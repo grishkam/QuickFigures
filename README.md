@@ -1,6 +1,8 @@
 # QuickFigures
 QuickFigures is a toolset for creating scientific figures see publication for details
 
+See videos for instructions
+https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1
 
 Note from the author: 
 You have permission to use any part of the QuickFigures project and share it with 
