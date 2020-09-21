@@ -12,6 +12,7 @@ It is primarily for academic use by researchers at scientific institutions. In t
 that it takes off with incredible popularity, I might need to start making many improvements and
 possibly start asking for help. 
 Furthermore, I would be flattered if parts of my work were re-used or repurposed by others.
+The sourcecode is in the QuickFigures.zip file while the .jar file can be used as an ImageJ plugin.
 
 Please feel free to contact me with any bug reports, questions, recommendations or comments.
 
