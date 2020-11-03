@@ -30,7 +30,7 @@ import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LocationChangeListenerList;
 import utilityClassesForObjects.PaintProvider;
 import utilityClassesForObjects.SnappingPosition;
-
+/**not extensively used anymore*/
 public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObjectConvertable {
 	Roi roi;
 	
