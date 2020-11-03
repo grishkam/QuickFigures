@@ -25,5 +25,5 @@ Enjoy the toolset,
 Gregory 
 
 PS: Some of the source code does not follow ordinary conventions for naming and explanations 
-for how my code works are not always detailed. if you want to re-use parts of my code in your sofrware
+for how my code works are not always detailed. if you want to re-use parts of my code in your software
 it may be helpful to contact me. 
