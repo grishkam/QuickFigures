@@ -1,0 +1,89 @@
+package dividedPanels;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
+import applicationAdapters.CanvasMouseEventWrapper;
+import dividedPanels.DividedPanelLayout.layoutDivider;
+import graphicalObjectHandles.SmartHandle;
+import graphicalObjects.CordinateConverter;
+import menuUtil.SmartPopupJMenu;
+import standardDialog.NumberInputPanel;
+
+public class DividerHandle extends SmartHandle  implements ActionListener {
+
+	public layoutDivider divider;
+	private DividedPanelLayoutGraphic layoutG;
+	public DividerHandle(Rectangle2D r, Color c, DividedPanelLayoutGraphic layourGraphic) {
+		super((int)r.getX(), (int)r.getY());
+		this.width=(int) r.getWidth();
+		this.height=(int) r.getHeight();
+		this.setHandleColor(c);
+		this.layoutG=layourGraphic;
+	}
+
+	public int getHandleNumber() {
+		return layoutG.smartl.indexOf(this);
+	}
+	
+	public DividerHandle(Double rect, Color pink, CordinateConverter<?> cords, DividedPanelLayoutGraphic layourGraphic) {
+		this(cords.getAfflineTransform().createTransformedShape(rect).getBounds(), pink, layourGraphic);
+		if(this.width<6)this.width=6;
+		if(this.height<6)this.height=6;
+	}
+
+
+	public DividerHandle(layoutDivider div, Color orange, CordinateConverter<?> cords,DividedPanelLayoutGraphic layourGraphic) {
+		this(div.rect, orange, cords,layourGraphic);
+		this.divider=div;
+	}
+	
+	 
+
+
+	public void draw(Graphics2D graphics, CordinateConverter<?> cords) { 
+	
+		super.drawOnShape(graphics, this);
+	}
+	
+	
+	public JPopupMenu getJPopup() {
+		SmartPopupJMenu out = new SmartPopupJMenu();
+		JMenuItem mi = new JMenuItem("Remove Divider");
+		mi.addActionListener(this);
+		out.add(mi);
+		return out;
+	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		
+		divider.parent.removeDivider(divider);
+		
+		layoutG.getPanelLayout().resetPtsPanels();
+		layoutG.updateDisplay();
+		
+	}
+	
+public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	
+		if(canvasMouseEventWrapper.clickCount()==2) {
+			double pos = NumberInputPanel.getNumber("Divider Position", divider.getPosition(), 1, true, null);
+			divider.setPosition(pos);
+			layoutG.getPanelLayout().resetPtsPanels();
+			layoutG.updateDisplay();
+		}
+		
+	}
+	
+}

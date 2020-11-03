@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/DataPlotting"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/ij.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-3.12-beta1-20150228.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-examples-3.12-beta1-20150228.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-excelant-3.12-beta1-20150228.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-3.12-beta1-20150228.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-schemas-3.12-beta1-20150228.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-scratchpad-3.12-beta1-20150228.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ImageJ1ModuleForQuickFigures"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

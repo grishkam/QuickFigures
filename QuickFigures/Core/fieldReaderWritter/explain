@@ -1,0 +1,3 @@
+Package originally meant for saving and restoring items. Made for items that I specifically need to stick
+around. Object serialization would be a problematic option if I continue to edit the classes over time.
+Did it. 

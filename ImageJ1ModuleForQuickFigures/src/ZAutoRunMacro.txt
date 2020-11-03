@@ -1,0 +1,5 @@
+	macro "AutoRun" {
+			run("Layout Tools");
+			run("Object Tools");
+			run("Turn On Zvi Open Correction");
+			}

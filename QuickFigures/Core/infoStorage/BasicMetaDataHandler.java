@@ -1,0 +1,949 @@
+package infoStorage;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.File;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+import fieldReaderWritter.RetrievableOption;
+import logging.IssueLog;
+import utilityClasses1.NumberUse;
+
+public class BasicMetaDataHandler {
+	public static  String delimiter=";";//The delimiter separates the parts of the list
+	public static String myIndexCode="Greg Channel At Index ";;//"Image Channel Index ";
+	public static String myColorCode="Greg Channel Color ";
+	Hashtable <String, String> hash=new Hashtable <String, String>();
+	String[] ZviChanKey= new String[] {"Channel Name ", " "};
+	String[] ZviExposureKey=new String[] {"Exposure Time [ms] ", " "};
+	String[] myChanKey= new String[] {myIndexCode, " "};
+	
+	/**Channel name keys for determining channel colors, can retrieved lut names or channel names*/
+	static String[][] allNameKeys=new String[][] {
+		new String[] {"DisplaySetting|Channel|DyeName|", " "},//for CZI
+		new String[] {"ChannelDescription|LUTName ", " "},   //for lif possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
+		new String[] {"LUT Channel ", " name "},   //the most reliable key for lei
+		new String[] {"Block 2 csLutName", " "} ,           // alternate key for lei for LEI files. not sure if block 2 part is consistent between files
+		new String[] {"Channel Name ", " "} //For .zvi
+		
+	};
+	
+	String[][] allNumberKeys=new String[][] {
+		new String[] {"Information|Image|Channel|Id ", " "},//for CZI
+		// possible for LIF but not enough information "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|LUT|Channel "
+		
+	};
+	
+	String[][] allExposureTimeKeys=new String[][] {
+		new String[] {"Information|Image|Channel|ExposureTime|", " "},//for CZI
+		
+	};
+	
+	/**This will return the meta data info entry in a Text
+	   Assumes that the string is the format of key=### \n
+	   */
+	public  String getMetaDataEntry(String linesOfText, String key){
+		return getMetaDataEntryFromLine(linesOfText,key);
+	}
+	
+	public static String getMetaDataEntryFromLine(String linesOfText, String key) {
+		String[] ss2=linesOfText.split("\n");
+		for (int i=0; i<ss2.length; i++) {if (ss2[i].startsWith(key+"= ")) return ss2[i];}
+		return null;
+	}
+	
+	public  static String getMetaDataEntry(String[] ss2, String key){
+		for (int i=0; i<ss2.length; i++) {if (ss2[i].startsWith(key+"= ")) return ss2[i];}
+		return null;
+	}
+	public  static String getMetaDataEntryValue(String[] ss2, String key){
+		for (int i=0; i<ss2.length; i++) {if (ss2[i].startsWith(key+"= ")) return ss2[i].substring(key.length()+1);}
+		return null;
+	}
+	
+	
+
+	
+	public  Integer parseMetadataIntvalue(MetaInfoWrapper a, String b ) {
+		String output=a.getEntryAsString(b);// getEntryFromInfoAsString(a, b) ;
+		if (output==null) return null;
+	    Integer r;
+	    try {r=Integer.parseInt(output);} catch (NumberFormatException si) {return null; }
+	    return r;
+	}
+	
+	public  int[] parseMetadataIntArrayValue(MetaInfoWrapper a, String b ) {
+		String output= getEntryFromInfoAsString(a, b) ;
+		if (output==null) return null;
+	    return NumberUse.intArrayFromString1(output);
+	}
+	
+
+	
+	public  String[] parseMetadataStringArrayValue(MetaInfoWrapper a, String b ) {
+		String output= getEntryFromInfoAsString(a, b) ;
+		if (output==null) return null;
+	    return stringArrayFromString(output);
+	}
+	
+	public  Double parseMetadataDoublevalue(MetaInfoWrapper a, String b ) {
+		String output= getEntryFromInfoAsString(a, b) ;
+		if (output==null) return null;
+	    Double r;
+	    try {r=Double.parseDouble(output);} catch (NumberFormatException si) {return null; }
+	    return r;
+	}
+	
+	
+	//public abstract String getEntryFromInfoAsString(ImageType a, String b);
+	
+	Font parseMetadataFontvalue(MetaInfoWrapper a, String b) {
+		String st =getEntryFromInfoAsString( a,  b);
+		return getFont(st);
+	}
+	Point parseMetadataPointvalue(MetaInfoWrapper a, String b) {
+		String st =getEntryFromInfoAsString( a,  b);
+		return getPoint(st);
+		
+	}
+	
+	public Object parseMetadataClassValue(MetaInfoWrapper a, String b, Class<?> c) {
+		return getObject(getEntryFromInfoAsString( a,b), c);
+
+	}
+	
+	/**this decodes an object of class 'c' from its string representation 'st'*/
+	public static Object getObject(String st, Class<?> c) {	
+		if (st.equals("null")) return null;
+		if (c.equals(String.class)) return st ;
+		if (c.equals(Color.class)) return getColor( st) ;
+		if (c.equals(Point.class)) return getPoint( st) ;
+		if (c.equals(Rectangle.class)) return getRectangle(st) ;
+		if (c.equals(Font.class)) return getFont( st) ;
+		if (c.equals(int.class)||c.equals(Integer.class)) {
+			
+			return Integer.parseInt(st);
+			}
+		
+		if (c.equals(double.class)||c.equals(Double.class)) {return Double.parseDouble(st);}
+		if (c.equals(float.class)||c.equals(Float.class)) {return Float.parseFloat(st);}
+		
+		if (c.equals(boolean.class)||c.equals(Boolean.class)) {return Integer.parseInt(st)==1;}
+		if (c.isArray()) {
+			
+			Class<?> type = c.getComponentType();
+			
+			/**these lines are to select the delimiter*/
+			String delit=delimiter;
+			String d2 = getDelimitForClass(type);
+			if (st.contains(d2)&&!st.contains(delit)) delit=d2;
+			
+			
+			String[] s=st.split(delit);
+			
+			Object output=Array.newInstance(c.getComponentType(), s.length);
+			if (s.length==1) {
+				if (st.equals("")) return output;
+			}
+			
+			
+			for(int i=0; i<s.length; i++) Array.set(output, i, getObject(s[i],type ));
+			return output;
+		}
+
+		throw new NullPointerException();
+		//return null;
+	}	 
+	
+	/**gets the proer delimiter for arrays of class c*/
+	static String getDelimitForClass(Class<?> c) {
+		if (c.equals(double.class)||c.equals(Double.class)) {return ",";}
+		if (c.equals(float.class)||c.equals(Float.class)) {return ",";}
+		if (c.equals(int.class)||c.equals(Integer.class)) {return ",";}
+		if (c.equals(float.class)||c.equals(Float.class)) {return ",";}
+		
+		return delimiter;
+	}
+
+	public  Boolean parseMetadataBooleanvalue(MetaInfoWrapper a, String b ) {
+		Integer i1=parseMetadataIntvalue(a,  b ) ;
+		if (i1==0) return false;
+		if (i1==1) return true;
+		return null;
+	}
+	
+	
+	
+	
+	/**Method to make a string array into a string and to change it back*/	
+	public  String stringFromStringArray(String[] sta) {
+		if (sta.length==1) return sta[0];
+		if (sta.length==0) return "";
+		String output=sta[0];
+		for (int i=1; i<sta.length; i++) {output+= delimiter+sta[i];}
+		return output;
+	}
+		public  static String[] stringArrayFromString(String st) {
+		String[] eachnumber=st.split(delimiter);
+		String[] output=new String[eachnumber.length];
+		for (int i=0; i<output.length; i++){
+			{output[i]=eachnumber[i].trim();}
+		}
+		return output;
+	}
+		
+		
+		/**This puts all the information about a particular object into a string form so it can be added to the metadata of an image to be retrived later*/
+		public static String entryString(Object o) {
+			if (o==null) return "";
+			String output=o.toString();
+			if (output.equals("true")) return "1";
+			if (output.equals("false")) return "0";
+			if (output.contains("java.awt.")) output=output.replace("java.awt.", "");
+			if (o.getClass().isArray()) {
+				
+				output="";
+				int length=Array.getLength(o);
+				if (length==0) return "";
+				int i=0;
+				if (length==1) return entryString(Array.get(o, i));
+				output=entryString(Array.get(o, 0));
+				for(i=1; i<length; i++ ) {
+					Object elementi=Array.get(o, i);
+					output+=delimiter+entryString(elementi);
+				}
+				
+			}
+			
+			return output.replaceAll(" ", " ");
+		}
+		
+		
+		public  void addArrayListEntryToInfo(MetaInfoWrapper img, String name, ArrayList<?> numbers) {
+			addEntryToInfo(img, name, numbers.toArray(new Object[numbers.size()]));
+		}
+		
+		public  void addEntryToInfo(MetaInfoWrapper img, String name, Object number) {
+			if (number.getClass()==ArrayList.class) try {if (number instanceof ArrayList<?> )addArrayListEntryToInfo(img, name, (ArrayList<?>) number) ; return;} catch (Throwable e) {}
+			
+			try{addEntryToInfo(img, name, entryString(number)) ;} catch (Throwable t) {IssueLog.log(" problem adding entry to metadata", t);}
+		}
+		
+		
+		
+		/**
+		public abstract void addEntryToInfo(ImageType img, String name,
+				String stringfromIntarray) ;*/
+	
+		
+
+		public  String getFileNameFromMetaData(MetaInfoWrapper imp, String key) {
+			return new File(getEntryFromInfoAsString(imp, key)).getName();
+		}
+		
+
+		/**This will replace part of the metadata for the ImageType.
+		   Assumes that the string is the format of keys=###\n
+		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, int newValue){
+			a.replaceInfoMetaDataEntry(b,""+ newValue);
+		}
+		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, double newValue){
+			a.replaceInfoMetaDataEntry(b,""+ newValue);
+		}
+		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, Number newValue){
+			a.replaceInfoMetaDataEntry(b,""+ newValue);
+			//{replaceMetaDataEntry( a, b, ""+ newValue);}
+
+		}*/
+
+		/**if the string ends with .tif, does nothing, else adds .tif to the string*/
+		public String addTifToName(String name) {
+			if (name.endsWith(".tif")) return name;
+			return name+".tif";
+		}
+		
+		void addEntryToInfo(MetaInfoWrapper img, String name, Point[] numbers) {
+			int[] intsx=new int[numbers.length];
+			int[] intsy=new int[numbers.length];
+			for (int i=0; i<numbers.length; i++) {
+				intsx[i]=(int)numbers[i].getX();
+				intsy[i]=(int)numbers[i].getY();
+			}
+			addEntryToInfo(img, name+"X", intsx);
+			addEntryToInfo(img, name+"Y", intsy);
+		}
+		
+		Point[] parseMetadataPointArrayvalue(MetaInfoWrapper a, String b) {
+			int[] intsx=parseMetadataIntArrayValue(a,  b+"X") ;
+			int[] intsy=parseMetadataIntArrayValue(a,  b+"Y") ;
+			Point[] numbers=new Point[intsx.length];
+			for (int i=0; i<numbers.length; i++) { 
+				numbers[i]=new Point(intsx[i], intsy[i]);
+			}
+			return numbers;
+		}
+		
+		 
+	
+		
+		/**takes the output of the toString method for class color and returns a color*/
+		 public static Color getColor(String st) {		
+			 
+			    String lowerCase = st.toLowerCase();
+				if (lowerCase.equals("white")) {return Color.white;}
+				if (lowerCase.equals("black")) {return Color.black;}
+				if (lowerCase.equals("red")) {return Color.red;}
+				if (lowerCase.equals("blue")) {return Color.blue;}
+				if (lowerCase.equals("green")) {return Color.green;}
+				if (lowerCase.equals("pink")) {return Color.pink;}
+				if (lowerCase.equals("yellow")) {return Color.yellow;}
+				if (lowerCase.equals("orange")) {return Color.orange;}
+				if (lowerCase.equals("cyan")) {return Color.cyan;}
+				if (lowerCase.equals("magenta")) {return Color.magenta;}
+				if (lowerCase.equals("grey")) {return Color.gray;}
+				if (lowerCase.equals("gray")) {return Color.gray;}
+				if (lowerCase.equals("light grey")) {return Color.lightGray;}
+				if (lowerCase.equals("dark grey")) {return Color.darkGray;}
+				if (lowerCase.equals("light gray")) {return Color.lightGray;}
+				if (lowerCase.equals("dark gray")) {return Color.darkGray;}
+			 
+			    if (st.contains("Color[")) {
+			    		return getColorFromImplied(st, "Color");
+			    
+			    }
+			    
+			    if (st.contains("rgb(")) {
+			    	IssueLog.log("trying to parse color "+st);
+			    	Color parsedC = getColorFromImplied(st, "rgb");
+			    	IssueLog.log("parsed color as "+parsedC);
+			    	
+		    		return parsedC;
+		    
+		    }
+			    
+			    if (st.startsWith("#")) st=st.substring(1);
+			    if (st.trim().length()==6) {
+			    	CharSequence st1 = st.subSequence(0, 2);
+			    	CharSequence st2 = st.subSequence(2, 4);
+			    	CharSequence st3 = st.subSequence(4, 6);
+			    	int r = Integer.parseInt(st1+"", 16);
+			    	int g = Integer.parseInt(st2+"", 16);
+			    	int b = Integer.parseInt(st3+"", 16);
+			    	
+			    	return new Color(r,g,b);
+			    }
+			    
+			    return null;
+			  }
+		 
+		 private static Color getColorFromImplied(String st, String method) {
+			 String[] colors=getArgsFromImpliedMethod(st, method);
+			   int r=0; int g=0; int b=0;
+			   try{r=Integer.parseInt(getMetaDataEntryValue(colors, "r"));} catch (Exception e) {}
+			   try{g=Integer.parseInt(getMetaDataEntryValue(colors, "g"));} catch (Exception e) {}
+			   try{b=Integer.parseInt(getMetaDataEntryValue(colors, "b"));} catch (Exception e) {}
+			   
+			   
+			   /**if the colors are not in the format of r=, g=, b= but instead in order*/
+			   if (!colors[0].contains("=")) {
+				   r=Integer.parseInt(colors[0]);
+				   g=Integer.parseInt(colors[1]);
+				   b=Integer.parseInt(colors[2]);
+				   
+			   }
+			   
+			 return  new Color(r,g,b);
+			 
+		 }
+		 
+		 
+		 
+			/**takes the output of the toString method for class Point and returns a point*/
+		public static Point getPoint(String st) {		 
+			    if (st.contains("Point[")) {
+			   String[] c=getArgsFromImpliedMethod(st, "Point");
+			   int x=0; int y=0; 
+			   try{x=Integer.parseInt(getMetaDataEntryValue(c, "x"));} catch (Exception e) {}
+			   try{y=Integer.parseInt(getMetaDataEntryValue(c, "y"));} catch (Exception e) {}		  
+			   return  new Point(x,y);
+			    }
+			    if (st.contains("x=")) {
+					   String[] c=st.split(" ");
+					   int x=0; int y=0; 
+					   try{x=Integer.parseInt(getMetaDataEntryValue(c, "x"));} catch (Exception e) {}
+					   try{y=Integer.parseInt(getMetaDataEntryValue(c, "y"));} catch (Exception e) {}		  
+					   return  new Point(x,y);
+					    }
+			    
+			    
+			    return null;
+			  }
+			/**undoes the output of the toString method for class Rectangle*/
+		 static Rectangle getRectangle(String st) {		 
+			    if (st.contains("Rectangle[")) {
+			   String[] c=getArgsFromImpliedMethod(st, "Rectangle");
+			   int x=0; int y=0; int width=0; int height=0; 
+			   try{x=Integer.parseInt(getMetaDataEntryValue(c, "x"));} catch (Exception e) {}
+			   try{y=Integer.parseInt(getMetaDataEntryValue(c, "y"));} catch (Exception e) {}	
+			   try{width=Integer.parseInt(getMetaDataEntryValue(c, "width"));} catch (Exception e) {}
+			   try{height=Integer.parseInt(getMetaDataEntryValue(c, "height"));} catch (Exception e) {}	
+			   return  new Rectangle(x,y, width, height);
+			    }
+			    return null;
+			  }
+		 
+			/**undoes the output of the toString method for class Font*/
+		 static Font getFont(String st) {		 
+			    return getFont(defaultfont, st);
+			  } 
+		 static Font defaultfont=new Font("Arial", Font.PLAIN, 20);
+			/**undoes the output of the toString method for class Font*/
+		 public static Font getFont(Font defaultfont, String st) {	
+			 if (st==null) return defaultfont;
+			 if (defaultfont==null) defaultfont=BasicMetaDataHandler.defaultfont;
+			    if (st.contains("Font[")) {
+			   String[] c=getArgsFromImpliedMethod(st, "Font");
+			   int size=defaultfont.getSize(); String family=defaultfont.getFamily(); String style="Plain"; if(defaultfont.isBold()) style="bold"; if(defaultfont.isItalic()) style="italic";
+			   try{size=Integer.parseInt(getMetaDataEntryValue(c, "size"));} catch (Exception e) {  }
+			  try{
+				 String s =getMetaDataEntryValue(c, "style");
+				 if(s!=null) style=s;
+				  } catch (Exception e) {}	
+			  try{
+				  String s=getMetaDataEntryValue(c, "family");
+				  if(s!=null) family=s;
+			  } catch (Exception e) {}	
+			  
+			  return  Font.decode(family+"-"+style.toUpperCase()+"-"+size);
+			    } else return defaultfont;
+			   // IssueLog.log("not font found");
+			   // return null;
+			  } 
+		 
+		 public static String[] getArgsFromImpliedMethod(String st, String methodName) {
+			 if (st.contains("["))
+			 return getArgsFromImpliedMethod(st, methodName, "[", "]");
+			 if (st.contains("(")) 
+				 return getArgsFromImpliedMethod(st, methodName, "(", ")");
+			 else return getArgsFromImpliedMethod(st, methodName, "<", ">");
+		 }
+		 
+		 public static String[] getArgsFromImpliedMethod(String st, String methodName, String start, String end) {
+		
+			 String delimit=",";
+			 
+			   if (st.contains(methodName+start)) {
+				    int i=st.indexOf(methodName+start);
+				    int i2=st.indexOf(end, i);
+				    
+				   
+				  
+				   String output= st.substring(i+methodName.length()+1, i2);
+				 
+				 
+				  
+				  String[] array = output.split(delimit);
+				   
+				 
+				  return array;
+				    }
+			   return null;
+		 }
+		 
+		 public static Integer[] getIntArgsFromImpliedMethod(String st, String methodName) {
+			   if (st.contains(methodName+"[")) {
+				    String[] outputs=getArgsFromImpliedMethod(st, methodName);
+				    Integer[] outputsint=new Integer[outputs.length];
+				    for(int i=0; i<outputs.length; i++) {
+				    	 try {outputsint[i]=Integer.parseInt(outputs[i]);} catch (Exception e) {
+				    		 outputsint[i]=null;
+				    	 }
+				    }
+				    }
+			   return null;
+		 }
+		 
+		 public static String removeImpliedMethod(String st, String methodName) {
+			   if (st.contains(methodName+"[")) {
+				    int i=st.indexOf(methodName+"[");
+				    int i2=st.indexOf("]", i);
+				   String outputargs= st.substring(i+methodName.length()+1, i2);
+				  return st.replace(methodName+"["+outputargs+"]", "");
+				    }
+			   return st;
+		 }
+		 
+		 /**
+		 public void editObjectMetaData(MetaInfoWrapper imp, Object o, boolean superClass, String subsetWith) {
+			 getFieldsFromMetaData(imp,  o, superClass,subsetWith);
+			 IJdialogUse.setObjectFieldsDialog( o, superClass, subsetWith);
+			 addFieldsToMetaData(imp,  o, superClass, subsetWith);
+		 }*/
+		 
+		 public void addFieldsToMetaData(MetaInfoWrapper imp, Object o, boolean superClass, String subsetWith) {
+			 Field[] fields=o.getClass().getDeclaredFields() ;
+			 if (superClass) fields=o.getClass().getSuperclass().getDeclaredFields() ;
+			 
+				for(int i=0; i<fields.length; i++) {
+					boolean stat=Modifier.isStatic(fields[i].getModifiers());
+					boolean exclud=(subsetWith!=null && !fields[i].getName().contains(subsetWith));
+					if (stat||exclud) continue;
+					String typename=fields[i].getType().getName();
+					
+					boolean isInt=typename.equals("int");
+					boolean isDouble=typename.equals("double");
+					boolean isString=typename.equals("String");
+					boolean isBoolean=typename.equals("boolean");
+					boolean isPoint=fields[i].getType().equals(Point.class);
+					boolean isFont=fields[i].getType().equals(Font.class);
+					
+					//log(fields[i].getType()+"");
+					try {
+						if (isInt)  addEntryToInfo( imp, fields[i].getName()+"=", fields[i].getInt(o));
+						if (isDouble) addEntryToInfo( imp,fields[i].getName()+"=", fields[i].getDouble(o));
+						if (isString) addEntryToInfo( imp,fields[i].getName()+"=", ""+fields[i].get(o));
+						if (isBoolean) addEntryToInfo( imp, fields[i].getName()+"=", fields[i].getBoolean(o)?1:0);
+						if (isFont) addEntryToInfo( imp,fields[i].getName()+"=", (Font)fields[i].get(o));
+						if (isPoint) addEntryToInfo( imp,fields[i].getName()+"=", (Point)fields[i].get(o));
+						//if (isBoolean) addEntryToInfo( imp, fields[i].getName()+"=", fields[i].getBoolean(o)?1:0);
+						//log(+"="+ );
+						//log(fields[i].getName()+"="+fields[i].getDouble(o) );
+					} catch (Exception e) {
+						IssueLog.log(e);
+					} 
+					
+				}
+		 }
+		 
+		 public void getFieldsFromMetaData(MetaInfoWrapper imp, Object o, boolean superClass, String subsetWith) {
+			 Field[] fields=o.getClass().getDeclaredFields() ;
+			 if (superClass) fields=o.getClass().getSuperclass().getDeclaredFields() ;
+			 
+				for(int i=0; i<fields.length; i++) {
+					boolean stat=Modifier.isStatic(fields[i].getModifiers());
+					boolean exclud=(subsetWith!=null && !fields[i].getName().contains(subsetWith));
+					if (stat||exclud) continue;
+					String typename=fields[i].getType().getName();
+					
+					boolean isInt=fields[i].getType().equals(int.class);
+					boolean isDouble=fields[i].getType().equals(double.class);
+					boolean isString=typename.equals("String");
+					boolean isBoolean=typename.equals("boolean");
+					boolean isPoint=fields[i].getType().equals(Point.class);
+					boolean isFont=fields[i].getType().equals(Font.class);
+					
+					//log(fields[i].getType()+"");
+					try {
+						if (isInt)  fields[i].setInt(o, parseMetadataIntvalue(imp, fields[i].getName()))	;
+						if (isDouble) fields[i].setDouble(o, parseMetadataDoublevalue(imp, fields[i].getName()))	;
+						if (isBoolean) fields[i].setBoolean(o, parseMetadataIntvalue(imp, fields[i].getName())==1);	
+						if (isString||isPoint||isFont) fields[i].set(o, getEntryFromInfoAsString(imp, fields[i].getName()));	
+						//log(+"="+ );
+						//log(fields[i].getName()+"="+fields[i].getDouble(o) );
+					} catch (Exception e) {
+					//	IssueLog.log(e);
+					} 
+					
+				}
+		 }
+		 
+		 public void saveAnnotatedFields(MetaInfoWrapper imp, Object of, String suffix) {
+			 if (imp==null) IssueLog.log("cannot add metadata to a null image");
+			 Class<?> c=of.getClass();
+			 try{
+			 while (c!=Object.class) {
+			 for (Field f: c.getDeclaredFields()) {
+				 RetrievableOption o= f.getAnnotation( RetrievableOption.class);
+
+				if (o!=null) try {
+					f.setAccessible(true);
+					// IJ.log("will attempt to add "+o.key()+" entry to metadata");
+					if (o.save()) addEntryToInfo(imp, o.key()+suffix, f.get(of));
+				} catch (Exception e) {
+					IssueLog.log("problem adding entry "+o.key()+suffix +" reported in save annotated fields method "+'\n' );
+					IssueLog.log(e);
+					//if (imp==null)
+					//IssueLog.log("problem adding entry "+o.key()+suffix +"" );
+				}
+			 }
+			 c=c.getSuperclass();
+			 }
+			// IJ.log("method finished");
+			 } catch (Exception e) {IssueLog.log(e);}
+			 return;
+			
+			 
+		 }
+		 
+		 public void loadAnnotatedFields(MetaInfoWrapper imp, Object of, String suffix) {
+			 Class<?> c=of.getClass();
+			 try{
+			 while (c!=Object.class) {
+			 for (Field f: c.getDeclaredFields()) {
+				 RetrievableOption o= f.getAnnotation( RetrievableOption.class);
+				if (o!=null) try {
+					f.setAccessible(true);
+				if (o.save()) {
+					Object value=parseMetadataClassValue(imp,o.key()+suffix, f.getType());
+					if (value!=null) f.set(of, value );
+				//	IssueLog.log2("loading value from image "+imp+" metadata", o.key()+suffix);
+					}
+				} catch (Throwable e) {
+					IssueLog.log3("meta data entry not found "+o.key());
+					//e.printStackTrace();
+				} 
+			 }
+			 c=c.getSuperclass();
+			 }
+			 } catch (Exception e) {IssueLog.log(e);}
+			
+			 return;
+			
+			 
+		 }
+		 
+		 
+		 /**adds a simple entry containing a key value pair (example:  entryName=5) 
+		   to the image metadata. This uses the metadata like a hashtable.
+		 */
+		public  void addEntryToInfo(MetaInfoWrapper img, String name, String number) {
+			img.setEntry(name, number);
+			/**if (img==null||name==null) return;
+			String oldProp=(String) img.getProperty("Info");
+			if (oldProp==null) {
+					img.setProperty("Info", name+"="+number);
+					oldProp=(String) img.getProperty("Info");
+				}
+			if (!oldProp.contains(name+"=")){
+					String newProp=oldProp+"\n"+name+"="+number;
+					img.setProperty("Info", newProp);
+					}
+			else {replaceMetaDataEntry(img, name, number);}
+			*/
+		}
+		
+
+
+		public  ArrayList<String> getEntryListByNumber(MetaInfoWrapper a, String prefix, String suffix, int begin, int end ) {
+			ArrayList<String> output=new ArrayList<String> ();
+
+			for (int j=begin; j<end; j++) {
+				String current=getEntryFromInfoAsString(a, prefix+j+suffix);
+				output.add(current);
+			}
+			
+			return output;
+			
+		}
+		
+		public  ArrayList<Integer> getIntEntryListByNumber(MetaInfoWrapper a, String prefix, String suffix, int begin, int end, String[] filler ) {
+			ArrayList<String> strings = getEntryListByNumber(a,prefix, suffix, begin, end);
+			ArrayList<Integer> output=new ArrayList<Integer> ();
+			for(int i=0; i<strings.size(); i++) {
+				String current = strings.get(i);
+				if (current==null) output.add(null);
+				if (current!=null) try {
+					for(int m=0; m<filler.length; m++) { current=current.replace(filler[m], "").trim();}
+					output.add(Integer.parseInt(current));
+					
+				} catch (Throwable t) {t.printStackTrace();}
+			}
+			 return output;
+			
+		}
+		
+		
+		public  String getEntryFromInfoAsString(MetaInfoWrapper a, String b ) {
+			return a.getEntryAsString(b);
+				/**	
+		    if (a==null||b==null) return null;
+		    Object property=a.getProperty("Info");
+		    String ss;
+			ss=(String) property;
+		    if (ss.equals(null) || ss.equals("") || ss==null) return null;
+		    ss=getMetaDataEntry(ss, b);
+		    ;
+		    try {String output=ss.substring(b.length()+1); return output;} catch (StringIndexOutOfBoundsException si) {IJ.showMessage("out of bounds exception"); throw new NullPointerException(); }
+		   */
+		}
+		
+		/**i
+		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, String newValue){
+			a.replaceInfoMetaDataEntry(b, newValue);
+			//createMetadataWrapper(a).replaceInfoMetaDataEntry(b, newValue);
+			f (b==null|| newValue==null) return;
+			String entry=getMetaDataEntry( (String)a.getProperty("Info"), b);
+			if (entry==null) return;
+			String newMeta=((String) a.getProperty("Info")).replace(entry, b+"="+newValue);
+			a.setProperty("Info", newMeta);
+		}*/
+		
+		
+		public  void removeMetaDataEntry(MetaInfoWrapper a, String b){
+			a.removeEntry(b);
+			//createMetadataWrapper(a).removeInfoMetaDataEntry(b);
+			/**if (b==null || a==null) return;
+			String entry=getMetaDataEntry( (String)a.getProperty("Info"), b);
+			if (entry==null) return;
+			String newMeta=((String) a.getProperty("Info")).replace(entry, "");
+			a.setProperty("Info", newMeta);*/
+		}
+		
+		
+		/**this method switched the number or value for two metadata keys.*/
+		public  void switchMetaDataEntries(MetaInfoWrapper a, String b, String c){
+			if (a==null||b==null||c==null) return;
+			String entryB=getEntryFromInfoAsString(a, b ) ;
+			String entryC=getEntryFromInfoAsString(a, c ) ;
+			//IJ.showMessage("replacing entries "+entryB +" and " +entryC);
+			if (entryB==null || entryC==null) return;
+			
+			a.setEntry(b, entryC);
+			a.setEntry(c, entryB);
+			
+		}
+		
+			/**Given an image opened originally from a zvi file, this method 
+			   returns a list of each channel's name. example {texasred, eGFP, DAPI}.
+			   Seems to work but no longer understand why. needs new testing*/
+			public  ArrayList<String> channelNamesInOrder(MetaInfoWrapper select){
+				
+				/**method reflects an old format of CZI channel names that I have not seen in recent tests. */
+				String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
+				if (CZItest!=null) {
+					return CZIChannelNamesInOrder2(select);
+				}
+				
+				
+				
+				return chanOrderBasedInMyIndex(select);	
+					
+				}
+
+			public boolean hasmyIndexSystem(MetaInfoWrapper select) {
+				try {String c3=(String) getEntryFromInfoAsString(select, myIndexCode+0+ " " ) ;
+				if (c3==null)return false;
+				return true;
+				} catch (Exception nn) {
+					return false;}
+				
+			}
+			
+			/**looks for my index system*/
+			public ArrayList<String> chanOrderBasedInMyIndex(MetaInfoWrapper select) {
+				
+				createChanDataIfnotEstablished(select);
+				String[] chanKey =findChannelNameKey(select);
+				if (chanKey==null)
+					chanKey =ZviChanKey;//the default channel key
+				
+				
+				ArrayList <String> ChannelNames=new ArrayList <String> ();
+					String c1;
+					int c2;
+					/**checks indexes 0 through 7 for channel data. For each of my indices,
+					 * returns a number c2. then adds the name of channel c2 to the lists of names
+					 * */ 
+					for (int j=0; j<7; j++) {
+						try {	String c3=(String) getEntryFromInfoAsString(select, myIndexCode+j+ " " ) ;
+								c1=c3.trim();
+								c2=Integer.parseInt(c1);
+						try {
+							
+							c1=getRealChannelInformationBasedOnMetaData(select, chanKey, c2) ;
+							ChannelNames.add(c1);
+				} catch (Exception nn) {}
+			} catch (Exception nn) {}	
+				}
+					
+				return ChannelNames;
+			}
+
+			/**Given metadata, and the key for determining which key holds the channel name, returns the name of a certain channel
+			 *  Channels here are numbered from 0, 1, 2 onward ()*/
+			public String getRealChannelInformationBasedOnMetaData(MetaInfoWrapper select, String[] prefixSuffix,
+					int channelNumber) {
+				return (String) getEntryFromInfoAsString(select, prefixSuffix[0]+channelNumber+ prefixSuffix[1] );
+			}
+
+			/**Checks the file for my metadta regarding he channel indeces, creates the info if not already present*/
+			public void createChanDataIfnotEstablished(MetaInfoWrapper select) {
+				boolean establish=hasmyIndexSystem(select);
+				if (!establish) 
+					createGregIndexSystem(select);
+			}
+			
+			/**To accomadate newer versions of locitools, I need to write this.
+			   this will obtain a list of the channel names and their numbers and record their indexes*/
+			private void createGregIndexSystem(MetaInfoWrapper select) {
+				ArrayList <String> ChannelNames=new ArrayList <String> ();
+				ArrayList <Integer> ChannelNums=new ArrayList <Integer> ();
+				
+				String[] chanKey =findChannelNameKey(select);
+				if (chanKey==null)
+					chanKey =ZviChanKey;
+				
+				/**list all the channel numbers that appear in the metadata. And each of their channel anmes */
+				for (int j=0; j<6; j++) {
+								try {
+								try {
+									String c1 = getRealChannelInformationBasedOnMetaData(select, chanKey, j) ;
+									if (c1!=null) 
+										{
+										ChannelNames.add(c1);
+										ChannelNums.add(j);
+										}
+								
+								} catch (Exception nn) {}
+								} catch (Exception nn) {}
+							}
+				
+				//IssueLog.log("listed channel names in order");
+				//IssueLog.log(ChannelNames);
+				
+				for (int j=0; j<ChannelNames.size(); j++) {
+					select.setEntry(myIndexCode+j+ " ", ""+ChannelNums.get(j));
+					select.setEntry(myColorCode+ChannelNums.get(j)+ " ", ""+ChannelNames.get(j));
+					
+					 //setEntryFromInfoAsString(select, myIndexCode+j+ " " );
+				}
+				
+			}
+
+			/**Given an image opened originally from a zvi file, this method 
+			   returns a list of each channel's exposure time.
+			   Seems to work but no longer understand why. needs new testing*/
+			public  ArrayList<String> ZviChannelExposuresInOrder(MetaInfoWrapper select){
+				
+				
+				/**not yet modified to work with czis*/
+				//String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
+				
+				createChanDataIfnotEstablished(select);
+				
+				ArrayList <String> ChannelExposures=new ArrayList <String> ();
+					String c1;
+					int c2;
+					for (int j=0; j<6; j++) {
+						try {
+							String c3=getRealChannelInformationBasedOnMetaData(select, myChanKey,j) ;
+								   c1=c3.trim();
+								   c2=Integer.parseInt(c1);
+						try {
+									c1=getRealChannelInformationBasedOnMetaData(select,ZviExposureKey ,c2 ) ;
+									ChannelExposures.add(c1);
+				} catch (Exception nn) {}
+			} catch (Exception nn) {}	
+				}
+				return ChannelExposures;	
+					
+				}
+			
+			
+			/**possibly OBSOLETE: Given an image opened originally from a zvi file, this method 
+			   returns a list of each channel's name. example {texasred, eGFP, DAPI}.
+			   Seems to work but not extensively tested. 
+			   Takes into account the possibility that the channel IDs are not in order
+			   */
+			public  ArrayList<String> CZIChannelNamesInOrder2(MetaInfoWrapper select){
+				
+				
+				ArrayList<Integer> list = getIntEntryListByNumber(select, "Information|Image|Channel|Id #"," ", 1,6, new String[] {"Channel:"});
+				
+				
+				ArrayList <String> ChannelNames=new ArrayList <String> ();
+					String c1;
+					int c2;
+					for (int j=0; j<6; j++) {
+						int ind1 = list.indexOf((j));
+						try {String c3=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Id #"+(ind1+1)+ " " ) ;
+						
+						c3=c3.replace("Channel:", "");
+						c1=c3.trim();
+						c2=Integer.parseInt(c1);
+						
+						try {c1=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #"+(c2+1)+" ") ;
+						
+						ChannelNames.add(c1);
+						
+				} catch (Exception nn) {}
+						
+						}catch (Throwable t) {}
+						
+						/** old version
+						try {String c3=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Id #"+j+ " " ) ;
+				c3=c3.replace("Channel:", "");
+						c1=c3.trim();
+				
+				c2=Integer.parseInt(c1);
+						try {c1=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #"+(c2+1)+" ") ;
+						
+						ChannelNames.add(c1);
+				} catch (Exception nn) {}
+			} catch (Exception nn) {}	*/
+						
+						
+						
+				}
+					
+					
+					
+					
+					
+				return ChannelNames;	
+					
+				}
+			
+			/**Given an image opened originally from a CZI file, this method 
+			   returns a list of each channel's name. example {texasred, eGFP, DAPI}
+			public  ArrayList<String> CZIChannelNamesInOrder(MetaInfoWrapper select){
+				ArrayList <String> ChannelNames=new ArrayList <String> ();
+					
+					for (int j=0; j<6; j++) {
+						
+						try {String c3=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #"+(j+1)+" " ) ;
+						
+						ChannelNames.add(c3);
+				} catch (Exception nn) {}
+			
+				}
+				return ChannelNames;	
+					
+				}*/
+			
+			
+
+			
+
+			/**Tests the image metadata to determine if any of the known channel name keys are present*/
+			public String[] findChannelNameKey(MetaInfoWrapper handle) {
+				
+				for(String[] key : allNameKeys) try {
+					for(int i=0; i<7; i++) try {
+						
+					String f = getRealChannelInformationBasedOnMetaData(handle, key, i);
+					if(f!=null) return key;
+					
+					} catch (Throwable t) {}
+				}
+				catch (Throwable t) {}
+				
+				
+				
+				return null;
+			}
+
+			public void createChanNamesFor(MetaInfoWrapper mcw, int nChan) {
+				for(int i=1; i<=nChan; i++) {
+					mcw.setEntry(ZviChanKey[0]+(i-1)+ZviChanKey[1], "channel #"+i);
+				}
+				
+			}
+		 
+}

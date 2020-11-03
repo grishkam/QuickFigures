@@ -1,0 +1,441 @@
+package graphicalObjectHandles;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.Icon;
+import javax.swing.JPopupMenu;
+
+import applicationAdapters.CanvasMouseEventWrapper;
+import graphicActionToombar.CurrentSetInformerBasic;
+import graphicalObjects.CordinateConverter;
+import undo.UndoManagerPlus;
+import utilityClassesForObjects.Hideable;
+import utilityClassesForObjects.RainbowPaintProvider;
+import utilityClassesForObjects.Selectable;
+
+public class SmartHandle extends HandleRect implements Selectable, Hideable{
+	
+	public static int CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
+	
+	protected Color messageColor = Color.BLACK;
+	protected Color handleStrokeColor=Color.black;
+	protected Color decorationColor=Color.LIGHT_GRAY;
+	private int specialFill=0;
+	private SmartHandle lineto;
+	
+	private Point2D cordinateLocation=new Point();
+	protected Icon icon=null;
+	
+	
+	private int handleNumber=1;
+	
+	protected transient Shape lastDrawShape=null;
+	transient protected Shape specialShape=null;
+	protected String message=null;
+
+	private CordinateConverter<?> lastDrawnConverter;
+
+	private boolean selected;
+
+	private boolean hidden;
+
+	public transient Area underDecorationShape;
+	public transient Area overDecorationShape;
+
+	private boolean ellipse;
+	
+	public boolean absent() {return false;}
+
+	public SmartHandle(int x, int y) {
+		super(x, y);
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+	
+	
+	public void setCordinateLocation(Point2D pt) {
+		cordinateLocation=pt;
+	}
+	
+	protected Stroke getHandleStroke() {
+		BasicStroke bs = new BasicStroke();
+		return bs;
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		lastDrawnConverter=cords;
+		Point2D pt = cords.transformP(getCordinateLocation());
+		
+	
+		
+		Shape s = createDrawnRect(pt);
+		if (hasSpecialShape()) {
+			s=createSpecialShape(pt, cords);
+		}
+		if(this.getUnderdecorationShape()!=null) {
+			drawOnDecorationShape(graphics, createDecorationShape( pt, cords, getUnderdecorationShape()));
+		}
+		
+		if(lineto!=null) {drawLineTo(graphics, cords, lineto);}
+		
+		drawOnShape(graphics, s);
+		
+		if(this.getOverdecorationShape()!=null) {
+			drawOnDecorationShape(graphics, createDecorationShape( pt, cords, getOverdecorationShape()));
+		}
+		
+		drawIcon(graphics, pt);
+		
+		drawMessage(graphics, s);
+			
+	}
+
+
+
+	public void drawIcon(Graphics2D graphics, Point2D pt) {
+		if (getIcon()!=null) {
+			getIcon().paintIcon(null, graphics, (int)pt.getX()-this.getIcon().getIconWidth()/2, (int)pt.getY()-getIcon().getIconHeight()/2);
+			
+		};
+	}
+
+	protected Area getUnderdecorationShape() {
+		return underDecorationShape;
+	}
+
+	protected Area getOverdecorationShape() {
+		return overDecorationShape;
+	}
+
+	protected void drawMessage(Graphics2D graphics, Shape s) {
+		if(message!=null) {
+			graphics.setColor(messageColor);
+			graphics.setFont(getMessageFont());
+			graphics.drawString(message, (int)s.getBounds().getMaxX()+1, (int)(s.getBounds().getCenterY()/2+s.getBounds().getMaxY()/2));
+		}
+	}
+
+	protected boolean hasSpecialShape() {
+		return specialShape!=null;
+	}
+
+	protected Shape createSpecialShape(Point2D pt, CordinateConverter<?> cords) {
+		AffineTransform g = AffineTransform.getTranslateInstance(pt.getX(), pt.getY());
+		return	g.createTransformedShape(specialShape);
+	}
+	
+	protected Shape createDecorationShape(Point2D pt, CordinateConverter<?> cords, Shape shape) {
+		AffineTransform g = AffineTransform.getTranslateInstance(pt.getX(), pt.getY());
+		return	g.createTransformedShape(shape);
+	}
+
+	protected Font getMessageFont() {
+		return new Font("Arial", 0, 12);
+	}
+	
+	/**Draws the main Shape. mouse clicks inside this shape will result in calls
+	  to methods within this class*/
+	protected void drawOnShape(Graphics2D graphics, Shape s) {
+		lastDrawShape=s;
+		
+		graphics.setColor(getHandleColor());
+	
+		graphics.fill(s);
+		if (specialFill==CROSS_FILL &&s instanceof Rectangle2D) {
+			Rectangle b = s.getBounds();
+			graphics.setColor(decorationColor);
+			graphics.setStroke(getHandleStroke());
+			graphics.drawLine(b.x, b.y, b.x+b.width, b.y+b.height);
+			graphics.drawLine(b.x, b.y+b.height, b.x+b.width, b.y);
+		}
+		if (specialFill==PLUS_FILL &&s instanceof Rectangle2D) {
+			Rectangle b = s.getBounds();
+			graphics.setColor(decorationColor);
+			BasicStroke bs = new BasicStroke((float) (s.getBounds2D().getWidth()/3));
+			graphics.setStroke(bs);
+			int centerX = (int)b.getCenterX();
+			graphics.drawLine(centerX, b.y, centerX, b.y+b.height);
+			int centerY = (int)b.getCenterY();
+			graphics.drawLine(b.x, centerY, b.x+b.width, centerY);
+		}
+		if (specialFill==CHECK_MARK ) {
+			Rectangle b = s.getBounds();
+			graphics.setColor(decorationColor);
+			BasicStroke bs = new BasicStroke((float) (s.getBounds2D().getWidth()/3));
+			graphics.setStroke(bs);
+			int centerX = (int)b.getCenterX();
+			int centerY = (int)b.getCenterY();
+			graphics.drawLine(centerX, centerY,centerX -5, centerY-5);
+			
+			graphics.drawLine(centerX, centerY,centerX+ 15, centerY-15);
+			
+		}
+		
+		if (specialFill==RAINBOW_FILL) 
+			{
+			Rectangle b = s.getBounds();
+			Paint paint1 = RainbowPaintProvider.getRaindowGradient(new Point(b.x, b.y) ,new Point( b.x+b.width, b.y+b.height));
+			graphics.setPaint(paint1);
+			graphics.fill(s);
+			}
+		
+		graphics.setStroke(getHandleStroke());
+		graphics.setColor(handleStrokeColor);
+		graphics.draw(s);
+	}
+	
+	protected void drawOnDecorationShape(Graphics2D graphics, Shape s) {
+
+		graphics.setColor(this.decorationColor);
+	
+		graphics.fill(s);
+		
+		graphics.setStroke(getHandleStroke());
+		graphics.draw(s);
+	}
+
+	public int handleSize() {
+		return handlesize;
+	}
+	
+	protected Shape createDrawnRect(Point2D pt) {
+		double xr = pt.getX()-handleSize();
+		double yr = pt.getY()-handleSize();
+		double widthr =getDrawnHandleWidth();
+		double heightr = getDrawnHandleHeight();
+		if(isEllipseShape())return new Ellipse2D.Double(xr,yr, widthr, heightr);
+		return new Rectangle2D.Double(xr,yr, widthr, heightr);
+	}
+
+	public int getDrawnHandleWidth() {
+		return handleSize()*2;
+	}
+	
+	public int getDrawnHandleHeight() {
+		return getDrawnHandleWidth();
+	}
+
+	public Point2D getCordinateLocation() {
+		return cordinateLocation;
+	}
+
+	public int getHandleNumber() {
+		return handleNumber;
+	}
+
+	public void setHandleNumber(int handleNumber) {
+		this.handleNumber = handleNumber;
+	}
+	
+	/**What to do when a handle is moved from point p1 to p2*/
+	public void handleMove(Point2D p1, Point2D p2) {
+		
+	}
+
+	@Override
+	public void select() {
+		// TODO Auto-generated method stub
+		selected=true;
+	}
+
+	@Override
+	public void deselect() {
+		selected=false;
+		
+	}
+
+	@Override
+	public boolean isSelected() {
+		return selected;
+	}
+
+	@Override
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	@Override
+	public void setHidden(boolean b) {
+		hidden=b;
+		
+	}
+	
+	public JPopupMenu getJPopup() {
+		
+		return null;
+	}
+
+	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		
+		
+	}
+	
+public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	
+		
+	}
+	
+	public void nudgeHandle(double dx, double dy) {}
+
+
+public boolean containsClickPoint(Point2D p) {
+	return lastDrawShape.contains(p);
+}
+
+
+public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	return lastDrawShape.contains(canvasMouseEventWrapper.getClickedXScreen(),canvasMouseEventWrapper. getClickedYScreen());
+}
+
+	public Icon getIcon() {
+		return icon;
+	}
+
+
+
+
+
+	public void setIcon(Icon icon) {
+		this.icon = icon;
+	}
+	
+	
+	public UndoManagerPlus getUndoManager() {
+		return new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getUndoManager();
+	}
+
+	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	protected Area getAllDirectionArrows(int handlesize, int lenArr, boolean middleout) {
+		Area a = createLeftRightArrow(handlesize, lenArr);
+		a.add(new Area(getUpDownArrowShape(handlesize, lenArr)));
+		lenArr=lenArr*2;
+		if (middleout)a.subtract(new Area(new Rectangle(-lenArr,-lenArr,lenArr*2,lenArr*2)));
+		return a;
+	}
+
+	protected Shape getUpDownArrowShape(int handlesize, int lenArr) {
+		return AffineTransform.getRotateInstance(Math.PI/2).createTransformedShape(createLeftRightArrow(handlesize, lenArr));
+	}
+
+	private Shape getDirectionPointer(boolean left) {
+		Area a=new Area();
+		super.handlesize=4;
+		
+		int plusSize = 4;
+		a.add(new Area(new Rectangle(0, 0, plusSize*3, plusSize)));
+		 Area t = new Area(new Rectangle(0, 0, plusSize, plusSize*3));
+		 a.add(t);
+		Shape t2 = AffineTransform.getRotateInstance(3*Math.PI/4).createTransformedShape(a);
+		if (left) t2 = AffineTransform.getRotateInstance(3*Math.PI/4-Math.PI).createTransformedShape(a);
+		return t2;
+	}
+	
+	private Shape getArrowPointer(int handlesize, int lenArr, boolean left) {
+		
+		Area a = createRightArrow(handlesize, lenArr);
+
+		
+		if (left) return AffineTransform.getRotateInstance(-Math.PI).createTransformedShape(a);
+		return a ;
+	}
+
+	private Area createRightArrow(int handlesize, int lenArr ) {
+		Area a=new Area();
+		int lineHieght = handlesize/2;
+		
+		Polygon point = new Polygon(new int[] {-handlesize, -handlesize, handlesize}, new int[] {handlesize,-handlesize,   0}, 3);
+		Rectangle line = new Rectangle(-lenArr*handlesize, -lineHieght, lenArr*handlesize, 2*lineHieght );
+		
+		a.add(new Area(point));
+		a.add(new Area(line));
+		return a;
+	}
+	
+	private Shape createUpDownArrow(int handlesize, int lenArr) {
+		return AffineTransform.getRotateInstance(Math.PI/2).createTransformedShape(createLeftRightArrow(handlesize, lenArr));
+	}
+	
+	protected Area createLeftRightArrow(int handlesize, int lenArr) {
+		Area arrow1 = createRightArrow(handlesize, lenArr);
+		Shape arrow2 = AffineTransform.getTranslateInstance(-arrow1.getBounds().getMinX(),0).createTransformedShape(arrow1);
+		Shape arrow3 = AffineTransform.getRotateInstance(-Math.PI).createTransformedShape(arrow2);
+		Area output=new Area(arrow2); output.add(new Area(arrow3));
+		return output;
+	}
+
+	@Override
+	public boolean makePrimarySelectedItem(boolean isFirst) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setSpecialFill(int sFill) {
+		specialFill=sFill;
+		
+	}
+	
+	public  void drawLineBetweenPoints(Graphics2D g, CordinateConverter<?> cords, Point2D point, Point2D baseLineEnd) {
+		int x1=(int)cords.transformX( point.getX());
+		int y1=(int)cords.transformY( point.getY());
+		int x2=(int)cords.transformX( baseLineEnd.getX());
+		int y2=(int)cords.transformY( baseLineEnd.getY());
+		g.drawLine(x1, y1, x2, y2);
+	}
+	
+	private void drawLineTo(Graphics2D graphics, CordinateConverter<?> cords, SmartHandle lineto2) {
+		graphics.setColor(getHandleColor());
+		graphics.setStroke(getHandleStroke());
+		drawLineBetweenPoints(graphics, cords, this.getCordinateLocation(), lineto2.getCordinateLocation());
+		
+	}
+	
+
+	public boolean handlesOwnUndo() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setLineConnectionHandle(SmartHandle s) {
+		this.lineto=s;
+}
+	
+	public SmartHandle getLineConnectionHandle() {
+		return lineto;
+	}
+
+	public boolean isEllipseShape() {
+		return ellipse;
+	}
+
+	public void setEllipseShape(boolean ellipse) {
+		this.ellipse = ellipse;
+	}
+	
+}
