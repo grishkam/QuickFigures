@@ -29,7 +29,9 @@ public class PanelManagerUndo extends CompoundEdit2 {
 		iPanels=new ArrayList<PanelListElement>();
 		iPanels.addAll(list.getPanels());
 		for(PanelListElement i:iPanels) {
-			addEditToList(new ListElementUndo(i));
+			ListElementUndo edit = new ListElementUndo(i);
+			addEditToList(edit);
+			if(edit.iBar!=null) {addEditToList(edit.iBar.provideUndoForDialog());}
 		}
 		addEditToList(new ChannelUseChangeUndo(list.getChannelUseInstructions()));
 		
@@ -99,6 +101,7 @@ public class PanelManagerUndo extends CompoundEdit2 {
 			this.panel=p;
 			iElement=p.copy();
 			iBar=p.getScaleBar();
+			
 		}
 		public void establishFinalState() {
 			fElement=panel.copy();

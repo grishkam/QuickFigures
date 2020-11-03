@@ -15,7 +15,7 @@ public class CompoundEdit2 extends AbstractUndoableEdit2 {
 	 */
 	private static final long serialVersionUID = 1L;
 	ArrayList<UndoableEdit> editlist=new 	ArrayList<UndoableEdit> ();
-	
+	ArrayList<EditListener> afterEdits=new 	ArrayList<EditListener> ();
 	
 	public CompoundEdit2(AbstractUndoableEdit... edits) {
 		for(AbstractUndoableEdit undo: edits)
@@ -35,6 +35,7 @@ public class CompoundEdit2 extends AbstractUndoableEdit2 {
 		for(int i=nEdits()-1; i>-1;i--) {
 			editlist.get(i).undo();
 			}
+		afterEditDone();
 		super.selectTree();
 		
 	}
@@ -42,10 +43,20 @@ public class CompoundEdit2 extends AbstractUndoableEdit2 {
 		for(int i=0; i<nEdits();i++) {
 			editlist.get(i).redo();
 		}
+		afterEditDone();
 		super.selectTree();
 		
 	}
 	
+	public void afterEditDone() {
+		for(int i=afterEdits.size()-1; i>-1;i--) try {
+			afterEdits.get(i).afterEdit();
+			} catch (Throwable t) {IssueLog.log(t);}
+	}
+	
+	public void addEditListener(EditListener el) {
+		afterEdits.add(el);
+	}
 	
 	
 	
@@ -57,6 +68,7 @@ public class CompoundEdit2 extends AbstractUndoableEdit2 {
 		
 		return true;
 	}
+	
 	
 	public boolean empty() {return nEdits()==0;}
 
