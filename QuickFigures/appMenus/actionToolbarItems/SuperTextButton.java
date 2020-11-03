@@ -189,8 +189,8 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		CompoundEdit2 edits=new CompoundEdit2();
 		if (this.resizesFont()&&script==8) startFontSize=this.getModelText().getFont().getSize()+2;
 		if (this.resizesFont()&&script==9) startFontSize=this.getModelText().getFont().getSize()-2;
-		
-		startFont=this.getModelText().getFont();
+		if(this.getModelText()!=null)
+			startFont=this.getModelText().getFont();
 			
 		for(LocatedObject2D a: all) {
 			actOnObject(edits, a);

@@ -381,6 +381,7 @@ import channelLabels.ChannelLabelTextGraphic;
 				graphic.setScaleInfo(getDisplayScaleInfo());
 				createChanSwapHandles(graphic);
 				graphic.setScaleInfo(getDisplayScaleInfo());
+				
 			}
 		}
 		
