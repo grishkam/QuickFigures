@@ -35,17 +35,18 @@ public class Zvi_NameOnOpen implements PlugIn, ImageListener {
 		String name = arg0.getOriginalFileInfo().fileName;
 		if (name==null) return;
 		
-		if   (    name.toLowerCase().endsWith(".zvi")
-				||name.toLowerCase().endsWith(".lif")
-				||name.toLowerCase().endsWith(".lei")
-				||name.toLowerCase().endsWith(".czi")
+		String lowerCase = name.toLowerCase();
+		if   (    lowerCase.endsWith(".zvi")
+				||lowerCase.endsWith(".lif")
+				||lowerCase.endsWith(".lei")
+				||lowerCase.endsWith(".czi")
 				) {
 			//IssueLog.log("Zvi, Czi and Lif Correction running");
 			new ImagePlusWrapper(arg0).renameBasedOnRealChannelName();
 			//new ImagePlusWrapper(arg0).colorBasedOnRealChannelName();
 		}
 		
-		if   (    name.toLowerCase().endsWith(".zvi"))
+		if   (    lowerCase.endsWith(".zvi")|| lowerCase.endsWith(".czi"))//on nov 3 2020 added czi
 		{
 			new ImagePlusWrapper(arg0).colorBasedOnRealChannelName();
 		}

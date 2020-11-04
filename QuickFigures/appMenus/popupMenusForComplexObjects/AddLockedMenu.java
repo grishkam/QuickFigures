@@ -23,7 +23,7 @@ public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	public AddLockedMenu(TakesLockedItems t) {
-		this(t, "AttacehItem");
+		this(t, "Attach Item");
 	}
 	public AddLockedMenu(TakesLockedItems t,String st) {
 		super(st);

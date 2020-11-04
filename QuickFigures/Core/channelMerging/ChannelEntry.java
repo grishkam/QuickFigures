@@ -23,7 +23,9 @@ public class ChannelEntry implements Serializable{
 	
 	public String getShortLabel() {
 		if (label==null) return null;
-		return label.split(";")[0];
+		String short1 = label.split(";")[0];
+		if(short1.length()>20) return "Channel "+this.getOriginalChannelIndex();
+		return short1;
 	}
 	
 	public void setLabel(String label) {

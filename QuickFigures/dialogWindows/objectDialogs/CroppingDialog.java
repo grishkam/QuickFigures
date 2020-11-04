@@ -161,7 +161,12 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	public double getDisplayScale(ImagePanelGraphic imagePanelGraphic) {
 		if (imagePanelGraphic.getUnderlyingImageWidth()<200) {return 200/imagePanelGraphic.getUnderlyingImageWidth();}
+		if (imagePanelGraphic.getUnderlyingImageWidth()>3000){return 0.15;}
+		
+		if (imagePanelGraphic.getUnderlyingImageWidth()>2000){return 0.25;}
+		
 		if (imagePanelGraphic.getUnderlyingImageWidth()>1000){return 0.5;}
+	
 		
 		return 1;
 	}
@@ -178,7 +183,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		ImagePanelGraphic b = new ImagePanelGraphic();
 		b.setImage(imagePanelGraphic.getBufferedImage());
 		panel.getGraphicLayers().add(b);
-		panel.setPrefferedSize(imagePanelGraphic.getUnderlyingImageWidth()*mag, imagePanelGraphic.getUnderlyingImageHeight()*mag);
+		double width2 = imagePanelGraphic.getUnderlyingImageWidth()*mag;
+		double height2 = imagePanelGraphic.getUnderlyingImageHeight()*mag;
+		panel.setPrefferedSize(width2, height2);
 		b.setLocationUpperLeft(0, 0);
 		
 		if (r==null) {r=getRectForEntireImage(imagePanelGraphic);}
