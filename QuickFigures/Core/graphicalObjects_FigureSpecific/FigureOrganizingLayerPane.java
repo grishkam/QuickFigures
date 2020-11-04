@@ -395,8 +395,9 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return nextMultiChannel(item,-1);
 	}
 
-	
-	public ArrayList<TextGraphic> addRowLabelsBasedOnImageNames(int type) {
+	/**Attempts to identify the names of the images present in either panels, rows or columns
+	  adds label accordingly*/
+	public ArrayList<TextGraphic> addLabelsBasedOnImageNames(int type) {
 		BasicMontageLayout ml = getMontageLayout();
 		ArrayList<TextGraphic> addedItems=new ArrayList<TextGraphic>();
 		int limit = ml.nRows();
@@ -405,7 +406,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		SnappingPosition position=null;
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;
-			PanelStackDisplay pan = getPanelForRowindex(i, type);
+			PanelStackDisplay pan = getPanelForRowindex(i, type);//may return null
 			
 			if (pan==null) {
 				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic());
@@ -417,6 +418,8 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 					item=addRowLabel(text, i);
 				if (type==BasicMontageLayout.COLS)
 					item=addColLabel(text, i);
+				if (type==BasicMontageLayout.PANELS)//added on nov 3 thinking that it would fix an issue with generate all labels that I have only been seeing on the Mac
+					item=addPanelLabel(text, i);
 			}
 			
 			if (item!=null)
@@ -429,7 +432,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	}
 
 
-	
+	/**If an entire Multichannel image's set of panels is contained in teh Row, Col, or panel in the layout, returns the image*/
 	public PanelStackDisplay getPanelForRowindex(int i, int type) {
 		BasicMontageLayout rowshapes = this.getMontageLayout().makeAltered(type);
 		ArrayList<PanelStackDisplay> list = this.getMultiChannelDisplaysInOrder();
@@ -499,7 +502,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	/**Adds row labels based on names*/
 	public CompoundEdit2 addRowOrColLabel(int type) {
 		CompoundEdit2 edit = new CompoundEdit2();
-		ArrayList<TextGraphic> output = addRowLabelsBasedOnImageNames(type);
+		ArrayList<TextGraphic> output = addLabelsBasedOnImageNames(type);
 		UndoAddManyItem many = new UndoAddManyItem(this, output);
 		edit.addEditToList(many);
 		UndoLayoutEdit many2 = new UndoLayoutEdit(getMontageLayout());

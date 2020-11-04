@@ -57,7 +57,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 	public void updateLocation() {
 		
 		Rectangle bounds = theImage.getOutline().getBounds();
-		super.setLocation(new Point2D.Double(bounds.getX()+5, bounds.getMaxY()+20));
+		super.setLocation(new Point2D.Double(bounds.getX()+5, bounds.getMaxY()+15));
 	
 	}
 	public void updateHandleLocations(double magnify) {
