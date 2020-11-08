@@ -4,6 +4,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import channelMerging.CSFLocation;
 import channelMerging.MultiChannelWrapper;
 import fLexibleUIKit.MenuItemMethod;
 import genericMontageKit.PanelList;
@@ -15,7 +16,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import logging.IssueLog;
-import objectDialogs.ChannelSelectionDialog;
+import objectDialogs.ChannelSliceAndFrameSelectionDialog;
 import undo.AbstractUndoableEdit2;
 import undo.CompoundEdit2;
 import undo.Edit;
@@ -42,14 +43,14 @@ public class PanelManager implements Serializable{
 	public PanelManager(MultichannelDisplayLayer multichannelImageDisplay, PanelList stack,
 			GraphicLayer multichannelImageDisplay2) {
 		this.display=multichannelImageDisplay;
-		this.setStack(stack);
+		this.setPanelList(stack);
 		this.layer=multichannelImageDisplay2;
 		if(layer==null) layer=multichannelImageDisplay;
 		setMultiChannelWrapper(multichannelImageDisplay.getMultichanalWrapper());
 		
 	}
 	
-	/**Creates a panel Graphic*/
+	/**Creates a panel Graphic for the panel, adds that panel to the layer*/
 	protected ImagePanelGraphic generatePanelGraphicFor(PanelListElement panel) {
 		if (panel==null) return null;
 		ImagePanelGraphic panelgraphic = new ImagePanelGraphic();
@@ -84,7 +85,7 @@ public class PanelManager implements Serializable{
 			
 			panelgraphic.setName(name);
 			
-			/**if (this.getParentLayer()!=null ) this.getParentLayer().*/
+			
 			layer.add(panelgraphic);
 			
 			panel.createChanSwapHandles(panelgraphic).setDisplayLayer(display);
@@ -125,12 +126,8 @@ public class PanelManager implements Serializable{
 	/**generates the panel graphics and adds then all to the parent layer*/
 	@MenuItemMethod(menuActionCommand = "paneloptions2", menuText = "Generate New Panels", subMenuName="Image Panels")
 	public void generatePanelGraphics() {
-	
-		getStack().addAllCandF(display.getMultichanalWrapper());
-		
-		generatePanelGraphicsFor(getStack());
-		
-		
+		getPanelList().addAllCandF(display.getMultichanalWrapper());
+		generatePanelGraphicsFor(getPanelList());
 	}
 	
 	/**Creates a panelGraphic for the list elements and adds them
@@ -144,12 +141,12 @@ public class PanelManager implements Serializable{
 			return items;
 	}
 	
-	
-	public void eliminatePanels() {
-		eliminatePanels(getStack());
-	}
-	
+	/**empties the panel list and removes all the objects from the layer
+	*/
 	@MenuItemMethod(menuActionCommand = "panelgone", menuText = "Eliminate Panels", subMenuName="Image Panels")
+	public CompoundEdit2 eliminatePanels() {
+		return eliminatePanels(getPanelList());
+	}
 	public CompoundEdit2 eliminatePanels(PanelList stack) {
 		if (stack==null) return null;
 		CompoundEdit2 output = new CompoundEdit2();
@@ -183,9 +180,8 @@ public class PanelManager implements Serializable{
 		return output;
 	}
 	
-	/**removes the display objects for the given panel list element from ther layer.
-	  returns a list of what has been removed
-	 * @return */
+	/**removes the display objects for the given panel list element from the layer.
+	  */
 	public CompoundEdit2 removeDisplayObjectsFor(PanelListElement g) {
 		CompoundEdit2 itemsTaken=new CompoundEdit2();
 		
@@ -208,6 +204,8 @@ public class PanelManager implements Serializable{
 		 return itemsTaken;
 	}
 	
+	/**returns a channel panel at the given slice and frame.
+	  If the list does not already contain such a panel, this will create one*/
 	private PanelListElement generateSingleChannelPanel(PanelList stack, int channel, int slice, int frame) {
 		PanelListElement panel = stack.getOrCreateChannelPanel(getMultiChannelWrapper(),channel, slice, frame);
 		
@@ -216,10 +214,8 @@ public class PanelManager implements Serializable{
 		return panel;
 	}
 	
-
-	
-	
-	
+	/**returns a panel containing a merged image at the given slice and frame.
+	  If the list does not already contain such a panel, this will create one*/
 	private PanelListElement generateSingleMergePanel(PanelList stack, int slice, int frame) {
 		PanelListElement panel =stack.getOrCreateMergePanel( display.getMultichanalWrapper(), slice, frame);
 	
@@ -228,39 +224,41 @@ public class PanelManager implements Serializable{
 		 return panel;
 	}
 	
+	/**Displays a dialog then adds a merge panel to the figure*/
 	@MenuItemMethod(menuActionCommand = "1merge", menuText = "Create 1 Merge Panel", subMenuName="Image Panels")
 	public void addSingleMergePanel(PanelList stack) {
-		ChannelSelectionDialog dia = new ChannelSelectionDialog(1,1,1,display.getMultichanalWrapper());
+		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1,display.getMultichanalWrapper());
 		dia.show2DimensionDialog();
 		
 		generateSingleMergePanel(stack, dia.getSlice(),dia.getFrame());
 	}
 	
 	
-	
+	/**Displays a dialog then adds a channel panel to the figure*/
 	@MenuItemMethod(menuActionCommand = "1chan", menuText = "Create New Panel", subMenuName="Image Panels")
 	public PanelListElement addSingleChannelPanel(PanelList stack) {
-		ChannelSelectionDialog dia = new ChannelSelectionDialog(1,1,1, display.getMultichanalWrapper());
+		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1, display.getMultichanalWrapper());
 		dia.show3DimensionDialog();
-		if (dia.getChannel()==0) { return generateSingleMergePanel(stack, dia.getSlice(),dia.getFrame());} else
+		boolean b = dia.getChannel()==0;
+		if (b) { 
+			return generateSingleMergePanel(stack, dia.getSlice(),dia.getFrame());} else
 		return generateSingleChannelPanel(stack, dia.getChannel(), dia.getSlice(),dia.getFrame());
 	}
+	
 	
 	public int getDefaultFrameWidth() {
 		return defaultFrameWidth;
 	}
 
-
-
 	public void setDefaultFrameWidth(int defaultFrameWidth) {
 		this.defaultFrameWidth = defaultFrameWidth;
 	}
 
-	public PanelList getStack() {
+	public PanelList getPanelList() {
 		return stack;
 	}
 
-	public void setStack(PanelList stack) {
+	public void setPanelList(PanelList stack) {
 		this.stack = stack;
 	}
 
@@ -274,8 +272,8 @@ public class PanelManager implements Serializable{
 	
 	public synchronized void updatePanels() {
 		MultiChannelWrapper impw =multi;
-		getStack().resetChannelEntriesForAll(impw);
-		getStack().updateAllPanelsWithImage(impw);
+		getPanelList().resetChannelEntriesForAll(impw);
+		getPanelList().updateAllPanelsWithImage(impw);
 		
 	}
 	
@@ -285,7 +283,7 @@ public class PanelManager implements Serializable{
 	  after creation of the image panels.
 	 * */
 	public synchronized void updatePanelsWithChannel(String realChannelName) {
-		getStack().updateAllPanelsWithImage(multi, realChannelName);
+		getPanelList().updateAllPanelsWithImage(multi, realChannelName);
 	}
 	
 	public MultichannelDisplayLayer getDisplay() {
@@ -329,6 +327,7 @@ public class PanelManager implements Serializable{
 		return output;
 		
 	}
+
 	
 	/**When given a single panel list element, finds an empty spot in the layout
 	   and puts the panel in that location. If no empty spot exists, it creates one*/
@@ -351,7 +350,7 @@ public class PanelManager implements Serializable{
 	
 	
 
-	public MontageLayoutGraphic getGridLayout(GraphicLayer layer) {
+	public static MontageLayoutGraphic getGridLayout(GraphicLayer layer) {
 		if (layer==null) return null;
 		ArrayList<ZoomableGraphic> arr = layer.getItemArray();
 		if (arr==null) return null;
@@ -359,26 +358,29 @@ public class PanelManager implements Serializable{
 			if (a==null) continue;
 			if (a instanceof MontageLayoutGraphic) {
 				MontageLayoutGraphic m=(MontageLayoutGraphic) a;
-				
 				m.generateStandardImageWrapper();
 				return m;
 						};
 		}
+		/**recursively looks for layouts in the parent layers. Added on 11/8/20. If the user moves the layout to a layer above*/
+		if (layer.getParentLayer()!=null) 
+			return getGridLayout(layer.getParentLayer());
 		return null;
 	}
 	
+	/**returns the graphical object meant for displaying and editing (via handles) of the figure layout*/
 	public MontageLayoutGraphic getGridLayout() {
-		MontageLayoutGraphic layoutGraphic=this.getGridLayout(layer);
-		if (layoutGraphic==null &&layer.getParentLayer()!=null) layoutGraphic=this.getGridLayout(layer.getParentLayer());
+		MontageLayoutGraphic layoutGraphic=getGridLayout(layer);
+		if (layoutGraphic==null &&layer.getParentLayer()!=null) 
+				layoutGraphic=getGridLayout(layer.getParentLayer());
 		if (layoutGraphic==null) return null;
 		return layoutGraphic;
 	}
 	
+	/**Returns the figure layout*/
 	public BasicMontageLayout getLayout() {
 		MontageLayoutGraphic layoutGraphic=getGridLayout();
-		
 		if (layoutGraphic==null) return null;
-
 		return layoutGraphic.getPanelLayout();
 	}
 
@@ -393,9 +395,9 @@ public class PanelManager implements Serializable{
 	}
 	
 	/**alters the PPI of the figure.
-	 * @return */
+	 */
 	public CompoundEdit2 changePPI(double newppi) {
-		ImagePanelGraphic panel = getStack().getPanels().get(0).getPanelGraphic();
+		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newPanelScale=panel.getScale()*ppi/newppi;
 		double newScale=getDisplay().getPreprocessScale()*newppi/ppi;
@@ -416,10 +418,11 @@ public class PanelManager implements Serializable{
 		return output;
 	}
 
+	/**Changed the panel level scale and returns a CompoundEdit edit*/
 	protected CompoundEdit2 imposePanelLevelScale(double newPanelScale) {
 		CompoundEdit2 output=new CompoundEdit2();
 		
-		for(PanelListElement panel2: getStack().getPanels()) {
+		for(PanelListElement panel2: getPanelList().getPanels()) {
 		
 			ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();
 			
@@ -434,6 +437,7 @@ public class PanelManager implements Serializable{
 		return output;
 	}
 	
+	/**An undo for changes to the panel level scale (what determines pixel density of the panels)*/
 	class PanelManagerUndo extends AbstractUndoableEdit2 {
 		/**
 		 * 
@@ -454,6 +458,8 @@ public class PanelManager implements Serializable{
 		}
 	}
 	
+	/**An undo that can be added to a compound edit. does not actually undo anything but
+	  only updates the panels to display the edit before it in the compound edit*/
 	class PanelManagerUndo2 extends AbstractUndoableEdit2 {
 		private static final long serialVersionUID = 1L;
 		private PanelManager pm;
@@ -466,5 +472,54 @@ public class PanelManager implements Serializable{
 		public void establishFinalState() {
 		}
 	}
+	
+	/**sets the view location of the slot to match the selected slice and frame*/
+	public void setupViewLocation() {
+		CSFLocation out =getDisplay().getSlot().getDisplaySlice();
+		if(out==null) {
+			out=new CSFLocation();
+			getDisplay().getSlot().setDisplaySlice(out);
+		}
+		this.getPanelList().setupViewLocation(out);
+	}
+
+	/**returns true if the panel manager can switch the panel locations (slice, frame or channel) from one setting to another
+	  this will be the case if there are panels with location 1 but none with location 2*/
+	boolean canReplace(CSFLocation f1, CSFLocation f2) {
+		if (this.getMultiChannelWrapper().nSlices()==1&&this.getMultiChannelWrapper().nFrames()==1) return false;
+		if (getMultiChannelWrapper().nFrames()<f2.frame) return false;
+		if (getMultiChannelWrapper().nSlices()<f2.slice) return false;
+		
+		int s1 = getPanelList().getPanelsWith(f1).size();
+		int s2 = getPanelList().getPanelsWith(f2).size();
+		if(s2==0&&s1>0) return true;
+		return false;
+	}
+	/**when given two stack location objects, this edits the panels
+	 such that every panel with the first location is switched to the second.
+	 if there are already panels in the second location this will do nothing and return false*/
+	public boolean performReplaceOfIndex(CSFLocation f1, CSFLocation f2) {
+		if(!canReplace(f1, f2)) return false;
+		ArrayList<PanelListElement> list = this.getPanelList().getPanelsWith(f1);
+		boolean bf = getPanelList().getChannelUseInstructions().getFrameUseInstructions().replaceIndex( f1, f2);
+		boolean bs= getPanelList().getChannelUseInstructions().getSliceUseInstructions().replaceIndex( f1, f2);
+		if (!bs&&!bf) return false;
+		for(PanelListElement l: list) {
+			l.changeStackLocation(f2);
+		}
+		this.updatePanels();
+		return true;
+	}
+	
+	/**returns true if the panel manager is using only a subset of the Z slices or T frames*/
+	public boolean selectsSlicesOrFrames() {
+		return (
+				!getPanelList().getChannelUseInstructions().getFrameUseInstructions().selectsAll()
+				||
+				!getPanelList().getChannelUseInstructions().getSliceUseInstructions().selectsAll()
+				)
+				;
+	}
+	
 
 }

@@ -25,9 +25,11 @@ import logging.IssueLog;
 import plotTools.ColumnSwapTool;
 import plotTools.TTestTool;
 import selectedItemMenus.SelectionOperationsMenu;
+import ultilInputOutput.FileChoiceUtil;
 
 public class InstallAndTest  implements MenuBarItemInstaller, ToolInstallers{
 
+	private static final String pathOfExample =FileChoiceUtil.pathOfDocumentsFolder()+ "/FigureWizold/ExampleGrouped.xlsx";
 	static boolean alreadyInstalled=false;
 	
 	public static void main(String[] args) {
@@ -39,7 +41,7 @@ public class InstallAndTest  implements MenuBarItemInstaller, ToolInstallers{
 		//new ExcelFileToXYPlot(2).performActionDisplayedImageWrapper(set);
 		try {
 			new ExcelFileToComplexCategoryPlot(1).createPlotFromFileExcelFile(null,
-					new File("C:/Users/Greg Mazo/Documents/FigureWizold/ExampleGrouped.xlsx"));
+					new File(pathOfExample));
 		} catch (InvalidFormatException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

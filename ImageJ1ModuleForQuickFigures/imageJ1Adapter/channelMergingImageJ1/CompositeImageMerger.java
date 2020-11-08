@@ -77,9 +77,30 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 			if (channels.size()==1) return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==1); else 
 				return mergedComposite(tempcomposte);
 				}
-		else return image;
+		else if (imp.getChannelProcessor() instanceof ColorProcessor)
+			{return image;}
+			
+		else {
+			/**adds each channel entry to the stack and array*/
+			for (int i=0; i<channels.size(); i++) {
+				ChannelEntry channl=channels.get(i);
+				
+				int index=imp.getStackIndex(channl.getOriginalChannelIndex(), slice, frame);
+				
+				st.addSlice(imp.getStack().getProcessor(index));
+				newLut[i]=luts[channl.getOriginalChannelIndex()-1];
+			}
+			/**Creates a temporary composite image*/
+			CompositeImage tempcomposte = new CompositeImage(new ImagePlus("", st));
+			tempcomposte.setLuts(newLut);
+			tempcomposte.updateAndDraw();
+			if (channels.size()==1) return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==1); else 
+				return mergedComposite(tempcomposte);
+				}
+		}
+			//return image;
 		
-	}
+	
 	
 	/**Returns a slice of composite image as a color processor. */
 	private PixelWrapper sliceOfComposite(CompositeImage imm, int c, Boolean ChannelsInGrayScale) {

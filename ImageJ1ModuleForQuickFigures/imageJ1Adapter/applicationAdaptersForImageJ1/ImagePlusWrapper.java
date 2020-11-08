@@ -403,11 +403,22 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		if (stack.getSize()<index) return null;
 		String name=stack.getSliceLabel(index);
 		if (name==null) {
-			stack.setSliceLabel("c:"+c+"/"+imp.getNChannels(), index);
+			setSliceLabelToChannel(c, index, stack);
 		}
 		return name;
 		
 	}
+
+	private void setSliceLabelToChannel(int c, int index, ImageStack stack) {
+		stack.setSliceLabel("c:"+c+"/"+imp.getNChannels(), index);
+		if(imp.getNChannels()<stack.getSize())
+			for( int f=1; f<=imp.getNFrames(); f++) {
+				for(int s=1; s<=imp.getNSlices(); s++) {
+					index=imp.getStackIndex(c, s, f);
+					stack.setSliceLabel("c:"+c+"/"+imp.getNChannels(), index);
+				}
+			}
+		}
 
 	/**gets the channel lut as a color*/
 	@Override
@@ -420,9 +431,13 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		else if (c==0) {
 			IssueLog.log("problem with lut arrays");
 			return null;
+		} else if (eachChanLUT.length==0){
+			return Color.white;	
 		}
-		else 
+		else {
+			
 			return getColorFromLUT(eachChanLUT[c-1], 255);
+			}
 		
 	}
 	
@@ -477,7 +492,6 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	@Override
 	public ChannelOrderAndColorWrap getChannelSwapper() {
-		// TODO Auto-generated method stub
 		IJ1ChannelOrderWrap cs = new IJ1ChannelOrderWrap(imp, this);
 		cs.addChannelSwapListener(this);
 		this.channames=null;
@@ -667,33 +681,11 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 			String name=this.getRealChannelName(i);
 			if (name==null) {IssueLog.log("Cannot find real Channel name");
 								continue;}
-			name=name.trim().toLowerCase();
-			
-			
-			
 			
 			//IssueLog.log("Will try to set channel color for "+name);//+ " of exposure "+this.getRealChannelExposure(i) +" ms");
-			if (name.equals("texasred"))
-					this.getChannelSwapper().setChannelColor(Color.red, i);
-			if (name.contains("egfp")||name.contains("488"))
-				this.getChannelSwapper().setChannelColor(Color.green, i);
-			if (name.contains("yfp"))
-				this.getChannelSwapper().setChannelColor(Color.yellow, i);
-			if (name.contains("rfp")||name.contains("568"))
-				this.getChannelSwapper().setChannelColor(Color.red, i);
-			if (name.equals("dapi"))
-				this.getChannelSwapper().setChannelColor(Color.blue, i);
-			if (name.equals("brightfield"))
-				this.getChannelSwapper().setChannelColor(Color.white, i);
-			if (name.equals("dic") ||name.equals("tl dic"))
-				this.getChannelSwapper().setChannelColor(Color.white, i);
-			if (name.equals("cy5"))
-				this.getChannelSwapper().setChannelColor(Color.magenta, i);
+			ChannelOrderAndColorWrap channelSwapper = this.getChannelSwapper();
 			
-			Color color1 = BasicMetaDataHandler.getColor(name);
-			//IssueLog.log("Found color "+color1);
-			if(color1!=null)
-				this.getChannelSwapper().setChannelColor(color1, i);
+			Color color1 = ChannelManipulations.setChannelColor(i, name, channelSwapper);
 			
 		} catch (Throwable t) {
 			IssueLog.log("problem setting colors based on real channel names "+i);
@@ -703,6 +695,8 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		}
 		
 	}
+
+	
  
 	@Override
 	public void renameBasedOnRealChannelName() {
@@ -734,7 +728,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		
 	}
 	
-	/**not yet implemented. returns a scaled version of this*/
+	/** returns a scaled version of this*/
 	@Override
 	public ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale) {
 		imp.deleteRoi();
@@ -791,6 +785,20 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	public void afterChanSwap() {
 		channames=null;
 		chanexposures=null;
+	}
+
+	@Override
+	public Integer getSelectedFromDimension(int i) {
+		if(i==0) return imp.getChannel();
+		if(i==1) return imp.getSlice();
+		if(i==2) return imp.getFrame();
+		return 0;
+	}
+
+	@Override
+	public double bitDepth() {
+		if (imp==null) return 8;
+		return imp.getBitDepth();
 	}
 
 

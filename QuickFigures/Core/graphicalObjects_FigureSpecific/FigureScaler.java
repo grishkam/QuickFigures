@@ -232,7 +232,7 @@ public class FigureScaler {
 		ArrayList<ImagePanelGraphic> items= new 	ArrayList<ImagePanelGraphic>();
 		ArrayList<PanelManager> managers = getPanelManagers(gl);
 		for(PanelManager man: managers) {
-			items.addAll(man.getStack().getPanelGraphics());
+			items.addAll(man.getPanelList().getPanelGraphics());
 		}
 		
 		return items;

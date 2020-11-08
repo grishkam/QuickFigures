@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 
 import appContext.CurrentAppContext;
+import exportMenus.SVGQuickExport;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -60,7 +61,10 @@ public class ObjectAddingMenu extends SmartJMenu implements ActionListener, KeyL
 			
 			objectAdders.add(new BarGraphicAdder());
 			//adders.add(new SavedGraphicAdder());
-			adders.add(new SVG_GraphicAdder2());
+			if (new SVGQuickExport().isBatikInstalled())
+				adders.add(new SVG_GraphicAdder2());
+			
+			
 			//adders.add(new layoutAdder());
 			objectAdders.add(new GroupAdder());
 			imageadders.add(new FileImageAdder(false));

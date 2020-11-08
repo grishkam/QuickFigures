@@ -18,6 +18,7 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import logging.IssueLog;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicObjectDisplayBasic;
@@ -157,6 +158,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 		public Color getImageColor() {
 			try {
 				ChannelSwapperToolBit2 cc = new ChannelSwapperToolBit2(firstImage);
+				
 				return cc.getChannelEntryList().get(0).getColor();
 			} catch (Exception e) {
 			}
@@ -168,7 +170,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 			
 			try {
 				ChannelSwapperToolBit2 cc = new ChannelSwapperToolBit2(firstImage);
-				return cc.getPressedPanelManager().getStack().getChannelUseInstructions().ChannelsInGrayScale==1;
+				return cc.getPressedPanelManager().getPanelList().getChannelUseInstructions().ChannelsInGrayScale==1;
 			} catch (Exception e) {
 				
 			}

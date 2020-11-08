@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
+import figureTemplates.DirectoryHandler;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import includedToolbars.ActionToolset1;
@@ -47,7 +48,7 @@ public class ToolbarTester {
 		startToolbars(appclose);
 		 
 		
-		File example=new File("/Users/Greg Mazo/Desktop/example");
+		File example=new File(new DirectoryHandler().getFigureFolderPath()+"/example");
 		
 		if (example.exists()) {
 		 try {

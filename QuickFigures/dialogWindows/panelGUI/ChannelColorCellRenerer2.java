@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
+import channelMerging.ChannelEntry;
 import standardDialog.ChannelEntryBox;
 
 /**Renders the channel color cells in a channel selection JList*/
@@ -39,11 +40,14 @@ public class ChannelColorCellRenerer2 extends DefaultListCellRenderer {
 		
 		
 		if (box.elements.size()>0&&dim>-1) {
+			ChannelEntry chan = box.elements.get(dim);
 			if(box.getSelectedIndex()==dim) {
 			g.setColor(Color.blue);
-			g.fillRect(2, 2, (int)g.getFontMetrics().getStringBounds(box.elements.get(dim).getRealChannelName(), g).getWidth(), g.getFont().getSize());
+			String realChannelName = chan.getRealChannelName();
+			if(realChannelName==null) {realChannelName ="Channel #"+chan.getOriginalChannelIndex();}
+			g.fillRect(2, 2, (int)g.getFontMetrics().getStringBounds(realChannelName, g).getWidth(), g.getFont().getSize());
 			}
-			ChannelEntryBox.drawRainbowString(g, box.elements.get(dim), 1,this.getFont().getSize()+1, "none");
+			ChannelEntryBox.drawRainbowString(g, chan, 1,this.getFont().getSize()+1, "none");
 			
 		}
 		else {ChannelEntryBox.drawRainbowString(g, null, 1,this.getFont().getSize()+1, "none");}

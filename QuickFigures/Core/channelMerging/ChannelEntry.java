@@ -10,6 +10,16 @@ public class ChannelEntry implements Serializable{
 	/**
 	 * 
 	 */
+	
+	
+	private String label="";
+	private Color originalLutCol=Color.BLACK;
+	private int originalChannelIndex;
+	private int originalStackIndex;
+	private String additional="";
+	private String realChannelName;
+	private int exposureMS=0;
+	
 	private static final long serialVersionUID = 1L;
 	public ChannelEntry(String label, Color c, int number) {
 		this.setLabel(label);
@@ -22,10 +32,14 @@ public class ChannelEntry implements Serializable{
 	}
 	
 	public String getShortLabel() {
-		if (label==null) return null;
+		if (label==null) return getSimpleLabel();
 		String short1 = label.split(";")[0];
-		if(short1.length()>20) return "Channel "+this.getOriginalChannelIndex();
+		if(short1.length()>20) return getSimpleLabel();
 		return short1;
+	}
+
+	private String getSimpleLabel() {
+		return "Channel "+this.getOriginalChannelIndex();
 	}
 	
 	public void setLabel(String label) {
@@ -78,13 +92,7 @@ public class ChannelEntry implements Serializable{
 		return exposureMS;
 	}
 
-	private String label="";
-	private Color originalLutCol=Color.BLACK;
-	private int originalChannelIndex;
-	private int originalStackIndex;
-	private String additional="";
-	private String realChannelName;
-	private int exposureMS=0;
+
 	
 	/**updates a channel entry in the event of a color change, to match*/
 	public void updateFrom(ChannelEntry ce) {
@@ -95,11 +103,11 @@ public class ChannelEntry implements Serializable{
 		this.originalChannelIndex=ce.originalChannelIndex;//in the even the channel order was change
 		this.realChannelName=ce.getRealChannelName();
 		
-		
+		/**
 		IssueLog.log("Updating channel entry ");
 		IssueLog.log(" index "+ce.originalChannelIndex);
 		IssueLog.log(" name "+ce.getRealChannelName());
-		
+		*/
 	}
 	
 	

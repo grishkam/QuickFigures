@@ -30,6 +30,9 @@ public interface DisplayedImageWrapper {
 	public void zoomOutToFitScreen();
 	public void zoom(String st);
 	
+	public double getZoomLevel();
+	public void setZoomLevel(double z);
+	
 	public void setEndFrame(int frame);
 	public int getEndFrame();
 	
@@ -42,5 +45,6 @@ public interface DisplayedImageWrapper {
 	
 	public Selectable getSelectedItem() ;
 	public void setSelectedItem(Selectable s) ;
+	
 	
 }

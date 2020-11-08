@@ -27,7 +27,6 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	
 	public IJ1ChannelOrderWrap(ImagePlus imp2, ImagePlusWrapper imagePlusWrapper) {
 		imp=imp2;
-		
 	}
 
 	@Override
@@ -46,19 +45,35 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	@Override
 	public void setChannelColor(Color c, int chan) {
 		setLutColor(c,chan);
-		
+	}
+	
+	@Override
+	public void setChannelColor(byte[][] lut, int chan) {
+		LUT l = new LUT(lut[0], lut[1], lut[2]);
+		setLut(chan, l);
 	}
 	
 	private void setLutColor(Color lut, int chan) {
 		if (chan<=0) {
-			IssueLog.log("Error, Was asked to chang color for channel '0' but channel numbering starts from 1");
+			IssueLog.log("Error, Was asked to change color for channel '0' but channel numbering starts from 1");
 			
 			return;
 			}
+		LUT createLutFromColor = LUT.createLutFromColor(lut);
+		setLut(chan, createLutFromColor);
+	}
+
+	private void setLut(int chan, LUT createLutFromColor) {
+		if (chan<=0) {
+			IssueLog.log("Error, Was asked to change color for channel '0' but channel numbering starts from 1");
+			
+			return;
+			}
+		
 		if (imp instanceof CompositeImage)
-		setLutColorWithoutDisplayRangeEdit((CompositeImage)imp, LUT.createLutFromColor(lut), chan);
+		setLutColorWithoutDisplayRangeEdit((CompositeImage)imp, createLutFromColor, chan);
 		else {
-			imp.getProcessor().setLut(LUT.createLutFromColor(lut));
+			imp.getProcessor().setLut(createLutFromColor);
 		}
 	}
 	

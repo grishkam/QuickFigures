@@ -9,16 +9,19 @@ import logging.IssueLog;
   or included in code would not change. Using simply string replacement
   this helps */
 public class FileFinder {
+	private static String workingDir="/";
+	String extension=null;
+	static String name="Greg";
 	
 	String[][] replacements=new String[][] {
 			new String[] {
-					"/Gregs Data/Greg Microscopy Files/Greg HP Doccuments/",
-					"/Gregs Data/Greg Microscopy Files/Microscope Images/"
+					"/"+name+"s Data/"+name+" Microscopy Files/"+name+" HP Doccuments/",
+					"/"+name+"s Data/"+name+" Microscopy Files/Microscope Images/"
 					
 			},
 			new String[] {
-					"/Gregs Data/Greg Microscopy Files/Greg HP Doccuments/",
-					"/Gregs Data/Greg Microscopy Files/Miocroscope Images/"
+					"/"+name+"s Data/"+name+" Microscopy Files/"+name+" HP Doccuments/",
+					"/"+name+"s Data/"+name+" Microscopy Files/Miocroscope Images/"
 					
 			}
 			
@@ -26,18 +29,16 @@ public class FileFinder {
 	
 	
 	public static void main(String[] args) {
-		String example="/Gregs Data/Greg Microscopy Files/Greg HP Doccuments/C14 Domain Mapping/Oct 13 2013 RG clone 11 c14cn1 double rescue/ha red, percentrin green centriole cohession/delta n c14 plasmid/Image- 0056_taken_10_13_2013.zvi";
+		String example="/"+name+"s Data/"+name+" Microscopy Files/"+name+" HP Doccuments/C14 Domain Mapping/Oct 13 2013 RG clone 11 c14cn1 double rescue/ha red, percentrin green centriole cohession/delta n c14 plasmid/Image- 0056_taken_10_13_2013.zvi";
 	
 		File f=new File(example);
-		IssueLog.log("found file "+f+"");
-	
+		
 	
 	}
 	
 	
 
-	private static String workingDir="/";
-	String extension=null;
+	
 	
 	public File findFile(File file) {
 		if (file.exists()) return file;

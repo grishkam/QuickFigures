@@ -263,7 +263,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			
 			
 			
-			if (pressedInset!=null) {new PanelStackDisplayOptions(presseddisplay,pressedInset.getPanelManager().getStack(),pressedInset.getPanelManager(), false).showDialog();;}
+			if (pressedInset!=null) {new PanelStackDisplayOptions(presseddisplay,pressedInset.getPanelManager().getPanelList(),pressedInset.getPanelManager(), false).showDialog();;}
 			else
 			if (workOn==0) {
 				if (pressedInset==null)
@@ -322,7 +322,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	protected CompoundEdit2 changeColorModes() {
 		ChannelUseInstructions ins = presseddisplay.getStack().getChannelUseInstructions();
 		if (this.pressedInset!=null) {
-			 ins =pressedInset.getPanelManager().getStack().getChannelUseInstructions();
+			 ins =pressedInset.getPanelManager().getPanelList().getChannelUseInstructions();
 			
 		}
 		CompoundEdit2 undo=new CompoundEdit2();
@@ -626,7 +626,7 @@ static ArrayList<PanelGraphicInsetDef> getAllInsets(PanelStackDisplay pd) {
 public static PanelGraphicInsetDef findInsetWith(PanelStackDisplay pd, ImagePanelGraphic image) {
 	ArrayList<PanelGraphicInsetDef> insets = getAllInsets(pd);
 	for(PanelGraphicInsetDef in: insets) {
-		if(in.getPanelManager().getStack().getPanelGraphics().contains(image)) return in;
+		if(in.getPanelManager().getPanelList().getPanelGraphics().contains(image)) return in;
 		
 	}
 	return null;

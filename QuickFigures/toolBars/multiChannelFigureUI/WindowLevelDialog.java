@@ -111,6 +111,7 @@ public class WindowLevelDialog extends StandardDialog  {
 		
 		
 	public WindowLevelDialog(int chan, MultiChannelWrapper mrp, DisplayRangeChangeListener listen,int winLev) {
+		IssueLog.log("creating window level dialog");
 		this.winLev=winLev;
 		
 		this.displayChangeLis=listen;
@@ -122,8 +123,21 @@ public class WindowLevelDialog extends StandardDialog  {
 		
 		slidermin=(int)ShowDisplayRange.findMinOfDistributionHistogram(basis);
 		
-		for(int i=basis.length-1; i>1; i--) {
-			if (basis[i]==0) {slidermax=i;} else break;
+		IssueLog.log("will attempt to determine slider max");
+		/**attempts to find the point in the histogram that the top of the distribution starts*/
+		boolean maxSet=false;
+		slidermax=basis.length-1;
+		for(int i=basis.length-1; i>0; i--) {
+			if (basis[i]==0) {
+				slidermax=i;
+			} else { 
+				maxSet=true;
+				break;
+			}
+			
+		}
+		if (!maxSet) {
+			slidermax=(int)Math.pow(2, mrp.bitDepth());
 		}
 		
 		

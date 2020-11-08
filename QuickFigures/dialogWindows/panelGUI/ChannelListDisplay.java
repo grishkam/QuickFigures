@@ -55,6 +55,7 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 	public void setPanelListPartner(PanelListDisplay panelDisp) {this.panelDisp=panelDisp;}
 
 	public void setPanel(PanelListElement panel) {
+		if(panel==null) return;
 		this.panel=panel;
 		elements.clear();
 		elements.addAll(panel.getChannelEntries());
@@ -279,7 +280,7 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 	@Override
 	public
 	Dimension  	getPreferredSize() {
-	return 	new Dimension(250,100) ;
+	return 	new Dimension(250,200) ;
 	}
 	
 	

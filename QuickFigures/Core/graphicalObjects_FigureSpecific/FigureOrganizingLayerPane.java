@@ -219,7 +219,12 @@ public BasicMontageLayout getMontageLayout() {
 			double w = principalMultiChannel.getMultichanalWrapper().getDimensions().getWidth()/pScale;
 			double h = principalMultiChannel.getMultichanalWrapper().getDimensions().getHeight()/pScale;
 			
-			if ( mustResize)CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
+			if ( mustResize||display.getStack().getChannelUseInstructions().selectsSlices(display.getMultichanalWrapper()))
+				{
+				CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
+				display.getStack().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
+				}
+			
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -262,13 +267,14 @@ public BasicMontageLayout getMontageLayout() {
 	public static void cropIfUserSelectionExists(MultichannelDisplayLayer display) {
 		if (display.getMultichanalWrapper().getSelectionRectangle(0)!=null) try{
 			Rectangle b = display.getSlot().getMultichanalWrapper().getSelectionRectangle(0).getBounds();
-			display.getMultichanalWrapper().eliminateSelection(0);
+			display.getMultichanalWrapper().eliminateSelection(0);//eliminates the rectangle so it wont interfere with later steps
 			boolean valid=true;//is the ROI valid
 			if(b.height>3.5*b.width) valid=false;
 			if(b.width>3.5*b.height) valid=false;
 			if(b.width<25||b.height<25) valid=false;
+			if(b.width>1000||b.height>1000) valid=false;
 			
-			
+			IssueLog.log("Rectangle valid= "+valid);
 			if(!valid) {
 				CroppingDialog.showCropDialog(display.getSlot(), b, 0);
 			} else {
@@ -276,7 +282,7 @@ public BasicMontageLayout getMontageLayout() {
 			}
 			
 		} catch (Throwable t) {
-			t.printStackTrace();
+			IssueLog.log(t);
 		}
 	}
 	
@@ -566,7 +572,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	public ArrayList<ChannelUseInstructions> getChannelUseInfo() {
 		ArrayList<ChannelUseInstructions> alreadySwapped=new ArrayList<ChannelUseInstructions>();
 		for (PanelStackDisplay d: getMultiChannelDisplaysInOrder()) {
-			ChannelUseInstructions ins = d.getPanelManager().getStack().getChannelUseInstructions();
+			ChannelUseInstructions ins = d.getPanelManager().getPanelList().getChannelUseInstructions();
 			if(alreadySwapped.contains(ins)) continue;
 			alreadySwapped.add(ins);
 		}

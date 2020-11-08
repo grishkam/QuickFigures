@@ -55,7 +55,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 		add(new ObjectAction<PanelManager>(panelManager) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ImagePanelGraphic panel = panelManager.getStack().getPanels().get(0).getPanelGraphic();
+				ImagePanelGraphic panel = panelManager.getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newppi=StandardDialog.getNumberFromUser("Input PPI ", ppi);
 			addUndo(
@@ -184,7 +184,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 	}
 	
 	SmartMenuItem2 showPanelListItem() {
-		SmartMenuItem2 out=new SmartMenuItem2("Advanced Channel Use") {
+		SmartMenuItem2 out=new SmartMenuItem2("Advanced Channel and Frame Use") {
 
 			/**
 			 * 

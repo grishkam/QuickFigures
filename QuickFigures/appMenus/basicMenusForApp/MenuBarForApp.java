@@ -52,8 +52,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	
 	public MenuBarForApp() {
 		installItem(new NewCanvasDialog());
-		installItem(new QuickFigureMaker().getMenuVersion());
-		installItem(new QuickFigureMaker(true).getMenuVersion());
+		installItems(QuickFigureMaker.getMenuBarItems());
 		installItem(new GraphicSetSaver());
 		installItem(new TemplateSaver(true, false));
 		
@@ -81,6 +80,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new ZoomFit());
 		installItem(new ZoomFit("Out"));
 		installItem(new ZoomFit("In"));
+		installItem(new ZoomFit("Set"));
 		
 		for(int i=0; i<5; i++)
 			installItem(new ShowToolBar(i));
@@ -119,14 +119,19 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			installItem(new PNGQuickExport());
 			installItem(new PNGSequenceQuickExport());
 			
+			
 			try {installItem(new PPTQuickExport());} 
-			catch (java.lang.NoClassDefFoundError t) {	
-			IssueLog.log("could not install some menu items because missing classes", t.toString());
+			catch (Throwable t) {	
+			//if there is any problem with installation the menu item will not be added
 		}
 			
-			try {installItem(new SVGQuickExport());} 
-			catch (java.lang.NoClassDefFoundError t) {	
-				IssueLog.log("could not install some menu items because missing classes", t.toString());
+			try {
+				SVGQuickExport obj = new SVGQuickExport();
+				if (obj.isBatikInstalled())
+					installItem(obj);
+				} 
+			catch (Throwable t) {	
+				//if there is any problem with installation the menu item will not be added
 		}
 			
 		
@@ -140,8 +145,14 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		return output;
 	}
 	
+	public void installItems(MenuItemForObj... o) {
+		for(MenuItemForObj obj: o) {
+			installItem(obj);
+		}
+	}
+	
 	public void installItem(MenuItemForObj obj) {
-		
+		if(obj==null) return;
 		try{
 		
 		JMenuItem ji=new JMenuItem(obj.getNameText());

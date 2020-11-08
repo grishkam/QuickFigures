@@ -24,6 +24,13 @@ import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.util.ParsedURL;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
+import figureTemplates.DirectoryHandler;
+
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
 import org.apache.batik.anim.dom.SVGOMDocument;
 import org.apache.batik.anim.dom.SVGOMTextElement;
@@ -39,7 +46,7 @@ import org.apache.batik.gvt.GraphicsNode;
 import org.apache.batik.gvt.ShapeNode;
 import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
-import org.w3c.dom.*;
+
 
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ZoomableGraphic;
@@ -254,11 +261,11 @@ public class SVGImportTest {
 		
 		if (x==null) {
 			x=new Double(0);
-			IssueLog.log("Erroe: null x location");
+			IssueLog.log(": null x location");
 		}
 		if (y==null) {
 			y=new Double(0);
-			IssueLog.log("Erroe: null y location");
+			IssueLog.log(": null y location");
 		}
 		
 		if (x!=null&&y!=null) tg.setLocation(x, y);
@@ -856,7 +863,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=false;
 		//String path="/Users/mazog/Desktop/test.svg";
-		String path="/Users/Greg Mazo/Desktop/Untitled 1.svg";
+		String path=new DirectoryHandler().getFigureFolderPath()+"/Untitled 1.svg";
 		IssueLog.log(new File(path).exists());
 		//loadClass("org/w3c/dom/Window");
 		

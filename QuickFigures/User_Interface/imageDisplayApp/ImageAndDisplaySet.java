@@ -181,6 +181,12 @@ public class ImageAndDisplaySet implements DisplayedImageWrapper {
 		getTheWindow().zoom(st);
 		
 	}
+	
+	@Override
+	public void setZoomLevel(double st) {
+		getTheWindow().getZoomer().setZoom(st);
+	}
+
 
 	public int getCurrentFrame() {
 		return currentFrame;
@@ -229,5 +235,11 @@ public class ImageAndDisplaySet implements DisplayedImageWrapper {
 		this.selectedItem = selectedItem;
 	}
 
+	@Override
+	public double getZoomLevel() {
+		return 100*getTheWindow().getZoomer().getZoom();
+	}
+
+	
 	
 }

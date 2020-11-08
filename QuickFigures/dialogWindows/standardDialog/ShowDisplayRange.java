@@ -36,12 +36,14 @@ public class ShowDisplayRange extends GraphicComponent  {
 	
 	public void setRange(int[] range) {
 		this.range=range;
+		
 		maxShow=findMaxOfDistributionHistogram(range);
 		minShow=findMinOfDistributionHistogram(range);
 		topShow=findLargestOfDistributionHistogram(range);
 	}
 	
 	public static double findMinOfDistributionHistogram(int[] basis) {
+		if (basis==null) return 0;
 		double slidermin=0;
 		for(int i=0; i<basis.length; i++) {
 			if (basis[i]==0) {slidermin=i;} else break;
@@ -50,6 +52,7 @@ public class ShowDisplayRange extends GraphicComponent  {
 	}
 	
 	public static double findMaxOfDistributionHistogram(int[] basis) {
+		if (basis==null) return 255;
 		double slidermax=basis.length-1;
 		for(int i=basis.length-1; i>1; i--) {
 			if (basis[i]==0) {slidermax=i;} else break;
@@ -58,6 +61,7 @@ public class ShowDisplayRange extends GraphicComponent  {
 	}
 	
 	public static double findLargestOfDistributionHistogram(int[] basis) {
+		if (basis==null) return 255;
 		double slidermax=0;
 		for(int i=basis.length-1; i>1; i--) {
 			if (basis[i]>slidermax) {slidermax=basis[i];} 

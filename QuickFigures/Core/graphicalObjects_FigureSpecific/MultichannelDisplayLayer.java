@@ -92,6 +92,12 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		return output;
 	}
 	
+	/**creates a copy with all the same traits but no image innitialized*/
+	public MultichannelDisplayLayer similar() {
+		MultichannelDisplayLayer output = new MultichannelDisplayLayer(getSlot().copy()) ;
+		output.copyTraitsFrom(this);
+		return output;
+	}
 	
 
 	PanelSetter setter;
@@ -261,7 +267,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	
 	public PanelManager getPanelManager() {
 		if (panelMan==null) panelMan=new PanelManager( this, this.getStack(), this);
-		panelMan.setStack(this.getStack());
+		panelMan.setPanelList(this.getStack());
 		panelMan.setMultiChannelWrapper(getMultichanalWrapper());
 				
 		return panelMan;
@@ -523,10 +529,6 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	
 	
 	
-
-	
-
-	
 	/**Tries to find the panel with the given display*/
 	public PanelListElement getPanelWithDisplay(Object impg) {
 		
@@ -558,7 +560,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 			//IssueLog.log("display "+d+" is determined to "+d2.hasItem(impg)+" for impg");
 			if (d2.hasItem(impg)) return d2;//The simplest way is the search the layer
 			PanelListElement potentialpanel = d2. getPanelWithDisplay(impg);
-			if (d2.getPanelManager().getStack().getPanels().contains( potentialpanel )) return d2;
+			if (d2.getPanelManager().getPanelList().getPanels().contains( potentialpanel )) return d2;
 		}
 		
 		return null;
@@ -678,13 +680,14 @@ transient static IconSet i;
 	}
 	public UndoAddManyItem generateChannelLabels() {
 		MultiChannelWrapper mw = getMultichanalWrapper();
-		
 		ArrayList<ChannelLabelTextGraphic> labels;
 		//Check to determine if this stack is both multichannel and multi-slice. if so, channel labels will be needed only for the top row
 		if (mw.nChannels()>1 && (mw.getStackSize()>mw.nChannels()))
 			labels=getChannelLabelManager().generateChannelLabels2();
+		else if (mw.nChannels()>1) 
+			labels=getChannelLabelManager().generateChannelLabels();
+		else return null;//channel labels not needed if only one channel present
 		
-		else labels=getChannelLabelManager().generateChannelLabels();
 		return new UndoAddManyItem(this, labels);
 	}
 	
@@ -796,7 +799,6 @@ transient static IconSet i;
 		this.updatePanels();
 	}
 	
-	
-	
+	public void setFrameSliceUseToViewLocation() {getPanelManager().getPanelList().getChannelUseInstructions().shareViewLocation(getSlot().getDisplaySlice());}
 	
 }

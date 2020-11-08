@@ -18,7 +18,7 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import objectDialogs.ChannelLabelDialog;
 import objectDialogs.ChannelLabelPropertiesDialog;
-import objectDialogs.ChannelSelectionDialog;
+import objectDialogs.ChannelSliceAndFrameSelectionDialog;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import objectDialogs.TextLineDialogForChenLabel;
 import standardDialog.DialogItemChangeEvent;
@@ -128,7 +128,7 @@ public class ChannelLabelManager implements Serializable {
 	
 	@MenuItemMethod(menuActionCommand = "1mergeL", menuText = "Create 1 Merge Panel Label", subMenuName="Channel Labels")
 	public void addSingleMergeLabel() {
-		ChannelSelectionDialog dia = new ChannelSelectionDialog(1,1,1, getMultiChannel());
+		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1, getMultiChannel());
 		dia.show2DimensionDialog();
 		
 		generateSingleChannelMergeLabel( dia.getSlice(),dia.getFrame());
@@ -136,7 +136,7 @@ public class ChannelLabelManager implements Serializable {
 	
 	@MenuItemMethod(menuActionCommand = "1chanL", menuText = "Create 1 Channel Panel Label", subMenuName="Channel Labels")
 	public void addSingleChannelLabel() {
-		ChannelSelectionDialog dia = new ChannelSelectionDialog(0,1,1, getMultiChannel());
+		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(0,1,1, getMultiChannel());
 		dia.show3DimensionDialog();
 		generateSingleChannelPanelLabel( dia.getChannel(), dia.getSlice(),dia.getFrame());
 	}

@@ -149,4 +149,18 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		
 	}
 
+	
+
+	@Override
+	public double getZoomLevel() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
+
+	@Override
+	public void setZoomLevel(double z) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

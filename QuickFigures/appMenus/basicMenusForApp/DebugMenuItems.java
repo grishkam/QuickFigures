@@ -29,7 +29,7 @@ public  class DebugMenuItems implements MenuItemForObj{
 		IssueLog.reportAllFail(on);
 		IssueLog.reportAllEvents();
 		IssueLog.log("Testing Error Logging");
-		new NullPointerException().printStackTrace();}
+		}
 		
 		else {
 			

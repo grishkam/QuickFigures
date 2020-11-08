@@ -399,7 +399,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			);
 			;
 			
-			PanelList currentstack = inset.getPanelManager().getStack();
+			PanelList currentstack = inset.getPanelManager().getPanelList();
 			
 			if (currentstack!=null) {
 				undo.addEditToList(

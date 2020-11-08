@@ -114,7 +114,6 @@ public class Toolset_Runner implements PlugIn {
 	
 	static boolean hasAutoRunInTXTfile() throws Exception {
 		String macrosPath = IJ.getDirectory("macros");
-		if (macrosPath==null) return false;
 		
 		if (macrosPath!=null) {
 			
@@ -124,12 +123,12 @@ public class Toolset_Runner implements PlugIn {
 			
 			    return hasAutoRun;
 	}
-		return false;
+		else return false;
+		
 	}
 	
 	static boolean hasAutoRunInIJMfile() throws Exception {
 		String macrosPath = IJ.getDirectory("macros");
-		if (macrosPath==null) return false;
 		
 		if (macrosPath!=null) {
 			
@@ -140,18 +139,16 @@ public class Toolset_Runner implements PlugIn {
 			boolean hasAutoRun=fileContainsString(f, "Layout Tools", null);
 			
 			    return hasAutoRun;
-	}
+	}else
 		return false;
 	}
 		
 		
 	public static void checkForAutoRun() throws Exception {
 		
-		//IssueLog.log("path is");
-		
 			    
 			    if (!hasAutoRun() ) {
-			    //	IssueLog.log("autorun not found");
+			 
 			    	boolean start =   FileChoiceUtil.yesOrNo("Open QuickFigures toolbars whenever ImageJ starts?"); 
 			    	IssueLog.log("Will write to startup macros file");
 			    	if (start) try {
@@ -210,7 +207,6 @@ public class Toolset_Runner implements PlugIn {
 				ImageWindow iw=(ImageWindow) arg0.getWindow();
 		
 				iw.getCanvas().removeKeyListener(kd);
-				//IssueLog.log("Activation of window heard");
 			}
 		}
 

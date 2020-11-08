@@ -424,15 +424,19 @@ public class BasicOverlayHandler {
 	}
 	
 	/**resizes the canvas to fit all objects*/
-	public void resizeCanvasToFitAllObjects(ImageWrapper iw) {
+	public boolean resizeCanvasToFitAllObjects(ImageWrapper iw) {
+		boolean output=false;
 		ArrayList<LocatedObject2D> arr = iw.getLocatedObjects();
 		for(LocatedObject2D l:arr) {
-			resizeCanvasToFitObject(iw,l);
+			if(
+					resizeCanvasToFitObject(iw,l)) {output=true;};
 		}
+		
+		return output;
 	}
 	
 	/**resizes the canvas to fit the object*/
-	public void resizeCanvasToFitObject(ImageWrapper iw, LocatedObject2D l) {
+	public boolean resizeCanvasToFitObject(ImageWrapper iw, LocatedObject2D l) {
 		int xOff=0;
 		int yOff=0;
 		int xAdded=0;
@@ -441,7 +445,7 @@ public class BasicOverlayHandler {
 		Dimension dims = iw.getCanvasDims();
 		Rectangle r1 = new Rectangle(0,0, dims.width, dims.height);
 		Rectangle r2 = l.getBounds();
-	   if (r1.contains(r2)) return;
+	   if (r1.contains(r2)) return false;
 	  if (r2.x<0) {
 		  xOff=-r2.x;
 	  }
@@ -458,7 +462,7 @@ public class BasicOverlayHandler {
 	  int newwidth=dims.width+xOff+xAdded;
 	  int newheight=dims.height+yOff+yAdded;
 	  CanvasResizeObjectsIncluded(iw, newwidth, newheight, xOff, yOff);
-	   
+	   return true;
 	}
 	
 	

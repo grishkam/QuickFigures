@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.ToolbarTester;
+import figureTemplates.DirectoryHandler;
 import ij.IJ;
 import ij.ImageJ;
 import ij.Menus;
@@ -20,6 +21,7 @@ import includedToolbars.ObjectToolset1;
 import loci.formats.FormatException;
 import loci.plugins.BF;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 public class ImageDisplayTester extends ToolbarTester {
 
@@ -31,7 +33,7 @@ public class ImageDisplayTester extends ToolbarTester {
 		ij1Test(false);
 		showExample(true);
 		
-		String exampleimage = "C:\\Users\\Greg Mazo\\Desktop\\Quickfigures\\examples form dsRNA red eGFP green/Image- 0001_taken_01_29_2020.tif";
+		String exampleimage = new DirectoryHandler().getFigureFolderPath()+"examples form dsRNA red eGFP green/Image- 0001_taken_01_29_2020.tif";
 		 if (new File(exampleimage).exists())
 			 	IJ.open(exampleimage);
 		 
@@ -40,7 +42,7 @@ public class ImageDisplayTester extends ToolbarTester {
 	
 	
 	public static void openZVI() {
-		String file1="/Users/Greg Mazo/Desktop/red blu green tab order/bl green red image order.zvi";
+		String file1=new DirectoryHandler().getFigureFolderPath()+"/red blu green tab order/bl green red image order.zvi";
 		try {
 			BF.openImagePlus(file1);
 		} catch (FormatException e) {

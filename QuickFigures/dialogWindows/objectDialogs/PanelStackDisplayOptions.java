@@ -161,12 +161,12 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	
 	
 	public void setItemsToDiaog()  {
-		setItemstoDialog(panMan.getDisplay(), panMan.getStack().getChannelUseInstructions(), false, true);
+		setItemstoDialog(panMan.getDisplay(), panMan.getPanelList().getChannelUseInstructions(), false, true);
 		
 		//displural.remove(panMan.getDisplay());
 		for(MultichannelDisplayLayer p: displural) {
 			if (p!=panMan.getDisplay())
-			setItemstoDialog(p, p.getPanelManager().getStack().getChannelUseInstructions(), true, false);
+			setItemstoDialog(p, p.getPanelManager().getPanelList().getChannelUseInstructions(), true, false);
 		}
 	}
 	
@@ -209,7 +209,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 				addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
 				if (includeBilScale) {
 					double bilScale = this.getNumber("Source Image Level Scale");
-					if (bilScale >0)addedDiaply.getPanelManager().getStack().setScaleBilinear(bilScale);
+					if (bilScale >0)addedDiaply.getPanelManager().getPanelList().setScaleBilinear(bilScale);
 				}
 				if (preScale>0.01)addedDiaply.setPreprocessScale(preScale);
 			}

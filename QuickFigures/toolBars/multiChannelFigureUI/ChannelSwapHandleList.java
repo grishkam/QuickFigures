@@ -127,6 +127,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 				try {
 					this.message=(
 							theDisplayLayer.getMultichanalWrapper().getRealChannelName(channelNumber));
+					if(message==null) message="Channel #"+chan.getOriginalChannelIndex();
 					this.entry=chan;
 				} catch (Throwable t) {}
 					

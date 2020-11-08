@@ -291,6 +291,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	
 		/**if the cursor position object just has the cursur at the start,
 		  it is not counted*/
+		if(allSelectedSegments.size()==0) return;
 		if (allSelectedSegments .get(allSelectedSegments .size()-1).getCursorposition()==0 &&allSelectedSegments .size()>1) {
 			allSelectedSegments .remove(allSelectedSegments .get(allSelectedSegments.size()-1));
 		}

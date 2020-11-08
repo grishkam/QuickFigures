@@ -64,7 +64,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand);
 		 addButtonToMenu(output, "Reset Channel Names", renameChanCommand);
 		 
-		PanelMenuForMultiChannel allPanels = new PanelMenuForMultiChannel("All Panels", presseddisplay,  getPressedPanelManager().getStack(), this.getPressedPanelManager());
+		PanelMenuForMultiChannel allPanels = new PanelMenuForMultiChannel("All Panels", presseddisplay,  getPressedPanelManager().getPanelList(), this.getPressedPanelManager());
 		//output.add(allPanels); 
 		
 		return output;
@@ -123,7 +123,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		if (arg0.getActionCommand().equals(colorModeCommand)) {
 			ChannelUseInstructions ins = presseddisplay.getStack().getChannelUseInstructions();
 			if (this.pressedInset!=null) {
-				 ins =pressedInset.getPanelManager().getStack().getChannelUseInstructions();
+				 ins =pressedInset.getPanelManager().getPanelList().getChannelUseInstructions();
 				
 			}
 			
@@ -154,7 +154,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			
 			
 			
-			if (pressedInset!=null) {new PanelStackDisplayOptions(presseddisplay,pressedInset.getPanelManager().getStack(),pressedInset.getPanelManager(), false).showDialog();;}
+			if (pressedInset!=null) {new PanelStackDisplayOptions(presseddisplay,pressedInset.getPanelManager().getPanelList(),pressedInset.getPanelManager(), false).showDialog();;}
 			else
 			if (workOn==0) {
 				if (pressedInset==null)

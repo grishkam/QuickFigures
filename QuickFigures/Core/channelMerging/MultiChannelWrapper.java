@@ -52,7 +52,7 @@ public interface MultiChannelWrapper extends ImageFileWrapper {
 	
 
 	
-	
+	/**sets the display range of the channel*/
 	public double getChannalMax(int chan);
 	public double getChannalMin(int chan);
 	public void setChannalMax(int chan, double max);
@@ -80,5 +80,7 @@ public interface MultiChannelWrapper extends ImageFileWrapper {
 	/** returns a cropped and scaled version of this*/
 	public MultiChannelWrapper  cropAtAngle(Rectangle r, double angle, double scale);
 	public MultiChannelWrapper  cropAtAngle(PreProcessInformation p);
+	public Integer getSelectedFromDimension(int i);
+	public double bitDepth();
 	
 }

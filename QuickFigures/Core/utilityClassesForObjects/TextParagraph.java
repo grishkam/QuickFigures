@@ -229,7 +229,7 @@ public Point2D getLocationForLine(TextLine t) {
 		
 		int index1=fullList.indexOf(p1);
 		int index2=fullList.indexOf(p2);
-		
+		if(index1<0||index2<0) return output;//fixes a bug that occurs if  one is missing
 		for(int i=Math.min(index1, index2); i<=Math.max(index1, index2); i++) {
 			output.add(fullList.get(i));
 		}

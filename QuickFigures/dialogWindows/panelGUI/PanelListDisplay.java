@@ -15,6 +15,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -36,7 +40,7 @@ import standardDialog.ColorDimmingBox;
 
 
 /**experimenting with a way for the user to look through the parts of a panel list*/
-public class PanelListDisplay extends JList implements ActionListener, DropTargetListener, KeyListener{
+public class PanelListDisplay extends JList<PanelListElement> implements ActionListener, DropTargetListener, KeyListener, WindowListener, MouseListener{
 
 	/**
 	 * 
@@ -50,7 +54,7 @@ public class PanelListDisplay extends JList implements ActionListener, DropTarge
 	
 	public PanelListDisplay(PanelManager man) {
 		this.panelManager=man;
-		this.setList(man.getStack());
+		this.setList(man.getPanelList());
 		this.setDragEnabled(true);
 		addListSelectionListener(new listener1(this));
 		new DropTarget(this, this);
@@ -62,11 +66,24 @@ public class PanelListDisplay extends JList implements ActionListener, DropTarge
 		elements.clear();
 		elements.addAll(list.getPanels());
 		this.setListData(elements);
+		selectedPanels();
 	}
 	
 
 	
-	
+	/**sets this to the user selected panels*/
+	public void selectedPanels() {
+		ArrayList<Integer> ints=new ArrayList<Integer>();
+		for(int i=0; i<this.elements.size(); i++) {
+			if(elements.get(i).isSelected()) ints.add(i);
+		}
+		int[] ar = new int[ints.size()];
+		for(int i=0; i<ints.size(); i++) {
+			ar[i]=ints.get(i);
+		}
+		super.setSelectedIndices(ar);
+	}
+
 	void selectListSelectedDisplays() {
 		for(int i=0; i<elements.size(); i++) {
 			 elements.get(i).selectLabelAndPanel(false);;
@@ -175,6 +192,8 @@ public class PanelListDisplay extends JList implements ActionListener, DropTarge
 			for(; i<theChannelentries.size(); i++ ) {
 				ChannelEntry chan=theChannelentries.get(i);
 				String real = chan.getRealChannelName();
+				if(real==null) real=chan.getLabel();
+				if(real==null) real="Channel #"+chan.getOriginalChannelIndex();
 				names.add(real); lengths[i+start]=real.length();
 				colors[i+start]=chan.getColor();
 				all+=real;
@@ -230,7 +249,7 @@ public class PanelListDisplay extends JList implements ActionListener, DropTarge
 		int ind1 = elements.indexOf(panel1);
 				int ind2 = elements.indexOf(panel2);
 			
-			panelManager.getStack().swapPanelLocations(panel1, panel2);
+			panelManager.getPanelList().swapPanelLocations(panel1, panel2);
 			
 			
 			panelManager.updatePanels();
@@ -250,7 +269,7 @@ public class PanelListDisplay extends JList implements ActionListener, DropTarge
 			elements.remove(panel12);
 		
 			
-			panelManager.getStack().remove(panel12);
+			panelManager.getPanelList().remove(panel12);
 			
 			panelManager.removeDisplayObjectsFor(panel12);
 			panelManager.updatePanels();
@@ -364,13 +383,85 @@ public class PanelListDisplay extends JList implements ActionListener, DropTarge
 		// TODO Auto-generated method stub
 		
 	}
-	
+	/**
 	@Override
 	public
 	Dimension  	getPreferredSize() {
-	return 	new Dimension(300,100) ;
+	return 	new Dimension(300,200) ;
 	}
-	
+	*/
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		selectedPanels();
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		this.selectedPanels();
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

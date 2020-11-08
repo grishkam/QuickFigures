@@ -30,7 +30,7 @@ public class ScaleFigureDialog extends StandardDialog {
 	public ScaleFigureDialog(MontageLayoutGraphic layout, PanelManager s) {
 	this.layout=layout;
 		this.def=s;
-		super.add("scale", new NumberInputPanel("Bilinear Scale", def.getStack().getScaleBilinear(), 3));
+		super.add("scale", new NumberInputPanel("Bilinear Scale", def.getPanelList().getScaleBilinear(), 3));
 		double ppi=ImageDPIHandler.getStandardDPI()/def.getPanelLevelScale();
 		super.add("PPI", new NumberInputPanel("PPI", ppi, 3));
 		
@@ -66,11 +66,11 @@ public class ScaleFigureDialog extends StandardDialog {
 	
 		@Override
 		public void onOK() {
-			setStackToDislogItems(def, def.getStack());
+			setStackToDislogItems(def, def.getPanelList());
 			
 			if (theArray!=null)for(PanelManager a: theArray) {
 				
-				setStackToDislogItems(a, a.getStack());
+				setStackToDislogItems(a, a.getPanelList());
 			}
 			
 			layout.snapLockedItems();

@@ -314,7 +314,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		else {
 			PanelGraphicInsetDef ins = PanelGraphicInsetDef.findInsetWith(this);
 			if(ins!=null) {
-				chanLabelMenu = new MenuForChannelLabelMultiChannel("Channel Labels", ins.getSourceDisplay(), ins.getPanelManager().getStack(), ins.getChannelLabelManager());
+				chanLabelMenu = new MenuForChannelLabelMultiChannel("Channel Labels", ins.getSourceDisplay(), ins.getPanelManager().getPanelList(), ins.getChannelLabelManager());
 			}
 		}
 		
@@ -368,7 +368,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 			}
 		}
 		
-		void updateColor(ChannelEntry c2) {
+		private void updateColor(ChannelEntry c2) {
 			if (c2.getRealChannelName().equals(channel.getRealChannelName())) {
 				channel.setColor(c2.getColor());
 			}

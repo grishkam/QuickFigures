@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelWrapper;
@@ -28,29 +29,33 @@ public class PanelList implements Serializable{
 	 */
 	
 	private ChannelUseInstructions instructions=new ChannelUseInstructions() ;
-	boolean channelUpdateMode=false;//why not update the channel entries in each panel? I dont remember why I set this to false
-	 /**The Bilinear Scale that will be applied to the panels*/
+	
+	//If true The colors of all the channel entires are updated to account for changes in the channel colors of the original image. I don't remember the other details of what this does but it seems to have little effect on the user
+	//if false, this will create new channel entries which at the moment dont always update to the channel handles and color mode button. need to figure out why
+	boolean channelUpdateMode=false;
+	/**The Bilinear Scale that will be applied to the panels*/
     private double scaleBilinear=1;//will make this no longer accessible by user. obsolete
     /**scaling of display image*/
     private double displayPanelScale=ImageDPIHandler.ratioFor300DPI();//
-	 public Rectangle cropper=null;//no longer accessible by user. obsolete
-	 private double cropAngle=0;//no longer accessible by user. obsolete
+	 public Rectangle cropper=null;//no longer accessible by user.will be obsolete in future versions
+	 private double cropAngle=0;//no longer accessible by user. will be obsolete in future versions
+
+		private ArrayList<PanelListElement> panels=new ArrayList<PanelListElement>();
 	
-	 /**never returns null*/
+	 /**The method used by this list to select which channels and panels are created 
+	  never returns null*/
 	public ChannelUseInstructions getChannelUseInstructions() {
-		if (getChannelUstInstructions()==null) {
-			setChannelUstInstructions(new ChannelUseInstructions()) ;
+		if (instructions==null) {
+			instructions=new ChannelUseInstructions() ;
 		}
-		return getChannelUstInstructions();
+		return instructions;
 	} 
-	
-	/**needed for functioning of the channel merging. it must be a non-null value for the class to work*/
 	
 	
 	public PanelList() {
-		
 	} 
 	
+	/**Creates a simple duplicate of this list*/
 	public PanelList createDouble() {
 		PanelList output = new  PanelList() ;
 		output.setChannelUstInstructions(this.getChannelUseInstructions());
@@ -68,14 +73,12 @@ public class PanelList implements Serializable{
 	
 	 
 
-	private ArrayList<PanelListElement> panels=new ArrayList<PanelListElement>();
 	
 	
 	/**creates a panel entry object*/
 	protected PanelListElement createEntry() {
 		return new PanelListElement();
 	}	
-	
 	
 	
 	/**returns the channel panel with a given slice and frame*/
@@ -219,7 +222,10 @@ public class PanelList implements Serializable{
 	 
 	public void addChannelPanel(MultiChannelWrapper imp, int channel, int frame, int slice) {
 		if (imp==null) {IssueLog.log("panel stack can do nothing with a null image"); return;}
-		try{add(createChannelPanelEntry(imp, channel, frame, slice) );}
+		try{
+			add(
+					createChannelPanelEntry(imp, channel, frame, slice) );
+			}
 		
 		catch (Throwable t) {IssueLog.log(t);}
 	}
@@ -241,7 +247,8 @@ public class PanelList implements Serializable{
 		 
 		int chanNum=imp.nChannels();
 		boolean singleChannel=   chanNum==1;
-		
+		if(this.getChannelUseInstructions().isFrameExcluded(frame)) return;
+		if(this.getChannelUseInstructions().isSliceExcluded(slice)) return;
 		 
 		if (
 				(getChannelUseInstructions().mergePanelFirst()
@@ -396,6 +403,8 @@ public class PanelList implements Serializable{
 		for(PanelListElement entry: this.getPanels()) {
 			if (this.channelUpdateMode==true) this.updateChannelEntries(imp, entry);
 			else this.resetChannelEntriesForPanel(imp, entry);
+			
+			updateChannelColors(imp, entry);
 		}
 	}
 
@@ -428,6 +437,18 @@ public class PanelList implements Serializable{
 				entry.getChannelLabelDisplay().setParaGraphToChannels();
 				
 				};
+		}
+		
+	}
+	
+	/**updates the channel entry object. This changes the label and color of the entries but does
+	 * not replace them with fresh objects*/
+	public void updateChannelColors(MultiChannelWrapper impw, PanelListElement entry) {
+		ArrayList<ChannelEntry> origEntry = impw.getChannelEntriesInOrder();
+		
+		for(ChannelEntry c: entry.getChannelEntries()) {
+			ChannelEntry cnew = findEquivalent(c, origEntry);
+			if (cnew!=null) c.setColor(cnew.getColor());
 		}
 		
 	}
@@ -634,20 +655,21 @@ public class PanelList implements Serializable{
 		return out;
 	}
 
-	public ChannelUseInstructions getChannelUstInstructions() {
-		return instructions;
-	}
+	
 
 	public void setChannelUstInstructions(ChannelUseInstructions instructions) {
 		this.instructions = instructions;
 	}
 	
+	/**returns all the channel labels*/
 	public ArrayList<ChannelLabelTextGraphic> getChannelLabels() {
+		return getChannelLabelsFrom(getPanels());
+	}
+	private ArrayList<ChannelLabelTextGraphic> getChannelLabelsFrom(ArrayList<PanelListElement> eachPanel) {
 		ArrayList<ChannelLabelTextGraphic> out=new ArrayList<ChannelLabelTextGraphic>();
-		for(PanelListElement panel: getPanels()) {
+		for(PanelListElement panel: eachPanel) {
 			if (panel.getChannelLabelDisplay() instanceof ChannelLabelTextGraphic) out.add(panel.getChannelLabelDisplay());
 		}
-		
 		return out;
 	}
 	
@@ -679,6 +701,19 @@ public class PanelList implements Serializable{
 		return out;
 	}
 	
+	/**Given a channel, frame and slice location, returns that panel at that location
+	 if one value in the argument (c.frame for example) is set to -1, the frame is unspecified and 
+	 every panel with that frame will be returned*/
+	public 	ArrayList<PanelListElement> getPanelsWith(CSFLocation c) {
+		ArrayList<PanelListElement> output = new ArrayList<PanelListElement>();
+		for(PanelListElement p:panels) {
+			if(c.channel>-1 &&p.originalChanNum!=c.channel) continue;
+			if(c.frame>-1 &&p.originalFrameNum!=c.frame) continue;
+			if(c.slice>-1 &&p.originalSliceNum!=c.slice) continue;
+			output.add(p);
+		}
+		return output;
+	}
 	
 
 	public double getPanelLevelScale() {
@@ -762,7 +797,11 @@ public class PanelList implements Serializable{
 	}
 
 
-	
+	public void setupViewLocation(CSFLocation d) {
+		d.channel=0;//allows for merge
+		if(this.getChannelUseInstructions().getFrameUseInstructions().selectsSingle()) getChannelUseInstructions().getFrameUseInstructions().setupLocation(d);
+		if(this.getChannelUseInstructions().getSliceUseInstructions().selectsSingle()) getChannelUseInstructions().getSliceUseInstructions().setupLocation(d);
+	}
 	
 	
 	

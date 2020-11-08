@@ -103,13 +103,13 @@ import utilityClassesForObjects.SnappingPosition;
 			  if (currentInset.sharesPersonalLayer()) {
 				  
 				  ArrayList<PanelGraphicInsetDef> list = currentInset.getInsetDefinersThatShareLayout();
-				  extralist = currentInset.getPanelManager().getStack().createDouble();
+				  extralist = currentInset.getPanelManager().getPanelList().createDouble();
 				  extralist.getPanels().clear();
 					
 					for(PanelGraphicInsetDef inset: list) {
 						
-							extralist.addAll(inset.getPanelManager().getStack().getPanels());
-							InsetLayout.removeAbsentPanels(extralist, inset.getPanelManager().getStack(), inset);
+							extralist.addAll(inset.getPanelManager().getPanelList().getPanels());
+							InsetLayout.removeAbsentPanels(extralist, inset.getPanelManager().getPanelList(), inset);
 							
 					}
 					
@@ -120,7 +120,7 @@ import utilityClassesForObjects.SnappingPosition;
 			
 			
 			
-			PanelList panelStack = currentInset.getPanelManager().getStack();
+			PanelList panelStack = currentInset.getPanelManager().getPanelList();
 			MontageLayoutGraphic graphicRem = currentInset.personalGraphic;
 			
 			if (currentInset.sharesPersonalLayer()&&extralist!=null) {

@@ -19,12 +19,29 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasAutoResize;
+import logging.IssueLog;
+import menuUtil.SmartJMenu;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 import objectDialogs.PanelStackDisplayOptions;
 import ultilInputOutput.FileChoiceUtil;
 
 public class QuickFigureMaker extends DisplayActionTool {
 	private static final String slowFigure = "Slow Figure";
+	static String[] possibleCodes=new String[] {"C+",		 "C+T", 				"C+Z", 							"C+Z+T","Merge", 		"Merge+T"				,"Merge+Z"                 ,"Merge+Z+T"
+			};
+	String[] menuTextForCodes=new String[] {"Default", "Selected T Frame only"  , "Selected Z Slice only", "Single Panel Only"          };
+
+	private String codeString="C+";
+	
+	public String getMenuTextForCode(String t) {
+		if(t==null) return  menuTextForCodes[0];
+		if(t.contains("+Z+T")) return  menuTextForCodes[3];
+		if(t.contains("+T")) return  menuTextForCodes[1];
+		if(t.contains("+Z")) return  menuTextForCodes[2];
+		return  menuTextForCodes[0];
+	}
+	
+	
 	 localAdder  la=new localAdder();
 	 
 	 boolean mergeOnly=false;
@@ -48,36 +65,54 @@ public class QuickFigureMaker extends DisplayActionTool {
 	public QuickFigureMaker(boolean mergeOnly) {
 		super("quickFig", "quickFigure.jpg");
 		this.mergeOnly=mergeOnly;
+		codeString="Merge";
 		setupAdder() ;
-		// TODO Auto-generated constructor stub
 	}
 	
+	public QuickFigureMaker(String aC) {
+		super("quickFig", "quickFigure.jpg");
+		codeString=aC;
+		setOptionsBasedOnCodeString(aC);
+		setupAdder() ;
+	}
+
+
 	protected void perform(GraphicSetDisplayContainer graphic) {
-		
+		createFigureFromOpenImage();
+	}
+
+	/**creates a figure from the multi channel image that the user currently has open
+	 * @return */
+	public FigureOrganizingLayerPane createFigureFromOpenImage() {
 		FigureOrganizingLayerPane f = createFigure();
 		if (f!=null && this.hidesImage)f.hideImages();
-		
+		return f;
 	}
 
 	private FigureOrganizingLayerPane createFigure() {
 		return createFigure(null);
 	}
+	
+	/**creates a figure. If path is set to null, uses the image that the user has open
+	  otherwise, opens the file in the path*/
 	public FigureOrganizingLayerPane createFigure(String path) {
 		ImageAndDisplaySet diw = ImageAndDisplaySet.createAndShowNew("New Image", 40, 30);
 		if (path==null) la.openFile=false; else la.openFile=true;
 	
 		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getGraphicLayerSet(), path);
+		
 		if(added==null) {
-			//IssueLog.showMessage("No tmage was found, no figure created");
+			//if something goes wrong, closes the newly created window
+			
 			diw.getWindow().setVisible(false);
+			IssueLog.showMessage("You need to have an image open to create a figure");
 			return null;
 			}
 		diw.getTheSet().setTitle(added.getName());
-		new CanvasAutoResize().performUndoableAction(diw);
+		new CanvasAutoResize().performUndoableAction(diw);//resizes the canvas to fit the figure
 		diw.autoZoom();
 		ImageAndDisplaySet.centreWindow(diw.getWindow());
 		
-		//Hides the image
 			
 		return added;
 	}
@@ -99,30 +134,39 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
 			if (!mergeOnly) return super.getUsedTemplate(display);
-			
-			
 			FigureTemplate tp = super.getUsedTemplate(display);
-			
 			tp.makeMergeOnly();
 			return tp; 
 		}
 		
 	}
 	
+	
 	@Override
 	public ArrayList<JMenuItem> getPopupMenuItems() {
 		ArrayList<JMenuItem> output = new  ArrayList<JMenuItem>();
 		
-		JMenuItem mi7 = new JMenuItem(slowFigure);
-		mi7.setActionCommand(slowFigure);
-		mi7.addActionListener(new actionLis());
-		output.add(mi7);
 		
-		JMenuItem mi = new JMenuItem("Create Merge only");
-		mi.setActionCommand("Merge");
-		mi.addActionListener(new actionLis());
-		output.add(mi);
+		SmartJMenu sm = new SmartJMenu("Create Figure With Merge Only");
+		SmartJMenu sm2 = new SmartJMenu("Create Figure With Split Channels");
 		
+		
+		sm.add(addToMenu("Default",  "Merge"));
+		sm.add(addToMenu("For Selected T Frame only",  "Merge+T"));
+		sm.add(addToMenu("For Selected Z Slice only",  "Merge+Z"));
+		sm.add(addToMenu("Single Panel Only",  "Merge+Z+T"));
+		
+		sm2.add(addToMenu("Default",  "C+"));
+		sm2.add(addToMenu(slowFigure, slowFigure));
+		sm2.add(addToMenu("Selected T Frame only",  "C+T"));
+		sm2.add(addToMenu("Selected Z Slice only",  "C+Z"));
+		sm2.add(addToMenu("Selected Slice and Frame only",  "C+Z+T"));
+		
+		output.add(sm);
+		output.add(sm2);
+		
+	
+		JMenuItem mi;
 		mi = new JMenuItem("Add Image To Current");
 		mi.setActionCommand("Add");
 		mi.addActionListener(new actionLis());
@@ -133,7 +177,17 @@ public class QuickFigureMaker extends DisplayActionTool {
 		mi.addActionListener(new actionLis());
 		output.add(mi);
 		
+		
 		return output;
+	}
+
+
+	public JMenuItem addToMenu(String text, String atext) {
+		JMenuItem mi = new JMenuItem(text);
+		
+		mi.setActionCommand(atext);
+		mi.addActionListener(new actionLis());
+		return mi;
 	}
 	
 	
@@ -141,32 +195,35 @@ public class QuickFigureMaker extends DisplayActionTool {
 
 		
 
+		
+
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (arg0.getActionCommand().equals("Merge")) {
-				mergeOnly=true;
-				performLoadAction() ;
-				mergeOnly=false;
-			}
 			
-			if (arg0.getActionCommand().equals(slowFigure)) {
-				MultichannelDisplayLayer m = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromOpenImage();
-				//m.getSlot().showCropDialog(null);
-				FigureOrganizingLayerPane f = createFigure();
-				PanelStackDisplayOptions dialog = f. recreateFigurePanels(false);
-				dialog.recropButton().showRecropDialog();
+			String aC = arg0.getActionCommand();
+			codeString=aC;
+			if (aC.contains("Merge")||aC.contains("C+")||aC.contains(slowFigure)) {
+				setOptionsBasedOnCodeString(aC);
+				FigureOrganizingLayerPane f = createFigureFromOpenImage();
 				
-			}
+				if (aC.contains(slowFigure)) {
+					PanelStackDisplayOptions dialog = f. recreateFigurePanels(false);
+					dialog.recropButton().showRecropDialog();
+				}
+			} 
+			
+			setOptionsBackToDefault();
 			
 			FigureOrganizingLayerPane sm = findFigureOrganizingLayer();
-			if (arg0.getActionCommand().equals("Add")) {
+			if (aC.equals("Add")) {
 				if (sm!=null) {	
 					sm.nextMultiChannel(true);
 					 setinformer.getCurrentlyActiveOne().getAsWrapper().updateDisplay();
 				}
 			}
 			
-			if (arg0.getActionCommand().equals("Add2")) {
+			if (aC.equals("Add2")) {
 				if (sm!=null) {	
 					File[] files = FileChoiceUtil.getFiles();
 					for(File f: files) {
@@ -180,8 +237,29 @@ public class QuickFigureMaker extends DisplayActionTool {
 				}
 			}
 			
-		}}
+		}
 
+
+		
+
+		
+		}
+
+	
+	
+	public void setOptionsBasedOnCodeString(String aC) {
+		if (aC.contains("Merge")) 
+			mergeOnly=true;
+		la.useSingleSlice=aC.contains("+Z");
+		la.useSingleFrame=aC.contains("+T");
+	}
+	
+	public void setOptionsBackToDefault() {
+		la.useSingleFrame=false;
+		la.useSingleSlice=false;
+		mergeOnly=false;
+	}
+	
 	/**Attempts to find the organizing layer for the current image*/
 	FigureOrganizingLayerPane findFigureOrganizingLayer() {
 		GraphicLayer sm = setinformer.getCurrentlyActiveOne().getGraphicLayerSet().getSelectedContainer();
@@ -212,20 +290,34 @@ public class QuickFigureMaker extends DisplayActionTool {
 		}
 	
 	public BasicMenuItemForObj getMenuVersion() {
-		return new fileMenuVersion();
+		return new QuickFigureFileMenuItem();
 	}
 	
-	class fileMenuVersion extends BasicMenuItemForObj {
+	public static BasicMenuItemForObj[] getMenuBarItems() {
+		BasicMenuItemForObj[] b=new BasicMenuItemForObj[possibleCodes.length];
+		for(int i=0; i<b.length; i++ ) {
+			b[i]=new QuickFigureMaker(possibleCodes[i]).getMenuVersion();
+		}
+		return b;
+	}
+	
+	class QuickFigureFileMenuItem extends BasicMenuItemForObj {
 
 		@Override
 		public String getNameText() {
+			if (codeString!=null) {
+				return getMenuTextForCode(codeString);
+			}
 			if (mergeOnly) return "Figure from open image (with Merge only)";
-			return "Figure from open image with split panels";
+			return "Figure from open image with Split Channels";
 		}
 
 		@Override
 		public String getMenuPath() {
-			return "File<New";
+			String string = "File<New";
+			if(mergeOnly) string+="<Figure With Merge Panels Only";
+			else string+="<Figure With Split Channels";
+			return string;
 		}
 		
 		@Override

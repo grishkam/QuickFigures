@@ -971,6 +971,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if (roi1!=null && roi1 instanceof Selectable) {
 			((Selectable)roi1).select();
 			setSelectedItemForDisplay(roi1);
+			if (getImageWrapperClick()==null) return;
 			SelectionManager manager = getImageWrapperClick().getSelectionManagger();
 			LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
 			manager.setSelectionGraphic3(SmartHandleList.createList(sHandle));

@@ -8,15 +8,18 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelWrapper;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import gridLayout.GridIndex;
+import logging.IssueLog;
 import multiChannelFigureUI.ChannelSwapHandleList;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ScaleInfo;
 import utilityClassesForObjects.ScalededItem;
+import utilityClassesForObjects.Selectable;
 import applicationAdapters.PixelWrapper;
 import channelLabels.ChannelLabelTextGraphic;
 
@@ -24,10 +27,9 @@ import channelLabels.ChannelLabelTextGraphic;
  public class PanelListElement implements Serializable, ScalededItem{
 	
 	 	/**
-	 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static int MergeImageDes=2;
+	public static final int MergeImageDes=2, ChannelPanelDes=1;;
 
 		/**The image data. Its pixels. whatever type they may be*/
 		transient PixelWrapper image;
@@ -46,7 +48,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		private GridIndex displayGridIndex=new GridIndex();
 		
 		/**An integer telling what type of panel this is. channel or merge*/
-		public Integer designation=1;	
+		public Integer designation=ChannelPanelDes;	
 		
 		/**the original source image name and id for this panel*/
 		public String originalImageName;
@@ -65,22 +67,20 @@ import channelLabels.ChannelLabelTextGraphic;
 				
 			return output;
 		}
-
-		private void giveSettingsTo(PanelListElement output) {
+		/**simple, sets fields of output*/
+		public void giveSettingsTo(PanelListElement output) {
 			output.originalChanNum=this.originalChanNum;
 			output.originalFrameNum=this.originalFrameNum;
 			output.originalSliceNum=this.originalSliceNum;
 			output.originalIndex=this.originalIndex;
-			
 			output.originalImageID=this.originalImageID;
-			
-				output.originalImageName	=this.originalImageName;
-				output.originalImagePath=this.originalImagePath;
+			output.originalImageName	=this.originalImageName;
+			output.originalImagePath=this.originalImagePath;
 				
-				output.displayGridIndex=this.displayGridIndex;
-				output.designation=this.designation;
-				output.image=this.image;
-				output.hashChannel=this.hashChannel;
+			output.displayGridIndex=this.displayGridIndex;
+			output.designation=this.designation;
+			output.image=this.image;
+			output.hashChannel=this.hashChannel;
 		}
 		
 		public PanelListElement copy() {
@@ -93,7 +93,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			giveSettingsTo(output);
 			giveObjectsTo(output);
 		}
-
+		
 		private void giveObjectsTo(PanelListElement output) {
 			output.setImageDisplayObject(getImageDisplayObject());
 			output.setChannelLabelDisplay(getChannelLabelDisplay());
@@ -101,11 +101,11 @@ import channelLabels.ChannelLabelTextGraphic;
 			output.originalIndices=new ArrayList<Integer>(); output.originalIndices.addAll(originalIndices);
 		}
 		
+		/**Checks for any duplicate Channel Entries, no entry should occur twice in the list*/
 		public void purgeDuplicateChannelEntries() {
 			ArrayList<ChannelEntry> dd = getDuplicateChannelEntries();
 			for(ChannelEntry d:dd) {hashChannel.remove(d);}
 		}
-		
 		private ArrayList<ChannelEntry> getDuplicateChannelEntries() {
 			ArrayList<ChannelEntry> out=new ArrayList<ChannelEntry>();
 			for(ChannelEntry e:this.getChannelEntries()) {
@@ -119,13 +119,14 @@ import channelLabels.ChannelLabelTextGraphic;
 			
 			return out;
 		}
-		
 		private boolean areEntriesDuplicate(ChannelEntry c1, ChannelEntry c2) {
 			if (c1!=c2&&c1.getLabel()==c2.getLabel() &&c1.getOriginalChannelIndex()==c2.getOriginalChannelIndex())return true;
 			return false;
 		}
 		
-		public ChannelEntry getChannelEntry(int index) {return getChannelEntries().get(index);}
+		/**returns a channel entry from the list, returns based on the order they appear in the channel list
+		  and not their original channel index*/
+		ChannelEntry getChannelEntry(int index) {return getChannelEntries().get(index);}
 		
 		public boolean hasChannel(int chanIndex) {
 			for(ChannelEntry chan: hashChannel) {
@@ -139,7 +140,6 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 	
 		
-
 		
 		/**Adds a given channel entry to the list elements Array*/
 		public void addChannelEntry(ChannelEntry ce ) {
@@ -152,24 +152,18 @@ import channelLabels.ChannelLabelTextGraphic;
 			try{
 				
 				this.hashChannel.remove(ce);
-				originalIndices.remove(new Integer(ce.getOriginalStackIndex()));//random index out of bounds error here
+				originalIndices.remove(new Integer(ce.getOriginalStackIndex()));//random index out of bounds error here. not clear why
 				}
 			catch (Throwable t) {t.printStackTrace();}
 			
 		}
-				
+		
+		/**Adds a channel entry to the list*/
 		public void addChannelDescriptor(String label, Color c, int number, int index) {
 			ChannelEntry ce = new ChannelEntry(label,  c, number);
 			ce.setOriginalStackIndex(index);
 			addChannelEntry(ce);
 		}
-		/**
-		public void addChannelDescriptor(String label, Color c, int chanNumber, String additional) {
-			ChannelEntry ce = new ChannelEntry(label,  c, chanNumber);
-			ce.setAdditionalString(additional);
-			ce.setOriginalStackIndex((originalIndex));
-			addChannelEntry(ce);
-		}*/
 		
 		public void setChannelFrameSlice(int channel,  int frame,int slice) {
 			originalChanNum=channel;
@@ -177,7 +171,16 @@ import channelLabels.ChannelLabelTextGraphic;
 			originalFrameNum=frame;
 		}
 		
-		
+		public void setChannelNumber(int channel) {
+			originalChanNum=channel;
+		}
+		public void setSliceNumber(int slice) {
+			originalSliceNum=slice;
+		}
+	
+		public void setFrameNumber(int frame) {
+			originalFrameNum=frame;
+		}
 	
 		
 		/**resizes the image to fit within a particular size*/
@@ -230,6 +233,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		@Deprecated
 		void resize(double width, double height) {
+			if(getImageWrapped()==null) return;
 			this.getImageWrapped().resize(width, height);
 		}
 		
@@ -442,6 +446,12 @@ import channelLabels.ChannelLabelTextGraphic;
 				return null;
 		}
 		
+		public boolean isSelected() {
+			if ( getImageDisplayObject() instanceof Selectable)
+				return ((Selectable) getImageDisplayObject()).isSelected();
+			
+			return false;
+		}
 		
 		/**selects/deselects the display panel, scale bar and label for this panel*/
 		public void selectLabelAndPanel(boolean sel) {
@@ -467,6 +477,13 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		public boolean isTheMerge() {
 			return this.designation.equals(MergeImageDes);
+		}
+		
+		public boolean changeStackLocation(CSFLocation csf) {
+			if(csf.channel>-1) this.originalChanNum=csf.channel;
+			if(csf.frame>0) this.originalFrameNum=csf.frame;
+			if(csf.slice>0) this.originalSliceNum=csf.slice;
+			return false;
 		}
 		
 	}

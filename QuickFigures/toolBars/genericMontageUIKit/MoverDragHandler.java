@@ -338,7 +338,7 @@ public class MoverDragHandler extends BasicDragHandler {
 				{
 				//IssueLog.log("Start index clicked is "+startIndex);
 				//IssueLog.log("Start index clicked is "+l.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, startIndex, startIndex));
-				int numberOfEmptyNeeded = l.getPrincipalMultiChannel().getPanelManager().getStack().getChannelUseInstructions().estimageNPanels(item.getMultichanalWrapper());
+				int numberOfEmptyNeeded = l.getPrincipalMultiChannel().getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultichanalWrapper());
 				//IssueLog.log("need x empty "+numberOfEmptyNeeded);
 				startIndex=l.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, numberOfEmptyNeeded, startIndex-1);
 				//if(startIndex<0) startIndex=ml.nPanels()-1;

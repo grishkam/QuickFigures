@@ -39,7 +39,7 @@ class PanelAndLayoutManager implements Serializable{
 	
 	
 	void showChannelUseOption() {
-		new PanelStackDisplayOptions(panelManager.getDisplay(),panelManager.getStack(), panelManager, false);
+		new PanelStackDisplayOptions(panelManager.getDisplay(),panelManager.getPanelList(), panelManager, false);
 		
 	}
 	
@@ -47,8 +47,8 @@ class PanelAndLayoutManager implements Serializable{
 	
 	ArrayList<JMenuItem> getPopupItems() {
 		ArrayList<JMenuItem> output=new ArrayList<JMenuItem>();
-		output.add(new PanelMenuForMultiChannel("Image Panels",  panelManager.getDisplay(), panelManager.getStack(),panelManager));
-		output.add(new MenuForChannelLabelMultiChannel("Channel Labels", panelManager.getDisplay(),  panelManager.getStack(), labels));
+		output.add(new PanelMenuForMultiChannel("Image Panels",  panelManager.getDisplay(), panelManager.getPanelList(),panelManager));
+		output.add(new MenuForChannelLabelMultiChannel("Channel Labels", panelManager.getDisplay(),  panelManager.getPanelList(), labels));
 		
 		return output;
 	}

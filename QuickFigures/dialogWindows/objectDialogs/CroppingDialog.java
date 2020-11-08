@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 
 import applicationAdapters.PixelWrapper;
+import channelMerging.CSFLocation;
 import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelWrapper;
 import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
+import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
@@ -29,7 +31,9 @@ import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import standardDialog.AngleInputPanel;
+import standardDialog.ChoiceInputEvent;
 import standardDialog.GraphicComponent;
+import standardDialog.InfoDisplayPanel;
 import standardDialog.NumberInputEvent;
 import standardDialog.NumberInputPanel;
 import utilityClassesForObjects.RectangleEdges;
@@ -42,6 +46,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private static final long serialVersionUID = 1L;
 	public GraphicComponent panel=new GraphicComponent();
 	public boolean wasEliminated=false;
+	String instructions="Set Crop Area";
 	
 	JButton elim=new JButton("Eliminate Cropping Rect"); {elim.addActionListener(new cropLis());}
 	private ArrayList<ImagePanelGraphic> imagepanels=new ArrayList<ImagePanelGraphic>();
@@ -72,6 +77,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private Point2D orilocation;
 	private ArrayList<ZoomableGraphic> extraItems=new ArrayList<ZoomableGraphic>();
 	public boolean hideRotateHandle;
+	private MultiChannelWrapper multiChannelSource;
+	private CSFLocation display=new CSFLocation();
+	private ImagePanelGraphic dialogDisplayImage;
+	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.insets=new Insets(10,10,10,10);
@@ -89,7 +98,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		includeInsets(s);
 		
 		
-		setImageToCrop(multichanalWrapper);
+		setImageToCrop(multichanalWrapper, display.channel, display.frame, display.slice);
 		
 		if(preprocessRecord!=null) 
 			{
@@ -122,7 +131,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	public CroppingDialog(MultiChannelSlot s, MultiChannelWrapper multichanalWrapper, Rectangle r, double recAngle) {
 		includeInsets(s);
-		setImageToCrop(multichanalWrapper);
+		setImageToCrop(multichanalWrapper, display.channel, display.frame, display.slice);
 		
 		Rectangle rDefault = getRectForEntireImage();
 		
@@ -145,14 +154,41 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 
 
-	private void setImageToCrop(MultiChannelWrapper multichanalWrapper) {
-		PixelWrapper image2 = multichanalWrapper.getChannelMerger().generateMergedRGB(new PanelList().createMergePanelEntry(multichanalWrapper ,1, 1), 0);
-		
-		this.image=new ImagePanelGraphic((BufferedImage) image2.image());
+	private void setImageToCrop(MultiChannelWrapper multichanalWrapper,int chan, int frame, int slice) {
+		multiChannelSource= multichanalWrapper;
+		this.setTitle("Crop: "+multichanalWrapper.getTitle());
+		this.display.frame=frame;
+		this.display.slice=slice;
+		BufferedImage image3 = createDisplayImage(chan, frame, slice);
+		this.image=new ImagePanelGraphic(image3);
 		includeAngle=true;
-		this.setTitle(""+multichanalWrapper.getTitle());
+		
 	
 	}
+	
+	void updateDisplayImage() {
+		if(dialogDisplayImage==null) return;
+		dialogDisplayImage.setImage(createDisplayImage(this.display.channel, this.display.frame, this.display.slice));
+		dialogDisplayImage.updateDisplay();
+		panel.repaint();
+	}
+
+	
+
+	public BufferedImage createDisplayImage(int chan, int frame, int slice) {
+		PanelListElement pList;
+		if(chan==0)
+			pList = new PanelList().createMergePanelEntry(multiChannelSource ,frame, slice);
+		else 
+			pList =new PanelList().createChannelPanelEntry(multiChannelSource, display.channel, display.frame, display.slice);
+		
+		PixelWrapper image2 =pList.getImageWrapped();// multiChannelSource.getChannelMerger().generateMergedRGB(pList, 0);
+		
+		BufferedImage image3 = (BufferedImage) image2.image();
+		return image3;
+	}
+	
+	
 	
 	public CroppingDialog(ImagePanelGraphic image) {
 		this.image=image;
@@ -183,6 +219,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		ImagePanelGraphic b = new ImagePanelGraphic();
 		b.setImage(imagePanelGraphic.getBufferedImage());
 		panel.getGraphicLayers().add(b);
+		dialogDisplayImage=b;
 		double width2 = imagePanelGraphic.getUnderlyingImageWidth()*mag;
 		double height2 = imagePanelGraphic.getUnderlyingImageHeight()*mag;
 		panel.setPrefferedSize(width2, height2);
@@ -204,7 +241,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 		
 		{panel.addMouseListener(this); panel.addMouseMotionListener(this);}
+		
 		this.addButton(elim);
+		this.add("ins", new InfoDisplayPanel("", instructions));
 		this.add("x", new NumberInputPanel("x", rect.getBounds().getX()));
 		this.moveGrid(2, -1);
 		this.add("y", new NumberInputPanel("y", rect.getBounds().getY()));
@@ -212,16 +251,38 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.add("width", new NumberInputPanel("width", rect.getBounds().getWidth()));
 		this.moveGrid(2, -1);
 		this.add("height", new NumberInputPanel("height", rect.getBounds().getHeight()));
-if(includeAngle) {
-	this.add("angle", new AngleInputPanel("angle", rect.getAngle(), true));
-
+		if(includeAngle) {
+				this.add("angle", new AngleInputPanel("angle", rect.getAngle(), true));
 		}
+		if(showsFrameSlider()) {
+			ChannelSliceAndFrameSelectionDialog.addFrameSelectionToDialog(this, multiChannelSource, display.frame);
+		}
+		if(showsSliceSlider()) {
+			ChannelSliceAndFrameSelectionDialog.addSliceSelectionToDialog(this, multiChannelSource, display.slice);
+		}
+		if(showsChannelBox()) {
+			ChannelSliceAndFrameSelectionDialog.addChannelSelectionToDialog(this, multiChannelSource, display.channel);
+		}
+	
 		this.moveGrid(-2, 0);
 		
 		this.pack();
 		super.showDialog();
 		if(rect==null)return null;
 		return rect.getBounds();
+	}
+
+
+	public boolean showsChannelBox() {
+		return this.multiChannelSource!=null&&this.multiChannelSource.nChannels()>1;
+		}
+	public boolean showsSliceSlider() {
+		return this.multiChannelSource!=null&&this.multiChannelSource.nSlices()>1;
+	}
+
+
+	public boolean showsFrameSlider() {
+		return this.multiChannelSource!=null&&this.multiChannelSource.nFrames()>1;
 	}
 
 	/**returns a rectangle large engough to contain the entire image being cropped*/
@@ -327,6 +388,18 @@ if(includeAngle) {
 		setImageCropping();
 		
 		super.numberChanged(ne);
+		if(ne.getKey()==null) {return;}
+		if(ne.getKey().equals("frame")) { display.frame=(int) ne.getNumber();updateDisplayImage();}
+		if(ne.getKey().equals("slice")) {display.slice=(int) ne.getNumber();updateDisplayImage();}
+		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getNumber();updateDisplayImage();}
+		
+	}
+	
+	public void numberChanged(ChoiceInputEvent ne) {
+		super.numberChanged(ne);
+		
+		if(ne.getKey()==null) {return;}
+		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getNumber();updateDisplayImage();}
 	}
 
 	@Override
@@ -453,7 +526,7 @@ if(includeAngle) {
 		else {
 			crop = new CroppingDialog(slot, slot.getUnprocessedVersion(), recommmendation, recAngle);
 		}
-		
+		if(slot.getDisplaySlice()!=null) crop.setDisplaySlice(slot.getDisplaySlice());
 		crop.showDialog();
 		if(!crop.wasOKed()&&!crop.wasEliminated) return;
 		
@@ -472,6 +545,7 @@ if(includeAngle) {
 		
 		try {
 			/***/
+			slot.setDisplaySlice(crop.display);
 			slot.applyCropAndScale(process);
 			
 		} catch (Exception e) {
@@ -479,6 +553,11 @@ if(includeAngle) {
 		}
 	}
 
+	
+	public void setDisplaySlice(CSFLocation l) {
+		display=l;
+		this.updateDisplayImage();
+	}
 	
 }
 	

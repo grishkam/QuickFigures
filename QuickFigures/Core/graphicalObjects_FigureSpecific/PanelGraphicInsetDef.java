@@ -586,13 +586,13 @@ static Color  folderColor2= new Color(0,140, 0);
 		}
 		
 		public CompoundEdit2 changePPI(double newppi) {
-			ImagePanelGraphic panel = getStack().getPanels().get(0).getPanelGraphic();
+			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newPanelScale=panel.getScale()*ppi/newppi;
 			double newScale=inset.getBilinearScale()*newppi/ppi;
 			if (getSourceDisplay().getSlot().getModifications()!=null) newScale/=getSourceDisplay().getSlot().getModifications().getScale();
 			
-			for(PanelListElement panel2: getStack().getPanels()) {
+			for(PanelListElement panel2: getPanelList().getPanels()) {
 				ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();
 				panelGraphic.setLocationType(RectangleEdges.UPPER_LEFT);
 				panelGraphic.setScale(newPanelScale);

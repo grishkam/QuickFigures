@@ -26,7 +26,7 @@ public class CanvasAutoResize implements MenuItemForObj {
 	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
 		if(diw==null) return;
 		CanvasResizeUndo undo = performUndoableAction(diw);
-		if(undo.sizeSame()) return;//if no changes were made
+		if(undo==null||undo.sizeSame()) return;//if no changes were made
 		diw.getUndoManager().addEdit(undo);//adds the undo
 	}
 	public CanvasResizeUndo performUndoableAction(DisplayedImageWrapper diw) {
@@ -34,7 +34,11 @@ public class CanvasAutoResize implements MenuItemForObj {
 		ImageWrapper iw = diw.getImageAsWrapper();
 		BasicOverlayHandler boh = new BasicOverlayHandler();
 		
-		if (mode==fitAll)boh.resizeCanvasToFitAllObjects(iw);
+		if (mode==fitAll)
+			{
+			boolean requiresWindowSizeChange = boh.resizeCanvasToFitAllObjects(iw);
+			if(!requiresWindowSizeChange) return undo;
+			}
 		if (mode!=fitAll) {
 			Rectangle2D.Double r=new Rectangle2D.Double(0,0, ImageDPIHandler.getStandardDPI()*8.5, 490);
 			

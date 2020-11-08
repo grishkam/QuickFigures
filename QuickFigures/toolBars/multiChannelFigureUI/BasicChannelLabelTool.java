@@ -50,7 +50,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 	
 	public JPopupMenu createJPopup() {
 		
-		MenuForChannelLabelMultiChannel menu = new MenuForChannelLabelMultiChannel("All Channel Labels", presseddisplay, this.getPressedPanelManager().getStack(), this.getPressedChannelLabelManager());
+		MenuForChannelLabelMultiChannel menu = new MenuForChannelLabelMultiChannel("All Channel Labels", presseddisplay, this.getPressedPanelManager().getPanelList(), this.getPressedChannelLabelManager());
 		JPopupMenu output = new SmartPopupJMenu();
 		
 		addChanlabelsMenuItems(output);
@@ -112,7 +112,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 		
 if (arg0.getActionCommand().equals(alterAll)) {
 			
-			ArrayList<ChannelLabelTextGraphic> labels = this.getPressedPanelManager().getStack().getChannelLabels();
+			ArrayList<ChannelLabelTextGraphic> labels = this.getPressedPanelManager().getPanelList().getChannelLabels();
 			MultiTextGraphicSwingDialog mt = new MultiTextGraphicSwingDialog( labels, true);
 			mt.showDialog();
 			

@@ -41,6 +41,7 @@ import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
 import org.w3c.dom.*;
 
+import figureTemplates.DirectoryHandler;
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
@@ -856,7 +857,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=false;
 		//String path="/Users/mazog/Desktop/test.svg";
-		String path="/Users/Greg Mazo/Documents/Quick Figures/export 5.svg";
+		String path=new DirectoryHandler().getFigureFolderPath()+"/export 5.svg";
 		IssueLog.log(new File(path).exists());
 		//loadClass("org/w3c/dom/Window");
 		

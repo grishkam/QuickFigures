@@ -29,8 +29,8 @@ import utilityClassesForObjects.SnappingPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 
-/**This is a form of montage editor that I creaded as a general class to be adaptable to other 
-  enviroments besides imageJ1. For example. I may adapt it for imageJ 2. it has no specific references to
+/**This is a form of montage editor that I created as a general class to be adaptable to other 
+  Environments besides imageJ1. For example. I may adapt it for imageJ 2. it has no specific references to
   any application specific class. The methods in it were originally made for explicit ImagePlus and ImageProcessor 
   object in imageJ but I rewrote this so the same methods could be used more freely. As long as 
   objects of the appropriate interfaces work*/
@@ -267,12 +267,12 @@ public class GenericMontageEditor implements MontageSpaces {
 			   this.addRightLabelSpace(ml, (r.x+r.width-space.x-space.width));
 			   this.addBottomLabelSpace(ml, (r.y+r.height-space.y-space.height));
 			   ensurePositiveLabelSpace(ml);
-		    /**
-		   */
-		   
+	
 	   }
 	  
-	  /**If any label spaces are negative, makes them positive*/
+	  /**If any label spaces are negative, makes them positive. There are relatively few ways a user can set
+	    the spaces to negative values. */
+	 // TODO determine if will need and delete
 	  private void ensurePositiveLabelSpace(BasicMontageLayout ml) {
 		  if (ml.labelSpaceWidthLeft<0)  this.addLeftLabelSpace(ml, Math.abs(ml.labelSpaceWidthLeft));
 		  if (ml.labelSpaceWidthRight<0)  this.addRightLabelSpace(ml, Math.abs(ml.labelSpaceWidthRight));
@@ -282,6 +282,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	  
 	   
 	   public void addTopLabelSpace(BasicMontageLayout ml, double space) {
+		   if(ml.labelSpaceWidthTop+space<0) {space=-ml.labelSpaceWidthTop;}
 		   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+TOP_SPACE, space, 0 );
 		   notifyListenersOfFutureChange(ml, event);
 			  ml.labelSpaceWidthTop+=space;
@@ -313,6 +314,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		
 		
 		public void addBottomLabelSpace(BasicMontageLayout ml, double space) {
+			if(ml.labelSpaceWidthBottom+space<0) {space=-ml.labelSpaceWidthBottom;}
 			  GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+BOTTOM_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			  ml.labelSpaceWidthBottom+=space;
@@ -341,6 +343,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		
 
 		public  void addLeftLabelSpace(BasicMontageLayout ml, double space) {	
+			if(ml.labelSpaceWidthLeft+space<0) {space=-ml.labelSpaceWidthLeft;}//TODO test if this works
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+LEFT_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 				
@@ -373,6 +376,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		}
 		
 		public void addRightLabelSpace(BasicMontageLayout ml, double space) {	
+			if(ml.labelSpaceWidthRight+space<0) {space=-ml.labelSpaceWidthRight;}//TODO test if this works
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+RIGHT_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			  ml.labelSpaceWidthRight+=space;

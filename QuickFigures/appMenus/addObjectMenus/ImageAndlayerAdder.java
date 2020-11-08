@@ -19,7 +19,11 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	public boolean openFile=false;
 	boolean firstSet=true;
 	boolean makeLabels=false;
-
+	
+	/**set to true if limiting */
+	public boolean useSingleFrame=false;
+	public boolean useSingleSlice=false;
+	
 	private TemplateSaver templatesaver =null;
 	
 	//private multiChannelDisplayCreator multiChannelCreator=new IJ1MultiChannelCreator();
@@ -29,7 +33,8 @@ public class ImageAndlayerAdder extends LayoutAdder {
 
 	private FigureOrganizingLayerPane currentFigureOrganizer;
 
-	private boolean cropOnROI=true;
+	
+	
 	
 	public TemplateSaver getTemplatesaver() {
 		
@@ -145,6 +150,8 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
 		if(display==null) return null;
 		FigureOrganizingLayerPane.cropIfUserSelectionExists(display);
+		if (useSingleFrame) display.getStack().getChannelUseInstructions().limitStackUseToFrame(display.getMultichanalWrapper().getSelectedFromDimension(2));
+		if (useSingleSlice) display.getStack().getChannelUseInstructions().limitStackUseToSlice( display.getMultichanalWrapper().getSelectedFromDimension(1));
 		
 		return addFigureOrganizerFor(gc, display);
 		}

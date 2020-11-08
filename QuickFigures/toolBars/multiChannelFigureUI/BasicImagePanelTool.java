@@ -182,7 +182,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	static PanelGraphicInsetDef findInsetWith(PanelStackDisplay pd, ImagePanelGraphic image) {
 		ArrayList<PanelGraphicInsetDef> insets = getAllInsets(pd);
 		for(PanelGraphicInsetDef in: insets) {
-			if(in.getPanelManager().getStack().getPanelGraphics().contains(image)) return in;
+			if(in.getPanelManager().getPanelList().getPanelGraphics().contains(image)) return in;
 			
 		}
 		return null;

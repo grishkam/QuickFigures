@@ -61,7 +61,7 @@ public class PanelManagerUndo extends CompoundEdit2 {
 	
 	public static CompoundEdit2 createFor(PanelManager pm) {
 		CompoundEdit2 output = new CompoundEdit2();
-		output.addEditToList(new PanelManagerUndo(pm.getStack()));
+		output.addEditToList(new PanelManagerUndo(pm.getPanelList()));
 		output.addEditToList(new UndoLayerContentChange(pm.getDisplay()));
 		output.addEditToList(new UndoLayerContentChange(pm.getLayer()));
 		MontageLayoutGraphic layout = pm.getGridLayout();layout.generateCurrentImageWrapper();

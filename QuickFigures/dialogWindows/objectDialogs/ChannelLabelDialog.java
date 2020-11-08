@@ -86,12 +86,12 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 			if (this.getChannelLabel().isThisMergeLabel()||doMergeLabelMenu) {
 				JTabbedPane p = new JTabbedPane();
 				p.addTab("Merge Label Options", tab);
-				p.addTab("Each channels Text", tabsfull);
+				p.addTab("View Each channels Text", tabsfull);
 				this.add(p, c);
 				setTheTabs(p);
 			}else
 			{
-				getOptionDisplayTabs().addTab("Each channels Text", tabsfull);
+				getOptionDisplayTabs().addTab("View Channel Text", tabsfull);
 			//	this.add(tabsfull, c);
 			setTheTabs(tabsfull);
 			}

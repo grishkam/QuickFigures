@@ -11,6 +11,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelWrapper;
 import channelMerging.PanelStackDisplay;
@@ -82,6 +83,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 		addOpenImageFromList = new JMenuItem("Currently Open Image");
 		addImage.add(addOpenImageFromList);
 		addOpenImageFromList.addActionListener(this);
+		
 	
 	/**	 mi2 = new JMenuItem("Save Source Image Paths");
 			jj.add(mi2);
@@ -287,13 +289,45 @@ public static CompoundEdit2 recropManyImages(MultichannelDisplayLayer crop1, Arr
 
 	public static CompoundEdit2 showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim) {
 		PreProcessInformation original = display.getSlot().getModifications();
+		display.getPanelManager().setupViewLocation();
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(display);
+		CSFLocation csfInitial = display.getSlot().getDisplaySlice().duplicate();
+		
 		CroppingDialog.showCropDialogOfSize(display.getSlot(), dim);
-		if (display.getSlot().getModifications()!=null&&display.getSlot().getModifications().isSame(original)) {
+		
+		onViewLocationChange(display, csfInitial, display.getSlot().getDisplaySlice());
+		
+		if (display.getSlot().getModifications()!=null&&display.getSlot().getModifications().isSame(original)
+				) {
 			return null;
 		}
 		undo1.establishFinalLocations();
+		
+		
 		return new CompoundEdit2(undo1, updateRowColSizesOf(display));
+		
+	}
+
+
+
+	private static void onViewLocationChange(MultichannelDisplayLayer display, CSFLocation i,
+			CSFLocation f) {
+		
+		if (!display.getPanelManager().selectsSlicesOrFrames()) return;
+		
+		if (f.changesT(i)  )  {
+			display.getPanelManager().performReplaceOfIndex(
+					CSFLocation.frameLocation(i.frame), CSFLocation.frameLocation(f.frame)
+					);
+			
+		}
+			if (f.changesZ(i)  )  {
+				display.getPanelManager().performReplaceOfIndex(
+						CSFLocation.sliceLocation(i.slice), CSFLocation.sliceLocation(f.slice)
+						);
+				}	
+			//display.getStack().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());//experimental
+			
 		
 	}
 
@@ -359,7 +393,7 @@ public static CompoundEdit2 recropManyImages(MultichannelDisplayLayer crop1, Arr
 
 
 	private double showPPISingleImage(PanelStackDisplay principalMultiChannel) {
-		ImagePanelGraphic panel = principalMultiChannel.getPanelManager().getStack().getPanels().get(0).getPanelGraphic();
+		ImagePanelGraphic panel = principalMultiChannel.getPanelManager().getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newppi=StandardDialog.getNumberFromUser("Input PPI ", ppi);
 		return newppi;

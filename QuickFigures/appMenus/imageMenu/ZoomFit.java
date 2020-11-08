@@ -13,6 +13,7 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import standardDialog.GraphicDisplayComponent;
+import standardDialog.StandardDialog;
 
 public class ZoomFit implements MenuItemForObj {
 
@@ -30,15 +31,21 @@ public ZoomFit(String type) {
 
 public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
 	if (diw==null) return;
+	if (type.contains("Set")) {
+		Double z = StandardDialog.getNumberFromUser("Set Zoom Level", diw.getZoomLevel());
+		diw.setZoomLevel(z);
+	} else
 	if (type.contains("fit"))diw.zoomOutToFitScreen();
 	else diw.zoom(type);
 	diw.updateWindowSize();
 	diw.updateDisplay();
 }
+
 public String getCommand() {return "Zoom out to fit"+type;}
 public String getNameText() {
 	if (type.startsWith("Out")) return "Out (press '-')";
 	if (type.startsWith("In")) return "In (press '=' or '+')";
+	if (type.startsWith("Set")) return "Set Zoom Level";
 	return "View All";
 	}
 public String getMenuPath() {return "Image<Zoom";}

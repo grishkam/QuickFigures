@@ -4,17 +4,32 @@ package exportMenus;
 import java.awt.Desktop;
 import java.io.File;
 
+import org.apache.batik.svggen.SVGGeneratorContext;//as long as this import is here and batik is not installed, an exception will result
+
 import applicationAdapters.DisplayedImageWrapper;
 import fieldReaderWritter.SVGsaver;
 import logging.IssueLog;
 
 public class SVGQuickExport extends QuickExport {
+	
 	protected String getExtension() {
+		
 		return "svg";
 	}
 	
 	protected String getExtensionName() {
 		return "SVG Images";
+	}
+	
+	public boolean isBatikInstalled() {
+		try {
+			getClass().getClassLoader().loadClass("org.apache.batik.svggen.SVGGraphics2DRuntimeException");
+			return true;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override

@@ -2,11 +2,13 @@ package popupMenusForComplexObjects;
 
 
 import java.awt.Container;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+import channelMerging.PreProcessInformation;
 import fLexibleUIKit.ObjectAction;
 import genericMontageKit.PanelList;
 import graphicalObjects.ImagePanelGraphic;
@@ -16,7 +18,10 @@ import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelSwapperToolBit2;
+import objectDialogs.CroppingDialog;
 import ultilInputOutput.FileChoiceUtil;
+import undo.CompoundEdit2;
+import undo.Edit;
 
 public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		PopupMenuSupplier {
@@ -54,6 +59,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		
 		addChannelMenu(thi);
 		addRemoveImage(thi);
+		addView(thi);
 		return output;
 		
 	}
@@ -72,10 +78,51 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 				}
 				boolean b=FileChoiceUtil.yesOrNo("Are you sure you want to remove this image from figure?");
 				
-				if (b)panel.getParentLayer().remove(panel);
+				if (b)
+					{
+					
+					addUndo(Edit.removeItem(panel.getParentLayer(), panel)
+							);
+					
+					
+					};
 				
 			}};
 		thi.add(act.createJMenuItem("Remove From Figure"));
+	}
+	
+	/**creates a menu item to remove the image*/
+	protected void addView(JMenu thi) {
+		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(panel) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(panel.getParentLayer() instanceof FigureOrganizingLayerPane) {
+					FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) panel.getParentLayer() ;
+					MultichannelDisplayLayer co = panel.similar();
+					
+					co.setSlot(co.getSlot().copy());
+					co.getSlot().redoCropAndScale();
+					co.setLaygeneratedPanelsOnGrid(true);
+					PreProcessInformation mods =co.getSlot().getModifications();
+					Rectangle r=null;
+					if(mods==null||mods.getRectangle()==null) {
+						int w = panel.getMultichanalWrapper().getDimensions().width/2;
+						int h = panel.getMultichanalWrapper().getDimensions().height/2;
+						r=new Rectangle(0,0,w,h);
+					} else {
+						r=mods.getRectangle();
+					}
+					//CompoundEdit2 undo = new CompoundEdit2();
+					CroppingDialog.showCropDialog(co.getSlot(), r, 0);
+					addUndo(
+							f.nextMultiChannel(co));
+					
+				} else return;
+				
+				
+				
+			}};
+		thi.add(act.createJMenuItem("Copy with new cropping"));
 	}
 
 	public void addChannelMenu(Container thi) {

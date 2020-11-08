@@ -3,6 +3,8 @@ package channelMerging;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import channelMerging.SubStackSelectionInstructions.FrameUseInstructions;
+import channelMerging.SubStackSelectionInstructions.SliceUseInstructions;
 import gridLayout.BasicMontageLayout;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
@@ -15,7 +17,9 @@ import utilityClasses1.ArraySorter;
 		 Used by 
 		 */
 		private static final long serialVersionUID = 1L;
-			
+		public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=3, NO_MERGE_PANELS=4;
+		
+		
 			/**These options are important for deciding how composite stacks are converted into RGB*/
 			public int ChannelsInGrayScale=1;
 			
@@ -34,6 +38,8 @@ import utilityClasses1.ArraySorter;
 		    public int idealColNum=5;
 
 			private ChannelPanelReorder reorder;
+			private FrameUseInstructions frameUseMethod;
+			private SliceUseInstructions sliceUseMethod;
 		 
 		    /**returns a set of channel use instrcutions used when one wants to put
 		     * channel panels as insets near or around a merged image*/
@@ -57,7 +63,8 @@ import utilityClasses1.ArraySorter;
 				this.ignoreAfterChannel=ignoreAfterChannel;
 			}
 			
-			public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=3, NO_MERGE_PANELS=4;
+		
+			
 			
 			/**true if merge panel goes last*/
 			public boolean mergePanelLast() {
@@ -98,12 +105,21 @@ import utilityClasses1.ArraySorter;
 			}
 			
 			
-			
+			public boolean isFrameExcluded(int frame) {
+				if(this.getFrameUseInstructions()==null) return false;
+				return getFrameUseInstructions().isExcluded(frame);
+			}
 		
+			public boolean isSliceExcluded(int frame) {
+				if(this.getSliceUseInstructions()==null) return false;
+				return getSliceUseInstructions().isExcluded(frame);
+			}
 			
 			public void makeMatching(ChannelUseInstructions other) {
 				 makePartialMatching(other);
 				other.reorder=new ChannelPanelReorder(this.getChanPanelReorder().currentOrder);
+				if(this.getFrameUseInstructions()!=null) other.setFrameUseMethod(getFrameUseInstructions().createDouble());
+				if(this.getSliceUseInstructions()!=null) other.setSliceUseMethod(getSliceUseInstructions().createDouble());
 			} 
 			
 			public void makePartialMatching(ChannelUseInstructions other) {
@@ -189,7 +205,7 @@ import utilityClasses1.ArraySorter;
 				/**What is done if multiple channels are represented*/
 				if (image.nChannels()>1 && !onlyMergePanel()) {
 					int chanCols = estimateChanColsNeeded(image);
-					int nSF=image.nFrames()*image.nSlices();
+					int nSF=estimateNFramesUsed(image)*estimateNSlicesUsed(image);
 					
 					/**what to do if the number of channel columns needed is above the desired total number of cols*/
 					if(this.idealColNum<chanCols) {
@@ -203,15 +219,58 @@ import utilityClasses1.ArraySorter;
 					;}
 				
 				/**What to do if both frames and z slices are represented*/
-				if ((image.nChannels()==1||this.onlyMergePanel())&&image.nSlices()>1&&image.nFrames()>1) {return new int[] {image.nFrames(),image.nSlices()};}
+				if ((image.nChannels()==1||this.onlyMergePanel())&&estimateNSlicesUsed(image)>1&&estimateNFramesUsed(image)>1) {return new int[] {estimateNFramesUsed(image),estimateNSlicesUsed(image)};}
 				
-				if ((image.nChannels()==1||this.onlyMergePanel())&& image.nFrames()==1) {return gridFor(image.nSlices());};
-				if ((image.nChannels()==1||this.onlyMergePanel())&& image.nSlices()==1) {return gridFor(image.nFrames());};
+				if ((image.nChannels()==1||this.onlyMergePanel())&& estimateNFramesUsed(image)==1) {return gridFor(estimateNSlicesUsed(image));};
+				if ((image.nChannels()==1||this.onlyMergePanel())&& estimateNSlicesUsed(image)==1) {return gridFor(estimateNFramesUsed(image));};
 				
 				
 				return new int[]{1,1};
 			}
+
+			public int estimateNSlicesUsed(MultiChannelWrapper image) {
+				if(this.getSliceUseInstructions()!=null) return getSliceUseInstructions().estimateNUsed(image);
+				return image.nSlices();
+			}
+
+			public int estimateNFramesUsed(MultiChannelWrapper image) {
+				if(this.getFrameUseInstructions()!=null) return getFrameUseInstructions().estimateNUsed(image);
+				return image.nFrames();
+			}
 			
+			private void setSliceUseMethod(SliceUseInstructions sliceUseMethod) {
+				this.sliceUseMethod = sliceUseMethod;
+			}
+
+			private void setFrameUseMethod(FrameUseInstructions frameUseMethod) {
+				this.frameUseMethod = frameUseMethod;
+			}
+
+			public SubStackSelectionInstructions.FrameUseInstructions getFrameUseInstructions() {
+				if(frameUseMethod==null) frameUseMethod=new SubStackSelectionInstructions.FrameUseInstructions(null);
+				return frameUseMethod;
+			}
+
+			public SubStackSelectionInstructions.SliceUseInstructions getSliceUseInstructions() {
+			if(sliceUseMethod==null) sliceUseMethod=new SubStackSelectionInstructions.SliceUseInstructions(null);
+				return sliceUseMethod;
+			}
+			
+			/**returns true if the instructions only use a subset of the frames or slices*/
+			public boolean selectsSlices(MultiChannelWrapper mw) {
+				if(mw.nFrames()>1&&this.getFrameUseInstructions()!=null &&!getFrameUseInstructions().selectsAll()) return true;
+				if(mw.nSlices()>1&&this.getSliceUseInstructions()!=null &&!getSliceUseInstructions().selectsAll()) return true;
+				
+				return false;
+			}
+			
+			public void limitStackUseToFrame(Integer frame) {
+				
+				if (frame!=null)setFrameUseMethod(new SubStackSelectionInstructions.FrameUseInstructions(frame));
+			}
+			public void limitStackUseToSlice(Integer slice) {
+			if (slice!=null)setSliceUseMethod(new SubStackSelectionInstructions.SliceUseInstructions(slice));
+			}
 			public int estimageNPanels(MultiChannelWrapper image) {
 				int[] in = estimateBestMontageDims(image);
 				return in[0]*in[1];
@@ -323,4 +382,12 @@ import utilityClasses1.ArraySorter;
 				reorder=null;
 			}
 
+			public void shareViewLocation(CSFLocation d) {
+				
+				if(this.frameUseMethod!=null&& frameUseMethod.method==frameUseMethod.SINGLE_) frameUseMethod.setSelected(d.frame);
+				if(this.sliceUseMethod!=null&& sliceUseMethod.method==sliceUseMethod.SINGLE_) sliceUseMethod.setSelected(d.slice);
+				
+			}
+
+	
 }

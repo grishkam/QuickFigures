@@ -10,6 +10,9 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	
 	
 	static final String[] retrivalOptions=new String[] {"load from embedded (if failed try File)", "load from file (if fail, try embedded)", "Look in working directory"};
+
+
+	
 			
 	public void addMultichannelUpdateListener(MultiChannelUpdateListener lis);
 	public void removeMultichannelUpdateListener(MultiChannelUpdateListener lis);
@@ -34,4 +37,9 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	
 	public void setPanelStackDisplay( PanelStackDisplay multichannelDisplayLayer);
 	public PanelStackDisplay getDisplayLayer();
+	public MultiChannelSlot copy();
+	 void setDisplaySlice(CSFLocation display);
+	CSFLocation getDisplaySlice();
+	
+	
 }

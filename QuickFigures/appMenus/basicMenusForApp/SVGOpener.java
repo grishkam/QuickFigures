@@ -6,6 +6,7 @@ import ultilInputOutput.FileChoiceUtil;
 import applicationAdapters.DisplayedImageWrapper;
 import applicationAdapters.ToolbarTester;
 import fieldReaderWritter.GraphicSVGParser;
+import figureTemplates.DirectoryHandler;
 import imageDisplayApp.GraphicSet;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasAutoResize;
@@ -18,7 +19,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 	
 	public static void main(String[] arts) {
 		ToolbarTester.startToolbars(true);
-		String path="/Users/Greg Mazo/Documents/Quick Figures/export 5.svg";
+		String path=new DirectoryHandler().getFigureFolderPath()+"/export 5.svg";
 		File f = new File(path);
 		SVGOpener.showFile(f);
 		

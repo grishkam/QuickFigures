@@ -2,6 +2,8 @@ package standardDialog;
 
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+
 import appContext.CurrentAppContext;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelWrapper;
@@ -33,6 +35,7 @@ public class SelectImageDialog extends StandardDialog {
 		this.includeChans=includeChans;
 		if (ops.size()==0) {
 			IssueLog.log("not options");
+			this.add("Info", new InfoDisplayPanel("Problem:","no image is open"));
 			return;
 		}
 		String[] s=new 	String[ops.size()+1];
