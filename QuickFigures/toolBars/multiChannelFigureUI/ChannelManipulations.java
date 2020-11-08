@@ -14,9 +14,9 @@ public class ChannelManipulations {
 		try {
 			int[] basis=mrp.getPixelWrapperForSlice(chan, 1, 1).getDistribution();
 			double themin=ShowDisplayRange.findMinOfDistributionHistogram(basis);
-			mrp.setChannalMin(chan, themin);
+			mrp.setChannelMin(chan, themin);
 			double themax=ShowDisplayRange.findMaxOfDistributionHistogram(basis);
-			mrp.setChannalMax(chan, themax);
+			mrp.setChannelMax(chan, themax);
 		} catch (Exception e) {
 			IssueLog.log(e);//sometimes the method  has an argument out of range and an exception
 		}
@@ -26,7 +26,7 @@ public class ChannelManipulations {
 	public static void innitializeDisplayRangetoMinMax(MultiChannelWrapper mrp)  {
 		if (mrp==null) return;
 		for(int chan=1; chan<=mrp.nChannels(); chan++)  try {
-		if(mrp.getChannalMin(chan)==0&&mrp.getChannalMax(chan)==0) {
+		if(mrp.getChannelMin(chan)==0&&mrp.getChannelMax(chan)==0) {
 			setDisplayRangetoMinMax(mrp, chan);
 		}
 		} catch (Throwable t) {

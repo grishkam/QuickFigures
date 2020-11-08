@@ -116,8 +116,8 @@ public class WindowLevelDialog extends StandardDialog  {
 		
 		this.displayChangeLis=listen;
 		this.chan=chan;
-		setMinMaxDisplay(mrp.getChannalMin(chan), mrp.getChannalMax(chan));
-		setStartingminMax(mrp.getChannalMin(chan), mrp.getChannalMax(chan));
+		setMinMaxDisplay(mrp.getChannelMin(chan), mrp.getChannelMax(chan));
+		setStartingminMax(mrp.getChannelMin(chan), mrp.getChannelMax(chan));
 		
 		int[] basis=mrp.getPixelWrapperForSlice(chan, 1, 1).getDistribution();
 		

@@ -196,7 +196,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			workOn=1;
 			new ChannelOrderAndLutMatching().matchOrder(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			for(int c=1; c<=this.getPressedWrapper().nChannels(); c++) {
-				minMaxSet(c, getPressedWrapper().getChannalMin(c),getPressedWrapper().getChannalMax(c));
+				minMaxSet(c, getPressedWrapper().getChannelMin(c),getPressedWrapper().getChannelMax(c));
 			}
 		}
 		

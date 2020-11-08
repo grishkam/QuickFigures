@@ -39,8 +39,8 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 		iMax=new double[nC];
 		iColor=new Color[nC];
 		for(int i=0; i<nC; i++) {
-			iMin[i]=mw.getChannalMin(i+1);
-			iMax[i]=mw.getChannalMax(i+1);
+			iMin[i]=mw.getChannelMin(i+1);
+			iMax[i]=mw.getChannelMax(i+1);
 			iColor[i]= mw.getChannelColor(i+1);
 		}
 	};
@@ -57,8 +57,8 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 		fMax=new double[nC];
 		fColor=new Color[nC];
 		for(int i=0; i<nC; i++) {
-			fMin[i]=mw.getChannalMin(i+1);
-			fMax[i]=mw.getChannalMax(i+1);
+			fMin[i]=mw.getChannelMin(i+1);
+			fMax[i]=mw.getChannelMax(i+1);
 			fColor[i]= mw.getChannelColor(i+1);
 		}
 	}
@@ -66,8 +66,8 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 	public void editNow(double[] mins, double[] max) {
 		int nC=mw.nChannels();
 		for(int i=0; i<nC; i++) {
-			mw.setChannalMin(i+1, mins[i]);
-			mw.setChannalMax(i+1, max[i]);
+			mw.setChannelMin(i+1, mins[i]);
+			mw.setChannelMax(i+1, max[i]);
 		}
 		mw.updateDisplay();
 		lis.updateAllDisplaysWithRealChannel(null);

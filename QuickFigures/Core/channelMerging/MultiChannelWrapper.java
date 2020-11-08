@@ -53,10 +53,10 @@ public interface MultiChannelWrapper extends ImageFileWrapper {
 
 	
 	/**sets the display range of the channel*/
-	public double getChannalMax(int chan);
-	public double getChannalMin(int chan);
-	public void setChannalMax(int chan, double max);
-	public void setChannalMin(int chan, double max);
+	public double getChannelMax(int chan);
+	public double getChannelMin(int chan);
+	public void setChannelMax(int chan, double max);
+	public void setChannelMin(int chan, double max);
 	
 	public boolean containsSplitedChannels();
 	

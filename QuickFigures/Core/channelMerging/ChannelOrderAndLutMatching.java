@@ -64,7 +64,7 @@ public class ChannelOrderAndLutMatching {
 			String channelI=ChannelNamesA.get(i);
 			int channelOfRef=reference.getIndexOfChannel(channelI);
 			int channelToEdit=edited.getIndexOfChannel(channelI);
-			setMinMaxOfParticular(channelI, (int)reference.getChannalMin(i+1), (int)reference.getChannalMax(i+1), channelToEdit, edited);
+			setMinMaxOfParticular(channelI, (int)reference.getChannelMin(i+1), (int)reference.getChannelMax(i+1), channelToEdit, edited);
 			
 		}
 	}
@@ -97,8 +97,8 @@ public class ChannelOrderAndLutMatching {
 			if (chanNum>0&&chanNum<=w.nChannels()) chan=chanNum;
 		}
 		if (chan>0) {
-			w.setChannalMin(chan, min);
-			w.setChannalMax(chan, max);
+			w.setChannelMin(chan, min);
+			w.setChannelMax(chan, max);
 			w.updateDisplay();
 		}
 		return chan;

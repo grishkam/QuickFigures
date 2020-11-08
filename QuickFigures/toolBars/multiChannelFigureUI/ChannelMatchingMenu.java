@@ -87,7 +87,7 @@ ActionListener, DisplayRangeChangeListener  {
 				
 				new ChannelOrderAndLutMatching().matchOrder(sourceDisplayRanges, items, 2);
 				for(int c=1; c<=sourceDisplayRanges.nChannels(); c++) {
-					minMaxSet(c, sourceDisplayRanges.getChannalMin(c),sourceDisplayRanges.getChannalMax(c));
+					minMaxSet(c, sourceDisplayRanges.getChannelMin(c),sourceDisplayRanges.getChannelMax(c));
 				}
 			}
 		 
@@ -112,8 +112,8 @@ ActionListener, DisplayRangeChangeListener  {
 	public static void setAllChannelMinMax(ArrayList<MultiChannelWrapper> items, int chan, String realName, double min, double max) {
 		for(MultiChannelWrapper w: items) {
 			chan = ChannelSwapperToolBit2.getBestMatchToChannel(w, realName, chan);
-			w.setChannalMin(chan, min);
-			w.setChannalMax(chan, max);
+			w.setChannelMin(chan, min);
+			w.setChannelMax(chan, max);
 			w.updateDisplay();
 		}
 	}

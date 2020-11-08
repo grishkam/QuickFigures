@@ -292,7 +292,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			workOn=1;
 			new ChannelOrderAndLutMatching().matchOrder(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			for(int c=1; c<=this.getPressedWrapper().nChannels(); c++) {
-				minMaxSet(c, getPressedWrapper().getChannalMin(c),getPressedWrapper().getChannalMax(c));
+				minMaxSet(c, getPressedWrapper().getChannelMin(c),getPressedWrapper().getChannelMax(c));
 			}
 		}
 		
@@ -409,7 +409,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		  or (if no match), those with the same number*/
 		String realName=getPressedWrapper().getRealChannelName(chan);
 		
-		StatusPanel.updateStatus("Setting Display Range "+min+", "+max);
+		StatusPanel.updateStatus("Setting Display Range "+realName+" in c= "+chan+" "+min+", "+max);
 		
 		setDisplayRange(wraps, chan, realName, min, max);
 		updateAllDisplaysWithRealChannel( realName);
@@ -421,11 +421,12 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	public static void setDisplayRange(ArrayList<MultiChannelWrapper> wraps, int chan, String realName, double min,
 			double max) {
 		for(MultiChannelWrapper w: wraps) try {
-			if (realName!=null) {
+			if (realName!=null &&!realName.equals("null")) {
 				chan=getBestMatchToChannel(w, realName, chan);
-			}
-			w.setChannalMin(chan, min);
-			w.setChannalMax(chan, max);
+			} 
+			
+			w.setChannelMin(chan, min);
+			w.setChannelMax(chan, max);
 		} catch (Throwable t) {IssueLog.log(t);}
 	}
 	

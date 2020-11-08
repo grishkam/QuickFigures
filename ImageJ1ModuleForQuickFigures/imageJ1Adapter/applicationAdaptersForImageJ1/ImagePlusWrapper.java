@@ -404,6 +404,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		String name=stack.getSliceLabel(index);
 		if (name==null) {
 			setSliceLabelToChannel(c, index, stack);
+			name=stack.getSliceLabel(index);
 		}
 		return name;
 		
@@ -500,7 +501,6 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	@Override
 	public int[] convertIndexToPosition(int i) {
-		// TODO Auto-generated method stub
 		return imp.convertIndexToPosition(i);
 	}
 
@@ -512,12 +512,11 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	@Override
 	public String getSliceName(int stackIndex) {
-		// TODO Auto-generated method stub
 		return imp.getStack().getSliceLabel(stackIndex);
 	}
 
 	@Override
-	public double getChannalMax(int chan) {
+	public double getChannelMax(int chan) {
 		if (lutsNotAvailable(chan)) return 0;
 		if(getLut(chan)==null) return 0;
 		return getLut(chan).max;
@@ -545,26 +544,29 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	}
 
 	@Override
-	public double getChannalMin(int chan) {
+	public double getChannelMin(int chan) {
 		if (lutsNotAvailable(chan)) return 0;
 		if(getLut(chan)==null) return 0;
 		return getLut(chan).min;
 	}
 
 	@Override
-	public void setChannalMax(int chan, double max) {
+	public void setChannelMax(int chan, double max) {
 		if (lutsNotAvailable(chan)) return ;
 		imp.setSlice(chan);
+		imp.setC(chan);
 		 double smin = getLut(chan).min;
+		 
 		 imp.setDisplayRange(smin, max);
 		 imp.updateImage();
 		
 	}
 
 	@Override
-	public void setChannalMin(int chan, double min) {
+	public void setChannelMin(int chan, double min) {
 		if (lutsNotAvailable(chan)) return ;
 		imp.setSlice(chan);
+		imp.setC(chan);
 		double smax = getLut(chan).min;
 		 imp.setDisplayRange(min, smax);
 		 imp.updateImage();
@@ -614,7 +616,6 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	public String getRealChannelName(int i) {
 		 setUpChanNames() ;
 		if (channames.size()>=i) {
-			
 			return channames.get(i-1);
 			
 		}
@@ -755,16 +756,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		
 		d.setStack(nstack);
 		
-		
-		/**
-		d.getOriginalFileInfo().pixelHeight=imp.getOriginalFileInfo().pixelHeight/scale;
-				;
-		d.getOriginalFileInfo().pixelWidth=imp.getOriginalFileInfo().pixelWidth/scale;
-				
-		
-			d.getFileInfo().pixelHeight=imp.getFileInfo().pixelHeight/scale;
-			d.getFileInfo().pixelWidth=imp.getFileInfo().pixelWidth/scale;
-		*/
+
 		
 		ImagePlusWrapper imagePlusWrapper = new ImagePlusWrapper(d);
 		
