@@ -4,6 +4,7 @@ public class GridLayoutEditEvent implements GridEditEventTypes{
 
 	
 	
+	
 	private int type;
 	private double arg1;
 	private double arg2;;

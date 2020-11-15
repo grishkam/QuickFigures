@@ -15,6 +15,7 @@ import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEventWrapper;
 import genericMontageUIKitMenuItems.MontageEditCommandMenu;
 import graphicalObjectHandles.AddRowHandle;
+import graphicalObjectHandles.EditRowColNumberHandle;
 import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.MoveRowHandle;
 import graphicalObjectHandles.RowLabelHandle;
@@ -386,6 +387,7 @@ public void resizeLayoutToFitContents() {
 	protected void addAdditionalHandles(SmartHandleList box) {
 		box.add(new AddRowHandle(this, MontageSpaces.ROWS, false));
 		box.add(new AddRowHandle(this, MontageSpaces.COLS, false));
+		box.add(new EditRowColNumberHandle(this));
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
 			box.add(new MoveRowHandle(this, MontageSpaces.COLS, false, i));
 			}
