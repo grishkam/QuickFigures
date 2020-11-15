@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import dataSeries.XYDataSeries;
 import plotCreation.XYPlotCreator;
@@ -28,7 +28,7 @@ public class ExcelFileToXYPlot extends ExcelDataImport{
 
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		try {
 			
 			
@@ -85,7 +85,7 @@ public class ExcelFileToXYPlot extends ExcelDataImport{
 		
 	}
 	
-	public void createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImage diw) {
 		creator.createPlot(name, items, diw);
 		
 	}

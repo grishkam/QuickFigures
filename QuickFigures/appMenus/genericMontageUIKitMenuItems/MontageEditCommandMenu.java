@@ -10,7 +10,7 @@ import javax.swing.JMenuItem;
 import javax.swing.undo.UndoManager;
 
 import externalToolBar.IconSet;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
@@ -19,7 +19,7 @@ import gridLayout.MontageEditorDialogs;
 import logging.IssueLog;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 import undo.UndoSnappingChange;
 import utilityClasses1.ArraySorter;
@@ -162,7 +162,7 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 	
 	 public void onActionPerformed(Object sour, String st) {
 		 
-		 CompoundEdit2 editUndo = new CompoundEdit2();
+		 CombinedEdit editUndo = new CombinedEdit();
 		 UndoLayoutEdit undo1 = new UndoLayoutEdit(getMainLayout());
 		 editUndo.addEditToList(undo1);
 		 
@@ -220,7 +220,7 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 			
 			 ArrayList<UndoSnappingChange> arraySnapUndo =new ArrayList<UndoSnappingChange>();
 				for(LocatedObject2D loc: getMainLayout().getWrapper().getLocatedObjects()) {
-					if (loc.getSnappingBehaviour()!=null)
+					if (loc.getSnapPosition()!=null)
 					arraySnapUndo.add(new UndoSnappingChange(loc));
 				}
 			
@@ -236,7 +236,7 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		undo1.establishFinalLocations();
 		addUndo(editUndo);
 		
-		CurrentSetInformerBasic.updateActiveDisplayGroup();
+		CurrentFigureSet.updateActiveDisplayGroup();
 		getMainLayout().getWrapper().updateDisplay();
 		
 		}
@@ -249,7 +249,7 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 	 
 
 	 
-	private void addUndo(CompoundEdit2 editUndo) {
+	private void addUndo(CombinedEdit editUndo) {
 		if (this.getUndoManager()!=null) 
 			getUndoManager().addEdit(editUndo);
 	}

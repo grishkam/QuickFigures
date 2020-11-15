@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 
+/**An SVG exporter for shapes*/
 public class SVGEXporterForShape extends SVGExporter {
 
 	private ShapeGraphic shape;

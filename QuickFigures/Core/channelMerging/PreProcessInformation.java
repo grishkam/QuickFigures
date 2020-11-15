@@ -60,7 +60,7 @@ public class PreProcessInformation implements Serializable {
 		return scale;
 	}
 
-	/**returns true if the preprocess information is identical*/
+	/**returns true if the argument's information is identical to this object*/
 	public boolean isSame(PreProcessInformation original) {
 		if(original==null) return false;
 		if(scale!= original.getScale()) return false;

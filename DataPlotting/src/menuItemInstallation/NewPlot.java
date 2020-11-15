@@ -2,7 +2,7 @@ package menuItemInstallation;
 
 import javax.swing.Icon;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import columnPlots.ColumnPlot;
 import dataSeries.ColumnDataSeries;
@@ -12,7 +12,7 @@ import imageDisplayApp.ImageAndDisplaySet;
 public class NewPlot implements MenuItemForObj {
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
 		ImageAndDisplaySet set= ImageAndDisplaySet.createAndShowNew("Figure", 500,400);
 		ColumnPlot plot=new ColumnPlot("Test data ", 

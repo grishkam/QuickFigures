@@ -11,6 +11,7 @@ import imageDisplayApp.ImageAndDisplaySet;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;
 
+/**A blob shape with a number of lobes that can be edited individual by dragging points*/
 public class ComplexBlobShape extends BlobShape {
 	{super.setNvertex(12);}
 	BlobCurveParameterGroup[] parameters2=new BlobCurveParameterGroup[] {createParameters2(5, 200023, 0.25), createParameters2(6, 243023, 0.25), createParameters2(7, 9324023, 0.25)};
@@ -19,13 +20,13 @@ public class ComplexBlobShape extends BlobShape {
 	
 	public void innitialSetup() {
 		double d0=0.25;
-		double baseRadia1 = 1.1;
+		double baseRadia1 = 0.9;
 		double angleshift1=-0.25;
 		getParameter(1).setPositions(baseRadia1, -d0, -0.25, angleshift1);
 		getParameter(2).setPositions(baseRadia1, d0, 0.250,angleshift1);
 		
 		double d = -.15;
-		double baseRadia = .65;
+		double baseRadia = .55;
 		double angleShift2 = 0.1;
 		double bAngle=-1.1;
 		getParameter(3).setPositions(baseRadia, -d, bAngle,angleShift2);
@@ -37,23 +38,23 @@ public class ComplexBlobShape extends BlobShape {
 		for(int i=0; i<this.getNHandleGroups(); i++) { 
 				if(i%2==0) {
 					double d0=0;
-					double baseRadia0 = 0.8;
-					double angleshift0=-0.8;
+					double baseRadia0 = 0.7;
+					double angleshift0=-0.65;
 					getParameter(i).setPositions(baseRadia0, -d0, 0, angleshift0);
-					getParameter(i).moveCurveControlOutward(0.025);
+					getParameter(i).moveCurveControlOutward(0.02);
 				}
 				if (i%2==1) {
 					double d1=0;
-					double baseRadia1 = 1.1;
-					double angleshift1=-0.8;
+					double baseRadia1 = 0.85;
+					double angleshift1=-0.65;
 					getParameter(i).setPositions(baseRadia1, d1, 0,angleshift1);
-					getParameter(i).moveCurveControlOutward(0.025);
+					getParameter(i).moveCurveControlOutward(0.015);
 				}
 		
 		}
 	
-		this.getParameter(3).movePointOutward(0.25);
-		this.getParameter(0).movePointOutward(-0.15);
+		this.getParameter(3).movePointOutward(0.15);
+		this.getParameter(0).movePointOutward(-0.1);
 		
 	}
 

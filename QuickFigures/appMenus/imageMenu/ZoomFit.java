@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 import javax.swing.Icon;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
@@ -29,7 +29,7 @@ public ZoomFit(String type) {
 
 
 
-public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	if (diw==null) return;
 	if (type.contains("Set")) {
 		Double z = StandardDialog.getNumberFromUser("Set Zoom Level", diw.getZoomLevel());

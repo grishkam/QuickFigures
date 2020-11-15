@@ -8,6 +8,10 @@ import utilityClassesForObjects.Selectable;
 
 public class DeselectItem extends HideItem implements MultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean deselect=true;
 	
 	public DeselectItem(boolean b) {

@@ -20,7 +20,7 @@ import javax.swing.Icon;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.Hideable;
@@ -323,7 +323,7 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 	
 	
 	public UndoManagerPlus getUndoManager() {
-		return new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getUndoManager();
+		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}
 
 	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {

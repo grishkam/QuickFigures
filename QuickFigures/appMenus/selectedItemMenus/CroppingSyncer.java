@@ -10,6 +10,11 @@ import objectDialogs.CroppingDialog;
 public class CroppingSyncer extends BasicMultiSelectionOperator{
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		// TODO Auto-generated method stub

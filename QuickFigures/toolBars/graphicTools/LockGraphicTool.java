@@ -9,7 +9,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_LayoutObjects.ObjectDefinedLayoutGraphic;
 import sUnsortedDialogs.ObjectListChoice;
 import selectedItemMenus.SnappingSyncer;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
@@ -17,7 +17,7 @@ import utilityClassesForObjects.LockedItemList;
 import utilityClassesForObjects.TakesLockedItems;
 
 public class LockGraphicTool extends GraphicTool {
-	protected CompoundEdit2 undoer;
+	protected CombinedEdit undoer;
 	private ArrayList<LocatedObject2D> allRoi;
 	boolean askIfMultiple=true;
 	
@@ -46,7 +46,7 @@ public class LockGraphicTool extends GraphicTool {
 	}
 	
 	/**goes through a list of lock taking items and removes the selected item*/
-	static void removeFromAlltakers(LocatedObject2D sel, ArrayList<LocatedObject2D> allRoi, CompoundEdit2 undoer) {
+	static void removeFromAlltakers(LocatedObject2D sel, ArrayList<LocatedObject2D> allRoi, CombinedEdit undoer) {
 		LockedItemList.removeFromAlltakers(sel, allRoi, undoer);
 	}
 	

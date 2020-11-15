@@ -5,10 +5,10 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import appContext.ImageDPIHandler;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.MenuItemForObj;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
 
 public class CanvasAutoResize implements MenuItemForObj {
@@ -23,16 +23,16 @@ public class CanvasAutoResize implements MenuItemForObj {
 	}
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if(diw==null) return;
 		CanvasResizeUndo undo = performUndoableAction(diw);
 		if(undo==null||undo.sizeSame()) return;//if no changes were made
 		diw.getUndoManager().addEdit(undo);//adds the undo
 	}
-	public CanvasResizeUndo performUndoableAction(DisplayedImageWrapper diw) {
+	public CanvasResizeUndo performUndoableAction(DisplayedImage diw) {
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
 		ImageWrapper iw = diw.getImageAsWrapper();
-		BasicOverlayHandler boh = new BasicOverlayHandler();
+		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		if (mode==fitAll)
 			{
@@ -58,7 +58,7 @@ public class CanvasAutoResize implements MenuItemForObj {
 	
 
 	
-	public void makeAllVisible(DisplayedImageWrapper diw) {
+	public void makeAllVisible(DisplayedImage diw) {
 		performActionDisplayedImageWrapper(diw);
 		diw.zoomOutToFitScreen();
 	}

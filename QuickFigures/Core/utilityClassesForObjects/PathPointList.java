@@ -642,53 +642,44 @@ private static 	Point2D[] quadratic(Point2D a, Point2D b, Point2D c) {
 	
 	return new 	Point2D[] {t1,t2};
 }
-	
-	private void addClosePoint(Point2D p) {
-		this.addPoint(p);this.getLastPoint().setClosePoint(true);
-	}
+
 	
 	
-	/**when given two points find a o*/
+	/**when given two points find a point in between the two*/
 	static Point2D intermediatePoint(Point2D p1, Point2D p2, double t) {
-		
-	/**	double dx = p2.getX()-p1.getX();
-		double dy = p2.getY()-p1.getY();
-		dx*=t;
-		dy*=t;
-		return new Point2D.Double(dx+p1.getX(), dy+p1.getY());*/
 		return add(multiply(p2, t), multiply(p1, 1-t));
 	}
 	
 	/**reverses the intermediate point formula to find p2*/
 	static Point2D followingIntPoint(Point2D p1, Point2D p3, double t) {
-		
-	
 		return add(multiply(p3, 1/t), multiply(p1, -(1-t)/t));
 	}
 
 	
 	/**reverses the intermediate point formula to find p1*/
 	static Point2D followingIntPoint2(Point2D p2, Point2D p3, double t) {
-
 		return add(multiply(p3, 1/(1-t)), multiply(p2, -t/(1-t)  ));
 	}
 	
 	
 	
-	
+	/**multiplies the point's by x and y by t and returns the result*/
 	public static Point2D multiply(Point2D p1, double t) {
 		return new Point2D.Double(t*p1.getX(), t*p1.getY());
 	}
+	/**finds the square root of the points x and y*/
 	static Point2D sqrt(Point2D p1) {
 		return new Point2D.Double(Math.sqrt(p1.getX()), Math.sqrt(p1.getY()));
 	}
-	
+	/**multiplies the points x and y*/
 	static Point2D multiply(Point2D p1, Point2D p2) {
 		return new Point2D.Double(p2.getX()*p1.getX(), p2.getY()*p1.getY());
 	}
+	/**divides the points x and y*/
 	static Point2D divide(Point2D p1, Point2D p2) {
 		return new Point2D.Double(p1.getX()/p2.getX(), p1.getY()/p2.getY());
 	}
+	/**divides the points x and y by p2*/
 	static Point2D divide(Point2D p1, double p2) {
 		return new Point2D.Double(p1.getX()/p2, p1.getY()/p2);
 	}
@@ -702,7 +693,7 @@ private static 	Point2D[] quadratic(Point2D a, Point2D b, Point2D c) {
 		return p2.getX()*p1.getX()+ p2.getY()*p1.getY();
 	}
 	
-	/**performs a reflection*/
+	/**performs a reflection transform of point about a line defined by the other two points*/
 	public static Point2D.Double reflectPointAboutLine(Point2D p1, Point2D line1, Point2D line2) {
 		
 		Point2D vectLine = subtract(line2, line1);
@@ -711,11 +702,11 @@ private static 	Point2D[] quadratic(Point2D a, Point2D b, Point2D c) {
 		Point2D vprojection = multiply(vectLine, dot(vectLine , vectPoint)/(dot(vectLine ,vectLine )));
 		
 		
-		//subtracts the orthogonal line from 
+		//subtracts the orthogonal line 
 		Point2D vorthogonal = subtract(vectPoint, vprojection);
-		Point2D.Double vout = subtract(vectPoint, vorthogonal ); vout = subtract(vout, vorthogonal );
-		
-		
+		Point2D.Double vout = subtract(vectPoint, vorthogonal ); 
+		vout = subtract(vout, vorthogonal );
+				
 		return add(vout, line1);
 	}
 	
@@ -756,6 +747,7 @@ private static 	Point2D[] quadratic(Point2D a, Point2D b, Point2D c) {
 
 	    return new Point2D.Double(x, y);
 	}
+	 /**given two path points and a t (between 0 and 1), returns a spot on the curve*/
 	 public static Point2D interPolatePlaceOnCurve(PathPoint previois, PathPoint pp, double t) {
 		 return cubic(previois.getAnchor(), previois.getCurveControl2(), pp.getCurveControl1(), pp.getAnchor() , t);
 	}
@@ -776,8 +768,6 @@ private static 	Point2D[] quadratic(Point2D a, Point2D b, Point2D c) {
 	 
 	/**Adds a line to the path*/
 	public void lineTo(double x1, double y1) {
-      
-        
         add(new PathPoint(x1, y1));
     }
 
@@ -795,7 +785,7 @@ private static 	Point2D[] quadratic(Point2D a, Point2D b, Point2D c) {
 	}
 	
 	/**not actually the normals but returns the direction vectors of each point 
-	 * that corexpond to the direction from one point to the next*/
+	 * that correspond to the direction from one point to the next*/
 	public Point2D[] getDiffVectors() {
 		Point2D[] output = new  Point2D[this.size()-1];
 		for(int i=1; i<this.size(); i++) {
@@ -833,8 +823,6 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 		}
 		
 	
-	
-	
 	}
 	
 	public boolean hasCloseByPoints(double tolerance) {
@@ -849,7 +837,7 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 	
 	}
 	
-	/**removes a point and adjust to curve control of nearby points to make a similar looking bezier curve*/
+	/**removes a point and adjusts the curve control points of nearby points to make a similar looking bezier curve*/
 	public void cullPointAndAdjustCurvature(PathPoint p) {
 		if (p==null||this.get(0)==p) return;
 		if (this.get(size()-1)==p) return;
@@ -866,6 +854,7 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 		 this.remove(p);
 	}
 	
+	/**removes points that have little impact on the appearance of the line*/
 	public void cullUselessPoints(double tolerance, boolean curve, int frac, boolean random) {
 		Point2D[] directions = getDiffVectors();
 		
@@ -900,13 +889,10 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 		
 	}
 	
-	/**a bunch of the tans*/
+	/**a bunch of point arrays that define lines that are tangent to the curve*/
 	public ArrayList<Point2D[]> getTangentVectors() {
 		 ArrayList<Point2D[]> output = new  ArrayList<Point2D[]>();
 		for(int i=1; i<this.size(); i++) {
-			
-			//java.awt.geom.Point2D diff =interPolateTangentOfPlaceOnCurve(this.get(i-1),get(i), 0.5);
-			//double length = Math.sqrt(dot(diff, diff));
 			output.add(tangentOfPath(i-1, 0.5));
 		}
 		return output;
@@ -960,11 +946,12 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 	public void smoothCurve() {
 		for(PathPoint l:this ) {
 		l.evenOutAngleOfCurveControls(0.5);
-		//textG.updatePathFromPoints();
+		
 	}
 	
 	}
 
+	/**de-selects the points*/
 	public void deselectAll() {
 		for(utilityClassesForObjects.PathPoint p: this) {
 			p.deselect();

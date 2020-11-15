@@ -9,7 +9,7 @@ public class WidthAndHeightDialog extends ShapeGraphicOptionsSwingDialog {
 	{this.setWindowCentered(true);}
 	
 	public WidthAndHeightDialog(RectangularGraphic s) {
-		super(s);
+		super(s, true);
 		rect=s;
 		// TODO Auto-generated constructor stub
 	}

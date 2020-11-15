@@ -19,7 +19,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.MontageSpaces;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicDisplayComponent;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoReorder;
 import utilityClassesForObjects.ArrayObjectContainer;
@@ -87,7 +87,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  MontageSp
 			boolean forwardOrder=true;
 			if (type==MOVE_TO_BACK ||type==MOVE_FORWARD) forwardOrder=false;
 			
-			CompoundEdit2 edit = new CompoundEdit2();//for the undo manager
+			CombinedEdit edit = new CombinedEdit();//for the undo manager
 			
 			if (forwardOrder) 
 			for(int i=0; i<items.size(); i++)

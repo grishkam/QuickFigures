@@ -29,10 +29,10 @@ import dataSeries.GroupedDataSeries;
 import dataSeries.KaplenMeierDataPoint;
 import dataSeries.KaplenMeierDataSeries;
 import dataSeries.XYDataSeries;
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 import fileread.ExcelRowToJTable;
 import fileread.UtilForDataReading;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 import plotCreation.GroupedPlotCreator;
 import plotCreation.KaplanMeierPlotCreator;
@@ -517,7 +517,7 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 			if (maker1!=null) {
 				ArrayList<GroupedDataSeries> in = getCategoryDataSeriesUsingClassificationFolumn(0,1,2);
 				
-				maker1.createPlot("New Plot", in, CurrentSetInformerBasic.getCurrentActiveDisplayGroup());
+				maker1.createPlot("New Plot", in, CurrentFigureSet.getCurrentActiveDisplayGroup());
 			}
 			
 		}
@@ -547,7 +547,7 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 				if (form==4 ) in= getDataSeriesUsingClassificationFolumn(0,1, area);
 				else in=getAllColumns();
 				
-				maker2.createPlot("New Plot", in, CurrentSetInformerBasic.getCurrentActiveDisplayGroup());
+				maker2.createPlot("New Plot", in, CurrentFigureSet.getCurrentActiveDisplayGroup());
 			}
 		}
 	}
@@ -579,7 +579,7 @@ class PlotMakerMenuItem3 extends JMenuItem implements ActionListener {
 				ArrayList<XYDataSeries> in = getXYDataSeriesUsingDefaultClassification();
 				
 				
-				maker3.createPlot("New Plot", in, CurrentSetInformerBasic.getCurrentActiveDisplayGroup());
+				maker3.createPlot("New Plot", in, CurrentFigureSet.getCurrentActiveDisplayGroup());
 			}
 		}
 	}
@@ -608,7 +608,7 @@ class PlotMakerMenuItem4 extends JMenuItem implements ActionListener {
 			ArrayList<KaplenMeierDataSeries> in = getKaplanDataSeriesUsingDefaultClassification();
 			
 			
-			maker3.createPlot("New Plot", in, CurrentSetInformerBasic.getCurrentActiveDisplayGroup());
+			maker3.createPlot("New Plot", in, CurrentFigureSet.getCurrentActiveDisplayGroup());
 		}
 	}
 }

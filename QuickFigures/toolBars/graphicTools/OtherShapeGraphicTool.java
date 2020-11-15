@@ -15,7 +15,7 @@ public OtherShapeGraphicTool(RectangularGraphic model) {
 	{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
 }
 
-	protected RectangularGraphic createNewRect(Rectangle r) {
+	public RectangularGraphic createShape(Rectangle r) {
 		RectangularGraphic ouput = model.copy();
 		ouput.setRectangle(r);
 		return ouput;

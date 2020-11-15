@@ -1,3 +1,5 @@
-Package originally meant for saving and restoring items. Made for items that I specifically need to stick
-around. Object serialization would be a problematic option if I continue to edit the classes over time.
-Did it. 
+This package contains methods to write QuickFigures objects to a DOM tree
+and export to SVG using Apache Batik. Names of layers and objects are preserved
+Some files in this class are excluded from the build path because they play no role ]
+in the current version of quickfigures.
+ Made for items that I specifically need to stick around. 

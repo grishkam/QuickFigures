@@ -1,6 +1,5 @@
 package objectDialogs;
 
-import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -37,7 +36,7 @@ public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 		}
 		for(LocatedObject2D ob1: array) {
 			
-			if (ob1.getSnappingBehaviour()!=null) object=ob1; 
+			if (ob1.getSnapPosition()!=null) object=ob1; 
 		}
 		
 		SnappingPanel panel = this.addSnappingBehviourToDialog(object);
@@ -70,10 +69,10 @@ public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 		this.setObjectSnappingBehaviourToDialog(object);
 		
 		for(LocatedObject2D s: array) {
-				if (s.getSnappingBehaviour()!=null) 
+				if (s.getSnapPosition()!=null) 
 					{
-					SnappingPosition newSnap = object.getSnappingBehaviour().copy();
-					if(!copySnap) newSnap = object.getSnappingBehaviour();
+					SnappingPosition newSnap = object.getSnapPosition().copy();
+					if(!copySnap) newSnap = object.getSnapPosition();
 					s.setSnappingBehaviour(newSnap);
 					};
 		}

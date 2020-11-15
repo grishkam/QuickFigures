@@ -13,7 +13,7 @@ import utilityClassesForObjects.RectangleEdges;
 
 public class PlusGraphic extends TrapezoidGraphic {
 
-	{ parameter=new RectangleEdgeParameter(this, 0.5, TOP, UPPER_LEFT); parameter.setRatioToMaxLength(0.33333);
+	{ parameter=new RectangleEdgeParameter(this, 0.5, TOP, UPPER_LEFT); getParameter().setRatioToMaxLength(0.33333);
 	name="Plus";
 	
 	}
@@ -42,7 +42,7 @@ public class PlusGraphic extends TrapezoidGraphic {
 		double rx=getObjectWidth()/2;
 		double ry=getObjectHeight()/2;
 		
-		double ratioToMaxLength = parameter.getRatioToMaxLength();
+		double ratioToMaxLength = getParameter().getRatioToMaxLength();
 		double hPlus=ratioToMaxLength*rx*2;
 		double vPlus=ratioToMaxLength*ry*2;
 		
@@ -107,13 +107,13 @@ public class PlusGraphic extends TrapezoidGraphic {
 	
 	public PlusGraphic copy() {
 		PlusGraphic output = new PlusGraphic(this);
-		output.parameter.setRatioToMaxLength(parameter.getRatioToMaxLength());
+		output.getParameter().setRatioToMaxLength(getParameter().getRatioToMaxLength());
 		return output;
 	}
 	
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		PlusGraphic r1 = new PlusGraphic(r);
-		r1.parameter.setRatioToMaxLength(this.parameter.getRatioToMaxLength());
+		r1.getParameter().setRatioToMaxLength(this.getParameter().getRatioToMaxLength());
 		r1.setDashes(new float[]{100000,1});
 		r1.setStrokeWidth(4);
 		r1.setStrokeColor(c);

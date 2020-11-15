@@ -24,10 +24,9 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import imageDisplayApp.KeyDownTracker;
-import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiSnappingDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoReorder;
 import undo.UndoSnappingChange;
 import undo.UndoTakeLockedItem;
@@ -53,7 +52,7 @@ public class LockedItemHandle extends SmartHandle {
 	static LocatedObject2D potentialTransplantTarget;
 	protected boolean releaseIt=false;
 	private boolean transplantIt;
-	protected static CompoundEdit2 currentEdit;
+	protected static CombinedEdit currentEdit;
 	protected  SnappingPosition originalSnap;
 	protected Rectangle originalBounds;
 	boolean willTransplant=true;
@@ -104,12 +103,12 @@ public class LockedItemHandle extends SmartHandle {
 	/**What to do when a handle is moved from point p1 to p2*/
 	@Override
 	public void handleDrag(CanvasMouseEventWrapper mEvent) {
-		Point2D p2=mEvent.getCordinatePoint();
+		Point2D p2=mEvent.getCoordinatePoint();
 		UndoSnappingChange undo = new UndoSnappingChange(object);
 		if (this.fineControlMode()) {
 			LockGraphicTool2.adjustPosition((int)p2.getX(), (int)p2.getY(), taker, object);
 		} else
-		getObject().getSnappingBehaviour().setToNearestSnap(getObject().getBounds().getBounds(), taker.getContainerForBounds(object), new Point((int)p2.getX(), (int)p2.getY() ));
+		getObject().getSnapPosition().setToNearestSnap(getObject().getBounds().getBounds(), taker.getContainerForBounds(object), new Point((int)p2.getX(), (int)p2.getY() ));
 		
 		
 		undo.establishFinalState();
@@ -125,7 +124,7 @@ public class LockedItemHandle extends SmartHandle {
 
 	public void showMessageForOutOfRange(CanvasMouseEventWrapper mEvent) {
 		boolean out = outOfRange(mEvent);
-		Point2D p2=mEvent.getCordinatePoint();
+		Point2D p2=mEvent.getCoordinatePoint();
 		SelectionManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger();
 		if(out &&willTransplant) {
 			releaseIt=true;
@@ -135,7 +134,7 @@ public class LockedItemHandle extends SmartHandle {
 			selectionManagger.setSelection(marker2, 0);
 			//getObject().getSnappingBehaviour().copyPositionFrom(s);
 			
-			LocatedObject2D a = LockGraphicTool.getPotentialLockAcceptorAtPoint(mEvent.getCordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWrapper());
+			LocatedObject2D a = LockGraphicTool.getPotentialLockAcceptorAtPoint(mEvent.getCoordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWrapper());
 			if (a!=null)
 				{
 				RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
@@ -146,7 +145,7 @@ public class LockedItemHandle extends SmartHandle {
 				transplantIt=true;
 				} else transplantIt=false;
 			if(originalSnap!=null)
-			getObject().getSnappingBehaviour().copyPositionFrom(originalSnap);
+			getObject().getSnapPosition().copyPositionFrom(originalSnap);
 			
 		} else {
 			releaseIt=false;
@@ -156,7 +155,7 @@ public class LockedItemHandle extends SmartHandle {
 	}
 
 	protected boolean outOfRange(CanvasMouseEventWrapper mEvent) {
-		return LockGraphicTool2.outofRange(this.getObject().getBounds(), taker.getBounds(), mEvent.getCordinatePoint());
+		return LockGraphicTool2.outofRange(this.getObject().getBounds(), taker.getBounds(), mEvent.getCoordinatePoint());
 	}
 
 	
@@ -248,14 +247,14 @@ private Shape createDrawnCirc(Point2D pt) {
 
 
 public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
-	originalSnap=getObject().getSnappingBehaviour().copy();
+	originalSnap=getObject().getSnapPosition().copy();
 	originalBounds=getObject().getBounds();
 	if(lastInnerShape!=null&&lastInnerShape.contains(canvasMouseEventWrapper.getClickedXScreen(), canvasMouseEventWrapper.getClickedYScreen()))
 		setInfineControl(true); else setInfineControl(false);
 	
 	releaseIt=false;
 	transplantIt=false;
-	currentEdit=new CompoundEdit2();
+	currentEdit=new CombinedEdit();
 	
 	//	double distance = this.getCordinateLocation().distance(canvasMouseEventWrapper.getClickedXImage(), canvasMouseEventWrapper.getClickedYImage());
 	
@@ -289,7 +288,7 @@ public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
 		
 		taker.removeLockedItem(getObject());
 		if(currentEdit!=null) currentEdit.addEditToList(undo);
-		getObject().setLocation(canvasMouseEventWrapper.getCordinatePoint());
+		getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
 		releaseIt=false;
 	}
 	if (transplantIt) {

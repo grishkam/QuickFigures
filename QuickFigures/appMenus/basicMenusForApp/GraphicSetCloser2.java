@@ -1,6 +1,6 @@
 package basicMenusForApp;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import imageDisplayApp.GraphicSetDisplayWindow;
 
 public class GraphicSetCloser2  extends BasicMenuItemForObj {
@@ -8,7 +8,7 @@ public class GraphicSetCloser2  extends BasicMenuItemForObj {
 	boolean save=false;
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (diw.getWindow() instanceof GraphicSetDisplayWindow) {
 			GraphicSetDisplayWindow theSet=(GraphicSetDisplayWindow) diw.getWindow();
 			theSet.closeGroupAndSupportingWindows(save);

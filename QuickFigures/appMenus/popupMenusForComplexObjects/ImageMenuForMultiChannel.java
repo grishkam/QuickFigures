@@ -1,19 +1,10 @@
 package popupMenusForComplexObjects;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.JMenu;
 
 import channelMerging.MultiChannelSlotDialog;
 import genericMontageKit.PanelList;
-import graphicActionToombar.CurrentSetInformerBasic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
-import logging.IssueLog;
-import sUnsortedDialogs.ScaleResetListener;
-import sUnsortedDialogs.ScaleSettingDialog;
-import utilityClassesForObjects.ScaleInfo;
-import applicationAdapters.HasScaleInfo;
 
 public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 
@@ -32,8 +23,6 @@ public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 	public void generateLabelMenuItems() {
 		createSetScaleItem() ;
 		createCropOption();
-		createColorImageItem();
-	
 		
 		JMenu mm = new JMenu("Expert Options") ;
 		createSaveImageItem(mm) ;
@@ -111,19 +100,7 @@ public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 	
 	
 
-	SmartMenuItem2 createColorImageItem() {
-		SmartMenuItem2 out=new SmartMenuItem2("Recolor Channels Automatically") {
-			private static final long serialVersionUID = 1L;
-			public void onAction() {
-				display.getSlot().getMultichanalWrapper().colorBasedOnRealChannelName();
-				display.updatePanelsAndLabelsFromSource();
-				display.updateDisplay();
-			}
-			
-		};
-		this.add(out);
-		return out;
-	}
+
 	
 	SmartMenuItem2 createSaveImageItem(JMenu thi) {
 		SmartMenuItem2 out=new SmartMenuItem2("Save Image") {

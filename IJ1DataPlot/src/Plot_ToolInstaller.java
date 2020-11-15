@@ -65,7 +65,6 @@ public class Plot_ToolInstaller implements PlugIn {
 	
 	static boolean hasAutoRunInTXTfile() throws Exception {
 		String macrosPath = IJ.getDirectory("macros");
-		if (macrosPath==null) return false;
 		
 		if (macrosPath!=null) {
 			
@@ -80,7 +79,6 @@ public class Plot_ToolInstaller implements PlugIn {
 	
 	static boolean hasAutoRunInIJMfile() throws Exception {
 		String macrosPath = IJ.getDirectory("macros");
-		if (macrosPath==null) return false;
 		
 		if (macrosPath!=null) {
 			

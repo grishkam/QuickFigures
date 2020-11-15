@@ -4,29 +4,28 @@ import java.awt.Color;
 import java.awt.Shape;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageEditorDialogs;
 
+/**Objects that implements this interface 
+  store information relating to the tools in the toolbar
+  Interface contains methods relating the the tools
+  TODO: */
 public interface ToolCore {
 
-	//public abstract GenericMontageEditor getEditor();
 	public ImageWrapper currentlyInFocusWindowImage();
 	
-	//public abstract ImagePlus getImageClick();
-
-	//public abstract void setImageClick(ImagePlus imageClick);
+	public abstract DisplayedImage getClickedImage();
+	public abstract void setClickedImage(DisplayedImage d);
 	
-	public abstract DisplayedImageWrapper getClickedImage();
-	public abstract void setClickedImage(DisplayedImageWrapper d);
-	
-	//public AbstractMontageLayout<ImagePlus> getMainLayout();
-	//public AbstractMontageLayout<ImagePlus> getLayoutForCurrentImage();
 	public abstract ImageWrapper getImageWrapperClick();
 
 	public abstract void setImageWrapperClick(ImageWrapper imageWrapperClick);
 	
+	
+	public abstract boolean shiftDown();
+	public abstract boolean altKeyDown();
 	
 	/** Returns the difference in cordinates between the last mouse press
 	  and the last drag (or release). Note, these are coordinates are
@@ -37,7 +36,6 @@ public interface ToolCore {
 	public abstract int getYDisplaceMent();
 
 
-	public abstract MontageEditorDialogs getMontageEditorDialogs();
 
 	public abstract void setMarkerRoi(int type);
 
@@ -47,13 +45,8 @@ public interface ToolCore {
 
 	public abstract void createIconSet(String... sts);
 
-	//public abstract void updateImageDisplay(ImagePlus image);
-
-
-
 	public abstract int getClickedCordinateX();
 
-	//public abstract void setClickedCordinateX(int clickedCordinateX);
 
 	public abstract int getClickedCordinateY();
 
@@ -94,76 +87,44 @@ public interface ToolCore {
 	public abstract int getMouseXrelease();
 	public abstract int getMouseYrelease();
 
+	//Stores the index of the channel, frame of slice being dragged
 	public abstract int getChannelClick();
-
 	public abstract void setChannelClick(int channelClick);
-
 	public abstract int getChannelDrag();
-
 	public abstract void setChannelDrag(int channelDrag);
-
 	public abstract int getFrameClick();
-
 	public abstract void setFrameClick(int frameClick);
-
 	public abstract int getFrameDrag();
-
 	public abstract void setFrameDrag(int frameDrag);
-
 	public abstract int getSliceClick();
-
 	public abstract void setSliceClick(int sliceClick);
-
 	public abstract int getSliceDrag();
-	
 	public abstract int getSliceRelease() ;
-
 	public abstract void setSliceDrag(int sliceDrag);
 
-//	public abstract Image getCursorIcon();
-
-//	public abstract void setCursorIcon(Image cursorIcon);
-
+	
 	public abstract int getPanelIndexClick();
-
 	public abstract void setPanelIndexClick(int panelIndexClick);
-
 	public abstract int getPanelIndexDrag();
-
 	public abstract void setPanelIndexDrag(int panelIndexDrag);
-
 	public abstract int getColIndexClick();
-
 	public abstract void setColIndexClick(int colIndexClick);
-
 	public abstract int getColIndexDrag();
-
 	public abstract void setColIndexDrag(int colIndexDrag);
-
 	public abstract int getRowIndexClick();
-
 	public abstract void setRowIndexClick(int rowIndexClick);
-
 	public abstract int getRowIndexDrag();
-
 	public abstract void setRowIndexDrag(int rowIndexDrag);
 
 
-	public int getMouseButtonClick();
-
-
-	public abstract boolean shiftDown();
-
-	public abstract boolean altKeyDown();
-
+	/**resets the tool to operate as if the original click point was in fact the current drag point
+	 Needed for the function of certain tools*/
 	public abstract void setClickPointToDragReleasePoint();
 
+	public int getMouseButtonClick();
 	public abstract int clickCount();
 
-	public abstract BasicMontageLayout getClickedLayout();
-
-	//public abstract java.awt.event.MouseEvent getLastMouseEvent();
-
+	
 	public abstract Color getForeGroundColor();
 
 	
@@ -175,8 +136,9 @@ public interface ToolCore {
 	public void setRowColClickForLayout(BasicMontageLayout lay);
 
 	public CanvasMouseEventWrapper getLastDragMouseEvent();
-
 	public CanvasMouseEventWrapper getLastMouseEvent();
+
+
 
 	
 	

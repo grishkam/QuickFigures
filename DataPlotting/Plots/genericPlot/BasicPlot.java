@@ -47,7 +47,7 @@ import plotParts.DataShowingParts.SeriesLabel;
 import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
 import plotParts.DataShowingParts.SeriesStyle;
 import plotTools.PlotIcon;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 import undoForPlots.AxisFlipUndo;
@@ -175,8 +175,8 @@ public void fullPlotUpdate() {
 }
 
 @MenuItemMethod(menuActionCommand = "To Tukey", menuText = "Make Tukey Boxplot", subMenuName="Change Format", orderRank=12)
-public CompoundEdit2 tukeyBoxplotPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit tukeyBoxplotPlot() {
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup a: getAllDataSeries()) {
 		undo.addEditToList(a.removeLine());
 		undo.addEditToList(
@@ -196,8 +196,8 @@ public CompoundEdit2 tukeyBoxplotPlot() {
 
 /**Changes the form of the plot to a normal boxplot*/
 @MenuItemMethod(menuActionCommand = "To normal box", menuText = "Make Boxplot", subMenuName="Change Format", orderRank=11)
-public CompoundEdit2 normalBoxplotPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit normalBoxplotPlot() {
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup a: getAllDataSeries()) {
 		undo.addEditToList(a.removeLine());
 		undo.addEditToList(
@@ -302,7 +302,7 @@ public void addYAxiLabel() {
 	
 	yLabel.setSnappingBehaviour(SnappingPosition.defaultRowLabel());
 	yLabel.setAngle(Math.PI/2);
-	yLabel.getSnappingBehaviour().setSnapHOffset((int) (25+yAxis.getTicLength()));
+	yLabel.getSnapPosition().setSnapHOffset((int) (25+yAxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel.putIntoSnapPosition();
 	
@@ -322,7 +322,7 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	sn.setSnapLocationTypeExternal(RectangleEdges.RIGHT_SIDE_MIDDLE);
 	yLabel2.setSnappingBehaviour(sn);
 	yLabel2.setAngle(Math.PI/2);
-	yLabel2.getSnappingBehaviour().setSnapHOffset((int) (25+this.alternateYaxis.getTicLength()));
+	yLabel2.getSnapPosition().setSnapHOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel2.putIntoSnapPosition();
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
@@ -334,8 +334,8 @@ public void addXAxiLabel(int offset) {
 	if (this.hasItem(xLabel)) this.remove(xLabel);
 	xLabel=new  AxisLabel("X-Axis Label", this);
 	xLabel.setSnappingBehaviour(SnappingPosition.defaultRowLabel());
-	xLabel.getSnappingBehaviour().setSnapLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
-	xLabel.getSnappingBehaviour().setSnapVOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
+	xLabel.getSnapPosition().setSnapLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
+	xLabel.getSnapPosition().setSnapVOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
 	this.add(xLabel);
 	xLabel.getParagraph().get(0).get(0).setText("X Axis ");
 	areaRect.addLockedItem(xLabel);
@@ -353,15 +353,15 @@ public void moxAxisLabelOutOfWay() {
 
 	if (bb.contains(xLabel.getBounds())) {
 		double m = bb.getMaxY()-xLabel.getBounds().getMinY();
-		double oldOff = xLabel.getSnappingBehaviour().getSnapVOffset();
-		xLabel.getSnappingBehaviour().setSnapVOffset(m+oldOff);
+		double oldOff = xLabel.getSnapPosition().getSnapVOffset();
+		xLabel.getSnapPosition().setSnapVOffset(m+oldOff);
 		//new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
 	}
 	
 	if (bb.contains(yLabel.getBounds())) {
 		double m = bb.getMinX()-yLabel.getBounds().getMaxX();
-		double oldOff = xLabel.getSnappingBehaviour().getSnapHOffset();
-		yLabel.getSnappingBehaviour().setSnapHOffset(m+oldOff);
+		double oldOff = xLabel.getSnapPosition().getSnapHOffset();
+		yLabel.getSnapPosition().setSnapHOffset(m+oldOff);
 		//new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 	}
 }
@@ -673,14 +673,14 @@ private ArrayList<PlotLabel> getSeriesLabels() {
 
 @MenuItemMethod(menuActionCommand = "Add Scatter Plot", menuText = "New Scatter Points", subMenuName="Add")
 public AbstractUndoableEdit addScatter() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addScatter());}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Add Secondary Vertical Axis", menuText = "Secondary Vertical Axis", subMenuName="Add", orderRank=500)
 public AbstractUndoableEdit addVAxis() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	if (alternateYaxis!=null ) {
 		undo.addEditToList(new UndoAbleEditForRemoveItem(this, alternateYaxis));
 		this.remove(alternateYaxis); 
@@ -700,7 +700,7 @@ public AbstractUndoableEdit addVAxis() {
 /**Adds a data bar for every data series on the plot*/
 @MenuItemMethod(menuActionCommand = "New Data Bar", menuText = "New Data Bars", subMenuName="Add")
 public AbstractUndoableEdit addDataBar() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addDataBar());}
 	return undo;
 }
@@ -709,7 +709,7 @@ public AbstractUndoableEdit addDataBar() {
 */
 @MenuItemMethod(menuActionCommand = "Add Error Bar", menuText = "New Error Bars", subMenuName="Add")
 public AbstractUndoableEdit addErrorBar() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addErrorBar());}
 	return undo;
 }
@@ -718,7 +718,7 @@ public AbstractUndoableEdit addErrorBar() {
 */
 @MenuItemMethod(menuActionCommand = "Add Boxplot", menuText = "New Boxplots", subMenuName="Add")
 public AbstractUndoableEdit addBoxplotBar() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addBoxPlot());;}
 	return undo;
 }
@@ -728,44 +728,44 @@ public AbstractUndoableEdit addBoxplotBar() {
 
 @MenuItemMethod(menuActionCommand = "Remove Scatter Plot", menuText = "Points", subMenuName="Remove")
 public AbstractUndoableEdit removeScatter() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeScatter());}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Remove Label", menuText = "Labels", subMenuName="Remove")
 public AbstractUndoableEdit removeLabel() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeLabel());;}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Remove Data Bar", menuText = "Data Bars", subMenuName="Remove")
-public CompoundEdit2 removeDataBar() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit removeDataBar() {
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeDataBar());;}
 	return undo;
 }
 
 
 @MenuItemMethod(menuActionCommand = "Remove Error Bar", menuText = "Error Bars", subMenuName="Remove")
-public CompoundEdit2 removeErrorBar() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit removeErrorBar() {
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeErrorBar());;}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Remove Boxplot Bar", menuText = "Boxplots", subMenuName="Remove")
-public CompoundEdit2 removeBoxplots() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit removeBoxplots() {
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeBoxplot());;;}
 	return undo;
 }
 
 
 @MenuItemMethod(menuActionCommand = "To Barplot", menuText = "Make Barplot", subMenuName="Change Format", orderRank=4)
-public CompoundEdit2 barPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit barPlot() {
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup a: getAllDataSeries()) {
 		
 		undo.addEditToList(a.removeBoxplot());
@@ -784,8 +784,8 @@ public CompoundEdit2 barPlot() {
 	return undo;
 }
 
-protected CompoundEdit2 forceBarToForm( BasicDataSeriesGroup a, int type) {
-	CompoundEdit2 undo = new CompoundEdit2();
+protected CombinedEdit forceBarToForm( BasicDataSeriesGroup a, int type) {
+	CombinedEdit undo = new CombinedEdit();
 	if (a.getDataBar()==null) 
 		undo.addEditToList(a.addDataBar());
 	DataShapeUndo undo2 = new DataShapeUndo(a.getDataBar());
@@ -794,8 +794,8 @@ protected CompoundEdit2 forceBarToForm( BasicDataSeriesGroup a, int type) {
 	return undo;
 }
 
-protected CompoundEdit2 forceBoxplotWhisker( BasicDataSeriesGroup a, int  whisker) {
-	CompoundEdit2 undo = new CompoundEdit2();
+protected CombinedEdit forceBoxplotWhisker( BasicDataSeriesGroup a, int  whisker) {
+	CombinedEdit undo = new CombinedEdit();
 	if (a.getBoxPlot()==null)
 		undo.addEditToList(a.addBoxPlot());
 	DataShapeUndo undo2 = new DataShapeUndo(a.getBoxPlot());
@@ -804,8 +804,8 @@ protected CompoundEdit2 forceBoxplotWhisker( BasicDataSeriesGroup a, int  whiske
 	return undo;
 }
 
-protected CompoundEdit2 forceErrorBarToForm( BasicDataSeriesGroup a, int  depiction) {
-	CompoundEdit2 undo = new CompoundEdit2();
+protected CombinedEdit forceErrorBarToForm( BasicDataSeriesGroup a, int  depiction) {
+	CombinedEdit undo = new CombinedEdit();
 	if (a.getErrorBar()==null) 
 		undo.addEditToList(a.addErrorBar());
 	DataShapeUndo undo2 = new DataShapeUndo(a.getErrorBar());
@@ -814,8 +814,8 @@ protected CompoundEdit2 forceErrorBarToForm( BasicDataSeriesGroup a, int  depict
 	return undo;
 }
 
-protected CompoundEdit2 forceScatterBarToExclusion( BasicDataSeriesGroup a, int  exclusion) {
-	CompoundEdit2 undo = new CompoundEdit2();
+protected CombinedEdit forceScatterBarToExclusion( BasicDataSeriesGroup a, int  exclusion) {
+	CombinedEdit undo = new CombinedEdit();
 	if (a.getScatterPoints()==null) 
 		undo.addEditToList(a.addScatter());
 	DataShapeUndo undo2 = new DataShapeUndo(a.getScatterPoints());
@@ -826,7 +826,7 @@ protected CompoundEdit2 forceScatterBarToExclusion( BasicDataSeriesGroup a, int 
 
 @MenuItemMethod(menuActionCommand = "To Scatter Plot", menuText = "Make Scatter", subMenuName="Change Format", orderRank=6)
 public AbstractUndoableEdit scatterPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup a: getAllDataSeries()) {
 		
 		undo.addEditToList(
@@ -892,7 +892,7 @@ public void createFigureLegends() {
 protected void giveConsistentStanppingToLabelGroup(ArrayList<PlotLabel> labels) {
 	PlotLabel lab1 = labels.get(0);
 	for(PlotLabel l: labels) {
-		l.setSnappingBehaviour(lab1.getSnappingBehaviour());
+		l.setSnappingBehaviour(lab1.getSnapPosition());
 	}
 }
 
@@ -951,8 +951,8 @@ protected void flipPlotOrientation() {
 	if (null!=xLabel||null!=yLabel) {
 		TextParagraph px = xLabel.getParagraph();
 		TextParagraph py = yLabel.getParagraph();
-		SnappingPosition sx = xLabel.getSnappingBehaviour();
-		SnappingPosition sy = yLabel.getSnappingBehaviour();
+		SnappingPosition sx = xLabel.getSnapPosition();
+		SnappingPosition sy = yLabel.getSnapPosition();
 		double ax = xLabel.getAngle();
 		double ay = yLabel.getAngle();
 		PlotLabel oldx = xLabel;
@@ -966,12 +966,12 @@ protected void flipPlotOrientation() {
 }
 
 @MenuItemMethod(menuActionCommand = "Add Label", menuText = "New Series Labels", subMenuName="Add<Label", orderRank=40)
-public CompoundEdit2 addSeriesLabels() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit addSeriesLabels() {
+	CombinedEdit undo = new CombinedEdit();
 	SnappingPosition snap1=null;
 	for(BasicDataSeriesGroup t: getAllDataSeries()){
 		undo.addEditToList(t.addLabel());
-		if (snap1==null) snap1=t.getSeriesLabel().getSnappingBehaviour();
+		if (snap1==null) snap1=t.getSeriesLabel().getSnapPosition();
 		else {t.getSeriesLabel().setSnappingBehaviour(snap1);}
 	}
 	return undo;

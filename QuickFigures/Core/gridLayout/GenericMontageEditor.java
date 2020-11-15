@@ -1,22 +1,17 @@
 package gridLayout;
 
 
-import java.awt.Color;
-import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
-import applicationAdapters.PixelContainer;
-import applicationAdapters.PixelWrapper;
 import channelLabels.ChannelLabelTextGraphic;
-import genericMontageKit.BasicOverlayHandler;
-import genericMontageKit.BasicOverlayHandler.LocatedObjectFilter;
+import genericMontageKit.BasicObjectListHandler;
+import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
 import genericMontageKit.PanelLayout;
-import genericMontageKit.panelContentElement;
+import genericMontageKit.PanelContentExtract;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.FigureLabelOrganizer.ColumnLabelTextGraphic;
 import graphicalObjects_FigureSpecific.FigureLabelOrganizer.RowLabelTextGraphic;
@@ -30,90 +25,62 @@ import utilityClassesForObjects.TakesLockedItems;
 
 
 /**This is a form of montage editor that I created as a general class to be adaptable to other 
-  Environments besides imageJ1. For example. I may adapt it for imageJ 2. it has no specific references to
-  any application specific class. The methods in it were originally made for explicit ImagePlus and ImageProcessor 
-  object in imageJ but I rewrote this so the same methods could be used more freely. As long as 
-  objects of the appropriate interfaces work*/
+ Methods in this class Both alter the layout and move the contents appropriately
+ */
 public class GenericMontageEditor implements MontageSpaces {
 	
 	
-	private BasicOverlayHandler objecthandler=new BasicOverlayHandler();
+	private BasicObjectListHandler objecthandler=new BasicObjectListHandler();
 	private LocatedObjectFilter[] qualificationsForPanelObject=new LocatedObjectFilter[] {};
 	
-	public BasicOverlayHandler getObjectHandler() {
+	public BasicObjectListHandler getObjectHandler() {
 		return objecthandler;
 	}
 	
-	//public abstract PixelWrapper createPixelWrapper(Dimension d) ;
 	
 	/**Alters the canvas size of the image while preserving the positions of the objects relative to the pixels of the image*/
 	public void resetMontageImageSize(BasicMontageLayout ml,  double xOff, double yOff) {
 		if (ml==null||ml.getWrapper()==null) return;
-		ml.getWrapper().CanvasResizePixelsOnly( (int)ml.montageWidth, (int)ml.montageHeight, (int)xOff, (int) yOff);
-		getObjectHandler().shiftAllRois(ml.getWrapper(), xOff, yOff);
+		ml.getWrapper().CanvasResizePixelsOnly( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
+		getObjectHandler().shiftAll(ml.getWrapper(), xOff, yOff);
 		this.finishEdit(ml);
 			}
-	
-	
-	
-	
-	public PixelWrapper getImageFromPanel(PanelLayout ml, int panel) {
-		return getPanel(ml.getWrapper(),ml.getPanel(panel));
-	}
-	
-	public ArrayList <PixelWrapper> stack(PanelLayout ml) {
-		ArrayList<PixelWrapper> output = new ArrayList <PixelWrapper> ();
-		for (int j=1;j<=ml.nPanels(); j++) {output.add(getImageFromPanel(ml, j));}
-		return output;
-	}
-	
-	public ArrayList <panelContentElement> cutStack(PanelLayout ml) {
-		ArrayList <panelContentElement> output=new ArrayList <panelContentElement>();
+
+	/**Extracts the content from each panel of this layout and returns the contents of every
+	  panel as an array */
+	public ArrayList <PanelContentExtract> cutStack(PanelLayout ml) {
+		ArrayList <PanelContentExtract> output=new ArrayList <PanelContentExtract>();
 		ml.resetPtsPanels();
 		Rectangle2D[] panels = ml.getPanels();
-		for (Rectangle2D panel: panels) {output.add(cutPanelContents(ml.getWrapper(), ml.getWrapper(), panel) );}
+		for (Rectangle2D panel: panels) {output.add(cutPanelContents(ml.getWrapper(), panel) );}
 		return output;	
 	}
 	
-	public  void pasteStack(PanelLayout ml, ArrayList <panelContentElement> panels) {
+	/**Reverses the cutStack Method above. */
+	public  void pasteStack(PanelLayout ml, ArrayList <PanelContentExtract> panels) {
 		Rectangle2D[] rpanels = ml.getPanels();
 		for (int i=0; i<rpanels.length&&i<panels.size(); i++) {
 			pastePanelContents(ml.getWrapper(), rpanels[i], panels.get(i));
 		}
 	}
 	
-	/**takes the pixels and objects in a particular panel and cuts then out*/
-	panelContentElement cutPanelContents(ObjectContainer imp, PixelContainer impp,  Rectangle2D r) {
+	/**takes the objects in a particular panel and returns them*/
+	PanelContentExtract cutPanelContents(ObjectContainer imp, Rectangle2D r) {
 		
-		panelContentElement output = new panelContentElement(r);
+		PanelContentExtract output = new PanelContentExtract(r);
 		
-		output.ip=getPanel(impp, r);
-		output.setObjectList(getObjectHandler().liftOverlaysInPanelX(imp, r , getQualificationsForPanelObject()));
 		
-		clear(impp,r);
+		output.setObjectList(getObjectHandler().liftObjectsFromPanelX(imp, r , getQualificationsForPanelObject()));
+		
 		return output;
 	}
 	
-	/**takes the pixels and objects in a particular panel and cuts then out*/
-	void pastePanelContents(ImageWrapper imp, Rectangle2D r, panelContentElement p) {
-		setIntoPanel( imp, p.ip, r);
-		getObjectHandler().setOverlaysInPanelX(p.getObjectList(),imp, r);
+	/**takes the objects in a particular panel and reverses the cutPanelContent method above*/
+	void pastePanelContents(ImageWrapper imp, Rectangle2D r, PanelContentExtract p) {
+	
+		getObjectHandler().setObjectsIntoPanelX(p.getObjectList(),imp, r);
 	}
 	
-
-	
-	/**clears a specicified section of the image*/
-	   public void clear(BasicMontageLayout ml, int index, int type) {
-			clear(ml.getWrapper(), ml.getSelectedSpace( (int)(ml.getPoint(index).getX())+1,  (int)(ml.getPoint(index).getY())+1, type));
-		   }
-
-	   public void clearPanels(BasicMontageLayout ml) { clearPanels(ml, 1, ml.nPanels());}
-	   
-	   public void clearPanels(BasicMontageLayout ml, int start, int end) {
-		   for (int i=start; i<=ml.nPanels()&&i<=end; i++) {clear(ml.getWrapper(), ml.getPanel(i));}
-	   }
-
-
 		
 	/**Simple methods to set the number of rows. */
 	   public void addRows(BasicMontageLayout ml, int rows){
@@ -121,16 +88,15 @@ public class GenericMontageEditor implements MontageSpaces {
 		   
 		   notifyListenersOfFutureChange(ml, event);
 		  
-		   
 		   ml.setNRows(ml.nRows() + rows);
 		   if (rows*ml.yincrementOfRow(ml.nRows())<ml.specialSpaceWidthBottom) {ml.specialSpaceWidthBottom-=rows*ml.yincrementOfRow(ml.nRows());}else {
-		   ml.montageHeight+=ml.yincrementOfRow(ml.nRows())*rows;
+		   ml.layoutHeight+=ml.yincrementOfRow(ml.nRows())*rows;
 		  
 		   notifyListenersOfCurrentChange(ml, event);
 		   
 		   resetMontageImageSize(ml, 0, 0);}
 
-		  finishEdit(ml);
+		   finishEdit(ml);
 		   
 		   notifyListenersOfCompleteChange(ml, event);
 		   
@@ -141,20 +107,20 @@ public class GenericMontageEditor implements MontageSpaces {
 	   }
 	   
 		
-		/**Simple methods to set the number of columns. */
+		/**Simple method to set the number of columns. */
 	   public void addCols(BasicMontageLayout ml, int cols){  
 		   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.COL_ADDITION, ml.nColumns()+1, cols );
 		   notifyListenersOfFutureChange(ml, event);
 		   ml.setNColumns(ml.nColumns() + cols); 
 		   if (cols*ml.xincrementOfColumn( ml.nColumns())<ml.specialSpaceWidthRight) {ml.specialSpaceWidthRight-=cols*ml.xincrementOfColumn( ml.nColumns());}else {
-		   ml.montageWidth+=ml.xincrementOfColumn( ml.nColumns())*cols;
+		   ml.layoutWidth+=ml.xincrementOfColumn( ml.nColumns())*cols;
 		   notifyListenersOfCurrentChange(ml, event);
 		   resetMontageImageSize(ml, 0, 0);}
 		   ml.resetPtsPanels();
 		  this.finishEdit(ml);
 		  notifyListenersOfCompleteChange(ml, event);
 	   }
-	   
+	   /**Simple method to set the number of columns. */
 	   public void setColNumber(BasicMontageLayout ml, int cols) {
 		   addCols(ml, cols-ml.nColumns());
 	   }
@@ -190,7 +156,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	   
 	   /**returns the area that this montage takes up, returns the dimensions not the position*/
 	   private Rectangle getRecomendedContentArea(BasicMontageLayout ml) {
-		     ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(MontageSpaces.ALL_MONTAGE_SPACE));   
+		     ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.ALL_MONTAGE_SPACE));   
 		   
 		   Rectangle area = stack.get(0).getAreaSpannelByContents();
 		   area.x+=ml.specialSpaceWidthLeft;
@@ -205,7 +171,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		    area.add(new Area(ml.allPanelArea()));
 		   
 		  //Rectangle area = getRecomendedContentArea(ml);//retrieves panel areas
-		  ArrayList<LocatedObject2D> rois = new BasicOverlayHandler().getOverlapOverlaypingOrContainedItems(area.getBounds(), ml.getWrapper());
+		  ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(area.getBounds(), ml.getWrapper());
 		  Area area2=new Area(new Area(ml.allPanelArea()));
 		 	
 		  for(LocatedObject2D roi:rois) {
@@ -218,14 +184,15 @@ public class GenericMontageEditor implements MontageSpaces {
 		   setLabelpacesToIncludeOnly(ml, area2.getBounds());
 	   }
 
-	protected void expandArea(Area area2, LocatedObject2D roi) {
-		area2.add(new Area(roi.getBounds()));
-		  expandForLockedItems(area2, roi);
+	   /**Enlarges area2 to include the given object*/
+	protected void expandArea(Area area2, LocatedObject2D rObject) {
+		area2.add(new Area(rObject.getBounds()));
+		  expandForLockedItems(area2, rObject);
 	}
-
-	protected void expandForLockedItems(Area area2, LocatedObject2D roi) {
-		if (roi instanceof TakesLockedItems) {
-			  TakesLockedItems roi2=(TakesLockedItems) roi;
+	 /**Enlarges area2 to include the items attached to the given object*/
+	protected void expandForLockedItems(Area area2, LocatedObject2D rObject) {
+		if (rObject instanceof TakesLockedItems) {
+			  TakesLockedItems roi2=(TakesLockedItems) rObject;
 			  for (LocatedObject2D item: roi2.getLockedItems()) {
 				  
 				 area2.add(new Area(item.getBounds()));
@@ -235,7 +202,8 @@ public class GenericMontageEditor implements MontageSpaces {
 		  }
 	}
 	   
-	   /**Adds label space to the montage to make it include the Rectangle r*/
+	   /**Adds label space to the layout to make sure it includes the Rectangle r (the bounds of a label).
+	     */
 	  private void trimLabelpacesToIncludeOnly(BasicMontageLayout ml, Rectangle r) {
 		   Rectangle space = ml.getSelectedSpace(1,MontageSpaces.ALL_MONTAGE_SPACE).getBounds();
 
@@ -261,7 +229,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	  /**Adds or subtracts label space to/from the montage to make fit Rectangle r*/
 	  private void setLabelpacesToIncludeOnly(BasicMontageLayout ml, Rectangle r) {
 		   Rectangle space = ml.getSelectedSpace(1,MontageSpaces.ALL_MONTAGE_SPACE).getBounds();
-			  /**currently flawd as does not take into accound position the the montage*/
+			  /**currently flawd as does not take into account position the the montage*/
 		   	this.addLeftLabelSpace(ml, -(r.x-space.x));
 			   this.addTopLabelSpace(ml, -(r.y-space.y));
 			   this.addRightLabelSpace(ml, (r.x+r.width-space.x-space.width));
@@ -272,7 +240,6 @@ public class GenericMontageEditor implements MontageSpaces {
 	  
 	  /**If any label spaces are negative, makes them positive. There are relatively few ways a user can set
 	    the spaces to negative values. */
-	 // TODO determine if will need and delete
 	  private void ensurePositiveLabelSpace(BasicMontageLayout ml) {
 		  if (ml.labelSpaceWidthLeft<0)  this.addLeftLabelSpace(ml, Math.abs(ml.labelSpaceWidthLeft));
 		  if (ml.labelSpaceWidthRight<0)  this.addRightLabelSpace(ml, Math.abs(ml.labelSpaceWidthRight));
@@ -280,68 +247,76 @@ public class GenericMontageEditor implements MontageSpaces {
 		  if (ml.labelSpaceWidthBottom<0)  this.addTopLabelSpace(ml, Math.abs(ml.labelSpaceWidthBottom));	  
 	  }
 	  
-	   
+	   /**Changes the label space at the top of the layout*/
 	   public void addTopLabelSpace(BasicMontageLayout ml, double space) {
 		   if(ml.labelSpaceWidthTop+space<0) {space=-ml.labelSpaceWidthTop;}
 		   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+TOP_SPACE, space, 0 );
 		   notifyListenersOfFutureChange(ml, event);
 			  ml.labelSpaceWidthTop+=space;
 			  if (space>ml.specialSpaceWidthTop) {
-				  ml.montageHeight+=space; 
+				  ml.layoutHeight+=space; 
 				  resetMontageImageSize(ml, 0, space); 
 				  }
 			  else ml.setSpecialTopSpace(ml.specialSpaceWidthTop-space);
 			 
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+	   /**Changes the label space at the top of the layout*/
 	   public void setTopLabelSpace(BasicMontageLayout ml, double space) {
 		   addTopLabelSpace(ml, space-ml.labelSpaceWidthTop);
 	   }
 		
+	   /**Changes the y location of the layout relative to the 0 point*/
 		public void addTopSpecialSpace(BasicMontageLayout ml, double space) {
 			  GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ADITIONAL_SPACE_OR_LOCATION_EDIT+TOP_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
-			  ml.montageHeight+=space;
+			  ml.layoutHeight+=space;
 			  ml.specialSpaceWidthTop+=space;
 			  resetMontageImageSize(ml, 0, space);
 			  
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+		 /**Changes the y location of the layout relative to the 0 point*/
 		public void setTopSpecialSpace(BasicMontageLayout ml, double space) {
 			addTopSpecialSpace(ml, space-ml.specialSpaceWidthTop);
 		}
 		
 		
-		
+		 /**Changes the label space at the bottom of the layout*/
 		public void addBottomLabelSpace(BasicMontageLayout ml, double space) {
 			if(ml.labelSpaceWidthBottom+space<0) {space=-ml.labelSpaceWidthBottom;}
 			  GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+BOTTOM_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			  ml.labelSpaceWidthBottom+=space;
 			  if (space>ml.specialSpaceWidthBottom) { 
-				  ml.montageHeight+=space; 
+				  ml.layoutHeight+=space; 
 				  resetMontageImageSize(ml, 0, 0); 
 				  }
 			  else ml.setSpecialBottomSpace(ml.specialSpaceWidthBottom-space);
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+		 /**Changes the label space at the bottom of the layout*/
 		public void setBottomLabelSpace(BasicMontageLayout ml, double space) {
 			 addBottomLabelSpace(ml, space-ml.labelSpaceWidthBottom);
 		}
 
+		/**Changes the amount of empty space that is expected between the bottom of the layout and
+		 * the bottom of the canvas*/
 		public void addBottomSpecialSpace(BasicMontageLayout ml, double space) {
 			  GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ADITIONAL_SPACE_OR_LOCATION_EDIT+BOTTOM_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
-			  ml.montageHeight+=space;
+			  ml.layoutHeight+=space;
 			  ml.specialSpaceWidthBottom+=space;
 			  resetMontageImageSize(ml, 0, 0);
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+		/**Changes the amount of empty space that is expected between the bottom of the layout and
+		 * the bottom of the canvas*/
 		public void setBottomSpecialSpace(BasicMontageLayout ml, double space) {
 			addBottomSpecialSpace(ml, space-ml.specialSpaceWidthBottom);
 		}
 		
-
+		 /**Changes the label space at the left of the layout*/
 		public  void addLeftLabelSpace(BasicMontageLayout ml, double space) {	
 			if(ml.labelSpaceWidthLeft+space<0) {space=-ml.labelSpaceWidthLeft;}//TODO test if this works
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+LEFT_SPACE, space, 0 );
@@ -349,7 +324,7 @@ public class GenericMontageEditor implements MontageSpaces {
 				
 			  ml.labelSpaceWidthLeft+=space;
 			  if (space>ml.specialSpaceWidthLeft) { 
-				  ml.montageWidth+=space; 
+				  ml.layoutWidth+=space; 
 				  resetMontageImageSize(ml, space, 0);
 				  //getObJectHandler().shiftAllRois(ml, space, 0);
 				  }
@@ -357,53 +332,64 @@ public class GenericMontageEditor implements MontageSpaces {
 			  notifyListenersOfCompleteChange(ml, event);
 			  
 		   }
+		 /**Changes the label space at the left of the layout*/
 		public  void setLeftLabelSpace(BasicMontageLayout ml, double space) {	
 			addLeftLabelSpace(ml, space-ml.labelSpaceWidthLeft);
 		}
 		
+		 /**Changes the x location of the layout relative to the 0 point*/
 		public  void addLeftSpecialSpace(BasicMontageLayout ml, double space) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ADITIONAL_SPACE_OR_LOCATION_EDIT+LEFT_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			   
-			  ml.montageWidth+=space;
+			  ml.layoutWidth+=space;
 			  ml.specialSpaceWidthLeft+=space;
 			  resetMontageImageSize(ml, space, 0);
 			  
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+		
+		 /**Changes the x location of the layout relative to the 0 point*/
 		public void setLeftSpecialSpace(BasicMontageLayout ml, double space) {
 			addLeftSpecialSpace(ml, space-ml.specialSpaceWidthLeft);
 		}
 		
+		 /**Changes the label space at the right of the layout*/
 		public void addRightLabelSpace(BasicMontageLayout ml, double space) {	
 			if(ml.labelSpaceWidthRight+space<0) {space=-ml.labelSpaceWidthRight;}//TODO test if this works
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LABEL_SPACE_EDIT+RIGHT_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			  ml.labelSpaceWidthRight+=space;
-			  if (space>ml.specialSpaceWidthRight) {ml.montageWidth+=space; resetMontageImageSize(ml, 0, 0);  }
+			  if (space>ml.specialSpaceWidthRight) {ml.layoutWidth+=space; resetMontageImageSize(ml, 0, 0);  }
 			  else ml.setSpecialRightSpace(ml.specialSpaceWidthRight-space);
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+		 /**Changes the label space at the right of the layout*/
 		public void setRightLabelSpace(BasicMontageLayout ml, double space) {
 			addRightLabelSpace(ml, space-ml.labelSpaceWidthRight);
 		}
 		
+		/**Changes the amount of empty space that is expected between the right of the layout and
+		 * the right end of the canvas*/
 		public void addRightSpecialSpace(BasicMontageLayout ml, double space) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ADITIONAL_SPACE_OR_LOCATION_EDIT+RIGHT_SPACE, space, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			   
-			  ml.montageWidth+=space;
+			  ml.layoutWidth+=space;
 			  ml.specialSpaceWidthRight+=space;
 			  resetMontageImageSize(ml, 0, 0);
 			  
 			  notifyListenersOfCompleteChange(ml, event);
 		   }
+		/**Changes the amount of empty space that is expected between the right of the layout and
+		 * the right end of the canvas*/
 		public void setRightSpecialSpace(BasicMontageLayout ml, double space) {
 			addRightSpecialSpace(ml, space-ml.specialSpaceWidthRight);
 		}
 		
 		
-		/**When given a motantage layout, this will add to the verticalal border around each panel, copy the rows,
+		/**Changes the vertical border between panels
+		 *When given a layout, this will add to the vertical border around each panel, copy the rows,
 		   and paste then into a resized version of the montage*/
 		public void expandBorderY2(BasicMontageLayout ml, double t) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.BORDER_EDIT_V, t, 0 );
@@ -411,7 +397,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			 
 			
 			if (ml.BorderWidthBottomTop+t<0) return;
-			ArrayList<panelContentElement> stack=cutStack(ml.makeAltered(ROWS));
+			ArrayList<PanelContentExtract> stack=cutStack(ml.makeAltered(ROWS));
 	
 			ml.setVerticalBorder(ml.BorderWidthBottomTop+t);
 			if (t*ml.nRows()<ml.specialSpaceWidthBottom ) {ml.setSpecialBottomSpace(ml.specialSpaceWidthBottom-t*ml.nRows());}
@@ -422,18 +408,20 @@ public class GenericMontageEditor implements MontageSpaces {
 			finishEdit(ml);
 			notifyListenersOfCompleteChange(ml, event);
 		}
+		/**Changes the vertical border between panels*/
 		public void setVerticalBorder(BasicMontageLayout ml, double border) {
 			expandBorderY2(ml, border-ml.BorderWidthBottomTop);
 		}
 		
 		
 		
-		/**When given a motantage layout, this will add to the horizontal border around each panel, copy the columns,
+		/**Changes the horizontal border between panels
+		 * When given a layout, this will add to the horizontal border around each panel, copy the columns,
 		   and paste then into a resized version of the montage*/
 		public void expandBorderX2(BasicMontageLayout ml, double t) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.BORDER_EDIT_H, t, 0 );
 			   notifyListenersOfFutureChange(ml, event);
-			ArrayList<panelContentElement> stack=cutStack(ml.makeAltered(COLS));
+			ArrayList<PanelContentExtract> stack=cutStack(ml.makeAltered(COLS));
 			
 			ml.setHorizontalBorder(ml.BorderWidthLeftRight+t);
 			if (t*ml.nColumns()<ml.specialSpaceWidthRight) {ml.setSpecialRightSpace(ml.specialSpaceWidthRight-t*ml.nColumns());}
@@ -444,20 +432,25 @@ public class GenericMontageEditor implements MontageSpaces {
 			finishEdit(ml);
 			notifyListenersOfCompleteChange(ml, event);
 		}
+		/**Changes the horizontal border between panels*/
 		public void setHorizontalBorder(BasicMontageLayout ml, double border) {
 			expandBorderX2(ml, border-ml.BorderWidthLeftRight);
 		}
 		
+		/**called after the end of each layout edit. the array of points and rectangles must
+		 be reset to reflect the current layout*/
 		void finishEdit(BasicMontageLayout ml) {
 			ml.resetPtsPanels() ;
 			ml.setMontageProperties();
 		}
 		
+		/**Swaps the number of rows with the number of columns of the layout. does not affect the 
+		  items in the label spaces*/
 		public  GridLayoutEditEvent invertPanels(BasicMontageLayout ml) {	
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.INVERSION, 0, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			
-			ArrayList<panelContentElement> stack=cutStack(ml);
+			ArrayList<PanelContentExtract> stack=cutStack(ml);
 			
 			int newcol=ml.nRows();
 			int newrow=ml.nColumns();
@@ -472,15 +465,15 @@ public class GenericMontageEditor implements MontageSpaces {
 			return event;
 		}
 		
-		/**Performs a horizontal/vertical flip of the layout. Edits label positions as well*/
+		/**Performs a horizontal/vertical flip of the layout. Edits the items in the label spaces as well*/
 		public void invertPanelsAndLabels(BasicMontageLayout ml) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.INVERSION, 0, 0 );
 			   notifyListenersOfFutureChange(ml, event);
 			   
 			  
-			   ArrayList<panelContentElement> stack=cutStack(ml);
-			   ArrayList<panelContentElement> collabel = cutStack(  ml.makeAltered(COLS));
-			   ArrayList<panelContentElement> rowlabel = cutStack(  ml.makeAltered(ROWS));
+			   ArrayList<PanelContentExtract> stack=cutStack(ml);
+			   ArrayList<PanelContentExtract> collabel = cutStack(  ml.makeAltered(COLS));
+			   ArrayList<PanelContentExtract> rowlabel = cutStack(  ml.makeAltered(ROWS));
 			   
 				
 				int newcol=ml.nRows();
@@ -497,7 +490,6 @@ public class GenericMontageEditor implements MontageSpaces {
 				
 				finishEdit( ml);
 			
-			
 				
 			flipSnappings(ml);
 			
@@ -505,6 +497,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			notifyListenersOfCompleteChange(ml, event);
 		}
 
+		/**Changes the snap position of objects to reflect a row column flip*/
 		protected void flipSnappings(BasicMontageLayout ml) {
 			ArrayList<LocatedObject2D> objects = ml.getWrapper().getLocatedObjects();
 			
@@ -515,7 +508,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			}
 		}
 
-	
+
 		
 		  /**Alters the size alloted to the panel. if the panel's column lacks an individual width
 		    this simply alters the width of them all*/
@@ -538,13 +531,13 @@ public class GenericMontageEditor implements MontageSpaces {
 			   notifyListenersOfFutureChange(ml, event);
 			   
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(COLS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(COLS));
 			   
 			   if (colIndex>0) ml.setColumnWidth(colIndex, ml.getPanelWidthOfColumn(colIndex)+widthincrease);
 			  
 				//ml.setPanelWidth(ml.getPanelWidthOfColumn(colIndex)+widthincrease);
 				if (widthincrease<ml.specialSpaceWidthRight) {ml.setSpecialRightSpace(-widthincrease+ml.specialSpaceWidthRight);}
-				else { ml.montageWidth=ml.montageWidth+widthincrease; resetMontageImageSize(ml, 0, 0);}
+				else { ml.layoutWidth=ml.layoutWidth+widthincrease; resetMontageImageSize(ml, 0, 0);}
 				
 				pasteStack(ml.makeAltered(COLS), stack);
 				finishEdit(ml);
@@ -575,7 +568,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ROW_RESIZE, increase,  rowIndex);
 			   notifyListenersOfFutureChange(ml, event);
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(ROWS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(ROWS));
 			 ml.setRowHeight(rowIndex, ml.getPanelHeightOfRow(rowIndex)+increase);
 				//ml.setPanelHeight(ml.getPanelHeightOfRow(rowIndex)+increase);
 				
@@ -583,7 +576,7 @@ public class GenericMontageEditor implements MontageSpaces {
 					ml.setSpecialBottomSpace(-increase+ml.specialSpaceWidthBottom);
 					}
 				else {
-					ml.montageHeight+=increase;
+					ml.layoutHeight+=increase;
 					resetMontageImageSize(ml, 0, 0);
 					}
 				
@@ -607,7 +600,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			   
 			   
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(COLS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(COLS));
 			   
 				ml.setStandardPanelWidth(ml.getPanelWidthOfColumn(0)+widthincrease);
 				if (widthincrease*ml.nColumns()<ml.specialSpaceWidthRight) {ml.setSpecialRightSpace(-widthincrease*ml.nColumns()+ml.specialSpaceWidthRight);}
@@ -623,7 +616,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			   notifyListenersOfFutureChange(ml, event);
 			   
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(ROWS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(ROWS));
 			 
 				ml.setStandardPanelHeight(ml.getPanelHeightOfRow(0)+increase);
 				if (increase*ml.nRows()<ml.specialSpaceWidthBottom) {ml.setSpecialBottomSpace(-increase*ml.nRows()+ml.specialSpaceWidthBottom);}
@@ -691,7 +684,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		   /**experimental. makes the column fit objects*/
 		   public void alterPanelWidthsToFitContents(BasicMontageLayout ml) {
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(MontageSpaces.COLUMN_OF_PANELS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.COLUMN_OF_PANELS));
 			   ArrayObjectContainer.ignoredClass=BarGraphic.class;
 			   ArrayObjectContainer.ignoredClass2=ChannelLabelTextGraphic.class;
 			   ArrayObjectContainer.ignoredClasses=nonConsideredClasses;
@@ -724,7 +717,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		   /**experimental. makes the row to fit objects*/
 		   public void alterPanelHeightsToFitContents(BasicMontageLayout ml) {
 			
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(MontageSpaces.ROW_OF_PANELS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.ROW_OF_PANELS));
 			   int[] heights=new int[stack.size()];
 			   for(int i=0; i<stack.size(); i++) {
 				   heights[i]=stack.get(i).getAreaSpannelByContents2().height;
@@ -745,7 +738,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		   
 		   /**experimental. makes the column fit objects. buggy*/
 		   public void shiftPanelContentsToEdge(BasicMontageLayout ml) {
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(MontageSpaces.PANELS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.PANELS));
 			   int[] widths=new int[stack.size()];
 			   for(int i=0; i<widths.length; i++) {
 				   int x = stack.get(i).getAreaSpannelByContents().x;
@@ -770,7 +763,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LOCATION_EDIT, mx,  my);
 			   notifyListenersOfFutureChange(ml, event);
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(ALL_MONTAGE_SPACE));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(ALL_MONTAGE_SPACE));
 			   if (ml.specialSpaceWidthTop+my<0) {addTopSpecialSpace(ml, -my);}
 			   if (ml.specialSpaceWidthBottom-my<0) {addBottomSpecialSpace(ml, my);}
 			   if (ml.specialSpaceWidthLeft+mx<0) {addLeftSpecialSpace(ml, -mx);}
@@ -791,7 +784,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LOCATION_EDIT, mx,  my);
 			   notifyListenersOfFutureChange(ml, event);
 			   
-			   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(ALL_MONTAGE_SPACE));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(ALL_MONTAGE_SPACE));
 			 
 			   ml.setSpecialTopSpace(ml.specialSpaceWidthTop+my);
 			   ml.setSpecialBottomSpace(ml.specialSpaceWidthBottom-my);
@@ -806,10 +799,10 @@ public class GenericMontageEditor implements MontageSpaces {
 		   
 		   /**moves the position of the panels within the border of those panels. */
 		   public  void movePanelOffset(BasicMontageLayout ml,  int increasex, int increasey) {
-			   ArrayList<panelContentElement> stack= cutStack(ml);
+			   ArrayList<PanelContentExtract> stack= cutStack(ml);
 			   
-			   getObjectHandler().liftOverLayRois(ml, ml.getWrapper());
-				clearPanels(ml);
+			   getObjectHandler().liftPanelObjects(ml, ml.getWrapper());
+			
 				if (!(Math.abs(ml.xshift+increasex)>ml.BorderWidthLeftRight/2
 					||  Math.abs(ml.yshift+increasey)>ml.BorderWidthBottomTop/2	) && ml.type%10==BasicMontageLayout.Center_Of_Border)
 				ml.setPoints(ml.xshift+increasex, ml.yshift+increasey);
@@ -862,24 +855,24 @@ public class GenericMontageEditor implements MontageSpaces {
 		   }
 		   
 		   
-		   public panelContentElement lastCol;	
-			public panelContentElement lastRow;
-			public panelContentElement lastPanel;
+		   public PanelContentExtract lastCol;	
+			public PanelContentExtract lastRow;
+			public PanelContentExtract lastPanel;
 			
 			//public ArrayList<ObjectType> lastObjects;
 			   /**Alters the montage getting rid of the column at index colIndex*/
-			   public panelContentElement removeColumn(BasicMontageLayout ml, int colIndex) {
+			   public PanelContentExtract removeColumn(BasicMontageLayout ml, int colIndex) {
 				  
 				   
 				   if (colIndex>ml.nColumns()||colIndex<1) return null;
 				   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.COL_REMOVAL, colIndex,  1);
 				   notifyListenersOfFutureChange(ml, event);
 				   
-				   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(COLS));
+				   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(COLS));
 				   double widthincrease=ml.xincrementOfColumn(colIndex);
 				   ml.columnWidths=BasicMontageLayout.takeoutElement(colIndex-1, ml.columnWidths);
 				   {ml.setSpecialRightSpace(widthincrease+ml.specialSpaceWidthRight);}
-				   panelContentElement output= stack.get(colIndex-1);
+				   PanelContentExtract output= stack.get(colIndex-1);
 				   stack.remove(colIndex-1);
 				   ml.setNColumns(ml.nColumns() - 1);
 				   pasteStack(ml.makeAltered(COLS), stack);
@@ -888,18 +881,18 @@ public class GenericMontageEditor implements MontageSpaces {
 				   return output;
 			   }
 			   /**Alters the montage getting rid of the row at index colIndex*/
-			   public panelContentElement removeRow(BasicMontageLayout ml, int colIndex) {
+			   public PanelContentExtract removeRow(BasicMontageLayout ml, int colIndex) {
 				   
 				   
 				   if (colIndex>ml.nRows()||colIndex<1) return null;
 				   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ROW_REMOVAL, colIndex,  1);
 				   notifyListenersOfFutureChange(ml, event);
 				   
-				   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(ROWS));
+				   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(ROWS));
 				   double increase=ml.yincrementOfRow(colIndex);
 				   ml.rowHeights=BasicMontageLayout.takeoutElement(colIndex-1,  ml.rowHeights);
 				   {ml.setSpecialBottomSpace(increase+ml.specialSpaceWidthBottom);}
-				   panelContentElement output= stack.get(colIndex-1);
+				   PanelContentExtract output= stack.get(colIndex-1);
 				   stack.remove(colIndex-1);
 				   ml.setNRows(ml.nRows() - 1);
 				   pasteStack(ml.makeAltered(ROWS), stack);
@@ -909,16 +902,16 @@ public class GenericMontageEditor implements MontageSpaces {
 			   }
 			   
 			   /**Alters the montage adding a column at index colIndex. */
-			   public void addColumn(BasicMontageLayout ml, int colIndex, panelContentElement colContent) {
+			   public void addColumn(BasicMontageLayout ml, int colIndex, PanelContentExtract colContent) {
 				   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.COL_INSERTION, colIndex,  1);
 				   notifyListenersOfFutureChange(ml, event);
 				   
 				   BasicMontageLayout layout = ml.makeAltered(COLS);
-				 ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(COLS));
+				 ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(COLS));
 				 double widthnewCol= layout.getPanelWidthOfColumn(colIndex);
 				
 				 if (colContent==null) {
-					  colContent=new panelContentElement(new Rectangle(0,0, (int)widthnewCol, (int)ml.getPanelHeightOfRow(1)));
+					  colContent=new PanelContentExtract(new Rectangle(0,0, (int)widthnewCol, (int)ml.getPanelHeightOfRow(1)));
 					  colContent.setObjectList(new ArrayList<LocatedObject2D>());
 					
 				  }
@@ -931,7 +924,7 @@ public class GenericMontageEditor implements MontageSpaces {
 				   if (colIndex>stack.size()) stack.add(colContent); else stack.add(colIndex-1, colContent);
 				   ml.setNColumns(ml.nColumns()+1);
 				   if (ml.xincrementOfColumn( colIndex)<ml.specialSpaceWidthRight) {ml.specialSpaceWidthRight-=ml.xincrementOfColumn(colIndex);}else {
-					   ml.montageWidth+=ml.xincrementOfColumn( colIndex);
+					   ml.layoutWidth+=ml.xincrementOfColumn( colIndex);
 					   resetMontageImageSize(ml, 0, 0);
 					   }
 				  // ml.resetPtsPanels();
@@ -946,7 +939,7 @@ public class GenericMontageEditor implements MontageSpaces {
 				   if (ml==null||index>ml.nColumns()||index2>ml.nColumns()) return;
 				   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.COL_SWAP, index,  index2);
 				   notifyListenersOfFutureChange(ml, event);
-				   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(COLS));
+				   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(COLS));
 				  double w1=ml.getPanelWidthOfColumn(index);
 				  double w2=ml.getPanelWidthOfColumn(index2);
 				   ml.setColumnWidth(index, w2);
@@ -966,7 +959,7 @@ public class GenericMontageEditor implements MontageSpaces {
 				   
 				   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ROW_SWAP, colIndex, colIndex2);
 				   notifyListenersOfFutureChange(ml, event);
-				   ArrayList<panelContentElement> stack= cutStack(ml.makeAltered(ROWS));
+				   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(ROWS));
 				  double w1=ml.getPanelHeightOfRow(colIndex);
 				 double w2=ml.getPanelHeightOfRow(colIndex2);
 				   ml.setRowHeight(colIndex, w2);
@@ -978,12 +971,12 @@ public class GenericMontageEditor implements MontageSpaces {
 				   this.notifyListenersOfCompleteChange(ml, event);
 			   }
 			   
-			   public void swapArrayListElements(ArrayList<panelContentElement> list, int in1, int in2) {
+			   public void swapArrayListElements(ArrayList<PanelContentExtract> list, int in1, int in2) {
 				   if (in1<0||in2<0) return;
 				   if (in1>=list.size()) return;
 				   if (in2>=list.size()) return;
-				   panelContentElement ob1 = list.get(in1);
-				  panelContentElement ob2 = list.get(in2);
+				   PanelContentExtract ob1 = list.get(in1);
+				  PanelContentExtract ob2 = list.get(in2);
 				  list.set(in1, ob2);
 				  list.set(in2, ob1);
 				   
@@ -992,17 +985,17 @@ public class GenericMontageEditor implements MontageSpaces {
 			   
 			   
 			   /**Alters the montage adding a column at index colIndex. */
-			   public void addRow(BasicMontageLayout ml, int rowIndex, panelContentElement colContent) {
+			   public void addRow(BasicMontageLayout ml, int rowIndex, PanelContentExtract colContent) {
 				   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.ROW_INSERTION, rowIndex,  1);
 				   notifyListenersOfFutureChange(ml, event);
 				   
 				   BasicMontageLayout layout = ml.makeAltered(ROWS);
 				   if (colContent==null) {
-					  colContent=new panelContentElement(new Rectangle2D.Double(0,0,layout.panelWidth, layout.getPanelHeightOfRow(rowIndex)));
+					  colContent=new PanelContentExtract(new Rectangle2D.Double(0,0,layout.panelWidth, layout.getPanelHeightOfRow(rowIndex)));
 					  colContent.setObjectList(new ArrayList<LocatedObject2D>());
 					  
 				  }
-				   ArrayList<panelContentElement> stack= cutStack(layout);
+				   ArrayList<PanelContentExtract> stack= cutStack(layout);
 				   int newwidth=colContent.dim().height;
 				   
 				   ml.rowHeights=BasicMontageLayout.putInElement(rowIndex-1, ml.rowHeights);
@@ -1011,7 +1004,7 @@ public class GenericMontageEditor implements MontageSpaces {
 				   if (rowIndex>stack.size()) stack.add(colContent); else stack.add(rowIndex-1, colContent);
 				   ml.setNRows(ml.nRows()+1);
 				   if (ml.yincrementOfRow( rowIndex)<ml.specialSpaceWidthBottom) {ml.specialSpaceWidthBottom-=ml.yincrementOfRow(rowIndex);}else {
-					   ml.montageHeight+=ml.yincrementOfRow(rowIndex);
+					   ml.layoutHeight+=ml.yincrementOfRow(rowIndex);
 					   resetMontageImageSize(ml, 0, 0);
 					   }
 				  // ml.resetPtsPanels();
@@ -1020,18 +1013,17 @@ public class GenericMontageEditor implements MontageSpaces {
 				   this.notifyListenersOfCompleteChange(ml, event);
 			   }
 			
-			/**Removes column t from the montage*/
+			/**Removes item at index t from the layout*/
 			public void deleteInsertPanel(BasicMontageLayout ml, int t, boolean insert, int type) {
 				  GridLayoutEditEvent event = new GridLayoutEditEvent(ml, insert?GridLayoutEditEvent.PANEL_INSERTION: GridLayoutEditEvent.PANEL_REMOVAL, t,  1);
 				   notifyListenersOfFutureChange(ml, event);
 				
 				BasicMontageLayout colLayout=ml.makeAltered(type);
-				ArrayList<panelContentElement> stack=cutStack(colLayout);
-				clearPanels(colLayout);
+				ArrayList<PanelContentExtract> stack=cutStack(colLayout);
 				
 				try{
 				if (!insert){
-				panelContentElement last=null;
+				PanelContentExtract last=null;
 				//lastObjects=null;
 				if (stack.size()>t-1) {
 					last=stack.get(t-1);
@@ -1055,12 +1047,12 @@ public class GenericMontageEditor implements MontageSpaces {
 					}
 
 				} else {
-					panelContentElement last; 
+					PanelContentExtract last; 
 					if (type==ROWS)last=lastRow; else
 					if (type==COLS)last=lastCol;
 					else last=lastPanel;
 					
-					panelContentElement ipnew=new panelContentElement(stack.get(0).dim());
+					PanelContentExtract ipnew=new PanelContentExtract(stack.get(0).dim());
 					
 					ipnew.setObjectList(new ArrayList<LocatedObject2D>());
 					
@@ -1096,8 +1088,8 @@ public class GenericMontageEditor implements MontageSpaces {
 				   int index=ml.getPanelIndex(r.x, r.y);
 				   ml.setRectangles((int)(r.x-ml.getPoint(index).getX()), (int)(r.y-ml.getPoint(index).getY()), r.width, r.height);
 				 
-				  ArrayList<panelContentElement> stack = cutStack(ml);
-				  clearPanels( ml);
+				  ArrayList<PanelContentExtract> stack = cutStack(ml);
+				
 				   resizePanels(ml,  (int)r.getWidth(), (int) r.getHeight());
 				   pasteStack(ml,stack);
 				
@@ -1108,14 +1100,12 @@ public class GenericMontageEditor implements MontageSpaces {
 					   
 					
 					//ObjectContainer imp2 = getObjectHandler().getWrapper(imp);
-					ArrayList<LocatedObject2D> o1=getObjectHandler().liftOverlaysInPanelX(imp, r1.getBounds());
-					PixelWrapper plus1=getPanel(imp, r1);
-					ArrayList<LocatedObject2D> o2=getObjectHandler().liftOverlaysInPanelX(imp, r2.getBounds());
-					PixelWrapper plus2=getPanel(imp, r2);
-					setPanel(imp, plus1, r2);
-					setPanel(imp, plus2, r1);
-					getObjectHandler().setOverlaysInPanelX(o2, imp, r1.getBounds());
-					getObjectHandler().setOverlaysInPanelX(o1, imp, r2.getBounds());
+					ArrayList<LocatedObject2D> o1=getObjectHandler().liftObjectsFromPanelX(imp, r1.getBounds());
+				
+					ArrayList<LocatedObject2D> o2=getObjectHandler().liftObjectsFromPanelX(imp, r2.getBounds());
+					
+					getObjectHandler().setObjectsIntoPanelX(o2, imp, r1.getBounds());
+					getObjectHandler().setObjectsIntoPanelX(o1, imp, r2.getBounds());
 				}
 				
 				public void moveMontagePanels(BasicMontageLayout ml, int index1, int index2, int type) {
@@ -1145,7 +1135,7 @@ public class GenericMontageEditor implements MontageSpaces {
 				
 				/**returns a list of the empty panels*/
 				boolean[] emptyPanels(BasicMontageLayout ml) {
-					 ArrayList<panelContentElement> stack= cutStack(ml);
+					 ArrayList<PanelContentExtract> stack= cutStack(ml);
 					   boolean[] output=new   boolean[stack.size()];
 					   for(int i=0;i<stack.size();i++) {
 						   output[i]=!stack.get(i).hasObjects();
@@ -1177,72 +1167,9 @@ public class GenericMontageEditor implements MontageSpaces {
 				}
 				
 				
-				/**This pastes the image pixels into the rectangle of image imp. If
-				 * the pixels to be inserted are large than the rectangle, the remianing pixels
-				 * will be pasted anyway.*/
-				 void setIntoPanel(ImageWrapper imp, PixelWrapper ip, Rectangle2D r) {
-					if (ip==null||imp==null) return;
-					 setPanel(imp, crop(ip, (int)r.getWidth(), (int)r.getHeight()), r);
-				 }
 				
-				 /**part 2 of this class are below
-				  public ArrayList<PixelWrapper> array(AbstractPanelList< PixelWrapper> abstractPanelList) {
-					  ArrayList<PixelWrapper> o = new ArrayList<PixelWrapper>();
-					  for (int i=1; i<=abstractPanelList.getSize(); i++) o.add(abstractPanelList.getPanels().get(i-1).getImageObject());
-					  return o;
-				  }*/
-				  
-				  
-				   /**deletes the contents of a specified shape and inserts the panel into that contents*/
-				   public void insertIntoSelectedSpace(BasicMontageLayout ml, PixelWrapper p2, int index, int type) {
-					   			Rectangle clear=		ml.getSelectedSpace(index, type).getBounds();
-					   			clear(ml.getWrapper(), clear);
-					   			paste(ml.getWrapper(), p2, (int) clear.getBounds().getX(), (int)clear.getBounds().getY());
-					   }
-
-				public PixelWrapper crop(PixelWrapper  ip, int width, int height) {
-					if (ip==null) return null;
-					return ip.copy( new Rectangle(0,0, width, height))  ;
-				//	return imageData().cropped(ip, new Rectangle(0,0, width, height));
-				   }
+			
 				
-				public  Image image(PixelWrapper ip, int x, int y) {
-					return ip.image();
-				}
-				
-				/**pastes and image (ip) into the rectangle with ImageType imp.*/
-				public
-				void setPanel(ImageWrapper imp, PixelWrapper ip, Rectangle2D r) {
-					if (r==null) {IssueLog.log("null panel"); return;}
-					paste(imp, ip, (int)r.getX(), (int)r.getY());
-				} 
-
-				
-				
-				public void clear(PixelContainer impp, Shape roi) {
-					if (impp!=null&&impp.getPixelWrapper()!=null)
-					impp.getPixelWrapper().fill(roi, Color.white);
-				
-				}
-				
-				   
-					/**Returns a copy of what is inside rectangle r of image imp*/
-					
-					public
-					PixelWrapper getPanel(PixelContainer impp, Rectangle2D r) {
-						if (impp!=null&& impp.getPixelWrapper()!=null)
-						return impp.getPixelWrapper().copy(r.getBounds());
-						return null;
-						
-					}
-					
-				 
-					/**pastes the pixels in p2 into a point in image imp*/
-					  public void paste(ImageWrapper imp, PixelWrapper p2, int x, int y) {
-						 if (imp!=null&&imp.getPixelWrapper()!=null&&p2!=null)
-						  p2.insertInto(imp.getPixelWrapper(), x, y);
-					   }
-					   
 					  
 					public void notifyListenersOfFutureChange(GridLayout g, GridLayoutEditEvent e) {
 						if (g==null) return;
@@ -1275,8 +1202,8 @@ public class GenericMontageEditor implements MontageSpaces {
 						
 						/**puts each panel in the upper left corner*/
 						for(Rectangle2D r: gra.getPanels()) {
-							ArrayList<LocatedObject2D> items = new BasicOverlayHandler().getOverlapOverlaypingOrContainedItems(r, new ArrayObjectContainer(objects2));
-							LocatedObject2D panelItem =new BasicOverlayHandler(). identifyPanel(r, items);
+							ArrayList<LocatedObject2D> items = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, new ArrayObjectContainer(objects2));
+							LocatedObject2D panelItem =BasicObjectListHandler.identifyPanel(r, items);
 							if (panelItem!=null) {
 								panelItem.setLocationUpperLeft(r.getX(), r.getY());
 							}

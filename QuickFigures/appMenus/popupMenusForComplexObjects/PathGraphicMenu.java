@@ -20,9 +20,8 @@ import menuUtil.SmartJMenu;
 import menuUtil.PopupMenuSupplier;
 import sUnsortedDialogs.AffineTransformDialog;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.Edit;
-import undo.UndoAddItem;
 import undo.UndoAbleEditForRemoveItem;
 import undo.PathEditUndo;
 import utilityClassesForObjects.BasicShapeMaker;
@@ -141,7 +140,7 @@ PopupMenuSupplier  {
 		/**PathGraphic textG2 = (PathGraphic) textG.copy();
 		textG.getParentLayer().add(textG2);*/
 		
-		CompoundEdit2 undo2 = new CompoundEdit2();
+		CombinedEdit undo2 = new CombinedEdit();
 		
 			ArrayList<PathPointList> arrayOfSec = PathPointList.createFromIterator(pi).createAtCloseSubsections();
 			for(PathPointList arr: arrayOfSec) {
@@ -209,7 +208,7 @@ PopupMenuSupplier  {
 		}
 		
 		if (com.equals(addPoint)) {
-			new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathForMenuG, false, super.getMemoryOfMouseEvent().getCordinatePoint());
+			new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathForMenuG, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
 		}
 		
 		if (com.equals(getAddArrowHead1MenuCommand())) {

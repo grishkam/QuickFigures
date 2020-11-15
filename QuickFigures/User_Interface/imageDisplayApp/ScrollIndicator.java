@@ -10,6 +10,9 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**although there is no user option for this. a programmer can create a version of the 
+window that does not use a scroll pane but instead indicates the position 
+in the same way as imageJ does. in that case a scroll indicator need be drawn*/
 public class ScrollIndicator implements ZoomableGraphic{
 	
 	/**
@@ -27,7 +30,7 @@ public class ScrollIndicator implements ZoomableGraphic{
 	}
 	
 	
-	
+	/**returns the outer rectangle that indicates the entire image size*/
 	Rectangle2D getTotalRect() {
 		
 		double width = this.getDisplay().getTheSet().getWidth()*factor;
@@ -35,14 +38,13 @@ public class ScrollIndicator implements ZoomableGraphic{
 		return new Rectangle(0,0,(int)width, (int)height);
 	}
 	
+	/**returns the inner rectangle that indicates the view area (in comparison to the entire image of the total rect)*/
 	Rectangle2D getInnerRect() {
 		double x=x0;
 		double y=y0;
 		x+=display.getZoomer().getX0();
 		y+=display.getZoomer().getY0();
 		double mag=getDisplayMag();
-	//	double width = this.getDisplay().getTheSet().getWidth()/mag;
-		//double height = this.getDisplay().getTheSet().getHeight()/mag;
 		double canWidth=this.getDisplay().getTheCanvas().getWidth()/mag;
 		double canHeight=this.getDisplay().getTheCanvas().getHeight()/mag;
 		
@@ -50,6 +52,7 @@ public class ScrollIndicator implements ZoomableGraphic{
 		return new Rectangle((int)(x*factor),(int)(y*factor),(int)(canWidth*factor), (int)(canHeight*factor));
 	}
 	
+	/**returns the magnification*/
 	double getDisplayMag() {
 		return getDisplay().getZoomer().getZoom();
 	}
@@ -72,32 +75,31 @@ public class ScrollIndicator implements ZoomableGraphic{
 		
 	}
 	
+	
 	boolean areRectsSame() {
-		if (getTotalRect().equals(getInnerRect())) return true;
-		//if (areRectWidthsSame()&&areRectHeightsSame()&&areRectXSame()&&areRectYSame()) return true;
-		
+		if (getTotalRect().equals(getInnerRect())) return true;		
 		return false;
 	}
-	
+	/**returns true if the widths are similar*/
  boolean areRectWidthsSame() {
 	double ratio = getTotalRect().getWidth()/getInnerRect().getWidth();
 	if (ratio<1.02&&ratio>0.98) return true;
 	return false;
  }
- 
+ /**returns true if the locations' x are similar*/
  boolean areRectXSame() {
 	 double dif = getTotalRect().getX()-getInnerRect().getX();
 	 if (dif<0.02) return true;
 	 return false;
  }
- 
+ /**returns true if the locations' y are similar*/
  boolean areRectYSame() {
 	 double dif = getTotalRect().getY()-getInnerRect().getY();
 	 if (dif<0.02) return true;
 	 return false;
  }
  
- 
+ /**returns true if the locations' height are similar*/
  boolean areRectHeightsSame() {
 	double ratio = getTotalRect().getHeight()/getInnerRect().getHeight();
 	if (ratio<1.02&&ratio>0.98) return true;
@@ -120,7 +122,6 @@ public class ScrollIndicator implements ZoomableGraphic{
 	private transient GraphicLayer layer;
 	@Override
 	public GraphicLayer getParentLayer() {
-		// TODO Auto-generated method stub
 		return layer;
 	}
 

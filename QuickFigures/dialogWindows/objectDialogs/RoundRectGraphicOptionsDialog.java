@@ -7,10 +7,9 @@ public class RoundRectGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialo
 
 	RoundedRectangleGraphic rect=null;
 	
-	public RoundRectGraphicOptionsDialog(RoundedRectangleGraphic roundedRectangleGraphic) {
-		super(roundedRectangleGraphic);
+	public RoundRectGraphicOptionsDialog(RoundedRectangleGraphic roundedRectangleGraphic, boolean simple) {
+		super(roundedRectangleGraphic, simple);
 		rect=roundedRectangleGraphic;
-		// TODO Auto-generated constructor stub
 	}
 	
 	protected void addOptionsToDialogPart1() {

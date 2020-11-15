@@ -6,7 +6,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
 public class PNGQuickExport extends QuickExport {
 	protected String getExtension() {
@@ -18,7 +18,7 @@ public class PNGQuickExport extends QuickExport {
 	}
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		// TODO Auto-generated method stub
 		try{
 		

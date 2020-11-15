@@ -25,7 +25,7 @@ public class UndoWarning extends AbstractUndoableEdit2 {
 		undo.add("PPI", 
 				new InfoDisplayPanel("Warning :", "Undo for this item is inperfect. Sorry about that"+'\n'+st));
 		undo.setLocation(800, 800);
-	//	undo.addKeyListener(new ToolBarKeyListener());
+
 		undo.showDialog();
 	}
 

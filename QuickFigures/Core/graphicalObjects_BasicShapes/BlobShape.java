@@ -13,7 +13,7 @@ import utilityClassesForObjects.PathPointList;
 
 public class BlobShape extends SimpleStar {
 	{ setStarRatio(0.75);}
-
+	{name="Blob";}
 	
 	BlobCurveParameterGroup parameters=createParameters();
 
@@ -44,7 +44,7 @@ public class BlobShape extends SimpleStar {
 	protected AngleParameter createCCAngleParameter(BlobShape blobShape) {
 		AngleParameter n = new AngleParameter(this);
 		n.setType(AngleParameter.ANGLE_RATIO_AND_RAD_TYPE);
-		n.setRatioToMaxRadius(1.03);
+		n.setRatioToMaxRadius(.9);
 		
 		return n;
 	}

@@ -5,6 +5,11 @@ import utilityClassesForObjects.LocatedObject2D;
 
 public class LocationSetter extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		return "Set Item Location";

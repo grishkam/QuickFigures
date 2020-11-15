@@ -2,12 +2,12 @@ package basicMenusForApp;
 
 import javax.swing.Icon;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
 public abstract class BasicMenuItemForObj implements MenuItemForObj {
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		// TODO Auto-generated method stub
 
 	}

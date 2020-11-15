@@ -4,8 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import applicationAdapters.ImageWrapper;
-import graphicActionToombar.CurrentSetInformer;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
+import graphicActionToolbar.CurrentSetInformer;
 import graphicalObjects.GraphicSetDisplayContainer;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import logging.IssueLog;
@@ -17,7 +17,6 @@ import standardDialog.SnappingPanel;
 import standardDialog.StandardDialog;
 import standardDialog.StringInputPanel;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.StrokedItem;
@@ -35,7 +34,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	private static ImageWrapper currentImage=null;
 	private static GraphicSetDisplayContainer setContainer;
 	private boolean updateAfterEachItemChange=true;
-	private static CurrentSetInformer informer=new CurrentSetInformerBasic();
+	private static CurrentSetInformer informer=new CurrentFigureSet();
 	
 
 	SnappingPanel snappingPanel=null;
@@ -65,7 +64,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	protected void addUndo() {
 		if(undoableEdit!=null&&!editAdded) try {
 			undoableEdit.establishFinalState();
-			UndoManagerPlus undoManager = new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getUndoManager();
+			UndoManagerPlus undoManager = new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 			if (undoManager!=null) {
 				undoManager.addEdit(undoableEdit);
 				editAdded=true;
@@ -102,10 +101,10 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	public SnappingPanel addSnappingBehviourToDialog(LocatedObject2D l) {
 		
 		
-		if (l==null||l.getSnappingBehaviour()==null) return null;
+		if (l==null||l.getSnapPosition()==null) return null;
 		//GriddedPanel newtabContent = new GriddedPanel();
 		
-		snappingPanel = new SnappingPanel(l.getSnappingBehaviour());
+		snappingPanel = new SnappingPanel(l.getSnapPosition());
 		snappingPanel.addObjectEditListener(this);
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridwidth=4;

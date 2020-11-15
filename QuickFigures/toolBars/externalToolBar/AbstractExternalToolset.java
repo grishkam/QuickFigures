@@ -1,8 +1,10 @@
 package externalToolBar;
 
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -26,10 +28,12 @@ import javax.swing.JToolBar;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 
-
+/**The methods in this class organize a toolbar, maintain a list of tools, keeps track of the current tool*/
 public class AbstractExternalToolset<ImageType> implements MouseListener, WindowListener {
 	
-	 Vector<ToolChangeListener<ImageType>> listeners=new Vector<ToolChangeListener<ImageType>>();
+	public static final int DEFAULT_ICONSIZE = 25;
+
+	Vector<ToolChangeListener<ImageType>> listeners=new Vector<ToolChangeListener<ImageType>>();
 	 public void addToolChangeListener(ToolChangeListener<ImageType> lis) {
 		 listeners.add(lis);
 	 }
@@ -45,10 +49,11 @@ public class AbstractExternalToolset<ImageType> implements MouseListener, Window
 	protected Vector<AbstractButton> buttons= new Vector<AbstractButton>();
 	public InterfaceExternalTool<ImageType> currentTool;
 	
-	int Xinnitial=0;
+	private int Xinnitial=0;
 	private int Yinnitial=0;
 	GridBagConstraints toolBarBridConstraints=new GridBagConstraints();
 
+	/**the max number of tools that can appear in one row beyond that are added to the subsequent row*/
 	protected int maxGridx=11;
 	
 	private JFrame frame=new JFrame(); {
@@ -58,11 +63,11 @@ public class AbstractExternalToolset<ImageType> implements MouseListener, Window
 	
 	protected JToolBar toolbar=new JToolBar();
 
-	public boolean drawMenuIndicator=true;
+	
 
 	 { innitializeToolbar();}
 	
-	
+	/**Sets uo the layout of the toolbar. adds the JToolbar object to the window*/
 	public void innitializeToolbar() {
 		GridBagLayout g = new GridBagLayout(); 
 		GridBagConstraints c=new GridBagConstraints(); 
@@ -82,25 +87,28 @@ public class AbstractExternalToolset<ImageType> implements MouseListener, Window
 		
 	}
 	
-	
+	/**returns teh window that contains this toolbar*/
 	public JFrame getframe() {
 		return frame;
 	}
 	
-	
-	
+	/**Sets the current tool*/
 	public void setCurrentTool(InterfaceExternalTool<ImageType> currentTool) {
 		if(currentTool==null) return;
 		if (this.currentTool!=null) {
-			 this.currentTool.onToolChange(false);
+			 this.currentTool.onToolChange(false);//some tools do something when they are deactivated
 		 }
 		this.currentTool=currentTool;
-		this.currentTool.onToolChange(true);
-		for(ToolChangeListener<ImageType> tcl: listeners) {
+		this.currentTool.onToolChange(true);//some tools do something when they are activated
+		
+		
+		for(ToolChangeListener<ImageType> tcl: listeners) {//some classes do something when a tool switch is made
 			if (tcl!=null) tcl.ToolChanged( getCurrentTool() );
 		}
 	}
 	
+	/**Searches through the open toolbars. 
+	 * If a tool containing the given name is found, sets that as the current tool*/
 	public static InterfaceExternalTool<?> setCurrentTool(String st) {
 		for (AbstractExternalToolset<?> toolset :openToolsets ) {
 			InterfaceExternalTool<?> n = toolset.selectToolWithName(st);
@@ -109,12 +117,11 @@ public class AbstractExternalToolset<ImageType> implements MouseListener, Window
 		return null;
 		}
 	
-/**Finds a tool with the given name
- * @return */
-public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
+/**Finds a tool with the given name */
+public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 	for(AbstractButton button: buttonToolPairs.keySet()) {
 		InterfaceExternalTool<ImageType> tool = buttonToolPairs.get(button);
-		if(tool.getToolName().equals(st)) {
+		if(tool.getToolName().equals(name)) {
 			selectTool( tool, (JButton)button);
 			return tool;
 		}
@@ -164,7 +171,7 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 		jb.setText(null);
 		if (tool.getToolPressedImageIcon()!=null)
 		jb.setPressedIcon(tool.getToolPressedImageIcon());}
-		if (tool.getRollOverIcon()!=null) {jb.setRolloverIcon(tool.getRollOverIcon()); jb.setRolloverEnabled(true);}
+		if (tool.getToolRollOverImageIcon()!=null) {jb.setRolloverIcon(tool.getToolRollOverImageIcon()); jb.setRolloverEnabled(true);}
 		jb.setToolTipText(tool.getToolTip());
 		
 	
@@ -177,17 +184,15 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 		
 		
 	}
+	
 	Icon getIconForTool(InterfaceExternalTool<ImageType> tool) {
-		Icon i=tool.getToolImageIcon();
+		Icon i=null;
+		i=tool.getToolImageIcon();
 		if (i==null) {
-			i=new ImageIcon(new BufferedImage(25, 25, BufferedImage.TYPE_INT_RGB));
-		
+			BufferedImage image = new BufferedImage(DEFAULT_ICONSIZE, DEFAULT_ICONSIZE, BufferedImage.TYPE_INT_RGB);
+			Graphics g = image.getGraphics();g.setColor(Color.gray); g.fillRect(0, 0, DEFAULT_ICONSIZE, DEFAULT_ICONSIZE);
+			i=new ImageIcon(image);
 		}
-		
-		/**If the item has a menu, draws a little triangle
-		if (tool.getPopupMenuItems()!=null&&tool.getPopupMenuItems().size()>0 &&drawMenuIndicator) {
-			i=new CompoundIcon(drawMenuIndicator, i);
-		}*/
 		
 		return i;
 	}
@@ -208,7 +213,6 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 	public void resetOwnButtonIcons() {
 		for (AbstractButton jb: buttons) {
 			resetButtonIcon(jb);
-			//jb.setRolloverIcon(new ImageIcon(tool1.getRollOverIcon()));
 		}
 	}
 	
@@ -224,9 +228,8 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 			jb.setRolloverEnabled(true);
 	}
 	
-	
-	//public int maxGridx=1;
-	
+
+	/**changes the grid x and y of the gridbag constraints to the next position in the toolbar*/
 	void moveGridConstraints() {
 		toolBarBridConstraints.gridx=toolBarBridConstraints.gridx+1;
 		if (toolBarBridConstraints.gridx>=getMaxGridx()) {
@@ -238,32 +241,24 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 	public void showFrame() {frame.pack(); frame.setVisible(true);frame.setResizable(false);
 	}
 	
-	private void addDragAndDrop() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		int click=arg0.getClickCount();
 		if (click==2&&getCurrentTool()!=null) getCurrentTool() .showOptionsDialog();
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-           
 	
 		if (arg0.getSource() instanceof JButton) {
 			int click=arg0.getClickCount();
@@ -302,13 +297,14 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 		setCurrentTool(clickedTool) ;
 		for (AbstractExternalToolset<?> set : openToolsets)set.resetButtonIcon();
 		currentToolButton=(AbstractButton) button;
-		//resetButtonIcons();
+		
 		JButton jb=((JButton) button); jb.setIcon(
 			jb.getPressedIcon()
 			); 
 		jb.setRolloverEnabled(false);
 	}
 	
+	/**some tools have popup menus that appear when the tool is clicked*/
 	public void showToolMenu(Component c, InterfaceExternalTool<ImageType> clickedTool ) {
 		if (clickedTool.getPopupMenuItems()!=null) {controlClickDialog(c, clickedTool);} else
 			clickedTool.controlClickDialog(c) ; 
@@ -317,25 +313,21 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 	
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		if (arg0.getWindow()==frame) openToolsets.remove(this);
 	}
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -351,10 +343,13 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String st) {
 	@Override
 	public void windowOpened(WindowEvent arg0) {}
 
+	/**returns the maximum number of tools that appear in one row of the toolbar.
+	  tools beyond that are added to the subsequent row*/
 	public int getMaxGridx() {
 		return maxGridx;
 	}
-
+	/**set the maximum number of tools that appear in one row of the toolbar
+	 *  tools beyond that are added to the subsequent row*/
 	public void setMaxGridx(int maxGridx) {
 		this.maxGridx = maxGridx;
 	}

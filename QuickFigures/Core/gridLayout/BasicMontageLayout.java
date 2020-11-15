@@ -12,8 +12,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import applicationAdapters.ImageWrapper;
-import fieldReaderWritter.RetrievableOption;
-import fieldReaderWritter.RetriveableClass;
 import genericMontageKit.PanelLayout;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
@@ -22,7 +20,6 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
    with rows and columns. Columns, rows and panels are
    indexed from 1 to the total number.
    */
-@RetriveableClass(tag = "MontageLayout")
 public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializable, PanelLayout{
 
 	  private transient BasicMetaDataHandler IJMetaDatause=null;
@@ -32,7 +29,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 		}
 	
 	private static final long serialVersionUID = 1L;
-	public double montageWidth, montageHeight;
+	public double layoutWidth, layoutHeight;
 	
 	/**whether the panels of this montage are rows.*/
 	boolean rowlayout=false;
@@ -174,8 +171,8 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 		
 		
 		
-		montageWidth= montageWidth*factor;
-		montageHeight= montageHeight*factor;
+		layoutWidth= layoutWidth*factor;
+		layoutHeight= layoutHeight*factor;
 		this.resetPtsPanels();
 	}
 	
@@ -231,8 +228,8 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 	   This was originally called before creating an image. 
 	   this ensures that the fields of the layout are consistent.*/
 	public void computeSizes() {
-		montageWidth=SumXincrement(nColumns()) +labelSpaceWidthRight+labelSpaceWidthLeft+specialSpaceWidthLeft+specialSpaceWidthRight;
-		montageHeight=SumYincrement(nRows())+labelSpaceWidthTop+specialSpaceWidthTop+specialSpaceWidthBottom+labelSpaceWidthBottom;
+		layoutWidth=SumXincrement(nColumns()) +labelSpaceWidthRight+labelSpaceWidthLeft+specialSpaceWidthLeft+specialSpaceWidthRight;
+		layoutHeight=SumYincrement(nRows())+labelSpaceWidthTop+specialSpaceWidthTop+specialSpaceWidthBottom+labelSpaceWidthBottom;
 	}
 	
 	/**returns the array of panel rectangles. does not re-innitialize the rectangles 
@@ -289,21 +286,21 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 	 public void setTopSpace(double t) {
 		 double told=labelSpaceWidthTop;
 		 labelSpaceWidthTop=t;
-		 montageHeight+=t-told;
+		 layoutHeight+=t-told;
 		 movePoints(0, t-told);
 	 }
 	 /**see method above*/
 	 public void setBottomSpace(double t) {
 		 double told=labelSpaceWidthBottom;
 		 labelSpaceWidthBottom=t;
-		 montageHeight+=t-told;
+		 layoutHeight+=t-told;
 		 
 	 }
 	 /**see method above*/
 	 public void setLeftSpace(double t) {
 		 double told=labelSpaceWidthLeft;
 		 labelSpaceWidthLeft=t;
-		 montageWidth+=labelSpaceWidthLeft-told;
+		 layoutWidth+=labelSpaceWidthLeft-told;
 		 movePoints(t-told, 0);
 	 }
 	 
@@ -311,7 +308,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 	 public void setRightSpace(double t) {
 		 double told=labelSpaceWidthRight;
 		 labelSpaceWidthRight=t;
-		 montageWidth+=t-told;
+		 layoutWidth+=t-told;
 	 }
 	 
 	 /**sets the distance between panels in the x direction*/
@@ -319,7 +316,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 		 if (t<0) { return;}
 		 double told=BorderWidthLeftRight;
 		 BorderWidthLeftRight=t;
-		 montageWidth+=(t-told)*nColumns();
+		 layoutWidth+=(t-told)*nColumns();
 	 }
 	 
 	 /**sets the distance between panels in the y direction*/
@@ -327,7 +324,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 		 if (t<0) { return;}
 		 double told=BorderWidthBottomTop;
 		 BorderWidthBottomTop=t;
-		 montageHeight+=(t-told)*nRows();
+		 layoutHeight+=(t-told)*nRows();
 	 }
 	 
 		
@@ -379,25 +376,25 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 		 public void setSpecialTopSpace(double t) {
 			 double told=specialSpaceWidthTop;
 			 specialSpaceWidthTop=t;
-			 montageHeight+=t-told;
+			 layoutHeight+=t-told;
 			 movePoints(0, t-told);
 		 }
 		 public void setSpecialLeftSpace(double t) {
 			 double told=specialSpaceWidthLeft;
 			 specialSpaceWidthLeft= t;
-			 montageWidth+=t-told;
+			 layoutWidth+=t-told;
 			 movePoints(t-told, 0);
 		 }
 		 
 		 public void setSpecialBottomSpace(double t) {
 			 double told=specialSpaceWidthBottom;
 			 specialSpaceWidthBottom=t;
-			 montageHeight+=t-told;
+			 layoutHeight+=t-told;
 		 }
 		 public void setSpecialRightSpace(double t) {
 			 double told=specialSpaceWidthRight;
 			 specialSpaceWidthRight=t;
-			 montageWidth+=t-told;
+			 layoutWidth+=t-told;
 		 }
 		 
 		 public void setAdditionalSpaces(int topspace, int bottomspace, int leftspace, int rightspace) {
@@ -417,7 +414,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 	   
 	   public void matchLayoutSettings(BasicMontageLayout ml) {
 		   pts= ml.pts;        panels=ml.panels;
-	  		montageWidth=ml.montageWidth;      montageHeight=ml.montageHeight;
+	  		layoutWidth=ml.layoutWidth;      layoutHeight=ml.layoutHeight;
 	  		setNColumns(ml.nColumns());          setNRows(ml.nRows());
 	  		specialSpaceWidthTop=ml.specialSpaceWidthTop; 
 	  		specialSpaceWidthLeft=ml.specialSpaceWidthLeft;
@@ -448,8 +445,8 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 		public void setLayoutBasedOnRect(Rectangle r) {
 			panelWidth=r.width; panelHeight=r.height;
 			labelSpaceWidthLeft=r.x; labelSpaceWidthTop=r.y;
-			montageWidth=r.x+r.width;
-			montageHeight=r.y+r.height;
+			layoutWidth=r.x+r.width;
+			layoutHeight=r.y+r.height;
 		}
 
 		/**makes uniformly sized rectangles for the panels*/
@@ -474,7 +471,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 			 double told=panelWidth;
 			 panelWidth=t;
 			// xincrement+=(t-told);
-			 montageWidth+=(panelWidth-told)*nColumns();
+			 layoutWidth+=(panelWidth-told)*nColumns();
 			 resetPtsPanels();
 			 if (panelWidth<=0) {IssueLog.log("Error bizare panel width after resetof ponts and panels "+panelWidth);}
 		 }
@@ -484,7 +481,7 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 			 double told=panelHeight;
 			 panelHeight=t;
 			 //yincrement+=t-told;
-			 montageHeight+=(panelHeight-told)*nRows();
+			 layoutHeight+=(panelHeight-told)*nRows();
 			 resetPtsPanels(xshift, yshift);
 		 }
 		 /**A convenience method that calls both the above methods*/
@@ -627,13 +624,13 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 			 public void setCols(int t) {
 				 int told=nColumns();
 				 setNColumns(t);
-				 montageWidth+=(t-told)*xincrementOfColumn(nColumns());
+				 layoutWidth+=(t-told)*xincrementOfColumn(nColumns());
 			 }
 			 
 			 public void setRows(int t) {
 				 int told=nRows();
 				 setNRows(t);
-				 montageHeight+=(t-told)*yincrementOfRow(nRows());
+				 layoutHeight+=(t-told)*yincrementOfRow(nRows());
 			 }
 			 
 			 	 /**This methods sets the point array to x,y displacements from the top left corner of the panel.
@@ -1099,11 +1096,11 @@ public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializabl
 				   if (type==LEFT_3rd) return new Rectangle2D.Double(ml.panels[i-1].getX(), ml.panels[i-1].getY(), ml.panels[i-1].getWidth()/3, (ml.panels[i-1].getHeight()));
 				   if (type==RIGHT_3rd) return new Rectangle2D.Double(ml.panels[i-1].getX()+ ml.panels[i-1].getWidth()*2/3, ml.panels[i-1].getY(), ml.panels[i-1].getWidth()/3, (ml.panels[i-1].getHeight()));
 				   
-				   if (type==NON_MONTAGE_TOP) return new Rectangle2D.Double(0,0, ml.montageWidth, ml.specialSpaceWidthTop); 
-				   if (type==NON_MONTAGE_LEFT)  return new Rectangle2D.Double(0,0, ml.specialSpaceWidthLeft, ml.montageHeight); 
-				   if (type==NON_MONTAGE_BOT)  return new Rectangle2D.Double(0,ml.montageHeight-ml.specialSpaceWidthBottom, ml.montageWidth, ml.specialSpaceWidthBottom); 
-				   if (type==NON_MONTAGE_RIGHT) return new Rectangle2D.Double(ml.montageWidth-ml.specialSpaceWidthRight,0, ml.specialSpaceWidthRight,ml.montageHeight); 
-				   if (type==ENTIRE_IMAGE) return new Rectangle2D.Double(0,0, ml.montageWidth, ml.montageHeight);
+				   if (type==NON_MONTAGE_TOP) return new Rectangle2D.Double(0,0, ml.layoutWidth, ml.specialSpaceWidthTop); 
+				   if (type==NON_MONTAGE_LEFT)  return new Rectangle2D.Double(0,0, ml.specialSpaceWidthLeft, ml.layoutHeight); 
+				   if (type==NON_MONTAGE_BOT)  return new Rectangle2D.Double(0,ml.layoutHeight-ml.specialSpaceWidthBottom, ml.layoutWidth, ml.specialSpaceWidthBottom); 
+				   if (type==NON_MONTAGE_RIGHT) return new Rectangle2D.Double(ml.layoutWidth-ml.specialSpaceWidthRight,0, ml.specialSpaceWidthRight,ml.layoutHeight); 
+				   if (type==ENTIRE_IMAGE) return new Rectangle2D.Double(0,0, ml.layoutWidth, ml.layoutHeight);
 				   
 				   
 				   if (type==ALL_BORDERS) return ml.getSelectedSpace(i, ALL_OF_THE+BORDER) ;

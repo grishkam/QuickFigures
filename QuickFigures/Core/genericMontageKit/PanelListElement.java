@@ -14,7 +14,6 @@ import channelMerging.MultiChannelWrapper;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import gridLayout.GridIndex;
-import logging.IssueLog;
 import multiChannelFigureUI.ChannelSwapHandleList;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ScaleInfo;

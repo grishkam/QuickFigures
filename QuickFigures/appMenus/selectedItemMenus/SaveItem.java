@@ -10,6 +10,11 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 
 public class SaveItem extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		// TODO Auto-generated method stub

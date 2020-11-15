@@ -22,13 +22,13 @@ import javax.swing.undo.AbstractUndoableEdit;
 import officeConverter.BarGraphicToOffice;
 import officeConverter.OfficeObjectConvertable;
 import officeConverter.OfficeObjectMaker;
+import officeConverter.TextGraphicImmitator;
 import popupMenusForComplexObjects.BarGraphicMenu;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoScaleBarEdit;
-import undo.UndoScaling;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.PathPointList;
@@ -215,7 +215,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		
 		this.setScaleInfo(b.getScaleInfo());
 		this.setScaleProvider(b.getScaleProvider());
-		if (b.getSnappingBehaviour()!=null)this.setSnappingBehaviour(b.getSnappingBehaviour().copy());
+		if (b.getSnapPosition()!=null)this.setSnappingBehaviour(b.getSnapPosition().copy());
 		
 		
 		
@@ -364,8 +364,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	
 	
 	public void snapTextToBar() {
-		if (getBarText().getSnappingBehaviour()!=null) {
-			getBarText().getSnappingBehaviour().snapLocatedObjects(getBarText(), this);
+		if (getBarText().getSnapPosition()!=null) {
+			getBarText().getSnapPosition().snapLocatedObjects(getBarText(), this);
 		}
 	}
 	
@@ -423,7 +423,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 					   getGrahpicUtil().setHandleFillColor(Color.LIGHT_GRAY);
 					   getGrahpicUtil().setHandleSize(5);
 					   getGrahpicUtil().drawHandlesAtPoint(g2d, cords, textLocation);
-					   getGrahpicUtil().setHandleSize(getGrahpicUtil().defaulthandleSize);
+					   getGrahpicUtil();
+					getGrahpicUtil().setHandleSize(GraphicUtil.defaulthandleSize);
 					   getGrahpicUtil().setHandleFillColor(Color.white);
 				   }
 		}
@@ -630,7 +631,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		this.snapBarText=false;
 		this.setLocation(p2);
 		this.snapBarText=oSnap;
-		this.getSnappingBehaviour().scaleAbout(p, mag);
+		this.getSnapPosition().scaleAbout(p, mag);
 	
 	}
 
@@ -696,6 +697,8 @@ public static void optimizeBarFont(BarGraphic newbar, LocatedObject2D panel) {
 	
 }
 
+/**When given a panel and a scale bar, alters the bars thickness so that it looks
+  reasonable within the panel*/
 public static void optimizeBarThickness(BarGraphic newbar, LocatedObject2D panel) {
 	/**a loop to optimize the bar length. */
 	
@@ -714,20 +717,20 @@ public static void optimizeBar(BarGraphic bg, LocatedObject2D b) {
 	BarGraphic.optimizeBarThickness(bg, b);
 }
 
-
+/**Returns the bars' text. This method is required for the user to be able to click on the scale bar
+  which is not inside in any layer */
 public ArrayList<ZoomableGraphic> getAllHeldGraphics() {
 	ArrayList<ZoomableGraphic> output = new ArrayList<ZoomableGraphic>();
 	if (isShowText())output.add(getBarText());
 	return output;
 }
 
-
-
+/**changes the length (the units) of this scale bar fits nicely into the panel*/
 public void changeBarLengthToFit(ImagePanelGraphic panel) {
 	if(panel==null) return;
 	this.setLengthInUnits( getStandardBarLengthFor(panel));
 }
-
+/**When given an image panel, returns a scale bar length that can fit comfortable in the panel*/
 public static double getStandardBarLengthFor(ImagePanelGraphic panel) {
 	double[] dims = panel.getScaleInfo().convertPixelsToUnits(panel.getDimensions());
 	double num = NumberUse.findNearest(dims[0]/3, BarGraphic.reccomendedBarLengths);
@@ -748,7 +751,19 @@ public class BarTextGraphic extends TextGraphic {
 	@Override
 	public void setHidden(boolean hide) {
 		showText=!hide;
-		IssueLog.log("attempting to hide bar text");
+		
+	}
+	
+	/**does not create an object for writing into office, the bar text will create a group
+	  for this instead*/
+	@Override
+	public OfficeObjectMaker getObjectMaker() {
+		return null;
+	}
+
+
+	public OfficeObjectMaker getBarTextObjectMaker() {
+		return new TextGraphicImmitator(this);
 	}
 	
 	@Override
@@ -858,7 +873,7 @@ class BarSmartHandle extends SmartHandle {
 	
 	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 		
-		Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		if (this.getHandleNumber() ==ROTATION_HANDLE) {
 			double angle=getAngleOfDragPoint(p2);
 			setAngle(angle);
@@ -873,14 +888,14 @@ class BarSmartHandle extends SmartHandle {
 		}
 		
 		if (this.getHandleNumber()==TEXT_LOCATION_HANDLE2) {
-			getBarText().getSnappingBehaviour().setToNearestSnap(getBarText().getBounds(), getBarBounds(), p2 );
+			getBarText().getSnapPosition().setToNearestSnap(getBarText().getBounds(), getBarBounds(), p2 );
 			getBarText().setLocation(p2.x, p2.y);
 			
 		}
 		
 		if (isBarThicknessHandle()) {
 			Point2D tipLocation = getOppositeTipLocation();
-			int dir=getSnappingBehaviour().getOffSetPolarities()[0];
+			int dir=getSnapPosition().getOffSetPolarities()[0];
 			if(dir>0)tipLocation = getTipLocation();
 			
 			double newthick = tipLocation.distance(p2);
@@ -892,7 +907,7 @@ class BarSmartHandle extends SmartHandle {
 			
 		}
 		if (isBarLengthHandle()) {
-			int dir=getSnappingBehaviour().getOffSetPolarities()[0];
+			int dir=getSnapPosition().getOffSetPolarities()[0];
 			double oneUnit=getBarWidthBasedOnUnits()/getLengthInUnits();
 			int change=(int)(this.getCordinateLocation().distance(p2)/oneUnit);
 			if(this.getCordinateLocation().getX()<p2.getX() &&dir<0) change=-change;
@@ -954,7 +969,7 @@ class BarSmartHandle extends SmartHandle {
 	}
 		if (isBarLengthHandle()) {
 			this.setHandleColor(Color.GREEN.darker());
-			int dir=getSnappingBehaviour().getOffSetPolarities()[0];
+			int dir=getSnapPosition().getOffSetPolarities()[0];
 			Point2D p = getOppositeTipEndLocation();
 			if(dir<0) {
 				p = getTipLocation();
@@ -970,7 +985,7 @@ class BarSmartHandle extends SmartHandle {
 
 	protected Point2D getBathThicknessHandleLocation() {
 		Point2D location = getBarBounds().getLocation();
-		int dir=getSnappingBehaviour().getOffSetPolarities()[0];
+		int dir=getSnapPosition().getOffSetPolarities()[0];
 		if(dir>0) {
 			 if( usesProjections()) {
 					location =new Point2D.Double(location.getX()+getBarStroke(), location.getY()+getProjectionLength());
@@ -1042,5 +1057,7 @@ public ScaleBarActionHandleList getActionList() {
 public AbstractUndoableEdit provideUndoForDialog() {
 	return new UndoScaleBarEdit(this);
 }
+
+
 
 }

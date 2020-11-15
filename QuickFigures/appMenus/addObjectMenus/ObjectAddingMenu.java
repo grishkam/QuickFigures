@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import appContext.CurrentAppContext;
@@ -25,7 +26,7 @@ import undo.UndoAddItem;
 import utilityClassesForObjects.LobeMaker;
 
 /**The menus used to add graphics to graphic layers*/
-public class ObjectAddingMenu extends SmartJMenu implements ActionListener, KeyListener {
+public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	
 	
 	static ArrayList <GraphicAdder> adders= new ArrayList <GraphicAdder>(); 
@@ -39,7 +40,7 @@ public class ObjectAddingMenu extends SmartJMenu implements ActionListener, KeyL
 	static ArrayList <AddingMenuInstaller> bonusAdders=new ArrayList<AddingMenuInstaller>();
 	
 	static boolean addersMade=false;
-	//{setIconTextGap(-5);}
+
 	
 	public static void addItemInstaller(AddingMenuInstaller n) {
 		n.installOntoMenu(null);
@@ -118,37 +119,43 @@ public class ObjectAddingMenu extends SmartJMenu implements ActionListener, KeyL
 	
 	public void addMenuItemForAdder(GraphicAdder ad) {
 	
-		JMenuItem jmi=new JMenuItem(ad.getMessage(), ad.getIcon());
+		JMenuItem jmi=new AddingMenuItem(ad);
 		
 		if (ad instanceof DisplaysGraphicalObject) {
-			GraphicJMenuItem jmi2 = new GraphicJMenuItem(ad.getMessage());
+			GraphicJMenuItem jmi2 = new GraphicJMenuItem(ad.getMenuCommand());
 			GraphicDisplayComponent g2 = jmi2.getDisplayedGraphicalObject();
 			g2.setCurrentDisplayObject(((DisplaysGraphicalObject)ad).getCurrentDisplayObject());
 			jmi=jmi2;
 		}
-			jmi.setActionCommand(ad.getCommand());
-			//jmi.setIconTextGap(-5);
-			
-			add(jmi);
-			jmi.addActionListener(this);
+			JMenu menu1 = super.getOrCreateSubmenuFromPath(ad, this);
+			menu1.add(jmi);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		for (GraphicAdder ad:useradders){
-			
-			if (ad.getCommand().equals(arg0.getActionCommand())) try {
-				
-				setupAdderAndRun(ad);
-				selector.getGraphicDisplayContainer().updateDisplay();
-			} catch (Throwable t) {IssueLog.log(t);}
-		
+
+	
+	class AddingMenuItem extends JMenuItem implements ActionListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private GraphicAdder ad;
+
+		public AddingMenuItem(GraphicAdder ad) {
+			super(ad.getMenuCommand(), ad.getIcon());
+			this.ad=ad;
+			this.addActionListener(this);
 		}
-		
-	}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setupAdderAndRun(ad);
+			selector.getGraphicDisplayContainer().updateDisplay();
+			
+		}}
 	
 	 void setupAdderAndRun(GraphicAdder ad) {
-		//ad.setDisplay(selector.getGraphicDisplayContainer());
+		
 				ad.setSelector(selector);
 				ZoomableGraphic item = ad.add(selector.getSelectedLayer());
 				

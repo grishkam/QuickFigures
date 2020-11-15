@@ -11,7 +11,7 @@ import javax.swing.tree.TreeCellRenderer;
 import graphicalObjects_BasicShapes.TextGraphic;
 import utilityClassesForObjects.Hideable;
 
-/**a tree cell rendered that will display different icons depending on whether 
+/**a tree cell renderer that will display different icons depending on whether 
   the objects in the default mutable tree nodes implement a certain interface*/
 public class GraphicCellRenderer implements TreeCellRenderer  {
 	
@@ -20,21 +20,16 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 	 */
 	static boolean useEyeIcon=true;
 	private static boolean treeDebug=false;
-	//Icon oriIcon=this.getLeafIcon();
-	//{this.setLeafIcon(hasTreeIcon.defaultLeaf);}
 
 	public Component  	getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		
 		TreeCellRenderer ren = getUniqueRenderer(value);
 		
 		if (ren==null&&TreeMode.fancy) {return this.getPanel(tree, value, selected, expanded, leaf, row, hasFocus);}
-		//if (ren==null&&!leaf &&TreeMode.fancy) {return this.getPanel(tree, value, selected, expanded, leaf, row, hasFocus);}
-		
 		
 		if (ren!=null) return ren.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 		
-	
-			
+
 		Component output = new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 	
 		 return output;
@@ -42,9 +37,7 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 	
 	
 TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-	
-	//TreeCellPanel panel = new TreeCellPanel(value.toString(), selected, useEyeIcon);
-	TextGraphicListCellComponent panel=new TextGraphicListCellComponent(value.toString(), selected);
+		TextGraphicListCellComponent panel=new TextGraphicListCellComponent(value.toString(), selected);
 	panel.setIcon(HasTreeLeafIcon.defaultLeaf);
 	if (!leaf) {
 		if (expanded) {
@@ -71,17 +64,16 @@ TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected
 		if (node.getUserObject() instanceof TextGraphic)panel.setToImmitate((TextGraphic) node.getUserObject());
 		if (node.getUserObject() instanceof Hideable) {
 			Hideable h=(Hideable) node.getUserObject();
-			//panel.getVisibilityCheckBox().setSelected(h.isHidden());
-			if (h.isHidden()) panel.setIcon(HasTreeLeafIcon.defaultHiddenLeaf);
+			if (h.isHidden()) panel.setIcon(HasTreeLeafIcon.defaultHiddenLeaf);// hidden objects are displayed with a red X
 		}
 	
 	}
-panel.setMinimumWidth(100);
+	panel.setMinimumWidth(100);
 	
 	return panel;
 	
 }
-	
+	/**returns the tree leaf icon for displaying the object*/
 	public Icon getLeafIconForValue(Object value) {
 		if (value instanceof DefaultMutableTreeNode) {
 			DefaultMutableTreeNode v=(DefaultMutableTreeNode) value;
@@ -92,22 +84,22 @@ panel.setMinimumWidth(100);
 		return  	null;
 	}
 	
+	/**returns the tree cell renderer if there is a special one*/
 	public TreeCellRenderer getUniqueRenderer(Object value) {
 		if (value instanceof DefaultMutableTreeNode) {
 			DefaultMutableTreeNode v=(DefaultMutableTreeNode) value;
-			if (v.getUserObject() instanceof HadOwnCellRenderer) {
-				return ((HadOwnCellRenderer)v.getUserObject() ).getCellRenderer();
+			if (v.getUserObject() instanceof HasOwnCellRenderer) {
+				return ((HasOwnCellRenderer)v.getUserObject() ).getCellRenderer();
 			} else return null;
 	}
 		return null;
-	
-	
-	
 	}
 	
+	/**returns true if the tree will be rendered in a less graphically complex form*/
 	public static boolean isTreeDebug() {
 		return treeDebug;
 	}
+	/**switches the tree to a less graphically complex version*/
 	public static void setTreeDebug(boolean treeDebug) {
 		GraphicCellRenderer.treeDebug = treeDebug;
 	}

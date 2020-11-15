@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**An implementation of the SVG exporter for layers*/
 public class SVGExporter_GraphicLayer extends SVGExporter {
 	
 	private GraphicLayer layer;

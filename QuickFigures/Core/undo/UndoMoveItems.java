@@ -19,7 +19,10 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**stores the items that this undo works with*/
 	private ArrayList<LocatedObject2D> list;
+	
+	/**stores the locations of the items that this undo works with*/
 	HashMap<LocatedObject2D, Point2D> originalLocal=new HashMap<LocatedObject2D, Point2D>();
 	HashMap<LocatedObject2D, Point2D> finalLocal=new HashMap<LocatedObject2D, Point2D>();
 	
@@ -48,7 +51,7 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 		this(list, false);
 	}
 
-
+	/**stores the upper left locations of each object's as its original position*/
 	private void establishOriginalLocations() {
 		for(LocatedObject2D l: list) {
 			Point2D point = l.getLocationUpperLeft();
@@ -58,7 +61,7 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 		
 	}
 	
-
+	/**stores the upper left locations of each object's as its final position*/
 	public void establishFinalLocations() {
 		for(LocatedObject2D l: list) {
 			Point2D point = l.getLocationUpperLeft();
@@ -77,20 +80,27 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 			
 			Point2D pt = originalLocal.get(l);
 			Point2D ptfinal = l.getLocationUpperLeft();
-			double dx = pt.getX()-ptfinal.getX();
-			double dy = pt.getY()-ptfinal.getY();
-			l.moveLocation(dx, dy);
+			moveLocationToFrom(l, pt, ptfinal);
 		}
 	}
+
+	
 	
 	public void redo() {
 		for(LocatedObject2D l: list) {
 			Point2D pt = finalLocal.get(l);
 			Point2D ptfinal = l.getLocationUpperLeft();
-			double dx = pt.getX()-ptfinal.getX();
-			double dy = pt.getY()-ptfinal.getY();
-			l.moveLocation(dx, dy);
+			moveLocationToFrom(l, pt, ptfinal);
 		}
+	}
+	
+	/**
+	when given two points, computes the distance between those points and moved the object based on that distance
+	 */
+	public void moveLocationToFrom(LocatedObject2D l, Point2D ptEnding, Point2D ptStarting) {
+		double dx = ptEnding.getX()-ptStarting.getX();
+		double dy = ptEnding.getY()-ptStarting.getY();
+		l.moveLocation(dx, dy);
 	}
 	
 	public boolean canRedo() {
@@ -101,6 +111,10 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 	public Animation getAnimation() {
 		return new GroupsTranslationAnimation( finalLocal, originalLocal);
 
+	}
+
+	public ArrayList<LocatedObject2D> getObjectList() {
+		return list;
 	}
 
 }

@@ -15,7 +15,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupCloser;
 import standardDialog.ColorCellRenderer;

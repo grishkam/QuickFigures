@@ -59,7 +59,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import imageDisplayApp.GraphicSet;
+import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import imageDisplayApp.BasicImageInfo;
@@ -84,7 +84,7 @@ public class SVGImportTest {
 	static BridgeContext startingContext=null;
 	
 	
-	public  GraphicSet openSVG(String path) throws IOException {
+	public  GraphicContainingImage openSVG(String path) throws IOException {
 		 String parser = XMLResourceDescriptor.getXMLParserClassName();
 		    SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
 		    String uri = path;
@@ -112,7 +112,7 @@ public class SVGImportTest {
 			  
 			   
 			 ZoomableGraphic graphic =  parseLayer(element1, mw);
-			 GraphicSet set = new GraphicSet((GraphicLayerPane) graphic, new BasicImageInfo());
+			 GraphicContainingImage set = new GraphicContainingImage((GraphicLayerPane) graphic, new BasicImageInfo());
 			 
 			// IssueLog.log("from line "+graphic+" "+set);
 			 
@@ -785,8 +785,8 @@ private  ZoomableGraphic parseRect(Node node) {
 		return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(255*opacity));
 	}
 	
-	public  GraphicSet openDisplaySVG(String path) throws IOException {
-		GraphicSet set = openSVG(path);
+	public  GraphicContainingImage openDisplaySVG(String path) throws IOException {
+		GraphicContainingImage set = openSVG(path);
 		return set;
 	}
 	
@@ -868,7 +868,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		//loadClass("org/w3c/dom/Window");
 		
 		
-		GraphicSet set = new SVGImportTest().openSVG(path);
+		GraphicContainingImage set = new SVGImportTest().openSVG(path);
 		if (set==null) return ;
 		ImageAndDisplaySet output = new ImageAndDisplaySet(set);
 		
@@ -1029,39 +1029,12 @@ private  ZoomableGraphic parseRect(Node node) {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		/**
-		 * 
-		 */
-		
+
 		
 	public BridgeContext letBrindgeContextBePublic( ) {
 		return super.bridgeContext;
 	}
 	
 	}
-	/**
-	 class my_workaround extends JSVGCanvas {
-
-		
-		private  final long serialVersionUID = 1L;
-		
-		public my_workaround() { 
-		}
-		
-		public UserAgent borrowAgent() {
-			return super.createUserAgent();
-			
-		}
-		
-		public BridgeContext borrowContext() {
-			
-			
-			
-			return super.bridgeContext;
-			
-		}
-		
-		
-	}*/
-
+	
 }

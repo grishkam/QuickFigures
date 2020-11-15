@@ -5,7 +5,7 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 public class StrokeOnlySwingDialog extends ShapeGraphicOptionsSwingDialog{
 
 	public StrokeOnlySwingDialog(ShapeGraphic s) {
-		super(s);
+		super(s, true);
 		addOptionsToDialog2();
 		
 	}

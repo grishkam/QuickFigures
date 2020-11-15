@@ -4,8 +4,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
+/**Performs simple geometry formulas*/
 public class GeometryLineUtil {
-	
 	
 
 	static double getSlope(Line2D l) {

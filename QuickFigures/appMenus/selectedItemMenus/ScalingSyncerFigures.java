@@ -2,17 +2,22 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import sUnsortedDialogs.ScaleAboutDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;
 
 public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String getMenuCommand() {
@@ -41,10 +46,10 @@ public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 			ArrayList<PanelLayoutGraphic> layouts = new ArrayList<PanelLayoutGraphic>();
 			for(ZoomableGraphic p: panelLayouts) {layouts.add((PanelLayoutGraphic) p);}
 			
-			CompoundEdit2 undo = new FigureScaler(true).scaleMultipleFigures(layouts,aa.getAbout(), aa.getScaleLevel());
+			CombinedEdit undo = new FigureScaler(true).scaleMultipleFigures(layouts,aa.getAbout(), aa.getScaleLevel());
 			
 			
-			BasicOverlayHandler boh = new BasicOverlayHandler();
+			BasicObjectListHandler boh = new BasicObjectListHandler();
 			
 			boh.resizeCanvasToFitAllObjects(selector.getImageWrapper());
 			

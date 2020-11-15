@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.SelectedSetLayerSelector;
 import imageDisplayApp.KeyDownTracker;
@@ -19,33 +19,33 @@ public class GMouseEvent implements CanvasMouseEventWrapper {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	transient DisplayedImageWrapper imp;
+	transient DisplayedImage imp;
 	transient MouseEvent e;
 	
-	public GMouseEvent(DisplayedImageWrapper imp, MouseEvent e) {
+	public GMouseEvent(DisplayedImage imp, MouseEvent e) {
 		this.imp=imp;
 		this.e=e;
 	}
 	
-	public DisplayedImageWrapper getImageDispay() {return imp;}
+	public DisplayedImage getImageDispay() {return imp;}
 	public ImageWrapper getImage() {return imp.getImageAsWrapper();}
 	
 	/**returns the cordinate of the clickpoin on the canvas*/
 	@Override
-	public int getClickedXImage() {
+	public int getCoordinateX() {
 		//imp.getTheWindow()
 		return this.convertClickedXImage(e.getX());
 		//return 0;
 	}
 
 	@Override
-	public int getClickedYImage() {
+	public int getCoordinateY() {
 		// TODO Auto-generated method stub
 		return this.convertClickedYImage( e.getY());
 	}
 	
-	public Point getCordinatePoint() {
-		return new Point(getClickedXImage(), getClickedYImage());
+	public Point getCoordinatePoint() {
+		return new Point(getCoordinateX(), getCoordinateY());
 	}
 	
 	/**When given the clickpoint relative to a the screen or compoent geometry,
@@ -76,7 +76,7 @@ public class GMouseEvent implements CanvasMouseEventWrapper {
 	}
 
 	@Override
-	public DisplayedImageWrapper getAsDisplay() {
+	public DisplayedImage getAsDisplay() {
 		// TODO Auto-generated method stub
 		return imp;
 	}

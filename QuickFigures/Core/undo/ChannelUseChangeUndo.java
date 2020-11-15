@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import channelMerging. ChannelUseInstructions;
-import channelMerging.MultiChannelWrapper;
 import channelMerging.PanelStackDisplay;
 
 public class ChannelUseChangeUndo extends AbstractUndoableEdit {
@@ -25,7 +24,7 @@ public class ChannelUseChangeUndo extends AbstractUndoableEdit {
 	}
 	
 	public ChannelUseChangeUndo(PanelStackDisplay mw) {
-		this(mw.getStack().getChannelUseInstructions());
+		this(mw.getPanelList().getChannelUseInstructions());
 		this.display=mw;
 	}
 
@@ -35,17 +34,26 @@ public class ChannelUseChangeUndo extends AbstractUndoableEdit {
 	}
 	
 	public void undo() {
-		iChannels.makePartialMatching(chanUse);
+		match(iChannels);
+		
 		if(display!=null) display.updatePanels();
 	}
-	
+
 	public void redo() {
-		fChannels.makePartialMatching(chanUse);
+		match(fChannels);
 		if(display!=null) display.updatePanels();
 		}
 	
-	public static CompoundEdit2 createForMany(ArrayList<? extends PanelStackDisplay> mws ) {
-		CompoundEdit2 ce2=new CompoundEdit2();
+	private void match(ChannelUseInstructions aChannels2) {
+		aChannels2.makePartialMatching(chanUse);
+		aChannels2.getFrameUseInstructions().giveAllTraitsTo(chanUse.getFrameUseInstructions());
+		aChannels2.getSliceUseInstructions().giveAllTraitsTo(chanUse.getSliceUseInstructions());
+	}
+	
+
+	
+	public static CombinedEdit createForMany(ArrayList<? extends PanelStackDisplay> mws ) {
+		CombinedEdit ce2=new CombinedEdit();
 		for(PanelStackDisplay mw: mws) {
 			ce2.addEditToList(new ChannelUseChangeUndo(mw));
 		}

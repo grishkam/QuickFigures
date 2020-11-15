@@ -10,15 +10,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import dividedPanels.DividedPanelLayout.layoutDivider;
+import dividedPanels.DividedPanelLayout.LayoutDivider;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjects.CordinateConverter;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.NumberInputPanel;
 
+/**A hande used for moving the dividers of a layout*/
 public class DividerHandle extends SmartHandle  implements ActionListener {
 
-	public layoutDivider divider;
+	public LayoutDivider divider;
 	private DividedPanelLayoutGraphic layoutG;
 	public DividerHandle(Rectangle2D r, Color c, DividedPanelLayoutGraphic layourGraphic) {
 		super((int)r.getX(), (int)r.getY());
@@ -39,7 +40,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 	}
 
 
-	public DividerHandle(layoutDivider div, Color orange, CordinateConverter<?> cords,DividedPanelLayoutGraphic layourGraphic) {
+	public DividerHandle(LayoutDivider div, Color orange, CordinateConverter<?> cords,DividedPanelLayoutGraphic layourGraphic) {
 		this(div.rect, orange, cords,layourGraphic);
 		this.divider=div;
 	}

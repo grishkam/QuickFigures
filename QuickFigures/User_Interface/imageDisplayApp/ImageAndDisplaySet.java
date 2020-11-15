@@ -12,17 +12,17 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import graphicalObjects.BasicCordinateConverter;
 import layersGUI.GraphicTreeUI;
 
 /**see description for interface*/
-public class ImageAndDisplaySet implements DisplayedImageWrapper {
+public class ImageAndDisplaySet implements DisplayedImage {
 	public static GraphicTreeUI exampletree;
 	private GraphicSetDisplayWindow theWindow=null;
 	private GraphicDisplayCanvas theCanvas=null;
-	private GraphicSet theSet=null;
+	private GraphicContainingImage theSet=null;
 	private int currentFrame=0;
 	private int endFrame=200;
 	private Selectable selectedItem=null;
@@ -30,7 +30,7 @@ public class ImageAndDisplaySet implements DisplayedImageWrapper {
 	transient UndoManagerPlus undoMan=null;
 	
 	/**Generates a Display of the given graphic set*/
-	public ImageAndDisplaySet(GraphicSet graphicSet) {
+	public ImageAndDisplaySet(GraphicContainingImage graphicSet) {
 		this.setTheSet( graphicSet);
 		GraphicDisplayCanvas canvas = new GraphicDisplayCanvas();
 		this.setTheCanvas(canvas);
@@ -77,10 +77,10 @@ public class ImageAndDisplaySet implements DisplayedImageWrapper {
 			
 		}
 	}
-	public GraphicSet getTheSet() {
+	public GraphicContainingImage getTheSet() {
 		return theSet;
 	}
-	public void setTheSet(GraphicSet theSet) {
+	public void setTheSet(GraphicContainingImage theSet) {
 		this.theSet = theSet;
 		theSet.undoManager=this.getUndoManager();
 		if (theSet!=null)	theSet.setDisplayGroup(this);
@@ -119,14 +119,14 @@ public class ImageAndDisplaySet implements DisplayedImageWrapper {
 	
 	
 	public static ImageAndDisplaySet createAndShowNew(String title, int width, int height) {
-		GraphicSet gs = new GraphicSet();
+		GraphicContainingImage gs = new GraphicContainingImage();
 		gs.setTitle(title);
 		gs.getBasics().setWidth(width);
 		gs.getBasics().setHeight(height);
 		return  show(gs);
 	}
 	
-	public static ImageAndDisplaySet  show(GraphicSet gs) {
+	public static ImageAndDisplaySet  show(GraphicContainingImage gs) {
 		ImageAndDisplaySet set = new ImageAndDisplaySet(gs);
 		Window win = set.getWindow();
 		win.pack();

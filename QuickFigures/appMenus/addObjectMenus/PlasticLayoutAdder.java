@@ -28,7 +28,7 @@ public class PlasticLayoutAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Flexible Layout";
 	}
 

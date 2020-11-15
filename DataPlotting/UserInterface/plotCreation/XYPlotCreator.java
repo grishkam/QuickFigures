@@ -2,7 +2,7 @@ package plotCreation;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.XYDataSeries;
 import imageDisplayApp.ImageAndDisplaySet;
 import xyPlots.XY_Plot;
@@ -23,7 +23,7 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		return "Bar plot";
 	}
 	
-	public void createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}

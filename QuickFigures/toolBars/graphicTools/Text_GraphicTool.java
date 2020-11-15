@@ -21,7 +21,7 @@ import javax.swing.Icon;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.IconWrappingToolIcon;
 import externalToolBar.TreeIconWrappingToolIcon;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.CursorFinder;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects_BasicShapes.TextGraphic;
@@ -34,7 +34,7 @@ import utilityClassesForObjects.TakesLockedItems;
 public class Text_GraphicTool extends GraphicTool {
 	
 	private Cursor textCursor=new Cursor(Cursor.TEXT_CURSOR);
-	{excludedClass=PanelLayoutGraphic.class;}
+	{excludedClass=PanelLayoutGraphic.class;super.temporaryTool=true;}
 	
 	
 
@@ -107,11 +107,6 @@ public class Text_GraphicTool extends GraphicTool {
 			this.setSelectedObject(textob);
 			}
 		
-		/**
-		if (editorOnly && lastText!=null) {
-			createNew=false;
-			textob=(TextGraphic) lastText;
-		}*/
 		
 		
 		if (createNew&&this.clickCount()==2)
@@ -133,9 +128,7 @@ public class Text_GraphicTool extends GraphicTool {
 			}
 			this.setSelectedObject(textob);
 		}
-		
-		
-		//if (this.clickCount()>1)textob.showOptionsDialog();
+
 		
 		
 		
@@ -168,7 +161,7 @@ public class Text_GraphicTool extends GraphicTool {
 		}
 		
 		
-		double dist = pressY-this.getLastDragOrRelMouseEvent().getCordinatePoint().getY();
+		double dist = pressY-this.getLastDragOrRelMouseEvent().getCoordinatePoint().getY();
 		dist=Math.abs(dist);
 		if (!startedDragCreation){
 			
@@ -237,7 +230,7 @@ public class Text_GraphicTool extends GraphicTool {
 		
 		
 		output.setToNearestInternalSnap(textob.getBounds(),snapBounds, new Point(cx, cy));	
-		textob.getSnappingBehaviour().setToNearestExternalSnap(textob.getBounds(), snapBounds, new Point(cx, cy));	
+		textob.getSnapPosition().setToNearestExternalSnap(textob.getBounds(), snapBounds, new Point(cx, cy));	
 		
 		return output;
 	}
@@ -353,7 +346,7 @@ public class Text_GraphicTool extends GraphicTool {
 /***/
 	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWrapper click, int x, int y) {
 		if (!this.editorOnly) return super.getObjectsAtPressLocationWithoutFiltering(click, x, y);
-		ArrayList<LocatedObject2D> list = getObjecthandler().getOverlapOverlaypingOrContainedItems(new Rectangle(x-5, y-5, 10, 10), click, new BasicOverlayHandler.excluder(this.excludedClass));
+		ArrayList<LocatedObject2D> list = getObjecthandler().getOverlapOverlaypingOrContainedItems(new Rectangle(x-5, y-5, 10, 10), click, new BasicObjectListHandler.excluder(this.excludedClass));
 		
 		ArrayList<LocatedObject2D> list2 = new ArrayList<LocatedObject2D>();
 		for(int i=list.size()-1; i>=0; i--) {

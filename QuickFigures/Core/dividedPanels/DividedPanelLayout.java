@@ -11,6 +11,8 @@ import logging.IssueLog;
 import plasticPanels.FundamentalPanelLayout;
 import plasticPanels.PanelOperations;
 
+/**A layout organized by sequential division of rows and columns. Although this is not the layout of choice
+   As it offers few advanatges*/
 public class DividedPanelLayout extends FundamentalPanelLayout implements Serializable, PanelLayout  {
 
 	
@@ -169,8 +171,8 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		
 		layoutDividedArea area1 = areas.get(i1-1);
 		if (area1==null) return;
-		layoutDivider hdtop = area1.getHorizontalDividerTop();
-		layoutDivider hdbottom = area1.getHorizontalDivider();
+		LayoutDivider hdtop = area1.getHorizontalDividerTop();
+		LayoutDivider hdbottom = area1.getHorizontalDivider();
 		
 		if (hdtop!=null)  {
 			hdtop.nudgePosition(dy);
@@ -185,8 +187,8 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 	
 		
 		
-		layoutDivider vdl=area1.getVerticalDividerLeft();
-		layoutDivider vdr = area1.getVerticalDivider();
+		LayoutDivider vdl=area1.getVerticalDividerLeft();
+		LayoutDivider vdr = area1.getVerticalDivider();
 		
 		if(vdl!=null) {
 			vdl.nudgePosition(dx);
@@ -242,11 +244,11 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 
 
 		
-		private layoutDivider definingDivider;//the divider responsible for separating out this area. it is to the right or below the area
+		private LayoutDivider definingDivider;//the divider responsible for separating out this area. it is to the right or below the area
 	
 		
 		private boolean horizontal=true;
-		ArrayList<layoutDivider> dividers= new ArrayList<layoutDivider>();
+		ArrayList<LayoutDivider> dividers= new ArrayList<LayoutDivider>();
 		private ArrayList< layoutDividedArea> subareas= new ArrayList<layoutDividedArea>();
 
 
@@ -257,7 +259,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 
 
 
-		private layoutDivider precedingDivider; 
+		private LayoutDivider precedingDivider; 
 		
 		
 		
@@ -329,7 +331,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		
 		
 		/**Adds either this area, or subareas to the list*/
-		void addToDividerArray(ArrayList<layoutDivider> r) {
+		void addToDividerArray(ArrayList<LayoutDivider> r) {
 				if (this.isSubdivided())  {
 					r.addAll(dividers);
 					for(layoutDividedArea area: getSubareas()) {
@@ -340,22 +342,22 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		/**returns an array of all the layout dividers within this area*/
-		ArrayList<layoutDivider> getHorizontalDividerArray( boolean horizontals) {
-				ArrayList<layoutDivider> o1 = new ArrayList<layoutDivider>();
+		ArrayList<LayoutDivider> getHorizontalDividerArray( boolean horizontals) {
+				ArrayList<LayoutDivider> o1 = new ArrayList<LayoutDivider>();
 				this.addToDividerArray(o1);
-				ArrayList<layoutDivider> o2 = new ArrayList<layoutDivider>();
-				for(layoutDivider div: o1) {if (div.horizontal==horizontals)  o2.add(div);}
+				ArrayList<LayoutDivider> o2 = new ArrayList<LayoutDivider>();
+				for(LayoutDivider div: o1) {if (div.horizontal==horizontals)  o2.add(div);}
 				return o2;
 		}
 		
 		public void nudgeDividers(boolean hori, int nudge) {
-			ArrayList<layoutDivider> arr = getHorizontalDividerArray(hori);
-			for(layoutDivider a:arr) {a.nudgePosition(nudge);}
+			ArrayList<LayoutDivider> arr = getHorizontalDividerArray(hori);
+			for(LayoutDivider a:arr) {a.nudgePosition(nudge);}
 		}
 		
 		public void nudgeDividersIfIndependant(boolean hori, int nudge) {
-			ArrayList<layoutDivider> arr = getHorizontalDividerArray(hori);
-			for(layoutDivider a:arr) {
+			ArrayList<LayoutDivider> arr = getHorizontalDividerArray(hori);
+			for(LayoutDivider a:arr) {
 				if(!a.isDependentOnAnyOfSameOrientation())
 				a.nudgePosition(nudge);
 				}
@@ -379,7 +381,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 				
 				
 				
-				layoutDivider div = dividers.get(i);
+				LayoutDivider div = dividers.get(i);
 				div.horizontal=this.horizontal;
 				div.dividernum=i+1;
 				
@@ -438,7 +440,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		
-		void setPrecedingDivider(layoutDivider layoutDivider) {
+		void setPrecedingDivider(LayoutDivider layoutDivider) {
 			 precedingDivider=layoutDivider;
 			
 		}
@@ -448,7 +450,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 			
 			if (dividers.size()==0 ){getSubareas().add(new layoutDividedArea());}//There is one more subarea then dividers
 			
-			layoutDivider div = new layoutDivider(d);
+			LayoutDivider div = new LayoutDivider(d);
 			dividers.add(div);
 			div.parent=this;
 			getSubareas().add(new layoutDividedArea());
@@ -456,7 +458,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 			return true;
 		}
 		
-		public boolean removeDivider(layoutDivider div) {
+		public boolean removeDivider(LayoutDivider div) {
 			if(!this.dividers.contains(div)) {
 				 
 				IssueLog.log("could not remove divider");
@@ -474,10 +476,10 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		/**returns the horizontal divider responsible for the bottom border of this item*/
-		layoutDivider getHorizontalDivider() {
+		LayoutDivider getHorizontalDivider() {
 			layoutDividedArea p = this;
 			while(p!=null) {
-				layoutDivider div = p.definingDivider;
+				LayoutDivider div = p.definingDivider;
 				if (div!=null&&div.horizontal) return div; 
 				p=p.getParent();
 			}
@@ -486,10 +488,10 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		/**returns the horizontal divider responsible for the top border of this item*/
-		layoutDivider getHorizontalDividerTop() {
+		LayoutDivider getHorizontalDividerTop() {
 			layoutDividedArea p = this;
 			while(p!=null) {
-				layoutDivider div = p.precedingDivider;
+				LayoutDivider div = p.precedingDivider;
 				if (div!=null&&div.horizontal) return div; 
 				p=p.getParent();
 			}
@@ -498,11 +500,11 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		/**returns the divider that is responsible for the right edge of this area*/
-		layoutDivider getVerticalDivider() {
+		LayoutDivider getVerticalDivider() {
 			layoutDividedArea p = this;
 				
 				while(p!=null) {
-					layoutDivider div = p.definingDivider;
+					LayoutDivider div = p.definingDivider;
 					if (div!=null&&!div.horizontal) return div; 
 					p=p.getParent();
 					
@@ -513,11 +515,11 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		/**returns the divider that is responsible for the left edge of this area*/
-		layoutDivider getVerticalDividerLeft() {
+		LayoutDivider getVerticalDividerLeft() {
 			layoutDividedArea p = this;
 				
 				while(p!=null) {
-					layoutDivider div = p.precedingDivider;
+					LayoutDivider div = p.precedingDivider;
 					if (div!=null&&!div.horizontal) return div; 
 					p=p.getParent();
 					
@@ -557,11 +559,11 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 			this.parent = parent;
 		}
 
-		public layoutDivider getDefiningDivider() {
+		public LayoutDivider getDefiningDivider() {
 			return definingDivider;
 		}
 
-		public void setDefiningDivider(layoutDivider definingDivider) {
+		public void setDefiningDivider(LayoutDivider definingDivider) {
 			this.definingDivider = definingDivider;
 		}
 		
@@ -571,7 +573,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 	
 	
 	
-	class layoutDivider implements Serializable{
+	class LayoutDivider implements Serializable{
 		/**
 		 * 
 		 */
@@ -581,7 +583,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		public Rectangle2D.Double rect;
 		public boolean horizontal;
 		private double position=100;
-		public layoutDivider(double spot) {
+		public LayoutDivider(double spot) {
 			setPosition(spot);
 		}
 		
@@ -591,7 +593,7 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		}
 		
 		/**returns true if a parent areas divider is necesary for this divider*/
-		boolean isDependentOn(layoutDivider other) {
+		boolean isDependentOn(LayoutDivider other) {
 			layoutDividedArea pp = parent;
 			while(pp!=null) {
 				if(pp.dividers.contains(other)) return true;
@@ -627,20 +629,20 @@ public class DividedPanelLayout extends FundamentalPanelLayout implements Serial
 		
 	}
 	
-	public layoutDivider findSmallest(ArrayList<layoutDivider> divs) {
-		layoutDivider div = divs.get(0);
-		for(layoutDivider div2: divs) {if(div2.getPosition()<div.getPosition()) div=div2;}
+	public LayoutDivider findSmallest(ArrayList<LayoutDivider> divs) {
+		LayoutDivider div = divs.get(0);
+		for(LayoutDivider div2: divs) {if(div2.getPosition()<div.getPosition()) div=div2;}
 		return div;
 	}
 	
 	
-	ArrayList<layoutDivider> orderSmallToLarge(ArrayList<layoutDivider> divs) {
-		ArrayList<layoutDivider> divs2=new ArrayList<layoutDivider> ();
+	ArrayList<LayoutDivider> orderSmallToLarge(ArrayList<LayoutDivider> divs) {
+		ArrayList<LayoutDivider> divs2=new ArrayList<LayoutDivider> ();
 		divs2.addAll(divs);
-		ArrayList<layoutDivider> divs3=new ArrayList<layoutDivider> ();
+		ArrayList<LayoutDivider> divs3=new ArrayList<LayoutDivider> ();
 		int len=divs2.size();
 		for(int i=0; i<len; i++) {
-			layoutDivider small = findSmallest(divs2);
+			LayoutDivider small = findSmallest(divs2);
 			divs2.remove(small);
 			divs3.add(small);
 		}

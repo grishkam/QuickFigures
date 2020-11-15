@@ -13,7 +13,6 @@ import graphicalObjects_FigureSpecific.PanelManager;
 import objectDialogs.PanelStackDisplayOptions;
 import panelGUI.PanelListDisplayGUI;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
 import undo.PanelManagerUndo;
 
 public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {

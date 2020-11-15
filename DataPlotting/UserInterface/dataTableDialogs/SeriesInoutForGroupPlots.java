@@ -197,7 +197,8 @@ public class SeriesInoutForGroupPlots extends DataInputDialog2 {
 			File f=new ExcelFileToComplexCategoryPlot(0).getFileAndaddExtension();
 			ExcelRowSubset subset;
 			try {
-				subset = new ExcelRowSubset(new ReadExcelData().fileToWorkBook(f.getAbsolutePath()));
+				new ReadExcelData();
+				subset = new ExcelRowSubset(ReadExcelData.fileToWorkBook(f.getAbsolutePath()));
 				ArrayList<GroupedDataSeries> items = subset.createCategoryDataSeries(0, 1, 2);//ReadExcelData.readXY(f.getAbsolutePath());
 				SeriesInoutForGroupPlots dialog = new SeriesInoutForGroupPlots(items.get(0), true);
 						dialog.showDialog();

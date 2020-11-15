@@ -47,7 +47,7 @@ public class DividedLayoutAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Divided Layout";
 	}
 

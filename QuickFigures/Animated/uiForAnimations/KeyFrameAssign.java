@@ -6,7 +6,7 @@ import java.awt.geom.Area;
 
 import javax.swing.Icon;
 import animations.KeyFrameCompatible;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
@@ -18,6 +18,10 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 	
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean update=false;
 		
 	public KeyFrameAssign(boolean update) {this.update=update;}
@@ -47,7 +51,7 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 		
 		if (selectedItem instanceof KeyFrameCompatible ) {
 			KeyFrameCompatible  m=(KeyFrameCompatible ) selectedItem;
-			int frame = new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getCurrentFrame();
+			int frame = new CurrentFigureSet().getCurrentlyActiveDisplay().getCurrentFrame();
 			
 			if (update)m.getOrCreateAnimation().updateKeyFrame(frame); else
 			m.getOrCreateAnimation().recordKeyFrame(frame);

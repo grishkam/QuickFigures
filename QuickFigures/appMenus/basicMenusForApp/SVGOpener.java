@@ -3,11 +3,11 @@ package basicMenusForApp;
 import java.io.File;
 
 import ultilInputOutput.FileChoiceUtil;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ToolbarTester;
 import fieldReaderWritter.GraphicSVGParser;
-import figureTemplates.DirectoryHandler;
-import imageDisplayApp.GraphicSet;
+import figureFormat.DirectoryHandler;
+import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
@@ -33,7 +33,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 	}
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		File f=FileChoiceUtil.getOpenFile();
 	
 		showFile(f);
@@ -48,7 +48,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 		
 		IssueLog.log("showing file "+'\n'+f.getAbsolutePath());
 			
-			GraphicSet set = readFromFile(f);
+			GraphicContainingImage set = readFromFile(f);
 			if (set==null) return null;
 			ImageAndDisplaySet output = new ImageAndDisplaySet(set);
 			
@@ -56,7 +56,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 			return output;
 	}
 	
-	public static GraphicSet readFromFile(File f) {
+	public static GraphicContainingImage readFromFile(File f) {
 	
 		if (!f.exists()) {
 			IssueLog.log("file "+" is non existent"+f);
@@ -67,7 +67,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 			
 			
 			
-			GraphicSet set = new GraphicSVGParser().openSVG(f.getAbsolutePath());
+			GraphicContainingImage set = new GraphicSVGParser().openSVG(f.getAbsolutePath());
 		return set;
 			//return GraphicSVGParser.openSVG(f.getAbsolutePath());
 		} catch (Exception e) {

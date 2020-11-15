@@ -9,14 +9,11 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.RhombusGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import logging.IssueLog;
-import utilityClassesForObjects.DefaultPaintProvider;
 import utilityClassesForObjects.PaintProvider;
-import utilityClassesForObjects.RainbowPaintProvider;
 import utilityClassesForObjects.RectangleEdgePosisions;
-import utilityClassesForObjects.RectangleEdges;
 
-/**A class for creation of a folder icon object*/
+/**A class for procedural rendering of a brighness icon
+  */
 public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEdgePosisions {
 
 	/**
@@ -107,7 +104,6 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 			r3.setFillColor(Color.white);
 			
 			
-		//	r.setFilled(true);
 			PaintProvider pp = r.getFillPaintProvider();
 			
 			pp.setColor(getIconColor().brighter());
@@ -119,11 +115,6 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 				//r.setRectangle(new Rectangle(0,4,14,8));
 				r.setStrokeColor(getIconColor().darker().darker());
 		}
-			
-			
-		
-		
-			
 			
 			
 	}

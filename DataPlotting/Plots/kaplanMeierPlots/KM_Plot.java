@@ -15,7 +15,7 @@ import gridLayout.GridLayoutEditListener;
 import gridLayout.MontageSpaces;
 import menuUtil.HasUniquePopupMenu;
 import plotParts.Core.PlotArea;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 
 /**A special layer for a plot with single dimensional data*/
 public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, MontageSpaces, GridLayoutEditListener {
@@ -165,8 +165,8 @@ protected void afterNumberOfDataSeriesChanges() {
 
 
 //@MenuItemMethod(menuActionCommand = "To default", menuText = "Make Default Plot", subMenuName="Change Format", orderRank=1)
-public CompoundEdit2 defaultPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit defaultPlot() {
+	CombinedEdit undo = new CombinedEdit();
 	for(KaplanDataSeriesGroup a: getAllDataSeries()) {
 	
 
@@ -195,22 +195,22 @@ public void setAllData(ArrayList<KaplanDataSeriesGroup> allData) {
 
 
 @MenuItemMethod(menuActionCommand = "Remove Lines", menuText = "Lines", subMenuName="Remove")
-public CompoundEdit2 removeLines() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit removeLines() {
+	CombinedEdit undo = new CombinedEdit();
 	for(KaplanDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeKaplanLine() );;;;}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Add Lines", menuText = "New Lines", subMenuName="Add")
-public CompoundEdit2 addLine() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit addLine() {
+	CombinedEdit undo = new CombinedEdit();
 	for(KaplanDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addKaplanLine());;}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Add Censors ", menuText = "New Censor Marks", subMenuName="Add")
-public CompoundEdit2 addCensorMarke() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit addCensorMarke() {
+	CombinedEdit undo = new CombinedEdit();
 	for(KaplanDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addKaplanCensor());;}
 	return undo;
 }
@@ -286,13 +286,13 @@ private void replaceData(ArrayList<KaplanDataSeriesGroup> olderSeries, ArrayList
 	public void editScatterPoints() {}
 	public void editBoxPlots() {}
 	public void editBoxplots() {}
-	public CompoundEdit2 barPlot() {return null;}
+	public CombinedEdit barPlot() {return null;}
 	public AbstractUndoableEdit scatterPlot() {return null;}
-	public CompoundEdit2 normalBoxplotPlot() {return null;}
-	public CompoundEdit2 tukeyBoxplotPlot() {return null;}
-	public CompoundEdit2 removeDataBar() {return null;}
-	public CompoundEdit2 removeErrorBar() {return null;}
-	public CompoundEdit2 removeBoxplots() {return null;}
+	public CombinedEdit normalBoxplotPlot() {return null;}
+	public CombinedEdit tukeyBoxplotPlot() {return null;}
+	public CombinedEdit removeDataBar() {return null;}
+	public CombinedEdit removeErrorBar() {return null;}
+	public CombinedEdit removeBoxplots() {return null;}
 	public AbstractUndoableEdit removeScatter() {return null;}
 
 }

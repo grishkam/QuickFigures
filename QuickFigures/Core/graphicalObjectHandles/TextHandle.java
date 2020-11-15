@@ -58,12 +58,12 @@ public class TextHandle extends SmartHandle {
 	
 	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 		if (this.getHandleNumber()==ROTATION_HANDLE) {
-			double angle=TextGraphic.distanceFromCenterOfRotationtoAngle(textItem.getCenterOfRotation(), lastDragOrRelMouseEvent.getCordinatePoint());
+			double angle=TextGraphic.distanceFromCenterOfRotationtoAngle(textItem.getCenterOfRotation(), lastDragOrRelMouseEvent.getCoordinatePoint());
 
 				textItem.setAngle(angle);
 				
 		}
-		Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		
 		if (getHandleNumber()==TEXT_FONT_SIZE_HANDLE ) {
 			

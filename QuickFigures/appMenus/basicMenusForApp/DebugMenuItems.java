@@ -2,7 +2,7 @@ package basicMenusForApp;
 
 import javax.swing.Icon;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import logging.IssueLog;
 
 /**A menu item for turning on debugging mode*/
@@ -24,7 +24,7 @@ public  class DebugMenuItems implements MenuItemForObj{
 	}
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (on) {
 		IssueLog.reportAllFail(on);
 		IssueLog.reportAllEvents();

@@ -1,6 +1,6 @@
 package fileread;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import dataTableDialogs.SmartDataInputDialog;
 
@@ -34,7 +34,7 @@ public class ShowTable extends BasicMenuItemForObj {
 	}
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (type==1) {SmartDataInputDialog.showTableFromUserFile(false);}
 		else
 		SmartDataInputDialog.createDialog(0).showDialog();;

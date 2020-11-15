@@ -8,8 +8,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.image.ColorModel;
-
 import applicationAdapters.PixelWrapper;
 import ij.gui.Roi;
 import ij.gui.ShapeRoi;
@@ -26,6 +24,10 @@ import ij.process.ShortProcessor;
 import logging.IssueLog;
 import utilityClassesForObjects.RectangleEdges;
 
+/**an implementation of pixel wrapper interface for drawing on imageJ objects
+ *  QuickFigures.  Of the methods below, only a few are crucial for the 
+ *  function of Quickfigures in its current form
+ *  */
 public class ProcessorWrapper implements PixelWrapper {
 	public ImageProcessor object;
 	
@@ -39,7 +41,7 @@ public class ProcessorWrapper implements PixelWrapper {
 	}
 
 
-	@Override
+	/**Inserts this items pixels into the target*/
 	public void insertInto(PixelWrapper recipient, int x, int y) {
 		Object ob = recipient.getPixels();
 		if (ob instanceof ImageProcessor) {
@@ -214,15 +216,10 @@ public static void drawRotatedString(String st, ImageProcessor ip, Color c, int 
 	if (aboutcenter) b1.copyBits(rotatable, x-ssquare+swidth/2+sheight, y-ssquare+sheight/2+swidth, Blitter.COPY_TRANSPARENT) ;
 }
 
-@Override
-public ColorModel getColorModel() {
-	// TODO Auto-generated method stub
-	return object.getColorModel();
-}
+
 
 @Override
 public boolean isRGB() {
-	// TODO Auto-generated method stub
 	return object instanceof ColorProcessor;
 }
 

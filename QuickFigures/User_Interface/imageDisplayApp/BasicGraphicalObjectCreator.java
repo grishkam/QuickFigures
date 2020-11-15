@@ -14,6 +14,7 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**an implementation of the object creator interface*/
 public class BasicGraphicalObjectCreator implements ObjectCreator {
 
 	
@@ -21,7 +22,6 @@ public class BasicGraphicalObjectCreator implements ObjectCreator {
 	@Override
 	public LocatedObject2D createTextObject(String label, Color c, Font font, FontMetrics f, int lx,
 			int ly, double angle, boolean antialiasedText) {
-		// TODO Auto-generated method stub
 		TextGraphic tg = new TextGraphic(label);
 		tg.setTextColor(c);
 		tg.setFont(font);
@@ -41,7 +41,6 @@ public class BasicGraphicalObjectCreator implements ObjectCreator {
 
 	@Override
 	public LocatedObject2D createRectangularObject(Rectangle r) {
-		// TODO Auto-generated method stub
 		RectangularGraphic output = new RectangularGraphic();
 		output.setRectangle(r);
 		return output;

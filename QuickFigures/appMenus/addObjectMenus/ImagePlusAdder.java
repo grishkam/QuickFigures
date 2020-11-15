@@ -29,7 +29,7 @@ public class ImagePlusAdder extends BasicGraphicAdder{
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Multichannel Image";
 	}
 

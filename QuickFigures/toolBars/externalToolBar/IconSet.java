@@ -10,18 +10,21 @@ import javax.swing.ImageIcon;
 
 import logging.IssueLog;
 
+/**maintains a list of icons. 
+  in most cases this will contain 
+   a normal button icon, button pressed icon, and a button rollover icon  */
 public class IconSet {
 	
-	 public Image[] icons;
+	public static final int ROLLOVER_ICON = 2, PRESSED_ICON = 1, BUTTON_ICON = 0;
+	private Image[] icons;
+	 private Icon[] icons2;
 	 
-	 Image defaultIcon=loadLocalImage("icons/Blank.jpg");
+	 private Image defaultIcon=null;
 	 
-	 Icon[] icons2;
-	 
+	
 	 /**Given the name of a  file in the same .jar package as this file,
-	  returns an image with all the file.*/
+	  returns an image */
 	 public Image loadImage(String name) {
-		
 		return loadLocalImage(name);
 		
 	}
@@ -60,12 +63,10 @@ public class IconSet {
 	}
 	
 	public void setIcon(int i, Icon st){
-		//icons[i]=loadImage(st);
 		icons2[i]=st;
 	}
 	
 	
-	String directory="";
 	
 	/**Given the name of a  file in the same .jar package as this file,
 	  returns an image with all the file.*/
@@ -83,20 +84,27 @@ public class IconSet {
 	}
 
 		public Image getImageForIcon(int i) {
-			if (i>=icons.length) return defaultIcon;
+			if (i>=icons.length) return getDefaultIcon();
 			return icons[i];
 		}
 		
 		public Icon getIcon(int i) {
-			if (i>=icons2.length) return new ImageIcon(defaultIcon);
+			if (i>=icons2.length) return new ImageIcon(getDefaultIcon());
 			return icons2[i];
 		}
 		
+		/**sets the standard, pressed and rollover icons */
 		public void setItemIcons(AbstractButton item) {
-			item.setIcon(getIcon(0));
-			item.setPressedIcon(getIcon(1));
-			item.setRolloverIcon(getIcon(2));
+			item.setIcon(getIcon(BUTTON_ICON));
+			item.setPressedIcon(getIcon(PRESSED_ICON));
+			item.setRolloverIcon(getIcon(ROLLOVER_ICON));
 			
+		}
+
+
+		private Image getDefaultIcon() {
+			if (defaultIcon==null) defaultIcon=loadLocalImage("icons/Blank.jpg");
+			return defaultIcon;
 		}
 		
 	

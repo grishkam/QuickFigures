@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
 import exportMenus.QuickImport;
@@ -42,7 +42,7 @@ public class ExcelRowToJTable extends QuickImport  {
 	}
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		try {
 			if (diw==null|| (diw.getWindow().isVisible()==false)) {
 				diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);

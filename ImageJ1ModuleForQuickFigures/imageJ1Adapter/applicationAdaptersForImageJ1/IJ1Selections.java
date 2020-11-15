@@ -9,6 +9,10 @@ import ij.ImagePlus;
 import ij.gui.ShapeRoi;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**a specialized selection manager that sets the selections
+ of an imageJ image (or returns the selection) and not a QuickFigures figure
+ A programmer might use this while displaying quickfigures objects on top of an ImageJ image.
+ */
 public class IJ1Selections extends SelectionManager {
 	private ImagePlus imagePlus;
 
@@ -59,6 +63,7 @@ public void setSelection( LocatedObject2D lastRoi, int i) {
 	
 }
 
+/**removes the roi but stores a version of the shape. */
 public void movePrimarySelectionTo2nd() {
 	if (imagePlus.getRoi()==null) return;
 	RoiWrapper rw = new RoiWrapper(imagePlus.getRoi());

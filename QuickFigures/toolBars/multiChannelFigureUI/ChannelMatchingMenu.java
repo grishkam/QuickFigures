@@ -11,7 +11,7 @@ import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.MultiChannelWrapper;
 import standardDialog.SelectImageDialog;
 import undo.ChannelDisplayUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 
 /**This class is the Match display ranges Menu that opens a dialog
  * letting the user select a list of multichannel images.
@@ -65,7 +65,7 @@ ActionListener, DisplayRangeChangeListener  {
 		 MultiChannelWrapper sourceDisplayRanges = items.get(0);
 		 
 		 
-			CompoundEdit2 undo = ChannelDisplayUndo.createMany(items, this);
+			CombinedEdit undo = ChannelDisplayUndo.createMany(items, this);
 			
 			if (arg0.getActionCommand().equals(minMaxCommand)) {
 				WindowLevelDialog.showWLDialogs(chans,  sourceDisplayRanges , this, WindowLevelDialog.MIN_MAX , undo);
@@ -79,13 +79,13 @@ ActionListener, DisplayRangeChangeListener  {
 			
 			if (arg0.getActionCommand().equals(orderCommand)) {
 				
-				new ChannelOrderAndLutMatching().matchOrder(sourceDisplayRanges , items, 2);
+				new ChannelOrderAndLutMatching().matchChannels(sourceDisplayRanges , items, 2);
 				
 			}
 			
 			if (arg0.getActionCommand().equals(orderCommand2)) {
 				
-				new ChannelOrderAndLutMatching().matchOrder(sourceDisplayRanges, items, 2);
+				new ChannelOrderAndLutMatching().matchChannels(sourceDisplayRanges, items, 2);
 				for(int c=1; c<=sourceDisplayRanges.nChannels(); c++) {
 					minMaxSet(c, sourceDisplayRanges.getChannelMin(c),sourceDisplayRanges.getChannelMax(c));
 				}

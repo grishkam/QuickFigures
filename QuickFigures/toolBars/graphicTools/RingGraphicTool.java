@@ -21,7 +21,7 @@ public class RingGraphicTool extends CircleGraphicTool {
 
 	{model=new SimpleRing(new Rectangle(0,0,15,15));}{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
 	
-	protected RectangularGraphic createNewRect(Rectangle r) {
+	public RectangularGraphic createShape(Rectangle r) {
 		return new  SimpleRing(r, isArc);
 	}
 	

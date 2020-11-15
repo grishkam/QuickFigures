@@ -10,7 +10,7 @@ import javax.swing.Icon;
 import fieldReaderWritter.SVGExportable;
 import fieldReaderWritter.SVGExporter;
 import fieldReaderWritter.SVGExporter_GraphicLayer;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.GraphicSetDisplayContainer;
 import graphicalObjects.KnowsParentLayer;
@@ -439,7 +439,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 
 	@Override
-	public void takeRoiFromImage(LocatedObject2D roi) {
+	public void takeFromImage(LocatedObject2D roi) {
 		if (roi instanceof ZoomableGraphic) {
 			remove((ZoomableGraphic) roi);
 		}
@@ -640,7 +640,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	
 	
 	public UndoManagerPlus getUndoManager() {
-		return new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getUndoManager();
+		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}
 
 	/**returns the top level parent layer (the one with no parent of its own)*/

@@ -776,8 +776,8 @@ public class SnappingPosition implements  RectangleEdgePosisions, Serializable  
 	public static ArrayList<SnappingPosition> findAllSnappings(ArrayList<LocatedObject2D> objects) {
 		ArrayList<SnappingPosition> bahs=new ArrayList<SnappingPosition>();
 		for(LocatedObject2D o: objects) {
-			if (o.getSnappingBehaviour()!=null && !bahs.contains(o.getSnappingBehaviour())) {
-				bahs.add(o.getSnappingBehaviour());
+			if (o.getSnapPosition()!=null && !bahs.contains(o.getSnapPosition())) {
+				bahs.add(o.getSnapPosition());
 			}
 		}
 		return bahs;

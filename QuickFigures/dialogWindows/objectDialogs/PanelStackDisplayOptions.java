@@ -15,9 +15,9 @@ import standardDialog.ChannelEntryBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
 import undo.ChannelUseChangeUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.PanelManagerUndo;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
 /**A dialog box used for two purposes. First, works as a set of options when 
 creating a channel figure. Second, allow you to change how the channels are
@@ -31,7 +31,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	private MultichannelDisplayLayer principalMultiChannel;
 	private ArrayList<MultichannelDisplayLayer> displural=new ArrayList<MultichannelDisplayLayer>();
 	boolean panelCreationIncluded=true;
-	private DisplayedImageWrapper currentImageDisplay;
+	private DisplayedImage currentImageDisplay;
 	private PanelList stack;
 	private PanelManager panMan;
 	static String[] MergePositions=new String[] {"Merged Image Last", "Merged Image First", "No Merge", "Only Merge (no channels)"};
@@ -45,7 +45,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		this.principalMultiChannel=display;
 		this.panMan=panMan;
 		this.stack=stack;
-		if (stack==null) this.stack=display.getStack();
+		if (this.stack==null) this.stack=display.getPanelList();
 		
 		if (panMan==null) this.panMan=display.getPanelManager();
 		this.addButton(recropButton());
@@ -55,7 +55,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			
 			undo=PanelManagerUndo.createFor(display);
 		} else
-		undo=new CompoundEdit2(new ChannelUseChangeUndo(principalMultiChannel));
+		undo=new CombinedEdit(new ChannelUseChangeUndo(principalMultiChannel));
 	}
 
 	public RecropButton recropButton() {
@@ -71,12 +71,12 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		}
 		
 		if(this.panelCreationIncluded) {
-			CompoundEdit2 undo2 = PanelManagerUndo.createFor(principalMultiChannel);
+			CombinedEdit undo2 = PanelManagerUndo.createFor(principalMultiChannel);
 			undo2.addEditToList(PanelManagerUndo.createForMany(displural));
 			undo=undo2;
 		} else
 		{
-			CompoundEdit2 undo2 = ChannelUseChangeUndo.createForMany(displural);
+			CombinedEdit undo2 = ChannelUseChangeUndo.createForMany(displural);
 			undo2.addEditToList(new ChannelUseChangeUndo(principalMultiChannel) );
 			undo=undo2;
 		}
@@ -118,7 +118,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		}
 		
 		
-		ComboBoxPanel grey =new  standardDialog.ComboBoxPanel("Channels To Grey ", new String[] {"Color of LUTs", "Greyscale"}, ins.ChannelsInGrayScale);
+		ComboBoxPanel grey =new  standardDialog.ComboBoxPanel("Channels To Grey ", new String[] {"Color of LUTs", "Greyscale"}, ins.channelColorMode);
 		this.add("grey", grey);
 		
 		ArrayList<Integer> nome = ins.noMergeChannels;
@@ -173,7 +173,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	void setItemstoDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins, boolean eliminateChanLabel, boolean first) {
 		//ChannelUseInstructions ins = dis.getStack().getChannelUseInstructions();
 
-		ins.ChannelsInGrayScale=this.getChoiceIndex("grey");
+		ins.channelColorMode=this.getChoiceIndex("grey");
 		ArrayList<Integer> noMerge=new ArrayList<Integer>();
 		for(int i=0; i<3; i++) {
 			noMerge.add(this.getChoiceIndex("don't merge"+i));
@@ -221,7 +221,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			
 			/**flawed code. does*/
 			for(MultichannelDisplayLayer addedDiaply: displural) {
-				addedDiaply.getSetter().startPoint=lastone.getStack().getlastPanelsIndex()+1;
+				addedDiaply.getSetter().startPoint=lastone.getPanelList().getlastPanelsIndex()+1;
 				lastone=addedDiaply;
 				if (first&&dis==addedDiaply)  {addedDiaply.getSetter().startPoint=0;}
 			}
@@ -242,11 +242,11 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 							}
 	}
 
-	public DisplayedImageWrapper getCurrentImageDisplay() {
+	public DisplayedImage getCurrentImageDisplay() {
 		return currentImageDisplay;
 	}
 
-	public void setCurrentImageDisplay(DisplayedImageWrapper currentImageDisplay) {
+	public void setCurrentImageDisplay(DisplayedImage currentImageDisplay) {
 		this.currentImageDisplay = currentImageDisplay;
 	}
 	

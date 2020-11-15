@@ -4,13 +4,13 @@ import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import layersGUI.GraphicTreeUI;
 
 public class TreeShower  extends BasicMenuItemForObj {
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		GraphicTreeUI tree = new GraphicTreeUI(diw.getImageAsWrapper());
 		tree.showTreeForLayerSet(diw.getImageAsWrapper()) ;
 		treeWindowCloser closer = new treeWindowCloser(tree, diw.getWindow());

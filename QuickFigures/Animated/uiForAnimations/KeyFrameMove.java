@@ -1,13 +1,17 @@
 package uiForAnimations;
 
 import animations.KeyFrameCompatible;
+import graphicActionToolbar.CurrentFigureSet;
 import animations.BasicKeyFrame;
-import graphicActionToombar.CurrentSetInformerBasic;
 import graphicalObjects.ZoomableGraphic;
 import standardDialog.NumberInputPanel;
 
 public class KeyFrameMove extends BasicTimeLineOperator{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int motion=0;
 	
 	
@@ -42,7 +46,7 @@ public class KeyFrameMove extends BasicTimeLineOperator{
 		
 		if (selectedItem instanceof KeyFrameCompatible ) {
 			KeyFrameCompatible  m=(KeyFrameCompatible ) selectedItem;
-			int frame = new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getCurrentFrame();
+			int frame = new CurrentFigureSet().getCurrentlyActiveDisplay().getCurrentFrame();
 			if (m.getAnimation()==null) return;
 			BasicKeyFrame frame2 = m.getOrCreateAnimation().isKeyFrame(frame);
 			frame2.setFrame(frame+motion);

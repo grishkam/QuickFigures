@@ -8,15 +8,13 @@ import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelWrapper;
 import channelMerging.PanelStackDisplay;
 import genericMontageKit.PanelListElement;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
@@ -37,7 +35,7 @@ import standardDialog.SwingDialogListener;
 import undo.AbstractUndoableEdit2;
 import undo.ChannelDisplayUndo;
 import undo.ChannelUseChangeUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import applicationAdapters.HasScaleInfo;
 import channelLabels.ChannelLabelManager;
 
@@ -212,7 +210,7 @@ public class ChannelSwapperToolBit2 implements ActionListener, DisplayRangeChang
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		CompoundEdit2 undo = null ;
+		CombinedEdit undo = null ;
 		
 		if (arg0.getActionCommand().equals(minMaxCommand)) {
 			undo=showDisplayRangeDialog(WindowLevelDialog.MIN_MAX);
@@ -272,7 +270,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 				
 			} else {
 				
-				PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(presseddisplay,presseddisplay.getStack(),null, false);
+				PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(presseddisplay,presseddisplay.getPanelList(),null, false);
 				
 				/**adds a list of all the channel displays that are relevant*/
 				ArrayList<PanelStackDisplay> all = getAllDisplays();
@@ -290,7 +288,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		
 		if (arg0.getActionCommand().equals(orderCommand2)) {
 			workOn=1;
-			new ChannelOrderAndLutMatching().matchOrder(this.getPressedWrapper(), this.getAllWrappers(), 2);
+			new ChannelOrderAndLutMatching().matchChannels(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			for(int c=1; c<=this.getPressedWrapper().nChannels(); c++) {
 				minMaxSet(c, getPressedWrapper().getChannelMin(c),getPressedWrapper().getChannelMax(c));
 			}
@@ -304,13 +302,13 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	
 		
 		 updateAllAfterMenuAction();
-		if(undo!=null) { new CurrentSetInformerBasic().addUndo(undo);
+		if(undo!=null) { new CurrentFigureSet().addUndo(undo);
 							}
 	}
 
-	protected CompoundEdit2 recolorBasedOnRealChannelNames() {
+	protected CombinedEdit recolorBasedOnRealChannelNames() {
 		ArrayList<MultiChannelWrapper> all = this.getAllWrappers();
-		CompoundEdit2 undo = ChannelDisplayUndo.createMany(all, this, ChannelDisplayUndo.COLOR_TYPE);
+		CombinedEdit undo = ChannelDisplayUndo.createMany(all, this, ChannelDisplayUndo.COLOR_TYPE);
 		
 		for(MultiChannelWrapper p: all)
 			p.colorBasedOnRealChannelName();
@@ -319,29 +317,29 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		return undo;
 	}
 
-	protected CompoundEdit2 changeColorModes() {
-		ChannelUseInstructions ins = presseddisplay.getStack().getChannelUseInstructions();
+	protected CombinedEdit changeColorModes() {
+		ChannelUseInstructions ins = presseddisplay.getPanelList().getChannelUseInstructions();
 		if (this.pressedInset!=null) {
 			 ins =pressedInset.getPanelManager().getPanelList().getChannelUseInstructions();
 			
 		}
-		CompoundEdit2 undo=new CompoundEdit2();
+		CombinedEdit undo=new CombinedEdit();
 		undo.addEditToList(new AfterUndoChannel());
 		undo.addEditToList(new ChannelUseChangeUndo(ins));
 		
-		int value = ins.ChannelsInGrayScale;
+		int value = ins.channelColorMode;
 		if (value==1) {value=0;} else {value=1;}
-		ins.ChannelsInGrayScale=value;
+		ins.channelColorMode=value;
 		
 		
 		
 		if (workOn==1 && pressedInset==null) for(PanelStackDisplay d: getAllDisplays()) {
 			undo.addEditToList(new ChannelUseChangeUndo(d));
-			d.getStack().getChannelUseInstructions().ChannelsInGrayScale=value;
+			d.getPanelList().getChannelUseInstructions().channelColorMode=value;
 		} 
 		if(extraDisplays!=null&&pressedInset==null)	for(PanelStackDisplay d:this.extraDisplays) {
 			undo.addEditToList(new ChannelUseChangeUndo(d));
-			d.getStack().getChannelUseInstructions().ChannelsInGrayScale=value;//this part might be redudent
+			d.getPanelList().getChannelUseInstructions().channelColorMode=value;//this part might be redudent
 		}
 		undo.addEditToList(new AfterUndoChannel());
 		undo.establishFinalState();
@@ -351,7 +349,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 				
 	}
 
-	protected CompoundEdit2 showDisplayRangeDialog(int type) {
+	protected CombinedEdit showDisplayRangeDialog(int type) {
 		WindowLevelDialog.showWLDialogs(getChannelEntryList(),  getPrincipalMultiChannel(), this, type , ChannelDisplayUndo.createMany(getAllWrappers(), this));
 		return ChannelDisplayUndo.createMany(getAllWrappers(), this);
 	}
@@ -414,7 +412,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		setDisplayRange(wraps, chan, realName, min, max);
 		updateAllDisplaysWithRealChannel( realName);
 		presseddisplay.updatePanelsAndLabelsFromSource();
-		new CurrentSetInformerBasic().getCurrentlyActiveDisplay().updateDisplay();
+		new CurrentFigureSet().getCurrentlyActiveDisplay().updateDisplay();
 	}
 
 
@@ -657,7 +655,7 @@ public void setTheColor(Color color, Integer chan1) {
 	
 	
 	ArrayList<MultiChannelWrapper> allWrappers = getAllWrappers();
-	CompoundEdit2 undo = ChannelDisplayUndo.createMany(allWrappers, this, ChannelDisplayUndo.COLOR_TYPE);
+	CombinedEdit undo = ChannelDisplayUndo.createMany(allWrappers, this, ChannelDisplayUndo.COLOR_TYPE);
 	
 	for(MultiChannelWrapper ic: allWrappers) {
 		int chan=getBestMatchToChannel(ic, realName, chan1);
@@ -666,8 +664,8 @@ public void setTheColor(Color color, Integer chan1) {
 	updateAllDisplaysWithRealChannel( realName);
 	updateAllDisplays();
 	try {
-		new CurrentSetInformerBasic().getCurrentlyActiveDisplay().updateDisplay();
-		new CurrentSetInformerBasic().addUndo(undo);
+		new CurrentFigureSet().getCurrentlyActiveDisplay().updateDisplay();
+		new CurrentFigureSet().addUndo(undo);
 	} catch (Exception e) {
 		IssueLog.log(e);
 	}

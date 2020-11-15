@@ -6,6 +6,10 @@ import animations.KeyFrameAnimation;
 
 public class KeyFrameProgress extends BasicTimeLineOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int type;
 
 	public KeyFrameProgress(int type) {

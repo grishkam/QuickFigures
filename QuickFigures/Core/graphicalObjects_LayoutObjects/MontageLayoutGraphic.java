@@ -95,7 +95,7 @@ public class MontageLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		
-		int handleType = handlenum/this.handleIDFactor;
+		int handleType = handlenum/PanelLayoutGraphic.handleIDFactor;
 		
 		onSmartHandleMove(handlenum, p1, p2);//call method in case any smart handle has a special task. otherwise, each smart handle is here
 		//this.mapPanelLocationsOfLockedItems();
@@ -230,7 +230,7 @@ this.updateDisplay();
 		UndoLayoutEdit undo = new UndoLayoutEdit(this);
 		
 		 if (handlenum==-1) {
-				med.showDialogBasedOnLocation(getEditor(), thelayout, me.getCordinatePoint());
+				med.showDialogBasedOnLocation(getEditor(), thelayout, me.getCoordinatePoint());
 			
 		 }
 		 else
@@ -314,9 +314,9 @@ this.updateDisplay();
 		if(o==null) return null;
 		if(i<0) return null;
 		Rectangle2D panel = getPanelLayout().getPanel(i);
-		if (o.getSnappingBehaviour()==null || o.getSnappingBehaviour().getGridLayoutSnapType()==0)
+		if (o.getSnapPosition()==null || o.getSnapPosition().getGridLayoutSnapType()==0)
 							return panel;
-		int rectSnapType = o.getSnappingBehaviour().getGridChoiceNumbers();
+		int rectSnapType = o.getSnapPosition().getGridChoiceNumbers();
 		
 		return	this.getPanelLayout().getSelectedSpace((int)panel.getCenterX(), (int)panel.getCenterY(), rectSnapType).getBounds();
 	}
@@ -326,10 +326,10 @@ this.updateDisplay();
 		if(o==null) return null;
 		if(i<0) return null;
 		Rectangle2D panel = getPanelLayout().getPanel(i);
-		if (o.getSnappingBehaviour()==null || o.getSnappingBehaviour().getGridLayoutSnapType()==0)
+		if (o.getSnapPosition()==null || o.getSnapPosition().getGridLayoutSnapType()==0)
 							return panel;
 	
-		int rectSnapType = o.getSnappingBehaviour().getGridLayoutSnapType();
+		int rectSnapType = o.getSnapPosition().getGridLayoutSnapType();
 		
 		return	this.getPanelLayout().getSelectedSpace((int)panel.getCenterX(), (int)panel.getCenterY(), rectSnapType).getBounds();
 	}
@@ -463,7 +463,7 @@ public void resizeLayoutToFitContents() {
 			super(montageLayoutGraphic,l,i);
 			amount=1;
 			boolean major = montageLayoutGraphic.getPanelLayout().rowmajor;
-			if(!major &&l.getSnappingBehaviour().getGridChoiceNumbers()==MontageSpaces.COLUMN_OF_PANELS) {
+			if(!major &&l.getSnapPosition().getGridChoiceNumbers()==MontageSpaces.COLUMN_OF_PANELS) {
 				amount= montageLayoutGraphic.getPanelLayout().nRows();
 			}
 			if(major&&this.isRows()) {
@@ -487,11 +487,11 @@ public void resizeLayoutToFitContents() {
 		}
 
 		private boolean isRows() {
-			return getObject().getSnappingBehaviour().getGridChoiceNumbers()==MontageSpaces.ROW_OF_PANELS;
+			return getObject().getSnapPosition().getGridChoiceNumbers()==MontageSpaces.ROW_OF_PANELS;
 		}
 
 		private boolean isCols() {
-			return getObject().getSnappingBehaviour().getGridChoiceNumbers()==MontageSpaces.COLUMN_OF_PANELS;
+			return getObject().getSnapPosition().getGridChoiceNumbers()==MontageSpaces.COLUMN_OF_PANELS;
 		}
 		
 		public JPopupMenu getJPopup() {
@@ -529,21 +529,21 @@ public void resizeLayoutToFitContents() {
 		
 		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 	
-			BasicMontageLayout rLayout = myLayout.makeAltered(getObject().getSnappingBehaviour().getGridChoiceNumbers());
+			BasicMontageLayout rLayout = myLayout.makeAltered(getObject().getSnapPosition().getGridChoiceNumbers());
 			Point2D p1 = super.getCordinateLocation();
 			
-			Point cordinatePoint = lastDragOrRelMouseEvent.getCordinatePoint();
+			Point cordinatePoint = lastDragOrRelMouseEvent.getCoordinatePoint();
 			double d = cordinatePoint.distance(p1);
 			if(originalBounds!=null) d = cordinatePoint.distance(originalBounds.getCenterX(), originalBounds.getCenterY());
 			if(d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent)) {
 				shifted=true;
-				getObject().getSnappingBehaviour().copyPositionFrom(originalSnap);
+				getObject().getSnapPosition().copyPositionFrom(originalSnap);
 
 					//int panel = getPanelForObject(new RectangularGraphic(cordinatePoint));
 					Rectangle2D nearestPanel = rLayout.getNearestPanel(cordinatePoint);
 					Rectangle r2 = getObject().getBounds();
 					if (originalSnap!=null)originalSnap.snapRects(r2, nearestPanel); else
-						getObject().getSnappingBehaviour().snapRects(r2, nearestPanel);
+						getObject().getSnapPosition().snapRects(r2, nearestPanel);
 					
 					setDragMask(lastDragOrRelMouseEvent, r2);
 			} else {
@@ -573,8 +573,8 @@ public void resizeLayoutToFitContents() {
 				releaseIt=false;
 			}
 			if (shifted) {
-				getObject().setLocation(canvasMouseEventWrapper.getCordinatePoint());
-				getObject().getSnappingBehaviour().copyPositionFrom(originalSnap);
+				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
+				getObject().getSnapPosition().copyPositionFrom(originalSnap);
 				mapPanelLocation(getObject());
 				shifted=false;
 			} 
@@ -631,10 +631,10 @@ public void resizeLayoutToFitContents() {
 		
 		@Override
 		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
-			panel = getPanelLayout().getNearestPanel(lastDragOrRelMouseEvent.getCordinatePoint());
+			panel = getPanelLayout().getNearestPanel(lastDragOrRelMouseEvent.getCoordinatePoint());
 			super.setDragMask(lastDragOrRelMouseEvent, panel);
 			
-			if (!panel.contains(lastDragOrRelMouseEvent.getCordinatePoint()))
+			if (!panel.contains(lastDragOrRelMouseEvent.getCoordinatePoint()))
 			{
 				panel=null;
 			 showMessageForOutOfRange(lastDragOrRelMouseEvent);
@@ -649,7 +649,7 @@ public void resizeLayoutToFitContents() {
 				UndoTakeLockedItem undo = new UndoTakeLockedItem(taker, getObject() , true);
 				taker.removeLockedItem(getObject());
 				if(currentEdit!=null) currentEdit.addEditToList(undo);
-				getObject().setLocation(canvasMouseEventWrapper.getCordinatePoint());
+				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
 			}
 			
 			/**moves the image panel to its new panel location*/
@@ -658,8 +658,8 @@ public void resizeLayoutToFitContents() {
 			super.setDragMask(canvasMouseEventWrapper, null);
 			
 			if (shifted) {
-				getObject().setLocation(canvasMouseEventWrapper.getCordinatePoint());
-				getObject().getSnappingBehaviour().copyPositionFrom(originalSnap);
+				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
+				getObject().getSnapPosition().copyPositionFrom(originalSnap);
 				mapPanelLocation(getObject());
 			} 
 			originalSnap=null;

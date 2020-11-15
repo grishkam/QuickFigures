@@ -5,7 +5,11 @@ import javax.swing.JComboBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
 
-public class MultiChannelSlotDialog extends StandardDialog {
+/**"Dialog appears when the user chooses Saving Options for an image.
+  Gives the user an option to load the image from a save location 
+  after a figure is de-Serialized. Arguably, the user has no reason to change
+  this from the default"*/
+public class MultiChannelSlotDialog extends StandardDialog  {
 	
 	/**
 	 * 
@@ -16,7 +20,7 @@ public class MultiChannelSlotDialog extends StandardDialog {
 	public MultiChannelSlotDialog(MultiChannelSlot slot) {
 		super("Retrieval", true);
 		theslot = slot;
-		JComboBox retOps = new JComboBox(MultiChannelSlot.retrivalOptions);
+		JComboBox<?> retOps = new JComboBox<String>(MultiChannelSlot.retrivalOptions);
 		retOps.setSelectedIndex(slot.getRetrieval());
 		this.add("Retrival", new ComboBoxPanel("How to store multichannel image", retOps));
 		

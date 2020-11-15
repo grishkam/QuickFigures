@@ -8,7 +8,6 @@ import standardDialog.BooleanInputPanel;
 import standardDialog.ColorComboboxPanel;
 import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
-import undo.CompoundEdit2;
 import undo.Edit;
 
 public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {

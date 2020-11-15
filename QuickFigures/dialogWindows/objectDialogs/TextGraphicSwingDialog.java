@@ -4,7 +4,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
@@ -68,7 +68,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		this.add("backGround", new BooleanInputPanel("Use background", textItem.isFillBackGround()));
 		addInsetsTab();
 		BasicShapeGraphic bgShape = textItem.getBackGroundShape();
-		bgDialog=new ShapeGraphicOptionsSwingDialog(bgShape);
+		bgDialog=new ShapeGraphicOptionsSwingDialog(bgShape, true);
 		
 		this.addSubordinateDialog("Background", bgDialog);
 	
@@ -128,7 +128,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		textItem.setDimming(this.getChoiceIndex("dim"));
 		setBackgroundOptionsToDialog(textItem);
 		setObjectSnappingBehaviourToDialog(textItem);
-		CurrentSetInformerBasic.canvasResize();
+		CurrentFigureSet.canvasResize();
 	}
 	
 	

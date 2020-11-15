@@ -33,7 +33,7 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 	
 	
 	File showFileChooer(String extensions) {
-		FileChoiceUtil.ensureWidowsLook();
+		FileChoiceUtil.ensureWindowsLook();
 		
 		JFileChooser jc = new JFileChooser( FileChoiceUtil.getWorkingDirectory());
 		

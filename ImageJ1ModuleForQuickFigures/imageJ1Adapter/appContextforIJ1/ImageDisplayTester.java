@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.ToolbarTester;
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 import ij.IJ;
 import ij.ImageJ;
 import ij.Menus;
@@ -21,7 +21,6 @@ import includedToolbars.ObjectToolset1;
 import loci.formats.FormatException;
 import loci.plugins.BF;
 import logging.IssueLog;
-import ultilInputOutput.FileChoiceUtil;
 
 public class ImageDisplayTester extends ToolbarTester {
 

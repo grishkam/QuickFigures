@@ -1,7 +1,7 @@
 package imageMenu;
 
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import logging.IssueLog;
 
@@ -17,7 +17,7 @@ public class UndoRedoMenuItem  extends BasicMenuItemForObj {
 
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
 		try {
 			if (undo) {diw.getUndoManager().undo();} 

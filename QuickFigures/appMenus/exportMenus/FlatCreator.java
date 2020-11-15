@@ -16,7 +16,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import appContext.ImageDPIHandler;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCordinateConverter;
 import graphicalObjects.GraphicSetDisplayContainer;
@@ -88,7 +88,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	}
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		toSystemClip(diw.getImageAsWrapper());
 		
 	}

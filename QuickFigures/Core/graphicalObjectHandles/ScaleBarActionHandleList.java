@@ -6,24 +6,13 @@ import java.awt.geom.Point2D;
 
 import actionToolbarItems.EditAndColorizeMultipleItems;
 import actionToolbarItems.EditScaleBars;
-import graphicalObjectHandles.ActionButtonHandleList.GeneralActionHandle;
-import graphicalObjectHandles.ActionButtonHandleList.GeneralActionListHandle;
 import graphicalObjectHandles.ShapeActionButtonHandleList2.ColoringButton;
-import graphicalObjectHandles.TextActionButtonHandleList.GeneralActionHandleForText;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
-import journalCriteria.PPIOption;
-import logging.IssueLog;
-import multiChannelFigureUI.ImagePropertiesButton;
 import objectDialogs.DialogIcon;
 import selectedItemMenus.BarOptionsSyncer;
-import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.SelectAllButton;
 import selectedItemMenus.SnappingSyncer;
-import selectedItemMenus.TextOptionsSyncer;
-import utilityClassesForObjects.LocatedObject2D;
 
 public class ScaleBarActionHandleList extends ActionButtonHandleList {
 

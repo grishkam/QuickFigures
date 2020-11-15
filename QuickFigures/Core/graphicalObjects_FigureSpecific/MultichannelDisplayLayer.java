@@ -36,7 +36,7 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
 import objectDialogs.PanelStackDisplayOptions;
 import popupMenusForComplexObjects.MultiChannelImageDisplayPopup;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddManyItem;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
@@ -47,44 +47,38 @@ import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 
+/**Special layer for showing parts of a specific multi-channel image */
 public class MultichannelDisplayLayer extends GraphicLayerPane implements ZoomableGraphic, ShowsOptionsDialog, PanelStackDisplay, KnowsParentLayer, Named, HasUniquePopupMenu,  HasTreeLeafIcon, SubFigureOrganizer, MultiChannelUpdateListener,PointsToFile , Serializable{
 
 	/**
 	 * 
 	 */
-	
-	
-	public MultiChannelSlot slot=null;
-	public MultichannelDisplayLayer(MultiChannelSlot slot) {	
-	super("");	
-	this.setSlot(slot);
-	slot.setPanelStackDisplay(this);
-	}
-	
 	{description= "A layer containing the components of a multichannel image";}
 	
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 	
-	/**a serialized version of this image*/
+
 	
 	private boolean loadFromFile=false;
-	//private ChannelLabelProperties channelLabelProp;
-	
-	
+	public MultiChannelSlot slot=null;
 	protected GraphicLayer parent;
 	protected String name="Image ";
 	private boolean laygeneratedPanelsOnGrid;
+
+	PanelSetter setter;
 	
-	//private double panelLevelScale=0.24;
-	//private int defaultFrameWidth=0;
-	
-	
+	/**Creates a display layer, Argument cannot be null*/
+	public MultichannelDisplayLayer(MultiChannelSlot slot) {	
+		super("");	
+		this.setSlot(slot);
+		slot.setPanelStackDisplay(this);
+	}
 
 	public PanelList createPanelList() {
-		// TODO Auto-generated method stub
 		return new PanelList();
 	}
-	/**creates a copy with all the same traits but no image innitialized*/
+	/**creates a copy with all the same traits but no new image initialized.
+	  this copy shares the same image slot as this one*/
 	public MultichannelDisplayLayer copy() {
 		MultichannelDisplayLayer output = new MultichannelDisplayLayer(getSlot()) ;
 		output.copyTraitsFrom(this);
@@ -92,7 +86,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		return output;
 	}
 	
-	/**creates a copy with all the same traits but no image innitialized*/
+	/**creates a copy with all the same traits but no new image initialized*/
 	public MultichannelDisplayLayer similar() {
 		MultichannelDisplayLayer output = new MultichannelDisplayLayer(getSlot().copy()) ;
 		output.copyTraitsFrom(this);
@@ -100,7 +94,6 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	}
 	
 
-	PanelSetter setter;
 	
 	/**copies the scaling, frame width and label properties from argument*/
 	public void copyTraitsFrom(MultichannelDisplayLayer multi) {
@@ -116,8 +109,8 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		
 		this.getChannelLabelProp().copyOptionsFrom(multi.getChannelLabelProp().copy());
 		
-		multi.getStack().giveSettingsTo(getStack());
-		this.getSetter().setInsertionType(multi.getSetter().getInsertionType());
+		multi.getPanelList().giveSettingsTo(getPanelList());
+		
 		
 		if (preprocessToo)this.setPreprocessScale(multi.getPreprocessScale());
 	}
@@ -133,8 +126,8 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		this.getPanelManager().setPanelLevelScale(multi.getPanelManager().getPanelLevelScale());
 		}
 		
-		multi.getStack().givePartialSettingsTo(getStack());
-		this.getSetter().setInsertionType(multi.getSetter().getInsertionType());
+		multi.getPanelList().givePartialSettingsTo(getPanelList());
+	
 		
 	}
 	
@@ -144,46 +137,29 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 
 	private PanelManager panelMan;
 	
-	public PanelList getStack() {
+	public PanelList getPanelList() {
 		return stack;
 	}
 
 	
-	public void setStack(PanelList stack) {
+	public void setPanelList(PanelList stack) {
 		this.stack = stack;
 	}
+	
+
+	@Override
+	public PanelList getWorkingPanelList() {
+		return stack;
+	}
+	
+	
 	public PanelSetter getSetter() {
 		if (setter==null) setter=new  PanelSetter();
 		return setter;
 	}
 	
 	
-	
-	
-	
-	/**Retrives the grid layout for the parent layer
-	public MontageLayoutGraphic getGridLayoutOfParent() {
-		//this.getPanelManager().getGridLayoutOfParent();
-		this.getPanelManager();
-		if (getParentLayer()==null) return null;
-		ArrayList<ZoomableGraphic> arr = getParentLayer().getItemArray();
-		if (arr==null) return null;
-		for(ZoomableGraphic a:arr) {
-			if (a==null) continue;
-			if (a instanceof MontageLayoutGraphic) {
-				MontageLayoutGraphic m=(MontageLayoutGraphic) a;
-				
-				m.generateStandardImageWrapper();
-				return m;
-						};
-		}
-		return null;
-	}
-	
-	public BasicMontageLayout getLayoutOfParent() {
-		if (this.getGridLayoutOfParent()==null) return null;
-		return this.getGridLayoutOfParent().getPanelLayout();
-	} */
+
 	
 	
 	
@@ -191,26 +167,13 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	
 	static boolean showTimes=false;
 	
-	
-	
-	/**returns all the panel graphics that are both in this image and supported by the panel list
-	public ArrayList<ImagePanelGraphic> getPanelGraphics() {
-		ArrayList<ImagePanelGraphic> out=new ArrayList<ImagePanelGraphic>();
-		for(PanelListElement panel: getStack().getPanels()) {
-			ImagePanelGraphic image = getImagePanelFor(panel);
-			if (super.hasItem(image)&&image!=null)
-							out.add(image);
-		}
-		
-		
-		return out;
-	}*/
+
 	
 	/**returns the bounding box of all the panel graphics in this layer
 	  wrote it with the intention of using it to create a way to sort
 	  these types of layers by position*/
 	public Rectangle getBoundOfUsedPanels() {
-		ArrayList<ImagePanelGraphic> graphi =this.getStack(). getPanelGraphics();
+		ArrayList<ImagePanelGraphic> graphi =this.getPanelList(). getPanelGraphics();
 		if (graphi.size()==0) return null;
 		if (graphi.size()==1) return graphi.get(0).getBounds();
 		
@@ -227,7 +190,6 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	
 	@Override
 	public GraphicLayer getParentLayer() {
-		// TODO Auto-generated method stub
 		return parent;
 	}
 
@@ -261,27 +223,27 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	}
 	
 	public ChannelLabelManager getChannelLabelManager() {
-		if (channelLabelMan==null) channelLabelMan=new ChannelLabelManager(this, this.getStack(), this);
+		if (channelLabelMan==null) channelLabelMan=new ChannelLabelManager(this, this.getPanelList(), this);
 		return channelLabelMan;
 	}
 	
+	/**returns the panel manager. Also creates and initializes the panel manager
+	  if needed*/
 	public PanelManager getPanelManager() {
-		if (panelMan==null) panelMan=new PanelManager( this, this.getStack(), this);
-		panelMan.setPanelList(this.getStack());
+		if (panelMan==null) 
+			panelMan=new PanelManager( this, this.getPanelList(), this);
+		panelMan.setPanelList(this.getPanelList());
 		panelMan.setMultiChannelWrapper(getMultichanalWrapper());
 				
 		return panelMan;
 	}
 
-	/**
-	public void setChannelLabelProp(ChannelLabelProperties channelLabelProp) {
-		this.channelLabelProp = channelLabelProp;
-	}*/
 	
 	public String toString() {
 		return this.getName();
 	}
 	
+	/**returns the name of this image*/
 	public String getShortName() {
 		return this.getName().split(";")[0];
 	}
@@ -293,11 +255,11 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 /**gets the Panel that one needs to take a scale bar from
  * or put a scale bar into when one recreates the all the panels*/
 	ImagePanelGraphic getDefaultPanelForScaleBar() {
-		PanelListElement mp = getStack().getMergePanelFor( 1,1);
+		PanelListElement mp = getPanelList().getMergePanelFor( 1,1);
 		ImagePanelGraphic MergePanel = null;
 		if(mp!=null) MergePanel =(ImagePanelGraphic) mp.getImageDisplayObject();
 		
-		ArrayList<ImagePanelGraphic> allpan = this.getStack().getPanelGraphics();
+		ArrayList<ImagePanelGraphic> allpan = this.getPanelList().getPanelGraphics();
 		
 		
 		ImagePanelGraphic lastPanel ;
@@ -307,13 +269,13 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		if(MergePanel!=null&& MergePanel.getScaleBar()!=null) return MergePanel;
 		if(lastPanel==null||lastPanel.getScaleBar()!=null) return lastPanel;
 		
-		if (this.getStack().getChannelUseInstructions().addsMergePanel())
+		if (this.getPanelList().getChannelUseInstructions().addsMergePanel())
 					return MergePanel;
 					else return lastPanel;
 	}
 	
 	ImagePanelGraphic getAnyPanelWithScaleBar() {
-		ArrayList<ImagePanelGraphic> allpan = this.getStack().getPanelGraphics();
+		ArrayList<ImagePanelGraphic> allpan = this.getPanelList().getPanelGraphics();
 		for(ImagePanelGraphic panel: allpan) {
 			if(panel==null) continue;
 			if(panel.getScaleBar()!=null)
@@ -328,7 +290,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	}
 	/**eliminates old panels and recreates new ones*/
 	public void eliminateAndRecreate(boolean redoDimensions, boolean expandDimensions, boolean labels) {
-		CompoundEdit2 output = new CompoundEdit2();
+		CombinedEdit output = new CombinedEdit();
 		output.addEditToList(
 		eliminateChanLabels()); 
 		
@@ -405,7 +367,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	
 
 	public void showRecreatePanelOptions(boolean modal) {
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this,this.getStack(),null, true);
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this,this.getPanelList(),null, true);
 		dialog.setModal(modal);
 		dialog.showDialog();
 	}
@@ -430,12 +392,12 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		
 		
 		
-		getSetter().layDisplayPanelsOfStackOnLayout( getStack(), layout,true, fit);
+		getSetter().layDisplayPanelsOfStackOnLayout( getPanelList(), layout,true, fit);
 	
-		if (getStack().getPanels().size()>0)
+		if (getPanelList().getPanels().size()>0)
 			{
 			if (fit)
-				resizeMontagePanelsToFitImage(grid, this.getStack().getPanels().get(0));
+				resizeMontagePanelsToFitImage(grid, this.getPanelList().getPanels().get(0));
 			if (expand) {
 				GenericMontageEditor me =new GenericMontageEditor();
 				
@@ -446,18 +408,6 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		}
 	
 	}
-	
-
-
-	/**Takes a panel list with located object distplay panels
-	private void layDisplayPanelsOfStackOnLayout(PanelSetter ps, 	PanelList thestack, BasicMontageLayout layout) {
-		ps.mapPanelPlacements(layout, thestack);
-	
-		ps.editMontageToFitPanels(layout, thestack);
-		
-		ps.putPanelDisplayObjectsIntoGrid(thestack, layout);
-	}*/
-	
 	
 	
 
@@ -488,16 +438,14 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		ZoomableGraphic zz = ge.readFromUserSelectedFile();
 		if (zz instanceof TextGraphic) {
 			TextGraphic zt=(TextGraphic) zz;
-			for (ChannelLabelTextGraphic lab:getStack().getChannelLabels()) {
+			for (ChannelLabelTextGraphic lab:getPanelList().getChannelLabels()) {
 				lab.copyAttributesFrom(zt);
-				lab.setSnappingBehaviour(zt.getSnappingBehaviour().copy());
+				lab.setSnappingBehaviour(zt.getSnapPosition().copy());
 			}
 		}
 	}
 
-	/**
-
-	*/
+	
 	
 	public synchronized void updatePanels() {
 		this.getPanelManager().updatePanels();
@@ -510,26 +458,26 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 
 	
 	public void showStackOptionsDialog() {
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this,this.getStack(), null,false);
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this,this.getPanelList(), null,false);
 		dialog.showDialog();
 	}
 	
-
+/**returns a list of channel names*/
 	public static String[] getChannelNames(MultiChannelWrapper impw) {
 		
 		String[] out=new String[impw.nChannels()];
 		for(int i=1; i<=impw.nChannels(); i++) {
-			out[i-1]=impw.channelName(i);
+			out[i-1]=impw.getGenericChannelName(i);
 		}
 		return out;
-		//return IJdialogUse.getChannelList(this.getImagePlus());
 	}
 	
 	
 	
 	
 	
-	/**Tries to find the panel with the given display*/
+	/**When given an object, returns the panel which contains that object
+	  or null if none found*/
 	public PanelListElement getPanelWithDisplay(Object impg) {
 		
 		/**the fastest way to find the panel is to check if 
@@ -540,7 +488,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 			if (panelslice!=null) return panelslice;
 		}
 		
-		for(PanelListElement slice: this.getStack().getPanels()) {
+		for(PanelListElement slice: this.getPanelList().getPanels()) {
 			if (impg==slice.getImageDisplayObject()) {
 				return slice;
 			}
@@ -548,16 +496,16 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 		return null;
 	}
 	
-	/**Given an imagePanel Graphic, looks in layer l to find its Display*/
+	/**Given an ImagePanel Graphic, looks in layer l to find the multi-channel display that is associated with the panel*/
 	public static MultichannelDisplayLayer findMultiChannelForGraphic(GraphicLayer l, ImagePanelGraphic impg) {
 		if (impg==null) return null;
 		if (impg.getParentLayer() instanceof MultichannelDisplayLayer) return (MultichannelDisplayLayer) impg.getParentLayer();
 		
-		ArrayList<GraphicLayer> gs = l.getSubLayers();//.getAllGraphics();
+		ArrayList<GraphicLayer> gs = l.getSubLayers();
 		ArrayList<GraphicLayer> displays = new ArraySorter<GraphicLayer>().getThoseOfClass(gs, MultichannelDisplayLayer.class);
 		for(ZoomableGraphic d: displays) {
 			MultichannelDisplayLayer d2=(MultichannelDisplayLayer) d;
-			//IssueLog.log("display "+d+" is determined to "+d2.hasItem(impg)+" for impg");
+			
 			if (d2.hasItem(impg)) return d2;//The simplest way is the search the layer
 			PanelListElement potentialpanel = d2. getPanelWithDisplay(impg);
 			if (d2.getPanelManager().getPanelList().getPanels().contains( potentialpanel )) return d2;
@@ -568,8 +516,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	
 	
 	
-	/**Next few methods are experimental designed to work out an interface that
-	   can help access the source images from*/
+	/***/
 	
 	@Override
 	public ArrayList<MultiChannelWrapper> getAllSourceStacks() {
@@ -580,12 +527,6 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	}
 
 
-	@Override
-	public PanelList getWorkingStack() {
-		// TODO Auto-generated method stub
-		return stack;
-	}
-	
 	
 	
 transient static IconSet i;
@@ -665,17 +606,11 @@ transient static IconSet i;
 		this.description=""+getMultichanalWrapper().getPath();
 	}
 
-	/**
-	@return 
-	 * @Override
-	public SourceStackEntry createDocEntry() {
-		SourceStackEntry sse = new SourceStackEntry(getMultichanalWrapper().getPath(), this.getDescription());
-		return sse;
-	}*/
+	
 	
 
 	
-	public CompoundEdit2 eliminateChanLabels() {
+	public CombinedEdit eliminateChanLabels() {
 		return getChannelLabelManager().eliminateChanLabels();
 	}
 	public UndoAddManyItem generateChannelLabels() {
@@ -705,8 +640,8 @@ transient static IconSet i;
 			slot.removeMultichannelUpdateListener(this);
 		}
 		this.slot = slot;
-		slot.setPanelStackDisplay(this);
 		if (slot==null) return;
+		slot.setPanelStackDisplay(this);
 		slot.addMultichannelUpdateListener(this);
 	}
 
@@ -716,14 +651,6 @@ transient static IconSet i;
 		getSlot().kill();
 	}
 	
-	/**
-	public double getPanelLevelScale() {
-		return panelLevelScale;
-	}
-	
-	public void setPanelLevelScale(double panelLevelScale) {
-		this.panelLevelScale = panelLevelScale;
-	}*/
 	
 	public void closeWindow(boolean save) {
 		getSlot().kill();
@@ -732,7 +659,6 @@ transient static IconSet i;
 	
 	@Override
 	public MultiChannelWrapper getMultichanalWrapper() {
-		// TODO Auto-generated method stub
 		if(getSlot()==null) {
 			IssueLog.log("null slot");
 		}

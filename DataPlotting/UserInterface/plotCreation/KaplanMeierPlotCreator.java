@@ -2,7 +2,7 @@ package plotCreation;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.KaplenMeierDataSeries;
 import imageDisplayApp.ImageAndDisplaySet;
 import kaplanMeierPlots.KM_Plot;
@@ -21,7 +21,7 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplenMeierDataSeries
 		return "Kaplan-Meier Plot";
 	}
 	
-	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}

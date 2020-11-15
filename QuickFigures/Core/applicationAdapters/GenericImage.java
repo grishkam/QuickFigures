@@ -14,20 +14,24 @@ import java.util.ArrayList;
 import genericMontageKit.SelectionManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.BasicGraphicalObjectCreator;
 
-/**This class has a collection of pixels and objects. most classes just use it as a stand in*/
+
+/** A barebones implementation of the interface
+ *This class has a collection of objects. 
+  This class is used as just a 'virtual' image  by certain classes
+  during modification of objects. 
+  Only Subclasses of the class do more than that
+  */
 public class GenericImage implements ImageWrapper {
 
 	
 	transient public UndoManagerPlus undoManager;
 	
-	int id=(int)Math.random()*100000;
+	int id=(int)Math.random()*100000;// a random id number
 	ObjectContainer objects;
 	transient PixelContainer pixels;
 	private GraphicLayer layer;
 	SelectionManager selectionManager=new SelectionManager();
-	ObjectCreator objectCreator=new BasicGraphicalObjectCreator();
 	private String title;
 	
 	public GenericImage(ObjectContainer c, PixelContainer pix) {
@@ -36,7 +40,7 @@ public class GenericImage implements ImageWrapper {
 	}
 	
 	/**should not be called*/
-	public GenericImage() {}
+	protected GenericImage() {}
 	
 	public GenericImage(ObjectContainer c) {
 		setObjectContainer(c);
@@ -47,8 +51,8 @@ public class GenericImage implements ImageWrapper {
 	
 	
 	@Override
-	public void takeRoiFromImage(LocatedObject2D roi) {
-		if (objects!=null)objects.takeRoiFromImage(roi);
+	public void takeFromImage(LocatedObject2D roi) {
+		if (objects!=null)objects.takeFromImage(roi);
 		
 	}
 
@@ -72,7 +76,6 @@ public class GenericImage implements ImageWrapper {
 
 	@Override
 	public LocatedObject2D getSelectionObject() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -199,11 +202,7 @@ public class GenericImage implements ImageWrapper {
 		
 	}
 
-	@Override
-	public ObjectCreator getDefaultObjectCreator() {
-		// TODO Auto-generated method stub
-		return objectCreator;
-	}
+
 
 	@Override
 	public int getID() {
@@ -231,7 +230,7 @@ public class GenericImage implements ImageWrapper {
 	}
 
 	@Override
-	public DisplayedImageWrapper getImageDisplay() {
+	public DisplayedImage getImageDisplay() {
 		// TODO Auto-generated method stub
 		return null;
 	}

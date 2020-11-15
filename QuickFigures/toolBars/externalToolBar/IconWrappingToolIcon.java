@@ -35,6 +35,14 @@ public class IconWrappingToolIcon  extends GraphicToolIcon{
 						new IconWrappingToolIcon(treeIcon1, 1),
 						new IconWrappingToolIcon(treeIcon1, 2)
 						);}
+
+	@Override
+	public
+	GraphicToolIcon copy(int type) {
+		return new IconWrappingToolIcon(treeIcon, type);
+	}
+
+	
 	
 
 }

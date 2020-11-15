@@ -17,10 +17,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 import org.apache.batik.svggen.*;
 
@@ -37,7 +38,7 @@ public class SVGsaver {
 	
 	public Document makeDocument(String newpath) throws ParserConfigurationException {
 		File file=new File(newpath);
-		int i=TestXMLWRitting.overrideQuestion(file);
+		int i=FileChoiceUtil.overrideQuestion(file);
 		if(i!=0) return null;
 		// TODO Auto-generated method stub
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -145,7 +146,7 @@ public class SVGsaver {
 	}
 	
 	
-	public void saveWrapper(String newpath, DisplayedImageWrapper diw) throws TransformerException, ParserConfigurationException {
+	public void saveWrapper(String newpath, DisplayedImage diw) throws TransformerException, ParserConfigurationException {
 		
 		 GraphicLayer set = diw.getImageAsWrapper().getGraphicLayerSet();
 		  Document doc = makeDocument(newpath);

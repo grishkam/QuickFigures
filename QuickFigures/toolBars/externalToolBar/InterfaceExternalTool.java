@@ -51,7 +51,7 @@ public interface InterfaceExternalTool<ImageType>  {
 	/**icons for the tool*/
 	Icon getToolImageIcon() ;
 	Icon getToolPressedImageIcon() ;
-	Icon getRollOverIcon() ;
+	Icon getToolRollOverImageIcon() ;
 	
 //	public void introduceButton(JButton jb);
 	public void introduceButton(JButton jb);

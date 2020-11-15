@@ -8,10 +8,8 @@ import genericMontageKit.PanelListElement;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import logging.IssueLog;
 
-public class PanelManagerUndo extends CompoundEdit2 {
+public class PanelManagerUndo extends CombinedEdit {
 
 	/**
 	 * 
@@ -59,24 +57,25 @@ public class PanelManagerUndo extends CompoundEdit2 {
 	}
 
 	
-	public static CompoundEdit2 createFor(PanelManager pm) {
-		CompoundEdit2 output = new CompoundEdit2();
+	public static CombinedEdit createFor(PanelManager pm) {
+		CombinedEdit output = new CombinedEdit();
 		output.addEditToList(new PanelManagerUndo(pm.getPanelList()));
 		output.addEditToList(new UndoLayerContentChange(pm.getDisplay()));
 		output.addEditToList(new UndoLayerContentChange(pm.getLayer()));
 		MontageLayoutGraphic layout = pm.getGridLayout();layout.generateCurrentImageWrapper();
 		output.addEditToList(new UndoLayoutEdit(layout));
+		output.addEditListener(pm);
 		return output;
 	}
 	
-	public static CompoundEdit2 createFor(PanelStackDisplay pm) {
-		CompoundEdit2 output = createFor(pm.getPanelManager());
+	public static CombinedEdit createFor(PanelStackDisplay pm) {
+		CombinedEdit output = createFor(pm.getPanelManager());
 		output.addEditToList(new PreprocessChangeUndo(pm));
 		return output;
 	}
 	
-	public static CompoundEdit2 createForMany(ArrayList<? extends PanelStackDisplay> all) {
-		CompoundEdit2 output = new CompoundEdit2();
+	public static CombinedEdit createForMany(ArrayList<? extends PanelStackDisplay> all) {
+		CombinedEdit output = new CombinedEdit();
 		for(PanelStackDisplay a:all) {
 			output.addEditToList(createFor(a));
 		}

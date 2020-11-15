@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-import genericMontageKit.BasicOverlayHandler.LocatedObjectFilter;
+import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
 import genericPlot.BasicPlot;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects_LayerTypes.GraphicLayer;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 
-import figureTemplates.RowLabelPicker;
+import figureFormat.RowLabelPicker;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
@@ -25,7 +25,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 
 	public EditLabels(TextGraphic t) {
 		
-		 type=t.getSnappingBehaviour().getGridChoiceNumbers();
+		 type=t.getSnapPosition().getGridChoiceNumbers();
 		 setUpPickerFortype(type);
 		 modelTextItem=t;
 	}

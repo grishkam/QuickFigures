@@ -65,8 +65,8 @@ public class WrappingTransferHandler extends TransferHandler {
 
 		@Override
 		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-			// TODO Auto-generated method stub
-			return "Hello";
+		
+			return "Hello World";
 		}
 
 		@Override

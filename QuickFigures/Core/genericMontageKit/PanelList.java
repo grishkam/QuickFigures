@@ -20,7 +20,7 @@ import utilityClasses1.ArraySorter;
 import appContext.ImageDPIHandler;
 import channelLabels.ChannelLabelTextGraphic;
 
-/**This class is critical for the storage of image that are to 
+/**This class is critical for the storage of images that are to 
    be displayed as panels. Each item on the list contains information
    for a channel or it has methods for merging */
 public class PanelList implements Serializable{
@@ -352,7 +352,9 @@ public class PanelList implements Serializable{
 	}
 	
 	/**performs cropping on all the panel images.
-	   Needed if there is a cropping rectangle of any kind.*/
+	   Needed if there is a cropping rectangle added to the list.
+	   Although a programmer can add a rectangle here for an additional crop operation
+	   the user */
 	public void cropAll(Rectangle r) {
 		for (PanelListElement p:getPanels()) {p.crop(r, cropAngle);}
 	}
@@ -500,7 +502,7 @@ public class PanelList implements Serializable{
 		Color[] eachColor=new Color[nChannel];
 		
 		for (int c=1; c<=ipw.nChannels(); c++) {
-			eachChanNameH[c-1]=ipw.channelName(c);
+			eachChanNameH[c-1]=ipw.getGenericChannelName(c);
 			eachColor[c-1]=ipw.getChannelColor(c);
 		} 
 
@@ -525,7 +527,7 @@ public class PanelList implements Serializable{
 			PanelListElement entry){
 		
 	
-		entry.setImageObjectWrapped(impw.getChannelMerger().generateMergedRGB(entry, this.getChannelUseInstructions().ChannelsInGrayScale));
+		entry.setImageObjectWrapped(impw.getChannelMerger().generateMergedRGB(entry, this.getChannelUseInstructions().channelColorMode));
 		
 		entry.setScaleInfo(impw.getScaleInfo());
 		
@@ -796,8 +798,8 @@ public class PanelList implements Serializable{
 		
 	}
 
-
-	public void setupViewLocation(CSFLocation d) {
+	/**Called after the user changes the z section that the user is */
+	public void ssetupViewLocation(CSFLocation d) {
 		d.channel=0;//allows for merge
 		if(this.getChannelUseInstructions().getFrameUseInstructions().selectsSingle()) getChannelUseInstructions().getFrameUseInstructions().setupLocation(d);
 		if(this.getChannelUseInstructions().getSliceUseInstructions().selectsSingle()) getChannelUseInstructions().getSliceUseInstructions().setupLocation(d);

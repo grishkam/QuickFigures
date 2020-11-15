@@ -4,7 +4,7 @@ import java.awt.PopupMenu;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import externalToolBar.AbstractExternalToolset;
 import externalToolBar.DummyTool;
 import externalToolBar.InterfaceExternalTool;
@@ -15,17 +15,21 @@ import ij.gui.Toolbar;
 //import ij.plugin.tool.PlugInTool;
 import logging.IssueLog;
 
-/**Originally this allowed imageJ to use an external toolbar. Eventually, updated such that all the tools worked 
-  independently of the imageJ toolbar. might change it back to use imageJ again but so far there seems to be no need. */
-public class IJ1ToolSetContainer2  implements  MouseListener, ToolChangeListener<DisplayedImageWrapper> {
+/**Originally this class was written as part of a system to allow imageJ to use an external toolbar. 
+  Classes could be written that would appear as icons in a separate toolbar but otherwise
+  work like plugin tools for imageJ. 
+ Eventually, updated such that all my tools worked independently of the imageJ.
+ I might change it back to use imageJ again but so far there seems to be no need.
+ It does not affect the user interface of quickfigures but might be interesting to programmers. */
+public class IJ1ToolSetContainer2  implements  MouseListener, ToolChangeListener<DisplayedImage> {
 	
 	 static IJ1ToolSetContainer2 instance=new IJ1ToolSetContainer2();
 	
 	//StandardIJ1MontageToolset[] toolbox=new StandardIJ1MontageToolset[]{ new StandardIJ1MontageToolset(this)};
-	AbstractExternalToolset< DisplayedImageWrapper > toolbox=null;
+	AbstractExternalToolset< DisplayedImage > toolbox=null;
 	
 	
-	InterfaceExternalTool< DisplayedImageWrapper > current=new DummyTool< DisplayedImageWrapper>();
+	InterfaceExternalTool< DisplayedImage > current=new DummyTool< DisplayedImage>();
 	
 	
 	
@@ -33,16 +37,16 @@ public IJ1ToolSetContainer2() {
 		
 	}
 
-	public IJ1ToolSetContainer2(AbstractExternalToolset< DisplayedImageWrapper > toolset) {
+	public IJ1ToolSetContainer2(AbstractExternalToolset< DisplayedImage > toolset) {
 		toolbox=toolset;
 	}
 	
-	public AbstractExternalToolset< DisplayedImageWrapper > getToolbox() {
+	public AbstractExternalToolset< DisplayedImage > getToolbox() {
 		return toolbox;
 	}
 	
 	
-	boolean isToolbox(AbstractExternalToolset< DisplayedImageWrapper > currentToolbar) {
+	boolean isToolbox(AbstractExternalToolset< DisplayedImage > currentToolbar) {
 		return currentToolbar==toolbox;
 	}
 	
@@ -74,13 +78,13 @@ public IJ1ToolSetContainer2() {
 		
 	}
 	
-	void switchedToolbar(AbstractExternalToolset<DisplayedImageWrapper> ij1Toolset) {
+	void switchedToolbar(AbstractExternalToolset<DisplayedImage> ij1Toolset) {
 		toolbox=ij1Toolset;
 	}
 	
 	
-	public InterfaceExternalTool< DisplayedImageWrapper > getCurrentTool() {
-		if (current==null) return new DummyTool<DisplayedImageWrapper>();
+	public InterfaceExternalTool< DisplayedImage > getCurrentTool() {
+		if (current==null) return new DummyTool<DisplayedImage>();
 		return current;
 		
 	};
@@ -218,7 +222,7 @@ public IJ1ToolSetContainer2() {
 
 	@Override
 	public void ToolChanged(
-			InterfaceExternalTool<DisplayedImageWrapper> tool) {
+			InterfaceExternalTool<DisplayedImage> tool) {
 		current=tool;
 		this.run("");
 		

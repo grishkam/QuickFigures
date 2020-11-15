@@ -41,7 +41,7 @@ import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
 import org.w3c.dom.*;
 
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
@@ -53,7 +53,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import imageDisplayApp.GraphicSet;
+import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import imageDisplayApp.BasicImageInfo;
@@ -66,10 +66,10 @@ import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
-
+//WORK IN PROGRESS
 /**A quick and dirty class to load svg graphics back into quickfigures
-   since this is a super sloppy implementation of parsing SVG it only really works with
-   files that have been exported to quickfigures. Does not take into account the full complexity
+   since this is a super sloppy attempt for parsing SVG it only really works with
+   files that have been exported from Quickfigures. Does not take into account the full complexity
    of .svg files nor the full complexity of batik. might re-write after understanding batik bridge
    and GVT trees better
    Re-imported items are not imported with the quickfigures specific properties */
@@ -78,7 +78,7 @@ public class GraphicSVGParser {
 	static BridgeContext startingContext=null;
 	
 	
-	public  GraphicSet openSVG(String path) throws IOException {
+	public  GraphicContainingImage openSVG(String path) throws IOException {
 		 String parser = XMLResourceDescriptor.getXMLParserClassName();
 		    SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
 		    String uri = path;
@@ -93,12 +93,7 @@ public class GraphicSVGParser {
 		    	startingContext=mw;
 		    }
 		    
-		   // GraphicsNode gvtTree = new  GVTBuilder().build(startingContext, doc); IssueLog.log("Tree is "+gvtTree.getClass());;
-		    
-		   
-		   
-		   // takes care of a missing cssengine engine. dont remember why this was needed. but many images dont appear without this code
-		    CSSEngine engine = doc.getCSSEngine();
+		  CSSEngine engine = doc.getCSSEngine();
 		    IssueLog.log("is the engine missing"+doc.getCSSEngine());
 		  doc.setCSSEngine(new SVGCSSEngine(doc, new ParsedURL(path),new Parser(), mw));
 		    
@@ -106,7 +101,7 @@ public class GraphicSVGParser {
 			  
 			   
 			 ZoomableGraphic graphic =  parseLayer(element1, mw);
-			 GraphicSet set = new GraphicSet((GraphicLayerPane) graphic, new BasicImageInfo());
+			 GraphicContainingImage set = new GraphicContainingImage((GraphicLayerPane) graphic, new BasicImageInfo());
 			 
 			// IssueLog.log("from line "+graphic+" "+set);
 			 
@@ -239,10 +234,7 @@ public class GraphicSVGParser {
 			
 		}
 		
-	//	IssueLog.log("value  is "+node.getNodeValue());
-		//IssueLog.log(node.getTextContent());
-		
-		
+
 		
 		Font fontFromElement = getFontFromElement(node);
 		if (fontFromElement==null) {
@@ -779,8 +771,8 @@ private  ZoomableGraphic parseRect(Node node) {
 		return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(255*opacity));
 	}
 	
-	public  GraphicSet openDisplaySVG(String path) throws IOException {
-		GraphicSet set = openSVG(path);
+	public  GraphicContainingImage openDisplaySVG(String path) throws IOException {
+		GraphicContainingImage set = openSVG(path);
 		return set;
 	}
 	
@@ -862,17 +854,13 @@ private  ZoomableGraphic parseRect(Node node) {
 		//loadClass("org/w3c/dom/Window");
 		
 		
-		GraphicSet set = new GraphicSVGParser().openSVG(path);
+		GraphicContainingImage set = new GraphicSVGParser().openSVG(path);
 		if (set==null) return ;
 		ImageAndDisplaySet output = new ImageAndDisplaySet(set);
 		
 		new CanvasAutoResize().performActionDisplayedImageWrapper(output);
 		
-	//	ImageAndDisplaySet ex = ImageAndDisplaySet.showExample(true);
-		//ex.getImageAsWrapper().getGraphicLayerSet().add(p);
-		
-	 //  IssueLog.log("done "+root.getClass().getName());
-	    
+   
 	}
 	
 	/**

@@ -91,8 +91,8 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 		if (editsColors()) editNow(fColor);
 	}
 	
-	public static CompoundEdit2 createMany(ArrayList<MultiChannelWrapper> mws, DisplayRangeChangeListener  extras, int type) {
-		CompoundEdit2 ce2=new CompoundEdit2();
+	public static CombinedEdit createMany(ArrayList<MultiChannelWrapper> mws, DisplayRangeChangeListener  extras, int type) {
+		CombinedEdit ce2=new CombinedEdit();
 		for(MultiChannelWrapper mw: mws) {
 			ce2.addEditToList(new ChannelDisplayUndo(mw, extras, type));
 		}
@@ -100,7 +100,7 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 		return ce2;
 		
 	}
-	public static CompoundEdit2 createMany(ArrayList<MultiChannelWrapper> mws, DisplayRangeChangeListener  extras) { 
+	public static CombinedEdit createMany(ArrayList<MultiChannelWrapper> mws, DisplayRangeChangeListener  extras) { 
 		return createMany(mws, extras, DISPLAY_RANGE_TYPE);
 	}
 		

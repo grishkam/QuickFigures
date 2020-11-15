@@ -32,7 +32,7 @@ import plotParts.DataShowingParts.ScatterPoints;
 import plotParts.DataShowingParts.SeriesLabel;
 import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
 import plotParts.DataShowingParts.SeriesStyle;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 import undoForPlots.AxisChangeUndo;
@@ -141,7 +141,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 		AbstractUndoableEdit e1=null;
 		if (bar!=null) e1=removeDataBar();
 		add(new DataBarShape(getDataSeries()));
-		return new CompoundEdit2(e1, new UndoAddItem(this, getDataBar()));
+		return new CombinedEdit(e1, new UndoAddItem(this, getDataBar()));
 	}
 	
 
@@ -150,7 +150,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 		AbstractUndoableEdit e1=null;
 		if (getScatterPoints()!=null) e1=removeScatter();
 		add(createScatter());
-		return new CompoundEdit2(e1, new UndoAddItem(this, getScatterPoints()));
+		return new CombinedEdit(e1, new UndoAddItem(this, getScatterPoints()));
 	}
 
 	protected ScatterPoints createScatter() {
@@ -159,12 +159,12 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	
 
 	@MenuItemMethod(menuActionCommand = "Add Error Bar", menuText = "New Error Bar", subMenuName="Add")
-	public CompoundEdit2 addErrorBar() {
+	public CombinedEdit addErrorBar() {
 		AbstractUndoableEdit e1=null;
 		if (getErrorBar()!=null) e1=removeErrorBar();
 		this.errorBar=new ErrorBarShowingShape(getDataSeries());
 		add(errorBar);
-		return new CompoundEdit2(e1, new UndoAddItem(this, getErrorBar()));
+		return new CombinedEdit(e1, new UndoAddItem(this, getErrorBar()));
 	}
 	
 	
@@ -206,12 +206,12 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	
 
 	@MenuItemMethod(menuActionCommand = "Add Box Plot", menuText = "New Boxplot", subMenuName="Add")
-	public CompoundEdit2 addBoxPlot() {
+	public CombinedEdit addBoxPlot() {
 		AbstractUndoableEdit e1=null;
 		if (this.boxPlot!=null) e1=removeBoxplot() ;
 		boxPlot=new Boxplot(this.getDataSeries());
 		add(boxPlot);
-		return new CompoundEdit2(e1, new UndoAddItem(this, getBoxPlot()));
+		return new CombinedEdit(e1, new UndoAddItem(this, getBoxPlot()));
 	}
 
 	
@@ -325,7 +325,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	}
 	
 	@MenuItemMethod(menuActionCommand = "Add Label", menuText = "New Series Label", subMenuName="Add", orderRank=30)
-	public CompoundEdit2 addLabel() {
+	public CombinedEdit addLabel() {
 		UndoAbleEditForRemoveItem el=null;
 		if (this.seriesLabel!=null) {
 			 el= removeLabel();
@@ -334,7 +334,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 		setUpSeriesLabel(seriesLabel);
 		setFor(seriesLabel);
 		this.add(seriesLabel);
-		return new CompoundEdit2(el, new UndoAddItem(this, this.getSeriesLabel()));
+		return new CombinedEdit(el, new UndoAddItem(this, this.getSeriesLabel()));
 	}
 
 	protected void createLabel() {
@@ -565,13 +565,13 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 		return line;
 	}
 	@MenuItemMethod(menuActionCommand = "New Line", menuText = "New Line", subMenuName="Add", orderRank=0)
-	public CompoundEdit2 addLine() {
+	public CombinedEdit addLine() {
 		AbstractUndoableEdit e1=null;
 		if (getLine()!=null) e1=removeLine() ;
 		line=new MeanLineShape(this.getDataSeries());
 		add(line);
 		if (this.getStyle()!=null)this.getStyle().applyTo(line);
-		return new CompoundEdit2(e1, new UndoAddItem(this, line));
+		return new CombinedEdit(e1, new UndoAddItem(this, line));
 	}
 
 	public DataLineShape getFunctionLine() {

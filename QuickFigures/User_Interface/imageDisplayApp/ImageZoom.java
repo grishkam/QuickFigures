@@ -2,7 +2,7 @@ package imageDisplayApp;
 
 import graphicalObjects.BasicCordinateConverter;
 
-/**Image zoom*/
+/**Image zoom. stores information about the zoom level and x/y shift*/
 public class ImageZoom {
 	private double zoom=1;
 	

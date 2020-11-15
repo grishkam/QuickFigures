@@ -63,7 +63,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 			ImageWrapper wrapper = layoutGraphic.getPanelLayout().getWrapper();
 			ArrayList<LocatedObject2D> excluded = layoutGraphic.getEditor().getObjectHandler().getExcludedRois(layoutGraphic.getPanelLayout().getBoundry().getBounds(), wrapper);
 			for(LocatedObject2D e: excluded) {
-			wrapper.takeRoiFromImage(e);
+			wrapper.takeFromImage(e);
 			} 
 		}
 		this.setEditor(layoutGraphic.getEditor());
@@ -154,8 +154,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 		if (getCurrentLayout()!=null) getCurrentLayout().resetPtsPanels();
 		
 		
-		this.getToolCore().setMouseDisplacementX(getXDisplaceMent());
-		this.getToolCore().setMouseDisplacementY(getYDisplaceMent());
+		setStoredMouseDisplacement();
 		
 		
 		if (layoutGraphic!=null&& layoutGraphic.getBounds().contains(getDragCordinateX(), getDragCordinateY())) {
@@ -190,12 +189,10 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 		getImageWrapperClick().updateDisplay();
 		
 }
+
+
 	
-	void report(String st) {
-		IssueLog.log(st);
-		IssueLog.log("click is"+this.getMouseXClick());
-		IssueLog.log("drag is"+this.getMouseXdrag());
-	}
+
 	
 	
 	@Override

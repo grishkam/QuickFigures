@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.OpeningFileDropHandler;
 import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
@@ -14,7 +14,7 @@ import genericMontageLayoutToolKit.LayoutMover;
 import genericMontageLayoutToolKit.LayoutScalerTool;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 import genericMontageLayoutToolKit.MontageMoverTool;
-import genericMontageLayoutToolKit.NonMontageSpaceAdjusterTool;
+import genericMontageLayoutToolKit.LabelSpaceAdjusterTool;
 import genericMontageLayoutToolKit.PanelSizeAdjusterTool;
 import genericMontageLayoutToolKit.Panel_Selector2;
 import genericMontageLayoutToolKit.PannelGrabberTool;
@@ -33,7 +33,7 @@ public class LayoutToolSet extends QuickFiguresToolBar {
 	}
 	//AdapterKit<DisplayedImageWrapper> ak=new AdapterKit <DisplayedImageWrapper>(new ToolAdapterG());
 	
-	public void setCurrentTool(InterfaceExternalTool<DisplayedImageWrapper> currentTool) {
+	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
 		super.setCurrentTool(currentTool);
 		ToolBarManager.setCurrentTool(currentTool);
 	}
@@ -107,7 +107,7 @@ for(ToolBit b: getLayoutLabelBits3()) {
 		output.add(new RowColSwapperTool2(0));
 		
 		output.add(new MontageMoverTool());
-		output.add(new NonMontageSpaceAdjusterTool());
+		output.add(new LabelSpaceAdjusterTool());
 		
 		
 		return output;

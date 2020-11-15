@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
-public class UndoAddManyItem extends  CompoundEdit2 {
+public class UndoAddManyItem extends  CombinedEdit {
 
 	/**
 	 * 

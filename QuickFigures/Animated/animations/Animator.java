@@ -6,20 +6,20 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import includedToolbars.StatusPanel;
-import logging.IssueLog;
 
+/**Class of displaying animations*/
 public class Animator implements ActionListener{
 	
 	private ArrayList<Animation> animationList=new ArrayList<Animation> ();
-	private DisplayedImageWrapper display;
+	private DisplayedImage display;
 	int currentFrame=0;
 	int nFrames=100;
 	int fps=12;
 	Timer timer;
 
-	public Animator(DisplayedImageWrapper diw) {
+	public Animator(DisplayedImage diw) {
 		display=diw;
 	}
 	
@@ -45,11 +45,7 @@ public class Animator implements ActionListener{
 	public void animate() throws InterruptedException {
 		
 		int pauseInterval = 1000/fps;
-		IssueLog.log("starting animation");
-		
-		
-			
-			
+
 			
 			 timer = new Timer(pauseInterval, new ActionListener() {
 
@@ -63,9 +59,6 @@ public class Animator implements ActionListener{
 			timer.start();
 			
 			
-			//Thread.sleep(pauseInterval);
-		
-		
 	}
 
 	@Override

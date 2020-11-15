@@ -4,10 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFGroupShape;
-import org.apache.poi.xslf.usermodel.XSLFNotes;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 

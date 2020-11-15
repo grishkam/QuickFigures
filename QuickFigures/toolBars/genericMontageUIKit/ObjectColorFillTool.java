@@ -73,10 +73,12 @@ public String getToolTip() {
 		
 		protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2,
 				int arg3) {
-			int dispw=25;
-			int disph=25;
-			Color col = getTheForegroundColor();
 			getItemIcon(true).paintIcon(arg0, g, arg2, arg3);
+		}
+
+		@Override
+		public GraphicToolIcon copy(int type) {
+			return new BrushIcon(type);
 		}
 		
 	

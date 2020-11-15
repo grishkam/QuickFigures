@@ -20,8 +20,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import officeConverter.OfficeObjectConvertable;
 import officeConverter.OfficeObjectMaker;
 import officeConverter.TextGraphicImmitator;
@@ -42,7 +40,6 @@ import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.ShapesUtil;
 import utilityClassesForObjects.Snap2Rectangle;
 import utilityClassesForObjects.TextItem;
-import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextPrecision;
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEventWrapper;
@@ -67,6 +64,8 @@ import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.TextGraphicSwingDialog;
 
+/**A graphical object that consists of text. This one displays a piece of 
+ * text with a single font and color. Used for the most simple labels*/
 public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic,GraphicalObject, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePosisions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
 	/**
 	 
@@ -107,7 +106,6 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 
 
 	private static final long serialVersionUID = 1L;
-	//transient ArrayList<Rectangle> handleBoxes=null;
 
 	transient FontMetrics fontMetrics=defaultMetrics(getFont());
 	transient  BufferedImage fmImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
@@ -131,7 +129,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	
 	
 	public TextGraphic() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	
@@ -555,8 +553,8 @@ protected void giveTraitsTo(TextGraphic tg) {
     tg.setFillBackGround(isFillBackGround());
 	
 	tg.strokeColor=strokeColor;
-	if (getSnappingBehaviour()!=null)
-	tg.setSnappingBehaviour(getSnappingBehaviour().copy());
+	if (getSnapPosition()!=null)
+	tg.setSnappingBehaviour(getSnapPosition().copy());
 	tg.map= map;
 	tg.backGroundShape=this.getBackGroundShape().copy();
 }
@@ -841,18 +839,7 @@ public void setFillBackGround(boolean fillBackGround) {
 	this.fillBackGround = fillBackGround;
 }
 
-/**
-public Color getBackGroundColor() {
-	if (this.backGroundColor==null) {backGroundColor=Color.white;}
-	return backGroundColor;
-}
-public void setBackGroundColor(Color backGroundColor) {
-	this.backGroundColor = backGroundColor;
-	
-}*/
-
 public Insets getInsets() {
-	
 	return insets;
 }
 public void setInsets(Insets insets) {
@@ -891,7 +878,7 @@ public void scaleAbout(Point2D p, double mag) {
 	p2=scaleAbout(p2, p,mag,mag);
 	this.setFont(this.getFont().deriveFont((float) (this.getFont().getSize2D()*mag)));
 	this.setLocation(p2);
-	if (this.getSnappingBehaviour()!=null) this.getSnappingBehaviour().scaleAbout(p, mag);
+	if (this.getSnapPosition()!=null) this.getSnapPosition().scaleAbout(p, mag);
 }
 @Override
 public OfficeObjectMaker getObjectMaker() {
@@ -903,11 +890,7 @@ public SVGExporter getSVGEXporter() {
 }
 
 public void handleKeyTypedEvent(KeyEvent e) {
-	/**handleKeyTypedEvent(e);
-	if (e.getKeyCode()==KeyEvent.VK_BACK_SPACE) {
-		//String st = KeyOnString(e,this.getText(),-1);
-		//this.setText(st);
-	}*/
+
 	
 }
 
@@ -952,7 +935,7 @@ public boolean hasHighlightRegion() {
 
 public void handleKeyPressEvent(KeyEvent arg0) {
 	
-	if(this.handleNonLetterKey(arg0)) return;
+	if(this.handleNonLetterKey(arg0)) return;//returns if the press is not a letter
 	
 	if (arg0.getKeyCode()==KeyEvent.VK_BACK_SPACE || (this.hasHighlightRegion()&&arg0.getKeyCode()==KeyEvent.VK_DELETE)) {
 		handleBackspaceKeyStroke();

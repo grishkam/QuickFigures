@@ -155,8 +155,10 @@ public void moveSegBackward(	TextLineSegment lin) {
 		return added;
 	}
 	
-	public void addSegment() {
-		this.add(new TextLineSegment("", 0));
+	public TextLineSegment addSegment() {
+		TextLineSegment newSegment = new TextLineSegment("", 0);
+		this.add(newSegment);
+		return newSegment;
 	}
 	
 	

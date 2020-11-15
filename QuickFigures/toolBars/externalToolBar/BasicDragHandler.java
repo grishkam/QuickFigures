@@ -7,6 +7,8 @@ import java.awt.geom.Point2D;
 
 import imageDisplayApp.ImageAndDisplaySet;
 
+/**Barebones implementation of drag and drop handler
+  does nothing interesting but subclasses perform other actions*/
 public class BasicDragHandler implements DragAndDropHandler {
 
 	protected Point2D position;
@@ -21,7 +23,7 @@ public class BasicDragHandler implements DragAndDropHandler {
 	}
 
 	@Override
-	public void dropActCahnge(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0) {
+	public void dropActChange(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0) {
 		setPosition(displaySet, arg0.getLocation());
 	}
 

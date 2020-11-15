@@ -2,11 +2,11 @@ package basicMenusForApp;
 
 import javax.swing.Icon;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
 public interface MenuItemForObj {
 	
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw);
+	public void performActionDisplayedImageWrapper(DisplayedImage diw);
 	public String getCommand();
 	public String getNameText();
 	public String getMenuPath();

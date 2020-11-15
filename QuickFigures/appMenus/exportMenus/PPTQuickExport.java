@@ -14,9 +14,7 @@ import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFGroupShape;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xslf.usermodel.XSLFTextBox;
-
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -39,7 +37,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		File f=getFileAndaddExtension();
 		
 		

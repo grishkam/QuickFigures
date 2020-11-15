@@ -4,6 +4,11 @@ import standardDialog.NumberInputPanel;
 
 public class TimeLineRange extends KeyFrameProgress {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public TimeLineRange(int type) {
 		super(type);
 		// TODO Auto-generated constructor stub

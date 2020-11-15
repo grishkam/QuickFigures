@@ -14,7 +14,7 @@ import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 
 public class PPIOption extends BasicMultiSelectionOperator {
 
@@ -63,15 +63,15 @@ public class PPIOption extends BasicMultiSelectionOperator {
 		
 		String st="Set PPI";
 		double starting=300;
-		CompoundEdit2 undo = showPPIChangeDialog(panels, st, starting);
+		CombinedEdit undo = showPPIChangeDialog(panels, st, starting);
 		super.getUndoManager().addEdit(undo);
 	}
 
 
 
 
-	protected CompoundEdit2 showPPIChangeDialog(ArrayList<PanelManager> panels, String st, double starting) {
-		CompoundEdit2 output = new CompoundEdit2();
+	protected CombinedEdit showPPIChangeDialog(ArrayList<PanelManager> panels, String st, double starting) {
+		CombinedEdit output = new CombinedEdit();
 		StandardDialog sd = new StandardDialog(st);
 		sd.setModal(true);
 		sd.setWindowCentered(true);

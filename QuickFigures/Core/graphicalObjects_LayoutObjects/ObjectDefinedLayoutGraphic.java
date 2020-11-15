@@ -88,9 +88,9 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrapper = new GenericImage(new ArrayObjectContainer(parent2));
 		this.getPanelLayout().setWrapper(wrapper);
-		this.getPanelLayout().getWrapper().takeRoiFromImage(this);
+		this.getPanelLayout().getWrapper().takeFromImage(this);
 		for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-			getPanelLayout().getWrapper().takeRoiFromImage(loc);
+			getPanelLayout().getWrapper().takeFromImage(loc);
 		}
 		return wrapper;
 	}
@@ -98,9 +98,9 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 	public ImageWrapper generateEditNonpermissiveWrapper() {
 			GenericImage wrapper = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
 			this.getPanelLayout().setWrapper(wrapper);
-			this.getPanelLayout().getWrapper().takeRoiFromImage(this);
+			this.getPanelLayout().getWrapper().takeFromImage(this);
 			for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-				getPanelLayout().getWrapper().takeRoiFromImage(loc);
+				getPanelLayout().getWrapper().takeFromImage(loc);
 			}
 			return wrapper;
 		}

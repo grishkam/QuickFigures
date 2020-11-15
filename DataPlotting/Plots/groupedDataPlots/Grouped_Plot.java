@@ -30,7 +30,7 @@ import standardDialog.DialogItemChangeEvent;
 import standardDialog.NumberInputPanel;
 import standardDialog.SwingDialogListener;
 import undo.ColorEditUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undoForPlots.AxisFlipUndo;
 import undoForPlots.GroupedPlotTypeEdit;
 import undoForPlots.PlotAreaChangeUndo;
@@ -68,7 +68,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 				 super.areaRect.addLockedItem(label1);
 				 label1.setPlotOrientation(orientation);
 				 label1.setPlotArea(this);
-				 if (lastLabel==null)lastLabel=label1; else label1.setSnappingBehaviour(lastLabel.getSnappingBehaviour());
+				 if (lastLabel==null)lastLabel=label1; else label1.setSnappingBehaviour(lastLabel.getSnapPosition());
 				 this.add(label1);
 			
 			}
@@ -333,8 +333,8 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 
 	
 	@MenuItemMethod(menuActionCommand = "To Staggered Bars", menuText = "Make Staggered Bar Plot", subMenuName="Change Format", orderRank=2)
-	public CompoundEdit2 defaultPlot() {
-		CompoundEdit2 undo =barPlot();
+	public CombinedEdit defaultPlot() {
+		CombinedEdit undo =barPlot();
 		undo.addEditToList(
 				barPlot());
 		undo.addEditToList(
@@ -355,8 +355,8 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 
 	@MenuItemMethod(menuActionCommand = "To Stacked Bars", menuText = "Make Stacked Bar Plot", subMenuName="Change Format", orderRank=2)
-	public CompoundEdit2 stackedPlot() {
-		CompoundEdit2 undo =barPlot();
+	public CombinedEdit stackedPlot() {
+		CombinedEdit undo =barPlot();
 		
 		undo.addEditToList(
 				forcePlotTypeTo(Stacked_Bars));
@@ -369,8 +369,8 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 	
 	@MenuItemMethod(menuActionCommand = "To Sequential Bars", menuText = "Make Sequential Bar Plot", subMenuName="Change Format", orderRank=4)
-	public CompoundEdit2 sequentialBarPlot() {
-		CompoundEdit2 undo = barPlot();
+	public CombinedEdit sequentialBarPlot() {
+		CombinedEdit undo = barPlot();
 		
 		undo.addEditToList(
 				forcePlotTypeTo(SequentialBars));
@@ -422,10 +422,10 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 	
 	@MenuItemMethod(menuActionCommand = "To Scatter Plot", menuText = "Make Scatter", subMenuName="Change Format", orderRank=6)
-	public CompoundEdit2 scatterPlot() {
+	public CombinedEdit scatterPlot() {
 		GroupedPlotTypeEdit undo2 = new GroupedPlotTypeEdit(this);
 		setGroupedPlotType(JitterPoints);
-		CompoundEdit2 undo = new CompoundEdit2();//unfinished undo
+		CombinedEdit undo = new CombinedEdit();//unfinished undo
 		this.updateOffsets();
 		for(BasicDataSeriesGroup a: getAllDataSeries()) {
 			undo.addEditToList(
@@ -455,17 +455,17 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 	
 	@MenuItemMethod(menuActionCommand = "To Tukey", menuText = "Make Tukey Boxplot", subMenuName="Change Format", orderRank=12)
-	public CompoundEdit2 tukeyBoxplotPlot() {
-		CompoundEdit2 output = super.tukeyBoxplotPlot();
+	public CombinedEdit tukeyBoxplotPlot() {
+		CombinedEdit output = super.tukeyBoxplotPlot();
 		output.addEditToList(
 				forcePlotTypeTo(Staggered_Bars));
 		return output;
 	}
 
 	@MenuItemMethod(menuActionCommand = "To normal box", menuText = "Make Boxplot", subMenuName="Change Format", orderRank=11)
-	public CompoundEdit2 normalBoxplotPlot() {
+	public CombinedEdit normalBoxplotPlot() {
 		
-		CompoundEdit2 output =super.normalBoxplotPlot();
+		CombinedEdit output =super.normalBoxplotPlot();
 		
 		output.addEditToList(
 				forcePlotTypeTo(Staggered_Bars));
@@ -475,7 +475,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 
 	
-	public CompoundEdit2 barPlot() {
+	public CombinedEdit barPlot() {
 		return super.barPlot();
 		/**CompoundEdit2 undo = new CompoundEdit2();
 		for(GenericDataSeriesGroup a: getAllDataSeries()) {

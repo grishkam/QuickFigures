@@ -18,7 +18,7 @@ import dataSeries.KaplenMeierDataSeries;
 import dataSeries.XYDataSeries;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.SmartDataInputDialog;
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 import logging.IssueLog;
 
 public class ReadExcelData {

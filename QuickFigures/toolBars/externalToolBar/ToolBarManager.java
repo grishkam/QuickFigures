@@ -1,18 +1,18 @@
 package externalToolBar;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
 public class ToolBarManager {
-	static InterfaceExternalTool<DisplayedImageWrapper> tool=null;
+	static InterfaceExternalTool<DisplayedImage> tool=null;
 	
-	public static InterfaceExternalTool<DisplayedImageWrapper> getCurrentTool() {
+	public static InterfaceExternalTool<DisplayedImage> getCurrentTool() {
 		return tool;
 		
 		
 	}
 
 	public static void setCurrentTool(
-			InterfaceExternalTool<DisplayedImageWrapper> currentTool) {
+			InterfaceExternalTool<DisplayedImage> currentTool) {
 		tool=currentTool;
 		
 	}

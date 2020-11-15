@@ -7,15 +7,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.DragAndDropHandler;
 import externalToolBar.IconSet;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import gridLayout.BasicMontageLayout;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasAutoResize;
@@ -25,12 +24,13 @@ import undo.UndoManagerPlus;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**A simple implementation of the ToolBit interface that does not do
+  anything in particular but is used as a superclass for other tool bits*/
 public class BasicToolBit implements ToolBit {
 	public static final String selectorToolName = "Object Selector/Mover";
 	private ToolCore toolCore;
 	private IconSet iconSet=null;
-	private BasicOverlayHandler oh=new BasicOverlayHandler();
-	private JButton button;
+	private BasicObjectListHandler oh=new BasicObjectListHandler();
 	
 	
 
@@ -38,41 +38,39 @@ public class BasicToolBit implements ToolBit {
 
 	@Override
 	public void mousePressed() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseDragged() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered() {
-		// TODO Auto-generated method stub
-
 	}
 	
 	@Override
 	public void mouseExited() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void setToolCore(ToolCore toolCore) {
 		this.toolCore=toolCore;
-		
 	}
 	
-	
-	public ToolCore getToolCore() {
+	private ToolCore getToolCore() {
 		return toolCore;
 		
 	}
 
-	
+	/**TODO determine if this method is still important for the function of the layout tools
+	  Previously, as the canvas was resized in the middle of layout editing, this method was needed to */
+	protected void setStoredMouseDisplacement() {
+		this.getToolCore().setMouseDisplacementX(getXDisplaceMent());
+		this.getToolCore().setMouseDisplacementY(getYDisplaceMent());
+	}
 
 	@Override
 	public IconSet getIconSet() {
@@ -120,7 +118,7 @@ public class BasicToolBit implements ToolBit {
 	}
 	
 	
-	public DisplayedImageWrapper getImageDisplayWrapperClick() {
+	public DisplayedImage getImageDisplayWrapperClick() {
 		// TODO Auto-generated method stub
 		if (toolCore==null) IssueLog.log("no tool core!!!");
 		return toolCore.getClickedImage();//.getImageWrapperClick();
@@ -134,7 +132,7 @@ public class BasicToolBit implements ToolBit {
 		return toolCore.clickCount();
 	}
 	
-	public BasicOverlayHandler getObjecthandler() {
+	public BasicObjectListHandler getObjecthandler() {
 		return oh;
 	}
 	
@@ -166,7 +164,6 @@ public class BasicToolBit implements ToolBit {
 	}
 	
 	public int getReleaseCordinateY() {
-		// TODO Auto-generated method stub
 		return this.getToolCore().getReleaseCordinateY();
 	}
 
@@ -201,15 +198,10 @@ public class BasicToolBit implements ToolBit {
 		return this.getToolCore(). getRowIndexDrag();
 	}
 	
-	/**
-	public BasicMontageLayout getClickedLayout() {
-		return this.getToolCore().getClickedLayout();
-	}*/
-
+	
 	@Override
 	public void mouseReleased() {
-		// TODO Auto-generated method stub
-		
+
 	}
 	
 	public CanvasMouseEventWrapper getLastClickMouseEvent() {
@@ -267,28 +259,10 @@ public class BasicToolBit implements ToolBit {
 	public ImageWrapper currentlyInFocusWindowImage() {
 		return this.getToolCore().currentlyInFocusWindowImage();
 	}
-	/**
-	public AbstractMontageLayout<?> getMainLayout() {
-		return this.getToolCore().getMainLayout();
-	}
-	
-	public AbstractMontageLayout<?> getLayoutForCurrentImage() {
-		return this.getToolCore().getLayoutForCurrentImage();
-	}*/
 
-	/**
-	public boolean doesClickedImageHAveMaintMontageLayout() {
-		return this.getImageWrapperClick().createLayout()!=null;
-	//	return this.getToolCore().doesClickedImageHAveMaintMontageLayout();
-	}*/
-	
-	/**public void setCursorIcon(Image i) {
-		this.getToolCore().setCursorIcon(i);
-	}*/
 
 	@Override
 	public ArrayList<JMenuItem> getPopupMenuItems() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -333,35 +307,31 @@ public class BasicToolBit implements ToolBit {
 	}
 
 	public void resizeCanvas() {
-		// TODO Auto-generated method stub
 		resizeCanvas(getImageDisplayWrapperClick());
 	}
 	
-	protected void resizeCanvas(DisplayedImageWrapper wrap) {
+	protected void resizeCanvas(DisplayedImage wrap) {
 				new CanvasAutoResize().performActionDisplayedImageWrapper(wrap);
 	}
 
 	@Override
 	public boolean keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -373,7 +343,6 @@ public class BasicToolBit implements ToolBit {
 
 	@Override
 	public String getToolTip() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -1,17 +1,14 @@
 package genericMontageKit;
 
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 import applicationAdapters.ImageWrapper;
-import applicationAdapters.PixelWrapper;
-import fieldReaderWritter.RetrievableOption;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.GridLayout;
+import gridLayout.RetrievableOption;
 import logging.IssueLog;
 import utilityClassesForObjects.DrawnGraphic;
 import utilityClassesForObjects.DrawnGraphicPicker;
@@ -44,7 +41,7 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	 @RetrievableOption(key =  "stretchToFit", label="Stretch to Fit", choices={"dont", "stretch"})
 	 public  int stretchToFit=0;//no longer used
 	 
-	 @RetrievableOption(key =  "panelPasteMode", label="Paste Panel As", choices={"Pixels", "Image Overlay"})
+	 @RetrievableOption(key =  "panelPasteMode", label="Paste Panel As", choices={"Pixels", "Image Object"})
 	 public 
 	 int type=0;
 	 
@@ -58,37 +55,10 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	String key="";
 	
 	public 	PanelListElement lastSetPanel;
-	
-	transient private GenericMontageEditor me=new GenericMontageEditor();
 
-	
-	/**pastes the image. If this is done by altering the pixels of the data then
-	  it returns null. If an object is created to display the pasted image, then this returns
-	  that object. */
-	public Object paste(ImageWrapper imp2, PixelWrapper ipw, int x, int y) {
-		//ImageWrapper imp2 = new ImagePlusWrapper(imp);
-		//PixelWrapper<ImageProcessor> ipw=new ProcessorWrapper(image);
-		if (type==0)me.paste(imp2, ipw, x, y);
-		if (type==1) {
-			String name=lastSetPanel.getChannelEntry(0).getLabel();
-			LocatedObject2D i1 = imp2.getDefaultObjectCreator().createImageObject(name, ipw, x, y);
-			imp2.addRoiToImageBack(i1);
-			return i1;
-		}
-		return null;
-	}
-	
-	public void pasteIntoPixels(PixelWrapper recipient, PixelWrapper image) {
-		
-	}
-	
-	
-/**clear and paste may be overwritten by subclasses*/
-	
 	/**Clears a rectangular area of the image. This can occur by filling the pixels with white or 
 	  by deleting the display object
 	  */
-	
 	public
 	void clear(ImageWrapper impw, Rectangle2D r) {
 		//ImagePlusWrapper impw = new ImagePlusWrapper(imp);
@@ -96,26 +66,12 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 			impw.getPixelWrapper().fill(r, Color.white);
 		}
 		if (type==1) {
-			new BasicOverlayHandler().clearAreaOfDrawnGraphicType(impw, r, new DrawnGraphicPicker(DrawnGraphic.ImagePanel));
+			new BasicObjectListHandler().clearAreaOfDrawnGraphicType(impw, r, new DrawnGraphicPicker(DrawnGraphic.ImagePanel));
 		}
 		
 	}
 	
-	/**
-	public void showDialog() {
-	
-		
-		GenericDialog gd = new GenericDialog("Panel Insertion Options") ;
-		IJdialogUse.createDialogItemsFromAnnotatedFields(gd, this, key);
-		//if (dl!=null) gd.addDialogListener(dl);
-		gd.showDialog();
-		
-		if (gd.wasOKed()) {
-			setToDialog(gd);
-		}
-		
-	}
-	*/
+
 	
 	/**this sets up the locations in a montage to place each panel based on the settings*/
 	public void mapPanelPlacements(GridLayout ml, PanelList list) {
@@ -154,9 +110,6 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 				
 				
 				p.getDisplayGridIndex().setRowCol(row, start, ml);
-				//p.displayGridIndex.colindex=start;
-				//p.displayRowIndex=row;
-				//p.displayPanelIndex=ml.getIndexAtPosition( p.displayRowIndex, p.displayColIndex);
 				start++;
 			}
 			
@@ -214,11 +167,11 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	}
 	
 	//public void setToDialog(GenericDialog gd) {IJdialogUse.setAnnotatedFields(gd, this, key);}
-
+/**
 	private void insertStackToPanels(BasicMontageLayout ml, PanelList abstractPanelList,
 			boolean b, int start) {
 		setStack(abstractPanelList, ml, start );
-	}
+	}*/
 	
 	/**resets the points on the montage layout then inserts a stack into them*/
 	public void replacePanels(BasicMontageLayout ml,
@@ -233,7 +186,7 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	  	
 	  	 mapPanelPlacements(ml, workingStack);
 	  	editMontageToFitPanels(ml, workingStack, editMontageToFitPanels);
-	  	setStack2( workingStack,ml,startPoint);
+	  
 	 	ml.setMontageProperties();
 	}
 	
@@ -287,10 +240,9 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	void addRowColToFit(BasicMontageLayout ml, PanelListElement p) {
 		GenericMontageEditor editor = new GenericMontageEditor();
 		if (p.getDisplayGridIndex().getColindex()>ml.nColumns()) {editor.setColNumber(ml, p.getDisplayGridIndex().getColindex());
-	//	IssueLog.log2("adding columns for panel");
 		}
 		if (p.getDisplayGridIndex().getRowindex()>ml.nRows()){editor.setRowNumber(ml, p.getDisplayGridIndex().getRowindex());
-		//IssueLog.log2("adding rows for panel");
+	
 		}
 	}
 	
@@ -298,47 +250,7 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	public boolean isColInsertion() {return insertiontype==columnSourceInsertion;}
 	
 	public void setInsertionType(int i) {insertiontype=i;}
-
-	/**without updating the points of the montage layout this pastes a set of images into them */
-	public void setStack(PanelList stack, BasicMontageLayout ml, int i) {
-		for (int j=0; j<stack.getPanels().size()&&i+j<=ml.nPanels(); j++) {setPanel(ml.getWrapper(), stack.getPanels().get(j),  ml.getPanel(i+j));}
-	}
 	
-	/**without updating the points of the montage layout this pastes a set of images into them */
-	public void setStack2(PanelList stack, BasicMontageLayout ml, int i) {
-		for (int j=0; j<stack.getPanels().size()&&i+j<=ml.nPanels(); j++) {setPanel(ml.getWrapper(), stack.getPanels().get(j),  ml.getPanel(stack.getPanels().get(j).getDisplayGridIndex().getPanelindex()));}
-	}
-	
-
-
-	
-	public void setPanel(ImageWrapper impw, PanelListElement image, Rectangle2D panel) {	
-		//ImageWrapper impw =createWrapper(imp);
-		
-		removePanelImage(impw, image, panel);
-		lastSetPanel=image;
-		Point bounds = putRelativeToCorner(new Rectangle(0,0,image.getWidth(), image.getHeight()), panel,insertionplacement, 0,0 );
-		
-		if (stretchToFit==1) {image.fit(panel.getWidth(), panel.getHeight());}//this one should no longer be used
-		
-		Object o=paste(impw, image.getImageWrapped(), bounds.x, bounds.y);
-		if (image.getImageDisplayObject() instanceof LocatedObject2D) {
-			LocatedObject2D loc=(LocatedObject2D) image.getImageDisplayObject() ;
-			loc.setLocationUpperLeft(bounds.x, bounds.y);
-		}
-		image.setImageDisplayObject(o);
-	}
-	
-	public void removePanelImages(PanelList panels, BasicMontageLayout layout) {
-		if (panels==null||layout.getWrapper()==null) return;
-		for(PanelListElement panel: panels.getPanels()) try{clear(layout.getWrapper(), layout.getPanel(panel.getDisplayGridIndex().getPanelindex()));} catch (Throwable t) {IssueLog.log(t);}
-	}
-	
-	public void removePanelImage(ImageWrapper imp, PanelListElement image, Rectangle2D panel) {
-		clear(imp, panel);
-	}
-	
-
 	/**Takes a panel list with located object display panels. Subsequently places each of the said objects 
 	 into the layout*/
 	public void layDisplayPanelsOfStackOnLayout(PanelList thestack, BasicMontageLayout layout, boolean resizeLayoutIfNeeded) {
@@ -362,7 +274,7 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 		if (l!=null&&pan!=null)l.setLocationUpperLeft(pan.getX(), pan.getY());
 	}
 	
-	
+	/**returns the image  used by panel p as an instance of LocatedObject2D*/
 	private static LocatedObject2D getDisplayObjectForPanel(PanelListElement p) {
 		if (p.getImageDisplayObject() instanceof LocatedObject2D ) {
 			LocatedObject2D l=(LocatedObject2D) p.getImageDisplayObject();
@@ -382,7 +294,4 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 		}
 	}
 
-	public int getInsertionType() {
-		return insertiontype;
-	}
 }

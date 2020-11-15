@@ -6,7 +6,7 @@ import addObjectMenus.BasicGraphicAdder;
 import basicMenusForApp.SVGOpener;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.GraphicSet;
+import imageDisplayApp.GraphicContainingImage;
 import ultilInputOutput.FileChoiceUtil;
 
 public class SVG_GraphicAdder2 extends BasicGraphicAdder {
@@ -21,7 +21,7 @@ public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 	}
 	
 	public ZoomableGraphic addFromFile(File f, GraphicLayer gc) {
-		GraphicSet ss = SVGOpener.readFromFile(f);
+		GraphicContainingImage ss = SVGOpener.readFromFile(f);
 		GraphicLayer ob = ss.getGraphicLayerSet();
 		
 	
@@ -39,7 +39,7 @@ public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		return "Saved SVG Graphics";
 	}

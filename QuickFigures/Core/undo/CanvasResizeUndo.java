@@ -3,7 +3,7 @@ package undo;
 import java.awt.geom.Dimension2D;
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import utilityClassesForObjects.LocatedObject2D;
 
 public class CanvasResizeUndo extends AbstractUndoableEdit2 {
@@ -12,13 +12,13 @@ public class CanvasResizeUndo extends AbstractUndoableEdit2 {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private DisplayedImageWrapper image;
+	private DisplayedImage image;
 	private Dimension2D oldDims;
 	private Dimension2D newDims;
 	private ArrayList<LocatedObject2D> items;
 	private UndoMoveItems itemMovments;
 
-	public CanvasResizeUndo(DisplayedImageWrapper diw) {
+	public CanvasResizeUndo(DisplayedImage diw) {
 		this.image=diw;
 		oldDims=(Dimension2D) image.getImageAsWrapper().getCanvasDims().clone();
 		items=image.getImageAsWrapper().getLocatedObjects();

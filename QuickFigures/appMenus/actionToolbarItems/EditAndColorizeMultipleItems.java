@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.JColorChooser;
 import javax.swing.JMenu;
 import javax.swing.undo.AbstractUndoableEdit;
 
@@ -23,11 +22,9 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import gridLayout.MontageSpaces;
-import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.StrokeInputPanel;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
 import standardDialog.GraphicDisplayComponent;
@@ -38,10 +35,10 @@ import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 import undo.ColorEditUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.PathEditUndo;
 import undo.SimpleItemUndo;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
 import undo.UndoTextEdit;
 import utilityClassesForObjects.Fillable;
@@ -225,19 +222,19 @@ public class EditAndColorizeMultipleItems extends BasicMultiSelectionOperator im
 
 	@Override
 	public void run() {
-		long time = System.currentTimeMillis();
+			/**	long time = System.currentTimeMillis();
 		
-		if (rainbowColor||time-lastTime<500) {
+if (rainbowColor||time-lastTime<500) {
 			if (getTheColor()!=null){
 			setTheColor(JColorChooser.showDialog(null, "Color", getTheColor()));
 			colorObject.setFillColor(getTheColor()); }
 			
-		} else  lastTime=System.currentTimeMillis();
+		} else  lastTime=System.currentTimeMillis();*/
 		
 		setSelection(this.selector.getSelecteditems());
 		ArrayList<LocatedObject2D> all = getAllObjects();
 		
-		CompoundEdit2 edit = new CompoundEdit2();//an edit for the undo manager
+		CombinedEdit edit = new CombinedEdit();//an edit for the undo manager
 		for(LocatedObject2D a: all) edit.addEditToList(colorize(a));
 		
 		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
@@ -249,7 +246,7 @@ public class EditAndColorizeMultipleItems extends BasicMultiSelectionOperator im
 
 /**applies the change and returns an undoable edit*/
 	private AbstractUndoableEdit colorize(Object a) {
-		CompoundEdit2 edit = new CompoundEdit2();
+		CombinedEdit edit = new CombinedEdit();
 		ColorEditUndo edit4 = new ColorEditUndo(a);
 		
 		if (stroke && a instanceof StrokedItem) {
@@ -279,7 +276,7 @@ public class EditAndColorizeMultipleItems extends BasicMultiSelectionOperator im
 			}
 			
 			if ( arrowStyle!=null) {
-				UndoScaling edit2 = new UndoScaling(b);
+				UndoScalingAndRotation edit2 = new UndoScalingAndRotation(b);
 				b.setArrowStyle(this.getArrowStyle());
 				edit2.establishFinalState();
 				edit.addEditToList(edit2);
@@ -727,6 +724,8 @@ if(a instanceof PathGraphic ) {
 	public void setPathCloser(Boolean pathClosed) {
 		this.pathClosed = pathClosed;
 	}
+	
+	
 	
 	
 

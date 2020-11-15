@@ -9,8 +9,8 @@ import javax.swing.JMenuItem;
 
 import actionToolbarItems.AlignItem;
 import actionToolbarItems.DistributeItems;
-import figureTemplates.MassTemplateApplication;
-import figureTemplates.TemplateSaver;
+import figureFormat.MassTemplateApplication;
+import figureFormat.TemplateSaver;
 import fileListOpps.CombineSavedFigures;
 import fileListOpps.LoadFileLists;
 import genericMontageLayoutToolKit.FitLayout;
@@ -86,8 +86,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		
 		operatorsSc.add(new IllustratorMimic(true));
 		operatorsSc.add(new IllustratorMimic(false));
-		//operatorsSc.add(new Pasteillustrator());
-
+		
 
 		
 
@@ -106,7 +105,6 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		
 		if (IssueLog.isDebugMode()) operators.add(new ListItems());
 		operators.add(new FillPaintSetter());
-		//operators.add(new CopyItem());
 		operators.add(new LocationSetter());
 		operatorsMade=true;
 		}
@@ -119,16 +117,12 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 	public static SelectionOperationsMenu getStandardMenu(LayerSelector selection) {
 			SelectionOperationsMenu out = new  SelectionOperationsMenu("Selected Item(s)", selection, operators);
 			SelectionOperationsMenu o2 = new SelectionOperationsMenu("Options Dialogs", selection, operatorsOp);
-			//SelectionOperationsMenu o3 = new SelectionOperationsMenu("Figure Templates", selection, operatorsTemplates);
 			out.subordinateMenus.add(o2);
 			out.insert(o2, 3);
 			 o2 = new SelectionOperationsMenu("Application Scripts", selection, operatorsSc);
 			 out.insert(o2, 4);
 			 out.subordinateMenus.add(o2);
 			 
-			 /** removed the figure template menu as I decided it would be better housed in the image submenu
-			 out.insert(o3, 5);
-			 out.subordinateMenus.add(o3);*/
 			return out;
 	}
 	
@@ -157,8 +151,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		}
 	}
 	
-	private void addMenuItemForOperator(MultiSelectionOperator o) {
-		// TODO Auto-generated method stub
+	private void addMenuItemForOperator(MenuItemInstall o) {
 		JMenuItem jb = new JMenuItem(o.getMenuCommand(), o.getIcon());
 		jb.addActionListener(this);
 		jb.setActionCommand(o.getMenuCommand());

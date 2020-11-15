@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import undo.AbstractUndoableEdit2;
 
 public abstract class ObjectAction<Type> implements ActionListener {
@@ -37,7 +37,7 @@ public abstract class ObjectAction<Type> implements ActionListener {
 	}
 	
 	public void addUndo(AbstractUndoableEdit2 e) {
-		new CurrentSetInformerBasic().addUndo(e);
+		new CurrentFigureSet().addUndo(e);
 	}
 	
 	

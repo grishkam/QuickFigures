@@ -55,7 +55,7 @@ public class ClipboardAdder extends FileImageAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		if (rg)return "Add RGB Image From System Clipboard";
 		else return "Paste From System Clipboard";

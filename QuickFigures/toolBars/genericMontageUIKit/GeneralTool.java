@@ -1,13 +1,12 @@
 package genericMontageUIKit;
 import appContext.CurrentAppContext;
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.*;
 import genericMontageKit.*;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
 import gridLayout.MontageEditorDialogs;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
@@ -27,25 +26,30 @@ import java.util.HashMap;
 
 import javax.swing.JMenuItem;
 
-/**this class contains fields and methods useful for any tool that manipulates montages.
-   It is used by multiple tools so any edits to it may interfere with the function of multiple other 
-   classes. it has had a bit of rough editing.
+/** A tool that appears as an icon within the toolbar and may contain
+  multiple tool 'bits' that can be used. The specifics of what the tool does
+  depends on the bit being used. User can switch bits with a popup menu
+ 	This class may contain a single tool bit or many
+ * An implementation of the ToolCore
+   It is used by multiple tools so any edits to it may interfere with the function of many of the tools
+   in the toolbar. Although many parts of this could be coded more efficiently and others are likely not needed at
+   all. I have not revised the code
    */
-public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements ActionListener, ToolCore{
+public class GeneralTool extends BlankTool<DisplayedImage> implements ActionListener, ToolCore{
 	
-	public BasicOverlayHandler oh=new BasicOverlayHandler();
+	public BasicObjectListHandler oh=new BasicObjectListHandler();
 	
 	static Cursor defaultCursor=new Cursor(Cursor.DEFAULT_CURSOR);
 	
+	/**The tool bit defines the specific */
 	private ToolBit toolbit=null;
 	
 	private ArrayList<ToolBit> additionalBits;
 	
 	protected GeneralTool() {}
 
-	public GeneralTool(
-			ToolBit bit
-			) {
+	/**Creates a tool containing the given tool bit*/
+	public GeneralTool(ToolBit bit) {
 		setUpToolBit(bit);
 		
 	}
@@ -71,12 +75,11 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		bit.setToolCore(this);
 	}
 	
-	//private int clickedCordinateX;
+	private int clickedCordinateX;
 	private int clickedCordinateY;
 	private int dragCordinateX;
 	private int dragCordinateY;
 
-	
 	private int mouseDisplacementX;
 	private int mouseDisplacementY;
 	
@@ -86,7 +89,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	private int mouseYClick;
 	private int mouseXdrag;
 	private int mouseYdrag;
-	private DisplayedImageWrapper imageClick;
+	private DisplayedImage imageClick;
 	private ImageWrapper imageWrapperClick;
 	
 	protected CanvasMouseEventWrapper event ;//the latest mouse event of any kind
@@ -104,8 +107,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	public boolean isUpdaterImage=false;
 	protected PanelListElement panelClick;
 	protected PanelListElement panelDrag;
-	//public AbstractMontageUpdater<DisplayedImageWrapper> updater;
-	//private Image cursorIcon;
+	
 	private int panelIndexClick;
 	private int panelIndexDrag;
 	private int colIndexClick;
@@ -113,10 +115,6 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	private int rowIndexClick;
 	private int rowIndexDrag;
 	
-	//Overlay o;
-	//private Roi temp=null;
-	//private AbstractMontageLayout<DisplayedImageWrapper> mainLayoutOfImageclick=null;//getAdapter().createLayout();
-	private GenericMontageEditor montEditor=new GenericMontageEditor();//null;//getAdapter().createEditor();
 	private int clickCount;
 	private java.awt.event.MouseEvent lastME;
 	private transient CanvasMouseEventWrapper lastDragMe;
@@ -129,18 +127,17 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	private int rowRelease;
 	private int colRelease;
 	private int mouseButton;
-	private DisplayedImageWrapper dispImageClick;
+	private DisplayedImage dispImageClick;
 	private CanvasMouseEventWrapper lastDragOrReleaseEvent;
-	private int clickedCordinateX;
+	
 	
 	
 	
 	@Override
-	public void mousePressed(DisplayedImageWrapper imp, CanvasMouseEventWrapper e) {
+	public void mousePressed(DisplayedImage imp, CanvasMouseEventWrapper e) {
 		 event =e;
 		 eventClick=event;
 		 
-		//setClickPoint(imp,e);
 		setClickPoint(imp,event);
 		try {
 			getToolbit().mousePressed();
@@ -153,21 +150,19 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		}
 	
 	public void mousePressed() {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	public void setCursor(Cursor c, int i) {
-		DisplayedImageWrapper disp = event.getAsDisplay();
+		DisplayedImage disp = event.getAsDisplay();
 		if (disp!=null)disp.setCursor(c);
 	}
 
 
 	
 	@Override
-	public void mouseEntered(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	public void mouseEntered(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		try {
-			//IssueLog.log("mouse entry heard");
 			CanvasMouseEventWrapper event1 = e;
 			event=e;
 			setCursor(currentCursor, 0);
@@ -181,27 +176,23 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		}
 	
 	public void mouseEntered() {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public void mouseMoved(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	public void mouseMoved(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		
 		
 		try {
 			
 			CanvasMouseEventWrapper event1 = e;
 			event=event1;
-			//setCursor(currentCursor, 0);
 			setClickPoint(imp,event1);
 			if (getToolbit()!=null) getToolbit().mouseMoved();
 			mouseMoved();
 			if (getImageWrapperClick()==null) {
 				 IssueLog.log("wrapper not innitialized");
 			}
-			//this display update was slowing down the program
-			//getImageWrapperClick().updateDisplay();
 		} catch (Throwable e2) {
 			IssueLog.log(e2);
 		}
@@ -210,12 +201,11 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	
 	
 	public void mouseMoved() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseExited(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	public void mouseExited(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		try {
 			setReleaseOrDragPoint(imp, e);
 			getToolbit().mouseExited();
@@ -227,12 +217,11 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		}
 	
 	public void mouseExited() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseDragged(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	public void mouseDragged(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		setReleaseOrDragPoint(imp,e);
 	event=e;
 			lastDragOrReleaseEvent =  e;
@@ -249,12 +238,11 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	
 	
 	public void mouseDragged() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseReleased(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	public void mouseReleased(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		setReleasePoint(imp,e);
 		event=e;
 			lastDragOrReleaseEvent = e;
@@ -273,38 +261,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	
 	public void mouseReleased() {}
 	
-	/**
-	public void updateFromSource() {
-		if (isUpdaterImage) getAdapter().getCurrentUpdater().updateMontageFromSource();
-	}
-	*/
-	
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#getEditor()
-	
-	@Override
-	public GenericMontageEditor getEditor() {
-		if (montEditor==null) montEditor=getAdapter().createEditor();
-		return montEditor;
-	} */
-/**
-	public BasicMontageLayout getMainLayout() {
-		if (mainLayoutOfImageclick==null) {
-			
-			mainLayoutOfImageclick=getAdapter().createLayout();
-			}
-		return mainLayoutOfImageclick;
-	}
-	
-	public AbstractMontageLayout<DisplayedImageWrapper> getLayoutForCurrentImage() {
-		setImageClick(getAdapter().currentlyInFocusWindowImage());
-		if (getImageClick()!=null) {
-			mainLayoutOfImageclick=getAdapter().createLayout(getImageClick());
-			}
-		return mainLayoutOfImageclick;
-	}*/
-	
-	
+
 
 	/** Returns the difference in cordinates between the last mouse press
 	  and the last drag (or release). Note, these are coordinates are
@@ -326,49 +283,40 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	
 	
 	
-	public void setXY1(DisplayedImageWrapper imp, CanvasMouseEventWrapper event) {
+	public void setXY1(DisplayedImage imp, CanvasMouseEventWrapper event) {
 		
 		setMouseXClick(event.getClickedXScreen());
 		setMouseYClick(event.getClickedYScreen());
-		setClickedCordinateX(event.getClickedXImage());
-		setClickedCordinateY(event.getClickedYImage());
+		setClickedCordinateX(event.getCoordinateX());
+		setClickedCordinateY(event.getCoordinateY());
 	
 		setChannelClick(event.getClickedChannel());
 		setFrameClick(event.getClickedFrame());
 		setSliceClick(event.getClickedSlice());
 	}
 	
-	
-	
-	
-	
-	public void setXY2(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+
+	public void setXY_Point2(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		CanvasMouseEventWrapper event=e;
 		
 		setMouseXdrag(event.getClickedXScreen());
 		setMouseYdrag(event.getClickedYScreen());
-		setDragCordinateX(event.getClickedXImage());
-		setDragCordinateY(event.getClickedYImage());
+		setDragCordinateX(event.getCoordinateX());
+		setDragCordinateY(event.getCoordinateY());
 
 		setChannelDrag(event.getClickedChannel());
 		setFrameDrag(event.getClickedFrame());
 		setSliceDrag(event.getClickedSlice());
 	}
-	private void setXY3(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	private void setXY3(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		CanvasMouseEventWrapper event=e;
 		this.releasePointMouse=new Point(event.getClickedXScreen(), event.getClickedYScreen());
-		this.releasePoint=new Point(event.getClickedXImage(), event.getClickedYImage());
+		this.releasePoint=new Point(event.getCoordinateX(), event.getCoordinateY());
 		setChannelRelease(event.getClickedChannel());
 		setFrameRelease(event.getClickedFrame());
 		setSliceRelease(event.getClickedSlice());
 	}
-	/**
-	public void setRowColReleaseForLayout(BasicMontageLayout ml) {
-		setPanelIndexRelease(ml.getPanelIndex(getReleaseCordinateX() , getReleaseCordinateY()));
-		int[] gridpos=ml.getGridCordAtIndex(getPanelIndexRelease());
-		setColIndexRelease(gridpos[0]);
-		setRowIndexRelease(gridpos[1]);
-	}*/
+
 	
 	
 	
@@ -392,7 +340,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		
 	}
 
-	public void setClickPoint(DisplayedImageWrapper imp, CanvasMouseEventWrapper event) {
+	public void setClickPoint(DisplayedImage imp, CanvasMouseEventWrapper event) {
 		if (imp==null) return;
 	
 		eventClick=event;
@@ -409,31 +357,20 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		else lastME=eventClick.getAwtEvent();
 		clickCount=event.clickCount();
 		
-		//mainLayoutOfImageclick=getAdapter().createLayout(imp);
-		//setRowColClickForLayout(getMainLayout());
-		
-		/**AbstractMontageUpdater<DisplayedImageWrapper> up = getAdapter().getCurrentUpdater();
-		
-		if (up!=null&& up.images2()!=null&&this.getImageWrapperClick().isSameImage(up.images2().getMontage())) {
-			
-			if (up==null||up.getWorkingStack()==null) return;
-			panelClick=up.getWorkingStack().getMontageIndexPanel(getPanelIndexClick());
-			isUpdaterImage=true;
-			updater=up;
-		}
-		else isUpdaterImage=false;*/
 	}
 
 	
 
 	
-	/**This takes converts the onscreen cordinates to off*/
+	/**This takes converts the stored mouse click/press event location (point1) to a coordinate location of the figure
+	  */
 	private void setOScreen1() {
 		CanvasMouseEventWrapper canvasMouse =event;
 		setClickedCordinateX(canvasMouse.convertClickedXImage(getMouseXClick()));
 		setClickedCordinateY(canvasMouse.convertClickedYImage(getMouseYClick()));
 		
 	}
+	/**This takes converts the stored mouse drag/release event location to a coordinate location of the figure*/
 	private void setOScreen2() {
 		CanvasMouseEventWrapper canvasMouse = event;
 		setDragCordinateX(canvasMouse.convertClickedXImage(getMouseXdrag()));
@@ -441,75 +378,30 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	}
 	
 	
-	
-	public void setReleaseOrDragPoint(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	/**Stores a release of drag point location*/
+	public void setReleaseOrDragPoint(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		this.setImageClick(imp);
 		this.lastDragMe=e;
 		this.event=e;
 		this.eventDrag=event;
 		lastDragOrReleaseEvent=e;
 		this.setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
-		setXY2(imp,e);
-		
-		/**mainLayoutOfImageclick=getAdapter().createLayout(imp);
-		setRowColDragForLayout(getMainLayout());*/
-		/**
-		AbstractMontageUpdater<DisplayedImageWrapper> man = getAdapter().getUpdater(imp);
-		
-		
-		if (man!=null&&man.images2().getMontage()==imp) {
-
-			panelDrag=man.getWorkingStack().getMontageIndexPanel(getPanelIndexDrag());
-			isUpdaterImage=true;
-			updater=man;
-			
-		}
-		else isUpdaterImage=false;*/
+		setXY_Point2(imp,e);
 	}
 	
-	private void setReleasePoint(DisplayedImageWrapper imp, CanvasMouseEventWrapper e) {
+	private void setReleasePoint(DisplayedImage imp, CanvasMouseEventWrapper e) {
 		this.eventRelease=e;
 		this.setImageClick(imp);
 		this.setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
 		setXY3(imp,e);
-		//setRowColReleaseForLayout(getMainLayout());
-		
 		
 	}
 	
 	
 
-	private void setRowColReleaseForLayout(
-			BasicMontageLayout ml) {
-		if (ml==null) {IssueLog.log3("must have a layout to set a row and column release point"); return;}
-		setPanelIndexRelease(ml.getPanelIndex(getReleaseCordinateX() , getReleaseCordinateY() ));
-		int[] gridpos=ml.getGridCordAtIndex(getPanelIndexRelease());
-		setColIndexRelease(gridpos[0]);
-		setRowIndexRelease(gridpos[1]);
-	}
-
-	private void setRowIndexRelease(int i) {
-		rowRelease=i;
-		
-	}
-
-	private void setColIndexRelease(int i) {
-		colRelease=i;
-		
-	}
-
-	private int getPanelIndexRelease() {
-		// TODO Auto-generated method stub
-		return panelIndRelease;
-	}
-
-	private void setPanelIndexRelease(int panelIndex) {
-		 panelIndRelease=panelIndex;
-		
-	}
 
 	public void setRowColDragForLayout(BasicMontageLayout ml) {
-		if (ml==null) {IssueLog.log3("must have a layout to set a row and col for drag");return;}
+		if (ml==null) {return;}
 		setPanelIndexDrag(ml.getPanelIndex(getDragCordinateX() , getDragCordinateY() ));
 		int[] gridpos=ml.getGridCordAtIndex(getPanelIndexDrag());
 		setColIndexDrag(gridpos[0]);
@@ -525,7 +417,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	}
 	
 
-	@Override
+	
 	public MontageEditorDialogs getMontageEditorDialogs() {return new MontageEditorDialogs();}
 
 	
@@ -570,29 +462,9 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		if (getImageClick()==null)return 8;
 		
 		return getImageWrapperClick().getPixelWrapper().width()/200;
-		//if (imp!=null)return (int) (imp.getWidth()/200);
-		//return 8;
-	}
+		}
 	
-	/**These method is for showing and removing and overlay roi that surrounds the panel at the start of a
-	 mouse drag
-	public void makeDragMask(DisplayedImageWrapper imp) {
-		//o=imp.getOverlay();if (o==null) {o=new Overlay();imp.setOverlay(o);}
-		removeDragMask( imp);
-		
-		setTemporarySelection(getObjectAdapter().getSelectionObject(imp));//temp=imp.getRoi(); 
 
-		
-		getObjectAdapter().setSelectionStroke(getTemporarySelection(), getStrokeWidth(), Color.green.darker());
-		
-		getObjectAdapter().addRoiToImage(getTemporarySelection(), imp);
-		//o.add(temp); 
-		//temp.setStrokeWidth(getStrokeWidth());
-	}
-	
-	public void removeDragMask(DisplayedImageWrapper imp) {
-		getObjectAdapter().takeRoiFromImage(getTemporarySelection(), imp);
-	}*/
 	
 
 	
@@ -609,10 +481,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		
 	}
 	
-	/**
-	public Rectangle getSelectionBounds(DisplayedImageWrapper imp) {
-		return getObjectAdapter().getSelectionBounds(imp);
-	}*/
+
 	
 	/**Returns a menu item with this object as an action listener.*/
 	public MenuItem createMenuItem(String st) {
@@ -627,83 +496,46 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		return output;
 	}
 	
-
-	/**
-	public boolean isMontage(DisplayedImageWrapper imp) {
-		return this.getAdapter().hasMontageMetaData(imp);
-	}*/
 	
-	public BasicOverlayHandler getObjecthandler() {
+	public BasicObjectListHandler getObjecthandler() {
 		return oh;
 	}
 	
 	
 	
-	/**protected ObjectAdapter<DisplayedImageWrapper, Roi> getObjectAdapter() {
-		return oa;
-	}*/
 	
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#updateImageDisplay(DisplayedImageWrapper)
-	
-	@Override
-	public void updateImageDisplay(DisplayedImageWrapper image) {
-		if (image==null) return;
-	getAdapter().updateImageDisplay(image);
-	} */
-
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#getImageClick()
-	 */
-	
-	public DisplayedImageWrapper getImageClick() {
+	public DisplayedImage getImageClick() {
 		return imageClick;
 	}
 
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#setImageClick(DisplayedImageWrapper)
-	 */
 
-	public void setImageClick(DisplayedImageWrapper imageClick) {
+	public void setImageClick(DisplayedImage imageClick) {
 		this.imageClick = imageClick;
 		if (event!=null)this.dispImageClick=event.getAsDisplay();
 	}
 
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#getClickedCordinateX()
-	 */
 	@Override
 	public int getClickedCordinateX() {
 		return clickedCordinateX;
 	}
 
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#setClickedCordinateX(int)
-	 */
 	
 	public void setClickedCordinateX(int clickedCordinateX) {
 		this.clickedCordinateX = clickedCordinateX;
 	}
 
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#getClickedCordinateY()
-	 */
+
 	@Override
 	public int getClickedCordinateY() {
 		return clickedCordinateY;
 	}
 
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#setClickedCordinateY(int)
-	 */
+
 	@Override
 	public void setClickedCordinateY(int clickedCordinateY) {
 		this.clickedCordinateY = clickedCordinateY;
 	}
 
-	/* (non-Javadoc)
-	 * @see GenericMontageUIKit.ToolCore#getDragCordinateX()
-	 */
 	@Override
 	public int getDragCordinateX() {
 		return dragCordinateX;
@@ -1033,16 +865,10 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		return event.altKeyDown();
 	}
 
-	@Override
-	public BasicMontageLayout getClickedLayout() {
-		// TODO Auto-generated method stub
-		//return getMainLayout();
-		return null;
-	}
 
 	
 	@Override
-	public void mouseClicked(DisplayedImageWrapper imp, CanvasMouseEventWrapper  e) {
+	public void mouseClicked(DisplayedImage imp, CanvasMouseEventWrapper  e) {
 		event=e;
 		setReleaseOrDragPoint(imp,e);
 		 try {
@@ -1061,19 +887,9 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 
 	public void setSelectedObject(LocatedObject2D lastRoi) {
 		getImageWrapperClick().getSelectionManagger().setSelection(lastRoi, 0);
-		//getObjectAdapter().setSelectedObject(this.getImageWrapperClick(),lastRoi);
-		
-		
+	
 	}
 
-	/**
-	public boolean doesClickedImageHAveMaintMontageLayout() {
-		return this.isMontage(getImageClick());
-	}*/
-
-	public void setEditor(GenericMontageEditor montEditor) {
-		this.montEditor = montEditor;
-	}
 
 	@Override
 	public int getReleaseCordinateY() {
@@ -1093,11 +909,8 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 
 	@Override
 	public ImageWrapper currentlyInFocusWindowImage() {
-		// TODO Auto-generated method stub
-		return CurrentSetInformerBasic.getCurrentActiveDisplayGroup().getImageAsWrapper();
-		//return getAdapter().currentlyInFocusWindowImage().getImageAsWrapper();
-		//return this.getAdapter().createImageWrapper(getAdapter().currentlyInFocusWindowImage());
-	}
+		return CurrentFigureSet.getCurrentActiveDisplayGroup().getImageAsWrapper();
+		}
 
 	@Override
 	public int getMouseXrelease() {
@@ -1145,7 +958,7 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	private JMenuItem createJButtonForBit(ToolBit bit) {
 		JMenuItem item=new JMenuItem();
 		
-		item.addActionListener(new bitSwitch(bit));
+		item.addActionListener(new ToolBitSwitch(bit));
 		bit.getIconSet().setItemIcons(item);
 		item.setText(bit.getToolName());
 		return item;
@@ -1155,10 +968,10 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 		return this.getToolbit().getToolName();
 	}
 	
-	 class bitSwitch implements ActionListener {
+	 class ToolBitSwitch implements ActionListener {
 
 		 ToolBit bit;
-		bitSwitch(ToolBit b) {
+		ToolBitSwitch(ToolBit b) {
 			bit=b;
 		}
 		
@@ -1168,16 +981,12 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 			if (toolbit!=null) toolbit.onToolChange(false);
 			bit.onToolChange(true);
 			setUpToolBit(bit);
-			/**if (bit .getIconSet().getIcon(0) instanceof CompoundIcon) {} else {
-				Icon icon1 = bit .getIconSet().getIcon(0);
-				bit .getIconSet().setIcon(0, new CompoundIcon(icon1));
-			}*/
+
 			
 			getIconSet().setItemIcons(getToolButton()) ;
 			getToolButton().setIcon(getToolPressedImageIcon());
 			if(bit.isActionTool())getToolButton().setIcon(getToolImageIcon());
 			getToolButton().setRolloverEnabled(false);
-			//getToolButton().repaint();
 			
 			getToolButton().setToolTipText(getToolTip());
 			if (bit.isActionTool()) {
@@ -1192,20 +1001,18 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 
 	@Override
 	public int getMouseButtonClick() {
-		// TODO Auto-generated method stub
 		return mouseButton;
 	}
 
 	@Override
-	public DisplayedImageWrapper getClickedImage() {
-		// TODO Auto-generated method stub
+	public DisplayedImage getClickedImage() {
 		if (dispImageClick!=null) return dispImageClick;
 		if(event==null) return null;
 		return event.getAsDisplay();
 	}
 
 	@Override
-	public void setClickedImage(DisplayedImageWrapper d) {
+	public void setClickedImage(DisplayedImage d) {
 		dispImageClick=d;
 		
 	}
@@ -1217,31 +1024,25 @@ public class GeneralTool extends BlankTool<DisplayedImageWrapper> implements Act
 	}
 	
 	@Override
-	public boolean keyPressed(DisplayedImageWrapper imp, KeyEvent e) {
+	public boolean keyPressed(DisplayedImage imp, KeyEvent e) {
 		setImageClick(imp);
 		return this.getToolbit().keyPressed(e);
 	}
 
 	@Override
-	public boolean keyReleased(DisplayedImageWrapper imp, KeyEvent e) {
+	public boolean keyReleased(DisplayedImage imp, KeyEvent e) {
 		setImageClick(imp);
 		return this.getToolbit().keyReleased(e);
 	}
 
 	@Override
-	public boolean keyTyped(DisplayedImageWrapper imp, KeyEvent e) {
+	public boolean keyTyped(DisplayedImage imp, KeyEvent e) {
 		setImageClick(imp);
 		return this.getToolbit().keyTyped(e);
 		
 	}
 	
-	/**
-	@Override
-	public void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
-		// TODO Auto-generated method stub
-		
-		this.getToolbit().handleFileListDrop( imageAndDisplaySet, location, file);
-	}*/
+
 	
 	public DragAndDropHandler getDraghandler() {
 		return this.getToolbit().getDragAndDropHandler();

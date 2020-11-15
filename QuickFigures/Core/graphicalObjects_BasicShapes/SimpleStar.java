@@ -13,7 +13,7 @@ public class SimpleStar extends RegularPolygonGraphic {
 
 	//private static final int STAR_RATIO_HANDLE = 80, ANGLE_SHIFT_HANDLE=73;
 	
-
+	{name="Star";}
 	private AngleParameter starRatio=new AngleParameter(this); {starRatio.setType(AngleParameter.ANGLE_RATIO_AND_RAD_TYPE); starRatio.setRatioToMaxRadius(0.5);}
 	private AngleParameter angleRatio=new AngleParameter(this); {angleRatio.setType(AngleParameter.ANGLE_RATIO_TYPE); angleRatio.setRatioToMaxRadius(0.5);}
 	

@@ -10,6 +10,8 @@ import javax.swing.tree.TreePath;
 
 import logging.IssueLog;
 
+/**class contains different methods for searching up and down the
+ * structure of a JTree with many tree nodes*/
 public class TreeUtil<Type> {
 	
 

@@ -10,21 +10,23 @@ import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import menuUtil.SmartPopupJMenu;
+import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.PointsToFile;
 
+/**abstract implementation of the MultiSelectionOperator.
+  Contains methods that are useful for multiple classes*/
 public abstract class BasicMultiSelectionOperator implements MultiSelectionOperator, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected transient ArrayList<ZoomableGraphic> array;
-	//protected GraphicSetDisplayContainer cont;
-	protected transient LayerSelector selector;
+	protected transient ArrayList<ZoomableGraphic> array;//a list of selected items
+	protected transient LayerSelector selector;//the layer selector object that determines which items are selecred
 
+	/**Sets the list of all the items*/
 	@Override
 	public void setSelection(ArrayList<ZoomableGraphic> array) {
 		this.array=array;
@@ -64,14 +66,11 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 		this.selector=graphicTreeUI;
 	}
 	
-	
-	
 	public LayerSelector getSelector() {
 		return selector;
 	}
 
 	public String getMenuPath() {
-		
 		return null;
 	}
 	
@@ -90,16 +89,34 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 		return files;
 	}
 	
+	/**returns the undo manager for the object*/
 	public UndoManagerPlus getUndoManager() {
 		return getSelector().getGraphicDisplayContainer().getUndoManager();
 	}
 	
 	
 	public boolean canUseObjects(LayerSelector graphicTreeUI) {return true;}
-	
 	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {return true;}
 	
 	public Font getMenuItemFont() {return null;}
 	public Component getInputPanel() {return null;}
+	
+	
+	/**The undo manager must be transient as one does not want a very long array of undo's to be serialized*/
+	private transient UndoManagerPlus undoManager;
+	
+	/**returns the unto manager*/
+	public UndoManagerPlus getCurrentUndoManager() {
+		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
+		return selector.getGraphicDisplayContainer().getUndoManager();
+		return undoManager;
+	}
+	
+	/**
+	 Adds the undo
+	 */
+	public void addUndo(AbstractUndoableEdit2 edits) {
+		if (getCurrentUndoManager()!=null) getCurrentUndoManager().addEdit(edits);
+	}
 
 }

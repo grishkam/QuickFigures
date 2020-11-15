@@ -24,11 +24,11 @@ import objectDialogs.TextLineDialogForChenLabel;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.SwingDialogListener;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClassesForObjects.SnappingPosition;
 
-/**A class for adding, accessing and editing the channel labels*/
+/**A class for adding, accessing, removing and editing the channel labels or a figure*/
 public class ChannelLabelManager implements Serializable {
 
 	/**
@@ -60,12 +60,15 @@ public class ChannelLabelManager implements Serializable {
 		cltg.setParaGraphToChannels();
 		cltg.setName("channel label");
 				if (getFossilLabel()!=null) {cltg.copyAttributesFrom(getFossilLabel());
-											cltg.setSnappingBehaviour(getFossilLabel().getSnappingBehaviour());
+											cltg.setSnappingBehaviour(getFossilLabel().getSnapPosition());
 											} else {
 												cltg.setSnappingBehaviour(SnappingPosition.defaultPanelLabel());
 											}
+				
+		
 		slice.setChannelLabelDisplay(cltg);
-		if (getLayer()!=null)getLayer().add(cltg);
+		if (getLayer()!=null)getLayer().add(cltg);//adds the label to the image
+		/**Attaches this label to the panel*/
 		if (slice.getImageDisplayObject() instanceof ImagePanelGraphic) {
 			ImagePanelGraphic panel=(ImagePanelGraphic) slice.getImageDisplayObject();
 			panel.addLockedItem(cltg);
@@ -75,14 +78,16 @@ public class ChannelLabelManager implements Serializable {
 		
 	}
 
+	/**The last label to be removed in the previous round of removal. 
+	  will be used as a model if labels are immediately recreated*/
 	public TextGraphic getFossilLabel() {
 		return fossilLabel;
 	}
 	
 	/**Removes the channel labels from the layer and returns them as an array*/
 	@MenuItemMethod(menuActionCommand = "labelgone", menuText = "Eliminate Channel Labels", subMenuName="Channel Labels")
-	public CompoundEdit2 eliminateChanLabels() {
-		CompoundEdit2 output = new CompoundEdit2();
+	public CombinedEdit eliminateChanLabels() {
+		CombinedEdit output = new CombinedEdit();
 		if(stack==null) return output ; 
 		ArrayList<ChannelLabelTextGraphic> arr =getStack().getChannelLabels();
 	
@@ -95,16 +100,19 @@ public class ChannelLabelManager implements Serializable {
 		
 	}
 	
+	/**if a channel panel with the given channel slice and frame exists, this generates a label for it*/
 	void generateSingleChannelPanelLabel(int channel, int slice, int frame) {
 		PanelListElement panel = getStack().getOrCreateChannelPanel(getMultiChannel(),channel, slice, frame);
 		 if (panel!=null)this.generateChanelLabel(panel);
 	}
 	
+	/**if a merge panel with the given slice and frame exists, this generates a label for it*/
 	void generateSingleChannelMergeLabel( int slice, int frame) {
 		PanelListElement panel =  getStack().getOrCreateMergePanel(getMultiChannel(), slice, frame);
 		 if (panel!=null)this.generateChanelLabel(panel);
 	}
 	
+	/**generates channel labels for every single panel*/
 	@MenuItemMethod(menuActionCommand = "channeoLabels", menuText = "Generate Channel Labels", subMenuName="Channel Labels")
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
@@ -114,7 +122,7 @@ public class ChannelLabelManager implements Serializable {
 		return output;
 	}
 	
-	/**Creates channel labels but only for the first stack slice or frame*/
+	/**Creates channel labels but only for panels in the first stack slice or first frame*/
 	@MenuItemMethod(menuActionCommand = "channeoLabels2", menuText = "Generate Channel Labels (For first slice only)", subMenuName="Channel Labels")
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels2() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
@@ -126,14 +134,15 @@ public class ChannelLabelManager implements Serializable {
 		return output;
 	}
 	
+	/**displays a dialog for the addition of a single merge panel*/
 	@MenuItemMethod(menuActionCommand = "1mergeL", menuText = "Create 1 Merge Panel Label", subMenuName="Channel Labels")
 	public void addSingleMergeLabel() {
 		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1, getMultiChannel());
 		dia.show2DimensionDialog();
-		
 		generateSingleChannelMergeLabel( dia.getSlice(),dia.getFrame());
 	}
 	
+	/**displays a dialog for the addition of a single channel panel*/
 	@MenuItemMethod(menuActionCommand = "1chanL", menuText = "Create 1 Channel Panel Label", subMenuName="Channel Labels")
 	public void addSingleChannelLabel() {
 		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(0,1,1, getMultiChannel());
@@ -171,14 +180,12 @@ public class ChannelLabelManager implements Serializable {
 		this.stack = stack;
 	}
 	
-	//@MenuItemMethod(menuActionCommand = "chan names", menuText = "Name Channels", subMenuName="Channel Labels")
-	
+	/***/
 	public void nameChannels() {
 		nameChannels(getMultiChannel().getChannelEntriesInOrder());
 	}
 	
 	public void nameChannels(ArrayList<ChannelEntry> entries) {
-	
 	
 		dialogForChannelEntries(entries).makeVisible();;
 		
@@ -244,7 +251,7 @@ public class ChannelLabelManager implements Serializable {
 	}
 	
 	public void copyLabelStyleFrom(ChannelLabelManager c) {
-		this.fossilLabel=c.fossilLabel;
+		ChannelLabelManager.fossilLabel=ChannelLabelManager.fossilLabel;
 	}
 	
 	

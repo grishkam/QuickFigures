@@ -11,7 +11,7 @@ import javax.swing.Icon;
 
 import actionToolbarItems.AlignItem;
 import actionToolbarItems.DistributeItems;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
@@ -23,7 +23,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicDisplayComponent;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
 import undo.UndoMoveItems;
@@ -34,6 +34,11 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
 
 public class FitLayout extends BasicMultiSelectionOperator {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public static final int cleanUp=5;
 	
@@ -281,8 +286,8 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		return false;
 	}
 
-	public CompoundEdit2 fitLayoutToObjects(ArrayList<LocatedObject2D> objects, boolean addLayout) {
-		CompoundEdit2 edit = new CompoundEdit2();
+	public CombinedEdit fitLayoutToObjects(ArrayList<LocatedObject2D> objects, boolean addLayout) {
+		CombinedEdit edit = new CombinedEdit();
 		edit.addEditToList(cleanUp(objects, false));//makes the positions more grid-like
 		UndoMoveItems moveitems = new UndoMoveItems(objects);
 		
@@ -399,7 +404,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		
 		/**puts each panel in the upper left corner*/
 		for(Rectangle2D r: gra.getPanels()) {
-			ArrayList<LocatedObject2D> items = new BasicOverlayHandler().getOverlapOverlaypingOrContainedItems(r, new ArrayObjectContainer(objects2));
+			ArrayList<LocatedObject2D> items = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, new ArrayObjectContainer(objects2));
 			if (items.size()>0) items.get(0).setLocationUpperLeft(r.getX(), r.getY());
 			objects2.removeAll(items);
 		}

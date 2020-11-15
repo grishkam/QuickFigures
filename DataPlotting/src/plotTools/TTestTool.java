@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import columnPlots.ColumnPlot;
 import dataSeries.DataSeries;
 import externalToolBar.IconWrappingToolIcon;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
@@ -94,7 +94,7 @@ public int numberTails=0;
 	protected boolean doesOverLapDataShapes(PathGraphic p1) {
 		Rectangle r = p1.getBounds();
 		r.height=2;
-		ArrayList<LocatedObject2D> items = new BasicOverlayHandler().getOverlapOverlaypingOrContainedItems(r, this.getImageWrapperClick());
+		ArrayList<LocatedObject2D> items = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, this.getImageWrapperClick());
 		items=new ArraySorter<LocatedObject2D>().getThoseOfClass(items, DataShowingShape.class);
 		boolean overlapsDataShapes=items.size()>0;
 		

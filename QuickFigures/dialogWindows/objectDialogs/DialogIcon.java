@@ -7,7 +7,6 @@ import javax.swing.Icon;
 
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import standardDialog.GraphicDisplayComponent;
 

@@ -5,6 +5,11 @@ import ij.io.FileInfo;
 import ij.measure.Calibration;
 import utilityClassesForObjects.ScaleInfo;
 
+/**A ScaleInfo object whose initial values
+ * are set to those of an ImageJ figure.
+ this is used to share the information that is crucial to 
+ maintaining accurate scale bar lengths
+ */
 public class IJ1ScaleInfo extends ScaleInfo {
 
 	/**
@@ -24,7 +29,7 @@ public class IJ1ScaleInfo extends ScaleInfo {
 		
 	}
 	
-	public void setToIJCalibration(Calibration cal) {
+	private void setToIJCalibration(Calibration cal) {
 		if (cal==null) return;
 		setUnits(cal.getUnit());
 		this.setPixelWidth(cal.pixelWidth);

@@ -21,8 +21,8 @@ import genericMontageLayoutToolKit.FitLayout;
 import genericMontageUIKit.BasicToolBit;
 import genericMontageUIKit.GeneralTool;
 import genericMontageUIKit.ToolBit;
-import graphicActionToombar.CurrentSetInformer;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
+import graphicActionToolbar.CurrentSetInformer;
 import imageMenu.ZoomFit;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.TextBackGroundOptionsSyncer;
@@ -32,7 +32,7 @@ import utilityClassesForObjects.RectangleEdges;
 public class ActionToolset1 extends QuickFiguresToolBar{
 	
 	public static ActionToolset1 currentToolset;
-	public CurrentSetInformer currentImageInformer=new CurrentSetInformerBasic();
+	public CurrentSetInformer currentImageInformer=new CurrentFigureSet();
 	private static Color[] standardColor=new Color[] { Color.blue, Color.green, Color.red,  Color.cyan, Color.magenta, Color.yellow , Color.white, Color.black,new Color(0,0,0,0)};
 	
 	
@@ -198,7 +198,7 @@ public void run(String s) {
 			ad.setSelector( selector);
 			ad.setSelection(selector.getSelecteditems());
 			ad.run();
-			CurrentSetInformerBasic.updateActiveDisplayGroup();
+			CurrentFigureSet.updateActiveDisplayGroup();
 		}
 		
 		
@@ -236,7 +236,7 @@ public void run(String s) {
 		public void performLoadAction() {
 			
 			ad.performActionDisplayedImageWrapper(currentImageInformer.getCurrentlyActiveDisplay());
-			CurrentSetInformerBasic.updateActiveDisplayGroup();
+			CurrentFigureSet.updateActiveDisplayGroup();
 			getframe().pack();//fix for an issue that made buttons invisible after tool switch
 		}
 		

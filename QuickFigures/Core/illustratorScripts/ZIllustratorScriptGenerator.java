@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 import logging.IssueLog;
 
 public class ZIllustratorScriptGenerator {

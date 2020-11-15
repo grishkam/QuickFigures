@@ -12,7 +12,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import applicationAdapters.ObjectWrapper;
 import ij.ImagePlus;
 import ij.gui.*;
 import ij.io.Opener;
@@ -24,23 +23,24 @@ import illustratorScripts.PlacedItemRef;
 import illustratorScripts.TextFrame;
 import logging.IssueLog;
 import utilityClassesForObjects.DefaultPaintProvider;
+import utilityClassesForObjects.DrawnGraphic;
 import utilityClassesForObjects.HasText;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LocationChangeListenerList;
 import utilityClassesForObjects.PaintProvider;
 import utilityClassesForObjects.SnappingPosition;
-/**not extensively used anymore*/
-public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObjectConvertable {
+/**An implementation of LocatedObject2D that allows many QuickFigures classes
+ to act on ImageJ Rois. not extensively used anymore. The methods in this class
+ might be useful to future programmers but not currently important for the package*/
+public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectConvertable,  DrawnGraphic {
 	Roi roi;
 	
 	
 	public RoiWrapper(Roi roi) {
 		this.roi=roi;
 	}
-	/**AdapterObIJ1 oa=new AdapterObIJ1();
-	public AdapterObIJ1 getAdapter() {return oa;}
-	*/
+	
 	
 	 public boolean doesIntersect(Rectangle2D rect) {
 		   return roi.getPolygon().intersects(rect);
@@ -50,15 +50,9 @@ public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObje
 	   }
 	 
 		public void takeFromImage( Object imp) {
-			
-			/**if (imp instanceof ImagePlus)
-			getAdapter().*/
 			takeRoiFromImage(getObject() , (ImagePlus)imp);
 		}
 		public void addToImage( Object imp) {
-			/**
-			if (imp instanceof ImagePlus)
-			getAdapter() .*/
 			addRoiToImage(getObject() ,(ImagePlus)imp);
 			
 		}
@@ -74,7 +68,7 @@ public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObje
 			moveRoiLocation(getObject() , (int)xmov, (int)ymov);
 		}
 
-		@Override
+		
 		public void setWrappedObject(Roi roi) {
 			this.roi=roi;
 		}
@@ -116,7 +110,7 @@ public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObje
 			getObject() .setLocation((int)x, (int)y);
 		}
 
-		@Override
+		
 		public Roi getObject() {
 			if (roi==null) {
 				return null;
@@ -168,19 +162,9 @@ public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObje
 
 
 
-		
-/**
-		@Override
-		public BufferedImage getImage() {
-			if (roi instanceof ImageRoi) {
-				ImageRoi im = (ImageRoi) roi;
-				return im.getImage().getBufferedImage();
-			}
-			return null;
-		}*/
 
 
-		@Override
+
 		public Point getPoint(int ind) {
 			if (roi instanceof ij.gui.Line ||roi instanceof ij.gui.Arrow) {
 				ij.gui.Line lin=(ij.gui.Line) roi;
@@ -348,7 +332,7 @@ public class RoiWrapper implements ObjectWrapper< Roi>, HasText, IllustratorObje
 
 
 		@Override
-		public SnappingPosition getSnappingBehaviour() {
+		public SnappingPosition getSnapPosition() {
 			// TODO Auto-generated method stub
 			return null;
 		}

@@ -2,7 +2,7 @@ package plotCreation;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.GroupedDataSeries;
 import groupedDataPlots.Grouped_Plot;
 import imageDisplayApp.ImageAndDisplaySet;
@@ -24,7 +24,7 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 		if (type==3) return "Superimposed Scatter Plot ";
 		return "Stagered";
 	}
-	public void createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}

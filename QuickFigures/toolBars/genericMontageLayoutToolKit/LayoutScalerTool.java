@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import externalToolBar.IconSet;
-import genericMontageKit.BasicOverlayHandler.LocatedObjectFilter;
+import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
 import genericMontageUIKit.Object_Mover;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
@@ -18,7 +18,7 @@ import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import standardDialog.BooleanInputPanel;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
 import utilityClasses1.NumberUse;
@@ -106,7 +106,7 @@ public class LayoutScalerTool extends Object_Mover {
 		FigureScaler scaler = new FigureScaler(keepPPI);
 		
 		
-		CompoundEdit2 undo1 = scaler.scaleFigure(theLayout, scale, loc);
+		CombinedEdit undo1 = scaler.scaleFigure(theLayout, scale, loc);
 		this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo1);
 		
 		if (theLayout!=null) {
@@ -140,7 +140,7 @@ public class LayoutScalerTool extends Object_Mover {
 			undoOriginalUndo=null;
 			duplicate.getPanelLayout().resetPtsPanels();
 		}
-		CompoundEdit2 curentEdit = new CompoundEdit2();;
+		CombinedEdit curentEdit = new CombinedEdit();;
 		
 		
 		if (duplicate!=null) {

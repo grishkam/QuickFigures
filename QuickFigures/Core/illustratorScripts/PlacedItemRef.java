@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import figureTemplates.DirectoryHandler;
+
+import figureFormat.DirectoryHandler;
 import logging.IssueLog;
 
 

@@ -6,11 +6,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.SetAngle;
 import applicationAdapters.CanvasMouseEventWrapper;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
-import logging.IssueLog;
 import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
@@ -24,8 +24,8 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	}
 
 	private ShapeGraphic shape;
-	public static final int ARROW_ONLYFORM=4;
-	private int specialForm=0;
+	public static final int ARROW_ONLYFORM=4, NORMAL_FORM=0;
+	private int specialForm=NORMAL_FORM;
 
 
 	public ShapeActionButtonHandleList2(ShapeGraphic t) {
@@ -40,7 +40,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		if(form==ARROW_ONLYFORM) {
 			this.createForArrowHeadType();
 		} else
-		addItems();
+			addItems();
 		updateLocation();
 	}
 
@@ -67,7 +67,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		itemForIcon = new EditAndColorizeMultipleItems(false, shape.getFillColor());
 		itemForIcon.setModelItem(shape);
 
-		GeneralActionListHandle hf = addOperationList(itemForIcon, EditAndColorizeMultipleItems.getForColors(false, standardColor));
+		GeneralActionListHandle hf = addOperationList(itemForIcon, fillColorActs());
 		hf.setAlternativePopup(new ColoringButton(itemForIcon, 78341));
 		
 		}
@@ -76,7 +76,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		itemForIcon = new EditAndColorizeMultipleItems(true, shape.getStrokeColor());
 		itemForIcon.setModelItem(shape);
 		
-		GeneralActionListHandle h = addOperationList(itemForIcon, EditAndColorizeMultipleItems.getForColors(true, standardColor));
+		GeneralActionListHandle h = addOperationList(itemForIcon, strokeColorActs());
 		h.setAlternativePopup(new ColoringButton(itemForIcon, 782417));
 		
 		
@@ -111,18 +111,34 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		 addOperationList(itemForIcon,EditAndColorizeMultipleItems. createForArrow() );
 		 createForArrowHeadType();
 		 
-				 }
+				 } else 
 		if(shape instanceof PathGraphic) {
 			 itemForIcon=new EditAndColorizeMultipleItems((PathGraphic) shape, shape.isClosedShape());
 			 itemForIcon.setModelItem(shape);
 			 addOperationList(itemForIcon,new EditAndColorizeMultipleItems[] {new EditAndColorizeMultipleItems(null, true), new EditAndColorizeMultipleItems(null, false)} );
 				 
 					 }
-		
-	//	this.createGeneralButton(new EditAndColorizeMultipleItems("up"));
-	//	this.createGeneralButton( new EditAndColorizeMultipleItems("down"));
-	//	this.createGeneralButton( new EditAndColorizeMultipleItems(false, text.getTextColor()));
+		else {
+			SetAngle itemForIcon2 = new SetAngle(45);
+			 addOperationList(itemForIcon2,SetAngle.createManyAngles() );
+				
+		}
+
 		setLocation(location);
+	}
+
+	/**
+	 * @return
+	 */
+	public EditAndColorizeMultipleItems[] strokeColorActs() {
+		return EditAndColorizeMultipleItems.getForColors(true, standardColor);
+	}
+
+	/**
+	 * @return
+	 */
+	public EditAndColorizeMultipleItems[] fillColorActs() {
+		return EditAndColorizeMultipleItems.getForColors(false, standardColor);
 	}
 
 	protected void createForArrowHeadType() {

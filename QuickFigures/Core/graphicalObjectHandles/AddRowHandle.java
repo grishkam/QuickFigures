@@ -8,7 +8,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -20,14 +20,14 @@ import gridLayout.GenericMontageEditor;
 import gridLayout.MontageSpaces;
 import imageMenu.CanvasAutoResize;
 
-
+/**A handle that adds rows/cols to the end of the layout or */
 public class AddRowHandle extends SmartHandle implements MontageSpaces{
 
 	private MontageLayoutGraphic layout;
 	private int type;
 	private boolean subtract=false;
 	boolean dragType=true;
-	private DisplayedImageWrapper wrap;
+	private DisplayedImage wrap;
 	int a=0;
 
 	public AddRowHandle(int x, int y) {
@@ -107,7 +107,7 @@ public class AddRowHandle extends SmartHandle implements MontageSpaces{
 	
 	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 		if(!dragType) return;
-		Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		BasicMontageLayout bm = layout.getPanelLayout();
 		GenericMontageEditor edit = layout.getEditor();
 		int[] rowcol = MontageLayoutRowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), bm);

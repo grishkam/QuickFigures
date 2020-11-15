@@ -16,7 +16,6 @@ import javax.swing.JColorChooser;
 
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import logging.IssueLog;
 import objectDialogs.TextGraphicSwingDialog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
@@ -24,7 +23,7 @@ import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.NumberInputEvent;
 import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoManagerPlus;
 import undo.UndoTextEdit;
 import utilityClassesForObjects.ColorDimmer;
@@ -33,6 +32,7 @@ import utilityClassesForObjects.RainbowPaintProvider;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.TextLineSegment;
 
+/**Performs a speficic edit of one or more Text objects*/
 public class SuperTextButton extends BasicMultiSelectionOperator implements Serializable {
 
 
@@ -43,8 +43,8 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	private int script;
 	private Color color=null;
 	public int colorDimming=0;
-	private long lastTime;
-	private transient UndoManagerPlus undoManager;
+
+	
 	private TextGraphic modelText;
 	private int startFontSize;
 	private Font startFont=null;
@@ -174,19 +174,11 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 
 	public void run() {
 		
-		long time = System.currentTimeMillis();
-		
-		if (time-lastTime<500||script==SELECT_COLOR) {
-			if (doesRecolor()){
-			color  = JColorChooser.showDialog(null, "Color",color);
-			 }
-			
-		} else  lastTime=System.currentTimeMillis();
 		if(selector==null) return;//can do nothing if no selection system present
 		
 		setSelection(this.selector.getSelecteditems());
 		ArrayList<LocatedObject2D> all = getAllObjects();
-		CompoundEdit2 edits=new CompoundEdit2();
+		CombinedEdit edits=new CombinedEdit();
 		
 		if(this.getModelText()!=null)
 			{
@@ -199,10 +191,12 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		for(LocatedObject2D a: all) {
 			actOnObject(edits, a);
 				}
-		if (getCurrentUndoManager()!=null) getCurrentUndoManager().addEdit(edits);
+		addUndo(edits);
 		
 		
 	}
+
+
 	
 	
 	public boolean objectIsAlready(Object a) {
@@ -237,7 +231,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		return false;
 	}
 
-	public void actOnObject(CompoundEdit2 edits, LocatedObject2D a) {
+	public void actOnObject(CombinedEdit edits, LocatedObject2D a) {
 		if (a instanceof ComplexTextGraphic && ((ComplexTextGraphic) a).isEditMode()) {
 			
 			ComplexTextGraphic c=(ComplexTextGraphic) a;
@@ -352,11 +346,7 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 }
 
 
-	public UndoManagerPlus getCurrentUndoManager() {
-		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
-		return selector.getGraphicDisplayContainer().getUndoManager();
-		return undoManager;
-	}
+
 		
 		public Icon getIcon() {
 			if(this.setsJustification()) {

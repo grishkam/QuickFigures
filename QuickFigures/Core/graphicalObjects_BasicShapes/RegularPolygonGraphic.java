@@ -16,10 +16,9 @@ import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import objectDialogs.PolygonGraphicOptionsDialog;
 import undo.ColorEditUndo;
-import undo.CompoundEdit2;
-import undo.PathEditUndo;
+import undo.CombinedEdit;
 import undo.SimpleItemUndo;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
 
 public class RegularPolygonGraphic extends RectangularGraphic {
@@ -166,7 +165,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	
 	@Override
 	public void showOptionsDialog() {
-		new PolygonGraphicOptionsDialog(this).showDialog();
+		new PolygonGraphicOptionsDialog(this, false).showDialog();
 	}
 	
 	protected SmartHandleList createSmartHandleList() {
@@ -181,7 +180,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	
 	@Override
 	public AbstractUndoableEdit provideUndoForDialog() {
-		return new CompoundEdit2(new UndoStrokeEdit(this), new UndoScaling(this), new ColorEditUndo(this),new SimpleItemUndo<CountParameter> (nvertex));
+		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this),new SimpleItemUndo<CountParameter> (nvertex));
 	}
 	
 	

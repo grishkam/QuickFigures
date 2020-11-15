@@ -19,14 +19,12 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import officeConverter.OfficeObjectConvertable;
 import officeConverter.OfficeObjectMaker;
 import popupMenusForComplexObjects.ArrowGraphicMenu;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.BasicStrokedItem;
 import utilityClassesForObjects.PathPointList;
 import utilityClassesForObjects.RectangleEdges;
@@ -54,70 +52,83 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.ArrowSwingDialog;
 import objectDialogs.StrokeOnlySwingDialog;
 
+/**Draws an arrow*/
 public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, HasTreeLeafIcon,HasBackGroundShapeGraphic, HasUniquePopupMenu, OfficeObjectConvertable, HasSmartHandles {
 
-	
-	
-	
-	{name="Arrow"; strokeWidth=8; dash=new float[] {700000000}; angle=0;}
-	/**
-	 * 
-	 */
-	protected double x2=60;
-	protected double y2=60;
-	private CountParameter headnumber=new CountParameter(this, 1, 0,2);
-	private BasicShapeGraphic backGroundShape=null;
-	boolean headOnly=false;
-	
-	private static final long serialVersionUID = 1L;
-	
-	private double arrowTipAngle=Math.PI/4;
-	private double arrowHeadSize=32;
-	
-	Point2D.Double upperend=null;
-	Point2D.Double lowerend=null;
-	
-	private double notchAngle=Math.PI*3/4;
-	Point2D.Double notchpoint=null;
-	private Point2D.Double[] processesPoints;
-	
-	Point2D.Double notchpoint2=null;
-	private Point2D.Double[] processesPoints2;
-	private Point2D.Double upperend2;
-	private Point2D.Double lowerend2;
-	
-	private Double[] processesPoints3;
-	
-	private int style=0;
-	private transient SmartHandleList smartList;
-	public boolean hideNormalHandles;
-	private transient ReshapeHandleList rotList;
-	
+	private static final int STANDARD_HEAD_SIZE = 16;
+	private static final double STANDARD_TIP_ANGLE = Math.PI/4, STANDARD_NOTCH_ANGLE = Math.PI*3/4;
 	public static final int normalHead=0, openHead=1,outline=2, outlineHeads=3, openOutlineHeads=4, openOutline=5, barHead = 6, squareHead=7, ballhead=8, lineHead=9, triangleHead=10, polygonHead=11;;
 	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Outline", "Outline Heads", "Open Outline Heads", "Outline of Open Head", "Bar Head", "Square Cap", "Circle Cap", "Line Cap", "Arrow Cap", "Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
 	public static final int HANDLE_1=0, HANDLE_2=1, ARROW_SIZE_HANDLE=2, ARROW_STROKE_HANDLE=3, HEAD_NUN_HANDLE=4;;
 	
 	
+	{name="Arrow"; strokeWidth=4; dash=new float[] {700000000}; angle=0;}
+	/**
+	 * 
+	 */
+	
+	private CountParameter headnumber=new CountParameter(this, 1, 0,2);
+	
+	/**set to true if only the arrow head should be drawn*/
+	boolean headOnly=false;
+	
+	private static final long serialVersionUID = 1L;
+	
+	/**The variables that determine the appearance of the arrow*/
+	private int style=normalHead;
+	private double arrowTipAngle=STANDARD_TIP_ANGLE;
+	private double notchAngle=STANDARD_NOTCH_ANGLE;
+	private double arrowHeadSize=STANDARD_HEAD_SIZE;
+	
+	/**The second point within the arrow. see superclass for 1st point*/
+	protected double x2=60, y2=60;//
+	
+	Point2D.Double upperend=null;
+	Point2D.Double lowerend=null;
+	
+	
+	
+	/**As the methods calculate where different parts of the arrow are. values are stored here*/
+	Point2D.Double notchpoint=null;
+	private Point2D.Double[] processesPoints;
+	Point2D.Double notchpoint2=null;
+	private Point2D.Double[] processesPoints2;
+	private Point2D.Double upperend2;
+	private Point2D.Double lowerend2;
+	private Double[] processesPoints3;
+	
+
+	/**The handles*/
+	private transient SmartHandleList smartList;
+	public boolean hideNormalHandles;//set to true if only the specialized arrow head handle will be shown
+	private transient ReshapeHandleList rotList;//a list containing a rotation handle
+	private BasicShapeGraphic backGroundShape=null;
+	
+	
 	public ArrowGraphic() {}
-	public ArrowGraphic(Point p1, Point p2) {
+
+	/**constructor for an arrow stretching from p1 to p2*/
+	public ArrowGraphic(Point2D p1, Point2D p2) {
 		setPoints(p1,p2);
 	}
 	
+	/**set points p1 and p2*/
 	public void setPoints(Point2D p1, Point2D p2) {
 		setPoint1(p1);
 		setPoint2(p2);
 	}
+	
+	/**the first point. if there is only one head, the head is at the first point*/
 	void setPoint1(Point2D p1) {
-		
-		x=p1.getX();//.x;
-		y=p1.getY();//.y;
-		
+		x=p1.getX();
+		y=p1.getY();
 	}
 	void setPoint2(Point2D p2) {
-		x2=p2.getX();//.x;
-		y2=p2.getY();//.y;
+		x2=p2.getX();
+		y2=p2.getY();
 	}
-	
+	/**Creates an arrow outline that is filled with one color and stroked with another.
+	  useful for creating icons*/
 	public static ArrowGraphic createDefaltOutlineArrow(Color fill, Color stroke) {
 		ArrowGraphic ag1=new ArrowGraphic();
 		ag1.setArrowHeadSize(20);
@@ -133,6 +144,9 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return ag1;
 	}
 	
+	/**Creates an arrow outline without heads stretching from one point to the other
+	 * that is filled with one color and stroked with another.
+	  useful for creating icons*/
 	public static ArrowGraphic createLine(Color fill, Color stroke, Point2D p1, Point2D p2) {
 		ArrowGraphic output = ArrowGraphic.createDefaltOutlineArrow(fill, stroke);
 		output.setHeadnumber(0);
@@ -140,6 +154,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return output;
 	}
 	
+	/**switches the location of the two points. if the head is at one point, this changed the direction*/
 	public void swapDirections() {
 		double xo = x;
 		double yo = y;
@@ -170,7 +185,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	
 
 	
-	
+	/**returns the location of the stroke handle*/
 	public Point2D[] getStrokeHandlePoints() {
 		/**this math places the handle at the edge of the stroke near the middle of the line*/
 		
@@ -179,10 +194,9 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return calculatePointsOnStrokeBetween(location1, location2);
 	}
 	
-	
+	/**performs calculations to determine the points along the arrow*/
 	private void computePoints() {
-		
-		
+	
 		double px = getArrowLength()-getArrowHeadSize();
 		double py = Math.tan( getArrowTipAngle()/2)*getArrowHeadSize();
 		if (this.getArrowTipAngle()==Math.PI||isBarHead()) {
@@ -221,27 +235,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		}
 	}
 	
-	private void computeForSquareHead() {
-		double px = getArrowLength()-getArrowHeadSize()/2;
-		double py = getArrowHeadSize()/2;
-		
-		upperend=new Point2D.Double(px, py);
-		lowerend=new Point2D.Double(px, -py);
-		double pxn = getArrowLength()-getArrowHeadSize();
-		notchpoint=new Point2D.Double(pxn, 0);
-		
-		
-		
-		px=getArrowHeadSize()/2;
-		upperend2=new Point2D.Double(px, py);
-		lowerend2=new Point2D.Double(px, -py);
-		pxn =2*px;
-		
-		notchpoint2=new Point2D.Double(pxn, 0);
-		
-		  
-	}
-	
+	/**returns true for certain arrow head shapes that will be placed above the tip of the line*/
 	boolean overTipShape() {
 		if(this.isSquareHead()) return true;
 		if(this.isCircleHead()) return true;
@@ -368,7 +362,6 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		x=arr.x;
 		y=arr.y;
 		y2=arr.y2;
-		//setAngle(arr.getAngle());
 	}
 	
 	public void copyArrowAtributesFrom(ArrowGraphic arr) {
@@ -383,19 +376,14 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 	@Override
 	public Point2D getLocation() {
-		// TODO Auto-generated method stub
 		return new Point2D.Double(x,y);
 	}
 	
-	
-	
 	public Point2D.Double getTipLocation() {
-		// TODO Auto-generated method stub
 		return new Point2D.Double(x2,y2);
 	}
 	
 	public Point2D.Double getOppositeTipEndLocation() {
-		// TODO Auto-generated method stub
 		return new Point2D.Double(x,y);
 	}
 
@@ -408,7 +396,6 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 	@Override
 	public void setLocation(double x,double y) {
-		// TODO Auto-generated method stub
 		this.x2+=x-this.x;
 		this.y2+=y-this.y;
 		this.x=x;
@@ -456,17 +443,6 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	public Rectangle getBounds() {
 		return getOutline().getBounds();
 	}
-/**
-	@Override
-	public int handleNumber(int x, int y) {
-		if (handleBoxes==null||handleBoxes.size()==1) return -1;
-		for(int i=0; i<handleBoxes.size(); i++) {
-			if (handleBoxes.get(i).contains(x, y)) return i;
-		}
-		return -1;
-	}*/
-	
-
 	
 	public double getAngleBetweenPoints() {
 		double angle=Math.atan(((double)(y2-y))/(x2-x));
@@ -477,9 +453,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return angle;
 	}
 	
-	
-
-	
+	/**the arrows never have an angle explicitly set, the two points determine the line*/
 	public double getAngle() {
 		return 0;
 	}
@@ -821,7 +795,7 @@ protected Point2D getDrawnLineEnd2() {
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
 		try {
-		UndoScaling output = new UndoScaling(this);
+		UndoScalingAndRotation output = new UndoScalingAndRotation(this);
 			Point2D p1 = new Point2D.Double(x,y);
 			Point2D p2 = new Point2D.Double(x2,y2);
 			p2=scaleAbout(p2, p,mag,mag);
@@ -934,6 +908,7 @@ protected Point2D getDrawnLineEnd2() {
 		if (h!=null) h.handleMove(p1, p2);
 	}
 	
+	/**A handle for the user to modify the arrow*/
 class ArrowSmartHandle extends SmartHandle {
 		
 		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
@@ -942,7 +917,7 @@ class ArrowSmartHandle extends SmartHandle {
 		}
 
 		private ArrowGraphic rect;
-		private transient UndoScaling undo;
+		private transient UndoScalingAndRotation undo;
 		private transient boolean undoAdded=false;
 
 		public ArrowSmartHandle(int type, ArrowGraphic r) {
@@ -968,14 +943,14 @@ class ArrowSmartHandle extends SmartHandle {
 			if (this.isArrowStrokeHandle()) {
 				return getStrokeHandlePoints()[0];
 			}
-	return getHeadPoints()[2];
+			return getHeadPoints()[2];
 		
 		}
 		
 		
 		public void handlePress(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 			undoAdded=false;
-			undo=new UndoScaling(rect);
+			undo=new UndoScalingAndRotation(rect);
 			if (lastDragOrRelMouseEvent.clickCount()==2&&isArrowSizeHandle())
 				{
 				java.lang.Double p = StandardDialog.getNumberFromUser("Arrow Size", getArrowHeadSize());
@@ -1010,7 +985,7 @@ class ArrowSmartHandle extends SmartHandle {
 		}
 
 		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
-			Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+			Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 			if (this.getHandleNumber()==HANDLE_1) {
 				setPoint1(p2);
 			}
@@ -1064,6 +1039,7 @@ class ArrowSmartHandle extends SmartHandle {
 @Override
 public boolean isFillable() {return false;}
 
+/**returns true if the stroke join is relevant to the appearance of the arrow*/
 public boolean doesJoins() {
 	if(this.style==openHead) return true;
 	return false;
@@ -1098,7 +1074,7 @@ public void rotateAbout(Point2D c, double distanceFromCenterOfRotationtoAngle) {
 	}
 }
 
-/**overrides the interface but implementation is not crucial for arrows*/
+/**overrides the methos in the interface but implementation is not crucial for arrows*/
 @Override
 public void setFillBackGround(boolean fillBackGround) {
 	

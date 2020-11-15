@@ -6,7 +6,7 @@ import animations.HasAnimation;
 import animations.KeyFrameCompatible;
 import animations.Animation;
 import animations.KeyFrameAnimation;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import graphicalObjects.ZoomableGraphic;
 import selectedItemMenus.LayerSelector;
 
@@ -69,7 +69,7 @@ public static int findLastKeyFrame(ArrayList<KeyFrameAnimation> frameLists, int 
 	return lastFrame;
 }
 
-public static void applyFrameAnimators(DisplayedImageWrapper image, int frame2) {
+public static void applyFrameAnimators(DisplayedImage image, int frame2) {
 	
 	ArrayList<ZoomableGraphic> listedObjects = image.getImageAsWrapper().getGraphicLayerSet().getAllGraphics();
 	image.setCurrentFrame(frame2);

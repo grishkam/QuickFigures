@@ -13,7 +13,7 @@ import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import standardDialog.GraphicDisplayComponent;
 import ultilInputOutput.FileChoiceUtil;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClassesForObjects.Mortal;
 
@@ -21,11 +21,15 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 
 	
 	
-	transient CompoundEdit2 undoableEdit=new CompoundEdit2();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	transient CombinedEdit undoableEdit=new CombinedEdit();
 
 	@Override
 	public void run() {
-		undoableEdit=new CompoundEdit2();
+		undoableEdit=new CombinedEdit();
 		
 		boolean b= FileChoiceUtil.yesOrNo("Are you sure you want to delete these "+array.size()+" items?"); if (b==false) return;
 		

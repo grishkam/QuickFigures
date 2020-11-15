@@ -3,8 +3,6 @@ package basicMenusForApp;
 import java.io.File;
 
 import genericMontageUIKit.MoverDragHandler;
-import graphicActionToombar.QuickFigureMaker;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import imageDisplayApp.ImageDisplayIO;
 
 public class OpeningFileDropHandler extends FileDropHandler {

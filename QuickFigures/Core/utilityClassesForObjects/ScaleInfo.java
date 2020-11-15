@@ -4,8 +4,10 @@ package utilityClassesForObjects;
 import java.awt.geom.Dimension2D;
 import java.io.Serializable;
 
-import fieldReaderWritter.RetrievableOption;
+import gridLayout.RetrievableOption;
 
+/**Stores information regarding the
+number of pixels that corresponds to a physical unit distance*/
 public class ScaleInfo implements Serializable{
 
 	/**

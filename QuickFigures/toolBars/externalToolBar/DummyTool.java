@@ -16,7 +16,7 @@ import applicationAdapters.CanvasMouseEventWrapper;
 import imageDisplayApp.ImageAndDisplaySet;
 import logging.IssueLog;
 
-/**A default tool that can be used as both space filler in an external toolset or */
+/**A default tool that can be used as both space filler in an external toolset or as a superclass*/
 public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, InterfaceKeyStrokeReader<ImageType>{
 
 	
@@ -91,28 +91,24 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 
 	@Override
 	public Icon getToolImageIcon() {
-		// TODO Auto-generated method stub
 		try{this.getClass().getResource("Blank.jpg");} catch(Throwable t){
-			IssueLog.log("problem coult not find Blank.jpg");
+			IssueLog.log("problem could not find Blank.jpg");
 		}
 		return null;
 	}
 
 	@Override
 	public Icon getToolPressedImageIcon() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Icon getRollOverIcon() {
-		// TODO Auto-generated method stub
+	public Icon getToolRollOverImageIcon() {
 		return null;
 	}
 
 	@Override
 	public InterfaceKeyStrokeReader<ImageType> getCurrentKeyStrokeReader() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
@@ -123,29 +119,28 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 	}
 
 
-	public static class colorIcon implements Icon {
+	protected static class ColorIcon implements Icon {
 
 		@Override
 		public int getIconHeight() {
-			// TODO Auto-generated method stub
-			return 25;
+			return AbstractExternalToolset.DEFAULT_ICONSIZE;
 		}
 
 		@Override
 		public int getIconWidth() {
-			// TODO Auto-generated method stub
-			return 25;
+			return AbstractExternalToolset.DEFAULT_ICONSIZE;
 		}
 
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			g.setColor(this.getColor());
-			g.draw3DRect(x+3, y+3, 19, 19, true);
+			int location3d = 3;
+			int size3d = 19;
+			g.draw3DRect(x+location3d, y+location3d, size3d, size3d, true);
 		}
 
 		Color theColor=Color.black;
 		private Color getColor() {
-			// TODO Auto-generated method stub
 			return theColor;
 		}}
 	
@@ -178,8 +173,7 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 
 	@Override
 	public void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -189,19 +183,16 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 
 	@Override
 	public String getToolTip() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean userSetSelectedItem(Object o) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void onToolChange(boolean b) {
-		// TODO Auto-generated method stub
 		
 	}
 

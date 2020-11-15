@@ -2,7 +2,7 @@ package fileListOpps;
 
 import java.io.File;
 import java.util.ArrayList;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import imageMenu.CombineImages;
@@ -13,6 +13,11 @@ import ultilInputOutput.FileChoiceUtil;
 public class CombineSavedFigures extends BasicMultiSelectionOperator{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public String getMenuCommand() {
 		return "Combine Figures in list";
 	}
@@ -43,7 +48,7 @@ public class CombineSavedFigures extends BasicMultiSelectionOperator{
 			
 				 ImageAndDisplaySet figure2 = ImageDisplayIO.showFile(f);
 				 CombineImages.combineInto(figure, figure2, false);
-					BasicOverlayHandler boh = new BasicOverlayHandler();
+					BasicObjectListHandler boh = new BasicObjectListHandler();
 				
 				 boh.resizeCanvasToFitAllObjects(figure.getImageAsWrapper());
 				 figure.updateDisplay();

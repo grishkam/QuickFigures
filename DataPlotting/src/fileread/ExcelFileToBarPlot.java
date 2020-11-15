@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import plotCreation.columnPlotCreator;
 
@@ -35,7 +35,7 @@ public class ExcelFileToBarPlot extends  ExcelDataImport{
 	
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		try {
 		
 			File f=getFileAndaddExtension();
@@ -70,7 +70,7 @@ public class ExcelFileToBarPlot extends  ExcelDataImport{
 	}
 
 
-	public void createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImage diw) {
 		creator.createPlot(name, items, diw);
 		
 	}

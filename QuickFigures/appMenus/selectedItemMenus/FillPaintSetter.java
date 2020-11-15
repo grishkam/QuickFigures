@@ -5,6 +5,11 @@ import utilityClassesForObjects.Fillable;
 
 public class FillPaintSetter extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		// TODO Auto-generated method stub

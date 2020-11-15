@@ -35,7 +35,7 @@ public class BarGraphicAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 	
 		return "Scale Bar To Selected Image";
 	}

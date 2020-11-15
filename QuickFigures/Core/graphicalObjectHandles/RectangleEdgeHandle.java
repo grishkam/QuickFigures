@@ -87,7 +87,7 @@ public class RectangleEdgeHandle extends SmartHandle {
 		
 		Point2D pz =  getZeroLocation();
 		Point2D maxLocation = getMaxLocation();
-		Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		
 		double angle = -NumberUse.getAngleBetweenPoints(pz, maxLocation);
 		double maxDistance=distanceOnAxis(pz, maxLocation, angle);

@@ -1,13 +1,18 @@
 package graphicTools;
 
+import java.awt.Rectangle;
+
 import applicationAdapters.ImageWrapper;
 import genericMontageUIKit.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**A tool for adding and manipulating shapes*/
 public class GraphicTool extends Object_Mover {
 
 	{createSelector=false;}
@@ -41,11 +46,7 @@ public class GraphicTool extends Object_Mover {
 			IssueLog.log(t);
 		}
 	}
-	/**
-	public void mouseClicked(ImagePlus imp, MouseEvent e) {
-	
-		}*/
-	
+
 	@Override
 	public void mouseReleased() {
 		super.mouseReleased();
@@ -71,4 +72,6 @@ public class GraphicTool extends Object_Mover {
 	public String getToolName() {
 		return "Graphic Tool";
 	}
+	
+
 }

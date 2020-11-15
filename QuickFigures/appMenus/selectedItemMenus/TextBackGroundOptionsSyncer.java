@@ -7,6 +7,11 @@ import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 public class TextBackGroundOptionsSyncer extends BasicMultiSelectionOperator{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		// TODO Auto-generated method stub

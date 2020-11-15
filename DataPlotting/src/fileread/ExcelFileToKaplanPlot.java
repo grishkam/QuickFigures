@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import dataSeries.KaplenMeierDataSeries;
 import plotCreation.KaplanMeierPlotCreator;
@@ -36,7 +36,7 @@ public class ExcelFileToKaplanPlot extends  ExcelDataImport{
 	
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		try {
 		
 			File f=getFileAndaddExtension();
@@ -71,7 +71,7 @@ public class ExcelFileToKaplanPlot extends  ExcelDataImport{
 	}
 
 
-	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImage diw) {
 		creator.createPlot(name, items, diw);
 		
 	}

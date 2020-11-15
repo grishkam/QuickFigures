@@ -15,15 +15,18 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	protected ShapeGraphic s;
+	public boolean omitPart1=false;
 	
 	ArrayList<ShapeGraphic> array=new 	ArrayList<ShapeGraphic>();
 
-	public ShapeGraphicOptionsSwingDialog(ShapeGraphic s) {
-	this.s=s;	
-	 addOptionsToDialog();
-	 super.undoableEdit=Edit.createGenericEditForItem(s);
+	public ShapeGraphicOptionsSwingDialog(ShapeGraphic s, boolean omit) {
+		 this.s=s;	
+		 addOptionsToDialog();
+		 omitPart1=omit;
+		 super.undoableEdit=Edit.createGenericEditForItem(s);
 	}
 	
 	public boolean hasItems() {
@@ -35,6 +38,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		return false;
 	}
 	
+	/**Constructs a dialog that changes the appearance of multiple items*/
 	public ShapeGraphicOptionsSwingDialog(ArrayList<?> items, boolean backgroundShapes) {
 		setArray(items);
 		if (backgroundShapes) setArrayToTextBackGround(items);
@@ -44,7 +48,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		}
 	
 	
-	
+	/**Add multiple shapes to the dialog*/
 	public void setArray(ArrayList<?> items) {
 		array=new 	ArrayList<ShapeGraphic>();
 		for(Object i: items) {
@@ -55,6 +59,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		super.undoableEdit=Edit.createGenericEdit(items);
 	}
 	
+	/**Add multiple shapes to the dialog*/
 	public void setArrayToTextBackGround(ArrayList<?> items) {
 		array=new 	ArrayList<ShapeGraphic>();
 		for(Object i: items) {
@@ -74,20 +79,18 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 	}
 	
 	protected void addOptionsToDialog() {
-		// TODO Auto-generated method stub
-		 addOptionsToDialogPart1();
+		if (!omitPart1) {addOptionsToDialogPart1();}
 		addOptionsToDialogPart2();
 	}
 	
-	
+	/**Adds the name and fixed edge position to the dialog. these items do not affect the objects appearance*/
 	protected void addOptionsToDialogPart1() {
-		this.addNameField(s);
+		addNameField(s);
 		this.addFixedEdgeToDialog(s);
 	}
 	
-	
+	/**Adds all other options to the dialog. these items affect the objects appearance*/
 	protected void addOptionsToDialogPart2() {
-		// TODO Auto-generated method stub
 		this.add("AntiA", new BooleanInputPanel("Antialize Appeareance", s.isAntialize()));
 		this.addStrokePanelToDialog(s);
 		ColorComboboxPanel filpanel = new ColorComboboxPanel("Fill Color", null, s.getFillColor());
@@ -102,7 +105,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 			BooleanInputPanel colsepanel2 = new BooleanInputPanel("Closed?", s.isClosedShape());
 			add("Closed", colsepanel2);
 		}
-		if (s.getSnappingBehaviour()!=null) this.addSnappingBehviourToDialog(s);
+		if (s.getSnapPosition()!=null) this.addSnappingBehviourToDialog(s);
 	}
 	
 	protected void setItemsToDiaog() {
@@ -114,8 +117,11 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 	
 	protected void setItemsToDiaog(ShapeGraphic s) {
 		if (s==null) return;
-		this.setFixedEdgeToDialog(s);
-		this.setNameFieldToDialog(s);
+		
+		if (!omitPart1) {
+			this.setFixedEdgeToDialog(s);
+			setNameFieldToDialog(s);
+		}
 		this.setStrokedItemtoPanel(s);
 		s.setFillColor(this.getColor("FillColor"));
 		

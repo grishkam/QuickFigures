@@ -16,7 +16,7 @@ public class ImagePanelLayoutAdder extends PlasticLayoutAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		return "Add Image Panel Dependent Layout";
 	}

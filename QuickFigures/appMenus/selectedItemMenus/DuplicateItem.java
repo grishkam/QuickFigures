@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
 
 public class DuplicateItem extends BasicMultiSelectionOperator {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String getMenuCommand() {
@@ -28,7 +33,7 @@ public class DuplicateItem extends BasicMultiSelectionOperator {
 
 	@Override
 	public void run() {
-		CompoundEdit2 undo = new CompoundEdit2();
+		CombinedEdit undo = new CombinedEdit();
 		//new BasicOverlayHandler().copyRois(input)
 	
 		for(ZoomableGraphic i: this.array) {

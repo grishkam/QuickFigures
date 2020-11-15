@@ -6,6 +6,10 @@ import graphicalObjects.GraphicSetDisplayContainer;
 public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private GraphicSetDisplayContainer container;
 
 	public SelectedSetLayerSelector(GraphicSetDisplayContainer cont) {

@@ -15,15 +15,11 @@ import javax.swing.Icon;
 
 import externalToolBar.textGraphicTreeIcon;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_FigureSpecific.FigureLabelOrganizer.PanelLabelTextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;
 import logging.IssueLog;
-import menuUtil.PopupMenuSupplier;
 import objectDialogs.ComplexTextGraphicSwingDialog;
-import popupMenusForComplexObjects.TextGraphicMenu;
-import popupMenusForComplexObjects.TextSelectionMenu;
 import standardDialog.StandardDialog;
 import undo.Edit;
 import undo.UndoAbleEditForRemoveItem;
@@ -59,7 +55,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		output.copyAttributesFrom(this);
 		output.copyBasicTraitsFrom(this);
 		output.backGroundShape=getBackGroundShape().copy();
-		if (getSnappingBehaviour()!=null) output.setSnappingBehaviour(getSnappingBehaviour().copy());
+		if (getSnapPosition()!=null) output.setSnappingBehaviour(getSnapPosition().copy());
 		else output.setSnappingBehaviour(null);
 		
 		return output;
@@ -757,7 +753,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	/**not implemented, decided to implement a popup menu instead*/
 	public String copySelectedRegion() {
 		String out = getSelectedText();
-		this.lastCopy=out;
+		TextGraphic.lastCopy=out;
 		afterSplitUp();
 		return lastCopy;
 	}
@@ -790,7 +786,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		boolean state = isSelectionUnderlined();
 		TextLineSegment selSeq = getAllSelectedSegments().get(0);
 		IssueLog.log("will attempt to copy text");
-		if(selSeq!=null&&this.lastCopy!=null) selSeq.setText(lastCopy);
+		if(selSeq!=null&&TextGraphic.lastCopy!=null) selSeq.setText(lastCopy);
 
 		afterSplitUp();
 	}

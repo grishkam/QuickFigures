@@ -1,8 +1,6 @@
 package undo;
 
 
-import javax.swing.undo.UndoableEdit;
-
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import utilityClassesForObjects.LocatedObject2D;
@@ -27,8 +25,8 @@ public class Edit {
 		return output;
 	}
 	
-	public static CompoundEdit2 createGenericEdit(Iterable<?> objects) {
-		CompoundEdit2 output=new CompoundEdit2();
+	public static CombinedEdit createGenericEdit(Iterable<?> objects) {
+		CombinedEdit output=new CombinedEdit();
 		for(Object item: objects) {
 			if(item instanceof ProvidesDialogUndoableEdit) {
 				output.addEditToList(((ProvidesDialogUndoableEdit) item).provideUndoForDialog());
@@ -38,8 +36,8 @@ public class Edit {
 		return output;
 	}
 	
-	public static CompoundEdit2 createGenericEditForItem(Object item) {
-		CompoundEdit2 output=new CompoundEdit2();
+	public static CombinedEdit createGenericEditForItem(Object item) {
+		CombinedEdit output=new CombinedEdit();
 	
 			if(item instanceof ProvidesDialogUndoableEdit) {
 				output.addEditToList(((ProvidesDialogUndoableEdit) item).provideUndoForDialog());

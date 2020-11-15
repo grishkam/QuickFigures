@@ -3,17 +3,17 @@ package imageMenu;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.BasicMenuItemForObj;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
 import utilityClassesForObjects.LocatedObject2D;
 
 public class CanvasAutoTrim extends BasicMenuItemForObj{
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
 		
 		trimCanvas(diw);
@@ -22,9 +22,9 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 			diw.getUndoManager().addEdit(undo);
 	}
 
-	public void trimCanvas(DisplayedImageWrapper diw) {
+	public void trimCanvas(DisplayedImage diw) {
 		ImageWrapper iw = diw.getImageAsWrapper();
-		BasicOverlayHandler boh = new BasicOverlayHandler();
+		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		ArrayList<LocatedObject2D> list = iw.getLocatedObjects();
 		Rectangle bound=null;

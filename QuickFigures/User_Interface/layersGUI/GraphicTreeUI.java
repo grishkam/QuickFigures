@@ -47,7 +47,7 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import addObjectMenus.ObjectAddingMenu;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.AbstractExternalToolset;
 import externalToolBar.InterfaceExternalTool;
@@ -71,7 +71,7 @@ import selectedItemMenus.LayerSelector;
 import selectedItemMenus.SelectionOperationsMenu;
 import standardDialog.GraphicDisplayComponent;
 import ultilInputOutput.ForDragAndDrop;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoReorder;
@@ -80,7 +80,7 @@ import utilityClassesForObjects.Selectable;
 import utilityClassesForObjects.ShowsOptionsDialog;
 import undo.UndoHideUnhide;
 
-/**The user GUI for the layers pallete. Is complex with manipluations of layer structure 
+/**The user GUI for the layers window. This is a complex window with manipulations of layer structure 
   being done when the user drags and drops*/
 public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropTargetListener, ActionListener, MouseListener, WindowListener, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>, MouseMotionListener {
 	
@@ -520,7 +520,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 		
 		TreePath[] selPaths = tree.getSelectionPaths();
 		
-		CompoundEdit2 undo = new CompoundEdit2();
+		CombinedEdit undo = new CombinedEdit();
 		
 		/**What to do when a group of items are moved to the same destination.
 		  The loops work in a specific order so that the original object order
@@ -760,7 +760,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 		try{
 			if (!destination.canAccept(item)) return null;
 			if (!origin.canRelease(item)) return null;
-			CompoundEdit2 undo2 = new CompoundEdit2();
+			CombinedEdit undo2 = new CombinedEdit();
 			undo2.addEditToList(new UndoAbleEditForRemoveItem(origin, item, tree));
 			undo2.addEditToList(new UndoAddItem(destination, item, tree));
 			
@@ -1108,7 +1108,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 	public void setSelecteditem(ZoomableGraphic selecteditem) {
 		this.selecteditem = selecteditem;
 		
-		InterfaceExternalTool<DisplayedImageWrapper> tool = ToolBarManager.getCurrentTool();
+		InterfaceExternalTool<DisplayedImage> tool = ToolBarManager.getCurrentTool();
 		if(tool!=null)
 			try {
 				tool.userSetSelectedItem(selecteditem);

@@ -72,27 +72,7 @@ public class SmartPopupJMenu extends JPopupMenu {
 	}
 	
 	protected CanvasMouseEventWrapper getMemoryOfMouseEvent() {return mEvent;};
-	/**
-	 * 
-	
 
-	private static final long serialVersionUID = 1L;
-	{
-		closer=new PopupCloser(this);
-		;closer.removeAfterDone=false;
-} */
-	/**
-	 * 
-	 */
-/**
-	public JMenu.WinListener createWinListener(JPopupMenu p) {
- 		WinListener output = super.createWinListener(p);
- 		IssueLog.log("win listener created");
- 		closer = new PopupCloser(p);
- 		//closer.removeAfterDone=false;
- 		this.popupListener=output;
- 		return output;
- 	}*/
 	
 	public void setVisible(boolean b) {
 		

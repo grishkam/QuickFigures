@@ -15,7 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.MenuSupplier;
@@ -24,14 +24,14 @@ import utilityClassesForObjects.RectangleEdges;
 
 /**this will generate a working popup menus from the annotated methods in
   an object.  I wrote it because I wanted to sometimes write the 
-  code for popup menus quickly with a little less complexity each time*/
+  code for popup menus with a little less complexity each time*/
 public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	private Object o;
-	//Class<MenuItemMethod> c=;
+
 	private HashMap<MenuItemMethod, Method> map=new HashMap<MenuItemMethod, Method>();
 	private HashMap<String, Method> mapComms=new HashMap<String, Method>();
 	private MenuSupplier partner=null;
-//	private ArrayList<Method> methodsList=new ArrayList<Method> ();
+
 	private SmartPopupJMenu popupMenu;
 	private UndoManagerPlus undoManager;
 	
@@ -102,7 +102,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 				}
 				
 				if (k.subMenuName().contains("<"))
-						submen=SmartJMenu. getSubmenuFromPath(submen, k.subMenuName().split("<"), 1);
+						submen=SmartJMenu. getOrCreateSubmenuFromPath(submen, k.subMenuName().split("<"), 1);
 				
 				submen.add(item);
 			}
@@ -141,9 +141,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		Method[] methods = o.getClass().getMethods();
 		for(Method m:methods) {
 		MenuItemMethod anns = m.getAnnotation(MenuItemMethod.class);
-	//	IssueLog.log("checking method "+m.getName());
 		if(anns==null ) continue;
-	//	IssueLog.log("found menu annotation in  "+m.getName());
 			map.put(anns, m);
 			mapComms.put(anns.menuActionCommand(), m);
 		}
@@ -174,7 +172,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 				getUndoManager().addEdit((UndoableEdit) item);
 			}
 			
-			new CurrentSetInformerBasic().getCurrentlyActiveDisplay().updateDisplay();
+			new CurrentFigureSet().getCurrentlyActiveDisplay().updateDisplay();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -32,14 +32,14 @@ public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 	private static final long serialVersionUID = 1L;
 	private GraphicSetDisplayTree theTree;
 
-	public GraphicTreeTransferHandler(TransferHandler t) {
+	private GraphicTreeTransferHandler(TransferHandler t) {
 		super(t);
 		
 	}
 
-	public GraphicTreeTransferHandler(String property) {
+	private GraphicTreeTransferHandler(String property) {
 		super(property);
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	public GraphicTreeTransferHandler(TransferHandler transferHandler, GraphicSetDisplayTree graphicSetDisplayTree) {
@@ -90,7 +90,7 @@ public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 			}
 		
 		return img;
-		//return super.getDragImage();
+	
 	}
 	
 
@@ -128,7 +128,6 @@ public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 
 		@Override
 		public boolean isDataFlavorSupported(DataFlavor theflavor) {
-			//if (DataFlavor.stringFlavor==theflavor) return true;
 			if (selectedItemListFlavor==theflavor) return true;
 			return false;
 		}

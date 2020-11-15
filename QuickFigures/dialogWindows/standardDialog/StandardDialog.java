@@ -22,17 +22,15 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelWrapper;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import undo.AbstractUndoableEdit2;
-import undo.UndoManagerPlus;
 import utilityClassesForObjects.ScaleInfo;
 
 /**inspired by imageJ's generic dialog. */
@@ -151,7 +149,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 
 	public AbstractUndoableEdit2 undo;//this undo is added to an undo 
 
-	public UndoManager currentUndoManager=new CurrentSetInformerBasic().getUndoManager();
+	public UndoManager currentUndoManager=new CurrentFigureSet().getUndoManager();
 	
 	
 	public void add(String key, StringInputPanel st) {

@@ -14,6 +14,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import standardDialog.GraphicObjectDisplayBasic;
 
+/**this class consists of static methods for creating a few of the icons used*/
 public class IconUtil {
 
 	public static Icon createFolderIcon(boolean open, Color folderColor) {

@@ -5,11 +5,11 @@ import java.awt.Point;
 
 import applicationAdapters.ImageWrapper;
 import externalToolBar.TreeIconWrappingToolIcon;
-import figureTemplates.ScaleBarPicker;
+import figureFormat.ScaleBarPicker;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
@@ -45,7 +45,7 @@ public class BarGraphicTool extends GraphicTool {
 			return (BarGraphic) roi2;
 		}
 		GraphicLayer selectedContainer = gmp.getGraphicLayerSet().getSelectedContainer();
-			CompoundEdit2 undo=new CompoundEdit2();
+			CombinedEdit undo=new CombinedEdit();
 			int x = getClickedCordinateX();
 			int y = getClickedCordinateY();
 			
@@ -62,7 +62,7 @@ public class BarGraphicTool extends GraphicTool {
 
 	/**adds a scale bar to the image*/
 	public BarGraphic addBarGraphic(LocatedObject2D roi2, GraphicLayer selectedContainer,
-			CompoundEdit2 undo, int x, int y) {
+			CombinedEdit undo, int x, int y) {
 		BarGraphic bg = new BarGraphic();
 	
 		if(bg!=null) {
@@ -85,7 +85,7 @@ public class BarGraphicTool extends GraphicTool {
 			
 			 new ScaleBarPicker(model).setBarDefaultsBasedOnHeight(b.getBounds().height, bg, model.getFillColor());
 		
-			bg.getSnappingBehaviour().setToNearestInternalSnap(bg.getBounds(), b.getBounds(), new Point(x, y));
+			bg.getSnapPosition().setToNearestInternalSnap(bg.getBounds(), b.getBounds(), new Point(x, y));
 			//bg.setLengthInUnits(length);
 			
 			//bg.setSnappingBehaviour(SnappingBehaviour.defaultScaleBar());

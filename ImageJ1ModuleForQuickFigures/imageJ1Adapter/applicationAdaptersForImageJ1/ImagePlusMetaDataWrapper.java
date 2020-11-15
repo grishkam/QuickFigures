@@ -4,6 +4,9 @@ import ij.ImagePlus;
 import infoStorage.StringBasedMetaWrapper;
 import infoStorage.MetaInfoWrapper;
 
+/**This class is crucial for retrieving certain information from an image's metadata
+ * For example, real channel names are obtained this way. See superclass for detail
+  */
 public class ImagePlusMetaDataWrapper extends StringBasedMetaWrapper  implements MetaInfoWrapper{
 	
 	/**

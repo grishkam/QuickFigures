@@ -10,7 +10,8 @@ import java.awt.RenderingHints;
 import javax.swing.Icon;
 
 
-/**An icon that paints multiple other icons on top of each other*/
+/**An icon that paints multiple other icons on top of each other.
+  Also draws a small triangle on some icons to indicate a menu*/
 public class CompoundIcon implements Icon {
 
 	private Icon[] icons;
@@ -37,6 +38,7 @@ public class CompoundIcon implements Icon {
 		return icons[0].getIconWidth();
 	}
 
+	/**Paints the icons*/
 	@Override
 	public void paintIcon(Component arg0, Graphics arg1, int arg2, int arg3) {
 		for(Icon icon: icons) {

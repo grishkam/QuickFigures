@@ -14,6 +14,8 @@ import graphicalObjectHandles.SmartHandleList;
 
 public class GearShape extends SimpleStar {
 
+	{name="Gear";}
+	
 	public String getPolygonType() {return "Gear";}
 	
 	int complexity=2;

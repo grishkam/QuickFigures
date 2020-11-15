@@ -11,6 +11,8 @@ import graphicalObjectHandles.SmartHandleList;
 /**A star object*/
 public class ComplexStar extends SimpleStar {
 
+	
+	{name="Complex Star";}
 	{ doesAngleShift=false;}
 	private static final int STAR_RATIO_HANDLE2 = 88;
 	//private double ieRatio2=0.15;

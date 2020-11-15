@@ -8,23 +8,15 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**A text windows that can be used for displaying messages that the users can see and copy/paste
+  useful if anyone wants to send a description of the bugs they encounter to the programmer (me).*/
 public class MyTextWindow  extends JFrame {
 
 	    /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-		public static final String LOC_KEY = "results.loc";
-	    public static final String WIDTH_KEY = "results.width";
-	    public static final String HEIGHT_KEY = "results.height";
-	    public static final String LOG_LOC_KEY = "log.loc";
-	    public static final String LOG_WIDTH_KEY = "log.width";
-	    public static final String LOG_HEIGHT_KEY = "log.height";
-	    public static final String DEBUG_LOC_KEY = "debug.loc";
-	    static final String FONT_SIZE = "tw.font.size";
-	    static final String FONT_ANTI= "tw.font.anti";
-	   
-	    int[] sizes = {9, 10, 11, 12, 13, 14, 16, 18, 20, 24, 36, 48, 60, 72};
+
 	    int fontSize = 12;
 		private JTextArea area;
 	   

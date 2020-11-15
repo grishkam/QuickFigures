@@ -32,12 +32,12 @@ import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.SnappingPanel;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAddManyItem;
 import undo.UndoInsetDefinerGraphic;
 import undo.UndoLayoutEdit;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.SnappingPosition;
 
@@ -96,12 +96,12 @@ public class InsetTool extends GraphicTool implements MontageSpaces {
 
 
 
-	private CompoundEdit2 undo;
+	private CombinedEdit undo;
 	
 	
 	
 public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
-	undo=new CompoundEdit2();
+	undo=new CombinedEdit();
 	//undo.addEditToList(new UndoWarning());
 	
 	if (roi2 instanceof PanelGraphicInsetDef) {
@@ -160,8 +160,8 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	
 	
 	
-	private CompoundEdit2 createInsets(PanelGraphicInsetDef inset) {
-		CompoundEdit2 undo = new CompoundEdit2();
+	private CombinedEdit createInsets(PanelGraphicInsetDef inset) {
+		CombinedEdit undo = new CombinedEdit();
 		if(!inset.isValid()) return undo;
 		
 		
@@ -175,7 +175,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 
 	inset.setBilinearScale(scale);
 	inset.multiChannelStackofInsets=list;
-	inset.setUpListToMakeInset(list, display.getStack());
+	inset.setUpListToMakeInset(list, display.getPanelList());
 	
 	
 	if (createMultiChannel==1)list.addAllCandF(display.getMultichanalWrapper());
@@ -258,7 +258,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(this.getImageWrapperClick(), l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.onlySelectThoseOfClass);
 		itemsInway.remove(l);
 		itemsInway.remove(inset.personalGraphic);
-		if (itemsInway.size()>0&&l.getSnappingBehaviour().isExternalSnap()) {
+		if (itemsInway.size()>0&&l.getSnapPosition().isExternalSnap()) {
 			//IssueLog.log("limited space puts makes  col label impossible");
 			l.setSnappingBehaviour(SnappingPosition.defaultPanelLabel());
 		} else
@@ -309,7 +309,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		
 		ChannelUseInstructions ins = ChannelUseInstructions.getChannelInstructionsForInsets();
 		list.setChannelUstInstructions(ins);
-		ArrayList<Integer> noMChan = display.getStack().getChannelUseInstructions().noMergeChannels;
+		ArrayList<Integer> noMChan = display.getPanelList().getChannelUseInstructions().noMergeChannels;
 		ins.excludedChannelPanels=new ArrayList<Integer>();
 		ins.excludedChannelPanels.addAll(noMChan);
 		ins.noMergeChannels=new ArrayList<Integer>();;
@@ -350,7 +350,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		if (!getImageDisplayWrapperClick().getUndoManager().hasUndo(undo)){
 				this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
 		}
-		UndoScaling scalingUndo = new UndoScaling(inset);
+		UndoScalingAndRotation scalingUndo = new UndoScalingAndRotation(inset);
 		Rectangle2D r = SelectionManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
 		undo.addEditToList(scalingUndo);
 		boolean isRectValid=validRect(r);
@@ -361,7 +361,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 								
 								inset = new PanelGraphicInsetDef(SourceImageforInset,r.getBounds());
 								
-								scalingUndo = new UndoScaling(inset);undo.addEditToList(scalingUndo);
+								scalingUndo = new UndoScalingAndRotation(inset);undo.addEditToList(scalingUndo);
 								SourceImageforInset.getParentLayer().add(inset);
 								undo.addEditToList(new UndoAddItem(SourceImageforInset.getParentLayer(), inset));
 								inset.setDashes(new float[] {});
@@ -379,11 +379,11 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		/**what to do if the panels of the inset are simply added to an existing layout*/
 		if (usePreexisting(inset)) {
 			
-			CompoundEdit2 undo2 = 
+			CombinedEdit undo2 = 
 					inset.getPanelManager().removeDisplayObjectsForAll();
 					
 			undo.addEditToList(undo2);
-			CompoundEdit2 undo3 = inset.getChannelLabelManager().eliminateChanLabels();
+			CombinedEdit undo3 = inset.getChannelLabelManager().eliminateChanLabels();
 			undo.addEditToList(undo3);
 			
 			/**Sets the layout and layer to those of the preexisting*/
@@ -443,8 +443,8 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		return true;
 	}
 
-	public static CompoundEdit2 addExtraInsetPanelsToLayout(PanelList currentstack, double border, PanelManager pm, boolean alterlayout) {
-		CompoundEdit2 undoOutput = new CompoundEdit2();
+	public static CombinedEdit addExtraInsetPanelsToLayout(PanelList currentstack, double border, PanelManager pm, boolean alterlayout) {
+		CombinedEdit undoOutput = new CombinedEdit();
 		
 		/**Adds space if there is none*/
 		BasicMontageLayout layout = pm.getLayout();

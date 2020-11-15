@@ -8,7 +8,7 @@ import java.util.HashMap;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import selectedItemMenus.LayerSelector;
 
 public class TimeLineMenu extends JMenu implements ActionListener {
@@ -19,13 +19,13 @@ public class TimeLineMenu extends JMenu implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	ArrayList<TimeLineOperator> items=new ArrayList<TimeLineOperator>();
 	private LayerSelector ls;
-	private DisplayedImageWrapper diw;
+	private DisplayedImage diw;
 	HashMap<String, TimeLineOperator> map=new HashMap<String, TimeLineOperator>();
 	private TimeLineDialog dialog;
 	
 	
 	
-	public TimeLineMenu(DisplayedImageWrapper diw, LayerSelector ls, TimeLineDialog dialog) {
+	public TimeLineMenu(DisplayedImage diw, LayerSelector ls, TimeLineDialog dialog) {
 		
 		super("Keyframes");
 		

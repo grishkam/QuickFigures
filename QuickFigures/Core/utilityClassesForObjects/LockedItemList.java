@@ -4,12 +4,12 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import logging.IssueLog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
 
@@ -57,7 +57,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 		     throws IOException {
 		try {
 			//ArraySorter.removeDeadItems(this);
-			ArraySorter.removeNonserialiazble(this);
+			ArraySorter.removeNonSerialiazble(this);
 		} catch (Exception e) {
 			IssueLog.log(e);
 			IssueLog.log("Problem attempting to purge problematic items");
@@ -121,7 +121,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 	public ArrayList<LocatedObject2D> getEligibleNONLockedItems(TakesLockedItems taker, Rectangle r) {
 		ObjectContainer container = taker.getTopLevelContainer();
 		if (container !=null) {
-			ArrayList<LocatedObject2D> o = new BasicOverlayHandler().getOverlapOverlaypingOrContainedItems(r, container);
+			ArrayList<LocatedObject2D> o = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, container);
 			ensureThatNoOverlappingItemsStayOnThis(o);
 			return LockedItemList.removeItemsNotAvailableForLock(container.getLocatedObjects(), o);
 		}
@@ -169,7 +169,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 	}
 	
 	/**goes through a list of lock taking items and removes the selected item*/
-	public static void removeFromAlltakers(LocatedObject2D sel, ArrayList<?> allRoi, CompoundEdit2 undoer) {
+	public static void removeFromAlltakers(LocatedObject2D sel, ArrayList<?> allRoi, CombinedEdit undoer) {
 	
 		for(Object t: allRoi) try {
 			if (t==null || !(t instanceof TakesLockedItems)) continue;

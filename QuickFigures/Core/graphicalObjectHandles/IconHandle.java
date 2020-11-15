@@ -1,9 +1,7 @@
 package graphicalObjectHandles;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -11,15 +9,19 @@ import javax.swing.Icon;
 
 import applicationAdapters.CanvasMouseEventWrapper;
 
+/**A handle that displays an icon*/
 public class IconHandle extends SmartHandle {
 	
+	private static final int _DEFAULT_MAX_SIZE = 22;
 	protected int subtract = 0;
+	
+	/**Some icons are drawn shifted slightly*/
 	protected int xShift=0;
 	protected int yShift=0;
 	
-	
-	int maxWidth=22;
-	int maxHeight=22;
+	/**The max size for the handle. Even if icons are larger, the handle will be this size*/
+	int maxWidth=_DEFAULT_MAX_SIZE;
+	int maxHeight=_DEFAULT_MAX_SIZE;
 
 	public IconHandle(Icon i, Point2D p) {
 		super((int)p.getX(), (int)p.getY());
@@ -56,12 +58,6 @@ public class IconHandle extends SmartHandle {
 	public int getxShift() {
 		return xShift;
 	}
-
-	
-
-
-
-
 	public int getyShift() {
 		return yShift;
 	}

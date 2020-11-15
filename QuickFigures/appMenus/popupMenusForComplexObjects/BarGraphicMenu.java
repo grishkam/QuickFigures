@@ -14,7 +14,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
@@ -86,7 +86,7 @@ PopupMenuSupplier  {
 		@Override
 		public AbstractUndoableEdit performAction(LocatedObject2D target) {
 			ImagePanelGraphic image=(ImagePanelGraphic) target;
-			CompoundEdit2 output = new CompoundEdit2();
+			CombinedEdit output = new CombinedEdit();
 			
 			LockedItemList.removeFromAlltakers( barG, barG.getParentLayer().getTopLevelParentLayer().getAllGraphics(), output);
 			

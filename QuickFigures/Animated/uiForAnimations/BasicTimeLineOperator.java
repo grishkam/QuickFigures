@@ -1,11 +1,15 @@
 package uiForAnimations;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import uiForAnimations.TimeLineOperator;
 
 public class BasicTimeLineOperator extends BasicMultiSelectionOperator implements TimeLineOperator {
 
-	protected DisplayedImageWrapper display;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected DisplayedImage display;
 	protected TimeLineDialog ui;
 
 	@Override
@@ -21,7 +25,7 @@ public class BasicTimeLineOperator extends BasicMultiSelectionOperator implement
 	}
 
 	@Override
-	public void setDisplay(DisplayedImageWrapper diw) {
+	public void setDisplay(DisplayedImage diw) {
 		this.display=diw;
 		
 	}

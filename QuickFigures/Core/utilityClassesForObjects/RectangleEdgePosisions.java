@@ -1,12 +1,15 @@
 package utilityClassesForObjects;
 
+/**contains constants that indicate points within a rectangle as well as constants 
+  indicating positions of one objects relative to the bounding box of another.
+  Heavily used*/
 public interface RectangleEdgePosisions {
 
 	static final int factor=100;
 	
 	/**these represent 8 positions along the sides of a Rectangle*/
 	static final int UPPER_LEFT=0, UPPER_RIGHT=1, LOWER_RIGHT=2, LOWER_LEFT=3, 
-			LEFT=4, TOP=5, RIGHT=6, BOTTOM=7, CENTER=8, MIDDLE=9;//#9 middle is a bit buggy, it got drawn on the supper left corner
+			LEFT=4, TOP=5, RIGHT=6, BOTTOM=7, CENTER=8, MIDDLE=9;
 	
 	
 	
@@ -28,7 +31,7 @@ public interface RectangleEdgePosisions {
 	static final int CornerToCenter_LowerLeft=CornerToCenter+LOWER_LEFT;
 	static final int CornerToCenter_UpperRight=CornerToCenter+UPPER_RIGHT;
 	
-	
+	/**positions within a bounding box*/
 	static final int[] locationsfort=new int[] {UPPER_LEFT, UPPER_RIGHT, LOWER_RIGHT, LOWER_LEFT, LEFT, TOP, RIGHT, BOTTOM, CENTER, /**POINT_START, BELOW_POINT_START, ABOVE_POINT_START, LEFT_OF_POINT_START, RIGHT_OF_POINT_START*/};
 	
 	

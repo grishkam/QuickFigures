@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import applicationAdapters.ObjectCreator;
 import applicationAdapters.PixelWrapper;
 
+/**an implementation of object creator for an imageplus*/
 public class OverlayObjectCreator implements ObjectCreator {
 
 	@Override

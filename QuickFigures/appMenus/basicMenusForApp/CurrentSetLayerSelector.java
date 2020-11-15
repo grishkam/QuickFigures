@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.GraphicSetDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -39,7 +39,7 @@ public class CurrentSetLayerSelector  implements LayerSelector , Serializable{
 
 	@Override
 	public GraphicSetDisplayContainer getGraphicDisplayContainer() {
-		return new CurrentSetInformerBasic().getCurrentlyActiveOne();
+		return new CurrentFigureSet().getCurrentlyActiveOne();
 	}
 
 	@Override

@@ -7,19 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
 import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.SetAngle;
 import actionToolbarItems.SuperTextButton;
 import applicationAdapters.CanvasMouseEventWrapper;
 import channelLabels.ChannelLabelTextGraphic;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import iconGraphicalObjects.IconUtil;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.DialogIcon;
-import objectDialogs.MultiSnappingDialog;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
@@ -30,7 +27,7 @@ import standardDialog.FontChooser;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 import standardDialog.SwingDialogListener;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
@@ -93,20 +90,20 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		this.add(new textSyncHandle(800210));
 		
 		this.add(new GeneralActionHandleForText(new SelectAllButton(text), 819100, 0));
-	//	this.createGeneralButton(new EditAndColorizeMultipleItems("up"));
-	//	this.createGeneralButton( new EditAndColorizeMultipleItems("down"));
-	//	this.createGeneralButton( new EditAndColorizeMultipleItems(false, text.getTextColor()));
-		
+	
 		sizeField = new SuperTextButton(text, SuperTextButton. RESIZES_FONT_TO, text.getFont().getSize());
 		add(new JustifyButtonForText(1488925));
 		setLocation(location);
 		adddSnapPositionButton(text);
 		
+		SetAngle itemForIcon2 = new SetAngle(45);
+		 addOperationList(itemForIcon2,SetAngle.createManyAngles() );
+		
 		
 	}
 
 	protected void adddSnapPositionButton(LocatedObject2D t2) {
-		if (t2.getSnappingBehaviour()!=null)this.add(new GeneralActionHandleForText(new SnappingSyncer(true, t2), 741905, 0));
+		if (t2.getSnapPosition()!=null)this.add(new GeneralActionHandleForText(new SnappingSyncer(true, t2), 741905, 0));
 	}
 	
 	class GeneralActionHandleForText extends GeneralActionHandle {
@@ -272,7 +269,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		private static final long serialVersionUID = 1L;
 		
 		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
-			CompoundEdit2 edit = new CompoundEdit2();
+			CombinedEdit edit = new CombinedEdit();
 			boolean rightSide=canvasMouseEventWrapper. getClickedXScreen()>lastDrawShape.getBounds().getCenterX();
 			boolean down=canvasMouseEventWrapper. getClickedYScreen()>lastDrawShape.getBounds().getCenterY();
 			

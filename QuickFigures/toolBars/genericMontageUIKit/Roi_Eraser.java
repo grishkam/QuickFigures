@@ -31,7 +31,7 @@ public class Roi_Eraser extends Object_Mover {
 		
 		
 		
-		getImageWrapperClick().takeRoiFromImage(o);
+		getImageWrapperClick().takeFromImage(o);
 		
 		
 		if (getSelectedObject()!=null)	getSelectedObject().kill();

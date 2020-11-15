@@ -1,11 +1,11 @@
 package uiForAnimations;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import selectedItemMenus.LayerSelector;
 
 public class TimeLineMenu2 extends TimeLineMenu {
 
-	public TimeLineMenu2(DisplayedImageWrapper diw, LayerSelector ls, TimeLineDialog dialog) {
+	public TimeLineMenu2(DisplayedImage diw, LayerSelector ls, TimeLineDialog dialog) {
 		super(diw, ls, dialog);
 		// TODO Auto-generated constructor stub
 	}

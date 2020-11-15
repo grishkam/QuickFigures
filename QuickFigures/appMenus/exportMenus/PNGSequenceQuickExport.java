@@ -7,7 +7,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import appContext.CurrentAppContext;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import channelMerging.MultiChannelWrapper;
 import uiForAnimations.KeyFrameHandling;
 
@@ -21,7 +21,7 @@ public class PNGSequenceQuickExport extends QuickExport {
 	}
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		// TODO Auto-generated method stub
 		try{
 		File f=getFileAndaddExtension();
@@ -43,11 +43,12 @@ public class PNGSequenceQuickExport extends QuickExport {
 		}
 		
 		 
-		   /**
+		   new CurrentAppContext();
+		/**
 		  SVGsaver saver = new SVGsaver();
 		   
 		  saver.saveWrapper(newpath, diw);*/
-		MultiChannelWrapper a = new CurrentAppContext().getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
+		MultiChannelWrapper a = CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
 		
 		} catch (Throwable t) {
 			t.printStackTrace();

@@ -21,7 +21,7 @@ import imageDisplayApp.ImageAndDisplaySet;
 import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 
-
+/**An  SVG exporter implementation for text items*/
 public class TextSVGExporter extends SVGExporter {
 
 	private TextGraphic textgra;
@@ -168,12 +168,7 @@ public class TextSVGExporter extends SVGExporter {
 		
 		Desktop.getDesktop().open(new File(path));
 		
-		//svgOpener.showFile(f);
-		/**
-	   path="/Users/mazog/Desktop/test.svg";
-		File f2 = new File(path);
-	   svgOpener.showFile(f2);
-	   svgOpener.showFile(f);*/
+		
 	  
 	}
 

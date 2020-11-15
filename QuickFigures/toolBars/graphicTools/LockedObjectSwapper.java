@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import applicationAdapters.ImageWrapper;
 import genericMontageKit.SelectionManager;
 import graphicalObjects_BasicShapes.RectangularGraphic;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoSnappingChange;
 import undo.UndoTakeLockedItem;
@@ -108,8 +108,8 @@ private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
 			UndoSnappingChange undoS1 = new  UndoSnappingChange(inside);
 			UndoSnappingChange undoS2 = new  UndoSnappingChange(object2);
 			
-			SnappingPosition snap1 = inside.getSnappingBehaviour();
-			SnappingPosition snap2 = object2.getSnappingBehaviour();
+			SnappingPosition snap1 = inside.getSnapPosition();
+			SnappingPosition snap2 = object2.getSnapPosition();
 			inside.setSnappingBehaviour(snap2);
 			object2.setSnappingBehaviour(snap1);
 			
@@ -130,7 +130,7 @@ private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
 			 UndoTakeLockedItem undo3 = new UndoTakeLockedItem(t2, inside, false);
 			 UndoTakeLockedItem undo4 = new UndoTakeLockedItem(t, object2, false);
 			 
-			CompoundEdit2 undoFinal = new CompoundEdit2(undoS1,undoS2, undo1, undo2, undo3, undo4);
+			CombinedEdit undoFinal = new CombinedEdit(undoS1,undoS2, undo1, undo2, undo3, undo4);
 			this.getImageDisplayWrapperClick().getUndoManager().addEdit(undoFinal);
 }
 

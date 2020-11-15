@@ -9,7 +9,7 @@ import javax.swing.undo.UndoableEdit;
 import animations.HasAnimation;
 import animations.Animation;
 import animations.Animator;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import includedToolbars.StatusPanel;
 import logging.IssueLog;
 
@@ -56,7 +56,7 @@ public class UndoManagerPlus extends UndoManager {
 			return;
 		}
 		
-		CompoundEdit2 c = new CompoundEdit2();
+		CombinedEdit c = new CombinedEdit();
 		c.addEditToList(edits.get(edits.size()-1));
 		c.addEditToList(edit);
 		edits.set(edits.size()-1, c);
@@ -70,7 +70,7 @@ public class UndoManagerPlus extends UndoManager {
 			return newedit;
 		}
 		
-		CompoundEdit2 c = new CompoundEdit2();
+		CombinedEdit c = new CombinedEdit();
 		c.addEditToList(newedit);
 		c.addEditToList(oldedit);
 		edits.set(edits.indexOf(oldedit), c);
@@ -90,7 +90,7 @@ public class UndoManagerPlus extends UndoManager {
 		
 		this.trimEdits(edits.size()-i, edits.size()-1);
 		
-		CompoundEdit2 c = new CompoundEdit2();
+		CombinedEdit c = new CombinedEdit();
 		for(UndoableEdit edit: editsToBeFused) {
 			c.addEditToList(edit);
 			
@@ -102,12 +102,12 @@ public class UndoManagerPlus extends UndoManager {
 	
 	public void addEdits(AbstractUndoableEdit... edits) {
 		if(edits.length==1)this.addEdit(edits[0]);
-		else addEdit(new CompoundEdit2(edits));
+		else addEdit(new CombinedEdit(edits));
 		
 	}
 	
 	/**undoes the action and returns an animation for the redo*/
-	public Animation doAnimatedUndo(DisplayedImageWrapper diw) {
+	public Animation doAnimatedUndo(DisplayedImage diw) {
 		UndoableEdit todo = this.editToBeUndone();
 		if(todo instanceof HasAnimation) {
 			IssueLog.log("This undo can be animated");

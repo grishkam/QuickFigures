@@ -2,8 +2,6 @@ package standardDialog;
 
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
-
 import appContext.CurrentAppContext;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelWrapper;

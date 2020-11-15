@@ -101,7 +101,7 @@ public class LocationChangeListenerList extends
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
 		ArraySorter.removeDeadItems(this);
-		ArraySorter.removeNonserialiazble(this);
+		ArraySorter.removeNonSerialiazble(this);
 		out.defaultWriteObject();
 	}
 	

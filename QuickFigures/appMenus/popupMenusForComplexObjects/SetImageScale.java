@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 
 import applicationAdapters.HasScaleInfo;
 import fLexibleUIKit.ObjectAction;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
 import sUnsortedDialogs.ScaleResetListener;
@@ -45,7 +45,7 @@ public class SetImageScale extends ObjectAction<MultichannelDisplayLayer> {
 					i.updateDisplayPanelImages();
 				}
 				
-			new CurrentSetInformerBasic().updateDisplayCurrent();
+			new CurrentFigureSet().updateDisplayCurrent();
 			
 			}
 			

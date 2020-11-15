@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuBarForApp;
 import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
@@ -15,8 +15,8 @@ import genericMontageUIKit.ObjectColorFillTool;
 import genericMontageUIKit.Roi_Into_Multiple_Panels2;
 import genericMontageUIKit.Object_Mover;
 import genericMontageUIKit.ToolBit;
-import graphicActionToombar.PSActionTool;
-import graphicActionToombar.QuickFigureMaker;
+import graphicActionToolbar.PSActionTool;
+import graphicActionToolbar.QuickFigureMaker;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.BarGraphicTool;
 import graphicTools.CircleGraphicTool;
@@ -109,7 +109,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	public static void includeBonusTool(ToolInstallers tool) {bonusTools.add(tool);}
 	//AdapterKit<DisplayedImageWrapper> ak=new AdapterKit <DisplayedImageWrapper>(new ToolAdapterG());
 	
-	public void setCurrentTool(InterfaceExternalTool<DisplayedImageWrapper> currentTool) {
+	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
 		super.setCurrentTool(currentTool);
 		ToolBarManager.setCurrentTool(currentTool);
 	}
@@ -146,7 +146,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 	}
 	
-	static ArrayList<ToolBit> getRectangularShapeGraphicBits() {
+	public static ArrayList<ToolBit> getRectangularShapeGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 	out.add(new RectGraphicTool());
 	out.add(new RoundRectGraphicTool());
@@ -159,7 +159,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	out.add(new OtherShapeGraphicTool(new NotchedRectangleGraphic(new Rectangle(0,0,5,5))));
 	return out;}
 	
-	static ArrayList<ToolBit> getCircularShapeGraphicBits() {
+	public static ArrayList<ToolBit> getCircularShapeGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 		out.add(new CircleGraphicTool(0));
 	
@@ -177,7 +177,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		return out;
 	}
 	
-	static ArrayList<ToolBit> getShapeGraphicBits2() {
+	public static ArrayList<ToolBit> getRegularPolygonShapeTools() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 		
 		out.add(new RegularPolygonGraphicTool(5));
@@ -233,7 +233,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 	}
 	
-	static ArrayList<ToolBit> getArrowGraphicBits() {
+	public static ArrayList<ToolBit> getArrowGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 		out.add(new ArrowGraphicTool(1));
 		out.add(new ArrowGraphicTool(2));
@@ -264,7 +264,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		addTool(new  GeneralTool( getRectangularShapeGraphicBits()));
 		addTool(new  GeneralTool( getCircularShapeGraphicBits()));
 		
-		addTool(new  GeneralTool( getShapeGraphicBits2()));
+		addTool(new  GeneralTool( getRegularPolygonShapeTools()));
 		addTool(new  GeneralTool( getArrowGraphicBits() ));
 		addTool(new  GeneralTool( new BrushTool(false, 0)));
 		addTool(new  GeneralTool( getPathGraphicBits()));

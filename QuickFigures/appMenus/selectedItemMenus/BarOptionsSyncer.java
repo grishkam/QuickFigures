@@ -2,12 +2,16 @@ package selectedItemMenus;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.BarGraphic;
 import objectDialogs.DialogIcon;
 import objectDialogs.MultiBarDialog;
 
 public class BarOptionsSyncer extends BasicMultiSelectionOperator {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		return "Show Scale Bar Options";

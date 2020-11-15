@@ -1,18 +1,18 @@
 package basicMenusForApp;
 
 import java.io.File;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import ultilInputOutput.FileChoiceUtil;
-import imageDisplayApp.GraphicSet;
+import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageDisplayIO;
 
 public class GraphicSetSaver  extends BasicMenuItemForObj {
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
-		if (diw.getImageAsWrapper() instanceof GraphicSet) {
-			GraphicSet theSet=(GraphicSet) diw.getImageAsWrapper();
+		if (diw.getImageAsWrapper() instanceof GraphicContainingImage) {
+			GraphicContainingImage theSet=(GraphicContainingImage) diw.getImageAsWrapper();
 			File f=FileChoiceUtil.getSaveFile(theSet.getSavePath(), theSet.getSaveName());
 		if (f==null) return;
 		//diw.getImageAsWrapper();

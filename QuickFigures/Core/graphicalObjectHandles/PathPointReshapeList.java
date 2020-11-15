@@ -7,8 +7,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
-
 import applicationAdapters.CanvasMouseEventWrapper;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
@@ -18,7 +16,6 @@ import java.awt.geom.Rectangle2D;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.PathEditUndo;
-import utilityClassesForObjects.BasicStrokedItem;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LocationChangeListenerList;
@@ -298,7 +295,7 @@ public class PathPointReshapeList extends ReshapeHandleList {
 		}
 
 		@Override
-		public SnappingPosition getSnappingBehaviour() {
+		public SnappingPosition getSnapPosition() {
 			// TODO Auto-generated method stub
 			return null;
 		}

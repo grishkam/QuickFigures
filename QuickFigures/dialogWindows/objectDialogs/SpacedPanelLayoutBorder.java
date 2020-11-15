@@ -2,7 +2,7 @@ package objectDialogs;
 
 import java.util.ArrayList;
 
-import genericMontageKit.panelContentElement;
+import genericMontageKit.PanelContentExtract;
 import graphicalObjects_LayoutObjects.SpacedPanelLayoutGraphic;
 import plasticPanels.BasicSpacedPanelLayout;
 import standardDialog.BooleanInputPanel;
@@ -34,7 +34,7 @@ public class SpacedPanelLayoutBorder extends GraphicItemOptionsDialog {
 	}
 	protected void setItemsToDiaog() {
 		layoutg.generateCurrentImageWrapper();
-		ArrayList<panelContentElement> stack = layoutg.getEditor().cutStack(layoutl);
+		ArrayList<PanelContentExtract> stack = layoutg.getEditor().cutStack(layoutl);
 		 layoutl.setHorizontalBorder(this.getNumberInt("bh"));
 		 layoutl.setVerticalBorder(this.getNumberInt("bv"));
 		 layoutl.getneighborFinder().setPerformBottomEdgeAllign(this.getBoolean("bottomA"));

@@ -17,6 +17,8 @@ import channelMerging.ChannelEntry;
 import channelMerging.ChannelMerger;
 import genericMontageKit.PanelListElement;
 
+/**this class handles the merging of multiple channels into rgb images that 
+ * are to be displayed in image panels*/
 public class CompositeImageMerger implements ChannelMerger, Serializable {
 
 	/**

@@ -61,7 +61,7 @@ public class PasteItem extends BasicGraphicAdder{
 
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		return getCommand();
 	}

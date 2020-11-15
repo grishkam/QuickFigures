@@ -1,6 +1,10 @@
 package graphicTools;
 
 import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+
+import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
 import externalToolBar.TreeIconWrappingToolIcon;
@@ -8,10 +12,12 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import utilityClassesForObjects.LocatedObject2D;
 
-public class ArrowGraphicTool extends GraphicTool {
-	private boolean line=false;
+/**A tool to draw an arrow. If the number of arrow heads is set to 0, this is reffered to ]
+  as a tool to draw a line (arrow without heads)*/
+public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
+	private boolean line=false; 
 
-	ArrowGraphic model = new ArrowGraphic(); {} //{super.temporaryTool=true;}
+	ArrowGraphic model = new ArrowGraphic(); {} {super.temporaryTool=true;}
 	
 	
 	
@@ -40,15 +46,9 @@ public class ArrowGraphicTool extends GraphicTool {
 	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	
 		if (getSelectedObject() instanceof ArrowGraphic) return;
-		
-		ArrowGraphic bg = new ArrowGraphic();
-		if (line) bg.setName("Line");
-		bg.copyAttributesFrom(model);
-		bg.copyArrowAtributesFrom(model);
-		bg.copyColorsFrom(model);
-		
-		bg.setLocation(getClickedCordinateX(), getClickedCordinateY());
-		//bg.setStrokeColor(getForeGroundColor());
+		int cx = getClickedCordinateX();
+		int cy = getClickedCordinateY();
+		ArrowGraphic bg = createArrow(cx, cy);
 		setSelectedObject(bg);
 		setSelectedHandleNum(1);
 		super.setPressedSmartHandle(bg.getSmartHandleList().getHandleNumber(1));;
@@ -57,10 +57,31 @@ public class ArrowGraphicTool extends GraphicTool {
 				layer.add(bg);
 				addUndoerForAddItem(gmp, layer, bg);
 				
-		//bg.showOptionsDialog();
 		gmp.updateDisplay();
 		
 		
+	}
+	
+	/**
+	creates the arrow at the given point
+	 */
+	public ArrowGraphic createArrow(double d, double e) {
+		ArrowGraphic bg = new ArrowGraphic();
+		if (line) bg.setName("Line");
+		bg.copyAttributesFrom(model);
+		bg.copyArrowAtributesFrom(model);
+		bg.copyColorsFrom(model);
+		
+		
+		bg.setLocation(d, e);
+		return bg;
+	}
+	
+	/**creates an arrow that stretches from one end of the rectangle to another*/
+	public ArrowGraphic createShape(Rectangle r) {
+		ArrowGraphic createArrow = createArrow(r.getX(), r.getY());
+		createArrow.setPoints(new Point2D.Double(r.getX(), r.getY()), new Point2D.Double(r.getMaxX(), r.getMaxY()));
+		return createArrow;
 	}
 	
 	
@@ -71,15 +92,22 @@ public class ArrowGraphicTool extends GraphicTool {
 	
 	@Override
 	public String getToolTip() {
-			
+		if(line) return "A Line";
 			return "Draw an Arrow";
 		}
 	
 
 	@Override
 	public String getToolName() {
-		if(line) return "Draw Line";
-		return "Draw Arrow";
+		return "Draw "+ getShapeName();
+	}
+	
+	public String getShapeName() {
+		if(line) return "Line";
+		return "Arrow";
+	}
+	public Icon getIcon() {
+		return model.getTreeIcon();
 	}
 
 }

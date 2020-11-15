@@ -7,6 +7,12 @@ import selectedItemMenus.BasicMultiSelectionOperator;
 
 public class JournalCriteriaMenuOption extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	public JournalCriteriaMenuOption() {
 		// TODO Auto-generated constructor stub
 	}

@@ -5,11 +5,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import layersGUI.HasTreeLeafIcon;
 import menuUtil.SmartJMenu;
 import utilityClassesForObjects.LocatedObject2D;
@@ -44,7 +43,7 @@ public abstract class SelectItemJMenu extends SmartJMenu  implements ActionListe
 	}
 	
 	public void createMenuItemsForList2(Collection<?> localItems) {
-		createMenuItemsForList(BasicOverlayHandler.getAs2DObjects( localItems));
+		createMenuItemsForList(BasicObjectListHandler.getAs2DObjects( localItems));
 	}
 	
 	@Override

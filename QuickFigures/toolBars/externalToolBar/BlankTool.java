@@ -20,7 +20,7 @@ public class BlankTool<ImageType> extends  DummyTool<ImageType>{
 	}
 
 	@Override
-	public Icon getRollOverIcon() {
+	public Icon getToolRollOverImageIcon() {
 		if (isMenuOnlyTool()||isActionTool()) return  getToolImageIcon();
 		return getIconSet().getIcon(2);//.getIcon(2);
 	}

@@ -7,8 +7,8 @@ public class RectangleGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialo
 
 	RectangularGraphic rect=null;
 	
-	public RectangleGraphicOptionsDialog(RectangularGraphic s) {
-		super(s);
+	public RectangleGraphicOptionsDialog(RectangularGraphic s, boolean simple) {
+		super(s, simple);
 		rect=s;
 		// TODO Auto-generated constructor stub
 	}

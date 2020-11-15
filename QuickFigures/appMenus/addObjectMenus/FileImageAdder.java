@@ -63,7 +63,7 @@ public class FileImageAdder extends BasicGraphicAdder{
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		if (rg)return "Add RGB Image";
 		else return "Add Image File";

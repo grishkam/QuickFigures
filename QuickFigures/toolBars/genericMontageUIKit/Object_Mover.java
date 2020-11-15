@@ -2,6 +2,7 @@ package genericMontageUIKit;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -16,10 +17,11 @@ import javax.swing.JPopupMenu;
 import addObjectMenus.ClipboardAdder;
 import appContext.ImageDPIHandler;
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.CurrentSetLayerSelector;
 import externalToolBar.DragAndDropHandler;
+import externalToolBar.GraphicToolIcon;
 import externalToolBar.IconSet;
 import genericMontageKit.PanelLayout;
 import genericMontageKit.SelectionManager;
@@ -30,7 +32,6 @@ import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.ReshapeHandleList;
 import graphicalObjectHandles.HasHandles;
 import graphicalObjects.CursorFinder;
-import graphicalObjects.GraphicSetDisplayContainer;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
@@ -51,7 +52,7 @@ import standardDialog.BooleanInputPanel;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoTextEdit;
 import utilityClasses1.ArraySorter;
@@ -68,11 +69,15 @@ import undo.UndoAbleEditForRemoveItem;
 import undo.UndoDragHandle;
 import undo.UndoManagerPlus;
 
+/**The most important tool in the toolbar, allows user to select objects, drag handes, bring up popup menus and 
+  more....*/
 public class Object_Mover extends BasicToolBit implements ToolBit  {
-	protected IconSet set=new IconSet("icons2/SelectorIcon.jpg","icons2/SelectorIconPressed.jpg","icons2/SelectorIcon.jpg");
-		protected boolean createSelector=true;	
-			{createIconSet("icons2/SelectorIcon.jpg","icons2/SelectorIconPressed.jpg","icons2/SelectorIcon.jpg");};
+	protected IconSet set=GraphicToolIcon.createIconSet(new LocalIcon(0));//new IconSet("icons2/SelectorIcon.jpg","icons2/SelectorIconPressed.jpg","icons2/SelectorIcon.jpg");
+	//{createIconSet("icons2/SelectorIcon.jpg","icons2/SelectorIconPressed.jpg","icons2/SelectorIcon.jpg");};
 
+	
+	protected boolean createSelector=true;	
+			
 			private Cursor handleCursor=new Cursor(Cursor.HAND_CURSOR);
 			
 	protected LocatedObject2D selectedItem;
@@ -133,7 +138,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			
 		} else
 		{
-			//statusPanel.updateStatus("shift not down on press");
+			
 			deselect(selectedItem);
 			deselectAll() ;
 		 
@@ -807,11 +812,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		//getImageWrapperClick().getSelectionManagger().select(rect, 0);
 		if(rect!=null&&rect.getHeight()>2&&rect.getWidth()>2) {
 		//	
-			ArrayList<LocatedObject2D> items = this.getObjecthandler().getOverlapOverlaypingrois(rect.getBounds(),this.getImageWrapperClick());
+			ArrayList<LocatedObject2D> items = this.getObjecthandler().getOverlapOverlaypingItems(rect.getBounds(),this.getImageWrapperClick());
 			removeIgnoredAndHidden(items);
 			if(items.size()==0) return;
 			LocatedObject2D lastItem = items.get(items.size()-1);
-			boolean selLast=pressX>this.getLastDragOrRelMouseEvent().getCordinatePoint().getX();
+			boolean selLast=pressX>this.getLastDragOrRelMouseEvent().getCoordinatePoint().getX();
 			if (selLast)this.setSelectedObject(lastItem);
 			else this.setSelectedObject(items.get(0));
 			for(Object i: items) {
@@ -1089,7 +1094,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	public void setSelectingroup(int selectingroup) {
-		this.selectingroup = selectingroup;
+		Object_Mover.selectingroup = selectingroup;
 	}
 
 	public Cursor getNormalCursor() {
@@ -1144,7 +1149,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		}
 
 		if (!arg0.isShiftDown()) {
-			DisplayedImageWrapper imageDisplayWrapperClick = getImageDisplayWrapperClick();
+			DisplayedImage imageDisplayWrapperClick = getImageDisplayWrapperClick();
 			switch (arg0.getKeyCode()) {
 			
 			
@@ -1215,10 +1220,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return false;
 	}
 
-	public void deleteSelectedItemsAndLayers(DisplayedImageWrapper imageDisplayWrapperClick) {
+	public void deleteSelectedItemsAndLayers(DisplayedImage imageDisplayWrapperClick) {
 		ArrayList<LocatedObject2D> rois3 = getAllSelectedRois(false);
 		ArrayList<GraphicLayer> rois4 = this.getSelectedLayers(this.getImageWrapperClick().getGraphicLayerSet());
-		CompoundEdit2 undoableEdit=new CompoundEdit2();
+		CombinedEdit undoableEdit=new CombinedEdit();
 		imageDisplayWrapperClick.getUndoManager().addEdit(undoableEdit);
 		for (LocatedObject2D roi: rois3){
 			undoableEdit.addEditToList(new UndoAbleEditForRemoveItem(null,(ZoomableGraphic)roi ));
@@ -1408,5 +1413,22 @@ public String getToolTip() {
 		}
 		
 	}
+	
+	class LocalIcon extends GraphicToolIcon {
+		
+		public LocalIcon(int type) {
+			super(type);
+		}
+
+		@Override
+		protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2, int arg3) {
+			super.paintArrow=true;
+			
+		}
+
+		@Override
+		public GraphicToolIcon copy(int type) {
+			return new LocalIcon(type);
+		}}
 
 }

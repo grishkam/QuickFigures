@@ -78,4 +78,10 @@ public class ToolIconWithText extends GraphicToolIcon{
 		
 	}
 
+	@Override
+	public
+	GraphicToolIcon copy(int type) {
+		return new  ToolIconWithText(type, place);
+	}
+
 }

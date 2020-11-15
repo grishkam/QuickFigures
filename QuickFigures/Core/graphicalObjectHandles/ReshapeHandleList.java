@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import javax.swing.JPopupMenu;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEventWrapper;
@@ -18,10 +18,9 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import logging.IssueLog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoMoveItems;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdgePosisions;
@@ -30,24 +29,36 @@ import utilityClassesForObjects.RotatesFully;
 import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.ScalesFully;
 
-/**a handle list for resizing and rotating groups of objects*/
+/**a handle list for resizing, moving and rotating objects.
+  The use can make many modifications simply by dragging handles
+ The user can drag handles to scale rotate and move objects or groups of objects
+ */
 public class ReshapeHandleList extends SmartHandleList implements RectangleEdgePosisions{
 	
-	
-	private static final int rotationOnlyType = 1;
+
+	public static final int defaultHandleNumber = 8000000;
+	private static final int DEFAULT_TYPE=0, ROTATION_ONLY_TYPE = 1;
 	protected ArrayList<LocatedObject2D> objects;
 	private RectangularGraphic rect;
-	public  int handleNumberCorrection=8000000;
-	private int rotationType=10;
+	public  int handleNumberCorrection=defaultHandleNumber;
+	private static final int rotationType=10;
 	private double handleSize=2;
-	ReshapeSmartHandle lastDrag;
-	boolean singleScale=false;
-	private int type;
+	ReshapeSmartHandle lastDrag;//the most recently draged handle
+	boolean singleScale=false;//set to true if both x and y scale factors should be the same
+	private int type=DEFAULT_TYPE;
 	private boolean showLineConnectionForRotationHandle;
 	protected boolean hideCenterHandle=true;
+	
+	/**The color of the handles*/
 	protected  Color reshapeHandleColor = Color.pink;
 	protected Color fixedpointHandleColor = Color.red;
 	
+	private boolean drawsRectOver;//if set to true, draws the rectangle
+	public int RectandleDrawThickness = 1;
+	
+	public JPopupMenu thePopup;//a popup menu for the handles
+	
+	/**returns true if the argument contains the same objects as this list*/
 	public boolean isSimilarList(ReshapeHandleList l) {
 		if(l==null) return false;
 		if(l.objects.size()!=this.objects.size()) return false;
@@ -58,6 +69,9 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		return true;
 	}
 	
+	/**Constructs a reshape handle list with the objects in o.
+	 * The type argument determines which handles are included
+	  */
 	public ReshapeHandleList(int type, LocatedObject2D... o) {
 		this.type=type;
 		objects=new ArrayList<LocatedObject2D>();
@@ -65,6 +79,10 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		refreshList(objects);
 	}
 	
+	/**Constructs a reshape handle list with the objects in o.
+	 * The type argument determines which handles are included.
+	  the hNumber affects the handle id numbers assigned to each handle
+	  */
 	public ReshapeHandleList(int type, int hNumber, LocatedObject2D... o) {
 		this.type=type;
 		this.handleNumberCorrection=hNumber;
@@ -73,6 +91,12 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		refreshList(objects);
 	}
 
+	/**Constructs a reshape handle list with the objects in o.
+	 * The type argument determines which handles are included.
+	  the hNumber affects the handle id numbers assigned to each handle
+	  Arguments two way determine which method call is used for resizing. 
+	  a hide-center argument indicates to hide the center handle (at least temporarily).
+	  */
 	public ReshapeHandleList(ArrayList<LocatedObject2D> objects, double handleSize, int handleNumberCorrection, boolean twoWay, int type, boolean hidecenter) {
 		this.handleNumberCorrection=handleNumberCorrection;
 		this.type=type;
@@ -81,33 +105,48 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		this.handleSize=handleSize;
 		hideCenterHandle=hidecenter;
 		refreshList(objects);
-		
-			
 	}
 
+	/**updates the handle list according to the listed objects*/
 	protected void refreshList(ArrayList<LocatedObject2D> objects) {
 		updateRectangle(objects);
-		if (type!=rotationOnlyType) for(int i:RectangleEdges.locationsforh) {
-			SmartHandle createSmartHandle = createSmartHandle(i);
-			if (i==CENTER)
-				createSmartHandle.handlesize=(int) (2*handleSize);
-			if (isHiddenCenterHandle()&&i==CENTER)	createSmartHandle.setHidden(true);;
-			
-			add(createSmartHandle);
+		if (type!=ROTATION_ONLY_TYPE) for(int i:RectangleEdges.locationsforh) {
+			crateHandleFor(i);
 		}
 		
+		createRotationHandle();
+	}
+
+	/**
+	Method call adds a handle to the list for rotating objects
+	 */
+	public void createRotationHandle() {
 		SmartHandle rotationHandle = createSmartHandle(rotationType);
-		if (showLineConnectionForRotationHandle)rotationHandle.setLineConnectionHandle(createSmartHandle(CENTER));
+		if (showLineConnectionForRotationHandle)
+			rotationHandle.setLineConnectionHandle(createSmartHandle(CENTER));
 		add(rotationHandle);
 	}
 
+	/**
+	Creates a handle for the given rectangle position i.
+	 */
+	public void crateHandleFor(int i) {
+		SmartHandle createSmartHandle = createSmartHandle(i);
+		if (i==CENTER)
+			createSmartHandle.handlesize=(int) (2*handleSize);
+		if (isHiddenCenterHandle()&&i==CENTER)	createSmartHandle.setHidden(true);;
+		
+		add(createSmartHandle);
+	}
+
+	/**returns true if the list is hiding the center handle*/
 	protected boolean isHiddenCenterHandle() {
 		return hideCenterHandle;
 	}
 
+	/**sets the rectangle for this list based on the bounding box of all the objects in the list*/
 	public void updateRectangle() {
 		updateRectangle(objects);
-		
 	}
 	private void updateRectangle(ArrayList<LocatedObject2D> objects) {
 		Shape a = ArrayObjectContainer.combineOutLines(objects);
@@ -123,16 +162,17 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected SmartHandle createSmartHandle(int type) {
-		ReshapeSmartHandle out = new ReshapeSmartHandle(type, rect);
+	/**creates a handle for the given location on the bounding box. */
+	public SmartHandle createSmartHandle(int location) {
+		ReshapeSmartHandle out = new ReshapeSmartHandle(location, rect);
 		out.handlesize=(int) handleSize;
-		out.setHandleNumber(handleNumberCorrection+type);
-		out.updateLocation(type);
+		out.setHandleNumber(handleNumberCorrection+location);
+		out.updateLocation(location);
 				return out;
 	}
 	
+	/**A handle for moving or resizing selected objects*/
 	class ReshapeSmartHandle extends SmartHandle {
-		
 
 		private RectangularGraphic rect;
 		
@@ -159,6 +199,8 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 
 		private double disPlaceY;
 
+		
+
 		public  ReshapeSmartHandle(int type, RectangularGraphic r) {
 			super(0, 0);
 			this.setHandleNumber(type);
@@ -166,6 +208,8 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			
 			
 		}
+		
+		/**draws the handle*/
 		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 			
 			this.updateLocation(getHandleNumber());
@@ -173,37 +217,30 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 				 ReshapeSmartHandle h2=(ReshapeSmartHandle) getLineConnectionHandle();
 				 h2.updateLocation(h2.getHandleNumber());
 			}
+			
 			if (getHandleType()==rect.getLocationType()) {
-				
 				this.setHandleColor(fixedpointHandleColor);
-				
 			} else this.setHandleColor(reshapeHandleColor);
 			
+			/**the rotation handle will look somewhat different*/
 			if (isRotationHandle()) {
 				this.setHandleColor(Color.orange);
-				//new GraphicUtil(). drawSizeHandlesAtPoint(graphics, cords,  this.getCordinateLocation(),rect.getCenterOfRotation());
+				if (specialShape==null) {
+					int x2 = (int) (-handlesize*1.5);
+					int w = (int) (handlesize*3);
+					this.specialShape=new Ellipse2D.Double(x2, x2, w, w);
+				}
+			
 			}
-			
-			
-			
-			if (this.isRotationHandle()&&specialShape==null) {
-				int x2 = (int) (-handlesize*1.5);
-				int w = (int) (handlesize*3);
-				this.specialShape=new Ellipse2D.Double(x2, x2, w, w);
-			}
+
 			
 			super.draw(graphics, cords);
 		}
 		
-		/**@Override
-		protected Area getOverdecorationShape() {
-			if (this.getHandleType()==CENTER&&overDecorationShape==null) {
-				
-				this.decorationColor=Color.black;
-				overDecorationShape=getAllDirectionArrows(2,2, false);
-			}
-			return overDecorationShape;
-		}*/
+		/**returns the popup menu for the handle*/
+		public JPopupMenu getJPopup() {
+			return thePopup;
+		}
 
 		public boolean isRotationHandle() {
 			return getHandleType()==rotationType;
@@ -232,19 +269,19 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		 */
 		private static final long serialVersionUID = 1L;
 		
+		/**handle press*/
 		@Override
 		public void handlePress(CanvasMouseEventWrapper w) {
 			onHandlePress();
-			this.pressPoint=w.getCordinatePoint();
+			this.pressPoint=w.getCoordinatePoint();
 			startingReshape=rect.getRectangle().getBounds();
 		}
 		
+		/***/
 		@Override
 		public void handleDrag(CanvasMouseEventWrapper w) {
 			if(pressPoint==null||startingReshape==null) 
-			{
-				handlePress(w);
-			}
+					{handlePress(w);}
 			
 		
 			
@@ -253,60 +290,67 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			int handletype = getHandleType();
 			
 		
-			
+			/**Alters the rectangle as if its own handle was being dragged*/
 			rect.flipDuringHandleDrag=false;
-			rect.handleSmartMove(handletype, pressPoint, w.getCordinatePoint());
+			rect.handleSmartMove(handletype, pressPoint, w.getCoordinatePoint());
 			
-			o2=copyObjects();
+			
+				o2=copyObjects();//creates a copy of every object to be modified
+			
+			
+			/**Determines the scale factors for the rectangle drag*/
 			xScale = rect.getRectangle().getWidth()/startingReshape.getWidth();
 			yScale = rect.getRectangle().getHeight()/startingReshape.getHeight();
-			
-			 double dist1=RectangleEdges.distanceOppositeSide(handletype, startingReshape);
-			double dist2= RectangleEdges.getLocation(rect.getLocationType(), rect.getRectangle()).distance(w.getCordinatePoint());
+			double dist1=RectangleEdges.distanceOppositeSide(handletype, startingReshape);
+			double dist2= RectangleEdges.getLocation(rect.getLocationType(), rect.getRectangle()).distance(w.getCoordinatePoint());
 			xyScale=dist2/dist1;
-			
-			
 			centerOfScaling = rect.getLocation();
+			
+			
 			angle=rect.getAngle();
 			
-				if(handletype==CENTER) {
-				 moveList(o2, pressPoint, w.getCordinatePoint());
+			/**Transforms the copy of the objects based on the handle drag being done*/
+			if(handletype==CENTER) {
+				 moveList(o2, pressPoint, w.getCoordinatePoint());
 			}  else if (this.isRotationHandle()) {
 				if (angle!=0) {
 				performRotate(o2, -angle);
 				}
 			} else {
-				
-			performScale(o2);
-			
+				performScale(o2);
 			}
-				
-			GraphicGroup g = new GraphicGroup(o2);
-		
+			
+			
+			
+			
+			
 			selectionManagger = w.getAsDisplay().getImageAsWrapper().getSelectionManagger();
 			
+			/**displays copy over the original image so the user can see the new locations or transformations being implemented*/
+			GraphicList g = new GraphicList(o2);
 			selectionManagger.setSelectionGraphicWithoutSelecting(g);
-	//if(!this.isRotationHandle()||o2.size()<2)//freezes under certain circumstances. failed to identify the issue but it only occurs when it tries to draw the copy
-		
-		
-		
-			
 			
 		}
+		
+		
+		/**returns the handle type of this handle. See Interface RectangleEdgePosisions*/
 		protected int getHandleType() {
 			return this.getHandleNumber()-handleNumberCorrection;
 		}
 		
-		private void moveList(ArrayList<LocatedObject2D> o22, Point pressPoint2, Point point) {
-			disPlaceX = point.getX()-pressPoint2.getX();
-			disPlaceY = point.getY()-pressPoint2.getY();
-			
+		/**moves all objects in the list based on a movement from one point to another.
+		  stores the displacemets done*/
+		private void moveList(ArrayList<LocatedObject2D> o22, Point startingPoint, Point finishingPoint) {
+			disPlaceX = finishingPoint.getX()-startingPoint.getX();
+			disPlaceY = finishingPoint.getY()-startingPoint.getY();
 			for(LocatedObject2D ob:o22) {
+				if(ob!=null)
 				ob.moveLocation(disPlaceX, disPlaceY);
 			}
 		
 		}
 		
+		/**moves all the objects based on the stored x and y displacements. returns an undoable edit */
 		private UndoMoveItems performMove(ArrayList<LocatedObject2D> o22) {
 			UndoMoveItems undo = new UndoMoveItems(o22);
 			for(LocatedObject2D ob:o22) {
@@ -315,16 +359,17 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			return undo;
 		}
 		
-		
-		private CompoundEdit2 performRotate(ArrayList<LocatedObject2D> o2, double angle) {
+		/**rotates all the objects by an angle. Returns an undoable edit */
+		private CombinedEdit performRotate(ArrayList<LocatedObject2D> o2, double angle) {
 			return rotateList(o2, angle, rect.getCenterOfRotation());
 			
 		}
-		private CompoundEdit2 rotateList(ArrayList<LocatedObject2D> o2, double angle, Point2D centerOfRotation) {
-			CompoundEdit2 edit = new CompoundEdit2();
+		/**rotates all the objects by an angle around a given point. Returns an undoable edit */
+		private CombinedEdit rotateList(ArrayList<LocatedObject2D> o2, double angle, Point2D centerOfRotation) {
+			CombinedEdit edit = new CombinedEdit();
 			for(LocatedObject2D ob:o2) {
 				if (ob instanceof RotatesFully) try {
-					UndoScaling undo = new UndoScaling(ob);
+					UndoScalingAndRotation undo = new UndoScalingAndRotation(ob);
 					((RotatesFully) ob).rotateAbout(centerOfRotation, angle);
 					undo.establishFinalState();
 					edit.addEditToList(undo);
@@ -332,29 +377,32 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			}
 			return edit;
 		}
-		private CompoundEdit2 performScale(ArrayList<LocatedObject2D> o2) {
+		
+		/**Scales each object based on the stored scale information. Returns an undoable edit */
+		private CombinedEdit performScale(ArrayList<LocatedObject2D> o2) {
 			if(singleScale) {
 				return scaleList(o2, xyScale, centerOfScaling);
 			} else 
 			return scaleList(o2, xScale, yScale, centerOfScaling);
 		}
-		private CompoundEdit2 scaleList(ArrayList<LocatedObject2D> o2, double xScale, double yScale, Point2D s) {
-			CompoundEdit2 edit = new CompoundEdit2();
+		/**Scales each object based on the arguments. Returns an undoable edit */
+		private CombinedEdit scaleList(ArrayList<LocatedObject2D> o2, double xScale, double yScale, Point2D s) {
+			CombinedEdit edit = new CombinedEdit();
 			for(LocatedObject2D ob:o2) {
 				if (ob instanceof ScalesFully &&s!=null) {
-					UndoScaling undo = new UndoScaling(ob);
+					UndoScalingAndRotation undo = new UndoScalingAndRotation(ob);
 					((ScalesFully) ob).scaleAbout(s, xScale, yScale);
 					edit.addEditToList(undo);
 				}
 			}
 			return edit;
 		}
-		
-		private CompoundEdit2 scaleList(ArrayList<LocatedObject2D> o2, double xyScale, Point2D s) {
-			CompoundEdit2 edit = new CompoundEdit2();
+		/**Scales each object based on the arguments. Returns an undoable edit */
+		private CombinedEdit scaleList(ArrayList<LocatedObject2D> o2, double xyScale, Point2D s) {
+			CombinedEdit edit = new CombinedEdit();
 			for(LocatedObject2D ob:o2) {
 				if (ob instanceof Scales &&s!=null) {
-					UndoScaling undo = new UndoScaling(ob);
+					UndoScalingAndRotation undo = new UndoScalingAndRotation(ob);
 					((Scales) ob).scaleAbout(s, xyScale);
 					undo.establishFinalState();
 					edit.addEditToList(undo);
@@ -363,6 +411,8 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			return edit;
 		}
 		
+		/**creates a copy of the selected objects.
+		  */
 		private ArrayList<LocatedObject2D>  copyObjects() {
 			ArrayList<LocatedObject2D> output=new ArrayList<LocatedObject2D> ();
 			for(LocatedObject2D o: objects) {
@@ -371,75 +421,85 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			
 			return output;
 		}
+		
 		@Override
 		public void handleRelease(CanvasMouseEventWrapper w) {
 			editComplete(w);
 		}
+		
+		/**called in order to finish the edit.
+		  transforms the shapes and not just the preview*/
 		protected void editComplete(CanvasMouseEventWrapper w) {
-			if(!editOngoing) return;
-			if (selectionManagger!=null)selectionManagger.setSelectionGraphic2(null);
+			if(!editOngoing) return;//if no edit was started by the user this just returns. dragging a handle starts an edit
+			if (selectionManagger!=null)selectionManagger.setSelectionGraphic2(null);//removes the preview of the transformation
+			
+			/**Performs the edit on the selected objects*/
 			if(isMoveHandle()) {
 				UndoMoveItems edit =performMove(objects);
 				addUndo(w, edit);
 			} else
 				if (!isRotationHandle()) 
 					{
-					CompoundEdit2 edit = performScale(objects);
-					if(w!=null) {
-						addUndo(w, edit);
-						
-					}
-					FigureScaler.showScaleWarnings(objects);
+						CombinedEdit edit = performScale(objects);
+						if(w!=null) {
+							addUndo(w, edit);}
+						FigureScaler.showScaleWarnings(objects);
 					}
 				else {
-					CompoundEdit2 edit =performRotate(objects, -angle);
+					CombinedEdit edit =performRotate(objects, -angle);
 					
 					if(w!=null) {
 						addUndo(w, edit);
-						
 					}
 				}
+			
+				/**resets the bounding rectangle so match the new bounds of the transformed objects*/
 				rect.setAngle(0);
 				updateRectangle();
+				
 				editOngoing=false;
 				editover(w);
-				
 		}
+		
 		protected void addUndo(CanvasMouseEventWrapper w, AbstractUndoableEdit edit) {
-			w.addUndo(edit);
+			if (w!=null)w.addUndo(edit);
 		}
-		
-
-
-		
-		
-	
 		
 		private boolean isMoveHandle() {
 			return getHandleType()==CENTER;
 		}
-		/**What to do when a handle is moved from point p1 to p2*/
+		
+		/**What to do when a handle is moved from point p1 to p2. 
+		  The bounding rectangle is resized, rotated or moved depending on which handle the user is dragging*/
 		public void handleMove(Point2D p1, Point2D p2) {
-			
 			rect.handleSmartMove(getHandleNumber()-handleNumberCorrection, (Point) p1,  (Point) p2) ;
-			
-			
 		}
 		
 	}
 
+	/**Called after edit is completed*/
 	public void finishEdit() {
 		if(lastDrag!=null &&lastDrag.editOngoing) lastDrag.editComplete(null);
 	}
 
+	/**Called after a handle is pressed. this may be overwritten by subclasses*/
 	public void onHandlePress() {
 		// TODO Auto-generated method stub
 		
 	}
-
+	/**Called after the edit is completed. this may be overwritten by subclasses*/
 	public void editover(CanvasMouseEventWrapper w) {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	/**draw method for this handle list*/
+	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+		if(this.drawsRectOver) {
+			RectangularGraphic blankRect = RectangularGraphic.blankRect(rect.getBounds(), Color.LIGHT_GRAY);
+			blankRect.setStrokeWidth(RectandleDrawThickness);
+			blankRect.draw(g, cords);
+		}
+		super.draw(g, cords);
 	}
 	
 

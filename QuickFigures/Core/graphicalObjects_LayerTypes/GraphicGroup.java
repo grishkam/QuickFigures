@@ -9,6 +9,7 @@ import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import menuUtil.PopupMenuSupplier;
 import officeConverter.LayerToOffice;
 import officeConverter.OfficeObjectConvertable;
 import officeConverter.OfficeObjectMaker;
+import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LocatedObjectGroup;
@@ -48,12 +50,14 @@ import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.Selectable;
 import layersGUI.HasTreeBranchIcon;
 
-/**The most straitforward implementation of grouping that I could manage*/
+/**The most straightforward implementation of grouping that I could manage*/
 public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphicGroup, HasSmartHandles, HasHandles, Selectable, HasUniquePopupMenu,  LocatedObjectGroup,HasTreeBranchIcon, IllustratorObjectConvertable,KnowsTree, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>,SVGExportable, OfficeObjectConvertable, Scales{
+
+	
 
 	public Color outlineColor = new Color(100,100,100,100);
 
-	public static boolean treatGroupsLikeLayers=false;
+	public static boolean treatGroupsLikeLayers=true;
 	/**
 	 * 
 	 */
@@ -61,6 +65,8 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	
 	public GraphicGroup() {}
+	
+	
 	
 	/**creates a group containing all the objects for layer l*/
 	public GraphicGroup(GraphicLayer donor) {
@@ -98,6 +104,34 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	public void select() {
 		super.select();
 		setupReshapeList();
+		selectContent();
+	}
+	
+	@Override
+	public void deselect() {
+		super.deselect();
+		setupReshapeList();
+		deselectContent();
+	}
+
+
+	/**sets all the objects inside the group to not selected*/
+	private void deselectContent() {
+		ArrayList<ZoomableGraphic> allGraphics = this.getTheLayer().getAllGraphics();
+		ArraySorter.removeNonSelectionItems(allGraphics);
+		for(Object z:allGraphics) {
+			((Selectable) z).deselect();
+		}
+	}
+	
+	/**sets all the objects inside the group to not selected*/
+	private void selectContent() {
+		ArrayList<ZoomableGraphic> allGraphics = this.getTheLayer().getAllGraphics();
+		ArraySorter.removeThoseOfClass(allGraphics, GraphicGroup.GroupHook.class);
+		for(Object z:allGraphics) {
+			if (z instanceof Selectable )
+				((Selectable) z).select();
+		}
 	}
 
 	protected void setupReshapeList() {
@@ -155,10 +189,9 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	@Override
 	public Shape getOutline() {
-		
+		ArrayObjectContainer.ignoredClass=GraphicGroup.GroupHook.class;
 		Shape a = ArrayObjectContainer.combineOutLines(getTheLayer().getLocatedObjects());
-	
-		// TODO Auto-generated method stub
+		ArrayObjectContainer.ignoredClass=null;
 		return transform().createTransformedShape(a);
 	}
 	
@@ -208,16 +241,14 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		if (this.isSelected()&& drawGhost) {
 			graphics.setStroke(new BasicStroke(5));
 			graphics.setColor(getOutlineColor());
-		//	Shape s = this.getOutline();
-			
-		//	getGrahpicUtil().drawStrokedShape(graphics, cords, s);
-		//	graphics.setColor(new Color(0,0,0,0));
-			
-		//	getGrahpicUtil().drawHandlesAtPoints(graphics, cords, RectangleEdges.getLocationsForHandles(s.getBounds()));//.drawRectangle(graphics, cords, s.getBounds2D(), true);
-		//	this.handleBoxes=getGrahpicUtil().lastHandles;
+
 		}
 		else if (this.isSelected()&&this.reshapeList!=null) {
+			
 			getReshapeList().draw(graphics, cords);
+			
+			
+			
 		}
 	}
 	
@@ -243,29 +274,13 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		if (handlenum<0) return;
-	//	IssueLog.log("handle moving");
+
 		double dx = p2.getX()-p1.getX();
 		double width=this.getBounds().getWidth();
-		//double scale = (width-dx)/width;
+		
 		if (dx*2>width) return;
 		if (dx>width*2) return;
-		//int o = RectangleEdges.oppositeSide(handlenum);
-		//this.scaleAbout(RectangleEdges.getLocation(o, getBounds()), scale);
-		/**
-		
-		 setLocationType(RectangleEdges.oppositeSide(handlenum));
-		 Rectangle r = this.getBounds();
-		 double dist1=r.getWidth();//RectangleEdges.distanceOppositeSide(handlenum, r);
-		 double dist2=Math.abs(p2.x-RectangleEdges.getLocation(getLocationType(), getBounds()).getX());// RectangleEdges.getLocation(getLocationType(), getBounds()).distance(p2);
-		 //Point2D lo = getLocation(handlenum, getBounds());
-	
-		//double l1 = getLocation(op, getBounds()).distance( getLocation(handlenum, getBounds()));		
-		double scaleme = dist2/dist1;
-		Point2D p = RectangleEdges.getLocation(o, r);//this.getLocation();
-		
-		//setScale( dist2/dist1);		
-		 * 
-		 */
+
 		
 		getListenerList().notifyListenersOfUserSizeChange(this);
 	}
@@ -411,6 +426,14 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		}
 
 		
+		@Override
+		public ArrayList<ZoomableGraphic> getAllGraphics() {
+			ArrayList<ZoomableGraphic> out = super.getAllGraphics();
+			out.add(0, new GroupHook(theGroup));
+			return out;
+		}
+		
+		
 	
 	}
 	
@@ -422,7 +445,6 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
-		// TODO Auto-generated method stub
 		return new LayerToOffice(this);
 	}
 	
@@ -491,11 +513,115 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	private ReshapeHandleList getReshapeList() {
 		if(reshapeList==null)this.setupReshapeList();
 		reshapeList.updateRectangle();
+		
+		reshapeList.thePopup=new GroupGraphicMenu(this);
+		
 		return reshapeList;
 	}
 	
 	public int handleNumber(int x, int y) {
 		return this.getSmartHandleList().handleNumberForClickPoint(x, y);
+	}
+	
+	/**A phantom object. Is not drawn but this can be clicked on by the user
+	 while the group is being treated as a layer*/
+	public class GroupHook extends BasicGraphicalObject implements HasSmartHandles, HasHandles {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private GraphicGroup theGroup;
+
+		public GroupHook(GraphicGroup tg) {
+			theGroup=tg;
+		}
+
+		@Override
+		public Point2D getLocationUpperLeft() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void setLocationUpperLeft(double x, double y) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public LocatedObject2D copy() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Rectangle getExtendedBounds() {
+			// TODO Auto-generated method stub
+			return getBounds() ;
+		}
+
+		/**includes and extra rectangle in the outline so the user has a place to click the group*/
+		@Override
+		public Shape getOutline() {
+			Shape outline = theGroup.getOutline();
+			
+			Area o = new Area(new BasicStroke(7).createStrokedShape(outline.getBounds()));
+			o.add(new Area(new BasicStroke(21).createStrokedShape(outline)));
+			
+			return o;
+		}
+
+		@Override
+		public Rectangle getBounds() {
+			return theGroup.getBounds();
+		}
+
+		@Override
+		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+			
+			
+		}
+
+		@Override
+		public void handleMove(int handlenum, Point p1, Point p2) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void showOptionsDialog() {
+			// TODO Auto-generated method stub
+			
+		}
+		public SmartHandleList getSmartHandleList() {
+			
+			return getReshapeList();
+		}
+		
+		public int handleNumber(int x, int y) {
+			int num = this.getSmartHandleList().handleNumberForClickPoint(x, y);
+			if (num<0 &&this.getOutline().contains(x, y))
+				return ReshapeHandleList.defaultHandleNumber+RectangleEdges.CENTER;
+			return num;
+		}
+
+		@Override
+		public void select() {
+			super.select();
+			theGroup.select();
+
+		}
+
+		@Override
+		public void deselect() {
+			super.deselect();
+			theGroup.deselect();
+		}
+		
+		
+	
+
 	}
 
 }

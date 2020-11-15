@@ -241,7 +241,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	/**What to do when a handle is moved from point p1 to p2.
 	  */
 	public void handleDrag(CanvasMouseEventWrapper e ) {
-		Point2D p2=e.getCordinatePoint();
+		Point2D p2=e.getCoordinatePoint();
 		try{
 		
 		//java.awt.geom.Point2D.Double p = new Point2D.Double();
@@ -404,7 +404,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			}
 			
 			if (com.equals(addPoint)) {
-				new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathGraphic, false, super.getMemoryOfMouseEvent().getCordinatePoint());
+				new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathGraphic, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
 			}
 			
 			

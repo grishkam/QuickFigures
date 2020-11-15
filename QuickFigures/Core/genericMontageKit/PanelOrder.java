@@ -49,9 +49,9 @@ public class PanelOrder  implements Serializable, MontageSpaces{
 		g.generateCurrentImageWrapper();
 		BasicMontageLayout layout = g.getPanelLayout();
 		layout=layout.makeAltered(type);
-		ArrayList<panelContentElement> read = g.getEditor().cutStack(layout);
+		ArrayList<PanelContentExtract> read = g.getEditor().cutStack(layout);
 		ArrayList<ArrayList<PanelListElement>> output=new ArrayList<ArrayList<PanelListElement>>();
-		for(panelContentElement content: read) {
+		for(PanelContentExtract content: read) {
 			ArrayList<PanelListElement> part = new ArrayList<PanelListElement>();
 			ArrayList<LocatedObject2D> olist = content.getObjectList();
 			olist=new ArraySorter<LocatedObject2D>().getThoseOfClass(olist, ImagePanelGraphic.class);
@@ -67,7 +67,7 @@ public class PanelOrder  implements Serializable, MontageSpaces{
 
 
 	public void addElementsInPanel(ArrayList<PanelListElement> output, Rectangle2D rect) {
-		ArrayList<LocatedObject2D> inPanel = new BasicOverlayHandler().getAllClickedRoi(figure, rect.getCenterX(), rect.getCenterY(), ImagePanelGraphic.class);
+		ArrayList<LocatedObject2D> inPanel = new BasicObjectListHandler().getAllClickedRoi(figure, rect.getCenterX(), rect.getCenterY(), ImagePanelGraphic.class);
 		addPanelListElements(output, inPanel);
 	}
 

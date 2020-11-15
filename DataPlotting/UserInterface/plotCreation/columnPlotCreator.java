@@ -2,7 +2,7 @@ package plotCreation;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import columnPlots.ColumnPlot;
 import dataSeries.ColumnDataSeries;
 import imageDisplayApp.ImageAndDisplaySet;
@@ -17,7 +17,7 @@ int type=0;
 	
 	
 	
-	public void createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}

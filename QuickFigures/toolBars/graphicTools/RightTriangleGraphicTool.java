@@ -42,7 +42,7 @@ public class RightTriangleGraphicTool extends RectGraphicTool {
 		}
 	}
 	
-	protected RectangularGraphic createNewRect(Rectangle r) {
+	public RectangularGraphic createShape(Rectangle r) {
 		RightTriangleGraphic output = new RightTriangleGraphic(r);
 		if (type>9) output= new SimpleLineGraphic(r);
 		output.setType(type);

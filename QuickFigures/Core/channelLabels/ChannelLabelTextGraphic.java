@@ -25,6 +25,8 @@ import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
+/**A special category of channel label that changes based on the options
+  set in channel label properties and the channel colors*/
 public class ChannelLabelTextGraphic extends ComplexTextGraphic implements ChannelLabel {
 
 	/**
@@ -195,7 +197,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		Color output=c;
 		boolean dontinvert=true;
 	//	boolean inside=false;
-		if (this.getSnappingBehaviour()!=null && this.getSnappingBehaviour().isInternalSnap()) dontinvert=false;
+		if (this.getSnapPosition()!=null && this.getSnapPosition().isInternalSnap()) dontinvert=false;
 	
 		
 		
@@ -405,7 +407,6 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	}
 
 	public ChannelSwapHandleList getExtraHandles() {
-
 		return eHan;
 	}
 	

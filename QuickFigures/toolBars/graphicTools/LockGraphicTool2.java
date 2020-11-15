@@ -16,7 +16,7 @@ import applicationAdapters.ImageWrapper;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import imageDisplayApp.KeyDownTracker;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoManagerPlus;
 import undo.UndoMoveItems;
 import undo.UndoSnappingChange;
@@ -60,8 +60,8 @@ public class LockGraphicTool2 extends LockGraphicTool {
 	}
 
 
-	private CompoundEdit2 createUndoableEdit() {
-		CompoundEdit2 undoer=new CompoundEdit2(undosnap); 
+	private CombinedEdit createUndoableEdit() {
+		CombinedEdit undoer=new CombinedEdit(undosnap); 
 		undosnap = new UndoSnappingChange(inside);
 		undoer.addEditToList(undosnap);
 		undoMove=new UndoMoveItems(inside);
@@ -74,7 +74,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 			super.onRelease(gmp, roi2);
 			lockTaker=getLockContainterForObject(inside, getPotentialLockAcceptors(gmp));
 			if (lockTaker!=null){
-				inside.getSnappingBehaviour().setToNearestSnap(inside.getBounds(), lockTaker.getBounds(), this.getDragPoint() );
+				inside.getSnapPosition().setToNearestSnap(inside.getBounds(), lockTaker.getBounds(), this.getDragPoint() );
 			}
 		}
 		
@@ -106,14 +106,14 @@ public class LockGraphicTool2 extends LockGraphicTool {
 				adjustPosition(dragx, dragy, lockTaker, inside);
 				
 			} else 
-				inside.getSnappingBehaviour().setToNearestSnap(inside.getBounds(), lockbounds, this.getDragPoint() );
+				inside.getSnapPosition().setToNearestSnap(inside.getBounds(), lockbounds, this.getDragPoint() );
 			
 			undosnap.establishFinalState();
 			
 			if (this.shiftDown()) {
 				for(LocatedObject2D roi1: rois) {
 					UndoSnappingChange undo0 = new UndoSnappingChange(roi1);
-					roi1.setSnappingBehaviour(inside.getSnappingBehaviour().copy());
+					roi1.setSnappingBehaviour(inside.getSnapPosition().copy());
 					undo0.establishFinalState();
 					undoer.addEditToList(undo0);
 				}
@@ -147,7 +147,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 
 
 	public static void adjustPosition(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
-		SnappingPosition s = inside.getSnappingBehaviour();
+		SnappingPosition s = inside.getSnapPosition();
 		
 		
 		int[] poles = s.getOffSetPolarities();
@@ -170,7 +170,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 	}
 	
 	public static void adjustPositionForBar(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
-		SnappingPosition s = inside.getSnappingBehaviour();
+		SnappingPosition s = inside.getSnapPosition();
 		
 		
 		int[] poles = s.getOffSetPolarities();

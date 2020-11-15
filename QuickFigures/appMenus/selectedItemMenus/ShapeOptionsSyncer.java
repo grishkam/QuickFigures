@@ -7,6 +7,11 @@ import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 public class ShapeOptionsSyncer extends BasicMultiSelectionOperator{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		return "Set Shape Options";

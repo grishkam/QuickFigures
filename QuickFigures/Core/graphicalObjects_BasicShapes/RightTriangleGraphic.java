@@ -171,13 +171,13 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 			int t = triangle.getType();
 			Point2D l1 = RectangleEdges.getLocation(t, triangle.getRectangle());
 			Point2D l2 = RectangleEdges.getLocation(CENTER, triangle.getRectangle());
-			Point2D p = triangle.betweenPoint(l1, l2, 0.7);
+			Point2D p = ShapeGraphic.betweenPoint(l1, l2, 0.7);
 			triangle.undoRotationCorrection(p);
 			return p;
 		}
 		
 		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
-			Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+			Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 			triangle.performRotationCorrection(p2);;
 			int e = RectangleEdges.getNearestEdgeFromList(triangle.getRectangle(), new int[] {UPPER_RIGHT, LOWER_LEFT, UPPER_LEFT, LOWER_RIGHT}, p2);
 			triangle.setType(e);
@@ -191,7 +191,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 			for (int i:RectangleEdges.adjacentPositions(t)) {
 				Point2D l1 = RectangleEdges.getLocation(t, triangle.getRectangle());
 				Point2D l2 = RectangleEdges.getLocation(i, triangle.getRectangle());
-				Point2D p = triangle.betweenPoint(l1, l2, 0.7);
+				Point2D p = ShapeGraphic.betweenPoint(l1, l2, 0.7);
 				triangle.undoRotationCorrection(p);
 				super.drawLineBetweenPoints(graphics, cords, p, getCordinateLocation());
 			}

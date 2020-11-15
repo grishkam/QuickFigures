@@ -12,6 +12,7 @@ import java.util.List;
 
 import logging.IssueLog;
 
+/**class contains static methods related to drag and drop*/
 public class ForDragAndDrop {
 	
 	
@@ -19,6 +20,7 @@ public class ForDragAndDrop {
 	public static ArrayList<File> dropedFiles(DropTargetDropEvent dtde) {
 		return dropedFiles(dtde, false);
 	}
+	
 	
 	public static void listDataFlavors(DropTargetDropEvent dtde) {
 		DataFlavor[] flavors = dtde.getTransferable().getTransferDataFlavors();
@@ -98,7 +100,7 @@ public class ForDragAndDrop {
 	    return output;
 	}
 
-
+/**returns the file extension for file f*/
 	public static String getExtension(File f) {
 		String output="null";
 		String apath=f.getAbsolutePath();

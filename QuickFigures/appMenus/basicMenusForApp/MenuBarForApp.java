@@ -15,10 +15,10 @@ import exportMenus.PNGQuickExport;
 import exportMenus.PNGSequenceQuickExport;
 import exportMenus.PPTQuickExport;
 import exportMenus.SVGQuickExport;
-import figureTemplates.TemplateSaver;
-import graphicActionToombar.CurrentSetInformer;
-import graphicActionToombar.CurrentSetInformerBasic;
-import graphicActionToombar.QuickFigureMaker;
+import figureFormat.TemplateSaver;
+import graphicActionToolbar.CurrentFigureSet;
+import graphicActionToolbar.CurrentSetInformer;
+import graphicActionToolbar.QuickFigureMaker;
 import imageMenu.CombineImages;
 import imageMenu.UndoRedoMenuItem;
 import imageMenu.CanvasAutoResize;
@@ -37,7 +37,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public CurrentSetInformer currentImageInformer=new CurrentSetInformerBasic();
+	public CurrentSetInformer currentImageInformer=new CurrentFigureSet();
 	
 	/**A hashmap with menu commands and the objects that will execute them*/
 	HashMap<String, MenuItemForObj> isntalledMenuItems=new HashMap<String, MenuItemForObj>();

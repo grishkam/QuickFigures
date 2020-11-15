@@ -14,12 +14,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import graphicalObjects_BasicShapes.TextGraphic;
-import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartPopupJMenu;
 
-import java.awt.datatransfer.Clipboard;
-
+/**A simple cut copy and paste menu for textGraphic objects.
+   */
 public class TextSelectionMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier, Transferable{
 
@@ -30,7 +29,7 @@ PopupMenuSupplier, Transferable{
 	private static final long serialVersionUID = 1L;
 	private TextGraphic text;
 	ArrayList<JMenuItem> items=new ArrayList<JMenuItem>();
-	private  static String theCippedText;
+	private  static String theCoppedText;
 
 	public TextSelectionMenu(TextGraphic textGraphic) {
 		this.text=textGraphic;
@@ -64,7 +63,7 @@ PopupMenuSupplier, Transferable{
 		Clipboard c=Toolkit.getDefaultToolkit().getSystemClipboard();
 		
 		if(COPY.equals(a)||CUT.equals(a)) {
-			theCippedText = text.getSelectedText();
+			theCoppedText = text.getSelectedText();
 			c.setContents(this, null);
 		}
 		if(CUT.equals(a)) {
@@ -80,13 +79,12 @@ PopupMenuSupplier, Transferable{
 	@Override
 	public Object getTransferData(DataFlavor arg0) throws UnsupportedFlavorException, IOException {
 		if (arg0.equals(DataFlavor.stringFlavor))
-		return this.theCippedText;
+		return theCoppedText;
 		return null;
 	}
 
 	@Override
 	public DataFlavor[] getTransferDataFlavors() {
-		// TODO Auto-generated method stub
 		return new DataFlavor[] {DataFlavor.stringFlavor};
 	}
 

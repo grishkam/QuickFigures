@@ -2,7 +2,8 @@ package externalToolBar;
 
 import javax.swing.Icon;
 
-public class ActionToolBlank<ImagePlus> extends BlankTool<ImagePlus>{
+/**An tool that performs an action rather than being used to draw or edit*/
+public class ActionToolBlank<ImageType> extends BlankTool<ImageType>{
 
 	protected String ActionCommand="";
 	
@@ -17,7 +18,7 @@ public class ActionToolBlank<ImagePlus> extends BlankTool<ImagePlus>{
 		return getToolImageIcon();
 	}
 	@Override
-	public Icon getRollOverIcon()  {
+	public Icon getToolRollOverImageIcon()  {
 		return getToolImageIcon();
 	}
 	

@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import includedToolbars.ActionToolset1;

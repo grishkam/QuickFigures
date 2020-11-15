@@ -10,16 +10,12 @@ import javax.swing.JPanel;
 
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelWrapper;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
-import standardDialog.ChoiceInputEvent;
-import standardDialog.DialogItemChangeEvent;
 import standardDialog.GriddedPanel;
-import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 import undo.AbstractUndoableEdit2;
-import undo.UndoManagerPlus;
 import standardDialog.ShowDisplayRange;
 
 /**A more simplistic version of the window/level adjuster
@@ -73,7 +69,8 @@ public class WindowLevelDialog extends StandardDialog  {
 		public static void showWLDialogs(ArrayList<ChannelEntry> chans, MultiChannelWrapper mrp, DisplayRangeChangeListener listen, int winLev, AbstractUndoableEdit2 undo) {
 			
 			StandardDialog jf = new StandardDialog();
-			jf.currentUndoManager= new CurrentSetInformerBasic().getCurrentActiveDisplayGroup().getUndoManager();
+			new CurrentFigureSet();
+			jf.currentUndoManager= CurrentFigureSet.getCurrentActiveDisplayGroup().getUndoManager();
 			jf.undo=undo;
 			
 			

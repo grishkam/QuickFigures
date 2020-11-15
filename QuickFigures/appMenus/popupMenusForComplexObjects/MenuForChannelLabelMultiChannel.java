@@ -8,10 +8,10 @@ import javax.swing.JMenuItem;
 
 import channelLabels.ChannelLabelManager;
 import genericMontageKit.PanelList;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 
 public class MenuForChannelLabelMultiChannel extends JMenu {
@@ -219,7 +219,7 @@ public class MenuForChannelLabelMultiChannel extends JMenu {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		protected CompoundEdit2 undo;
+		protected CombinedEdit undo;
 
 		public SmartMenuItem2(String name) {
 			 super(name);
@@ -227,7 +227,7 @@ public class MenuForChannelLabelMultiChannel extends JMenu {
 			 
 		 }
 		public void addUndo(AbstractUndoableEdit2 e) {
-			new CurrentSetInformerBasic().addUndo(e);
+			new CurrentFigureSet().addUndo(e);
 		}
 		
 		public void actionPerformed(ActionEvent e) {

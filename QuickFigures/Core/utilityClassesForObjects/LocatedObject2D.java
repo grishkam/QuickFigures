@@ -53,7 +53,7 @@ public interface LocatedObject2D extends Mortal, Hideable, Selectable {
 	
 	/**some objects will need to autolocate relative to a
 	  rectangular region, the snapping behavior object describes how*/
-	public SnappingPosition getSnappingBehaviour();
+	public SnappingPosition getSnapPosition();
 	public void setSnappingBehaviour(SnappingPosition snap);
 	
 	/**the Location of the object may refer to one of the corners of its bounding

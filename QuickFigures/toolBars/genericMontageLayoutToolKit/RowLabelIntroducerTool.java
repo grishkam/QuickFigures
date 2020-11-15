@@ -17,8 +17,8 @@ import applicationAdapters.CanvasMouseEventWrapper;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.IconSet;
 import externalToolBar.ToolIconWithText;
-import figureTemplates.RowLabelPicker;
-import genericMontageKit.BasicOverlayHandler;
+import figureFormat.RowLabelPicker;
+import genericMontageKit.BasicObjectListHandler;
 import genericMontageKit.SelectionManager;
 import graphicalObjects.CursorFinder;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
@@ -34,7 +34,7 @@ import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.SwingDialogListener;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoManagerPlus;
 import undo.UndoSelectionSet;
@@ -112,7 +112,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 	
 	/**returns the text graphic relevant to the clickpoint if there is one*/
 	private TextGraphic getDesiredGraphic(Rectangle boundsForThisRowsLabel, ImageWrapper wp ) {
-		ArrayList<LocatedObject2D> rois = new BasicOverlayHandler().getOverlapOverlaypingrois(boundsForThisRowsLabel, wp);
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, wp);
 		
 		ArrayList<BasicGraphicalObject> array = picker.getDesiredItemsAsGraphicals(rois);
 		if (array.size()>0) 
@@ -159,7 +159,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 	
 	protected void performPressEdit() {
 		
-		CompoundEdit2 undoGroup = new CompoundEdit2();
+		CombinedEdit undoGroup = new CombinedEdit();
 		
 		CanvasMouseEventWrapper mm = super.getLastClickMouseEvent();
 		if (mm.isPopupTrigger()) {
@@ -179,7 +179,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 			GraphicLayer layerFor=getImageWrapperClick().getGraphicLayerSet();
 			MontageLayoutGraphic montageLayoutGraphic = super.layoutGraphic;
 			
-			item=createNewGraphic(boundsForThisRowsLabel, wp,mm.getClickedXImage(), mm.getClickedYImage());
+			item=createNewGraphic(boundsForThisRowsLabel, wp,mm.getCoordinateX(), mm.getCoordinateY());
 	
 			
 			if (montageLayoutGraphic!=null)
@@ -263,7 +263,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 			if (arg0.getSource()==showDialog) {
 				ImageWrapper wp = getCurrentLayout().getWrapper();
 				Shape bb = getCurrentLayout().getSelectedSpace(1, MontageSpaces.ALL_MONTAGE_SPACE);
-				rois = new BasicOverlayHandler().getOverlapOverlaypingrois(bb.getBounds(), wp);
+				rois = new BasicObjectListHandler().getOverlapOverlaypingItems(bb.getBounds(), wp);
 				
 				ArrayList<BasicGraphicalObject> rois2 = picker.getDesiredItemsAsGraphicals(rois);
 				
@@ -303,7 +303,7 @@ dd.showDialog();
 		if (dd==null) {
 			dd=createNewGraphic(MarkerRoi().getBounds(),this.getImageDisplayWrapperClick().getImageAsWrapper(), this.getClickedCordinateX(), this.getClickedCordinateY());
 			Rectangle r2 = this.getCurrentLayout().getSelectedSpace(this.getClickedCordinateX(), this.getClickedCordinateY(), mode).getBounds();
-			dd.getSnappingBehaviour().snapObjectToRectangle(dd, r2);
+			dd.getSnapPosition().snapObjectToRectangle(dd, r2);
 		
 		}
 		item=dd;

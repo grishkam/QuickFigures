@@ -6,7 +6,8 @@ import java.awt.geom.Rectangle2D;
 
 import applicationAdapters.ImageWrapper;
 
-/***/
+/**This interface contains all methods that are crucial for any type of panel layout
+  Although I have written a few implementations of this, the basic montage layout */
 public interface PanelLayout {
 
 	
@@ -45,14 +46,16 @@ public interface PanelLayout {
 	 /**returns the standard panel dimensions*/
 	 public double getStandardPanelWidth();
 	 public double getStandardPanelHeight();
-	 
 	 public void setStandardPanelWidth(double width);
 	 public void setStandardPanelHeight(double height);
 	 
+	 /**returns true if panel number panel does not use the standard panel size for the layout*/
 	 public boolean doesPanelUseUniqueWidth(int panel);
 	 public boolean doesPanelUseUniqueHeight(int panel);
 
+	 /**called when a user drags the center handle of the panel*/
 	public void nudgePanel(int panelnum, double dx, double dy);
+	/**called when a user drags a corner handle of the panel*/
 	public void nudgePanelDimensions(int panelnum, double dx, double dy);
 	
 	public ImageWrapper getWrapper() ;

@@ -28,7 +28,7 @@ public class CentriolePairCartoonAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		return null;//"Add Centrioles";
 	}

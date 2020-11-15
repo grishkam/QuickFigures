@@ -15,7 +15,7 @@ import javax.swing.JMenuBar;
 import animations.KeyFrameCompatible;
 import animations.Animation;
 import animations.KeyFrameAnimation;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.SelectedSetLayerSelector;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
@@ -26,7 +26,7 @@ public class TimeLineDialog extends StandardDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private DisplayedImageWrapper image;
+	private DisplayedImage image;
 	JMenuBar b=new JMenuBar();
 	int timeLineLength=500;
 	
@@ -55,7 +55,7 @@ public class TimeLineDialog extends StandardDialog {
 		setJMenuBar(b);
 	}
 	
-	public TimeLineDialog(DisplayedImageWrapper diw) {
+	public TimeLineDialog(DisplayedImage diw) {
 		this.image=diw;
 		this.setTitle("Timeline for "+diw.getImageAsWrapper().getTitle());
 		selector=new SelectedSetLayerSelector(diw.getImageAsWrapper());

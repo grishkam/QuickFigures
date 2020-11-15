@@ -48,7 +48,7 @@ class TextItemAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		if(!simple) return "Add Rich Text";
 		return "Add Text";
 	}

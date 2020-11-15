@@ -8,9 +8,11 @@ import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 
 public class CircleGraphicTool extends RectGraphicTool {
+	public static final int SIMPLE_CIRCLE = 0;
+
 	{model=new CircularGraphic(new Rectangle(0,0,15,15));}
 	{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
-	int isArc=0;
+	int isArc=SIMPLE_CIRCLE;
 	
 	
 	public CircleGraphicTool(int  arc) {
@@ -23,7 +25,7 @@ public class CircleGraphicTool extends RectGraphicTool {
 		super.set=TreeIconWrappingToolIcon.createIconSet(model);
 		
 	}
-	protected RectangularGraphic createNewRect(Rectangle r) {
+	public RectangularGraphic createShape(Rectangle r) {
 		CircularGraphic ovalGraphic = new CircularGraphic(r, isArc);
 
 		return ovalGraphic;

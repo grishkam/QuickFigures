@@ -4,9 +4,7 @@ package exportMenus;
 import java.awt.Desktop;
 import java.io.File;
 
-import org.apache.batik.svggen.SVGGeneratorContext;//as long as this import is here and batik is not installed, an exception will result
-
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import fieldReaderWritter.SVGsaver;
 import logging.IssueLog;
 
@@ -33,7 +31,7 @@ public class SVGQuickExport extends QuickExport {
 	}
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 
 		try{
 			System.setProperty("javax.xml.transform.TransformerFactory",

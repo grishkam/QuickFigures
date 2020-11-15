@@ -19,13 +19,13 @@ public class TextLineSegment implements  Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final int parentColorAlways=1, uniqueIfGiven=0, alwaysUnique=2;
-	public static final int Super_Script=1;
+	public static final int NORMAL_SCRIPT=0, Super_Script=1;
 	public final double id=Math.random();
 	String text="";
 	TextLine parent=null;
 	static Font defaultFont=new Font("Arial", 1, 20);
 	static Color defaultColor=Color.white;
-	private int script=0;
+	private int script=NORMAL_SCRIPT;
 	boolean hasUniqueColor=false;
 	Color uniqueColor=new Color(0,0,0,0);
 	private int lines=0;

@@ -3,8 +3,8 @@ package includedToolbars;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import applicationAdapters.DisplayedImageWrapper;
-import graphicActionToombar.CurrentSetInformerBasic;
+import applicationAdapters.DisplayedImage;
+import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 
 public class ToolbarKeyListener implements KeyListener {
@@ -15,7 +15,7 @@ public class ToolbarKeyListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-			DisplayedImageWrapper figureDisplay = new CurrentSetInformerBasic().getCurrentlyActiveDisplay();
+			DisplayedImage figureDisplay = new CurrentFigureSet().getCurrentlyActiveDisplay();
 			
 			boolean WindowsOrMacMeta=false;
 	 		if (IssueLog.isWindows() &&arg0.isControlDown()) {

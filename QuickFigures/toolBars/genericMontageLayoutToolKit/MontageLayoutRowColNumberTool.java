@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import genericMontageKit.panelContentElement;
+import genericMontageKit.PanelContentExtract;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import logging.IssueLog;
@@ -23,7 +23,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	MontageLayoutGraphic ml;
 	BasicMontageLayout bm;
 	private LocatedObject2D r;
-	private List<panelContentElement> extrapanel;
+	private List<PanelContentExtract> extrapanel;
 	private UndoLayoutEdit undo;
 	private UndoAddItem undo2;
 	
@@ -72,7 +72,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		BasicMontageLayout bm = getCurrentLayout();
 		rowcol = findAddedRowsCols(dragCordinateX, dragCordinateY, bm);
 		
-		ArrayList<panelContentElement> panels=null;
+		ArrayList<PanelContentExtract> panels=null;
 		if (movePanelContent) {
 			panels = getEditor().cutStack(bm);
 			
@@ -84,7 +84,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			
 						/**handles loose panels*/
 						if(bm.nPanels()<panels.size()) {
-							List<panelContentElement> oldextra = extrapanel;//if former extra panels exits best not to forget them
+							List<PanelContentExtract> oldextra = extrapanel;//if former extra panels exits best not to forget them
 							extrapanel=panels.subList(bm.nPanels(), panels.size());//stores extra panels
 							if (oldextra!=null)extrapanel.addAll(oldextra);//completes the list to include new and former extra
 						}

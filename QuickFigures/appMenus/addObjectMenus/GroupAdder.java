@@ -47,7 +47,7 @@ public class GroupAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Shape Group";
 	}
 	

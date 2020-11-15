@@ -16,7 +16,7 @@ import applicationAdapters.CanvasMouseEventWrapper;
 import animations.Animation;
 import animations.KeyFrameAnimation;
 import fLexibleUIKit.MenuItemExecuter;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjectHandles.HandleRect;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.GraphicSetDisplayContainer;
@@ -28,37 +28,38 @@ import keyFrameAnimators.BasicGraphicObjectKeyFrameAnimator;
 import menuUtil.PopupMenuSupplier;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.Hideable;
 import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LocationChangeListenerList;
 import utilityClassesForObjects.ObjectContainer;
+import utilityClassesForObjects.RectangleEdgePosisions;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.SnappingPosition;
 import menuUtil.HasUniquePopupMenu;
 
+/**The abstract superclass for many graphical objects*/
 public abstract class BasicGraphicalObject implements GraphicalObject, HasUniquePopupMenu,KnowsSetContainer,KnowsParentLayer,  Hideable, KeyFrameCompatible  {
 	/**
 	 * 
 	 */
-	
-	protected int locationType=0;
+	private static final long serialVersionUID = 1L;
+	protected int locationType=RectangleEdgePosisions.UPPER_LEFT;//indicates which location will actually be returned and set by the getlocation and set location methods
 
 	protected double angle=0;
 	LocationChangeListenerList listeners=new LocationChangeListenerList();
 	protected boolean handlesHidden=false;;
 	
 
-	
-	//ArrayList<locationChangeListener> listenersLongTerm=new locationChangeListenerList();
 	protected GraphicLayer parent;
 	protected Animation animation=null;
 	
 	transient boolean hidden=false;
 	
-	private static final long serialVersionUID = 1L;
-	protected String name="";
-	protected transient boolean selected=false, superSelected=false;
+	
+	protected String name="";//the name of the object
+	
+	protected transient boolean selected=false, superSelected=false;// the selection state of the object
 
 
 	protected double x=0;
@@ -261,7 +262,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 		
 	}
 	
-	public SnappingPosition getSnappingBehaviour() {
+	public SnappingPosition getSnapPosition() {
 		return snappingBehaviour;
 	}
 
@@ -310,12 +311,6 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 		}
 	}
 
-	/**
-	@Override
-	public Rectangle getHandleShapeOnCanvas(int i) {
-		if (handleBoxes==null||handleBoxes.size()<i) return null;
-		return handleBoxes.get(i);
-	}*/
 	
 	public void clearHandleBoxes() {
 		handleBoxes=new ArrayList<HandleRect>();
@@ -455,12 +450,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	
 	/**And edit is requested */
 	public AbstractUndoableEdit2 provideDragEdit() {
-		return new UndoScaling(this);
+		return new UndoScalingAndRotation(this);
 		
 	}
 	
 	public UndoManagerPlus getUndoManager() {
-		return new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getUndoManager();
+		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}
 	
 	/**finds the layer pane at the top of the tree*/

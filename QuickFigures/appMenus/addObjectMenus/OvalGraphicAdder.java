@@ -24,7 +24,7 @@ public class OvalGraphicAdder  extends RectangleAdder{
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Elipse";
 	}
 	

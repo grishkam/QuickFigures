@@ -13,9 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicAppAdapters.GMouseEvent;
-import graphicalObjectHandles.ActionButtonHandleList.GeneralActionListHandle;
 import graphicalObjects.CordinateConverter;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
@@ -23,20 +22,22 @@ import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.GraphicComponent;
-import standardDialog.NumberInputListener;
 
+/**A set of handles functions as a 'mini-toolbar' for some objects.
+ Each subclass of this list, forms a different grid of handles with icons  */
 public class ActionButtonHandleList extends SmartHandleList {
 
-
-
-
+	private static final int DEFAULT_ICON_SPACING = 1;
+	private static final int DEFAULT_MAX_GRID_ = 8;
+	
+	
 	private static final long serialVersionUID = 1L;
 	protected Point2D.Double location=new Point2D.Double(0,0);
 	double rightMostX=50;
 	double lowerMostY=50;
-	private double spacing=1;
+	private double spacing=DEFAULT_ICON_SPACING;
 	int numHandleID=30;
-	protected int maxGrid=8;
+	protected int maxGrid=DEFAULT_MAX_GRID_;
 	double between=1;
 	
 	
@@ -90,32 +91,20 @@ public class ActionButtonHandleList extends SmartHandleList {
 		}
 	}
 	
-	/**protected boolean checkForPopup(CanvasMouseEventWrapper canvasMouseEventWrapper, MultiSelectionOperator operation) {
-		if(operation.getPopup()!=null&&canvasMouseEventWrapper.isPopupTrigger()) {
-			SmartPopupJMenu popupNow = operation.getPopup();
-			popupNow.setLastMouseEvent(canvasMouseEventWrapper);
-			operation.setSelector(canvasMouseEventWrapper.getSelectionSystem());
-			popupNow.show(canvasMouseEventWrapper.getComponent(),canvasMouseEventWrapper.getClickedXScreen(), canvasMouseEventWrapper.getClickedYScreen());
-			
-			return true;
-		}
-		return false;
-	}
-*/
-	
+
+	/**An icon that performs an action*/
 	public class GeneralActionHandle extends IconHandle {
+		
+		protected MultiSelectionOperator operation;//the action to be performed
+		protected IconHandle alternativePopup=null;//if non-null, this will display a popup rather than perform the operation when pressed 
+		public boolean useOperatorPopup=false;
+		
 		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 			updateHandleLocations(cords.getMagnification());
 			updateIcon();
-		//	if (button.objectIsAlready(text)) this.setHandleColor(Color.DARK_GRAY); else this.setHandleColor(Color.white);
 			super.draw(graphics, cords);
 		}
-		
-		protected MultiSelectionOperator operation;
-		private boolean operateOnAll=true;
-		protected IconHandle alternativePopup;
-		public boolean useOperatorPopup=false;
-		
+
 
 		public GeneralActionHandle(MultiSelectionOperator i, int num) {
 			super(i.getIcon(), new Point(0,0));
@@ -132,6 +121,8 @@ public class ActionButtonHandleList extends SmartHandleList {
 			return operation.getMenuCommand();
 		}
 
+		/**updates the icon based on the getIcon method from the operation. This sometimes results in 
+		  a change of icon that informs the user*/
 		public void updateIcon() {
 			super.setIcon(operation.getIcon());
 		}
@@ -140,21 +131,30 @@ public class ActionButtonHandleList extends SmartHandleList {
 		
 		private static final long serialVersionUID = 1L;
 		
+		/**when the user presses the handle*/
 		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
 			
 			if (alternativePopup!=null) {
 				alternativePopup.showPopupMenu(canvasMouseEventWrapper);
 				return;
 			}
-			if (operateOnAll) {
-				LayerSelector selector = canvasMouseEventWrapper.getSelectionSystem();
-				operation.setSelector(selector);
-				operation.setSelection(selector.getSelecteditems());
-				
-				operation.run();
-			} 
-			canvasMouseEventWrapper.getAsDisplay().updateDisplay();
 			
+			
+			performOperation(canvasMouseEventWrapper);
+			
+		}
+
+
+
+
+		/**Executes the operation on the target specified by the mouse event*/
+		public void performOperation(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+			LayerSelector selector = canvasMouseEventWrapper.getSelectionSystem();
+			operation.setSelector(selector);
+			operation.setSelection(selector.getSelecteditems());
+			operation.run();
+			
+			canvasMouseEventWrapper.getAsDisplay().updateDisplay();
 		}
 
 	
@@ -162,7 +162,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	}
 	
 
-	
+	/**A handle that */
 	public class GeneralActionListHandle extends GeneralActionHandle {
 
 		public MultiSelectionOperator itemForIcon;
@@ -338,9 +338,9 @@ public class ActionButtonHandleList extends SmartHandleList {
 	public class HandlePressMouseListener implements MouseListener {
 
 		private ActionButtonHandleList theList;
-		private DisplayedImageWrapper imp;
+		private DisplayedImage imp;
 
-		public HandlePressMouseListener(ActionButtonHandleList a, DisplayedImageWrapper imp) {
+		public HandlePressMouseListener(ActionButtonHandleList a, DisplayedImage imp) {
 			theList=a;
 			this.imp=imp;
 		}

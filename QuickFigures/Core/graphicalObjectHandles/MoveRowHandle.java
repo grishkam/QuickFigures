@@ -14,7 +14,7 @@ import gridLayout.GenericMontageEditor;
 import gridLayout.MontageSpaces;
 import undo.UndoLayoutEdit;
 
-
+/**a handle that moves the rows and columns of the layout around*/
 public class MoveRowHandle extends SmartHandle implements MontageSpaces{
 
 	protected MontageLayoutGraphic layout;
@@ -103,7 +103,7 @@ public class MoveRowHandle extends SmartHandle implements MontageSpaces{
 		
 		BasicMontageLayout makeAltered = layout.getPanelLayout().makeAltered(type);
 		int startIndex = index;
-		endIndex = makeAltered.getNearestPanelIndex(canvasMouseEventWrapper.getCordinatePoint());
+		endIndex = makeAltered.getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());
 		
 		Rectangle2D startingPanel = makeAltered.getPanel(startIndex);
 		Rectangle2D ending = makeAltered.getPanel(endIndex);
@@ -116,7 +116,7 @@ public class MoveRowHandle extends SmartHandle implements MontageSpaces{
 	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
 		UndoLayoutEdit currentUndo = new UndoLayoutEdit(layout);
 		
-		endIndex = this.getCurrentLayout().makeAltered(type).getNearestPanelIndex(canvasMouseEventWrapper.getCordinatePoint());
+		endIndex = this.getCurrentLayout().makeAltered(type).getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());
 		
 		if (type==PANELS) {  
 			getEditor().swapMontagePanels(getCurrentLayout(), index, endIndex);

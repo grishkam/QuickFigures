@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
-import genericMontageKit.BasicOverlayHandler;
-import graphicActionToombar.CurrentSetInformerBasic;
+import genericMontageKit.BasicObjectListHandler;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.GraphicSet;
+import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageAndDisplaySet;
 import sUnsortedDialogs.ObjectListChoice;
 import utilityClassesForObjects.LocatedObject2D;
@@ -20,14 +20,14 @@ import utilityClassesForObjects.LocatedObject2D;
 public class CombineImages implements MenuItemForObj {
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
-		ArrayList<DisplayedImageWrapper> choices = getChoices();
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		ArrayList<DisplayedImage> choices = getChoices();
 		ImageAndDisplaySet figure =  ImageAndDisplaySet.createAndShowNew("new set", 0,0);;
 		
 		
-			for(DisplayedImageWrapper figure2: choices) {
+			for(DisplayedImage figure2: choices) {
 				CombineImages.combineInto(figure, figure2, false);
-			BasicOverlayHandler boh = new BasicOverlayHandler();
+			BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		 boh.resizeCanvasToFitAllObjects(figure.getImageAsWrapper());
 		 figure.updateDisplay();
@@ -36,20 +36,20 @@ public class CombineImages implements MenuItemForObj {
 	}
 	
 
-public static ArrayList<DisplayedImageWrapper> getChoices() {
+public static ArrayList<DisplayedImage> getChoices() {
 	 
-		 ArrayList<DisplayedImageWrapper> alldisp = new CurrentSetInformerBasic().getVisibleDisplays();
-		ArrayList<DisplayedImageWrapper> foruse = new ObjectListChoice<DisplayedImageWrapper>("").selectMany("Chose Which to combine", alldisp, 4);
+		 ArrayList<DisplayedImage> alldisp = new CurrentFigureSet().getVisibleDisplays();
+		ArrayList<DisplayedImage> foruse = new ObjectListChoice<DisplayedImage>("").selectMany("Chose Which to combine", alldisp, 4);
 		 
 		 return foruse;
 	 
 	 
 }
 
-public static DisplayedImageWrapper getChoice(String prompt) {
+public static DisplayedImage getChoice(String prompt) {
 	 
-	 ArrayList<DisplayedImageWrapper> allDisp = new CurrentSetInformerBasic().getVisibleDisplays();
-	DisplayedImageWrapper foruse = new ObjectListChoice<DisplayedImageWrapper>("").select(prompt, allDisp);
+	 ArrayList<DisplayedImage> allDisp = new CurrentFigureSet().getVisibleDisplays();
+	DisplayedImage foruse = new ObjectListChoice<DisplayedImage>("").select(prompt, allDisp);
 	 
 	 return foruse;
 
@@ -80,7 +80,7 @@ public static DisplayedImageWrapper getChoice(String prompt) {
 	
 
 	/**Combines two displays by adding one of them to the other*/
-	public static void combineInto(ImageAndDisplaySet recipient, DisplayedImageWrapper figure2, boolean horizontal) {
+	public static void combineInto(ImageAndDisplaySet recipient, DisplayedImage figure2, boolean horizontal) {
 		if (recipient==null) return;
 		if (figure2==null) return;
 		int h = recipient.getTheSet().getHeight();
@@ -96,7 +96,7 @@ public static DisplayedImageWrapper getChoice(String prompt) {
 	recipient.getTheSet().setWidth(dims.width);
 	}
 	
-	static Dimension getCombinedSize(ImageAndDisplaySet recipient, DisplayedImageWrapper figure2, boolean horizontal) {
+	static Dimension getCombinedSize(ImageAndDisplaySet recipient, DisplayedImage figure2, boolean horizontal) {
 		
 		int w=0;
 		int h=0;
@@ -117,7 +117,7 @@ public static DisplayedImageWrapper getChoice(String prompt) {
 	
 	
 	/**Combines two displays by adding one of them to the other*/
-	public static void combineInto(ImageAndDisplaySet recipient, DisplayedImageWrapper addition, Point XYDisplace) {
+	public static void combineInto(ImageAndDisplaySet recipient, DisplayedImage addition, Point XYDisplace) {
 		GraphicLayer layer = addition.getImageAsWrapper().getGraphicLayerSet();
 		for(ZoomableGraphic ob1: layer.getAllGraphics()) {
 			if (ob1 instanceof LocatedObject2D) {
@@ -127,7 +127,7 @@ public static DisplayedImageWrapper getChoice(String prompt) {
 		}
 		recipient.updateDisplay();
 		addition.updateDisplay();
-		GraphicSet set = recipient.getTheSet();
+		GraphicContainingImage set = recipient.getTheSet();
 		
 		set.getGraphicLayerSet().add(layer);
 		

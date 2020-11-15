@@ -24,12 +24,12 @@ public class AxisLabel extends PlotLabel {
 
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
-		double h=this.getSnappingBehaviour().getSnapHOffset();
-		double v=this.getSnappingBehaviour().getSnapVOffset();
+		double h=this.getSnapPosition().getSnapHOffset();
+		double v=this.getSnapPosition().getSnapVOffset();
 		super.scaleAbout(p, mag);
 		
-		getSnappingBehaviour().setSnapHOffset( Math.round(h*mag));
-		getSnappingBehaviour().setSnapVOffset( Math.round(v*mag));
+		getSnapPosition().setSnapHOffset( Math.round(h*mag));
+		getSnapPosition().setSnapVOffset( Math.round(v*mag));
 		this.putIntoSnapPosition();
 		
 	}

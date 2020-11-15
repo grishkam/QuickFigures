@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import applicationAdapters.ObjectWrapper;
-import genericMontageKit.BasicOverlayHandler;
 import utilityClassesForObjects.Hideable;
 import utilityClassesForObjects.Mortal;
 import utilityClassesForObjects.Selectable;
 
+/**contains a variety of useful methods that work on ArrayLists
+  The method names a highly self explanatory */
 public class ArraySorter<ItemType> {
 	
 	private Random randy=null;
@@ -27,10 +27,10 @@ public class ArraySorter<ItemType> {
 	}
 	
 	public ItemType getRandom(ArrayList<ItemType> th) {
-		//int i=(int) (Math.random()*100000);
 		return th.get(Math.abs(this.getRandy().nextInt())%th.size());
 	}
 	
+	/**scrambles the array*/
 	public void randomizePointPositions(ArrayList<ItemType> th){
 		randomizePointPositions(th, th.size());
 	}
@@ -124,39 +124,10 @@ public class ArraySorter<ItemType> {
 			}
 			
 		}
-		
-		//array.set(ind1, i2);
-		//array.set(ind2, i1);
+
 		
 	}
 
-	/**sorts the array based on the int returned by method m
-	public void sort(ArrayList<ItemType> arr, Method m) {
-		try{
-		int middle=arr.size()/2;
-		int i=0;
-		int j=arr.size();
-		while (((Integer)m.invoke(arr.get(i))) < ((Integer)m.invoke(arr.get(middle)))) {
-	        i++;
-	      }
-		
-		while (((Integer)m.invoke(arr.get(j))) > ((Integer)m.invoke(arr.get(middle)))) {
-	        j--;
-	      }
-		
-		 if (((Integer)m.invoke(arr.get(i))) <= ((Integer)m.invoke(arr.get(j)))) {
-			 swapObjectPositionsInArray(arr.get(i), arr.get(j), arr);
-		        i++;
-		        j--;
-		      }
-		
-		
-		
-		} catch (Throwable t) {}
-	
-	}*/
-	
-	
 
 	public void swapObjectPositionsInArray(ItemType i1,
 			ItemType i2, LinkedList<ItemType> array) {
@@ -175,7 +146,7 @@ public class ArraySorter<ItemType> {
 		return output;
 	}
 	
-
+/**
 	public ArrayList<ItemType> getThoseThatWrapObjectClass(ArrayList<ItemType> array, Class<?>... c) {
 		ArrayList<ItemType> output = new ArrayList<ItemType>();
 		for(ItemType a: array) {
@@ -191,8 +162,9 @@ public class ArraySorter<ItemType> {
 			
 		}
 		return false;
-	}
+	}*/
 
+	/**counts the number of objects in array that are of class c*/
 	public static int getNOfClass(ArrayList<?> array, Class<?>... c) {
 		int i=0;
 		for(Object a: array) {
@@ -211,6 +183,7 @@ public class ArraySorter<ItemType> {
 		array.addAll(i+1, b);
 	}
 	
+	/**returns true if the object is an instance of at least one of the listed classes*/
 	public static boolean isOfClass(Object o, Class<?>... classes) {
 		for(Class<?> c: classes) {
 			if (c.isInstance(o)) return true;
@@ -229,7 +202,7 @@ public class ArraySorter<ItemType> {
 		
 		ItemType lin2=t.get(index2);
 		if (lin2==null) return;
-	//	ArraySorter<TextLine> as = new ArraySorter<TextLine>();
+
 		swapObjectPositionsInArray(lin, lin2, t);
 	}
 	
@@ -273,11 +246,11 @@ public class ArraySorter<ItemType> {
 		
 		ItemType lin2=t.get(index2);
 		if (lin2==null) return;
-	//	ArraySorter<TextLine> as = new ArraySorter<TextLine>();
+	
 		swapObjectPositionsInArray(lin, lin2, t);
 	}
 	
-	public static void removeNonserialiazble(ArrayList<?> arr) {
+	public static void removeNonSerialiazble(ArrayList<?> arr) {
 		ArrayList<Object> deads = new ArrayList<Object> ();
 		for(Object i:arr) {
 			if (!(i instanceof Serializable)) deads.add( i);
@@ -339,6 +312,7 @@ public class ArraySorter<ItemType> {
 		}
 	}
 	
+	/**removes any selectable items that are not currently selected from the array list*/
 	public static void removeNonSelectionItems(ArrayList<?> arr) {
 		ArrayList<Selectable> deads = new ArrayList<Selectable> ();
 		for(Object i:arr) {
@@ -348,9 +322,34 @@ public class ArraySorter<ItemType> {
 			arr.remove(in);
 		}
 	}
+	
+	/**removes any objects that occur before object object1, within the array*/
+	public static void removeItemsBefore(ArrayList<?> arr, Object object1) {
+		ArrayList<Object> deads = new ArrayList<Object> ();
+		int index1 = arr.indexOf(object1);
+		for(Object i:arr) {
+			if (arr.indexOf(i)<index1) deads.add( i);
+		}
+		for(Object in:deads) {
+			arr.remove(in);
+		}
+	}
+	
+	/**Selects all the items that are not currently select within the array list*/
+	public static void selectItems(ArrayList<?> arr) {
+		ArrayList<Selectable> deads = new ArrayList<Selectable> ();
+		for(Object i:arr) {
+			if (i instanceof Selectable && !((Selectable) i).isSelected()) deads.add((Selectable) i);
+		}
+		for(Selectable in:deads) {
+			in.select();
+		}
+	}
+
 
 	public synchronized Random getRandy() {
-		randy=new  	SecureRandom();
+		if (randy==null)
+			randy=new  	SecureRandom();
 		return randy;
 	}
 
@@ -358,21 +357,7 @@ public class ArraySorter<ItemType> {
 		this.randy = randy;
 	}
 	
-	public ArrayList<ItemType> getItemsWithIndex(ItemType[] pts, ArrayList<Integer> j) {
-		ArrayList<ItemType> deads = new ArrayList<ItemType> ();
-		for (int i=0; i<pts.length; i++) {
-			if (j!=null) {
-			if (!BasicOverlayHandler.hasInt(j, i+1)) continue;
-			deads.add(pts[i]);
-			
-			}
-			
-		
-	}
-		return deads;
 
-		
-	}
 	
 	
 }

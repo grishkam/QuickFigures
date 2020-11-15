@@ -66,7 +66,7 @@ public class GridLayoutEditListenerList extends
 		     throws IOException {
 
 		ArraySorter.removeDeadItems(this);
-		ArraySorter.removeNonserialiazble(this);
+		ArraySorter.removeNonSerialiazble(this);
 		out.defaultWriteObject();
 	}
 

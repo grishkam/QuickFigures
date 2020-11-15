@@ -34,7 +34,7 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 	
 	private static final long serialVersionUID = 1L;
 	private GraphicSetDisplayContainer setDisplayContainer;
-//	private GraphicTreeUI theUIObject;
+
 	 DefaultMutableTreeNode masternode;
 	GraphicLayer baseLayer;
 	
@@ -50,27 +50,8 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 		
 	
 	}
-	/**
-	public GraphicSetDisplayTree(GraphicSetDisplayContainer cont) {
-		super(makeMasterNode(cont.getGraphicLayerSet()),true);
-		this.setDisplay=cont;
-		if (TreeMode.fancy)this.setRowHeight(0);
-		setCellRenderer(new GraphicCellRenderer());
-		
-		this.setDisplay=cont;
-		if (TreeMode.fancy)this.setRowHeight(0);
-		setCellRenderer(new GraphicCellRenderer());
-		
-		baseLayer=setDisplay.getGraphicLayerSet();
-		masternode = new DefaultMutableTreeNode(baseLayer, true);
-		
-		for(ZoomableGraphic l: baseLayer.getItemArray()) {
-			addGraphicToTreeNode(masternode, l);
-		}
-		
+
 	
-	}
-	*/
 	public DefaultMutableTreeNode makeMasterNode(GraphicLayer baseLayer) {
 		this.baseLayer=baseLayer;
 		masternode = new DefaultMutableTreeNode(baseLayer, true);
@@ -247,7 +228,8 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 	}
 	
 	/**Paints a rectangle on the location that is specified by the field
-	  I use this as an indicator when dragging*/
+	  I use this as an indicator when dragging a tree item around so the user can 
+	  see where he is targetting*/
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.black);

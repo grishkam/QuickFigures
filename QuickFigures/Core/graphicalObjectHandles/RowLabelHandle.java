@@ -5,28 +5,23 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import javax.swing.JPopupMenu;
-
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
-import fLexibleUIKit.ObjectAction;
-import figureTemplates.ChannelLabelPicker;
-import figureTemplates.RowLabelPicker;
-import genericMontageKit.BasicOverlayHandler;
+import applicationAdapters.DisplayedImage;
+import figureFormat.ChannelLabelPicker;
+import figureFormat.RowLabelPicker;
+import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.FigureLabelOrganizer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.MontageSpaces;
-import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
 import utilityClassesForObjects.LocatedObject2D;
@@ -69,7 +64,7 @@ public class RowLabelHandle extends MoveRowHandle {
 
 	private void hideIfNotNeeded(MontageLayoutGraphic montageLayoutGraphic, int index, RowLabelPicker pick) {
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index).getBounds();
-		ArrayList<LocatedObject2D> rois = new BasicOverlayHandler().getOverlapOverlaypingrois(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getWrapper());
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getWrapper());
 		
 		ArrayList<BasicGraphicalObject> array = pick.getDesiredItemsAsGraphicals(rois);
 		
@@ -115,9 +110,9 @@ public class RowLabelHandle extends MoveRowHandle {
 		setUpMatchingLocation(label);
 		
 		
-		DisplayedImageWrapper d = canvasMouseEventWrapper.getAsDisplay();
+		DisplayedImage d = canvasMouseEventWrapper.getAsDisplay();
 		
-		CompoundEdit2 cEdit=new CompoundEdit2();
+		CombinedEdit cEdit=new CombinedEdit();
 		UndoAddItem anEdit = new UndoAddItem(layout.getParentLayer(), label);
 		cEdit.addEditToList(anEdit);
 		d.getUndoManager().addEdit(cEdit);
@@ -133,9 +128,9 @@ public class RowLabelHandle extends MoveRowHandle {
 	private void setUpMatchingLocation(TextGraphic label) {
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+MontageSpaces.LABEL_ALLOTED_TOP).getBounds();
 		if (type==ROWS) space = layout.getPanelLayout().makeAltered(MontageSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, MontageSpaces.LABEL_ALLOTED_LEFT).getBounds();
-		ArrayList<LocatedObject2D> rois = new BasicOverlayHandler().getOverlapOverlaypingrois(space.getBounds(), layout.getPanelLayout().getWrapper());
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getWrapper());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
-		if(array.size()>0) label.setSnappingBehaviour(array.get(0).getSnappingBehaviour());
+		if(array.size()>0) label.setSnappingBehaviour(array.get(0).getSnapPosition());
 	
 	}
 	public void handleDrag(CanvasMouseEventWrapper canvasMouseEventWrapper) {}

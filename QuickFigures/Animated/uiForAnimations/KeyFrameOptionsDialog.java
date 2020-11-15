@@ -3,13 +3,18 @@ package uiForAnimations;
 import java.util.ArrayList;
 
 import animations.KeyFrameCompatible;
+import graphicActionToolbar.CurrentFigureSet;
 import animations.BasicKeyFrame;
 import animations.KeyFrameAnimation;
-import graphicActionToombar.CurrentSetInformerBasic;
 import graphicalObjects.ZoomableGraphic;
 import sUnsortedDialogs.ReflectingFieldSettingDialog;
 
 public class KeyFrameOptionsDialog extends BasicTimeLineOperator {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	static int Allframes=1, AllObjects=0, All=2;
 	
@@ -93,7 +98,7 @@ public class KeyFrameOptionsDialog extends BasicTimeLineOperator {
 	
 	/**Performs an options dialog*/
 	public void actioinOnSelected() {
-		int frame1=new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getCurrentFrame();
+		int frame1=new CurrentFigureSet().getCurrentlyActiveDisplay().getCurrentFrame();
 		KeyFrameAnimation selectedItem = this.getAllKeyFrameAnimationAtFrame(frame1).get(0);
 
 		/***/

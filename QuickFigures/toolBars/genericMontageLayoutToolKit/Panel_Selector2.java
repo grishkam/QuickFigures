@@ -51,8 +51,8 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 
 		public void checkExpansion(BasicMontageLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2) {
 			try{
-			if (yc1>basicMontageLayout.montageHeight-basicMontageLayout.specialSpaceWidthBottom || yc2>basicMontageLayout.montageHeight-basicMontageLayout.specialSpaceWidthBottom ) {getEditor().addRows(basicMontageLayout, 1); return;}
-			if (xc1>basicMontageLayout.montageWidth-basicMontageLayout.specialSpaceWidthRight || xc2>basicMontageLayout.montageWidth-basicMontageLayout.specialSpaceWidthRight) {getEditor().addCols(basicMontageLayout, 1); return;}
+			if (yc1>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom || yc2>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom ) {getEditor().addRows(basicMontageLayout, 1); return;}
+			if (xc1>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight || xc2>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight) {getEditor().addCols(basicMontageLayout, 1); return;}
 			if (xc1<0 || xc2<0) {
 				me.addLeftLabelSpace(basicMontageLayout, basicMontageLayout.getPanelWidthOfColumn(1)/8); 
 				return;}

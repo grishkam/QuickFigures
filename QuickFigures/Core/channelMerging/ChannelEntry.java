@@ -3,14 +3,15 @@ package channelMerging;
 import java.awt.Color;
 import java.io.Serializable;
 
-import logging.IssueLog;
-
+/**Information about a particular channel of a particular frame and slice.
+  Used to keep track of information wuch as
+  which channels are in a particular panel, what color a channel is, channel name, exposure time
+  */
 public class ChannelEntry implements Serializable{
 	
 	/**
 	 * 
 	 */
-	
 	
 	private String label="";
 	private Color originalLutCol=Color.BLACK;
@@ -31,6 +32,7 @@ public class ChannelEntry implements Serializable{
 		return label;
 	}
 	
+	/**Returns a short version of the label that can be displayed in part of the user interface*/
 	public String getShortLabel() {
 		if (label==null) return getSimpleLabel();
 		String short1 = label.split(";")[0];
@@ -39,7 +41,7 @@ public class ChannelEntry implements Serializable{
 	}
 
 	private String getSimpleLabel() {
-		return "Channel "+this.getOriginalChannelIndex();
+		return "Channel "+ getOriginalChannelIndex();
 	}
 	
 	public void setLabel(String label) {
@@ -96,18 +98,11 @@ public class ChannelEntry implements Serializable{
 	
 	/**updates a channel entry in the event of a color change, to match*/
 	public void updateFrom(ChannelEntry ce) {
-		
-		
 		this.label=ce.label;
 		this.originalLutCol=ce.originalLutCol;//lut color change
 		this.originalChannelIndex=ce.originalChannelIndex;//in the even the channel order was change
 		this.realChannelName=ce.getRealChannelName();
-		
-		/**
-		IssueLog.log("Updating channel entry ");
-		IssueLog.log(" index "+ce.originalChannelIndex);
-		IssueLog.log(" name "+ce.getRealChannelName());
-		*/
+
 	}
 	
 	

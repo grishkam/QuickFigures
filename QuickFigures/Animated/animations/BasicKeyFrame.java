@@ -1,5 +1,6 @@
 package animations;
 
+/***/
 public interface BasicKeyFrame {
 
 	public int getFrame();

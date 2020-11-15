@@ -10,16 +10,14 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
-import javax.swing.JPopupMenu;
-
 import actionToolbarItems.EditAndColorizeMultipleItems;
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEventWrapper;
-import fieldReaderWritter.RetrievableOption;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
+import gridLayout.RetrievableOption;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorObjectConvertable;
 import illustratorScripts.PathItemRef;
@@ -27,7 +25,6 @@ import keyFrameAnimators.RectGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import objectDialogs.WidthAndHeightDialog;
-import selectedItemMenus.LayerSelector;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
 import undo.UndoStrokeEdit;
@@ -39,29 +36,20 @@ import utilityClassesForObjects.ScalesFully;
 import utilityClassesForObjects.ShowsOptionsDialog;
 import utilityClassesForObjects.StrokedItem;
 
+/**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog*/
 public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePosisions, HasSmartHandles {
-	
-
-	/**
-	 * 
-	 */
-	
-	
+	{name="Rectangle ";}
 	
 	private static final long serialVersionUID = 1L;
 	
-	{name="Rectangle ";}
+	
 	@RetrievableOption(key="width",  label="Width ")
 	private double width;
 
 	@RetrievableOption(key="height",  label="Height ")
 	private double height;
 	
-	@RetrievableOption(key="stretchX",  label="Stretch X ")
-	private double stretchX=1.0;
 
-	@RetrievableOption(key="stretchY",  label="Stretch Y ")
-	private double stretchY=1.0;
 
 	private SmartHandleList smartList;
 	public boolean flipDuringHandleDrag=true;
@@ -76,6 +64,13 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	
 	
 	public RectangularGraphic(){}
+	
+	public RectangularGraphic(double x, double y, double width2, double height2) {
+		this.x=x;
+		this.y=y;
+		this.setObjectWidth(width2);
+		this.setObjectHeight(height2);
+	}
 	
 	public RectangularGraphic(Point2D p) {
 		this(new Rectangle2D.Double(p.getX(), p.getY(), 1, 1));
@@ -92,36 +87,13 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		copyColorsFrom(r);
 	}
 	
-	public static RectangularGraphic blackRect() {
-		RectangularGraphic r1 = new RectangularGraphic(0,0,300,200);
-		r1.setFilled(true);
-		r1.setDashes(new float[]{10000});
-		r1.setStrokeWidth(4);
-		r1.setStrokeColor(Color.black);
-		return r1;
+	public String getShapeName() {
+		return "Rectangle";
 	}
 	
-	/**returns a rectangular graphic*/
-	public static RectangularGraphic blankRect(Rectangle r, Color c) {
-		return blankRect(r, c, false, false);
-	}
-	public static RectangularGraphic blankRect(Rectangle2D r, Color c, boolean hideHandle, boolean hideAllHandles) {
-		RectangularGraphic r1 = new RectangularGraphic(r);
-		r1.hideCenterAndRotationHandle=hideHandle;
-		r1.hideStrokeHandle=hideHandle;
-		r1.hideHandles(hideAllHandles);
-		r1.setDashes(new float[]{10000});
-		r1.setStrokeWidth(3);
-		r1.setStrokeColor(c);
-		return r1;
-	}
 	
-	public RectangularGraphic(double x, double y, double width2, double height2) {
-		this.x=x;
-		this.y=y;
-		this.setObjectWidth(width2);
-		this.setObjectHeight(height2);
-	}
+	
+
 	public void setRectangle(Rectangle2D r) {
 		x=r.getX();
 		y=r.getY();
@@ -129,12 +101,6 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		setObjectHeight(r.getHeight());
 	}
 	
-	public static RectangularGraphic filledRect(Rectangle r) {
-		RectangularGraphic output = new RectangularGraphic(r);
-		output.setFilled(true);
-		output.setStrokeWidth(-1);
-		return output;
-		}
 
 	@Override
 	public RectangularGraphic copy() {
@@ -145,24 +111,21 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		return copy;
 	}
 
-
-
-	
-	
-
-	
+/**Called when the rectangle's handles are moved*/
 	public void handleSmartMove(int handlenum, Point p1, Point p2) {
+		/**if the rectangle is rotated, transforms the points to the equivalent unrotated points*/
 		if (handlenum!=10) {
-		performRotationCorrection(p1);
-		performRotationCorrection(p2);
+			performRotationCorrection(p1);
+			performRotationCorrection(p2);
 		}
+		
 		if (flipDuringHandleDrag)
 			handlenum=checkForHandleInvalidity(handlenum,p1,p2);
 		
+		/**When a user drags one corner the other is set as the fixed edge*/
 		int op=RectangleEdges.oppositeSide(handlenum);
 		setLocationType(op);
 		
-		//Point2D lo = getLocation(handlenum, getBounds());
 		Point2D l2 = RectangleEdges.getLocation(op, getBounds());
 		double newwidth = Math.abs(p2.getX()-l2.getX());
 		double newheight = Math.abs(p2.getY()-l2.getY());
@@ -305,12 +268,13 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	}
 	
 
+	/**returns the bounds of the rectangle in its unroated form*/
 	@Override
 	public Rectangle getBounds() {
 		return getRectangle().getBounds();
 	}
 	
-	
+	/**returns the rectangle in its non-rotated form*/
 public Rectangle2D.Double getRectangle() {
 	return new Rectangle2D.Double(x,y,getObjectWidth(),getObjectHeight());
 }
@@ -319,7 +283,10 @@ public Rectangle2D.Double getRectangle() {
 
 	@Override
 	public void showOptionsDialog() {
-		new RectangleGraphicOptionsDialog(this).showDialog();
+		getOptionsDialog(false).showDialog();
+	}
+	public RectangleGraphicOptionsDialog getOptionsDialog(boolean simple) {
+		return new RectangleGraphicOptionsDialog(this, simple);
 	}	
 
 
@@ -328,6 +295,7 @@ public Rectangle2D.Double getRectangle() {
 		
 	}
 	
+	/**returns the shape*/
 	@Override
 	public Shape getShape() {
 		return getRectangle();
@@ -338,7 +306,6 @@ public Rectangle2D.Double getRectangle() {
 	@Override
 	public Icon getTreeIcon() {
 		return new GraphicDisplayComponent(createIcon() );
-		//return createImageIcon();
 	}
 	
 	RectangularGraphic createIcon() {
@@ -368,7 +335,7 @@ public Rectangle2D.Double getRectangle() {
 		
 	}
 	
-	/**faulty implementation*/
+	/**Scales the rectangle */
 	@Override
 	public void scaleAbout(Point2D p, double magx, double magy) {
 		this.setLocationType(CENTER);
@@ -385,25 +352,17 @@ public Rectangle2D.Double getRectangle() {
 			this.setObjectWidth(r.getWidth());
 			this.setObjectHeight(r.getHeight());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		//double w = getObjectWidth()*magx;//(Math.abs(magx*Math.cos(a))+Math.abs(magy*Math.sin(a)));
-		//double h = getObjectHeight()*magy;//*(Math.abs(magx*Math.sin(a))+Math.abs(magy*Math.cos(a)));
-		//this.setWidth(w);
-		//this.setHeight(h);
-		
 		
 		this.setLocation(p2);
 		
 	}
 	
+	/**Performs a rotation*/
 	@Override
 	public void rotateAbout(Point2D p, double distanceFromCenterOfRotationtoAngle) {
 		if(distanceFromCenterOfRotationtoAngle==0) return;
-		//not yet implemented
 		this.setLocationType(CENTER);
 		Point2D p2 = this.getLocation();
 		AffineTransform at = AffineTransform.getRotateInstance(distanceFromCenterOfRotationtoAngle, p.getX(), p.getY());
@@ -426,47 +385,17 @@ public Rectangle2D.Double getRectangle() {
 		this.width = width;
 	}
 	
-	
+	/**rotation of the rectangle changes the cordinates of the handles, this method corrects for that*/
 	protected void performRotationCorrection(Point2D p) {
 		AffineTransform aa = RectangleEdges.getRotationAboutCenter(this.getBounds(), this.getAngle());
-		removeStretch(aa);
 		aa.transform(p, p);
 	}
-	
+	/**rotation of the rectangle changes the cordinates of the handles, this method corrects for that*/
 	public void undoRotationCorrection(Point2D p) {
 		AffineTransform aa = RectangleEdges.getRotationAboutCenter(this.getBounds(), -getAngle());
-		addStretch(aa);
 		aa.transform(p, p);
 	}
 	
-
-	
-	
-	private void addStretch(AffineTransform rotation) {
-		if(stretchX!=1||stretchY!=1) {
-			
-		}
-	}
-
-	/**not implemented properly yet*/
-	protected AffineTransform getStretch() {
-		double xr = getCenterOfRotation().getX();
-		double yr = getCenterOfRotation().getY();
-		AffineTransform stretch = AffineTransform.getTranslateInstance(-xr, -yr);
-		stretch.concatenate(AffineTransform.getScaleInstance(stretchX, stretchY));
-		stretch.concatenate(AffineTransform.getTranslateInstance(xr, yr));
-		return stretch;
-	}
-	private void removeStretch(AffineTransform rotation) {
-		if(stretchX!=1||stretchY!=1) {
-			try {
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 
 	/**draws the handles*/
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
@@ -577,7 +506,8 @@ public Rectangle2D.Double getRectangle() {
 		}
 
 		
-		
+		/**Sets the locations of the handles based on the rectangles, size, location and rotation and
+		 */
 		public void updateLocation(int type) {
 			if (type!=rotationType) {
 				Point2D p = RectangleEdges.getLocation(type,rect.getBounds());
@@ -605,7 +535,7 @@ public Rectangle2D.Double getRectangle() {
 			if (isStrokeHandle()) {
 				
 				Point2D p =getStrokeHandlePoints()[1];
-				Point c = w.getCordinatePoint();
+				Point c = w.getCoordinatePoint();
 				double d = 2*p.distance(c);
 				if(getStrokeHandlePoints()[0].distance(c)>12) {d=0.5;}
 				rect.setStrokeWidth((float)d);
@@ -629,6 +559,7 @@ public Rectangle2D.Double getRectangle() {
 				w.getAsDisplay().getUndoManager().addEdit(strokeUndo);
 		}
 		
+		/**when the user double click a handle with the mouse, this will show a dialog*/
 		@Override
 		public void handlePress(CanvasMouseEventWrapper w) {
 			if (this.isStrokeHandle()) strokeUndo= new UndoStrokeEdit(rect);
@@ -662,25 +593,22 @@ public Rectangle2D.Double getRectangle() {
 		/**What to do when a handle is moved from point p1 to p2*/
 		public void handleMove(Point2D p1, Point2D p2) {
 			rect.handleSmartMove(getHandleNumber(), (Point) p1,  (Point) p2) ;
-			
-			
+
 		}
 		
 	}
 	
 	
-	
+	/**returns the list of handles for the shape*/
 	@Override
 	public SmartHandleList getSmartHandleList() {
 		if (smartList==null)smartList=this.createSmartHandleList(); 
 		if (!superSelected) return smartList;
 		return SmartHandleList.combindLists(smartList, getButtonList());
-		//return smartList;
 	}
 
 	
-
-	
+	/**returns the handle id for the location*/
 	@Override
 	public int handleNumber(int x, int y) {
 		return getSmartHandleList().handleNumberForClickPoint(x, y);
@@ -708,12 +636,41 @@ public Rectangle2D.Double getRectangle() {
 		return output;
 	}
 
-	public String getShapeName() {
-		return "Rectangle";
+	
+
+
+	/**returns a simple rectangle*/
+	public static RectangularGraphic blackRect() {
+		RectangularGraphic r1 = new RectangularGraphic(0,0,300,200);
+		r1.setFilled(true);
+		r1.setDashes(new float[]{10000});
+		r1.setStrokeWidth(4);
+		r1.setStrokeColor(Color.black);
+		return r1;
 	}
-
-
-
+	
+	/**returns a rectangular graphic with the given bounds and color*/
+	public static RectangularGraphic blankRect(Rectangle r, Color c) {
+		return blankRect(r, c, false, false);
+	}
+	/**returns a rectangle. If certain arguments are set to true, the handes are not shown */
+	public static RectangularGraphic blankRect(Rectangle2D r, Color c, boolean hideHandle, boolean hideAllHandles) {
+		RectangularGraphic r1 = new RectangularGraphic(r);
+		r1.hideCenterAndRotationHandle=hideHandle;
+		r1.hideStrokeHandle=hideHandle;
+		r1.hideHandles(hideAllHandles);
+		r1.setDashes(new float[]{10000});
+		r1.setStrokeWidth(3);
+		r1.setStrokeColor(c);
+		return r1;
+	}
+	/**returns a filled rectangle with not visible stroke*/
+	public static RectangularGraphic filledRect(Rectangle r) {
+		RectangularGraphic output = new RectangularGraphic(r);
+		output.setFilled(true);
+		output.setStrokeWidth(-1);//no stroke
+		return output;
+		}
 	
 
 	

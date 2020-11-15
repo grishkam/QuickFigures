@@ -2,6 +2,7 @@ package fieldReaderWritter;
 
 import infoStorage.BasicMetaDataHandler;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -60,27 +61,12 @@ public class TestXMLWRitting {
 		
 	}
 	
-	public static int overrideQuestion(File f) {
-		if (f.exists()) {
-			int i=JOptionPane.showConfirmDialog(null, 	
-					"Are you sure?. This will eliminate the existing file\n"
-				    + new File("").getName()+"\n",
-				    "Override?",
-				    JOptionPane.YES_NO_OPTION
-				    );
-			if (i==0) {
-				f.delete();
-				
-			}
-			return i;
-		}
-		return 0;
-	}
+
 
 	public static void saveObject(String newpath, Object o) {
 			try {
 				File file=new File(newpath);
-				int i=overrideQuestion(file);
+				int i=FileChoiceUtil.overrideQuestion(file);
 				if(i!=0) return;
 				// TODO Auto-generated method stub
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

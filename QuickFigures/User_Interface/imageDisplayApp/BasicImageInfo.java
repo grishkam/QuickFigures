@@ -2,6 +2,7 @@ package imageDisplayApp;
 
 import java.io.Serializable;
 
+/**this class stores simple information about an image: canvas size and name*/
 public class BasicImageInfo implements Serializable {
 	
 		/**

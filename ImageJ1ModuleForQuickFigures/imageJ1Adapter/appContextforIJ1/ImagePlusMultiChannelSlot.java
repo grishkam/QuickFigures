@@ -3,7 +3,6 @@ package appContextforIJ1;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;

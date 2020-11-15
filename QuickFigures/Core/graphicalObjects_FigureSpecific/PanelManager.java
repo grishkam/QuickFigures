@@ -18,16 +18,17 @@ import gridLayout.BasicMontageLayout;
 import logging.IssueLog;
 import objectDialogs.ChannelSliceAndFrameSelectionDialog;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.Edit;
+import undo.EditListener;
 import undo.PreprocessChangeUndo;
 import undo.UndoAbleEditForRemoveItem;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.RectangleEdges;
 
 /**handles the adding and removing of channel display panels
  */
-public class PanelManager implements Serializable{
+public class PanelManager implements Serializable, EditListener{
 
 	/**
 	 * 
@@ -144,12 +145,12 @@ public class PanelManager implements Serializable{
 	/**empties the panel list and removes all the objects from the layer
 	*/
 	@MenuItemMethod(menuActionCommand = "panelgone", menuText = "Eliminate Panels", subMenuName="Image Panels")
-	public CompoundEdit2 eliminatePanels() {
+	public CombinedEdit eliminatePanels() {
 		return eliminatePanels(getPanelList());
 	}
-	public CompoundEdit2 eliminatePanels(PanelList stack) {
+	public CombinedEdit eliminatePanels(PanelList stack) {
 		if (stack==null) return null;
-		CompoundEdit2 output = new CompoundEdit2();
+		CombinedEdit output = new CombinedEdit();
 		ArrayList<ImagePanelGraphic> arr = stack.getPanelGraphics();
 		for(ImagePanelGraphic g:arr) {
 			output.addEditToList(
@@ -166,8 +167,8 @@ public class PanelManager implements Serializable{
 	
 	/**removes all objects associated with the panels including imagePanelGraphics,
 		channelLabels and scale bars. returns an undo for the action*/
-	public CompoundEdit2 removeDisplayObjectsForAll() {
-		CompoundEdit2 output = new CompoundEdit2();
+	public CombinedEdit removeDisplayObjectsForAll() {
+		CombinedEdit output = new CombinedEdit();
 		if (stack==null) return  output;
 		
 		PanelList arr = stack;
@@ -182,8 +183,8 @@ public class PanelManager implements Serializable{
 	
 	/**removes the display objects for the given panel list element from the layer.
 	  */
-	public CompoundEdit2 removeDisplayObjectsFor(PanelListElement g) {
-		CompoundEdit2 itemsTaken=new CompoundEdit2();
+	public CombinedEdit removeDisplayObjectsFor(PanelListElement g) {
+		CombinedEdit itemsTaken=new CombinedEdit();
 		
 			itemsTaken.addEditToList(new UndoAbleEditForRemoveItem(layer, g.getPanelGraphic()));
 			layer.remove(g.getPanelGraphic()); 
@@ -246,35 +247,40 @@ public class PanelManager implements Serializable{
 	}
 	
 	
+	/**getter method for the initial frame width used for newly created image panels*/
 	public int getDefaultFrameWidth() {
 		return defaultFrameWidth;
 	}
-
 	public void setDefaultFrameWidth(int defaultFrameWidth) {
 		this.defaultFrameWidth = defaultFrameWidth;
 	}
 
+	/**getter method for the panel list*/
 	public PanelList getPanelList() {
 		return stack;
 	}
-
+	/**setter method for the panel list*/
 	public void setPanelList(PanelList stack) {
 		this.stack = stack;
 	}
 
+	/**getter method for multi-channel*/
 	public MultiChannelWrapper getMultiChannelWrapper() {
 		return multi;
 	}
-
-	public void setMultiChannelWrapper(MultiChannelWrapper multi) {
+	/**setter method for multi-channel*/
+	 void setMultiChannelWrapper(MultiChannelWrapper multi) {
 		this.multi = multi;
 	}
 	
+	/**Based on the current source image, channel use instructions
+	  and other options, updates the ImagePanel objects with 
+	   the buffered images or appropriate color/contrast
+	    scale information */
 	public synchronized void updatePanels() {
 		MultiChannelWrapper impw =multi;
 		getPanelList().resetChannelEntriesForAll(impw);
 		getPanelList().updateAllPanelsWithImage(impw);
-		
 	}
 	
 	/**updates the panels that include the given channel from the source
@@ -396,13 +402,13 @@ public class PanelManager implements Serializable{
 	
 	/**alters the PPI of the figure.
 	 */
-	public CompoundEdit2 changePPI(double newppi) {
+	public CombinedEdit changePPI(double newppi) {
 		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newPanelScale=panel.getScale()*ppi/newppi;
 		double newScale=getDisplay().getPreprocessScale()*newppi/ppi;
 		
-		CompoundEdit2 output = new CompoundEdit2();
+		CombinedEdit output = new CombinedEdit();
 		
 		output.addEditToList(
 				imposePanelLevelScale(newPanelScale));
@@ -412,33 +418,33 @@ public class PanelManager implements Serializable{
 		
 		
 		updatePanels();
-		output.addEditToList(new PanelManagerUndo2(this));
+		output.addEditListener(this);
 		
 		output.establishFinalState();
 		return output;
 	}
 
 	/**Changed the panel level scale and returns a CompoundEdit edit*/
-	protected CompoundEdit2 imposePanelLevelScale(double newPanelScale) {
-		CompoundEdit2 output=new CompoundEdit2();
+	protected CombinedEdit imposePanelLevelScale(double newPanelScale) {
+		CombinedEdit output=new CombinedEdit();
 		
 		for(PanelListElement panel2: getPanelList().getPanels()) {
 		
 			ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();
 			
-			output.addEditToList(new UndoScaling(panelGraphic));
+			output.addEditToList(new UndoScalingAndRotation(panelGraphic));
 			
 			panelGraphic.setLocationType(RectangleEdges.UPPER_LEFT);
 			panelGraphic.setScale(newPanelScale);
 		}
-		output.addEditToList(new PanelManagerUndo(this));
+		output.addEditToList(new PanelManagerScaleUndo(this));
 		this.setPanelLevelScale(newPanelScale);
 		output.establishFinalState();
 		return output;
 	}
 	
 	/**An undo for changes to the panel level scale (what determines pixel density of the panels)*/
-	class PanelManagerUndo extends AbstractUndoableEdit2 {
+	class PanelManagerScaleUndo extends AbstractUndoableEdit2 {
 		/**
 		 * 
 		 */
@@ -447,7 +453,7 @@ public class PanelManager implements Serializable{
 		double fScale;
 		private PanelManager pm;
 		
-		public PanelManagerUndo(PanelManager pm) {
+		public PanelManagerScaleUndo(PanelManager pm) {
 			this.pm=pm;
 			iScale=pm.getPanelLevelScale();
 		}
@@ -458,29 +464,17 @@ public class PanelManager implements Serializable{
 		}
 	}
 	
-	/**An undo that can be added to a compound edit. does not actually undo anything but
-	  only updates the panels to display the edit before it in the compound edit*/
-	class PanelManagerUndo2 extends AbstractUndoableEdit2 {
-		private static final long serialVersionUID = 1L;
-		private PanelManager pm;
-		
-		public PanelManagerUndo2(PanelManager pm) {
-			this.pm=pm;
-		}
-		public void undo() {pm.updatePanels();}
-		public void redo()  {pm.updatePanels();}
-		public void establishFinalState() {
-		}
-	}
+
 	
-	/**sets the view location of the slot to match the selected slice and frame*/
+	/**sets the initial view location of the image
+	   to match the selected slice and frame*/
 	public void setupViewLocation() {
 		CSFLocation out =getDisplay().getSlot().getDisplaySlice();
 		if(out==null) {
 			out=new CSFLocation();
 			getDisplay().getSlot().setDisplaySlice(out);
 		}
-		this.getPanelList().setupViewLocation(out);
+		this.getPanelList().ssetupViewLocation(out);
 	}
 
 	/**returns true if the panel manager can switch the panel locations (slice, frame or channel) from one setting to another
@@ -519,6 +513,15 @@ public class PanelManager implements Serializable{
 				!getPanelList().getChannelUseInstructions().getSliceUseInstructions().selectsAll()
 				)
 				;
+	}
+
+
+	/**An undo that can be added to a compound edit. does not actually undo anything but
+	  only updates the panels to display the edit before it in the compound edit*/
+	@Override
+	public void afterEdit() {
+		this.updatePanels();
+		
 	}
 	
 

@@ -1,7 +1,5 @@
 package undo;
 
-import javax.swing.undo.AbstractUndoableEdit;
-
 import channelMerging.PanelStackDisplay;
 import channelMerging.PreProcessInformation;
 

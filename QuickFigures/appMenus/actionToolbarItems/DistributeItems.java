@@ -19,6 +19,10 @@ import utilityClassesForObjects.LocatedObject2D;
 
 public class DistributeItems extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean vertical;
 	//boolean layout;//true if this works on panel layouts.
 	

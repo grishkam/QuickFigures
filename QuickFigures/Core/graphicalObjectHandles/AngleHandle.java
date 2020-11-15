@@ -74,7 +74,7 @@ public class AngleHandle extends SmartHandle {
 	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 		
 		
-		Point p2 = lastDragOrRelMouseEvent.getCordinatePoint();
+		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		;
 			
 			

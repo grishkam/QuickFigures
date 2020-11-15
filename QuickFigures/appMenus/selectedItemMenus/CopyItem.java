@@ -2,7 +2,7 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
@@ -34,15 +34,7 @@ public class CopyItem extends BasicMultiSelectionOperator {
 	@Override
 	public void setSelection(ArrayList<ZoomableGraphic> array) {
 	thearray=array;
-	/**
-	if (array.size()>1) {
-		boolean complete = isCompleteLayer(array.get(0).getParentLayer(),array);
-		if (complete) {
-			ArrayList<ZoomableGraphic> ar2 = new ArrayList<ZoomableGraphic>();
-			ar2.add(array.get(0).getParentLayer());
-			thearray=ar2;
-		}
-	}*/
+
 		
 	}
 
@@ -61,7 +53,7 @@ public class CopyItem extends BasicMultiSelectionOperator {
 		}
 
 		if (move) {
-			DisplayedImageWrapper destination = CombineImages.getChoice("Select where");
+			DisplayedImage destination = CombineImages.getChoice("Select where");
 			GraphicLayer l = this.getSelector().getSelectedLayer();
 		}
 	}

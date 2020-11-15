@@ -6,6 +6,11 @@ import logging.IssueLog;
 public class ListItems extends BasicMultiSelectionOperator {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public void run() {
 		for(ZoomableGraphic item: array) {

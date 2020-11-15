@@ -15,6 +15,10 @@ import ultilInputOutput.FileChoiceUtil;
 
 public class LoadFileLists extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean save=true;
 	String menuPath="File Lists";
 	private boolean multiFileChooser;

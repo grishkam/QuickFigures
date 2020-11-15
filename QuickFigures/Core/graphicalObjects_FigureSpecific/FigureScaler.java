@@ -13,9 +13,9 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import logging.IssueLog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.Scales;
 
 public class FigureScaler {
@@ -42,15 +42,15 @@ public class FigureScaler {
 	}
 	
 	
-	public CompoundEdit2 scaleFigure(PanelLayoutGraphic item, double factor, Point2D about ) {
+	public CombinedEdit scaleFigure(PanelLayoutGraphic item, double factor, Point2D about ) {
 		GraphicLayer parentLayer = item.getParentLayer();
 		
 		return scaleLayer(factor, about, parentLayer);
 	}
 
 
-	public CompoundEdit2 scaleLayer(double factor, Point2D about, GraphicLayer parentLayer) {
-		CompoundEdit2 undo = new CompoundEdit2();
+	public CombinedEdit scaleLayer(double factor, Point2D about, GraphicLayer parentLayer) {
+		CombinedEdit undo = new CombinedEdit();
 		
 		ArrayList<ImagePanelGraphic> panelsInFigure = getAllPanelGraphics(parentLayer);
 		
@@ -60,7 +60,7 @@ public class FigureScaler {
 			
 			if (xg instanceof Scales  ) {
 				Scales s=(Scales) xg;
-				UndoScaling edit = new UndoScaling(s);
+				UndoScalingAndRotation edit = new UndoScalingAndRotation(s);
 				
 				s.scaleAbout(about, factor);
 				edit.establishFinalState();
@@ -92,8 +92,8 @@ public class FigureScaler {
 	/**Alters the bilinear scale factor for all the multichannel displays that use
 	  this layout
 	  */
-	CompoundEdit2 scaleDisplays(GraphicLayer layer, double factor) {
-		CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit scaleDisplays(GraphicLayer layer, double factor) {
+		CombinedEdit undo = new CombinedEdit();
 		
 		
 		if (layer instanceof PanelStackDisplay) {
@@ -131,8 +131,8 @@ public class FigureScaler {
 	/**Alters the bilinear scale factor for all the multichannel displays that use
 	  this layout
 	  */
-	CompoundEdit2 panelLevelScaleDisplays(GraphicLayer layer, double factor) {
-		CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit panelLevelScaleDisplays(GraphicLayer layer, double factor) {
+		CombinedEdit undo = new CombinedEdit();
 		
 		
 		if (layer instanceof PanelStackDisplay) {
@@ -156,7 +156,7 @@ public class FigureScaler {
 	private UndoableEdit panelLeveScaleDisplay(PanelStackDisplay layer, double factor) {
 		double s = layer.getPanelManager().getPanelLevelScale()*factor;
 		 layer.getPanelManager().setPanelLevelScale(s);
-		return new CompoundEdit2();
+		return new CombinedEdit();
 	}
 
 
@@ -215,9 +215,9 @@ public class FigureScaler {
 	
 	/**Scales several figures at once
 	 * @return */
-	public CompoundEdit2 scaleMultipleFigures(ArrayList<PanelLayoutGraphic> layouts, Point2D loc, double factor) {
+	public CombinedEdit scaleMultipleFigures(ArrayList<PanelLayoutGraphic> layouts, Point2D loc, double factor) {
 	
-		CompoundEdit2 undo = new CompoundEdit2();
+		CombinedEdit undo = new CombinedEdit();
 		for(PanelLayoutGraphic ob: layouts) {
 			undo.addEditToList(
 					scaleFigure(ob, factor, loc)

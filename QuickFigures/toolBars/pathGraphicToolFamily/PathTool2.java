@@ -87,7 +87,7 @@ public class PathTool2 extends PathTool{
 		//getImageWrapperClick().getSelectionManagger().select(rect, 0);
 		if(rect!=null&&rect.getHeight()>2&&rect.getWidth()>2) {
 		//	
-			ArrayList<LocatedObject2D> items = this.getObjecthandler().getOverlapOverlaypingrois(rect.getBounds(),this.getImageWrapperClick());
+			ArrayList<LocatedObject2D> items = this.getObjecthandler().getOverlapOverlaypingItems(rect.getBounds(),this.getImageWrapperClick());
 			removeIgnoredAndHidden(items);
 			for(Object i: items) {
 				deselect(i);

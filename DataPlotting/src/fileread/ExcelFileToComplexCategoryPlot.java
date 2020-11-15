@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import dataSeries.GroupedDataSeries;
 import logging.IssueLog;
@@ -31,7 +31,7 @@ public class ExcelFileToComplexCategoryPlot extends  ExcelDataImport {
 	
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		try {
 			
 			
@@ -47,7 +47,7 @@ public class ExcelFileToComplexCategoryPlot extends  ExcelDataImport {
 	}
 
 
-	public void createPlotFromFileExcelFile(DisplayedImageWrapper diw, File f)
+	public void createPlotFromFileExcelFile(DisplayedImage diw, File f)
 			throws InvalidFormatException, IOException {
 		ExcelRowSubset subset = new ExcelRowSubset(ReadExcelData.fileToWorkBook(f.getAbsolutePath()));
 		
@@ -73,7 +73,7 @@ public class ExcelFileToComplexCategoryPlot extends  ExcelDataImport {
 		return items;
 	}
 
-	public void createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImageWrapper diw) {
+	public void createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImage diw) {
 		creator.createPlot(name, items, diw);
 	}
 

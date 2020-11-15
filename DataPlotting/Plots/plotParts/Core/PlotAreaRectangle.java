@@ -103,7 +103,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	class SpecialOptionDialog extends RectangleGraphicOptionsDialog {
 
 		public SpecialOptionDialog(RectangularGraphic s) {
-			super(s);
+			super(s, false);
 			// TODO Auto-generated constructor stub
 		}
 
@@ -139,7 +139,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	public void snapLockedItem(LocatedObject2D l) {
 		if (l instanceof PlotLabel) {}
 		else {
-			l.getSnappingBehaviour().snapObjectToRectangle(l, this.getRectangle().getBounds());
+			l.getSnapPosition().snapObjectToRectangle(l, this.getRectangle().getBounds());
 		}
 	}
 

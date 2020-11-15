@@ -16,7 +16,7 @@ import plotParts.DataShowingParts.RegressionLineShape;
 import plotParts.DataShowingParts.ScatterPoints;
 import plotParts.DataShowingParts.SeriesLabel;
 import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 
@@ -105,7 +105,7 @@ public class XYPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 	public XYDataSeries getDataSeries() {return data;}
 	
 	@MenuItemMethod(menuActionCommand = "New Regression Line", menuText = "New Regression Line", subMenuName="Add", orderRank=50)
-	public CompoundEdit2 addRegressionLine() {
+	public CombinedEdit addRegressionLine() {
 		AbstractUndoableEdit e1=null;
 		if (lineReg!=null) e1=removeRegressionLine() ;
 		lineReg=new RegressionLineShape(this.getDataSeries());
@@ -117,17 +117,17 @@ public class XYPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		add(lineReg.getInformationText());
 		
 		if (this.getStyle()!=null)this.getStyle().applyTo(line);
-		return new CompoundEdit2(e1, new UndoAddItem(this, line), new UndoAddItem(this, lineReg.getInformationText()));
+		return new CombinedEdit(e1, new UndoAddItem(this, line), new UndoAddItem(this, lineReg.getInformationText()));
 	}
 	
 	@MenuItemMethod(menuActionCommand = "Remove Regression Line", menuText = "Regression Line", subMenuName="Remove", orderRank=31, permissionMethod="getRegressionLine")
-	public CompoundEdit2 removeRegressionLine() {
+	public CombinedEdit removeRegressionLine() {
 		if (lineReg!=null&&hasItem(lineReg)) {
 			UndoAbleEditForRemoveItem undo2 = new UndoAbleEditForRemoveItem(this, getRegressionLine().getInformationText());
 			remove(getRegressionLine().getInformationText());
 			UndoAbleEditForRemoveItem undo = new UndoAbleEditForRemoveItem(this, getRegressionLine());
 			remove(lineReg);
-			return new CompoundEdit2(undo, undo2);
+			return new CombinedEdit(undo, undo2);
 		}
 		setLine(null);
 		return null;

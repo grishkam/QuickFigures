@@ -4,6 +4,11 @@ import sUnsortedDialogs.ScaleAboutDialog;
 
 public class ScalingSyncer extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		return  "Scale Objects";

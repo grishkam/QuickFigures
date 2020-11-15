@@ -82,7 +82,7 @@ public class PannelGrabberTool extends GeneralLayoutEditorTool implements
 	
 	
 	
-	public panelContentElement getLast() {
+	public PanelContentExtract getLast() {
 		if (mode==1) return  getEditor().lastCol;
 		if (mode==2) return  getEditor().lastRow;
 		if (mode==0) return getEditor().lastPanel;

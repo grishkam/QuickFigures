@@ -9,8 +9,8 @@ import javax.swing.undo.UndoManager;
 import standardDialog.NumberInputPanel;
 import standardDialog.PointInputPanel;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
-import undo.UndoScaling;
+import undo.CombinedEdit;
+import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.Scales;
 
 public class ScaleAboutDialog extends StandardDialog{
@@ -19,7 +19,7 @@ public class ScaleAboutDialog extends StandardDialog{
 	private double scaleLevel=1;
 	double x=0;
 	double y=0;
-	private CompoundEdit2 undo;
+	private CombinedEdit undo;
 	private UndoManager undoManager;
 	
 	
@@ -77,9 +77,9 @@ public class ScaleAboutDialog extends StandardDialog{
 	}
 	
 	void scaleItemstoDialog() {
-		CompoundEdit2 undo = new CompoundEdit2();
+		CombinedEdit undo = new CombinedEdit();
 		for(Scales m:items ){
-			UndoScaling edit = new UndoScaling(m);
+			UndoScalingAndRotation edit = new UndoScalingAndRotation(m);
 			
 			m.scaleAbout(getAbout(), this.scaleLevel);//does the scaling
 			

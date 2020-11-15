@@ -12,23 +12,13 @@ import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
+/**This class stores information that pertains to all of the channel labels*/
 public class ChannelLabelProperties implements Serializable{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	/**Links channel names to text lines*/
-	private HashMap<String, TextLine> list=null;
-	
-	private HashMap<String, TextLine> getTextList() {
-		if (list==null) {
-			list=new HashMap<String, TextLine>();
-		}
-		
-		return list;
-	}
 	
 	public static String[] mergeTexts=new String[] {"Merge", "merge", "Merged", "merged", "use custom", "Overlay", "overlay"};
 	public static String[][] split2MergeTexts=new String[][] {new String[]{"Mer", "ge"},new String[]{"mer", "ge"} ,new String[]{"Mer", "ged"},new String[]{"mer", "ged"}, new String[]{"Mer", "ge"}, new String[]{"Over", "lay"}, new String[]{"over", "lay"}};
@@ -37,11 +27,29 @@ public class ChannelLabelProperties implements Serializable{
 	
 	public static final int MergeText=0, noMergeLabel=1, Multiline_Labels=3, Singleline_Labels=4, SoniStyle=5, Merge_Style=6;
 	public static final int space=1, nothing=0, slash=2, custom=3;
-	
+	public static Color emptyColor=new Color(255,255,255, 255);
 	public static String[] separatorOptions=new String[] { "nothing", "a space", "/", "use custom"};
 	public static String[] separatorTexts=new String[] {"", " ", "/", "?"};
 	public static String[] mergeLabelOptions=new String[] {"'Merge' text",  "No Merge Label ", "Only Label the Merge ", "Multiline Channel Labels", "Single Line Channel Labels", "Soni Style", "Color Merge Style"};
 	
+	private String customMergeText="Merge";
+	private String customSeparator="";
+	private int saparatorOption=nothing;
+	
+	private int mergeTextContentOption=0;
+	private int mergeLabelTypeOption=MergeText;
+	
+	/**the text for each channel is stored here. Hashmap Links channel names to text lines. */
+	private HashMap<String, TextLine> list=null;
+	private HashMap<String, TextLine> getTextList() {
+		if (list==null) {
+			list=new HashMap<String, TextLine>();
+		}
+		
+		return list;
+	}
+	
+	/**If a certain string is meant to separate single line channel labels, this returns it*/
 	public String getSeparatorText() {
 		
 		if (this.getSaparatorOption()==custom) return this.getCustomSeparator();
@@ -49,15 +57,8 @@ public class ChannelLabelProperties implements Serializable{
 		return o;
 	}
 	
-	private String customMergeText="Merge";
-	private String customSeparator="";
-	private int saparatorOption=0;
-	
 
-	private int mergeTextOption=0;
-	private int mergeLabelTypeOption=0;
 
-	public static Color emptyColor=new Color(255,255,255, 255);
 	
 	public ChannelLabelProperties copy() {
 		ChannelLabelProperties output = new ChannelLabelProperties();
@@ -76,14 +77,14 @@ public class ChannelLabelProperties implements Serializable{
 	}
 	
 	public int getMergeLabelType() {return mergeLabelTypeOption;}
-	public int getMergeTextOption() {return mergeTextOption;}
+	public int getMergeTextOption() {return mergeTextContentOption;}
 
 	public void setMergeLabelType(int mergeLabelTypeOption) {
 		this.mergeLabelTypeOption = mergeLabelTypeOption;
 	}
 
 	public void setMergeTextOption(int mergeTextOption) {
-		this.mergeTextOption = mergeTextOption;
+		this.mergeTextContentOption = mergeTextOption;
 	}
 
 	public int getSaparatorOption() {
@@ -110,11 +111,11 @@ public class ChannelLabelProperties implements Serializable{
 		for(int i=0; i<mergeTexts.length; i++) {
 			String t=mergeTexts[i];
 			if(t.equals(customMergeText)) 
-				{mergeTextOption=i; 
+				{mergeTextContentOption=i; 
 					return;}
 			
 		}
-		mergeTextOption=4;
+		mergeTextContentOption=4;
 		this.customMergeText=customMergeText;
 	}
 
@@ -126,8 +127,8 @@ public class ChannelLabelProperties implements Serializable{
 		this.customSeparator = customSeparator;
 	}
 
+	/**Combines channel colors to create a third color to display */
 	public static Color fuseColors(ArrayList<ChannelEntry> chanEntries) {
-		// TODO Auto-generated method stub
 		ArrayList<Color> arr = new ArrayList<Color> ();
 		for(ChannelEntry en:chanEntries) {
 			arr.add(en.getColor());
@@ -135,6 +136,7 @@ public class ChannelLabelProperties implements Serializable{
 		return fuseColors(arr);
 	}
 	
+	/**Adds up the rgb compoments of the colors to create a merged color*/
 	public static Color fuseColors(Iterable<Color> cs) {
 		int r=0;
 		int g=0;
@@ -158,12 +160,13 @@ public class ChannelLabelProperties implements Serializable{
 		
 	}
 
-	public void copyOptionsFrom(ChannelLabelProperties copy) {
-		this.customMergeText=copy.customMergeText;
-		this.customSeparator=copy.customSeparator;
-		saparatorOption=copy.saparatorOption;
-		mergeTextOption=copy.mergeTextOption;
-		mergeLabelTypeOption=copy.mergeLabelTypeOption;
+	/**Sets these channel label properties to match the model*/
+	public void copyOptionsFrom(ChannelLabelProperties theModel) {
+		this.customMergeText=theModel.customMergeText;
+		this.customSeparator=theModel.customSeparator;
+		saparatorOption=theModel.saparatorOption;
+		mergeTextContentOption=theModel.mergeTextContentOption;
+		mergeLabelTypeOption=theModel.mergeLabelTypeOption;
 	}
 
 	/**Creates a line of text to match the channel of name label and adds it to the hashmap*/
@@ -198,6 +201,8 @@ public class ChannelLabelProperties implements Serializable{
 		
 	}
 	
+	/**returns true, if the label text indicates that QuickFigures may have altered the channel labels
+	  to match image metadata (images would have been opened using locitools)*/
 	boolean isStandardLociLabel(String label) {
 		if (!label.startsWith("c:")) return false;
 		if (label.charAt(3)!='/') return false;
@@ -223,9 +228,9 @@ public class ChannelLabelProperties implements Serializable{
 		return getTextList().get(label.getLabel());
 	}
 	
-	
-	private TextLine getTextLineForChannel(String label) {
-		return getTextList().get(label);
+	/**returns the text for a given channel name*/
+	private TextLine getTextLineForChannel(String channelName) {
+		return getTextList().get(channelName);
 	}
 	
 	

@@ -12,6 +12,10 @@ import illustratorScripts.ZIllustratorScriptGenerator;
 
 /**implements a menu item to generate an illustrator script*/
 public class IllustratorMimic extends BasicMultiSelectionOperator {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean makeNewDoc=false;
 	
 	public IllustratorMimic(boolean makeNewDoc) {

@@ -22,10 +22,10 @@ import applicationAdapters.CanvasMouseEventWrapper;
 import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.IconSet;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import genericMontageKit.PanelLayout;
 import genericMontageKit.PanelLayoutContainer;
-import genericMontageKit.panelContentElement;
+import genericMontageKit.PanelContentExtract;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.SmartHandle;
@@ -66,8 +66,9 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	protected static final int ROW_HEIGTH_HANDLE=0, PANEL_LOCATION_HANDLE=1, COLUMN_WIDTH_HANDLE=2, ROW_HEIGHT_HANDLE_UNIFORM=3,COLUMN_WIDTH_HANDLE_UNIFORM=4;
 	protected static final int LocationHandleID=5*handleIDFactor, RightHandleID = LocationHandleID+1,
 					BottomHandleID=LocationHandleID+2, LeftHandleID=LocationHandleID+3, TopHandleID=LocationHandleID+4;
-	public static final int AddRowHandle=LocationHandleID+5;
-	public static final int AddColHandle=LocationHandleID+6;
+	public static final int AddRowHandle=LocationHandleID+5,
+			AddColHandle=LocationHandleID+6, 
+			RepackPanelsHandle=LocationHandleID+7;
 	
 	/**
 	 * 
@@ -82,7 +83,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	}
 	
 	
-	transient ArrayList<panelContentElement> contentstack;
+	transient ArrayList<PanelContentExtract> contentstack;
 	private int editMode=0;
 	private transient boolean alwaysShow=false;
 	private boolean filledPanels=false;
@@ -466,7 +467,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	public void moveLayoutAndContents(double dx, double dy) {
 		
 		this.generateCurrentImageWrapper();
-		ArrayList<panelContentElement> stack = getEditor().cutStack(getPanelLayout());
+		ArrayList<PanelContentExtract> stack = getEditor().cutStack(getPanelLayout());
 		getPanelLayout().move(dx,dy);
 		
 		this.getEditor().pasteStack(getPanelLayout(), stack);
@@ -502,7 +503,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 			}
 		
 		this.generateCurrentImageWrapper();
-		ArrayList<panelContentElement> stack = this.getEditor().cutStack(getPanelLayout());
+		ArrayList<PanelContentExtract> stack = this.getEditor().cutStack(getPanelLayout());
 		
 		boolean nudgeWidth=type==COLUMN_WIDTH_HANDLE;//handlenum<this.getPanelLayout().getPanels().length;
 		boolean nudgeHeigth=type==ROW_HEIGTH_HANDLE;//handlenum<this.getPanelLayout().getPanels().length+3*handleIDFactor &&handlenum>this.getPanelLayout().getPanels().length+2*handleIDFactor ;;
@@ -601,10 +602,10 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	public void snapLockedItem(LocatedObject2D o) {
 	
 		if (o==null) return;
-		SnappingPosition sb = o.getSnappingBehaviour();
+		SnappingPosition sb = o.getSnapPosition();
 			if (sb==null) {
 				o.setSnappingBehaviour(SnappingPosition.defaultInternal());
-				sb=o.getSnappingBehaviour();
+				sb=o.getSnapPosition();
 				}
 			Integer rw = getPanelLocations().get(o);
 			
@@ -784,7 +785,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrap1 = new GenericImage(new ArrayObjectContainer(parent2));
 		this.getPanelLayout().setWrapper(wrap1);
-		this.getPanelLayout().getWrapper().takeRoiFromImage(this);
+		this.getPanelLayout().getWrapper().takeFromImage(this);
 		return wrap1;
 		
 	}
@@ -792,7 +793,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	public ImageWrapper generateEditNonpermissiveWrapper() {
 			GenericImage genericImage = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
 			this.getPanelLayout().setWrapper(genericImage);
-			this.getPanelLayout().getWrapper().takeRoiFromImage(this);
+			this.getPanelLayout().getWrapper().takeFromImage(this);
 			return genericImage;
 		}
 	
@@ -825,7 +826,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 		{
 			
 			Rectangle2D r = getPanelLayout().getPanel(panelNum); 
-			ArrayList<LocatedObject2D> rois = new BasicOverlayHandler().getOverlapOverlaypingrois(r,  getParentLayerAsContainer());
+			ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(r,  getParentLayerAsContainer());
 			ArraySorter.removeThoseOfClass(rois, PanelLayoutGraphic.class);
 			if (rois.size()>0) return true;
 		}

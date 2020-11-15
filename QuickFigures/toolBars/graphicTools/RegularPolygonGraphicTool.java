@@ -24,7 +24,7 @@ public class RegularPolygonGraphicTool extends RectGraphicTool {
 	}
 	
 	
-	protected RectangularGraphic createNewRect(Rectangle r) {
+	public RectangularGraphic createShape(Rectangle r) {
 		RectangularGraphic out = model.copy();
 		out.setRectangle(r);
 		return out;

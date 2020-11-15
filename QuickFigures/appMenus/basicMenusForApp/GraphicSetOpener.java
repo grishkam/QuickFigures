@@ -2,14 +2,14 @@ package basicMenusForApp;
 
 import java.io.File;
 import ultilInputOutput.FileChoiceUtil;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import imageDisplayApp.ImageDisplayIO;
 
 /**Opens a figure display*/
 public class GraphicSetOpener  extends BasicMenuItemForObj {
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		File f=FileChoiceUtil.getOpenFile();
 	
 		ImageDisplayIO.showFile(f);

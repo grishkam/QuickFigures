@@ -4,19 +4,15 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
-import graphicalObjectHandles.ActionButtonHandleList.GeneralActionHandle;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import journalCriteria.PPIOption;
-import logging.IssueLog;
 import multiChannelFigureUI.ImagePropertiesButton;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.DialogIcon;
 import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.SelectAllButton;
 import selectedItemMenus.SnappingSyncer;
-import selectedItemMenus.TextOptionsSyncer;
 
 public class ImagePanelActionHandleList extends ActionButtonHandleList {
 
@@ -34,7 +30,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		
 		add(new ImageSyncHandle(1100));
 		createGeneralButton(new SelectAllButton(t));
-		if(t.getSnappingBehaviour()!=null) {
+		if(t.getSnapPosition()!=null) {
 			add(new GeneralActionHandle(new SnappingSyncer(true,t), 741905));
 		}
 	}

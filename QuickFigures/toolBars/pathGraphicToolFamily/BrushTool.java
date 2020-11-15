@@ -11,7 +11,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import standardDialog.BooleanInputPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.PathEditUndo;
 
@@ -60,7 +60,7 @@ public class BrushTool extends PathGraphicTool {
 		setcur.add(p);
 		
 		undo = new PathEditUndo(p);
-		CompoundEdit2 undo2 = new CompoundEdit2(new UndoAddItem(setcur, p), undo);
+		CombinedEdit undo2 = new CombinedEdit(new UndoAddItem(setcur, p), undo);
 	
 		getImageDisplayWrapperClick().getUndoManager().addEdit(undo2);
 		

@@ -3,6 +3,7 @@ import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
 import gridLayout.MontageSpaces;
 import logging.IssueLog;
 
+/**Tool that moves the layout*/
 public class MontageMoverTool  extends GeneralLayoutEditorTool implements MontageSpaces{
 
 
@@ -21,7 +22,7 @@ public class MontageMoverTool  extends GeneralLayoutEditorTool implements Montag
 	@Override
 	public String getToolTip() {
 		
-			return "Adjust Montage Layout Position";
+			return "Adjust Layout Position";
 		}
 	@Override
 	public String getToolName() {

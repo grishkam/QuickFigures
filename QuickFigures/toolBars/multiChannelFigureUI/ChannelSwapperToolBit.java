@@ -121,18 +121,18 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		
 		
 		if (arg0.getActionCommand().equals(colorModeCommand)) {
-			ChannelUseInstructions ins = presseddisplay.getStack().getChannelUseInstructions();
+			ChannelUseInstructions ins = presseddisplay.getPanelList().getChannelUseInstructions();
 			if (this.pressedInset!=null) {
 				 ins =pressedInset.getPanelManager().getPanelList().getChannelUseInstructions();
 				
 			}
 			
-			int value = ins.ChannelsInGrayScale;
+			int value = ins.channelColorMode;
 			if (value==1) {value=0;} else {value=1;}
-			ins.ChannelsInGrayScale=value;
+			ins.channelColorMode=value;
 			
 			if (workOn==1 && pressedInset==null) for(PanelStackDisplay d: super.getAllDisplays()) {
-				d.getStack().getChannelUseInstructions().ChannelsInGrayScale=value;
+				d.getPanelList().getChannelUseInstructions().channelColorMode=value;
 			}
 			this.updateAllDisplays();
 					;
@@ -163,7 +163,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 				
 			} else {
 				
-				PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(presseddisplay,presseddisplay.getStack(),null, false);
+				PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(presseddisplay,presseddisplay.getPanelList(),null, false);
 				
 				/**adds a list of all the channel displays that are relevant*/
 				ArrayList<PanelStackDisplay> all = super.getAllDisplays();
@@ -179,7 +179,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		
 		
 		if (arg0.getActionCommand().equals(panCreateCommand)) {
-			PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this.presseddisplay, presseddisplay.getStack(),null, true);
+			PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this.presseddisplay, presseddisplay.getPanelList(),null, true);
 			
 			dialog.addAditionalDisplays(this.getAllDisplays());
 			dialog.setCurrentImageDisplay(this.getImageDisplayWrapperClick());
@@ -188,13 +188,13 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		}
 		if (arg0.getActionCommand().equals(orderCommand)) {
 			workOn=1;
-			new ChannelOrderAndLutMatching().matchOrder(this.getPressedWrapper(), this.getAllWrappers(), 2);
+			new ChannelOrderAndLutMatching().matchChannels(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			
 		}
 		
 		if (arg0.getActionCommand().equals(orderCommand2)) {
 			workOn=1;
-			new ChannelOrderAndLutMatching().matchOrder(this.getPressedWrapper(), this.getAllWrappers(), 2);
+			new ChannelOrderAndLutMatching().matchChannels(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			for(int c=1; c<=this.getPressedWrapper().nChannels(); c++) {
 				minMaxSet(c, getPressedWrapper().getChannelMin(c),getPressedWrapper().getChannelMax(c));
 			}

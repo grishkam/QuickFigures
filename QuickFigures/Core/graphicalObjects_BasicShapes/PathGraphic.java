@@ -39,9 +39,9 @@ import keyFrameAnimators.PathGraphicKeyFrameAnimator;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.PathGraphicMenu;
 import undo.ColorEditUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.PathEditUndo;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.BasicStrokedItem;
@@ -932,7 +932,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	@Override
 	public AbstractUndoableEdit provideUndoForDialog() {
-		return new CompoundEdit2(new UndoStrokeEdit(this), new UndoScaling(this), new ColorEditUndo(this), new PathEditUndo(this));
+		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this), new PathEditUndo(this));
 	}
 
 }

@@ -20,7 +20,7 @@ import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
 import plotParts.DataShowingParts.ScatterPoints;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 
 /**A special layer for a plot with single dimensional data*/
 public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, MontageSpaces, GridLayoutEditListener {
@@ -161,8 +161,8 @@ protected void afterNumberOfDataSeriesChanges() {
 
 
 @MenuItemMethod(menuActionCommand = "To default", menuText = "Make Default Plot", subMenuName="Change Format", orderRank=1)
-public CompoundEdit2 defaultPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit defaultPlot() {
+	CombinedEdit undo = new CombinedEdit();
 	for(XYPlotDataSeriesGroup a: getAllDataSeries()) {
 		if (a.getLine()==null) undo.addEditToList(
 				a.addLine());
@@ -184,7 +184,7 @@ public CompoundEdit2 defaultPlot() {
 /**Edits the parts of each data series as to create a proper scatterplot*/
 @MenuItemMethod(menuActionCommand = "To Scatter Plot", menuText = "Make Scatter", subMenuName="Change Format", orderRank=3)
 public AbstractUndoableEdit scatterPlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(XYPlotDataSeriesGroup a: getAllDataSeries()) {
 		
 		undo.addEditToList(
@@ -205,7 +205,7 @@ public AbstractUndoableEdit scatterPlot() {
 
 @MenuItemMethod(menuActionCommand = "To Line", menuText = "Make Line Plot", subMenuName="Change Format", orderRank=5)
 public void linePlot() {
-	CompoundEdit2 undo = new CompoundEdit2();
+	CombinedEdit undo = new CombinedEdit();
 	for(XYPlotDataSeriesGroup a: getAllDataSeries()) {
 	  if (a.getLine()==null)
 		undo.addEditToList(
@@ -241,15 +241,15 @@ public void setAllData(ArrayList<XYPlotDataSeriesGroup> allData) {
 
 
 @MenuItemMethod(menuActionCommand = "Remove Lines", menuText = "Lines", subMenuName="Remove")
-public CompoundEdit2 removeLines() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit removeLines() {
+	CombinedEdit undo = new CombinedEdit();
 	for(XYPlotDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeLine());;;;}
 	return undo;
 }
 
 @MenuItemMethod(menuActionCommand = "Add Lines", menuText = "New Lines", subMenuName="Add")
-public CompoundEdit2 addLine() {
-	CompoundEdit2 undo = new CompoundEdit2();
+public CombinedEdit addLine() {
+	CombinedEdit undo = new CombinedEdit();
 	for(XYPlotDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addLine());;}
 	return undo;
 }

@@ -34,19 +34,20 @@ import channelMergingImageJ1.ChannelSwapListener;
 import channelMergingImageJ1.CompositeImageMerger;
 import channelMergingImageJ1.IJ1ChannelOrderWrap;
 import genericMontageKit.SelectionManager;
-import genericMontageKit.SubFigureOrganizer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import gridLayout.BasicMontageLayout;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
-import applicationAdapters.ObjectCreator;
 import applicationAdapters.PixelWrapper;
 
+/**An implementation of several interfaces that is required for an imageJ image to
+  be used by QuickFigures as a multichannel image*/
 public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, ChannelSwapListener {
 
+	private static final int FRAME = 2;
+	private static final int SLICE = 1;
+	private static final int CHANNEL = 0;
 	private SelectionManager selectionManagger;
-	private  ObjectCreator  objectCreator=new  OverlayObjectCreator();
 	private CompositeImageMerger merger=new CompositeImageMerger(this);
 	
 	ImagePlus imp;
@@ -55,10 +56,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	
 	public ImagePlusWrapper(ImagePlus imp) {
 		this.imp=imp;
-		/**if (imp instanceof GraphicalImagePlus) {
-			selectionManagger=((GraphicalImagePlus)imp).getSelectionManagger();
-		}
-		else*/ {
+		{
 			this.setSelectionManagger(new IJ1Selections(imp));
 		}
 		checkVoid(); 
@@ -76,17 +74,12 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	}
 	
 	@Override
-	public void takeRoiFromImage(LocatedObject2D roi) {
+	public void takeFromImage(LocatedObject2D roi) {
 		checkVoid();
 		if (roi instanceof RoiWrapper) {
 			((RoiWrapper)roi).takeFromImage(imp);
 		} 
-		/**
-		if (imp instanceof GraphicalImagePlus&&roi instanceof ZoomableGraphic) {
-			GraphicalImagePlus gi = (GraphicalImagePlus)imp;
-			ZoomableGraphic z=(ZoomableGraphic) roi;
-			gi.getGraphicLayerSet().remove(z);
-		} */
+
 	}
 
 	@Override
@@ -95,16 +88,6 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		if (roi instanceof RoiWrapper) {
 			((RoiWrapper)roi).addToImage(imp);
 		}
-		/**
-		if (roi instanceof ZoomableGraphic && !(imp instanceof GraphicalImagePlus)) {
-			imp=MakeGraphical.makeGraphicalIfPossible(imp);
-		}
-		
-		if (imp instanceof GraphicalImagePlus&&roi instanceof ZoomableGraphic) {
-			GraphicalImagePlus gi = (GraphicalImagePlus)imp;
-			ZoomableGraphic z=(ZoomableGraphic) roi;
-			gi.add(z);
-		}*/
 	}
 
 	@Override
@@ -125,15 +108,6 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		for(Roi roi: rois) {if (roi!=null) output.add(new RoiWrapper(roi));}
 		}
 		
-		/**if (imp instanceof GraphicalImagePlus) {
-			GraphicalImagePlus gi = (GraphicalImagePlus)imp;
-			ArrayList<ZoomableGraphic> graphics = gi.getGraphicLayerSet().getAllGraphics();
-			for(ZoomableGraphic item :graphics) {
-				if (item instanceof locatedObject) {
-					output.add((locatedObject)item);
-				}
-			}
-		}*/
 		return output;
 	}
 
@@ -216,16 +190,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		 
 	 }
 	
-	
-	
-	public SubFigureOrganizer getOrganizer() {
-		//Montage_Updater mu=UpdaterManger.findUpdater(imp);
-		//if (mu.images2().hasImage(imp)) return mu;
-		return null;
-	}
 
-	
-	
 	@Override
 	public ScaleInfo getScaleInfo() {
 		if (imp!=null)
@@ -240,35 +205,17 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		cal.pixelWidth=scaleInfo.getPixelWidth();
 		cal.pixelHeight=scaleInfo.getPixelHeight();
 		cal.pixelDepth=scaleInfo.getPixelDepth();
-		/**
-		FileInfo fi=imp.getFileInfo();
-		fi.unit=scaleInfo.getUnits();
-		fi.pixelWidth=scaleInfo.getPixelWidth();
-		fi.pixelHeight=scaleInfo.getPixelHeight();
-		
-		imp.setFileInfo(fi);*/
+
 		imp.setCalibration(cal);
 		
 		
 	}
 
-	
-	public void saveLayout(BasicMontageLayout layout) {
-		if (layout instanceof BasicMontageLayout) {
-		//	(( BasicMontageLayout)layout).setMontageProperties(getMetadataWrapper());
-		}
-		
-	}
+
 
 	@Override
 	public GraphicLayer getGraphicLayerSet() {
-		/**if (imp instanceof GraphicalImagePlus) {
-			GraphicalImagePlus gmp=(GraphicalImagePlus) imp;
-			return gmp.getGraphicLayerSet();
-		}else 
-		if (!(imp instanceof CompositeImage)) {
-			imp=MakeGraphical.makeGraphicalIfPossible(imp);
-		}*/
+
 		return null;
 	}
 
@@ -276,22 +223,10 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	@Override
 	public void onItemLoad(ZoomableGraphic z) {
-		/**if (imp instanceof GraphicalImagePlus) {
-			GraphicalImagePlus gmp=(GraphicalImagePlus) imp;
-			gmp.onItemLoad(z);
-		}*/
+
 		
 	}
 
-	/**
-	@Override
-	public void setSelection(locatedObject l, int i) {
-		if (imp instanceof GraphicalImagePlus) {
-			GraphicalImagePlus g=(GraphicalImagePlus) imp;
-			g.getSelectionManagger().setSelection(l, i);
-		}
-		
-	}*/
 	
 	public String toString() {
 		return ""+imp;
@@ -299,20 +234,17 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	@Override
 	public Dimension getCanvasDims() {
-		// TODO Auto-generated method stub
 		if (imp==null) return new Dimension();
 		return new Dimension(imp.getWidth(), imp.getHeight());
 	}
 
 	@Override
 	public ImageWrapper getAsWrapper() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
 	@Override
 	public int nChannels() {
-		// TODO Auto-generated method stub
 		if(imp==null)  return 1;
 		return imp.getNChannels();
 	}
@@ -372,10 +304,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		this.selectionManagger = selectionManagger;
 	}
 
-	@Override
-	public ObjectCreator getDefaultObjectCreator() {
-		return  objectCreator;
-	}
+	
 
 	@Override
 	public int getID() {
@@ -396,8 +325,12 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	}
 
 	@Override
-	/**returns the name of the channel. channel indexes go from 1 onward*/
-	public String channelName(int c) {
+	/**returns a name for the channel. 
+	  In this case, the labels of the first stack slices are
+	 used as channel names. if other names are found and slice labels
+	 are null, sets the slice labels to generic channel names
+	 channel indexes go from 1 onward*/
+	public String getGenericChannelName(int c) {
 		int index=imp.getStackIndex(c, 1, 1);
 		ImageStack stack=imp.getStack();
 		if (stack.getSize()<index) return null;
@@ -410,6 +343,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		
 	}
 
+	/**sets the stack slice label at index to indicate the channel index*/
 	private void setSliceLabelToChannel(int c, int index, ImageStack stack) {
 		stack.setSliceLabel("c:"+c+"/"+imp.getNChannels(), index);
 		if(imp.getNChannels()<stack.getSize())
@@ -447,6 +381,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	public static Color getColorFromLUT(LUT lut, int in){return new Color(lut.getRed(in), lut.getGreen(in), lut.getBlue(in));}
 
 	
+	/**returns the name of the indicated stack slice*/
 	@Override
 	public String getSliceName(int channel, int slice, int frame, int... dim) {
 		int i=this.getStackIndex(channel, slice, frame, dim);
@@ -457,30 +392,29 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	@Override
 	public boolean containsSplitedChannels() {
 		return imp instanceof CompositeImage;
-		//return false;
 	}
 
-
-	public Rectangle getSelectionRectangle( int i) {
-		// TODO Auto-generated method stub
+	/**returns the bounds of the roi or one of the first few overlay objects*/
+	public Rectangle getSelectionRectangle( int n) {
 		try{
-		if (i==0&&imp.getRoi()!=null) return imp.getRoi().getBounds();
-		if (i==1&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[0].getBounds();
-		if (i==2&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[1].getBounds(); 
-		if (i==3&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[2].getBounds(); 
-		if (i==4&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[3].getBounds(); 
+		if (n==0&&imp.getRoi()!=null) return imp.getRoi().getBounds();
+		if (n==1&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[0].getBounds();
+		if (n==2&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[1].getBounds(); 
+		if (n==3&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[2].getBounds(); 
+		if (n==4&& imp.getOverlay()!=null) return  imp.getOverlay().toArray()[3].getBounds(); 
 		} catch (Exception e) {}
 		return null;
 	}
 	
+	/**Removes the roi*/
 	public void eliminateSelection( int i) {
-		// TODO Auto-generated method stub
 		try{
 		if (i==0&&imp.getRoi()!=null)imp.killRoi();;
 		} catch (Exception e) {}
 		
 	}
 
+	/**returns true if the same image plus is given by the argument*/
 	@Override
 	public boolean isSameImage(Object o) {
 		if (o==imp) return true;
@@ -504,6 +438,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		return imp.convertIndexToPosition(i);
 	}
 
+	
 	@Override
 	public void setSliceName(String name, int i) {
 		imp.getStack().setSliceLabel(name, i);
@@ -594,7 +529,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	}
 
 	@Override
-	public DisplayedImageWrapper getImageDisplay() {
+	public DisplayedImage getImageDisplay() {
 		if (imp==null) return null;
 		return new ImagePlusDisplayWrap(imp);
 	}
@@ -686,7 +621,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 			//IssueLog.log("Will try to set channel color for "+name);//+ " of exposure "+this.getRealChannelExposure(i) +" ms");
 			ChannelOrderAndColorWrap channelSwapper = this.getChannelSwapper();
 			
-			Color color1 = ChannelManipulations.setChannelColor(i, name, channelSwapper);
+			 ChannelManipulations.setChannelColor(i, name, channelSwapper);
 			
 		} catch (Throwable t) {
 			IssueLog.log("problem setting colors based on real channel names "+i);
@@ -698,16 +633,17 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	}
 
 	
- 
+	/**names the first few stack slices to include the channel information
+	  assumes that the stack is in an order that starts with the channels*/
 	@Override
 	public void renameBasedOnRealChannelName() {
 		for(int i=1; i<=this.nChannels(); i++) {
 		
-			String name=this.getRealChannelName(i)+"; "+this.getRealChannelExposure(i) +" ms";
-			if (name==null) {IssueLog.log("Cannot find real Channel name");
-								continue;}
+			String rName = this.getRealChannelName(i);
+			String name=rName+"; "+this.getRealChannelExposure(i) +" ms";
 			name=name+";";
-			this.setSliceName(name+this.getSliceName(i), i);;
+			int iIndex=i;
+			this.setSliceName(name+this.getSliceName(iIndex),iIndex);;
 		}
 		
 	}
@@ -719,6 +655,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		return new ImagePlusWrapper(imp.duplicate());
 	}
 
+	/**returns a cropped and scaled version of this*/
 	public ImagePlusWrapper cropAtAngle(PreProcessInformation p) {
 		if(p==null) {
 			
@@ -729,7 +666,8 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		
 	}
 	
-	/** returns a scaled version of this*/
+	/** returns a scaled version of this that is also cropped using a rectangle that 
+	  may be rotated at a certain angle*/
 	@Override
 	public ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale) {
 		imp.deleteRoi();
@@ -773,17 +711,21 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		return new Dimension(imp.getWidth(), imp.getHeight());
 	}
 
+	/**after channel swap, this sets the arrays with channel names/exposures to null.
+	 The order in these arrays will be obsolete after a channel swap and null values indicate a 
+	 fresh reset of channel names from metadata is required */
 	@Override
 	public void afterChanSwap() {
 		channames=null;
 		chanexposures=null;
 	}
 
+	/**returns either the current channel, current slice or frame depending on the argument*/
 	@Override
 	public Integer getSelectedFromDimension(int i) {
-		if(i==0) return imp.getChannel();
-		if(i==1) return imp.getSlice();
-		if(i==2) return imp.getFrame();
+		if(i==CHANNEL) return imp.getChannel();
+		if(i==SLICE) return imp.getSlice();
+		if(i==FRAME) return imp.getFrame();
 		return 0;
 	}
 

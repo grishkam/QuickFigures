@@ -33,7 +33,7 @@ import popupMenusForComplexObjects.InsetMenu;
 import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
@@ -257,7 +257,7 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 		
 			MultichannelDisplayLayer d=getSourceDisplay();
 			if (d==null) return;
-			PanelList stack = createCroppedInsetChannelDisplay(d.getStack());
+			PanelList stack = createCroppedInsetChannelDisplay(d.getPanelList());
 		
 			this.multiChannelStackofInsets=stack;
 			d.getPanelManager().generatePanelGraphicsFor(stack);
@@ -277,7 +277,7 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	public void updateDisplayPanelImages() {
 		if (multiChannelStackofInsets!=null&&getSourceDisplay()!=null) {
 			//multiChannelStackofInsets.setCropper(getproperCropping());
-			setUpListToMakeInset(this.multiChannelStackofInsets,this.getSourceDisplay().getStack());//Sets all the cropping and scale to fit
+			setUpListToMakeInset(this.multiChannelStackofInsets,this.getSourceDisplay().getPanelList());//Sets all the cropping and scale to fit
 			multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates());}
 	}
 
@@ -332,8 +332,8 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 		this.sourcePanel = sourcePanel;
 	}
 	
-	public CompoundEdit2 removePanels() {
-		CompoundEdit2 output = new CompoundEdit2();
+	public CombinedEdit removePanels() {
+		CombinedEdit output = new CombinedEdit();
 		
 		if (sharesPersonalLayer()) {
 			output.addEditToList(
@@ -585,7 +585,7 @@ static Color  folderColor2= new Color(0,140, 0);
 			this.inset=panelGraphicInsetDef;
 		}
 		
-		public CompoundEdit2 changePPI(double newppi) {
+		public CombinedEdit changePPI(double newppi) {
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newPanelScale=panel.getScale()*ppi/newppi;

@@ -3,7 +3,7 @@ package uiForAnimations;
 
 
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 
 public class TimeLineAction  extends BasicMenuItemForObj {
@@ -17,7 +17,7 @@ public class TimeLineAction  extends BasicMenuItemForObj {
 
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		TimeLineDialog dialog = new TimeLineDialog(diw);
 		dialog.showDialog();
 	}

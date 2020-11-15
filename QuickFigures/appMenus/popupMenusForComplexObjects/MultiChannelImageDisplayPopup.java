@@ -20,7 +20,6 @@ import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelSwapperToolBit2;
 import objectDialogs.CroppingDialog;
 import ultilInputOutput.FileChoiceUtil;
-import undo.CompoundEdit2;
 import undo.Edit;
 
 public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements

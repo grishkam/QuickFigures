@@ -18,12 +18,10 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
-import logging.IssueLog;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicObjectDisplayBasic;
-import undo.ChannelDisplayUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
 
@@ -60,7 +58,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 	@Override
 	public void run() {
 		ArrayList<LocatedObject2D> items = super.getAllObjects();
-		CompoundEdit2 undo=null;
+		CombinedEdit undo=null;
 		
 		
 		firstImage=null;
@@ -170,7 +168,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 			
 			try {
 				ChannelSwapperToolBit2 cc = new ChannelSwapperToolBit2(firstImage);
-				return cc.getPressedPanelManager().getPanelList().getChannelUseInstructions().ChannelsInGrayScale==1;
+				return cc.getPressedPanelManager().getPanelList().getChannelUseInstructions().channelColorMode==1;
 			} catch (Exception e) {
 				
 			}

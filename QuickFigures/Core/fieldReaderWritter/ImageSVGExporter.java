@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 
 import graphicalObjects.ImagePanelGraphic;
 
+/**An SVG exporter implementation for image panels*/
 public class ImageSVGExporter extends SVGExporter {
 
 	

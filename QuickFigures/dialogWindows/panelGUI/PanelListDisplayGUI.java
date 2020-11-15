@@ -20,12 +20,15 @@ import javax.swing.event.ListSelectionListener;
 import channelLabels.ChannelLabelManager;
 import channelMerging.ChannelEntry;
 import genericMontageKit.PanelListElement;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
 import objectDialogs.ChannelSliceAndFrameSelectionDialog;
 import standardDialog.ChannelEntryBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import undo.CombinedEdit;
+import undo.PanelManagerUndo;
 
 
 /**A gui that show a list of panels*/
@@ -210,6 +213,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			CombinedEdit e2=PanelManagerUndo.createFor(pm);
 			if (arg0.getSource()==this.addPanelButton) {
 				
 				  addPanel();
@@ -249,7 +253,8 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			if(arg0.getSource()==this.alterZButton) {
 				this.editPanelSlice();
 			}
-			
+			e2.establishFinalState();
+			new CurrentFigureSet().addUndo(e2);
 			
 		}
 
@@ -262,6 +267,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			  panel.getChannelLabelDisplay().updateDisplay();
 			
 			pack();
+			
 		}
 		
 		private void editPanel() {

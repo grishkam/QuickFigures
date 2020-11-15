@@ -6,7 +6,7 @@ import java.awt.geom.Area;
 
 import javax.swing.Icon;
 import animations.KeyFrameCompatible;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
@@ -15,6 +15,10 @@ import standardDialog.GraphicDisplayComponent;
 
 public class KeyFrameAssignRemove extends BasicTimeLineOperator{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean all=false;
 	public KeyFrameAssignRemove(boolean a) {
 		all=a;
@@ -47,7 +51,7 @@ public class KeyFrameAssignRemove extends BasicTimeLineOperator{
 		
 		if (selectedItem instanceof KeyFrameCompatible ) {
 			KeyFrameCompatible  m=(KeyFrameCompatible ) selectedItem;
-			int frame = new CurrentSetInformerBasic().getCurrentlyActiveDisplay().getCurrentFrame();
+			int frame = new CurrentFigureSet().getCurrentlyActiveDisplay().getCurrentFrame();
 			if (m.getAnimation()==null) return;
 			m.getOrCreateAnimation().removeKeyFrame(frame);
 			if (all) for(int i=0; i<display.getEndFrame(); i++) m.getOrCreateAnimation().removeKeyFrame(i);

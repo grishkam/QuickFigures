@@ -60,11 +60,11 @@ public class PlotLabel extends ComplexTextGraphic {
 		{ 
 			Rectangle srect = getLabelLocationOnPlot() .getBounds();
 	
-			getSnappingBehaviour().snapObjectToRectangle(this,srect );
+			getSnapPosition().snapObjectToRectangle(this,srect );
 		
 		}
 		else 
-			 getSnappingBehaviour().snapObjectToRectangle(this, snapItem.getPlotLabelLocationShape());;
+			 getSnapPosition().snapObjectToRectangle(this, snapItem.getPlotLabelLocationShape());;
 		 snapNeeded=false;
 		 ;
 	}
@@ -124,7 +124,7 @@ public class PlotLabel extends ComplexTextGraphic {
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		if (handlenum==1) {
-			SnappingPosition s = this.getSnappingBehaviour();
+			SnappingPosition s = this.getSnapPosition();
 			Point2D p = getUpperLeftCornerOfBounds();
 			double dx = p2.getX()-p.getX();
 			double dy = p2.getY()-p.getY();
@@ -161,8 +161,8 @@ public class PlotLabel extends ComplexTextGraphic {
 	
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
-		double h=this.getSnappingBehaviour().getSnapHOffset();
-		double v=this.getSnappingBehaviour().getSnapVOffset();
+		double h=this.getSnapPosition().getSnapHOffset();
+		double v=this.getSnapPosition().getSnapVOffset();
 		super.scaleAbout(p, mag);
 		
 		//getSnappingBehaviour().setSnapHOffset( Math.round(h*mag));

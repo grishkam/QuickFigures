@@ -1,34 +1,22 @@
 package actionToolbarItems;
 
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.JColorChooser;
-import javax.swing.JPanel;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import externalToolBar.TreeIconWrappingToolIcon;
-import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import gridLayout.MontageSpaces;
-import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
 import standardDialog.GraphicDisplayComponent;
@@ -36,17 +24,12 @@ import standardDialog.InfoDisplayPanel;
 import standardDialog.NumberInputEvent;
 import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
-import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;
 import undo.ColorEditUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoScaleBarEdit;
-import undo.UndoStrokeEdit;
-import undo.UndoTextEdit;
 import utilityClassesForObjects.Fillable;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RainbowPaintProvider;
-import utilityClassesForObjects.StrokedItem;
 
 /**Applies a single color or stroke style to all the objects.*/
 public class EditScaleBars extends BasicMultiSelectionOperator implements  MontageSpaces, ColorInputListener,  Serializable {
@@ -141,7 +124,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Monta
 		setSelection(this.selector.getSelecteditems());
 		ArrayList<LocatedObject2D> all = getAllObjects();
 		
-		CompoundEdit2 edit = new CompoundEdit2();//an edit for the undo manager
+		CombinedEdit edit = new CombinedEdit();//an edit for the undo manager
 		
 		for(LocatedObject2D a: all) 
 			if(a instanceof BarGraphic) edit.addEditToList(applyTo((BarGraphic) a));
@@ -155,7 +138,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Monta
 
 /**applies the change and returns an undoable edit*/
 	private AbstractUndoableEdit applyTo(BarGraphic a) {
-		CompoundEdit2 edit = new CompoundEdit2();
+		CombinedEdit edit = new CombinedEdit();
 		ColorEditUndo edit4 = new ColorEditUndo(a);
 		
 	
@@ -257,7 +240,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Monta
 		return theColor;
 	}
 
-	private void setTheColor(Color theColor) {
+	public void setTheColor(Color theColor) {
 		this.theColor = theColor;
 	}
 

@@ -3,9 +3,9 @@ package addObjectMenus;
 import ultilInputOutput.FileFinder;
 
 import appContext.CurrentAppContext;
-import figureTemplates.AutoFigureGenerationOptions;
-import figureTemplates.FigureTemplate;
-import figureTemplates.TemplateSaver;
+import figureFormat.AutoFigureGenerationOptions;
+import figureFormat.FigureTemplate;
+import figureFormat.TemplateSaver;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -150,8 +150,8 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
 		if(display==null) return null;
 		FigureOrganizingLayerPane.cropIfUserSelectionExists(display);
-		if (useSingleFrame) display.getStack().getChannelUseInstructions().limitStackUseToFrame(display.getMultichanalWrapper().getSelectedFromDimension(2));
-		if (useSingleSlice) display.getStack().getChannelUseInstructions().limitStackUseToSlice( display.getMultichanalWrapper().getSelectedFromDimension(1));
+		if (useSingleFrame) display.getPanelList().getChannelUseInstructions().limitStackUseToFrame(display.getMultichanalWrapper().getSelectedFromDimension(2));
+		if (useSingleSlice) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultichanalWrapper().getSelectedFromDimension(1));
 		
 		return addFigureOrganizerFor(gc, display);
 		}
@@ -251,7 +251,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		if (isAutoGenerateFromModel()) {
 			return "Figure from active "+ nameType();
 		}

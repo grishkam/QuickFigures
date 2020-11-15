@@ -1,5 +1,7 @@
 package addObjectMenus;
 
+import java.awt.Font;
+
 import javax.swing.Icon;
 
 import graphicalObjects.ImagePanelGraphic;
@@ -57,5 +59,19 @@ public abstract class BasicGraphicAdder implements GraphicAdder {
 	protected BasicGraphicalObject getModelForIcon() {
 		return null;
 	}
+
+	@Override
+	public String getMenuPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Font getMenuItemFont() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

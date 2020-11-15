@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 
 import logging.IssueLog;
 
+/**A class that transforms a QuickFigures objects into svg items for export*/
 public abstract class SVGExporter {
 	public abstract Element toSVG(Document dom, Element e) ;
 	

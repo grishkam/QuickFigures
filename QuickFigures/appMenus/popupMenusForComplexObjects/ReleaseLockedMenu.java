@@ -8,7 +8,6 @@ import channelLabels.ChannelLabelTextGraphic;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import undo.Edit;
-import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LockedItemList;

@@ -18,10 +18,11 @@ import utilityClasses1.ArraySorter;
 		 */
 		private static final long serialVersionUID = 1L;
 		public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=3, NO_MERGE_PANELS=4;
-		
+		public static final int CHANNELS_IN_COLOR=0, CHANNELS_IN_GREYSCALE=1;
+		public static final int NONE_SELECTED=0;
 		
 			/**These options are important for deciding how composite stacks are converted into RGB*/
-			public int ChannelsInGrayScale=1;
+			public int channelColorMode=CHANNELS_IN_GREYSCALE;
 			
 			/**Channels that are treated differently are noted by their numbers*/
 		    public int eachMergeChannel=0;//merged with every other channel
@@ -32,7 +33,7 @@ import utilityClasses1.ArraySorter;
 		    public int ignoreAfterChannel=0;
 		    
 		    /**what to do with the Merge*/
-		    public int MergeHandleing=0;
+		    public int MergeHandleing=MERGE_LAST;
 		    
 		    /**what amount of columns are recommended*/
 		    public int idealColNum=5;
@@ -45,9 +46,9 @@ import utilityClasses1.ArraySorter;
 		     * channel panels as insets near or around a merged image*/
 		    public static ChannelUseInstructions getChannelInstructionsForInsets() {
 		    	ChannelUseInstructions out = new ChannelUseInstructions();
-		    	out.ignoreAfterChannel=0;
-		    	out.eachMergeChannel=0;
-		    	out.ChannelsInGrayScale=0;
+		    	out.ignoreAfterChannel=NONE_SELECTED;
+		    	out.eachMergeChannel=NONE_SELECTED;
+		    	out.channelColorMode=CHANNELS_IN_COLOR;
 		    	out.excludedChannelPanels=new ArrayList<Integer>();
 		    	out.noMergeChannels=new ArrayList<Integer>();
 		    	return out;
@@ -55,7 +56,7 @@ import utilityClasses1.ArraySorter;
 		   
 		    /**sets several values of fields*/
 			public void setChannelHandleing(int ChannelsInGrayScale, int MergeFirst, int eachMergeChannel, ArrayList<Integer> excludedChannelPanels, ArrayList<Integer> noMergeChannels, int ignoreAfterChannel) {
-				this.ChannelsInGrayScale=ChannelsInGrayScale;
+				this.channelColorMode=ChannelsInGrayScale;
 				this.eachMergeChannel=eachMergeChannel;
 				this.excludedChannelPanels=excludedChannelPanels;
 				this.noMergeChannels=noMergeChannels;
@@ -104,26 +105,30 @@ import utilityClasses1.ArraySorter;
 				return false;
 			}
 			
-			
+			/**returns true if panels from the given time frame will
+			  be excluded according to these instructions*/
 			public boolean isFrameExcluded(int frame) {
 				if(this.getFrameUseInstructions()==null) return false;
 				return getFrameUseInstructions().isExcluded(frame);
 			}
-		
+			/**returns true if panels from the given z slice will
+			  be excluded according to these instructions*/
 			public boolean isSliceExcluded(int frame) {
 				if(this.getSliceUseInstructions()==null) return false;
 				return getSliceUseInstructions().isExcluded(frame);
 			}
 			
-			public void makeMatching(ChannelUseInstructions other) {
-				 makePartialMatching(other);
-				other.reorder=new ChannelPanelReorder(this.getChanPanelReorder().currentOrder);
-				if(this.getFrameUseInstructions()!=null) other.setFrameUseMethod(getFrameUseInstructions().createDouble());
-				if(this.getSliceUseInstructions()!=null) other.setSliceUseMethod(getSliceUseInstructions().createDouble());
+			/**Alters the other Instructions to have settings comparable to this one.
+			  However, the selected frame or slice (if there is one) will be set to 1*/
+			public void makeMatching(ChannelUseInstructions otherInstructions) {
+				 makePartialMatching(otherInstructions);
+				otherInstructions.reorder=new ChannelPanelReorder(this.getChanPanelReorder().currentOrder);
+				if(this.getFrameUseInstructions()!=null) otherInstructions.setFrameUseMethod(getFrameUseInstructions().createDouble());
+				if(this.getSliceUseInstructions()!=null) otherInstructions.setSliceUseMethod(getSliceUseInstructions().createDouble());
 			} 
 			
 			public void makePartialMatching(ChannelUseInstructions other) {
-				other.ChannelsInGrayScale=ChannelsInGrayScale;
+				other.channelColorMode=channelColorMode;
 				other.eachMergeChannel=eachMergeChannel;
 				
 				other.MergeHandleing=MergeHandleing;
@@ -140,42 +145,13 @@ import utilityClasses1.ArraySorter;
 				makePartialMatching(output);
 				output.excludedChannelPanels=new ArrayList<Integer>();output.excludedChannelPanels.addAll(excludedChannelPanels);
 				output.noMergeChannels=new ArrayList<Integer>();output.noMergeChannels.addAll(noMergeChannels);
+				output.frameUseMethod=this.frameUseMethod.duplicate();
+				output.sliceUseMethod=this.sliceUseMethod.duplicate();
 				return output;
 			}
 			
-			/**Matches the setting of the argument to this instance.
-			public void giveSettingsTo(ChannelUseInstructions output) {
-				output.ChannelsInGrayScale=this.ChannelsInGrayScale;
-				output.eachMergeChannel=this.eachMergeChannel;
-				output.excludedChannelPanels=this.excludedChannelPanels;
-				output.MergeHandleing=this.MergeHandleing;
-				output.noMergeChannels=this.noMergeChannels;
-				output.scaleBilinear=this.scaleBilinear;
-				output.ignoreAfterChannel=this.ignoreAfterChannel;
-			}*/
-			/**
-			public int estimateNPanelsNeeded(MultiChannelWrapper imp) {
-				if (imp==null) {
-					IssueLog.log("no multichannel image available. cannot estimate number of panels needed");
-					return 1;
-				}
-				
-				int out=0;
-				int fs=imp.nSlices()*imp.nFrames();
-				out=fs*(imp.nChannels());
-				
-				if (addsMergePanel()) out+=fs;
-				
-				for(int c=1; c<=imp.nChannels(); c++) {
-					if (isChanPanExcluded(c)) out-=fs;
-				}
-				
-				
-				return out;
-			}
-			*/
-			
-			/**Estimates the number of channel panels that will be in the processed stack*/
+			/**Estimates the number of channel and merge panels
+			  that will be in each slice of the list */
 			public int estimateChanColsNeeded(MultiChannelWrapper imp) {
 				if (this.onlyMergePanel()) return 1;
 				int out=0;
@@ -193,8 +169,8 @@ import utilityClasses1.ArraySorter;
 			
 			
 			/**Estimates the number of rows and columns of a
-			 * grid layout needed to display the panels for 
-			 * the given image*/
+			 grid layout needed to display the panels for 
+			  the given image*/
 			public int[] estimateBestMontageDims(MultiChannelWrapper image) {
 				
 				if (image==null) {
@@ -203,9 +179,11 @@ import utilityClasses1.ArraySorter;
 				}
 				
 				/**What is done if multiple channels are represented*/
+				int nFramesUsed = estimateNFramesUsed(image);
+				int nSlicesUsed = estimateNSlicesUsed(image);
 				if (image.nChannels()>1 && !onlyMergePanel()) {
 					int chanCols = estimateChanColsNeeded(image);
-					int nSF=estimateNFramesUsed(image)*estimateNSlicesUsed(image);
+					int nSF=nFramesUsed*nSlicesUsed;
 					
 					/**what to do if the number of channel columns needed is above the desired total number of cols*/
 					if(this.idealColNum<chanCols) {
@@ -219,38 +197,40 @@ import utilityClasses1.ArraySorter;
 					;}
 				
 				/**What to do if both frames and z slices are represented*/
-				if ((image.nChannels()==1||this.onlyMergePanel())&&estimateNSlicesUsed(image)>1&&estimateNFramesUsed(image)>1) {return new int[] {estimateNFramesUsed(image),estimateNSlicesUsed(image)};}
+				boolean singleChannelOfMergeUsed = image.nChannels()==1||this.onlyMergePanel();
 				
-				if ((image.nChannels()==1||this.onlyMergePanel())&& estimateNFramesUsed(image)==1) {return gridFor(estimateNSlicesUsed(image));};
-				if ((image.nChannels()==1||this.onlyMergePanel())&& estimateNSlicesUsed(image)==1) {return gridFor(estimateNFramesUsed(image));};
+				if (singleChannelOfMergeUsed&&nSlicesUsed>1&&nFramesUsed>1) {return new int[] {nFramesUsed,nSlicesUsed};}
+				if (singleChannelOfMergeUsed&& nFramesUsed==1) {return gridFor(nSlicesUsed);};
+				if (singleChannelOfMergeUsed&& nSlicesUsed==1) {return gridFor(nFramesUsed);};
 				
 				
 				return new int[]{1,1};
 			}
 
+			/**the number of slices that will be included in the figure*/
 			public int estimateNSlicesUsed(MultiChannelWrapper image) {
 				if(this.getSliceUseInstructions()!=null) return getSliceUseInstructions().estimateNUsed(image);
 				return image.nSlices();
 			}
-
+			/**the number of frames that will be included in the figure*/
 			public int estimateNFramesUsed(MultiChannelWrapper image) {
 				if(this.getFrameUseInstructions()!=null) return getFrameUseInstructions().estimateNUsed(image);
 				return image.nFrames();
 			}
-			
+			/**setter method for the instructions regarding which slices to include*/
 			private void setSliceUseMethod(SliceUseInstructions sliceUseMethod) {
 				this.sliceUseMethod = sliceUseMethod;
 			}
-
+			/**setter method for the instructions regarding which frames to include*/
 			private void setFrameUseMethod(FrameUseInstructions frameUseMethod) {
 				this.frameUseMethod = frameUseMethod;
 			}
-
+			/**getter method for the instructions regarding which frames to include*/
 			public SubStackSelectionInstructions.FrameUseInstructions getFrameUseInstructions() {
 				if(frameUseMethod==null) frameUseMethod=new SubStackSelectionInstructions.FrameUseInstructions(null);
 				return frameUseMethod;
 			}
-
+			/**getter method for the instructions regarding which slices to include*/
 			public SubStackSelectionInstructions.SliceUseInstructions getSliceUseInstructions() {
 			if(sliceUseMethod==null) sliceUseMethod=new SubStackSelectionInstructions.SliceUseInstructions(null);
 				return sliceUseMethod;
@@ -302,7 +282,6 @@ import utilityClasses1.ArraySorter;
 				
 				if (this.onlyMergePanel()) {
 					return this.gridFor(images.size());
-					//return new int[] {1,};
 				}
 				return output;
 			}
@@ -326,14 +305,9 @@ import utilityClasses1.ArraySorter;
 			}
 			
 			
-			/**not yet implemented. swaps channels */
+			/**Called when channel panels have been swaped.  */
 			public void onChannelSwap(int c1, int c2) {
-				/**IssueLog.log("Swap for excluded and includeded chans");
-				ArrayList<Integer> t = excludedChannelPanels;
-				int i1 = t.indexOf(c1);
-				int i2= t.indexOf(c1);
-				if(i1<0&&i2<0) return;*/
-				
+	
 				getChanPanelReorder().swap(c1, c2);
 			}
 			
@@ -360,7 +334,7 @@ import utilityClasses1.ArraySorter;
 				}
 				void swap(int c1, int c2) {
 					new ArraySorter<Integer>().swapObjectPositionsInArray(c1, c2, currentOrder);
-				//IssueLog.log("Order is "+currentOrder);
+				
 				}
 				public int index(int c) {
 					return currentOrder.indexOf(c);
@@ -384,8 +358,8 @@ import utilityClasses1.ArraySorter;
 
 			public void shareViewLocation(CSFLocation d) {
 				
-				if(this.frameUseMethod!=null&& frameUseMethod.method==frameUseMethod.SINGLE_) frameUseMethod.setSelected(d.frame);
-				if(this.sliceUseMethod!=null&& sliceUseMethod.method==sliceUseMethod.SINGLE_) sliceUseMethod.setSelected(d.slice);
+				if(this.frameUseMethod!=null&& frameUseMethod.method==SubStackSelectionInstructions.SINGLE_) frameUseMethod.setSelected(d.frame);
+				if(this.sliceUseMethod!=null&& sliceUseMethod.method==SubStackSelectionInstructions.SINGLE_) sliceUseMethod.setSelected(d.slice);
 				
 			}
 

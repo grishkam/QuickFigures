@@ -10,7 +10,8 @@ import utilityClassesForObjects.DefaultPaintProvider;
 import utilityClassesForObjects.PaintProvider;
 import utilityClassesForObjects.RectangleEdges;
 
-/**A class for creation of a folder icon object*/
+/**A class for creation of a folder icon object. This actually consists of a few objects
+ folder icons appear as expected*/
 public class FolderIconGraphic extends GraphicGroup {
 
 	/**

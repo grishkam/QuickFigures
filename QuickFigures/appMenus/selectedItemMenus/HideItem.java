@@ -10,6 +10,11 @@ import utilityClassesForObjects.Hideable;
 
 public class HideItem extends BasicMultiSelectionOperator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public String getMenuCommand() {
 		return "Hide";

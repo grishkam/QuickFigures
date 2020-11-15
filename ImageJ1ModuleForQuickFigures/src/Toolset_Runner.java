@@ -9,8 +9,8 @@ import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import applicationAdaptersForImageJ1.IJ1ToolSetContainer2;
 import applicationAdaptersForImageJ1.ImagePlusDisplayWrap;
-import figureTemplates.DirectoryHandler;
-import graphicActionToombar.CurrentSetInformerBasic;
+import figureFormat.DirectoryHandler;
+import graphicActionToolbar.CurrentFigureSet;
 import ij.IJ;
 import ij.ImageListener;
 import ij.ImagePlus;
@@ -182,7 +182,7 @@ public class Toolset_Runner implements PlugIn {
 		public void windowActivated(WindowEvent arg0) {
 			if (arg0.getWindow() instanceof ImageWindow) {
 				ImageWindow iw=(ImageWindow) arg0.getWindow();
-				CurrentSetInformerBasic.setCurrentActiveDisplayGroup(new ImagePlusDisplayWrap(iw.getImagePlus()));
+				CurrentFigureSet.setCurrentActiveDisplayGroup(new ImagePlusDisplayWrap(iw.getImagePlus()));
 		
 				iw.getCanvas().addKeyListener(kd);
 				

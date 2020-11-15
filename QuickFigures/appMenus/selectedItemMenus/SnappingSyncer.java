@@ -11,7 +11,6 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import objectDialogs.MultiSnappingDialog;
 import standardDialog.GraphicDisplayComponent;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.SnappingPosition;
 
 public class SnappingSyncer extends BasicMultiSelectionOperator {
@@ -96,7 +95,7 @@ public class SnappingSyncer extends BasicMultiSelectionOperator {
 	
 	private void setTomodel(SnappingPosition s) {
 		if(this.model==null) return;
-		SnappingPosition a = this.model.getSnappingBehaviour();
+		SnappingPosition a = this.model.getSnapPosition();
 		if(a==null)return;
 		s.setSnapLocationTypeInternal(a.getSnapLocationTypeInternal());
 		s.setSnapLocationTypeExternal(a.getSnapLocationTypeExternal());

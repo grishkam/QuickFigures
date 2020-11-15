@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import applicationAdapters.ToolbarTester;
 import graphicalObjects_BasicShapes.PathGraphic;
-import imageDisplayApp.GraphicSet;
+import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageAndDisplaySet;
 import sUnsortedDialogs.ReflectingFieldSettingDialog;
 import standardDialog.DialogItemChangeEvent;
@@ -46,7 +46,7 @@ public abstract class BasicShapeMaker  implements ShapeMaker, Serializable {
 	
 
 	protected static void showShape(ShapeMaker  cpc) {
-		GraphicSet gl=new GraphicSet();
+		GraphicContainingImage gl=new GraphicContainingImage();
 		
 		
 		

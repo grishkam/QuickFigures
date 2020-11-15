@@ -4,17 +4,14 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.RhombusGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import utilityClassesForObjects.DefaultPaintProvider;
 import utilityClassesForObjects.PaintProvider;
-import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.SnappingPosition;
 
-/**A class for creation of a folder icon object*/
+/**A class for rendering of a cropping icon*/
 public class CropIconGraphic extends GraphicGroup {
 
 	/**

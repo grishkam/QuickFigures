@@ -157,7 +157,7 @@ public class PolygonAdder extends BasicGraphicAdder {
 		rg.setGraphicSetContainer(super.selector.getGraphicDisplayContainer());
 		return rg;
 	}
-	PathGraphic createCartoon(boolean dialog, boolean icon) {
+	public PathGraphic createCartoon(boolean dialog, boolean icon) {
 		
 		double olddis = shape.getStandardDisplacement();
 		if (icon) shape.setStandardDisplacement(30);
@@ -219,7 +219,7 @@ public class PolygonAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "";
 	}
 

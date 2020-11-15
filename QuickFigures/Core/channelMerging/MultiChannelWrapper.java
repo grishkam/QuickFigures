@@ -5,11 +5,11 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import applicationAdapters.ImageFileWrapper;
+import applicationAdapters.OpenFileReference;
 import applicationAdapters.PixelWrapper;
 
-/**A multidimensional image wrapper*/
-public interface MultiChannelWrapper extends ImageFileWrapper {
+/**An interface representing a multidimensional image*/
+public interface MultiChannelWrapper extends OpenFileReference {
 
 
 	
@@ -30,7 +30,7 @@ public interface MultiChannelWrapper extends ImageFileWrapper {
 	public int[] convertIndexToPosition(int i);
 	
 	
-	public String channelName(int i);
+	public String getGenericChannelName(int i);
 	
 	/**names as specified by the microscope channelname and not the user. this can be edited by the channel swapper tool.*/
 	public String getRealChannelName(int i);

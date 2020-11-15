@@ -23,7 +23,7 @@ public class ArrowGraphicAdder extends BasicGraphicAdder {
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Arrow";
 	}
 

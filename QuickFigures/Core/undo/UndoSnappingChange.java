@@ -16,12 +16,12 @@ public class UndoSnappingChange extends AbstractUndoableEdit2 {
 	public UndoSnappingChange(LocatedObject2D object) {
 		
 		this.object=object;
-		if (object==null ||object.getSnappingBehaviour()==null) return;
-		iSnap=object.getSnappingBehaviour().copy();
+		if (object==null ||object.getSnapPosition()==null) return;
+		iSnap=object.getSnapPosition().copy();
 	}
 	
 	public void establishFinalState() {
-		fSnap=object.getSnappingBehaviour().copy();
+		fSnap=object.getSnapPosition().copy();
 	}
 	
 	public boolean same() {
@@ -31,14 +31,14 @@ public class UndoSnappingChange extends AbstractUndoableEdit2 {
 	public void redo() {
 		if (object==null) return;
 		if (fSnap==null) object.setSnappingBehaviour(null); else
-		fSnap.givePropertiesTo(object.getSnappingBehaviour());
+		fSnap.givePropertiesTo(object.getSnapPosition());
 		
 	}
 	
 	public void undo() {
 		if (object==null) return;
 		if (iSnap==null) object.setSnappingBehaviour(null); else
-		iSnap.givePropertiesTo(object.getSnappingBehaviour());
+		iSnap.givePropertiesTo(object.getSnapPosition());
 		
 	}
 

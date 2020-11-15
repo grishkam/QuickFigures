@@ -15,8 +15,8 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEventWrapper;
 import dividedPanels.DividedPanelLayout.layoutDividedArea;
-import dividedPanels.DividedPanelLayout.layoutDivider;
-import genericMontageKit.panelContentElement;
+import dividedPanels.DividedPanelLayout.LayoutDivider;
+import genericMontageKit.PanelContentExtract;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjectHandles.HasSmartHandles;
@@ -27,6 +27,8 @@ import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 import utilityClassesForObjects.RectangleEdges;
 
+/**Displays a divided panel layout. Available for use as a ''super* layout that contains 
+  other layouts. Offers few advantages*/
 public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements HasSmartHandles{
 
 	/**
@@ -36,9 +38,8 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	private transient ArrayList<DividerHandle> vHandle;
 	private transient ArrayList<DividerHandle> hHandle;
 	transient SmartHandleList smartl;
-	private transient ArrayList<areaHandle> areaHandles;
-	private transient ArrayList<edgeHandle> edgeHandles;
-	//private ArrayList<cornerHandle> cornerHandles;
+	private transient ArrayList<AreaHandleForDividedLayout> areaHandles;
+	private transient ArrayList<EdgeHandleForDivitedLayout> edgeHandles;
 	
 	public DividedPanelLayoutGraphic(DividedPanelLayout layout) {
 		super(layout);
@@ -48,27 +49,26 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	public void drawHandles(Graphics2D graphics, CordinateConverter<?> cords) {
 		vHandle=new ArrayList<DividerHandle>();
 		hHandle=new ArrayList<DividerHandle>();
-		areaHandles=new ArrayList<areaHandle>();
-		//cornerHandles=new ArrayList<cornerHandle>();
-		edgeHandles=new ArrayList<edgeHandle>();
+		areaHandles=new ArrayList<AreaHandleForDividedLayout>();
+
+		edgeHandles=new ArrayList<EdgeHandleForDivitedLayout>();
 		smartl = new SmartHandleList();;
 		
-		ArrayList<layoutDivider> hDiv = getPanelLayout().mainArea.getHorizontalDividerArray(true);
-		ArrayList<layoutDivider> vDiv = getPanelLayout().mainArea.getHorizontalDividerArray(false);
+		ArrayList<LayoutDivider> hDiv = getPanelLayout().mainArea.getHorizontalDividerArray(true);
+		ArrayList<LayoutDivider> vDiv = getPanelLayout().mainArea.getHorizontalDividerArray(false);
 		ArrayList<layoutDividedArea> subArea = getPanelLayout().mainArea.getAllBottomLevelSubareas();
-		for(int i=0; i<9; i++) edgeHandles.add(new edgeHandle(i));
+		for(int i=0; i<9; i++) edgeHandles.add(new EdgeHandleForDivitedLayout(i));
 		
-		for(layoutDivider div:hDiv) {
+		for(LayoutDivider div:hDiv) {
 			hHandle.add(new DividerHandle(div,  Color.orange, cords, this));
 			}
-		for(layoutDivider div:vDiv) {
+		for(LayoutDivider div:vDiv) {
 			vHandle.add(new DividerHandle(div,  Color.pink, cords, this));
 			}
 		
 		for(int i=0; i<subArea.size(); i++) {
-			areaHandles.add(new areaHandle(subArea.get(i), Color.white, cords, i+1));
+			areaHandles.add(new AreaHandleForDividedLayout(subArea.get(i), Color.white, cords, i+1));
 			}
-		
 		
 		
 		smartl.addAll(hHandle);
@@ -77,15 +77,13 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		smartl.addAll(edgeHandles);
 		
 	
-		for(int i=0; i<subArea.size(); i++)	smartl.add(new LowerRightHandle(this.getPanelLayout(), subArea.get(i), i+1));
+		for(int i=0; i<subArea.size(); i++)	smartl.add(new LowerRightHandleForDividedPanelLayout(this.getPanelLayout(), subArea.get(i), i+1));
 			
-		
-		
-		
-		smartl.draw(graphics, cords);
-		
+
+		smartl.draw(graphics, cords);	
 	}
 
+		/**Overrides superclass for drawing a layout*/
 	protected void drawLayoutTypeSpecific(Graphics2D graphics,
 			CordinateConverter<?> cords) {
 		if (this.isSelected())drawHandles(graphics, cords);
@@ -96,13 +94,13 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		this.generateCurrentImageWrapper();
-		ArrayList<panelContentElement> stack = this.getEditor().cutStack(getPanelLayout());
+		ArrayList<PanelContentExtract> stack = this.getEditor().cutStack(getPanelLayout());
 		
 		
 		SmartHandle item = this.getSmartHandleList().getHandleNumber(handlenum);
 		
-		if(this.edgeHandles.contains(item) && item instanceof edgeHandle) {
-			edgeHandle edge=(edgeHandle) item;
+		if(this.edgeHandles.contains(item) && item instanceof EdgeHandleForDivitedLayout) {
+			EdgeHandleForDivitedLayout edge=(EdgeHandleForDivitedLayout) item;
 			if(edge.edge==RectangleEdges.RIGHT||edge.edge==RectangleEdges.LOWER_RIGHT||edge.edge==RectangleEdges.UPPER_RIGHT) {
 				double dx = p2.getX()-this.getPanelLayout().getBoundry().getBounds2D().getMaxX();
 				this.getPanelLayout().width+=dx;
@@ -148,14 +146,14 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 			if(this.hHandle.contains(item))
 			 {
 				DividerHandle  d=(DividerHandle) item;;
-				layoutDivider divider = d.divider;
+				LayoutDivider divider = d.divider;
 				double dy = p2.getY()-divider.rect.getY();
 				divider.nudgePosition((int)dy);
 			} else
 		
 				if(this.vHandle.contains(item)) {
 					DividerHandle  d=(DividerHandle) item;;
-					layoutDivider divider = d.divider;
+					LayoutDivider divider = d.divider;
 			double dy = p2.getX()-divider.rect.getX();
 			divider.nudgePosition((int)dy);
 		} else  {
@@ -183,7 +181,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		return (DividedPanelLayout)layout;
 	}
 	
-	class edgeHandle extends SmartHandle  {
+	class EdgeHandleForDivitedLayout extends SmartHandle  {
 
 		/**
 		 * 
@@ -192,7 +190,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		ArrayList<Point2D> places;
 		private int edge;
 		
-		public edgeHandle(int edge) {
+		public EdgeHandleForDivitedLayout(int edge) {
 			super(0, 0);
 			 places = RectangleEdges.getLocationsForHandles(getPanelLayout().getBoundry().getBounds2D());
 			 this.edge=edge;
@@ -209,13 +207,13 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 
 	
 	
-	class areaHandle  extends SmartHandle  implements ActionListener {
+	class AreaHandleForDividedLayout  extends SmartHandle  implements ActionListener {
 
 		
 		protected layoutDividedArea dividedArea;
 		private int panelnumber;
 
-		public areaHandle(layoutDividedArea div, Color orange, CordinateConverter<?> cords, int panelnumber) {
+		public AreaHandleForDividedLayout(layoutDividedArea div, Color orange, CordinateConverter<?> cords, int panelnumber) {
 			super((int)div.getCenterX(), (int)div.getCenterY());
 			super.setCordinateLocation(new Point((int)div.getCenterX(), (int)div.getCenterY()));
 			this.panelnumber=panelnumber;
@@ -233,15 +231,11 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 			
 			layoutDividedArea useA = dividedArea;
 			if (arg0.getActionCommand().equals("+h")) {
-				
-				//while(!useA.isHorizontal()) {useA=useA.getParent();}
-				/**if (!useA.isSubdivided()&&useA.getParent()!=null &&useA.getParent().isHorizontal()) {useA=useA.getParent();}
-				else*/ if (!useA.isSubdivided()) {useA.setHorizontal(true);}
+				 if (!useA.isSubdivided()) {useA.setHorizontal(true);}
 				useA.divide(dividedArea.getCenterY()-dividedArea.getY());
 			}
 			if (arg0.getActionCommand().equals("+v")) {
-				/**if (!useA.isSubdivided()&&useA.getParent()!=null &&!useA.getParent().isHorizontal()) {useA=useA.getParent();}
-				else */
+
 					if (!useA.isSubdivided()) {useA.setHorizontal(false);}
 				dividedArea.divide(dividedArea.getCenterX()-dividedArea.getX());
 			}
@@ -349,7 +343,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		double dw = w-panel.width;
 		double dh = h-panel.height;
 		this.generateCurrentImageWrapper();
-		ArrayList<panelContentElement> stack = this.getEditor().cutStack(getPanelLayout());
+		ArrayList<PanelContentExtract> stack = this.getEditor().cutStack(getPanelLayout());
 		this.getPanelLayout().nudgePanelDimensions(panelNum, dw, dh);
 		getPanelLayout().resetPtsPanels();
 		this.getEditor().pasteStack(getPanelLayout(), stack);

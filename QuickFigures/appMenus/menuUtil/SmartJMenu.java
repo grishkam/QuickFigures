@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 import javax.swing.undo.AbstractUndoableEdit;
 import applicationAdapters.CanvasMouseEventWrapper;
+import selectedItemMenus.MenuItemInstall;
 import selectedItemMenus.MultiSelectionOperator;
 import undo.UndoManagerPlus;
 
@@ -86,7 +87,7 @@ public class SmartJMenu extends JMenu {
 		return undoManager;
 	}
 
-
+	/**Sets an undo to the undo manager*/
 	public void setUndoManager(UndoManagerPlus undoManager) {
 		this.undoManager = undoManager;
 		for(Component e : this.getMenuComponents()) {
@@ -96,21 +97,29 @@ public class SmartJMenu extends JMenu {
 		}
 	}
 	
+	/**Adds an undo to the undo manager*/
 	public void addUndo(AbstractUndoableEdit edit) {
 		if (this.getUndoManager()!=null) this.getUndoManager().addEdit(edit);
 	}
 	
-	public static JMenu getOrCreateSubmenuFromPath(MultiSelectionOperator o, JMenu men) {
+	/**When given an instance of a menu items installation instructions and a menu
+	  returns the appropriate submenu for the new menu item*/
+	public static JMenu getOrCreateSubmenuFromPath(MenuItemInstall o, JMenu men) {
+		if(o==null||o.getMenuPath()==null) return men;//if there is no submenu
 		String[] path = o.getMenuPath().split("<");
 		return getSubmenuFromPath(men, path);
 	}
 
 
+	/**When given a JMenu with series of strings describing a menu path, returns the submenu for that path
+	  will create a new menu if it does not already exist*/
 	public static JMenu getSubmenuFromPath(JMenu men, String[] path) {
-		return getSubmenuFromPath(men, path, 0);
+		return getOrCreateSubmenuFromPath(men, path, 0);
 	}
 	
-	public static JMenu getSubmenuFromPath(JMenu men, String[] path, int start) {
+	/**When given a JMenu with series of strings describing a menu path, returns the submenu for that path
+	  will create a new menu if it does not already exist. does not consider any strings that are before the start index*/
+	public static JMenu getOrCreateSubmenuFromPath(JMenu men, String[] path, int start) {
 		for(int i=start; i<path.length; i++)men= getOrCreateSubmenu(men, path[i]);
 		return men;
 	}

@@ -3,22 +3,23 @@ package objectDialogs;
 import graphicalObjects_BasicShapes.RegularPolygonGraphic;
 import standardDialog.NumberInputPanel;
 
+/**An options dialog for regular polygons, includes options for the n-vertices in addition to all other options*/
 public class PolygonGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog {
 
-	RegularPolygonGraphic rect=null;
+	RegularPolygonGraphic currentPolygon=null;
 	
-	public PolygonGraphicOptionsDialog(RegularPolygonGraphic s) {
-		super(s);
-		rect=s;
-		// TODO Auto-generated constructor stub
+	/***/
+	public PolygonGraphicOptionsDialog(RegularPolygonGraphic s, boolean simple) {
+		super(s, true);
+		currentPolygon=s;
 	}
 	
 	protected void addOptionsToDialogPart1() {
 		super.addOptionsToDialogPart1();
-		if (s instanceof RegularPolygonGraphic) rect=(RegularPolygonGraphic) s;
-		NumberInputPanel win = new NumberInputPanel("Width", rect.getBounds().width);
-		NumberInputPanel hin = new NumberInputPanel("Height", rect.getBounds().height);
-		NumberInputPanel vin = new NumberInputPanel("N-Vertex", rect.getNvertex());
+		if (s instanceof RegularPolygonGraphic) currentPolygon=(RegularPolygonGraphic) s;
+		NumberInputPanel win = new NumberInputPanel("Width", currentPolygon.getBounds().width);
+		NumberInputPanel hin = new NumberInputPanel("Height", currentPolygon.getBounds().height);
+		NumberInputPanel vin = new NumberInputPanel("N-Vertex", currentPolygon.getNvertex());
 		this.add("width", win);
 		this.add("height", hin);
 		this.add("Vertices", vin);
@@ -26,15 +27,12 @@ public class PolygonGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog 
 	
 	protected void setItemsToDiaog() {
 		super.setItemsToDiaog();
-		rect.setWidth(this.getNumber("width"));
-		rect.setHeight(this.getNumber("height"));
-		rect.setNvertex((int)this.getNumber("Vertices"));
+		currentPolygon.setWidth(this.getNumber("width"));
+		currentPolygon.setHeight(this.getNumber("height"));
+		currentPolygon.setNvertex((int)this.getNumber("Vertices"));
 	}
 	
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	

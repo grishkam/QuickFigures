@@ -16,9 +16,9 @@ import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelOrder;
 import genericMontageKit.PanelOrder.imageOrderComparator;
+import graphicActionToolbar.CurrentFigureSet;
 import genericMontageKit.PanelSetter;
 import genericMontageKit.SubFigureOrganizer;
-import graphicActionToombar.CurrentSetInformerBasic;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
@@ -33,14 +33,14 @@ import logging.IssueLog;
 import objectDialogs.CroppingDialog;
 import objectDialogs.PanelStackDisplayOptions;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAddManyItem;
 import undo.UndoLayoutEdit;
 import utilityClassesForObjects.SnappingPosition;
 import menuUtil.HasUniquePopupMenu;
 import appContext.CurrentAppContext;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
 /**meant to check if bugs that existed with previous subclasses are gone. Later adapted to work 
  * with source stacks in a special way*/
@@ -71,17 +71,17 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 
 	/**combines the panel lists*/
 	@Override
-	public PanelList getWorkingStack() {
+	public PanelList getWorkingPanelList() {
 		PanelList output = new PanelList();
 		for(PanelStackDisplay d: getMultiChannelDisplays()){
 			if (d==null) continue;
-			output.add(d.getStack());
+			output.add(d.getPanelList());
 		}
 		// TODO Auto-generated method stub
 		return output;
 	}
 	public void mapAllPanelPlacements() {
-		this.subfigureSetter.layDisplayPanelsOfStackOnLayout(getWorkingStack(), this.getMontageLayoutGraphic().getPanelLayout(), true);
+		this.subfigureSetter.layDisplayPanelsOfStackOnLayout(getWorkingPanelList(), this.getMontageLayoutGraphic().getPanelLayout(), true);
 		
 	}
 
@@ -194,13 +194,13 @@ public BasicMontageLayout getMontageLayout() {
 
 	/**Adds an additional multichannel image to the figure, creates panels as needed
 	 * @return */
-	public CompoundEdit2 addNovelMultiChannel(MultichannelDisplayLayer display, int start) {
+	public CombinedEdit addNovelMultiChannel(MultichannelDisplayLayer display, int start) {
 		if(display==null) return null;
-		int startpoint=this.getWorkingStack().getlastPanelsIndex()+1;
+		int startpoint=this.getWorkingPanelList().getlastPanelsIndex()+1;
 		if(start>0) startpoint=start;
 		PanelStackDisplay principalMultiChannel = getPrincipalMultiChannel();
 		boolean hasOne=principalMultiChannel!=null;//true if there is already a multichannel image in figure
-		CompoundEdit2 output = new CompoundEdit2();
+		CombinedEdit output = new CombinedEdit();
 		
 		if(!hasOne) {
 			cropIfUserSelectionExists(display);
@@ -210,7 +210,7 @@ public BasicMontageLayout getMontageLayout() {
 			//IssueLog.log("d scale "+display.getPreprocessScale());
 			display.setPreprocessScale(principalMultiChannel.getPreprocessScale());
 			//IssueLog.log("d scale "+display.getPreprocessScale());
-			principalMultiChannel.getStack().giveSettingsTo(display.getStack());
+			principalMultiChannel.getPanelList().giveSettingsTo(display.getPanelList());
 			display.getSetter().startPoint=startpoint;
 			
 			try {
@@ -219,10 +219,10 @@ public BasicMontageLayout getMontageLayout() {
 			double w = principalMultiChannel.getMultichanalWrapper().getDimensions().getWidth()/pScale;
 			double h = principalMultiChannel.getMultichanalWrapper().getDimensions().getHeight()/pScale;
 			
-			if ( mustResize||display.getStack().getChannelUseInstructions().selectsSlices(display.getMultichanalWrapper()))
+			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlices(display.getMultichanalWrapper()))
 				{
 				CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
-				display.getStack().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
+				display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
 				}
 			
 			} catch (Exception e) {
@@ -238,7 +238,7 @@ public BasicMontageLayout getMontageLayout() {
 		}
 		
 		/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
-		if (hasOne) try {new ChannelOrderAndLutMatching().matchOrder(principalMultiChannel.getMultichanalWrapper(), display.getMultichanalWrapper(), 2);
+		if (hasOne) try {new ChannelOrderAndLutMatching().matchChannels(principalMultiChannel.getMultichanalWrapper(), display.getMultichanalWrapper(), 2);
 				} catch (Throwable t) {IssueLog.log(t);}
 		
 		this.add(display);
@@ -345,7 +345,7 @@ public BasicMontageLayout getMontageLayout() {
 public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDisplay panelStackDisplay,
 		MontageLayoutGraphic p) {
 	if (panelStackDisplay!=null) {
-	int[] dims =  panelStackDisplay.getStack().getChannelUseInstructions().estimateBestMontageDims(image);
+	int[] dims =  panelStackDisplay.getPanelList().getChannelUseInstructions().estimateBestMontageDims(image);
 	
 		//int col=panelStackDisplay.getStack().getChannelUseInstructions().estimateNPanelsNeeded(image);
 		int col=dims[1];
@@ -370,11 +370,11 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	
 	/**Adds another multichannel image
 	 * @return */
-	public CompoundEdit2 nextMultiChannel(boolean openFile) {
+	public CombinedEdit nextMultiChannel(boolean openFile) {
 		
-		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(openFile, null);
+		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromUserSelectedImage(openFile, null);
 		
-		CompoundEdit2 output = nextMultiChannel(item);
+		CombinedEdit output = nextMultiChannel(item);
 		
 		return output;
 	}
@@ -382,13 +382,13 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	
 	/**Adds another multichannel image
 	 * @return */
-	public CompoundEdit2 nextMultiChannel(MultichannelDisplayLayer item, int start) {
-		CompoundEdit2 output = new CompoundEdit2();
+	public CombinedEdit nextMultiChannel(MultichannelDisplayLayer item, int start) {
+		CombinedEdit output = new CombinedEdit();
 	
 			output.addEditToList(	
 					addNovelMultiChannel(item, start)
 					);
-		DisplayedImageWrapper disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
+		DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
 		
 		
 		
@@ -397,7 +397,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 				
 		return output;
 	}
-	public CompoundEdit2 nextMultiChannel(MultichannelDisplayLayer item) {
+	public CombinedEdit nextMultiChannel(MultichannelDisplayLayer item) {
 		return nextMultiChannel(item,-1);
 	}
 
@@ -430,7 +430,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 			
 			if (item!=null)
 				{
-				if(position==null) position = item.getSnappingBehaviour(); else item.setSnappingBehaviour(position);
+				if(position==null) position = item.getSnapPosition(); else item.setSnappingBehaviour(position);
 				addedItems.add(item);
 				}
 		}
@@ -451,7 +451,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	}
 	
 	public void showChannelUseOptions() {
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions((MultichannelDisplayLayer)getPrincipalMultiChannel(),getPrincipalMultiChannel().getStack(), null,false);
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions((MultichannelDisplayLayer)getPrincipalMultiChannel(),getPrincipalMultiChannel().getPanelList(), null,false);
 		/**adds a list of all the channel displays that are relevant*/
 		ArrayList<PanelStackDisplay> all = getMultiChannelDisplaysInOrder();
 		all.remove(getPrincipalMultiChannel());
@@ -466,10 +466,10 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		
 		ArrayList<PanelStackDisplay> d1 = getMultiChannelDisplaysInLayoutOrder();
 		MultichannelDisplayLayer in = (MultichannelDisplayLayer)getPrincipalMultiChannel();
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getStack(),null, true);
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getPanelList(),null, true);
 		
 		dialog.addAditionalDisplays(d1);
-		dialog.setCurrentImageDisplay(CurrentSetInformerBasic. getCurrentActiveDisplayGroup());
+		dialog.setCurrentImageDisplay(CurrentFigureSet. getCurrentActiveDisplayGroup());
 		dialog.setModal(false);
 		
 		dialog.showDialog();
@@ -506,8 +506,8 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 
 
 	/**Adds row labels based on names*/
-	public CompoundEdit2 addRowOrColLabel(int type) {
-		CompoundEdit2 edit = new CompoundEdit2();
+	public CombinedEdit addRowOrColLabel(int type) {
+		CombinedEdit edit = new CombinedEdit();
 		ArrayList<TextGraphic> output = addLabelsBasedOnImageNames(type);
 		UndoAddManyItem many = new UndoAddManyItem(this, output);
 		edit.addEditToList(many);
@@ -515,7 +515,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		fixLabelSpaces();
 		many2.establishFinalLocations(); 
 		edit.addEditToList(many2);
-		DisplayedImageWrapper disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
+		DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
 
 		disp.updateDisplay();
 		return edit;

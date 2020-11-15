@@ -16,6 +16,7 @@ import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import logging.IssueLog;
 
+/**Class for rendering tree cells*/
 public class TextGraphicListCellComponent extends JComponent {
 
 	/**

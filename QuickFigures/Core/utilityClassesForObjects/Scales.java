@@ -2,8 +2,6 @@ package utilityClassesForObjects;
 
 import java.awt.geom.Point2D;
 
-import javax.swing.undo.AbstractUndoableEdit;
-
 public interface Scales {
 
 	/**scales the shape about point p. the fold scaling is determined by mag*/

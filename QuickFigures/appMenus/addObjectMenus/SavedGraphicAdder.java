@@ -22,12 +22,11 @@ public class SavedGraphicAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "open";
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		// TODO Auto-generated method stub
 		return "Saved Graphic";
 	}

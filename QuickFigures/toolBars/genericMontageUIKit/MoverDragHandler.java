@@ -16,7 +16,7 @@ import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
 import channelMerging.PanelStackDisplay;
 import externalToolBar.BasicDragHandler;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
@@ -34,7 +34,7 @@ import logging.IssueLog;
 import selectedItemMenus.SVG_GraphicAdder2;
 import ultilInputOutput.ForDragAndDrop;
 import undo.AbstractUndoableEdit2;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.Selectable;
@@ -94,7 +94,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 		}
 		
-		new CurrentSetInformerBasic().addUndo(undo);;
+		new CurrentFigureSet().addUndo(undo);;
 	}
 	
 	public void select(ZoomableGraphic z) {
@@ -159,7 +159,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	  If there are single images. Adds them to the 
 	 * @return */
 	
-	public CompoundEdit2 handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
+	public CombinedEdit handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
 		Point2D location2 = imageAndDisplaySet.getConverter().unTransformP(location);
 		LocatedObject2D roi2 = getObjectAtPoint(imageAndDisplaySet, location2);
 		PanelLayoutGraphic layout=null;
@@ -185,7 +185,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 		
 		boolean multiChannelOpen=true;
-		CompoundEdit2 undo = new CompoundEdit2();
+		CombinedEdit undo = new CombinedEdit();
 		for(File f: file) {
 			
 			
@@ -324,7 +324,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	}
 	
 	private AbstractUndoableEdit2 handleMultiChannelStackDrop(File f, ImageAndDisplaySet imageAndDisplaySet, GraphicLayer layer , Point2D location2) {
-		CompoundEdit2 undo=new CompoundEdit2();
+		CombinedEdit undo=new CombinedEdit();
 		layer = findValidLayer(layer);
 		int startIndex=-1;
 		if (layer instanceof FigureOrganizingLayerPane) {

@@ -7,10 +7,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import logging.IssueLog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 
 public class RecropButton extends JButton implements ActionListener {
@@ -31,14 +31,14 @@ public class RecropButton extends JButton implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new CurrentSetInformerBasic().addUndo(
+		new CurrentFigureSet().addUndo(
 		showRecropDialog()						);
 		
 	}
 
-	public  CompoundEdit2 showRecropDialog() {
+	public  CombinedEdit showRecropDialog() {
 		MultichannelDisplayLayer mainDisplayItem = dialog.getMainDisplayItem();
-		CompoundEdit2 undo = new CompoundEdit2(new PreprocessChangeUndo(mainDisplayItem));
+		CombinedEdit undo = new CombinedEdit(new PreprocessChangeUndo(mainDisplayItem));
 		CroppingDialog.showCropDialog(mainDisplayItem.getSlot(), null, 0);
 		mainDisplayItem .setFrameSliceUseToViewLocation();
 		dialog.afterEachItemChange();

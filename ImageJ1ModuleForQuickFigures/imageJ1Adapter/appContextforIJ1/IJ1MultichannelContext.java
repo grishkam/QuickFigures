@@ -2,7 +2,7 @@ package appContextforIJ1;
 
 import java.util.ArrayList;
 
-import appContext.MultichannelContext;
+import appContext.MultiDimensionalImageContext;
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.MultiChannelWrapper;
 import ij.IJ;
@@ -12,7 +12,7 @@ import ij.io.OpenDialog;
 import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
-public class IJ1MultichannelContext implements MultichannelContext {
+public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 
 	IJ1MultiChannelCreator item=new IJ1MultiChannelCreator();
 	

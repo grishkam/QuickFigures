@@ -10,7 +10,7 @@ import menuUtil.SmartJMenu;
 import standardDialog.InfoDisplayPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 
 public class FigureScalerMenu extends SmartJMenu{
 	
@@ -27,7 +27,7 @@ public class FigureScalerMenu extends SmartJMenu{
 		createItems();
 	}
 	
-	public void addEdit(CompoundEdit2 undo) {
+	public void addEdit(CombinedEdit undo) {
 		if(mouseE!=null)
 			{
 			undo.addEditToList(new CanvasAutoResize().performUndoableAction(mouseE.getAsDisplay()));
@@ -41,10 +41,10 @@ public class FigureScalerMenu extends SmartJMenu{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				FigureScaler scaler = new FigureScaler(true);
-				CompoundEdit2 undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
+				CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
 				item.updateDisplay();
 				addEdit(undo);
-				scaler.scaleWarnings(item.getParentLayer());
+				FigureScaler.scaleWarnings(item.getParentLayer());
 				}
 	}.createJMenuItem("Scale (Same PPI, Bilinear Interpolation if needed)"));
 		
@@ -56,10 +56,10 @@ public class FigureScalerMenu extends SmartJMenu{
 				FigureScaler scaler = new FigureScaler(false);
 					double factor=scaler.getSlideSizeScale(item);
 					
-					CompoundEdit2 undo = scaler.scaleFigure(item, factor, item.getPanelLayout().getReferenceLocation());
+					CombinedEdit undo = scaler.scaleFigure(item, factor, item.getPanelLayout().getReferenceLocation());
 					item.updateDisplay();
 					addEdit(undo);
-					scaler.scaleWarnings(item.getParentLayer());
+					FigureScaler.scaleWarnings(item.getParentLayer());
 			}	
 	}.createJMenuItem("Scale to Slide Size (PPI changes, No Interpolation)"));
 		
@@ -69,11 +69,11 @@ public class FigureScalerMenu extends SmartJMenu{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				FigureScaler scaler = new FigureScaler(false);
-				CompoundEdit2 undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
+				CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
 				undo.addEditToList(new CanvasAutoResize().performUndoableAction(mouseE.getAsDisplay()));
 				item.updateDisplay();
 				addEdit(undo);
-				scaler.scaleWarnings(item.getParentLayer());
+				FigureScaler.scaleWarnings(item.getParentLayer());
 				}
 
 			

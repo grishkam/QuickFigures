@@ -15,7 +15,7 @@ import plotParts.DataShowingParts.PlotComponent;
 import plotParts.DataShowingParts.ScatterPoints;
 import plotParts.DataShowingParts.SeriesLabel;
 import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 
@@ -128,7 +128,7 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 	public KaplenMeierDataSeries getDataSeries() {return data;}
 	
 	@MenuItemMethod(menuActionCommand = "New KaplanMeier Line", menuText = "New Kaplan-Meier Line", subMenuName="Add", orderRank=50)
-	public CompoundEdit2 addKaplanLine() {
+	public CombinedEdit addKaplanLine() {
 		AbstractUndoableEdit e1=null;
 		if (kaplanLine!=null) e1=removeKaplanLine() ;
 		kaplanLine=new KaplanMeierLineShape(this.getDataSeries());
@@ -139,7 +139,7 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		
 		
 		if (this.getStyle()!=null)this.getStyle().applyTo(kaplanLine);
-		return new CompoundEdit2(e1, new UndoAddItem(this, kaplanLine));
+		return new CombinedEdit(e1, new UndoAddItem(this, kaplanLine));
 	}
 	
 	@MenuItemMethod(menuActionCommand = "Remove Line", menuText = "Line", subMenuName="Remove", orderRank=21, permissionMethod="getLine")
@@ -153,7 +153,7 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 	}
 	
 	@MenuItemMethod(menuActionCommand = "New Censor Indicator", menuText = "Censor Marks for Kaplan-Meier", subMenuName="Add", orderRank=50)
-	public CompoundEdit2 addKaplanCensor() {
+	public CombinedEdit addKaplanCensor() {
 		AbstractUndoableEdit e1=null;
 		if (censorMark!=null) e1=removeKaplanLine() ;
 		censorMark=new KaplanMeierCensorShower(this.getDataSeries());
@@ -164,7 +164,7 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		
 		
 		if (this.getStyle()!=null)this.getStyle().applyTo(censorMark);
-		return new CompoundEdit2(e1, new UndoAddItem(this, censorMark));
+		return new CombinedEdit(e1, new UndoAddItem(this, censorMark));
 	}
 	
 	@MenuItemMethod(menuActionCommand = "Remove Regression Line", menuText = "Line", subMenuName="Remove", orderRank=31, permissionMethod="getKaplanLine")
@@ -202,9 +202,9 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 	
 	public AbstractUndoableEdit addDataBar() {return null;}
 	public AbstractUndoableEdit addScatter() {return null;}
-	public CompoundEdit2 addErrorBar() {return null;}
-	public CompoundEdit2 addBoxPlot() {return null;}
-	public CompoundEdit2 addLine() {return null;}
+	public CombinedEdit addErrorBar() {return null;}
+	public CombinedEdit addBoxPlot() {return null;}
+	public CombinedEdit addLine() {return null;}
 
 	
 

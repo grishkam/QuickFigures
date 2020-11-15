@@ -10,7 +10,7 @@ public interface SubFigureOrganizer {
 	public ArrayList<MultiChannelWrapper> getAllSourceStacks();
 	
 	/**returns a panel list containing all panels from all the source images*/
-	public PanelList getWorkingStack();
+	public PanelList getWorkingPanelList();
 
 	public void updatePanelsAndLabelsFromSource();
 	

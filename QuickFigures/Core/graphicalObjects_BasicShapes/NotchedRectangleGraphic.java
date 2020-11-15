@@ -239,7 +239,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	
 	@Override
 	public void showOptionsDialog() {
-		new RectangleGraphicOptionsDialog(this).showDialog();
+		new RectangleGraphicOptionsDialog(this, false).showDialog();
 	}
 
 

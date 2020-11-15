@@ -35,21 +35,20 @@ public class StringBasedMetaWrapper extends BasicMetaInfoWrapper implements Meta
 	
 	
 
-	
+	/**sets a given entry to value value*/
 	@Override
-	public void setEntry(String name, String number) {
-		//ImagePlus img = image;
-		if (name==null) return;
+	public void setEntry(String keyName, String value) {
+		if (keyName==null) return;
 		String oldProp=(String) getProperty();
 		if (oldProp==null) {
-				setProperty( name+"= "+number);
+				setProperty( keyName+"= "+value);
 				oldProp=(String) getProperty();
 			}
-		if (!oldProp.contains(name+"= ")){
-				String newProp=oldProp+"\n"+name+"= "+number;
+		if (!oldProp.contains(keyName+"= ")){
+				String newProp=oldProp+"\n"+keyName+"= "+value;
 				setProperty(newProp);
 				}
-		else {replaceInfoMetaDataEntry(name, number);}
+		else {replaceInfoMetaDataEntry(keyName, value);}
 		
 	}
 	

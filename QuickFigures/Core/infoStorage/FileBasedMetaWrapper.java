@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import figureTemplates.DirectoryHandler;
+import figureFormat.DirectoryHandler;
 
 
 /**A class that keeps a set of key value pains in a string. Methods innitially written 

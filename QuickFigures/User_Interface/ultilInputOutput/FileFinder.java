@@ -2,12 +2,14 @@ package ultilInputOutput;
 
 import java.io.File;
 
-import logging.IssueLog;
-
-/**As I worked on this, I sometimes changed the working directories 
-  and the locations of files. Meanwhile the file paths that were saved
-  or included in code would not change. Using simply string replacement
-  this helps */
+/** Sometimes a file might be saved in a differed path than the stored directory
+  this class stores a working directory name where it looks for any files if it 
+  cannot locate them in their proper locations. This is only relevant if the user
+  chooses load from file (in a certain options dialog), subsequently then saves the figure
+  and tries to reopen it despite the folder with both figure and file moving.
+  In the current version of QuickFigures, the users are not likely to select this option and
+  I am considering removing it
+*/
 public class FileFinder {
 	private static String workingDir="/";
 	String extension=null;
@@ -27,19 +29,9 @@ public class FileFinder {
 			
 	};
 	
-	
-	public static void main(String[] args) {
-		String example="/"+name+"s Data/"+name+" Microscopy Files/"+name+" HP Doccuments/C14 Domain Mapping/Oct 13 2013 RG clone 11 c14cn1 double rescue/ha red, percentrin green centriole cohession/delta n c14 plasmid/Image- 0056_taken_10_13_2013.zvi";
-	
-		File f=new File(example);
-		
-	
-	}
-	
-	
 
-	
-	
+	/**Attempts to find file in its normal path
+	 * if fails, looks in the working directory that is set for this class*/
 	public File findFile(File file) {
 		if (file.exists()) return file;
 		
@@ -57,7 +49,7 @@ public class FileFinder {
 	}
 	
 	
-	/**Tries to find a file in the working dir*/
+	/**Tries to find a file with the same name as the given file in the working directory given*/
 	File findFileInWorkingDirectory(File file, String workingDirectory) {
 		File wd=new File(workingDirectory);
 		if (!wd.isDirectory()) {
@@ -69,8 +61,6 @@ public class FileFinder {
 		
 		path+=file.getName();
 		
-		//IssueLog.log("looking for file");
-		//IssueLog.log(path);
 		
 		File newfilepath = new File(path);
 		if (newfilepath.exists()) return newfilepath;

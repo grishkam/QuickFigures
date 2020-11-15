@@ -5,7 +5,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTabbedPane;
 
 import channelLabels.ChannelLabelTextGraphic;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
@@ -60,7 +60,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 					if (z instanceof ChannelLabelTextGraphic) ((ChannelLabelTextGraphic) z).setParaGraphToChannels();
 				}
 				onListenerLotification(event);
-				CurrentSetInformerBasic.canvasResize();
+				CurrentFigureSet.canvasResize();
 			}};
 	}
 	

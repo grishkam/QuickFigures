@@ -1,11 +1,11 @@
 package uiForAnimations;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import selectedItemMenus.MultiSelectionOperator;
 
 public interface TimeLineOperator extends MultiSelectionOperator{
 
-	void setDisplay(DisplayedImageWrapper diw);
+	void setDisplay(DisplayedImage diw);
 
 	void setUI(TimeLineDialog dialog);
 

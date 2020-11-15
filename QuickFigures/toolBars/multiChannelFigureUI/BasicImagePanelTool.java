@@ -291,7 +291,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		if (pd!=null) {
 	
 			presseddisplay=pd;
-			boolean direct=presseddisplay.getStack().getPanelGraphics().contains(imagepanel);
+			boolean direct=presseddisplay.getPanelList().getPanelGraphics().contains(imagepanel);
 			
 			if (!direct) {
 				pressedInset = findInsetWith(presseddisplay, imagepanel);

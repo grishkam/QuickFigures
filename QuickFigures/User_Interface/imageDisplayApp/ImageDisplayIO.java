@@ -11,11 +11,13 @@ import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
 
+/**Serializes figures and saves to a file. 
+  De-serializes those figures and creates figure display windows*/
 public class ImageDisplayIO {
-	public static GraphicSet readFromFile(File f) {
+	public static GraphicContainingImage readFromFile(File f) {
 		//GraphicEncoder encoder = new GraphicEncoder(theSet.getGraphicLayerSet());
 		FileInputStream fo;
-		GraphicSet output=null;
+		GraphicContainingImage output=null;
 		FileFinder.setWorkingDir(f);
 		
 		if (!f.exists()) {
@@ -33,7 +35,7 @@ public class ImageDisplayIO {
 				 GraphicLayerPane g=(GraphicLayerPane) o1;
 				 BasicImageInfo b=(BasicImageInfo) o2;
 				 
-				output= new GraphicSet(g,b);
+				output= new GraphicContainingImage(g,b);
 				output.onItemLoad(output.getLayer());
 			}
 			
@@ -61,7 +63,7 @@ public class ImageDisplayIO {
 	
 	
 
-	public static boolean writeToFile(File f, GraphicSet theSet) {
+	public static boolean writeToFile(File f, GraphicContainingImage theSet) {
 		//GraphicEncoder encoder = new GraphicEncoder(theSet.getGraphicLayerSet());
 		FileOutputStream fo;
 		try {
@@ -86,7 +88,7 @@ public class ImageDisplayIO {
 	
 	public static ImageAndDisplaySet showFile(File f) {
 		if (f==null) return null;
-			GraphicSet set = ImageDisplayIO.readFromFile(f);
+			GraphicContainingImage set = ImageDisplayIO.readFromFile(f);
 			if (set==null) return null;
 			return new ImageAndDisplaySet(set);
 	}

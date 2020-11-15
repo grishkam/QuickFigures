@@ -10,7 +10,7 @@ import graphicalObjects_BasicShapes.RoundedRectangleGraphic;
 public class RoundRectGraphicTool extends RectGraphicTool {
 	{model=new RoundedRectangleGraphic(new Rectangle(0,0,0,0));}{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
 	
-	protected RectangularGraphic createNewRect(Rectangle r) {
+	public RectangularGraphic createShape(Rectangle r) {
 		RoundedRectangleGraphic ouput = new RoundedRectangleGraphic(r);
 		ouput.setArch(((RoundedRectangleGraphic)model).getArch());
 		ouput.setArcw(((RoundedRectangleGraphic)model).getArcw());

@@ -1,7 +1,7 @@
 package basicMenusForApp;
 
 import appContext.ImageDPIHandler;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import imageDisplayApp.ImageAndDisplaySet;
 import imageMenu.CanvasDialogResize;
 
@@ -31,7 +31,7 @@ public class NewCanvasDialog  extends BasicMenuItemForObj   {
 
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		diw=ImageAndDisplaySet.createAndShowNew("New Image", width, height);
 		CanvasDialogResize cdr = new CanvasDialogResize();
 		cdr.fancy=false;

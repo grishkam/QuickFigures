@@ -6,11 +6,13 @@ import java.awt.dnd.DropTargetEvent;
 
 import imageDisplayApp.ImageAndDisplaySet;
 
+/**Interface is used to determine what happens when a 
+ * user drops something on an open figure*/
 public interface DragAndDropHandler {
 
 	void drop(ImageAndDisplaySet displaySet, DropTargetDropEvent arg0);
 
-	void dropActCahnge(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0);
+	void dropActChange(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0);
 
 	void dragOver(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0);
 

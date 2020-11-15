@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import genericPlot.BasicPlot;
 import groupedDataPlots.Grouped_Plot;
 import undo.AbstractUndoableEdit2;
-import undo.UndoScaling;
+import undo.UndoScalingAndRotation;
 
 public class PlotAreaChangeUndo extends AbstractUndoableEdit2 {
 
@@ -21,7 +21,7 @@ public class PlotAreaChangeUndo extends AbstractUndoableEdit2 {
 		acu.add(new AxisResetUndoableEdit(plot.getXAxis()));
 		acu.add(new AxisResetUndoableEdit(plot.getYAxis()));
 		if (plot.getSecondaryYaxis()!=null)acu.add(new AxisResetUndoableEdit(plot.getYAxisAlternate()));
-		acu.add(new UndoScaling(plot.plotAreaDefiningRectangle()));
+		acu.add(new UndoScalingAndRotation(plot.plotAreaDefiningRectangle()));
 	
 	}
 	

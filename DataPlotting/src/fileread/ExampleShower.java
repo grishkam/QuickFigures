@@ -9,7 +9,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
@@ -47,7 +47,7 @@ public class ExampleShower extends BasicMenuItemForObj {
 	}
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		String s = exampleNames[type];
 		InputStream inp = this.getClass().getClassLoader().getResourceAsStream(s);
 		  try {

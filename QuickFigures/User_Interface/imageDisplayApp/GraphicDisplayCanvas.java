@@ -24,6 +24,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import utilityClassesForObjects.Selectable;
 
+/**A component that displays the figure within the display window
+  All objects in the figure are drawn here*/
 public class GraphicDisplayCanvas extends
 		JComponent {
 
@@ -32,16 +34,13 @@ public class GraphicDisplayCanvas extends
 	 */
 	private static final long serialVersionUID = 1L;
 	private GraphicSetDisplayWindow window;
-	private boolean buf;
 	
 	public GraphicDisplayCanvas() {
 		super();
 		this.addKeyListener(new KeyDownTracker());
 	
 	}
-	
-	{}
-	
+
 
 	public void setDispWindow(GraphicSetDisplayWindow window) {
 		this.window=window;
@@ -51,59 +50,45 @@ public class GraphicDisplayCanvas extends
 	
 	
 	public void paintComponent(Graphics g) {
-		//super.paint(g);
-		
-		//if (buf=false) {this.createBufferStrategy(4); buf=true;}
+
 		if (g instanceof Graphics2D) {
 			 Graphics2D g2 = (Graphics2D)g;
-		GraphicSet gmp = window.getTheSet();
-		//BasicCordinateConverter cc = window.getZoomer().getConverter();
+		GraphicContainingImage gmp = window.getTheSet();
 		
-		/**marks the borders of the canvas with black and grey*/
+		/**marks the parts of the canvas object beyond the display canvas area with black and grey gradient*/
 		g2.setPaint(getGrayFillPaint());//.setColor(Color.darkGray);
-		
-		
-		
-		
 		Rectangle r = new Rectangle(-1, -1, this.getWidth(), this.getHeight());
 		Shape da = getDisplaySetArea();
 		Area greyArea = (new Area(r));
 		greyArea.subtract(new Area(da));;
-		
 		((Graphics2D) g).fill(greyArea);
+		
+		/**fills the display canvas area with white so that user knows this is where they draw*/
 		g2.setColor(Color.white);
-		 
-	 	
 	 	g2.fill( da);
 		g.setColor(Color.black);
 		g.drawRect(-1, -1, this.getWidth(), this.getHeight());
 		
 		
 		
-		 if (window==null||window.getTheSet()==null) {IssueLog.log("warning, window null");}
+		if (window==null||window.getTheSet()==null) {IssueLog.log("warning, window null");}
 		 
+		/**draws all of objects*/
 		if (window!=null&&window.getTheSet()!=null) {
 		
-		
-		 
-		
-				
 			
 			GraphicLayer layerSet = window.getTheSet().getGraphicLayerSet();
 			CordinateConverter<?> conv1 = getConverter();
 			
-			
 			layerSet.draw(g2, conv1);
-			
-			
 			
 			gmp.getSelectionManagger().drawSelections(g2, getConverter());
 			
-			
+			/**although there is no user option for this. a programmer can create a version of the 
+			  window that does not use a scroll pane but instead indicates the position 
+			  in the same way as imageJ does. in that case an indicator need be drawn*/
 			if (!window.usesScrollPane()) window.indicator.draw(g2, getConverter());
 			
-			 
-			 
 			 drawRulers((Graphics2D) g);
 			 drawSmartHandlesForSelectedItrm(g2, conv1);
 			
@@ -130,7 +115,7 @@ public class GraphicDisplayCanvas extends
 	
 	/**Returns the area of the canvas that Actually Contains the Graphic Display Set*/
 	public Shape getDisplaySetArea() {
-		GraphicSet gmp = window.getTheSet();
+		GraphicContainingImage gmp = window.getTheSet();
 		Rectangle r5 = new Rectangle(0,0, gmp.getWidth(), gmp.getHeight());
 		AffineTransform at = getConverter().getAfflineTransform();
 		Point2D p = new Point(0,0);

@@ -9,10 +9,10 @@ import java.awt.geom.Rectangle2D.Double;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.MenuItemForObj;
-import genericMontageKit.BasicOverlayHandler;
+import genericMontageKit.BasicObjectListHandler;
 import standardDialog.NumberInputPanel;
 import standardDialog.SnapBox;
 import standardDialog.StandardDialog;
@@ -35,7 +35,7 @@ public class CanvasDialogResize implements MenuItemForObj {
 
 
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
 		ImageWrapper iw = diw.getImageAsWrapper();
 		performResize(iw);
@@ -117,7 +117,7 @@ public class canvasDialog extends StandardDialog {
 	}
 	
 	public void onOK() {
-		BasicOverlayHandler boh = new BasicOverlayHandler();
+		BasicObjectListHandler boh = new BasicObjectListHandler();
 		String title=this.getString("name");
 		double ww = this.getNumber("width")*ratio;
 		double hh = this.getNumber("height")*ratio;

@@ -13,9 +13,6 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import menuUtil.SmartPopupJMenu;
 import undo.Edit;
-import undo.UndoAbleEditForRemoveItem;
-import undo.UndoAddItem;
-import undo.UndoReorder;
 import utilityClassesForObjects.LocatedObject2D;
 import menuUtil.PopupMenuSupplier;
 

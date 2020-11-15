@@ -1,8 +1,8 @@
 package channelMerging;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 
-public interface MultiChannelDisplayWrapper extends DisplayedImageWrapper {
+public interface MultiChannelDisplayWrapper extends DisplayedImage {
 
 	public  MultiChannelWrapper getMultiChannelWrapper();
 	public int getCurrentChannel();

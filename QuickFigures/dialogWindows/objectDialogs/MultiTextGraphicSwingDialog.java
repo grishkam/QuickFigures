@@ -134,7 +134,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 	
 
 	protected void setItemsToDiaog() {
-		SnappingPosition snap = array.get(0).getSnappingBehaviour();
+		SnappingPosition snap = array.get(0).getSnapPosition();
 		
 		for(TextGraphic s: array) {
 			setAtrributesToDialog(s);

@@ -7,12 +7,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.ImageCanvas;
 import selectedItemMenus.LayerSelector;
 
+/**implementation of CanvasMouseEventWrapper  interface
+  that converts clicks on the imageJ cancas to events.
+    not accessible to users but might be of use to programmers */
 public class IJ1MEWrapper implements CanvasMouseEventWrapper {
 
 	
@@ -35,13 +38,13 @@ public class IJ1MEWrapper implements CanvasMouseEventWrapper {
 	}
 	
 	@Override
-	public int getClickedXImage() {
+	public int getCoordinateX() {
 		ImageCanvas ic=imp.getCanvas();
 		return ic.offScreenX((int)(e.getX()));
 	}
 
 	@Override
-	public int getClickedYImage() {
+	public int getCoordinateY() {
 		ImageCanvas ic=imp.getCanvas();
 		return ic.offScreenY((int)(e.getY()));
 	}
@@ -69,7 +72,7 @@ public class IJ1MEWrapper implements CanvasMouseEventWrapper {
 	}
 	
 	@Override
-	public DisplayedImageWrapper getAsDisplay() {
+	public DisplayedImage getAsDisplay() {
 		// TODO Auto-generated method stub
 		return new ImagePlusDisplayWrap(imp);
 	}
@@ -142,8 +145,8 @@ public class IJ1MEWrapper implements CanvasMouseEventWrapper {
 		// TODO Auto-generated method stub
 		return e.isControlDown();
 	}
-	public Point getCordinatePoint() {
-		return new Point(getClickedXImage(), getClickedYImage());
+	public Point getCoordinatePoint() {
+		return new Point(getCoordinateX(), getCoordinateY());
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	 * 
 	 */
 	
-	RectangleEdgeParameter parameter=new RectangleEdgeParameter(this, 0.5,  UPPER_LEFT, TOP);
+	protected RectangleEdgeParameter parameter=new RectangleEdgeParameter(this, 0.5,  UPPER_LEFT, TOP);
 	
 	
 	
@@ -30,8 +30,8 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	
 	
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
-		TrapezoidGraphic r1 = new TrapezoidGraphic(r, parameter.getRatioToMaxLength());
-		r1.parameter.setRatioToMaxLength(this.parameter.getRatioToMaxLength());
+		TrapezoidGraphic r1 = new TrapezoidGraphic(r, getParameter().getRatioToMaxLength());
+		r1.getParameter().setRatioToMaxLength(this.getParameter().getRatioToMaxLength());
 		r1.setDashes(new float[]{100000,1});
 		r1.setStrokeWidth(4);
 		r1.setStrokeColor(c);
@@ -42,7 +42,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 
 	public TrapezoidGraphic copy() {
 		TrapezoidGraphic output = new TrapezoidGraphic(this);
-		output.parameter.setRatioToMaxLength(parameter.getRatioToMaxLength());
+		output.getParameter().setRatioToMaxLength(getParameter().getRatioToMaxLength());
 		return output;
 	}
 	
@@ -51,7 +51,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	}
 	public TrapezoidGraphic(Rectangle rectangle, double nV) {
 		super(rectangle);
-		this.parameter.setRatioToMaxLength(nV);
+		this.getParameter().setRatioToMaxLength(nV);
 	}
 	
 	public TrapezoidGraphic(RectangularGraphic r) {
@@ -70,10 +70,10 @@ public class TrapezoidGraphic extends RectangularGraphic {
 		path.moveTo( startPoint .getX(),startPoint .getY());
 		
 		Point2D p2 = RectangleEdges.getLocation(UPPER_LEFT, r);
-		path.lineTo(p2.getX()+parameter.getRatioToMaxLength()*rx, p2.getY());
+		path.lineTo(p2.getX()+getParameter().getRatioToMaxLength()*rx, p2.getY());
 		
 		Point2D p3 = RectangleEdges.getLocation(UPPER_RIGHT, r);
-		if (parameter.getRatioToMaxLength()<1)path.lineTo(p3.getX()-parameter.getRatioToMaxLength()*rx, p3.getY());
+		if (getParameter().getRatioToMaxLength()<1)path.lineTo(p3.getX()-getParameter().getRatioToMaxLength()*rx, p3.getY());
 		
 		Point2D p4 = RectangleEdges.getLocation(LOWER_RIGHT, r);
 		path.lineTo(p4.getX(), p4.getY());
@@ -92,7 +92,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 		public Point2D[] getStrokeHandlePoints() {
 			PathIterator pi = getShape().getPathIterator(null);
 			pi.next();
-			if (this.parameter.getRatioToMaxLength()!=1)pi.next();
+			if (this.getParameter().getRatioToMaxLength()!=1)pi.next();
 			double[] d=new double[6];pi.currentSegment(d);
 			Point2D location2 =new Point2D.Double(d[0],d[1]);
 			pi.next();d=new double[6];pi.currentSegment(d);
@@ -115,7 +115,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
-		RectangleEdgeHandle handle = new RectangleEdgeHandle(this, parameter, Color.green, 20,1, 0.05);
+		RectangleEdgeHandle handle = new RectangleEdgeHandle(this, getParameter(), Color.green, 20,1, 0.05);
 		list.add(0,handle);
 		return list;
 	}
@@ -123,6 +123,18 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	
 	public String getShapeName() {
 		return "Trapezoid";
+	}
+
+
+
+	public RectangleEdgeParameter getParameter() {
+		return parameter;
+	}
+
+
+
+	public void setParameter(RectangleEdgeParameter parameter) {
+		this.parameter = parameter;
 	}
 	
 	

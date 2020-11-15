@@ -2,7 +2,6 @@ package selectedItemMenus;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.TextGraphic;
 import objectDialogs.DialogIcon;
 import objectDialogs.MultiTextGraphicSwingDialog;
 

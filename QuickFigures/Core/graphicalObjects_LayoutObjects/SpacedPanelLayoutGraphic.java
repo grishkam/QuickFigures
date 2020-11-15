@@ -2,7 +2,7 @@ package graphicalObjects_LayoutObjects;
 
 import java.util.ArrayList;
 
-import genericMontageKit.panelContentElement;
+import genericMontageKit.PanelContentExtract;
 import plasticPanels.BasicSpacedPanelLayout;
 
 public class SpacedPanelLayoutGraphic extends PanelLayoutGraphic {
@@ -19,7 +19,7 @@ public class SpacedPanelLayoutGraphic extends PanelLayoutGraphic {
 	
 	public void repack() {
 		this.generateCurrentImageWrapper();
-		ArrayList<panelContentElement> stack = this.getEditor().cutStack(getPanelLayout());
+		ArrayList<PanelContentExtract> stack = this.getEditor().cutStack(getPanelLayout());
 		getPanelLayout().autoLocatePanels();
 		getEditor().pasteStack(getPanelLayout(), stack);
 		this.snapLockedItems();

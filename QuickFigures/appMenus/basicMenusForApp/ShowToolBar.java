@@ -1,6 +1,6 @@
 package basicMenusForApp;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import includedToolbars.ActionToolset1;
 import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
@@ -20,7 +20,7 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 	}
 	
 	@Override
-	public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (getToolBarName().equals(obToolBar))new ObjectToolset1().run("");
 		if (getToolBarName().equals(layoutToolbar))new LayoutToolSet().run("");	
 		if (getToolBarName().equals(actionToolbar))new ActionToolset1().run("");

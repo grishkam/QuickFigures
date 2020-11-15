@@ -12,7 +12,6 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
@@ -32,12 +31,9 @@ import officeConverter.OfficeObjectConvertable;
 import officeConverter.OfficeObjectMaker;
 import popupMenusForComplexObjects.ImagePanelMenu;
 import undo.ColorEditUndo;
-import undo.CompoundEdit2;
+import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;
-import undo.SimpleItemUndo;
-import undo.SimpleTraits;
-import undo.UndoScaling;
-import undo.UndoStrokeEdit;
+import undo.UndoScalingAndRotation;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LockedItemList;
@@ -50,23 +46,19 @@ import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.SnappingPosition;
 import utilityClassesForObjects.TakesLockedItems;
 import animations.KeyFrameAnimation;
-import applicationAdapters.CanvasMouseEventWrapper;
 import externalToolBar.IconSet;
 import fieldReaderWritter.ImageSVGExporter;
 import fieldReaderWritter.SVGExportable;
 import fieldReaderWritter.SVGExporter;
 import genericMontageKit.PanelListElement;
-import genericMontageKit.SelectionManager;
-import genericMontageUIKit.Object_Mover;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ImagePanelActionHandleList;
+import graphicalObjectHandles.ImagePanelHandleList;
 import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.HasIllustratorOptions;
@@ -91,9 +83,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	 * 
 	 */
 	private double width;
-
-
 	private double height;
+	
 	protected static int imagePanelUserLocked=0;//determines if the user is allowed to move image panels by directly clicking and draging
 
 	{setLocationType(BufferedImageGraphic.UPPER_LEFT);
@@ -305,7 +296,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	private void setScaleBar(BarGraphic scaleBar) {
 		this.scaleBar = scaleBar;
 		if (scaleBar!=null) {
-			if (scaleBar.getSnappingBehaviour()==null)scaleBar.setSnappingBehaviour(SnappingPosition.defaultScaleBar());
+			if (scaleBar.getSnapPosition()==null)scaleBar.setSnappingBehaviour(SnappingPosition.defaultScaleBar());
 			updateBarScale();
 		}
 	}
@@ -314,7 +305,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		if (scaleBar!=null) {
 			scaleBar.setScaleInfo(getDisplayScaleInfo());
 			this.snapLockedItems();
-			scaleBar.getSnappingBehaviour().snapLocatedObjects(getScaleBar(), this);
+			scaleBar.getSnapPosition().snapLocatedObjects(getScaleBar(), this);
 			scaleBar.setUpBarRects();
 		}
 		
@@ -508,10 +499,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 				 // getTheLayer().draw(graphics, cords);
 			}
 
-		protected Point getFrameHandlePoint() {
-			Rectangle rect2 = this.getExtendedBounds();
-			return new Point((int)(rect2.getCenterX()-rect2.width/4), rect2.y+rect2.height);
-		}
+	
 
 		public Image getDisplayedImage() {
 			return displayedImage;
@@ -524,6 +512,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		
 		
 
+		/**Called whenever a handle is moved. Additional actions might be performed by smart handle objects*/
 		@Override
 		public void handleMove(int handlenum, Point p1, Point p2) {
 			if (handlenum>50) {
@@ -541,7 +530,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 				double bottom=y+getObjectHeight();
 				double size=p2.y-bottom;
 				setFrameWidthV(size);
-				notLstens();
+				notifyListenersNow();
 				
 				return;
 			}
@@ -560,17 +549,14 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 			//double l1 = getLocation(op, getBounds()).distance( getLocation(handlenum, getBounds()));		
 			if (getScale()==dist2/dist1) return;
 			setScale( dist2/dist1);		
-			notLstens();
+			notifyListenersNow();
 			
 		}
 
 		/**
-		int dx = p2.x-p1.x;
-		int dy = p2.y-p1.y;
-	Point2D p0 = RectangleEdges.getLocation(handlenum, getBounds());
-	Point2D dp = new Point2D.Double(p0.getX()+dx, p0.getY()+dy);
+		Notifies the listeners of a size change for this object
 		*/
-		protected void notLstens() {
+		public void notifyListenersNow() {
 			getListenerList().notifyListenersOfUserSizeChange(this);
 		}
 		
@@ -726,10 +712,10 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		@Override
 		public void snapLockedItem(LocatedObject2D o) {
 			if (o==null) return;
-			SnappingPosition sb = o.getSnappingBehaviour();
+			SnappingPosition sb = o.getSnapPosition();
 				if (sb==null) {
 					o.setSnappingBehaviour(SnappingPosition.defaultInternal());
-					sb=o.getSnappingBehaviour();
+					sb=o.getSnapPosition();
 					}
 				
 				sb.snapLocatedObjects(o, this);
@@ -1061,153 +1047,6 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return new Dimension(getBounds().width, getBounds().height);
 		}
 		
-		/**A class for the image panel handles*/
-		protected class PanelHandle extends SmartHandle {
-
-			int handlecode=0;
-			private ImagePanelGraphic panel;
-			
-			public PanelHandle(int x, int y) {
-				super(x, y);
-				//this.setHandleColor(Color.green);
-			}
-			
-			public PanelHandle(ImagePanelGraphic panel, int handlenum) {
-				this(0,0);
-				handlecode=handlenum;
-				this.panel=panel;
-				super.setCordinateLocation(RectangleEdges.getLocation(handlecode, getBounds()));
-				this.setHandleNumber(handlenum);
-				if(RectangleEdges.CENTER==handlenum) {
-					super.handlesize*=5;
-				} 
-			}
-			
-			protected Area getOverdecorationShape() {
-				if (overDecorationShape==null &&getHandleNumber()==CENTER) {
-					decorationColor=Color.black;
-					overDecorationShape=super.getAllDirectionArrows(3, 3, false);
-				}
-				return overDecorationShape;
-			}
-			
-
-			public void handleDrag(CanvasMouseEventWrapper e) {
-				super.handleDrag(e);
-				SelectionManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getSelectionManagger();
-				
-				if(super.getHandleNumber()==CENTER)
-				{
-				Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCordinatePoint().getX(), e.getCordinatePoint().getY(), true, null);
-				Rectangle b = panel.getBounds();
-				RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);
-				Object_Mover.snapRoi(mark,r, 2, true);
-				mark.setStrokeWidth(1);
-				selectionManagger.setSelection(mark, 0);
-				}
-				TextGraphic mark2 = new TextGraphic(panel.getSummary());
-				mark2.hideHandles(true);
-				mark2.deselect();
-				mark2.setLocationUpperLeft(panel.getBounds().getX(), panel.getBounds().getMaxY()+2);
-				mark2.setFontSize(panel.getBounds().height/5);
-				mark2.setFontStyle(Font.BOLD);
-				mark2.setTextColor(Color.green.darker());
-				selectionManagger.setSelection(mark2, 1);
-			}
-			
-			public void handleRelease(CanvasMouseEventWrapper e) {
-				
-				if(super.getHandleNumber()==CENTER)
-				{
-				Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCordinatePoint().getX(), e.getCordinatePoint().getY(), true, null);
-				Object_Mover.snapRoi(panel,r, 2, true);
-				}
-				e.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelectionstoNull();
-				
-			}
-			
-		
-			/**What to do when a handle is moved from point p1 to p2*/
-			public void handleMove(Point2D p1, Point2D p2) {
-			
-
-			int handlenum=handlecode;
-				if (handlenum==10) {
-					double bottom=y+getObjectHeight();
-					double size=p2.getY()-bottom;
-					if(size>=0) {
-						setFrameWidthV(size);
-						notLstens();
-					}
-					return;
-				}
-				
-				if (handlenum==8) return;// the handleDrag method does what is needed in this case
-				/**
-				int dx = p2.x-p1.x;
-				int dy = p2.y-p1.y;
-			Point2D p0 = RectangleEdges.getLocation(handlenum, getBounds());
-			Point2D dp = new Point2D.Double(p0.getX()+dx, p0.getY()+dy);
-				*/
-				 setLocationType(RectangleEdges.oppositeSide(handlenum));
-				 double dist1=RectangleEdges.distanceOppositeSide(handlenum, getCroppedImageSize());
-				double dist2= RectangleEdges.getLocation(getLocationType(), getBounds()).distance(p2);
-				 //Point2D lo = getLocation(handlenum, getBounds());
-			
-				//double l1 = getLocation(op, getBounds()).distance( getLocation(handlenum, getBounds()));		
-				if (getScale()==dist2/dist1) return;
-				setScale( dist2/dist1);		
-				notLstens();
-					}
-			
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;}
-		
-		protected class ImagePanelHandleList extends SmartHandleList {
-
-			private static final int FRAME_HANDLE_ID = 10;
-			/**
-			 * 
-			 */
-			
-			PanelHandle frameHandle=null;
-			private static final long serialVersionUID = 1L;
-			public ImagePanelHandleList(ImagePanelGraphic panel) {
-				Rectangle bounds = getBounds();
-				int[] spots = RectangleEdges.locationsforh;//.getLocationsForHandles(bounds);
-				for(int i=0; i<9; i++) {
-					this.add(new PanelHandle(panel, i)); 
-					
-					this.get(i).setCordinateLocation(RectangleEdges.getLocation(spots[i], bounds));
-				
-				
-				}
-				frameHandle=new PanelHandle(panel, FRAME_HANDLE_ID); 
-				this.add(frameHandle);
-				frameHandle.setCordinateLocation(getFrameHandlePoint());
-				
-			}
-			
-			void updateHandleLocs() {
-				ArrayList<Point2D> spots = RectangleEdges.getLocationsForHandles(getBounds());
-				for(int i=0; i<9; i++) {
-					this.get(i).setCordinateLocation(spots.get(i));
-				}
-				frameHandle.setCordinateLocation(getFrameHandlePoint());
-				for(int i=10; i<this.size(); i++) {
-					SmartHandle item = this.get(i);
-					if (item instanceof LockedItemHandle) {
-						LockedItemHandle lh=(LockedItemHandle) item;
-					lh.updateLocation();
-					}
-				}
-			}
-		
-		}
-		
 		protected ImagePanelHandleList getPanelHandleList() {
 			if (panelHandleList==null) panelHandleList=new ImagePanelHandleList(this);
 				return panelHandleList;
@@ -1289,7 +1128,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		@Override
 		public AbstractUndoableEdit provideUndoForDialog() {
-			return new CompoundEdit2(new UndoScaling(this), new ColorEditUndo(this));
+			return new CombinedEdit(new UndoScalingAndRotation(this), new ColorEditUndo(this));
 		}
 
 	

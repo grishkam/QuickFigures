@@ -20,7 +20,7 @@ public class ArrayObjectContainer implements ObjectContainer {
 	}
 
 	@Override
-	public void takeRoiFromImage(LocatedObject2D roi) {
+	public void takeFromImage(LocatedObject2D roi) {
 		if (this.getNeverRemove().contains(roi)) return;
 		array.remove(roi);
 		

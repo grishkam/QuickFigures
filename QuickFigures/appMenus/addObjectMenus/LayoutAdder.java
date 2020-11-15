@@ -40,7 +40,7 @@ MontageLayoutGraphic p = new MontageLayoutGraphic();
 	}
 
 	@Override
-	public String getMessage() {
+	public String getMenuCommand() {
 		return "Add Normal Layout (a grid)";
 	}
 

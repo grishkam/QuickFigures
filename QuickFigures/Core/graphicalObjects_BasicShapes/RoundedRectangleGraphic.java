@@ -9,6 +9,7 @@ import graphicalObjectHandles.RectangleEdgeHandle;
 import graphicalObjectHandles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
+import objectDialogs.RectangleGraphicOptionsDialog;
 import objectDialogs.RoundRectGraphicOptionsDialog;
 
 public class RoundedRectangleGraphic extends RectangularGraphic {
@@ -74,7 +75,12 @@ public class RoundedRectangleGraphic extends RectangularGraphic {
 	
 	@Override
 	public void showOptionsDialog() {
-		new RoundRectGraphicOptionsDialog(this).showDialog();
+		getRoundOptionsDialog(false).showDialog();
+	}
+	
+	
+	public RoundRectGraphicOptionsDialog getRoundOptionsDialog(boolean simple) {
+		return new RoundRectGraphicOptionsDialog(this, simple);
 	}
 
 

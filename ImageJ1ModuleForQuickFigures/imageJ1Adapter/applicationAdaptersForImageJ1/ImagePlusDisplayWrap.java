@@ -8,14 +8,16 @@ import utilityClassesForObjects.Selectable;
 import java.awt.Cursor;
 import java.awt.Window;
 
-import applicationAdapters.DisplayedImageWrapper;
+import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import channelMerging.MultiChannelDisplayWrapper;
 import channelMerging.MultiChannelWrapper;
 import graphicalObjects.CordinateConverter;
 
-/**See interface*/
-public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelDisplayWrapper {
+/**See interface.  Very few of the methods from the interfaces 
+ need be implemented for this class to perform its function so most are not implemented.
+ 	*/
+public class ImagePlusDisplayWrap implements DisplayedImage,MultiChannelDisplayWrapper {
 
 	ImagePlus imp;
 
@@ -47,6 +49,7 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		return imp.getWindow();
 	}
 
+	/**not implemented*/
 	@Override
 	public void updateWindowSize() {
 	
@@ -72,6 +75,7 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		return imp.getChannel();
 	}
 
+	/**not implemented*/
 	@Override
 	public void zoomOutToFitScreen() {
 		// TODO Auto-generated method stub
@@ -90,12 +94,14 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		return imp.getSlice();
 	}
 
+	/**not implemented*/
 	@Override
 	public UndoManagerPlus getUndoManager() {
 		// TODO Auto-generated method stub
 		return new UndoManagerPlus();
 	}
 
+	/**not implemented*/
 	@Override
 	public void zoom(String st) {
 		
@@ -107,7 +113,7 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		imp.setT(currentFrame);
 		
 	}
-
+	/**not implemented*/
 	@Override
 	public void setEndFrame(int frame) {
 		
@@ -119,13 +125,13 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		// TODO Auto-generated method stub
 		return imp.getNFrames();
 	}
-
+	/**not implemented*/
 	@Override
 	public void scrollPane(double dx, double dy) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	/**not implemented*/
 	@Override
 	public void setScrollCenter(double dx, double dy) {
 		
@@ -143,6 +149,7 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 		return null;
 	}
 
+	/**not implemented*/
 	@Override
 	public void setSelectedItem(Selectable s) {
 		// TODO Auto-generated method stub
@@ -150,13 +157,13 @@ public class ImagePlusDisplayWrap implements DisplayedImageWrapper,MultiChannelD
 	}
 
 	
-
+	/**not implemented*/
 	@Override
 	public double getZoomLevel() {
 		// TODO Auto-generated method stub
 		return 1;
 	}
-
+	/**not implemented*/
 	@Override
 	public void setZoomLevel(double z) {
 		// TODO Auto-generated method stub

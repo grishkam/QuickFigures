@@ -10,6 +10,10 @@ import standardDialog.StandardDialog;
 
 public class DataShapeSyncer extends BasicMultiSelectionOperator{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public int type=0;
 	
 	public DataShapeSyncer(int t) {type=t;}

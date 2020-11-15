@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import channelLabels.ChannelLabel;
 import channelLabels.ChannelLabelProperties;
-import graphicActionToombar.CurrentSetInformerBasic;
+import graphicActionToolbar.CurrentFigureSet;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StringInputPanel;
 
@@ -50,6 +50,6 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 		if (labels!=null) {
 			for(ChannelLabel l:labels) {l.setParaGraphToChannels();}
 		}
-		CurrentSetInformerBasic.canvasResize();
+		CurrentFigureSet.canvasResize();
 	}
 }
