@@ -3,7 +3,6 @@ package graphicalObjectHandles;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
@@ -29,6 +28,7 @@ public class AddRowHandle extends SmartHandle implements MontageSpaces{
 	boolean dragType=true;
 	private DisplayedImage wrap;
 	int a=0;
+	int plusSize = 5;
 
 	public AddRowHandle(int x, int y) {
 		super(x, y);
@@ -54,8 +54,8 @@ public class AddRowHandle extends SmartHandle implements MontageSpaces{
 		
 		super.handlesize=4;
 		
-		int plusSize = 5;
-		Area a = addSubtractShape(plusSize);
+		
+		Area a = addSubtractShape(plusSize, subtract);
 		specialShape=a;//AffineTransform.getTranslateInstance(x2,y2).createTransformedShape(a);
 		if (subtract)this.setHandleColor(Color.red);
 		else setHandleColor(Color.green);
@@ -70,12 +70,7 @@ public class AddRowHandle extends SmartHandle implements MontageSpaces{
 		
 	}
 
-	private Area addSubtractShape(int plusSize) {
-		Area a=new Area();
-		a.add(new Area(new Rectangle(-plusSize, 0, plusSize*3, plusSize)));
-		 if(!subtract) a.add(new Area(new Rectangle(0, -plusSize, plusSize, plusSize*3)));
-		return a;
-	}
+
 
 	/**
 	 * 

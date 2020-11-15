@@ -497,7 +497,7 @@ public class GenericMontageEditor implements MontageSpaces {
 			notifyListenersOfCompleteChange(ml, event);
 		}
 		
-		/**If the objects in the layout can be packed into the number of panels given,
+		/**If the objects in the layout can be packed into the number of panels given by the new row and new col,
 		  changes the number of item*/
 		public void repackagePanels(BasicMontageLayout ml, int newrow, int newcol) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.REPACKAGE, 0, 0 );

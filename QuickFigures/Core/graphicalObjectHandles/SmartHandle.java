@@ -437,5 +437,12 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 	public void setEllipseShape(boolean ellipse) {
 		this.ellipse = ellipse;
 	}
+	/**creates a shape that is a plus or minus sign*/
+	protected Area addSubtractShape(int plusSize, boolean subtract) {
+		Area a=new Area();
+		a.add(new Area(new Rectangle(-plusSize, 0, plusSize*3, plusSize)));
+		 if(!subtract) a.add(new Area(new Rectangle(0, -plusSize, plusSize, plusSize*3)));
+		return a;
+	}
 	
 }

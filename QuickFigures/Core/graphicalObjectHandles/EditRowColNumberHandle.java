@@ -15,7 +15,6 @@ import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.MontageSpaces;
 import imageMenu.CanvasAutoResize;
-import logging.IssueLog;
 import undo.UndoLayoutEdit;
 
 /**a handle that allows the user to pack panels into a different number of rows andcolors*/
@@ -39,17 +38,17 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 		this.layout=montageLayoutGraphic;
 		
 		
-	//this.setLocation(50,50);
-		setHandleColor(Color.LIGHT_GRAY);
+		setHandleColor(Color.red);
+		this.specialShape=addSubtractShape(3, false);
 		
 		setupSpecialShape();
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
 		
 		this.setHandleNumber(PanelLayoutGraphic.RepackPanelsHandle);
 		
-		double y2 = space.getMaxY()+20;
+		double y2 = space.getMaxY()+25;
 		
-		double x2 = space.getMaxX()+20;
+		double x2 = space.getMaxX()+25;
 		
 		this.setCordinateLocation(new Point2D.Double(x2, y2));
 		nRow=layout.getPanelLayout().nRows();
@@ -112,10 +111,10 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 		
 		int r=bm.nRows();
 		int c=bm.nColumns();
-		if (rowcol[0]+bm.nRows()>=1 &&type==ROWS)r= rowcol[0];
-		if (rowcol[1]+bm.nColumns()>=1 &&type==COLS)c= rowcol[1];
+		if (rowcol[0]+bm.nRows()>=1 )r= rowcol[0]+bm.nRows();
+		if (rowcol[1]+bm.nColumns()>=1 )c= rowcol[1]+bm.nColumns();
 		if(r*c>-nRow*nCols) {
-			IssueLog.log("will try to repack the panels");
+			
 			edit.repackagePanels(layout.getPanelLayout(), r, c);
 		}
 		
