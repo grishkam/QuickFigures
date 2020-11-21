@@ -10,6 +10,11 @@ import standardDialog.GraphicDisplayComponent;
 
 public class CentriolePairCartoonAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	CentriolePairCartoon makePair() {
 		return new CentriolePairCartoon();
 	}

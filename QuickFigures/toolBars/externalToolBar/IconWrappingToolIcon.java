@@ -5,13 +5,15 @@ import java.awt.Graphics;
 
 import javax.swing.Icon;
 
+/**A tool icon that draws another kind of icon on top of it
+ Allows reuse of icons designed for menus and JTrees to be used 
+ for certain tools*/
 public class IconWrappingToolIcon  extends GraphicToolIcon{
 
 	private Icon treeIcon;
 
 	public IconWrappingToolIcon(Icon treeIcon, int type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 		this.treeIcon = treeIcon;
 	}
 	

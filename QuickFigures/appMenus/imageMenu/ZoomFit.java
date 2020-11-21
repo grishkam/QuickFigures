@@ -15,8 +15,11 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
 
+/**This class represents a menu item for the user to zoom in or out*/
 public class ZoomFit implements MenuItemForObj {
 
+	public static final String USER_SET="Set", SCREEN_FIT="fit", IN="In", OUT="Out";
+	
 String type="fit";
 
 public ZoomFit() {
@@ -31,12 +34,14 @@ public ZoomFit(String type) {
 
 public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	if (diw==null) return;
-	if (type.contains("Set")) {
+	if (type.contains(USER_SET)) {
 		Double z = StandardDialog.getNumberFromUser("Set Zoom Level", diw.getZoomLevel());
-		diw.setZoomLevel(z);
+		diw.setZoomLevel(z/100);
 	} else
-	if (type.contains("fit"))diw.zoomOutToFitScreen();
+	if (type.contains(SCREEN_FIT))diw.zoomOutToFitScreen();
 	else diw.zoom(type);
+	
+	/**updates the window to account for the new zoom level*/
 	diw.updateWindowSize();
 	diw.updateDisplay();
 }
@@ -49,19 +54,20 @@ public String getNameText() {
 	return "View All";
 	}
 public String getMenuPath() {return "Image<Zoom";}
+
+
 @Override
 public Icon getIcon() {
-	// TODO Auto-generated method stub
 	return getItemIcon();
 }
-
+/**creates an icon for the zoom level menu items*/
 public GraphicDisplayComponent getItemIcon() {
 	GraphicGroup gg=new GraphicGroup();
 	
 	
 	
 	
-	RectangularGraphic oval2 = new RectangularGraphic(new Rectangle(8,6, 2, 9));
+	RectangularGraphic oval2 = new RectangularGraphic(new Rectangle(9,7, 2, 9));
 	oval2.setStrokeWidth(1);
 	oval2.setStrokeColor(Color.black);
 	oval2.setFillColor(Color.DARK_GRAY);
@@ -70,7 +76,7 @@ public GraphicDisplayComponent getItemIcon() {
 	gg.getTheLayer().add(oval2);
 	oval2.setAntialize(true);
 	
-	CircularGraphic oval1 = new CircularGraphic(new Rectangle(0,0, 7, 7));
+	CircularGraphic oval1 = new CircularGraphic(new Rectangle(1,2, 7, 7));
 	oval1.setStrokeWidth((float)1.5);
 	 oval1.setDashes(new float[] {});
 	 oval1.setAntialize(true);
@@ -79,7 +85,7 @@ public GraphicDisplayComponent getItemIcon() {
 	
 	
 	TextGraphic tg=new TextGraphic(getCurrentLabel() );
-	tg.setLocation(9, 11); 
+	tg.setLocation(10, 13); 
 	
 	tg.setFont(tg.getFont().deriveFont((float) 14).deriveFont(Font.BOLD));
 	if (type.equals("fit")) { 
@@ -94,6 +100,7 @@ public GraphicDisplayComponent getItemIcon() {
 	 return output;
 }
 
+/**The text that will appear on the zoom level icon*/
 String getCurrentLabel() {
 	
 	if (type.startsWith("Out")) return " -";

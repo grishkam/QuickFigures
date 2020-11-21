@@ -180,7 +180,7 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 		toolbar.add(jb, toolBarBridConstraints); 
 		moveGridConstraints();
 		
-		} catch (Exception ex) {IssueLog.log(ex);}
+		} catch (Exception ex) {IssueLog.logT(ex);}
 		
 		
 	}

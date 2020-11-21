@@ -28,13 +28,11 @@ public class CompoundIcon implements Icon {
 
 	@Override
 	public int getIconHeight() {
-		// TODO Auto-generated method stub
 		return icons[0].getIconHeight();
 	}
 
 	@Override
 	public int getIconWidth() {
-		// TODO Auto-generated method stub
 		return icons[0].getIconWidth();
 	}
 

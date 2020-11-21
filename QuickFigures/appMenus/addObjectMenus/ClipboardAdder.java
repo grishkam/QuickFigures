@@ -14,6 +14,11 @@ import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ImagePanelGraphic;
 
 public class ClipboardAdder extends FileImageAdder {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ClipboardAdder(boolean RGBint) {
 		super(RGBint);
 		// TODO Auto-generated constructor stub

@@ -6,7 +6,7 @@ import applicationAdapters.HasScaleInfo;
 import fLexibleUIKit.ObjectAction;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import sUnsortedDialogs.ScaleResetListener;
 import sUnsortedDialogs.ScaleSettingDialog;
 import undo.AbstractUndoableEdit2;
@@ -41,7 +41,7 @@ public class SetImageScale extends ObjectAction<MultichannelDisplayLayer> {
 				display.updateFromOriginal();
 				display.updatePanels();
 				
-				for (PanelGraphicInsetDef i: display.getInsets()) {
+				for (PanelGraphicInsetDefiner i: display.getInsets()) {
 					i.updateDisplayPanelImages();
 				}
 				

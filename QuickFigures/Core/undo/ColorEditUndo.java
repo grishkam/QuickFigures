@@ -6,6 +6,7 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 
+/**an undoable edit for changes to the color of objects*/
 public class ColorEditUndo extends AbstractUndoableEdit2 {
 
 	/**
@@ -56,6 +57,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		if(image!=null) {
 			newFrameColor=image.getFrameColor();
 		}
+		
 	}
 	
 	
@@ -76,6 +78,9 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		if (shape!=null) {
 			shape.setFillColor(newfillColor);
 			shape.setStrokeColor(newstrokeColor);
+		}
+		if(image!=null) {
+			image.setFrameColor(newFrameColor);
 		}
 		
 	}

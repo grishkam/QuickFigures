@@ -25,7 +25,7 @@ public class BarGraphicTool extends GraphicTool {
 	BarGraphic model = new BarGraphic(); {
 		
 		model.setFillColor(Color.white);
-	model.setSnappingBehaviour(SnappingPosition.defaultScaleBar());
+	model.setSnapPosition(SnappingPosition.defaultScaleBar());
 	model.setProjectionType(2);
 	}
 	

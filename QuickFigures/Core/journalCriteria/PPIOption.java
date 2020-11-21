@@ -9,7 +9,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_FigureSpecific.PanelManager;
 import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
-import multiChannelFigureUI.ChannelSwapperToolBit2;
+import multiChannelFigureUI.ChannelPanelEditingMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.NumberInputPanel;
@@ -48,7 +48,7 @@ public class PPIOption extends BasicMultiSelectionOperator {
 		
 		for(ZoomableGraphic z: array1) {
 			if(z instanceof ImagePanelGraphic) try {
-				ChannelSwapperToolBit2 z2 = new ChannelSwapperToolBit2((ImagePanelGraphic) z);
+				ChannelPanelEditingMenu z2 = new ChannelPanelEditingMenu((ImagePanelGraphic) z);
 				PanelManager pm = z2.getPressedPanelManager();
 				if(pm!=null&&!panels.contains(pm)) panels.add(pm);
 			} catch (Throwable t) {}

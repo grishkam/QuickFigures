@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 import logging.IssueLog;
 
-public class BasicCordinateConverter implements CordinateConverter<Object>, Serializable {
+public class BasicCoordinateConverter implements CordinateConverter<Object>, Serializable {
 
 	/**
 	 * 
@@ -21,7 +21,7 @@ public class BasicCordinateConverter implements CordinateConverter<Object>, Seri
 	private double y=0;
 	private double magnification=1;
 	
-	public BasicCordinateConverter() {}
+	public BasicCoordinateConverter() {}
 	
 	public void transformGraphics(Graphics2D g) {
 		g.translate(-x, -y);
@@ -34,7 +34,7 @@ public void unTransformGraphics(Graphics2D g) {
 	g.translate(x, y);
 	}
 	
-	public BasicCordinateConverter(double x2, double y2, double scale) {
+	public BasicCoordinateConverter(double x2, double y2, double scale) {
 		setX(x2);
 		setY(y2);
 		setMagnification(scale);
@@ -213,7 +213,7 @@ public void unTransformGraphics(Graphics2D g) {
 	}
 	
 	static void testConsistenCy1(int x, int y, double d) {
-		BasicCordinateConverter bb = new BasicCordinateConverter(x,y,d);
+		BasicCoordinateConverter bb = new BasicCoordinateConverter(x,y,d);
 		bb.testConsistency(new Point(50,40));
 		bb.testConsistency(new Point(-50,40));
 		bb.testConsistency(new Point(50,4));
@@ -230,6 +230,6 @@ public void unTransformGraphics(Graphics2D g) {
 	@Override
 	public CordinateConverter<?> getCopyTranslated(int dx, int dy) {
 		// TODO Auto-generated method stub
-		return new BasicCordinateConverter(x+dx,y+dy,magnification);
+		return new BasicCoordinateConverter(x+dx,y+dy,magnification);
 	}
 }

@@ -28,12 +28,12 @@ import java.util.ArrayList;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelMerger;
 import channelMerging.ChannelOrderAndColorWrap;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import channelMergingImageJ1.ChannelSwapListener;
 import channelMergingImageJ1.CompositeImageMerger;
 import channelMergingImageJ1.IJ1ChannelOrderWrap;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import applicationAdapters.DisplayedImage;
@@ -42,12 +42,12 @@ import applicationAdapters.PixelWrapper;
 
 /**An implementation of several interfaces that is required for an imageJ image to
   be used by QuickFigures as a multichannel image*/
-public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, ChannelSwapListener {
+public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, ChannelSwapListener {
 
 	private static final int FRAME = 2;
 	private static final int SLICE = 1;
 	private static final int CHANNEL = 0;
-	private SelectionManager selectionManagger;
+	private OverlayObjectManager selectionManagger;
 	private CompositeImageMerger merger=new CompositeImageMerger(this);
 	
 	ImagePlus imp;
@@ -83,7 +83,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	}
 
 	@Override
-	public void addRoiToImage(LocatedObject2D roi) {
+	public void addItemToImage(LocatedObject2D roi) {
 		checkVoid();
 		if (roi instanceof RoiWrapper) {
 			((RoiWrapper)roi).addToImage(imp);
@@ -92,7 +92,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	@Override
 	public void addRoiToImageBack(LocatedObject2D roi) {
-		addRoiToImage(roi);
+		addItemToImage(roi);
 
 	}
 
@@ -295,12 +295,12 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		return new ImagePlusMetaDataWrapper(imp);
 	}
 
-	public SelectionManager getSelectionManagger() {
+	public OverlayObjectManager getSelectionManagger() {
 			
 		return selectionManagger;
 	}
 
-	public void setSelectionManagger(SelectionManager selectionManagger) {
+	public void setSelectionManagger(OverlayObjectManager selectionManagger) {
 		this.selectionManagger = selectionManagger;
 	}
 
@@ -472,7 +472,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		try {
 			return imp.getLuts()[chan-1];
 		} catch (Exception e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 			
 		}
 		return null;
@@ -626,7 +626,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 		} catch (Throwable t) {
 			IssueLog.log("problem setting colors based on real channel names "+i);
 			IssueLog.log("meta data may be incomplete or inconsistent "+i);
-			IssueLog.log(t);
+			IssueLog.logT(t);
 			
 		}
 		
@@ -650,7 +650,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 
 	/**not yet implemented. returns a scaled version of this*/
 	@Override
-	public MultiChannelWrapper scaleBilinear(double d) {
+	public MultiChannelImage scaleBilinear(double d) {
 
 		return new ImagePlusWrapper(imp.duplicate());
 	}
@@ -733,6 +733,12 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelWrapper, Cha
 	public double bitDepth() {
 		if (imp==null) return 8;
 		return imp.getBitDepth();
+	}
+
+	@Override
+	public boolean setPrimarySelectionObject(Object d) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

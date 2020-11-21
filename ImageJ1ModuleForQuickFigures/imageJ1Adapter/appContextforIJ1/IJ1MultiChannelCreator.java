@@ -11,10 +11,11 @@ import multiChannelFigureUI.MultiChannelDisplayCreator;
 import standardDialog.SelectImageDialog;
 
 import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 
 public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
@@ -102,7 +103,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 
 	public static ImagePlus showImagePlusChoice() {
 		ImagePlus imp=null;
-		ArrayList<MultiChannelWrapper> list=null;
+		ArrayList<MultiChannelImage> list=null;
 		if (imp==null)
 			list=SelectImageDialog.getSelectedMultis(false,1).getList();
 			if (list!=null&&list.size()>0) {
@@ -119,7 +120,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	}
 
 	@Override
-	public MultiChannelWrapper creatMultiChannelFromImage(Image img) {
+	public MultiChannelImage creatMultiChannelFromImage(Image img) {
 
 		
 		ColorProcessor cp = new ColorProcessor(img.getWidth(null), img.getHeight(null));
@@ -127,14 +128,28 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		cp.insert(new ColorProcessor(img), 0, 0);
 		return new ImagePlusWrapper(new ImagePlus("no title", new ColorProcessor(img)));
 	}
+	
+	@Override
+	public MultiChannelImage creatRGBFromImage(Image img, String savePath) {
+		File f=new File(savePath);
+		ColorProcessor cp = new ColorProcessor(img.getWidth(null), img.getHeight(null));
+		
+		cp.insert(new ColorProcessor(img), 0, 0);
+		ImagePlus image = new ImagePlus(f.getName(), new ColorProcessor(img));
+		IJ.saveAsTiff(image, savePath);
+		image.show();
+		return new ImagePlusWrapper(image);
+	}
+
 
 	@Override
-	public MultiChannelWrapper createFromImageSequence(String path, int[] dims) {
+	public MultiChannelImage createFromImageSequence(String path, int[] dims) {
 		ImagePlus open = FolderOpener.open(path);
 		open.show();
 		return new ImagePlusWrapper( open);
 	}
 
+	
 
 
 

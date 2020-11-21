@@ -121,6 +121,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  MontageSp
 		allignArray(all);
 		
 		undo.establishFinalLocations();
+		if(selector!=null)
 		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
 		
 	}

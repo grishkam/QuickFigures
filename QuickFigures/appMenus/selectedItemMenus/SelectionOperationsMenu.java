@@ -175,7 +175,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 				ad.setSelection(selector.getSelecteditems());
 				ad.run();
 				
-			} catch (Throwable t) {IssueLog.log(t);}
+			} catch (Throwable t) {IssueLog.logT(t);}
 			
 		}
 		selector.getGraphicDisplayContainer().updateDisplay();

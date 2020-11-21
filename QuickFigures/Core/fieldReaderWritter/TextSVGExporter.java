@@ -17,7 +17,7 @@ import applicationAdapters.ToolbarTester;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 
@@ -161,7 +161,7 @@ public class TextSVGExporter extends SVGExporter {
 	
 	/**opens a display. exports as svg then asks desktop to open the saved file*/
 	public static void main(String[] arts) throws TransformerException, ParserConfigurationException, IOException {
-		ImageAndDisplaySet ex = ToolbarTester.showExample(true);
+		ImageWindowAndDisplaySet ex = ToolbarTester.showExample(true);
 		String path="/Users/mazog/Desktop/test2.svg";
 		  new SVGsaver().saveWrapper(path, ex);
 		

@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JComponent;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 
 public class GraphicComponent extends JComponent {
@@ -31,15 +31,15 @@ public class GraphicComponent extends JComponent {
 	
 	
 	
-	BasicCordinateConverter cords=null;
+	BasicCoordinateConverter cords=null;
 	private double magnification=0.4;
 	
 	
 	Color background=Color.white;
 	
-	public BasicCordinateConverter getCord() {
+	public BasicCoordinateConverter getCord() {
 		if (cords==null) {
-		BasicCordinateConverter bcc = new BasicCordinateConverter();
+		BasicCoordinateConverter bcc = new BasicCoordinateConverter();
 		bcc.setMagnification(getMagnification());
 		cords=bcc;
 		}

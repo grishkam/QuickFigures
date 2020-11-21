@@ -1,6 +1,6 @@
 package graphicActionToolbar;
 
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import layersGUI.GraphicTreeUI;
 
 public class TreeActionTool extends DisplayActionTool {
@@ -10,7 +10,7 @@ public class TreeActionTool extends DisplayActionTool {
 		// TODO Auto-generated constructor stub
 	}
 	
-	protected void perform(GraphicSetDisplayContainer graphic) {
+	protected void perform(FigureDisplayContainer graphic) {
 		if (graphic!=null) {
 			new GraphicTreeUI(graphic).showTreeForLayerSet(graphic) ;
 		}

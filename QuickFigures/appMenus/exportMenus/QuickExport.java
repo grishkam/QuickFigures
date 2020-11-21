@@ -13,7 +13,6 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 	
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
 		return "File<Export";
 	}
 	

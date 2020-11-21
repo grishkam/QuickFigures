@@ -7,7 +7,7 @@ import java.util.HashMap;
 import javax.swing.undo.UndoableEdit;
 
 import appContext.ImageDPIHandler;
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -96,14 +96,14 @@ public class FigureScaler {
 		CombinedEdit undo = new CombinedEdit();
 		
 		
-		if (layer instanceof PanelStackDisplay) {
+		if (layer instanceof ImageDisplayLayer) {
 			undo.addEditToList(
-			scaleDisplay((PanelStackDisplay) layer, factor));
+			scaleDisplay((ImageDisplayLayer) layer, factor));
 			//if parent layer is a panel stack display, then only it needs scaling 
 		} else 
 		
 		if (layer instanceof FigureOrganizingLayerPane) {
-			for(PanelStackDisplay disp1: ((FigureOrganizingLayerPane) layer).getMultiChannelDisplays()) {
+			for(ImageDisplayLayer disp1: ((FigureOrganizingLayerPane) layer).getMultiChannelDisplays()) {
 				undo.addEditToList(
 				scaleDisplay(disp1, factor));
 			}
@@ -135,14 +135,14 @@ public class FigureScaler {
 		CombinedEdit undo = new CombinedEdit();
 		
 		
-		if (layer instanceof PanelStackDisplay) {
+		if (layer instanceof ImageDisplayLayer) {
 			undo.addEditToList(
-			panelLeveScaleDisplay((PanelStackDisplay) layer, factor));
+			panelLeveScaleDisplay((ImageDisplayLayer) layer, factor));
 			//if parent layer is a panel stack display, then only it needs scaling 
 		} else 
 		
 		if (layer instanceof FigureOrganizingLayerPane) {
-			for(PanelStackDisplay disp1: ((FigureOrganizingLayerPane) layer).getMultiChannelDisplays()) {
+			for(ImageDisplayLayer disp1: ((FigureOrganizingLayerPane) layer).getMultiChannelDisplays()) {
 				undo.addEditToList(
 						panelLeveScaleDisplay(disp1, factor));
 			}
@@ -153,7 +153,7 @@ public class FigureScaler {
 		
 	}
 	
-	private UndoableEdit panelLeveScaleDisplay(PanelStackDisplay layer, double factor) {
+	private UndoableEdit panelLeveScaleDisplay(ImageDisplayLayer layer, double factor) {
 		double s = layer.getPanelManager().getPanelLevelScale()*factor;
 		 layer.getPanelManager().setPanelLevelScale(s);
 		return new CombinedEdit();
@@ -162,21 +162,21 @@ public class FigureScaler {
 
 	void updateDisplays(GraphicLayer layer) {
 
-		if (layer instanceof PanelStackDisplay) {
-			((PanelStackDisplay) layer).updatePanels();;
+		if (layer instanceof ImageDisplayLayer) {
+			((ImageDisplayLayer) layer).updatePanels();;
 		}
 		
 		
 		
 		if (layer instanceof FigureOrganizingLayerPane) {
-			for(PanelStackDisplay disp1: ((FigureOrganizingLayerPane) layer).getMultiChannelDisplays()) {
+			for(ImageDisplayLayer disp1: ((FigureOrganizingLayerPane) layer).getMultiChannelDisplays()) {
 		
 				disp1.updatePanels();
 			}
 		}
 		
 	}
-	private PreprocessChangeUndo scaleDisplay(PanelStackDisplay layer, double factor) {
+	private PreprocessChangeUndo scaleDisplay(ImageDisplayLayer layer, double factor) {
 		PreprocessChangeUndo undoer = new PreprocessChangeUndo(layer);//scaleStack( layer.getStack(), factor);
 		
 		double nScale = layer.getPreprocessScale();
@@ -257,11 +257,11 @@ public class FigureScaler {
 	}
 	
 	PanelManager getPanelManagerForObject(Object item) {
-		if (item instanceof PanelStackDisplay) {
-			return ((PanelStackDisplay) item).getPanelManager();
+		if (item instanceof ImageDisplayLayer) {
+			return ((ImageDisplayLayer) item).getPanelManager();
 		}
-		if (item instanceof PanelGraphicInsetDef) {
-			return ((PanelGraphicInsetDef) item).getPanelManager();
+		if (item instanceof PanelGraphicInsetDefiner) {
+			return ((PanelGraphicInsetDefiner) item).getPanelManager();
 		}
 		
 		return null;

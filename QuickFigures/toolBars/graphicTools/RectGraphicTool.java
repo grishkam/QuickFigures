@@ -9,7 +9,7 @@ import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
 import externalToolBar.TreeIconWrappingToolIcon;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdgePosisions;
@@ -24,9 +24,9 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	RectangularGraphic model= new RectangularGraphic(0,0,0,0);
 	RectangularGraphic lastSetObject=null;
 	{
-		model.setStrokeColor(Color.black);
+		getModel().setStrokeColor(Color.black);
 	{
-		super.set=TreeIconWrappingToolIcon.createIconSet(model);//sets up the tool icons
+		super.set=TreeIconWrappingToolIcon.createIconSet(getModel());//sets up the tool icons
 
 		super.temporaryTool=true;//set to true if the toolbar will switch back to the object mover tool when done
 	}}
@@ -56,8 +56,8 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 			/**starts the edit. creates a rectangle changes its setting to match the model*/
 			started=true;
 			currentRect= createShape(new Rectangle(getClickedCordinateX(), getClickedCordinateY(), 15,15));
-			currentRect.copyColorsFrom(model);
-			currentRect.copyAttributesFrom(model);
+			currentRect.copyColorsFrom(getModel());
+			currentRect.copyAttributesFrom(getModel());
 			/**adds the item*/
 			gmp.getGraphicLayerSet().getSelectedContainer().add(currentRect);
 			
@@ -83,7 +83,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 
 	public void mouseDragged() {
 		if (started) {
-			Rectangle2D r = SelectionManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
+			Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
 			if (this.getSelectedObject() instanceof RectangularGraphic) {
 				RectangularGraphic rr=(RectangularGraphic) getSelectedObject();
 				rr.setRectangle(r);
@@ -97,7 +97,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	/**Shows the model shape's options dialog. The options in that dialog fulfill the role of a tool dialog*/
 	@Override
 	public void showOptionsDialog() {
-		model.showOptionsDialog();
+		getModel().showOptionsDialog();
 	}
 	
 	
@@ -112,12 +112,17 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 
 	/**returns the name of the model shape (default is rectangle)*/
 	public String getShapeName() {
-		return model.getShapeName();
+		return getModel().getShapeName();
 	}
 
 
 	public Icon getIcon() {
-		return model.getTreeIcon();
+		return getModel().getTreeIcon();
+	}
+
+
+	public RectangularGraphic getModel() {
+		return model;
 	}
 	
 	

@@ -68,7 +68,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 				 super.areaRect.addLockedItem(label1);
 				 label1.setPlotOrientation(orientation);
 				 label1.setPlotArea(this);
-				 if (lastLabel==null)lastLabel=label1; else label1.setSnappingBehaviour(lastLabel.getSnapPosition());
+				 if (lastLabel==null)lastLabel=label1; else label1.setSnapPosition(lastLabel.getSnapPosition());
 				 this.add(label1);
 			
 			}

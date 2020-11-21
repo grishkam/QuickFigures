@@ -1,12 +1,8 @@
 package graphicTools;
 
-import java.awt.Rectangle;
-
 import applicationAdapters.ImageWrapper;
 import genericMontageUIKit.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import undo.UndoAddItem;
@@ -43,7 +39,7 @@ public class GraphicTool extends Object_Mover {
 
 
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 

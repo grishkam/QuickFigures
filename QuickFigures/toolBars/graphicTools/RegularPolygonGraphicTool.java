@@ -19,27 +19,22 @@ public class RegularPolygonGraphicTool extends RectGraphicTool {
 	public  RegularPolygonGraphicTool(RegularPolygonGraphic m) {
 		this.m=m;
 		model=m;
-		model.setStrokeColor(Color.black);
-		super.set=TreeIconWrappingToolIcon.createIconSet(model);
+		getModel().setStrokeColor(Color.black);
+		super.set=TreeIconWrappingToolIcon.createIconSet(getModel());
 	}
 	
 	
 	public RectangularGraphic createShape(Rectangle r) {
-		RectangularGraphic out = model.copy();
+		RectangularGraphic out = getModel().copy();
 		out.setRectangle(r);
 		return out;
 	}
 	
-	@Override
-	public String getToolTip() {
-			if(m!=null) return "Draw "+m.getPolygonType();
-			return "Draw Polygon";
-		}
 	
-	@Override
-	public String getToolName() {
-		if(m!=null) return "Draw "+m.getPolygonType();
-		return "Draw Shape";
+	/**returns the name of the model shape */
+	public String getShapeName() {
+		if(m!=null) return ""+m.getPolygonType();
+		return "Shape";
 	}
 	
 		

@@ -127,8 +127,8 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 	
 	public void setObjectSnappingBehaviourToDialog(LocatedObject2D l) {
 		if (snappingPanel==null) return;
-		l.setSnappingBehaviour(snappingPanel.getSnappingBehaviour().copy());
-		if (sameSnap)l.setSnappingBehaviour(snappingPanel.getSnappingBehaviour());
+		l.setSnapPosition(snappingPanel.getSnappingBehaviour().copy());
+		if (sameSnap)l.setSnapPosition(snappingPanel.getSnappingBehaviour());
 	}
 
 	
@@ -139,7 +139,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 		for(TextGraphic s: array) {
 			setAtrributesToDialog(s);
 			if (this.isUnifyPosition()) {
-				s.setSnappingBehaviour(snap);
+				s.setSnapPosition(snap);
 			}
 			if (s instanceof ComplexTextGraphic) {
 				setComplexProperteisToDialog((ComplexTextGraphic) s);

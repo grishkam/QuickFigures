@@ -100,7 +100,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 		for(ToolInstallers bonusTool: bonusTools) try {
 			bonusTool.installTools(this);
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 	
 		this.setCurrentTool(this.tools.get(0));
 		

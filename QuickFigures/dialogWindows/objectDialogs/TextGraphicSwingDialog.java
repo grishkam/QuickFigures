@@ -18,6 +18,7 @@ import standardDialog.GraphicSampleComponent;
 import standardDialog.StringInputPanel;
 import undo.Edit;
 
+/**A dialog for text graphics*/
 public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 
 	public static final String[] JUSTIFICATION_CHOICES = new String[] {"Left", "Center", "Right"};
@@ -50,8 +51,6 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		this.add("tColor", cbp);
 		addDimmingToDialog();
 		addBackgroundOptionsToDialog();
-		//this.addInsetToDialog(textItem.getInsets());
-		//textItem.setSnappingBehaviour(SnappingBehaviour.defaultInternal());
 		addSnappingBehviourToDialog(textItem);
 		
 	}
@@ -60,7 +59,6 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		
 		TextInsetsDialog id = new TextInsetsDialog(textItem);
 		this.addSubordinateDialog("Insets", id);
-		//this.getOptionDisplayTabs().addTab("Insets", id.removeOptionsTab());
 		
 	}
 	

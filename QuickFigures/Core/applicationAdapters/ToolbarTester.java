@@ -5,7 +5,7 @@ import java.io.File;
 import javax.swing.JFrame;
 
 import figureFormat.DirectoryHandler;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import includedToolbars.ActionToolset1;
 import includedToolbars.LayoutToolSet;
@@ -44,7 +44,7 @@ public class ToolbarTester {
 
 	
 	
-	public static ImageAndDisplaySet showExample(boolean appclose) {
+	public static ImageWindowAndDisplaySet showExample(boolean appclose) {
 		startToolbars(appclose);
 		 
 		
@@ -61,7 +61,7 @@ public class ToolbarTester {
 		} 
 		{
 			 IssueLog.log("Example File not found "+'\n'+example.getAbsolutePath());
-			 return ImageAndDisplaySet.createAndShowNew("Figure", 400,300);
+			 return ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
 		 }
 		
 		
@@ -70,11 +70,11 @@ public class ToolbarTester {
 		
 	}
 
-	private static ImageAndDisplaySet setSavedExample(File example) {
-		ImageAndDisplaySet file = ImageDisplayIO.showFile(example);
-		 ImageAndDisplaySet.exampletree = new GraphicTreeUI(file.getImageAsWrapper());
+	private static ImageWindowAndDisplaySet setSavedExample(File example) {
+		ImageWindowAndDisplaySet file = ImageDisplayIO.showFile(example);
+		 ImageWindowAndDisplaySet.exampletree = new GraphicTreeUI(file.getImageAsWrapper());
 		
-		 ImageAndDisplaySet. exampletree  .showTreeForLayerSet(file.getImageAsWrapper()) ;
+		 ImageWindowAndDisplaySet. exampletree  .showTreeForLayerSet(file.getImageAsWrapper()) ;
 		 
 		//locatedObject object0 = file.getImageAsWrapper().getLocatedObjects().get(0);
 		//PathGraphic p2=(PathGraphic) object0;

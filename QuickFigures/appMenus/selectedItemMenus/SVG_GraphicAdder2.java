@@ -12,6 +12,11 @@ import ultilInputOutput.FileChoiceUtil;
 public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		

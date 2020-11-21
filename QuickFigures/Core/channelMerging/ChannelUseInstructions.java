@@ -152,7 +152,7 @@ import utilityClasses1.ArraySorter;
 			
 			/**Estimates the number of channel and merge panels
 			  that will be in each slice of the list */
-			public int estimateChanColsNeeded(MultiChannelWrapper imp) {
+			public int estimateChanColsNeeded(MultiChannelImage imp) {
 				if (this.onlyMergePanel()) return 1;
 				int out=0;
 				int fs=1;
@@ -171,7 +171,7 @@ import utilityClasses1.ArraySorter;
 			/**Estimates the number of rows and columns of a
 			 grid layout needed to display the panels for 
 			  the given image*/
-			public int[] estimateBestMontageDims(MultiChannelWrapper image) {
+			public int[] estimateBestMontageDims(MultiChannelImage image) {
 				
 				if (image==null) {
 					IssueLog.log("No multichannel image available");
@@ -208,12 +208,12 @@ import utilityClasses1.ArraySorter;
 			}
 
 			/**the number of slices that will be included in the figure*/
-			public int estimateNSlicesUsed(MultiChannelWrapper image) {
+			public int estimateNSlicesUsed(MultiChannelImage image) {
 				if(this.getSliceUseInstructions()!=null) return getSliceUseInstructions().estimateNUsed(image);
 				return image.nSlices();
 			}
 			/**the number of frames that will be included in the figure*/
-			public int estimateNFramesUsed(MultiChannelWrapper image) {
+			public int estimateNFramesUsed(MultiChannelImage image) {
 				if(this.getFrameUseInstructions()!=null) return getFrameUseInstructions().estimateNUsed(image);
 				return image.nFrames();
 			}
@@ -237,7 +237,7 @@ import utilityClasses1.ArraySorter;
 			}
 			
 			/**returns true if the instructions only use a subset of the frames or slices*/
-			public boolean selectsSlices(MultiChannelWrapper mw) {
+			public boolean selectsSlices(MultiChannelImage mw) {
 				if(mw.nFrames()>1&&this.getFrameUseInstructions()!=null &&!getFrameUseInstructions().selectsAll()) return true;
 				if(mw.nSlices()>1&&this.getSliceUseInstructions()!=null &&!getSliceUseInstructions().selectsAll()) return true;
 				
@@ -251,7 +251,7 @@ import utilityClasses1.ArraySorter;
 			public void limitStackUseToSlice(Integer slice) {
 			if (slice!=null)setSliceUseMethod(new SubStackSelectionInstructions.SliceUseInstructions(slice));
 			}
-			public int estimageNPanels(MultiChannelWrapper image) {
+			public int estimageNPanels(MultiChannelImage image) {
 				int[] in = estimateBestMontageDims(image);
 				return in[0]*in[1];
 			}
@@ -265,7 +265,7 @@ import utilityClasses1.ArraySorter;
 					
 			}
 			
-			public int[] estimateBestMontageDims(ArrayList<MultiChannelWrapper> images) {
+			public int[] estimateBestMontageDims(ArrayList<MultiChannelImage> images) {
 				
 				
 				
@@ -289,7 +289,7 @@ import utilityClasses1.ArraySorter;
 			
 			
 			/***/
-			public void setDimensionForPanels(BasicMontageLayout p,ArrayList<MultiChannelWrapper> image) {
+			public void setDimensionForPanels(BasicMontageLayout p,ArrayList<MultiChannelImage> image) {
 				int[] dims=estimateBestMontageDims(image);
 				int col=dims[1];
 				int row=dims[0];

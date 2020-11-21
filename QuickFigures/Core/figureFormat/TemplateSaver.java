@@ -14,7 +14,7 @@ import javax.swing.JMenuItem;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects.GraphicEncoder;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
@@ -72,7 +72,7 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 		try {
 			writeObjectToFile(figure, path);
 		} catch (Exception e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 	
@@ -175,7 +175,7 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 		ArrayList<ZoomableGraphic> itemsSel = selector.getSelecteditems();
 		
 		if (itemsSel.size()==0) {
-			GraphicSetDisplayContainer graphicDisplayContainer = selector.getGraphicDisplayContainer();
+			FigureDisplayContainer graphicDisplayContainer = selector.getGraphicDisplayContainer();
 			
 			operateOnContainer(graphicDisplayContainer);
 		} else if (itemsSel.size()==1 && itemsSel.get(0) instanceof GraphicLayer) {
@@ -187,7 +187,7 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 	}
 
 
-	public void operateOnContainer(GraphicSetDisplayContainer graphicDisplayContainer) {
+	public void operateOnContainer(FigureDisplayContainer graphicDisplayContainer) {
 		
 		GraphicLayer graphicLayerSet = graphicDisplayContainer.getAsWrapper().getGraphicLayerSet();
 		

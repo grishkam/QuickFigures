@@ -12,7 +12,7 @@ import fieldReaderWritter.SVGExporter;
 import fieldReaderWritter.SVGExporter_GraphicLayer;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.LayerStructureChangeListenerList;
 import graphicalObjects.ZoomableGraphic;
@@ -36,6 +36,7 @@ import utilityClassesForObjects.Mortal;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.ShowsOptionsDialog;
 
+/**Basic implementation of the GraphicLayer interface. This class defines a layer */
 public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializable, IllustratorObjectConvertable, ShowsOptionsDialog, ObjectContainer, KnowsSetContainer, Mortal, HasTreeBranchIcon,KnowsTree, SVGExportable, ItemSwapper<ZoomableGraphic> {
 
 	/**
@@ -45,22 +46,25 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	private LayerStructureChangeListenerList listenerlist=new LayerStructureChangeListenerList();
 	private static final long serialVersionUID = 1L;
 	public String name="base layer";
-	public Object key=0;
+	
 	protected ArrayList<ZoomableGraphic> theGraphics=new ArrayList<ZoomableGraphic>();
 	transient LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>  tree;
 	private GraphicLayer parent;
-	transient GraphicSetDisplayContainer graphicSetContainer;
+	transient FigureDisplayContainer graphicSetContainer;
 	transient boolean dead=false;
 	protected String description= "A Normal Layer";
 	protected String notes=null;
 	
+	static int count=0;//counts the total number of layers that have been created
+	public Object key=0;
 	
-	
+	/**creates a new layer with the name given. assigns a mostly random key to the layer*/
 	public GraphicLayerPane(String name) {
 		this.name=name;
-		key=generateRandomKey();
+		key=generateRandomKey()+count; count++;
 	}
 	
+	/**generates a random string that is used as an ID for this layer*/
 	public String generateRandomKey() {
 		int i=(int)(Math.random()*1000000);
 		char c=(char)(Math.random()*1000000);
@@ -68,11 +72,12 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return ""+c+i+c2;
 	}
 	
+	/**Adds a layer change listener object to the list*/
 	public void addLayerStructureChangeListener(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> listener) {
 		if (!getListenerlist().contains(listener));
-		getListenerlist().add(listener);
+			getListenerlist().add(listener);
 	}
-	
+	/**Removes a layer change listener object from the list*/
 	public void removeLayerStructureChangeListener(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> listener) {
 		getListenerlist().remove(listener);
 	}
@@ -276,41 +281,60 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 	
 
+	/**removes a graphical object from the layer*/
 	@Override
 	public synchronized void remove(ZoomableGraphic z) {
-		/**removes it if it is inside any subsection*/
+		/**removes it if it is inside any sublayer*/
 		for(ZoomableGraphic z2:this.getSubLayers()) {
 			if (z2 instanceof GraphicLayer) {
 				GraphicLayer gc = (GraphicLayer)z2;
 				
 				if (gc.hasItem(z)) {
-				gc.remove(z);
-			//	IssueLog.log("removal done on sublayer.removed item "+z);
-				if (tree!=null) tree.itemRemovedFromContainer(gc, z);
-				getListenerlist().itemRemovedFromContainer(gc, z);
+					gc.remove(z);
+					if (tree!=null) tree.itemRemovedFromContainer(gc, z);
+					getListenerlist().itemRemovedFromContainer(gc, z);
 				}
 				
 				
 			}	
 		}
 		removeItemFromLayer(z);
-		//IssueLog.log("removal done inside "+this+ "  removed: "+z);
 		
 	}
 
+	/**draws the layer*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 	
-		for(ZoomableGraphic z: getGraphicsSync()) try {
-			if (z==null||isHidden(z)) continue;
-			assignKey(z);
-			z.draw(graphics, cords);
+		ArrayList<ZoomableGraphic> allGraphicsDrawn = getGraphicsSync();
+		
+		try {
+			for(ZoomableGraphic z: allGraphicsDrawn) try {
+				if (z==null||isHidden(z)) continue;
+				assignKey(z);
+				z.draw(graphics, cords);
+			}
+			catch (Throwable t) {
+				IssueLog.log("something happened while drawing "+z);
+				IssueLog.log("something happened while drawing a "+z.getClass());
+				IssueLog.logT(t);
+				
+			}
+		} catch (Exception e) {
+			if (e instanceof java.util.ConcurrentModificationException) {
+				//i know these happen when doing automated testing (no effect on function) but not when the user is working
+				//decided that showing a message to the user is just a distraction
+			} else {
+				IssueLog.log("something happened while drawing layer "+this);
+				IssueLog.log("something happened while drawing a "+this.getClass());
+				IssueLog.log(e);
+			}
 		}
-		catch (Throwable t) {IssueLog.log(t);}
 		
 		
 	}
 	
+	/**returns true if the given object is hidden*/
 	boolean isHidden(ZoomableGraphic z) {
 		if (!(z instanceof Hideable)) {return false;}
 		Hideable h=(Hideable) z;
@@ -319,7 +343,6 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 	
@@ -328,11 +351,12 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return ""+getName();
 	}
 	
+	/**returns the given layer's key*/
 	@Override
 	public Object getKey() {
-		// TODO Auto-generated method stub
 		return key;
 	}
+	/**sets the given layer's key*/
 	@Override
 	public void setKey(Object key) {
 		this.key=key;
@@ -355,7 +379,6 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 
 	@Override
 	public void showOptionsDialog() {
-		// TODO Auto-generated method stub
 		new LayerPaneDialog(this);
 	}
 
@@ -438,17 +461,19 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return output;
 	}
 
+	/**removes the item*/
 	@Override
-	public void takeFromImage(LocatedObject2D roi) {
-		if (roi instanceof ZoomableGraphic) {
-			remove((ZoomableGraphic) roi);
+	public void takeFromImage(LocatedObject2D l2D) {
+		if (l2D instanceof ZoomableGraphic) {
+			remove((ZoomableGraphic) l2D);
 		}
 	}
 
+	/**adds the item*/
 	@Override
-	public void addRoiToImage(LocatedObject2D roi) {
-		if (roi instanceof ZoomableGraphic) {
-			add((ZoomableGraphic) roi);
+	public void addItemToImage(LocatedObject2D l2D) {
+		if (l2D instanceof ZoomableGraphic) {
+			add((ZoomableGraphic) l2D);
 		}
 	}
 
@@ -460,6 +485,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		
 	}
 
+	/**returns all of the located objects in this layer*/
 	@Override
 	public ArrayList<LocatedObject2D> getLocatedObjects() {
 		ArrayList<LocatedObject2D> output = new  ArrayList<LocatedObject2D>();
@@ -473,6 +499,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return output;
 	}
 
+	/**returns the object that is selected in the layers window*/
 	@Override
 	public LocatedObject2D getSelectionObject() {
 		if (this.getTree()!=null) {
@@ -482,7 +509,8 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return null;
 	}
 	
-	
+	/**if another layer or sublayer is selected within the tree, returns that layer.
+	  otherwise returns this layer*/
 	public GraphicLayer getSelectedContainer() {
 		if (this.getTree()!=null) {
 			GraphicLayer item = getTree().getSelectedLayer();
@@ -491,6 +519,8 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return this;
 	}
 	
+	/**called after the layers window is closed. At that point, the layers no longer need to keep the tree up to 
+	  date on their laters reorderings*/
 	public void treeEliminated() {
 		this.setTree(null);
 		for (GraphicLayer l:this.getSubLayers()) {
@@ -548,7 +578,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 
 	
-
+/**calls the kill method for all mortal objects in the layer*/
 	@Override
 	public void kill() {
 		for(ZoomableGraphic i: this.getItemArray()) {
@@ -560,12 +590,14 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		dead=true;
 	}
 
-
+/**returns true if the kill method has already been called*/
 	@Override
 	public boolean isDead() {
 		return dead;
 	}
 
+	/**returns a list of layer structure change listeners, 
+	 * listeners are notified when objects are added to, removes from or moved with the layer*/
 	public LayerStructureChangeListenerList getListenerlist() {
 		if (listenerlist==null) listenerlist=new LayerStructureChangeListenerList ();
 		return listenerlist;
@@ -576,48 +608,43 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 	
 	static Color  folderColor= new Color(140,180, 200);
+	/**cteates a the tree icon that will be displayed in the layers gui*/
 	public static Icon createDefaultTreeIcon(boolean open) {
 		return IconUtil.createFolderIcon(open, folderColor);
 	}
 	
+	/**returns the tree icon for this layer*/
 	@Override
 	public Icon getTreeIcon(boolean open) {
-		
 		return createDefaultTreeIcon(open);
-	/**
-		if (open) return defaultLeaf;// TODO Auto-generated method stub
-		return defaultLeaf2;*/
+
 	}
 
-	
+	/**returns A string of text that the user can use to stroke a description of what the layer contains*/
 	public String getDescription() {
-		// TODO Auto-generated method stub
 		return description;
 	}
 
-	
+	/**sets A string of text that the user can use to stroke a description of what the layer contains*/
 	public void setDescription(String nextString) {
 		description=nextString;
-		
 	}
 	
 
-
+	/**returns an SVG exporter object for this layer*/
 	@Override
 	public SVGExporter getSVGEXporter() {
-		// TODO Auto-generated method stub
 		return new SVGExporter_GraphicLayer(this);
 	}
 	
 	
 	
-	public GraphicSetDisplayContainer getGraphicSetContainer() {
-		
+	public FigureDisplayContainer getGraphicSetContainer() {
 		return graphicSetContainer;
 	}
 	
 	@Override
-	public void setGraphicSetContainer(GraphicSetDisplayContainer gc) {
+	public void setGraphicSetContainer(FigureDisplayContainer gc) {
 		graphicSetContainer=gc;
 		for(ZoomableGraphic g: this.getItemArray()) {
 			if (g instanceof KnowsSetContainer) {
@@ -638,7 +665,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		return true;
 	}
 	
-	
+	/**returns the undo manager for the currently active display group*/
 	public UndoManagerPlus getUndoManager() {
 		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}

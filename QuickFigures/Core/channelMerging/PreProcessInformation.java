@@ -11,12 +11,15 @@ public class PreProcessInformation implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private double angle;
 	private Rectangle rectangle;
-	private double scale;
+	private double scale=1;
 	
 	public String toString() {
 		return "[Rectangle="+rectangle+" angle="+angle+" scale="+scale+"]";
 	}
 	
+	public PreProcessInformation(Rectangle r2) {
+		this(r2, 0, 1);
+	}
 	public PreProcessInformation(Rectangle rectangle2, double angle2, double scale2) {
 		this.rectangle=rectangle2;
 		this.angle=angle2;

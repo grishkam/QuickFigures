@@ -9,8 +9,8 @@ import javax.swing.JPopupMenu;
 
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.MultiChannelWrapper;
-import channelMerging.PanelStackDisplay;
+import channelMerging.MultiChannelImage;
+import channelMerging.ImageDisplayLayer;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.PanelStackDisplayOptions;
 import panelGUI.PanelListDisplayGUI;
@@ -51,7 +51,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		 addButtonToMenu(output, "Min/Max", minMaxCommand);
 		 addButtonToMenu(output, "Set Units For Scale", scalingCommand);
 		 addButtonToMenu(output, "Set Bilinear Scaling", scalingCommand2);
-		 addButtonToMenu(output, "Change Color Modes", colorModeCommand);
+		 addButtonToMenu(output, "Change Color Modes ", colorModeCommand);
 	
 		 
 		
@@ -76,7 +76,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 			"icons/ChannelSwapperRollOverIcon.jpg");	};  
 	
 	
-	public void applyReleaseActionToMultiChannel(MultiChannelWrapper mw) {
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
 		if (swapMode==0)
 			mw.getChannelSwapper().swapChannelsOfImage(getPressChannelOfMultichannel(), getReleaseChannelOfMultichannel());
 	
@@ -93,12 +93,12 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 	
 		
 		if (arg0.getActionCommand().equals(minMaxCommand)) {
-			WindowLevelDialog.showWLDialogs(this.stackSlicePressed.getChannelEntries(),  this.presseddisplay.getMultichanalWrapper(), this, WindowLevelDialog.MIN_MAX , ChannelDisplayUndo.createMany(this.getAllWrappers(), this));
+			WindowLevelDialog.showWLDialogs(this.stackSlicePressed.getChannelEntries(),  this.presseddisplay.getMultiChannelImage(), this, WindowLevelDialog.MIN_MAX , ChannelDisplayUndo.createMany(this.getAllWrappers(), this));
 			
 		}
 		if (arg0.getActionCommand().equals(WLCommand)) {
 			
-			WindowLevelDialog.showWLDialogs(this.stackSlicePressed.getChannelEntries(),  this.presseddisplay.getMultichanalWrapper(), this, WindowLevelDialog.WINDOW_LEVEL, ChannelDisplayUndo.createMany(this.getAllWrappers(), this) );
+			WindowLevelDialog.showWLDialogs(this.stackSlicePressed.getChannelEntries(),  this.presseddisplay.getMultiChannelImage(), this, WindowLevelDialog.WINDOW_LEVEL, ChannelDisplayUndo.createMany(this.getAllWrappers(), this) );
 			
 		}
 		
@@ -131,7 +131,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 			if (value==1) {value=0;} else {value=1;}
 			ins.channelColorMode=value;
 			
-			if (workOn==1 && pressedInset==null) for(PanelStackDisplay d: super.getAllDisplays()) {
+			if (workOn==1 && pressedInset==null) for(ImageDisplayLayer d: super.getAllDisplays()) {
 				d.getPanelList().getChannelUseInstructions().channelColorMode=value;
 			}
 			this.updateAllDisplays();
@@ -139,13 +139,13 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		}
 		
 if (	arg0.getActionCommand().equals(colorRecolorCommand)) {
-		for(MultiChannelWrapper p: getAllWrappers())
+		for(MultiChannelImage p: getAllWrappers())
 		p.colorBasedOnRealChannelName();
 			this.updateAllDisplays();
 		}
 
 if (	arg0.getActionCommand().equals(renameChanCommand)) {
-	presseddisplay.getMultichanalWrapper().renameBasedOnRealChannelName();
+	presseddisplay.getMultiChannelImage().renameBasedOnRealChannelName();
 	this.updateAllDisplays();
 }
 		
@@ -166,7 +166,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 				PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(presseddisplay,presseddisplay.getPanelList(),null, false);
 				
 				/**adds a list of all the channel displays that are relevant*/
-				ArrayList<PanelStackDisplay> all = super.getAllDisplays();
+				ArrayList<ImageDisplayLayer> all = super.getAllDisplays();
 				all.remove(presseddisplay);
 				dialog.addAditionalDisplays(all);
 				
@@ -218,13 +218,13 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 
 	@Override
 	public void minMaxSet(int chan, double min, double max) {
-		ArrayList<MultiChannelWrapper> wraps = getAllWrappers() ;
+		ArrayList<MultiChannelImage> wraps = getAllWrappers() ;
 		
 		/**The real channel name will be checked against the channel names in each image
 		  in the for loop. display ranges will be changed in either those with a match
 		  or (if no match), those with the same number*/
 		String realName=getPressedWrapper().getRealChannelName(chan);
-		ChannelSwapperToolBit2.setDisplayRange(wraps, chan, realName, min, max);
+		ChannelPanelEditingMenu.setDisplayRange(wraps, chan, realName, min, max);
 		updateAllDisplaysWithRealChannel( realName);
 		getImageWrapperClick().updateDisplay();
 	}
@@ -235,7 +235,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	
 	
 	public void showScaleSettingDialog() {
-		localScaleSetter lss = new localScaleSetter(presseddisplay.getMultichanalWrapper(), null);
+		localScaleSetter lss = new localScaleSetter(presseddisplay.getMultiChannelImage(), null);
 		lss.showDialog();
 	}
 	

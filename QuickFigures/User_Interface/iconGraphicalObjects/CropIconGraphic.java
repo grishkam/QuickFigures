@@ -4,11 +4,12 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
+
 import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.RhombusGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import utilityClassesForObjects.PaintProvider;
+import standardDialog.GraphicObjectDisplayBasic;
 import utilityClassesForObjects.SnappingPosition;
 
 /**A class for rendering of a cropping icon*/
@@ -20,27 +21,25 @@ public class CropIconGraphic extends GraphicGroup {
 	private static final long serialVersionUID = 1L;
 	private Color iconColor=Color.black;
 	boolean open;
-	private RhombusGraphic spacefilled;
+	private RectangularGraphic spacefilled;
 
 	
-	ArrayList<ShapeGraphic> spokeDots=new ArrayList<ShapeGraphic>();
+	ArrayList<ShapeGraphic> iconParts=new ArrayList<ShapeGraphic>();
 	
 	public  CropIconGraphic() {
 	
 		createItems() ;
-		setItemColors();
 		
 		addItems();
 	}
 	
 	
 	
-	
+	/**creates the graphical objects that will compose the shapes in the icon */
 	public void createItems() {
-		spacefilled = new RhombusGraphic();
-		spacefilled.setRectangle(new Rectangle(0,2,14,10));
+		spacefilled = new RectangularGraphic();
+		spacefilled.setRectangle(getR1rect());
 		spacefilled.setAntialize(true);
-		Rectangle rectsize = new Rectangle(4,4,10,10);
 		
 		
 	
@@ -57,12 +56,12 @@ public class CropIconGraphic extends GraphicGroup {
 			
 			ShapeGraphic bar = RectangularGraphic.filledRect(partRect);
 			
-			bar.setFillColor(Color.black);
+			bar.setFillColor(iconColor);
 			
-			spokeDots.add(bar);
+			iconParts.add(bar);
 		}
 		
-		 setItemColors() ;
+		
 	}
 	
 	
@@ -72,55 +71,11 @@ public class CropIconGraphic extends GraphicGroup {
 			return new Rectangle(0,2,14,10);
 		}
 	}
-	
-	public double getR1angle() {
-		 {
-			return 0;
-		}
-	}
-	
-	/**alters r1's properties depending on the condition of the folder.
-	   open or closed*/
-	public void setR1Dims() {
-		spacefilled.setRectangle(getR1rect());
-		spacefilled.setAngleBend(getR1angle());
-	}
-	
-	public void setOpen(boolean o) {
-		this.open=o;
-		this.setR1Dims();
-		this.setItemColors();
-	}
-	
-	public void setColor(Color c) {
-		setItemColors();
-	}
-	public void setItemColors() {
-		setR1Dims();
-		
-		
-		//	r.setFilled(true);
-			PaintProvider pp = spacefilled.getFillPaintProvider();
-			
-			pp.setColor(getIconColor().brighter());
-			pp.setColor(1, getIconColor().darker());
-			spacefilled.setStrokeColor(getIconColor().darker());
-			
-			if (open) {
-				pp.setColor(getIconColor().darker());
-				//r.setRectangle(new Rectangle(0,4,14,8));
-				spacefilled.setStrokeColor(getIconColor().darker().darker());
-		}
-			 
-		
-			
-			
-			
-	}
+
 	
 	public void addItems() {
 		
-		for(ShapeGraphic d:spokeDots) {	getTheLayer().add(d);}
+		for(ShapeGraphic d:iconParts) {	getTheLayer().add(d);}
 	}
 
 
@@ -132,7 +87,12 @@ public class CropIconGraphic extends GraphicGroup {
 		return iconColor;
 	}
 
-
+	/**
+	 * @return
+	 */
+	public static Icon createsCropIcon() {
+		return new GraphicObjectDisplayBasic<CropIconGraphic>(new 	CropIconGraphic());
+	}
 
 	
 }

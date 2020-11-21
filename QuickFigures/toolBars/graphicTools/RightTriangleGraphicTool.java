@@ -25,8 +25,8 @@ public class RightTriangleGraphicTool extends RectGraphicTool {
 			 model1=new CrossGraphic(new Rectangle(0,0,0,0));
 			 model=model1;
 		}
-		model.setStrokeColor(Color.black);
-		{super.set=TreeIconWrappingToolIcon.createIconSet(model);}
+		getModel().setStrokeColor(Color.black);
+		{super.set=TreeIconWrappingToolIcon.createIconSet(getModel());}
 	}
 	
 	public RightTriangleGraphicTool() {}
@@ -36,8 +36,8 @@ public class RightTriangleGraphicTool extends RectGraphicTool {
 		{model.setStrokeColor(Color.black);
 		{super.set=TreeIconWrappingToolIcon.createIconSet(model);}*/
 		innitiateModel();
-		if(model instanceof RightTriangleGraphic) {
-			RightTriangleGraphic m=(RightTriangleGraphic) model;
+		if(getModel() instanceof RightTriangleGraphic) {
+			RightTriangleGraphic m=(RightTriangleGraphic) getModel();
 			m.setType(type);
 		}
 	}
@@ -50,19 +50,12 @@ public class RightTriangleGraphicTool extends RectGraphicTool {
 		if (type==20) output= new CrossGraphic(r);
 		return output;
 	}
-	
-	@Override
-	public String getToolTip() {
-		if (type==20) 	return "Draw a Cross";
-		if (type>9) 	return "Draw a Simple Line";
-			return "Draw a Right Triangle";
-		}
-	
-	@Override
-	public String getToolName() {
-		if (type==20) 	return "Draw Cross";
-		if (type>9) 	return "Draw Simple Line";
-		return "Draw Right Triangle";
+
+	/**returns the name of the model shape (default is rectangle)*/
+	public String getShapeName() {
+		if (type==20) 	return "Cross";
+		if (type>9) 	return "Simple Line";
+		return "Right Triangle";
 	}
 	
 		

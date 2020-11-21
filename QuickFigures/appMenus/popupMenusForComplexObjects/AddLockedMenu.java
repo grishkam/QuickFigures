@@ -52,7 +52,7 @@ public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
 		UndoTakeLockedItem undo = new UndoTakeLockedItem(getLockbox(), target, false);
 		Rectangle2D b = getLockbox().getContainerForBounds(target);
 		Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, target.getBounds());
-		if (target.getSnapPosition()==null) {target.setSnappingBehaviour(SnappingPosition.defaultInternal());}
+		if (target.getSnapPosition()==null) {target.setSnapPosition(SnappingPosition.defaultInternal());}
 		target.getSnapPosition().setToNearestSnap(target.getBounds(), b, location);
 		
 		getLockbox().addLockedItem(target);

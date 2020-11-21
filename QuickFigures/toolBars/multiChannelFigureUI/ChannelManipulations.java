@@ -3,14 +3,14 @@ package multiChannelFigureUI;
 import java.awt.Color;
 
 import channelMerging.ChannelOrderAndColorWrap;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import infoStorage.BasicMetaDataHandler;
 import logging.IssueLog;
 import standardDialog.ShowDisplayRange;
 
 public class ChannelManipulations {
 	/**useful method that sets the display range of channel chan without referencing*/
-	public static void setDisplayRangetoMinMax(MultiChannelWrapper mrp, int chan) {
+	public static void setDisplayRangetoMinMax(MultiChannelImage mrp, int chan) {
 		try {
 			int[] basis=mrp.getPixelWrapperForSlice(chan, 1, 1).getDistribution();
 			double themin=ShowDisplayRange.findMinOfDistributionHistogram(basis);
@@ -18,19 +18,19 @@ public class ChannelManipulations {
 			double themax=ShowDisplayRange.findMaxOfDistributionHistogram(basis);
 			mrp.setChannelMax(chan, themax);
 		} catch (Exception e) {
-			IssueLog.log(e);//sometimes the method  has an argument out of range and an exception
+			IssueLog.logT(e);//sometimes the method  has an argument out of range and an exception
 		}
 	}
 	
 	/**Check to see is any of the channels have an invalid display range and fixes the issue*/
-	public static void innitializeDisplayRangetoMinMax(MultiChannelWrapper mrp)  {
+	public static void innitializeDisplayRangetoMinMax(MultiChannelImage mrp)  {
 		if (mrp==null) return;
 		for(int chan=1; chan<=mrp.nChannels(); chan++)  try {
 		if(mrp.getChannelMin(chan)==0&&mrp.getChannelMax(chan)==0) {
 			setDisplayRangetoMinMax(mrp, chan);
 		}
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 	

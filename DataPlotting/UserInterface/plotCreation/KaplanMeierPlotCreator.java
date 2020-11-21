@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.KaplenMeierDataSeries;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import kaplanMeierPlots.KM_Plot;
 import logging.IssueLog;
 
@@ -23,7 +23,7 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplenMeierDataSeries
 	
 	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
-			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
+			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
 		if(items.size()==0) {
 			IssueLog.showMessage("Unable to extract data");

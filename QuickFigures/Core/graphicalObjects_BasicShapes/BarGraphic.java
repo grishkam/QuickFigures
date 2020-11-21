@@ -41,6 +41,7 @@ import utilityClassesForObjects.SnappingPosition;
 import applicationAdapters.CanvasMouseEventWrapper;
 import externalToolBar.IconSet;
 import graphicTools.LockGraphicTool2;
+import graphicalObjectHandles.ActionButtonHandleList;
 import graphicalObjectHandles.HandleRect;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.LockedItemHandle;
@@ -60,6 +61,7 @@ import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.BarSwingGraphicDialog;
 
+/**A graphical object that represents a scale bar*/
 public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,RectangleEdgePosisions, HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,GraphicHolder, HasSmartHandles, ProvidesDialogUndoableEdit{
 	
 
@@ -73,7 +75,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	public static final double[] reccomendedBarLengths=new double[] {0.5, 1,2,5,10, 20};
 	
 	 ScaleInfo info=new ScaleInfo();
-	 {super.setSnappingBehaviour(SnappingPosition.defaultScaleBar());}
+	 {super.setSnapPosition(SnappingPosition.defaultScaleBar());}
 	 private ScalededItem scaleProvider=null;
 	 
 	 transient Rectangle2D mainBarRect=null;
@@ -116,7 +118,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 			 		barText.setTextColor(getFillColor());
 			 		barText.setLocationType(LOWER_LEFT);
 		 			barText.setLocation(x, y);
-		 			barText.setSnappingBehaviour(SnappingPosition.defaultExternal());
+		 			barText.setSnapPosition(SnappingPosition.defaultExternal());
 		 			barText.setUserEditable(false);
 		 			snapTextToBar();
 		 			}
@@ -215,7 +217,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		
 		this.setScaleInfo(b.getScaleInfo());
 		this.setScaleProvider(b.getScaleProvider());
-		if (b.getSnapPosition()!=null)this.setSnappingBehaviour(b.getSnapPosition().copy());
+		if (b.getSnapPosition()!=null)this.setSnapPosition(b.getSnapPosition().copy());
 		
 		
 		
@@ -1014,7 +1016,7 @@ class BarSmartHandle extends SmartHandle {
 }
 
 transient SmartHandleList smartList=null;
-transient ScaleBarActionHandleList aList=null;
+transient ActionButtonHandleList aList=null;
 
 @Override
 public SmartHandleList getSmartHandleList() {
@@ -1032,6 +1034,8 @@ public SmartHandleList getSmartHandleList() {
 	//return smartList;
 }
 
+
+
 protected BarSmartHandle createTextLocationHandle() {
 	return new BarSmartHandle(this, TEXT_LOCATION_HANDLE);
 }
@@ -1045,12 +1049,19 @@ public int handleNumber(int x, int y) {
 	return getSmartHandleList().handleNumberForClickPoint(x, y);
 }
 
-public ScaleBarActionHandleList getActionList() {
+public ActionButtonHandleList getActionList() {
 	if(aList==null) {
-		aList=new ScaleBarActionHandleList(this);
+		aList=createActionHandleList();
 	}
 	aList.updateLocation();
 	return aList;
+}
+
+/**
+Creates an action handle list for the object that looks and works like a mini toolbar
+ */
+public ActionButtonHandleList createActionHandleList()  {
+	return new ScaleBarActionHandleList(this);
 }
 
 @Override

@@ -44,9 +44,7 @@ public class Toolset_Runner implements PlugIn {
 			new ActionToolset1().run("");
 			new ActionToolset2().run("");
 		}
-		/**if (arg0.equals("Graphic")) {
-			new ObjectToolset().run("");
-		}*/
+		
 		
 		if (arg0.equals("LayoutToolSet")) {
 			LayoutToolSet tsr = new LayoutToolSet();
@@ -82,7 +80,7 @@ public class Toolset_Runner implements PlugIn {
 			if (!DirectoryHandler.getDefaultHandler().defaultTemplateExits())
 					checkForAutoRun() ;
 			} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		
 	}
@@ -168,7 +166,7 @@ public class Toolset_Runner implements PlugIn {
 			    		else FileChoiceUtil.addLocalStringToFile(macrosStartupFilePath(), st+"AutoRunMacro.txt", Toolset_Runner.class.getClassLoader());
 			    	
 			    	
-			    	} catch (Exception e) {IssueLog.log(e);}
+			    	} catch (Exception e) {IssueLog.logT(e);}
 			    }
 		
 	}

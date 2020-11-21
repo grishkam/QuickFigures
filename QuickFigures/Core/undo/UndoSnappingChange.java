@@ -30,14 +30,14 @@ public class UndoSnappingChange extends AbstractUndoableEdit2 {
 	
 	public void redo() {
 		if (object==null) return;
-		if (fSnap==null) object.setSnappingBehaviour(null); else
+		if (fSnap==null) object.setSnapPosition(null); else
 		fSnap.givePropertiesTo(object.getSnapPosition());
 		
 	}
 	
 	public void undo() {
 		if (object==null) return;
-		if (iSnap==null) object.setSnappingBehaviour(null); else
+		if (iSnap==null) object.setSnapPosition(null); else
 		iSnap.givePropertiesTo(object.getSnapPosition());
 		
 	}

@@ -13,6 +13,11 @@ import utilityClasses1.ArraySorter;
 
 public class GroupAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		GraphicGroup gg = new GraphicGroup();
@@ -49,6 +54,11 @@ public class GroupAdder extends BasicGraphicAdder {
 	@Override
 	public String getMenuCommand() {
 		return "Add Shape Group";
+	}
+	
+	@Override
+	public String getMenuPath() {
+		return "Shapes";
 	}
 	
 	public Icon getIcon() {

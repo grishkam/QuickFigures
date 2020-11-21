@@ -33,7 +33,7 @@ public class Plot_ToolInstaller implements PlugIn {
 			if (true)
 					checkForAutoRun() ;
 			} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		
 	}
@@ -115,7 +115,7 @@ public class Plot_ToolInstaller implements PlugIn {
 			    		}
 			    		
 			    	
-			    	} catch (Exception e) {IssueLog.log(e);}
+			    	} catch (Exception e) {IssueLog.logT(e);}
 			    }
 		
 	}

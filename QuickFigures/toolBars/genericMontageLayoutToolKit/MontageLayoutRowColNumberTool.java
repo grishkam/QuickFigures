@@ -8,22 +8,28 @@ import java.util.List;
 import genericMontageKit.PanelContentExtract;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import logging.IssueLog;
+import includedToolbars.StatusPanel;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
 import utilityClassesForObjects.LocatedObject2D;
 
 
-/**A tool to change the number of rows and cols in a montage. Created Feb 1.
-   it can also be used to create a new layout graphic if one applies it to a selection*/
+/**A tool to change the number of rows and cols in a layout. when shift is held down
+  the content of the panels (not only the layout) will also be moved*/
 public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 
-	
+	/**this determines if the objects within a panel are effected*/
 	boolean movePanelContent=false;
+	
+	/**the layout being worked on. not always the same as the layout that was clicked on*/
 	MontageLayoutGraphic ml;
 	BasicMontageLayout bm;
+	
+	
 	private LocatedObject2D r;
 	private List<PanelContentExtract> extrapanel;
+	
+	/**undo that may be added*/
 	private UndoLayoutEdit undo;
 	private UndoAddItem undo2;
 	
@@ -32,31 +38,31 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			"icons/GirdDimensionRolloverIcon.jpg"
 			);}
 	
-	
+	/**sets up the fields in this class*/
 	public void mousePressed() {
 		setupClickedLayout();
 		extrapanel=null;
 		if (this.hasALayoutBeenClicked() ) {
 			
 			ml=layoutGraphic;
-			bm=super.getCurrentLayout();//ml.getPanelLayout();
+			bm=super.getCurrentLayout();
 			undo=new UndoLayoutEdit(layoutGraphic);
 			undo2=null;
 		}
 		else
 		{
-		Rectangle bounds = this.getImageWrapperClick().getSelectionManagger().getSelectionBounds1();
-		if (bounds==null) return;
-		if (bounds.getWidth()==0) return;
-		
-		bm=new BasicMontageLayout();
-		bm.setLayoutBasedOnRect(bounds);
-		
-		 ml = new MontageLayoutGraphic(bm);
-		this.getImageWrapperClick().getGraphicLayerSet().add(ml);
-		super.layoutGraphic=ml;
-		undo2=new UndoAddItem(getImageWrapperClick().getGraphicLayerSet(), ml);
-		undo=null;
+			Rectangle bounds = this.getImageWrapperClick().getSelectionManagger().getSelectionBounds1();
+			if (bounds==null) return;
+			if (bounds.getWidth()==0) return;
+			
+			bm=new BasicMontageLayout();
+			bm.setLayoutBasedOnRect(bounds);
+			
+			 ml = new MontageLayoutGraphic(bm);
+			this.getImageWrapperClick().getGraphicLayerSet().add(ml);
+			super.layoutGraphic=ml;
+			undo2=new UndoAddItem(getImageWrapperClick().getGraphicLayerSet(), ml);
+			undo=null;
 		}
 		
 		
@@ -65,6 +71,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		
 	}
 	
+	/**performs the edit*/
 	public void performDragEdit(boolean b) {
 		int[] rowcol=new int[] {};
 		int dragCordinateY = this.getDragCordinateY();
@@ -77,9 +84,12 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			panels = getEditor().cutStack(bm);
 			
 		}
+		
+		/**this part actually changes the number of rows and columns*/
 		if (rowcol[0]+bm.nRows()>=1)getEditor().addRows(bm, rowcol[0]);
 		if (rowcol[1]+bm.nColumns()>=1)getEditor().addCols(bm, rowcol[1]);
 		
+		/**after the change, the former content of the layout panels must be put back*/
 		if (movePanelContent&&panels!=null) {
 			
 						/**handles loose panels*/
@@ -103,6 +113,8 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			
 			getEditor().pasteStack(bm, panels );//puts the panels back
 		}
+		
+		
 		if (undo!=null) {
 			undo.establishFinalLocations();
 			this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
@@ -112,13 +124,17 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		}
 	}
 
+	/**When given an x value, a y value and a layout. returns the number of rows and columns that
+	  would need to be added or subtracted in order for the layout's last row or column to be near the 
+	  x and y position. required so that the number of columns and rows can be changed in response to mouse drags 
+	  At the moment this method is accurate for layouts that have rows/columns of uniform width. 
+	  Tools is still usable for non-uniform layouts*/
 	public static int[] findAddedRowsCols(int dragCordinateX, int dragCordinateY, BasicMontageLayout bm) {
 		int[] rowcol;
 		Rectangle bound = bm.getBoundry().getBounds();
 		
 		
 		double col=dragCordinateX-bound.getWidth()-bound.getX();
-	
 		double row=dragCordinateY-bound.getHeight()-bound.getY();
 		
 		col/=bm.getStandardPanelWidth();
@@ -145,7 +161,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	@Override
 	public boolean keyPressed(KeyEvent e) {
 		if (e.getKeyCode()==KeyEvent.VK_SHIFT) {
-			IssueLog.log("Shift down, will include panel contends in move");
+			StatusPanel.updateStatus("Shift down, will include panel contends in move");
 			movePanelContent=true;
 		}
 		return false;

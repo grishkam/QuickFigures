@@ -11,6 +11,10 @@ import java.util.ArrayList;
 public class PasteItem extends BasicGraphicAdder{
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	GraphicLayer layer;
 	
 

@@ -12,13 +12,12 @@ import graphicTools.CircleGraphicTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import menuUtil.SmartJMenu;
-import multiChannelFigureUI.ChannelSwapperToolBit2;
+import multiChannelFigureUI.ChannelPanelEditingMenu;
 import undo.CombinedEdit;
 import undo.Edit;
 import undo.UndoTakeLockedItem;
@@ -42,7 +41,7 @@ public class ImagePanelMenu extends LockedItemMenu {
 			
 			JMenu channelMenu=new SmartJMenu("Channels"); 
 			this.add(channelMenu);
-			new ChannelSwapperToolBit2(c). addChannelRelevantMenuItems(channelMenu);
+			new ChannelPanelEditingMenu(c). addChannelRelevantMenuItems(channelMenu);
 			
 			JMenu extendFigure=new SmartJMenu("Figure");
 			new FigureOrganizingSuplierForPopup(folp).addMenus(extendFigure);

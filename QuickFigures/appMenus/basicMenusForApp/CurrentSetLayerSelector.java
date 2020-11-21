@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layersGUI.LayerStructureChangeListener;
@@ -30,7 +30,7 @@ public class CurrentSetLayerSelector  implements LayerSelector , Serializable{
 
 	@Override
 	public ArrayList<ZoomableGraphic> getSelecteditems() {
-		GraphicSetDisplayContainer contain = getGraphicDisplayContainer();
+		FigureDisplayContainer contain = getGraphicDisplayContainer();
 		if (contain==null) return new ArrayList<ZoomableGraphic>();
 		ArrayList<ZoomableGraphic> all = contain.getGraphicLayerSet().getAllGraphics();
 		ArraySorter.removeNonSelectionItems(all);
@@ -38,7 +38,7 @@ public class CurrentSetLayerSelector  implements LayerSelector , Serializable{
 	}
 
 	@Override
-	public GraphicSetDisplayContainer getGraphicDisplayContainer() {
+	public FigureDisplayContainer getGraphicDisplayContainer() {
 		return new CurrentFigureSet().getCurrentlyActiveOne();
 	}
 

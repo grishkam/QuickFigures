@@ -119,7 +119,7 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 	        else return output;
 	        
 			} catch (Throwable r) {
-				IssueLog.log(r);
+				IssueLog.logT(r);
 				return null;
 			}
 		/**
@@ -233,7 +233,7 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 		
 		return output;}
 		catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		//	return super.getProcessedImageForDisplay();
 			return this.getBufferedImage();
 		}
@@ -280,7 +280,7 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 			if(o==null) continue;
 			SnappingPosition sb = o.getSnapPosition();
 			if (sb==null) {
-				o.setSnappingBehaviour(SnappingPosition.defaultInternal());
+				o.setSnapPosition(SnappingPosition.defaultInternal());
 				sb=o.getSnapPosition();
 				}
 			
@@ -297,7 +297,7 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 	public void showCroppingDialog() {
 		CroppingDialog cd = new CroppingDialog();
 		try{cd.showDialog(this);} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		//IssueLog.log("The cropping rect is valid? "+this.isCroppintRectValid(), this.getCroppingrect().toString());
 	}

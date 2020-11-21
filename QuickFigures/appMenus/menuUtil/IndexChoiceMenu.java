@@ -29,7 +29,7 @@ public class IndexChoiceMenu<Type> extends JMenu implements ActionListener {
 				try {
 					generateJMenuItems();
 				} catch (Throwable e) {
-					IssueLog.log(e);
+					IssueLog.logT(e);
 				}
 	}
 	

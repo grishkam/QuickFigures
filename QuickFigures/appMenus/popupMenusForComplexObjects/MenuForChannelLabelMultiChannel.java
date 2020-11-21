@@ -65,7 +65,7 @@ public class MenuForChannelLabelMultiChannel extends JMenu {
 
 			@Override
 			public void onAction() {
-				man.completeMenu();
+				man.showEditAllChannelLabelsDialog();
 			}
 			
 		};
@@ -203,7 +203,7 @@ public class MenuForChannelLabelMultiChannel extends JMenu {
 
 			@Override
 			public void onAction() {
-				display.getMultichanalWrapper().renameBasedOnRealChannelName();;
+				display.getMultiChannelImage().renameBasedOnRealChannelName();;
 				display.updatePanelsAndLabelsFromSource();
 			}
 			

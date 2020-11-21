@@ -3,7 +3,7 @@ package applicationAdaptersForImageJ1;
 import java.awt.BasicStroke;
 import java.awt.Rectangle;
 
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import ij.ImagePlus;
 import ij.gui.ShapeRoi;
@@ -13,7 +13,7 @@ import utilityClassesForObjects.LocatedObject2D;
  of an imageJ image (or returns the selection) and not a QuickFigures figure
  A programmer might use this while displaying quickfigures objects on top of an ImageJ image.
  */
-public class IJ1Selections extends SelectionManager {
+public class IJ1Selections extends OverlayObjectManager {
 	private ImagePlus imagePlus;
 
 	public IJ1Selections(ImagePlus imp) {

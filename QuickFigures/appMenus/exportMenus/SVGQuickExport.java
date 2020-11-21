@@ -52,7 +52,7 @@ public class SVGQuickExport extends QuickExport {
 				IssueLog.showMessage("Opps"+ "It seems imageJ cant find "+t.getMessage());
 			//this.getClass().getClassLoader().loadClass(arg0)
 			}
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	        
 	}

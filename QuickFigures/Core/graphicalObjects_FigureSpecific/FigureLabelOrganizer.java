@@ -64,9 +64,9 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.PanelLabelTextGraphic();
-		tg.setSnappingBehaviour(SnappingPosition.defaultInternalPanel());
+		tg.setSnapPosition(SnappingPosition.defaultInternalPanel());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.white);
-		tg.getParagraph().setJustification(TextParagraph.Justify_Center);
+		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLay.add(tg);
 		Rectangle2D p = g.getPanelLayout().makeAltered(MontageSpaces.PANELS).getPanel(colNum);
 		
@@ -92,9 +92,9 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.ColumnLabelTextGraphic();
-		tg.setSnappingBehaviour(SnappingPosition.defaultColSide());
+		tg.setSnapPosition(SnappingPosition.defaultColSide());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
-		tg.getParagraph().setJustification(TextParagraph.Justify_Center);
+		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLay.add(tg);
 		Rectangle2D p = g.getPanelLayout().makeAltered(MontageSpaces.COLS).getPanel(colNum);
 		
@@ -124,9 +124,9 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.RowLabelTextGraphic();
-		tg.setSnappingBehaviour(SnappingPosition.defaultRowSide());
+		tg.setSnapPosition(SnappingPosition.defaultRowSide());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
-		tg.getParagraph().setJustification(TextParagraph.Justify_Right);
+		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_RIGHT);
 		thisLay.add(tg);
 		Rectangle2D p = g.getPanelLayout().makeAltered(MontageSpaces.ROWS).getPanel(rowNum);
 		

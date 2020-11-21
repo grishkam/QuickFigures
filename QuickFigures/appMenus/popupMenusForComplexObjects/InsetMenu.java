@@ -8,7 +8,7 @@ import javax.swing.JPopupMenu;
 
 import graphicalObjects_FigureSpecific.InsetDefiner;
 import graphicalObjects_FigureSpecific.InsetLayoutDialog;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
@@ -80,8 +80,8 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			}
 		
 		if (c.equals("inset layout")) {
-			if (inset instanceof PanelGraphicInsetDef ) {
-				 PanelGraphicInsetDef pgInset=(PanelGraphicInsetDef) inset;
+			if (inset instanceof PanelGraphicInsetDefiner ) {
+				 PanelGraphicInsetDefiner pgInset=(PanelGraphicInsetDefiner) inset;
 				 pgInset.previosInsetLayout.practicalSize=true;
 				InsetLayoutDialog dialog = new InsetLayoutDialog(pgInset.previosInsetLayout);
 				dialog.setTargetInset(pgInset);
@@ -101,8 +101,8 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {
-				if (inset instanceof PanelGraphicInsetDef) {
-					PanelGraphicInsetDef inset2=(PanelGraphicInsetDef) inset;
+				if (inset instanceof PanelGraphicInsetDefiner) {
+					PanelGraphicInsetDefiner inset2=(PanelGraphicInsetDefiner) inset;
 				IssueLog.log("Scale is "+inset.getBilinearScale());
 				double scale = ss.getNumber("scale");
 				inset.setBilinearScale(scale);

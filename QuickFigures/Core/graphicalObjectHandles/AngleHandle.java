@@ -11,24 +11,26 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 import standardDialog.StandardDialog;
 import undo.SimpleItemUndo;
 
+/**A handle that allows the user to alter an angle parameter. 
+  angle parameters determine the angle and radius that are used 
+  to determine the appearance of certain shapes */
 public class AngleHandle extends SmartHandle {
 
-	private RectangularGraphic theShape;
-	private AngleParameter theAngle;
+	
+	private RectangularGraphic theShape;//the target shape is always a subclass of rectangular graphic
+	private AngleParameter theAngle;//the parameter being altered
 	private double handleDrawAngle;//the angle at which to draw the handle
 	
 	public static final int ANGLE_TYPE=0, ANGLE_AND_RADIUS_TYPE=2, RADIUS_TYPE=1, ANGLE_RATIO_TYPE=3, ANGLE_RATIO_AND_RAD_TYPE=4;
-	private int type=0;
-	public double maxRatio=1;
+	private int type=ANGLE_TYPE;
+	public double maxRatio=1;//the maximum radius ratio that this handle will allow the user to set
 	private SimpleItemUndo<AngleParameter> undo;
-	private boolean dragging;
 	private boolean undoadded;
 	
 
 
 	public AngleHandle(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
 	}
 
 	public AngleHandle(RectangularGraphic r, AngleParameter angle, Color c, double startAngle, int handleNumber) {
@@ -79,60 +81,68 @@ public class AngleHandle extends SmartHandle {
 			
 			
 		if (setsAngle()) {
-			double original=theAngle.getAngle();
-			double orginalRatio=theAngle.getRatioToStandardAngle();
-			
-			double inner = ShapeGraphic.getAngleBetweenPoints(getCenterOfRotation(), getZeroLocation() );
-			double inner2 = ShapeGraphic.getAngleBetweenPoints(getCenterOfRotation(), p2 );
-		/**	while (inner>2*Math.PI) inner-=2*Ma;th.PI;
-			while (inner<0) 		inner+=2*Math.PI;
-			while (inner2>2*Math.PI) inner2-=2*Math.PI;
-			while (inner2<0) 		inner2+=2*Math.PI;*/
-			double diff=(inner2-inner);
-			
-			if(diff<0) diff+=2*Math.PI;
-				theAngle.setAngle(diff);
-			
-			double angleRatio=diff/this.getStandardAngle();
-			if (inner2-inner<0)
-				{
-				
-				diff=(inner2-inner);
-				//if(diff<-2*Math.PI) diff+=Math.PI*2;
-				angleRatio=diff/this.getStandardAngle();
-				}
-			theAngle.setRatioToStandardAngle(angleRatio);
-			
-			if(theAngle.attached!=null)for(AngleParameter a: theAngle.attached) {
-				if(a==null) continue;
-				a.increaseAngleRatio(theAngle.getRatioToStandardAngle()-orginalRatio);
-				a.increaseAngle(theAngle.getAngle()-original);
-			}
-		
+			setAngleToHandleDragLocation(p2);
 			}
 		
 		if(setsRadius()) {
-			double original=theAngle.getRatioToMaxRadius();
-			
-			Point2D p0 = this.getCenterOfRotation();
-			double d1 = p0.distance(p2);
-			double d2= p0.distance(getMaxRadiusLocation());
-			double ratio = d1/d2;
-			if(ratio>maxRatio) ratio=maxRatio;
-			theAngle.setRatioToMaxRadius(ratio);
-			
-			
-			if(theAngle.attached!=null)for(AngleParameter a: theAngle.attached) {
-				if(a==null) continue;
-				a.increaseRadiusRatio(theAngle.getRatioToMaxRadius()-original);
-			}
+			setRadiusToHandleDragLocation(p2);
 		}
-			dragging=true;
 			
 			if (undoadded==false) {
 				undoadded=true;
-				addUndo(lastDragOrRelMouseEvent);
+				addUndoToManager(lastDragOrRelMouseEvent);
 			} else undo.establishFinalState();
+	}
+
+	/**
+	 called when the user drags the handle to point p2. changes the value of the radius based on the drag location
+	 */
+	protected void setRadiusToHandleDragLocation(Point p2) {
+		double original=theAngle.getRatioToMaxRadius();
+		
+		Point2D p0 = this.getCenterOfRotation();
+		double d1 = p0.distance(p2);
+		double d2= p0.distance(getMaxRadiusLocation());
+		double ratio = d1/d2;
+		if(ratio>maxRatio) ratio=maxRatio;
+		theAngle.setRatioToMaxRadius(ratio);
+		
+		
+		if(theAngle.attached!=null)for(AngleParameter a: theAngle.attached) {
+			if(a==null) continue;
+			a.increaseRadiusRatio(theAngle.getRatioToMaxRadius()-original);
+		}
+	}
+
+	/**
+	 called when the user drags the handle to point p2. changes the value of the angle based on the drag location
+	 */
+	protected void setAngleToHandleDragLocation(Point p2) {
+		double original=theAngle.getAngle();
+		double orginalRatio=theAngle.getRatioToStandardAngle();
+		
+		double inner = ShapeGraphic.getAngleBetweenPoints(getCenterOfRotation(), getZeroLocation() );
+		double inner2 = ShapeGraphic.getAngleBetweenPoints(getCenterOfRotation(), p2 );
+
+		double diff=(inner2-inner);
+		
+		if(diff<0) diff+=2*Math.PI;
+			theAngle.setAngle(diff);
+		
+		double angleRatio=diff/this.getStandardAngle();
+		if (inner2-inner<0)
+			{
+			
+			diff=(inner2-inner);
+			angleRatio=diff/this.getStandardAngle();
+			}
+		theAngle.setRatioToStandardAngle(angleRatio);
+		
+		if(theAngle.attached!=null)for(AngleParameter a: theAngle.attached) {
+			if(a==null) continue;
+			a.increaseAngleRatio(theAngle.getRatioToStandardAngle()-orginalRatio);
+			a.increaseAngle(theAngle.getAngle()-original);
+		}
 	}
 	
 	
@@ -170,24 +180,36 @@ public class AngleHandle extends SmartHandle {
 		undo = new SimpleItemUndo<AngleParameter> (theAngle);
 		undoadded = false;
 		
-		
-		
 		if (w.clickCount()==2&& setsAngle()) {
-			if (doesAngleRatio()) {
-				double nSW = StandardDialog.getNumberFromUser("Input angle ratio", theAngle.getRatioToStandardAngle(), false);
-				theAngle.setRatioToStandardAngle(nSW);
-			} else {
-			double nSW = StandardDialog.getNumberFromUser("Input angle", theAngle.getAngle(), true);
-			theAngle.setAngle(nSW);}
-			addUndo(w);
+			showUserDialogForAngle(w);
 		} 
 		
 		if (w.clickCount()==2&& setsRadius()) {
-			double nSW = StandardDialog.getNumberFromUser("Input ratio", theAngle.getRatioToMaxRadius(), false);
-			if(nSW>maxRatio) nSW=maxRatio;
-			theAngle.setRatioToMaxRadius(nSW);
-			addUndo(w);
+			showUserDialogForRadius(w);
 		} 
+	}
+
+	/**
+		displays a dialog for altering the angle parameter's radius
+	 */
+	protected void showUserDialogForRadius(CanvasMouseEventWrapper w) {
+		double nSW = StandardDialog.getNumberFromUser("Input ratio", theAngle.getRatioToMaxRadius(), false);
+		if(nSW>maxRatio) nSW=maxRatio;
+		theAngle.setRatioToMaxRadius(nSW);
+		addUndoToManager(w);
+	}
+
+	/**
+		displays a dialog for altering the angle parameter's angle
+	 */
+	protected void showUserDialogForAngle(CanvasMouseEventWrapper w) {
+		if (doesAngleRatio()) {
+			double nSW = StandardDialog.getNumberFromUser("Input angle ratio", theAngle.getRatioToStandardAngle(), false);
+			theAngle.setRatioToStandardAngle(nSW);
+		} else {
+		double nSW = StandardDialog.getNumberFromUser("Input angle", theAngle.getAngle(), true);
+		theAngle.setAngle(nSW);}
+		addUndoToManager(w);
 	}
 
 	public boolean doesAngleRatio() {
@@ -195,7 +217,7 @@ public class AngleHandle extends SmartHandle {
 		return type==ANGLE_RATIO_TYPE;
 	}
 
-	public void addUndo(CanvasMouseEventWrapper w) {
+	public void addUndoToManager(CanvasMouseEventWrapper w) {
 		undo.establishFinalState();
 		w.addUndo(undo);
 	}

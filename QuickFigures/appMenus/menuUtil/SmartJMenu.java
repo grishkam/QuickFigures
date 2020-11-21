@@ -9,7 +9,6 @@ import javax.swing.MenuElement;
 import javax.swing.undo.AbstractUndoableEdit;
 import applicationAdapters.CanvasMouseEventWrapper;
 import selectedItemMenus.MenuItemInstall;
-import selectedItemMenus.MultiSelectionOperator;
 import undo.UndoManagerPlus;
 
 

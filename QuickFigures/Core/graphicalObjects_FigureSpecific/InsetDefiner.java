@@ -100,7 +100,7 @@ public abstract class InsetDefiner extends FrameGraphic implements LocationChang
 		try  {
 		updateImage(getImageInset());
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		//matchImage(getImageInset(), additionalGraphics);
 		
@@ -109,7 +109,7 @@ public abstract class InsetDefiner extends FrameGraphic implements LocationChang
 			
 			updateImage(big);
 		} catch (Throwable r) {
-			IssueLog.log(r);
+			IssueLog.logT(r);
 		}
 	}
 	
@@ -174,7 +174,7 @@ public abstract class InsetDefiner extends FrameGraphic implements LocationChang
 		big.setScaleInfo(getScaleInfoForSourceImage());
 		if (cropping!=null) big.setCroppingrect(cropping);}
 		catch (Throwable r) {
-			IssueLog.log(r);
+			IssueLog.logT(r);
 		}
 	}
 	void matchImage(BufferedImageGraphic big, ArrayList<BufferedImageGraphic> images) {
@@ -185,7 +185,7 @@ public abstract class InsetDefiner extends FrameGraphic implements LocationChang
 			im.setImage(big.getBufferedImage());
 			im.setCroppingrect(big.getCroppingrect());
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 	

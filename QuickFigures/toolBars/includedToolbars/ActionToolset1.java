@@ -53,8 +53,8 @@ public class ActionToolset1 extends QuickFiguresToolBar{
 		installOperator(new AlignItem(103));
 		
 		
-		installMenuAdapter( new ZoomFit("In"));
-		installMenuAdapter( new ZoomFit("Out"));
+		installMenuAdapter( new ZoomFit(ZoomFit.IN));
+		installMenuAdapter( new ZoomFit(ZoomFit.OUT));
 		installMenuAdapter(  new ZoomFit());
 		
 	}

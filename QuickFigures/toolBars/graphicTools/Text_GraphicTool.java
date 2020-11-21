@@ -200,7 +200,7 @@ public class Text_GraphicTool extends GraphicTool {
 			
 			taker.addLockedItem(textob);
 			
-		textob.setSnappingBehaviour(createStartingDefaultSnap(image, textob, cx, cy));
+		textob.setSnapPosition(createStartingDefaultSnap(image, textob, cx, cy));
 		
 		taker.snapLockedItems();	
 		}

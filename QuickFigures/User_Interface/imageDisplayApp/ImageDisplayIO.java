@@ -46,7 +46,7 @@ public class ImageDisplayIO {
 			if (e instanceof java.lang.ClassNotFoundException) {
 				FileChoiceUtil.OkOrNo("Class not found. "+"File likely saved with earlier version");
 			}
-			IssueLog.log(e);;
+			IssueLog.logT(e);;
 			return null;
 		}
 		
@@ -86,11 +86,11 @@ public class ImageDisplayIO {
 		
 	}
 	
-	public static ImageAndDisplaySet showFile(File f) {
+	public static ImageWindowAndDisplaySet showFile(File f) {
 		if (f==null) return null;
 			GraphicContainingImage set = ImageDisplayIO.readFromFile(f);
 			if (set==null) return null;
-			return new ImageAndDisplaySet(set);
+			return new ImageWindowAndDisplaySet(set);
 	}
 	
 

@@ -16,7 +16,7 @@ import externalToolBar.DragAndDropHandler;
 import externalToolBar.IconSet;
 import genericMontageKit.BasicObjectListHandler;
 import gridLayout.BasicMontageLayout;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import includedToolbars.ObjectToolset1;
 import logging.IssueLog;
@@ -330,7 +330,7 @@ public class BasicToolBit implements ToolBit {
 	}
 
 	@Override
-	public void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
+	public void handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
 
 		
 	}

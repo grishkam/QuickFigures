@@ -73,7 +73,7 @@ public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 					{
 					SnappingPosition newSnap = object.getSnapPosition().copy();
 					if(!copySnap) newSnap = object.getSnapPosition();
-					s.setSnappingBehaviour(newSnap);
+					s.setSnapPosition(newSnap);
 					};
 		}
 }

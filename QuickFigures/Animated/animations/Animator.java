@@ -9,25 +9,29 @@ import javax.swing.Timer;
 import applicationAdapters.DisplayedImage;
 import includedToolbars.StatusPanel;
 
-/**Class of displaying animations*/
+/**Class for displaying animations*/
 public class Animator implements ActionListener{
 	
 	private ArrayList<Animation> animationList=new ArrayList<Animation> ();
-	private DisplayedImage display;
+	private DisplayedImage display;//the image that contains the annimated objects
+	
+	/**the current frame of the annimation*/
 	int currentFrame=0;
-	int nFrames=100;
-	int fps=12;
+	int nFrames=100;//total number of frames
+	int fps=12;//the number of frames/second
 	Timer timer;
 
 	public Animator(DisplayedImage diw) {
 		display=diw;
 	}
 	
+	/**adds an animation object to the list*/
 	public void addAnimation(Animation g) {
 		if(g!=null)
 		animationList.add(g);
 	}
 	
+	/**Sets the frame of every animation and updates the image to show that frame to the user */
 	void setToCurrentFrameAndUpdateDisplay() {
 		int frame=currentFrame;
 		for(Animation a: animationList) {
@@ -42,6 +46,7 @@ public class Animator implements ActionListener{
 			
 	}
 	
+	/**called to show the animation to the user*/
 	public void animate() throws InterruptedException {
 		
 		int pauseInterval = 1000/fps;
@@ -53,7 +58,7 @@ public class Animator implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 			
 				setToCurrentFrameAndUpdateDisplay();
-				if (currentFrame>nFrames) timer.stop();
+				if (currentFrame>nFrames) timer.stop();//stops the timer when the animation is done
 			}});
 			
 			timer.start();

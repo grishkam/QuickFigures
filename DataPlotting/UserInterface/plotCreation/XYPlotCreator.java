@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.XYDataSeries;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import xyPlots.XY_Plot;
 
 public class XYPlotCreator implements PlotCreator<XYDataSeries> {
@@ -25,7 +25,7 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 	
 	public void createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
-			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
+			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
 		XY_Plot plot=new XY_Plot(name, items);
 		

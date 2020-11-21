@@ -3,6 +3,7 @@ package applicationAdapters;
 import java.awt.Cursor;
 import java.awt.Window;
 
+import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.Selectable;
@@ -53,6 +54,8 @@ public interface DisplayedImage {
 	/**Sets the selected item*/
 	public Selectable getSelectedItem() ;
 	public void setSelectedItem(Selectable s) ;
+
+	public SmartHandleList getCanvasHandles();
 	
 	
 }

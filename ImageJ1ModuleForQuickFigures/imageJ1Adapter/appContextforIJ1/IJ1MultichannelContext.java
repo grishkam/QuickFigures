@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import appContext.MultiDimensionalImageContext;
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
@@ -31,10 +31,10 @@ public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 
 
 	@Override
-	public ArrayList<MultiChannelWrapper> getallVisibleMultichanal() {
+	public ArrayList<MultiChannelImage> getallVisibleMultichanal() {
 		// TODO Auto-generated method stub
 		int[] list1 = WindowManager.getIDList();
-		ArrayList<MultiChannelWrapper> output=new ArrayList<MultiChannelWrapper>();
+		ArrayList<MultiChannelImage> output=new ArrayList<MultiChannelImage>();
 		
 		if (list1==null|| list1.length==0) IssueLog.log("No multichannel images are open");
 		if (list1!=null) for(int i: list1) {
@@ -47,7 +47,7 @@ public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 	}
 
 	@Override
-	public MultiChannelWrapper getCurrentMultichanal() {
+	public MultiChannelImage getCurrentMultichanal() {
 		// TODO Auto-generated method stub
 		return new ImagePlusWrapper(IJ.getImage());
 	}

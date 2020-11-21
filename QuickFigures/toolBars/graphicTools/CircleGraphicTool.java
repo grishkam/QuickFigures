@@ -11,18 +11,19 @@ public class CircleGraphicTool extends RectGraphicTool {
 	public static final int SIMPLE_CIRCLE = 0;
 
 	{model=new CircularGraphic(new Rectangle(0,0,15,15));}
-	{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
+	{getModel().setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(getModel());}}
 	int isArc=SIMPLE_CIRCLE;
 	
 	
+	public CircleGraphicTool() {this(0);}
 	public CircleGraphicTool(int  arc) {
 		
 		isArc=arc;
 		CircularGraphic mCircle = new CircularGraphic(new Rectangle(0,0,15,15), arc);;
 	
 		model=mCircle;
-		model.setStrokeColor(Color.black);
-		super.set=TreeIconWrappingToolIcon.createIconSet(model);
+		getModel().setStrokeColor(Color.black);
+		super.set=TreeIconWrappingToolIcon.createIconSet(getModel());
 		
 	}
 	public RectangularGraphic createShape(Rectangle r) {
@@ -31,15 +32,10 @@ public class CircleGraphicTool extends RectGraphicTool {
 		return ovalGraphic;
 	}
 	
-	@Override
-	public String getToolTip() {
-			if (isArc>0) return "Draw an Arc";
-			return "Draw an Oval";
-		}
 	
-	@Override
-	public String getToolName() {
-		if (isArc>0) return "Draw Arc";
-		return "Draw Oval";
+	/**returns the name of the model shape (default is rectangle)*/
+	public String getShapeName() {
+		if (isArc>0) return "Arc";
+		return "Oval";
 	}
 }

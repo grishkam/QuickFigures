@@ -28,6 +28,8 @@ public class LobeMaker extends BasicShapeMaker {
 	public int _n_Preceding_Lobes=1;
 	public int _n_Succeding_Lobes=3;
 	
+	public double lobeAngle=Math.PI/8;
+	
 	private static final long serialVersionUID = 1L;
 
 	private PathPointList creatLobe(java.awt.geom.Rectangle2D.Double double1) {
@@ -57,29 +59,7 @@ public class LobeMaker extends BasicShapeMaker {
 		
 		//
 		
-		/**
-		Point2D cc1 = points.get(5);
-		Double curve1 = new Point2D.Double(cc1.getX(), cc1.getY()-double1.height/sFactor);
-		pp.get(0).setCurveControl2(curve1);
-		pp.get(1).setCurveControl(curve1);
-		
-		
-		cc1 = points.get(6);
-		curve1 = new Point2D.Double(cc1.getX()+double1.width/sFactor, cc1.getY());
-		pp.get(1).setCurveControl2(curve1);
-		pp.get(2).setCurveControl(curve1);
-		
-		cc1 = points.get(7);
-		curve1 = new Point2D.Double(cc1.getX(), cc1.getY()+double1.height/sFactor);
-		pp.get(2).setCurveControl2(curve1);
-		pp.get(3).setCurveControl(curve1);
-		
-		
-		cc1 = points.get(8);
-		curve1 = new Point2D.Double(cc1.getX()-double1.width/sFactor, cc1.getY());
-		pp.get(3).setCurveControl2(curve1);
-		pp.get(0).setCurveControl(curve1);
-		*/
+	
 		
 		return pp;
 	}
@@ -97,6 +77,8 @@ public class LobeMaker extends BasicShapeMaker {
 		}
 		
 		moveAllIntoView(output);
+		
+		
 		return output;
 	}
 	

@@ -12,18 +12,11 @@ import standardDialog.ChannelEntryBox;
 
 /**Renders the channel color cells in a channel selection JList*/
 public class ChannelColorCellRenerer2 extends DefaultListCellRenderer {
+
 	
-	/**
-	 * 
-	 */
-	
-	/**
-	 * 
-	 */
-	public int channelNumber=0;
 	private ChannelListDisplay box;
-	public int theindex=-1;
-	
+	public int theindex=-1;// current index is stored here
+	public int channelNumber=0;
 	private static final long serialVersionUID = 1L;
 	
 	public ChannelColorCellRenerer2(ChannelListDisplay channelEntryBox) {
@@ -60,15 +53,13 @@ public class ChannelColorCellRenerer2 extends DefaultListCellRenderer {
 		if (out instanceof ChannelColorCellRenerer2) {
 			ChannelColorCellRenerer2 c=(ChannelColorCellRenerer2) out;
 			c.channelNumber=theindex;
-			//	{this.setFont(this.getFont().deriveFont(Font.BOLD).deriveFont((float)20.0));}
+			
 			if (cellHasFocus) {
 				c.channelNumber=theindex;
 	
 				}
 		}
 	
-		//Font font=new Font(out.getFont().getFamily(), index, out.getFont().getSize());
-		//out.setFont(font);
 		return out;
 			}
 

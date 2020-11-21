@@ -146,12 +146,12 @@ public class GraphicDisplayCanvas extends
 	}
 	
 	 double getCanvasWidthInUnits() {
-			double mag=getZoomer().getZoom();
+			double mag=getZoomer().getZoomMagnification();
 			return getWidth()/mag;
 		}
 		
 		double getCanvasHeightInUnits() {
-			double mag=getZoomer().getZoom();
+			double mag=getZoomer().getZoomMagnification();
 			return getHeight()/mag;
 		}
 
@@ -200,7 +200,7 @@ public class GraphicDisplayCanvas extends
 			g.setFont(new Font("Arial", Font.BOLD, 14));
 				/**Draws the inch markers*/	
 			for(int i=0; i<20; i++) {
-				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoom();
+				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification();
 				if (positionx>areaWhite.getMaxX()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+10);
 				g.drawString((i+1)+" in", (int)positionx-10, (int)positiony+10+g.getFont().getSize());
@@ -212,7 +212,7 @@ public class GraphicDisplayCanvas extends
 			
 			/**Draws the 1/4 inch markers*/	
 			for(int i=0; i<80; i++) {
-				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoom()/4;
+				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification()/4;
 				if (positionx>areaWhite.getMaxX()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+5);
 				
@@ -227,7 +227,7 @@ public class GraphicDisplayCanvas extends
 			
 			/**Draws the inch markers*/	
 			for(int i=0; i<20; i++) {
-				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoom();
+				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification();
 				if (positiony>areaWhite.getMaxY()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx+10, (int)positiony);
 				g.drawString((i+1)+" in", (int)positionx+15, (int)positiony+g.getFont().getSize()/2);
@@ -238,7 +238,7 @@ public class GraphicDisplayCanvas extends
 			positiony = areaWhite.getBounds().getMinY();
 			/**Draws the 1/4 inch markers*/	
 			for(int i=0; i<80; i++) {
-				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoom()/4;
+				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification()/4;
 				if (positiony>areaWhite.getMaxY()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx+5, (int)positiony);
 				

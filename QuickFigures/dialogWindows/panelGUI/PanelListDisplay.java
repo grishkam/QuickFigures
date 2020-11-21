@@ -166,7 +166,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			PanelListElement panel = list.getPanels().get(theindex);
 			ArrayList<ChannelEntry> theChannelentries = panel.getChannelEntries();
 			
-			boolean merge=panel.designation+0==0+PanelListElement.MergeImageDes;
+			boolean merge=panel.designation+0==0+PanelListElement.MERGE_IMAGE_PANEL;
 			int size=theChannelentries.size()+1 ;
 			
 			int[] lengths=new int[size];

@@ -20,6 +20,9 @@ import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
+/**implementation of office object maker for text graphics
+  needed to export to Powerpoint using apache poi.
+  TODO: clean up commented code*/
 public class TextGraphicImmitator implements OfficeObjectMaker {
 	
 	private TextGraphic t;
@@ -33,32 +36,30 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		 XSLFTextBox shape = slide.createTextBox();
 		
 
-
-		 
 		    XSLFTextParagraph p = shape.addNewTextParagraph();
 
 		    shape.setWordWrap(false);
 		    
 		    if (t instanceof ComplexTextGraphic) {
 		    	TextParagraph paragraph = ((ComplexTextGraphic) t).getParagraph();
-		    	boolean firstline=true;
+		    	boolean firstLine=true;
 		    	
 		    	for(TextLine line: paragraph) {
 		    		
-		    		if (!firstline) p.addLineBreak();
+		    		if (!firstLine) p.addLineBreak();
 		    		
 		    		for(TextLineSegment seg: line) {
 		    		
 		    			  XSLFTextRun r1 = p.addNewTextRun();
 		    			  r1.setText(seg.getText());
 		    			  setTextRunFont(r1, seg.getFont(),t.getDimmedColor(seg.getTextColor()));
-		    			  r1.setSubscript(seg.getScript()==1);
-		    			  r1.setSuperscript(seg.getScript()==1);
+		    			  r1.setSubscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);//export appears to work for subscripts even though this makes no sense
+		    			  r1.setSuperscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);
 		    			  r1.setFontSize(seg.getParent().getFont().getSize());
 		    			  r1.setUnderline(seg.isUnderlined());
 		    			  r1.setStrikethrough(seg.isStrikeThrough());
 		    		}
-		    		firstline=false;
+		    		firstLine=false;
 		    		 
 		    	}
 		    	
@@ -68,15 +69,10 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		    
 		    {
 		    	XSLFTextRun r1 = p.addNewTextRun();
-		  
 		    	r1.setText(t.getText());
-		   
 		    	setTextRunFont(r1, t.getFont(), t.getDimmedColor(t.getTextColor()));
 		    }
 		   
-		    
-		    
-		
 		   shape.setAnchor(getRectForAnchor(t));
 		   
 		  
@@ -158,12 +154,14 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		   
 	}
 	
+	/**sets the alignments of the paragraph*/
 	public void setTextAlign(int align, XSLFTextParagraph p ) {
-		if (align==TextParagraph.Justify_Left) p.setTextAlign(TextAlign.LEFT);
-		if (align==TextParagraph.Justify_Right) p.setTextAlign(TextAlign.RIGHT);
-		if (align==TextParagraph.Justify_Center) p.setTextAlign(TextAlign.CENTER);
+		if (align==TextParagraph.JUSTIFY_LEFT) p.setTextAlign(TextAlign.LEFT);
+		if (align==TextParagraph.JUSTIFY_RIGHT) p.setTextAlign(TextAlign.RIGHT);
+		if (align==TextParagraph.JUSTIFY_CENTER) p.setTextAlign(TextAlign.CENTER);
 	}
 	
+	/**sets the font of a particular text run*/
 	void setTextRunFont(XSLFTextRun r1, Font f, Color c) {
 		 r1.setFontColor(c);
 		    r1.setFontSize(f.getSize());

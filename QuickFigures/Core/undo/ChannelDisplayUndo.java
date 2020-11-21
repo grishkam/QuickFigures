@@ -3,7 +3,7 @@ package undo;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import multiChannelFigureUI.DisplayRangeChangeListener;
 
 public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
@@ -22,11 +22,11 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 	double[] fMax;
 	Color[] fColor;
 
-	private MultiChannelWrapper mw;
+	private MultiChannelImage mw;
 
 	private DisplayRangeChangeListener lis;
 	
-	public ChannelDisplayUndo(MultiChannelWrapper mw, DisplayRangeChangeListener lis, int type) {
+	public ChannelDisplayUndo(MultiChannelImage mw, DisplayRangeChangeListener lis, int type) {
 		currentType=type;
 		this.mw=mw;
 		this.lis=lis;
@@ -91,16 +91,16 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 		if (editsColors()) editNow(fColor);
 	}
 	
-	public static CombinedEdit createMany(ArrayList<MultiChannelWrapper> mws, DisplayRangeChangeListener  extras, int type) {
+	public static CombinedEdit createMany(ArrayList<MultiChannelImage> mws, DisplayRangeChangeListener  extras, int type) {
 		CombinedEdit ce2=new CombinedEdit();
-		for(MultiChannelWrapper mw: mws) {
+		for(MultiChannelImage mw: mws) {
 			ce2.addEditToList(new ChannelDisplayUndo(mw, extras, type));
 		}
 		
 		return ce2;
 		
 	}
-	public static CombinedEdit createMany(ArrayList<MultiChannelWrapper> mws, DisplayRangeChangeListener  extras) { 
+	public static CombinedEdit createMany(ArrayList<MultiChannelImage> mws, DisplayRangeChangeListener  extras) { 
 		return createMany(mws, extras, DISPLAY_RANGE_TYPE);
 	}
 		

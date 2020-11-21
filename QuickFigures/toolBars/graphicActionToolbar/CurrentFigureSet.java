@@ -6,7 +6,7 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.DisplayedImage;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import imageMenu.CanvasAutoResize;
 import undo.CanvasResizeUndo;
 
@@ -19,12 +19,12 @@ public class CurrentFigureSet implements CurrentSetInformer {
 	private static DisplayedImage  currentActiveDisplayGroup=null;
 	private static ArrayList<DisplayedImage  > allVisible=new ArrayList<DisplayedImage  >();
 	
-	private static GraphicSetDisplayContainer activeGraphicDisplay;
+	private static FigureDisplayContainer activeGraphicDisplay;
 	
 	public CurrentFigureSet() {}
 	
 	@Override
-	public GraphicSetDisplayContainer getCurrentlyActiveOne() {
+	public FigureDisplayContainer getCurrentlyActiveOne() {
 		if (currentActiveDisplayGroup!=null) return currentActiveDisplayGroup.getImageAsWrapper();
 		
 		return activeGraphicDisplay;
@@ -57,7 +57,7 @@ public class CurrentFigureSet implements CurrentSetInformer {
 	}
 
 	/**Sets the stored figure display. takes an instance of GraphicSetDisplayContainer as an argumant*/
-	public void setActiveGraphicDisplay(GraphicSetDisplayContainer activeGraphicDisplay) {
+	public void setActiveGraphicDisplay(FigureDisplayContainer activeGraphicDisplay) {
 		CurrentFigureSet.activeGraphicDisplay = activeGraphicDisplay;
 	}
 

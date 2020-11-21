@@ -23,6 +23,7 @@ public class NumberUse {
 		
 	}
 	
+	/**when given one number and a list of numbers, returns the number from the list that is nearest to the input*/
 	public static double findNearest(Number n, double[] numbers) {
 		
 	

@@ -17,7 +17,7 @@ import fileread.ExcelFileToKaplanPlot;
 import fileread.ExcelFileToXYPlot;
 import fileread.ExcelRowToJTable;
 import fileread.ShowTable;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import includedToolbars.QuickFiguresToolBar;
 import includedToolbars.ToolInstallers;
@@ -37,7 +37,7 @@ public class InstallAndTest  implements MenuBarItemInstaller, ToolInstallers{
 	
 		//ObjectToolset1.includeBonusTool(new GamePlayer());
 		install();
-		ImageAndDisplaySet set = ToolbarTester.showExample(true);
+		ImageWindowAndDisplaySet set = ToolbarTester.showExample(true);
 		//new ExcelFileToXYPlot(2).performActionDisplayedImageWrapper(set);
 		try {
 			new ExcelFileToComplexCategoryPlot(1).createPlotFromFileExcelFile(null,

@@ -604,7 +604,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 		if (o==null) return;
 		SnappingPosition sb = o.getSnapPosition();
 			if (sb==null) {
-				o.setSnappingBehaviour(SnappingPosition.defaultInternal());
+				o.setSnapPosition(SnappingPosition.defaultInternal());
 				sb=o.getSnapPosition();
 				}
 			Integer rw = getPanelLocations().get(o);

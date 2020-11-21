@@ -271,7 +271,7 @@ public class ShapeRotatingPolygon implements Serializable, ShapeMaker  {
 				
 			}
 			catch (Throwable t) {
-				IssueLog.log(t);
+				IssueLog.logT(t);
 			}
 			if (this.getCurveDistype()==2) {
 				p=new Point2D.Double(pts[i].getX(), p.getY());
@@ -292,7 +292,7 @@ public class ShapeRotatingPolygon implements Serializable, ShapeMaker  {
 			try {
 			//	getPathPointList().randomizePointPositions();
 			} catch (Throwable e) {
-				IssueLog.log(e);
+				IssueLog.logT(e);
 			}
 		}
 		
@@ -447,7 +447,7 @@ public void moveCurvePointToward(Point2D towardthis, Point2D startingpoint, int 
 				//if (pot==0) return 1;
 				return pot;
 			} catch (Throwable e) {
-				IssueLog.log(e);
+				IssueLog.logT(e);
 				return 1;
 			}
 			

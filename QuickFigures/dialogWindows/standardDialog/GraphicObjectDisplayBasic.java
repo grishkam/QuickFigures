@@ -13,7 +13,7 @@ import java.awt.Rectangle;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_BasicShapes.SimpleGraphicalObject;
 import logging.IssueLog;
 
@@ -56,7 +56,7 @@ public void setMagnification(double magnification) {
 						}
 		
 		
-		currentDisplay().draw((Graphics2D) g, new BasicCordinateConverter(0-getCurrentItemInsets().left-arg2/this.getMagnification(),0-getCurrentItemInsets().top-arg3/this.getMagnification(),this.getMagnification()));
+		currentDisplay().draw((Graphics2D) g, new BasicCoordinateConverter(0-getCurrentItemInsets().left-arg2/this.getMagnification(),0-getCurrentItemInsets().top-arg3/this.getMagnification(),this.getMagnification()));
 		
 		g.setFont(oldcon);
 		g.setColor(oldcol);
@@ -128,8 +128,8 @@ public void setMagnification(double magnification) {
 	}
 	
 	
-	BasicCordinateConverter currentMagConverter() {
-		return new BasicCordinateConverter(0,0,getMagnification());
+	BasicCoordinateConverter currentMagConverter() {
+		return new BasicCoordinateConverter(0,0,getMagnification());
 	}
 	
 	@Override
@@ -154,12 +154,12 @@ public void setMagnification(double magnification) {
 			
 			
 		
-			currentDisplay().draw((Graphics2D) g, new BasicCordinateConverter());
+			currentDisplay().draw((Graphics2D) g, new BasicCoordinateConverter());
 			
 			
 		} catch (Exception e) {
 	
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		
 	}

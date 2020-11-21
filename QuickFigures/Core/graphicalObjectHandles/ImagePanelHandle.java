@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEventWrapper;
 import genericMontageKit.BasicObjectListHandler;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import genericMontageUIKit.Object_Mover;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
@@ -109,7 +109,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**performed to drag the handles*/
 	public void handleDrag(CanvasMouseEventWrapper e) {
 		super.handleDrag(e);
-		SelectionManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getSelectionManagger();
+		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getSelectionManagger();
 		
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
 			{
@@ -130,7 +130,7 @@ public class ImagePanelHandle extends SmartHandle {
 	}
 
 	/**creates a message below that panel that gives the user information regarding the image panel*/
-	protected void showPanelInformation(SelectionManager selectionManagger) {
+	protected void showPanelInformation(OverlayObjectManager selectionManagger) {
 		TextGraphic mark2 = new TextGraphic(panel.getSummary());
 		mark2.hideHandles(true);
 		mark2.deselect();
@@ -144,7 +144,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**
 	 Called when the center handle is dragged
 	 */
-	public void dragCenterHandle(CanvasMouseEventWrapper e, SelectionManager selectionManagger) {
+	public void dragCenterHandle(CanvasMouseEventWrapper e, OverlayObjectManager selectionManagger) {
 		Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCoordinatePoint().getX(), e.getCoordinatePoint().getY(), true, null);
 		Rectangle b = panel.getBounds();
 		RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);

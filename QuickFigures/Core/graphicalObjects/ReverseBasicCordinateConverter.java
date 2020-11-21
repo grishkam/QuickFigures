@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
-public class ReverseBasicCordinateConverter extends BasicCordinateConverter {
+public class ReverseBasicCordinateConverter extends BasicCoordinateConverter {
 
 	/**
 	 * 

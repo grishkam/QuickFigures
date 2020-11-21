@@ -1159,7 +1159,7 @@ public class GenericMontageEditor implements MontageSpaces {
 					
 					  GridLayoutEditEvent event = new GridLayoutEditEvent(ml,GridLayoutEditEvent.PANEL_SWAP, index1,  index2);
 					   notifyListenersOfFutureChange(ml, event);
-					try{swapMontagePanels( ml.getWrapper(),  ml.getPanel(index1),  ml.getPanel(index2));} catch (Exception e) {IssueLog.log(e);}
+					try{swapMontagePanels( ml.getWrapper(),  ml.getPanel(index1),  ml.getPanel(index2));} catch (Exception e) {IssueLog.logT(e);}
 					 this.notifyListenersOfCompleteChange(ml, event);	
 				}
 				

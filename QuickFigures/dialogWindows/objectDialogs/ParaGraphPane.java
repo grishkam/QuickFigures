@@ -119,7 +119,7 @@ public class ParaGraphPane extends ObjectInputTab implements ActionListener, Mou
 			
 		}
 		catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		if (arg0.getSource()==moveLineBackward) {
 			this.para.moveLineBackward(getSelectedLine());

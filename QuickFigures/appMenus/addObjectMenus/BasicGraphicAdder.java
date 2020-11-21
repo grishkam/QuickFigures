@@ -7,23 +7,26 @@ import javax.swing.Icon;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.BasicMultiSelectionOperator;
+
 import standardDialog.GraphicDisplayComponent;
+import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
 
-public abstract class BasicGraphicAdder implements GraphicAdder {
+public abstract class BasicGraphicAdder extends BasicMultiSelectionOperator implements GraphicAdder {
 
 
-	protected LayerSelector selector;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
 	protected int unique=(int)Math.random()*1000;
 	
-	
-	public void setSelector(LayerSelector selector) {
-		this.selector=selector;
-	}
-	
+
 	public void addLockedItemToSelectedImage(LocatedObject2D ag) {
 		
 		try {
@@ -36,7 +39,7 @@ public abstract class BasicGraphicAdder implements GraphicAdder {
 				}
 			}
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 	
@@ -62,14 +65,24 @@ public abstract class BasicGraphicAdder implements GraphicAdder {
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Font getMenuItemFont() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**performs the action.*/
+	public void run() {
+		GraphicLayer l = null;
+		if(selector!=null &&selector.getSelectedLayer()!=null)l=selector.getSelectedLayer();
+	
+		ZoomableGraphic item = this.add(l);
+		
+		if(item!=null) {
+			this.getUndoManager().addEdit(new UndoAddItem(l, item));
+		}
 	}
 
 	

@@ -11,6 +11,7 @@ import applicationAdapters.CanvasMouseEventWrapper;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.SelectedSetLayerSelector;
+import graphicalObjects.CordinateConverter;
 import imageDisplayApp.KeyDownTracker;
 import selectedItemMenus.LayerSelector;
 
@@ -52,7 +53,7 @@ public class GMouseEvent implements CanvasMouseEventWrapper {
 	  this returns the cordinate in the image*/
 	@Override
 	public int convertClickedXImage( int x) {
-		return (int) imp.getConverter().unTransformX(x);
+		return (int) getUsedConverter().unTransformX(x);
 		// TODO Auto-generated method stub
 	
 	}
@@ -60,7 +61,14 @@ public class GMouseEvent implements CanvasMouseEventWrapper {
 	@Override
 	public int convertClickedYImage( int y) {
 		// TODO Auto-generated method stub
-		return (int) imp.getConverter().unTransformY(y);
+		return (int) getUsedConverter().unTransformY(y);
+	}
+
+	/**
+	returns the cordinateconverter that 
+	 */
+	public CordinateConverter<?> getUsedConverter() {
+		return imp.getConverter();
 	}
 	
 	@Override

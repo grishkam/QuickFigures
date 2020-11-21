@@ -11,7 +11,7 @@ import java.awt.Point;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
@@ -87,7 +87,7 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 		
 			
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 	
@@ -129,7 +129,7 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 			
 			if (!this.hideText) {
 				this.textRep.setLocationUpperLeft(0, 0);
-				textRep.draw((Graphics2D) g, new BasicCordinateConverter(0,0,1));
+				textRep.draw((Graphics2D) g, new BasicCoordinateConverter(0,0,1));
 			}
 		
 			currentDisplay().draw((Graphics2D) g, currentDisplayConverter());
@@ -137,14 +137,14 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 			
 		} catch (Exception e) {
 	
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		
 	}
 	
 	
-	public  BasicCordinateConverter currentDisplayConverter() {
-		return new BasicCordinateConverter(this.currentDisplay().getLocationUpperLeft().getX()-textDim().width-getCurrentItemInsets().left,this.currentDisplay().getLocationUpperLeft().getY()-getCurrentItemInsets().top,getMagnification());
+	public  BasicCoordinateConverter currentDisplayConverter() {
+		return new BasicCoordinateConverter(this.currentDisplay().getLocationUpperLeft().getX()-textDim().width-getCurrentItemInsets().left,this.currentDisplay().getLocationUpperLeft().getY()-getCurrentItemInsets().top,getMagnification());
 	}
 	
 	

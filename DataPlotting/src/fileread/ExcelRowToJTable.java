@@ -12,7 +12,7 @@ import applicationAdapters.DisplayedImage;
 import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
 import exportMenus.QuickImport;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 
 public class ExcelRowToJTable extends QuickImport  {
@@ -45,7 +45,7 @@ public class ExcelRowToJTable extends QuickImport  {
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		try {
 			if (diw==null|| (diw.getWindow().isVisible()==false)) {
-				diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
+				diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 			}
 			
 			File f=getFileAndaddExtension();
@@ -92,7 +92,7 @@ public class ExcelRowToJTable extends QuickImport  {
 					else 
 				if (typeCell==1) value=cell.getStringCellValue();
 				else 
-				if (typeCell==4) value=new Boolean(cell.getBooleanCellValue());
+				if (typeCell==4) value=cell.getBooleanCellValue();
 					else{
 					IssueLog.log("Table unprepared for value tyepe"+typeCell);
 				}

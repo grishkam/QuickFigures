@@ -14,6 +14,7 @@ import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.SelectAllButton;
 import selectedItemMenus.SnappingSyncer;
 
+/**this handle list contains a set of handles that act as a minitoolbar for an image panel*/
 public class ImagePanelActionHandleList extends ActionButtonHandleList {
 
 	/**

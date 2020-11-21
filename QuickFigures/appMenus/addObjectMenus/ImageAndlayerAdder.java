@@ -3,6 +3,7 @@ package addObjectMenus;
 import ultilInputOutput.FileFinder;
 
 import appContext.CurrentAppContext;
+import channelMerging.PreProcessInformation;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
 import figureFormat.TemplateSaver;
@@ -12,30 +13,30 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
+/**this class adds a figure containing a multidimensional images to a layer */
 public class ImageAndlayerAdder extends LayoutAdder {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public AutoFigureGenerationOptions autoFigureGenerationOptions=new AutoFigureGenerationOptions();
 	
-	public boolean openFile=false;
-	boolean firstSet=true;
+	public boolean openFile=false;//set to true if this opens a file to create a figure
+	
 	boolean makeLabels=false;
 	
-	/**set to true if limiting */
+	/**set to true if limiting the new figure to a single frame*/
 	public boolean useSingleFrame=false;
 	public boolean useSingleSlice=false;
 	
 	private TemplateSaver templatesaver =null;
 	
-	//private multiChannelDisplayCreator multiChannelCreator=new IJ1MultiChannelCreator();
-	
-	//String imageTypeName="ImagePlus";
-	//private MultiChannelOpener<?> opener=new ImagePlusOpener();
 
 	private FigureOrganizingLayerPane currentFigureOrganizer;
 
-	
-	
-	
+	/**returns the template saver that is used to create objects*/
 	public TemplateSaver getTemplatesaver() {
 		
 		if (templatesaver==null) {
@@ -58,21 +59,20 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	}
 	
 
-	
-	
-	
-
-	
-	
-	public static FigureOrganizingLayerPane getUsedFigureOrganizingLayerPane(GraphicLayer gc) {
-			FigureOrganizingLayerPane l22 = new FigureOrganizingLayerPane("Sub-Figure");
+	/**when given a layer, will return a figure organizing layer pane for that layer
+	  if the layer is inside of a figure organizing layer, returns that figure organizing layer
+	  otherwise creates a new figure organizing layer.
+	  , attempts to move up the layer tree to find a Figure organizing layer pane*/
+	private static FigureOrganizingLayerPane getOrCreateUsedFigureOrganizingLayerPane(GraphicLayer gc) {
+		
+			FigureOrganizingLayerPane l22 = new FigureOrganizingLayerPane("Figure");
 		
 			/**What to do if the input layer is a multichannel display*/
 			if (gc instanceof MultichannelDisplayLayer) {
 				gc=gc.getParentLayer();
 			}
 			
-			/**What to do if the input layer is a FigureOrganizingLayerPane. */
+			/**What to do if the input layer or one of its parents is already FigureOrganizingLayerPane. */
 		if 	(gc instanceof FigureOrganizingLayerPane) 
 					{l22=(FigureOrganizingLayerPane) gc;} 
 			else
@@ -88,11 +88,13 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		return l22;
 	}
 	
+	/**when given a file path, opens the Image and returns a the multichannel display layer
+	  that contains the open image*/
 	public MultichannelDisplayLayer createMultiChannel(String path) {
-		return getMultiChannelCreator().creatMultiChannelDisplayFromUserSelectedImage(openFile, path);
+		return getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(openFile, path);
 	}
 	
-	
+	/**Adds a figure to the layer*/
 	@Override
 	public FigureOrganizingLayerPane add(GraphicLayer gc) {
 		return add(gc, null);
@@ -102,37 +104,6 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		return new FileFinder();	
 	}
 	
-	/**uses the information is the Subfigure Object to find the files need to 
-	  create a figure
-	 
-	public void addFromSubFigureObject(GraphicLayer gc, SubFigure subfig) {
-		if (subfig==null||subfig.getSourceStackCount()<1) return;
-		 currentFigureOrganizer = getUsedFigureOrganizingLayerPane(gc);
-		 currentFigureOrganizer.setDescription(subfig.getDescription());
-		 FigureTemplate temp = getUsedTemplate();
-		
-		//add(gc, path);
-		for(int i=0; i<subfig.getSourceStackCount(); i++) {
-			SourceStackEntry sse = subfig.getSourceStack(i);
-			String path = sse.getPath();
-			MultichannelImageDisplay multichan = createMultiChannel(getFileFinder().findExistingFilePath(path));
-			if (temp==null) getUsedTemplate(multichan);
-			temp.addDisplayToFigure(currentFigureOrganizer,
-					multichan 
-							);
-			if (sse.getDescription()==null ||sse.getDescription().equals("null"))
-							{
-				String s=multichan.getMultichanalWrapper().getTitle();
-				sse.setDescription(shorten(s));
-							}
-			multichan .setDescription(sse.getDescription());
-			
-			
-			currentFigureOrganizer.addRowLabel(sse.getDescription(), i+1);
-		}
-		temp.createScaleBarOffTemplate(currentFigureOrganizer);
-		this.applyUsedTemplate(currentFigureOrganizer);
-	} */
 	
 	public String shorten(String tooLong) {
 		if (tooLong==null) return null;
@@ -141,83 +112,119 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		return output;
 	}
 	
-	
-	
+	/**Adds a figure to the layer gc. If path is not null, the image from the save path is used
+	  otherwise, uses the image that is already open*/
 	public FigureOrganizingLayerPane add(GraphicLayer gc, String path) {
+		return add(gc, path, null);
+	}
+	
+	/**Adds a figure to the layer gc. If path is not null, the image from the save path is used
+	  otherwise, uses the image that is already open. if the preprocess information given is not null
+	  sets the cropping and scale based on it. If the Preprocess informatin is null, just uses the selected roi*/
+	public FigureOrganizingLayerPane add(GraphicLayer targetLayer, String path, PreProcessInformation p) {
 		
-		firstSet=true;
 		/***/
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
 		if(display==null) return null;
-		FigureOrganizingLayerPane.cropIfUserSelectionExists(display);
-		if (useSingleFrame) display.getPanelList().getChannelUseInstructions().limitStackUseToFrame(display.getMultichanalWrapper().getSelectedFromDimension(2));
-		if (useSingleSlice) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultichanalWrapper().getSelectedFromDimension(1));
 		
-		return addFigureOrganizerFor(gc, display);
+		/**determines the crop for this image*/
+		if (p==null)
+			FigureOrganizingLayerPane.cropIfUserSelectionExists(display); 
+		else display.getSlot().applyCropAndScale(p);
+		
+		if (useSingleFrame) display.getPanelList().getChannelUseInstructions().limitStackUseToFrame(display.getMultiChannelImage().getSelectedFromDimension(2));
+		if (useSingleSlice) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultiChannelImage().getSelectedFromDimension(1));
+		
+		return addFigureOrganizerFor(targetLayer, display);
 		}
 
-	public FigureOrganizingLayerPane addFigureOrganizerFor(GraphicLayer gc, MultichannelDisplayLayer display) {
+	/**when given a normal parent layer and a multidimensional image display layer,
+	 places the multichannel display layer into a figure organizing layer (which is created if the ordinary layer is not inside of an existing figure organizer). 
+	 that figure organizer will contain the multidimensional image inside of it  */
+	public FigureOrganizingLayerPane addFigureOrganizerFor(GraphicLayer ordinaryLayer, MultichannelDisplayLayer multiDimensionalImage) {
 
-		
-		
 		/**Sets up which figure organizing layer pane should be used*/
-		 currentFigureOrganizer = getUsedFigureOrganizingLayerPane(gc);
+		 currentFigureOrganizer = getOrCreateUsedFigureOrganizingLayerPane(ordinaryLayer);
+		 
+		 /**If the figure organizer is newly created, it will need a new name which depends on the multichannel*/
 		if (currentFigureOrganizer.getPrincipalMultiChannel()==null) {
-			currentFigureOrganizer.setName("Figure For "+display.getName());
+			currentFigureOrganizer.setName("Figure For "+multiDimensionalImage.getName());
 		}
 		
-		FigureTemplate temp = getUsedTemplate( display);
-		
-	/**if the template scale is very large this fixes the issue*/
-		boolean d = temp.getMultiChannelPicker().isProprocessSuitable(display);
+		/**opens a figure template or creates one if one does not exist*/
+		FigureTemplate temp = getUsedTemplate( multiDimensionalImage);
+		/**If there is not template*/
+		if (temp==null){
+				currentFigureOrganizer.addNovelMultiChannel(multiDimensionalImage, -1);
+				showRecreateDialog();
+				return currentFigureOrganizer;
+			} 
+			else 
+				addImageToFigureUsingTemplate(currentFigureOrganizer, multiDimensionalImage, temp);
+				
+		return currentFigureOrganizer;
+	}
+
+	/**
+	 Using the figure template given, adds the multichannel display layer to the figure organizer given
+	 */
+	protected void addImageToFigureUsingTemplate(FigureOrganizingLayerPane currentFigureOrganizer, MultichannelDisplayLayer multiDimensionalImage, FigureTemplate temp) {
+		/**if the template scale is very large this fixes the issue*/
+		boolean d = temp.getMultiChannelPicker()!=null&&temp.getMultiChannelPicker().isProprocessSuitable(multiDimensionalImage);
 		temp.getMultiChannelPicker().doesPreprocess=d;
 		
-		/**must apply before creating the layout so the minimum number of columns can be created*/
-		if (temp!=null)
-			temp .addDisplayToFigure(currentFigureOrganizer, display);
+		/**must apply before creating the layout so the minimum number of columns can be created
+		  it appears that without a template the display will not be added to the figure. TODO: fit this */
 		
-		if (showPanelCreationOptions()) {
-			currentFigureOrganizer.recreateFigurePanels();
-			//display.showOptionsThenRegeneratePanelGraphics();
-			}
+			temp .addDisplayToFigure(currentFigureOrganizer, multiDimensionalImage);
+			showRecreateDialog();
 
-		
+
 		try{
-			if (temp!=null) temp.applyProperties(currentFigureOrganizer);
-			
-			
-			
-		if (isAutoGenerateFromModel()) {
-			display.eliminateAndRecreate();
-			MontageLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
-			if (makeLabels) temp .createDefaultLabelsObjectsFromTemplate( currentFigureOrganizer, display, layout);
-			temp .createScaleBarOffTemplate( currentFigureOrganizer);
-			layout.generateCurrentImageWrapper();
-			layout.getEditor().fitLabelSpacesToContents(layout.getPanelLayout());
-			 
-		} 
+		if (temp!=null) temp.applyProperties(currentFigureOrganizer);
 		
-		}catch (Throwable t) {
-			t.printStackTrace();
-		}
-		return currentFigureOrganizer;
+		
+		
+		if (isAutoGenerateFromModel()) {
+		multiDimensionalImage.eliminateAndRecreate();
+		MontageLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
+		if (makeLabels) temp .createDefaultLabelsObjectsFromTemplate( currentFigureOrganizer, multiDimensionalImage, layout);
+		temp .createScaleBarOffTemplate( currentFigureOrganizer);
+		layout.generateCurrentImageWrapper();
+		layout.getEditor().fitLabelSpacesToContents(layout.getPanelLayout());
+ 
+} 
+
+	}catch (Throwable t) {
+	t.printStackTrace();
+	}
+		
+	}
+
+	/**
+	If the option to show the recreate panels dialog right away is choses. does so.
+	 */
+	protected void showRecreateDialog() {
+		if (showPanelCreationOptions()) {
+				currentFigureOrganizer.recreateFigurePanels();
+			}
 	}
 	
 	FigureTemplate getUsedTemplate() {
 		return getUsedTemplate(null);
 	}
 		
-	/**returns the figure template to be used by this adder. might return null*/
+	/**returns the figure template to be used by this adder. 
+	  if no template is found, creates a new default template*/
 	protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
 		FigureTemplate template = getTemplatesaver().loadDefaultTemplate();
 		if (template==null&&display!=null) {
-			
 			template=new FigureTemplate(display);
 			getTemplatesaver().saveDefaultTemplate(template);
 		}
 		return template;
 	}
-	
+	/**Applies a figure template to the layer*/
 	void applyUsedTemplate(GraphicLayer g) {
 			try{
 				getUsedTemplate().applyProperties(g);
@@ -231,7 +238,6 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	
 	
 	private boolean isAutoGenerateFromModel() {
-		// TODO Auto-generated method stub
 		return 	autoFigureGenerationOptions.autoGenerateFromModel;
 	}
 
@@ -261,13 +267,13 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	}
 
 
-	public MultiChannelDisplayCreator getMultiChannelCreator() {
+	public MultiChannelDisplayCreator getMultiChannelOpener() {
 		if (CurrentAppContext.getMultichannelContext()==null) return null;
 		return CurrentAppContext.getMultichannelContext().getMultichannelOpener() ;
 	}
 	
 	private String nameType() {
-		if (getMultiChannelCreator()!=null) return getMultiChannelCreator().imageTypeName();
+		if (getMultiChannelOpener()!=null) return getMultiChannelOpener().imageTypeName();
 			return "Image";
 		
 	}

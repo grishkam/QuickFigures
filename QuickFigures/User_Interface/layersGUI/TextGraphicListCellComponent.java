@@ -11,7 +11,7 @@ import java.awt.Rectangle;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import logging.IssueLog;
@@ -64,7 +64,7 @@ public class TextGraphicListCellComponent extends JComponent {
 			setToImmitate(t);
 			
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 	
@@ -130,12 +130,12 @@ public class TextGraphicListCellComponent extends JComponent {
 		if (this.getIcon()!=null) {
 			getIcon().paintIcon(this, g, 0, (this.getHeight()-getIcon().getIconHeight())/2);
 		}
-			currentDisplay().draw((Graphics2D) g, new BasicCordinateConverter(-this.iconDim().width-textInsets.left ,-this.currentDisplay().getFont().getSize()-textInsets.top,1));
+			currentDisplay().draw((Graphics2D) g, new BasicCoordinateConverter(-this.iconDim().width-textInsets.left ,-this.currentDisplay().getFont().getSize()-textInsets.top,1));
 			
 			
 		} catch (Exception e) {
 	
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		
 	}

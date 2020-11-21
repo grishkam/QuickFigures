@@ -53,7 +53,7 @@ public class ScaleBarPicker extends GraphicalItemPicker<BarGraphic>{
 		item2.copyColorsFrom(getModelItem());
 		if (getModelItem().getSnapPosition()==null) return;
 		
-		item2.setSnappingBehaviour(getModelItem().getSnapPosition().copy());
+		item2.setSnapPosition(getModelItem().getSnapPosition().copy());
 		}
 		
 	}
@@ -74,16 +74,16 @@ public class ScaleBarPicker extends GraphicalItemPicker<BarGraphic>{
 	
 	@Override
 public void setToStandardFor(MultichannelDisplayLayer wrap) {
-		float h=(float) (wrap.getWorkingPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
+		float h=(float) (wrap.getPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
 		
-		PanelListElement panel = wrap.getWorkingPanelList().getPanels().get(0);
+		PanelListElement panel = wrap.getPanelList().getPanels().get(0);
 		
 		
 		if (this.getModelItem()!=null) {
 
 
 			getModelItem().setLengthInUnits(getBarLengthStandard(panel));
-			getModelItem().setSnappingBehaviour(SnappingPosition.defaultScaleBar());
+			getModelItem().setSnapPosition(SnappingPosition.defaultScaleBar());
 			
 			setBarDefaultsBasedOnHeight(h, getModelItem(), Color.white);
 		}

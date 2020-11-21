@@ -39,7 +39,15 @@ public class ActionButtonHandleList extends SmartHandleList {
 	int numHandleID=30;
 	protected int maxGrid=DEFAULT_MAX_GRID_;
 	double between=1;
+	private boolean vertical=false;
 	
+	
+	public ActionButtonHandleList() {
+		
+	}
+	public ActionButtonHandleList(boolean vertical) {
+		this.vertical=vertical;
+	}
 	
 	public void setLocation(Point2D.Double p) {
 		if(p==null) return;
@@ -48,7 +56,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	}
 	
 	
-	
+	/**draws the handles*/
 	public void draw(Graphics2D g, CordinateConverter<?> cords) {
 		
 		
@@ -58,38 +66,83 @@ public class ActionButtonHandleList extends SmartHandleList {
 	}
 	
 /**Sets the locations of each handle such that they appear the same regardless of magnification
- * works but needs updating as handles sometimes have odd positions*/
+ */
 	public void updateHandleLocations(double magnify) {
 		spacing = 1/magnify;
-		double xi= location.getX();
-		double y= location.getY();
-		int colIndex = 0;
-		lowerMostY=0;
-		rightMostX=0;
-		
-		for(SmartHandle handle: this) {
-			if(handle.isHidden()) continue;
-			handle.setCordinateLocation(new Point2D.Double(xi+handle.getDrawnHandleWidth()*spacing/2, y));
-			double handleXSpace = ((double)handle.getDrawnHandleWidth()+between)*spacing;//how much space until the next handle
-			xi+=handleXSpace;
-			
-			colIndex++;
-			if(colIndex>=maxGrid) {
-				xi=location.getX();
-				y+=handleXSpace;//not the y space? might cause issues if the handles are not square
-				colIndex=0;
-			}
-			
-			if (y+handle.getHeight()>lowerMostY) {
-				lowerMostY=y+handle.getHeight();
-			}
-			if (xi+handle.getWidth()>rightMostX) {
-				rightMostX=xi+handle.getWidth();
-			}
-			
-			
-		}
+		if (vertical)
+			updateLocationsForVertical();
+		else
+			updateLocationsForHorizontal();
 	}
+
+
+/**
+ 
+ */
+public void updateLocationsForHorizontal() {
+	double xi= location.getX();
+	double y= location.getY();
+	int colIndex = 0;
+	lowerMostY=0;
+	rightMostX=0;
+	
+	for(SmartHandle handle: this) {
+		if(handle.isHidden()) continue;
+		handle.setCordinateLocation(new Point2D.Double(xi+handle.getDrawnHandleWidth()*spacing/2, y));
+		double handleXSpace = ((double)handle.getDrawnHandleWidth()+between)*spacing;//how much space until the next handle
+		xi+=handleXSpace;
+		
+		colIndex++;
+		if(colIndex>=maxGrid) {
+			xi=location.getX();
+			y+=handleXSpace;//not the y space? might cause issues if the handles are not square
+			colIndex=0;
+		}
+		
+		if (y+handle.getHeight()>lowerMostY) {
+			lowerMostY=y+handle.getHeight();
+		}
+		if (xi+handle.getWidth()>rightMostX) {
+			rightMostX=xi+handle.getWidth();
+		}
+		
+		
+	}
+}
+
+/**
+sets the locations of each handle to form a vertical array
+*/
+public void updateLocationsForVertical() {
+	double xi= location.getX();
+	double yi= location.getY();
+	int rowIndex = 0;
+	lowerMostY=0;
+	rightMostX=0;
+	
+	for(SmartHandle handle: this) {
+		if(handle.isHidden()) continue;
+		handle.setCordinateLocation(new Point2D.Double(xi, yi+handle.getDrawnHandleHeight()*spacing/2));
+		double handleYSpace = ((double)handle.getDrawnHandleHeight()+between)*spacing;//how much space until the next handle
+		yi+=handleYSpace;
+		
+		rowIndex++;
+		if(rowIndex>=maxGrid) {
+			xi=location.getX();
+			yi+=handleYSpace;//not the y space? might cause issues if the handles are not square
+			rowIndex=0;
+		}
+		
+		if (yi+handle.getHeight()>lowerMostY) {
+			lowerMostY=yi+handle.getHeight();
+		}
+		if (xi+handle.getWidth()>rightMostX) {
+			rightMostX=xi+handle.getWidth();
+		}
+		
+		
+	}
+}
 	
 
 	/**An icon that performs an action*/
@@ -162,7 +215,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	}
 	
 
-	/**A handle that */
+	/**A handle that shows a popup menu to the user with options defined by an array of actions*/
 	public class GeneralActionListHandle extends GeneralActionHandle {
 
 		public MultiSelectionOperator itemForIcon;
@@ -375,5 +428,15 @@ public class ActionButtonHandleList extends SmartHandleList {
 
 		}
 
+	}
+
+	/**sets the orientation to vertical*/
+	public void setVertical(boolean b) {
+		this.vertical=b;
+		
+	}
+	public void updateLocation() {
+		// TODO Auto-generated method stub
+		
 	}
 }

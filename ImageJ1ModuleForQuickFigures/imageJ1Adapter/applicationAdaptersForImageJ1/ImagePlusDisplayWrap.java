@@ -11,13 +11,14 @@ import java.awt.Window;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import channelMerging.MultiChannelDisplayWrapper;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
+import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
 
 /**See interface.  Very few of the methods from the interfaces 
  need be implemented for this class to perform its function so most are not implemented.
  	*/
-public class ImagePlusDisplayWrap implements DisplayedImage,MultiChannelDisplayWrapper {
+public class ImagePlusDisplayWrap implements MultiChannelDisplayWrapper {
 
 	ImagePlus imp;
 
@@ -64,7 +65,7 @@ public class ImagePlusDisplayWrap implements DisplayedImage,MultiChannelDisplayW
 	}
 
 	@Override
-	public MultiChannelWrapper getMultiChannelWrapper() {
+	public MultiChannelImage getMultiChannelWrapper() {
 		if (imp==null) return null;
 		return new ImagePlusWrapper(imp);
 	}
@@ -168,6 +169,12 @@ public class ImagePlusDisplayWrap implements DisplayedImage,MultiChannelDisplayW
 	public void setZoomLevel(double z) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public SmartHandleList getCanvasHandles() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

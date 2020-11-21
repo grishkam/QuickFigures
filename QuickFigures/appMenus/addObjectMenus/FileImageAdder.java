@@ -17,6 +17,10 @@ import logging.IssueLog;
 
 public class FileImageAdder extends BasicGraphicAdder{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected boolean rg=false;
 	boolean isImageMale=true;
 

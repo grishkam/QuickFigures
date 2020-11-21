@@ -14,25 +14,21 @@ public class RingGraphicTool extends CircleGraphicTool {
 		model=simpleRing;
 		simpleRing.arc=arc;
 		
-		model.setStrokeColor(Color.black);
-		super.set=TreeIconWrappingToolIcon.createIconSet(model);
+		getModel().setStrokeColor(Color.black);
+		super.set=TreeIconWrappingToolIcon.createIconSet(getModel());
 		
 	}
 
-	{model=new SimpleRing(new Rectangle(0,0,15,15));}{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
+	{model=new SimpleRing(new Rectangle(0,0,15,15));}{getModel().setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(getModel());}}
 	
 	public RectangularGraphic createShape(Rectangle r) {
 		return new  SimpleRing(r, isArc);
 	}
 	
-	@Override
-	public String getToolTip() {
-			
-			return "Draw a Ring";
-		}
-	
-	@Override
-	public String getToolName() {
-		return "Draw Ring";
+	/**returns the name of the model shape */
+	public String getShapeName() {
+		return "Ring";
 	}
+	
+	
 }

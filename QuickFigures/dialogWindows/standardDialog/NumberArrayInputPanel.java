@@ -45,8 +45,8 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		NumericTextField f = new NumericTextField(number, precision);
 		f.addKeyListener(this);
 		fields.add(f);
-		numbers.add(new Double(0));
-		numbersOriginal.add(new Double(0));
+		numbers.add((double) 0);
+		numbersOriginal.add((double) 0);
 		this.add(f);
 		
 	}
@@ -66,7 +66,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 	public float[] getArray() {
 		ArrayList<Float> oo=new ArrayList<Float>();
 		for(NumericTextField f: fields) {
-			if (!f.isBlank()) oo.add(new Float(f.getNumberFromField()));
+			if (!f.isBlank()) oo.add((float) f.getNumberFromField());
 			
 		}
 		float[] output = new float[oo.size()];

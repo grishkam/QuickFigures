@@ -2,7 +2,6 @@ package utilityClassesForObjects;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
@@ -13,6 +12,7 @@ import infoStorage.BasicMetaDataHandler;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
+/**stores information about a line of text that is part of a textGraphic object*/
 public class TextLine extends ArrayList<TextLineSegment>{
 
 	/**
@@ -29,8 +29,17 @@ public class TextLine extends ArrayList<TextLineSegment>{
 	double xbase=0;
 	double ybase=0;
 	
-	//private HashMap<TextLineSegment, Rectangle2D> segmentdimensions=new HashMap<TextLineSegment, Rectangle2D>();
+	/**creates a line of text in the given paragraph*/
+	public TextLine(TextParagraph parent) {
+		this.setParent(parent);
+	}
+	/**creates a line of text in the given paragraph with the given conent and text color*/
+	public TextLine(TextParagraph parent, String text, Color c) {
+		this.setParent(parent);
+		addSegment(text,c);
+	}
 	
+	/**returns the constituent text as a string*/
 	public String getText() {
 		String output = "";
 		for(TextLineSegment t: this) {
@@ -39,6 +48,8 @@ public class TextLine extends ArrayList<TextLineSegment>{
 		return output;
 	}
 	public String toString() {return getText();}
+	
+	/**creates a copy of this line*/
 	public TextLine copy() {
 		TextLine t=new TextLine(this.getParent());
 		t.copySegmentsFrom(this);
@@ -66,7 +77,13 @@ public ArrayList<TextLineSegment> replaceSegmentsWith(ArrayList<TextLineSegment>
 	}
 
 /**replaces the segments of this line with the argument. However does not copy the segment colors*/
+//TODO: determine if the matchWithoutColor method that I added on 11/17 to fix some of the consistency issues between dialog and labels causes any bugs. will write test cases
 public ArrayList<TextLineSegment> replaceSegmentsWithoutColor(ArrayList<TextLineSegment> origin) {
+	if(origin.size()==size()) {
+		matchWithoutColor(origin);
+		return this;
+	}
+	
 	this.clear();
 	ArrayList<TextLineSegment> output=new ArrayList<TextLineSegment>();
 	for(TextLineSegment seg: origin) {
@@ -79,37 +96,43 @@ public ArrayList<TextLineSegment> replaceSegmentsWithoutColor(ArrayList<TextLine
 	return output;
 }
 
+/**replaces the segments of this line with the argument. However does not copy the segment colors*/
+public void matchWithoutColor(ArrayList<TextLineSegment> origin) {
+	for(int i=0;i<this.size(); i++) {
+		TextLineSegment seg1=origin.get(0);
+		TextLineSegment localSeg1=get(0);
+		seg1.makeSimilar(localSeg1);
+		localSeg1.text=seg1.text;
+		localSeg1.setTextColor(null);
+	}
+}
+
+/**returns the font*/
 	public Font getFont() {
 		
 		return this.getParent().getFont();
 	}
 	
-	
-	public TextLine(TextParagraph parent) {
-		this.setParent(parent);
-	}
-	
+
+	/**moves the fragment of text one index forward*/
 	public void moveSegForward(	TextLineSegment lin) {
 		
 		ArraySorter<TextLineSegment> as = new ArraySorter<TextLineSegment>();
 		as.moveItemForward(lin, this);
 	}
 	
-public void moveSegBackward(	TextLineSegment lin) {
-		
+	/**moves the fragment of text one index backward*/
+	public void moveSegBackward(	TextLineSegment lin) {
 		ArraySorter<TextLineSegment> as = new ArraySorter<TextLineSegment>();
 		as.moveItemBackward(lin, this);
 	}
 
 	
-	public TextLine(TextParagraph parent, String text, Color c) {
-		this.setParent(parent);
-		addSegment(text,c);
-	}
-	
 
 	
-	/**decodes a string and adds the label with properties described by that string*/
+
+	@Deprecated
+	/**decodes certain information regarding color and subscript/superscript from a string and adds the test with properties described by that string to the text line*/
 	public void addFromCodeString(String st, Color c) {
 		String[] sts=new String[] {st};
 		
@@ -136,10 +159,12 @@ public void moveSegBackward(	TextLineSegment lin) {
 		
 	}
 	
+	/**Adds a new segment of text to the end of this line and returns it*/
 	public TextLineSegment addSegment(String text, Color color) {
 		return addSegment(text,color, 0);
 	}
 	
+	/**Adds a new segment of text to the end of this line and returns it.*/
 	public TextLineSegment addText(String s) {
 		return addSegment(s, null, 0);
 	}
@@ -155,31 +180,34 @@ public void moveSegBackward(	TextLineSegment lin) {
 		return added;
 	}
 	
+	/**Adds a new segment of text to the end of this line and returns it.*/
 	public TextLineSegment addSegment() {
 		TextLineSegment newSegment = new TextLineSegment("", 0);
 		this.add(newSegment);
 		return newSegment;
 	}
 	
-	
-	
+	/**empties this line of text*/
 	public void removeAllSegments() {
 		this.clear();
 	}
 	
-	
+	/**removes any segments of text that contain an emty string*/
 	public void removeAllEmptySegments() {
 		ArrayList<TextLineSegment> segs=new ArrayList<TextLineSegment>();
 		segs.addAll(this);
 		for(TextLineSegment s: segs) {if (s.getText().equals("")) remove(s);}
 		
 	}
-	public Point2D getSegmentBoundsLocation(TextLineSegment t) {
+	
+	/**returns the location of the given segment of text (based on the bounding box)*/
+	public static Point2D getSegmentBoundsLocation(TextLineSegment t) {
 		Rectangle2D r = t.bounds;//segmentdimensions.get(t);
 		if (r==null) return new Point();
 		return new Point2D.Double(r.getX(), r.getY());
 	}
 	
+	/**moves the location of this text line*/
 	public void move(double x, double y) {
 		for(TextLineSegment t: this) {
 			t.move(x, y);
@@ -191,95 +219,59 @@ public void moveSegBackward(	TextLineSegment lin) {
 		}
 	}
 	
-	
+	/**adds the segment of text to this line*/
 	public boolean add(TextLineSegment t) {
 		t.setParent(this);
 		return super.add(t);
 	}
 
+	/**returns the parent paragraph for this line*/
 	public TextParagraph  getParent() {
 		return parent;
 	}
-
+	/**sets the parent paragraph for this line*/
 	public void setParent(TextParagraph parent) {
 		this.parent = parent;
 	}
 	
+
 	
-//	boolean testnew=true;
+	/**when given the basline x and y, this returns the bounding box for 
+	  this line of text as if it were drawn at that x and y*/
+	public Rectangle2D computeLineDimensions(Graphics g, double x, double y) {
 	
-	/**when given the basline x and y, this computes the line bounds*/
-public Rectangle2D computeLineDimensions(Graphics g, double x, double y) {
 	
-	
-	lineWidth=0;
-	setLineHeight(0);
+		lineWidth=0;
+		setLineHeight(0);
 		double xrect = x;
-		
-		
-		
-		 FontMetrics metricsi0=textPrecis().getInflatedMetrics(getFont(), g);
-		double fontHeight = metricsi0.getHeight()/this.inflationFactor();
-        double descent = metricsi0.getDescent()/this.inflationFactor();
+		/**in order to obtain double precision values for the fontheight and descent, I used a relatively inefficient method*/
+		double[] both = TextPrecision.getFontHeightAndDescent(getFont(), g);
+		double fontHeight = both[0];
+        double descent = both[1];
         ybase=y;
         xbase=x;
-		y=y-fontHeight+descent;//changes the y from baseline to corner
+		y=y-fontHeight+descent;//changes the y from baseline of the text to the corner
 		
-		
+		/**adds all of the segments of text to the linWidth*/
 		for(TextLineSegment t: this) try {
 			if (t==null) continue;
 			t.setParent(this);
-			
-			if (true) {
 				Rectangle2D r = t.computeLineDimensions(g, xrect, ybase);
 				 xrect+=r.getWidth();
 				 lineWidth+=r.getWidth();
-				 if (r.getHeight()>getLineHeight())setLineHeight(r.getHeight());
+				 if (r.getHeight()>getLineHeight())setLineHeight(r.getHeight());//the tallest segment determines the line height
 				 continue;
-			}
-			/**
-			FontMetrics metrics2 = g.getFontMetrics(t.getFont());
-	        Rectangle2D r=metrics2.getStringBounds(t.getText(), g);
-	        FontMetrics metricsi=textPrecis().getInflatedMetrics(t.getFont(), g);
-	        if (r==null) {IssueLog.log("null rectangle as string boungs");}
-	        double yrect = y;
-	        
-	        //FontMetrics metrics2 = g.getFontMetrics(t.getFont());
-			double fontHeight2 = metricsi.getHeight()/inflationFactor();
-	        double descent2 = metricsi.getDescent()/inflationFactor();
-	        if (t.isSubOrSuperScript()==1) yrect-=t.getFont().getSize();
-	       // -fontHeight2+descent2
-	        r=new Rectangle2D.Double(xrect, yrect, metricsi.stringWidth(t.getText())/inflationFactor(), r.getHeight());//changed from a setrect method
-	        xrect+=r.getWidth();
-	      //  metrics2.
-	       
-	        t.baseLine=new Point2D.Double(r.getX(), r.getY()+fontHeight2-descent2);
-	       
-			t.baseLineend=new Point2D.Double(r.getX()+r.getWidth()*1.1, r.getY()+fontHeight2-descent2);
-	        t.bounds=r;
-	        lineWidth+=r.getWidth();
-	   
-	      //  segmentdimensions.put(t, r);
-	      
-	       if (r.getHeight()>getLineHeight())setLineHeight(r.getHeight());*/
-		} catch (Throwable tt) {IssueLog.log("problem with segmetn of line 1");IssueLog.log(tt);}
 		
+		} catch (Throwable tt) {IssueLog.log("problem with segment of line 1");IssueLog.logT(tt);}
 		
-		
-       
-       
         setLineBounds(new  Rectangle2D.Double(x,y-fontHeight+descent, lineWidth, getLineHeight()));
        
         return getLineBounds();
-	
 	}
 
 
 
-private double inflationFactor() {
-		return textPrecis().getInflationFactor();
-	}
-
+/**returns the stored line height of this line*/
 public double getLineHeight() {
 	return lineHeight;
 }
@@ -288,6 +280,7 @@ public void setLineHeight(double lineHeight) {
 	this.lineHeight = lineHeight;
 }
 
+/**returns the stored bounds of this line*/
 public Rectangle2D getLineBounds() {
 	return linedim;
 }
@@ -320,17 +313,17 @@ public TextLineSegment[] splitSegment(TextLineSegment thisSegment, int position)
 		return new TextLineSegment[] {thisSegment, seg2};
 }
 
-
-
-TextPrecision textPrecis() {
-	  return TextPrecision.createPrecisForFont(getFont());
-}
+/**When given two adjacent segments of the line. removes on and adds its text to the 
+ * one before it. Used to reverse the splitSegment method above*/
 public void fuseSegments(TextLineSegment previousSeg, TextLineSegment thisSegment) {
 	String textmoved = thisSegment.getText();
 	remove(thisSegment);
 	previousSeg .setText(previousSeg.getText()+textmoved);
 	
 }
+
+
+
 
 
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import gridLayout.GridIndex;
@@ -22,13 +22,13 @@ import utilityClassesForObjects.Selectable;
 import applicationAdapters.PixelWrapper;
 import channelLabels.ChannelLabelTextGraphic;
 
-/**An object containing a set of images and various informtation about them. */
+/**An object containing a set of images and various information about them. */
  public class PanelListElement implements Serializable, ScalededItem{
 	
 	 	/**
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int MergeImageDes=2, ChannelPanelDes=1;;
+	public static final int MERGE_IMAGE_PANEL=2, CHANNEL_IMAGE_PANEL=1;;
 
 		/**The image data. Its pixels. whatever type they may be*/
 		transient PixelWrapper image;
@@ -36,6 +36,8 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**The graphical object that displays this panel. If there is one. 
 		   */
 		public Object imageGObject;
+		/**The channel label used to display the channel name*/
+		private ChannelLabelTextGraphic channelLabelDisplay;
 
 		/**The index of the image in its original stack. */
 		public Integer originalIndex=0;
@@ -47,25 +49,28 @@ import channelLabels.ChannelLabelTextGraphic;
 		private GridIndex displayGridIndex=new GridIndex();
 		
 		/**An integer telling what type of panel this is. channel or merge*/
-		public Integer designation=ChannelPanelDes;	
+		public Integer designation=CHANNEL_IMAGE_PANEL;	
 		
-		/**the original source image name and id for this panel*/
+		/**the original source image name and id for this panel. */
 		public String originalImageName;
 		public String originalImagePath;
 		public Integer originalImageID;
 		public ArrayList<Integer> originalIndices=new ArrayList<Integer>();
-		private ChannelLabelTextGraphic channelLabelDisplay;
+		
 
-		private ScaleInfo scaleinfo;
+		private ScaleInfo scaleinfo;//the pixel size is stored here
 
 		private ArrayList<ChannelEntry> hashChannel =new  ChannelEntryList();
 		
+		/**creates a similar panel targeting the same stack location but 
+		  without any Channel Label or Image*/
 		public PanelListElement createDouble() {
 			PanelListElement output=new PanelListElement();
 			giveSettingsTo(output);
 				
 			return output;
 		}
+		
 		/**simple, sets fields of output*/
 		public void giveSettingsTo(PanelListElement output) {
 			output.originalChanNum=this.originalChanNum;
@@ -82,22 +87,25 @@ import channelLabels.ChannelLabelTextGraphic;
 			output.hashChannel=this.hashChannel;
 		}
 		
+		/**creates a copy. this method is needed for the undo to work*/
 		public PanelListElement copy() {
 			PanelListElement output =new PanelListElement();
 			giveObjectsAndSettingsTo(output);
 			return output;
 		}
 
-		public void giveObjectsAndSettingsTo(PanelListElement output) {
-			giveSettingsTo(output);
-			giveObjectsTo(output);
+		/**Alters the target panel to be a copy of this panel*/
+		public void giveObjectsAndSettingsTo(PanelListElement targetPanel) {
+			giveSettingsTo(targetPanel);
+			giveObjectsTo(targetPanel);
 		}
 		
-		private void giveObjectsTo(PanelListElement output) {
-			output.setImageDisplayObject(getImageDisplayObject());
-			output.setChannelLabelDisplay(getChannelLabelDisplay());
-			output.hashChannel=hashChannel;
-			output.originalIndices=new ArrayList<Integer>(); output.originalIndices.addAll(originalIndices);
+		/**sets the target panels stored objects to those of this object*/
+		private void giveObjectsTo(PanelListElement targetPanel) {
+			targetPanel.setImageDisplayObject(getImageDisplayObject());
+			targetPanel.setChannelLabelDisplay(getChannelLabelDisplay());
+			targetPanel.hashChannel=hashChannel;
+			targetPanel.originalIndices=new ArrayList<Integer>(); targetPanel.originalIndices.addAll(originalIndices);
 		}
 		
 		/**Checks for any duplicate Channel Entries, no entry should occur twice in the list*/
@@ -134,6 +142,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			return false;
 		}
 		
+		/**Returns a string describing the channel framd and slice that this panel uses*/
 		public String getChanSF() {
 			return "Channel "+this.originalChanNum+" Slice "+this.originalSliceNum +" Frame " +this.originalFrameNum;
 		}
@@ -145,13 +154,13 @@ import channelLabels.ChannelLabelTextGraphic;
 			hashChannel.add(ce);
 			originalIndices.add(ce.getOriginalStackIndex());
 		}
-		/**Removes*/
+		/**Removes a channel entry from the list*/
 		public void removeChannelEntry(ChannelEntry ce) {
 			
 			try{
 				
 				this.hashChannel.remove(ce);
-				originalIndices.remove(new Integer(ce.getOriginalStackIndex()));//random index out of bounds error here. not clear why
+				originalIndices.remove(ce.getOriginalStackIndex());//random index out of bounds exception here. not clear why
 				}
 			catch (Throwable t) {t.printStackTrace();}
 			
@@ -339,7 +348,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 		
 		public String getName() {
-			if (designation+0==MergeImageDes+0) return "Merge";
+			if (designation+0==MERGE_IMAGE_PANEL+0) return "Merge";
 			if (this.getChannelEntries().size()==0) return "";
 			return getChannelEntries().get(0).getLabel();
 		}
@@ -347,7 +356,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		/**sets the original image of the entry. the method does nothing now but is 
 		  overwritten in some subclasses*/
-		public void setSourceImage(MultiChannelWrapper imp) {	
+		public void setSourceImage(MultiChannelImage imp) {	
 			originalImageName=imp.getTitle();//imp.getTitle();
 			originalImageID=imp.getID();
 			this.setScaleInfo(imp.getScaleInfo());
@@ -474,10 +483,13 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 		
 		
+		/**returns true if this is a merge panel*/
 		public boolean isTheMerge() {
-			return this.designation.equals(MergeImageDes);
+			return this.designation.equals(MERGE_IMAGE_PANEL);
 		}
 		
+		
+		/**Changes the panel's channel slice and frame based on the argument given*/
 		public boolean changeStackLocation(CSFLocation csf) {
 			if(csf.channel>-1) this.originalChanNum=csf.channel;
 			if(csf.frame>0) this.originalFrameNum=csf.frame;

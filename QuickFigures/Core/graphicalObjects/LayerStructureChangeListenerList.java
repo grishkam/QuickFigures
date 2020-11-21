@@ -1,11 +1,16 @@
 package graphicalObjects;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layersGUI.LayerStructureChangeListener;
 import utilityClasses1.ArraySorter;
+
+/**This class maintains a list of layer structure change listeners.
+ * listeners are notified when objects are added to, removes from or moved with the layer.
+ * methods in this class also handle listener notifications*/
 
 public class LayerStructureChangeListenerList extends ArrayList<LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>> implements LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> {
 
@@ -43,12 +48,13 @@ public class LayerStructureChangeListenerList extends ArrayList<LayerStructureCh
 
 	@Override
 	public GraphicLayer getSelectedLayer() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	private void writeObject(java.io.ObjectOutputStream out)
 		     throws IOException {
+		/**ensures that any non useful items stored in this list will not be serialized
+		  */
 		ArraySorter.removeDeadItems(this);
 		ArraySorter.removeNonSerialiazble(this);
 		out.defaultWriteObject();

@@ -3,7 +3,7 @@ package multiChannelFigureUI;
 import java.awt.Color;
 import java.awt.Component;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import specialMenus.ColorJMenu;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
@@ -11,7 +11,7 @@ import standardDialog.ColorInputListener;
 public class LutSwapperTool extends BasicImagePanelTool implements ColorInputListener {
 	
 	@Override
-	public void applyReleaseActionToMultiChannel(MultiChannelWrapper mw, int chan1, int chan2) {
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw, int chan1, int chan2) {
 		if (mw==null) return;
 		mw.getChannelSwapper().swapChannelLuts(chan1, chan2);
 	}
@@ -27,7 +27,7 @@ public class LutSwapperTool extends BasicImagePanelTool implements ColorInputLis
 
 	private void setTheColor(Color color) {
 		
-		for(MultiChannelWrapper ic: super.getAllWrappers()) {
+		for(MultiChannelImage ic: super.getAllWrappers()) {
 			int chan=getBestMatchToChannel(ic, getRealNameOfPressedChannel(), getPressChannelOfMultichannel());
 			ic.getChannelSwapper().setChannelColor(color, chan);
 		}

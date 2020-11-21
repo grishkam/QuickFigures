@@ -3,11 +3,13 @@ package exportMenus;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import applicationAdapters.DisplayedImage;
 
+/**this class exports a figure as PNG file*/
 public class PNGQuickExport extends QuickExport {
 	protected String getExtension() {
 		return "png";
@@ -19,7 +21,6 @@ public class PNGQuickExport extends QuickExport {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		// TODO Auto-generated method stub
 		try{
 		
 		String newpath=getFileAndaddExtension().getAbsolutePath();
@@ -27,17 +28,19 @@ public class PNGQuickExport extends QuickExport {
 		flat.setUseTransparent(false);
 		flat.showDialog();
 		BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
-		ImageIO.write(bi, "PNG", new File(newpath));
-		 
-		   /**
-		  SVGsaver saver = new SVGsaver();
-		   
-		  saver.saveWrapper(newpath, diw);*/
+		writeImage(newpath, bi);
 		
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	        
+	}
+
+	/**
+	 writes the buffered image to the save path given
+	 */
+	public void writeImage(String newpath, BufferedImage bi) throws IOException {
+		ImageIO.write(bi, "PNG", new File(newpath));
 	}
 
 	@Override

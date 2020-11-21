@@ -1,6 +1,5 @@
 package appContextforIJ1;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
@@ -22,6 +21,7 @@ import loci.formats.FormatException;
 import loci.plugins.BF;
 import logging.IssueLog;
 
+/**the main method of this class shows the toolbars and an image */
 public class ImageDisplayTester extends ToolbarTester {
 
 	public static void main(String[] args) {
@@ -32,10 +32,6 @@ public class ImageDisplayTester extends ToolbarTester {
 		ij1Test(false);
 		showExample(true);
 		
-		String exampleimage = new DirectoryHandler().getFigureFolderPath()+"examples form dsRNA red eGFP green/Image- 0001_taken_01_29_2020.tif";
-		 if (new File(exampleimage).exists())
-			 	IJ.open(exampleimage);
-		 
 		
 	}
 	

@@ -54,7 +54,7 @@ import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import imageDisplayApp.GraphicContainingImage;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import imageDisplayApp.BasicImageInfo;
 import infoStorage.BasicMetaDataHandler;
@@ -291,7 +291,7 @@ public class GraphicSVGParser {
 					currentline.get(0).setTextColor(color);
 					
 					Double x2 = span.getEntryAsDouble("x");
-					if(x2!=null &&x2>tg.getX()) comp.getParagraph().setJustification(TextParagraph.Justify_Center);
+					if(x2!=null &&x2>tg.getX()) comp.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 				
 				}  else currentSegment= currentline.addSegment(string,color);
 				
@@ -414,7 +414,7 @@ public class GraphicSVGParser {
 					currentline.get(0).setTextColor(color);
 					
 					Double x2 = span.getEntryAsDouble("x");
-					if(x2!=null &&x2>tg.getX()) comp.getParagraph().setJustification(TextParagraph.Justify_Center);
+					if(x2!=null &&x2>tg.getX()) comp.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 				
 				}  else currentSegment= currentline.addSegment(string,color);
 				
@@ -611,8 +611,8 @@ private  ZoomableGraphic parseRect(Node node) {
 			
 		}
 		
-		if(x==null) x=new Double(0);
-		if(y==null) y=new Double(0);
+		if(x==null) x=(double) 0;
+		if(y==null) y=(double) 0;
 		
 		//PNGDecodeParam param = new PNGDecodeParam();
 		
@@ -679,7 +679,7 @@ private  ZoomableGraphic parseRect(Node node) {
 			   
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				IssueLog.log(e);
+				IssueLog.logT(e);
 				e.printStackTrace();
 				
 				return null;
@@ -743,7 +743,7 @@ private  ZoomableGraphic parseRect(Node node) {
 			if (stroke_miter!=null)
 			s.setMiterLimit(stroke_miter);
 			if (stroke_width!=null)
-			s.setStrokeWidth(new Float(stroke_width));
+			s.setStrokeWidth(stroke_width.floatValue());
 			if (dashes!=null)
 			s.setDashes(dashes);
 	 }
@@ -856,7 +856,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		
 		GraphicContainingImage set = new GraphicSVGParser().openSVG(path);
 		if (set==null) return ;
-		ImageAndDisplaySet output = new ImageAndDisplaySet(set);
+		ImageWindowAndDisplaySet output = new ImageWindowAndDisplaySet(set);
 		
 		new CanvasAutoResize().performActionDisplayedImageWrapper(output);
 		

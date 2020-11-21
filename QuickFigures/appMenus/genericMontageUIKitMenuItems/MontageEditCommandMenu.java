@@ -284,7 +284,7 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 			onActionPerformed(e.getSource(), e.getActionCommand());
 			if (GraphicItemOptionsDialog.getSetContainer()!=null)GraphicItemOptionsDialog.getSetContainer().updateDisplay();
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 		
 	}

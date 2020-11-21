@@ -9,7 +9,7 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 
 /**interface for tool icons that are placed in the toolbar
@@ -21,7 +21,7 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 		protected int type=NORMAL_ICON_TYPE;
 		int borderLineWidth=1;
 		protected int iconDim=AbstractExternalToolset.DEFAULT_ICONSIZE;
-		protected boolean paintArrow=false;
+		protected boolean paintCursorIcon=false;
 		
 		/**two grey values for the pressed and unpressed icon colors*/
 		Color lightColor=new Color(210,210,210);
@@ -50,7 +50,7 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 			
 			/***/
 			paintObjectOntoIcon(arg0, g, arg2, arg3);
-			if (paintArrow) {
+			if (paintCursorIcon) {
 				paintArrowOntoIcon(arg0, g, arg2, arg3);
 			}
 			
@@ -95,7 +95,7 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 			//a.setNotchAngle(Math.PI);
 			a.setArrowHeadSize(13);
 			if (g instanceof Graphics2D)
-			a.draw((Graphics2D) g, new BasicCordinateConverter());
+			a.draw((Graphics2D) g, new BasicCoordinateConverter());
 		}
 
 		public int getIconHeight() {return iconDim;}

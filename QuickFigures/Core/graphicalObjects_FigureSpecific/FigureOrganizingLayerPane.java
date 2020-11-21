@@ -10,8 +10,8 @@ import javax.swing.Icon;
 
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.MultiChannelWrapper;
-import channelMerging.PanelStackDisplay;
+import channelMerging.MultiChannelImage;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelOrder;
@@ -49,7 +49,7 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 	{description= "A Figure Organizing Layer";}
 	
 	PanelSetter subfigureSetter=new PanelSetter(); 
-	private ArrayList< PanelStackDisplay> displays=new 	ArrayList<PanelStackDisplay>();
+	private ArrayList< ImageDisplayLayer> displays=new 	ArrayList<ImageDisplayLayer>();
 	
 	
 	public FigureOrganizingLayerPane(String name) {
@@ -58,36 +58,40 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 
 	private static final long serialVersionUID = 1L;
 
+	/**Returns the miltidimensional images the are part of the figure*/
 	@Override
-	public ArrayList<MultiChannelWrapper> getAllSourceStacks() {
-		ArrayList<MultiChannelWrapper> output = new ArrayList<MultiChannelWrapper>();
-		for(PanelStackDisplay d: getMultiChannelDisplays()){
+	public ArrayList<MultiChannelImage> getAllSourceImages() {
+		ArrayList<MultiChannelImage> output = new ArrayList<MultiChannelImage>();
+		for(ImageDisplayLayer d: getMultiChannelDisplays()){
 			if (d==null) continue;
-			output.add(d.getMultichanalWrapper());
+			output.add(d.getMultiChannelImage());
 		}
 
 		return output;
 	}
 
-	/**combines the panel lists*/
-	@Override
-	public PanelList getWorkingPanelList() {
+	
+	/**combines the panel lists from all the images in the figure into one list*/
+	public PanelList getAllPanelLists() {
 		PanelList output = new PanelList();
-		for(PanelStackDisplay d: getMultiChannelDisplays()){
+		for(ImageDisplayLayer d: getMultiChannelDisplays()){
 			if (d==null) continue;
 			output.add(d.getPanelList());
 		}
-		// TODO Auto-generated method stub
 		return output;
 	}
+	/***/
 	public void mapAllPanelPlacements() {
-		this.subfigureSetter.layDisplayPanelsOfStackOnLayout(getWorkingPanelList(), this.getMontageLayoutGraphic().getPanelLayout(), true);
+		this.subfigureSetter.layDisplayPanelsOfStackOnLayout(getAllPanelLists(), this.getMontageLayoutGraphic().getPanelLayout(), true);
 		
 	}
-
+	
+	
+	/**Updates the images panels and labels for every image in the figure from the source images.
+	  this is needed in order for the panels to reflect things like color switches, channel order changes, display range adjustments and images panels */
 	@Override
 	public void updatePanelsAndLabelsFromSource() {
-		for(PanelStackDisplay d: getMultiChannelDisplays()){
+		for(ImageDisplayLayer d: getMultiChannelDisplays()){
 			if (d==null) continue;
 			d.updatePanels();
 		}
@@ -106,43 +110,48 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public void addItemToLayer(ZoomableGraphic z) {
 		super.addItemToLayer(z);
-		if (z instanceof  PanelStackDisplay) {
-			PanelStackDisplay psdz = (PanelStackDisplay) z;
+		if (z instanceof  ImageDisplayLayer) {
+			ImageDisplayLayer psdz = (ImageDisplayLayer) z;
 			getMultiChannelDisplays().add(psdz);
 		}
 	}
 	
 	public void removeItemFromLayer(ZoomableGraphic z) {
 		super.removeItemFromLayer(z);
-		if (z instanceof  PanelStackDisplay) {
-			PanelStackDisplay psdz = (PanelStackDisplay) z;
+		if (z instanceof  ImageDisplayLayer) {
+			ImageDisplayLayer psdz = (ImageDisplayLayer) z;
 			getMultiChannelDisplays().remove(psdz);
 			this.updateImageOrder();
 		}
 	}
 	
 	
-	static Color  folderColor2= new Color(140,0, 0);
+	/**in the tree, figure organizing layers are shown in a different color from normal layers*/
+	static Color  folderColorForFigureOrganizers= new Color(140,0, 0);
 	public static Icon createDefaultTreeIcon2(boolean open) {
-		return IconUtil.createFolderIcon(open, folderColor2);
+		return IconUtil.createFolderIcon(open, folderColorForFigureOrganizers);
 	}
-	
-	@Override
+	/**returns the tree icon for figure organizering layers*/
 	public Icon getTreeIcon(boolean open) {
-		
 		return createDefaultTreeIcon2(open);
-	
 	}
 	
-
+	
+/**returns the layout */
 public BasicMontageLayout getLayout() {
 	return getMontageLayout();
 }
-
-/**gets the layout graphic*/
+/**returns the layout */
+public BasicMontageLayout getMontageLayout() {
+	MontageLayoutGraphic mm = getMontageLayoutGraphic();
+	if (mm!=null) return mm.getPanelLayout();
+	return null;
+}
+/**gets the graphic that displays the layout and allows layout editing by user*/
 public MontageLayoutGraphic getMontageLayoutGraphic() {
 	for(ZoomableGraphic a:super.getItemArray()) {
 		if (a==null) continue;
@@ -156,37 +165,31 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 	return null;
 }
 
-public BasicMontageLayout getMontageLayout() {
-	MontageLayoutGraphic mm = getMontageLayoutGraphic();
-	if (mm!=null) return mm.getPanelLayout();
-	
-	return null;
-}
 
-	public ArrayList< PanelStackDisplay> getMultiChannelDisplays() {
+/**returns a list of all display layers for all the images in the figure*/
+	public ArrayList< ImageDisplayLayer> getMultiChannelDisplays() {
 		return displays;
 	}
-	
-	public  PanelStackDisplay getPrincipalMultiChannel() {
-		for (PanelStackDisplay p: getMultiChannelDisplays()) {
+	/**returns the first display layers for the first image in the figure*/
+	public  ImageDisplayLayer getPrincipalMultiChannel() {
+		for (ImageDisplayLayer p: getMultiChannelDisplays()) {
 			if (p!=null) return p;
 		}
-
 		return null;
 	}
-	
-	public ArrayList< PanelStackDisplay> getMultiChannelDisplaysInOrder() {
+	/**returns all the image display layers */
+	public ArrayList< ImageDisplayLayer> getMultiChannelDisplaysInOrder() {
 		ArrayList<ZoomableGraphic> ia = this.getItemArray();
-		ArrayList<PanelStackDisplay> output = new ArrayList< PanelStackDisplay>();
+		ArrayList<ImageDisplayLayer> output = new ArrayList< ImageDisplayLayer>();
 		for(ZoomableGraphic a:ia) {
-			if (a instanceof PanelStackDisplay) {
-				output .add((PanelStackDisplay) a);
+			if (a instanceof ImageDisplayLayer) {
+				output .add((ImageDisplayLayer) a);
 			}
 		}
 		return output;
 	}
 	
-	public ArrayList< PanelStackDisplay> getMultiChannelDisplaysInLayoutOrder() {
+	public ArrayList< ImageDisplayLayer> getMultiChannelDisplaysInLayoutOrder() {
 		this.updateImageOrder();
 		return getMultiChannelDisplays();
 	}
@@ -196,9 +199,9 @@ public BasicMontageLayout getMontageLayout() {
 	 * @return */
 	public CombinedEdit addNovelMultiChannel(MultichannelDisplayLayer display, int start) {
 		if(display==null) return null;
-		int startpoint=this.getWorkingPanelList().getlastPanelsIndex()+1;
+		int startpoint=this.getAllPanelLists().getlastPanelsIndex()+1;
 		if(start>0) startpoint=start;
-		PanelStackDisplay principalMultiChannel = getPrincipalMultiChannel();
+		ImageDisplayLayer principalMultiChannel = getPrincipalMultiChannel();
 		boolean hasOne=principalMultiChannel!=null;//true if there is already a multichannel image in figure
 		CombinedEdit output = new CombinedEdit();
 		
@@ -216,10 +219,10 @@ public BasicMontageLayout getMontageLayout() {
 			try {
 				boolean mustResize=areSizesDifferent(principalMultiChannel, display) ;
 			double pScale = principalMultiChannel.getPreprocessScale();
-			double w = principalMultiChannel.getMultichanalWrapper().getDimensions().getWidth()/pScale;
-			double h = principalMultiChannel.getMultichanalWrapper().getDimensions().getHeight()/pScale;
+			double w = principalMultiChannel.getMultiChannelImage().getDimensions().getWidth()/pScale;
+			double h = principalMultiChannel.getMultiChannelImage().getDimensions().getHeight()/pScale;
 			
-			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlices(display.getMultichanalWrapper()))
+			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlices(display.getMultiChannelImage()))
 				{
 				CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
 				display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
@@ -238,8 +241,8 @@ public BasicMontageLayout getMontageLayout() {
 		}
 		
 		/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
-		if (hasOne) try {new ChannelOrderAndLutMatching().matchChannels(principalMultiChannel.getMultichanalWrapper(), display.getMultichanalWrapper(), 2);
-				} catch (Throwable t) {IssueLog.log(t);}
+		if (hasOne) try {new ChannelOrderAndLutMatching().matchChannels(principalMultiChannel.getMultiChannelImage(), display.getMultiChannelImage(), 2);
+				} catch (Throwable t) {IssueLog.logT(t);}
 		
 		this.add(display);
 		output.addEditToList(new UndoAddItem(this, display));
@@ -263,34 +266,56 @@ public BasicMontageLayout getMontageLayout() {
 		return output;
 	}
 
-	/**Written to crop an initial image based on the roi*/
+	/**Sometimes, a user or programmer will have set a cropping region
+	 Written to crop an initial image based on the roi*/
 	public static void cropIfUserSelectionExists(MultichannelDisplayLayer display) {
-		if (display.getMultichanalWrapper().getSelectionRectangle(0)!=null) try{
-			Rectangle b = display.getSlot().getMultichanalWrapper().getSelectionRectangle(0).getBounds();
-			display.getMultichanalWrapper().eliminateSelection(0);//eliminates the rectangle so it wont interfere with later steps
-			boolean valid=true;//is the ROI valid
-			if(b.height>3.5*b.width) valid=false;
-			if(b.width>3.5*b.height) valid=false;
-			if(b.width<25||b.height<25) valid=false;
-			if(b.width>1000||b.height>1000) valid=false;
-			
-			IssueLog.log("Rectangle valid= "+valid);
-			if(!valid) {
-				CroppingDialog.showCropDialog(display.getSlot(), b, 0);
-			} else {
-				display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
-			}
-			
+		Rectangle totalImageSize = new Rectangle(display.getMultiChannelImage().getDimensions());
+		Rectangle b=totalImageSize;
+		
+		boolean valid=true;//is the ROI valid
+		
+		if (display.getMultiChannelImage().getSelectionRectangle(0)!=null) try{
+			//if user has region of interest drawn this takes precedent
+			b = display.getSlot().getMultichannelImage().getSelectionRectangle(0).getBounds();
+			display.getMultiChannelImage().eliminateSelection(0);//eliminates the rectangle so it wont interfere with later steps
+
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
+		} else if (display.getPreProcess()!=null &&display.getPreProcess().getRectangle()!=null) 
+				{	
+					b=display.getPreProcess().getRectangle();
+				//in some contexts, a crop region might already be set
+				}
+			
+		/**for rectangles that are either small or have strange aspect ratios, rectangle is declared invalid*/
+		if(b.height>3.5*b.width) valid=false;
+		if(b.width>3.5*b.height) valid=false;
+		if(b.width<25||b.height<25) valid=false;	
+		
+		/**if area is very large, rectangle is declared invalid and 
+		  a smaller one is set. Asks user to crop anyway*/
+		if(b.width>1000||b.height>1000) { 
+			valid=false;
+			b.width=800;
+			b.height=600;
+		}
+		
+		/**if the entire image will be used, this method can return without doing a crop*/
+		if (valid&&totalImageSize.equals(b)) 
+			return;
+		
+		if(!valid) {
+			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
+		} else {
+			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
 		}
 	}
 	
 	/**returns true if the sizes are different enough to merit a cropping
 	   is an incompatibility in the sizes*/
-	private boolean areSizesDifferent(PanelStackDisplay principalMultiChannel, MultichannelDisplayLayer display) {
-		Dimension2D p1 = principalMultiChannel.getMultichanalWrapper().getDimensions();
-		Dimension2D p2 = display.getMultichanalWrapper().getDimensions();
+	private boolean areSizesDifferent(ImageDisplayLayer principalMultiChannel, MultichannelDisplayLayer display) {
+		Dimension2D p1 = principalMultiChannel.getMultiChannelImage().getDimensions();
+		Dimension2D p2 = display.getMultiChannelImage().getDimensions();
 		if (this.getLayout()!=null) {
 			if(getLayout().rowmajor &&p2.getWidth()>p1.getWidth()) return true;
 			if(!getLayout().rowmajor &&p2.getWidth()>2.5*p1.getWidth()) return true;
@@ -306,10 +331,10 @@ public BasicMontageLayout getMontageLayout() {
 	}
 	
 	/**returns true if the sizes are different enough to merit a layout change*/
-	private boolean areSizesChangedForLayout(PanelStackDisplay principalMultiChannel, MultichannelDisplayLayer display) {
+	private boolean areSizesChangedForLayout(ImageDisplayLayer principalMultiChannel, MultichannelDisplayLayer display) {
 		if (principalMultiChannel==null) return false;
-		Dimension2D p1 = principalMultiChannel.getMultichanalWrapper().getDimensions();
-		Dimension2D p2 = display.getMultichanalWrapper().getDimensions();
+		Dimension2D p1 = principalMultiChannel.getMultiChannelImage().getDimensions();
+		Dimension2D p2 = display.getMultiChannelImage().getDimensions();
 		if (this.getLayout()!=null) {
 			if(getLayout().rowmajor &&p2.getHeight()!=p1.getHeight()) return true;
 			if(getLayout().rowmajor &&p2.getWidth()>p1.getWidth()) return true;
@@ -326,7 +351,7 @@ public BasicMontageLayout getMontageLayout() {
 		/**creates a MontageLayout Graphic if the layer has none*/
 		MontageLayoutGraphic p=getMontageLayoutGraphic();
 		if (p==null) {
-			p=createLayoutForImage(display.getMultichanalWrapper(), display);
+			p=createLayoutForImage(display.getMultiChannelImage(), display);
 			add(p);
 		} 
 		p.generateCurrentImageWrapper();//
@@ -334,7 +359,7 @@ public BasicMontageLayout getMontageLayout() {
 	}
 	
 	/**creates a layout that is of the right dimensions for the panel stack display to use to place the image's panels*/
- static MontageLayoutGraphic createLayoutForImage(MultiChannelWrapper image, PanelStackDisplay panelStackDisplay) {
+ static MontageLayoutGraphic createLayoutForImage(MultiChannelImage image, ImageDisplayLayer panelStackDisplay) {
 		MontageLayoutGraphic p = new MontageLayoutGraphic();
 		//p.getPanelLayout().setNColumns(image.nChannels()+1);
 		p.getPanelLayout().setHorizontalBorder(10);
@@ -342,7 +367,7 @@ public BasicMontageLayout getMontageLayout() {
 		setUpRowAndColsToFit(image, panelStackDisplay, p);
 		return p;
 	}
-public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDisplay panelStackDisplay,
+public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLayer panelStackDisplay,
 		MontageLayoutGraphic p) {
 	if (panelStackDisplay!=null) {
 	int[] dims =  panelStackDisplay.getPanelList().getChannelUseInstructions().estimateBestMontageDims(image);
@@ -368,7 +393,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return new FigureOrganizingSuplierForPopup(this);
 	}
 	
-	/**Adds another multichannel image
+	/**Adds another multi-channel image to the figure
 	 * @return */
 	public CombinedEdit nextMultiChannel(boolean openFile) {
 		
@@ -379,9 +404,21 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return output;
 	}
 	
-	
-	/**Adds another multichannel image
+	/**Adds another multi-channel image to the figure using the file in the path given
 	 * @return */
+	public CombinedEdit nextMultiChannel(String path, PreProcessInformation p) {
+		
+		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromUserSelectedImage(true, path);
+		item.getSlot().applyCropAndScale(p);
+		CombinedEdit output = nextMultiChannel(item);
+		
+		
+		return output;
+	}
+	
+	
+	/**Adds another multichannel image to the figure. returns an undoable edit
+	 */
 	public CombinedEdit nextMultiChannel(MultichannelDisplayLayer item, int start) {
 		CombinedEdit output = new CombinedEdit();
 	
@@ -389,14 +426,14 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 					addNovelMultiChannel(item, start)
 					);
 		DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
-		
-		
-		
+	
 		
 		output.addEditToList(	new  CanvasAutoResize().performUndoableAction(disp));
 				
 		return output;
 	}
+	
+	/**Adds a multi channel image to the figure. returns an undoable edit*/
 	public CombinedEdit nextMultiChannel(MultichannelDisplayLayer item) {
 		return nextMultiChannel(item,-1);
 	}
@@ -412,7 +449,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		SnappingPosition position=null;
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;
-			PanelStackDisplay pan = getPanelForRowindex(i, type);//may return null
+			ImageDisplayLayer pan = getPanelForRowindex(i, type);//may return null
 			
 			if (pan==null) {
 				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic());
@@ -430,7 +467,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 			
 			if (item!=null)
 				{
-				if(position==null) position = item.getSnapPosition(); else item.setSnappingBehaviour(position);
+				if(position==null) position = item.getSnapPosition(); else item.setSnapPosition(position);
 				addedItems.add(item);
 				}
 		}
@@ -439,10 +476,10 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 
 
 	/**If an entire Multichannel image's set of panels is contained in teh Row, Col, or panel in the layout, returns the image*/
-	public PanelStackDisplay getPanelForRowindex(int i, int type) {
+	public ImageDisplayLayer getPanelForRowindex(int i, int type) {
 		BasicMontageLayout rowshapes = this.getMontageLayout().makeAltered(type);
-		ArrayList<PanelStackDisplay> list = this.getMultiChannelDisplaysInOrder();
-		for(PanelStackDisplay l: list) {
+		ArrayList<ImageDisplayLayer> list = this.getMultiChannelDisplaysInOrder();
+		for(ImageDisplayLayer l: list) {
 			if (rowshapes.getPanel(i).contains(l.getBoundOfUsedPanels().getCenterX(), l.getBoundOfUsedPanels().getCenterY())) {
 				return l;
 			}
@@ -450,11 +487,13 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return null;
 	}
 	
+	/**displays the channel use options dialog to the user*/
 	public void showChannelUseOptions() {
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions((MultichannelDisplayLayer)getPrincipalMultiChannel(),getPrincipalMultiChannel().getPanelList(), null,false);
+		ImageDisplayLayer image1 = getPrincipalMultiChannel();
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions((MultichannelDisplayLayer)image1,image1.getPanelList(), null,false);
 		/**adds a list of all the channel displays that are relevant*/
-		ArrayList<PanelStackDisplay> all = getMultiChannelDisplaysInOrder();
-		all.remove(getPrincipalMultiChannel());
+		ArrayList<ImageDisplayLayer> all = getMultiChannelDisplaysInOrder();
+		all.remove(image1);
 		dialog.addAditionalDisplays(all);
 		dialog.showDialog();
 	}
@@ -464,7 +503,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 	public void recreateFigurePanels() {recreateFigurePanels(false);}
 	public PanelStackDisplayOptions recreateFigurePanels(boolean cropToo) {
 		
-		ArrayList<PanelStackDisplay> d1 = getMultiChannelDisplaysInLayoutOrder();
+		ArrayList<ImageDisplayLayer> d1 = getMultiChannelDisplaysInLayoutOrder();
 		MultichannelDisplayLayer in = (MultichannelDisplayLayer)getPrincipalMultiChannel();
 		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getPanelList(),null, true);
 		
@@ -476,33 +515,6 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		this.fixLabelSpaces();
 		return dialog;
 	}
-	/** obsolete code
-	public void minMaxSet(int chan, double min, double max) {
-		// TODO Auto-generated method stub
-		
-		ArrayList<MultiChannelWrapper> wraps = getAllSourceStacks() ;
-		
-		The real channel name will be checked against the channel names in each image
-		  in the for loop. display ranges will be changed in either those with a match
-		  or (if no match), those with the same number
-		//String realName=getPressedWrapper().getRealChannelName(chan);
-		
-		StatusPanel.updateStatus("Setting Display Range "+min+", "+max);
-		for(MultiChannelWrapper w: wraps) {
-	
-			w.setChannalMin(chan, min);
-			w.setChannalMax(chan, max);
-			StatusPanel.updateStatus("working on image "+w.getTitle());
-		}
-		
-		updateMontageFromSource();
-		//updateAllDisplaysWithRealChannel( realName);
-		//presseddisplay.updateMontageFromSource();
-		
-		updateDisplay();
-	}
-	 * @return 
-	*/
 
 
 	/**Adds row labels based on names*/
@@ -521,6 +533,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return edit;
 	}
 
+	/**Expends the label spaces of the layout to fit the current labels*/
 	public void fixLabelSpaces() {
 		this.getMontageLayoutGraphic().generateCurrentImageWrapper();
 		getMontageLayout().getEditor().fitLabelSpacesToContents(getMontageLayout());
@@ -531,19 +544,22 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return FigureLabelOrganizer.addRowLabel(st, rowNum, this, this.getMontageLayoutGraphic());
 	}
 	
+	/**Adds a column label to the figure*/
 	public ComplexTextGraphic addColLabel(String st, int colNum) {
 		return FigureLabelOrganizer.addColLabel(st, colNum, this, this.getMontageLayoutGraphic());
 	}
 	
 	
-	
-	public ComplexTextGraphic addPanelLabel(String st, int colNum) {
-		return FigureLabelOrganizer.addPanelLabel(st, colNum, this, this.getMontageLayoutGraphic());
+	/**adds a panel label to the figure at the index*/
+	public ComplexTextGraphic addPanelLabel(String st, int theIndex) {
+		return FigureLabelOrganizer.addPanelLabel(st, theIndex, this, this.getMontageLayoutGraphic());
 	}
 	
 	
-	
-	
+	/** returns false if the layer should not contain the proposed object. depending on the result of this method
+	  the user may not be allowed to drag a particular item into this layer.
+	  Figure organizing layers are not allowed to contain other figure organizing layers.
+	  */
 	public boolean canAccept(ZoomableGraphic z) {
 		if (z instanceof FigureOrganizingLayerPane) return false;
 		if (z instanceof GraphicLayer)  {
@@ -556,7 +572,7 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return  super.canAccept(z);
 	}
 	
-	/**given an object, moves up the layer tree untill it find a figure organizer to return*/
+	/**given an object, moves up the layer tree until it find a figure organizer to return*/
 	public static FigureOrganizingLayerPane findFigureOrganizer(KnowsParentLayer k) {
 		GraphicLayer output = k.getParentLayer();
 		
@@ -569,31 +585,37 @@ public static void setUpRowAndColsToFit(MultiChannelWrapper image, PanelStackDis
 		return null;
 	}
 
+	/**returns the channel use instructions for every image in the figure*/
 	public ArrayList<ChannelUseInstructions> getChannelUseInfo() {
-		ArrayList<ChannelUseInstructions> alreadySwapped=new ArrayList<ChannelUseInstructions>();
-		for (PanelStackDisplay d: getMultiChannelDisplaysInOrder()) {
+		ArrayList<ChannelUseInstructions> onList=new ArrayList<ChannelUseInstructions>();
+		for (ImageDisplayLayer d: getMultiChannelDisplaysInOrder()) {
 			ChannelUseInstructions ins = d.getPanelManager().getPanelList().getChannelUseInstructions();
-			if(alreadySwapped.contains(ins)) continue;
-			alreadySwapped.add(ins);
+			if(onList.contains(ins)) continue;
+			onList.add(ins);
 		}
-		return alreadySwapped;
+		return onList;
 	}
 
 	/**hides any open images that are source images for this*/
 	public void hideImages() {
-		for(PanelStackDisplay m :getMultiChannelDisplaysInOrder())
+		for(ImageDisplayLayer m :getMultiChannelDisplaysInOrder())
 			m.getSlot().hideImageWihtoutMessage();
 	}
 
+	/**called after a panel, column or row swap on the layout is done. 
+	 * updates the image order within the figure and channel order to reflect the change*/
 	public void updateChannelOrder(int type) {
 		PanelOrder panelOrder = new PanelOrder(this);
 		updateImageOrder();
 		panelOrder.updateChanOrder(type);
 	}
 	
+	/**Determines the order of the multidimensional images within the layout based on the x/y geometry of the layout
+	 The list of images within this figure organizer is reordered to store that order.
+	  */
 	public void updateImageOrder() {
 		PanelOrder panelOrder = new PanelOrder(this);
-		ArrayList<PanelStackDisplay> layoutOrder = panelOrder.getDisplaysInLayoutImageOrder();
+		ArrayList<ImageDisplayLayer> layoutOrder = panelOrder.getDisplaysInLayoutImageOrder();
 		imageOrderComparator lorder = new PanelOrder.imageOrderComparator(layoutOrder);
 
 		Collections.sort(displays, lorder);

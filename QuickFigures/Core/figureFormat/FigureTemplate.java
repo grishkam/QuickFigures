@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import channelMerging.ChannelUseInstructions;
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelList;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
@@ -215,7 +215,7 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 	
 	/**If there is a model scale bar selected it will give it to the merge panel of the principal graphic layer*/
 	public void createScaleBarOffTemplate(FigureOrganizingLayerPane p) {
-		PanelStackDisplay display=p.getPrincipalMultiChannel();
+		ImageDisplayLayer display=p.getPrincipalMultiChannel();
 		
 		if (this.awaitingReset) {
 			autoGeneratePickersForDisplay((MultichannelDisplayLayer) display);
@@ -231,7 +231,7 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 			if (displayob instanceof TakesLockedItems) {
 				BarGraphic newbar = new BarGraphic();
 				newbar.copyAttributesButNotScale(oldsbar);
-				newbar.setSnappingBehaviour(oldsbar.getSnapPosition());
+				newbar.setSnapPosition(oldsbar.getSnapPosition());
 				p.add(newbar);
 				
 				TakesLockedItems t= (TakesLockedItems) displayob ;
@@ -290,7 +290,8 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 	public void makeMergeOnly() {
 		if (mdp==null) IssueLog.log("no example image display (innitial template fail)");
 		if (mdp.getModelItem()==null) 
-			{IssueLog.log("no example image display");
+			{
+			//if no example image display layer is in the template, creates one
 			MultichannelDisplayLayer mid = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromOpenImage();
 			if (mid!=null)
 			mdp.setModelItem(mid);

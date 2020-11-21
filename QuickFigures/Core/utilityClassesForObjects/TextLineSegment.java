@@ -13,13 +13,16 @@ import java.util.Map;
 
 import logging.IssueLog;
 
+/**stores the properties of a fragment of text that is part of a
+ TextGraphic object*/
 public class TextLineSegment implements  Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final int parentColorAlways=1, uniqueIfGiven=0, alwaysUnique=2;
-	public static final int NORMAL_SCRIPT=0, Super_Script=1;
+	public static final int NORMAL_SCRIPT=0, SUPER_SCRIPT=1, SUB_SCRIPT=2;
+	public static final int NO_LINE=0, UNDERLINE=1, STRIKETHROUGH=2;
 	public final double id=Math.random();
 	String text="";
 	TextLine parent=null;
@@ -28,45 +31,11 @@ public class TextLineSegment implements  Serializable {
 	private int script=NORMAL_SCRIPT;
 	boolean hasUniqueColor=false;
 	Color uniqueColor=new Color(0,0,0,0);
-	private int lines=0;
+	private int lines=NO_LINE;
 	
 	
-	private int colorHandling=0;
 	public Double copyOf=null;
 	
-	TextLineSegment copy() {
-		TextLineSegment lin = colorLessCopy();
-		
-		lin.uniqueColor=uniqueColor;
-		lin.copyOf=id;
-		
-	return lin;
-		
-	}
-
-	public TextLineSegment colorLessCopy() {
-		TextLineSegment lin = new TextLineSegment(text, uniqueColor);
-		
-		lin.script=script;
-		lin.colorHandling=colorHandling;
-		lin.hasUniqueColor=hasUniqueColor;
-		lin.uniqueStyle=uniqueStyle;
-		lin.lines=lines;
-		return lin;
-	}
-	
-	/**returns true if the color, font and other properties are the same 
-	 * as this segment*/
-	public boolean isSimilarStyle(TextLineSegment lin) {
-		if 	(lin.script!=script) return false;
-		if (lin.colorHandling!=colorHandling) return false;
-		if (lin.hasUniqueColor!=hasUniqueColor) return false;
-		if (lin.uniqueColor!=uniqueColor) return false;
-		if (lin.uniqueStyle!=uniqueStyle) return false;
-		if (	lin.lines!=lines) return false;
-		
-		return true;
-	}
 	
 	/**the location of the baseline start of the segment*/
 	public Point2D.Double baseLine;
@@ -75,21 +44,67 @@ public class TextLineSegment implements  Serializable {
 	/**the bounds of the segment*/
 	public Rectangle2D bounds=null;
 	
+	/**the location of a rotated baseline start of the segment*/
 	public Point2D transformedBaseLineStart;
 	public Point2D transformedBaseLineEnd;
 	
 	/**The position of the bounding box after rotation operation*/
 	public Shape transformedBounds;
 	
-	private double lineWidth;
-	private double lineHeight;
-	private double ybase;
-	private double xbase;
+	double lineWidth;
+	double lineHeight;
+	double ybase;
+	double xbase;
 	
-	private Rectangle2D LineBounds;
+	Rectangle2D LineBounds;
 	private int uniqueStyle;
 	private int cursorposition;
 	private int highlightPosition;
+	
+	/**returns a copy. and stores an indication that the new segment is s copy */
+	TextLineSegment copy() {
+		TextLineSegment lin = simpleCopy();
+		
+		lin.uniqueColor=uniqueColor;
+		lin.copyOf=id;
+		
+	return lin;
+		
+	}
+
+	/**returns a copy.  */
+	private TextLineSegment simpleCopy() {
+		TextLineSegment lin = new TextLineSegment(text, uniqueColor);
+		makeSimilar(lin);
+		return lin;
+	}
+
+	/**
+	 edits the target to make it similar to this
+	 */
+	public void makeSimilar(TextLineSegment lin) {
+		lin.text=text;
+		lin.script=script;
+		
+		lin.hasUniqueColor=hasUniqueColor;
+		lin.uniqueStyle=uniqueStyle;
+		lin.lines=lines;
+	}
+	
+	/**returns true if the color, font and other properties are the same 
+	 * as this segment*/
+	public boolean isSimilarStyle(TextLineSegment lin) {
+		if 	(lin.script!=script) return false;
+		
+		if (lin.hasUniqueColor!=hasUniqueColor) return false;
+		if (lin.uniqueColor!=uniqueColor) return false;
+		if (lin.uniqueStyle!=uniqueStyle) return false;
+		if (	lin.lines!=lines) return false;
+		
+		return true;
+	}
+	
+
 	
 	public void boldUnbold() {
 		if (getFont().isPlain()) {
@@ -225,7 +240,6 @@ public class TextLineSegment implements  Serializable {
 		return getScript();
 	}
 	
-	
 
 	public int getScript() {
 		return script;
@@ -235,19 +249,18 @@ public class TextLineSegment implements  Serializable {
 		this.script = script;
 	}
 	
-	public static final int SUPER_SCRIPT=1;
 	
 	
-	public boolean isSubscript() {return script==2;}
+	public boolean isSubscript() {return script==SUB_SCRIPT;}
 	public boolean isSuperscript() {return script==SUPER_SCRIPT;}
-	public boolean isNormalscript() {return script==0;}
-	public void makeSuperScript() {script=1;}
-	public void makeSubScript() {script=2;}
-	public void makeNormalScript() {script=0;}
+	public boolean isNormalscript() {return script==NORMAL_SCRIPT;}
+	public void makeSuperScript() {script=SUPER_SCRIPT;}
+	public void makeSubScript() {script=SUB_SCRIPT;}
+	public void makeNormalScript() {script=NORMAL_SCRIPT;}
 	
 	
 	
-	/**when given the basline x and y, this computes the line bounds*/
+	/**when given the basline x and y, this computes the line  bounds*/
 	public Rectangle2D computeLineDimensions(Graphics g, double x, double y) {	
 		lineWidth=0;
 		lineHeight=0;
@@ -267,7 +280,8 @@ public class TextLineSegment implements  Serializable {
 	        double descent = metricsi.getDescent()/this.inflationfactor();
 	       
 			yrect=y-fontHeight+descent;//changes the y from baseline to corner
-			  if (isSubOrSuperScript()==1) yrect-=getFont().getSize();
+			  if (this.isSuperscript()) //TODO: check the 
+				  yrect-=getFont().getSize();
 			 
 			  double newwidth = metricsi.stringWidth(text)/inflationfactor();
 			  
@@ -276,7 +290,7 @@ public class TextLineSegment implements  Serializable {
 			  
 			   baseLine=new Point2D.Double(r.getX(), r.getY()+fontHeight-descent);
 			   
-			   //multiplication by 1.25 and +4 is to make sure that the baseline extends beyond the text. there is a bug somewhere that makes this only apply to lines beyond the first 
+			   //multiplication by 1.25 and +4 is done to make sure that the baseline extends beyond the text. TODO: fix bug. there is a bug somewhere that makes this only apply to lines beyond the first 
 			   baseLineend=new Point2D.Double(r.getX()+r.getWidth()*1.25+4, r.getY()+fontHeight-descent);
 			  
 			   bounds=r;
@@ -285,31 +299,13 @@ public class TextLineSegment implements  Serializable {
 		return r;
 		}
 
-	private double inflationfactor() {
-		return textPrecis().getInflationFactor();
-	}
+
 
 	protected double getLineHeight() {
-		// TODO Auto-generated method stub
 		return lineHeight;
 	}
 
-	
-
-	private Rectangle2D getLineBounds() {
-		return LineBounds;
-	}
-
-	public int getColorHandling() {
-		return colorHandling;
-	}
-
-	public void setColorHandling(int colorHandling) {
-		this.colorHandling = colorHandling;
-	}
-
 	public Color getUniqueTextColor() {
-		// TODO Auto-generated method stub
 		return  uniqueColor;
 	}
 
@@ -336,6 +332,9 @@ public class TextLineSegment implements  Serializable {
 	TextPrecision textPrecis() {
 		  return TextPrecision.createPrecisForFont(getFont());
 	}
+	private double inflationfactor() {
+		return textPrecis().getInflationFactor();
+	}
 
 	public void setHighlightPosition(int p) {
 		this.highlightPosition=p;
@@ -346,29 +345,32 @@ public class TextLineSegment implements  Serializable {
 		return highlightPosition;
 	}
 
+	/**returns an int  that indicates whether the text has an underline or a strike through*/
 	public int getLines() {
 		return lines;
 	}
 
+
+	/**sets a stored value that indicates whether the text has an underline or a strike through*/
 	public void setLines(int lines) {
 		this.lines = lines;
 	}
 
 	public boolean isUnderlined() {
-		return lines==1;
+		return lines==UNDERLINE;
 	}
 	public boolean isStrikeThrough() {
-		return lines==2;
+		return lines==STRIKETHROUGH;
 	}
 
 	public void setStrikeThough(boolean b) {
-		if (b) lines=2;
-		else lines=0;
+		if (b) lines=STRIKETHROUGH;
+		else lines=NO_LINE;
 	}
 	
 	public void setUnderlined(boolean b) {
-		if (b) lines=1;
-		else lines=0;
+		if (b) lines=UNDERLINE;
+		else lines=NO_LINE;
 		
 	}
 	

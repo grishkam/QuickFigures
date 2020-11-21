@@ -8,7 +8,7 @@ import java.io.Serializable;
 import applicationAdapters.ToolbarTester;
 import graphicalObjects_BasicShapes.PathGraphic;
 import imageDisplayApp.GraphicContainingImage;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import sUnsortedDialogs.ReflectingFieldSettingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.SwingDialogListener;
@@ -51,10 +51,10 @@ public abstract class BasicShapeMaker  implements ShapeMaker, Serializable {
 		
 		
 		PathGraphic  pg=createDefaultCartoon(cpc);
-		gl.addRoiToImage(pg);
+		gl.addItemToImage(pg);
 		gl.setWidth(900);
 		gl.setHeight(700);
-		 ImageAndDisplaySet.show(gl);
+		 ImageWindowAndDisplaySet.show(gl);
 		 ToolbarTester.showToolSet();
 		 
 		 createUpdatingDialog(pg, cpc);

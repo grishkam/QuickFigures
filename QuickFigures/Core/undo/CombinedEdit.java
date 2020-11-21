@@ -51,7 +51,7 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 	public void afterEditDone() {
 		for(int i=afterEdits.size()-1; i>-1;i--) try {
 			afterEdits.get(i).afterEdit();
-			} catch (Throwable t) {IssueLog.log(t);}
+			} catch (Throwable t) {IssueLog.logT(t);}
 	}
 	
 	public void addEditListener(EditListener el) {

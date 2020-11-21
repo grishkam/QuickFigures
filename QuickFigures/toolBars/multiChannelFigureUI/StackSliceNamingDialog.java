@@ -2,7 +2,7 @@ package multiChannelFigureUI;
 
 import java.util.ArrayList;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
@@ -12,9 +12,9 @@ import standardDialog.SwingDialogListener;
 /**shows a dialog that lets the user name the stack slices channels of a multichannel images*/
 public class StackSliceNamingDialog {
 	ArrayList<Integer> indeces;
-	MultiChannelWrapper imp2;
+	MultiChannelImage imp2;
 	
-	public void showNamingDialog(ArrayList<Integer> indeces, MultiChannelWrapper imp2) {
+	public void showNamingDialog(ArrayList<Integer> indeces, MultiChannelImage imp2) {
 		StandardDialog gd = new StandardDialog("Name Stack Slice");	
 		gd.setWindowCentered(true);
 	//	gd.setModal(true);
@@ -26,7 +26,7 @@ public class StackSliceNamingDialog {
 
 	}
 	
-	public void showNamingDialog(int indeces, MultiChannelWrapper imp2) {
+	public void showNamingDialog(int indeces, MultiChannelImage imp2) {
 		this.imp2=imp2;
 		ArrayList<Integer> i = new ArrayList<Integer> () ; 
 		i.add(indeces);
@@ -60,9 +60,9 @@ public class StackSliceNamingDialog {
 			  * so I redid the tool to use my own dialog instead of imageJ's generic dialog. */
 			
 			
-			 for (int in2: indeces) try{imp2.setSliceName( event.getSource().getString(""+in2), in2);} catch (Throwable t){IssueLog.log(t); return ;}
+			 for (int in2: indeces) try{imp2.setSliceName( event.getSource().getString(""+in2), in2);} catch (Throwable t){IssueLog.logT(t); return ;}
 		
-			try{ imp2.updateDisplay();} catch (Throwable e) {IssueLog.log(e);}
+			try{ imp2.updateDisplay();} catch (Throwable e) {IssueLog.logT(e);}
 			 return;
 		}
 		
@@ -71,14 +71,14 @@ public class StackSliceNamingDialog {
 	
 	
 	/**This method adds a Field containing the name of a stack slice to the generic dialog gd.*/
-	public void addSliceNameFieldtoDialog(StandardDialog gd, int i, MultiChannelWrapper theImage) {
+	public void addSliceNameFieldtoDialog(StandardDialog gd, int i, MultiChannelImage theImage) {
 		imp2=theImage;
 		int[] position=theImage.convertIndexToPosition(i);
 		addSliceNameFieldtoDialog(gd,  position[0],position[1], position[2], theImage, i);
 	}
 	
 	/**This method adds a Field containing the name of a stack slice to the generic dialog gd.*/
-	public void addSliceNameFieldtoDialog(StandardDialog gd, int channel, int slice, int frame, MultiChannelWrapper theImage, int i) {		
+	public void addSliceNameFieldtoDialog(StandardDialog gd, int channel, int slice, int frame, MultiChannelImage theImage, int i) {		
 		imp2=theImage;
 		String text="";
 		boolean neeof=false;

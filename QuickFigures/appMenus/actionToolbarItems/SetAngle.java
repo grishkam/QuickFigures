@@ -14,6 +14,10 @@ import javax.swing.Icon;
 
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import selectedItemMenus.BasicMultiSelectionOperator;
+import standardDialog.AngleInputPanel;
+import standardDialog.NumberInputEvent;
+import standardDialog.NumberInputListener;
+import standardDialog.NumberInputPanel;
 import undo.CombinedEdit;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.LocatedObject2D;
@@ -88,6 +92,31 @@ public class SetAngle extends BasicMultiSelectionOperator {
 	public void setAngle(double a) {
 		this.angle = a;
 	}
+	
+	
+	public Component getInputPanel() {
+		return getStrokeAngleInput() ;
+	}
+	
+	/**creates a JPanel for setting the angle*/
+	protected NumberInputPanel getStrokeAngleInput() {
+		
+		NumberInputPanel panel = new AngleInputPanel("Set Angle", this.getAngle()*Math.PI/180, true);
+		panel.placeItems(panel, 0, 0);
+		panel.addNumberInputListener(new NumberInputListener() {
+			
+			@Override
+			public void numberChanged(NumberInputEvent ne) {
+				float angle1 = (float) ne.getNumber();
+				SetAngle runner = new SetAngle(angle1*180/Math.PI);
+				runner.setSelector(selector);
+				runner.run();
+				selector.getGraphicDisplayContainer().updateDisplay();
+				
+			}
+		});
+		return panel;
+	}
 
 
 	public class AngleIcon implements Icon {
@@ -128,15 +157,14 @@ public class SetAngle extends BasicMultiSelectionOperator {
 			}
 		}
 
+		//TODO: fix icon size to be mini toolbar's icon sizes appropriate
 		@Override
 		public int getIconWidth() {
-			// TODO Auto-generated method stub
 			return 25;
 		}
 
 		@Override
 		public int getIconHeight() {
-			// TODO Auto-generated method stub
 			return 25;
 		}
 

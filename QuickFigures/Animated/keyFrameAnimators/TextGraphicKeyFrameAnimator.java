@@ -20,7 +20,7 @@ public class TextGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnima
 	}
 	
 	
-	protected keyFrame createkeyFrame(int frame) {
+	protected KeyFrame createkeyFrame(int frame) {
 		return new textKeyFrame(frame);
 	}
 	
@@ -60,7 +60,7 @@ public class TextGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnima
 		
 	}
 	
-	class textKeyFrame extends keyFrame {
+	class textKeyFrame extends KeyFrame {
 
 		 Color textColor;
 		 

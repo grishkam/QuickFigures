@@ -67,7 +67,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		
 		if (text instanceof ComplexTextGraphic )
 			{
-			for(int j=0; j<6; j++) {	createSuperscriptButton( j);}
+			for(int j=0; j<=SuperTextButton.STRIKES; j++) {	createSuperscriptButton( j);}
 			}
 		else {
 			createSuperscriptButton(SuperTextButton.BOLDENS);
@@ -225,7 +225,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 
 
-	public void createSuperscriptButton( int j) {
+	private void createSuperscriptButton( int j) {
 		SuperTextButton i=new SuperTextButton(j);
 		i.setModelText(text);
 		addButton(i);
@@ -328,6 +328,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 	}
 	
+	/**a special handle subcless of the color dimming feature, for certain colors it is not applicable and hidden*/
 	public class TextDimmingColorHandle2 extends GeneralActionListHandle {
 
 		/**

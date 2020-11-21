@@ -54,7 +54,7 @@ public class ScrollIndicator implements ZoomableGraphic{
 	
 	/**returns the magnification*/
 	double getDisplayMag() {
-		return getDisplay().getZoomer().getZoom();
+		return getDisplay().getZoomer().getZoomMagnification();
 	}
 	
 	

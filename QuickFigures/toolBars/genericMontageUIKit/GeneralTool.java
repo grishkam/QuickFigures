@@ -144,7 +144,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 			mousePressed();
 			getImageWrapperClick().updateDisplay();
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 		
 		}
@@ -171,7 +171,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 			mouseEntered();
 			getImageWrapperClick().updateDisplay();
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 		}
 	
@@ -194,7 +194,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 				 IssueLog.log("wrapper not innitialized");
 			}
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 		}
 	
@@ -212,7 +212,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 			mouseExited();
 			this.getImageWrapperClick().updateDisplay();
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 		}
 	
@@ -232,7 +232,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 			mouseDragged();
 			this.getImageWrapperClick().updateDisplay();
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 	}
 	
@@ -876,7 +876,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 			mouseClicked();
 			this.getImageWrapperClick().updateDisplay();
 		} catch (Throwable e2) {
-			IssueLog.log(e2);
+			IssueLog.logT(e2);
 		}
 	}
 	

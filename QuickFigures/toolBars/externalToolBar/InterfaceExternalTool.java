@@ -10,8 +10,12 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
+
+/**Tools that are installed directly on a toolbar implement this interface*/
 public interface InterfaceExternalTool<ImageType>  {
+	
+	/**standard methods for how the tool reacts to mouse actions and key strokes */
 	public void mousePressed(ImageType imp, CanvasMouseEventWrapper e) ;
 	public void mouseClicked(ImageType imp, CanvasMouseEventWrapper e) ;
 	public void mouseDragged(ImageType imp, CanvasMouseEventWrapper e) ;
@@ -19,7 +23,6 @@ public interface InterfaceExternalTool<ImageType>  {
 	public void mouseExited(ImageType imp, CanvasMouseEventWrapper e) ;
 	public void mouseEntered(ImageType imp, CanvasMouseEventWrapper e) ;
 	public void mouseMoved(ImageType imp, CanvasMouseEventWrapper e) ;
-	
 	public boolean keyPressed(ImageType imp, KeyEvent e) ;
 	public boolean keyReleased(ImageType imp, KeyEvent e) ;
 	public boolean keyTyped(ImageType imp, KeyEvent e) ;
@@ -34,34 +37,60 @@ public interface InterfaceExternalTool<ImageType>  {
 	/**A method that performs an action for action tools*/
 	public void performLoadAction();
 	
-	/**Retrives a list of menu items if one wants a simplistic popup menu to appear on 
+	/**Retrieves a list of menu items if one wants a simplistic popup menu to appear on 
 	  control click*/
 	ArrayList<JMenuItem> getPopupMenuItems();
 	
-	public void setImageAndClickPoint(ImageType imp, int x, int y);
+	
 	
 	/**lets the code know that this is a tool that just performs an action is not to be set as the current tool*/
 	boolean isActionTool();
 	/**true if this is a tool that just shows a menu and nothing more. false otherwise.*/
 	boolean isMenuOnlyTool();
 	
+	/**returns the basic traits*/
 	String getToolName() ;
-	String getToolIcon() ;
+	
+	/**Text that helps the user understand what the tool does*/
+	public String getToolTip();
+	
+	
 	
 	/**icons for the tool*/
 	Icon getToolImageIcon() ;
 	Icon getToolPressedImageIcon() ;
 	Icon getToolRollOverImageIcon() ;
-	
-//	public void introduceButton(JButton jb);
-	public void introduceButton(JButton jb);
-	
+
+	/**Each tool may function differently for drag and drop operation.
+	  the returned object determines how drag and drop is handled.
+	  */
 	public DragAndDropHandler getDraghandler();
 	
-	public void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file);
-	public String getToolTip();
+	public void handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file);
 	
-	public boolean userSetSelectedItem(Object o);
+	
+	/**Called when the toolbar switches to this tool (true) or away from this tool (false)*/
 	public void onToolChange(boolean b);
+	
+	
+	/**Changes the selected object*/
+	public boolean userSetSelectedItem(Object o);
+	
+	
+
+	
+	/**Called by the toolbar after a Button is created for this tool. 
+	  tool will stroke the JButton. 
+	  Programmer may want to add additional action listerners to the button but
+	  method is not crucial for any current features */
+	public void introduceButton(JButton jb);
+	
+	/**Sets the image clicked and the location clicked. not used by classed in the current draft of QuickFigures*/
+	public void setImageAndClickPoint(ImageType imp, int x, int y);
+	
+	
+	/**returns a text that would have been used*/
+	@Deprecated
+	String getToolIcon() ;
 	
 }

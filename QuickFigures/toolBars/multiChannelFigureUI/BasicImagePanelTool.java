@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import channelMerging.MultiChannelDisplayWrapper;
-import channelMerging.MultiChannelWrapper;
-import channelMerging.PanelStackDisplay;
+import channelMerging.MultiChannelImage;
+import channelMerging.ImageDisplayLayer;
 import externalToolBar.DragAndDropHandler;
 import genericMontageKit.PanelListElement;
 import genericMontageUIKit.BasicToolBit;
@@ -18,7 +18,7 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
@@ -46,7 +46,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	private int clickingOnMultiModeChan2;
 	private MultiChannelDisplayWrapper m;
 	boolean updateInsets=true;
-	protected PanelGraphicInsetDef pressedInset;
+	protected PanelGraphicInsetDefiner pressedInset;
 	
 	public void mousePressed() {
 		ImageWrapper impw = getImageWrapperClick();
@@ -75,7 +75,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	
 	/**If called after a mouse press on a multichannel. Does not get called when a popup menu is triggered*/
-	protected void afterMousePress(MultiChannelWrapper mw, int chan1) {
+	protected void afterMousePress(MultiChannelImage mw, int chan1) {
 		
 	}
 	
@@ -101,7 +101,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		stackSliceReleased=getElementAtPoint(impw, this.getReleaseCordinateX(), this.getReleaseCordinateY());
 
 	if (arePressAndreleaseValid() )
-		for(MultiChannelWrapper wr:  getAllWrappers() ) {
+		for(MultiChannelImage wr:  getAllWrappers() ) {
 			applyReleaseActionToMultiChannel(wr);
 		}
 	
@@ -111,7 +111,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	public void updateAllDisplaysWithRealChannel(String realName) {
 		if (realName==null||realName.trim().equals("")) this.updateAllDisplays();
 		else {
-			for(PanelStackDisplay pd: getAllDisplays() ) {
+			for(ImageDisplayLayer pd: getAllDisplays() ) {
 			pd.updatePanelsWithChannel(realName);
 			if (updateInsets) {
 				if (this.updateInsets) updateInsetPanels(pd, realName);
@@ -126,7 +126,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	/**updates the panels*/
 	void updateAllDisplays() {
-		for(PanelStackDisplay pd: getAllDisplays() ) {
+		for(ImageDisplayLayer pd: getAllDisplays() ) {
 			if(pd==null) continue;
 			if (this.updateInsets) updateInsetPanels(pd, null);
 			pd.updatePanels();
@@ -139,19 +139,19 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	void updateAllAfterMenuAction() {
 		if(presseddisplay!=null)presseddisplay.updatePanels();//.getMultichanalWrapper().updateDisplay();
 		if (workOn==1) {
-			for(PanelStackDisplay d: getAllDisplays()) {
+			for(ImageDisplayLayer d: getAllDisplays()) {
 				d.updatePanels();
 			}
 		}
 		this.getImageWrapperClick().updateDisplay();
 	}
 	
-	public ArrayList<PanelStackDisplay> getAllDisplays() {
-		ArrayList<PanelStackDisplay> output = new ArrayList<PanelStackDisplay>();
+	public ArrayList<ImageDisplayLayer> getAllDisplays() {
+		ArrayList<ImageDisplayLayer> output = new ArrayList<ImageDisplayLayer>();
 		if (presseddisplay==null) return output;
 		output.add(presseddisplay);
 		if (getCurrentOrganizer()!=null&&this.workOn==1) {
-			output = new ArrayList<PanelStackDisplay>();
+			output = new ArrayList<ImageDisplayLayer>();
 			output.addAll( getCurrentOrganizer().getMultiChannelDisplays());
 		}
 		
@@ -167,9 +167,9 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	}
 	
 	/**called to update the inset panels*/
-	private void updateInsetPanels(PanelStackDisplay pd, String name) {
-		ArrayList<PanelGraphicInsetDef> insets = getAllInsets(pd);
-		for(PanelGraphicInsetDef ins: insets) {
+	private void updateInsetPanels(ImageDisplayLayer pd, String name) {
+		ArrayList<PanelGraphicInsetDefiner> insets = getAllInsets(pd);
+		for(PanelGraphicInsetDefiner ins: insets) {
 			if(name==null) {
 				ins.getPanelManager().updatePanels();
 				
@@ -179,9 +179,9 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	}
 	
 	
-	static PanelGraphicInsetDef findInsetWith(PanelStackDisplay pd, ImagePanelGraphic image) {
-		ArrayList<PanelGraphicInsetDef> insets = getAllInsets(pd);
-		for(PanelGraphicInsetDef in: insets) {
+	static PanelGraphicInsetDefiner findInsetWith(ImageDisplayLayer pd, ImagePanelGraphic image) {
+		ArrayList<PanelGraphicInsetDefiner> insets = getAllInsets(pd);
+		for(PanelGraphicInsetDefiner in: insets) {
 			if(in.getPanelManager().getPanelList().getPanelGraphics().contains(image)) return in;
 			
 		}
@@ -189,14 +189,14 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		
 	}
 	
-	static ArrayList<PanelGraphicInsetDef> getAllInsets(PanelStackDisplay pd) {
-		ArrayList<PanelGraphicInsetDef> out =new ArrayList<PanelGraphicInsetDef>();
+	static ArrayList<PanelGraphicInsetDefiner> getAllInsets(ImageDisplayLayer pd) {
+		ArrayList<PanelGraphicInsetDefiner> out =new ArrayList<PanelGraphicInsetDefiner>();
 		if (pd instanceof GraphicLayer) {
 			 GraphicLayer gl=(GraphicLayer) pd;
 			 ArrayList<ZoomableGraphic> items = gl.getAllGraphics();
 			 for(ZoomableGraphic i : items) {
-				 if (i instanceof PanelGraphicInsetDef) {
-					 PanelGraphicInsetDef i2=(PanelGraphicInsetDef) i;
+				 if (i instanceof PanelGraphicInsetDefiner) {
+					 PanelGraphicInsetDefiner i2=(PanelGraphicInsetDefiner) i;
 					out.add(i2);
 				 } 
 			 }
@@ -213,25 +213,25 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	  this returns an array with just a single multichannel Display.
 	  Otherwise returns all the multichannel displays that are directly in the figure organizing
 	  pane*/
-	public ArrayList<MultiChannelWrapper> getAllWrappers() {
-		ArrayList<MultiChannelWrapper> output=new ArrayList<MultiChannelWrapper>();
-		output.addAll(presseddisplay.getAllSourceStacks());
+	public ArrayList<MultiChannelImage> getAllWrappers() {
+		ArrayList<MultiChannelImage> output=new ArrayList<MultiChannelImage>();
+		output.addAll(presseddisplay.getAllSourceImages());
 		if (presseddisplay.getParentLayer() instanceof FigureOrganizingLayerPane &&this.workOn==1) {
 			FigureOrganizingLayerPane pane=(FigureOrganizingLayerPane) presseddisplay.getParentLayer();
-			return pane.getAllSourceStacks();
+			return pane.getAllSourceImages();
 		}
 		return output;
 	}
 	
 	
-	public void applyReleaseActionToMultiChannel(MultiChannelWrapper mw) {
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
 		int chan1=getBestMatchToChannel(mw, getRealNameOfPressedChannel(), getPressChannelOfMultichannel());
 		int chan2=getBestMatchToChannel(mw, getRealNameOfReleaseChannel(), getReleaseChannelOfMultichannel());	
 		applyReleaseActionToMultiChannel(mw, chan1, chan2);
 	}
 	
 	/**Tries to find the channel index of the channel names realChanName, if it cant, it just returns the chanNum*/
-	int getBestMatchToChannel(MultiChannelWrapper mw, String realChanName, int chanNum) {
+	int getBestMatchToChannel(MultiChannelImage mw, String realChanName, int chanNum) {
 		int chan1=mw.getIndexOfChannel(realChanName);
 		if (chan1<1||chan1>mw.nChannels()) 
 			chan1=chanNum;
@@ -239,7 +239,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		return chan1;
 	}
 	
-	public void applyReleaseActionToMultiChannel(MultiChannelWrapper mw, int chan1, int chan2) {
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw, int chan1, int chan2) {
 		mw.getChannelSwapper().swapChannelLuts(chan1, chan2);
 		
 	}
@@ -308,10 +308,10 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	
 	
-	public MultiChannelWrapper getPressedWrapper() {
+	public MultiChannelImage getPressedWrapper() {
 		if (clickingOnMultiMode) return m.getMultiChannelWrapper();
 		if (presseddisplay==null) {IssueLog.log("You are not clicking on a figure panel"); return null;}
-		return presseddisplay.getMultichanalWrapper();
+		return presseddisplay.getMultiChannelImage();
 	}
 	
 	

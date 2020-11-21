@@ -15,6 +15,7 @@ import exportMenus.PNGQuickExport;
 import exportMenus.PNGSequenceQuickExport;
 import exportMenus.PPTQuickExport;
 import exportMenus.SVGQuickExport;
+import exportMenus.TiffQuickExport;
 import figureFormat.TemplateSaver;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
@@ -78,9 +79,9 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new CanvasAutoResize(CanvasAutoResize.page) );
 		
 		installItem(new ZoomFit());
-		installItem(new ZoomFit("Out"));
-		installItem(new ZoomFit("In"));
-		installItem(new ZoomFit("Set"));
+		installItem(new ZoomFit(ZoomFit.OUT));
+		installItem(new ZoomFit(ZoomFit.IN));
+		installItem(new ZoomFit(ZoomFit.USER_SET));
 		
 		for(int i=0; i<5; i++)
 			installItem(new ShowToolBar(i));
@@ -117,6 +118,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		
 			
 			installItem(new PNGQuickExport());
+			installItem(new TiffQuickExport());
 			installItem(new PNGSequenceQuickExport());
 			
 			
@@ -170,11 +172,11 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		
 		} catch (Throwable t) {
 			IssueLog.log("Problem installing items");
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 	
-	
+	/**returns the submenu with the given menu path. if that submenu does not exist, creates the submenu*/
 	public static JMenu getOrCreateSubmenuOfPath(JMenuBar th, String menuPath, String delimiter) {
 		String[] array = menuPath.split(delimiter);
 		
@@ -198,9 +200,6 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	}
 	
 
-	
-	
-	
 	public static void main(String[] args) {
 		
 	}
@@ -214,42 +213,9 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		
 		item.performActionDisplayedImageWrapper(currentImageInformer.getCurrentlyActiveDisplay());
 		} catch (Throwable t) {
-			IssueLog.log(t);;
+			IssueLog.logT(t);;
 		}
 		}
 	
-	/**
 	
-	class zoomIn implements MenuItemForObj {
-		public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
-		diw.zoom("In");
-		diw.updateWindowSize();
-		diw.updateDisplay();
-		}
-		public String getCommand() {return "Zoom out to fit+";}
-		public String getNameText() {return "In";}
-		public String getMenuPath() {return "Image<Zoom";}
-		@Override
-		public Icon getIcon() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		}
-	
-	class zoomOut implements MenuItemForObj {
-		public void performActionDisplayedImageWrapper(DisplayedImageWrapper diw) {
-		diw.zoom("Out");
-		diw.updateWindowSize();
-		diw.updateDisplay();
-		}
-		public String getCommand() {return "Zoom out to fit-";}
-		public String getNameText() {return "Out";}
-		public String getMenuPath() {return "Image<Zoom";}
-		@Override
-		public Icon getIcon() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		}
-	*/
 }

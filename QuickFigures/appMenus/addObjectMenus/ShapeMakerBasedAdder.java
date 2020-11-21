@@ -11,6 +11,10 @@ import utilityClassesForObjects.CiliaryPocketPathCreator;
 
 public class ShapeMakerBasedAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	BasicShapeMaker shape=new CiliaryPocketPathCreator();
 	private String indiName="cilia pocket";
 	Color startingColor=Color.green;

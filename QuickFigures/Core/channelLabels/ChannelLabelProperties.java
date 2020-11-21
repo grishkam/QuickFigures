@@ -25,7 +25,7 @@ public class ChannelLabelProperties implements Serializable{
 	public static String[][] split3MergeTexts=new String[][] {new String[]{"M","er", "ge"},new String[]{"m","er", "ge"} ,new String[]{"Me","rg", "ed"},new String[]{"me","rg", "ed"}, new String[]{"Me","rg", "e"}, new String[]{"Ov","er", "lay"}, new String[]{"ov", "er", "lay"}};
 	public static String[][] split4MergeTexts=new String[][] {new String[]{"M","e","r", "ge"},new String[]{"m","e","r", "ge"} ,new String[]{"M","er","ge", "d"},new String[]{"m","er","ge", "d"},new String[]{"m","er","ge", "d"}, new String[]{"Ov","er", "la","y"}, new String[]{"ov", "er", "la","y"}};
 	
-	public static final int MergeText=0, noMergeLabel=1, Multiline_Labels=3, Singleline_Labels=4, SoniStyle=5, Merge_Style=6;
+	public static final int SIMPLY_lABEL_AS_MERGE=0, EXCLUDE_THE_MERGE_LABEL=1, Multiline_Labels=3, ONE_LINE_WITH_ALL_CHANNEL_NAMES=4, SONI_STYLE=5, OVERLAY_THE_COLORS=6;
 	public static final int space=1, nothing=0, slash=2, custom=3;
 	public static Color emptyColor=new Color(255,255,255, 255);
 	public static String[] separatorOptions=new String[] { "nothing", "a space", "/", "use custom"};
@@ -37,7 +37,7 @@ public class ChannelLabelProperties implements Serializable{
 	private int saparatorOption=nothing;
 	
 	private int mergeTextContentOption=0;
-	private int mergeLabelTypeOption=MergeText;
+	private int mergeLabelTypeOption=SIMPLY_lABEL_AS_MERGE;
 	
 	/**the text for each channel is stored here. Hashmap Links channel names to text lines. */
 	private HashMap<String, TextLine> list=null;

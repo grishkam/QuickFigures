@@ -16,7 +16,7 @@ import javax.swing.JPopupMenu;
 
 import actionToolbarItems.AlignItem;
 import applicationAdapters.CanvasMouseEventWrapper;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicTools.LockGraphicTool;
 import graphicTools.LockGraphicTool2;
 import graphicalObjects.CordinateConverter;
@@ -125,7 +125,7 @@ public class LockedItemHandle extends SmartHandle {
 	public void showMessageForOutOfRange(CanvasMouseEventWrapper mEvent) {
 		boolean out = outOfRange(mEvent);
 		Point2D p2=mEvent.getCoordinatePoint();
-		SelectionManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger();
+		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger();
 		if(out &&willTransplant) {
 			releaseIt=true;
 			TextGraphic marker = new TextGraphic("Release Item?");marker.setLocation(p2);

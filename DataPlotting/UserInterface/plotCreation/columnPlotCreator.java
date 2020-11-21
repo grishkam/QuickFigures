@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 import columnPlots.ColumnPlot;
 import dataSeries.ColumnDataSeries;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 
 public class columnPlotCreator implements PlotCreator<ColumnDataSeries>{
 
@@ -19,7 +19,7 @@ int type=0;
 	
 	public void createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
-			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
+			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
 		
 		ColumnPlot plot=new ColumnPlot(name, items.toArray(new ColumnDataSeries[items.size()]));

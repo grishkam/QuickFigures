@@ -34,6 +34,7 @@ import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEventWrapper;
 import externalToolBar.IconSet;
 import fieldReaderWritter.SVGExporter;
+import graphicalObjectHandles.ActionButtonHandleList;
 import graphicalObjectHandles.CountHandle;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ReshapeHandleList;
@@ -870,14 +871,28 @@ protected Point2D getDrawnLineEnd2() {
 		return rotList;
 	}
 	
-	public ShapeActionButtonHandleList2 getButtonList() {
+	/**
+	Returns an action handle list for the object that acts as a mini toolbar
+	 */
+	public ActionButtonHandleList getButtonList() {
 		if(buttonList==null) {
-			buttonList=new ShapeActionButtonHandleList2(this);
-			if(this.hideNormalHandles) 	buttonList=new ShapeActionButtonHandleList2(this, 4);
+			buttonList= createActionHandleList();
 		}
 		buttonList.updateLocation();
 		return buttonList;
 	}
+	
+	/**
+	Creates an action handle list for the object
+	 */
+	public ShapeActionButtonHandleList2 createActionHandleList()  {
+		ShapeActionButtonHandleList2 buttonList=new ShapeActionButtonHandleList2(this);
+		if(this.hideNormalHandles) 	buttonList=new ShapeActionButtonHandleList2(this, ShapeActionButtonHandleList2.ARROW_ONLYFORM);
+		return buttonList;
+	}
+	
+	
+	
 	protected SmartHandleList createSmartHandleList() {
 		 SmartHandleList smList = new SmartHandleList();
 		 if (!hideNormalHandles) {

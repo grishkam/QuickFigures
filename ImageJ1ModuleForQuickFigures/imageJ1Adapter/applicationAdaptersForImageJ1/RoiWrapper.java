@@ -339,7 +339,7 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 
 
 		@Override
-		public void setSnappingBehaviour(SnappingPosition snap) {
+		public void setSnapPosition(SnappingPosition snap) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -652,7 +652,7 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 				
 				for (Roi roi: o.toArray()) try {
 					SendRoiToIllutrator( aref, roi);
-					} catch (Throwable t) {IssueLog.log(t);}
+					} catch (Throwable t) {IssueLog.logT(t);}
 			}
 		}
 		@Override

@@ -21,7 +21,7 @@ public class ShapeGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnim
 	}
 	
 	
-	protected keyFrame createkeyFrame(int frame) {
+	protected KeyFrame createkeyFrame(int frame) {
 		return new shapeKeyFrame(frame);
 	}
 	
@@ -79,7 +79,7 @@ public class ShapeGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnim
 						}
 	}
 	
-	public class shapeKeyFrame extends keyFrame {
+	public class shapeKeyFrame extends KeyFrame {
 
 		public boolean animatesAngleChange=true;
 		public boolean animatesStrokeChange=true;

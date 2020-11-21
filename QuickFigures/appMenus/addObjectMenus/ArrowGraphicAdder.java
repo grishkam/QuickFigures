@@ -8,6 +8,10 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 
 public class ArrowGraphicAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrowGraphic model = new ArrowGraphic(); {model.setStrokeColor(Color.darkGray);}
 	
 	@Override
@@ -29,6 +33,11 @@ public class ArrowGraphicAdder extends BasicGraphicAdder {
 
 	public ArrowGraphic getModelForIcon() {
 		return model;
+	}
+	
+	@Override
+	public String getMenuPath() {
+		return "Shapes";
 	}
 
 

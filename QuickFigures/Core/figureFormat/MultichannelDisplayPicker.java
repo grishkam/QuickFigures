@@ -55,7 +55,7 @@ public class MultichannelDisplayPicker extends
 		if (getModelItem()!=null)
 			pScale = getModelItem().getPreprocessScale();
 		/**decides whether the preprocess is appropriate or not*/
-		boolean b = imageMulti.getMultichanalWrapper().getDimensions().getWidth()*pScale<500;
+		boolean b = imageMulti.getMultiChannelImage().getDimensions().getWidth()*pScale<500;
 		return b;
 	}
 

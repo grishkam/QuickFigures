@@ -2,7 +2,6 @@ package addObjectMenus;
 
 import java.awt.Color;
 import java.awt.Insets;
-
 import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
@@ -13,19 +12,25 @@ import utilityClassesForObjects.ScaleInfo;
 
 public class BarGraphicAdder extends BasicGraphicAdder {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	BarGraphic modelbar = new BarGraphic(); {modelbar.moveLocation(-4, 0);}
 	
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		
 		BarGraphic ag = getModelBar().copy();
-		addLockedItemToSelectedImage(ag);
+		 addLockedItemToSelectedImage(ag);
 		gc.add(ag);
 		
 		
 		return ag;
 	}
 	
+	
+
 
 
 	@Override
@@ -37,7 +42,7 @@ public class BarGraphicAdder extends BasicGraphicAdder {
 	@Override
 	public String getMenuCommand() {
 	
-		return "Scale Bar To Selected Image";
+		return "Scale Bar";
 	}
 	
 	public BarGraphic getModelBar() {
@@ -59,5 +64,11 @@ public class BarGraphicAdder extends BasicGraphicAdder {
 		m.setLocation(0,16);
 		out.setCurrentItemInsets(new Insets(5,5,1,5));
 		 return out;
+	}
+	
+	
+	@Override
+	public String getMenuPath() {
+		return "to selected panels";
 	}
 }

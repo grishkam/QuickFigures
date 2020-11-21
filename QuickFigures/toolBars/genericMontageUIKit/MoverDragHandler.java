@@ -14,7 +14,7 @@ import addObjectMenus.FileImageAdder;
 import addObjectMenus.ImageAndlayerAdder;
 import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import externalToolBar.BasicDragHandler;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
@@ -27,7 +27,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import layersGUI.GraphicSetDisplayTree;
 import layersGUI.GraphicTreeTransferHandler;
 import logging.IssueLog;
@@ -48,7 +48,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		this.tool=roi_Mover;
 	}
 
-	public void drop(ImageAndDisplaySet displaySet, DropTargetDropEvent arg0) {
+	public void drop(ImageWindowAndDisplaySet displaySet, DropTargetDropEvent arg0) {
 		AbstractUndoableEdit2 undo=null;
 		ArrayList<File> file = ForDragAndDrop.dropedFiles(arg0);
 		if (file!=null) undo=handleFileListDrop(displaySet, arg0.getLocation(), file);
@@ -90,7 +90,7 @@ public class MoverDragHandler extends BasicDragHandler {
 				}
 		
 		}
-		catch (Throwable t) {IssueLog.log(t);
+		catch (Throwable t) {IssueLog.logT(t);
 		
 		}
 		
@@ -107,7 +107,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		}
 	}
 	
-	void moveItemToSet(ZoomableGraphic z, ImageAndDisplaySet displaySet) {
+	void moveItemToSet(ZoomableGraphic z, ImageWindowAndDisplaySet displaySet) {
 		select(z);
 		if (displaySet.getImageAsWrapper().getGraphicLayerSet().hasItem(z))
 					return;
@@ -124,7 +124,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 	}
 	
-	public void dragOver(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0) {
+	public void dragOver(ImageWindowAndDisplaySet displaySet, DropTargetDragEvent arg0) {
 		super.dragOver(displaySet, arg0);
 		
 	
@@ -149,7 +149,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 	}
 
-	private LocatedObject2D getObjectAtPoint(ImageAndDisplaySet displaySet, Point2D position) {
+	private LocatedObject2D getObjectAtPoint(ImageWindowAndDisplaySet displaySet, Point2D position) {
 		return tool.getObject(displaySet.getImageAsWrapper(), (int)position.getX(), (int) position.getY());
 	}
 	
@@ -159,7 +159,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	  If there are single images. Adds them to the 
 	 * @return */
 	
-	public CombinedEdit handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
+	public CombinedEdit handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
 		Point2D location2 = imageAndDisplaySet.getConverter().unTransformP(location);
 		LocatedObject2D roi2 = getObjectAtPoint(imageAndDisplaySet, location2);
 		PanelLayoutGraphic layout=null;
@@ -205,7 +205,7 @@ public class MoverDragHandler extends BasicDragHandler {
 			if (isMicroscopeFormat(f)) {
 				multiChannelOpen=true;
 			}
-			else if (layer instanceof PanelStackDisplay) {
+			else if (layer instanceof ImageDisplayLayer) {
 				multiChannelOpen=true;
 			}
 			else if (layer instanceof FigureOrganizingLayerPane) {
@@ -216,11 +216,11 @@ public class MoverDragHandler extends BasicDragHandler {
 				
 				MultichannelDisplayLayer testOpen = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
 				//IssueLog.log("perform test open "+testOpen);
-				if(testOpen==null||testOpen.getMultichanalWrapper()==null ) {
+				if(testOpen==null||testOpen.getMultiChannelImage()==null ) {
 					multiChannelOpen=false;
 				}
 				else
-				if (testOpen.getMultichanalWrapper().getStackSize()>1 ||testOpen.getMultichanalWrapper().getPixelWrapperForSlice(1,1,1).getBitsPerPixel()==16){} 
+				if (testOpen.getMultiChannelImage().getStackSize()>1 ||testOpen.getMultiChannelImage().getPixelWrapperForSlice(1,1,1).getBitsPerPixel()==16){} 
 				else {multiChannelOpen=false;}
 				if (testOpen!=null)testOpen.getSlot().hideImage();
 					
@@ -323,7 +323,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		return false;
 	}
 	
-	private AbstractUndoableEdit2 handleMultiChannelStackDrop(File f, ImageAndDisplaySet imageAndDisplaySet, GraphicLayer layer , Point2D location2) {
+	private AbstractUndoableEdit2 handleMultiChannelStackDrop(File f, ImageWindowAndDisplaySet imageAndDisplaySet, GraphicLayer layer , Point2D location2) {
 		CombinedEdit undo=new CombinedEdit();
 		layer = findValidLayer(layer);
 		int startIndex=-1;
@@ -338,7 +338,7 @@ public class MoverDragHandler extends BasicDragHandler {
 				{
 				//IssueLog.log("Start index clicked is "+startIndex);
 				//IssueLog.log("Start index clicked is "+l.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, startIndex, startIndex));
-				int numberOfEmptyNeeded = l.getPrincipalMultiChannel().getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultichanalWrapper());
+				int numberOfEmptyNeeded = l.getPrincipalMultiChannel().getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultiChannelImage());
 				//IssueLog.log("need x empty "+numberOfEmptyNeeded);
 				startIndex=l.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, numberOfEmptyNeeded, startIndex-1);
 				//if(startIndex<0) startIndex=ml.nPanels()-1;
@@ -390,7 +390,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	}
 	
 	
-	public void dragEnter(ImageAndDisplaySet displaySet, DropTargetDragEvent arg0) {
+	public void dragEnter(ImageWindowAndDisplaySet displaySet, DropTargetDragEvent arg0) {
 		super.dragEnter(displaySet, arg0);
 		
 		

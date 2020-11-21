@@ -113,7 +113,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 			if (this.shiftDown()) {
 				for(LocatedObject2D roi1: rois) {
 					UndoSnappingChange undo0 = new UndoSnappingChange(roi1);
-					roi1.setSnappingBehaviour(inside.getSnapPosition().copy());
+					roi1.setSnapPosition(inside.getSnapPosition().copy());
 					undo0.establishFinalState();
 					undoer.addEditToList(undo0);
 				}

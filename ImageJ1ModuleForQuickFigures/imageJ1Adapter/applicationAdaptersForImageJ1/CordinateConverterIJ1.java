@@ -2,12 +2,12 @@ package applicationAdaptersForImageJ1;
 
 
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import ij.ImagePlus;
 
 /**Coordinate converted used if graphics need to be superimposed on an IJ1 image
   not accessible to users but might be of use to programmers*/
-public class CordinateConverterIJ1 extends BasicCordinateConverter{
+public class CordinateConverterIJ1 extends BasicCoordinateConverter{
 	/**
 	 * 
 	 */

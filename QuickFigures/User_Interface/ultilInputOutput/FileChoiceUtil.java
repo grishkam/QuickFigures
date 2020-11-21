@@ -70,7 +70,7 @@ public class FileChoiceUtil {
 			 try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (Exception e) {
-				IssueLog.log(e);
+				IssueLog.logT(e);
 			} 
 		}
 	}

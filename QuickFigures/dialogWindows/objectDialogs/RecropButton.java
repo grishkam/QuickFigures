@@ -54,7 +54,7 @@ public class RecropButton extends JButton implements ActionListener {
 			undo2.establishFinalState();
 			undo.addEditToList(undo2);
 		}catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		
 		undo.establishFinalState();

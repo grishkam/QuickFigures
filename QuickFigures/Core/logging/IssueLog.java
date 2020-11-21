@@ -115,7 +115,7 @@ public class IssueLog {
 	}
 	
 	
-	public static void log(Throwable... ees){
+	public static void logT(Throwable... ees){
 		String show="";
 		for(Throwable ee: ees) {
 		for (Object e: ee.getStackTrace()) show+='\n'+e.toString();
@@ -125,7 +125,7 @@ public class IssueLog {
 	
 	public static void log(String st, Throwable ee){
 		log(st);
-		log(ee);
+		logT(ee);
 	}
 
 	public static void showMessage(String s) {

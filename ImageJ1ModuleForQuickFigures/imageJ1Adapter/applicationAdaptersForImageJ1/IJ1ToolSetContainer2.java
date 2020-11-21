@@ -21,6 +21,7 @@ import logging.IssueLog;
  Eventually, updated such that all my tools worked independently of the imageJ.
  I might change it back to use imageJ again but so far there seems to be no need.
  It does not affect the user interface of quickfigures but might be interesting to programmers. */
+@Deprecated
 public class IJ1ToolSetContainer2  implements  MouseListener, ToolChangeListener<DisplayedImage> {
 	
 	 static IJ1ToolSetContainer2 instance=new IJ1ToolSetContainer2();
@@ -95,39 +96,39 @@ public IJ1ToolSetContainer2() {
 			;
 		getCurrentTool().mousePressed(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));
 		}
-		catch (Throwable t) {IssueLog.log(t);}
+		catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public void mouseClicked(ImagePlus imp, MouseEvent e){
 		try{
 			getCurrentTool().mouseClicked(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));
 }
-	catch (Throwable t) {IssueLog.log(t);}
+	catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public void mouseDragged(ImagePlus imp, MouseEvent e) {
 		try{
 		getCurrentTool().mouseDragged(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));}
-		catch (Throwable t) {IssueLog.log(t);}
+		catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public void mouseReleased(ImagePlus imp, MouseEvent e) {
 		try {
 		getCurrentTool().mouseReleased(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));}
-	catch (Throwable t) {IssueLog.log(t);}
+	catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public void mouseExited(ImagePlus imp, MouseEvent e) {
 	//	imp.getCanvas().removeMouseListener(this);
 		//imp.getCanvas().disablePopupMenu(false);
 		try {getCurrentTool().mouseExited(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));}
-		catch (Throwable t) {IssueLog.log(t);}
+		catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public void mouseEntered(ImagePlus imp, MouseEvent e) {
 		try{
 		getCurrentTool().mouseEntered(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));}
-	catch (Throwable t) {IssueLog.log(t);}
+	catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public void mouseMoved(ImagePlus imp, MouseEvent e) {
 		try{
 		getCurrentTool().mouseMoved(new ImagePlusDisplayWrap(imp), new IJ1MEWrapper(imp, e));}
-	catch (Throwable t) {IssueLog.log(t);}
+	catch (Throwable t) {IssueLog.logT(t);}
 	}
 	public String getToolIcon() {
 		if (getCurrentTool()==null) return "Toolbox";

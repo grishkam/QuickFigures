@@ -53,7 +53,7 @@ public class IconSet {
 		icons2=new Icon[strings.length] ;
 		for(int i=0; i<strings.length; i++) try {
 			setIcon( i,strings[i]);
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 	}
 	
 	/**sets the icon based on a string that tells the code how to find the icon*/

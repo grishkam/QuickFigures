@@ -76,7 +76,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 			@Override
 			public void onAction() {
 				undo=PanelManagerUndo.createFor(panelManager);
-				stack.addAllCandF(display.getMultichanalWrapper());
+				stack.addAllCandF(display.getMultiChannelImage());
 				panelManager.generatePanelGraphicsFor(stack);
 			}
 			

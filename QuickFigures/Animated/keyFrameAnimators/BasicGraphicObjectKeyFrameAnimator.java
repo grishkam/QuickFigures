@@ -11,6 +11,7 @@ import animations.KeyFrameAnimation;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import utilityClassesForObjects.Hideable;
 
+/**A simple implementation of animation interfaces that acts as a superclass for other classes*/
 public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAnimation {
 
 	
@@ -19,7 +20,7 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 	 */
 	private static final long serialVersionUID = 1L;
 	private BasicGraphicalObject object;
-	private ArrayList<keyFrame> frames=new ArrayList<keyFrame>();
+	private ArrayList<KeyFrame> frames=new ArrayList<KeyFrame>();
 	
 	int animatesTranslation=1;
 
@@ -38,12 +39,12 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 		else isKeyFrame(frame).setUp();
 	}
 	
-	protected keyFrame createkeyFrame(int frame) {
-		return new keyFrame(frame);
+	protected KeyFrame createkeyFrame(int frame) {
+		return new KeyFrame(frame);
 	}
 	
 	
-	double spanBetweenKeyFrames(keyFrame before, keyFrame after, int frameNum) {
+	double spanBetweenKeyFrames(KeyFrame before, KeyFrame after, int frameNum) {
 		double span=after.theFrameNumber-before.theFrameNumber;
 		double progressWithinSpan=frameNum-before.theFrameNumber;
 		double factor = progressWithinSpan/span;
@@ -54,8 +55,8 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 	boolean isInterpretableFrame(int frameNum)  {
 		
 		if (isKeyFrame(frameNum)!=null) return true;
-		keyFrame before = this.getKeyFrameBefore(frameNum);
-		keyFrame after = this.getKeyFrameAfter(frameNum);
+		KeyFrame before = this.getKeyFrameBefore(frameNum);
+		KeyFrame after = this.getKeyFrameAfter(frameNum);
 		if (before==null) return false;
 		if (after==null) return false;
 		return true;
@@ -78,7 +79,7 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 			isKeyFrame(frameNum).setObjectToKeyFrame();
 			return;
 		};
-		keyFrame before = getKeyFrameBefore(frameNum);
+		KeyFrame before = getKeyFrameBefore(frameNum);
 		if (before!=null)before.setObjectToKeyFrame();
 		interpolateLocation(frameNum);
 		
@@ -89,8 +90,8 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 	
 	
 	protected void interpolateLocation(int frameNum) {
-		keyFrame before = this.getKeyFrameBefore(frameNum);
-		keyFrame after = this.getKeyFrameAfter(frameNum);
+		KeyFrame before = this.getKeyFrameBefore(frameNum);
+		KeyFrame after = this.getKeyFrameAfter(frameNum);
 		if (before==null) return;
 		if (after==null|| !after.animatesMotion) return;
 	
@@ -125,7 +126,7 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 
 	}
 	
-	public ArrayList<keyFrame> getFrames() {
+	public ArrayList<KeyFrame> getFrames() {
 		return frames;
 	}
 
@@ -138,20 +139,20 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 
 
 
-
-	public class keyFrame implements Serializable, BasicKeyFrame{
+	/**simple implementation of the basic key frame interface*/
+	public class KeyFrame implements Serializable, BasicKeyFrame{
 		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		int theFrameNumber=0;
-		double locationULx;
-		double locationULy;
-		boolean hidden=false;
+		int theFrameNumber=0;//the frame number of this key frame
+		double locationULx;//the location of the object during this key frame
+		double locationULy;//the location of the object during this key frame
+		boolean hidden=false;//true if the object is hidden during this key frame
 		public boolean animatesMotion=true;
 		
-		protected keyFrame(int f) {
+		protected KeyFrame(int f) {
 			theFrameNumber=f;
 			setUp();
 		}
@@ -176,7 +177,6 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 
 		@Override
 		public int getFrame() {
-			// TODO Auto-generated method stub
 			return theFrameNumber;
 		}
 
@@ -188,21 +188,22 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 		
 	}
 	
-	/**returns true if frame 'frame' is a keyFrame*/
-	public keyFrame isKeyFrame(int frame) {
-		for(keyFrame aFrame:getFrames()) {
+	/**returns true if there is a key frame at frame 'frame' */
+	public KeyFrame isKeyFrame(int frame) {
+		for(KeyFrame aFrame:getFrames()) {
 			if (aFrame.theFrameNumber==frame)return aFrame;
 		} 
 		return null;
 	}
 	
-	
-	public keyFrame getKeyFrameBefore(int frame) {
+	/**returns the key frame that occurs before the given frame.
+	  if there are no key frames before this frame, it returns null */
+	public KeyFrame getKeyFrameBefore(int frame) {
 		if (getFrames().size()==0) return null;
 		
-		keyFrame output=null;
+		KeyFrame output=null;
 		
-		for(keyFrame aFrame:getFrames()) {
+		for(KeyFrame aFrame:getFrames()) {
 			if(aFrame.theFrameNumber> frame) continue;//ignore if the frame is not before this one
 			if (output==null) {output=aFrame; continue;};//what to do if this is the first frame in the iteration that is before the frame argument 
 			if (output!=null &&output.theFrameNumber<aFrame.theFrameNumber) output=aFrame;//what is aFrame is closer to the current frame than the previous candidate.
@@ -211,26 +212,30 @@ public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAn
 		return output;
 	}
 	
-	public keyFrame getKeyFrameAfter(int frame) {
-if (getFrames().size()==0) return null;
+	/**returns the key frame at the given frame index*/
+	public KeyFrame getKeyFrameAfter(int frame) {
 		
-		keyFrame output=null;
+		if (getFrames().size()==0) return null;
 		
-		for(keyFrame aFrame:getFrames()) {
+		KeyFrame output=null;
+		
+		for(KeyFrame aFrame:getFrames()) {
 			if(aFrame.theFrameNumber< frame) continue;//ignore if the frame is before this one
-			if (output==null) {output=aFrame; continue;};//what to do if this is the first frame in the iteration that is before the frame argument 
+			if (output==null) {output=aFrame; continue;};//what to do if this is the first frame in the iteration that is at the frame argument 
 			if (output!=null &&output.theFrameNumber>aFrame.theFrameNumber) output=aFrame;//what is aFrame is closer to the current frame than the previous candidate.
 		}
 				
 		return output;
 	}
 
+	/**removes the key frame at time frame*/
 	@Override
 	public void removeKeyFrame(int frame) {
 		getFrames().remove(this.isKeyFrame(frame));
 		
 	}
 
+	/**returns all of the key frames*/
 	@Override
 	public ArrayList<BasicKeyFrame> getKeyFrames() {
 		ArrayList<BasicKeyFrame> output = new ArrayList<BasicKeyFrame>();

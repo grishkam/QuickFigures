@@ -5,17 +5,19 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
+import externalToolBar.AbstractExternalToolset;
 import externalToolBar.GraphicToolIcon;
 import gridLayout.BasicMontageLayout;
 
-/***/
+/**An icon that displays a small picture of a layout*/
 public class LayoutShowingToolIcon extends GraphicToolIcon implements Icon{
 	
-	private static final int ICONSIZE = 25;
+	private static final int ICONSIZE = AbstractExternalToolset.DEFAULT_ICONSIZE;
 	protected int type;
 	Color[] panelColor    = new Color[] {Color.blue.darker().darker()};
 
@@ -25,13 +27,18 @@ public class LayoutShowingToolIcon extends GraphicToolIcon implements Icon{
 		super(type);
 		this.type=type;
 	}
+	public LayoutShowingToolIcon(int type, boolean paintArrow) {
+		super(type);
+		super.paintCursorIcon=paintArrow;
+		this.type=type;
+	}
 	
 	protected Color getPanelColor(int i) {
 		return getPanelColors()[i%getPanelColors().length];
 	}
 
 	/**
-	 * @return
+	returns a list of panel colors. 
 	 */
 	protected Color[] getPanelColors() {
 		return panelColor;
@@ -44,11 +51,10 @@ public class LayoutShowingToolIcon extends GraphicToolIcon implements Icon{
 	@Override
 	protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2, int arg3) {
 			Graphics2D g2d=(Graphics2D) g;
-			
-			
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			BasicMontageLayout layout = getDrawnLayout();
 			layout.move(arg2, arg3);
-			
+			layout.resetPtsPanels();
 			g2d.setStroke(new BasicStroke(1));
 			for(Rectangle2D p: layout.getPanels()) {
 				g.setColor(getPanelColor(0));
@@ -61,8 +67,8 @@ public class LayoutShowingToolIcon extends GraphicToolIcon implements Icon{
 	
 	
 
-	protected BasicMontageLayout getDrawnLayout() {
-		return createSimpleIconLayout(type);
+	public BasicMontageLayout getDrawnLayout() {
+		return createSimpleIconLayout( type);
 	}
 
 	/**
@@ -70,8 +76,8 @@ public class LayoutShowingToolIcon extends GraphicToolIcon implements Icon{
 	 */
 	protected BasicMontageLayout createSimpleIconLayout( int type) {
 		BasicMontageLayout layout = new BasicMontageLayout(2, 2, 6, 6, 2,2, true);
-		layout.setLabelSpaces(2, 2, 3, 3);
-		layout.move(3, 3);
+		layout.setLabelSpaces(2, 2,2,2);
+		layout.move(2,3);
 		return layout;
 	}
 
@@ -86,7 +92,9 @@ public class LayoutShowingToolIcon extends GraphicToolIcon implements Icon{
 	}
 	
 	public LayoutShowingToolIcon copy(int type) {
-		return new LayoutShowingToolIcon(type);
+		LayoutShowingToolIcon another = new LayoutShowingToolIcon(type);
+		another.paintCursorIcon=paintCursorIcon;
+		return another;
 	}
 
 }

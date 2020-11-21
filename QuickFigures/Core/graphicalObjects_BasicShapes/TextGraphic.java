@@ -44,13 +44,15 @@ import utilityClassesForObjects.TextPrecision;
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEventWrapper;
 import externalToolBar.IconSet;
-import externalToolBar.textGraphicTreeIcon;
+import externalToolBar.TreeIconForTextGraphic;
 import fieldReaderWritter.SVGExportable;
 import fieldReaderWritter.SVGExporter;
 import fieldReaderWritter.TextSVGExporter;
 import graphicalObjectHandles.TextActionButtonHandleList;
 import graphicalObjectHandles.HandleRect;
+import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjectHandles.HasSmartHandles;
+import graphicalObjectHandles.ImagePanelActionHandleList;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjectHandles.TextHandle;
 import graphicalObjects.CordinateConverter;
@@ -66,7 +68,7 @@ import objectDialogs.TextGraphicSwingDialog;
 
 /**A graphical object that consists of text. This one displays a piece of 
  * text with a single font and color. Used for the most simple labels*/
-public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic,GraphicalObject, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePosisions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
+public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic,GraphicalObject, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePosisions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
 	/**
 	 
 	 */
@@ -366,7 +368,7 @@ public void draw(Graphics2D g, CordinateConverter<?> cords) {
    if (selected &&!super.handlesHidden) try {
  	  drawHandlesAndOutline(g, cords);
  	  
- } catch (Throwable t) {IssueLog.log(t);}
+ } catch (Throwable t) {IssueLog.logT(t);}
    g.setColor(getDimmedColor());
 	drawRotatedText(g,cords);
 
@@ -525,7 +527,7 @@ public void drawHandlesAndOutline(Graphics2D g2d, CordinateConverter<?> cords) {
 		
 	 }
 	catch (Throwable t) {
-		IssueLog.log(t);
+		IssueLog.logT(t);
 	}
 }
 
@@ -554,7 +556,7 @@ protected void giveTraitsTo(TextGraphic tg) {
 	
 	tg.strokeColor=strokeColor;
 	if (getSnapPosition()!=null)
-	tg.setSnappingBehaviour(getSnapPosition().copy());
+	tg.setSnapPosition(getSnapPosition().copy());
 	tg.map= map;
 	tg.backGroundShape=this.getBackGroundShape().copy();
 }
@@ -815,7 +817,7 @@ transient static IconSet i;//=new IconSet("icons2/TextIcon.jpg");
 public Icon getTreeIcon() {
 	//output=
 	//return null;
-	return new textGraphicTreeIcon(this.getFont(), "a");
+	return new TreeIconForTextGraphic(this.getFont(), "a");
 	//return createImageIcon();
 }
 
@@ -1242,11 +1244,18 @@ public boolean isUserEditable() {
 protected transient TextActionButtonHandleList aList;
 transient SmartHandleList smartList=null;
 
+
+/**creates a handle list that appears similar to a mini-toolbar*/
+@Override
+public TextActionButtonHandleList createActionHandleList() {
+	return new TextActionButtonHandleList(this);
+}
+
 @Override
 public SmartHandleList getSmartHandleList() {
 		if (this.isEditMode()||superSelected) {
 			if (aList==null) {
-				aList=new TextActionButtonHandleList(this);
+				aList=createActionHandleList();
 			}
 			aList.updateLocationBasedOnParentItem();
 			return SmartHandleList.combindLists(aList, this.getStandardHandles());
@@ -1273,6 +1282,7 @@ public int handleNumber(int x, int y) {
 public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoTextEdit(this);
 }
+
 
 
 	

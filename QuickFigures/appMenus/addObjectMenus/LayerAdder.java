@@ -8,6 +8,10 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 
 class LayerAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		GraphicLayerPane out = new GraphicLayerPane("New Layer Pane");

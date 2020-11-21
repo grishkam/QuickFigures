@@ -2,13 +2,16 @@ package undo;
 
 import java.util.ArrayList;
 
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 
+/**An undo for changes made to many parts of a split channel figure. since those edits are ofter done by methods in the
+ *  panel manager class, it is called the panel manager undo.
+  */
 public class PanelManagerUndo extends CombinedEdit {
 
 	/**
@@ -16,14 +19,14 @@ public class PanelManagerUndo extends CombinedEdit {
 	 */
 	private static final long serialVersionUID = 1L;
 	private PanelList list;
-	private double iPS;
-	private double fPS;
+	private double innitialPixelDensityRatio;
+	private double finalPixelDensityRatio;
 	private ArrayList<PanelListElement> iPanels=new ArrayList<PanelListElement>();
 	private ArrayList<PanelListElement> fPanels=new ArrayList<PanelListElement>();
 	
 	public PanelManagerUndo(PanelList list) {
 		this.list=list;
-		iPS=list.getPanelLevelScale();
+		innitialPixelDensityRatio=list.getPixelDensityRatio();
 		iPanels=new ArrayList<PanelListElement>();
 		iPanels.addAll(list.getPanels());
 		for(PanelListElement i:iPanels) {
@@ -35,28 +38,31 @@ public class PanelManagerUndo extends CombinedEdit {
 		
 	}
 	
+	/**stores the current state of all the objects as the final state for the undo*/
 	public void establishFinalState() {
 		super.establishFinalState();
-		fPS=list.getPanelLevelScale();
+		finalPixelDensityRatio=list.getPixelDensityRatio();
 		fPanels=new ArrayList<PanelListElement>();
 		fPanels.addAll(list.getPanels());
 		
 	}
+	
+	
 	public void redo() {
 		super.redo();
-		list.setPanelLevelScale(fPS);
+		list.setPixelDensityRatio(finalPixelDensityRatio);
 		list.eliminateAllPanels();
 		list.getPanels().addAll(fPanels);
 	}
 	
 	public void undo() {
 		super.undo();
-		list.setPanelLevelScale(iPS);
+		list.setPixelDensityRatio(innitialPixelDensityRatio);
 		list.eliminateAllPanels();
 		list.getPanels().addAll(iPanels);
 	}
 
-	
+	/**creates an undo for the given panel manager*/
 	public static CombinedEdit createFor(PanelManager pm) {
 		CombinedEdit output = new CombinedEdit();
 		output.addEditToList(new PanelManagerUndo(pm.getPanelList()));
@@ -68,15 +74,15 @@ public class PanelManagerUndo extends CombinedEdit {
 		return output;
 	}
 	
-	public static CombinedEdit createFor(PanelStackDisplay pm) {
+	public static CombinedEdit createFor(ImageDisplayLayer pm) {
 		CombinedEdit output = createFor(pm.getPanelManager());
 		output.addEditToList(new PreprocessChangeUndo(pm));
 		return output;
 	}
 	
-	public static CombinedEdit createForMany(ArrayList<? extends PanelStackDisplay> all) {
+	public static CombinedEdit createForMany(ArrayList<? extends ImageDisplayLayer> all) {
 		CombinedEdit output = new CombinedEdit();
-		for(PanelStackDisplay a:all) {
+		for(ImageDisplayLayer a:all) {
 			output.addEditToList(createFor(a));
 		}
 		return output;

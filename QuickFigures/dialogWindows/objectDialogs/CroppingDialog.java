@@ -20,14 +20,14 @@ import javax.swing.JButton;
 import applicationAdapters.PixelWrapper;
 import channelMerging.CSFLocation;
 import channelMerging.MultiChannelSlot;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import standardDialog.AngleInputPanel;
@@ -77,7 +77,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private Point2D orilocation;
 	private ArrayList<ZoomableGraphic> extraItems=new ArrayList<ZoomableGraphic>();
 	public boolean hideRotateHandle;
-	private MultiChannelWrapper multiChannelSource;
+	private MultiChannelImage multiChannelSource;
 	private CSFLocation display=new CSFLocation();
 	private ImagePanelGraphic dialogDisplayImage;
 	
@@ -94,7 +94,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 	}
 	
-	public CroppingDialog(MultiChannelSlot s, MultiChannelWrapper multichanalWrapper, PreProcessInformation preprocessRecord) {
+	public CroppingDialog(MultiChannelSlot s, MultiChannelImage multichanalWrapper, PreProcessInformation preprocessRecord) {
 		includeInsets(s);
 		
 		
@@ -112,7 +112,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 
 	public void includeInsets(MultiChannelSlot s) {
-		for(PanelGraphicInsetDef i: s.getDisplayLayer().getInsets()) {
+		for(PanelGraphicInsetDefiner i: s.getDisplayLayer().getInsets()) {
 			if(i==null) continue;
 			RectangularGraphic r3 = i.mapRectBackToUnprocessedVersion(s.getModifications());
 			this.addExtraItem(r3);
@@ -129,7 +129,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.showDialog(image);
 	}
 	
-	public CroppingDialog(MultiChannelSlot s, MultiChannelWrapper multichanalWrapper, Rectangle r, double recAngle) {
+	public CroppingDialog(MultiChannelSlot s, MultiChannelImage multichanalWrapper, Rectangle r, double recAngle) {
 		includeInsets(s);
 		setImageToCrop(multichanalWrapper, display.channel, display.frame, display.slice);
 		
@@ -154,7 +154,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 
 
-	private void setImageToCrop(MultiChannelWrapper multichanalWrapper,int chan, int frame, int slice) {
+	private void setImageToCrop(MultiChannelImage multichanalWrapper,int chan, int frame, int slice) {
 		multiChannelSource= multichanalWrapper;
 		this.setTitle("Crop: "+multichanalWrapper.getTitle());
 		this.display.frame=frame;
@@ -457,7 +457,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 		
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 	
@@ -549,7 +549,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			slot.applyCropAndScale(process);
 			
 		} catch (Exception e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 

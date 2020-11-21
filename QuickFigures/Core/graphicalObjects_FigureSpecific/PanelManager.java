@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import channelMerging.CSFLocation;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import fLexibleUIKit.MenuItemMethod;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
@@ -38,7 +38,7 @@ public class PanelManager implements Serializable, EditListener{
 	private PanelList stack;
 	private MultichannelDisplayLayer display;
 	
-	private transient MultiChannelWrapper multi;
+	private transient MultiChannelImage multi;
 	private int defaultFrameWidth;
 
 	public PanelManager(MultichannelDisplayLayer multichannelImageDisplay, PanelList stack,
@@ -47,7 +47,7 @@ public class PanelManager implements Serializable, EditListener{
 		this.setPanelList(stack);
 		this.layer=multichannelImageDisplay2;
 		if(layer==null) layer=multichannelImageDisplay;
-		setMultiChannelWrapper(multichannelImageDisplay.getMultichanalWrapper());
+		setMultiChannelWrapper(multichannelImageDisplay.getMultiChannelImage());
 		
 	}
 	
@@ -71,9 +71,9 @@ public class PanelManager implements Serializable, EditListener{
 			try {
 				
 				String indexname="";
-				if (display.getMultichanalWrapper().nFrames()>1)
+				if (display.getMultiChannelImage().nFrames()>1)
 					indexname+="t:"+panel.originalFrameNum+" "; 
-				if (display.getMultichanalWrapper().nSlices()>1)
+				if (display.getMultiChannelImage().nSlices()>1)
 					indexname+="s:"+panel.originalSliceNum;
 				
 				if (panel.isTheMerge()&&indexname.length()>1) {
@@ -116,18 +116,18 @@ public class PanelManager implements Serializable, EditListener{
 	}
 	
 	public double getPanelLevelScale() {
-		return stack.getPanelLevelScale();
+		return stack.getPixelDensityRatio();
 	}
 	
 	public void setPanelLevelScale(double panelLevelScale) {
-		stack.setPanelLevelScale(panelLevelScale);
+		stack.setPixelDensityRatio(panelLevelScale);
 	}
 	
 
 	/**generates the panel graphics and adds then all to the parent layer*/
 	@MenuItemMethod(menuActionCommand = "paneloptions2", menuText = "Generate New Panels", subMenuName="Image Panels")
 	public void generatePanelGraphics() {
-		getPanelList().addAllCandF(display.getMultichanalWrapper());
+		getPanelList().addAllCandF(display.getMultiChannelImage());
 		generatePanelGraphicsFor(getPanelList());
 	}
 	
@@ -218,7 +218,7 @@ public class PanelManager implements Serializable, EditListener{
 	/**returns a panel containing a merged image at the given slice and frame.
 	  If the list does not already contain such a panel, this will create one*/
 	private PanelListElement generateSingleMergePanel(PanelList stack, int slice, int frame) {
-		PanelListElement panel =stack.getOrCreateMergePanel( display.getMultichanalWrapper(), slice, frame);
+		PanelListElement panel =stack.getOrCreateMergePanel( display.getMultiChannelImage(), slice, frame);
 	
 		 if (panel!=null)this.generatePanelGraphicFor(panel);
 		 else IssueLog.log("null for requested panel"); 
@@ -228,7 +228,7 @@ public class PanelManager implements Serializable, EditListener{
 	/**Displays a dialog then adds a merge panel to the figure*/
 	@MenuItemMethod(menuActionCommand = "1merge", menuText = "Create 1 Merge Panel", subMenuName="Image Panels")
 	public void addSingleMergePanel(PanelList stack) {
-		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1,display.getMultichanalWrapper());
+		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1,display.getMultiChannelImage());
 		dia.show2DimensionDialog();
 		
 		generateSingleMergePanel(stack, dia.getSlice(),dia.getFrame());
@@ -238,7 +238,7 @@ public class PanelManager implements Serializable, EditListener{
 	/**Displays a dialog then adds a channel panel to the figure*/
 	@MenuItemMethod(menuActionCommand = "1chan", menuText = "Create New Panel", subMenuName="Image Panels")
 	public PanelListElement addSingleChannelPanel(PanelList stack) {
-		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1, display.getMultichanalWrapper());
+		ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(1,1,1, display.getMultiChannelImage());
 		dia.show3DimensionDialog();
 		boolean b = dia.getChannel()==0;
 		if (b) { 
@@ -265,11 +265,11 @@ public class PanelManager implements Serializable, EditListener{
 	}
 
 	/**getter method for multi-channel*/
-	public MultiChannelWrapper getMultiChannelWrapper() {
+	public MultiChannelImage getMultiChannelWrapper() {
 		return multi;
 	}
 	/**setter method for multi-channel*/
-	 void setMultiChannelWrapper(MultiChannelWrapper multi) {
+	 void setMultiChannelWrapper(MultiChannelImage multi) {
 		this.multi = multi;
 	}
 	
@@ -278,7 +278,7 @@ public class PanelManager implements Serializable, EditListener{
 	   the buffered images or appropriate color/contrast
 	    scale information */
 	public synchronized void updatePanels() {
-		MultiChannelWrapper impw =multi;
+		MultiChannelImage impw =multi;
 		getPanelList().resetChannelEntriesForAll(impw);
 		getPanelList().updateAllPanelsWithImage(impw);
 	}
@@ -474,7 +474,7 @@ public class PanelManager implements Serializable, EditListener{
 			out=new CSFLocation();
 			getDisplay().getSlot().setDisplaySlice(out);
 		}
-		this.getPanelList().ssetupViewLocation(out);
+		this.getPanelList().setupViewLocation(out);
 	}
 
 	/**returns true if the panel manager can switch the panel locations (slice, frame or channel) from one setting to another

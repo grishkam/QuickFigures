@@ -80,7 +80,7 @@ public class ZIllustratorScriptGenerator {
 	            out.write(string);
 	            out.close();
 	        } catch (Exception e) {
-	            IssueLog.log(e);
+	            IssueLog.logT(e);
 	        }
 	        return null;
 	    }

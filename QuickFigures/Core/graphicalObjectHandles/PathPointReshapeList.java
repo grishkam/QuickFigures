@@ -301,7 +301,7 @@ public class PathPointReshapeList extends ReshapeHandleList {
 		}
 
 		@Override
-		public void setSnappingBehaviour(SnappingPosition snap) {
+		public void setSnapPosition(SnappingPosition snap) {
 			// TODO Auto-generated method stub
 			
 		}

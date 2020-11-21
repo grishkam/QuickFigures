@@ -1,6 +1,6 @@
 package graphicActionToolbar;
 
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
@@ -15,7 +15,7 @@ public class PSActionTool extends DisplayActionTool {
 	
 	
 	
-	protected void perform(GraphicSetDisplayContainer graphic) {
+	protected void perform(FigureDisplayContainer graphic) {
 		if (graphic!=null) {
 			
 		sm.sendWrapperToills(graphic.getAsWrapper(), true);

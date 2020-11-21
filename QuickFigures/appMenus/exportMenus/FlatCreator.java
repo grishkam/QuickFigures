@@ -18,8 +18,8 @@ import javax.imageio.ImageIO;
 import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
-import graphicalObjects.BasicCordinateConverter;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.BasicCoordinateConverter;
+import graphicalObjects.FigureDisplayContainer;
 import standardDialog.BooleanInputPanel;
 import standardDialog.InfoDisplayPanel;
 import standardDialog.NumberInputEvent;
@@ -27,20 +27,19 @@ import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 
-/**Creates a buffered image for the display*/
+/**Creates a buffered image for the display. that will be a snapshot of the figure display*/
 public class FlatCreator extends BasicMenuItemForObj implements Transferable{
-	
 
 	
 	private BufferedImage image;
 	private boolean useTransparent=true;
-	private GraphicSetDisplayContainer cont;
+	private FigureDisplayContainer cont;
 	static	double ratio=1/ImageDPIHandler.ratioFor300DPI();//So the copied images can be 300ppi when in the equivalent dimensions
 	
 	public FlatCreator() {this(true);}
 	public FlatCreator(boolean transparent) {setUseTransparent(transparent);}
 	
-	public BufferedImage createFlat(GraphicSetDisplayContainer cont) {
+	public BufferedImage createFlat(FigureDisplayContainer cont) {
 		this.cont=cont;
 		return createFlat();
 	}
@@ -49,6 +48,8 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		ImageIO.write(createFlat(), "PNG", new File(newpath));
 		return true;
 	}
+	
+	/**creates a buffered image and draws all of the graphics on it*/
 	public BufferedImage createFlat() {
 		
 		Dimension dim = cont.getCanvasDims();
@@ -58,12 +59,14 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			if (isUseTransparent()) g.setColor(new Color(255,255,255,00));
 			
 			g.fillRect(0, 0, img.getWidth(), img.getHeight());
-		cont.getGraphicLayerSet().draw((Graphics2D) g, new BasicCordinateConverter(0,0,ratio));
+		cont.getGraphicLayerSet().draw((Graphics2D) g, new BasicCoordinateConverter(0,0,ratio));
 		
 		return img;
 	}
 	
-	public void toSystemClip(GraphicSetDisplayContainer cont) {
+	/**creates a buffered image and draws all of the graphics on it. 
+	 * copies the buffered image to the system clipboard*/
+	public void toSystemClip(FigureDisplayContainer cont) {
 		image = createFlat( cont) ;
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
         clip.setContents(this, null);
@@ -108,7 +111,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		return "Image";
 	}
 	
-	public void showDialog() {new flatDialog().showDialog();}
+	public void showDialog() {new FlatDialog().showDialog();}
 	
 	public boolean isUseTransparent() {
 		return useTransparent;
@@ -117,7 +120,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		this.useTransparent = useTransparent;
 	}
 
-	class flatDialog extends StandardDialog {
+	class FlatDialog extends StandardDialog {
 		/**
 		 * 
 		 */
@@ -126,7 +129,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		private NumberInputPanel nop;
 
 
-		public flatDialog() {
+		public FlatDialog() {
 			super("Export Options");
 			BooleanInputPanel bip = new BooleanInputPanel("Transpartent background?", isUseTransparent());
 			this.add("transp" , bip);

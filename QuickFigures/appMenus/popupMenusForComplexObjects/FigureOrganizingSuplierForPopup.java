@@ -13,8 +13,8 @@ import javax.swing.JPopupMenu;
 
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
-import channelMerging.MultiChannelWrapper;
-import channelMerging.PanelStackDisplay;
+import channelMerging.MultiChannelImage;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import figureFormat.TemplateSaver;
 import graphicActionToolbar.CurrentFigureSet;
@@ -24,11 +24,12 @@ import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
+import iconGraphicalObjects.CropIconGraphic;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
-import multiChannelFigureUI.ChannelSwapperToolBit2;
+import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.CroppingDialog;
 import standardDialog.StandardDialog;
@@ -109,9 +110,10 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 					
 				recropPanelsButton= new JMenuItem("Re-Crop All Images");
 				recropPanelsButton.addActionListener(this);
+				recropPanelsButton.setIcon( CropIconGraphic.createsCropIcon());
 				imagesMenu.add(recropPanelsButton);
 				
-				reScalePanelsButton= new JMenuItem("Re-Scale All Images");
+				reScalePanelsButton= new JMenuItem("Reset Scale for All Images");
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				
@@ -140,7 +142,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 						 windowLevelButton = new JMenuItem("Window/Level");
 						 chanMen.add(windowLevelButton);
 							windowLevelButton.addActionListener(this);
-							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.log(t);};
+							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.logT(t);};
 							jj.add(chanMen);
 							
 							jj.add(TemplateSaver.createFormatMenu(figureOrganizingLayerPane));
@@ -151,10 +153,10 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 	
 	public void addRecolorMenu(JMenu j) {
 		
-		MultiChannelWrapper mw = getPrimaryMultichannelWrapper();
+		MultiChannelImage mw = getPrimaryMultichannelWrapper();
 		ArrayList<ChannelEntry> iFin = mw.getChannelEntriesInOrder();
 		
-		ChannelSwapperToolBit2 bit = new ChannelSwapperToolBit2(figureOrganizingLayerPane, iFin.get(0).getOriginalChannelIndex());
+		ChannelPanelEditingMenu bit = new ChannelPanelEditingMenu(figureOrganizingLayerPane, iFin.get(0).getOriginalChannelIndex());
 		
 		
 		bit.addChenEntryColorMenus( j, iFin);
@@ -162,8 +164,8 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 
 
 
-	public MultiChannelWrapper getPrimaryMultichannelWrapper() {
-		return figureOrganizingLayerPane.getPrincipalMultiChannel().getMultichanalWrapper();
+	public MultiChannelImage getPrimaryMultichannelWrapper() {
+		return figureOrganizingLayerPane.getPrincipalMultiChannel().getMultiChannelImage();
 	}
 
 
@@ -213,15 +215,15 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 			undo=showRePPIAll();
 		}
 		
-		ChannelSwapperToolBit2 bit = new ChannelSwapperToolBit2( figureOrganizingLayerPane, 1);
+		ChannelPanelEditingMenu bit = new ChannelPanelEditingMenu( figureOrganizingLayerPane, 1);
 		if (source==minMaxButton5) {
-			CombinedEdit undoMinMax = ChannelDisplayUndo.createMany(figureOrganizingLayerPane.getAllSourceStacks(), bit);
+			CombinedEdit undoMinMax = ChannelDisplayUndo.createMany(figureOrganizingLayerPane.getAllSourceImages(), bit);
 			undo=undoMinMax;
 			WindowLevelDialog.showWLDialogs(getPrimaryMultichannelWrapper().getChannelEntriesInOrder(), getPrimaryMultichannelWrapper(), bit, WindowLevelDialog.MIN_MAX, undoMinMax);
 			
 		}
 		if (source==windowLevelButton) {
-			CombinedEdit undoMinMax = ChannelDisplayUndo.createMany(figureOrganizingLayerPane.getAllSourceStacks(), bit);
+			CombinedEdit undoMinMax = ChannelDisplayUndo.createMany(figureOrganizingLayerPane.getAllSourceImages(), bit);
 			undo=undoMinMax;
 			WindowLevelDialog.showWLDialogs(getPrimaryMultichannelWrapper().getChannelEntriesInOrder(), getPrimaryMultichannelWrapper(), bit,  WindowLevelDialog.WINDOW_LEVEL, undoMinMax);
 			
@@ -253,13 +255,13 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
  * @return */
 	public CombinedEdit recropAll() {
 		MultichannelDisplayLayer crop1 = (MultichannelDisplayLayer) figureOrganizingLayerPane.getPrincipalMultiChannel();
-		ArrayList<PanelStackDisplay> all = figureOrganizingLayerPane.getMultiChannelDisplays();
+		ArrayList<ImageDisplayLayer> all = figureOrganizingLayerPane.getMultiChannelDisplays();
 		
 		return recropManyImages(crop1, all);
 	}
 
 
-public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends PanelStackDisplay> all) {
+public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends ImageDisplayLayer> all) {
 	CombinedEdit output = new CombinedEdit();
 	output.addEditToList(
 			showRecropDisplayDialog( crop1, null)
@@ -270,11 +272,11 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		r1= modifications.getRectangle();
 	Dimension d1;
 	if (r1==null) {
-		d1=crop1.getMultichanalWrapper().getDimensions();
+		d1=crop1.getMultiChannelImage().getDimensions();
 	}else d1=new Dimension(r1.width, r1.height);
 	
 	
-	for(PanelStackDisplay crop2: all) {
+	for(ImageDisplayLayer crop2: all) {
 		if(crop2==crop1) continue;
 		output.addEditToList(
 				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1)
@@ -364,9 +366,9 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 				applyNewScaleTo(display, newScale)
 				);
 		
-		ArrayList<PanelStackDisplay> all = figureOrganizingLayerPane.getMultiChannelDisplays();
+		ArrayList<ImageDisplayLayer> all = figureOrganizingLayerPane.getMultiChannelDisplays();
 		
-		for(PanelStackDisplay crop2: all) {
+		for(ImageDisplayLayer crop2: all) {
 			if(crop2==display) continue;
 			
 				output.addEditToList(
@@ -379,8 +381,8 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	 private CombinedEdit showRePPIAll() {
 		 CombinedEdit output = new CombinedEdit();
 		 double newPPI = showPPISingleImage(figureOrganizingLayerPane.getPrincipalMultiChannel());
-		 ArrayList<PanelStackDisplay> all = figureOrganizingLayerPane.getMultiChannelDisplays();
-		 for(PanelStackDisplay crop2: all) {
+		 ArrayList<ImageDisplayLayer> all = figureOrganizingLayerPane.getMultiChannelDisplays();
+		 for(ImageDisplayLayer crop2: all) {
 			 output.addEditToList(
 				((MultichannelDisplayLayer) crop2).getPanelManager().changePPI(newPPI)
 				);
@@ -391,7 +393,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 
-	private double showPPISingleImage(PanelStackDisplay principalMultiChannel) {
+	private double showPPISingleImage(ImageDisplayLayer principalMultiChannel) {
 		ImagePanelGraphic panel = principalMultiChannel.getPanelManager().getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newppi=StandardDialog.getNumberFromUser("Input PPI ", ppi);

@@ -8,6 +8,11 @@ import graphicalObjects_LayoutObjects.PlasticPanelLayoutGraphic;
 
 public class PlasticLayoutAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		GraphicLayerPane l22 = new GraphicLayerPane("Plastic Layout Layer");

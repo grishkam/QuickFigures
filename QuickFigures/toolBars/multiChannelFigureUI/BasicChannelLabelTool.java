@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
@@ -29,7 +29,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 
 				
 		/**If called after a mouse press on a multichannel. Does not get called when a popup menu is triggered*/
-		protected void afterMousePress(MultiChannelWrapper mw, int chan1) {
+		protected void afterMousePress(MultiChannelImage mw, int chan1) {
 					
 					
 		ChannelLabelManager lm=getPressedChannelLabelManager();
@@ -72,7 +72,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 	}
 	
 	
-	public void applyReleaseActionToMultiChannel(MultiChannelWrapper mw) {
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
 		
 		applyReleaseActionToMultiChannel(mw, 1,1);
 	}
@@ -95,7 +95,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getActionCommand().equals(renameCommand)) {
 		
-		new StackSliceNamingDialog().showNamingDialog(stackSlicePressed.originalIndices, this.presseddisplay.getMultichanalWrapper());
+		new StackSliceNamingDialog().showNamingDialog(stackSlicePressed.originalIndices, this.presseddisplay.getMultiChannelImage());
 		//presseddisplay.updatePanels();
 		
 		}

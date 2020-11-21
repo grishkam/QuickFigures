@@ -26,7 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 
 import channelMerging.ChannelEntry;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
@@ -431,7 +431,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 				currentUndoManager.addEdit(undo);
 				}
 		} catch (Exception e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 	
@@ -598,7 +598,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return cc;
 	}
 	
-	public void addChannelCheckBoxes(MultiChannelWrapper mw) {
+	public void addChannelCheckBoxes(MultiChannelImage mw) {
 		int chan=mw.nChannels();
 		channelEnt=new ArrayList<ChannelEntry>();
 		

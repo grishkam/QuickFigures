@@ -2,7 +2,7 @@ package standardDialog;
 
 import java.awt.Dimension;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import utilityClassesForObjects.LocatedObject2D;
 
@@ -29,9 +29,9 @@ public class GraphicSampleComponent extends GraphicComponent {
 		return null;
 	}
 	
-	public BasicCordinateConverter getCord() {
+	public BasicCoordinateConverter getCord() {
 	//	if (cords==null) {
-		BasicCordinateConverter bcc = new BasicCordinateConverter();
+		BasicCoordinateConverter bcc = new BasicCoordinateConverter();
 		bcc.setMagnification(1);
 		if (zLoc()!=null) {
 			bcc.setX(zLoc().getLocationUpperLeft().getX());

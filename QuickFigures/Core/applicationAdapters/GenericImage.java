@@ -11,7 +11,7 @@ import java.awt.Dimension;
 import java.awt.Window;
 import java.util.ArrayList;
 
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
@@ -31,8 +31,10 @@ public class GenericImage implements ImageWrapper {
 	ObjectContainer objects;
 	transient PixelContainer pixels;
 	private GraphicLayer layer;
-	SelectionManager selectionManager=new SelectionManager();
+	OverlayObjectManager selectionManager=new OverlayObjectManager();
 	private String title;
+
+	private transient Object selected;
 	
 	public GenericImage(ObjectContainer c, PixelContainer pix) {
 		objects =c;
@@ -57,8 +59,8 @@ public class GenericImage implements ImageWrapper {
 	}
 
 	@Override
-	public void addRoiToImage(LocatedObject2D roi) {
-		if (objects!=null)objects.addRoiToImage(roi);
+	public void addItemToImage(LocatedObject2D roi) {
+		if (objects!=null)objects.addItemToImage(roi);
 		
 	}
 
@@ -76,6 +78,8 @@ public class GenericImage implements ImageWrapper {
 
 	@Override
 	public LocatedObject2D getSelectionObject() {
+		if(selected==null) return null;
+		if (selected instanceof LocatedObject2D) return (LocatedObject2D) selected;
 		return null;
 	}
 
@@ -191,7 +195,7 @@ public class GenericImage implements ImageWrapper {
 	}
 
 	@Override
-	public SelectionManager getSelectionManagger() {
+	public OverlayObjectManager getSelectionManagger() {
 		// TODO Auto-generated method stub
 		return selectionManager;
 	}
@@ -239,6 +243,13 @@ public class GenericImage implements ImageWrapper {
 	public UndoManagerPlus getUndoManager() {
 		if ( undoManager==null)  undoManager=new UndoManagerPlus();
 		return  undoManager;
+	}
+
+	@Override
+	public boolean setPrimarySelectionObject(Object d) {
+		
+		 selected=d;
+		 return true;
 	}
 
 

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import appContext.ImageDPIHandler;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import genericMontageKit.PanelList;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
@@ -20,22 +20,38 @@ import undo.PanelManagerUndo;
 import applicationAdapters.DisplayedImage;
 
 /**A dialog box used for two purposes. First, works as a set of options when 
-creating a channel figure. Second, allow you to change how the channels are
-colored and combined in the channel panels*/
+creating a split channel figure. Second, displays channel use options regarding how the channels are
+colored and combined in the channel panels and merge.*/
 public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 1L;
-	private MultichannelDisplayLayer principalMultiChannel;
-	private ArrayList<MultichannelDisplayLayer> displural=new ArrayList<MultichannelDisplayLayer>();
+	
+	/**set to true if the panel creation options will be included in this dialog*/
 	boolean panelCreationIncluded=true;
-	private DisplayedImage currentImageDisplay;
-	private PanelList stack;
+	
+	/**The initial settings for the dialog are based on a particular group of objects*/
+	/**the primary target of the dialog. normally this is the first multichannel display in the figure*/
+	private MultichannelDisplayLayer principalMultiChannel;
+	/**the panel list that the dialog is based on*/
+	private PanelList panelList;
+	/**the panel manager that the dialog is based on*/
 	private PanelManager panMan;
+	
+	/**additional targets of the dialog*/
+	private ArrayList<MultichannelDisplayLayer> displural=new ArrayList<MultichannelDisplayLayer>();
+	
+	
+	private DisplayedImage currentImageDisplay;
+	
 	static String[] MergePositions=new String[] {"Merged Image Last", "Merged Image First", "No Merge", "Only Merge (no channels)"};
-	boolean includeBilScale=false;
+	
+	/**tells whether an additional bilinear scale step will be done. has been replaced */
+	@Deprecated
+	final boolean includeBilScale=false;
 	
 	
 	public PanelStackDisplayOptions(MultichannelDisplayLayer display, PanelList stack, PanelManager panMan, boolean panelCreationIncluded) {
@@ -44,8 +60,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		this.panelCreationIncluded=panelCreationIncluded;
 		this.principalMultiChannel=display;
 		this.panMan=panMan;
-		this.stack=stack;
-		if (this.stack==null) this.stack=display.getPanelList();
+		this.panelList=stack;
+		if (this.panelList==null) this.panelList=display.getPanelList();
 		
 		if (panMan==null) this.panMan=display.getPanelManager();
 		this.addButton(recropButton());
@@ -83,7 +99,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	}
 	/***/
 	public String[] createListWithNoChannelOption() {
-		String[] old = MultichannelDisplayLayer.getChannelNames(principalMultiChannel.getMultichanalWrapper());
+		String[] old = MultichannelDisplayLayer.getChannelNames(principalMultiChannel.getMultiChannelImage());
 		String[] output=new String[old.length+1];
 		output[0]="none";
 		for(int i=0; i<old.length; i++) {
@@ -96,8 +112,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	public void addOptionsToDialog() {
 		String[] chanList=createListWithNoChannelOption();
 		
-		channelMerging.ChannelUseInstructions ins =stack.getChannelUseInstructions();
-		ArrayList<ChannelEntry> entries = principalMultiChannel.getMultichanalWrapper().getChannelEntriesInOrder();
+		channelMerging.ChannelUseInstructions ins =panelList.getChannelUseInstructions();
+		ArrayList<ChannelEntry> entries = principalMultiChannel.getMultiChannelImage().getChannelEntriesInOrder();
 		
 		if (this.panelCreationIncluded) {
 			ComboBoxPanel mergeh = new standardDialog.ComboBoxPanel("Merge Image", MergePositions, ins.MergeHandleing);
@@ -118,7 +134,27 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		}
 		
 		
-		ComboBoxPanel grey =new  standardDialog.ComboBoxPanel("Channels To Grey ", new String[] {"Color of LUTs", "Greyscale"}, ins.channelColorMode);
+		addChannelUseInstructionsToDialog(chanList, ins, entries);
+		
+		if (this.panelCreationIncluded)
+			{
+			this.add("preScale", new NumberInputPanel("Scale (Bilinear Interpolation)", principalMultiChannel.getPreprocessScale(),3));
+			
+			if (this.includeBilScale) this.add("Source Image Level Scale", new NumberInputPanel("Bilinear Scale 2", panelList.getScaleBilinear(),3));
+			
+			}
+		if (this.panelCreationIncluded) {
+			this.add("Panel Level Scale", new NumberInputPanel("PPI",ImageDPIHandler.getStandardDPI()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
+			this.add("mWidth",  new NumberInputPanel("Ideal Number Columns", ins.idealColNum ));
+			}
+	}
+
+	/**
+	adds the dialog items for the channel use instructions to the dialog
+	 */
+	protected void addChannelUseInstructionsToDialog(String[] chanList, channelMerging.ChannelUseInstructions ins,
+			ArrayList<ChannelEntry> entries) {
+		ComboBoxPanel grey =new  standardDialog.ComboBoxPanel("Channel Color Mode ", new String[] {"Color of LUTs", "Greyscale"}, ins.channelColorMode);
 		this.add("grey", grey);
 		
 		ArrayList<Integer> nome = ins.noMergeChannels;
@@ -145,92 +181,42 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			 mergeCombo2 = new standardDialog.ComboBoxPanel("merge each channel with", new ChannelEntryBox(ins.eachMergeChannel , entries));
 		} else mergeCombo2 = new standardDialog.ComboBoxPanel("merge each channel with", chanList, ins.eachMergeChannel);
 		this.add("mergeeach", mergeCombo2);
-		
-		if (this.panelCreationIncluded)
-			{
-			this.add("preScale", new NumberInputPanel("Scale (Bilinear Interpolation)", principalMultiChannel.getPreprocessScale(),3));
-			
-			if (this.includeBilScale) this.add("Source Image Level Scale", new NumberInputPanel("Bilinear Scale 2", stack.getScaleBilinear(),3));
-			
-			}
-		if (this.panelCreationIncluded) {
-			this.add("Panel Level Scale", new NumberInputPanel("PPI",ImageDPIHandler.getStandardDPI()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
-			this.add("mWidth",  new NumberInputPanel("Ideal Number Columns", ins.idealColNum ));
-			}
 	}
 	
-	
+	/**based on the dialog, changes the options*/
 	public void setItemsToDiaog()  {
 		setItemstoDialog(panMan.getDisplay(), panMan.getPanelList().getChannelUseInstructions(), false, true);
-		
-		//displural.remove(panMan.getDisplay());
+
 		for(MultichannelDisplayLayer p: displural) {
 			if (p!=panMan.getDisplay())
 			setItemstoDialog(p, p.getPanelManager().getPanelList().getChannelUseInstructions(), true, false);
 		}
 	}
 	
-	void setItemstoDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins, boolean eliminateChanLabel, boolean first) {
-		//ChannelUseInstructions ins = dis.getStack().getChannelUseInstructions();
-
-		ins.channelColorMode=this.getChoiceIndex("grey");
-		ArrayList<Integer> noMerge=new ArrayList<Integer>();
-		for(int i=0; i<3; i++) {
-			noMerge.add(this.getChoiceIndex("don't merge"+i));
-		}
-		ins.noMergeChannels=noMerge;
-		ins.eachMergeChannel=getChoiceIndex("mergeeach");
-		ins.ignoreAfterChannel=getChoiceIndex("ignoreAfter");
-		
+	/**changes the options based on the dialog */
+	void setItemstoDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins, boolean eliminateChanLabel, boolean firstImage) {
+	
+		setChannelUseOptionsToDialog(ins);
 		
 		if (this.panelCreationIncluded) {
-			if (includeBilScale) {
-				double bilScale = this.getNumber("Source Image Level Scale");
-				if (bilScale>0)stack.setScaleBilinear(bilScale);
-			}
 			
-			double preScale=this.getNumber("preScale");
-			if (preScale>0.01)dis.setPreprocessScale(preScale);
+			setPanelCreationOptionsToDialog(dis, ins);
 			
-			ins.MergeHandleing=this.getChoiceIndex("merge");
-			ArrayList<Integer> noChan=new ArrayList<Integer>();
-			for(int i=0; i<3; i++) {
-				
-				noChan.add(this.getChoiceIndex("exclude channel panel "+i));
-			}
-			ins.excludedChannelPanels=noChan;
-			ins.idealColNum=this.getNumberInt("mWidth"); 
-			
-			
-			double panelLevelScale = ImageDPIHandler.getStandardDPI()/this.getNumber("Panel Level Scale");
-			if ( panelLevelScale>0.01)dis.getPanelManager().setPanelLevelScale(panelLevelScale);
-			
-			for(MultichannelDisplayLayer addedDiaply: displural) {
-				addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
-				if (includeBilScale) {
-					double bilScale = this.getNumber("Source Image Level Scale");
-					if (bilScale >0)addedDiaply.getPanelManager().getPanelList().setScaleBilinear(bilScale);
-				}
-				if (preScale>0.01)addedDiaply.setPreprocessScale(preScale);
-			}
-			
-			ins.setDimensionForPanels(panMan.getLayout(), allWrappers());
-			dis.eliminateAndRecreate(first, !first, first);//only want to redo the dimensions if it is the first one being recreated
-			if (eliminateChanLabel) {dis.eliminateChanLabels();}
-			MultichannelDisplayLayer lastone=dis;
-			
-			/**flawed code. does*/
-			for(MultichannelDisplayLayer addedDiaply: displural) {
-				addedDiaply.getSetter().startPoint=lastone.getPanelList().getlastPanelsIndex()+1;
-				lastone=addedDiaply;
-				if (first&&dis==addedDiaply)  {addedDiaply.getSetter().startPoint=0;}
-			}
+			recreateGraphicsFor(dis, ins, eliminateChanLabel, firstImage);
 			
 			
 		}
 		
 		dis.getPanelManager().updatePanels();
 		panMan.updatePanels();
+		
+		resizeCanvasToFit(dis);
+	}
+
+	/**
+	 * @param dis
+	 */
+	protected void resizeCanvasToFit(MultichannelDisplayLayer dis) {
 		if (getCurrentImageDisplay()!=null) {
 				
 							new CanvasAutoResize().makeAllVisible(getCurrentImageDisplay());
@@ -242,6 +228,76 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 							}
 	}
 
+	/**
+	 * @param dis
+	 * @param ins
+	 */
+	protected void setPanelCreationOptionsToDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins) {
+		if (includeBilScale) {
+			double bilScale = this.getNumber("Source Image Level Scale");
+			if (bilScale>0)panelList.setScaleBilinear(bilScale);
+		}
+		
+		double preScale=this.getNumber("preScale");
+		if (preScale>0.01)dis.setPreprocessScale(preScale);
+		
+		ins.MergeHandleing=this.getChoiceIndex("merge");
+		ArrayList<Integer> noChan=new ArrayList<Integer>();
+		for(int i=0; i<3; i++) {
+			
+			noChan.add(this.getChoiceIndex("exclude channel panel "+i));
+		}
+		ins.excludedChannelPanels=noChan;
+		ins.idealColNum=this.getNumberInt("mWidth"); 
+		
+		
+		double panelLevelScale = ImageDPIHandler.getStandardDPI()/this.getNumber("Panel Level Scale");
+		if ( panelLevelScale>0.01)dis.getPanelManager().setPanelLevelScale(panelLevelScale);
+		
+		for(MultichannelDisplayLayer addedDiaply: displural) {
+			addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
+			if (includeBilScale) {
+				double bilScale = this.getNumber("Source Image Level Scale");
+				if (bilScale >0)addedDiaply.getPanelManager().getPanelList().setScaleBilinear(bilScale);
+			}
+			if (preScale>0.01)addedDiaply.setPreprocessScale(preScale);
+		}
+	}
+
+	/**
+	 * @param ins
+	 */
+	protected void setChannelUseOptionsToDialog(ChannelUseInstructions ins) {
+		ins.channelColorMode=this.getChoiceIndex("grey");
+		ArrayList<Integer> noMerge=new ArrayList<Integer>();
+		for(int i=0; i<3; i++) {
+			noMerge.add(this.getChoiceIndex("don't merge"+i));
+		}
+		ins.noMergeChannels=noMerge;
+		ins.eachMergeChannel=getChoiceIndex("mergeeach");
+		ins.ignoreAfterChannel=getChoiceIndex("ignoreAfter");
+	}
+
+	/**
+	this methods removes the old panels and channel labels. 
+	Subsequently creates new panels and channel labels.
+	During the process, it also alter the figure layout to fit the new objects
+	 */
+	protected void recreateGraphicsFor(MultichannelDisplayLayer dis, ChannelUseInstructions ins,
+			boolean eliminateChanLabel, boolean firstImage) {
+		ins.setDimensionForPanels(panMan.getLayout(), allWrappers());
+		dis.eliminateAndRecreate(firstImage, !firstImage, firstImage);//only want to redo the dimensions if it is the first one being recreated
+		if (eliminateChanLabel) {dis.eliminateChanLabels();}
+		MultichannelDisplayLayer lastone=dis;
+		
+		/** does*/
+		for(MultichannelDisplayLayer addedDiaply: displural) {
+			addedDiaply.getSetter().startPoint=lastone.getPanelList().getlastPanelsIndex()+1;
+			lastone=addedDiaply;
+			if (firstImage&&dis==addedDiaply)  {addedDiaply.getSetter().startPoint=0;}
+		}
+	}
+
 	public DisplayedImage getCurrentImageDisplay() {
 		return currentImageDisplay;
 	}
@@ -250,10 +306,10 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		this.currentImageDisplay = currentImageDisplay;
 	}
 	
-	public ArrayList<MultiChannelWrapper> allWrappers() {
-		ArrayList<MultiChannelWrapper> array1=new ArrayList<MultiChannelWrapper>();
-		array1.add(principalMultiChannel.getMultichanalWrapper());
-		for(MultichannelDisplayLayer adisplay: displural) {array1.add(adisplay.getMultichanalWrapper());};
+	public ArrayList<MultiChannelImage> allWrappers() {
+		ArrayList<MultiChannelImage> array1=new ArrayList<MultiChannelImage>();
+		array1.add(principalMultiChannel.getMultiChannelImage());
+		for(MultichannelDisplayLayer adisplay: displural) {array1.add(adisplay.getMultiChannelImage());};
 		return array1;
 	}
 	

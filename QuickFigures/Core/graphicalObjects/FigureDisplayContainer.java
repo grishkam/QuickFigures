@@ -3,18 +3,18 @@ package graphicalObjects;
 import java.awt.Dimension;
 
 import applicationAdapters.ImageWrapper;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.UndoManagerPlus;
 
-public interface GraphicSetDisplayContainer {
+public interface FigureDisplayContainer {
 
 	public void updateDisplay();
 	
 	public GraphicLayer getGraphicLayerSet();
 	
 	public void onItemLoad(ZoomableGraphic z);
-	public SelectionManager getSelectionManagger();
+	public OverlayObjectManager getSelectionManagger();
 	
 	
 	public Dimension getCanvasDims();

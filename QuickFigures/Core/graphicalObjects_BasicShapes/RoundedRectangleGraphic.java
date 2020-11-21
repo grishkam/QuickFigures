@@ -9,7 +9,6 @@ import graphicalObjectHandles.RectangleEdgeHandle;
 import graphicalObjectHandles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
-import objectDialogs.RectangleGraphicOptionsDialog;
 import objectDialogs.RoundRectGraphicOptionsDialog;
 
 public class RoundedRectangleGraphic extends RectangularGraphic {

@@ -515,7 +515,7 @@ public class BasicMetaDataHandler {
 						//log(+"="+ );
 						//log(fields[i].getName()+"="+fields[i].getDouble(o) );
 					} catch (Exception e) {
-						IssueLog.log(e);
+						IssueLog.logT(e);
 					} 
 					
 				}
@@ -567,7 +567,7 @@ public class BasicMetaDataHandler {
 					if (o.save()) addEntryToInfo(imp, o.key()+suffix, f.get(of));
 				} catch (Exception e) {
 					IssueLog.log("problem adding entry "+o.key()+suffix +" reported in save annotated fields method "+'\n' );
-					IssueLog.log(e);
+					IssueLog.logT(e);
 					//if (imp==null)
 					//IssueLog.log("problem adding entry "+o.key()+suffix +"" );
 				}
@@ -575,7 +575,7 @@ public class BasicMetaDataHandler {
 			 c=c.getSuperclass();
 			 }
 			// IJ.log("method finished");
-			 } catch (Exception e) {IssueLog.log(e);}
+			 } catch (Exception e) {IssueLog.logT(e);}
 			 return;
 			
 			 
@@ -601,7 +601,7 @@ public class BasicMetaDataHandler {
 			 }
 			 c=c.getSuperclass();
 			 }
-			 } catch (Exception e) {IssueLog.log(e);}
+			 } catch (Exception e) {IssueLog.logT(e);}
 			
 			 return;
 			

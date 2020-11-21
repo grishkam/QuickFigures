@@ -3,7 +3,7 @@ package fileListOpps;
 import java.io.File;
 import java.util.ArrayList;
 import genericMontageKit.BasicObjectListHandler;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import imageMenu.CombineImages;
 import logging.IssueLog;
@@ -42,17 +42,17 @@ public class CombineSavedFigures extends BasicMultiSelectionOperator{
 		 }
 		
 		 
-		 ImageAndDisplaySet figure =  ImageAndDisplaySet.createAndShowNew("new set", 0,0);;
+		 ImageWindowAndDisplaySet figure =  ImageWindowAndDisplaySet.createAndShowNew("new set", 0,0);;
 			
 			for(File f: files) try {
 			
-				 ImageAndDisplaySet figure2 = ImageDisplayIO.showFile(f);
+				 ImageWindowAndDisplaySet figure2 = ImageDisplayIO.showFile(f);
 				 CombineImages.combineInto(figure, figure2, false);
 					BasicObjectListHandler boh = new BasicObjectListHandler();
 				
 				 boh.resizeCanvasToFitAllObjects(figure.getImageAsWrapper());
 				 figure.updateDisplay();
-				} catch (Throwable t) {IssueLog.log(t);}
+				} catch (Throwable t) {IssueLog.logT(t);}
 			figure.autoZoom();
 			
 			}

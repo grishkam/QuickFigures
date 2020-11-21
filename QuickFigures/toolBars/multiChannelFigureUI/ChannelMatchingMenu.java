@@ -8,7 +8,7 @@ import javax.swing.JMenuItem;
 
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelOrderAndLutMatching;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import standardDialog.SelectImageDialog;
 import undo.ChannelDisplayUndo;
 import undo.CombinedEdit;
@@ -30,7 +30,7 @@ ActionListener, DisplayRangeChangeListener  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<MultiChannelWrapper> items;
+	private ArrayList<MultiChannelImage> items;
 
 	public ChannelMatchingMenu() {
 		addItem(minMaxCommand);
@@ -62,7 +62,7 @@ ActionListener, DisplayRangeChangeListener  {
 		 items = sd.getList();
 		 ArrayList<ChannelEntry> chans = sd.getChannelsChosen();
 		
-		 MultiChannelWrapper sourceDisplayRanges = items.get(0);
+		 MultiChannelImage sourceDisplayRanges = items.get(0);
 		 
 		 
 			CombinedEdit undo = ChannelDisplayUndo.createMany(items, this);
@@ -109,9 +109,9 @@ ActionListener, DisplayRangeChangeListener  {
 		
 	}
 
-	public static void setAllChannelMinMax(ArrayList<MultiChannelWrapper> items, int chan, String realName, double min, double max) {
-		for(MultiChannelWrapper w: items) {
-			chan = ChannelSwapperToolBit2.getBestMatchToChannel(w, realName, chan);
+	public static void setAllChannelMinMax(ArrayList<MultiChannelImage> items, int chan, String realName, double min, double max) {
+		for(MultiChannelImage w: items) {
+			chan = ChannelPanelEditingMenu.getBestMatchToChannel(w, realName, chan);
 			w.setChannelMin(chan, min);
 			w.setChannelMax(chan, max);
 			w.updateDisplay();
@@ -120,12 +120,12 @@ ActionListener, DisplayRangeChangeListener  {
 	
 	@Override
 	public void updateAllDisplaysWithRealChannel(String st) {
-		for(MultiChannelWrapper w: items) {w.updateDisplay();};
+		for(MultiChannelImage w: items) {w.updateDisplay();};
 		
 	}
 
 	/**When given a channel real name, attempts to find the index of that channel, returns given index if search fails*/
-	public static int getRealIndex(int chan, String realName, MultiChannelWrapper w) {
+	public static int getRealIndex(int chan, String realName, MultiChannelImage w) {
 		if (realName!=null) {
 			int chanNum = w.getIndexOfChannel(realName);
 		

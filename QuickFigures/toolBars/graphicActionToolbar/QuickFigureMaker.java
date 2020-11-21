@@ -11,13 +11,14 @@ import addObjectMenus.ImageAndlayerAdder;
 import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import channelMerging.PreProcessInformation;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
@@ -25,6 +26,8 @@ import multiChannelFigureUI.MultiChannelDisplayCreator;
 import objectDialogs.PanelStackDisplayOptions;
 import ultilInputOutput.FileChoiceUtil;
 
+/**This class is used to create a new figure from either an open image or a saved on
+  The QuickFigure Button on the toolbar*/
 public class QuickFigureMaker extends DisplayActionTool {
 	private static final String slowFigure = "Slow Figure";
 	static String[] possibleCodes=new String[] {"C+",		 "C+T", 				"C+Z", 							"C+Z+T","Merge", 		"Merge+T"				,"Merge+Z"                 ,"Merge+Z+T"
@@ -42,7 +45,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	}
 	
 	
-	 localAdder  la=new localAdder();
+	 LocalImageAdder  la=new LocalImageAdder();
 	 
 	 boolean mergeOnly=false;
 	 public boolean hidesImage=true;
@@ -51,15 +54,14 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	 void setupAdder() {
 		 auto.autoGenerateFromModel=true;
-	 auto.showPanelDialog=false;
-	 la.autoFigureGenerationOptions=auto;
+		 auto.showPanelDialog=false;
+		 la.autoFigureGenerationOptions=auto;
 	 }
 	 
 	
 	public QuickFigureMaker() {
 		super("quickFig", "quickFigure.jpg");
 		setupAdder() ;
-		// TODO Auto-generated constructor stub
 	}
 	
 	public QuickFigureMaker(boolean mergeOnly) {
@@ -77,7 +79,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	}
 
 
-	protected void perform(GraphicSetDisplayContainer graphic) {
+	protected void perform(FigureDisplayContainer graphic) {
 		createFigureFromOpenImage();
 	}
 
@@ -89,17 +91,19 @@ public class QuickFigureMaker extends DisplayActionTool {
 		return f;
 	}
 
+	/**when no arguments are given, attempt to create a figure for the active image*/
 	private FigureOrganizingLayerPane createFigure() {
-		return createFigure(null);
+		return createFigure(null, null);
 	}
 	
-	/**creates a figure. If path is set to null, uses the image that the user has open
+	/**creates a new window with new figure. If path is set to null, uses the image that the user has open
 	  otherwise, opens the file in the path*/
-	public FigureOrganizingLayerPane createFigure(String path) {
-		ImageAndDisplaySet diw = ImageAndDisplaySet.createAndShowNew("New Image", 40, 30);
+	public FigureOrganizingLayerPane createFigure(String path, PreProcessInformation p2) {
+		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
+		
 		if (path==null) la.openFile=false; else la.openFile=true;
 	
-		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getGraphicLayerSet(), path);
+		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getGraphicLayerSet(), path, p2);
 		
 		if(added==null) {
 			//if something goes wrong, closes the newly created window
@@ -111,30 +115,38 @@ public class QuickFigureMaker extends DisplayActionTool {
 		diw.getTheSet().setTitle(added.getName());
 		new CanvasAutoResize().performUndoableAction(diw);//resizes the canvas to fit the figure
 		diw.autoZoom();
-		ImageAndDisplaySet.centreWindow(diw.getWindow());
+		ImageWindowAndDisplaySet.centreWindow(diw.getWindow());
 		
 			
 		return added;
 	}
 	
-	private class localAdder extends ImageAndlayerAdder   {
+	private class LocalImageAdder extends ImageAndlayerAdder   {
 		
-		public localAdder() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public LocalImageAdder() {
 			super(false);
-			// TODO Auto-generated constructor stub
 		}
 
 		
+		/**Written so that if the path given is null, uses the active image
+		  instead of opening a file chooser*/
 		public MultichannelDisplayLayer createMultiChannel(String path) {
-			if (path==null) return getMultiChannelCreator().creatMultiChannelDisplayFromUserSelectedImage(false, MultiChannelDisplayCreator.useActiveImage);
+			if (path==null) return getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(false, MultiChannelDisplayCreator.useActiveImage);
 			//if(this.openFile) getMultiChannelCreator().creatMultiChannelDisplayFromUserSelectedImage(true, path);
 			return super.createMultiChannel(path);
 		
 		}
 		
+		/**depending on the variable set. might need to transform the template into a merged image only version*/
 		protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
 			if (!mergeOnly) return super.getUsedTemplate(display);
 			FigureTemplate tp = super.getUsedTemplate(display);
+			IssueLog.log("calling get template");
 			tp.makeMergeOnly();
 			return tp; 
 		}
@@ -142,6 +154,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	}
 	
 	
+	/**creates a popup menu that displays options*/
 	@Override
 	public ArrayList<JMenuItem> getPopupMenuItems() {
 		ArrayList<JMenuItem> output = new  ArrayList<JMenuItem>();
@@ -166,38 +179,42 @@ public class QuickFigureMaker extends DisplayActionTool {
 		output.add(sm2);
 		
 	
-		JMenuItem mi;
-		mi = new JMenuItem("Add Image To Current");
-		mi.setActionCommand("Add");
-		mi.addActionListener(new actionLis());
-		output.add(mi);
-		
-		mi = new JMenuItem("Add Multiple Images To Current");
-		mi.setActionCommand("Add2");
-		mi.addActionListener(new actionLis());
-		output.add(mi);
+		includeAddImageMenuItems(output);
 		
 		
 		return output;
 	}
 
 
+	/**
+	Menu items to add and image to the current figure. 
+	Largely obsolete due to drag and drop feature
+	 */
+	protected void includeAddImageMenuItems(ArrayList<JMenuItem> output) {
+		JMenuItem mi;
+		mi = new JMenuItem("Add Image To Current");
+		mi.setActionCommand("Add");
+		mi.addActionListener(new QuickFigureMenuActionListener());
+		output.add(mi);
+		
+		mi = new JMenuItem("Add Multiple Images To Current");
+		mi.setActionCommand("Add2");
+		mi.addActionListener(new QuickFigureMenuActionListener());
+		output.add(mi);
+	}
+
+
 	public JMenuItem addToMenu(String text, String atext) {
 		JMenuItem mi = new JMenuItem(text);
-		
 		mi.setActionCommand(atext);
-		mi.addActionListener(new actionLis());
+		mi.addActionListener(new QuickFigureMenuActionListener());
 		return mi;
 	}
 	
+	/**executes the menu items that are associated with the quickfigure button*/
+	class QuickFigureMenuActionListener implements ActionListener {
+
 	
-	class actionLis implements ActionListener {
-
-		
-
-		
-
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
@@ -241,17 +258,33 @@ public class QuickFigureMaker extends DisplayActionTool {
 
 
 		
-
-		
 		}
 
 	
-	
+	/**Changes the settings on this object based on a particular string*/
 	public void setOptionsBasedOnCodeString(String aC) {
 		if (aC.contains("Merge")) 
 			mergeOnly=true;
-		la.useSingleSlice=aC.contains("+Z");
-		la.useSingleFrame=aC.contains("+T");
+		boolean singleSlice = aC.contains("+Z");
+		setSingleSliceMode(singleSlice);
+		boolean singleFrame = aC.contains("+T");
+		setSingleFrameMode(singleFrame);
+	}
+
+
+	/**
+	set to true if the current frame must be used rather than all time frames
+	 */
+	protected boolean setSingleFrameMode(boolean singleFrame) {
+		return la.useSingleFrame=singleFrame;
+	}
+
+
+	/**
+	 set to true if the current slice must be used rather than all z slices
+	 */
+	protected boolean setSingleSliceMode(boolean singleSlice) {
+		return la.useSingleSlice=singleSlice;
 	}
 	
 	public void setOptionsBackToDefault() {
@@ -260,7 +293,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		mergeOnly=false;
 	}
 	
-	/**Attempts to find the organizing layer for the current image*/
+	/**Attempts to find the figure organizing layer for the currently active figure.*/
 	FigureOrganizingLayerPane findFigureOrganizingLayer() {
 		GraphicLayer sm = setinformer.getCurrentlyActiveOne().getGraphicLayerSet().getSelectedContainer();
 		while(!(sm instanceof FigureOrganizingLayerPane)&&sm!=null) {
@@ -289,6 +322,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 			return "Quick Multichannel Figure";
 		}
 	
+	/**returns an object that is used to add an item to the file menu
+	  that functions the same way as the quickfigure button*/
 	public BasicMenuItemForObj getMenuVersion() {
 		return new QuickFigureFileMenuItem();
 	}
@@ -301,6 +336,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		return b;
 	}
 	
+	/**Adds a version of the quickfigure maker to the file menu*/
 	class QuickFigureFileMenuItem extends BasicMenuItemForObj {
 
 		@Override
@@ -312,6 +348,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 			return "Figure from open image with Split Channels";
 		}
 
+		/**determines what submenu contains the quick figure maker*/
 		@Override
 		public String getMenuPath() {
 			String string = "File<New";

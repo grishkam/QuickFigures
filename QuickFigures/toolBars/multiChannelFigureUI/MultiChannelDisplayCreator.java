@@ -2,7 +2,7 @@ package multiChannelFigureUI;
 
 import java.awt.Image;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 
 public interface MultiChannelDisplayCreator {
@@ -13,10 +13,11 @@ public interface MultiChannelDisplayCreator {
 	public MultichannelDisplayLayer creatMultiChannelDisplayFromUserSelectedImage(boolean openFile, String path) ;
 	public MultichannelDisplayLayer creatMultiChannelDisplayFromOpenImage() ;
 	
-	public MultiChannelWrapper creatMultiChannelFromImage(Image img) ;
+	public MultiChannelImage creatMultiChannelFromImage(Image img) ;
+	public MultiChannelImage creatRGBFromImage(Image img, String savePath) ;
 	
 	public String imageTypeName();
 	
-	public MultiChannelWrapper createFromImageSequence(String path, int[] dims);
+	public MultiChannelImage createFromImageSequence(String path, int[] dims);
 	
 }

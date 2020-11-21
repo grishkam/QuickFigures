@@ -169,7 +169,7 @@ public class IJ1ChannelSwapper extends AbstractChannelHandler<ImagePlus> {
 	}
 	
 	@Override
-	public void setLutColor(ImagePlus imp, Color lut, int chan) {
+	public void setChannelColor(ImagePlus imp, Color lut, int chan) {
 		if (imp instanceof CompositeImage) setLutColorWithoutDisplayRangeEdit((CompositeImage)imp, LUT.createLutFromColor(lut), chan);
 	}
 	

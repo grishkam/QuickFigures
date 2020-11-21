@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import applicationAdapters.ToolbarTester;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import utilityClassesForObjects.RectangleEdges;
 
 public class PlusGraphic extends TrapezoidGraphic {
@@ -122,7 +122,7 @@ public class PlusGraphic extends TrapezoidGraphic {
 
 	
 	public static void main(String[] args) {
-		ImageAndDisplaySet ex = ToolbarTester.showExample(true);
+		ImageWindowAndDisplaySet ex = ToolbarTester.showExample(true);
 		ComplexBlobShape z = new ComplexBlobShape(new Rectangle(20,20,200,200), 5, 0);
 		z.setStrokeColor(Color.BLACK);
 		PlusGraphic z2 = new PlusGraphic(z);

@@ -3,7 +3,7 @@ package selectedItemMenus;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorDocRef;
@@ -67,8 +67,8 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 	}
 	
 	void sentToIlls(Object mont, ArtLayerRef aref) {
-		if (mont instanceof GraphicSetDisplayContainer) {
-			GraphicSetDisplayContainer mont2 = (GraphicSetDisplayContainer)mont;
+		if (mont instanceof FigureDisplayContainer) {
+			FigureDisplayContainer mont2 = (FigureDisplayContainer)mont;
 			if (mont2.getGraphicLayerSet() instanceof IllustratorObjectConvertable) {
 				((IllustratorObjectConvertable) mont2.getGraphicLayerSet()).toIllustrator(aref);
 			}

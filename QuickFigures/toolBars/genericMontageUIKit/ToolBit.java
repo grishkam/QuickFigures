@@ -9,7 +9,7 @@ import javax.swing.JMenuItem;
 
 import externalToolBar.DragAndDropHandler;
 import externalToolBar.IconSet;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 
 public interface ToolBit {
 	
@@ -47,7 +47,7 @@ public interface ToolBit {
 
 String getToolName();
 
-void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file);
+void handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file);
 
 DragAndDropHandler getDragAndDropHandler();
 

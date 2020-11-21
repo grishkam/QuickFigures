@@ -20,13 +20,15 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.Selectable;
 import utilityClassesForObjects.StrokedItem;
 
-public class SelectionManager {
+/**A list of special objects that are drawn over the image*/
+public class OverlayObjectManager {
 	private ZoomableGraphic selectionGraphic=null;
 	protected ZoomableGraphic selectionGraphic2=null;
 	protected ZoomableGraphic selectionGraphic3=null;
 	private Color selColor=Color.blue;
 	private Color selColor2=Color.green;
 	private SmartHandleList shlist;
+	private SmartHandleList otherList;
 	
 	/**Allows for the selection of 3 primary objects*/
 	public ArrayList<ZoomableGraphic> getSelectionGraphics() {
@@ -35,6 +37,7 @@ public class SelectionManager {
 		out.add(selectionGraphic2);
 		out.add(selectionGraphic3);
 		if (shlist!=null) out.add(shlist);
+		if ( otherList!=null) out.add( otherList);
 		return out;
 	}
 	
@@ -306,6 +309,10 @@ public void select(Shape s, int strokeWidth, int i) {
 
 public void setSelectionHandles(SmartHandleList createList) {
 	shlist = createList;
+}
+
+public void setPermanentHandles(SmartHandleList canvasHandleList) {
+	otherList=canvasHandleList;
 	
 }
 

@@ -8,6 +8,10 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 
 public class ImagePlusAdder extends BasicGraphicAdder{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	boolean layonGrid=false;
 	
 	@Override

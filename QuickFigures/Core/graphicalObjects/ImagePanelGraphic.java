@@ -57,9 +57,10 @@ import graphicalObjectHandles.ImagePanelHandleList;
 import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
+import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.HasIllustratorOptions;
 import illustratorScripts.IllustratorObjectConvertable;
@@ -75,7 +76,7 @@ import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 
 /**an object that displays an image inside a frame with a specified scale and cropping*/
-public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLockedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePosisions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, ProvidesDialogUndoableEdit{
+public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLockedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePosisions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
 
 	
 	
@@ -296,7 +297,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	private void setScaleBar(BarGraphic scaleBar) {
 		this.scaleBar = scaleBar;
 		if (scaleBar!=null) {
-			if (scaleBar.getSnapPosition()==null)scaleBar.setSnappingBehaviour(SnappingPosition.defaultScaleBar());
+			if (scaleBar.getSnapPosition()==null)scaleBar.setSnapPosition(SnappingPosition.defaultScaleBar());
 			updateBarScale();
 		}
 	}
@@ -714,7 +715,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			if (o==null) return;
 			SnappingPosition sb = o.getSnapPosition();
 				if (sb==null) {
-					o.setSnappingBehaviour(SnappingPosition.defaultInternal());
+					o.setSnapPosition(SnappingPosition.defaultInternal());
 					sb=o.getSnapPosition();
 					}
 				
@@ -761,15 +762,15 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			CroppingDialog cd = new CroppingDialog();
 			cd.hideRotateHandle=true;
 			try{cd.showDialog(this);} catch (Throwable t) {
-				IssueLog.log(t);
+				IssueLog.logT(t);
 			}
 			//IssueLog.log("The cropping rect is valid? "+this.isCroppintRectValid(), this.getCroppingrect().toString());
 		}
 
-		public PanelGraphicInsetDef createInset() {
+		public PanelGraphicInsetDefiner createInset() {
 			try {
 		//	IssueLog.log("Will attempt to create inset");
-			PanelGraphicInsetDef inset = new PanelGraphicInsetDef(this, ShrinkedRect(this.getBounds(), 8));
+			PanelGraphicInsetDefiner inset = new PanelGraphicInsetDefiner(this, ShrinkedRect(this.getBounds(), 8));
 			if (this.getParentLayer()==null) IssueLog.log("parent layer not found");
 		//	IssueLog.log("inset will be added to layer"+this.getParentLayer());
 			this.getParentLayer().add(inset);
@@ -781,7 +782,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return inset;
 			
 			} catch (Throwable t) {
-				IssueLog.log(t);
+				IssueLog.logT(t);
 			}
 		return null;
 		}
@@ -851,7 +852,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				try {
 					img = ImageIO.read(f);
 				} catch (Throwable e) {
-					IssueLog.log(e);
+					IssueLog.logT(e);
 					return null;
 				}
 				 return img;
@@ -1052,9 +1053,19 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				return panelHandleList;
 		}
 		
+		/**
+		returns the action handle list of the image panel
+		 */
 		protected ImagePanelActionHandleList getActionHandleList() {
-			if (aHandleList==null) aHandleList=new ImagePanelActionHandleList(this);
+			if (aHandleList==null) aHandleList=createActionHandleList();
 				return aHandleList;
+		}
+
+		/**
+		Creates an action handle list for the image panel
+		 */
+		public ImagePanelActionHandleList createActionHandleList() {
+			return new ImagePanelActionHandleList(this);
 		}
 
 		@Override

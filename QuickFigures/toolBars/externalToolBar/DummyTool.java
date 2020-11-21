@@ -13,10 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 
-/**A default tool that can be used as both space filler in an external toolset or as a superclass*/
+/**A default tool that can be used as both space filler in a toolbar or as a superclass*/
 public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, InterfaceKeyStrokeReader<ImageType>{
 
 	
@@ -172,7 +172,7 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 	}
 
 	@Override
-	public void handleFileListDrop(ImageAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
+	public void handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
 
 	}
 

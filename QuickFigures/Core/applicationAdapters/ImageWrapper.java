@@ -4,12 +4,12 @@ import utilityClassesForObjects.ObjectContainer;
 
 import java.awt.Window;
 
-import genericMontageKit.SelectionManager;
-import graphicalObjects.GraphicSetDisplayContainer;
+import genericMontageKit.OverlayObjectManager;
+import graphicalObjects.FigureDisplayContainer;
 
 /**a general interface for images.
   if the methods in this interface and superinterfaces work, the basics of the montage should work*/
-public interface ImageWrapper extends ObjectContainer,PixelContainer, GraphicSetDisplayContainer, OpenFileReference{
+public interface ImageWrapper extends ObjectContainer,PixelContainer, FigureDisplayContainer, OpenFileReference{
 	
 	public void updateDisplay();
 	public DisplayedImage getImageDisplay();
@@ -21,7 +21,10 @@ public interface ImageWrapper extends ObjectContainer,PixelContainer, GraphicSet
 
 	public MetaInfoWrapper getMetadataWrapper();
 	
-	public SelectionManager getSelectionManagger();
+	public OverlayObjectManager getSelectionManagger();
+	
+	public boolean setPrimarySelectionObject(Object d);
+	
 	
 
 }

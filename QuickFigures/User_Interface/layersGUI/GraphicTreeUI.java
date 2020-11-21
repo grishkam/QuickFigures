@@ -54,7 +54,7 @@ import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
 import graphicalObjects.FileStandIn;
 import graphicalObjects.GraphicEncoder;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.LayerSpecified;
@@ -88,7 +88,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	
 	
 	static ArrayList <MiscTreeOptions> otherOps=new ArrayList <MiscTreeOptions>();
-	private GraphicSetDisplayContainer graphicDisplayContainer;
+	private FigureDisplayContainer graphicDisplayContainer;
 	
 	
 	
@@ -258,7 +258,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	private static GraphicSetDisplayTree lastGradTree;//the last tree clicked in
 	
 	
-	public GraphicTreeUI(GraphicSetDisplayContainer setcont) {
+	public GraphicTreeUI(FigureDisplayContainer setcont) {
 		setGraphicDisplayContainer(setcont);
 	}
 	
@@ -283,11 +283,11 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 		return output;
 	}
 	
-	public void showTreeForLayerSet(GraphicSetDisplayContainer set) {
+	public void showTreeForLayerSet(FigureDisplayContainer set) {
 		showTreeForLayerSet(set, set.getTitle());
 	}
 	
-	public void showTreeForLayerSet(GraphicSetDisplayContainer set, String title) {
+	public void showTreeForLayerSet(FigureDisplayContainer set, String title) {
 		this.setGraphicDisplayContainer(set);
 		frame = new JFrame("Layer Tree "+title);
 		frame.addWindowListener(this);
@@ -792,7 +792,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 		
 		return undo2;
 		
-		} catch (Throwable r) {IssueLog.log(r);}
+		} catch (Throwable r) {IssueLog.logT(r);}
 		
 		return null;
 	}
@@ -965,7 +965,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 			//tree.add(pp);
 			new PopupCloser(currentpopup);
 			currentpopup.show((Component) tree, arg0.getX(), arg0.getY());
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 		getGraphicDisplayContainer().updateDisplay();
 		frame.repaint();
 	}
@@ -1064,7 +1064,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 			fileAdded=true;
 			return;
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		
 		if (!f.isDirectory()) try {
@@ -1113,7 +1113,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 			try {
 				tool.userSetSelectedItem(selecteditem);
 			} catch (Exception e) {
-				IssueLog.log(e);
+				IssueLog.logT(e);
 			}
 	
 	}
@@ -1284,11 +1284,11 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 		return tree.getSelecteditems();
 	}
 
-	public GraphicSetDisplayContainer getGraphicDisplayContainer() {
+	public FigureDisplayContainer getGraphicDisplayContainer() {
 		return graphicDisplayContainer;
 	}
 
-	public void setGraphicDisplayContainer(GraphicSetDisplayContainer graphicDisplayContainer) {
+	public void setGraphicDisplayContainer(FigureDisplayContainer graphicDisplayContainer) {
 		this.graphicDisplayContainer = graphicDisplayContainer;
 	}
 	

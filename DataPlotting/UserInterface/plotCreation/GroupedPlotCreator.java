@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 import dataSeries.GroupedDataSeries;
 import groupedDataPlots.Grouped_Plot;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 
 public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 	int type=0;
@@ -26,7 +26,7 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 	}
 	public void createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
-			diw=ImageAndDisplaySet.createAndShowNew("Figure", 300,300);
+			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
 		
 		

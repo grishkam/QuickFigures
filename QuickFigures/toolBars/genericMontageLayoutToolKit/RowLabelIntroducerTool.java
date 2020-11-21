@@ -19,7 +19,7 @@ import externalToolBar.IconSet;
 import externalToolBar.ToolIconWithText;
 import figureFormat.RowLabelPicker;
 import genericMontageKit.BasicObjectListHandler;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.CursorFinder;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
@@ -61,7 +61,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 			 picker.getModelItem().showOptionsDialog();;
 			
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		 
 	}
@@ -130,7 +130,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		item=picker.getModelItem().copy();
 		item.setText("Text");
 	
-		item.setSnappingBehaviour(picker.getDefaultSnapping());
+		item.setSnapPosition(picker.getDefaultSnapping());
 		
 		/**puts the item in the correct location*/
 		BasicMontageLayout alteredLayout = this.getCurrentLayout().makeAltered(markerType());
@@ -219,7 +219,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		
 		
 		
-			SelectionManager sel = getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager sel = getImageWrapperClick().getSelectionManagger();
 			sel.setSelection(item, 1);
 			
 			undoGroup.addEditToList(new UndoSelectionSet(sel));
@@ -309,7 +309,7 @@ dd.showDialog();
 		item=dd;
 		if(dd!=null)
 		 {
-			SelectionManager sel = getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager sel = getImageWrapperClick().getSelectionManagger();
 					sel.setSelection(dd, 1);
 			selectItem();
 		//	this.getImageDisplayWrapperClick().getUndoManager().mergeInedit(new UndoSelectionSet(sel));

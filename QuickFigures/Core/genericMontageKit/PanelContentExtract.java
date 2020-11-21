@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
@@ -58,7 +58,7 @@ public class PanelContentExtract {
 			g.fillRect(0, 0, dim().width, dim().height);
 		
 			};
-			BasicCordinateConverter cords = new BasicCordinateConverter();
+			BasicCoordinateConverter cords = new BasicCoordinateConverter();
 			Graphics g = output.getGraphics();
 			for(LocatedObject2D o: objectList) {
 				if (o instanceof ZoomableGraphic && g instanceof Graphics2D) {

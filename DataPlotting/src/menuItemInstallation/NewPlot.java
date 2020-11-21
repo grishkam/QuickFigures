@@ -7,14 +7,14 @@ import basicMenusForApp.MenuItemForObj;
 import columnPlots.ColumnPlot;
 import dataSeries.ColumnDataSeries;
 import gridLayout.BasicMontageLayout;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 
 public class NewPlot implements MenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
-		ImageAndDisplaySet set= ImageAndDisplaySet.createAndShowNew("Figure", 500,400);
+		ImageWindowAndDisplaySet set= ImageWindowAndDisplaySet.createAndShowNew("Figure", 500,400);
 		ColumnPlot plot=new ColumnPlot("Test data ", 
 				new ColumnDataSeries("Control",
 						new double[] {30, 24, 20,  24,180, 177, 167,  198, 345, 200, 198, 199, 201, 195, 201, 204, 423, 80, 19} 

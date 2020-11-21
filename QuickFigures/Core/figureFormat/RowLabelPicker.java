@@ -75,7 +75,7 @@ public class RowLabelPicker extends GraphicalItemPicker<TextGraphic> implements 
 		item2.copyAttributesFrom(super.getModelItem());
 		//IssueLog.log("Will apply model text "+this.getModelItem().getFont().getSize()+ " to "+item2.getFont().getSize());
 		if (getModelItem().getSnapPosition()==null) return;
-		item2.setSnappingBehaviour(getModelItem().getSnapPosition().copy());
+		item2.setSnapPosition(getModelItem().getSnapPosition().copy());
 		}
 	}
 	
@@ -113,7 +113,7 @@ public class RowLabelPicker extends GraphicalItemPicker<TextGraphic> implements 
 	
 	protected void setModelSnappingtoDefault() {
 		if (this.getModelItem()!=null)
-		getModelItem().setSnappingBehaviour(SnappingPosition.defaultRowSide());
+		getModelItem().setSnapPosition(SnappingPosition.defaultRowSide());
 	}
 	
 	
@@ -121,7 +121,7 @@ public class RowLabelPicker extends GraphicalItemPicker<TextGraphic> implements 
 public void setToStandardFor(MultichannelDisplayLayer wrap) {
 		
 		/**Calculation to get a comfortable font size for the panel*/
-		float h2=(float) (wrap.getWorkingPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
+		float h2=(float) (wrap.getPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
 		float h=h2/5;
 		h=(float)NumberUse.findNearest(h, new double[] {0,2,4,6,8,10,12,14,16,20, 18,24,28, 32,36,40});
 		

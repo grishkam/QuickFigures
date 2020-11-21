@@ -13,7 +13,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.GraphicContainingImage;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import sUnsortedDialogs.ObjectListChoice;
 import utilityClassesForObjects.LocatedObject2D;
 
@@ -22,7 +22,7 @@ public class CombineImages implements MenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		ArrayList<DisplayedImage> choices = getChoices();
-		ImageAndDisplaySet figure =  ImageAndDisplaySet.createAndShowNew("new set", 0,0);;
+		ImageWindowAndDisplaySet figure =  ImageWindowAndDisplaySet.createAndShowNew("new set", 0,0);;
 		
 		
 			for(DisplayedImage figure2: choices) {
@@ -80,7 +80,7 @@ public static DisplayedImage getChoice(String prompt) {
 	
 
 	/**Combines two displays by adding one of them to the other*/
-	public static void combineInto(ImageAndDisplaySet recipient, DisplayedImage figure2, boolean horizontal) {
+	public static void combineInto(ImageWindowAndDisplaySet recipient, DisplayedImage figure2, boolean horizontal) {
 		if (recipient==null) return;
 		if (figure2==null) return;
 		int h = recipient.getTheSet().getHeight();
@@ -96,7 +96,7 @@ public static DisplayedImage getChoice(String prompt) {
 	recipient.getTheSet().setWidth(dims.width);
 	}
 	
-	static Dimension getCombinedSize(ImageAndDisplaySet recipient, DisplayedImage figure2, boolean horizontal) {
+	static Dimension getCombinedSize(ImageWindowAndDisplaySet recipient, DisplayedImage figure2, boolean horizontal) {
 		
 		int w=0;
 		int h=0;
@@ -117,7 +117,7 @@ public static DisplayedImage getChoice(String prompt) {
 	
 	
 	/**Combines two displays by adding one of them to the other*/
-	public static void combineInto(ImageAndDisplaySet recipient, DisplayedImage addition, Point XYDisplace) {
+	public static void combineInto(ImageWindowAndDisplaySet recipient, DisplayedImage addition, Point XYDisplace) {
 		GraphicLayer layer = addition.getImageAsWrapper().getGraphicLayerSet();
 		for(ZoomableGraphic ob1: layer.getAllGraphics()) {
 			if (ob1 instanceof LocatedObject2D) {

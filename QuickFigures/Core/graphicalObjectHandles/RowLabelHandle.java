@@ -130,7 +130,7 @@ public class RowLabelHandle extends MoveRowHandle {
 		if (type==ROWS) space = layout.getPanelLayout().makeAltered(MontageSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, MontageSpaces.LABEL_ALLOTED_LEFT).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getWrapper());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
-		if(array.size()>0) label.setSnappingBehaviour(array.get(0).getSnapPosition());
+		if(array.size()>0) label.setSnapPosition(array.get(0).getSnapPosition());
 	
 	}
 	public void handleDrag(CanvasMouseEventWrapper canvasMouseEventWrapper) {}

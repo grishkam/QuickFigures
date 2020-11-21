@@ -5,24 +5,26 @@ import java.awt.Dimension;
 
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.GenericImage;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.KnowsSetContainer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-/**an object to represent the image being edited*/
-public class GraphicContainingImage extends GenericImage implements GraphicSetDisplayContainer {
+/**Simple subclass of the generic image
+ * that contains an object linking it to the 
+ * the window being used to display the */
+public class GraphicContainingImage extends GenericImage implements FigureDisplayContainer {
 
 	public static final String SAVE_EXTENSION = ".ser";
 
 	
 	private String savePath=null;
 	/**The window that displays the item*/
-	private transient ImageAndDisplaySet displayItems=null;
+	private transient ImageWindowAndDisplaySet displayItems=null;
 
 	private BasicImageInfo basics=new BasicImageInfo();
 	
-	
+	/**creates an image with the given file info and parent layer*/
 	public GraphicContainingImage(GraphicLayerPane layer2, BasicImageInfo basics) {
 		super.setLayer(layer2);
 		super.setObjectContainer(layer2);
@@ -30,7 +32,13 @@ public class GraphicContainingImage extends GenericImage implements GraphicSetDi
 		this.basics=basics;
 	}
 
-	public static void onItemLoad(GraphicSetDisplayContainer gsd, ZoomableGraphic z) {
+	public GraphicContainingImage() {
+		this(new GraphicLayerPane("Name"), new BasicImageInfo());
+	
+	}
+	
+	/***/
+	public static void onItemLoad(FigureDisplayContainer gsd, ZoomableGraphic z) {
 	
 		if (z instanceof KnowsSetContainer) {
 			KnowsSetContainer kn=(KnowsSetContainer) z;
@@ -48,19 +56,13 @@ public class GraphicContainingImage extends GenericImage implements GraphicSetDi
 	
 	
 	
-	
-	
-	
-	
+	/**returns the object storing this image, window and canvas*/
 	@Override
 	public DisplayedImage getImageDisplay() {
 		return displayItems;
 	}
 	
-	public GraphicContainingImage() {
-		this(new GraphicLayerPane("Name"), new BasicImageInfo());
-	
-	}
+
 	
 	
 	@Override
@@ -81,8 +83,8 @@ public class GraphicContainingImage extends GenericImage implements GraphicSetDi
 
 
 	
-	public void setDisplayGroup(ImageAndDisplaySet theCanvas) {
-		this.displayItems=theCanvas;
+	public void setDisplayGroup(ImageWindowAndDisplaySet displayGroup) {
+		this.displayItems=displayGroup;
 		
 	}
 	

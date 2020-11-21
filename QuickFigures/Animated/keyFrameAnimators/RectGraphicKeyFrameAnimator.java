@@ -17,7 +17,7 @@ public class RectGraphicKeyFrameAnimator extends ShapeGraphicKeyFrameAnimator {
 	}
 	
 	
-	protected keyFrame createkeyFrame(int frame) {
+	protected KeyFrame createkeyFrame(int frame) {
 		return new rectKeyFrame(frame);
 	}
 	

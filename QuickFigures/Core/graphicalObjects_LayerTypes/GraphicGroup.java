@@ -25,7 +25,7 @@ import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ReshapeHandleList;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.KnowsTree;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
@@ -260,7 +260,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 			
 			z.draw(graphics, cords);
 		}
-		catch (Throwable t) {IssueLog.log(t);}
+		catch (Throwable t) {IssueLog.logT(t);}
 		
 		
 	}
@@ -334,7 +334,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 	
 	@Override
-	public void setGraphicSetContainer(GraphicSetDisplayContainer gc) {
+	public void setGraphicSetContainer(FigureDisplayContainer gc) {
 		super.setGraphicSetContainer(gc);
 		this.getTheLayer().setGraphicSetContainer(gc);
 		

@@ -46,12 +46,12 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 		installOperator( new EditAndColorizeMultipleItems("up"));
 		installOperator( getTextOperations()
 				);
-		installOperator(new SuperTextButton(0));
-		installOperator(new SuperTextButton(1));
-		installOperator(new SuperTextButton(2));
-		installOperator(new SuperTextButton(3));
-		installOperator(new SuperTextButton(4));
-		installOperator(new SuperTextButton(5));
+		installOperator(new SuperTextButton(SuperTextButton.TO_SUPERSCRIPT));
+		installOperator(new SuperTextButton(SuperTextButton.TO_SUBSCRIPT));
+		installOperator(new SuperTextButton(SuperTextButton.BOLDENS));
+		installOperator(new SuperTextButton(SuperTextButton.ITALICIZES));
+		installOperator(new SuperTextButton(SuperTextButton.UNDERLINES));
+		installOperator(new SuperTextButton(SuperTextButton.STRIKES));
 		installOperator(SuperTextButton.getForDims(new TextGraphic("", Color.white)));
 		
 	}

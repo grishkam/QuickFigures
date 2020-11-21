@@ -19,7 +19,10 @@ public interface GraphicAdder extends MenuItemInstall {
 		
 		/**returns a keyboard shortcut*/
 		public Character getKey();
-		public void setSelector(LayerSelector selector);
 		
+		/**sets the selection system*/
+		public void setSelector(LayerSelector selector);
+		public void run();
+	
 	
 }

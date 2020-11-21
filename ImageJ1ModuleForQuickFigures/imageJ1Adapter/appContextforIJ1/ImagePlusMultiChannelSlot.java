@@ -10,8 +10,8 @@ import channelMerging.CSFLocation;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelUpdateListener;
-import channelMerging.MultiChannelWrapper;
-import channelMerging.PanelStackDisplay;
+import channelMerging.MultiChannelImage;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemMethod;
 import ultilInputOutput.FileChoiceUtil;
@@ -52,7 +52,7 @@ import standardDialog.SelectImageDialog;
 
 		private PreProcessInformation preprocessRecord;
 
-		private PanelStackDisplay display;
+		private ImageDisplayLayer display;
 
 		private ImagePlusMultiChannelSlot parentSlot;
 
@@ -62,7 +62,7 @@ import standardDialog.SelectImageDialog;
 			
 		}
 
-		public ImagePlusMultiChannelSlot(PanelStackDisplay imagePlusDisplayPanels) {
+		public ImagePlusMultiChannelSlot(ImageDisplayLayer imagePlusDisplayPanels) {
 			display= imagePlusDisplayPanels;
 		}
 
@@ -73,7 +73,7 @@ import standardDialog.SelectImageDialog;
 		}
 
 		@Override
-		public ImagePlusWrapper getMultichanalWrapper() {
+		public ImagePlusWrapper getMultichannelImage() {
 			if (getImagePlus()==null) {
 				IssueLog.log("Warning. No image in wrapper");
 				return null;
@@ -210,8 +210,8 @@ import standardDialog.SelectImageDialog;
 		
 		/**Sets the internal String path to its current multichannel wrapper*/
 		public void setPathStringToImagePlus() {
-			if (this.getMultichanalWrapper().containsImage())
-			path=this.getMultichanalWrapper().getPath();
+			if (this.getMultichannelImage().containsImage())
+			path=this.getMultichannelImage().getPath();
 		}
 		
 
@@ -388,7 +388,7 @@ import standardDialog.SelectImageDialog;
 		
 		private String getSavePath() {
 			// TODO Auto-generated method stub
-			 path=this.getMultichanalWrapper().getPath();
+			 path=this.getMultichannelImage().getPath();
 			 
 			if (path!=null&&!path.toLowerCase().endsWith(".tif")) {
 				path+=".tif";
@@ -424,7 +424,7 @@ import standardDialog.SelectImageDialog;
 		
 		private static ImagePlus showImagePlusChoice() {
 			ImagePlus imp=null;
-			ArrayList<MultiChannelWrapper> list=null;
+			ArrayList<MultiChannelImage> list=null;
 			if (imp==null)
 				list=SelectImageDialog.getSelectedMultis(false,1).getList();
 				if (list!=null&&list.size()>0) {
@@ -504,7 +504,7 @@ import standardDialog.SelectImageDialog;
 			if (backup!=null)bwrap=new ImagePlusWrapper(backup);
 			if(backup==null) {
 				backupUncroppedImagePlus=this.sourceImagePlus;
-				bwrap=this.getMultichanalWrapper();
+				bwrap=this.getMultichannelImage();
 			}
 			return bwrap;
 		}
@@ -520,15 +520,15 @@ import standardDialog.SelectImageDialog;
 				/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
 				try {
 				matchOrderAndLuts(new ImagePlusWrapper(getUncroppedOriginal()));
-				} catch (Throwable t) {IssueLog.log(t);}
+				} catch (Throwable t) {IssueLog.logT(t);}
 			}
 			return getUncroppedOriginal();
 		}
 
 		/**changes the channel order, Display range and luts of a to match the main source stack*/
-		public void matchOrderAndLuts(MultiChannelWrapper a) {
+		public void matchOrderAndLuts(MultiChannelImage a) {
 			ChannelOrderAndLutMatching m = new ChannelOrderAndLutMatching();
-			m. matchDisplayRangeLUTandOrder(getMultichanalWrapper(),a);
+			m. matchDisplayRangeLUTandOrder(getMultichannelImage(),a);
 		}
 
 		@Override
@@ -544,11 +544,11 @@ import standardDialog.SelectImageDialog;
 		}
 
 		@Override
-		public void setPanelStackDisplay(PanelStackDisplay multichannelDisplayLayer) {
+		public void setPanelStackDisplay(ImageDisplayLayer multichannelDisplayLayer) {
 			display=multichannelDisplayLayer;
 		}
 		
-		public PanelStackDisplay getDisplayLayer() {
+		public ImageDisplayLayer getDisplayLayer() {
 			return display;
 		}
 

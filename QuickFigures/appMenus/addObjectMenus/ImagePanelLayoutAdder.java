@@ -4,6 +4,11 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_LayoutObjects.ObjectDefinedLayoutGraphic;
 
 public class ImagePanelLayoutAdder extends PlasticLayoutAdder {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PanelLayoutGraphic getNewLayout() {
 		return  new ObjectDefinedLayoutGraphic();
 	}

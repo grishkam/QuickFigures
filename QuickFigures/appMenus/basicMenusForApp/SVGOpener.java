@@ -8,7 +8,7 @@ import applicationAdapters.ToolbarTester;
 import fieldReaderWritter.GraphicSVGParser;
 import figureFormat.DirectoryHandler;
 import imageDisplayApp.GraphicContainingImage;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
 
@@ -41,7 +41,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 		
 	}
 	
-	public static ImageAndDisplaySet showFile(File f) {
+	public static ImageWindowAndDisplaySet showFile(File f) {
 		if (f==null) return null;
 		//diw.getImageAsWrapper();
 		
@@ -50,7 +50,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 			
 			GraphicContainingImage set = readFromFile(f);
 			if (set==null) return null;
-			ImageAndDisplaySet output = new ImageAndDisplaySet(set);
+			ImageWindowAndDisplaySet output = new ImageWindowAndDisplaySet(set);
 			
 			new CanvasAutoResize().performActionDisplayedImageWrapper(output);
 			return output;

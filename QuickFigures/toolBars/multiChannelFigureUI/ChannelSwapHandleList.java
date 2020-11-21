@@ -8,7 +8,7 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEventWrapper;
 import channelMerging.ChannelEntry;
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
@@ -126,7 +126,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 					this.setHandleColor(chan.getColor());
 				try {
 					this.message=(
-							theDisplayLayer.getMultichanalWrapper().getRealChannelName(channelNumber));
+							theDisplayLayer.getMultiChannelImage().getRealChannelName(channelNumber));
 					if(message==null) message="Channel #"+chan.getOriginalChannelIndex();
 					this.entry=chan;
 				} catch (Throwable t) {}
@@ -148,13 +148,13 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		
 		if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer() ;
-			for(PanelStackDisplay item: f.getMultiChannelDisplaysInOrder()) {
-				item.getMultichanalWrapper().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex);
+			for(ImageDisplayLayer item: f.getMultiChannelDisplaysInOrder()) {
+				item.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex);
 				item.updatePanels();
 			}
 		}
 		else if(pressHandleIndex!=relHandleIndex) {
-			theDisplayLayer.getMultichanalWrapper().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex);
+			theDisplayLayer.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex);
 			theDisplayLayer.updatePanelsAndLabelsFromSource();
 		}
 	
@@ -166,7 +166,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 			
 			SmartPopupJMenu output = new SmartPopupJMenu ();
 			
-			ChannelSwapperToolBit2 out = new ChannelSwapperToolBit2((ImagePanelGraphic)anchorObject, entry);
+			ChannelPanelEditingMenu out = new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
 			if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
 				figure=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer();
 			}
@@ -183,7 +183,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 				SmartJMenu jOneImage=new SmartJMenu("Just This Image's Panels");
 				jOneImage.setText("Only For "+theDisplayLayer.getTitle());
 				
-				out = new ChannelSwapperToolBit2((ImagePanelGraphic)anchorObject, entry);
+				out = new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
 				out.workOn=0;
 				out.addChannelRelevantMenuItems(jOneImage);
 				output.add(jOneImage);

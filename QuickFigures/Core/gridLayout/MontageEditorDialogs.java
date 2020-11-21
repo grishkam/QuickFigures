@@ -214,7 +214,7 @@ public class MontageEditorDialogs implements MontageSpaces {
 				if (kind==1) {me.augmentPanelHeightOfRow(basicMontageLayout, choice-basicMontageLayout.getPanelHeightOfRow(i+1), i+1);}
 			}
 			basicMontageLayout.setMontageProperties();
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 		
 	}
 	
@@ -237,7 +237,7 @@ public class MontageEditorDialogs implements MontageSpaces {
 			if (kind==0) ml.setIndividualColumnWidths(output);
 			if (kind==1) ml.setIndividualRowHegihts(output);
 			ml.setMontageProperties();
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 		
 	}
 	

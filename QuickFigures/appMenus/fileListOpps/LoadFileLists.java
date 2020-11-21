@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import graphicalObjects.FileStandIn;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -44,7 +44,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	public void run() {
 		if (multiFileChooser) {
 			File[] files = FileChoiceUtil.getFiles();
-			GraphicSetDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
+			FigureDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
 			 for(File f: files) {
 				 FileStandIn fileSI = new FileStandIn(f);
 				 container.getGraphicLayerSet().add(fileSI);
@@ -58,7 +58,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	
 	void loadList() {
 		File input=FileChoiceUtil.getOpenFile();
-		GraphicSetDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
+		FigureDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
 		try{
 			if (input==null ||!input.exists()) return;
 		Scanner scan2 =  new Scanner(input);
@@ -72,7 +72,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 		scan2.close();
 		
 		
-		}catch (Throwable t) {IssueLog.log(t);}
+		}catch (Throwable t) {IssueLog.logT(t);}
 	}
 	
 	void saveList() {
@@ -87,10 +87,10 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	    		
 	    		fw.write('\n'+f.getAbsolutePath()+'\n');
 	    		
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 	    	
 	    fw.close();
-		} catch (Exception e) {IssueLog.log(e);}
+		} catch (Exception e) {IssueLog.logT(e);}
 		
 	}
 	

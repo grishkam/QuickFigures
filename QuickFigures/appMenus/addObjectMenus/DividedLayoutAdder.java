@@ -12,6 +12,11 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 public class DividedLayoutAdder extends BasicGraphicAdder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		GraphicLayerPane l22 = new GraphicLayerPane("Divided Layout Layer");

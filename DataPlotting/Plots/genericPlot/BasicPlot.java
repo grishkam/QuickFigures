@@ -282,7 +282,7 @@ public void removeItemFromLayer(ZoomableGraphic z) {
 public void addTitleLabel() {
 	if (this.hasItem(titleLabel)) this.remove(plotLayout);
 	titleLabel=new PlotLabel("Plot Title", this);
-	titleLabel.setSnappingBehaviour(SnappingPosition.defaultPlotTitle());
+	titleLabel.setSnapPosition(SnappingPosition.defaultPlotTitle());
 	this.add(titleLabel);
 	titleLabel.getParagraph().get(0).get(0).setText("Plot Title");
 	areaRect.addLockedItem(titleLabel);
@@ -300,7 +300,7 @@ public void addYAxiLabel() {
 	yLabel.getParagraph().get(0).get(0).setText("Y Axis ");
 	areaRect.addLockedItem(yLabel);
 	
-	yLabel.setSnappingBehaviour(SnappingPosition.defaultRowLabel());
+	yLabel.setSnapPosition(SnappingPosition.defaultRowLabel());
 	yLabel.setAngle(Math.PI/2);
 	yLabel.getSnapPosition().setSnapHOffset((int) (25+yAxis.getTicLength()));
 	areaRect.snapLockedItems();
@@ -320,7 +320,7 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	
 	SnappingPosition sn = SnappingPosition.defaultRowLabel();
 	sn.setSnapLocationTypeExternal(RectangleEdges.RIGHT_SIDE_MIDDLE);
-	yLabel2.setSnappingBehaviour(sn);
+	yLabel2.setSnapPosition(sn);
 	yLabel2.setAngle(Math.PI/2);
 	yLabel2.getSnapPosition().setSnapHOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
@@ -333,7 +333,7 @@ return new UndoAddItem(this, yLabel2);
 public void addXAxiLabel(int offset) {
 	if (this.hasItem(xLabel)) this.remove(xLabel);
 	xLabel=new  AxisLabel("X-Axis Label", this);
-	xLabel.setSnappingBehaviour(SnappingPosition.defaultRowLabel());
+	xLabel.setSnapPosition(SnappingPosition.defaultRowLabel());
 	xLabel.getSnapPosition().setSnapLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
 	xLabel.getSnapPosition().setSnapVOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
 	this.add(xLabel);
@@ -892,7 +892,7 @@ public void createFigureLegends() {
 protected void giveConsistentStanppingToLabelGroup(ArrayList<PlotLabel> labels) {
 	PlotLabel lab1 = labels.get(0);
 	for(PlotLabel l: labels) {
-		l.setSnappingBehaviour(lab1.getSnapPosition());
+		l.setSnapPosition(lab1.getSnapPosition());
 	}
 }
 
@@ -907,7 +907,7 @@ private void addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
 	
 	SeriesLabel l = aaa.getSeriesLabel();
 			l.setSnapTo(aaa.getLegandShape());
-			l.setSnappingBehaviour(SnappingPosition.defaultPlotLegand());
+			l.setSnapPosition(SnappingPosition.defaultPlotLegand());
 			l.setAngle(0);
 			l.putIntoSnapPosition();
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
@@ -956,9 +956,9 @@ protected void flipPlotOrientation() {
 		double ax = xLabel.getAngle();
 		double ay = yLabel.getAngle();
 		PlotLabel oldx = xLabel;
-		xLabel=yLabel; xLabel.setSnappingBehaviour(sx);
+		xLabel=yLabel; xLabel.setSnapPosition(sx);
 		xLabel.setAngle(ax);
-		yLabel=oldx; yLabel.setSnappingBehaviour(sy);
+		yLabel=oldx; yLabel.setSnapPosition(sy);
 		yLabel.setAngle(ay);
 		
 	}
@@ -972,7 +972,7 @@ public CombinedEdit addSeriesLabels() {
 	for(BasicDataSeriesGroup t: getAllDataSeries()){
 		undo.addEditToList(t.addLabel());
 		if (snap1==null) snap1=t.getSeriesLabel().getSnapPosition();
-		else {t.getSeriesLabel().setSnappingBehaviour(snap1);}
+		else {t.getSeriesLabel().setSnapPosition(snap1);}
 	}
 	return undo;
 }

@@ -3,7 +3,7 @@ package popupMenusForComplexObjects;
 import java.util.ArrayList;
 
 import appContext.ImageDPIHandler;
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelList;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.InsetDefiner;
@@ -55,8 +55,8 @@ public class ScaleFigureDialog extends StandardDialog {
 					if (s instanceof PanelManager) {
 						theArray.add((PanelManager) s);
 					} else
-					if (s instanceof PanelStackDisplay) {
-						theArray.add(((PanelStackDisplay) s).getPanelManager());
+					if (s instanceof ImageDisplayLayer) {
+						theArray.add(((ImageDisplayLayer) s).getPanelManager());
 					}
 			
 			
@@ -84,12 +84,12 @@ public class ScaleFigureDialog extends StandardDialog {
 			stack.setScaleBilinear(this.getNumber("scale"));
 			if (this.inset!=null) inset.setBilinearScale(getNumber("scale"));
 			double scalePanel = ImageDPIHandler.getStandardDPI()/this.getNumber("PPI");
-			stack.setPanelLevelScale(scalePanel);
+			stack.setPixelDensityRatio(scalePanel);
 			ArrayList<ImagePanelGraphic> graphi = stack.getPanelGraphics();
 			
 			pm.updatePanels();
 			for(ImagePanelGraphic panel: graphi) {
-				panel.setScale(stack.getPanelLevelScale());
+				panel.setScale(stack.getPixelDensityRatio());
 				panel.snapLockedItems();
 			}
 		}

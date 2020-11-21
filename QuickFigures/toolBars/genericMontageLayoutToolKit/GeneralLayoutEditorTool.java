@@ -104,7 +104,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 			performPressEdit();
 			
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 	
@@ -169,7 +169,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 		}
 		
 		
-	try{	performDragEdit(this.getLastClickMouseEvent().shfitDown());} catch (Throwable t) {IssueLog.log(t);}
+	try{	performDragEdit(this.getLastClickMouseEvent().shfitDown());} catch (Throwable t) {IssueLog.logT(t);}
 	
 	if (resetClickPointOnDrag) {
 	
@@ -202,7 +202,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 			removeMarkerRoi();
 			if (currentUndo!=null) currentUndo.establishFinalLocations();
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		if (currentUndo!=null) getImageDisplayWrapperClick().getUndoManager().addEdit(currentUndo);
 		
@@ -227,7 +227,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 		if (super.clickCount()==2) try{
 			doubleClickDialog();
 			} catch (Throwable t) {
-				IssueLog.log(t);
+				IssueLog.logT(t);
 				}
 	//if (e.isPopupTrigger()) {IssueLog.log("popup window not finished yet");}
 	}
@@ -258,12 +258,12 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 	public void setMarkerRoi() {
 		getImageWrapperClick().getGraphicLayerSet();
 			try {
-				SelectionManager select = this.getImageWrapperClick().getSelectionManagger();
+				OverlayObjectManager select = this.getImageWrapperClick().getSelectionManagger();
 				
 				select.setSelection(MarkerRoi(), 0);
 				select.setSelection(MarkerRoi2(), 1);
 			} catch (Throwable e) {
-				IssueLog.log(e);
+				IssueLog.logT(e);
 			}
 		
 	} 

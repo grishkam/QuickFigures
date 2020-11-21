@@ -25,7 +25,7 @@ public class TreeUtil<Type> {
 			
 			DefaultMutableTreeNode grandchild=this.findDescendantWithuserObject(child, o);
 			if (doesNodeRepresentUserObject(grandchild,o)) return grandchild;
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 		
 		return null;
 		

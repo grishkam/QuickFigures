@@ -10,8 +10,8 @@ import javax.swing.Icon;
 
 import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelUpdateListener;
-import channelMerging.MultiChannelWrapper;
-import channelMerging.PanelStackDisplay;
+import channelMerging.MultiChannelImage;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import externalToolBar.IconSet;
 import fLexibleUIKit.MenuItemMethod;
@@ -47,8 +47,8 @@ import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 
-/**Special layer for showing parts of a specific multi-channel image */
-public class MultichannelDisplayLayer extends GraphicLayerPane implements ZoomableGraphic, ShowsOptionsDialog, PanelStackDisplay, KnowsParentLayer, Named, HasUniquePopupMenu,  HasTreeLeafIcon, SubFigureOrganizer, MultiChannelUpdateListener,PointsToFile , Serializable{
+/**Special layer for showing parts of a specific multi dimensional image */
+public class MultichannelDisplayLayer extends GraphicLayerPane implements ZoomableGraphic, ShowsOptionsDialog, ImageDisplayLayer, KnowsParentLayer, Named, HasUniquePopupMenu,  HasTreeLeafIcon, SubFigureOrganizer, MultiChannelUpdateListener,PointsToFile , Serializable{
 
 	/**
 	 * 
@@ -58,10 +58,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 private static final long serialVersionUID = 1L;
 	
 
-	
-	private boolean loadFromFile=false;
-	public MultiChannelSlot slot=null;
-	protected GraphicLayer parent;
+	public MultiChannelSlot slot=null;//the original image is stored within this variable
 	protected String name="Image ";
 	private boolean laygeneratedPanelsOnGrid;
 
@@ -74,9 +71,11 @@ private static final long serialVersionUID = 1L;
 		slot.setPanelStackDisplay(this);
 	}
 
+	/**creates a new panel list for this ImageDisplay layer*/
 	public PanelList createPanelList() {
 		return new PanelList();
 	}
+	
 	/**creates a copy with all the same traits but no new image initialized.
 	  this copy shares the same image slot as this one*/
 	public MultichannelDisplayLayer copy() {
@@ -115,6 +114,7 @@ private static final long serialVersionUID = 1L;
 		if (preprocessToo)this.setPreprocessScale(multi.getPreprocessScale());
 	}
 	
+	/**changes the settings of this multi-channel display layer to match the argument. */
 	public void partialCopyTraitsFrom(MultichannelDisplayLayer multi, boolean doesPreprocess) {
 		if(multi==null) return;
 		if (doesPreprocess)this.setPreprocessScale(multi.getPreprocessScale());
@@ -137,19 +137,13 @@ private static final long serialVersionUID = 1L;
 
 	private PanelManager panelMan;
 	
+	/**returns the list of panels that display this Image*/
 	public PanelList getPanelList() {
 		return stack;
 	}
-
-	
+	/**sets the list of panels that display this Image*/
 	public void setPanelList(PanelList stack) {
 		this.stack = stack;
-	}
-	
-
-	@Override
-	public PanelList getWorkingPanelList() {
-		return stack;
 	}
 	
 	
@@ -158,20 +152,14 @@ private static final long serialVersionUID = 1L;
 		return setter;
 	}
 	
-	
 
-	
-	
-	
-	
 	
 	static boolean showTimes=false;
 	
 
 	
 	/**returns the bounding box of all the panel graphics in this layer
-	  wrote it with the intention of using it to create a way to sort
-	  these types of layers by position*/
+	 */
 	public Rectangle getBoundOfUsedPanels() {
 		ArrayList<ImagePanelGraphic> graphi =this.getPanelList(). getPanelGraphics();
 		if (graphi.size()==0) return null;
@@ -186,28 +174,17 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	
-	
-	
-	@Override
-	public GraphicLayer getParentLayer() {
-		return parent;
-	}
-
-
-	@Override
-	public void setParentLayer(GraphicLayer parent) {
-		this.parent=parent;
-		
-	}
-
 	public String getName() {
-	return name;
+		return name;
 	}
 
 	
 	@Override
 	public void setName(String st) {
-		if (st.length()>50) {IssueLog.log("name is excessive");}
+		if (st.length()>50) {
+			name=st.substring(0, 50);
+			return;
+			}
 		name=st;
 		
 	}
@@ -233,7 +210,7 @@ private static final long serialVersionUID = 1L;
 		if (panelMan==null) 
 			panelMan=new PanelManager( this, this.getPanelList(), this);
 		panelMan.setPanelList(this.getPanelList());
-		panelMan.setMultiChannelWrapper(getMultichanalWrapper());
+		panelMan.setMultiChannelWrapper(getMultiChannelImage());
 				
 		return panelMan;
 	}
@@ -329,25 +306,16 @@ private static final long serialVersionUID = 1L;
 	}
 
 
-	/**returns true if the default way to get the image is to load it from the original file*/
-	public boolean loadFromFile() {
-		return loadFromFile;
-	}
 
 
 
-	public void setLoadFromFile(boolean loadFromFile) {
-		this.loadFromFile = loadFromFile;
-	}
-
-
-
+	/**If true, newly generated panels should be placed on a grid*/
 	public boolean isLaygeneratedPanelsOnGrid() {
 		return laygeneratedPanelsOnGrid;
 	}
 
 
-
+	/**Set to true if newly generated panels should be placed on a grid*/
 	public void setLaygeneratedPanelsOnGrid(boolean laygeneratedPanelsOnGrid) {
 		this.laygeneratedPanelsOnGrid = laygeneratedPanelsOnGrid;
 	}
@@ -427,7 +395,7 @@ private static final long serialVersionUID = 1L;
 				
 			}
 			
-			}catch (Throwable t) {IssueLog.log(t);}
+			}catch (Throwable t) {IssueLog.logT(t);}
 	}
 
 	
@@ -440,7 +408,7 @@ private static final long serialVersionUID = 1L;
 			TextGraphic zt=(TextGraphic) zz;
 			for (ChannelLabelTextGraphic lab:getPanelList().getChannelLabels()) {
 				lab.copyAttributesFrom(zt);
-				lab.setSnappingBehaviour(zt.getSnapPosition().copy());
+				lab.setSnapPosition(zt.getSnapPosition().copy());
 			}
 		}
 	}
@@ -463,7 +431,7 @@ private static final long serialVersionUID = 1L;
 	}
 	
 /**returns a list of channel names*/
-	public static String[] getChannelNames(MultiChannelWrapper impw) {
+	public static String[] getChannelNames(MultiChannelImage impw) {
 		
 		String[] out=new String[impw.nChannels()];
 		for(int i=1; i<=impw.nChannels(); i++) {
@@ -519,10 +487,10 @@ private static final long serialVersionUID = 1L;
 	/***/
 	
 	@Override
-	public ArrayList<MultiChannelWrapper> getAllSourceStacks() {
+	public ArrayList<MultiChannelImage> getAllSourceImages() {
 		// TODO Auto-generated method stub
-		ArrayList<MultiChannelWrapper> output = new ArrayList<MultiChannelWrapper> ();
-		output.add(this.getMultichanalWrapper());
+		ArrayList<MultiChannelImage> output = new ArrayList<MultiChannelImage> ();
+		output.add(this.getMultiChannelImage());
 		return output;
 	}
 
@@ -574,15 +542,11 @@ transient static IconSet i;
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		//di.turnOn();
 	}
 
 
 	@Override
 	public void supress() {
-		// TODO Auto-generated method stub
-	//	di.turnOff();
 	}
 	@Override
 	public void onImageUpdated() {
@@ -593,28 +557,29 @@ transient static IconSet i;
 			if (this.getGraphicSetContainer()!=null)getGraphicSetContainer().updateDisplay();
 			if (GraphicItemOptionsDialog.getSetContainer()!=null) GraphicItemOptionsDialog.getSetContainer().updateDisplay();
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 
 
+	/**called after a source images is set for this image display layer*/
 	@Override
 	public void onImageInitiated() {
 		getPanelManager().generatePanelGraphics();
-		setName(this.getMultichanalWrapper().getTitle());
-		notes=getMultichanalWrapper().getPath();
-		this.description=""+getMultichanalWrapper().getPath();
+		setName(this.getMultiChannelImage().getTitle());
+		notes=getMultiChannelImage().getPath();
+		this.description=""+getMultiChannelImage().getPath();
 	}
 
 	
 	
 
-	
+	/**removes the channel labels and returns an undoable edit*/
 	public CombinedEdit eliminateChanLabels() {
 		return getChannelLabelManager().eliminateChanLabels();
 	}
 	public UndoAddManyItem generateChannelLabels() {
-		MultiChannelWrapper mw = getMultichanalWrapper();
+		MultiChannelImage mw = getMultiChannelImage();
 		ArrayList<ChannelLabelTextGraphic> labels;
 		//Check to determine if this stack is both multichannel and multi-slice. if so, channel labels will be needed only for the top row
 		if (mw.nChannels()>1 && (mw.getStackSize()>mw.nChannels()))
@@ -625,16 +590,12 @@ transient static IconSet i;
 		
 		return new UndoAddManyItem(this, labels);
 	}
-	
 
-	
-	
-	
-
+	/**returns the MultiChannelSlot that contains the source image*/
 	public MultiChannelSlot getSlot() {
 		return slot;
 	}
-	
+	/**sets the MultiChannelSlot that may contain the source image*/
 	public void setSlot(MultiChannelSlot slot) {
 		if (this.slot!=null) {
 			slot.removeMultichannelUpdateListener(this);
@@ -645,29 +606,30 @@ transient static IconSet i;
 		slot.addMultichannelUpdateListener(this);
 	}
 
-
+	/**implements the .kill option from the mortal interface*/
 	public void kill() {
 		super.kill();
 		getSlot().kill();
 	}
 	
-	
+	/**closes the window that showed the source image or the cropped intermediate image*/
 	public void closeWindow(boolean save) {
 		getSlot().kill();
 		getSlot().hideImage();
 	}
 	
+	/**returns the multi channel image object for this image display*/
 	@Override
-	public MultiChannelWrapper getMultichanalWrapper() {
+	public MultiChannelImage getMultiChannelImage() {
 		if(getSlot()==null) {
 			IssueLog.log("null slot");
 		}
-		return this.getSlot().getMultichanalWrapper();
+		return this.getSlot().getMultichannelImage();
 	
 	}
 	
 	@Override
-	/**retruns a short title*/
+	/**Returns a short version of the title*/
 	public String getTitle() {
 		String nam = getName();
 		String output = nam.split(";")[0];
@@ -679,8 +641,8 @@ transient static IconSet i;
 	/**returns the file object for the file uses*/
 	@Override
 	public File getFile() {
-		if (slot.getMultichanalWrapper()==null) return null;
-		String path= slot.getMultichanalWrapper().getPath();
+		if (slot.getMultichannelImage()==null) return null;
+		String path= slot.getMultichannelImage().getPath();
 		return new File(path);
 	}
 	
@@ -693,26 +655,28 @@ transient static IconSet i;
 	}
 	
 	/**sets the preprocess scale*/
-	public MultiChannelWrapper setPreprocessScale(double s) {
+	public MultiChannelImage setPreprocessScale(double s) {
 		if (s>10) s=10; //does not allow user to scale more than 10 fold. it is never really needed and may cause heap space issues
 		PreProcessInformation info = this.getSlot().getModifications();
-		if(info!=null&&s==info.getScale()) return this.getMultichanalWrapper();
+		if(info!=null&&s==info.getScale()) return this.getMultiChannelImage();
 		PreProcessInformation newscale;
 		if (info!=null) newscale= new PreProcessInformation(info.getRectangle(), info.getAngle(), s);
 		else  newscale= new PreProcessInformation(null, 0, s);
 		slot.applyCropAndScale(newscale);
-		return this.getMultichanalWrapper();
+		return this.getMultiChannelImage();
 	}
+	/**returns the preprocess information object for this images*/
 	@Override
 	public PreProcessInformation getPreProcess() {
 		return this.getSlot().getModifications();
 	}
 	
-	public ArrayList<PanelGraphicInsetDef> getInsets() {
-		ArrayList<PanelGraphicInsetDef> output = new ArrayList<PanelGraphicInsetDef>();
+	/**returns all of the inset definer objects in the figure*/
+	public ArrayList<PanelGraphicInsetDefiner> getInsets() {
+		ArrayList<PanelGraphicInsetDefiner> output = new ArrayList<PanelGraphicInsetDefiner>();
 		for(ZoomableGraphic z: this.getAllGraphics()) {
-			if (z instanceof PanelGraphicInsetDef)
-				output.add((PanelGraphicInsetDef) z);
+			if (z instanceof PanelGraphicInsetDefiner)
+				output.add((PanelGraphicInsetDefiner) z);
 		}
 		
 		return output;
@@ -725,6 +689,10 @@ transient static IconSet i;
 		this.updatePanels();
 	}
 	
-	public void setFrameSliceUseToViewLocation() {getPanelManager().getPanelList().getChannelUseInstructions().shareViewLocation(getSlot().getDisplaySlice());}
+	/**changes the view location of the multichannel slot to match the frame and slice that is selected
+	 in the frame and slice use instructions the panel manager */
+	public void setFrameSliceUseToViewLocation() {
+		getPanelManager().getPanelList().getChannelUseInstructions().shareViewLocation(getSlot().getDisplaySlice());
+		}
 	
 }

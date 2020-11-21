@@ -1,31 +1,29 @@
 package standardDialog;
 
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import channelMerging.ChannelEntry;
 
-
-public class ChannelEntryBox extends JComboBox {
+/**A combo box that allows the user to choose a channel. channel options will appear in their respective color*/
+public class ChannelEntryBox extends JComboBox<Object> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	//static Color[] segColors=new Color[] {Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.GRAY};
 	ArrayList<ChannelEntry> theChannelentries;
 	
-	String nullString="none";
+	String nullString="no channel";//what to use as text if no channel entry is at that position in the list
 	
 	public ChannelEntryBox(ArrayList<ChannelEntry> cl) {
 		this(cl, "none");
 	}
 	
 	
-	
+	/**creates a channel entry box with a specific text for index zero (which can be 'no channel', or 'merge all')*/
 	public ChannelEntryBox(ArrayList<ChannelEntry> cl, String zeroText) {
 		super(namesOfEach(cl, zeroText));
 		this.nullString=zeroText;
@@ -63,7 +61,6 @@ public class ChannelEntryBox extends JComboBox {
 		this.setSelectedIndex(innitial);
 	}
 	
-	//public static void indexOfValue(String value, ) {}
 	
 	
 	public void drawRainbowString(Graphics g, ChannelEntry c1, int x, int y) {
@@ -71,19 +68,18 @@ public class ChannelEntryBox extends JComboBox {
 		
 	}
 	
+	/**draws the text for the given channel entry in the appropriate color. if not channel is given draws the text in black*/
 public static void drawRainbowString(Graphics g, ChannelEntry c1, int x, int y, String nullString) {
 		
-		//ArrayList<String> stringarr = ComplexTextGraphic .splitStringBasedOnArray(st, ints);
 		String st = nullString; 
 		if (c1!=null) {
-			st=c1.getRealChannelName();
-			if (st==null) st=c1.getLabel();
-			if (st==null) st="Ch "+c1.getOriginalChannelIndex();
+			st=c1.getRealChannelName();//if possible uses the channel name
+			if (st==null) st=c1.getLabel();//if not, then there may be a different label used
+			if (st==null) st="Ch "+c1.getOriginalChannelIndex();//if no other label is available, uses the channel number
 		}
 		
 		 {
 			
-			FontMetrics fm = g.getFontMetrics();
 			if (c1!=null) {
 				g.setColor(c1.getColor());
 				g.drawString(st, x, y);
@@ -97,14 +93,6 @@ public static void drawRainbowString(Graphics g, ChannelEntry c1, int x, int y, 
 	}
 	
 	
-	/*
-	public static void main(String[] arg) {
-		JFrame jf = new JFrame();
-		;
-		ImagePlusWrapper wrap = new ImagePlusWrapper(IJ.openImage());
-		
-		jf.add(new ChannelEntryBox(2,wrap.getChannelEntriesInOrder()));
-		jf.pack();jf.setVisible(true);
-	}*/
+	
 
 }

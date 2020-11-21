@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
 
 import channelMerging.MultiChannelDisplayWrapper;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 
@@ -18,7 +18,7 @@ public class BasicChannelNameTool extends BasicImagePanelTool {
 				"icons/NameStackSlicesicon.jpg");	};  
 				
 				
-				protected void afterMousePress(MultiChannelWrapper mw, int chan1) {
+				protected void afterMousePress(MultiChannelImage mw, int chan1) {
 		
 		
 		if (this.clickingOnMultiMode=true &&getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {
@@ -28,7 +28,7 @@ public class BasicChannelNameTool extends BasicImagePanelTool {
 			 new StackSliceNamingDialog().showNamingDialog(m.getMultiChannelWrapper().getStackIndex(m.getCurrentChannel(), m.getCurrentSlice(),m.getCurrentFrame()), m.getMultiChannelWrapper());
 			}
 		else {
-			 new StackSliceNamingDialog().showNamingDialog(stackSlicePressed.originalIndices, this.presseddisplay.getMultichanalWrapper());
+			 new StackSliceNamingDialog().showNamingDialog(stackSlicePressed.originalIndices, this.presseddisplay.getMultiChannelImage());
 			
 		}
 		
@@ -55,7 +55,7 @@ public class BasicChannelNameTool extends BasicImagePanelTool {
 		}
 	}
 	
-	public void applyReleaseActionToMultiChannel(MultiChannelWrapper mw) {
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
 		
 		applyReleaseActionToMultiChannel(mw, 1,1);
 	}

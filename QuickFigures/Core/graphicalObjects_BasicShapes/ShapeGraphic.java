@@ -37,6 +37,8 @@ import animations.KeyFrameAnimation;
 import fieldReaderWritter.SVGEXporterForShape;
 import fieldReaderWritter.SVGExportable;
 import fieldReaderWritter.SVGExporter;
+import graphicalObjectHandles.ActionButtonHandleList;
+import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjectHandles.ShapeActionButtonHandleList2;
 import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
@@ -50,7 +52,7 @@ import menuUtil.PopupMenuSupplier;
 import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 /**An abstract class for the shapes in the figure*/
-public abstract class ShapeGraphic extends BasicGraphicalObject implements GraphicalObject, StrokedItem, ShowsOptionsDialog,IllustratorObjectConvertable, Fillable, Rotatable, HasTreeLeafIcon , OfficeObjectConvertable, HasUniquePopupMenu, SVGExportable, ProvidesDialogUndoableEdit {
+public abstract class ShapeGraphic extends BasicGraphicalObject implements GraphicalObject, StrokedItem, ShowsOptionsDialog,IllustratorObjectConvertable, Fillable, Rotatable, HasTreeLeafIcon , OfficeObjectConvertable, HasUniquePopupMenu, SVGExportable, ProvidesDialogUndoableEdit, HasMiniToolBarHandles {
 	/**
 	 * 
 	 */
@@ -569,17 +571,25 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	}
 
 	/**a list of handles that serve as a mini toolbar for this shape*/
-	protected transient ShapeActionButtonHandleList2 buttonList;
+	protected transient ActionButtonHandleList buttonList;
 	
 	/**returns the list of handles that take the role of buttons on a mini-toolbar of sorts*/
-	public ShapeActionButtonHandleList2 getButtonList() {
+	public ActionButtonHandleList getButtonList() {
 		if(buttonList==null) {
-			buttonList=new ShapeActionButtonHandleList2(this);
+			buttonList=createActionHandleList();
 			
 		}
 		buttonList.updateLocation();
 		return buttonList;
 	}
+	
+	/**
+	Creates an action handle list for the object
+	 */
+	public ActionButtonHandleList createActionHandleList()  {
+		return new ShapeActionButtonHandleList2(this);
+	}
+	
 	public boolean isFillable() {
 		return true;
 	}

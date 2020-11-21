@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import channelMerging.ChannelUseInstructions;
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
@@ -91,8 +91,8 @@ public class PanelOrder  implements Serializable, MontageSpaces{
 		if (singleChannelPer(COLS)) {
 			return getChannelOrder(COLS);
 		}
-		PanelStackDisplay pm = figure.getPrincipalMultiChannel();
-		if(figure.getMultiChannelDisplaysInOrder().size()==1 &&pm.getMultichanalWrapper().nFrames()==1&&pm.getMultichanalWrapper().nSlices()==1)
+		ImageDisplayLayer pm = figure.getPrincipalMultiChannel();
+		if(figure.getMultiChannelDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
 			return getChannelOrder(PANELS);
 		
 		return null;
@@ -180,15 +180,15 @@ public class PanelOrder  implements Serializable, MontageSpaces{
 		return new imageOrderComparator(getDisplaysInLayoutImageOrder());
 	}
 	
-	public ArrayList< PanelStackDisplay> getDisplaysInLayoutImageOrder() {
+	public ArrayList< ImageDisplayLayer> getDisplaysInLayoutImageOrder() {
 		ArrayList<PanelListElement> list = getOrderedPanelList();
-		ArrayList<PanelStackDisplay> allContainedDisplays = figure.getMultiChannelDisplaysInOrder();
-		ArrayList< PanelStackDisplay> displays=new 	ArrayList<PanelStackDisplay>();
+		ArrayList<ImageDisplayLayer> allContainedDisplays = figure.getMultiChannelDisplaysInOrder();
+		ArrayList< ImageDisplayLayer> displays=new 	ArrayList<ImageDisplayLayer>();
 		
 		for(PanelListElement l: list) {
 			if (allContainedDisplays.contains(l.getPanelGraphic().getParentLayer())&&!displays.contains(l.getPanelGraphic().getParentLayer())) 
 			{
-				PanelStackDisplay parentLayer = (PanelStackDisplay) l.getPanelGraphic().getParentLayer();
+				ImageDisplayLayer parentLayer = (ImageDisplayLayer) l.getPanelGraphic().getParentLayer();
 				displays.add(parentLayer);
 				parentLayer.getSetter().startPoint=list.indexOf(l)+1;
 			};
@@ -198,15 +198,15 @@ public class PanelOrder  implements Serializable, MontageSpaces{
 		return displays;
 	}
 
-	public static class imageOrderComparator implements Comparator<PanelStackDisplay> {
-		private ArrayList<PanelStackDisplay> newOrder;
+	public static class imageOrderComparator implements Comparator<ImageDisplayLayer> {
+		private ArrayList<ImageDisplayLayer> newOrder;
 
-		public imageOrderComparator(ArrayList< PanelStackDisplay> newOrder) {
+		public imageOrderComparator(ArrayList< ImageDisplayLayer> newOrder) {
 			this.newOrder=newOrder;
 		}
 
 		@Override
-		public int compare(PanelStackDisplay o1, PanelStackDisplay o2) {
+		public int compare(ImageDisplayLayer o1, ImageDisplayLayer o2) {
 			int indexOf = newOrder.indexOf(o1);
 			int indexOf2 = newOrder.indexOf(o2);
 			if (indexOf==-1) return 1;

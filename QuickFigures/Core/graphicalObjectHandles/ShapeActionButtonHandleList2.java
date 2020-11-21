@@ -37,7 +37,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	public ShapeActionButtonHandleList2(ShapeGraphic t, int form) {
 		this.shape=t;
 		this.specialForm=form;
-		if(form==ARROW_ONLYFORM) {
+		if(specialForm==ARROW_ONLYFORM) {
 			this.createForArrowHeadType();
 		} else
 			addItems();
@@ -84,7 +84,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		itemForIcon=new EditAndColorizeMultipleItems(true, 2);
 		itemForIcon.setModelItem(shape);
 		
-		GeneralActionListHandle s = addOperationList(itemForIcon, getStrokes() );
+		addOperationList(itemForIcon, getStrokes() );
 		
 		
 		

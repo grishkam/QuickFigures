@@ -1,41 +1,33 @@
 package multiChannelFigureUI;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Arc2D.Double;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import standardDialog.GraphicObjectDisplayBasic;
 import undo.CombinedEdit;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
 
+/**A multi-selection operation that performs one among a few operations 
+  that depend on the setting. each options requires that the user have an image panel selected*/
 public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 
 	
 
-	public static final int COLOR_MODE = 9, CROP_IMAGE = 3;
+	public static final int COLOR_MODE = 9, CROP_IMAGE = 3, PIXEL_DENSITY=8;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private ImagePanelGraphic firstImage;
-	int brightcontrast=0;
+	int brightcontrast=WindowLevelDialog.MIN_MAX;
 	
 	public ImagePropertiesButton() {}
 	public ImagePropertiesButton(ImagePanelGraphic i, int bc) {
@@ -49,8 +41,8 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 		if(brightcontrast==WindowLevelDialog.WINDOW_LEVEL) return "Set Window/Level";
 		if(brightcontrast==WindowLevelDialog.MIN_MAX) return "Set Brightness/Contrast";
 		if(brightcontrast==CROP_IMAGE) return "Recrop Image";
-		if(brightcontrast==8) return "PPI";
-		if(brightcontrast==9) return "Change Color Modes";
+		if(brightcontrast==PIXEL_DENSITY) return "Pixel Density";
+		if(brightcontrast==COLOR_MODE) return "Change Color Modes";
 		
 		return "Set Window/Level";
 	}
@@ -64,117 +56,58 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 		firstImage=null;
 		
 		ArrayList<MultichannelDisplayLayer> foundDisplays=new ArrayList<MultichannelDisplayLayer>();
-		ArrayList<MultiChannelWrapper> foundImages=new ArrayList<MultiChannelWrapper>();
+		ArrayList<MultiChannelImage> foundImages=new ArrayList<MultiChannelImage>();
 		
 		 
 		for(LocatedObject2D i: items) {
 			if(i instanceof ImagePanelGraphic)  {
 				if(firstImage==null)firstImage=(ImagePanelGraphic) i;
-				MultichannelDisplayLayer nextone = new ChannelSwapperToolBit2((ImagePanelGraphic) i).getPrincipalDisplay();
+				MultichannelDisplayLayer nextone = new ChannelPanelEditingMenu((ImagePanelGraphic) i).getPrincipalDisplay();
 				
 				if (nextone!=null&&!foundDisplays.contains(nextone))
 					{
 					foundDisplays.add(nextone);
-					foundImages.add(nextone.getMultichanalWrapper());
+					foundImages.add(nextone.getMultiChannelImage());
 					}
 			}
 				
 		}
 		
-		ChannelSwapperToolBit2 context = new ChannelSwapperToolBit2(firstImage);
+		ChannelPanelEditingMenu context = new ChannelPanelEditingMenu(firstImage);
 		context.workOn=0;
 		context.extraWrappers= foundImages;
 		context.extraDisplays=foundDisplays;
 		//if (this.brightcontrast<2) undo = ChannelDisplayUndo.createMany(foundImages, context);//
 	
-		if (this.brightcontrast<3)
+		if (doesShowDisplayRange())
 			context.showDisplayRangeDialog(brightcontrast);
 	
 			
-		if(this.brightcontrast==3) {
+		if(this.brightcontrast==CROP_IMAGE) {
 			if(foundDisplays.size()<1) return;
 			foundDisplays.remove(context.getPrincipalDisplay());
 		
 			undo = FigureOrganizingSuplierForPopup.recropManyImages(context.getPrincipalDisplay(),foundDisplays);;
 		}
 		
-		if(this.brightcontrast==9) {
+		if(this.brightcontrast==COLOR_MODE) {
 			context.workOn=1;
 			undo=context.changeColorModes();
 		}
 		
 		if(undo!=null&&this.getUndoManager()!=null) this.getUndoManager().addEdit(undo);
 	}
-	
-	public Icon getIcon() {
-		if(brightcontrast==3) return new GraphicObjectDisplayBasic<CropIconGraphic>(new 	CropIconGraphic());
-		if(brightcontrast==COLOR_MODE) return new ColorIcon();
-		return IconUtil.createBrightnessIcon(0, Color.black);
+	/**
+	 * @return
+	 */
+	protected boolean doesShowDisplayRange() {
+		return this.brightcontrast<=WindowLevelDialog.ALL;
 	}
 	
-	public class ColorIcon implements Icon {
-		
-		
-
-		@Override
-		public void paintIcon(Component c, Graphics g, int x, int y) {
-			java.awt.geom.Rectangle2D.Double ra = new Rectangle2D.Double(x+3, y+3, 18, 18);
-			
-			GradientPaint gp = new GradientPaint(RectangleEdges.getLocation(RectangleEdges.TOP, ra), Color.white, RectangleEdges.getLocation(RectangleEdges.BOTTOM, ra), Color.black);
-			GradientPaint gp2 = gp;
-			Color iColor = this.getImageColor();
-		if (iColor!=null) gp2=new GradientPaint(RectangleEdges.getLocation(RectangleEdges.TOP, ra), iColor, RectangleEdges.getLocation(RectangleEdges.BOTTOM, ra), Color.black);
-			
-			Double a = new Arc2D.Double(ra, 90, 180, Arc2D.CHORD);
-		Double a2 = new Arc2D.Double(ra, -90, 180, Arc2D.CHORD);
-			
-		
-			if(g instanceof Graphics2D) {
-			Graphics2D g2=(Graphics2D) g;
-			g2.setPaint(gp);
-			g2.fill(a);
-			g2.setPaint(gp2);
-			g2.fill(a2);
-			g2.setStroke(new BasicStroke());
-			g2.setColor(Color.red.darker());
-			if(this.getImageColorMode()) {g2.draw(a);} else {g2.draw(a2);}
-		}
-		}
-
-		@Override
-		public int getIconWidth() {
-			// TODO Auto-generated method stub
-			return 25;
-		}
-
-		@Override
-		public int getIconHeight() {
-			// TODO Auto-generated method stub
-			return 25;
-		}
-		
-		public Color getImageColor() {
-			try {
-				ChannelSwapperToolBit2 cc = new ChannelSwapperToolBit2(firstImage);
-				
-				return cc.getChannelEntryList().get(0).getColor();
-			} catch (Exception e) {
-			}
-			
-			return Color.white;
-		}
-		
-		public boolean getImageColorMode() {
-			
-			try {
-				ChannelSwapperToolBit2 cc = new ChannelSwapperToolBit2(firstImage);
-				return cc.getPressedPanelManager().getPanelList().getChannelUseInstructions().channelColorMode==1;
-			} catch (Exception e) {
-				
-			}
-		return false;
-		}
-
+	public Icon getIcon() {
+		if(brightcontrast==CROP_IMAGE) return CropIconGraphic.createsCropIcon();
+		if(brightcontrast==COLOR_MODE) return new ColorModeIcon(firstImage);
+		return IconUtil.createBrightnessIcon(0);
 	}
 
 }

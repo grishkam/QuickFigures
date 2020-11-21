@@ -10,6 +10,10 @@ import logging.IssueLog;
 import utilityClassesForObjects.ShapeRotatingPolygon;
 
 public class PolygonAdder extends BasicGraphicAdder {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final int t4 = 3, t5=4,t6=5, t7=6, t8=7, t9=8, t10=9;;
 	int vertex=7;
 	int length=50;
@@ -139,7 +143,7 @@ public class PolygonAdder extends BasicGraphicAdder {
 			p.setUpRegularVertexes();
 			p.resetPolygonFromVertices();
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		p.setUpRegularVertexes();
 		return p;

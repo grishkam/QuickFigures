@@ -25,9 +25,9 @@ public class ChannelOrderAndLutMatching {
 	/** will alter the channel order of many edited multichannel images to that of the reference.
 	  If the last argument is set to anything other than orderOnly, this method also match the channel colors
 	 */
-	public void matchChannels(MultiChannelWrapper o1, ArrayList<MultiChannelWrapper> others, int command) {
+	public void matchChannels(MultiChannelImage o1, ArrayList<MultiChannelImage> others, int command) {
 		
-		for(MultiChannelWrapper edited: others) {
+		for(MultiChannelImage edited: others) {
 			matchChannels(o1, edited, command);
 		}
 		
@@ -37,7 +37,7 @@ public class ChannelOrderAndLutMatching {
 	/** will alter the channel order of the edited multichannel image to that of the reference.
 	  If the last argument is set to anything other than orderOnly, this method also match the channel colors
 	  */
-	public void matchChannels(MultiChannelWrapper reference, MultiChannelWrapper edited, int command) {
+	public void matchChannels(MultiChannelImage reference, MultiChannelImage edited, int command) {
 		ArrayList<String> ChannelNamesA = getAllRealChannelNames(reference);
 		ArrayList<String> ChannelNamesB= getAllRealChannelNames(edited);
 		
@@ -57,13 +57,13 @@ public class ChannelOrderAndLutMatching {
 	}
 	
 	/** will alter the display range and channel order of the edited multichannel image to that of the reference. */
-	public void matchDisplayRangeLUTandOrder(MultiChannelWrapper reference, MultiChannelWrapper edited) {
+	public void matchDisplayRangeLUTandOrder(MultiChannelImage reference, MultiChannelImage edited) {
 		matchChannels(reference,edited , ChannelOrderAndLutMatching.ORDER_AND_COLOR);
 		matchDisplayRange(reference, edited);
 	}
 	
 	/** will alter the display range of the edited multichannel image to that of the reference. of every channel*/
-	public void matchDisplayRange(MultiChannelWrapper reference, MultiChannelWrapper edited) {
+	public void matchDisplayRange(MultiChannelImage reference, MultiChannelImage edited) {
 		ArrayList<String> ChannelNamesA = getAllRealChannelNames(reference);
 		ArrayList<String> ChannelNamesB= getAllRealChannelNames(edited);
 		
@@ -79,7 +79,7 @@ public class ChannelOrderAndLutMatching {
 	
 	
 	/**lists the real channel names. Example: eGFP, texasred, Cy5*/
-	ArrayList<String> getAllRealChannelNames(MultiChannelWrapper m1) {
+	ArrayList<String> getAllRealChannelNames(MultiChannelImage m1) {
 		ArrayList<String> names1=new ArrayList<String>();
 		for(int i=1; i<=m1.nChannels(); i++) {
 			names1.add(m1.getRealChannelName(i));
@@ -89,9 +89,9 @@ public class ChannelOrderAndLutMatching {
 	
 	/**Sets the display range of each multi channel image. If no channels with the given 
 	   channel name are located, does not change anything*/
-	public void setAllMinMax(Iterable<MultiChannelWrapper> wraps, String realName, int min, int max ) {
+	public void setAllMinMax(Iterable<MultiChannelImage> wraps, String realName, int min, int max ) {
 		int chan=0;
-		for(MultiChannelWrapper w: wraps) {
+		for(MultiChannelImage w: wraps) {
 			chan = setMinMaxOfParticular(realName, min, max, chan, w);
 			
 		}
@@ -101,7 +101,7 @@ public class ChannelOrderAndLutMatching {
 	  attempt to identify which channel has that name to set the display range of that channel
 	  If the channel is not found, sets the display range of channel number c.
 	  returns the channel number that was actually used */
-	private int setMinMaxOfParticular(String realName, int min, int max, int c, MultiChannelWrapper w) {
+	private int setMinMaxOfParticular(String realName, int min, int max, int c, MultiChannelImage w) {
 		if (realName!=null) {
 			int chanNum = w.getIndexOfChannel(realName);
 		

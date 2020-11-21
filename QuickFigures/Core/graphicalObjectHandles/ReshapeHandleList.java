@@ -13,11 +13,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEventWrapper;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
-import graphicalObjects_LayerTypes.GraphicGroup;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoScalingAndRotation;
@@ -189,7 +188,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 
 		private double angle;
 
-		private transient SelectionManager selectionManagger;
+		private transient OverlayObjectManager selectionManagger;
 
 		public boolean editOngoing;
 

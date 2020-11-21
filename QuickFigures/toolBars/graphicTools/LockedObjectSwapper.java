@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
@@ -39,7 +39,7 @@ public class LockedObjectSwapper extends LockGraphicTool2 {
 	public void setMarkerRoi() {
 		
 		
-				SelectionManager select = this.getImageWrapperClick().getSelectionManagger();
+				OverlayObjectManager select = this.getImageWrapperClick().getSelectionManagger();
 				
 				select.setSelection(MarkerRoi(), 0);
 				
@@ -60,7 +60,7 @@ public void mouseDragged() {
 	object2 = getObject(getImageWrapperClick(), getDragCordinateX(), getDragCordinateY());
 	if (object2==null) return;
 	lockTaker2=findLockContainer(object2);
-	SelectionManager select = this.getImageWrapperClick().getSelectionManagger();
+	OverlayObjectManager select = this.getImageWrapperClick().getSelectionManagger();
 	
 	select.setSelection(RectangularGraphic.blankRect(object2.getBounds(), Color.green, true, true),1);
 	
@@ -110,8 +110,8 @@ private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
 			
 			SnappingPosition snap1 = inside.getSnapPosition();
 			SnappingPosition snap2 = object2.getSnapPosition();
-			inside.setSnappingBehaviour(snap2);
-			object2.setSnappingBehaviour(snap1);
+			inside.setSnapPosition(snap2);
+			object2.setSnapPosition(snap1);
 			
 			undoS1.establishFinalState();
 			undoS2.establishFinalState();

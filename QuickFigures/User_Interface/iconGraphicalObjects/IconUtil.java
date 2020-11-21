@@ -35,9 +35,9 @@ public class IconUtil {
 		
 	}
 
-public static Icon createBrightnessIcon(int open, Color folderColor) {
+public static Icon createBrightnessIcon(int open) {
 		
-		return new BrightnessIcon( open,folderColor);
+		return new BrightnessIcon( open);
 	}
 	
 	public static class BrightnessIcon extends GraphicObjectDisplayBasic<BrightNessIconGraphic> {
@@ -47,8 +47,8 @@ public static Icon createBrightnessIcon(int open, Color folderColor) {
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public BrightnessIcon(int open, Color c) {
-			this.setCurrentDisplayObject(new BrightNessIconGraphic(c,open));
+		public BrightnessIcon(int open) {
+			this.setCurrentDisplayObject(new BrightNessIconGraphic(open));
 		}
 		
 	}

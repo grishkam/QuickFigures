@@ -465,7 +465,7 @@ public class SnappingPosition implements  RectangleEdgePosisions, Serializable  
 				one=i;
 						
 			}
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 		return one;
 	}
 	

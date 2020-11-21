@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.JColorChooser;
 
+import externalToolBar.AbstractExternalToolset;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import objectDialogs.TextGraphicSwingDialog;
@@ -24,76 +24,83 @@ import standardDialog.NumberInputEvent;
 import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
 import undo.CombinedEdit;
-import undo.UndoManagerPlus;
 import undo.UndoTextEdit;
 import utilityClassesForObjects.ColorDimmer;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RainbowPaintProvider;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.TextLineSegment;
+import utilityClassesForObjects.TextParagraph;
 
-/**Performs a speficic edit of one or more Text objects*/
+/**Performs a certain edit of one or more Text objects*/
 public class SuperTextButton extends BasicMultiSelectionOperator implements Serializable {
+
 
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int script;
+	
 	private Color color=null;
-	public int colorDimming=0;
+	public int colorDimming=ColorDimmer.FULL_BRIGTHNESS;
 
 	
 	private TextGraphic modelText;
 	private int startFontSize;
 	private Font startFont=null;
-	public static final int BOLDENS=2, ITALICIZES=3, RESIZES_FONT_UP=8, RESIZES_FONT_DOWN=9, SELECT_COLOR=10;
-	private static final int DIMS_COLOR = 11, FONT_FAM=12;
-	public static final int RESIZES_FONT_TO=14, JUSTIFIES_TEXT=15;
+	
+	public static final int DO_NOTHIING=-1, TO_SUPERSCRIPT = 0, TO_SUBSCRIPT = 1, BOLDENS=2, ITALICIZES=3, UNDERLINES = 4, STRIKES = 5,
+			CHANGES_COLOR = 7,
+			RESIZES_FONT_UP=8, RESIZES_FONT_DOWN=9, SELECT_COLOR=10,
+			DIMS_COLOR = 11, FONT_FAM=12,
+			RESIZES_FONT_TO=14, JUSTIFIES_TEXT=15;
+	
+	private int type=DO_NOTHIING;
+	
 	private String fontFamily=null;
 	private Integer justification=null;
 	
 
 	public SuperTextButton(String fam) {
-		this.script=FONT_FAM;
+		this.type=FONT_FAM;
 		fontFamily=fam;
 		
 	}
 	
 	public SuperTextButton(int subscript) {
-		this.script=subscript;
+		this.type=subscript;
 	}
 	
 	public SuperTextButton(Color c) {
-		this.script=7;
+		this.type=CHANGES_COLOR;
 		color=c;
 	}
 	public SuperTextButton(TextGraphic m,Color c) {
-		this.script=7;
+		this.type=CHANGES_COLOR;
 		color=c;
 		 setModelText(m);
 	}
 	public SuperTextButton(TextGraphic m, int c) {
-		this.script=DIMS_COLOR;
+		this.type=DIMS_COLOR;
 		colorDimming=c;
 		 setModelText(m);
 	}
 	
 	public SuperTextButton(TextGraphic c, boolean down) {
-		this.script=8;
-		if (down)script=9;
+		this.type=RESIZES_FONT_UP;
+		if (down)type=RESIZES_FONT_DOWN;
 		setModelText(c);
 		if(c==null) setModelText(new TextGraphic());
 	}
 	
 	public SuperTextButton(TextGraphic c, int type, int variable) {
 		if(type==RESIZES_FONT_TO) {
-			this.script=type;
+			this.type=type;
 			this.startFontSize=variable;
 		}
 		if (setsJustification(type)) {
-			this.script=type;
+			this.type=type;
 			setJustification(variable);
 		}
 		
@@ -106,36 +113,36 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	
 	
 	boolean makesSuperScript() {
-		return script==0;
+		return type==TO_SUPERSCRIPT;
+	}
+	boolean makesSubScript() {
+		return type==TO_SUBSCRIPT;
 	}
 	
 	public boolean resizesFont() {
-		return script==8||script==9|| RESIZES_FONT_TO==script;
+		return type==RESIZES_FONT_UP||type==RESIZES_FONT_DOWN|| RESIZES_FONT_TO==type;
 	}
 	
 	/**sets to resizes down if true, sets to resizes up otherwise*/
 	public boolean makeResizeDown(boolean b) {
-		if(b) script=9; else script=8;
+		if(b) type=RESIZES_FONT_DOWN; else type=RESIZES_FONT_UP;
 		return true;
 	}
 	
-	boolean makesSubScript() {
-		return script==1;
-	}
 	
 	public boolean boldens() {
-		return script==BOLDENS;
+		return type==BOLDENS;
 	}
 	
 	public boolean italicizes() {
-		return script==ITALICIZES;
+		return type==ITALICIZES;
 	}
 	private boolean underlines() {
-		return script==4;
+		return type==UNDERLINES;
 	}
 	
 	private boolean strikes() {
-		return script==5;
+		return type==STRIKES;
 	}
 
 
@@ -143,7 +150,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	public String getMenuCommand() {
 		if (this.doesFontFamily()) return this.getFontFamily();
 		if (makesSubScript()) return "Make Subscript "+getKeyBoardCommand() ;
-		if (this.boldens()) return "Make Bold"+getKeyBoardCommand() ;
+		if (this.boldens()) return "Make Bold "+getKeyBoardCommand() ;
 		if (this.italicizes()) return "Make Italic "+getKeyBoardCommand() ;
 		if (this.underlines()) return "Make Underlined "+getKeyBoardCommand() ;
 		if (this.strikes()) return "Strike-through "+getKeyBoardCommand() ;
@@ -156,18 +163,18 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	
 	
 	private boolean setsFontSize() { 
-		return script==RESIZES_FONT_TO;
+		return type==RESIZES_FONT_TO;
 	}
 	
-	private boolean setsJustification() {return setsJustification(script)&&getJustification()!=null;}
+	private boolean setsJustification() {return setsJustification(type)&&getJustification()!=null;}
 	
 	private boolean setsJustification(int type) { 
 		if (	JUSTIFIES_TEXT==type) 
 						return true;
-			
 			return false;
 	}
 	
+	/**keyboard shortcuts not yet implemented*/
 	String getKeyBoardCommand() {
 		return "";
 	}
@@ -183,8 +190,8 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		if(this.getModelText()!=null)
 			{
 			startFont=this.getModelText().getFont();
-				if (this.resizesFont()&&script==8) startFontSize=this.getModelText().getFont().getSize()+2;
-				if (this.resizesFont()&&script==9) startFontSize=this.getModelText().getFont().getSize()-2;
+				if (this.resizesFont()&&type==8) startFontSize=this.getModelText().getFont().getSize()+2;
+				if (this.resizesFont()&&type==9) startFontSize=this.getModelText().getFont().getSize()-2;
 		
 			}
 		
@@ -198,7 +205,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 
 
 	
-	
+	/**returns true if the object is already in sthe stake that this class would transform it into*/
 	public boolean objectIsAlready(Object a) {
 		
 		if (a instanceof ComplexTextGraphic && ((ComplexTextGraphic) a).isEditMode()) {
@@ -211,10 +218,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 			if (boldens()&&c.isSelectionBold()) return true;
 			if (underlines()&&c.isSelectionUnderlined())return true;
 			if (strikes()&&c.isSelectionStrikedThrough()) return true;
-			//if (color!=null) c.colorSelectedRegion(color);
-			
-			
-			
+
 		} else if (a instanceof TextGraphic) {
 			TextGraphic t=(TextGraphic) a;
 		
@@ -283,16 +287,15 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	}
 
 	public boolean doesRecolor() {
-		if(script==SELECT_COLOR) return true;
+		if(type==SELECT_COLOR) return true;
 		return color!=null;
 	}
 	
 	private boolean doesDimColor() {
-		return script==DIMS_COLOR;
+		return type==DIMS_COLOR;
 	}
 	
 	private boolean doesFontFamily() {
-		
 		return this.fontFamily!=null;
 	}
 	
@@ -302,7 +305,7 @@ private String getFontFamily() {
 		return this.fontFamily;
 	}
 
-
+/**the font to use for the menu item*/
 public Font getMenuItemFont() {
 	if(this.doesFontFamily()) return new Font(this.getFontFamily(), 1,  10);
 	return null;
@@ -316,14 +319,13 @@ public String getMenuPath() {
 }
 
 public Component getInputPanel() {
-//if(this.setsFontSize()||this.doesFontFamily()) return getFontInputPanel() ;
 	
 	return null;
 	}
 
 
 
-
+/**returns a panel meant for the user to input a font size*/
 public NumberInputPanel getFontInputPanel(LayerSelector s) {
 	if(s!=null) this.setSelector(s);
 	NumberInputPanel panel = new NumberInputPanel("Input Font Size", getModelText().getFont().getSize());
@@ -350,9 +352,9 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 		
 		public Icon getIcon() {
 			if(this.setsJustification()) {
-				if(getJustification()==0) return new AlignItem(RectangleEdges.LEFT).getIcon();
-				if(getJustification()==1) return new AlignItem(RectangleEdges.MIDDLE).getIcon();
-				if(getJustification()==2) return new AlignItem(RectangleEdges.RIGHT).getIcon();
+				if(getJustification()==TextParagraph.JUSTIFY_LEFT) return new AlignItem(RectangleEdges.LEFT).getIcon();
+				if(getJustification()==TextParagraph.JUSTIFY_CENTER) return new AlignItem(RectangleEdges.MIDDLE).getIcon();
+				if(getJustification()==TextParagraph.JUSTIFY_RIGHT) return new AlignItem(RectangleEdges.RIGHT).getIcon();
 			}
 			return  new SuperTextIcon();
 		}
@@ -371,13 +373,13 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 			@Override
 			public int getIconHeight() {
 				
-				return 25;
+				return AbstractExternalToolset.DEFAULT_ICONSIZE;
 			}
 
 			@Override
 			public int getIconWidth() {
-				if(resizesFont()) return 35;
-				return 25;
+				if(resizesFont()) return AbstractExternalToolset.DEFAULT_ICONSIZE+10;
+				return AbstractExternalToolset.DEFAULT_ICONSIZE;
 			}
 
 			@Override
@@ -486,7 +488,7 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 			
 
 			public boolean doesUserSelectColor() {
-				return script==SELECT_COLOR;
+				return type==SELECT_COLOR;
 			}
 			}
 		
@@ -498,7 +500,7 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 				out[i]=new SuperTextButton(c1);
 			}
 			SuperTextButton c = new SuperTextButton(Color.white);
-			c.script=SELECT_COLOR;
+			c.type=SELECT_COLOR;
 			out[color.length]=c;
 			return out;
 		}

@@ -15,7 +15,7 @@ public class MontageMoverTool  extends GeneralLayoutEditorTool implements Montag
 	try {
 			 getEditor().moveMontageLayout(getCurrentLayout(), getMouseDisplacementX(), getMouseDisplacementY());
 
-		} catch (Throwable t) {IssueLog.log(t);}
+		} catch (Throwable t) {IssueLog.logT(t);}
 	}
 	
 

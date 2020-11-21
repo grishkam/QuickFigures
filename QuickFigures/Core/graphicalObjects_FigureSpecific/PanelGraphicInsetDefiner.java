@@ -18,7 +18,7 @@ import applicationAdapters.PixelWrapper;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
@@ -40,7 +40,9 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScaleInfo;
 
-public class PanelGraphicInsetDef extends InsetDefiner {
+/**A special inset definer object that the user can use to draw insets with the inset tool.
+  */
+public class PanelGraphicInsetDefiner extends InsetDefiner {
 
 	
 	
@@ -53,19 +55,19 @@ public class PanelGraphicInsetDef extends InsetDefiner {
 	private ImagePanelGraphic sourcePanel;
 	public PanelList multiChannelStackofInsets;
 	public InsetGraphicLayer personalLayer;
-	private ChannelLabelProperties channelLabelProp;
+	private ChannelLabelProperties channelLabelProp;//instructions on how this one uses channel labels
 	private ChannelLabelManager channelLabelMan;
 	public InsetLayout previosInsetLayout;
-	private boolean usePreprocess=true;
+	private final boolean usePreprocess=true;
 	
-public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
+public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		super(r);
 		setSourcePanel(p);
 		updateImagePanels();
 	}
 	
-	public PanelGraphicInsetDef copy() {
-		return new PanelGraphicInsetDef(getSourcePanel(), this.getBounds());
+	public PanelGraphicInsetDefiner copy() {
+		return new PanelGraphicInsetDefiner(getSourcePanel(), this.getBounds());
 	}
 
 	
@@ -102,7 +104,7 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 		
 		return b2;
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 			return null;
 		}
 	}
@@ -149,8 +151,8 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	}
 	
 	/**Applies the appropriate crop and scale and returns a version of the source image that is original*/
-	public MultiChannelWrapper generatePreProcessedVersion() {
-		MultiChannelWrapper unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion();
+	public MultiChannelImage generatePreProcessedVersion() {
+		MultiChannelImage unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion();
 		 return unprocessed .cropAtAngle(generateInsetPreprocess(getSourceDisplay().getSlot().getModifications()));
 	
 	}
@@ -237,6 +239,13 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 			clearStackProcessing(output);
 			return;
 		}
+		oldListSetup(output, parent);
+	}
+
+	/**
+	 
+	 */
+	protected void oldListSetup(PanelList output, PanelList parent) {
 		output.setCropper(getproperCropping().getBounds());
 		output.setCropperAngle(this.getAngle());
 		output.setScaleBilinear(parent.getScaleBilinear()*super.getBilinearScale());
@@ -284,20 +293,18 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	/**returns the image that will be used as a source for the update.
 	  either the original or a version that has already been cropped might
 	  be returned*/
-	public MultiChannelWrapper getSourceImageForUpdates() {
+	public MultiChannelImage getSourceImageForUpdates() {
 		if (this.usesPreprocess()) {
 			return this.generatePreProcessedVersion();
 			}
-		return getSourceDisplay().getMultichanalWrapper();
+		return getSourceDisplay().getMultiChannelImage();
 	}
 	
 	/**any panels that are linked to the stack for the multichannel image
 	  are updated this way */
 	public void updateDisplayPanelImagesWithChannelName(String name) {
 		if (multiChannelStackofInsets!=null &&!this.usesPreprocess()) {
-			multiChannelStackofInsets.setCropper(getproperCropping().getBounds());
-			multiChannelStackofInsets.setCropperAngle(this.getAngle());
-			multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates(), name);
+			oldPanelUpdate(name);
 			}
 		else 
 		if (multiChannelStackofInsets!=null &&this.usesPreprocess()) {
@@ -307,6 +314,15 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 		}
 		
 		
+	}
+
+	/**
+	 */
+	@Deprecated
+	protected void oldPanelUpdate(String name) {
+		multiChannelStackofInsets.setCropper(getproperCropping().getBounds());
+		multiChannelStackofInsets.setCropperAngle(this.getAngle());
+		multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates(), name);
 	}
 	
 	@Override
@@ -471,9 +487,9 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	
 	/**returns true if another Insetdefiner shares the personal layout and layer with this one*/
 	public boolean sharesPersonalLayer() {
-		ArrayList<PanelGraphicInsetDef> list = getInsetDefinersFromLayer(this.getParentLayer());
+		ArrayList<PanelGraphicInsetDefiner> list = getInsetDefinersFromLayer(this.getParentLayer());
 		
-		for(PanelGraphicInsetDef inset1: list) {
+		for(PanelGraphicInsetDefiner inset1: list) {
 			if (inset1!=this && inset1.personalLayer==this.personalLayer) {return true;}
 		}
 		
@@ -482,9 +498,9 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	
 	/**returns true if another Insetdefiner shares the personal layout and layer with this one*/
 	public int totalThatSharesPersonalLayer() {
-		ArrayList<PanelGraphicInsetDef> list = getInsetDefinersFromLayer(this.getParentLayer());
+		ArrayList<PanelGraphicInsetDefiner> list = getInsetDefinersFromLayer(this.getParentLayer());
 		int output=1;
-		for(PanelGraphicInsetDef inset1: list) {
+		for(PanelGraphicInsetDefiner inset1: list) {
 			if (inset1!=this && inset1.personalLayer==this.personalLayer) {output++;}
 		}
 		
@@ -493,22 +509,22 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	
 
 	/**returns the inset definers within a specific layer*/
-	public   ArrayList<PanelGraphicInsetDef> getInsetDefinersThatShareLayout() {
+	public   ArrayList<PanelGraphicInsetDefiner> getInsetDefinersThatShareLayout() {
 		GraphicLayer gl=this.getParentLayer();
-		ArrayList<ZoomableGraphic> array1 = new ArraySorter<ZoomableGraphic>().getThoseOfClass(gl.getAllGraphics(), PanelGraphicInsetDef.class);
-		ArrayList<PanelGraphicInsetDef> arrayout=new ArrayList<PanelGraphicInsetDef>();
+		ArrayList<ZoomableGraphic> array1 = new ArraySorter<ZoomableGraphic>().getThoseOfClass(gl.getAllGraphics(), PanelGraphicInsetDefiner.class);
+		ArrayList<PanelGraphicInsetDefiner> arrayout=new ArrayList<PanelGraphicInsetDefiner>();
 		for(ZoomableGraphic ar: array1) {
-			PanelGraphicInsetDef otherPanelDef = (PanelGraphicInsetDef) ar;
+			PanelGraphicInsetDefiner otherPanelDef = (PanelGraphicInsetDefiner) ar;
 			if (otherPanelDef.personalLayer==this.personalLayer) arrayout.add(otherPanelDef);
 		}
 		return arrayout;
 	}
 	
 	/**returns the inset definers that have the specified channel label*/
-	public static PanelGraphicInsetDef findInsetWith(ChannelLabelTextGraphic z) {
+	public static PanelGraphicInsetDefiner findInsetWith(ChannelLabelTextGraphic z) {
 		GraphicLayer layer = z.getParentLayer().getTopLevelParentLayer();
-		ArrayList<PanelGraphicInsetDef> defs = getInsetDefinersFromLayer(layer);
-		for(PanelGraphicInsetDef definer: defs) {
+		ArrayList<PanelGraphicInsetDefiner> defs = getInsetDefinersFromLayer(layer);
+		for(PanelGraphicInsetDefiner definer: defs) {
 			if (definer.getChannelLabelManager().getChannelLabelProp()==z.getChannelLabelproperties())
 				return definer;;
 		}
@@ -517,21 +533,21 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 	
 	
 	/**returns the inset definers that have the specified channel label*/
-	public static PanelGraphicInsetDef findInsetWith(ImagePanelGraphic z) {
+	public static PanelGraphicInsetDefiner findInsetWith(ImagePanelGraphic z) {
 		GraphicLayer layer = z.getParentLayer().getTopLevelParentLayer();
-		ArrayList<PanelGraphicInsetDef> defs = getInsetDefinersFromLayer(layer);
-		for(PanelGraphicInsetDef definer: defs) {
+		ArrayList<PanelGraphicInsetDefiner> defs = getInsetDefinersFromLayer(layer);
+		for(PanelGraphicInsetDefiner definer: defs) {
 			if (definer.getPanelManager().getListElementFor(z)!=null)
 				return definer;
 		}
 		return null;
 	}
 	/**returns the inset definers within a specific layer*/
-	public static ArrayList<PanelGraphicInsetDef> getInsetDefinersFromLayer(GraphicLayer gl) {
-		ArrayList<ZoomableGraphic> array1 = new ArraySorter<ZoomableGraphic>().getThoseOfClass(gl.getAllGraphics(), PanelGraphicInsetDef.class);
-		ArrayList<PanelGraphicInsetDef> arrayout=new ArrayList<PanelGraphicInsetDef>();
+	public static ArrayList<PanelGraphicInsetDefiner> getInsetDefinersFromLayer(GraphicLayer gl) {
+		ArrayList<ZoomableGraphic> array1 = new ArraySorter<ZoomableGraphic>().getThoseOfClass(gl.getAllGraphics(), PanelGraphicInsetDefiner.class);
+		ArrayList<PanelGraphicInsetDefiner> arrayout=new ArrayList<PanelGraphicInsetDefiner>();
 		for(ZoomableGraphic ar: array1) {
-			PanelGraphicInsetDef otherPanelDef = (PanelGraphicInsetDef) ar;
+			PanelGraphicInsetDefiner otherPanelDef = (PanelGraphicInsetDefiner) ar;
 			
 			arrayout.add(otherPanelDef);
 		}
@@ -546,12 +562,11 @@ public PanelGraphicInsetDef(ImagePanelGraphic p, Rectangle r) {
 		
 	}
 	
-	
+	/**a layer that is used to store objects that are part of the inset figure*/
 	public class InsetGraphicLayer extends GraphicLayerPane {
 
 		public InsetGraphicLayer(String name) {
 			super(name);
-			// TODO Auto-generated constructor stub
 		}
 
 		/**
@@ -577,10 +592,10 @@ static Color  folderColor2= new Color(0,140, 0);
 		
 	public class InsetPanelManager extends PanelManager {
 
-		private PanelGraphicInsetDef inset;
+		private PanelGraphicInsetDefiner inset;
 
 		public InsetPanelManager(MultichannelDisplayLayer multichannelImageDisplay, PanelList stack,
-				GraphicLayer multichannelImageDisplay2, PanelGraphicInsetDef panelGraphicInsetDef) {
+				GraphicLayer multichannelImageDisplay2, PanelGraphicInsetDefiner panelGraphicInsetDef) {
 			super(multichannelImageDisplay, stack, multichannelImageDisplay2);
 			this.inset=panelGraphicInsetDef;
 		}

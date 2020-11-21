@@ -1,6 +1,6 @@
 package undo;
 
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 
 public class PreprocessChangeUndo extends AbstractUndoableEdit2 {
@@ -9,11 +9,11 @@ public class PreprocessChangeUndo extends AbstractUndoableEdit2 {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PanelStackDisplay display;
+	private ImageDisplayLayer display;
 	private PreProcessInformation original;
 	PreProcessInformation finalState;
 	
-	public PreprocessChangeUndo(PanelStackDisplay l) {
+	public PreprocessChangeUndo(ImageDisplayLayer l) {
 		this.display=l;
 		this.original=l.getSlot().getModifications();
 				

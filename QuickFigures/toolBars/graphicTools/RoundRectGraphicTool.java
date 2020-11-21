@@ -8,12 +8,12 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.RoundedRectangleGraphic;
 
 public class RoundRectGraphicTool extends RectGraphicTool {
-	{model=new RoundedRectangleGraphic(new Rectangle(0,0,0,0));}{model.setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(model);}}
+	{model=new RoundedRectangleGraphic(new Rectangle(0,0,0,0));}{getModel().setStrokeColor(Color.black);{super.set=TreeIconWrappingToolIcon.createIconSet(getModel());}}
 	
 	public RectangularGraphic createShape(Rectangle r) {
 		RoundedRectangleGraphic ouput = new RoundedRectangleGraphic(r);
-		ouput.setArch(((RoundedRectangleGraphic)model).getArch());
-		ouput.setArcw(((RoundedRectangleGraphic)model).getArcw());
+		ouput.setArch(((RoundedRectangleGraphic)getModel()).getArch());
+		ouput.setArcw(((RoundedRectangleGraphic)getModel()).getArcw());
 		return ouput;
 	}
 	

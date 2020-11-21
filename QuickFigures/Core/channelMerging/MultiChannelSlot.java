@@ -17,7 +17,7 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	public void addMultichannelUpdateListener(MultiChannelUpdateListener lis);
 	public void removeMultichannelUpdateListener(MultiChannelUpdateListener lis);
 	
-	public MultiChannelWrapper getMultichanalWrapper() ;
+	public MultiChannelImage getMultichannelImage() ;
 	public int getRetrieval() ;
 	public void setRetrival(int i);
 	public void saveImageEmbed();
@@ -32,11 +32,11 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	//void showCropDialogOfSize(Dimension recommmendation);
 	//void showCropDialog(Rectangle recommmendation, double recAngle);
 	public void applyCropAndScale(PreProcessInformation process) ;
-	public MultiChannelWrapper getUnprocessedVersion();
+	public MultiChannelImage getUnprocessedVersion();
 	public void redoCropAndScale();
 	
-	public void setPanelStackDisplay( PanelStackDisplay multichannelDisplayLayer);
-	public PanelStackDisplay getDisplayLayer();
+	public void setPanelStackDisplay( ImageDisplayLayer multichannelDisplayLayer);
+	public ImageDisplayLayer getDisplayLayer();
 	public MultiChannelSlot copy();
 	 void setDisplaySlice(CSFLocation display);
 	CSFLocation getDisplaySlice();

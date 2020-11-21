@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.AbstractUndoableEdit2;
@@ -91,7 +92,8 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	
 	/**returns the undo manager for the object*/
 	public UndoManagerPlus getUndoManager() {
-		return getSelector().getGraphicDisplayContainer().getUndoManager();
+		FigureDisplayContainer graphicDisplayContainer = getSelector().getGraphicDisplayContainer();
+		return graphicDisplayContainer.getUndoManager();
 	}
 	
 	

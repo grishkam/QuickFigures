@@ -25,7 +25,7 @@ import utilityClassesForObjects.SnappingPosition;
 		private static final long serialVersionUID = 1L;
 		private InsetLayout currentLayout;
 		private SnappingPanel snappanel;
-		private PanelGraphicInsetDef currentInset;
+		private PanelGraphicInsetDefiner currentInset;
 	
 		public final static String[] arrangements=new String[] {"Lock to lateral outsides", "Normal Placement" , "Fill Side", "On Both Insides", "On outer sides"};
 		
@@ -102,11 +102,11 @@ import utilityClassesForObjects.SnappingPosition;
 			/**preparation if many panels are shared*/
 			  if (currentInset.sharesPersonalLayer()) {
 				  
-				  ArrayList<PanelGraphicInsetDef> list = currentInset.getInsetDefinersThatShareLayout();
+				  ArrayList<PanelGraphicInsetDefiner> list = currentInset.getInsetDefinersThatShareLayout();
 				  extralist = currentInset.getPanelManager().getPanelList().createDouble();
 				  extralist.getPanels().clear();
 					
-					for(PanelGraphicInsetDef inset: list) {
+					for(PanelGraphicInsetDefiner inset: list) {
 						
 							extralist.addAll(inset.getPanelManager().getPanelList().getPanels());
 							InsetLayout.removeAbsentPanels(extralist, inset.getPanelManager().getPanelList(), inset);
@@ -175,7 +175,7 @@ import utilityClassesForObjects.SnappingPosition;
 			return currentLayout;
 		}
 		
-		public void setTargetInset(PanelGraphicInsetDef inset) {
+		public void setTargetInset(PanelGraphicInsetDefiner inset) {
 			this.currentInset=inset;
 		}
 		

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import sUnsortedDialogs.ScaleAboutDialog;
@@ -57,9 +57,9 @@ public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 	}
 	
 	void removeThoseForInsets(ArrayList<ZoomableGraphic> panelLayouts) {
-		ArrayList<PanelGraphicInsetDef> insets = PanelGraphicInsetDef.getInsetDefinersFromLayer(getTopLayer(selector.getSelectedLayer()));
+		ArrayList<PanelGraphicInsetDefiner> insets = PanelGraphicInsetDefiner.getInsetDefinersFromLayer(getTopLayer(selector.getSelectedLayer()));
 		
-		for(PanelGraphicInsetDef ins: insets) {
+		for(PanelGraphicInsetDefiner ins: insets) {
 			panelLayouts.remove(ins.personalGraphic);
 		}
 	

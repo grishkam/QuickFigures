@@ -14,4 +14,7 @@ public interface MenuItemInstall {
 	public Icon getIcon();
 	/**if the menu item must have a non-default font, returns it*/
 	public Font getMenuItemFont();
+	
+	
+	
 }

@@ -16,28 +16,27 @@ import java.util.Vector;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import channelMerging.ChannelEntry;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_FigureSpecific.PanelManager;
 
 
-/**experimenting with a way for the user to look through the parts of a panel list*/
-public class ChannelListDisplay extends JList implements ActionListener, DropTargetListener, KeyListener{
+/**A JList that displays a list of possible channels in their respecrive channel names and colors*/
+public class ChannelListDisplay extends JList<Object> implements ActionListener, DropTargetListener, KeyListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	Vector<ChannelEntry> elements=new Vector<ChannelEntry>();
+	
 	private ChannelColorCellRenerer2 render= new ChannelColorCellRenerer2(this);
 	private PanelManager panelManager;
 	private PanelListElement panel;
 	private PanelListDisplay panelDisp;
 	
-	
+	/**constructor with starting panel and panel manager*/
 	public ChannelListDisplay(PanelManager man, PanelListElement panel) {
 		this.panelManager=man;
 		
@@ -47,13 +46,14 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 		
 		this.setDragEnabled(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
-		addListSelectionListener(new listener1(this));
 		new DropTarget(this, this);
 		this.addKeyListener(this);
 	}
 	
 	public void setPanelListPartner(PanelListDisplay panelDisp) {this.panelDisp=panelDisp;}
 
+	/**changes the panel whose channel's are displayed
+	  replaces the channel list with a new one*/
 	public void setPanel(PanelListElement panel) {
 		if(panel==null) return;
 		this.panel=panel;
@@ -68,22 +68,7 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 	
 	PanelListElement getPanel() {return panel;}
 	
-	
-	void selectListSelectedDisplays() {
-		for(int i=0; i<elements.size(); i++) {
-			
-			
-		}
-		
-		
-		int[] index1 = this.getSelectedIndices();
-		
-		for(int i=0; i<index1.length; i++) {
-			ChannelEntry ele = elements.get(index1[i]);
-			
-		}
-	
-	}
+
 	
 	public static void main(String[] arg) {
 		
@@ -93,20 +78,9 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 	
 	
 	
-	public  ListCellRenderer	getCellRenderer() {return render;}
+	public  ListCellRenderer<Object>	getCellRenderer() {return render;}
 	
 
-	class listener1 implements ListSelectionListener {
-
-		public listener1(ChannelListDisplay panelListDisplay) {
-			
-		}
-
-		@Override
-		public void valueChanged(ListSelectionEvent arg0) {
-			selectListSelectedDisplays() ;
-			
-		}}
 
 
 	@Override
@@ -126,6 +100,10 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 		
 	}
 	
+	/**swaps the channel entry locations in the panel.
+	  If the  multiple channels are shown in the merge label
+	  a swap will be visible to the user 
+	  (the swap is undone when the channel entries for that panel are updated)*/
 	void swapItems(ChannelEntry cl1, ChannelEntry cl2) {
 		
 		int ind1 = elements.indexOf(cl1);
@@ -135,18 +113,13 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 				elements.set(ind2, cl1);
 				panel.getChannelEntries().set(ind1, cl2);
 				panel.getChannelEntries().set(ind2, cl1);
-				
-			
 				 updateDisplay();
 			
 			
-			
 			if (this.panelDisp!=null) panelDisp.repaint();
-			//this.setListData(elements);
 			this.repaint();
-		
-		
 	}
+	
 	
 	void updateDisplay() {
 		panelManager.updatePanels();
@@ -155,19 +128,13 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 		
 	}
 	
+	/**removes the channel entry from the panel and the list*/
 	void removeItem(ChannelEntry o) {
 			if(elements.size()<2) return;
 			elements.remove(o);
-		
-			
 			panel.removeChannelEntry(o);
-			
 			panelManager.updatePanels();
-			
-			
 			panelManager.getDisplay().onImageUpdated();
-			
-			
 			this.repaint();
 		
 		
@@ -175,11 +142,8 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 
 
 
-
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -187,8 +151,6 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 
 	@Override
 	public void dragExit(DropTargetEvent dte) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -196,13 +158,11 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 
 	@Override
 	public void dragOver(DropTargetDragEvent dtde) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 
-
+	/**In response to drag and drop, swaps two channels*/
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
 		if (dtde.getDropTargetContext().getComponent() ==this) {
@@ -227,6 +187,7 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 		
 	}
 	
+	/**based on a lick location within this component, returns the element clicked*/
 	int getIndexForPoint(Point2D pt) {
 		for(int i=0; i<elements.size(); i++) {
 			if (getCellBounds(i,i).contains(pt)) return i;
@@ -251,7 +212,7 @@ public class ChannelListDisplay extends JList implements ActionListener, DropTar
 	}
 	
 	public void removeSelectedChannels() {
-		Object[] index1 = this.getSelectedValues();
+		Object[] index1 = getSelectedValues();
 		for(Object o: index1) {
 			if (o instanceof ChannelEntry) {
 				this.removeItem((ChannelEntry) o);

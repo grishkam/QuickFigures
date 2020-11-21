@@ -113,10 +113,10 @@ public class PlotLabel extends ComplexTextGraphic {
 		if (legend) {}
 			else {
 					if (orientation2==PlotOrientation.BARS_VERTICAL)
-						{setSnappingBehaviour(SnappingPosition.defaultPlotBottomSide());
+						{setSnapPosition(SnappingPosition.defaultPlotBottomSide());
 						setAngle(Math.PI/4);
 						}
-					else setSnappingBehaviour(SnappingPosition.defaultPlotRigthSide());
+					else setSnapPosition(SnappingPosition.defaultPlotRigthSide());
 		}
 	}
 	

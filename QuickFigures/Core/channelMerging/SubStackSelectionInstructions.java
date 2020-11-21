@@ -29,7 +29,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 	public abstract SubStackSelectionInstructions createDouble();
 	
 	/**returns how many frames or slices of the image are to be used in the figure*/
-	public abstract int estimateNUsed(MultiChannelWrapper image) ;
+	public abstract int estimateNUsed(MultiChannelImage image) ;
 	
 	/**returns true if the item at index t is excluded*/
 	public boolean isExcluded(int t) {
@@ -110,7 +110,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public int estimateNUsed(MultiChannelWrapper image) {
+		public int estimateNUsed(MultiChannelImage image) {
 			if(method==ALL_) {return image.nFrames();}
 			int count=0;
 			for(int i: selectedIndices()) {
@@ -177,7 +177,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		public int estimateNUsed(MultiChannelWrapper image) {
+		public int estimateNUsed(MultiChannelImage image) {
 			if(method==ALL_) {return image.nSlices();}
 			int count=0;
 			for(int i: selectedIndices()) {

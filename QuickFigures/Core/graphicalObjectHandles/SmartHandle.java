@@ -27,6 +27,10 @@ import utilityClassesForObjects.Hideable;
 import utilityClassesForObjects.RainbowPaintProvider;
 import utilityClassesForObjects.Selectable;
 
+/**This class defines a handle that the user can drag to freely edit objects.
+   most handles that the user sees are instances of this class. contains the basic methods
+   that subclasses may variously override. also contains methods for creating many shapes
+   that the handles can appear as*/
 public class SmartHandle extends HandleRect implements Selectable, Hideable{
 	
 	public static int CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
@@ -47,7 +51,7 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 	transient protected Shape specialShape=null;
 	protected String message=null;
 
-	private CordinateConverter<?> lastDrawnConverter;
+	protected CordinateConverter<?> lastDrawnConverter;
 
 	private boolean selected;
 
@@ -60,13 +64,10 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 	
 	public boolean absent() {return false;}
 
+	/**Creates a smart handle*/
 	public SmartHandle(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
 	
 	
 	public void setCordinateLocation(Point2D pt) {
@@ -78,9 +79,6 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 		return bs;
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -91,6 +89,7 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 	
 		
 		Shape s = createDrawnRect(pt);
+		
 		if (hasSpecialShape()) {
 			s=createSpecialShape(pt, cords);
 		}
@@ -220,6 +219,7 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 		return handlesize;
 	}
 	
+	/**returns the standard shape for the handle. Rectangle or Ellipse*/
 	protected Shape createDrawnRect(Point2D pt) {
 		double xr = pt.getX()-handleSize();
 		double yr = pt.getY()-handleSize();
@@ -229,14 +229,17 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 		return new Rectangle2D.Double(xr,yr, widthr, heightr);
 	}
 
+	/**Returns the width of the handle used if the handle is defined by the standard shape*/
 	public int getDrawnHandleWidth() {
 		return handleSize()*2;
 	}
 	
+	/**Returns the height of the handle used if the handle is defined by the standard shape*/
 	public int getDrawnHandleHeight() {
 		return getDrawnHandleWidth();
 	}
 
+	/**location of the handle in the figures' coordinates. this determines where the handle will actually appear*/
 	public Point2D getCordinateLocation() {
 		return cordinateLocation;
 	}
@@ -256,7 +259,6 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 
 	@Override
 	public void select() {
-		// TODO Auto-generated method stub
 		selected=true;
 	}
 
@@ -344,7 +346,7 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 		return AffineTransform.getRotateInstance(Math.PI/2).createTransformedShape(createLeftRightArrow(handlesize, lenArr));
 	}
 
-	private Shape getDirectionPointer(boolean left) {
+	protected Shape getDirectionPointer(boolean left) {
 		Area a=new Area();
 		super.handlesize=4;
 		
@@ -357,7 +359,7 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 		return t2;
 	}
 	
-	private Shape getArrowPointer(int handlesize, int lenArr, boolean left) {
+	protected Shape getArrowPointer(int handlesize, int lenArr, boolean left) {
 		
 		Area a = createRightArrow(handlesize, lenArr);
 
@@ -378,7 +380,7 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 		return a;
 	}
 	
-	private Shape createUpDownArrow(int handlesize, int lenArr) {
+	protected Shape createUpDownArrow(int handlesize, int lenArr) {
 		return AffineTransform.getRotateInstance(Math.PI/2).createTransformedShape(createLeftRightArrow(handlesize, lenArr));
 	}
 	
@@ -392,7 +394,6 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 
 	@Override
 	public boolean makePrimarySelectedItem(boolean isFirst) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -401,42 +402,48 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 		
 	}
 	
-	public  void drawLineBetweenPoints(Graphics2D g, CordinateConverter<?> cords, Point2D point, Point2D baseLineEnd) {
+	/**when given the coordinate location of points, draws them on the canvas*/
+	public  void drawLineBetweenPoints(Graphics2D g, CordinateConverter<?> cords, Point2D point, Point2D point2) {
 		int x1=(int)cords.transformX( point.getX());
 		int y1=(int)cords.transformY( point.getY());
-		int x2=(int)cords.transformX( baseLineEnd.getX());
-		int y2=(int)cords.transformY( baseLineEnd.getY());
+		int x2=(int)cords.transformX( point2.getX());
+		int y2=(int)cords.transformY( point2.getY());
 		g.drawLine(x1, y1, x2, y2);
 	}
 	
-	private void drawLineTo(Graphics2D graphics, CordinateConverter<?> cords, SmartHandle lineto2) {
+	/**draws a line between this point and the other point*/
+	private void drawLineTo(Graphics2D graphics, CordinateConverter<?> cords, SmartHandle otherPoint) {
 		graphics.setColor(getHandleColor());
 		graphics.setStroke(getHandleStroke());
-		drawLineBetweenPoints(graphics, cords, this.getCordinateLocation(), lineto2.getCordinateLocation());
+		drawLineBetweenPoints(graphics, cords, this.getCordinateLocation(), otherPoint.getCordinateLocation());
 		
 	}
 	
 
+	/**Subclasses may returns true if the method calls with the handle add an undo to the undomanager.
+	  if not, an undo that simply tries to move a handle back to its origin location is used (those are often not complex enough to undo properly)*/
 	public boolean handlesOwnUndo() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**Some handles are linked to each other by a line. This method sets a handle that a line will be drawn from*/
 	public void setLineConnectionHandle(SmartHandle s) {
 		this.lineto=s;
 }
-	
+	/**Some handles are linked to each other by a line. This method gets a handle that a line will be drawn from*/
 	public SmartHandle getLineConnectionHandle() {
 		return lineto;
 	}
 
+	/**returns true  if the standard shape is ellipse. rectangle otherwise*/
 	public boolean isEllipseShape() {
 		return ellipse;
 	}
-
+	/**set to true if the standard shape is ellipse. rectangle otherwise*/
 	public void setEllipseShape(boolean ellipse) {
 		this.ellipse = ellipse;
 	}
+	
 	/**creates a shape that is a plus or minus sign*/
 	protected Area addSubtractShape(int plusSize, boolean subtract) {
 		Area a=new Area();

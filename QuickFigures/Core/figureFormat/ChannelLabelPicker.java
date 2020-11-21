@@ -36,7 +36,7 @@ public void setToStandardFor(MultichannelDisplayLayer wrap) {
 	
 	protected void setModelSnappingtoDefault() {
 		if (getModelItem()!=null)
-		getModelItem().setSnappingBehaviour(SnappingPosition.defaultColSide());
+		getModelItem().setSnapPosition(SnappingPosition.defaultColSide());
 	}
 	
 	public String getOptionName()  {

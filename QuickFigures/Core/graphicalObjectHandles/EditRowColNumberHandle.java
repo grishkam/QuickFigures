@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import applicationAdapters.CanvasMouseEventWrapper;
-import applicationAdapters.DisplayedImage;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 
 import java.awt.geom.Rectangle2D;
@@ -17,16 +16,15 @@ import gridLayout.MontageSpaces;
 import imageMenu.CanvasAutoResize;
 import undo.UndoLayoutEdit;
 
-/**a handle that allows the user to pack panels into a different number of rows andcolors*/
+/**a handle that allows the user to pack the layout panels into a different number of rows and columns 
+  For example, user can drag handle to easily transform a 1*6 layout into 2*3, 3*2 or6*1*/
 public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces{
 
+	private static final int PLUS_SIZE = 3;
 	protected MontageLayoutGraphic layout;
 	protected int type;
 	protected int index;
-	private int endIndex;
-	private DisplayedImage wrap;
-	private int nRow;
-	private int nCols;
+	private UndoLayoutEdit currentUndo;
 
 	public EditRowColNumberHandle(int x, int y) {
 		super(x, y);
@@ -36,10 +34,8 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 		this(0,0);
 		
 		this.layout=montageLayoutGraphic;
-		
-		
 		setHandleColor(Color.red);
-		this.specialShape=addSubtractShape(3, false);
+		this.specialShape=addSubtractShape(PLUS_SIZE, false);
 		
 		setupSpecialShape();
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
@@ -51,8 +47,7 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 		double x2 = space.getMaxX()+25;
 		
 		this.setCordinateLocation(new Point2D.Double(x2, y2));
-		nRow=layout.getPanelLayout().nRows();
-		nCols=layout.getPanelLayout().nColumns();
+	
 	}
 	
 	protected boolean hasSpecialShape() {;
@@ -66,10 +61,6 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 	
 	}
 
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public boolean containsClickPoint(Point2D p) {
@@ -77,65 +68,37 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 	}
 	
 	
-	
+	/***/
 	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
-		UndoLayoutEdit currentUndo = new UndoLayoutEdit(layout);
-		
-		endIndex = this.getCurrentLayout().makeAltered(type).getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());
-		
+		if(currentUndo!=null) currentUndo.establishFinalState();
 		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentUndo);
 		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelectionstoNull();
-		
-		
-		
-		
+	
 	}
 	
 	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
-		wrap=canvasMouseEventWrapper.getAsDisplay();
-		
-		if(canvasMouseEventWrapper.clickCount()<2) return;
-		
-		
-		
-
-		
+		currentUndo = new UndoLayoutEdit(layout);//establishes the undo
 	}
 	
 	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
-	
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
-		BasicMontageLayout bm = layout.getPanelLayout();
+		BasicMontageLayout current = layout.getPanelLayout();
 		GenericMontageEditor edit = layout.getEditor();
-		int[] rowcol = MontageLayoutRowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), bm);
+		int[] proposedRowColChange = MontageLayoutRowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), current);
 		
-		int r=bm.nRows();
-		int c=bm.nColumns();
-		if (rowcol[0]+bm.nRows()>=1 )r= rowcol[0]+bm.nRows();
-		if (rowcol[1]+bm.nColumns()>=1 )c= rowcol[1]+bm.nColumns();
-		if(r*c>-nRow*nCols) {
-			
+		int r=current.nRows();
+		int c=current.nColumns();
+		if (proposedRowColChange[0]+current.nRows()>=1 )r= proposedRowColChange[0]+current.nRows();
+		if (proposedRowColChange[1]+current.nColumns()>=1 )c= proposedRowColChange[1]+current.nColumns();
+		
 			edit.repackagePanels(layout.getPanelLayout(), r, c);
-		}
+		
 		
 		new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
 
 	}
-	/**What to do when a handle is moved from point p1 to p2*/
-	public void handleMove(Point2D p1, Point2D p2) {
-		
-	}
 
-	private BasicMontageLayout getCurrentLayout() {
-		return layout.getPanelLayout();
-		
-	}
-	
-	
 
-	private GenericMontageEditor getEditor() {
-		this.layout.generateCurrentImageWrapper();
-		return layout.getEditor();
-	}
+
 
 }

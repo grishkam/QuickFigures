@@ -1,6 +1,6 @@
 package undo;
 
-import channelMerging.PanelStackDisplay;
+import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelList;
 
 public class UndoStackEdit extends AbstractUndoableEdit2 {
@@ -12,7 +12,7 @@ public class UndoStackEdit extends AbstractUndoableEdit2 {
 	private PanelList stack;
 	private double iScale;
 	private double fScale;
-	private PanelStackDisplay display;
+	private ImageDisplayLayer display;
 
 	public UndoStackEdit(PanelList stack) {
 		this.stack=stack;
@@ -35,7 +35,7 @@ public class UndoStackEdit extends AbstractUndoableEdit2 {
 		if (this.display!=null) display.updatePanels();
 	}
 
-	public void setDisplayLayer(PanelStackDisplay layer) {
+	public void setDisplayLayer(ImageDisplayLayer layer) {
 		this.display=layer;
 		
 	}

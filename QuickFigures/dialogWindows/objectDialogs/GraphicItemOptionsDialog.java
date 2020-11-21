@@ -6,7 +6,7 @@ import java.awt.Insets;
 import applicationAdapters.ImageWrapper;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import logging.IssueLog;
 import standardDialog.FixedEdgeSelectable;
@@ -32,7 +32,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	public GraphicSampleComponent sam;
 	StrokeInputPanel strokeInput;
 	private static ImageWrapper currentImage=null;
-	private static GraphicSetDisplayContainer setContainer;
+	private static FigureDisplayContainer setContainer;
 	private boolean updateAfterEachItemChange=true;
 	private static CurrentSetInformer informer=new CurrentFigureSet();
 	
@@ -48,7 +48,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	
 	public void afterEachItemChange() {
 		if (updateAfterEachItemChange) try{this.onOK();} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 			
 		}
 	}
@@ -124,7 +124,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	
 	public void setObjectSnappingBehaviourToDialog(LocatedObject2D l) {
 		if (snappingPanel==null) return;
-		l.setSnappingBehaviour(snappingPanel.getSnappingBehaviour());
+		l.setSnapPosition(snappingPanel.getSnappingBehaviour());
 	}
 	
 	public void addFixedEdgeToDialog(BasicGraphicalObject l) {
@@ -197,7 +197,7 @@ public static void setCurrentImage(ImageWrapper currentImage) {
 
 
 
-public static GraphicSetDisplayContainer getSetContainer() {
+public static FigureDisplayContainer getSetContainer() {
 	return setContainer;
 }
 
@@ -206,7 +206,7 @@ public static void updateCurrentDisplay() {
 }
 
 
-public static void setSetContainer(GraphicSetDisplayContainer setContainer) {
+public static void setSetContainer(FigureDisplayContainer setContainer) {
 	GraphicItemOptionsDialog.setContainer = setContainer;
 }
 

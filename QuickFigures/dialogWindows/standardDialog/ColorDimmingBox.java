@@ -8,46 +8,46 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import utilityClassesForObjects.ColorDimmer;
 
-public class ColorDimmingBox extends JComboBox {
+/**A JCombo box designed for the user to select a color dimming effect
+ * see ColorDimmer class for more information*/
+public class ColorDimmingBox extends JComboBox<String> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**the colors used to display the text of the menu options*/
 	static Color[] segColors=new Color[] {Color.red, Color.green, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.GRAY};
 	
-	
+	/**creates a new color dimming box*/
 	public ColorDimmingBox() {
 		super(ColorDimmer.colorModChoices2);
-		colorCellRenerer cc = new colorCellRenerer();
+		ColorDimmingCellRenerer cc = new ColorDimmingCellRenerer();
 		cc.setBox(this);
 		cc.setFont(cc.getFont().deriveFont((float)20));
 		this.setRenderer(cc);
 	}
 	
+	/**creates a new color dimming box with initial value initial*/
 	public ColorDimmingBox(int innitial) {
 		this();
 		this.setSelectedIndex(innitial);
 		
 	}
-	
-	//public static void indexOfValue(String value, ) {}
-	
-	
+
+	/**draws the given text in several colors*/
 	public static void drawRainbowString(Graphics g, int x, int y,  String st, int[] ints, Color[] colors) {
-		
 		ArrayList<String> stringarr = ComplexTextGraphic .splitStringBasedOnArray(st, ints);
 		drawRainBowString(g,x,y, stringarr, ints, colors);
 		
 	}
-	
+	/**draws the given array of strings as a line of text with several colors*/
 	public static void drawRainBowString(Graphics g, int x, int y,  ArrayList<String> stringarr, int[] ints, Color[] colors) {
 		int ci=0;
 		for(String st1: stringarr) {
@@ -61,8 +61,8 @@ public class ColorDimmingBox extends JComboBox {
 	}
 	
 	
-	
-	public class colorCellRenerer extends BasicComboBoxRenderer {
+	/**how to render the combo box choices*/
+	public class ColorDimmingCellRenerer extends BasicComboBoxRenderer {
 		
 		/**
 		 * 
@@ -72,7 +72,7 @@ public class ColorDimmingBox extends JComboBox {
 		
 		private static final long serialVersionUID = 1L;
 		
-		public colorCellRenerer() {
+		public ColorDimmingCellRenerer() {
 		
 		}
 	
@@ -85,25 +85,25 @@ public class ColorDimmingBox extends JComboBox {
 			
 		}
 
-
-		public void drawRainbowStringForDimmingBox(Graphics g, int dim, String text) {
-			ColorDimmingBox.drawRainbowString(g, 1,this.getFont().getSize()+1, text, new int[]{3,2,2}, ColorDimmer.modifyArray( segColors, dim, true));
+		/**Based on the dimming type, draws a many colored text from the string given with the dimmed colors*/
+		public void drawRainbowStringForDimmingBox(Graphics g, int dimmingType, String text) {
+			ColorDimmingBox.drawRainbowString(g, 1,this.getFont().getSize()+1, text, new int[]{3,2,2}, ColorDimmer.modifyArray( segColors, dimmingType, true));
 		}
 		
-		public  Component	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (out instanceof colorCellRenerer) {
-				colorCellRenerer c=(colorCellRenerer) out;
+			if (out instanceof ColorDimmingCellRenerer) {
+				ColorDimmingCellRenerer c=(ColorDimmingCellRenerer) out;
 				c.colorDims=index;
+				
 					{this.setFont(this.getFont().deriveFont(Font.BOLD).deriveFont((float)20.0));}
+					
 				if (cellHasFocus) {
 					c.colorDims=getBox().getSelectedIndex();
 		
 					}
 			}
 		
-			//Font font=new Font(out.getFont().getFamily(), index, out.getFont().getSize());
-			//out.setFont(font);
 			return out;
 				}
 
@@ -120,9 +120,7 @@ public class ColorDimmingBox extends JComboBox {
 	
 	
 	public static void main(String[] arg) {
-		JFrame jf = new JFrame();
-		jf.add(new ColorDimmingBox());
-		jf.pack();jf.setVisible(true);
+	
 	}
 
 }

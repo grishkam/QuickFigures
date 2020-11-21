@@ -90,7 +90,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 		
 		
 		}catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 			}
 	}
 
@@ -116,7 +116,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			
 		}
 		catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		
 		

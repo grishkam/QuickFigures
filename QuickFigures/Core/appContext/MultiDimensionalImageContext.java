@@ -2,7 +2,7 @@ package appContext;
 
 import java.util.ArrayList;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
 /**Interface for whatever package is used to open and display multidimensional images
@@ -13,9 +13,9 @@ public interface MultiDimensionalImageContext {
   
   public MultiChannelDisplayCreator createMultichannelDisplay();
  
-  public ArrayList< MultiChannelWrapper> getallVisibleMultichanal();
+  public ArrayList< MultiChannelImage> getallVisibleMultichanal();
   
-  public MultiChannelWrapper getCurrentMultichanal();
+  public MultiChannelImage getCurrentMultichanal();
 
   public String getDefaultDirectory();
   

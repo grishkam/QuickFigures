@@ -84,7 +84,7 @@ public class GraphicEncoder {
 		writeToOS(fo);
 		fo.flush();
 		fo.close();
-		} catch (Throwable T) {IssueLog.log(T);}
+		} catch (Throwable T) {IssueLog.logT(T);}
 	}
 	
 	public  GraphicLayerPane readFromFile(String file) {
@@ -110,7 +110,7 @@ public class GraphicEncoder {
 			output=ob;
 			fo.close();
 			} catch (Throwable T) {
-				IssueLog.log(T);
+				IssueLog.logT(T);
 				IssueLog.log("Problem reading ");
 			}
 		
@@ -128,7 +128,7 @@ public class GraphicEncoder {
 			Object ob = readFromIS(fo);
 			if (ob instanceof ZoomableGraphic) {output= (ZoomableGraphic) ob;}
 			fo.close();
-			} catch (Throwable T) {IssueLog.log(T);}
+			} catch (Throwable T) {IssueLog.logT(T);}
 		
 		return output;
 	}

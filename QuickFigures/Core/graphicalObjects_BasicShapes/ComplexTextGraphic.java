@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 import javax.swing.Icon;
 
-import externalToolBar.textGraphicTreeIcon;
+import externalToolBar.TreeIconForTextGraphic;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import illustratorScripts.ArtLayerRef;
@@ -29,6 +29,7 @@ import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
+/**A subclass of text graphic that displays text consisting of many lines*/
 public class ComplexTextGraphic extends TextGraphic {
 
 	/**
@@ -55,8 +56,8 @@ public class ComplexTextGraphic extends TextGraphic {
 		output.copyAttributesFrom(this);
 		output.copyBasicTraitsFrom(this);
 		output.backGroundShape=getBackGroundShape().copy();
-		if (getSnapPosition()!=null) output.setSnappingBehaviour(getSnapPosition().copy());
-		else output.setSnappingBehaviour(null);
+		if (getSnapPosition()!=null) output.setSnapPosition(getSnapPosition().copy());
+		else output.setSnapPosition(null);
 		
 		return output;
 	}
@@ -506,7 +507,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	@Override
 	public Icon getTreeIcon() {
 
-		return new textGraphicTreeIcon(this.getFont(), "cd", Color.green.darker(), Color.red.darker());
+		return new TreeIconForTextGraphic(this.getFont(), "cd", Color.green.darker(), Color.red.darker());
 	}
 	
 	@Override

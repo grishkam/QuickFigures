@@ -1,6 +1,6 @@
 package basicMenusForApp;
 
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 
 /**A layer selector that returns the selected items in whatever set is the currently active one*/
 public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
@@ -10,14 +10,14 @@ public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private GraphicSetDisplayContainer container;
+	private FigureDisplayContainer container;
 
-	public SelectedSetLayerSelector(GraphicSetDisplayContainer cont) {
+	public SelectedSetLayerSelector(FigureDisplayContainer cont) {
 		this.container=cont;
 	} 
 
 	@Override
-	public GraphicSetDisplayContainer getGraphicDisplayContainer() {
+	public FigureDisplayContainer getGraphicDisplayContainer() {
 		return container;
 	}
 

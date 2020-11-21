@@ -8,12 +8,11 @@ import channelMerging.ChannelEntry;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import includedToolbars.StatusPanel;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
-import multiChannelFigureUI.ChannelSwapHandleList;
 import objectDialogs.ChannelLabelDialog;
 import objectDialogs.ComplexTextGraphicSwingDialog;
 import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
@@ -25,7 +24,7 @@ import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
-/**A special category of channel label that changes based on the options
+/**A special category of label that changes based on the options
   set in channel label properties and the channel colors*/
 public class ChannelLabelTextGraphic extends ComplexTextGraphic implements ChannelLabel {
 
@@ -33,25 +32,35 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<ChannelEntry> chanEn;
-	private Integer isMerge;
+	
+	/**options related to how channel labels are organized is stored her. 
+	 * a channel label properties object is shared between many labels*/
 	private ChannelLabelProperties ChannelLabelproperties=new ChannelLabelProperties();
-	private PanelListElement panel;
+	
+	/**a list of channels*/
+	private ArrayList<ChannelEntry> channelEntryList;
+	private Integer panelType=PanelListElement.CHANNEL_IMAGE_PANEL;
+
+	private PanelListElement panel;//the panel that the channel label is part of 
 	boolean coupledToImage=true;
-	
+
+	/**This array helps maintain consistency between the text in the channel label properties
+	  and the text of this channel label. */
 	private ArrayList<EntryPair> updateMap=new ArrayList<EntryPair>();
-	private ChannelSwapHandleList eHan;
-	
+
+	/**creates a label with the given channel label properties*/
 	public ChannelLabelTextGraphic(ChannelLabelProperties p) {
 		super();
 		setChannelLabelproperties(p);
 	}
 	
+	/**sets the panel for this channel label*/
 	public void setPanel(PanelListElement panel) {
 		this.panel=panel;
 			setChanEntries(panel.getChannelEntries());
-			setIsMerge(panel.designation);
+			setPanelType(panel.designation);
 	}
+	/**returns the panel for this channel label*/
 	public PanelListElement getPanel() {
 		return panel;
 	}
@@ -64,30 +73,34 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	}
 	
 	
-	/**Creates a new paragraph based on the channels, this method is called whenever channel label is created. 
-	 Another method is called to keep the labels consistent as the channel swapper and channel color changes are done*/
+	/**Creates a new paragraph based on the channels, this method is called whenever a channel label is created. 
+	 In some contexts, this is called to keep the labels consistent as the channel swaps and channel color changes are done.
+	 */
 	private void setParaGraphToChannels2() {
 		
 		TextParagraph paragraph = new TextParagraph(this);
-		updateMap.clear();
+		updateMap.clear();//when paragraph is reset the old text lines no longer have any relationship with the text lined in the channel label properties 
+		
 		/**The merge label is a complicated entity*/
+		int mergeLabelType = this.getChannelLabelproperties().getMergeLabelType();
+		
 		if (isThisMergeLabel()) {
-			if (this.getChannelLabelproperties().getMergeLabelType()==0) {
+			if (mergeLabelType==ChannelLabelProperties.SIMPLY_lABEL_AS_MERGE) {
 				paragraph.addLineFromCodeString(getChannelLabelproperties().getMergeText(), Color.black);
 				this.setParagraph(paragraph);
 				return;
 			}
 			
-			if (this.getChannelLabelproperties().getMergeLabelType()==ChannelLabelProperties.Merge_Style) {
+			if (mergeLabelType==ChannelLabelProperties.OVERLAY_THE_COLORS) {
 				paragraph.addLineFromCodeString(getChannelLabelproperties().getMergeText(), ChannelLabelProperties.fuseColors(getChanEntries()));
 				this.setParagraph(paragraph);
 				return;
 			}
 			
 			
-			if (this.getChannelLabelproperties().getMergeLabelType()==ChannelLabelProperties.noMergeLabel) {return;}
+			if (mergeLabelType==ChannelLabelProperties.EXCLUDE_THE_MERGE_LABEL) {return;}
 		
-			if (this.getChannelLabelproperties().getMergeLabelType()==ChannelLabelProperties.SoniStyle) {
+			if (mergeLabelType==ChannelLabelProperties.SONI_STYLE) {
 				TextLine lin = paragraph.addLine();	
 				lin.removeAllSegments();
 				ArrayList<ChannelEntry> entries = this.getChanEntries();
@@ -109,7 +122,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		
 		
 		/**What to do if every channel entry must be placed in the same line*/
-			if (this.getChannelLabelproperties().getMergeLabelType()==ChannelLabelProperties.Singleline_Labels) {
+			if (mergeLabelType==ChannelLabelProperties.ONE_LINE_WITH_ALL_CHANNEL_NAMES) {
 				TextLine lin = paragraph.addLine();	
 				lin.removeAllSegments();
 				//lin.addSegment();
@@ -125,6 +138,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 				return;
 			}
 
+			
 		/**What to do when there is a multiline label*/
 		for(ChannelEntry en: this.getChanEntries()) {
 			TextLine lin = paragraph.addLine();
@@ -133,66 +147,67 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 			
 			generateLineTextFromChannelName(lin, en, true);
 		}
+		
 		this.setParagraph(paragraph);
 	}
 
 	public boolean isThisMergeLabel() {
-		return getIsMerge()==PanelListElement.MergeImageDes;
+		return getPannelType()==PanelListElement.MERGE_IMAGE_PANEL;
 	}
 	
 	
 	
 	
-	/**When given channel of name label, this generates text for the line from it*/
-	public void generateLineTextFromChannelName(TextLine lin, ChannelEntry cc, boolean map) {
+	/**When given channel entry, determines what text serves as the label for that channel entry 
+	  and adds that text to the empty textLine given*/
+	public void generateLineTextFromChannelName(TextLine aTextLine, ChannelEntry cc, boolean map) {
 		
 		Color c=cc.getColor(); 
 		
-		/**If there is already a text line in the channel label properties, finds that line*/
-		TextLine potential = getChannelLabelproperties().getTextLineForChannel(cc);
-		if (potential==null) IssueLog.log("PROBLEM, failed to get text line for channel");
+		/**If there is already a text line in the channel label properties, finds that line.
+		  that line may have superscripts and other options/*/
+		TextLine textLineForChannel = getChannelLabelproperties().getTextLineForChannel(cc);
+		if (textLineForChannel==null) IssueLog.log("PROBLEM, failed to get text line for channel");
 		
-		ArrayList<TextLineSegment> list = lin.copySegmentsFrom(potential);
+		ArrayList<TextLineSegment> list = aTextLine.copySegmentsFrom(textLineForChannel);
 		
-			if(map)updateMap.add(new EntryPair(lin, potential,cc));
-			else updateMap.add(new EntryPair(list, potential, cc));
+		/**generates an object that will help maintain consistency by updateing the text in the channel label
+		  properties object to reflect changes in the text line*/
+			if(map)updateMap.add(new EntryPair(aTextLine, textLineForChannel,cc));
+			else updateMap.add(new EntryPair(list, textLineForChannel, cc));
 			
-			for(TextLineSegment seg: lin) {
+			for(TextLineSegment seg: aTextLine) {
 				if (!seg.usesUniqueColor())
-				seg.setTextColor(c);//makes sure the color is consitent with the current channel color			
-				
+				seg.setTextColor(c);//makes sure the color is consistent with the current channel color		
 			}
 		
 	}
 	
-	
-	
-	
-	
-
-
+	/**returns the channel entry list*/
 	public ArrayList<ChannelEntry> getChanEntries() {
-		return chanEn;
+		return channelEntryList;
 	}
-
-
-
 	public void setChanEntries(ArrayList<ChannelEntry> chanEn) {
-		this.chanEn = chanEn;
+		this.channelEntryList = chanEn;
 	}
 
 
-
-	public Integer getIsMerge() {
-		return isMerge;
+/**returned in indicates whether the label is meant for a channel panel or a merge panel*/
+	public Integer getPannelType() {
+		return panelType;
 	}
 
 
-
-	public void setIsMerge(Integer isMerge) {
-		this.isMerge = isMerge;
+	/**sets whether the label is meant for a channel panel or a merge panel*/
+	public void setPanelType(Integer isMerge) {
+		this.panelType = isMerge;
 	}
 	
+	
+	/**modifies the color based on the position of the label.
+	  If the color is black and the panel is to be placed above a black panel background
+	  the color is changed to white. the opposite occurs if the label is outside the panel on a white background
+	  for colored labels, */
 	public Color getDimmedColor(Color c) {
 		Color output=c;
 		boolean dontinvert=true;
@@ -201,7 +216,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	
 		
 		
-		if (this.isDimColor()) output= ColorDimmer.modifyColor( c, colordimming, dontinvert);
+		if (isDimColor()) output= ColorDimmer.modifyColor( c, colordimming, dontinvert);
 		 	  
 		 	    else return c;
 		
@@ -238,15 +253,16 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		//TextLineDialogForChenLabel.showMultiTabDialogDialogss(chanEn, ChannelLabelproperties, null).showDialog();;
 	}
 
+	/**replaces the split up segment call of the superclass.  also splits of the text segment but
+	  also updates the text stored within the entries*/
 	protected TextLineSegment[] splitUpSingleHighLightSegment(TextLineSegment thisSegment) {
-		TextLine line = getParagraph().getLineWithSegment(thisSegment);
-		/**for some reason, splitting lines changes their hashcodes and messes up the update hashmap
-		  overiding the line splitting method in this way corrects the problem*/
-		//TextLine record = updateMap.get(line);
+		 getParagraph().getLineWithSegment(thisSegment);
 		
-		//updates the records in the channel use properties to match segment split that occur
-		TextLineSegment[] newseg = super.splitUpSingleHighLightSegment(thisSegment);
+	TextLineSegment[] newseg = super.splitUpSingleHighLightSegment(thisSegment);
+	
 		if(newseg==null) return newseg;
+		
+		//updates the records in the list to match segment split that occurred. That way, the text is the channel label properties object will remain consistent
 		for(EntryPair i: updateMap) {
 			/**needed when the merge label consists of many bits of text in a single line*/
 			if(i.segments instanceof TextLine) continue;//this update code is only for the array lists not text line objects
@@ -262,6 +278,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	
 	
 	static boolean warned=false;
+	/**gives a brief message to the user about one caveat of the system. TODO: find a clever solution*/
 	public void handleKeyPressEvent(KeyEvent arg0) {
 		super.handleKeyPressEvent(arg0);
 		updateChannelLabelPropertiesToLabelText();
@@ -280,16 +297,15 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		try {updateChannelLabelPropertiesToLabelText() ;} catch (Exception e) {e.printStackTrace();}
 	}
 
-	/**After the user edits the text, this will update the information in channel label properties to be consistent*/
+	/**After the user edits the text, this will change the text in the channel label properties to be consistent
+	  with this channel label*/
 	public void updateChannelLabelPropertiesToLabelText() { 
 		/**will update some of the line segments channel label properties*/
 		for(EntryPair p: updateMap) {
 			if(p==null) continue;
 			
 			if(p.record!=null&&p.segments.size()>0) {
-				
 				p.record.replaceSegmentsWithoutColor(p.segments);
-				
 				}
 		}
 		if (this.isThisMergeLabel()&&ChannelLabelproperties.getMergeLabelType()==0) {
@@ -298,6 +314,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		}
 	}
 	
+	/**returns the popup menu for channel labels*/
 	public PopupMenuSupplier getMenuSupplier() {
 		if(this.isEditMode()) 
 			return new TextSelectionMenu(this);
@@ -314,7 +331,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 			chanLabelMenu = m.getMenuSupplier().createChanLabelMenu();
 		}
 		else {
-			PanelGraphicInsetDef ins = PanelGraphicInsetDef.findInsetWith(this);
+			PanelGraphicInsetDefiner ins = PanelGraphicInsetDefiner.findInsetWith(this);
 			if(ins!=null) {
 				chanLabelMenu = new MenuForChannelLabelMultiChannel("Channel Labels", ins.getSourceDisplay(), ins.getPanelManager().getPanelList(), ins.getChannelLabelManager());
 			}
@@ -328,17 +345,8 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		return output;
 	}
 	
-	/**makes it harder for the user to directly edit the texts of a channel label. needed because the channel labels 
-	  are constantly being updated as the channel label properties, channel order and channel colors are changed.
-	@Override
-	public void handleMouseEvent(int handlenum, int button, int clickcount, int type,
-			int... other) {
-		
-		
-		if(clickcount==2)showOptionsDialog();
-		super.handleMouseEvent(handlenum, button, clickcount, type, other);
-	}*/
-	
+
+	/**This one is difficult to explain. an object with a list of text segments, the text */
 	class EntryPair implements Serializable {
 		/**
 		 * 
@@ -369,13 +377,13 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 				}
 			}
 		}
-		
+		/**
 		private void updateColor(ChannelEntry c2) {
 			if (c2.getRealChannelName().equals(channel.getRealChannelName())) {
 				channel.setColor(c2.getColor());
 			}
 					updateColor();
-		}
+		}*/
 
 		public void updateColor() {
 			Color c = channel.getColor();
@@ -390,9 +398,8 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		super.setParagraph(paragraph);
 		
 		
-		/**if an undo is called, replaces the text lines on the update map with new ones
-		  but only if the new lines are a copy of the old ones. written as a quick bugfix
-		  not meant to be flawless
+		/**if an undo is called, the code below replaces the text lines on the update map with new ones
+		  but only if the new lines are a copy of the old ones. written as a quick bugfix.
 		  just meant to prevent flagrant inconsistencies from being visible after undo
 		  is followed by an update of the channel labels from the channel label properties*/
 		for(EntryPair p: updateMap) try {
@@ -401,14 +408,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		updateChannelLabelPropertiesToLabelText();//updates the channel label properties
 	}
 
-	public void setExtraHandles(ChannelSwapHandleList channelSwapHandleList) {
-		eHan=channelSwapHandleList;
-		
-	}
 
-	public ChannelSwapHandleList getExtraHandles() {
-		return eHan;
-	}
 	
 	
 	

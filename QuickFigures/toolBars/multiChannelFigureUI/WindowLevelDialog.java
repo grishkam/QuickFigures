@@ -9,9 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import channelMerging.ChannelEntry;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import graphicActionToolbar.CurrentFigureSet;
-import logging.IssueLog;
 import standardDialog.GriddedPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
@@ -36,7 +35,7 @@ public class WindowLevelDialog extends StandardDialog  {
 		int chan=1;
 		
 		public static final int MIN_MAX=0, WINDOW_LEVEL=1, ALL=2;
-		int winLev=MIN_MAX;
+		int winLevDialogType=MIN_MAX;
 		
 		
 		int slidermax=(int)Math.pow(2, 12);
@@ -66,7 +65,7 @@ public class WindowLevelDialog extends StandardDialog  {
 		}
 		
 	
-		public static void showWLDialogs(ArrayList<ChannelEntry> chans, MultiChannelWrapper mrp, DisplayRangeChangeListener listen, int winLev, AbstractUndoableEdit2 undo) {
+		public static void showWLDialogs(ArrayList<ChannelEntry> chans, MultiChannelImage mrp, DisplayRangeChangeListener listen, int winLev, AbstractUndoableEdit2 undo) {
 			
 			StandardDialog jf = new StandardDialog();
 			new CurrentFigureSet();
@@ -97,19 +96,9 @@ public class WindowLevelDialog extends StandardDialog  {
 
 
 
-
-
-
+	public WindowLevelDialog(int chan, MultiChannelImage mrp, DisplayRangeChangeListener listen,int winLev) {
 		
-		
-		
-		
-		
-		
-		
-	public WindowLevelDialog(int chan, MultiChannelWrapper mrp, DisplayRangeChangeListener listen,int winLev) {
-		IssueLog.log("creating window level dialog");
-		this.winLev=winLev;
+		this.winLevDialogType=winLev;
 		
 		this.displayChangeLis=listen;
 		this.chan=chan;
@@ -120,7 +109,6 @@ public class WindowLevelDialog extends StandardDialog  {
 		
 		slidermin=(int)ShowDisplayRange.findMinOfDistributionHistogram(basis);
 		
-		IssueLog.log("will attempt to determine slider max");
 		/**attempts to find the point in the histogram that the top of the distribution starts*/
 		boolean maxSet=false;
 		slidermax=basis.length-1;
@@ -149,16 +137,16 @@ public class WindowLevelDialog extends StandardDialog  {
 		sdr.setLineColor(mrp.getChannelColor(chan));
 		//setModal(true);
 		
-		if (this.winLev==WINDOW_LEVEL) {
+		if (this.winLevDialogType==WINDOW_LEVEL) {
 			createWindowLevelPanels();
 		
 			//this.add( aip2);
 		}
-		else if (this.winLev==MIN_MAX) {
+		else if (this.winLevDialogType==MIN_MAX) {
 		
 			 createMinMaxPanels();
 		}
-		else if (this.winLev==ALL) {
+		else if (this.winLevDialogType==ALL) {
 			 createMinMaxPanels();
 			 createWindowLevelPanels();
 		}
@@ -234,12 +222,12 @@ public class WindowLevelDialog extends StandardDialog  {
 		sdr.repaint();
 		displayChangeLis.minMaxSet(chan, min, max);
 		
-		if (winLev==WINDOW_LEVEL) {
+		if (winLevDialogType==WINDOW_LEVEL) {
 			updateWindowLevelPanels();
-		} else if (winLev==MIN_MAX) {
+		} else if (winLevDialogType==MIN_MAX) {
 			updateMinMaxPanels();
 		}
-		else if (winLev==ALL) {
+		else if (winLevDialogType==ALL) {
 			updateWindowLevelPanels();
 			updateMinMaxPanels();
 		}
@@ -267,8 +255,8 @@ public class WindowLevelDialog extends StandardDialog  {
 	/**sets the min and max after each change to the GUI items*/
 	public void notifyAllListeners(JPanel key, String string) {
 		super.notifyAllListeners(key, string);
-		int type=winLev;
-		if(winLev==ALL){
+		int type=winLevDialogType;
+		if(winLevDialogType==ALL){
 			if(MIN_TYPE.equals(string)||MAX_TYPE.equals(string)) type=MIN_MAX; else type=WINDOW_LEVEL;
 				}
 		
@@ -285,12 +273,12 @@ public class WindowLevelDialog extends StandardDialog  {
 			double level=getNumber("Level");
 			min=level-window/2;
 			max=level+window/2;
-			if(this.winLev==ALL) {this.updateMinMaxPanels();}
+			if(this.winLevDialogType==ALL) {this.updateMinMaxPanels();}
 			
 		}  else if (type==MIN_MAX) {
 				min=super.getNumber(MIN_TYPE);
 				max=super.getNumber(MAX_TYPE);
-				if(this.winLev==ALL) {updateWindowLevelPanels();}
+				if(this.winLevDialogType==ALL) {updateWindowLevelPanels();}
 		}
 		
 		setMinMaxDisplay(min, max);

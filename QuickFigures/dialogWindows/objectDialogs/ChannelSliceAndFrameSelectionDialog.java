@@ -1,6 +1,6 @@
 package objectDialogs;
 
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import standardDialog.ChannelEntryBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
@@ -17,9 +17,9 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 	private int frame;
 	private int slice;
 	
-	MultiChannelWrapper mw;
+	MultiChannelImage mw;
 	
-	public ChannelSliceAndFrameSelectionDialog( int channel, int slice, int frame, MultiChannelWrapper mw) {
+	public ChannelSliceAndFrameSelectionDialog( int channel, int slice, int frame, MultiChannelImage mw) {
 		this.mw=mw;
 		this.setChannel(channel);
 		this.setFrame(frame);
@@ -34,7 +34,7 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 	public boolean addOptions(boolean haschannel, boolean hasslice, boolean hasframe) {
 		
 			StandardDialog dialog = this;
-			MultiChannelWrapper multiChannel = mw;
+			MultiChannelImage multiChannel = mw;
 		
 			
 			if(multiChannel!=null&&multiChannel.nFrames()<2) {
@@ -61,7 +61,7 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 		return true;
 	}
 
-	public static void addChannelSelectionToDialog(StandardDialog dialog, MultiChannelWrapper multiChannel, int chan) {
+	public static void addChannelSelectionToDialog(StandardDialog dialog, MultiChannelImage multiChannel, int chan) {
 		if (multiChannel==null) {
 		dialog.add("chan", new NumberInputPanel("The channel ", chan));
 }
@@ -73,7 +73,7 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 		}
 	}
 
-	public static void addSliceSelectionToDialog(StandardDialog dialog, MultiChannelWrapper multiChannel, int slice) {
+	public static void addSliceSelectionToDialog(StandardDialog dialog, MultiChannelImage multiChannel, int slice) {
 		if (multiChannel!=null&&multiChannel.nFrames()<150) {
 			dialog.add("slice", new NumberInputPanel("The slice ", slice, true, true, 1, multiChannel.nSlices()));
 		}
@@ -81,7 +81,7 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 		dialog.add("slice", new NumberInputPanel("The slice ", slice));
 	}
 
-	public static void addFrameSelectionToDialog(StandardDialog dialog, MultiChannelWrapper multiChannel, int frame) {
+	public static void addFrameSelectionToDialog(StandardDialog dialog, MultiChannelImage multiChannel, int frame) {
 		if (multiChannel!=null&&multiChannel.nFrames()<150) {
 			dialog.add("frame", new NumberInputPanel("The frame ",frame, true, true, 1, multiChannel.nFrames()));
 		}

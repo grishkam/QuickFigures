@@ -8,7 +8,7 @@ import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import utilityClassesForObjects.SnappingPosition;
@@ -184,7 +184,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 
 			tUndo1.redo();
 			tUndo2.redo();
-			b.getBarText().setSnappingBehaviour(fSnap);
+			b.getBarText().setSnapPosition(fSnap);
 		}
 		
 		if (o instanceof ImagePanelGraphic) {
@@ -212,8 +212,8 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			
 			}
 	
-		if (o instanceof PanelGraphicInsetDef) {
-			((PanelGraphicInsetDef) o).updateImagePanels();
+		if (o instanceof PanelGraphicInsetDefiner) {
+			((PanelGraphicInsetDefiner) o).updateImagePanels();
 		}
 		
 	}
@@ -247,7 +247,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 
 			tUndo1.undo();
 			tUndo2.undo();
-			b.getBarText().setSnappingBehaviour(iSnap);
+			b.getBarText().setSnapPosition(iSnap);
 		}
 		
 		if (o instanceof TextGraphic) {
@@ -274,8 +274,8 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			m.getPanelLayout().resetPtsPanels();
 			}
 		
-		if (o instanceof PanelGraphicInsetDef) {
-			((PanelGraphicInsetDef) o).updateImagePanels();
+		if (o instanceof PanelGraphicInsetDefiner) {
+			((PanelGraphicInsetDefiner) o).updateImagePanels();
 		}
 		
 		

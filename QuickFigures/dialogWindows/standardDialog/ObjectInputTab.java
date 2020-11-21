@@ -48,7 +48,7 @@ protected ArrayList<ObjectEditListener> lis=new ArrayList<ObjectEditListener>();
 		this.setTabComponentAt(tabindex+1, c1);
 		
 		} catch (Throwable t) {
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 	}
 }

@@ -23,7 +23,7 @@ public class GridLayoutEditListenerList extends
 						l.editWillOccur(e);
 					}
 				} catch (Throwable e2) {
-					IssueLog.log(e2);
+					IssueLog.logT(e2);
 				}
 			}
 		}
@@ -40,7 +40,7 @@ public class GridLayoutEditListenerList extends
 						;
 					}
 				} catch (Throwable e2) {
-					IssueLog.log(e2);
+					IssueLog.logT(e2);
 				}
 			}
 		}
@@ -56,7 +56,7 @@ public class GridLayoutEditListenerList extends
 						;
 					}
 				} catch (Throwable e2) {
-					IssueLog.log(e2);
+					IssueLog.logT(e2);
 				}
 			}
 		}

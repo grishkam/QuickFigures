@@ -59,7 +59,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 			//ArraySorter.removeDeadItems(this);
 			ArraySorter.removeNonSerialiazble(this);
 		} catch (Exception e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 			IssueLog.log("Problem attempting to purge problematic items");
 		}
 		out.defaultWriteObject();
@@ -185,7 +185,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 				undo.establishFinalState();
 				}
 		} catch (Throwable t2) {
-			IssueLog.log(t2);
+			IssueLog.logT(t2);
 		}
 	}
 	

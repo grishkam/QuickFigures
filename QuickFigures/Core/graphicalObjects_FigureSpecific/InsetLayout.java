@@ -172,7 +172,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		}
 		
 		/**Creates a montage layout that fit the panel list and the inset*/
-		public	MontageLayoutGraphic createLayout(PanelList list, PanelGraphicInsetDef inset) {
+		public	MontageLayoutGraphic createLayout(PanelList list, PanelGraphicInsetDefiner inset) {
 			ImagePanelGraphic insetPanel = (ImagePanelGraphic) list.getPanels().get(0).getLocatedImageDisplayObject();
 			
 			Rectangle insetPanelDim = insetPanel.getBounds();
@@ -196,7 +196,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		
 		
 		/**returns only the panels in the image that are included in the layer. Reorders */
-		PanelList getPanelsPresentInImage(PanelList list, PanelGraphicInsetDef inset) {
+		PanelList getPanelsPresentInImage(PanelList list, PanelGraphicInsetDefiner inset) {
 			PanelList output = list.createDouble();
 			output.getPanels().clear();
 			output.add(list);//the same exact panels not copies need to be included in the new list
@@ -213,7 +213,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		}
 		
 		/**if some of the panels graphics are not in the personal layer their list elements are removed from output*/
-		public static boolean removeAbsentPanels(PanelList output, PanelList input, PanelGraphicInsetDef inset) {
+		public static boolean removeAbsentPanels(PanelList output, PanelList input, PanelGraphicInsetDefiner inset) {
 			
 			for(PanelListElement g: input.getPanels() ) {
 				ImagePanelGraphic panelGraphic = g.getPanelGraphic();
@@ -445,7 +445,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		
 
 		/**When given a panel list and inset, sets up a layout according to the current options*/
-		public void applyInsetLayout(PanelList list, PanelGraphicInsetDef  inset) {
+		public void applyInsetLayout(PanelList list, PanelGraphicInsetDefiner  inset) {
 			 inset.previosInsetLayout=this.copy();
 			 
 			 if (practicalSize) {
@@ -476,7 +476,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 								for(int i=0; i<list.getSize(); i++) {
 									
 									ImagePanelGraphic insetPanel = (ImagePanelGraphic) listOfPanels.get(i);
-									insetPanel.setSnappingBehaviour(getSnapping(i));
+									insetPanel.setSnapPosition(getSnapping(i));
 									inset.getSourcePanel().addLockedItem( insetPanel);
 									setFrameSize(insetPanel);
 								}
@@ -507,7 +507,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 			}
 			return true;
 		}
-		private void forMontageLayoutAppliestoInset(PanelList list, PanelGraphicInsetDef  inset) {
+		private void forMontageLayoutAppliestoInset(PanelList list, PanelGraphicInsetDefiner  inset) {
 
 			
 			MontageLayoutGraphic lg = createLayout(list, inset);
@@ -528,7 +528,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 					ImagePanelGraphic ob = (ImagePanelGraphic) list.getPanels().get(i).getImageDisplayObject();
 					imagelist.add(ob);
 					//lg.addLockedItem(ob);
-					ob.setSnappingBehaviour(SnappingPosition.defaultInternalPanel());
+					ob.setSnapPosition(SnappingPosition.defaultInternalPanel());
 					setBorders(ob);
 					
 				}

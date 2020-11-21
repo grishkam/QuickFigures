@@ -8,9 +8,10 @@ import javax.imageio.ImageIO;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import uiForAnimations.KeyFrameHandling;
 
+/**exporter for a sequence of .png files representing time frames within an animation*/
 public class PNGSequenceQuickExport extends QuickExport {
 	protected String getExtension() {
 		return "png";
@@ -44,11 +45,8 @@ public class PNGSequenceQuickExport extends QuickExport {
 		
 		 
 		   new CurrentAppContext();
-		/**
-		  SVGsaver saver = new SVGsaver();
-		   
-		  saver.saveWrapper(newpath, diw);*/
-		MultiChannelWrapper a = CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
+		
+		MultiChannelImage a = CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
 		
 		} catch (Throwable t) {
 			t.printStackTrace();

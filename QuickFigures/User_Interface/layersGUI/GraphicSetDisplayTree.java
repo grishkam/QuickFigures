@@ -13,7 +13,7 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.ZoomableGraphicGroup;
@@ -33,13 +33,13 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 	}
 	
 	private static final long serialVersionUID = 1L;
-	private GraphicSetDisplayContainer setDisplayContainer;
+	private FigureDisplayContainer setDisplayContainer;
 
 	 DefaultMutableTreeNode masternode;
 	GraphicLayer baseLayer;
 	
 	
-	public GraphicSetDisplayTree(GraphicSetDisplayContainer cont, DefaultMutableTreeNode masternode) {
+	public GraphicSetDisplayTree(FigureDisplayContainer cont, DefaultMutableTreeNode masternode) {
 		super(masternode, true);
 	
 		this.masternode=masternode;
@@ -188,7 +188,7 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 		for(int i=0; i<z.size(); i++) {output[i]=map2.get(z.get(i));}
 		return output;
 	}
-	public GraphicSetDisplayContainer getSetDisplayContainer() {
+	public FigureDisplayContainer getSetDisplayContainer() {
 		return setDisplayContainer;
 	}
 

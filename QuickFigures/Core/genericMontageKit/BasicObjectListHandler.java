@@ -72,7 +72,7 @@ public class BasicObjectListHandler {
 	if the boolean takeFromImage is true, this will also add the object lo2D to the ObjectContainer */
 	public void moveObjectToPanelCord(LocatedObject2D roi,  BasicMontageLayout ml, ObjectContainer imp, int panelIndex, boolean addToImage){
 		roi.moveLocation( ml.getPoint(panelIndex).getX(), ml.getPoint(panelIndex).getY());
-		if (addToImage) {imp.addRoiToImage(roi);
+		if (addToImage) {imp.addItemToImage(roi);
 		}
 	}
 
@@ -162,14 +162,14 @@ public class BasicObjectListHandler {
 		for (LocatedObject2D roi: input) {
 			if (this.getNeverRemove().contains(roi)) continue;
 			roi.moveLocation(r.getX(), r.getY());
-			imp.addRoiToImage(roi);
+			imp.addItemToImage(roi);
 		}
 	}
 	
 	
 	/**Adds a list of objects to the container*/
 	 public void addRoisToImage(ArrayList<LocatedObject2D> roi, ObjectContainer imp) {
-		for (LocatedObject2D roi1: roi) imp.addRoiToImage(roi1);
+		for (LocatedObject2D roi1: roi) imp.addItemToImage(roi1);
 	 }
 	
 	

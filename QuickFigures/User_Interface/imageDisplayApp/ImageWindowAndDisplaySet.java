@@ -4,25 +4,30 @@ package imageDisplayApp;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.Selectable;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
+import applicationAdapters.CanvasMouseEventWrapper;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
-import graphicalObjects.BasicCordinateConverter;
+import graphicalObjectHandles.SmartHandle;
+import graphicalObjectHandles.SmartHandleList;
+import graphicalObjects.BasicCoordinateConverter;
 import layersGUI.GraphicTreeUI;
 
 /**see description for interface*/
-public class ImageAndDisplaySet implements DisplayedImage {
+public class ImageWindowAndDisplaySet implements DisplayedImage {
 	public static GraphicTreeUI exampletree;
 	private GraphicSetDisplayWindow theWindow=null;
 	private GraphicDisplayCanvas theCanvas=null;
-	private GraphicContainingImage theSet=null;
+	private GraphicContainingImage theFigure=null;
 	private int currentFrame=0;
 	private int endFrame=200;
 	private Selectable selectedItem=null;
@@ -30,7 +35,7 @@ public class ImageAndDisplaySet implements DisplayedImage {
 	transient UndoManagerPlus undoMan=null;
 	
 	/**Generates a Display of the given graphic set*/
-	public ImageAndDisplaySet(GraphicContainingImage graphicSet) {
+	public ImageWindowAndDisplaySet(GraphicContainingImage graphicSet) {
 		this.setTheSet( graphicSet);
 		GraphicDisplayCanvas canvas = new GraphicDisplayCanvas();
 		this.setTheCanvas(canvas);
@@ -41,16 +46,6 @@ public class ImageAndDisplaySet implements DisplayedImage {
 		centreWindow(this.getWindow());
 		ensureAllLinked();
 	}
-	
-	/**
-	public ImageAndDisplaySet(GraphicDisplayCanvas graphicDisplayCanvas,
-			GraphicSet graphicSet, GraphicSetDisplayWindow canvasDisplayWindow) {
-		this.setTheCanvas(graphicDisplayCanvas);
-		this.setTheSet( graphicSet);
-		setTheWindow(canvasDisplayWindow);
-		
-		ensureAllLinked();
-	}*/
 	
 	
 	void ensureAllLinked() {
@@ -78,47 +73,45 @@ public class ImageAndDisplaySet implements DisplayedImage {
 		}
 	}
 	public GraphicContainingImage getTheSet() {
-		return theSet;
+		return theFigure;
 	}
 	public void setTheSet(GraphicContainingImage theSet) {
-		this.theSet = theSet;
+		this.theFigure = theSet;
 		theSet.undoManager=this.getUndoManager();
 		if (theSet!=null)	theSet.setDisplayGroup(this);
 	}
 	
 	
 	int count =0;
+	private MiniToolBarPanel sidePanel;
 	public void updateDisplay() {
 		
 		if (this.getTheCanvas()==null) return;
-		//updateCanvasDims();
+		
 		theCanvas.repaint();
-		//theCanvas.paint(theCanvas.getGraphics());
-		//IssueLog.log("updating display");
-		//if (count>7) throw new NullPointerException();
+		if (this.sidePanel!=null) sidePanel.repaint();
 		 count++;
 	}
 	
-	public BasicCordinateConverter getConverter() {
+	public BasicCoordinateConverter getConverter() {
 		if (theWindow==null) {
 			//IssueLog.log("Problem: Cordinate conversion factor requested despite no window being set");
-		return new BasicCordinateConverter();}
+		return new BasicCoordinateConverter();}
 		return theWindow.getZoomer().getConverter();
 	}
 	
 	@Override
 	public ImageWrapper getImageAsWrapper() {
-		return theSet;
+		return theFigure;
 	}
 	@Override
 	public Window getWindow() {
-		// TODO Auto-generated method stub
 		return this.theWindow;
 	}
 	
 	
 	
-	public static ImageAndDisplaySet createAndShowNew(String title, int width, int height) {
+	public static ImageWindowAndDisplaySet createAndShowNew(String title, int width, int height) {
 		GraphicContainingImage gs = new GraphicContainingImage();
 		gs.setTitle(title);
 		gs.getBasics().setWidth(width);
@@ -126,8 +119,9 @@ public class ImageAndDisplaySet implements DisplayedImage {
 		return  show(gs);
 	}
 	
-	public static ImageAndDisplaySet  show(GraphicContainingImage gs) {
-		ImageAndDisplaySet set = new ImageAndDisplaySet(gs);
+	/**creates the window an user interface elements needed to display the image*/
+	public static ImageWindowAndDisplaySet  show(GraphicContainingImage gs) {
+		ImageWindowAndDisplaySet set = new ImageWindowAndDisplaySet(gs);
 		Window win = set.getWindow();
 		win.pack();
 		return set;
@@ -170,7 +164,7 @@ public class ImageAndDisplaySet implements DisplayedImage {
 	public UndoManagerPlus getUndoManager() {
 		if ( undoMan==null) {
 			undoMan=new UndoManagerPlus();
-			if (theSet!=null)theSet.undoManager=undoMan;
+			if (theFigure!=null)theFigure.undoManager=undoMan;
 		}
 		
 		return undoMan;
@@ -235,11 +229,52 @@ public class ImageAndDisplaySet implements DisplayedImage {
 		this.selectedItem = selectedItem;
 	}
 
+	/**returns the zoom level (100% is no zoom)*/
 	@Override
 	public double getZoomLevel() {
-		return 100*getTheWindow().getZoomer().getZoom();
+		return 100*getTheWindow().getZoomer().getZoomMagnification();
 	}
 
-	
+
+	public void setSidePanel(MiniToolBarPanel miniToolBarPanel) {
+		sidePanel=miniToolBarPanel;
+		
+	}
+
+	/**a handle used for resizing the canvas*/
+	class CanvasResizeHandle extends SmartHandle {
+
+		public CanvasResizeHandle(ImageWindowAndDisplaySet s) {
+			super(0, 0);
+			this.setHandleNumber(999910044);
+			this.setHandleColor(Color.DARK_GRAY);
+			
+		}
+		
+		public Point2D getCordinateLocation() {
+			Dimension d = theFigure.getCanvasDims();
+			return new Point2D.Double(d.getWidth(), d.getHeight());
+			}
+		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+			Point p = lastDragOrRelMouseEvent.getCoordinatePoint();
+			theFigure.getBasics().setWidth(p.x);
+			theFigure.getBasics().setHeight(p.y);
+			//updateDisplay();
+			theWindow.resetCanvasSize();
+		}
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+	}
+
+
+	transient SmartHandleList canvasHandleList;
+	@Override
+	public SmartHandleList getCanvasHandles() {
+		if (canvasHandleList==null) canvasHandleList = SmartHandleList.createList(new CanvasResizeHandle(this));
+		return canvasHandleList;
+	}
 	
 }

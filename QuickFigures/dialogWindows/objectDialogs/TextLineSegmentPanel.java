@@ -16,6 +16,7 @@ import standardDialog.StringInputListener;
 import standardDialog.StringInputPanel;
 import utilityClassesForObjects.TextLineSegment;
 
+/**A panel within a dialog that allows the user to edit to a specific fragment of text, determining if the text is underlined, superscripted and so on */
 public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInputListener, ChoiceInputListener, OnGridLayout {
 
 	/**
@@ -30,15 +31,22 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 	private ComboBoxPanel scriptLine;
 	Boolean includeColor=true;
 	
-	
+	/**creates a panel for the given text line segment*/
 	public TextLineSegmentPanel(TextLineSegment t) {
 		setSegment(t);
+		setupDialog(t);
+	}
+
+	/**
+	adds all of the gui items to this dialog.
+	 */
+	protected void setupDialog(TextLineSegment t) {
 		textPanel=new StringInputPanel("Text", t.getText(),15);
 		
 		if (includeColor)	colorPanal=new ColorComboboxPanel("Text Color", null, t.getUniqueTextColor());
 		
 		scriptType=new ComboBoxPanel("Text is", new String[] {"normal", "superscript", "subscript"},t.isSubOrSuperScript());
-		scriptStyle=new ComboBoxPanel("Text style", new String[] {"normal","Plain", "Bold", "Italic", "Bold+Italic"},t.isSubOrSuperScript());
+		scriptStyle=new ComboBoxPanel("Text style", new String[] {"normal","Plain", "Bold", "Italic", "Bold+Italic"},t.getFont().getStyle());
 		scriptLine=new ComboBoxPanel("Line Type", new String[] {"no line","Underline", "Strike Through"},t.getLines());
 		
 		addListeners();
@@ -51,15 +59,10 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 		return new Dimension(350,200);
 	}
 	
-	public void addListeners() {
-		textPanel.addStringInputListener(this);
-		scriptType.addChoiceInputListener(this);
-		scriptStyle.addChoiceInputListener(this);
-		scriptLine.addChoiceInputListener(this);
-		if (includeColor)	colorPanal.addChoiceInputListener(this);
-		
-	}
 	
+	
+	
+	/**changes the segment of text to match the dialog*/
 	public void setSegmentToPanels() {
 		 getSegment().setText(textPanel.getTextFromField());
 		 if (includeColor)	 getSegment().setTextColor(colorPanal.getSelectedColor());
@@ -68,18 +71,9 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 		 getSegment().setLines(scriptLine.getSelectedIndex());
 	}
 
-	@Override
-	public void numberChanged(ChoiceInputEvent ne) {
-		setSegmentToPanels();
-		this.notifyListeners(new ObjectEditEvent(getSegment()));
-	}
 
-	@Override
-	public void StringInput(StringInputEvent sie) {
-		setSegmentToPanels();
-		this.notifyListeners(new ObjectEditEvent(getSegment()));
-	}
 
+	/**places all the the dialog items within the grid bag layout of the container given*/
 	@Override
 	public void placeItems(Container jp, int x0, int y0) {
 		textPanel.placeItems(jp, x0, y0);
@@ -91,13 +85,11 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 
 	@Override
 	public int gridHeight() {
-		// TODO Auto-generated method stub
 		return 3;
 	}
 
 	@Override
 	public int gridWidth() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 
@@ -110,5 +102,25 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 	}
 	
 	
-	
+	/**used to ensure that certain methods are called when a change is made to this dialog panel*/
+	public void addListeners() {
+		textPanel.addStringInputListener(this);
+		scriptType.addChoiceInputListener(this);
+		scriptStyle.addChoiceInputListener(this);
+		scriptLine.addChoiceInputListener(this);
+		if (includeColor)	colorPanal.addChoiceInputListener(this);
+		
+	}
+	/**if dialog items are changed, this notifies teh listeners for object edit events*/
+	@Override
+	public void numberChanged(ChoiceInputEvent ne) {
+		setSegmentToPanels();
+		this.notifyListeners(new ObjectEditEvent(getSegment()));
+	}
+	/**if dialog items are changed, this notifies teh listeners for object edit events*/
+	@Override
+	public void StringInput(StringInputEvent sie) {
+		setSegmentToPanels();
+		this.notifyListeners(new ObjectEditEvent(getSegment()));
+	}
 }

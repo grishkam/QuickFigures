@@ -24,7 +24,7 @@ import externalToolBar.DragAndDropHandler;
 import externalToolBar.GraphicToolIcon;
 import externalToolBar.IconSet;
 import genericMontageKit.PanelLayout;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjectHandles.HasSmartHandles;
@@ -117,6 +117,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	private ReshapeHandleList lastGroupHandleList;
 	private SmartHandle smartHandle;
 
+
+	private SmartHandleList canvasHandleList;
+
+
+	private boolean draggingCanvasHandle;
+
 	public LocatedObject2D setSelectedObject(LocatedObject2D roi) {
 		CanvasMouseEventWrapper me = getLastClickMouseEvent();
 		if (me==null) return setSelectedObject(false, roi);
@@ -148,7 +154,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		selectedItem=roi;
 	
 		select(selectedItem);
-		if (selectedItem!=null)selectedItem.makePrimarySelectedItem(true);
+		if (selectedItem!=null) selectedItem.makePrimarySelectedItem(true);
+		if (getImageWrapperClick()!=null) getImageWrapperClick().setPrimarySelectionObject(selectedItem);
 		return selectedItem;
 	}
 	
@@ -178,7 +185,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			((Selectable)roi1).deselect();
 			this.getImageWrapperClick().getSelectionManagger().setSelection(null, 1);
 		} catch (Throwable t) {
-			IssueLog.log(t);// t.printStackTrace();
+			IssueLog.logT(t);// t.printStackTrace();
 		}
 	}
 	protected void selectAll(ArrayList<?> ls) {
@@ -211,20 +218,29 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	public int establishMovedIntoOrClickedHandle() {
-		
+		this.setSelectedHandleNum(-1);//starts off the handle as 0
 		if (getSelectedObject() instanceof HasHandles) {
 			HasHandles handledObject = (HasHandles)getSelectedObject();
 			int handleNumber = handledObject.handleNumber(getMouseXClick(), getMouseYClick());
 			setSelectedHandleNum(handleNumber);
+			
 			if(handleNumber==-1&&this.getObjectGroupHandleList()!=null) {
 				int num2 = getObjectGroupHandleList().handleNumberForClickPoint(getMouseXClick(), getMouseYClick());
 				setSelectedHandleNum(num2);
 			}
 			
+			
+			
 		}
 		
 		
-		if (getSelectedObject()==null) setSelectedHandleNum(-1);
+		
+		if(this.handle==-1) {
+			int num2 = this.getCanvasHandleList().handleNumberForClickPoint(getMouseXClick(), getMouseYClick());
+			setSelectedHandleNum(num2);
+			if (num2>0) draggingCanvasHandle=true; else draggingCanvasHandle=false;
+		} else  draggingCanvasHandle=false;
+	
 		
 		
 		
@@ -251,7 +267,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		boolean startsSelected=false;
 		if(roi2!=null) startsSelected=roi2.isSelected();
 		
-		SmartHandle sh = this.getSelectionSmartHamndles();
+		SmartHandle sh = this.getSelectedSmartHamndles();
 		
 		/**what to do in the event of a handle press*/
 						if (sh!=null) {
@@ -308,6 +324,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				oriy=(int) getSelectedObject().getBounds().getY();
 				}
 		this.getObjectGroupHandleList();
+		this.getCanvasHandleList();
 			if(this.textEditMode() &&this.handle<0 &&!e.isPopupTrigger()) {
 				this.mousePressOnTextCursor((TextGraphic) this.getSelectedObject());
 			}
@@ -323,7 +340,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	protected void createUndoForDragHandle() {
-		currentundoDragHandle=new UndoDragHandle(handle, (HasHandles) getSelectedObject(), new Point(getClickedCordinateX(),  getClickedCordinateY()));
+		if (getSelectionObjectAshashangles()==null) return;
+		currentundoDragHandle=new UndoDragHandle(handle, this.getSelectionObjectAshashangles(), new Point(getClickedCordinateX(),  getClickedCordinateY()));
 		if (getSelectedObject() instanceof BasicGraphicalObject) {
 			smartHandleMoveUndo=((BasicGraphicalObject)getSelectedObject()).provideDragEdit();
 		}
@@ -402,7 +420,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if (super.shiftDown()) {
 			GroupOfobjectPopup menuAll = new GroupOfobjectPopup( new CurrentSetLayerSelector());
 			menu=menuAll;
-			menuAll.addItemsFromJMenu( obtainUniquepopup(roi2,e), "this item");
+			menuAll.addItemsFromJMenu( obtainUniquePopup(roi2,e), "this item");
 			
 		}
 		if (sh!=null) {
@@ -410,7 +428,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		} 
 		
 		if (menu==null&& roi2 instanceof HasUniquePopupMenu) {
-			menu = obtainUniquepopup(roi2, e);
+			menu = obtainUniquePopup(roi2, e);
 			
 			try {
 				if ( isAttachedItem(roi2)) {
@@ -434,7 +452,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 if (menu!=null) menu.show(c, e.getClickedXScreen(), e.getClickedYScreen());
 	}
 
-	protected JPopupMenu obtainUniquepopup(LocatedObject2D roi2, CanvasMouseEventWrapper e) {
+	protected JPopupMenu obtainUniquePopup(LocatedObject2D roi2, CanvasMouseEventWrapper e) {
 		JPopupMenu menu=null;
 		HasUniquePopupMenu has=(HasUniquePopupMenu) roi2;
 		if (has==null) return null;
@@ -564,7 +582,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return null;
 	}
 	
-	private SmartHandle getSelectionSmartHamndles() {
+	private SmartHandle getSelectedSmartHamndles() {
 		SmartHandle output=null;
 		if (getSelectedObject() instanceof HasSmartHandles){
 			HasSmartHandles handetConatiner = (HasSmartHandles) getSelectedObject();
@@ -587,6 +605,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			
 		}
 		
+		if (output==null&&this.canvasHandleList!=null) {
+			output=canvasHandleList.getHandleNumber(handle);
+			
+		}
+	
+		
 		return output;
 	}
 
@@ -601,15 +625,25 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if(this.getClass()!=Object_Mover.class) return null; //not needed for subclasses
 		if(!this.selectionsScale()) return null;
 		ReshapeHandleList newHandleList = new ReshapeHandleList(this.getAllSelectedRois(false), 5, 90000000, selectionsScale2Ways(), 0, false);
+		
+		/**if the new grouped handle list is much like the old one, just used the old one*/
 		if(newHandleList.isSimilarList(lastGroupHandleList)) newHandleList=lastGroupHandleList;
-		else if (lastGroupHandleList!=null) {
-			lastGroupHandleList.finishEdit();
-		}
+			else if (lastGroupHandleList!=null) {
+				lastGroupHandleList.finishEdit();
+			}
 		
 		lastGroupHandleList=newHandleList;
 		lastGroupHandleList.updateRectangle();
 		getImageDisplayWrapperClick().getImageAsWrapper().getSelectionManagger().setSelectionHandles(lastGroupHandleList);
 		return lastGroupHandleList;
+	}
+	
+	private SmartHandleList getCanvasHandleList() {
+		
+		canvasHandleList = this.getImageDisplayWrapperClick().getCanvasHandles();
+		
+		getImageDisplayWrapperClick().getImageAsWrapper().getSelectionManagger().setPermanentHandles(canvasHandleList);
+		return canvasHandleList;
 	}
 
 	private boolean selectionsScale() {
@@ -788,7 +822,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		/**If the user drags around a rectangle, selects the rois inside*/
 		if ((getAllSelectedRois(false).size()==0)&&this.getSelectedObject()==null &&createSelector) {
 			selectRoisInDrawnSelector() ;
-			getSelectionSmartHamndles();
+			getSelectedSmartHamndles();
 		}
 
 
@@ -837,6 +871,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 	@Override
 	public void mouseDragged() {
+		
+		/**selects text if text edit mode */
 		if (this.textEditMode())  {
 			mouseDragForTextCursor();
 			return;
@@ -846,16 +882,21 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if (getSelectedObject()!=null) {
 			
 			
-			if (getPressedHandle()>-1&&getSelectedObject() instanceof HasHandles) {
+			if (getPressedHandle()>-1) {
 
-				HasHandles h=(HasHandles) getSelectedObject();
-				h.handleMove(getPressedHandle(), new Point(getClickedCordinateX(),  getClickedCordinateY()), new Point(getDragCordinateX(), getDragCordinateY()));
+				/**for objects that are of the has handles interface*/
+				if (getSelectedObject() instanceof HasHandles)
+					{HasHandles h=getSelectionObjectAshashangles();
+					h.handleMove(getPressedHandle(), new Point(getClickedCordinateX(),  getClickedCordinateY()), new Point(getDragCordinateX(), getDragCordinateY()));
+					}
+				
 				SmartHandle sh = this.getPressedSmartHandle();//.getSelectionSmartHamndles();
 				if (sh!=null) sh.handleDrag(getLastDragOrRelMouseEvent());
-				/**lets the object know its handle is getting a mouse drag*/
-				getSelectionObjectAshashangles().handleMouseEvent(this.getLastDragOrRelMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_DRAGGED, null);
-					
 				
+				
+				/**lets the object know its handle is getting a mouse drag*/
+				if (getSelectedObject() instanceof HasHandles)
+					getSelectionObjectAshashangles().handleMouseEvent(this.getLastDragOrRelMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_DRAGGED, null);
 					
 					
 					if (currentundoDragHandle==null) {
@@ -894,21 +935,28 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			}
 
 			
+		}  else if (draggingCanvasHandle){
+			/**just for the cavas resize handle*/
+			SmartHandle sh = this.getPressedSmartHandle();//.getSelectionSmartHamndles();
+			if (sh!=null) sh.handleDrag(getLastDragOrRelMouseEvent());
 		}
 		
+		updateSelectingMask();
+		
+		getImageWrapperClick().updateDisplay();	
+		
+	}
+
+	/**
+	creates a marker for the region that the user is dragging the mouse over
+	 */
+	public void updateSelectingMask() {
 		selection=null;
 		if (useSelectorNow() ) {
-			Rectangle2D rect = SelectionManager.createRectangleFrom2Points(new Point2D.Double(pressX, pressY), this.draggedCord());
+			Rectangle2D rect = OverlayObjectManager.createRectangleFrom2Points(new Point2D.Double(pressX, pressY), this.draggedCord());
 			getImageWrapperClick().getSelectionManagger().select(rect, 0);
 			selection=rect;
 			}
-		
-		
-		
-		
-		//long time7=System.currentTimeMillis();
-		getImageWrapperClick().updateDisplay();	
-		
 	}
 
 	public boolean useSelectorNow() {
@@ -977,7 +1025,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			((Selectable)roi1).select();
 			setSelectedItemForDisplay(roi1);
 			if (getImageWrapperClick()==null) return;
-			SelectionManager manager = getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager manager = getImageWrapperClick().getSelectionManagger();
 			LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
 			manager.setSelectionGraphic3(SmartHandleList.createList(sHandle));
 			
@@ -1084,7 +1132,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			MoverDialog md = new MoverDialog(this);
 			md.showDialog();
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		 
 	}
@@ -1337,7 +1385,7 @@ public String getToolTip() {
 			TakesLockedItems taker=(TakesLockedItems) t;
 			if (taker.hasLockedItem(object)) return taker;
 		} catch (Throwable t2) {
-			IssueLog.log(t2);
+			IssueLog.logT(t2);
 		}
 		return null;
 	}
@@ -1422,7 +1470,7 @@ public String getToolTip() {
 
 		@Override
 		protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2, int arg3) {
-			super.paintArrow=true;
+			super.paintCursorIcon=true;
 			
 		}
 

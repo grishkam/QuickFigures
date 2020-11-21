@@ -12,9 +12,11 @@ import javax.swing.JMenuItem;
 
 import appContext.CurrentAppContext;
 import exportMenus.SVGQuickExport;
+import genericMontageUIKit.ToolBit;
+import graphicTools.RectGraphicTool;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import includedToolbars.ObjectToolset1;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import selectedItemMenus.LayerSelector;
@@ -22,7 +24,6 @@ import selectedItemMenus.SVG_GraphicAdder2;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.GraphicJMenuItem;
 import standardDialog.DisplaysGraphicalObject;
-import undo.UndoAddItem;
 import utilityClassesForObjects.LobeMaker;
 
 /**The menus used to add graphics to graphic layers*/
@@ -35,7 +36,6 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	static ArrayList <GraphicAdder> imagePlusAdders= new ArrayList <GraphicAdder>();
 	static ArrayList <GraphicAdder> kayadders= new ArrayList <GraphicAdder>();
 	static ArrayList <GraphicAdder> cartoonadders= new ArrayList <GraphicAdder>();
-	static ArrayList <GraphicAdder> objectAdders= new ArrayList <GraphicAdder>();
 	
 	static ArrayList <AddingMenuInstaller> bonusAdders=new ArrayList<AddingMenuInstaller>();
 	
@@ -51,23 +51,21 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		if (!addersMade) {
 			
 			//adders.add(new layerSetAdder());
-			objectAdders.add(new RectangleAdder());
-			objectAdders.add(new OvalGraphicAdder());
-			objectAdders.add(new TextItemAdder(true)); 
-			objectAdders.add(new TextItemAdder(false)); 
+			addShapeAdders();
+			
 			adders.add(new LayerAdder());
 		
-			objectAdders.add(new ArrowGraphicAdder());
+			adders.add(new ArrowGraphicAdder());
 			
 			
-			objectAdders.add(new BarGraphicAdder());
+			adders.add(new BarGraphicAdder());
 			//adders.add(new SavedGraphicAdder());
 			if (new SVGQuickExport().isBatikInstalled())
 				adders.add(new SVG_GraphicAdder2());
 			
 			
 			//adders.add(new layoutAdder());
-			objectAdders.add(new GroupAdder());
+			adders.add(new GroupAdder());
 			imageadders.add(new FileImageAdder(false));
 			imageadders.add(new ClipboardAdder(false));
 			
@@ -97,9 +95,32 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			layoutadders.add(new ImagePanelLayoutAdder());
 			layoutadders.add(new PlasticLayoutAdder());
 			layoutadders.add(new DividedLayoutAdder());
-			for(AddingMenuInstaller bonus:  bonusAdders) try {bonus.installOntoMenu(this);} catch (Throwable t) {IssueLog.log(t);}
+			adders.add(new TextItemAdder(true)); 
+			adders.add(new TextItemAdder(false)); 
+			for(AddingMenuInstaller bonus:  bonusAdders) try {bonus.installOntoMenu(this);} catch (Throwable t) {IssueLog.logT(t);}
 			addersMade=true;
 			}
+	}
+
+	/**
+	 Adds many items to the add shapes menu. content determined by object toolset1
+	 */
+	protected void addShapeAdders() {
+		
+		extractShapeAddersFrom(ObjectToolset1.getRectangularShapeGraphicBits(), "Rectangular");
+		extractShapeAddersFrom(ObjectToolset1.getCircularShapeGraphicBits(), "Circular");
+		extractShapeAddersFrom(ObjectToolset1.getRegularPolygonShapeTools(), "Polygonal");
+		
+	}
+
+	/**
+	 Takes the rectangle graphic tools from the list of tool bits and creates an adder from each of them
+	 */
+	protected void extractShapeAddersFrom(ArrayList<ToolBit> list, String sName) {
+		for(ToolBit i: list) {
+			if (i instanceof RectGraphicTool)
+				adders.add(new RectangleAdder((RectGraphicTool) i, sName));
+		}
 	}
 	/**
 	 * 
@@ -157,10 +178,8 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	 void setupAdderAndRun(GraphicAdder ad) {
 		
 				ad.setSelector(selector);
-				ZoomableGraphic item = ad.add(selector.getSelectedLayer());
-				
-				selector.getGraphicDisplayContainer().getUndoManager().addEdit(new UndoAddItem(selector.getSelectedLayer(), item));
-	}
+				ad.run();
+				}
 	
 
 	
@@ -171,12 +190,10 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		lad.setIcon(PanelLayoutGraphic.createImageIcon());
 		ObjectAddingMenu iad = new ObjectAddingMenu("Image Panel", selection, imageadders);
 		iad.setIcon(ImagePanelGraphic.createImageIcon());
-		ObjectAddingMenu iadO = new ObjectAddingMenu("Shape", selection, objectAdders);
 		
 		ObjectAddingMenu cad = new ObjectAddingMenu("Cell Cartoons", selection,  cartoonadders);
 		//lad.setIconTextGap(-5);
 		output.insert( lad, 2);
-		output.insert(iadO,2);
 		
 		if (CurrentAppContext.getMultichannelContext()!=null) {
 				ObjectAddingMenu iad2 = new ObjectAddingMenu("Figure ", selection, imagePlusAdders);
@@ -206,20 +223,17 @@ for (GraphicAdder ad:useradders){
 				
 				setupAdderAndRun(ad);
 			
-			} catch (Throwable t) {IssueLog.log(t);}
+			} catch (Throwable t) {IssueLog.logT(t);}
 		
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 }

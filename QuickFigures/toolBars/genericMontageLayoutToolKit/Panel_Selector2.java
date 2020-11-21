@@ -3,7 +3,7 @@ package genericMontageLayoutToolKit;
 import java.awt.Rectangle;
 import java.awt.Shape;
 
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.MontageEditorDialogs;
@@ -60,7 +60,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 				me.addTopLabelSpace(basicMontageLayout,basicMontageLayout.getPanelHeightOfRow(1)/8); 
 				return;
 				}
-			} catch (Exception e) {IssueLog.log(e );}	
+			} catch (Exception e) {IssueLog.logT(e );}	
 		}
 
 		
@@ -83,7 +83,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 			
 		}
 		
-		protected SelectionManager getSelManOfClcikedImage() {
+		protected OverlayObjectManager getSelManOfClcikedImage() {
 			return getImageWrapperClick().getSelectionManagger();
 		}
 		
@@ -110,7 +110,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 				return;
 				}
 				
-			SelectionManager man = this.getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager man = this.getImageWrapperClick().getSelectionManagger();
 			man.select(getSelectedRoi(getCurrentLayout(), this.getDragCordinateX(), this.getDragCordinateY(), panelSelectionOption), 4, 1);
 		}
 		

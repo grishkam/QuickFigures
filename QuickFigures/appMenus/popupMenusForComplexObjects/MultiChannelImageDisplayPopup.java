@@ -17,7 +17,7 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
-import multiChannelFigureUI.ChannelSwapperToolBit2;
+import multiChannelFigureUI.ChannelPanelEditingMenu;
 import objectDialogs.CroppingDialog;
 import ultilInputOutput.FileChoiceUtil;
 import undo.Edit;
@@ -70,7 +70,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 			public void actionPerformed(ActionEvent e) {
 				if(panel.getParentLayer() instanceof FigureOrganizingLayerPane) {
 					FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) panel.getParentLayer() ;
-					if(f.getAllSourceStacks().size()==1) {
+					if(f.getAllSourceImages().size()==1) {
 						FileChoiceUtil.yesOrNo("Figure must contain at least one image. Will not remove last image. Understood?");
 						return;
 					}
@@ -105,8 +105,8 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 					PreProcessInformation mods =co.getSlot().getModifications();
 					Rectangle r=null;
 					if(mods==null||mods.getRectangle()==null) {
-						int w = panel.getMultichanalWrapper().getDimensions().width/2;
-						int h = panel.getMultichanalWrapper().getDimensions().height/2;
+						int w = panel.getMultiChannelImage().getDimensions().width/2;
+						int h = panel.getMultiChannelImage().getDimensions().height/2;
 						r=new Rectangle(0,0,w,h);
 					} else {
 						r=mods.getRectangle();
@@ -126,7 +126,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 
 	public void addChannelMenu(Container thi) {
 		JMenu oneMore = new SmartJMenu("Channels");
-		ChannelSwapperToolBit2 b = new ChannelSwapperToolBit2(panel, clickedPanel);
+		ChannelPanelEditingMenu b = new ChannelPanelEditingMenu(panel, clickedPanel);
 		b.workOn=0;
 		b.addChannelRelevantMenuItems(oneMore, true);
 		thi.add(oneMore);

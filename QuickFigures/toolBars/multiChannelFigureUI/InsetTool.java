@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import applicationAdapters.ImageWrapper;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 import graphicTools.GraphicTool;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.InsetLayoutDialog;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDef.InsetGraphicLayer;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner.InsetGraphicLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_FigureSpecific.InsetLayout;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -68,8 +68,8 @@ public class InsetTool extends GraphicTool implements MontageSpaces {
 	
 	
 	ImagePanelGraphic SourceImageforInset=null;
-	PanelGraphicInsetDef inset=null;
-	PanelGraphicInsetDef preExisting=null;
+	PanelGraphicInsetDefiner inset=null;
+	PanelGraphicInsetDefiner preExisting=null;
 	
 	int arrangement=useSnapping;//How to arrange the many panel insets
 	//int montageOrientation=0;//0 is horizontal, 1 is vertical
@@ -104,9 +104,9 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	undo=new CombinedEdit();
 	//undo.addEditToList(new UndoWarning());
 	
-	if (roi2 instanceof PanelGraphicInsetDef) {
+	if (roi2 instanceof PanelGraphicInsetDefiner) {
 		
-		inset= (PanelGraphicInsetDef) roi2;
+		inset= (PanelGraphicInsetDefiner) roi2;
 		SourceImageforInset=inset.getSourcePanel();
 		sizeDefining=false;
 		return;
@@ -142,12 +142,12 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	/**returns true if a newly added set of inset panels is to be
 	 * added to the layout of an existing one. returns false
 	 * if there is no pre-exisiting one*/
-	private boolean usePreexisting(PanelGraphicInsetDef inset) {
+	private boolean usePreexisting(PanelGraphicInsetDefiner inset) {
 		if (!addToExisting) return false;
-		ArrayList<PanelGraphicInsetDef> old =PanelGraphicInsetDef.getInsetDefinersFromLayer(inset.getParentLayer());// new ArraySorter<ZoomableGraphic>().getThoseOfClass(inset.getParentLayer().getAllGraphics(), PanelGraphicInsetDef.class);
+		ArrayList<PanelGraphicInsetDefiner> old =PanelGraphicInsetDefiner.getInsetDefinersFromLayer(inset.getParentLayer());// new ArraySorter<ZoomableGraphic>().getThoseOfClass(inset.getParentLayer().getAllGraphics(), PanelGraphicInsetDef.class);
 		
 		if (inset!=old.get(0)) {
-			this.preExisting=(PanelGraphicInsetDef) old.get(0);
+			this.preExisting=(PanelGraphicInsetDefiner) old.get(0);
 			if (preExisting==null) return false;
 			return true;
 			
@@ -160,7 +160,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	
 	
 	
-	private CombinedEdit createInsets(PanelGraphicInsetDef inset) {
+	private CombinedEdit createInsets(PanelGraphicInsetDefiner inset) {
 		CombinedEdit undo = new CombinedEdit();
 		if(!inset.isValid()) return undo;
 		
@@ -178,7 +178,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	inset.setUpListToMakeInset(list, display.getPanelList());
 	
 	
-	if (createMultiChannel==1)list.addAllCandF(display.getMultichanalWrapper());
+	if (createMultiChannel==1)list.addAllCandF(display.getMultiChannelImage());
 	if (createMultiChannel==0) {
 		PanelListElement p = inset.getSourcePanel().getSourcePanel();
 		list.add(p.createDouble());
@@ -260,19 +260,19 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		itemsInway.remove(inset.personalGraphic);
 		if (itemsInway.size()>0&&l.getSnapPosition().isExternalSnap()) {
 			//IssueLog.log("limited space puts makes  col label impossible");
-			l.setSnappingBehaviour(SnappingPosition.defaultPanelLabel());
+			l.setSnapPosition(SnappingPosition.defaultPanelLabel());
 		} else
 		if(fontsize>heightofPanel/3.5) {
-			l.setSnappingBehaviour(SnappingPosition.defaultColLabel());	
+			l.setSnapPosition(SnappingPosition.defaultColLabel());	
 		}
 		
 		if(fontsize<heightofPanel/4) {
-			l.setSnappingBehaviour(SnappingPosition.defaultPanelLabel());
+			l.setSnapPosition(SnappingPosition.defaultPanelLabel());
 		}
 		if  (haveChanLabelsOnTop() ) {
 			MontageLayoutGraphic layout = inset.personalGraphic;
 			double height = layout.getBounds().getHeight();
-			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setSnappingBehaviour(SnappingPosition.defaultColLabel());	
+			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setSnapPosition(SnappingPosition.defaultColLabel());	
 		}
 		
 	}
@@ -287,7 +287,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		for(PanelListElement panel: list.getPanels())
 		if (locksItems ) {
 			pm.getGridLayout().addLockedItem(panel.getPanelGraphic());
-			panel.getPanelGraphic().setSnappingBehaviour(SnappingPosition.defaultInternalPanel());
+			panel.getPanelGraphic().setSnapPosition(SnappingPosition.defaultInternalPanel());
 			};
 	}
 	
@@ -325,13 +325,13 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	/**When given the name of a channel, sets the excluded channel to be the one of that same*/
 	public static void setExcludedChannel(MultichannelDisplayLayer display, ChannelUseInstructions ins,
 			String excludedChanName) {
-		MultiChannelWrapper multichanalWrapper = display.getMultichanalWrapper();
+		MultiChannelImage multichanalWrapper = display.getMultiChannelImage();
 		setExcludedChannel(excludedChanName, ins, multichanalWrapper);
 	}
 
 	public static void setExcludedChannel(String excludedChanName, ChannelUseInstructions ins,
-			MultiChannelWrapper multichanalWrapper) {
-		int indexDapi=new Integer(multichanalWrapper.getIndexOfChannel(excludedChanName));
+			MultiChannelImage multichanalWrapper) {
+		int indexDapi=multichanalWrapper.getIndexOfChannel(excludedChanName);
 		
 		int in0 = ins.excludedChannelPanels.indexOf(0);
 						if(in0==-1) {in0=0;}
@@ -351,7 +351,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 				this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
 		}
 		UndoScalingAndRotation scalingUndo = new UndoScalingAndRotation(inset);
-		Rectangle2D r = SelectionManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
+		Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
 		undo.addEditToList(scalingUndo);
 		boolean isRectValid=validRect(r);
 		
@@ -359,7 +359,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 							if (inset==null) {
 								if (SourceImageforInset==null||!isRectValid) return;
 								
-								inset = new PanelGraphicInsetDef(SourceImageforInset,r.getBounds());
+								inset = new PanelGraphicInsetDefiner(SourceImageforInset,r.getBounds());
 								
 								scalingUndo = new UndoScalingAndRotation(inset);undo.addEditToList(scalingUndo);
 								SourceImageforInset.getParentLayer().add(inset);
@@ -495,7 +495,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			md.showDialog();
 			md.afterEachItemChange();
 		} catch (Throwable e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 		 
 	}

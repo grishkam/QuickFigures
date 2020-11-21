@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 
 import applicationAdapters.ToolbarTester;
 import graphicalObjectHandles.SmartHandleList;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;
 
@@ -198,7 +198,7 @@ public class ComplexBlobShape extends BlobShape {
 	}
 	
 	public static void main(String[] args) {
-		ImageAndDisplaySet ex = ToolbarTester.showExample(true);
+		ImageWindowAndDisplaySet ex = ToolbarTester.showExample(true);
 		ComplexBlobShape z = new ComplexBlobShape(new Rectangle(20,20,200,200), 5, 0);
 		z.setStrokeColor(Color.BLACK);
 		ex.getImageAsWrapper().getGraphicLayerSet().add(z);

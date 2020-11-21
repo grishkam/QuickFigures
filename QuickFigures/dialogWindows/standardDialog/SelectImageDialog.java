@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import appContext.CurrentAppContext;
 import channelMerging.ChannelEntry;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 
 public class SelectImageDialog extends StandardDialog {
@@ -18,7 +18,7 @@ public class SelectImageDialog extends StandardDialog {
 
 	private int type;
 
-	private ArrayList<MultiChannelWrapper> optioins;
+	private ArrayList<MultiChannelImage> optioins;
 
 	private ArrayList<ChannelEntry> channelEnt;
 
@@ -27,7 +27,7 @@ public class SelectImageDialog extends StandardDialog {
 	private int num=0;
 	{this.setModal(true);}
 	
-	public SelectImageDialog( ArrayList<MultiChannelWrapper> ops, boolean includeChans, int numb) {
+	public SelectImageDialog( ArrayList<MultiChannelImage> ops, boolean includeChans, int numb) {
 		this.setWindowCentered(true);
 		this.num=numb;
 		this.includeChans=includeChans;
@@ -57,37 +57,37 @@ public class SelectImageDialog extends StandardDialog {
 	
 	
 	public static void main(String[] arg) {
-		new SelectImageDialog(new ArrayList<MultiChannelWrapper> (), true,4).showDialog();;
+		new SelectImageDialog(new ArrayList<MultiChannelImage> (), true,4).showDialog();;
 	}
 	
 	
-	public ArrayList<MultiChannelWrapper> getList() {
-		ArrayList<MultiChannelWrapper> listoutput=new ArrayList<MultiChannelWrapper> ();
+	public ArrayList<MultiChannelImage> getList() {
+		ArrayList<MultiChannelImage> listoutput=new ArrayList<MultiChannelImage> ();
 		
 		for(int  i=1; i<=num; i++) try {
 			 int index = this.getChoiceIndex(""+i);
 			 
 			 if (index>0) {
-				 MultiChannelWrapper item = this.optioins.get(index-1);
+				 MultiChannelImage item = this.optioins.get(index-1);
 				 if (!listoutput.contains(item)) listoutput.add(item);
 				 }
 			
 			
 		} catch (Throwable t) {
 			t.printStackTrace();
-			IssueLog.log(t);
+			IssueLog.logT(t);
 		}
 		IssueLog.log("got list of "+listoutput.size()+" out of a possible " +num);
 		return listoutput;
 		
 	}
 	
-	protected static	ArrayList<MultiChannelWrapper>  getAvailableMultis() {
+	protected static	ArrayList<MultiChannelImage>  getAvailableMultis() {
 		return  CurrentAppContext.getMultichannelContext().getallVisibleMultichanal();
 	}
 	
 	public static SelectImageDialog getSelectedMultis(boolean includeChans, int num) {
-		ArrayList<MultiChannelWrapper> multis =getAvailableMultis();
+		ArrayList<MultiChannelImage> multis =getAvailableMultis();
 		
 		SelectImageDialog sd = new SelectImageDialog(multis, includeChans,num);
 		sd.showDialog();;

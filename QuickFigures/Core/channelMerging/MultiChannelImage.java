@@ -9,7 +9,7 @@ import applicationAdapters.OpenFileReference;
 import applicationAdapters.PixelWrapper;
 
 /**An interface representing a multidimensional image*/
-public interface MultiChannelWrapper extends OpenFileReference {
+public interface MultiChannelImage extends OpenFileReference {
 
 
 	
@@ -75,11 +75,11 @@ public interface MultiChannelWrapper extends OpenFileReference {
 	
 	
 	/**Returns a scaled version, false otherwise*/
-	public MultiChannelWrapper scaleBilinear(double d);
+	public MultiChannelImage scaleBilinear(double d);
 	
 	/** returns a cropped and scaled version of this*/
-	public MultiChannelWrapper  cropAtAngle(Rectangle r, double angle, double scale);
-	public MultiChannelWrapper  cropAtAngle(PreProcessInformation p);
+	public MultiChannelImage  cropAtAngle(Rectangle r, double angle, double scale);
+	public MultiChannelImage  cropAtAngle(PreProcessInformation p);
 	public Integer getSelectedFromDimension(int i);
 	public double bitDepth();
 	

@@ -19,7 +19,7 @@ import fLexibleUIKit.MenuItemExecuter;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjectHandles.HandleRect;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.KnowsSetContainer;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -70,7 +70,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	transient GraphicUtil Gu=new GraphicUtil();
 	transient boolean isDead=false;
 	protected transient ArrayList<HandleRect> handleBoxes=new ArrayList<HandleRect> ();
-	transient GraphicSetDisplayContainer setContainer;
+	transient FigureDisplayContainer setContainer;
 	private SnappingPosition snappingBehaviour=null;
 
 	protected int userLocked=0;
@@ -267,7 +267,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	}
 
 
-	public void setSnappingBehaviour(SnappingPosition snappingBehaviour) {
+	public void setSnapPosition(SnappingPosition snappingBehaviour) {
 		this.snappingBehaviour = snappingBehaviour;
 	}
 	
@@ -316,7 +316,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 		handleBoxes=new ArrayList<HandleRect>();
 	}
 	@Override
-	public void setGraphicSetContainer(GraphicSetDisplayContainer gc) {
+	public void setGraphicSetContainer(FigureDisplayContainer gc) {
 		this.setContainer=gc;
 		
 	}

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JTabbedPane;
 
 import channelMerging.ChannelEntry;
-import channelMerging.MultiChannelWrapper;
+import channelMerging.MultiChannelImage;
 import fLexibleUIKit.MenuItemMethod;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
@@ -28,20 +28,30 @@ import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClassesForObjects.SnappingPosition;
 
-/**A class for adding, accessing, removing and editing the channel labels or a figure*/
+/**A class containing methods for adding, accessing, removing and editing the channel labels to a figure.
+ * 
+  */
 public class ChannelLabelManager implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PanelList stack;
-	private GraphicLayer layer;
-	private ChannelLabelProperties channelLabelProp;
-	private static TextGraphic fossilLabel;
+	
+	/**A dialog for editing multiple labels*/
 	private transient MultiTextGraphicSwingDialog mt;
+	
+	private PanelList panelList;//the panels
+	private GraphicLayer layer;//the target layer where the labels are kept
+	private ChannelLabelProperties channelLabelProp;
+	
+	/**stores the last label to be removed after a call to eliminate all channel labels
+	   the font of this label may then be reused when replacement labels are creates*/
+	private static TextGraphic fossilLabel;//
+	
 	private MultichannelDisplayLayer source;
 
+	/**constructor for the label manager. */
 	public ChannelLabelManager( MultichannelDisplayLayer multichannelImageDisplay, PanelList stack, GraphicLayer layer) {
 		this.source= multichannelImageDisplay;
 		this.setStack(stack);
@@ -60,9 +70,9 @@ public class ChannelLabelManager implements Serializable {
 		cltg.setParaGraphToChannels();
 		cltg.setName("channel label");
 				if (getFossilLabel()!=null) {cltg.copyAttributesFrom(getFossilLabel());
-											cltg.setSnappingBehaviour(getFossilLabel().getSnapPosition());
+											cltg.setSnapPosition(getFossilLabel().getSnapPosition());
 											} else {
-												cltg.setSnappingBehaviour(SnappingPosition.defaultPanelLabel());
+												cltg.setSnapPosition(SnappingPosition.defaultPanelLabel());
 											}
 				
 		
@@ -88,8 +98,8 @@ public class ChannelLabelManager implements Serializable {
 	@MenuItemMethod(menuActionCommand = "labelgone", menuText = "Eliminate Channel Labels", subMenuName="Channel Labels")
 	public CombinedEdit eliminateChanLabels() {
 		CombinedEdit output = new CombinedEdit();
-		if(stack==null) return output ; 
-		ArrayList<ChannelLabelTextGraphic> arr =getStack().getChannelLabels();
+		if(panelList==null) return output ; 
+		ArrayList<ChannelLabelTextGraphic> arr =getPanelList().getChannelLabels();
 	
 		for(ChannelLabelTextGraphic g:arr) {
 			output.addEditToList((new UndoAbleEditForRemoveItem(getLayer(), g)));
@@ -102,13 +112,13 @@ public class ChannelLabelManager implements Serializable {
 	
 	/**if a channel panel with the given channel slice and frame exists, this generates a label for it*/
 	void generateSingleChannelPanelLabel(int channel, int slice, int frame) {
-		PanelListElement panel = getStack().getOrCreateChannelPanel(getMultiChannel(),channel, slice, frame);
+		PanelListElement panel = getPanelList().getOrCreateChannelPanel(getMultiChannel(),channel, slice, frame);
 		 if (panel!=null)this.generateChanelLabel(panel);
 	}
 	
 	/**if a merge panel with the given slice and frame exists, this generates a label for it*/
 	void generateSingleChannelMergeLabel( int slice, int frame) {
-		PanelListElement panel =  getStack().getOrCreateMergePanel(getMultiChannel(), slice, frame);
+		PanelListElement panel =  getPanelList().getOrCreateMergePanel(getMultiChannel(), slice, frame);
 		 if (panel!=null)this.generateChanelLabel(panel);
 	}
 	
@@ -116,7 +126,7 @@ public class ChannelLabelManager implements Serializable {
 	@MenuItemMethod(menuActionCommand = "channeoLabels", menuText = "Generate Channel Labels", subMenuName="Channel Labels")
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
-		for(PanelListElement slice: getStack().getPanels()) {
+		for(PanelListElement slice: getPanelList().getPanels()) {
 			output.add(generateChanelLabel(slice));
 		}
 		return output;
@@ -126,7 +136,7 @@ public class ChannelLabelManager implements Serializable {
 	@MenuItemMethod(menuActionCommand = "channeoLabels2", menuText = "Generate Channel Labels (For first slice only)", subMenuName="Channel Labels")
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels2() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
-		for(PanelListElement slice: getStack().getPanels()) {
+		for(PanelListElement slice: getPanelList().getPanels()) {
 			if(slice.originalFrameNum>1) continue;
 			if(slice.originalSliceNum>1) continue;
 			output.add(generateChanelLabel(slice));
@@ -150,18 +160,20 @@ public class ChannelLabelManager implements Serializable {
 		generateSingleChannelPanelLabel( dia.getChannel(), dia.getSlice(),dia.getFrame());
 	}
 	
+	/**displays the channel label properties dialog to the user*/
 	@MenuItemMethod(menuActionCommand = "chantype", menuText = "Merge Label Options", subMenuName="Channel Labels")
 	public void showChannelLabelPropDialog() {
 		ChannelLabelPropertiesDialog dia = new  ChannelLabelPropertiesDialog(this.getChannelLabelProp());
-		dia.setLabelItems(getStack().getChannelLabels());
+		dia.setLabelItems(getPanelList().getChannelLabels());
 		
 		JTabbedPane tabs = dialogForChannelEntries(getMultiChannel().getChannelEntriesInOrder()).getOptionDisplayTabs();
 		dia.getOptionDisplayTabs().addTab("Channel Names", tabs);
 		dia.showDialog();
 	}
 
-	public MultiChannelWrapper getMultiChannel() {
-		return source.getMultichanalWrapper();
+	/**returns the multichannel image being used*/
+	public MultiChannelImage getMultiChannel() {
+		return source.getMultiChannelImage();
 	}
 
 	public GraphicLayer getLayer() {
@@ -172,60 +184,46 @@ public class ChannelLabelManager implements Serializable {
 		this.layer = layer;
 	}
 
-	public PanelList getStack() {
-		return stack;
+	public PanelList getPanelList() {
+		return panelList;
 	}
 
 	public void setStack(PanelList stack) {
-		this.stack = stack;
+		this.panelList = stack;
 	}
 	
-	/***/
+	/**displays the channel naming dialog to the user*/
 	public void nameChannels() {
 		nameChannels(getMultiChannel().getChannelEntriesInOrder());
 	}
-	
+	/**displays a channel naming dialog to the user*/
 	public void nameChannels(ArrayList<ChannelEntry> entries) {
-	
 		dialogForChannelEntries(entries).makeVisible();;
 		
 	}
 
+	/**method calls a dialog that allows the user to change the text lines of the channel labels*/
 	public StandardDialog dialogForChannelEntries(ArrayList<ChannelEntry> entries) {
 		return TextLineDialogForChenLabel.showMultiTabDialogDialogss(entries, this.getChannelLabelProp(), new SwingDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {
-				getStack().resetChannelEntriesForAll(getMultiChannel());
+				getPanelList().resetChannelEntriesForAll(getMultiChannel());
 			
-				getStack().updateAllPanelsWithImage(getMultiChannel());
+				getPanelList().updateAllPanelsWithImage(getMultiChannel());
 				
 			}});
 	}
 
-	public void completeMenu() {
-		ArrayList<ChannelLabelTextGraphic> labels = this.getStack().getChannelLabels();
+	/**displays a dialog that allows the editing of all the channel labels that are 
+	 * handled by this channel label manager*/
+	public void showEditAllChannelLabelsDialog() {
+		ArrayList<ChannelLabelTextGraphic> labels = this.getPanelList().getChannelLabels();
 		
 		mt = new MultiTextGraphicSwingDialog( labels, true);
 		
-		SwingDialogListener listener1 = new SwingDialogListener() {
-
-			@Override
-			public void itemChange(DialogItemChangeEvent event) {
-				try {
-					FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(getLayer());
-					if (f!=null)
-							{
-						for(TextGraphic t:mt.getAllEditedItems()) 
-						f.getLayout().getEditor().expandSpacesToInclude(f.getLayout(), t.getBounds());
-						//TODO expand label spaces
-							}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}};
-		mt.addDialogListener(listener1);
+		addAutomaticLayoutSpaceUpdatesToDialog(mt, getLayer());
+		
 		
 		/**these lines add the label text options to the dialog*/
 		ChannelLabelTextGraphic ml = getMergeLabel(labels);
@@ -243,16 +241,40 @@ public class ChannelLabelManager implements Serializable {
 		mt.showDialog();
 	}
 
+	/**
+	 given the multi text dialog given, adds a feature that updates the label spaces 
+	 in the figure layout after each edit to ensure that the layout fits the labels.
+	 * @param graphicLayer 
+	 */
+	protected void addAutomaticLayoutSpaceUpdatesToDialog(MultiTextGraphicSwingDialog mt, GraphicLayer graphicLayer) {
+		SwingDialogListener listener1 = new SwingDialogListener() {
+
+			@Override
+			public void itemChange(DialogItemChangeEvent event) {
+				try {
+					FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(graphicLayer);
+					if (f!=null)
+							{
+						for(TextGraphic t:mt.getAllEditedItems()) 
+						f.getLayout().getEditor().expandSpacesToInclude(f.getLayout(), t.getBounds());
+						
+							}
+				} catch (Exception e) {
+				
+					e.printStackTrace();
+				}
+			}};
+		mt.addDialogListener(listener1);
+	}
+
+	/**returns all of the merge panel labels in the list*/
 	private static ChannelLabelTextGraphic getMergeLabel(ArrayList<ChannelLabelTextGraphic> labels) {
 		for(ChannelLabelTextGraphic l:labels) {
 			if (l.isThisMergeLabel()) return l;
 		}
 		return null;
 	}
-	
-	public void copyLabelStyleFrom(ChannelLabelManager c) {
-		ChannelLabelManager.fossilLabel=ChannelLabelManager.fossilLabel;
-	}
+
 	
 	
 }

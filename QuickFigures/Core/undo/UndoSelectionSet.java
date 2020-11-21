@@ -1,6 +1,6 @@
 package undo;
 
-import genericMontageKit.SelectionManager;
+import genericMontageKit.OverlayObjectManager;
 
 public class UndoSelectionSet extends AbstractUndoableEdit2 {
 
@@ -8,9 +8,9 @@ public class UndoSelectionSet extends AbstractUndoableEdit2 {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private SelectionManager selection;
+	private OverlayObjectManager selection;
 
-	public UndoSelectionSet( SelectionManager selection) {
+	public UndoSelectionSet( OverlayObjectManager selection) {
 		this.selection=selection;
 	}
 	public void redo() {

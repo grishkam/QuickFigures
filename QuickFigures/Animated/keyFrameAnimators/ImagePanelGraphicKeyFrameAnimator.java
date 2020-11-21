@@ -18,7 +18,7 @@ public class ImagePanelGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFram
 	}
 	
 	
-	protected keyFrame createkeyFrame(int frame) {
+	protected KeyFrame createkeyFrame(int frame) {
 		return new imageKeyFrame(frame);
 	}
 	
@@ -70,7 +70,7 @@ public class ImagePanelGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFram
 		}
 	}
 	
-	class imageKeyFrame extends keyFrame {
+	class imageKeyFrame extends KeyFrame {
 
 		 Color frameColor;
 		 double angle;

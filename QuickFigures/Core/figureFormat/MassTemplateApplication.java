@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.ImageAndDisplaySet;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import layersGUI.GraphicTreeUI;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -27,7 +27,7 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 	public void perform(ArrayList<File> files) {
 		 FigureTemplate template = templateSaver.loadDefaultTemplate();
 		for(File f: files) {
-			ImageAndDisplaySet figure = ImageDisplayIO.showFile(f);
+			ImageWindowAndDisplaySet figure = ImageDisplayIO.showFile(f);
 			GraphicLayer layer = figure.getImageAsWrapper().getGraphicLayerSet();
 			ArrayList<GraphicLayer> allsublayers = layer.getSubLayers();
 			

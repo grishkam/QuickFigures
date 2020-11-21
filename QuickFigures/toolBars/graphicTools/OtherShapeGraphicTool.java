@@ -16,7 +16,7 @@ public OtherShapeGraphicTool(RectangularGraphic model) {
 }
 
 	public RectangularGraphic createShape(Rectangle r) {
-		RectangularGraphic ouput = model.copy();
+		RectangularGraphic ouput = getModel().copy();
 		ouput.setRectangle(r);
 		return ouput;
 	}

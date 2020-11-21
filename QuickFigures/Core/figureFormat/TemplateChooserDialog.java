@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 
-import graphicalObjects.GraphicSetDisplayContainer;
+import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
@@ -47,7 +47,7 @@ public class TemplateChooserDialog extends StandardDialog {
 		
 	}
 	
-	public TemplateChooserDialog(FigureTemplate tp, GraphicSetDisplayContainer oc) {
+	public TemplateChooserDialog(FigureTemplate tp, FigureDisplayContainer oc) {
 		this(tp,oc.getAsWrapper().getGraphicLayerSet());
 	}
 
@@ -130,14 +130,14 @@ public class TemplateChooserDialog extends StandardDialog {
 		//FigureTemplate tp=new FigureTemplate();
 		ObjectContainer oc1=new GraphicLayerPane("");
 		TextGraphic tg4 = new TextGraphic("Hello");
-		tg4.setSnappingBehaviour(SnappingPosition.defaultRowSide());
-		oc1.addRoiToImage(tg4);
+		tg4.setSnapPosition(SnappingPosition.defaultRowSide());
+		oc1.addItemToImage(tg4);
 		
 		tg4 = new TextGraphic("Hi");
-		tg4.setSnappingBehaviour(SnappingPosition.defaultRowSide());
-		oc1.addRoiToImage(tg4);
-		oc1.addRoiToImage(new MontageLayoutGraphic());
-		oc1.addRoiToImage(new BarGraphic());
+		tg4.setSnapPosition(SnappingPosition.defaultRowSide());
+		oc1.addItemToImage(tg4);
+		oc1.addItemToImage(new MontageLayoutGraphic());
+		oc1.addItemToImage(new BarGraphic());
 		//new TemplateChooserDialog(tp, oc1).showDialog();;
 	}
 
