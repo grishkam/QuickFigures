@@ -13,11 +13,10 @@ import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import standardDialog.GraphicDisplayComponent;
 
+/**A menu item for creating key frames within the time line*/
 public class KeyFrameAssign extends BasicTimeLineOperator {
 
-	
-	
-	
+
 	/**
 	 * 
 	 */
@@ -42,11 +41,8 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 		return "Make Key Frame";
 	}
 	
-	/**adds a key frame*/
+	/**adds a key frame or updates an existing key frame of a given object*/
 	public void actioinOnSelected(ZoomableGraphic selectedItem) {
-		
-		
-		
 		
 		
 		if (selectedItem instanceof KeyFrameCompatible ) {
@@ -62,8 +58,8 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 		
 	}
 	
-
-	static ShapeGraphic createCartoonX(boolean selected) {
+	/**Creates a cartoon that will be used for an icon */
+	static ShapeGraphic createCartoonForIcon(boolean selected) {
 		Point p1=new Point(2,-3);
 		Point p2=new Point(17,15);
 		
@@ -93,17 +89,15 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 			return output;
 	}
 	
-	public GraphicDisplayComponent getDeleteIcon(boolean selected) {
-		 GraphicDisplayComponent output = new GraphicDisplayComponent(createCartoonX( selected));
-		 
+	public GraphicDisplayComponent getTheIcon(boolean selected) {
+		 GraphicDisplayComponent output = new GraphicDisplayComponent(createCartoonForIcon( selected));	 
 		 output.setRelocatedForIcon(false);
-		 //output.setSelected(selected);
 		 return output;
 	}
 	
 	
 	public Icon getIcon() {
-		return  getDeleteIcon(true);
+		return  getTheIcon(true);
 	}
 
 }

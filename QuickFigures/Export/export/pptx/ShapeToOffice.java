@@ -1,4 +1,4 @@
-package officeConverter;
+package export.pptx;
 
 import java.awt.BasicStroke;
 import java.awt.Shape;

@@ -82,7 +82,7 @@ public class GraphicDisplayCanvas extends
 			
 			layerSet.draw(g2, conv1);
 			
-			gmp.getSelectionManagger().drawSelections(g2, getConverter());
+			gmp.getOverlaySelectionManagger().drawSelections(g2, getConverter());
 			
 			/**although there is no user option for this. a programmer can create a version of the 
 			  window that does not use a scroll pane but instead indicates the position 
@@ -256,6 +256,7 @@ public class GraphicDisplayCanvas extends
 			Rectangle b = this.getDisplaySetArea().getBounds();
 			double w = b.getWidth()+60;
 			double h = b.getHeight()+60;
+			
 			return new Dimension((int)w, (int)h);
 		}
 }

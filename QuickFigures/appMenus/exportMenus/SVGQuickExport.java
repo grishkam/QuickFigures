@@ -5,7 +5,7 @@ import java.awt.Desktop;
 import java.io.File;
 
 import applicationAdapters.DisplayedImage;
-import fieldReaderWritter.SVGsaver;
+import export.svg.SVGsaver;
 import logging.IssueLog;
 
 public class SVGQuickExport extends QuickExport {

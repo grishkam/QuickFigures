@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import fieldReaderWritter.SVGExportable;
-import fieldReaderWritter.SVGExporter;
-import fieldReaderWritter.SVGExporter_GraphicLayer;
+import export.svg.SVGExportable;
+import export.svg.SVGExporter;
+import export.svg.SVGExporter_GraphicLayer;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.FigureDisplayContainer;

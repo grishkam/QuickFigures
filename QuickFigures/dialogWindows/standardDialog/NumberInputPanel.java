@@ -27,6 +27,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	/**
 	 * 
 	 */
+	private boolean editable=true;
 	
 	
 	 public static  JPanel getPanelForContents(Component... obs) {
@@ -191,6 +192,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
+		if (!isEditable()) return;
 		if(arg0.getSource()==field) {
 			slider.setValue((int)field.getNumberFromField());
 			number=field.getNumberFromField();
@@ -299,6 +301,15 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 		 
 		 return sd.getNumber(prompt);
 		
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+		field.setEditable(editable);
 	}
 
 	

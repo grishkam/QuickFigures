@@ -8,6 +8,7 @@
 /channelLabels/
 /channelMerging/
 /dividedPanels/
+/export/
 /exportMenus/
 /externalToolBar/
 /fLexibleUIKit/
@@ -28,6 +29,7 @@
 /graphicalObjects_LayoutObjects/
 /gridLayout/
 /iconGraphicalObjects/
+/icons/
 /icons2/
 /icons3/
 /iconsHandles/
@@ -44,7 +46,6 @@
 /menuUtil/
 /multiChannelFigureUI/
 /objectDialogs/
-/officeConverter/
 /openImageandPasteJavaScript
 /panelGUI/
 /pathGraphicToolFamily/
@@ -55,6 +56,7 @@
 /selectedItemMenus/
 /specialMenus/
 /standardDialog/
+/storedValueDialog/
 /testMethods.class
 /uiForAnimations/
 /ultilInputOutput/

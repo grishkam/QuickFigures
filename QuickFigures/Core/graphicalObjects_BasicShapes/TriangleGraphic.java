@@ -32,8 +32,8 @@ public class TriangleGraphic extends RectangularGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		TriangleGraphic r1 = new TriangleGraphic(r, parameter.getRatioToMaxLength());
 		r1.parameter.setRatioToMaxLength(this.parameter.getRatioToMaxLength());
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}

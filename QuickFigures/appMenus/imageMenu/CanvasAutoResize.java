@@ -60,7 +60,7 @@ public class CanvasAutoResize implements MenuItemForObj {
 	
 	public void makeAllVisible(DisplayedImage diw) {
 		performActionDisplayedImageWrapper(diw);
-		diw.zoomOutToFitScreen();
+		diw.zoomOutToDisplayEntireCanvas();
 	}
 
 	@Override

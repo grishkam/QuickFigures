@@ -440,12 +440,12 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	
 	@Override
 	public void setMarkerRoi(Shape s) {
-		this.getImageWrapperClick().getSelectionManagger().select(s, getStrokeWidth(), 0);
+		this.getImageWrapperClick().getOverlaySelectionManagger().select(s, getStrokeWidth(), 0);
 		//getObjectAdapter().select(getImageClick(), s, );
 	}
 	
 	public void setMarkerRoi(Shape s, int strokeWidth) {
-		getImageWrapperClick().getSelectionManagger().select( s, strokeWidth, 0);
+		getImageWrapperClick().getOverlaySelectionManagger().select( s, strokeWidth, 0);
 	}
 	
 	public void removeSelection() {
@@ -453,7 +453,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 	
 	public void removeMarkerRoi() {
-		this.getImageWrapperClick().getSelectionManagger().removeSelections();
+		this.getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
 		//getObjectAdapter().deselect(getImageClick());
 	//	imp.killRoi(); imp.updateAndDraw();
 	}
@@ -798,7 +798,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	public LocatedObject2D getTemporarySelection() {
-		return this.getImageWrapperClick().getSelectionManagger().getSelection(1);
+		return this.getImageWrapperClick().getOverlaySelectionManagger().getSelection(1);
 		
 	}
 
@@ -886,7 +886,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	public void setSelectedObject(LocatedObject2D lastRoi) {
-		getImageWrapperClick().getSelectionManagger().setSelection(lastRoi, 0);
+		getImageWrapperClick().getOverlaySelectionManagger().setSelection(lastRoi, 0);
 	
 	}
 

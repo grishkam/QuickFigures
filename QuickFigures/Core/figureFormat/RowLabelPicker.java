@@ -7,7 +7,7 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import gridLayout.MontageSpaces;
 import logging.IssueLog;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class RowLabelPicker extends GraphicalItemPicker<TextGraphic> implements MontageSpaces {
 	
@@ -54,7 +54,7 @@ public class RowLabelPicker extends GraphicalItemPicker<TextGraphic> implements 
 		TextGraphic tg=(TextGraphic) o;
 		if (tg.getSnapPosition()==null) return false;
 		
-		if (SnappingPosition. getGridchoices()[tg.getSnapPosition().getGridLayoutSnapType()]!=getDesiredGridSnapType()) {
+		if (AttachmentPosition. getGridchoices()[tg.getSnapPosition().getGridLayoutSnapType()]!=getDesiredGridSnapType()) {
 		
 		return false;
 		}
@@ -103,17 +103,17 @@ public class RowLabelPicker extends GraphicalItemPicker<TextGraphic> implements 
 		return false;
 	}
 	
-	public SnappingPosition getDefaultSnapping() {
-		if (getDesiredGridSnapType()==MontageSpaces.ROW_OF_PANELS) return SnappingPosition .defaultRowLabel() ;
-		if (getDesiredGridSnapType()==MontageSpaces.COLUMN_OF_PANELS) return SnappingPosition.defaultColLabel();
+	public AttachmentPosition getDefaultSnapping() {
+		if (getDesiredGridSnapType()==MontageSpaces.ROW_OF_PANELS) return AttachmentPosition .defaultRowLabel() ;
+		if (getDesiredGridSnapType()==MontageSpaces.COLUMN_OF_PANELS) return AttachmentPosition.defaultColLabel();
 		
-		 return SnappingPosition.defaultPanelLabel();
+		 return AttachmentPosition.defaultPanelLabel();
 	}
 	
 	
 	protected void setModelSnappingtoDefault() {
 		if (this.getModelItem()!=null)
-		getModelItem().setSnapPosition(SnappingPosition.defaultRowSide());
+		getModelItem().setSnapPosition(AttachmentPosition.defaultRowSide());
 	}
 	
 	

@@ -1,4 +1,4 @@
-package fieldReaderWritter;
+package export.svg;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -35,7 +35,7 @@ public class TextSVGExporter extends SVGExporter {
 	
 	@Override
 	public Element toSVG(Document dom, Element e) {
-		// TODO Auto-generated method stub
+		
 		boolean complex=textgra instanceof ComplexTextGraphic;
 		ComplexTextGraphic comp=null;
 		
@@ -90,7 +90,7 @@ public class TextSVGExporter extends SVGExporter {
 		
 		if (complex) {
 			comp=(ComplexTextGraphic) textgra;
-			//comp.getParagraph().get(0).get(0);
+			
 			TextLine line = comp.getParagraph().get(0);
 			//for(int i=1; i<line.size();i++) {createTextSpan(text, line.get(i), dom, false, g2d);}
 			for(int i=0; i<comp.getParagraph().size();i++) {

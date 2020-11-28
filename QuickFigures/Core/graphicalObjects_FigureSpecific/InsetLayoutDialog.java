@@ -13,7 +13,7 @@ import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.SnappingPanel;
 import standardDialog.StandardDialog;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 
 	
@@ -182,7 +182,7 @@ import utilityClassesForObjects.SnappingPosition;
 		
 		public static void main(String[] args) {
 			
-			InsetLayout inlay=new InsetLayout(2, InsetLayout.fill, true,SnappingPosition.defaultInternal());
+			InsetLayout inlay=new InsetLayout(2, InsetLayout.fill, true,AttachmentPosition.defaultInternal());
 			new InsetLayoutDialog(inlay).showDialog();
 		}
 		

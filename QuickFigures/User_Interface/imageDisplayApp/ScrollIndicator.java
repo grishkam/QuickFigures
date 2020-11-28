@@ -10,9 +10,11 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
-/**although there is no user option for this. a programmer can create a version of the 
+/**although there is no user option for this presently. A programmer can create a version of the 
 window that does not use a scroll pane but instead indicates the position 
-in the same way as imageJ does. in that case a scroll indicator need be drawn*/
+in the same way as imageJ does. in that case a scroll indicator need be drawn.
+using this class
+*/
 public class ScrollIndicator implements ZoomableGraphic{
 	
 	/**
@@ -20,9 +22,12 @@ public class ScrollIndicator implements ZoomableGraphic{
 	 */
 	private static final long serialVersionUID = 1L;
 	private GraphicSetDisplayWindow display;
+	
+	/**the size of the scroll indicator compared to the images*/
 	double factor=0.1;
 	double x0=0;
 	double y0=0;
+	
 	
 	public ScrollIndicator(GraphicSetDisplayWindow display) {
 		this.display=display;
@@ -32,7 +37,6 @@ public class ScrollIndicator implements ZoomableGraphic{
 	
 	/**returns the outer rectangle that indicates the entire image size*/
 	Rectangle2D getTotalRect() {
-		
 		double width = this.getDisplay().getTheSet().getWidth()*factor;
 		double height = this.getDisplay().getTheSet().getHeight()*factor;
 		return new Rectangle(0,0,(int)width, (int)height);
@@ -47,8 +51,6 @@ public class ScrollIndicator implements ZoomableGraphic{
 		double mag=getDisplayMag();
 		double canWidth=this.getDisplay().getTheCanvas().getWidth()/mag;
 		double canHeight=this.getDisplay().getTheCanvas().getHeight()/mag;
-		
-		
 		return new Rectangle((int)(x*factor),(int)(y*factor),(int)(canWidth*factor), (int)(canHeight*factor));
 	}
 	
@@ -57,17 +59,17 @@ public class ScrollIndicator implements ZoomableGraphic{
 		return getDisplay().getZoomer().getZoomMagnification();
 	}
 	
-	
+	/**draws too rectangles to indicated the size and position of the view ara compared to the entire canvas*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 		
-		graphics.setColor(Color.blue);
-		graphics.setStroke(new BasicStroke(1));
-		
+		/**if the entire view area contains the entire figure canvas does not need to draw a scroll indicator*/
 		if ( areRectsSame() ) return;
 		
-		graphics.draw(getTotalRect());
 		
+		graphics.setColor(Color.blue);
+		graphics.setStroke(new BasicStroke(1));
+		graphics.draw(getTotalRect());
 		
 		graphics.setColor(Color.green);
 		graphics.setStroke(new BasicStroke(1));
@@ -75,7 +77,7 @@ public class ScrollIndicator implements ZoomableGraphic{
 		
 	}
 	
-	
+	/**if true if the rectangles are identical*/
 	boolean areRectsSame() {
 		if (getTotalRect().equals(getInnerRect())) return true;		
 		return false;
@@ -118,13 +120,14 @@ public class ScrollIndicator implements ZoomableGraphic{
 
 
 
-
+	
 	private transient GraphicLayer layer;
+	/**method from interface, not critical to the function of this class*/
 	@Override
 	public GraphicLayer getParentLayer() {
 		return layer;
 	}
-
+	/**method from interface, not critical to the function of this class*/
 	@Override
 	public void setParentLayer(GraphicLayer parent) {
 		layer=parent;

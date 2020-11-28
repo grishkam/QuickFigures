@@ -14,7 +14,11 @@ import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import utilityClassesForObjects.RectangleEdges;
 
+/**A trapezoid shaped graphic.user can adjust the exaxt appearance of the trapezoid
+  */
 public class TrapezoidGraphic extends RectangularGraphic {
+	
+
 	
 
 	{name="Trapezoid";}
@@ -32,8 +36,8 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		TrapezoidGraphic r1 = new TrapezoidGraphic(r, getParameter().getRatioToMaxLength());
 		r1.getParameter().setRatioToMaxLength(this.getParameter().getRatioToMaxLength());
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}

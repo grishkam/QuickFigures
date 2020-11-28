@@ -1,4 +1,4 @@
-package officeConverter;
+package export.pptx;
 
 import graphicalObjects_BasicShapes.ShapeGraphic;
 

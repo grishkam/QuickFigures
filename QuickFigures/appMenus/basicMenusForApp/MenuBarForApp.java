@@ -10,7 +10,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import addObjectMenus.ObjectAddingMenu;
+import exportMenus.EPSQuickExport;
 import exportMenus.FlatCreator;
+import exportMenus.PDFQuickExport;
 import exportMenus.PNGQuickExport;
 import exportMenus.PNGSequenceQuickExport;
 import exportMenus.PPTQuickExport;
@@ -71,10 +73,10 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new SVGOpener());
 		
 		installItem(new TreeShower());
-		installItem(new CanvasAutoTrim());
+		
 		installItem(new CanvasDialogResize());
-		installItem(new CanvasDialogResize(CanvasDialogResize.Inch));
 		installItem(new CanvasAutoResize() );
+		installItem(new CanvasAutoTrim());
 		installItem(new CanvasAutoResize(CanvasAutoResize.slide) );
 		installItem(new CanvasAutoResize(CanvasAutoResize.page) );
 		
@@ -82,8 +84,9 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new ZoomFit(ZoomFit.OUT));
 		installItem(new ZoomFit(ZoomFit.IN));
 		installItem(new ZoomFit(ZoomFit.USER_SET));
+		installItem(new ZoomFit(ZoomFit.OPTIONS));
 		
-		for(int i=0; i<5; i++)
+		for(int i=0; i<ShowToolBar.names.length; i++)
 			installItem(new ShowToolBar(i));
 		
 		
@@ -136,7 +139,12 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 				//if there is any problem with installation the menu item will not be added
 		}
 			
-		
+			
+			EPSQuickExport eps=new EPSQuickExport();
+			installItem(eps);
+			
+			PDFQuickExport ep=new PDFQuickExport();
+			installItem(ep);
 	
 	}
 	

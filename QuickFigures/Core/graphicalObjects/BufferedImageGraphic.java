@@ -17,7 +17,7 @@ import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class BufferedImageGraphic extends ImagePanelGraphic implements GraphicalObject,IllustratorObjectConvertable, ScalededItem {
 
@@ -278,9 +278,9 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 	public void snapLockedItems() {
 		for(LocatedObject2D o: getLockedItems()) {
 			if(o==null) continue;
-			SnappingPosition sb = o.getSnapPosition();
+			AttachmentPosition sb = o.getSnapPosition();
 			if (sb==null) {
-				o.setSnapPosition(SnappingPosition.defaultInternal());
+				o.setSnapPosition(AttachmentPosition.defaultInternal());
 				sb=o.getSnapPosition();
 				}
 			

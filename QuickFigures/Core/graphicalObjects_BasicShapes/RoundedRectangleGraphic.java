@@ -27,8 +27,8 @@ public class RoundedRectangleGraphic extends RectangularGraphic {
 	public static RoundedRectangleGraphic blankShape(Rectangle r, Color c) {
 		RoundedRectangleGraphic r1 = new RoundedRectangleGraphic(r);
 		
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}

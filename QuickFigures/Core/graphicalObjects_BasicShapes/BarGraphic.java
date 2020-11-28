@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import officeConverter.BarGraphicToOffice;
-import officeConverter.OfficeObjectConvertable;
-import officeConverter.OfficeObjectMaker;
-import officeConverter.TextGraphicImmitator;
 import popupMenusForComplexObjects.BarGraphicMenu;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import standardDialog.GraphicDisplayComponent;
@@ -37,8 +33,12 @@ import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScaleInfo;
 import utilityClassesForObjects.ScalededItem;
 import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import applicationAdapters.CanvasMouseEventWrapper;
+import export.pptx.BarGraphicToOffice;
+import export.pptx.OfficeObjectConvertable;
+import export.pptx.OfficeObjectMaker;
+import export.pptx.TextGraphicImmitator;
 import externalToolBar.IconSet;
 import graphicTools.LockGraphicTool2;
 import graphicalObjectHandles.ActionButtonHandleList;
@@ -75,7 +75,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	public static final double[] reccomendedBarLengths=new double[] {0.5, 1,2,5,10, 20};
 	
 	 ScaleInfo info=new ScaleInfo();
-	 {super.setSnapPosition(SnappingPosition.defaultScaleBar());}
+	 {super.setSnapPosition(AttachmentPosition.defaultScaleBar());}
 	 private ScalededItem scaleProvider=null;
 	 
 	 transient Rectangle2D mainBarRect=null;
@@ -118,7 +118,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 			 		barText.setTextColor(getFillColor());
 			 		barText.setLocationType(LOWER_LEFT);
 		 			barText.setLocation(x, y);
-		 			barText.setSnapPosition(SnappingPosition.defaultExternal());
+		 			barText.setSnapPosition(AttachmentPosition.defaultExternal());
 		 			barText.setUserEditable(false);
 		 			snapTextToBar();
 		 			}

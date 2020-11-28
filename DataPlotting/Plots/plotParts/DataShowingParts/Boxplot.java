@@ -12,12 +12,12 @@ import java.util.HashMap;
 import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
 import dialogs.BoxPlotDialog;
-import fieldReaderWritter.SVGExporter;
+import export.pptx.OfficeObjectMaker;
+import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import officeConverter.OfficeObjectMaker;
 import plotParts.Core.PlotCordinateHandler;
 
 public class Boxplot extends DataShowingShape {

@@ -12,7 +12,7 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.MontageSpaces;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TextParagraph;
 
 public class FigureLabelOrganizer implements Serializable {
@@ -64,7 +64,7 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.PanelLabelTextGraphic();
-		tg.setSnapPosition(SnappingPosition.defaultInternalPanel());
+		tg.setSnapPosition(AttachmentPosition.defaultInternalPanel());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.white);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLay.add(tg);
@@ -92,7 +92,7 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.ColumnLabelTextGraphic();
-		tg.setSnapPosition(SnappingPosition.defaultColSide());
+		tg.setSnapPosition(AttachmentPosition.defaultColSide());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLay.add(tg);
@@ -124,7 +124,7 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.RowLabelTextGraphic();
-		tg.setSnapPosition(SnappingPosition.defaultRowSide());
+		tg.setSnapPosition(AttachmentPosition.defaultRowSide());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_RIGHT);
 		thisLay.add(tg);

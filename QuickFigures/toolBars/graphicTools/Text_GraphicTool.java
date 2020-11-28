@@ -28,7 +28,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ShapesUtil;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 public class Text_GraphicTool extends GraphicTool {
@@ -206,8 +206,8 @@ public class Text_GraphicTool extends GraphicTool {
 		}
 	}
 	
-	static SnappingPosition createStartingDefaultSnap(LocatedObject2D image, TextGraphic textob , int cx,int cy) {
-		SnappingPosition output = SnappingPosition.defaultPanelLabel();
+	static AttachmentPosition createStartingDefaultSnap(LocatedObject2D image, TextGraphic textob , int cx,int cy) {
+		AttachmentPosition output = AttachmentPosition.defaultPanelLabel();
 		Rectangle2D snapBounds = image.getBounds();
 		
 		if (image instanceof PanelLayoutGraphic) { 

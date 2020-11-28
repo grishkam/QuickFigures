@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
+/**A diagonal line*/
 public class SimpleLineGraphic extends RightTriangleGraphic {
 	{name="Simple Line";}
 	/**
@@ -24,8 +25,8 @@ public class SimpleLineGraphic extends RightTriangleGraphic {
 	public static SimpleLineGraphic blankShape(Rectangle r, Color c) {
 		SimpleLineGraphic r1 = new SimpleLineGraphic(r);
 		
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}
@@ -48,34 +49,24 @@ public class SimpleLineGraphic extends RightTriangleGraphic {
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
-		
-	
 		ArrayList<Point2D> loc = getLocations();
 		path.moveTo(loc.get(0).getX(),loc.get(0).getY());
 		path.lineTo(loc.get(1).getX(),loc.get(1).getY());
-		
 		return path;
 		
 	}
-	
-	
-	
 	
 
 	RectangularGraphic rectForIcon() {
 		SimpleLineGraphic ss = blankShape(new Rectangle(0,0,12,10), Color.BLACK);
 		ss.setType(getType());
 		return ss;
-		
 	}
 
 	
-
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
-
-
 
 
 	/**The outline needed to determine if the user has clicked inside the shape or not

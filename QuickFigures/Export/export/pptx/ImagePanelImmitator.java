@@ -1,4 +1,4 @@
-package officeConverter;
+package export.pptx;
 
 import java.io.File;
 import java.io.FileInputStream;

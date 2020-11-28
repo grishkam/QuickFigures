@@ -1,4 +1,4 @@
-package officeConverter;
+package export.pptx;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;

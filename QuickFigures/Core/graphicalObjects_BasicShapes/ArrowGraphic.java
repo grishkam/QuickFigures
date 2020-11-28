@@ -19,8 +19,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import officeConverter.OfficeObjectConvertable;
-import officeConverter.OfficeObjectMaker;
+
 import popupMenusForComplexObjects.ArrowGraphicMenu;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
@@ -32,8 +31,10 @@ import utilityClassesForObjects.RotatesFully;
 import utilityClassesForObjects.Scales;
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEventWrapper;
+import export.pptx.OfficeObjectConvertable;
+import export.pptx.OfficeObjectMaker;
+import export.svg.SVGExporter;
 import externalToolBar.IconSet;
-import fieldReaderWritter.SVGExporter;
 import graphicalObjectHandles.ActionButtonHandleList;
 import graphicalObjectHandles.CountHandle;
 import graphicalObjectHandles.HasSmartHandles;

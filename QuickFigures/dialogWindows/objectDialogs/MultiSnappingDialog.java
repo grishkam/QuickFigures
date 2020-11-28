@@ -7,7 +7,7 @@ import logging.IssueLog;
 import standardDialog.BooleanInputPanel;
 import standardDialog.SnappingPanel;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 
@@ -71,7 +71,7 @@ public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 		for(LocatedObject2D s: array) {
 				if (s.getSnapPosition()!=null) 
 					{
-					SnappingPosition newSnap = object.getSnapPosition().copy();
+					AttachmentPosition newSnap = object.getSnapPosition().copy();
 					if(!copySnap) newSnap = object.getSnapPosition();
 					s.setSnapPosition(newSnap);
 					};

@@ -10,6 +10,7 @@ import genericMontageKit.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**A menu bar item that resizes the canvas to precisely the size at which the objects fit.*/
 public class CanvasAutoTrim extends BasicMenuItemForObj{
 
 	@Override
@@ -52,7 +53,7 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 	@Override
 	public String getNameText() {
 		
-		return "Canvas Size To Fit All Objects";
+		return "Trim Canvas To Fit Obects";
 	}
 
 	@Override

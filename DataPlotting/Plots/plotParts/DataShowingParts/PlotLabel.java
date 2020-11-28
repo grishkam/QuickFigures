@@ -11,7 +11,7 @@ import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class PlotLabel extends ComplexTextGraphic {
 
@@ -113,10 +113,10 @@ public class PlotLabel extends ComplexTextGraphic {
 		if (legend) {}
 			else {
 					if (orientation2==PlotOrientation.BARS_VERTICAL)
-						{setSnapPosition(SnappingPosition.defaultPlotBottomSide());
+						{setSnapPosition(AttachmentPosition.defaultPlotBottomSide());
 						setAngle(Math.PI/4);
 						}
-					else setSnapPosition(SnappingPosition.defaultPlotRigthSide());
+					else setSnapPosition(AttachmentPosition.defaultPlotSide());
 		}
 	}
 	
@@ -124,24 +124,24 @@ public class PlotLabel extends ComplexTextGraphic {
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		if (handlenum==1) {
-			SnappingPosition s = this.getSnapPosition();
+			AttachmentPosition s = this.getSnapPosition();
 			Point2D p = getUpperLeftCornerOfBounds();
 			double dx = p2.getX()-p.getX();
 			double dy = p2.getY()-p.getY();
 			int[] poles = s.getOffSetPolarities();
 		
 			if (dx!=0) {
-				double newdx = dx*poles[0]+s.getSnapHOffset();
+				double newdx = dx*poles[0]+s.getHorizontalOffset();
 				//if (Math.abs(newdx)<lockbounds2.width/4)
-					s.setSnapHOffset((int) newdx);
+					s.setHorizontalOffset((int) newdx);
 			}
 			
 			
 			
 			if (dy!=0){
-				double newdy = dy*poles[1]+s.getSnapVOffset();
+				double newdy = dy*poles[1]+s.getVerticalOffset();
 			//if (Math.abs(newdy)<lockbounds2.height/4 )
-				s.setSnapVOffset((int) newdy);
+				s.setVerticalOffset((int) newdy);
 			
 			}
 			
@@ -161,8 +161,8 @@ public class PlotLabel extends ComplexTextGraphic {
 	
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
-		double h=this.getSnapPosition().getSnapHOffset();
-		double v=this.getSnapPosition().getSnapVOffset();
+		double h=this.getSnapPosition().getHorizontalOffset();
+		double v=this.getSnapPosition().getVerticalOffset();
 		super.scaleAbout(p, mag);
 		
 		//getSnappingBehaviour().setSnapHOffset( Math.round(h*mag));

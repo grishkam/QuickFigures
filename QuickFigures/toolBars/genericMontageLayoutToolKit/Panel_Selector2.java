@@ -84,7 +84,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 		}
 		
 		protected OverlayObjectManager getSelManOfClcikedImage() {
-			return getImageWrapperClick().getSelectionManagger();
+			return getImageWrapperClick().getOverlaySelectionManagger();
 		}
 		
 		protected void performPressEdit() {
@@ -92,7 +92,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 			if (this.getCurrentLayout()==null
 					||!getCurrentLayout().getBoundry().contains(this.getClickedCordinateX(), this.getClickedCordinateY())
 					) {
-				getImageWrapperClick().getSelectionManagger().removeSelections();return;
+				getImageWrapperClick().getOverlaySelectionManagger().removeSelections();return;
 			}
 			getSelManOfClcikedImage().select(getSelectedRoi(getCurrentLayout(), this.getClickedCordinateX(), this.getClickedCordinateY(), panelSelectionOption), 4, 0);
 			
@@ -110,7 +110,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 				return;
 				}
 				
-			OverlayObjectManager man = this.getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager man = this.getImageWrapperClick().getOverlaySelectionManagger();
 			man.select(getSelectedRoi(getCurrentLayout(), this.getDragCordinateX(), this.getDragCordinateY(), panelSelectionOption), 4, 1);
 		}
 		
@@ -136,7 +136,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 		public void mouseReleased() {
 			if (swapper==this.SELECT_PANEL) return;
 			
-			this.getImageWrapperClick().getSelectionManagger().removeSelections();
+			this.getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
 			if ((swapper==SWAP_TWO_PANEL || ( (shiftDown() && swapper==0)) ) ) {
 				swapMontagePanels(this.getCurrentLayout(), getEditor(), getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), panelSelectionOption );
 				

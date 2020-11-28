@@ -1,7 +1,7 @@
 package undo;
 
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class UndoSnappingChange extends AbstractUndoableEdit2 {
 
@@ -10,8 +10,8 @@ public class UndoSnappingChange extends AbstractUndoableEdit2 {
 	 */
 	private static final long serialVersionUID = 1L;
 	private LocatedObject2D object;
-	private SnappingPosition iSnap;
-	private SnappingPosition fSnap;
+	private AttachmentPosition iSnap;
+	private AttachmentPosition fSnap;
 
 	public UndoSnappingChange(LocatedObject2D object) {
 		

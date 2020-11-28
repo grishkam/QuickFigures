@@ -118,7 +118,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 	@Override
 	public void mouseMoved() {
 		setupClickedLayout();
-		getImageWrapperClick().getSelectionManagger().setSelection(MarkerRoi(), 0);
+		getImageWrapperClick().getOverlaySelectionManagger().setSelection(MarkerRoi(), 0);
 	}
 	
 	@Override
@@ -258,7 +258,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 	public void setMarkerRoi() {
 		getImageWrapperClick().getGraphicLayerSet();
 			try {
-				OverlayObjectManager select = this.getImageWrapperClick().getSelectionManagger();
+				OverlayObjectManager select = this.getImageWrapperClick().getOverlaySelectionManagger();
 				
 				select.setSelection(MarkerRoi(), 0);
 				select.setSelection(MarkerRoi2(), 1);
@@ -297,7 +297,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpac
 
 	public void removeMarkerRoi()  {
 		
-		getImageWrapperClick().getSelectionManagger().removeSelections();
+		getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
 		
 	}
 	

@@ -11,6 +11,7 @@ import applicationAdapters.ToolbarTester;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import utilityClassesForObjects.RectangleEdges;
 
+/**A graphic that looks like a plus sign*/
 public class PlusGraphic extends TrapezoidGraphic {
 
 	{ parameter=new RectangleEdgeParameter(this, 0.5, TOP, UPPER_LEFT); getParameter().setRatioToMaxLength(0.33333);
@@ -114,8 +115,8 @@ public class PlusGraphic extends TrapezoidGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		PlusGraphic r1 = new PlusGraphic(r);
 		r1.getParameter().setRatioToMaxLength(this.getParameter().getRatioToMaxLength());
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}

@@ -56,7 +56,7 @@ public int numberTails=0;
 		preliminaryPath = createLinkingLineForShapes(getPressShape(), getDragShape(), this.getClickedCordinateX(), this.getClickedCordinateY(), this.getDragCordinateX(), this.getDragCordinateY());
 		preliminaryPath .moveLocation(0, -20);
 		;
-		super.getImageWrapperClick().getSelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true), generateMarkerForSwitch()), 0);
+		super.getImageWrapperClick().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true), generateMarkerForSwitch()), 0);
 	}
 
 

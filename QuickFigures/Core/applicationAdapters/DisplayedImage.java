@@ -27,13 +27,15 @@ public interface DisplayedImage {
 	
 	/**Resizes the window to fit its contents*/
 	public void updateWindowSize();
+	
+	/**returns the undo manager*/
 	public UndoManagerPlus getUndoManager();
 	
 	/**Sets what cursor is drawn over the window*/
 	public void setCursor(Cursor c);
 	
-	/**Methods to control the soom*/
-	public void zoomOutToFitScreen();
+	/**Methods to control the zoom*/
+	public void zoomOutToDisplayEntireCanvas();
 	public void zoom(String st);
 	public double getZoomLevel();
 	public void setZoomLevel(double z);
@@ -51,10 +53,12 @@ public interface DisplayedImage {
 	/**closes the window*/
 	public void closeWindowButKeepObjects();
 	
-	/**Sets the selected item*/
+	/**Sets the selected item. the item set here is refered to only by a couple parts of the package.
+	 * this may be a different object from the overlay selections and the item the user sets*/
 	public Selectable getSelectedItem() ;
 	public void setSelectedItem(Selectable s) ;
 
+	/**returns a handle list for the user to resize the canvas*/
 	public SmartHandleList getCanvasHandles();
 	
 	

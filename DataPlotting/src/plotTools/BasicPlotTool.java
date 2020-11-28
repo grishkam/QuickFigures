@@ -108,7 +108,7 @@ public class BasicPlotTool extends Object_Mover {
 		
 			GraphicGroup sg = generateMarkerForSwitch();
 			
-			super.getImageWrapperClick().getSelectionManagger().setSelection(sg, 0);
+			super.getImageWrapperClick().getOverlaySelectionManagger().setSelection(sg, 0);
 		
 	}
 

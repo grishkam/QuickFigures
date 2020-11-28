@@ -23,7 +23,7 @@ import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;
 import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.ScalesFully;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class PathPointReshapeList extends ReshapeHandleList {
 
@@ -295,13 +295,13 @@ public class PathPointReshapeList extends ReshapeHandleList {
 		}
 
 		@Override
-		public SnappingPosition getSnapPosition() {
+		public AttachmentPosition getSnapPosition() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public void setSnapPosition(SnappingPosition snap) {
+		public void setSnapPosition(AttachmentPosition snap) {
 			// TODO Auto-generated method stub
 			
 		}

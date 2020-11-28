@@ -35,7 +35,7 @@ import utilityClassesForObjects.LocationChangeListenerList;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.RectangleEdgePosisions;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import menuUtil.HasUniquePopupMenu;
 
 /**The abstract superclass for many graphical objects*/
@@ -71,7 +71,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	transient boolean isDead=false;
 	protected transient ArrayList<HandleRect> handleBoxes=new ArrayList<HandleRect> ();
 	transient FigureDisplayContainer setContainer;
-	private SnappingPosition snappingBehaviour=null;
+	private AttachmentPosition snappingBehaviour=null;
 
 	protected int userLocked=0;
 	
@@ -262,12 +262,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 		
 	}
 	
-	public SnappingPosition getSnapPosition() {
+	public AttachmentPosition getSnapPosition() {
 		return snappingBehaviour;
 	}
 
 
-	public void setSnapPosition(SnappingPosition snappingBehaviour) {
+	public void setSnapPosition(AttachmentPosition snappingBehaviour) {
 		this.snappingBehaviour = snappingBehaviour;
 	}
 	

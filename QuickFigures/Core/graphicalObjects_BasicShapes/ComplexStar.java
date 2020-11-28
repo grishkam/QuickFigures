@@ -8,20 +8,21 @@ import java.awt.geom.Point2D;
 
 import graphicalObjectHandles.SmartHandleList;
 
-/**A star object*/
+/**A star object with two different point lengths*/
 public class ComplexStar extends SimpleStar {
 
 	
+	
+
+
 	{name="Complex Star";}
 	{ doesAngleShift=false;}
 	private static final int STAR_RATIO_HANDLE2 = 88;
-	//private double ieRatio2=0.15;
 	private AngleParameter starRatio2=new AngleParameter(this); {starRatio2.setType(AngleParameter.RADIUS_TYPE); starRatio2.setRatioToMaxRadius(0.15);}
 	
 	
 	public ComplexStar(Rectangle rectangle, int nV) {
 		super(rectangle, nV);
-		// TODO Auto-generated constructor stub
 	}
 
 	public ComplexStar(ComplexStar complexStar) {
@@ -44,8 +45,8 @@ public class ComplexStar extends SimpleStar {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		RegularPolygonGraphic r1 = new ComplexStar(r, this.getNvertex());
 		
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}

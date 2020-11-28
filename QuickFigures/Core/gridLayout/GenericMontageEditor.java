@@ -20,7 +20,7 @@ import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 
@@ -531,9 +531,9 @@ public class GenericMontageEditor implements MontageSpaces {
 		protected void flipSnappings(BasicMontageLayout ml) {
 			ArrayList<LocatedObject2D> objects = ml.getWrapper().getLocatedObjects();
 			
-			ArrayList<SnappingPosition> bahs = SnappingPosition.findAllSnappings(objects);
+			ArrayList<AttachmentPosition> bahs = AttachmentPosition.findAllPositions(objects);
 			
-			for(SnappingPosition b: bahs) {
+			for(AttachmentPosition b: bahs) {
 				b.flipDiag();
 			}
 		}

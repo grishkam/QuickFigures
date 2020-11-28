@@ -13,7 +13,7 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.MontageSpaces;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 
 	/**Class used to position the inset's image panels
@@ -50,10 +50,10 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		int snaptype=0;
 		 boolean horizontal;
 		 
-		 SnappingPosition sb;
+		 AttachmentPosition sb;
 
 
-		public InsetLayout(int b, int type, boolean preferhorizontal, SnappingPosition sb) {
+		public InsetLayout(int b, int type, boolean preferhorizontal, AttachmentPosition sb) {
 			horizontal=preferhorizontal;
 			this.sb=sb;
 			border=b;
@@ -241,7 +241,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		
 		/**Creates a layout inwhich npanels of size insetPanelDim are fit around a panel with sourcePanelDim*/
 			public MontageLayoutGraphic createLayout(int npanel, Rectangle insetPanelDim, 	Rectangle sourcePanelDim, int nimages ) {
-			SnappingPosition theSnap = sb.copy();
+			AttachmentPosition theSnap = sb.copy();
 			double overallheight = sourcePanelDim.getHeight();
 			double overallwidth = sourcePanelDim.getWidth();
 			int ncol=1;
@@ -311,9 +311,9 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		}
 			
 			/**Edits the layout to be appropriate for snapping and returns the snapping behaviors*/
-			public SnappingPosition prepareForSnapping(Rectangle sourcePanelDim, MontageLayoutGraphic lg) {
+			public AttachmentPosition prepareForSnapping(Rectangle sourcePanelDim, MontageLayoutGraphic lg) {
 				BasicMontageLayout bml = lg.getPanelLayout();
-				SnappingPosition theSnap = sb.copy();
+				AttachmentPosition theSnap = sb.copy();
 				double overallheight = sourcePanelDim.getHeight();
 				double overallwidth = sourcePanelDim.getWidth();
 				int ncol = bml.nColumns();
@@ -396,27 +396,27 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 			/**returns the snapping behavior that will actually be used to snap the rectangle. this differs
 			  from the internally saved snapping for some sets of options
 			 */
-			private SnappingPosition makeSnapping() {
-				SnappingPosition theSnap = sb.copy();
+			private AttachmentPosition makeSnapping() {
+				AttachmentPosition theSnap = sb.copy();
 				
 				
 				if (this.snaptype==onOuterSides) {
-						theSnap.setSnapType(SnappingPosition.INTERNAL);
+						theSnap.setLocationType(AttachmentPosition.INTERNAL);
 						
 						if (sb.getSnapLocationTypeInternal()==RectangleEdges.TOP||sb.getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) {
-							theSnap.setSnapLocationTypeInternal(RectangleEdges.LEFT);
+							theSnap.setLocationTypeInternal(RectangleEdges.LEFT);
 						}else 	if (sb.getSnapLocationTypeInternal()==RectangleEdges.LEFT||sb.getSnapLocationTypeInternal()==RectangleEdges.RIGHT) {
-							theSnap.setSnapLocationTypeInternal(RectangleEdges.TOP);
+							theSnap.setLocationTypeInternal(RectangleEdges.TOP);
 						} else {
-							theSnap.setSnapLocationTypeInternal(RectangleEdges.CENTER);
-						theSnap.setSnapLocationTypeInternal(RectangleEdges.MIDDLE);
+							theSnap.setLocationTypeInternal(RectangleEdges.CENTER);
+						theSnap.setLocationTypeInternal(RectangleEdges.MIDDLE);
 						}
 				}
 				
 
 				if (this.snaptype==onSides) {
-					theSnap.setSnapType(SnappingPosition.INTERNAL);
-					theSnap.setSnapLocationTypeInternal(RectangleEdges.UPPER_LEFT);
+					theSnap.setLocationType(AttachmentPosition.INTERNAL);
+					theSnap.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
 				}
 				
 				return theSnap;
@@ -528,7 +528,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 					ImagePanelGraphic ob = (ImagePanelGraphic) list.getPanels().get(i).getImageDisplayObject();
 					imagelist.add(ob);
 					//lg.addLockedItem(ob);
-					ob.setSnapPosition(SnappingPosition.defaultInternalPanel());
+					ob.setSnapPosition(AttachmentPosition.defaultInternalPanel());
 					setBorders(ob);
 					
 				}
@@ -561,18 +561,18 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 		}
 		
 		
-		SnappingPosition getSnapping(int i) {
-			ArrayList<SnappingPosition> snaps =getSnappings();
-			SnappingPosition snap = snaps.get(i);
-			if (snaptype==0)snap.setSnapHOffset((int)border);
+		AttachmentPosition getSnapping(int i) {
+			ArrayList<AttachmentPosition> snaps =getSnappings();
+			AttachmentPosition snap = snaps.get(i);
+			if (snaptype==0)snap.setHorizontalOffset((int)border);
 			return snap;
 		}
 
 		/***/
-		ArrayList<SnappingPosition> getSnappings() {
-			if (snaptype==0)return SnappingPosition.externalRightLeft();
-			if (snaptype==1) return SnappingPosition.internalSpread(); 
-			return SnappingPosition.externalRightLeft();
+		ArrayList<AttachmentPosition> getSnappings() {
+			if (snaptype==0)return AttachmentPosition.externalRightLeft();
+			if (snaptype==1) return AttachmentPosition.internalSpread(); 
+			return AttachmentPosition.externalRightLeft();
 		}
 		
 	}

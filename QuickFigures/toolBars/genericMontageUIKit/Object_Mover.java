@@ -171,7 +171,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	protected void deselectAll(ArrayList<?> ls) {
-		getImageWrapperClick().getSelectionManagger().removeSelections();
+		getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
 		for(Object l: ls) try  {
 				deselect(l);
 		} catch (Throwable t) {
@@ -183,7 +183,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void deselect(Object roi1) {
 		if (roi1!=null && roi1 instanceof Selectable) try {
 			((Selectable)roi1).deselect();
-			this.getImageWrapperClick().getSelectionManagger().setSelection(null, 1);
+			this.getImageWrapperClick().getOverlaySelectionManagger().setSelection(null, 1);
 		} catch (Throwable t) {
 			IssueLog.logT(t);// t.printStackTrace();
 		}
@@ -634,7 +634,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		lastGroupHandleList=newHandleList;
 		lastGroupHandleList.updateRectangle();
-		getImageDisplayWrapperClick().getImageAsWrapper().getSelectionManagger().setSelectionHandles(lastGroupHandleList);
+		getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setSelectionHandles(lastGroupHandleList);
 		return lastGroupHandleList;
 	}
 	
@@ -642,7 +642,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		canvasHandleList = this.getImageDisplayWrapperClick().getCanvasHandles();
 		
-		getImageDisplayWrapperClick().getImageAsWrapper().getSelectionManagger().setPermanentHandles(canvasHandleList);
+		getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setPermanentHandles(canvasHandleList);
 		return canvasHandleList;
 	}
 
@@ -667,7 +667,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	public void setSelectedExtraHandle(SmartHandle output) {
-		this.getImageDisplayWrapperClick().getImageAsWrapper().getSelectionManagger().setSelectionHandles(SmartHandleList.createList(output));
+		this.getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setSelectionHandles(SmartHandleList.createList(output));
 	}
 	
 	public void mouseClicked() {
@@ -807,7 +807,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	protected void afterRelease() {
-		getImageWrapperClick().getSelectionManagger().select(null, 0); 
+		getImageWrapperClick().getOverlaySelectionManagger().select(null, 0); 
 		if (getSelectedObject() instanceof HasHandles &&handle>-1) {
 			getSelectionObjectAshashangles().handleMouseEvent(this.getLastDragOrRelMouseEvent(), handle, getButton(),this.clickCount(), MouseEvent.MOUSE_RELEASED, null);
 			if(getSelectedObject() instanceof BasicGraphicalObject &&resizeAfterMousDrags) 
@@ -954,7 +954,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		selection=null;
 		if (useSelectorNow() ) {
 			Rectangle2D rect = OverlayObjectManager.createRectangleFrom2Points(new Point2D.Double(pressX, pressY), this.draggedCord());
-			getImageWrapperClick().getSelectionManagger().select(rect, 0);
+			getImageWrapperClick().getOverlaySelectionManagger().select(rect, 0);
 			selection=rect;
 			}
 	}
@@ -1025,7 +1025,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			((Selectable)roi1).select();
 			setSelectedItemForDisplay(roi1);
 			if (getImageWrapperClick()==null) return;
-			OverlayObjectManager manager = getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager manager = getImageWrapperClick().getOverlaySelectionManagger();
 			LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
 			manager.setSelectionGraphic3(SmartHandleList.createList(sHandle));
 			

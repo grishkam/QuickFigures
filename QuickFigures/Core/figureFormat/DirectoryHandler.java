@@ -21,7 +21,7 @@ public class DirectoryHandler {
 	String subPathofDocumentsFolder="/Quick Figures";
 	String subPathofTemplatesFoloder="/Quick Figures/Templates";
 	String prefsFileName="prefs";
-	private String subPathofDefaultTemplate=subPathofTemplatesFoloder+"/default template";;
+	private String subPathofDefaultTemplate=getSubPathofTemplatesFoloder()+"/default template";;
 	
 	public static DirectoryHandler getDefaultHandler(){
 		if (defaultHandler==null)
@@ -73,7 +73,7 @@ public class DirectoryHandler {
 	/**creates all the the folders that will be used by QuickFigures*/
 	void makeAllNeededDirsIfAbsent() {
 		makeDirectoryIfAbsent(pathOfDocFolder+subPathofDocumentsFolder);
-		makeDirectoryIfAbsent(pathOfDocFolder+subPathofTemplatesFoloder);
+		makeDirectoryIfAbsent(pathOfDocFolder+getSubPathofTemplatesFoloder());
 		makeDirectoryIfAbsent(pathOfDocFolder+subPathofDocumentsFolder+"/tmp");
 		//makeDirectoryIfAbsent(pathOfDocFolder+subPathofPrefsFoloder+"/"+prefsFolderName) ;
 	}
@@ -145,6 +145,10 @@ public void savePrefs() {
 
 	public static void setDefaultHandler(DirectoryHandler defaultHandler) {
 		DirectoryHandler.defaultHandler = defaultHandler;
+	}
+
+	public String getSubPathofTemplatesFoloder() {
+		return subPathofTemplatesFoloder;
 	}
 	
 	

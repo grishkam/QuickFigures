@@ -72,7 +72,7 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
 		if(currentUndo!=null) currentUndo.establishFinalState();
 		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentUndo);
-		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelectionstoNull();
+		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
 	
 	}
 	

@@ -3,7 +3,7 @@ package figureFormat;
 import channelLabels.ChannelLabelTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class ChannelLabelPicker extends RowLabelPicker {
 
@@ -36,7 +36,7 @@ public void setToStandardFor(MultichannelDisplayLayer wrap) {
 	
 	protected void setModelSnappingtoDefault() {
 		if (getModelItem()!=null)
-		getModelItem().setSnapPosition(SnappingPosition.defaultColSide());
+		getModelItem().setSnapPosition(AttachmentPosition.defaultColSide());
 	}
 	
 	public String getOptionName()  {

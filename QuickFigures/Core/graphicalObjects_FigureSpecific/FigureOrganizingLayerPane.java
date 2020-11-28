@@ -37,7 +37,7 @@ import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAddManyItem;
 import undo.UndoLayoutEdit;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import menuUtil.HasUniquePopupMenu;
 import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
@@ -446,7 +446,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		int limit = ml.nRows();
 		if(type==BasicMontageLayout.COLS) limit=ml.nColumns();
 		if(type==BasicMontageLayout.PANELS) limit=ml.nPanels();
-		SnappingPosition position=null;
+		AttachmentPosition position=null;
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;
 			ImageDisplayLayer pan = getPanelForRowindex(i, type);//may return null

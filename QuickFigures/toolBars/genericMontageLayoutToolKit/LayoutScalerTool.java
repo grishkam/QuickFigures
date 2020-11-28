@@ -70,7 +70,7 @@ public class LayoutScalerTool extends Object_Mover {
 			duplicate.setStrokeWidth(8);
 			duplicate.boundryColor=Color.cyan;
 			duplicate.panelColor=Color.magenta;
-			getImageWrapperClick().getSelectionManagger().setSelection(duplicate, 0);
+			getImageWrapperClick().getOverlaySelectionManagger().setSelection(duplicate, 0);
 		} else {
 			eliminateSelection();
 	
@@ -82,7 +82,7 @@ public class LayoutScalerTool extends Object_Mover {
 
 	public void eliminateSelection() {
 		duplicate=null;
-		getImageWrapperClick().getSelectionManagger().setSelection(null, 0);
+		getImageWrapperClick().getOverlaySelectionManagger().setSelection(null, 0);
 	}
 	
 	public void mouseReleased() {

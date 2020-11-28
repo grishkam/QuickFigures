@@ -15,7 +15,7 @@ import standardDialog.ComboBoxPanel;
 import standardDialog.FontChooser;
 import undo.Edit;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 
@@ -134,7 +134,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 	
 
 	protected void setItemsToDiaog() {
-		SnappingPosition snap = array.get(0).getSnapPosition();
+		AttachmentPosition snap = array.get(0).getSnapPosition();
 		
 		for(TextGraphic s: array) {
 			setAtrributesToDialog(s);

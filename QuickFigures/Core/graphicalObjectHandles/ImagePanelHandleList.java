@@ -22,7 +22,7 @@ public class ImagePanelHandleList extends SmartHandleList {
 	public ImagePanelHandleList(ImagePanelGraphic panel) {
 		this.panel=panel;
 		Rectangle bounds = panel.getBounds();
-		int[] spots = RectangleEdges.locationsforh;//.getLocationsForHandles(bounds);
+		int[] spots = RectangleEdges.internalLocations;//.getLocationsForHandles(bounds);
 		for(int i=0; i<9; i++) {
 			this.add(new ImagePanelHandle(panel, i)); 
 			

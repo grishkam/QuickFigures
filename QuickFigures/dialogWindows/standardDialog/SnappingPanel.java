@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, NumberInputListener, ItemListener {
 	
@@ -23,10 +23,10 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 
 	
 	private static final long serialVersionUID = 1L;
-	 private SnappingPosition snappingBehaviour=SnappingPosition.defaultInternal();
+	 private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultInternal();
 	JLabel label=new JLabel("Position");
 	 private SnapBox SnapBox=new  SnapBox(snappingBehaviour);
-	 JComboBox jcom=new  JComboBox(SnappingPosition.getGridChoices());
+	 JComboBox jcom=new  JComboBox(AttachmentPosition.getGridSpaceCodes());
 	 NumberInputPanel xoffSet=new NumberInputPanel("xOffset", 0, true, true, 0,100);
 	 NumberInputPanel yoffSet=new NumberInputPanel("yOffset", 0, true, true, 0,100); {
 		 yoffSet.setSliderOrientation(JScrollBar.VERTICAL);
@@ -42,23 +42,23 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	
 	 
 	 
-	 public SnappingPanel(SnappingPosition s) {
+	 public SnappingPanel(AttachmentPosition s) {
 		 this.setSnapping(s);
 		 
 	 }
 	 
-	 public SnappingPanel(SnappingPosition s, String text) {
+	 public SnappingPanel(AttachmentPosition s, String text) {
 		this(s);
 		label.setText(text);
 		 
 	 }
 	 
-	 private void setSnapping(SnappingPosition s) {
+	 private void setSnapping(AttachmentPosition s) {
 		 this.snappingBehaviour=s;
 		// IssueLog.log("inputted snapping behaviour is "+s);
 		getSnapBox().setSnappingBehaviour(s.copyWOofffsets());
-		xoffSet.setNumber(s.getSnapHOffset());
-		yoffSet.setNumber(s.getSnapVOffset());
+		xoffSet.setNumber(s.getHorizontalOffset());
+		yoffSet.setNumber(s.getVerticalOffset());
 		this.setLayout(new GridBagLayout());
 		jcom.setSelectedIndex(s.getGridLayoutSnapType() );
 		//IssueLog.log("snapping behaviour of panel set up");
@@ -145,12 +145,12 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	@Override
 	public void numberChanged(NumberInputEvent ne) {
 		if (ne.getSourcePanel()==xoffSet) {
-			getSnappingBehaviour().setSnapHOffset((int)xoffSet.getNumber());
+			getSnappingBehaviour().setHorizontalOffset((int)xoffSet.getNumber());
 			
 			notifyListeners(new ObjectEditEvent(this.getSnappingBehaviour()));
 		}
 		if (ne.getSourcePanel()==yoffSet) {
-			getSnappingBehaviour().setSnapVOffset((int)yoffSet.getNumber());
+			getSnappingBehaviour().setVerticalOffset((int)yoffSet.getNumber());
 			notifyListeners(new ObjectEditEvent(this.getSnappingBehaviour()));
 		}
 		
@@ -158,7 +158,7 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 		
 	}
 
-	public SnappingPosition getSnappingBehaviour() {
+	public AttachmentPosition getSnappingBehaviour() {
 		return snappingBehaviour;
 	}
 
@@ -174,7 +174,7 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
-		f.add(new SnappingPanel(SnappingPosition.defaultInternal()));
+		f.add(new SnappingPanel(AttachmentPosition.defaultInternal()));
 		
 		f.pack();
 		f.setVisible(true);

@@ -11,7 +11,7 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import objectDialogs.MultiSnappingDialog;
 import standardDialog.GraphicDisplayComponent;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class SnappingSyncer extends BasicMultiSelectionOperator {
 
@@ -83,7 +83,7 @@ public class SnappingSyncer extends BasicMultiSelectionOperator {
 		
 				output.add(new Rectangle(5,5,12,10));
 				
-			SnappingPosition s = SnappingPosition.defaultColLabel();
+			AttachmentPosition s = AttachmentPosition.defaultColLabel();
 				output.add(new Rectangle(0,0,5,5));
 				setTomodel(s);
 				s.snapRects(output.get(1), output.get(0));
@@ -93,15 +93,15 @@ public class SnappingSyncer extends BasicMultiSelectionOperator {
 	}
 	
 	
-	private void setTomodel(SnappingPosition s) {
+	private void setTomodel(AttachmentPosition s) {
 		if(this.model==null) return;
-		SnappingPosition a = this.model.getSnapPosition();
+		AttachmentPosition a = this.model.getSnapPosition();
 		if(a==null)return;
-		s.setSnapLocationTypeInternal(a.getSnapLocationTypeInternal());
-		s.setSnapLocationTypeExternal(a.getSnapLocationTypeExternal());
-		s.setSnapType(a.getSnapType());
-		s.setSnapHOffset(0);
-		s.setSnapVOffset(0);
+		s.setLocationTypeInternal(a.getSnapLocationTypeInternal());
+		s.setLocationTypeExternal(a.getSnapLocationTypeExternal());
+		s.setLocationType(a.getSnapType());
+		s.setHorizontalOffset(0);
+		s.setVerticalOffset(0);
 	}
 	public Icon getIcon() {
 		return  getItemIcon(true);

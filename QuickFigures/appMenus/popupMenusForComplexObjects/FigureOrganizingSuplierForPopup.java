@@ -241,7 +241,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 
 
 	public EditLabels getLabelEditorMenuItemFor(TextGraphic t) {
-		int gridSnap = t.getSnapPosition().getGridChoiceNumbers();
+		int gridSnap = t.getSnapPosition().getGridSpaceCode();
 		EditLabels output = new EditLabels(gridSnap, figureOrganizingLayerPane.getMontageLayoutGraphic(), t);
 	
 		if(output.getLabels(t).size()==0) {

@@ -12,21 +12,25 @@ import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import imageDisplayApp.ZoomOptions;
 import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 
 /**This class represents a menu item for the user to zoom in or out*/
 public class ZoomFit implements MenuItemForObj {
 
-	public static final String USER_SET="Set", SCREEN_FIT="fit", IN="In", OUT="Out";
+	public static final String USER_SET="Set", SCREEN_FIT="fit", IN="In", OUT="Out", OPTIONS="options";
 	
 String type="fit";
+
 
 public ZoomFit() {
 	
 }
 
 public ZoomFit(String type) {
+	
 	this.type=type;
 }
 
@@ -34,11 +38,16 @@ public ZoomFit(String type) {
 
 public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	if (diw==null) return;
+	if (type.equals(OPTIONS)) {
+		new StoredValueDilaog(ZoomOptions.current).showDialog();
+		return;
+	}
+	
 	if (type.contains(USER_SET)) {
 		Double z = StandardDialog.getNumberFromUser("Set Zoom Level", diw.getZoomLevel());
 		diw.setZoomLevel(z/100);
 	} else
-	if (type.contains(SCREEN_FIT))diw.zoomOutToFitScreen();
+	if (type.contains(SCREEN_FIT))diw.zoomOutToDisplayEntireCanvas();
 	else diw.zoom(type);
 	
 	/**updates the window to account for the new zoom level*/
@@ -48,6 +57,7 @@ public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 
 public String getCommand() {return "Zoom out to fit"+type;}
 public String getNameText() {
+	if (type.equals(OPTIONS)) return "Zoom Options";
 	if (type.startsWith("Out")) return "Out (press '-')";
 	if (type.startsWith("In")) return "In (press '=' or '+')";
 	if (type.startsWith("Set")) return "Set Zoom Level";

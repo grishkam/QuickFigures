@@ -21,7 +21,7 @@ import undo.UndoManagerPlus;
 import undo.UndoMoveItems;
 import undo.UndoSnappingChange;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 public class LockGraphicTool2 extends LockGraphicTool {
@@ -147,7 +147,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 
 
 	public static void adjustPosition(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
-		SnappingPosition s = inside.getSnapPosition();
+		AttachmentPosition s = inside.getSnapPosition();
 		
 		
 		int[] poles = s.getOffSetPolarities();
@@ -156,21 +156,21 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		int dy=(int) (dragy-inside.getBounds().getCenterY());
 		
 		if (dx!=0) {
-			double newdx = dx*poles[0]+s.getSnapHOffset();
-			if (Math.abs(newdx)<lockbounds2.width/4)s.setSnapHOffset(newdx);
+			double newdx = dx*poles[0]+s.getHorizontalOffset();
+			if (Math.abs(newdx)<lockbounds2.width/4)s.setHorizontalOffset(newdx);
 		}
 		
 		
 		
 		if (dy!=0){
-			double newdy = dy*poles[1]+s.getSnapVOffset();
-		if (Math.abs(newdy)<lockbounds2.height/4 )s.setSnapVOffset(newdy);
+			double newdy = dy*poles[1]+s.getVerticalOffset();
+		if (Math.abs(newdy)<lockbounds2.height/4 )s.setVerticalOffset(newdy);
 		
 		}
 	}
 	
 	public static void adjustPositionForBar(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
-		SnappingPosition s = inside.getSnapPosition();
+		AttachmentPosition s = inside.getSnapPosition();
 		
 		
 		int[] poles = s.getOffSetPolarities();
@@ -179,15 +179,15 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		int dy=(int) (dragy-inside.getBounds().getCenterY());
 		
 		if (dx!=0) {
-			double newdx = dx*poles[0]+s.getSnapHOffset();
-			if (Math.abs(newdx)<lockbounds2.width)s.setSnapHOffset(newdx);
+			double newdx = dx*poles[0]+s.getHorizontalOffset();
+			if (Math.abs(newdx)<lockbounds2.width)s.setHorizontalOffset(newdx);
 		}
 		
 		
 		
 		if (dy!=0){
-			double newdy = dy*poles[1]+s.getSnapVOffset();
-		if (Math.abs(newdy)<lockbounds2.height )s.setSnapVOffset(newdy);
+			double newdy = dy*poles[1]+s.getVerticalOffset();
+		if (Math.abs(newdy)<lockbounds2.height )s.setVerticalOffset(newdy);
 		
 		}
 	}

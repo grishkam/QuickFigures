@@ -47,7 +47,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	 LocalImageAdder  la=new LocalImageAdder();
 	 
-	 boolean mergeOnly=false;
+	
 	 public boolean hidesImage=true;
 	 
 	 AutoFigureGenerationOptions auto=new AutoFigureGenerationOptions();
@@ -66,7 +66,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	public QuickFigureMaker(boolean mergeOnly) {
 		super("quickFig", "quickFigure.jpg");
-		this.mergeOnly=mergeOnly;
+		this.setMergeOnly(mergeOnly);
 		codeString="Merge";
 		setupAdder() ;
 	}
@@ -127,6 +127,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+		public boolean mergeOnly=false;
 
 		public LocalImageAdder() {
 			super(false);
@@ -144,9 +145,9 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		/**depending on the variable set. might need to transform the template into a merged image only version*/
 		protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
-			if (!mergeOnly) return super.getUsedTemplate(display);
+			if (!isMergeOnly()) return super.getUsedTemplate(display);
 			FigureTemplate tp = super.getUsedTemplate(display);
-			IssueLog.log("calling get template");
+			
 			tp.makeMergeOnly();
 			return tp; 
 		}
@@ -249,7 +250,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 						sm.nextMultiChannel(item);
 					}
 					
-					setinformer.getCurrentlyActiveDisplay().zoomOutToFitScreen();;
+					setinformer.getCurrentlyActiveDisplay().zoomOutToDisplayEntireCanvas();;
 					setinformer.getCurrentlyActiveOne().getAsWrapper().updateDisplay();
 				}
 			}
@@ -264,7 +265,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	/**Changes the settings on this object based on a particular string*/
 	public void setOptionsBasedOnCodeString(String aC) {
 		if (aC.contains("Merge")) 
-			mergeOnly=true;
+			setMergeOnly(true);
 		boolean singleSlice = aC.contains("+Z");
 		setSingleSliceMode(singleSlice);
 		boolean singleFrame = aC.contains("+T");
@@ -290,7 +291,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	public void setOptionsBackToDefault() {
 		la.useSingleFrame=false;
 		la.useSingleSlice=false;
-		mergeOnly=false;
+		setMergeOnly(false);
 	}
 	
 	/**Attempts to find the figure organizing layer for the currently active figure.*/
@@ -336,6 +337,15 @@ public class QuickFigureMaker extends DisplayActionTool {
 		return b;
 	}
 	
+	public boolean isMergeOnly() {
+		return la.mergeOnly;
+	}
+
+
+	public void setMergeOnly(boolean mergeOnly) {
+		la.mergeOnly = mergeOnly;
+	}
+
 	/**Adds a version of the quickfigure maker to the file menu*/
 	class QuickFigureFileMenuItem extends BasicMenuItemForObj {
 
@@ -344,7 +354,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 			if (codeString!=null) {
 				return getMenuTextForCode(codeString);
 			}
-			if (mergeOnly) return "Figure from open image (with Merge only)";
+			if (isMergeOnly()) return "Figure from open image (with Merge only)";
 			return "Figure from open image with Split Channels";
 		}
 
@@ -352,7 +362,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		@Override
 		public String getMenuPath() {
 			String string = "File<New";
-			if(mergeOnly) string+="<Figure With Merge Panels Only";
+			if(isMergeOnly()) string+="<Figure With Merge Panels Only";
 			else string+="<Figure With Split Channels";
 			return string;
 		}

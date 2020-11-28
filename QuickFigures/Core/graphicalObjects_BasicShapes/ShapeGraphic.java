@@ -14,9 +14,6 @@ import java.util.HashMap;
 import javax.swing.Icon;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import officeConverter.OfficeObjectConvertable;
-import officeConverter.OfficeObjectMaker;
-import officeConverter.PathGraphicToOffice;
 import popupMenusForComplexObjects.ShapeGraphicMenu;
 import standardDialog.GraphicDisplayComponent;
 import undo.ColorEditUndo;
@@ -34,9 +31,12 @@ import utilityClassesForObjects.Rotatable;
 import utilityClassesForObjects.ShowsOptionsDialog;
 import utilityClassesForObjects.StrokedItem;
 import animations.KeyFrameAnimation;
-import fieldReaderWritter.SVGEXporterForShape;
-import fieldReaderWritter.SVGExportable;
-import fieldReaderWritter.SVGExporter;
+import export.pptx.OfficeObjectConvertable;
+import export.pptx.OfficeObjectMaker;
+import export.pptx.PathGraphicToOffice;
+import export.svg.SVGEXporterForShape;
+import export.svg.SVGExportable;
+import export.svg.SVGExporter;
 import graphicalObjectHandles.ActionButtonHandleList;
 import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjectHandles.ShapeActionButtonHandleList2;
@@ -53,17 +53,34 @@ import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 /**An abstract class for the shapes in the figure*/
 public abstract class ShapeGraphic extends BasicGraphicalObject implements GraphicalObject, StrokedItem, ShowsOptionsDialog,IllustratorObjectConvertable, Fillable, Rotatable, HasTreeLeafIcon , OfficeObjectConvertable, HasUniquePopupMenu, SVGExportable, ProvidesDialogUndoableEdit, HasMiniToolBarHandles {
+	
+
+
+	private static final int DEFAULT_STROKE_WIDTH = 1;
+
 	/**
 	 * 
 	 */
 	
 	{name="Shape ";}
+	
+	protected static final float[] NEARLY_DASHLESS = new float[]{100000,1};
+	protected static final int THICK_STROKE_4 = 4;
+	private static final int DEFAULT_MITER_LIMIT = 8;
+	protected static final Color whiteIcon = new Color(240,240,240),//a nearly but not 100% white that will be used in icons
+				TRANSPARENT_FILL = new Color(0,0,0,0);
+
+	
 	private static final long serialVersionUID = 1L;
-	private boolean antialize=true;
-	protected static final Color whiteIcon = new Color(240,240,240);
+	
+	
+
+	
 	
 	/**Is the shape closed of open*/
 	private boolean closedShape=false;
+	/**set to true if antialias rendering hint used*/
+	private boolean antialize=true;
 	
 	PaintProvider fillPaintProvider=null;
 	PaintProvider strokePaintProvider=null;
@@ -71,14 +88,14 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	public HashMap<String, Object> map=new HashMap<String, Object>();
 
 	
-	boolean filled=true; {setFillColor(new Color(0,0,0,0));}//starts with transparent fill color
+	boolean filled=true; {setFillColor(TRANSPARENT_FILL);}//starts with transparent fill color
 	
-	protected float strokeWidth=1;
+	protected float strokeWidth=DEFAULT_STROKE_WIDTH;
 	float[] dash=new float[]{};
 	
 	int end=BasicStroke.CAP_BUTT;
 	int join=BasicStroke.JOIN_ROUND;
-	float miterLimit=8;
+	float miterLimit=DEFAULT_MITER_LIMIT;
 	private boolean hasCloseOption=false;
 	
 	
@@ -334,6 +351,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		pi.setMiterLimit(getMiterLimit());
 	}
 	
+	/**implementation of an interface required for generating adobe illustrator scripts*/
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
 		PathItemRef pi = new PathItemRef();
@@ -342,14 +360,9 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return pi;
 	}
 	
-	
-	
-	
-	
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
-	
 	protected void basicCreateShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		if (this.isCompleteMoveToIlls()) {
 			pi.addPathWithCurves(aref, getShape().getPathIterator(new AffineTransform()), true, isDrawClosePoint());
@@ -362,7 +375,9 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		 if (this.isClosedShape()) pi.setClosed(true);
 		 pi.setName(this.getName());
 		}
-	
+	public boolean isCompleteMoveToIlls() {
+		return completeMoveToIlls;
+	}
 	
 	
 	
@@ -372,6 +387,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return getBounds();
 	}
 	
+	/**basic geometry operation is used by many subclasses for several distinct purposes*/
 	public static double getAngleBetweenPoints(double x, double y, double x2, double y2) {
 		double angle=Math.atan(((double)(y2-y))/(x2-x));
 		if (!java.lang.Double.isNaN(angle)) {
@@ -398,9 +414,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	
 	public void setStrokeJoin(String j) {
 		if (j==null) return;
-		
 		String st=j.toLowerCase().trim();
-		
 		if (st.equals("bevel")) join=BasicStroke.JOIN_BEVEL;
 		if (st.equals("miter")) join=BasicStroke.JOIN_MITER;
 		if (st.equals("round")) join=BasicStroke.JOIN_ROUND;
@@ -410,7 +424,6 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	public void setStrokeCap(int e){
 		end=e;
 	}
-	
 	public void setStrokeCap(String j){
 		if (j==null) return;
 		
@@ -432,9 +445,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	public void setAntialize(boolean antialize) {
 		this.antialize = antialize;
 	}
-	public boolean isCompleteMoveToIlls() {
-		return completeMoveToIlls;
-	}
+	
 	public boolean isClosedShape() {
 		return closedShape;
 	}
@@ -463,7 +474,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	} 
 	
 	public void makeDashLess() {
-		setDashes(new float[]{100000,1});
+		setDashes(NEARLY_DASHLESS);
 	}
 	
 	@Override
@@ -471,6 +482,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return new GraphicDisplayComponent(createIcon() );
 	}
 	
+	/**creates a small shape that resembles this graphic. that small shape functions as an icon*/
 	ShapeGraphic createIcon() {
 		ShapeGraphic out = rectForIcon() ;//RectangularGraphic.blankRect(new Rectangle(0,0,14,12), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFillColor(), this.getStrokeColor());
 		out.setAntialize(true);
@@ -621,6 +633,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return new Point2D.Double(nx, ny);
 	}
 	
+	/**calculates two point positions that are crucial for determining how the stroke handles 
+	  of the subclasses work*/
 	public Point2D[] calculatePointsOnStrokeBetween(Point2D location1, Point2D location2) {
 		Point2D m = midPoint(location1, location2);
 		double a = getAngleBetweenPoints(location1, location2)+Math.PI/2;
@@ -630,7 +644,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return new Point2D[] {new Point2D.Double(dx, dy), m};
 	}
 	
-	/**returns an object for displaying a popup menu in response to a righclick on the object*/
+	/**returns an object for displaying a popup menu in response to a right click on the object*/
 	public PopupMenuSupplier getMenuSupplier() {
 		return new ShapeGraphicMenu(this);
 	}

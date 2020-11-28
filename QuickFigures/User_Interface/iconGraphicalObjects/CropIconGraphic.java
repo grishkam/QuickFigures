@@ -10,7 +10,7 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import standardDialog.GraphicObjectDisplayBasic;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 /**A class for rendering of a cropping icon*/
 public class CropIconGraphic extends GraphicGroup {
@@ -49,9 +49,9 @@ public class CropIconGraphic extends GraphicGroup {
 			Rectangle partRect=new Rectangle(0,0, 2, 15);
 			if(i<4) partRect=new Rectangle(0,0, 15, 2);
 			if(place==1||place==3) continue;
-			SnappingPosition p=new SnappingPosition();
-			p.setSnapLocationTypeInternal(place);
-			p.setSnapType(SnappingPosition.INTERNAL);
+			AttachmentPosition p=new AttachmentPosition();
+			p.setLocationTypeInternal(place);
+			p.setLocationType(AttachmentPosition.INTERNAL);
 			p.snapRects(partRect, fullRect);
 			
 			ShapeGraphic bar = RectangularGraphic.filledRect(partRect);

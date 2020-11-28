@@ -7,21 +7,57 @@
 	<classpathentry excluding="ExternalToolBar/ToolSetContainer.java|GraphicTools/InsetGraphicTool.java|GraphicTools/LockAndSizeDefiner.java|graphicTools/InsetGraphicTool.java|graphicTools/LockAndSizeDefiner.java|graphicActionToombar/QuickFigFromXML.java|graphicTools/SelectionTool.java|includedToolbars/MinimalToolset2.java|graphicActionToombar/TreeActionTool.java" kind="src" path="toolBars"/>
 	<classpathentry excluding="selectedItemMenus/SaveItemAsXml.java|basicMenusForApp/XMLloadItem.java|selectedItemMenus/AllignLayout.java" kind="src" path="appMenus"/>
 	<classpathentry kind="src" path="dialogWindows"/>
+	<classpathentry kind="src" path="Export"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/ooxml-lib/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-3.12-beta1-20150228.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-3.12-beta1-20150228.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-schemas-3.12-beta1-20150228.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-scratchpad-3.12-beta1-20150228.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/lib/commons-codec-1.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-bin-1.13/batik-1.13/batik-rasterizer-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-bin-1.13/batik-1.13/batik-slideshow-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-bin-1.13/batik-1.13/batik-squiggle-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-bin-1.13/batik-1.13/batik-svgpp-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-bin-1.13/batik-1.13/batik-ttf2svg-1.13.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/batik-rasterizer-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/batik-slideshow-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/batik-squiggle-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/batik-svgpp-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/batik-ttf2svg-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-all-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-anim-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-awt-util-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-bridge-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-codec-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-constants-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-css-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-dom-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-ext-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-extension-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-gui-util-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-gvt-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-i18n-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-parser-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-script-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-shared-resources-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-svgbrowser-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-svg-dom-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-svggen-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-svgrasterizer-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-swing-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-test-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-test-old-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-test-svg-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-test-swing-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-util-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-util-1.13-tests.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/batik-xml-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/rhino-1.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/serializer-2.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/xalan-2.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/xercesImpl-2.12.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/batik-bin-1.13/batik-1.13/lib/xmlgraphics-commons-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

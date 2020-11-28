@@ -71,7 +71,7 @@ public class PathReflactTool extends GraphicTool {
 	@Override
 	public void mouseReleased() {
 		onRelease(this.getImageWrapperClick(),getSelectedObject());
-		getImageWrapperClick().getSelectionManagger().setSelectionstoNull();
+		getImageWrapperClick().getOverlaySelectionManagger().setSelectionstoNull();
 	}
 	
 	public void mouseDragged() {
@@ -85,8 +85,8 @@ public class PathReflactTool extends GraphicTool {
 			} else 	rect2.scaleAbout(this.clickedCord(), scaleLevel()[0], scaleLevel()[1]);
 			rect=rect2;
 		}
-		getImageWrapperClick().getSelectionManagger().setSelection(rect, 0);
-		getImageWrapperClick().getSelectionManagger().setSelection(createMirrorGraphic() , 1);
+		getImageWrapperClick().getOverlaySelectionManagger().setSelection(rect, 0);
+		getImageWrapperClick().getOverlaySelectionManagger().setSelection(createMirrorGraphic() , 1);
 	}
 	
 	
@@ -100,7 +100,7 @@ public class PathReflactTool extends GraphicTool {
 public void onRelease(ImageWrapper imageWrapper, LocatedObject2D roi2) {
 	
 			
-		getImageWrapperClick().getSelectionManagger().setSelectionstoNull();
+		getImageWrapperClick().getOverlaySelectionManagger().setSelectionstoNull();
 		PathGraphic path2 = createMirrorGraphic();
 		if (path2==null) return;
 		
@@ -164,7 +164,7 @@ PathGraphic createMirrorGraphic() {
 
 	
 	public void mouseExited() {
-		getImageWrapperClick().getSelectionManagger().setSelectionstoNull();
+		getImageWrapperClick().getOverlaySelectionManagger().setSelectionstoNull();
 		
 		
 	}

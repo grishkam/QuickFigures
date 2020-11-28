@@ -29,14 +29,14 @@ import imageMenu.ZoomFit;
 /**A components that displays a side panel within each image window or potentially within*/
 class MiniToolBarPanel extends JPanel implements MouseListener {
 	
-
+	boolean inWindow;
 
 	ArrayList<MenuItemForObj> permanentObjects=new ArrayList<MenuItemForObj>();
 	private ImageWindowAndDisplaySet displaySet;
 	private ActionButtonHandleList buttonList;
 	private ActionButtonHandleList alternateList;
 	private Object lastItem;
-	
+	boolean vertical=true;
 	
 	{this.setForeground(Color.orange);}
 	/**
@@ -45,17 +45,26 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public MiniToolBarPanel(ImageWindowAndDisplaySet display) {
+	public MiniToolBarPanel(ImageWindowAndDisplaySet display, boolean vertical) {
+		this.vertical=vertical;
 		this.displaySet=display;
 		addAction(new ZoomFit("In"));
 		addAction(new ZoomFit("Out"));
 		addAction(new ZoomFit(ZoomFit.SCREEN_FIT));
-		display.setSidePanel(this);
+		
+		
 		buttonList=createActionList();
 		this.addMouseListener(this);
+		if (display!=null)
+			display.setSidePanel(this);
+	}
+
+	public MiniToolBarPanel(ImageWindowAndDisplaySet display) {
+		this(display, true);
 	}
 
 	public Dimension getPreferredSize() {
+		if (!vertical)new Dimension(330, 50);
 		return new Dimension(30, 325);
 	}
 	
@@ -100,7 +109,9 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	returns the currently used action button handle list
 	 */
 	public ActionButtonHandleList getChangingButtonList() {
-		Object selectedItem = displaySet.getImageAsWrapper().getSelectionObject();
+		ImageWindowAndDisplaySet displaySet2 = getDisplaySet();
+		if(displaySet2==null) return null;
+		Object selectedItem = displaySet2.getImageAsWrapper().getSelectionObject();
 		if (selectedItem!=lastItem) {
 			updateAlternateList(selectedItem);
 			lastItem=selectedItem;
@@ -108,6 +119,13 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 		if(alternateList!=null) return alternateList;
 		
 		return null;
+	}
+
+	/**
+	 * @return
+	 */
+	public ImageWindowAndDisplaySet getDisplaySet() {
+		return displaySet;
 	}
 
 	/**
@@ -120,7 +138,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 			
 			if(alternateList!=null)
 				{
-				alternateList.setVertical(true);
+				alternateList.setVertical(vertical);
 				alternateList.setLocation(getToolLocations2());
 				
 				}
@@ -138,15 +156,16 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 		}
 
 		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
-			item.performActionDisplayedImageWrapper(displaySet);
-			displaySet.updateDisplay();
+			if( getDisplaySet()==null) return;
+			item.performActionDisplayedImageWrapper( getDisplaySet());
+			 getDisplaySet().updateDisplay();
 		}
 		private static final long serialVersionUID = 1L;
 		}
 	
 	/**creates a set of action handles*/
 	public ActionButtonHandleList createActionList() {
-		ActionButtonHandleList output = new ActionButtonHandleList(true);
+		ActionButtonHandleList output = new ActionButtonHandleList(vertical);
 		for(MenuItemForObj ob:permanentObjects)output.add(new  MenuBarIconHandle(ob, new Point()));
 		output.setLocation(getToolLocations());
 		return output;
@@ -156,14 +175,16 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	 returns the location of the first toolbar
 	 */
 	public Double getToolLocations() {
-		return new Point2D.Double(14,5);
+		if (!vertical)new Dimension(15, 40);
+		return new Point2D.Double(15,5);
 	}
 	
 	/**
 	 returns the location of the second mini toolbar
 	 */
 	public Double getToolLocations2() {
-		return new Point2D.Double(14,90);
+		if (!vertical)  new Point2D.Double(90,40);
+		return new Point2D.Double(15,85);
 	}
 
 	@Override
@@ -175,7 +196,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		GMouseEvent cew = new LocalMouseEvent(displaySet, e);
+		GMouseEvent cew = new LocalMouseEvent(getDisplaySet(), e);
 		mousePressOnHandleList(cew, getStableButtonList());
 		this.mousePressOnHandleList(cew, this.getChangingButtonList());
 	}

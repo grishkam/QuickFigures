@@ -11,7 +11,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 
 /**Written to undo scaling operations for a few different kinds of objects
@@ -41,8 +41,8 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 	private BasicMontageLayout fLayout;
 	private UndoTextEdit tUndo1;
 	private UndoMoveItems tUndo2;
-	private SnappingPosition iSnap;
-	private SnappingPosition fSnap;
+	private AttachmentPosition iSnap;
+	private AttachmentPosition fSnap;
 	private double iAngle;
 	private double fAngle;
 	

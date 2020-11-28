@@ -1,4 +1,4 @@
-package fieldReaderWritter;
+package export.svg;
 
 /**Classes that implements this, return an instance of class SVG exporter
   that adds them to the exported SVG file*/

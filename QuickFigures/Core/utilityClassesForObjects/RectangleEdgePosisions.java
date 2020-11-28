@@ -14,7 +14,11 @@ public interface RectangleEdgePosisions {
 	
 	
 	/**all critical locations for a rectangle*/
-	static final int[] locationsforh=new int[] {UPPER_LEFT, UPPER_RIGHT, LOWER_RIGHT, LOWER_LEFT, LEFT, TOP, RIGHT, BOTTOM, CENTER};
+	static final int[] internalLocations=new int[] {UPPER_LEFT, UPPER_RIGHT, LOWER_RIGHT, LOWER_LEFT, LEFT, TOP, RIGHT, BOTTOM, CENTER};
+	
+	/**locations for a rectangle that may be used as attachment positions*/
+	static final int[] internalAttachmentLocations=new int[] {UPPER_LEFT, UPPER_RIGHT, LOWER_RIGHT, LOWER_LEFT, LEFT, TOP, RIGHT, BOTTOM};
+	
 	
 	/**all critical locations on the edge of a rectangle*/
 	static final int[] locationsonSide=new int[] {UPPER_LEFT, UPPER_RIGHT, LOWER_RIGHT, LOWER_LEFT, LEFT, TOP, RIGHT, BOTTOM, CENTER, MIDDLE};

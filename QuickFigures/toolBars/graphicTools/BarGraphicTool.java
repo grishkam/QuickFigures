@@ -13,7 +13,7 @@ import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 public class BarGraphicTool extends GraphicTool {
 	
 	private static BarGraphicTool currentBar;
@@ -25,7 +25,7 @@ public class BarGraphicTool extends GraphicTool {
 	BarGraphic model = new BarGraphic(); {
 		
 		model.setFillColor(Color.white);
-	model.setSnapPosition(SnappingPosition.defaultScaleBar());
+	model.setSnapPosition(AttachmentPosition.defaultScaleBar());
 	model.setProjectionType(2);
 	}
 	

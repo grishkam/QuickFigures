@@ -12,7 +12,7 @@ import undo.UndoMoveItems;
 import undo.UndoSnappingChange;
 import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 public class LockedObjectSwapper extends LockGraphicTool2 {
@@ -39,7 +39,7 @@ public class LockedObjectSwapper extends LockGraphicTool2 {
 	public void setMarkerRoi() {
 		
 		
-				OverlayObjectManager select = this.getImageWrapperClick().getSelectionManagger();
+				OverlayObjectManager select = this.getImageWrapperClick().getOverlaySelectionManagger();
 				
 				select.setSelection(MarkerRoi(), 0);
 				
@@ -60,7 +60,7 @@ public void mouseDragged() {
 	object2 = getObject(getImageWrapperClick(), getDragCordinateX(), getDragCordinateY());
 	if (object2==null) return;
 	lockTaker2=findLockContainer(object2);
-	OverlayObjectManager select = this.getImageWrapperClick().getSelectionManagger();
+	OverlayObjectManager select = this.getImageWrapperClick().getOverlaySelectionManagger();
 	
 	select.setSelection(RectangularGraphic.blankRect(object2.getBounds(), Color.green, true, true),1);
 	
@@ -108,8 +108,8 @@ private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
 			UndoSnappingChange undoS1 = new  UndoSnappingChange(inside);
 			UndoSnappingChange undoS2 = new  UndoSnappingChange(object2);
 			
-			SnappingPosition snap1 = inside.getSnapPosition();
-			SnappingPosition snap2 = object2.getSnapPosition();
+			AttachmentPosition snap1 = inside.getSnapPosition();
+			AttachmentPosition snap2 = object2.getSnapPosition();
 			inside.setSnapPosition(snap2);
 			object2.setSnapPosition(snap1);
 			
@@ -142,7 +142,7 @@ public String getToolTip() {
 
 public void removeMarkerRoi()  {
 	
-	getImageWrapperClick().getSelectionManagger().removeSelections();
+	getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
 	
 }
 

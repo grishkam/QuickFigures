@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import logging.IssueLog;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class PlasticPanelLayout extends BasicSpacedPanelLayout implements SpacedPanelLayout{
 	
@@ -36,7 +36,7 @@ public PlasticPanelLayout(int size) {
 	
 
 	
-	SnappingPosition sb=SnappingPosition.partnerExternal();
+	AttachmentPosition sb=AttachmentPosition.partnerExternal();
 
 	
 	

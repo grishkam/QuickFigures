@@ -195,7 +195,7 @@ public class GenericImage implements ImageWrapper {
 	}
 
 	@Override
-	public OverlayObjectManager getSelectionManagger() {
+	public OverlayObjectManager getOverlaySelectionManagger() {
 		// TODO Auto-generated method stub
 		return selectionManager;
 	}

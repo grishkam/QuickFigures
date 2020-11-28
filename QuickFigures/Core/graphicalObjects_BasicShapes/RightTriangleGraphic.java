@@ -35,8 +35,8 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 	public static RightTriangleGraphic blankShape(Rectangle r, Color c) {
 		RightTriangleGraphic r1 = new RightTriangleGraphic(r);
 		
-		r1.setDashes(new float[]{100000,1});
-		r1.setStrokeWidth(4);
+		r1.setDashes(NEARLY_DASHLESS);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
 	}

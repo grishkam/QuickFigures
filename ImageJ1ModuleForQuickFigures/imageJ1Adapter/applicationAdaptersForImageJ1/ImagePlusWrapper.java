@@ -295,7 +295,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 		return new ImagePlusMetaDataWrapper(imp);
 	}
 
-	public OverlayObjectManager getSelectionManagger() {
+	public OverlayObjectManager getOverlaySelectionManagger() {
 			
 		return selectionManagger;
 	}

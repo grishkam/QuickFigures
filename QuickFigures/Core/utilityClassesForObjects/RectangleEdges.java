@@ -9,6 +9,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**contains methods for identifying specific points along a rectangular bounds
+ * @see  RectangleEdgePosisions */
 public class RectangleEdges implements  RectangleEdgePosisions {
 
 	
@@ -37,7 +39,7 @@ public class RectangleEdges implements  RectangleEdgePosisions {
 		return new Point2D.Double(x/2,y/2);
 	}
 	
-	/**when given a point and alist of rectangle edge positions, this returns the edge position closest
+	/**when given a point and a list of rectangle edge positions, this returns the edge position closest
 	  to the point*/
 	public static int getNearestEdgeFromList(Rectangle2D r, int[] edges, Point2D position) {
 		double distance=Double.MAX_VALUE;
@@ -98,7 +100,9 @@ public class RectangleEdges implements  RectangleEdgePosisions {
 		return "Upper Left";
 	}
 	
-	public static HashMap<Integer, Integer> generateTranslationMap(int[] choices) {
+	/**Generates a hashmap in which ordered numbers (the keys) refer to items
+	  in a list of non-ordered numbers. */
+	private static HashMap<Integer, Integer> generateTranslationMap(int[] choices) {
 		HashMap<Integer, Integer> output=new HashMap<Integer, Integer>();
 		for(int i=0; i<choices.length; i++) {
 			output.put(i, choices[i]);
@@ -109,7 +113,7 @@ public class RectangleEdges implements  RectangleEdgePosisions {
 	/**when given a location on the outside of one rectangle, returns what the 
 	 fixed edge of the snapped object would have to be to keep its position as it is resized.
 	 Also returns appropriate a values for internal snap types.*/
-	public static int getAppropriateFixedEdgeForSnapType(int locationType) {
+	public static int getAppropriateFixedEdgeForAttachmentType(int locationType) {
 		switch (locationType) {
 		case UPPER_LEFT: 
 		case UPPER_RIGHT:
@@ -143,8 +147,8 @@ public class RectangleEdges implements  RectangleEdgePosisions {
 	}
 	
 	/**Returns 1 or -1 depending on whether the offset from the base location 
-	 of the snap type is positive or negative*/
-	public int getXDirectionOfOffSetForSnapType(int locationType){
+	 of the location type is positive or negative. @see AttachmentPosition*/
+	public int getXDirectionOfOffSetForAttachmentType(int locationType){
 		switch (locationType) {
 		case UPPER_LEFT:  return 1;
 		case UPPER_RIGHT:return -1;
@@ -178,8 +182,9 @@ public class RectangleEdges implements  RectangleEdgePosisions {
 		return 1;
 	} 
 	
-	/**see above*/
-public int getYDirectionOfOffSetForSnapType(int locationType){
+	/**Returns 1 or -1 depending on whether the offset from the base location 
+	 of the location type is positive or negative. @see AttachmentPosition*/
+public int getYDirectionOfOffSetForAttachmentType(int locationType){
 	switch (locationType) {
 	case UPPER_LEFT:  return 1;
 	case UPPER_RIGHT:return 1;
@@ -214,7 +219,7 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 	return 1;
 	} 
 	
-/**turns a list of positions into a set of Strings*/
+/**turns a list of positions into a set of Strings with the names of the locations*/
 	public static String[] translate(int[] positions) {
 		String[] output=new String[positions.length];
 		for(int i=0; i<positions.length; i++) {
@@ -224,16 +229,13 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 		return output;
 	}
 	
-	/**
-	public static int[] translate(String[] positions) {
-		
-	}*/
-	
+
+	/**returns the names of locations within a rectangle*/
 	public static String[] getLocationsRect() {
-		return translate(locationsforh);
+		return translate(internalLocations);
 	}
 	public static HashMap<Integer, Integer> translatorForLocationsRect() {
-		return generateTranslationMap(locationsforh);
+		return generateTranslationMap(internalLocations);
 	}
 	
 	public static String[] getLocationsText() {
@@ -268,7 +270,7 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 	}
 	
 	
-	/**sets the location of a rectangle based on the given location type*/
+	/**sets the location of a rectangle based on the given location type. @see RectangleEdgePosisions*/
 	public static void setLocation(Rectangle r, int locationType, double x, double y) {
 		switch (locationType) {
 		case UPPER_RIGHT: {
@@ -323,7 +325,7 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 	}
 	}
 	
-	/**sets the location of a rectangle based on the given location type*/
+	/**sets the location of a rectangle based on the given location type. */
 	public static void setLocation(Rectangle2D.Double r, int locationType, double x, double y) {
 		switch (locationType) {
 		case UPPER_RIGHT: {
@@ -486,6 +488,7 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 		 return new int[] {CENTER};
 	}
 	
+	/**When given a location type, this returns the distance between that location and the opposite side of the rectangle*/
 	public static double distanceOppositeSide(int side, Rectangle2D r) {
 		int side2 = oppositeSide(side);
 		Point2D p1 = getLocation(side, r);
@@ -497,10 +500,10 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 
 	
 
-	
+	/**returns the locations on a rectangular bounded object that handles should be drawn*/
 	public static ArrayList<Point2D> getLocationsForHandles(Rectangle2D r) {
 			ArrayList<Point2D> output = new ArrayList<Point2D>();
-			for(int i: locationsforh) {
+			for(int i: internalLocations) {
 				output.add(RectangleEdges.getLocation(i,r));
 			}
 			return output;
@@ -531,6 +534,7 @@ public int getYDirectionOfOffSetForSnapType(int locationType){
 		}	
 	}
 		
+	/**Returns the rotation transform for rotating objects about the center of the given shape's bounds*/
 	public static AffineTransform getRotationAboutCenter(Shape s, double angle) {
 		return AffineTransform.getRotateInstance(angle, s.getBounds().getCenterX(), s.getBounds().getCenterY());
 	}

@@ -51,7 +51,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		}
 		else
 		{
-			Rectangle bounds = this.getImageWrapperClick().getSelectionManagger().getSelectionBounds1();
+			Rectangle bounds = this.getImageWrapperClick().getOverlaySelectionManagger().getSelectionBounds1();
 			if (bounds==null) return;
 			if (bounds.getWidth()==0) return;
 			
@@ -146,7 +146,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	}
 	
 	public void mouseEntered() {
-		r=this.getImageWrapperClick().getSelectionManagger().getSelection(0);
+		r=this.getImageWrapperClick().getOverlaySelectionManagger().getSelection(0);
 	}
 	
 	

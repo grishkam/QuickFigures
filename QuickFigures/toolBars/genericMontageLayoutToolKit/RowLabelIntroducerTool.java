@@ -219,7 +219,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		
 		
 		
-			OverlayObjectManager sel = getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager sel = getImageWrapperClick().getOverlaySelectionManagger();
 			sel.setSelection(item, 1);
 			
 			undoGroup.addEditToList(new UndoSelectionSet(sel));
@@ -297,7 +297,7 @@ dd.showDialog();
 		removeMarkerRoi();
 		setupClickedLayout();
 		if (MarkerRoi()==null) return;
-		getImageWrapperClick().getSelectionManagger().setSelection(MarkerRoi(), 0);
+		getImageWrapperClick().getOverlaySelectionManagger().setSelection(MarkerRoi(), 0);
 		
 		TextGraphic dd = this.getDesiredGraphic(MarkerRoi().getBounds(),this.getImageDisplayWrapperClick().getImageAsWrapper());
 		if (dd==null) {
@@ -309,7 +309,7 @@ dd.showDialog();
 		item=dd;
 		if(dd!=null)
 		 {
-			OverlayObjectManager sel = getImageWrapperClick().getSelectionManagger();
+			OverlayObjectManager sel = getImageWrapperClick().getOverlaySelectionManagger();
 					sel.setSelection(dd, 1);
 			selectItem();
 		//	this.getImageDisplayWrapperClick().getUndoManager().mergeInedit(new UndoSelectionSet(sel));

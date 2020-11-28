@@ -26,9 +26,6 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import officeConverter.ImagePanelImmitator;
-import officeConverter.OfficeObjectConvertable;
-import officeConverter.OfficeObjectMaker;
 import popupMenusForComplexObjects.ImagePanelMenu;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
@@ -43,13 +40,16 @@ import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScaleInfo;
 import utilityClassesForObjects.ScalededItem;
 import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 import animations.KeyFrameAnimation;
+import export.pptx.ImagePanelImmitator;
+import export.pptx.OfficeObjectConvertable;
+import export.pptx.OfficeObjectMaker;
+import export.svg.ImageSVGExporter;
+import export.svg.SVGExportable;
+import export.svg.SVGExporter;
 import externalToolBar.IconSet;
-import fieldReaderWritter.ImageSVGExporter;
-import fieldReaderWritter.SVGExportable;
-import fieldReaderWritter.SVGExporter;
 import genericMontageKit.PanelListElement;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ImagePanelActionHandleList;
@@ -297,7 +297,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	private void setScaleBar(BarGraphic scaleBar) {
 		this.scaleBar = scaleBar;
 		if (scaleBar!=null) {
-			if (scaleBar.getSnapPosition()==null)scaleBar.setSnapPosition(SnappingPosition.defaultScaleBar());
+			if (scaleBar.getSnapPosition()==null)scaleBar.setSnapPosition(AttachmentPosition.defaultScaleBar());
 			updateBarScale();
 		}
 	}
@@ -713,9 +713,9 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		@Override
 		public void snapLockedItem(LocatedObject2D o) {
 			if (o==null) return;
-			SnappingPosition sb = o.getSnapPosition();
+			AttachmentPosition sb = o.getSnapPosition();
 				if (sb==null) {
-					o.setSnapPosition(SnappingPosition.defaultInternal());
+					o.setSnapPosition(AttachmentPosition.defaultInternal());
 					sb=o.getSnapPosition();
 					}
 				

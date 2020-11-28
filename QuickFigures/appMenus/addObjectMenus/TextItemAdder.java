@@ -15,7 +15,7 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 /**Adds text objects to selected image panels*/
 class TextItemAdder extends BasicGraphicAdder {
@@ -79,7 +79,7 @@ class TextItemAdder extends BasicGraphicAdder {
 						ag2=ag.copy();
 						ag2.setSnapPosition(ag.getSnapPosition());
 					} else {
-						ag.setSnapPosition(SnappingPosition.defaultPanelLabel());
+						ag.setSnapPosition(AttachmentPosition.defaultPanelLabel());
 						while (ag.getBounds().width>0.9*it.getObjectWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
 					}
 					ag2.setText("Label "+count); count++;

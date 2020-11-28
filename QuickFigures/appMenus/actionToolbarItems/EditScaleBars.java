@@ -292,7 +292,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Monta
 	
 	protected NumberInputPanel getProjectionInput() {
 		
-		NumberInputPanel panel = new NumberInputPanel("Length Projection", this.projectionLength(), 0,50);
+		NumberInputPanel panel = new NumberInputPanel("Projection", this.projectionLength(), 0,50);
 		panel.addNumberInputListener(new NumberInputListener() {
 			
 			@Override

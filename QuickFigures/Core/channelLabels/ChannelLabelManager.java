@@ -26,7 +26,7 @@ import standardDialog.StandardDialog;
 import standardDialog.SwingDialogListener;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 /**A class containing methods for adding, accessing, removing and editing the channel labels to a figure.
  * 
@@ -72,7 +72,7 @@ public class ChannelLabelManager implements Serializable {
 				if (getFossilLabel()!=null) {cltg.copyAttributesFrom(getFossilLabel());
 											cltg.setSnapPosition(getFossilLabel().getSnapPosition());
 											} else {
-												cltg.setSnapPosition(SnappingPosition.defaultPanelLabel());
+												cltg.setSnapPosition(AttachmentPosition.defaultPanelLabel());
 											}
 				
 		

@@ -317,7 +317,7 @@ this.updateDisplay();
 		Rectangle2D panel = getPanelLayout().getPanel(i);
 		if (o.getSnapPosition()==null || o.getSnapPosition().getGridLayoutSnapType()==0)
 							return panel;
-		int rectSnapType = o.getSnapPosition().getGridChoiceNumbers();
+		int rectSnapType = o.getSnapPosition().getGridSpaceCode();
 		
 		return	this.getPanelLayout().getSelectedSpace((int)panel.getCenterX(), (int)panel.getCenterY(), rectSnapType).getBounds();
 	}
@@ -465,7 +465,7 @@ public void resizeLayoutToFitContents() {
 			super(montageLayoutGraphic,l,i);
 			amount=1;
 			boolean major = montageLayoutGraphic.getPanelLayout().rowmajor;
-			if(!major &&l.getSnapPosition().getGridChoiceNumbers()==MontageSpaces.COLUMN_OF_PANELS) {
+			if(!major &&l.getSnapPosition().getGridSpaceCode()==MontageSpaces.COLUMN_OF_PANELS) {
 				amount= montageLayoutGraphic.getPanelLayout().nRows();
 			}
 			if(major&&this.isRows()) {
@@ -489,11 +489,11 @@ public void resizeLayoutToFitContents() {
 		}
 
 		private boolean isRows() {
-			return getObject().getSnapPosition().getGridChoiceNumbers()==MontageSpaces.ROW_OF_PANELS;
+			return getObject().getSnapPosition().getGridSpaceCode()==MontageSpaces.ROW_OF_PANELS;
 		}
 
 		private boolean isCols() {
-			return getObject().getSnapPosition().getGridChoiceNumbers()==MontageSpaces.COLUMN_OF_PANELS;
+			return getObject().getSnapPosition().getGridSpaceCode()==MontageSpaces.COLUMN_OF_PANELS;
 		}
 		
 		public JPopupMenu getJPopup() {
@@ -531,7 +531,7 @@ public void resizeLayoutToFitContents() {
 		
 		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 	
-			BasicMontageLayout rLayout = myLayout.makeAltered(getObject().getSnapPosition().getGridChoiceNumbers());
+			BasicMontageLayout rLayout = myLayout.makeAltered(getObject().getSnapPosition().getGridSpaceCode());
 			Point2D p1 = super.getCordinateLocation();
 			
 			Point cordinatePoint = lastDragOrRelMouseEvent.getCoordinatePoint();
@@ -550,7 +550,7 @@ public void resizeLayoutToFitContents() {
 					setDragMask(lastDragOrRelMouseEvent, r2);
 			} else {
 				shifted=false;
-				lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelection(null, 0);
+				lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(null, 0);
 				super.handleDrag(lastDragOrRelMouseEvent);
 			}
 
@@ -559,12 +559,12 @@ public void resizeLayoutToFitContents() {
 		}
 
 		protected void setDragMask(CanvasMouseEventWrapper lastDragOrRelMouseEvent, Rectangle2D r2) {
-			if(r2==null) {lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelection(null, 0);
+			if(r2==null) {lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(null, 0);
 				return;
 			}
 			RectangularGraphic r = RectangularGraphic.blankRect(r2, Color.green, true, true);
 			r.hideHandles(true);
-			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelection(r, 0);
+			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(r, 0);
 		}
 		
 		

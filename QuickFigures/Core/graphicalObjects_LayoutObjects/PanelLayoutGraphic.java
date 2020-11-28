@@ -53,7 +53,7 @@ import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LockedItemList;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
@@ -602,9 +602,9 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	public void snapLockedItem(LocatedObject2D o) {
 	
 		if (o==null) return;
-		SnappingPosition sb = o.getSnapPosition();
+		AttachmentPosition sb = o.getSnapPosition();
 			if (sb==null) {
-				o.setSnapPosition(SnappingPosition.defaultInternal());
+				o.setSnapPosition(AttachmentPosition.defaultInternal());
 				sb=o.getSnapPosition();
 				}
 			Integer rw = getPanelLocations().get(o);

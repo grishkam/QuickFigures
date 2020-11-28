@@ -56,7 +56,7 @@ import undoForPlots.PlotAreaChangeUndo;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TextParagraph;
 
 /**A class for organizing parts of a plot.
@@ -282,7 +282,7 @@ public void removeItemFromLayer(ZoomableGraphic z) {
 public void addTitleLabel() {
 	if (this.hasItem(titleLabel)) this.remove(plotLayout);
 	titleLabel=new PlotLabel("Plot Title", this);
-	titleLabel.setSnapPosition(SnappingPosition.defaultPlotTitle());
+	titleLabel.setSnapPosition(AttachmentPosition.defaultPlotTitle());
 	this.add(titleLabel);
 	titleLabel.getParagraph().get(0).get(0).setText("Plot Title");
 	areaRect.addLockedItem(titleLabel);
@@ -300,9 +300,9 @@ public void addYAxiLabel() {
 	yLabel.getParagraph().get(0).get(0).setText("Y Axis ");
 	areaRect.addLockedItem(yLabel);
 	
-	yLabel.setSnapPosition(SnappingPosition.defaultRowLabel());
+	yLabel.setSnapPosition(AttachmentPosition.defaultRowLabel());
 	yLabel.setAngle(Math.PI/2);
-	yLabel.getSnapPosition().setSnapHOffset((int) (25+yAxis.getTicLength()));
+	yLabel.getSnapPosition().setHorizontalOffset((int) (25+yAxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel.putIntoSnapPosition();
 	
@@ -318,11 +318,11 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	yLabel2.getParagraph().get(0).get(0).setText("Y Axis 2");
 	areaRect.addLockedItem(yLabel2);
 	
-	SnappingPosition sn = SnappingPosition.defaultRowLabel();
-	sn.setSnapLocationTypeExternal(RectangleEdges.RIGHT_SIDE_MIDDLE);
+	AttachmentPosition sn = AttachmentPosition.defaultRowLabel();
+	sn.setLocationTypeExternal(RectangleEdges.RIGHT_SIDE_MIDDLE);
 	yLabel2.setSnapPosition(sn);
 	yLabel2.setAngle(Math.PI/2);
-	yLabel2.getSnapPosition().setSnapHOffset((int) (25+this.alternateYaxis.getTicLength()));
+	yLabel2.getSnapPosition().setHorizontalOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel2.putIntoSnapPosition();
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
@@ -333,9 +333,9 @@ return new UndoAddItem(this, yLabel2);
 public void addXAxiLabel(int offset) {
 	if (this.hasItem(xLabel)) this.remove(xLabel);
 	xLabel=new  AxisLabel("X-Axis Label", this);
-	xLabel.setSnapPosition(SnappingPosition.defaultRowLabel());
-	xLabel.getSnapPosition().setSnapLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
-	xLabel.getSnapPosition().setSnapVOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
+	xLabel.setSnapPosition(AttachmentPosition.defaultRowLabel());
+	xLabel.getSnapPosition().setLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
+	xLabel.getSnapPosition().setVerticalOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
 	this.add(xLabel);
 	xLabel.getParagraph().get(0).get(0).setText("X Axis ");
 	areaRect.addLockedItem(xLabel);
@@ -353,15 +353,15 @@ public void moxAxisLabelOutOfWay() {
 
 	if (bb.contains(xLabel.getBounds())) {
 		double m = bb.getMaxY()-xLabel.getBounds().getMinY();
-		double oldOff = xLabel.getSnapPosition().getSnapVOffset();
-		xLabel.getSnapPosition().setSnapVOffset(m+oldOff);
+		double oldOff = xLabel.getSnapPosition().getVerticalOffset();
+		xLabel.getSnapPosition().setVerticalOffset(m+oldOff);
 		//new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
 	}
 	
 	if (bb.contains(yLabel.getBounds())) {
 		double m = bb.getMinX()-yLabel.getBounds().getMaxX();
-		double oldOff = xLabel.getSnapPosition().getSnapHOffset();
-		yLabel.getSnapPosition().setSnapHOffset(m+oldOff);
+		double oldOff = xLabel.getSnapPosition().getHorizontalOffset();
+		yLabel.getSnapPosition().setHorizontalOffset(m+oldOff);
 		//new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 	}
 }
@@ -907,7 +907,7 @@ private void addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
 	
 	SeriesLabel l = aaa.getSeriesLabel();
 			l.setSnapTo(aaa.getLegandShape());
-			l.setSnapPosition(SnappingPosition.defaultPlotLegand());
+			l.setSnapPosition(AttachmentPosition.defaultPlotLegand());
 			l.setAngle(0);
 			l.putIntoSnapPosition();
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
@@ -951,8 +951,8 @@ protected void flipPlotOrientation() {
 	if (null!=xLabel||null!=yLabel) {
 		TextParagraph px = xLabel.getParagraph();
 		TextParagraph py = yLabel.getParagraph();
-		SnappingPosition sx = xLabel.getSnapPosition();
-		SnappingPosition sy = yLabel.getSnapPosition();
+		AttachmentPosition sx = xLabel.getSnapPosition();
+		AttachmentPosition sy = yLabel.getSnapPosition();
 		double ax = xLabel.getAngle();
 		double ay = yLabel.getAngle();
 		PlotLabel oldx = xLabel;
@@ -968,7 +968,7 @@ protected void flipPlotOrientation() {
 @MenuItemMethod(menuActionCommand = "Add Label", menuText = "New Series Labels", subMenuName="Add<Label", orderRank=40)
 public CombinedEdit addSeriesLabels() {
 	CombinedEdit undo = new CombinedEdit();
-	SnappingPosition snap1=null;
+	AttachmentPosition snap1=null;
 	for(BasicDataSeriesGroup t: getAllDataSeries()){
 		undo.addEditToList(t.addLabel());
 		if (snap1==null) snap1=t.getSeriesLabel().getSnapPosition();

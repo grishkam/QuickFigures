@@ -1,7 +1,7 @@
 package plotParts.DataShowingParts;
 
 import dataSeries.DataSeries;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class SeriesLabel extends PlotLabel  {
 
@@ -17,7 +17,7 @@ public class SeriesLabel extends PlotLabel  {
 		this.setLegend(l);
 		if (l) return;
 		
-		this.setSnapPosition(SnappingPosition.defaultPlotBottomSide());
+		this.setSnapPosition(AttachmentPosition.defaultPlotBottomSide());
 		this.setAngle(Math.PI/4);
 	}
 

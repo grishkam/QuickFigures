@@ -22,17 +22,25 @@ import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.BasicCoordinateConverter;
 import layersGUI.GraphicTreeUI;
 
-/**see description for interface*/
+/**
+Stores everything related to a particular figure image including the
+display window for figures, the layer set inside, the undo manager and what selections are made
+Also used for windows that display multichannel images
+ */
 public class ImageWindowAndDisplaySet implements DisplayedImage {
 	public static GraphicTreeUI exampletree;
 	private GraphicSetDisplayWindow theWindow=null;
 	private GraphicDisplayCanvas theCanvas=null;
 	private GraphicContainingImage theFigure=null;
+	private MiniToolBarPanel sidePanel;
+	
+	/**The time frames for animations*/
 	private int currentFrame=0;
 	private int endFrame=200;
-	private Selectable selectedItem=null;
+	private transient Selectable selectedItem=null;
 	
-	transient UndoManagerPlus undoMan=null;
+	/**This undo manager stores the undos for this image*/
+	transient UndoManagerPlus undoManager=null;
 	
 	/**Generates a Display of the given graphic set*/
 	public ImageWindowAndDisplaySet(GraphicContainingImage graphicSet) {
@@ -47,21 +55,24 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		ensureAllLinked();
 	}
 	
-	
+	/**called to let the window know which set of objects it is displaying*/
 	void ensureAllLinked() {
 		this.getTheWindow().setDisplaySet(this);
 	}
 	
+	/**returns the component that all the edited object are drawn onto*/
 	public JComponent getTheCanvas() {
 		return theCanvas;
 	}
 	
-	
+	/**sets the component that all the edited object are drawn onto*/
 	public void setTheCanvas(GraphicDisplayCanvas theCanvas) {
 		
 		this.theCanvas = theCanvas;
 		
 	}
+	
+	/**getter methow for the window*/
 	public GraphicSetDisplayWindow getTheWindow() {
 		return theWindow;
 	}
@@ -69,9 +80,10 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		this.theWindow = theWindow;
 		if (theWindow!=null) {
 			theWindow.setDisplaySet(this);
-			
 		}
 	}
+	
+	/**getter method for the 'image' containing all the objects and layers*/
 	public GraphicContainingImage getTheSet() {
 		return theFigure;
 	}
@@ -82,8 +94,8 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	
-	int count =0;
-	private MiniToolBarPanel sidePanel;
+	int count =0;//keeps a count of all the updates to the display windows
+	
 	public void updateDisplay() {
 		
 		if (this.getTheCanvas()==null) return;
@@ -110,7 +122,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	
-	
+	/**Creates a new blank image*/
 	public static ImageWindowAndDisplaySet createAndShowNew(String title, int width, int height) {
 		GraphicContainingImage gs = new GraphicContainingImage();
 		gs.setTitle(title);
@@ -128,52 +140,61 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		
 	}
 	
+	
+	/**returns the undo manager*/
+	public UndoManagerPlus getUndoManager() {
+		if ( undoManager==null) {
+			undoManager=new UndoManagerPlus();
+			if (theFigure!=null)theFigure.undoManager=undoManager;
+		}
+		
+		return undoManager;
+	}
+	
+	/**sets the cursor being used*/
+	@Override
+	public void setCursor(Cursor c) {
+		if (c==null)return;
+		if (theCanvas.getCursor().equals(c)) return;
+		theCanvas.setCursor(c);
+	
+	}
+
+	
+	/**resets the window size*/
 	@Override
 	public void updateWindowSize() {
 		this.getTheWindow().reSetCanvasAndWindowSizes();
 		
 	}
 	
-	public static void centreWindow(Window frame) {
+	/**places the window at the center of the screen*/
+	public static void centreWindow(Window window1) {
 	    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-	    int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
-	    int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
-	    frame.setLocation(x, y);
+	    int x = (int) ((dimension.getWidth() - window1.getWidth()) / 2);
+	    int y = (int) ((dimension.getHeight() - window1.getHeight()) / 2);
+	    window1.setLocation(x, y);
 	}
 
-	@Override
-	public void setCursor(Cursor c) {
-		if (c==null)return;
-		if (theCanvas.getCursor().equals(c)) return;
 	
-		theCanvas.setCursor(c);
-	
-	}
 
+	/**chooses a zoom level automatically*/
 	public void autoZoom() {
 		this.getTheWindow().comfortZoom();
 		
 	}
 
+	/**zooms out until the entire image is of a size that is comfortable visible*/
 	@Override
-	public void zoomOutToFitScreen() {
+	public void zoomOutToDisplayEntireCanvas() {
 		getTheWindow().shrinktoFit();
 		
 	}
 
-	public UndoManagerPlus getUndoManager() {
-		if ( undoMan==null) {
-			undoMan=new UndoManagerPlus();
-			if (theFigure!=null)theFigure.undoManager=undoMan;
-		}
-		
-		return undoMan;
-	}
 
 	@Override
-	public void zoom(String st) {
-		getTheWindow().zoom(st);
-		
+	public void zoom(String actionCommand) {
+		getTheWindow().zoom(actionCommand);
 	}
 	
 	@Override
@@ -247,20 +268,29 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		public CanvasResizeHandle(ImageWindowAndDisplaySet s) {
 			super(0, 0);
 			this.setHandleNumber(999910044);
-			this.setHandleColor(Color.DARK_GRAY);
+			this.setHandleColor(Color.DARK_GRAY.darker());
 			
 		}
 		
+		/**the location at the bottom right corner of the canvas*/
 		public Point2D getCordinateLocation() {
 			Dimension d = theFigure.getCanvasDims();
 			return new Point2D.Double(d.getWidth(), d.getHeight());
 			}
+		
+		/**performs the change in canvas size*/
 		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
 			Point p = lastDragOrRelMouseEvent.getCoordinatePoint();
 			theFigure.getBasics().setWidth(p.x);
 			theFigure.getBasics().setHeight(p.y);
 			//updateDisplay();
-			theWindow.resetCanvasSize();
+			theWindow.resetCanvasDisplayObjectSize();
+			
+		}
+		
+		public void handleRelease(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+			if (theWindow.usesBuiltInSidePanel())
+				theWindow.reSetCanvasAndWindowSizes();
 		}
 		/**
 		 * 
@@ -269,7 +299,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		
 	}
 
-
+	/**The handle list for the canvas size changing handle*/
 	transient SmartHandleList canvasHandleList;
 	@Override
 	public SmartHandleList getCanvasHandles() {

@@ -109,7 +109,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	/**updates the handle list according to the listed objects*/
 	protected void refreshList(ArrayList<LocatedObject2D> objects) {
 		updateRectangle(objects);
-		if (type!=ROTATION_ONLY_TYPE) for(int i:RectangleEdges.locationsforh) {
+		if (type!=ROTATION_ONLY_TYPE) for(int i:RectangleEdges.internalLocations) {
 			crateHandleFor(i);
 		}
 		
@@ -323,7 +323,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			
 			
 			
-			selectionManagger = w.getAsDisplay().getImageAsWrapper().getSelectionManagger();
+			selectionManagger = w.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
 			
 			/**displays copy over the original image so the user can see the new locations or transformations being implemented*/
 			GraphicList g = new GraphicList(o2);

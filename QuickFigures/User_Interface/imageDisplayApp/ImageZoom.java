@@ -23,7 +23,7 @@ public class ImageZoom {
 		return zoom;
 	}
 	
-	@Deprecated
+	
 	/**returns the zoom level as a double but with only a limited number of digits*/
 	public double getZoomAsFewDigits() {
 		double factor=10000;

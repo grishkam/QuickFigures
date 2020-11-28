@@ -48,7 +48,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 		establishMovedIntoOrClickedHandle();//if the user clicked a handle on an existing rectangle
 		
 		/**if a Rectangles handle was clicked on sets that as the current rectangle */
-		if (roi2 instanceof RectangularGraphic||getPressedHandle()>-1) {
+		if (roi2 instanceof RectangularGraphic&&getPressedHandle()>-1) {
 			currentRect=(RectangularGraphic) roi2;
 			
 		} else

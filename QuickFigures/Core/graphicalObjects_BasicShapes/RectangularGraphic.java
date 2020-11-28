@@ -38,6 +38,8 @@ import utilityClassesForObjects.StrokedItem;
 
 /**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog*/
 public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePosisions, HasSmartHandles {
+	private static final int ROTATION_HANDLE = 10;
+	public static final int STROKE_HANDLE_TYPE = 11;
 	{name="Rectangle ";}
 	
 	private static final long serialVersionUID = 1L;
@@ -55,10 +57,10 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	public boolean flipDuringHandleDrag=true;
 
 	public Integer handleSize=3;
+	
+	/**under some circumstances, not all the handles will be visible*/
 	public boolean hideCenterAndRotationHandle=false;
-
 	public boolean hideStrokeHandle=false;
-
 	public boolean hideRotationHandle=false;
 
 	
@@ -90,8 +92,6 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	public String getShapeName() {
 		return "Rectangle";
 	}
-	
-	
 	
 
 	public void setRectangle(Rectangle2D r) {
@@ -153,7 +153,7 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 			}
 		
 		
-		if (handlenum==10){
+		if (handlenum==ROTATION_HANDLE){
 
 			setAngle(BasicGraphicalObject.distanceFromCenterOfRotationtoAngle(getCenterOfRotation(), p2));
 		
@@ -252,13 +252,16 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	}
 
 
-	
+	/**Returns the location type. 
+	 * @see RectangleEdges*/
 	@Override
 	public Point2D getLocation() {
 		Point2D out = RectangleEdges.getLocation(getLocationType(), getRectangle());
 		return new Point.Double(out.getX(), out.getY());
 	}
 
+	/**Sets the location. what location exactly this refers to depends on the location type
+	 @see RectangleEdges */
 	@Override
 	public void setLocation(double x, double y) {
 		Rectangle2D.Double r=getRectangle();//.getBounds();
@@ -426,17 +429,17 @@ public Rectangle2D.Double getRectangle() {
 	
 	
 
-	public static final int STROKE_HANDLE_TYPE = 11, rotationType=10;
+	
 	
 	protected SmartHandleList createSmartHandleList() {
 		 SmartHandleList smList = new SmartHandleList();
-		for(int i:RectangleEdges.locationsforh) {
+		for(int i:RectangleEdges.internalLocations) {
 			if (hideCenterAndRotationHandle &&i==CENTER) continue;
 			smList.add(createSmartHandle(i));
 		}
 		if (!hideCenterAndRotationHandle &&!hideRotationHandle)
 			{
-			smList.add(createSmartHandle(rotationType));
+			smList.add(createSmartHandle(ROTATION_HANDLE));
 			
 			}
 		if (!hideStrokeHandle) smList.add(createSmartHandle(STROKE_HANDLE_TYPE));
@@ -502,14 +505,14 @@ public Rectangle2D.Double getRectangle() {
 		}
 
 		public boolean isRotationHandle() {
-			return this.getHandleNumber()==rotationType;
+			return this.getHandleNumber()==ROTATION_HANDLE;
 		}
 
 		
 		/**Sets the locations of the handles based on the rectangles, size, location and rotation and
 		 */
 		public void updateLocation(int type) {
-			if (type!=rotationType) {
+			if (type!=ROTATION_HANDLE) {
 				Point2D p = RectangleEdges.getLocation(type,rect.getBounds());
 				rect.undoRotationCorrection(p);
 				setCordinateLocation(p);
@@ -613,6 +616,8 @@ public Rectangle2D.Double getRectangle() {
 	public int handleNumber(int x, int y) {
 		return getSmartHandleList().handleNumberForClickPoint(x, y);
 	}
+	
+	/**Called when a handle is moved*/
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		SmartHandle h = this.getSmartHandleList().getHandleNumber(handlenum);
@@ -644,7 +649,7 @@ public Rectangle2D.Double getRectangle() {
 		RectangularGraphic r1 = new RectangularGraphic(0,0,300,200);
 		r1.setFilled(true);
 		r1.setDashes(new float[]{10000});
-		r1.setStrokeWidth(4);
+		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(Color.black);
 		return r1;
 	}

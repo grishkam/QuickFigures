@@ -25,7 +25,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 
 	public EditLabels(TextGraphic t) {
 		
-		 type=t.getSnapPosition().getGridChoiceNumbers();
+		 type=t.getSnapPosition().getGridSpaceCode();
 		 setUpPickerFortype(type);
 		 modelTextItem=t;
 	}

@@ -17,7 +17,7 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 /***/
 public class SnapBox extends GraphicSelectable {
@@ -27,7 +27,7 @@ public class SnapBox extends GraphicSelectable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private SnappingPosition snappingBehaviour=SnappingPosition.defaultExternal();
+	private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultExternal();
 	
 	private RectangularGraphic referenceObject=new RectangularGraphic(new Rectangle(50,30,120,90));
 	RectangularGraphic r2=new RectangularGraphic(new Rectangle(0,0,40,30));
@@ -77,7 +77,7 @@ public class SnapBox extends GraphicSelectable {
 	}
 	
 	
-	public SnapBox(SnappingPosition snappingBehaviour) {
+	public SnapBox(AttachmentPosition snappingBehaviour) {
 		this. snappingBehaviour= snappingBehaviour;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
@@ -204,12 +204,12 @@ public class SnapBox extends GraphicSelectable {
 	}
 
 
-	public SnappingPosition getSnappingBehaviour() {
+	public AttachmentPosition getSnappingBehaviour() {
 		return snappingBehaviour;
 	}
 
 
-	public void setSnappingBehaviour(SnappingPosition snappingBehaviour) {
+	public void setSnappingBehaviour(AttachmentPosition snappingBehaviour) {
 		this.snappingBehaviour = snappingBehaviour;
 		this.repaint();
 	}
@@ -231,7 +231,7 @@ public class SnapBox extends GraphicSelectable {
 	}
 	@Override
 	public void setSelectionNumber(int index) {
-		this.getSnappingBehaviour().setSnapType(index);
+		this.getSnappingBehaviour().setLocationType(index);
 		
 	}
 

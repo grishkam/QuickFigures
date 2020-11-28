@@ -36,7 +36,7 @@ import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 import undoForPlots.AxisChangeUndo;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements PlotComponent {
 	
@@ -511,7 +511,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	public void setUpSeriesLabel(SeriesLabel l) {
 		l.setLegend(true);
 				l.setSnapTo(getLegandShape());
-				l.setSnapPosition(SnappingPosition.defaultPlotLegand());
+				l.setSnapPosition(AttachmentPosition.defaultPlotLegand());
 				l.setAngle(0);
 				l.putIntoSnapPosition();
 	}

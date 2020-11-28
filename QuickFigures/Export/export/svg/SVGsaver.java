@@ -1,4 +1,4 @@
-package fieldReaderWritter;
+package export.svg;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -31,6 +31,9 @@ public class SVGsaver {
 	String xmlns="http://www.w3.org/2000/svg";
 	Rectangle rs=new Rectangle(0,0,500,500);
 	
+	
+	public SVGsaver() {}
+	
 	public static void main(String[] args) {
 		new SVGsaver().saveObject(pathOfDesktopFolder()+"/test.svg");
 	}
@@ -57,7 +60,7 @@ public class SVGsaver {
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
 		StreamResult result = new StreamResult(newpath);
-
+		
 		
 		try{
 		transformer.transform(source, result); 
@@ -89,7 +92,6 @@ public class SVGsaver {
 }
 	
 	public Element createSVGelememnt(Document doc) {
-		// TODO Auto-generated method stub
 		Element ele = doc.createElement("svg");
 		
 		doc.appendChild(ele);
@@ -154,7 +156,7 @@ public class SVGsaver {
 		  element.setAttribute("id", set.getName());
 		  setRectAttributes(element, new Rectangle(diw.getImageAsWrapper().getCanvasDims()));
 		  
-			SVGGeneratorContext context = SVGGeneratorContext.createDefault(doc);
+			createContext(doc);
 			
 		  
 		  for(ZoomableGraphic z: set.getItemArray()) try {
@@ -174,5 +176,13 @@ public class SVGsaver {
 		
 			makeFile(doc, newpath);
 		
+	}
+
+
+	/**
+	 * @param doc
+	 */
+	public void createContext(Document doc) {
+		SVGGeneratorContext context = SVGGeneratorContext.createDefault(doc);
 	}
 }

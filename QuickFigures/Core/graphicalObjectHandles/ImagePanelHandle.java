@@ -109,7 +109,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**performed to drag the handles*/
 	public void handleDrag(CanvasMouseEventWrapper e) {
 		super.handleDrag(e);
-		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getSelectionManagger();
+		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
 		
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
 			{
@@ -180,7 +180,7 @@ public class ImagePanelHandle extends SmartHandle {
 		{
 		releaseCenterHandle(e);
 		}
-		e.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelectionstoNull();
+		e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
 		
 	}
 

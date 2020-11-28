@@ -39,7 +39,7 @@ import undo.UndoInsetDefinerGraphic;
 import undo.UndoLayoutEdit;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class InsetTool extends GraphicTool implements MontageSpaces {
 	
@@ -77,7 +77,7 @@ public class InsetTool extends GraphicTool implements MontageSpaces {
 	public double scale=2;//The width of the frames around the newly created insets
 	boolean avoidDapi=false;
 	int createMultiChannel=1;
-	SnappingPosition sb=SnappingPosition.partnerExternal() ;//.defaultInternalPanel();
+	AttachmentPosition sb=AttachmentPosition.partnerExternal() ;//.defaultInternalPanel();
 	boolean sizeDefining=true;
 
 
@@ -260,19 +260,19 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		itemsInway.remove(inset.personalGraphic);
 		if (itemsInway.size()>0&&l.getSnapPosition().isExternalSnap()) {
 			//IssueLog.log("limited space puts makes  col label impossible");
-			l.setSnapPosition(SnappingPosition.defaultPanelLabel());
+			l.setSnapPosition(AttachmentPosition.defaultPanelLabel());
 		} else
 		if(fontsize>heightofPanel/3.5) {
-			l.setSnapPosition(SnappingPosition.defaultColLabel());	
+			l.setSnapPosition(AttachmentPosition.defaultColLabel());	
 		}
 		
 		if(fontsize<heightofPanel/4) {
-			l.setSnapPosition(SnappingPosition.defaultPanelLabel());
+			l.setSnapPosition(AttachmentPosition.defaultPanelLabel());
 		}
 		if  (haveChanLabelsOnTop() ) {
 			MontageLayoutGraphic layout = inset.personalGraphic;
 			double height = layout.getBounds().getHeight();
-			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setSnapPosition(SnappingPosition.defaultColLabel());	
+			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setSnapPosition(AttachmentPosition.defaultColLabel());	
 		}
 		
 	}
@@ -287,7 +287,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		for(PanelListElement panel: list.getPanels())
 		if (locksItems ) {
 			pm.getGridLayout().addLockedItem(panel.getPanelGraphic());
-			panel.getPanelGraphic().setSnapPosition(SnappingPosition.defaultInternalPanel());
+			panel.getPanelGraphic().setSnapPosition(AttachmentPosition.defaultInternalPanel());
 			};
 	}
 	

@@ -3,7 +3,6 @@ import java.awt.Desktop;
 import java.awt.Rectangle;
 import java.io.File;
 
-import officeConverter.OfficeObjectConvertable;
 import utilityClassesForObjects.ArrayObjectContainer;
 
 import java.io.FileNotFoundException;
@@ -16,6 +15,8 @@ import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
+import export.pptx.OfficeObjectConvertable;
+import export.pptx.OfficeObjectMaker;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
@@ -41,9 +42,6 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 		File f=getFileAndaddExtension();
 		
 		
-		
-		
-		//File f=new File("testPPT.ppt");
 		try{
 			System.setProperty("javax.xml.transform.TransformerFactory",
 	                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
@@ -112,7 +110,11 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 		
 		if (o instanceof OfficeObjectConvertable)try {
 			OfficeObjectConvertable t=(OfficeObjectConvertable) o;
-			t.getObjectMaker().addObjectToSlide( ppt, slide);
+			OfficeObjectMaker objectMaker = t.getObjectMaker();
+			if (objectMaker==null) {
+				IssueLog.log("object maker not found for "+t);
+				} else
+			objectMaker.addObjectToSlide( ppt, slide);
 			
 		}
 		catch (Throwable t) {

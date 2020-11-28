@@ -8,7 +8,6 @@ import utilityClassesForObjects.Selectable;
 import java.awt.Cursor;
 import java.awt.Window;
 
-import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import channelMerging.MultiChannelDisplayWrapper;
 import channelMerging.MultiChannelImage;
@@ -78,7 +77,7 @@ public class ImagePlusDisplayWrap implements MultiChannelDisplayWrapper {
 
 	/**not implemented*/
 	@Override
-	public void zoomOutToFitScreen() {
+	public void zoomOutToDisplayEntireCanvas() {
 		// TODO Auto-generated method stub
 		
 	}

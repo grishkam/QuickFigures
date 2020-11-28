@@ -11,7 +11,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 /**A menu for choosing to attach an item to another object. */
@@ -52,7 +52,7 @@ public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
 		UndoTakeLockedItem undo = new UndoTakeLockedItem(getLockbox(), target, false);
 		Rectangle2D b = getLockbox().getContainerForBounds(target);
 		Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, target.getBounds());
-		if (target.getSnapPosition()==null) {target.setSnapPosition(SnappingPosition.defaultInternal());}
+		if (target.getSnapPosition()==null) {target.setSnapPosition(AttachmentPosition.defaultInternal());}
 		target.getSnapPosition().setToNearestSnap(target.getBounds(), b, location);
 		
 		getLockbox().addLockedItem(target);

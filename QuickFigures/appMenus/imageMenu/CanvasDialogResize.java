@@ -13,20 +13,28 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.MenuItemForObj;
 import genericMontageKit.BasicObjectListHandler;
+import standardDialog.ChoiceInputEvent;
+import standardDialog.ChoiceInputListener;
+import standardDialog.ComboBoxPanel;
+import standardDialog.NumberInputEvent;
+import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
 import standardDialog.SnapBox;
 import standardDialog.StandardDialog;
 import standardDialog.StringInputPanel;
 import undo.CanvasResizeUndo;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
+import utilityClassesForObjects.RectangleEdges;
 
+/**simple menu item that displays a dialog to allow the user to input a canvas size*/
 public class CanvasDialogResize implements MenuItemForObj {
 
 	static int NORMAL=0;
-	public static int Inch=1;
-	static int Centimmeter=2;
+	public static int INCH=1;
+	static int CENTIMETER=2;
+	static String[] values= {"Points", "Inches", "cm"};
 	public boolean fancy=true;
-	private int type=0;
+	private int type=NORMAL;
 	
 	public CanvasDialogResize() {}
 	public CanvasDialogResize(int type) {
@@ -47,24 +55,30 @@ public class CanvasDialogResize implements MenuItemForObj {
 	}
 
 	public void performResize(ImageWrapper iw) {
+		new CanvasDialog(iw, fancy);
+	}
+	/**
+	 * @return
+	 */
+	public double getRatio() {
 		double ratio=1;
-		if (type==Inch) ratio=72;
-		if (type==Centimmeter) ratio=72/2.54;
-		new canvasDialog(iw, fancy, ratio);
+		if (type==INCH) ratio=72;
+		if (type==CENTIMETER) ratio=72/2.54;
+		return ratio;
 	}
 	
 	
 	@Override
 	public String getCommand() {
-		if (type==Inch) return "Canvas Resize Dialog (Inch)";
-		if (type==Centimmeter) return "Canvas Resize Dialog (cm)";
+		if (type==INCH) return "Canvas Resize Dialog (Inch)";
+		if (type==CENTIMETER) return "Canvas Resize Dialog (cm)";
 		return "Canvas Resize Dialog";
 	}
 
 	@Override
 	public String getNameText() {
-		if (type==Inch) return "Resize Canvas (in)";
-		if (type==Centimmeter) return "Resize Canvas (cm)";
+		if (type==INCH) return "Resize Canvas (in)";
+		if (type==CENTIMETER) return "Resize Canvas (cm)";
 		return "Resize Canvas";
 	}
 
@@ -75,7 +89,7 @@ public class CanvasDialogResize implements MenuItemForObj {
 	}
 	
 
-public class canvasDialog extends StandardDialog {
+public class CanvasDialog extends StandardDialog {
 	
 	/**
 	 * 
@@ -85,26 +99,61 @@ public class canvasDialog extends StandardDialog {
 	boolean fancy=true;
 	Rectangle r1;
 	private Rectangle2D.Double r2;
-	double ratio=1;
 	
-	 private SnappingPosition snappingBehaviour=SnappingPosition.defaultInternal();
+	
+	 private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultInternal();
+	 
 		JLabel label=new JLabel("Position Of Items");
 		 SnapBox Box=new  SnapBox(snappingBehaviour);
+		private double width2;
+		private double height2;
+		private NumberInputPanel wInput;
+		private NumberInputPanel hInput;
 		
-	
-	public canvasDialog(ImageWrapper iw, boolean fancy, double ratio) {
-		this.ratio=ratio;
+	public CanvasDialog(ImageWrapper iw, boolean fancy) {
+		snappingBehaviour.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
 		this.fancy=fancy;
 		setModal(true);
 		this.iw=iw;
 		Dimension d = iw.getCanvasDims();//.getDimensionsXY();
 		r1=new Rectangle(d);
 		String adder="";
-		if(type==Inch) adder=" (inches)";
-		if(type==Centimmeter) adder=" (cm)";
+		if(type==INCH) adder=" (inches)";
+		if(type==CENTIMETER) adder=" (cm)";
 		this.add("name", new StringInputPanel("Title", iw.getTitle()));
-		this.add("width", new NumberInputPanel("Width"+adder, d.getWidth()/ratio));
-		this.add("height", new NumberInputPanel("Height"+adder, d.getHeight()/ratio));
+		
+		ComboBoxPanel unitPanel = new ComboBoxPanel("Units", values, type);
+		this.add("unit", unitPanel);
+		width2 = d.getWidth();
+		wInput = new NumberInputPanel("Width"+adder, width2/ getRatio(), 1);
+		this.add("width", wInput);
+		height2 = d.getHeight();
+		hInput = new NumberInputPanel("Height"+adder, height2/ getRatio(), 1);
+		this.add("height", hInput);
+		hInput.addNumberInputListener(new NumberInputListener() {
+			public void numberChanged(NumberInputEvent ne) {
+				height2=ne.getNumber()*getRatio();
+			}});
+		wInput.addNumberInputListener(new NumberInputListener() {
+			public void numberChanged(NumberInputEvent ne) {
+				width2 =ne.getNumber()*getRatio();
+			}});
+	
+		unitPanel.addChoiceInputListener(new ChoiceInputListener() {
+
+			@Override
+			public void numberChanged(ChoiceInputEvent ne) {
+				type=(int) ne.getNumber();
+				double w2 = width2/getRatio();
+				double h2 = height2/getRatio();
+				wInput.setNumber(w2);
+				hInput.setNumber(h2);
+				
+			}
+			
+		});
+		
+		
 	this.setWindowCentered(true);
 		if (fancy) {
 			GridBagConstraints c = new GridBagConstraints();
@@ -116,11 +165,14 @@ public class canvasDialog extends StandardDialog {
 		this.showDialog();
 	}
 	
+	
+
+	
 	public void onOK() {
 		BasicObjectListHandler boh = new BasicObjectListHandler();
 		String title=this.getString("name");
-		double ww = this.getNumber("width")*ratio;
-		double hh = this.getNumber("height")*ratio;
+		double ww = width2;
+		double hh =height2;
 		
 		if (fancy) {
 		r2=new Rectangle2D.Double(0,0,(int)ww,(int)hh);
@@ -141,6 +193,30 @@ public class canvasDialog extends StandardDialog {
 public Icon getIcon() {
 	// TODO Auto-generated method stub
 	return null;
+}
+
+class PartnerNumbers implements NumberInputListener {
+
+	private NumberInputPanel first;
+	private NumberInputPanel second;
+	private double ratio;
+
+	public PartnerNumbers(NumberInputPanel p1, NumberInputPanel p2, double ratio) {
+		p1.addNumberInputListener(this);
+		p2.addNumberInputListener(this);
+		this.first=p1;
+		this.second=p2;
+		this.ratio=ratio;
+	}
+	
+	@Override
+	public void numberChanged(NumberInputEvent ne) {
+		
+		if(ne.getSourcePanel()==first) second.setNumber(ne.getNumber()/ratio);
+		if(ne.getSourcePanel()==second) first.setNumber(ne.getNumber()*ratio);
+	}
+	
+	
 }
 
 

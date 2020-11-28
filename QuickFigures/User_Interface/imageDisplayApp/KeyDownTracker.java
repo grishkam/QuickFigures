@@ -6,6 +6,10 @@ import java.util.HashMap;
 
 import includedToolbars.StatusPanel;
 
+/**A simple class that keeps records of key presses and releases.
+ Work in progress. Sometimes this class appears to miss events so it is not
+ used for any crucial features.
+  */
 public class KeyDownTracker implements KeyListener {
 	
 	

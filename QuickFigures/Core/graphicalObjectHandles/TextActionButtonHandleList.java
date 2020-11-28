@@ -32,6 +32,7 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.TextLineSegment;
 import utilityClassesForObjects.TextParagraph;
 
+/**A list of handles that works like a mini toolbar for text Graphic*/
 public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 	
@@ -39,10 +40,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	{maxGrid=12;}
 
 	private TextGraphic text;
-	private boolean dimmerExists;
-	private SuperTextButton sizeField;
-
-
+	
 	public TextActionButtonHandleList(TextGraphic t) {
 		this.text=t;
 		addItems();
@@ -50,12 +48,13 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	}
 
 	public void updateHandleLocations(double magnify) {
-	
 		super.updateHandleLocations(magnify);
 	}
 
 	public void updateLocationBasedOnParentItem() {
-		setLocation(new Point2D.Double(text.getBounds().getX(), text.getBounds().getMaxY()+15));
+		double x = text.getBounds().getX();
+		if (x>30)x-=30;
+		setLocation(new Point2D.Double(x, text.getBounds().getMaxY()+15));
 	}
 	
 	/**
@@ -63,6 +62,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**creates the handles and add them to the list*/
 	public void addItems() {
 		
 		if (text instanceof ComplexTextGraphic )
@@ -75,26 +75,18 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			
 		}
 		
-		SuperTextButton fontSizer = new SuperTextButton(text, true);
-		
-		TextActionHandle sizeHandle = addButton(fontSizer);
-		sizeHandle.maxWidth=30;
+		addFontSizeHandle();
 		addTextColor();
 		createColorDimmer();
 		
-		MultiSelectionOperator[] ff = SuperTextButton.getForFonts(text);
-		GeneralActionListHandle h = new FontFamilyActionHandle(ff[ff.length-1], 18,  ff);
-		this.add(h);
+		addFontFamilyHandle();
 		
 		
-		this.add(new textSyncHandle(800210));
-		
-		this.add(new GeneralActionHandleForText(new SelectAllButton(text), 819100, 0));
-	
-		sizeField = new SuperTextButton(text, SuperTextButton. RESIZES_FONT_TO, text.getFont().getSize());
+		this.add(new TextDialogHandle(800210));
+		this.add(new TextHandleNonEditmode(new SelectAllButton(text), 819100));
 		add(new JustifyButtonForText(1488925));
 		setLocation(location);
-		adddSnapPositionButton(text);
+		addAttachmentPositionButton(text);
 		
 		SetAngle itemForIcon2 = new SetAngle(45);
 		 addOperationList(itemForIcon2,SetAngle.createManyAngles() );
@@ -102,21 +94,37 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		
 	}
 
-	protected void adddSnapPositionButton(LocatedObject2D t2) {
-		if (t2.getSnapPosition()!=null)this.add(new GeneralActionHandleForText(new SnappingSyncer(true, t2), 741905, 0));
+	/**
+	 * 
+	 */
+	public void addFontFamilyHandle() {
+		MultiSelectionOperator[] ff = SuperTextButton.getForFonts(text);
+		GeneralActionListHandle h = new FontFamilyActionHandle(ff[ff.length-1], 18,  ff);
+		this.add(h);
+	}
+
+	/**
+	 * 
+	 */
+	public void addFontSizeHandle() {
+		SuperTextButton fontSizer = new SuperTextButton(text, true);
+		TextActionHandle sizeHandle = addButton(fontSizer);
+		sizeHandle.maxWidth=30;
+	}
+
+	protected void addAttachmentPositionButton(LocatedObject2D t2) {
+		if (t2.getSnapPosition()!=null)this.add(new TextHandleNonEditmode(new SnappingSyncer(true, t2), 741905));
 	}
 	
-	class GeneralActionHandleForText extends GeneralActionHandle {
+	class TextHandleNonEditmode extends GeneralActionHandle {
 
-		private int form;
 
-		public GeneralActionHandleForText(MultiSelectionOperator i, int num, int form) {
+		public TextHandleNonEditmode(MultiSelectionOperator i, int num) {
 			super(i, num);
-			this.form=form;
 		}
 		@Override
 		public boolean isHidden() {
-			if(form==0&&text.isEditMode()) {return true;}
+			if(text.isEditMode()) {return true;}
 			
 			return super.isHidden();
 			
@@ -161,11 +169,10 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 
 	
-	public class textSyncHandle extends GeneralActionHandle {
+	public class TextDialogHandle extends GeneralActionHandle {
 
-		public textSyncHandle( int num) {
+		public TextDialogHandle( int num) {
 			super(new TextOptionsSyncer(), num);
-			//super.setIcon(DialogIcon.getIcon());
 		}
 		
 		public void updateIcon() {
@@ -184,10 +191,10 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		private static final long serialVersionUID = 1L;}
 
 
-	protected void createColorDimmer() {
-		if (dimmerExists) return; else dimmerExists=true;
+	private void createColorDimmer() {
+		
 		SuperTextButton[] forDims = SuperTextButton.getForDims(text);
-		GeneralActionListHandle h2 = new TextDimmingColorHandle2(forDims[0], numHandleID,forDims);;
+		GeneralActionListHandle h2 = new ColorDimmingHandle(forDims[0], numHandleID,forDims);;
 		h2.setxShift(h2.getxShift() + 2);
 		h2.setyShift(h2.getyShift() + 2);
 		addHandle(h2);
@@ -241,13 +248,11 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	}
 	
 	
-	
+	/**A handle for altering text in a few ways, including size, style.
+	  handle appearance may be different depending on whether the selected text is 
+	  bold, italic, superscript or something else.*/
 	public class TextActionHandle extends IconHandle {
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
-			updateHandleLocations(cords.getMagnification());
-			if (button.objectIsAlready(text)) this.setHandleColor(Color.DARK_GRAY); else this.setHandleColor(Color.white);
-			super.draw(graphics, cords);
-		}
+		
 		
 		private SuperTextButton button;
 		private boolean operateOnAll=true;
@@ -256,6 +261,14 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			super(i.getIcon(), new Point(0,0));
 			this.setHandleNumber(num);
 			this.button=i;
+		}
+		
+		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+			updateHandleLocations(cords.getMagnification());
+			if (button.objectIsAlready(text))
+				this.setHandleColor(Color.DARK_GRAY); 
+			else this.setHandleColor(Color.white);
+			super.draw(graphics, cords);
 		}
 		
 		public boolean isHidden() {
@@ -273,17 +286,18 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			boolean rightSide=canvasMouseEventWrapper. getClickedXScreen()>lastDrawShape.getBounds().getCenterX();
 			boolean down=canvasMouseEventWrapper. getClickedYScreen()>lastDrawShape.getBounds().getCenterY();
 			
+			/**handles the activity for a font resizing version of this button*/
 			if (button.resizesFont()) {
 				if(!rightSide||canvasMouseEventWrapper.clickCount()>5||canvasMouseEventWrapper.isPopupTrigger()) {
 					showFontSizeInputPopup(canvasMouseEventWrapper);
 					return;
 				}
-				
-				
 				if(rightSide)
 					button.makeResizeDown(down);
 			}
 
+			/**performs the action. if the text item is in edit mode, this will only affect the user selected text 
+			  with the object*/
 			if (operateOnAll&&!text.isEditMode()) {
 				LayerSelector selector = canvasMouseEventWrapper.getSelectionSystem();
 				button.setSelector(selector);
@@ -293,12 +307,12 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 				canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(edit);
 			}
 			
-			
-			
 			canvasMouseEventWrapper.getAsDisplay().updateDisplay();
 			
 		}
 
+		
+	/**displays a popup that allows the user to input a font size*/
 		protected void showFontSizeInputPopup(CanvasMouseEventWrapper canvasMouseEventWrapper) {
 			NumberInputPanel panel = button.getFontInputPanel(canvasMouseEventWrapper.getSelectionSystem());
 			SmartPopupJMenu menu = new SmartPopupJMenu();
@@ -308,35 +322,33 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 	}
 	
+	/**A handle for choosing text colors*/
 	public class TextColorHandle2 extends GeneralActionListHandle {
 		{setxShift(4); setyShift(4);}
 		public TextColorHandle2(MultiSelectionOperator i, int num, MultiSelectionOperator[] items) {
 			super(i, num, items);
 			
 		}
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		
 		public boolean isHidden() {
-			if(!text.isEditMode() && text instanceof ComplexTextGraphic) return true;
-			
+			if(!text.isEditMode() && text instanceof ComplexTextGraphic) return true;//since a user must select text for this handle to affect complex text, it is hidden when text cannot be selected
 			return false;
 		}
 
 	}
 	
-	/**a special handle subcless of the color dimming feature, for certain colors it is not applicable and hidden*/
-	public class TextDimmingColorHandle2 extends GeneralActionListHandle {
+	/**a special handle for the color dimming feature. allows the user
+	 * to change the dimming applied to text colors, 
+	 * for certain colors it is not applicable and hidden*/
+	public class ColorDimmingHandle extends GeneralActionListHandle {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public TextDimmingColorHandle2(SuperTextButton superscriptButton, int numHandleID,
+		public ColorDimmingHandle(SuperTextButton superscriptButton, int numHandleID,
 				SuperTextButton[] forDims) {
 			super(superscriptButton, numHandleID, forDims);
 		}
@@ -361,6 +373,8 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 	}
 	
+	/**A handle with an additional menu option called more fonts, that allows the user to 
+	 * select a font. Handle for choosing a font family*/
 	public class FontFamilyActionHandle extends GeneralActionListHandle implements ActionListener, SwingDialogListener {
 
 		/**
@@ -373,12 +387,9 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		public FontFamilyActionHandle(MultiSelectionOperator multiSelectionOperator, int i,
 				MultiSelectionOperator[] ff) {
 			super( multiSelectionOperator, i, ff);
-			//familyC=new FontChooser(text.getFont()).generateFamilyCombo();
-		//	familyC.addMouseListener(this);
-			
+	
 			JMenuItem jM = new JMenuItem("More Fonts");
 			jM.addActionListener(this);
-			//jM.add(familyC);
 			p.add(jM);
 		}
 		
@@ -388,7 +399,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		}
 
 	
-
+		/**displays a font chooser dialog*/
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			StandardDialog s = new StandardDialog("Select font", true);
@@ -406,6 +417,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			s2.showDialog();
 		}
 
+		/**After user has chosen a font in the dialog, this method applies it*/
 		@Override
 		public void itemChange(DialogItemChangeEvent event) {
 			

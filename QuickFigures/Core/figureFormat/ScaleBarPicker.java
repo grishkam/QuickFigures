@@ -8,7 +8,7 @@ import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class ScaleBarPicker extends GraphicalItemPicker<BarGraphic>{
 	/**
@@ -83,7 +83,7 @@ public void setToStandardFor(MultichannelDisplayLayer wrap) {
 
 
 			getModelItem().setLengthInUnits(getBarLengthStandard(panel));
-			getModelItem().setSnapPosition(SnappingPosition.defaultScaleBar());
+			getModelItem().setSnapPosition(AttachmentPosition.defaultScaleBar());
 			
 			setBarDefaultsBasedOnHeight(h, getModelItem(), Color.white);
 		}

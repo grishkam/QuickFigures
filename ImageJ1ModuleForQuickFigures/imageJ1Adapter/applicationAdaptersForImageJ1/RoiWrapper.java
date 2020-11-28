@@ -29,7 +29,7 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LocationChangeListenerList;
 import utilityClassesForObjects.PaintProvider;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 /**An implementation of LocatedObject2D that allows many QuickFigures classes
  to act on ImageJ Rois. not extensively used anymore. The methods in this class
  might be useful to future programmers but not currently important for the package*/
@@ -332,14 +332,14 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 
 
 		@Override
-		public SnappingPosition getSnapPosition() {
+		public AttachmentPosition getSnapPosition() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 
 		@Override
-		public void setSnapPosition(SnappingPosition snap) {
+		public void setSnapPosition(AttachmentPosition snap) {
 			// TODO Auto-generated method stub
 			
 		}

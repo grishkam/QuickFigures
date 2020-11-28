@@ -18,7 +18,7 @@ import standardDialog.GraphicComboBox;
 import standardDialog.ItemSelectblePanel;
 import standardDialog.StandardDialog;
 import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 
 public class TemplateChooserDialog extends StandardDialog {
 	
@@ -130,11 +130,11 @@ public class TemplateChooserDialog extends StandardDialog {
 		//FigureTemplate tp=new FigureTemplate();
 		ObjectContainer oc1=new GraphicLayerPane("");
 		TextGraphic tg4 = new TextGraphic("Hello");
-		tg4.setSnapPosition(SnappingPosition.defaultRowSide());
+		tg4.setSnapPosition(AttachmentPosition.defaultRowSide());
 		oc1.addItemToImage(tg4);
 		
 		tg4 = new TextGraphic("Hi");
-		tg4.setSnapPosition(SnappingPosition.defaultRowSide());
+		tg4.setSnapPosition(AttachmentPosition.defaultRowSide());
 		oc1.addItemToImage(tg4);
 		oc1.addItemToImage(new MontageLayoutGraphic());
 		oc1.addItemToImage(new BarGraphic());

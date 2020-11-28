@@ -5,7 +5,7 @@ import java.io.File;
 import ultilInputOutput.FileChoiceUtil;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ToolbarTester;
-import fieldReaderWritter.GraphicSVGParser;
+import export.svg.GraphicSVGParser;
 import figureFormat.DirectoryHandler;
 import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageWindowAndDisplaySet;

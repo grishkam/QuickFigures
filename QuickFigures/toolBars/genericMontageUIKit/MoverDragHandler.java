@@ -138,11 +138,11 @@ public class MoverDragHandler extends BasicDragHandler {
 			Rectangle2D panel = p.getPanelLayout().getPanel(i);
 		
 			
-			displaySet.getImageAsWrapper().getSelectionManagger().setSelectionGraphic(p);
-			displaySet.getImageAsWrapper().getSelectionManagger().select(panel, 1);
+			displaySet.getImageAsWrapper().getOverlaySelectionManagger().setSelectionGraphic(p);
+			displaySet.getImageAsWrapper().getOverlaySelectionManagger().select(panel, 1);
 			
 		}  else {
-			displaySet.getImageAsWrapper().getSelectionManagger().removeSelections();
+			displaySet.getImageAsWrapper().getOverlaySelectionManagger().removeSelections();
 			
 		}
 		displaySet.updateDisplay();
@@ -249,7 +249,7 @@ public class MoverDragHandler extends BasicDragHandler {
 				if(imageadded!=null) addedPanels.add(imageadded);
 				}
 			
-			imageAndDisplaySet.getImageAsWrapper().getSelectionManagger().removeSelections();
+			imageAndDisplaySet.getImageAsWrapper().getOverlaySelectionManagger().removeSelections();
 		}
 		
 		

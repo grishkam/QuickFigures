@@ -1,6 +1,7 @@
 package imageDisplayApp;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,8 +15,6 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -26,7 +25,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoundedRangeModel;
@@ -76,6 +74,9 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**The canvas that actually shows all of the drawn object*/
 	private GraphicDisplayCanvas theCanvas=null;//the canvas
 	
+	/**stores the on screen location of the window before certain actions are taken. */
+	private double lx=0;
+	private double ly=0;
 
 	/**although there is no user option for this. a programmer can create a version of the 
 	  window that does not use a scroll pane but instead indicates the position 
@@ -85,7 +86,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	private boolean useScrollPane=true;
 	
 	/**the side panel is a work in progress*/
-	private boolean usesBuiltInSidePanel=false;
+	public static boolean startsWithSidePanel=false;
+	private boolean usesBuiltInSidePanel=startsWithSidePanel;
 	/**A small panel that displays a mini toolbar inside*/
 	private MiniToolBarPanel sidePanel;
 	
@@ -97,12 +99,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	
 	
 	
-	/**returns the current tool*/
-	public InterfaceExternalTool<DisplayedImage> getCuttentTool() {return ToolBarManager.getCurrentTool();}
-	
-	public boolean usesScrollPane() {
-		return useScrollPane;
-	}
+
 	
 	/**constructor for the window*/
 	public GraphicSetDisplayWindow(ImageWindowAndDisplaySet set, GraphicDisplayCanvas canvas) {
@@ -112,10 +109,20 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		setJMenuBar(new  MenuBarForApp());
 	}
 	
+	
+	/**returns the current tool*/
+	public InterfaceExternalTool<DisplayedImage> getCuttentTool() {return ToolBarManager.getCurrentTool();}
+	
+	/**returns true if a scroll pane is being used within the windows*/
+	public boolean usesScrollPane() {
+		
+		return useScrollPane;
+	}
+	
 	/**returns the dimensions the canvas needs to be in order to display the image
 	  at the given zoom and canvas display size.*/
 	public Dimension getMaxNeededCanvasSizeforGraphicSet() {
-		setTitleBasedOnSet() ;
+		
 		int mw=(int)Math.ceil(getTheSet().getWidth()*getZoomer().getZoomMagnification());
 		int mh= (int)Math.ceil(getTheSet().getHeight()*getZoomer().getZoomMagnification());
 		return new Dimension(mw,mh);
@@ -130,15 +137,24 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**Automatically sets the windows size to something that better fits the objects in the 
 	  figure*/
 	void reSetCanvasAndWindowSizes() {
-		resetCanvasSize();
-		pack();
+		/**stores the current on screen locations of the window*/
+		lx=this.getLocationOnScreen().getX();
+		ly=this.getLocationOnScreen().getY();
+		
+		
+		resetCanvasDisplayObjectSize();
+		if (ZoomOptions.current.resizeWindowsAfterZoom)
+			pack();
 	}
+	
+	
 
-	/**
-	 changes the size of the components that is the canvs
+	/**sets the sizes for the canvas, size limit will depend on the screen size
+		  and window position. If using a scroll pane, see the getPrefferedSize method in the nested scroll pane
 	 */
-	public void resetCanvasSize() {
-		Dimension b1 = determineMaxBounds();
+	void resetCanvasDisplayObjectSize() {
+		setTitleBasedOnSet() ;//this updates the title to include the current zoom level. I put it here since this method is called after every zoom change
+		Dimension b1 = determineMaxBoundsForWindow();
 		Dimension b2 = getMaxNeededCanvasSizeforGraphicSet();
 		
 		b2.width=Math.min(b1.width, b2.width);
@@ -150,29 +166,34 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		getTheCanvas().setSize(b2);
 	}
 	
+
 	
-	
-	/**returns the max allowable bounds for a window. this is set to be comfortably smaller than the screen*/
-	static Dimension determineMaxBounds() {
-		Dimension bounds = Toolkit.getDefaultToolkit().getScreenSize();
-        bounds.width= bounds.width*8/10;
-        bounds.height=bounds.height*8/10;
+	/**returns the max allowable bounds for the window that still allow for comfortable viewing.
+	 *  this is set to be comfortably smaller than the screen*/
+	Dimension determineMaxBoundsForWindow() {
+		Dimension bounds = Toolkit.getDefaultToolkit().getScreenSize().getSize();
+		
+        bounds.width= (bounds.width-super.getLocationOnScreen().x-50)*8/10;
+        bounds.height=(bounds.height-super.getLocationOnScreen().y-80)*8/10;
+        
        return bounds;
 		
 	}
 	
-	/**this reduces the zoom untill the image is small enough to 
-	  fit comfortable on screen*/
+	
+	
+	/**this reduces the zoom until the image is small enough to 
+	  fit in the 'max' window size while the window is small enough to fit in the screen*/
 	public void shrinktoFit() {
 		while(!willFitInMaxWindowSize()) {
 			this.getZoomer().zoomOut();
 		}
 	}
 	
-	/**returns true if the canvas is smaller than the max size for the windows*/
+	/**returns true if the canvas is smaller than the max reccomendeds size for the window*/
 	boolean willFitInMaxWindowSize() {
 		Dimension size1 = getMaxNeededCanvasSizeforGraphicSet();
-		Dimension b2 = determineMaxBounds();
+		Dimension b2 = determineMaxBoundsForWindow();
 		if (size1.width> b2.width) return false;
 		if (size1.height> b2.height) return false;
 		return true;
@@ -181,42 +202,20 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**returns the recommended size for the window*/
 	Dimension getReccomendedSize() {
 		Dimension size1 = getMaxNeededCanvasSizeforGraphicSet();
-		Dimension b2 = determineMaxBounds();
+		Dimension b2 = determineMaxBoundsForWindow();
 		size1.width=Math.min(size1.width, b2.width);
 		size1.height=Math.min(size1.height, b2.height);
 		return size1;
 	}
-	
-	
-	
+
 	
 	/**sets up the canvas and shows the window*/
 	public void setUpCanvas(GraphicDisplayCanvas canvas) {
 		if (canvas==null) {IssueLog.log("no canvas");}
 		this.theCanvas=canvas;
 	
-		if (useScrollPane) {
-				pane=new SpecialPaneForCanvas(getTheCanvas());
-				pane.setPreferredSize(getTheCanvas().getPreferredSize());
-				
-				/**if window should include a side panel*/
-			if (usesBuiltInSidePanel) {
-				this.setLayout(new GridBagLayout());
-				GridBagConstraints c = new GridBagConstraints();
-				c.anchor=GridBagConstraints.NORTHWEST;
-				addSidePanel(c);
-				c.gridx=1;
-				this.add(pane, c);
-				this.setResizable(false);
-			}
-			else this.add(pane);
-			
-		;
-			
-		} else
-		this.add(getTheCanvas());
+		addComponentsToWindow();
 
-		//this.add(p);
 		
 		this.addKeyListener(this);
 		this.addKeyListener(new KeyDownTracker());
@@ -227,11 +226,45 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		new DropTarget(getTheCanvas(), this);
 		getDisplaySet().updateDisplay();
 		this.setVisible(true);
-		reSetCanvasAndWindowSizes() ;
 		
+		reSetCanvasAndWindowSizes() ;
 		this.pack();
 	
 	}
+
+
+	/**
+	adds the canvas, scroll pane, side panel to the window
+	 */
+	public void addComponentsToWindow() {
+		if (useScrollPane) {
+				pane=new SpecialPaneForCanvas(getTheCanvas());
+				pane.setPreferredSize(getTheCanvas().getPreferredSize());
+				
+				/**if window should include a side panel*/
+			if (usesBuiltInSidePanel()) {
+				
+				this.setLayout(new GridBagLayout());
+				GridBagConstraints c = new GridBagConstraints();
+				c.anchor=GridBagConstraints.NORTHWEST;
+				addSidePanel(c);
+				c.gridx=1;
+				this.add(pane, c);
+				this.setResizable(false);
+			}
+			else {
+				this.setLayout(new BorderLayout());
+				this.add(pane);
+				this.setResizable(true);
+			}
+			
+		;
+			
+		} else
+		this.add(getTheCanvas());
+	}
+	
+
 
 	/**
 	This method adds a side panel with tools
@@ -286,7 +319,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	
 	
 
-	/**Called after a mouse event*/
+	/**Called after a mouse event. */
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
@@ -399,6 +432,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 			
 		}
+		
+		/**if the canvas is not in a scroll pane, user arrow keys will scroll*/
 		if (arg0.isShiftDown()&&!this.useScrollPane)switch (arg0.getKeyCode()) {
 			case KeyEvent.VK_LEFT: {getZoomer().scroll(-numberscroll, 0); ;break;}
 			case KeyEvent.VK_RIGHT: {getZoomer().scroll(numberscroll, 0); ;break;}
@@ -416,7 +451,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	}
 	
 	/**Performs scrolling action. Exactly how this is implemented depends on whether a JScroll pane object is used
-	  for scrolling*/
+	  for scrolling or if the a scrolling is done with only a canvas visible */
 	void scrollPane(double dx, double dy) {
 		if (!usesScrollPane()) {
 			double mag = getZoomer().getZoomMagnification();
@@ -449,7 +484,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**zooms the window so that the canvas can fit inside easily and still be seen
 	  Comfortably. in other words, zooms out than in again*/
 	public void comfortZoom() {
-		Dimension dim = determineMaxBounds() ;
+		Dimension dim = determineMaxBoundsForWindow() ;
 		dim.width/=1.2;
 		dim.height/=1.2;
 		
@@ -467,8 +502,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 		reSetCanvasAndWindowSizes() ;
 		scrollToComfort();
-		//this.pane.setPreferredSize(this.getTheCanvas().getPreferredSize());
-		pack();
+		
 	}
 	
 	/**changes the magnification to a higher level, zooming in*/
@@ -479,17 +513,28 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 		reSetCanvasAndWindowSizes() ;
 		scrollToComfort() ;
-		pack();
+		
 	}
 	
+	/** scrolls such that as much of the canvas is visible as possible
+	If the scroll pane is being used, this means setting the prefered size of the pane to the canvas size*/
 	private void scrollToComfort() {
 		
+		moveVirtualScrollingToVisible();
+		
+		if (pane!=null)
+			this.pane.setPreferredSize(this.getTheCanvas().getPreferredSize());
+	}
+
+
+	/**
+	 scrolls such that as much of the canvas is visible as possible
+	 */
+	private void moveVirtualScrollingToVisible() {
 		scrollOptimalX();
 		scrollOptimalY();
-		
 		if (canEntireCanvasHeightFit()) this.getZoomer().setScrollY(0);
 		if (canEntireCanvasWidthFit()) this.getZoomer().setScrollX(0);
-		this.pane.setPreferredSize(this.getTheCanvas().getPreferredSize());
 	}
 	
 	/**not implemented*/
@@ -602,13 +647,13 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		this.zoomer = zoomer;
 	}
 	
-	
+	/**Scrolls such that the last clicked on co-ordinate location is at the center of the window*/
 	private void centerZoom() {
 		centerZoom(this.lastPointCordinate);
 
 	}
 	
-	/**Scrolls such that the cordinate location is at the center*/
+	/**Scrolls such that the co-ordinate location is at the center of the window*/
 	 void centerZoom(Point2D lastPointCordinate) {
 		if (this.usesScrollPane() && lastPress!=null) {
 			/**needs fixing. does not work perfectly on edges*/
@@ -842,6 +887,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		private static final long serialVersionUID = 1L;
 		
 		
+		/**creates a scroll pane and adds black scroll bars*/
 		public SpecialPaneForCanvas(GraphicDisplayCanvas theCanvas) {
 			super(theCanvas);
 			this.setVerticalScrollBar(new BlackBarScrollBar(JScrollBar.VERTICAL));
@@ -850,15 +896,20 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		}
 		
 
-		/**determines the scroll pane size based on the size of the canvas and screen */
+		/**determines the scroll pane size based on the size of the canvas and screen 
+		  The size returned will depends on the position of the window and the screen size
+		  This method is crucial for the normal appearance and behavior of windows. */
 		public Dimension getPreferredSize() {
 			int w=getTheCanvas().getPreferredSize().width+this.getVerticalScrollBar().getWidth();
 			int h=getTheCanvas().getPreferredSize().height+this.getHorizontalScrollBar().getHeight();
 			
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			double width = screenSize.getWidth();
-			double height = screenSize.getHeight();
-			/**if the scroll pane would be larger than the screen, this reduces it*/
+			
+			/**subtracts the window location from the size to get the width and height available on the screen */
+			double width = screenSize.getWidth()-lx;
+			double height = screenSize.getHeight()-ly;
+			
+			/**if the size would be larger than 80% of the available width or height, this reduces it*/
 			if (w>width*0.8) w=(int) (width*0.8);
 			if (h>height*0.8)h=(int) (height*0.8);
 			return new Dimension(w,h);
@@ -903,7 +954,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 				g2d.setStroke(oldstroke);
 		}
 	}
-	
+	/**
 	static void methodReport(Object thi) {
 		Method[] methods = thi.getClass().getMethods();
 		for (Method m:methods) {
@@ -915,14 +966,34 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 					
 				} 
 		}
+	}*/
+	
+	
+	/**returns true if the window is setup with a side panel*/
+	public boolean usesBuiltInSidePanel() {
+		return usesBuiltInSidePanel;
 	}
 	
-	
+	/**Alters the window to show built in side panels*/
+	public void setUsesBuiltInSidePanel(boolean b) {
+		if (usesBuiltInSidePanel==b) return;
+		
+		
+		usesBuiltInSidePanel=b;
+		if (this.pane!=null)this.remove(pane);
+		if (this.sidePanel!=null)this.remove(sidePanel);
+		this.remove(theCanvas);
+		startsWithSidePanel=b;
+		this.addComponentsToWindow();
+		this.pack();
+	}
+
+/**
 	{this.addComponentListener(new ComponentListener() {
 
 		@Override
 		public void componentResized(ComponentEvent e) {
-			if (usesBuiltInSidePanel) {
+			if (usesBuiltInSidePanel()) {
 				resetCanvasSize();
 			}
 		}
@@ -944,6 +1015,6 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			// TODO Auto-generated method stub
 			
 		}});}
-
+*/
 	
 }

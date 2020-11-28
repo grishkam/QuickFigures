@@ -7,6 +7,7 @@ import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.UndoManagerPlus;
 
+/**A super interface for classed that display the figures on a canvas.*/
 public interface FigureDisplayContainer {
 
 	public void updateDisplay();
@@ -14,7 +15,7 @@ public interface FigureDisplayContainer {
 	public GraphicLayer getGraphicLayerSet();
 	
 	public void onItemLoad(ZoomableGraphic z);
-	public OverlayObjectManager getSelectionManagger();
+	public OverlayObjectManager getOverlaySelectionManagger();
 	
 	
 	public Dimension getCanvasDims();

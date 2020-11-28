@@ -33,7 +33,7 @@ import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.SnappingPosition;
+import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 public class LockedItemHandle extends SmartHandle {
@@ -53,7 +53,7 @@ public class LockedItemHandle extends SmartHandle {
 	protected boolean releaseIt=false;
 	private boolean transplantIt;
 	protected static CombinedEdit currentEdit;
-	protected  SnappingPosition originalSnap;
+	protected  AttachmentPosition originalSnap;
 	protected Rectangle originalBounds;
 	boolean willTransplant=true;
 	protected boolean suppressMenu;
@@ -125,7 +125,7 @@ public class LockedItemHandle extends SmartHandle {
 	public void showMessageForOutOfRange(CanvasMouseEventWrapper mEvent) {
 		boolean out = outOfRange(mEvent);
 		Point2D p2=mEvent.getCoordinatePoint();
-		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getSelectionManagger();
+		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
 		if(out &&willTransplant) {
 			releaseIt=true;
 			TextGraphic marker = new TextGraphic("Release Item?");marker.setLocation(p2);
@@ -300,7 +300,7 @@ public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
 	if(currentEdit!=null)
 	 canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentEdit);
 	
-	canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getSelectionManagger().setSelectionstoNull();
+	canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
 }
 
 private void performTransplant() {
