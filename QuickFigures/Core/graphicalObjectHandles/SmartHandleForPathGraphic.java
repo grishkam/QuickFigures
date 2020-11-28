@@ -255,7 +255,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			
 			double dx=p.getX()-pAnchor.getX();
 			double dy=p.getY()-pAnchor.getY();
-			if (pathGraphic.getHandleMode()==PathGraphic.allSelectedHandleMode||e.shfitDown()) {
+			if (pathGraphic.getHandleMode()==PathGraphic.MOVE_ALL_SELECTED_HANDLES||e.shfitDown()) {
 				PathPointList pts = pathGraphic.getPoints().getSelectedPointsOnly();
 				for(utilityClassesForObjects.PathPoint point: pts) {
 					point.move(dx, dy);
@@ -264,9 +264,9 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			else
 			pathPoint.move(dx, dy);
 		} else {
-			boolean linkedHandles = this.getHandleMode()==PathGraphic.linkedHandleMode;
+			boolean linkedHandles = this.getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED;
 			
-			boolean symetricHandles = this.getHandleMode()==PathGraphic.symetricHandleMode;
+			boolean symetricHandles = this.getHandleMode()==PathGraphic.CURVE_CONTROL_SYMETRIC_MODE;
 			if(!linkedHandles)symetricHandles=false;
 			
 			
@@ -307,10 +307,10 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	public boolean isHidden() {
 		// TODO Auto-generated method stub
 		if (isAnchorPointHandle()) return false;
-		if (pathGraphic.getHandleMode()==PathGraphic.linkedHandleMode&&pathGraphic.selectedsegmentindex== getPointNumber()) return false;
-		if (pathGraphic.getHandleMode()==PathGraphic.linkedHandleMode) return false;
+		if (pathGraphic.getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED&&pathGraphic.selectedsegmentindex== getPointNumber()) return false;
+		if (pathGraphic.getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED) return false;
 		if (isACurveControl() && !pathGraphic.isCurvemode()) return true;
-		if (type==curveControl2 && !pathGraphic.isSupercurvemode()) return true;
+		if (type==curveControl2 && !pathGraphic.isSuperCurveControlMode()) return true;
 		if (type==curveControl1&&!isPrimarySelected()) {
 			return true;
 		}

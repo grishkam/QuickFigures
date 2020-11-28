@@ -175,11 +175,11 @@ PopupMenuSupplier  {
 			pathForMenuG.getPoints().applyAffine(BasicShapeMaker.createVFlip(pathForMenuG.getPoints().createPath(true).getBounds().getCenterY()));
 		}
 		if (com.equals(switchHandleModes)) {
-			if (pathForMenuG.getHandleMode()!=PathGraphic.anchorHandleOnlyMode) {
+			if (pathForMenuG.getHandleMode()!=PathGraphic.ANCHOR_HANDLE_ONLY_MODE) {
 				
-				pathForMenuG.setHandleMode(PathGraphic.anchorHandleOnlyMode);
+				pathForMenuG.setHandleMode(PathGraphic.ANCHOR_HANDLE_ONLY_MODE);
 					} 
-				else pathForMenuG.setHandleMode(PathGraphic.ThreeHandelMode);
+				else pathForMenuG.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 		}
 		
 		if (com.equals(crissCross)) {pathForMenuG.setUseArea(!pathForMenuG.isUseArea());}

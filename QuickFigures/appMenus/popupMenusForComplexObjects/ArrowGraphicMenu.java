@@ -10,36 +10,38 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEventWrapper;
 import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
 import menuUtil.SmartPopupJMenu;
-import undo.Edit;
+import undo.UndoScalingAndRotation;
 import menuUtil.PopupMenuSupplier;
 
+/**a popup menu for arrows that includes both the standard menu options for shapes
+  and those specific to arrows*/
 public class ArrowGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
 
 	/**
 	 * 
 	 */
+	/**the arrow specific menu options*/
+	static final String  editOutline="Outline Shape", flipHead="Swap Ends", makeVertical= "Make Vertical",makeHorizontal= "Make Horizontal";
 	
-	static final String  backGroundShap="Outline Shape", flipHead="Swap Ends", mv= "Make Vertical",mh= "Make Horizontal";
-	
-	ArrowGraphic textG;
+	ArrowGraphic targetArrow;
 	ShapeGraphicMenu shapeGraphicMenu;
 
-	private String copyArrow="Arrow Copy";
 	
-	public ArrowGraphicMenu(ArrowGraphic textG) {
+	public ArrowGraphicMenu(ArrowGraphic arrow) {
 		super();
-		this.textG = textG;
-		shapeGraphicMenu = new ShapeGraphicMenu(textG);
+		this.targetArrow = arrow;
+		
+		/**adds the shape manu options*/
+		shapeGraphicMenu = new ShapeGraphicMenu(arrow);
 		this.addAllMenuItems(shapeGraphicMenu.createMenuItems());
 		
-		add(createItem(backGroundShap));
-		add(createItem(flipHead));
-		//add(createItem(copyArrow));
-		add(createItem(mh));
-		add(createItem(mv));
+		/**Adds the arrow specific menu options*/
+		add(createMenuItem(editOutline));
+		add(createMenuItem(flipHead));
+		add(createMenuItem(makeHorizontal));
+		add(createMenuItem(makeVertical));
 	}
 	
 	public void setLastMouseEvent(CanvasMouseEventWrapper e) {
@@ -47,11 +49,10 @@ PopupMenuSupplier  {
 		if (shapeGraphicMenu!=null)shapeGraphicMenu.setLastMouseEvent(e);
 	}
 	
-	public JMenuItem createItem(String st) {
+	public JMenuItem createMenuItem(String st) {
 		JMenuItem o=new JMenuItem(st);
 		o.addActionListener(this);
 		o.setActionCommand(st);
-		
 		return o;
 	}
 
@@ -59,48 +60,74 @@ PopupMenuSupplier  {
 
 	@Override
 	public JPopupMenu getJPopup() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
-	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String com=arg0.getActionCommand();
-		if (com.equals(backGroundShap)) {
-			textG.getBackGroundShape().showOptionsDialog();
+		if (com.equals(editOutline)) {
+			showOutlineDialog();
 		}
 	
 		if (com.equals(flipHead)) {
-			textG.swapDirections();
-			textG.updateDisplay();
+			swapHeads();
 		}
 		
-		if (com.equals(copyArrow)) {
-			PathGraphic cop = textG.createPathCopy();
-			
-			performUndoable(
-					Edit.addItem(textG.getParentLayer(),cop)
-					);
-		}
-		
-		if (com.equals(mv)) {
-			ArrayList<Point2D> pp = textG.getEndPoints();
-			double x = pp.get(0).getX();
-			double y = pp.get(1).getY();
-			textG.setPoints(pp.get(0), new Point2D.Double(x, y));
+		if (com.equals(makeVertical)) {
+			makeVertical();
 			
 			
 		}
-		if (com.equals(mh)) {
-			ArrayList<Point2D> pp = textG.getEndPoints();
-			double x2 = pp.get(1).getX();
-			double y = pp.get(0).getY();
-			textG.setPoints(pp.get(0), new Point2D.Double(x2, y));
+		if (com.equals(makeHorizontal)) {
+			makeHorizontal();
 		}
-		textG.updateDisplay();
+		targetArrow.updateDisplay();
 		
+	}
+
+	/**
+	 * 
+	 */
+	public void showOutlineDialog() {
+		/**sets the arrow to outline mode if it is not already*/
+				if (!targetArrow.drawnAsOutline())
+					{
+					UndoScalingAndRotation undo = new  UndoScalingAndRotation(targetArrow);
+					targetArrow.setDrawAsOutline(true);
+					undo.establishFinalState();
+					if (this.getUndoManager()!=null)this.getUndoManager().addEdit(undo);
+					}
+		targetArrow.getBackGroundShape().showOptionsDialog();
+	}
+
+	/**
+	 * 
+	 */
+	public void swapHeads() {
+		targetArrow.swapDirections();
+		targetArrow.updateDisplay();
+	}
+
+	/**
+	 * 
+	 */
+	public void makeVertical() {
+		ArrayList<Point2D> pp = targetArrow.getEndPoints();
+		double x = pp.get(0).getX();
+		double y = pp.get(1).getY();
+		targetArrow.setPoints(pp.get(0), new Point2D.Double(x, y));
+	}
+
+	/**
+	 * 
+	 */
+	public void makeHorizontal() {
+		ArrayList<Point2D> pp = targetArrow.getEndPoints();
+		double x2 = pp.get(1).getX();
+		double y = pp.get(0).getY();
+		targetArrow.setPoints(pp.get(0), new Point2D.Double(x2, y));
 	}
 	
 	

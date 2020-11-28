@@ -7,6 +7,7 @@ import externalToolBar.TreeIconWrappingToolIcon;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.RegularPolygonGraphic;
 
+/**A tool bit for drawing regular polygons*/
 public class RegularPolygonGraphicTool extends RectGraphicTool {
 	
 	private RegularPolygonGraphic m;

@@ -89,7 +89,7 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 			ArrowGraphic a = new ArrowGraphic();
 			a.setPoints(new Point(15,20), new Point(8,3));
 			a.setStrokeColor(Color.black);
-			a.setArrowStyle(ArrowGraphic.normalHead);
+			a.setArrowStyle(ArrowGraphic.NORMAL_HEAD);
 			a.moveLocation(arg2, arg3);
 			a.setStrokeWidth(2);
 			//a.setNotchAngle(Math.PI);

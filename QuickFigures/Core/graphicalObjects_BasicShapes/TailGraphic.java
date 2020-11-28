@@ -7,37 +7,35 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-
+import java.awt.geom.Rectangle2D.Double;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjectHandles.CountHandle;
-import graphicalObjectHandles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
-import objectDialogs.PolygonGraphicOptionsDialog;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
-import undo.SimpleItemUndo;
 import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
+import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdges;
 
 /**A graphic that depicts a polygon with n sides. subclasses include many shapes
   with a specific number of sides*/
-public class RegularPolygonGraphic extends RectangularGraphic {
+public class TailGraphic extends RectangularGraphic implements RectangleEdgePosisions{
 	
 
-	{name="Polygon";}
+	{name="tail";}
 	/**
 	 * 
 	 */
 	
-	private CountParameter nvertex=new CountParameter(this, 5); {nvertex.parameterName="n sides";}
+	private double notchAngle=Math.PI/2; 
 	
 	private static final long serialVersionUID = 1L;
 	
 	
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
-		RegularPolygonGraphic r1 = new RegularPolygonGraphic(r, getNvertex());
+		TailGraphic r1 = new TailGraphic(r);
 		
 		r1.setDashes(NEARLY_DASHLESS);
 		r1.setStrokeWidth(THICK_STROKE_4);
@@ -46,63 +44,45 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	}
 	
 	public String getPolygonType() {
-		switch(getNvertex()) {
-			case 3:
-				return "Triangle";
-			case 4:
-				return "Parallelogram";
-			case 5:
-				return "Pentagon";
-			case 6:
-				return "Hexagon";
-			case 7:
-				return "Septagon";
-			case 8:
-				return "Octogon";
-			case 9:
-				return "Nonogon";
-			case 10:
-				return "Decagon";
-			
-		}
-		
-		
-		return "Regular Polygon";
+		return "Tail";
 	}
 
-	public RegularPolygonGraphic copy() {
-		RegularPolygonGraphic output = new RegularPolygonGraphic(this);
-		output.setNvertex(getNvertex());
+	public TailGraphic copy() {
+		TailGraphic output = new TailGraphic(this);
+		output.setNotchAngle(notchAngle);
 		return output;
 	}
 	
-	public RegularPolygonGraphic(Rectangle2D rectangle) {
+	public TailGraphic(Rectangle2D rectangle) {
 		super(rectangle);
-	}
-	public RegularPolygonGraphic(Rectangle rectangle, int nV) {
-		super(rectangle);
-		this.setNvertex(nV);
 	}
 	
-	public RegularPolygonGraphic(RectangularGraphic r) {
+	
+	public TailGraphic(RectangularGraphic r) {
 		super(r);
 	}
 
-	/**implements a formular to produce a regular polygon with a certain number of vertices*/
+	/**creates the shape*/
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
 		
 		double rx=getObjectWidth()/2;
 		double ry=getObjectHeight()/2;
-		double centx = x+rx;
-		double centy = y+ry;
 		double angle=getIntervalAngle();
-		path.moveTo(centx+rx,centy);
-		for(int i=1; i<getNvertex();i++) {
-				double curx=centx+Math.cos(angle*i)*rx;
-				double cury=centy+Math.sin(angle*i)*ry;
-				path.lineTo(curx, cury);
+		double shift=ry/Math.tan(angle/2);
+		
+		
+		int[] i7 = new int[] { RIGHT,  UPPER_RIGHT, UPPER_LEFT, LEFT,  LOWER_LEFT, LOWER_RIGHT};
+		Double rect = this.getRectangle();
+		
+		
+		for(int i=0; i<i7.length;i++) {
+				Point2D p = RectangleEdges.getLocation(i7[i], rect);
+				double cx = p.getX();
+				if (i7[i]==LEFT||i7[i]==RIGHT) cx-=shift;
+				if (i==0) path.moveTo(cx, p.getY()); else
+					path.lineTo(cx, p.getY());
 		}
 		path.closePath();
 		this.setClosedShape(true);
@@ -111,11 +91,13 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 		
 	}
 
-	public double getIntervalAngle() {
-		return 2*Math.PI/getNvertex();
+	
+	
+	
+	private double getIntervalAngle() {
+		return getNothchAngle();
 	}
-	
-	
+
 	/**returns the points that define the stroke' handles location and reference location.
 	   Precondition: the distance between the two points should be about half the stroke*/
 		public Point2D[] getStrokeHandlePoints() {
@@ -146,43 +128,28 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 
 
 
-	public int getNvertex() {
-		return nvertex.getValue();
-	}
 	
-	public void setNvertex(int n) {
-		if(n>=minimumNVertex())
-		nvertex.setValue(n);
-	}
+
 
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
 
-	
 
-	public int minimumNVertex() {
-		return 3;
-	}
-	
-	@Override
-	public void showOptionsDialog() {
-		new PolygonGraphicOptionsDialog(this, false).showDialog();
-	}
-	
-	protected SmartHandleList createSmartHandleList() {
-		SmartHandleList list = super.createSmartHandleList();
-		nvertex.setMinValue(minimumNVertex());
-		
-		list.add(new CountHandle(this, nvertex, 900215));
-		return list;
-	}
 	
 	
 	
 	@Override
 	public AbstractUndoableEdit provideUndoForDialog() {
-		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this),new SimpleItemUndo<CountParameter> (nvertex));
+		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this));
+	}
+
+	public double getNothchAngle() {
+		return notchAngle;
+	}
+
+	public void setNotchAngle(double tipAngle) {
+		this.notchAngle = tipAngle;
 	}
 	
 	

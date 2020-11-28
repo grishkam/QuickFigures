@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -54,13 +55,29 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.ArrowSwingDialog;
 import objectDialogs.StrokeOnlySwingDialog;
 
-/**Draws an arrow*/
+/**Draws an arrow. Many different arrow apearances are possible*/
 public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, HasTreeLeafIcon,HasBackGroundShapeGraphic, HasUniquePopupMenu, OfficeObjectConvertable, HasSmartHandles {
 
 	private static final int STANDARD_HEAD_SIZE = 16;
 	private static final double STANDARD_TIP_ANGLE = Math.PI/4, STANDARD_NOTCH_ANGLE = Math.PI*3/4;
-	public static final int normalHead=0, openHead=1,outline=2, outlineHeads=3, openOutlineHeads=4, openOutline=5, barHead = 6, squareHead=7, ballhead=8, lineHead=9, triangleHead=10, polygonHead=11;;
-	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Outline", "Outline Heads", "Open Outline Heads", "Outline of Open Head", "Bar Head", "Square Cap", "Circle Cap", "Line Cap", "Arrow Cap", "Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	
+	/**set to true if an outline of the arrow will be drawn*/
+	private boolean outline=false;
+	
+	
+	/**The choices that appear in the user dialog*/
+	
+	public static final int NORMAL_HEAD=0, OPEN_HEAD=1, REVERSE_HEAD=2, REVERSE_OPEN_HEAD=3, BAR_HEAD = 4, OUTLINE_OF_NORMAL_HEAD=5, OUTLINE_OF_OPEN_HEAD=6, SQUARE_HEAD=7, BALL_HEAD=8, LINE_CAP=9,HALF_LINE_HEAD2 = 10, TRIANGLE_HEAD=11, 
+			TAIL=12, NARROW_TAIL=13, HALF_CIRCLE_TAIL=14,
+			POLYGON_HEAD=15;
+	public static final int DIAMOND_HEAD=POLYGON_HEAD+1, PENTAGON_HEAD=POLYGON_HEAD+2, HEXAGON_HEAD=POLYGON_HEAD+3;	
+	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Bar Head", "Outline Heads", "Open Outline Heads", "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Triangle Cap", "Tail", "Narrow Tail","Semi Circle", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	/**some options not available to the user dialog but available to programmer*/
+	public static final int  OPEN_HEAD_OUTLINE=50,
+	 HALF_BAR_HEAD = 400,  HALF_BAR_HEAD2 = 500 ,
+	   HALF_LINE_HEAD = 500 ;
+	
+	
 	public static final int HANDLE_1=0, HANDLE_2=1, ARROW_SIZE_HANDLE=2, ARROW_STROKE_HANDLE=3, HEAD_NUN_HANDLE=4;;
 	
 	
@@ -69,15 +86,16 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	 * 
 	 */
 	
+	/**Stores the number of heads that the arrow has.*/
 	private CountParameter headnumber=new CountParameter(this, 1, 0,2);
 	
-	/**set to true if only the arrow head should be drawn*/
+	/**set to true if only the arrow head should be drawn and no line*/
 	boolean headOnly=false;
 	
 	private static final long serialVersionUID = 1L;
 	
 	/**The variables that determine the appearance of the arrow*/
-	private int style=normalHead;
+	private int style=NORMAL_HEAD;
 	private double arrowTipAngle=STANDARD_TIP_ANGLE;
 	private double notchAngle=STANDARD_NOTCH_ANGLE;
 	private double arrowHeadSize=STANDARD_HEAD_SIZE;
@@ -85,12 +103,11 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	/**The second point within the arrow. see superclass for 1st point*/
 	protected double x2=60, y2=60;//
 	
-	Point2D.Double upperend=null;
-	Point2D.Double lowerend=null;
-	
-	
+
 	
 	/**As the methods calculate where different parts of the arrow are. values are stored here*/
+	Point2D.Double upperend=null;
+	Point2D.Double lowerend=null;
 	Point2D.Double notchpoint=null;
 	private Point2D.Double[] processesPoints;
 	Point2D.Double notchpoint2=null;
@@ -135,7 +152,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		ArrowGraphic ag1=new ArrowGraphic();
 		ag1.setArrowHeadSize(20);
 		ag1.setStrokeWidth(8);
-		ag1.setArrowStyle(ArrowGraphic.outline);
+		ag1.outline=true;
 		ag1.getBackGroundShape().setFilled(true);
 		ag1.getBackGroundShape().setFillColor(fill);
 		ag1.getBackGroundShape().setStrokeColor(stroke);
@@ -181,6 +198,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return  getNotchLocation();
 	}
 	
+	/**returns the length of the arrow from one tip to the other*/
 	double getArrowLength() {
 		return getLocation().distance(getTipLocation());
 	}
@@ -196,8 +214,10 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return calculatePointsOnStrokeBetween(location1, location2);
 	}
 	
-	/**performs calculations to determine the points along the arrow*/
+	/**performs calculations to determine the points along the arrow
+	  stores them each*/
 	private void computePoints() {
+		/**starting with one head's points*/
 	
 		double px = getArrowLength()-getArrowHeadSize();
 		double py = Math.tan( getArrowTipAngle()/2)*getArrowHeadSize();
@@ -205,11 +225,24 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 			py=this.getArrowHeadSize();
 			px=getArrowLength();
 		}
+		
+		
+		if (reverseHead()) {
+			px+=2*getArrowHeadSize();
+		}
+		
 		upperend=new Point2D.Double(px, py);
 		lowerend=new Point2D.Double(px, -py);
+		
+		if (isHalfHead1()) {lowerend=new Point2D.Double(px, getStrokeWidth()/2);}
+		if (isHalfHead2()) {upperend=new Point2D.Double(px,-getStrokeWidth()/2);}
+		
+		
 		double pxn = px+py/Math.tan( getNotchAngle()/2);
+		if (reverseHead()) {pxn = px-py/Math.tan( getNotchAngle()/2);}
 		if (this.isBarHead()) {pxn=px+this.getStrokeWidth();}
 		notchpoint=new Point2D.Double(pxn, 0);
+		
 		
 		if(overTipShape()) {
 			notchpoint=new Point2D.Double(getArrowLength()-getArrowHeadSize()/2, 0);
@@ -218,23 +251,58 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 			notchpoint=new Point2D.Double(getArrowLength(), 0);
 		}
 		
+		/**now for the second head's points*/
+		
 		px=getArrowHeadSize();
 		if (this.getArrowTipAngle()==Math.PI||isBarHead()) {
 			px=0;
 		}
+		
+		if (reverseHead()) {
+			px-=2*getArrowHeadSize();
+		}
+		
 		upperend2=new Point2D.Double(px, py);
 		lowerend2=new Point2D.Double(px, -py);
+		
+		if (isHalfHead1()) {lowerend2=new Point2D.Double(px, getStrokeWidth()/2);}
+		if (isHalfHead2()) {upperend2=new Point2D.Double(px,-getStrokeWidth()/2);}
+		
 		pxn =px-py/Math.tan( getNotchAngle()/2);
+		
+		/**for special cases*/
+		if (reverseHead()) {pxn =px+py/Math.tan( getNotchAngle()/2);}
 		if (this.isBarHead()) {pxn=px-getStrokeWidth();}
+		
+		
 		notchpoint2=new Point2D.Double(pxn, 0);
 		
 		if(overTipShape()) {
-			
 			notchpoint2=new Point2D.Double(getArrowHeadSize()/2, 0);
 		}
 		if (isOpenHeadType()) {
 			notchpoint2=new Point2D.Double(0, 0);
 		}
+	}
+
+	private boolean isHalfHead1() {
+		if (HALF_BAR_HEAD==this.getArrowStyle()) return true;
+		if (HALF_LINE_HEAD==this.getArrowStyle()) return true;
+		return false;
+	}
+	
+	private boolean isHalfHead2() {
+		if (HALF_BAR_HEAD2==this.getArrowStyle()) return true;
+		if (HALF_LINE_HEAD2==this.getArrowStyle()) return true;
+		return false;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean reverseHead() {
+		if (getArrowStyle()==REVERSE_HEAD) return true;
+		return this.getArrowStyle()==REVERSE_OPEN_HEAD;
 	}
 	
 	/**returns true for certain arrow head shapes that will be placed above the tip of the line*/
@@ -243,19 +311,33 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		if(this.isCircleHead()) return true;
 		if(this.isPolygonHead()) return true;
 		if(this.isTriangleHead()) return true;
+		if (halfCircleTail()) return true;
+		if(this.isTail()) return true;
 		return false;
 	}
+
+	/**
+	 * @return
+	 */
+	public boolean halfCircleTail() {
+		return this.getArrowStyle()==HALF_CIRCLE_TAIL;
+	}
 	
+	private boolean isTail() {
+		if (isNarrowHead()) return true;
+		return this.getArrowStyle()==TAIL;
+	}
+
 	private boolean isCircleHead() {
-		return this.getArrowStyle()==ballhead;
+		return this.getArrowStyle()==BALL_HEAD;
 	
 	}
 	private boolean isSquareHead() {
-		return this.getArrowStyle()==squareHead;
+		return this.getArrowStyle()==SQUARE_HEAD;
 		}
 	
 	private boolean isPolygonHead() {
-		return this.getArrowStyle()>=polygonHead;
+		return this.getArrowStyle()>=POLYGON_HEAD;
 		}
 	
 	/**returns the points of the first head*/
@@ -283,8 +365,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	}
 	
 	
-	
-	public Point2D.Double[] getOutLinePoints() {
+	/**returns the points that represent a rectangle large enough to enclose the arrow's line (but not in position to actually do so)*/
+	private Point2D.Double[] getOutLinePoints() {
 		computePoints();
 		Point2D.Double[]  out=new Point2D.Double[4];
 		out[0]=new Point2D.Double(0,this.getStrokeWidth()/2);
@@ -295,7 +377,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return processesPoints3;
 	}
 	
-	public Path2D.Double  getOutLinePointsPath() {
+	/**returns a path large enough to enclose the arrow's line. (but not in position to actually do so)*/
+	private Path2D.Double  getOutLinePointsPath() {
 		Double[] points = getOutLinePoints();
 		Path2D.Double output=new Path2D.Double();
 		output.moveTo(points[0].x, points[0].y);
@@ -305,7 +388,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return output;
 	}
 	
-	public Point2D.Double[] transform(Point2D.Double[] out) {
+	/**when given a set of points, translates and rotates them to the position and angle of this arrow*/
+	private Point2D.Double[] transform(Point2D.Double[] out) {
 		AffineTransform a=AffineTransform.getTranslateInstance(x, y);
 		
 		Point2D.Double[]  out2=new Point2D.Double[4];
@@ -318,8 +402,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	}
 	
 
-	
-	public Path2D.Double getArrowHeadPath1(boolean includeNotch, boolean loopstart) {
+	/**creates a path2d that loops around arrow head 1*/
+	private Path2D.Double getArrowHeadPath1(boolean includeNotch, boolean loopstart) {
 		Double[] points = getHeadPoints();
 		Path2D.Double output=new Path2D.Double();
 		output.moveTo(points[0].x, points[0].y);
@@ -331,7 +415,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return output;
 	}
 
-	public Path2D.Double getArrowHeadPath2(boolean includeNotch, boolean loopstart) {
+	/**creates a path2d that loops around arrow head 2*/
+	private Path2D.Double getArrowHeadPath2(boolean includeNotch, boolean loopstart) {
 		Double[] points = getHeadPoints2();
 		Path2D.Double output=new Path2D.Double();
 		output.moveTo(points[0].x, points[0].y);
@@ -354,6 +439,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		arrow.headOnly=headOnly;
 		arrow.copyPositionFrom(this);
 		arrow.hideNormalHandles=this.hideNormalHandles;
+		arrow.outline=outline;
 		arrow.backGroundShape=this.getBackGroundShape().copy();
 
 		return arrow;
@@ -374,6 +460,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		this.setArrowStyle(arr.getArrowStyle());
 		this.setStrokeWidth(arr.getStrokeWidth());
 		this.headOnly=arr.headOnly;
+		this.outline=arr.outline;
 	}
 
 	@Override
@@ -479,23 +566,17 @@ private Line2D getDrawnLineBetweenHeads() {
 	line.setLine(getDrawnLineEnd1(), getDrawnLineEnd2());
 	return line;
 }
-	/**
-	private Line2D getLineBetweenHeads() {
-		Line2D.Double line = new Line2D.Double();
-		line.setLine(this.getLineEnd1(), this.getLineEnd2());
-		return line;
-	}*/
-	
+
+	/**returns the point where the line part of the arrow will start*/
 	private Point2D getLineEnd1() {
 		 Point2D l1=this.getOppositeTipEndLocation();
 		 if (this.getNotchAngle()>this.getArrowTipAngle()) {
-		 		
 		 		if (getHeadnumber()>1) l1=this.getNotchLocation2();
 	 									}
 		 return l1;
 		 
 	}
-	
+	/**returns the point where the line part of arrow will stop*/
 	private Point2D getLineEnd2() {
 		 Point2D l2=this.getTipLocation();
 		 if (this.getNotchAngle()>this.getArrowTipAngle()) {
@@ -527,8 +608,8 @@ private Line2D getDrawnLineBetweenHeads() {
 	}
 	
 	boolean outlineDraw() {
-		if (getArrowStyle()==outline) return true;
-		if (getArrowStyle()==openOutline) return true;
+		if (outline) return true;
+		if (getArrowStyle()==OPEN_HEAD_OUTLINE) return true;
 		return false;
 	}
 	
@@ -593,7 +674,7 @@ protected Point2D getDrawnLineEnd2() {
 
 
 
-
+/**creates a shape graphic that corresponds to an arrow head*/
 	private BasicShapeGraphic getHead1DrawShape(int headnumber) {
 		BasicShapeGraphic out = getBackGroundShape();
 		
@@ -602,10 +683,10 @@ protected Point2D getDrawnLineEnd2() {
 		if (isBarHead()) {
 			
 		}
-		if (this.getArrowStyle()==openHead||isLineHead()) {
+		if (this.getArrowStyle()==OPEN_HEAD||this.getArrowStyle()==REVERSE_OPEN_HEAD||isLineHead()) {
 			out=BasicShapeGraphic.createStroked(this, s);
 		}else 
-		if (this.getArrowStyle()==normalHead||this.isSquareHead()||this.isCircleHead()||this.isTriangleHead()||this.isPolygonHead()) {
+		if (this.getArrowStyle()==NORMAL_HEAD||this.getArrowStyle()==REVERSE_HEAD||this.isTail()||this.isSquareHead()||this.isCircleHead()||this.isTriangleHead()||this.isPolygonHead()||halfCircleTail()) {
 			out=BasicShapeGraphic.createFilled(getFillColor(), s);
 		}
 		
@@ -618,9 +699,12 @@ protected Point2D getDrawnLineEnd2() {
 		return out;
 	}
 	public boolean isLineHead() {
-		return this.getArrowStyle()==lineHead;
+		if (this.getArrowStyle()==HALF_LINE_HEAD) return true;
+		if (this.getArrowStyle()==HALF_LINE_HEAD2) return true;
+		return this.getArrowStyle()==LINE_CAP;
 	}
 	
+	/**returns the shape of the given arrow head*/
 	private  Shape getShapeToDrawHead(int headnumber) {
 		boolean notopen=!isOpenHeadType();
 		
@@ -631,11 +715,14 @@ protected Point2D getDrawnLineEnd2() {
 		if(this.isTriangleHead()&&headnumber==2) shapeOfHead = this.getArrowHeadPath2(false, notopen);
 		
 		
-		Point2D pt = this.getNotchLocation(headnumber);//.getTipLocation(headnumber);
-		//Point2D pt2=this.getTipLocation(headnumber);
-		//Point2D pt=super.midPoint(pt1, pt2);
-		if(this.isSquareHead()||this.isPolygonHead()) {
+		Point2D pt = this.getNotchLocation(headnumber);
+		
+		if(this.isSquareHead()||this.isPolygonHead()||this.isTail()||halfCircleTail()) {
 			java.awt.geom.Rectangle2D.Double r2d = new Rectangle2D.Double(0,0, this.getArrowHeadSize(), this.getArrowHeadSize());	
+			
+			if(isNarrowHead())  
+				r2d=new Rectangle2D.Double(0,this.getArrowHeadSize()/4, this.getArrowHeadSize(), this.getArrowHeadSize()/2);	
+			
 			RectangleEdges.setLocation(r2d, RectangleEdges.CENTER, pt.getX(), pt.getY());
 			
 			AffineTransform at = AffineTransform.getRotateInstance(this.getAngleBetweenPoints(),  pt.getX(), pt.getY());
@@ -643,9 +730,18 @@ protected Point2D getDrawnLineEnd2() {
 			
 			if(this.isPolygonHead()) {
 				RegularPolygonGraphic rp = new RegularPolygonGraphic(r2d);
-				rp.setNvertex(this.getArrowStyle()-polygonHead+3);
+				rp.setNvertex(this.getArrowStyle()-POLYGON_HEAD+3);//
 				shapeOfHead=at.createTransformedShape(rp.getShape());
-			} else 
+			} else if (this.halfCircleTail()) {
+				
+				CircularGraphic a = CircularGraphic.halfCircle(r2d);
+				shapeOfHead=at.createTransformedShape(a.getShape());
+			} else if (this.isTail()) {
+				TailGraphic t = new TailGraphic(r2d);
+				
+				t.setNotchAngle(this.getNotchAngle());
+				shapeOfHead=at.createTransformedShape(t.getShape());
+			} else
 			shapeOfHead=at.createTransformedShape(r2d);
 			
 			
@@ -659,26 +755,35 @@ protected Point2D getDrawnLineEnd2() {
 
 		return shapeOfHead;
 	}
+
+	/**
+	 * @return
+	 */
+	public boolean isNarrowHead() {
+		return this.getArrowStyle()==NARROW_TAIL;
+	}
 	
 	boolean isBarHead() {
 		if (this.getArrowTipAngle()==Math.PI&&this.getNotchAngle()==Math.PI) return true;
-		if (this.getArrowStyle()==barHead) return true;
-		
+		if (this.getArrowStyle()==BAR_HEAD) return true;
+		if (this.getArrowStyle()==HALF_BAR_HEAD) return true;
+		if (this.getArrowStyle()==HALF_BAR_HEAD2) return true;
 		return false;
 	}
 	
 
 	
 	boolean isOpenHeadType() {
-		if (this.getArrowStyle()==openHead) return true;
-		if (this.getArrowStyle()==openOutlineHeads) return true;
-		if (this.getArrowStyle()==openOutline) return true;
+		if (this.getArrowStyle()==OPEN_HEAD) return true;
+		if (this.getArrowStyle()==REVERSE_OPEN_HEAD) return true;
+		if (this.getArrowStyle()==OUTLINE_OF_OPEN_HEAD) return true;
+		if (this.getArrowStyle()==OPEN_HEAD_OUTLINE) return true;
 		if(isLineHead()) return true;
 		if (this.isBarHead()) return true;
 		return false;
 	}
 	boolean isOutlineType() {
-		return this.getArrowStyle()==outlineHeads||this.getArrowStyle()==openOutlineHeads||getArrowStyle()==openOutline||this.getArrowStyle()==outline;
+		return this.getArrowStyle()==OUTLINE_OF_NORMAL_HEAD||this.getArrowStyle()==OUTLINE_OF_OPEN_HEAD||getArrowStyle()==OPEN_HEAD_OUTLINE||outline;
 	}
 
 	
@@ -686,6 +791,7 @@ protected Point2D getDrawnLineEnd2() {
 		if(isLineHead()) { 
 			return Math.PI;
 		}
+		
 		return arrowTipAngle;
 	}
 
@@ -699,7 +805,7 @@ protected Point2D getDrawnLineEnd2() {
 	}
 
 	private boolean isTriangleHead() {
-		return this.getArrowStyle()==triangleHead;
+		return this.getArrowStyle()==TRIANGLE_HEAD;
 	}
 	public void setNotchAngle(double notchAngle) {
 		this.notchAngle = notchAngle;
@@ -1057,7 +1163,8 @@ public boolean isFillable() {return false;}
 
 /**returns true if the stroke join is relevant to the appearance of the arrow*/
 public boolean doesJoins() {
-	if(this.style==openHead) return true;
+	if(this.style==OPEN_HEAD) return true;
+	if(this.style==REVERSE_OPEN_HEAD) return true;
 	return false;
 }
 
@@ -1094,6 +1201,14 @@ public void rotateAbout(Point2D c, double distanceFromCenterOfRotationtoAngle) {
 @Override
 public void setFillBackGround(boolean fillBackGround) {
 	
+}
+
+public boolean drawnAsOutline() {
+	return outline;
+}
+
+public void setDrawAsOutline(boolean outline) {
+	this.outline = outline;
 }
 
 

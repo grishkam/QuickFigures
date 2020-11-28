@@ -66,79 +66,29 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	private boolean useFilledShapeAsOutline=false;
 	private PathPointList points=new PathPointList();
+	
+	/**a Path2D object for drawing this PathGraphic on a graphics2D. This item is updated when certain methods make changes to the pathpoint list */
 	private Path2D path=new Path2D.Float();
 	
-	
-	public static final int anchorHandleOnlyMode=0, ThreeHandelMode=2, TwohandleMode=1, linkedHandleMode=3, allSelectedHandleMode=4, symetricHandleMode=5;
-	private int handleMode=ThreeHandelMode; 
+	/**constants determine how handles are used and which handles are visible*/
+	public static final int ANCHOR_HANDLE_ONLY_MODE=0, THREE_HANDLE_MODE=2, TWO_HANDLE_MODE=1, CURVE_CONTROL_HANDLES_LINKED=3, MOVE_ALL_SELECTED_HANDLES=4, CURVE_CONTROL_SYMETRIC_MODE=5;
+	private int handleMode=THREE_HANDLE_MODE; 
 	
 	ArrayList<HandleRect> leftHandles=new ArrayList<HandleRect>();
 	ArrayList<HandleRect> rightHandles=new ArrayList<HandleRect>();
 	
-	ArrowGraphic arrowHead1=null;
-	private ArrowGraphic arrowHead2=null;
+	/**some paths will end with an arrow head*/
+	ArrowGraphic arrowHead1=null,
+						arrowHead2=null;
 
 	private transient SmartHandleList smartHandleBoxes;
 
+	/**outline is the area that a user may click on to select the path*/
 	private Shape outline;
 
 	private boolean useArea=false;
 	
-	ArrayList<Point2D> getAnchorPoints() {
-		ArrayList<Point2D> out=new ArrayList<Point2D>();
-		for(PathPoint p:getPoints()) {out.add(p.getAnchor());}
-		return out;
-	}
-	
-	ArrayList<Point2D> getLeftPoints() {
-		ArrayList<Point2D> out=new ArrayList<Point2D>();
-		for(PathPoint p:getPoints()) {out.add(p.getCurveControl1());}
-		return out;
-	}
-	
-	ArrayList<Point2D> getRightPoints() {
-		ArrayList<Point2D> out=new ArrayList<Point2D>();
-		for(PathPoint p:getPoints()) {out.add(p.getCurveControl2());}
-		return out;
-	}
-	
-	public ArrayList<Point2D> getTranslatedVersion(ArrayList<Point2D> in, double x, double y) {
-		ArrayList<Point2D> out=new ArrayList<Point2D>();
-		for(Point2D p:in) {out.add(new Point2D.Double(p.getX()+x, p.getY()+y));}
-		return out;
-	}
-	
-	
-	
-	
-	void setAnchorPoints(ArrayList<Point2D> in) {
-		PathPointList out=new PathPointList();
-		for(Point2D p:in) {out.add(new PathPoint(p));}
-		setPoints(out);
-	}
-	
-	
-	
-	void copyAnchorPointsFrom(PathGraphic in) {
-		this.setAnchorPoints(in.getAnchorPoints());
-		//this.setLeftPoints(in.getLeftPoints());
-	}
-	
-	@Override
-	public int handleNumber(int x, int y) {
-		if (this.getSmartHandleBoxes()!=null) {
-			
-			int output=getSmartHandleList().handleNumberForClickPoint(x, y);
-			
-			return output;
-		}
-		
-		return -1;
-
-	}
-	
-	
-	
+	/**creates a path graphic from the given path2d*/
 	public PathGraphic(Path2D path2d) {
 		this.setPath(path2d);
 	}
@@ -159,7 +109,59 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		setLocationInnitial(p);
 	}
 	
-	public void setLocationInnitial(Point2D p) {
+	/**returns each anchor point of the curve*/
+	ArrayList<Point2D> getAnchorPoints() {
+		ArrayList<Point2D> out=new ArrayList<Point2D>();
+		for(PathPoint p:getPoints()) {out.add(p.getAnchor());}
+		return out;
+	}
+	
+	/**returns the first curve control point for each point in the curve*/
+	ArrayList<Point2D> getLeftPoints() {
+		ArrayList<Point2D> out=new ArrayList<Point2D>();
+		for(PathPoint p:getPoints()) {out.add(p.getCurveControl1());}
+		return out;
+	}
+	
+	/**returns the second curve control point for each point in the curve*/
+	ArrayList<Point2D> getRightPoints() {
+		ArrayList<Point2D> out=new ArrayList<Point2D>();
+		for(PathPoint p:getPoints()) {out.add(p.getCurveControl2());}
+		return out;
+	}
+	
+
+	/**creates new points for the path, */
+	void setPathToAnchorPoints(ArrayList<Point2D> in) {
+		PathPointList out=new PathPointList();
+		for(Point2D p:in) {out.add(new PathPoint(p));}
+		setPoints(out);
+	}
+	
+	
+	/**Makes this path similar to the path given except that it
+	 * copies only the anchor point locations and not the curve control points*/
+	void copyAnchorPointsFrom(PathGraphic in) {
+		this.setPathToAnchorPoints(in.getAnchorPoints());
+		//this.setLeftPoints(in.getLeftPoints());
+	}
+	
+	@Override
+	public int handleNumber(int x, int y) {
+		if (this.getPointHandles()!=null) {
+			
+			int output=getSmartHandleList().handleNumberForClickPoint(x, y);
+			
+			return output;
+		}
+		
+		return -1;
+
+	}
+	
+	
+	/**used to set the first point when initializing a new path*/
+	private void setLocationInnitial(Point2D p) {
 		this.setLocation(p.getX(), p.getY());
 		getPoints().add(new PathPoint(0,0)); 
 		
@@ -179,21 +181,23 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return output;
 	}
 	
+	/**since this subclass is already a path, its path copy is just a normal copy*/
 	public PathGraphic createPathCopy() {
 		return copy();
 	}
 
-	/**Add point takes the overall cordinate not the one within the path
-	 * @return */
+	/**given a location on the canvas, adds a new point to the path (from that location)
+	*/
 	public PathPoint addPoint(Point2D p) {
-		Point2D p2 = convertPointToInternalCrdinates(p);
-		PathPoint output = getPoints().addPoint(p2);
-		path.lineTo(p2.getX(), p2.getY());
+		Point2D p2 = convertPointToInternalCrdinates(p);//if the path location is not (0,0) converts
+		PathPoint output = getPoints().addPoint(p2);//adds a point to the list
+		path.lineTo(p2.getX(), p2.getY());//updates the internal path2d
 		return output;
 	}
 	
-	/**Add point takes the overall cordinate not the one within the path
-	 * @return */
+	/**given a location on the canvas, adds a new point to the start of the path (from that location)
+	  does not update the internal path2D. another method must be called for that
+	*/
 	public PathPoint addPointToStart(Point2D p) {
 		Point2D p2 = convertPointToInternalCrdinates(p);
 		PathPoint output = getPoints().addPoint(p2, 0);
@@ -235,47 +239,34 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	
 	/**The outline needed to determine if the user has clicked inside the shape or not
-	  intricate series of stroked shapes for line outline necesary*/
+	  intricate series of stroked shapes for line outline necessary*/
 	@Override
 	public Shape getOutline() {
 		if (outline==null) outline=createOutline() ;
 		return outline ;
 	}
 	
-	
+	/**creates the outline of the shape that determines where the user can click to select the shape*/
 	private Shape createOutline() {
-		// TODO Auto-generated method stub
+		/**for filled shapes or relatively complex paths, the shape itself will be used as an outline*/
 		if (isUseFilledShapeAsOutline()||this.getPoints().size()>25) return getShape();
 		
+		/**for simpler paths lines, a thick stroked area around the line is used as an outline*/
 		float strokeWidth2 = this.getStrokeWidth();
 		if(strokeWidth2<0)strokeWidth2=0;
 		Shape shape = new BasicStroke(strokeWidth2).createStrokedShape(getShape());
 		Area a=new Area(shape);
 		a.add(new Area(new BasicStroke(12).createStrokedShape(a)));
-	
 		return getRotationTransform().createTransformedShape(a);
 	}
 	
-	public static Polygon shapeToPolygon(PathIterator s) {
-		PathIterator pi = s;
-		double[] d=new double[6];
-		Polygon poly = new Polygon();
-		
-		while (!pi.isDone()) {
-			pi.currentSegment(d);
-			//if (d[0]==0&& d[1]==0) {} else
-			poly.addPoint((int)d[0], (int)d[1]);
-			
-			pi.next();
-		}
-		return poly;
-	}
-	
+	/**returns a path iterator for the shape*/
 	public PathIterator getPathIterator() {
 		return getShape().getPathIterator(new AffineTransform());
 	}
 	
-	public static ArrayList<Point2D> shapeToArray(PathIterator s) {
+	/**returns an array of anchor points */
+	private static ArrayList<Point2D> shapeToArray(PathIterator s) {
 		PathIterator pi = s;
 		double[] d=new double[6];
 		ArrayList<Point2D> poly = new ArrayList<Point2D>();
@@ -293,31 +284,14 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
 		return getShape().getBounds();
 	}
 
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
-		if (this.getSmartHandleBoxes()==null) return;
-		SmartHandle thehandle = this.getSmartHandleBoxes().getHandleNumber(handlenum);
+		if (this.getPointHandles()==null) return;
+		SmartHandle thehandle = this.getPointHandles().getHandleNumber(handlenum);
 		if (thehandle!=null)thehandle.handleMove(p1, p2);
-		
-		/**
-		if (isCurvemode()) {
-		if (handlenum<2000&&handlenum>=1000) {
-			moveLeftTo(handlenum-1000, p2);
-			
-		}
-		
-		
-		if (this.isSupercurvemode()&&handlenum<3000&&handlenum>=2000)
-					moveRightTo(handlenum-2000, p2);
-		
-		
-		}
-			if (handlenum<1000)movePointTo(handlenum, p2);
-		*/
 	}
 
 	@Override
@@ -340,8 +314,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
 		if (selected) {
-			if (getSmartHandleBoxes()==null) setSmartHandleBoxes(SmartHandleForPathGraphic.getPathSmartHandles(this));
-			getSmartHandleBoxes().draw(g2d, cords);
+			if (getPointHandles()==null) setSmartHandleBoxes(SmartHandleForPathGraphic.getPathSmartHandles(this));
+			getPointHandles().draw(g2d, cords);
 		
 		   }
 		 getGrahpicUtil().setHandleFillColor(Color.GRAY); 
@@ -357,12 +331,12 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	public void setPath(Path2D path2d) {
 		this.path = path2d;
-		this.setAnchorPoints(shapeToArray(path2d.getPathIterator(new AffineTransform())));
+		this.setPathToAnchorPoints(shapeToArray(path2d.getPathIterator(new AffineTransform())));
 	}
 	
 	public void setPathToShape(Shape path2d) {
 		
-		this.setAnchorPoints(shapeToArray(path2d.getPathIterator(new AffineTransform())));
+		this.setPathToAnchorPoints(shapeToArray(path2d.getPathIterator(new AffineTransform())));
 		this.updatePathFromPoints();
 	}
 	
@@ -377,39 +351,41 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 
 	
 	public boolean isCurvemode() {
-		if(getHandleMode()==allSelectedHandleMode) return false;
+		if(getHandleMode()==MOVE_ALL_SELECTED_HANDLES) return false;
 		if (getHandleMode()>0) return true;
 		return false;
 		//return curvemode;
 	}
 
 	
-
-	public boolean isSupercurvemode() {
-		if (getHandleMode()==PathGraphic.ThreeHandelMode) return true;
-		if (getHandleMode()==PathGraphic.linkedHandleMode) return true;
-		if (getHandleMode()==PathGraphic.symetricHandleMode) return true;
+	/**returns true if the second of the two curve control points is to be visible*/
+	public boolean isSuperCurveControlMode() {
+		if (getHandleMode()==PathGraphic.THREE_HANDLE_MODE) return true;
+		if (getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED) return true;
+		if (getHandleMode()==PathGraphic.CURVE_CONTROL_SYMETRIC_MODE) return true;
 		return false;
 	}
 
 	public void setSupercurvemode(boolean supercurvemode) {
-		setHandleMode(PathGraphic.ThreeHandelMode);//.TwohandleMode;
+		setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 	}
+	
 	
 	public boolean isDrawClosePoint() {
 		return false;
 	}
 
+	/**returns the path point list*/
 	public PathPointList getPoints() {
 		return points;
 	}
-
+	/**sets a new path point list*/
 	public void setPoints(PathPointList points) {
 		this.points = points;
 		this.updatePathFromPoints();
 	}
 	
-	
+	/**creates a simple path that is used for the icon*/
 	public static PathGraphic createExample() {
 		PathGraphic output = new PathGraphic(new Point(0,0));
 		output.addPoint(new Point(1,4));
@@ -421,6 +397,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return output;
 	}
 	
+	/**when given a shape maker, creates a path*/
 	public static PathGraphic createPolygon(ShapeMaker shapeMaker ){//double length, int vertices, boolean in) {
 		
 		PathGraphic out = new PathGraphic(shapeMaker.getPathPointList());;
@@ -440,11 +417,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	public void setUseFilledShapeAsOutline(boolean useFilledShapeAsOutline) {
 		this.useFilledShapeAsOutline = useFilledShapeAsOutline;
 	}
-	/**
-	public void updateDisplay() {
-		IssueLog.log("was asked to update display"+this.setContainer);
-		super.updateDisplay();
-	}*/
+
 	public PopupMenuSupplier getMenuSupplier() {
 		return new PathGraphicMenu(this);
 	}
@@ -460,8 +433,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	public void setLocationUpperLeft(double x, double y) {
 		Point p = getLocationUpperLeft() ;
 		super.moveLocation(x-p.x, y-p.y);
-		
-
+		outline=null;//so a new outline will be created next time its needed
+		reshapeList2=null;
 	}
 	
 	public void moveLocation(double x, double y) {
@@ -470,19 +443,20 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		reshapeList2=null;
 	}
 	
+	/**scales the path about point p, also scale strokes and effects*/
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
 		p=this.convertPointToInternalCrdinates(p);
 		
-		//Point2D p2 = this.getLocation();
+		
 		AffineTransform af = new AffineTransform();
 		af.translate(p.getX(), p.getY());
 		af.scale(mag, mag);
 		af.translate(-p.getX(), -p.getY());
-		//p2=scaleAbout(p2, p,mag,mag);
+		
 		BasicStrokedItem.scaleStrokeProps(this, mag);
 		getPoints().applyAffine(af);
-		//this.setLocation(p2);
+		
 		this.updatePathFromPoints();
 		
 	}
@@ -501,12 +475,12 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	
-	
+	/**Used when generating a script for adobe illustrator*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		if (this.isCompleteMoveToIlls()) {
 			pi.addPathWithCurves(aref, this.getPoints(), true, isDrawClosePoint());
 			 pi.translate(x, y);
-			//IssueLog.log("trying experimental illustrator export on "+this);
+			
 		} else
 			pi.createPathWithoutCurves(aref, getShape());
 		
@@ -518,7 +492,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	boolean compound=true;
 
 	
-	
+	/**Used when generating a script for adobe illustrator*/
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
 		ArrayList<PathPointList> secs = this.getPoints().createAtCloseSubsections();
@@ -550,7 +524,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	
-	/**creates the given pathpoint list to illustrator*/
+	/**needed to create script to make the given pathpoint list in illustrator*/
 	private Object createShapeIllustrator(IllustratorObjectRef aref, PathPointList p) {
 		PathItemRef pi = new PathItemRef();
 	
@@ -569,41 +543,42 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.handleMode = handleMode;
 	}
 	
-	/**This the the transform that transforma the pathPoint list points into the path graphic's actual cordiantes that \
+	/**This the transform that transform the pathPoint list points into the path graphic's coordiantes on the canvas that 
 	  will be displayed*/
 	public AffineTransform getTransformForPathGraphic() {
 		
-		AffineTransform output =getRotationTransform();
+		AffineTransform output =getRotationTransform();//the rotation transform will actually have an angle of 0 since. paths are no longer allowed to be.
 		output.concatenate( AffineTransform.getTranslateInstance(getLocation().getX(), getLocation().getY()));
-	//	output.concatenate(getRotationTransform());
 		return output;
 	}
 
+	/**returns the smart handle list*/
 	@Override
 	public SmartHandleList getSmartHandleList() {
-		// TODO Auto-generated method stub
-		if ( getSmartHandleBoxes()==null) {
+		if ( getPointHandles()==null) {
 			setSmartHandleBoxes(new SmartHandleList());
 		}
-		if (this.superSelected) return SmartHandleList.combindLists(getSmartHandleBoxes(), getButtonList(), getReshapeList(), getReshapeList2(),getAddPointList());
-		return  getSmartHandleBoxes();
+		if (this.superSelected) return SmartHandleList.combindLists(getPointHandles(), getButtonList(), getReshapeList(), getReshapeList2(),getAddPointList());
+		return  getPointHandles();
 	}
 
-	
+	/**The add point list conists of two handles */
 	private transient SmartHandleList addPointList;
 	private SmartHandleList getAddPointList() {
 		if (addPointList==null)addPointList=SmartHandleList.createList(new AddPointSmartHandle(this, false),new AddPointSmartHandle(this, true));
 		return addPointList;
 	}
 
+	/**The reshape handle list contains points for rotation and scaling of the path point list*/
 	private transient ReshapeHandleList reshapeList;
-	public transient ReshapeHandleList reshapeList2;
 	private ReshapeHandleList getReshapeList() {
 		if(reshapeList==null)reshapeList=new ReshapeHandleList(0, this);
 		reshapeList.updateRectangle();
 		return reshapeList;
 	}
 
+	/**the second reshape handle list contains handles for rotating, moving and scaling only a subset of points*/
+	public transient ReshapeHandleList reshapeList2;
 	private ReshapeHandleList getReshapeList2() {
 		if(this.getPoints().getSelectedPointsOnly().size()<2) return null;
 		if(reshapeList2==null)reshapeList2=new PathPointReshapeList( 90000000, this);
@@ -612,7 +587,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	
-	/**creates an uncurved path that resembles this curve*/
+	/**creates an uncurved path with anchor points in position such that it resembles this path*/
 	public PathGraphic break10(int parts) {
 		double npart=parts;
 		PathPointList newlist = this.points.copy();
@@ -643,7 +618,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		
 	}
 	
-	
+	/**reflects the path about a line*/
 	public void reflectPathAboutLine(Point2D clickedCord,Point2D draggedCord) {
 		Point2D lineToProjectOn=convertPointToInternalCrdinates(clickedCord);
 		Point2D lineToProjectOn2=convertPointToInternalCrdinates(draggedCord);
@@ -657,6 +632,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			
 }
 
+	/**roates the path about a point*/
 	public void rotateAbout(Point2D clickedCord, double distanceFromCenterOfRotationtoAngle) {
 		Point2D pointCenter=convertPointToInternalCrdinates(clickedCord);
 		AffineTransform at = AffineTransform.getRotateInstance(distanceFromCenterOfRotationtoAngle, pointCenter.getX(), pointCenter.getY());
@@ -665,25 +641,27 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		
 	}
 
-	public synchronized SmartHandleList getSmartHandleBoxes() {
+	/**returns the handles for the point in the path */
+	public synchronized SmartHandleList getPointHandles() {
 		if (smartHandleBoxes==null) {
 			setSmartHandleBoxes(SmartHandleForPathGraphic.getPathSmartHandles(this));
-		
 		}
 		return smartHandleBoxes;
 	}
 
+	/**stores the given smart handle list as the main handle boxes. adds arrow size handles if needed*/
 	public void setSmartHandleBoxes(SmartHandleList smartHandleBoxes) {
 		if(this.smartHandleBoxes == smartHandleBoxes)return;
 		this.smartHandleBoxes = smartHandleBoxes;
-		if(this.arrowHead1!=null&&smartHandleBoxes!=null) {
-			smartHandleBoxes.add(arrowHead1.createArrowSizeHandle(100));
+		if(getArrowHead1()!=null&&smartHandleBoxes!=null) {
+			smartHandleBoxes.add(getArrowHead1().createArrowSizeHandle(100));
 		}
 		if(this.getArrowHead2()!=null&&smartHandleBoxes!=null) {
 			smartHandleBoxes.add(getArrowHead2().createArrowSizeHandle(200));
 		}
 	}
 
+	/**returns the key frame animation for this path graphic*/
 	public  KeyFrameAnimation getOrCreateAnimation() {
 		if (animation instanceof KeyFrameAnimation) return (KeyFrameAnimation) animation;
 		animation=new PathGraphicKeyFrameAnimator(this);
@@ -698,6 +676,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.useArea = useArea;
 	}
 
+	/**creates a simple path with a black line*/
 	public static PathGraphic blackLine(Point2D[] pts) {
 		PathGraphic output = new PathGraphic(pts[0]);
 		output.setDashes(new float[] {});output.setStrokeColor(Color.black);
@@ -706,7 +685,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return output;
 	}
 
-	public void selectHandlesInside(Rectangle2D selection) {
+	/**when given an area, selects the points inside the area */
+	public void selectHandlesInside(Shape selection) {
 		if(selection==null) return;
 		for(SmartHandle h:getSmartHandleList()) {
 			if(h instanceof SmartHandleForPathGraphic) {
@@ -720,8 +700,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		reshapeList2=null;
 	}
 	
-	
-	public void deselectHandlesInside(Rectangle2D selection) {
+	/**when given an area, deselects the points inside the area */
+	public void deselectHandlesInside(Shape selection) {
 		if(selection==null) return;
 		for(SmartHandle h:getSmartHandleList()) {
 			if(h instanceof SmartHandleForPathGraphic) {
@@ -741,12 +721,6 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.drawArrowHeads( g,cords);
 	}
 	
-	
-	@Override
-	public void deselect() {
-		super.deselect();
-		//for(PathPoint p:this.getPoints()) {p.deselect();}
-	}
 
 	private void drawArrowHeads(Graphics2D g, CordinateConverter<?> cords) {
 		drawArrow(g, cords, 0);
@@ -792,6 +766,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return arrowHead1;
 	}
 
+	/**Adds new arrow heads. creates 1 or 2 arrow heads depending on the number given*/
 	public void addArrowHeads(int i) {
 		if (i==1) {
 			arrowHead1=new ArrowGraphic();
@@ -800,11 +775,11 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			return;
 		}
 		setArrowHead2(new ArrowGraphic());
-		
 		setupArrowHead(getArrowHead2());
 		smartHandleBoxes=null;
 	}
 
+	/**alters the arrow graphic so that it has the proper appearance for an arrow head on this path*/
 	public void setupArrowHead(ArrowGraphic arrowHead) {
 		arrowHead.headOnly=true;
 		arrowHead.hideNormalHandles=true;
@@ -842,6 +817,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		if(nArrow==2) {this.addArrowHeads(2);this.addArrowHeads(1);}
 	}
 	
+	/**returns teh shape that will be used as an icon for thiss*/
 	ShapeGraphic rectForIcon() {
 		PathGraphic createExample = PathGraphic.createExample();
 		if(this.hasArrowHead1()) {
@@ -855,8 +831,9 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	/**the angle field is not used by this class*/
 	public double getAngle() {return 0;}
-	public void setAngle(double angle) {	this.angle=0;}
+	public void setAngle(double angle) {this.angle=0;}
 
+	/**class defines the handle for adding point to the start or end of the path*/
 	public class AddPointSmartHandle extends SmartHandle {
 
 		private PathGraphic path;
@@ -882,7 +859,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		}
 
 		public Point2D getCordinateLocation() {
-			SmartHandleList boxes = path.getSmartHandleBoxes();
+			SmartHandleList boxes = path.getPointHandles();
 			SmartHandle lastOne = boxes.get(boxes.size()-1);
 			if(toStart) lastOne=boxes.get(0);
 			

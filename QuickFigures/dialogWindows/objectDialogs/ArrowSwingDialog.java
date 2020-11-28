@@ -1,6 +1,7 @@
 package objectDialogs;
 
 import graphicalObjects_BasicShapes.ArrowGraphic;
+import standardDialog.BooleanInputPanel;
 import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
 
@@ -36,7 +37,7 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 		
 	}
 	
-	
+	/**Adds the arrow specific items to the dialog*/
 	protected void addOptionsToDialogPart2() {
 		
 		if ((dialogType!=LIMITED_DIALOG))this.addStrokePanelToDialog(s);
@@ -54,6 +55,9 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 		this.add("HeadNum", cip);
 		ComboBoxPanel cp = new ComboBoxPanel("Head Style", ArrowGraphic.arrowStyleChoices, arrow.getArrowStyle());
 		this.add("style", cp);
+		
+		BooleanInputPanel bip=new BooleanInputPanel("Outline", arrow.drawnAsOutline());
+		this.add("outline", bip);
 	
 	}
 	
@@ -61,12 +65,12 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 		this.setNameFieldToDialog(s);
 		if ((dialogType!=LIMITED_DIALOG))this.setStrokedItemtoPanel(s);
 		
-		
 		arrow.setArrowHeadSize((int)this.getNumber("headsize"));
 		arrow.setArrowTipAngle(this.getNumber("HeadAngle")/DEGREE_RADIANS);
 		arrow.setNotchAngle(this.getNumber("NotchAngle")/DEGREE_RADIANS);
 		arrow.setHeadnumber(this.getChoiceIndex("HeadNum"));
 		arrow.setArrowStyle(this.getChoiceIndex("style"));
+		arrow.setDrawAsOutline(this.getBoolean("outline"));
 		
 }
 

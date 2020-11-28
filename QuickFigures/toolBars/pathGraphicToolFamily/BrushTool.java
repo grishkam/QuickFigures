@@ -132,7 +132,7 @@ public class BrushTool extends PathGraphicTool {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			p.setHandleMode(PathGraphic.ThreeHandelMode);
+			p.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 
 			
 			p.updatePathFromPoints();
@@ -176,7 +176,7 @@ public class BrushTool extends PathGraphicTool {
 			this.p1 = p1;
 			this.p2=p1.copy();
 			p2.select();
-			p2.setHandleMode(PathGraphic.ThreeHandelMode);
+			p2.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 			p1.getParentLayer().add(p2);p2.moveLocation(10,10);
 			add("tolerance",new  NumberInputPanel("tolerance", pathSimplificatoinTolerance*1000, 800, 1000 ));
 			add("range",new  NumberInputPanel("Eliminate Nearby Points", nearbyPointCull, 0, 30 ));

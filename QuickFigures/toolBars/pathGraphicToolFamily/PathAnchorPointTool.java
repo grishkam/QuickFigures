@@ -99,7 +99,7 @@ public class PathAnchorPointTool extends GraphicTool {
 		}
 		
 		if (mode==6) {
-			p.setHandleMode(PathGraphic.linkedHandleMode);
+			p.setHandleMode(PathGraphic.CURVE_CONTROL_HANDLES_LINKED);
 			
 		}
 		
@@ -109,7 +109,7 @@ public class PathAnchorPointTool extends GraphicTool {
 				if (!pi.isSelected())pi.select();
 				
 			}
-			p.setHandleMode(PathGraphic.allSelectedHandleMode);
+			p.setHandleMode(PathGraphic.MOVE_ALL_SELECTED_HANDLES);
 			
 		}
 	}

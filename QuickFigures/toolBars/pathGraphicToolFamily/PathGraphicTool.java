@@ -136,7 +136,7 @@ public class PathGraphicTool extends GraphicTool {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			p.setHandleMode(PathGraphic.ThreeHandelMode);
+			p.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 
 			p.getPoints().getLastPoint().setCurveControl2(newp);
 			

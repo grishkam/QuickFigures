@@ -18,7 +18,7 @@ public class PathTool extends GraphicTool{
 	//PathGraphic model= new PathGraphic(new Point(0,0)); {model.setStrokeColor(Color.green); model.setStrokeWidth(2);}
 	SmartHandle handleSmart ;
 
-	private int handleMode=PathGraphic.anchorHandleOnlyMode;;
+	private int handleMode=PathGraphic.ANCHOR_HANDLE_ONLY_MODE;;
 	{createIconSet("icons2/DrawCurveLineIcon.jpg","icons2/LineIconPressed.jpg","icons2/LineIcon.jpg");
 	this.realtimeshow=false;
 	}
@@ -30,10 +30,10 @@ public class PathTool extends GraphicTool{
 	public PathTool(boolean curve, boolean symetricCurve) {
 		defaultCurved=curve;
 		this.set= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
-		if (!curve) this.handleMode=PathGraphic.anchorHandleOnlyMode;
+		if (!curve) this.handleMode=PathGraphic.ANCHOR_HANDLE_ONLY_MODE;
 		else {
-			handleMode=PathGraphic.linkedHandleMode;
-			if (symetricCurve) {handleMode=PathGraphic.symetricHandleMode;}
+			handleMode=PathGraphic.CURVE_CONTROL_HANDLES_LINKED;
+			if (symetricCurve) {handleMode=PathGraphic.CURVE_CONTROL_SYMETRIC_MODE;}
 		}
 		
 	}
@@ -83,7 +83,7 @@ public class PathTool extends GraphicTool{
 
 	void retorePathGraphicToNoral() {
 		if (pathGraphic!=null) {
-			pathGraphic.setHandleMode(PathGraphic.ThreeHandelMode);
+			pathGraphic.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 			//pathGraphic.setHandleMode(PathGraphic.allSelectedHandleMode);
 		}
 	}
@@ -97,7 +97,7 @@ public class PathTool extends GraphicTool{
 	
 	@Override
 	public String getToolName() {
-		if (defaultCurved&&getMode()==PathGraphic.symetricHandleMode) {return "Adjust Curvature Symetric Tool";}
+		if (defaultCurved&&getMode()==PathGraphic.CURVE_CONTROL_SYMETRIC_MODE) {return "Adjust Curvature Symetric Tool";}
 		if (defaultCurved) {return "Adjust Curvature Tool";}
 		return "Move Anchor Point Tool";
 	}
@@ -120,7 +120,7 @@ public class PathTool extends GraphicTool{
 				
 				p.getPoints().get(0).setCurveControl1(new Point(1, 8));
 				p.getPoints().get(0).setCurveControl2(new Point(16, 8));
-				p.setHandleMode(PathGraphic.ThreeHandelMode);
+				p.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 			}
 		/**	RectangularGraphic rect1 = RectangularGraphic.blankRect(new Rectangle(6,6,4,4), Color.white) ;
 			rect1.setFillColor(Color.white);

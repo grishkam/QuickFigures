@@ -22,7 +22,7 @@ public class PathTool2 extends PathTool{
 	  the path by moving multiple points at a time*/
 	public void onPathPress() {
 		if(pathGraphic==null) return;
-			pathGraphic.setHandleMode(PathGraphic.allSelectedHandleMode);
+			pathGraphic.setHandleMode(PathGraphic.MOVE_ALL_SELECTED_HANDLES);
 			
 			Point2D locationClickInPathsCords=new Point2D.Double(getClickedCordinateX()-pathGraphic.getLocation().getX(), this.getClickedCordinateY()-pathGraphic.getLocation().getY());
 			PathPoint pi = pathGraphic.getPoints().getNearest(locationClickInPathsCords.getX(), locationClickInPathsCords.getY());

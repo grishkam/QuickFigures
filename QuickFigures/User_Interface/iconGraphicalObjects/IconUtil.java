@@ -79,7 +79,7 @@ public static Icon createBrightnessIcon(int open) {
 		z.setArrowTipAngle(80);
 		z.setStrokeColor(Color.black);
 		z.setArrowHeadSize(5);
-		z.setArrowStyle(ArrowGraphic.openHead);
+		z.setArrowStyle(ArrowGraphic.OPEN_HEAD);
 		z.setStrokeWidth(2);
 	//	gg.getTheLayer().add(circleb);
 		gg.getTheLayer().add(z);

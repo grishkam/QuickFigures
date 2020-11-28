@@ -96,7 +96,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	int end=BasicStroke.CAP_BUTT;
 	int join=BasicStroke.JOIN_ROUND;
 	float miterLimit=DEFAULT_MITER_LIMIT;
-	private boolean hasCloseOption=false;
+	private boolean hasCloseOption=false;//set to true if the shape can be set to either open or close (used for 1 subclass)
 	
 	
 	public void setMiterLimit(double miter) {
@@ -270,9 +270,9 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		  
 		  /**draws the stroke*/
 		  if (this.getStrokeWidth()>=0){
-		  g.setStroke(cords.getScaledStroke(getStroke()));
-		  if (r!=null )getStrokePaintProvider().strokeShape(g, r);
-		  else IssueLog.log("Shape graphic has no shape "+this.getClass().getName()+" "+this.getName());
+			  g.setStroke(cords.getScaledStroke(getStroke()));
+			  if (r!=null )getStrokePaintProvider().strokeShape(g, r);
+			  	else IssueLog.log("Shape graphic has no shape "+this.getClass().getName()+" "+this.getName());
 	}
 		
 		  drawHandesSelection(g, cords);
@@ -602,9 +602,11 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return new ShapeActionButtonHandleList2(this);
 	}
 	
+	/**set to true if the shape is fillable*/
 	public boolean isFillable() {
 		return true;
 	}
+	/**returns true if the shape has joins (some subclasses dont)*/
 	public boolean doesJoins() {
 		return true;
 	}
@@ -649,7 +651,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return new ShapeGraphicMenu(this);
 	}
 	
-	/**returns a pathGraphic that looks just like this shape*/
+	/**returns a pathGraphic that looks just like this shape
+	 * @see PathGraphic*/
 	public PathGraphic createPathCopy() {
 		PathPointList list = PathPointList.createFromIterator(this.getOutline().getPathIterator(new AffineTransform()));
 		PathGraphic oo = new PathGraphic(list);
@@ -658,7 +661,6 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		oo.setName(getName());
 		oo.setClosedShape(true);
 		if(this.isSelected())oo.select();
-	//	oo.setUseFilledShapeAsOutline(this.isFilled());
 		return oo;
 	}
 	

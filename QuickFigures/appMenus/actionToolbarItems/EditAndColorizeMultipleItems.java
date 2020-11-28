@@ -46,7 +46,7 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RainbowPaintProvider;
 import utilityClassesForObjects.StrokedItem;
 
-/**Applies a single color or stroke style to all the objects.*/
+/**Applies a single color or stroke style to all the selected shapes*/
 public class EditAndColorizeMultipleItems extends BasicMultiSelectionOperator implements  MontageSpaces, ColorInputListener,  Serializable {
 
 	/**
@@ -75,7 +75,6 @@ public class EditAndColorizeMultipleItems extends BasicMultiSelectionOperator im
 	private boolean bigIcon;
 	public boolean alwaysDashIcon=false;
 	
-
 
 	public boolean doesStroke() {
 		return stroke;
@@ -123,11 +122,11 @@ public class EditAndColorizeMultipleItems extends BasicMultiSelectionOperator im
 	}
 	
 	public static EditAndColorizeMultipleItems[] createForArrow2() {
-		EditAndColorizeMultipleItems[] output = new EditAndColorizeMultipleItems[10];
+		EditAndColorizeMultipleItems[] output = new EditAndColorizeMultipleItems[14];
 		for(int i=0; i<2; i++)
 			output[i]=new EditAndColorizeMultipleItems(null,i,2);
-		for(int i=0; i<8; i++)
-			output[2+i]=new EditAndColorizeMultipleItems(null,i+ArrowGraphic.squareHead,2);
+		for(int i=0; i<12; i++)
+			output[2+i]=new EditAndColorizeMultipleItems(null,i+ArrowGraphic.SQUARE_HEAD,2);
 		
 		return output;
 	}

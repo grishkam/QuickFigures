@@ -37,6 +37,7 @@ import graphicalObjects_BasicShapes.GearShape;
 import graphicalObjects_BasicShapes.NotchedRectangleGraphic;
 import graphicalObjects_BasicShapes.PlusGraphic;
 import graphicalObjects_BasicShapes.SimpleStar;
+import graphicalObjects_BasicShapes.TailGraphic;
 import graphicalObjects_BasicShapes.TrapezoidGraphic;
 import graphicalObjects_BasicShapes.TriangleGraphic;
 import logging.IssueLog;
@@ -153,10 +154,13 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	out.add(new OtherShapeGraphicTool(new TrapezoidGraphic(new Rectangle(0,0,5,5))));
 
 	out.add(new OtherShapeGraphicTool(new TriangleGraphic(new Rectangle(0,0,5,5))));
+	
 	out.add(new RightTriangleGraphicTool(2));
 	out.add(new RightTriangleGraphicTool(3));
 	out.add(new OtherShapeGraphicTool(new PlusGraphic(new Rectangle(0,0,5,5))));
 	out.add(new OtherShapeGraphicTool(new NotchedRectangleGraphic(new Rectangle(0,0,5,5))));
+	//out.add(new OtherShapeGraphicTool(new TailGraphic(new Rectangle(0,0,5,5))));
+	
 	return out;}
 	
 	public static ArrayList<ToolBit> getCircularShapeGraphicBits() {

@@ -7,6 +7,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 
 import graphicalObjectHandles.AngleHandle;
 import graphicalObjectHandles.SmartHandleList;
@@ -53,11 +54,11 @@ public class CircularGraphic extends RectangularGraphic {
 		ovalGraphic.parameterArcEnd.setAngle(parameterArcEnd.getAngle());
 	}
 	
-	public CircularGraphic(Rectangle rectangle) {
+	public CircularGraphic(Rectangle2D rectangle) {
 		this(rectangle, 0);
 	}
-	public CircularGraphic(Rectangle rectangle, int arc) {
-		super(rectangle);
+	public CircularGraphic(Rectangle2D r2d, int arc) {
+		super(r2d);
 		this.arc=arc;
 		{name="Oval";
 		if(this.isArc())name="Arc";
@@ -160,8 +161,8 @@ public class CircularGraphic extends RectangularGraphic {
 			return output;
 			}
 		
-		public static CircularGraphic halfCircle(Rectangle r) {
-			CircularGraphic output = new CircularGraphic(r);
+		public static CircularGraphic halfCircle(Rectangle2D r2d) {
+			CircularGraphic output = new CircularGraphic(r2d);
 			output.setFilled(true);
 			output.setStrokeWidth(-1);
 			output.arc=1;
