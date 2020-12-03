@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Gregory Mazo
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
 package popupMenusForComplexObjects;
 
 import java.awt.Color;
@@ -12,6 +27,7 @@ import graphicTools.CircleGraphicTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
@@ -91,7 +107,7 @@ super.addLockedItemMenus();
 		SmartJMenu s = new SmartJMenu("Add Shape ");
 		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer()));
 		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer()));
-		s.add(new PanelShapeAdder(new CircleGraphicTool(CircleGraphicTool.SIMPLE_CIRCLE), imagePanel, imagePanel.getParentLayer()));
+		s.add(new PanelShapeAdder(new CircleGraphicTool(CircularGraphic.NO_ARC), imagePanel, imagePanel.getParentLayer()));
 		this.add(s);
 	}
 

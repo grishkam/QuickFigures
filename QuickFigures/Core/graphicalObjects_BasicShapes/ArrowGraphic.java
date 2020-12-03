@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Gregory Mazo
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
 package graphicalObjects_BasicShapes;
 
 
@@ -80,7 +95,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	public static final int[] arrowStyleList=new int[] {
 			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL};
 	
-	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Feather Tail", "Fine Feather Tail", "Open Outline Heads", "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Triangle Cap", "Tail", "Narrow Tail","Semi Circle", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail", "Open Outline Heads", "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Triangle Cap", "Tail", "Narrow Tail","Semi Circle", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
 	/**some options not available to the user dialog but available to programmer*/
 	public static final int 
 	 HALF_BAR_HEAD = 400,  HALF_BAR_HEAD2 = 500 ,BAR_HEAD = 444,
