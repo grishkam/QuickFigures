@@ -182,6 +182,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		}
 	}
 	
+	/**returns the location of the notchpoint for the given head*/
 	public Point2D getNotchLocation(int h) {
 		ArrowHead head = this.getHead(h);
 		if (head.processesPoints==null) 
@@ -264,7 +265,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 
 	/**
-	 
+	 returns the points along the arrow head
 	 */
 	private Point2D.Double[] getHeadPoints(int headnumber) {
 		ArrowHead head=this.getHead(headnumber);
@@ -382,6 +383,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		y2=arr.y2;
 	}
 	
+	/**makes the arrow heads of this arrow identical to the argument*/
 	public void copyArrowAtributesFrom(ArrowGraphic arr) {
 		
 		this.setNHeads(arr.getNHeads());
