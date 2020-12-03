@@ -460,6 +460,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return getOutline().getBounds();
 	}
 	
+	/**returns the angle of the arrow*/
 	public double getAngleBetweenPoints() {
 		double angle=Math.atan(((double)(y2-y))/(x2-x));
 		if (!java.lang.Double.isNaN(angle)) {
@@ -667,7 +668,7 @@ protected Point2D getDrawnLineEnd2() {
 			RectangleEdges.setLocation(r2d, RectangleEdges.CENTER, pt.getX(), pt.getY());
 			
 			AffineTransform at = AffineTransform.getRotateInstance(this.getAngleBetweenPoints(),  pt.getX(), pt.getY());
-			if(headnumber==2) at = AffineTransform.getRotateInstance(this.getAngleBetweenPoints()+Math.PI,  pt.getX(), pt.getY());
+			if(headnumber==SECOND_HEAD) at = AffineTransform.getRotateInstance(this.getAngleBetweenPoints()+Math.PI,  pt.getX(), pt.getY());
 			
 			if(head.isPolygonHead()) {
 				RegularPolygonGraphic rp = new RegularPolygonGraphic(r2d);
