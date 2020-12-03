@@ -32,7 +32,7 @@ public class CentriolePairCartoon extends GraphicGroup {
 	
 	private void setPropertiesInitialOfCentriole(RectangularGraphic centriole1) {
 		centriole1.setStrokeWidth(1);
-		centriole1.makeDashLess();
+		centriole1.makeNearlyDashLess();
 		centriole1.setFillColor(Color.black);
 		centriole1.setFilled(true);
 		centriole1.setStrokeColor(Color.DARK_GRAY);

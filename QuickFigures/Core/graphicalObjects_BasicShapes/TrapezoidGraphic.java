@@ -68,7 +68,6 @@ public class TrapezoidGraphic extends RectangularGraphic {
 		Path2D.Double path=new Path2D.Double();
 		Rectangle2D r = this.getRectangle();
 		double rx=getObjectWidth()/2;
-		double ry=getObjectHeight()/2;
 		
 		Point2D startPoint = RectangleEdges.getLocation(LOWER_LEFT, r);
 		path.moveTo( startPoint .getX(),startPoint .getY());

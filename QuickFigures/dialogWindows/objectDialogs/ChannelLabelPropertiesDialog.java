@@ -8,6 +8,8 @@ import graphicActionToolbar.CurrentFigureSet;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StringInputPanel;
 
+/**A dialog that allows the user to change how the channel label's are shown
+ */
 public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 
 	
@@ -19,11 +21,13 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 	private ArrayList<ChannelLabel> labels;
 	ChannelLabelProperties properties;
 
+	/**Constructs a dialog for the given channel label properties*/
 	public  ChannelLabelPropertiesDialog(ChannelLabelProperties p) {
 		properties = p;
 		this.addOptionsToDialog();
 	}
 	
+	/**sets the channel labels that this dialog affects*/
 	public void setLabelItems(Iterable<?> items) {
 	labels=new ArrayList<ChannelLabel>();
 		for(Object  i:items) {
@@ -32,17 +36,17 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 	}
 	
 	protected void addOptionsToDialog() {
-		ComboBoxPanel mergeTypeCombo = new ComboBoxPanel("How To label Merge",ChannelLabelProperties.mergeLabelOptions, properties.getMergeLabelType() );
+		ComboBoxPanel mergeTypeCombo = new ComboBoxPanel("How To label Merge",ChannelLabelProperties.mergeLabelOptions, properties.getMergeLabelStyle() );
 		this.add("mergeType", mergeTypeCombo );
 		ComboBoxPanel mergeTextCombo = new ComboBoxPanel("Merge Label",ChannelLabelProperties.mergeTexts, properties.getMergeTextOption() );
 		this.add("mergeText", mergeTextCombo  );
-		ComboBoxPanel sepTextCombo = new ComboBoxPanel("Separator Used For Single Line Label",ChannelLabelProperties.separatorOptions, properties.getSaparatorOption() );
+		ComboBoxPanel sepTextCombo = new ComboBoxPanel("Separator Used For Single Line Label",ChannelLabelProperties.separatorOptions, properties.getSeparatorOption() );
 		this.add("sepText", sepTextCombo  );
 		this.add("Custom Merge Text ", new StringInputPanel("Custom Merge Text ",properties.getCustomMergeText() ));
 		this.add("Custom Separator ", new StringInputPanel("Custom Separator ",properties.getCustomSeparator() ));
 	}
 	protected void setItemsToDiaog() {
-		properties.setMergeLabelType(this.getChoiceIndex("mergeType"));
+		properties.setMergeLabelStyle(this.getChoiceIndex("mergeType"));
 		properties.setMergeTextOption(this.getChoiceIndex("mergeText"));
 		properties.setSaparatorOption(this.getChoiceIndex("sepText"));
 		properties.setCustomMergeText(this.getString("Custom Merge Text "));

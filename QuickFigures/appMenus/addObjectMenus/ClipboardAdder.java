@@ -12,6 +12,7 @@ import javax.swing.text.rtf.RTFEditorKit;
 
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ImagePanelGraphic;
+import logging.IssueLog;
 
 public class ClipboardAdder extends FileImageAdder {
 	/**
@@ -29,13 +30,14 @@ public class ClipboardAdder extends FileImageAdder {
 	        boolean imageSupported = transferable.isDataFlavorSupported(DataFlavor.imageFlavor);
 	        if (imageSupported) {
 	        	Object ob = transferable.getTransferData(DataFlavor.imageFlavor);
-	        	
+	        	if (ob!=null)IssueLog.log(" image flavor ");
 	        }
 	       /** for(DataFlavor flavor:transferable.getTransferDataFlavors())
 	        		System.out.println(flavor+"");*/
 	        try {
 				DataFlavor rtflavor = new DataFlavor("text/rtf");
 				boolean richTextSupported = transferable.isDataFlavorSupported(rtflavor);
+				if (richTextSupported)IssueLog.log(" rich text  ");
 				ByteArrayInputStream ob = (ByteArrayInputStream) transferable.getTransferData(rtflavor);
 				//String s = new String(ob.readAllBytes());
 				//String[] lines = s.split(""+'\t');

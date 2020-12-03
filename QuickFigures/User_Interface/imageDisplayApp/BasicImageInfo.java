@@ -1,8 +1,9 @@
 package imageDisplayApp;
 
+import java.awt.Dimension;
 import java.io.Serializable;
 
-/**this class stores simple information about an image: canvas size and name*/
+/**this class stores simple information about an image: canvas size */
 public class BasicImageInfo implements Serializable {
 	
 		/**
@@ -26,6 +27,10 @@ public class BasicImageInfo implements Serializable {
 
 		public void setWidth(int width) {
 			this.width = width;
+		}
+		
+		public Dimension getDimensions() {
+			return new Dimension(getWidth(), getHeight());
 		}
 	
 }

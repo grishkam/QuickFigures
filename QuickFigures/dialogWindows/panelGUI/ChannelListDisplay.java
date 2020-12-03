@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JList;
@@ -212,7 +213,8 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	}
 	
 	public void removeSelectedChannels() {
-		Object[] index1 = getSelectedValues();
+		
+		List<Object> index1 = super.getSelectedValuesList();
 		for(Object o: index1) {
 			if (o instanceof ChannelEntry) {
 				this.removeItem((ChannelEntry) o);

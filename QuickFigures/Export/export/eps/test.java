@@ -2,25 +2,19 @@ package export.eps;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.TranscodingHints;
-import org.apache.commons.io.IOUtils;
 import org.apache.fop.render.ps.EPSTranscoder;
 import org.apache.fop.svg.PDFDocumentGraphics2D;
 import org.apache.fop.svg.PDFTranscoder;
-import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
-
 import ultilInputOutput.FileChoiceUtil;
 
 /**

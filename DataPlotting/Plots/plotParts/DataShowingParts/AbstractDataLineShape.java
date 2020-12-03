@@ -35,7 +35,7 @@ public abstract class AbstractDataLineShape extends DataShowingShape implements 
 		super.drawHandesSelection(g2d, cords);
 		if (this.isSelected()) {
 			g2d.setColor(new Color(0, 0, 0, 50));
-			g2d.fill(cords.getAfflineTransform().createTransformedShape(getOutline2()));
+			g2d.fill(cords.getAffineTransform().createTransformedShape(getOutline2()));
 		}
 	}
 

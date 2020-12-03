@@ -1,7 +1,7 @@
 package genericMontageLayoutToolKit;
 import externalToolBar.IconSet;
 import genericMontageKit.*;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 
 public class PannelGrabberTool extends GeneralLayoutEditorTool implements 
-		MontageSpaces{
+		LayoutSpaces{
 	
 	public int mode=1;
 	{this.removalPermissive=true;}

@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.EditManyShapes;
 import actionToolbarItems.SetAngle;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
@@ -61,10 +61,10 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	
 	public void addItems() {
 		
-		EditAndColorizeMultipleItems itemForIcon=null;
+		EditManyShapes itemForIcon=null;
 	
 		if (shape.isFillable()){
-		itemForIcon = new EditAndColorizeMultipleItems(false, shape.getFillColor());
+		itemForIcon = new EditManyShapes(false, shape.getFillColor());
 		itemForIcon.setModelItem(shape);
 
 		GeneralActionListHandle hf = addOperationList(itemForIcon, fillColorActs());
@@ -73,7 +73,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		}
 		
 		
-		itemForIcon = new EditAndColorizeMultipleItems(true, shape.getStrokeColor());
+		itemForIcon = new EditManyShapes(true, shape.getStrokeColor());
 		itemForIcon.setModelItem(shape);
 		
 		GeneralActionListHandle h = addOperationList(itemForIcon, strokeColorActs());
@@ -81,7 +81,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		
 		
 		
-		itemForIcon=new EditAndColorizeMultipleItems(true, 2);
+		itemForIcon=new EditManyShapes(true, 2);
 		itemForIcon.setModelItem(shape);
 		
 		addOperationList(itemForIcon, getStrokes() );
@@ -89,7 +89,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		
 		
 		
-			itemForIcon=new EditAndColorizeMultipleItems(BasicStroke.JOIN_BEVEL, null);
+			itemForIcon=new EditManyShapes(BasicStroke.JOIN_BEVEL, null);
 			itemForIcon.setModelItem(shape);
 			GeneralActionListHandle cj =new GeneralActionHandleJoiner(itemForIcon, this.numHandleID,getJions()) ;
 			super. addOperationList(itemForIcon, cj );
@@ -97,25 +97,22 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 			cj.setyShift(cj.getyShift() + 6);
 		
 		
-		itemForIcon=new EditAndColorizeMultipleItems(null, BasicStroke.CAP_BUTT);
+		itemForIcon=new EditManyShapes(null, BasicStroke.CAP_BUTT);
 		itemForIcon.setModelItem(shape);
 		 addOperationList(itemForIcon, getCaps() );
 		 
-		 itemForIcon=new EditAndColorizeMultipleItems(true, new float[] {2,2});
+		 itemForIcon=new EditManyShapes(true, new float[] {2,2});
 			itemForIcon.setModelItem(shape); itemForIcon.alwaysDashIcon=true;
 			addOperationList(itemForIcon, getDashes() );
 		 
 		if(shape instanceof ArrowGraphic) {
-		 itemForIcon=new EditAndColorizeMultipleItems((ArrowGraphic) shape, 1, 0);
-		 itemForIcon.setModelItem(shape);
-		 addOperationList(itemForIcon,EditAndColorizeMultipleItems. createForArrow() );
-		 createForArrowHeadType();
+			createArrowButtons();
 		 
 				 } else 
 		if(shape instanceof PathGraphic) {
-			 itemForIcon=new EditAndColorizeMultipleItems((PathGraphic) shape, shape.isClosedShape());
+			 itemForIcon=new EditManyShapes((PathGraphic) shape, shape.isClosedShape());
 			 itemForIcon.setModelItem(shape);
-			 addOperationList(itemForIcon,new EditAndColorizeMultipleItems[] {new EditAndColorizeMultipleItems(null, true), new EditAndColorizeMultipleItems(null, false)} );
+			 addOperationList(itemForIcon,new EditManyShapes[] {new EditManyShapes(null, true), new EditManyShapes(null, false)} );
 				 
 					 }
 		else {
@@ -128,28 +125,70 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	}
 
 	/**
-	 * @return
+	 * 
 	 */
-	public EditAndColorizeMultipleItems[] strokeColorActs() {
-		return EditAndColorizeMultipleItems.getForColors(true, standardColor);
+	public void createArrowButtons() {
+		EditManyShapes itemForIcon;
+		itemForIcon=new EditManyShapes((ArrowGraphic) shape, 1, 0, 1);
+		 itemForIcon.setModelItem(shape);
+		 addOperationList(itemForIcon,EditManyShapes. createForArrow() );
+		 createForArrowHeadType();
 	}
 
 	/**
 	 * @return
 	 */
-	public EditAndColorizeMultipleItems[] fillColorActs() {
-		return EditAndColorizeMultipleItems.getForColors(false, standardColor);
+	public EditManyShapes[] strokeColorActs() {
+		return EditManyShapes.getForColors(true, standardColor);
 	}
 
+	/**
+	 * @return
+	 */
+	public EditManyShapes[] fillColorActs() {
+		return EditManyShapes.getForColors(false, standardColor);
+	}
+
+	/**creates the arrow head style action buttons*/
 	protected void createForArrowHeadType() {
-		EditAndColorizeMultipleItems itemForIcon;
-		itemForIcon=new EditAndColorizeMultipleItems((ArrowGraphic) shape, 1, 2);
+		EditManyShapes itemForIcon;
+		
+		 itemForIcon=new EditManyShapes((ArrowGraphic) shape, 1, 2, ArrowGraphic.SECOND_HEAD);
 		 itemForIcon.setModelItem(shape);
-		 addOperationList(itemForIcon,EditAndColorizeMultipleItems. createForArrow2() );
+		  GeneralArrowHeadButton h2 = new GeneralArrowHeadButton(itemForIcon, numHandleID,EditManyShapes.createForArrow2(ArrowGraphic.SECOND_HEAD),ArrowGraphic.SECOND_HEAD);
+		 super. addOperationList(itemForIcon, h2 );
+		
+		itemForIcon=new EditManyShapes((ArrowGraphic) shape, 1, 2, ArrowGraphic.FIRST_HEAD);
+		 itemForIcon.setModelItem(shape);
+		 
+		 GeneralActionListHandle h = new GeneralArrowHeadButton(itemForIcon, numHandleID,EditManyShapes.createForArrow2(ArrowGraphic.FIRST_HEAD),ArrowGraphic.FIRST_HEAD);
+		 super. addOperationList(itemForIcon, h );
+		 
+		
 	}
 
+	/**An action handle that is only visible if the given arrow head is visible*/
+	class GeneralArrowHeadButton extends GeneralActionListHandle{
 
-
+		private int hNumber;
+		public GeneralArrowHeadButton(MultiSelectionOperator i, int num, MultiSelectionOperator[] items, int headNumber) {
+			super(i, num, items);
+			hNumber=headNumber;
+		}
+		@Override
+		public boolean isHidden() {
+			if (shape instanceof ArrowGraphic) {
+				
+					ArrowGraphic arrowGraphic = (ArrowGraphic) shape;
+					if (hNumber==ArrowGraphic.SECOND_HEAD && arrowGraphic.headsAreSame()) { return true;}
+					
+					if (arrowGraphic.getNHeads()<hNumber) return true;
+				
+			}
+			
+			return false;
+		}
+		private static final long serialVersionUID = 1L;}
 
 	class GeneralActionHandleJoiner extends GeneralActionListHandle {
 
@@ -165,48 +204,48 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 
 
 
-	public static EditAndColorizeMultipleItems[] getDashes() {
-		return new EditAndColorizeMultipleItems[] {
-				new EditAndColorizeMultipleItems(true, new float[] {2,2}),
-				new EditAndColorizeMultipleItems(true, new float[] {}),
+	public static EditManyShapes[] getDashes() {
+		return new EditManyShapes[] {
+				new EditManyShapes(true, new float[] {2,2}),
+				new EditManyShapes(true, new float[] {}),
 				
-				new EditAndColorizeMultipleItems(true, new float[] {4,4}),
-				new EditAndColorizeMultipleItems(true, new float[] {8,8}),
+				new EditManyShapes(true, new float[] {4,4}),
+				new EditManyShapes(true, new float[] {8,8}),
 			
-				new EditAndColorizeMultipleItems(true, new float[] {8,16}),
-				new EditAndColorizeMultipleItems(true, new float[] {12,24})
-				,new EditAndColorizeMultipleItems(true, new float[] {4,4,8,4})
+				new EditManyShapes(true, new float[] {8,16}),
+				new EditManyShapes(true, new float[] {12,24})
+				,new EditManyShapes(true, new float[] {4,4,8,4})
 			
 	};
 	}
 	
-	public static EditAndColorizeMultipleItems[] getStrokes() {
-		return new EditAndColorizeMultipleItems[] {
-				new EditAndColorizeMultipleItems(true, (float) 0.5),
-				new EditAndColorizeMultipleItems(true, 1),
-				new EditAndColorizeMultipleItems(true, 2),
-				new EditAndColorizeMultipleItems(true, 4),
-				new EditAndColorizeMultipleItems(true, 8),
-				new EditAndColorizeMultipleItems(true, 16),
-				new EditAndColorizeMultipleItems(true, 30),
+	public static EditManyShapes[] getStrokes() {
+		return new EditManyShapes[] {
+				new EditManyShapes(true, (float) 0.5),
+				new EditManyShapes(true, 1),
+				new EditManyShapes(true, 2),
+				new EditManyShapes(true, 4),
+				new EditManyShapes(true, 8),
+				new EditManyShapes(true, 16),
+				new EditManyShapes(true, 30),
 			};
 	}
 	
 
-	public static EditAndColorizeMultipleItems[] getJions() {
-		return new EditAndColorizeMultipleItems[] {
-				new EditAndColorizeMultipleItems(BasicStroke.JOIN_BEVEL, null),
-				new EditAndColorizeMultipleItems(BasicStroke.JOIN_MITER, null),
-				new EditAndColorizeMultipleItems(BasicStroke.JOIN_ROUND, null)
+	public static EditManyShapes[] getJions() {
+		return new EditManyShapes[] {
+				new EditManyShapes(BasicStroke.JOIN_BEVEL, null),
+				new EditManyShapes(BasicStroke.JOIN_MITER, null),
+				new EditManyShapes(BasicStroke.JOIN_ROUND, null)
 				
 				};
 	}
 	
-	public static EditAndColorizeMultipleItems[] getCaps() {
-		return new EditAndColorizeMultipleItems[] {
-				new EditAndColorizeMultipleItems(null, BasicStroke.CAP_BUTT),
-				new EditAndColorizeMultipleItems(null, BasicStroke.CAP_ROUND),
-				new EditAndColorizeMultipleItems(null, BasicStroke.CAP_SQUARE)
+	public static EditManyShapes[] getCaps() {
+		return new EditManyShapes[] {
+				new EditManyShapes(null, BasicStroke.CAP_BUTT),
+				new EditManyShapes(null, BasicStroke.CAP_ROUND),
+				new EditManyShapes(null, BasicStroke.CAP_SQUARE)
 				
 				};
 	}
@@ -217,10 +256,10 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private EditAndColorizeMultipleItems item;
-		private transient CanvasMouseEventWrapper lastPress;
+		private EditManyShapes item;
+		private transient CanvasMouseEvent lastPress;
 
-		public ColoringButton(EditAndColorizeMultipleItems itemForIcon, int handleNumber ) {
+		public ColoringButton(EditManyShapes itemForIcon, int handleNumber ) {
 			
 			super(itemForIcon.getIcon(), new Point(0,0));
 			
@@ -232,12 +271,12 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		}
 		
 		@Override
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			showPopupMenu(canvasMouseEventWrapper);
 		
 		}
 
-		public void showPopupMenu(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void showPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
 			lastPress=canvasMouseEventWrapper;
 			String message="Change Fill Color";
 			if(item.doesStroke()) message="Change Stroke Color";

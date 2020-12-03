@@ -139,7 +139,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	public void snapLockedItem(LocatedObject2D l) {
 		if (l instanceof PlotLabel) {}
 		else {
-			l.getSnapPosition().snapObjectToRectangle(l, this.getRectangle().getBounds());
+			l.getAttachmentPosition().snapObjectToRectangle(l, this.getRectangle().getBounds());
 		}
 	}
 

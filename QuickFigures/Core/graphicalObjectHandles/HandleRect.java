@@ -42,7 +42,7 @@ public class HandleRect extends Rectangle2D.Double implements ZoomableGraphic {
 	}
 	
 	public HandleRect(Rectangle2D r,CordinateConverter<?> cords, Color c ) {
-		this(cords.getAfflineTransform().createTransformedShape(r).getBounds2D());
+		this(cords.getAffineTransform().createTransformedShape(r).getBounds2D());
 		this.setHandleColor(c);
 	}
 	

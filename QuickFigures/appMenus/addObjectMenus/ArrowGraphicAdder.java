@@ -6,6 +6,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**An implementation of graphic adder that adds an arrow*/
 public class ArrowGraphicAdder extends BasicGraphicAdder {
 
 	/**

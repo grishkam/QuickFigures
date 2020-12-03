@@ -7,6 +7,8 @@ public class CSFLocation implements Serializable {
 	 * 
 	 */
 	
+	public static final int MERGE_SELECTED=0, NONE_SELECTED=-1;
+	
 	private static final long serialVersionUID = 1L;
 	/**the channel frame and slice position specified. channel 0 represents merged images
 	  negative numbers indicate the place is not specified (which can mean all or none depending on context)*/

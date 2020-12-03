@@ -9,7 +9,7 @@ import standardDialog.StandardDialog;
 
 
 
-public class MontageEditorDialogs implements MontageSpaces {
+public class MontageEditorDialogs implements LayoutSpaces {
 	
 	public void showGeneralEditorDialog( GenericMontageEditor me, BasicMontageLayout basicMontageLayout) {
 		if (basicMontageLayout==null) return;

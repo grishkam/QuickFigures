@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 import channelMerging.ChannelEntry;
 
-/**The channel label*/
+/**The channel label object must perform certain tasks*/
 public interface ChannelLabel extends Serializable {
 	public ArrayList<ChannelEntry> getChanEntries();
 	public void setParaGraphToChannels();
-	public ChannelLabelProperties getChannelLabelproperties();
+	public ChannelLabelProperties getChannelLabelProperties();
 	public void setChannelLabelproperties(ChannelLabelProperties channelLabelproperties) ;
 	
 }

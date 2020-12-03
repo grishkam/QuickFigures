@@ -8,6 +8,7 @@ import graphicalObjects_LayerTypes.CentriolePairCartoon;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import standardDialog.GraphicDisplayComponent;
 
+/**Adds a group of two rectangles to the image */
 public class CentriolePairCartoonAdder extends BasicGraphicAdder {
 
 	/**
@@ -28,13 +29,11 @@ public class CentriolePairCartoonAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "Centrioles";
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return null;//"Add Centrioles";
 	}
 	

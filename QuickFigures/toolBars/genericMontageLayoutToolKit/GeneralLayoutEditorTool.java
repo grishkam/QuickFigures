@@ -9,7 +9,7 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.MontageEditorDialogs;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
@@ -26,7 +26,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**A superclass used for a variety of tool bits. Has methods to access Grid layout*/
-public class GeneralLayoutEditorTool extends BasicToolBit implements MontageSpaces, ActionListener{
+public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpaces, ActionListener{
 
 
 	

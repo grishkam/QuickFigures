@@ -87,7 +87,7 @@ public class TextParagraph extends ArrayList<TextLine> {
 			return lin;
 		}
 	
-	@Deprecated
+	
 	/**based on the instructions within the string, creates a new line of text in the paragraph*/
 	public TextLine addLineFromCodeString(String st,Color c) {
 		String[] sts=st.split("///");
@@ -102,7 +102,7 @@ public class TextParagraph extends ArrayList<TextLine> {
 		
 		}
 	 
-	@Deprecated
+	
 	public TextLine setAllLinesToCodeString(String st,Color c) {
 		this.removeAllLines();
 		

@@ -16,7 +16,7 @@ import javax.swing.JPopupMenu;
 
 import addObjectMenus.ClipboardAdder;
 import appContext.ImageDPIHandler;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.CurrentSetLayerSelector;
@@ -124,7 +124,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	private boolean draggingCanvasHandle;
 
 	public LocatedObject2D setSelectedObject(LocatedObject2D roi) {
-		CanvasMouseEventWrapper me = getLastClickMouseEvent();
+		CanvasMouseEvent me = getLastClickMouseEvent();
 		if (me==null) return setSelectedObject(false, roi);
 		//boolean commdown = super.getLastClickMouseEvent().isMetaDown();//.isControlDown();
 		
@@ -256,7 +256,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void mousePressed() {
 		
 		selection=null;
-		CanvasMouseEventWrapper e = getLastClickMouseEvent();
+		CanvasMouseEvent e = getLastClickMouseEvent();
 		pressX= getClickedCordinateX();
 		pressY= getClickedCordinateY();
 		
@@ -413,7 +413,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	
 	/**what to do if a popup menu must be shown*/
-	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEventWrapper e, SmartHandle sh ) {
+	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {
 		JPopupMenu menu =null;
 		
 		
@@ -452,7 +452,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 if (menu!=null) menu.show(c, e.getClickedXScreen(), e.getClickedYScreen());
 	}
 
-	protected JPopupMenu obtainUniquePopup(LocatedObject2D roi2, CanvasMouseEventWrapper e) {
+	protected JPopupMenu obtainUniquePopup(LocatedObject2D roi2, CanvasMouseEvent e) {
 		JPopupMenu menu=null;
 		HasUniquePopupMenu has=(HasUniquePopupMenu) roi2;
 		if (has==null) return null;

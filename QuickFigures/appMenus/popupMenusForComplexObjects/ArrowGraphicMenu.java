@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import menuUtil.SmartPopupJMenu;
 import undo.UndoScalingAndRotation;
@@ -18,6 +18,8 @@ import menuUtil.PopupMenuSupplier;
   and those specific to arrows*/
 public class ArrowGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
+
+	private static final String USE_DIFFERENT_HEADS = "Use different heads";
 
 	/**
 	 * 
@@ -39,12 +41,16 @@ PopupMenuSupplier  {
 		
 		/**Adds the arrow specific menu options*/
 		add(createMenuItem(editOutline));
+		
 		add(createMenuItem(flipHead));
 		add(createMenuItem(makeHorizontal));
 		add(createMenuItem(makeVertical));
+		if (arrow.getNHeads()>1 &&arrow.headsAreSame()) {
+			add(createMenuItem(USE_DIFFERENT_HEADS));
+		}
 	}
 	
-	public void setLastMouseEvent(CanvasMouseEventWrapper e) {
+	public void setLastMouseEvent(CanvasMouseEvent e) {
 		super.setLastMouseEvent(e);
 		if (shapeGraphicMenu!=null)shapeGraphicMenu.setLastMouseEvent(e);
 	}
@@ -83,6 +89,10 @@ PopupMenuSupplier  {
 		if (com.equals(makeHorizontal)) {
 			makeHorizontal();
 		}
+		
+		if(com.equals(USE_DIFFERENT_HEADS)) {
+			targetArrow.setHeadsSame(false);
+		}
 		targetArrow.updateDisplay();
 		
 	}
@@ -92,10 +102,10 @@ PopupMenuSupplier  {
 	 */
 	public void showOutlineDialog() {
 		/**sets the arrow to outline mode if it is not already*/
-				if (!targetArrow.drawnAsOutline())
+				if (targetArrow.drawnAsOutline()!=ArrowGraphic.OUTLINE_SHAPE)
 					{
 					UndoScalingAndRotation undo = new  UndoScalingAndRotation(targetArrow);
-					targetArrow.setDrawAsOutline(true);
+					targetArrow.setDrawAsOutline(ArrowGraphic.OUTLINE_SHAPE);
 					undo.establishFinalState();
 					if (this.getUndoManager()!=null)this.getUndoManager().addEdit(undo);
 					}

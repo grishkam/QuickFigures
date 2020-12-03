@@ -1,6 +1,6 @@
 package genericMontageUIKit;
 import appContext.CurrentAppContext;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.*;
@@ -92,10 +92,10 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	private DisplayedImage imageClick;
 	private ImageWrapper imageWrapperClick;
 	
-	protected CanvasMouseEventWrapper event ;//the latest mouse event of any kind
-	protected CanvasMouseEventWrapper eventClick ;
-	protected CanvasMouseEventWrapper eventDrag ;
-	protected CanvasMouseEventWrapper eventRelease ;
+	protected CanvasMouseEvent event ;//the latest mouse event of any kind
+	protected CanvasMouseEvent eventClick ;
+	protected CanvasMouseEvent eventDrag ;
+	protected CanvasMouseEvent eventRelease ;
 	boolean markEditedRegionsWithRoi=true;
 	
 	private int channelClick;
@@ -117,24 +117,19 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	
 	private int clickCount;
 	private java.awt.event.MouseEvent lastME;
-	private transient CanvasMouseEventWrapper lastDragMe;
+	private transient CanvasMouseEvent lastDragMe;
 	private Cursor currentCursor;
 	
-	private int releaseSlice;
-	private int channelRelease;
-	private int releaseFrame;
-	private int panelIndRelease;
-	private int rowRelease;
-	private int colRelease;
+
 	private int mouseButton;
 	private DisplayedImage dispImageClick;
-	private CanvasMouseEventWrapper lastDragOrReleaseEvent;
+	private CanvasMouseEvent lastDragOrReleaseEvent;
 	
 	
 	
 	
 	@Override
-	public void mousePressed(DisplayedImage imp, CanvasMouseEventWrapper e) {
+	public void mousePressed(DisplayedImage imp, CanvasMouseEvent e) {
 		 event =e;
 		 eventClick=event;
 		 
@@ -161,9 +156,9 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 
 	
 	@Override
-	public void mouseEntered(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void mouseEntered(DisplayedImage imp, CanvasMouseEvent  e) {
 		try {
-			CanvasMouseEventWrapper event1 = e;
+			CanvasMouseEvent event1 = e;
 			event=e;
 			setCursor(currentCursor, 0);
 			setClickPoint(imp,event1);
@@ -180,12 +175,12 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 	
 	@Override
-	public void mouseMoved(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void mouseMoved(DisplayedImage imp, CanvasMouseEvent  e) {
 		
 		
 		try {
 			
-			CanvasMouseEventWrapper event1 = e;
+			CanvasMouseEvent event1 = e;
 			event=event1;
 			setClickPoint(imp,event1);
 			if (getToolbit()!=null) getToolbit().mouseMoved();
@@ -205,7 +200,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	@Override
-	public void mouseExited(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void mouseExited(DisplayedImage imp, CanvasMouseEvent  e) {
 		try {
 			setReleaseOrDragPoint(imp, e);
 			getToolbit().mouseExited();
@@ -221,7 +216,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	@Override
-	public void mouseDragged(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void mouseDragged(DisplayedImage imp, CanvasMouseEvent  e) {
 		setReleaseOrDragPoint(imp,e);
 	event=e;
 			lastDragOrReleaseEvent =  e;
@@ -242,7 +237,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	@Override
-	public void mouseReleased(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void mouseReleased(DisplayedImage imp, CanvasMouseEvent  e) {
 		setReleasePoint(imp,e);
 		event=e;
 			lastDragOrReleaseEvent = e;
@@ -283,7 +278,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	
 	
 	
-	public void setXY1(DisplayedImage imp, CanvasMouseEventWrapper event) {
+	public void setXY1(DisplayedImage imp, CanvasMouseEvent event) {
 		
 		setMouseXClick(event.getClickedXScreen());
 		setMouseYClick(event.getClickedYScreen());
@@ -296,8 +291,8 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 	
 
-	public void setXY_Point2(DisplayedImage imp, CanvasMouseEventWrapper  e) {
-		CanvasMouseEventWrapper event=e;
+	public void setXY_Point2(DisplayedImage imp, CanvasMouseEvent  e) {
+		CanvasMouseEvent event=e;
 		
 		setMouseXdrag(event.getClickedXScreen());
 		setMouseYdrag(event.getClickedYScreen());
@@ -308,39 +303,19 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		setFrameDrag(event.getClickedFrame());
 		setSliceDrag(event.getClickedSlice());
 	}
-	private void setXY3(DisplayedImage imp, CanvasMouseEventWrapper  e) {
-		CanvasMouseEventWrapper event=e;
+	private void setXY3(DisplayedImage imp, CanvasMouseEvent  e) {
+		CanvasMouseEvent event=e;
 		this.releasePointMouse=new Point(event.getClickedXScreen(), event.getClickedYScreen());
 		this.releasePoint=new Point(event.getCoordinateX(), event.getCoordinateY());
-		setChannelRelease(event.getClickedChannel());
-		setFrameRelease(event.getClickedFrame());
-		setSliceRelease(event.getClickedSlice());
+		
 	}
 
 	
 	
 	
-	private void setFrameRelease(int clickedFrame) {
-		releaseFrame=clickedFrame;
-		
-	}
 
-	private void setSliceRelease(int clickedSlice) {
-		releaseSlice=clickedSlice;
-		
-	}
-	
-	public int getSliceRelease() {
-		return releaseSlice;
-		
-	}
 
-	private void setChannelRelease(int clickedChannel) {
-		channelRelease=clickedChannel;
-		
-	}
-
-	public void setClickPoint(DisplayedImage imp, CanvasMouseEventWrapper event) {
+	public void setClickPoint(DisplayedImage imp, CanvasMouseEvent event) {
 		if (imp==null) return;
 	
 		eventClick=event;
@@ -365,21 +340,21 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	/**This takes converts the stored mouse click/press event location (point1) to a coordinate location of the figure
 	  */
 	private void setOScreen1() {
-		CanvasMouseEventWrapper canvasMouse =event;
+		CanvasMouseEvent canvasMouse =event;
 		setClickedCordinateX(canvasMouse.convertClickedXImage(getMouseXClick()));
 		setClickedCordinateY(canvasMouse.convertClickedYImage(getMouseYClick()));
 		
 	}
 	/**This takes converts the stored mouse drag/release event location to a coordinate location of the figure*/
 	private void setOScreen2() {
-		CanvasMouseEventWrapper canvasMouse = event;
+		CanvasMouseEvent canvasMouse = event;
 		setDragCordinateX(canvasMouse.convertClickedXImage(getMouseXdrag()));
 		setDragCordinateY(canvasMouse.convertClickedYImage(getMouseYdrag()));
 	}
 	
 	
 	/**Stores a release of drag point location*/
-	public void setReleaseOrDragPoint(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void setReleaseOrDragPoint(DisplayedImage imp, CanvasMouseEvent  e) {
 		this.setImageClick(imp);
 		this.lastDragMe=e;
 		this.event=e;
@@ -389,7 +364,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		setXY_Point2(imp,e);
 	}
 	
-	private void setReleasePoint(DisplayedImage imp, CanvasMouseEventWrapper e) {
+	private void setReleasePoint(DisplayedImage imp, CanvasMouseEvent e) {
 		this.eventRelease=e;
 		this.setImageClick(imp);
 		this.setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
@@ -461,7 +436,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	public int getStrokeWidth() {
 		if (getImageClick()==null)return 8;
 		
-		return getImageWrapperClick().getPixelWrapper().width()/200;
+		return getImageWrapperClick().width()/200;
 		}
 	
 
@@ -821,7 +796,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		return clickCount;
 	}
 
-	public CanvasMouseEventWrapper getLastMouseEvent() {
+	public CanvasMouseEvent getLastMouseEvent() {
 		// TODO Auto-generated method stub
 		return event;
 	}
@@ -829,7 +804,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	
 
 	public void setClickPointToDragReleasePoint() {
-		CanvasMouseEventWrapper event1 = lastDragMe;//this.getAdapter().createCanvasMouseEventWrapper(getImageClick(), lastDragMe);
+		CanvasMouseEvent event1 = lastDragMe;//this.getAdapter().createCanvasMouseEventWrapper(getImageClick(), lastDragMe);
 		//setCursor(currentCursor, 0);
 		setClickPoint(getImageClick(),event1);
 		
@@ -868,7 +843,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 
 	
 	@Override
-	public void mouseClicked(DisplayedImage imp, CanvasMouseEventWrapper  e) {
+	public void mouseClicked(DisplayedImage imp, CanvasMouseEvent  e) {
 		event=e;
 		setReleaseOrDragPoint(imp,e);
 		 try {
@@ -1018,7 +993,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	@Override
-	public CanvasMouseEventWrapper getLastDragMouseEvent() {
+	public CanvasMouseEvent getLastDragMouseEvent() {
 		// TODO Auto-generated method stub
 		return lastDragOrReleaseEvent;
 	}

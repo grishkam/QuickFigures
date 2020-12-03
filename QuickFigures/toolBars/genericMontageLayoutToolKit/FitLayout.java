@@ -116,7 +116,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	/**returns the items that are in the left most column*/
 	ArrayList<LocatedObject2D> getLeftMostColumn(ArrayList<LocatedObject2D> objects) {
 		ArrayList<LocatedObject2D> output=new ArrayList<LocatedObject2D> ();
-		Rectangle bounds =ArrayObjectContainer.combineOutLines(objects).getBounds();		
+	//	Rectangle bounds =ArrayObjectContainer.combineOutLines(objects).getBounds();		
 		/**sort by distance from left edge*/
 		Collections.sort(objects, new Comparator<LocatedObject2D>() {
 
@@ -216,7 +216,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		
 		UndoMoveItems undo = new UndoMoveItems(objects);
 		
-		Rectangle bounds =ArrayObjectContainer.combineOutLines(objects).getBounds();		
+		//Rectangle bounds =ArrayObjectContainer.combineOutLines(objects).getBounds();		
 		
 		ArrayList<ArrayList<LocatedObject2D>> rows = this.getRows(objects);
 		ArrayList<ArrayList<LocatedObject2D>> cols = this.getCols(objects);

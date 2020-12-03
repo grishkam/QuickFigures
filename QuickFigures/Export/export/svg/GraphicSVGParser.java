@@ -246,11 +246,11 @@ public class GraphicSVGParser {
 		tg.setAngleInDegrees(-angle);
 		
 		if (x==null) {
-			x=new Double(0);
+			x=0.0;
 			IssueLog.log("Erroe: null x location");
 		}
 		if (y==null) {
-			y=new Double(0);
+			y=0.0;
 			IssueLog.log("Erroe: null y location");
 		}
 		

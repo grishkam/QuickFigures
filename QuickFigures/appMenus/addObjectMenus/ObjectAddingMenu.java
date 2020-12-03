@@ -37,7 +37,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	static ArrayList <GraphicAdder> kayadders= new ArrayList <GraphicAdder>();
 	static ArrayList <GraphicAdder> cartoonadders= new ArrayList <GraphicAdder>();
 	
-	static ArrayList <AddingMenuInstaller> bonusAdders=new ArrayList<AddingMenuInstaller>();
+	public static ArrayList <AddingMenuInstaller> bonusAdders=new ArrayList<AddingMenuInstaller>();
 	
 	static boolean addersMade=false;
 

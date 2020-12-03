@@ -22,8 +22,10 @@ import genericMontageLayoutToolKit.RowColSwapperTool2;
 import genericMontageLayoutToolKit.RowLabelIntroducerTool;
 import genericMontageUIKit.GeneralTool;
 import genericMontageUIKit.ToolBit;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 
+/**A toolbar containing tools that allow the user to edit the layout.
+  This toolbar is useful but not indispensible to the user*/
 public class LayoutToolSet extends QuickFiguresToolBar {
 	
 	public static LayoutToolSet currentToolset;
@@ -31,7 +33,6 @@ public class LayoutToolSet extends QuickFiguresToolBar {
 	public void start() {
 		
 	}
-	//AdapterKit<DisplayedImageWrapper> ak=new AdapterKit <DisplayedImageWrapper>(new ToolAdapterG());
 	
 	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
 		super.setCurrentTool(currentTool);
@@ -41,9 +42,7 @@ public class LayoutToolSet extends QuickFiguresToolBar {
 
 	
 	public void graphicTools() {
-		//Roi_Mover mover = new Roi_Mover();
-		//mover.setExcludedClass(PanelLayoutGraphic.class);
-		
+	
 		
 		for(ToolBit b: getMinimumLayoutToolBits()) {
 			
@@ -90,7 +89,7 @@ for(ToolBit b: getLayoutLabelBits3()) {
 				new Panel_Selector2()};
 	} 
 	
-	/**returns the tool bits for the montage layout editor tools*/
+	/**returns the tool bits for the layout editor tools*/
 	public static ArrayList<ToolBit> getMinimumLayoutToolBits() {
 		ArrayList<ToolBit> output=new ArrayList<ToolBit>();
 		output.add(new LayoutMover());
@@ -98,7 +97,7 @@ for(ToolBit b: getLayoutLabelBits3()) {
 		return output;
 	} 
 	
-	/**returns the tool bits for the montage layout editor tools*/
+	/**returns more tool bits for the layout editor tools*/
 	public static ArrayList<ToolBit> getStandardLayoutToolBits() {
 		ArrayList<ToolBit> output=new ArrayList<ToolBit>();
 		
@@ -114,16 +113,12 @@ for(ToolBit b: getLayoutLabelBits3()) {
 	} 
 	
 	
-	/**returns the tool bits for the montage layout editor tools*/
+	/**returns the least often used tool bits for the layout editor tools*/
 	public static ArrayList<ToolBit> getLayoutLabelBits3() {
 		ArrayList<ToolBit> output=new ArrayList<ToolBit>();
-		
-		
-		
-	
-		output.add(new  RowLabelIntroducerTool(MontageSpaces.ROW_OF_PANELS));
-		output.add(new  RowLabelIntroducerTool(MontageSpaces.COLUMN_OF_PANELS));
-		output.add(new  RowLabelIntroducerTool(MontageSpaces.PANELS));
+		output.add(new  RowLabelIntroducerTool(LayoutSpaces.ROW_OF_PANELS));
+		output.add(new  RowLabelIntroducerTool(LayoutSpaces.COLUMN_OF_PANELS));
+		output.add(new  RowLabelIntroducerTool(LayoutSpaces.PANELS));
 	
 		
 		

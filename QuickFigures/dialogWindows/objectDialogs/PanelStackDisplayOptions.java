@@ -122,8 +122,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			
 			
 		for(int i=0; i<3; i++) {
-			int mergeChannelIndex= ex.size()>i?  ex.get(i):0;
-			if (mergeChannelIndex>=chanList.length) { mergeChannelIndex=0;}
+			int mergeChannelIndex= ex.size()>i?  ex.get(i):ChannelUseInstructions.NONE_SELECTED;
+			if (mergeChannelIndex>=chanList.length) { mergeChannelIndex=ChannelUseInstructions.NONE_SELECTED;}
 			ComboBoxPanel mergeCombo;
 			if (entries.size()>i){
 				 mergeCombo = new standardDialog.ComboBoxPanel("don't include channel", new ChannelEntryBox(mergeChannelIndex, entries));
@@ -159,8 +159,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		ArrayList<Integer> nome = ins.noMergeChannels;
 		for(int i=0; i<3; i++) {
-			int noMergeIndex=nome.size()>i? nome.get(i):0;
-			if (noMergeIndex>=chanList.length) noMergeIndex=0;
+			int noMergeIndex=nome.size()>i? nome.get(i):ChannelUseInstructions.NONE_SELECTED;
+			if (noMergeIndex>=chanList.length) noMergeIndex=ChannelUseInstructions.NONE_SELECTED;
 			ComboBoxPanel mergeCombo;
 			if (entries.size()>i){
 				 mergeCombo = new standardDialog.ComboBoxPanel("dont't merge channel", new ChannelEntryBox(noMergeIndex , entries));

@@ -12,26 +12,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**Class contains methods for creating a subfolder in my documents for saving figures*/
+/**Class contains methods for creating a subfolder in my documents for saving figures.
+  this in turn has subfolders for saving templates and for saving temporary files*/
 public class DirectoryHandler {
 	private static DirectoryHandler defaultHandler;
 	
-	HashMapBasedMeta prefs;//a list of preferences
+	HashMapBasedMeta prefs;//a list of preferences that may be stored in a file
 	String pathOfDocFolder=FileChoiceUtil.pathOfDocumentsFolder();
 	String subPathofDocumentsFolder="/Quick Figures";
 	String subPathofTemplatesFoloder="/Quick Figures/Templates";
 	String prefsFileName="prefs";
 	private String subPathofDefaultTemplate=getSubPathofTemplatesFoloder()+"/default template";;
 	
+	/**returns the default directory handler*/
 	public static DirectoryHandler getDefaultHandler(){
 		if (defaultHandler==null)
-		{defaultHandler=new DirectoryHandler();
-		PrefsShutDownHook.addShutdownHook();
-		}
+			{defaultHandler=new DirectoryHandler();
+			PrefsShutDownHook.addShutdownHook();
+			}
 		
 		return defaultHandler;
 	} 
 	
+	/**returns true if a file for the default figure template already exists*/
 	public boolean defaultTemplateExits() {
 		return new File(fullPathofDefaultTemplate() ).exists();
 	}
@@ -70,14 +73,20 @@ public class DirectoryHandler {
 		return f;
 	}
 	
-	/**creates all the the folders that will be used by QuickFigures*/
+	/**creates all the the folders and subfolders that will be used by QuickFigures.
+	  */
 	void makeAllNeededDirsIfAbsent() {
 		makeDirectoryIfAbsent(pathOfDocFolder+subPathofDocumentsFolder);
 		makeDirectoryIfAbsent(pathOfDocFolder+getSubPathofTemplatesFoloder());
 		makeDirectoryIfAbsent(pathOfDocFolder+subPathofDocumentsFolder+"/tmp");
 		//makeDirectoryIfAbsent(pathOfDocFolder+subPathofPrefsFoloder+"/"+prefsFolderName) ;
 	}
+
+	public String getSubPathofTemplatesFoloder() {
+		return subPathofTemplatesFoloder;
+	}
 	
+	/**if a particular file path includes folder that do not exist, makes the folders*/
 	void makeDirectoryIfAbsent(String path) {
 		File f=new File(path) ;
 		if (!f.exists())
@@ -91,11 +100,10 @@ public class DirectoryHandler {
 	
 	}
 	
-	void moveLocalResourceToWizDir(String local) {
-		moveLocalResourceToFolder(local,getFigureFolderPath() );
-	}
+
 	
-	void moveLocalResourceToFolder(String local, String folerPath) {
+	/**takes a resource stored within the jar file and copies it to the given folder*/
+	protected void moveLocalResourceToFolder(String local, String folerPath) {
 		File fo=new File(folerPath+"/"+local);
 		try {
 			FileOutputStream out = new FileOutputStream(fo);
@@ -126,6 +134,7 @@ FileBasedMetaWrapper getFileBasedPrefsWrapper() {
 	return new FileBasedMetaWrapper(this.getPrefsFile().getAbsolutePath());
 }
 
+/**returns the object that stores the preferences hashmap*/
 public MetaInfoWrapper getPrefsStorage() {
 	if (prefs==null) {
 		prefs=new HashMapBasedMeta(getFileBasedPrefsWrapper() );
@@ -134,6 +143,7 @@ public MetaInfoWrapper getPrefsStorage() {
 	return prefs;
 }
 	
+/**saves the preferences to a file*/
 public void savePrefs() {
 	if (prefs!=null)
 		getFileBasedPrefsWrapper().setProperty( prefs.toAString());
@@ -147,9 +157,7 @@ public void savePrefs() {
 		DirectoryHandler.defaultHandler = defaultHandler;
 	}
 
-	public String getSubPathofTemplatesFoloder() {
-		return subPathofTemplatesFoloder;
-	}
+
 	
 	
 	

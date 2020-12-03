@@ -8,8 +8,8 @@ import standardDialog.StringInputPanel;
 import standardDialog.SwingDialogListener;
 import utilityClassesForObjects.ScaleInfo;
 
-/**Alternative to the set Scale dialog of imageJ. does exactly that but in a context
-  where QuickFigures will update the targeted image panels*/
+/**Alternative to the set Scale dialog of imageJ. does exactly that but after this dialog,
+   QuickFigures will update the targeted image panels*/
 public class ScaleSettingDialog  extends StandardDialog {
 
 	/**

@@ -40,7 +40,7 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import applicationAdapters.PixelWrapper;
 
-/**An implementation of several interfaces that is required for an imageJ image to
+/**An implementation of several interfaces. Some are required for an imageJ image to
   be used by QuickFigures as a multichannel image*/
 public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, ChannelSwapListener {
 
@@ -73,6 +73,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 	
 	}
 	
+	/***/
 	@Override
 	public void takeFromImage(LocatedObject2D roi) {
 		checkVoid();
@@ -118,7 +119,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 		return new RoiWrapper(imp.getRoi());
 	}
 
-	@Override
+
 	public PixelWrapper getPixelWrapper() {
 		checkVoid();
 		return new ProcessorWrapper(imp.getProcessor());
@@ -133,7 +134,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 
 	/**resizes the canvas of pixels but does not move the objects*/
 	@Override
-	public void CanvasResizePixelsOnly(int width, int height, int xOff, int yOff) {
+	public void CanvasResize(int width, int height, int xOff, int yOff) {
 		Prefs.set("resizer.zero", false); 
 		Toolbar.setBackgroundColor(Color.white);
 		ImageStack newStack=new CanvasResizer().expandStack(imp.getStack(), width, height, xOff, yOff);	
@@ -557,9 +558,9 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 		return null;
 	}
 	
+	/**if the exposure of the given channel is available, returns it*/
 	@Override
 	public String getRealChannelExposure(int i) {
-		// TODO Auto-generated method stub
 		 setUpChanNames() ;
 		if (this.chanexposures.size()>=i) {
 			
@@ -737,7 +738,6 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 
 	@Override
 	public boolean setPrimarySelectionObject(Object d) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

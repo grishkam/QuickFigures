@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.PathGraphic;
 import menuUtil.SmartPopupJMenu;
@@ -216,7 +216,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	}
 	
 	@Override
-	public void handlePress(CanvasMouseEventWrapper e){
+	public void handlePress(CanvasMouseEvent e){
 		
 		if(e.clickCount()==2) {pathPoint.deselect(); return;}
 		else if (!isSelected()) {pathPoint.deselect();}
@@ -240,7 +240,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	/**What to do when a handle is moved from point p1 to p2.
 	  */
-	public void handleDrag(CanvasMouseEventWrapper e ) {
+	public void handleDrag(CanvasMouseEvent e ) {
 		Point2D p2=e.getCoordinatePoint();
 		try{
 		

@@ -3,12 +3,16 @@ package figureFormat;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
 import logging.IssueLog;
+import undo.CombinedEdit;
 import utilityClassesForObjects.ObjectContainer;
 
-/**Class contains methods for two purposes.
-	 1) Identify items that belong to a certain category (which share the same format)
-	 2) Apply the traits that are characteristic of that format
+/**Class contains methods for 3 purposes.
+	1) Identify items that belong to a certain category
+	2) store and example item of the given category with traits exemplary of a desired format
+	3) Apply the traits that are characteristic of that format to all of the item
 	 */
 public abstract class ItemPicker<ItemType extends Serializable> implements Serializable {
 	
@@ -33,13 +37,20 @@ public abstract class ItemPicker<ItemType extends Serializable> implements Seria
 	/**returns a String describing what sort of category the picker targets*/
 	public abstract String getOptionName() ;
 	
-	/**Applies the format to the target*/
-	public abstract void applyProperties(Object target);
-	/**Applies the format to the list*/
-	public  void applyPropertiesToList(Iterable<?> list) {
+	/**Applies the format to the target
+	 * @return */
+	public abstract AbstractUndoableEdit applyProperties(Object target);
+	/**Applies the format to the list
+	 * @return */
+	public  CombinedEdit applyPropertiesToList(Iterable<?> list) {
+		CombinedEdit undo = new CombinedEdit();
 	  for(Object o: list) {
-		  applyProperties(o);
+		  undo.addEditToList(
+				  applyProperties(o)
+				  );
 	  }
+	  undo.establishFinalState();
+	  return undo;
   }
 	
 	/**Returns a new list containing a subset of the input list.
@@ -65,7 +76,7 @@ public abstract class ItemPicker<ItemType extends Serializable> implements Seria
 	}
 	
 
-	
+	/**returns unique a key referring to this object. */
 	public String getKeyName() {
 		return getOptionName();
 	}
@@ -77,13 +88,17 @@ public abstract class ItemPicker<ItemType extends Serializable> implements Seria
 	}
 	/**the and setter method for the model item. allows the item to be set to null
 	  but does not allow anything that fails the isDesirableItem method to be set*/
+	@SuppressWarnings("unchecked")
 	public void setModelItem(Object modelItem) {
 		if (modelItem==null) {
 			this.modelItem=null;
 			return;
 		}
 		if (!isDesirableItem(modelItem)) return;
+		
+		
 		try{this.modelItem = (ItemType)modelItem;} catch (Exception e) {
+			/**The isDesireable item method should have performed the check but just in case someone did not implements that properly*/
 			e.printStackTrace();
 			IssueLog.log("problem. wrong class");
 		}

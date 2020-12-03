@@ -17,7 +17,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**a combo box that lets the user choose various graphical objects*/
-public class GraphicComboBox extends JComboBox implements UserSelectable{
+public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements UserSelectable{
 	
 	/**
 	 * 
@@ -110,7 +110,7 @@ public class GraphicComboBox extends JComboBox implements UserSelectable{
 		
 		public Color currentColor=Color.black;
 
-		public  Component	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			
 			

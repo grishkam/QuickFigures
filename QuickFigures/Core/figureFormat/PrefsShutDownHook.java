@@ -1,5 +1,7 @@
 package figureFormat;
 
+/**A shutdown hook that saves the preferences of the default directory handler to a file
+  if that file is loaded, the working directory used previously would be used again*/
 public class PrefsShutDownHook implements Runnable{
 	
 static boolean addedHook=false;

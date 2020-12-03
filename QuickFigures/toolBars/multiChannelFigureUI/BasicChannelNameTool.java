@@ -25,7 +25,7 @@ public class BasicChannelNameTool extends BasicImagePanelTool {
 			 MultiChannelDisplayWrapper m=( MultiChannelDisplayWrapper) getImageDisplayWrapperClick();;
 			if (m==null) {IssueLog.log2("are you sure you clicked on the inage m");}
 			if (mw==null) {IssueLog.log2("are you sure you clicked on the inage mw");}
-			 new StackSliceNamingDialog().showNamingDialog(m.getMultiChannelWrapper().getStackIndex(m.getCurrentChannel(), m.getCurrentSlice(),m.getCurrentFrame()), m.getMultiChannelWrapper());
+			 new StackSliceNamingDialog().showNamingDialog(m.getContainedMultiChannel().getStackIndex(m.getCurrentChannel(), m.getCurrentSlice(),m.getCurrentFrame()), m.getContainedMultiChannel());
 			}
 		else {
 			 new StackSliceNamingDialog().showNamingDialog(stackSlicePressed.originalIndices, this.presseddisplay.getMultiChannelImage());

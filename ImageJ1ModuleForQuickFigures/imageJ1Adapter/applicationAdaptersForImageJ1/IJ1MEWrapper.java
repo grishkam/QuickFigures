@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import ij.IJ;
 import ij.ImagePlus;
@@ -16,7 +16,7 @@ import selectedItemMenus.LayerSelector;
 /**implementation of CanvasMouseEventWrapper  interface
   that converts clicks on the imageJ cancas to events.
     not accessible to users but might be of use to programmers */
-public class IJ1MEWrapper implements CanvasMouseEventWrapper {
+public class IJ1MEWrapper implements CanvasMouseEvent {
 
 	
 	/**

@@ -43,7 +43,7 @@ public class ChannelColorCellRenerer extends BasicComboBoxRenderer {
 	
 	}
 	
-	public  Component	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		theindex=index;
 		Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		if (out instanceof ChannelColorCellRenerer) {

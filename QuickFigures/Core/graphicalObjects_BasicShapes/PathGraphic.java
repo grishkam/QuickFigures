@@ -5,7 +5,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -14,13 +13,12 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
 import animations.KeyFrameAnimation;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjectHandles.HandleRect;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleForPathGraphic;
@@ -783,7 +781,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	public void setupArrowHead(ArrowGraphic arrowHead) {
 		arrowHead.headOnly=true;
 		arrowHead.hideNormalHandles=true;
-		arrowHead.setArrowHeadSize(this.getStrokeWidth()*8);
+		arrowHead.getHead().setArrowHeadSize(this.getStrokeWidth()*8);
 	}
 
 	public boolean hasArrowHead1() {
@@ -807,8 +805,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	@Override
 	public ArrayList<ZoomableGraphic> getAllHeldGraphics() {
 		ArrayList<ZoomableGraphic> output = new ArrayList<ZoomableGraphic>();
-		if (arrowHead1!=null && arrowHead1.getHeadnumber()>0)output.add(arrowHead1);
-		if (arrowHead2!=null && arrowHead2.getHeadnumber()>0)output.add(arrowHead2);
+		if (arrowHead1!=null && arrowHead1.getNHeads()>0)output.add(arrowHead1);
+		if (arrowHead2!=null && arrowHead2.getNHeads()>0)output.add(arrowHead2);
 		return output;
 	}
 
@@ -879,7 +877,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			return new Point2D.Double(lastOne.getCordinateLocation().getX()+step*Math.cos(angle2), lastOne.getCordinateLocation().getY()-step*Math.sin(angle2));
 		}
 		
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			if(toStart) {
 				addedPoint = path.addPointToStart(this.getCordinateLocation());
 			} else
@@ -888,7 +886,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			path.updatePathFromPoints();
 		}
 		
-		public void handleDrag(CanvasMouseEventWrapper w) {
+		public void handleDrag(CanvasMouseEvent w) {
 			SmartHandleForPathGraphic handle = new SmartHandleForPathGraphic(path, addedPoint);
 			handle.handleDrag(w);
 			addedPoint.deselect();

@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.TextGraphic;
 
 public class TextHandle extends SmartHandle {
@@ -50,13 +50,13 @@ public class TextHandle extends SmartHandle {
 		return handlesize;
 	}
 	
-	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		baseLineStart = textItem.getBaseLineStart();
 		
 	}
 
 	
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		if (this.getHandleNumber()==ROTATION_HANDLE) {
 			double angle=TextGraphic.distanceFromCenterOfRotationtoAngle(textItem.getCenterOfRotation(), lastDragOrRelMouseEvent.getCoordinatePoint());
 
@@ -84,12 +84,8 @@ public class TextHandle extends SmartHandle {
 				return;
 			
 			} catch (NoninvertibleTransformException e) {
-				
-			}
-			/**Sets the font size the old way. not as natural for rotated text*/
+				/**Sets the font size the old way. not as natural for rotated text*/
 			
-			double distance2=p2.distance(baseLineStart);
-			double distX=p2.getX()-baseLineStart.getX();
 			double distY=-p2.getY()+baseLineStart.getY();
 			double cos = Math.cos(textItem.getAngle());
 			double newsize =textItem.getFont().getSize();
@@ -98,6 +94,8 @@ public class TextHandle extends SmartHandle {
 			if (newsize>50)newsize =textItem.getFont().getSize();
 			
 			userSetNewSize(newsize);
+			}
+			
 		}
 		
 	}

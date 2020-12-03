@@ -381,7 +381,7 @@ public class BasicObjectListHandler {
 
 	/**resizes the canvas if the given offsets while off setting objects as well*/
 	public void CanvasResizeObjectsIncluded(ImageWrapper iw, int width, int height, int xOff, int yOff) {
-		iw.CanvasResizePixelsOnly( width, height, xOff, yOff);
+		iw.CanvasResize( width, height, xOff, yOff);
 		shiftAll(iw, xOff, yOff);
 	}
 	

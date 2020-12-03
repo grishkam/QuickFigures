@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
-import applicationAdaptersForImageJ1.IJ1ToolSetContainer2;
 import applicationAdaptersForImageJ1.ImagePlusDisplayWrap;
 import figureFormat.DirectoryHandler;
 import graphicActionToolbar.CurrentFigureSet;
@@ -48,8 +47,7 @@ public class Toolset_Runner implements PlugIn {
 		
 		if (arg0.equals("LayoutToolSet")) {
 			LayoutToolSet tsr = new LayoutToolSet();
-			IJ1ToolSetContainer2 tsc1 = new IJ1ToolSetContainer2(tsr);
-			tsr.addToolChangeListener(tsc1);
+			
 			tsr.run("");
 			
 		}
@@ -61,9 +59,7 @@ public class Toolset_Runner implements PlugIn {
 		if (arg0.equals("FigureWizApp")||arg0.equals("Object Tools")) {
 			
 			ObjectToolset1 tsr = new ObjectToolset1();
-			IJ1ToolSetContainer2 tsc1 = new IJ1ToolSetContainer2(tsr);
 			
-			tsr.addToolChangeListener(tsc1);
 			tsr.run("");
 			new ActionToolset1().run("");
 		}
@@ -74,7 +70,7 @@ public class Toolset_Runner implements PlugIn {
 	
 	private void onFirstRun() {
 		CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
-		ImagePlus.addImageListener(new  windowAndSet());
+		ImagePlus.addImageListener(new  WindowAndSet());
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		try {
 			if (!DirectoryHandler.getDefaultHandler().defaultTemplateExits())
@@ -172,7 +168,7 @@ public class Toolset_Runner implements PlugIn {
 	}
 		
 	
-	class windowAndSet implements WindowListener, ImageListener {
+	class WindowAndSet implements WindowListener, ImageListener {
 		
 		KeyListener kd=new KeyDownTracker();//not as important in recent versions. might not need the image listener added at all
 

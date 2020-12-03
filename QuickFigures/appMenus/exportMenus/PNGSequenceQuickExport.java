@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
-import channelMerging.MultiChannelImage;
 import uiForAnimations.KeyFrameHandling;
 
 /**exporter for a sequence of .png files representing time frames within an animation*/
@@ -23,7 +22,7 @@ public class PNGSequenceQuickExport extends QuickExport {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		// TODO Auto-generated method stub
+		
 		try{
 		File f=getFileAndaddExtension();
 		String newpath=f.getAbsolutePath();
@@ -44,9 +43,8 @@ public class PNGSequenceQuickExport extends QuickExport {
 		}
 		
 		 
-		   new CurrentAppContext();
-		
-		MultiChannelImage a = CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
+		/**opens the image as a timeline*/
+		CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
 		
 		} catch (Throwable t) {
 			t.printStackTrace();

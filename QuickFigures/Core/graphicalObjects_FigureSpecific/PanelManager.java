@@ -72,15 +72,15 @@ public class PanelManager implements Serializable, EditListener{
 				
 				String indexname="";
 				if (display.getMultiChannelImage().nFrames()>1)
-					indexname+="t:"+panel.originalFrameNum+" "; 
+					indexname+="t:"+panel.targetFrameNumber+" "; 
 				if (display.getMultiChannelImage().nSlices()>1)
-					indexname+="s:"+panel.originalSliceNum;
+					indexname+="s:"+panel.targetSlideNumber;
 				
 				if (panel.isTheMerge()&&indexname.length()>1) {
 					name="Merge "+indexname;
 				}
 				if (!panel.isTheMerge()&&"".equals(name)) {
-					name="c:"+panel.originalChanNum+" "+indexname;
+					name="c:"+panel.targetChannelNumber+" "+indexname;
 				}
 			} catch (Throwable t) {}
 			

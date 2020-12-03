@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.RectangularGraphic;
@@ -270,7 +270,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		
 		/**handle press*/
 		@Override
-		public void handlePress(CanvasMouseEventWrapper w) {
+		public void handlePress(CanvasMouseEvent w) {
 			onHandlePress();
 			this.pressPoint=w.getCoordinatePoint();
 			startingReshape=rect.getRectangle().getBounds();
@@ -278,7 +278,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		
 		/***/
 		@Override
-		public void handleDrag(CanvasMouseEventWrapper w) {
+		public void handleDrag(CanvasMouseEvent w) {
 			if(pressPoint==null||startingReshape==null) 
 					{handlePress(w);}
 			
@@ -422,13 +422,13 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		}
 		
 		@Override
-		public void handleRelease(CanvasMouseEventWrapper w) {
+		public void handleRelease(CanvasMouseEvent w) {
 			editComplete(w);
 		}
 		
 		/**called in order to finish the edit.
 		  transforms the shapes and not just the preview*/
-		protected void editComplete(CanvasMouseEventWrapper w) {
+		protected void editComplete(CanvasMouseEvent w) {
 			if(!editOngoing) return;//if no edit was started by the user this just returns. dragging a handle starts an edit
 			if (selectionManagger!=null)selectionManagger.setSelectionGraphic2(null);//removes the preview of the transformation
 			
@@ -460,7 +460,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 				editover(w);
 		}
 		
-		protected void addUndo(CanvasMouseEventWrapper w, AbstractUndoableEdit edit) {
+		protected void addUndo(CanvasMouseEvent w, AbstractUndoableEdit edit) {
 			if (w!=null)w.addUndo(edit);
 		}
 		
@@ -487,7 +487,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		
 	}
 	/**Called after the edit is completed. this may be overwritten by subclasses*/
-	public void editover(CanvasMouseEventWrapper w) {
+	public void editover(CanvasMouseEvent w) {
 		
 	}
 	

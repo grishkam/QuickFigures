@@ -108,10 +108,10 @@ private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
 			UndoSnappingChange undoS1 = new  UndoSnappingChange(inside);
 			UndoSnappingChange undoS2 = new  UndoSnappingChange(object2);
 			
-			AttachmentPosition snap1 = inside.getSnapPosition();
-			AttachmentPosition snap2 = object2.getSnapPosition();
-			inside.setSnapPosition(snap2);
-			object2.setSnapPosition(snap1);
+			AttachmentPosition snap1 = inside.getAttachmentPosition();
+			AttachmentPosition snap2 = object2.getAttachmentPosition();
+			inside.setAttachmentPosition(snap2);
+			object2.setAttachmentPosition(snap1);
 			
 			undoS1.establishFinalState();
 			undoS2.establishFinalState();

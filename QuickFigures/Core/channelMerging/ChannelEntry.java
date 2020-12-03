@@ -12,14 +12,15 @@ public class ChannelEntry implements Serializable{
 	/**
 	 * 
 	 */
-	
+	/**strings describing the channel*/
 	private String label="";
+	private String additional="";
+	private String realChannelName;
+	
 	private Color originalLutCol=Color.BLACK;
 	private int originalChannelIndex;
 	private int originalStackIndex;
-	private String additional="";
-	private String realChannelName;
-	private int exposureMS=0;
+	
 	
 	private static final long serialVersionUID = 1L;
 	public ChannelEntry(String label, Color c, int number) {
@@ -90,13 +91,9 @@ public class ChannelEntry implements Serializable{
 		return realChannelName;
 	}
 	
-	public int getStoredExposureTime() {
-		return exposureMS;
-	}
-
-
 	
-	/**updates a channel entry in the event of a color change, to match*/
+	/**updates this channel entry to match the given channel
+	 in the event of a color change, this may be called*/
 	public void updateFrom(ChannelEntry ce) {
 		this.label=ce.label;
 		this.originalLutCol=ce.originalLutCol;//lut color change

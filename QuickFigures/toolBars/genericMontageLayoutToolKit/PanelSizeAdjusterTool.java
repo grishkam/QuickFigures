@@ -1,6 +1,6 @@
 package genericMontageLayoutToolKit;
 import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 
 
-public class PanelSizeAdjusterTool extends GeneralLayoutEditorTool implements ActionListener, MontageSpaces {
+public class PanelSizeAdjusterTool extends GeneralLayoutEditorTool implements ActionListener, LayoutSpaces {
 	int mode=1;
 	
 

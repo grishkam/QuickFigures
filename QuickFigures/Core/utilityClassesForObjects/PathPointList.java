@@ -287,7 +287,7 @@ public class PathPointList extends ArrayList<PathPoint> {
 		PathPointList output = new PathPointList();
 		
 		double[] d=new double[6];
-		ArrayList<Point2D> poly = new ArrayList<Point2D>();
+		
 		PathPoint lastpp=null;
 		PathPoint lasomoveTo;
 		
@@ -364,7 +364,7 @@ public class PathPointList extends ArrayList<PathPoint> {
 			
 			
 			
-			boolean p = output.add(newpp);
+			 output.add(newpp);
 			
 			
 			pi.next();

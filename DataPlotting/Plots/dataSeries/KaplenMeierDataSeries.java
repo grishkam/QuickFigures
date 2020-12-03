@@ -77,12 +77,13 @@ public class KaplenMeierDataSeries implements DataSeries {
 		return out;
 	}
 	
+	/**
 	private ArrayList<Double> getAllVaidDays() {
 		ArrayList<Double> out=new ArrayList<Double> ();
 		for(double d=0; d<=studyEnd; d++)  out.add(d);
 		return out;
 	}
-	
+	*/
 	double getLongestTime() {
 		double longest = 0;
 		for(KaplenMeierDataPoint d: data) {

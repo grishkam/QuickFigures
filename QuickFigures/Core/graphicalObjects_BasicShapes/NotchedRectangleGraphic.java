@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjectHandles.CountHandle;
 import graphicalObjectHandles.RectangleEdgeHandle;
 import graphicalObjectHandles.SmartHandle;
@@ -167,9 +167,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		
 		Double r = new Rectangle2D.Double(d,e,f,g);
 		Point2D p1 = RectangleEdges.getLocation(TOP, r);
-		Point2D p2 = RectangleEdges.getLocation(CENTER, r);
-		Point2D p3 = RectangleEdges.getLocation(CENTER, r);
-		
+	
 		path.moveTo(p1.getX(), p1.getY());
 		
 		 p1 = RectangleEdges.getLocation(RIGHT, r);
@@ -307,7 +305,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		public Color getHandleColor() {
 			return checked()? Color.LIGHT_GRAY: Color.darkGray;
 		}
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			rect.validCounts[index]=!checked();
 			if (checked()) this.setSpecialFill(CHECK_MARK); else this.setSpecialFill(0);
 		}

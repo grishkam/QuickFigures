@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 
 /**The positions of certain objects (like text and scale bars). 
@@ -43,8 +43,8 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	
 	/**items attached to a layout will require this option to determine what kind of parent panel is used for them*/
 	private static String[] gridChoices=new String[] {"To Panel", "To Column", "To Row", "To Montage", "To Block of Panels"};
-	private static int[] gridSpaceCodes=new int[] {MontageSpaces.PANELS,MontageSpaces.COLUMN_OF_PANELS,MontageSpaces.ROW_OF_PANELS, MontageSpaces.ALL_MONTAGE_SPACE, MontageSpaces.BLOCK_OF_PANELS};
-	private int gridLayoutSnapType=Arrays.binarySearch(gridSpaceCodes, MontageSpaces.PANELS);
+	private static int[] gridSpaceCodes=new int[] {LayoutSpaces.PANELS,LayoutSpaces.COLUMN_OF_PANELS,LayoutSpaces.ROW_OF_PANELS, LayoutSpaces.ALL_MONTAGE_SPACE, LayoutSpaces.BLOCK_OF_PANELS};
+	private int gridLayoutSnapType=Arrays.binarySearch(gridSpaceCodes, LayoutSpaces.PANELS);
 	
 	
 	/**the internal and external snapping types. around 20 in total*/
@@ -124,7 +124,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultRowSide() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(LEFT_SIDE_MIDDLE);
-		output.setGridChoice2(MontageSpaces.ROW_OF_PANELS);
+		output.setGridChoice2(LayoutSpaces.ROW_OF_PANELS);
 		output.setLocationType(EXTERNAL);
 		return output;
 	}
@@ -137,7 +137,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultColSide() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(ABOVE_AT_MIDDLE);
-		output.setGridChoice2(MontageSpaces.COLUMN_OF_PANELS);
+		output.setGridChoice2(LayoutSpaces.COLUMN_OF_PANELS);
 		output.setLocationType(EXTERNAL);
 		return output;
 	}
@@ -146,7 +146,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultPlotTitle() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(ABOVE_AT_MIDDLE);
-		output.setGridChoice2(MontageSpaces.ALL_OF_THE+MontageSpaces.PANELS);
+		output.setGridChoice2(LayoutSpaces.ALL_OF_THE+LayoutSpaces.PANELS);
 		output.setLocationType(EXTERNAL);
 		return output;
 	}
@@ -156,7 +156,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultPlotBottomSide() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(CornerToCenter_UpperRight);
-		output.setGridChoice2(MontageSpaces.COLUMN_OF_PANELS);
+		output.setGridChoice2(LayoutSpaces.COLUMN_OF_PANELS);
 		output.setVerticalOffset(6);
 		output.setHorizontalOffset(4);
 		output.setLocationType(EXTERNAL);
@@ -168,7 +168,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultPlotSide() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(LEFT_SIDE_MIDDLE);
-		output.setGridChoice2(MontageSpaces.ROW_OF_PANELS);
+		output.setGridChoice2(LayoutSpaces.ROW_OF_PANELS);
 		output.setVerticalOffset(6);
 		output.setHorizontalOffset(4);
 		output.setLocationType(EXTERNAL);
@@ -817,8 +817,8 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public void flipDiag(){
 		this.setLocationTypeExternal(diagnalFlip() );
 		
-		if (this.getGridLayoutSnapType()==MontageSpaces.COLS) this.setGridLayoutSnapType(MontageSpaces.ROWS);
-		else if (this.getGridLayoutSnapType()==MontageSpaces.ROWS) this.setGridLayoutSnapType(MontageSpaces.COLS);
+		if (this.getGridLayoutSnapType()==LayoutSpaces.COLS) this.setGridLayoutSnapType(LayoutSpaces.ROWS);
+		else if (this.getGridLayoutSnapType()==LayoutSpaces.ROWS) this.setGridLayoutSnapType(LayoutSpaces.COLS);
 	}
 	
 	/**when given a list of located objects, returns a list containing every position from each object
@@ -826,8 +826,8 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static ArrayList<AttachmentPosition> findAllPositions(ArrayList<LocatedObject2D> objects) {
 		ArrayList<AttachmentPosition> alreadyDone=new ArrayList<AttachmentPosition>();
 		for(LocatedObject2D o: objects) {
-			if (o.getSnapPosition()!=null && !alreadyDone.contains(o.getSnapPosition())) {
-				alreadyDone.add(o.getSnapPosition());
+			if (o.getAttachmentPosition()!=null && !alreadyDone.contains(o.getAttachmentPosition())) {
+				alreadyDone.add(o.getAttachmentPosition());
 			}
 		}
 		return alreadyDone;

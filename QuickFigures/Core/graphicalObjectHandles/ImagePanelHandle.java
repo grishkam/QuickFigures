@@ -9,7 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import genericMontageKit.BasicObjectListHandler;
 import genericMontageKit.OverlayObjectManager;
 import genericMontageUIKit.Object_Mover;
@@ -42,6 +42,8 @@ public class ImagePanelHandle extends SmartHandle {
 	private PanelMovementGroupItems passengers;
 	private PanelMovementGroupItems rivalFamily;
 	
+	ArrayList<PanelMovementGroupItems> allMovementGroups=new ArrayList<PanelMovementGroupItems>();
+	
 	public ImagePanelHandle(int x, int y) {
 		super(x, y);
 		super.setEllipseShape(true);
@@ -68,24 +70,28 @@ public class ImagePanelHandle extends SmartHandle {
 		return overDecorationShape;
 	}
 	
-	public void handlePress(CanvasMouseEventWrapper e) {
+	public void handlePress(CanvasMouseEvent e) {
 		undo=new CombinedEdit(new UndoMoveItems(panel));
 		rivalPanel=null;
 		originalL=panel.getLocationUpperLeft();
+		allMovementGroups.clear();
 		
 		/**Will move all the items above the panel within the same area*/
-		passengers=createPassengerList(e, panel, null, e.shfitDown());
-		
+		passengers=createPassengerList(e, panel, allMovementGroups, e.shfitDown());
+		allMovementGroups.add(passengers);
 	}
 
 	/**
 	creates a PanelMovementGroup for moving the objects that are above the image panel
 	 */
-	public 	PanelMovementGroupItems createPassengerList(CanvasMouseEventWrapper e, ImagePanelGraphic panel, PanelMovementGroupItems exclude, boolean shift) {
+	public 	PanelMovementGroupItems createPassengerList(CanvasMouseEvent e, ImagePanelGraphic panel, Iterable<PanelMovementGroupItems> exclude, boolean shift) {
 		ArrayList<LocatedObject2D> objects = getObjetsAbove(panel, e.getAsDisplay().getImageAsWrapper());
 		if(exclude!=null) {
-			objects.removeAll(exclude.originalLocations.getObjectList());
-			objects.remove(exclude.panel);
+			for(PanelMovementGroupItems exc:exclude) {
+				if (exc==null) continue;
+				objects.removeAll(exc.originalLocations.getObjectList());
+				objects.remove(exc.panel);
+			}
 		}
 		if (shift)ArraySorter.selectItems(objects);
 		
@@ -107,7 +113,7 @@ public class ImagePanelHandle extends SmartHandle {
 	}
 
 	/**performed to drag the handles*/
-	public void handleDrag(CanvasMouseEventWrapper e) {
+	public void handleDrag(CanvasMouseEvent e) {
 		super.handleDrag(e);
 		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
 		
@@ -144,7 +150,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**
 	 Called when the center handle is dragged
 	 */
-	public void dragCenterHandle(CanvasMouseEventWrapper e, OverlayObjectManager selectionManagger) {
+	public void dragCenterHandle(CanvasMouseEvent e, OverlayObjectManager selectionManagger) {
 		Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCoordinatePoint().getX(), e.getCoordinatePoint().getY(), true, null);
 		Rectangle b = panel.getBounds();
 		RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);
@@ -163,7 +169,7 @@ public class ImagePanelHandle extends SmartHandle {
 			RectangularGraphic mark2 = RectangularGraphic.blankRect(new Rectangle2D.Double(originalL.getX(), originalL.getY(), rivalPanel.getObjectWidth(), rivalPanel.getObjectHeight()), Color.blue, true, true);
 			mark2.setStrokeWidth(1);
 			selectionManagger.setSelection(new GraphicGroup(true, mark, mark2), 0);
-			rivalFamily=this.createPassengerList(e, rivalPanel, passengers, e.shfitDown());
+			rivalFamily=this.createPassengerList(e, rivalPanel,allMovementGroups, e.shfitDown());
 			
 			
 		} else rivalPanel=null;
@@ -174,7 +180,7 @@ public class ImagePanelHandle extends SmartHandle {
 
 	
 	
-	public void handleRelease(CanvasMouseEventWrapper e) {
+	public void handleRelease(CanvasMouseEvent e) {
 		
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
 		{
@@ -187,7 +193,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**
 	 * @param e
 	 */
-	public void releaseCenterHandle(CanvasMouseEventWrapper e) {
+	public void releaseCenterHandle(CanvasMouseEvent e) {
 		Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCoordinatePoint().getX(), e.getCoordinatePoint().getY(), true, null);
 		Object_Mover.snapRoi(panel,r, 2, true);
 		
@@ -225,7 +231,7 @@ public class ImagePanelHandle extends SmartHandle {
 			return;
 		}
 		
-		if (handlenum==8) return;// the handleDrag method does what is needed in this case
+		if (handlenum==RectangleEdges.CENTER) return;// the handleDrag method does what is needed in this case
 	
 		panel. setLocationType(RectangleEdges.oppositeSide(handlenum));
 		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, panel.getCroppedImageSize());

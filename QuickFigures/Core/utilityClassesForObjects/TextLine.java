@@ -131,7 +131,7 @@ public void matchWithoutColor(ArrayList<TextLineSegment> origin) {
 
 	
 
-	@Deprecated
+	
 	/**decodes certain information regarding color and subscript/superscript from a string and adds the test with properties described by that string to the text line*/
 	public void addFromCodeString(String st, Color c) {
 		String[] sts=new String[] {st};

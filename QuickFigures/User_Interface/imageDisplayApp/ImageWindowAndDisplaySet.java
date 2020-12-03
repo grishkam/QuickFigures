@@ -14,7 +14,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import graphicalObjectHandles.SmartHandle;
@@ -279,7 +279,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 			}
 		
 		/**performs the change in canvas size*/
-		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 			Point p = lastDragOrRelMouseEvent.getCoordinatePoint();
 			theFigure.getBasics().setWidth(p.x);
 			theFigure.getBasics().setHeight(p.y);
@@ -288,7 +288,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 			
 		}
 		
-		public void handleRelease(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+		public void handleRelease(CanvasMouseEvent lastDragOrRelMouseEvent) {
 			if (theWindow.usesBuiltInSidePanel())
 				theWindow.reSetCanvasAndWindowSizes();
 		}

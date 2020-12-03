@@ -127,19 +127,19 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 	
 	public void setObjectSnappingBehaviourToDialog(LocatedObject2D l) {
 		if (snappingPanel==null) return;
-		l.setSnapPosition(snappingPanel.getSnappingBehaviour().copy());
-		if (sameSnap)l.setSnapPosition(snappingPanel.getSnappingBehaviour());
+		l.setAttachmentPosition(snappingPanel.getSnappingBehaviour().copy());
+		if (sameSnap)l.setAttachmentPosition(snappingPanel.getSnappingBehaviour());
 	}
 
 	
 
 	protected void setItemsToDiaog() {
-		AttachmentPosition snap = array.get(0).getSnapPosition();
+		AttachmentPosition snap = array.get(0).getAttachmentPosition();
 		
 		for(TextGraphic s: array) {
 			setAtrributesToDialog(s);
 			if (this.isUnifyPosition()) {
-				s.setSnapPosition(snap);
+				s.setAttachmentPosition(snap);
 			}
 			if (s instanceof ComplexTextGraphic) {
 				setComplexProperteisToDialog((ComplexTextGraphic) s);

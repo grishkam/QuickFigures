@@ -525,7 +525,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		GraphicLayer layer = z.getParentLayer().getTopLevelParentLayer();
 		ArrayList<PanelGraphicInsetDefiner> defs = getInsetDefinersFromLayer(layer);
 		for(PanelGraphicInsetDefiner definer: defs) {
-			if (definer.getChannelLabelManager().getChannelLabelProp()==z.getChannelLabelproperties())
+			if (definer.getChannelLabelManager().getChannelLabelProp()==z.getChannelLabelProperties())
 				return definer;;
 		}
 		return null;

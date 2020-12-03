@@ -9,20 +9,20 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
 /**Tools that are installed directly on a toolbar implement this interface*/
 public interface InterfaceExternalTool<ImageType>  {
 	
 	/**standard methods for how the tool reacts to mouse actions and key strokes */
-	public void mousePressed(ImageType imp, CanvasMouseEventWrapper e) ;
-	public void mouseClicked(ImageType imp, CanvasMouseEventWrapper e) ;
-	public void mouseDragged(ImageType imp, CanvasMouseEventWrapper e) ;
-	public void mouseReleased(ImageType imp, CanvasMouseEventWrapper e) ;
-	public void mouseExited(ImageType imp, CanvasMouseEventWrapper e) ;
-	public void mouseEntered(ImageType imp, CanvasMouseEventWrapper e) ;
-	public void mouseMoved(ImageType imp, CanvasMouseEventWrapper e) ;
+	public void mousePressed(ImageType imp, CanvasMouseEvent e) ;
+	public void mouseClicked(ImageType imp, CanvasMouseEvent e) ;
+	public void mouseDragged(ImageType imp, CanvasMouseEvent e) ;
+	public void mouseReleased(ImageType imp, CanvasMouseEvent e) ;
+	public void mouseExited(ImageType imp, CanvasMouseEvent e) ;
+	public void mouseEntered(ImageType imp, CanvasMouseEvent e) ;
+	public void mouseMoved(ImageType imp, CanvasMouseEvent e) ;
 	public boolean keyPressed(ImageType imp, KeyEvent e) ;
 	public boolean keyReleased(ImageType imp, KeyEvent e) ;
 	public boolean keyTyped(ImageType imp, KeyEvent e) ;

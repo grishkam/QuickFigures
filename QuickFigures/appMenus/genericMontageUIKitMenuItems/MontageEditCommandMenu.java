@@ -220,7 +220,7 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 			
 			 ArrayList<UndoSnappingChange> arraySnapUndo =new ArrayList<UndoSnappingChange>();
 				for(LocatedObject2D loc: getMainLayout().getWrapper().getLocatedObjects()) {
-					if (loc.getSnapPosition()!=null)
+					if (loc.getAttachmentPosition()!=null)
 					arraySnapUndo.add(new UndoSnappingChange(loc));
 				}
 			

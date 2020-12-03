@@ -13,17 +13,17 @@ import selectedItemMenus.LayerSelector;
 import ultilInputOutput.FileChoiceUtil;
 
 
-
+/**A multi selection operator that applies a figure template to many files*/
 public class MassTemplateApplication extends BasicMultiSelectionOperator {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	TemplateSaver templateSaver=new TemplateSaver(false, true);
+	TemplateUserMenuAction templateSaver=new TemplateUserMenuAction(false, true);
 	
-	/**Will apply a single default template to a mass of serialized
-  	figure displays*/
+	/**Will apply a single default template to a series of files that each contain serialized
+  	figures*/
 	public void perform(ArrayList<File> files) {
 		 FigureTemplate template = templateSaver.loadDefaultTemplate();
 		for(File f: files) {
@@ -33,7 +33,7 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 			
 			for(GraphicLayer figLayer: allsublayers) {
 				if (figLayer instanceof FigureOrganizingLayerPane) {
-					template.applyProperties(figLayer);
+					template.applyTemplateToLayer(figLayer);
 					
 				}
 			}
@@ -44,8 +44,6 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 		
 	}
 	
-	
-
 
 	@Override
 	public String getMenuCommand() {
@@ -66,9 +64,10 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 		
 	}
 	
+	/**this option is only available from the layers window (that window contains a means of storing a file list)*/
 	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {
 		if (graphicTreeUI instanceof GraphicTreeUI)
-		return true;
+			return true;
 		return false;
 		}
 

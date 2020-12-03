@@ -98,7 +98,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		presseddisplay=pd;
 		if(ipg==null) return;
 		stackSlicePressed= ipg.getSourcePanel();
-		chanNum=stackSlicePressed.originalChanNum;
+		chanNum=stackSlicePressed.targetChannelNumber;
 		setColorToStackSlice();
 	}
 
@@ -130,7 +130,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			presseddisplay=pd;
 			
 			stackSlicePressed= pd.getPanelWithDisplay(imagepanel);
-			chanNum=stackSlicePressed.originalChanNum;
+			chanNum=stackSlicePressed.targetChannelNumber;
 		}
 		setColorToStackSlice();
 	}
@@ -422,7 +422,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		if (realName==null||realName.trim().equals("")) this.updateAllDisplays();
 		else {
 			for(ImageDisplayLayer pd: getAllDisplays() ) {
-			pd.updatePanelsWithChannel(realName);
+			pd.updateOnlyPanelsWithChannel(realName);
 			if (updateInsets) {
 				if (this.updateInsets) updateInsetPanels(pd, realName);
 			}

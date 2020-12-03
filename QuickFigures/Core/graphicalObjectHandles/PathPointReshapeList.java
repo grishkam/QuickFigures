@@ -7,7 +7,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 
@@ -51,7 +51,7 @@ public class PathPointReshapeList extends ReshapeHandleList {
 		undo=new PathEditUndo(path);
 	}
 	
-	public void editover(CanvasMouseEventWrapper w) {
+	public void editover(CanvasMouseEvent w) {
 		super.editover(w);
 		path.updatePathFromPoints();
 		if(undo!=null) {
@@ -295,13 +295,13 @@ public class PathPointReshapeList extends ReshapeHandleList {
 		}
 
 		@Override
-		public AttachmentPosition getSnapPosition() {
+		public AttachmentPosition getAttachmentPosition() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public void setSnapPosition(AttachmentPosition snap) {
+		public void setAttachmentPosition(AttachmentPosition snap) {
 			// TODO Auto-generated method stub
 			
 		}

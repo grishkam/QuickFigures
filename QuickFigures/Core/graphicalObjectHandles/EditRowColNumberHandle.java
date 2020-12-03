@@ -3,7 +3,7 @@ package graphicalObjectHandles;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 
 import java.awt.geom.Rectangle2D;
@@ -12,13 +12,13 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import imageMenu.CanvasAutoResize;
 import undo.UndoLayoutEdit;
 
 /**a handle that allows the user to pack the layout panels into a different number of rows and columns 
   For example, user can drag handle to easily transform a 1*6 layout into 2*3, 3*2 or6*1*/
-public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces{
+public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 
 	private static final int PLUS_SIZE = 3;
 	protected MontageLayoutGraphic layout;
@@ -69,18 +69,18 @@ public class EditRowColNumberHandle extends SmartHandle implements MontageSpaces
 	
 	
 	/***/
-	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		if(currentUndo!=null) currentUndo.establishFinalState();
 		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentUndo);
 		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
 	
 	}
 	
-	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		currentUndo = new UndoLayoutEdit(layout);//establishes the undo
 	}
 	
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		BasicMontageLayout current = layout.getPanelLayout();
 		GenericMontageEditor edit = layout.getEditor();

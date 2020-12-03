@@ -5,7 +5,7 @@ import java.awt.Point;
 
 import applicationAdapters.ImageWrapper;
 import externalToolBar.TreeIconWrappingToolIcon;
-import figureFormat.ScaleBarPicker;
+import figureFormat.ScaleBarExamplePicker;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -25,7 +25,7 @@ public class BarGraphicTool extends GraphicTool {
 	BarGraphic model = new BarGraphic(); {
 		
 		model.setFillColor(Color.white);
-	model.setSnapPosition(AttachmentPosition.defaultScaleBar());
+	model.setAttachmentPosition(AttachmentPosition.defaultScaleBar());
 	model.setProjectionType(2);
 	}
 	
@@ -83,9 +83,9 @@ public class BarGraphicTool extends GraphicTool {
 			
 			BarGraphic.optimizeBar(bg, b);
 			
-			 new ScaleBarPicker(model).setBarDefaultsBasedOnHeight(b.getBounds().height, bg, model.getFillColor());
+			 new ScaleBarExamplePicker(model).setBarDefaultsBasedOnHeight(b.getBounds().height, bg, model.getFillColor());
 		
-			bg.getSnapPosition().setToNearestInternalSnap(bg.getBounds(), b.getBounds(), new Point(x, y));
+			bg.getAttachmentPosition().setToNearestInternalSnap(bg.getBounds(), b.getBounds(), new Point(x, y));
 			//bg.setLengthInUnits(length);
 			
 			//bg.setSnappingBehaviour(SnappingBehaviour.defaultScaleBar());

@@ -48,7 +48,7 @@ import standardDialog.SelectImageDialog;
 		
 		private static final long serialVersionUID = 1L;
 		ArrayList<MultiChannelUpdateListener> listens=new ArrayList<MultiChannelUpdateListener>();
-		private int retreival=loadEmbeded;
+		private int retreival=LOAD_EMBEDDED_IMAGE;
 
 		private PreProcessInformation preprocessRecord;
 
@@ -85,7 +85,7 @@ import standardDialog.SelectImageDialog;
 		
 		void storeImage() {
 				this.saveImageEmbed();
-			if (this.getRetrieval()==loadFromFile&&getImagePlus()!=null) {
+			if (this.getRetrieval()==lOAD_FROM_SAVED_FILE&&getImagePlus()!=null) {
 	
 				String savePath = getSavePath();
 				if(savePath!=null) {//saves the image file if it is used
@@ -164,7 +164,7 @@ import standardDialog.SelectImageDialog;
 
 		private boolean loadFromFile() {
 			// TODO Auto-generated method stub
-			if (this.getRetrieval()==loadFromFile) return true;
+			if (this.getRetrieval()==lOAD_FROM_SAVED_FILE) return true;
 			return false;
 		}
 
@@ -544,7 +544,7 @@ import standardDialog.SelectImageDialog;
 		}
 
 		@Override
-		public void setPanelStackDisplay(ImageDisplayLayer multichannelDisplayLayer) {
+		public void setStackDisplayLayer(ImageDisplayLayer multichannelDisplayLayer) {
 			display=multichannelDisplayLayer;
 		}
 		

@@ -35,7 +35,7 @@ public class CrossGraphic extends SimpleLineGraphic {
 		Path2D.Double path=new Path2D.Double();
 		
 	
-		ArrayList<Point2D> loc = getLocations();
+		ArrayList<Point2D> loc = getTrianglePoints();
 		path.moveTo(loc.get(0).getX(),loc.get(0).getY());
 		path.lineTo(loc.get(1).getX(),loc.get(1).getY());
 		path.moveTo(loc.get(2).getX(),loc.get(2).getY());
@@ -45,7 +45,7 @@ public class CrossGraphic extends SimpleLineGraphic {
 		
 	}
 	
-	ArrayList<Point2D> getLocations() {
+	ArrayList<Point2D> getTrianglePoints() {
 		ArrayList<Point2D> output=new ArrayList<Point2D>();
 		output.add(RectangleEdges.getLocation(RectangleEdges.LEFT, getRectangle()));
 		output.add(RectangleEdges.getLocation(RectangleEdges.RIGHT, getRectangle()));

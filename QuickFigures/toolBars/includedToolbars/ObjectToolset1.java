@@ -18,11 +18,8 @@ import genericMontageUIKit.ToolBit;
 import graphicActionToolbar.PSActionTool;
 import graphicActionToolbar.QuickFigureMaker;
 import graphicTools.ArrowGraphicTool;
-import graphicTools.BarGraphicTool;
 import graphicTools.CircleGraphicTool;
 import graphicTools.ComplexText_GraphicTool;
-import graphicTools.LockGraphicTool2;
-import graphicTools.LockedObjectSwapper;
 import graphicTools.RectGraphicTool;
 import graphicTools.RegularPolygonGraphicTool;
 import graphicTools.RightTriangleGraphicTool;
@@ -31,13 +28,14 @@ import graphicTools.RoundRectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicTools.OtherShapeGraphicTool;
 import graphicalObjects_BasicShapes.BlobShape;
+import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.ComplexBlobShape;
 import graphicalObjects_BasicShapes.ComplexStar;
 import graphicalObjects_BasicShapes.GearShape;
 import graphicalObjects_BasicShapes.NotchedRectangleGraphic;
 import graphicalObjects_BasicShapes.PlusGraphic;
+import graphicalObjects_BasicShapes.SimpleRing;
 import graphicalObjects_BasicShapes.SimpleStar;
-import graphicalObjects_BasicShapes.TailGraphic;
 import graphicalObjects_BasicShapes.TrapezoidGraphic;
 import graphicalObjects_BasicShapes.TriangleGraphic;
 import logging.IssueLog;
@@ -48,12 +46,17 @@ import multiChannelFigureUI.LutSwapperTool;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
 import pathGraphicToolFamily.BrushTool;
 import pathGraphicToolFamily.PathGraphicTool;
-import pathGraphicToolFamily.PathReflactTool;
+import pathGraphicToolFamily.PathReflectTool;
 import pathGraphicToolFamily.PathTool;
 import pathGraphicToolFamily.PathTool2;
+import utilityClassesForObjects.RectangleEdgePosisions;
 
+/**The main toolbar for QuickFigures. Includes all critical tools*/
 public class ObjectToolset1 extends QuickFiguresToolBar{
 	
+	/**Extra tool installers. A programmer can write extensions to quickfigures
+	  the plot package is such an extension. additional tools that are part of an extension 
+	  are added to this arraylist*/
 	static ArrayList<ToolInstallers> bonusTools=new ArrayList<ToolInstallers> ();
 	
 	public static ObjectToolset1 currentToolset;
@@ -73,7 +76,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		addToolBit(new Object_Mover());
 		ArrayList<ToolBit> layoutTools = LayoutToolSet.getMinimumLayoutToolBits();
 		layoutTools.addAll( LayoutToolSet.getStandardLayoutToolBits());
-		//layoutTools.addAll(LayoutToolSet.getOptionalToolBits() );
+		
 		layoutTools.add(new Roi_Into_Multiple_Panels2());
 		addTool(new GeneralTool(layoutTools));
 		
@@ -90,14 +93,8 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 			
 		}
 		
-		//addTool(new GeneralTool(new LutSwapperTool()));
 		addTool(new GeneralTool(new ChannelSwapperToolBit(), new BasicChannelLabelTool(), new LutSwapperTool()));
-		//addTool(new GeneralTool(new BasicChannelLabelTool()));
 		
-		
-		
-		
-		//addTool(new QuickFigFromXML() );
 		
 		for(ToolInstallers bonusTool: bonusTools) try {
 			bonusTool.installTools(this);
@@ -108,7 +105,6 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	}
 	
 	public static void includeBonusTool(ToolInstallers tool) {bonusTools.add(tool);}
-	//AdapterKit<DisplayedImageWrapper> ak=new AdapterKit <DisplayedImageWrapper>(new ToolAdapterG());
 	
 	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
 		super.setCurrentTool(currentTool);
@@ -136,7 +132,8 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		return bits;
 	} 
 	
-	static ArrayList<ToolBit> getLockToolBits() {
+	/** TODO: determine if these obsolete tools have any use.
+	private static ArrayList<ToolBit> getLockToolBits() {
 		ArrayList<ToolBit> output = new ArrayList<ToolBit>();
 		output.add(new BarGraphicTool());
 		output.add(new LockGraphicTool2(false));
@@ -145,57 +142,52 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 		return output;
 		
-	}
+	}*/
 	
 	public static ArrayList<ToolBit> getRectangularShapeGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 	out.add(new RectGraphicTool());
 	out.add(new RoundRectGraphicTool());
-	out.add(new OtherShapeGraphicTool(new TrapezoidGraphic(new Rectangle(0,0,5,5))));
-
-	out.add(new OtherShapeGraphicTool(new TriangleGraphic(new Rectangle(0,0,5,5))));
 	
-	out.add(new RightTriangleGraphicTool(2));
-	out.add(new RightTriangleGraphicTool(3));
-	out.add(new OtherShapeGraphicTool(new PlusGraphic(new Rectangle(0,0,5,5))));
-	out.add(new OtherShapeGraphicTool(new NotchedRectangleGraphic(new Rectangle(0,0,5,5))));
-	//out.add(new OtherShapeGraphicTool(new TailGraphic(new Rectangle(0,0,5,5))));
+	Rectangle standardRectangle = new Rectangle(0,0,5,5);
+	
+	out.add(new OtherShapeGraphicTool(new TrapezoidGraphic(standardRectangle)));
+
+	out.add(new OtherShapeGraphicTool(new TriangleGraphic(standardRectangle)));
+	
+	out.add(new RightTriangleGraphicTool(RectangleEdgePosisions.LOWER_RIGHT));
+	out.add(new RightTriangleGraphicTool(RectangleEdgePosisions.LOWER_LEFT));
+	out.add(new OtherShapeGraphicTool(new PlusGraphic(standardRectangle)));
+	out.add(new OtherShapeGraphicTool(new NotchedRectangleGraphic(standardRectangle)));
 	
 	return out;}
 	
 	public static ArrayList<ToolBit> getCircularShapeGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
-		out.add(new CircleGraphicTool(0));
+		out.add(new CircleGraphicTool(CircularGraphic.NO_ARC));
 	
 	
 		
-		out.add(new RingGraphicTool(0));
-		out.add(new RingGraphicTool(1));
-		out.add(new RegularPolygonGraphicTool(new GearShape(new Rectangle(0,0, 2,2),12, 0.75)));
-		out.add(new RegularPolygonGraphicTool(new BlobShape(new Rectangle(0,0, 2,2),7, 0.75)));
-		out.add(new RegularPolygonGraphicTool(new ComplexBlobShape(new Rectangle(0,0, 2,2),7, 0.75)));
+		out.add(new RingGraphicTool(SimpleRing.NO_ARC));
+		out.add(new RingGraphicTool(SimpleRing.PI_ARC));
+		Rectangle sRectangle = new Rectangle(0,0, 2,2);
+		out.add(new RegularPolygonGraphicTool(new GearShape(sRectangle,12, 0.75)));
+		out.add(new RegularPolygonGraphicTool(new BlobShape(sRectangle,7, 0.75)));
+		out.add(new RegularPolygonGraphicTool(new ComplexBlobShape(sRectangle,7, 0.75)));
 
 		
-		out.add(new CircleGraphicTool(1));
-		out.add(new CircleGraphicTool(2));
+		out.add(new CircleGraphicTool(CircularGraphic.PI_ARC));
+		out.add(new CircleGraphicTool(CircularGraphic.CHORD_ARC));
 		return out;
 	}
 	
 	public static ArrayList<ToolBit> getRegularPolygonShapeTools() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 		
-		out.add(new RegularPolygonGraphicTool(5));
-		out.add(new RegularPolygonGraphicTool(6));
-		//out.add(new RegularPolygonGraphicTool(3));
-		out.add(new RegularPolygonGraphicTool(4));
+		out.add(new RegularPolygonGraphicTool(5));//5 for pentagon
+		out.add(new RegularPolygonGraphicTool(6));//6 for hexagon
+		out.add(new RegularPolygonGraphicTool(4));//4 for diamond
 		
-		
-
-		//out.add(new RightTriangleGraphicTool(13));
-		//out.add(new RightTriangleGraphicTool(20));
-		
-		//out.add(new RightTriangleGraphicTool(2));
-		//out.add(new RightTriangleGraphicTool(3));
 		
 		out.add(new RegularPolygonGraphicTool(new SimpleStar(new Rectangle(0,0, 2,2),5)));
 		out.add(new RegularPolygonGraphicTool(new ComplexStar(new Rectangle(0,0, 2,2),5)));
@@ -228,11 +220,11 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		out.add(new PathTool(true, true));
 		
 		out.add(new PathTool2());
-		out.add(new PathReflactTool(0));
-		out.add(new PathReflactTool(1));
-		out.add(new PathReflactTool(2));
-		out.add(new PathReflactTool(3));
-		//out.add(new PathAnchorPointTool());
+		out.add(new PathReflectTool(PathReflectTool.REFLECT));
+		out.add(new PathReflectTool(PathReflectTool.SCALE));
+		out.add(new PathReflectTool(PathReflectTool.ROTATE));
+		out.add(new PathReflectTool(PathReflectTool.MOVE));
+		
 		return out;
 		
 	}
@@ -241,6 +233,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 		out.add(new ArrowGraphicTool(1));
 		out.add(new ArrowGraphicTool(2));
+		out.add(new ArrowGraphicTool(2, true));
 		out.add(new ArrowGraphicTool(0));
 		return out;
 		
@@ -249,17 +242,6 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	public void addToolBit(ToolBit t) {
 		addTool(new  GeneralTool( t));
 	}
-	
-	/**public static ArrayList<ToolBit> moverBits() {
-		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
-		Object_Mover mover = new Object_Mover();
-		
-		//mover.setExcludedClass(PanelLayoutGraphic.class);
-		out.add(mover);
-		out.add(new  Roi_Into_Multiple_Panels2());
-		out.add(new LayoutMover());
-		return out;
-	}*/
 	
 	
 
@@ -278,12 +260,13 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	}
 	
 	
-	
+	/**shows the window with the toolbar*/
 public void run(String s) {
 		
 		
-		if (currentToolset!=null&&currentToolset!=this) currentToolset.getframe().setVisible(false);
-		//innitialize();
+		if (currentToolset!=null&&currentToolset!=this) 
+			currentToolset.getframe().setVisible(false);//removes the previous toolbar
+		
 		graphicTools();
 	
 
@@ -296,7 +279,6 @@ public void run(String s) {
 		
 		addDragAndDrop();
 		
-		//getframe().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 
@@ -316,6 +298,6 @@ private void selectDefaultTool() {
 		c.gridx=0;
 		getframe().add(new StatusPanel() ,c ); 
 		getframe().pack();
-		// statusPanel.currentStatus.updateStatus("showing bar", 0);
+		
 	}
 }

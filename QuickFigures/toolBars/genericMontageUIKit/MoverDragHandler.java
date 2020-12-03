@@ -40,7 +40,7 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.Selectable;
 import utilityClassesForObjects.TakesLockedItems;
 
-/***/
+/**A drag and drop handler for the tools on the toolbar.*/
 public class MoverDragHandler extends BasicDragHandler {
 	private BasicToolBit tool ;
 
@@ -48,11 +48,21 @@ public class MoverDragHandler extends BasicDragHandler {
 		this.tool=roi_Mover;
 	}
 
+	/**handles a drag and drop event */
 	public void drop(ImageWindowAndDisplaySet displaySet, DropTargetDropEvent arg0) {
 		AbstractUndoableEdit2 undo=null;
 		ArrayList<File> file = ForDragAndDrop.dropedFiles(arg0);
 		if (file!=null) undo=handleFileListDrop(displaySet, arg0.getLocation(), file);
 		else
+			handleLayersWindowDrop(displaySet, arg0);
+		
+		new CurrentFigureSet().addUndo(undo);;
+	}
+
+	/**
+	 occasionally, a user might drag and item from one layers window into 
+	 the canvas of another open figure. wrote this to handle that event*/
+	public void handleLayersWindowDrop(ImageWindowAndDisplaySet displaySet, DropTargetDropEvent arg0) {
 		try{
 			
 		Transferable t = arg0.getTransferable();
@@ -93,11 +103,10 @@ public class MoverDragHandler extends BasicDragHandler {
 		catch (Throwable t) {IssueLog.logT(t);
 		
 		}
-		
-		new CurrentFigureSet().addUndo(undo);;
 	}
 	
-	public void select(ZoomableGraphic z) {
+	/**selects an item. if that  item is a layer, selects everything inside the layer*/
+	public void select(Object z) {
 		if (z instanceof Selectable) ((Selectable) z).select();
 		if (z instanceof GraphicLayer) {
 			
@@ -107,6 +116,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		}
 	}
 	
+	/**handles the transplant of a graphic to a new image*/
 	void moveItemToSet(ZoomableGraphic z, ImageWindowAndDisplaySet displaySet) {
 		select(z);
 		if (displaySet.getImageAsWrapper().getGraphicLayerSet().hasItem(z))
@@ -124,6 +134,8 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 	}
 	
+	/**Called when something is dragged over an image, draws a selection 
+	 * over any empty layout panel at the position*/
 	public void dragOver(ImageWindowAndDisplaySet displaySet, DropTargetDragEvent arg0) {
 		super.dragOver(displaySet, arg0);
 		
@@ -149,6 +161,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 	}
 
+	/**returns the object at the given location*/
 	private LocatedObject2D getObjectAtPoint(ImageWindowAndDisplaySet displaySet, Point2D position) {
 		return tool.getObject(displaySet.getImageAsWrapper(), (int)position.getX(), (int) position.getY());
 	}
@@ -370,14 +383,6 @@ public class MoverDragHandler extends BasicDragHandler {
 		FigureOrganizingLayerPane layer2 = FigureOrganizingLayerPane.findFigureOrganizer(layer);
 		if (layer2==null) return layer;
 		return layer2;
-		/**if (layer instanceof MultichannelImageDisplay) { 
-			if (layer.getParentLayer() instanceof FigureOrganizingLayerPane) layer=layer.getParentLayer();
-			if (layer.getParentLayer() instanceof FigureOrganizingLayerPane) layer=layer.getParentLayer();
-			if (layer.getParentLayer() instanceof FigureOrganizingLayerPane) layer=layer.getParentLayer();
-			if (layer.getParentLayer() instanceof FigureOrganizingLayerPane) layer=layer.getParentLayer();
-			if (layer.getParentLayer() instanceof FigureOrganizingLayerPane) layer=layer.getParentLayer();
-		}
-		return layer;*/
 	}
 	
 	ImagePanelGraphic handleImageFileDrop(GraphicLayer layer, File f,Point2D location2, boolean hasAlpha) {

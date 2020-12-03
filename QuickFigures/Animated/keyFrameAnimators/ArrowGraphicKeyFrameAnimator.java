@@ -3,15 +3,19 @@ package keyFrameAnimators;
 import java.awt.geom.Point2D.Double;
 
 import graphicalObjects_BasicShapes.ArrowGraphic;
+import graphicalObjects_BasicShapes.ArrowGraphic.ArrowHead;
 
+/**Animator for animating changes to arrows*/
 public class ArrowGraphicKeyFrameAnimator extends ShapeGraphicKeyFrameAnimator {
 
 	ArrowGraphic rect;
+	private ArrowHead head;
 	
 	public ArrowGraphicKeyFrameAnimator(ArrowGraphic object) {
 		super(object);
 		this.shape=object;
 		rect=object;
+		head=getObject().getHead();
 	}
 	
 	public ArrowGraphic getObject() {
@@ -49,9 +53,9 @@ public class ArrowGraphicKeyFrameAnimator extends ShapeGraphicKeyFrameAnimator {
 		Double l1=interpolate(before.l1,after.l1, factor);
 		Double l2=interpolate(before.l2,after.l2, factor);
 		if (after.animagesArrowEdit) {
-			getObject().setArrowHeadSize(interpolate(before.headSize,after.headSize, factor));
-			getObject().setNotchAngle(interpolate(before.notchAngle,after.notchAngle, factor));
-			getObject().setArrowTipAngle(interpolate(before.tipAngle,after.tipAngle, factor));
+			head.setArrowHeadSize(interpolate(before.headSize,after.headSize, factor));
+			head.setNotchAngle(interpolate(before.notchAngle,after.notchAngle, factor));
+			head.setArrowTipAngle(interpolate(before.tipAngle,after.tipAngle, factor));
 			}
 		if (after.animatesMotion) getObject().setPoints(l1, l2);
 	}
@@ -77,12 +81,13 @@ public class ArrowGraphicKeyFrameAnimator extends ShapeGraphicKeyFrameAnimator {
 		@Override
 		void setUp() {
 			super.setUp();
-			l2=getObject().getOppositeTipEndLocation();
-			l1=getObject().getTipLocation();
 			
-				headSize=getObject().getArrowHeadSize();
-				notchAngle=getObject().getNotchAngle();
-				tipAngle=getObject().getArrowTipAngle();
+			l2=getObject().getLineStartLocation();
+			l1=getObject().getLineEndLocation();
+			
+				headSize=head.getArrowHeadSize();
+				notchAngle=head.getNotchAngle();
+				tipAngle=head.getArrowTipAngle();
 			
 		}
 		
@@ -91,9 +96,9 @@ public class ArrowGraphicKeyFrameAnimator extends ShapeGraphicKeyFrameAnimator {
 			
 			if (super.animatesMotion) getObject().setPoints(l1, l2);
 			if (animagesArrowEdit) {
-				getObject().setArrowHeadSize(headSize);
-				getObject().setArrowTipAngle(tipAngle);
-				getObject().setNotchAngle(notchAngle);
+				head.setArrowHeadSize(headSize);
+				head.setArrowTipAngle(tipAngle);
+				head.setNotchAngle(notchAngle);
 			}
 		}
 

@@ -18,7 +18,7 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.IconSet;
@@ -602,10 +602,10 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	public void snapLockedItem(LocatedObject2D o) {
 	
 		if (o==null) return;
-		AttachmentPosition sb = o.getSnapPosition();
+		AttachmentPosition sb = o.getAttachmentPosition();
 			if (sb==null) {
-				o.setSnapPosition(AttachmentPosition.defaultInternal());
-				sb=o.getSnapPosition();
+				o.setAttachmentPosition(AttachmentPosition.defaultInternal());
+				sb=o.getAttachmentPosition();
 				}
 			Integer rw = getPanelLocations().get(o);
 			
@@ -671,7 +671,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	
 	
 	@Override
-	public void handleMouseEvent(CanvasMouseEventWrapper me, int handlenum, int button, int clickcount, int type,
+	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
 		if (clickcount==2 && type==MouseEvent.MOUSE_CLICKED)
 					{
@@ -1010,7 +1010,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 			new CanvasAutoResize().performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
 		}
 	

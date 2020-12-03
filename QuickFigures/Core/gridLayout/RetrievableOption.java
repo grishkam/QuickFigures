@@ -36,7 +36,7 @@ public @interface RetrievableOption {
 	/**the name that will appear next to this item in a user interface*/
 	String label() default "unnamed field";
 	
-	/**Should this item be added to image metadata and retrieved?*/
+	/**Should this item be stored to a file and retrieved?*/
 	boolean save() default true;
 	/**Whether to match this field when creating a double of the given object*/
 	boolean matchable() default true;

@@ -10,9 +10,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
-import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.EditManyShapes;
 import animations.KeyFrameAnimation;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
@@ -344,7 +344,6 @@ public Rectangle2D.Double getRectangle() {
 		this.setLocationType(CENTER);
 		Point2D p2 = this.getLocation();
 		p2=scaleAbout(p2, p,magx,magy);
-		double a = this.getAngle();
 		
 		try {
 		Rectangle2D r = this.getRectangle();
@@ -534,7 +533,7 @@ public Rectangle2D.Double getRectangle() {
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		public void handleDrag(CanvasMouseEventWrapper w) {
+		public void handleDrag(CanvasMouseEvent w) {
 			if (isStrokeHandle()) {
 				
 				Point2D p =getStrokeHandlePoints()[1];
@@ -551,20 +550,20 @@ public Rectangle2D.Double getRectangle() {
 		}
 		
 		
-		public void showJPopup(CanvasMouseEventWrapper w) {
-			EditAndColorizeMultipleItems multi = new EditAndColorizeMultipleItems(true, getStrokeWidth());
+		public void showJPopup(CanvasMouseEvent w) {
+			EditManyShapes multi = new EditManyShapes(true, getStrokeWidth());
 			multi.setSelector(w.getSelectionSystem());
 			multi.getPopup().showForMouseEvent(w);;
 		}
 		
-		private void addStrokeUndo(CanvasMouseEventWrapper w) {
+		private void addStrokeUndo(CanvasMouseEvent w) {
 			if (!w.getAsDisplay().getUndoManager().hasUndo(strokeUndo))
 				w.getAsDisplay().getUndoManager().addEdit(strokeUndo);
 		}
 		
 		/**when the user double click a handle with the mouse, this will show a dialog*/
 		@Override
-		public void handlePress(CanvasMouseEventWrapper w) {
+		public void handlePress(CanvasMouseEvent w) {
 			if (this.isStrokeHandle()) strokeUndo= new UndoStrokeEdit(rect);
 			if(w.isPopupTrigger()) {
 				showJPopup(w);;

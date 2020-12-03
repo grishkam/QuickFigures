@@ -67,8 +67,9 @@ private static final long serialVersionUID = 1L;
 	/**Creates a display layer, Argument cannot be null*/
 	public MultichannelDisplayLayer(MultiChannelSlot slot) {	
 		super("");	
+		if(slot==null) return;//slot given would not be null in most circunstances
 		this.setSlot(slot);
-		slot.setPanelStackDisplay(this);
+		slot.setStackDisplayLayer(this);
 	}
 
 	/**creates a new panel list for this ImageDisplay layer*/
@@ -408,7 +409,7 @@ private static final long serialVersionUID = 1L;
 			TextGraphic zt=(TextGraphic) zz;
 			for (ChannelLabelTextGraphic lab:getPanelList().getChannelLabels()) {
 				lab.copyAttributesFrom(zt);
-				lab.setSnapPosition(zt.getSnapPosition().copy());
+				lab.setAttachmentPosition(zt.getAttachmentPosition().copy());
 			}
 		}
 	}
@@ -419,7 +420,7 @@ private static final long serialVersionUID = 1L;
 		this.getPanelManager().updatePanels();
 	}
 	
-	public synchronized void updatePanelsWithChannel(String realChannelName) {
+	public synchronized void updateOnlyPanelsWithChannel(String realChannelName) {
 		getPanelManager().updatePanelsWithChannel(realChannelName);
 	}
 	
@@ -602,7 +603,7 @@ transient static IconSet i;
 		}
 		this.slot = slot;
 		if (slot==null) return;
-		slot.setPanelStackDisplay(this);
+		slot.setStackDisplayLayer(this);
 		slot.addMultichannelUpdateListener(this);
 	}
 
@@ -622,7 +623,8 @@ transient static IconSet i;
 	@Override
 	public MultiChannelImage getMultiChannelImage() {
 		if(getSlot()==null) {
-			IssueLog.log("null slot");
+			//if there is no slot, then there is no image to return
+			return null;
 		}
 		return this.getSlot().getMultichannelImage();
 	
@@ -649,7 +651,9 @@ transient static IconSet i;
 	
 	/**getter and setter methods for the preprocess scale. experimental*/
 	public double getPreprocessScale() {
-		PreProcessInformation info = this.getSlot().getModifications();
+		MultiChannelSlot slot2 = this.getSlot();
+		if(slot2==null) return 1;
+		PreProcessInformation info = slot2.getModifications();
 		if(info==null) return 1;
 		return info.getScale();
 	}
@@ -657,7 +661,9 @@ transient static IconSet i;
 	/**sets the preprocess scale*/
 	public MultiChannelImage setPreprocessScale(double s) {
 		if (s>10) s=10; //does not allow user to scale more than 10 fold. it is never really needed and may cause heap space issues
-		PreProcessInformation info = this.getSlot().getModifications();
+		MultiChannelSlot slot2 = this.getSlot();
+		if (slot2==null) return this.getMultiChannelImage();
+		PreProcessInformation info = slot2.getModifications();
 		if(info!=null&&s==info.getScale()) return this.getMultiChannelImage();
 		PreProcessInformation newscale;
 		if (info!=null) newscale= new PreProcessInformation(info.getRectangle(), info.getAngle(), s);
@@ -665,7 +671,7 @@ transient static IconSet i;
 		slot.applyCropAndScale(newscale);
 		return this.getMultiChannelImage();
 	}
-	/**returns the preprocess information object for this images*/
+	/**returns the 'pre-process' information object for this image*/
 	@Override
 	public PreProcessInformation getPreProcess() {
 		return this.getSlot().getModifications();

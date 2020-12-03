@@ -5,12 +5,12 @@ import javax.swing.JMenuItem;
 
 import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
 
 
-public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements MontageSpaces{
+public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements LayoutSpaces{
 
 	int mode=0;
 	

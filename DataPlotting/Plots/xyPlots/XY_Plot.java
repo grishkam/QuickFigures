@@ -14,7 +14,7 @@ import genericPlot.BasicPlot;
 import genericPlot.BasicDataSeriesGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import gridLayout.GridLayoutEditListener;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import menuUtil.HasUniquePopupMenu;
 import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.DataBarShape;
@@ -23,7 +23,7 @@ import plotParts.DataShowingParts.ScatterPoints;
 import undo.CombinedEdit;
 
 /**A special layer for a plot with single dimensional data*/
-public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, MontageSpaces, GridLayoutEditListener {
+public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
 
 
 

@@ -3,6 +3,8 @@ package basicAppAdapters;
 import java.awt.Color;
 import appContext.ToolbarColorContext;
 
+/**class stores a background and a foreground color. 
+ * rarely used*/
 public class ToolColors implements ToolbarColorContext {
 
 	static Color foregroundCol=Color.black;

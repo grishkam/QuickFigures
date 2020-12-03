@@ -117,7 +117,7 @@ public class GraphicDisplayCanvas extends
 	public Shape getDisplaySetArea() {
 		GraphicContainingImage gmp = window.getTheSet();
 		Rectangle r5 = new Rectangle(0,0, gmp.getWidth(), gmp.getHeight());
-		AffineTransform at = getConverter().getAfflineTransform();
+		AffineTransform at = getConverter().getAffineTransform();
 		Point2D p = new Point(0,0);
 
 		Point2D p2 = new Point2D.Double(0,0);

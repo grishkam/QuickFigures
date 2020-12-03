@@ -22,7 +22,6 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 	/**The window that displays the item*/
 	private transient ImageWindowAndDisplaySet displayItems=null;
 
-	private BasicImageInfo basics=new BasicImageInfo();
 	
 	/**creates an image with the given file info and parent layer*/
 	public GraphicContainingImage(GraphicLayerPane layer2, BasicImageInfo basics) {
@@ -32,30 +31,14 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 		this.basics=basics;
 	}
 
+	/**minimal constructor*/
 	public GraphicContainingImage() {
 		this(new GraphicLayerPane("Name"), new BasicImageInfo());
 	
 	}
 	
-	/***/
-	public static void onItemLoad(FigureDisplayContainer gsd, ZoomableGraphic z) {
 	
-		if (z instanceof KnowsSetContainer) {
-			KnowsSetContainer kn=(KnowsSetContainer) z;
-			kn.setGraphicSetContainer(gsd);
-		}
-		if (z instanceof GraphicLayer) {
-			for(ZoomableGraphic g: ((GraphicLayer) z).getAllGraphics()) {
-				onItemLoad(gsd, g);
-			}
-			for(ZoomableGraphic g: ((GraphicLayer) z).getSubLayers()) {
-				onItemLoad(gsd, g);
-			}
-		}
-	}
-	
-	
-	
+		
 	/**returns the object storing this image, window and canvas*/
 	@Override
 	public DisplayedImage getImageDisplay() {
@@ -107,6 +90,28 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 
 	
 
+
+	
+	/**this method is run to initialize an added item
+	  it is also called after objects have been deserialized*/
+	public void onItemLoad(ZoomableGraphic z) {
+		
+		if (z instanceof KnowsSetContainer) {
+			KnowsSetContainer kn=(KnowsSetContainer) z;
+			kn.setGraphicSetContainer(this);
+		}
+		if (z instanceof GraphicLayer) {
+			for(ZoomableGraphic g: ((GraphicLayer) z).getAllGraphics()) {
+				onItemLoad(g);
+			}
+			for(ZoomableGraphic g: ((GraphicLayer) z).getSubLayers()) {
+				onItemLoad(g);
+				
+			}
+		}
+	}
+	
+	
 	/**Getter method for width*/
 	public int getWidth() {
 		return getBasics().getWidth();
@@ -128,29 +133,9 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 	public void setHeight(int height) {
 		getBasics().setHeight(height);
 	}
-	
-	/**this method is run to initialize an added item
-	  it is also called after objects have been deserialized*/
-	public void onItemLoad(ZoomableGraphic z) {
-		
-		if (z instanceof KnowsSetContainer) {
-			KnowsSetContainer kn=(KnowsSetContainer) z;
-			kn.setGraphicSetContainer(this);
-		}
-		if (z instanceof GraphicLayer) {
-			for(ZoomableGraphic g: ((GraphicLayer) z).getAllGraphics()) {
-				onItemLoad(g);
-			}
-			for(ZoomableGraphic g: ((GraphicLayer) z).getSubLayers()) {
-				onItemLoad(g);
-				
-			}
-		}
-	}
-	
 	/***/
 	@Override
-	public void CanvasResizePixelsOnly(int width, int height, int xOff, int yOff) {
+	public void CanvasResize(int width, int height, int xOff, int yOff) {
 		getBasics().setWidth(width);
 		getBasics().setHeight(height);
 		

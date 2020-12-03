@@ -2,7 +2,6 @@ package applicationAdaptersForImageJ1;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -11,22 +10,17 @@ import java.awt.geom.Point2D;
 import applicationAdapters.PixelWrapper;
 import ij.gui.Roi;
 import ij.gui.ShapeRoi;
-import ij.process.Blitter;
-import ij.process.ByteBlitter;
 import ij.process.ByteProcessor;
-import ij.process.ColorBlitter;
 import ij.process.ColorProcessor;
-import ij.process.FloatBlitter;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
-import ij.process.ShortBlitter;
 import ij.process.ShortProcessor;
 import logging.IssueLog;
 import utilityClassesForObjects.RectangleEdges;
 
-/**an implementation of pixel wrapper interface for drawing on imageJ objects
+/**an implementation of pixel wrapper interface for ImageJ images
  *  QuickFigures.  Of the methods below, only a few are crucial for the 
- *  function of Quickfigures in its current form
+ *  function of QuickFigures in its current form
  *  */
 public class ProcessorWrapper implements PixelWrapper {
 	public ImageProcessor object;
@@ -41,7 +35,7 @@ public class ProcessorWrapper implements PixelWrapper {
 	}
 
 
-	/**Inserts this items pixels into the target*/
+	/**Inserts this items pixels into the target
 	public void insertInto(PixelWrapper recipient, int x, int y) {
 		Object ob = recipient.getPixels();
 		if (ob instanceof ImageProcessor) {
@@ -49,7 +43,7 @@ public class ProcessorWrapper implements PixelWrapper {
 		}
 		
 	}
-
+*/
 
 	public ImageProcessor getPixels() {
 		return object;
@@ -176,45 +170,6 @@ public class ProcessorWrapper implements PixelWrapper {
 		if (fill) getProcessor().fill(roi); else roi.drawPixels(getProcessor()) ;
 	}
 	
-public void drawPixelString(String label, Color c,  Font font, int lx, int ly, double angle, boolean antialiasedText ) {
-	 ImageProcessor ip=getPixels();
-	getProcessor().setAntialiasedText(antialiasedText);
-	 getProcessor().setFont(font);
-	 getProcessor().setColor(c);
-if (angle==0||angle==360) {
-	
-	ip.drawString(label, lx, ly+ip.getFont().getSize()); 
-//if (debugmode)	ip.drawRect(lx, ly, sWidth(label), ip.getFont().getSize());
-}else
-	drawRotatedString(label, getProcessor(), c, lx, ly, angle);
-	}
-
-
-public static void drawRotatedString(String st, ImageProcessor ip, Color c, int x, int y, double angle){
-	boolean aboutcenter=false;
-	int swidth=ip.getStringWidth(st);
-	int sheight=ip.getFont().getSize();
-	int ssquare=swidth;
-	if (ssquare<sheight) {ssquare=ip.getFont().getSize();}
-	ssquare+=ip.getFont().getSize();
-	ImageProcessor rotatable=ip.createProcessor(ssquare*2, ssquare*2) ;
-	Color tempBG=Color.white;
-	if (c.equals(Color.white)) {tempBG=Color.black;rotatable.setBackgroundValue(0) ;}
-	rotatable.setColor(tempBG); rotatable.fill(); rotatable.setColor(c);
-	rotatable.setFont(ip.getFont());
-	if (!aboutcenter) rotatable.drawString(st, ssquare, ssquare);
-	if (aboutcenter) rotatable.drawString(st, ssquare-swidth/2, ssquare-sheight/2);
-	//rotatable.setInterpolationMethod(ImageProcessor.BILINEAR);
-	rotatable.rotate(angle);
-	Blitter b1 = null;
-	if (ip instanceof ColorProcessor) b1=new ColorBlitter((ColorProcessor) ip);
-	if (ip instanceof ByteProcessor) b1=new ByteBlitter((ByteProcessor) ip);
-	if (ip instanceof FloatProcessor) b1=new FloatBlitter((FloatProcessor) ip);
-	if (ip instanceof ShortProcessor) b1=new ShortBlitter((ShortProcessor) ip);
-	b1.setTransparentColor(tempBG);
-	if (!aboutcenter) b1.copyBits(rotatable, x-ssquare+sheight, y-ssquare+swidth, Blitter.COPY_TRANSPARENT) ;
-	if (aboutcenter) b1.copyBits(rotatable, x-ssquare+swidth/2+sheight, y-ssquare+sheight/2+swidth, Blitter.COPY_TRANSPARENT) ;
-}
 
 
 

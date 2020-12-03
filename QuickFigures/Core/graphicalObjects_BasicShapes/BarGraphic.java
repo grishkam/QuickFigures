@@ -34,7 +34,7 @@ import utilityClassesForObjects.ScaleInfo;
 import utilityClassesForObjects.ScalededItem;
 import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.AttachmentPosition;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import export.pptx.BarGraphicToOffice;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
@@ -72,10 +72,10 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final double[] reccomendedBarLengths=new double[] {0.5, 1,2,5,10, 20};
+	public static final double[] reccomendedBarLengths=new double[] {0.5, 1,2,5,10, 20, 50, 100};
 	
 	 ScaleInfo info=new ScaleInfo();
-	 {super.setSnapPosition(AttachmentPosition.defaultScaleBar());}
+	 {super.setAttachmentPosition(AttachmentPosition.defaultScaleBar());}
 	 private ScalededItem scaleProvider=null;
 	 
 	 transient Rectangle2D mainBarRect=null;
@@ -118,7 +118,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 			 		barText.setTextColor(getFillColor());
 			 		barText.setLocationType(LOWER_LEFT);
 		 			barText.setLocation(x, y);
-		 			barText.setSnapPosition(AttachmentPosition.defaultExternal());
+		 			barText.setAttachmentPosition(AttachmentPosition.defaultExternal());
 		 			barText.setUserEditable(false);
 		 			snapTextToBar();
 		 			}
@@ -217,7 +217,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		
 		this.setScaleInfo(b.getScaleInfo());
 		this.setScaleProvider(b.getScaleProvider());
-		if (b.getSnapPosition()!=null)this.setSnapPosition(b.getSnapPosition().copy());
+		if (b.getAttachmentPosition()!=null)this.setAttachmentPosition(b.getAttachmentPosition().copy());
 		
 		
 		
@@ -316,7 +316,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	
 
 	@Override
-	public void handleMouseEvent(CanvasMouseEventWrapper me, int handlenum, int button, int clickcount, int type,
+	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
 		if (clickcount<2) return;
 		if(clickcount>2) return;
@@ -366,8 +366,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	
 	
 	public void snapTextToBar() {
-		if (getBarText().getSnapPosition()!=null) {
-			getBarText().getSnapPosition().snapLocatedObjects(getBarText(), this);
+		if (getBarText().getAttachmentPosition()!=null) {
+			getBarText().getAttachmentPosition().snapLocatedObjects(getBarText(), this);
 		}
 	}
 	
@@ -390,7 +390,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		
 		//setUpBarRects();
 		Shape r=this.getShape();
-		 r= cords.getAfflineTransform().createTransformedShape(r);
+		 r= cords.getAffineTransform().createTransformedShape(r);
 		
 		 g.setColor(getFillColor());  
 			g.fill(r);
@@ -633,7 +633,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		this.snapBarText=false;
 		this.setLocation(p2);
 		this.snapBarText=oSnap;
-		this.getSnapPosition().scaleAbout(p, mag);
+		this.getAttachmentPosition().scaleAbout(p, mag);
 	
 	}
 
@@ -850,7 +850,7 @@ class BarSmartHandle extends SmartHandle {
 	}
 	
 	
-	public void handlePress(CanvasMouseEventWrapper l) { 
+	public void handlePress(CanvasMouseEvent l) { 
 		undo=new UndoScaleBarEdit(bar);
 		undoAdded=false;
 		
@@ -864,7 +864,7 @@ class BarSmartHandle extends SmartHandle {
 		}
 	}
 	
-	void addUndo(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	void addUndo(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		if(undo==null) return;
 		undo.establishFinalState();
 		if(!undoAdded) {
@@ -873,7 +873,7 @@ class BarSmartHandle extends SmartHandle {
 		}
 	}
 	
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		if (this.getHandleNumber() ==ROTATION_HANDLE) {
@@ -890,14 +890,14 @@ class BarSmartHandle extends SmartHandle {
 		}
 		
 		if (this.getHandleNumber()==TEXT_LOCATION_HANDLE2) {
-			getBarText().getSnapPosition().setToNearestSnap(getBarText().getBounds(), getBarBounds(), p2 );
+			getBarText().getAttachmentPosition().setToNearestSnap(getBarText().getBounds(), getBarBounds(), p2 );
 			getBarText().setLocation(p2.x, p2.y);
 			
 		}
 		
 		if (isBarThicknessHandle()) {
 			Point2D tipLocation = getOppositeTipLocation();
-			int dir=getSnapPosition().getOffSetPolarities()[0];
+			int dir=getAttachmentPosition().getOffSetPolarities()[0];
 			if(dir>0)tipLocation = getTipLocation();
 			
 			double newthick = tipLocation.distance(p2);
@@ -909,7 +909,7 @@ class BarSmartHandle extends SmartHandle {
 			
 		}
 		if (isBarLengthHandle()) {
-			int dir=getSnapPosition().getOffSetPolarities()[0];
+			int dir=getAttachmentPosition().getOffSetPolarities()[0];
 			double oneUnit=getBarWidthBasedOnUnits()/getLengthInUnits();
 			int change=(int)(this.getCordinateLocation().distance(p2)/oneUnit);
 			if(this.getCordinateLocation().getX()<p2.getX() &&dir<0) change=-change;
@@ -971,7 +971,7 @@ class BarSmartHandle extends SmartHandle {
 	}
 		if (isBarLengthHandle()) {
 			this.setHandleColor(Color.GREEN.darker());
-			int dir=getSnapPosition().getOffSetPolarities()[0];
+			int dir=getAttachmentPosition().getOffSetPolarities()[0];
 			Point2D p = getOppositeTipEndLocation();
 			if(dir<0) {
 				p = getTipLocation();
@@ -987,7 +987,7 @@ class BarSmartHandle extends SmartHandle {
 
 	protected Point2D getBathThicknessHandleLocation() {
 		Point2D location = getBarBounds().getLocation();
-		int dir=getSnapPosition().getOffSetPolarities()[0];
+		int dir=getAttachmentPosition().getOffSetPolarities()[0];
 		if(dir>0) {
 			 if( usesProjections()) {
 					location =new Point2D.Double(location.getX()+getBarStroke(), location.getY()+getProjectionLength());

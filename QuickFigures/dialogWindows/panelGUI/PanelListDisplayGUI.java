@@ -278,7 +278,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			return listChannels.getPanel();
 		}
 		private void editPanelSliceAndFrame(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.originalChanNum,panel.originalSliceNum, panel.originalFrameNum,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSlideNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.show2DimensionDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setFrameNumber(dia.getFrame());
@@ -295,7 +295,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			editPanelFrame(getPrimarySelectedPanel());
 		}
 		private void editPanelSlice(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.originalChanNum,panel.originalSliceNum, panel.originalFrameNum,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSlideNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.showSliceDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setSliceNumber(dia.getSlice());
@@ -304,7 +304,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			updatePanelDisplay();
 		}
 		private void editPanelFrame(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.originalChanNum,panel.originalSliceNum, panel.originalFrameNum,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSlideNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.showFrameDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setFrameNumber(dia.getFrame());

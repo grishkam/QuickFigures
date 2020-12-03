@@ -49,7 +49,7 @@ public class ReverseBasicCordinateConverter extends BasicCoordinateConverter {
 	            return stroke;
 	    }
 	
-	public AffineTransform getAfflineTransform() {
+	public AffineTransform getAffineTransform() {
 		AffineTransform af = AffineTransform.getScaleInstance(1/getMagnification(), 1/getMagnification());
 		//af.translate(-transformX(0), -transformY(0));
 		af.translate(-getX(), -getY()); 

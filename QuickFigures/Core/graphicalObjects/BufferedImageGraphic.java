@@ -278,10 +278,10 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 	public void snapLockedItems() {
 		for(LocatedObject2D o: getLockedItems()) {
 			if(o==null) continue;
-			AttachmentPosition sb = o.getSnapPosition();
+			AttachmentPosition sb = o.getAttachmentPosition();
 			if (sb==null) {
-				o.setSnapPosition(AttachmentPosition.defaultInternal());
-				sb=o.getSnapPosition();
+				o.setAttachmentPosition(AttachmentPosition.defaultInternal());
+				sb=o.getAttachmentPosition();
 				}
 			
 			sb.snapLocatedObjects(o, this);

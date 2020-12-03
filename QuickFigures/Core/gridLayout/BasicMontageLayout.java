@@ -20,7 +20,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
    with rows and columns. Columns, rows and panels are
    indexed from 1 to the total number.
    */
-public class BasicMontageLayout implements MontageSpaces,GridLayout, Serializable, PanelLayout{
+public class BasicMontageLayout implements LayoutSpaces,GridLayout, Serializable, PanelLayout{
 
 	  private transient BasicMetaDataHandler IJMetaDatause=null;
 		public  BasicMetaDataHandler IJMetaDatause() {

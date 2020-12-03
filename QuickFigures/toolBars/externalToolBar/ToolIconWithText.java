@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 
 import graphicalObjects_BasicShapes.TextGraphic;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 
 public class ToolIconWithText extends GraphicToolIcon{
 
@@ -37,7 +37,7 @@ public class ToolIconWithText extends GraphicToolIcon{
 		bl.setHorizontalBorder(2);
 		bl.setVerticalBorder(2);
 		
-		if (place==MontageSpaces.ROW_OF_PANELS) {
+		if (place==LayoutSpaces.ROW_OF_PANELS) {
 			bl.setLayoutBasedOnRect(new Rectangle(arg2+12, arg3+2, 9,9));
 			bl.setCols(1);
 			bl.setRows(2);
@@ -48,7 +48,7 @@ public class ToolIconWithText extends GraphicToolIcon{
 			}
 		}
 		
-		if (place==MontageSpaces.COLUMN_OF_PANELS) {
+		if (place==LayoutSpaces.COLUMN_OF_PANELS) {
 			bl.setLayoutBasedOnRect(new Rectangle(arg2+2, arg3+12, 9,9));
 			bl.setCols(2);
 			bl.setRows(1);
@@ -59,7 +59,7 @@ public class ToolIconWithText extends GraphicToolIcon{
 			}
 		}
 		
-		if (place==MontageSpaces.PANELS) {
+		if (place==LayoutSpaces.PANELS) {
 			bl.setLayoutBasedOnRect(new Rectangle(arg2+2, arg3+2, 20,20));
 			bl.setCols(1);
 			bl.setRows(1);

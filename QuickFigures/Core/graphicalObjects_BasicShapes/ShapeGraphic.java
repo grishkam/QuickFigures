@@ -56,6 +56,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	
 
 
+	
 	private static final int DEFAULT_STROKE_WIDTH = 1;
 
 	/**
@@ -64,7 +65,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	
 	{name="Shape ";}
 	
-	protected static final float[] NEARLY_DASHLESS = new float[]{100000,1};
+	protected static final float[] NEARLY_DASHLESS = new float[]{100000,1}, DASHLESS = new float[]{};
 	protected static final int THICK_STROKE_4 = 4;
 	private static final int DEFAULT_MITER_LIMIT = 8;
 	protected static final Color whiteIcon = new Color(240,240,240),//a nearly but not 100% white that will be used in icons
@@ -91,7 +92,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	boolean filled=true; {setFillColor(TRANSPARENT_FILL);}//starts with transparent fill color
 	
 	protected float strokeWidth=DEFAULT_STROKE_WIDTH;
-	float[] dash=new float[]{};
+	float[] dash=DASHLESS;
 	
 	int end=BasicStroke.CAP_BUTT;
 	int join=BasicStroke.JOIN_ROUND;
@@ -257,10 +258,10 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, isAntialize()?RenderingHints.VALUE_ANTIALIAS_ON: RenderingHints.VALUE_ANTIALIAS_OFF);
 		
 		/**Sets up the shape that will be used to draw*/
-		 Shape r= cords.getAfflineTransform().createTransformedShape(getShape());
+		 Shape r= cords.getAffineTransform().createTransformedShape(getShape());
 		   if (angle!=0) {
 			  r=getRotationTransform().createTransformedShape(getShape());
-			  r= cords.getAfflineTransform().createTransformedShape(r);
+			  r= cords.getAffineTransform().createTransformedShape(r);
 		   }
 		 
 		   /**fills the shape*/
@@ -473,7 +474,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return at.createTransformedShape(getShape());
 	} 
 	
-	public void makeDashLess() {
+	public void makeNearlyDashLess() {
 		setDashes(NEARLY_DASHLESS);
 	}
 	
@@ -488,7 +489,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		out.copyColorsFrom(this);
-		out.makeDashLess();
+		out.makeNearlyDashLess();
 		out.setClosedShape(this.isClosedShape());
 		boolean isTooWhite=isIconTooWhite();
 		if(isTooWhite) {
@@ -551,6 +552,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	/**Called when object is exported to powerpoint*/
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
+		//TODO: determine if any subclasses use a line2d as thier shape and delete the commented part
 		/**if (this.getShape() instanceof Line2D) {
 			Shape shapeStroked = this.getStroke().createStrokedShape(getRotationTransformShape());
 			return BasicShapeGraphic.createFilled(getStrokeColor(), shapeStroked).getObjectMaker();

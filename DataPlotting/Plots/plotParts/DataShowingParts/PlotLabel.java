@@ -60,11 +60,11 @@ public class PlotLabel extends ComplexTextGraphic {
 		{ 
 			Rectangle srect = getLabelLocationOnPlot() .getBounds();
 	
-			getSnapPosition().snapObjectToRectangle(this,srect );
+			getAttachmentPosition().snapObjectToRectangle(this,srect );
 		
 		}
 		else 
-			 getSnapPosition().snapObjectToRectangle(this, snapItem.getPlotLabelLocationShape());;
+			 getAttachmentPosition().snapObjectToRectangle(this, snapItem.getPlotLabelLocationShape());;
 		 snapNeeded=false;
 		 ;
 	}
@@ -113,10 +113,10 @@ public class PlotLabel extends ComplexTextGraphic {
 		if (legend) {}
 			else {
 					if (orientation2==PlotOrientation.BARS_VERTICAL)
-						{setSnapPosition(AttachmentPosition.defaultPlotBottomSide());
+						{setAttachmentPosition(AttachmentPosition.defaultPlotBottomSide());
 						setAngle(Math.PI/4);
 						}
-					else setSnapPosition(AttachmentPosition.defaultPlotSide());
+					else setAttachmentPosition(AttachmentPosition.defaultPlotSide());
 		}
 	}
 	
@@ -124,7 +124,7 @@ public class PlotLabel extends ComplexTextGraphic {
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		if (handlenum==1) {
-			AttachmentPosition s = this.getSnapPosition();
+			AttachmentPosition s = this.getAttachmentPosition();
 			Point2D p = getUpperLeftCornerOfBounds();
 			double dx = p2.getX()-p.getX();
 			double dy = p2.getY()-p.getY();
@@ -161,12 +161,10 @@ public class PlotLabel extends ComplexTextGraphic {
 	
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
-		double h=this.getSnapPosition().getHorizontalOffset();
-		double v=this.getSnapPosition().getVerticalOffset();
+		
 		super.scaleAbout(p, mag);
 		
-		//getSnappingBehaviour().setSnapHOffset( Math.round(h*mag));
-		//getSnappingBehaviour().setSnapVOffset( Math.round(v*mag));
+	
 		this.putIntoSnapPosition();
 		
 	}

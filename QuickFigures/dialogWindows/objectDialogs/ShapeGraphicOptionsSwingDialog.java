@@ -105,7 +105,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 			BooleanInputPanel colsepanel2 = new BooleanInputPanel("Closed?", s.isClosedShape());
 			add("Closed", colsepanel2);
 		}
-		if (s.getSnapPosition()!=null) this.addSnappingBehviourToDialog(s);
+		if (s.getAttachmentPosition()!=null) this.addSnappingBehviourToDialog(s);
 	}
 	
 	protected void setItemsToDiaog() {

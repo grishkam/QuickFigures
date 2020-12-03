@@ -35,21 +35,13 @@ public class FrameGraphic extends RectangularGraphic {
 	public void draw(Graphics2D g, CordinateConverter<?> cords) {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, this.isAntialize()?RenderingHints.VALUE_ANTIALIAS_ON: RenderingHints.VALUE_ANTIALIAS_OFF);
 		
-		 Shape r= cords.getAfflineTransform().createTransformedShape( getInsideFrameRect());
+		
 		 if (filled) {
 				g.setColor(getFillColor()); 
-				Shape r2 = cords.getAfflineTransform().createTransformedShape( this.getRotatedFrame(getBounds()));
+				Shape r2 = cords.getAffineTransform().createTransformedShape( this.getRotatedFrame(getBounds()));
 				g.fill(r2);
 			  }
-		 /**
-		  * 
-		  if (angle!=0) {
-			  double xr = r.getBounds().getCenterX();
-			  double yr= r.getBounds().getCenterY();
-			
-			  r=AffineTransform.getRotateInstance(angle, xr, yr).createTransformedShape( getInsideFrameRect() );
-			   
-		   }*/
+		
 		   
 		   if (this.getStrokeWidth()==0 )return;
 		   g.setColor(getStrokeColor());

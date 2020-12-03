@@ -7,6 +7,7 @@ import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
 import includedToolbars.ObjectToolset1;
 
+/**A Menu item that shows one of several possible toolbars*/
 public class ShowToolBar  extends BasicMenuItemForObj {
 
 	public static final String OBJECT_TOOLS="Object Toolbar", lAYOUT_TOOLS="Layout Tools", ACTION_BAR="Action Tools", SHAPE_AND_TEXT_EDITING_BAR="Shape And Text Edit Actions", MINIMUM_TOOLBAR="Minimum Toolset";
@@ -16,10 +17,10 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 	public static String[] names=new String[] {OBJECT_TOOLS, lAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MINIMUM_TOOLBAR, SIDE_PANEL};
 	
 	
-	int bar=0;
+	int toolBarType=0;
 	
 	public ShowToolBar(int type) {
-		bar=type;
+		toolBarType=type;
 	}
 	
 	@Override
@@ -40,7 +41,7 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 	}
 	
 	String getToolBarName() {
-		return names[bar];
+		return names[toolBarType];
 	}
 	
 

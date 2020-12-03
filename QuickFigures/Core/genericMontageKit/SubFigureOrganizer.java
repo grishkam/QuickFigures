@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import channelMerging.MultiChannelImage;
 
-/**This interface is for all classes that maintain sets of panels and arrange them into figure*/
+/**This interface is for all classes that maintain sets of panels that are updated 
+  with changes to source images*/
 public interface SubFigureOrganizer {
 	
+	/**Returns all the multidimensional images in the subfigure*/
 	public ArrayList<MultiChannelImage> getAllSourceImages();
 
 	public void updatePanelsAndLabelsFromSource();

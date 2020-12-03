@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
-import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.EditManyShapes;
 import actionToolbarItems.EditScaleBars;
 import graphicalObjectHandles.ShapeActionButtonHandleList2.ColoringButton;
 import graphicalObjects.CordinateConverter;
@@ -25,9 +25,9 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 	public ScaleBarActionHandleList(BarGraphic t) {
 	
 		this.theBar=t;
-		EditAndColorizeMultipleItems itemForIcon2 = new EditAndColorizeMultipleItems(false, t.getFillColor());
+		EditManyShapes itemForIcon2 = new EditManyShapes(false, t.getFillColor());
 		itemForIcon2.setModelItem(t);
-		GeneralActionListHandle hf = addOperationList(itemForIcon2, new EditAndColorizeMultipleItems[] {});
+		GeneralActionListHandle hf = addOperationList(itemForIcon2, new EditManyShapes[] {});
 		hf.setAlternativePopup(new ColoringButton(itemForIcon2, 78341));
 			
 		
@@ -37,7 +37,7 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 		addProjectionButton(t);
 		
 		
-		itemForIcon = new EditScaleBars(EditScaleBars.TYPE_WIDTH, 4);
+		itemForIcon = new EditScaleBars(EditScaleBars.TYPE_BAR_THICKNESS_WIDTH, 4);
 		itemForIcon.setModelItem(t);
 		addOperationList(itemForIcon, EditScaleBars.getUnitLengthList(t.getScaleInfo().getUnits()));
 		
@@ -50,7 +50,7 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 
 
 	protected void addProjectionButton(BarGraphic t) {
-		EditScaleBars itemForIcon = new EditScaleBars(EditScaleBars.TYPE_PROJ, 0);
+		EditScaleBars itemForIcon = new EditScaleBars(EditScaleBars.TYPE_CHANGE_PROJECTIONS, 0);
 		itemForIcon.setModelItem(t);
 		addOperationList(itemForIcon, EditScaleBars.getProjectionList());
 	}

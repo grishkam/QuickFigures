@@ -12,7 +12,7 @@ import plasticPanels.FundamentalPanelLayout;
 import plasticPanels.PanelOperations;
 
 /**A layout organized by sequential division of rows and columns. Although this is not the layout of choice
-   As it offers few advanatges*/
+   As it offers few advantages*/
 public class DividedPanelLayout extends FundamentalPanelLayout implements Serializable, PanelLayout  {
 
 	

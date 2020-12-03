@@ -180,9 +180,9 @@ public class SVGsaver {
 
 
 	/**
-	 * @param doc
+	creates a context for the document
 	 */
-	public void createContext(Document doc) {
-		SVGGeneratorContext context = SVGGeneratorContext.createDefault(doc);
+	public SVGGeneratorContext createContext(Document doc) {
+		return SVGGeneratorContext.createDefault(doc);
 	}
 }

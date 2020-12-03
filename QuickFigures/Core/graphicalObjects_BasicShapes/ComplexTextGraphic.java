@@ -56,8 +56,8 @@ public class ComplexTextGraphic extends TextGraphic {
 		output.copyAttributesFrom(this);
 		output.copyBasicTraitsFrom(this);
 		output.backGroundShape=getBackGroundShape().copy();
-		if (getSnapPosition()!=null) output.setSnapPosition(getSnapPosition().copy());
-		else output.setSnapPosition(null);
+		if (getAttachmentPosition()!=null) output.setAttachmentPosition(getAttachmentPosition().copy());
+		else output.setAttachmentPosition(null);
 		
 		return output;
 	}
@@ -587,8 +587,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		TextLineSegment thisSegment = lastSegment;
 		if(cursorSegment!=null)  thisSegment=cursorSegment;
 		TextLine thisLine = getParagraph().getLineWithSegment(thisSegment);//.getLastLine();
-		boolean oneSegmentInline=getParagraph().size()>1&&thisLine.size()==1;
-		boolean noTextInthisSegment= thisSegment.getText().length()==0;
+		
 		int linIndex=this.getParagraph().indexOf(thisLine);
 		
 		if (arg0.getKeyCode()==KeyEvent.VK_UP) {
@@ -784,9 +783,9 @@ public class ComplexTextGraphic extends TextGraphic {
 	public void pasteIntoSelectedRegion() {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();
-		boolean state = isSelectionUnderlined();
+		
 		TextLineSegment selSeq = getAllSelectedSegments().get(0);
-		IssueLog.log("will attempt to copy text");
+		
 		if(selSeq!=null&&TextGraphic.lastCopy!=null) selSeq.setText(lastCopy);
 
 		afterSplitUp();
@@ -812,7 +811,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	public void colorSelectedRegion(Color c) {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();
-		Color state = getAllSelectedSegments().get(0).getTextColor();
+		
 		for(TextLineSegment seg1: this.getAllSelectedSegments()) {
 			seg1.setTextColor(c);
 		}
@@ -921,7 +920,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		}
 		
 		if (segCursor<lastSegment.getText().length()-1&&segCursor>0)  {
-			TextLineSegment[] o = lastLine.splitSegment(lastSegment, segCursor);
+			lastLine.splitSegment(lastSegment, segCursor);
 			
 			cursor++;
 		}

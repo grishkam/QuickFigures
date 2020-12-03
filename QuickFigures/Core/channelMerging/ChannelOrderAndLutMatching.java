@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /**Sometimes, the channel order of different images
   in the same figure will be different
-  Simple code to reorder the channels of several images to match another*/
+  This class contains code to reorder the channels of several images to match one another.
+  Also possible to match the colors and the display ranges of the channel*/
 public class ChannelOrderAndLutMatching {
 
 	public static final int ORDER_ONLY=0;
@@ -100,13 +101,14 @@ public class ChannelOrderAndLutMatching {
 	/**Sets the min max of a single channel. If the String realName is not null
 	  attempt to identify which channel has that name to set the display range of that channel
 	  If the channel is not found, sets the display range of channel number c.
-	  returns the channel number that was actually used */
+	  returns the channel number that was actually used. only channel numbers 1 and above are valid */
 	private int setMinMaxOfParticular(String realName, int min, int max, int c, MultiChannelImage w) {
 		if (realName!=null) {
 			int chanNum = w.getIndexOfChannel(realName);
 		
 			if (chanNum>0&&chanNum<=w.nChannels()) c=chanNum;
 		}
+		
 		if (c>0) {
 			w.setChannelMin(c, min);
 			w.setChannelMax(c, max);

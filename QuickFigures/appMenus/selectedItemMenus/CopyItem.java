@@ -2,13 +2,11 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImage;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import imageMenu.CombineImages;
 
 public class CopyItem extends BasicMultiSelectionOperator {
 	
@@ -53,8 +51,8 @@ public class CopyItem extends BasicMultiSelectionOperator {
 		}
 
 		if (move) {
-			DisplayedImage destination = CombineImages.getChoice("Select where");
-			GraphicLayer l = this.getSelector().getSelectedLayer();
+			//DisplayedImage destination = CombineImages.getChoice("Select where");
+			//GraphicLayer l = this.getSelector().getSelectedLayer();
 		}
 	}
 	

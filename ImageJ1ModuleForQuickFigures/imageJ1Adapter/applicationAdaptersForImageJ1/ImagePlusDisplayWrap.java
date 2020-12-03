@@ -64,7 +64,7 @@ public class ImagePlusDisplayWrap implements MultiChannelDisplayWrapper {
 	}
 
 	@Override
-	public MultiChannelImage getMultiChannelWrapper() {
+	public MultiChannelImage getContainedMultiChannel() {
 		if (imp==null) return null;
 		return new ImagePlusWrapper(imp);
 	}

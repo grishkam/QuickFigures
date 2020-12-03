@@ -76,10 +76,10 @@ public static Icon createBrightnessIcon(int open) {
 		
 		ArrowGraphic z = new ArrowGraphic();
 		z.setPoints(new Point(11,9), new Point(12,9));
-		z.setArrowTipAngle(80);
+		z.getHead().setArrowTipAngle(80);
 		z.setStrokeColor(Color.black);
-		z.setArrowHeadSize(5);
-		z.setArrowStyle(ArrowGraphic.OPEN_HEAD);
+		z.getHead().setArrowHeadSize(5);
+		z.getHead().setArrowStyle(ArrowGraphic.OPEN_HEAD);
 		z.setStrokeWidth(2);
 	//	gg.getTheLayer().add(circleb);
 		gg.getTheLayer().add(z);
@@ -94,7 +94,7 @@ public static Icon createBrightnessIcon(int open) {
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		
-		out.makeDashLess();
+		out.makeNearlyDashLess();
 		g.getTheLayer().add(out);
 		return out;
 	}

@@ -7,14 +7,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
 import javax.swing.undo.AbstractUndoableEdit;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import selectedItemMenus.MenuItemInstall;
 import undo.UndoManagerPlus;
 
 
 /**normal JMenus often would not vanish when i clicked outside of them. this 
  * class is a fix for that. it also has other useful methods*/
-public class SmartJMenu extends JMenu {
+public class SmartJMenu extends JMenu implements SmartMenuItem {
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class SmartJMenu extends JMenu {
 	}
 	PopupCloser closer;
 	private transient UndoManagerPlus undoManager;
-	protected transient CanvasMouseEventWrapper mouseE;
+	protected transient CanvasMouseEvent mouseE;
 	
 	
 	public void setPopupMenuVisible(boolean b) {
@@ -90,8 +90,8 @@ public class SmartJMenu extends JMenu {
 	public void setUndoManager(UndoManagerPlus undoManager) {
 		this.undoManager = undoManager;
 		for(Component e : this.getMenuComponents()) {
-			if (e instanceof SmartJMenu) {
-				((SmartJMenu) e).setUndoManager(getUndoManager());
+			if (e instanceof SmartMenuItem) {
+				((SmartMenuItem) e).setUndoManager(getUndoManager());
 			}
 		}
 	}
@@ -124,12 +124,12 @@ public class SmartJMenu extends JMenu {
 	}
 
 
-	public void setLastMouseEvent(CanvasMouseEventWrapper e) {
+	public void setLastMouseEvent(CanvasMouseEvent e) {
 		this.mouseE=e;
 		
 		for(Component e2 : this.getMenuComponents()) {
-			if (e2 instanceof SmartJMenu) {
-				((SmartJMenu) e2).setLastMouseEvent(e);
+			if (e2 instanceof SmartMenuItem) {
+				((SmartMenuItem) e2).setLastMouseEvent(e);
 			}
 		}
 	}

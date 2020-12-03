@@ -19,7 +19,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import undo.UndoManagerPlus;
@@ -289,12 +289,12 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 		return null;
 	}
 
-	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
 		
 	}
 	
-public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 	
 		
 	}
@@ -307,7 +307,7 @@ public boolean containsClickPoint(Point2D p) {
 }
 
 
-public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+public boolean containsClickPoint(CanvasMouseEvent canvasMouseEventWrapper) {
 	return lastDrawShape.contains(canvasMouseEventWrapper.getClickedXScreen(),canvasMouseEventWrapper. getClickedYScreen());
 }
 
@@ -328,7 +328,7 @@ public boolean containsClickPoint(CanvasMouseEventWrapper canvasMouseEventWrappe
 		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}
 
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		// TODO Auto-generated method stub
 		
 	}

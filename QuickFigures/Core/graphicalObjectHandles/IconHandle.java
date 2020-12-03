@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 
 /**A handle that displays an icon*/
 public class IconHandle extends SmartHandle {
@@ -76,7 +76,7 @@ public class IconHandle extends SmartHandle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public void showPopupMenu(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void showPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
 	}
 
 }

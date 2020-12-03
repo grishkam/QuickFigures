@@ -384,7 +384,7 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 
 			@Override
 			public void paintIcon(Component arg0, Graphics arg1, int arg2, int arg3) {
-				Font font0 = arg1.getFont();
+				
 				if (doesUserSelectColor()) {
 					Paint paint = RainbowPaintProvider.getRaindowGradient(new Point(arg2,  arg3), new Point(arg2+20,  arg3+20) );
 				if (arg1 instanceof Graphics2D) {
@@ -396,7 +396,7 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 				}
 				
 				if(doesDimColor()) {
-					int ind=0;
+					
 					int x=arg2;
 					int y=arg3;
 					int w=20;
@@ -467,7 +467,6 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 				if ((makesSuperScript())) arg1.drawString("b", arg2+14, arg3+10);
 				if ( (makesSubScript()))	arg1.drawString("b", arg2+14, arg3+16);
 				
-				Graphics2D g2d=(Graphics2D) arg1;
 				
 				arg1.setFont(arg1.getFont().deriveFont((float) 14));
 				

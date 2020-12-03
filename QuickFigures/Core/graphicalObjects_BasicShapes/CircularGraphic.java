@@ -7,13 +7,14 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 
 import graphicalObjectHandles.AngleHandle;
 import graphicalObjectHandles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
+/**A graphical object that draws either an ellipse or an Arc
+  within the bounds of a rectangle*/
 public class CircularGraphic extends RectangularGraphic {
 
 	/**
@@ -21,8 +22,10 @@ public class CircularGraphic extends RectangularGraphic {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public int arc=0;
-	boolean isArc() {return arc>0;}
+	public static final int NO_ARC=0, PI_ARC=1, CHORD_ARC=2;
+	
+	public int arc=NO_ARC;
+	boolean isArc() {return arc>NO_ARC;}
 	
 	AngleParameter parameterArcStart=new AngleParameter(this);
 	AngleParameter parameterArcEnd=new AngleParameter(this); {parameterArcEnd.setAngle(Math.PI/2);}
@@ -88,7 +91,7 @@ public class CircularGraphic extends RectangularGraphic {
 		double extent =-parameterArcEnd.inDegrees()+ parameterArcStart.inDegrees();
 		if(extent<0) extent+=360;
 		
-		return new Arc2D.Double(rect1, start, extent, arc==1?Arc2D.PIE: Arc2D.CHORD);
+		return new Arc2D.Double(rect1, start, extent, arc==PI_ARC?Arc2D.PIE: Arc2D.CHORD);
 	}
 	@Override
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {

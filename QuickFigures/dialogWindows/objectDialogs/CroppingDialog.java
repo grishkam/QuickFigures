@@ -74,7 +74,6 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	double mag=1;
 	ImagePanelGraphic image;
 	private double cropAngle=0;
-	private Point2D orilocation;
 	private ArrayList<ZoomableGraphic> extraItems=new ArrayList<ZoomableGraphic>();
 	public boolean hideRotateHandle;
 	private MultiChannelImage multiChannelSource;
@@ -295,7 +294,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		Point2D drag=panel.getCord().transformME(arg0);
+		Point2D drag=panel.getCord().unTransformClickPoint(arg0);
 		RectangularGraphic rect2 = rect.copy();
 		
 		
@@ -428,11 +427,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-	press = panel.getCord().transformME(arg0);
+	press = panel.getCord().unTransformClickPoint(arg0);
 		handle=rect.handleNumber(arg0.getX(), arg0.getY());
-		orilocation=rect.getLocation();
 		
-	//	IssueLog.log("mouse press "+handle);
+
 	}
 
 	@Override

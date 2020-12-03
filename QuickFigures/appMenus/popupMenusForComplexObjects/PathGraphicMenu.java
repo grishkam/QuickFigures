@@ -198,7 +198,7 @@ PopupMenuSupplier  {
 		
 		if (com.equals(addNormIndicators)) {
 			ArrayList<Point2D[]> vectors = pathForMenuG.getPoints().getTangentVectors();//.getDiffVectors();
-			Point2D[] m = pathForMenuG.getPoints().getMidpionts(0.5);
+			 pathForMenuG.getPoints().getMidpionts(0.5);
 			for(int it=0; it<vectors.size(); it++) {
 				PathGraphic pt = PathGraphic.blackLine(vectors.get(it));pt.setStrokeWidth(2);
 	

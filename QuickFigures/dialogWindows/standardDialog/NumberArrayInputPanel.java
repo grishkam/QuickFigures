@@ -58,7 +58,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 	public void setNumber(int index, Double value) {
 		if (numbers==null) return;
 		while(index>=numbers.size()) addFieldAndNumber(0);
-		if (value!=null)numbers.set(index, new Double(value)); else numbers.set(index, null);
+		if (value!=null)numbers.set(index, value); else numbers.set(index, null);
 		if (value!=null)fields.get(index).setNumber(value);
 		else fields.get(index).setText("");
 	}
@@ -84,7 +84,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 			else fields.get(i).setText("");
 		
 			
-			if (i<f.length)  numbersOriginal.set(i, new Double(f[i]));
+			if (i<f.length)  numbersOriginal.set(i, (double)f[i]);
 			else numbersOriginal.set(i,null);
 		}
 	}

@@ -25,7 +25,7 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	 */
 	private static final long serialVersionUID = 1L;
 	protected transient ArrayList<ZoomableGraphic> array;//a list of selected items
-	protected transient LayerSelector selector;//the layer selector object that determines which items are selecred
+	public transient LayerSelector selector;//the layer selector object that determines which items are selecred
 
 	/**Sets the list of all the items*/
 	@Override

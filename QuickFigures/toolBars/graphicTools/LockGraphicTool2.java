@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.ImageWrapper;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -74,7 +74,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 			super.onRelease(gmp, roi2);
 			lockTaker=getLockContainterForObject(inside, getPotentialLockAcceptors(gmp));
 			if (lockTaker!=null){
-				inside.getSnapPosition().setToNearestSnap(inside.getBounds(), lockTaker.getBounds(), this.getDragPoint() );
+				inside.getAttachmentPosition().setToNearestSnap(inside.getBounds(), lockTaker.getBounds(), this.getDragPoint() );
 			}
 		}
 		
@@ -106,14 +106,14 @@ public class LockGraphicTool2 extends LockGraphicTool {
 				adjustPosition(dragx, dragy, lockTaker, inside);
 				
 			} else 
-				inside.getSnapPosition().setToNearestSnap(inside.getBounds(), lockbounds, this.getDragPoint() );
+				inside.getAttachmentPosition().setToNearestSnap(inside.getBounds(), lockbounds, this.getDragPoint() );
 			
 			undosnap.establishFinalState();
 			
 			if (this.shiftDown()) {
 				for(LocatedObject2D roi1: rois) {
 					UndoSnappingChange undo0 = new UndoSnappingChange(roi1);
-					roi1.setSnapPosition(inside.getSnapPosition().copy());
+					roi1.setAttachmentPosition(inside.getAttachmentPosition().copy());
 					undo0.establishFinalState();
 					undoer.addEditToList(undo0);
 				}
@@ -147,7 +147,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 
 
 	public static void adjustPosition(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
-		AttachmentPosition s = inside.getSnapPosition();
+		AttachmentPosition s = inside.getAttachmentPosition();
 		
 		
 		int[] poles = s.getOffSetPolarities();
@@ -170,7 +170,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 	}
 	
 	public static void adjustPositionForBar(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
-		AttachmentPosition s = inside.getSnapPosition();
+		AttachmentPosition s = inside.getAttachmentPosition();
 		
 		
 		int[] poles = s.getOffSetPolarities();
@@ -226,7 +226,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		return null;
 	}
 	
-	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEventWrapper e, SmartHandle sh ) {}
+	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {}
 	
 	
 	

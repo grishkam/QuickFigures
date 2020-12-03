@@ -93,7 +93,7 @@ public class PanelList implements Serializable{
 	public PanelListElement getChannelPanelFor(int channel, int slice, int frame) {
 		for(PanelListElement p: this.getPanels()) {
 			if (p==null) continue;
-			if (p.originalChanNum==channel&&p.originalFrameNum==frame&&p.originalSliceNum==slice&&p.designation+0!=PanelListElement.MERGE_IMAGE_PANEL+0) return p;
+			if (p.targetChannelNumber==channel&&p.targetFrameNumber==frame&&p.targetSlideNumber==slice&&p.designation+0!=PanelListElement.MERGE_IMAGE_PANEL+0) return p;
 		}
 		return null;
 	}
@@ -102,7 +102,7 @@ public class PanelList implements Serializable{
 	public PanelListElement getMergePanelFor(int slice, int frame) {
 		for(PanelListElement p: this.getPanels()) {
 			if (p==null) continue;
-			if (p.originalFrameNum==frame&&p.originalSliceNum==slice&&p.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) return p;
+			if (p.targetFrameNumber==frame&&p.targetSlideNumber==slice&&p.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) return p;
 		}
 		return null;
 	}
@@ -424,10 +424,10 @@ public class PanelList implements Serializable{
 		//ImagePlusWrapper impw = new ImagePlusWrapper(imp);
 		
 		if (entry.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) {
-			this.setUpChannelEntryForMerge(impw, entry, entry.originalFrameNum, entry.originalSliceNum);
+			this.setUpChannelEntryForMerge(impw, entry, entry.targetFrameNumber, entry.targetSlideNumber);
 		}
 		else {
-			setUpChannelEntriesForPanel(impw, entry, entry.originalChanNum, entry.originalFrameNum, entry.originalSliceNum);
+			setUpChannelEntriesForPanel(impw, entry, entry.targetChannelNumber, entry.targetFrameNumber, entry.targetSlideNumber);
 			
 		}
 		entry.purgeDuplicateChannelEntries();
@@ -463,9 +463,9 @@ public class PanelList implements Serializable{
 		
 	}
 	
-
+	/**sets up the properties and fields for the split channel panel's channel entries. called when entries are
+	  created or updated*/
 	public void setUpChannelEntriesForPanel(MultiChannelImage impw, PanelListElement entry, int channel, int frame, int slice) {
-		// MultiChannelWrapper impw=new ImagePlusWrapper(imp);
 		
 		entry.getChannelEntries().clear();
 		entry.originalIndices.clear();
@@ -479,18 +479,17 @@ public class PanelList implements Serializable{
 		
 		if (impw.containsSplitedChannels()) {	
 			
-			entry.addChannelEntry(impw.getSliceChannelEntry(channel, slice, frame));
-			
-			int eachMergeChannel = this.getChannelUseInstructions().eachMergeChannel;
-			
-			if (eachMergeChannel>0 && eachMergeChannel<=impw.nChannels()) {		
-				entry.addChannelEntry(impw.getSliceChannelEntry(eachMergeChannel, slice, frame));
-			} 
+				entry.addChannelEntry(impw.getSliceChannelEntry(channel, slice, frame));
+				
+				/**if a second channel is not be added to the panel*/
+				int eachMergeChannel = this.getChannelUseInstructions().eachMergeChannel;
+				if (eachMergeChannel>ChannelUseInstructions.NONE_SELECTED && eachMergeChannel<=impw.nChannels()) {		
+					entry.addChannelEntry(impw.getSliceChannelEntry(eachMergeChannel, slice, frame));
+				} 
 			
 		} else {
-			//entry.originalIndex=imp.getStackIndex(channel, slice, frame);
-			//String title=imp.getStack().getSliceLabel(entry.originalIndex);
-			entry.addChannelDescriptor(title, Color.BLACK, channel, entry.originalIndex);	
+			/**if the target image channels are not truly split*/
+			entry.addChannelDescriptor(title, Color.BLACK, channel, entry.innitialStackIndex);	
 		}
 	}
 	
@@ -572,10 +571,10 @@ public class PanelList implements Serializable{
 		entry.designation=2;
 		entry.originalImageName=impw.getTitle();
 		entry.originalImageID=impw.getID();
-		entry.originalChanNum=1;//not truly relevant as all the channels are included but the number must be set
-		entry.originalIndex=impw.getStackIndex(1, slice, frame);
-		entry.originalFrameNum=frame;
-		entry.originalSliceNum=slice;
+		entry.targetChannelNumber=1;//not truly relevant as all the channels are included but the number must be set
+		entry.innitialStackIndex=impw.getStackIndex(1, slice, frame);
+		entry.targetFrameNumber=frame;
+		entry.targetSlideNumber=slice;
 		
 		
 		
@@ -599,7 +598,7 @@ public class PanelList implements Serializable{
 		// MultiChannelWrapper impw=new ImageTypeWrapper(imp);
 		entry.setChannelFrameSlice(channel, frame, slice);
 		entry.setSourceImage(impw);
-		entry.originalIndex=impw.getStackIndex(channel, slice, frame);
+		entry.innitialStackIndex=impw.getStackIndex(channel, slice, frame);
 		
 		setUpChannelEntriesForPanel(impw, entry, channel, frame, slice);
 	
@@ -719,9 +718,9 @@ public class PanelList implements Serializable{
 	public 	ArrayList<PanelListElement> getPanelsWith(CSFLocation c) {
 		ArrayList<PanelListElement> output = new ArrayList<PanelListElement>();
 		for(PanelListElement p:panels) {
-			if(c.channel>-1 &&p.originalChanNum!=c.channel) continue;
-			if(c.frame>-1 &&p.originalFrameNum!=c.frame) continue;
-			if(c.slice>-1 &&p.originalSliceNum!=c.slice) continue;
+			if(c.channel>-1 &&p.targetChannelNumber!=c.channel) continue;
+			if(c.frame>-1 &&p.targetFrameNumber!=c.frame) continue;
+			if(c.slice>-1 &&p.targetSlideNumber!=c.slice) continue;
 			output.add(p);
 		}
 		return output;
@@ -764,23 +763,23 @@ public class PanelList implements Serializable{
 	public static ChannelEntry findEquivalent(ChannelEntry ce, ArrayList<ChannelEntry>  list) {
 		for(ChannelEntry chan: list) {
 			if(ce.getOriginalChannelIndex()==chan.getOriginalChannelIndex()) return chan;
-			//if (ce.getRealChannelName().equals(chan.getRealChannelName())) return chan;
 		}
 		
 		return null;
 	}
 	
 	
-	/**A comparator for sorting the panel lists*/
+	/**A comparator for sorting the panel lists. takes into account the channel
+	  order from the channel use instructions*/
 	class PanelCompare implements Comparator<PanelListElement>  {
 
 		@Override
 		public int compare(PanelListElement o1, PanelListElement o2) {
 			try {
-				if (o1.originalFrameNum>o2.originalFrameNum) return 1;
-				if (o2.originalFrameNum>o1.originalFrameNum) return -1;
-				if (o1.originalSliceNum>o2.originalSliceNum) return 1;
-				if (o2.originalSliceNum>o1.originalSliceNum) return -1;
+				if (o1.targetFrameNumber>o2.targetFrameNumber) return 1;
+				if (o2.targetFrameNumber>o1.targetFrameNumber) return -1;
+				if (o1.targetSlideNumber>o2.targetSlideNumber) return 1;
+				if (o2.targetSlideNumber>o1.targetSlideNumber) return -1;
 				/**proceeds beyond this point only if the slice and frame are equal*/
 				
 				if (instructions.mergePanelFirst() &&o1.isTheMerge()&&!o2.isTheMerge())  {
@@ -798,8 +797,8 @@ public class PanelList implements Serializable{
 				}
 				
 				/**proceeds beyond this point only if neither item is a merge panel*/
-				int c1 = instructions.getChanPanelReorder().index(o1.originalChanNum);
-				int c2 = instructions.getChanPanelReorder().index(o2.originalChanNum);
+				int c1 = instructions.getChanPanelReorder().index(o1.targetChannelNumber);
+				int c2 = instructions.getChanPanelReorder().index(o2.targetChannelNumber);
 				if (c1>c2) return 1;
 				if (c2>c1) return -1;
 			} catch (Exception e) {
@@ -813,7 +812,7 @@ public class PanelList implements Serializable{
 
 	/**Called after the user changes the z section that the user is */
 	public void setupViewLocation(CSFLocation d) {
-		d.channel=0;//allows for merge
+		d.channel=CSFLocation.MERGE_SELECTED;//allows for merge
 		if(this.getChannelUseInstructions().getFrameUseInstructions().selectsSingle()) getChannelUseInstructions().getFrameUseInstructions().setupLocation(d);
 		if(this.getChannelUseInstructions().getSliceUseInstructions().selectsSingle()) getChannelUseInstructions().getSliceUseInstructions().setupLocation(d);
 	}

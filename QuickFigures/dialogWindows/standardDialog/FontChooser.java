@@ -41,8 +41,8 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 	public static String[] fontStyles= {"Plain", "Bold", "Italic", "Bold+Italic"}; 
 	
 	JLabel label=new JLabel("Font ");
-	JComboBox styleChooser=generateStyleCombo();
-	JComboBox famChooser=generateFamilyCombo();
+	JComboBox<?> styleChooser=generateStyleCombo();
+	JComboBox<?> famChooser=generateFamilyCombo();
 	NumericTextField sizeField=new NumericTextField(12); {sizeField.addKeyListener(this);}
 	FontSizeSelector fontdisplay=new FontSizeSelector();
 	private String key;
@@ -129,8 +129,8 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 	
 	
 	
-	public JComboBox generateStyleCombo() {
-		JComboBox output=new JComboBox(fontStyles);
+	public JComboBox<?> generateStyleCombo() {
+		JComboBox<?> output=new JComboBox<String>(fontStyles);
 		output.addItemListener(this);
 		output.setRenderer(new styleCellRenerer());
 		return output;
@@ -149,7 +149,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 		return  font;
 	}
 	
-	public JComboBox getFamChoser() {
+	public JComboBox<?> getFamChoser() {
 		return famChooser;
 	}
 	
@@ -256,7 +256,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public  Component	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		
 			Font font=new Font(value.toString(), out.getFont().getStyle(), out.getFont().getSize());
@@ -270,7 +270,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public  Component	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		
 			Font font=new Font(out.getFont().getFamily(), index, out.getFont().getSize());

@@ -15,14 +15,14 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.LockedItemMenu;
 import utilityClassesForObjects.LocatedObject2D;
 
-public class PlotLayout extends MontageLayoutGraphic implements MontageSpaces{
+public class PlotLayout extends MontageLayoutGraphic implements LayoutSpaces{
 
 	private BasicPlot plotArea;
 

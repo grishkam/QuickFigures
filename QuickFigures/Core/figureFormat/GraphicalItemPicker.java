@@ -2,13 +2,21 @@ package figureFormat;
 
 import java.util.ArrayList;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import utilityClassesForObjects.ObjectContainer;
 
-/***/
-public class GraphicalItemPicker<ItemType extends BasicGraphicalObject> extends ItemPicker<ItemType> {
+/**Class contains methods for 3 purposes.
+1) Identify items that belong to a certain category
+2) store and example item of the given category with traits exemplary of a desired format
+3) Apply the traits that are characteristic of that format to all of the item
+
+This subclass of (@see ItemPicker) slects objects of class BasicGraphicalObject
+*/
+public abstract class GraphicalItemPicker<ItemType extends BasicGraphicalObject> extends ItemPicker<ItemType> {
 
 	/**
 	  
@@ -18,15 +26,16 @@ public class GraphicalItemPicker<ItemType extends BasicGraphicalObject> extends 
 	
 	public GraphicalItemPicker(ItemType model) {
 		super(model);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**subclasses overwrite this*/
 	@Override
 	boolean isDesirableItem(Object o) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
+	/**Searches the array for desirable objects.
+	 * returns the list of desired items as an array of basic graphical objects*/
 	public ArrayList<BasicGraphicalObject> getDesiredItemsAsGraphicals(ArrayList<?> input) {
 		ArrayList<BasicGraphicalObject> output = new ArrayList<BasicGraphicalObject>();
 		for(Object ob:input) {
@@ -39,31 +48,37 @@ public class GraphicalItemPicker<ItemType extends BasicGraphicalObject> extends 
 		
 		return output;
 	}
-	
+	/**Searches the object container for desirable objects.
+	 * returns the list of desired items as an array of basic graphical objects*/
 	public ArrayList<BasicGraphicalObject> getDesiredItemsAsGraphicals(ObjectContainer oc ) {
 		return getDesiredItemsAsGraphicals(oc.getLocatedObjects());
 	}
-	
+	/**Searches the layer for desirable objects.
+	 * returns the list of desired items as an array of basic graphical objects*/
 	public ArrayList<BasicGraphicalObject> getDesiredItemsAsGraphicals(GraphicLayer oc ) {
 		return getDesiredItemsAsGraphicals(oc.getAllGraphics());
 	}
 
 	@Override
 	public String getOptionName() {
-		// TODO Auto-generated method stub
 		return optionname;
 	}
 
+	/**Will Apply the traits of the desired format to the given object
+	 * @return */
 	@Override
-	public void applyProperties(Object item) {
-		// TODO Auto-generated method stub
-		
+	public AbstractUndoableEdit applyProperties(Object item) {
+		return null;
 	}
 	
+	/**returns true if the dialog should show this object itself in a combo box or popup menu.
+	  if false, will just show the objects name*/
 	boolean displayGraphicChooser() {
 		return true;
 	}
 	
+	/**When given a display layer for a multidimensional image, changes the format of this object
+	  to better fit the image*/
 	public void setToStandardFor(MultichannelDisplayLayer wrap) {
 		
 	}

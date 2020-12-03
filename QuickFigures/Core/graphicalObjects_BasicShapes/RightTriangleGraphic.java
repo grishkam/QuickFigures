@@ -10,7 +10,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
@@ -19,6 +19,7 @@ import illustratorScripts.PathItemRef;
 import utilityClassesForObjects.RectangleEdgePosisions;
 import utilityClassesForObjects.RectangleEdges;
 
+/**A Right triangle shape. user can flip the triangle by dragging a handle*/
 public class RightTriangleGraphic extends RectangularGraphic implements RectangleEdgePosisions{
 	
 
@@ -27,26 +28,12 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 	/**
 	 * 
 	 */
-	private int type;
+	/**The location of the right angle relative to the bounding box*/
+	private int type=UPPER_LEFT;
 	
 	private static final long serialVersionUID = 1L;
 	
-	
-	public static RightTriangleGraphic blankShape(Rectangle r, Color c) {
-		RightTriangleGraphic r1 = new RightTriangleGraphic(r);
-		
-		r1.setDashes(NEARLY_DASHLESS);
-		r1.setStrokeWidth(THICK_STROKE_4);
-		r1.setStrokeColor(c);
-		return r1;
-	}
-	
-	
-
-	public RightTriangleGraphic copy() {
-		return new RightTriangleGraphic(this);
-	}
-	
+	/**creates a right triangle graphic with the given bounds*/
 	public RightTriangleGraphic(Rectangle rectangle) {
 		super(rectangle);
 	}
@@ -55,13 +42,17 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		super(r);
 	}
 
-	/**implements a formular to produce a regular polygon with a certain number of vertices*/
+	public RightTriangleGraphic copy() {
+		return new RightTriangleGraphic(this);
+	}
+
+	/**Creates the shape of a right triangle*/
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
 		
 	
-		ArrayList<Point2D> loc = getLocations();
+		ArrayList<Point2D> loc = getTrianglePoints();
 		path.moveTo(loc.get(0).getX(),loc.get(0).getY());
 		path.lineTo(loc.get(1).getX(),loc.get(1).getY());
 		path.lineTo(loc.get(2).getX(),loc.get(2).getY());
@@ -73,7 +64,8 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		
 	}
 	
-	ArrayList<Point2D> getLocations() {
+	/**returns the points of the triangle.*/
+	ArrayList<Point2D> getTrianglePoints() {
 		ArrayList<Point2D> output=new ArrayList<Point2D>();
 		
 		if(getType()==UPPER_LEFT) {
@@ -82,12 +74,13 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 			output.add(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, getRectangle()));
 			
 		} else 
-		if(getType()==UPPER_RIGHT) {
-			output.add(RectangleEdges.getLocation(RectangleEdges.UPPER_RIGHT, getRectangle()));
-			output.add(RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, getRectangle()));
-			output.add(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, getRectangle()));
+			if(getType()==UPPER_RIGHT) {
+				output.add(RectangleEdges.getLocation(RectangleEdges.UPPER_RIGHT, getRectangle()));
+				output.add(RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, getRectangle()));
+				output.add(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, getRectangle()));
 			
-		} else if(getType()==LOWER_RIGHT) {
+		} else 
+			if(getType()==LOWER_RIGHT) {
 			output.add(RectangleEdges.getLocation(RectangleEdges.UPPER_RIGHT, getRectangle()));
 			output.add(RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, getRectangle()));
 			output.add(RectangleEdges.getLocation(RectangleEdges.LOWER_LEFT, getRectangle()));
@@ -153,6 +146,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		return list;
 	}
 	
+	/**a handle that lets the user easily change the triangle orientation*/
 	public class RigthAngleHandle extends SmartHandle {
 
 		/**
@@ -176,13 +170,15 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 			return p;
 		}
 		
-		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+		/**changes which point along the bounding box is the location of the right angle.*/
+		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 			Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 			triangle.performRotationCorrection(p2);;
 			int e = RectangleEdges.getNearestEdgeFromList(triangle.getRectangle(), new int[] {UPPER_RIGHT, LOWER_LEFT, UPPER_LEFT, LOWER_RIGHT}, p2);
 			triangle.setType(e);
 		}
 		
+		/**Draws the handle and the lines to denote the right angle*/
 		@Override
 		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 			graphics.setStroke(new BasicStroke(1));
@@ -200,5 +196,15 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 
 	}
 	
+	public static RightTriangleGraphic blankShape(Rectangle r, Color c) {
+		RightTriangleGraphic r1 = new RightTriangleGraphic(r);
+		
+		r1.setStrokeWidth(THICK_STROKE_4);
+		r1.setStrokeColor(c);
+		return r1;
+	}
+	
+	
+
 	
 }

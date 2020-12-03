@@ -14,10 +14,10 @@ import javax.swing.JPanel;
 public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();
-	JComboBox box=new JComboBox();
+	JComboBox<? extends Object> box=new JComboBox<String>();
 	boolean omitLabel=false;
 	
-	public JComboBox getBox() {return box;}
+	public JComboBox<? extends Object> getBox() {return box;}
 	ArrayList<ChoiceInputListener> listeners=new ArrayList<ChoiceInputListener>();
 	private String key;
 	public int originalStatus;
@@ -29,17 +29,19 @@ public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
 	
 	
 	public ComboBoxPanel(String labeln, String[] choices, int startingindex) {
+		JComboBox<String> box2 = new JComboBox<String>();
+		box=box2;
 		label.setText(labeln);
 		for(String c: choices) {
-			box.addItem(c);
+			box2.addItem(c);
 		}
-		if (startingindex>=box.getItemCount()) startingindex=0;
-		box.setSelectedIndex(startingindex);
-		{box.addItemListener(this);}
+		if (startingindex>=box2.getItemCount()) startingindex=0;
+		box2.setSelectedIndex(startingindex);
+		{box2.addItemListener(this);}
 		this.originalStatus=startingindex;
 	}
 	
-	public ComboBoxPanel(String labeln, JComboBox box) {
+	public ComboBoxPanel(String labeln, JComboBox<? extends Object> box) {
 		label.setText(labeln);
 		
 		this.box=box;

@@ -166,12 +166,14 @@ public class TextLineSegment implements  Serializable {
 		return output;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Font deriveUnderlinedFont(Font f) {
 		Map attributes = f.getAttributes();
 		attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		return f.deriveFont( attributes);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Font deriveStrikedFont(Font f) {
 		Map attributes = f.getAttributes();
 		attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);

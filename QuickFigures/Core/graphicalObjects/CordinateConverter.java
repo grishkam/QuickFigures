@@ -12,10 +12,10 @@ public interface CordinateConverter<ImageType> {
 	 double transformY(double oy);
 	 Point2D transformP(Point2D op);
 	double getMagnification();
-	public AffineTransform getAfflineTransform();
+	public AffineTransform getAffineTransform();
 	Font getScaledFont(Font font) ;
 	BasicStroke getScaledStroke(BasicStroke bs) ;
-	Point2D[] transformPoints(Point2D[] upperLeftCornerOfBounds);
+	
 	double unTransformX(double ox);
 	double unTransformY(double oy);
 	Point2D unTransformP(Point2D op);

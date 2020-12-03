@@ -22,19 +22,19 @@ import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
 import standardDialog.ColorListChoice;
 
-/**A menu that is used to pick colors*/
+/**A menu that is used to pick colors. Color rectangles appear in the menu instead of normal menu items*/
 public class ColorJMenu extends SmartPopupJMenu implements ColorListChoice,  MouseListener, ListSelectionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	ArrayList<Color> colors=new ArrayList<Color>(); 
-int i=0;
+	int i=0;
 
 	
 	ArrayList<ColorInputListener> listens=new ArrayList<ColorInputListener> ();
-	JList thelist;//'//=createJList();
-	private int rainbowIndex=1000;
+	JList<?> thelist;
+	private int rainbowIndex=1000;//the index at which a special menu item that is drawn as a rainbow will appear
 	
 	
 	public ColorJMenu(Color[] standard) {
@@ -79,31 +79,28 @@ int i=0;
 	
 	
 
-	public JList createJList() {
+	public JList<?> createJList() {
 		
 		Vector<Color> x = new Vector<Color> ();
 		x.addAll(colors);
-		JList out = new JList(x);
+		JList<?> out = new JList<Color>(x);
 
 		out.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		ColorCellRenderer cc = ColorCellRenderer.getPalleteRenderer(this);
-		//out.setVisibleRowCount(3);
+		
 		out.setCellRenderer(cc);
 		
 		int rows=out.getVisibleRowCount();
 		int cols=1;
 		if (rows>x.size()) rows=x.size();
-		int maxRow=20;//affects of changing the numbers here were not evaluated
+		int maxRow=20;
 		if (rows>maxRow) {
 			
 			cols=rows/maxRow;
 			rows=maxRow;
 		}
 		
-		//set preffered size was concocted by trail and error. does not follow any logic
-		int sizewid=(int) ( (cc.getPreferredSize().width+3)*x.size());
-		//out.setPreferredSize(new Dimension( sizewid, cc.getPreferredSize().height*rows));
-	
+		
 		
 		out.setFixedCellWidth((cc.getPreferredSize().width+20)*cols);
 		
@@ -116,8 +113,7 @@ int i=0;
 	
 	
 	public static void main(String[] args) {
-		Color[] testLutColors=new Color[] {Color.red, Color.GREEN, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.white, Color.black,Color.red, Color.GREEN, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.white, Color.black,Color.red, Color.GREEN, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.white, Color.black,Color.red, Color.GREEN, Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.white, Color.black};
-
+		
 		JFrame ff = new JFrame("frame");
 		ff.setLayout(new FlowLayout());
 		JButton button = new JButton("button");
@@ -211,7 +207,6 @@ int i=0;
 
 		@Override
 		public int getRainbow() {
-			// TODO Auto-generated method stub
 			return rainbowIndex;
 		}
 }

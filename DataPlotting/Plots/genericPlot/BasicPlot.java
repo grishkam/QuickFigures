@@ -25,7 +25,7 @@ import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.GridLayoutEditEvent;
 import gridLayout.GridLayoutEditListener;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.AxisLabel;
@@ -61,7 +61,7 @@ import utilityClassesForObjects.TextParagraph;
 
 /**A class for organizing parts of a plot.
    Has methods to produce a layout, and a pair of axes*/
-public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  GridLayoutEditListener , MontageSpaces, SeriesLabelPositionAnchor {
+public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  GridLayoutEditListener , LayoutSpaces, SeriesLabelPositionAnchor {
 
 	/**
 	 * 
@@ -282,7 +282,7 @@ public void removeItemFromLayer(ZoomableGraphic z) {
 public void addTitleLabel() {
 	if (this.hasItem(titleLabel)) this.remove(plotLayout);
 	titleLabel=new PlotLabel("Plot Title", this);
-	titleLabel.setSnapPosition(AttachmentPosition.defaultPlotTitle());
+	titleLabel.setAttachmentPosition(AttachmentPosition.defaultPlotTitle());
 	this.add(titleLabel);
 	titleLabel.getParagraph().get(0).get(0).setText("Plot Title");
 	areaRect.addLockedItem(titleLabel);
@@ -300,9 +300,9 @@ public void addYAxiLabel() {
 	yLabel.getParagraph().get(0).get(0).setText("Y Axis ");
 	areaRect.addLockedItem(yLabel);
 	
-	yLabel.setSnapPosition(AttachmentPosition.defaultRowLabel());
+	yLabel.setAttachmentPosition(AttachmentPosition.defaultRowLabel());
 	yLabel.setAngle(Math.PI/2);
-	yLabel.getSnapPosition().setHorizontalOffset((int) (25+yAxis.getTicLength()));
+	yLabel.getAttachmentPosition().setHorizontalOffset((int) (25+yAxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel.putIntoSnapPosition();
 	
@@ -320,9 +320,9 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	
 	AttachmentPosition sn = AttachmentPosition.defaultRowLabel();
 	sn.setLocationTypeExternal(RectangleEdges.RIGHT_SIDE_MIDDLE);
-	yLabel2.setSnapPosition(sn);
+	yLabel2.setAttachmentPosition(sn);
 	yLabel2.setAngle(Math.PI/2);
-	yLabel2.getSnapPosition().setHorizontalOffset((int) (25+this.alternateYaxis.getTicLength()));
+	yLabel2.getAttachmentPosition().setHorizontalOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel2.putIntoSnapPosition();
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
@@ -333,9 +333,9 @@ return new UndoAddItem(this, yLabel2);
 public void addXAxiLabel(int offset) {
 	if (this.hasItem(xLabel)) this.remove(xLabel);
 	xLabel=new  AxisLabel("X-Axis Label", this);
-	xLabel.setSnapPosition(AttachmentPosition.defaultRowLabel());
-	xLabel.getSnapPosition().setLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
-	xLabel.getSnapPosition().setVerticalOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
+	xLabel.setAttachmentPosition(AttachmentPosition.defaultRowLabel());
+	xLabel.getAttachmentPosition().setLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
+	xLabel.getAttachmentPosition().setVerticalOffset((int) (offset+xAxis.getTicLength()+xAxis.getLabelText().getFont().getSize()));
 	this.add(xLabel);
 	xLabel.getParagraph().get(0).get(0).setText("X Axis ");
 	areaRect.addLockedItem(xLabel);
@@ -353,15 +353,15 @@ public void moxAxisLabelOutOfWay() {
 
 	if (bb.contains(xLabel.getBounds())) {
 		double m = bb.getMaxY()-xLabel.getBounds().getMinY();
-		double oldOff = xLabel.getSnapPosition().getVerticalOffset();
-		xLabel.getSnapPosition().setVerticalOffset(m+oldOff);
+		double oldOff = xLabel.getAttachmentPosition().getVerticalOffset();
+		xLabel.getAttachmentPosition().setVerticalOffset(m+oldOff);
 		//new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
 	}
 	
 	if (bb.contains(yLabel.getBounds())) {
 		double m = bb.getMinX()-yLabel.getBounds().getMaxX();
-		double oldOff = xLabel.getSnapPosition().getHorizontalOffset();
-		yLabel.getSnapPosition().setHorizontalOffset(m+oldOff);
+		double oldOff = xLabel.getAttachmentPosition().getHorizontalOffset();
+		yLabel.getAttachmentPosition().setHorizontalOffset(m+oldOff);
 		//new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 	}
 }
@@ -892,7 +892,7 @@ public void createFigureLegends() {
 protected void giveConsistentStanppingToLabelGroup(ArrayList<PlotLabel> labels) {
 	PlotLabel lab1 = labels.get(0);
 	for(PlotLabel l: labels) {
-		l.setSnapPosition(lab1.getSnapPosition());
+		l.setAttachmentPosition(lab1.getAttachmentPosition());
 	}
 }
 
@@ -907,7 +907,7 @@ private void addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
 	
 	SeriesLabel l = aaa.getSeriesLabel();
 			l.setSnapTo(aaa.getLegandShape());
-			l.setSnapPosition(AttachmentPosition.defaultPlotLegand());
+			l.setAttachmentPosition(AttachmentPosition.defaultPlotLegand());
 			l.setAngle(0);
 			l.putIntoSnapPosition();
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
@@ -951,14 +951,14 @@ protected void flipPlotOrientation() {
 	if (null!=xLabel||null!=yLabel) {
 		TextParagraph px = xLabel.getParagraph();
 		TextParagraph py = yLabel.getParagraph();
-		AttachmentPosition sx = xLabel.getSnapPosition();
-		AttachmentPosition sy = yLabel.getSnapPosition();
+		AttachmentPosition sx = xLabel.getAttachmentPosition();
+		AttachmentPosition sy = yLabel.getAttachmentPosition();
 		double ax = xLabel.getAngle();
 		double ay = yLabel.getAngle();
 		PlotLabel oldx = xLabel;
-		xLabel=yLabel; xLabel.setSnapPosition(sx);
+		xLabel=yLabel; xLabel.setAttachmentPosition(sx);
 		xLabel.setAngle(ax);
-		yLabel=oldx; yLabel.setSnapPosition(sy);
+		yLabel=oldx; yLabel.setAttachmentPosition(sy);
 		yLabel.setAngle(ay);
 		
 	}
@@ -971,8 +971,8 @@ public CombinedEdit addSeriesLabels() {
 	AttachmentPosition snap1=null;
 	for(BasicDataSeriesGroup t: getAllDataSeries()){
 		undo.addEditToList(t.addLabel());
-		if (snap1==null) snap1=t.getSeriesLabel().getSnapPosition();
-		else {t.getSeriesLabel().setSnapPosition(snap1);}
+		if (snap1==null) snap1=t.getSeriesLabel().getAttachmentPosition();
+		else {t.getSeriesLabel().setAttachmentPosition(snap1);}
 	}
 	return undo;
 }

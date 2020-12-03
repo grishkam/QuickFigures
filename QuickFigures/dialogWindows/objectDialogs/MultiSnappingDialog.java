@@ -36,7 +36,7 @@ public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 		}
 		for(LocatedObject2D ob1: array) {
 			
-			if (ob1.getSnapPosition()!=null) object=ob1; 
+			if (ob1.getAttachmentPosition()!=null) object=ob1; 
 		}
 		
 		SnappingPanel panel = this.addSnappingBehviourToDialog(object);
@@ -69,11 +69,11 @@ public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 		this.setObjectSnappingBehaviourToDialog(object);
 		
 		for(LocatedObject2D s: array) {
-				if (s.getSnapPosition()!=null) 
+				if (s.getAttachmentPosition()!=null) 
 					{
-					AttachmentPosition newSnap = object.getSnapPosition().copy();
-					if(!copySnap) newSnap = object.getSnapPosition();
-					s.setSnapPosition(newSnap);
+					AttachmentPosition newSnap = object.getAttachmentPosition().copy();
+					if(!copySnap) newSnap = object.getAttachmentPosition();
+					s.setAttachmentPosition(newSnap);
 					};
 		}
 }

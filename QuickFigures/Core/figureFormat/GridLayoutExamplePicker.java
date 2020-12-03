@@ -1,9 +1,13 @@
 package figureFormat;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
+import undo.UndoLayoutEdit;
 
-public class GridLayoutPicker extends GraphicalItemPicker<MontageLayoutGraphic> {
+/**A graphical item picker for layouts*/
+public class GridLayoutExamplePicker extends GraphicalItemPicker<MontageLayoutGraphic> {
 	/**
 	 * 
 	 */
@@ -11,9 +15,8 @@ public class GridLayoutPicker extends GraphicalItemPicker<MontageLayoutGraphic> 
 
 	{super.optionname="Chose Grid Layout";}
 	
-	public GridLayoutPicker(MontageLayoutGraphic model) {
+	public GridLayoutExamplePicker(MontageLayoutGraphic model) {
 		super(model);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -22,12 +25,14 @@ public class GridLayoutPicker extends GraphicalItemPicker<MontageLayoutGraphic> 
 		return false;
 	}
 	
+	/**if the object is a layout, changes the borders and spaces to fit the format of the modelLayout
+	 * @return */
 	@Override
-	public void applyProperties(Object item) {
-		
-		if (this.getModelItem()==null) return;
-		if (!(item instanceof MontageLayoutGraphic)) return;
+	public AbstractUndoableEdit applyProperties(Object item) {
+		if (this.getModelItem()==null) return null;
+		if (!(item instanceof MontageLayoutGraphic)) return null;
 		MontageLayoutGraphic item2=(MontageLayoutGraphic) item;
+		UndoLayoutEdit undo = new UndoLayoutEdit(item2);
 		item2.generateCurrentImageWrapper();//required or the items within the layout wont get moved
 		
 		
@@ -36,9 +41,11 @@ public class GridLayoutPicker extends GraphicalItemPicker<MontageLayoutGraphic> 
 		item2.getEditor().setBordersToModelLayout(layout, modelLayout);
 		item2.getEditor().setLabelSpacesToModelLayout(layout, modelLayout);
 		
-		
+		return undo;
 	}
 	
+	/**returns true if the dialog should show this object itself in a combo box or popup menu.
+	  if false, will just show the objects name*/
 	boolean displayGraphicChooser() {
 		return false;
 	}

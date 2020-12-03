@@ -39,13 +39,11 @@ public class ShapeMakerBasedAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
-		return "Add Cartoon "+shape.getClass().getName();
+		return "Add Cartoon "+shape.getClass().getName()+indiName;
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "";
 	}
 

@@ -9,17 +9,17 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import figureFormat.ChannelLabelPicker;
-import figureFormat.RowLabelPicker;
+import figureFormat.ChannelLabelExamplePicker;
+import figureFormat.LabelExamplePicker;
 import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.FigureLabelOrganizer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import menuUtil.SmartPopupJMenu;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -28,13 +28,13 @@ import utilityClassesForObjects.LocatedObject2D;
 
 public class RowLabelHandle extends MoveRowHandle {
 
-	private RowLabelPicker picker;
+	private LabelExamplePicker picker;
 	private int mode=PANELS;
 	
 	public RowLabelHandle(MontageLayoutGraphic montageLayoutGraphic, int y,  int index) {
 		super(montageLayoutGraphic, y, false, index);
-		 if (type==ROWS) mode=MontageSpaces.ROW_OF_PANELS ;
-			if (type==COLS)mode=MontageSpaces.COLUMN_OF_PANELS ;
+		 if (type==ROWS) mode=LayoutSpaces.ROW_OF_PANELS ;
+			if (type==COLS)mode=LayoutSpaces.COLUMN_OF_PANELS ;
 			
 			
 		specialShape=null;
@@ -59,10 +59,10 @@ public class RowLabelHandle extends MoveRowHandle {
 
 	
 	hideIfNotNeeded(montageLayoutGraphic, index, getPicker(mode));
-	hideIfNotNeeded(montageLayoutGraphic, index, new ChannelLabelPicker(new TextGraphic()));
+	hideIfNotNeeded(montageLayoutGraphic, index, new ChannelLabelExamplePicker(new TextGraphic()));
 	}
 
-	private void hideIfNotNeeded(MontageLayoutGraphic montageLayoutGraphic, int index, RowLabelPicker pick) {
+	private void hideIfNotNeeded(MontageLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getWrapper());
 		
@@ -72,8 +72,8 @@ public class RowLabelHandle extends MoveRowHandle {
 	}
 	
 	private Rectangle2D getSpaceForLabel(int index) {
-		Rectangle2D space = layout.getPanelLayout().makeAltered(MontageSpaces.COLUMN_OF_PANELS).getSelectedSpace(index, MontageSpaces.LABEL_ALLOTED_TOP).getBounds();
-	if(type==ROWS)  space = layout.getPanelLayout().makeAltered(MontageSpaces.ROW_OF_PANELS).getSelectedSpace(index, MontageSpaces.LABEL_ALLOTED_LEFT).getBounds();
+		Rectangle2D space = layout.getPanelLayout().makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
+	if(type==ROWS)  space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
 		return space;
 	}
 	
@@ -96,7 +96,7 @@ public class RowLabelHandle extends MoveRowHandle {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
 		if (canvasMouseEventWrapper.isPopupTrigger()) {return;}
 		
@@ -106,7 +106,7 @@ public class RowLabelHandle extends MoveRowHandle {
 		
 	}
 
-	protected void addLabel(CanvasMouseEventWrapper canvasMouseEventWrapper, TextGraphic label) {
+	protected void addLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label) {
 		setUpMatchingLocation(label);
 		
 		
@@ -126,15 +126,15 @@ public class RowLabelHandle extends MoveRowHandle {
 	}
 
 	private void setUpMatchingLocation(TextGraphic label) {
-		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+MontageSpaces.LABEL_ALLOTED_TOP).getBounds();
-		if (type==ROWS) space = layout.getPanelLayout().makeAltered(MontageSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, MontageSpaces.LABEL_ALLOTED_LEFT).getBounds();
+		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
+		if (type==ROWS) space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getWrapper());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
-		if(array.size()>0) label.setSnapPosition(array.get(0).getSnapPosition());
+		if(array.size()>0) label.setAttachmentPosition(array.get(0).getAttachmentPosition());
 	
 	}
-	public void handleDrag(CanvasMouseEventWrapper canvasMouseEventWrapper) {}
-	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {}
+	public void handleDrag(CanvasMouseEvent canvasMouseEventWrapper) {}
+	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {}
 	
 	protected void drawMessage(Graphics2D graphics, Shape s) {
 		if(message!=null) {
@@ -151,9 +151,9 @@ public class RowLabelHandle extends MoveRowHandle {
 	
 
 	
-	public RowLabelPicker getPicker(int mode) {
+	public LabelExamplePicker getPicker(int mode) {
 		
-		this.picker=new RowLabelPicker(new ComplexTextGraphic(), mode);
+		this.picker=new LabelExamplePicker(new ComplexTextGraphic(), mode);
 		return picker;
 	}
 

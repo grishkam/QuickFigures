@@ -134,7 +134,7 @@ public class LobeMaker extends BasicShapeMaker {
 		
 		
 		LobeMaker cpc = new LobeMaker();
-		int l = cpc.getClass().getDeclaredFields().length;
+		
 		showShape(cpc);
 		
 	}

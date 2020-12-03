@@ -2,7 +2,7 @@ package graphicalObjectHandles;
 
 import java.awt.Point;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 
 
 public interface HasHandles {
@@ -21,7 +21,7 @@ public interface HasHandles {
 	public void handleRelease(int pressedHandle, Point point, Point point2);
 	public void handlePress(int handlenum,  Point p2);
 	
-    public void handleMouseEvent(CanvasMouseEventWrapper me, int handlenum, int button, int clickcount, int type, int... other);
+    public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type, int... other);
 
 
 		

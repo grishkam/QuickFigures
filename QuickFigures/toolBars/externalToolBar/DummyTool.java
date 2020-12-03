@@ -12,7 +12,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 
@@ -29,26 +29,26 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 	}
 }
 	@Override
-	public void mousePressed(ImageType imp, CanvasMouseEventWrapper e) {
+	public void mousePressed(ImageType imp, CanvasMouseEvent e) {
 	}
 
 	@Override
-	public void mouseClicked(ImageType imp, CanvasMouseEventWrapper e) {}
+	public void mouseClicked(ImageType imp, CanvasMouseEvent e) {}
 
 	@Override
-	public void mouseDragged(ImageType imp, CanvasMouseEventWrapper e) {}
+	public void mouseDragged(ImageType imp, CanvasMouseEvent e) {}
 
 	@Override
-	public void mouseReleased(ImageType imp, CanvasMouseEventWrapper e) {}
+	public void mouseReleased(ImageType imp, CanvasMouseEvent e) {}
 
 	@Override
-	public void mouseExited(ImageType imp, CanvasMouseEventWrapper e) {}
+	public void mouseExited(ImageType imp, CanvasMouseEvent e) {}
 
 	@Override
-	public void mouseEntered(ImageType imp, CanvasMouseEventWrapper e) {}
+	public void mouseEntered(ImageType imp, CanvasMouseEvent e) {}
 
 	@Override
-	public void mouseMoved(ImageType imp, CanvasMouseEventWrapper e) {}
+	public void mouseMoved(ImageType imp, CanvasMouseEvent e) {}
 
 	@Override
 	public void showOptionsDialog() {}

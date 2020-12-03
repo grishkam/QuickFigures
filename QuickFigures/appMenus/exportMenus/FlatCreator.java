@@ -21,13 +21,13 @@ import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.FigureDisplayContainer;
 import standardDialog.BooleanInputPanel;
-import standardDialog.InfoDisplayPanel;
 import standardDialog.NumberInputEvent;
 import standardDialog.NumberInputListener;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 
-/**Creates a buffered image for the display. that will be a snapshot of the figure display*/
+/**Creates a buffered image for that will be a snapshot of the figure display.
+  That image can in turn be copied to the system clipboard*/
 public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 
 	
@@ -125,7 +125,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private InfoDisplayPanel sip;
+		
 		private NumberInputPanel nop;
 
 
@@ -134,19 +134,14 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			BooleanInputPanel bip = new BooleanInputPanel("Transpartent background?", isUseTransparent());
 			this.add("transp" , bip);
 			nop=new NumberInputPanel("Output PPI", ratio*72, 2 );
-		//	sip= new InfoDisplayPanel("Output Size", "");
-			
 			nop.addNumberInputListener(new NumberInputListener() {
 			
 			
 				@Override
 				public void numberChanged(NumberInputEvent ne) {
-					// TODO Auto-generated method stub
 					if (ne.getSourcePanel()==nop)ratio=nop.getNumber()/72;
-				//	if (cont!=null) sip.setContentText(" "+((int)cont.getCanvasDims().getWidth()*ratio)+" X "+(int)(cont.getCanvasDims().getHeight()*ratio));
 				}});
 			this.add("ratio" , nop);
-			//this.add("size" , sip);
 			super.setWindowCentered(true);
 			this.setModal(true);
 		}

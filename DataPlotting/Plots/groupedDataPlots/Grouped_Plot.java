@@ -68,7 +68,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 				 super.areaRect.addLockedItem(label1);
 				 label1.setPlotOrientation(orientation);
 				 label1.setPlotArea(this);
-				 if (lastLabel==null)lastLabel=label1; else label1.setSnapPosition(lastLabel.getSnapPosition());
+				 if (lastLabel==null)lastLabel=label1; else label1.setAttachmentPosition(lastLabel.getAttachmentPosition());
 				 this.add(label1);
 			
 			}
@@ -253,7 +253,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 						
 						for(double pos: p) {
 							Double current = vOffsets.get(pos);
-							if (current==null) current=new Double(0);
+							if (current==null) current=0.0;
 							/*adds the mean to this offset**/
 							Basic1DDataSeries posval = thedata.getValuesForPosition(pos);
 							if (posval!=null&&posval.length()>0) {current+=posval.getMean();}

@@ -20,27 +20,26 @@ import standardDialog.GraphicDisplayComponent;
 import undo.PathEditUndo;
 import utilityClassesForObjects.LocatedObject2D;
 
-public class PathReflactTool extends GraphicTool {
+/**a tool that modifies the clicked pathgraphic*/
+public class PathReflectTool extends GraphicTool {
+	
+	public static final int 	REFLECT=0, SCALE=1, ROTATE=2, MOVE=3, UNIFORM_SCALE=4;
 	
 	
 	private boolean pathChosen;
 	private PathGraphic chosenGraphic;
 	private PathGraphic pathGraphic;
-	private boolean scale=false;
-	private boolean rotate=false;
-	boolean reflect=false;
-	private boolean move;
-	private boolean scaleuniform;
+	private boolean scale=false, rotate=false, reflect=false, move=false, scaleuniform=false;
 
 	
 	private boolean scale() {return scale||scaleuniform;}
 	
-	public PathReflactTool(int scale) {
-		reflect=scale==0;
-		this.scale=scale==1;
-		this.rotate=scale==2;
-		this.move=scale==3;
-		this.scaleuniform=scale==4;
+	public PathReflectTool(int toolType) {
+		reflect=toolType==REFLECT;
+		this.scale=toolType==SCALE;
+		this.rotate=toolType==ROTATE;
+		this.move=toolType==MOVE;
+		this.scaleuniform=toolType==UNIFORM_SCALE;
 		this.set= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
 	}
 	
@@ -186,7 +185,7 @@ PathGraphic createMirrorGraphic() {
 			p.addPoint(new Point(9,15));
 			p.moveLocation(-2, 0);
 		
-			p.makeDashLess();
+			p.makeNearlyDashLess();
 			p.updatePathFromPoints();
 			out.getTheLayer().add(p);
 			PathGraphic p2 =p.copy();  

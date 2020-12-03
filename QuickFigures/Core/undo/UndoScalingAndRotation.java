@@ -82,7 +82,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			TextGraphic barText = ((BarGraphic) o).getBarText();
 			tUndo1=new UndoTextEdit(barText);
 			tUndo2=new UndoMoveItems(barText);
-			iSnap=barText.getSnapPosition().copy();
+			iSnap=barText.getAttachmentPosition().copy();
 			
 			}
 	
@@ -123,7 +123,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			fBar=((BarGraphic)o).copy();
 			tUndo1.setUpFinalState();
 			tUndo2.establishFinalLocations();
-			fSnap=((BarGraphic)o).getBarText().getSnapPosition().copy();
+			fSnap=((BarGraphic)o).getBarText().getAttachmentPosition().copy();
 			
 			}
 		
@@ -184,7 +184,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 
 			tUndo1.redo();
 			tUndo2.redo();
-			b.getBarText().setSnapPosition(fSnap);
+			b.getBarText().setAttachmentPosition(fSnap);
 		}
 		
 		if (o instanceof ImagePanelGraphic) {
@@ -247,7 +247,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 
 			tUndo1.undo();
 			tUndo2.undo();
-			b.getBarText().setSnapPosition(iSnap);
+			b.getBarText().setAttachmentPosition(iSnap);
 		}
 		
 		if (o instanceof TextGraphic) {

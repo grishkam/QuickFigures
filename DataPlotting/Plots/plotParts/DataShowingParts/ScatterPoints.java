@@ -174,11 +174,7 @@ public class ScatterPoints extends DataShowingShape {
 		return plottingShapes ;
 	}
 	
-	private ArrayList<Shape> createListWithout(ArrayList<Shape> shapes, Shape shape) {
-		ArrayList<Shape> output = new ArrayList<Shape>();
-		output.addAll(shapes); output.remove(shape);
-		return output;
-	}
+
 	
 	private ArrayList<plotPoint> createListUpTo(ArrayList<plotPoint> shapes, plotPoint shape1) {
 		ArrayList<plotPoint> output = new ArrayList<plotPoint>();

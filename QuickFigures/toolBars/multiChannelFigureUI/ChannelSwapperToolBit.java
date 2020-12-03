@@ -14,7 +14,6 @@ import channelMerging.ImageDisplayLayer;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.PanelStackDisplayOptions;
 import panelGUI.PanelListDisplayGUI;
-import popupMenusForComplexObjects.PanelMenuForMultiChannel;
 import popupMenusForComplexObjects.ScaleFigureDialog;
 import sUnsortedDialogs.ScaleSettingDialog;
 import standardDialog.DialogItemChangeEvent;
@@ -64,7 +63,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand);
 		 addButtonToMenu(output, "Reset Channel Names", renameChanCommand);
 		 
-		PanelMenuForMultiChannel allPanels = new PanelMenuForMultiChannel("All Panels", presseddisplay,  getPressedPanelManager().getPanelList(), this.getPressedPanelManager());
+		//PanelMenuForMultiChannel allPanels = new PanelMenuForMultiChannel("All Panels", presseddisplay,  getPressedPanelManager().getPanelList(), this.getPressedPanelManager());
 		//output.add(allPanels); 
 		
 		return output;

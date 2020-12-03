@@ -28,7 +28,7 @@ import channelLabels.ChannelLabelTextGraphic;
 	 	/**
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int MERGE_IMAGE_PANEL=2, CHANNEL_IMAGE_PANEL=1;;
+	public static final int MERGE_IMAGE_PANEL=2, CHANNEL_IMAGE_PANEL=1;
 
 		/**The image data. Its pixels. whatever type they may be*/
 		transient PixelWrapper image;
@@ -39,11 +39,14 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**The channel label used to display the channel name*/
 		private ChannelLabelTextGraphic channelLabelDisplay;
 
-		/**The index of the image in its original stack. */
-		public Integer originalIndex=0;
-		public Integer originalChanNum=0;	
-		public Integer originalFrameNum=0;	
-		public Integer originalSliceNum=0;	
+		/**The index of the image in its original stack.
+		 *  This represents the index used when the element was first created*/
+		public Integer innitialStackIndex=0;
+		
+		/**Specifies the channel slice and frame that the panel is derived from*/
+		public Integer targetChannelNumber=0;	
+		public Integer targetFrameNumber=0;	
+		public Integer targetSlideNumber=0;	
 		
 		/**The location of the panel in a grid layout. In both row-column and panel index formats*/
 		private GridIndex displayGridIndex=new GridIndex();
@@ -57,9 +60,10 @@ import channelLabels.ChannelLabelTextGraphic;
 		public Integer originalImageID;
 		public ArrayList<Integer> originalIndices=new ArrayList<Integer>();
 		
-
+		
 		private ScaleInfo scaleinfo;//the pixel size is stored here
 
+		/**Maintains a list of the channel entries*/
 		private ArrayList<ChannelEntry> hashChannel =new  ChannelEntryList();
 		
 		/**creates a similar panel targeting the same stack location but 
@@ -73,10 +77,10 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		/**simple, sets fields of output*/
 		public void giveSettingsTo(PanelListElement output) {
-			output.originalChanNum=this.originalChanNum;
-			output.originalFrameNum=this.originalFrameNum;
-			output.originalSliceNum=this.originalSliceNum;
-			output.originalIndex=this.originalIndex;
+			output.targetChannelNumber=this.targetChannelNumber;
+			output.targetFrameNumber=this.targetFrameNumber;
+			output.targetSlideNumber=this.targetSlideNumber;
+			output.innitialStackIndex=this.innitialStackIndex;
 			output.originalImageID=this.originalImageID;
 			output.originalImageName	=this.originalImageName;
 			output.originalImagePath=this.originalImagePath;
@@ -113,6 +117,9 @@ import channelLabels.ChannelLabelTextGraphic;
 			ArrayList<ChannelEntry> dd = getDuplicateChannelEntries();
 			for(ChannelEntry d:dd) {hashChannel.remove(d);}
 		}
+		
+		/**looks for duplicate channel entries in the channel entry list. returns the extras.
+		 * Only adds one of the two duplicates to the output*/
 		private ArrayList<ChannelEntry> getDuplicateChannelEntries() {
 			ArrayList<ChannelEntry> out=new ArrayList<ChannelEntry>();
 			for(ChannelEntry e:this.getChannelEntries()) {
@@ -126,6 +133,8 @@ import channelLabels.ChannelLabelTextGraphic;
 			
 			return out;
 		}
+		
+		/**returns true if the two channel entries appear to be identical.*/
 		private boolean areEntriesDuplicate(ChannelEntry c1, ChannelEntry c2) {
 			if (c1!=c2&&c1.getLabel()==c2.getLabel() &&c1.getOriginalChannelIndex()==c2.getOriginalChannelIndex())return true;
 			return false;
@@ -144,7 +153,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		/**Returns a string describing the channel framd and slice that this panel uses*/
 		public String getChanSF() {
-			return "Channel "+this.originalChanNum+" Slice "+this.originalSliceNum +" Frame " +this.originalFrameNum;
+			return "Channel "+this.targetChannelNumber+" Slice "+this.targetSlideNumber +" Frame " +this.targetFrameNumber;
 		}
 	
 		
@@ -174,20 +183,20 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 		
 		public void setChannelFrameSlice(int channel,  int frame,int slice) {
-			originalChanNum=channel;
-			originalSliceNum=slice;
-			originalFrameNum=frame;
+			targetChannelNumber=channel;
+			targetSlideNumber=slice;
+			targetFrameNumber=frame;
 		}
 		
 		public void setChannelNumber(int channel) {
-			originalChanNum=channel;
+			targetChannelNumber=channel;
 		}
 		public void setSliceNumber(int slice) {
-			originalSliceNum=slice;
+			targetSlideNumber=slice;
 		}
 	
 		public void setFrameNumber(int frame) {
-			originalFrameNum=frame;
+			targetFrameNumber=frame;
 		}
 	
 		
@@ -324,7 +333,6 @@ import channelLabels.ChannelLabelTextGraphic;
 
 		@Override
 		public ScaleInfo getDisplayScaleInfo() {
-			// TODO Auto-generated method stub
 			return scaleinfo;
 		}
 
@@ -412,6 +420,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 	}
 		
+	/**crates a set of channel handles for the image panel that */
 		public ChannelSwapHandleList createChanSwapHandles(ImagePanelGraphic graphic) {
 		
 			if (graphic.getExtraHandles()==null ) {
@@ -426,24 +435,11 @@ import channelLabels.ChannelLabelTextGraphic;
 				graphic.getExtraHandles().updateList(hashChannel);
 				
 			}
-			/**
-			ChannelLabelTextGraphic clabel = this.getChannelLabelDisplay();
-			if(clabel!=null) {
-				if (clabel.getExtraHandles()!=null) clabel.getExtraHandles().updateList(hashChannel);
-				else
-				clabel.setExtraHandles(new ChannelSwapHandleList(null, hashChannel, clabel));
-			} 
-			*/
 			
 			return graphic.getExtraHandles();
 		}
 
-		public static void main(String[] args) throws CloneNotSupportedException {
-			PanelListElement pp = new PanelListElement();
-			pp.originalChanNum=4;
-			PanelListElement pp2=(PanelListElement) pp.createDouble();
-				
-		}
+
 		
 		
 		/**returns the image display object as a panel Grahic*/
@@ -454,6 +450,7 @@ import channelLabels.ChannelLabelTextGraphic;
 				return null;
 		}
 		
+		/**returns true if the user has selected this element*/
 		public boolean isSelected() {
 			if ( getImageDisplayObject() instanceof Selectable)
 				return ((Selectable) getImageDisplayObject()).isSelected();
@@ -491,9 +488,9 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		/**Changes the panel's channel slice and frame based on the argument given*/
 		public boolean changeStackLocation(CSFLocation csf) {
-			if(csf.channel>-1) this.originalChanNum=csf.channel;
-			if(csf.frame>0) this.originalFrameNum=csf.frame;
-			if(csf.slice>0) this.originalSliceNum=csf.slice;
+			if(csf.channel>-1) this.targetChannelNumber=csf.channel;
+			if(csf.frame>0) this.targetFrameNumber=csf.frame;
+			if(csf.slice>0) this.targetSlideNumber=csf.slice;
 			return false;
 		}
 		

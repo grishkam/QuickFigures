@@ -1,10 +1,10 @@
 package genericMontageLayoutToolKit;
 import externalToolBar.IconSet;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 
 
-public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements MontageSpaces{
+public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements LayoutSpaces{
 	{resetClickPointOnDrag=false;}
 	//ArrayList<PanelSwapListener<ImagePlus>> psListeners=new ArrayList<PanelSwapListener<ImagePlus>>();
 	
@@ -77,8 +77,8 @@ public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements Monta
 	}
 	
 	 protected String getTextBase() {
-		 if (mode==MontageSpaces.ROWS) return "Row";
-			if (mode==MontageSpaces.COLS) return  "Column";
+		 if (mode==LayoutSpaces.ROWS) return "Row";
+			if (mode==LayoutSpaces.COLS) return  "Column";
 			
 			 return "Panel";
 	    

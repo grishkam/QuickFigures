@@ -12,7 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import genericMontageUIKitMenuItems.MontageEditCommandMenu;
 import graphicalObjectHandles.AddRowHandle;
 import graphicalObjectHandles.EditRowColNumberHandle;
@@ -28,7 +28,7 @@ import gridLayout.BasicMontageLayout;
 import gridLayout.GridLayoutEditEvent;
 import gridLayout.GridLayoutEditListener;
 import gridLayout.MontageEditorDialogs;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.MontageLayoutPanelMenu;
@@ -221,7 +221,7 @@ this.updateDisplay();
 	
 	
 	@Override
-	public void handleMouseEvent(CanvasMouseEventWrapper me, int handlenum, int button, int clickcount, int type,
+	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
 		
 		if (clickcount<2) return;
@@ -315,9 +315,9 @@ this.updateDisplay();
 		if(o==null) return null;
 		if(i<0) return null;
 		Rectangle2D panel = getPanelLayout().getPanel(i);
-		if (o.getSnapPosition()==null || o.getSnapPosition().getGridLayoutSnapType()==0)
+		if (o.getAttachmentPosition()==null || o.getAttachmentPosition().getGridLayoutSnapType()==0)
 							return panel;
-		int rectSnapType = o.getSnapPosition().getGridSpaceCode();
+		int rectSnapType = o.getAttachmentPosition().getGridSpaceCode();
 		
 		return	this.getPanelLayout().getSelectedSpace((int)panel.getCenterX(), (int)panel.getCenterY(), rectSnapType).getBounds();
 	}
@@ -327,10 +327,10 @@ this.updateDisplay();
 		if(o==null) return null;
 		if(i<0) return null;
 		Rectangle2D panel = getPanelLayout().getPanel(i);
-		if (o.getSnapPosition()==null || o.getSnapPosition().getGridLayoutSnapType()==0)
+		if (o.getAttachmentPosition()==null || o.getAttachmentPosition().getGridLayoutSnapType()==0)
 							return panel;
 	
-		int rectSnapType = o.getSnapPosition().getGridLayoutSnapType();
+		int rectSnapType = o.getAttachmentPosition().getGridLayoutSnapType();
 		
 		return	this.getPanelLayout().getSelectedSpace((int)panel.getCenterX(), (int)panel.getCenterY(), rectSnapType).getBounds();
 	}
@@ -379,30 +379,30 @@ public void resizeLayoutToFitContents() {
 	
 	protected void addFirstLayerHandles(SmartHandleList box) {
 		for(int i=1; i<=this.getPanelLayout().nPanels(); i++) {
-			box.add(new MoveRowHandle(this, MontageSpaces.PANELS, false, i));
+			box.add(new MoveRowHandle(this, LayoutSpaces.PANELS, false, i));
 			
 			}
 	}
 	
 	protected void addAdditionalHandles(SmartHandleList box) {
-		box.add(new AddRowHandle(this, MontageSpaces.ROWS, false));
-		box.add(new AddRowHandle(this, MontageSpaces.COLS, false));
+		box.add(new AddRowHandle(this, LayoutSpaces.ROWS, false));
+		box.add(new AddRowHandle(this, LayoutSpaces.COLS, false));
 		box.add(new EditRowColNumberHandle(this));
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
-			box.add(new MoveRowHandle(this, MontageSpaces.COLS, false, i));
+			box.add(new MoveRowHandle(this, LayoutSpaces.COLS, false, i));
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
-			box.add(new MoveRowHandle(this, MontageSpaces.ROWS, false, i));
+			box.add(new MoveRowHandle(this, LayoutSpaces.ROWS, false, i));
 			
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
-			box.add(new RowLabelHandle(this, MontageSpaces.COLS, i));
+			box.add(new RowLabelHandle(this, LayoutSpaces.COLS, i));
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
-			box.add(new RowLabelHandle(this, MontageSpaces.ROWS,  i));
+			box.add(new RowLabelHandle(this, LayoutSpaces.ROWS,  i));
 			
 			}
 	
@@ -449,7 +449,7 @@ public void resizeLayoutToFitContents() {
 		 */
 		private static final long serialVersionUID = 1L;
 		private int amount=1;
-		private String text;
+		
 		private BasicMontageLayout myLayout;
 		private int nOptions;
 		boolean shifted=false;
@@ -465,13 +465,13 @@ public void resizeLayoutToFitContents() {
 			super(montageLayoutGraphic,l,i);
 			amount=1;
 			boolean major = montageLayoutGraphic.getPanelLayout().rowmajor;
-			if(!major &&l.getSnapPosition().getGridSpaceCode()==MontageSpaces.COLUMN_OF_PANELS) {
+			if(!major &&l.getAttachmentPosition().getGridSpaceCode()==LayoutSpaces.COLUMN_OF_PANELS) {
 				amount= montageLayoutGraphic.getPanelLayout().nRows();
 			}
 			if(major&&this.isRows()) {
 				amount= montageLayoutGraphic.getPanelLayout().nColumns();
 			}
-			text=changeText();
+			
 			myLayout=montageLayoutGraphic.getPanelLayout();
 			nOptions=myLayout.nPanels();
 			if (this.isRows())nOptions=myLayout.nRows();
@@ -489,11 +489,11 @@ public void resizeLayoutToFitContents() {
 		}
 
 		private boolean isRows() {
-			return getObject().getSnapPosition().getGridSpaceCode()==MontageSpaces.ROW_OF_PANELS;
+			return getObject().getAttachmentPosition().getGridSpaceCode()==LayoutSpaces.ROW_OF_PANELS;
 		}
 
 		private boolean isCols() {
-			return getObject().getSnapPosition().getGridSpaceCode()==MontageSpaces.COLUMN_OF_PANELS;
+			return getObject().getAttachmentPosition().getGridSpaceCode()==LayoutSpaces.COLUMN_OF_PANELS;
 		}
 		
 		public JPopupMenu getJPopup() {
@@ -529,9 +529,9 @@ public void resizeLayoutToFitContents() {
 			snapLockedItem(getObject());
 		}
 		
-		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 	
-			BasicMontageLayout rLayout = myLayout.makeAltered(getObject().getSnapPosition().getGridSpaceCode());
+			BasicMontageLayout rLayout = myLayout.makeAltered(getObject().getAttachmentPosition().getGridSpaceCode());
 			Point2D p1 = super.getCordinateLocation();
 			
 			Point cordinatePoint = lastDragOrRelMouseEvent.getCoordinatePoint();
@@ -539,13 +539,13 @@ public void resizeLayoutToFitContents() {
 			if(originalBounds!=null) d = cordinatePoint.distance(originalBounds.getCenterX(), originalBounds.getCenterY());
 			if(d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent)) {
 				shifted=true;
-				getObject().getSnapPosition().copyPositionFrom(originalSnap);
+				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 
 					//int panel = getPanelForObject(new RectangularGraphic(cordinatePoint));
 					Rectangle2D nearestPanel = rLayout.getNearestPanel(cordinatePoint);
 					Rectangle r2 = getObject().getBounds();
 					if (originalSnap!=null)originalSnap.snapRects(r2, nearestPanel); else
-						getObject().getSnapPosition().snapRects(r2, nearestPanel);
+						getObject().getAttachmentPosition().snapRects(r2, nearestPanel);
 					
 					setDragMask(lastDragOrRelMouseEvent, r2);
 			} else {
@@ -558,7 +558,7 @@ public void resizeLayoutToFitContents() {
 			
 		}
 
-		protected void setDragMask(CanvasMouseEventWrapper lastDragOrRelMouseEvent, Rectangle2D r2) {
+		protected void setDragMask(CanvasMouseEvent lastDragOrRelMouseEvent, Rectangle2D r2) {
 			if(r2==null) {lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(null, 0);
 				return;
 			}
@@ -568,7 +568,7 @@ public void resizeLayoutToFitContents() {
 		}
 		
 		
-		public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 			
 			if(releaseIt) {
 				super.handleRelease(canvasMouseEventWrapper);
@@ -576,7 +576,7 @@ public void resizeLayoutToFitContents() {
 			}
 			if (shifted) {
 				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
-				getObject().getSnapPosition().copyPositionFrom(originalSnap);
+				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 				mapPanelLocation(getObject());
 				shifted=false;
 			} 
@@ -585,7 +585,7 @@ public void resizeLayoutToFitContents() {
 			
 			
 		}
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 				super.handlePress(canvasMouseEventWrapper);
 				
 		}
@@ -632,7 +632,7 @@ public void resizeLayoutToFitContents() {
 		}
 		
 		@Override
-		public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 			panel = getPanelLayout().getNearestPanel(lastDragOrRelMouseEvent.getCoordinatePoint());
 			super.setDragMask(lastDragOrRelMouseEvent, panel);
 			
@@ -645,7 +645,7 @@ public void resizeLayoutToFitContents() {
 		
 		
 		
-		public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 
 			if(releaseIt) {
 				UndoTakeLockedItem undo = new UndoTakeLockedItem(taker, getObject() , true);
@@ -661,7 +661,7 @@ public void resizeLayoutToFitContents() {
 			
 			if (shifted) {
 				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
-				getObject().getSnapPosition().copyPositionFrom(originalSnap);
+				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 				mapPanelLocation(getObject());
 			} 
 			originalSnap=null;

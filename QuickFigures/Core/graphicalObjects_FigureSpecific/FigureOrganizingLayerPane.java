@@ -14,8 +14,8 @@ import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
-import genericMontageKit.PanelOrder;
-import genericMontageKit.PanelOrder.imageOrderComparator;
+import genericMontageKit.PanelOrderCorrector;
+import genericMontageKit.PanelOrderCorrector.ImageOrderComparator;
 import graphicActionToolbar.CurrentFigureSet;
 import genericMontageKit.PanelSetter;
 import genericMontageKit.SubFigureOrganizer;
@@ -451,12 +451,19 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			TextGraphic item=null;
 			ImageDisplayLayer pan = getPanelForRowindex(i, type);//may return null
 			
-			if (pan==null) {
+			boolean useImageNames = (pan!=null) && LabelCreationOptions.current.useImageNames;
+			
+			if (!useImageNames) {
 				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic());
 			}
 			
-			if (pan!=null) {
-				String text=pan.getTitle();
+			if (useImageNames) {
+				String text=pan.getMultiChannelImage().getTitle();
+				
+				if (text!=null&&text.length()>LabelCreationOptions.current.clipLabels) {
+					{text=text.substring(0, (int)LabelCreationOptions.current.clipLabels);}
+				}
+				
 				if (type==BasicMontageLayout.ROWS)
 					item=addRowLabel(text, i);
 				if (type==BasicMontageLayout.COLS)
@@ -467,7 +474,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			
 			if (item!=null)
 				{
-				if(position==null) position = item.getSnapPosition(); else item.setSnapPosition(position);
+				if(position==null) position = item.getAttachmentPosition(); else item.setAttachmentPosition(position);
 				addedItems.add(item);
 				}
 		}
@@ -605,7 +612,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	/**called after a panel, column or row swap on the layout is done. 
 	 * updates the image order within the figure and channel order to reflect the change*/
 	public void updateChannelOrder(int type) {
-		PanelOrder panelOrder = new PanelOrder(this);
+		PanelOrderCorrector panelOrder = new PanelOrderCorrector(this);
 		updateImageOrder();
 		panelOrder.updateChanOrder(type);
 	}
@@ -614,9 +621,9 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	 The list of images within this figure organizer is reordered to store that order.
 	  */
 	public void updateImageOrder() {
-		PanelOrder panelOrder = new PanelOrder(this);
+		PanelOrderCorrector panelOrder = new PanelOrderCorrector(this);
 		ArrayList<ImageDisplayLayer> layoutOrder = panelOrder.getDisplaysInLayoutImageOrder();
-		imageOrderComparator lorder = new PanelOrder.imageOrderComparator(layoutOrder);
+		ImageOrderComparator lorder = new PanelOrderCorrector.ImageOrderComparator(layoutOrder);
 
 		Collections.sort(displays, lorder);
 	}

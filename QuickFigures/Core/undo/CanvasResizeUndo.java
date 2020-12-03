@@ -26,14 +26,14 @@ public class CanvasResizeUndo extends AbstractUndoableEdit2 {
 	}
 	
 	public void undo() {
-		image.getImageAsWrapper().CanvasResizePixelsOnly( (int)oldDims.getWidth(), (int)oldDims.getHeight(), 0,0);
+		image.getImageAsWrapper().CanvasResize( (int)oldDims.getWidth(), (int)oldDims.getHeight(), 0,0);
 		itemMovments.undo();
 		image.updateDisplay();
 		image.updateWindowSize();
 	}
 	
 	public void redo() {
-		image.getImageAsWrapper().CanvasResizePixelsOnly( (int)newDims.getWidth(), (int)newDims.getHeight(), 0,0);
+		image.getImageAsWrapper().CanvasResize( (int)newDims.getWidth(), (int)newDims.getHeight(), 0,0);
 		itemMovments.redo();
 		image.updateDisplay();
 		image.updateWindowSize();

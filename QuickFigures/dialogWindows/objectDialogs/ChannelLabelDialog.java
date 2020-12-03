@@ -47,7 +47,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 	StandardDialog createPanelForLines() {
 		
 		if (getChannelLabel() ==null) {IssueLog.log("null channel label issue");}
-		return TextLineDialogForChenLabel.createMultiLineDialog(getChannelLabel() .getChanEntries(), getChannelLabel().getChannelLabelproperties(), createSwingDialogListener());
+		return TextLineDialogForChenLabel.createMultiLineDialog(getChannelLabel() .getChanEntries(), getChannelLabel().getChannelLabelProperties(), createSwingDialogListener());
 	}
 	protected SwingDialogListener createSwingDialogListener() {
 		return new SwingDialogListener() {
@@ -65,7 +65,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 	}
 	
 	protected ChannelLabelPropertiesDialog mergeMenu() {
-		ChannelLabelPropertiesDialog dia = new  ChannelLabelPropertiesDialog(getChannelLabel().getChannelLabelproperties());
+		ChannelLabelPropertiesDialog dia = new  ChannelLabelPropertiesDialog(getChannelLabel().getChannelLabelProperties());
 		dia.addDialogListener(createSwingDialogListener());
 		return dia;
 		

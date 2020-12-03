@@ -2,15 +2,17 @@ package figureFormat;
 
 import java.awt.Color;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
 import genericMontageKit.PanelListElement;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ScalededItem;
 import utilityClassesForObjects.AttachmentPosition;
 
-public class ScaleBarPicker extends GraphicalItemPicker<BarGraphic>{
+/**An implementation of graphical item picker for scale bars*/
+public class ScaleBarExamplePicker extends GraphicalItemPicker<BarGraphic>{
 	/**
 	 * 
 	 */
@@ -19,27 +21,27 @@ public class ScaleBarPicker extends GraphicalItemPicker<BarGraphic>{
 	{super.optionname="Chose Scale Bar";}
 	boolean autoComfortBarSize=true;
 	
-	
-	public ScaleBarPicker(BarGraphic model) {
+	/**creates a scale bar picker with the given example scale bar*/
+	public ScaleBarExamplePicker(BarGraphic model) {
 		super(model);
-		// TODO Auto-generated constructor stub
 	}
 
-	/**returns true if the object is a TextGraphi with the desired snap type*/
+	/**returns true if the object is a scale bar*/
 	boolean isDesirableItem(Object o) {
 		if (!(o instanceof BarGraphic))
 		return false;
-		
 		return true;
 	}
 	
+	/**if the targeted item is a scale bar, alters its appearance to match the example scale bar.
+	 * Does nothing unless there is an example scale bar to act as a model*/
 	@Override
-	public void applyProperties(Object item) {
-		if (this.getModelItem()==null) return;
+	public AbstractUndoableEdit applyProperties(Object item) {
+		if (this.getModelItem()==null) return null;
 		
 		if (item instanceof BarGraphic) {
 			BarGraphic item2=(BarGraphic) item;
-		
+			AbstractUndoableEdit undo = item2.provideUndoForDialog();
 		if (autoComfortBarSize) {
 			ScalededItem scaleProvider = item2.getScaleProvider();
 			if (scaleProvider!=null)
@@ -51,29 +53,22 @@ public class ScaleBarPicker extends GraphicalItemPicker<BarGraphic>{
 	
 		item2.copyAttributesButNotScale(getModelItem());
 		item2.copyColorsFrom(getModelItem());
-		if (getModelItem().getSnapPosition()==null) return;
-		
-		item2.setSnapPosition(getModelItem().getSnapPosition().copy());
+		if (getModelItem().getAttachmentPosition()!=null) 
+				item2.setAttachmentPosition(getModelItem().getAttachmentPosition().copy());
+		return undo;
 		}
-		
+		return null;
 	}
 	
-	double getBarLengthStandard(PanelListElement panel) {
-		if (panel==null) return this.getModelItem().getLengthInUnits();
-		double[] dims = panel.getScaleInfo().convertPixelsToUnits(panel.getDimensions());
-		double num = NumberUse.findNearest(dims[0]/3, BarGraphic.reccomendedBarLengths);
-		return num;		
-	}
-	
-	public double getBarLengthStandard(ImagePanelGraphic panel) {
-		if (panel==null) return this.getModelItem().getLengthInUnits();
-		return BarGraphic.getStandardBarLengthFor(panel);		
-	}
 
 
-	
+
+	/**When given a multichannel display, changes the model item
+	 * to be more appropriate for the size of the panels within the display
+	 * if there are no panels, does nothing*/
 	@Override
 public void setToStandardFor(MultichannelDisplayLayer wrap) {
+		if (wrap.getPanelList().getSize()<1) return;
 		float h=(float) (wrap.getPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
 		
 		PanelListElement panel = wrap.getPanelList().getPanels().get(0);
@@ -83,7 +78,7 @@ public void setToStandardFor(MultichannelDisplayLayer wrap) {
 
 
 			getModelItem().setLengthInUnits(getBarLengthStandard(panel));
-			getModelItem().setSnapPosition(AttachmentPosition.defaultScaleBar());
+			getModelItem().setAttachmentPosition(AttachmentPosition.defaultScaleBar());
 			
 			setBarDefaultsBasedOnHeight(h, getModelItem(), Color.white);
 		}
@@ -91,7 +86,18 @@ public void setToStandardFor(MultichannelDisplayLayer wrap) {
 		
 	}
 	
-	public void setBarDefaultsBasedOnHeight(float h, BarGraphic model, Color c) {
+	/**returns a scale bar length that is appropriate for the given panel*/
+	double getBarLengthStandard(PanelListElement panel) {
+		if (panel==null) return this.getModelItem().getLengthInUnits();
+		double[] dims = panel.getScaleInfo().convertPixelsToUnits(panel.getDimensions());
+		double num = NumberUse.findNearest(dims[0]/3, BarGraphic.reccomendedBarLengths);
+		return num;		
+	}
+	
+	
+	/**Based on the height h, alters the scale bar thickness to be a fraction of the height given.
+	 * Sets the color of the scale bar as well*/
+	public static void setBarDefaultsBasedOnHeight(float h, BarGraphic model, Color c) {
 		h=(float)NumberUse.findNearest(h/8, new double[] {0,2,4,6,8,10,12,14,16,20, 18,24,28, 32,36,40});
 		
 		

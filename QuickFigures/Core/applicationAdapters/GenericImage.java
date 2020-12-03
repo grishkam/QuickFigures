@@ -14,32 +14,31 @@ import java.util.ArrayList;
 import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import imageDisplayApp.BasicImageInfo;
 
 
 /** A barebones implementation of the interface
- *This class has a collection of objects. 
+ This class has a collection of objects. 
   This class is used as just a 'virtual' image  by certain classes
-  during modification of objects. 
-  Only Subclasses of the class do more than that
+  during modification of objects. some methods are not implemented
+  Only the subclass is a more complete implementation
+   Also @see GraphicContainingImage
   */
 public class GenericImage implements ImageWrapper {
 
 	
 	transient public UndoManagerPlus undoManager;
-	
+	protected BasicImageInfo basics=new BasicImageInfo();
 	int id=(int)Math.random()*100000;// a random id number
 	ObjectContainer objects;
-	transient PixelContainer pixels;
+	//transient PixelContainer pixels;
 	private GraphicLayer layer;
 	OverlayObjectManager selectionManager=new OverlayObjectManager();
 	private String title;
 
 	private transient Object selected;
 	
-	public GenericImage(ObjectContainer c, PixelContainer pix) {
-		objects =c;
-		pixels=pix;
-	}
+
 	
 	/**should not be called*/
 	protected GenericImage() {}
@@ -83,27 +82,22 @@ public class GenericImage implements ImageWrapper {
 		return null;
 	}
 
-	@Override
-	public PixelWrapper getPixelWrapper() {
-	if (pixels!=null) return pixels.getPixelWrapper();
-		return null;
-	}
+	
 
 	@Override
-	public void CanvasResizePixelsOnly(int width, int height, int xOff, int yOff) {
-		// TODO Auto-generated method stub
+	public void CanvasResize(int width, int height, int xOff, int yOff) {
 		
 	}
 
 	@Override
 	public int width() {
-		if (pixels!=null) return pixels.width();
+		if (basics!=null) return basics.getWidth();
 		return 0;
 	}
 
 	@Override
 	public int height() {
-		if (pixels!=null) return pixels.height();
+		if (basics!=null) return basics.getHeight();
 		return 0;
 	}
 
@@ -112,7 +106,6 @@ public class GenericImage implements ImageWrapper {
 	@Override
 	public String getTitle() {
 		return title;
-		//return null;
 	}
 	public void setTitle(String t) {
 		title=t;
@@ -177,7 +170,7 @@ public class GenericImage implements ImageWrapper {
 
 	@Override
 	public Dimension getCanvasDims() {
-		if (pixels!=null) return pixels.getPixelWrapper().dim();
+		if (basics!=null) return basics.getDimensions();
 		return new Dimension();
 	}
 
@@ -190,20 +183,17 @@ public class GenericImage implements ImageWrapper {
 
 	@Override
 	public MetaInfoWrapper getMetadataWrapper() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public OverlayObjectManager getOverlaySelectionManagger() {
-		// TODO Auto-generated method stub
+	
 		return selectionManager;
 	}
 
 	@Override
 	public void updateDisplay() {
-		// TODO Auto-generated method stub
-		
 	}
 
 
@@ -235,7 +225,6 @@ public class GenericImage implements ImageWrapper {
 
 	@Override
 	public DisplayedImage getImageDisplay() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

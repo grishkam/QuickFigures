@@ -294,9 +294,7 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ArrayList<ColumnDataSeries> u = 	getDataSeriesUsingClassificationFolumn(0,1, area);
-					//UtilForDataReading.getUniqueStrings(getStrings(0, null));;
-					
+					//not implemented
 					
 				}});
 		}

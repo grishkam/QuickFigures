@@ -6,7 +6,7 @@ import appContext.CurrentAppContext;
 import channelMerging.PreProcessInformation;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
-import figureFormat.TemplateSaver;
+import figureFormat.TemplateUserMenuAction;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -31,21 +31,21 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	public boolean useSingleFrame=false;
 	public boolean useSingleSlice=false;
 	
-	private TemplateSaver templatesaver =null;
+	private TemplateUserMenuAction templatesaver =null;
 	
 
 	private FigureOrganizingLayerPane currentFigureOrganizer;
 
 	/**returns the template saver that is used to create objects*/
-	public TemplateSaver getTemplatesaver() {
+	public TemplateUserMenuAction getTemplatesaver() {
 		
 		if (templatesaver==null) {
-			templatesaver = new TemplateSaver(false, false);
+			templatesaver = new TemplateUserMenuAction(false, false);
 		}
 		return templatesaver;
 	}
 
-	public void setTemplatesaver(TemplateSaver templatesaver) {
+	public void setTemplatesaver(TemplateUserMenuAction templatesaver) {
 		this.templatesaver = templatesaver;
 	}
 	
@@ -181,7 +181,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 
 
 		try{
-		if (temp!=null) temp.applyProperties(currentFigureOrganizer);
+		if (temp!=null) temp.applyTemplateToLayer(currentFigureOrganizer);
 		
 		
 		
@@ -227,7 +227,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	/**Applies a figure template to the layer*/
 	void applyUsedTemplate(GraphicLayer g) {
 			try{
-				getUsedTemplate().applyProperties(g);
+				getUsedTemplate().applyTemplateToLayer(g);
 				}catch (Throwable t) {
 						t.printStackTrace();
 					}

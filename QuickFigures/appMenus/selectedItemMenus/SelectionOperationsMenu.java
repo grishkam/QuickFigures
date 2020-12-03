@@ -10,7 +10,7 @@ import javax.swing.JMenuItem;
 import actionToolbarItems.AlignItem;
 import actionToolbarItems.DistributeItems;
 import figureFormat.MassTemplateApplication;
-import figureFormat.TemplateSaver;
+import figureFormat.TemplateUserMenuAction;
 import fileListOpps.CombineSavedFigures;
 import fileListOpps.LoadFileLists;
 import genericMontageLayoutToolKit.FitLayout;
@@ -72,7 +72,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		
 		
 		operators.add(new DuplicateItem());
-		ArrayList<TemplateSaver> many = TemplateSaver.createSeveral("Figure Format");
+		ArrayList<TemplateUserMenuAction> many = TemplateUserMenuAction.createSeveral("Figure Format");
 		operators.addAll(many);
 		
 		operatorsOp.add(new TextBackGroundOptionsSyncer());

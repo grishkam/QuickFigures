@@ -1,12 +1,12 @@
 package genericMontageLayoutToolKit;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 
 
-public class BorderAdjusterTool extends GeneralLayoutEditorTool implements MontageSpaces {
+public class BorderAdjusterTool extends GeneralLayoutEditorTool implements LayoutSpaces {
 
 
 	public void performDragEdit(boolean shift) {

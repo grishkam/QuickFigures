@@ -19,6 +19,7 @@ import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import popupMenusForComplexObjects.TextSelectionMenu;
 import standardDialog.StandardDialog;
+import undo.EditListener;
 import utilityClassesForObjects.ColorDimmer;
 import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;
@@ -82,33 +83,32 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		updateMap.clear();//when paragraph is reset the old text lines no longer have any relationship with the text lined in the channel label properties 
 		
 		/**The merge label is a complicated entity*/
-		int mergeLabelType = this.getChannelLabelproperties().getMergeLabelType();
+		int mergeLabelType = this.getChannelLabelProperties().getMergeLabelStyle();
 		
 		if (isThisMergeLabel()) {
 			if (mergeLabelType==ChannelLabelProperties.SIMPLY_lABEL_AS_MERGE) {
-				paragraph.addLineFromCodeString(getChannelLabelproperties().getMergeText(), Color.black);
+				paragraph.addLineFromCodeString(getChannelLabelProperties().getMergeText(), Color.black);
 				this.setParagraph(paragraph);
 				return;
 			}
 			
 			if (mergeLabelType==ChannelLabelProperties.OVERLAY_THE_COLORS) {
-				paragraph.addLineFromCodeString(getChannelLabelproperties().getMergeText(), ChannelLabelProperties.fuseColors(getChanEntries()));
+				paragraph.addLineFromCodeString(getChannelLabelProperties().getMergeText(), ChannelLabelProperties.fuseColors(getChanEntries()));
 				this.setParagraph(paragraph);
 				return;
 			}
 			
 			
-			if (mergeLabelType==ChannelLabelProperties.EXCLUDE_THE_MERGE_LABEL) {return;}
-		
-			if (mergeLabelType==ChannelLabelProperties.SONI_STYLE) {
+			
+			if (mergeLabelType==ChannelLabelProperties.RAINBOW_STYLE) {
 				TextLine lin = paragraph.addLine();	
 				lin.removeAllSegments();
 				ArrayList<ChannelEntry> entries = this.getChanEntries();
 				int size=entries.size();
-				String[] mergeLabel=ChannelLabelProperties.split3MergeTexts[this.getChannelLabelproperties().getMergeTextOption()];
-				if (size==2) mergeLabel=ChannelLabelProperties.split2MergeTexts[this.getChannelLabelproperties().getMergeTextOption()];
-				if (size==1) mergeLabel=new String[]{getChannelLabelproperties().getMergeText()};
-				if (size==4)  mergeLabel=ChannelLabelProperties.split4MergeTexts[this.getChannelLabelproperties().getMergeTextOption()];
+				String[] mergeLabel=ChannelLabelProperties.split3MergeTexts[this.getChannelLabelProperties().getMergeTextOption()];
+				if (size==2) mergeLabel=ChannelLabelProperties.split2MergeTexts[this.getChannelLabelProperties().getMergeTextOption()];
+				if (size==1) mergeLabel=new String[]{getChannelLabelProperties().getMergeText()};
+				if (size==4)  mergeLabel=ChannelLabelProperties.split4MergeTexts[this.getChannelLabelProperties().getMergeTextOption()];
 				for(int i=0; i<size&&i<mergeLabel.length; i++) {
 					lin.addSegment(mergeLabel[i], entries.get(i).getColor());
 				}
@@ -132,7 +132,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 					generateLineTextFromChannelName(lin, en, false);
 					
 					if (i+1!=this.getChanEntries().size())
-					lin.addSegment(this.getChannelLabelproperties().getSeparatorText(), Color.black);
+					lin.addSegment(this.getChannelLabelProperties().getSeparatorText(), Color.black);
 				}
 				this.setParagraph(paragraph);
 				return;
@@ -166,7 +166,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		
 		/**If there is already a text line in the channel label properties, finds that line.
 		  that line may have superscripts and other options/*/
-		TextLine textLineForChannel = getChannelLabelproperties().getTextLineForChannel(cc);
+		TextLine textLineForChannel = getChannelLabelProperties().getTextLineForChannel(cc);
 		if (textLineForChannel==null) IssueLog.log("PROBLEM, failed to get text line for channel");
 		
 		ArrayList<TextLineSegment> list = aTextLine.copySegmentsFrom(textLineForChannel);
@@ -187,6 +187,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	public ArrayList<ChannelEntry> getChanEntries() {
 		return channelEntryList;
 	}
+	/**sets the channel entry list*/
 	public void setChanEntries(ArrayList<ChannelEntry> chanEn) {
 		this.channelEntryList = chanEn;
 	}
@@ -211,8 +212,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	public Color getDimmedColor(Color c) {
 		Color output=c;
 		boolean dontinvert=true;
-	//	boolean inside=false;
-		if (this.getSnapPosition()!=null && this.getSnapPosition().isInternalSnap()) dontinvert=false;
+		if (this.getAttachmentPosition()!=null && this.getAttachmentPosition().isInternalSnap()) dontinvert=false;
 	
 		
 		
@@ -234,7 +234,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	
 	
 
-	public ChannelLabelProperties getChannelLabelproperties() {
+	public ChannelLabelProperties getChannelLabelProperties() {
 		return ChannelLabelproperties;
 	}
 
@@ -308,7 +308,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 				p.record.replaceSegmentsWithoutColor(p.segments);
 				}
 		}
-		if (this.isThisMergeLabel()&&ChannelLabelproperties.getMergeLabelType()==0) {
+		if (this.isThisMergeLabel()&&ChannelLabelproperties.getMergeLabelStyle()==0) {
 			
 			ChannelLabelproperties.setMergeText(this.getParagraph().getText());
 		}
@@ -409,6 +409,15 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	}
 
 
+	/**work in progress. this will be needed. added to undoable edits that update the channel*/
+	public EditListener createEditListener() {
+		return new EditListener() {
+
+			@Override
+			public void afterEdit() {
+				setParaGraphToChannels();
+			}};
+	}
 	
 	
 	

@@ -127,7 +127,7 @@ public class OffsetBox extends GraphicComponent implements KeyListener, MouseMot
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(),  this.getHeight());
 		
-		componentCord=getCord().getAfflineTransform().createTransformedShape(r.getBounds());
+		componentCord=getCord().getAffineTransform().createTransformedShape(r.getBounds());
 		r.draw((Graphics2D) g, getCord());
 		
 		

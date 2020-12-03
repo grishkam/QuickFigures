@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import dividedPanels.DividedPanelLayout.layoutDividedArea;
 import dividedPanels.DividedPanelLayout.LayoutDivider;
 import genericMontageKit.PanelContentExtract;
@@ -352,7 +352,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	
 	
 	@Override
-	public void handleMouseEvent(CanvasMouseEventWrapper me, int handlenum, int button, int clickcount, int type,
+	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
 		if (clickcount==2 && type==MouseEvent.MOUSE_CLICKED &&handlenum<0)
 					{ {this.showOptionsDialog();}

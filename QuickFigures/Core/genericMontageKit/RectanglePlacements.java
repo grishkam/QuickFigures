@@ -3,12 +3,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
-
+/***/
 public class RectanglePlacements {
 
 	/**when given the dimensios of the bounding box a rectangle this returns a list of points with the
 	  rectangle located at a position that depends on p */
-	public static Point[] putRelativeToCorner(Rectangle bounds, Rectangle2D[] panels, int position, int barxoff, int baryoff) {
+	private static Point[] putRelativeToCorner(Rectangle bounds, Rectangle2D[] panels, int position, int barxoff, int baryoff) {
 		if (panels==null||bounds==null) return new Point[] {};
 		Point[] output=new Point[panels.length];
 		for(int i=0; i<panels.length; i++) {
@@ -17,7 +17,7 @@ public class RectanglePlacements {
 		return output;
 	}
 	
-	public static Point putRelativeToCorner(Rectangle bounds, Rectangle2D panel,  int position, int barxoff, int baryoff) {
+	private static Point putRelativeToCorner(Rectangle bounds, Rectangle2D panel,  int position, int barxoff, int baryoff) {
 		Point output=new Point();
 		if (position==TOP_LEFT) output=new Point((int)panel.getX()+barxoff, (int)panel.getY()+baryoff);
 		if (position==BOTTOM_LEFT) output=new Point((int)panel.getX()+ barxoff, (int)panel.getY()+(int)(panel.getHeight()-baryoff-bounds.getHeight()));

@@ -53,7 +53,7 @@ public class PathTool2 extends PathTool{
 		p.getPoints().get(1).select();
 		p.getPoints().get(2).select();
 		p.setStrokeColor(Color.green.darker());
-		p.makeDashLess();
+		p.makeNearlyDashLess();
 		out.getTheLayer().add(p);
 			/**
 			RectangularGraphic rect1 = RectangularGraphic.blankRect(new Rectangle(8,8,4,4), Color.white) ;

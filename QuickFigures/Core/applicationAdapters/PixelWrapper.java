@@ -2,7 +2,6 @@ package applicationAdapters;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -20,9 +19,6 @@ public interface PixelWrapper {
 	
 	/**Fills shape with folor c*/
 	public void fill(Shape r, Color c)  ;
-	
-	/**draws a String */
-	public void drawPixelString(String label, Color c,  Font font, int lx, int ly, double angle, boolean antialiasedText );
 	
 	
 	/**returns a copy. If r is null, returns a full copy. otherwise, returns a cropped copy*/
@@ -52,12 +48,13 @@ public interface PixelWrapper {
 	/**creates an awt image*/
 	public Image image();
 	
-	/***/
+	/**returns true if this represents an RGB image and not another kind*/
 	public boolean isRGB();
 	
 	/**returns a histogram or all the pixel values in the image*/
 	public int[] getDistribution();
 
+	/**performs a scaling with bilinear interpolation*/
 	void scaleBilinear(double scale);
 
 	

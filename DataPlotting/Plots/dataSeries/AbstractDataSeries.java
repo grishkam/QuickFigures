@@ -122,7 +122,6 @@ public abstract class AbstractDataSeries implements DataSeries {
 		
 		Double lastPosition=sorted.get(0).getPosition();
 		allPositions.add(lastPosition);
-		int count=1;
 		
 		/**goes through the presorted list, when it finds an item with a new 
 		 x value, it adds the x value to the list. skips when it finds the
@@ -131,7 +130,7 @@ public abstract class AbstractDataSeries implements DataSeries {
 			if (sorted.get(i).getPosition()==lastPosition) continue;
 			lastPosition=sorted.get(i).getPosition();
 			allPositions.add(lastPosition);
-			count++;
+			
 		}
 		allUniquePositions=allPositions;
 		//return getUniquePositions();

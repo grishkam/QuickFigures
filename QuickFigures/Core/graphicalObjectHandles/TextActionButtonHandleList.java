@@ -7,10 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import javax.swing.JMenuItem;
-import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.EditManyShapes;
 import actionToolbarItems.SetAngle;
 import actionToolbarItems.SuperTextButton;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import channelLabels.ChannelLabelTextGraphic;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
@@ -113,7 +113,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	}
 
 	protected void addAttachmentPositionButton(LocatedObject2D t2) {
-		if (t2.getSnapPosition()!=null)this.add(new TextHandleNonEditmode(new SnappingSyncer(true, t2), 741905));
+		if (t2.getAttachmentPosition()!=null)this.add(new TextHandleNonEditmode(new SnappingSyncer(true, t2), 741905));
 	}
 	
 	class TextHandleNonEditmode extends GeneralActionHandle {
@@ -206,7 +206,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		
 		if (text instanceof ChannelLabelTextGraphic) return;
 		//SuperscriptButton itemForIcon = new SuperscriptButton(text, text.getTextColor());
-		EditAndColorizeMultipleItems i = new EditAndColorizeMultipleItems();
+		EditManyShapes i = new EditManyShapes();
 		i.setModelItem(text);
 		i.setBigIcon(true);
 		GeneralActionListHandle h = new TextColorHandle2(i, numHandleID,getTextColors());;
@@ -281,7 +281,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		
 		private static final long serialVersionUID = 1L;
 		
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			CombinedEdit edit = new CombinedEdit();
 			boolean rightSide=canvasMouseEventWrapper. getClickedXScreen()>lastDrawShape.getBounds().getCenterX();
 			boolean down=canvasMouseEventWrapper. getClickedYScreen()>lastDrawShape.getBounds().getCenterY();
@@ -313,7 +313,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 		
 	/**displays a popup that allows the user to input a font size*/
-		protected void showFontSizeInputPopup(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		protected void showFontSizeInputPopup(CanvasMouseEvent canvasMouseEventWrapper) {
 			NumberInputPanel panel = button.getFontInputPanel(canvasMouseEventWrapper.getSelectionSystem());
 			SmartPopupJMenu menu = new SmartPopupJMenu();
 			menu.add(panel);

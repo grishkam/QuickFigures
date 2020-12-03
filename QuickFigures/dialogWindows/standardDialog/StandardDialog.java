@@ -30,6 +30,7 @@ import channelMerging.MultiChannelImage;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import storedValueDialog.StoredValueDilaog;
 import undo.AbstractUndoableEdit2;
 import utilityClassesForObjects.ScaleInfo;
 
@@ -682,16 +683,18 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	public static Double getNumberFromUser(String st, double starting) {
-		return getNumberFromUser(st, starting, false);
+		return getNumberFromUser(st, starting, false, new Object[] {});
 	}
-	public static Double getNumberFromUser(String st, double starting, boolean angle) {
+	public static Double getNumberFromUser(String st, double starting, boolean angle, Object... otherOptions) {
 		StandardDialog sd = new StandardDialog(st);
 		sd.setModal(true);
 		sd.setWindowCentered(true);
 		if (angle) sd.add(st, new AngleInputPanel(st, starting, true));
 		else
 		sd.add(st, new NumberInputPanel(st, starting, 4));
-		
+		if (otherOptions!=null &&otherOptions.length>0) {
+			for(Object of: otherOptions)StoredValueDilaog.addFieldsForObject(sd, of);
+		}
 		sd.showDialog();
 		
 		if(sd.wasOKed) {

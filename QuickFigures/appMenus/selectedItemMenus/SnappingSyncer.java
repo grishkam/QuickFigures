@@ -95,7 +95,7 @@ public class SnappingSyncer extends BasicMultiSelectionOperator {
 	
 	private void setTomodel(AttachmentPosition s) {
 		if(this.model==null) return;
-		AttachmentPosition a = this.model.getSnapPosition();
+		AttachmentPosition a = this.model.getAttachmentPosition();
 		if(a==null)return;
 		s.setLocationTypeInternal(a.getSnapLocationTypeInternal());
 		s.setLocationTypeExternal(a.getSnapLocationTypeExternal());

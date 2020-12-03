@@ -20,17 +20,22 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.Selectable;
 import utilityClassesForObjects.StrokedItem;
 
-/**A list of special objects that are drawn over the image*/
+/**A list of special objects that are drawn over the image. 
+ * These objects are always drawn in their selected forms. 
+ * Always above the normal objects in the image.
+  These are temporary objects that are not saved/exported*/
 public class OverlayObjectManager {
 	private ZoomableGraphic selectionGraphic=null;
 	protected ZoomableGraphic selectionGraphic2=null;
 	protected ZoomableGraphic selectionGraphic3=null;
 	private Color selColor=Color.blue;
 	private Color selColor2=Color.green;
+	
+	/**two lists of smart handles may be drawn over other objects*/
 	private SmartHandleList shlist;
 	private SmartHandleList otherList;
 	
-	/**Allows for the selection of 3 primary objects*/
+	/**Returns all the objects that are drawn as overlays*/
 	public ArrayList<ZoomableGraphic> getSelectionGraphics() {
 		ArrayList<ZoomableGraphic> out = new ArrayList<ZoomableGraphic>();
 		out.add(selectionGraphic);
@@ -41,6 +46,7 @@ public class OverlayObjectManager {
 		return out;
 	}
 	
+	/**draws the objects. if any are not selected, selects them*/
 	public void drawSelections(Graphics2D g2, CordinateConverter<?> cc ) {
 		
 		for(ZoomableGraphic G: getSelectionGraphics()) {
@@ -54,10 +60,18 @@ public class OverlayObjectManager {
 		
 	}
 
+	/**returns the primary selection*/
 	public ZoomableGraphic getSelectionGraphic() {
 		return selectionGraphic;
 	}
-
+	public ZoomableGraphic getSelectionGraphic2() {
+		return selectionGraphic2;
+	}
+	public ZoomableGraphic getSelectionGraphic3() {
+		return selectionGraphic3;
+	}
+	
+	/**sets the primary selection*/
 	public void setSelectionGraphic(ZoomableGraphic selectionGraphic) {
 		 ensureSelected();
 		if (selectionGraphic==this.selectionGraphic) return;
@@ -87,16 +101,7 @@ public class OverlayObjectManager {
 		}
 	}
 	
-	public ZoomableGraphic getSelectionGraphic2() {
 	
-		return selectionGraphic2;
-	}
-
-	
-	public ZoomableGraphic getSelectionGraphic3() {
-		
-		return selectionGraphic3;
-	}
 	
 	public void setSelectionGraphic2(ZoomableGraphic selectionGraphic2) {
 		ensureSelected() ;
@@ -148,7 +153,7 @@ public class OverlayObjectManager {
 		return null;
 	}
 
-	/**eliminates the two selections*/
+	/**eliminates the selections*/
 	public void setSelectionstoNull() {
 		setSelection(null, 2);
 		setSelection(null, 1);
@@ -156,7 +161,6 @@ public class OverlayObjectManager {
 	}
 	
 	public void setSelection(LocatedObject2D l, int i) {
-	//	IssueLog.log("Selection setter method called on  "+this.getSelectionGraphic());
 		if (l instanceof ZoomableGraphic) {
 			ZoomableGraphic z=(ZoomableGraphic) l;
 			if (i==0) setSelectionGraphic(z);
@@ -178,10 +182,10 @@ public class OverlayObjectManager {
 		if (l==null&&i==2) {
 			this.setSelectionGraphic3(null);
 		}
-		//IssueLog.log("Selection is "+this.getSelectionGraphic());
 	
 	}
 
+	/**sets all three selections to null*/
 public void removeSelections() {
 	this.setSelectionGraphic(null);
 	this.setSelectionGraphic2(null);

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.undo.UndoableEdit;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.IconSet;
 import externalToolBar.ToolIconWithText;
-import figureFormat.RowLabelPicker;
+import figureFormat.LabelExamplePicker;
 import genericMontageKit.BasicObjectListHandler;
 import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.CursorFinder;
@@ -27,7 +27,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
@@ -48,7 +48,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 
 	
 	
-	private RowLabelPicker picker;
+	private LabelExamplePicker picker;
 	TextGraphic item;
 	private BasicMontageLayout lastusedLayout;
 	private UndoableEdit lastEdit;
@@ -68,22 +68,22 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 	
 	public RowLabelIntroducerTool(int mode) {
 		super(mode);
-		this.picker=new RowLabelPicker(new ComplexTextGraphic(), mode);
+		this.picker=new LabelExamplePicker(new ComplexTextGraphic(), mode);
 		
 		// TODO Auto-generated constructor stub
 	}
 	
 	
 	 public int markerType() {
-		 if (mode==MontageSpaces.ROW_OF_PANELS) return MontageSpaces.ROWS;
-			if (mode==MontageSpaces.COLUMN_OF_PANELS) return  MontageSpaces.COLS;
+		 if (mode==LayoutSpaces.ROW_OF_PANELS) return LayoutSpaces.ROWS;
+			if (mode==LayoutSpaces.COLUMN_OF_PANELS) return  LayoutSpaces.COLS;
 			
-			 return MontageSpaces.PANELS;
+			 return LayoutSpaces.PANELS;
 	    }
 	 
 	 protected String getTextBase() {
-		 if (mode==MontageSpaces.ROW_OF_PANELS) return "Row";
-			if (mode==MontageSpaces.COLUMN_OF_PANELS) return  "Column";
+		 if (mode==LayoutSpaces.ROW_OF_PANELS) return "Row";
+			if (mode==LayoutSpaces.COLUMN_OF_PANELS) return  "Column";
 			
 			 return "Panel";
 	    
@@ -130,7 +130,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		item=picker.getModelItem().copy();
 		item.setText("Text");
 	
-		item.setSnapPosition(picker.getDefaultSnapping());
+		item.setAttachmentPosition(picker.getDefaultAttachmentPosition());
 		
 		/**puts the item in the correct location*/
 		BasicMontageLayout alteredLayout = this.getCurrentLayout().makeAltered(markerType());
@@ -140,7 +140,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		item.setLocationUpperLeft(r.getX()+2, r.getY()+2);
 		ComplexTextGraphic c=(ComplexTextGraphic) item;
 		c.getParagraph().get(0).get(0).setText(getTextBase()+" "+index);
-		if (markerType()==MontageSpaces.PANELS) {
+		if (markerType()==LayoutSpaces.PANELS) {
 			c.setTextColor(Color.white);
 		}
 		if (getTextBase().equals("Row")) {
@@ -161,7 +161,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		
 		CombinedEdit undoGroup = new CombinedEdit();
 		
-		CanvasMouseEventWrapper mm = super.getLastClickMouseEvent();
+		CanvasMouseEvent mm = super.getLastClickMouseEvent();
 		if (mm.isPopupTrigger()) {
 			new popupMenuForRowLabels(lastusedLayout).show(mm.getComponent(), mm.getClickedXScreen(), mm.getClickedYScreen());
 			return;
@@ -262,7 +262,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource()==showDialog) {
 				ImageWrapper wp = getCurrentLayout().getWrapper();
-				Shape bb = getCurrentLayout().getSelectedSpace(1, MontageSpaces.ALL_MONTAGE_SPACE);
+				Shape bb = getCurrentLayout().getSelectedSpace(1, LayoutSpaces.ALL_MONTAGE_SPACE);
 				rois = new BasicObjectListHandler().getOverlapOverlaypingItems(bb.getBounds(), wp);
 				
 				ArrayList<BasicGraphicalObject> rois2 = picker.getDesiredItemsAsGraphicals(rois);
@@ -303,7 +303,7 @@ dd.showDialog();
 		if (dd==null) {
 			dd=createNewGraphic(MarkerRoi().getBounds(),this.getImageDisplayWrapperClick().getImageAsWrapper(), this.getClickedCordinateX(), this.getClickedCordinateY());
 			Rectangle r2 = this.getCurrentLayout().getSelectedSpace(this.getClickedCordinateX(), this.getClickedCordinateY(), mode).getBounds();
-			dd.getSnapPosition().snapObjectToRectangle(dd, r2);
+			dd.getAttachmentPosition().snapObjectToRectangle(dd, r2);
 		
 		}
 		item=dd;

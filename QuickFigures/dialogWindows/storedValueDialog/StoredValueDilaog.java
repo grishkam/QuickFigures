@@ -7,11 +7,14 @@ import logging.IssueLog;
 import standardDialog.BooleanInputEvent;
 import standardDialog.BooleanInputListener;
 import standardDialog.BooleanInputPanel;
+import standardDialog.NumberInputEvent;
+import standardDialog.NumberInputListener;
+import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 
 /**Created this class to that generating dialogs to change simple options
  * would not take much effort.
- * when given an object in which some fields are annotated with the RetrievableOption annotation
+ * when given an object in which some fields are annotated with the RetrievableOption annotation (@see RetrievableOption)
   creates a dialog that allows a user to change those fields. a programmer only has to include an
   annotations*/
 public class StoredValueDilaog extends StandardDialog{
@@ -25,7 +28,7 @@ public class StoredValueDilaog extends StandardDialog{
 	
 	public StoredValueDilaog(Object of) {
 		this.setWindowCentered(true);
-		 addFieldsForObject(of);
+		 addFieldsForObject(this, of);
 		
 		 return;
 		
@@ -35,7 +38,7 @@ public class StoredValueDilaog extends StandardDialog{
 	 looks for annotated fields in the object and add items to the dialog for each 
 	 field with the RetrievableOption annotation on them
 	 */
-	public void addFieldsForObject(Object of) {
+	public static void addFieldsForObject(StandardDialog d, Object of) {
 		Class<?> c=of.getClass();
 		 try{
 		 while (c!=Object.class) {
@@ -45,8 +48,10 @@ public class StoredValueDilaog extends StandardDialog{
 				f.setAccessible(true);
 				
 				if(f.getType()==boolean.class) {
-					String label = o.label();
-					this.add(o.key(), new BooleanObjectInput(label, of, f));
+					addBooleanField(d, of, f, o);
+				}
+				if (f.getType()==double.class) {
+					addNumberField(d, of, f, o);
 				}
 				
 				
@@ -58,9 +63,61 @@ public class StoredValueDilaog extends StandardDialog{
 		 }
 		 } catch (Exception e) {IssueLog.logT(e);}
 	}
+
+	private static void addNumberField(StandardDialog dialog, Object of, Field f, RetrievableOption o) {
+		String label = o.label();
+		int[] range = o.minmax();
+		boolean useSlider=false;
+		if (range.length>=2 && range[0]<range[1]) useSlider=true;
+		try {
+			NumberInputPanel panel=null;
+			if (!useSlider)
+			{ panel= new NumberInputPanel(label, f.getDouble(of));}
+			else 
+				{ panel = new NumberInputPanel(label, f.getDouble(of), range[0], range[1]);}
+			new NumberInput(panel,f, of);
+			
+			dialog.add(o.key(), panel);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 
+	 */
+	public static void addBooleanField(StandardDialog d, Object of, Field f, RetrievableOption o)
+			throws IllegalAccessException {
+		String label = o.label();
+		d.add(o.key(), new BooleanObjectInput(label, of, f));
+	}
+	
+	/**Class changes a specific field in a specific object in response to a number input*/
+	public static class NumberInput implements NumberInputListener {
+
+		private Field field;
+		private Object object;
+
+		public NumberInput(NumberInputPanel panel, Field f, Object of) {
+			panel.addNumberInputListener(this);
+			this.field=f;
+			this.object=of;
+		}
+		
+		@Override
+		public void numberChanged(NumberInputEvent ne) {
+			try {
+				field.set(object, ne.getNumber());
+			} catch (Exception e) {
+				IssueLog.logT(e);
+			} 
+		}}
+	
 	
 	/**A boolean input panel that changes a boolean field every time the checkbox is changed*/
-	public class BooleanObjectInput extends BooleanInputPanel implements BooleanInputListener {
+	public static class BooleanObjectInput extends BooleanInputPanel implements BooleanInputListener {
 
 		/**
 		 * 

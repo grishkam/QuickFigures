@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.SelectedSetLayerSelector;
@@ -15,7 +15,10 @@ import graphicalObjects.CordinateConverter;
 import imageDisplayApp.KeyDownTracker;
 import selectedItemMenus.LayerSelector;
 
-public class GMouseEvent implements CanvasMouseEventWrapper {
+/**Simple class that stores information related to the context
+  of a mouse event. this class is passed as an argument to different
+  tools*/
+public class GMouseEvent implements CanvasMouseEvent {
 	/**
 	 * 
 	 */
@@ -126,25 +129,20 @@ public class GMouseEvent implements CanvasMouseEventWrapper {
 	
 	public boolean shfitDown() {
 		return e.isShiftDown();
-		//if (e.isShiftDown()) return true;
-		//return KeyDownTracker.isKeyDown(KeyEvent.VK_SHIFT);
 	}
 
 	@Override
 	public Component getComponent() {
-		// TODO Auto-generated method stub
 		return e.getComponent();
 	}
 
 	@Override
 	public Object getSource() {
-		// TODO Auto-generated method stub
 		return e.getSource();
 	}
 
 	@Override
 	public boolean isPopupTrigger() {
-		// TODO Auto-generated method stub
 		if (e.isPopupTrigger()) return true;
 		if(e.getButton()==3) return true;
 		return false;
@@ -158,12 +156,10 @@ public class GMouseEvent implements CanvasMouseEventWrapper {
 
 	@Override
 	public MouseEvent getAwtEvent() {
-		// TODO Auto-generated method stub
 		return e;
 	}
 	
 	public boolean isControlDown() {
-		// TODO Auto-generated method stub
 		return e.isControlDown();
 	}
 

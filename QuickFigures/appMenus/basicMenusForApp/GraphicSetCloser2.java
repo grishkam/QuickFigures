@@ -3,6 +3,8 @@ package basicMenusForApp;
 import applicationAdapters.DisplayedImage;
 import imageDisplayApp.GraphicSetDisplayWindow;
 
+/**this class implements a menu item for closing the figure. 
+  the command will also close the layers window.*/
 public class GraphicSetCloser2  extends BasicMenuItemForObj {
 
 	boolean save=false;
@@ -19,28 +21,18 @@ public class GraphicSetCloser2  extends BasicMenuItemForObj {
 		}
 			
 		
-	
-
-		
-		
-	
-	
-
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "closeDisplaySetAndSupporting";
 	}
 
 	@Override
 	public String getNameText() {
-		// TODO Auto-generated method stub
 		return "Close Group";
 	}
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
 		return "File<";
 	}
 

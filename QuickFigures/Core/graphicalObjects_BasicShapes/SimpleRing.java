@@ -16,7 +16,6 @@ import illustratorScripts.PathItemRef;
 /**A star object*/
 public class SimpleRing extends CircularGraphic {
 
-	private static final int STAR_RATIO_HANDLE = 80;
 	
 	AngleParameter parameterRing=new AngleParameter(this); {parameterRing.setType(AngleParameter.RADIUS_TYPE); parameterRing.setRatioToMaxRadius(0.5);}
 	

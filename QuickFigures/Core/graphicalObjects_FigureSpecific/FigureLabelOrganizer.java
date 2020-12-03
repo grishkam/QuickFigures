@@ -10,7 +10,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TextParagraph;
@@ -64,11 +64,11 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.PanelLabelTextGraphic();
-		tg.setSnapPosition(AttachmentPosition.defaultInternalPanel());
+		tg.setAttachmentPosition(AttachmentPosition.defaultInternalPanel());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.white);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLay.add(tg);
-		Rectangle2D p = g.getPanelLayout().makeAltered(MontageSpaces.PANELS).getPanel(colNum);
+		Rectangle2D p = g.getPanelLayout().makeAltered(LayoutSpaces.PANELS).getPanel(colNum);
 		
 		
 		try {
@@ -92,11 +92,11 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.ColumnLabelTextGraphic();
-		tg.setSnapPosition(AttachmentPosition.defaultColSide());
+		tg.setAttachmentPosition(AttachmentPosition.defaultColSide());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLay.add(tg);
-		Rectangle2D p = g.getPanelLayout().makeAltered(MontageSpaces.COLS).getPanel(colNum);
+		Rectangle2D p = g.getPanelLayout().makeAltered(LayoutSpaces.COLS).getPanel(colNum);
 		
 		try {
 			/**makes sure the row label can fit*/
@@ -124,11 +124,11 @@ public class FigureLabelOrganizer implements Serializable {
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.RowLabelTextGraphic();
-		tg.setSnapPosition(AttachmentPosition.defaultRowSide());
+		tg.setAttachmentPosition(AttachmentPosition.defaultRowSide());
 		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_RIGHT);
 		thisLay.add(tg);
-		Rectangle2D p = g.getPanelLayout().makeAltered(MontageSpaces.ROWS).getPanel(rowNum);
+		Rectangle2D p = g.getPanelLayout().makeAltered(LayoutSpaces.ROWS).getPanel(rowNum);
 		
 		tg.setLocationType(RectangleEdges.RIGHT);
 		tg.setLocation(new Point2D.Double(p.getX(), p.getCenterY()));

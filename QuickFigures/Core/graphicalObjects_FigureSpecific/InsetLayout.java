@@ -11,7 +11,7 @@ import genericMontageKit.PanelSetter;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
 
@@ -20,7 +20,7 @@ import utilityClassesForObjects.AttachmentPosition;
 	  It basically just creates a MontageLayout Graphic
 	  that is appropriate for insets and places it in 
 	  the right location relative to the source panel*/
-public 	class InsetLayout implements MontageSpaces, Serializable{
+public 	class InsetLayout implements LayoutSpaces, Serializable{
 	
 	
 	/**
@@ -476,7 +476,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 								for(int i=0; i<list.getSize(); i++) {
 									
 									ImagePanelGraphic insetPanel = (ImagePanelGraphic) listOfPanels.get(i);
-									insetPanel.setSnapPosition(getSnapping(i));
+									insetPanel.setAttachmentPosition(getSnapping(i));
 									inset.getSourcePanel().addLockedItem( insetPanel);
 									setFrameSize(insetPanel);
 								}
@@ -528,7 +528,7 @@ public 	class InsetLayout implements MontageSpaces, Serializable{
 					ImagePanelGraphic ob = (ImagePanelGraphic) list.getPanels().get(i).getImageDisplayObject();
 					imagelist.add(ob);
 					//lg.addLockedItem(ob);
-					ob.setSnapPosition(AttachmentPosition.defaultInternalPanel());
+					ob.setAttachmentPosition(AttachmentPosition.defaultInternalPanel());
 					setBorders(ob);
 					
 				}

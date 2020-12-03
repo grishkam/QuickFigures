@@ -7,8 +7,11 @@ import standardDialog.StandardDialog;
 
 /**"Dialog appears when the user chooses Saving Options for an image.
   Gives the user an option to load the image from a save location 
-  after a figure is de-Serialized. Arguably, the user has no reason to change
-  this from the default"*/
+  after a figure is de-Serialized. 
+  In most cases, the default for embedding the image is convenient. 
+  Arguably, the user has no reason to change this from the default
+  however some figures with many very large file size images might 
+  be more easily handled if the original image is saved.*/
 public class MultiChannelSlotDialog extends StandardDialog  {
 	
 	/**

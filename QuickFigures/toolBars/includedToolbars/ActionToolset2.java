@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 
-import actionToolbarItems.EditAndColorizeMultipleItems;
+import actionToolbarItems.EditManyShapes;
 import actionToolbarItems.SuperTextButton;
 import basicMenusForApp.CurrentSetLayerSelector;
 import basicMenusForApp.MenuItemForObj;
@@ -35,15 +35,15 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 	public ActionToolset2() {
 		super.maxGridx=16;
 		
-		installOperator(EditAndColorizeMultipleItems.getForColors(false, standardColor));
-		installOperator(EditAndColorizeMultipleItems.getForColors(true, standardColor));
+		installOperator(EditManyShapes.getForColors(false, standardColor));
+		installOperator(EditManyShapes.getForColors(true, standardColor));
 		installOperator(getTextColors());
 		
 		installOperator( getDashesAndStrokes());
 		installOperator( getCapsAndJions()
 				);
 		
-		installOperator( new EditAndColorizeMultipleItems("up"));
+		installOperator( new EditManyShapes("up"));
 		installOperator( getTextOperations()
 				);
 		installOperator(new SuperTextButton(SuperTextButton.TO_SUPERSCRIPT));
@@ -64,14 +64,14 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 
 
 
-	public static EditAndColorizeMultipleItems[] getCapsAndJions() {
-		return new EditAndColorizeMultipleItems[] {
-				new EditAndColorizeMultipleItems(BasicStroke.JOIN_BEVEL, null),
-				new EditAndColorizeMultipleItems(BasicStroke.JOIN_MITER, null),
-				new EditAndColorizeMultipleItems(BasicStroke.JOIN_ROUND, null),
-				new EditAndColorizeMultipleItems(null, BasicStroke.CAP_BUTT),
-				new EditAndColorizeMultipleItems(null, BasicStroke.CAP_ROUND),
-				new EditAndColorizeMultipleItems(null, BasicStroke.CAP_SQUARE)
+	public static EditManyShapes[] getCapsAndJions() {
+		return new EditManyShapes[] {
+				new EditManyShapes(BasicStroke.JOIN_BEVEL, null),
+				new EditManyShapes(BasicStroke.JOIN_MITER, null),
+				new EditManyShapes(BasicStroke.JOIN_ROUND, null),
+				new EditManyShapes(null, BasicStroke.CAP_BUTT),
+				new EditManyShapes(null, BasicStroke.CAP_ROUND),
+				new EditManyShapes(null, BasicStroke.CAP_SQUARE)
 				
 				};
 	}
@@ -81,12 +81,12 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 	public static MultiSelectionOperator[] getTextOperations() {
 		return new MultiSelectionOperator[] {
 				
-				new EditAndColorizeMultipleItems("down"),
-				new EditAndColorizeMultipleItems(Font.BOLD),
-				new EditAndColorizeMultipleItems(Font.PLAIN),
+				new EditManyShapes("down"),
+				new EditManyShapes(Font.BOLD),
+				new EditManyShapes(Font.PLAIN),
 				
-				new EditAndColorizeMultipleItems(Font.ITALIC),
-				new EditAndColorizeMultipleItems(Font.BOLD+Font.ITALIC),
+				new EditManyShapes(Font.ITALIC),
+				new EditManyShapes(Font.BOLD+Font.ITALIC),
 				
 				new TextOptionsSyncer(),
 				new TextBackGroundOptionsSyncer()
@@ -96,20 +96,20 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 
 
 
-	public static EditAndColorizeMultipleItems[] getDashesAndStrokes() {
-		return new EditAndColorizeMultipleItems[] {
-				new EditAndColorizeMultipleItems(true, new float[] {2,2}),
-				new EditAndColorizeMultipleItems(true, new float[] {}),
+	public static EditManyShapes[] getDashesAndStrokes() {
+		return new EditManyShapes[] {
+				new EditManyShapes(true, new float[] {2,2}),
+				new EditManyShapes(true, new float[] {}),
 				
-				new EditAndColorizeMultipleItems(true, new float[] {4,4}),
-				new EditAndColorizeMultipleItems(true, new float[] {8,8}),
-				new EditAndColorizeMultipleItems(true, new float[] {8,16}),
-				new EditAndColorizeMultipleItems(true, 1),
-				new EditAndColorizeMultipleItems(true, 2),
-				new EditAndColorizeMultipleItems(true, 4),
-				new EditAndColorizeMultipleItems(true, 8),
-				new EditAndColorizeMultipleItems(true, 16),
-				new EditAndColorizeMultipleItems(true, 30)};
+				new EditManyShapes(true, new float[] {4,4}),
+				new EditManyShapes(true, new float[] {8,8}),
+				new EditManyShapes(true, new float[] {8,16}),
+				new EditManyShapes(true, 1),
+				new EditManyShapes(true, 2),
+				new EditManyShapes(true, 4),
+				new EditManyShapes(true, 8),
+				new EditManyShapes(true, 16),
+				new EditManyShapes(true, 30)};
 	}
 	
 

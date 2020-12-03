@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
@@ -16,11 +16,11 @@ import java.awt.geom.Rectangle2D;
 
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import imageMenu.CanvasAutoResize;
 
 /**A handle that adds rows/cols to the end of the layout or */
-public class AddRowHandle extends SmartHandle implements MontageSpaces{
+public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 
 	private MontageLayoutGraphic layout;
 	private int type;
@@ -81,7 +81,7 @@ public class AddRowHandle extends SmartHandle implements MontageSpaces{
 		return super.containsClickPoint(p);
 	}
 	
-	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		wrap=canvasMouseEventWrapper.getAsDisplay();
 		
 		if(dragType&&canvasMouseEventWrapper.clickCount()<2) return;
@@ -100,7 +100,7 @@ public class AddRowHandle extends SmartHandle implements MontageSpaces{
 		
 	}
 	
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		if(!dragType) return;
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		BasicMontageLayout bm = layout.getPanelLayout();

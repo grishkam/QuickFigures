@@ -75,14 +75,14 @@ public class GraphicUtil {
 	}
 	
 public  void drawRectangle(Graphics2D g, CordinateConverter<?> cords, Rectangle2D r2, boolean handles) {
-		Rectangle r=cords.getAfflineTransform().createTransformedShape(r2).getBounds();//getAlteredRectangle(g,  cords, r2);	
+		Rectangle r=cords.getAffineTransform().createTransformedShape(r2).getBounds();//getAlteredRectangle(g,  cords, r2);	
 	
 		g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
 		if (handles) drawHandles(g, r);
 	}
 
 public  void fillRectangle(Graphics2D g, CordinateConverter<?> cords, Rectangle2D r2) {
-	Rectangle r=cords.getAfflineTransform().createTransformedShape(r2).getBounds();//getAlteredRectangle(g,  cords, r2);	
+	Rectangle r=cords.getAffineTransform().createTransformedShape(r2).getBounds();//getAlteredRectangle(g,  cords, r2);	
 
 	g.fillRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
 }
@@ -111,7 +111,7 @@ public  void drawLine(Graphics2D g, CordinateConverter<?> cords, Point2D point, 
 }
 
 public  void drawStrokedShape(Graphics2D g, CordinateConverter<?> cords, Shape s) {
-	g.draw(cords.getAfflineTransform().createTransformedShape(s));
+	g.draw(cords.getAffineTransform().createTransformedShape(s));
 }
 
 

@@ -45,7 +45,7 @@ public class CanvasAutoResize implements MenuItemForObj {
 			if (mode==slide) {
 				r=new Rectangle2D.Double(0,0,ImageDPIHandler.getStandardDPI()*10, ImageDPIHandler.getStandardDPI()*7.5);
 				}
-			iw.CanvasResizePixelsOnly( (int)r.width, (int)r.height, 0,0);
+			iw.CanvasResize( (int)r.width, (int)r.height, 0,0);
 		}
 		
 		

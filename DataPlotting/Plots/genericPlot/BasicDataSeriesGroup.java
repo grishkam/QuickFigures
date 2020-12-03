@@ -511,7 +511,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	public void setUpSeriesLabel(SeriesLabel l) {
 		l.setLegend(true);
 				l.setSnapTo(getLegandShape());
-				l.setSnapPosition(AttachmentPosition.defaultPlotLegand());
+				l.setAttachmentPosition(AttachmentPosition.defaultPlotLegand());
 				l.setAngle(0);
 				l.putIntoSnapPosition();
 	}

@@ -16,7 +16,7 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.GraphicDisplayComponent;
 import undo.CombinedEdit;
@@ -29,7 +29,7 @@ import utilityClassesForObjects.RectangleEdges;
 
 /**Implements the align objects menu, complete with icons.
    Also includes code for arrange: moving and item between front and back.*/
-public class AlignItem extends BasicMultiSelectionOperator implements  MontageSpaces {
+public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpaces {
 
 	/**
 	 * 

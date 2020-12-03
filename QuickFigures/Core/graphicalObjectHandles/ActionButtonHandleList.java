@@ -12,7 +12,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import basicAppAdapters.GMouseEvent;
 import graphicalObjects.CordinateConverter;
@@ -185,7 +185,7 @@ public void updateLocationsForVertical() {
 		private static final long serialVersionUID = 1L;
 		
 		/**when the user presses the handle*/
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			
 			if (alternativePopup!=null) {
 				alternativePopup.showPopupMenu(canvasMouseEventWrapper);
@@ -201,7 +201,7 @@ public void updateLocationsForVertical() {
 
 
 		/**Executes the operation on the target specified by the mouse event*/
-		public void performOperation(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void performOperation(CanvasMouseEvent canvasMouseEventWrapper) {
 			LayerSelector selector = canvasMouseEventWrapper.getSelectionSystem();
 			operation.setSelector(selector);
 			operation.setSelection(selector.getSelecteditems());
@@ -221,7 +221,7 @@ public void updateLocationsForVertical() {
 		public MultiSelectionOperator itemForIcon;
 		SmartPopupJMenu p=new SmartPopupJMenu();
 		ActionButtonHandleList sublist=new ActionButtonHandleList();
-		CanvasMouseEventWrapper lastEvent;
+		CanvasMouseEvent lastEvent;
 		boolean usePalete=false;
 		private  MultiSelectionOperator[] allItems;
 		private Component iPanel;
@@ -289,7 +289,7 @@ public void updateLocationsForVertical() {
 		private static final long serialVersionUID = 1L;
 		
 		
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			lastEvent=canvasMouseEventWrapper;
 		
 			if(this.itemForIcon.getInputPanel()!=null) 
@@ -365,13 +365,13 @@ public void updateLocationsForVertical() {
 		numHandleID++;
 	}
 	
-	public void  showInPopupPalete(CanvasMouseEventWrapper canvasMouseEventWrapper, String message) {
+	public void  showInPopupPalete(CanvasMouseEvent canvasMouseEventWrapper, String message) {
 		JPopupMenu j = getPopup(canvasMouseEventWrapper, message);
 		
 		j.show(canvasMouseEventWrapper.getAwtEvent().getComponent(), canvasMouseEventWrapper.getAwtEvent().getX(), canvasMouseEventWrapper.getAwtEvent().getY());
 	}
 
-	public JPopupMenu getPopup(CanvasMouseEventWrapper canvasMouseEventWrapper, String message) {
+	public JPopupMenu getPopup(CanvasMouseEvent canvasMouseEventWrapper, String message) {
 		this.setLocation(new Point2D.Double(35,35));
 		JPopupMenu j = new SmartPopupJMenu();
 		GraphicComponent panel=new GraphicComponent();
@@ -384,7 +384,7 @@ public void updateLocationsForVertical() {
 		return j;
 	}
 	
-	public JPopupMenu getPopup(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public JPopupMenu getPopup(CanvasMouseEvent canvasMouseEventWrapper) {
 		return getPopup(canvasMouseEventWrapper, null);
 	}
 	

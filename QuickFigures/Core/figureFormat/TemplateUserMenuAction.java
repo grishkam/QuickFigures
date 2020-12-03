@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects.GraphicEncoder;
@@ -18,50 +15,67 @@ import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
+import menuUtil.SmartJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
 import ultilInputOutput.FileChoiceUtil;
+import undo.CombinedEdit;
 
-public class TemplateSaver extends BasicMultiSelectionOperator implements MenuItemForObj{
+/**This class creates menu items for saving/creating figure templates, loading saved templates, applying figure templates
+  to few or many objects or deleting a figure template. It is required for the figure format menus to appear*/
+public class TemplateUserMenuAction extends BasicMultiSelectionOperator implements MenuItemForObj{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	static DirectoryHandler handler=new DirectoryHandler(); static {handler.makeAllNeededDirsIfAbsent();}
+	
+	/**set to true if this object allows user to create/save a template, false if it allows user to load/apply a template*/
 	boolean save=true;
+	/**set to true if this simply deletes a target template and nothing else. if this is true, it will neither save nor apply*/
+	boolean delete=false;
 	boolean useDefaultpath=false;//set to true if the default path for figure templates is to be used
 	String menuPath="File<Save<";
-	boolean delete=false;
 	
-	public TemplateSaver(boolean save, boolean defpath)  {
+	
+	/**constructor, creates a menu action for either saving a new figure template or applying a saved one
+	  the default template*/
+	public TemplateUserMenuAction(boolean save, boolean willUseDefaultTemplate)  {
 			this.save=save;
-		useDefaultpath=defpath;
+		useDefaultpath=willUseDefaultTemplate;
 	}
 	
-	
-	public TemplateSaver(boolean save, boolean defpath, String menuPath)  {
+
+	/**constructor, creates a menu action for a figure template with the pro*/
+	public TemplateUserMenuAction(boolean save, boolean defpath, String menuPath)  {
 			this.save=save;
 		useDefaultpath=defpath;
 		this.menuPath=menuPath;
 	}
 	
 	
-	/**returns a file for saving. the default for the file choser*/
+	/**displays a dialog for the user to select a file save path
+	 * returns a file object for saving. the default for the file chooser*/
 	public static File  getSaveFile() {
 		String path=handler.fullPathofDefaultTemplate();
-		///JFileChooser jd= new JFileChooser(path); jd.setFileSelectionMode(JFileChooser.FILES_ONLY ); jd.setDialogTitle("Save Template");  jd.showSaveDialog(null); 
-		  File files;//=jd.getSelectedFile();
+		File files;
 		  files=FileChoiceUtil.getSaveFile(path, " template 2");
 		  return files;
 	}
 	
+	/**displays a dialog for the user to select a file
+	 * and returns the file that the user has chosen to open*/
 	public static File  getFileToOpen() {
 		String path=handler.fullPathofDefaultTemplate();
-		//JFileChooser jd= new JFileChooser(path); jd.setFileSelectionMode(JFileChooser.FILES_ONLY ); jd.setDialogTitle("Choose Template");  jd.showOpenDialog(null); 
 		  File files=FileChoiceUtil.getOpenFile(path);//jd.getSelectedFile();
 		  return files;
 	}
 	
+	/**Saves a given figure template with the savepath.
+	 * if the given save path is null, displays a dialog for the user to select a 
+	 * save path.
+	  */
 	public synchronized void saveTemplate(FigureTemplate figure, String path) {
 		if (path==null) {
 			File file = getSaveFile();
@@ -77,7 +91,10 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 	}
 	
 	
-
+	/**Loads a figure template from the save path
+	 * if the given save path is null, displays a dialog for the user to select a 
+	 * save path.
+	  */
 	public FigureTemplate loadTemplate(String path) {
 		File f;
 		if (path==null) {
@@ -93,7 +110,7 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 		return null;
 	}
 	
-	
+	/**serializes the object and stores it in the file path given*/
 	public static synchronized void writeObjectToFile(Object o, String path) throws IOException {
 		FileOutputStream os = new FileOutputStream(new File(path));
 		try {
@@ -102,24 +119,24 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 			
 			oos.flush();
 			os.flush();
-			//os.close();
+			//os.close();//TODO: determine if closing the output stream makes a difference
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		//writeToOS(os, this.getItemToBeEncoded());
+		
 	}
 
 
-
+	/**operates with the entire image given as its target for creating templates or applying a saved template*/
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		/**FigureTemplate tp=new FigureTemplate();
 		TemplateChooserDialog dd = new TemplateChooserDialog(tp, diw.getImageAsWrapper());
 		dd.showDialog();
 		saveTemplate(tp, getUserPath());*/
-		this.operateOnContainer(diw.getImageAsWrapper());
+		diw.getUndoManager().addEdit(
+				this.operateOnContainer(diw.getImageAsWrapper()));
 	}
 
 
@@ -127,26 +144,23 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 	@Override
 	public String getCommand() {
 		return "MENUCMD"+getMenuCommand();
-		// TODO Auto-generated method stub
-//	if (!save) return "openAndApplyTemplate";
-	//	return "saveATemplate";
 	}
 
 
 
+	/**returns the text that the user will see in the menu*/
 	@Override
 	public String getNameText() {
 		return getMenuCommand();
 	}
 
 
-	
-
 	@Override
 	public String getMenuPath() {
 		return menuPath;
 	}
 
+	/**returns the menu text that acts as both the menu commands and the text of the menu item*/
 	@Override
 	public String getMenuCommand() {
 		String output="";
@@ -171,58 +185,80 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 			return;
 		}
 		
+		
 		if (super.selector.getGraphicDisplayContainer()==null) return;
 		ArrayList<ZoomableGraphic> itemsSel = selector.getSelecteditems();
+		CombinedEdit undo=null;
 		
 		if (itemsSel.size()==0) {
 			FigureDisplayContainer graphicDisplayContainer = selector.getGraphicDisplayContainer();
-			
-			operateOnContainer(graphicDisplayContainer);
+					undo=operateOnContainer(graphicDisplayContainer);
 		} else if (itemsSel.size()==1 && itemsSel.get(0) instanceof GraphicLayer) {
-			operateOnLayer((GraphicLayer) itemsSel.get(0));
+					undo=operateOnLayer((GraphicLayer) itemsSel.get(0));
 		}
 		else {
-			operateOnList(selector);
+					undo=operateOnList(selector);
 		}
+		
+		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		
 	}
 
-
-	public void operateOnContainer(FigureDisplayContainer graphicDisplayContainer) {
+	/**Called when the target of this template saver is the given figure container.
+	 * @return 
+	 */
+	public CombinedEdit operateOnContainer(FigureDisplayContainer graphicDisplayContainer) {
 		
 		GraphicLayer graphicLayerSet = graphicDisplayContainer.getAsWrapper().getGraphicLayerSet();
 		
-		operateOnLayer(graphicLayerSet);
+		return operateOnLayer(graphicLayerSet);
 	}
 
-	/**will apply the figure template to the layer and items within the layer*/
-	public void operateOnLayer(GraphicLayer graphicLayerSet) {
+	/**will apply the figure template to the layer and items within the layer
+	 either creates+saves a template, deletes a saved template or applies a saved template
+	 see constructors
+	 * @return 
+	 */
+	public CombinedEdit operateOnLayer(GraphicLayer graphicLayerSet) {
 		if (delete) {
 			deleteTemplateFile();
-			return;
+			return null;
 		}
 		
 		FigureTemplate tp=new FigureTemplate();
+		
+		/***/
 		if (save) {
 			TemplateChooserDialog dd = new TemplateChooserDialog(tp, graphicLayerSet);
 			dd.showDialog();
 		
 			saveTemplate(tp, getUserPath());
+			return null;
 		} else 
+			
 		{
 			FigureTemplate temp = loadTemplate( getUserPath());
-			if (temp!=null)
-			temp.applyProperties(graphicLayerSet);
-			temp.fixupLabelSpaces(graphicLayerSet);
+			if (temp!=null) {
+					CombinedEdit undo = new CombinedEdit();
+					undo.addEditToList(
+								temp.applyTemplateToLayer(graphicLayerSet));
+					undo.addEditToList(
+								temp.fixupLabelSpaces(graphicLayerSet));
+					return undo;
+			}
 			
 		}
+		return null;
 	}
 
 	
-	/**will apply the figure template to the layer and items within the layer*/
-	public void operateOnList(LayerSelector itemsSel ) {
+	/**will apply the figure template to a set of selected items
+	 * for example, the targets may be the layer and items within the layer
+	 * @return */
+	public CombinedEdit operateOnList(LayerSelector itemsSel ) {
 		if (delete) {
 			deleteTemplateFile();
-			return;
+			return null;
 		}
 		
 		FigureTemplate tp=new FigureTemplate();
@@ -234,17 +270,27 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 		} else 
 		{
 			FigureTemplate temp = loadTemplate( getUserPath());
-			if (temp!=null)
-			temp.applyProperties( itemsSel.getSelecteditems() );
-			temp.fixupLabelSpaces( itemsSel.getSelecteditems() );
+			if (temp!=null) {
+				CombinedEdit undo = new CombinedEdit();
+				undo.addEditToList(
+				temp.applyTemplateToList( itemsSel.getSelecteditems() ));
+				undo.addEditToList(
+				temp.fixupLabelSpaces( itemsSel.getSelecteditems() ));
+		
+				return undo;
+			}
 			
 		}
+		return null;
 	}
 
 
+	/**deletes the template file that this template saver targets*/
 	public void deleteTemplateFile() {
 		new File(getUserPath()).delete();
 	}
+	
+	
 /**returns the default template file path or returns null if the user is meant to chose one*/
 	public String getUserPath() {
 		String path=null;
@@ -252,54 +298,58 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 		return path;
 	}
 	
+	/**returns the default template*/
 	public FigureTemplate loadDefaultTemplate() {
 		String path=handler.fullPathofDefaultTemplate();
 		return loadTemplate(path);
 		
 	}
 	
+	/**Saves the given template as the new default template*/
 	public void saveDefaultTemplate(FigureTemplate temp) {
 		String path=handler.fullPathofDefaultTemplate();
 		this.saveTemplate(temp, path);
 		
 	}
 	
-	public static ArrayList<TemplateSaver> createSeveral(String figFormatPath) {
-		ArrayList<TemplateSaver> t=new ArrayList<TemplateSaver>();
-		t.add(new TemplateSaver(true, true, figFormatPath));
-		t.add(new TemplateSaver(false, true, figFormatPath));
-		t.add(new TemplateSaver(true, false, figFormatPath));
-		t.add(new TemplateSaver(false, false, figFormatPath));
+	/**Creates a series of items that will appear in the same menu*/
+	public static ArrayList<TemplateUserMenuAction> createSeveral(String figFormatPath) {
+		ArrayList<TemplateUserMenuAction> t=new ArrayList<TemplateUserMenuAction>();
+		t.add(new TemplateUserMenuAction(true, true, figFormatPath));
+		t.add(new TemplateUserMenuAction(false, true, figFormatPath));
+		t.add(new TemplateUserMenuAction(true, false, figFormatPath));
+		t.add(new TemplateUserMenuAction(false, false, figFormatPath));
 		t.add(createTemplateDeleter(figFormatPath));
 		return t;
 	}
 
-
-	public static TemplateSaver createTemplateDeleter(String figFormatPath) {
-		TemplateSaver delTemp = new TemplateSaver(true, true, figFormatPath);
+	/**creates a version that deletes templates*/
+	public static TemplateUserMenuAction createTemplateDeleter(String figFormatPath) {
+		TemplateUserMenuAction delTemp = new TemplateUserMenuAction(true, true, figFormatPath);
 		delTemp.delete=true;
 		return delTemp;
 	}
 	
-	/**Returns a menu that the user can use to format figures in layer l*/
-	public static JMenu createFormatMenu(GraphicLayer l) {
-		JMenu output=new JMenu("Format Figure");
-		ArrayList<TemplateSaver> list = createSeveral("");
-		for(TemplateSaver item: list) {
+	/**Returns a menu that the user can use to format figures in a layer */
+	public static SmartJMenu createFormatMenu(GraphicLayer l) {
+		SmartJMenu output=new SmartJMenu("Format Figure");
+		ArrayList<TemplateUserMenuAction> list = createSeveral("");
+		for(TemplateUserMenuAction item: list) {
 			output.add(new TemplateSaverAction(item,l));
 		}
 		return output;
 	}
 	
-	static class TemplateSaverAction extends JMenuItem implements ActionListener{
+	/**a j menu item for a popup menu that targets a particular layer*/
+	static class TemplateSaverAction extends BasicSmartMenuItem implements ActionListener{
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private TemplateSaver saver;
+		private TemplateUserMenuAction saver;
 		private GraphicLayer layer;
-		public TemplateSaverAction(TemplateSaver t, GraphicLayer l) {
+		public TemplateSaverAction(TemplateUserMenuAction t, GraphicLayer l) {
 			this.saver=t;
 			this.layer=l;
 			this.addActionListener(this);
@@ -308,7 +358,8 @@ public class TemplateSaver extends BasicMultiSelectionOperator implements MenuIt
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			saver.operateOnLayer(layer);
+			CombinedEdit undo = saver.operateOnLayer(layer);
+			if (this.undoManager!=null) this.undoManager.addEdit(undo);
 		}
 	}
 	

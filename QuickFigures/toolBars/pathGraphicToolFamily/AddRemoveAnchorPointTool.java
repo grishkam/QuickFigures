@@ -11,16 +11,16 @@ import externalToolBar.IconWrappingToolIcon;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import sUnsortedDialogs.ReflectingFieldSettingDialog;
 import standardDialog.GraphicDisplayComponent;
+import storedValueDialog.ReflectingFieldSettingDialog;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;
 
+/**A tool for adding and removing points from a PathGraphic. @see PathGraphic*/
 public class AddRemoveAnchorPointTool extends PathAnchorPointTool {
 	
 	
 	private boolean remove;
-	///int experimentalRemove=1;
 	public boolean oldRemovalFormula;
 	
 
@@ -36,7 +36,7 @@ public class AddRemoveAnchorPointTool extends PathAnchorPointTool {
 		
 		boolean remove1=remove;
 		if(this.shiftDown())remove1=!remove;
-		boolean adjectCurvature=true;
+		
 		Point clickedCord = this.clickedCord();
 		
 		

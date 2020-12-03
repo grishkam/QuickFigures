@@ -18,7 +18,7 @@ public class FormatOptionsDialog extends StandardDialog {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<?> list;
 	private JournalCriteria jc=new JournalCriteria();
-	private JComboBox output;
+	private JComboBox<?> output;
 	private String[] fontOptions;
 
 	public FormatOptionsDialog(ArrayList<?extends Object> list, JournalCriteria jc) {
@@ -61,7 +61,7 @@ public class FormatOptionsDialog extends StandardDialog {
 		 String[] fonts2 = new String[fonts.length+1];
 		 this.fontOptions=fonts2;
 		 fonts2[0]=""; for(int i=0; i<fonts.length; i++) {fonts2[i+1]=fonts[i];}
-		 output=new JComboBox(fonts2);
+		 output=new JComboBox<String>(fonts2);
 		 output.setSelectedIndex(Arrays.binarySearch(fonts2, jc.prefferedFontFamily));
 	     ComboBoxPanel cbp = new ComboBoxPanel("Ideal Font", output);
 		return cbp;

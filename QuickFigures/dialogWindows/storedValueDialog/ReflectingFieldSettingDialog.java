@@ -1,4 +1,4 @@
-package sUnsortedDialogs;
+package storedValueDialog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -68,22 +68,11 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 	}
 	
 	
-	void addField(String sf) {
-		Field f=null;
+	private void addField(String sf) {
+	
 		Class<?> classC = o.getClass();
 		addFieldToDialog(findField(classC, sf));
-		/**
-		while (f==null&&classC!=Object.class) {
-				try{f= classC.getDeclaredField(sf);} catch (Throwable t) {}
-			
-				if (f!=null) {addField(f); return;}
-				
-				
-				try{f= classC.getField(sf);} catch (Throwable t) {}
-			
-				if (f!=null) {addField(f); return;}
-				classC=classC.getSuperclass();
-		}*/
+		
 		
 	}
 	

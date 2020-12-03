@@ -332,14 +332,14 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 
 
 		@Override
-		public AttachmentPosition getSnapPosition() {
+		public AttachmentPosition getAttachmentPosition() {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 
 		@Override
-		public void setSnapPosition(AttachmentPosition snap) {
+		public void setAttachmentPosition(AttachmentPosition snap) {
 			// TODO Auto-generated method stub
 			
 		}

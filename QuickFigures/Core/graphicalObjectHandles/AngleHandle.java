@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.AngleParameter;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
@@ -73,7 +73,7 @@ public class AngleHandle extends SmartHandle {
 	
 	
 	
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		
 		
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
@@ -171,12 +171,12 @@ public class AngleHandle extends SmartHandle {
 	}
 	
 	@Override
-	public void handleRelease(CanvasMouseEventWrapper w) {
+	public void handleRelease(CanvasMouseEvent w) {
 		
 	}
 	
 	@Override
-	public void handlePress(CanvasMouseEventWrapper w) {
+	public void handlePress(CanvasMouseEvent w) {
 		undo = new SimpleItemUndo<AngleParameter> (theAngle);
 		undoadded = false;
 		
@@ -192,7 +192,7 @@ public class AngleHandle extends SmartHandle {
 	/**
 		displays a dialog for altering the angle parameter's radius
 	 */
-	protected void showUserDialogForRadius(CanvasMouseEventWrapper w) {
+	protected void showUserDialogForRadius(CanvasMouseEvent w) {
 		double nSW = StandardDialog.getNumberFromUser("Input ratio", theAngle.getRatioToMaxRadius(), false);
 		if(nSW>maxRatio) nSW=maxRatio;
 		theAngle.setRatioToMaxRadius(nSW);
@@ -202,7 +202,7 @@ public class AngleHandle extends SmartHandle {
 	/**
 		displays a dialog for altering the angle parameter's angle
 	 */
-	protected void showUserDialogForAngle(CanvasMouseEventWrapper w) {
+	protected void showUserDialogForAngle(CanvasMouseEvent w) {
 		if (doesAngleRatio()) {
 			double nSW = StandardDialog.getNumberFromUser("Input angle ratio", theAngle.getRatioToStandardAngle(), false);
 			theAngle.setRatioToStandardAngle(nSW);
@@ -217,7 +217,7 @@ public class AngleHandle extends SmartHandle {
 		return type==ANGLE_RATIO_TYPE;
 	}
 
-	public void addUndoToManager(CanvasMouseEventWrapper w) {
+	public void addUndoToManager(CanvasMouseEvent w) {
 		undo.establishFinalState();
 		w.addUndo(undo);
 	}

@@ -2,7 +2,7 @@ package graphicalObjectHandles;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import java.awt.geom.Rectangle2D;
 
 import graphicalObjects_BasicShapes.RectangularGraphic;
@@ -11,11 +11,11 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import undo.UndoLayoutEdit;
 
 /**a handle that moves the rows and columns of the layout around*/
-public class MoveRowHandle extends SmartHandle implements MontageSpaces{
+public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 
 	protected MontageLayoutGraphic layout;
 	protected int type;
@@ -98,7 +98,7 @@ public class MoveRowHandle extends SmartHandle implements MontageSpaces{
 		return super.containsClickPoint(p);
 	}
 	
-	public void handleDrag(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handleDrag(CanvasMouseEvent canvasMouseEventWrapper) {
 		super.handleDrag(canvasMouseEventWrapper);
 		
 		BasicMontageLayout makeAltered = layout.getPanelLayout().makeAltered(type);
@@ -113,7 +113,7 @@ public class MoveRowHandle extends SmartHandle implements MontageSpaces{
 		
 	}
 	
-	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		UndoLayoutEdit currentUndo = new UndoLayoutEdit(layout);
 		
 		endIndex = this.getCurrentLayout().makeAltered(type).getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());

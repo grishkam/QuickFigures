@@ -3,7 +3,7 @@ package genericMontageUIKit;
 import java.awt.Color;
 import java.awt.Shape;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import gridLayout.BasicMontageLayout;
@@ -14,8 +14,10 @@ import gridLayout.BasicMontageLayout;
   TODO: */
 public interface ToolCore {
 
+	
 	public ImageWrapper currentlyInFocusWindowImage();
 	
+	/**Sets and returns the image being worked on by the tool*/
 	public abstract DisplayedImage getClickedImage();
 	public abstract void setClickedImage(DisplayedImage d);
 	
@@ -99,7 +101,6 @@ public interface ToolCore {
 	public abstract int getSliceClick();
 	public abstract void setSliceClick(int sliceClick);
 	public abstract int getSliceDrag();
-	public abstract int getSliceRelease() ;
 	public abstract void setSliceDrag(int sliceDrag);
 
 	
@@ -135,8 +136,8 @@ public interface ToolCore {
 	public void setRowColDragForLayout(BasicMontageLayout lay);
 	public void setRowColClickForLayout(BasicMontageLayout lay);
 
-	public CanvasMouseEventWrapper getLastDragMouseEvent();
-	public CanvasMouseEventWrapper getLastMouseEvent();
+	public CanvasMouseEvent getLastDragMouseEvent();
+	public CanvasMouseEvent getLastMouseEvent();
 
 
 

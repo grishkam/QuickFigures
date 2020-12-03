@@ -18,7 +18,7 @@ import exportMenus.PNGSequenceQuickExport;
 import exportMenus.PPTQuickExport;
 import exportMenus.SVGQuickExport;
 import exportMenus.TiffQuickExport;
-import figureFormat.TemplateSaver;
+import figureFormat.TemplateUserMenuAction;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
 import graphicActionToolbar.QuickFigureMaker;
@@ -33,6 +33,11 @@ import menuUtil.SmartJMenu;
 import selectedItemMenus.SelectionOperationsMenu;
 import uiForAnimations.TimeLineAction;
 
+/**The main menu bar that appears for every image (and some toolbars) 
+ 
+ @see MenuItemForObj
+ It will appear above windows ( @see GraphicSetDisplayWindow).
+ */
 public class MenuBarForApp extends JMenuBar implements ActionListener{
 
 	/**
@@ -53,15 +58,16 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	
 	public JMenu imageMenu=setupImageMenu();
 	
+	
 	public MenuBarForApp() {
 		installItem(new NewCanvasDialog());
 		installItems(QuickFigureMaker.getMenuBarItems());
 		installItem(new GraphicSetSaver());
-		installItem(new TemplateSaver(true, false));
+		installItem(new TemplateUserMenuAction(true, false));
 		
 		
-	//	intallItem(new TemplateSaver(false));
-		this.add(imageMenu);
+	
+		this.add(imageMenu);//makes sure the image menu is the second menu
 		
 		
 	
@@ -84,7 +90,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new ZoomFit(ZoomFit.OUT));
 		installItem(new ZoomFit(ZoomFit.IN));
 		installItem(new ZoomFit(ZoomFit.USER_SET));
-		installItem(new ZoomFit(ZoomFit.OPTIONS));
+		
 		
 		for(int i=0; i<ShowToolBar.names.length; i++)
 			installItem(new ShowToolBar(i));
@@ -92,7 +98,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		
 		installItem(new FlatCreator());
 		installItem(new CombineImages());
-		addOfficeToolsToMenu();
+		addExportMenus();
 		installItem(new GraphicSetCloser2());
 		
 		CurrentSetLayerSelector ls = new CurrentSetLayerSelector();
@@ -102,10 +108,11 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		//installItem(new XMLloadItem());
 		installItem(new DebugMenuItems());
 		installItem(new DebugMenuItems(false));
+		installItem(new WindowDebugMenuItem());
 		
 	String figFormatPath="Image<Figure Format<";
-	ArrayList<TemplateSaver> templateMenu = TemplateSaver.createSeveral(figFormatPath);
-	for(TemplateSaver i: templateMenu) {
+	ArrayList<TemplateUserMenuAction> templateMenu = TemplateUserMenuAction.createSeveral(figFormatPath);
+	for(TemplateUserMenuAction i: templateMenu) {
 		installItem(i);
 	}
 		
@@ -117,7 +124,8 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	}
 	
 	
-	void addOfficeToolsToMenu() {
+	/**Installs the export menu items*/
+	void addExportMenus() {
 		
 			
 			installItem(new PNGQuickExport());
@@ -125,27 +133,40 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			installItem(new PNGSequenceQuickExport());
 			
 			
-			try {installItem(new PPTQuickExport());} 
+			try {
+				installItem(new PPTQuickExport());} 
 			catch (Throwable t) {	
 			//if there is any problem with installation the menu item will not be added
 		}
 			
-			try {
-				SVGQuickExport obj = new SVGQuickExport();
-				if (obj.isBatikInstalled())
-					installItem(obj);
-				} 
-			catch (Throwable t) {	
-				//if there is any problem with installation the menu item will not be added
-		}
+			installBatikExportItems();
 			
+			
+			
+	
+	}
+
+
+	/**
+	 * 
+	 */
+	public void installBatikExportItems() {
+		try {
+			SVGQuickExport obj = new SVGQuickExport();
+			if (obj.isBatikInstalled())
+				installItem(obj);
 			
 			EPSQuickExport eps=new EPSQuickExport();
 			installItem(eps);
 			
 			PDFQuickExport ep=new PDFQuickExport();
 			installItem(ep);
-	
+			
+			
+			} 
+		catch (Throwable t) {	
+			//if there is any problem with installation the menu item will not be added
+}
 	}
 	
 	

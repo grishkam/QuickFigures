@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.DragAndDropHandler;
@@ -204,11 +204,11 @@ public class BasicToolBit implements ToolBit {
 
 	}
 	
-	public CanvasMouseEventWrapper getLastClickMouseEvent() {
+	public CanvasMouseEvent getLastClickMouseEvent() {
 		return this.getToolCore(). getLastMouseEvent();
 	}
 	
-	public CanvasMouseEventWrapper getLastDragOrRelMouseEvent() {
+	public CanvasMouseEvent getLastDragOrRelMouseEvent() {
 		return this.getToolCore(). getLastDragMouseEvent();
 	}
 	

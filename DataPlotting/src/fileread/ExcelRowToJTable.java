@@ -88,7 +88,10 @@ public class ExcelRowToJTable extends QuickImport  {
 				Object value=null;
 				if (typeCell==0) value=cell.getNumericCellValue();
 				else
-					if (typeCell==2) {String st="does not handle formulats";}
+					if (typeCell==2) {
+						String st="does not handle formulas";
+						IssueLog.log(st);
+					}
 					else 
 				if (typeCell==1) value=cell.getStringCellValue();
 				else 

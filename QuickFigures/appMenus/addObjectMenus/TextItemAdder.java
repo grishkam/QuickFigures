@@ -77,9 +77,9 @@ class TextItemAdder extends BasicGraphicAdder {
 					
 					if (output) {
 						ag2=ag.copy();
-						ag2.setSnapPosition(ag.getSnapPosition());
+						ag2.setAttachmentPosition(ag.getAttachmentPosition());
 					} else {
-						ag.setSnapPosition(AttachmentPosition.defaultPanelLabel());
+						ag.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
 						while (ag.getBounds().width>0.9*it.getObjectWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
 					}
 					ag2.setText("Label "+count); count++;

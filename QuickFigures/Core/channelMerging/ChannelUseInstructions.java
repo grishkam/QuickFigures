@@ -9,28 +9,34 @@ import gridLayout.BasicMontageLayout;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
-	public class ChannelUseInstructions implements Serializable {
+/**
+Instructions on how to take that channels from a multichannel image
+and make panels.
+Used by many classes
+*/
+public class ChannelUseInstructions implements Serializable {
 
-		/**
-		 Instructions on how to take that channels from a multichannel image
-		 and make panels.
-		 Used by 
-		 */
+		
 		private static final long serialVersionUID = 1L;
 		public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=3, NO_MERGE_PANELS=4;
 		public static final int CHANNELS_IN_COLOR=0, CHANNELS_IN_GREYSCALE=1;
 		public static final int NONE_SELECTED=0;
 		
+		
+		
 			/**These options are important for deciding how composite stacks are converted into RGB*/
 			public int channelColorMode=CHANNELS_IN_GREYSCALE;
 			
-			/**Channels that are treated differently are noted by their numbers*/
-		    public int eachMergeChannel=0;//merged with every other channel
+			/**Channel that is merged into every channel panel*/
+		    public int eachMergeChannel=NONE_SELECTED;
+		    
+		    /**Channels panels are not created for some channel numbers*/
 		    public ArrayList<Integer> excludedChannelPanels=new ArrayList<Integer>(), 
+		    		 /**Channels for some channel numbers are excluded from the merge*/
 		    		noMergeChannels=new ArrayList<Integer>();//excluded from the merge
 		   
 		    /**will skip channels after this one*/
-		    public int ignoreAfterChannel=0;
+		    public int ignoreAfterChannel= NONE_SELECTED;
 		    
 		    /**what to do with the Merge*/
 		    public int MergeHandleing=MERGE_LAST;
@@ -127,6 +133,10 @@ import utilityClasses1.ArraySorter;
 				if(this.getSliceUseInstructions()!=null) otherInstructions.setSliceUseMethod(getSliceUseInstructions().createDouble());
 			} 
 			
+			/**changes the channel use options of the given instructions to match this one
+			 NOTE: this uses the same array to store the excluded channels so the other will not be 
+			 completely separated from these instructions.
+			 */
 			public void makePartialMatching(ChannelUseInstructions other) {
 				other.channelColorMode=channelColorMode;
 				other.eachMergeChannel=eachMergeChannel;
@@ -151,11 +161,13 @@ import utilityClasses1.ArraySorter;
 			}
 			
 			/**Estimates the number of channel and merge panels
-			  that will be in each slice of the list */
+			  that will be needed for in each slice of the panel list
+			  made for the multichannel image */
 			public int estimateChanColsNeeded(MultiChannelImage imp) {
-				if (this.onlyMergePanel()) return 1;
-				int out=0;
 				int fs=1;
+				if (this.onlyMergePanel()) return fs;
+				
+				int out=0;
 				out=fs*(imp.nChannels());
 				
 				if (addsMergePanel()) out+=fs;
@@ -244,20 +256,28 @@ import utilityClasses1.ArraySorter;
 				return false;
 			}
 			
+			/**Sets the instructions to use only the given time frame. 
+			  if the given frame is null, uses all the frames*/
 			public void limitStackUseToFrame(Integer frame) {
-				
 				if (frame!=null)setFrameUseMethod(new SubStackSelectionInstructions.FrameUseInstructions(frame));
 			}
+			
+			/**Sets the instructions to use only the given z slice. 
+			  if the given slice is null, uses all the slices*/
 			public void limitStackUseToSlice(Integer slice) {
 			if (slice!=null)setSliceUseMethod(new SubStackSelectionInstructions.SliceUseInstructions(slice));
 			}
+			
+			/**Estimates the total number of panels that will be created
+			  for display of the multichannel image.*/
 			public int estimageNPanels(MultiChannelImage image) {
 				int[] in = estimateBestMontageDims(image);
 				return in[0]*in[1];
 			}
 			
 			
-			/**when given a number of panels containing slices or frames, determines a grid dimension for them*/
+			/**when given a number of panels containing slices or frames, determines a grid dimension for them
+			  that will fit within the 'ideal' coluumn number option (changeable by user)*/
 			public int[] gridFor(int i) {
 				if (i<=idealColNum) return new int[] {1,i};
 				
@@ -265,9 +285,10 @@ import utilityClasses1.ArraySorter;
 					
 			}
 			
+			/**returns the number of rows and columns of panels that are needed to display the given images
+			 * if the list contains more than one image, then this method
+			 * does not take into account the number of time points and z sections. only channels */
 			public int[] estimateBestMontageDims(ArrayList<MultiChannelImage> images) {
-				
-				
 				
 				if (images.size()==0) return new int[]{1,1};
 				int[] output=estimateBestMontageDims(images.get(0));
@@ -275,11 +296,8 @@ import utilityClasses1.ArraySorter;
 					int[] addition=estimateBestMontageDims(images.get(i2));
 					if (this.onlyMergePanel()){output[1]=output[1]+addition[1];} else {output[0]=output[0]+addition[0];}
 					if (addition[1]>output[1]) output[1]=addition[1];
-					
-					
 				}
-				
-				
+
 				if (this.onlyMergePanel()) {
 					return this.gridFor(images.size());
 				}
@@ -288,7 +306,9 @@ import utilityClasses1.ArraySorter;
 			
 			
 			
-			/***/
+			/**alters the layout to ensure that sufficient rows and columns are available to fit the image
+			 *if multiple images are present and each has more than one section/time frame this does not produce a perfect result
+			 **/
 			public void setDimensionForPanels(BasicMontageLayout p,ArrayList<MultiChannelImage> image) {
 				int[] dims=estimateBestMontageDims(image);
 				int col=dims[1];
@@ -311,6 +331,17 @@ import utilityClasses1.ArraySorter;
 				getChanPanelReorder().swap(c1, c2);
 			}
 			
+			/**If these instructions target a specific time frame or z section
+			 changes the selected Z section and T frame selected to be consistent with the CSF location provided.
+			  */
+	public void shareViewLocation(CSFLocation d) {
+				
+				if(this.frameUseMethod!=null&& frameUseMethod.method==SubStackSelectionInstructions.SINGLE_) frameUseMethod.setSelected(d.frame);
+				if(this.sliceUseMethod!=null&& sliceUseMethod.method==SubStackSelectionInstructions.SINGLE_) sliceUseMethod.setSelected(d.slice);
+				
+			}
+			
+			/**returns the channel re-order object*/
 			public ChannelPanelReorder getChanPanelReorder() {
 				if (reorder==null) {
 					reorder=new ChannelPanelReorder();
@@ -318,9 +349,19 @@ import utilityClasses1.ArraySorter;
 				return reorder;
 			}
 			
+			/**resets the channel order back to default*/
+			public void clearChannelReorder() {
+				reorder=null;
+			}
+
+		
+			/**this nested class stores the order of the channel panels.
+			  Objects of this class are used to determine channel panel orders
+			 when panels are freshly created. The order may be modified when the user 
+			 makes certain changes*/
 			public static class ChannelPanelReorder implements Serializable {
 				private static final long serialVersionUID = 1L;
-				static int[] defaultOrder=new int[] {0,1,2,3,4,5,6,7,8,9,10};
+				static final int[] defaultOrder=new int[] {0,1,2,3,4,5,6,7,8,9,10};
 				private ArrayList<Integer> currentOrder;
 				
 				public ChannelPanelReorder() {
@@ -332,13 +373,17 @@ import utilityClasses1.ArraySorter;
 					this.currentOrder = new ArrayList<Integer>();
 					currentOrder.addAll(order);
 				}
+				
+				/**swaps the locations of two channels within the order*/
 				void swap(int c1, int c2) {
 					new ArraySorter<Integer>().swapObjectPositionsInArray(c1, c2, currentOrder);
 				
 				}
+				/**returns the position of channel c in the order*/
 				public int index(int c) {
 					return currentOrder.indexOf(c);
 				}
+				/**imposes a particular order on this object*/
 				public void setOrder(ArrayList<Integer> order) {
 					currentOrder = new ArrayList<Integer>();
 					currentOrder.addAll(order);
@@ -347,21 +392,13 @@ import utilityClasses1.ArraySorter;
 							currentOrder.add(i);
 						}
 					}
+				/**imposes the given order onto this object*/
 				public void setOrder(ChannelPanelReorder chanPanelReorder) {
 					setOrder(chanPanelReorder.currentOrder);
 				}
 			}
 
-			public void clearChannelReorder() {
-				reorder=null;
-			}
-
-			public void shareViewLocation(CSFLocation d) {
-				
-				if(this.frameUseMethod!=null&& frameUseMethod.method==SubStackSelectionInstructions.SINGLE_) frameUseMethod.setSelected(d.frame);
-				if(this.sliceUseMethod!=null&& sliceUseMethod.method==SubStackSelectionInstructions.SINGLE_) sliceUseMethod.setSelected(d.slice);
-				
-			}
+			
 
 	
 }

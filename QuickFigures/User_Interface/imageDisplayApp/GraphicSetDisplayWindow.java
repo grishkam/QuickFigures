@@ -44,6 +44,7 @@ import externalToolBar.InterfaceKeyStrokeReader;
 import externalToolBar.ToolBarManager;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import includedToolbars.StatusPanel;
 import logging.IssueLog;
 import selectedItemMenus.CopyItem;
 import selectedItemMenus.ItemRemover;
@@ -322,10 +323,11 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**Called after a mouse event. */
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		try {
+		if(arg0.isConsumed()) StatusPanel.updateStatus("Key is consumed  "+arg0.getKeyChar());
 		
 		
-		
-		if (getStrokeReader() !=null) {
+		if (getStrokeReader() !=null)  {
 			getStrokeReader().keyPressed(getDisplaySet(), arg0);
 			
 		}
@@ -447,6 +449,9 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 		getDisplaySet().updateDisplay();
 		
+		} catch (Throwable t) {
+			IssueLog.log(t);
+		}
 
 	}
 	

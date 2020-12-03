@@ -47,7 +47,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	private static final long serialVersionUID = 1L;
 	private PanelList list=null;
 	Vector<PanelListElement> elements=new Vector<PanelListElement>();
-	private specialCellRenderer render= new specialCellRenderer();
+	private SpecialCellRenderer render= new SpecialCellRenderer();
 	private PanelManager panelManager;
 	
 	
@@ -126,7 +126,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	public  ListCellRenderer	getCellRenderer() {return render;}
 	
 	
-	class specialCellRenderer extends  DefaultListCellRenderer {
+	class SpecialCellRenderer extends  DefaultListCellRenderer {
 
 		/**
 		 * 
@@ -136,12 +136,12 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		private int panelNumber;
 		private boolean focus;
 		private boolean isSelected;
-		public Component 	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public Component 	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			theindex=index;
 			focus=cellHasFocus;
 			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (out instanceof specialCellRenderer) {
-				specialCellRenderer c=(specialCellRenderer) out;
+			if (out instanceof SpecialCellRenderer) {
+				SpecialCellRenderer c=(SpecialCellRenderer) out;
 				c.focus=cellHasFocus;
 				c.panelNumber=theindex-1;
 				c.isSelected=isSelected;
@@ -179,8 +179,8 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			
 				start=1;
 				;
-				String panelType="(c="+panel.originalChanNum+ ", f="+panel.originalFrameNum+", z="+panel.originalSliceNum+")";
-				if (merge) 	panelType="(Merge "+", f="+panel.originalFrameNum+", z="+panel.originalSliceNum+")";;
+				String panelType="(c="+panel.targetChannelNumber+ ", f="+panel.targetFrameNumber+", z="+panel.targetSlideNumber+")";
+				if (merge) 	panelType="(Merge "+", f="+panel.targetFrameNumber+", z="+panel.targetSlideNumber+")";;
 				names.add(panelType);
 			
 				lengths[0]=panelType.length();
@@ -357,11 +357,10 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	}
 	
 	public void removeSelectedPanels() {
-		Object[] index1 = this.getSelectedValues();
-		for(Object o: index1) {
-			if (o instanceof PanelListElement) {
-				this.removeItem((PanelListElement) o);
-			}
+		for(PanelListElement o: getSelectedValuesList()) {
+			
+				this.removeItem( o);
+			
 		}
 	}
 

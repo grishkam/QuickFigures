@@ -26,7 +26,7 @@ import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.ImageWrapper;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
@@ -64,7 +64,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		stackSlicePressed=getElementAtPoint(impw, this.getClickedCordinateX(), this.getClickedCordinateY());
 		
 		
-		CanvasMouseEventWrapper me = super.getLastClickMouseEvent();
+		CanvasMouseEvent me = super.getLastClickMouseEvent();
 		Object source = super.getLastClickMouseEvent().getSource();
 		if (me.isPopupTrigger()||me.altKeyDown()) {
 			showthePopup((Component)source, me.getClickedXScreen(), me.getClickedYScreen()) ;
@@ -93,7 +93,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		if (this.clickingOnMultiMode&&this.getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {
 			 MultiChannelDisplayWrapper m=( MultiChannelDisplayWrapper) getImageDisplayWrapperClick() ;
 			clickingOnMultiModeChan2=m.getCurrentChannel();
-			applyReleaseActionToMultiChannel(m.getMultiChannelWrapper());//applyReleaseActionToMultiChannel((MultiChannelWrapper) this.getImageWrapperClick());
+			applyReleaseActionToMultiChannel(m.getContainedMultiChannel());//applyReleaseActionToMultiChannel((MultiChannelWrapper) this.getImageWrapperClick());
 			impw.updateDisplay();return;
 		}
 		
@@ -112,7 +112,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		if (realName==null||realName.trim().equals("")) this.updateAllDisplays();
 		else {
 			for(ImageDisplayLayer pd: getAllDisplays() ) {
-			pd.updatePanelsWithChannel(realName);
+			pd.updateOnlyPanelsWithChannel(realName);
 			if (updateInsets) {
 				if (this.updateInsets) updateInsetPanels(pd, realName);
 			}
@@ -256,12 +256,12 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	public int getPressChannelOfMultichannel() {
 		if(this.clickingOnMultiMode) return this.clickingOnMultiModeChan1;
 		if (stackSlicePressed==null) return 0;
-		return stackSlicePressed.originalChanNum;
+		return stackSlicePressed.targetChannelNumber;
 	}
 	
 	public int getReleaseChannelOfMultichannel() {
 		if(this.clickingOnMultiMode) return this.clickingOnMultiModeChan2;
-		return stackSliceReleased.originalChanNum;
+		return stackSliceReleased.targetChannelNumber;
 	}
 	
 	boolean arePressAndreleaseValid() {
@@ -309,7 +309,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	
 	public MultiChannelImage getPressedWrapper() {
-		if (clickingOnMultiMode) return m.getMultiChannelWrapper();
+		if (clickingOnMultiMode) return m.getContainedMultiChannel();
 		if (presseddisplay==null) {IssueLog.log("You are not clicking on a figure panel"); return null;}
 		return presseddisplay.getMultiChannelImage();
 	}

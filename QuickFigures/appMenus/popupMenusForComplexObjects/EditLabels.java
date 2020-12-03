@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 
-import figureFormat.RowLabelPicker;
+import figureFormat.LabelExamplePicker;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
@@ -18,14 +18,14 @@ public class EditLabels extends JMenuItem implements ActionListener {
 	
 	
 	private int type;
-	private RowLabelPicker picker;
+	private LabelExamplePicker picker;
 	private MontageLayoutGraphic layout;
 	private transient MultiTextGraphicSwingDialog dd;
 	private TextGraphic modelTextItem;
 
 	public EditLabels(TextGraphic t) {
 		
-		 type=t.getSnapPosition().getGridSpaceCode();
+		 type=t.getAttachmentPosition().getGridSpaceCode();
 		 setUpPickerFortype(type);
 		 modelTextItem=t;
 	}
@@ -40,7 +40,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 	}
 
 	public void setUpPickerFortype(int type) {
-		picker=new RowLabelPicker(new ComplexTextGraphic(), type);
+		picker=new LabelExamplePicker(new ComplexTextGraphic(), type);
 		this.setText("Edit All "+picker.getTypeName());
 		
 	}

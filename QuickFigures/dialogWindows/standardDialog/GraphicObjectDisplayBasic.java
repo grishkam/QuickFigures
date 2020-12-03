@@ -122,7 +122,7 @@ public void setMagnification(double magnification) {
 		Rectangle b = currentDisplay().getBounds();
 		
 		if (this.getMagnification()!=1) {
-			b=currentMagConverter().getAfflineTransform().createTransformedShape(b).getBounds();
+			b=currentMagConverter().getAffineTransform().createTransformedShape(b).getBounds();
 		}
 		return new Dimension(b.width+getCurrentItemInsets().left+getCurrentItemInsets().right, b.height+getCurrentItemInsets().top+getCurrentItemInsets().bottom);
 	}

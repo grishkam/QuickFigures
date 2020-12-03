@@ -3,9 +3,6 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JList;
-
-import menuUtil.SmartPopupJMenu;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -16,12 +13,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorComboBox extends JComboBox implements ColorListChoice{
+public class ColorComboBox extends JComboBox<Color> implements ColorListChoice{
 	public int rainbowIndex=Integer.MAX_VALUE-2;
 	{this.setRenderer(new ColorCellRenderer(this));}
 	/**
@@ -155,65 +150,21 @@ public ColorComboBox(ArrayList<Color> c, int rainbowInd) {
 		g2.setColor(Color.DARK_GRAY);
 			g2.draw(r);
 		}
-	//	g.setColor(Color.darkGray);
-		
+	
 		
 	}
 
 	private Stroke getBorderStroke() {
 		BasicStroke st=new BasicStroke(4, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-		// TODO Auto-generated method stub
 		return st;
 	}
 
 	@Override
 	public List<Color> getColors() {
-		// TODO Auto-generated method stub
 		return colors;
 	}
 	
-	
-	public static class menuWithJList extends SmartPopupJMenu implements MouseListener {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		JList list1;
-		public menuWithJList(JList list) {
-			list1=list;
-			add(list1);
-			pack();
-			
-		}
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			Component c = arg0.getComponent();
-			show(c, arg0.getX(), arg0.getY());
-			
-		}
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
-	}
+
 
 
 	@Override

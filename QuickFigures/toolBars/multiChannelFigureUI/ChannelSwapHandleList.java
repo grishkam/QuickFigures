@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import channelMerging.ChannelEntry;
 import channelMerging.ImageDisplayLayer;
 import graphicalObjectHandles.SmartHandle;
@@ -51,7 +51,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	
 
 	
-	int getPressChannel(CanvasMouseEventWrapper e) {
+	int getPressChannel(CanvasMouseEvent e) {
 		SmartHandle h = this.getHandleForClickPoint(new Point2D.Double(e.getClickedXScreen(), e.getClickedYScreen()));
 		if (h!=null)
 			return h.getHandleNumber()-800;
@@ -137,11 +137,11 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		}
 	
 		
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			pressHandleIndex=getPressChannel(canvasMouseEventWrapper);
 		}
 		
-	public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		int relHandleIndex = getPressChannel(canvasMouseEventWrapper);
 		if (pressHandleIndex==relHandleIndex)return;
 		

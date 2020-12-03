@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JColorChooser;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
 import utilityClassesForObjects.ColorDimmer;
@@ -88,7 +88,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 			
 		}
 		
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		if (moreColors) {
 			theColor=JColorChooser.showDialog(null, "Color", getTheColor());
 			addColor(theColor);

@@ -7,7 +7,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import animations.BasicKeyFrame;
 import animations.KeyFrameAnimation;
 import graphicalObjects.ZoomableGraphic;
-import sUnsortedDialogs.ReflectingFieldSettingDialog;
+import storedValueDialog.ReflectingFieldSettingDialog;
 
 public class KeyFrameOptionsDialog extends BasicTimeLineOperator {
 

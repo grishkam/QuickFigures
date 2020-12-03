@@ -14,8 +14,10 @@ import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
+import undo.CombinedEdit;
+import undo.UndoLayoutEdit;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.TakesLockedItems;
 import appContext.CurrentAppContext;
@@ -26,84 +28,98 @@ import channelLabels.ChannelLabelTextGraphic;
 /**Objects of class figure template alter target figures to match a certain 
   example objects. 
   */
-public class FigureTemplate implements MontageSpaces, Serializable{
+public class FigureTemplate implements LayoutSpaces, Serializable{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private RowLabelPicker rowLabelPicker=new RowLabelPicker(new TextGraphic() , ROW_OF_PANELS);
-	private RowLabelPicker colLabelPicker=new RowLabelPicker(new TextGraphic() , COLUMN_OF_PANELS);
-	private RowLabelPicker titleLabelPicker=new RowLabelPicker(new TextGraphic() , MontageSpaces.ALL_MONTAGE_SPACE);
-	private RowLabelPicker panelLabelPicker=new RowLabelPicker(new TextGraphic() , MontageSpaces.PANELS);
 	
-	private RowLabelPicker channelLabelPicker=new ChannelLabelPicker(new ChannelLabelTextGraphic(new ChannelLabelProperties()));
-	private ScaleBarPicker scaleBar=new ScaleBarPicker(new BarGraphic());
-	MultichannelDisplayPicker	mdp=new MultichannelDisplayPicker();
-	GridLayoutPicker layoutpicker =new GridLayoutPicker(new MontageLayoutGraphic());
+	/**The classes below select and store example objects that define the properties of the template*/
+	private LabelExamplePicker rowLabelPicker=new LabelExamplePicker(new TextGraphic() , ROW_OF_PANELS);
+	private LabelExamplePicker colLabelPicker=new LabelExamplePicker(new TextGraphic() , COLUMN_OF_PANELS);
+	private LabelExamplePicker titleLabelPicker=new LabelExamplePicker(new TextGraphic() , LayoutSpaces.ALL_MONTAGE_SPACE);
+	private LabelExamplePicker panelLabelPicker=new LabelExamplePicker(new TextGraphic() , LayoutSpaces.PANELS);
 	
-
+	private LabelExamplePicker channelLabelPicker=new ChannelLabelExamplePicker(new ChannelLabelTextGraphic(new ChannelLabelProperties()));
+	private ScaleBarExamplePicker scaleBarPicker=new ScaleBarExamplePicker(new BarGraphic());
+	MultichannelDisplayPicker	mdp=new MultichannelDisplayPicker(); {mdp.setModelItem(new MultichannelDisplayLayer(null));}
+	GridLayoutExamplePicker layoutpicker =new GridLayoutExamplePicker(new MontageLayoutGraphic());
 	
-	private GraphicalItemPicker<?>[] pickers=new GraphicalItemPicker[] {layoutpicker,  rowLabelPicker, colLabelPicker,  titleLabelPicker, panelLabelPicker, getChannelLabelPicker(),scaleBar };
+	
+	private GraphicalItemPicker<?>[] pickers=new GraphicalItemPicker[] {layoutpicker,  rowLabelPicker, colLabelPicker,  titleLabelPicker, getPanelLabelPicker(), getChannelLabelPicker(),scaleBarPicker };
 	public ItemPicker<?>[] pickersReg=new ItemPicker[] {mdp};
-	public boolean awaitingReset;
+	
+	public boolean awaitingReset=false;
 	
 	
 	public FigureTemplate() {
 		
 	}
+	/**creates a new figure template*/
 	public FigureTemplate(MultichannelDisplayLayer chan ) {
 		this();
-		
 		autoGeneratePickersForDisplay(chan);
 	}
 	
 	/**the standard template for new QuickFigure creations.
-	  this template will not have any default for row column or panel labels*/
-	public static FigureTemplate createStandardTemplate() {
+	  this template will not have any default for row column or panel labels
+	private static FigureTemplate createStandardTemplate() {
 		FigureTemplate ft = new FigureTemplate();
 		ft.panelLabelPicker=null;
 		ft.colLabelPicker=null;
 		ft.rowLabelPicker=null;
 		return ft;
+	}*/
+	
+	/**Applies the format defined by this template to the image
+	 * @return */
+	public CombinedEdit applyTemplateTo(ImageWrapper theImage) {
+		return applyTemplateToLayer(theImage.getGraphicLayerSet());
 	}
 	
-	/**Applies the format defined by this template to the image*/
-	public void applyProperties(ImageWrapper theImage) {
-		this.applyProperties(theImage.getGraphicLayerSet());
-	}
-	
-	/**Applies the format defined by this template to the layer and its sublayers*/
-	public void applyProperties(GraphicLayer theLayer) {
+	/**Applies the format defined by this template to the layer and its sublayers
+	 * @return */
+	public CombinedEdit applyTemplateToLayer(GraphicLayer theLayer) {
 		
 		try{
 		ArrayList<GraphicLayer> l = new ArrayList<GraphicLayer>();
 		l.add(theLayer);
 		l.addAll(theLayer.getSubLayers());
-		this.applyProperties(theLayer.getAllGraphics());
-		this.applyProperties(l);
+		CombinedEdit undo = new CombinedEdit();
+		undo.addEditToList(
+				this.applyTemplateToList(theLayer.getAllGraphics()));
+		undo.addEditToList(
+				applyTemplateToList(l));
+		return undo;
 		}
 		
 			catch (Throwable t) {
 			t.printStackTrace();
+			return null;
 		}
 	}
 	
-	/**Applies the format defined by this template to the objects in the list */
-	public void applyProperties(ArrayList<?> list) {
-		for(GraphicalItemPicker<?> pik:getPickers()) {
-			pik.applyPropertiesToList(list);
+	/**Applies the format defined by this template to the objects in the list 
+	 * @return */
+	public CombinedEdit applyTemplateToList(ArrayList<?> list) {
+		CombinedEdit undo = new CombinedEdit();
+		for(GraphicalItemPicker<?> pik:getAllExamplePickers()) {
+			undo.addEditToList(
+					pik.applyPropertiesToList(list));
 		}
 		for(ItemPicker<?> pik:pickersReg) {
-			pik.applyPropertiesToList(list);
+			undo.addEditToList(
+					pik.applyPropertiesToList(list));
 			
 		}
+		return undo;
 	}
 	
 	/**Returns a string summarizing the what types of items are used by this template*/
 	public String summarizeContent() {
 		String st="";
-		for(GraphicalItemPicker<?> pik:getPickers()) {
+		for(GraphicalItemPicker<?> pik:getAllExamplePickers()) {
 			st+="picker "+pik.getClass().getName()+'\n';
 		}
 		for(ItemPicker<?> pik:pickersReg) {
@@ -113,54 +129,51 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 	}
 	
 
-	/**Returns a list of ItemPicker objects for labels*/
+	/**Returns a list of objects that store the example labels*/
 	public ArrayList<ItemPicker<?>> getStartupLabelPickerList() {
 		ArrayList<ItemPicker<?>> output=new ArrayList<ItemPicker<?>>();
-		//output.add(mdp);
-		//output.add(layoutpicker);
-			output.add(rowLabelPicker);
-			output.add(colLabelPicker);
-			output.add(titleLabelPicker);
-			output.add(panelLabelPicker);
-			//output.add(scaleBar);
+			output.add(getRowLabelPicker());
+			output.add( getColLabelPicker());
+			output.add(getTitleLabelPicker());
+			output.add(getPanelLabelPicker());
 		return output;
 	}
 	
 
-	public RowLabelPicker getRowLabelPicker() {
+	public LabelExamplePicker getRowLabelPicker() {
 		return rowLabelPicker;
 	}
-	public void setRowLabelPicker(RowLabelPicker rowLabelPicker) {
+	public void setRowLabelPicker(LabelExamplePicker rowLabelPicker) {
 		this.rowLabelPicker = rowLabelPicker;
 	}
-	public RowLabelPicker getColLabelPicker() {
+	public LabelExamplePicker getColLabelPicker() {
 		return colLabelPicker;
 	}
-	public void setColLabelPicker(RowLabelPicker colLabelPicker) {
+	public void setColLabelPicker(LabelExamplePicker colLabelPicker) {
 		this.colLabelPicker = colLabelPicker;
 	}
-	public RowLabelPicker getTitleLabelPicker() {
+	public LabelExamplePicker getTitleLabelPicker() {
 		return titleLabelPicker;
 	}
-	public void setTitleLabelPicker(RowLabelPicker titleLabelPicker) {
+	public void setTitleLabelPicker(LabelExamplePicker titleLabelPicker) {
 		this.titleLabelPicker = titleLabelPicker;
 	}
-	public ScaleBarPicker getScaleBar() {
-		return scaleBar;
+	public ScaleBarExamplePicker getScaleBar() {
+		return scaleBarPicker;
 	}
-	public void setScaleBar(ScaleBarPicker scaleBar) {
-		this.scaleBar = scaleBar;
+	public void setScaleBar(ScaleBarExamplePicker scaleBar) {
+		this.scaleBarPicker = scaleBar;
 	}
-	public RowLabelPicker getChannelLabelPicker() {
+	public LabelExamplePicker getChannelLabelPicker() {
 		return channelLabelPicker;
 	}
-	public void setChannelLabelPicker(RowLabelPicker channelLabelPicker) {
+	public void setChannelLabelPicker(LabelExamplePicker channelLabelPicker) {
 		this.channelLabelPicker = channelLabelPicker;
 	}
 	
 	
-	/**creates a set of starter labels and scale bars from the list of model objects
-	  Does not create channel labels as it is another 
+	/**creates a set of starter labels and scale bar from the list of model objects
+	  Does not create channel labels as those are created by another method
 	  */
 	public void createDefaultLabelsObjectsFromTemplate( GraphicLayer l22, MultichannelDisplayLayer display, MontageLayoutGraphic p) {
 		
@@ -169,12 +182,12 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 		}
 	
 		if (l22==null) return;
-		applyProperties(l22);
+		applyTemplateToLayer(l22);
 	
 		/**iterates through the pikers, letting them each add their model
 		  to the layer. Locks them all to the Layout*/
 		for(ItemPicker<?> item : getStartupLabelPickerList()) {
-			if (item==null||item.getModelItem()==null||item instanceof ChannelLabelPicker) continue;
+			if (item==null||item.getModelItem()==null||item instanceof ChannelLabelExamplePicker) continue;
 			
 			if (item.getModelItem() instanceof BasicGraphicalObject&&item.getModelItem() !=null) {
 				 
@@ -190,9 +203,9 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 				 /**If the item is a row, panel or column picker, this alters the montage label space
 				    to include its area. Since the label starts out locked to the layout, the space is
 				    not essensial to keep it in place*/
-				 if (item instanceof RowLabelPicker) {
-						RowLabelPicker rowLabp=(RowLabelPicker) item;
-						if (rowLabp.isInRowOrColumn()) {
+				 if (item instanceof LabelExamplePicker) {
+						LabelExamplePicker rowLabp=(LabelExamplePicker) item;
+						if (rowLabp.isInRowOrColumnOrPanel()) {
 							
 							p.generateCurrentImageWrapper();
 							p.getEditor().expandSpacesToInclude(p.getPanelLayout(), cop.getBounds());
@@ -209,11 +222,13 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 		
 		
 		
-		applyProperties(l22);
+		applyTemplateToLayer(l22);
 		
 	}
 	
-	/**If there is a model scale bar selected it will give it to the merge panel of the principal graphic layer*/
+	/**If there is a model scale bar selected,
+	 * this method will add a similar scale bar to 
+	 * the merge panel of the principal graphic layer*/
 	public void createScaleBarOffTemplate(FigureOrganizingLayerPane p) {
 		ImageDisplayLayer display=p.getPrincipalMultiChannel();
 		
@@ -231,7 +246,7 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 			if (displayob instanceof TakesLockedItems) {
 				BarGraphic newbar = new BarGraphic();
 				newbar.copyAttributesButNotScale(oldsbar);
-				newbar.setSnapPosition(oldsbar.getSnapPosition());
+				newbar.setAttachmentPosition(oldsbar.getAttachmentPosition());
 				p.add(newbar);
 				
 				TakesLockedItems t= (TakesLockedItems) displayob ;
@@ -254,22 +269,22 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 	
 	/**Adds a multichannel display to a a figure organizing layer and applies this template to the newly created items*/
 	public void addDisplayToFigure(FigureOrganizingLayerPane currentFigureOrganizer, MultichannelDisplayLayer display ) {
-		/**must apply before creating the layout so the minimum number of columns can be created*/
 		if (awaitingReset) {
 			autoGeneratePickersForDisplay(display);
 		}
-		
-		applyProperties(display);
+		/**must apply before creating the layout so the minimum number of columns can be created*/
+		applyTemplateToLayer(display);
 		currentFigureOrganizer.addNovelMultiChannel(display, -1);
-		applyProperties(currentFigureOrganizer);
+		/**must also apply after creating the layout and objects*/
+		applyTemplateToLayer(currentFigureOrganizer);
 	}
 	
 
-	
+	/**creates new example picker objects that are suitable for the given display layer*/
 	public void autoGeneratePickersForDisplay(MultichannelDisplayLayer chan ) {
 		IssueLog.log("Figure Template Reset, generating standard from multichannel" );
 		
-		for(GraphicalItemPicker<?> pik: getPickers())try  {
+		for(GraphicalItemPicker<?> pik: getAllExamplePickers())try  {
 			IssueLog.log("Figure Template Reset, generating standard for "+pik.getOptionName());
 			pik.setToStandardFor(chan);
 		} catch (Throwable t) {
@@ -277,7 +292,9 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 		}
 		
 	}
-	public Iterable<GraphicalItemPicker<?>> getPickers() {
+	
+	/**returns a list of the example object pickers used in this template*/
+	public Iterable<GraphicalItemPicker<?>> getAllExamplePickers() {
 		ArrayList<GraphicalItemPicker<?>> outputpickers = new ArrayList<GraphicalItemPicker<?>>();
 		for(GraphicalItemPicker<?> pi:pickers ) {
 			outputpickers.add(pi);
@@ -285,7 +302,7 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 				return outputpickers;
 	}
 	
-	/**changes the properties of this multichannel picker to a version for merge only
+	/**changes the properties of this templates to a version for merge only
 	  displays*/
 	public void makeMergeOnly() {
 		if (mdp==null) IssueLog.log("no example image display (innitial template fail)");
@@ -299,38 +316,52 @@ public class FigureTemplate implements MontageSpaces, Serializable{
 		
 		
 		mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.ONLY_MERGE_PANELS;
-		mdp.getModelItem().getChannelLabelProp().setMergeLabelType(ChannelLabelProperties.Multiline_Labels);
+		mdp.getModelItem().getChannelLabelProp().setMergeLabelStyle(ChannelLabelProperties.MULTIPLE_LINES);
 	
 	}
 	
 	
-	/**expands the label spaces of layouts in the layer to fit their contents */
-	public void fixupLabelSpaces(GraphicLayer graphicLayer) {
+	/**expands the label spaces of layouts in the layer to fit their contents 
+	 * @return */
+	public CombinedEdit fixupLabelSpaces(GraphicLayer graphicLayer) {
 		ArrayList<ZoomableGraphic> items = graphicLayer.getAllGraphics();
 		
-		fixupLabelSpaces(items);
+		return fixupLabelSpaces(items);
 		
 	}
-	/**expands the label spaces of layouts to fit their contents */
-	public void fixupLabelSpaces( ArrayList<ZoomableGraphic> items) {
+	/**expands the label spaces of layouts to fit their contents 
+	 * @return */
+	public CombinedEdit fixupLabelSpaces( ArrayList<ZoomableGraphic> items) {
+		CombinedEdit undo = new CombinedEdit();
 		for (ZoomableGraphic z: items) {
 			
 			if (z instanceof MontageLayoutGraphic) {
+				
 				MontageLayoutGraphic m=(MontageLayoutGraphic) z;
+				UndoLayoutEdit lEdit = new UndoLayoutEdit(m);
 				m.snapLockedItems();
 				m.updateDisplay();
 				//selector.getGraphicDisplayContainer().updateDisplay();
 				m.getEditor().fitLabelSpacesToContents(m.getPanelLayout());
-				
+				lEdit.establishFinalState();
+				undo.addEditToList(lEdit);
 			}
 			if (z instanceof GraphicLayer) {
-				fixupLabelSpaces( ((GraphicLayer) z).getAllGraphics());
+				undo.addEditToList(
+						fixupLabelSpaces( ((GraphicLayer) z).getAllGraphics()));
 			}
 		}
+		return undo;
 	}
 	
 	/**Returns the picker for multichannel display layers*/
 	public MultichannelDisplayPicker getMultiChannelPicker() {
 		return mdp;
+	}
+	public LabelExamplePicker getPanelLabelPicker() {
+		return panelLabelPicker;
+	}
+	public void setPanelLabelPicker(LabelExamplePicker panelLabelPicker) {
+		this.panelLabelPicker = panelLabelPicker;
 	}
 }

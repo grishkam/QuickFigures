@@ -12,8 +12,7 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import utilityClassesForObjects.LocatedObject2D;
 
-/**A tool to draw an arrow. If the number of arrow heads is set to 0, this is reffered to ]
-  as a tool to draw a line (arrow without heads)*/
+/**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
 public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	private boolean line=false; 
 
@@ -26,16 +25,28 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	public ArrowGraphicTool() {
 		//setUpModel();
 	}
+	
 	public ArrowGraphicTool(int head) {
-		this.line=head==0;
+		this(head, false);
+	}
+	
+	public ArrowGraphicTool(int head, boolean tail) {
+		this.line= head==0;
+		if(tail) {head=2; this.line=false;}
+		ArrowGraphic arrow = new ArrowGraphic();
 		if (line) {
-			model = new ArrowGraphic();
-			model.setHeadnumber(0);
-			model.setArrowStyle(0);
+			model = arrow;
+			model.setNHeads(0);
+			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
 		} else {
-			model = new ArrowGraphic();
-			model.setHeadnumber(head);
-			model.setArrowStyle(0);
+			model = arrow;
+			model.setNHeads(head);
+			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
+			
+			if(tail) {
+				arrow.setHeadsSame(false);
+				arrow.getHead(ArrowGraphic.SECOND_HEAD).setArrowStyle(ArrowGraphic.FEATHER_TAIL);
+			}
 		}
 		setUpModel();
 	}
@@ -68,6 +79,7 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	public ArrowGraphic createArrow(double d, double e) {
 		ArrowGraphic bg = new ArrowGraphic();
 		if (line) bg.setName("Line");
+		bg.setHeadsSame(model.headsAreSame());
 		bg.copyAttributesFrom(model);
 		bg.copyArrowAtributesFrom(model);
 		bg.copyColorsFrom(model);

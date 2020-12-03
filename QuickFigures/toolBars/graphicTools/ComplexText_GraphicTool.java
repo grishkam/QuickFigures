@@ -5,6 +5,7 @@ import externalToolBar.TreeIconWrappingToolIcon;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 
+/**A tool for adding text items with multiple lines*/
 public class ComplexText_GraphicTool extends Text_GraphicTool{
 
 	{model= new ComplexTextGraphic();;

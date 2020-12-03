@@ -63,7 +63,7 @@ public class FontSizeSelector  extends GraphicComponent implements MouseListener
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		Point2D p = this.getCord().transformME(arg0);//.getInverse().transformP(new Point(arg0.getX(), arg0.getY()));
+		Point2D p = this.getCord().unTransformClickPoint(arg0);//.getInverse().transformP(new Point(arg0.getX(), arg0.getY()));
 		if(handleclick>0) {
 			textItem.handleMove(handleclick, getMousePosition(), new Point( (int)p.getX(), (int)p.getY()));
 			if (TextHandle.TEXT_FONT_SIZE_HANDLE==handleclick) {

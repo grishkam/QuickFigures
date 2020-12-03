@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.RectangleEdgeParameter;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
@@ -83,7 +83,7 @@ public class RectangleEdgeHandle extends SmartHandle {
 		}
 	
 	
-	public void handleDrag(CanvasMouseEventWrapper lastDragOrRelMouseEvent) {
+	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		
 		Point2D pz =  getZeroLocation();
 		Point2D maxLocation = getMaxLocation();
@@ -126,7 +126,7 @@ public class RectangleEdgeHandle extends SmartHandle {
 	}
 
 	@Override
-	public void handlePress(CanvasMouseEventWrapper w) {
+	public void handlePress(CanvasMouseEvent w) {
 		undo = new SimpleItemUndo<RectangleEdgeParameter>(theParameter);
 		undoaddedAlready=false;
 		
@@ -144,7 +144,7 @@ public class RectangleEdgeHandle extends SmartHandle {
 		} 
 	}
 
-	public void addUndo(CanvasMouseEventWrapper w) {
+	public void addUndo(CanvasMouseEvent w) {
 		undo.establishFinalState();
 		if(undoaddedAlready) {return;}
 		w.addUndo(undo);

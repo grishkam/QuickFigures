@@ -27,7 +27,7 @@ import utilityClassesForObjects.TakesLockedItems;
 /**This is a form of montage editor that I created as a general class to be adaptable to other 
  Methods in this class Both alter the layout and move the contents appropriately
  */
-public class GenericMontageEditor implements MontageSpaces {
+public class GenericMontageEditor implements LayoutSpaces {
 	
 	
 	private BasicObjectListHandler objecthandler=new BasicObjectListHandler();
@@ -41,7 +41,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	/**Alters the canvas size of the image while preserving the positions of the objects relative to the pixels of the image*/
 	public void resetMontageImageSize(BasicMontageLayout ml,  double xOff, double yOff) {
 		if (ml==null||ml.getWrapper()==null) return;
-		ml.getWrapper().CanvasResizePixelsOnly( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
+		ml.getWrapper().CanvasResize( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
 		getObjectHandler().shiftAll(ml.getWrapper(), xOff, yOff);
 		this.finishEdit(ml);
 			}
@@ -128,7 +128,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	   /**Adds label space to the montage to make it include the Rectangle r*/
 	   public void expandSpacesToInclude(BasicMontageLayout ml, Rectangle r) {
 		   if (ml==null) return;
-		   Rectangle space = ml.getSelectedSpace(1,MontageSpaces.ALL_MONTAGE_SPACE).getBounds();
+		   Rectangle space = ml.getSelectedSpace(1,LayoutSpaces.ALL_MONTAGE_SPACE).getBounds();
 		  
 		   if (r.x<space.x) {
 			   this.addLeftLabelSpace(ml, space.x-r.x);
@@ -156,12 +156,12 @@ public class GenericMontageEditor implements MontageSpaces {
 	   
 	   /**returns the area that this montage takes up, returns the dimensions not the position*/
 	   private Rectangle getRecomendedContentArea(BasicMontageLayout ml) {
-		     ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.ALL_MONTAGE_SPACE));   
+		     ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.ALL_MONTAGE_SPACE));   
 		   
 		   Rectangle area = stack.get(0).getAreaSpannelByContents();
 		   area.x+=ml.specialSpaceWidthLeft;
 		   area.y+=ml.specialSpaceWidthTop;
-		   pasteStack( ml.makeAltered(MontageSpaces.ALL_MONTAGE_SPACE), stack);
+		   pasteStack( ml.makeAltered(LayoutSpaces.ALL_MONTAGE_SPACE), stack);
 		   return area;
 	   }
 	   
@@ -205,7 +205,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	   /**Adds label space to the layout to make sure it includes the Rectangle r (the bounds of a label).
 	     */
 	  private void trimLabelpacesToIncludeOnly(BasicMontageLayout ml, Rectangle r) {
-		   Rectangle space = ml.getSelectedSpace(1,MontageSpaces.ALL_MONTAGE_SPACE).getBounds();
+		   Rectangle space = ml.getSelectedSpace(1,LayoutSpaces.ALL_MONTAGE_SPACE).getBounds();
 
 		   if (r.x>space.x) {
 			   this.addLeftLabelSpace(ml, -(r.x-space.x));
@@ -228,7 +228,7 @@ public class GenericMontageEditor implements MontageSpaces {
 	  
 	  /**Adds or subtracts label space to/from the montage to make fit Rectangle r*/
 	  private void setLabelpacesToIncludeOnly(BasicMontageLayout ml, Rectangle r) {
-		   Rectangle space = ml.getSelectedSpace(1,MontageSpaces.ALL_MONTAGE_SPACE).getBounds();
+		   Rectangle space = ml.getSelectedSpace(1,LayoutSpaces.ALL_MONTAGE_SPACE).getBounds();
 			  /**currently flawd as does not take into account position the the montage*/
 		   	this.addLeftLabelSpace(ml, -(r.x-space.x));
 			   this.addTopLabelSpace(ml, -(r.y-space.y));
@@ -714,7 +714,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		   /**experimental. makes the column fit objects*/
 		   public void alterPanelWidthsToFitContents(BasicMontageLayout ml) {
 			   
-			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.COLUMN_OF_PANELS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.COLUMN_OF_PANELS));
 			   ArrayObjectContainer.ignoredClass=BarGraphic.class;
 			   ArrayObjectContainer.ignoredClass2=ChannelLabelTextGraphic.class;
 			   ArrayObjectContainer.ignoredClasses=nonConsideredClasses;
@@ -747,7 +747,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		   /**experimental. makes the row to fit objects*/
 		   public void alterPanelHeightsToFitContents(BasicMontageLayout ml) {
 			
-			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.ROW_OF_PANELS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.ROW_OF_PANELS));
 			   int[] heights=new int[stack.size()];
 			   for(int i=0; i<stack.size(); i++) {
 				   heights[i]=stack.get(i).getAreaSpannelByContents2().height;
@@ -768,7 +768,7 @@ public class GenericMontageEditor implements MontageSpaces {
 		   
 		   /**experimental. makes the column fit objects. buggy*/
 		   public void shiftPanelContentsToEdge(BasicMontageLayout ml) {
-			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(MontageSpaces.PANELS));
+			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.PANELS));
 			   int[] widths=new int[stack.size()];
 			   for(int i=0; i<widths.length; i++) {
 				   int x = stack.get(i).getAreaSpannelByContents().x;

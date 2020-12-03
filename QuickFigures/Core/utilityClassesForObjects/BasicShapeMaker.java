@@ -9,9 +9,9 @@ import applicationAdapters.ToolbarTester;
 import graphicalObjects_BasicShapes.PathGraphic;
 import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageWindowAndDisplaySet;
-import sUnsortedDialogs.ReflectingFieldSettingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.SwingDialogListener;
+import storedValueDialog.ReflectingFieldSettingDialog;
 
 public abstract class BasicShapeMaker  implements ShapeMaker, Serializable {
 

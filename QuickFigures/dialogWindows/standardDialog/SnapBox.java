@@ -176,7 +176,7 @@ public class SnapBox extends GraphicSelectable {
 		Point p1 = new Point(x,y);
 		Point p2 = new Point();
 		try {
-			this.getCord().getAfflineTransform().createInverse().transform(p1, p2);
+			this.getCord().getAffineTransform().createInverse().transform(p1, p2);
 		} catch (NoninvertibleTransformException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

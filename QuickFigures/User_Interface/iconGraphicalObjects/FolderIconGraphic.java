@@ -43,7 +43,7 @@ public class FolderIconGraphic extends GraphicGroup {
 		r.setAntialize(true);
 		r2 = RectangularGraphic.filledRect(new Rectangle(2,0, 6,5));
 		 r3 = RectangularGraphic.filledRect(new Rectangle(1,1, 12,9));
-		 r.makeDashLess();
+		 r.makeNearlyDashLess();
 		 setItemColors() ;
 	}
 	

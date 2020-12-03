@@ -31,7 +31,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		
 		add(new ImageSyncHandle(1100));
 		createGeneralButton(new SelectAllButton(t));
-		if(t.getSnapPosition()!=null) {
+		if(t.getAttachmentPosition()!=null) {
 			add(new GeneralActionHandle(new SnappingSyncer(true,t), 741905));
 		}
 	}

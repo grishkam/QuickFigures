@@ -89,11 +89,11 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 			ArrowGraphic a = new ArrowGraphic();
 			a.setPoints(new Point(15,20), new Point(8,3));
 			a.setStrokeColor(Color.black);
-			a.setArrowStyle(ArrowGraphic.NORMAL_HEAD);
+			a.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
 			a.moveLocation(arg2, arg3);
 			a.setStrokeWidth(2);
 			//a.setNotchAngle(Math.PI);
-			a.setArrowHeadSize(13);
+			a.getHead().setArrowHeadSize(13);
 			if (g instanceof Graphics2D)
 			a.draw((Graphics2D) g, new BasicCoordinateConverter());
 		}

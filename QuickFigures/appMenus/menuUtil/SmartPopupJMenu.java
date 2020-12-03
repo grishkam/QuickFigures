@@ -6,7 +6,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import logging.IssueLog;
 import undo.UndoManagerPlus;
 
@@ -23,13 +23,13 @@ public class SmartPopupJMenu extends JPopupMenu {
 	
 	private UndoManagerPlus undoManager;
 
-	private transient CanvasMouseEventWrapper mEvent;
+	private transient CanvasMouseEvent mEvent;
 	
-	public void setLastMouseEvent(CanvasMouseEventWrapper e) {
+	public void setLastMouseEvent(CanvasMouseEvent e) {
 		this.mEvent=e;
 		for(MenuElement e2 : this.getSubElements()) {
-			if (e2 instanceof SmartJMenu) {
-				((SmartJMenu) e2).setLastMouseEvent(e);
+			if (e2 instanceof SmartMenuItem) {
+				((SmartMenuItem) e2).setLastMouseEvent(e);
 			}
 		}
 		
@@ -43,12 +43,12 @@ public class SmartPopupJMenu extends JPopupMenu {
 		}
 	}
 	
-	public void showForMouseEvent(CanvasMouseEventWrapper w) {
+	public void showForMouseEvent(CanvasMouseEvent w) {
 		this.setLastMouseEvent(w);
 		this.show(w.getComponent(), w.getClickedXScreen(), w.getClickedYScreen());
 	}
 	
-	public void showForMouseEvent(CanvasMouseEventWrapper w, int dx, int dy) {
+	public void showForMouseEvent(CanvasMouseEvent w, int dx, int dy) {
 		this.setLastMouseEvent(w);
 		this.show(w.getComponent(), w.getClickedXScreen()+dx, w.getClickedYScreen()+dy);
 	}
@@ -71,7 +71,7 @@ public class SmartPopupJMenu extends JPopupMenu {
 		return menuItem;
 	}
 	
-	protected CanvasMouseEventWrapper getMemoryOfMouseEvent() {return mEvent;};
+	protected CanvasMouseEvent getMemoryOfMouseEvent() {return mEvent;};
 
 	
 	public void setVisible(boolean b) {
@@ -89,8 +89,8 @@ public UndoManagerPlus getUndoManager() {
 public void setUndoManager(UndoManagerPlus undoManager) {
 	this.undoManager = undoManager;
 	for(MenuElement e : this.getSubElements()) {
-		if (e instanceof SmartJMenu) {
-			((SmartJMenu) e).setUndoManager(getUndoManager());
+		if (e instanceof SmartMenuItem) {
+			((SmartMenuItem) e).setUndoManager(getUndoManager());
 		}
 	}
 }

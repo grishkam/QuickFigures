@@ -3,6 +3,7 @@ package objectDialogs;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import standardDialog.NumberInputPanel;
 
+/**An options dialog for RectangularGraphics*/
 public class RectangleGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog {
 
 	RectangularGraphic rect=null;

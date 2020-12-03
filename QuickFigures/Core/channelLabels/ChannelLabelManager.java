@@ -70,9 +70,9 @@ public class ChannelLabelManager implements Serializable {
 		cltg.setParaGraphToChannels();
 		cltg.setName("channel label");
 				if (getFossilLabel()!=null) {cltg.copyAttributesFrom(getFossilLabel());
-											cltg.setSnapPosition(getFossilLabel().getSnapPosition());
+											cltg.setAttachmentPosition(getFossilLabel().getAttachmentPosition());
 											} else {
-												cltg.setSnapPosition(AttachmentPosition.defaultPanelLabel());
+												cltg.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
 											}
 				
 		
@@ -137,8 +137,8 @@ public class ChannelLabelManager implements Serializable {
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels2() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
 		for(PanelListElement slice: getPanelList().getPanels()) {
-			if(slice.originalFrameNum>1) continue;
-			if(slice.originalSliceNum>1) continue;
+			if(slice.targetFrameNumber>1) continue;
+			if(slice.targetSlideNumber>1) continue;
 			output.add(generateChanelLabel(slice));
 		}
 		return output;

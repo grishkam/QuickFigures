@@ -64,7 +64,7 @@ public class Boxplot extends DataShowingShape {
 	
 		/**Draws the boxes fill*/
 		if (this.isFilled()&&this.allFillRect!=null) {
-			Shape fr = cords.getAfflineTransform().createTransformedShape(allFillRect);
+			Shape fr = cords.getAffineTransform().createTransformedShape(allFillRect);
 			g.setColor(getFillColor());
 			g.fill(fr);
 				//RectangularGraphic r = new RectangularGraphic(fillRect.getBounds());

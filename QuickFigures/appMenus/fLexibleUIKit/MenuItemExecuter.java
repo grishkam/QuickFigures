@@ -22,8 +22,8 @@ import menuUtil.MenuSupplier;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.RectangleEdges;
 
-/**this will generate a working popup menus from the annotated methods in
-  an object.  I wrote it because I wanted to sometimes write the 
+/**this will generate working popup menus from the annotated methods in
+  an object. I wrote it because I wanted to sometimes write the 
   code for popup menus with a little less complexity each time*/
 public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	private Object o;
@@ -49,7 +49,11 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		}	return output;
 	}
 	
+	
 	public ArrayList<JMenuItem> findJItems() {
+		return findJItems(null);
+	}
+	public ArrayList<JMenuItem> findJItems(JMenu menu) {
 		//this.o=o;
 		Set<MenuItemMethod> keySet = map.keySet();
 		
@@ -127,10 +131,17 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	
 	public JMenu getJMenu() {
 		JMenu p=new SmartJMenu("");
-		ArrayList<JMenuItem> arr = findJItems();
-		for(JMenuItem a:arr) {p.add(a);}
+		addToJMenu(p);
 		
 		return p;
+	}
+
+	/**
+	 * @param p
+	 */
+	public void addToJMenu(JMenu p) {
+		ArrayList<JMenuItem> arr = findJItems();
+		for(JMenuItem a:arr) {p.add(a);}
 	}
 	
 	

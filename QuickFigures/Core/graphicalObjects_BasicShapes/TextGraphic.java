@@ -40,7 +40,7 @@ import utilityClassesForObjects.Snap2Rectangle;
 import utilityClassesForObjects.TextItem;
 import utilityClassesForObjects.TextPrecision;
 import animations.KeyFrameAnimation;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import export.pptx.TextGraphicImmitator;
@@ -555,8 +555,8 @@ protected void giveTraitsTo(TextGraphic tg) {
     tg.setFillBackGround(isFillBackGround());
 	
 	tg.strokeColor=strokeColor;
-	if (getSnapPosition()!=null)
-	tg.setSnapPosition(getSnapPosition().copy());
+	if (getAttachmentPosition()!=null)
+	tg.setAttachmentPosition(getAttachmentPosition().copy());
 	tg.map= map;
 	tg.backGroundShape=this.getBackGroundShape().copy();
 }
@@ -880,7 +880,7 @@ public void scaleAbout(Point2D p, double mag) {
 	p2=scaleAbout(p2, p,mag,mag);
 	this.setFont(this.getFont().deriveFont((float) (this.getFont().getSize2D()*mag)));
 	this.setLocation(p2);
-	if (this.getSnapPosition()!=null) this.getSnapPosition().scaleAbout(p, mag);
+	if (this.getAttachmentPosition()!=null) this.getAttachmentPosition().scaleAbout(p, mag);
 }
 @Override
 public OfficeObjectMaker getObjectMaker() {
@@ -1222,7 +1222,7 @@ public void deselect() {
 }
 
 @Override
-public void handleMouseEvent(CanvasMouseEventWrapper me,int handlenum, int button, int clickcount, int type,
+public void handleMouseEvent(CanvasMouseEvent me,int handlenum, int button, int clickcount, int type,
 		int... other) {
 	
 	if (handlenum>0) return;

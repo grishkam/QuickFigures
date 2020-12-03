@@ -6,7 +6,6 @@ public class MiniToolBarWindow  {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	public static  MiniToolBarWindow currentWindow=null;
 	
 

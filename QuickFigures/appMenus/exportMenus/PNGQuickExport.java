@@ -2,14 +2,17 @@ package exportMenus;
 
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.batik.ext.awt.image.codec.png.PNGImageWriter;
+
 import applicationAdapters.DisplayedImage;
 
-/**this class exports a figure as PNG file*/
+/**this supports a menu item that exports a figure as PNG file*/
 public class PNGQuickExport extends QuickExport {
 	protected String getExtension() {
 		return "png";
@@ -51,6 +54,16 @@ public class PNGQuickExport extends QuickExport {
 	@Override
 	public String getNameText() {
 		return "Export as Image (.png)";
+	}
+	
+	public static void main(String[] args) throws IOException {
+		String path=args[0];
+		BufferedImage image = ImageIO.read(new File(path));
+		PNGImageWriter pngwrit = new PNGImageWriter();
+		ByteArrayOutputStream bao = new ByteArrayOutputStream();
+		pngwrit.writeImage(image, bao);
+		
+		
 	}
 	
 	

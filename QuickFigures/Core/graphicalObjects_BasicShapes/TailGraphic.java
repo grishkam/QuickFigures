@@ -7,7 +7,6 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import illustratorScripts.ArtLayerRef;
@@ -19,11 +18,13 @@ import undo.UndoStrokeEdit;
 import utilityClassesForObjects.RectangleEdgePosisions;
 import utilityClassesForObjects.RectangleEdges;
 
-/**A graphic that depicts a polygon with n sides. subclasses include many shapes
-  with a specific number of sides*/
+/**A graphic that was designed to depict the tail of an arrow. 
+  TODO: modify it to include options for a variety of interesting shapes*/
 public class TailGraphic extends RectangularGraphic implements RectangleEdgePosisions{
 	
-
+	final int[] locations = new int[] { RIGHT,  UPPER_RIGHT, UPPER_LEFT, LEFT,  LOWER_LEFT, LOWER_RIGHT};
+	int divisions=2;
+	double cutAway=0.10;
 	{name="tail";}
 	/**
 	 * 
@@ -33,9 +34,14 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	
 	private static final long serialVersionUID = 1L;
 	
+	public TailGraphic(Rectangle2D rectangle, int nDiv) {
+		super(rectangle);
+		divisions=nDiv;
+	}
+	
 	
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
-		TailGraphic r1 = new TailGraphic(r);
+		TailGraphic r1 = new TailGraphic(r, 2);
 		
 		r1.setDashes(NEARLY_DASHLESS);
 		r1.setStrokeWidth(THICK_STROKE_4);
@@ -53,9 +59,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 		return output;
 	}
 	
-	public TailGraphic(Rectangle2D rectangle) {
-		super(rectangle);
-	}
+	
 	
 	
 	public TailGraphic(RectangularGraphic r) {
@@ -67,28 +71,48 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
 		
-		double rx=getObjectWidth()/2;
-		double ry=getObjectHeight()/2;
+		
+		
 		double angle=getIntervalAngle();
-		double shift=ry/Math.tan(angle/2);
 		
 		
-		int[] i7 = new int[] { RIGHT,  UPPER_RIGHT, UPPER_LEFT, LEFT,  LOWER_LEFT, LOWER_RIGHT};
-		Double rect = this.getRectangle();
 		
 		
-		for(int i=0; i<i7.length;i++) {
-				Point2D p = RectangleEdges.getLocation(i7[i], rect);
-				double cx = p.getX();
-				if (i7[i]==LEFT||i7[i]==RIGHT) cx-=shift;
-				if (i==0) path.moveTo(cx, p.getY()); else
-					path.lineTo(cx, p.getY());
+		Rectangle2D rect = this.getRectangle();
+		
+			
+		for(int i=0; i<divisions; i++) {
+			double space = rect.getWidth()*cutAway;
+			if (divisions==1) space=0;
+			double width=rect.getWidth()/divisions-space;
+			Rectangle2D r2 = new Rectangle2D.Double(rect.getX()+i*(space+width), rect.getY(), width, rect.getHeight());
+			addTailPartToPath(path, angle, r2);
 		}
-		path.closePath();
+		
+		
+		
+		
+		
+		
 		this.setClosedShape(true);
 		
 		return path;
 		
+	}
+
+	/**
+	 Adds a fragment to the path that is based on the given rectangle
+	 */
+	public void addTailPartToPath(Path2D.Double path, double angle, Rectangle2D rect) {
+		double shift=rect.getHeight()/Math.tan(angle/2);
+		for(int i=0; i<locations.length;i++) {
+				Point2D p = RectangleEdges.getLocation(locations[i], rect);
+				double cx = p.getX();
+				if (locations[i]==LEFT||locations[i]==RIGHT) cx-=shift;
+				if (i==0) path.moveTo(cx, p.getY()); else
+					path.lineTo(cx, p.getY());
+		}
+		path.closePath();
 	}
 
 	
@@ -118,7 +142,6 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 		
 	
 	protected void selectSegmentForStrokeHandle(PathIterator pi) {
-		// TODO Auto-generated method stub
 		
 	}
 

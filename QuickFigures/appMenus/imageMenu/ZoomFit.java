@@ -17,7 +17,7 @@ import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 
-/**This class represents a menu item for the user to zoom in or out*/
+/**This class implements the functions for a menu item that allows the user to zoom in or out*/
 public class ZoomFit implements MenuItemForObj {
 
 	public static final String USER_SET="Set", SCREEN_FIT="fit", IN="In", OUT="Out", OPTIONS="options";
@@ -44,13 +44,13 @@ public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	}
 	
 	if (type.contains(USER_SET)) {
-		Double z = StandardDialog.getNumberFromUser("Set Zoom Level", diw.getZoomLevel());
+		Double z = StandardDialog.getNumberFromUser("Set Zoom Level", diw.getZoomLevel(), false, ZoomOptions.current);
 		diw.setZoomLevel(z/100);
 	} else
 	if (type.contains(SCREEN_FIT))diw.zoomOutToDisplayEntireCanvas();
 	else diw.zoom(type);
 	
-	/**updates the window to account for the new zoom level*/
+	/**updates the window to account for the new zoom level. unless the zoom options have been changed*/
 	diw.updateWindowSize();
 	diw.updateDisplay();
 }
@@ -58,9 +58,9 @@ public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 public String getCommand() {return "Zoom out to fit"+type;}
 public String getNameText() {
 	if (type.equals(OPTIONS)) return "Zoom Options";
-	if (type.startsWith("Out")) return "Out (press '-')";
-	if (type.startsWith("In")) return "In (press '=' or '+')";
-	if (type.startsWith("Set")) return "Set Zoom Level";
+	if (type.startsWith(OUT)) return "Out (press '-')";
+	if (type.startsWith(IN)) return "In (press '=' or '+')";
+	if (type.startsWith(USER_SET)) return "Set Zoom Level";
 	return "View All";
 	}
 public String getMenuPath() {return "Image<Zoom";}
@@ -98,7 +98,7 @@ public GraphicDisplayComponent getItemIcon() {
 	tg.setLocation(10, 13); 
 	
 	tg.setFont(tg.getFont().deriveFont((float) 14).deriveFont(Font.BOLD));
-	if (type.equals("fit")) { 
+	if (type.equals(SCREEN_FIT)) { 
 		tg.setFont(tg.getFont().deriveFont((float) 10).deriveFont(Font.BOLD));
 		tg.moveLocation(2,0);
 	}
@@ -113,10 +113,10 @@ public GraphicDisplayComponent getItemIcon() {
 /**The text that will appear on the zoom level icon*/
 String getCurrentLabel() {
 	
-	if (type.startsWith("Out")) return " -";
-	if (type.startsWith("In")) return "+";
+	if (type.startsWith(OUT)) return " -";
+	if (type.startsWith(IN)) return "+";
 
-	if (type.toLowerCase()=="fit") return "[ ]";
+	if (type.toLowerCase().contentEquals(SCREEN_FIT)) return "[ ]";
 	
 	return null;
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import basicAppAdapters.GMouseEvent;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjectHandles.ActionButtonHandleList;
@@ -155,7 +155,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 			item=i;
 		}
 
-		public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			if( getDisplaySet()==null) return;
 			item.performActionDisplayedImageWrapper( getDisplaySet());
 			 getDisplaySet().updateDisplay();

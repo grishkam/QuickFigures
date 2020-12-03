@@ -25,7 +25,7 @@ import graphicalObjects_FigureSpecific.InsetLayout;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import standardDialog.BooleanInputPanel;
 import standardDialog.ComboBoxPanel;
@@ -41,7 +41,7 @@ import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.AttachmentPosition;
 
-public class InsetTool extends GraphicTool implements MontageSpaces {
+public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
 	static boolean locksItems=false;
 	{createIconSet("icons2/InsetIcon.jpg","icons2/InsetIconPressed.jpg","icons2/InsetIcon.jpg");};
@@ -258,21 +258,21 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(this.getImageWrapperClick(), l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.onlySelectThoseOfClass);
 		itemsInway.remove(l);
 		itemsInway.remove(inset.personalGraphic);
-		if (itemsInway.size()>0&&l.getSnapPosition().isExternalSnap()) {
+		if (itemsInway.size()>0&&l.getAttachmentPosition().isExternalSnap()) {
 			//IssueLog.log("limited space puts makes  col label impossible");
-			l.setSnapPosition(AttachmentPosition.defaultPanelLabel());
+			l.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
 		} else
 		if(fontsize>heightofPanel/3.5) {
-			l.setSnapPosition(AttachmentPosition.defaultColLabel());	
+			l.setAttachmentPosition(AttachmentPosition.defaultColLabel());	
 		}
 		
 		if(fontsize<heightofPanel/4) {
-			l.setSnapPosition(AttachmentPosition.defaultPanelLabel());
+			l.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
 		}
 		if  (haveChanLabelsOnTop() ) {
 			MontageLayoutGraphic layout = inset.personalGraphic;
 			double height = layout.getBounds().getHeight();
-			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setSnapPosition(AttachmentPosition.defaultColLabel());	
+			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setAttachmentPosition(AttachmentPosition.defaultColLabel());	
 		}
 		
 	}
@@ -287,7 +287,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		for(PanelListElement panel: list.getPanels())
 		if (locksItems ) {
 			pm.getGridLayout().addLockedItem(panel.getPanelGraphic());
-			panel.getPanelGraphic().setSnapPosition(AttachmentPosition.defaultInternalPanel());
+			panel.getPanelGraphic().setAttachmentPosition(AttachmentPosition.defaultInternalPanel());
 			};
 	}
 	

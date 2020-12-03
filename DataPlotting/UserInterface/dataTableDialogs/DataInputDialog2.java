@@ -186,8 +186,9 @@ public class DataInputDialog2 extends StandardDialog {
 
 	private static boolean isCensor(Object val1) {
 		if (val1==null)return false;
-		if (val1==new Double(1)) return true;
-		if ("1.0".equals(val1.toString().toLowerCase())) return true;
+		//if (val1==new Double(1)) return true;//TODO: determine if commenting this out affect anything
+		if ("1.0".equals((val1+"").toString().toLowerCase())) return true;
+		if ("1".equals((val1+"").toString().toLowerCase())) return true;
 		return "censored".equals(val1.toString().toLowerCase());
 	}
 	

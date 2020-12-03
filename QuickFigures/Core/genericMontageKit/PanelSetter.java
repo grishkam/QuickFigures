@@ -9,10 +9,11 @@ import gridLayout.GridLayout;
 import gridLayout.RetrievableOption;
 import logging.IssueLog;
 import utilityClassesForObjects.LocatedObject2D;
+import utilityClassesForObjects.RectangleEdges;
 
 /**A class that determines the places of panels within a layout and puts then there.
  * */
-public class PanelSetter extends RectanglePlacements implements Serializable{
+public class PanelSetter  implements Serializable{
 	
 	 /**
 	 * 
@@ -27,7 +28,7 @@ public class PanelSetter extends RectanglePlacements implements Serializable{
 	 public int insertiontype=DEFAULT_INSERTION;
 	 
 	 @RetrievableOption(key = "inserttionPlaceMentType", label="Placement", choices={"Top Left", "Bottom Left", "Top Right", "Bottom Right", "Top Center", "Bottom Center", "Left Center", "Right Center", "Center"})
-	 public int insertionplacement=0;
+	 public int insertionplacement=RectangleEdges.UPPER_LEFT;
 	 
 	 final int DO_NOT_RESIZE_LAYOUT_PANELS=0, RESIZE_LAYOUT_FIT_FIRST_PANEL=1;
 	 

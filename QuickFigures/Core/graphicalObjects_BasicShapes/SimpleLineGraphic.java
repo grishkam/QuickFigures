@@ -49,7 +49,7 @@ public class SimpleLineGraphic extends RightTriangleGraphic {
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
-		ArrayList<Point2D> loc = getLocations();
+		ArrayList<Point2D> loc = getTrianglePoints();
 		path.moveTo(loc.get(0).getX(),loc.get(0).getY());
 		path.lineTo(loc.get(1).getX(),loc.get(1).getY());
 		return path;

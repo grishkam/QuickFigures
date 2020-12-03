@@ -9,7 +9,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import dividedPanels.DividedPanelLayout.LayoutDivider;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjects.CordinateConverter;
@@ -34,7 +34,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 	}
 	
 	public DividerHandle(Double rect, Color pink, CordinateConverter<?> cords, DividedPanelLayoutGraphic layourGraphic) {
-		this(cords.getAfflineTransform().createTransformedShape(rect).getBounds(), pink, layourGraphic);
+		this(cords.getAffineTransform().createTransformedShape(rect).getBounds(), pink, layourGraphic);
 		if(this.width<6)this.width=6;
 		if(this.height<6)this.height=6;
 	}
@@ -76,7 +76,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 		
 	}
 	
-public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 	
 		if(canvasMouseEventWrapper.clickCount()==2) {
 			double pos = NumberInputPanel.getNumber("Divider Position", divider.getPosition(), 1, true, null);

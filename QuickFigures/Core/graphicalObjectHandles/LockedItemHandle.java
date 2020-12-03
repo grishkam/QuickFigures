@@ -15,7 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import actionToolbarItems.AlignItem;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import genericMontageKit.OverlayObjectManager;
 import graphicTools.LockGraphicTool;
 import graphicTools.LockGraphicTool2;
@@ -45,7 +45,6 @@ public class LockedItemHandle extends SmartHandle {
 	private static final long serialVersionUID = 1L;
 	protected TakesLockedItems taker;
 	protected LocatedObject2D object;
-	private CordinateConverter<?> cords;
 	private boolean infineControl=false;
 	private Shape lastInnerShape;
 
@@ -102,13 +101,13 @@ public class LockedItemHandle extends SmartHandle {
 	
 	/**What to do when a handle is moved from point p1 to p2*/
 	@Override
-	public void handleDrag(CanvasMouseEventWrapper mEvent) {
+	public void handleDrag(CanvasMouseEvent mEvent) {
 		Point2D p2=mEvent.getCoordinatePoint();
 		UndoSnappingChange undo = new UndoSnappingChange(object);
 		if (this.fineControlMode()) {
 			LockGraphicTool2.adjustPosition((int)p2.getX(), (int)p2.getY(), taker, object);
 		} else
-		getObject().getSnapPosition().setToNearestSnap(getObject().getBounds().getBounds(), taker.getContainerForBounds(object), new Point((int)p2.getX(), (int)p2.getY() ));
+		getObject().getAttachmentPosition().setToNearestSnap(getObject().getBounds().getBounds(), taker.getContainerForBounds(object), new Point((int)p2.getX(), (int)p2.getY() ));
 		
 		
 		undo.establishFinalState();
@@ -122,7 +121,7 @@ public class LockedItemHandle extends SmartHandle {
 	
 	}
 
-	public void showMessageForOutOfRange(CanvasMouseEventWrapper mEvent) {
+	public void showMessageForOutOfRange(CanvasMouseEvent mEvent) {
 		boolean out = outOfRange(mEvent);
 		Point2D p2=mEvent.getCoordinatePoint();
 		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
@@ -145,7 +144,7 @@ public class LockedItemHandle extends SmartHandle {
 				transplantIt=true;
 				} else transplantIt=false;
 			if(originalSnap!=null)
-			getObject().getSnapPosition().copyPositionFrom(originalSnap);
+			getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 			
 		} else {
 			releaseIt=false;
@@ -154,7 +153,7 @@ public class LockedItemHandle extends SmartHandle {
 		}
 	}
 
-	protected boolean outOfRange(CanvasMouseEventWrapper mEvent) {
+	protected boolean outOfRange(CanvasMouseEvent mEvent) {
 		return LockGraphicTool2.outofRange(this.getObject().getBounds(), taker.getBounds(), mEvent.getCoordinatePoint());
 	}
 
@@ -217,7 +216,7 @@ public boolean absent() {
 public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 	
 	this.updateLocation();
-	this.cords=cords;
+	
 		super.draw(graphics, cords);
 		
 		Point2D pt = cords.transformP(getCordinateLocation());
@@ -246,8 +245,8 @@ private Shape createDrawnCirc(Point2D pt) {
 }
 
 
-public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
-	originalSnap=getObject().getSnapPosition().copy();
+public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
+	originalSnap=getObject().getAttachmentPosition().copy();
 	originalBounds=getObject().getBounds();
 	if(lastInnerShape!=null&&lastInnerShape.contains(canvasMouseEventWrapper.getClickedXScreen(), canvasMouseEventWrapper.getClickedYScreen()))
 		setInfineControl(true); else setInfineControl(false);
@@ -281,7 +280,7 @@ public boolean isHidden() {
 
 
 
-public void handleRelease(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 	
 	if(releaseIt) {
 		UndoTakeLockedItem undo = new UndoTakeLockedItem(taker, getObject() , true);

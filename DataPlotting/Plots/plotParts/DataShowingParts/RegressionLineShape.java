@@ -37,7 +37,7 @@ public class RegressionLineShape extends AbstractDataLineShape{
 		if ( regressionResults==null) return null;
 		double rs = regressionResults[3];
 		rs=roundToPlace(rs, 3);
-		return new java.lang.Double(rs);
+		return rs;
 	}
 	
 	public static double roundToPlace(double rs, int places) {

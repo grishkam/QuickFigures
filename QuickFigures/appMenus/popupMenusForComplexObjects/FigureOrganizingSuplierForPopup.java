@@ -16,11 +16,14 @@ import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
-import figureFormat.TemplateSaver;
+import fLexibleUIKit.MenuItemExecuter;
+import fLexibleUIKit.MenuItemMethod;
+import figureFormat.TemplateUserMenuAction;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
+import graphicalObjects_FigureSpecific.LabelCreationOptions;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
@@ -33,6 +36,7 @@ import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.CroppingDialog;
 import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 import undo.AbstractUndoableEdit2;
 import undo.CanvasResizeUndo;
 import undo.ChannelDisplayUndo;
@@ -104,7 +108,9 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
 					
+						new MenuItemExecuter(this).addToJMenu(labelMenu);
 					jj.add(labelMenu);
+					
 					
 					
 					
@@ -145,7 +151,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.logT(t);};
 							jj.add(chanMen);
 							
-							jj.add(TemplateSaver.createFormatMenu(figureOrganizingLayerPane));
+							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));
 							
 							if (figureOrganizingLayerPane.getMontageLayoutGraphic()!=null)
 								jj.add(new FigureScalerMenu(figureOrganizingLayerPane.getMontageLayoutGraphic()));
@@ -241,7 +247,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 
 
 	public EditLabels getLabelEditorMenuItemFor(TextGraphic t) {
-		int gridSnap = t.getSnapPosition().getGridSpaceCode();
+		int gridSnap = t.getAttachmentPosition().getGridSpaceCode();
 		EditLabels output = new EditLabels(gridSnap, figureOrganizingLayerPane.getMontageLayoutGraphic(), t);
 	
 		if(output.getLabels(t).size()==0) {
@@ -434,6 +440,12 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		UndoLayoutEdit output2 = updateRowColSizesOf(display);
 		
 		return new CombinedEdit(output1,output2 );
+	}
+	
+	/**shows a labeling options dialog*/
+	@MenuItemMethod(menuActionCommand = "Label Creation Options", menuText = "Label Creation Options")
+	public void changeLabelProperties() {
+		new StoredValueDilaog(LabelCreationOptions.current).showDialog();;
 	}
 	
 	

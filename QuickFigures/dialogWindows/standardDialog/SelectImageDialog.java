@@ -3,10 +3,10 @@ package standardDialog;
 import java.util.ArrayList;
 
 import appContext.CurrentAppContext;
-import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 
+/**A dialog for selecting one or more open multidimensional images*/
 public class SelectImageDialog extends StandardDialog {
 
 	/**
@@ -14,19 +14,18 @@ public class SelectImageDialog extends StandardDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	static final int rotated=0, scales=1, sheared=2, translate=3;
 
-	private int type;
-
+	/**The choices*/
 	private ArrayList<MultiChannelImage> optioins;
 
-	private ArrayList<ChannelEntry> channelEnt;
 
-	private boolean includeChans;
+
+	private boolean includeChans=true;
 
 	private int num=0;
 	{this.setModal(true);}
 	
+	/**builds a dialog*/
 	public SelectImageDialog( ArrayList<MultiChannelImage> ops, boolean includeChans, int numb) {
 		this.setWindowCentered(true);
 		this.num=numb;
@@ -50,7 +49,8 @@ public class SelectImageDialog extends StandardDialog {
 			this.add(""+i, new ComboBoxPanel("Image "+i, s, innitial));
 			}
 		
-		if (includeChans)addChannelCheckBoxes(optioins.get(0));
+		if (this.includeChans)
+			addChannelCheckBoxes(optioins.get(0));
 	}
 	
 	
@@ -61,6 +61,7 @@ public class SelectImageDialog extends StandardDialog {
 	}
 	
 	
+	/**returns a list of the multichannel images that were selected*/
 	public ArrayList<MultiChannelImage> getList() {
 		ArrayList<MultiChannelImage> listoutput=new ArrayList<MultiChannelImage> ();
 		
@@ -69,7 +70,8 @@ public class SelectImageDialog extends StandardDialog {
 			 
 			 if (index>0) {
 				 MultiChannelImage item = this.optioins.get(index-1);
-				 if (!listoutput.contains(item)) listoutput.add(item);
+				 if (!listoutput.contains(item)) 
+					 listoutput.add(item);
 				 }
 			
 			
@@ -82,10 +84,12 @@ public class SelectImageDialog extends StandardDialog {
 		
 	}
 	
+	/**returns a list of the multichannel images that are open in the application*/
 	protected static	ArrayList<MultiChannelImage>  getAvailableMultis() {
 		return  CurrentAppContext.getMultichannelContext().getallVisibleMultichanal();
 	}
 	
+	/**shows a dialog and returns it.*/
 	public static SelectImageDialog getSelectedMultis(boolean includeChans, int num) {
 		ArrayList<MultiChannelImage> multis =getAvailableMultis();
 		

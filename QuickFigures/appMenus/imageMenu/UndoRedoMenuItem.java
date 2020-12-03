@@ -7,7 +7,6 @@ import logging.IssueLog;
 
 public class UndoRedoMenuItem  extends BasicMenuItemForObj {
 	boolean undo=true;
-	private Object stroke;
 	
 	public UndoRedoMenuItem(boolean un) {
 		undo=un;

@@ -31,6 +31,7 @@ import utilityClassesForObjects.ShapesUtil;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
+/**A tool for adding text items to the image*/
 public class Text_GraphicTool extends GraphicTool {
 	
 	private Cursor textCursor=new Cursor(Cursor.TEXT_CURSOR);
@@ -39,8 +40,8 @@ public class Text_GraphicTool extends GraphicTool {
 	
 
 	static boolean lowercase=false;
-	TextGraphic model = new TextGraphic();// {model.setSnappingBehaviour(snappingBehaviour);}
-	{//createIconSet("icons2/TextIcon.jpg","icons2/TextIconPressed.jpg","icons2/TextIcon.jpg");
+	TextGraphic model = new TextGraphic();
+	{
 	set=TreeIconWrappingToolIcon.createIconSet(model);
 
 	}
@@ -200,7 +201,7 @@ public class Text_GraphicTool extends GraphicTool {
 			
 			taker.addLockedItem(textob);
 			
-		textob.setSnapPosition(createStartingDefaultSnap(image, textob, cx, cy));
+		textob.setAttachmentPosition(createStartingDefaultSnap(image, textob, cx, cy));
 		
 		taker.snapLockedItems();	
 		}
@@ -230,7 +231,7 @@ public class Text_GraphicTool extends GraphicTool {
 		
 		
 		output.setToNearestInternalSnap(textob.getBounds(),snapBounds, new Point(cx, cy));	
-		textob.getSnapPosition().setToNearestExternalSnap(textob.getBounds(), snapBounds, new Point(cx, cy));	
+		textob.getAttachmentPosition().setToNearestExternalSnap(textob.getBounds(), snapBounds, new Point(cx, cy));	
 		
 		return output;
 	}

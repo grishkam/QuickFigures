@@ -5,7 +5,7 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.CountParameter;
 import standardDialog.StandardDialog;
 import undo.SimpleItemUndo;
@@ -77,7 +77,7 @@ public class CountHandle extends SmartHandle {
 		if(form==COUNT_DOWN) px-=15;
 		return new Point2D.Double(px, py);
 	}
-	public void handlePress(CanvasMouseEventWrapper canvasMouseEventWrapper) {
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
 		
 		SimpleItemUndo<CountParameter> undo = createUndo();

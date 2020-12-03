@@ -58,10 +58,10 @@ public class WrappingTransferHandler extends TransferHandler {
 	
 	
 	protected Transferable 	createTransferable(JComponent c) {
-		return new basicTransferable();
+		return new BasicTransferable();
 	}
 	
-	class basicTransferable implements Transferable {
+	class BasicTransferable implements Transferable {
 
 		@Override
 		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {

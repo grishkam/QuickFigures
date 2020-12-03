@@ -17,7 +17,7 @@ public class SeriesLabel extends PlotLabel  {
 		this.setLegend(l);
 		if (l) return;
 		
-		this.setSnapPosition(AttachmentPosition.defaultPlotBottomSide());
+		this.setAttachmentPosition(AttachmentPosition.defaultPlotBottomSide());
 		this.setAngle(Math.PI/4);
 	}
 

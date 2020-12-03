@@ -12,7 +12,7 @@ import selectedItemMenus.LayerSelector;
  such as thEach figure has its own coordinate. 
  Broadly similar to java's MouseEvent class except with a few methods
  specifically relevant to QuickFigures images */
-public interface CanvasMouseEventWrapper extends Serializable {
+public interface CanvasMouseEvent extends Serializable {
 
 	/**The point clicked given in my coordinate system. Immediately useful for may tools*/
 	Point getCoordinatePoint() ;

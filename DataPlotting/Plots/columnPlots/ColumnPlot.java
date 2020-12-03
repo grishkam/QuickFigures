@@ -11,7 +11,7 @@ import genericPlot.BasicPlot;
 import genericPlot.BasicDataSeriesGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import gridLayout.GridLayoutEditListener;
-import gridLayout.MontageSpaces;
+import gridLayout.LayoutSpaces;
 import menuUtil.HasUniquePopupMenu;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.PlotArea;
@@ -19,7 +19,7 @@ import plotParts.DataShowingParts.PlotUtil;
 import undoForPlots.AxisFlipUndo;
 
 /**A special layer for a plot with single dimensional data*/
-public class ColumnPlot extends BasicPlot implements PlotArea, HasUniquePopupMenu, MontageSpaces, GridLayoutEditListener {
+public class ColumnPlot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
 
 
 

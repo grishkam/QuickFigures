@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import animations.KeyFrameCompatible;
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 import animations.Animation;
 import animations.KeyFrameAnimation;
 import fLexibleUIKit.MenuItemExecuter;
@@ -222,7 +222,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	}
 	
 	@Override
-	public void handleMouseEvent(CanvasMouseEventWrapper me, int handlenum, int button, int clickcount, int type,
+	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
 		if (clickcount<2||handlenum>-1) return;
 		if (clickcount==2) showOptionsDialog();
@@ -262,12 +262,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 		
 	}
 	
-	public AttachmentPosition getSnapPosition() {
+	public AttachmentPosition getAttachmentPosition() {
 		return snappingBehaviour;
 	}
 
 
-	public void setSnapPosition(AttachmentPosition snappingBehaviour) {
+	public void setAttachmentPosition(AttachmentPosition snappingBehaviour) {
 		this.snappingBehaviour = snappingBehaviour;
 	}
 	

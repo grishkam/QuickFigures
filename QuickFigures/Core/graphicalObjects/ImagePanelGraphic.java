@@ -297,7 +297,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	private void setScaleBar(BarGraphic scaleBar) {
 		this.scaleBar = scaleBar;
 		if (scaleBar!=null) {
-			if (scaleBar.getSnapPosition()==null)scaleBar.setSnapPosition(AttachmentPosition.defaultScaleBar());
+			if (scaleBar.getAttachmentPosition()==null)scaleBar.setAttachmentPosition(AttachmentPosition.defaultScaleBar());
 			updateBarScale();
 		}
 	}
@@ -306,7 +306,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		if (scaleBar!=null) {
 			scaleBar.setScaleInfo(getDisplayScaleInfo());
 			this.snapLockedItems();
-			scaleBar.getSnapPosition().snapLocatedObjects(getScaleBar(), this);
+			scaleBar.getAttachmentPosition().snapLocatedObjects(getScaleBar(), this);
 			scaleBar.setUpBarRects();
 		}
 		
@@ -713,10 +713,10 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		@Override
 		public void snapLockedItem(LocatedObject2D o) {
 			if (o==null) return;
-			AttachmentPosition sb = o.getSnapPosition();
+			AttachmentPosition sb = o.getAttachmentPosition();
 				if (sb==null) {
-					o.setSnapPosition(AttachmentPosition.defaultInternal());
-					sb=o.getSnapPosition();
+					o.setAttachmentPosition(AttachmentPosition.defaultInternal());
+					sb=o.getAttachmentPosition();
 					}
 				
 				sb.snapLocatedObjects(o, this);

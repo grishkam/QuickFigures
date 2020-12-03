@@ -232,7 +232,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		
 	}
 
-	/**Alters the CSF location to target, so that is shows the stack index targeted */
+	/**Alters the given CSF location to match the target slice/frame, so that is shows the stack index targeted */
 	public abstract void setupLocation(CSFLocation d);
 
 	

@@ -68,8 +68,11 @@ public class PanelManagerUndo extends CombinedEdit {
 		output.addEditToList(new PanelManagerUndo(pm.getPanelList()));
 		output.addEditToList(new UndoLayerContentChange(pm.getDisplay()));
 		output.addEditToList(new UndoLayerContentChange(pm.getLayer()));
-		MontageLayoutGraphic layout = pm.getGridLayout();layout.generateCurrentImageWrapper();
-		output.addEditToList(new UndoLayoutEdit(layout));
+		MontageLayoutGraphic layout = pm.getGridLayout();
+		if (layout!=null) {
+			layout.generateCurrentImageWrapper();
+			output.addEditToList(new UndoLayoutEdit(layout));
+		}
 		output.addEditListener(pm);
 		return output;
 	}

@@ -101,10 +101,10 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	public SnappingPanel addSnappingBehviourToDialog(LocatedObject2D l) {
 		
 		
-		if (l==null||l.getSnapPosition()==null) return null;
+		if (l==null||l.getAttachmentPosition()==null) return null;
 		//GriddedPanel newtabContent = new GriddedPanel();
 		
-		snappingPanel = new SnappingPanel(l.getSnapPosition());
+		snappingPanel = new SnappingPanel(l.getAttachmentPosition());
 		snappingPanel.addObjectEditListener(this);
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridwidth=4;
@@ -124,7 +124,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	
 	public void setObjectSnappingBehaviourToDialog(LocatedObject2D l) {
 		if (snappingPanel==null) return;
-		l.setSnapPosition(snappingPanel.getSnappingBehaviour());
+		l.setAttachmentPosition(snappingPanel.getSnappingBehaviour());
 	}
 	
 	public void addFixedEdgeToDialog(BasicGraphicalObject l) {

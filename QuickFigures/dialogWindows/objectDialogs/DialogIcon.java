@@ -39,7 +39,7 @@ public class DialogIcon {
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		
-		out.makeDashLess();
+		out.makeNearlyDashLess();
 		g.getTheLayer().add(out);
 		return out;
 	}

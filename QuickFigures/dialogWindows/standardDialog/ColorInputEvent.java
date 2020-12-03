@@ -5,12 +5,12 @@ import java.awt.Component;
 
 import javax.swing.JPanel;
 
-import applicationAdapters.CanvasMouseEventWrapper;
+import applicationAdapters.CanvasMouseEvent;
 
 public class ColorInputEvent extends ComponentInputEvent {
 	
 	private Color font;
-	public CanvasMouseEventWrapper event;
+	public CanvasMouseEvent event;
 
 	
 	public ColorInputEvent(JPanel sourcePanel, Component component, Color number) {

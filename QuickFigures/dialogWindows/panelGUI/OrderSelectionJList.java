@@ -346,8 +346,8 @@ MouseListener addMouseList(boolean b) {
 	}
 	
 	public void removeSelectedPanels() {
-		Object[] index1 = this.getSelectedValues();
-		if (this.removeEnabled) for(Object o: index1) {
+		if (this.removeEnabled) 
+			for(String o: this.getSelectedValuesList()) {
 				this.removeItem((String) o);
 				addable.addElement((String) o);
 				

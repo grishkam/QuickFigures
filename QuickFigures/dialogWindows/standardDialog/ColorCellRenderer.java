@@ -61,7 +61,7 @@ public class ColorCellRenderer extends BasicComboBoxRenderer implements ListCell
 		return output;
 	}
 
-	public  Component	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 	
 		//list.set
 	//	list.setVisibleRowCount(2);
@@ -143,7 +143,7 @@ public class ColorCellRenderer extends BasicComboBoxRenderer implements ListCell
 			//g.fillRect(0, 0, 15, this.getHeight());
 			ArrowGraphic ar = ArrowGraphic.createDefaltOutlineArrow(getForeground().brighter(), Color.black);
 			ar.setStrokeWidth(4);
-			ar.setArrowHeadSize(15);
+			ar.getHead().setArrowHeadSize(15);
 			ar.setPoints(new Point(0,10), new Point(22,10));
 			GraphicDisplayComponent i = new GraphicDisplayComponent(ar);
 			i.paintIcon(this, g, 0, 0);
