@@ -78,7 +78,8 @@ public class ChannelOrderAndLutMatching {
 		matchDisplayRange(reference, edited);
 	}
 	
-	/** will alter the display range of the edited multichannel image to that of the reference. of every channel*/
+	/** will alter the display range of the edited multichannel image to that of the reference. 
+	 * of every channel. Uses the channel names to determine which channel is which*/
 	public void matchDisplayRange(MultiChannelImage reference, MultiChannelImage edited) {
 		ArrayList<String> ChannelNamesA = getAllRealChannelNames(reference);
 		ArrayList<String> ChannelNamesB= getAllRealChannelNames(edited);

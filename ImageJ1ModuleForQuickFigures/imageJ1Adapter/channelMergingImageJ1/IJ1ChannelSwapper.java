@@ -29,7 +29,6 @@ import ij.process.ImageProcessor;
 import ij.process.LUT;
 import infoStorage.BasicMetaDataHandler;
 
-
 public class IJ1ChannelSwapper extends AbstractChannelHandler<ImagePlus> {
 	
 
@@ -105,13 +104,6 @@ public class IJ1ChannelSwapper extends AbstractChannelHandler<ImagePlus> {
 		 return output;
 	}
 	
-	public static void swapChannelsWithoutUpdaterConflict(ImagePlus p, int a, int b){
-		//Montage_Updater.UpDatemode=false;
-		//ImagePlus p=IJ.getImage();
-	swapChannels(p, a, b);
-	//p.setStack(imp.getStack());
-		//Montage_Updater.UpDatemode=true;
-	}
 
 /**given an image, it will swap the channels */
 	@Override
@@ -119,6 +111,8 @@ public class IJ1ChannelSwapper extends AbstractChannelHandler<ImagePlus> {
 		if (p==null) return;
 		if (a==b) return;
 		if (p.getNChannels()==1) return;
+		if (a<1||b<1) return;//channel indices start from 1 so lower is invalid
+		
 		if (!p.isComposite()) {
 			ImagePlus cpnew=swapStackSlices(p, a, b); 
 			p.setStack(cpnew.getStack()); return;

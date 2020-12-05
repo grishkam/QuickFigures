@@ -34,24 +34,24 @@ public class UndoInsetDefinerGraphic extends AbstractUndoableEdit2 {
 	public UndoInsetDefinerGraphic(PanelGraphicInsetDefiner def) {
 		this.def=def;
 		iLayer=def.personalLayer;
-		iLayout=def.personalGraphic;
+		iLayout=def.personalLayout;
 	}
 	
 
 	public void establishFinalState() {
 		
 		fLayer=def.personalLayer;
-		fLayout=def.personalGraphic;
+		fLayout=def.personalLayout;
 	}
 	public void redo() {
 		def.personalLayer=fLayer;
-		def.personalGraphic=fLayout;
+		def.personalLayout=fLayout;
 	
 	}
 	
 	public void undo() {
 		def.personalLayer=iLayer;
-		def.personalGraphic=iLayout;
+		def.personalLayout=iLayout;
 	}
 
 }

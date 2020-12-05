@@ -25,9 +25,6 @@ public class NewCanvasDialog  extends BasicMenuItemForObj   {
 	int width=8*ImageDPIHandler.getStandardDPI();
 	int height=10*ImageDPIHandler.getStandardDPI();
 	
-	int type=1;
-	
-	
 	@Override
 	public String getMenuPath() {
 		return "File<New";
@@ -55,7 +52,6 @@ public class NewCanvasDialog  extends BasicMenuItemForObj   {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "newCanvas"+typeString();
 	}
 

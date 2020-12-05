@@ -62,7 +62,7 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	public PreProcessInformation getModifications();
 	
 	/**returns the original version of the multidimensional image (without crop nor rotation nor scale) */
-	public MultiChannelImage getUnprocessedVersion();
+	public MultiChannelImage getUnprocessedVersion(boolean matchColorsChannelOrder);
 
 	/**applies a new set of processes (roate_crop+scale) to the original version of the multidimensional image
 	 * creating a new multidimensional image.
@@ -87,6 +87,12 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	CSFLocation getDisplaySlice();
 	 /**sets which location in the stack is selected by the user*/
 	 void setDisplaySlice(CSFLocation display);
+	
+	 
+	 /**
+	 * @param cropped
+	 */
+	public void matchOrderAndLuts(MultiChannelImage cropped);
 	
 	
 }

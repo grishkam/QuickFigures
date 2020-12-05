@@ -58,6 +58,7 @@ import utilityClassesForObjects.Scales;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 import animations.KeyFrameAnimation;
+import appContext.ImageDPIHandler;
 import export.pptx.ImagePanelImmitator;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
@@ -70,12 +71,10 @@ import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ImagePanelActionHandleList;
 import graphicalObjectHandles.ImagePanelHandleList;
 import graphicalObjectHandles.LockedItemHandle;
-import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.HasIllustratorOptions;
 import illustratorScripts.IllustratorObjectConvertable;
@@ -90,7 +89,7 @@ import multiChannelFigureUI.ChannelSwapHandleList;
 import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 
-/**an object that displays an image inside a frame with a specified scale and cropping*/
+/**an object that displays an image inside a frame at a specified scale and cropping*/
 public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLockedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePosisions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
 
 	
@@ -98,19 +97,27 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	/**
 	 * 
 	 */
+	/**The width of the panel object.*/
 	private double width;
+	/**The height of the panel object.*/
 	private double height;
-	
+
+	 private Color frameColor=Color.white;
+		private double frameWidthv=2;
+		private double frameWidthh=2;
+		private boolean uniformFrameWidth=true;
+		
 	protected static int imagePanelUserLocked=0;//determines if the user is allowed to move image panels by directly clicking and draging
 
-	{setLocationType(BufferedImageGraphic.UPPER_LEFT);
+	{setLocationType(UPPER_LEFT);
 	name="Image Graphic";
 	
 	}
 	
 	/**this is the image used to show the actual display*/
 	private transient Image displayedImage;
-	/**the scale*/
+	
+	/**the scale relative to the points*/
 	double scale=1;
 	boolean embed=false;
 	 
@@ -122,13 +129,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	
 	private static final long serialVersionUID = 1L;
 	  LockedItemList lockedItems=new LockedItemList(this);
-	  
-	  
-		 private Color frameColor=Color.white;
-		private double frameWidthv=2;
-		private double frameWidthh=2;
-		private boolean uniformFrameWidth=true;
-	
+
 	
 	 Rectangle croppingrect=null;
 
@@ -155,17 +156,15 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		 
 		 /**Sets whether the object embeds the image or not*/
 		 public void setEmbed(boolean em) {
-			 embed=em;
-			// if (em)	 saveEmbeded();
-			
+			 embed=em;	
 			 if (!em)  serializedIm=null;
 		 }
 		 
+		 /**Since BufferedImages are not Serializable, image is stored in a byte array*/
 		 private void saveEmbeded() {
 			 try {
 				serializedIm=imageToByteArray(getBufferedImage());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		 }
@@ -178,11 +177,11 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		    return baos.toByteArray();
 		}
 
-		 /**returns the dimensions of the stored image.
-		   this must not be allowed to return null.
-		   */
-		/**Retrieves the image, if the image is null will try to recreate it based on the embedded image*/
+		/**Retrieves the image, if the image is null will try a few methods to obtain 
+		 * the missing image. May attempt to open a file or to recreate the image based on a a stored byte array
+		 or just create a new image*/
 		public BufferedImage getBufferedImage() {
+			if (img!=null) return img;
 			
 			if (img==null && embed==false && this.isLoadFromFile()) {
 				img=loadFromFile(file);
@@ -190,17 +189,21 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 					img=null;
 				}
 			}
-			if (img==null && embed==false){ img=new BufferedImage((int)(getObjectWidth()/getScale()), (int)(getObjectHeight()/getScale()),  BufferedImage.TYPE_INT_RGB);}
+			
+			
+			if (img==null && embed==false){ 
+				img=new BufferedImage((int)(getObjectWidth()/getScale()), (int)(getObjectHeight()/getScale()),  BufferedImage.TYPE_INT_RGB);}
+			
+			
 			if (img==null && embed==true) {
 					try {
-				
 					img=getImageFromByteArray(serializedIm);
 					
 						} catch (Throwable t) {
 								img=new BufferedImage((int)(getObjectWidth()/getScale()), (int)(getObjectHeight()/getScale()),  BufferedImage.TYPE_INT_RGB);
 								}
 			}
-			//IssueLog.log("image code is "+img.toString());
+			
 			return img;
 			
 			}
@@ -217,11 +220,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		 return embed;
 	 }
 	 
-	 /**Sets whether the object embeds the image or not*/
-
-	 
+	/**copies the settings of the given image*/ 
 	 public void copyAttributesFrom(ImagePanelGraphic bg) {
-		//super.copyAttributesFrom(bg);
 		this.setFrameWidthH(bg.getFrameWidthH());
 		this.setFrameWidthV(bg.getFrameWidthV());
 		this.setFrameColor(bg.getFrameColor());
@@ -230,26 +230,27 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 
 	 }
 	 
-	 /**returns the dimensions of the stored image (in pixels)*/
+	 /**returns the width of the stored image (in pixels)*/
 		public int getUnderlyingImageWidth() {return getBufferedImage().getWidth();}
+	/**returns the height of the stored image (in pixels)*/
 		public int getUnderlyingImageHeight() {return getBufferedImage().getHeight();}
 		
 		
-		/**returns an image that is the postprocessed version of this image
+		/**returns a cropped version of this image
 		  this is a cropped image*/
 		public BufferedImage getProcessedImageForDisplay() {
 			if (getObjectWidth()==0||getObjectHeight()==0) computeWidths();
-			if (this.isCroppintRectValid()) return getBufferedImage().getSubimage((int)this.getCroppingrect().getX(), (int)this.getCroppingrect().getY(), (int)this.getCroppingrect().getWidth(), (int) this.getCroppingrect().getHeight());
+			if (this.isCroppintRectValid()) return getBufferedImage().getSubimage((int)this.getCroppingRect().getX(), (int)this.getCroppingRect().getY(), (int)this.getCroppingRect().getWidth(), (int) this.getCroppingRect().getHeight());
 			return this.getBufferedImage();
 		}
 		
-		/**returns a version that can be saved as a png and opened.*/
+		/**returns a version that can be saved as a png and opened. Required for some export methods*/
 		public BufferedImage getPNGExportImage() {
 			return getProcessedImageForDisplay();
 		}
 
 	 
-	 /**refreshes the scaled copy*/
+	 /**refreshes the scaled copy that is kept ready to draw*/
 		protected void ensureDisplayedImage() {
 			setDisplayedImage(getProcessedImageForDisplay());
 		}
@@ -317,18 +318,31 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		}
 	}
 	
+	/**updates the scale bar to ensure that it is drawn correctly. Also updates any additional scale bars
+	  that may be attached*/
 	public void updateBarScale() {
+		BarGraphic scaleBar=this.scaleBar;
+		updateScaleBar(scaleBar);
+		for(LocatedObject2D i:this.getLockedItems()) {
+			if (i instanceof BarGraphic) updateScaleBar((BarGraphic) i);
+		}
+	}
+
+	/**
+	updates the given scale bar
+	 */
+	private void updateScaleBar(BarGraphic scaleBar) {
 		if (scaleBar!=null) {
 			scaleBar.setScaleInfo(getDisplayScaleInfo());
 			this.snapLockedItems();
 			scaleBar.getAttachmentPosition().snapLocatedObjects(getScaleBar(), this);
 			scaleBar.setUpBarRects();
 		}
-		
 	}
 	
 	private BarGraphic scaleBar=null;
 	
+	/**returns a version of the scale information that can be used by the scale bar*/
 	@Override
 	public ScaleInfo getDisplayScaleInfo() {
 		return info.getScaledCopyXY(getScale());
@@ -340,6 +354,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	 ScaleInfo info=new ScaleInfo();
 
 
+	 /**A panel list element that is associated with this image panel */
 	private PanelListElement sourcePanel;
 
 
@@ -351,11 +366,11 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 
 	
 	 
-	 
+	 	/**returns the scale factor that determines the size at which the image panel is displayed.*/
 		public double getScale() {
 			return scale;
 		}
-
+		/**sets the scale factor that determines the size at which the image panel is displayed.*/
 		public void setScale(double scale) {
 			if (scale==getScale()) return;
 			if (scale<=0) return;
@@ -448,13 +463,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		}
 		
 		 
-		 public void setImageScale(String units, double pwidth, double pheight) {
-			 info=new  ScaleInfo(units, pwidth, pheight);
-			 updateBarScale();
-			 
-		 }
-		 
-		 
+		 /**Draws the image*/
 		 @Override
 			public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 			 
@@ -466,14 +475,9 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 				double x2 = cords.transformX((x+getObjectWidth()));
 				double y1 =cords.transformY(y);
 				double y2 = cords.transformY( (y+getObjectHeight()));
-				double scaleFrame=this.getFrameWidthV()*cords.getMagnification();
-				double scaleFrame2=this.getFrameWidthH()*cords.getMagnification();
-				//Rectangle rect = new Rectangle(x1, y1, x2-x1, y2-y1);
-				Rectangle rect2 = new Rectangle((int)(x1-scaleFrame2 ), (int)(y1-scaleFrame), (int)(x2-x1+2*scaleFrame2), (int)(y2-y1+2*scaleFrame));
 				
-				int displaywidth=(int) (getObjectWidth()/this.getScale());//scale is for new version. to be deleted in the event of bugs. 
+				int displaywidth=(int) (getObjectWidth()/this.getScale());
 				int displayheight=(int) (getObjectHeight()/this.getScale());
-				graphics.setColor(getFrameColor());
 				
 				
 				if (getDisplayedImage()==null) ensureDisplayedImage();
@@ -486,11 +490,9 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 						double sy1 = cords.transformY(getCenterOfRotation().getY());
 					   graphics.rotate(-angle, sx1, sy1);
 					   
-					   graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);						
-					   graphics.fill(rect2);
-					   graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-						
+					  drawFrame(graphics, cords, x1, x2, y1, y2); 
 					   
+					   graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 					   graphics.drawImage(image, (int) x1,  (int)y1, (int)x2, (int)y2, 0, 0, displaywidth, displayheight, null);
 					  
 					   graphics.rotate(angle, sx1, sy1);
@@ -500,73 +502,47 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 				  if (selected) {
 					  getPanelHandleList().updateHandleLocs();
 					  getPanelHandleList().draw(graphics, cords);
-					  // getGrahpicUtil().drawHandlesAtPoints(graphics, cords,  RectangleEdges.getLocationsForHandles(this.getBounds()));
 					
-						  // handleBoxes=getGrahpicUtil().lastHandles;
-						   
-						  // Point frameHandPoint = getFrameHandlePoint();
-						   //HandleRect framehandle = super.getGrahpicUtil().drawHandlesAtPoint(graphics, cords,frameHandPoint );
-					
-					  // handleBoxes.add(framehandle);
-					  // drawLocationAnchorHandle(graphics,cords);
 					   
 				   }
 				 
-				 // getTheLayer().draw(graphics, cords);
+			
 			}
+
+		/**
+		 * Draws the Frame
+		 */
+		public void drawFrame(Graphics2D graphics, CordinateConverter<?> cords, double x1, double x2, double y1,
+				double y2) {
+			if (getFrameWidthV()>0||getFrameWidthH()>0) {
+				   graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);						
+				   double scaleFrame=this.getFrameWidthV()*cords.getMagnification();
+					double scaleFrame2=this.getFrameWidthH()*cords.getMagnification();
+					
+					Rectangle rect2 = new Rectangle((int)(x1-scaleFrame2 ), (int)(y1-scaleFrame), (int)(x2-x1+2*scaleFrame2), (int)(y2-y1+2*scaleFrame));
+					
+				   graphics.setColor(getFrameColor());
+				   graphics.fill(rect2);
+			   }
+		}
 
 	
 
-		public Image getDisplayedImage() {
+		private Image getDisplayedImage() {
 			return displayedImage;
 		}
 
-		public void setDisplayedImage(Image displayedImage) {
+		private void setDisplayedImage(Image displayedImage) {
 			this.displayedImage = displayedImage;
 			updateBarScale();
 		}
 		
 		
 
-		/**Called whenever a handle is moved. Additional actions might be performed by smart handle objects*/
+		/**Called whenever a handle is moved. In this case, does nothing since this class uses smart handles*/
 		@Override
 		public void handleMove(int handlenum, Point p1, Point p2) {
-			if (handlenum>50) {
-				if (this.getPanelHandleList()==null) return;
-				SmartHandle thehandle = this.getPanelHandleList().getHandleNumber(handlenum);
-				if (thehandle!=null)thehandle.handleMove(p1, p2);
-				
-			}
-			
-			if (handlenum>50) return;
-			//int rightside=x+width;
-			//IssueLog.log("handle num is "+handlenum);
-			//double distance=0;
-			if (handlenum==10) {
-				double bottom=y+getObjectHeight();
-				double size=p2.y-bottom;
-				setFrameWidthV(size);
-				notifyListenersNow();
-				
-				return;
-			}
-			
-			if (handlenum==8) {
-				this.setLocationType(RectangleEdges.CENTER);
-				this.setLocation(p2);
-				return;
-				}
-			
-			 setLocationType(RectangleEdges.oppositeSide(handlenum));
-			 double dist1=RectangleEdges.distanceOppositeSide(handlenum, getCroppedImageSize());
-			double dist2= RectangleEdges.getLocation(getLocationType(), getBounds()).distance(p2);
-			 //Point2D lo = getLocation(handlenum, getBounds());
 		
-			//double l1 = getLocation(op, getBounds()).distance( getLocation(handlenum, getBounds()));		
-			if (getScale()==dist2/dist1) return;
-			setScale( dist2/dist1);		
-			notifyListenersNow();
-			
 		}
 
 		/**
@@ -576,30 +552,34 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 			getListenerList().notifyListenersOfUserSizeChange(this);
 		}
 		
+		/**Returns the cropped size of the buffered image*/
 		public Rectangle getCroppedImageSize() {
 			if (!this.isCroppintRectValid())
 			return new Rectangle(0,0, this.getUnderlyingImageWidth(), this.getUnderlyingImageHeight());
 		
-			return new Rectangle(0,0,this.getCroppingrect().width, this.getCroppingrect().height);
+			return new Rectangle(0,0,this.getCroppingRect().width, this.getCroppingRect().height);
 		}
 		
+		/**returns true if the current cropping rectangle can be used as a crop area for the image*/
 		public boolean isCroppintRectValid() {
-			if (getCroppingrect()==null) return false;
-			return isItAValidCrop(getCroppingrect());
+			if (getCroppingRect()==null) return false;
+			return isItAValidCrop(getCroppingRect());
 		}
 		
+		/**returns true if the given rectangle can be used as a crop area for the image*/
 		public boolean isItAValidCrop(Rectangle2D r) {
 			if (r==null) return false;
 			
 			return new Rectangle(0,0, this.getUnderlyingImageWidth(), this.getUnderlyingImageHeight()).contains(r);
 		}
 		
-		public Rectangle getCroppingrect() {
+		/**returns the cropping rectangle*/
+		public Rectangle getCroppingRect() {
 			return croppingrect;
 		}
 
-		public void setCroppingrect(Rectangle croppingrect) {
-			
+		/**Sets a cropping rectangle if the given rectangle is appropriate for defining a crop area*/
+		public void setCroppingRect(Rectangle croppingrect) {
 			if (this.croppingrect!=null && this.croppingrect.equals(croppingrect)) return;
 			if (!this.isItAValidCrop(croppingrect)&&croppingrect!=null) return;
 			this.croppingrect = croppingrect;
@@ -609,8 +589,9 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		
 		
 		
-		
-		protected void computeWidths() {
+		/**Based on the number of pixels in the image, the scale and the crop area,
+		  calculates the width and height of this object. */
+		private void computeWidths() {
 			double newwidth=getScale()* getUnderlyingImageWidth();
 			double newheight=getScale()* getUnderlyingImageHeight();
 			
@@ -624,23 +605,13 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 			
 		}
 			
-		/**
-		public BasicCordinateConverter getCord() {
-			double xc=-x/this.getScale();
-			double yc=-y/this.getScale();
-			if (this.isCroppintRectValid()) {
-				xc-=(this.getCroppingrect().x)*this.getScale();
-				yc-=(this.getCroppingrect().y)*this.getScale();
-			}
-			
-			return new BasicCordinateConverter(xc,yc, 1);
-		}*/
+	
 		
 		/**transforms */
 		public AffineTransform getAfflineTransformToCord() {
 			AffineTransform af = new AffineTransform();
 			if (this.isCroppintRectValid()) {
-				af.translate(this.getCroppingrect().getX(), this.getCroppingrect().getY());
+				af.translate(this.getCroppingRect().getX(), this.getCroppingRect().getY());
 			}
 			af.scale(1/scale, 1/scale);
 			//af.translate(-transformX(0), -transformY(0));
@@ -782,45 +753,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			//IssueLog.log("The cropping rect is valid? "+this.isCroppintRectValid(), this.getCroppingrect().toString());
 		}
 
-		public PanelGraphicInsetDefiner createInset() {
-			try {
-		//	IssueLog.log("Will attempt to create inset");
-			PanelGraphicInsetDefiner inset = new PanelGraphicInsetDefiner(this, ShrinkedRect(this.getBounds(), 8));
-			if (this.getParentLayer()==null) IssueLog.log("parent layer not found");
-		//	IssueLog.log("inset will be added to layer"+this.getParentLayer());
-			this.getParentLayer().add(inset);
-		
-			BufferedImageGraphic imageForin = inset.getImageInset();
-			getParentLayer().add(imageForin);
-			imageForin.setScale( getScale());
-			this.addLockedItem(imageForin);
-			return inset;
-			
-			} catch (Throwable t) {
-				IssueLog.logT(t);
-			}
-		return null;
-		}
-		
-		
-		
-		static Rectangle ShrinkedRect(Rectangle r) {
-			Rectangle r2 = r.getBounds();
-			r2.width/=4;
-			r2.height/=4;
-			r2.x+=r2.width;
-			r2.y+=r2.width;
-			return r2;
-		}
-		
-		static Rectangle ShrinkedRect(Rectangle r, double factor) {
-			Rectangle r2 = r.getBounds();
-			r2.width/=factor;
-			r2.height/=factor;
-			r2.x+=r2.width*factor/4;
-			r2.y+=r2.width*factor/4;
-			return r2;
-		}
+	
 
 		public Color getFrameColor() {
 			return frameColor;
@@ -841,14 +774,14 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		
 		@Override
 		public ImagePanelGraphic copy() {
-			ImagePanelGraphic out = new ImagePanelGraphic();
-			if (getCroppingrect()!=null) out.setCroppingrect(getCroppingrect().getBounds());
-			out.setImage(this.getBufferedImage());
+			ImagePanelGraphic out = new ImagePanelGraphic(this.getBufferedImage());
+			if (getCroppingRect()!=null) out.setCroppingRect(getCroppingRect().getBounds());
 			out.copyAttributesFrom(this);
 			out.setLocationUpperLeft(this.getLocationUpperLeft().getX(), this.getLocationUpperLeft().getY());
 			return out;
 		}
 		
+		/**Creates a buffered image with the words "File not found" printeds*/
 		 protected BufferedImage createFileNotFountImage(double width, double height) {
 			 BufferedImage img=new BufferedImage((int)(width/getScale()), (int)(height/getScale()),  BufferedImage.TYPE_INT_RGB);
 			Graphics g = img.getGraphics();
@@ -874,13 +807,13 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			}
 			
 			
-
+		/**returns true if there is (or was) a file that stores the underlying image*/
 		public boolean isFilederived() {
 			if (this.file==null) return false;
 			return filederived;
 		}
 
-
+		/**returns true if the method to find the image (if missing) is to load from the original source file*/
 		public boolean isLoadFromFile() {
 			if (!isFilederived()) return false;
 			return loadFromFile;
@@ -939,7 +872,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 
 		public double getQuickfiguresPPI() {
-			return 72/getScale();
+			return ImageDPIHandler.getStandardDPI()/getScale();
 		}
 		
 		public String getInkscapePPI() {

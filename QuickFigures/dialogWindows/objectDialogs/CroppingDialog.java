@@ -116,7 +116,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		if(preprocessRecord!=null) 
 			{
-			image.setCroppingrect(preprocessRecord.getRectangle());
+			image.setCroppingRect(preprocessRecord.getRectangle());
 			this.cropAngle=preprocessRecord.getAngle();
 			
 			}
@@ -160,7 +160,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 				r.height=rDefault.height;
 			}
 			this.cropAngle=recAngle;
-			image.setCroppingrect(r);//sets the crop rect
+			image.setCroppingRect(r);//sets the crop rect
 			
 			}
 		this.setModal(true);
@@ -222,7 +222,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	public Rectangle showDialog(ImagePanelGraphic imagePanelGraphic) {
-		Rectangle r=imagePanelGraphic.getCroppingrect();
+		Rectangle r=imagePanelGraphic.getCroppingRect();
 		
 		mag=this.getDisplayScale(imagePanelGraphic);
 		
@@ -230,8 +230,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.image=imagePanelGraphic;
 		panel.setMagnification(mag);
 	//	IssueLog.log("the magnification of the display will be "+mag);
-		ImagePanelGraphic b = new ImagePanelGraphic();
-		b.setImage(imagePanelGraphic.getBufferedImage());
+		ImagePanelGraphic b = new ImagePanelGraphic(imagePanelGraphic.getBufferedImage());
 		panel.getGraphicLayers().add(b);
 		dialogDisplayImage=b;
 		double width2 = imagePanelGraphic.getUnderlyingImageWidth()*mag;
@@ -463,10 +462,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	public void setImageCropping() {
 		try{
-		image.setCroppingrect(rect.getBounds());
+		image.setCroppingRect(rect.getBounds());
 
 		for(ImagePanelGraphic image: getImagepanels()) {
-			image.setCroppingrect(rect.getBounds());
+			image.setCroppingRect(rect.getBounds());
 		}
 		
 		} catch (Throwable t) {
@@ -475,9 +474,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	public void removeCroppingRect() {
-		image.setCroppingrect(null);
+		image.setCroppingRect(null);
 		for(ImagePanelGraphic image: getImagepanels()) {
-			image.setCroppingrect(null);
+			image.setCroppingRect(null);
 		}
 	}
 	
@@ -535,9 +534,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		CroppingDialog crop;
 		if(recommmendation==null)
-		 crop= new CroppingDialog(slot, slot.getUnprocessedVersion(), slot.getModifications());
+		 crop= new CroppingDialog(slot, slot.getUnprocessedVersion(true), slot.getModifications());
 		else {
-			crop = new CroppingDialog(slot, slot.getUnprocessedVersion(), recommmendation, recAngle);
+			crop = new CroppingDialog(slot, slot.getUnprocessedVersion(true), recommmendation, recAngle);
 		}
 		if(slot.getDisplaySlice()!=null) crop.setDisplaySlice(slot.getDisplaySlice());
 		crop.showDialog();

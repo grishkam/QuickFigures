@@ -26,14 +26,14 @@ import ultilInputOutput.FileChoiceUtil;
   As long as the implementation of that context works, every part of QuickFigures should work*/
 public class CurrentAppContext {
 
+	/**The current context. Determines which package is used to open/find images*/
 	public static MultiDimensionalImageContext currentContext=null;
-	//determines  how multi-dimensional images are viewed opened and merged
+	
 	public static ToolbarColorContext  currentColorContext=new ToolColors();
 	
 	public static MultiDimensionalImageContext getMultichannelContext() {
 		return currentContext;
 	}
-	
 	public static void setMultichannelContext(MultiDimensionalImageContext mcu) {
 		currentContext=mcu;
 	}
@@ -47,10 +47,7 @@ public class CurrentAppContext {
 	  with the save dialog or open dialog*/
 	public static String getDefaultDirectory() {
 		if ( getMultichannelContext()==null) return FileChoiceUtil.getWorkingDirectory();
-		
-		
 		if ( getMultichannelContext().getDefaultDirectory()==null)return FileChoiceUtil.getWorkingDirectory();
-	
 		return getMultichannelContext().getDefaultDirectory();
 	}
 	

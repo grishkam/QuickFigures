@@ -75,7 +75,7 @@ public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 		ArrayList<PanelGraphicInsetDefiner> insets = PanelGraphicInsetDefiner.getInsetDefinersFromLayer(getTopLayer(selector.getSelectedLayer()));
 		
 		for(PanelGraphicInsetDefiner ins: insets) {
-			panelLayouts.remove(ins.personalGraphic);
+			panelLayouts.remove(ins.personalLayout);
 		}
 	
 	}

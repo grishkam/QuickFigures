@@ -15,19 +15,37 @@
  *******************************************************************************/
 package appContext;
 
+/**A certain number of points on the canvas correspond to 1 inch distance.
+ * That number of points is 72 in QuickFigures. 
+ * This ensures that the rulers end up being consistent with the rulers in Abobe Illustrator 
+ * An image panel with a pixel density of 300 per inch in QuickFigures will have the same pixel density in illustrator when scaled to the same size
+ * Confusingly, Inkscape has each inch correspond to 96 pixels (the CSS/SVG defined value) but has that distance still equal to 72 points in Inkscape. 
+ * Draw (an application that is part of LibreOffice) seems to have rulers similar to Inkscape 
+ * Exported Images still look identical in Inkscape but rulers in Inkscape are not consistent with QuickFigures.
+ * 
+ * For example an image panel 
+ */
 public class ImageDPIHandler {
 
+	public static final int DEFAULT_POINTS_PER_INCH = 72,
+							 	SVG_PIXELS_PER_INCH = 96;
+	
+	
+	private static int POINTS_PER_INCH = DEFAULT_POINTS_PER_INCH ;
+
+	/**Returns the number of points on the canvas that corresponds to 1 inch distance*/
 	public static int getStandardDPI() {
-		return 72;
+		return POINTS_PER_INCH;
 	}
 	
+	/**returns the pixel density ratio needed for panels with 300 pixels per inch*/
 	public static double ratioFor300DPI() {
 		double i=getStandardDPI();
 		return i/300.0;
 	}
 	
-	public ImageDPIHandler() {
-		 
-	}
+	
+	public static double idealPanelPixelDesity() {return 300;}
+	
 
 }

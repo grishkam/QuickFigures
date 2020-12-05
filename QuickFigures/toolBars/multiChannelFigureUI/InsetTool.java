@@ -190,7 +190,6 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 
 	inset.setBilinearScale(scale);
 	inset.multiChannelStackofInsets=list;
-	inset.setUpListToMakeInset(list, display.getPanelList());
 	
 	
 	if (createMultiChannel==1)list.addAllCandF(display.getMultiChannelImage());
@@ -206,7 +205,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	UndoInsetDefinerGraphic undoLayerSet = new UndoInsetDefinerGraphic(inset);
 	if (usePreexisting(inset)) {
 		//Called if the panels for this inset simply need to be added to ther layer for another one
-		inset.personalGraphic=preExisting.personalGraphic;
+		inset.personalLayout=preExisting.personalLayout;
 		inset.personalLayer=preExisting.personalLayer;
 		pm=new PanelManager(display, list, this.preExisting.personalLayer);
 		
@@ -272,7 +271,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		
 		ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(this.getImageWrapperClick(), l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.onlySelectThoseOfClass);
 		itemsInway.remove(l);
-		itemsInway.remove(inset.personalGraphic);
+		itemsInway.remove(inset.personalLayout);
 		if (itemsInway.size()>0&&l.getAttachmentPosition().isExternalSnap()) {
 			//IssueLog.log("limited space puts makes  col label impossible");
 			l.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
@@ -285,15 +284,14 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			l.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
 		}
 		if  (haveChanLabelsOnTop() ) {
-			MontageLayoutGraphic layout = inset.personalGraphic;
+			MontageLayoutGraphic layout = inset.personalLayout;
 			double height = layout.getBounds().getHeight();
 			if(height>l.getFont().getSize2D() &&layout.getPanelLayout().nRows()==1) l.setAttachmentPosition(AttachmentPosition.defaultColLabel());	
 		}
 		
 	}
 	
-	inset.getParentLayer().remove(inset.getImageInset());//removes the direct inset
-
+	
 		return undo;
 	
 	}
@@ -404,7 +402,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			/**Sets the layout and layer to those of the preexisting*/
 			UndoInsetDefinerGraphic undo5 = new UndoInsetDefinerGraphic(inset);
 			inset.personalLayer=preExisting.personalLayer;
-			inset.personalGraphic=preExisting.personalGraphic;
+			inset.personalLayout=preExisting.personalLayout;
 			undo5.establishFinalState();
 			undo.addEditToList(undo5);
 			

@@ -866,7 +866,8 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**given a rectangle you want to snap to rectangle 2 this returns a point with the 
 	  snapped distance. This will snap to wherever is in range. r1's location changes.
 	  not used*/
-	private void snapBoundsSideIfInRange(Rectangle2D.Double r1, Rectangle2D.Double r2) {
+	@Deprecated
+	public void snapBoundsSideIfInRange(Rectangle2D.Double r1, Rectangle2D.Double r2) {
 		double snaph = getSnappingRangeH(r1.width) ;
 		double snapv = getSnappingRangeV(r1.height) ;
 		
@@ -892,13 +893,17 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		
 		return;
 	}
+	@Deprecated
 	private double snapRangeH=0;
+	@Deprecated
 	private double snapRangeV=0;
 	/**returns the horizontal range used used to determine if automated snapping of objects to nearby panels
 	  will occur. This is only relevant in a handful of contexts*/
+	@Deprecated
 	private double getSnappingRangeH(double objectWidth) {
 		return snapRangeH*objectWidth;
 	};
+	@Deprecated
 	/**returns the vertical range used used to determine if automated snapping of objects to nearby panels
 	  will occur. This is only relevant in a handful of contexts*/
 	private double getSnappingRangeV(double objectHeight) {

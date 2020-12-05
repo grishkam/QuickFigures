@@ -22,10 +22,11 @@ import genericMontageKit.PanelList;
 import genericMontageKit.PanelSetter;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelManager;
+import graphicalObjects_LayerTypes.GraphicLayer;
 
 /**A specialized object that contains a source multi-dimensional image
  * and a list of panels that display various parts of that image*/
-public interface ImageDisplayLayer {
+public interface ImageDisplayLayer extends GraphicLayer {
 	
 	/**Returns the source stack*/
 	public String getTitle();

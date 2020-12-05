@@ -40,7 +40,8 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 	/**
 	 * 
 	 */
-	static Color standardBG=new Color(42,91,214);
+	static Color standardBG=new Color(42,91,214);//The color around the slected item
+	Color canvasColor = Color.white;//the color around all ther other items
 	private static final long serialVersionUID = 1L;
 	
 	private boolean selected=false;
@@ -136,7 +137,11 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 	
 		try {
 			
-				if (isSelected()) g.setColor(standardBG); else g.setColor(Color.white);
+				if (isSelected()) g.setColor(standardBG);
+				else {
+					
+					g.setColor(canvasColor);
+				}
 				g.fillRect(0, 0, this.getWidth(), getHeight());
 			
 				//this.currentDisplay().setFillBackGround(isSelected());

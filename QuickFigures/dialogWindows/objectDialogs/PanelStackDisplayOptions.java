@@ -64,10 +64,6 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	
 	static String[] MergePositions=new String[] {"Merged Image Last", "Merged Image First", "No Merge", "Only Merge (no channels)"};
 	
-	/**tells whether an additional bilinear scale step will be done. has been replaced */
-	@Deprecated
-	final boolean includeBilScale=false;
-	
 	
 	public PanelStackDisplayOptions(MultichannelDisplayLayer display, PanelList stack, PanelManager panMan, boolean panelCreationIncluded) {
 		stack.setChannelUpdateMode(false);//need to be set to false, otherwise the channels will not be updated according to the instructions
@@ -155,7 +151,6 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			{
 			this.add("preScale", new NumberInputPanel("Scale (Bilinear Interpolation)", principalMultiChannel.getPreprocessScale(),3));
 			
-			if (this.includeBilScale) this.add("Source Image Level Scale", new NumberInputPanel("Bilinear Scale 2", panelList.getScaleBilinear(),3));
 			
 			}
 		if (this.panelCreationIncluded) {
@@ -248,10 +243,6 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	 * @param ins
 	 */
 	protected void setPanelCreationOptionsToDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins) {
-		if (includeBilScale) {
-			double bilScale = this.getNumber("Source Image Level Scale");
-			if (bilScale>0)panelList.setScaleBilinear(bilScale);
-		}
 		
 		double preScale=this.getNumber("preScale");
 		if (preScale>0.01)dis.setPreprocessScale(preScale);
@@ -271,10 +262,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		for(MultichannelDisplayLayer addedDiaply: displural) {
 			addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
-			if (includeBilScale) {
-				double bilScale = this.getNumber("Source Image Level Scale");
-				if (bilScale >0)addedDiaply.getPanelManager().getPanelList().setScaleBilinear(bilScale);
-			}
+			
 			if (preScale>0.01)addedDiaply.setPreprocessScale(preScale);
 		}
 	}

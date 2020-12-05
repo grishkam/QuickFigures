@@ -136,7 +136,7 @@ import utilityClassesForObjects.AttachmentPosition;
 			
 			
 			PanelList panelStack = currentInset.getPanelManager().getPanelList();
-			MontageLayoutGraphic graphicRem = currentInset.personalGraphic;
+			MontageLayoutGraphic graphicRem = currentInset.personalLayout;
 			
 			if (currentInset.sharesPersonalLayer()&&extralist!=null) {
 				panelStack =extralist;
@@ -147,7 +147,7 @@ import utilityClassesForObjects.AttachmentPosition;
 			
 			
 			/**removes the old layout graphic*/
-			currentInset.personalLayer.swapItemPositions(graphicRem, currentInset.personalGraphic);
+			currentInset.personalLayer.swapItemPositions(graphicRem, currentInset.personalLayout);
 			currentInset.personalLayer.remove(graphicRem);
 			
 			/**buggy need to fix many isues at once*/
@@ -169,12 +169,12 @@ import utilityClassesForObjects.AttachmentPosition;
 			currentInset.updateDisplay();
 			
 
-			currentInset.personalGraphic.resizeLayoutToFitContents();
+			currentInset.personalLayout.resizeLayoutToFitContents();
 			
 			Rectangle sourcePanelDim = currentInset.getSourcePanel().getBounds();
 			InsetLayout inlayout = currentInset.previosInsetLayout;
-			inlayout.prepareForSnapping(sourcePanelDim, currentInset.personalGraphic);
-			if (inlayout.useSnapping()) {inlayout.snapLayout(currentInset.personalGraphic, sourcePanelDim);}
+			inlayout.prepareForSnapping(sourcePanelDim, currentInset.personalLayout);
+			if (inlayout.useSnapping()) {inlayout.snapLayout(currentInset.personalLayout, sourcePanelDim);}
 			
 			currentInset.updateDisplay();
 			

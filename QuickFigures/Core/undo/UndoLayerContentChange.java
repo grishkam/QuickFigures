@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import layersGUI.GraphicSetDisplayTree;
 
 /**undo for any changes to the direct contents of a layer*/
 public class UndoLayerContentChange extends AbstractUndoableEdit2 {
@@ -31,7 +30,6 @@ public class UndoLayerContentChange extends AbstractUndoableEdit2 {
 	private static final long serialVersionUID = 1L;
 	private GraphicLayer layer;
 	private ArrayList<ZoomableGraphic> iItems;
-	private GraphicSetDisplayTree tree;
 	private ArrayList<ZoomableGraphic> fItems;
 	
 	public UndoLayerContentChange(GraphicLayer layer) {

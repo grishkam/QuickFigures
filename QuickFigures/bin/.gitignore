@@ -29,6 +29,9 @@
 /graphicalObjects_LayoutObjects/
 /gridLayout/
 /iconGraphicalObjects/
+/icons2/
+/icons3/
+/iconsHandles/
 /iconsTree/
 /illustratorScripts/
 /imageDisplayApp/
@@ -60,3 +63,4 @@
 /utilityClasses1/
 /utilityClassesForObjects/
 /writeTextWithJavascript
+/Montage Selection Channels.jsx

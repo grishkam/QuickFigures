@@ -18,7 +18,7 @@ package graphicalObjects_FigureSpecific;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -28,8 +28,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
+import javax.swing.undo.AbstractUndoableEdit;
 
-import applicationAdapters.PixelWrapper;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
@@ -37,11 +37,14 @@ import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
+import graphicalObjects.CordinateConverter;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_BasicShapes.FrameGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
@@ -52,12 +55,13 @@ import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
+import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScaleInfo;
 
 /**A special inset definer object that the user can use to draw insets with the inset tool.
   */
-public class PanelGraphicInsetDefiner extends InsetDefiner {
+public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener{
 
 	
 	
@@ -67,14 +71,27 @@ public class PanelGraphicInsetDefiner extends InsetDefiner {
 	}
 	
 	/**The source panel for the inset definer*/
+	
 	private ImagePanelGraphic sourcePanel;
 	public PanelList multiChannelStackofInsets;
 	public InsetGraphicLayer personalLayer;
+	public MontageLayoutGraphic personalLayout;
 	private ChannelLabelProperties channelLabelProp;//instructions on how this one uses channel labels
 	private ChannelLabelManager channelLabelMan;
 	public InsetLayout previosInsetLayout;
-	private final boolean usePreprocess=true;
+	private double bilinearScale=2;
 	
+	{this.setName("Inset Definer");}
+	transient boolean setup=false;
+
+	public double getBilinearScale() {
+		return bilinearScale;
+	}
+
+	public void setBilinearScale(double bilinearScale) {
+		this.bilinearScale = bilinearScale;
+	}
+
 public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		super(r);
 		setSourcePanel(p);
@@ -93,15 +110,12 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
 	public ScaleInfo getScaleInfoForSourceImage() {
 		
 		return getSourcePanel().getScaleInfo();
 	}
 
 	/**returns the buffered image for the source panel*/
-	@Override
-	@Deprecated
 	public BufferedImage getBuffImage() {
 		
 		try {
@@ -123,17 +137,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			return null;
 		}
 	}
-	
-	/**
-	private void setCropping() {
-		
-		cropping=getproperCropping();
-		//cropping = inv.createTransformedShape(this.getShape()).getBounds();
-	}*/
-	
-	public boolean usesPreprocess() {
-		return usePreprocess;
-	}
+
 	
 	/**in refernce to the cordinates of the source image pixels, returns the proper cropping rect.*/
 	private Rectangle2D getproperCropping() {
@@ -167,8 +171,10 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	
 	/**Applies the appropriate crop and scale and returns a version of the source image that is original*/
 	public MultiChannelImage generatePreProcessedVersion() {
-		MultiChannelImage unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion();
-		 return unprocessed .cropAtAngle(generateInsetPreprocess(getSourceDisplay().getSlot().getModifications()));
+		MultiChannelImage unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion(false);
+		 MultiChannelImage cropped = unprocessed .cropAtAngle(generateInsetPreprocess(getSourceDisplay().getSlot().getModifications()));
+		 getSourceDisplay().getSlot().matchOrderAndLuts(cropped);
+		 return cropped;
 	
 	}
 	
@@ -216,7 +222,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		
 	}
 
-	/**does the bilinear scale and returns the scaled up version of the image*/
+	/**does the bilinear scale and returns the scaled up version of the image
 	@Deprecated
 	public Image getImagePixelsScaledBilinear(double bilinearScale) {
 		IssueLog.log("Called get scaled picture");
@@ -231,46 +237,22 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			return outputpanel.image();
 		}
 		
-		/**if finding the source image data fails just set the cropping rect of the inset object
-		  and gives it the full size image*/
-		super.getImageInset().setCroppingrect(getproperCropping().getBounds());
+		
+		super.getImageInset().setCroppingRect(getproperCropping().getBounds());
 		return getBuffImage();
 
-	}
+	}*/
 	
 	
 	/**super experimental. Creates a panel list for this cropper*/
 	public PanelList createCroppedInsetChannelDisplay(PanelList p) {
 		PanelList output = p.createDouble();
-		setUpListToMakeInset(output, p);
+	//	setUpListToMakeInset(output, p);
 		return output;
 	}
 	
 	
-	/**sets the cropper and scaling of list output for it to display the insets
-	  of the parent list*/
-	public void setUpListToMakeInset(PanelList output, PanelList parent) {
-		if (this.usesPreprocess()) {
-			clearStackProcessing(output);
-			return;
-		}
-		oldListSetup(output, parent);
-	}
 
-	/**
-	 
-	 */
-	protected void oldListSetup(PanelList output, PanelList parent) {
-		output.setCropper(getproperCropping().getBounds());
-		output.setCropperAngle(this.getAngle());
-		output.setScaleBilinear(parent.getScaleBilinear()*super.getBilinearScale());
-	}
-
-	public void clearStackProcessing(PanelList output) {
-		output.setCropper(null);
-		output.setCropperAngle(0);
-		output.setScaleBilinear(1);
-	}
 	
 	
 	
@@ -301,7 +283,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	public void updateDisplayPanelImages() {
 		if (multiChannelStackofInsets!=null&&getSourceDisplay()!=null) {
 			//multiChannelStackofInsets.setCropper(getproperCropping());
-			setUpListToMakeInset(this.multiChannelStackofInsets,this.getSourceDisplay().getPanelList());//Sets all the cropping and scale to fit
+			//setUpListToMakeInset(this.multiChannelStackofInsets,this.getSourceDisplay().getPanelList());//Sets all the cropping and scale to fit
 			multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates());}
 	}
 
@@ -309,21 +291,17 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	  either the original or a version that has already been cropped might
 	  be returned*/
 	public MultiChannelImage getSourceImageForUpdates() {
-		if (this.usesPreprocess()) {
+		
 			return this.generatePreProcessedVersion();
-			}
-		return getSourceDisplay().getMultiChannelImage();
+		
 	}
 	
 	/**any panels that are linked to the stack for the multichannel image
 	  are updated this way */
 	public void updateDisplayPanelImagesWithChannelName(String name) {
-		if (multiChannelStackofInsets!=null &&!this.usesPreprocess()) {
-			oldPanelUpdate(name);
-			}
-		else 
-		if (multiChannelStackofInsets!=null &&this.usesPreprocess()) {
-			this.clearStackProcessing(multiChannelStackofInsets);
+		
+		if (multiChannelStackofInsets!=null ) {
+			
 			multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates(), name);
 			
 		}
@@ -340,10 +318,10 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates(), name);
 	}
 	
-	@Override
+	
 	public void updateImagePanels() {
 		if (!isValid()) return;//returns if the inset definer is not inside of the source panel
-		super.updateImagePanels();
+		
 		updateDisplayPanelImages() ;
 	}
 	
@@ -371,18 +349,18 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 					getChannelLabelManager().eliminateChanLabels());
 			output.addEditToList(
 					getPanelManager().removeDisplayObjectsForAll());
-			super.removePanels();
+			
 			return output;
 		}
 		
 		
-		super.removePanels();
+		
 		
 		output.addEditToList(new UndoAbleEditForRemoveItem(getParentLayer(),personalLayer ));
 		getParentLayer().remove(this.personalLayer);
 			
-		output.addEditToList(new UndoAbleEditForRemoveItem(getParentLayer(),this.personalGraphic));
-		getParentLayer().remove(this.personalGraphic);
+		output.addEditToList(new UndoAbleEditForRemoveItem(getParentLayer(),this.personalLayout));
+		getParentLayer().remove(this.personalLayout);
 		
 		output.addEditToList(
 				getChannelLabelManager().eliminateChanLabels());
@@ -445,22 +423,12 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		
 		MultichannelDisplayLayer sourceDisplay = this.getSourceDisplay();
 		PanelManager panMan = new InsetPanelManager(sourceDisplay, this.multiChannelStackofInsets, this.personalLayer, this);
-		if(this.usesPreprocess()) panMan.setMultiChannelWrapper( this.generatePreProcessedVersion());
-		
-		
+		panMan.setMultiChannelWrapper( this.generatePreProcessedVersion());
 		return panMan;
 	}
 	
-	
-	
-	@Override
-	public void handleSmartMove(int handlenum, Point p1, Point p2){
-		super.handleSmartMove(handlenum, p1, p2);
-		resizeMontageLayoutPanels(handlenum);
-	}
-	
 	public void afterUserScaleResize() {
-		resizeMontageLayoutPanels(100);
+		resizeMontageLayoutPanels(CENTER);
 		
 	}
 
@@ -468,28 +436,27 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		
 		resizeMontageLayoutPanels(LOWER_RIGHT);
 		
-		
 	}
 	
 	/**whan a certain handle is moved, resizes the panels*/
 	public void resizeMontageLayoutPanels(int handlenum) {
-		if (this.personalGraphic!=null) {
+		if (this.personalLayout!=null) {
 			
-			personalGraphic.snapLockedItems();
-			personalGraphic.generateCurrentImageWrapper();
+			personalLayout.snapLockedItems();
+			personalLayout.generateCurrentImageWrapper();
 			
 			//personalGraphic.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(personalGraphic.getPanelLayout());
 			if(handlenum==TOP||handlenum==BOTTOM) {
-				personalGraphic.getPanelLayout().getEditor().alterPanelHeightsToFitContents(personalGraphic.getPanelLayout());
-				personalGraphic.getPanelLayout().getEditor().alterPanelHeightsToFitContents(personalGraphic.getPanelLayout());//random glitch fix
+				personalLayout.getPanelLayout().getEditor().alterPanelHeightsToFitContents(personalLayout.getPanelLayout());
+				personalLayout.getPanelLayout().getEditor().alterPanelHeightsToFitContents(personalLayout.getPanelLayout());//random glitch fix
 ;
 				
 			} else 
 			if(handlenum==LEFT||handlenum==RIGHT) {
-				personalGraphic.getPanelLayout().getEditor().alterPanelWidthsToFitContents(personalGraphic.getPanelLayout());
+				personalLayout.getPanelLayout().getEditor().alterPanelWidthsToFitContents(personalLayout.getPanelLayout());
 				
 			} else {
-				personalGraphic.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(personalGraphic.getPanelLayout());
+				personalLayout.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(personalLayout.getPanelLayout());
 				
 			}
 			
@@ -640,4 +607,76 @@ static Color  folderColor2= new Color(0,140, 0);
 		private static final long serialVersionUID = 1L;
 
 	}
+
+
+
+	
+	public void objectMoved(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public void objectSizeChanged(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void objectEliminated(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public void userMoved(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void setLocation(double x, double y) {
+		super.setLocation(x, y);
+		updateImagePanels();
+	}
+	@Override
+	public void moveLocation(double xmov, double ymov) {
+		super.moveLocation(xmov, ymov);
+		updateImagePanels();
+	}
+	
+
+	
+	@Override
+	public void handleSmartMove(int handlenum, Point p1, Point p2){
+		super.handleSmartMove(handlenum, p1, p2);
+		updateImagePanels();
+		resizeMontageLayoutPanels(handlenum);
+	}
+	
+	public AbstractUndoableEdit removeInsetAndPanels() {
+		
+		getParentLayer().remove(this);
+		
+		return null;
+	}
+	
+	
+	protected void ensureSetup() {
+		if (setup) return;
+		onsetup();
+		setup=true;
+	}
+	
+	public void onsetup() {
+		
+		updateImagePanels();
+		setup=true;
+	}
+	
+	@Override 
+	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+		this.ensureSetup();
+		super.draw(g, cords);
+	}
+
 }

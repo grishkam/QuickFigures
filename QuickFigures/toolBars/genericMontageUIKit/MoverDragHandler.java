@@ -191,7 +191,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		Point2D location2 = imageAndDisplaySet.getConverter().unTransformP(location);
 		LocatedObject2D roi2 = getObjectAtPoint(imageAndDisplaySet, location2);
 		PanelLayoutGraphic layout=null;
-		int startIndex=-1;
+		/**int startIndex=-1;
 		if (roi2 instanceof PanelLayoutGraphic) {
 			layout=(PanelLayoutGraphic) roi2;
 			if (layout instanceof MontageLayoutGraphic)
@@ -200,7 +200,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 		
 		
-		
+		*/
 		
 		GraphicLayer layer = imageAndDisplaySet.getImageAsWrapper().getGraphicLayerSet();
 		ArrayList<ImagePanelGraphic> addedPanels=new ArrayList<ImagePanelGraphic>();

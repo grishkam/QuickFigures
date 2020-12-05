@@ -218,7 +218,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			
 			removeAbsentPanels(output, list, inset);
 			
-			fixorderOfPanels(output, inset.personalGraphic);
+			fixorderOfPanels(output, inset.personalLayout);
 			
 			
 			
@@ -529,7 +529,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			
 			 		inset.personalLayer.add(lg);
 			 		inset.personalLayer.swapmoveObjectPositionsInArray(lg, inset.personalLayer.getItemArray().get(0));
-					inset.personalGraphic=lg;
+					inset.personalLayout=lg;
 								
 								
 				

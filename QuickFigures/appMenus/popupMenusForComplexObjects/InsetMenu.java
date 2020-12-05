@@ -21,7 +21,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import graphicalObjects_FigureSpecific.InsetDefiner;
 import graphicalObjects_FigureSpecific.InsetLayoutDialog;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
@@ -37,8 +36,14 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	/**
 	 * 
 	 */
+	private static final String RECRATE_INSET_LAYOUT = "inset layout",
+			SCALE_OPTIONS = "i5",  REMOVE = "i6", REMOVE_INSETS = "i4",
+			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup";
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-	private InsetDefiner inset;
+	private PanelGraphicInsetDefiner inset;
 	private ScaleFigureDialog ss;
 	
 	void createMenuItem(String st, String ac) {
@@ -48,17 +53,15 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		this.add(g);
 	}
 
-	public InsetMenu(InsetDefiner inset) {
+	public InsetMenu(PanelGraphicInsetDefiner inset) {
 		this.inset=inset;
-		createMenuItem("Update Panels", "panelup");
-	//	createMenuItem("Create Primary RGB mode Inset", "i1");
-	//	createMenuItem("Create Additional RGB mode Insets", "i2");
-		createMenuItem("Create MultiChannel Display Insets", "i3");
-		createMenuItem("Remove Insets", "i4");
-		createMenuItem("Remove", "i6");
-		createMenuItem("Scale Options", "i5");
-		createMenuItem("Redo Inset Layout", "inset layout");
-		//createMenuItem("Update Panels", "panelup");
+		createMenuItem("Update Panels", UPDATE_PANELS);
+		createMenuItem("Create MultiChannel Display Insets", CREATE_INSETS);
+		createMenuItem("Remove Insets", REMOVE_INSETS);
+		createMenuItem("Remove", REMOVE);
+		createMenuItem("Scale Options", SCALE_OPTIONS);
+		createMenuItem("Redo Inset Layout", RECRATE_INSET_LAYOUT);
+		
 	}
 
 	@Override
@@ -72,29 +75,27 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String c=arg0.getActionCommand();
-		if (c.equals("panelup")) {inset.updateImagePanels();;}
-		if (c.equals("i1")) {inset.createImageInsetDisplay();}
-		if (c.equals("i2")) {inset.createChannelInsets();}
-		if (c.equals("i3")) {
+		if (c.equals(UPDATE_PANELS)) {inset.updateImagePanels();;}
+		if (c.equals(CREATE_INSETS)) {
 			inset.createMultiChannelInsets();
 			}
-		if (c.equals("i4")) {
+		if (c.equals(REMOVE_INSETS)) {
 			inset.removePanels();
 			}
-		if (c.equals("i6")) {
+		if (c.equals(REMOVE)) {
 			inset.removePanels();
 			inset.getParentLayer().remove(inset);
 			}
 		
-		if (c.equals("i5")) {
+		if (c.equals(SCALE_OPTIONS)) {
 			
-			if(inset.personalGraphic!=null)
+			if(inset.personalLayout!=null)
 			{
-				showFigureScalerMenu();
+				showFigureScalerDialog();
 			}
 			}
 		
-		if (c.equals("inset layout")) {
+		if (c.equals(RECRATE_INSET_LAYOUT)) {
 			if (inset instanceof PanelGraphicInsetDefiner ) {
 				 PanelGraphicInsetDefiner pgInset=(PanelGraphicInsetDefiner) inset;
 				 pgInset.previosInsetLayout.practicalSize=true;
@@ -109,8 +110,8 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		inset.updateDisplay();
 	}
 
-	public void showFigureScalerMenu() {
-		ss=new ScaleFigureDialog(inset.personalGraphic, inset.getPanelManager());
+	public void showFigureScalerDialog() {
+		ss=new ScaleFigureDialog(inset.personalLayout, inset.getPanelManager());
 		IssueLog.log("Scale starts as "+inset.getBilinearScale());
 		ss.addDialogListener(new SwingDialogListener() {
 
@@ -122,16 +123,16 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				double scale = ss.getNumber("scale");
 				inset.setBilinearScale(scale);
 				inset.updateImagePanels();
-				MontageLayoutGraphic layout = inset.personalGraphic;
+				MontageLayoutGraphic layout = inset.personalLayout;
 				layout.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(layout.getPanelLayout());
 				}
-			//	inset.setBilinearScale(scale);
+			
 			}});
 		ss.showDialog();
 	}
 	
 	public void showScaleDialog() {
-		new ScaleFigureDialog(inset.personalGraphic, inset.getPanelManager(), inset).showDialog();
+		new ScaleFigureDialog(inset.personalLayout, inset.getPanelManager(), inset).showDialog();
 		
 		
 	}

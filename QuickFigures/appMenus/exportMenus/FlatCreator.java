@@ -148,13 +148,13 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			super("Export Options");
 			BooleanInputPanel bip = new BooleanInputPanel("Transpartent background?", isUseTransparent());
 			this.add("transp" , bip);
-			nop=new NumberInputPanel("Output PPI", ratio*72, 2 );
+			nop=new NumberInputPanel("Output PPI", ratio*ImageDPIHandler.getStandardDPI(), 2 );
 			nop.addNumberInputListener(new NumberInputListener() {
 			
 			
 				@Override
 				public void numberChanged(NumberInputEvent ne) {
-					if (ne.getSourcePanel()==nop)ratio=nop.getNumber()/72;
+					if (ne.getSourcePanel()==nop)ratio=nop.getNumber()/ImageDPIHandler.getStandardDPI();
 				}});
 			this.add("ratio" , nop);
 			super.setWindowCentered(true);

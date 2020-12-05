@@ -31,19 +31,19 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-/**a combo box that lets the user choose various graphical objects*/
+/**a combo box that lets the user choose various objects that are each drawn within the menu*/
 public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements UserSelectable{
 	
-	/**
-	 * 
-	 */
+	Color backgroundColor = Color.white;
+
 	
-	{this.setRenderer(new colorCellRenerer());}
+	{this.setRenderer(new GraphicalObjectCellRenerer());}
 	private SimpleGraphicalObject selectedColor=null;
 	private static final long serialVersionUID = 1L;
 	ArrayList<SimpleGraphicalObject> colors=new ArrayList<SimpleGraphicalObject> ();
 	
-	public GraphicComboBox(ArrayList<? extends SimpleGraphicalObject> c) {
+	public GraphicComboBox(ArrayList<? extends SimpleGraphicalObject> c, Color background) {
+		if (background!=null) backgroundColor =background;
 		addItem(getNullComponent() );
 		for(SimpleGraphicalObject ci:c) {this.addItem(ci);colors.add(ci);}
 	}
@@ -57,7 +57,6 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 
 	public static void main(String[] args) {
 		JFrame ff = new JFrame("frame");
-		//ff.setLayout(new FlowLayout());
 		ff.add(new JButton("button"));
 		ArrayList<SimpleGraphicalObject> ac = new ArrayList<SimpleGraphicalObject> ();
 		{ac.add(new TextGraphic(""));
@@ -67,7 +66,7 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		
 		ac.add(rect);
 		ac.add(new TextGraphic("none"));}
-		GraphicComboBox sb = new GraphicComboBox(ac);
+		GraphicComboBox sb = new GraphicComboBox(ac, Color.orange);
 		ff.add(sb);
 		ff.pack();
 		
@@ -88,7 +87,8 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 	@Override
 	public void paint(Graphics g) {
 		//super.paintComponent(g);
-		g.setColor(Color.white);
+		
+		g.setColor(backgroundColor);
 		//g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
 	
@@ -117,7 +117,8 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 	
 	
 	
-	class colorCellRenerer extends BasicComboBoxRenderer {
+	/**a cell renderer that paints the graphic*/
+	class GraphicalObjectCellRenerer extends BasicComboBoxRenderer {
 		/**
 		 * 
 		 */
@@ -131,25 +132,13 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 			
 				try {
 					
-					/**simpleGraphicalObject item = colors.get(index);
-					if (index==0) item=new TextGraphic("none");
-					String s="none";
-					if (item!=null) s=item.toString();
 					
-					
-					GraphicDisplayComponent com = new GraphicDisplayComponent(s,item,  isSelected);
-					*/
 					return getDisplayedForIndex(index,isSelected);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					
 					return out;
 				}
 				
-				//	out.setBackground(AbstractSavedDataServiceGM.getColor(value.toString()));
-				//((BasicComboBoxRenderer) out).setText("    ");
-				//out.setForeground(AbstractSavedDataServiceGM.getColor(value.toString()));
-				//if (index<colors.size()&&index>-1)out.setForeground(colors.get(index));
-			
 			
 				}
 	
@@ -166,40 +155,22 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 			
 			g.setColor(this.getForeground());
 			g.fillRect(20, 0, this.getWidth()-20,  this.getHeight());
-			//GraphicDisplayComponent com = new GraphicDisplayComponent(null,colors.get(getSelectionNumber()),  false);
 			getSelectedDC().paintComponent(g);
 			
 			
 		}
 		
 		
-		
-		 /**	public Dimension getPreferredSize() {
-		 GraphicDisplayComponent dc = getSelectedDC();
-			  if (dc==null)   return new Dimension(20,15);
-			 return (getSelectedDC().getPreferredSize());
-		
-			 return new Dimension(30,25);
-
-		    } */
 	}
 	
 	private GraphicDisplayComponent getSelectedDC() {
 		
-		return new GraphicDisplayComponent(null,getSelectedGraphicalObject(),  false);
+		GraphicDisplayComponent graphicDisplayComponent = new GraphicDisplayComponent(null,getSelectedGraphicalObject(),  false);
+		graphicDisplayComponent.canvasColor=backgroundColor;
+		return graphicDisplayComponent;
 		
 	}
-/**
-	@Override
-	 public Dimension getPreferredSize() {
-		 GraphicDisplayComponent dc = getSelectedDC();
-		 Dimension output;
-		 dc=null;
-		  if (dc==null) output= new Dimension(30,25);
-		  output=(getSelectedDC().getPreferredSize());
-	 
-		  return output;
-	    }*/
+
 	 
 	 
 	@Override
@@ -220,7 +191,7 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		return getDisplayedForIndex(getSelectedIndex(), false);
 	}
 	
-	
+	/**What is drawn when a null appears on the list*/
 	private TextGraphic getNullComponent() {
 		TextGraphic tg = new TextGraphic("no item selected");
 	
@@ -241,8 +212,9 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		
 		if (item!=null) s=item.toString();
 		if (!usename) s=null;
-		
+		item.deselect();
 		GraphicDisplayComponent com = new GraphicDisplayComponent(s,item,  isSelected);
+		com.canvasColor=backgroundColor;
 		com.setCurrentItemInsets(new Insets(6,6,6,6));
 		return com;
 	}

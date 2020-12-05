@@ -146,10 +146,6 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**operates with the entire image given as its target for creating templates or applying a saved template*/
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		/**FigureTemplate tp=new FigureTemplate();
-		TemplateChooserDialog dd = new TemplateChooserDialog(tp, diw.getImageAsWrapper());
-		dd.showDialog();
-		saveTemplate(tp, getUserPath());*/
 		diw.getUndoManager().addEdit(
 				this.operateOnContainer(diw.getImageAsWrapper()));
 	}

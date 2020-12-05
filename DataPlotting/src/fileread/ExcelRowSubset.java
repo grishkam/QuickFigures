@@ -118,9 +118,9 @@ public class ExcelRowSubset extends ArrayList<Row> {
 		//IssueLog.log(uni);
 		//IssueLog.log("Future categries include "+uni);
 		
-		ArrayList<String> allStrings2 = ReadExcelData.getTextForColumn(rows, categoryCol1, null, 1);
+		//ArrayList<String> allStrings2 = ReadExcelData.getTextForColumn(rows, categoryCol1, null, 1);
 		//IssueLog.log(allStrings2);
-		ArrayList<String> uni2 = UtilForDataReading.getUniqueStrings(allStrings2);
+		//ArrayList<String> uni2 = UtilForDataReading.getUniqueStrings(allStrings2);
 		//IssueLog.log("Future data series include "+uni2);
 		//IssueLog.log("Future numbers include "+ReadExcelData.getNumbersForColumn(rows, numericol1, null));
 		

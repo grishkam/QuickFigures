@@ -378,6 +378,7 @@ public class PanelList implements Serializable{
 	   Needed if there is a cropping rectangle added to the list.
 	   Although a programmer can add a rectangle here for an additional crop operation
 	   the user */
+	@Deprecated
 	public void cropAll(Rectangle r) {
 		for (PanelListElement p:getPanels()) {p.crop(r, cropAngle);}
 	}
@@ -553,27 +554,11 @@ public class PanelList implements Serializable{
 		
 		entry.setScaleInfo(impw.getScaleInfo());
 		
-		processEntryImage(entry);
-		
 		/**needed to change the image when there are updates but not for initial creation*/
 		entry.updateImagePanelGraphic();
 	}
 	
-	
-	/**crops and scales the image. needed during each update from the source multichannel
-	  so the appropriately cropped image is kept.
-	   */
-	public void processEntryImage(PanelListElement entry) {
-		if (getCropper()!=null) entry.crop(getCropper(), cropAngle);
-		if (getScaleBilinear()>0) {
-			entry.scaleBilinear(getScaleBilinear());
-		}
-	}
-	
-	/**returns the unrotated cropping rectangle*/
-	Rectangle getCropper() {
-		return cropper;
-	}
+
 	
 	
 	

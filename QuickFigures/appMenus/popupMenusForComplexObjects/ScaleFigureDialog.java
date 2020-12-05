@@ -21,7 +21,7 @@ import appContext.ImageDPIHandler;
 import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelList;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_FigureSpecific.InsetDefiner;
+import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import standardDialog.NumberInputPanel;
@@ -40,7 +40,7 @@ public class ScaleFigureDialog extends StandardDialog {
 	private PanelManager def;
 	private MontageLayoutGraphic layout;
 	ArrayList<PanelManager> theArray;
-	private InsetDefiner inset;
+	private PanelGraphicInsetDefiner inset;
 /**Dialog for scaling the panels within a layout while still keeping the layout*/
 	public ScaleFigureDialog(MontageLayoutGraphic layout, PanelManager s) {
 	this.layout=layout;
@@ -55,7 +55,7 @@ public class ScaleFigureDialog extends StandardDialog {
 	
 	
 	
-	public ScaleFigureDialog(MontageLayoutGraphic personalGraphic, PanelManager panelManager, InsetDefiner inset) {
+	public ScaleFigureDialog(MontageLayoutGraphic personalGraphic, PanelManager panelManager, PanelGraphicInsetDefiner inset) {
 				this(personalGraphic, panelManager);
 				this.inset=inset;
 }
@@ -96,7 +96,7 @@ public class ScaleFigureDialog extends StandardDialog {
 		}
 		
 		void setStackToDislogItems(PanelManager pm, PanelList stack) {
-			stack.setScaleBilinear(this.getNumber("scale"));
+			
 			if (this.inset!=null) inset.setBilinearScale(getNumber("scale"));
 			double scalePanel = ImageDPIHandler.getStandardDPI()/this.getNumber("PPI");
 			stack.setPixelDensityRatio(scalePanel);

@@ -119,7 +119,7 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Graphical
 	public BufferedImage filterCrop(BufferedImage image) {
 		boolean[] colors=this.getRemovedChannels();
 		int fg=this.getForceGrayChannel();
-		Rectangle rect = this.getCroppingrect();
+		Rectangle rect = this.getCroppingRect();
 		if(colors.length<4&&fg<1&&!isCroppintRectValid()) return image;
 		//if(areAllFalse(colors)&&fg<1) return image;
 		BufferedImage output;//=new BufferedImage(image.getWidth(), image.getHeight(), image.getType());

@@ -15,18 +15,10 @@
  *******************************************************************************/
 package dataSeries;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
-
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
-import fileread.ExcelFileToBarPlot;
 
 /**a Data series that is an amalgamation of a few categories*/
 public class GroupedDataSeries implements DataSeries {
@@ -252,7 +244,7 @@ public class GroupedDataSeries implements DataSeries {
 		for(int i=0; i<output.length; i++) output[i]=dar[i];
 		return output;
 	}
-
+/**
 	public static void main(String[] args) {
 		File f=new ExcelFileToBarPlot(0).getFileAndaddExtension();
 		System.out.println(f.getAbsolutePath());
@@ -260,19 +252,19 @@ public class GroupedDataSeries implements DataSeries {
 		try {
 			inp = new FileInputStream(f.getAbsolutePath());
 			Workbook wb = WorkbookFactory.create(inp);
-		//	ArrayList<MultiCategorySeries> xyData = ReadExcelData.extractXYDataSeriesF(wb);
-		//	xyData.get(0).getAllPositions();
+		ArrayList<MultiCategorySeries> xyData = ReadExcelData.extractXYDataSeriesF(wb);
+		xyData.get(0).getAllPositions();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    //InputStream inp = new FileInputStream("workbook.xlsx");
+	    InputStream inp = new FileInputStream("workbook.xlsx");
 
 	    
 	    
 	}
-
+*/
 
 /**
 

@@ -24,6 +24,7 @@ import java.awt.geom.Rectangle2D.Double;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
+import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.MenuItemForObj;
@@ -77,8 +78,8 @@ public class CanvasDialogResize implements MenuItemForObj {
 	 */
 	public double getRatio() {
 		double ratio=1;
-		if (type==INCH) ratio=72;
-		if (type==CENTIMETER) ratio=72/2.54;
+		if (type==INCH) ratio=ImageDPIHandler.getStandardDPI();
+		if (type==CENTIMETER) ratio=ImageDPIHandler.getStandardDPI()/2.54;
 		return ratio;
 	}
 	

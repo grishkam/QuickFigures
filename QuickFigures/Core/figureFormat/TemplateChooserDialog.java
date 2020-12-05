@@ -15,6 +15,7 @@
  *******************************************************************************/
 package figureFormat;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
@@ -77,7 +78,7 @@ public class TemplateChooserDialog extends StandardDialog {
 		ArrayList<BasicGraphicalObject> possibleExamples = picker.getDesiredItemsAsGraphicals(source);
 	
 		if (picker.displayGraphicChooser()) {
-			rlcb=new GraphicComboBox(possibleExamples);
+			rlcb=new GraphicComboBox(possibleExamples, new Color(250,250,250));
 			setOfPanels.put(picker.getKeyName(), rlcb);
 			
 			ItemSelectblePanel panel1 = new ItemSelectblePanel(picker.getOptionName(), rlcb);

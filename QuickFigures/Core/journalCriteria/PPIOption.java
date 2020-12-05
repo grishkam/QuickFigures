@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
+import appContext.ImageDPIHandler;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_FigureSpecific.PanelManager;
@@ -77,7 +78,7 @@ public class PPIOption extends BasicMultiSelectionOperator {
 		
 		
 		String st="Set PPI";
-		double starting=300;
+		double starting=ImageDPIHandler.idealPanelPixelDesity();
 		CombinedEdit undo = showPPIChangeDialog(panels, st, starting);
 		super.getUndoManager().addEdit(undo);
 	}

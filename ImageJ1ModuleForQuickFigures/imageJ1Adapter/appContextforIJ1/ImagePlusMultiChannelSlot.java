@@ -18,6 +18,7 @@ package appContextforIJ1;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
@@ -47,15 +48,14 @@ import standardDialog.SelectImageDialog;
 		
 		protected String path;
 		
+		private SubSlot original=new SubSlot();
+		
 		/**The image that is displayed*/
 		private transient ImagePlus sourceImagePlus;//the imageplus
 		protected byte[] serializedIM;//the serialized version of the image 
 		
 		
-		/**An uncropped backup version used in case user wants to change scale or cropping later
-		  Current working on a way for multiple sets of panels to share this one*/
-		private transient ImagePlus backupUncroppedImagePlus;//the imageplus
-		protected byte[] serializedBackup;
+	
 		
 		transient displayUpdater di;
 		transient ImagePlusWrapper multiChannelWrapper;
@@ -112,13 +112,7 @@ import standardDialog.SelectImageDialog;
 				}
 		}
 		
-		/**Before serialization of the object, this will serialize the ImagePlus into its Byte[]*/
-		private void writeObject(java.io.ObjectOutputStream out)
-			     throws IOException {
 		
-			storeImage();
-			out.defaultWriteObject();
-		}
 		
 		
 
@@ -234,10 +228,10 @@ import standardDialog.SelectImageDialog;
 		@MenuItemMethod(menuActionCommand = "saveEm", menuText = "Save Embedded", subMenuName="Image")
 		public void saveImageEmbed() {
 			if (getImagePlus()==null)return;
-			if(this.getParentSlot()!=null) return;//if the parent slot stores the image this is unneeded
+			
 			serializedIM=new ij.io.FileSaver(getImagePlus()).serialize();
-			if(this.getUncroppedOriginal()!=null)
-				this.serializedBackup=new ij.io.FileSaver(getUncroppedOriginal()).serialize();
+			original.saveImageEmbed();
+			
 		}
 		
 
@@ -261,23 +255,8 @@ import standardDialog.SelectImageDialog;
 				return;
 			}
 			
-			/**showing the actual image causes java heap space issues when using the contrast adjuster
-			  */
-			//this.getUnprocessedVersion().show();
-			/**ImagePlus.removeImageListener(this.getDisplayUpdater());
-			ImagePlus backup = this.getBackup();
-			if (backup!=imp &&backup!=null) {
-				backup.show();
-				backup.getWindow().setVisible(true);
-			}
-			else 
-			{
-				imp.show();
-				imp.getWindow().setVisible(true);
-			}
-			ImagePlus.addImageListener(this.getDisplayUpdater());
-			*/
-			ImagePlus backup = this.getBackup();
+			
+			ImagePlus backup = this.getBackup(true);
 			if (backup==null)
 			imp.duplicate().show();
 			else backup.duplicate().show();
@@ -302,7 +281,7 @@ import standardDialog.SelectImageDialog;
 			public void imageUpdated(ImagePlus arg0) {
 				turnOff();
 				if (arg0==dis.sourceImagePlus)onImageUpdated();
-				if (arg0==dis.backupUncroppedImagePlus) {
+				if (arg0==dis.original.backupUncroppedImagePlus) {
 					/**commented out this to see if it would fix a bug that cased infinite loop for small images*/
 					/**redoCropandScale(preprocessRecord);//this part might create an infinite loop
 					*/
@@ -326,11 +305,11 @@ import standardDialog.SelectImageDialog;
 			
 			@Override
 			public void imageClosed(ImagePlus arg0) {
-				if (arg0==dis.backupUncroppedImagePlus) {
+				/**if (arg0==dis.backupUncroppedImagePlus) {
 						storeImage();
 						dis.backupUncroppedImagePlus=null;
 						ImagePlus.removeImageListener(this);
-				}
+				}*/
 				
 				if (arg0==dis.sourceImagePlus) 
 					{
@@ -482,7 +461,7 @@ import standardDialog.SelectImageDialog;
 		}
 
 	private void redoCropandScale(PreProcessInformation process) {
-			ImagePlusWrapper unprocessedVersion = getUnprocessedVersion();
+			ImagePlusWrapper unprocessedVersion = getUnprocessedVersion(true);
 			 if (unprocessedVersion==null) {
 				 IssueLog.log("cannot scale empty image");
 				 preprocessRecord=process;
@@ -513,12 +492,13 @@ import standardDialog.SelectImageDialog;
 			return r1.equals(r2);
 		}
 
-		public ImagePlusWrapper getUnprocessedVersion() {
-			ImagePlus backup = getBackup();
+		/**returns the original image*/
+		public ImagePlusWrapper getUnprocessedVersion(boolean b) {
+			ImagePlus backup = getBackup(b);
 			ImagePlusWrapper bwrap=null;
 			if (backup!=null)bwrap=new ImagePlusWrapper(backup);
 			if(backup==null) {
-				backupUncroppedImagePlus=this.sourceImagePlus;
+				original.backupUncroppedImagePlus=this.sourceImagePlus;
 				bwrap=this.getMultichannelImage();
 			}
 			return bwrap;
@@ -526,18 +506,17 @@ import standardDialog.SelectImageDialog;
 		
 		/**Returns the uncropped backup, however it will be returned with any changes to channel order
 		 * display range and colors set to the current ones and not the original*/
-		ImagePlus getBackup() {
-			if(this.getParentSlot()!=null) return getParentSlot().getBackup();
-			if(getUncroppedOriginal()==null &&this.serializedBackup!=null) {
-				backupUncroppedImagePlus=	new ij.io.Opener().deserialize(serializedBackup);
-			}
-			if(getUncroppedOriginal()!=null) {
+		private ImagePlus getBackup(boolean matchColors) {
+			
+			ImagePlus backup=original.getOrCreateImagePlus();
+			
+			if(backup!=null) {
 				/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
 				try {
-				matchOrderAndLuts(new ImagePlusWrapper(getUncroppedOriginal()));
+				if (matchColors)matchOrderAndLuts(new ImagePlusWrapper(getUncroppedOriginal()));
 				} catch (Throwable t) {IssueLog.logT(t);}
 			}
-			return getUncroppedOriginal();
+			return backup;
 		}
 
 		/**changes the channel order, Display range and luts of a to match the main source stack*/
@@ -548,12 +527,12 @@ import standardDialog.SelectImageDialog;
 
 		@Override
 		public ScaleInfo getScaleInfo() {
-			return getUnprocessedVersion().getScaleInfo();
+			return getUnprocessedVersion(false).getScaleInfo();
 		}
 
 		@Override
 		public void setScaleInfo(ScaleInfo scaleInfo) {
-			getUnprocessedVersion().setScaleInfo(scaleInfo);
+			getUnprocessedVersion(false).setScaleInfo(scaleInfo);
 			if (preprocessRecord!=null) this.applyCropAndScale(preprocessRecord);
 			this.getDisplayUpdater().imageUpdated(this.getImagePlus());
 		}
@@ -578,12 +557,9 @@ import standardDialog.SelectImageDialog;
 		}
 
 		public ImagePlus getUncroppedOriginal() {
-			return backupUncroppedImagePlus;
+			return original.backupUncroppedImagePlus;
 		}
 
-		ImagePlusMultiChannelSlot getParentSlot() {
-			return parentSlot;
-		}
 
 		@Override
 		public void setDisplaySlice(CSFLocation display) {
@@ -597,6 +573,44 @@ import standardDialog.SelectImageDialog;
 			
 		}
 
+		class SubSlot implements Serializable {
+			
+			
+			/**An uncropped backup version used in case user wants to change scale or cropping later
+			  Current working on a way for multiple sets of panels to share this one*/
+			private transient ImagePlus backupUncroppedImagePlus;//the imageplus
+			protected byte[] serializedBackup;
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			/**Before serialization of the object, this will serialize the ImagePlus into its Byte[]*/
+			private void writeObject(java.io.ObjectOutputStream out)
+				     throws IOException {
+			
+				storeImage();
+				out.defaultWriteObject();
+			}
+
+			/**
+			 returns the stored image
+			 */
+			public ImagePlus getOrCreateImagePlus() {
+				if(backupUncroppedImagePlus==null &&serializedBackup!=null) {
+					backupUncroppedImagePlus=	new ij.io.Opener().deserialize(serializedBackup);
+				}
+				return backupUncroppedImagePlus;
+			}
+
+			/**
+			 * 
+			 */
+			public void saveImageEmbed() {
+				if(backupUncroppedImagePlus!=null)
+					this.serializedBackup=new ij.io.FileSaver(backupUncroppedImagePlus).serialize();
+			}
+		}
 		
 		
 	}

@@ -50,7 +50,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	boolean usesMain=false;
 	boolean resetClickPointOnDrag=true;
 	GenericMontageEditor editor=new GenericMontageEditor();
-	private Image cursorIcon;
+	
 	private Cursor currentCursor;
 	private BasicMontageLayout editingLayout;
 	private UndoLayoutEdit currentUndo;
@@ -66,16 +66,13 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	  used by the tool's getCurrentLayout function.*/
 	private BasicMontageLayout setUpCurrentLayout() {
 		if (layoutGraphic==null) {
-			//usesMain=true;
-			//return this.getImageWrapperClick().createLayout();
 			return null;
 			}
 		layoutGraphic.generateStandardImageWrapper();
 		
 		if (removalPermissive) {layoutGraphic.generateRemovalPermissiveImageWrapper();}
 		else {
-			//if removal non permissive, takes the unneeded. this was written to solve a BUG but eventually caused more bugs.
-			ImageWrapper wrapper = layoutGraphic.getPanelLayout().getWrapper();
+				ImageWrapper wrapper = layoutGraphic.getPanelLayout().getWrapper();
 			ArrayList<LocatedObject2D> excluded = layoutGraphic.getEditor().getObjectHandler().getExcludedRois(layoutGraphic.getPanelLayout().getBoundry().getBounds(), wrapper);
 			for(LocatedObject2D e: excluded) {
 			wrapper.takeFromImage(e);
@@ -317,10 +314,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	}
 	
 	public void setCursorIcon(Image cursorIcon) {
-		this.cursorIcon = cursorIcon;
 		currentCursor=Toolkit.getDefaultToolkit().createCustomCursor(cursorIcon, new Point(0,0), "");
 		super.setCursor(currentCursor);
-		//this.getToolCore().setCursor(currentCursor, Cursor.CUSTOM_CURSOR);
 	}
 
 	

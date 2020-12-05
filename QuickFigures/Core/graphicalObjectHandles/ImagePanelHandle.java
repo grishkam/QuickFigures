@@ -17,6 +17,7 @@ package graphicalObjectHandles;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
@@ -40,10 +41,10 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.RectangleEdges;
 
-/**A class for the  handles on an ImagePanel*/
+/**A class for the  handles on an ImagePanel. */
 public class ImagePanelHandle extends SmartHandle {
 
-	int handlecode=0;
+	private int handlecode=0;
 	
 	/**The panel on which this acts*/
 	private ImagePanelGraphic panel;
@@ -131,16 +132,32 @@ public class ImagePanelHandle extends SmartHandle {
 	public void handleDrag(CanvasMouseEvent e) {
 		super.handleDrag(e);
 		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
+		Point p2 = e.getCoordinatePoint();
+							int handlenum = this.getHandleNumber();
+		if (this.getHandleNumber()<RectangleEdges.CENTER){
+						 moveResizeHandle(p2, handlenum);
+						
+		}
 		
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
 			{
+				panel.setLocationType(RectangleEdges.CENTER);
+				panel.setLocation(p2);
 				dragCenterHandle(e, selectionManagger);
 				}
 		
 			showPanelInformation(selectionManagger);
+			
+		if (isFrameHandle()) {
+			
+			double bottom=panel.getLocationUpperLeft().getY()+panel.getObjectHeight();
+			double size=e.getCoordinateY()-bottom;
+			panel.setFrameWidthV(size);
+			panel.notifyListenersNow();
+		}	
 		
 		/**if the user is holding shift while adjusting the frame it adjust all of the image panels*/
-		if (this.getHandleNumber()==ImagePanelHandleList.FRAME_HANDLE_ID&&e.shfitDown()) {
+		if (isFrameHandle()&&e.shfitDown()) {
 			for (ZoomableGraphic item: e.getSelectionSystem().getSelecteditems()) {
 				if (item instanceof ImagePanelGraphic) {
 					((ImagePanelGraphic) item).setFrameWidthH(panel.getFrameWidthH());
@@ -148,6 +165,27 @@ public class ImagePanelHandle extends SmartHandle {
 					}
 			}
 		}
+	}
+
+	/**
+	 method is called when a handle is moved to resize the image panel
+	 */
+	public void moveResizeHandle(Point p2, int handlenum) {
+		panel.setLocationType(RectangleEdges.oppositeSide(handlenum));
+		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, panel.getCroppedImageSize());
+		 double dist2= RectangleEdges.getLocation(panel.getLocationType(), panel.getBounds()).distance(p2);
+		
+		if (panel.getScale()==dist2/dist1) {} else {
+			panel.setScale( dist2/dist1);		
+			panel.notifyListenersNow();
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isFrameHandle() {
+		return this.getHandleNumber()==ImagePanelHandleList.FRAME_HANDLE_ID;
 	}
 
 	/**creates a message below that panel that gives the user information regarding the image panel*/
