@@ -239,8 +239,14 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 			
 			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage()))
 				{
-				CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
+				CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
 				display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
+			
+			
+			if (crop.wasCanceled()) {
+				this.remove(display);//the user may chose not to add the image by clicking cancel
+				return output;
+				}
 				}
 			
 			} catch (Exception e) {

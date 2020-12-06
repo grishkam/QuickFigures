@@ -18,7 +18,9 @@ package addObjectMenus;
 import ultilInputOutput.FileFinder;
 
 import appContext.CurrentAppContext;
+import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import figureEditDialogs.SubStackDialog;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
 import figureFormat.TemplateUserMenuAction;
@@ -26,11 +28,17 @@ import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
 /**this class adds a figure containing a multidimensional images to a layer */
 public class ImageAndlayerAdder extends LayoutAdder {
 	
+	/**
+	 a dialog will be shown to users if they attempt to add create with a very large image
+	 */
+	private static final int MAX_RECCOMENDED_SIZE_LIMIT = 25;
+
 	/**
 	 * 
 	 */
@@ -147,8 +155,20 @@ public class ImageAndlayerAdder extends LayoutAdder {
 			FigureOrganizingLayerPane.cropIfUserSelectionExists(display); 
 		else display.getSlot().applyCropAndScale(p);
 		
-		if (useSingleFrame) display.getPanelList().getChannelUseInstructions().limitStackUseToFrame(display.getMultiChannelImage().getSelectedFromDimension(2));
-		if (useSingleSlice) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultiChannelImage().getSelectedFromDimension(1));
+		
+		boolean useSingleFrame2 = useSingleFrame;
+		boolean useSingleSlice2 = useSingleSlice;
+		
+		
+		if (useSingleFrame2) display.getPanelList().getChannelUseInstructions().limitStackUseToFrame(display.getMultiChannelImage().getSelectedFromDimension(MultiChannelImage.FRAME_DIMENSION));
+		if (useSingleSlice2) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultiChannelImage().getSelectedFromDimension(MultiChannelImage.SLICE_DIMENSION));
+		
+		int n = display.getPanelList().getChannelUseInstructions().estimageNPanels(display.getMultiChannelImage());
+		if (n>MAX_RECCOMENDED_SIZE_LIMIT) {
+			//MultiChannelImage chans = display.getMultiChannelImage();
+			IssueLog.log("large image");
+			new SubStackDialog(display, true).showDialog();
+		}
 		
 		return addFigureOrganizerFor(targetLayer, display);
 		}

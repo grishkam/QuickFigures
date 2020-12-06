@@ -531,7 +531,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	
-	public static void showCropDialog(MultiChannelSlot slot, Rectangle recommmendation, double recAngle) {
+	public static CroppingDialog showCropDialog(MultiChannelSlot slot, Rectangle recommmendation, double recAngle) {
 		
 		CroppingDialog crop;
 		if(recommmendation==null)
@@ -541,9 +541,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 		if(slot.getDisplaySlice()!=null) crop.setDisplaySlice(slot.getDisplaySlice());
 		crop.showDialog();
-		if(!crop.wasOKed()&&!crop.wasEliminated) return;
+		if(!crop.wasOKed()&&!crop.wasEliminated) return crop;
 		
-		if(!crop.isCroppingRectangleValid()) return;
+		if(!crop.isCroppingRectangleValid()) return crop;
 		
 		RectangularGraphic r = crop.getRectangle();
 		double oldScale=1;
@@ -564,6 +564,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}
+		return crop;
+		
 	}
 
 	

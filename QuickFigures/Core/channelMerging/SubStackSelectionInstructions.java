@@ -67,7 +67,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 	/**returns the list of selected indices as a String*/
 	public String selectedString() {
 		String output = selectedIndices().toString();
-		if (this.selectsAll())return "";	
+		if (this.selectsAll())return "all";	
 		output=output.replace("[", "");
 		output=output.replace("]", "");
 		return output.trim();
@@ -109,19 +109,30 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 	public boolean isInvalid(ArrayList<Integer> i) {
 		
 		if (i==null||i.size()==0) return true;
-		if (i.contains(0)) return true;
+		if (allZero(i)) return true;
 		return false;
 	}
 	
+	/**
+	
+	 */
+	private boolean allZero(ArrayList<Integer> i) {
+		for(Integer number:i) {
+			if (number>0) return false;
+		}
+		return true;
+	}
+
+
 	/**
 	returns the index of the first slice or frame to be used
 	 */
 	public int getFirstIndex() {
 		if (this.selectsAll()) return 1;
 		if(this.selectsSingle()) return this.selectedIndices().get(0);
-		if (this.isInvalid(this.selectedIndices()))
-			return findLowest(selectedIndices());
-		return 1;
+		if (isInvalid(this.selectedIndices()))
+			return 1;
+		return findLowest(selectedIndices());
 	}
 	
 	/**

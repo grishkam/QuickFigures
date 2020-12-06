@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 6, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package standardDialog;
 
 import java.awt.Color;
@@ -167,6 +173,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	private ArrayList<ChannelEntry> channelEnt;
 
 	private boolean wasOKed;
+	private boolean wasCanceled;
 
 	private JPanel theButtonPanel;
 
@@ -177,6 +184,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public UndoManager currentUndoManager=new CurrentFigureSet().getUndoManager();
 
 	private final ArrayList<StandardDialog> subordinateDialogs =new ArrayList<StandardDialog> ();
+
+	
 	
 	
 	
@@ -443,7 +452,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		}
 		if (arg0.getSource()==CancelBut) {
 			afterCancelButtonPress();
-			
+			this.wasCanceled=true;
 			this.setVisible(false);
 		}
 		
@@ -661,10 +670,16 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		
 		return channelEnt2;
 	}
+	
+	/**returns true if the ok button was pressed */
 	public boolean wasOKed() {
-		// TODO Auto-generated method stub
 		return wasOKed;
 	}
+	/**returns true if the ok button was pressed */
+	public boolean wasCanceled() {
+		return wasCanceled;
+	}
+	
 	
 	/**restores all fields and input panels to original values*/
 	public void revertAll() {

@@ -34,11 +34,40 @@ public class SubStackDialog extends StandardDialog {
 	private ArrayList<? extends ImageDisplayLayer> displayLayers;
 	private boolean empty=true;
 	private PanelStackDisplayOptions parentDialog;
+	private boolean showChannelC=false;
 
 	/**
 	 constructor that creates a dialog for many display layers
 	 */
 	public SubStackDialog(ArrayList<? extends ImageDisplayLayer> multiChannelDisplaysInOrder) {
+		setup(multiChannelDisplaysInOrder);
+	
+	}
+	
+	/**
+	 constructor that creates a dialog for many display layers
+	 */
+	public SubStackDialog(ImageDisplayLayer item, boolean m) {
+		ArrayList<ImageDisplayLayer> displayLayers=new ArrayList<ImageDisplayLayer>();
+		displayLayers.add(item);
+		
+		if (m) {
+			this.showChannelC=true;
+			this.setWindowCentered(m);
+			this.setModal(m);
+			
+		}
+		
+		
+		this.setup(displayLayers);
+		
+		
+	}
+
+	/**
+	 * @param multiChannelDisplaysInOrder
+	 */
+	private void setup(ArrayList<? extends ImageDisplayLayer> multiChannelDisplaysInOrder) {
 		this.displayLayers=multiChannelDisplaysInOrder;
 		
 		for(ImageDisplayLayer display1: displayLayers) {
@@ -54,7 +83,6 @@ public class SubStackDialog extends StandardDialog {
 		
 		JTabbedPane tabs = this.getOptionDisplayTabs();
 		if (!empty)tabs.setSelectedIndex(1);
-	
 	}
 
 	/**returns true if no selection tabs have been added. If the images given do not
@@ -87,6 +115,10 @@ public class SubStackDialog extends StandardDialog {
 			slices=display1.getMultiChannelImage().nSlices()>1;
 			instructions=display1.getPanelList().getChannelUseInstructions();
 			
+			
+			if (showChannelC) {
+				PanelStackDisplayOptions.addMergeHandlingToDialog(this, instructions);
+			}
 			if (slices) {
 				StringInputPanel sliceInput = new StringInputPanel("Slices Chosen", instructions.getSliceUseInstructions().selectedString());
 				this.add("Slice", sliceInput);
@@ -97,6 +129,8 @@ public class SubStackDialog extends StandardDialog {
 				this.add("Frame", frameInput);
 			}
 			
+			
+			
 			addNumerRangeExamples();
 			
 		}
@@ -105,7 +139,7 @@ public class SubStackDialog extends StandardDialog {
 		adds text explaining how to input the numbers
 		 */
 		public void addNumerRangeExamples() {
-			InfoDisplayPanel tip = new InfoDisplayPanel("Input the desired stack indices" , "in field above");
+			InfoDisplayPanel tip = new InfoDisplayPanel("Choose which slices to use" , "in field above");
 			InfoDisplayPanel examples = new InfoDisplayPanel("For Example" , "  '1, 4-6'= [1,4,5,6] and '2x4'= [2, 4, 6, 8]");
 			
 			this.add("t1", tip);
@@ -129,6 +163,11 @@ public class SubStackDialog extends StandardDialog {
 				if (0<n.estimateNUsed(display1.getMultiChannelImage()))
 					instructions.getFrameUseInstructions().resetSelectedIndex(newFrame);
 			}
+			
+			if (showChannelC) {
+				PanelStackDisplayOptions.setMergeHandlingToDialog(this, instructions);
+			}
+			
 			if (parentDialog!=null) 
 				parentDialog.afterEachItemChange();
 			display1.updatePanels();

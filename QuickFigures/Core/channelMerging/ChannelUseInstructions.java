@@ -388,8 +388,8 @@ public class ChannelUseInstructions implements Serializable {
 			 changes the selected Z section and T frame selected to be consistent with the CSF location provided.
 			  */
 	public void shareViewLocation(CSFLocation d) {
-				
-				if(this.frameUseMethod!=null&& frameUseMethod.method==SubStackSelectionInstructions.SINGLE_) frameUseMethod.setSelected(d.frame);
+				if (d==null) return;
+				if(frameUseMethod!=null&& frameUseMethod.method==SubStackSelectionInstructions.SINGLE_) frameUseMethod.setSelected(d.frame);
 				if(this.sliceUseMethod!=null&& sliceUseMethod.method==SubStackSelectionInstructions.SINGLE_) sliceUseMethod.setSelected(d.slice);
 				
 			}
