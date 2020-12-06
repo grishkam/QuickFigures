@@ -82,7 +82,7 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 			ag1.setStrokeWidth(4);
 			if (selected) ag1.getBackGroundShape().setFillColor(Color.red);
 			ag1.setPoints(p1, p2);
-			ag1.setNHeads(0);
+			ag1.setNumerOfHeads(0);
 			
 			ArrowGraphic ag2 = ag1.copy();
 			p1=new Point(17,2);

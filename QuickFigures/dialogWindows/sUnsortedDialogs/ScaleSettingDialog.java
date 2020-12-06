@@ -20,7 +20,7 @@ import standardDialog.GriddedPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 import standardDialog.StringInputPanel;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import utilityClassesForObjects.ScaleInfo;
 
 /**Alternative to the set Scale dialog of imageJ. does exactly that but after this dialog,
@@ -37,11 +37,11 @@ public class ScaleSettingDialog  extends StandardDialog {
 	
 	boolean alternateDialog=false;
 	
-	public ScaleSettingDialog(HasScaleInfo scaled, SwingDialogListener listener) {
+	public ScaleSettingDialog(HasScaleInfo scaled, StandardDialogListener listener) {
 		this(scaled, listener, true);
 	}
 	
-	public ScaleSettingDialog(HasScaleInfo scaled, SwingDialogListener listener, boolean alternate) {
+	public ScaleSettingDialog(HasScaleInfo scaled, StandardDialogListener listener, boolean alternate) {
 		 alternateDialog=alternate;
 		this.getOptionDisplayTabs().remove(this.getMainPanel());
 		this.scaled=scaled;

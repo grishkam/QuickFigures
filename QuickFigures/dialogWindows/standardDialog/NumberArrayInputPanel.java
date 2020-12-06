@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**A panel that contains many fields that can be usedto input numbers*/
 public class NumberArrayInputPanel extends NumberInputPanel implements KeyListener{
 	
 	/**
@@ -111,9 +112,6 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		}
 	}
 	
-	//public NumberArrayInputPanel(float[] nums) {}
-	//public NumberArrayInputPanel(double[] nums) {}
-	//public NumberArrayInputPanel(int[] nums) {}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
@@ -180,17 +178,6 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		return fieldPanel;
 	}
 	
-/**
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		int index = fields.indexOf(arg0.getSource());
-		if(index>-1) {
-			//slider.setValue((int)field.getNumberFromField());
-			//number=field.getNumberFromField();
-			numbers.set(index, fields.get(index).getNumberFromField());
-			
-			notifyListeners(new NumberInputEvent(this,  fields.get(index), fields.get(index).getNumberFromField()) );
-		}
-	}*/
+
 
 }

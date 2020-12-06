@@ -17,7 +17,6 @@ package graphicalObjects_BasicShapes;
 
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -33,7 +32,6 @@ import animations.KeyFrameAnimation;
 import fLexibleUIKit.MenuItemExecuter;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjectHandles.HandleRect;
-import graphicalObjects.CordinateConverter;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.KnowsSetContainer;
@@ -49,7 +47,6 @@ import utilityClassesForObjects.LocationChangeListener;
 import utilityClassesForObjects.LocationChangeListenerList;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.RectangleEdgePosisions;
-import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
 import menuUtil.HasUniquePopupMenu;
 
@@ -393,23 +390,18 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 		return getOutline().intersects(rect);
 	}
 	
+	/**returns the location type. What point on the bounding box is the location (@see RectangleEdgePosisions)*/
 	public int getLocationType() {
 		return locationType;
 	}
+	
+	/**sets the location type. What point on the bounding box is the location (@see RectangleEdgePosisions)*/
 	public void setLocationType(int locationType) {
 		this.locationType = locationType;
 	}
 	
 	public int isUserLocked() {
 		return userLocked;
-	}
-	
-	public void drawLocationAnchorHandle(Graphics2D g2d, CordinateConverter<?> cords) {
-		Point2D p = RectangleEdges.getLocation(getLocationType(), this.getBounds());
-		 getGrahpicUtil().setHandleFillColor(Color.red);
-	//	 IssueLog.log("will try to draw red handle");
-		getGrahpicUtil().drawHandlesAtPoint(g2d, cords, p);
-		getGrahpicUtil().setHandleFillColor(Color.white);
 	}
 	
 	public void handleRelease(int handlenum, Point p1, Point p2) {}

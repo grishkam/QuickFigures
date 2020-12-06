@@ -29,6 +29,7 @@ import basicMenusForApp.SelectedSetLayerSelector;
 import graphicalObjects.CordinateConverter;
 import imageDisplayApp.KeyDownTracker;
 import selectedItemMenus.LayerSelector;
+import undo.UndoManagerPlus;
 
 /**Simple class that stores information related to the context
   of a mouse event. this class is passed as an argument to different
@@ -190,5 +191,10 @@ public class GMouseEvent implements CanvasMouseEvent {
 		if(e!=null &&imp!=null &&imp.getUndoManager()!=null) {
 			imp.getUndoManager().addEdits(e);
 		}
+	}
+
+	@Override
+	public UndoManagerPlus getUndoManager() {
+		return imp.getUndoManager();
 	}
 }

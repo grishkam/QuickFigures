@@ -41,7 +41,7 @@ import standardDialog.DialogItemChangeEvent;
 import standardDialog.FontChooser;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import undo.CombinedEdit;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.TextLineSegment;
@@ -390,7 +390,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	
 	/**A handle with an additional menu option called more fonts, that allows the user to 
 	 * select a font. Handle for choosing a font family*/
-	public class FontFamilyActionHandle extends GeneralActionListHandle implements ActionListener, SwingDialogListener {
+	public class FontFamilyActionHandle extends GeneralActionListHandle implements ActionListener, StandardDialogListener {
 
 		/**
 		 * 

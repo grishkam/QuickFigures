@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package objectDialogs;
+package figureEditDialogs;
 
 import java.awt.GridBagConstraints;
 
@@ -24,9 +24,10 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
+import objectDialogs.ComplexTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 
 public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 
@@ -64,8 +65,8 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 		if (getChannelLabel() ==null) {IssueLog.log("null channel label issue");}
 		return TextLineDialogForChenLabel.createMultiLineDialog(getChannelLabel() .getChanEntries(), getChannelLabel().getChannelLabelProperties(), createSwingDialogListener());
 	}
-	protected SwingDialogListener createSwingDialogListener() {
-		return new SwingDialogListener() {
+	protected StandardDialogListener createSwingDialogListener() {
+		return new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

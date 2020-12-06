@@ -27,7 +27,7 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import menuUtil.PopupMenuSupplier;
 
 public class InsetMenu extends SmartPopupJMenu implements ActionListener,
@@ -113,19 +113,18 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	public void showFigureScalerDialog() {
 		ss=new ScaleFigureDialog(inset.personalLayout, inset.getPanelManager());
 		IssueLog.log("Scale starts as "+inset.getBilinearScale());
-		ss.addDialogListener(new SwingDialogListener() {
+		ss.addDialogListener(new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {
-				if (inset instanceof PanelGraphicInsetDefiner) {
-					PanelGraphicInsetDefiner inset2=(PanelGraphicInsetDefiner) inset;
-				IssueLog.log("Scale is "+inset.getBilinearScale());
+				
+				
 				double scale = ss.getNumber("scale");
 				inset.setBilinearScale(scale);
 				inset.updateImagePanels();
 				MontageLayoutGraphic layout = inset.personalLayout;
 				layout.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(layout.getPanelLayout());
-				}
+				
 			
 			}});
 		ss.showDialog();

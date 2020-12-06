@@ -27,6 +27,7 @@ import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
+import selectedItemMenus.LayerSelector;
 import undo.CombinedEdit;
 import utilityClassesForObjects.LocatedObject2D;
 
@@ -42,40 +43,79 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ImagePanelGraphic firstImage;
-	int brightcontrast=WindowLevelDialog.MIN_MAX;
+	int actionType=WindowLevelDialog.MIN_MAX;
+	private ChannelPanelEditingMenu context;
 	
-	public ImagePropertiesButton() {}
-	public ImagePropertiesButton(ImagePanelGraphic i, int bc) {
+	
+	public ImagePropertiesButton(ImagePanelGraphic i, LayerSelector l) {
+		super.setSelector(l);
+		
 		firstImage=i;
-		brightcontrast=bc;
+		context= new ChannelPanelEditingMenu(i);
+	}
+	
+	public ImagePropertiesButton(int action) {
+		actionType=action;
+	}
+	public ImagePropertiesButton(ImagePanelGraphic i, int bc) {
+		this(bc);
+		actionType=bc;
+		firstImage=i;
+		context= new ChannelPanelEditingMenu(i);
 	}
 
 	@Override
 	public String getMenuCommand() {
-		if(brightcontrast==WindowLevelDialog.ALL) return "Set Display Range";
-		if(brightcontrast==WindowLevelDialog.WINDOW_LEVEL) return "Set Window/Level";
-		if(brightcontrast==WindowLevelDialog.MIN_MAX) return "Set Brightness/Contrast";
-		if(brightcontrast==CROP_IMAGE) return "Recrop Image";
-		if(brightcontrast==PIXEL_DENSITY) return "Pixel Density";
-		if(brightcontrast==COLOR_MODE) return "Change Color Modes";
+		if(actionType==WindowLevelDialog.ALL) return "Set Display Range";
+		if(actionType==WindowLevelDialog.WINDOW_LEVEL) return "Set Window/Level";
+		if(actionType==WindowLevelDialog.MIN_MAX) return "Set Brightness/Contrast";
+		if(actionType==CROP_IMAGE) return "Recrop Image";
+		if(actionType==PIXEL_DENSITY) return "Pixel Density";
+		if(actionType==COLOR_MODE) return "Change Color Modes";
 		
 		return "Set Window/Level";
 	}
 
 	@Override
 	public void run() {
-		ArrayList<LocatedObject2D> items = super.getAllObjects();
+		
 		CombinedEdit undo=null;
 		
 		
-		firstImage=null;
+		//firstImage=null;
+		prepareContext();
 		
+		if (doesShowDisplayRange())
+			context.showDisplayRangeDialog(actionType);
+	
+			
+		if(this.actionType==CROP_IMAGE) {
+			if(context.getExtraDisplays().size()<1) return;
+			context.getExtraDisplays().remove(context.getPrincipalDisplay());
+		
+			undo = FigureOrganizingSuplierForPopup.recropManyImages(context.getPrincipalDisplay(),context.getExtraDisplays());;
+		}
+		
+		if(this.actionType==COLOR_MODE) {
+			context.setScope(ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
+			undo=context.changeColorModes();
+		}
+		
+		if(undo!=null&&this.getUndoManager()!=null) this.getUndoManager().addEdit(undo);
+	}
+	/**
+	 * @return 
+	 * 
+	 */
+	public ChannelPanelEditingMenu prepareContext() {
+		ArrayList<LocatedObject2D> items = super.getAllObjects();
 		ArrayList<MultichannelDisplayLayer> foundDisplays=new ArrayList<MultichannelDisplayLayer>();
 		ArrayList<MultiChannelImage> foundImages=new ArrayList<MultiChannelImage>();
 		
 		 
 		for(LocatedObject2D i: items) {
 			if(i instanceof ImagePanelGraphic)  {
+				
 				if(firstImage==null)firstImage=(ImagePanelGraphic) i;
 				MultichannelDisplayLayer nextone = new ChannelPanelEditingMenu((ImagePanelGraphic) i).getPrincipalDisplay();
 				
@@ -88,41 +128,61 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 				
 		}
 		
-		ChannelPanelEditingMenu context = new ChannelPanelEditingMenu(firstImage);
-		context.workOn=0;
-		context.extraWrappers= foundImages;
-		context.extraDisplays=foundDisplays;
-		//if (this.brightcontrast<2) undo = ChannelDisplayUndo.createMany(foundImages, context);//
-	
-		if (doesShowDisplayRange())
-			context.showDisplayRangeDialog(brightcontrast);
-	
-			
-		if(this.brightcontrast==CROP_IMAGE) {
-			if(foundDisplays.size()<1) return;
-			foundDisplays.remove(context.getPrincipalDisplay());
-		
-			undo = FigureOrganizingSuplierForPopup.recropManyImages(context.getPrincipalDisplay(),foundDisplays);;
-		}
-		
-		if(this.brightcontrast==COLOR_MODE) {
-			context.workOn=1;
-			undo=context.changeColorModes();
-		}
-		
-		if(undo!=null&&this.getUndoManager()!=null) this.getUndoManager().addEdit(undo);
+		context = new ChannelPanelEditingMenu(firstImage);
+		context.setScope(ChannelPanelEditingMenu.CLICKED_IMAGES_ONLY);
+		context.setExtraWrappers(foundImages);
+		context.setExtraDisplays(foundDisplays);
+		return context;
 	}
 	/**
 	 * @return
 	 */
 	protected boolean doesShowDisplayRange() {
-		return this.brightcontrast<=WindowLevelDialog.ALL;
+		return this.actionType<=WindowLevelDialog.ALL;
 	}
 	
 	public Icon getIcon() {
-		if(brightcontrast==CROP_IMAGE) return CropIconGraphic.createsCropIcon();
-		if(brightcontrast==COLOR_MODE) return new ColorModeIcon(firstImage);
+		if(actionType==CROP_IMAGE) return CropIconGraphic.createsCropIcon();
+		if(actionType==COLOR_MODE) return new ColorModeIcon(firstImage);
+		
 		return IconUtil.createBrightnessIcon(0);
 	}
+	
+	public BasicMultiSelectionOperator[] createMergeContentItems() {
+		 BasicMultiSelectionOperator[] output=new  BasicMultiSelectionOperator[context.getPrincipalMultiChannel().nChannels()];;
+		for(int i=0; i<output.length; i++) {
+			output[i] =new ChannelInclusionMenuItem(i+1);
+		}
+		 
+		 return output;
+	}
+	
+	class ChannelInclusionMenuItem extends BasicMultiSelectionOperator {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		int channel=1;
+		/**
+		 * @param i
+		 */
+		public ChannelInclusionMenuItem(int c) {
+			channel=c;
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public String getMenuCommand() {
+			return context.getPrincipalDisplay().getMultiChannelImage().getGenericChannelName(channel);
+			
+		}}
+	
+	
 
 }

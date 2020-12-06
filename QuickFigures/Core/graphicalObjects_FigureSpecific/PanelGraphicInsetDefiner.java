@@ -63,8 +63,6 @@ import utilityClassesForObjects.ScaleInfo;
   */
 public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener{
 
-	
-	
 
 	public InsetGraphicLayer createPersonalLayer(String st) {
 		return new InsetGraphicLayer(st);
@@ -119,11 +117,9 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	public BufferedImage getBuffImage() {
 		
 		try {
-		// setCropping();
-		 
+		
 		BufferedImage b=getSourcePanel().getBufferedImage();
 		
-	//	IssueLog.log("have image of w="+b.getWidth()+"   h="+ b.getHeight());
 		BufferedImage b2=new BufferedImage(b.getWidth(), b.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		
 		Graphics g = b2.getGraphics();
@@ -138,19 +134,6 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		}
 	}
 
-	
-	/**in refernce to the cordinates of the source image pixels, returns the proper cropping rect.*/
-	private Rectangle2D getproperCropping() {
-		try{
-		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
-		Rectangle2D b = inv.createTransformedShape(this.getBounds()).getBounds2D();
-		
-		return b;
-		} catch (Error e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 	
 	/**Returns an indicator rectangle to be used by the cropping dialog*/
 	public RectangularGraphic mapRectBackToUnprocessedVersion(PreProcessInformation p) {
@@ -313,8 +296,6 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	 */
 	@Deprecated
 	protected void oldPanelUpdate(String name) {
-		multiChannelStackofInsets.setCropper(getproperCropping().getBounds());
-		multiChannelStackofInsets.setCropperAngle(this.getAngle());
 		multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates(), name);
 	}
 	

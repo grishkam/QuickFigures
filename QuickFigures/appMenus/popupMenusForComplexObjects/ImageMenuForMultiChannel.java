@@ -20,6 +20,7 @@ import javax.swing.JMenu;
 import channelMerging.MultiChannelSlotDialog;
 import genericMontageKit.PanelList;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import iconGraphicalObjects.ChannelUseIcon;
 
 public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 
@@ -146,6 +147,7 @@ public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 				display. showStackOptionsDialog();
 			}
 		};
+		out.setIcon(new ChannelUseIcon(display.getMultiChannelImage().getChannelEntriesInOrder()));
 		thi.add(out);
 		return out;
 	}

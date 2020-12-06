@@ -18,6 +18,7 @@ package menuUtil;
 import applicationAdapters.CanvasMouseEvent;
 import undo.UndoManagerPlus;
 
+/**A menu item that can store information about the context in which it is called*/
 public interface SmartMenuItem {
 	public void setLastMouseEvent(CanvasMouseEvent e);
 	public void setUndoManager(UndoManagerPlus undoManager);

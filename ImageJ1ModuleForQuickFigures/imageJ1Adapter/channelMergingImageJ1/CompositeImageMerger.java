@@ -54,7 +54,7 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 		ArrayList<ChannelEntry> channels=entry.getChannelEntries();
 		if (impw instanceof ImagePlusWrapper) {
 			ImagePlusWrapper impw2=(ImagePlusWrapper) impw;
-			return  generateMergedRGB(impw2.getImagePlus(), channels, entry.targetSlideNumber, entry.targetFrameNumber, ChannelsInGrayScale);
+			return  generateMergedRGB(impw2.getImagePlus(), channels, entry.targetSliceNumber, entry.targetFrameNumber, ChannelsInGrayScale);
 		}
 		else {throw new IllegalArgumentException("Must have ImagePlusWrapper as argumenr");}
 		// TODO Auto-generated method stub

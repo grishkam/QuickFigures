@@ -13,24 +13,41 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package imageDisplayApp;
+package menuUtil;
 
-/**work in progress A small window that shows a mini toolbar*/
-public class MiniToolBarWindow  {
-	
+import javax.swing.JRadioButton;
+
+import applicationAdapters.CanvasMouseEvent;
+import logging.IssueLog;
+import undo.UndoManagerPlus;
+
+/**A special JMenu item that also stores an undo manager*/
+public final class SmartRadioButton extends JRadioButton implements  SmartMenuItem{
+
 	/**
 	 * 
 	 */
-	public static  MiniToolBarWindow currentWindow=null;
-	
+	private static final long serialVersionUID = 1L;
+	protected CanvasMouseEvent me;
+	protected UndoManagerPlus undoManager;
 
+	@Override
+	public void setLastMouseEvent(CanvasMouseEvent e) {
+		this.me=e;
+		
+	}
 
-	
-	public  MiniToolBarWindow() {
+	@Override
+	public void setUndoManager(UndoManagerPlus undoManager) {
+		IssueLog.log("undo manager being set to "+undoManager);
+		this.undoManager=undoManager;
 		
-		currentWindow=this;
-		
-		
+	}
+
+	@Override
+	public UndoManagerPlus getUndoManager() {
+		// TODO Auto-generated method stub
+		return undoManager;
 	}
 
 }

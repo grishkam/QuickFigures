@@ -23,7 +23,7 @@ import standardDialog.AngleInputPanel;
 import standardDialog.ComboBoxPanel;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.NumberInputPanel;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 
 public class PointOptionsDialog extends GraphicItemOptionsDialog{
 
@@ -35,11 +35,11 @@ public class PointOptionsDialog extends GraphicItemOptionsDialog{
 	ArrayList<PointModel> additionalPoints=new ArrayList<PointModel> ();
 	private static final long serialVersionUID = 1L;
 	PointOptionsDialog(){}
-	PointOptionsDialog(PointModel p, boolean bareBones, SwingDialogListener lis) {
+	PointOptionsDialog(PointModel p, boolean bareBones, StandardDialogListener lis) {
 		this.bareBones=bareBones;
 		pmodel=p;
 		this.addPointModelOptions(pmodel);
-		this.addDialogListener(new SwingDialogListener() {
+		this.addDialogListener(new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

@@ -51,11 +51,11 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 		ArrowGraphic arrow = new ArrowGraphic();
 		if (line) {
 			model = arrow;
-			model.setNHeads(0);
+			model.setNumerOfHeads(0);
 			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
 		} else {
 			model = arrow;
-			model.setNHeads(head);
+			model.setNumerOfHeads(head);
 			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
 			
 			if(tail) {

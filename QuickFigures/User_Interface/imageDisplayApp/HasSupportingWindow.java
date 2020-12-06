@@ -13,9 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package standardDialog;
+package imageDisplayApp;
 
-public interface SwingDialogListener {
+@Deprecated
+public interface HasSupportingWindow {
+	
+	public void closeWindow(boolean save);
 
-	public void itemChange(DialogItemChangeEvent event);
 }

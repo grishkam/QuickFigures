@@ -13,10 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package imageDisplayApp;
+package standardDialog;
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 6, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
+/**
+package standardDialog;
 
-public interface hasSupportingWindow {
-	
-	public void closeWindow(boolean save);
+/**Implementations of the class can be notified of changes to dialog fields.
+ *WORK IN PROGRESS. As of last editing, listeners were not aleays notified.
+ */
+public interface StandardDialogListener {
 
+	public void itemChange(DialogItemChangeEvent event);
 }

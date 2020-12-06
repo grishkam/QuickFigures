@@ -29,6 +29,7 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.MenuItemForObj;
 import genericMontageKit.BasicObjectListHandler;
+import imageDisplayApp.CanvasOptions;
 import standardDialog.ChoiceInputEvent;
 import standardDialog.ChoiceInputListener;
 import standardDialog.ComboBoxPanel;
@@ -38,6 +39,7 @@ import standardDialog.NumberInputPanel;
 import standardDialog.SnapBox;
 import standardDialog.StandardDialog;
 import standardDialog.StringInputPanel;
+import storedValueDialog.StoredValueDilaog;
 import undo.CanvasResizeUndo;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.RectangleEdges;
@@ -45,9 +47,7 @@ import utilityClassesForObjects.RectangleEdges;
 /**simple menu item that displays a dialog to allow the user to input a canvas size*/
 public class CanvasDialogResize implements MenuItemForObj {
 
-	static int NORMAL=0;
-	public static int INCH=1;
-	static int CENTIMETER=2;
+	public static int NORMAL=0, INCH=1, CENTIMETER=2;
 	static String[] values= {"Points", "Inches", "cm"};
 	public boolean fancy=true;
 	private int type=NORMAL;
@@ -127,58 +127,63 @@ public class CanvasDialog extends StandardDialog {
 		private NumberInputPanel hInput;
 		
 	public CanvasDialog(ImageWrapper iw, boolean fancy) {
-		snappingBehaviour.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
-		this.fancy=fancy;
-		setModal(true);
-		this.iw=iw;
-		Dimension d = iw.getCanvasDims();//.getDimensionsXY();
-		r1=new Rectangle(d);
-		String adder="";
-		if(type==INCH) adder=" (inches)";
-		if(type==CENTIMETER) adder=" (cm)";
-		this.add("name", new StringInputPanel("Title", iw.getTitle()));
-		
-		ComboBoxPanel unitPanel = new ComboBoxPanel("Units", values, type);
-		this.add("unit", unitPanel);
-		width2 = d.getWidth();
-		wInput = new NumberInputPanel("Width"+adder, width2/ getRatio(), 1);
-		this.add("width", wInput);
-		height2 = d.getHeight();
-		hInput = new NumberInputPanel("Height"+adder, height2/ getRatio(), 1);
-		this.add("height", hInput);
-		hInput.addNumberInputListener(new NumberInputListener() {
-			public void numberChanged(NumberInputEvent ne) {
-				height2=ne.getNumber()*getRatio();
-			}});
-		wInput.addNumberInputListener(new NumberInputListener() {
-			public void numberChanged(NumberInputEvent ne) {
-				width2 =ne.getNumber()*getRatio();
-			}});
-	
-		unitPanel.addChoiceInputListener(new ChoiceInputListener() {
-
-			@Override
-			public void numberChanged(ChoiceInputEvent ne) {
-				type=(int) ne.getNumber();
-				double w2 = width2/getRatio();
-				double h2 = height2/getRatio();
-				wInput.setNumber(w2);
-				hInput.setNumber(h2);
+				snappingBehaviour.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
+				this.fancy=fancy;
+				setModal(true);
+				this.iw=iw;
+				Dimension d = iw.getCanvasDims();//.getDimensionsXY();
+				r1=new Rectangle(d);
+				String adder="";
+				if(type==INCH) adder=" (inches)";
+				if(type==CENTIMETER) adder=" (cm)";
+				this.add("name", new StringInputPanel("Title", iw.getTitle()));
 				
-			}
+				ComboBoxPanel unitPanel = new ComboBoxPanel("Units", values, type);
+				this.add("unit", unitPanel);
+				width2 = d.getWidth();
+				wInput = new NumberInputPanel("Width"+adder, width2/ getRatio(), 1);
+				this.add("width", wInput);
+				height2 = d.getHeight();
+				hInput = new NumberInputPanel("Height"+adder, height2/ getRatio(), 1);
+				this.add("height", hInput);
+				hInput.addNumberInputListener(new NumberInputListener() {
+					public void numberChanged(NumberInputEvent ne) {
+						height2=ne.getNumber()*getRatio();
+					}});
+				wInput.addNumberInputListener(new NumberInputListener() {
+					public void numberChanged(NumberInputEvent ne) {
+						width2 =ne.getNumber()*getRatio();
+					}});
 			
-		});
+				unitPanel.addChoiceInputListener(new ChoiceInputListener() {
 		
-		
-	this.setWindowCentered(true);
-		if (fancy) {
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridwidth=2;
-			c.gridy=super.gymax;
-			super.gymax++;
-			this.add(Box, c);
-		}
-		this.showDialog();
+					@Override
+					public void numberChanged(ChoiceInputEvent ne) {
+						type=(int) ne.getNumber();
+						double w2 = width2/getRatio();
+						double h2 = height2/getRatio();
+						wInput.setNumber(w2);
+						hInput.setNumber(h2);
+						
+					}
+					
+				});
+				
+				
+			this.setWindowCentered(true);
+				if (fancy) {
+					GridBagConstraints c = new GridBagConstraints();
+					c.gridwidth=2;
+					c.gridy=super.gymax;
+					super.gymax++;
+					this.add(Box, c);
+				}
+				;
+				
+				addSubordinateDialog("Other Canvas Options",  new StoredValueDilaog(CanvasOptions.current)  );
+				
+				
+				this.showDialog();
 	}
 	
 	

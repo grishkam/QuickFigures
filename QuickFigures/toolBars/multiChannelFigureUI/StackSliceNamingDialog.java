@@ -22,7 +22,7 @@ import logging.IssueLog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.StringInputPanel;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 
 /**shows a dialog that lets the user name the stack slices channels of a multichannel images*/
 public class StackSliceNamingDialog {
@@ -49,7 +49,7 @@ public class StackSliceNamingDialog {
 	}
 	
 	
-	public class NamerListenr implements /**DialogListener, */SwingDialogListener{
+	public class NamerListenr implements /**DialogListener, */StandardDialogListener{
 /**
 		@Override
 		public boolean dialogItemChanged(GenericDialog gd, AWTEvent arg1) {

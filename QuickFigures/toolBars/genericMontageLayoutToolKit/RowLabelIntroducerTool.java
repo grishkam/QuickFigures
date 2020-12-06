@@ -48,7 +48,7 @@ import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoManagerPlus;
@@ -217,7 +217,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		lastusedLayout=getCurrentLayout();
 		
 		StandardDialog td = item.getOptionsDialog();
-		td.addDialogListener(new SwingDialogListener() {
+		td.addDialogListener(new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {
@@ -290,7 +290,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		public void showLabelEditDialog(ArrayList<BasicGraphicalObject> rois2) {
 			MultiTextGraphicSwingDialog dd = new MultiTextGraphicSwingDialog(rois2, true);
 
-			dd.addDialogListener(new SwingDialogListener() {
+			dd.addDialogListener(new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

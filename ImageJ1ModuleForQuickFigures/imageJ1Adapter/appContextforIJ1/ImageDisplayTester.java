@@ -72,7 +72,7 @@ public class ImageDisplayTester extends ToolbarTester {
 			   /** Opens an image file using the Bio-Formats plugin. */
 		   
 		        String className = "loci.plugins.BF";
-		        String methodName = "openImagePlus";
+		      //  String methodName = "openImagePlus";
 		        
 		            Class<?> c = IJ.getClassLoader().loadClass(className);
 		            IJ.getClassLoader().loadClass("loci.plugins.LociImporter");

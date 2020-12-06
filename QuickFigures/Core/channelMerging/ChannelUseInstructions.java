@@ -113,8 +113,46 @@ public class ChannelUseInstructions implements Serializable {
 			/**returns true if the given channel should be excluded from the merge panel*/
 			public boolean isMergeExcluded(int c) {
 				for(Integer ex: noMergeChannels) {if (ex.intValue()==c) return true;}
-				if (this.ignoreAfterChannel>0&&c>this.ignoreAfterChannel) return true;
+				if (this.ignoreAfterChannel>NONE_SELECTED&&c>this.ignoreAfterChannel) return true;
 				return false;
+			}
+			
+			public void setMergeExcluded(int c, boolean excluded) {
+				if (excluded) {
+					excludeThisChannelFromMerge(c);
+				}
+				else {
+					includeThisChannelInMerge(c);
+				}
+			}
+
+			/**
+			if the given channel is excluded from the merge, removes it from the excluded channel list
+			 */
+			public void includeThisChannelInMerge(int c) {
+				if (!noMergeChannels.contains(c)) return;
+				for(int i=0; i<noMergeChannels.size(); i++) {
+					if (noMergeChannels.get(i)==c) {
+						noMergeChannels.set(i, NONE_SELECTED);
+					}
+					
+				}
+			}
+
+			/**
+			if the given channel is not already excluded from merge, adds it to the excluded channel list.
+			 */
+			public void excludeThisChannelFromMerge(int c) {
+				if (noMergeChannels.contains(c)) return;
+				for(int i=0; i<noMergeChannels.size(); i++) {
+					if (noMergeChannels.get(i)==NONE_SELECTED) {
+						noMergeChannels.set(i, c);
+						return;
+					}
+					
+				}
+				
+				noMergeChannels.add(c);
 			}
 			
 			/**true is channel number c is to be excluded from the panel list. false otherwise*/
@@ -264,7 +302,7 @@ public class ChannelUseInstructions implements Serializable {
 			}
 			
 			/**returns true if the instructions only use a subset of the frames or slices*/
-			public boolean selectsSlices(MultiChannelImage mw) {
+			public boolean selectsSlicesOrFrames(MultiChannelImage mw) {
 				if(mw.nFrames()>1&&this.getFrameUseInstructions()!=null &&!getFrameUseInstructions().selectsAll()) return true;
 				if(mw.nSlices()>1&&this.getSliceUseInstructions()!=null &&!getSliceUseInstructions().selectsAll()) return true;
 				

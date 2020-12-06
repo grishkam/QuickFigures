@@ -657,7 +657,7 @@ public static SmartDataInputDialog createFrom(ArrayList<ColumnDataSeries> cols) 
 }
 
 
-
+/**
 private ArrayList<String> getEachSeriesNames(ArrayList<? extends DataSeries> starting) {
 	ArrayList<String> names=new ArrayList<String>();
 	for(DataSeries s: starting) 
@@ -665,7 +665,7 @@ private ArrayList<String> getEachSeriesNames(ArrayList<? extends DataSeries> sta
 	names.add(s.getName());
 	}
 	return names;
-}
+}*/
 
 
 private static int getTotalLengths(ArrayList<? extends DataSeries> starting) {

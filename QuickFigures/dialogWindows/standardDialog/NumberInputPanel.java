@@ -303,7 +303,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	
 	
 	/**used for easy access*/
-	public static double getNumber(String prompt, double startnumber, int precis, boolean slider, SwingDialogListener dialogListener) {
+	public static double getNumber(String prompt, double startnumber, int precis, boolean slider, StandardDialogListener dialogListener) {
 		StandardDialog sd = new StandardDialog();
 		sd.setModal(true);
 		NumberInputPanel np = new NumberInputPanel(prompt, startnumber);

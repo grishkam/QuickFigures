@@ -83,7 +83,6 @@ public abstract class AbstractChannelHandler<ImageType> {
 		
 		} catch (Exception e) {IssueLog.logT(e);}
 		
-		//not that edits are done, want to update the figure panels from the source images
 		figure.release();		
 		figure.updatePanelsAndLabelsFromSource();
 		

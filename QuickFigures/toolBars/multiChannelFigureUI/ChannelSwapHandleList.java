@@ -199,7 +199,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 				jOneImage.setText("Only For "+theDisplayLayer.getTitle());
 				
 				out = new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
-				out.workOn=0;
+				out.setScope(0);
 				out.addChannelRelevantMenuItems(jOneImage);
 				output.add(jOneImage);
 			}

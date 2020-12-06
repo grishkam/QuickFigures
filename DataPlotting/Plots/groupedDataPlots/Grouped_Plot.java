@@ -43,7 +43,7 @@ import plotParts.DataShowingParts.PlotUtil;
 import plotParts.DataShowingParts.ScatterPoints;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.NumberInputPanel;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undoForPlots.AxisFlipUndo;
@@ -685,7 +685,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		MeanBarDialog d = new MeanBarDialog(bars.get(0), true);
 		d.add("spacing", new NumberInputPanel("Bar spacing ", spacing, 0, 20));
 		d.addAdditionalBars(bars);
-		d.addDialogListener(new SwingDialogListener() {
+		d.addDialogListener(new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

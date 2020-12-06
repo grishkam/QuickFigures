@@ -72,7 +72,6 @@ import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TextParagraph;
 
 /**A class for organizing parts of a plot.
    Has methods to produce a layout, and a pair of axes*/
@@ -964,8 +963,8 @@ protected void flipPlotOrientation() {
 	
 	/**Switches the x and y labels*/
 	if (null!=xLabel||null!=yLabel) {
-		TextParagraph px = xLabel.getParagraph();
-		TextParagraph py = yLabel.getParagraph();
+		xLabel.getParagraph();
+		yLabel.getParagraph();
 		AttachmentPosition sx = xLabel.getAttachmentPosition();
 		AttachmentPosition sy = yLabel.getAttachmentPosition();
 		double ax = xLabel.getAngle();

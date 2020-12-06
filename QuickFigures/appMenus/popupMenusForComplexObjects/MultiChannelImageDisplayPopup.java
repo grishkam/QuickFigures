@@ -17,13 +17,11 @@ package popupMenusForComplexObjects;
 
 
 import java.awt.Container;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-import channelMerging.PreProcessInformation;
 import fLexibleUIKit.ObjectAction;
 import genericMontageKit.PanelList;
 import graphicalObjects.ImagePanelGraphic;
@@ -33,10 +31,11 @@ import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
-import objectDialogs.CroppingDialog;
 import ultilInputOutput.FileChoiceUtil;
+import undo.CombinedEdit;
 import undo.Edit;
 
+/**A popup menu for multichannel display layers*/
 public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		PopupMenuSupplier {
 
@@ -45,12 +44,12 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	 */
 	private static final long serialVersionUID = 1L;
 	private PanelList list;
-	private MultichannelDisplayLayer panel;
+	private MultichannelDisplayLayer displayLayer;
 	private ImagePanelGraphic clickedPanel;
 
 	public MultiChannelImageDisplayPopup(MultichannelDisplayLayer panel, PanelList list, ImagePanelGraphic img) {
 		this.list=list;
-		this.panel=panel;
+		this.displayLayer=panel;
 			this.clickedPanel=img;	
 		addMenus(this, panel, list);
 		
@@ -65,9 +64,9 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	
 	public JMenu[] addMenus(JMenu thi) {
 		JMenu[] output=new JMenu[3];
-		output[0]=new ImageMenuForMultiChannel("Source Image", panel, list) ;
+		output[0]=new ImageMenuForMultiChannel("Source Image", displayLayer, list) ;
 		thi.add(output[0]);
-		output[1]=new PanelMenuForMultiChannel("Image Panels", panel, list, panel.getPanelManager());
+		output[1]=new PanelMenuForMultiChannel("Image Panels", displayLayer, list, displayLayer.getPanelManager());
 		thi.add(output[1]);
 		addChannelLabelMenu(thi);
 		
@@ -80,11 +79,11 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 
 	/**creates a menu item to remove the image*/
 	protected void addRemoveImage(JMenu thi) {
-		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(panel) {
+		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(displayLayer) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(panel.getParentLayer() instanceof FigureOrganizingLayerPane) {
-					FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) panel.getParentLayer() ;
+				if(displayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
+					FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) displayLayer.getParentLayer() ;
 					if(f.getAllSourceImages().size()==1) {
 						FileChoiceUtil.yesOrNo("Figure must contain at least one image. Will not remove last image. Understood?");
 						return;
@@ -95,7 +94,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 				if (b)
 					{
 					
-					addUndo(Edit.removeItem(panel.getParentLayer(), panel)
+					addUndo(Edit.removeItem(displayLayer.getParentLayer(), displayLayer)
 							);
 					
 					
@@ -105,44 +104,40 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		thi.add(act.createJMenuItem("Remove From Figure"));
 	}
 	
-	/**creates a menu item to remove the image*/
+	
+	/**
+	crates a new multichannel display layer with a new set of panels
+	 */
+	public CombinedEdit createSecondView(MultichannelDisplayLayer displayLayer) {
+		if(displayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
+			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) displayLayer.getParentLayer() ;
+			
+			return FigureOrganizingLayerPane.createSecondView(f, displayLayer, null);
+			
+		} else return null;
+	}
+
+	/**creates a menu item to add another display layer, using the same source image as this one*/
 	protected void addView(JMenu thi) {
-		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(panel) {
+		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(displayLayer) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(panel.getParentLayer() instanceof FigureOrganizingLayerPane) {
-					FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) panel.getParentLayer() ;
-					MultichannelDisplayLayer co = panel.similar();
-					
-					co.setSlot(co.getSlot().copy());
-					co.getSlot().redoCropAndScale();
-					co.setLaygeneratedPanelsOnGrid(true);
-					PreProcessInformation mods =co.getSlot().getModifications();
-					Rectangle r=null;
-					if(mods==null||mods.getRectangle()==null) {
-						int w = panel.getMultiChannelImage().getDimensions().width/2;
-						int h = panel.getMultiChannelImage().getDimensions().height/2;
-						r=new Rectangle(0,0,w,h);
-					} else {
-						r=mods.getRectangle();
-					}
-					//CompoundEdit2 undo = new CompoundEdit2();
-					CroppingDialog.showCropDialog(co.getSlot(), r, 0);
-					addUndo(
-							f.nextMultiChannel(co));
-					
-				} else return;
+				this.addUndo(
+						createSecondView(displayLayer));
 				
 				
 				
-			}};
-		thi.add(act.createJMenuItem("Copy with new cropping"));
+			}
+
+			
+			};
+		thi.add(act.createJMenuItem("Create second view"));
 	}
 
 	public void addChannelMenu(Container thi) {
 		JMenu oneMore = new SmartJMenu("Channels");
-		ChannelPanelEditingMenu b = new ChannelPanelEditingMenu(panel, clickedPanel);
-		b.workOn=0;
+		ChannelPanelEditingMenu b = new ChannelPanelEditingMenu(displayLayer, clickedPanel);
+		b.setScope(0);
 		b.addChannelRelevantMenuItems(oneMore, true);
 		thi.add(oneMore);
 	}
@@ -152,7 +147,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	}
 
 	public MenuForChannelLabelMultiChannel createChanLabelMenu() {
-		return new MenuForChannelLabelMultiChannel("Channel Labels", panel, list, panel.getChannelLabelManager());
+		return new MenuForChannelLabelMultiChannel("Channel Labels", displayLayer, list, displayLayer.getChannelLabelManager());
 	}
 	
 	@Override

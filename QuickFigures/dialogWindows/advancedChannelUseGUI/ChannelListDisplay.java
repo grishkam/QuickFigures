@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package panelGUI;
+package advancedChannelUseGUI;
 
 import java.awt.Dimension;
 import java.awt.dnd.DropTarget;
@@ -26,16 +26,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import channelMerging.ChannelEntry;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_FigureSpecific.PanelManager;
+import menuUtil.SmartJMenu;
 
 
 /**A JList that displays a list of possible channels in their respecrive channel names and colors*/
@@ -51,6 +54,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	private PanelManager panelManager;
 	private PanelListElement panel;
 	private PanelListDisplay panelDisp;
+	JMenu j=new SmartJMenu("Channels");
 	
 	/**constructor with starting panel and panel manager*/
 	public ChannelListDisplay(PanelManager man, PanelListElement panel) {
@@ -64,6 +68,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION );
 		new DropTarget(this, this);
 		this.addKeyListener(this);
+		
 	}
 	
 	public void setPanelListPartner(PanelListDisplay panelDisp) {this.panelDisp=panelDisp;}
@@ -76,7 +81,9 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		elements.clear();
 		elements.addAll(panel.getChannelEntries());
 		
-		
+		getJMenuForChannels().removeAll();
+		ArrayList<AvailableChannelsItem> makeentries = makeentries(panel);
+		for(AvailableChannelsItem entiti: makeentries) {getJMenuForChannels().add(entiti);};
 		this.repaint();
 		
 	}
@@ -261,6 +268,48 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	return 	new Dimension(250,200) ;
 	}
 	
+	public ArrayList<AvailableChannelsItem> makeentries(PanelListElement e) {
+		ArrayList<AvailableChannelsItem> output=new ArrayList<AvailableChannelsItem>();
+		ArrayList<ChannelEntry> all = panelManager.getMultiChannelWrapper().getChannelEntriesInOrder();
+		for(ChannelEntry entry:all) {
+			output.add(new AvailableChannelsItem2(entry, e));
+		}
+		
+		return output;
+	}
+
+	public JMenu getJMenuForChannels() {
+		return j;
+	}
 	
+	/**A versi*/
+	public class AvailableChannelsItem2 extends AvailableChannelsItem {
+
+		/**
+		 * @param ce
+		 * @param e
+		 */
+		public AvailableChannelsItem2(ChannelEntry ce, PanelListElement e) {
+			super(ce, e);
+			// TODO Auto-generated constructor stub
+		}
+
+		/**Adds/removes the channel from all selected panels*/
+		public void onAction() { 
+			
+			super.onAction();
+			setPanel(panel);
+			
+			List<PanelListElement> list = panelDisp.getSelectedValuesList();
+			for(PanelListElement panelp: list) {
+				if (panelp==panel) continue;
+				this.setChannelIsIncluded(!isExcludedChannel(), panelp);
+			}
+			panelManager.updatePanels();
+		}
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;}
 	
 }

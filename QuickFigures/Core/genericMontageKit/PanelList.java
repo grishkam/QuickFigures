@@ -18,13 +18,14 @@ package genericMontageKit;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import appContext.ImageDPIHandler;
+import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
@@ -32,8 +33,6 @@ import channelMerging.MultiChannelImage;
 import graphicalObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
-import appContext.ImageDPIHandler;
-import channelLabels.ChannelLabelTextGraphic;
 
 /**This class stores a list of the panels that are part of a figure
   A figure may contain many such lists (one for each source image)
@@ -46,28 +45,18 @@ public class PanelList implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	
 	private ChannelUseInstructions instructions=new ChannelUseInstructions() ;
 	
 	//If channelUpdateMode=true The colors of all the channel entires are updated to account for changes in the channel colors of the original image. 
-	//TODO: determine which method is superior. the channel update mode variable seems to have little effect on the user experience
 	//if channelUpdateMode=false, this will create new channel entries which at the moment dont always update to the channel handles and color mode button. need to figure out why
-	/**Determines the method of updating the channel entries*/
-	boolean channelUpdateMode=false;
+	/**Determines the method of updating the channel entries. Is changed to true for advanced channel use*/
+	public boolean channelUpdateMode=false;
 	
     /**Determines the pixel density of newly creates image panels*/
     private double pixelDensityRatio=ImageDPIHandler.ratioFor300DPI();//
     
     
-    /**The Bilinear Scale that will be applied to the panels*/
-    @Deprecated
-    private double scaleBilinear=1;//will make this no longer accessible by user. obsolete
-    @Deprecated
-	 public Rectangle cropper=null;//no longer accessible by user. will be obsolete in future versions. may be retained for use by programmers
-    @Deprecated
-    private double cropAngle=0;//no longer accessible by user. will be obsolete in future versions. may be retained for use by programmers
-
 		private ArrayList<PanelListElement> panels=new ArrayList<PanelListElement>();
 	
 	 /**The method used by this list to select which channels and panels are created 
@@ -88,8 +77,7 @@ public class PanelList implements Serializable{
 	public PanelList createDouble() {
 		PanelList output = new  PanelList() ;
 		output.setChannelUstInstructions(this.getChannelUseInstructions());
-		output.scaleBilinear=this.scaleBilinear;
-		output.cropper=this.cropper;
+		
 		for(PanelListElement e: panels) {
 			output.add(e.createDouble());
 		}
@@ -108,7 +96,7 @@ public class PanelList implements Serializable{
 	public PanelListElement getChannelPanelFor(int channel, int slice, int frame) {
 		for(PanelListElement p: this.getPanels()) {
 			if (p==null) continue;
-			if (p.targetChannelNumber==channel&&p.targetFrameNumber==frame&&p.targetSlideNumber==slice&&p.designation+0!=PanelListElement.MERGE_IMAGE_PANEL+0) return p;
+			if (p.targetChannelNumber==channel&&p.targetFrameNumber==frame&&p.targetSliceNumber==slice&&p.designation!=PanelListElement.MERGE_IMAGE_PANEL) return p;
 		}
 		return null;
 	}
@@ -117,7 +105,7 @@ public class PanelList implements Serializable{
 	public PanelListElement getMergePanelFor(int slice, int frame) {
 		for(PanelListElement p: this.getPanels()) {
 			if (p==null) continue;
-			if (p.targetFrameNumber==frame&&p.targetSlideNumber==slice&&p.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) return p;
+			if (p.targetFrameNumber==frame&&p.targetSliceNumber==slice&&p.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) return p;
 		}
 		return null;
 	}
@@ -337,7 +325,7 @@ public class PanelList implements Serializable{
 	//public abstract PixelWrapper<ImageDataType> makeWrapper(ImageDataType image);
 	
 
-	final int mergeDesig=2;
+	
 	
 	
 
@@ -356,7 +344,7 @@ public class PanelList implements Serializable{
 			if (panel.getChannelEntries().size()==0){IssueLog.log("no channel entry");; ;continue;}
 			
 			output[i]=panel.getChannelEntries().get(0).getLabel();
-			if (panel.designation==mergeDesig) output[i]="Merge";
+			if (panel.designation==PanelListElement.MERGE_IMAGE_PANEL) output[i]="Merge";
 			if (output[i]==null) output[i]="";
 		}
 		catch (Throwable t) {
@@ -374,14 +362,6 @@ public class PanelList implements Serializable{
 		return getPanels().get(0).getWidth();
 	}
 	
-	/**performs cropping on all the panel images.
-	   Needed if there is a cropping rectangle added to the list.
-	   Although a programmer can add a rectangle here for an additional crop operation
-	   the user */
-	@Deprecated
-	public void cropAll(Rectangle r) {
-		for (PanelListElement p:getPanels()) {p.crop(r, cropAngle);}
-	}
 	
 	/**creates a panel list with the same settings as this one*/
 	public PanelList createList() {	
@@ -440,10 +420,10 @@ public class PanelList implements Serializable{
 		//ImagePlusWrapper impw = new ImagePlusWrapper(imp);
 		
 		if (entry.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) {
-			this.setUpChannelEntryForMerge(impw, entry, entry.targetFrameNumber, entry.targetSlideNumber);
+			this.setUpChannelEntryForMerge(impw, entry, entry.targetFrameNumber, entry.targetSliceNumber);
 		}
 		else {
-			setUpChannelEntriesForPanel(impw, entry, entry.targetChannelNumber, entry.targetFrameNumber, entry.targetSlideNumber);
+			setUpChannelEntriesForPanel(impw, entry, entry.targetChannelNumber, entry.targetFrameNumber, entry.targetSliceNumber);
 			
 		}
 		entry.purgeDuplicateChannelEntries();
@@ -550,7 +530,7 @@ public class PanelList implements Serializable{
 			PanelListElement entry){
 		
 	
-		entry.setImageObjectWrapped(impw.getChannelMerger().generateMergedRGB(entry, this.getChannelUseInstructions().channelColorMode));
+		entry.setImageObjectWrapped(impw.getChannelMerger().generateMergedRGB(entry, getChannelUseInstructions().channelColorMode));
 		
 		entry.setScaleInfo(impw.getScaleInfo());
 		
@@ -574,7 +554,7 @@ public class PanelList implements Serializable{
 		entry.targetChannelNumber=1;//not truly relevant as all the channels are included but the number must be set
 		entry.innitialStackIndex=impw.getStackIndex(1, slice, frame);
 		entry.targetFrameNumber=frame;
-		entry.targetSlideNumber=slice;
+		entry.targetSliceNumber=slice;
 		
 		
 		
@@ -614,49 +594,20 @@ public class PanelList implements Serializable{
 		}
 
 
-
-	
-	
-	/**Sets and internal cropping rectangle*/
-	@Deprecated
-	public void setCropper(Rectangle selectionRectangle) {
-		if (selectionRectangle!=null)
-			cropper=selectionRectangle.getBounds();
-		else cropper=null;
-		
-	}
-
-
-/**copies the settings to another list*/
+	/**copies the settings to another list*/
 	public void giveSettingsTo(PanelList stack) {
-		getChannelUseInstructions().makeMatching(stack.getChannelUseInstructions());
-		stack.cropper=this.cropper;
-		stack.setScaleBilinear(getScaleBilinear());
 		stack.setPixelDensityRatio(getPixelDensityRatio());
+		getChannelUseInstructions().makeMatching(stack.getChannelUseInstructions());
 	}
-	
+	/**copies the settings to another list*/
 	public void givePartialSettingsTo(PanelList stack) {
-		stack.setScaleBilinear(getScaleBilinear());
 		stack.setPixelDensityRatio(getPixelDensityRatio());
 		getChannelUseInstructions().makePartialMatching(stack.getChannelUseInstructions());
 		
 	}
 	
-	
-/**gets the level of bilinear scale to use. 1 for no scale*/
-	@Deprecated
-	public double getScaleBilinear() {
-		return scaleBilinear;
-	}
 
-	/**sets the level of bilinear scale to use. 1 for no scale*/
-	@Deprecated
-	public void setScaleBilinear(double scaleBilinear) {
-		this.scaleBilinear = scaleBilinear;
-	}
-	
 	public int getlastPanelsIndex() {
-		
 		int out=0;
 		for(PanelListElement s:getPanels()) {
 			int j=s.getDisplayGridIndex().getPanelindex();
@@ -720,7 +671,7 @@ public class PanelList implements Serializable{
 		for(PanelListElement p:panels) {
 			if(c.channel>-1 &&p.targetChannelNumber!=c.channel) continue;
 			if(c.frame>-1 &&p.targetFrameNumber!=c.frame) continue;
-			if(c.slice>-1 &&p.targetSlideNumber!=c.slice) continue;
+			if(c.slice>-1 &&p.targetSliceNumber!=c.slice) continue;
 			output.add(p);
 		}
 		return output;
@@ -735,11 +686,7 @@ public class PanelList implements Serializable{
 		pixelDensityRatio=panelLevelScale;
 	}
 	
-	@Deprecated
-	public void setCropperAngle(double angle) {
-		cropAngle=angle;
-		
-	}
+	
 	
 	/**swaps the locations of two elements in the list. Also swaps the locations of the
 	 * objects which show the image to the user (which is visible)*/
@@ -778,8 +725,8 @@ public class PanelList implements Serializable{
 			try {
 				if (o1.targetFrameNumber>o2.targetFrameNumber) return 1;
 				if (o2.targetFrameNumber>o1.targetFrameNumber) return -1;
-				if (o1.targetSlideNumber>o2.targetSlideNumber) return 1;
-				if (o2.targetSlideNumber>o1.targetSlideNumber) return -1;
+				if (o1.targetSliceNumber>o2.targetSliceNumber) return 1;
+				if (o2.targetSliceNumber>o1.targetSliceNumber) return -1;
 				/**proceeds beyond this point only if the slice and frame are equal*/
 				
 				if (instructions.mergePanelFirst() &&o1.isTheMerge()&&!o2.isTheMerge())  {
@@ -812,7 +759,7 @@ public class PanelList implements Serializable{
 
 	/**Called after the user changes the z section that the user is */
 	public void setupViewLocation(CSFLocation d) {
-		d.channel=CSFLocation.MERGE_SELECTED;//allows for merge
+		d.channel=CSFLocation.MERGE_SELECTED;//
 		if(this.getChannelUseInstructions().getFrameUseInstructions().selectsSingle()) getChannelUseInstructions().getFrameUseInstructions().setupLocation(d);
 		if(this.getChannelUseInstructions().getSliceUseInstructions().selectsSingle()) getChannelUseInstructions().getSliceUseInstructions().setupLocation(d);
 	}

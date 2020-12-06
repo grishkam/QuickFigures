@@ -127,10 +127,10 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	protected double x2=60, y2=60;
 	
 	/**the first head of the arrow at position x2, y2*/
-	ArrowHead head1=new ArrowHead();
+	private ArrowHead head1=new ArrowHead();
 	
 	/**the second head of the arrow at position x, y*/
-	ArrowHead head2=new ArrowHead();
+	private ArrowHead head2=new ArrowHead();
 	
 	/**if true, the properties of the second arrow head will always mimic the first.*/
 	private boolean useSameHead=true;
@@ -372,9 +372,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		arrow.outline=outline;
 		arrow.backGroundShape=this.getBackGroundShape().copy();
 	
-		arrow.head1=head1.copy();
-		if (headsAreSame()) arrow.head2=arrow.head1;
-			else arrow.head2=head2.copy();
+		arrow.head1.copyAttributesFrom(head1);
+		arrow.head2.copyAttributesFrom(head1);
 		
 		return arrow;
 	}
@@ -401,7 +400,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	/**makes the arrow heads of this arrow identical to the argument*/
 	public void copyArrowAtributesFrom(ArrowGraphic arr) {
 		
-		this.setNHeads(arr.getNHeads());
+		this.setNumerOfHeads(arr.getNHeads());
 		
 		
 		this.setStrokeWidth(arr.getStrokeWidth());
@@ -726,7 +725,7 @@ protected Point2D getDrawnLineEnd2() {
 	public int getNHeads() {
 		return headnumber.getValue();
 	}
-	public void setNHeads(int headnumber) {
+	public void setNumerOfHeads(int headnumber) {
 		this.headnumber.setValue(headnumber);
 	}
 
@@ -788,7 +787,7 @@ protected Point2D getDrawnLineEnd2() {
 		secondHead.copyAttributesFrom(getHead(SECOND_HEAD));
 		
 		
-		out.setNHeads(getNHeads());
+		out.setNumerOfHeads(getNHeads());
 		
 		if (head.isOpenHeadType()||head.isOutlineType())out.getHead().setArrowStyle(head.getArrowStyle());
 			out.setStrokeWidth(2);
@@ -821,7 +820,7 @@ protected Point2D getDrawnLineEnd2() {
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
 		try {
-		UndoScalingAndRotation output = new UndoScalingAndRotation(this);
+		//UndoScalingAndRotation output = new UndoScalingAndRotation(this);
 			Point2D p1 = new Point2D.Double(x,y);
 			Point2D p2 = new Point2D.Double(x2,y2);
 			p2=scaleAbout(p2, p,mag,mag);
@@ -833,7 +832,6 @@ protected Point2D getDrawnLineEnd2() {
 			if (head2!=head1)head2.setArrowHeadSize(head2.getArrowHeadSize()*mag);
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	
@@ -933,10 +931,10 @@ protected Point2D getDrawnLineEnd2() {
 		return new CountHandle(this, headnumber, HEAD_NUMBER_HANDLE, 25,2, true, 1);
 	}
 	public ArrowSmartHandle createArrowSizeHandle(int i) {
-		return new ArrowSmartHandle(1000*i+ARROW_SIZE_HANDLE, this);
+		return new ArrowSmartHandle(ArrowSmartHandle.HANDLE_CONTEXT*i+ARROW_SIZE_HANDLE, this);
 	}
 	public ArrowSmartHandle createArrowSizeHandle2(int i) {
-		return new ArrowSmartHandle(1000*i+ARROW_SIZE_HANDLE_2, this);
+		return new ArrowSmartHandle(ArrowSmartHandle.HANDLE_CONTEXT*i+ARROW_SIZE_HANDLE_2, this);
 	}
 	
 	@Override
@@ -952,6 +950,11 @@ protected Point2D getDrawnLineEnd2() {
 	/**A handle for the user to modify the arrow*/
 class ArrowSmartHandle extends SmartHandle {
 		
+		/**
+		 * 
+		 */
+		private static final int HANDLE_CONTEXT = 1000;
+
 		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
 			
 			super.draw(graphics, cords);
@@ -1068,11 +1071,11 @@ class ArrowSmartHandle extends SmartHandle {
 		public boolean handlesOwnUndo() {return true;}
 
 		public boolean isArrowSizeHandle() {
-			return this.getHandleNumber()%1000==ARROW_SIZE_HANDLE;
+			return this.getHandleNumber()%HANDLE_CONTEXT==ARROW_SIZE_HANDLE;
 		}
 		
 		public boolean isArrowSizeHandle2() {
-			return this.getHandleNumber()%1000==ARROW_SIZE_HANDLE_2;
+			return this.getHandleNumber()%HANDLE_CONTEXT==ARROW_SIZE_HANDLE_2;
 		}
 		
 		public boolean isArrowStrokeHandle() {
@@ -1350,7 +1353,7 @@ public ArrowHead getHead(int i) {
   useful for creating icons*/
 public static ArrowGraphic createLine(Color fill, Color stroke, Point2D p1, Point2D p2) {
 	ArrowGraphic output = ArrowGraphic.createDefaltOutlineArrow(fill, stroke);
-	output.setNHeads(0);
+	output.setNumerOfHeads(0);
 	output.setPoints(p1, p2);
 	return output;
 }

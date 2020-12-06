@@ -54,6 +54,11 @@ public static Icon createBrightnessIcon(int open) {
 		
 		return new BrightnessIcon( open);
 	}
+
+public static Icon createBrightnessIcon() {
+	
+	return new BrightnessIcon( 0);
+}
 	
 	public static class BrightnessIcon extends GraphicObjectDisplayBasic<BrightNessIconGraphic> {
 
@@ -64,6 +69,10 @@ public static Icon createBrightnessIcon(int open) {
 		
 		public BrightnessIcon(int open) {
 			this.setCurrentDisplayObject(new BrightNessIconGraphic(open));
+		}
+		
+		public BrightnessIcon() {
+			this(0);
 		}
 		
 	}

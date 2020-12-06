@@ -42,12 +42,38 @@ public class SmartPopupJMenu extends JPopupMenu {
 	
 	public void setLastMouseEvent(CanvasMouseEvent e) {
 		this.mEvent=e;
-		for(MenuElement e2 : this.getSubElements()) {
-			if (e2 instanceof SmartMenuItem) {
-				((SmartMenuItem) e2).setLastMouseEvent(e);
+		setUndoManager(e.getUndoManager());
+		MenuElement[] subElements = this.getSubElements();
+		setMouseEventForAll(e, subElements);
+		
+	}
+	
+	
+	/**
+	Sets the mouse event for each of the SmartMenuItems
+	 */
+		public static void setMouseEventForAll(CanvasMouseEvent e, MenuElement[] subElements) {
+			for(Object e2 : subElements) {
+				if (e2 instanceof SmartMenuItem) {
+					SmartMenuItem smartMenuItem = (SmartMenuItem) e2;
+					smartMenuItem.setLastMouseEvent(e);
+					smartMenuItem.setUndoManager(e.getUndoManager());
+				}
+				
 			}
 		}
-		
+
+	/**
+	Sets the mouse event for each of the SmartMenuItems
+	 */
+	public void setMouseEventForAll(CanvasMouseEvent e, Iterable<?> subElements) {
+		for(Object e2 : subElements) {
+			if (e2 instanceof SmartMenuItem) {
+				SmartMenuItem smartMenuItem = (SmartMenuItem) e2;
+				smartMenuItem.setLastMouseEvent(e);
+				smartMenuItem.setUndoManager(e.getUndoManager());
+			}
+		}
 	}
 	
 	public void performUndoable(AbstractUndoableEdit... edits) {
@@ -58,13 +84,16 @@ public class SmartPopupJMenu extends JPopupMenu {
 		}
 	}
 	
+	/**shows the popup menu for the given mouse event*/
 	public void showForMouseEvent(CanvasMouseEvent w) {
 		this.setLastMouseEvent(w);
+		
 		this.show(w.getComponent(), w.getClickedXScreen(), w.getClickedYScreen());
 	}
 	
 	public void showForMouseEvent(CanvasMouseEvent w, int dx, int dy) {
 		this.setLastMouseEvent(w);
+		
 		this.show(w.getComponent(), w.getClickedXScreen()+dx, w.getClickedYScreen()+dy);
 	}
 	

@@ -238,7 +238,6 @@ public void updateLocationsForVertical() {
 		ActionButtonHandleList sublist=new ActionButtonHandleList();
 		CanvasMouseEvent lastEvent;
 		boolean usePalete=false;
-		private  MultiSelectionOperator[] allItems;
 		private Component iPanel;
 
 		public GeneralActionListHandle(MultiSelectionOperator i, int num, MultiSelectionOperator[] items) {
@@ -279,7 +278,7 @@ public void updateLocationsForVertical() {
 
 		public JMenuItem setItemsforMenu(String submenu, MultiSelectionOperator... items) {
 			JMenuItem mostRecentAddedItem=null;
-			this.allItems=items;
+			
 			for(MultiSelectionOperator i: items) {
 				JMenuItem j = new JMenuItem(i.getMenuCommand());
 				j.setIcon(i.getIcon());
@@ -288,8 +287,7 @@ public void updateLocationsForVertical() {
 				}
 				j.addActionListener(new MenuAction(i, this));
 				sublist.add(new GeneralActionHandle(i, (int)(Math.random()*100000)));
-				//if (i.getMenuPath()!=null) {p.getSubmenuOfName(i.getMenuPath()).add(j);} else
-				//if(j.getText().equals(mostRecentAddedItem.getText()))continue;
+				
 				if (submenu!=null) {p.getSubmenuOfName(submenu).add(j);} else
 				p.add(j);
 				mostRecentAddedItem = j;

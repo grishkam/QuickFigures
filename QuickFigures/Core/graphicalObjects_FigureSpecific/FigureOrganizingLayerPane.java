@@ -23,15 +23,17 @@ import java.util.Collections;
 
 import javax.swing.Icon;
 
+import appContext.CurrentAppContext;
+import applicationAdapters.DisplayedImage;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
+import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import figureEditDialogs.PanelStackDisplayOptions;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelOrderCorrector;
 import genericMontageKit.PanelOrderCorrector.ImageOrderComparator;
-import graphicActionToolbar.CurrentFigureSet;
 import genericMontageKit.PanelSetter;
 import genericMontageKit.SubFigureOrganizer;
 import graphicalObjects.KnowsParentLayer;
@@ -43,19 +45,17 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import iconGraphicalObjects.IconUtil;
+import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
+import menuUtil.HasUniquePopupMenu;
 import objectDialogs.CroppingDialog;
-import objectDialogs.PanelStackDisplayOptions;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAddManyItem;
 import undo.UndoLayoutEdit;
 import utilityClassesForObjects.AttachmentPosition;
-import menuUtil.HasUniquePopupMenu;
-import appContext.CurrentAppContext;
-import applicationAdapters.DisplayedImage;
 
 /**meant to check if bugs that existed with previous subclasses are gone. Later adapted to work 
  * with source stacks in a special way*/
@@ -237,7 +237,7 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 			double w = principalMultiChannel.getMultiChannelImage().getDimensions().getWidth()/pScale;
 			double h = principalMultiChannel.getMultiChannelImage().getDimensions().getHeight()/pScale;
 			
-			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlices(display.getMultiChannelImage()))
+			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage()))
 				{
 				CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
 				display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
@@ -442,8 +442,8 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					);
 		DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
 	
-		
-		output.addEditToList(	new  CanvasAutoResize().performUndoableAction(disp));
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			output.addEditToList(	new  CanvasAutoResize().performUndoableAction(disp));
 				
 		return output;
 	}
@@ -522,21 +522,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 
 
 	/**shows dialog to recreate figure panels*/
-	public void recreateFigurePanels() {recreateFigurePanels(false);}
-	public PanelStackDisplayOptions recreateFigurePanels(boolean cropToo) {
-		
-		ArrayList<ImageDisplayLayer> d1 = getMultiChannelDisplaysInLayoutOrder();
-		MultichannelDisplayLayer in = (MultichannelDisplayLayer)getPrincipalMultiChannel();
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getPanelList(),null, true);
-		
-		dialog.addAditionalDisplays(d1);
-		dialog.setCurrentImageDisplay(CurrentFigureSet. getCurrentActiveDisplayGroup());
-		dialog.setModal(false);
-		
-		dialog.showDialog();
-		this.fixLabelSpaces();
-		return dialog;
-	}
+	public void recreateFigurePanels() {PanelStackDisplayOptions.recreateFigurePanels(this, false);}
 
 
 	/**Adds row labels based on names*/
@@ -641,6 +627,34 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		ImageOrderComparator lorder = new PanelOrderCorrector.ImageOrderComparator(layoutOrder);
 
 		Collections.sort(displays, lorder);
+	}
+
+
+	/**
+	creates a new multichannel display layer and adds it to the figure. 
+	If preprocess information is not given, then the user will be shown a dialog to select the crop area
+	 */
+	public static CombinedEdit createSecondView(FigureOrganizingLayerPane f, MultichannelDisplayLayer displayLayer, PreProcessInformation p) {
+		MultichannelDisplayLayer co = displayLayer.similar();
+		co.setSlot(co.getSlot().createPartner());
+		co.getSlot().redoCropAndScale();
+		co.setLaygeneratedPanelsOnGrid(true);
+		if (p!=null) {
+				co.getSlot().applyCropAndScale(p);
+			} else {
+					PreProcessInformation mods =co.getSlot().getModifications();
+					Rectangle r=null;
+					if(mods==null||mods.getRectangle()==null) {
+						int w = displayLayer.getMultiChannelImage().getDimensions().width/2;
+						int h = displayLayer.getMultiChannelImage().getDimensions().height/2;
+						r=new Rectangle(0,0,w,h);
+					} else {
+						r=mods.getRectangle();
+					}
+					CroppingDialog.showCropDialog(co.getSlot(), r, 0);
+			}
+		
+		return f.nextMultiChannel(co);
 	}
 	
 	

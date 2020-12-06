@@ -27,6 +27,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.ImageCanvas;
 import selectedItemMenus.LayerSelector;
+import undo.UndoManagerPlus;
 
 /**implementation of CanvasMouseEventWrapper  interface
   that converts clicks on the imageJ cancas to events.
@@ -174,6 +175,12 @@ public class IJ1MEWrapper implements CanvasMouseEvent {
 	public void addUndo(AbstractUndoableEdit... e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public UndoManagerPlus getUndoManager() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

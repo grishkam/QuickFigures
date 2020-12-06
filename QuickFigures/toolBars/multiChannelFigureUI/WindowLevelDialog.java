@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 6, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package multiChannelFigureUI;
 
 import java.awt.GridBagConstraints;
@@ -32,7 +38,7 @@ import standardDialog.StandardDialog;
 import undo.AbstractUndoableEdit2;
 import standardDialog.ShowDisplayRange;
 
-/**A more simplistic version of the window/level adjuster
+/**A window/level adjuster that can adjust window/level across many panels
    */
 public class WindowLevelDialog extends StandardDialog  {
 
@@ -90,7 +96,8 @@ public class WindowLevelDialog extends StandardDialog  {
 			
 			jf.getOptionDisplayTabs().remove(jf.getMainPanel());
 			for(ChannelEntry chan:chans) {
-				WindowLevelDialog dis = new WindowLevelDialog(chan.getOriginalChannelIndex(), mrp, listen, winLev);
+				WindowLevelDialog dis = new WindowLevelDialog(chan.getOriginalChannelIndex(), mrp, listen, winLev, true);
+				
 				GriddedPanel p=dis.getMainPanel();
 				dis.remove(dis);
 				jf.getOptionDisplayTabs().addTab(chan.getShortLabel(), p);
@@ -110,9 +117,9 @@ public class WindowLevelDialog extends StandardDialog  {
 		}
 
 
-
-	public WindowLevelDialog(int chan, MultiChannelImage mrp, DisplayRangeChangeListener listen,int winLev) {
-		
+		/**Constructor. Generates a window level dialog that targets a specific channel*/
+	public WindowLevelDialog(int chan, MultiChannelImage mrp, DisplayRangeChangeListener listen,int winLev, boolean hideOK) {
+		this.setHideOK(hideOK);
 		this.winLevDialogType=winLev;
 		
 		this.displayChangeLis=listen;

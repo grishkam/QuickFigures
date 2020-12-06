@@ -90,7 +90,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 			/**Combines output shapes for each position in the series*/
 			Path2D outputShape=new Path2D.Double();
 			double[] pos = getTheData().getAllPositions();
-			boolean started=false;
+			
 			/**appends the error bars for all positions with enough points for a bar*/
 			for(int i=0; i<pos.length; i++) {
 				DataSeries datai2 = getTheData().getValuesForPosition(pos[i]);

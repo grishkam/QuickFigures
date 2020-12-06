@@ -274,7 +274,7 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 			
 			if ( arrowHeadNumber!=null) {
 				SimpleItemUndo<CountParameter> edit2 = b.createHeadNumberHandle().createUndo();
-				b.setNHeads(this.getArrowHeadNumber());
+				b.setNumerOfHeads(this.getArrowHeadNumber());
 				edit2.establishFinalState();
 				edit.addEditToList(edit2);
 			}
@@ -398,7 +398,7 @@ if(a instanceof PathGraphic ) {
 		
 		if (this.getDashes()!=null||this.getStrokeWidth()!=null) {
 			ArrowGraphic drawn = new ArrowGraphic(new Point(17,8), new Point(-2, 8));
-			drawn.setNHeads(0);
+			drawn.setNumerOfHeads(0);
 			drawn.setDashes(getDashes());
 			if(alwaysDashIcon) drawn.setDashes(new float[] {2,2});
 			drawn.setStrokeColor(Color.black);
@@ -499,7 +499,7 @@ if(a instanceof PathGraphic ) {
 		
 		if(this.arrowHeadNumber!=null||this.arrowStyle!=null) {
 			ArrowGraphic a = new ArrowGraphic();
-			if(this.getArrowHeadNumber()!=null)	a.setNHeads(getArrowHeadNumber());
+			if(this.getArrowHeadNumber()!=null)	a.setNumerOfHeads(getArrowHeadNumber());
 			a.setPoints(new Point(2,2), new Point(18,18));
 			
 			a.getHead().setArrowHeadSize(10);
@@ -510,7 +510,7 @@ if(a instanceof PathGraphic ) {
 				if (setTargetHead==ArrowGraphic.SECOND_HEAD) {
 					a.setPoints(new Point(17,9), new Point(0,9));
 				}
-				a.setNHeads(1);
+				a.setNumerOfHeads(1);
 				if(!a.getHead().isLineHead()) 
 					a.getHead().setArrowHeadSize(1.5*a.getHead().getArrowHeadSize());
 				else {

@@ -27,7 +27,7 @@ import applicationAdapters.CanvasMouseEvent;
 /**A handle that displays an icon*/
 public class IconHandle extends SmartHandle {
 	
-	private static final int _DEFAULT_MAX_SIZE = 22;
+	public static final int _DEFAULT_MAX_SIZE = 22;
 	protected int subtract = 0;
 	
 	/**Some icons are drawn shifted slightly*/

@@ -631,7 +631,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		
 		//PNGDecodeParam param = new PNGDecodeParam();
 		
-		String dc0 = "data:image/png;base64,";
+		//String dc0 = "data:image/png;base64,";
 		byte[] imageData=decodeEmbedSVG(st);
 		
 		BufferedImage img =null;

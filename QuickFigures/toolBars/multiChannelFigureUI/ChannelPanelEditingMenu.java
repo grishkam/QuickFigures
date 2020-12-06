@@ -24,11 +24,16 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
+import advancedChannelUseGUI.PanelListDisplayGUI;
+import applicationAdapters.HasScaleInfo;
+import channelLabels.ChannelLabelManager;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
+import channelMerging.MultiChannelImage;
+import figureEditDialogs.PanelStackDisplayOptions;
 import genericMontageKit.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
@@ -38,50 +43,48 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import iconGraphicalObjects.ChannelUseIcon;
+import iconGraphicalObjects.ColorIcon;
 import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.IconUtil;
 import includedToolbars.StatusPanel;
 import logging.IssueLog;
-import objectDialogs.PanelStackDisplayOptions;
-import panelGUI.PanelListDisplayGUI;
+import menuUtil.SmartJMenu;
 import sUnsortedDialogs.ScaleSettingDialog;
 import specialMenus.ColorJMenu;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import undo.AbstractUndoableEdit2;
 import undo.ChannelDisplayUndo;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.EditListener;
-import applicationAdapters.HasScaleInfo;
-import channelLabels.ChannelLabelManager;
+import undo.PanelManagerUndo;
 
 
 /**Generates menu items and executes operations related to channel color, channel display range and other properties
   same set of options will appear in different contexts, as submenus withing different menus or outside of menus*/
-public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChangeListener, SwingDialogListener {
+public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChangeListener, StandardDialogListener {
 	
 	
-	public static int ALL_IMAGES_IN_FIGURE=1, CLICKED_IMAGES_ONLY=0;
+	public static int ALL_IMAGES_IN_CLICKED_FIGURE=1, CLICKED_IMAGES_ONLY=0;
 	/***/
 	FigureOrganizingLayerPane givenOrganizer=null;//the targetted figure organizing layer
 	protected MultichannelDisplayLayer presseddisplay;//the primary target of the actions and options
-	public ArrayList<MultiChannelImage> extraWrappers=null;//in some contexts, additional items that are not directly clicked on are included
-	public ArrayList<MultichannelDisplayLayer> extraDisplays=null;
+	private ArrayList<MultiChannelImage> extraWrappers=null;//in some contexts, additional items that are not directly clicked on are included
+	private ArrayList<MultichannelDisplayLayer> extraDisplays=null;
 	
 	boolean updateInsets=true;
 	protected PanelGraphicInsetDefiner pressedInset;
 	
 	protected PanelListElement stackSlicePressed;//the panel that is being targetted 
-	protected int chanNum=0;//selected channel number. in some contexts there will not be a selected channel
+	protected int chanNum=ChannelUseInstructions.NONE_SELECTED;
 	private ChannelEntry entryPress;
 	Color colorForColorModeIcon=Color.red;
 	
-	public int workOn=ALL_IMAGES_IN_FIGURE;
-	int swapMode=0;
-	
+	private int workOn=ALL_IMAGES_IN_CLICKED_FIGURE;
 	
 
 	static final String scalingCommand="Scale", colorModeCommand="ColorMode",chanUseCommand="Channel Use";
@@ -168,7 +171,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		addButtonToMenu(output, "Window/Level", WLCommand, IconUtil.createBrightnessIcon(0));
 		 addButtonToMenu(output, "Min/Max", minMaxCommand, IconUtil.createBrightnessIcon(0));
 		 addButtonToMenu(output, "Change Color Modes", colorModeCommand, new ColorModeIcon(colorForColorModeIcon));
-		 addButtonToMenu(output, "Channel Use Options", chanUseCommand);
+		 addButtonToMenu(output, "Channel Use Options", chanUseCommand, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder()));
 		
 			 try {
 				addColorMenus("Recolor", output);
@@ -179,7 +182,6 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		 
 		 
 		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand);
-	
 		 
 		 if(!limitVersionOfMenu) {
 		 JMenu chanLabelMenu=new JMenu("Channel Label");
@@ -259,7 +261,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			
 			if (pressedInset!=null) {new PanelStackDisplayOptions(presseddisplay,pressedInset.getPanelManager().getPanelList(),pressedInset.getPanelManager(), false).showDialog();;}
 			else
-			if (workOn==CLICKED_IMAGES_ONLY) {
+			if (getScope()==CLICKED_IMAGES_ONLY) {
 				if (pressedInset==null)
 				presseddisplay.showStackOptionsDialog();
 				
@@ -283,7 +285,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	
 		
 		if (arg0.getActionCommand().equals(orderCommand2)) {
-			workOn=ALL_IMAGES_IN_FIGURE;
+			setScope(ALL_IMAGES_IN_CLICKED_FIGURE);
 			new ChannelOrderAndLutMatching().matchChannels(this.getPressedMultichannel(), this.getAllWrappers(), 2);
 			for(int c=1; c<=this.getPressedMultichannel().nChannels(); c++) {
 				minMaxSet(c, getPressedMultichannel().getChannelMin(c),getPressedMultichannel().getChannelMax(c));
@@ -330,11 +332,11 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		
 		
 		
-		if (workOn==ALL_IMAGES_IN_FIGURE && pressedInset==null) for(ImageDisplayLayer d: getAllDisplays()) {
+		if (getScope()==ALL_IMAGES_IN_CLICKED_FIGURE && pressedInset==null) for(ImageDisplayLayer d: getAllDisplays()) {
 			undo.addEditToList(new ChannelUseChangeUndo(d));
 			d.getPanelList().getChannelUseInstructions().channelColorMode=value;
 		} 
-		if(extraDisplays!=null&&pressedInset==null)	for(ImageDisplayLayer d:this.extraDisplays) {
+		if(getExtraDisplays()!=null&&pressedInset==null)	for(ImageDisplayLayer d:this.getExtraDisplays()) {
 			undo.addEditToList(new ChannelUseChangeUndo(d));
 			d.getPanelList().getChannelUseInstructions().channelColorMode=value;//this part might be redudent
 		}
@@ -375,7 +377,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	
 	void updateAllAfterMenuAction() {
 		if(presseddisplay!=null)presseddisplay.updatePanels();//.getMultichanalWrapper().updateDisplay();
-		if (workOn==ALL_IMAGES_IN_FIGURE) {
+		if (getScope()==ALL_IMAGES_IN_CLICKED_FIGURE) {
 			for(ImageDisplayLayer d: getAllDisplays()) {
 				d.updatePanels();
 			}
@@ -459,7 +461,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	public class LocalScaleSetterDialog extends ScaleSettingDialog {
 
 		public LocalScaleSetterDialog(HasScaleInfo scaled,
-				SwingDialogListener listener) {
+				StandardDialogListener listener) {
 			super(scaled, listener);
 		}
 
@@ -504,11 +506,11 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		ArrayList<ImageDisplayLayer> output = new ArrayList<ImageDisplayLayer>();
 		if (presseddisplay==null) return output;
 		output.add(presseddisplay);
-		if (getCurrentOrganizer()!=null&&this.workOn==ALL_IMAGES_IN_FIGURE) {
+		if (getCurrentOrganizer()!=null&&this.getScope()==ALL_IMAGES_IN_CLICKED_FIGURE) {
 			output = new ArrayList<ImageDisplayLayer>();
 			output.addAll( getCurrentOrganizer().getMultiChannelDisplays());
 		}
-		if(this.extraDisplays!=null) output.addAll(extraDisplays);
+		if(this.getExtraDisplays()!=null) output.addAll(getExtraDisplays());
 		
 		return output;
 		
@@ -556,12 +558,12 @@ pane*/
 public ArrayList<MultiChannelImage> getAllWrappers() {
 	ArrayList<MultiChannelImage> output=new ArrayList<MultiChannelImage>();
 	output.addAll(presseddisplay.getAllSourceImages());
-	if (presseddisplay.getParentLayer() instanceof FigureOrganizingLayerPane &&this.workOn==ALL_IMAGES_IN_FIGURE) {
+	if (presseddisplay.getParentLayer() instanceof FigureOrganizingLayerPane &&this.getScope()==ALL_IMAGES_IN_CLICKED_FIGURE) {
 		FigureOrganizingLayerPane pane=(FigureOrganizingLayerPane) presseddisplay.getParentLayer();
 		return pane.getAllSourceImages();
 	}
-	if(extraWrappers!=null) {
-		output.addAll(extraWrappers);
+	if(getExtraWrappers()!=null) {
+		output.addAll(getExtraWrappers());
 	
 	}
 	return output;
@@ -691,15 +693,64 @@ public class ChanReColorer implements ColorInputListener {
 public void addChenEntryColorMenus(Container j, ArrayList<ChannelEntry> iFin) {
 	JMenu output = new JMenu("Recolor Channel");
 	for(int i=0; i<iFin.size(); i++) {
-		String nameRC = iFin.get(i).getRealChannelName();
-		if (nameRC==null||nameRC.trim().equals("")) nameRC="Chan "+iFin.get(i).getOriginalChannelIndex();
-		ChanReColorer colorer = new ChanReColorer(iFin.get(i).getOriginalChannelIndex());
-		if (iFin.size()>1)
-		colorer.addColorMenu(new JMenu(nameRC),output);
-		else colorer.addColorMenu(output,output);
+		ChannelEntry channelEntry = iFin.get(i);
+		String nameRC = channelEntry.getRealChannelName();
+		if (nameRC==null||nameRC.trim().equals("")) nameRC="Chan "+channelEntry.getOriginalChannelIndex();
+		ChanReColorer colorer = new ChanReColorer(channelEntry.getOriginalChannelIndex());
+		if (iFin.size()>1) {
+		SmartJMenu b = new SmartJMenu(nameRC);
+		b.setIcon(new ColorIcon(channelEntry.getColor()));
+		colorer.addColorMenu(b,output);
+		
+		}
+		else {
+			output.setIcon(new ColorIcon(channelEntry.getColor()));
+			colorer.addColorMenu(output,output);
+		}
 	}
 	
 	j.add(output);
+}
+
+public ArrayList<MultiChannelImage> getExtraWrappers() {
+	return extraWrappers;
+}
+
+public void setExtraWrappers(ArrayList<MultiChannelImage> extraWrappers) {
+	this.extraWrappers = extraWrappers;
+}
+
+public ArrayList<MultichannelDisplayLayer> getExtraDisplays() {
+	return extraDisplays;
+}
+
+public void setExtraDisplays(ArrayList<MultichannelDisplayLayer> extraDisplays) {
+	this.extraDisplays = extraDisplays;
+}
+
+public int getScope() {
+	return workOn;
+}
+
+public void setScope(int workOn) {
+	this.workOn = workOn;
+}
+
+
+/**
+ Changes whether the given channel is displayed in each of the merged images
+ * @return 
+ */
+public CombinedEdit setChannelExcludedFromMerge(int chaneIndex, boolean excluded) {
+	ArrayList<ImageDisplayLayer> disp1 = getAllDisplays();
+	CombinedEdit output=new CombinedEdit();
+	boolean warningHasNotBeenSeen=true;
+	for(ImageDisplayLayer d : disp1) {
+		output.addEditToList( PanelManagerUndo.createFor(d));
+		warningHasNotBeenSeen=d.getPanelManager().setMergeExcluded(chaneIndex, excluded, warningHasNotBeenSeen);
+	}
+	output.establishFinalState();
+	return output;
 }
 
 /**updates the display */
@@ -721,6 +772,76 @@ public class AfterUndoChannel extends AbstractUndoableEdit2 implements EditListe
 		updateAllDisplays();
 		
 	}
+	
+	
+}
+
+
+/**returns a */
+public ArrayList<ChannelMergeMenuItem> createChannelMergeMenu() {
+	ArrayList<ChannelMergeMenuItem> m =new  ArrayList<ChannelMergeMenuItem> ();
+	for(ChannelEntry e: presseddisplay.getMultiChannelImage().getChannelEntriesInOrder()) {
+		int ignoreAfterC = presseddisplay.getPanelList().getChannelUseInstructions().ignoreAfterChannel;
+		if (ignoreAfterC!=ChannelUseInstructions.NONE_SELECTED   &e.getOriginalChannelIndex()>ignoreAfterC) continue;
+		m.add(new ChannelMergeMenuItem(e));
+	}
+	return m;
+}
+
+/**Menu item that allows the used to select/deselct which channels belong in the merged image*/
+		public class ChannelMergeMenuItem extends BasicChannelEntryMenuItem {
+		
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+			private ChannelUseInstructions instructions;
+			
+			
+		public 	ChannelMergeMenuItem(ChannelEntry ce) {
+					super(ce);
+					instructions=presseddisplay.getPanelManager().getPanelList().getChannelUseInstructions();
+					
+					boolean strike=isExcludedChannel();
+					super.setSelected(!strike);
+					updateFont();
+					
+					this.addActionListener(new ActionListener() {
+				
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							pressAction();
+						}				
+					});
+					
+							
+							
+				}
+				
+				/**
+				 determines if the channel is excluded
+				 */
+				public boolean isExcludedChannel() {
+					return presseddisplay.getPanelManager().getPanelList().getChannelUseInstructions().noMergeChannels.contains(entry.getOriginalChannelIndex());
+				}
+				
+				
+				/**
+				 * 
+				 */
+				public void pressAction() {
+					int chaneIndex = entry.getOriginalChannelIndex();
+					boolean i = instructions.noMergeChannels.contains(chaneIndex);
+					CombinedEdit undo = setChannelExcludedFromMerge(chaneIndex, !i);
+					this.getUndoManager().addEdit(
+						undo	
+					);
+					
+					updateFont();
+				}
+
+
 }
 
 }

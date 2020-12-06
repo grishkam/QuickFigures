@@ -29,7 +29,6 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
-import gridLayout.GridLayoutEditListener;
 import gridLayout.MontageEditorDialogs;
 import logging.IssueLog;
 import objectDialogs.GraphicItemOptionsDialog;
@@ -47,16 +46,13 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 	
 	private BasicMontageLayout maintLayout;
 	private GenericMontageEditor edit=new GenericMontageEditor();
-	private GridLayoutEditListener listener;
+	
 	private UndoManager undoManager;
 
 	public MontageEditCommandMenu(BasicMontageLayout l) {
 		setMainLayout(l);
 	}
 	
-	public void addGridLayoutEventListener(GridLayoutEditListener listen) {
-		this.listener=listen;
-	}
 	/**
 	 * 
 	 */

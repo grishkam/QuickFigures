@@ -16,12 +16,23 @@
 package graphicalObjectHandles;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
+import javax.swing.Icon;
+
+import applicationAdapters.CanvasMouseEvent;
+import channelMerging.ChannelEntry;
+import genericMontageKit.PanelListElement;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ImagePanelGraphic;
+import iconGraphicalObjects.ChannelUseIcon;
 import journalCriteria.PPIOption;
+import menuUtil.SmartPopupJMenu;
+import multiChannelFigureUI.ChannelPanelEditingMenu;
+import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
 import multiChannelFigureUI.ImagePropertiesButton;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.DialogIcon;
@@ -32,11 +43,14 @@ import selectedItemMenus.SnappingSyncer;
 /**this handle list contains a set of handles that act as a minitoolbar for an image panel*/
 public class ImagePanelActionHandleList extends ActionButtonHandleList {
 
+	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private ImagePanelGraphic theImage;
+	private ChannelPanelEditingMenu context;
 	
 	public ImagePanelActionHandleList(ImagePanelGraphic t) {
 	
@@ -52,16 +66,23 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 	}
 
 	protected void createMultiChannelSourceImageOptions(ImagePanelGraphic t) {
+		context= new ChannelPanelEditingMenu(t);
+		
+		
 		ImagePropertiesButton winlevelButton = new  ImagePropertiesButton(t, WindowLevelDialog.ALL);
 		this.add(new GeneralActionHandle(winlevelButton, 550));
 	
 			 winlevelButton = new  ImagePropertiesButton(t, ImagePropertiesButton.COLOR_MODE);
 			this.add(new GeneralActionHandle(winlevelButton, 289));
+			this.add(new ChannelsIconHandle());
 		
 		 winlevelButton = new  ImagePropertiesButton(t, ImagePropertiesButton.CROP_IMAGE);
 		this.add(new GeneralActionHandle(winlevelButton, 584));
 	
 		
+		
+			
+			
 		 PPIOption ppiO = new  PPIOption();
 			this.add(new GeneralActionHandle(ppiO, 8325));
 	}
@@ -107,4 +128,75 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		private static final long serialVersionUID = 1L;}
 	
 	
+	/**
+	 A handle that allows to select which channels are to be included in the merged image via a popup
+	 */
+public class ChannelsIconHandle extends IconHandle {
+
+		/**
+		 */
+		public ChannelsIconHandle() {
+			super(new ChannelIcon2(null), new Point(0,0));
+			this.setHandleNumber(236651);
+		}
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) { 
+			SmartPopupJMenu p = getThePopup( canvasMouseEventWrapper);
+			 p.showForMouseEvent(canvasMouseEventWrapper);
+			canvasMouseEventWrapper.getAsDisplay().updateDisplay();
+		}
+		
+		/**Generates a popup menu for the mouse event*/
+		public SmartPopupJMenu getThePopup(CanvasMouseEvent canvasMouseEventWrapper) {
+			SmartPopupJMenu o = new SmartPopupJMenu();
+			ImagePropertiesButton ss = new ImagePropertiesButton(theImage, canvasMouseEventWrapper.getSelectionSystem());
+			ss.setSelection(canvasMouseEventWrapper.getSelectionSystem().getSelecteditems());
+			ChannelPanelEditingMenu local = ss.prepareContext();
+			local.setScope(ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
+			ArrayList<ChannelMergeMenuItem> items = local.createChannelMergeMenu();
+			for(ChannelMergeMenuItem i:items) {o.add(i);}
+			return o;
+		}
+		
+		/**if the image panel is not a merged image or if there is only one channel available
+		  then this handle is hidden. When the panels are in advanced channel use mode,
+		  there is not need for this item*/
+	public boolean isHidden() {
+		PanelListElement source = theImage.getSourcePanel();
+		if (source!=null && !source.isTheMerge()) return true;
+		if (context!=null &&context.getPressedMultichannel().nChannels()==1) return true;
+		if (context!=null &&context.getPrincipalDisplay().getPanelManager().isAdvancedChannelUse()) return true;
+		return false;
+	}
+
+}
+	
+	public class ChannelIcon2 extends ChannelUseIcon  implements Icon {
+
+		/**
+		 * @param c
+		 */
+		public ChannelIcon2(ArrayList<ChannelEntry> c) {
+			super(c);
+		}
+
+		@Override
+		public ArrayList<ChannelEntry> getAllColors() {
+			if (context==null) return super.getAllColors();
+			return context.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder();
+		}
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		
+
+	}
 }

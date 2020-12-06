@@ -13,22 +13,33 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package objectDialogs;
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 6, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
+package figureEditDialogs;
 
 import java.util.ArrayList;
 
 import appContext.ImageDPIHandler;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.MultiChannelImage;
 import genericMontageKit.PanelList;
+import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
+import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.ChannelEntryBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
+import ultilInputOutput.FileChoiceUtil;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -40,6 +51,7 @@ colored and combined in the channel panels and merge.*/
 public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 
 	/**
+	 * 
 	 * 
 	 */
 	
@@ -89,6 +101,14 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		return new RecropButton(this);
 	}
 	
+	public ArrayList<MultichannelDisplayLayer> getAllDisplays() {
+		ArrayList<MultichannelDisplayLayer> output=new ArrayList<MultichannelDisplayLayer>();
+		output.add(this.getMainDisplayItem());
+		output.addAll(getAdditionalDisplayLayers());
+		return output;
+		
+	}
+	
 	public void addAditionalDisplays(Iterable<?> items) {
 		for(Object i: items) {
 			if (i==principalMultiChannel) continue;
@@ -108,7 +128,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			undo=undo2;
 		}
 	}
-	/***/
+	
+	/**creates a stringt array with 'none' at the 0 index and channel names from afterwards*/
 	public String[] createListWithNoChannelOption() {
 		String[] old = MultichannelDisplayLayer.getChannelNames(principalMultiChannel.getMultiChannelImage());
 		String[] output=new String[old.length+1];
@@ -228,7 +249,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	 */
 	protected void resizeCanvasToFit(MultichannelDisplayLayer dis) {
 		if (getCurrentImageDisplay()!=null) {
-				
+			if (CanvasOptions.current.resizeCanvasAfterEdit)
 							new CanvasAutoResize().makeAllVisible(getCurrentImageDisplay());
 							FigureOrganizingLayerPane fo = FigureOrganizingLayerPane.findFigureOrganizer(dis);
 							if (fo!=null) {
@@ -239,8 +260,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	}
 
 	/**
-	 * @param dis
-	 * @param ins
+	Changes the settings of the given display layer and its channel use instructions
 	 */
 	protected void setPanelCreationOptionsToDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins) {
 		
@@ -323,5 +343,78 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		return displural;
 	}
 	
+	/**Before showing this dialog, checks whether any of the panel managers use advanced channel use
+	  If they do, asks user if user wants to proceed*/
+	public void showDialog() {
+		boolean b=hasAdvancedChannelUse(false, this.getAllDisplays());
+		if (b) 
+			{
+			boolean okToProceed = FileChoiceUtil.yesOrNo("This will turn off advanced channel use. Is that OK");
+			if ( okToProceed ) {hasAdvancedChannelUse(true, this.getAllDisplays());};
+			
+			if (!okToProceed)
+				return;
+			
+		}
+		
+		/**Adds tabs for the Z and T */
+		if (this.panelCreationIncluded) {
+			SubStackDialog sf = new SubStackDialog(this.getAllDisplays());
+			sf.setParentDialog(this);
+			if (!sf.isEmpty())
+			{
+				getOptionDisplayTabs().setTitleAt(0, "Channels");
+				this.addSubordinateDialog("Frames and Slides",sf);
+				
+				if (singleChannel()) {
+					this.getOptionDisplayTabs().setSelectedIndex(1);
+				}
+				
+				}
+		}
+		
+		
+		super.showDialog();
+	}
+
+	/**
+	 returns true if all the displays have only a single channel
+	 */
+	private boolean singleChannel() {
+		for(MultichannelDisplayLayer d:this.getAllDisplays()) {
+			if(d.getMultiChannelImage().nChannels()>1) return false;
+		}
+		return true;
+	}
+
+	/**
+	returns true if one of the panel mangers uses advanced channel use.
+	If the argument is set to true, switches all of them to normal channel use
+	 */
+	private static boolean hasAdvancedChannelUse(boolean turnOff, Iterable<MultichannelDisplayLayer> dis) {
+		for(MultichannelDisplayLayer d: dis) {
+			if (d.getPanelManager().isAdvancedChannelUse()) {
+				if (turnOff) d.getPanelManager().setChannelUseMode(PanelManager.NORMAL_CHANNEL_USE); else
+				return true;
+				}
+		}
+		return false;
+	}
+	
+	
+	public static PanelStackDisplayOptions recreateFigurePanels(FigureOrganizingLayerPane f, boolean cropToo) {
+		
+		ArrayList<ImageDisplayLayer> d1 = f.getMultiChannelDisplaysInLayoutOrder();
+		MultichannelDisplayLayer in = (MultichannelDisplayLayer)f.getPrincipalMultiChannel();
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getPanelList(),null, true);
+		
+		dialog.addAditionalDisplays(d1);
+		dialog.setCurrentImageDisplay(CurrentFigureSet. getCurrentActiveDisplayGroup());
+		dialog.setModal(false);
+		
+		dialog.showDialog();
+		f.fixLabelSpaces();
+		return dialog;
+	}
 	
 }

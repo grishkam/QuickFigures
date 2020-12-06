@@ -27,7 +27,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 
 public class EditLabels extends JMenuItem implements ActionListener {
 	
@@ -102,7 +102,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		 dd = new MultiTextGraphicSwingDialog(getLabels(modelTextItem), true);
 		 dd.setUnifyPosition(true);
-		dd.addDialogListener(new SwingDialogListener() {
+		dd.addDialogListener(new StandardDialogListener() {
 			
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

@@ -19,14 +19,15 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JMenu;
 
+import advancedChannelUseGUI.PanelListDisplayGUI;
 import fLexibleUIKit.ObjectAction;
+import figureEditDialogs.PanelStackDisplayOptions;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
-import objectDialogs.PanelStackDisplayOptions;
-import panelGUI.PanelListDisplayGUI;
+import iconGraphicalObjects.ChannelUseIcon;
 import standardDialog.StandardDialog;
 import undo.PanelManagerUndo;
 
@@ -170,11 +171,13 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 
 			@Override
 			public void onAction() {
+				
 				new PanelStackDisplayOptions(display, stack, panelManager,false).showDialog();;
 				
 			}
 			
 		};
+		out.setIcon(new ChannelUseIcon(display.getMultiChannelImage().getChannelEntriesInOrder()));
 		this.add(out);
 		return out;
 	}

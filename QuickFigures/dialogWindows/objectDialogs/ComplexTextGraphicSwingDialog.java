@@ -31,7 +31,7 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	ComplexTextGraphic ct=null;
+	protected ComplexTextGraphic ct=null;
 	
 	public ComplexTextGraphicSwingDialog(ComplexTextGraphic t) {
 		textItem=t;

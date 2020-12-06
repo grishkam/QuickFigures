@@ -785,8 +785,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		}
 		
 		for(Object g: layer.getObjectsAndSubLayers()) {
-			if (g instanceof  hasSupportingWindow) {
-				hasSupportingWindow m=(hasSupportingWindow) g;
+			if (g instanceof  HasSupportingWindow) {
+				HasSupportingWindow m=(HasSupportingWindow) g;
 				
 				m.closeWindow(save);
 			}

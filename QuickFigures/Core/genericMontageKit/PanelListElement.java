@@ -18,7 +18,6 @@ package genericMontageKit;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**Specifies the channel slice and frame that the panel is derived from*/
 		public Integer targetChannelNumber=0;	
 		public Integer targetFrameNumber=0;	
-		public Integer targetSlideNumber=0;	
+		public Integer targetSliceNumber=0;	
 		
 		/**The location of the panel in a grid layout. In both row-column and panel index formats*/
 		private GridIndex displayGridIndex=new GridIndex();
@@ -94,7 +93,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		public void giveSettingsTo(PanelListElement output) {
 			output.targetChannelNumber=this.targetChannelNumber;
 			output.targetFrameNumber=this.targetFrameNumber;
-			output.targetSlideNumber=this.targetSlideNumber;
+			output.targetSliceNumber=this.targetSliceNumber;
 			output.innitialStackIndex=this.innitialStackIndex;
 			output.originalImageID=this.originalImageID;
 			output.originalImageName	=this.originalImageName;
@@ -168,7 +167,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		/**Returns a string describing the channel framd and slice that this panel uses*/
 		public String getChanSF() {
-			return "Channel "+this.targetChannelNumber+" Slice "+this.targetSlideNumber +" Frame " +this.targetFrameNumber;
+			return "Channel "+this.targetChannelNumber+" Slice "+this.targetSliceNumber +" Frame " +this.targetFrameNumber;
 		}
 	
 		
@@ -182,13 +181,17 @@ import channelLabels.ChannelLabelTextGraphic;
 		public void removeChannelEntry(ChannelEntry ce) {
 			
 			try{
-				
 				this.hashChannel.remove(ce);
-				originalIndices.remove(ce.getOriginalStackIndex());//random index out of bounds exception here. not clear why
+				if (originalIndices==null) return;
+				int index = originalIndices.indexOf(ce.getOriginalStackIndex());
+				if (index>0)
+				index=originalIndices.remove(index);//random index out of bounds exception would occur if the .remove was done 
 				}
 			catch (Throwable t) {t.printStackTrace();}
 			
 		}
+		
+		
 		
 		/**Adds a channel entry to the list*/
 		public void addChannelDescriptor(String label, Color c, int number, int index) {
@@ -199,7 +202,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		public void setChannelFrameSlice(int channel,  int frame,int slice) {
 			targetChannelNumber=channel;
-			targetSlideNumber=slice;
+			targetSliceNumber=slice;
 			targetFrameNumber=frame;
 		}
 		
@@ -207,7 +210,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			targetChannelNumber=channel;
 		}
 		public void setSliceNumber(int slice) {
-			targetSlideNumber=slice;
+			targetSliceNumber=slice;
 		}
 	
 		public void setFrameNumber(int frame) {
@@ -215,64 +218,8 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 	
 		
-		/**resizes the image to fit within a particular size*/
-		@Deprecated
-		void fit(double width, double height) {
-			if (width==getWidth() || height==getHeight()) return;
-			double as1 = ((double) height)/((double) width);
-			double as2 = ((double) getHeight())/((double) getWidth());
-			if (as2>as1) { 
-				scale(height/this.getHeight());
-				} else {
-				scale(width/this.getWidth());
-			
-			}	
-		}
-		
-		/**Scales the contained image*/
-		@Deprecated
-		public void scale(double scale) {
-			if (scale==1) return;
-			resize(getWidth()*scale, getHeight()*scale);
-			if (getScaleInfo()!=null) this.getScaleInfo().scaleXY(scale);
-		}
-		
-		/**Scales the contained image. no longer used. obsolete*/
-		@Deprecated
-		public void scaleBilinear(double scale) {
-			if (scale==1) return;
-			this.getImageWrapped().scaleBilinear(scale);
-			//this.getImageWrapped().scaleBilinear(scale);//resizeBilinear(getWidth()*scale, getHeight()*scale);
-			if (getScaleInfo()!=null) this.getScaleInfo().scaleXY(scale);
-		}
-		
-		
-		
-		/**crops the contained image
-		 Does nothing if rectangle is null
-		 If there is an angle, rotates the rectangle about
-		 its center before crop. uses bilinear interpolation
-		 to form rotated image
-		 */
-		@Deprecated
-		public
-		void crop(Rectangle r, double angle) {
-			if (r==null||r.getHeight()==0||r.getWidth()==0) return;
-			if(angle%Math.PI!=0) {image.cropAtAngle(r, angle);} else
-			this.image.crop(r);	
-		}
-		
-		
-		@Deprecated
-		void resize(double width, double height) {
-			if(getImageWrapped()==null) return;
-			this.getImageWrapped().resize(width, height);
-		}
-		
-		/**void resizeBilinear(double width, double height) {
-			this.getImageWrapped().resizeBilinear(width, height);
-		} */
-		
+	
+	
 		public void setImageDisplayObject(Object ob) {
 			imageGObject=ob;
 		}
@@ -387,7 +334,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			originalImagePath=imp.getPath();
 		}
 		
-		class ChannelEntryList extends ArrayList<ChannelEntry> {
+		public class ChannelEntryList extends ArrayList<ChannelEntry> {
 
 			/**
 			 * 
@@ -402,6 +349,8 @@ import channelLabels.ChannelLabelTextGraphic;
 				return false;
 			}
 			
+			
+		
 			
 			
 			
@@ -505,7 +454,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		public boolean changeStackLocation(CSFLocation csf) {
 			if(csf.channel>-1) this.targetChannelNumber=csf.channel;
 			if(csf.frame>0) this.targetFrameNumber=csf.frame;
-			if(csf.slice>0) this.targetSlideNumber=csf.slice;
+			if(csf.slice>0) this.targetSliceNumber=csf.slice;
 			return false;
 		}
 		

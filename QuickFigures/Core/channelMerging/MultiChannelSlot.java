@@ -68,6 +68,7 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	 * creating a new multidimensional image.
 	 the working version is replaced by the new one while the unmodified original remains*/
 	public void applyCropAndScale(PreProcessInformation process) ;
+	
 	/**re-applies the processes (roate_crop+scale) to the original version of the multidimensional image
 	 * * creating a new multidimensional image.
 	 the working version is replaced by the new one while the unmodified original remains*/
@@ -79,8 +80,12 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	public ImageDisplayLayer getDisplayLayer();
 	
 	
+	/**creates a copy*/
 	public MultiChannelSlot copy();
 	
+	
+	/**returns a slot that uses the same source image as this one. The new slot can maintain a separate crop area*/
+	public MultiChannelSlot createPartner();
 	
 	 
 	 /**returns which location in the stack is selected by the user*/
@@ -90,7 +95,7 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	
 	 
 	 /**
-	 * @param cropped
+	 change the channel order, display range and colors of the argument to those of this slot
 	 */
 	public void matchOrderAndLuts(MultiChannelImage cropped);
 	

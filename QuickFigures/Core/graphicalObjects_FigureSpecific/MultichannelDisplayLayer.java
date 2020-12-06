@@ -30,6 +30,7 @@ import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import externalToolBar.IconSet;
 import fLexibleUIKit.MenuItemMethod;
+import figureEditDialogs.PanelStackDisplayOptions;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import genericMontageKit.PanelSetter;
@@ -49,7 +50,6 @@ import layersGUI.HasTreeLeafIcon;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
-import objectDialogs.PanelStackDisplayOptions;
 import popupMenusForComplexObjects.MultiChannelImageDisplayPopup;
 import undo.CombinedEdit;
 import undo.UndoAddManyItem;
@@ -594,6 +594,8 @@ transient static IconSet i;
 	public CombinedEdit eliminateChanLabels() {
 		return getChannelLabelManager().eliminateChanLabels();
 	}
+	
+	/**Creates channel labels for the layer, only creates if there are more than 1 channel present  */
 	public UndoAddManyItem generateChannelLabels() {
 		MultiChannelImage mw = getMultiChannelImage();
 		ArrayList<ChannelLabelTextGraphic> labels;

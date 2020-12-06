@@ -15,33 +15,18 @@
  *******************************************************************************/
 package utilityClasses1;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import logging.IssueLog;
+
 public class NumberUse {
 	
-	public static void main(String[] args) {
-		testCase(0);
-		testCase(0.25);
-		testCase(0.5);
-		testCase(0.75);
-		testCase(1);
-		testCase(1.25);
-		testCase(1.5);
-		testCase(2.5);
-	}
-	
-	public static void testCase(double input) {
-		java.awt.geom.Point2D.Double d=getPointFromRadDeg(new Point(0,0), 1, Math.PI*input);
-		
-	}
+
 	
 	/**when given one number and a list of numbers, returns the number from the list that is nearest to the input*/
 	public static double findNearest(Number n, double[] numbers) {
-		
-	
 		
 		int closest=0;
 		double diff=Double.MAX_VALUE;
@@ -83,15 +68,38 @@ public class NumberUse {
 		
 	}
 	
-	public static ArrayList<Integer> integerVectFromString(String st) {
+	/**turns an input string into an array*/
+	public static ArrayList<Integer> integersFromString(String st) {
 		ArrayList<Integer> output = new ArrayList<Integer>();
-		int[] i1 =intArrayFromString1(st);
-		for (int i: i1) {output.add(i); }
+		if (st.toLowerCase().contains("x")&& !st.contains(",")) { 
+			addNumbersToArray(output,intArrayFromFormulaX(st));
+		}
+		
+		if (st.contains("-") && !st.contains(",")) 
+			{addNumbersToArray(output, intArrayFromDashed(st));}
+		
+		String[] eachnumber=st.split(",");
+			for(String s2: eachnumber) {
+				addNumbersToArray(output, intArrayFromString1(s2));
+			}
+		
 		return output;
 }
+
+	/**
+	Adds the numbers in the array to the ArrayList
+	 */
+	private static void addNumbersToArray(ArrayList<Integer> output, int[] i1) {
+		for (int i: i1) {output.add(i); }
+	}
 	
 	public static  int[] intArrayFromString1(String st) {
-		if (st.contains("-") && !st.contains(",")) {return intArrayFromString2(st);}
+		if (st.toLowerCase().contains("x")) { 
+			return intArrayFromFormulaX(st);
+		}
+		
+		if (st.contains("-") && !st.contains(",")) {return intArrayFromDashed(st);}
+		
 		String[] eachnumber=st.split(",");
 		int[] output=new int[eachnumber.length];
 		for (int i=0; i<output.length; i++){
@@ -102,54 +110,14 @@ public class NumberUse {
 	}
 	
 	
-	public static  float[] floatArrayFromString1(String st) {
-		String[] eachnumber=st.split(",");
-		float[] output=new float[eachnumber.length];
-		for (int i=0; i<output.length; i++){
-			try {output[i]=Float.parseFloat(eachnumber[i].trim());} catch (NumberFormatException ne) {output[i]=0;}
-		}
-	
-		return output;
-	}
-	
-	public static String floatArrayToString(float[] ia) {
-		String output="";
-		if (ia.length==0) return "";
-		
-		int intcast=(int) (ia[0]*100);
-		float recast= ((float)(intcast))/100;
-		
-		output+=recast;
-		if (ia.length==1) return output;
-		for (int i=1; i<ia.length; i++) output+=","+ia[i];
-		return output;
-	}
-	
-	
-	public static String stringfromIntarray(int [] ia) {
-		String output="";
-		if (ia.length==0) return "";
-		output+=ia[0];
-		if (ia.length==1) return output;
-		for (int i=1; i<ia.length; i++) output+=","+ia[i];
-		return output;
-	}
-	
-	 public static String  stringfromIntarray(ArrayList<Integer> ia) {
-		String output="";
-		if (ia.size()==0) return "";
-		output+=ia.get(0);
-		if (ia.size()==1) return output;
-		for (int i=1; i<ia.size(); i++) output+=","+ia.get(i);
-		return output;
-	}
-	
-	public static int[] intArrayFromString2(String st) {
+	 /**when given either one number or numbers separated by a dash, return the int array with 
+	  * */
+	private static int[] intArrayFromDashed(String st) {
 		String[] eachnumber=st.split("-");
 		try {
-		int num1=Integer.parseInt(eachnumber[0]);
+		int num1=Integer.parseInt(eachnumber[0].trim());
 		if (eachnumber.length<2) return new int[] {num1};
-		int num2=Integer.parseInt(eachnumber[1]);
+		int num2=Integer.parseInt(eachnumber[1].trim());
 		if (num1>num2) {int t=num1; num1=num2; num2=t;}
 		int[] output=new int[num2-num1+1];
 		for (int i=num1; i<=num2; i++){
@@ -161,6 +129,34 @@ public class NumberUse {
 		} catch (NumberFormatException ne) {return new int[] {};}
 	}
 	
+	 /**when given either one number or numbers separated by an X, * or x,
+	  * uses ths formula a X b, to create an array of b length with every a number
+	  * */
+	private static int[] intArrayFromFormulaX(String st) {
+		
+		st=st.toLowerCase();
+		String regex = "x";
+		String[] eachnumber=st.split(regex);
+		
+		try {
+			
+		int num1=Integer.parseInt(eachnumber[0].trim());
+		if (eachnumber.length<2) return new int[] {num1};
+		int num2=Integer.parseInt(eachnumber[1].trim());
+		
+		
+		
+		int[] output=new int[num2];
+		for (int i=1; i<=num2; i++){
+			 {
+				output[i-1]=num1*i;
+			}
+		}
+		Arrays.sort(output);
+
+		return output;
+		} catch (Exception ne) {return new int[] {};}
+	}
 	
 
 	
@@ -180,14 +176,15 @@ public class NumberUse {
 	}
 	
 
-	
-	
+	/**returns the coordinates of the point of interest in radians and degrees assuming the given orgin point
+	  is the center of the coordinate spaced*/
 	public static double[] getPointAsRadianDegree(Point2D origin, Point2D pointOfInterest) {
 		return new double[] {
 				Math.abs(origin.distance(pointOfInterest)), distanceFromCenterOfRotationtoAngle(origin,pointOfInterest)
 				};
 	}
 	
+	/**returns true if all of the int vales are the same*/
 	public static boolean allSame(int[] numbers) {
 		for(int i=1; i<numbers.length; i++) {
 			if (numbers[i-1]!=numbers[i]) return false;
@@ -196,12 +193,12 @@ public class NumberUse {
 		return true;
 	}
 	
+	/**When given two points, returns the angle of the line between them.
+	  Simple trigonometry*/
 	public static double distanceFromCenterOfRotationtoAngle(Point2D pcent, Point2D p2) {
-		//Point2D pcent=getCenterOfRotation();
+
 		double xc2=p2.getX()-pcent.getX();
 		double yc2=p2.getY()-pcent.getY();
-		
-
 		
 		double angle=-Math.atan((yc2)/(xc2));
 		if (!Double.isNaN(angle)) {
@@ -212,15 +209,8 @@ public class NumberUse {
 		return 0;
 	}
 	
-	public static double getAngleBetweenPoints(double x, double y, double x2, double y2) {
-		double angle=Math.atan(((double)(y2-y))/(x2-x));
-		if (!java.lang.Double.isNaN(angle)) {
-			if (x2-x<0) angle+=Math.PI;
-			//this.setAngle(angle);
-			}
-		return angle;
-	}
-	
+	/**When given two points, returns the angle of the line between them. however, assumes that rotation does in 
+	 the opposite direction*/
 	public static double getAngleBetweenPoints(Point2D p1, Point2D p2) {
 		double angle=Math.atan(((double)(p2.getY()-p1.getY()))/(p2.getX()-p1.getX()));
 		if (!java.lang.Double.isNaN(angle)) {

@@ -13,13 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package objectDialogs;
+package figureEditDialogs;
 
 import java.util.ArrayList;
 
 import channelLabels.ChannelLabel;
 import channelLabels.ChannelLabelProperties;
 import graphicActionToolbar.CurrentFigureSet;
+import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StringInputPanel;
 

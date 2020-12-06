@@ -13,21 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package kaplanMeierPlots;
+package imageDisplayApp;
 
-import applicationAdapters.ToolbarTester;
-import dataSeries.KaplenMeierDataSeries;
-import imageDisplayApp.ImageWindowAndDisplaySet;
+import gridLayout.RetrievableOption;
 
-public class KaplanTester {
+public class CanvasOptions {
 	
-	public static void main(String[] a) {
-		 ToolbarTester.showExample(true);
-		KaplenMeierDataSeries data = KaplenMeierDataSeries.createExampleData();
-		KaplenMeierDataSeries data2 = KaplenMeierDataSeries.createExampleData2();
-		KM_Plot plot = new KM_Plot("Test plot", data, data2);
-		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
-		diw.getImageAsWrapper().getGraphicLayerSet().add(plot);
-	}
+	public static CanvasOptions current=new CanvasOptions();
+	
+	@RetrievableOption(key = "Resize After Layout Edit", label="Automatically Enlarge Canvas To Fit layouts?")
+	public boolean resizeCanvasAfterEdit=true;
 
 }

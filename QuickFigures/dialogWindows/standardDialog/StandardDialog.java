@@ -71,7 +71,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 
 	{this.setLayout(new GridBagLayout());}
-	protected ArrayList<SwingDialogListener> listen=new ArrayList<SwingDialogListener>();
+	protected ArrayList<StandardDialogListener> listen=new ArrayList<StandardDialogListener>();
 	
 	protected int gy=0;
 	protected int gx=0;
@@ -84,8 +84,15 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	protected ArrayList<JButton> additionButtons=new ArrayList<JButton>();
 	private boolean hideCancel=false;
+	private boolean hideOK=false;
 	
 	boolean useMainPanel=true;
+	private String mainPanelName="";
+	
+
+	
+	
+	
 	
 	public JTabbedPane removeOptionsTab() {
 		JTabbedPane output = this.getOptionDisplayTabs();
@@ -100,17 +107,19 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		this.add(getOptionDisplayTabs(), mainPanelgc);
 		
 	}
-	protected GriddedPanel mainPanel=SetupmainPanel();
 	
 	
 	public GriddedPanel SetupmainPanel() {
 		GriddedPanel mainPanel=new GriddedPanel();
 		mainPanel.setLayout(new GridBagLayout());
 	
-		getOptionDisplayTabs().addTab("", mainPanel);
-		
+		getOptionDisplayTabs().addTab(mainPanelName, mainPanel);
+	
 		return mainPanel;
 	}
+	protected GriddedPanel mainPanel=SetupmainPanel();
+	
+	
 	
 	public void addButton(JButton b) {
 		additionButtons.add(b);
@@ -166,6 +175,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public AbstractUndoableEdit2 undo;//this undo is added to an undo 
 
 	public UndoManager currentUndoManager=new CurrentFigureSet().getUndoManager();
+
+	private final ArrayList<StandardDialog> subordinateDialogs =new ArrayList<StandardDialog> ();
+	
 	
 	
 	public void add(String key, StringInputPanel st) {
@@ -371,19 +383,19 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		   c.gridx=1;
 		   c.gridy=this.gymax+2;
 		
-		 // c.gridwidth=gxmax+2;
 		
 		  c.anchor=GridBagConstraints.EAST;
 		cont.add(ButtonPanel, c);
 		return ButtonPanel;
 	  }
 	  
+	  /**Creates a panel with OK and Cancel buttons*/
 	  public JPanel generateButtonPanel() {
 		  JPanel ButtonPanel=new JPanel();
 		  ButtonPanel.setLayout(new FlowLayout());
 		  for(JButton b:this.additionButtons) {ButtonPanel.add(b);}
 		if (!hideCancel)  ButtonPanel.add(CancelBut);
-		  ButtonPanel.add(OKBut);
+		if (!hideOK)  ButtonPanel.add(OKBut);
 		 if (this.bonusButtons!=null) for(JButton b:this.bonusButtons) {ButtonPanel.add(b);}
 		  return ButtonPanel;
 	  }
@@ -430,13 +442,23 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 			resolveUndo();
 		}
 		if (arg0.getSource()==CancelBut) {
-			this.revertAll();
-			this.onCancel();
-			if(undo!=null) undo.undo();
+			afterCancelButtonPress();
 			
 			this.setVisible(false);
 		}
 		
+	}
+	
+	/**
+	 Called in the wake of a cancel button press
+	 */
+	private void afterCancelButtonPress() {
+		this.revertAll();
+		this.onCancel();
+		if(undo!=null) undo.undo();
+		for(StandardDialog t: this.subordinateDialogs) {
+			t.afterCancelButtonPress();
+		}
 	}
 	
 	protected void resolveUndo() {
@@ -475,13 +497,13 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		onListenerLotification(di);
 	}
 	public void onListenerLotification(DialogItemChangeEvent di) {
-		for(SwingDialogListener l:listen ) {if (l!=null)l.itemChange(di);}
+		for(StandardDialogListener l:listen ) {if (l!=null)l.itemChange(di);}
 	}
 	
-	public void addDialogListener(SwingDialogListener l) {
+	public void addDialogListener(StandardDialogListener l) {
 		listen.add(l);
 	}
-	public void removeDialogListener(SwingDialogListener l) {
+	public void removeDialogListener(StandardDialogListener l) {
 		listen.remove(l);
 	}
 
@@ -555,7 +577,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		this.add("pw",new NumberInputPanel("Pixel Width ", si.getPixelWidth(), 4));
 	
 		this.add("ph",new NumberInputPanel("Pixel Height ", si.getPixelHeight(), 4));
-	
+		
 		
 		this.getOptionDisplayTabs().addTab("Calibration", this.getMainPanel());
 		this.setMainPanel(omp);
@@ -595,7 +617,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 			if (p==null) p=dis.getMainPanel();
 			if (p==null) return;
 			dis.remove(p);
-			getOptionDisplayTabs().addTab(shortLabel, p);}
+			getOptionDisplayTabs().addTab(shortLabel, p);
+			}
+		subordinateDialogs.add(dis);
 	}
 
 	
@@ -737,6 +761,12 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	public void setHideCancel(boolean hideCancel) {
 		this.hideCancel = hideCancel;
+	}
+	
+
+	public void setHideOK(boolean b) {
+		this.hideOK=b;
+		
 	}
 	
 	public SmartPopupJMenu createInPopup() {

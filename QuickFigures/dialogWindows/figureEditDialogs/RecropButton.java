@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package objectDialogs;
+package figureEditDialogs;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import logging.IssueLog;
+import objectDialogs.CroppingDialog;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 

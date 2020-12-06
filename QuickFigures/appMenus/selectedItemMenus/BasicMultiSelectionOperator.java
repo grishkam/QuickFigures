@@ -53,7 +53,7 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	  have been replaced by their contents*/
 	public ArrayList<ZoomableGraphic> getAllArray() {
 		ArrayList<ZoomableGraphic> array2=new ArrayList<ZoomableGraphic>();
-		for(ZoomableGraphic a:array) {
+		if (array!=null)for(ZoomableGraphic a:array) {
 			if (a instanceof GraphicLayer) {
 				array2.addAll(((GraphicLayer)a).getAllGraphics());
 			} else array2.add(a);
@@ -115,6 +115,7 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	public boolean canUseObjects(LayerSelector graphicTreeUI) {return true;}
 	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {return true;}
 	
+	/**returns the font that will be used for the menu item*/
 	public Font getMenuItemFont() {return null;}
 	public Component getInputPanel() {return null;}
 	

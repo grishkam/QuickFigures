@@ -482,7 +482,7 @@ protected void drawCursor(Graphics2D g, CordinateConverter<?> cords, double x, d
 /**draws the cursor highlight*/
 protected void drawHighlight(Graphics2D g, CordinateConverter<?> cords, double x, double y, String startText, int position, int position2, Font f) {
 
-	    double sy = cords.transformY(y);
+	   
 	    if(startText.length()==0) return;
 	    Color oldColor = g.getColor();
 	  

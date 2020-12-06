@@ -69,6 +69,8 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 		addArrowHeadOptions(head, headCode);
 		
 		
+		
+		
 		cip = new ComboBoxPanel("Outline", new String[] {"Do Not Outline", "Draw Outline Arrow"/**, "Outline for heads"*/},arrow.drawnAsOutline());
 		this.add("outline", cip);
 		
@@ -95,7 +97,7 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 	protected void setItemsToDiaog() {
 		this.setNameFieldToDialog(s);
 		if ((dialogType!=LIMITED_DIALOG))this.setStrokedItemtoPanel(s);
-		arrow.setNHeads(this.getChoiceIndex("HeadNum"));
+		arrow.setNumerOfHeads(this.getChoiceIndex("HeadNum"));
 		
 		ArrowHead head = arrow.getHead();
 		String headCode="";

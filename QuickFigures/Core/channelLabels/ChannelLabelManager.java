@@ -24,6 +24,10 @@ import javax.swing.JTabbedPane;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import fLexibleUIKit.MenuItemMethod;
+import figureEditDialogs.ChannelLabelDialog;
+import figureEditDialogs.ChannelLabelPropertiesDialog;
+import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
+import figureEditDialogs.TextLineDialogForChenLabel;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
@@ -31,14 +35,10 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import objectDialogs.ChannelLabelDialog;
-import objectDialogs.ChannelLabelPropertiesDialog;
-import objectDialogs.ChannelSliceAndFrameSelectionDialog;
 import objectDialogs.MultiTextGraphicSwingDialog;
-import objectDialogs.TextLineDialogForChenLabel;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClassesForObjects.AttachmentPosition;
@@ -152,11 +152,27 @@ public class ChannelLabelManager implements Serializable {
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels2() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
 		for(PanelListElement slice: getPanelList().getPanels()) {
-			if(slice.targetFrameNumber>1) continue;
-			if(slice.targetSlideNumber>1) continue;
+			if(slice.targetFrameNumber>firstFrameIndex()) continue;
+			if(slice.targetSliceNumber>firstSliceIndex()) continue;
 			output.add(generateChanelLabel(slice));
 		}
 		return output;
+	}
+
+	/**
+	
+	 */
+	public int firstSliceIndex() {
+		int first = source.getPanelList().getChannelUseInstructions().getSliceUseInstructions().getFirstIndex();
+		return first;
+	}
+
+	/**
+	 
+	 */
+	public int firstFrameIndex() {
+		int first = source.getPanelList().getChannelUseInstructions().getFrameUseInstructions().getFirstIndex();
+		return first;
 	}
 	
 	/**displays a dialog for the addition of a single merge panel*/
@@ -219,7 +235,7 @@ public class ChannelLabelManager implements Serializable {
 
 	/**method calls a dialog that allows the user to change the text lines of the channel labels*/
 	public StandardDialog dialogForChannelEntries(ArrayList<ChannelEntry> entries) {
-		return TextLineDialogForChenLabel.showMultiTabDialogDialogss(entries, this.getChannelLabelProp(), new SwingDialogListener() {
+		return TextLineDialogForChenLabel.showMultiTabDialogDialogss(entries, this.getChannelLabelProp(), new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {
@@ -262,7 +278,7 @@ public class ChannelLabelManager implements Serializable {
 	 * @param graphicLayer 
 	 */
 	protected void addAutomaticLayoutSpaceUpdatesToDialog(MultiTextGraphicSwingDialog mt, GraphicLayer graphicLayer) {
-		SwingDialogListener listener1 = new SwingDialogListener() {
+		StandardDialogListener listener1 = new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

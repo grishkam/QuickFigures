@@ -28,6 +28,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.LayoutSpaces;
+import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import undo.UndoLayoutEdit;
 
@@ -109,7 +110,8 @@ public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 			edit.repackagePanels(layout.getPanelLayout(), r, c);
 		
 		
-		new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
 
 	}
 

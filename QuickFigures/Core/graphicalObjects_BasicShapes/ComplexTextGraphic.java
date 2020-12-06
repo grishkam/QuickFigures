@@ -559,12 +559,12 @@ public class ComplexTextGraphic extends TextGraphic {
 	}
 	
 	
-	/**Finds the segment that has the cursor*/
+	/**Finds the segment where the cursor should be located. t*/
 	private TextLineSegment findCursorSegment(int p, boolean highlight) {
 		ArrayList<TextLineSegment> segs = this.getParagraph().getAllSegments();
-		int count=0;
+		
 		for(int i=0; i<segs.size();i++) {
-			TextLineSegment previous=null;
+			
 			if(p<=segs.get(i).getText().length()) {
 				TextLineSegment current = segs.get(i);
 				
@@ -574,7 +574,7 @@ public class ComplexTextGraphic extends TextGraphic {
 				return current;
 				}
 			p-=segs.get(i).getText().length()+1;
-			count+=segs.get(i).getText().length()-1;
+			
 		}
 		
 		this.setCursorPosition(this.getMaxNeededCursor());//this.setCursorPosition(count+1);
@@ -583,8 +583,6 @@ public class ComplexTextGraphic extends TextGraphic {
 		if (segs.size()==0)return null;
 		
 		TextLineSegment outputcursorSegment = segs.get(segs.size()-1);
-		//if (!highlight)outputcursorSegment.setCursorPosition(outputcursorSegment.getText().length());
-		//else outputcursorSegment.setHighlightPosition(outputcursorSegment.getText().length());
 		
 		return outputcursorSegment;
 		}
@@ -593,7 +591,7 @@ public class ComplexTextGraphic extends TextGraphic {
 
 	@Override
 	public void handleKeyPressEvent(KeyEvent arg0) {
-		//int originalCursorPosition=this.getCursorPosition();
+		
 		if (handleNonLetterKey(arg0)) return;
 		if(modifierKey(arg0)) return;
 		arg0.consume();

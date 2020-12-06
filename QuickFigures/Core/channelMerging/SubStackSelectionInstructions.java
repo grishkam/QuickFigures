@@ -36,6 +36,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		setSelected(s);
 	}
 	
+	
 	/**creates an identical copy*/
 	public abstract SubStackSelectionInstructions duplicate() ;
 	
@@ -63,6 +64,15 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		return selected;
 	}
 	
+	/**returns the list of selected indices as a String*/
+	public String selectedString() {
+		String output = selectedIndices().toString();
+		if (this.selectsAll())return "";	
+		output=output.replace("[", "");
+		output=output.replace("]", "");
+		return output.trim();
+	}
+	
 	/**Sets the selected slide numbers, if null, will use all of them*/
 	public void setSelected(int... i) {
 		if(i==null||i.length==0) {
@@ -75,7 +85,57 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		for(int num:i) {selected.add(num);
 			}
 	}
+
+	/**Sets the selected slide numbers, if null, will use all of them*/
+	public void resetSelectedIndex(ArrayList<Integer>i) {
+		if(isInvalid(i)) {
+			method=ALL_;
+			selected=null;
+			return;
+		}
+		if (i.size()==1) method=SINGLE_; 
+			else method=MULTIPLE_SELECTED_;
+		selected=new ArrayList<Integer>();
+		for(int num:i) {
+			if (!selected.contains(num))
+				selected.add(num);
+			}
+		
+	}
+
+	/**
+	returns true if the given int array is not appropriate for identifying slices
+	 */
+	public boolean isInvalid(ArrayList<Integer> i) {
+		
+		if (i==null||i.size()==0) return true;
+		if (i.contains(0)) return true;
+		return false;
+	}
 	
+	/**
+	returns the index of the first slice or frame to be used
+	 */
+	public int getFirstIndex() {
+		if (this.selectsAll()) return 1;
+		if(this.selectsSingle()) return this.selectedIndices().get(0);
+		if (this.isInvalid(this.selectedIndices()))
+			return findLowest(selectedIndices());
+		return 1;
+	}
+	
+	/**
+	 returns the lowest number in the list
+	 */
+	private int findLowest(ArrayList<Integer> selectedIndices) {
+		int output=Integer.MAX_VALUE;
+		for(int i:selectedIndices) {
+			if (i<output) output=i;
+		}
+		return output;
+	}
+
+
 	/**modifies the argument from another set of instructions to match this one
 	  required in order for a second image added to a figure to be treated like the previous ones*/
 	public void giveBasicTraitsTo(SubStackSelectionInstructions output) {
@@ -101,6 +161,9 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		selected=new ArrayList<Integer>();
 		selected.addAll(selectedIndices);
 	}
+	
+	
+	
 	/**returns true if this targets a single index only*/
 	public boolean selectsSingle() {
 		return method==SINGLE_;
@@ -188,6 +251,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		public SliceUseInstructions(int... s) {
 			super(s);
 		}
+	
 		/**
 		 * 
 		 */
@@ -244,11 +308,36 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 			giveAllTraitsTo(output);
 			return output;
 		}
+
+		
+
+		
 		
 	}
 
 	/**Alters the given CSF location to match the target slice/frame, so that is shows the stack index targeted */
 	public abstract void setupLocation(CSFLocation d);
+
+
+	/**
+	 creates a new slice use instructions
+	 */
+	public static SliceUseInstructions createSliceUseInstructions(ArrayList<Integer> newSlices) {
+		SliceUseInstructions n = new  SliceUseInstructions(null);
+		n.resetSelectedIndex(newSlices);
+		return n;
+	}
+
+
+	/**
+	 * @param newFrame
+	 * @return
+	 */
+	public static FrameUseInstructions createFrameUseInstructions(ArrayList<Integer> newFrame) {
+		FrameUseInstructions n = new  FrameUseInstructions(null);
+		n.resetSelectedIndex(newFrame);
+		return n;
+	}
 
 	
 }

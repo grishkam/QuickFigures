@@ -19,7 +19,7 @@ import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import panelGUI.OrderSelectionJList;
+import advancedChannelUseGUI.OrderSelectionJList;
 import standardDialog.StandardDialog;
 
 public class CategoryOrderDialog extends StandardDialog{

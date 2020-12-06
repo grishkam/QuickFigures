@@ -24,7 +24,7 @@ import java.awt.font.TextAttribute;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import java.util.Map;
+import java.util.HashMap;
 
 import logging.IssueLog;
 
@@ -181,33 +181,33 @@ public class TextLineSegment implements  Serializable {
 		return output;
 	}
 
-	@SuppressWarnings("unchecked")
+	/**derives an underlined version of the font*/
 	public static Font deriveUnderlinedFont(Font f) {
-		Map attributes = f.getAttributes();
+		HashMap<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
 		attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		return f.deriveFont( attributes);
 	}
 	
-	@SuppressWarnings("unchecked")
+	/**derives a strike-through version of the font*/
 	public static Font deriveStrikedFont(Font f) {
-		Map attributes = f.getAttributes();
+		HashMap<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
 		attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		return f.deriveFont( attributes);
 	}
 	
-	/**Whether or not there is a unique font stype. 0 if not uniue.
-	 1 if plain, 2 bold 3 itallic, 4 both*/
+	/**Whether or not there is a unique font stype. 0 if not unique.
+	 1 if plain, 2 bold 3 italic, 4 both*/
 	private int getUniqueStyle() {
-		// TODO Auto-generated method stub
 		return uniqueStyle;
+	}
+	/**used to set if this item has a unique font style. 0 if none.
+	 * 1 if plain, 2 bold, 3 if both.*/
+	public void setUniqueStyle(int uniqueStyle) {
+		this.uniqueStyle = uniqueStyle;
 	}
 
 	public void setFont(Font font) {
-		
-		
 			this.setUniqueStyle(font.getStyle()+1);
-		
-		
 	}
 
 	
@@ -326,11 +326,7 @@ public class TextLineSegment implements  Serializable {
 		return  uniqueColor;
 	}
 
-	/**used to set if this item has a unique font style. 0 if none.
-	 * 1 if plain, 2 bold est.*/
-	public void setUniqueStyle(int uniqueStyle) {
-		this.uniqueStyle = uniqueStyle;
-	}
+	
 
 	public void setCursorPosition(int p) {
 		setCursorposition(p);

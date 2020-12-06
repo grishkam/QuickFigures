@@ -69,7 +69,6 @@ import standardDialog.SelectImageDialog;
 
 		private ImageDisplayLayer display;
 
-		private ImagePlusMultiChannelSlot parentSlot;
 
 		private CSFLocation displayLocation;
 
@@ -281,12 +280,14 @@ import standardDialog.SelectImageDialog;
 			public void imageUpdated(ImagePlus arg0) {
 				turnOff();
 				if (arg0==dis.sourceImagePlus)onImageUpdated();
-				if (arg0==dis.original.backupUncroppedImagePlus) {
+				
+				/**this next part would not be needed anymore as the user is no longer given the option */
+				//if (arg0==dis.original.backupUncroppedImagePlus) {
 					/**commented out this to see if it would fix a bug that cased infinite loop for small images*/
 					/**redoCropandScale(preprocessRecord);//this part might create an infinite loop
 					*/
-					onImageUpdated();
-				}
+					//onImageUpdated();}
+				
 				turnOn();
 			}
 			
@@ -547,7 +548,7 @@ import standardDialog.SelectImageDialog;
 		}
 
 		@Override
-		public MultiChannelSlot copy() {
+		public ImagePlusMultiChannelSlot copy() {
 			 ImagePlusMultiChannelSlot output = new ImagePlusMultiChannelSlot();
 			 output.path=path;
 			 output.setAndInnitializeImagePlus(getUncroppedOriginal());
@@ -610,6 +611,15 @@ import standardDialog.SelectImageDialog;
 				if(backupUncroppedImagePlus!=null)
 					this.serializedBackup=new ij.io.FileSaver(backupUncroppedImagePlus).serialize();
 			}
+		}
+
+
+		/**returns a slot that uses the same source image as this one*/
+		@Override
+		public MultiChannelSlot createPartner() {
+			ImagePlusMultiChannelSlot c = this.copy();
+			c.original=original;
+			return c;
 		}
 		
 		

@@ -37,6 +37,7 @@ import channelMerging.CSFLocation;
 import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;

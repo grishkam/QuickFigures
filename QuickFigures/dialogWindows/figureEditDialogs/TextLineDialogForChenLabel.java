@@ -13,14 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package objectDialogs;
+package figureEditDialogs;
 
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 
 import channelMerging.ChannelEntry;
+import objectDialogs.GraphicItemOptionsDialog;
+import objectDialogs.LinePane;
 import standardDialog.StandardDialog;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import utilityClassesForObjects.TextLine;
 import channelLabels.ChannelLabelProperties;
 
@@ -80,14 +82,14 @@ public class TextLineDialogForChenLabel extends GraphicItemOptionsDialog {
 		
 	}
 	
-	public static StandardDialog showMultiTabDialogDialogss(ArrayList<ChannelEntry> chans, ChannelLabelProperties prop, SwingDialogListener sdl) {
+	public static StandardDialog showMultiTabDialogDialogss(ArrayList<ChannelEntry> chans, ChannelLabelProperties prop, StandardDialogListener sdl) {
 		StandardDialog jf = createMultiLineDialog(chans, prop, sdl);
 		return jf;
 		
 	}
 
 	protected static StandardDialog createMultiLineDialog(ArrayList<ChannelEntry> chans, ChannelLabelProperties prop,
-			SwingDialogListener sdl) {
+			StandardDialogListener sdl) {
 		StandardDialog jf = new StandardDialog();
 		jf.getOptionDisplayTabs().remove(jf.getMainPanel());
 		for(ChannelEntry chan:chans) {

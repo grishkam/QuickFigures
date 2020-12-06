@@ -13,8 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package panelGUI;
+package advancedChannelUseGUI;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -34,11 +35,13 @@ import javax.swing.event.ListSelectionListener;
 
 import channelLabels.ChannelLabelManager;
 import channelMerging.ChannelEntry;
+import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
 import genericMontageKit.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
-import objectDialogs.ChannelSliceAndFrameSelectionDialog;
+import iconGraphicalObjects.ChannelUseIcon;
+import menuUtil.SmartPopupJMenu;
 import standardDialog.ChannelEntryBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
@@ -59,9 +62,12 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 	private ChannelListDisplay listChannels;
 	
 	JButton addPanelButton=new JButton("+"); 
-	JButton addChannelButton=new JButton("+");
+	
 	JButton removePanelButton=new JButton("-"); 
+	
+	JButton addChannelButton=new JButton("+");
 	JButton removeChannelButton=new JButton("-");
+	JButton chooseChannelButton=new JButton("Add/Remove Channels");{chooseChannelButton.setIcon(new ChannelUseIcon());}
 	
 	JButton alterZButton=new JButton("Z"); 
 	
@@ -72,6 +78,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 	
 		public PanelListDisplayGUI(PanelManager pm, ChannelLabelManager cm) {
 			this.cm=cm;
+			pm.setChannelUseMode(PanelManager.ADVANCED_CHANNEL_USE);
 			pm.getPanelList().setChannelUpdateMode(true);
 			GridBagLayout gb = new GridBagLayout();
 			GridBagConstraints gc=new GridBagConstraints();
@@ -99,7 +106,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			if ( multipleChannel)this.add(createScrollPane(listChannels, 250), gc);
 			gc.gridwidth=1;
 			
-			
+			/**
 			gc.gridx=6;
 			gc.gridy=2;
 			gc.anchor=GridBagConstraints.WEST;
@@ -108,7 +115,11 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			gc.gridy=2;
 			gc.anchor=GridBagConstraints.WEST;
 			if ( multipleChannel)this.add(removeChannelButton, gc);
-			
+			*/
+			gc.gridx=8;
+			gc.gridy=2;
+			gc.anchor=GridBagConstraints.WEST;
+			if ( multipleChannel)this.add(chooseChannelButton, gc);
 			
 			
 			gc.gridwidth=1;
@@ -137,6 +148,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			
 			addPanelButton.addActionListener(this);
 			addChannelButton.addActionListener(this);
+			chooseChannelButton.addActionListener(this);
 			alterZButton.addActionListener(this);
 			alterTButton.addActionListener(this);
 			removePanelButton.addActionListener(this);
@@ -234,25 +246,28 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 				  addPanel();
 			}
 			
+			if (arg0.getSource()==chooseChannelButton) {
+				this.displayMenu(arg0);
+			}
+			
 			if (arg0.getSource()==this.addChannelButton) {
 				
-				ArrayList<ChannelEntry> chans = pm.getMultiChannelWrapper().getChannelEntriesInOrder();
-			
-				StandardDialog sd = new StandardDialog();
-				sd.add("Channel ", new ComboBoxPanel("Chan: ", new ChannelEntryBox(pm.getMultiChannelWrapper().getChannelEntriesInOrder())));
-				sd.setModal(true);
-				sd.showDialog();
-				
-				int chan = sd.getChoiceIndex("Channel ");
-				
-				ChannelEntry newChan = chans .get(chan-1);
-				
-				listChannels.elements.add(newChan);
-				getPrimarySelectedPanel().addChannelEntry(newChan);
-				listChannels.updateDisplay();
-				listChannels.repaint();
-				
-				pack();
+				{
+						ArrayList<ChannelEntry> chans = pm.getMultiChannelWrapper().getChannelEntriesInOrder();
+					
+						StandardDialog sd = new StandardDialog();
+						sd.add("Channel ", new ComboBoxPanel("Chan: ", new ChannelEntryBox(pm.getMultiChannelWrapper().getChannelEntriesInOrder())));
+						sd.setModal(true);
+						sd.showDialog();
+						
+						int chan = sd.getChoiceIndex("Channel ");
+						
+						ChannelEntry newChan = chans .get(chan-1);
+						
+						listChannels.elements.add(newChan);
+						getPrimarySelectedPanel().addChannelEntry(newChan);
+			}
+				afterChannelAddSubtract();
 			}
 			
 			if (arg0.getSource()==this.removeChannelButton) {
@@ -271,6 +286,37 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			e2.establishFinalState();
 			new CurrentFigureSet().addUndo(e2);
 			
+		}
+
+		/**
+		 * 
+		 */
+		public void afterChannelAddSubtract() {
+			repaint();
+			listChannels.updateDisplay();
+			listChannels.repaint();
+			
+			pack();
+		}
+
+		/**
+		 * @param arg0
+		 */
+		public void displayMenu(ActionEvent arg0) {
+			SmartPopupJMenu ppopme = new SmartPopupJMenu();
+			ArrayList<AvailableChannelsItem> items = listChannels.makeentries(listChannels.getPanel());
+			for(AvailableChannelsItem item: items) {
+				ppopme.add(item);
+				item.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						
+					afterChannelAddSubtract();
+						
+					}});
+			}
+			ppopme.show((Component) arg0.getSource(), 0,0);
 		}
 
 		public void addPanel() {
@@ -293,7 +339,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			return listChannels.getPanel();
 		}
 		private void editPanelSliceAndFrame(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSlideNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.show2DimensionDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setFrameNumber(dia.getFrame());
@@ -310,7 +356,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			editPanelFrame(getPrimarySelectedPanel());
 		}
 		private void editPanelSlice(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSlideNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.showSliceDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setSliceNumber(dia.getSlice());
@@ -319,7 +365,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 			updatePanelDisplay();
 		}
 		private void editPanelFrame(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSlideNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.showFrameDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setFrameNumber(dia.getFrame());
@@ -343,4 +389,6 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 		Dimension  	getPreferredSize() {
 			return 	new Dimension(600,400) ;
 		}
+		
+		
 }

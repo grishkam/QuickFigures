@@ -131,7 +131,6 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	private int rowIndexDrag;
 	
 	private int clickCount;
-	private java.awt.event.MouseEvent lastME;
 	private transient CanvasMouseEvent lastDragMe;
 	private Cursor currentCursor;
 	
@@ -341,10 +340,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		
 		setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
 		setXY1(imp, event);
-		if (event instanceof java.awt.event.MouseEvent ) {
-			lastME = (java.awt.event.MouseEvent) event;
-		}
-		else lastME=eventClick.getAwtEvent();
+		
 		clickCount=event.clickCount();
 		
 	}

@@ -25,7 +25,7 @@ import graphicalObjects_BasicShapes.PathGraphic;
 import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import storedValueDialog.ReflectingFieldSettingDialog;
 
 public abstract class BasicShapeMaker  implements ShapeMaker, Serializable {
@@ -93,7 +93,7 @@ public abstract class BasicShapeMaker  implements ShapeMaker, Serializable {
 			fsd.showDialog();
 	}
 	
-	static class shapeUpdater implements SwingDialogListener {
+	static class shapeUpdater implements StandardDialogListener {
 
 		private ShapeMaker sm;
 		private PathGraphic pg;

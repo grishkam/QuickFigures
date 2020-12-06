@@ -100,7 +100,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public boolean realtimeshow=false;
 	protected boolean ignorehidden=true;
 	protected boolean bringSelectedToFront=false;
-	boolean resizeAfterMousDrags=false;
+	private boolean resizeAfterMousDrags=false;
 	
 	  int orix;
 	  int oriy;
@@ -1458,10 +1458,6 @@ public String getToolTip() {
 		return null;
 	}
 	
-	private void finishAttachedObject(LocatedObject2D roi, int x, int y) {
-		TakesLockedItems tk = findLockContainer(roi);
-		tk.getSmartHandleList().getLockedItemHandle(roi).handleDrag(getLastDragOrRelMouseEvent());
-	}
 	
 	/**Called when a tool is about to be switched away from (false) or switched to (true)*/
 	@Override

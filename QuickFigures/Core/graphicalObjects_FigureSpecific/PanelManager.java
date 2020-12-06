@@ -20,8 +20,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import channelMerging.CSFLocation;
+import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelImage;
 import fLexibleUIKit.MenuItemMethod;
+import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
@@ -31,7 +33,6 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import logging.IssueLog;
-import objectDialogs.ChannelSliceAndFrameSelectionDialog;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
@@ -42,6 +43,7 @@ import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.RectangleEdges;
 
 /**handles the adding and removing of channel display panels
+  to and from figures.
  */
 public class PanelManager implements Serializable, EditListener{
 
@@ -49,6 +51,10 @@ public class PanelManager implements Serializable, EditListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final int NORMAL_CHANNEL_USE=0, ADVANCED_CHANNEL_USE = 1;
+	
+	int channelUseMode=NORMAL_CHANNEL_USE;
+	
 	private GraphicLayer layer;
 	private PanelList stack;
 	private MultichannelDisplayLayer display;
@@ -89,7 +95,7 @@ public class PanelManager implements Serializable, EditListener{
 				if (display.getMultiChannelImage().nFrames()>1)
 					indexname+="t:"+panel.targetFrameNumber+" "; 
 				if (display.getMultiChannelImage().nSlices()>1)
-					indexname+="s:"+panel.targetSlideNumber;
+					indexname+="s:"+panel.targetSliceNumber;
 				
 				if (panel.isTheMerge()&&indexname.length()>1) {
 					name="Merge "+indexname;
@@ -537,6 +543,43 @@ public class PanelManager implements Serializable, EditListener{
 	public void afterEdit() {
 		this.updatePanels();
 		
+	}
+
+	/**
+	Sets whether the given channel is visible in the merged image.
+	If successful, returns true.
+	If the merged image is down to one channel, displays a message and returns false.
+	 */
+	public boolean setMergeExcluded(int originalChannelIndex, boolean b, boolean showWarning) {
+		ChannelUseInstructions ins = this.getPanelList().getChannelUseInstructions();
+		
+		/**counts the number of channel that are in the merge*/
+		int totalChannels=0;
+		for(int i=1; i<=getMultiChannelWrapper().nChannels(); i++) {
+			if (!ins.isMergeExcluded(i)) totalChannels++;
+		}
+		if (totalChannels==1 && b && !ins.isMergeExcluded(originalChannelIndex)) {
+			if (showWarning)IssueLog.showMessage("At least one channel must be present in the image");
+			return false;
+		}
+		
+		ins.setMergeExcluded(originalChannelIndex, b);
+		this.updatePanels();
+		this.updateDisplay();
+		return true;
+	}
+
+	/**
+	  Sets the channel use mode
+	 */
+	public void setChannelUseMode(int a) {
+		this.channelUseMode=a;
+		if (channelUseMode==ADVANCED_CHANNEL_USE) this.getPanelList().channelUpdateMode=true; else
+			getPanelList().channelUpdateMode=false;
+	}
+	
+	public boolean isAdvancedChannelUse() {
+		return channelUseMode==ADVANCED_CHANNEL_USE;
 	}
 	
 

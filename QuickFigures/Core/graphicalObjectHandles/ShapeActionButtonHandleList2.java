@@ -30,6 +30,7 @@ import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.ColorInputEvent;
 import standardDialog.ColorInputListener;
 
+/**A set of smart handles that acts as a mini toolbar for shapes*/
 public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 
 	private Color[] standardColor=new Color[] { Color.white, Color.black,Color.blue, Color.green, Color.red,  Color.cyan, Color.magenta, Color.yellow , new Color(0,0,0,0)};
@@ -139,8 +140,24 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		setLocation(location);
 	}
 
+
+
 	/**
-	 * 
+	 returns the stroke colors
+	 */
+	public EditManyShapes[] strokeColorActs() {
+		return EditManyShapes.getForColors(true, standardColor);
+	}
+
+	/**
+	returns the fill colors
+	 */
+	public EditManyShapes[] fillColorActs() {
+		return EditManyShapes.getForColors(false, standardColor);
+	}
+	
+	/**
+	 generates all of the handles for the arrows
 	 */
 	public void createArrowButtons() {
 		EditManyShapes itemForIcon;
@@ -150,33 +167,21 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		 createForArrowHeadType();
 	}
 
-	/**
-	 * @return
-	 */
-	public EditManyShapes[] strokeColorActs() {
-		return EditManyShapes.getForColors(true, standardColor);
-	}
-
-	/**
-	 * @return
-	 */
-	public EditManyShapes[] fillColorActs() {
-		return EditManyShapes.getForColors(false, standardColor);
-	}
-
-	/**creates the arrow head style action buttons*/
+	/**creates the arrow head style action handles*/
 	protected void createForArrowHeadType() {
 		EditManyShapes itemForIcon;
 		
 		 itemForIcon=new EditManyShapes((ArrowGraphic) shape, 1, 2, ArrowGraphic.SECOND_HEAD);
 		 itemForIcon.setModelItem(shape);
 		  GeneralArrowHeadButton h2 = new GeneralArrowHeadButton(itemForIcon, numHandleID,EditManyShapes.createForArrow2(ArrowGraphic.SECOND_HEAD),ArrowGraphic.SECOND_HEAD);
-		 super. addOperationList(itemForIcon, h2 );
+		h2.usePalete=true;
+		  super. addOperationList(itemForIcon, h2 );
 		
 		itemForIcon=new EditManyShapes((ArrowGraphic) shape, 1, 2, ArrowGraphic.FIRST_HEAD);
 		 itemForIcon.setModelItem(shape);
 		 
 		 GeneralActionListHandle h = new GeneralArrowHeadButton(itemForIcon, numHandleID,EditManyShapes.createForArrow2(ArrowGraphic.FIRST_HEAD),ArrowGraphic.FIRST_HEAD);
+		 h.usePalete=true;
 		 super. addOperationList(itemForIcon, h );
 		 
 		
@@ -193,10 +198,8 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		@Override
 		public boolean isHidden() {
 			if (shape instanceof ArrowGraphic) {
-				
 					ArrowGraphic arrowGraphic = (ArrowGraphic) shape;
 					if (hNumber==ArrowGraphic.SECOND_HEAD && arrowGraphic.headsAreSame()) { return true;}
-					
 					if (arrowGraphic.getNHeads()<hNumber) return true;
 				
 			}
@@ -205,11 +208,12 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		}
 		private static final long serialVersionUID = 1L;}
 
+	/**A handle that is only visible if the given shape has joints. Circles and strait lies should not
+	  have joints. */
 	class GeneralActionHandleJoiner extends GeneralActionListHandle {
 
 		public GeneralActionHandleJoiner(MultiSelectionOperator i, int num, MultiSelectionOperator[] items) {
 			super(i, num, items);
-			// TODO Auto-generated constructor stub
 		}
 		@Override
 		public boolean isHidden() {
@@ -218,7 +222,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		private static final long serialVersionUID = 1L;}
 
 
-
+	
 	public static EditManyShapes[] getDashes() {
 		return new EditManyShapes[] {
 				new EditManyShapes(true, new float[] {2,2}),

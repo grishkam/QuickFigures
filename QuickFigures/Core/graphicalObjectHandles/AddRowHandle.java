@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.LayoutSpaces;
+import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 
 /**A handle that adds rows/cols to the end of the layout or */
@@ -110,7 +111,8 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 			else layout.getEditor().addRows(layout.getPanelLayout(), 1);
 		}
 		
-		new CanvasAutoResize().performActionDisplayedImageWrapper(wrap);
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			new CanvasAutoResize().performActionDisplayedImageWrapper(wrap);
 
 		
 	}
@@ -125,7 +127,8 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		if (rowcol[0]+bm.nRows()>=1 &&type==ROWS)edit.addRows(bm, rowcol[0]);
 		if (rowcol[1]+bm.nColumns()>=1 &&type==COLS)edit.addCols(bm, rowcol[1]);
 		
-		new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
 
 	}
 	/**What to do when a handle is moved from point p1 to p2*/

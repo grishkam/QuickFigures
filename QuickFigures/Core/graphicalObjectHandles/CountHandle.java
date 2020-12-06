@@ -18,7 +18,6 @@ package graphicalObjectHandles;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.CountParameter;
@@ -139,8 +138,6 @@ public class CountHandle extends SmartHandle {
 			String valueAsString = count.getValueAsString();
 			if(form==COUNT_DOWN) {valueAsString=down;}
 			if(form==COUNT_UP) {valueAsString=up;}
-			Rectangle2D b = graphics.getFontMetrics().getStringBounds(valueAsString, graphics);
-			double end = b.getWidth();
 			
 			
 			graphics.drawString(valueAsString, x2, y2);

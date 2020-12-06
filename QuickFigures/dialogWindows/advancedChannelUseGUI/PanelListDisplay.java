@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package panelGUI;
+package advancedChannelUseGUI;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -138,6 +138,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		
 	}
 	
+	
 	public  ListCellRenderer	getCellRenderer() {return render;}
 	
 	
@@ -194,8 +195,8 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			
 				start=1;
 				;
-				String panelType="(c="+panel.targetChannelNumber+ ", f="+panel.targetFrameNumber+", z="+panel.targetSlideNumber+")";
-				if (merge) 	panelType="(Merge "+", f="+panel.targetFrameNumber+", z="+panel.targetSlideNumber+")";;
+				String panelType="(c="+panel.targetChannelNumber+ ", f="+panel.targetFrameNumber+", z="+panel.targetSliceNumber+")";
+				if (merge) 	panelType="(Merge "+", f="+panel.targetFrameNumber+", z="+panel.targetSliceNumber+")";;
 				names.add(panelType);
 			
 				lengths[0]=panelType.length();

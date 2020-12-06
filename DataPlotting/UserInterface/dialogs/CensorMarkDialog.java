@@ -26,7 +26,7 @@ import standardDialog.ColorComboboxPanel;
 import standardDialog.ComboBoxPanel;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.NumberInputPanel;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 
 public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 
@@ -99,7 +99,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 		if (rect.showsAsPoint()) {
 			points=true;
 			PointModel m = rect.getPointModel();
-			dia2 = new PointOptionsDialog(m, bareBones, new SwingDialogListener() {
+			dia2 = new PointOptionsDialog(m, bareBones, new StandardDialogListener() {
 
 				@Override
 				public void itemChange(DialogItemChangeEvent event) {

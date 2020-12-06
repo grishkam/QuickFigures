@@ -22,21 +22,21 @@ import java.util.ArrayList;
 
 import javax.swing.JPopupMenu;
 
+import advancedChannelUseGUI.PanelListDisplayGUI;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelImage;
+import figureEditDialogs.PanelStackDisplayOptions;
 import channelMerging.ImageDisplayLayer;
 import menuUtil.SmartPopupJMenu;
-import objectDialogs.PanelStackDisplayOptions;
-import panelGUI.PanelListDisplayGUI;
 import popupMenusForComplexObjects.ScaleFigureDialog;
 import sUnsortedDialogs.ScaleSettingDialog;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.SwingDialogListener;
+import standardDialog.StandardDialogListener;
 import undo.ChannelDisplayUndo;
 import applicationAdapters.HasScaleInfo;
 
-public class ChannelSwapperToolBit extends BasicImagePanelTool implements ActionListener, DisplayRangeChangeListener, SwingDialogListener {
+public class ChannelSwapperToolBit extends BasicImagePanelTool implements ActionListener, DisplayRangeChangeListener, StandardDialogListener {
 	
 	
 	int swapMode=0;
@@ -256,7 +256,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	public class localScaleSetter extends ScaleSettingDialog {
 
 		public localScaleSetter(HasScaleInfo scaled,
-				SwingDialogListener listener) {
+				StandardDialogListener listener) {
 			super(scaled, listener);
 		}
 

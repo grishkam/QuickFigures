@@ -27,6 +27,7 @@ import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import channelMerging.PreProcessInformation;
+import figureEditDialogs.PanelStackDisplayOptions;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
 import graphicalObjects.FigureDisplayContainer;
@@ -38,7 +39,6 @@ import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
-import objectDialogs.PanelStackDisplayOptions;
 import ultilInputOutput.FileChoiceUtil;
 
 /**This class is used to create a new figure from either an open image or a saved on
@@ -241,7 +241,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 				FigureOrganizingLayerPane f = createFigureFromOpenImage();
 				
 				if (aC.contains(slowFigure)) {
-					PanelStackDisplayOptions dialog = f. recreateFigurePanels(false);
+					PanelStackDisplayOptions dialog = PanelStackDisplayOptions.recreateFigurePanels(f,  false);
 					dialog.recropButton().showRecropDialog();
 				}
 			} 

@@ -54,6 +54,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
+import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import layersGUI.HasTreeLeafIcon;
 import menuUtil.PopupMenuSupplier;
@@ -1026,7 +1027,8 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 		private static final long serialVersionUID = 1L;
 		
 		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
-			new CanvasAutoResize().performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
+			if (CanvasOptions.current.resizeCanvasAfterEdit)
+				new CanvasAutoResize().performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
 		}
 	
 	

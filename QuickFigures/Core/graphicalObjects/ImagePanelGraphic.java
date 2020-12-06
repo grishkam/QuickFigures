@@ -884,11 +884,8 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 
 		public String getDimensionString() {
-			// TODO Auto-generated method stub
 			return  (getBounds().getWidth()+" X "+this.getBounds().getHeight()+" units");
 		}
-		
-		
 		
 		public String getInchDimensionString() {
 			return  (getBounds().getWidth()/getScreenPPI()+" X "+this.getBounds().getHeight()/getScreenPPI()+" inch");
@@ -935,12 +932,15 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return new Rectangle2D.Double(x, y, width, height);
 		}
 		
+		/**returns the location. the type of location may vary depending on the location type (@see RectangleEdgePosisions)*/
 		@Override
 		public Point2D getLocation() {
 			Point2D out = RectangleEdges.getLocation(getLocationType(), getBounds());
 			return new Point2D.Double(out.getX(), out.getY());
 		}
 
+		
+		/**sets the location. the type of location may vary depending on the location type (@see RectangleEdgePosisions)*/
 		@Override
 		public void setLocation(double x, double y) {
 			Rectangle2D.Double r=this.getBounds2D();

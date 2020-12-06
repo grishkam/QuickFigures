@@ -42,7 +42,9 @@ import graphicalObjects_FigureSpecific.LabelCreationOptions;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
+import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
+import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -153,15 +155,19 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 				
 					
 					 channelUseOptionsButton = new JMenuItem("Channel Use");
+					 channelUseOptionsButton.setIcon(new ChannelUseIcon());
+					
 					 chanMen.add(channelUseOptionsButton);
 						channelUseOptionsButton.addActionListener(this);
 					
 					 minMaxButton5 = new JMenuItem("Min/Max");
+					 minMaxButton5.setIcon(IconUtil.createBrightnessIcon());
 					 chanMen.add(minMaxButton5);
 						minMaxButton5.addActionListener(this);
 						
 						 windowLevelButton = new JMenuItem("Window/Level");
 						 chanMen.add(windowLevelButton);
+						 windowLevelButton.setIcon(IconUtil.createBrightnessIcon());
 							windowLevelButton.addActionListener(this);
 							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.logT(t);};
 							jj.add(chanMen);
