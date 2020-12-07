@@ -19,7 +19,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import logging.IssueLog;
 
 public class NumberUse {
 	
@@ -144,17 +143,27 @@ public class NumberUse {
 		if (eachnumber.length<2) return new int[] {num1};
 		int num2=Integer.parseInt(eachnumber[1].trim());
 		
-		
-		
-		int[] output=new int[num2];
-		for (int i=1; i<=num2; i++){
-			 {
-				output[i-1]=num1*i;
-			}
+		if (eachnumber.length<3) {
+				int[] output=new int[num2];
+				for (int i=1; i<=num2; i++){
+					 {
+						output[i-1]=num1*i;
+					}
+				}
+				Arrays.sort(output);
+				return output;
 		}
-		Arrays.sort(output);
-
-		return output;
+		int num3=Integer.parseInt(eachnumber[2].trim());
+				int[] output=new int[num3];
+				for (int i=0; i<num3; i++){
+					 {
+						output[i]=num1+num2*i;
+					}
+				}
+				Arrays.sort(output);
+				return output;
+		
+		
 		} catch (Exception ne) {return new int[] {};}
 	}
 	

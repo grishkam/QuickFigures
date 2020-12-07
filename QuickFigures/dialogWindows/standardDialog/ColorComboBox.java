@@ -38,7 +38,7 @@ public class ColorComboBox extends JComboBox<Color> implements ColorListChoice{
 	 * 
 	 * 
 	 */
-	//{this.getJ}
+	public boolean showsChooserDialog=true;
 	private Color selectedColor=Color.black;
 	private static final long serialVersionUID = 1L;
 	ArrayList<Color> colors=new ArrayList<Color> ();
@@ -68,6 +68,7 @@ public ColorComboBox(ArrayList<Color> c, int rainbowInd) {
 	}
 	
 	public void addUserColor(Component c) {
+		if (!showsChooserDialog) return;
 		Color nc = JColorChooser.showDialog(c, "Color", this.getSelectedColor());
 		if (nc==null) return;
 		

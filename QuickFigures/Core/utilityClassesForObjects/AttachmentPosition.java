@@ -386,7 +386,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	
 	/**Sets the location of the target object to the bounds given*/
 	public void snapObjectToRectangle(LocatedObject2D attachedObject, Rectangle2D parentBounds) {
-			if (this.isSupressed()) return;
+			if (this.isSupressed()||attachedObject==null||parentBounds==null) return;
 		Rectangle r1 = attachedObject.getBounds().getBounds();//a new rectangle for the current location
 		Rectangle r1ex=attachedObject.getExtendedBounds();
 		

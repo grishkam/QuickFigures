@@ -22,6 +22,7 @@ import ij.process.ColorProcessor;
 import ij.process.LUT;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ import applicationAdaptersForImageJ1.ProcessorWrapper;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelMerger;
 import genericMontageKit.PanelListElement;
+import graphicalObjects.ImagePanelGraphic;
 
 /**this class handles the merging of multiple channels into rgb images that 
  * are to be displayed in image panels*/
@@ -70,6 +72,10 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 	
 	/**makes an rgb image by merging the given channels*/
 	private PixelWrapper generateMergedRGB(ImagePlus imp, ArrayList<ChannelEntry> channels, int slice, int frame, int ChannelsInGrayScale) {
+		if (channels.size()==0) {
+			BufferedImage image = ImagePanelGraphic.createImageWithText("Empty", imp.getWidth(),  imp.getHeight(), imp.getWidth()/5);
+			return new ProcessorWrapper(new ColorProcessor(image));
+		} 
 		LUT[] luts =imp.getLuts();
 		
 		LUT[] newLut=new LUT[channels.size()];

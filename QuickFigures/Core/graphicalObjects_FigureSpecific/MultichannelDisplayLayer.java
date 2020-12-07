@@ -677,6 +677,7 @@ transient static IconSet i;
 	
 	/**sets the preprocess scale*/
 	public MultiChannelImage setPreprocessScale(double s) {
+		if (s<=0) return this.getMultiChannelImage();
 		if (s>10) s=10; //does not allow user to scale more than 10 fold. it is never really needed and may cause heap space issues
 		MultiChannelSlot slot2 = this.getSlot();
 		if (slot2==null) return this.getMultiChannelImage();

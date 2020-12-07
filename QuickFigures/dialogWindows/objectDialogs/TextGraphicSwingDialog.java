@@ -23,6 +23,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
+import imageDisplayApp.CanvasOptions;
 import standardDialog.AngleInputPanel;
 import standardDialog.BooleanInputPanel;
 import standardDialog.ColorComboboxPanel;
@@ -141,7 +142,8 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		textItem.setDimming(this.getChoiceIndex("dim"));
 		setBackgroundOptionsToDialog(textItem);
 		setObjectSnappingBehaviourToDialog(textItem);
-		CurrentFigureSet.canvasResize();
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			CurrentFigureSet.canvasResize();
 	}
 	
 	

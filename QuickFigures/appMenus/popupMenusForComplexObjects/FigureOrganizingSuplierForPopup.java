@@ -45,6 +45,7 @@ import gridLayout.BasicMontageLayout;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import imageDisplayApp.CanvasOptions;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -309,9 +310,10 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1)
 		);
 	}
-	output.addEditToList(
-			CurrentFigureSet.canvasResizeUndoable()
-			);
+	if (CanvasOptions.current.resizeCanvasAfterEdit)
+		output.addEditToList(
+				CurrentFigureSet.canvasResizeUndoable()
+				);
 	return output;
 }
 

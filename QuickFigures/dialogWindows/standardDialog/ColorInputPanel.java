@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package standardDialog;
 
 import java.awt.Color;
@@ -25,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**A panel for selecting a color*/
 public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, ColorListChoice, ChangeListener {
 
 	/**
@@ -78,7 +85,6 @@ public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, C
 
 	@Override
 	public Color getSelectedColor() {
-		// TODO Auto-generated method stub
 		return c.getSelectedColor();
 	}
 
@@ -115,6 +121,10 @@ public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, C
 	
 	void revert() {
 		c.setSelectedColor(originalStatus);
+	}
+	
+	public void setSimulateSelectColor(Color color)  {
+		notifyListeners(new ColorInputEvent(this, c, color));
 	}
 
 	@Override

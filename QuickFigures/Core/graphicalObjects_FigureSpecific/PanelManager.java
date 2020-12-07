@@ -176,7 +176,7 @@ public class PanelManager implements Serializable, EditListener{
 		for(ImagePanelGraphic g:arr) {
 			output.addEditToList(
 			Edit.removeItem(layer,g));
-			if(g.getScaleBar()!=null) {
+			if(g!=null&&g.getScaleBar()!=null) {
 				output.addEditToList(
 						Edit.removeItem(g.getScaleBar().getParentLayer(),g.getScaleBar()));
 			}

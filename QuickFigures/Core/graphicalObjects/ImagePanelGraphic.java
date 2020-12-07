@@ -334,7 +334,6 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	private void updateScaleBar(BarGraphic scaleBar) {
 		if (scaleBar!=null) {
 			scaleBar.setScaleInfo(getDisplayScaleInfo());
-			this.snapLockedItems();
 			scaleBar.getAttachmentPosition().snapLocatedObjects(getScaleBar(), this);
 			scaleBar.setUpBarRects();
 		}
@@ -691,8 +690,9 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		
 		
 		public void snapLockedItems() {
-			for(LocatedObject2D o: getLockedItems()) {
-				snapLockedItem(o);
+			LockedItemList items = getLockedItems();
+			for(int i=0; i<items.size(); i++) {
+				snapLockedItem(items.get(i));
 			}
 		}
 		
@@ -783,11 +783,22 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		
 		/**Creates a buffered image with the words "File not found" printeds*/
 		 protected BufferedImage createFileNotFountImage(double width, double height) {
-			 BufferedImage img=new BufferedImage((int)(width/getScale()), (int)(height/getScale()),  BufferedImage.TYPE_INT_RGB);
+			 String text = "Image File"+'\n'+" Not Found";
+			 int w = (int)(width/getScale());
+			int h = (int)(height/getScale());
+			return createImageWithText(text, w, h, 10);
+		}
+
+		/**
+		An image with a message to the user
+		 */
+		public static BufferedImage createImageWithText(String text, int w, int h, int fontsize) {
+			BufferedImage img=new BufferedImage(w, h,  BufferedImage.TYPE_INT_RGB);
 			Graphics g = img.getGraphics();
-			g.setFont(new Font("Arial", Font.BOLD, 10));
+			g.setFont(new Font("Arial", Font.BOLD, fontsize));
 			g.setColor(Color.RED);
-			g.drawString("Image File"+'\n'+" Not Found", 0, 20);
+			
+			g.drawString(text, 0, (int) (1.5*fontsize));
 			return img;
 		}
 		 

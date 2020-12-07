@@ -88,6 +88,7 @@ public class IssueLog {
 	
 	
 	static double lastTime=-1;
+	public static int countExceptions=0;
 	
 	public static void logTimeStart(String st ) {
 		log("Starteed"+st);
@@ -131,6 +132,7 @@ public class IssueLog {
 	
 	
 	public static void logT(Throwable... ees){
+		countExceptions++;
 		String show="";
 		for(Throwable ee: ees) {
 		for (Object e: ee.getStackTrace()) show+='\n'+e.toString();

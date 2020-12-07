@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import channelLabels.ChannelLabel;
 import channelLabels.ChannelLabelProperties;
 import graphicActionToolbar.CurrentFigureSet;
+import imageDisplayApp.CanvasOptions;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.ComboBoxPanel;
 import standardDialog.StringInputPanel;
@@ -70,6 +71,7 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 		if (labels!=null) {
 			for(ChannelLabel l:labels) {l.setParaGraphToChannels();}
 		}
-		CurrentFigureSet.canvasResize();
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			CurrentFigureSet.canvasResize();
 	}
 }

@@ -23,6 +23,7 @@ import channelLabels.ChannelLabelTextGraphic;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import imageDisplayApp.CanvasOptions;
 import logging.IssueLog;
 import objectDialogs.ComplexTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
@@ -76,7 +77,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 					if (z instanceof ChannelLabelTextGraphic) ((ChannelLabelTextGraphic) z).setParaGraphToChannels();
 				}
 				onListenerLotification(event);
-				CurrentFigureSet.canvasResize();
+				if (CanvasOptions.current.resizeCanvasAfterEdit)CurrentFigureSet.canvasResize();
 			}};
 	}
 	

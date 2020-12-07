@@ -95,7 +95,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	public static final int[] arrowStyleList=new int[] {
 			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL};
 	
-	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail", "Open Outline Heads", "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Triangle Cap", "Tail", "Narrow Tail","Semi Circle", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
 	/**some options not available to the user dialog but available to programmer*/
 	public static final int 
 	 HALF_BAR_HEAD = 400,  HALF_BAR_HEAD2 = 500 ,BAR_HEAD = 444,
@@ -490,11 +490,13 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	public double getAngle() {
 		return 0;
 	}
+	
 
-	@Override
-	public void showOptionsDialog() {
-		ArrowSwingDialog ad = new ArrowSwingDialog(this, hideNormalHandles?1:0);
-		ad.showDialog();
+	/**
+	 * @return
+	 */
+	public ArrowSwingDialog getOptionsDialog() {
+		return new ArrowSwingDialog(this, hideNormalHandles?1:0);
 	}
 
 	@Override
@@ -547,6 +549,10 @@ private Line2D getDrawnLineBetweenHeads() {
 	public void setStrokeColor(Color c) {
 		super.setStrokeColor(c);
 		this.setFillColor(c);
+		if(this.outlineDraw()) {
+			this.getBackGroundShape().setStrokeColor(c);
+			this.getBackGroundShape().setFilled(true);
+		}
 	}
 	
 	boolean outlineDraw() {
@@ -1200,6 +1206,7 @@ public class ArrowHead implements Serializable {
 		return arrowHeadSize;
 	}
 
+	/**sets the size of the arrow head. must be a positive number*/
 	public void setArrowHeadSize(double d) {
 		this.arrowHeadSize = d;
 	}

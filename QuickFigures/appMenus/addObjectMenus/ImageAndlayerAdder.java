@@ -28,7 +28,6 @@ import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
 /**this class adds a figure containing a multidimensional images to a layer */
@@ -165,9 +164,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		
 		int n = display.getPanelList().getChannelUseInstructions().estimageNPanels(display.getMultiChannelImage());
 		if (n>MAX_RECCOMENDED_SIZE_LIMIT) {
-			//MultiChannelImage chans = display.getMultiChannelImage();
-			IssueLog.log("large image");
-			new SubStackDialog(display, true).showDialog();
+			new SubStackDialog(display, true, n+" would be a lot of panels " +"please select substack").showDialog();
 		}
 		
 		return addFigureOrganizerFor(targetLayer, display);

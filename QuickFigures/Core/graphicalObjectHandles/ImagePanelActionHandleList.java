@@ -104,7 +104,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		super.draw(g, cords);
 	}
 	
-	
+	/**a handle that generates a multi image dialog */
 	public class ImageSyncHandle extends GeneralActionHandle {
 
 		public  ImageSyncHandle( int num) {

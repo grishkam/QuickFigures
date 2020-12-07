@@ -46,16 +46,15 @@ public class SubStackDialog extends StandardDialog {
 	
 	/**
 	 constructor that creates a dialog for many display layers
+	 * @param string 
 	 */
-	public SubStackDialog(ImageDisplayLayer item, boolean m) {
+	public SubStackDialog(ImageDisplayLayer item, boolean m, String string) {
 		ArrayList<ImageDisplayLayer> displayLayers=new ArrayList<ImageDisplayLayer>();
 		displayLayers.add(item);
-		
+		this.setTitle(string);
 		if (m) {
-			this.showChannelC=true;
 			this.setWindowCentered(m);
 			this.setModal(m);
-			
 		}
 		
 		
@@ -108,6 +107,10 @@ public class SubStackDialog extends StandardDialog {
 		private boolean frames;
 		private boolean slices;
 		private ChannelUseInstructions instructions;
+		
+		/**Panels to display the result of the users input formula*/
+		private InfoDisplayPanel framesWanted;
+		private InfoDisplayPanel slicesWanted;
 
 		public SingleInstructionDialog(ImageDisplayLayer display1) {
 			this.display1=display1;
@@ -120,13 +123,17 @@ public class SubStackDialog extends StandardDialog {
 				PanelStackDisplayOptions.addMergeHandlingToDialog(this, instructions);
 			}
 			if (slices) {
-				StringInputPanel sliceInput = new StringInputPanel("Slices Chosen", instructions.getSliceUseInstructions().selectedString());
+				StringInputPanel sliceInput = new StringInputPanel("Slices", instructions.getSliceUseInstructions().selectedString());
 				this.add("Slice", sliceInput);
+				slicesWanted= new InfoDisplayPanel("You want?", instructions.getSliceUseInstructions().selectedString());
+				this.add("UserS", slicesWanted);
 			}
 			
 			if (frames) {
-				StringInputPanel frameInput = new StringInputPanel("Frames Chosen", instructions.getFrameUseInstructions().selectedString());
+				StringInputPanel frameInput = new StringInputPanel("Frames", instructions.getFrameUseInstructions().selectedString());
 				this.add("Frame", frameInput);
+				framesWanted = new InfoDisplayPanel("You want?", instructions.getSliceUseInstructions().selectedString());
+				this.add("UserF", framesWanted);
 			}
 			
 			
@@ -141,9 +148,11 @@ public class SubStackDialog extends StandardDialog {
 		public void addNumerRangeExamples() {
 			InfoDisplayPanel tip = new InfoDisplayPanel("Choose which slices to use" , "in field above");
 			InfoDisplayPanel examples = new InfoDisplayPanel("For Example" , "  '1, 4-6'= [1,4,5,6] and '2x4'= [2, 4, 6, 8]");
+			InfoDisplayPanel examples2 = new InfoDisplayPanel("For Example" , "  '1 x 3 x 3'= [1,4,7] and '10 x 2 x 3'= [10,12,14]");
 			
 			this.add("t1", tip);
 			this.add("t2", examples);
+			this.add("t2", examples2);
 		}
 		
 		protected void setItemsToDiaog() {
@@ -151,15 +160,16 @@ public class SubStackDialog extends StandardDialog {
 				String a = this.getString("Slice");
 				ArrayList<Integer> newSlices = NumberUse.integersFromString(a);
 				SliceUseInstructions n = SubStackSelectionInstructions.createSliceUseInstructions(newSlices );
+				slicesWanted.setContentText(n.selectedString());
 				if (0<n.estimateNUsed(display1.getMultiChannelImage()))
-					instructions.getSliceUseInstructions().resetSelectedIndex(newSlices);
-				
-				
+					instructions.getSliceUseInstructions().resetSelectedIndex(newSlices);	
 			}
+			
 			if (frames) {
 				String b = this.getString("Frame");
 				ArrayList<Integer> newFrame = NumberUse.integersFromString(b);
 				FrameUseInstructions n = SubStackSelectionInstructions.createFrameUseInstructions(newFrame);
+				framesWanted.setContentText(n.selectedString());
 				if (0<n.estimateNUsed(display1.getMultiChannelImage()))
 					instructions.getFrameUseInstructions().resetSelectedIndex(newFrame);
 			}

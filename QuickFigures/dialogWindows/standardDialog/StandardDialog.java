@@ -160,7 +160,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return OKBut;
 	}
 	
-	protected HashMap<String, StringInputPanel> Strings=new HashMap<String, StringInputPanel>();
+	protected HashMap<String, StringInputPanel> allStrings=new HashMap<String, StringInputPanel>();
 	protected HashMap<String, NumberInputPanel> Numbers=new HashMap<String, NumberInputPanel>();
 	protected HashMap<String, NumberArrayInputPanel> NumberSets=new HashMap<String, NumberArrayInputPanel>();
 	protected HashMap<String, ComboBoxPanel> choices=new HashMap<String, ComboBoxPanel>();
@@ -170,6 +170,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	protected HashMap<String, ColorListChoice> colors=new HashMap<String, ColorListChoice>();
 	protected HashMap<String, BooleanArrayInputPanel> boolSets=new HashMap<String, BooleanArrayInputPanel>();
 
+
+	
 	private ArrayList<ChannelEntry> channelEnt;
 
 	private boolean wasOKed;
@@ -190,20 +192,20 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	
 	public void add(String key, StringInputPanel st) {
-		Strings.put(key, st);
+		allStrings.put(key, st);
 		st.addStringInputListener(this);
 		st.setKey(key);
 		place(st);
 	}
 	
 	public String getString(String key) {
-		StringInputPanel ob = Strings.get(key);
+		StringInputPanel ob = allStrings.get(key);
 		if(ob==null) return "";
 		return ob.getTextFromField();
 	}
 	
 	protected boolean setStringField(String key, String content) {
-		StringInputPanel ob = Strings.get(key);
+		StringInputPanel ob = allStrings.get(key);
 		if(ob==null) return false;
 		ob.setContentText(content);;
 		return true;
@@ -622,14 +624,71 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		if (dis.getOptionDisplayTabs().getTabCount()>1) {
 			getOptionDisplayTabs().addTab(shortLabel, dis.removeOptionsTab());
 		} else {
-			Component p=dis.getOptionDisplayTabs().getTabComponentAt(0);//.getMainPanel();
-			if (p==null) p=dis.getMainPanel();
-			if (p==null) return;
-			dis.remove(p);
+			Component p = extractGridPanelFrom(dis);
+			if(p==null) return;
 			getOptionDisplayTabs().addTab(shortLabel, p);
 			}
 		subordinateDialogs.add(dis);
 	}
+	/**
+	returns the first tab component of the item
+	 */
+	protected Component extractGridPanelFrom(StandardDialog dis) {
+		Component p=dis.getOptionDisplayTabs().getTabComponentAt(0);//.getMainPanel();
+		if (p==null) p=dis.getMainPanel();
+		if (p==null) return null;
+		dis.remove(p);
+		return p;
+	}
+	
+	public void addSubordinateDialogsAsTabs(String shortLabel, StandardDialog... dis) {
+		SubDialogSection ss = new SubDialogSection(shortLabel, dis);
+		gy++;
+		ss.placeItems(this.getMainPanel(), gx+1,gy);
+		gy++;
+		for(StandardDialog d: dis)this.subordinateDialogs.add(d);
+		gy++;
+	}
+	
+	class SubDialogSection implements OnGridLayout {
+
+		private JTabbedPane tabs;
+
+		/**
+		 * @param shortLabel
+		 * @param dis
+		 */
+		public SubDialogSection(String shortLabel, StandardDialog[] dis) {
+			tabs=new JTabbedPane();
+			for(StandardDialog d: dis)tabs.addTab(d.getName(), extractGridPanelFrom(d));
+		}
+
+		@Override
+		public void placeItems(Container jp, int x0, int y0) {
+			GridBagConstraints gc = new GridBagConstraints();
+			
+			gc.insets=firstInsets;
+			gc.gridx=x0;
+			gc.gridy=y0;
+			gc.gridwidth=this.gridWidth();
+			gc.gridheight=this.gridHeight();
+			gc.anchor = GridBagConstraints.WEST;
+			jp.add(tabs, gc);;
+			
+			
+		}
+
+		@Override
+		public int gridHeight() {
+			// TODO Auto-generated method stub
+			return 1;
+		}
+
+		@Override
+		public int gridWidth() {
+			
+			return 4;
+		}}
 
 	
 	public JButton alternateCloseButton() {
@@ -683,7 +742,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	/**restores all fields and input panels to original values*/
 	public void revertAll() {
-		for(StringInputPanel i:Strings.values()) {
+		for(StandardDialog dia: this.subordinateDialogs) {dia.revertAll();}
+		for(StringInputPanel i:allStrings.values()) {
 			i.revert();
 		}
 		for(NumberInputPanel i:Numbers.values()) {
@@ -723,7 +783,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	public boolean hasContent() {
-		if (Strings.keySet().size()>0) return true;
+		if (allStrings.keySet().size()>0) return true;
 		if (Numbers.keySet().size()>0) return true;
 		if (NumberSets.keySet().size()>0) return true;
 		if (choices.keySet().size()>0) return true;
@@ -784,6 +844,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		
 	}
 	
+	/**returns a popup menu with the compoents of this dialog*/
 	public SmartPopupJMenu createInPopup() {
 		SmartPopupJMenu output = new SmartPopupJMenu();
 		output.add(this.getMainPanel());
@@ -796,6 +857,22 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		for(int i=0; i<i1.length; i++)
 			i1[i].placeItems(j, 0, 1+i);
 		return j;
+	}
+	
+	/**returns a map of very input panel. used by testing functions*/
+	public HashMap<String, Object> getAllInputPanels() {
+		HashMap<String, Object> output=new HashMap<String, Object> ();
+		output.putAll(Numbers);
+		output.putAll(NumberSets);
+		output.putAll(choices);
+		output.putAll(bools);
+		output.putAll(allStrings);
+		output.putAll(boolSets);
+		output.putAll(items);
+		output.putAll(choices);
+		for(StandardDialog d: this.subordinateDialogs) {output.putAll(d.getAllInputPanels());}
+		
+		return output;
 	}
 	
 }

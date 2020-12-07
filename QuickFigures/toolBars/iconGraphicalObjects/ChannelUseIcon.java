@@ -70,7 +70,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 				g.setColor(channels.get(i).getColor());
 				Path2D p=new Path2D.Double();
 				p.moveTo(xi, yc);
-				p.quadTo((xi+xf)/2, yc-0.5*yWidth/nChan, xf, yc);
+				p.quadTo((xi+xf)/2, yc-0.7*yWidth/nChan, xf, yc);
 				g2d.draw(p);
 			}
 			

@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 6, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package genericMontageKit;
 
 import java.awt.Color;
@@ -179,7 +185,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		}
 		/**Removes a channel entry from the list*/
 		public void removeChannelEntry(ChannelEntry ce) {
-			
+			if (ce==null) return;
 			try{
 				this.hashChannel.remove(ce);
 				if (originalIndices==null) return;

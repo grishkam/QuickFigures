@@ -106,8 +106,8 @@ public class ColorChoicePopup extends JComponent implements MouseListener, Actio
 			if (arg0.getSource()!=this)return;
 			cc.setColor(start);
 			
-			JDialog d = JColorChooser.createDialog(this, "Select Color", true, cc, this, null);
-			d.setVisible(true);
+				JDialog d = JColorChooser.createDialog(this, "Select Color", true, cc, this, null);
+				d.setVisible(true);
 			
 		}
 

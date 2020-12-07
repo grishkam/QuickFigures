@@ -57,7 +57,7 @@ public class ChannelUseInstructions implements Serializable {
 		    public int MergeHandleing=MERGE_LAST;
 		    
 		    /**what amount of columns are recommended*/
-		    public int idealColNum=5;
+		    private int idealColNum=5;
 
 			private ChannelPanelReorder reorder;
 			private FrameUseInstructions frameUseMethod;
@@ -196,7 +196,7 @@ public class ChannelUseInstructions implements Serializable {
 				
 				other.MergeHandleing=MergeHandleing;
 				other.ignoreAfterChannel=ignoreAfterChannel;
-				other.idealColNum=idealColNum;
+				other.setIdealNumberOfColumns(idealColNum);
 				
 				other.excludedChannelPanels=excludedChannelPanels;
 				other.noMergeChannels=noMergeChannels;
@@ -251,11 +251,11 @@ public class ChannelUseInstructions implements Serializable {
 					int nSF=nFramesUsed*nSlicesUsed;
 					
 					/**what to do if the number of channel columns needed is above the desired total number of cols*/
-					if(this.idealColNum<chanCols) {
-						int rows = (chanCols*nSF)/idealColNum;
-						int extra=(chanCols*nSF)%idealColNum;
+					if(this.getIdealNumberOfColumns()<chanCols) {
+						int rows = (chanCols*nSF)/getIdealNumberOfColumns();
+						int extra=(chanCols*nSF)%getIdealNumberOfColumns();
 						if(extra>0) rows++;
-						return new int[] {rows, idealColNum};
+						return new int[] {rows, getIdealNumberOfColumns()};
 					}
 					
 					return new int[] {nSF, chanCols}
@@ -332,9 +332,9 @@ public class ChannelUseInstructions implements Serializable {
 			/**when given a number of panels containing slices or frames, determines a grid dimension for them
 			  that will fit within the 'ideal' coluumn number option (changeable by user)*/
 			public int[] gridFor(int i) {
-				if (i<=idealColNum) return new int[] {1,i};
+				if (i<=getIdealNumberOfColumns()) return new int[] {1,i};
 				
-				return new int[] {1+i/idealColNum,idealColNum};
+				return new int[] {1+i/getIdealNumberOfColumns(),getIdealNumberOfColumns()};
 					
 			}
 			
@@ -408,6 +408,16 @@ public class ChannelUseInstructions implements Serializable {
 			}
 
 		
+			public int getIdealNumberOfColumns() {
+				return idealColNum;
+			}
+
+			public void setIdealNumberOfColumns(int idealColNum) {
+				if (idealColNum<1) return;
+				this.idealColNum = idealColNum;
+			}
+
+
 			/**this nested class stores the order of the channel panels.
 			  Objects of this class are used to determine channel panel orders
 			 when panels are freshly created. The order may be modified when the user 

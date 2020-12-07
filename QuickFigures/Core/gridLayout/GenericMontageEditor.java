@@ -675,6 +675,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 				notifyListenersOfCompleteChange(ml, event);
 }
 		   
+		   /**Changes the dimensions of the panels such that they fit the objects inside*/
 		   public void alterPanelWidthAndHeightToFitContents(BasicMontageLayout ml) {
 			   alterPanelWidthsToFitContents(ml);
 			   ml.resetPtsPanels();

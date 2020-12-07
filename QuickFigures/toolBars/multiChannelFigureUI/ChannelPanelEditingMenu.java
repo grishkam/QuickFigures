@@ -742,6 +742,13 @@ public void setScope(int workOn) {
  * @return 
  */
 public CombinedEdit setChannelExcludedFromMerge(int chaneIndex, boolean excluded) {
+	
+	if (pressedInset!=null) {
+		CombinedEdit undo = PanelManagerUndo.createFor(pressedInset.getPanelManager());
+		pressedInset.getPanelManager().setMergeExcluded(chaneIndex, excluded, false);
+		return undo;
+	}
+	
 	ArrayList<ImageDisplayLayer> disp1 = getAllDisplays();
 	CombinedEdit output=new CombinedEdit();
 	boolean warningHasNotBeenSeen=true;
@@ -823,6 +830,10 @@ public ArrayList<ChannelMergeMenuItem> createChannelMergeMenu() {
 				 determines if the channel is excluded
 				 */
 				public boolean isExcludedChannel() {
+					if (pressedInset!=null) {
+						
+						return pressedInset.getPanelManager().getPanelList().getChannelUseInstructions().isMergeExcluded(entry.getOriginalChannelIndex());
+					}
 					return presseddisplay.getPanelManager().getPanelList().getChannelUseInstructions().noMergeChannels.contains(entry.getOriginalChannelIndex());
 				}
 				
@@ -831,6 +842,7 @@ public ArrayList<ChannelMergeMenuItem> createChannelMergeMenu() {
 				 * 
 				 */
 				public void pressAction() {
+					
 					int chaneIndex = entry.getOriginalChannelIndex();
 					boolean i = instructions.noMergeChannels.contains(chaneIndex);
 					CombinedEdit undo = setChannelExcludedFromMerge(chaneIndex, !i);

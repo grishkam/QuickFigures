@@ -193,6 +193,14 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 		return number;
 	}
 	
+	/**Sets the number and notifies all the listeners*/
+	public void setNumberAndNotify(double d) {
+		this.setNumber(d);
+		NumberInputEvent ne = new NumberInputEvent(this, field, number);
+		ne.setKey(key);
+		notifyListeners( ne);
+	}
+	
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent arg0) {
 		if(arg0.getSource()==slider) {

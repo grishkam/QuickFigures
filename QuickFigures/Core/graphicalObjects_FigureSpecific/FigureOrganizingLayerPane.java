@@ -326,6 +326,7 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 			return;
 		
 		if(!valid) {
+			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
 		} else {
 			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
@@ -641,14 +642,14 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	If preprocess information is not given, then the user will be shown a dialog to select the crop area
 	 */
 	public static CombinedEdit createSecondView(FigureOrganizingLayerPane f, MultichannelDisplayLayer displayLayer, PreProcessInformation p) {
-		MultichannelDisplayLayer co = displayLayer.similar();
-		co.setSlot(co.getSlot().createPartner());
-		co.getSlot().redoCropAndScale();
-		co.setLaygeneratedPanelsOnGrid(true);
+		MultichannelDisplayLayer secondView = displayLayer.similar();
+		secondView.setSlot(secondView.getSlot().createPartner());
+		secondView.getSlot().redoCropAndScale();
+		secondView.setLaygeneratedPanelsOnGrid(true);
 		if (p!=null) {
-				co.getSlot().applyCropAndScale(p);
+				secondView.getSlot().applyCropAndScale(p);
 			} else {
-					PreProcessInformation mods =co.getSlot().getModifications();
+					PreProcessInformation mods =secondView.getSlot().getModifications();
 					Rectangle r=null;
 					if(mods==null||mods.getRectangle()==null) {
 						int w = displayLayer.getMultiChannelImage().getDimensions().width/2;
@@ -657,10 +658,13 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					} else {
 						r=mods.getRectangle();
 					}
-					CroppingDialog.showCropDialog(co.getSlot(), r, 0);
+					int t=(int) System.currentTimeMillis();
+					
+					CroppingDialog.showCropDialog(secondView.getSlot(), r, 0);
+					
 			}
 		
-		return f.nextMultiChannel(co);
+		return f.nextMultiChannel(secondView);
 	}
 	
 	

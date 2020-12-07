@@ -113,9 +113,9 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 					
 					image.setLoadFromFile(this.getBoolean("fileLoad"));
 				}
-				Strings.get("Dimensions").setContentText(image.getRealDimensionString());
-				Strings.get("Dimensions2").setContentText(image.getDimensionString());
-				Strings.get("PPI").setContentText(image.getIllustratorPPI() /**+" "+image.getScreenPPI()*/);
+				allStrings.get("Dimensions").setContentText(image.getRealDimensionString());
+				allStrings.get("Dimensions2").setContentText(image.getDimensionString());
+				allStrings.get("PPI").setContentText(image.getIllustratorPPI() /**+" "+image.getScreenPPI()*/);
 				//Strings.get("PPI-ink").setContentText(image.getInkscapePPI() /**+" "+image.getScreenPPI()*/);
 				
 				

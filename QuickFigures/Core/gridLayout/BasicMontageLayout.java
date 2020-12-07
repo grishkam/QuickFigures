@@ -480,22 +480,20 @@ public class BasicMontageLayout implements LayoutSpaces,GridLayout, Serializable
 		}
 		
 		
-		/**sets the standard panel width*/
+		/**sets the standard panel width. must be a positive number*/
 		 public void setStandardPanelWidth(double t) {
-			// if (panelWidth<=0) {IssueLog.log("invalid panel width at "+panelWidth);}
+			 if(t<=0) return;
 			 double told=panelWidth;
 			 panelWidth=t;
-			// xincrement+=(t-told);
 			 layoutWidth+=(panelWidth-told)*nColumns();
 			 resetPtsPanels();
-			 if (panelWidth<=0) {IssueLog.log("Error bizare panel width after resetof ponts and panels "+panelWidth);}
 		 }
 		 
 		 /**sets the standard panel height*/
 		 public void setStandardPanelHeight(double t) {
+			 if(t<=0) return;
 			 double told=panelHeight;
 			 panelHeight=t;
-			 //yincrement+=t-told;
 			 layoutHeight+=(panelHeight-told)*nRows();
 			 resetPtsPanels(xshift, yshift);
 		 }

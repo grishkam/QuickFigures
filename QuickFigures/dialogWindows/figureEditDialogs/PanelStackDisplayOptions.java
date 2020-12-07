@@ -35,11 +35,13 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import logging.IssueLog;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.ChannelEntryBox;
 import standardDialog.ComboBoxPanel;
 import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 import ultilInputOutput.FileChoiceUtil;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
@@ -176,7 +178,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			}
 		if (this.panelCreationIncluded) {
 			this.add("Panel Level Scale", new NumberInputPanel("PPI",ImageDPIHandler.getStandardDPI()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
-			this.add("mWidth",  new NumberInputPanel("Ideal Number Columns", ins.idealColNum ));
+			this.add("mWidth",  new NumberInputPanel("Ideal Number Columns", ins.getIdealNumberOfColumns() ));
 			}
 	}
 
@@ -272,7 +274,9 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	 */
 	protected void setPanelCreationOptionsToDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins) {
 		
-		double preScale=this.getNumber("preScale");
+		double preScale=this.getNumber("preScale"); 
+		if (preScale<=0) preScale=dis.getPreprocessScale();
+		
 		if (preScale>0.01)dis.setPreprocessScale(preScale);
 		
 		setMergeHandlingToDialog(this, ins);
@@ -282,14 +286,19 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			noChan.add(this.getChoiceIndex("exclude channel panel "+i));
 		}
 		ins.excludedChannelPanels=noChan;
-		ins.idealColNum=this.getNumberInt("mWidth"); 
+		ins.setIdealNumberOfColumns(this.getNumberInt("mWidth")); 
 		
 		
-		double panelLevelScale = ImageDPIHandler.getStandardDPI()/this.getNumber("Panel Level Scale");
+		double theScale = this.getNumber("Panel Level Scale");
+		if(theScale<=0) theScale=ImageDPIHandler.getStandardDPI();
+		double panelLevelScale = ImageDPIHandler.getStandardDPI()/theScale;
+		if (panelLevelScale<=0) 
+			{panelLevelScale=1;			}
+		
 		if ( panelLevelScale>0.01)dis.getPanelManager().setPanelLevelScale(panelLevelScale);
 		
 		for(MultichannelDisplayLayer addedDiaply: displural) {
-			addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
+			if ( panelLevelScale>0.01)addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
 			
 			if (preScale>0.01)addedDiaply.setPreprocessScale(preScale);
 		}
@@ -387,6 +396,9 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 				}
 				
 				}
+			addSubordinateDialog("Other Options",  new StoredValueDilaog(CanvasOptions.current)  );
+			
+			
 		}
 		
 		

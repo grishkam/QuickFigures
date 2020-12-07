@@ -64,6 +64,7 @@ import layersGUI.HasTreeLeafIcon;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
+import objectDialogs.ArrowSwingDialog;
 import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 /**An abstract class for the shapes in the figure*/
@@ -453,8 +454,14 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	
 	@Override
 	public void showOptionsDialog() {
-		new ShapeGraphicOptionsSwingDialog(this, false).showDialog();
+		getOptionsDialog().showDialog();
 	}
+	
+
+	public ShapeGraphicOptionsSwingDialog getOptionsDialog() {
+		return new ShapeGraphicOptionsSwingDialog(this, false);
+	}
+	
 	public boolean isAntialize() {
 		return antialize;
 	}

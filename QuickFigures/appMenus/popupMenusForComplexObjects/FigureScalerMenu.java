@@ -27,6 +27,7 @@ import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 
+/**a set of menu options that allow the user to scale a figure*/
 public class FigureScalerMenu extends SmartJMenu{
 	
 	/**
@@ -63,8 +64,7 @@ public class FigureScalerMenu extends SmartJMenu{
 				}
 	}.createJMenuItem("Scale (Same PPI, Bilinear Interpolation if needed)"));
 		
-		//JMenu jj = new JMenu("Advanced Scaling");
-		
+	
 		add(new ObjectAction<PanelLayoutGraphic>(item) {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -76,7 +76,7 @@ public class FigureScalerMenu extends SmartJMenu{
 					addEdit(undo);
 					FigureScaler.scaleWarnings(item.getParentLayer());
 			}	
-	}.createJMenuItem("Scale to Slide Size (PPI changes, No Interpolation)"));
+	}.createJMenuItem("Scale to Slide Size (PPI changes)"));
 		
 		
 		
@@ -92,7 +92,7 @@ public class FigureScalerMenu extends SmartJMenu{
 				}
 
 			
-	}.createJMenuItem("Scale (PPI changes, No Interpolation)"));
+	}.createJMenuItem("Scale (PPI changes)"));
 		
 		//this.add(jj);
 		

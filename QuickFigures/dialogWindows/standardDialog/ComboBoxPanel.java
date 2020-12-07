@@ -104,18 +104,25 @@ public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
 		return 2;
 	}
 
+	/**returns the selected index*/
 	public int getSelectedIndex() {
 		return getBox() .getSelectedIndex();
 	}
 
-
+/**returns the choice to its original value */
 public void revert() {
-	getBox() .setSelectedIndex(originalStatus);
+	setValue(originalStatus);
 }
 
-	
-	
-	 	
+
+/**
+ Sets the choice index
+ */
+public void setValue(int value) {
+	getBox() .setSelectedIndex(value);
+}
+
+
 	
 	public void notifyListeners(ChoiceInputEvent ni) {
 		//NumberInputEvent ni = new NumberInputEvent(this, getNumberFromField() );
@@ -152,5 +159,7 @@ public void revert() {
 		
 	}
 	
+	/**the number of choices*/
+	public int getNChoices() {return box.getModel().getSize();}
 	
 }

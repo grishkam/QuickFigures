@@ -16,6 +16,7 @@
 package objectDialogs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import graphicalObjects.HasBackGroundShapeGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
@@ -148,4 +149,19 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		}
 		setObjectSnappingBehaviourToDialog(s);
 }
+	
+	
+	
+	/**returns a map of every input panel. used by testing functions*/
+	public HashMap<String, Object> getAllInputPanels() {
+		HashMap<String, Object> output = super.getAllInputPanels();
+		if (this.strokeInput!=null) {
+			output.put("Stroke Width", strokeInput.widthInput);
+			output.put("Stroke Join", strokeInput.joinInput);
+			output.put("Stroke Cap", strokeInput.capInput);
+			output.put("Stroke Miter Limit", strokeInput.miterInput);
+			output.put("Stroke Color", strokeInput.strokeColorInput);
+		}
+		return output;
+	}
 }
