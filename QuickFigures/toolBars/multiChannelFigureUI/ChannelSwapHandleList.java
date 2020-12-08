@@ -39,6 +39,10 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	/**
 	 * 
 	 */
+	private static final int HANDLE_CODE_FOR_SWAP_HANDLE = 800;
+	/**
+	 * 
+	 */
 	
 	public static final int SWAP_IN_INSTRUCTIONS=0, SWAP_SOURCE_IMAGE_CHANNELS=1;
 	int swapType=SWAP_IN_INSTRUCTIONS;
@@ -61,7 +65,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	}
 
 
-
+	/***/
 	public void innitializeHandles() {
 		createHandles();
 		updateLocations();
@@ -69,11 +73,10 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	}
 	
 
-	
 	int getPressChannel(CanvasMouseEvent e) {
 		SmartHandle h = this.getHandleForClickPoint(new Point2D.Double(e.getClickedXScreen(), e.getClickedYScreen()));
 		if (h!=null)
-			return h.getHandleNumber()-800;
+			return h.getHandleNumber()-HANDLE_CODE_FOR_SWAP_HANDLE;
 		
 		return -1;
 	}
@@ -85,6 +88,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		
 	}
 	
+	/**Sets up handles for the channelentry list*/
 	public void updateList(ArrayList<ChannelEntry> hashChannel) {
 		this.channels=hashChannel;
 		this.clear();
