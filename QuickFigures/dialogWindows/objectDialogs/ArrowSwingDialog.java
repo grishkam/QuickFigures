@@ -23,8 +23,8 @@ package objectDialogs;
 
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic.ArrowHead;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 /**a dialog for altering the appearance of the arrow heads*/
 public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
@@ -119,7 +119,10 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 }
 
 
-	
+	public ArrowHeadDialog getHeadDialog(int head) {
+		if (head==ArrowGraphic.SECOND_HEAD) return a2;
+		return a1;
+	}
 	
 	class ArrowHeadDialog extends GraphicItemOptionsDialog {
 		

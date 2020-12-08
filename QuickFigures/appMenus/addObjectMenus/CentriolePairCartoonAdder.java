@@ -21,7 +21,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.CentriolePairCartoon;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 
 /**Adds a group of two rectangles to the image */
 public class CentriolePairCartoonAdder extends BasicGraphicAdder {

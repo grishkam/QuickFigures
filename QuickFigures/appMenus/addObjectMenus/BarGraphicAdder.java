@@ -22,7 +22,7 @@ import javax.swing.Icon;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.ScaleInfo;
 
 /**A menu option that adds a scale bar to selected panels*/

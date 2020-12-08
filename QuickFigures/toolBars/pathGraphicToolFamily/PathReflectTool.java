@@ -31,7 +31,7 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.PathEditUndo;
 import utilityClassesForObjects.LocatedObject2D;
 

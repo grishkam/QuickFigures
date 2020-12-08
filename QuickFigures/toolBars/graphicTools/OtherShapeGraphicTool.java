@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 import externalToolBar.TreeIconWrappingToolIcon;
-import genericMontageUIKit.ToolBit;
+import genericTools.ToolBit;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 
 public class OtherShapeGraphicTool extends RectGraphicTool implements ToolBit {

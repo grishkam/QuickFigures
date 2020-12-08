@@ -227,7 +227,7 @@ public void select(Rectangle2D r1, int i) {
 /**methods below set the properties of a shape to be a certain default*/
 public void setUpShapeProperties(ShapeGraphic bb ) {
 	DefaultPaintProvider dp = new DefaultPaintProvider(selColor);
-	dp.setType(DefaultPaintProvider.shapegradient);
+	dp.setType(DefaultPaintProvider.SHAPE_GRADIENT_PAINT);
 	dp.setnCycles(40);
 	bb.setStrokeColor(selColor);
 	bb.setFillPaintProvider(dp);

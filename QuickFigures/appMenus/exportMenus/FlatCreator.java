@@ -35,11 +35,11 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.FigureDisplayContainer;
-import standardDialog.BooleanInputPanel;
-import standardDialog.NumberInputEvent;
-import standardDialog.NumberInputListener;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.numbers.NumberInputEvent;
+import standardDialog.numbers.NumberInputListener;
+import standardDialog.numbers.NumberInputPanel;
 
 /**Creates a buffered image for that will be a snapshot of the figure display.
   That image can in turn be copied to the system clipboard*/

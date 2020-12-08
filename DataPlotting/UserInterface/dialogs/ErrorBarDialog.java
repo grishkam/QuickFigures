@@ -19,9 +19,9 @@ import java.util.ArrayList;
 
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 

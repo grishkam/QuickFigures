@@ -20,9 +20,9 @@ import java.util.HashMap;
 
 import graphicalObjects.HasBackGroundShapeGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
-import standardDialog.AngleInputPanel;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ColorComboboxPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.numbers.AngleInputPanel;
 import undo.Edit;
 import utilityClasses1.ArraySorter;
 

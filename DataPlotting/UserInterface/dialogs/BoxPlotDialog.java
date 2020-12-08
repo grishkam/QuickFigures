@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.Boxplot;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class BoxPlotDialog  extends GraphicItemOptionsDialog {
 

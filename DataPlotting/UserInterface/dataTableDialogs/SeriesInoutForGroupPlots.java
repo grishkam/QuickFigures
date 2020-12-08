@@ -33,7 +33,7 @@ import fileread.ExcelRowSubset;
 import fileread.ReadExcelData;
 import logging.IssueLog;
 import standardDialog.GriddedPanel;
-import standardDialog.StringInputPanel;
+import standardDialog.strings.StringInputPanel;
 
 public class SeriesInoutForGroupPlots extends DataInputDialog2 {
 	int checkedColumn=0;

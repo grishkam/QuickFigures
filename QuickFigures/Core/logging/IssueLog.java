@@ -145,20 +145,30 @@ public class IssueLog {
 		logT(ee);
 	}
 
-	public static void showMessage(String s) {
+	public static Boolean showMessage(String... texts) {
 		StandardDialog d = new StandardDialog();
 		d.setModal(true);
 		d.setLayout(new GridBagLayout());
 		int y=1;
-		
+		for(String s: texts) {
 			GridBagConstraints c = new GridBagConstraints();
-			c.gridy=y; y++;
+			c.anchor=GridBagConstraints.NORTHWEST;
+			c.gridy=y;
+			y++;
 			d.add(new JLabel(s), c);
+			}
 			
 		d.removeOptionsTab();
 		d.setHideCancel(true);
 		d.setWindowCentered(true);
 		d.showDialog();
+		
+		if(d.wasOKed())
+			return true;
+		if(d.wasCanceled())
+			return false;
+		
+		return null;
 	}
 	
 	public static void showMessages(Iterable<String> string) {

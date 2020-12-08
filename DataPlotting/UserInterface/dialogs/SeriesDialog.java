@@ -17,7 +17,7 @@ package dialogs;
 
 import genericPlot.BasicDataSeriesGroup;
 import objectDialogs.LayerPaneDialog;
-import standardDialog.NumberInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class SeriesDialog extends LayerPaneDialog {
 

@@ -22,11 +22,11 @@ import javax.swing.JTabbedPane;
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.PointModel;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ComboBoxPanel;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialogListener;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class MeanBarDialog  extends GraphicItemOptionsDialog {
 

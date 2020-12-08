@@ -26,7 +26,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;

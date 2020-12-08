@@ -16,10 +16,10 @@
 package figureEditDialogs;
 
 import channelMerging.MultiChannelImage;
-import standardDialog.ChannelEntryBox;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.channels.ChannelEntryBox;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 
@@ -82,7 +82,7 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 }
 		if (multiChannel!=null) {
 			ChannelEntryBox box = new ChannelEntryBox(multiChannel.getChannelEntriesInOrder(), "Merge");
-			 ComboBoxPanel mergeCombo = new standardDialog.ComboBoxPanel("Channel", box);
+			 ComboBoxPanel mergeCombo = new standardDialog.choices.ComboBoxPanel("Channel", box);
 			 
 			 dialog.add("chan",mergeCombo);
 		}

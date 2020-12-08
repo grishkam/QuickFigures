@@ -20,8 +20,8 @@ import java.awt.Component;
 
 import channelMerging.MultiChannelImage;
 import specialMenus.ColorJMenu;
-import standardDialog.ColorInputEvent;
-import standardDialog.ColorInputListener;
+import standardDialog.colors.ColorInputEvent;
+import standardDialog.colors.ColorInputListener;
 
 public class LutSwapperTool extends BasicImagePanelTool implements ColorInputListener {
 	

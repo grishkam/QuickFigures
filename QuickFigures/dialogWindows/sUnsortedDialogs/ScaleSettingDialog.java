@@ -17,9 +17,9 @@ package sUnsortedDialogs;
 
 import applicationAdapters.HasScaleInfo;
 import standardDialog.GriddedPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
-import standardDialog.StringInputPanel;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.StringInputPanel;
 import standardDialog.StandardDialogListener;
 import utilityClassesForObjects.ScaleInfo;
 

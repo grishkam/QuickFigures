@@ -24,8 +24,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import layersGUI.HasTreeLeafIcon;
-import standardDialog.InfoDisplayPanel;
 import standardDialog.StandardDialog;
+import standardDialog.strings.InfoDisplayPanel;
 import utilityClassesForObjects.PointsToFile;
 import utilityClassesForObjects.ShowsOptionsDialog;
 

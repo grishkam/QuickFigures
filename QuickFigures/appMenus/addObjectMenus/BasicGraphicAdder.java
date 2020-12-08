@@ -25,8 +25,7 @@ import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
-
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
 

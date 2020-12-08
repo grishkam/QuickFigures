@@ -26,7 +26,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 
 /**A menu item for creating key frames within the time line*/
 public class KeyFrameAssign extends BasicTimeLineOperator {

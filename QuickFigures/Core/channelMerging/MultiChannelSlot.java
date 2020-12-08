@@ -100,4 +100,10 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	public void matchOrderAndLuts(MultiChannelImage cropped);
 	
 	
+	/**
+	returns the number of bits needed to save the original version of the file
+	 */
+	public int getEstimatedSizeOriginal();
+	
+	
 }

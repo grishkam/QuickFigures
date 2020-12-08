@@ -22,9 +22,9 @@ import graphicalObjects_FigureSpecific.FigureScaler;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import imageMenu.CanvasAutoResize;
 import menuUtil.SmartJMenu;
-import standardDialog.InfoDisplayPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import undo.CombinedEdit;
 
 /**a set of menu options that allow the user to scale a figure*/

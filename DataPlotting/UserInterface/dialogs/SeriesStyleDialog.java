@@ -23,10 +23,10 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import plotParts.Core.PlotAreaRectangle;
 import plotParts.DataShowingParts.SeriesStyle;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ColorDimmingBox;
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorDimmingBox;
 
 public class SeriesStyleDialog extends StandardDialog {
 

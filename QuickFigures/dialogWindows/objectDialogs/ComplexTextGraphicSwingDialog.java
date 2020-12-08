@@ -19,10 +19,10 @@ import java.awt.GridBagConstraints;
 
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ColorDimmingBox;
-import standardDialog.ComboBoxPanel;
 import standardDialog.ObjectEditEvent;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorDimmingBox;
 
 public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 

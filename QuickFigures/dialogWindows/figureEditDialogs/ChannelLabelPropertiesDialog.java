@@ -22,8 +22,8 @@ import channelLabels.ChannelLabelProperties;
 import graphicActionToolbar.CurrentFigureSet;
 import imageDisplayApp.CanvasOptions;
 import objectDialogs.GraphicItemOptionsDialog;
-import standardDialog.ComboBoxPanel;
-import standardDialog.StringInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.strings.StringInputPanel;
 
 /**A dialog that allows the user to change how the channel label's are shown
  */

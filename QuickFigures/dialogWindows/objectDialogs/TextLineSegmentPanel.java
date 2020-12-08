@@ -19,16 +19,16 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
-import standardDialog.ChoiceInputEvent;
-import standardDialog.ChoiceInputListener;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ComboBoxPanel;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;
-import standardDialog.StringInputEvent;
-import standardDialog.StringInputListener;
-import standardDialog.StringInputPanel;
+import standardDialog.choices.ChoiceInputEvent;
+import standardDialog.choices.ChoiceInputListener;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.strings.StringInputEvent;
+import standardDialog.strings.StringInputListener;
+import standardDialog.strings.StringInputPanel;
 import utilityClassesForObjects.TextLineSegment;
 
 /**A panel within a dialog that allows the user to edit to a specific fragment of text, determining if the text is underlined, superscripted and so on */

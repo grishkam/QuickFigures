@@ -21,10 +21,10 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import objectDialogs.GraphicItemOptionsDialog;
 import objectDialogs.TextGraphicSwingDialog;
 import plotParts.Core.AxesGraphic;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ComboBoxPanel;
 import standardDialog.GriddedPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class AxisDialog  extends GraphicItemOptionsDialog {
 

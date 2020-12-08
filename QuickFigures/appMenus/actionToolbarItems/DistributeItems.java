@@ -28,7 +28,7 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoMoveItems;
 import utilityClassesForObjects.LocatedObject2D;
 

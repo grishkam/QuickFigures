@@ -21,8 +21,8 @@ import javax.swing.JMenuItem;
 import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
 import gridLayout.BasicMontageLayout;
 import gridLayout.LayoutSpaces;
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
 
 
 public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements LayoutSpaces{

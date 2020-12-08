@@ -28,6 +28,7 @@ import java.awt.geom.Rectangle2D;
 
 import objectDialogs.DefaultPaintProviderDialog;
 
+/**A class that provides a color or a gradient paint to fill a specific shape*/
 public class DefaultPaintProvider implements PaintProvider{
 	
 	/**
@@ -44,9 +45,9 @@ public class DefaultPaintProvider implements PaintProvider{
 	private int nCycles=1;
 	
 	
-	public static final int solid=0, shapegradient=1, radial=2;
+	public static final int SOLID_COLOR=0, SHAPE_GRADIENT_PAINT=1, RADIAL_GRADIENT_PAINT=2;
 	public static String[] types=new String[] {"Fill Solid", "Fill Gradient", "Radial"};
-	private int type=0;
+	private int type=SOLID_COLOR;
 	
 
 	
@@ -57,11 +58,11 @@ public class DefaultPaintProvider implements PaintProvider{
 
 	@Override
 	public Paint getPaint() {
-		if (type==shapegradient) {
+		if (type==SHAPE_GRADIENT_PAINT) {
 			return new GradientPaint(point1, fillColor,point2, fillColor2, this.getnCycles()>1);
 		}
 		
-		if (type==radial) {
+		if (type==RADIAL_GRADIENT_PAINT) {
 		
 			return new RadialGradientPaint(point1, (float) point1.distance(point2), new float[] {(float) 0,(float) 0.6}, new Color[] {fillColor, fillColor2});
 		}

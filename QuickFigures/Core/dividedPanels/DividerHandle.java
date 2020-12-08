@@ -29,7 +29,7 @@ import dividedPanels.DividedPanelLayout.LayoutDivider;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjects.CordinateConverter;
 import menuUtil.SmartPopupJMenu;
-import standardDialog.NumberInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 /**A hande used for moving the dividers of a layout*/
 public class DividerHandle extends SmartHandle  implements ActionListener {

@@ -22,17 +22,17 @@ import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 
 import graphicalObjects_BasicShapes.RectangularGraphic;
-import standardDialog.ChoiceInputEvent;
-import standardDialog.ChoiceInputListener;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberArrayInputPanel;
-import standardDialog.NumberInputEvent;
-import standardDialog.NumberInputListener;
-import standardDialog.NumberInputPanel;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;
+import standardDialog.choices.ChoiceInputEvent;
+import standardDialog.choices.ChoiceInputListener;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.numbers.NumberArrayInputPanel;
+import standardDialog.numbers.NumberInputEvent;
+import standardDialog.numbers.NumberInputListener;
+import standardDialog.numbers.NumberInputPanel;
 import utilityClassesForObjects.StrokedItem;
 
 public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, NumberInputListener, ChoiceInputListener{

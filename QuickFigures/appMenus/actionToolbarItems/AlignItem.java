@@ -33,7 +33,7 @@ import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.LayoutSpaces;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoReorder;

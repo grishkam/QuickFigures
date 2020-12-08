@@ -31,11 +31,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import menuUtil.SmartPopupJMenu;
+import standardDialog.colors.ColorCellRenderer;
+import standardDialog.colors.ColorInputEvent;
+import standardDialog.colors.ColorInputListener;
+import standardDialog.colors.ColorListChoice;
 import menuUtil.PopupCloser;
-import standardDialog.ColorCellRenderer;
-import standardDialog.ColorInputEvent;
-import standardDialog.ColorInputListener;
-import standardDialog.ColorListChoice;
 
 /**A menu that is used to pick colors. Color rectangles appear in the menu instead of normal menu items*/
 public class ColorJMenu extends SmartPopupJMenu implements ColorListChoice,  MouseListener, ListSelectionListener {

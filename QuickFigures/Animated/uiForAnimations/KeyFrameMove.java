@@ -19,7 +19,7 @@ import animations.KeyFrameCompatible;
 import graphicActionToolbar.CurrentFigureSet;
 import animations.BasicKeyFrame;
 import graphicalObjects.ZoomableGraphic;
-import standardDialog.NumberInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class KeyFrameMove extends BasicTimeLineOperator{
 	

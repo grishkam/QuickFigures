@@ -97,6 +97,7 @@ public class ChannelOrderAndLutMatching {
 	
 	/**lists the real channel names. Example: eGFP, texasred, Cy5*/
 	ArrayList<String> getAllRealChannelNames(MultiChannelImage m1) {
+		if(m1==null) {}
 		ArrayList<String> names1=new ArrayList<String>();
 		for(int i=1; i<=m1.nChannels(); i++) {
 			names1.add(m1.getRealChannelName(i));

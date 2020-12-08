@@ -46,12 +46,12 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
-import standardDialog.AngleInputPanel;
-import standardDialog.ChoiceInputEvent;
-import standardDialog.GraphicComponent;
-import standardDialog.InfoDisplayPanel;
-import standardDialog.NumberInputEvent;
-import standardDialog.NumberInputPanel;
+import standardDialog.choices.ChoiceInputEvent;
+import standardDialog.graphics.GraphicComponent;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.numbers.NumberInputEvent;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import utilityClassesForObjects.RectangleEdges;
 
 public class CroppingDialog extends GraphicItemOptionsDialog implements MouseListener, MouseMotionListener, ActionListener{
@@ -189,13 +189,16 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 
 	
-
+	/**creates an image of the entire source image to display as the background*/
 	public BufferedImage createDisplayImage(int chan, int frame, int slice) {
 		PanelListElement pList;
-		if(chan==0)
-			pList = new PanelList().createMergePanelEntry(multiChannelSource ,frame, slice);
+		PanelList panelList = new PanelList();
+		if(chan==0 &&multiChannelSource.nChannels()>1)
+			pList = panelList.createMergePanelEntry(multiChannelSource ,frame, slice);
+		else if (chan==0&&multiChannelSource.nChannels()==1)
+			pList =panelList.createChannelPanelEntry(multiChannelSource, 1, display.frame, display.slice);
 		else 
-			pList =new PanelList().createChannelPanelEntry(multiChannelSource, display.channel, display.frame, display.slice);
+			pList =panelList.createChannelPanelEntry(multiChannelSource, display.channel, display.frame, display.slice);
 		
 		PixelWrapper image2 =pList.getImageWrapped();// multiChannelSource.getChannelMerger().generateMergedRGB(pList, 0);
 		
@@ -212,6 +215,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	public double getDisplayScale(ImagePanelGraphic imagePanelGraphic) {
 		if (imagePanelGraphic.getUnderlyingImageWidth()<200) {return 200/imagePanelGraphic.getUnderlyingImageWidth();}
+		
+		if (imagePanelGraphic.getUnderlyingImageWidth()>4000){return 0.1;}
 		if (imagePanelGraphic.getUnderlyingImageWidth()>3000){return 0.15;}
 		
 		if (imagePanelGraphic.getUnderlyingImageWidth()>2000){return 0.25;}

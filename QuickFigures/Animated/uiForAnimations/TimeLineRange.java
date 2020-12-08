@@ -15,7 +15,7 @@
  *******************************************************************************/
 package uiForAnimations;
 
-import standardDialog.NumberInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class TimeLineRange extends KeyFrameProgress {
 

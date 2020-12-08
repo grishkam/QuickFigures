@@ -39,6 +39,10 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	/**
 	 * 
 	 */
+	
+	public static final int SWAP_IN_INSTRUCTIONS=0, SWAP_SOURCE_IMAGE_CHANNELS=1;
+	int swapType=SWAP_IN_INSTRUCTIONS;
+	
 	private static final long serialVersionUID = 1L;
 	private FigureOrganizingLayerPane figure;
 	private ArrayList<ChannelEntry> channels;
@@ -158,21 +162,48 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		int relHandleIndex = getPressChannel(canvasMouseEventWrapper);
-		if (pressHandleIndex==relHandleIndex)return;
+		int pressHandleIndex2 = pressHandleIndex;
+		if (pressHandleIndex2==relHandleIndex)return;
 		
 		
+		if (swapType==SWAP_IN_INSTRUCTIONS) {
+			swapImageChannelOrder(relHandleIndex,pressHandleIndex2);
+		}
+		else 
+			{swapSourceImageChannels(relHandleIndex, pressHandleIndex2);}
+	
+	}
+	
+	/**
+	swaps the two channels given
+	 */
+	protected void swapImageChannelOrder(int relHandleIndex, int pressHandleIndex2) {
 		if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer() ;
 			for(ImageDisplayLayer item: f.getMultiChannelDisplaysInOrder()) {
-				item.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex);
+				item.getPanelManager().performChannelSwap(relHandleIndex, pressHandleIndex2);
+			}
+		}
+		else if(pressHandleIndex2!=relHandleIndex) {
+			theDisplayLayer.getPanelManager().performChannelSwap(relHandleIndex, pressHandleIndex2);
+		}
+	}
+
+	/**
+	swaps the two channels given
+	 */
+	protected void swapSourceImageChannels(int relHandleIndex, int pressHandleIndex2) {
+		if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
+			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer() ;
+			for(ImageDisplayLayer item: f.getMultiChannelDisplaysInOrder()) {
+				item.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex2);
 				item.updatePanels();
 			}
 		}
-		else if(pressHandleIndex!=relHandleIndex) {
-			theDisplayLayer.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex);
+		else if(pressHandleIndex2!=relHandleIndex) {
+			theDisplayLayer.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex2);
 			theDisplayLayer.updatePanelsAndLabelsFromSource();
 		}
-	
 	}
 	
 	public JPopupMenu getJPopup() {

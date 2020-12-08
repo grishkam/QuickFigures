@@ -22,8 +22,8 @@ import javax.swing.AbstractButton;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.OpeningFileDropHandler;
 import externalToolBar.AbstractExternalToolset;
-import genericMontageUIKit.GeneralTool;
-import genericMontageUIKit.ToolBit;
+import genericTools.GeneralTool;
+import genericTools.ToolBit;
 
 public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>  {
 

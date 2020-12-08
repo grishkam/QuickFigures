@@ -17,9 +17,9 @@ package gridLayout;
 import java.awt.Point;
 
 import logging.IssueLog;
-import standardDialog.BooleanInputPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 
 

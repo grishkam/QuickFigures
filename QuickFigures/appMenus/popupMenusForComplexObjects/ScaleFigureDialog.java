@@ -24,8 +24,8 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
 
 public class ScaleFigureDialog extends StandardDialog {
 	

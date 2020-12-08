@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 import plotParts.DataShowingParts.PointModel;
 import plotParts.DataShowingParts.ScatterPoints;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ComboBoxPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorComboboxPanel;
 
 public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOptionsDialog*/ {
 

@@ -21,8 +21,8 @@ import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
-import standardDialog.StringInputPanel;
 import standardDialog.StandardDialogListener;
+import standardDialog.strings.StringInputPanel;
 
 /**shows a dialog that lets the user name the stack slices channels of a multichannel images*/
 public class StackSliceNamingDialog {

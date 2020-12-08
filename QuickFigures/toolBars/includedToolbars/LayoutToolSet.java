@@ -35,8 +35,8 @@ import genericMontageLayoutToolKit.Panel_Selector2;
 import genericMontageLayoutToolKit.PannelGrabberTool;
 import genericMontageLayoutToolKit.RowColSwapperTool2;
 import genericMontageLayoutToolKit.RowLabelIntroducerTool;
-import genericMontageUIKit.GeneralTool;
-import genericMontageUIKit.ToolBit;
+import genericTools.GeneralTool;
+import genericTools.ToolBit;
 import gridLayout.LayoutSpaces;
 
 /**A toolbar containing tools that allow the user to edit the layout.

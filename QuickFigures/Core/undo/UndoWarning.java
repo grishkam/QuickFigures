@@ -15,8 +15,8 @@
  *******************************************************************************/
 package undo;
 
-import standardDialog.InfoDisplayPanel;
 import standardDialog.StandardDialog;
+import standardDialog.strings.InfoDisplayPanel;
 
 public class UndoWarning extends AbstractUndoableEdit2 {
 

@@ -24,14 +24,14 @@ import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import imageDisplayApp.CanvasOptions;
-import standardDialog.AngleInputPanel;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ColorDimmingBox;
-import standardDialog.ComboBoxPanel;
-import standardDialog.FontChooser;
-import standardDialog.GraphicSampleComponent;
-import standardDialog.StringInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.colors.ColorDimmingBox;
+import standardDialog.fonts.FontChooser;
+import standardDialog.graphics.GraphicSampleComponent;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.strings.StringInputPanel;
 import undo.Edit;
 
 /**A dialog for text graphics*/

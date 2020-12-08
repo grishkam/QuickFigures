@@ -46,11 +46,13 @@ import standardDialog.SelectImageDialog;
 	public class ImagePlusMultiChannelSlot implements MultiChannelSlot {
 
 		
-		protected String path;
-		
+		/**An object that keeps track of the original image*/
 		private SubSlot original=new SubSlot();
 		
-		/**The image that is displayed*/
+		
+		/**The path where the working image is stored*/
+		protected String path;
+		/**The image that is displayed. Compared to the original, this version may be cropped or scaled*/
 		private transient ImagePlus sourceImagePlus;//the imageplus
 		protected byte[] serializedIM;//the serialized version of the image 
 		
@@ -97,6 +99,7 @@ import standardDialog.SelectImageDialog;
 			return multiChannelWrapper;
 		}
 		
+		/**stores the working image, */
 		void storeImage() {
 				this.saveImageEmbed();
 			if (this.getRetrieval()==lOAD_FROM_SAVED_FILE&&getImagePlus()!=null) {
@@ -104,6 +107,10 @@ import standardDialog.SelectImageDialog;
 				String savePath = getSavePath();
 				if(savePath!=null) {//saves the image file if it is used
 					IJ.save(this.getImagePlus(), savePath);
+					
+					if (this.getImagePlus()==original.backupUncroppedImagePlus) {
+						original.setSavePath(savePath);
+					}
 					
 					this.setPathStringToImagePlus();
 				
@@ -157,12 +164,12 @@ import standardDialog.SelectImageDialog;
 		 If it cant find the file in the full path, it search
 		 for it elsewhere .
 		 */
-		public void setToPath(String path) {
+		private void setToPath(String path) {
 			
 			
 			if (!imageFileFound() ) return;
 			
-			sourceImagePlus = IJ.openImage(this.getFileFinder().findExistingFilePath(path));
+			sourceImagePlus = getImageInPath(path);
 			if (sourceImagePlus!=null) {
 				this.setPathStringToImagePlus();
 			}
@@ -170,8 +177,14 @@ import standardDialog.SelectImageDialog;
 		
 		}
 
+		/**
+		opens an image
+		 */
+		protected static ImagePlus getImageInPath(String path) {
+			return IJ.openImage(getFileFinder().findExistingFilePath(path));
+		}
+
 		private boolean loadFromFile() {
-			// TODO Auto-generated method stub
 			if (this.getRetrieval()==lOAD_FROM_SAVED_FILE) return true;
 			return false;
 		}
@@ -187,11 +200,12 @@ import standardDialog.SelectImageDialog;
 			
 				path=wrap.getPath();
 			
-			saveImageEmbed();
+				
+			//saveImageEmbed();//commented out for testing
 			}
 		}
 		
-		public FileFinder getFileFinder() {
+		public static FileFinder getFileFinder() {
 			FileFinder finder = new FileFinder();
 			return finder;
 		}
@@ -229,7 +243,9 @@ import standardDialog.SelectImageDialog;
 			if (getImagePlus()==null)return;
 			
 			serializedIM=new ij.io.FileSaver(getImagePlus()).serialize();
-			original.saveImageEmbed();
+			
+			/**needed to keep the original around in case imageJ disposes of it*/
+			original.saveImage();
 			
 		}
 		
@@ -435,16 +451,16 @@ import standardDialog.SelectImageDialog;
 		}
 		
 	
-		
+		/**if the argument if different from the previous processing information,
+		 * then creates a new working image with the new crop and scale
+		  */
 		public void applyCropAndScale(PreProcessInformation process) {
 			ImagePlus.removeImageListener(this.getDisplayUpdater());//avoid exceptions during the next thread
 			
+			/**does not need to do anything if they are already the same*/
 			if(preprocessRecord!=null) {
 				if(areTheySame(process) )
-						
-				{
 					return;
-				}
 			} 
 			
 			 redoCropandScale(process);
@@ -461,11 +477,15 @@ import standardDialog.SelectImageDialog;
 			 ImagePlus.addImageListener(getDisplayUpdater());
 		}
 
+	/**takes the original image (full size, unscaled) and uses it to create a new
+	  working image that has been cropped and scaled with the same object 
+	  (@see PreProcessInformation) 
+	  */
 	private void redoCropandScale(PreProcessInformation process) {
 			ImagePlusWrapper unprocessedVersion = getUnprocessedVersion(true);
-			 if (unprocessedVersion==null) {
+			 if (unprocessedVersion==null||!unprocessedVersion.containsImage()) {
 				 IssueLog.log("cannot scale empty image");
-				 preprocessRecord=process;
+				 //preprocessRecord=process;
 				 return;
 			 }
 			 if(process==null) {
@@ -480,9 +500,11 @@ import standardDialog.SelectImageDialog;
 			getDisplayUpdater().imageUpdated(getImagePlus());
 		}
 
+	/**returns true if the two modifications are the same*/
 		private boolean areTheySame(PreProcessInformation process) {
 			if(process==null&&preprocessRecord!=null) return false;
 			if(process!=null&&preprocessRecord==null) return false;
+			
 			if (preprocessRecord.getAngle()!=process.getAngle()) return false;
 			if (preprocessRecord.getScale()!=process.getScale()) return false;
 			Rectangle r1 = preprocessRecord.getRectangle();
@@ -499,14 +521,28 @@ import standardDialog.SelectImageDialog;
 			ImagePlusWrapper bwrap=null;
 			if (backup!=null)bwrap=new ImagePlusWrapper(backup);
 			if(backup==null) {
-				original.backupUncroppedImagePlus=this.sourceImagePlus;
-				bwrap=this.getMultichannelImage();
+				/**If the backup once existed will ask user to reopen*/
+				if (original.innitialized) 
+					{
+					boolean reopen = FileChoiceUtil.yesOrNo("It appears the the original image was closed or disposed of. Do you want to open it from a saved tiff ?");
+					if (reopen) {
+						original.setStoredImage(IJ.openImage());
+						if (original.getStoredImage()!=null) 
+							return new ImagePlusWrapper(original.getStoredImage());
+					}
+					return null;
+					}
+					else  {
+						/**if the original image has never been innitialized*/
+						original.setStoredImage(this.sourceImagePlus);
+						bwrap=this.getMultichannelImage();
+				}
 			}
 			return bwrap;
 		}
 		
-		/**Returns the uncropped backup, however it will be returned with any changes to channel order
-		 * display range and colors set to the current ones and not the original*/
+		/**Returns the uncropped backup. If the parameter is set to true, it will be returned with any changes to channel order
+		 * display range and colors set to the current ones */
 		private ImagePlus getBackup(boolean matchColors) {
 			
 			ImagePlus backup=original.getOrCreateImagePlus();
@@ -558,7 +594,7 @@ import standardDialog.SelectImageDialog;
 		}
 
 		public ImagePlus getUncroppedOriginal() {
-			return original.backupUncroppedImagePlus;
+			return original.getStoredImage();
 		}
 
 
@@ -574,13 +610,20 @@ import standardDialog.SelectImageDialog;
 			
 		}
 
-		class SubSlot implements Serializable {
+		/**a subcompartment for storing the original version of the image*/
+		static class SubSlot implements Serializable {
 			
+			static final int STORE_IN_ARRAY_ALWAYS=0, STORE_IN_ARRAY_ONLY_WHEN_SAVING=1, STORE_IN_EXTERNAL_FILE=2;
+			int storage=STORE_IN_ARRAY_ALWAYS;
 			
 			/**An uncropped backup version used in case user wants to change scale or cropping later
 			  Current working on a way for multiple sets of panels to share this one*/
 			private transient ImagePlus backupUncroppedImagePlus;//the imageplus
 			protected byte[] serializedBackup;
+			boolean innitialized=false;
+			private String originalSavePath;
+			private String lastSavePath=null;
+			private int estimatedFileSize;
 			/**
 			 * 
 			 */
@@ -590,26 +633,72 @@ import standardDialog.SelectImageDialog;
 			private void writeObject(java.io.ObjectOutputStream out)
 				     throws IOException {
 			
-				storeImage();
+				
+				saveImage();
 				out.defaultWriteObject();
 			}
 
 			/**
-			 returns the stored image
+			sets the save path
 			 */
-			public ImagePlus getOrCreateImagePlus() {
-				if(backupUncroppedImagePlus==null &&serializedBackup!=null) {
-					backupUncroppedImagePlus=	new ij.io.Opener().deserialize(serializedBackup);
-				}
-				return backupUncroppedImagePlus;
+			public void setSavePath(String savePath) {
+				this.lastSavePath=savePath;
+				IssueLog.log("Save path for original image was stored", savePath, " may need to load from this path if missing");
 			}
 
 			/**
-			 * 
+			 returns the stored image. if there is not image plus object, attempts to re-create it
 			 */
-			public void saveImageEmbed() {
-				if(backupUncroppedImagePlus!=null)
-					this.serializedBackup=new ij.io.FileSaver(backupUncroppedImagePlus).serialize();
+			public ImagePlus getOrCreateImagePlus() {
+				if(getStoredImage()==null &&serializedBackup!=null) {
+					setStoredImage(new ij.io.Opener().deserialize(serializedBackup));
+					if (storage!=STORE_IN_ARRAY_ALWAYS) serializedBackup=null;
+				}
+				String p = lastSavePath;
+				if (getStoredImage()==null && p!=null) {
+					IssueLog.log("Will re-open original image at path ... ", p);
+					backupUncroppedImagePlus = getImageInPath(p);
+				}
+				return getStoredImage();
+			}
+
+			/**
+			saves the image inside of this object into an array that can be serialized
+			 */
+			public void saveImage() {
+				if(getStoredImage()!=null&& storage!=STORE_IN_EXTERNAL_FILE)
+					this.serializedBackup=new ij.io.FileSaver(getStoredImage()).serialize();
+				else {
+					askUserToSave();
+				}
+			}
+
+			/**
+			 Not yet implemented
+			 */
+			private void askUserToSave() {
+			}
+
+			public ImagePlus getStoredImage() {
+				return backupUncroppedImagePlus;
+			}
+
+			public void setStoredImage(ImagePlus backupUncroppedImagePlus) {
+				this.backupUncroppedImagePlus = backupUncroppedImagePlus;
+				if (backupUncroppedImagePlus!=null) {
+					this.innitialized=true;
+					this.originalSavePath=new ImagePlusWrapper(backupUncroppedImagePlus).getPath();
+					this.lastSavePath=originalSavePath;
+					this.estimatedFileSize=backupUncroppedImagePlus.getBitDepth()*backupUncroppedImagePlus.getWidth()*backupUncroppedImagePlus.getHeight()*backupUncroppedImagePlus.getStackSize();
+				}
+			}
+
+			public String getOriginalSavePath() {
+				return originalSavePath;
+			}
+
+			public int getEstimatedFileSize() {
+				return estimatedFileSize;
 			}
 		}
 
@@ -620,6 +709,11 @@ import standardDialog.SelectImageDialog;
 			ImagePlusMultiChannelSlot c = this.copy();
 			c.original=original;
 			return c;
+		}
+
+		@Override
+		public int getEstimatedSizeOriginal() {
+			return original.getEstimatedFileSize();
 		}
 		
 		

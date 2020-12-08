@@ -30,7 +30,7 @@ import javax.swing.Icon;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import popupMenusForComplexObjects.ShapeGraphicMenu;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;

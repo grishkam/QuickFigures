@@ -17,8 +17,8 @@ package sUnsortedDialogs;
 
 import java.util.ArrayList;
 
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
 
 
 public class ObjectListChoice<T> extends StandardDialog {

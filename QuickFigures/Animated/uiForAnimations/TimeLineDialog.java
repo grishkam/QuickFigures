@@ -32,8 +32,8 @@ import animations.Animation;
 import animations.KeyFrameAnimation;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.SelectedSetLayerSelector;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
 
 public class TimeLineDialog extends StandardDialog {
 

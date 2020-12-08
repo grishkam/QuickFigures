@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import genericMontageKit.PanelContentExtract;
 import graphicalObjects_LayoutObjects.SpacedPanelLayoutGraphic;
 import plasticPanels.BasicSpacedPanelLayout;
-import standardDialog.BooleanInputPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class SpacedPanelLayoutBorder extends GraphicItemOptionsDialog {
 

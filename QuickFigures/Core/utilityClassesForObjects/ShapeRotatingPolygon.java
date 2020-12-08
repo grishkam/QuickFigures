@@ -23,12 +23,12 @@ import java.io.Serializable;
 
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
-import standardDialog.AngleInputPanel;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberArrayInputPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.numbers.NumberArrayInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 import utilityClasses1.GeometryLineUtil;
 
 

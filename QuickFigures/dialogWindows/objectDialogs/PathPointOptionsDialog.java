@@ -16,7 +16,7 @@
 package objectDialogs;
 
 import graphicalObjects_BasicShapes.PathGraphic;
-import standardDialog.BooleanInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
 import utilityClassesForObjects.PathPoint;
 
 public class PathPointOptionsDialog extends GraphicItemOptionsDialog {

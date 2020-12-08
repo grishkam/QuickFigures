@@ -23,7 +23,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
 import channelMerging.ChannelEntry;
-import standardDialog.ChannelEntryBox;
+import standardDialog.channels.ChannelEntryBox;
 
 /**Renders the channel color cells in a channel selection JList*/
 public class ChannelColorCellRenerer2 extends DefaultListCellRenderer {

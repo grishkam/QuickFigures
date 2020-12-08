@@ -20,8 +20,8 @@ import java.awt.Color;
 import javax.swing.JColorChooser;
 
 import applicationAdapters.CanvasMouseEvent;
-import standardDialog.ColorInputEvent;
-import standardDialog.ColorInputListener;
+import standardDialog.colors.ColorInputEvent;
+import standardDialog.colors.ColorInputListener;
 import utilityClassesForObjects.ColorDimmer;
 
 /**A set of objects to be drawn in a color chooser style array. User will be able to select color. 

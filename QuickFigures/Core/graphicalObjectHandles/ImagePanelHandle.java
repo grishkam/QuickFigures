@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import applicationAdapters.CanvasMouseEvent;
 import genericMontageKit.BasicObjectListHandler;
 import genericMontageKit.OverlayObjectManager;
-import genericMontageUIKit.Object_Mover;
+import genericTools.Object_Mover;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;

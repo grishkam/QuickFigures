@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import genericMontageKit.PanelList;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
-import standardDialog.SnappingPanel;
 import standardDialog.StandardDialog;
+import standardDialog.attachmentPosition.SnappingPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 import utilityClassesForObjects.AttachmentPosition;
 
 

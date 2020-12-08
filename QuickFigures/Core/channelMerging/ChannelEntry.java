@@ -44,6 +44,10 @@ public class ChannelEntry implements Serializable{
 		this.setOriginalChannelIndex(number);
 	}
 	
+	public String toString() {
+		return this.getShortLabel()+"  "+getOriginalChannelIndex();
+	}
+	
 	public String getLabel() {
 		return label;
 	}

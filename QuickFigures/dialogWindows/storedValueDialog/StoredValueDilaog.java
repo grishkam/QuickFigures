@@ -19,13 +19,13 @@ import java.lang.reflect.Field;
 
 import gridLayout.RetrievableOption;
 import logging.IssueLog;
-import standardDialog.BooleanInputEvent;
-import standardDialog.BooleanInputListener;
-import standardDialog.BooleanInputPanel;
-import standardDialog.NumberInputEvent;
-import standardDialog.NumberInputListener;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputEvent;
+import standardDialog.booleans.BooleanInputListener;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.numbers.NumberInputEvent;
+import standardDialog.numbers.NumberInputListener;
+import standardDialog.numbers.NumberInputPanel;
 
 /**Created this class to that generating dialogs to change simple options
  * would not take much effort.

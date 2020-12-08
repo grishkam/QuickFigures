@@ -16,7 +16,7 @@
 package objectDialogs;
 
 import graphicalObjects_BasicShapes.RectangularGraphic;
-import standardDialog.NumberInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 /**An options dialog for RectangularGraphics*/
 public class RectangleGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog {

@@ -20,8 +20,8 @@ import java.awt.Shape;
 
 import dataSeries.DataSeries;
 import externalToolBar.IconWrappingToolIcon;
-import genericMontageUIKit.Object_Mover;
 import genericPlot.BasicDataSeriesGroup;
+import genericTools.Object_Mover;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import plotParts.DataShowingParts.DataShowingShape;

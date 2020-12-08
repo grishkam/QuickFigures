@@ -124,7 +124,7 @@ public class FolderIconGraphic extends GraphicGroup {
 			 
 			if (pp instanceof DefaultPaintProvider) {
 				DefaultPaintProvider dp=(DefaultPaintProvider) pp;
-				dp.setType(DefaultPaintProvider.shapegradient);
+				dp.setType(DefaultPaintProvider.SHAPE_GRADIENT_PAINT);
 				dp.setFe1(RectangleEdges.TOP);
 				dp.setFe2(RectangleEdges.BOTTOM);
 				

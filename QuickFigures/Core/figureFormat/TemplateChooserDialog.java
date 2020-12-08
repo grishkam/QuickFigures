@@ -29,10 +29,10 @@ import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import standardDialog.ComboBoxPanel;
-import standardDialog.GraphicComboBox;
-import standardDialog.ItemSelectblePanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.GraphicComboBox;
+import standardDialog.choices.ItemSelectblePanel;
 import utilityClassesForObjects.ObjectContainer;
 import utilityClassesForObjects.AttachmentPosition;
 

@@ -19,11 +19,11 @@ import java.util.ArrayList;
 
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.PointModel;
-import standardDialog.AngleInputPanel;
-import standardDialog.ComboBoxPanel;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialogListener;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class PointOptionsDialog extends GraphicItemOptionsDialog{
 

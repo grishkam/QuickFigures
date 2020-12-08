@@ -55,7 +55,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		/**The graphical object that displays this panel. If there is one. 
 		   */
-		public Object imageGObject;
+		public ImagePanelGraphic imageGObject;
 		/**The channel label used to display the channel name*/
 		private ChannelLabelTextGraphic channelLabelDisplay;
 
@@ -226,10 +226,10 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 	
 	
-		public void setImageDisplayObject(Object ob) {
+		public void setImageDisplayObject(ImagePanelGraphic ob) {
 			imageGObject=ob;
 		}
-		public Object getImageDisplayObject() {
+		public ImagePanelGraphic getImageDisplayObject() {
 			 return imageGObject;
 		}
 		public LocatedObject2D getLocatedImageDisplayObject() {

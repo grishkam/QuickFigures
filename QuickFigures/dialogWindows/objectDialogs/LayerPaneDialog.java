@@ -18,8 +18,8 @@ package objectDialogs;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicGroup.GroupedLayerPane;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import standardDialog.BooleanInputPanel;
-import standardDialog.StringInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.strings.StringInputPanel;
 
 public class LayerPaneDialog extends GraphicItemOptionsDialog  {
 

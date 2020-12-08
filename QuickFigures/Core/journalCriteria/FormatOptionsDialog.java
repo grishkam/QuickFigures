@@ -21,9 +21,9 @@ import java.util.Arrays;
 
 import javax.swing.JComboBox;
 
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class FormatOptionsDialog extends StandardDialog {
 

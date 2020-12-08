@@ -24,15 +24,15 @@ import javax.swing.Icon;
 
 import externalToolBar.IconSet;
 import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
-import genericMontageUIKit.Object_Mover;
+import genericTools.Object_Mover;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
-import standardDialog.BooleanInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputPanel;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;

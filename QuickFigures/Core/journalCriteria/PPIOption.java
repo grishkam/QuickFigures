@@ -27,9 +27,9 @@ import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import standardDialog.GraphicDisplayComponent;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.graphics.GraphicDisplayComponent;
+import standardDialog.numbers.NumberInputPanel;
 import undo.CombinedEdit;
 
 public class PPIOption extends BasicMultiSelectionOperator {

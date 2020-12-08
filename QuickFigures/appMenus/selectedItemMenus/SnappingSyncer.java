@@ -24,7 +24,7 @@ import javax.swing.Icon;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import objectDialogs.MultiSnappingDialog;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.AttachmentPosition;
 

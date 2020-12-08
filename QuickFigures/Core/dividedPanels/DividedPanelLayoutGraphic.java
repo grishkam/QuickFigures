@@ -38,8 +38,8 @@ import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import menuUtil.SmartPopupJMenu;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
 import utilityClassesForObjects.RectangleEdges;
 
 /**Displays a divided panel layout. Available for use as a ''super* layout that contains 

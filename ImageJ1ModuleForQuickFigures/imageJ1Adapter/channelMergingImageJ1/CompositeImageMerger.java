@@ -20,6 +20,7 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ColorProcessor;
 import ij.process.LUT;
+import logging.IssueLog;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -72,10 +73,8 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 	
 	/**makes an rgb image by merging the given channels*/
 	private PixelWrapper generateMergedRGB(ImagePlus imp, ArrayList<ChannelEntry> channels, int slice, int frame, int ChannelsInGrayScale) {
-		if (channels.size()==0) {
-			BufferedImage image = ImagePanelGraphic.createImageWithText("Empty", imp.getWidth(),  imp.getHeight(), imp.getWidth()/5);
-			return new ProcessorWrapper(new ColorProcessor(image));
-		} 
+		try {
+		
 		LUT[] luts =imp.getLuts();
 		
 		LUT[] newLut=new LUT[channels.size()];
@@ -120,8 +119,24 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 			if (channels.size()==1) return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==1); else 
 				return mergedComposite(tempcomposte);
 				}
+		
+		
+		}  catch (Throwable t) {
+			IssueLog.logT(t);
+			return createEmpty(imp);
+			}
+		
 		}
 			//return image;
+
+	/**
+	 * @param imp
+	 * @return
+	 */
+	protected PixelWrapper createEmpty(ImagePlus imp) {
+		BufferedImage image = ImagePanelGraphic.createImageWithText("Empty", imp.getWidth(),  imp.getHeight(), imp.getWidth()/5);
+		return new ProcessorWrapper(new ColorProcessor(image));
+	}
 		
 	
 	

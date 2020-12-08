@@ -17,8 +17,8 @@ package channelMerging;
 
 import javax.swing.JComboBox;
 
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
 
 /**"Dialog appears when the user chooses Saving Options for an image.
   Gives the user an option to load the image from a save location 

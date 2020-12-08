@@ -26,7 +26,7 @@ import externalToolBar.IconWrappingToolIcon;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import storedValueDialog.ReflectingFieldSettingDialog;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;

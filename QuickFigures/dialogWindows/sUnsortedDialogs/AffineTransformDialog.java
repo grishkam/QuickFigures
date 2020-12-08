@@ -19,9 +19,9 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-import standardDialog.AngleInputPanel;
-import standardDialog.PointInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.numbers.PointInputPanel;
 
 public class AffineTransformDialog extends StandardDialog {
 

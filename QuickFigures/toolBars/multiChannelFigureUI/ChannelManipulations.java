@@ -21,7 +21,7 @@ import channelMerging.ChannelOrderAndColorWrap;
 import channelMerging.MultiChannelImage;
 import infoStorage.BasicMetaDataHandler;
 import logging.IssueLog;
-import standardDialog.ShowDisplayRange;
+import standardDialog.channels.ShowDisplayRange;
 
 public class ChannelManipulations {
 	/**useful method that sets the display range of channel chan without referencing*/

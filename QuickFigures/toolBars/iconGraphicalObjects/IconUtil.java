@@ -27,7 +27,7 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import standardDialog.GraphicObjectDisplayBasic;
+import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**this class consists of static methods for creating a few of the icons used*/
 public class IconUtil {

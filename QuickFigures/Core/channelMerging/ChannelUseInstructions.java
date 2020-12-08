@@ -437,6 +437,10 @@ public class ChannelUseInstructions implements Serializable {
 					currentOrder.addAll(order);
 				}
 				
+				public String toString() {
+					return "Channel Reorder "+ currentOrder;
+				}
+				
 				/**swaps the locations of two channels within the order*/
 				void swap(int c1, int c2) {
 					new ArraySorter<Integer>().swapObjectPositionsInArray(c1, c2, currentOrder);

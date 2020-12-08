@@ -27,8 +27,8 @@ import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import selectedItemMenus.MultiSelectionOperator;
-import standardDialog.ColorInputEvent;
-import standardDialog.ColorInputListener;
+import standardDialog.colors.ColorInputEvent;
+import standardDialog.colors.ColorInputListener;
 
 /**A set of smart handles that acts as a mini toolbar for shapes*/
 public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {

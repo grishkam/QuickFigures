@@ -23,8 +23,8 @@ import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
 import gridLayout.MontageEditorDialogs;
 import logging.IssueLog;
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
 import utilityClassesForObjects.LocatedObject2D;
 
 /**The panel selector tool allows one to select regions of interest based on the the MontageLayout available*/

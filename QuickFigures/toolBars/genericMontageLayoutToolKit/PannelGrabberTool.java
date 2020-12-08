@@ -18,8 +18,8 @@ import externalToolBar.IconSet;
 import genericMontageKit.*;
 import gridLayout.LayoutSpaces;
 import logging.IssueLog;
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.choices.ComboBoxPanel;
 
 import java.awt.Dimension;
 import java.awt.Image;

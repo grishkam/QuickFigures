@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
-import standardDialog.BooleanInputPanel;
-import standardDialog.SnappingPanel;
+import standardDialog.attachmentPosition.SnappingPanel;
+import standardDialog.booleans.BooleanInputPanel;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.AttachmentPosition;
 

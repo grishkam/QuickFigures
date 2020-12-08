@@ -15,8 +15,8 @@
  *******************************************************************************/
 package objectDialogs;
 
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
 import utilityClassesForObjects.LocatedObject2D;
 
 public class LocationSettingDialog extends StandardDialog {

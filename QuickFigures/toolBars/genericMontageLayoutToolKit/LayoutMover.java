@@ -16,7 +16,7 @@
 package genericMontageLayoutToolKit;
 
 import externalToolBar.GraphicToolIcon;
-import genericMontageUIKit.Object_Mover;
+import genericTools.Object_Mover;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 public class LayoutMover extends Object_Mover {

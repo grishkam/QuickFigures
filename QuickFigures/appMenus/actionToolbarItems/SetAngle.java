@@ -29,10 +29,10 @@ import javax.swing.Icon;
 
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import standardDialog.AngleInputPanel;
-import standardDialog.NumberInputEvent;
-import standardDialog.NumberInputListener;
-import standardDialog.NumberInputPanel;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.numbers.NumberInputEvent;
+import standardDialog.numbers.NumberInputListener;
+import standardDialog.numbers.NumberInputPanel;
 import undo.CombinedEdit;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.LocatedObject2D;

@@ -28,8 +28,8 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import imageDisplayApp.ZoomOptions;
-import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
+import standardDialog.graphics.GraphicDisplayComponent;
 import storedValueDialog.StoredValueDilaog;
 
 /**This class implements the functions for a menu item that allows the user to zoom in or out*/

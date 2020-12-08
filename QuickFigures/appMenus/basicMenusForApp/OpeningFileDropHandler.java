@@ -17,7 +17,7 @@ package basicMenusForApp;
 
 import java.io.File;
 
-import genericMontageUIKit.MoverDragHandler;
+import genericTools.MoverDragHandler;
 import imageDisplayApp.ImageDisplayIO;
 
 public class OpeningFileDropHandler extends FileDropHandler {

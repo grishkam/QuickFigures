@@ -36,7 +36,7 @@ import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.MultiSelectionOperator;
-import standardDialog.GraphicComponent;
+import standardDialog.graphics.GraphicComponent;
 
 /**A set of handles functions as a 'mini-toolbar' for some objects.
  Each subclass of this list, forms a different grid of handles with icons  */

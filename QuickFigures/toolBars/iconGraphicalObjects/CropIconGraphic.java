@@ -24,7 +24,7 @@ import javax.swing.Icon;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import standardDialog.GraphicObjectDisplayBasic;
+import standardDialog.graphics.GraphicObjectDisplayBasic;
 import utilityClassesForObjects.AttachmentPosition;
 
 /**A class for rendering of a cropping icon*/

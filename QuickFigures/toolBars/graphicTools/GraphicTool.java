@@ -16,7 +16,7 @@
 package graphicTools;
 
 import applicationAdapters.ImageWrapper;
-import genericMontageUIKit.Object_Mover;
+import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;

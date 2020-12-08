@@ -19,10 +19,10 @@ import javax.swing.JTabbedPane;
 
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.numbers.NumberInputPanel;
 import undo.Edit;
 
 public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {

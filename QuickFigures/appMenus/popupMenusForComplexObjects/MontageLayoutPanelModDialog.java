@@ -21,8 +21,8 @@ import java.awt.event.MouseListener;
 import genericMontageKit.PanelLayout;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import objectDialogs.GraphicItemOptionsDialog;
-import standardDialog.BooleanInputPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.numbers.NumberInputPanel;
 
 public class MontageLayoutPanelModDialog extends GraphicItemOptionsDialog implements MouseListener{
 

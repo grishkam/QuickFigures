@@ -15,12 +15,14 @@
  *******************************************************************************/
 package objectDialogs;
 
-import standardDialog.ColorInputPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.FixedEdgeSelectable;
-import standardDialog.ItemSelectblePanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ItemSelectblePanel;
+import standardDialog.colors.ColorInputPanel;
+import standardDialog.graphics.FixedEdgeSelectable;
 import utilityClassesForObjects.DefaultPaintProvider;
 
+/**A dialog for editing paint provider objects 
+ * @see DefaultPaintProvider*/
 public class DefaultPaintProviderDialog extends GraphicItemOptionsDialog {
 
 	/**

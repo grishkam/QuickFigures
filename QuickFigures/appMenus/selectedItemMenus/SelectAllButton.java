@@ -21,7 +21,7 @@ import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
 import iconGraphicalObjects.IconUtil;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
 

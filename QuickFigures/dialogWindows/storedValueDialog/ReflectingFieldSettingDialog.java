@@ -21,11 +21,11 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import standardDialog.BooleanInputPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
-import standardDialog.StringInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.StringInputPanel;
 
 
 /**Takes advantage of reflection to create dialogs for arbitrary objects*/

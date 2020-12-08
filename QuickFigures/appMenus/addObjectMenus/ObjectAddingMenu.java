@@ -27,7 +27,7 @@ import javax.swing.JMenuItem;
 
 import appContext.CurrentAppContext;
 import exportMenus.SVGQuickExport;
-import genericMontageUIKit.ToolBit;
+import genericTools.ToolBit;
 import graphicTools.RectGraphicTool;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -36,9 +36,9 @@ import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.SVG_GraphicAdder2;
-import standardDialog.GraphicDisplayComponent;
-import standardDialog.GraphicJMenuItem;
-import standardDialog.DisplaysGraphicalObject;
+import standardDialog.graphics.DisplaysGraphicalObject;
+import standardDialog.graphics.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicJMenuItem;
 import utilityClassesForObjects.LobeMaker;
 
 /**The menu used to add graphics to graphic layers*/

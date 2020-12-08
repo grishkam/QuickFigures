@@ -84,7 +84,7 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.SelectionOperationsMenu;
-import standardDialog.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicDisplayComponent;
 import ultilInputOutput.ForDragAndDrop;
 import undo.CombinedEdit;
 import undo.UndoAddItem;

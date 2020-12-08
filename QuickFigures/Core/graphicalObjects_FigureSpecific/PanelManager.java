@@ -13,8 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 8, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package graphicalObjects_FigureSpecific;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,6 +46,7 @@ import undo.Edit;
 import undo.EditListener;
 import undo.PreprocessChangeUndo;
 import undo.UndoAbleEditForRemoveItem;
+import undo.UndoMoveItems;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.RectangleEdges;
 
@@ -56,7 +64,7 @@ public class PanelManager implements Serializable, EditListener{
 	int channelUseMode=NORMAL_CHANNEL_USE;
 	
 	private GraphicLayer layer;
-	private PanelList stack;
+	private PanelList panelList;
 	private MultichannelDisplayLayer display;
 	
 	private transient MultiChannelImage multi;
@@ -125,10 +133,11 @@ public class PanelManager implements Serializable, EditListener{
 		return null;
 	}
 	
+	/**returns the panel list element that contins the given image*/
 	public PanelListElement  getListElementFor(ImagePanelGraphic image) {
 		if (image==null) return null;
-		if (stack==null) return null;
-		for(PanelListElement panel: stack.getPanels()) {
+		if (panelList==null) return null;
+		for(PanelListElement panel: panelList.getPanels()) {
 			if (panel.getImageDisplayObject() ==image) {
 				return panel;
 			}
@@ -136,12 +145,14 @@ public class PanelManager implements Serializable, EditListener{
 		return null;
 	}
 	
+	/**returns the pixel density ratio that has been set of the panel list*/
 	public double getPanelLevelScale() {
-		return stack.getPixelDensityRatio();
+		return panelList.getPixelDensityRatio();
 	}
 	
+	/**sets the pixel density ratio for the panel list*/
 	public void setPanelLevelScale(double panelLevelScale) {
-		stack.setPixelDensityRatio(panelLevelScale);
+		panelList.setPixelDensityRatio(panelLevelScale);
 	}
 	
 
@@ -190,9 +201,9 @@ public class PanelManager implements Serializable, EditListener{
 		channelLabels and scale bars. returns an undo for the action*/
 	public CombinedEdit removeDisplayObjectsForAll() {
 		CombinedEdit output = new CombinedEdit();
-		if (stack==null) return  output;
+		if (panelList==null) return  output;
 		
-		PanelList arr = stack;
+		PanelList arr = panelList;
 		
 		for(PanelListElement  g:arr.getPanels()) {
 			 output.addEditToList(
@@ -278,11 +289,11 @@ public class PanelManager implements Serializable, EditListener{
 
 	/**getter method for the panel list*/
 	public PanelList getPanelList() {
-		return stack;
+		return panelList;
 	}
 	/**setter method for the panel list*/
 	public void setPanelList(PanelList stack) {
-		this.stack = stack;
+		this.panelList = stack;
 	}
 
 	/**getter method for multi-channel*/
@@ -376,7 +387,7 @@ public class PanelManager implements Serializable, EditListener{
 	}
 	
 	
-
+	/**returns the layout that is used for the given layer*/
 	public static MontageLayoutGraphic getGridLayout(GraphicLayer layer) {
 		if (layer==null) return null;
 		ArrayList<ZoomableGraphic> arr = layer.getItemArray();
@@ -421,7 +432,7 @@ public class PanelManager implements Serializable, EditListener{
 		return layer;
 	}
 	
-	/**alters the PPI of the figure.
+	/**alters the pixel density of the figure.
 	 */
 	public CombinedEdit changePPI(double newppi) {
 		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
@@ -524,6 +535,48 @@ public class PanelManager implements Serializable, EditListener{
 		}
 		this.updatePanels();
 		return true;
+	}
+	
+	/**returns the panels that actually have images in the layer*/
+	public ArrayList<PanelListElement> listPanelsWithVisibleGraphic() {
+		ArrayList<PanelListElement> output=new ArrayList<PanelListElement>();
+		for(PanelListElement panel: panelList.getPanels()) {
+			ZoomableGraphic z = panel.getImageDisplayObject();
+			if (this.getLayer().hasItem(z))
+				output.add(panel);
+		}
+		return output;
+	}
+	
+	/**Alters the channel order, also swaps the channel panel locations.
+	  Channel labels will also be updated. However*/
+	public void performChannelSwap(int i, int i2) {
+		this.getPanelList().getChannelUseInstructions().onChannelSwap(i, i2);
+		reorderImagePanels();
+		this.updatePanels();
+		this.updateDisplay();
+	}
+	
+	/**reorders the image panels and their display items, 
+	 * assuming that changes to channel order have been made, the new order will be different and channel
+	 * panels will move*/
+private AbstractUndoableEdit2 reorderImagePanels() {
+		ArrayList<PanelListElement> list = listPanelsWithVisibleGraphic();
+		CombinedEdit undo = new CombinedEdit();
+		ArrayList<Point2D> locations=new ArrayList<Point2D>();
+		
+		for(PanelListElement panel:list) {
+			ImagePanelGraphic graphic = panel.getImageDisplayObject();
+			undo.addEdit(new UndoMoveItems(graphic));
+			locations.add(graphic.getLocationUpperLeft());
+		}
+		this.getPanelList().sortThese(list);
+		this.getPanelList().sortPanels();
+		for(int i=0; i<locations.size(); i++) {
+			list.get(i).getImageDisplayObject().setLocationUpperLeft(locations.get(i));
+		}
+		undo.establishFinalState();
+		return undo;
 	}
 	
 	/**returns true if the panel manager is using only a subset of the Z slices or T frames*/

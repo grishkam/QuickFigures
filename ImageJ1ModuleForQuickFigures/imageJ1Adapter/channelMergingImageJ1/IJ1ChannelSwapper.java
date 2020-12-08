@@ -15,12 +15,11 @@
  *******************************************************************************/
 
 package channelMergingImageJ1;
-import genericMontageUIKit.AbstractChannelHandler;
-
 import java.awt.Color;
 import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
+import genericTools.AbstractChannelHandler;
 import ij.CompositeImage;
 import ij.ImagePlus;
 import ij.ImageStack;

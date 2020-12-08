@@ -36,8 +36,8 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import popupMenusForComplexObjects.BarGraphicMenu;
 import popupMenusForComplexObjects.TextGraphicMenu;
-import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoScaleBarEdit;
 import utilityClasses1.NumberUse;

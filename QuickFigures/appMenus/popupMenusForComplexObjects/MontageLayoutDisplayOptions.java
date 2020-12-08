@@ -17,8 +17,8 @@ package popupMenusForComplexObjects;
 
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import objectDialogs.GraphicItemOptionsDialog;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ComboBoxPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
 
 public class MontageLayoutDisplayOptions extends GraphicItemOptionsDialog {
 

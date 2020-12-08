@@ -33,10 +33,10 @@ import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicActionToolbar.CurrentFigureSet;
 import standardDialog.GriddedPanel;
-import standardDialog.NumberInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.channels.ShowDisplayRange;
+import standardDialog.numbers.NumberInputPanel;
 import undo.AbstractUndoableEdit2;
-import standardDialog.ShowDisplayRange;
 
 /**A window/level adjuster that can adjust window/level across many panels
    */

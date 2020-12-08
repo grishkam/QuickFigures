@@ -20,9 +20,9 @@ import channelMerging.SubStackSelectionInstructions;
 import channelMerging.SubStackSelectionInstructions.FrameUseInstructions;
 import channelMerging.SubStackSelectionInstructions.SliceUseInstructions;
 import objectDialogs.GraphicItemOptionsDialog;
-import standardDialog.InfoDisplayPanel;
 import standardDialog.StandardDialog;
-import standardDialog.StringInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
+import standardDialog.strings.StringInputPanel;
 import utilityClasses1.NumberUse;
 
 /**

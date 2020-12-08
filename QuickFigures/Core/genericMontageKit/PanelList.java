@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 8, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package genericMontageKit;
 
 
@@ -29,6 +35,7 @@ import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
+import channelMerging.ChannelUseInstructions.ChannelPanelReorder;
 import channelMerging.MultiChannelImage;
 import graphicalObjects.ImagePanelGraphic;
 import logging.IssueLog;
@@ -159,8 +166,7 @@ public class PanelList implements Serializable{
 
 	
 	/**returns the number of different original image names present in the list
-	  In most cases this will consist of a single image.*/
-	//TODO: determine if this is obsolete
+	  In most cases this will consist of a single image.
 	public int nDistinctNames() {
 		int output=0;
 		String name=null;
@@ -170,20 +176,18 @@ public class PanelList implements Serializable{
 			}
 		}	
 		return output;	
-	}
+	}*/
 	
-	/**returns the number of entries in the list with the orignal image name 'name'*/
-	//TODO: determine if this is obsolete
+	/**returns the number of entries in the list with the orignal image name 'name'
 	public int nWithName(String name) {
 		int output=0;
 		for(PanelListElement panel:getPanels()) {
 			if (panel.originalImageName.equals(name)) output++;
 		}
 		return output;
-	}
+	}*/
 	
 	/**Adds all the panels within list b to this list*/
-	//TODO: determine if this is obsolete
 	public void add( PanelList b ) {
 		getPanels().addAll(b.getPanels());
 	}
@@ -292,12 +296,27 @@ public class PanelList implements Serializable{
 		
 		
 		try {
-			// sorts the list so that the set channel order is followed. Also ensures that slices and frames are in order
-			Collections.sort(panels, new PanelCompare());
+			sortPanels();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+
+	/**
+	sorts the panels based on the order of the channels slices and frames
+	 */
+	public void sortPanels() {
+		sortThese(panels);
+	}
+
+
+	/**
+	sorts the array
+	 */
+	 public void sortThese(ArrayList<PanelListElement> panels2) {
+		Collections.sort(panels2, new PanelCompare());
 	}
 	
 	
@@ -415,19 +434,45 @@ public class PanelList implements Serializable{
 	}
 
 	
-	
-	private void resetChannelEntriesForPanel(MultiChannelImage  impw, PanelListElement entry) {
-		//ImagePlusWrapper impw = new ImagePlusWrapper(imp);
-		
-		if (entry.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) {
-			this.setUpChannelEntryForMerge(impw, entry, entry.targetFrameNumber, entry.targetSliceNumber);
+	/**updates the channel entry list for the panel to match the image*/
+	private void resetChannelEntriesForPanel(MultiChannelImage  impw, PanelListElement panel) {
+		if (panel.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) {
+			this.setUpChannelEntryForMerge(impw, panel, panel.targetFrameNumber, panel.targetSliceNumber);
 		}
 		else {
-			setUpChannelEntriesForPanel(impw, entry, entry.targetChannelNumber, entry.targetFrameNumber, entry.targetSliceNumber);
+			setUpChannelEntriesForPanel(impw, panel, panel.targetChannelNumber, panel.targetFrameNumber, panel.targetSliceNumber);
 			
 		}
-		entry.purgeDuplicateChannelEntries();
-		if (entry.getChannelLabelDisplay()!=null) entry.getChannelLabelDisplay().setParaGraphToChannels();
+	
+		
+		panel.purgeDuplicateChannelEntries();
+		updateChannelOrder(panel);
+		
+		
+		if (panel.getChannelLabelDisplay()!=null)
+				panel.getChannelLabelDisplay().setParaGraphToChannels();
+	}
+
+
+	/**
+	updates the order of the channel entries to match the instructions
+	 */
+	protected void updateChannelOrder(PanelListElement panel) {
+		ArrayList<ChannelEntry> channelEntries = panel.getChannelEntries();
+		if (channelEntries.size()<2) return;
+		
+		channelEntries.sort(new Comparator<ChannelEntry>() {
+
+			@Override
+			public int compare(ChannelEntry o1, ChannelEntry o2) {
+				ChannelPanelReorder order = instructions.getChanPanelReorder();
+				int p1 = order.index(o1.getOriginalChannelIndex());
+				int p2 = order.index(o2.getOriginalChannelIndex());
+				if(p1<p2) return -1;
+				if (p2>p1) return 1;
+				
+				return 0;
+			}});
 	}
 	
 	
@@ -535,7 +580,7 @@ public class PanelList implements Serializable{
 		entry.setImageObjectWrapped(impw.getChannelMerger().generateMergedRGB(entry, getChannelUseInstructions().channelColorMode));
 	
 		entry.setScaleInfo(impw.getScaleInfo());
-		
+	
 		/**needed to change the image when there are updates but not for initial creation*/
 		entry.updateImagePanelGraphic();
 	}  catch (Throwable t) {IssueLog.logT(t);}
@@ -609,7 +654,7 @@ public class PanelList implements Serializable{
 		
 	}
 	
-
+	
 	public int getlastPanelsIndex() {
 		int out=0;
 		for(PanelListElement s:getPanels()) {

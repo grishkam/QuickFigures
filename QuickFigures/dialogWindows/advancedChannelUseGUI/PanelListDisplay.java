@@ -50,7 +50,7 @@ import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
-import standardDialog.ColorDimmingBox;
+import standardDialog.colors.ColorDimmingBox;
 
 
 /**experimenting with a way for the user to look through the parts of a panel list*/

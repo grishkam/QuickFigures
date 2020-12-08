@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import standardDialog.GraphicObjectDisplayBasic;
+import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**A panel for displaying the current status of an ongoing process.
   In general, I designed this so there is one main status panel (the most recent one created)*/

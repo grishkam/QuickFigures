@@ -17,14 +17,14 @@ package objectDialogs;
 
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ImagePanelGraphic;
-import standardDialog.AngleInputPanel;
-import standardDialog.BooleanArrayInputPanel;
-import standardDialog.BooleanInputPanel;
-import standardDialog.ColorCheckbox;
-import standardDialog.ColorComboboxPanel;
-import standardDialog.ComboBoxPanel;
-import standardDialog.InfoDisplayPanel;
-import standardDialog.NumberInputPanel;
+import standardDialog.booleans.BooleanArrayInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ComboBoxPanel;
+import standardDialog.colors.ColorCheckbox;
+import standardDialog.colors.ColorComboboxPanel;
+import standardDialog.numbers.AngleInputPanel;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import undo.Edit;
 
 

@@ -21,9 +21,9 @@ import java.util.Collection;
 
 import javax.swing.undo.UndoManager;
 
-import standardDialog.NumberInputPanel;
-import standardDialog.PointInputPanel;
 import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.numbers.PointInputPanel;
 import undo.CombinedEdit;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.Scales;

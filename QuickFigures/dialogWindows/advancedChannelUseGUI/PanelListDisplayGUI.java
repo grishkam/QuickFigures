@@ -42,9 +42,9 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
 import iconGraphicalObjects.ChannelUseIcon;
 import menuUtil.SmartPopupJMenu;
-import standardDialog.ChannelEntryBox;
-import standardDialog.ComboBoxPanel;
 import standardDialog.StandardDialog;
+import standardDialog.channels.ChannelEntryBox;
+import standardDialog.choices.ComboBoxPanel;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 

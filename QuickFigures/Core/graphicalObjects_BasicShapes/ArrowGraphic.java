@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import popupMenusForComplexObjects.ArrowGraphicMenu;
-import standardDialog.GraphicDisplayComponent;
 import standardDialog.StandardDialog;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.BasicStrokedItem;
 import utilityClassesForObjects.PathPointList;
