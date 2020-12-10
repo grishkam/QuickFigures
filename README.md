@@ -10,8 +10,9 @@ https://www.biorxiv.org/content/10.1101/2020.09.24.311282v2
 Download here
 https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
 
-Of if you want the latest features download this one
+Of if you want the latest features download this one. 
 https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_Daily_Version.jar
+the most recent one uses the most recent version of Apache Batik (1.13) for SVG, PDF and EPS export
 
 Note from the author: 
 You have permission to use parts of the QuickFigures project. 
