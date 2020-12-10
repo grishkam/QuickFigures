@@ -30,7 +30,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.GraphicComboBox;
 import standardDialog.choices.ItemSelectblePanel;
 import utilityClassesForObjects.ObjectContainer;
@@ -124,7 +124,7 @@ public class TemplateChooserDialog extends StandardDialog {
 		vv.addAll(rowlabelpotentials);
 		JComboBox<Object> rlc = new JComboBox<Object>(vv);
 		setOfPanels2.put(picker.getKeyName(), rlc);
-		ComboBoxPanel panel1 = new ComboBoxPanel(picker.getOptionName(), rlc);
+		ChoiceInputPanel panel1 = new ChoiceInputPanel(picker.getOptionName(), rlc);
 		if (rowlabelpotentials.size()>0) rlc.setSelectedIndex(1);
 		super.add(title, panel1);
 	}

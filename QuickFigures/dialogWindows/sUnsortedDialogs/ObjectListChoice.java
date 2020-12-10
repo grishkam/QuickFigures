@@ -18,7 +18,7 @@ package sUnsortedDialogs;
 import java.util.ArrayList;
 
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 
 
 public class ObjectListChoice<T> extends StandardDialog {
@@ -90,7 +90,7 @@ public class ObjectListChoice<T> extends StandardDialog {
 		}
 		
 		if (starting>oos.size()) starting=oos.size();
-		this.add(prompt, new ComboBoxPanel(prompt, Items, starting));
+		this.add(prompt, new ChoiceInputPanel(prompt, Items, starting));
 		
 	}
 	

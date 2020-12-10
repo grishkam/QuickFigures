@@ -74,8 +74,7 @@ public class LockedItemHandle extends SmartHandle {
 	private LockedItemHandle demiVerion;
 
 	public LockedItemHandle(int x, int y) {
-		super(x, y);
-		
+	
 		handlesize=20;
 	}
 	

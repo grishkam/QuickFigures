@@ -34,6 +34,8 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import standardDialog.graphics.GraphicComponent;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 
+/**A component that allows a user to input an angle by dragging the mouse at the angles positions
+  the graphic indicates the selected angle with lines*/
 public class AngleBox extends GraphicComponent implements MouseListener, MouseMotionListener{
 
 	/**
@@ -44,7 +46,6 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 	private double angle=0;
 	
 	Point center=new Point(95,95);
-	//OvalGraphic r1=new OvalGraphic(new Rectangle(50,50,90,90)); {setRectProp(r1);r1.setFillColor(Color.gray);}
 	BarGraphic handle=new BarGraphic(); {setBarProp(handle);}
 	BarGraphic handle2=new BarGraphic(); {setBarProp(handle2);
 	handle2.setFillColor(Color.LIGHT_GRAY);
@@ -53,14 +54,9 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 	super.getCord().setMagnification(0.2);
 	}
 	
-	public void setRectProp(RectangularGraphic r1) {
-		r1.setFilled(true);
-		r1.setDashes(new float[]{10000});
-		r1.setStrokeWidth(4);
-		
-	}
-	
-	public void setBarProp(BarGraphic r1) {
+
+	/**sets the graphic to the right color and locaion to indicate the angle */
+	private void setBarProp(BarGraphic r1) {
 		r1.setLengthProjection(0);
 		r1.setFillColor(Color.black);
 		r1.setFilled(true);
@@ -69,7 +65,7 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 		r1.setLengthInUnits(80);
 		r1.setBarStroke(8);
 		r1.setLocation((int)center.getX(), (int)center.getY());
-		//r1.select();
+;
 	}
 	
 

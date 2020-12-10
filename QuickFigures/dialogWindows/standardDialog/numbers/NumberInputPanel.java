@@ -314,7 +314,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	}
 	
 	
-	/**used for easy access*/
+	/**used for easy way to obtain a number from the user*/
 	public static double getNumber(String prompt, double startnumber, int precis, boolean slider, StandardDialogListener dialogListener) {
 		StandardDialog sd = new StandardDialog();
 		sd.setModal(true);

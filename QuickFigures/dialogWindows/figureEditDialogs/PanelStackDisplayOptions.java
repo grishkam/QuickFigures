@@ -35,11 +35,10 @@ import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_FigureSpecific.PanelManager;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
-import logging.IssueLog;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.channels.ChannelEntryBox;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 import storedValueDialog.StoredValueDilaog;
 import ultilInputOutput.FileChoiceUtil;
@@ -152,16 +151,16 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		if (this.panelCreationIncluded) {
 			addMergeHandlingToDialog(this, ins);
-		ArrayList<Integer> ex = ins.excludedChannelPanels;
+		ArrayList<Integer> ex = ins.getExcludedChannelPanels();
 			
 			
 		for(int i=0; i<3; i++) {
 			int mergeChannelIndex= ex.size()>i?  ex.get(i):ChannelUseInstructions.NONE_SELECTED;
 			if (mergeChannelIndex>=chanList.length) { mergeChannelIndex=ChannelUseInstructions.NONE_SELECTED;}
-			ComboBoxPanel mergeCombo;
+			ChoiceInputPanel mergeCombo;
 			if (entries.size()>i){
-				 mergeCombo = new standardDialog.choices.ComboBoxPanel("don't include channel", new ChannelEntryBox(mergeChannelIndex, entries));
-			} else mergeCombo = new standardDialog.choices.ComboBoxPanel("don't include channel", chanList, mergeChannelIndex );
+				 mergeCombo = new standardDialog.choices.ChoiceInputPanel("don't include channel", new ChannelEntryBox(mergeChannelIndex, entries));
+			} else mergeCombo = new standardDialog.choices.ChoiceInputPanel("don't include channel", chanList, mergeChannelIndex );
 		this.add("exclude channel panel "+i, mergeCombo);
 		}
 		
@@ -186,7 +185,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	
 	 */
 	static void addMergeHandlingToDialog(StandardDialog t, ChannelUseInstructions ins) {
-		ComboBoxPanel mergeh = new ComboBoxPanel("Merge Image", MergePositions, ins.MergeHandleing);
+		ChoiceInputPanel mergeh = new ChoiceInputPanel("Merge Image", MergePositions, ins.MergeHandleing);
 		t.add("merge",mergeh );
 	}
 
@@ -195,32 +194,32 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	 */
 	protected static void addChannelUseInstructionsToDialog(StandardDialog t, String[] chanList, channelMerging.ChannelUseInstructions ins,
 			ArrayList<ChannelEntry> entries) {
-		ComboBoxPanel grey =new  standardDialog.choices.ComboBoxPanel("Channel Color Mode ", new String[] {"Color of LUTs", "Greyscale"}, ins.channelColorMode);
+		ChoiceInputPanel grey =new  standardDialog.choices.ChoiceInputPanel("Channel Color Mode ", new String[] {"Color of LUTs", "Greyscale"}, ins.channelColorMode);
 		t.add("grey", grey);
 		
-		ArrayList<Integer> nome = ins.noMergeChannels;
+		ArrayList<Integer> nome = ins.getNoMergeChannels();
 		for(int i=0; i<3; i++) {
 			int noMergeIndex=nome.size()>i? nome.get(i):ChannelUseInstructions.NONE_SELECTED;
 			if (noMergeIndex>=chanList.length) noMergeIndex=ChannelUseInstructions.NONE_SELECTED;
-			ComboBoxPanel mergeCombo;
+			ChoiceInputPanel mergeCombo;
 			if (entries.size()>i){
-				 mergeCombo = new standardDialog.choices.ComboBoxPanel("dont't merge channel", new ChannelEntryBox(noMergeIndex , entries));
-			} else mergeCombo = new standardDialog.choices.ComboBoxPanel("dont't merge channel", chanList,noMergeIndex );
+				 mergeCombo = new standardDialog.choices.ChoiceInputPanel("dont't merge channel", new ChannelEntryBox(noMergeIndex , entries));
+			} else mergeCombo = new standardDialog.choices.ChoiceInputPanel("dont't merge channel", chanList,noMergeIndex );
 		t.add("don't merge"+i, mergeCombo);
 
 		}
 
-		ComboBoxPanel mergeCombo;
+		ChoiceInputPanel mergeCombo;
 		if (entries.size()>ins.ignoreAfterChannel){
-			 mergeCombo = new standardDialog.choices.ComboBoxPanel("Go upto channel", new ChannelEntryBox(ins.ignoreAfterChannel , entries));
-		} else mergeCombo = new standardDialog.choices.ComboBoxPanel("Go upto channel", chanList,ins.ignoreAfterChannel );
+			 mergeCombo = new standardDialog.choices.ChoiceInputPanel("Go upto channel", new ChannelEntryBox(ins.ignoreAfterChannel , entries));
+		} else mergeCombo = new standardDialog.choices.ChoiceInputPanel("Go upto channel", chanList,ins.ignoreAfterChannel );
 		t.add("ignoreAfter", mergeCombo);
 		
 
-		ComboBoxPanel mergeCombo2;
+		ChoiceInputPanel mergeCombo2;
 		if (entries.size()>ins.eachMergeChannel){
-			 mergeCombo2 = new standardDialog.choices.ComboBoxPanel("merge each channel with", new ChannelEntryBox(ins.eachMergeChannel , entries));
-		} else mergeCombo2 = new standardDialog.choices.ComboBoxPanel("merge each channel with", chanList, ins.eachMergeChannel);
+			 mergeCombo2 = new standardDialog.choices.ChoiceInputPanel("merge each channel with", new ChannelEntryBox(ins.eachMergeChannel , entries));
+		} else mergeCombo2 = new standardDialog.choices.ChoiceInputPanel("merge each channel with", chanList, ins.eachMergeChannel);
 		t.add("mergeeach", mergeCombo2);
 	}
 	
@@ -285,7 +284,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			
 			noChan.add(this.getChoiceIndex("exclude channel panel "+i));
 		}
-		ins.excludedChannelPanels=noChan;
+		ins.setExcludedChannelPanels(noChan);
 		ins.setIdealNumberOfColumns(this.getNumberInt("mWidth")); 
 		
 		
@@ -321,7 +320,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		for(int i=0; i<3; i++) {
 			noMerge.add(t.getChoiceIndex("don't merge"+i));
 		}
-		ins.noMergeChannels=noMerge;
+		ins.setNoMergeChannels(noMerge);
 		ins.eachMergeChannel=t.getChoiceIndex("mergeeach");
 		ins.ignoreAfterChannel=t.getChoiceIndex("ignoreAfter");
 	}

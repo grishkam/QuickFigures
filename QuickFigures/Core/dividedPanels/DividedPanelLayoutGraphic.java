@@ -206,7 +206,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		private int edge;
 		
 		public EdgeHandleForDivitedLayout(int edge) {
-			super(0, 0);
+			
 			 places = RectangleEdges.getLocationsForHandles(getPanelLayout().getBoundry().getBounds2D());
 			 this.edge=edge;
 			 setHandleNumber(edge+10000000);
@@ -229,7 +229,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		private int panelnumber;
 
 		public AreaHandleForDividedLayout(layoutDividedArea div, Color orange, CordinateConverter<?> cords, int panelnumber) {
-			super((int)div.getCenterX(), (int)div.getCenterY());
+			
 			super.setCordinateLocation(new Point((int)div.getCenterX(), (int)div.getCenterY()));
 			this.panelnumber=panelnumber;
 			this.dividedArea=div;

@@ -945,7 +945,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	protected TextLineSegment[] splitUpSingleHighLightSegment(TextLineSegment thisSegment) {
 		TextLine thisLine = this.getParagraph().getLineWithSegment(thisSegment);
 		
-		int oldNseg = thisLine.size();
+		
 		TextLineSegment[] newseg =null;
 		int cursor=thisSegment.getCursorposition();
 		int high=thisSegment.getHightLightPosition();

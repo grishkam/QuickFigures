@@ -46,9 +46,9 @@ public class ChannelUseInstructions implements Serializable {
 		    public int eachMergeChannel=NONE_SELECTED;
 		    
 		    /**Channels panels are not created for some channel numbers*/
-		    public ArrayList<Integer> excludedChannelPanels=new ArrayList<Integer>(), 
+		    private ChannelExclusionInstructions excludedChannelPanels=new ChannelExclusionInstructions(), 
 		    		 /**Channels for some channel numbers are excluded from the merge*/
-		    		noMergeChannels=new ArrayList<Integer>();//excluded from the merge
+		    		noMergeChannels=new ChannelExclusionInstructions();//excluded from the merge
 		   
 		    /**will skip channels after this one*/
 		    public int ignoreAfterChannel= NONE_SELECTED;
@@ -70,8 +70,8 @@ public class ChannelUseInstructions implements Serializable {
 		    	out.ignoreAfterChannel=NONE_SELECTED;
 		    	out.eachMergeChannel=NONE_SELECTED;
 		    	out.channelColorMode=CHANNELS_IN_COLOR;
-		    	out.excludedChannelPanels=new ArrayList<Integer>();
-		    	out.noMergeChannels=new ArrayList<Integer>();
+		    	out.setExcludedChannelPanels(new ArrayList<Integer>());
+		    	out.setNoMergeChannels(new ArrayList<Integer>());
 		    	return out;
 		    }
 		   
@@ -79,8 +79,8 @@ public class ChannelUseInstructions implements Serializable {
 			public void setChannelHandleing(int ChannelsInGrayScale, int MergeFirst, int eachMergeChannel, ArrayList<Integer> excludedChannelPanels, ArrayList<Integer> noMergeChannels, int ignoreAfterChannel) {
 				this.channelColorMode=ChannelsInGrayScale;
 				this.eachMergeChannel=eachMergeChannel;
-				this.excludedChannelPanels=excludedChannelPanels;
-				this.noMergeChannels=noMergeChannels;
+				this.setExcludedChannelPanels(excludedChannelPanels);
+				this.setNoMergeChannels(noMergeChannels);
 				this.MergeHandleing=MergeFirst;
 				this.ignoreAfterChannel=ignoreAfterChannel;
 			}
@@ -110,54 +110,76 @@ public class ChannelUseInstructions implements Serializable {
 				return false;
 			}
 
+			
+			
+			
 			/**returns true if the given channel should be excluded from the merge panel*/
 			public boolean isMergeExcluded(int c) {
-				for(Integer ex: noMergeChannels) {if (ex.intValue()==c) return true;}
+				for(Integer ex: getNoMergeChannels()) {if (ex.intValue()==c) return true;}
 				if (this.ignoreAfterChannel>NONE_SELECTED&&c>this.ignoreAfterChannel) return true;
 				return false;
 			}
 			
 			public void setMergeExcluded(int c, boolean excluded) {
-				if (excluded) {
-					excludeThisChannelFromMerge(c);
-				}
-				else {
-					includeThisChannelInMerge(c);
-				}
+				this.noMergeChannels.setExcluded(c,excluded);
+			}
+			
+			public void setChannelPanelExcluded(int c, boolean excluded) {
+				this.excludedChannelPanels.setExcluded(c,excluded);
 			}
 
+			private class ChannelExclusionInstructions implements Serializable {
+				
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				ArrayList<Integer> chosenChannel=new ArrayList<Integer>();
+			
 			/**
 			if the given channel is excluded from the merge, removes it from the excluded channel list
 			 */
-			public void includeThisChannelInMerge(int c) {
-				if (!noMergeChannels.contains(c)) return;
-				for(int i=0; i<noMergeChannels.size(); i++) {
-					if (noMergeChannels.get(i)==c) {
-						noMergeChannels.set(i, NONE_SELECTED);
+			private void includeThisChannel(int c) {
+				if (!chosenChannel.contains(c)) return;
+				for(int i=0; i<chosenChannel.size(); i++) {
+					if (chosenChannel.get(i)==c) {
+						chosenChannel.set(i, NONE_SELECTED);
 					}
 					
 				}
 			}
 
+			
+			
 			/**
 			if the given channel is not already excluded from merge, adds it to the excluded channel list.
 			 */
-			public void excludeThisChannelFromMerge(int c) {
-				if (noMergeChannels.contains(c)) return;
-				for(int i=0; i<noMergeChannels.size(); i++) {
-					if (noMergeChannels.get(i)==NONE_SELECTED) {
-						noMergeChannels.set(i, c);
+			private void excludeThisChannel(int c) {
+				if (chosenChannel.contains(c)) return;
+				for(int i=0; i<chosenChannel.size(); i++) {
+					if (chosenChannel.get(i)==NONE_SELECTED) {
+						chosenChannel.set(i, c);
 						return;
 					}
 					
 				}
 				
-				noMergeChannels.add(c);
+				chosenChannel.add(c);
+			}
+			
+			public void setExcluded(int c, boolean excluded) {
+				if (excluded) {
+					excludeThisChannel(c);
+				}
+				else {
+					includeThisChannel(c);
+				}
+			}
 			}
 			
 			/**true is channel number c is to be excluded from the panel list. false otherwise*/
 			public boolean isChanPanExcluded(int c) {
-				for(Integer ex: excludedChannelPanels) {if (ex.intValue()==c) return true;}
+				for(Integer ex: getExcludedChannelPanels()) {if (ex.intValue()==c) return true;}
 				if (this.ignoreAfterChannel>0&&c>ignoreAfterChannel) return true;
 				if (c==eachMergeChannel) return true;
 				if (onlyMergePanel()) return true;
@@ -198,16 +220,16 @@ public class ChannelUseInstructions implements Serializable {
 				other.ignoreAfterChannel=ignoreAfterChannel;
 				other.setIdealNumberOfColumns(idealColNum);
 				
-				other.excludedChannelPanels=excludedChannelPanels;
-				other.noMergeChannels=noMergeChannels;
+				other.setExcludedChannelPanels(excludedChannelPanels.chosenChannel);
+				other.setNoMergeChannels(noMergeChannels.chosenChannel);
 					} 
 			
 			/**Generates a duplicate of this set of instructions but without the channel order*/
 			public ChannelUseInstructions duplicate() {
 				ChannelUseInstructions output = new ChannelUseInstructions();
 				makePartialMatching(output);
-				output.excludedChannelPanels=new ArrayList<Integer>();output.excludedChannelPanels.addAll(excludedChannelPanels);
-				output.noMergeChannels=new ArrayList<Integer>();output.noMergeChannels.addAll(noMergeChannels);
+				output.setExcludedChannelPanels(new ArrayList<Integer>());output.getExcludedChannelPanels().addAll(getExcludedChannelPanels());
+				output.setNoMergeChannels(new ArrayList<Integer>());output.getNoMergeChannels().addAll(getNoMergeChannels());
 				output.frameUseMethod=this.frameUseMethod.duplicate();
 				output.sliceUseMethod=this.sliceUseMethod.duplicate();
 				return output;
@@ -415,6 +437,24 @@ public class ChannelUseInstructions implements Serializable {
 			public void setIdealNumberOfColumns(int idealColNum) {
 				if (idealColNum<1) return;
 				this.idealColNum = idealColNum;
+			}
+
+
+			public ArrayList<Integer> getExcludedChannelPanels() {
+				return excludedChannelPanels.chosenChannel;
+			}
+
+			public void setExcludedChannelPanels(ArrayList<Integer> excludedChannelPanels) {
+				this.excludedChannelPanels.chosenChannel = excludedChannelPanels;
+			}
+
+
+			public ArrayList<Integer> getNoMergeChannels() {
+				return noMergeChannels.chosenChannel;
+			}
+
+			public void setNoMergeChannels(ArrayList<Integer> noMergeChannels) {
+				this.noMergeChannels.chosenChannel = noMergeChannels;
 			}
 
 

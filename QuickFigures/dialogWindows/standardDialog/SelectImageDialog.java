@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import appContext.CurrentAppContext;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 
 /**A dialog for selecting one or more open multidimensional images*/
@@ -63,7 +63,7 @@ public class SelectImageDialog extends StandardDialog {
 		for(int i=1; i<=num; i++) {
 			int innitial=i;
 			if(i>2) innitial=0;
-			this.add(""+i, new ComboBoxPanel("Image "+i, s, innitial));
+			this.add(""+i, new ChoiceInputPanel("Image "+i, s, innitial));
 			}
 		
 		if (this.includeChans)

@@ -22,30 +22,31 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import standardDialog.OnGridLayout;
 
-public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
+/**A JPanel that displays a label and a means for the user to choose something in */
+public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListener{
 
 	protected JLabel label=new JLabel();
 	protected JComboBox<? extends Object> box=new JComboBox<String>();
+	protected AbstractButton  button;
+	
 	boolean omitLabel=false;
 	
 	public JComboBox<? extends Object> getBox() {return box;}
 	ArrayList<ChoiceInputListener> listeners=new ArrayList<ChoiceInputListener>();
 	private String key;
+	
 	public int originalStatus;
-	
-	public void setItemFont(Font f) {
-		box.setFont(f);
-		label.setFont(f);
-	}
+	private ArrayList<Integer> originalValues=new ArrayList<Integer>();
 	
 	
-	public ComboBoxPanel(String labeln, String[] choices, int startingindex) {
+	public ChoiceInputPanel(String labeln, String[] choices, int startingindex) {
 		JComboBox<String> box2 = new JComboBox<String>();
 		box=box2;
 		label.setText(labeln);
@@ -56,14 +57,24 @@ public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
 		box2.setSelectedIndex(startingindex);
 		{box2.addItemListener(this);}
 		this.originalStatus=startingindex;
+		originalValues.add(startingindex);
 	}
 	
-	public ComboBoxPanel(String labeln, JComboBox<? extends Object> box) {
+
+	
+	public ChoiceInputPanel(String labeln, JComboBox<? extends Object> box) {
 		label.setText(labeln);
 		
 		this.box=box;
 		{box.addItemListener(this);}
 		this.originalStatus=box.getSelectedIndex();
+	}
+	
+	public void setButton(AbstractButton b) {button=b;}
+	
+	public void setItemFont(Font f) {
+		box.setFont(f);
+		label.setFont(f);
 	}
 	
 	/**
@@ -89,6 +100,14 @@ public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
 		gc.insets=lastInsets;
 		jp.add(box, gc);
 		
+		if (button!=null) {
+			gc.anchor = GridBagConstraints.EAST;
+			gc.insets=lastInsets;
+			gc.gridx++;
+			gc.gridy=y0;
+			jp.add(button, gc);
+			
+		}
 		
 	}
 
@@ -102,13 +121,20 @@ public class ComboBoxPanel extends JPanel implements OnGridLayout, ItemListener{
 
 	@Override
 	public int gridWidth() {
-		// TODO Auto-generated method stub
+		if (button!=null) return 3;
 		return 2;
 	}
 
 	/**returns the selected index*/
 	public int getSelectedIndex() {
 		return getBox() .getSelectedIndex();
+	}
+	
+	/**returns the selected index*/
+	public ArrayList<Integer> getSelectedIndices() {
+		 ArrayList<Integer> output=new  ArrayList<Integer>();
+		output.add(getSelectedIndex());
+		return output;
 	}
 
 /**returns the choice to its original value */
@@ -161,7 +187,9 @@ public void setValue(int value) {
 		
 	}
 	
-	/**the number of choices*/
+	/**the number of choices available*/
 	public int getNChoices() {return box.getModel().getSize();}
+	
+	public int howManyMayBeSelected() {return 1;}
 	
 }

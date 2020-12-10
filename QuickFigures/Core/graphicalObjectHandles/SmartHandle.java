@@ -37,6 +37,8 @@ import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.Hideable;
 import utilityClassesForObjects.RainbowPaintProvider;
@@ -46,13 +48,15 @@ import utilityClassesForObjects.Selectable;
    most handles that the user sees are instances of this class. contains the basic methods
    that subclasses may variously override. also contains methods for creating many shapes
    that the handles can appear as*/
-public class SmartHandle extends HandleRect implements Selectable, Hideable{
+public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	
 	public static int CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
 	
+	public int handlesize=3;
 	protected Color messageColor = Color.BLACK;
 	protected Color handleStrokeColor=Color.black;
 	protected Color decorationColor=Color.LIGHT_GRAY;
+	private Color handleColor=Color.white;
 	private int specialFill=0;
 	private SmartHandle lineto;
 	
@@ -80,8 +84,8 @@ public class SmartHandle extends HandleRect implements Selectable, Hideable{
 	public boolean absent() {return false;}
 
 	/**Creates a smart handle*/
-	public SmartHandle(int x, int y) {
-		super(x, y);
+	public SmartHandle() {
+		
 	}
 	
 	
@@ -363,7 +367,7 @@ public boolean containsClickPoint(CanvasMouseEvent canvasMouseEventWrapper) {
 
 	protected Shape getDirectionPointer(boolean left) {
 		Area a=new Area();
-		super.handlesize=4;
+		handlesize=4;
 		
 		int plusSize = 4;
 		a.add(new Area(new Rectangle(0, 0, plusSize*3, plusSize)));
@@ -465,6 +469,26 @@ public boolean containsClickPoint(CanvasMouseEvent canvasMouseEventWrapper) {
 		a.add(new Area(new Rectangle(-plusSize, 0, plusSize*3, plusSize)));
 		 if(!subtract) a.add(new Area(new Rectangle(0, -plusSize, plusSize, plusSize*3)));
 		return a;
+	}
+
+	public Color getHandleColor() {
+		return handleColor;
+	}
+
+	public void setHandleColor(Color handleColor) {
+		this.handleColor = handleColor;
+	}
+
+	@Override
+	public GraphicLayer getParentLayer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setParentLayer(GraphicLayer parent) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -35,7 +35,7 @@ public class TextHandle extends SmartHandle {
 	private Point2D baseLineStart;
 
 	public TextHandle(TextGraphic textGraphic, int rotationHandle) {
-		super(0,0);
+		
 		this.textItem=textGraphic;
 		this.setHandleNumber(rotationHandle);
 	}

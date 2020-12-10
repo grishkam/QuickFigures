@@ -24,7 +24,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorDimmingBox;
 import standardDialog.fonts.FontChooser;
 import standardDialog.numbers.AngleInputPanel;
@@ -104,7 +104,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 		
 		AngleInputPanel pai2 = new AngleInputPanel("Angle ", textItem.getAngle(), true);
 		add("angle", pai2);
-		ComboBoxPanel cp = new ComboBoxPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp = new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
 		this.add("dim", cp);
 		addBackgroundOptionsToDialog();
 	

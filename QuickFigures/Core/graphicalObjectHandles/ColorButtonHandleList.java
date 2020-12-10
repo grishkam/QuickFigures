@@ -77,14 +77,10 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 		private boolean moreColors;
 		{super.handleStrokeColor=Color.DARK_GRAY.darker().darker();}
 
-		public ColorHandle(int x, int y) {
-			super(x, y);
-			this.handlesize=8;
-			maxGrid=standardColor.length;
-		}
+	
 
 		public ColorHandle(Color c) {
-			this(0,0);
+			this();
 			this.setHandleColor(c);
 			this.setTheColor(c);
 			if(c==null||c.getAlpha()==0)
@@ -95,8 +91,11 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 			}
 		}
 		
+		
+
 		public ColorHandle() {
-			this(0,0);
+			this.handlesize=8;
+			maxGrid=standardColor.length;
 			this.setHandleColor(Color.white);
 			super.setSpecialFill(SmartHandle.RAINBOW_FILL);
 			this.moreColors=true;

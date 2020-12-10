@@ -23,11 +23,12 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import applicationAdapters.CanvasMouseEvent;
+import externalToolBar.MiniToolBarIcon;
 
 /**A handle that displays an icon*/
 public class IconHandle extends SmartHandle {
 	
-	public static final int _DEFAULT_MAX_SIZE = 22;
+	public static final int _DEFAULT_MAX_SIZE = MiniToolBarIcon.ICON_SIZE;
 	protected int subtract = 0;
 	
 	/**Some icons are drawn shifted slightly*/
@@ -39,7 +40,7 @@ public class IconHandle extends SmartHandle {
 	int maxHeight=_DEFAULT_MAX_SIZE;
 
 	public IconHandle(Icon i, Point2D p) {
-		super((int)p.getX(), (int)p.getY());
+		
 		this.setCordinateLocation(p);
 		this.icon=i;
 	}

@@ -26,7 +26,7 @@ import gridLayout.BasicMontageLayout;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnappingPanel;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 import utilityClassesForObjects.AttachmentPosition;
 
@@ -51,7 +51,7 @@ import utilityClassesForObjects.AttachmentPosition;
 			this.currentLayout=mover;
 			
 		
-			add("snaptypeClass", new ComboBoxPanel("Select snaptype", arrangements, mover.snaptype));
+			add("snaptypeClass", new ChoiceInputPanel("Select snaptype", arrangements, mover.snaptype));
 			
 		
 			add("border", new NumberInputPanel("Border Width", mover.border, 3));

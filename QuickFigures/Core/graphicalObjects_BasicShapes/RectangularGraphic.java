@@ -487,7 +487,7 @@ public Rectangle2D.Double getRectangle() {
 		private UndoStrokeEdit strokeUndo;
 
 		public RectangleSmartHandle(int type, RectangularGraphic r) {
-			super(0, 0);
+			
 			this.setHandleNumber(type);
 			this.rect=r;
 			

@@ -18,7 +18,7 @@ package channelMerging;
 import javax.swing.JComboBox;
 
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 
 /**"Dialog appears when the user chooses Saving Options for an image.
   Gives the user an option to load the image from a save location 
@@ -40,7 +40,7 @@ public class MultiChannelSlotDialog extends StandardDialog  {
 		theslot = slot;
 		JComboBox<?> retOps = new JComboBox<String>(MultiChannelSlot.retrivalOptions);
 		retOps.setSelectedIndex(slot.getRetrieval());
-		this.add("Retrival", new ComboBoxPanel("How to store multichannel image", retOps));
+		this.add("Retrival", new ChoiceInputPanel("How to store multichannel image", retOps));
 		
 	}
 	

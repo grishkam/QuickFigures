@@ -167,7 +167,7 @@ public class SetAngle extends BasicMultiSelectionOperator {
 				
 				g.setColor(Color.green.darker());
 				g2d.drawLine(x1, y1, (int) (x1+length*Math.cos(a)), (int) (y1-length*Math.sin(a)));
-				
+				g2d.setColor(Color.black);
 				
 			}
 		}

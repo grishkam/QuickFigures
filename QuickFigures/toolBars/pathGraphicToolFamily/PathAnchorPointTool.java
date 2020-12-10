@@ -22,7 +22,7 @@ import graphicalObjects_BasicShapes.PathGraphic;
 import objectDialogs.PathPointOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import undo.*;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.PathPoint;
@@ -138,7 +138,7 @@ public class PathAnchorPointTool extends GraphicTool {
 	@Override 
 	public void showOptionsDialog() {
 		StandardDialog sd = new StandardDialog();
-		sd.add("mode", new ComboBoxPanel("Mode", new String[] {"Curve Mode", "Remove point mode", "Add Point mode", "Autocalculate curve control", "Point options mode", "Anchor Point mode", "Curve Points Along Line", "Move All Selected Points"}, mode));
+		sd.add("mode", new ChoiceInputPanel("Mode", new String[] {"Curve Mode", "Remove point mode", "Add Point mode", "Autocalculate curve control", "Point options mode", "Anchor Point mode", "Curve Points Along Line", "Move All Selected Points"}, mode));
 		sd.add("nc",new BooleanInputPanel( "new points are curved ",this.samecurveControlAsLast));
 		sd.setModal(true);
 		sd.showDialog();

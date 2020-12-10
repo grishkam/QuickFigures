@@ -419,7 +419,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		if (this.isSelected())this.getSmartHandleList().draw(g2d, cords);
 	}
 	
-	public void drawHandesSelectionOld(Graphics2D g2d, CordinateConverter<?> cords) {
+	private void drawHandesSelectionOld(Graphics2D g2d, CordinateConverter<?> cords) {
 		
 		 handleBoxes=new ArrayList<HandleRect>();
 		if (selected) {
@@ -839,7 +839,7 @@ class BarSmartHandle extends SmartHandle {
 	private boolean undoAdded;
 
 	public BarSmartHandle(BarGraphic bar1, int x, int y) {
-		super(x, y);
+		
 		this.bar=bar1;
 		// TODO Auto-generated constructor stub
 	}

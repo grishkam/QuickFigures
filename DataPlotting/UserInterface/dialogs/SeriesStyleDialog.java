@@ -25,7 +25,7 @@ import plotParts.Core.PlotAreaRectangle;
 import plotParts.DataShowingParts.SeriesStyle;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorDimmingBox;
 
 public class SeriesStyleDialog extends StandardDialog {
@@ -76,7 +76,7 @@ public class SeriesStyleDialog extends StandardDialog {
 	}
 	
 	protected void addDimmingToDialog(SeriesStyle textItem) {
-		ComboBoxPanel cp=new ComboBoxPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
 		this.add("dim", cp);
 		this.getMainPanel().moveGrid(2, -1);
 		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));

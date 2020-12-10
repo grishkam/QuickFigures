@@ -61,7 +61,7 @@ public class ImagePanelHandle extends SmartHandle {
 	ArrayList<PanelMovementGroupItems> allMovementGroups=new ArrayList<PanelMovementGroupItems>();
 	
 	public ImagePanelHandle(int x, int y) {
-		super(x, y);
+		
 		super.setEllipseShape(true);
 	}
 	
@@ -69,7 +69,7 @@ public class ImagePanelHandle extends SmartHandle {
 		this(0,0);
 		handlecode=handlenum;
 		this.panel=panel;
-		super.setCordinateLocation(RectangleEdges.getLocation(handlecode, getBounds()));
+		super.setCordinateLocation(RectangleEdges.getLocation(handlecode, panel.getBounds()));
 		this.setHandleNumber(handlenum);
 		if(RectangleEdges.CENTER==handlenum) {
 			super.handlesize*=5;
@@ -275,7 +275,7 @@ public class ImagePanelHandle extends SmartHandle {
 
 	int handlenum=handlecode;
 		if (handlenum==ImagePanelHandleList.FRAME_HANDLE_ID) {
-			double bottom=y+panel.getObjectHeight();
+			double bottom=panel.getBounds2D().getMaxY()+panel.getObjectHeight();
 			double size=p2.getY()-bottom;
 			if(size>=0) {
 				panel.setFrameWidthV(size);
@@ -288,7 +288,7 @@ public class ImagePanelHandle extends SmartHandle {
 	
 		panel. setLocationType(RectangleEdges.oppositeSide(handlenum));
 		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, panel.getCroppedImageSize());
-		double dist2= RectangleEdges.getLocation(panel.getLocationType(), getBounds()).distance(p2);
+		double dist2= RectangleEdges.getLocation(panel.getLocationType(), panel.getBounds()).distance(p2);
 	
 		if (panel.getScale()==dist2/dist1) return;
 		panel.setScale( dist2/dist1);		

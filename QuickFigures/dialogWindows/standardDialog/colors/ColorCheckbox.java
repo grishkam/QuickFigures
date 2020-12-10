@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
+/**A checkbox that appears as a color*/
 public class ColorCheckbox extends JCheckBox {
 
 	/**

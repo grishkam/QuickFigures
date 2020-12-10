@@ -362,6 +362,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			
 		}
 
+		/**updates the image panel for this list element*/
 		void updateImagePanelGraphic() {
 			if (getImageDisplayObject() instanceof ImagePanelGraphic) {
 				ImagePanelGraphic graphic=(ImagePanelGraphic) getImageDisplayObject();

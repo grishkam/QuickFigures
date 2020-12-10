@@ -18,6 +18,7 @@ package channelMerging;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import channelLabels.ChannelLabelManager;
 import genericMontageKit.PanelList;
 import genericMontageKit.PanelSetter;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
@@ -34,6 +35,7 @@ public interface ImageDisplayLayer extends GraphicLayer {
 	
 	/**getter method for the panel manager */
 	public PanelManager getPanelManager();
+	public ChannelLabelManager getChannelLabelManager();
 	public PanelList getPanelList();
 	public void setPanelList(PanelList stack);
 	

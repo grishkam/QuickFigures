@@ -25,7 +25,7 @@ import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.AngleInputPanel;
 import standardDialog.numbers.NumberArrayInputPanel;
 import standardDialog.numbers.NumberInputPanel;
@@ -558,7 +558,7 @@ public void moveCurvePointToward(Point2D towardthis, Point2D startingpoint, int 
 			irinput2.setArray(shape.getAngleDistorts());
 			add("arr", irinput);
 			add("arr2", irinput2);
-			add("dType", new ComboBoxPanel("Curve Distort Type", new String[] {"to center", "perpendicular to local line", "up/down"}, shape.getCurveDistype()));
+			add("dType", new ChoiceInputPanel("Curve Distort Type", new String[] {"to center", "perpendicular to local line", "up/down"}, shape.getCurveDistype()));
 			//add("distance displacements", new NumberArrayInputPanel("Distance Distort Factors ", shape.allIrregularDistances)); 
 		}
 		

@@ -29,14 +29,15 @@ import java.awt.geom.Arc2D.Double;
 import javax.swing.Icon;
 
 import channelMerging.ChannelUseInstructions;
+import externalToolBar.MiniToolBarIcon;
 import graphicalObjects.ImagePanelGraphic;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import utilityClassesForObjects.RectangleEdges;
 
 /**An icon for the change color mode option*/
-public class ColorModeIcon implements Icon {
+public class ColorModeIcon implements Icon,MiniToolBarIcon {
 	
-	private static final int ICON_SIZE= 22;
+	
 	private ImagePanelGraphic imagePanel;
 	private Color color;
 	

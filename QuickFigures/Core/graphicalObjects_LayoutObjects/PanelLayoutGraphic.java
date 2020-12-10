@@ -72,6 +72,7 @@ import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
+/**A graphical object that stores a layout, displays the layout, includes handles for editing the layout*/
 public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
 	
 	public Color panelColor=Color.red;
@@ -1004,7 +1005,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 		}
 
 		public PanelLayoutHandle(int x, int y) {
-			super(x, y);
+			
 			super.handlesize=4;
 		}
 		

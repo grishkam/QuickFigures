@@ -46,7 +46,7 @@ public class CountHandle extends SmartHandle {
 	
 
 	public CountHandle(LocatedObject2D regularPolygonGraphic, CountParameter number, int handleNumber) {
-		super(0,0);
+		
 		polygon=regularPolygonGraphic;
 		this.count=number;
 		this.setHandleNumber(handleNumber);

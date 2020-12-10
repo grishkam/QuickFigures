@@ -122,7 +122,7 @@ public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, C
 		return listeners;
 	}
 	
-	void revert() {
+	public void revert() {
 		c.setSelectedColor(originalStatus);
 	}
 	

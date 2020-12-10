@@ -36,8 +36,14 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 
 	public LayoutDivider divider;
 	private DividedPanelLayoutGraphic layoutG;
+	
+	int x,y;
+	private int width;
+	private int height;
 	public DividerHandle(Rectangle2D r, Color c, DividedPanelLayoutGraphic layourGraphic) {
-		super((int)r.getX(), (int)r.getY());
+		
+		this.x=(int) r.getX();
+		this.y=(int) r.getY();
 		this.width=(int) r.getWidth();
 		this.height=(int) r.getHeight();
 		this.setHandleColor(c);
@@ -48,7 +54,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 		return layoutG.smartl.indexOf(this);
 	}
 	
-	public DividerHandle(Double rect, Color pink, CordinateConverter<?> cords, DividedPanelLayoutGraphic layourGraphic) {
+	public DividerHandle(Rectangle2D.Double rect, Color pink, CordinateConverter<?> cords, DividedPanelLayoutGraphic layourGraphic) {
 		this(cords.getAffineTransform().createTransformedShape(rect).getBounds(), pink, layourGraphic);
 		if(this.width<6)this.width=6;
 		if(this.height<6)this.height=6;
@@ -65,7 +71,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 
 	public void draw(Graphics2D graphics, CordinateConverter<?> cords) { 
 	
-		super.drawOnShape(graphics, this);
+		super.drawOnShape(graphics, new Rectangle2D.Double(x,y,width, height));
 	}
 	
 	

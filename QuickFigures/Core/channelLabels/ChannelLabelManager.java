@@ -152,12 +152,15 @@ public class ChannelLabelManager implements Serializable {
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels2() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
 		for(PanelListElement slice: getPanelList().getPanels()) {
-			if(slice.targetFrameNumber>firstFrameIndex()) continue;
-			if(slice.targetSliceNumber>firstSliceIndex()) continue;
+			if(slice.targetFrameNumber>firstFrameIndex()
+					||
+					slice.targetSliceNumber>firstSliceIndex()) continue;
 			output.add(generateChanelLabel(slice));
 		}
 		return output;
 	}
+	
+	
 
 	/**
 	

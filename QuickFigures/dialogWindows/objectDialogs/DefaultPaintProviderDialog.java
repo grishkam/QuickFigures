@@ -15,7 +15,7 @@
  *******************************************************************************/
 package objectDialogs;
 
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.ItemSelectblePanel;
 import standardDialog.colors.ColorInputPanel;
 import standardDialog.graphics.FixedEdgeSelectable;
@@ -43,7 +43,7 @@ public class DefaultPaintProviderDialog extends GraphicItemOptionsDialog {
 		ItemSelectblePanel is2 = new ItemSelectblePanel("Select Fixed Edge 2", f2);
 		add("edge fix2", is2);
 		
-		this.add("type", new ComboBoxPanel("Paint Type",DefaultPaintProvider.types, paintprovider.getType()));
+		this.add("type", new ChoiceInputPanel("Paint Type",DefaultPaintProvider.types, paintprovider.getType()));
 	}
 	
 	protected void setItemsToDiaog() {

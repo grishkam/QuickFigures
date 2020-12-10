@@ -34,7 +34,7 @@ import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnapBox;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
@@ -138,7 +138,7 @@ public class CanvasDialog extends StandardDialog {
 				if(type==CENTIMETER) adder=" (cm)";
 				this.add("name", new StringInputPanel("Title", iw.getTitle()));
 				
-				ComboBoxPanel unitPanel = new ComboBoxPanel("Units", values, type);
+				ChoiceInputPanel unitPanel = new ChoiceInputPanel("Units", values, type);
 				this.add("unit", unitPanel);
 				width2 = d.getWidth();
 				wInput = new NumberInputPanel("Width"+adder, width2/ getRatio(), 1);

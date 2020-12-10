@@ -853,13 +853,10 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		private PathPoint addedPoint;
 		private boolean toStart;
 
-		public AddPointSmartHandle(int x, int y) {
-			super(x, y);
-			// TODO Auto-generated constructor stub
-		}
+		
 
 		public AddPointSmartHandle(PathGraphic pathGraphic, boolean toStart) {
-			this(0,0);
+			
 			this.toStart=toStart;
 			this.path=pathGraphic;
 			this.setSpecialFill(PLUS_FILL);

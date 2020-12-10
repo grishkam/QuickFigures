@@ -21,7 +21,7 @@ import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.PointModel;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.AngleInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
@@ -65,7 +65,7 @@ public class PointOptionsDialog extends GraphicItemOptionsDialog{
 		this.add("sides", nip2);
 		
 		this.add("typ",
-				new ComboBoxPanel("Show as", new String[] {"Simple Points", "Complex Points"}, p.getPointType()));
+				new ChoiceInputPanel("Show as", new String[] {"Simple Points", "Complex Points"}, p.getPointType()));
 		AngleInputPanel aip = new AngleInputPanel("Angle", p.getModelShape().getAngle(), true);
 		this.add("Angle", aip);
 	}

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
 public class ErrorBarDialog  extends GraphicItemOptionsDialog {
@@ -91,10 +91,10 @@ public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 		this.add("width", nip);
 		
 		this.add("typ",
-				new ComboBoxPanel("Show as", new String[] {"Lines only", "Capped Lines"}, rect.getBarType()));
+				new ChoiceInputPanel("Show as", new String[] {"Lines only", "Capped Lines"}, rect.getBarType()));
 		
 		this.add("errorT",
-				new ComboBoxPanel("Show Error Bar as", new String[] {"Standard Dev", "SEM", "95% Interval (2*SEM)", "99% (3*SEM)"}, rect.getErrorDepiction()));
+				new ChoiceInputPanel("Show Error Bar as", new String[] {"Standard Dev", "SEM", "95% Interval (2*SEM)", "99% (3*SEM)"}, rect.getErrorDepiction()));
 	}
 	
 	@Override

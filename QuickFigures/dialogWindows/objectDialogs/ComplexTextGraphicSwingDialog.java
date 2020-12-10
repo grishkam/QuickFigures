@@ -21,7 +21,7 @@ import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import standardDialog.ObjectEditEvent;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorDimmingBox;
 
 public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
@@ -50,7 +50,7 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 		this.addFixedEdgeToDialog(textItem);
 		super.addFontAngleToDialog();
 		addBackgroundOptionsToDialog();
-		ComboBoxPanel cp=new ComboBoxPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
 		this.add("dim", cp);
 		this.getMainPanel().moveGrid(2, -1);
 		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));

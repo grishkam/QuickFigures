@@ -21,9 +21,10 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 
-public class ColorComboboxPanel extends ComboBoxPanel implements ColorListChoice, MouseListener {
+/**A panel for the user to choose from a list of colors*/
+public class ColorComboboxPanel extends ChoiceInputPanel implements ColorListChoice, MouseListener {
 
 
 	

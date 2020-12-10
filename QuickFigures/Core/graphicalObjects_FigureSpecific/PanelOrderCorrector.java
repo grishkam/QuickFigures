@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package genericMontageKit;
+package graphicalObjects_FigureSpecific;
 
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
@@ -22,8 +22,10 @@ import java.util.Comparator;
 
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
+import genericMontageKit.BasicObjectListHandler;
+import genericMontageKit.PanelContentExtract;
+import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.LayoutSpaces;
@@ -110,7 +112,9 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	public boolean singleChannelPer(int type) {
 		return getChannelOrder(type)!=null;
 	}
-
+	
+	/**attempts to generate a channel use instructions with the same order as the panels in the figure.
+	 * May return null if the current order does not fit with a set of instructions*/
 	ChannelUseInstructions determineChannelOrder() {
 		if (singleChannelPer(ROWS)) {
 			return getChannelOrder(ROWS);
@@ -118,16 +122,37 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		if (singleChannelPer(COLS)) {
 			return getChannelOrder(COLS);
 		}
-		ImageDisplayLayer pm = figure.getPrincipalMultiChannel();
-		if(figure.getMultiChannelDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
+		
+		if(isEachPanelADifferentChannel())
 			return getChannelOrder(PANELS);
 		
 		return null;
 	}
 	
+	boolean isEachPanelADifferentChannel() {
+		ImageDisplayLayer pm = figure.getPrincipalMultiChannel();
+		if(figure.getMultiChannelDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
+			return true;
+		
+		return false;
+	}
+	
+	
+	public Integer determineChannelLayout() {
+		if (singleChannelPer(ROWS)) {
+			return ROWS;
+		} else
+		if (singleChannelPer(COLS)) {
+			return COLS;
+		}
+		if(isEachPanelADifferentChannel())
+			return PANELS;
+		
+		return null;
+	}
 
 	/**checks either the rows, panels or columns of the figure depending on the argument
-	  returns a set of channel use instructions containing the order of the channels
+	  returns channel use instructions containing the order of the channels
 	  with the channels ordered in the same way that the panel that actually appear in the figure
 	   or null if each row or column contains multiple channels*/
 	public ChannelUseInstructions getChannelOrder(int type) {
@@ -136,36 +161,37 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		int whereIsMerge=ChannelUseInstructions.NO_MERGE_PANELS;
 		
 		for(int rowIndex=1; rowIndex<=list.size(); rowIndex++) {
-			boolean added=false;
-		ArrayList<PanelListElement> l = list.get(rowIndex-1);
-		for(int i=1; i<l.size(); i++) {
-			PanelListElement panelListElement = l.get(i);
-			PanelListElement panelListElement2 = l.get(i-1);
-			boolean sameChannel = panelListElement.targetChannelNumber==panelListElement2.targetChannelNumber;
-			
-			
-			
-			if(!sameChannel) return null;
-			
-		}
-		if (l.size()==0) continue;
-		PanelListElement panelListElement = l.get(0);
-		/**if this is the first channel panel of the row/col, adds the chan number to the list*/
-		if(!panelListElement.isTheMerge()&&!added) {
-			order.add(panelListElement.targetChannelNumber);
-			added=true;
-		}
-		
-		if(panelListElement.isTheMerge()&&rowIndex==1) 
-			whereIsMerge=ChannelUseInstructions.MERGE_FIRST;
-		if(panelListElement.isTheMerge()&&rowIndex==list.size() )
-			whereIsMerge=ChannelUseInstructions.MERGE_LAST;
+					boolean added=false;
+				ArrayList<PanelListElement> l = list.get(rowIndex-1);
+				for(int i=1; i<l.size(); i++) {
+					PanelListElement panelListElement = l.get(i);
+					PanelListElement panelListElement2 = l.get(i-1);
+					boolean sameChannel = panelListElement.targetChannelNumber==panelListElement2.targetChannelNumber;
+					
+					
+					
+					if(!sameChannel) return null;
+					
+				}
+				if (l.size()==0) continue;
+				PanelListElement panelListElement = l.get(0);
+				/**if this is the first channel panel of the row/col, adds the chan number to the list*/
+				if(!panelListElement.isTheMerge()&&!added) {
+					order.add(panelListElement.targetChannelNumber);
+					added=true;
+				}
+				
+				if(panelListElement.isTheMerge()&&rowIndex==1) 
+					whereIsMerge=ChannelUseInstructions.MERGE_FIRST;
+				if(panelListElement.isTheMerge()&&rowIndex==list.size() )
+					whereIsMerge=ChannelUseInstructions.MERGE_LAST;
 		}
 		
 		if (order.size()==0)
 			whereIsMerge=ChannelUseInstructions.ONLY_MERGE_PANELS;
 	 ChannelUseInstructions output = new ChannelUseInstructions();
-	 output.getChanPanelReorder().setOrder(order);
+	 if (order.size()==0)
+		 output.getChanPanelReorder().setOrder(order);
 	 output.MergeHandleing=whereIsMerge;
 		return output;
 	}
@@ -178,6 +204,21 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 			return l.get(0).targetChannelNumber;
 
 		return -1;
+	}
+	
+	/**returns the indices of where in the layout the given channels are stored
+	 * 
+	 * @param type 
+	 * 
+	 * */
+	public ArrayList<Integer> indexOfChannel( int channel, int type) {
+		ArrayList<Integer> indices=new ArrayList<Integer>();
+		BasicMontageLayout layout = figure.getMontageLayout().makeAltered(type);
+		for(int i=1; i<=layout.nPanels(); i++) {
+			if (channel==channelIndexAt(type, i))
+				indices.add(i);
+		}
+		return indices;
 	}
 
 
@@ -246,12 +287,6 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 			if (indexOf2==-1) return -1;
 		
 			return indexOf-indexOf2;
-			/**if (indexOf<indexOf2)
-					return 1;
-			if (indexOf>indexOf2)
-				return 1;
-			*/
-			//return 0;
 		}
 		
 	}

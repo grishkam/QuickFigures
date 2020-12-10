@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
 
@@ -144,7 +144,7 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 					{NumberInputPanel nip = new NumberInputPanel(label, d, 1);
 					 add(name, nip);
 				} else {
-					ComboBoxPanel nip = new ComboBoxPanel(label, sar, d);
+					ChoiceInputPanel nip = new ChoiceInputPanel(label, sar, d);
 					add(name, nip);
 			}
 				

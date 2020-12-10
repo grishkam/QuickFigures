@@ -52,7 +52,7 @@ public class HandleRect extends Rectangle2D.Double implements ZoomableGraphic {
 		this.height=handlesize*2;
 	}
 	
-	public HandleRect(Rectangle2D r) {
+	protected HandleRect(Rectangle2D r) {
 		super(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
 	

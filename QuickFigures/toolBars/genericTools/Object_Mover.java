@@ -65,7 +65,7 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
@@ -1187,9 +1187,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		public MoverDialog(Object_Mover mover) {
 			setModal(true);
 			this.mover=mover;
-			add("excludedClass", new ComboBoxPanel("Select which class to ignore", nalesofExcludedClasses, mover.getindexofExcluded()));
+			add("excludedClass", new ChoiceInputPanel("Select which class to ignore", nalesofExcludedClasses, mover.getindexofExcluded()));
 			String[] groupops=new String[] {"Don't", "Do", "1 Level Down", "2 Level Down"};
-			add("groupsel", new ComboBoxPanel("Reach into Groups",groupops, mover.isSelectingroup()));
+			add("groupsel", new ChoiceInputPanel("Reach into Groups",groupops, mover.isSelectingroup()));
 			add("selGroup", new BooleanInputPanel("Select in Group", GraphicGroup.treatGroupsLikeLayers));
 		}
 		@Override

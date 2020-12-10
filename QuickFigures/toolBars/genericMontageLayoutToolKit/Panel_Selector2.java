@@ -24,7 +24,7 @@ import gridLayout.GenericMontageEditor;
 import gridLayout.MontageEditorDialogs;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import utilityClassesForObjects.LocatedObject2D;
 
 /**The panel selector tool allows one to select regions of interest based on the the MontageLayout available*/
@@ -41,10 +41,10 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 	
 	public void showPanelSelectorOptions() {
 		StandardDialog gd=new StandardDialog("Panel Selector Options", true);
-		gd.add("Select what type of space",new ComboBoxPanel("Select what type of space", stringDescriptors, panelSelectionOption%100));
-		gd.add("Mod", new ComboBoxPanel(" ", stringDescriptorsOfModifyers, panelSelectionMod));
+		gd.add("Select what type of space",new ChoiceInputPanel("Select what type of space", stringDescriptors, panelSelectionOption%100));
+		gd.add("Mod", new ChoiceInputPanel(" ", stringDescriptorsOfModifyers, panelSelectionMod));
 		String[] option2=new String[] {"Select", "Swap", "Move"};
-		gd.add("What to do ",new ComboBoxPanel("What to do ", option2,swapper));
+		gd.add("What to do ",new ChoiceInputPanel("What to do ", option2,swapper));
 
 		gd.showDialog();
 		if (gd.wasOKed()) {	

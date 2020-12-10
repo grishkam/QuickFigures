@@ -971,7 +971,7 @@ class ArrowSmartHandle extends SmartHandle {
 		private transient boolean undoAdded=false;
 
 		public ArrowSmartHandle(int type, ArrowGraphic r) {
-			super(0, 0);
+		
 			this.setHandleNumber(type);
 			this.rect=r;
 			if(isArrowSizeHandle()) {

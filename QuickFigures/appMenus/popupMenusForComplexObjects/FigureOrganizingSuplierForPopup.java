@@ -51,6 +51,7 @@ import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
+import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.CroppingDialog;
 import standardDialog.StandardDialog;
@@ -151,16 +152,20 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 				
 				
 							
-				JMenu chanMen=new JMenu("All Channels");
-				
-				
+				JMenu chanMen=new SmartJMenu("All Channels");
+					
+					
+					
 					
 					 channelUseOptionsButton = new JMenuItem("Channel Use");
 					 channelUseOptionsButton.setIcon(new ChannelUseIcon());
 					
 					 chanMen.add(channelUseOptionsButton);
 						channelUseOptionsButton.addActionListener(this);
+						
+						
 					
+						
 					 minMaxButton5 = new JMenuItem("Min/Max");
 					 minMaxButton5.setIcon(IconUtil.createBrightnessIcon());
 					 chanMen.add(minMaxButton5);
@@ -172,6 +177,8 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 							windowLevelButton.addActionListener(this);
 							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.logT(t);};
 							jj.add(chanMen);
+							SmartJMenu excluders = this.getMenuContext().createChannelMergeMenu(ChannelPanelEditingMenu.EXCLUDED_CHANNEL_MENU);
+							jj.add(excluders);
 							
 							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));
 							
@@ -243,7 +250,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 			undo=showRePPIAll();
 		}
 		
-		ChannelPanelEditingMenu bit = new ChannelPanelEditingMenu( figureOrganizingLayerPane, 1);
+		ChannelPanelEditingMenu bit = getMenuContext();
 		if (source==minMaxButton5) {
 			CombinedEdit undoMinMax = ChannelDisplayUndo.createMany(figureOrganizingLayerPane.getAllSourceImages(), bit);
 			undo=undoMinMax;
@@ -263,6 +270,15 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 		}
 		
 		figureOrganizingLayerPane.getUndoManager().addEdit(undo);
+	}
+
+
+
+	/**
+	 * @return
+	 */
+	public ChannelPanelEditingMenu getMenuContext() {
+		return new ChannelPanelEditingMenu( figureOrganizingLayerPane, ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
 	}
 
 	

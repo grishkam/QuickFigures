@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import plotParts.DataShowingParts.PointModel;
 import plotParts.DataShowingParts.ScatterPoints;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 
 public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOptionsDialog*/ {
@@ -88,7 +88,7 @@ public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOption
 		addPointModelOptions(p);
 		
 		this.add("exclusion",
-				new ComboBoxPanel("Exclude", new String[] {"None", "Anything withing 1.5x IQR"}, rect.getExclusion()));
+				new ChoiceInputPanel("Exclude", new String[] {"None", "Anything withing 1.5x IQR"}, rect.getExclusion()));
 	
 	
 	}

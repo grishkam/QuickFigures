@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.Boxplot;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
 public class BoxPlotDialog  extends GraphicItemOptionsDialog {
@@ -89,7 +89,7 @@ public class BoxPlotDialog  extends GraphicItemOptionsDialog {
 		this.add("width2", nip2);
 		
 		this.add("typ",
-				new ComboBoxPanel("Show ends as", new String[] {"Min/Max", "Min/Max excluding outliers"}, rect.getWhiskerType()));
+				new ChoiceInputPanel("Show ends as", new String[] {"Min/Max", "Min/Max excluding outliers"}, rect.getWhiskerType()));
 	}
 	
 	@Override

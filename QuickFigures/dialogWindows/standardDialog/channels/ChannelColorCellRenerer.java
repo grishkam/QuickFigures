@@ -71,8 +71,6 @@ public class ChannelColorCellRenerer extends BasicComboBoxRenderer {
 				}
 		}
 	
-		//Font font=new Font(out.getFont().getFamily(), index, out.getFont().getSize());
-		//out.setFont(font);
 		return out;
 			}
 

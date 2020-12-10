@@ -46,12 +46,10 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	int a=0;
 	int plusSize = 5;
 
-	public AddRowHandle(int x, int y) {
-		super(x, y);
-	}
+
 
 	public AddRowHandle(MontageLayoutGraphic montageLayoutGraphic, int y, boolean sub) {
-		this(0,0);
+
 		this.subtract=sub;
 		this.layout=montageLayoutGraphic;
 		this.type=y;

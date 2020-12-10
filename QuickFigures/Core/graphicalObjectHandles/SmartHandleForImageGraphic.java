@@ -29,20 +29,17 @@ public class SmartHandleForImageGraphic extends SmartHandle {
 	int position=0;
 	RectangularGraphic rectangle=null;
 	
-	public SmartHandleForImageGraphic(int x, int y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
-	}
+
 	
 	public SmartHandleForImageGraphic( RectangularGraphic rect, int position) {
-		super(0,0);
+	
 		this.rectangle=rect;
 		this.position=position;
 		
 	}
 
 	public Point2D getCordinateLocation() {
-		Point2D p = RectangleEdges.getLocation(position, this.getBounds());
+		Point2D p = RectangleEdges.getLocation(position, rectangle.getBounds());
 		return p;
 	}
 	

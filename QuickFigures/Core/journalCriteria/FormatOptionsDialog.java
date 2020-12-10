@@ -22,7 +22,7 @@ import java.util.Arrays;
 import javax.swing.JComboBox;
 
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
 public class FormatOptionsDialog extends StandardDialog {
@@ -70,7 +70,7 @@ public class FormatOptionsDialog extends StandardDialog {
 		};
 	}
 	
-	public ComboBoxPanel generateFamilyCombo() {
+	public ChoiceInputPanel generateFamilyCombo() {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		 String[] fonts = ge.getAvailableFontFamilyNames();
 		 String[] fonts2 = new String[fonts.length+1];
@@ -78,7 +78,7 @@ public class FormatOptionsDialog extends StandardDialog {
 		 fonts2[0]=""; for(int i=0; i<fonts.length; i++) {fonts2[i+1]=fonts[i];}
 		 output=new JComboBox<String>(fonts2);
 		 output.setSelectedIndex(Arrays.binarySearch(fonts2, jc.prefferedFontFamily));
-	     ComboBoxPanel cbp = new ComboBoxPanel("Ideal Font", output);
+	     ChoiceInputPanel cbp = new ChoiceInputPanel("Ideal Font", output);
 		return cbp;
 	}
 

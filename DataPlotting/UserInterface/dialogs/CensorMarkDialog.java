@@ -24,7 +24,7 @@ import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.PointModel;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.numbers.NumberInputPanel;
 
@@ -122,7 +122,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 		this.add("width", nip);
 		
 		this.add("typ",
-				new ComboBoxPanel("Show as", new String[] {"Line only", "Crossing Line", "Plus", "Circle", "Shape"}, rect.getBarType()));
+				new ChoiceInputPanel("Show as", new String[] {"Line only", "Crossing Line", "Plus", "Circle", "Shape"}, rect.getBarType()));
 	}
 	
 	@Override

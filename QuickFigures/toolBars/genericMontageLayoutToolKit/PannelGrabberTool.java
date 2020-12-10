@@ -19,7 +19,7 @@ import genericMontageKit.*;
 import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -123,7 +123,7 @@ public class PannelGrabberTool extends GeneralLayoutEditorTool implements
 		StandardDialog gd=new StandardDialog(getClass().getName().replace("_", " "), true);
 		
 		String[] option2=new String[] {"Panel Adder (shift to cut)", "Column Adder (shift to remove)", "Row Adder (shift to remove)"};
-		gd.add("Adjust", new ComboBoxPanel("Adjust ", option2, mode));
+		gd.add("Adjust", new ChoiceInputPanel("Adjust ", option2, mode));
 		gd.showDialog();
 		
 		if (gd.wasOKed()) {	

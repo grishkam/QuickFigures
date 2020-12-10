@@ -347,7 +347,7 @@ public class PathPointReshapeList extends ReshapeHandleList {
 
 		@Override
 		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
-			SmartHandle dd = new SmartHandle(0,0);
+			SmartHandle dd = new SmartHandle();
 			dd.setCordinateLocation(getProxyLocation());
 			dd.setHandleColor(Color.magenta);
 			dd.handlesize=4;

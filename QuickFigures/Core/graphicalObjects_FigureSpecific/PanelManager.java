@@ -26,6 +26,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.undo.UndoableEdit;
+
 import channelMerging.CSFLocation;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelImage;
@@ -237,6 +239,32 @@ public class PanelManager implements Serializable, EditListener{
 		 return itemsTaken;
 	}
 	
+	
+	/**returns a channel panel at the given slice and frame.
+	  If the list does not already contain such a panel, this will create one*/
+	public ArrayList<PanelListElement> generateManyChannelPanels( int channel) {
+		ArrayList<PanelListElement> output=new ArrayList<PanelListElement>();
+		
+		int frames= this.getMultiChannelWrapper().nFrames();
+		int slices= this.getMultiChannelWrapper().nSlices();
+		for(int f=1; f<=frames; f++) {
+			for(int s=1; s<=slices; s++) {
+				if(this.getChannelUseInstructions().isFrameExcluded(f)) continue;
+				if(this.getChannelUseInstructions().isSliceExcluded(s)) continue;
+		output.add( generateSingleChannelPanel(getPanelList(),channel, s, f));
+			}
+			}
+		return output;
+	}
+	
+	
+	/**
+	 * @return
+	 */
+	public ChannelUseInstructions getChannelUseInstructions() {
+		return this.getPanelList().getChannelUseInstructions();
+	}
+
 	/**returns a channel panel at the given slice and frame.
 	  If the list does not already contain such a panel, this will create one*/
 	private PanelListElement generateSingleChannelPanel(PanelList stack, int channel, int slice, int frame) {
@@ -475,26 +503,7 @@ public class PanelManager implements Serializable, EditListener{
 		return output;
 	}
 	
-	/**An undo for changes to the panel level scale (what determines pixel density of the panels)*/
-	class PanelManagerScaleUndo extends AbstractUndoableEdit2 {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		double iScale;
-		double fScale;
-		private PanelManager pm;
-		
-		public PanelManagerScaleUndo(PanelManager pm) {
-			this.pm=pm;
-			iScale=pm.getPanelLevelScale();
-		}
-		public void undo() {pm.setPanelLevelScale(iScale);}
-		public void redo() {pm.setPanelLevelScale(fScale);}
-		public void establishFinalState() {
-			fScale=pm.getPanelLevelScale();
-		}
-	}
+
 	
 
 	
@@ -634,6 +643,29 @@ private AbstractUndoableEdit2 reorderImagePanels() {
 	public boolean isAdvancedChannelUse() {
 		return channelUseMode==ADVANCED_CHANNEL_USE;
 	}
+	
+	/**An undo for changes to the panel level scale (what determines pixel density of the panels)*/
+	class PanelManagerScaleUndo extends AbstractUndoableEdit2 {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		double iScale;
+		double fScale;
+		private PanelManager pm;
+		
+		public PanelManagerScaleUndo(PanelManager pm) {
+			this.pm=pm;
+			iScale=pm.getPanelLevelScale();
+		}
+		public void undo() {pm.setPanelLevelScale(iScale);}
+		public void redo() {pm.setPanelLevelScale(fScale);}
+		public void establishFinalState() {
+			fScale=pm.getPanelLevelScale();
+		}
+	}
+
+
 	
 
 }

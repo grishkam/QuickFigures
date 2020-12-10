@@ -18,8 +18,6 @@ package gridLayout;
 
 import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
-import logging.IssueLog;
-
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Area;
@@ -1034,8 +1032,16 @@ public class BasicMontageLayout implements LayoutSpaces,GridLayout, Serializable
 					if (xMontage==nRows()) return labelSpaceWidthBottom; else
 					 return bottomBorderOfRow(xMontage-1);
 			 }
-
 			 
+			 /**creates an identical layout*/
+			  public BasicMontageLayout duplicate() {
+					BasicMontageLayout out = new BasicMontageLayout();
+					out.matchLayoutSettings(this);
+					out.setWrapper(getWrapper());
+					return out;
+				}
+
+			 /**Creates an altered duplicate of the layout according to the given type*/
 			   public BasicMontageLayout makeAltered(int type) {
 				   BasicMontageLayout out=duplicate();
 				   out.convertAltered(type);
@@ -1043,14 +1049,8 @@ public class BasicMontageLayout implements LayoutSpaces,GridLayout, Serializable
 				 
 			   }
 			   
-			  public BasicMontageLayout duplicate() {
-				BasicMontageLayout out = new BasicMontageLayout();
-				out.matchLayoutSettings(this);
-				out.setWrapper(getWrapper());
-				return out;
-			}
-			  
-			void convertAltered(int type) {
+				/**Depending on the code, transforms this inot a different form*/
+			   void convertAltered(int type) {
 				  switch(type) {
 				  case COLS:convertToColumnLayout(); return;
 				  case ROWS:convertToRowLayout();return;

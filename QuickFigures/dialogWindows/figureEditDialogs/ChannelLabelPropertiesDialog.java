@@ -22,7 +22,7 @@ import channelLabels.ChannelLabelProperties;
 import graphicActionToolbar.CurrentFigureSet;
 import imageDisplayApp.CanvasOptions;
 import objectDialogs.GraphicItemOptionsDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.strings.StringInputPanel;
 
 /**A dialog that allows the user to change how the channel label's are shown
@@ -53,11 +53,11 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 	}
 	
 	protected void addOptionsToDialog() {
-		ComboBoxPanel mergeTypeCombo = new ComboBoxPanel("How To label Merge",ChannelLabelProperties.mergeLabelOptions, properties.getMergeLabelStyle() );
+		ChoiceInputPanel mergeTypeCombo = new ChoiceInputPanel("How To label Merge",ChannelLabelProperties.mergeLabelOptions, properties.getMergeLabelStyle() );
 		this.add("mergeType", mergeTypeCombo );
-		ComboBoxPanel mergeTextCombo = new ComboBoxPanel("Merge Label",ChannelLabelProperties.mergeTexts, properties.getMergeTextOption() );
+		ChoiceInputPanel mergeTextCombo = new ChoiceInputPanel("Merge Label",ChannelLabelProperties.mergeTexts, properties.getMergeTextOption() );
 		this.add("mergeText", mergeTextCombo  );
-		ComboBoxPanel sepTextCombo = new ComboBoxPanel("Separator Used For Single Line Label",ChannelLabelProperties.separatorOptions, properties.getSeparatorOption() );
+		ChoiceInputPanel sepTextCombo = new ChoiceInputPanel("Separator Used For Single Line Label",ChannelLabelProperties.separatorOptions, properties.getSeparatorOption() );
 		this.add("sepText", sepTextCombo  );
 		this.add("Custom Merge Text ", new StringInputPanel("Custom Merge Text ",properties.getCustomMergeText() ));
 		this.add("Custom Separator ", new StringInputPanel("Custom Separator ",properties.getCustomSeparator() ));

@@ -114,11 +114,11 @@ public void updateLocationsForHorizontal() {
 			colIndex=0;
 		}
 		
-		if (y+handle.getHeight()>lowerMostY) {
-			lowerMostY=y+handle.getHeight();
+		if (y>lowerMostY) {
+			lowerMostY=y;
 		}
-		if (xi+handle.getWidth()>rightMostX) {
-			rightMostX=xi+handle.getWidth();
+		if (xi>rightMostX) {
+			rightMostX=xi;
 		}
 		
 		
@@ -148,12 +148,14 @@ public void updateLocationsForVertical() {
 			rowIndex=0;
 		}
 		
-		if (yi+handle.getHeight()>lowerMostY) {
-			lowerMostY=yi+handle.getHeight();
+		if (yi>lowerMostY) {
+			lowerMostY=yi;
 		}
-		if (xi+handle.getWidth()>rightMostX) {
-			rightMostX=xi+handle.getWidth();
+		
+		if (xi>rightMostX) {
+			rightMostX=xi;
 		}
+		
 		
 		
 	}

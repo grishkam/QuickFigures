@@ -25,7 +25,7 @@ import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import imageDisplayApp.CanvasOptions;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.colors.ColorDimmingBox;
 import standardDialog.fonts.FontChooser;
@@ -99,7 +99,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	}
 	
 	protected void addDimmingToDialog() {
-		ComboBoxPanel cp=new ComboBoxPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
 		this.add("dim", cp);
 		this.getMainPanel().moveGrid(2, -1);
 		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
@@ -164,7 +164,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	public void addJustificationToDialog(TextGraphic tg) {
 		if (tg instanceof ComplexTextGraphic) {
 			ComplexTextGraphic ct=(ComplexTextGraphic) tg;
-			ComboBoxPanel st = new ComboBoxPanel("Justification", JUSTIFICATION_CHOICES, ct.getParagraph().getJustification());
+			ChoiceInputPanel st = new ChoiceInputPanel("Justification", JUSTIFICATION_CHOICES, ct.getParagraph().getJustification());
 			this.add("Justification", st);
 		}
 	}

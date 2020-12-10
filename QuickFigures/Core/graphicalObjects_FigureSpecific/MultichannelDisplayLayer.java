@@ -504,7 +504,6 @@ private static final long serialVersionUID = 1L;
 	
 	@Override
 	public ArrayList<MultiChannelImage> getAllSourceImages() {
-		// TODO Auto-generated method stub
 		ArrayList<MultiChannelImage> output = new ArrayList<MultiChannelImage> ();
 		output.add(this.getMultiChannelImage());
 		return output;

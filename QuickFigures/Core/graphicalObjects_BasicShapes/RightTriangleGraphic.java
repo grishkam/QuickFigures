@@ -171,7 +171,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		private RightTriangleGraphic triangle;
 
 		public RigthAngleHandle(RightTriangleGraphic rightTriangleGraphic) {
-			super(0,0);
+			
 			triangle=rightTriangleGraphic;
 			this.setHandleNumber(900471);
 		}

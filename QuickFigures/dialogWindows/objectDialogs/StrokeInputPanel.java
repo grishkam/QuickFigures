@@ -27,7 +27,7 @@ import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.numbers.NumberArrayInputPanel;
 import standardDialog.numbers.NumberInputEvent;
@@ -58,8 +58,8 @@ public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, 
 	NumberInputPanel widthInput=new NumberInputPanel("Stroke Width ", 0);
 	NumberInputPanel miterInput=new NumberInputPanel("Miterlimit ", 0);
 	ColorComboboxPanel strokeColorInput=null;
-	ComboBoxPanel joinInput=new ComboBoxPanel("Stroke Join", strokejoins, 0);
-	ComboBoxPanel capInput=new ComboBoxPanel("Stroke Cap", strokecaps, 0);
+	ChoiceInputPanel joinInput=new ChoiceInputPanel("Stroke Join", strokejoins, 0);
+	ChoiceInputPanel capInput=new ChoiceInputPanel("Stroke Cap", strokecaps, 0);
 	
 	public void setUpFont(Font f) {
 		dashinput.setItemFont(f);

@@ -62,7 +62,7 @@ public class GraphicUtil {
 		}
 	}
 	
-	public void fillPolygon(Graphics2D g, CordinateConverter<?> cords, Double[] rotatedBoundsPrecise, boolean handles) {
+	private void fillPolygon(Graphics2D g, CordinateConverter<?> cords, Double[] rotatedBoundsPrecise, boolean handles) {
 		Polygon p2 = getAlteredPolygon(g,  cords, rotatedBoundsPrecise);
 		
 		g.fill(p2);

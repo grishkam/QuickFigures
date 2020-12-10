@@ -28,7 +28,6 @@ public class LowerRightHandleForDividedPanelLayout extends SmartHandle {
 
 	public LowerRightHandleForDividedPanelLayout(DividedPanelLayout dpl, layoutDividedArea area, int num) {
 		
-		super(0, 0);
 		hnum = num;
 		super.setHandleNumber(num+40000);
 		this.area = area;

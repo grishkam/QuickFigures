@@ -42,12 +42,9 @@ public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 	protected int index;
 	private UndoLayoutEdit currentUndo;
 
-	public EditRowColNumberHandle(int x, int y) {
-		super(x, y);
-	}
+	
 
 	public EditRowColNumberHandle(MontageLayoutGraphic montageLayoutGraphic) {
-		this(0,0);
 		
 		this.layout=montageLayoutGraphic;
 		setHandleColor(Color.red);

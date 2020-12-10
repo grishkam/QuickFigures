@@ -18,7 +18,7 @@ package popupMenusForComplexObjects;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 
 public class MontageLayoutDisplayOptions extends GraphicItemOptionsDialog {
 
@@ -37,7 +37,7 @@ public class MontageLayoutDisplayOptions extends GraphicItemOptionsDialog {
 	
 	public void addOptionsToDialog() {
 		this.addNameField(mg);
-		this.add("editmode", new ComboBoxPanel("How to handle edits", new String[] {"Contents of parent layer", "Layout only"}, mg.getEditMode()));
+		this.add("editmode", new ChoiceInputPanel("How to handle edits", new String[] {"Contents of parent layer", "Layout only"}, mg.getEditMode()));
 		this.add("always show", new BooleanInputPanel("Always Show", mg.isAlwaysShow()));
 		this.add("locked in place", new BooleanInputPanel("Protected from mouse Drags ", mg.isUserLocked()==1));
 	}

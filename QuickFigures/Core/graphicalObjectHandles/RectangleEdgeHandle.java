@@ -40,13 +40,9 @@ public class RectangleEdgeHandle extends SmartHandle {
 	private boolean undoaddedAlready;
 
 
-	public RectangleEdgeHandle(int x, int y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	public RectangleEdgeHandle(RectangularGraphic r,  RectangleEdgeParameter a, Color c, int handleNumber, int type, double displace) {
-		this(0,0);
+	
 		this.theShape=r;
 		this.theParameter=a;
 		this.setHandleColor(c);

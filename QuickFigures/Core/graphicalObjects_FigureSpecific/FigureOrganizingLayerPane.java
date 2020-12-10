@@ -32,14 +32,13 @@ import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import figureEditDialogs.PanelStackDisplayOptions;
 import genericMontageKit.PanelList;
-import genericMontageKit.PanelOrderCorrector;
-import genericMontageKit.PanelOrderCorrector.ImageOrderComparator;
 import genericMontageKit.PanelSetter;
 import genericMontageKit.SubFigureOrganizer;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_FigureSpecific.PanelOrderCorrector.ImageOrderComparator;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
@@ -658,7 +657,6 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					} else {
 						r=mods.getRectangle();
 					}
-					int t=(int) System.currentTimeMillis();
 					
 					CroppingDialog.showCropDialog(secondView.getSlot(), r, 0);
 					

@@ -19,7 +19,7 @@ import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ImagePanelGraphic;
 import standardDialog.booleans.BooleanArrayInputPanel;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorCheckbox;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.numbers.AngleInputPanel;
@@ -81,7 +81,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 		
 		
 		this.add("ExcludedChannels", new BooleanArrayInputPanel("Include Colors ", image2.getRemovedChannels(), ColorCheckbox.get4Channel()));
-		this.add("Force Gray channel", new ComboBoxPanel("Force Gray channel ", new String[]{"None", "Red", "Green", "Blue"}, image2.getForceGrayChannel()));
+		this.add("Force Gray channel", new ChoiceInputPanel("Force Gray channel ", new String[]{"None", "Red", "Green", "Blue"}, image2.getForceGrayChannel()));
 		}
 		
 		AngleInputPanel aip = new AngleInputPanel("Angle", image.getAngle(), true);

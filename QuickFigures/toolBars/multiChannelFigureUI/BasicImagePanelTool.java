@@ -38,7 +38,7 @@ import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 import applicationAdapters.CanvasMouseEvent;
@@ -381,7 +381,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		public SwapperOptionDialog(BasicImagePanelTool mover) {
 			setModal(true);
 			this.mover=mover;
-			add("eWorkOn", new ComboBoxPanel("Select what to work on", new String[] {"On Multichannel Image of Clicked Only", "On all in same figure"}, workOn));
+			add("eWorkOn", new ChoiceInputPanel("Select what to work on", new String[] {"On Multichannel Image of Clicked Only", "On all in same figure"}, workOn));
 			//add("allFigure", new BooleanInputPanel("Select in Group", mover.selectingroup));
 		}
 		@Override

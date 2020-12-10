@@ -23,7 +23,7 @@ package objectDialogs;
 
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.ArrowGraphic.ArrowHead;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
 /**a dialog for altering the appearance of the arrow heads*/
@@ -76,10 +76,10 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 			arrow=(ArrowGraphic) s;
 		}
 		
-		ComboBoxPanel cip = new ComboBoxPanel(NUMBER_OF_HEADS, new String[] {"0", "1", "2"},arrow.getNHeads());
+		ChoiceInputPanel cip = new ChoiceInputPanel(NUMBER_OF_HEADS, new String[] {"0", "1", "2"},arrow.getNHeads());
 		this.add("HeadNum", cip);
 		
-		cip = new ComboBoxPanel(OUTLINE, new String[] {"Do Not Outline", "Draw Outline Arrow"/**, "Outline for heads"*/},arrow.drawnAsOutline());
+		cip = new ChoiceInputPanel(OUTLINE, new String[] {"Do Not Outline", "Draw Outline Arrow"/**, "Outline for heads"*/},arrow.drawnAsOutline());
 		this.add("outline", cip);
 		
 		a1.addArrowHeadOptions();
@@ -171,7 +171,7 @@ public class ArrowSwingDialog extends ShapeGraphicOptionsSwingDialog{
 			aip = new NumberInputPanel("Notch Angle", head.getNotchAngle()*DEGREE_RADIANS, true, true, 0, 180);
 			this.add(NOTCH_ANGLE, aip);
 			
-			ComboBoxPanel cp = new ComboBoxPanel("Head Style", ArrowGraphic.arrowStyleChoices, head.getArrowStyle());
+			ChoiceInputPanel cp = new ChoiceInputPanel("Head Style", ArrowGraphic.arrowStyleChoices, head.getArrowStyle());
 			this.add(ARROW_STYLE, cp);
 		}
 	}

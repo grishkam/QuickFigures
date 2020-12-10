@@ -169,13 +169,15 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		try {
 			SVGQuickExport obj = new SVGQuickExport();
 			if (obj.isBatikInstalled())
+				{
 				installItem(obj);
 			
-			EPSQuickExport eps=new EPSQuickExport();
-			installItem(eps);
-			
-			PDFQuickExport ep=new PDFQuickExport();
-			installItem(ep);
+				EPSQuickExport eps=new EPSQuickExport();
+				installItem(eps);
+				
+				PDFQuickExport ep=new PDFQuickExport();
+				installItem(ep);
+			}
 			
 			
 			} 

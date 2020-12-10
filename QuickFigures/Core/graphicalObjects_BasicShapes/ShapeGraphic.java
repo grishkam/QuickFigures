@@ -64,7 +64,6 @@ import layersGUI.HasTreeLeafIcon;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
-import objectDialogs.ArrowSwingDialog;
 import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 /**An abstract class for the shapes in the figure*/

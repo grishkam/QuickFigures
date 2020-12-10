@@ -45,7 +45,7 @@ import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnappingPanel;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -322,11 +322,11 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		
 		ChannelUseInstructions ins = ChannelUseInstructions.getChannelInstructionsForInsets();
 		list.setChannelUstInstructions(ins);
-		ArrayList<Integer> noMChan = display.getPanelList().getChannelUseInstructions().noMergeChannels;
-		ins.excludedChannelPanels=new ArrayList<Integer>();
-		ins.excludedChannelPanels.addAll(noMChan);
-		ins.noMergeChannels=new ArrayList<Integer>();;
-		ins.noMergeChannels.addAll(noMChan);
+		ArrayList<Integer> noMChan = display.getPanelList().getChannelUseInstructions().getNoMergeChannels();
+		ins.setExcludedChannelPanels(new ArrayList<Integer>());
+		ins.getExcludedChannelPanels().addAll(noMChan);
+		ins.setNoMergeChannels(new ArrayList<Integer>());;
+		ins.getNoMergeChannels().addAll(noMChan);
 		
 		if (avoidDapi) {
 			String excludedChanName = getExcludedChanName();
@@ -346,12 +346,12 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			MultiChannelImage multichanalWrapper) {
 		int indexDapi=multichanalWrapper.getIndexOfChannel(excludedChanName);
 		
-		int in0 = ins.excludedChannelPanels.indexOf(0);
+		int in0 = ins.getExcludedChannelPanels().indexOf(0);
 						if(in0==-1) {in0=0;}
-						ins.excludedChannelPanels.add(in0,indexDapi);
-						in0 = ins.noMergeChannels.indexOf(0);
+						ins.getExcludedChannelPanels().add(in0,indexDapi);
+						in0 = ins.getNoMergeChannels().indexOf(0);
 						if(in0==-1) {in0=0;}
-						ins.noMergeChannels.add(in0,indexDapi);
+						ins.getNoMergeChannels().add(in0,indexDapi);
 	}
 
 	public String getExcludedChanName() {
@@ -527,10 +527,10 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			this.mover=mover;
 			
 			//String[] options = new String[] {"Left and Right", "Inside Left and Right", "Vertical Montage (If fits at right)",  "Fill Right Side (If fits in single col)", "Horizontal Montage Right Top", "Horizontal Montage Right Bottom", "Montage Below", "Fill Bottom Side (If fits in single row)", "Montage Inside (see tab)",  "Free nearby"};
-			add("arrangementClass", new ComboBoxPanel("Select arrangement", InsetLayoutDialog.arrangements, mover.arrangement));
+			add("arrangementClass", new ChoiceInputPanel("Select arrangement", InsetLayoutDialog.arrangements, mover.arrangement));
 			
 			String[] options2 = new String[] {"Only Single Image", "Multiple Channel Panels"};
-			add("panelType", new ComboBoxPanel("Select Panel Type", options2, mover.createMultiChannel));
+			add("panelType", new ChoiceInputPanel("Select Panel Type", options2, mover.createMultiChannel));
 			
 			
 			//String[] options3 = new String[] {"Horizontal Montage", "Vertical Montage", "Fit at side"};

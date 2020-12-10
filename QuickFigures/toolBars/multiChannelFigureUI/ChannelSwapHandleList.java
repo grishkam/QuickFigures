@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 8, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package multiChannelFigureUI;
 
 import java.awt.Graphics2D;
@@ -34,6 +40,7 @@ import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**A set of handles that provide a way for the user to re-order channels*/
 public class ChannelSwapHandleList extends SmartHandleList {
 
 	/**
@@ -53,6 +60,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	LocatedObject2D anchorObject=null;
 	
 	int pressHandleIndex=0;
+	
 	private MultichannelDisplayLayer theDisplayLayer;
 	
 	
@@ -72,7 +80,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		updateColors();
 	}
 	
-
+	/**returns the index of the channel handle at the given click location*/
 	int getPressChannel(CanvasMouseEvent e) {
 		SmartHandle h = this.getHandleForClickPoint(new Point2D.Double(e.getClickedXScreen(), e.getClickedYScreen()));
 		if (h!=null)
@@ -82,8 +90,9 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	}
 	
 	private void createHandles() {
+		
 		for(ChannelEntry chan:channels) {
-			add(new ChannelSwapHandle(chan.getOriginalChannelIndex()));
+			add(new ChannelSwapHandle(chan));
 		}
 		
 	}
@@ -91,7 +100,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	/**Sets up handles for the channelentry list*/
 	public void updateList(ArrayList<ChannelEntry> hashChannel) {
 		this.channels=hashChannel;
-		this.clear();
+		this.clear();//elemintates the old handles 
 		innitializeHandles();
 	}
 
@@ -107,17 +116,31 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		}
 	}
 	
+	
 	void updateColors() {
 		for(SmartHandle c: this) {
 			if (c instanceof ChannelSwapHandle) 
 			{
 				ChannelSwapHandle handle =(ChannelSwapHandle) c;
-				handle.setUpChannelColor();
+				handle.setUpChannelColorAndText();
 			}
 		}
+		
 	}
 	
 	public class ChannelSwapHandle extends SmartHandle {
+		
+		int channelNumber=1;
+		private ChannelEntry entry;
+		
+		
+
+		public ChannelSwapHandle(ChannelEntry entry) {
+			
+			this.entry=entry;
+			this.setHandleNumber(HANDLE_CODE_FOR_SWAP_HANDLE+this.getChannelNumber());
+			this.handlesize=6;
+		}
 		
 		public void draw(Graphics2D g, CordinateConverter<?> cords) {
 			updateLocations();
@@ -127,36 +150,32 @@ public class ChannelSwapHandleList extends SmartHandleList {
 			
 		}
 		
-		int channelNumber=1;
-		private ChannelEntry entry;
+	
 
-		public ChannelSwapHandle(int index) {
-			super(0, 0);
-			channelNumber=index;
-			this.setHandleNumber(800+index);
-			this.handlesize=6;
-		}
-		
-		public ChannelSwapHandle(int x, int y) {
-			super(x, y);
-			
-		}
 		
 
-		void setUpChannelColor() {
-			for(ChannelEntry chan:channels) {
-				if(chan.getOriginalChannelIndex()==channelNumber) {
-					this.setHandleColor(chan.getColor());
+
+		/**sets the color and message of the handle to the channel entry*/
+		void setUpChannelColorAndText() {
 				try {
 					this.message=(
-							theDisplayLayer.getMultiChannelImage().getRealChannelName(channelNumber));
-					if(message==null) message="Channel #"+chan.getOriginalChannelIndex();
-					this.entry=chan;
+							theDisplayLayer.getMultiChannelImage().getRealChannelName(getChannelNumber()));
+					if(message==null) message="Channel #"+entry.getOriginalChannelIndex();
+					this.setHandleColor(entry.getColor());
+					this.messageColor=entry.getColor().darker();
 				} catch (Throwable t) {}
 					
-					this.messageColor=chan.getColor().darker();
-				}
-			}
+					
+				
+		}
+
+
+
+		/**
+		 returns the channel number used by this handle
+		 */
+		protected int getChannelNumber() {
+			return entry.getOriginalChannelIndex();
 		}
 	
 		
@@ -169,17 +188,22 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		int pressHandleIndex2 = pressHandleIndex;
 		if (pressHandleIndex2==relHandleIndex)return;
 		
-		
+		performChannelSwap(relHandleIndex, pressHandleIndex2);
+	
+	}
+
+	/**
+	performs a channel swap between the two channels with the given original channel indices (their locations in the multichannel image)
+	 */
+	public void performChannelSwap(int relHandleIndex, int pressHandleIndex2) {
 		if (swapType==SWAP_IN_INSTRUCTIONS) {
 			swapImageChannelOrder(relHandleIndex,pressHandleIndex2);
 		}
-		else 
-			{swapSourceImageChannels(relHandleIndex, pressHandleIndex2);}
-	
+		else {swapSourceImageChannels(relHandleIndex, pressHandleIndex2);}
 	}
 	
 	/**
-	swaps the two channels given
+	swaps the two channels given. does not alter the source image file
 	 */
 	protected void swapImageChannelOrder(int relHandleIndex, int pressHandleIndex2) {
 		if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
@@ -248,6 +272,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 
 	public void setDisplayLayer(MultichannelDisplayLayer display) {
 		this.theDisplayLayer=display;
+		
 	}
 
 	

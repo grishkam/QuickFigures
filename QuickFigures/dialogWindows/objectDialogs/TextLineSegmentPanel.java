@@ -24,7 +24,7 @@ import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.strings.StringInputEvent;
 import standardDialog.strings.StringInputListener;
@@ -41,9 +41,9 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 	private TextLineSegment segment;
 	StringInputPanel textPanel;
 	ColorComboboxPanel colorPanal;
-	ComboBoxPanel scriptType;
-	ComboBoxPanel scriptStyle;
-	private ComboBoxPanel scriptLine;
+	ChoiceInputPanel scriptType;
+	ChoiceInputPanel scriptStyle;
+	private ChoiceInputPanel scriptLine;
 	Boolean includeColor=true;
 	
 	/**creates a panel for the given text line segment*/
@@ -60,9 +60,9 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 		
 		if (includeColor)	colorPanal=new ColorComboboxPanel("Text Color", null, t.getUniqueTextColor());
 		
-		scriptType=new ComboBoxPanel("Text is", new String[] {"normal", "superscript", "subscript"},t.isSubOrSuperScript());
-		scriptStyle=new ComboBoxPanel("Text style", new String[] {"normal","Plain", "Bold", "Italic", "Bold+Italic"},t.getFont().getStyle());
-		scriptLine=new ComboBoxPanel("Line Type", new String[] {"no line","Underline", "Strike Through"},t.getLines());
+		scriptType=new ChoiceInputPanel("Text is", new String[] {"normal", "superscript", "subscript"},t.isSubOrSuperScript());
+		scriptStyle=new ChoiceInputPanel("Text style", new String[] {"normal","Plain", "Bold", "Italic", "Bold+Italic"},t.getFont().getStyle());
+		scriptLine=new ChoiceInputPanel("Line Type", new String[] {"no line","Underline", "Strike Through"},t.getLines());
 		
 		addListeners();
 		this.setLayout(new GridBagLayout());

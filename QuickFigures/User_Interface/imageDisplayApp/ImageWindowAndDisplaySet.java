@@ -281,7 +281,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	class CanvasResizeHandle extends SmartHandle {
 
 		public CanvasResizeHandle(ImageWindowAndDisplaySet s) {
-			super(0, 0);
+			
 			this.setHandleNumber(999910044);
 			this.setHandleColor(Color.DARK_GRAY.darker());
 			

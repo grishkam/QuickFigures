@@ -273,6 +273,8 @@ public class PanelList implements Serializable{
 			addMergePanel(imp, frame, slice);
 		
 		for (int c=1; c<=chanNum; c++ ) {
+			
+			
 			if ( singleChannel || !getChannelUseInstructions().isChanPanExcluded(c)  ) 
 						addChannelPanel( imp, c, frame, slice);
 		}
@@ -461,6 +463,14 @@ public class PanelList implements Serializable{
 		ArrayList<ChannelEntry> channelEntries = panel.getChannelEntries();
 		if (channelEntries.size()<2) return;
 		
+		sortTheseChannels(channelEntries);
+	}
+
+
+	/**
+	sorts the given channel entries
+	 */
+	public void sortTheseChannels(ArrayList<ChannelEntry> channelEntries) {
 		channelEntries.sort(new Comparator<ChannelEntry>() {
 
 			@Override
@@ -811,6 +821,8 @@ public class PanelList implements Serializable{
 		if(this.getChannelUseInstructions().getFrameUseInstructions().selectsSingle()) getChannelUseInstructions().getFrameUseInstructions().setupLocation(d);
 		if(this.getChannelUseInstructions().getSliceUseInstructions().selectsSingle()) getChannelUseInstructions().getSliceUseInstructions().setupLocation(d);
 	}
+	
+	
 	
 	
 	

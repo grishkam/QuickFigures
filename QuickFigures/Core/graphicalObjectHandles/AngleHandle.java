@@ -44,12 +44,10 @@ public class AngleHandle extends SmartHandle {
 	
 
 
-	public AngleHandle(int x, int y) {
-		super(x, y);
-	}
+	
 
 	public AngleHandle(RectangularGraphic r, AngleParameter angle, Color c, double startAngle, int handleNumber) {
-		this(0,0);
+		
 		this.theShape=r;
 		this.theAngle=angle;
 		this.setHandleColor(c);

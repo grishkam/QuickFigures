@@ -20,7 +20,7 @@ import javax.swing.JTabbedPane;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.numbers.NumberInputPanel;
 import undo.Edit;
@@ -66,7 +66,7 @@ public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {
 		this.add("barstroke", new NumberInputPanel("Thickness ", rect.getBarStroke(), true, true, 0,25));
 		
 		this.add("plen", new NumberInputPanel("Projection length", rect.getProjectionLength(), true, true, 0,50));
-		this.add("ptype", new ComboBoxPanel("Projection Type", BarGraphic.projTypes, rect.getProjectionType()));
+		this.add("ptype", new ChoiceInputPanel("Projection Type", BarGraphic.projTypes, rect.getProjectionType()));
 		this.addScaleInfoToDialog(rect.getScaleInfo());
 		
 		this.add("Angle",new NumberInputPanel("angle", rect.getAngle()*(180/Math.PI)));

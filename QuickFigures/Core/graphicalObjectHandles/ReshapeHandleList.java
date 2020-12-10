@@ -216,7 +216,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		
 
 		public  ReshapeSmartHandle(int type, RectangularGraphic r) {
-			super(0, 0);
+			
 			this.setHandleNumber(type);
 			this.rect=r;
 			

@@ -78,14 +78,14 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 
 	public SmartHandleForPathGraphic(PathGraphic p, PathPoint point) {
-		super(0, 0);
+		
 		this.pathPoint=point;
 		this.pathGraphic=p;
 		// TODO Auto-generated constructor stub
 	}
 	
 	public SmartHandleForPathGraphic(PathGraphic p, PathPoint point, int type, int number) {
-		super(0, 0);
+		
 		this.pathPoint=point;
 		this.pathGraphic=p;
 		

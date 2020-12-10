@@ -57,7 +57,7 @@ import standardDialog.booleans.BooleanInputListener;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.ItemSelectblePanel;
 import standardDialog.colors.ColorCheckbox;
 import standardDialog.colors.ColorComboboxPanel;
@@ -190,7 +190,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	protected HashMap<String, StringInputPanel> allStrings=new HashMap<String, StringInputPanel>();
 	protected HashMap<String, NumberInputPanel> Numbers=new HashMap<String, NumberInputPanel>();
 	protected HashMap<String, NumberArrayInputPanel> NumberSets=new HashMap<String, NumberArrayInputPanel>();
-	protected HashMap<String, ComboBoxPanel> choices=new HashMap<String, ComboBoxPanel>();
+	protected HashMap<String, ChoiceInputPanel> choices=new HashMap<String, ChoiceInputPanel>();
 	protected HashMap<String, FontChooser> fonts=new HashMap<String, FontChooser>();
 	protected HashMap<String, BooleanInputPanel> bools=new HashMap<String, BooleanInputPanel>();
 	protected HashMap<String, ItemSelectblePanel> items=new HashMap<String,ItemSelectblePanel>();
@@ -289,7 +289,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return new Point2D.Double(ar[0], ar[1]);
 	}
 	
-	public void add(String key, ComboBoxPanel st) {
+	public void add(String key, ChoiceInputPanel st) {
 		
 		if (st instanceof ColorComboboxPanel) {
 			colors.put(key, (ColorComboboxPanel) st);
@@ -301,7 +301,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		place(st);
 	}
 	public int getChoiceIndex(String key) {
-		ComboBoxPanel ob = choices.get(key);
+		ChoiceInputPanel ob = choices.get(key);
 		if(ob==null) {
 			ItemSelectblePanel ob2=items.get(key);
 			if(ob2==null) return 0;
@@ -455,7 +455,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		StandardDialog sd = new StandardDialog();
 		sd.add("text1", new StringInputPanel("give me text ", "default input"));
 		sd.add("num", new NumberInputPanel("Select number", 5));
-		sd.add("combo", new ComboBoxPanel("Select", new String[] {"a","b", "v", "d"}, 3));
+		sd.add("combo", new ChoiceInputPanel("Select", new String[] {"a","b", "v", "d"}, 3));
 		FontChooser sb = new FontChooser(new Font("Arial", Font.BOLD, 12));
 		sd.add("font", sb);
 		NumberArrayInputPanel pai = new NumberArrayInputPanel(4, 0);
@@ -715,7 +715,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		public int gridWidth() {
 			
 			return 4;
-		}}
+		}
+
+		}
 
 	
 	public JButton alternateCloseButton() {
@@ -779,7 +781,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		for(NumberInputPanel i:NumberSets.values()) {
 			i.revert();
 		}
-		for(ComboBoxPanel i:choices.values()) {
+		for(ChoiceInputPanel i:choices.values()) {
 			i.revert();
 		}
 		for(BooleanInputPanel i:bools.values()) {

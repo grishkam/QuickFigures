@@ -42,11 +42,12 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 
 
 	/**
-	 * 
+	 changes the font depecting on the state of the channel
 	 */
 	public void updateFont() {
 		HashMap<TextAttribute, Object> mm = new HashMap<TextAttribute, Object> ();
 		Font font2 = super.getFont();
+		font2=font2.deriveFont(fontStyle());
 		boolean strike=isExcludedChannel();
 		if (strike) 
 			{
@@ -61,9 +62,12 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 			this.setIcon(new ColorIcon(entry.getColor()));
 		}
 		this.setFont(font2.deriveFont(mm));
+		
 	}
 
-
+	int fontStyle() {return Font.BOLD;}
+	
+	
 	/**
 	returns true if the channel is excluded
 	 */

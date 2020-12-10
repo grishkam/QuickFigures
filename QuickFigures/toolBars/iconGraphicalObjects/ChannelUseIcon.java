@@ -32,12 +32,30 @@ public class ChannelUseIcon implements Icon, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+
+	private static final int NORMAL_CHANNEL_USE = 0, ADVANCED=1;
+	
+	
 	ArrayList<ChannelEntry> chans=null;
+	
+	private int style=NORMAL_CHANNEL_USE;
+	
+	
+	
 	/**
 	constructor for a channel icon with the given channel entries
 	 */
 	public ChannelUseIcon(ArrayList<ChannelEntry> c) {
 		chans=c;
+	}
+	
+	/**
+	constructor for a channel icon with the given channel entries
+	 */
+	public ChannelUseIcon(ArrayList<ChannelEntry> c, int style1) {
+		chans=c;
+		this.style=style1;
 	}
 
 	/**
@@ -70,14 +88,16 @@ public class ChannelUseIcon implements Icon, Serializable {
 				g.setColor(channels.get(i).getColor());
 				Path2D p=new Path2D.Double();
 				p.moveTo(xi, yc);
-				p.quadTo((xi+xf)/2, yc-0.7*yWidth/nChan, xf, yc);
+				double curveControlShift = 0.7;
+				if (style==ADVANCED) curveControlShift*=-1;
+				p.quadTo((xi+xf)/2, yc-curveControlShift*yWidth/nChan, xf, yc);
 				g2d.draw(p);
 			}
 			
 			
 			
 		}
-		
+		g.setColor(Color.black);
 
 	}
 

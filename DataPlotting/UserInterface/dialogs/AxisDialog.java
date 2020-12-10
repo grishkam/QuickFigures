@@ -23,7 +23,7 @@ import objectDialogs.TextGraphicSwingDialog;
 import plotParts.Core.AxesGraphic;
 import standardDialog.GriddedPanel;
 import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
 public class AxisDialog  extends GraphicItemOptionsDialog {
@@ -64,7 +64,7 @@ public class AxisDialog  extends GraphicItemOptionsDialog {
 		NumberInputPanel nip4 = new NumberInputPanel("Minor marks ", rect.getAxisData().getMinorTic(), 1, 100);
 		nip3.setDecimalPlaces(2);nip4.setDecimalPlaces(2);
 		this.add("major", nip3);this.add("minor", nip4);
-		ComboBoxPanel panel = new ComboBoxPanel("Marks ", new String[] {"Show all", "Dont Show", "Show Major Only"}, rect.getHideTicmarks());
+		ChoiceInputPanel panel = new ChoiceInputPanel("Marks ", new String[] {"Show all", "Dont Show", "Show Major Only"}, rect.getHideTicmarks());
 		this.add("hidTic", panel);
 	
 	
@@ -95,9 +95,9 @@ public class AxisDialog  extends GraphicItemOptionsDialog {
 		GriddedPanel gp2 = new GriddedPanel();
 		this.getOptionDisplayTabs().addTab("Scale Level", gp2);
 		this.setMainPanel(gp2);
-		ComboBoxPanel panel2 = new ComboBoxPanel("Scale Type ", new String[] {"Normal", "Log", "other"}, rect.getScaleType());
+		ChoiceInputPanel panel2 = new ChoiceInputPanel("Scale Type ", new String[] {"Normal", "Log", "other"}, rect.getScaleType());
 		this.add("ScaleType", panel2);
-		ComboBoxPanel panel3 = new ComboBoxPanel("Label Scale as ", new String[] {"Normal", "a*10^b", "other"}, rect.getScaleLabelType());
+		ChoiceInputPanel panel3 = new ChoiceInputPanel("Label Scale as ", new String[] {"Normal", "a*10^b", "other"}, rect.getScaleLabelType());
 		this.add("ScaleLabel", panel3);
 		
 		

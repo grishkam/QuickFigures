@@ -44,7 +44,7 @@ import iconGraphicalObjects.ChannelUseIcon;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.StandardDialog;
 import standardDialog.channels.ChannelEntryBox;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 
@@ -256,7 +256,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 						ArrayList<ChannelEntry> chans = pm.getMultiChannelWrapper().getChannelEntriesInOrder();
 					
 						StandardDialog sd = new StandardDialog();
-						sd.add("Channel ", new ComboBoxPanel("Chan: ", new ChannelEntryBox(pm.getMultiChannelWrapper().getChannelEntriesInOrder())));
+						sd.add("Channel ", new ChoiceInputPanel("Chan: ", new ChannelEntryBox(pm.getMultiChannelWrapper().getChannelEntriesInOrder())));
 						sd.setModal(true);
 						sd.showDialog();
 						

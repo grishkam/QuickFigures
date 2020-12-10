@@ -309,7 +309,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		private NotchedRectangleGraphic rect;
 
 		public notchHandle(NotchedRectangleGraphic notchedRectangleGraphic, int i) {
-			super(0,0);
+		
 			this.index=i;
 			this.rect=notchedRectangleGraphic;
 			this.setHandleNumber(98200+i);

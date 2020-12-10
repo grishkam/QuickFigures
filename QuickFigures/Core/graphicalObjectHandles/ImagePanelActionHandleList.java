@@ -159,17 +159,30 @@ public class ChannelsIconHandle extends IconHandle {
 			ss.setSelection(canvasMouseEventWrapper.getSelectionSystem().getSelecteditems());
 			ChannelPanelEditingMenu local = ss.prepareContext();
 			local.setScope(ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
-			ArrayList<ChannelMergeMenuItem> items = local.createChannelMergeMenu();
+			
+			ArrayList<ChannelMergeMenuItem> items =new ArrayList<ChannelMergeMenuItem>();
+			
+			if(this.isMergePanel())
+				 items.addAll( local.createChannelMergeMenuItems(ChannelPanelEditingMenu.NO_MERGE_CHANNEL_MENU));
+			else items.addAll(local.createChannelMergeMenuItems(ChannelPanelEditingMenu.MERGE_WITH_EACH_MENU));
+			
 			for(ChannelMergeMenuItem i:items) {o.add(i);}
 			return o;
 		}
 		
+		/**
+		 * @return
+		 */
+		private boolean isMergePanel() {
+			PanelListElement source = theImage.getSourcePanel();
+			if (source!=null && !source.isTheMerge()) return false;
+			return true;
+		}
+
 		/**if the image panel is not a merged image or if there is only one channel available
 		  then this handle is hidden. When the panels are in advanced channel use mode,
 		  there is not need for this item*/
 	public boolean isHidden() {
-		PanelListElement source = theImage.getSourcePanel();
-		if (source!=null && !source.isTheMerge()) return true;
 		if (context!=null &&context.getPressedMultichannel().nChannels()==1) return true;
 		if (context!=null &&context.getPrincipalDisplay().getPanelManager().isAdvancedChannelUse()) return true;
 		return false;

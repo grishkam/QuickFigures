@@ -29,7 +29,7 @@ import gridLayout.GenericMontageEditor;
 import gridLayout.LayoutSpaces;
 import undo.UndoLayoutEdit;
 
-/**a handle that moves the rows and columns of the layout around*/
+/**a handle that moves the rows and columns of the layout around by swapping their contents*/
 public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 
 	protected MontageLayoutGraphic layout;
@@ -39,7 +39,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 	private int endIndex;
 
 	public MoveRowHandle(int x, int y) {
-		super(x, y);
+		
 		// TODO Auto-generated constructor stub
 	}
 
@@ -72,16 +72,13 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		
 		
 		this.setCordinateLocation(new Point2D.Double(x2, y2));
-	//this.setLocation(50,50);
+	
 		setHandleColor(Color.LIGHT_GRAY);
 		
 		setupSpecialShape();
 		
 		this.setHandleNumber(PanelLayoutGraphic.handleIDFactor*20+type*1000+offset+1*index);
 		
-		//message="Move ";
-		//if(type==COLS) message+="Column"; else message+="Row";
-		//message=null;
 	}
 	
 	protected boolean hasSpecialShape() {

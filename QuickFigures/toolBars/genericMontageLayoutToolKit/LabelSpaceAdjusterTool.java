@@ -22,7 +22,7 @@ import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
 import gridLayout.BasicMontageLayout;
 import gridLayout.LayoutSpaces;
 import standardDialog.StandardDialog;
-import standardDialog.choices.ComboBoxPanel;
+import standardDialog.choices.ChoiceInputPanel;
 
 
 public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements LayoutSpaces{
@@ -73,7 +73,7 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 String[] option2 = new String[] {
 		"Label Space Adjuster (Top/Left), (shift Bottom/Right) ",
 		"Montage Canvas Size Adjuster (Top/Left, shift for Bottom/Right)" };
-gd.add("Adjust ",new ComboBoxPanel("Adjust ", option2, mode));
+gd.add("Adjust ",new ChoiceInputPanel("Adjust ", option2, mode));
 
 gd.showDialog();
 
