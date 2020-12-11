@@ -82,6 +82,7 @@ public class ColorModeIcon implements Icon,MiniToolBarIcon {
 			g2.setColor(Color.red.darker());
 			if(this.getImageColorMode()) {g2.draw(a);} else {g2.draw(a2);}
 	}
+		g.setColor(Color.black);
 	}
 
 	@Override

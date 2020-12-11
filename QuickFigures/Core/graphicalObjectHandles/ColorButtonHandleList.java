@@ -59,7 +59,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 		}
 		
 		add(new ColorHandle(new Color(0,0,0,0)));
-		add(new ColorHandle());
+		add(new ColorHandle(true));
 		
 	}
 	
@@ -80,7 +80,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 	
 
 		public ColorHandle(Color c) {
-			this();
+			this(false);
 			this.setHandleColor(c);
 			this.setTheColor(c);
 			if(c==null||c.getAlpha()==0)
@@ -89,15 +89,16 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 				super.setSpecialFill(SmartHandle.CROSS_FILL);
 				super.decorationColor=Color.red;
 			}
+			super.setSpecialFill(0);
 		}
 		
 		
 
-		public ColorHandle() {
+		public ColorHandle(boolean rainbow) {
 			this.handlesize=8;
 			maxGrid=standardColor.length;
 			this.setHandleColor(Color.white);
-			super.setSpecialFill(SmartHandle.RAINBOW_FILL);
+			if (rainbow)super.setSpecialFill(SmartHandle.RAINBOW_FILL);
 			this.moreColors=true;
 			
 		}
