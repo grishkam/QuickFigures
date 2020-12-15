@@ -142,7 +142,7 @@ public class ChannelLabelManager implements Serializable {
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
 		for(PanelListElement slice: getPanelList().getPanels()) {
-			output.add(generateChanelLabel(slice));
+			output.add(generateChannelLabelFor(slice));
 		}
 		return output;
 	}
@@ -152,12 +152,29 @@ public class ChannelLabelManager implements Serializable {
 	public ArrayList<ChannelLabelTextGraphic> generateChannelLabels2() {
 		ArrayList<ChannelLabelTextGraphic> output=new ArrayList<ChannelLabelTextGraphic>();
 		for(PanelListElement slice: getPanelList().getPanels()) {
-			if(slice.targetFrameNumber>firstFrameIndex()
-					||
-					slice.targetSliceNumber>firstSliceIndex()) continue;
-			output.add(generateChanelLabel(slice));
+			if(isNonLabeledSlice(slice)) continue;
+			output.add(
+					generateChannelLabelFor(slice)
+					);
 		}
 		return output;
+	}
+
+	/**
+	returns whether the panel list element is a target for a channel label creation
+	 */
+	public boolean isNonLabeledSlice(PanelListElement slice) {
+		return slice.targetFrameNumber>firstFrameIndex()
+				||
+				slice.targetSliceNumber>firstSliceIndex();
+	}
+
+	/**
+	 * @param slice
+	 * @return
+	 */
+	public ChannelLabelTextGraphic generateChannelLabelFor(PanelListElement slice) {
+		return generateChanelLabel(slice);
 	}
 	
 	
@@ -309,6 +326,10 @@ public class ChannelLabelManager implements Serializable {
 		return null;
 	}
 
+	/**returns a list of channel labels*/
+	public ArrayList<ChannelLabelTextGraphic> getAllLabels() {
+		return panelList.getChannelLabels();
+	}
 	
 	
 }

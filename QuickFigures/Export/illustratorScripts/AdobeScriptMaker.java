@@ -32,6 +32,7 @@ import applicationAdapters.ImageWrapper;
 import applicationAdapters.PixelWrapper;
 import graphicalObjects.FigureDisplayContainer;
 import logging.IssueLog;
+import messages.ShowMessage;
 import photoshopScripts.ZPhotoshopScriptGenerator;
 import ultilInputOutput.FileChoiceUtil;
 
@@ -230,7 +231,7 @@ public class AdobeScriptMaker {
 			String textFileAsString(String name) {
 				InputStream urlToDictionary;		
 				urlToDictionary = this.getClass().getClassLoader().getResourceAsStream( name);	
-				if (urlToDictionary==null) IssueLog.showMessage("File with name "+name+" is not found in jar");
+				if (urlToDictionary==null) ShowMessage.showMessages("File with name "+name+" is not found in jar");
 							
 				return FileChoiceUtil.readStringFrom(urlToDictionary);
 				

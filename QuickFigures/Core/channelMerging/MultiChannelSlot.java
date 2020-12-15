@@ -33,6 +33,9 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	
 	static final String[] retrivalOptions=new String[] {"load from embedded (if failed try File)", "load from file (if fail, try embedded)", "Look in working directory"};
 
+
+	
+
 	public int getRetrieval() ;
 	public void setRetrival(int i);
 

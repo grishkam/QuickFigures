@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -126,7 +127,7 @@ public class BasicToolBit implements ToolBit {
 	}
 
 	
-	public ImageWrapper getImageWrapperClick() {
+	public ImageWrapper getImageClicked() {
 		// TODO Auto-generated method stub
 		if (toolCore==null) IssueLog.log("no tool core!!!");
 		return toolCore.getImageWrapperClick();
@@ -174,8 +175,8 @@ public class BasicToolBit implements ToolBit {
 	public int getDragCordinateY() {
 		return this.getToolCore().getDragCordinateY();
 	}
-	public Point getDragPoint() {
-		return new Point(getDragCordinateX(), getDragCordinateY());
+	public Point2D getDragPoint() {
+		return new Point2D.Double(getDragCordinateX(), getDragCordinateY());
 	}
 	
 	public int getReleaseCordinateY() {
@@ -223,7 +224,7 @@ public class BasicToolBit implements ToolBit {
 		return this.getToolCore(). getLastMouseEvent();
 	}
 	
-	public CanvasMouseEvent getLastDragOrRelMouseEvent() {
+	public CanvasMouseEvent getLastDragOrLastReleaseMouseEvent() {
 		return this.getToolCore(). getLastDragMouseEvent();
 	}
 	
@@ -282,8 +283,8 @@ public class BasicToolBit implements ToolBit {
 	}
 	
 	public void updateClickedDisplay() {
-		if(this.getImageWrapperClick()!=null)
-		this.getImageWrapperClick() .updateDisplay();
+		if(this.getImageClicked()!=null)
+		this.getImageClicked() .updateDisplay();
 	}
 	
 	protected Point clickedCord() {
@@ -390,7 +391,7 @@ public class BasicToolBit implements ToolBit {
 	
 	
 	/**returns the object that may be clicked on at a given point*/
-	public LocatedObject2D getObject(ImageWrapper click, int x, int y) {
+	public LocatedObject2D getObjectAt(ImageWrapper click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjecthandler().getAllClickedRoi(click, x, y, Object.class);
 		ArraySorter.removehideableItems(therois);//removes hidden items
 		return new ArraySorter<LocatedObject2D>().getFirstNonNull(therois);

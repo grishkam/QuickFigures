@@ -13,6 +13,8 @@ package multiChannelFigureUI;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import channelLabels.ChannelLabelManager;
+import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
@@ -20,6 +22,7 @@ import graphicalObjects_FigureSpecific.PanelOrderCorrector;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
 import gridLayout.BasicMontageLayout;
 import gridLayout.LayoutSpaces;
+
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -44,11 +47,12 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	}
 
 	/**Adds channel panels for the given channel to the figure
-	 * @param chan 
-	 * The channel added
-	 * @return
+	 * @param chan The channel added
+	 * @return an undoable edit
 	 */
 	public CombinedEdit addChannelPanels(int chan) {
+		figure.updatePanelLevelScale();
+		
 		CombinedEdit output=new CombinedEdit();
 				
 				output.addEditToList(
@@ -59,12 +63,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			if (insertIntoLayout) {
 					
 					MontageLayoutGraphic layout = figure.getMontageLayoutGraphic();
-					output.addEditToList(new UndoLayoutEdit(layout));
-					
-					//ChannelUseInstructions order1 = orderer.getChannelOrder(changeLayout);
-					
-				//	int rowIndex = order1.getChanPanelReorder().index(chan);
-				
+					output.addEditToList(new UndoLayoutEdit(layout));	
 					if (changeLayout==ROWS)layout.getEditor().addRow(layout.getPanelLayout(), 1, null);
 					if (changeLayout==COLS)layout.getEditor().addColumn(layout.getPanelLayout(), 1, null);
 				}
@@ -77,10 +76,13 @@ public class ChannelPanelRemover implements LayoutSpaces{
 						);
 				
 				d.getPanelManager().getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chan, false);
+				
+				
 				if (figure.getPrincipalMultiChannel()==d) {
-					d.getChannelLabelManager().eliminateChanLabels();
-					d.getChannelLabelManager().generateChannelLabels2();
+					addChannelLabel(chan, d);
 				}
+				
+				
 				d.getPanelManager().updatePanels();
 				
 				
@@ -111,8 +113,27 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			
 	}
 
+	/**Adds a channel label for a newly created channel panel
+	 * @param chan the channel that is being added
+	 * @param d the multidimensional images' display layer
+	 */
+	void addChannelLabel(int chan, ImageDisplayLayer d) {
+		/**Adds a channel label to the selected channel*/
+		ChannelLabelManager channelLabelManager = d.getChannelLabelManager();
+		for( PanelListElement panel: channelLabelManager.getPanelList().getPanels()) {
+					if(channelLabelManager.isNonLabeledSlice(panel)
+							|| panel.targetChannelNumber!=chan
+							|| panel.isTheMerge()) 
+						continue;
+					ArrayList<ChannelLabelTextGraphic> oldLabels = channelLabelManager.getAllLabels();
+					ChannelLabelTextGraphic newLabel = channelLabelManager.generateChannelLabelFor(panel);
+					if(oldLabels.size()>0) newLabel.copyAttributesFrom(oldLabels.get(0));
+			}
+		
+	}
+
 	/**
-	 
+	 removes the channel panels for the given channel
 	 */
 	public CombinedEdit removeChannelPanels(int chaneIndex) {
 		CombinedEdit output=new CombinedEdit();
@@ -127,7 +148,6 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			output.addEditToList(new UndoLayoutEdit(layout));
 			
 			ArrayList<Integer> possibleIndex = orderer.indexOfChannel(chaneIndex, changeLayout);
-			
 		
 			if (possibleIndex.size()>0) {
 				for (int removing=possibleIndex.size()-1; removing>=0; removing--) {

@@ -23,6 +23,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import ultilInputOutput.FileChoiceUtil;
 
 public abstract class QuickImport  extends QuickExport {
+	
+	public QuickImport() {
+		super();
+	}
 
 	
 	@Override

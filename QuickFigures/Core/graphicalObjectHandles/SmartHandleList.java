@@ -24,12 +24,14 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**A list of smart handles that has a few methods particularly useful for working with handles*/
 public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableGraphic{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int NO_HANDLE = -1;
 	
 	public static  SmartHandleList createList(SmartHandle... handles) {
 		SmartHandleList out = new SmartHandleList();
@@ -73,9 +75,9 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	}
 	
 	/**Returns the handle with the specified ID number*/
-	public SmartHandle getHandleNumber(int i) {
+	public SmartHandle getHandleNumber(int id) {
 		for(SmartHandle sh:this) {
-			if (sh.getHandleNumber()==i&&!sh.isHidden()) return sh;
+			if (sh.getHandleNumber()==id&&!sh.isHidden()) return sh;
 		}
 		return null;
 	}
@@ -85,7 +87,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		
 		SmartHandle hh = getHandleForClickPoint(new Point2D.Double(x, y));
 		if (hh!=null) return hh.getHandleNumber(); else
-		return -1;
+		return NO_HANDLE;
 	}
 
 
@@ -121,7 +123,6 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	private transient GraphicLayer layer;
 	@Override
 	public GraphicLayer getParentLayer() {
-		// TODO Auto-generated method stub
 		return layer;
 	}
 

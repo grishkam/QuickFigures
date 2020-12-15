@@ -48,22 +48,22 @@ public class PannelGrabberTool extends GeneralLayoutEditorTool implements
 		if (mode==1) {
 			int index= getCurrentLayout().makeAltered(COLS).getPanelIndex(getClickedCordinateX(), getClickedCordinateY());
 
-			if (!shift)  getEditor().lastCol= getEditor().removeColumn(getCurrentLayout(), index);
-			else {		 getEditor().addColumn(getCurrentLayout(), index,  getEditor().lastCol);
-						 getEditor().lastCol=null;
+			if (!shift)  getLayoutEditor().lastCol= getLayoutEditor().removeColumn(getCurrentLayout(), index);
+			else {		 getLayoutEditor().addColumn(getCurrentLayout(), index,  getLayoutEditor().lastCol);
+						 getLayoutEditor().lastCol=null;
 						}
 
 		}
 		
 		if (mode==2) {
 			int index= getCurrentLayout().makeAltered(ROWS).getPanelIndex(getClickedCordinateX(), getClickedCordinateY());
-		if (!shift)  getEditor().lastRow= getEditor().removeRow(getCurrentLayout(), index);
-		else {		 getEditor().addRow(getCurrentLayout(), index,  getEditor().lastRow);
-					 getEditor().lastRow=null;
+		if (!shift)  getLayoutEditor().lastRow= getLayoutEditor().removeRow(getCurrentLayout(), index);
+		else {		 getLayoutEditor().addRow(getCurrentLayout(), index,  getLayoutEditor().lastRow);
+					 getLayoutEditor().lastRow=null;
 					}
 		}
 		if (mode==0) {
-			 getEditor().deleteInsertPanel(getCurrentLayout(), getCurrentLayout().getPanelIndex(getClickedCordinateX(), getClickedCordinateY()), shift, PANELS); 
+			 getLayoutEditor().deleteInsertPanel(getCurrentLayout(), getCurrentLayout().getPanelIndex(getClickedCordinateX(), getClickedCordinateY()), shift, PANELS); 
 		}
 		
 		
@@ -98,9 +98,9 @@ public class PannelGrabberTool extends GeneralLayoutEditorTool implements
 	
 	
 	public PanelContentExtract getLast() {
-		if (mode==1) return  getEditor().lastCol;
-		if (mode==2) return  getEditor().lastRow;
-		if (mode==0) return getEditor().lastPanel;
+		if (mode==1) return  getLayoutEditor().lastCol;
+		if (mode==2) return  getLayoutEditor().lastRow;
+		if (mode==0) return getLayoutEditor().lastPanel;
 		return null;
 	}
 	

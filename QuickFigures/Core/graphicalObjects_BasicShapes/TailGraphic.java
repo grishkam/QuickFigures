@@ -58,7 +58,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		TailGraphic r1 = new TailGraphic(r, 2);
 		
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

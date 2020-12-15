@@ -29,6 +29,14 @@ import applicationAdapters.DisplayedImage;
 
 /**this supports a menu item that exports a figure as PNG file*/
 public class PNGQuickExport extends QuickExport {
+	/**
+	 * @param openNow
+	 */
+	public PNGQuickExport(boolean openNow) {
+		super(openNow);
+		// TODO Auto-generated constructor stub
+	}
+
 	protected String getExtension() {
 		return "png";
 	}
@@ -42,16 +50,25 @@ public class PNGQuickExport extends QuickExport {
 		try{
 		
 		String newpath=getFileAndaddExtension().getAbsolutePath();
-		FlatCreator flat = new FlatCreator();
-		flat.setUseTransparent(false);
-		flat.showDialog();
-		BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
-		writeImage(newpath, bi);
+		saveInPath(diw, newpath);
 		
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	        
+	}
+
+	/**
+	 * @param diw
+	 * @param newpath
+	 * @throws IOException
+	 */
+	public void saveInPath(DisplayedImage diw, String newpath) throws IOException {
+		FlatCreator flat = new FlatCreator();
+		flat.setUseTransparent(false);
+		flat.showDialog();
+		BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
+		writeImage(newpath, bi);
 	}
 
 	/**

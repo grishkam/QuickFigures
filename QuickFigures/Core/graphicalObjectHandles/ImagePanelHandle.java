@@ -44,31 +44,28 @@ import utilityClassesForObjects.RectangleEdges;
 /**A class for the  handles on an ImagePanel. */
 public class ImagePanelHandle extends SmartHandle {
 
-	private int handlecode=0;
+	private int handlecode=50;
 	
 	/**The panel on which this acts*/
-	private ImagePanelGraphic panel;
+	private ImagePanelGraphic thePanel;
 	
-	private Point2D originalL;//the location of the upper left corner of the panel when the mouse press starts
 	private CombinedEdit undo;
 	
 	
 	/**another panel within the image which occupies the space that this one is being dragged over*/
-	private ImagePanelGraphic rivalPanel;
+	
 	private PanelMovementGroupItems passengers;
-	private PanelMovementGroupItems rivalFamily;
-	
+
 	ArrayList<PanelMovementGroupItems> allMovementGroups=new ArrayList<PanelMovementGroupItems>();
-	
-	public ImagePanelHandle(int x, int y) {
-		
-		super.setEllipseShape(true);
-	}
+	ArrayList<PanelMovementGroupItems> draggedGroups=new ArrayList<PanelMovementGroupItems>();
+
+	private ArrayList<RectangularGraphic> markers;
+
 	
 	public ImagePanelHandle(ImagePanelGraphic panel, int handlenum) {
-		this(0,0);
+		super.setEllipseShape(true);
 		handlecode=handlenum;
-		this.panel=panel;
+		this.thePanel=panel;
 		super.setCordinateLocation(RectangleEdges.getLocation(handlecode, panel.getBounds()));
 		this.setHandleNumber(handlenum);
 		if(RectangleEdges.CENTER==handlenum) {
@@ -79,22 +76,44 @@ public class ImagePanelHandle extends SmartHandle {
 	
 	/**Returns a 4 direction arrow shape that will appear on this handle*/
 	protected Area getOverdecorationShape() {
-		if (overDecorationShape==null &&getHandleNumber()==ImagePanelGraphic.CENTER) {
+		if (overDecorationShape==null &&isCenterHandle()) {
 			decorationColor=Color.black;
 			overDecorationShape=super.getAllDirectionArrows(3, 3, false);
 		}
 		return overDecorationShape;
 	}
+
+	boolean isCenterHandle() {
+		return getHandleNumber()==ImagePanelGraphic.CENTER;
+	}
 	
 	public void handlePress(CanvasMouseEvent e) {
-		undo=new CombinedEdit(new UndoMoveItems(panel));
-		rivalPanel=null;
-		originalL=panel.getLocationUpperLeft();
-		allMovementGroups.clear();
 		
-		/**Will move all the items above the panel within the same area*/
-		passengers=createPassengerList(e, panel, allMovementGroups, e.shfitDown());
-		allMovementGroups.add(passengers);
+		if (isCenterHandle())
+			setupForCenterHandleDrag(e);
+		
+	}
+
+	/**
+	 when the center handle is pressed, this method will store the original locations of every panel being 
+	 moved and every item above the panel in a list of objects
+	 */
+	public void setupForCenterHandleDrag(CanvasMouseEvent e) {
+		undo=new CombinedEdit(new UndoMoveItems(thePanel));
+		
+		allMovementGroups.clear();
+		draggedGroups.clear();
+		
+		ArrayList<ZoomableGraphic> items = e.getSelectionSystem().getSelecteditems();
+		for(ZoomableGraphic item: items) {
+			if (item instanceof ImagePanelGraphic) {
+				
+				PanelMovementGroupItems p2 = createPassengerList(e, (ImagePanelGraphic) item, allMovementGroups, e.shfitDown());
+				if (item==thePanel)passengers=p2;
+				allMovementGroups.add(p2);
+				draggedGroups.add(p2);
+			}
+		}
 	}
 
 	/**
@@ -133,16 +152,16 @@ public class ImagePanelHandle extends SmartHandle {
 		super.handleDrag(e);
 		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
 		Point p2 = e.getCoordinatePoint();
-							int handlenum = this.getHandleNumber();
+		int handlenum = this.getHandleNumber();
 		if (this.getHandleNumber()<RectangleEdges.CENTER){
-						 moveResizeHandle(p2, handlenum);
+						moveResizeHandle(p2, handlenum);
 						
 		}
 		
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
 			{
-				panel.setLocationType(RectangleEdges.CENTER);
-				panel.setLocation(p2);
+				thePanel.setLocationType(RectangleEdges.CENTER);
+				thePanel.setLocation(p2);
 				dragCenterHandle(e, selectionManagger);
 				}
 		
@@ -150,18 +169,18 @@ public class ImagePanelHandle extends SmartHandle {
 			
 		if (isFrameHandle()) {
 			
-			double bottom=panel.getLocationUpperLeft().getY()+panel.getObjectHeight();
+			double bottom=thePanel.getLocationUpperLeft().getY()+thePanel.getObjectHeight();
 			double size=e.getCoordinateY()-bottom;
-			panel.setFrameWidthV(size);
-			panel.notifyListenersNow();
+			thePanel.setFrameWidthV(size);
+			thePanel.notifyListenersNow();
 		}	
 		
 		/**if the user is holding shift while adjusting the frame it adjust all of the image panels*/
 		if (isFrameHandle()&&e.shfitDown()) {
 			for (ZoomableGraphic item: e.getSelectionSystem().getSelecteditems()) {
 				if (item instanceof ImagePanelGraphic) {
-					((ImagePanelGraphic) item).setFrameWidthH(panel.getFrameWidthH());
-					((ImagePanelGraphic) item).setFrameWidthV(panel.getFrameWidthV());
+					((ImagePanelGraphic) item).setFrameWidthH(thePanel.getFrameWidthH());
+					((ImagePanelGraphic) item).setFrameWidthV(thePanel.getFrameWidthV());
 					}
 			}
 		}
@@ -171,17 +190,17 @@ public class ImagePanelHandle extends SmartHandle {
 	 method is called when a handle is moved to resize the image panel
 	 */
 	public void moveResizeHandle(Point p2, int handlenum) {
-		panel.setLocationType(RectangleEdges.oppositeSide(handlenum));
-		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, panel.getCroppedImageSize());
-		 double dist2= RectangleEdges.getLocation(panel.getLocationType(), panel.getBounds()).distance(p2);
+		thePanel.setLocationType(RectangleEdges.oppositeSide(handlenum));
+		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, thePanel.getCroppedImageSize());
+		 double dist2= RectangleEdges.getLocation(thePanel.getLocationType(), thePanel.getBounds()).distance(p2);
 		
-		if (panel.getScale()==dist2/dist1) {} else {
-			panel.setScale( dist2/dist1);		
-			panel.notifyListenersNow();
+		if (thePanel.getScale()==dist2/dist1) {} else {
+			thePanel.setRelativeScale( dist2/dist1);		
+			thePanel.notifyListenersNow();
 		}
 	}
 
-	/**
+	/** returns true if this is the frame handle
 	 * @return
 	 */
 	public boolean isFrameHandle() {
@@ -190,11 +209,11 @@ public class ImagePanelHandle extends SmartHandle {
 
 	/**creates a message below that panel that gives the user information regarding the image panel*/
 	protected void showPanelInformation(OverlayObjectManager selectionManagger) {
-		TextGraphic mark2 = new TextGraphic(panel.getSummary());
+		TextGraphic mark2 = new TextGraphic(thePanel.getSummary());
 		mark2.hideHandles(true);
 		mark2.deselect();
-		mark2.setLocationUpperLeft(panel.getBounds().getX(), panel.getBounds().getMaxY()+2);
-		mark2.setFontSize(panel.getBounds().height/5);
+		mark2.setLocationUpperLeft(thePanel.getBounds().getX(), thePanel.getBounds().getMaxY()+2);
+		mark2.setFontSize(thePanel.getBounds().height/5);
 		mark2.setFontStyle(Font.BOLD);
 		mark2.setTextColor(Color.green.darker());
 		selectionManagger.setSelection(mark2, 1);
@@ -204,33 +223,27 @@ public class ImagePanelHandle extends SmartHandle {
 	 Called when the center handle is dragged
 	 */
 	public void dragCenterHandle(CanvasMouseEvent e, OverlayObjectManager selectionManagger) {
-		Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCoordinatePoint().getX(), e.getCoordinatePoint().getY(), true, null);
-		Rectangle b = panel.getBounds();
-		RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);
-		Object_Mover.snapRoi(mark,r, 2, true);
-		mark.setStrokeWidth(1);
-		selectionManagger.setSelection(mark, 0);
 		
-		/**check if another panel is in that destination location*/
-		ArrayList<LocatedObject2D> allObjects = e.getAsDisplay().getImageAsWrapper().getLocatedObjects();
-		allObjects.remove(panel);
+		markers=new ArrayList<RectangularGraphic>();
 		
-		ArraySorter.removeThoseNotOfClass(allObjects, ImagePanelGraphic.class);
-		LocatedObject2D p = BasicObjectListHandler.identifyPanel(mark.getBounds(), allObjects);
-		if(p!=panel && p instanceof ImagePanelGraphic) {
-			rivalPanel=(ImagePanelGraphic) p;//this panel occupies the destination space
-			RectangularGraphic mark2 = RectangularGraphic.blankRect(new Rectangle2D.Double(originalL.getX(), originalL.getY(), rivalPanel.getObjectWidth(), rivalPanel.getObjectHeight()), Color.blue, true, true);
-			mark2.setStrokeWidth(1);
-			selectionManagger.setSelection(new GraphicGroup(true, mark, mark2), 0);
-			rivalFamily=this.createPassengerList(e, rivalPanel,allMovementGroups, e.shfitDown());
-			
-			
-		} else rivalPanel=null;
+		/**marks the destination panel*/
+		passengers.markDestinationAndRival(e);
+		if (passengers!=null)
+			passengers.movePassengers();
+		
+		for(PanelMovementGroupItems item: draggedGroups) {
+			if (item.panel==thePanel ) continue;
+			item.revertOriginalLocation();
+			item.panel.moveLocation(passengers.getShiftX(), passengers.getShitY());
+			item.movePassengers();
+			item.markDestinationAndRival(e);
+		}
 		
 		
-		if (passengers!=null)passengers.movePassengers();
+		selectionManagger.setSelection(new GraphicGroup(markers), 0);
 	}
 
+	
 	
 	
 	public void handleRelease(CanvasMouseEvent e) {
@@ -244,56 +257,24 @@ public class ImagePanelHandle extends SmartHandle {
 	}
 
 	/**
-	 * @param e
+		After the center handle is released, image panels will snap into place
 	 */
 	public void releaseCenterHandle(CanvasMouseEvent e) {
-		Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), e.getCoordinatePoint().getX(), e.getCoordinatePoint().getY(), true, null);
-		Object_Mover.snapRoi(panel,r, 2, true);
 		
-		/**If a panel was found already occupying the target location, swaps the locations*/
-		if(rivalPanel!=null) {
-			if (undo!=null) undo.addEditToList(new UndoMoveItems(rivalPanel));
-			rivalPanel.setLocationUpperLeft(originalL);
-			undo.establishFinalState();
-			rivalPanel=null;
-			rivalFamily.movePassengers();
-			undo.addEditToList(rivalFamily.originalLocations);
-		}
-		if (passengers!=null) {
-				passengers.movePassengers();
-				undo.addEditToList(passengers.originalLocations);
-						
+		for(PanelMovementGroupItems p: draggedGroups) {
+			p.snapPanel(e);
+			
+			p.snapRivalPanel();
+			if (p!=null) {
+				undo.addEditToList(p.originalLocations);
 			}
+		}
+		
+		
 		
 		e.addUndo(undo);
 	}
-	
 
-	/**What to do when a handle is moved from point p1 to p2. TODO determine if this is redundant to the handleMove method in imagePanel*/
-	public void handleMove(Point2D p1, Point2D p2) {
-	
-
-	int handlenum=handlecode;
-		if (handlenum==ImagePanelHandleList.FRAME_HANDLE_ID) {
-			double bottom=panel.getBounds2D().getMaxY()+panel.getObjectHeight();
-			double size=p2.getY()-bottom;
-			if(size>=0) {
-				panel.setFrameWidthV(size);
-				panel.notifyListenersNow();
-			}
-			return;
-		}
-		
-		if (handlenum==RectangleEdges.CENTER) return;// the handleDrag method does what is needed in this case
-	
-		panel. setLocationType(RectangleEdges.oppositeSide(handlenum));
-		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, panel.getCroppedImageSize());
-		double dist2= RectangleEdges.getLocation(panel.getLocationType(), panel.getBounds()).distance(p2);
-	
-		if (panel.getScale()==dist2/dist1) return;
-		panel.setScale( dist2/dist1);		
-		panel.notifyListenersNow();
-			}
 	
 
 	/**
@@ -302,38 +283,130 @@ public class ImagePanelHandle extends SmartHandle {
 	private static final long serialVersionUID = 1L;
 	
 
-	/**The items above a panel should stay above that panel when the center handle is used*/
+	/**This class keeps track of the items above a panel 
+	  which will move with the panel when the center handle is used.
+	  It also check for the destination at the drop location*/
 	public class PanelMovementGroupItems implements Serializable {
 
+		/**
+		 * 
+		 */
+		private static final int MARKER_STROKE_WIDTH = 2;
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		private ImagePanelGraphic panel;
 		private UndoMoveItems originalLocations;
-		private Point2D oriL;
+		private Point2D originalLocationOfPanel;
+		
+		private ImagePanelGraphic rivalPanel;
+		private PanelMovementGroupItems rivalFamily;
 
 		public PanelMovementGroupItems(ImagePanelGraphic panel, ArrayList<LocatedObject2D> objects) {
 			this.panel=panel;
 			originalLocations=new UndoMoveItems(objects);
-			oriL=panel.getLocationUpperLeft();
+			originalLocationOfPanel=panel.getLocationUpperLeft();
 			
 		}
 		
+		void revertOriginalLocation() {
+			panel.setLocationUpperLeft(originalLocationOfPanel);
+			originalLocations.undo();
+		}
+		
 		/**
-		 Moves several other objects from their original locations to that of the panel displacement			 
+		aligns the ImagePanel with the layout at its destination location
 		 */
-		public void movePassengers() {
-			if (passengers!=null) {
-				double dx = panel.getLocationUpperLeft().getX()-this.oriL.getX();
-				double dy = panel.getLocationUpperLeft().getY()-this.oriL.getY();
+		void snapPanel(CanvasMouseEvent e) {
+			Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, panel.getBounds());
+			
+			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), center, true, null);
+			
+			Object_Mover.snapRoi(panel,r, 2, true);
+			movePassengers();
+		}
+		
+		/**
+		 Moves several other objects (the ones above the panel) from their original locations to that of the panel displacement			 
+		 */
+		 void movePassengers() {
+			
+				double dx = getShiftX();
+				double dy = getShitY();
 				originalLocations.undo();
 				for(LocatedObject2D o: originalLocations.getObjectList()) {
 					o.moveLocation(dx, dy);
 				}
 				
+			
+		}
+
+		/**
+		 returns how much the panel has moved from its original y location since the mouse drag began
+		 */
+		double getShitY() {
+			return panel.getLocationUpperLeft().getY()-this.originalLocationOfPanel.getY();
+		}
+
+		/**
+		 returns how much the panel has moved from its original x location since the mouse drag began
+		 */
+		 double getShiftX() {
+			return panel.getLocationUpperLeft().getX()-this.originalLocationOfPanel.getX();
+		}
+		
+		/**
+		this method check the location that the panel has been dragged to 
+		 */
+		RectangularGraphic[] markDestinationAndRival(CanvasMouseEvent e) {
+			Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, panel.getBounds());
+			
+			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), center, true, null);
+			
+			Rectangle b = panel.getBounds();
+			RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);
+			Object_Mover.snapRoi(mark,r, 2, true);
+			mark.setStrokeWidth(MARKER_STROKE_WIDTH);
+			markers.add(mark);
+			
+			
+			/**check if another panel is in that destination location*/
+			ArrayList<LocatedObject2D> allObjects = e.getAsDisplay().getImageAsWrapper().getLocatedObjects();
+			allObjects.remove(panel);
+			
+			ArraySorter.removeThoseNotOfClass(allObjects, ImagePanelGraphic.class);
+			LocatedObject2D p = BasicObjectListHandler.identifyPanel(mark.getBounds(), allObjects);
+			
+			if(p!=panel && p instanceof ImagePanelGraphic) {
+				rivalPanel=(ImagePanelGraphic) p;//this panel occupies the destination space
+				RectangularGraphic mark2 = RectangularGraphic.blankRect(new Rectangle2D.Double(originalLocationOfPanel.getX(), originalLocationOfPanel.getY(), rivalPanel.getObjectWidth(), rivalPanel.getObjectHeight()), Color.blue, true, true);
+				mark2.setStrokeWidth(MARKER_STROKE_WIDTH);
+				
+				rivalFamily=createPassengerList(e, rivalPanel,allMovementGroups, e.clickCount()>1);
+				markers.add(mark2);
+				return new RectangularGraphic[] {mark, mark2};
+			} else rivalPanel=null;
+			return new RectangularGraphic[] {mark, null};
+			
+		}
+		
+		/**
+		 * 
+		 */
+		void snapRivalPanel() {
+			/**If a panel was found already occupying the target location, swaps the locations*/
+			if(rivalPanel!=null) {
+				if (undo!=null) undo.addEditToList(new UndoMoveItems(rivalPanel));
+				rivalPanel.setLocationUpperLeft(originalLocationOfPanel);
+				undo.establishFinalState();
+				rivalPanel=null;
+				rivalFamily.movePassengers();
+				undo.addEditToList(rivalFamily.originalLocations);
 			}
 		}
+
+
 
 	}
 

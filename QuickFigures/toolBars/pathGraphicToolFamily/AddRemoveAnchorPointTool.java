@@ -88,19 +88,19 @@ public class AddRemoveAnchorPointTool extends PathAnchorPointTool {
 		int indexPath=indexSeg/50;
 		double dt=indexSeg%50; dt/=50;//calculates the t for the clicked point
 		
-		this.setSelectedHandleNum(indexPath);
+		this.setSelectedHandleNumber(indexPath);
 		boolean withInRange = nearest.getAnchor().distance(locationClickInPathsCords)<10;
 	
 		if (!remove1) {
 			if (indexPath< p.getPoints().size()&&withInRange ) {
 				p.getPoints().splitPath(indexPath, dt);
-				setSelectedHandleNum(indexPath+1);
+				setSelectedHandleNumber(indexPath+1);
 			}
 					else {
 						Double pnew = new Point2D.Double(locationClickInPathsCords.getX(), locationClickInPathsCords.getY());
 						 //p.getPoints().add(pnew);
 						 p.addPoint(pnew);
-						 setSelectedHandleNum(p.getPoints().size()-1);
+						 setSelectedHandleNumber(p.getPoints().size()-1);
 					}
 			
 }

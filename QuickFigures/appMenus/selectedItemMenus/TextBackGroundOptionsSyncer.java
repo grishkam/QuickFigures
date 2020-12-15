@@ -29,7 +29,6 @@ public class TextBackGroundOptionsSyncer extends BasicMultiSelectionOperator{
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Set Text Background Options";
 	}
 	

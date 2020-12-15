@@ -34,6 +34,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;
 import logging.IssueLog;
+import messages.ShowMessage;
 import objectDialogs.ComplexTextGraphicSwingDialog;
 import standardDialog.StandardDialog;
 import undo.Edit;
@@ -870,7 +871,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		boolean state=isSelectionASubScript();
 		
 		if (this.getParagraph().getAllSegments().size()==1) {
-			IssueLog.showMessage("Select A Region of Text First");
+			ShowMessage.showMessages("Select A Region of Text First");
 			return;
 		}
 		

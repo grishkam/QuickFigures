@@ -130,7 +130,7 @@ public class PlusGraphic extends TrapezoidGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		PlusGraphic r1 = new PlusGraphic(r);
 		r1.getParameter().setRatioToMaxLength(this.getParameter().getRatioToMaxLength());
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

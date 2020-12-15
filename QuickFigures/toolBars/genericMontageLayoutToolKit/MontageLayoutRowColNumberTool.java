@@ -66,7 +66,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		}
 		else
 		{
-			Rectangle bounds = this.getImageWrapperClick().getOverlaySelectionManagger().getSelectionBounds1();
+			Rectangle bounds = this.getImageClicked().getOverlaySelectionManagger().getSelectionBounds1();
 			if (bounds==null) return;
 			if (bounds.getWidth()==0) return;
 			
@@ -74,14 +74,14 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			bm.setLayoutBasedOnRect(bounds);
 			
 			 ml = new MontageLayoutGraphic(bm);
-			this.getImageWrapperClick().getGraphicLayerSet().add(ml);
+			this.getImageClicked().getGraphicLayerSet().add(ml);
 			super.layoutGraphic=ml;
-			undo2=new UndoAddItem(getImageWrapperClick().getGraphicLayerSet(), ml);
+			undo2=new UndoAddItem(getImageClicked().getGraphicLayerSet(), ml);
 			undo=null;
 		}
 		
 		
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 	
 		
 	}
@@ -96,13 +96,13 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		
 		ArrayList<PanelContentExtract> panels=null;
 		if (movePanelContent) {
-			panels = getEditor().cutStack(bm);
+			panels = getLayoutEditor().cutStack(bm);
 			
 		}
 		
 		/**this part actually changes the number of rows and columns*/
-		if (rowcol[0]+bm.nRows()>=1)getEditor().addRows(bm, rowcol[0]);
-		if (rowcol[1]+bm.nColumns()>=1)getEditor().addCols(bm, rowcol[1]);
+		if (rowcol[0]+bm.nRows()>=1)getLayoutEditor().addRows(bm, rowcol[0]);
+		if (rowcol[1]+bm.nColumns()>=1)getLayoutEditor().addCols(bm, rowcol[1]);
 		
 		/**after the change, the former content of the layout panels must be put back*/
 		if (movePanelContent&&panels!=null) {
@@ -126,7 +126,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 						}
 						
 			
-			getEditor().pasteStack(bm, panels );//puts the panels back
+			getLayoutEditor().pasteStack(bm, panels );//puts the panels back
 		}
 		
 		
@@ -161,12 +161,12 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	}
 	
 	public void mouseEntered() {
-		r=this.getImageWrapperClick().getOverlaySelectionManagger().getSelection(0);
+		r=this.getImageClicked().getOverlaySelectionManagger().getSelection(0);
 	}
 	
 	
-	public LocatedObject2D MarkerRoi() { 
-		LocatedObject2D mroi = super.MarkerRoi();
+	public LocatedObject2D markerRoi() { 
+		LocatedObject2D mroi = super.markerRoi();
 		if (mroi==null)
 			return r;
 		

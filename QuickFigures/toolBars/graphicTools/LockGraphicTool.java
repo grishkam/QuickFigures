@@ -52,9 +52,9 @@ public class LockGraphicTool extends GraphicTool {
 		}
 		
 		
-		allRoi=getPotentialLockAcceptors(getImageWrapperClick());
+		allRoi=getPotentialLockAcceptors(getImageClicked());
 		
-		removeFromAlltakers(getSelectedObject(), allRoi, undoer);
+		removeFromAlltakers(getPrimarySelectedObject(), allRoi, undoer);
 		
 		
 		
@@ -101,17 +101,17 @@ if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastClickMouseEvent()
 		allRoi=getAllPotentialLocks();
 		if (allRoi.size()<1) return;
 		
-		onLockAdd(allRoi, this.getSelectedObject());
+		onLockAdd(allRoi, this.getPrimarySelectedObject());
 		
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 	}
 	
 	protected ArrayList<LocatedObject2D> getAllPotentialLocks() {
-		ArrayList<LocatedObject2D> allRoi=this.getObjecthandler().getAllClickedRoi(getImageWrapperClick(), getReleaseCordinateX(), getReleaseCordinateY(), TakesLockedItems.class);
+		ArrayList<LocatedObject2D> allRoi=this.getObjecthandler().getAllClickedRoi(getImageClicked(), getReleaseCordinateX(), getReleaseCordinateY(), TakesLockedItems.class);
 		ArraySorter<LocatedObject2D> as = new ArraySorter<LocatedObject2D>();
 		if (ignorehidden)ArraySorter.removehideableItems(allRoi);
 		allRoi=as.getThoseOfClass(allRoi, TakesLockedItems.class);
-		allRoi.remove(getSelectedObject());
+		allRoi.remove(getPrimarySelectedObject());
 		return allRoi;
 	}
 	

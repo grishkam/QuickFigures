@@ -15,7 +15,9 @@
  *******************************************************************************/
 package graphicalObjectHandles;
 
-public interface HasSmartHandles {
+import utilityClassesForObjects.Selectable;
+
+public interface HasSmartHandles extends Selectable{
 	public SmartHandleList getSmartHandleList();
 	
 }

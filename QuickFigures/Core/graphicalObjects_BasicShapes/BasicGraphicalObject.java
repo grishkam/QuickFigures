@@ -32,6 +32,7 @@ import animations.KeyFrameAnimation;
 import fLexibleUIKit.MenuItemExecuter;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjectHandles.HandleRect;
+import graphicalObjectHandles.HasHandles;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.KnowsSetContainer;
@@ -51,11 +52,12 @@ import utilityClassesForObjects.AttachmentPosition;
 import menuUtil.HasUniquePopupMenu;
 
 /**The abstract superclass for many graphical objects*/
-public abstract class BasicGraphicalObject implements GraphicalObject, HasUniquePopupMenu,KnowsSetContainer,KnowsParentLayer,  Hideable, KeyFrameCompatible  {
+public abstract class BasicGraphicalObject implements GraphicalObject, HasHandles, HasUniquePopupMenu,KnowsSetContainer,KnowsParentLayer,  Hideable, KeyFrameCompatible  {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int NOT_LOCKED = 0;
 	protected int locationType=RectangleEdgePosisions.UPPER_LEFT;//indicates which location will actually be returned and set by the getlocation and set location methods
 
 	protected double angle=0;
@@ -83,9 +85,9 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	transient boolean isDead=false;
 	protected transient ArrayList<HandleRect> handleBoxes=new ArrayList<HandleRect> ();
 	transient FigureDisplayContainer setContainer;
-	private AttachmentPosition snappingBehaviour=null;
+	private AttachmentPosition attachementPosition=null;
 
-	protected int userLocked=0;
+	protected int userLocked=NOT_LOCKED;
 	
 	
 	protected GraphicUtil getGrahpicUtil() {
@@ -275,12 +277,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	}
 	
 	public AttachmentPosition getAttachmentPosition() {
-		return snappingBehaviour;
+		return attachementPosition;
 	}
 
 
 	public void setAttachmentPosition(AttachmentPosition snappingBehaviour) {
-		this.snappingBehaviour = snappingBehaviour;
+		this.attachementPosition = snappingBehaviour;
 	}
 	
 	public boolean isDead() {
@@ -310,7 +312,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	
 	
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		{
 			if (handleBoxes==null||handleBoxes.size()==1) return -1;
 			for(int i=0; i<handleBoxes.size(); i++) {
@@ -405,7 +407,10 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasUnique
 	}
 	
 	public void handleRelease(int handlenum, Point p1, Point p2) {}
+	/**Called whenever a handle is moved. In this case, does nothing */
 	public void handlePress(int handlenum,  Point p2) {}
+	/**Called whenever a handle is moved. In this case, does nothing*/
+	public void handleMove(int handlenum, Point p1, Point p2) {}
 
 	public Animation getAnimation() {return animation;}
 

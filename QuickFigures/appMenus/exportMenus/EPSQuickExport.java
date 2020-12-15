@@ -25,6 +25,13 @@ import logging.IssueLog;
 
 public class EPSQuickExport extends QuickExport {
 	
+	/**
+	 * @param openNow
+	 */
+	public EPSQuickExport(boolean openNow) {
+		super(openNow);
+	}
+
 	protected String getExtension() {
 		
 		return "eps";

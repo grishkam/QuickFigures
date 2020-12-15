@@ -627,7 +627,7 @@ public Rectangle2D.Double getRectangle() {
 	
 	/**returns the handle id for the location*/
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		return getSmartHandleList().handleNumberForClickPoint(x, y);
 	}
 	
@@ -678,7 +678,7 @@ public Rectangle2D.Double getRectangle() {
 		r1.hideCenterAndRotationHandle=hideHandle;
 		r1.hideStrokeHandle=hideHandle;
 		r1.hideHandles(hideAllHandles);
-		r1.setDashes(new float[]{10000});
+	
 		r1.setStrokeWidth(3);
 		r1.setStrokeColor(c);
 		return r1;

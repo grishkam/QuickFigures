@@ -51,7 +51,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		TrapezoidGraphic r1 = new TrapezoidGraphic(r, getParameter().getRatioToMaxLength());
 		r1.getParameter().setRatioToMaxLength(this.getParameter().getRatioToMaxLength());
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

@@ -64,7 +64,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	protected PanelGraphicInsetDefiner pressedInset;
 	
 	public void mousePressed() {
-		ImageWrapper impw = getImageWrapperClick();
+		ImageWrapper impw = getImageClicked();
 		
 		/**Switches it another mode if the display being clicked is a multichannel itself*/
 		if (this.getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {
@@ -104,7 +104,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 
 	public void mouseReleased() {
 		
-		ImageWrapper impw = getImageWrapperClick();
+		ImageWrapper impw = getImageClicked();
 		if (this.clickingOnMultiMode&&this.getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {
 			 MultiChannelDisplayWrapper m=( MultiChannelDisplayWrapper) getImageDisplayWrapperClick() ;
 			clickingOnMultiModeChan2=m.getCurrentChannel();
@@ -158,7 +158,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 				d.updatePanels();
 			}
 		}
-		this.getImageWrapperClick().updateDisplay();
+		this.getImageClicked().updateDisplay();
 	}
 	
 	public ArrayList<ImageDisplayLayer> getAllDisplays() {
@@ -287,7 +287,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	/***/
 	public PanelListElement getElementAtPoint(ImageWrapper impw, int x, int y) {
-		LocatedObject2D pressPointObject = getObject(impw, x, y);
+		LocatedObject2D pressPointObject = getObjectAt(impw, x, y);
 		ImagePanelGraphic imagepanel = (ImagePanelGraphic )pressPointObject;
 		PanelListElement output=null;
 		
@@ -331,7 +331,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	
 	/**returns the clicked object*/
-	public LocatedObject2D getObject(ImageWrapper click, int x, int y) {
+	public LocatedObject2D getObjectAt(ImageWrapper click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjecthandler().getAllClickedRoi(click, x, y,ImagePanelGraphic.class);
 		ArraySorter.removehideableItems(therois);
 		return new ArraySorter<LocatedObject2D>().getFirstNonNull(therois);

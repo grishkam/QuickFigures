@@ -30,25 +30,24 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.PathGraphic;
 import menuUtil.SmartPopupJMenu;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
+import undo.AbstractUndoableEdit2;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;
 
+/**This class of handles is for moving points in a path*/
 public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	
-	static int factorCode=1000;
 	
-	public static int anchorP=0, curveControl1=1, curveControl2=2;
+	public static final int ANCHOR_POINT=0, CURVE_CONTROL_POINT1=1, CURVE_CONTROL_POINT2=2,  FACTOR_CODE=1000;
 	private PathPoint pathPoint;
 	private PathGraphic pathGraphic;
 	
 	int pointNumber=-1;
 	
-	int type=anchorP;
+	int type=ANCHOR_POINT;
 	
-	
-	//public SmartHandleForPathGraphic getCurveControlForAnchor(){}
-	
+
 	/**creates a list of points for the given path graphic*/
 	public static SmartHandleList getPathSmartHandles(PathGraphic p) {
 		SmartHandleList output = new SmartHandleList();
@@ -81,7 +80,6 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		this.pathPoint=point;
 		this.pathGraphic=p;
-		// TODO Auto-generated constructor stub
 	}
 	
 	public SmartHandleForPathGraphic(PathGraphic p, PathPoint point, int type, int number) {
@@ -114,10 +112,10 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 
 	
 	private Point2D getPathCordinateLocation(int type) {
-		if (type==curveControl1) {
+		if (type==CURVE_CONTROL_POINT1) {
 			return pathPoint.getCurveControl1();
 		}
-		if (type==curveControl2) {
+		if (type==CURVE_CONTROL_POINT2) {
 			return pathPoint.getCurveControl2();
 		}
 		return pathPoint.getAnchor();
@@ -125,41 +123,66 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 
 	public Color getHandleColor() {
-		if (type==curveControl1) {
+		if (type==CURVE_CONTROL_POINT1) {
 			return Color.green;
 		}
-		if (type==curveControl2) {
+		if (type==CURVE_CONTROL_POINT2) {
 			return Color.red;
 		}
 		if (pathPoint.isPrimarySelected()) {
-			 
 			return Color.yellow;
 			
-		} else setEllipseShape(false);
+		}
 		if (pathPoint.isSelected()) {
 			return Color.yellow;
 		}
 		return Color.gray;
 	}
 	
-	public boolean isEllipseShape() {return pathPoint.isPrimarySelected()&&type==anchorP;}
+	public boolean isEllipseShape() {return pathPoint.isPrimarySelected()&&type==ANCHOR_POINT;}
 	
+	/**Draws a points and lines connecting them*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
-		super.draw(graphics, cords);
+		super.draw(graphics, cords);		
+		drawLinesConnectingPoints(graphics, cords);
 		
-		 
-	
-		  graphics.setColor(Color.green.darker());
+		  drawMarkForClosePoint(graphics);
+	}
+
+
+
+
+	/**
+	 * Draws lines that connect the curve control to the anchor points
+	 * @param graphics
+	 * @param cords
+	 */
+	private void drawLinesConnectingPoints(Graphics2D graphics, CordinateConverter<?> cords) {
 		Point2D thep  = cords.transformP(getPathGraphicCordinateLocation(0));
 		Point2D thep1 = cords.transformP(getPathGraphicCordinateLocation(1));
 		Point2D thep2 = cords.transformP(getPathGraphicCordinateLocation(2));  
 	
-		if (this.type==curveControl1) drawLineOnGraphics(graphics, thep, thep1);
+		  graphics.setColor(Color.green.darker());
+		if (this.type==CURVE_CONTROL_POINT1) drawLineOnGraphics(graphics, thep, thep1);
 		  graphics.setColor(Color.red.darker());
-		  if (this.type==curveControl2)  drawLineOnGraphics(graphics, thep, thep2);
+		  if (this.type==CURVE_CONTROL_POINT2)  drawLineOnGraphics(graphics, thep, thep2);
+	}
+
+	/**draws a line from point 1 to point 2*/
+	private void drawLineOnGraphics(Graphics2D graphics, Point2D p1, Point2D p2) {
+		  graphics.setStroke(new BasicStroke(1));
+		graphics.drawLine((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
 		
-		  if (isAnchorPointHandle()&&(pathPoint.isClosePoint()||pathGraphic.getPoints().indexOf(pathPoint)==0)) {
+	}
+
+
+	/**
+	 * Draws a mark to indicate that the given point is a path close point
+	 * @param graphics
+	 */
+	private void  drawMarkForClosePoint(Graphics2D graphics) {
+		if (isAnchorPointHandle()&&(pathPoint.isClosePoint()||pathGraphic.getPoints().indexOf(pathPoint)==0)) {
 			  graphics.setColor(Color.black);
 			  graphics.setStroke(this.getHandleStroke());
 			  Rectangle b = this.lastDrawShape.getBounds();
@@ -167,32 +190,19 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			  graphics.drawLine(b.x,y, (int)b.getMaxX(),y);
 			  
 		  }
-		  
-		if (this.isSelected()) {
-			
-		}
 	}
 
 
 
 	public boolean isAnchorPointHandle() {
-		return type==anchorP;
+		return type==ANCHOR_POINT;
 	}
 
-	
-	
-	
-	public void drawLineOnGraphics(Graphics2D graphics, Point2D p1, Point2D p2) {
-		  graphics.setStroke(new BasicStroke(1));
-		graphics.drawLine((int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY());
-		
-	}
-	
-	
+	/**initializes the handle id number for point number i*/
 	public void setUphandleType(int type, int i) {
 		this.type=type;
-		if(type!=anchorP) handlesize+=1;
-		this.setHandleNumber(i+type*factorCode);
+		if(type!=ANCHOR_POINT) handlesize+=1;
+		this.setHandleNumber(i+type*FACTOR_CODE);
 	}
 	
 	@Override
@@ -259,8 +269,6 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		Point2D p2=e.getCoordinatePoint();
 		try{
 		
-		//java.awt.geom.Point2D.Double p = new Point2D.Double();
-		//pathGraphic.getTransformForPathGraphic().inverseTransform(p2, p);
 		java.awt.geom.Point2D.Double p =pathGraphic.convertPointToInternalCrdinates(p2);
 		boolean b = e.altKeyDown()&&e.isControlDown();
 		if (isAnchorPointHandle()||e.shfitDown()) {
@@ -285,7 +293,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			if(!linkedHandles)symetricHandles=false;
 			
 			
-			if (type==curveControl1) {
+			if (type==CURVE_CONTROL_POINT1) {
 			
 				pathPoint.setCurveControl(p);
 				if (linkedHandles||e.altKeyDown()) pathPoint.makePointAlongLine(true);
@@ -293,7 +301,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 				if (symetricHandles||b) { pathPoint.makePointAlongLine(true);pathPoint.makePointEquidistantFromAnchor(true);}
 			}
 			else
-			if (type==curveControl2) {
+			if (type==CURVE_CONTROL_POINT2) {
 				
 				pathPoint.setCurveControl2(p);
 				if (linkedHandles||e.altKeyDown()) pathPoint.makePointAlongLine(false);
@@ -320,25 +328,25 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	@Override
 	public boolean isHidden() {
-		// TODO Auto-generated method stub
-		if (isAnchorPointHandle()) return false;
+		if (isAnchorPointHandle()) 
+			return false;
 		if (pathGraphic.getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED&&pathGraphic.selectedsegmentindex== getPointNumber()) return false;
 		if (pathGraphic.getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED) return false;
 		if (isACurveControl() && !pathGraphic.isCurvemode()) return true;
-		if (type==curveControl2 && !pathGraphic.isSuperCurveControlMode()) return true;
-		if (type==curveControl1&&!isPrimarySelected()) {
+		if (type==CURVE_CONTROL_POINT2 && !pathGraphic.isSuperCurveControlMode()) return true;
+		if (type==CURVE_CONTROL_POINT1&&!isPrimarySelected()) {
 			return true;
 		}
-		if (type==curveControl2 &&!isPrimarySelected()) {
+		if (type==CURVE_CONTROL_POINT2 &&!isPrimarySelected()) {
 			return true;
 		}
 		
 		return false;
 	}
 	
+	/**returns the point number of the handle*/
 	private int getPointNumber() {
-		// TODO Auto-generated method stub
-		int num=this.getHandleNumber()-type*factorCode;
+		int num=this.getHandleNumber()-type*FACTOR_CODE;
 	
 		return num;
 	}
@@ -352,10 +360,12 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	
 	public JPopupMenu getJPopup() {
-		return new pathHandlePopup();
+		return new PathHandlePopup();
 	}
 
-	private class pathHandlePopup extends SmartPopupJMenu implements ActionListener {
+	/**A simple popup menu for the handle
+	 * TODO: test the undo*/
+	private class PathHandlePopup extends SmartPopupJMenu implements ActionListener {
 
 		/**
 		 * 
@@ -367,7 +377,8 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		
 		private static final long serialVersionUID = 1L;
-		public pathHandlePopup() {
+		public PathHandlePopup() {
+			
 			String closePoint= pathPoint.isClosePoint()? "Unclose Path":"Close Path";
 			addMenuItem(closePoint, closePointCom);
 			
@@ -393,6 +404,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			AbstractUndoableEdit2 undo = pathGraphic.provideDragEdit();
 			String com=arg0.getActionCommand();
 			if (com.equals(closePointCom)) {
 				pathPoint.setClosePoint(!pathPoint.isClosePoint());
@@ -421,7 +433,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			if (com.equals(addPoint)) {
 				new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathGraphic, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
 			}
-			
+			super.getUndoManager().addEdit(undo);
 			
 		}
 	

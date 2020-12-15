@@ -118,7 +118,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	private transient Image displayedImage;
 	
 	/**the scale relative to the points*/
-	double scale=1;
+	private double scale=1;
 	boolean embed=false;
 	 
 	protected File file=null;
@@ -226,7 +226,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		this.setFrameWidthV(bg.getFrameWidthV());
 		this.setFrameColor(bg.getFrameColor());
 		this.setEmbed(bg.isEmbed());
-		this.setScale(bg.getScale());
+		this.setRelativeScale(bg.getScale());
 
 	 }
 	 
@@ -370,7 +370,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 			return scale;
 		}
 		/**sets the scale factor that determines the size at which the image panel is displayed.*/
-		public void setScale(double scale) {
+		public void setRelativeScale(double scale) {
 			if (scale==getScale()) return;
 			if (scale<=0) return;
 			Point2D pi=getLocation();
@@ -538,12 +538,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		
 		
 
-		/**Called whenever a handle is moved. In this case, does nothing since this class uses smart handles*/
-		@Override
-		public void handleMove(int handlenum, Point p1, Point p2) {
 		
-		}
-
 		/**
 		Notifies the listeners of a size change for this object
 		*/
@@ -860,7 +855,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		public void scaleAbout(Point2D p, double mag) {
 			Point2D p2 = this.getLocationUpperLeft();
 			p2=scaleAbout(p2, p,mag,mag);
-			this.setScale(this.getScale()*mag);
+			this.setRelativeScale(this.getScale()*mag);
 			double nfh = this.getFrameWidthH()*mag;
 			double nfv = this.getFrameWidthV()*mag;
 			this.setFrameWidthH(nfh);
@@ -1041,7 +1036,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 		
 		@Override
-		public int handleNumber(int x, int y) {
+		public int handleNumber(double x, double y) {
 			if (this.getSmartHandleList()!=null) {
 				
 				int output=this.getSmartHandleList().handleNumberForClickPoint(x, y);
@@ -1093,7 +1088,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		
 		public String[] getScaleWarning() {
 			this.snapLockedItems();
-			return new String[] {"Image Panel PPI is now "+this.getIllustratorPPI()};
+			return new String[] {"Image Panel Pixel Density is now "+this.getIllustratorPPI()};
 		}
 
 		@Override

@@ -72,6 +72,14 @@ public class DirectoryHandler {
 		return pathOfDocFolder+subPathofDocumentsFolder+"/tmp";
 	}
 	
+	/**Returns the subfolder for saving temporary files*/
+	public String getTempFolderPath(String subfolder) {
+		String path = getTempFolderPath();
+		path+="/"+subfolder;
+		makeDirectoryIfAbsent(path);
+		return path;
+	}
+	
 
 /**returns the path of the preferences file*/
 	public File getPrefsFile() {

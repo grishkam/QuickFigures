@@ -15,6 +15,7 @@
  *******************************************************************************/
 package objectDialogs;
 
+import appContext.ImageDPIHandler;
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ImagePanelGraphic;
 import standardDialog.booleans.BooleanArrayInputPanel;
@@ -35,6 +36,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	ImagePanelGraphic   image;
+	private boolean savingOption;
 	
 	public ImageGraphicOptionsDialog() {}
 	public ImageGraphicOptionsDialog(BufferedImageGraphic bg) {
@@ -59,8 +61,10 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 		addCommonOptionsToDialog();
 		this.addScaleInfoToDialog(image.getScaleInfo());
 		
+		if (savingOption)	
 			this.add("embed", new BooleanInputPanel("Embed ", image.isEmbed()));
-			if (image.isFilederived()) {
+
+		if (image.isFilederived()) {
 				this.moveGrid(2, -1);
 				this.add("fileLoad", new BooleanInputPanel("Always Load From File", image.isLoadFromFile()));
 				this.moveGrid(-2, 0);
@@ -70,10 +74,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 			this.add("Dimensions2", new InfoDisplayPanel("", image.getRealDimensionString()));
 			
 			this.add("PPI", 
-					new InfoDisplayPanel("PPI ", image.getIllustratorPPI() /**+" ("+image.getScreenPPI()+" on screen)"*/));
-			//this.add("PPI-ink", 
-			//		new InfoDisplayPanel("PPI (Inkscape-like)", image.getInkscapePPI() /**+" ("+image.getScreenPPI()+" on screen)"*/));
-			
+					new InfoDisplayPanel("Points per Inch ", image.getIllustratorPPI() /**+" ("+image.getScreenPPI()+" on screen)"*/));
 			
 		if (image instanceof BufferedImageGraphic) {
 			BufferedImageGraphic image2=(BufferedImageGraphic) image;
@@ -93,30 +94,28 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 	}
 	
 	public void addCommonOptionsToDialog() {
-		this.add("scale", new NumberInputPanel("Relative Scale", image.getScale(), 2) );
+		this.add("scale", new NumberInputPanel("Pixel Desnsity (/inch)", ImageDPIHandler.getStandardDPI()/image.getScale(), 2) );
 		this.add("frame", new NumberInputPanel("Frame Width", image.getFrameWidthH(), 3) );
 		this.add("frameC", new ColorComboboxPanel("Frame Color ", null, image.getFrameColor()));
 	}
 	
 	protected void setItemsToDiaog() {
 			setNameFieldToDialog(image);
-			//IssueLog.log("setting image to options");
-			
-		//image.setName(this.getNextString());
-		//image.setLocationType(this.getNextChoiceIndex());
+		
 				setFixedEdgeToDialog(image);
 				setCommonOptionsToDialog(image);
 				
-				image.setEmbed(this.getBoolean("embed"));
+				if (savingOption)	
+					image.setEmbed(this.getBoolean("embed"));
+				
 				image.setUserLocked(this.getBoolean("locked in place")?1:0);
+				
 				if (image.isFilederived()) {
-					
 					image.setLoadFromFile(this.getBoolean("fileLoad"));
 				}
 				allStrings.get("Dimensions").setContentText(image.getRealDimensionString());
 				allStrings.get("Dimensions2").setContentText(image.getDimensionString());
 				allStrings.get("PPI").setContentText(image.getIllustratorPPI() /**+" "+image.getScreenPPI()*/);
-				//Strings.get("PPI-ink").setContentText(image.getInkscapePPI() /**+" "+image.getScreenPPI()*/);
 				
 				
 				if (image instanceof BufferedImageGraphic) {
@@ -131,7 +130,9 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 	}
 	
 	public void setCommonOptionsToDialog(ImagePanelGraphic   image) {
-		image.setScale(this.getNumber("scale"));
+		double number = ImageDPIHandler.getStandardDPI()/this.getNumber("scale");
+		if (number!=0)
+			image.setRelativeScale(number);
 		image.setFrameWidthH((float)this.getNumber("frame"));
 		image.setFrameColor(this.getColor("frameC"));
 		image.notifyListenersOfUserSizeChange();

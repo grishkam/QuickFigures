@@ -59,12 +59,12 @@ public class PathTool extends GraphicTool{
 		super.mousePressed();
 		;
 		
-		if (this.getSelectedObject()!=pathGraphic) {
+		if (this.getPrimarySelectedObject()!=pathGraphic) {
 			retorePathGraphicToNoral() ;
 		}
 		
-		if (this.getSelectedObject()instanceof PathGraphic) {
-			this.pathGraphic=(PathGraphic) getSelectedObject();
+		if (this.getPrimarySelectedObject()instanceof PathGraphic) {
+			this.pathGraphic=(PathGraphic) getPrimarySelectedObject();
 			
 			//handleSmart = pathGraphic.getSmartHandleList().getHandleNumber(this.getPressedHandle());
 		}

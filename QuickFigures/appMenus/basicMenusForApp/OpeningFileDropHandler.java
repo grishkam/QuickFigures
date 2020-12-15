@@ -18,6 +18,8 @@ package basicMenusForApp;
 import java.io.File;
 
 import genericTools.MoverDragHandler;
+import graphicActionToolbar.QuickFigureMaker;
+import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import imageDisplayApp.ImageDisplayIO;
 
 public class OpeningFileDropHandler extends FileDropHandler {
@@ -25,15 +27,23 @@ public class OpeningFileDropHandler extends FileDropHandler {
 	@Override
 	public void performsingleFileAction(File f) {
 		if (isImageFormat(f)) {
-			//QuickFigureMaker quickFigureMaker = new QuickFigureMaker(true);
-			
-			//FigureOrganizingLayerPane f2 = quickFigureMaker.createFigure(f.getAbsolutePath());
-			//f2.getPrincipalMultiChannel().getSlot().showImage();
+			//TODO: determine whether I want the user to drag and drog onto the toolbar to create s figure
+			generateFigureFromFile(f);
 			
 			return;
 		}
 		ImageDisplayIO.showFile(f);
 
+	}
+
+	/**Generates a figure from the given file
+	 * @param file the file
+	 */
+	void generateFigureFromFile(File file) {
+		QuickFigureMaker quickFigureMaker = new QuickFigureMaker(true);
+		
+		FigureOrganizingLayerPane f2 = quickFigureMaker.createFigure(file.getAbsolutePath(), null);
+		f2.getPrincipalMultiChannel().getSlot().showImage();
 	}
 
 private boolean isImageFormat(File f) {

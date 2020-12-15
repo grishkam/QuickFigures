@@ -33,12 +33,12 @@ public class Roi_Eraser extends Object_Mover {
 	
 	void eraseSlectedObject() {
 		
-		LocatedObject2D o = getSelectedObject();
+		LocatedObject2D o = getPrimarySelectedObject();
 		
 		if (o instanceof ZoomableGraphic && o instanceof KnowsParentLayer) {
 			
 			UndoAbleEditForRemoveItem undo = new UndoAbleEditForRemoveItem(null, (ZoomableGraphic)o);
-			getImageWrapperClick().getImageDisplay().getUndoManager().addEdit(undo);
+			getImageClicked().getImageDisplay().getUndoManager().addEdit(undo);
 			
 		}
 		
@@ -46,10 +46,10 @@ public class Roi_Eraser extends Object_Mover {
 		
 		
 		
-		getImageWrapperClick().takeFromImage(o);
+		getImageClicked().takeFromImage(o);
 		
 		
-		if (getSelectedObject()!=null)	getSelectedObject().kill();
+		if (getPrimarySelectedObject()!=null)	getPrimarySelectedObject().kill();
 		
 	}
 	
@@ -57,7 +57,7 @@ public class Roi_Eraser extends Object_Mover {
 		
 		eraseSlectedObject();
 		
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 	}
 	
 	@Override

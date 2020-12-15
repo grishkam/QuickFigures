@@ -129,6 +129,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		return null;
 	}
 	
+	/**returns true if each channel in the image is represented by only one image panel*/
 	boolean isEachPanelADifferentChannel() {
 		ImageDisplayLayer pm = figure.getPrincipalMultiChannel();
 		if(figure.getMultiChannelDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
@@ -137,7 +138,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		return false;
 	}
 	
-	
+	/**returns the kind of layout */
 	public Integer determineChannelLayout() {
 		if (singleChannelPer(ROWS)) {
 			return ROWS;
@@ -200,8 +201,11 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	public int channelIndexAt(int type, int rowIndex) {
 		ArrayList<ArrayList<PanelListElement>> list = getOrderedPanelList(type);
 		ArrayList<PanelListElement> l = list.get(rowIndex-1);
-		if(l.size()>0)
-			return l.get(0).targetChannelNumber;
+		if(l.size()>0) {
+			PanelListElement panelListElement = l.get(0);
+			if (panelListElement!=null &&panelListElement.isChannelPanel())
+			return panelListElement.targetChannelNumber;
+			}
 
 		return -1;
 	}
@@ -228,12 +232,11 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	public void updateChannelOrder() {
 		
 		ChannelUseInstructions cOrder = determineChannelOrder();
-		
+		if (cOrder!=null)
 		for(ChannelUseInstructions c: figure.getChannelUseInfo())
 			try {
 					c.MergeHandleing=cOrder.MergeHandleing;
 					c.getChanPanelReorder().setOrder(cOrder.getChanPanelReorder());
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -241,15 +244,15 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		
 	}
 
-
+	/**if the channels are layed out in the form given,
+	  updates the channel order*/
 	public void updateChanOrder(int type) {
 		if (singleChannelPer(type) ) {
 			updateChannelOrder();
 		}
 	}
 
-	
-
+	/**returns a comparator for ordering the images*/
 	public ImageOrderComparator getImageOrderUpdate() {
 		return new ImageOrderComparator(getDisplaysInLayoutImageOrder());
 	}

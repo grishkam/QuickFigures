@@ -573,7 +573,7 @@ static Color  folderColor2= new Color(0,140, 0);
 			for(PanelListElement panel2: getPanelList().getPanels()) {
 				ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();
 				panelGraphic.setLocationType(RectangleEdges.UPPER_LEFT);
-				panelGraphic.setScale(newPanelScale);
+				panelGraphic.setRelativeScale(newPanelScale);
 			}
 			this.setPanelLevelScale(newPanelScale);
 			inset.setBilinearScale(newScale);

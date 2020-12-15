@@ -456,6 +456,12 @@ import channelLabels.ChannelLabelTextGraphic;
 			return this.designation.equals(MERGE_IMAGE_PANEL);
 		}
 		
+
+		/**returns true if this is a merge panel*/
+		public boolean isChannelPanel() {
+			return this.designation.equals(CHANNEL_IMAGE_PANEL);
+		}
+		
 		
 		/**Changes the panel's channel slice and frame based on the argument given*/
 		public boolean changeStackLocation(CSFLocation csf) {

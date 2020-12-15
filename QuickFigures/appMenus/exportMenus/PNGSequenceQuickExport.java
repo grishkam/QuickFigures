@@ -27,6 +27,14 @@ import uiForAnimations.KeyFrameHandling;
 
 /**exporter for a sequence of .png files representing time frames within an animation*/
 public class PNGSequenceQuickExport extends QuickExport {
+	/**
+	 * @param openNow
+	 */
+	public PNGSequenceQuickExport(boolean openNow) {
+		super(openNow);
+		// TODO Auto-generated constructor stub
+	}
+
 	protected String getExtension() {
 		return "png";
 	}

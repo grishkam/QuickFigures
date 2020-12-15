@@ -57,7 +57,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	public static NotchedRectangleGraphic blankShape(Rectangle r, Color c) {
 		NotchedRectangleGraphic r1 = new NotchedRectangleGraphic(r);
 		
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

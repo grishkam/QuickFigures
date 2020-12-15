@@ -30,6 +30,14 @@ import logging.IssueLog;
 
 public class PDFQuickExport extends QuickExport {
 	
+	/**
+	 * @param openNow
+	 */
+	public PDFQuickExport(boolean openNow) {
+		super(openNow);
+		
+	}
+
 	protected String getExtension() {
 		
 		return "pdf";
@@ -54,12 +62,10 @@ public class PDFQuickExport extends QuickExport {
 		 
 		   
 		  saveInPath(diw, newpath);
-		  //  Desktop.getDesktop().open(new File(newpath));
 		
 		} catch (Throwable t) {
 			if (t instanceof NoClassDefFoundError) {
 				IssueLog.showMessage("Opps"+ "It seems imageJ cant find "+t.getMessage());
-			//this.getClass().getClassLoader().loadClass(arg0)
 			}
 			IssueLog.logT(t);
 		}

@@ -205,7 +205,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 		if (o instanceof ImagePanelGraphic) {
 			
 			ImagePanelGraphic image = (ImagePanelGraphic)o;
-			image.setScale(fScale);
+			image.setRelativeScale(fScale);
 			image.setLocationUpperLeft(fLoc);
 			image.setFrameWidthH(fFrame[0]);image.setFrameWidthV(fFrame[1]);
 		
@@ -276,7 +276,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 		if (o instanceof ImagePanelGraphic) {
 			
 			ImagePanelGraphic image = (ImagePanelGraphic)o;
-			image.setScale(iScale);
+			image.setRelativeScale(iScale);
 			image.setLocationUpperLeft(iLoc);
 			image.setFrameWidthH(iFrame[0]);image.setFrameWidthV(iFrame[1]);
 	

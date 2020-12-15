@@ -35,14 +35,14 @@ public class Roi_Into_Multiple_Panels2 extends Object_Mover {
 			super.mouseDragged(); return;
 		}
 		
-		if (getSelectedObject()!=null) {
+		if (getPrimarySelectedObject()!=null) {
 		PanelLayoutGraphic layout = getClickContainingLayout();
 		if (layout==null) return;
-		if (layout==this.getSelectedObject()) return;
-		Rectangle2D l1 = layout.getPanelLayout().getNearestPanel(this.getSelectedObject().getBounds().getCenterX(), getSelectedObject().getBounds().getCenterY());
+		if (layout==this.getPrimarySelectedObject()) return;
+		Rectangle2D l1 = layout.getPanelLayout().getNearestPanel(this.getPrimarySelectedObject().getBounds().getCenterX(), getPrimarySelectedObject().getBounds().getCenterY());
 		Rectangle2D l2 = layout.getPanelLayout().getNearestPanel(getDragCordinateX(), getDragCordinateY());
 			if (l1.equals(l2)) return;
-			this.getSelectedObject().moveLocation(l2.getX()-l1.getX(), l2.getY()-l1.getY());
+			this.getPrimarySelectedObject().moveLocation(l2.getX()-l1.getX(), l2.getY()-l1.getY());
 		}
 		
 		if (currentUndo!=null) {
@@ -57,7 +57,7 @@ public class Roi_Into_Multiple_Panels2 extends Object_Mover {
 	
 	
 	public PanelLayoutGraphic getClickContainingLayout() {
-		ArrayList<LocatedObject2D> layouts = this.getObjecthandler().getAllClickedRoi(getImageWrapperClick(), getClickedCordinateX(), getClickedCordinateY(), PanelLayoutGraphic.class);
+		ArrayList<LocatedObject2D> layouts = this.getObjecthandler().getAllClickedRoi(getImageClicked(), getClickedCordinateX(), getClickedCordinateY(), PanelLayoutGraphic.class);
 		if (this.ignorehidden) ArraySorter.removehideableItems(layouts);
 		if (layouts.size()>0) return (PanelLayoutGraphic) new ArraySorter<LocatedObject2D>().getFirstNonNull(layouts);
 		return null;

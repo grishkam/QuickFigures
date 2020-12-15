@@ -65,8 +65,8 @@ public class PathReflectTool extends GraphicTool {
 		
 		
 		
-		if (this.getSelectedObject()instanceof PathGraphic) {
-			this.pathGraphic=(PathGraphic) getSelectedObject();
+		if (this.getPrimarySelectedObject()instanceof PathGraphic) {
+			this.pathGraphic=(PathGraphic) getPrimarySelectedObject();
 			
 			//handleSmart = pathGraphic.getSmartHandleList().getHandleNumber(this.getPressedHandle());
 		}
@@ -84,8 +84,8 @@ public class PathReflectTool extends GraphicTool {
 	
 	@Override
 	public void mouseReleased() {
-		onRelease(this.getImageWrapperClick(),getSelectedObject());
-		getImageWrapperClick().getOverlaySelectionManagger().setSelectionstoNull();
+		onRelease(this.getImageClicked(),getPrimarySelectedObject());
+		getImageClicked().getOverlaySelectionManagger().setSelectionstoNull();
 	}
 	
 	public void mouseDragged() {
@@ -99,8 +99,8 @@ public class PathReflectTool extends GraphicTool {
 			} else 	rect2.scaleAbout(this.clickedCord(), scaleLevel()[0], scaleLevel()[1]);
 			rect=rect2;
 		}
-		getImageWrapperClick().getOverlaySelectionManagger().setSelection(rect, 0);
-		getImageWrapperClick().getOverlaySelectionManagger().setSelection(createMirrorGraphic() , 1);
+		getImageClicked().getOverlaySelectionManagger().setSelection(rect, 0);
+		getImageClicked().getOverlaySelectionManagger().setSelection(createMirrorGraphic() , 1);
 	}
 	
 	
@@ -114,11 +114,11 @@ public class PathReflectTool extends GraphicTool {
 public void onRelease(ImageWrapper imageWrapper, LocatedObject2D roi2) {
 	
 			
-		getImageWrapperClick().getOverlaySelectionManagger().setSelectionstoNull();
+		getImageClicked().getOverlaySelectionManagger().setSelectionstoNull();
 		PathGraphic path2 = createMirrorGraphic();
 		if (path2==null) return;
 		
-		GraphicLayer layer = this.getImageWrapperClick().getGraphicLayerSet();
+		GraphicLayer layer = this.getImageClicked().getGraphicLayerSet();
 		if (!this.shiftDown()) {
 		
 			
@@ -178,7 +178,7 @@ PathGraphic createMirrorGraphic() {
 
 	
 	public void mouseExited() {
-		getImageWrapperClick().getOverlaySelectionManagger().setSelectionstoNull();
+		getImageClicked().getOverlaySelectionManagger().setSelectionstoNull();
 		
 		
 	}

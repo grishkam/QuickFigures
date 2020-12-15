@@ -71,12 +71,12 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	
-		if (getSelectedObject() instanceof ArrowGraphic) return;
+		if (getPrimarySelectedObject() instanceof ArrowGraphic) return;
 		int cx = getClickedCordinateX();
 		int cy = getClickedCordinateY();
 		ArrowGraphic bg = createArrow(cx, cy);
-		setSelectedObject(bg);
-		setSelectedHandleNum(1);
+		setPrimarySelectedObject(bg);
+		setSelectedHandleNumber(1);
 		super.setPressedSmartHandle(bg.getSmartHandleList().getHandleNumber(1));;
 		
 		GraphicLayer layer = gmp.getGraphicLayerSet().getSelectedContainer();

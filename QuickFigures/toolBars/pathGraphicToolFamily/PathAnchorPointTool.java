@@ -43,14 +43,14 @@ public class PathAnchorPointTool extends GraphicTool {
 	public void mousePressed() {
 		super.mousePressed();
 		
-		if (getSelectedObject()==null) this.setSelectedObject(lastPath);;
+		if (getPrimarySelectedObject()==null) this.setPrimarySelectedObject(lastPath);;
 		
-		if (this.getSelectedObject()instanceof PathGraphic) {
+		if (this.getPrimarySelectedObject()instanceof PathGraphic) {
 			
-			 PathGraphic p=(PathGraphic) this.getSelectedObject();
+			 PathGraphic p=(PathGraphic) this.getPrimarySelectedObject();
 			 
 			 /**will set i to the index of the pressed handle*/
-			 int i=this.getPressedHandle();
+			 int i=this.getSelectedHandleNumber();
 			//	while(i>1000) i-=1000;
 				
 			/**determines if i has a valid index number*/	
@@ -64,7 +64,7 @@ public class PathAnchorPointTool extends GraphicTool {
 				p.setSupercurvemode(!altKeyDown());
 			}
 			
-			if (mode>0)this.setSelectedHandleNum(i);
+			if (mode>0)this.setSelectedHandleNumber(i);
 			
 			PathEditUndo undo = new PathEditUndo(p);
 			performActionOnPath(p, valid, i);

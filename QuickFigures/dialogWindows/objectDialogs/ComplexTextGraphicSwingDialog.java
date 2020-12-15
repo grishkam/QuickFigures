@@ -71,11 +71,11 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 		tabsfull.addObjectEditListener(this);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx=gx;
-		c.gridy=gy;
+		c.gridy=gridPositionY;
 		c.gridheight=4;
 		c.gridwidth=6;
 		//this.add(tabsfull, c);
-		gy+=4;
+		gridPositionY+=4;
 		getOptionDisplayTabs().addTab("Edit Text Lines",tabsfull);
 		
 		

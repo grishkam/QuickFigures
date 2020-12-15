@@ -48,7 +48,7 @@ public class LutSwapperTool extends BasicImagePanelTool implements ColorInputLis
 		}
 	
 		updateAllDisplays();
-		this.getImageWrapperClick().updateDisplay();
+		this.getImageClicked().updateDisplay();
 	};  
 	
 	protected void showthePopup(Component source, int x, int y) {

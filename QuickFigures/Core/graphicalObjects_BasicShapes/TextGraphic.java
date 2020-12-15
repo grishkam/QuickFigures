@@ -65,7 +65,6 @@ import export.svg.TextSVGExporter;
 import externalToolBar.IconSet;
 import externalToolBar.TreeIconForTextGraphic;
 import graphicalObjectHandles.TextActionButtonHandleList;
-import graphicalObjectHandles.HandleRect;
 import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.SmartHandleList;
@@ -519,8 +518,7 @@ protected void drawHighlight(Graphics2D g, CordinateConverter<?> cords, double x
 
 public void drawHandlesAndOutline(Graphics2D g2d, CordinateConverter<?> cords) {
 	g2d.setColor(getTextColor());  
-	handleBoxes=new ArrayList<HandleRect>();
-
+	
 	  g2d.setColor(getTextColor());
 	  g2d.setStroke( getGrahpicUtil().getStroke());
 	  g2d.setColor(getTextColor());
@@ -734,10 +732,7 @@ public Color getTextColor() {
 }
 
 
-@Override
-public void handleMove(int handlenum, Point p1, Point p2) {
 
-}
 
 
 @Override
@@ -1240,7 +1235,7 @@ public void deselect() {
 public void handleMouseEvent(CanvasMouseEvent me,int handlenum, int button, int clickcount, int type,
 		int... other) {
 	
-	if (handlenum>0) return;
+	if (handlenum!=NO_HANDLE_) return;
 	if(clickcount==2 && !editMode)editMode=true;
 	else
 	if(clickcount==2) this.showOptionsDialog();//super.handleMouseEvent(me, handlenum, button, clickcount, type, other);
@@ -1290,7 +1285,7 @@ return smartList;
 }
 
 @Override
-public int handleNumber(int x, int y) {
+public int handleNumber(double x, double y) {
 	return getSmartHandleList().handleNumberForClickPoint(x, y);
 }
 @Override

@@ -944,7 +944,7 @@ protected Point2D getDrawnLineEnd2() {
 	}
 	
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		return getSmartHandleList().handleNumberForClickPoint(x, y);
 	}
 	@Override

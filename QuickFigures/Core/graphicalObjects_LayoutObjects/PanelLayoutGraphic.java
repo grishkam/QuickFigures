@@ -327,7 +327,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	
 	
 	public void clearHandleBoxes() {
-		super.clearHandleBoxes();
+		
 		panelMotionHandles.clear();
 		handleBoxes2.clear();
 		
@@ -715,9 +715,9 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	
 	
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		
-			SmartHandle handle = getAllSmartHandles().getHandleForClickPoint(new Point(x,y));
+			SmartHandle handle = getAllSmartHandles().getHandleForClickPoint(new Point2D.Double(x,y));
 			if (handle!=null) {
 				
 				return handle.getHandleNumber();

@@ -71,7 +71,7 @@ public int numberTails=0;
 		preliminaryPath = createLinkingLineForShapes(getPressShape(), getDragShape(), this.getClickedCordinateX(), this.getClickedCordinateY(), this.getDragCordinateX(), this.getDragCordinateY());
 		preliminaryPath .moveLocation(0, -20);
 		;
-		super.getImageWrapperClick().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true), generateMarkerForSwitch()), 0);
+		super.getImageClicked().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true), generateMarkerForSwitch()), 0);
 	}
 
 
@@ -109,7 +109,7 @@ public int numberTails=0;
 	protected boolean doesOverLapDataShapes(PathGraphic p1) {
 		Rectangle r = p1.getBounds();
 		r.height=2;
-		ArrayList<LocatedObject2D> items = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, this.getImageWrapperClick());
+		ArrayList<LocatedObject2D> items = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, this.getImageClicked());
 		items=new ArraySorter<LocatedObject2D>().getThoseOfClass(items, DataShowingShape.class);
 		boolean overlapsDataShapes=items.size()>0;
 		

@@ -25,7 +25,6 @@ public abstract class ExcelDataImport extends QuickImport {
 
 	@Override
 	protected String getExtensionName() {
-		// TODO Auto-generated method stub
 		return "excel files";
 	}
 }

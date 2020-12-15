@@ -82,9 +82,8 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		
 		
 			
-			
-		 PPIOption ppiO = new  PPIOption();
-			this.add(new GeneralActionHandle(ppiO, 8325));
+		//decided to omit this one	
+		//this.add(new GeneralActionHandle(new  PPIOption(), 8325));
 	}
 	
 	public void updateLocation() {

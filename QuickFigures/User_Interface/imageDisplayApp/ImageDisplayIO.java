@@ -79,7 +79,6 @@ public class ImageDisplayIO {
 	
 
 	public static boolean writeToFile(File f, GraphicContainingImage theSet) {
-		//GraphicEncoder encoder = new GraphicEncoder(theSet.getGraphicLayerSet());
 		FileOutputStream fo;
 		try {
 			fo = new FileOutputStream(f);
@@ -93,8 +92,8 @@ public class ImageDisplayIO {
 		fo.close();
 			return true;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.log("problem occued when saving ");
+			IssueLog.logT(e);
 			return false;
 		}
 		

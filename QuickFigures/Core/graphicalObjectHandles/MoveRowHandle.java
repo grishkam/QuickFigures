@@ -131,7 +131,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		endIndex = this.getCurrentLayout().makeAltered(type).getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());
 		
 		if (type==PANELS) {  
-			getEditor().swapMontagePanels(getCurrentLayout(), index, endIndex);
+			getEditor().swapPanels(getCurrentLayout(), index, endIndex);
 		
 		}
 		

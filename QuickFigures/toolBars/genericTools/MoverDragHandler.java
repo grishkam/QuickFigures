@@ -46,6 +46,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import layersGUI.GraphicSetDisplayTree;
 import layersGUI.GraphicTreeTransferHandler;
 import logging.IssueLog;
+import messages.ShowMessage;
 import selectedItemMenus.SVG_GraphicAdder2;
 import ultilInputOutput.ForDragAndDrop;
 import undo.AbstractUndoableEdit2;
@@ -178,7 +179,7 @@ public class MoverDragHandler extends BasicDragHandler {
 
 	/**returns the object at the given location*/
 	private LocatedObject2D getObjectAtPoint(ImageWindowAndDisplaySet displaySet, Point2D position) {
-		return tool.getObject(displaySet.getImageAsWrapper(), (int)position.getX(), (int) position.getY());
+		return tool.getObjectAt(displaySet.getImageAsWrapper(), (int)position.getX(), (int) position.getY());
 	}
 	
 	
@@ -239,11 +240,10 @@ public class MoverDragHandler extends BasicDragHandler {
 			else if (layer instanceof FigureOrganizingLayerPane) {
 				multiChannelOpen=true;
 			}
-			else
-			if (multiChannelOpen&&!isMicroscopeFormat(f)) {
+			else if (multiChannelOpen&&!isMicroscopeFormat(f)) {
 				
 				MultichannelDisplayLayer testOpen = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
-				//IssueLog.log("perform test open "+testOpen);
+				
 				if(testOpen==null||testOpen.getMultiChannelImage()==null ) {
 					multiChannelOpen=false;
 				}
@@ -281,7 +281,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		}
 		
 		
-		/**If adding many single image panels, takes care of the issue*/
+		/**If adding many single image panels, takes care of layting them out*/
 		if ((addedPanels.size()>1|| ((roi2 instanceof MontageLayoutGraphic)&&(addedPanels.size()>0))) &&(!multiChannelOpen)) {
 			Rectangle rect = addedPanels.get(0).getBounds();
 			boolean moveToNewLayer=false;
@@ -364,14 +364,10 @@ public class MoverDragHandler extends BasicDragHandler {
 			if (item==null) return null;
 			if (startIndex>0)
 				{
-				//IssueLog.log("Start index clicked is "+startIndex);
-				//IssueLog.log("Start index clicked is "+l.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, startIndex, startIndex));
 				int numberOfEmptyNeeded = figure.getPrincipalMultiChannel().getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultiChannelImage());
-				//IssueLog.log("need x empty "+numberOfEmptyNeeded);
 				startIndex=figure.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, numberOfEmptyNeeded, startIndex-1);
-				//if(startIndex<0) startIndex=ml.nPanels()-1;
 				}
-			//IssueLog.log("Empty index is "+startIndex);
+		
 			undo = figure.nextMultiChannel(item, startIndex);
 			
 			for(ZoomableGraphic g:item.getAllGraphics()) {
@@ -402,7 +398,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	protected void showFileSizeWarning(MultichannelDisplayLayer item) {
 		int size = item.getSlot().getEstimatedSizeOriginal();
 		if (size>16*1500*1000*4*2) {
-			IssueLog.showMessage("You added a very large file that takes a lot of memory",
+			ShowMessage.showOptionalMessage("That is a large file!", false, "You added a very large file that takes a lot of memory",
 					"The original is kept in case you want to change the scale or crop later", 
 					"No figure needs to be this large",
 					"Please use smaller version of the image in the future ");
@@ -419,7 +415,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	ImagePanelGraphic handleImageFileDrop(GraphicLayer layer, File f,Point2D location2, boolean hasAlpha) {
 		ImagePanelGraphic image = new FileImageAdder(hasAlpha).getImage(f);
 		if (image==null)return null;
-		image.setScale(ImageDPIHandler.ratioFor300DPI());
+		image.setRelativeScale(ImageDPIHandler.ratioFor300DPI());
 		layer.add(image);
 		image.setLocation(location2);
 		return image;

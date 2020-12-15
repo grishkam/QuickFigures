@@ -40,7 +40,7 @@ public class SimpleLineGraphic extends RightTriangleGraphic {
 	public static SimpleLineGraphic blankShape(Rectangle r, Color c) {
 		SimpleLineGraphic r1 = new SimpleLineGraphic(r);
 		
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

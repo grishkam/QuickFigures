@@ -51,7 +51,6 @@ import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
-import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.CroppingDialog;
 import standardDialog.StandardDialog;
@@ -146,7 +145,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 				jj.add(recreatePanelsButton);
 							recreatePanelsButton.addActionListener(this);
 				jj.add(imagesMenu);
-				rePPIPanelsButton=new JMenuItem("Re-Set PPI for All Images");
+				rePPIPanelsButton=new JMenuItem("Re-Set Pixel Density for All Images");
 				rePPIPanelsButton.addActionListener(this);
 				imagesMenu.add(rePPIPanelsButton);
 				

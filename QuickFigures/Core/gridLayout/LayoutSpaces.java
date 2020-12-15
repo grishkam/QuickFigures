@@ -27,7 +27,9 @@ public interface LayoutSpaces {
 	HORIZONTAL_SPACES=33, VERTICAL_SPACES=34, HORIZONTAL_BORDER=35, VERTICAL_BORDER=36,
 	COLUMN_OF_PANELS=37, ROW_OF_PANELS=38, BLOCK_OF_PANELS=39,
 	ENTIRE_IMAGE=40, TOP_3rd=41, BOTTOM_3rd=42, LEFT_3rd=43, RIGHT_3rd =44;
-	public static final int ALL_OF_THE=100, THIS_COLS=200, THIS_ROWS=300, PAIR=400, TRIAD=500, QUAD=600, PENT=700;
+	
+	public static final int GROUP_FACTOR=100;
+	public static final int ONLY_THIS_ONE=0, ALL_OF_THE=1*GROUP_FACTOR, THIS_COLS=2*GROUP_FACTOR, THIS_ROWS=3*GROUP_FACTOR, PAIR=4*GROUP_FACTOR, TRIAD=5*GROUP_FACTOR, QUAD=6*GROUP_FACTOR, PENT=7*GROUP_FACTOR;
 	
 	final String[] stringDescriptors=new String[] {"Panel", "Column", "Row", "Panel with border", "Border", "Points", 
 			"Top Space", "Bottom Space", "Left Space", "Right Space", 

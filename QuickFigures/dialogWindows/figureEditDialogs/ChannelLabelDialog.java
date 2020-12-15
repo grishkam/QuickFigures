@@ -97,7 +97,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 			//tabsfull.addObjectEditListener(this);
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx=gx;
-			c.gridy=gy;
+			c.gridy=gridPositionY;
 			c.gridheight=4;
 			c.gridwidth=6;
 			if (this.getChannelLabel().isThisMergeLabel()||doMergeLabelMenu) {
@@ -113,7 +113,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 			setTheTabs(tabsfull);
 			}
 			
-			gy+=4;
+			gridPositionY+=4;
 			
 			
 		

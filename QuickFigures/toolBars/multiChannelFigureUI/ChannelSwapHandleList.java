@@ -38,6 +38,7 @@ import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import utilityClassesForObjects.LocatedObject2D;
 
 /**A set of handles that provide a way for the user to re-order channels*/
@@ -132,6 +133,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		
 		int channelNumber=1;
 		private ChannelEntry entry;
+		private boolean draged;
 		
 		
 
@@ -151,9 +153,6 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		}
 		
 	
-
-		
-
 
 		/**sets the color and message of the handle to the channel entry*/
 		void setUpChannelColorAndText() {
@@ -181,12 +180,21 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			pressHandleIndex=getPressChannel(canvasMouseEventWrapper);
+			draged=false;
+		}
+		
+		public void handleDrag(CanvasMouseEvent canvasMouseEventWrapper) {
+			
+			draged=true;
 		}
 		
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		int relHandleIndex = getPressChannel(canvasMouseEventWrapper);
 		int pressHandleIndex2 = pressHandleIndex;
 		if (pressHandleIndex2==relHandleIndex)return;
+		if (relHandleIndex==-1) {
+			ShowMessage.showOptionalMessage("Channel Reordering handle", true, "To swap channels, drag one channel handle into another channel handle and release");
+		}
 		
 		performChannelSwap(relHandleIndex, pressHandleIndex2);
 	
@@ -234,6 +242,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		}
 	}
 	
+	/**returns a popup menu*/
 	public JPopupMenu getJPopup() {
 		if(entry!=null) {
 			

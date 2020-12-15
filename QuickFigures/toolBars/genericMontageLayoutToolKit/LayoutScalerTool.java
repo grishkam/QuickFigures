@@ -77,15 +77,15 @@ public class LayoutScalerTool extends Object_Mover {
 	public void mousePressed() {
 		super.mousePressed();
 		this.minimalDrag=false;
-		if (this.getSelectedObject() instanceof MontageLayoutGraphic) {
-			theLayout=(MontageLayoutGraphic) getSelectedObject();
+		if (this.getPrimarySelectedObject() instanceof MontageLayoutGraphic) {
+			theLayout=(MontageLayoutGraphic) getPrimarySelectedObject();
 			theLayout.generateCurrentImageWrapper();
 			yMin=theLayout.getPanelLayout().getBoundry().getBounds().getMinY();
 			duplicate=theLayout.copy();
 			duplicate.setStrokeWidth(8);
 			duplicate.boundryColor=Color.cyan;
 			duplicate.panelColor=Color.magenta;
-			getImageWrapperClick().getOverlaySelectionManagger().setSelection(duplicate, 0);
+			getImageClicked().getOverlaySelectionManagger().setSelection(duplicate, 0);
 		} else {
 			eliminateSelection();
 	
@@ -97,7 +97,7 @@ public class LayoutScalerTool extends Object_Mover {
 
 	public void eliminateSelection() {
 		duplicate=null;
-		getImageWrapperClick().getOverlaySelectionManagger().setSelection(null, 0);
+		getImageClicked().getOverlaySelectionManagger().setSelection(null, 0);
 	}
 	
 	public void mouseReleased() {
@@ -144,7 +144,7 @@ public class LayoutScalerTool extends Object_Mover {
 		}
 		eliminateSelection();
 		super.resizeCanvas();
-		this.getImageWrapperClick().updateDisplay();
+		this.getImageClicked().updateDisplay();
 	}
 	
 	public void mouseDragged() {

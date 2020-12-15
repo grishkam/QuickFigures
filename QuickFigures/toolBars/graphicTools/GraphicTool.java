@@ -32,7 +32,7 @@ public class GraphicTool extends Object_Mover {
 	
 	@Override 
 	public void mouseEntered() {
-		this.getImageWrapperClick().getGraphicLayerSet();
+		this.getImageClicked().getGraphicLayerSet();
 	
 	}
 	
@@ -46,7 +46,7 @@ public class GraphicTool extends Object_Mover {
 		
 			{
 			
-			onPress(getImageWrapperClick(), super.getSelectedObject()) ;
+			onPress(getImageClicked(), super.getPrimarySelectedObject()) ;
 
 			
 		}
@@ -61,7 +61,7 @@ public class GraphicTool extends Object_Mover {
 	@Override
 	public void mouseReleased() {
 		super.mouseReleased();
-		onRelease(this.getImageWrapperClick(),getSelectedObject());
+		onRelease(this.getImageClicked(),getPrimarySelectedObject());
 		if (temporaryTool) {
 			
 			super.todefaultTool();}

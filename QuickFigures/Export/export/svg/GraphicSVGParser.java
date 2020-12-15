@@ -677,9 +677,9 @@ private  ZoomableGraphic parseRect(Node node) {
 				
 				
 			    BufferedImageGraphic big = new BufferedImageGraphic(image,x,y);
-			   if(scale!=null) big.setScale(scale);
+			   if(scale!=null) big.setRelativeScale(scale);
 			    double ratio = w/img.getWidth();
-			   if (scale==null) big.setScale(ratio);
+			   if (scale==null) big.setRelativeScale(ratio);
 			    
 			    big.setFrameWidthH(0);
 			    big.setFrameWidthV(0);

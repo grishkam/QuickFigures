@@ -269,7 +269,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 	for(ChannelLabelTextGraphic l: labels) {
 		l.setFont(l.getFont().deriveFont(fontsize));
 		
-		ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(this.getImageWrapperClick(), l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.onlySelectThoseOfClass);
+		ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(this.getImageClicked(), l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.onlySelectThoseOfClass);
 		itemsInway.remove(l);
 		itemsInway.remove(inset.personalLayout);
 		if (itemsInway.size()>0&&l.getAttachmentPosition().isExternalSnap()) {
@@ -552,7 +552,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 			gc.anchor=GridBagConstraints.WEST;
 			
 			gc.gridy=7;
-			gy+=2;
+			gridPositionY+=2;
 			// snappanel.getSnapBox().setToMontageMode();
 			add( snappanel.getSnapBox(), gc);
 			

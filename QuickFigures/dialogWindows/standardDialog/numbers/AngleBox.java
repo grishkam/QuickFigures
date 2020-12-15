@@ -30,7 +30,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import standardDialog.graphics.GraphicComponent;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 

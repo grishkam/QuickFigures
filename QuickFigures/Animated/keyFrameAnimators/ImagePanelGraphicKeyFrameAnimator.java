@@ -68,7 +68,7 @@ public class ImagePanelGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFram
 		if (after.animagesAngleChange)getObject().setAngle(nangle);
 		
 		double scale=interpolate(before.scale,after.scale, factor);
-		if (after.animagesSizeChange)getObject().setScale(scale);
+		if (after.animagesSizeChange)getObject().setRelativeScale(scale);
 		
 		if (after.animatesFrameChange)  {
 				nangle=interpolate(before.frameWidthH,after.frameWidthH, factor);
@@ -121,7 +121,7 @@ public class ImagePanelGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFram
 				getObject().setFrameColor(frameColor);
 			}
 			
-			if (animagesSizeChange) getObject().setScale(scale);
+			if (animagesSizeChange) getObject().setRelativeScale(scale);
 		}
 
 		/**

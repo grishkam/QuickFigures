@@ -98,9 +98,10 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 			this.handlesize=8;
 			maxGrid=standardColor.length;
 			this.setHandleColor(Color.white);
-			if (rainbow)super.setSpecialFill(SmartHandle.RAINBOW_FILL);
-			this.moreColors=true;
-			
+			if (rainbow) {
+				super.setSpecialFill(SmartHandle.RAINBOW_FILL);
+				this.moreColors=true;
+			}
 		}
 		
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {

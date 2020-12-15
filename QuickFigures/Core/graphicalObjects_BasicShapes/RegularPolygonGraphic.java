@@ -54,7 +54,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		RegularPolygonGraphic r1 = new RegularPolygonGraphic(r, getNvertex());
 		
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

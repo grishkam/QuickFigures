@@ -57,7 +57,6 @@ import export.pptx.TextGraphicImmitator;
 import externalToolBar.IconSet;
 import graphicTools.LockGraphicTool2;
 import graphicalObjectHandles.ActionButtonHandleList;
-import graphicalObjectHandles.HandleRect;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.ScaleBarActionHandleList;
@@ -114,6 +113,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	 private boolean showText=true;
 	 private boolean snapBarText=true;
 	 BarTextGraphic barText=null;
+
+	private boolean considerAngle;
 	 
 	 
 	 
@@ -143,14 +144,24 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	 
 	 /**returns the pixel length based on the unit length*/
 	 public double getBarWidthBasedOnUnits() {
-		double lw = getLengthInUnits()*Math.cos(getAngle())/getDisplayScaleInfo().getPixelWidth();
-		double lh= getLengthInUnits()*Math.sin(getAngle())/getDisplayScaleInfo().getPixelHeight();
+		double cos = Math.cos(getAngle());
+		double sin = Math.sin(getAngle());
+		
+		double pixelWidth = getDisplayScaleInfo().getPixelWidth();
+		double pixelHeight = getDisplayScaleInfo().getPixelHeight();
+		if(!considerAngle) {
+			return getLengthInUnits()/pixelWidth;
+		}
+		
+		double lw = getLengthInUnits()*cos/pixelWidth;
+	
+		double lh= getLengthInUnits()*sin/pixelHeight;
 		double outputlength=Math.sqrt(lw*lw+lh*lh);
 		
 		return outputlength;
 	 }
 	 
-	 /**innitializes the pixel width based on the units*/
+	 /**Initializes the pixel width based on the units*/
 	 public void setupPixWidth() {
 		 this.setLengthInpixInnitial(getBarWidthBasedOnUnits());
 	 }
@@ -311,10 +322,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 
 
 
-	@Override
-	public void handleMove(int handlenum, Point p1, Point p2) {
 
-	}
 
 	public double getAngleOfDragPoint(Point p2) {
 		return -getAngleBetweenPoints((int)x, (int) y, p2.x, p2.y);
@@ -336,7 +344,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		if (clickcount<2) return;
 		if(clickcount>2) return;
 		if (handlenum==1) getBarText().showOptionsDialog();
-		else if (handlenum==-1)showOptionsDialog();
+		else if (handlenum==NO_HANDLE_)showOptionsDialog();
 
 	}
 
@@ -419,34 +427,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		if (this.isSelected())this.getSmartHandleList().draw(g2d, cords);
 	}
 	
-	private void drawHandesSelectionOld(Graphics2D g2d, CordinateConverter<?> cords) {
-		
-		 handleBoxes=new ArrayList<HandleRect>();
-		if (selected) {
-			getGrahpicUtil().drawLine(g2d, cords, this.getTipLocation(), getOppositeTipEndLocation(), false);
-			 
-			   ArrayList<Point2D> ps = new ArrayList<Point2D>();
-			   ps.add(getOppositeTipEndLocation());
-			   Point2D textLocation =RectangleEdges.getLocation(RectangleEdges.CENTER, getBarText().getBounds());
-			 if (this.isShowText()) {
-				 	ps.add(textLocation);
-			   }
-				
-				   getGrahpicUtil().drawHandlesAtPoints(g2d, cords, ps);
-				   handleBoxes.addAll(getGrahpicUtil().lastHandles);
-				   
-				   /**draws a grey handle*/
-				   if (this.isShowText()) { 
-					   getGrahpicUtil().setHandleFillColor(Color.LIGHT_GRAY);
-					   getGrahpicUtil().setHandleSize(5);
-					   getGrahpicUtil().drawHandlesAtPoint(g2d, cords, textLocation);
-					   getGrahpicUtil();
-					getGrahpicUtil().setHandleSize(GraphicUtil.defaulthandleSize);
-					   getGrahpicUtil().setHandleFillColor(Color.white);
-				   }
-		}
-		
-	}
+	
 
 	private Point2D getOppositeTipEndLocation() {
 		if (oppositeEnd==null)setUpBarRects();
@@ -1060,7 +1041,7 @@ protected BarSmartHandle createTextLocationHandle2() {
 }
 
 @Override
-public int handleNumber(int x, int y) {
+public int handleNumber(double x, double y) {
 	return getSmartHandleList().handleNumberForClickPoint(x, y);
 }
 

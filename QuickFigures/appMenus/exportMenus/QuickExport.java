@@ -24,7 +24,16 @@ import ultilInputOutput.FileChoiceUtil;
 
 public abstract class QuickExport  extends BasicMenuItemForObj {
 
+	protected boolean openImmediately;
+
 	
+	public QuickExport(boolean openNow) {
+		openImmediately=openNow;
+	}
+	public QuickExport() {
+		this(false);
+	}
+
 	@Override
 	public String getMenuPath() {
 		return "File<Export";

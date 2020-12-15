@@ -52,7 +52,7 @@ import standardDialog.SelectImageDialog;
 		
 		/**The path where the working image is stored*/
 		protected String path;
-		/**The image that is displayed. Compared to the original, this version may be cropped or scaled*/
+		/**The image that is used. Compared to the original, this version may be cropped or scaled*/
 		private transient ImagePlus sourceImagePlus;//the imageplus
 		protected byte[] serializedIM;//the serialized version of the image 
 		
@@ -71,7 +71,7 @@ import standardDialog.SelectImageDialog;
 
 		private ImageDisplayLayer display;
 
-
+		/**The channel frame and slice that is seen in the cropping dialog*/
 		private CSFLocation displayLocation;
 
 		public ImagePlusMultiChannelSlot() {
@@ -118,9 +118,6 @@ import standardDialog.SelectImageDialog;
 				}
 		}
 		
-		
-		
-		
 
 		/**gets the image. if needed, opens the image file. If
 		  the image file is not found it reconstitutes
@@ -160,7 +157,7 @@ import standardDialog.SelectImageDialog;
 			ImagePlus.addImageListener( getDisplayUpdater());
 		}
 		
-		/**Sets the image to the given path string.
+		/**Sets the working image to the given path string.
 		 If it cant find the file in the full path, it search
 		 for it elsewhere .
 		 */
@@ -199,7 +196,6 @@ import standardDialog.SelectImageDialog;
 			{
 			
 				path=wrap.getPath();
-			
 				
 			//saveImageEmbed();//commented out for testing
 			}
@@ -211,7 +207,7 @@ import standardDialog.SelectImageDialog;
 		}
 		
 		
-		
+		/**returns true if the working image file has a save path*/
 		protected boolean imageFileFound() {
 			if (path==null){
 				IssueLog.log("Has looked for image with null path");
@@ -261,7 +257,7 @@ import standardDialog.SelectImageDialog;
 
 		
 		
-		
+		/**shows the user a copy of the image being used*/
 		@MenuItemMethod(menuActionCommand = "showim", menuText = "Show Image", subMenuName="Image")
 		public void showImage() {
 			ImagePlus imp = this.getImagePlus();
@@ -273,7 +269,7 @@ import standardDialog.SelectImageDialog;
 			
 			ImagePlus backup = this.getBackup(true);
 			if (backup==null)
-			imp.duplicate().show();
+				imp.duplicate().show();
 			else backup.duplicate().show();
 		}
 		

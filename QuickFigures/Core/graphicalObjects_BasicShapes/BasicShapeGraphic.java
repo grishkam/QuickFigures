@@ -77,10 +77,7 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 		return getShape().getBounds();
 	}
 
-	@Override
-	public void handleMove(int handlenum, Point p1, Point p2) {
-
-	}
+	
 
 	@Override
 	public Shape getShape() {
@@ -116,7 +113,7 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 	}
 	
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		return getSmartHandleList().handleNumberForClickPoint(x, y);
 	}
 	@Override

@@ -57,7 +57,7 @@ public class BrushTool extends PathGraphicTool {
 	@Override
 	public void mousePressed() {
 		super.mousePressed();
-		if(super.getPressedHandle()>-1) return;
+		if(super.getSelectedHandleNumber()>-1) return;
 		if(this.clickCount()>1)
 			onDoubleclick();
 		
@@ -69,9 +69,9 @@ public class BrushTool extends PathGraphicTool {
 		p.copyAttributesFrom(model);
 		p.copyColorsFrom(model);
 		p.select();
-		super.setSelectedObject(p);
+		super.setPrimarySelectedObject(p);
 		
-		GraphicLayer setcur = this.getImageWrapperClick().getGraphicLayerSet();
+		GraphicLayer setcur = this.getImageClicked().getGraphicLayerSet();
 		setcur.add(p);
 		
 		undo = new PathEditUndo(p);
@@ -79,7 +79,7 @@ public class BrushTool extends PathGraphicTool {
 	
 		getImageDisplayWrapperClick().getUndoManager().addEdit(undo2);
 		
-		super.getImageWrapperClick().updateDisplay();
+		super.getImageClicked().updateDisplay();
 
 		
 	}
@@ -90,7 +90,7 @@ public class BrushTool extends PathGraphicTool {
 	
 	@Override
 	public void mouseReleased() {
-		if(super.getPressedHandle()>-1) {
+		if(super.getSelectedHandleNumber()>-1) {
 			super.mouseReleased();;
 			return;
 		}
@@ -100,7 +100,7 @@ public class BrushTool extends PathGraphicTool {
 			else simplifyPath(p, pathSimplificatoinTolerance, randomize);
 			
 			p=null;
-			this.setSelectedObject(null);
+			this.setPrimarySelectedObject(null);
 			super.finishPath();
 		}
 		onDoubleclick();
@@ -128,7 +128,7 @@ public class BrushTool extends PathGraphicTool {
 	@Override
 	public void mouseDragged() {
 		
-		if(super.getPressedHandle()>-1) {
+		if(super.getSelectedHandleNumber()>-1) {
 			super.mouseDragged();
 			return;
 		}
@@ -155,7 +155,7 @@ public class BrushTool extends PathGraphicTool {
 		}
 		
 		
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 		
 		
 	}

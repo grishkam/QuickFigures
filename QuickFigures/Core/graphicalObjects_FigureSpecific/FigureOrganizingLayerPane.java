@@ -56,8 +56,7 @@ import undo.UndoAddManyItem;
 import undo.UndoLayoutEdit;
 import utilityClassesForObjects.AttachmentPosition;
 
-/**meant to check if bugs that existed with previous subclasses are gone. Later adapted to work 
- * with source stacks in a special way*/
+/**A figure organizing layer*/
 public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFigureOrganizer, HasUniquePopupMenu {
 
 	{description= "A Figure Organizing Layer";}
@@ -85,7 +84,8 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 	}
 
 	
-	/**combines the panel lists from all the images in the figure into one list*/
+	/**combines the panel lists from all the images in the figure into one list
+	 * this method does not include inset panels*/
 	public PanelList getAllPanelLists() {
 		PanelList output = new PanelList();
 		for(ImageDisplayLayer d: getMultiChannelDisplays()){
@@ -622,6 +622,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		PanelOrderCorrector panelOrder = new PanelOrderCorrector(this);
 		updateImageOrder();
 		panelOrder.updateChanOrder(type);
+		
 	}
 	
 	/**Determines the order of the multidimensional images within the layout based on the x/y geometry of the layout
@@ -663,6 +664,17 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			}
 		
 		return f.nextMultiChannel(secondView);
+	}
+
+
+	/**
+	 sets the relative scale of the panel manager to match the scale of the panels
+	 */
+	public void updatePanelLevelScale() {
+		for(ImageDisplayLayer i: this.getMultiChannelDisplays()) {
+			i.getPanelManager().setPanelLevelScaleToPanels();
+		}
+		
 	}
 	
 	

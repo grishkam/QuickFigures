@@ -240,7 +240,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		String realName=getPressedWrapper().getRealChannelName(chan);
 		ChannelPanelEditingMenu.setDisplayRange(wraps, chan, realName, min, max);
 		updateAllDisplaysWithRealChannel( realName);
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 	}
 	
 	

@@ -26,8 +26,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.swing.undo.UndoableEdit;
-
 import channelMerging.CSFLocation;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelImage;
@@ -89,7 +87,7 @@ public class PanelManager implements Serializable, EditListener{
 		panelgraphic.setSourcePanel(panel);
 			
 			panelgraphic.setScaleInfo(panel.getDisplayScaleInfo());//sets the scale info
-			panelgraphic.setScale(getPanelLevelScale());
+			panelgraphic.setRelativeScale(getPanelLevelScale());
 			panelgraphic.setFrameWidthH(getDefaultFrameWidth());
 			//logTime("done setting image and scale");
 			panelgraphic.setEmbed(true);
@@ -495,7 +493,7 @@ public class PanelManager implements Serializable, EditListener{
 			output.addEditToList(new UndoScalingAndRotation(panelGraphic));
 			
 			panelGraphic.setLocationType(RectangleEdges.UPPER_LEFT);
-			panelGraphic.setScale(newPanelScale);
+			panelGraphic.setRelativeScale(newPanelScale);
 		}
 		output.addEditToList(new PanelManagerScaleUndo(this));
 		this.setPanelLevelScale(newPanelScale);
@@ -662,6 +660,15 @@ private AbstractUndoableEdit2 reorderImagePanels() {
 		public void redo() {pm.setPanelLevelScale(fScale);}
 		public void establishFinalState() {
 			fScale=pm.getPanelLevelScale();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void setPanelLevelScaleToPanels() {
+		for(ImagePanelGraphic p: panelList.getPanelGraphics()) {
+			this.setPanelLevelScale(p.getScale());
 		}
 	}
 

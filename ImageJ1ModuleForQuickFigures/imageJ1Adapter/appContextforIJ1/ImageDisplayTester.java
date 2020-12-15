@@ -22,7 +22,6 @@ import javax.swing.JFrame;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.ToolbarTester;
-import figureFormat.DirectoryHandler;
 import ij.IJ;
 import ij.ImageJ;
 import ij.Menus;
@@ -36,12 +35,12 @@ import loci.formats.FormatException;
 import loci.plugins.BF;
 import logging.IssueLog;
 
-/**the main method of this class shows the toolbars and an image */
+/**the main method of this class shows the toolbars and an image. meant for programmer to manually test features */
 public class ImageDisplayTester extends ToolbarTester {
 
 	public static void main(String[] args) {
-	//	System.setProperty("apple.laf.useScreenMenuBar", "true");
-	  //  System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Name");
+		//	System.setProperty("apple.laf.useScreenMenuBar", "true");
+	    //  System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Name");
 		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=false;
 		ij1Test(false);
@@ -51,8 +50,7 @@ public class ImageDisplayTester extends ToolbarTester {
 	}
 	
 	
-	public static void openZVI() {
-		String file1=new DirectoryHandler().getFigureFolderPath()+"/red blu green tab order/bl green red image order.zvi";
+	public static void openMicroscopeFormat(String file1) {
 		try {
 			BF.openImagePlus(file1);
 		} catch (FormatException e) {
@@ -69,11 +67,10 @@ public class ImageDisplayTester extends ToolbarTester {
 		CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
 		
 		try {
-			   /** Opens an image file using the Bio-Formats plugin. */
+			   /** loads the loci importers. */
 		   
 		        String className = "loci.plugins.BF";
-		      //  String methodName = "openImagePlus";
-		        
+		       
 		            Class<?> c = IJ.getClassLoader().loadClass(className);
 		            IJ.getClassLoader().loadClass("loci.plugins.LociImporter");
 		            if (c==null)
@@ -81,18 +78,14 @@ public class ImageDisplayTester extends ToolbarTester {
 		          
 		            
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	
+		
 		if (useNormalPath) try {
 			 String newhome="/Applications/ImageJ/plugins";
 			 String ijpath="/Applications/ImageJ";
-			/** Field homeDir = Prefs.class.getDeclaredField("homeDir");
-			 homeDir .setAccessible(true);
-			String output=""+homeDir.get(null);*/
-			 
-			 
+			
 			PluginClassLoader pcl = new PluginClassLoader(newhome);
 		
 			

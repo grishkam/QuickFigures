@@ -1059,7 +1059,8 @@ public class GenericMontageEditor implements LayoutSpaces {
 				   this.notifyListenersOfCompleteChange(ml, event);
 			   }
 			
-			/**Removes item at index t from the layout*/
+			/**Either removes item at index t from the layout or inserts an empty panel at that location
+			 * @param insert true if inserting a panel, false otherwise*/
 			public void deleteInsertPanel(BasicMontageLayout ml, int t, boolean insert, int type) {
 				  GridLayoutEditEvent event = new GridLayoutEditEvent(ml, insert?GridLayoutEditEvent.PANEL_INSERTION: GridLayoutEditEvent.PANEL_REMOVAL, t,  1);
 				   notifyListenersOfFutureChange(ml, event);
@@ -1070,7 +1071,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 				try{
 				if (!insert){
 				PanelContentExtract last=null;
-				//lastObjects=null;
+				
 				if (stack.size()>t-1) {
 					last=stack.get(t-1);
 					}
@@ -1094,8 +1095,10 @@ public class GenericMontageEditor implements LayoutSpaces {
 
 				} else {
 					PanelContentExtract last; 
-					if (type==ROWS)last=lastRow; else
-					if (type==COLS)last=lastCol;
+					if (type==ROWS)
+						 last=lastRow; 
+					else if (type==COLS)
+						 last=lastCol;
 					else last=lastPanel;
 					
 					PanelContentExtract ipnew=new PanelContentExtract(stack.get(0).dim());
@@ -1118,7 +1121,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 					if (type==ROWS)addRows(ml, 1);
 					if (type==COLS)addCols(ml, 1);
 				}
-				} catch (Exception e) {IssueLog.log("problen with delete/insertpanel method", e);}
+					} catch (Exception e) {IssueLog.log("problen with delete/insertpanel method", e);}
 				colLayout=ml.makeAltered(type);
 				pasteStack( colLayout,stack);
 				ml.resetPtsPanels(ml.xshift, ml.yshift) ;
@@ -1141,11 +1144,9 @@ public class GenericMontageEditor implements LayoutSpaces {
 				
 			   }
 			   
-				   public void swapMontagePanels(ImageWrapper imp, Rectangle2D r1, Rectangle2D r2){
-				
-					   
-					
-					//ObjectContainer imp2 = getObjectHandler().getWrapper(imp);
+			   /**swaps the objects within one rectangle with those inside another*/
+				   public void swapMontagePanels(ObjectContainer imp, Rectangle2D r1, Rectangle2D r2){
+		
 					ArrayList<LocatedObject2D> o1=getObjectHandler().liftObjectsFromPanelX(imp, r1.getBounds());
 				
 					ArrayList<LocatedObject2D> o2=getObjectHandler().liftObjectsFromPanelX(imp, r2.getBounds());
@@ -1154,23 +1155,24 @@ public class GenericMontageEditor implements LayoutSpaces {
 					getObjectHandler().setObjectsIntoPanelX(o1, imp, r2.getBounds());
 				}
 				
+				   /**when given two panel location indices, will move the objects in one index to the next one*/
 				public void moveMontagePanels(BasicMontageLayout ml, int index1, int index2, int type) {
 				
 					
 					ml=ml.makeAltered(type%100); ml.resetPtsPanels(0, 0);
 					int f=1;
-					if (type/100==PAIR/100) f=2;
-					if (type/100==TRIAD/100) f=3;
-					if (type/100==QUAD/100) f=4;
-					if (type/100==PENT/100) f=5;
+					if (type/GROUP_FACTOR==PAIR/GROUP_FACTOR)  f=2;
+					if (type/GROUP_FACTOR==TRIAD/GROUP_FACTOR) f=3;
+					if (type/GROUP_FACTOR==QUAD/GROUP_FACTOR)  f=4;
+					if (type/GROUP_FACTOR==PENT/GROUP_FACTOR)  f=5;
 
 					
-					if (index2>index1) for(int i=index1; i<index2; i+=f) { swapMontagePanels(ml, i, i+f);}
-					if (index2<index1) for(int i=index1; i>index2; i-=f) { swapMontagePanels(ml, i, i-f);}
+					if (index2>index1) for(int i=index1; i<index2; i+=f) { swapPanels(ml, i, i+f);}
+					if (index2<index1) for(int i=index1; i>index2; i-=f) { swapPanels(ml, i, i-f);}
 					
 				}
 				
-				public void swapMontagePanels(BasicMontageLayout ml, int index1, int index2){
+				public void swapPanels(BasicMontageLayout ml, int index1, int index2){
 					 if (ml==null||index1>ml.nPanels()||index2>ml.nPanels()) return;
 					
 					  GridLayoutEditEvent event = new GridLayoutEditEvent(ml,GridLayoutEditEvent.PANEL_SWAP, index1,  index2);

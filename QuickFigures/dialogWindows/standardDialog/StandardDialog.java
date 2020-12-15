@@ -106,7 +106,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	{this.setLayout(new GridBagLayout());}
 	protected ArrayList<StandardDialogListener> listen=new ArrayList<StandardDialogListener>();
 	
-	protected int gy=0;
+	protected int gridPositionY=0;
 	protected int gx=0;
 	protected int gxmax=0;
 	protected int gymax=0;
@@ -159,16 +159,16 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	public void moveGrid(int x, int y) {
-		gy+=y;
+		gridPositionY+=y;
 		gx+=x;
 		if (gx>gxmax) gxmax=gx;
-		if (gy>gymax) gymax=gy;
+		if (gridPositionY>gymax) gymax=gridPositionY;
 	}
 	
 	protected GridBagConstraints getCurrentConstraints() {
 		GridBagConstraints output=new GridBagConstraints();
 		output.gridx=gx;
-		output.gridy=gy;
+		output.gridy=gridPositionY;
 		return output;
 	}
 	
@@ -369,9 +369,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 			{
 			getMainPanel().place(st);
 			} else
-		st.placeItems(this, gx, gy);
+		st.placeItems(this, gx, gridPositionY);
 		if (gxmax<st.gridWidth())gxmax=st.gridWidth();
-		gy+=st.gridHeight();
+		gridPositionY+=st.gridHeight();
 	}
 	
 	public Font getFont(String key) {
@@ -670,11 +670,11 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	public void addSubordinateDialogsAsTabs(String shortLabel, StandardDialog... dis) {
 		SubDialogSection ss = new SubDialogSection(shortLabel, dis);
-		gy++;
-		ss.placeItems(this.getMainPanel(), gx+1,gy);
-		gy++;
+		gridPositionY++;
+		ss.placeItems(this.getMainPanel(), gx+1,gridPositionY);
+		gridPositionY++;
 		for(StandardDialog d: dis)this.subordinateDialogs.add(d);
-		gy++;
+		gridPositionY++;
 	}
 	
 	class SubDialogSection implements OnGridLayout {

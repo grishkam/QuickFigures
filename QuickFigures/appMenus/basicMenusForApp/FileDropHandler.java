@@ -29,19 +29,19 @@ public abstract class FileDropHandler implements DropTargetListener{
 
 	@Override
 	public void dragEnter(DropTargetDragEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void dragExit(DropTargetEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void dragOver(DropTargetDragEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -65,7 +65,7 @@ public abstract class FileDropHandler implements DropTargetListener{
 
 	@Override
 	public void dropActionChanged(DropTargetDragEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

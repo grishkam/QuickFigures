@@ -24,6 +24,14 @@ import appContext.CurrentAppContext;
 
 /**this class exports a figure as tiff file using ImageJ*/
 public class TiffQuickExport extends PNGQuickExport {
+	/**
+	 * @param openNow
+	 */
+	public TiffQuickExport(boolean openNow) {
+		super(openNow);
+		// TODO Auto-generated constructor stub
+	}
+
 	protected String getExtension() {
 		return "tiff";
 	}

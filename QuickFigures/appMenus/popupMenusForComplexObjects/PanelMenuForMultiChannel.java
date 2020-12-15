@@ -78,15 +78,11 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 					);
 			}
 			
-		}.createJMenuItem("Change Panel PPI (Scale if needed)"));
+		}.createJMenuItem("Change Panel Pixel Density (Scale factor)"));
 	}
 	
 	SmartMenuItem2 createImagePanelMenuItem(JMenu  thi) {
 		SmartMenuItem2 out=new SmartMenuItem2("Generate New Image Panels") {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override

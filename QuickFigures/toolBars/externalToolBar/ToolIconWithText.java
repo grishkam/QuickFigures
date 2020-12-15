@@ -38,7 +38,6 @@ public class ToolIconWithText extends GraphicToolIcon{
 	public ToolIconWithText(int type, int place) {
 		super(type);
 		this.place=place;
-		// TODO Auto-generated constructor stub
 	}
 	
 	protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2,

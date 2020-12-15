@@ -249,7 +249,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 				while(!shape2.isDone())
 				{
 					double[] arr = new double[6];
-					int seg1 = shape2.currentSegment(arr);
+					shape2.currentSegment(arr);
 					list.add(new Point2D.Double(arr[0], arr[1]));
 					shape2.next();
 				}

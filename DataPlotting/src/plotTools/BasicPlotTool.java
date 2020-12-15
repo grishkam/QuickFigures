@@ -44,7 +44,7 @@ public class BasicPlotTool extends Object_Mover {
 	
 	public void mousePressed() {
 		super.mousePressed();
-		LocatedObject2D o = this.getSelectedObject();
+		LocatedObject2D o = this.getPrimarySelectedObject();
 		
 		if (o instanceof DataShowingShape) {
 			pressShape=(DataShowingShape) o;
@@ -95,7 +95,7 @@ public class BasicPlotTool extends Object_Mover {
 		if (pressShape==null)  {super.mouseDragged(); return;}
 		
 		
-		LocatedObject2D roi2 = getObject(getImageWrapperClick(), this.getDragCordinateX(), this.getDragCordinateY());
+		LocatedObject2D roi2 = getObjectAt(getImageClicked(), this.getDragCordinateX(), this.getDragCordinateY());
 		if (roi2 instanceof DataShowingShape) {
 			dragShape=(DataShowingShape) roi2;
 			DataSeries dataDrag = dragShape.getTheData();
@@ -123,7 +123,7 @@ public class BasicPlotTool extends Object_Mover {
 		
 			GraphicGroup sg = generateMarkerForSwitch();
 			
-			super.getImageWrapperClick().getOverlaySelectionManagger().setSelection(sg, 0);
+			super.getImageClicked().getOverlaySelectionManagger().setSelection(sg, 0);
 		
 	}
 

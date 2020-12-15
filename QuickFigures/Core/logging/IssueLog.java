@@ -14,15 +14,11 @@
  *    limitations under the License.
  *******************************************************************************/
 package logging;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import javax.swing.JLabel;
-
-import standardDialog.StandardDialog;
+import messages.ShowMessage;
 
 
 
@@ -145,47 +141,7 @@ public class IssueLog {
 		logT(ee);
 	}
 
-	public static Boolean showMessage(String... texts) {
-		StandardDialog d = new StandardDialog();
-		d.setModal(true);
-		d.setLayout(new GridBagLayout());
-		int y=1;
-		for(String s: texts) {
-			GridBagConstraints c = new GridBagConstraints();
-			c.anchor=GridBagConstraints.NORTHWEST;
-			c.gridy=y;
-			y++;
-			d.add(new JLabel(s), c);
-			}
-			
-		d.removeOptionsTab();
-		d.setHideCancel(true);
-		d.setWindowCentered(true);
-		d.showDialog();
-		
-		if(d.wasOKed())
-			return true;
-		if(d.wasCanceled())
-			return false;
-		
-		return null;
-	}
 	
-	public static void showMessages(Iterable<String> string) {
-		StandardDialog d = new StandardDialog();
-		d.setModal(true);
-		d.setLayout(new GridBagLayout());
-		int y=1;
-		for(String s: string) {
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridy=y; y++;
-			d.add(new JLabel(s), c);
-			}
-		d.removeOptionsTab();
-		d.setHideCancel(true);
-		d.setWindowCentered(true);
-		d.showDialog();
-	}
 	
 	public static void createEventDisplay() {
 		if(displayProgress==null)
@@ -279,6 +235,14 @@ public class IssueLog {
 	
 	public static boolean isDebugMode() {
 		return debugStream()==System.out;
+	}
+
+	/**
+	 * @param string
+	 */
+	public static void showMessage(String string) {
+		ShowMessage.showMessages(string);
+		
 	}
 	 
 	

@@ -24,37 +24,39 @@ import gridLayout.LayoutSpaces;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 
-
+/**A layout tool for adjusting the label spaces of a layout. */
 public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements LayoutSpaces{
 
-	int mode=0;
+	private static final int LABEL_SPACES = 0, LAYOUT_LOCATION=1;
+	int mode=LABEL_SPACES;
+	
 	
 	public void performDragEdit(boolean shift) {
 		BasicMontageLayout layout = getCurrentLayout();
-		if (mode==0) {
+		if (mode==LABEL_SPACES) {
 			if (shift) {
 				
-				 getEditor().addRightLabelSpace(layout, getMouseDisplacementX());
-				 getEditor().addBottomLabelSpace(layout, getMouseDisplacementY());
-				layout.resetPtsPanels();
+				 getLayoutEditor().addRightLabelSpace(layout, getMouseDisplacementX());
+				 getLayoutEditor().addBottomLabelSpace(layout, getMouseDisplacementY());
+				 layout.resetPtsPanels();
 				
 				
 			} else {
-			 getEditor().addLeftLabelSpace(layout, -getMouseDisplacementX());
-			 getEditor().addTopLabelSpace(layout, -getMouseDisplacementY());
-			 layout.resetPtsPanels();
+				 getLayoutEditor().addLeftLabelSpace(layout, -getMouseDisplacementX());
+				 getLayoutEditor().addTopLabelSpace(layout, -getMouseDisplacementY());
+				 layout.resetPtsPanels();
 			
 			}
 			}
 		
-		if (mode==1) {
+		if (mode==LAYOUT_LOCATION) {
 		
 				if (shift) {
-					 getEditor().addRightSpecialSpace(layout, getMouseDisplacementX());
-					 getEditor().addBottomSpecialSpace(layout, getMouseDisplacementY());
+					 getLayoutEditor().addRightSpecialSpace(layout, getMouseDisplacementX());
+					 getLayoutEditor().addBottomSpecialSpace(layout, getMouseDisplacementY());
 				} else {
-					 getEditor().addLeftSpecialSpace(layout, getMouseDisplacementX());
-					 getEditor().addTopSpecialSpace(layout, getMouseDisplacementY());
+					 getLayoutEditor().addLeftSpecialSpace(layout, getMouseDisplacementX());
+					 getLayoutEditor().addTopSpecialSpace(layout, getMouseDisplacementY());
 				}
 		
 			
@@ -65,21 +67,22 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 	}
 	
 	
+	/**A Dialog for changing the type of tool*/
 	@Override
 	public void showOptionsDialog() {
-		StandardDialog gd = new StandardDialog(getClass().getName().replace("_",
-		" "), true);
-
-String[] option2 = new String[] {
-		"Label Space Adjuster (Top/Left), (shift Bottom/Right) ",
-		"Montage Canvas Size Adjuster (Top/Left, shift for Bottom/Right)" };
-gd.add("Adjust ",new ChoiceInputPanel("Adjust ", option2, mode));
-
-gd.showDialog();
-
-if (gd.wasOKed()) {
-	mode = gd.getChoiceIndex("Adjust ");
-	
+					StandardDialog gd = new StandardDialog(getClass().getName().replace("_",
+					" "), true);
+			
+			String[] option2 = new String[] {
+					"Label Space Adjuster (Top/Left), (shift Bottom/Right) ",
+					"Move Layout (Top/Left, shift for Bottom/Right)" };
+			gd.add("Adjust ",new ChoiceInputPanel("Adjust ", option2, mode));
+			
+			gd.showDialog();
+			
+			if (gd.wasOKed()) {
+				mode = gd.getChoiceIndex("Adjust ");
+				
 }
 
 	}
@@ -91,16 +94,15 @@ if (gd.wasOKed()) {
 	
 	public ArrayList<JMenuItem> getPopupMenuItems() {
 		ArrayList<JMenuItem> output = new ArrayList<JMenuItem>();
-	
-		 
 		return output;
-		//return new MontageEditCommandMenu(this.getCurrentLayout()).getNonMontageSpacePopupMenuItemsForMainLayout();
-	}
+			}
 	
 	@Override
 	public String getToolTip() {
-		if (mode==0)  {return "Adjust Label Spaces (try holding shift)";}
-			return "Adjust Montage Layout Position";
+		if (mode==LABEL_SPACES)  
+				{return "Adjust Label Spaces (try holding shift)";}
+		
+			return "Adjust Layout Position";
 		}
 	
 	public String getToolName() {return getToolTip();}

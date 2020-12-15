@@ -127,8 +127,8 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 		gc.gridx=0;
 		gc.anchor=GridBagConstraints.WEST;
 		
-		gc.gridy=this.gy;
-		gy+=2;
+		gc.gridy=this.gridPositionY;
+		gridPositionY+=2;
 		this.getOptionDisplayTabs().add("Position", snappingPanel);
 		//SnapBox f = new SnapBox();
 		//f.setSnappingBehaviour(l.getSnappingBehaviour().copy());

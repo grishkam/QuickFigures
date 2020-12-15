@@ -266,7 +266,6 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 	}
 
 	private GenericMontageEditor getEditor() {
-		// TODO Auto-generated method stub
 		return edit;
 	}
 

@@ -258,6 +258,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 						StandardDialog sd = new StandardDialog();
 						sd.add("Channel ", new ChoiceInputPanel("Chan: ", new ChannelEntryBox(pm.getMultiChannelWrapper().getChannelEntriesInOrder())));
 						sd.setModal(true);
+						sd.setWindowCentered(true);
 						sd.showDialog();
 						
 						int chan = sd.getChoiceIndex("Channel ");

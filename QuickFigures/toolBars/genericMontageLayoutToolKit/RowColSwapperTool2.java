@@ -18,16 +18,15 @@ import externalToolBar.IconSet;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import gridLayout.LayoutSpaces;
 
-
+/**A tool for swapping rows and columns*/
 public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements LayoutSpaces{
 	{resetClickPointOnDrag=false;}
-	//ArrayList<PanelSwapListener<ImagePlus>> psListeners=new ArrayList<PanelSwapListener<ImagePlus>>();
 	
 	public RowColSwapperTool2(int mode) {
 		this.mode=mode;
 	}
 	
-	public int mode=1;
+	public int mode=LayoutSpaces.ROWS;
 
 	 public int markerType() {
 	    	return mode;
@@ -35,18 +34,18 @@ public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements Layou
 	
 	public void performReleaseEdit(boolean b) {
 
-		if (mode==0) {  
-			getEditor().swapMontagePanels(getCurrentLayout(), getPanelIndexClick(), getPanelIndexDrag());
+		if (mode==LayoutSpaces.PANELS) {  
+			getLayoutEditor().swapPanels(getCurrentLayout(), getPanelIndexClick(), getPanelIndexDrag());
 		
 		}
 		
-		if (mode==1) {
-			 getEditor().swapColumn(getCurrentLayout(), getColIndexClick(), getColIndexDrag());
+		if (mode==LayoutSpaces.COLS) {
+			 getLayoutEditor().swapColumn(getCurrentLayout(), getColIndexClick(), getColIndexDrag());
 		
 		}
 		
-		if (mode==2) {
-			 getEditor().swapRow(getCurrentLayout(), getRowIndexClick(), getRowIndexDrag());
+		if (mode==LayoutSpaces.ROWS) {
+			 getLayoutEditor().swapRow(getCurrentLayout(), getRowIndexClick(), getRowIndexDrag());
 			
 			
 		}
@@ -57,7 +56,7 @@ public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements Layou
 			
 		}
 		
-		super.getImageWrapperClick().updateDisplay();
+		super.getImageClicked().updateDisplay();
 		
 	}
 	
@@ -73,28 +72,27 @@ public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements Layou
 				);
 	}
 	
-	IconSet set1=new IconSet("icons/ColumnSwapperIcon.jpg",
+	IconSet columnSwapIcons=new IconSet("icons/ColumnSwapperIcon.jpg",
 			"icons/ColumnSwapperPressIcon.jpg",
 			"icons/ColumnSwapperRollIcon.jpg");
-	IconSet set2=new IconSet("icons/RowSwapperIcon.jpg",
+	IconSet rowSwapIcons=new IconSet("icons/RowSwapperIcon.jpg",
 			"icons/RowSwapperPressIcon.jpg",
 			 "icons/RowSwapperRollIcon.jpg");
-	IconSet set3=new IconSet( "icons/PanelSwapperIcon.jpg",
+	IconSet panelSwapIcons=new IconSet( "icons/PanelSwapperIcon.jpg",
 			"icons/PanelSwapperIconPressed.jpg",
 			"icons/PanelSwapperIconRollOver.jpg");
 	
 	@Override
 	public
 	IconSet getIconSet() {
-		if (mode==0) return set3;
-		if (mode==1) return set1;
-		return set2;
+		if (mode==LayoutSpaces.PANELS) return panelSwapIcons;
+		if (mode==LayoutSpaces.COLS) return columnSwapIcons;
+		return rowSwapIcons;
 	}
 	
 	 protected String getTextBase() {
 		 if (mode==LayoutSpaces.ROWS) return "Row";
 			if (mode==LayoutSpaces.COLS) return  "Column";
-			
 			 return "Panel";
 	    
 	}
@@ -102,12 +100,10 @@ public class RowColSwapperTool2 extends GeneralLayoutEditorTool implements Layou
 
 	@Override
 	public String getToolTip() {
-			
 			return "Swap "+getTextBase();
 		}
 	@Override
 	public String getToolName() {
-			
 			return getToolTip();
 		}
 

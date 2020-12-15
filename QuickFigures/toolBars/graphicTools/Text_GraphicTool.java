@@ -97,14 +97,14 @@ public class Text_GraphicTool extends GraphicTool {
 		int y = this.getClickedCordinateY();
 			
 		boolean createNew=false;
-		if (roi2 instanceof TextGraphic &&getPressedHandle()==-1 ) {
+		if (roi2 instanceof TextGraphic &&getSelectedHandleNumber()==-1 ) {
 			
 			textob=(TextGraphic) roi2;
 			textob.setEditMode(true);
 			mousePressOnTextCursor(textob);
 			
 			
-		} else if (createNewText() &&getPressedHandle()==-1)
+		} else if (createNewText() &&getSelectedHandleNumber()==-1)
 			createNew=true;
 			
 		/**in the annoying case that the user clicks just barely outside of the selected text item, this prevents a new item from being made*/
@@ -120,7 +120,7 @@ public class Text_GraphicTool extends GraphicTool {
 				textob.setHighlightPositionToCursor();
 				
 			}
-			this.setSelectedObject(textob);
+			this.setPrimarySelectedObject(textob);
 			}
 		
 		
@@ -142,7 +142,7 @@ public class Text_GraphicTool extends GraphicTool {
 			{gmp.getGraphicLayerSet().add(textob);
 			addUndoerForAddItem(gmp, gmp.getGraphicLayerSet().getSelectedContainer(), textob);
 			}
-			this.setSelectedObject(textob);
+			this.setPrimarySelectedObject(textob);
 		}
 
 		
@@ -177,7 +177,7 @@ public class Text_GraphicTool extends GraphicTool {
 		}
 		
 		
-		double dist = pressY-this.getLastDragOrRelMouseEvent().getCoordinatePoint().getY();
+		double dist = pressY-this.getLastDragOrLastReleaseMouseEvent().getCoordinatePoint().getY();
 		dist=Math.abs(dist);
 		if (!startedDragCreation){
 			
@@ -186,10 +186,10 @@ public class Text_GraphicTool extends GraphicTool {
 			startedDragCreation=true;
 			newCreation= makeNewTextObject();
 			
-			ImageWrapper gmp = this.getImageWrapperClick();
+			ImageWrapper gmp = this.getImageClicked();
 			gmp.getGraphicLayerSet().add(newCreation);
 			addUndoerForAddItem(gmp, gmp.getGraphicLayerSet().getSelectedContainer(), newCreation);
-			this.setSelectedObject(newCreation);
+			this.setPrimarySelectedObject(newCreation);
 		}
 		}
 		
@@ -203,7 +203,7 @@ public class Text_GraphicTool extends GraphicTool {
 	
 	
 	public LocatedObject2D findPlaceToLockObject(TextGraphic textob) {
-		LocatedObject2D image = this.getObjecthandler().getClickedRoi(getImageWrapperClick(), getClickedCordinateX(), getClickedCordinateY(), TakesLockedItems.class);
+		LocatedObject2D image = this.getObjecthandler().getClickedRoi(getImageClicked(), getClickedCordinateX(), getClickedCordinateY(), TakesLockedItems.class);
 		int cx = getClickedCordinateX();
 		int cy = getClickedCordinateY();
 		lockAndSnap(image, textob, cx, cy);
@@ -269,7 +269,7 @@ public class Text_GraphicTool extends GraphicTool {
 	public boolean keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
-		if (this.getSelectedObject() instanceof TextGraphic) {
+		if (this.getPrimarySelectedObject() instanceof TextGraphic) {
 			
 			keyPressOnSelectedTextItem(arg0);
 			
@@ -284,7 +284,7 @@ public class Text_GraphicTool extends GraphicTool {
 	public boolean keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
-		if (this.getSelectedObject() instanceof TextGraphic) {
+		if (this.getPrimarySelectedObject() instanceof TextGraphic) {
 			keyTypedOnTextItem(arg0);
 		} else
 		super.keyTyped(arg0);
@@ -297,7 +297,7 @@ public class Text_GraphicTool extends GraphicTool {
 	
 	public void updateCursorIfOverhandle() { 
 		
-		LocatedObject2D roi2 =  getObject(getImageWrapperClick(), getClickedCordinateX(),getClickedCordinateY());
+		LocatedObject2D roi2 =  getObjectAt(getImageClicked(), getClickedCordinateX(),getClickedCordinateY());
 		if (roi2 instanceof TextGraphic) {
 			getImageDisplayWrapperClick().setCursor(textCursor);
 			

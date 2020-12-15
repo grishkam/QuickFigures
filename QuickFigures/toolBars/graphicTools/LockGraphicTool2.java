@@ -55,7 +55,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		
 		
 		
-		inside=this.getSelectedObject();
+		inside=this.getPrimarySelectedObject();
 		if (inside==null) return;
 		lockTaker=getLockContainterForObject(inside, getPotentialLockAcceptors(gmp));
 		
@@ -109,7 +109,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 			}
 			
 			
-		if (getAllSelectedRois(false).size()>1) {
+		if (getAllSelectedItems(false).size()>1) {
 			
 		}
 			
@@ -126,7 +126,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 			undosnap.establishFinalState();
 			
 			if (this.shiftDown()) {
-				for(LocatedObject2D roi1: rois) {
+				for(LocatedObject2D roi1: otherSelectedItems) {
 					UndoSnappingChange undo0 = new UndoSnappingChange(roi1);
 					roi1.setAttachmentPosition(inside.getAttachmentPosition().copy());
 					undo0.establishFinalState();
@@ -136,7 +136,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 			
 			/**removes the item from locking if out of range*/
 			if (outofRange( inside.getBounds(), lockbounds, this.getDragPoint()) &&!fineControlMode()) {
-				ArrayList<LocatedObject2D> allRoi2 = getPotentialLockAcceptors(getImageWrapperClick());
+				ArrayList<LocatedObject2D> allRoi2 = getPotentialLockAcceptors(getImageClicked());
 				
 				removeFromAlltakers(inside, allRoi2, undoer);
 				inside.setLocation(getDragPoint());

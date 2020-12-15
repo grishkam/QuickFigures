@@ -46,15 +46,15 @@ public class ObjectColorFillTool  extends Object_Mover {
 	@Override
 	public void mousePressed() {
 		
-		if (getSelectedObject()==null) return;
-		ColorEditUndo ceu = new ColorEditUndo(getSelectedObject());
+		if (getPrimarySelectedObject()==null) return;
+		ColorEditUndo ceu = new ColorEditUndo(getPrimarySelectedObject());
 		this.getImageDisplayWrapperClick().getUndoManager().addEdit(ceu);
 		
-		getSelectedObject().dropObject(getTheForegroundColor(), getClickedCordinateX(), getClickedCordinateY());
+		getPrimarySelectedObject().dropObject(getTheForegroundColor(), getClickedCordinateX(), getClickedCordinateY());
 		
 		ceu.establishFinalColors();
 		
-		this.getImageWrapperClick().updateDisplay();
+		this.getImageClicked().updateDisplay();
 
 	}
 	@Override

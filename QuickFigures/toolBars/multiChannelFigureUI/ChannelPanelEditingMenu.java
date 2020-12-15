@@ -51,6 +51,7 @@ import iconGraphicalObjects.IconUtil;
 import includedToolbars.StatusPanel;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
+import messages.ShowMessage;
 import sUnsortedDialogs.ScaleSettingDialog;
 import specialMenus.ColorJMenu;
 import standardDialog.DialogItemChangeEvent;
@@ -58,7 +59,6 @@ import standardDialog.StandardDialogListener;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 import ultilInputOutput.FileChoiceUtil;
-import undo.AbstractUndoableEdit2;
 import undo.ChannelDisplayUndo;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
@@ -794,13 +794,13 @@ public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean exclude
 	if (!excluded&&!alreadyExcluded) return null;
 	
 	if(excluded && !alreadyExcluded) {
-		if (FileChoiceUtil.yesOrNo("Are you sure you want to remove the channel panels? this is a work in progress"))
+		if (ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
 		return new ChannelPanelRemover(this.getPressedFigure()).removeChannelPanels(chaneIndex);
 	}
 	
 	if(!excluded && alreadyExcluded) {
-		if (FileChoiceUtil.yesOrNo("Are you sure you want to add channel panels? this is a work in progress"))
-		return new ChannelPanelRemover(this.getPressedFigure()).addChannelPanels(chaneIndex);
+		if (ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
+			return new ChannelPanelRemover(this.getPressedFigure()).addChannelPanels(chaneIndex);
 	}
 	
 	return null;
@@ -988,7 +988,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 					
 					ChannelUseInstructions i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
 					if (chaneIndex==chanNum) {
-						IssueLog.showMessage("If you select a channel other than the present one", "The channel will be merged into each channel panel");
+						ShowMessage.showOptionalMessage("This menu item is a work in progress", true, "If you select a channel other than the present one", "The channel will be merged into each channel panel");
 						
 						return;
 					}
@@ -1015,7 +1015,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 						);
 					
 					if(newState>0)
-					IssueLog.showMessage("Each channel panel will now contain channel "+newState, "You can select the menu item again to remove it");
+						ShowMessage.showOptionalMessage("Merge With Each", true, "Each channel panel will now be merged with channel "+newState, "You can select the menu item again to remove the extra channel");
 					
 				}
 

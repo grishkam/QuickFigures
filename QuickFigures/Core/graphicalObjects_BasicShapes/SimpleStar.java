@@ -68,7 +68,7 @@ public class SimpleStar extends RegularPolygonGraphic {
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
 		RegularPolygonGraphic r1 = new SimpleStar(r, this.getNvertex());
 		
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

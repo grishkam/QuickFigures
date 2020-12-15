@@ -27,7 +27,7 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import logging.IssueLog;
+import messages.ShowMessage;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 import undo.UndoScalingAndRotation;
@@ -85,7 +85,7 @@ public class FigureScaler {
 				/**undoes the scaling*/
 				if (( alterBilinearScale&&(xg instanceof ImagePanelGraphic))&&panelsInFigure.contains(xg)) {
 					ImagePanelGraphic image=(ImagePanelGraphic) xg;
-					image.setScale(image.getScale()/factor);
+					image.setRelativeScale(image.getScale()/factor);
 					edit.establishFinalState();
 				}
 				
@@ -299,7 +299,7 @@ public class FigureScaler {
 			}
 		}
 		if(allWarnings.keySet().size()>0)
-			IssueLog.showMessages(allWarnings.keySet());
+			ShowMessage.showOptionalMessage("About Scaling", false, allWarnings.keySet());
 		
 	}
 }

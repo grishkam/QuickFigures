@@ -21,6 +21,7 @@ import java.awt.Shape;
 import genericMontageKit.OverlayObjectManager;
 import gridLayout.BasicMontageLayout;
 import gridLayout.GenericMontageEditor;
+import gridLayout.LayoutSpaces;
 import gridLayout.MontageEditorDialogs;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
@@ -29,45 +30,60 @@ import utilityClassesForObjects.LocatedObject2D;
 
 /**The panel selector tool allows one to select regions of interest based on the the MontageLayout available*/
 public class Panel_Selector2 extends GeneralLayoutEditorTool {
-	public int panelSelectionOption=0;
+	
 	public  final int SELECT_PANEL=0, SWAP_TWO_PANEL=1, MOVE_PANEL=2;
-	public  int panelSelectionMod=0;
-	public int swapper=0;
+	public int actionType=SELECT_PANEL;
+	
+	public int targetType=LayoutSpaces.PANELS;
+	public int panelSelectionMod=ONLY_THIS_ONE;
+	
 	public LocatedObject2D lastRoi=null;
 	
 	public void setpanelSelectionOption(int i) {
-		panelSelectionOption=i;
+		targetType=i;
 	};
 	
 	public void showPanelSelectorOptions() {
 		StandardDialog gd=new StandardDialog("Panel Selector Options", true);
-		gd.add("Select what type of space",new ChoiceInputPanel("Select what type of space", stringDescriptors, panelSelectionOption%100));
+		gd.add("Select what type of space",new ChoiceInputPanel("Select what type of space", stringDescriptors, targetType%100));
 		gd.add("Mod", new ChoiceInputPanel(" ", stringDescriptorsOfModifyers, panelSelectionMod));
 		String[] option2=new String[] {"Select", "Swap", "Move"};
-		gd.add("What to do ",new ChoiceInputPanel("What to do ", option2,swapper));
+		gd.add("What to do ",new ChoiceInputPanel("What to do ", option2,actionType));
 
 		gd.showDialog();
 		if (gd.wasOKed()) {	
-			panelSelectionOption=gd.getChoiceIndex("Select what type of space");
+			targetType=gd.getChoiceIndex("Select what type of space");
 			panelSelectionMod=gd.getChoiceIndex("Mod");
-			panelSelectionOption+=panelSelectionMod*100;
-			swapper=gd.getChoiceIndex("What to do ");
+			targetType+=panelSelectionMod*100;
+			actionType=gd.getChoiceIndex("What to do ");
 
 		}
 	}
 	
-
-	 public void swapMontagePanels(BasicMontageLayout ml,  GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2, int type){
+	/**based on two points, determines which targeted areas are at those points and swaps the locations of the objects inside of them*/
+	 private void swapPanels(BasicMontageLayout ml,  GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2, int type){
 		if (ml==null) {IssueLog.log("one is attempting to swap panels in a null layout"); return;}
-		 Rectangle r1=(ml.getSelectedSpace(xc1, yc1, panelSelectionOption)).getBounds();
-		Rectangle r2=(ml.getSelectedSpace( xc2, yc2, panelSelectionOption)).getBounds();
+		 Rectangle r1=(ml.getSelectedSpace(xc1, yc1, targetType)).getBounds();
+		 Rectangle r2=(ml.getSelectedSpace( xc2, yc2, targetType)).getBounds();
 		me.swapMontagePanels(ml.getWrapper(), r1, r2);
 	}
 
-		public void checkExpansion(BasicMontageLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2) {
+	
+
+		
+	 	/**moves the layout panel at the first location to the second*/
+		private void moveLayoutPanel(BasicMontageLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2, int type){
+			checkExpansion(basicMontageLayout, me, xc1, yc1, xc2, yc2);
+			basicMontageLayout=basicMontageLayout.makeAltered(type);
+			me.moveMontagePanels(basicMontageLayout, basicMontageLayout.getPanelIndex(xc1, yc1), basicMontageLayout.getPanelIndex(xc2, yc2), type);
+		
+		}
+		
+		/**determines whether than panel movement demands a layout edit*/
+		private void checkExpansion(BasicMontageLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2) {
 			try{
-			if (yc1>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom || yc2>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom ) {getEditor().addRows(basicMontageLayout, 1); return;}
-			if (xc1>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight || xc2>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight) {getEditor().addCols(basicMontageLayout, 1); return;}
+			if (yc1>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom || yc2>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom ) {getLayoutEditor().addRows(basicMontageLayout, 1); return;}
+			if (xc1>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight || xc2>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight) {getLayoutEditor().addCols(basicMontageLayout, 1); return;}
 			if (xc1<0 || xc2<0) {
 				me.addLeftLabelSpace(basicMontageLayout, basicMontageLayout.getPanelWidthOfColumn(1)/8); 
 				return;}
@@ -76,15 +92,6 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 				return;
 				}
 			} catch (Exception e) {IssueLog.logT(e );}	
-		}
-
-		
-
-		public void moveMontagePanel(BasicMontageLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2, int type){
-			checkExpansion(basicMontageLayout, me, xc1, yc1, xc2, yc2);
-			basicMontageLayout=basicMontageLayout.makeAltered(type);
-			me.moveMontagePanels(basicMontageLayout, basicMontageLayout.getPanelIndex(xc1, yc1), basicMontageLayout.getPanelIndex(xc2, yc2), type);
-			//ml.getImage().updateAndDraw();
 		}
 		
 
@@ -99,7 +106,7 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 		}
 		
 		protected OverlayObjectManager getSelManOfClcikedImage() {
-			return getImageWrapperClick().getOverlaySelectionManagger();
+			return getImageClicked().getOverlaySelectionManagger();
 		}
 		
 		protected void performPressEdit() {
@@ -107,9 +114,9 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 			if (this.getCurrentLayout()==null
 					||!getCurrentLayout().getBoundry().contains(this.getClickedCordinateX(), this.getClickedCordinateY())
 					) {
-				getImageWrapperClick().getOverlaySelectionManagger().removeSelections();return;
+				getImageClicked().getOverlaySelectionManagger().removeSelections();return;
 			}
-			getSelManOfClcikedImage().select(getSelectedRoi(getCurrentLayout(), this.getClickedCordinateX(), this.getClickedCordinateY(), panelSelectionOption), 4, 0);
+			getSelManOfClcikedImage().select(getSelectedRoi(getCurrentLayout(), this.getClickedCordinateX(), this.getClickedCordinateY(), targetType), 4, 0);
 			
 			
 		}
@@ -119,22 +126,20 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 				return;
 			
 			/**selects several panels if one has dragged from one to another*/
-				if (this.swapper==this.SELECT_PANEL){
+				if (this.actionType==this.SELECT_PANEL){
 				
-					this.getSelManOfClcikedImage().select(getCurrentLayout().rangeRoi(getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), panelSelectionOption), 2, 0);
+					this.getSelManOfClcikedImage().select(getCurrentLayout().rangeRoi(getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), targetType), 2, 0);
 				return;
 				}
 				
-			OverlayObjectManager man = this.getImageWrapperClick().getOverlaySelectionManagger();
-			man.select(getSelectedRoi(getCurrentLayout(), this.getDragCordinateX(), this.getDragCordinateY(), panelSelectionOption), 4, 1);
+			OverlayObjectManager man = this.getImageClicked().getOverlaySelectionManagger();
+			man.select(getSelectedRoi(getCurrentLayout(), this.getDragCordinateX(), this.getDragCordinateY(), targetType), 4, 1);
 		}
 		
 
 		public Shape getSelectedRoi(BasicMontageLayout ml, int x, int y, int type) {
-			// Roi newroi=new Roi(0, 0, 0, 0);
-			 ml=ml.makeAltered(type);//Makes a copy of this MontageLayout with alterations depending on the type.
-				  int index=ml.getPanelIndex(x,y);
-			  //if (type==POINTS) return drawPointMarkers( ml, x, y);;
+			 	ml=ml.makeAltered(type);//Makes a copy of this MontageLayout with alterations depending on the type.
+			 int index=ml.getPanelIndex(x,y);
 				  
 			  Shape s=ml.getSelectedSpace(index, type); 
 			  if (s instanceof Rectangle) return (Rectangle)s;
@@ -144,22 +149,23 @@ public class Panel_Selector2 extends GeneralLayoutEditorTool {
 
 		
 		protected void performDragEdit() {
-			// TODO Auto-generated method stub
 			
 		}
 		
 		public void mouseReleased() {
-			if (swapper==this.SELECT_PANEL) return;
 			
-			this.getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
-			if ((swapper==SWAP_TWO_PANEL || ( (shiftDown() && swapper==0)) ) ) {
-				swapMontagePanels(this.getCurrentLayout(), getEditor(), getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), panelSelectionOption );
+			
+			this.getImageClicked().getOverlaySelectionManagger().removeSelections();
+			
+			if ((actionType==SWAP_TWO_PANEL || ( (shiftDown() && actionType==SELECT_PANEL)) ) ) {
+				swapPanels(this.getCurrentLayout(), getLayoutEditor(), getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), targetType );
 				
 			}
-			if ((swapper==MOVE_PANEL || ( (altKeyDown() && swapper==0)) ) ) {
-				moveMontagePanel(this.getCurrentLayout(),  getEditor(), getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), panelSelectionOption);
+			if ((actionType==MOVE_PANEL || ( (altKeyDown() && actionType==SELECT_PANEL)) ) ) {
+				moveLayoutPanel(this.getCurrentLayout(),  getLayoutEditor(), getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), targetType);
 				
 			}
+			
 			updateClickedDisplay();
 			
 		}

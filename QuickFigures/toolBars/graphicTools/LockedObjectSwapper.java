@@ -54,7 +54,7 @@ public class LockedObjectSwapper extends LockGraphicTool2 {
 	public void setMarkerRoi() {
 		
 		
-				OverlayObjectManager select = this.getImageWrapperClick().getOverlaySelectionManagger();
+				OverlayObjectManager select = this.getImageClicked().getOverlaySelectionManagger();
 				
 				select.setSelection(MarkerRoi(), 0);
 				
@@ -65,17 +65,17 @@ public class LockedObjectSwapper extends LockGraphicTool2 {
 	
 	
 	public LocatedObject2D MarkerRoi() {
-		if (getSelectedObject()==null) return null;
-		return RectangularGraphic.blankRect(this.getSelectedObject().getBounds(), Color.blue, true, true);
+		if (getPrimarySelectedObject()==null) return null;
+		return RectangularGraphic.blankRect(this.getPrimarySelectedObject().getBounds(), Color.blue, true, true);
 	}
 	
 	
 public void mouseDragged() {
 		
-	object2 = getObject(getImageWrapperClick(), getDragCordinateX(), getDragCordinateY());
+	object2 = getObjectAt(getImageClicked(), getDragCordinateX(), getDragCordinateY());
 	if (object2==null) return;
 	lockTaker2=findLockContainer(object2);
-	OverlayObjectManager select = this.getImageWrapperClick().getOverlaySelectionManagger();
+	OverlayObjectManager select = this.getImageClicked().getOverlaySelectionManagger();
 	
 	select.setSelection(RectangularGraphic.blankRect(object2.getBounds(), Color.green, true, true),1);
 	
@@ -112,7 +112,7 @@ switchLockedItem(object2, inside);
 
 
 private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
-	ArrayList<LocatedObject2D> allRoi = getPotentialLockAcceptors(getImageWrapperClick());
+	ArrayList<LocatedObject2D> allRoi = getPotentialLockAcceptors(getImageClicked());
 	TakesLockedItems t=(TakesLockedItems) lockTaker;
 	TakesLockedItems t2=(TakesLockedItems) lockTaker2;
 	
@@ -157,7 +157,7 @@ public String getToolTip() {
 
 public void removeMarkerRoi()  {
 	
-	getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
+	getImageClicked().getOverlaySelectionManagger().removeSelections();
 	
 }
 

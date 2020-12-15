@@ -31,8 +31,8 @@ public class PanelSizeAdjusterTool extends GeneralLayoutEditorTool implements Ac
 	public
 	void performDragEdit(boolean b) {
 		if (mode==1) {
-			 getEditor().augmentPanelHeight(getCurrentLayout(), getYDisplaceMent() , getRowIndexClick());
-			 getEditor().augmentPanelWidth(getCurrentLayout(), getXDisplaceMent() , getColIndexClick());
+			 getLayoutEditor().augmentPanelHeight(getCurrentLayout(), getYDisplaceMent() , getRowIndexClick());
+			 getLayoutEditor().augmentPanelWidth(getCurrentLayout(), getXDisplaceMent() , getColIndexClick());
 		}
 		
 	}

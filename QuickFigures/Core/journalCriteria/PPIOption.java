@@ -42,7 +42,7 @@ public class PPIOption extends BasicMultiSelectionOperator {
 
 	@Override
 	public String getMenuCommand() {
-		return "Select PPI";
+		return "Set pixel Density for image panels";
 	}
 
 
@@ -52,8 +52,6 @@ public class PPIOption extends BasicMultiSelectionOperator {
 	public String getMenuPath() {
 		return null;
 	}
-
-
 
 
 	@Override
@@ -77,7 +75,7 @@ public class PPIOption extends BasicMultiSelectionOperator {
 		
 		
 		
-		String st="Set PPI";
+		String st="Set Pixel Density";
 		double starting=ImageDPIHandler.idealPanelPixelDesity();
 		CombinedEdit undo = showPPIChangeDialog(panels, st, starting);
 		super.getUndoManager().addEdit(undo);

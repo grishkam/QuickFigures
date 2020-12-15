@@ -55,7 +55,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	private BasicMontageLayout editingLayout;
 	private UndoLayoutEdit currentUndo;
 	
-	public GenericMontageEditor getEditor() {
+	public GenericMontageEditor getLayoutEditor() {
 		if ( editor==null) editor=new GenericMontageEditor();
 		
 		return  editor;
@@ -130,7 +130,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	@Override
 	public void mouseMoved() {
 		setupClickedLayout();
-		getImageWrapperClick().getOverlaySelectionManagger().setSelection(MarkerRoi(), 0);
+		getImageClicked().getOverlaySelectionManagger().setSelection(markerRoi(), 0);
 	}
 	
 	@Override
@@ -141,7 +141,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	/**Identifies the layout at the clickpoint and sets it as the current layout. 
 	  */
 	public void setupClickedLayout() {
-		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageWrapperClick(), this.getClickedCordinateX(), this.getClickedCordinateY(), MontageLayoutGraphic.class);
+		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageClicked(), this.getClickedCordinateX(), this.getClickedCordinateY(), MontageLayoutGraphic.class);
 		ArraySorter.removehideableItems(list);//removes hidden layouts
 		
 		LocatedObject2D layoutGraphic0 = getObjecthandler().nearest(list, new Point(this.getClickedCordinateX(), this.getClickedCordinateY()));
@@ -198,7 +198,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		setMarkerRoi();
 		if (currentUndo!=null) currentUndo.establishFinalLocations();
 		
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 		
 }
 
@@ -220,7 +220,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		super.resizeCanvas();
 		
-		this.getImageWrapperClick().updateDisplay();
+		this.getImageClicked().updateDisplay();
 	}
 	
 	protected void performReleaseEdit(boolean b) {
@@ -230,8 +230,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	/**Shows a dialog window if user clicks twice, may be overriden*/
 	protected void doubleClickDialog() {
-			new MontageEditorDialogs().showDialogBasedOnLocation( getEditor(), getCurrentLayout(), getClickedCordinateX(), getClickedCordinateY());
-		getImageWrapperClick().updateDisplay();
+			new MontageEditorDialogs().showDialogBasedOnLocation( getLayoutEditor(), getCurrentLayout(), getClickedCordinateX(), getClickedCordinateY());
+		getImageClicked().updateDisplay();
 	}
 	
 	@Override
@@ -268,11 +268,11 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	
 	public void setMarkerRoi() {
-		getImageWrapperClick().getGraphicLayerSet();
+		getImageClicked().getGraphicLayerSet();
 			try {
-				OverlayObjectManager select = this.getImageWrapperClick().getOverlaySelectionManagger();
+				OverlayObjectManager select = this.getImageClicked().getOverlaySelectionManagger();
 				
-				select.setSelection(MarkerRoi(), 0);
+				select.setSelection(markerRoi(), 0);
 				select.setSelection(MarkerRoi2(), 1);
 			} catch (Throwable e) {
 				IssueLog.logT(e);
@@ -282,7 +282,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	
 	
-	public LocatedObject2D MarkerRoi() {
+	public LocatedObject2D markerRoi() {
 	//	if (usesMain) return null;
 	
 		if (getCurrentLayout()==null) return null;
@@ -309,7 +309,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	public void removeMarkerRoi()  {
 		
-		getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
+		getImageClicked().getOverlaySelectionManagger().removeSelections();
 		
 	}
 	

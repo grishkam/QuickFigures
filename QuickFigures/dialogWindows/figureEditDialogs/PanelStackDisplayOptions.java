@@ -171,12 +171,12 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		if (this.panelCreationIncluded)
 			{
-			this.add("preScale", new NumberInputPanel("Scale (Bilinear Interpolation)", principalMultiChannel.getPreprocessScale(),3));
+			this.add("preScale", new NumberInputPanel("Scale Factor (Bilinear)", principalMultiChannel.getPreprocessScale(),3));
 			
 			
 			}
 		if (this.panelCreationIncluded) {
-			this.add("Panel Level Scale", new NumberInputPanel("PPI",ImageDPIHandler.getStandardDPI()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
+			this.add("Panel Level Scale", new NumberInputPanel("Panel Pixel Density",ImageDPIHandler.getStandardDPI()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
 			this.add("mWidth",  new NumberInputPanel("Ideal Number Columns", ins.getIdealNumberOfColumns() ));
 			}
 	}
@@ -185,7 +185,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	
 	 */
 	static void addMergeHandlingToDialog(StandardDialog t, ChannelUseInstructions ins) {
-		ChoiceInputPanel mergeh = new ChoiceInputPanel("Merge Image", MergePositions, ins.MergeHandleing);
+		ChoiceInputPanel mergeh = new ChoiceInputPanel("Merge Panel", MergePositions, ins.MergeHandleing);
 		t.add("merge",mergeh );
 	}
 
@@ -194,7 +194,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	 */
 	protected static void addChannelUseInstructionsToDialog(StandardDialog t, String[] chanList, channelMerging.ChannelUseInstructions ins,
 			ArrayList<ChannelEntry> entries) {
-		ChoiceInputPanel grey =new  standardDialog.choices.ChoiceInputPanel("Channel Color Mode ", new String[] {"Color of LUTs", "Greyscale"}, ins.channelColorMode);
+		ChoiceInputPanel grey =new  standardDialog.choices.ChoiceInputPanel("Channel Color Mode ", new String[] {"Colors", "Greyscale"}, ins.channelColorMode);
 		t.add("grey", grey);
 		
 		ArrayList<Integer> nome = ins.getNoMergeChannels();

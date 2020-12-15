@@ -103,7 +103,7 @@ public class ScaleFigureDialog extends StandardDialog {
 			
 			pm.updatePanels();
 			for(ImagePanelGraphic panel: graphi) {
-				panel.setScale(stack.getPixelDensityRatio());
+				panel.setRelativeScale(stack.getPixelDensityRatio());
 				panel.snapLockedItems();
 			}
 		}

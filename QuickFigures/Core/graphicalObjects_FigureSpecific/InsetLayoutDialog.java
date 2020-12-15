@@ -69,7 +69,7 @@ import utilityClassesForObjects.AttachmentPosition;
 			gc.anchor=GridBagConstraints.WEST;
 			
 			gc.gridy=7;
-			gy+=2;
+			gridPositionY+=2;
 			// snappanel.getSnapBox().setToMontageMode();
 			add( snappanel.getSnapBox(), gc);
 			

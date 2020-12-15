@@ -344,9 +344,16 @@ public class BasicObjectListHandler {
 	}
 	
 	
-	/**returns the roi at the clickpoint only if it is a member of one of the given class types
+	/**returns the object at the clickpoint only if it is a member of one of the given class types
 	 * order is inverted*/
 	public ArrayList<LocatedObject2D> getAllClickedRoi(ObjectContainer imp, double d, double e, Class<?> onlySelectThoseOfClass) {
+		return getAllClickedRoi(imp,d,e, onlySelectThoseOfClass, false);
+	}
+	
+	
+	/**returns the object at the clickpoint only if it is a member of one of the given class types
+	 * order is inverted*/
+	public ArrayList<LocatedObject2D> getAllClickedRoi(ObjectContainer imp, double d, double e, Class<?> onlySelectThoseOfClass, boolean checkHandles) {
 		LocatedObject2D roi1;
 		ArrayList<LocatedObject2D> rois=imp.getLocatedObjects();
 		
@@ -360,6 +367,9 @@ public class BasicObjectListHandler {
 			if (p.contains(d, e)&&ArraySorter.isOfClass(roi, onlySelectThoseOfClass)) {
 				roi1=roi;
 				ouput.add(roi1);
+			} else if (checkHandles) {
+				
+				 //not implemented to check handles
 			}
 	}
 		return ouput;

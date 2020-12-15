@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import logging.IssueLog;
 
 /**An implementation of the SVG exporter for layers*/
 public class SVGExporter_GraphicLayer extends SVGExporter {
@@ -46,7 +47,10 @@ public Element toSVG(Document dom, Element e) {
 	
 	
 	
-	} catch (Throwable t) {t.printStackTrace();}
+	} catch (Throwable t) {
+		IssueLog.log("Problem occured when try to export "+z);
+		IssueLog.logT(t);
+	}
 	
 	return element;
 	}

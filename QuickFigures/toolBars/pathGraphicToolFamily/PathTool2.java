@@ -102,7 +102,7 @@ public class PathTool2 extends PathTool{
 		//getImageWrapperClick().getSelectionManagger().select(rect, 0);
 		if(rect!=null&&rect.getHeight()>2&&rect.getWidth()>2) {
 		//	
-			ArrayList<LocatedObject2D> items = this.getObjecthandler().getOverlapOverlaypingItems(rect.getBounds(),this.getImageWrapperClick());
+			ArrayList<LocatedObject2D> items = this.getObjecthandler().getOverlapOverlaypingItems(rect.getBounds(),this.getImageClicked());
 			removeIgnoredAndHidden(items);
 			for(Object i: items) {
 				deselect(i);
@@ -113,7 +113,7 @@ public class PathTool2 extends PathTool{
 			/**Selects the points inside the selector region*/
 			if (pathGraphic!=null) {
 			
-				this.setSelectedObject(pathGraphic);
+				this.setPrimarySelectedObject(pathGraphic);
 				Rectangle rect2 = rect.getBounds();
 				rect2.x-=pathGraphic.getLocation().getX();
 				rect2.y-=pathGraphic.getLocation().getY();

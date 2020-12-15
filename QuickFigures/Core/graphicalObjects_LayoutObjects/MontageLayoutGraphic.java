@@ -526,13 +526,7 @@ public void resizeLayoutToFitContents() {
 			for(int i=1; i<=nOptions; i++) {
 				moveMenu.add(new rowSwitchMenuItem(""+i,i));
 			}
-			/*JMenuItem j=new JMenuItem("-");
-			j.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {advanceLabel(-1) ;}});
-			JMenuItem j2=new JMenuItem("+");
-			j2.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {advanceLabel(1)  ;}});
-			
-			moveMenu.add(j);
-			moveMenu.add(j2);*/
+		
 			return moveMenu;
 		}
 		

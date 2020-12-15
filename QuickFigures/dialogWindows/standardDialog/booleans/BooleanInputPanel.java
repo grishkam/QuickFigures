@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 
 import standardDialog.OnGridLayout;
 
+/**A JPanel containing a Label and a checkbox for placement in a dialog*/
 public class BooleanInputPanel extends JPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();

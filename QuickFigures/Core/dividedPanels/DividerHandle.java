@@ -31,7 +31,7 @@ import graphicalObjects.CordinateConverter;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.numbers.NumberInputPanel;
 
-/**A hande used for moving the dividers of a layout*/
+/**A handle used for moving the dividers of a layout*/
 public class DividerHandle extends SmartHandle  implements ActionListener {
 
 	public LayoutDivider divider;

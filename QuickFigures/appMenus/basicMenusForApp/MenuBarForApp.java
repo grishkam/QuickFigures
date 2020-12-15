@@ -143,13 +143,13 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	void addExportMenus() {
 		
 			
-			installItem(new PNGQuickExport());
-			installItem(new TiffQuickExport());
-			installItem(new PNGSequenceQuickExport());
+			installItem(new PNGQuickExport(false));
+			installItem(new TiffQuickExport(false));
+			installItem(new PNGSequenceQuickExport(false));
 			
 			
 			try {
-				installItem(new PPTQuickExport());} 
+				installItem(new PPTQuickExport(true));} 
 			catch (Throwable t) {	
 			//if there is any problem with installation the menu item will not be added
 		}
@@ -172,10 +172,10 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 				{
 				installItem(obj);
 			
-				EPSQuickExport eps=new EPSQuickExport();
+				EPSQuickExport eps=new EPSQuickExport(false);
 				installItem(eps);
 				
-				PDFQuickExport ep=new PDFQuickExport();
+				PDFQuickExport ep=new PDFQuickExport(false);
 				installItem(ep);
 			}
 			

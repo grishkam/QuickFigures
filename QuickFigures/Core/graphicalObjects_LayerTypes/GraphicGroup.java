@@ -38,7 +38,6 @@ import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import export.svg.SVGExportable;
 import export.svg.SVGExporter;
-import graphicalObjectHandles.HasHandles;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ReshapeHandleList;
 import graphicalObjectHandles.SmartHandleList;
@@ -66,7 +65,7 @@ import utilityClassesForObjects.Selectable;
 import layersGUI.HasTreeBranchIcon;
 
 /**The most straightforward implementation of grouping that I could manage*/
-public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphicGroup, HasSmartHandles, HasHandles, Selectable, HasUniquePopupMenu,  LocatedObjectGroup,HasTreeBranchIcon, IllustratorObjectConvertable,KnowsTree, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>,SVGExportable, OfficeObjectConvertable, Scales{
+public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphicGroup, HasSmartHandles, Selectable, HasUniquePopupMenu,  LocatedObjectGroup,HasTreeBranchIcon, IllustratorObjectConvertable,KnowsTree, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>,SVGExportable, OfficeObjectConvertable, Scales{
 
 	
 
@@ -93,7 +92,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		for(ZoomableGraphic tz: tzs) getTheLayer().add(tz);
 	}
 
-	public GraphicGroup(ArrayList<LocatedObject2D> o2) {
+	public GraphicGroup(ArrayList<? extends LocatedObject2D> o2) {
 		for(LocatedObject2D tz: o2) 
 			{if(tz instanceof ZoomableGraphic)
 				getTheLayer().add((ZoomableGraphic) tz);}
@@ -540,7 +539,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	/**A phantom object. Is not drawn but this can be clicked on by the user
 	 while the group is being treated as a layer*/
-	public class GroupHook extends BasicGraphicalObject implements HasSmartHandles, HasHandles {
+	public class GroupHook extends BasicGraphicalObject implements HasSmartHandles {
 
 		/**
 		 * 
@@ -598,11 +597,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 			
 		}
 
-		@Override
-		public void handleMove(int handlenum, Point p1, Point p2) {
-			// TODO Auto-generated method stub
-			
-		}
+	
 
 		@Override
 		public void showOptionsDialog() {

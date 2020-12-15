@@ -332,7 +332,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	}
 	
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		SmartHandleList hl = smartl;
 		if (hl!=null) {
 			int output=hl.handleNumberForClickPoint(x, y);

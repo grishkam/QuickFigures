@@ -32,6 +32,8 @@ import logging.IssueLog;
 
 public class ExcelRowToJTable extends QuickImport  {
 
+	
+
 	int type=-1;
 	
 	@Override

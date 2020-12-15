@@ -133,7 +133,7 @@ super.addLockedItemMenus();
 
 
 
-	protected void addScaleBar() {
+	public void addScaleBar() {
 		CombinedEdit undo = new CombinedEdit();
 		BarGraphicTool.getCurrentBarTool().addBarGraphic(imagePanel, imagePanel.getParentLayer(), undo, (int)imagePanel.getBounds().getMaxX(),(int)imagePanel.getBounds().getMaxY());
 		imagePanel.getUndoManager().addEdit(undo);

@@ -160,7 +160,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	@Override
-	public int handleNumber(int x, int y) {
+	public int handleNumber(double x, double y) {
 		if (this.getPointHandles()!=null) {
 			
 			int output=getSmartHandleList().handleNumberForClickPoint(x, y);

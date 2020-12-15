@@ -73,7 +73,7 @@ public class SimpleRing extends CircularGraphic {
 	public static SimpleRing blankOval(Rectangle r, Color c, int arc) {
 		SimpleRing r1 = new SimpleRing(r);
 		r1.arc=arc;
-		r1.setDashes(NEARLY_DASHLESS);
+		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;

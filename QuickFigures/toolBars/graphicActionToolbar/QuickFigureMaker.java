@@ -95,20 +95,20 @@ public class QuickFigureMaker extends DisplayActionTool {
 
 
 	protected void perform(FigureDisplayContainer graphic) {
-		createFigureFromOpenImage();
+		createFigureFromOpenImage(null);
 	}
 
 	/**creates a figure from the multi channel image that the user currently has open
 	 * @return */
-	public FigureOrganizingLayerPane createFigureFromOpenImage() {
-		FigureOrganizingLayerPane f = createFigure();
+	public FigureOrganizingLayerPane createFigureFromOpenImage(PreProcessInformation p) {
+		FigureOrganizingLayerPane f = createFigure(p);
 		if (f!=null && this.hidesImage)f.hideImages();
 		return f;
 	}
 
 	/**when no arguments are given, attempt to create a figure for the active image*/
-	private FigureOrganizingLayerPane createFigure() {
-		return createFigure(null, null);
+	private FigureOrganizingLayerPane createFigure(PreProcessInformation p) {
+		return createFigure(null, p);
 	}
 	
 	/**creates a new window with new figure. If path is set to null, uses the image that the user has open
@@ -238,7 +238,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 			codeString=aC;
 			if (aC.contains("Merge")||aC.contains("C+")||aC.contains(slowFigure)) {
 				setOptionsBasedOnCodeString(aC);
-				FigureOrganizingLayerPane f = createFigureFromOpenImage();
+				FigureOrganizingLayerPane f = createFigureFromOpenImage(null);
 				
 				if (aC.contains(slowFigure)) {
 					PanelStackDisplayOptions dialog = PanelStackDisplayOptions.recreateFigurePanels(f,  false);

@@ -75,15 +75,15 @@ public class PathGraphicTool extends GraphicTool {
 	@Override
 	public void mousePressed() {
 		super.mousePressed();
-		if(super.getPressedHandle()>-1) return;
-		if (p!=null&&!getImageWrapperClick().getLocatedObjects().contains(p)) {finishPath();}
+		if(super.getSelectedHandleNumber()>-1) return;
+		if (p!=null&&!getImageClicked().getLocatedObjects().contains(p)) {finishPath();}
 		
-		if(p==null&&super.getSelectedObject() instanceof PathGraphic) 
-			{p=(PathGraphic) super.getSelectedObject(); 
+		if(p==null&&super.getPrimarySelectedObject() instanceof PathGraphic) 
+			{p=(PathGraphic) super.getPrimarySelectedObject(); 
 			return;}
 		if(this.clickCount()>2)
 			finishPath();
-		super.setSelectedObject(p);
+		super.setPrimarySelectedObject(p);
 		
 		if (p!=null) {
 			undo = new PathEditUndo(p);
@@ -110,20 +110,20 @@ public class PathGraphicTool extends GraphicTool {
 		
 		p.setNArrows(nArrow);
 		
-		super.setSelectedObject(p);
+		super.setPrimarySelectedObject(p);
 		
-		GraphicLayer setcur = this.getImageWrapperClick().getGraphicLayerSet();
+		GraphicLayer setcur = this.getImageClicked().getGraphicLayerSet();
 		setcur.add(p);
 		
 		getImageDisplayWrapperClick().getUndoManager().addEdit(new UndoAddItem(setcur, p));
-		super.getImageWrapperClick().updateDisplay();
+		super.getImageClicked().updateDisplay();
 		
 	}
 	
 	@Override
 	public void mouseReleased() {
 
-		if(super.getPressedHandle()>-1) {
+		if(super.getSelectedHandleNumber()>-1) {
 			super.mouseReleased();;
 			return;
 		}
@@ -133,7 +133,7 @@ public class PathGraphicTool extends GraphicTool {
 	@Override
 	public void mouseDragged() {
 		
-		if(super.getPressedHandle()>-1) {
+		if(super.getSelectedHandleNumber()>-1) {
 			super.mouseDragged();
 			return;
 		}
@@ -166,7 +166,7 @@ public class PathGraphicTool extends GraphicTool {
 		if (undo!=null  &&undo.isMyObject(p)) undo.establishFinalState();
 		
 		//getImageDisplayWrapperClick().getUndoManager().undo);
-		getImageWrapperClick().updateDisplay();
+		getImageClicked().updateDisplay();
 		
 		
 	}

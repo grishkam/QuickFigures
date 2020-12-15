@@ -50,11 +50,11 @@ public class TextLineDialogForChenLabel extends GraphicItemOptionsDialog {
 		tabsfull.addObjectEditListener(this);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx=gx;
-		c.gridy=gy;
+		c.gridy=gridPositionY;
 		c.gridheight=4;
 		c.gridwidth=6;
 		this.getMainPanel().add(tabsfull, c);
-		gy=5;
+		gridPositionY=5;
 		gymax=5;
 		
 	

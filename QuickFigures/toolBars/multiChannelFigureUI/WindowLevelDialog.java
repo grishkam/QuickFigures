@@ -152,10 +152,10 @@ public class WindowLevelDialog extends StandardDialog  {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth=3;
 		gbc.gridx=super.gx;
-		gbc.gridy=super.gy;
+		gbc.gridy=super.gridPositionY;
 		
 		this.getMainPanel().add(sdr,gbc);
-		super.gy++;
+		super.gridPositionY++;
 		sdr.setLineColor(mrp.getChannelColor(chan));
 		//setModal(true);
 		

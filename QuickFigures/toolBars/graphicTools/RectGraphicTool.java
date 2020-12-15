@@ -60,10 +60,10 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	public void handleRectangularObject(ImageWrapper gmp, Object roi2) {
 				
 		RectangularGraphic currentRect;
-		establishMovedIntoOrClickedHandle();//if the user clicked a handle on an existing rectangle
+		establishMovedIntoOrClickedHandle(true);//if the user clicked a handle on an existing rectangle
 		
 		/**if a Rectangles handle was clicked on sets that as the current rectangle */
-		if (roi2 instanceof RectangularGraphic&&getPressedHandle()>-1) {
+		if (roi2 instanceof RectangularGraphic&&getSelectedHandleNumber()>-1) {
 			currentRect=(RectangularGraphic) roi2;
 			
 		} else
@@ -80,12 +80,12 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 			addUndoerForAddItem(gmp, gmp.getGraphicLayerSet().getSelectedContainer(), currentRect);
 			
 			/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
-			setSelectedHandleNum( RectangleEdgePosisions.LOWER_RIGHT);
+			setSelectedHandleNumber( RectangleEdgePosisions.LOWER_RIGHT);
 			
 		}
 		
 		/**Ensures the selected object is the current rectangle*/
-		setSelectedObject(currentRect);
+		setPrimarySelectedObject(currentRect);
 		
 		
 	}
@@ -99,8 +99,8 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	public void mouseDragged() {
 		if (started) {
 			Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
-			if (this.getSelectedObject() instanceof RectangularGraphic) {
-				RectangularGraphic rr=(RectangularGraphic) getSelectedObject();
+			if (this.getPrimarySelectedObject() instanceof RectangularGraphic) {
+				RectangularGraphic rr=(RectangularGraphic) getPrimarySelectedObject();
 				rr.setRectangle(r);
 				lastSetObject=rr;
 			}
