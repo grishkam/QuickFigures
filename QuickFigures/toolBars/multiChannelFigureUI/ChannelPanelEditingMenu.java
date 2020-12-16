@@ -53,6 +53,7 @@ import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
 import sUnsortedDialogs.ScaleSettingDialog;
+import specialMenus.ChannelColorJMenu;
 import specialMenus.ColorJMenu;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
@@ -692,7 +693,7 @@ public class ChanReColorer implements ColorInputListener {
 	
 	/**Adds the color menu to one container and puts the container inside of the second*/
 	private void addColorMenu(Container b, Container output) {
-		 b.add(ColorJMenu.getStandardColorJMenu(this).getComponent(0));
+		 b.add(ChannelColorJMenu.getStandardColorJMenu(this));
 		 output.add(b);
 	}
 	
@@ -702,21 +703,23 @@ public class ChanReColorer implements ColorInputListener {
 
 /**Adds a recolor channel menu to the container. the channels in the channel entry list fill appear in that menu*/
 public void addChenEntryColorMenus(Container j, ArrayList<ChannelEntry> iFin) {
-	JMenu output = new JMenu("Recolor Channel");
+	JMenu output = new SmartJMenu("Recolor Channel");
 	for(int i=0; i<iFin.size(); i++) {
 		ChannelEntry channelEntry = iFin.get(i);
 		String nameRC = channelEntry.getRealChannelName();
 		if (nameRC==null||nameRC.trim().equals("")) nameRC="Chan "+channelEntry.getOriginalChannelIndex();
 		ChanReColorer colorer = new ChanReColorer(channelEntry.getOriginalChannelIndex());
 		if (iFin.size()>1) {
-		SmartJMenu b = new SmartJMenu(nameRC);
+		SmartJMenu b = ChannelColorJMenu.getStandardColorJMenu(colorer);
 		b.setIcon(new ColorIcon(channelEntry.getColor()));
-		colorer.addColorMenu(b,output);
+		b.setText(nameRC);
+		output.add(b);
 		
 		}
 		else {
+			output=ChannelColorJMenu.getStandardColorJMenu(colorer);
 			output.setIcon(new ColorIcon(channelEntry.getColor()));
-			colorer.addColorMenu(output,output);
+			output.setText("Recolor Channel");
 		}
 	}
 	

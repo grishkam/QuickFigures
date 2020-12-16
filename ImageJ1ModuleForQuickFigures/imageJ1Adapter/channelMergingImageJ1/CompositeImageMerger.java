@@ -32,6 +32,7 @@ import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import applicationAdaptersForImageJ1.ProcessorWrapper;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelMerger;
+import channelMerging.ChannelUseInstructions;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
 
@@ -91,12 +92,15 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 				
 				st.addSlice(imp.getStack().getProcessor(index));
 				newLut[i]=luts[channl.getOriginalChannelIndex()-1];
+				
 			}
 			/**Creates a temporary composite image*/
 			CompositeImage tempcomposte = new CompositeImage(new ImagePlus("", st));
 			tempcomposte.setLuts(newLut);
 			tempcomposte.updateAndDraw();
-			if (channels.size()==1) return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==1); else 
+			if (channels.size()==1) 
+				return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==ChannelUseInstructions.CHANNELS_IN_GREYSCALE); 
+			else 
 				return mergedComposite(tempcomposte);
 				}
 		else if (imp.getChannelProcessor() instanceof ColorProcessor)
@@ -142,9 +146,12 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 	
 	/**Returns a slice of composite image as a color processor. */
 	private PixelWrapper sliceOfComposite(CompositeImage imm, int c, Boolean ChannelsInGrayScale) {
-		if (ChannelsInGrayScale) {imm.setChannelLut(LUT.createLutFromColor(java.awt.Color.WHITE));}   
+		if (ChannelsInGrayScale&&!imm.isInvertedLut()) {
+			imm.setChannelLut(LUT.createLutFromColor(java.awt.Color.WHITE));
+			}   
+		
 		imm.setPositionWithoutUpdate(c, imm.getSlice(), imm.getFrame());
-		if (ChannelsInGrayScale) {imm.setChannelLut(LUT.createLutFromColor(java.awt.Color.WHITE)); imm.setMode(CompositeImage.GRAYSCALE); imm.updateAndDraw(); } 	
+		if (ChannelsInGrayScale&&!imm.isInvertedLut()) {imm.setChannelLut(LUT.createLutFromColor(java.awt.Color.WHITE)); imm.setMode(CompositeImage.GRAYSCALE); imm.updateAndDraw(); } 	
 		Image img = imm.getImage();
 		return new ProcessorWrapper(new ColorProcessor(img));
 	}

@@ -75,6 +75,11 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 			return;
 			}
 		LUT createLutFromColor = LUT.createLutFromColor(lut);
+		/**inverted lut*/
+		if (Color.black.equals(lut)) {
+			createLutFromColor = LUT.createLutFromColor(Color.white);
+			createLutFromColor=createLutFromColor.createInvertedLut();
+		}
 		setLut(chan, createLutFromColor);
 	}
 
