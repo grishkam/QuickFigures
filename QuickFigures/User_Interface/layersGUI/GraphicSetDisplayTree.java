@@ -57,7 +57,7 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 		super(masternode, true);
 	
 		this.masternode=masternode;
-		 baseLayer=cont.getGraphicLayerSet();
+		 baseLayer=cont.getTopLevelLayer();
 		 setDisplayContainer=cont;
 		if (TreeMode.fancy)this.setRowHeight(0);
 		setCellRenderer(new GraphicCellRenderer());

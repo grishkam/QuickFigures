@@ -52,7 +52,7 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 		
 		ArrayList<ZoomableGraphic> theExportedItems = this.array;
 		Dimension canvasDims = getSelector().getGraphicDisplayContainer().getCanvasDims();
-		if (theExportedItems.size()==0)  theExportedItems.add(getSelector().getGraphicDisplayContainer().getGraphicLayerSet());
+		if (theExportedItems.size()==0)  theExportedItems.add(getSelector().getGraphicDisplayContainer().getTopLevelLayer());
 		
 		generateIllustratorScript(theExportedItems, canvasDims);
 		//	aref.setName(Montage.getTitle());
@@ -84,8 +84,8 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 	void sentToIlls(Object mont, ArtLayerRef aref) {
 		if (mont instanceof FigureDisplayContainer) {
 			FigureDisplayContainer mont2 = (FigureDisplayContainer)mont;
-			if (mont2.getGraphicLayerSet() instanceof IllustratorObjectConvertable) {
-				((IllustratorObjectConvertable) mont2.getGraphicLayerSet()).toIllustrator(aref);
+			if (mont2.getTopLevelLayer() instanceof IllustratorObjectConvertable) {
+				((IllustratorObjectConvertable) mont2.getTopLevelLayer()).toIllustrator(aref);
 			}
 			
 		}

@@ -135,12 +135,12 @@ public class MoverDragHandler extends BasicDragHandler {
 	/**handles the transplant of a graphic to a new image*/
 	void moveItemToSet(ZoomableGraphic z, ImageWindowAndDisplaySet displaySet) {
 		select(z);
-		if (displaySet.getImageAsWrapper().getGraphicLayerSet().hasItem(z))
+		if (displaySet.getImageAsWrapper().getTopLevelLayer().hasItem(z))
 					return;
 		
 		
 		GraphicLayer oldparent = z.getParentLayer();
-		GraphicLayer newLayer = displaySet.getImageAsWrapper().getGraphicLayerSet().getSelectedContainer();
+		GraphicLayer newLayer = displaySet.getImageAsWrapper().getTopLevelLayer().getSelectedContainer();
 		
 		if (newLayer.canAccept(z)) {
 			oldparent.remove(z);
@@ -203,7 +203,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 		*/
 		
-		GraphicLayer layer = imageAndDisplaySet.getImageAsWrapper().getGraphicLayerSet();
+		GraphicLayer layer = imageAndDisplaySet.getImageAsWrapper().getTopLevelLayer();
 		ArrayList<ImagePanelGraphic> addedPanels=new ArrayList<ImagePanelGraphic>();
 		
 		if(roi2 instanceof KnowsParentLayer) {

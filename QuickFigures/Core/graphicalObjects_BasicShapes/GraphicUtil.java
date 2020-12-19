@@ -62,14 +62,7 @@ public class GraphicUtil {
 		}
 	}
 	
-	private void fillPolygon(Graphics2D g, CordinateConverter<?> cords, Double[] rotatedBoundsPrecise, boolean handles) {
-		Polygon p2 = getAlteredPolygon(g,  cords, rotatedBoundsPrecise);
-		
-		g.fill(p2);
-		if (handles) {
-			lastHandles=drawHandles(g, p2);
-		}
-	}
+
 	
 	public static Shape shapeFromArray(Point2D.Double[] in, boolean looptostart) {
 		

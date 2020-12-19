@@ -90,7 +90,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	/**Applies the format defined by this template to the image
 	 * @return */
 	public CombinedEdit applyTemplateTo(ImageWrapper theImage) {
-		return applyTemplateToLayer(theImage.getGraphicLayerSet());
+		return applyTemplateToLayer(theImage.getTopLevelLayer());
 	}
 	
 	/**Applies the format defined by this template to the layer and its sublayers

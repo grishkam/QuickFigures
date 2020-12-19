@@ -62,7 +62,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 			FigureDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
 			 for(File f: files) {
 				 FileStandIn fileSI = new FileStandIn(f);
-				 container.getGraphicLayerSet().add(fileSI);
+				 container.getTopLevelLayer().add(fileSI);
 			 }
 			return;
 		}
@@ -81,7 +81,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
     		String line = scan2.nextLine();
     		if (line==null||line.trim().equals("")) continue;
     		FileStandIn fileSI = new FileStandIn(new File(line));
-    		container.getGraphicLayerSet().add(fileSI);
+    		container.getTopLevelLayer().add(fileSI);
     		
 		}
 		scan2.close();

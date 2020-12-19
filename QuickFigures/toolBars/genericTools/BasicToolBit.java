@@ -110,7 +110,9 @@ public class BasicToolBit implements ToolBit {
 		return this.getToolCore().altKeyDown();
 	}
 
-	
+	/**Certain tools, reset the original location after each mouse drag.
+	 * that location is stored as the 'click point' even if it is not literally 
+	 * the place the user clicked*/
 	public void setClickPointToDragReleasePoint() {
 		getToolCore().setClickPointToDragReleasePoint();
 		
@@ -123,20 +125,21 @@ public class BasicToolBit implements ToolBit {
 	public void createIconSet(String... sts) {
 		IconSet output = new IconSet(sts);
 		iconSet=output;
-		
 	}
 
 	
 	public ImageWrapper getImageClicked() {
-		// TODO Auto-generated method stub
-		if (toolCore==null) IssueLog.log("no tool core!!!");
+		if (toolCore==null) {
+			IssueLog.log("no tool core!!!");
+		}
 		return toolCore.getImageWrapperClick();
 	}
 	
 	
 	public DisplayedImage getImageDisplayWrapperClick() {
-		// TODO Auto-generated method stub
-		if (toolCore==null) IssueLog.log("no tool core!!!");
+		if (toolCore==null) {
+			IssueLog.log("no tool core!!!");
+		}
 		return toolCore.getClickedImage();//.getImageWrapperClick();
 	}
 	
@@ -145,6 +148,9 @@ public class BasicToolBit implements ToolBit {
 	}
 	
 	public int clickCount() {
+		if (toolCore==null) {
+			IssueLog.log("no tool core!!!");
+		}
 		return toolCore.clickCount();
 	}
 	

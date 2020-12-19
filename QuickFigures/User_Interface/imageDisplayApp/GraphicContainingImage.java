@@ -34,9 +34,16 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 
 	
 	private String savePath=null;
+	
 	/**The window that displays the item*/
 	private transient ImageWindowAndDisplaySet displayItems=null;
 
+	
+	/**minimal constructor*/
+	public GraphicContainingImage() {
+		this(new GraphicLayerPane("Name"), new BasicImageInfo());
+	
+	}
 	
 	/**creates an image with the given file info and parent layer*/
 	public GraphicContainingImage(GraphicLayerPane layer2, BasicImageInfo basics) {
@@ -46,14 +53,7 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 		this.basics=basics;
 	}
 
-	/**minimal constructor*/
-	public GraphicContainingImage() {
-		this(new GraphicLayerPane("Name"), new BasicImageInfo());
-	
-	}
-	
-	
-		
+
 	/**returns the object storing this image, window and canvas*/
 	@Override
 	public DisplayedImage getImageDisplay() {
@@ -61,22 +61,20 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 	}
 	
 
-	
-	
 	@Override
 	public String getTitle() {
-		if (getGraphicLayerSet()==null) return null;
-		return this.getGraphicLayerSet().getName();
+		if (getTopLevelLayer()==null) return null;
+		return this.getTopLevelLayer().getName();
 	}
 	
 	public String getSaveName() {
-		if (getGraphicLayerSet()==null) return null;
-		return this.getGraphicLayerSet().getName()+SAVE_EXTENSION;
+		if (getTopLevelLayer()==null) return null;
+		return this.getTopLevelLayer().getName()+SAVE_EXTENSION;
 	}
 	
 	
 	public void setTitle(String t) {
-		this.getGraphicLayerSet().setName(t);
+		this.getTopLevelLayer().setName(t);
 	}
 
 
@@ -148,6 +146,7 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 	public void setHeight(int height) {
 		getBasics().setHeight(height);
 	}
+	
 	/***/
 	@Override
 	public void CanvasResize(int width, int height, int xOff, int yOff) {

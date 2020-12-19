@@ -133,7 +133,7 @@ public static DisplayedImage getChoice(String prompt) {
 	
 	/**Combines two displays by adding one of them to the other*/
 	public static void combineInto(ImageWindowAndDisplaySet recipient, DisplayedImage addition, Point XYDisplace) {
-		GraphicLayer layer = addition.getImageAsWrapper().getGraphicLayerSet();
+		GraphicLayer layer = addition.getImageAsWrapper().getTopLevelLayer();
 		for(ZoomableGraphic ob1: layer.getAllGraphics()) {
 			if (ob1 instanceof LocatedObject2D) {
 				LocatedObject2D ob2=(LocatedObject2D) ob1;
@@ -144,7 +144,7 @@ public static DisplayedImage getChoice(String prompt) {
 		addition.updateDisplay();
 		GraphicContainingImage set = recipient.getTheSet();
 		
-		set.getGraphicLayerSet().add(layer);
+		set.getTopLevelLayer().add(layer);
 		
 		
 		

@@ -53,7 +53,7 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 		if (type==2)  plot.sequentialBarPlot();;
 		if (type==3)  plot.scatterPlot();
 		
-		diw.getImageAsWrapper().getGraphicLayerSet().add(plot);
+		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();
 	}
 }

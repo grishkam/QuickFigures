@@ -23,6 +23,7 @@ import javax.swing.Icon;
 
 import channelMerging.ChannelEntry;
 import graphicalObjectHandles.IconHandle;
+import infoStorage.BasicMetaDataHandler;
 
 /**
 An icon with multiple colors depending on the given channel entries
@@ -34,12 +35,15 @@ public class ChannelUseIcon implements Icon, Serializable {
 	private static final long serialVersionUID = 1L;
 
 
-	private static final int NORMAL_CHANNEL_USE = 0, ADVANCED=1;
+	public static final int NORMAL_CHANNEL_USE = 0, ADVANCED=1, VERTICAL_BARS=3;
 	
 	
 	ArrayList<ChannelEntry> chans=null;
 	
 	private int style=NORMAL_CHANNEL_USE;
+
+
+	private boolean useNames;
 	
 	
 	
@@ -48,20 +52,29 @@ public class ChannelUseIcon implements Icon, Serializable {
 	 */
 	public ChannelUseIcon(ArrayList<ChannelEntry> c) {
 		chans=c;
+		if(c==null||c.size()<2) setupGenericChannelList();
 	}
 	
 	/**
 	constructor for a channel icon with the given channel entries
 	 */
-	public ChannelUseIcon(ArrayList<ChannelEntry> c, int style1) {
-		chans=c;
+	public ChannelUseIcon(ArrayList<ChannelEntry> c, int style1, boolean useNames) {
+		this(c);
 		this.style=style1;
+		this.useNames=useNames;
 	}
 
 	/**
 	 * 
 	 */
 	public ChannelUseIcon() {
+		setupGenericChannelList();
+	}
+
+	/**
+	 * 
+	 */
+	void setupGenericChannelList() {
 		chans=new ArrayList<ChannelEntry>();
 		chans.add(new ChannelEntry("Red", Color.red, 1));
 		chans.add(new ChannelEntry("Green", Color.green, 2));
@@ -69,36 +82,88 @@ public class ChannelUseIcon implements Icon, Serializable {
 	}
 
 	@Override
-	public void paintIcon(Component c, Graphics g, int x, int y) {
-		if (g instanceof Graphics2D) {
-			Graphics2D g2d=(Graphics2D) g;
+	public void paintIcon(Component c, Graphics g1, int x, int y) {
+		if (g1 instanceof Graphics2D) {
+			Graphics2D g2d=(Graphics2D) g1;
 			g2d.setStroke(new BasicStroke(3));
 			
-			double xi = x+this.getIconWidth()*0.2;
-			double xf = x+this.getIconWidth()*(1-0.2);
-			
-			ArrayList<ChannelEntry> channels = getAllColors();
-			if (channels==null) return;
-			double nChan=channels.size();
-			double yi = y+this.getIconHeight()*0.2;
-			double yf = y+this.getIconHeight()*(1);
-			double yWidth = yf-yi;
-			for(int i=0; i<nChan; i++) {
-				double yc = yi+yWidth*i/nChan;
-				g.setColor(channels.get(i).getColor());
-				Path2D p=new Path2D.Double();
-				p.moveTo(xi, yc);
-				double curveControlShift = 0.7;
-				if (style==ADVANCED) curveControlShift*=-1;
-				p.quadTo((xi+xf)/2, yc-curveControlShift*yWidth/nChan, xf, yc);
-				g2d.draw(p);
+			if (style==VERTICAL_BARS) {
+				g2d.setStroke(new BasicStroke(2));
+				drawBars(g2d, x, y);
 			}
+			else
+				drawStandard(g2d, x, y);
 			
 			
 			
 		}
-		g.setColor(Color.black);
+		g1.setColor(Color.black);
 
+	}
+	
+	/**
+	 * @param g2d
+	 * @param x
+	 * @param y
+	 */
+	void drawBars(Graphics2D g2d, int x, int y) {
+		double yi = x+this.getIconWidth()*0.2;
+		double yf = x+this.getIconWidth()*(1-0.2);
+		
+		ArrayList<ChannelEntry> channels = getAllColors();
+		if (channels==null) return;
+		double nChan=channels.size();
+		double xi = x+this.getIconWidth()*0.2;
+		double xf = x+this.getIconWidth()*(1);
+		double xWidth = xf-xi;
+		for(int i=0; i<nChan; i++) {
+			double xc = xi+xWidth*i/nChan;
+			g2d.setColor(channels.get(i).getColor());
+			if(useNames) {
+				Color c2 = BasicMetaDataHandler.determineNewChannelColor(channels.get(i).getRealChannelName());
+				if(c2!=null) g2d.setColor(c2);
+			}
+			Path2D p=new Path2D.Double();
+			p.moveTo(xc, yi);
+			
+			p.lineTo( xc, yf);
+			g2d.draw(p);
+		}
+	}
+
+
+	/**
+	 * @param g2d
+	 * @param x
+	 * @param y
+	 */
+	void drawStandard(Graphics2D g2d, int x, int y) {
+		double xi = x+this.getIconWidth()*0.2;
+		double xf = x+this.getIconWidth()*(1-0.2);
+		
+		ArrayList<ChannelEntry> channels = getAllColors();
+		if (channels==null) return;
+		double nChan=channels.size();
+		double yi = y+this.getIconHeight()*0.2;
+		double yf = y+this.getIconHeight()*(1);
+		double yWidth = yf-yi;
+		for(int i=0; i<nChan; i++) {
+			double yc = yi+yWidth*i/nChan;
+			g2d.setColor(channels.get(i).getColor());
+			Path2D p=new Path2D.Double();
+			p.moveTo(xi, yc);
+			double curveControlShift = 0.7;
+			if (isAdvanced()) curveControlShift*=-1;
+			p.quadTo((xi+xf)/2+(isAdvanced()? xi:0), yc-curveControlShift*yWidth/nChan, xf, yc);
+			g2d.draw(p);
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	boolean isAdvanced() {
+		return style==ADVANCED;
 	}
 
 

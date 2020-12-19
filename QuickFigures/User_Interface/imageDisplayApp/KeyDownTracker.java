@@ -15,17 +15,20 @@
  *******************************************************************************/
 package imageDisplayApp;
 
+import java.awt.AWTEvent;
+import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 import includedToolbars.StatusPanel;
+import logging.IssueLog;
 
 /**A simple class that keeps records of key presses and releases.
  Work in progress. Sometimes this class appears to miss events so it is not
  used for any crucial features.
   */
-public class KeyDownTracker implements KeyListener {
+public class KeyDownTracker implements AWTEventListener {
 	
 	
 	/**keeps track of what keys are up and down in the image*/
@@ -66,21 +69,36 @@ public class KeyDownTracker implements KeyListener {
 	}
 	
 
-	@Override
+
 	public void keyPressed(KeyEvent arg0) {
 		
 		setKeyDown(arg0);
 	}
 
-	@Override
+	
 	public void keyReleased(KeyEvent arg0) {
 		setKeyUp(arg0);
 		}
 
-	@Override
+	
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void eventDispatched(AWTEvent event) {
+		if (event instanceof KeyEvent) {
+			
+			KeyEvent k=(KeyEvent) event;
+			if(k.getID()==KeyEvent.KEY_PRESSED) {
+				
+				this.keyPressed(k);
+			} else  if(k.getID()==KeyEvent.KEY_RELEASED) {
+				this.keyReleased(k);
+			}
+		}
+		
 	}
 
 }

@@ -16,10 +16,8 @@
 package export.svg;
 
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.io.File;
 
-import javax.swing.JFileChooser;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,6 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.batik.svggen.SVGGeneratorContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -38,8 +37,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
-import org.apache.batik.svggen.*;
-
+/**this class exports figues as .SVG files*/
 public class SVGsaver {
 	
 	String version="1.1";
@@ -49,28 +47,26 @@ public class SVGsaver {
 	
 	public SVGsaver() {}
 	
-	public static void main(String[] args) {
-		new SVGsaver().saveObject(pathOfDesktopFolder()+"/test.svg");
-	}
+
 	
-	
-	public Document makeDocument(String newpath) throws ParserConfigurationException {
+	/**creates a document*/
+	private Document makeDocument(String newpath) throws ParserConfigurationException {
 		File file=new File(newpath);
 		int i=FileChoiceUtil.overrideQuestion(file);
 		if(i!=0) return null;
-		// TODO Auto-generated method stub
+	
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
 
 		docBuilder = docFactory.newDocumentBuilder();
 
 
-// root elements
 		Document doc = docBuilder.newDocument();
 		return doc;
 	}
 	
-	public void makeFile(Document doc, String newpath) throws TransformerException {
+	/**creates a file from the given document*/
+	private void makeFile(Document doc, String newpath) throws TransformerException {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
@@ -85,28 +81,9 @@ public class SVGsaver {
 	}
 	
 	
-	public void saveObject(String newpath) {
-		try {
-			
-			Document doc = makeDocument(newpath);
-	
-	
-	
-			createSVGelememnt(doc);
-	
-	
 
-		
-			makeFile(doc, newpath);
-		
-		
-		} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-}
 	
-	public Element createSVGelememnt(Document doc) {
+	private Element createSVGelememnt(Document doc) {
 		Element ele = doc.createElement("svg");
 		
 		doc.appendChild(ele);
@@ -118,7 +95,8 @@ public class SVGsaver {
 		
 	}
 	
-	public void setRectAttributes(Element e, Rectangle r) {
+	/**sets the location, width and height of the element to the given rectangle*/
+	private static void setRectAttributes(Element e, Rectangle r) {
 		String suffix="px";
 		
 		e.setAttribute("x", r.x+suffix);
@@ -126,46 +104,10 @@ public class SVGsaver {
 		e.setAttribute("width", r.width+suffix);
 		e.setAttribute("height", r.height+suffix);
 	}
-	
-	public static Rectangle getRectAttributes(Element e, String st) {
-		Rectangle output = new Rectangle();
-		output.x=(int)getAttributeAsNumber(e, "x");
-		output.y=(int)getAttributeAsNumber(e, "y");
-		output.width=(int)getAttributeAsNumber(e, "width");
-		output.height=(int)getAttributeAsNumber(e, "height");
-		
-		return output;
-	}
-	
-	
-	public static double getAttributeAsNumber(Element e, String st) {
-		String att = e.getAttribute(st);
-		if (att.contains("px")) att=att.replace("px", "");
-		return Double.parseDouble(att);
-	}
-	
-	
-	/**creates an attributre for the given object*/
-	public static void setAttributeToObject(Element e, String atNam, Object o) {
-		
-		
-		
-		e.setAttribute(atNam, o+"");
-	}
-	
-	public Element elementCreateShapeElement(Document dom, Shape s) {
-		SVGGeneratorContext context = SVGGeneratorContext.createDefault(dom);
-		return new SVGShape(context).toSVG(s);
-	}
 
-	public static String pathOfDesktopFolder() {
-		return new JFileChooser().getFileSystemView().getDefaultDirectory().toString()+"/Desktop";
-	}
-	
-	
-	public void saveWrapper(String newpath, DisplayedImage diw) throws TransformerException, ParserConfigurationException {
+	public void saveFigure(String newpath, DisplayedImage diw) throws TransformerException, ParserConfigurationException {
 		
-		 GraphicLayer set = diw.getImageAsWrapper().getGraphicLayerSet();
+		 GraphicLayer set = diw.getImageAsWrapper().getTopLevelLayer();
 		  Document doc = makeDocument(newpath);
 		  Element element = createSVGelememnt(doc);
 		  element.setAttribute("id", set.getName());
@@ -197,7 +139,7 @@ public class SVGsaver {
 	/**
 	creates a context for the document
 	 */
-	public SVGGeneratorContext createContext(Document doc) {
+	private SVGGeneratorContext createContext(Document doc) {
 		return SVGGeneratorContext.createDefault(doc);
 	}
 }

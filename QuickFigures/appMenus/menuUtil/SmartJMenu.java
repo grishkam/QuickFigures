@@ -32,26 +32,27 @@ import undo.UndoManagerPlus;
 public class SmartJMenu extends JMenu implements SmartMenuItem {
 
 	/**
+	 * the string the separates items in a menu path
+	 */
+	public static final String MENU_PATH_REGEX = "<";
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	public SmartJMenu(String string) {
 		super(string);
 	}
-	PopupCloser closer;
+	
 	private transient UndoManagerPlus undoManager;
 	protected transient CanvasMouseEvent mouseE;
 	
 	
 	public void setPopupMenuVisible(boolean b) {
-		
-		
 		super.setPopupMenuVisible(b);
-		if (b==true) {new PopupCloser(this);new PopupCloser(this.getPopupMenu());
-		}
+		if (b==true) {new PopupCloser(this);new PopupCloser(this.getPopupMenu());}
 	}
 	
-	
+	/**finds the submenu with the given name*/
 	public static JMenu getSubmenuOfJMenu(JMenu j, String submenu) {
 		int i2=j.getItemCount();
 		
@@ -59,9 +60,7 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 			JMenuItem arr = j.getItem(i);
 		
 			if (arr instanceof JMenu){
-				
 				JMenu j2=(JMenu) arr;
-		
 				if (j2.getText().equals(submenu)) return j2;
 			} 
 			
@@ -69,6 +68,7 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 		return null;
 	}
 	
+	/**finds the submenu with the given name*/
 	public static JMenu getSubmenu(JMenuBar j, String submenu) {
 		MenuElement[] array = j.getSubElements();
 		for(int i=0; i<array.length; i++) {
@@ -84,16 +84,15 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 	}
 	
 	
-	
+	/**returns a submenu with the given name*/
 	public static JMenu getOrCreateSubmenu(JMenu men3, String command) {
-	
-		JMenu men2 = SmartJMenu.getSubmenuOfJMenu(men3, command);
-	 if (men2==null) {
-			men2=new SmartJMenu(command);
-			men3.add(men2);
-			};
-			
-			return men2;
+			JMenu men2 = SmartJMenu.getSubmenuOfJMenu(men3, command);
+		 if (men2==null) {
+					men2=new SmartJMenu(command);
+					men3.add(men2);
+				};
+				
+				return men2;
 	}
 
 
@@ -120,7 +119,7 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 	  returns the appropriate submenu for the new menu item*/
 	public static JMenu getOrCreateSubmenuFromPath(MenuItemInstall o, JMenu men) {
 		if(o==null||o.getMenuPath()==null) return men;//if there is no submenu
-		String[] path = o.getMenuPath().split("<");
+		String[] path = o.getMenuPath().split(MENU_PATH_REGEX);
 		return getSubmenuFromPath(men, path);
 	}
 
@@ -138,7 +137,7 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 		return men;
 	}
 
-
+	/**Sets which mouse event triggered the popup menu*/
 	public void setLastMouseEvent(CanvasMouseEvent e) {
 		this.mouseE=e;
 		

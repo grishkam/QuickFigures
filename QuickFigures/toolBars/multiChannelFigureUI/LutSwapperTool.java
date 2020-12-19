@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import channelMerging.MultiChannelImage;
-import specialMenus.ColorJMenu;
+import menuUtil.SmartPopupJMenu;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 
@@ -52,7 +52,12 @@ public class LutSwapperTool extends BasicImagePanelTool implements ColorInputLis
 	};  
 	
 	protected void showthePopup(Component source, int x, int y) {
-		ColorJMenu.getStandardColorJMenu(this).show(source, x,y);
+		SmartPopupJMenu pop = new SmartPopupJMenu();
+		ChannelColorJMenu men = ChannelColorJMenu.getStandardColorJMenu(this);
+		pop.add(men);
+		pop.show(source, x, y);
+		
+		
 	}
 
 	

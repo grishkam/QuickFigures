@@ -26,7 +26,8 @@ public class BasicImageInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-		String name="";private int width=500, height=300;
+
+		private int width=500, height=300;
 
 		public int getHeight() {
 			return height;

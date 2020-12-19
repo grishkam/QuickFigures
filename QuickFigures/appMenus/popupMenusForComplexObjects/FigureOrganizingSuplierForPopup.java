@@ -176,7 +176,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 							windowLevelButton.addActionListener(this);
 							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.logT(t);};
 							jj.add(chanMen);
-							SmartJMenu excluders = this.getMenuContext().createChannelMergeMenu(ChannelPanelEditingMenu.EXCLUDED_CHANNEL_MENU);
+							SmartJMenu excluders = this.getMenuContext().createChannelMergeMenu(ChannelPanelEditingMenu.EXCLUDED_CHANNEL_AND_DONT_MERGE);
 							jj.add(excluders);
 							
 							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));

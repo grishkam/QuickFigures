@@ -52,30 +52,16 @@ public class ChannelManipulations {
 	
 	/**sets the color of channel i based on String name*/
 	public static Color setChannelColor(int i, String name, ChannelOrderAndColorWrap channelSwapper) {
-		name=name.trim().toLowerCase();
-		if (name.equals("texasred"))
-				channelSwapper.setChannelColor(Color.red, i);
-		if (name.contains("egfp")||name.contains("488"))
-			channelSwapper.setChannelColor(Color.green, i);
-		if (name.contains("yfp"))
-			channelSwapper.setChannelColor(Color.yellow, i);
-		if (name.contains("rfp")||name.contains("568")||name.contains("mplum"))
-			channelSwapper.setChannelColor(Color.red, i);
-		if (name.equals("dapi")||name.contains("ebfp"))
-			channelSwapper.setChannelColor(Color.blue, i);
-		if (name.equals("brightfield"))
-			channelSwapper.setChannelColor(Color.white, i);
-		if (name.equals("dic") ||name.equals("tl dic"))
-			channelSwapper.setChannelColor(Color.white, i);
-		if (name.equals("cy5"))
-			channelSwapper.setChannelColor(Color.magenta, i);
+		Color newColor = BasicMetaDataHandler.determineNewChannelColor(name);
 		
-		Color color1 = BasicMetaDataHandler.getColor(name);//finds a color based on standard names "Red, Green, blue..."
-		//IssueLog.log("Found color "+color1);
-		if(color1!=null)
-			channelSwapper.setChannelColor(color1, i);
-		return color1;
+		if(newColor!=null)
+			channelSwapper.setChannelColor(newColor, i);
+
+		
+		return newColor;
 	}
+
+	
 	
 	
 }

@@ -74,10 +74,10 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 			currentRect.copyColorsFrom(getModel());
 			currentRect.copyAttributesFrom(getModel());
 			/**adds the item*/
-			gmp.getGraphicLayerSet().getSelectedContainer().add(currentRect);
+			gmp.getTopLevelLayer().getSelectedContainer().add(currentRect);
 			
 			/**Adds an undo*/
-			addUndoerForAddItem(gmp, gmp.getGraphicLayerSet().getSelectedContainer(), currentRect);
+			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), currentRect);
 			
 			/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
 			setSelectedHandleNumber( RectangleEdgePosisions.LOWER_RIGHT);

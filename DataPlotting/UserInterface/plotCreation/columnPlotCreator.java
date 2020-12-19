@@ -44,7 +44,7 @@ int type=0;
 		if (type==3) plot.normalBoxplotPlot();;
 		if (type==4) plot.tukeyBoxplotPlot();;
 		
-		diw.getImageAsWrapper().getGraphicLayerSet().add(plot);
+		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();
 	}
 	

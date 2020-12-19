@@ -68,7 +68,7 @@ public class PathGraphicTool extends GraphicTool {
 
 	protected void finishPath() {
 		p=null;
-		this.selectedItem=null;
+		this.primarySelectedItem=null;
 	}
 	
 	
@@ -112,7 +112,7 @@ public class PathGraphicTool extends GraphicTool {
 		
 		super.setPrimarySelectedObject(p);
 		
-		GraphicLayer setcur = this.getImageClicked().getGraphicLayerSet();
+		GraphicLayer setcur = this.getImageClicked().getTopLevelLayer();
 		setcur.add(p);
 		
 		getImageDisplayWrapperClick().getUndoManager().addEdit(new UndoAddItem(setcur, p));
@@ -203,7 +203,7 @@ public class PathGraphicTool extends GraphicTool {
 	public void onToolChange(boolean b) {
 		
 			if (b&&lastToolsSelectedItem!=null) {
-				super.selectedItem=lastToolsSelectedItem;
+				super.primarySelectedItem=lastToolsSelectedItem;
 				if(lastToolsSelectedItem instanceof PathGraphic) p=(PathGraphic) lastToolsSelectedItem;
 				lastToolsSelectedItem=null;
 			}

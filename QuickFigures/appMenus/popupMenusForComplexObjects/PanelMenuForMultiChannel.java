@@ -212,8 +212,11 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 			}
 			
 		};
-		this.add(out);
-		return out;
+		
+			out.setIcon(new ChannelUseIcon(null, ChannelUseIcon.ADVANCED, false));
+		
+			this.add(out);
+			return out;
 	}
 	
 }

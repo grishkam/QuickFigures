@@ -230,7 +230,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 
 
 	@Override
-	public GraphicLayer getGraphicLayerSet() {
+	public GraphicLayer getTopLevelLayer() {
 
 		return null;
 	}

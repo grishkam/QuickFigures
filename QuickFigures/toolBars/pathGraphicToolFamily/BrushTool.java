@@ -71,7 +71,7 @@ public class BrushTool extends PathGraphicTool {
 		p.select();
 		super.setPrimarySelectedObject(p);
 		
-		GraphicLayer setcur = this.getImageClicked().getGraphicLayerSet();
+		GraphicLayer setcur = this.getImageClicked().getTopLevelLayer();
 		setcur.add(p);
 		
 		undo = new PathEditUndo(p);

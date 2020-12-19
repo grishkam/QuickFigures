@@ -74,7 +74,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			if (isUseTransparent()) g.setColor(new Color(255,255,255,00));
 			
 			g.fillRect(0, 0, img.getWidth(), img.getHeight());
-		cont.getGraphicLayerSet().draw((Graphics2D) g, new BasicCoordinateConverter(0,0,ratio));
+		cont.getTopLevelLayer().draw((Graphics2D) g, new BasicCoordinateConverter(0,0,ratio));
 		
 		return img;
 	}

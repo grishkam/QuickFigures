@@ -53,13 +53,10 @@ import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
 import sUnsortedDialogs.ScaleSettingDialog;
-import specialMenus.ChannelColorJMenu;
-import specialMenus.ColorJMenu;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
-import ultilInputOutput.FileChoiceUtil;
 import undo.ChannelDisplayUndo;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
@@ -176,7 +173,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			
 		 
 		 
-		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand);
+		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
 		 
 		 if(!limitVersionOfMenu) {
 		 JMenu chanLabelMenu=new JMenu("Channel Label");
@@ -691,13 +688,6 @@ public class ChanReColorer implements ColorInputListener {
 		
 	}
 	
-	/**Adds the color menu to one container and puts the container inside of the second*/
-	private void addColorMenu(Container b, Container output) {
-		 b.add(ChannelColorJMenu.getStandardColorJMenu(this));
-		 output.add(b);
-	}
-	
-
 
 }
 
@@ -795,18 +785,25 @@ public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean exclude
 	boolean alreadyExcluded = this.getPressedFigure().getPrincipalMultiChannel().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
 	if (excluded&&alreadyExcluded) return null;
 	if (!excluded&&!alreadyExcluded) return null;
-	
+	CombinedEdit output=null;
 	if(excluded && !alreadyExcluded) {
 		if (ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
-		return new ChannelPanelRemover(this.getPressedFigure()).removeChannelPanels(chaneIndex);
+			 {
+				output=new ChannelPanelRemover(this.getPressedFigure()).removeChannelPanels(chaneIndex);
+				if (mergeToo) output.addEditToList(setChannelExcludedFromMerge(chaneIndex, excluded));
+			 }
 	}
 	
 	if(!excluded && alreadyExcluded) {
 		if (ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
-			return new ChannelPanelRemover(this.getPressedFigure()).addChannelPanels(chaneIndex);
-	}
+			 {
+				output=new ChannelPanelRemover(this.getPressedFigure()).addChannelPanels(chaneIndex);
+				if (mergeToo) output.addEditToList(setChannelExcludedFromMerge(chaneIndex, excluded));
+			 }
+			 
+			 }
 	
-	return null;
+	return output;
 }
 
 
@@ -815,13 +812,14 @@ public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean exclude
 
 
 
-public static final int NO_MERGE_CHANNEL_MENU=0, EXCLUDED_CHANNEL_MENU=1, MERGE_WITH_EACH_MENU=2;
+public static final int NO_MERGE_CHANNEL_MENU=0, EXCLUDED_CHANNEL_MENU=1, MERGE_WITH_EACH_MENU=2,EXCLUDED_CHANNEL_AND_DONT_MERGE=3;;
 
 
 public SmartJMenu createChannelMergeMenu(int form) {
 	SmartJMenu output = new SmartJMenu("Merged Channels");
-	if (form== EXCLUDED_CHANNEL_MENU) output.setText("Exclude Panels");
-	else if (form==MERGE_WITH_EACH_MENU) output.setText("Merge into each channel panels");
+	if (form== EXCLUDED_CHANNEL_MENU) output.setText("Exclude Channel Panels ");
+	else if (form==MERGE_WITH_EACH_MENU) output.setText("Merge each channel panel with");
+	else if (form==EXCLUDED_CHANNEL_AND_DONT_MERGE) output.setText("Exclude Channel");
 	ArrayList<ChannelMergeMenuItem> f = createChannelMergeMenuItems(form);
 	for(ChannelMergeMenuItem item: f) {output.add(item);}
 
@@ -834,7 +832,8 @@ public ArrayList<ChannelMergeMenuItem> createChannelMergeMenuItems(int form) {
 	for(ChannelEntry e: getPresseddisplay().getMultiChannelImage().getChannelEntriesInOrder()) {
 		int ignoreAfterC = getPresseddisplay().getPanelList().getChannelUseInstructions().ignoreAfterChannel;
 		if (ignoreAfterC!=ChannelUseInstructions.NONE_SELECTED   &e.getOriginalChannelIndex()>ignoreAfterC) continue;
-		if (form== EXCLUDED_CHANNEL_MENU)	m.add(new ChannelExcludeMenuItem(e));
+		if (form== EXCLUDED_CHANNEL_MENU)	m.add(new ChannelExcludeMenuItem(e, false));
+		else if (form==EXCLUDED_CHANNEL_AND_DONT_MERGE) m.add(new ChannelExcludeMenuItem(e, true));
 		else
 			if (form== MERGE_WITH_EACH_MENU) 	m.add(new ChannelWithEachMenuItem(e));
 			else
@@ -927,11 +926,13 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
+			private boolean excludeFromMergeAlso=false;
 			
 			
 			
-		public 	ChannelExcludeMenuItem(ChannelEntry ce) {
+		public 	ChannelExcludeMenuItem(ChannelEntry ce, boolean excludeFromMergeAlso) {
 					super(ce);
+					this.excludeFromMergeAlso=excludeFromMergeAlso;
 				}
 				
 				/**
@@ -948,7 +949,8 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				public void pressAction() {
 					int chaneIndex = entry.getOriginalChannelIndex();
 					boolean i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
-					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, false);
+					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso);
+					
 					this.getUndoManager().addEdit(
 						undo	
 					);
@@ -977,7 +979,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				 determines if the channel is excluded
 				 */
 				public boolean isExcludedChannel() {
-					if (entry.getOriginalChannelIndex()==chanNum) return false;
+					//if (entry.getOriginalChannelIndex()==chanNum) return false;
 					
 					return getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().eachMergeChannel!=entry.getOriginalChannelIndex();
 				}
@@ -990,11 +992,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 					int chaneIndex = entry.getOriginalChannelIndex();
 					
 					ChannelUseInstructions i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
-					if (chaneIndex==chanNum) {
-						ShowMessage.showOptionalMessage("This menu item is a work in progress", true, "If you select a channel other than the present one", "The channel will be merged into each channel panel");
-						
-						return;
-					}
+					
 					
 					int newState=entry.getOriginalChannelIndex();
 					if(newState==i.eachMergeChannel) newState=0;
@@ -1023,9 +1021,10 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				}
 
 				int fontStyle() {
-					if(entry.getOriginalChannelIndex()==chanNum)
-					return Font.BOLD;
-					return Font.PLAIN;
+						if(entry.getOriginalChannelIndex()==chanNum)
+						return Font.BOLD;
+						else
+						return Font.PLAIN;
 					}
 				
 }

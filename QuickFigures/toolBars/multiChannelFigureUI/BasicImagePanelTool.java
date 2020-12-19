@@ -299,7 +299,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		}
 		
 		
-		MultichannelDisplayLayer pd = MultichannelDisplayLayer.findMultiChannelForGraphic(impw.getGraphicLayerSet(),imagepanel );
+		MultichannelDisplayLayer pd = MultichannelDisplayLayer.findMultiChannelForGraphic(impw.getTopLevelLayer(),imagepanel );
 	
 		
 		

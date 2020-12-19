@@ -48,7 +48,7 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		if (type==1)  plot.scatterPlot();
 		if (type==2)  plot.linePlot();;
 		
-		diw.getImageAsWrapper().getGraphicLayerSet().add(plot);
+		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();
 	}
 }

@@ -13,6 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+import java.awt.AWTEvent;
+import java.awt.Toolkit;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -93,6 +95,7 @@ public class Toolset_Runner implements PlugIn {
 			} catch (Throwable t) {
 			IssueLog.logT(t);
 		}
+		Toolkit.getDefaultToolkit().addAWTEventListener(new KeyDownTracker(), AWTEvent.KEY_EVENT_MASK);
 		
 	}
 	
@@ -185,7 +188,7 @@ public class Toolset_Runner implements PlugIn {
 	
 	class WindowAndSet implements WindowListener, ImageListener {
 		
-		KeyListener kd=new KeyDownTracker();//not as important in recent versions. might not need the image listener added at all
+		//KeyListener kd=new KeyDownTracker();//not as important in recent versions. might not need the image listener added at all
 
 		@Override
 		public void windowActivated(WindowEvent arg0) {
@@ -193,7 +196,7 @@ public class Toolset_Runner implements PlugIn {
 				ImageWindow iw=(ImageWindow) arg0.getWindow();
 				CurrentFigureSet.setCurrentActiveDisplayGroup(new ImagePlusDisplayWrap(iw.getImagePlus()));
 		
-				iw.getCanvas().addKeyListener(kd);
+				
 				
 			}
 		}
@@ -215,7 +218,6 @@ public class Toolset_Runner implements PlugIn {
 			if (arg0.getWindow() instanceof ImageWindow) {
 				ImageWindow iw=(ImageWindow) arg0.getWindow();
 		
-				iw.getCanvas().removeKeyListener(kd);
 			}
 		}
 

@@ -42,7 +42,7 @@ public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 	
 	public ZoomableGraphic addFromFile(File f, GraphicLayer gc) {
 		GraphicContainingImage ss = SVGOpener.readFromFile(f);
-		GraphicLayer ob = ss.getGraphicLayerSet();
+		GraphicLayer ob = ss.getTopLevelLayer();
 		
 	
 		gc.add(ob);

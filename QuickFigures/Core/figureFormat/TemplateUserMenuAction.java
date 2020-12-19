@@ -220,7 +220,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	 */
 	public CombinedEdit operateOnContainer(FigureDisplayContainer graphicDisplayContainer) {
 		
-		GraphicLayer graphicLayerSet = graphicDisplayContainer.getAsWrapper().getGraphicLayerSet();
+		GraphicLayer graphicLayerSet = graphicDisplayContainer.getAsWrapper().getTopLevelLayer();
 		
 		return operateOnLayer(graphicLayerSet);
 	}

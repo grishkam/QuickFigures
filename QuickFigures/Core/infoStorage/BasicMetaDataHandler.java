@@ -305,7 +305,37 @@ public class BasicMetaDataHandler {
 		}
 		
 		 
-	
+		/**Depending on a channel name, returns an appropriate color
+		 * @param name
+		 * @return
+		 */
+		public static Color determineNewChannelColor(String name) {
+			Color newColor=null;
+			if(name==null) return null;
+			name=name.trim().toLowerCase();
+			if (name.equals("texasred"))
+				newColor=Color.red;
+			if (name.contains("egfp")||name.contains("488"))
+				newColor=Color.green;
+			if (name.contains("yfp"))
+				newColor=Color.yellow;
+			if (name.contains("rfp")||name.contains("568")||name.contains("mplum"))
+				newColor=Color.red;
+			if (name.equals("dapi")||name.contains("ebfp"))
+				newColor=Color.blue;
+			if (name.equals("brightfield"))
+				newColor=Color.white;
+			if (name.equals("dic") ||name.equals("tl dic"))
+				newColor=Color.white;
+			if (name.equals("cy5"))
+				newColor=Color.magenta;
+			
+			Color color1 = getColor(name);//finds a color based on standard names "Red, Green, blue..."
+			
+			if(color1!=null)
+				newColor=color1;
+			return newColor;
+		}
 		
 		/**takes the output of the toString method for class color and returns a color*/
 		 public static Color getColor(String st) {		

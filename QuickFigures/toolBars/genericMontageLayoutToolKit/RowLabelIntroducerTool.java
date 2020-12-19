@@ -36,23 +36,21 @@ import figureFormat.LabelExamplePicker;
 import genericMontageKit.BasicObjectListHandler;
 import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.CursorFinder;
+import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import gridLayout.BasicMontageLayout;
 import gridLayout.LayoutSpaces;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
-import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoManagerPlus;
-import undo.UndoSelectionSet;
 import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
 
@@ -197,7 +195,7 @@ public class RowLabelIntroducerTool extends RowColSwapperTool2{
 		
 		item=getDesiredGraphic(markerRoi().getBounds(), wp);
 		if (item==null) {
-			GraphicLayer layerFor=getImageClicked().getGraphicLayerSet();
+			GraphicLayer layerFor=getImageClicked().getTopLevelLayer();
 			MontageLayoutGraphic montageLayoutGraphic = super.layoutGraphic;
 			
 			if (montageLayoutGraphic!=null)

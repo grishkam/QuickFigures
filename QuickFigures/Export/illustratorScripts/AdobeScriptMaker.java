@@ -86,8 +86,8 @@ public class AdobeScriptMaker {
 		
 		if (mont instanceof FigureDisplayContainer) {
 			FigureDisplayContainer mont2 = (FigureDisplayContainer)mont;
-			if (mont2.getGraphicLayerSet() instanceof IllustratorObjectConvertable) {
-				((IllustratorObjectConvertable) mont2.getGraphicLayerSet()).toIllustrator(aref);
+			if (mont2.getTopLevelLayer() instanceof IllustratorObjectConvertable) {
+				((IllustratorObjectConvertable) mont2.getTopLevelLayer()).toIllustrator(aref);
 			}
 			
 		}

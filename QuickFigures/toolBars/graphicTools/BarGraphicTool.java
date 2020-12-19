@@ -59,7 +59,7 @@ public class BarGraphicTool extends GraphicTool {
 		if (roi2 instanceof 	BarGraphic) {
 			return (BarGraphic) roi2;
 		}
-		GraphicLayer selectedContainer = gmp.getGraphicLayerSet().getSelectedContainer();
+		GraphicLayer selectedContainer = gmp.getTopLevelLayer().getSelectedContainer();
 			CombinedEdit undo=new CombinedEdit();
 			int x = getClickedCordinateX();
 			int y = getClickedCordinateY();

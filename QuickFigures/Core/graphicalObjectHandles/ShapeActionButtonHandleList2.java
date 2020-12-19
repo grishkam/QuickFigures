@@ -80,11 +80,11 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		EditManyShapes itemForIcon=null;
 	
 		if (shape.isFillable()){
-		itemForIcon = new EditManyShapes(false, shape.getFillColor());
-		itemForIcon.setModelItem(shape);
-
-		GeneralActionListHandle hf = addOperationList(itemForIcon, fillColorActs());
-		hf.setAlternativePopup(new ColoringButton(itemForIcon, 78341));
+			itemForIcon = new EditManyShapes(false, shape.getFillColor());
+			itemForIcon.setModelItem(shape);
+	
+			GeneralActionListHandle hf = addOperationList(itemForIcon, fillColorActs());
+			hf.setAlternativePopup(new ColoringButton(itemForIcon, 78341));
 		
 		}
 		
@@ -306,13 +306,14 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		public void ColorChanged(ColorInputEvent fie) {
 			
 			item.setSelector(fie.event.getSelectionSystem());
-			
-			if (item.doesStroke())item.getModelItem().setStrokeColor(fie.getColor());
-			else
-				item.getModelItem().setFillColor(fie.getColor());
+			ShapeGraphic model = item.getModelItem();
+			item.setModelItem(null);
+			item.setTheColor(fie.getColor());
+			item.run();
+			item.setModelItem(model);
 			
 			this.setIcon(item.getIcon());
-			item.run();
+			
 			lastPress.getAsDisplay().updateDisplay();
 			
 		}

@@ -37,6 +37,7 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import gridLayout.LayoutSpaces;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.StrokeInputPanel;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -242,7 +243,10 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 		
 		/**Adds the edit to the undo manager*/
 		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
-			selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
+			{
+				selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
+					}
+		else {IssueLog.log("failed to add undo to udo manager "+this);}
 		
 	}
 	
@@ -258,7 +262,11 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 			StrokedItem s=(StrokedItem) a;
 			UndoStrokeEdit edit2 = new UndoStrokeEdit(s);
 			
-			if (getTheColor()!=null)s.setStrokeColor(getTheColor());
+			if (getTheColor()!=null) {
+				
+				s.setStrokeColor(getTheColor());
+			
+			}
 			if (this.getDashes()!=null) s.setDashes(getDashes());
 			if (this.getStrokeWidth()!=null) s.setStrokeWidth(getStrokeWidth());
 			if (this.getStrokeJoin()!=null) s.setStrokeJoin(getStrokeJoin());
@@ -321,7 +329,8 @@ if(a instanceof PathGraphic ) {
 		
 		if (!stroke && a instanceof Fillable) {
 			Fillable s=(Fillable) a;
-			if (getTheColor()!=null &&s.isFillable())s.setFillColor(getTheColor());
+			if (getTheColor()!=null &&s.isFillable()) {s.setFillColor(getTheColor());
+			}
 		}
 		
 		edit4.establishFinalColors();
@@ -545,7 +554,7 @@ if(a instanceof PathGraphic ) {
 		return theColor;
 	}
 
-	private void setTheColor(Color theColor) {
+	public void setTheColor(Color theColor) {
 		this.theColor = theColor;
 	}
 
@@ -555,8 +564,9 @@ if(a instanceof PathGraphic ) {
 
 	public void setModelItem(ShapeGraphic modelItem) {
 		this.modelItem = modelItem;
+		
 	}
-	public void setModelItem(TextGraphic modelItem) {
+	public void setModelTextItem(TextGraphic modelItem) {
 		this.modelTextItem = modelItem;
 	}
 

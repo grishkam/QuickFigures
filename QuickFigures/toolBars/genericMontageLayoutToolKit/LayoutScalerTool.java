@@ -155,7 +155,7 @@ public class LayoutScalerTool extends Object_Mover {
 			undoOriginalUndo=null;
 			duplicate.getPanelLayout().resetPtsPanels();
 		}
-		CombinedEdit curentEdit = new CombinedEdit();;
+		
 		
 		
 		if (duplicate!=null) {

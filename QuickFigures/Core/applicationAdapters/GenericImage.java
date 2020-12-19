@@ -155,7 +155,7 @@ public class GenericImage implements ImageWrapper {
 
 
 	@Override
-	public GraphicLayer getGraphicLayerSet() {
+	public GraphicLayer getTopLevelLayer() {
 		if (getLayer()==null) {IssueLog.log("error no layer in generic image");}
 		return getLayer();
 	}
@@ -166,7 +166,6 @@ public class GenericImage implements ImageWrapper {
 
 	@Override
 	public void onItemLoad(ZoomableGraphic z) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -249,6 +248,7 @@ public class GenericImage implements ImageWrapper {
 		return  undoManager;
 	}
 
+	/**sets the primary selected object for the image*/
 	@Override
 	public boolean setPrimarySelectionObject(Object d) {
 		

@@ -178,7 +178,7 @@ public class TextSVGExporter extends SVGExporter {
 	public static void main(String[] arts) throws TransformerException, ParserConfigurationException, IOException {
 		ImageWindowAndDisplaySet ex = ToolbarTester.showExample(true);
 		String path="/Users/mazog/Desktop/test2.svg";
-		  new SVGsaver().saveWrapper(path, ex);
+		  new SVGsaver().saveFigure(path, ex);
 		
 		
 		Desktop.getDesktop().open(new File(path));

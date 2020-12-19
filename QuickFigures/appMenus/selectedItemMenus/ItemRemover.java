@@ -76,7 +76,7 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 			
 		}
 		
-		selector.getGraphicDisplayContainer().getGraphicLayerSet().remove(selectedItem);
+		selector.getGraphicDisplayContainer().getTopLevelLayer().remove(selectedItem);
 		
 		
 		

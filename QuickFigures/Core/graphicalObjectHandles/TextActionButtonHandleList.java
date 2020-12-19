@@ -222,7 +222,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		if (text instanceof ChannelLabelTextGraphic) return;
 		//SuperscriptButton itemForIcon = new SuperscriptButton(text, text.getTextColor());
 		EditManyShapes i = new EditManyShapes();
-		i.setModelItem(text);
+		i.setModelTextItem(text);
 		i.setBigIcon(true);
 		GeneralActionListHandle h = new TextColorHandle2(i, numHandleID,getTextColors());;
 		h.setxShift(0);

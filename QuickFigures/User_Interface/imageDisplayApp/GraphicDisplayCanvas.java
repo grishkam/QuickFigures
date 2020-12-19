@@ -40,10 +40,23 @@ import logging.IssueLog;
 import utilityClassesForObjects.Selectable;
 
 /**A component that displays the figure within the display window
-  All objects in the figure are drawn here*/
-public class GraphicDisplayCanvas extends
-		JComponent {
+  All objects in the figure are drawn here. 
+  Rulers are also drawn to  indicate size of the figure
+  @see GraphicSetDisplayWindow for information on where
+  */
+public class GraphicDisplayCanvas extends JComponent {
 
+	/**
+	 specifies how many extra pixels are needed on the bottom and right (they serve as space for the rulers)
+	 */
+	private static final int ADDITIONAL_SIZE = 60;
+	
+	/**
+	 These numbers define the ruler appearance
+	 */
+	static final int INCH_MARK_SIZE = 10, MAX_INCH_MARKS = 20;
+	static final int FRACTION_OF_INCH = 4, FRACTION_OF_INCH_MARK_SIZE = 5;
+	
 	/**
 	 * 
 	 */
@@ -52,47 +65,51 @@ public class GraphicDisplayCanvas extends
 	
 	public GraphicDisplayCanvas() {
 		super();
-		this.addKeyListener(new KeyDownTracker());
+		//this.addKeyListener(new KeyDownTracker());
 	
 	}
 
-
+	
 	public void setDispWindow(GraphicSetDisplayWindow window) {
 		this.window=window;
 		
 	}
 	
 	
-	
+	/**draws the component*/
 	public void paintComponent(Graphics g) {
 
 		if (g instanceof Graphics2D) {
-			 Graphics2D g2 = (Graphics2D)g;
+				 Graphics2D g2 = (Graphics2D)g;
+			
+			
+			
+			
+			drawWhiteCanvas(g2);
+			
+			
+			
+			if (window==null||window.getTheSet()==null) {IssueLog.log("warning, window null");}
+			 
+			drawObjectsAndRulers(g2);
+		
+	}
+		
+		
+		;
+}
+
+
+	/**Draws every object in every layer
+	 * @param g2
+	 */
+	void drawObjectsAndRulers(Graphics2D g2) {
 		GraphicContainingImage gmp = window.getTheSet();
-		
-		/**marks the parts of the canvas object beyond the display canvas area with black and grey gradient*/
-		g2.setPaint(getGrayFillPaint());//.setColor(Color.darkGray);
-		Rectangle r = new Rectangle(-1, -1, this.getWidth(), this.getHeight());
-		Shape da = getDisplaySetArea();
-		Area greyArea = (new Area(r));
-		greyArea.subtract(new Area(da));;
-		((Graphics2D) g).fill(greyArea);
-		
-		/**fills the display canvas area with white so that user knows this is where they draw*/
-		g2.setColor(Color.white);
-	 	g2.fill( da);
-		g.setColor(Color.black);
-		g.drawRect(-1, -1, this.getWidth(), this.getHeight());
-		
-		
-		
-		if (window==null||window.getTheSet()==null) {IssueLog.log("warning, window null");}
-		 
 		/**draws all of objects*/
 		if (window!=null&&window.getTheSet()!=null) {
 		
 			
-			GraphicLayer layerSet = window.getTheSet().getGraphicLayerSet();
+			GraphicLayer layerSet = window.getTheSet().getTopLevelLayer();
 			CordinateConverter<?> conv1 = getConverter();
 			
 			layerSet.draw(g2, conv1);
@@ -102,24 +119,50 @@ public class GraphicDisplayCanvas extends
 			/**although there is no user option for this. a programmer can create a version of the 
 			  window that does not use a scroll pane but instead indicates the position 
 			  in the same way as imageJ does. in that case an indicator need be drawn*/
-			if (!window.usesScrollPane()) window.indicator.draw(g2, getConverter());
+			if (!window.usesScrollPane())
+				window.indicator.draw(g2, getConverter());
 			
-			 drawRulers((Graphics2D) g);
-			 drawSmartHandlesForSelectedItrm(g2, conv1);
+			
+			 drawRulers(g2);
+			 
+			 drawSmartHandlesForSelectedItem(g2, conv1);
 			
 			 
 		}
-		// IssueLog.log(new GraphicEncoder(gmp).getBytes());
-		
 	}
+
+
+
+
+
+	/**
+	 Draws the canvas
+	 */
+	void drawWhiteCanvas(Graphics2D g2) {
+		/**Fills the canvas with a greyish gradient.
+		  After the white of the canvas is drawn,
+		  the parts of the canvas object beyond the display canvas area will be greyish
+		 */
+		g2.setPaint(getGrayFillPaint());
+		Rectangle r = new Rectangle(-1, -1, this.getWidth(), this.getHeight());
+		Shape da = getDisplaySetArea();
+		Area greyArea = (new Area(r));
+		greyArea.subtract(new Area(da));;
+		g2.fill(greyArea);
 		
 		
-		;
-}
+		
+		/**fills the display canvas area with white so that user knows this is where they draw*/
+		g2.setColor(Color.white);
+		g2.fill( da);
+		g2.setColor(Color.black);
+		g2.drawRect(-1, -1, this.getWidth(), this.getHeight());
+	}
 
 
-
-	protected void drawSmartHandlesForSelectedItrm(Graphics2D g2, CordinateConverter<?> conv1) {
+	/**if a single item has be set as the primary selected item, any smart handles it has
+	 * will be drawn over th other objects*/
+	protected void drawSmartHandlesForSelectedItem(Graphics2D g2, CordinateConverter<?> conv1) {
 		Selectable sel = window.getDisplaySet().getSelectedItem();
 		if (sel!=null&& sel instanceof HasSmartHandles) {
 			 HasSmartHandles h=(HasSmartHandles) sel;
@@ -128,7 +171,7 @@ public class GraphicDisplayCanvas extends
 	}
 	
 	
-	/**Returns the area of the canvas that Actually Contains the Graphic Display Set*/
+	/**Returns the area of the component where the white canvas is drawn*/
 	public Shape getDisplaySetArea() {
 		GraphicContainingImage gmp = window.getTheSet();
 		Rectangle r5 = new Rectangle(0,0, gmp.getWidth(), gmp.getHeight());
@@ -154,26 +197,17 @@ public class GraphicDisplayCanvas extends
 		return getHeight()-getDisplaySetArea().getBounds2D().getMaxY();
 	}
 	
-	
-	
+	/**returns the cordinate system used*/
 	public CordinateConverter<?> getConverter() {
 		return window.getZoomer().getConverter();
 	}
 	
-	 double getCanvasWidthInUnits() {
-			double mag=getZoomer().getZoomMagnification();
-			return getWidth()/mag;
-		}
-		
-		double getCanvasHeightInUnits() {
-			double mag=getZoomer().getZoomMagnification();
-			return getHeight()/mag;
-		}
+	
+
 
 
 
 		private ImageZoom getZoomer() {
-			// TODO Auto-generated method stub
 			return this.window.getZoomer();
 		}
 	
@@ -186,6 +220,18 @@ public class GraphicDisplayCanvas extends
 			return new Point2D.Double(xcent, ycent);
 		}
 		
+		double getCanvasWidthInUnits() {
+			double mag=getZoomer().getZoomMagnification();
+			return getWidth()/mag;
+		}
+		
+		
+		double getCanvasHeightInUnits() {
+			double mag=getZoomer().getZoomMagnification();
+			return getHeight()/mag;
+		}
+		
+		
 		public void centerZoomAtPoint(Point2D p) {
 			Point2D pcent = getCenterOfZoom();
 			double xs = p.getX()-pcent.getX();
@@ -193,6 +239,7 @@ public class GraphicDisplayCanvas extends
 			this.getZoomer().scroll(xs, ys);
 		}
 		
+		/**returns the paint that fills the area beyond the canvas*/
 		public Paint getGrayFillPaint() {
 			
 			GradientPaint output = new GradientPaint(new Point(0,0), Color.darkGray, new Point(5,5), Color.gray, true);
@@ -203,7 +250,7 @@ public class GraphicDisplayCanvas extends
 		
 		
 		/**Draws rulers so that each inch is 72 units*/
-		private void drawRulers(Graphics2D g) {
+		protected void drawRulers(Graphics2D g) {
 			Rectangle areaWhite = getDisplaySetArea().getBounds();
 			
 			g.setColor(Color.black);
@@ -213,23 +260,24 @@ public class GraphicDisplayCanvas extends
 			double positionx = areaWhite.getMinX();
 			double positiony = areaWhite.getMaxY();
 			g.setFont(new Font("Arial", Font.BOLD, 14));
+			
 				/**Draws the inch markers*/	
 			for(int i=0; i<20; i++) {
 				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification();
 				if (positionx>areaWhite.getMaxX()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+10);
-				g.drawString((i+1)+" in", (int)positionx-10, (int)positiony+10+g.getFont().getSize());
+				g.drawString((i+1)+" in ", (int)positionx-10, (int)positiony+10+g.getFont().getSize());
 				
 			}
 			
 			positionx = areaWhite.getBounds().getMinX();
 			positiony = areaWhite.getBounds().getMaxY();
 			
-			/**Draws the 1/4 inch markers*/	
-			for(int i=0; i<80; i++) {
-				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification()/4;
+			/**Draws the 1/4 inch markers for horizontal ruler*/	
+			for(int i=0; i<MAX_INCH_MARKS*FRACTION_OF_INCH; i++) {
+				positionx+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification()/FRACTION_OF_INCH;
 				if (positionx>areaWhite.getMaxX()) break;
-				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+5);
+				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+FRACTION_OF_INCH_MARK_SIZE);
 				
 			}
 			g.drawLine((int)areaWhite.getMinX(), (int)positiony, (int)areaWhite.getMaxX(), (int)positiony);
@@ -240,22 +288,22 @@ public class GraphicDisplayCanvas extends
 			positionx = areaWhite.getBounds().getMaxX();
 			positiony = areaWhite.getBounds().getMinY();
 			
-			/**Draws the inch markers*/	
-			for(int i=0; i<20; i++) {
+			/**Draws the inch markers for the vertical super*/	
+			for(int i=0; i<MAX_INCH_MARKS; i++) {
 				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification();
 				if (positiony>areaWhite.getMaxY()) break;
-				g.drawLine((int)positionx, (int)positiony, (int)positionx+10, (int)positiony);
-				g.drawString((i+1)+" in", (int)positionx+15, (int)positiony+g.getFont().getSize()/2);
+				g.drawLine((int)positionx, (int)positiony, (int)positionx+INCH_MARK_SIZE, (int)positiony);
+				g.drawString((i+1)+" in ", (int)positionx+15, (int)positiony+g.getFont().getSize()/2);
 				
 			}
 			
 			positionx = areaWhite.getBounds().getMaxX();
 			positiony = areaWhite.getBounds().getMinY();
-			/**Draws the 1/4 inch markers*/	
-			for(int i=0; i<80; i++) {
-				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification()/4;
+			/**Draws the 1/4 inch markers for the vertical ruler*/	
+			for(int i=0; i<MAX_INCH_MARKS*FRACTION_OF_INCH; i++) {
+				positiony+=ImageDPIHandler.getStandardDPI()*this.getZoomer().getZoomMagnification()/FRACTION_OF_INCH;
 				if (positiony>areaWhite.getMaxY()) break;
-				g.drawLine((int)positionx, (int)positiony, (int)positionx+5, (int)positiony);
+				g.drawLine((int)positionx, (int)positiony, (int)positionx+FRACTION_OF_INCH_MARK_SIZE, (int)positiony);
 				
 				
 			}
@@ -264,13 +312,13 @@ public class GraphicDisplayCanvas extends
 			
 		}
 
-		
+		/**returns the preferred size of the component*/
 		public Dimension getPreferredSize() {
 			if (window==null||window.getTheSet()==null ||!window.usesScrollPane()) 
 				return super.getPreferredSize();
 			Rectangle b = this.getDisplaySetArea().getBounds();
-			double w = b.getWidth()+60;
-			double h = b.getHeight()+60;
+			double w = b.getWidth()+ADDITIONAL_SIZE;
+			double h = b.getHeight()+ADDITIONAL_SIZE;
 			
 			return new Dimension((int)w, (int)h);
 		}

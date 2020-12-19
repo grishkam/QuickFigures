@@ -29,7 +29,7 @@ public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>
 
 
 	public QuickFiguresToolBar() {
-		
+		this.toolbar.setFloatable(false);
 	}
 	
 	public synchronized void addToolKeyListeners() {

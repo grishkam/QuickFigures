@@ -118,7 +118,7 @@ public void onRelease(ImageWrapper imageWrapper, LocatedObject2D roi2) {
 		PathGraphic path2 = createMirrorGraphic();
 		if (path2==null) return;
 		
-		GraphicLayer layer = this.getImageClicked().getGraphicLayerSet();
+		GraphicLayer layer = this.getImageClicked().getTopLevelLayer();
 		if (!this.shiftDown()) {
 		
 			

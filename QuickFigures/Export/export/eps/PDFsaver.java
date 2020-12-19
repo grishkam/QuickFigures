@@ -35,52 +35,61 @@ import export.svg.SVGsaver;
 import figureFormat.DirectoryHandler;
 import graphicalObjects_BasicShapes.TextGraphic;
 import logging.IssueLog;
+import messages.ShowMessage;
 import undo.CombinedEdit;
 import undo.UndoTextEdit;
 import utilityClassesForObjects.LocatedObject2D;
 
+/**Class used for exporting figures to pdf file*/
 public class PDFsaver {
 
 	public void saveWrapper(String newpath, DisplayedImage diw) throws IOException, TransformerException, ParserConfigurationException, TranscoderException {
 		
 		
-		CombinedEdit ce=new CombinedEdit() ;
-		boolean notUsedFont=false;
-		ArrayList<LocatedObject2D> all = diw.getImageAsWrapper().getLocatedObjects();
-		for(LocatedObject2D a: all) {
-			if(a instanceof TextGraphic) {
-				TextGraphic t = (TextGraphic) a;
-				if(t.getFont().getFamily().equals("Arial")) {
-					//Arial font does not export properly to pdf or eps with the library used. Instead of embedding it as a custom font, will be replaced by helvetica. See 'https://xmlgraphics.apache.org/fop/0.95/fonts.html' for some details about the fonts available
-					ce.addEditToList(new UndoTextEdit(t));
-					t.setFontFamily("Helvetica");
-					
-					notUsedFont=true;
+		try {
+			CombinedEdit ce=new CombinedEdit() ;
+			boolean notUsedFont=false;
+			ArrayList<LocatedObject2D> all = diw.getImageAsWrapper().getLocatedObjects();
+			for(LocatedObject2D a: all) {
+				if(a instanceof TextGraphic) {
+					TextGraphic t = (TextGraphic) a;
+					if(t.getFont().getFamily().equals("Arial")) {
+						//Arial font does not export properly to pdf or eps with the library used. Instead of embedding it as a custom font, will be replaced by helvetica. See 'https://xmlgraphics.apache.org/fop/0.95/fonts.html' for some details about the fonts available
+						ce.addEditToList(new UndoTextEdit(t));
+						t.setFontFamily("Helvetica");
+						
+						notUsedFont=true;
+					}
 				}
 			}
+			
+			
+			
+			String tempPath = DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/temp.svg";
+			IssueLog.log(tempPath);
+			File tempFile = new File(tempPath);
+			if(tempFile.exists()) tempFile.delete();
+			new SVGsaver().saveFigure(tempPath, diw);
+			
+			
+			transcode(newpath, tempFile);
+			
+			
+			if (notUsedFont) {
+				ce.undo();
+				ShowMessage.showOptionalMessage("Export notes", true, "Some fonts will not export exactly. May be replaced by nearly identical font");
+			}
+			
+			tempFile.deleteOnExit();
+			File outputFile = new File(newpath);
+			outputFile.setReadable(true);
+			outputFile.setReadOnly();
+		} catch (Throwable e) {
+			IssueLog.logT(e);
+			if(e instanceof ClassNotFoundException || e instanceof NoClassDefFoundError) {
+				ShowMessage.showOptionalMessage("have you installed batik 1.13?", false, "Seems that you have not installed the latest version of batik", "This feature was written with batik 1.13.");
+			}
 		}
-		
-		
-		
-		String tempPath = DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/temp.svg";
-		IssueLog.log(tempPath);
-		File tempFile = new File(tempPath);
-		if(tempFile.exists()) tempFile.delete();
-		new SVGsaver().saveWrapper(tempPath, diw);
-		
-		
-		transcode(newpath, tempFile);
-		
-		
-		if (notUsedFont) {
-			ce.undo();
-			IssueLog.showMessage("Some fonts will not export exactly. May be replaced by nearly identical font");
-		}
-		
-		tempFile.deleteOnExit();
-		File outputFile = new File(newpath);
-		outputFile.setReadable(true);
-		outputFile.setReadOnly();
 	}
 
 	/**

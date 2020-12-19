@@ -133,7 +133,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		
 		int channelNumber=1;
 		private ChannelEntry entry;
-		private boolean draged;
+		private boolean draged=false;
 		
 		
 
@@ -189,6 +189,8 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		}
 		
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
+		if(!draged) return;
+		
 		int relHandleIndex = getPressChannel(canvasMouseEventWrapper);
 		int pressHandleIndex2 = pressHandleIndex;
 		if (pressHandleIndex2==relHandleIndex)return;

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package imageDisplayApp;
 
-@Deprecated
+
 public interface HasSupportingWindow {
 	
 	public void closeWindow(boolean save);

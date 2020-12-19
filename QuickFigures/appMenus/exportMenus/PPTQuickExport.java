@@ -81,7 +81,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			   group.setInteriorAnchor(r);
 			  
 			
-			   GraphicLayer set = figure.getImageAsWrapper().getGraphicLayerSet();
+			   GraphicLayer set = figure.getImageAsWrapper().getTopLevelLayer();
 			   
 			   
 			        for(ZoomableGraphic z: set.getAllGraphics()) try {

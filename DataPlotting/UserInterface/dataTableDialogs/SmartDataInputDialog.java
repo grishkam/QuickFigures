@@ -229,10 +229,9 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 	}
 
 	private void fillGapsInTable() {
-		//area.shiftToTopLeft();
 		int refCol=2;
 		int fillCol=0;
-		int max=area.lastNonEmptyColumn();
+		
 		area.fillMissingValuesFor(refCol, fillCol);
 		if (form!=1&&form!=2) area.fillMissingValuesFor(refCol, fillCol+1);
 	}

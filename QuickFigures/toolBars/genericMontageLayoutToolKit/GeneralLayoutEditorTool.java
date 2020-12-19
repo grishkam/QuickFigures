@@ -268,7 +268,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	
 	public void setMarkerRoi() {
-		getImageClicked().getGraphicLayerSet();
+		getImageClicked().getTopLevelLayer();
 			try {
 				OverlayObjectManager select = this.getImageClicked().getOverlaySelectionManagger();
 				

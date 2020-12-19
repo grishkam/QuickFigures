@@ -86,7 +86,7 @@ import undo.UndoAbleEditForRemoveItem;
 import undo.UndoDragHandle;
 import undo.UndoManagerPlus;
 
-/**The most important tool in the toolbar, allows user to select objects, drag handes, bring up popup menus and 
+/**The most used tool in the toolbar, allows user to select objects, drag handles, bring up popup menus and 
   more....*/
 public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**
@@ -101,11 +101,13 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 	protected IconSet set=GraphicToolIcon.createIconSet(new LocalIcon(0));
 	
+	/**true if this tool or a subclass allows the user to select regions of the cancas*/
 	protected boolean createSelector=true;	
 			
 			private Cursor handleCursor=new Cursor(Cursor.HAND_CURSOR);
 			
-	protected LocatedObject2D selectedItem;
+	protected LocatedObject2D primarySelectedItem;
+	
 	protected ArrayList<LocatedObject2D> otherSelectedItems;
 	public boolean realtimeshow=false;
 	protected boolean ignorehidden=true;
@@ -118,7 +120,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	  	public static final int DO_NOT_SELECT_IN_GROUP=0, SELECT_IN_GROUP=1;
 	 private static int selectingroup=DO_NOT_SELECT_IN_GROUP;
 	 
-	 /**The undoable edit that will be added to the unto manager*/
+	 /**The undoable edit that will be added to the undo manager to allow a user to undo mouse drags*/
 		 protected UndoMoveItems currentUndo;
 		 boolean addedToManager=false;//true if the above edit has been added to the manager
 	  
@@ -129,7 +131,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		
 	}
-	private int handle=-1;
+	private int handle=NO_HANDLE;
 	int mode=NORMAL_OBJECT_MOVER;
 
 	private ArrayList<LocatedObject2D> rois2;
@@ -164,44 +166,48 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 * */
 	public LocatedObject2D setPrimarySelectedObject(boolean shift, LocatedObject2D targetItem) {
 		if (shift){
-				if (selectedItem!=null && selectedItem!=targetItem) 
-					selectedItem.makePrimarySelectedItem(false);//
+				if (primarySelectedItem!=null && primarySelectedItem!=targetItem) 
+					primarySelectedItem.makePrimarySelectedItem(false);//
 		} else
 			{
-			deselect(selectedItem);
-			deselectAll() ;
+			if (primarySelectedItem!=targetItem)
+				{
+				deselect(primarySelectedItem);
+				deselectAllExcept(targetItem) ;
+			}
 		}
 		
 		otherSelectedItems=null;
-		selectedItem=null;
+		primarySelectedItem=null;
 		
 		
-		selectedItem=targetItem;
-		select(selectedItem);
-		if (selectedItem!=null) {
-					selectedItem.makePrimarySelectedItem(true); 			
+		primarySelectedItem=targetItem;
+		select(primarySelectedItem);
+		if (primarySelectedItem!=null) {
+					primarySelectedItem.makePrimarySelectedItem(true); 			
 		}
 		if (getImageClicked()!=null) 
-			getImageClicked().setPrimarySelectionObject(selectedItem);
+			getImageClicked().setPrimarySelectionObject(primarySelectedItem);
 		
-		return selectedItem;
+		return primarySelectedItem;
 	}
 	
 	
-	protected void deselectAll() {
+	protected void deselectAllExcept(Object exempt) {
 		if (getImageClicked()!=null)
-			deselectAll(this.getImageClicked().getGraphicLayerSet());
+			deselectAll(this.getImageClicked().getTopLevelLayer(), exempt);
 	}
 	
-	 void deselectAll(GraphicLayer gl) {
+	 void deselectAll(GraphicLayer gl, Object exempt) {
 		if (gl==null) return;
 		ArrayList<ZoomableGraphic> ls = gl.getAllGraphics();
-		deselectAll(ls);
+		deselectAll(ls, exempt);
 	}
 	
-	protected void deselectAll(ArrayList<?> ls) {
+	protected void deselectAll(ArrayList<?> ls, Object exempt) {
 		getImageClicked().getOverlaySelectionManagger().removeSelections();
 		for(Object l: ls) try  {
+			if(l==exempt) continue;
 				deselect(l);
 		} catch (Throwable t) {
 			IssueLog.logT(t);
@@ -302,6 +308,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 
 		boolean startsSelected=false;
+		
 		LocatedObject2D objectAtPressLocation = getObjectAt(getImageClicked(), pressX, pressY);
 		if(objectAtPressLocation!=null) 
 			startsSelected=objectAtPressLocation.isSelected();
@@ -414,7 +421,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**returns all the selected objects*/
 	protected ArrayList<LocatedObject2D> getAllSelectedItems(boolean createCopy) {
 		ArrayList<LocatedObject2D> out=new ArrayList<LocatedObject2D>();
-		 otherSelectedItems= getAllSelected(getImageClicked().getGraphicLayerSet());
+		 otherSelectedItems= getAllSelected(getImageClicked().getTopLevelLayer());
 		
 		if (otherSelectedItems!=null)
 			out.addAll(otherSelectedItems);
@@ -430,7 +437,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				for(LocatedObject2D roia: otherSelectedItems) {if (roia instanceof Selectable) ((Selectable) roia).deselect();}
 				getObjecthandler().addRoisToImage(out2, getImageClicked());
 				otherSelectedItems=out2;
-				selectedItem=out2.get(0);
+				primarySelectedItem=out2.get(0);
 				return out2;
 				}
 			
@@ -506,11 +513,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public LocatedObject2D getObjectAt(ImageWrapper click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjectsAtPressLocationWithoutFiltering(click, x, y);
 		
-		while (isSelectingroup()==SELECT_IN_GROUP&& hasGroups(therois)) {
+		while (getGroupSelectionMode()==SELECT_IN_GROUP&& hasGroups(therois)) {
 			replaceGroupsWithContents(therois,  x,  y);
 		}
-		if (isSelectingroup()>1) {
-			int i=isSelectingroup();
+		if (getGroupSelectionMode()>1) {
+			int i=getGroupSelectionMode();
 			while(i>1&& hasGroups(therois)) {
 				replaceGroupsWithContents(therois,  x,  y);
 				i--;
@@ -947,10 +954,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	/**
-	 * 
+	 
 	 */
 	public void performObjectDrag() {
-		moveRois(super.getXDisplaceMent(), super.getYDisplaceMent()) ;
+		moveManySelectedObjects(super.getXDisplaceMent(), super.getYDisplaceMent()) ;
 		if (currentUndo!=null) {
 				 currentUndo.establishFinalLocations();
 				 if (!this.addedToManager)
@@ -962,7 +969,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	/**
-	 * 
+		drags a handle, depending on what kind of handle or what kind of object,
+		may perform additional tasks
 	 */
 	public void performHandleDrag() {
 		/**for objects that are of the has handles interface*/
@@ -971,19 +979,25 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			h.handleMove(getSelectedHandleNumber(), new Point(getClickedCordinateX(),  getClickedCordinateY()), new Point(getDragCordinateX(), getDragCordinateY()));
 			}
 		
-		SmartHandle sh = this.getPressedSmartHandle();//.getSelectionSmartHamndles();
+		/**every smart handle implements its own drag*/
+		SmartHandle sh = this.getPressedSmartHandle();
 		if (sh!=null) sh.handleDrag(getLastDragOrLastReleaseMouseEvent());
 		
 		
 		/**lets the object know its handle is getting a mouse drag*/
 		if (getPrimarySelectedObject() instanceof HasHandles)
 			getSelectionObjectAshashangles().handleMouseEvent(this.getLastDragOrLastReleaseMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_DRAGGED, null);
-			
-			
-			if (currentundoDragHandle==null) {
+		
+		addHandleDragToUndoManager(sh);
+	}
+
+	/**Different forms of undo-able edits are created for different handles*/
+	void addHandleDragToUndoManager(SmartHandle sh) {
+		if (currentundoDragHandle==null) {
 				createUndoForDragHandle() ;
 				}
-			if(sh.handlesOwnUndo()) { currentundoDragHandle=null; currentundoDragHandle=null;}
+		
+		if(sh.handlesOwnUndo()) { currentundoDragHandle=null; currentundoDragHandle=null;}
 			
 			if (!addedcurrentundoDragHandle&&currentundoDragHandle!=null) {
 				
@@ -1012,12 +1026,15 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			}
 	}
 
+	/**returns true if the region selector is draw under current circumstances
+	  */
 	public boolean useSelectorNow() {
 		if (this.shiftDown()&&createSelector&&(this.getPrimarySelectedObject()==null|| (getPrimarySelectedObject()!=null&&getPrimarySelectedObject().getOutline().contains(pressX, pressY)))) return true;
 		return (getAllSelectedItems(false).size()==0)&&createSelector&&getSelectedHandleNumber()<0;
 	}
 	
-	public void moveRois(int x, int y) {
+	
+	public void moveManySelectedObjects(int x, int y) {
 		
 		
 		
@@ -1056,6 +1073,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return performSnap;
 	}
 	
+	/**moves the object x,y units*/
 	protected void moveSingleObject(LocatedObject2D sel, int x, int y) {
 		if (sel==null) return;
 		if (sel instanceof PanelLayoutGraphic ) {
@@ -1112,11 +1130,6 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		getImageDisplayWrapperClick().setSelectedItem((Selectable) roi1);
 	}
 	
-	
-
-	
-
-	
 	@Override
 	public void mouseEntered() {
 		super.getImageDisplayWrapperClick().setCursor(getNormalCursor());
@@ -1125,7 +1138,6 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 
 	public void mouseExited() {
-		
 		if (this.getImageClicked()!=null) getImageClicked().updateDisplay();
 		
 	}
@@ -1141,7 +1153,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	public LocatedObject2D getPrimarySelectedObject() {
-		return selectedItem;
+		return primarySelectedItem;
 	}
 
 
@@ -1150,12 +1162,13 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return set;
 	}
 	
-	
+	/**loads icons from the given local resources*/
 	public void createIconSet(String... args) {
 		set=new IconSet(args);
 		
 	}
 
+	
 	public Class<?> getExcludedClass() {
 		return excludedClass;
 	}
@@ -1164,18 +1177,19 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		this.excludedClass = excludedClass;
 	}
 	
+	/**A user may select an option to ignore certain classes*/
 	static Class<?>[] potentialExcludedClasses=new Class<?>[] {null, PanelLayoutGraphic.class, ImagePanelGraphic.class, TextGraphic.class};
-	static String[]  nalesofExcludedClasses=new String[] {"none", "Layouts", "ImagePanels", "Text"};
+	static String[]  namesOfExcludedClasses=new String[] {"none", "Layouts", "ImagePanels", "Text"};
 	
 	int getindexofExcluded() {
-	Class<?> c = this.getExcludedClass();
-	if (c==null) return 0;
-	 int i=0;
-	 while(i< potentialExcludedClasses.length&&!c.equals(potentialExcludedClasses[i]) ) {
-		 i++;
-	 }
-	 
-	 return i;
+			Class<?> c = this.getExcludedClass();
+			if (c==null) return 0;
+			 int i=0;
+			 while(i< potentialExcludedClasses.length&&!c.equals(potentialExcludedClasses[i]) ) {
+				 i++;
+			 }
+			 
+			 return i;
 	}
 	
 	@Override
@@ -1190,7 +1204,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 
 	}
 	
-	public int isSelectingroup() {
+	/**Returns the */
+	public int getGroupSelectionMode() {
 		return selectingroup;
 	}
 
@@ -1214,7 +1229,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		this.handleCursor = handleCursor;
 	}
 
-	public class MoverDialog extends StandardDialog {
+	/**This class of dialog changes the options for this tool*/
+	public static class MoverDialog extends StandardDialog {
 
 		/**
 		 * 
@@ -1225,9 +1241,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		public MoverDialog(Object_Mover mover) {
 			setModal(true);
 			this.mover=mover;
-			add("excludedClass", new ChoiceInputPanel("Select which class to ignore", nalesofExcludedClasses, mover.getindexofExcluded()));
+			add("excludedClass", new ChoiceInputPanel("Select which class to ignore", namesOfExcludedClasses, mover.getindexofExcluded()));
 			String[] groupops=new String[] {"Don't", "Do", "1 Level Down", "2 Level Down"};
-			add("groupsel", new ChoiceInputPanel("Reach into Groups",groupops, mover.isSelectingroup()));
+			add("groupsel", new ChoiceInputPanel("Reach into Groups",groupops, mover.getGroupSelectionMode()));
 			add("selGroup", new BooleanInputPanel("Select in Group", GraphicGroup.treatGroupsLikeLayers));
 		}
 		@Override
@@ -1254,10 +1270,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			switch (arg0.getKeyCode()) {
 			
 			
-			case KeyEvent.VK_LEFT: {moveRois(-2,0) ; ;break;}
-			case KeyEvent.VK_RIGHT: {moveRois(2,0); ;break;}
-			case KeyEvent.VK_UP: {moveRois(0,-2); ;break;}
-			case KeyEvent.VK_DOWN: {moveRois(0,2) ;break;}
+			case KeyEvent.VK_LEFT: {moveManySelectedObjects(-2,0) ; ;break;}
+			case KeyEvent.VK_RIGHT: {moveManySelectedObjects(2,0); ;break;}
+			case KeyEvent.VK_UP: {moveManySelectedObjects(0,-2); ;break;}
+			case KeyEvent.VK_DOWN: {moveManySelectedObjects(0,2) ;break;}
 			case KeyEvent.VK_ESCAPE: {
 				
 				//in this situation the window should close but it does not ask
@@ -1285,8 +1301,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 					;break;
 				}
 				this.getImageDisplayWrapperClick().getUndoManager().addEdit(new UndoAbleEditForRemoveItem(null,(ZoomableGraphic)getPrimarySelectedObject() ));
-				this.getImageClicked().getGraphicLayerSet().remove((ZoomableGraphic) getPrimarySelectedObject());
-				this.selectedItem=null;
+				this.getImageClicked().getTopLevelLayer().remove((ZoomableGraphic) getPrimarySelectedObject());
+				this.primarySelectedItem=null;
 				imageDisplayWrapperClick.setSelectedItem(null);
 				;break;}
 			case KeyEvent.VK_A: {
@@ -1307,7 +1323,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			case KeyEvent.VK_V: {
 				
 				if (arg0.isAltDown()) {
-					GraphicLayer cc = getImageClicked().getGraphicLayerSet().getSelectedContainer();
+					GraphicLayer cc = getImageClicked().getTopLevelLayer().getSelectedContainer();
 					ImagePanelGraphic image = (ImagePanelGraphic) new ClipboardAdder(false).add(cc);
 					image.setRelativeScale(ImageDPIHandler.ratioFor300DPI());
 					image.setLocation(this.getClickedCordinateX(), this.getClickedCordinateY());
@@ -1322,28 +1338,24 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	/**removes the selected items from the image*/
-	public void deleteSelectedItemsAndLayers(DisplayedImage imageDisplayWrapperClick) {
+	private void deleteSelectedItemsAndLayers(DisplayedImage imageDisplayWrapperClick) {
 		ArrayList<LocatedObject2D> rois3 = getAllSelectedItems(false);
-		ArrayList<GraphicLayer> rois4 = this.getSelectedLayers(this.getImageClicked().getGraphicLayerSet());
+		ArrayList<GraphicLayer> rois4 = this.getSelectedLayers(this.getImageClicked().getTopLevelLayer());
 		CombinedEdit undoableEdit=new CombinedEdit();
 		imageDisplayWrapperClick.getUndoManager().addEdit(undoableEdit);
 		for (LocatedObject2D roi: rois3){
 			undoableEdit.addEditToList(new UndoAbleEditForRemoveItem(null,(ZoomableGraphic)roi ));
-			this.getImageClicked().getGraphicLayerSet().remove((ZoomableGraphic) roi);
+			this.getImageClicked().getTopLevelLayer().remove((ZoomableGraphic) roi);
 		}
 		for (GraphicLayer roi: rois4){
 			undoableEdit.addEditToList(new UndoAbleEditForRemoveItem(null,(ZoomableGraphic)roi ));
-			this.getImageClicked().getGraphicLayerSet().remove((ZoomableGraphic) roi);
+			this.getImageClicked().getTopLevelLayer().remove((ZoomableGraphic) roi);
 		}
-		this.selectedItem=null;
+		this.primarySelectedItem=null;
 		imageDisplayWrapperClick.setSelectedItem(null);
 	}
 
 
-
-
-	
-	
 	public DragAndDropHandler getDragAndDropHandler() {
 		return new MoverDragHandler(this);
 	}
@@ -1355,6 +1367,7 @@ public String getToolTip() {
 		return "Select, Move and Manipulate Objects";
 	}
 	
+	/**returns true if this tool is in text edit mode*/
 	boolean textEditMode() {
 		if (getPrimarySelectedObject() instanceof TextGraphic) {
 			if (((TextGraphic)getPrimarySelectedObject()).isEditMode())
@@ -1404,12 +1417,7 @@ public String getToolTip() {
 		this.updateClickedDisplay();
 	}
 
-	
-	
-	
-
-	
-	
+	/**Called when a user presses a key, will alter the text of the text item accordingly*/
 	public void keyTypedOnTextItem(KeyEvent arg0) {
 		if(this.textEditMode()) {
 			TextGraphic textob=(TextGraphic) getPrimarySelectedObject();
@@ -1420,6 +1428,7 @@ public String getToolTip() {
 		
 	}
 	
+	/**Called when the given object is selected in the layers window */
 	@Override
 	public boolean treeSetSelectedItem(Object o) {
 		if (o!=getPrimarySelectedObject() && o instanceof LocatedObject2D) {
@@ -1452,7 +1461,10 @@ public String getToolTip() {
 		
 		return aRoi;
 	}
-	/**finds what object holds the attached item*/
+	
+	/**finds what object holds the attached item
+	 * @param object2 the attached item
+	 * @return the item that object2 is attached to*/
 	public TakesLockedItems findLockContainer(LocatedObject2D object2) {
 		return getLockContainterForObject(object2, getPotentialLockAcceptors(getImageClicked()));
 	}
@@ -1460,6 +1472,7 @@ public String getToolTip() {
 	private boolean movingAttachedItem() {
 		return isAttachedItem(this.getPrimarySelectedObject());
 	}
+	/**returns true if the item is attached to another object*/
 	private boolean isAttachedItem(LocatedObject2D object) {
 		if(object instanceof BarGraphic.BarTextGraphic) {
 			BarGraphic.BarTextGraphic b=(BarTextGraphic) object;
@@ -1476,23 +1489,22 @@ public String getToolTip() {
 			if (b.locationAutoMatic()) b.getLocationHandleForBarText().handleDrag(getLastDragOrLastReleaseMouseEvent());;
 		}
 		
-		
 		LockedItemHandle lockedItemHandle = findHandleForLockedItem(roi);
 		if(lockedItemHandle==null) return;
 		lockedItemHandle=lockedItemHandle.createDemiVersion();
 		lockedItemHandle.handleDrag(getLastDragOrLastReleaseMouseEvent());
-		
-	
 	}
 
+	/**If the user clicks on an item that is attached to another, 
+	 * returns the locked item handle for that attachment*/
 	public LockedItemHandle findHandleForLockedItem(Object r) {
 		if (r instanceof LocatedObject2D) {
 			LocatedObject2D object=(LocatedObject2D) r;
-		TakesLockedItems tk = findLockContainer(object);
-		if(tk==null) return null;
-		if (tk.getSmartHandleList()==null) return null;
-		LockedItemHandle lockedItemHandle = tk.getSmartHandleList().getLockedItemHandle(object);
-		return lockedItemHandle;
+			TakesLockedItems tk = findLockContainer(object);
+			if(tk==null) return null;
+			if (tk.getSmartHandleList()==null) return null;
+			LockedItemHandle lockedItemHandle = tk.getSmartHandleList().getLockedItemHandle(object);
+			return lockedItemHandle;
 		}
 		return null;
 	}
@@ -1505,7 +1517,7 @@ public String getToolTip() {
 			lastToolsSelectedItem=this.getPrimarySelectedObject();
 		} else {
 			if (lastToolsSelectedItem!=null) {
-				selectedItem= lastToolsSelectedItem;
+				primarySelectedItem= lastToolsSelectedItem;
 				lastToolsSelectedItem=null;
 			}
 		}

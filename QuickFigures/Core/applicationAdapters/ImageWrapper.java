@@ -37,9 +37,10 @@ public interface ImageWrapper extends ObjectContainer, FigureDisplayContainer, O
 	/**A way to refer to the medadata of the image*/
 	public MetaInfoWrapper getMetadataWrapper();
 	
-	
+	/**This object manages a list of items that are drawn above the figure*/
 	public OverlayObjectManager getOverlaySelectionManagger();
 	
+	/**sets the primary selected object for the image*/
 	public boolean setPrimarySelectionObject(Object d);
 	
 	/**returns the dimensions*/

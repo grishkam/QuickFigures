@@ -48,7 +48,7 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplenMeierDataSeries
 		
 		if (type==0)  plot.defaultPlot();
 		
-		diw.getImageAsWrapper().getGraphicLayerSet().add(plot);
+		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();
 	}
 }

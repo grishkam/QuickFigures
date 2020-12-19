@@ -42,7 +42,7 @@ public class NewPlot implements MenuItemForObj {
 		
 				);
 		BasicMontageLayout layout = new BasicMontageLayout(6,6, 25, 25, 2,2, true);
-		set.getImageAsWrapper().getGraphicLayerSet().add(plot);
+		set.getImageAsWrapper().getTopLevelLayer().add(plot);
 	//	GenericTileGame testGeneric = new GenericTileGame(layout);
 		//testGeneric.getTileTypes()[5]=1;testGeneric.getTileTypes()[6]=1;testGeneric.getTileTypes()[12]=1;
 	diw.updateDisplay();	diw.updateDisplay();

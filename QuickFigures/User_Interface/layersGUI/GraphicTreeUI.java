@@ -317,7 +317,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	void refreshTreeFrame() {
 		frame.remove(pane);
 		frame.remove(ButtonPanel);
-		tree = makeTreeForSet(getGraphicDisplayContainer().getGraphicLayerSet());
+		tree = makeTreeForSet(getGraphicDisplayContainer().getTopLevelLayer());
 		
 		layout=new GridBagLayout();
 		frame.setLayout(layout);
@@ -554,7 +554,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 									
 					/**since the tree nodes might not be iterated in the order of the objects, this corrects the issue by creating an array in that order*/
 					ArrayList<ZoomableGraphic> fixedOrder=new ArrayList<ZoomableGraphic>();
-					ArrayList<ZoomableGraphic> all = this.getImageWrapper().getGraphicLayerSet().getObjectsAndSubLayers();
+					ArrayList<ZoomableGraphic> all = this.getImageWrapper().getTopLevelLayer().getObjectsAndSubLayers();
 					for(ZoomableGraphic g: all) {
 						if (selectedGraphics.contains(g)) fixedOrder.add(g);
 						
@@ -851,7 +851,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 
 
 	void redoDisplay() {
-		addGraphicToTreeNode(masternode, getGraphicDisplayContainer().getGraphicLayerSet());
+		addGraphicToTreeNode(masternode, getGraphicDisplayContainer().getTopLevelLayer());
 		fireModeStructureChange(masternode);
 	}
 	
@@ -934,7 +934,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 
 	
 	public GraphicLayer getSelectedLayer() {
-		if (getSelecteditem()==null) return getGraphicDisplayContainer().getGraphicLayerSet();
+		if (getSelecteditem()==null) return getGraphicDisplayContainer().getTopLevelLayer();
 		if (getSelecteditem() instanceof GraphicLayer) return (GraphicLayer) getSelecteditem();
 		
 		if (lastPath!=null ) {
@@ -944,7 +944,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 		}
 		
 		
-		return getGraphicDisplayContainer().getGraphicLayerSet();
+		return getGraphicDisplayContainer().getTopLevelLayer();
 		}
 
 
@@ -1155,7 +1155,7 @@ ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		if (e.getWindow()==frame) getGraphicDisplayContainer().getGraphicLayerSet().treeEliminated();
+		if (e.getWindow()==frame) getGraphicDisplayContainer().getTopLevelLayer().treeEliminated();
 		
 	}
 

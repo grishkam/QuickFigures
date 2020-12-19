@@ -12,13 +12,11 @@ package messages;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import javax.swing.JLabel;
 
-import logging.IssueLog;
 import standardDialog.GriddedPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;

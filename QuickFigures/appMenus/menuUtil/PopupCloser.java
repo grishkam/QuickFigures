@@ -24,6 +24,9 @@ import java.awt.event.WindowEvent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+/**this class closes popup menus that are not being used.
+  for some reason every popup stayed open even after the user
+  clicked on another application. added this to fix the 'issue'*/
 public class PopupCloser {
 	
 
@@ -58,30 +61,40 @@ public class PopupCloser {
 	                {
 	                    MouseEvent m = (MouseEvent)event;
 	                  
-	                    if ( m.getComponent()==menu||m.getComponent()==_Popup||m.getComponent() instanceof JMenu) {return;}
+	                    if ( withinMenu(m)) {return;}
 	              
 	                    if(m.getID() == MouseEvent.MOUSE_CLICKED)
-	                    {
-	                    	if (dontCloseAfterMenuClick&&_Popup!=null) {
-	                    		if (m.getSource()==_Popup) return;
-	                    		if (m.getSource()==_Popup.getInvoker()) return;
-	                    	}
-	                        get_Popup().setVisible(false);
-	                       if (removeAfterDone) Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+	                    {/**closes the menu when user clicks somewhere else*/
+		                    	if (dontCloseAfterMenuClick&&_Popup!=null) {
+		                    		if (m.getSource()==_Popup) return;
+		                    		if (m.getSource()==_Popup.getInvoker()) return;
+		                    	}
+		                        get_Popup().setVisible(false);
+		                       if (removeAfterDone) Toolkit.getDefaultToolkit().removeAWTEventListener(this);
 	                    }
 	                }
+	                
+	                /**closes the menu when the user activates another window*/
 	                if(event instanceof WindowEvent)
 	                {
 	                	
-	                    WindowEvent we = (WindowEvent)event;
-	                   if ( we.getComponent()==menu||we.getComponent()==_Popup) {return;}
-	                    if(we.getID() == WindowEvent.WINDOW_DEACTIVATED || we.getID() == WindowEvent.WINDOW_STATE_CHANGED)
-	                    {
-	                        get_Popup().setVisible(false);
-	                        if (removeAfterDone)   Toolkit.getDefaultToolkit().removeAWTEventListener(this);
-	                    }
+		                    WindowEvent we = (WindowEvent)event;
+		                   if ( we.getComponent()==menu||we.getComponent()==_Popup) {return;}
+		                    if(we.getID() == WindowEvent.WINDOW_DEACTIVATED || we.getID() == WindowEvent.WINDOW_STATE_CHANGED)
+		                    {
+		                        get_Popup().setVisible(false);
+		                        if (removeAfterDone)   Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+		                    }
 	                }
 	            }
+
+				/**
+				 * @param m
+				 * @return
+				 */
+				boolean withinMenu(MouseEvent m) {
+					return m.getComponent()==menu||m.getComponent()==_Popup||m.getComponent() instanceof JMenu;
+				}
 
 	        }, AWTEvent.MOUSE_EVENT_MASK | AWTEvent.WINDOW_EVENT_MASK);
 

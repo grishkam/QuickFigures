@@ -1,0 +1,12 @@
+
+
+if ($.os.search(/windows/i) != -1) {
+fileLineFeed = "Windows"
+} else {
+fileLineFeed = "Macintosh"
+}
+// create the output file accordingly
+fileOut = new File(directory)
+fileOut.lineFeed = fileLineFeed
+fileOut.open("w", "TEXT", "????")
+fileOut.write(line1)

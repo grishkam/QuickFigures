@@ -74,9 +74,9 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			bm.setLayoutBasedOnRect(bounds);
 			
 			 ml = new MontageLayoutGraphic(bm);
-			this.getImageClicked().getGraphicLayerSet().add(ml);
+			this.getImageClicked().getTopLevelLayer().add(ml);
 			super.layoutGraphic=ml;
-			undo2=new UndoAddItem(getImageClicked().getGraphicLayerSet(), ml);
+			undo2=new UndoAddItem(getImageClicked().getTopLevelLayer(), ml);
 			undo=null;
 		}
 		

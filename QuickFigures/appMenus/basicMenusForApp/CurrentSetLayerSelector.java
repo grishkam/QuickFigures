@@ -37,17 +37,17 @@ public class CurrentSetLayerSelector  implements LayerSelector , Serializable{
 
 	@Override
 	public GraphicLayer getSelectedLayer() {
-		LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> tree = getGraphicDisplayContainer().getGraphicLayerSet().getTree();
+		LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> tree = getGraphicDisplayContainer().getTopLevelLayer().getTree();
 		if (tree!=null)
-		return getGraphicDisplayContainer().getGraphicLayerSet().getTree().getSelectedLayer();
-		return getGraphicDisplayContainer().getGraphicLayerSet();
+		return getGraphicDisplayContainer().getTopLevelLayer().getTree().getSelectedLayer();
+		return getGraphicDisplayContainer().getTopLevelLayer();
 	}
 
 	@Override
 	public ArrayList<ZoomableGraphic> getSelecteditems() {
 		FigureDisplayContainer contain = getGraphicDisplayContainer();
 		if (contain==null) return new ArrayList<ZoomableGraphic>();
-		ArrayList<ZoomableGraphic> all = contain.getGraphicLayerSet().getAllGraphics();
+		ArrayList<ZoomableGraphic> all = contain.getTopLevelLayer().getAllGraphics();
 		ArraySorter.removeNonSelectionItems(all);
 		return all;
 	}

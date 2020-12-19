@@ -216,7 +216,7 @@ public class ComplexBlobShape extends BlobShape {
 		ImageWindowAndDisplaySet ex = ToolbarTester.showExample(true);
 		ComplexBlobShape z = new ComplexBlobShape(new Rectangle(20,20,200,200), 5, 0);
 		z.setStrokeColor(Color.BLACK);
-		ex.getImageAsWrapper().getGraphicLayerSet().add(z);
+		ex.getImageAsWrapper().getTopLevelLayer().add(z);
 		ex.updateDisplay();
 	}
 }

@@ -234,7 +234,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 
 		
 		this.addKeyListener(this);
-		this.addKeyListener(new KeyDownTracker());
+		//this.addKeyListener(new KeyDownTracker());
 		getTheCanvas().addKeyListener(this);
 		getTheCanvas().addMouseListener(this);
 		getTheCanvas().addMouseMotionListener(this);
@@ -769,6 +769,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 
 	/**closes the window and calls the kill() method on any mortal objects. 
 	  also checks to see if any of the objects are associated with supporting windows (also closed)*/
+	
 	public void closeGroupAndSupportingWindows(boolean save) {
 		
 		GraphicLayer layer = this.getDisplaySet().getTheSet().getLayer();
@@ -974,19 +975,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 				g2d.setStroke(oldstroke);
 		}
 	}
-	/**
-	static void methodReport(Object thi) {
-		Method[] methods = thi.getClass().getMethods();
-		for (Method m:methods) {
-			int types = m.getParameterTypes().length;
-			
-			if (types==0)
-				try {
-				} catch (Exception e) {
-					
-				} 
-		}
-	}*/
+
 	
 	
 	/**returns true if the window is setup with a side panel*/
@@ -1008,33 +997,6 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		this.pack();
 	}
 
-/**
-	{this.addComponentListener(new ComponentListener() {
 
-		@Override
-		public void componentResized(ComponentEvent e) {
-			if (usesBuiltInSidePanel()) {
-				resetCanvasSize();
-			}
-		}
-
-		@Override
-		public void componentMoved(ComponentEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void componentShown(ComponentEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void componentHidden(ComponentEvent e) {
-			// TODO Auto-generated method stub
-			
-		}});}
-*/
 	
 }

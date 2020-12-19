@@ -27,7 +27,7 @@ public interface FigureDisplayContainer {
 
 	public void updateDisplay();
 	
-	public GraphicLayer getGraphicLayerSet();
+	public GraphicLayer getTopLevelLayer();
 	
 	public void onItemLoad(ZoomableGraphic z);
 	public OverlayObjectManager getOverlaySelectionManagger();

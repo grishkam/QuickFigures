@@ -139,8 +139,8 @@ public class Text_GraphicTool extends GraphicTool {
 				layer.getParentLayer().add(textob);
 			}
 			else 
-			{gmp.getGraphicLayerSet().add(textob);
-			addUndoerForAddItem(gmp, gmp.getGraphicLayerSet().getSelectedContainer(), textob);
+			{gmp.getTopLevelLayer().add(textob);
+			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), textob);
 			}
 			this.setPrimarySelectedObject(textob);
 		}
@@ -187,8 +187,8 @@ public class Text_GraphicTool extends GraphicTool {
 			newCreation= makeNewTextObject();
 			
 			ImageWrapper gmp = this.getImageClicked();
-			gmp.getGraphicLayerSet().add(newCreation);
-			addUndoerForAddItem(gmp, gmp.getGraphicLayerSet().getSelectedContainer(), newCreation);
+			gmp.getTopLevelLayer().add(newCreation);
+			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), newCreation);
 			this.setPrimarySelectedObject(newCreation);
 		}
 		}

@@ -83,8 +83,8 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 
 	
 	private GraphicLayer findParentLayer(ZoomableGraphic item ) {
-		ArrayList<GraphicLayer> layers = selector.getGraphicDisplayContainer().getGraphicLayerSet().getSubLayers();
-		if(selector.getGraphicDisplayContainer().getGraphicLayerSet().getItemArray().contains(item)) return selector.getGraphicDisplayContainer().getGraphicLayerSet();
+		ArrayList<GraphicLayer> layers = selector.getGraphicDisplayContainer().getTopLevelLayer().getSubLayers();
+		if(selector.getGraphicDisplayContainer().getTopLevelLayer().getItemArray().contains(item)) return selector.getGraphicDisplayContainer().getTopLevelLayer();
 		for(GraphicLayer l: layers) {
 			if(l.getItemArray().contains(item)) return l;
 		}

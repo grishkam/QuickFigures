@@ -1,0 +1,2 @@
+When I began writting this package, imageJ info had a lot of key value pairs separated by an = sign. 
+I wrote to put information in that and decode it

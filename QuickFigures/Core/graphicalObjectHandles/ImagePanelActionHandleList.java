@@ -29,7 +29,6 @@ import genericMontageKit.PanelListElement;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ImagePanelGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
-import journalCriteria.PPIOption;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
@@ -163,8 +162,11 @@ public class ChannelsIconHandle extends IconHandle {
 			
 			if(this.isMergePanel())
 				 items.addAll( local.createChannelMergeMenuItems(ChannelPanelEditingMenu.NO_MERGE_CHANNEL_MENU));
-			else items.addAll(local.createChannelMergeMenuItems(ChannelPanelEditingMenu.MERGE_WITH_EACH_MENU));
-			
+			else {
+				o.add(local.createChannelMergeMenu(ChannelPanelEditingMenu.MERGE_WITH_EACH_MENU));
+				o.add(local.createChannelMergeMenu(ChannelPanelEditingMenu.EXCLUDED_CHANNEL_MENU));
+				
+			}
 			for(ChannelMergeMenuItem i:items) {o.add(i);}
 			return o;
 		}

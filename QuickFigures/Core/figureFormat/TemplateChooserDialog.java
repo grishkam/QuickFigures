@@ -68,7 +68,7 @@ public class TemplateChooserDialog extends StandardDialog {
 	/**Constructor for selecting items for the given figure template. looks in the given layer
 	 figure display container for possible example items*/
 	public TemplateChooserDialog(FigureTemplate tp, FigureDisplayContainer oc) {
-		this(tp,oc.getAsWrapper().getGraphicLayerSet());
+		this(tp,oc.getAsWrapper().getTopLevelLayer());
 	}
 
 	/**Adds combo boxes to the dialog that that allow the user to choose which objects to use as examples 

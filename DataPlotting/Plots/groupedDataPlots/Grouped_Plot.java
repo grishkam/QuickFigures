@@ -242,14 +242,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			}
 		}
 				if (getGroupedPlotType()==SequentialBars) {
-					HashMap<Double, Double> vOffsets = new HashMap<Double, Double> ();
+					//HashMap<Double, Double> vOffsets = new HashMap<Double, Double> ();
 					for(int i=orderedList.size()-1; i>=0; i--) {
-						GroupedPlotDataSeriesGroup groupSeries = orderedList.get(i);
+						//GroupedPlotDataSeriesGroup groupSeries = orderedList.get(i);
 						GroupedDataSeries thedata = orderedList.get(i).getTheData();
 						 thedata.setPositionOffset(0);
 						 thedata.setValueOffsetMap(null);
 						
-						 double[] p =thedata.getAllPositions();
+						// double[] p =thedata.getAllPositions();
 							double dist = super.getCordinateHandler().translate(2, 0, 0,0).getX()-getCordinateHandler().translate(1,0,0,0).getX();
 								
 							thedata.setPositionOffset((orderedList.size())*dist*(i));
@@ -586,7 +586,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	@MenuItemMethod(menuActionCommand = "Reorder Category Data", menuText = "Change Category Order", subMenuName="Edit", orderRank=19)
 	public void changeCategoryOrder() {
 		HashMap<Double, String> map = getLocationMap();
-		Set<String> names = getAllDataSeries().get(0).getTheData().getAllSeriesNames();
+		//Set<String> names = getAllDataSeries().get(0).getTheData().getAllSeriesNames();
 		
 		CategoryOrderDialog d = new CategoryOrderDialog(map, getAllDataSeries().get(0).getTheData().getAllSeriesNames());
 		d.showDialog();

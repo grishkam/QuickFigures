@@ -39,8 +39,6 @@ public class SVGQuickExport extends QuickExport {
 			getClass().getClassLoader().loadClass("org.apache.batik.svggen.SVGGraphics2DRuntimeException");
 			return true;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -59,7 +57,7 @@ public class SVGQuickExport extends QuickExport {
 		   
 		  SVGsaver saver = new SVGsaver();
 		   
-		  saver.saveWrapper(newpath, diw);
+		  saver.saveFigure(newpath, diw);
 		    Desktop.getDesktop().open(new File(newpath));
 		
 		} catch (Throwable t) {

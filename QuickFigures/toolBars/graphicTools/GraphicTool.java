@@ -32,7 +32,7 @@ public class GraphicTool extends Object_Mover {
 	
 	@Override 
 	public void mouseEntered() {
-		this.getImageClicked().getGraphicLayerSet();
+		this.getImageClicked().getTopLevelLayer();
 	
 	}
 	

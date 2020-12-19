@@ -73,7 +73,7 @@ import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
 
 /**A graphical object that stores a layout, displays the layout, includes handles for editing the layout*/
-public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
+public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
 	
 	public Color panelColor=Color.red;
 	public Color boundryColor=Color.blue;
@@ -979,8 +979,7 @@ public class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLay
 	protected class PanelLayoutHandle extends SmartHandle {
 		
 		boolean hasLinkLine=false;
-		Point2D startForLine=null;//cordinate locatin for start of line
-		//private IconSet iconSet=new IconSet("iconsHandles/Move cursor 4.png","iconsHandles/Move cursor 4.png","iconsHandles/Move cursor 4.png");
+		Point2D startForLine=null;//cordinate location for start of line
 		Icon imageIcon=null;
 		
 		void hasLine(Point2D start) {

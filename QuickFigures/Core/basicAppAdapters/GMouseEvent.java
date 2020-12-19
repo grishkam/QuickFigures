@@ -133,14 +133,12 @@ public class GMouseEvent implements CanvasMouseEvent {
 	
 	
 	public int clickCount() {
-		// TODO Auto-generated method stub
 		return e.getClickCount();
 	}
 
 	@Override
 	public boolean altKeyDown() {
-		if (e.isAltDown()) return true;
-		return KeyDownTracker.isKeyDown(KeyEvent.VK_ALT);
+		return e.isAltDown();
 	}
 	
 	public boolean shfitDown() {

@@ -118,7 +118,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		if (path==null) la.openFile=false; else la.openFile=true;
 	
-		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getGraphicLayerSet(), path, p2);
+		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getTopLevelLayer(), path, p2);
 		
 		if(added==null) {
 			//if something goes wrong, closes the newly created window
@@ -311,7 +311,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	/**Attempts to find the figure organizing layer for the currently active figure.*/
 	FigureOrganizingLayerPane findFigureOrganizingLayer() {
-		GraphicLayer sm = setinformer.getCurrentlyActiveOne().getGraphicLayerSet().getSelectedContainer();
+		GraphicLayer sm = setinformer.getCurrentlyActiveOne().getTopLevelLayer().getSelectedContainer();
 		while(!(sm instanceof FigureOrganizingLayerPane)&&sm!=null) {
 			if (sm.getParentLayer()==null) break;
 			sm=sm.getParentLayer();
