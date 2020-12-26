@@ -93,10 +93,6 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 * 
 	 */
 	public static final int CODE_FOR_RESHAPE_HANDLE_LIST = 90000000;
-
-	/**
-	 * 
-	 */
 	private static final int NO_HANDLE = HasHandles.NO_HANDLE_;
 
 	/**
