@@ -14,14 +14,17 @@
  *    limitations under the License.
  *******************************************************************************/
 package genericMontageLayoutToolKit;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 
 
 
 /**A layout tool for changing the border between panels*/
 public class BorderAdjusterTool extends GeneralLayoutEditorTool implements LayoutSpaces {
 
-	{createIconSet("icons/Montage_EditorToolIcon.jpg", "icons/Montage_EditorToolIconPressed.jpg", "icons/Montage_EditorToolRollOverIcon.jpg");}
+	{
+		this.setIconSet(new BorderAdjustToolIcon(0).generateIconSet());
+		//createIconSet("icons/Montage_EditorToolIcon.jpg", "icons/Montage_EditorToolIconPressed.jpg", "icons/Montage_EditorToolRollOverIcon.jpg");
+		}
 	
 	public void performDragEdit(boolean shift) {
 			
@@ -63,5 +66,7 @@ public class BorderAdjusterTool extends GeneralLayoutEditorTool implements Layou
 	public String getToolName() {
 			return "Adjust Border Between Panels";
 		}
+	
+	
 	
 }

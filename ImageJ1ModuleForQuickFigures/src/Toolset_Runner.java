@@ -15,7 +15,6 @@
  *******************************************************************************/
 import java.awt.AWTEvent;
 import java.awt.Toolkit;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -215,10 +214,10 @@ public class Toolset_Runner implements PlugIn {
 
 		@Override
 		public void windowDeactivated(WindowEvent arg0) {
-			if (arg0.getWindow() instanceof ImageWindow) {
+			/**if (arg0.getWindow() instanceof ImageWindow) {
 				ImageWindow iw=(ImageWindow) arg0.getWindow();
 		
-			}
+			}*/
 		}
 
 		@Override

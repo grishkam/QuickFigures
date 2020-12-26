@@ -17,12 +17,20 @@ package multiChannelFigureUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import channelMerging.MultiChannelImage;
+import genericMontageLayoutToolKit.GeneralLayoutToolIcon;
+import layout.PanelLayout;
+import layout.plasticPanels.PlasticPanelLayout;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
+import utilityClassesForObjects.RectangleEdges;
 
+/**A tool for changing the channel colors of an image*/
 public class LutSwapperTool extends BasicImagePanelTool implements ColorInputListener {
 	
 	@Override
@@ -31,9 +39,8 @@ public class LutSwapperTool extends BasicImagePanelTool implements ColorInputLis
 		mw.getChannelSwapper().swapChannelLuts(chan1, chan2);
 	}
 	
-	{createIconSet( "icons/CrayonTool.jpg",
-			"icons/CrayonToolPressed.jpg",
-			"icons/CrayonToolRollOver.jpg");	}
+	{
+	setIconSet(new  LutIcon(0).generateIconSet());}
 	
 	@Override
 	public void ColorChanged(ColorInputEvent fie) {
@@ -68,4 +75,76 @@ public class LutSwapperTool extends BasicImagePanelTool implements ColorInputLis
 			
 			return "Change Channel Colors";
 		}
+	
+	
+
+	{this.setIconSet(new  LutIcon(0).generateIconSet());}
+	public static class LutIcon extends GeneralLayoutToolIcon {
+
+		/**
+		 * @param type
+		 */
+		public LutIcon(int type) {
+			super(type);
+			super.paintBoundry=false;
+			panelColor=new Color[] {Color.blue, Color.green, Color.blue};
+			if (type!=NORMAL_ICON_TYPE)
+				panelColor=new Color[] {Color.blue, Color.red, Color.blue};
+			this.arrowColor=Color.red;
+			this.arrowthickNess=3;
+		}
+		
+		/**
+		creates a layout for drawing and icon
+		 */
+		protected PanelLayout createSimpleIconLayout( int type) {
+			int xLoc=3;
+			int yLoc=3;
+			int size=14;
+			Rectangle r1 = new Rectangle(xLoc, yLoc, size, size);
+			Rectangle r2 = new Rectangle(xLoc+3, yLoc+ 4, size, size);
+			
+			PlasticPanelLayout layout2 = new PlasticPanelLayout(r1, r2);
+			
+			return layout2;
+		}
+		
+		/**
+		 alters the color for the stroke of the panels
+		 */
+		protected Color derivePanelStrokeColor(Color panelColor2) {
+			return panelColor2.darker().darker();
+		}
+		
+		/**given the base color of a panel, returns the fill color used to give the panel a light tint
+		 * @param panelColor2
+		 * @return
+		 */
+		protected Color deriveFillColor(Color panelColor2) {
+			return panelColor2;
+		}
+		
+		/**
+		 
+		 */
+		@Override
+		protected
+		GeneralLayoutToolIcon generateAnother(int type) {
+			return new LutIcon(type);
+		}
+		
+		public GeneralLayoutToolIcon copy(int type) {
+			GeneralLayoutToolIcon another = generateAnother(type);
+			return another;
+		}
+		
+		/**draws the given panel of the icon
+		 */
+		protected void drawPanel(Graphics2D g2d, Rectangle2D p, int count) {
+			super.drawPanel(g2d, p, count);
+			if (count==1) {
+				super.paintArrow(g2d, (int) p.getMaxX(), (int)p.getMinY()-2, 8, RectangleEdges.LOWER_LEFT, 1);
+			}
+		}
+	}
 }

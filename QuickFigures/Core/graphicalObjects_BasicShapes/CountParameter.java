@@ -82,6 +82,17 @@ public class CountParameter implements Serializable, RectangleEdgePosisions, Sim
 	public CountParameter self() {
 		return this;
 	}
+	
+	/**sets the value to the name i*/
+	public void setValue(String a) {
+		if (a==null) return;
+		if(this.getNames()!=null) {
+			for(int i=0; i<getNames().length; i++) {
+				if (a.equals(getNames()[i]))
+						this.setValue(i);
+			}
+		}
+	}
 
 	public String getValueAsString() {
 		if(getNames()!=null &&getNames().length>value) return getNames()[value];

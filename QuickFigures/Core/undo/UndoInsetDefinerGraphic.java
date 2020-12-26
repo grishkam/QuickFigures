@@ -17,7 +17,7 @@ package undo;
 
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner.InsetGraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 
 public class UndoInsetDefinerGraphic extends AbstractUndoableEdit2 {
 	
@@ -26,10 +26,10 @@ public class UndoInsetDefinerGraphic extends AbstractUndoableEdit2 {
 	 */
 	private static final long serialVersionUID = 1L;
 	private InsetGraphicLayer iLayer;
-	private MontageLayoutGraphic iLayout;
+	private DefaultLayoutGraphic iLayout;
 	private PanelGraphicInsetDefiner def;
 	private InsetGraphicLayer fLayer;
-	private MontageLayoutGraphic fLayout;
+	private DefaultLayoutGraphic fLayout;
 
 	public UndoInsetDefinerGraphic(PanelGraphicInsetDefiner def) {
 		this.def=def;

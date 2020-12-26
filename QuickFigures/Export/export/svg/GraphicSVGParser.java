@@ -32,19 +32,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import org.apache.batik.swing.JSVGCanvas;
-import org.apache.batik.util.ParsedURL;
-import org.apache.batik.util.XMLResourceDescriptor;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
 import org.apache.batik.anim.dom.SVGOMDocument;
 import org.apache.batik.anim.dom.SVGOMTextElement;
 import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.bridge.GVTBuilder;
-import org.apache.batik.css.engine.CSSEngine;
 import org.apache.batik.css.engine.SVGCSSEngine;
 import org.apache.batik.css.parser.Parser;
 import org.apache.batik.dom.GenericText;
@@ -54,24 +50,31 @@ import org.apache.batik.gvt.GraphicsNode;
 import org.apache.batik.gvt.ShapeNode;
 import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
-import org.w3c.dom.*;
+import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.util.ParsedURL;
+import org.apache.batik.util.XMLResourceDescriptor;
+import org.apache.commons.codec.binary.Base64;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import figureFormat.DirectoryHandler;
 import graphicalObjects.BufferedImageGraphic;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
+import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_BasicShapes.CircularGraphic;
+import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import imageDisplayApp.BasicImageInfo;
 import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
-import imageDisplayApp.BasicImageInfo;
 import infoStorage.BasicMetaDataHandler;
 import infoStorage.DomMetaInfoWrapper;
 import logging.IssueLog;
@@ -108,7 +111,7 @@ public class GraphicSVGParser {
 		    	startingContext=mw;
 		    }
 		    
-		  CSSEngine engine = doc.getCSSEngine();
+		   doc.getCSSEngine();
 		    IssueLog.log("is the engine missing"+doc.getCSSEngine());
 		  doc.setCSSEngine(new SVGCSSEngine(doc, new ParsedURL(path),new Parser(), mw));
 		    
@@ -679,6 +682,8 @@ private  ZoomableGraphic parseRect(Node node) {
 			    BufferedImageGraphic big = new BufferedImageGraphic(image,x,y);
 			   if(scale!=null) big.setRelativeScale(scale);
 			    double ratio = w/img.getWidth();
+			     double ratio2 = h/img.getHeight();
+			     if(Math.abs(ratio-ratio2)>0.01) {IssueLog.log("pan aspect ratio is uneven");}
 			   if (scale==null) big.setRelativeScale(ratio);
 			    
 			    big.setFrameWidthH(0);

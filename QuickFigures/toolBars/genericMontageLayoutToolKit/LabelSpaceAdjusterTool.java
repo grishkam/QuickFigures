@@ -19,8 +19,9 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 
 import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
-import gridLayout.BasicMontageLayout;
-import gridLayout.LayoutSpaces;
+import layout.PanelLayout;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 
@@ -32,7 +33,7 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 	
 	
 	public void performDragEdit(boolean shift) {
-		BasicMontageLayout layout = getCurrentLayout();
+		BasicLayout layout = getCurrentLayout();
 		if (mode==LABEL_SPACES) {
 			if (shift) {
 				
@@ -63,7 +64,7 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 		
 	}
 		
-		layout.setMontageProperties();
+		layout.afterEditDone();
 	}
 	
 	
@@ -87,10 +88,7 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 
 	}
 	
-	{createIconSet("icons/NonMontageSpaceEditorTool.jpg",
-			"icons/NonMontageSpaceEditorToolPressed.jpg",
-			"icons/NonMontageSpaceEditorToolRollOver.jpg"
-			);}
+	{this.setIconSet(new  LabelSpaceIcon(0).generateIconSet());}
 	
 	public ArrayList<JMenuItem> getPopupMenuItems() {
 		ArrayList<JMenuItem> output = new ArrayList<JMenuItem>();
@@ -106,5 +104,38 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 		}
 	
 	public String getToolName() {return getToolTip();}
+	
+	
+	class LabelSpaceIcon extends GeneralLayoutToolIcon {
+
+		/**
+		 * @param type
+		 */
+		public  LabelSpaceIcon(int type) {
+			super(type);
+			// TODO Auto-generated constructor stub
+		}
+		
+		/**
+		creates a layout for drawing and icon
+		 */
+		protected PanelLayout createSimpleIconLayout( int type) {
+			BasicLayout layout = new BasicLayout(2, 2, 6, 6, 2,2, true);
+			layout.setLabelSpaces(2, 2,2,2);
+			layout.move(2,3);
+			if(type!=NORMAL_ICON_TYPE) {
+				layout.setLabelSpaces(3, 2, 6, 2);
+			}
+			return layout;
+		}
+		
+		/**
+		 * @param type
+		 * @return
+		 */
+		protected GeneralLayoutToolIcon generateAnother(int type) {
+			return new  LabelSpaceIcon(type);
+		}
+	}
 	
 }

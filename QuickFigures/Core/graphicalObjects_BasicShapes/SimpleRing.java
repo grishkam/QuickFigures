@@ -51,10 +51,16 @@ public class SimpleRing extends CircularGraphic {
 	}
 
 	private void setupName() {
+		name=getShapeName();
+	}
+	
+	
+	public String getShapeName() {
+		String name1="Ring";
 		if(this.isArc()) {
-			name="Part Ring";
+			name1="Part Ring";
 		}
-		else name="Ring";
+		return name1;
 	}
 
 	/**

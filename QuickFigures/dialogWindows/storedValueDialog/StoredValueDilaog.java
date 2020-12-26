@@ -17,7 +17,7 @@ package storedValueDialog;
 
 import java.lang.reflect.Field;
 
-import gridLayout.RetrievableOption;
+import layout.RetrievableOption;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputEvent;

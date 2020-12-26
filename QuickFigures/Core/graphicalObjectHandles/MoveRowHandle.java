@@ -22,17 +22,17 @@ import java.awt.geom.Rectangle2D;
 
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.LayoutSpaces;
 import undo.UndoLayoutEdit;
 
 /**a handle that moves the rows and columns of the layout around by swapping their contents*/
 public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 
-	protected MontageLayoutGraphic layout;
+	protected DefaultLayoutGraphic layout;
 	protected int type;
 	private boolean left=false;
 	protected int index;
@@ -43,7 +43,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		// TODO Auto-generated constructor stub
 	}
 
-	public MoveRowHandle(MontageLayoutGraphic montageLayoutGraphic, int y, boolean sub, int index) {
+	public MoveRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int y, boolean sub, int index) {
 		this(0,0);
 		this.left=sub;
 		this.layout=montageLayoutGraphic;
@@ -113,7 +113,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 	public void handleDrag(CanvasMouseEvent canvasMouseEventWrapper) {
 		super.handleDrag(canvasMouseEventWrapper);
 		
-		BasicMontageLayout makeAltered = layout.getPanelLayout().makeAltered(type);
+		BasicLayout makeAltered = layout.getPanelLayout().makeAltered(type);
 		int startIndex = index;
 		endIndex = makeAltered.getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());
 		
@@ -159,7 +159,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		
 	}
 
-	private BasicMontageLayout getCurrentLayout() {
+	private BasicLayout getCurrentLayout() {
 		return layout.getPanelLayout();
 		
 	}

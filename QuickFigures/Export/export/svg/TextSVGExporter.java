@@ -111,8 +111,7 @@ public class TextSVGExporter extends SVGExporter {
 			for(int i=0; i<comp.getParagraph().size();i++) {
 				line = comp.getParagraph().get(i);
 				for(int i2=0; i2<line.size();i2++) {
-					
-					Element espan = createTextSpan(text, line.get(i2), dom, i2==0, g2d);
+					createTextSpan(text, line.get(i2), dom, i2==0, g2d);
 				
 					}
 				}

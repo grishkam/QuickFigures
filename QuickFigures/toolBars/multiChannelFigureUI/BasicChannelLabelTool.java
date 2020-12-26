@@ -15,10 +15,14 @@
  *******************************************************************************/
 package multiChannelFigureUI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.JPopupMenu;
@@ -26,6 +30,9 @@ import javax.swing.JPopupMenu;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.MultiChannelImage;
+import genericMontageLayoutToolKit.GeneralLayoutToolIcon;
+import layout.PanelLayout;
+import layout.plasticPanels.PlasticPanelLayout;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
@@ -37,10 +44,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 	static String renameCommand2="RelabelChannels";
 	static String alterAll="Alter labels Channels";
 	
-	
-	 {createIconSet( "icons/NameStackSlicesicon.jpg",
-				"icons/NameStackSlicesiconPressed.jpg",
-				"icons/NameStackSlicesicon.jpg");	};  
+
 
 				
 		/**If called after a mouse press on a multichannel. Does not get called when a popup menu is triggered*/
@@ -134,5 +138,83 @@ if (arg0.getActionCommand().equals(alterAll)) {
 			}
 	}
 	
+	
+	{this.setIconSet(new  ChanelLabelIcon(0).generateIconSet());}
+	public static class ChanelLabelIcon extends GeneralLayoutToolIcon {
+
+		/**
+		 * @param type
+		 */
+		public ChanelLabelIcon(int type) {
+			super(type);
+			super.paintBoundry=false;
+			super.panelColor=new Color[] {Color.red, Color.green, Color.blue};
+			
+		}
+		
+		/**
+		creates a layout for drawing and icon
+		 */
+		protected PanelLayout createSimpleIconLayout( int type) {
+			int xLoc=3;
+			int yLoc=3;
+			int size=11;
+			Rectangle r1 = new Rectangle(xLoc, yLoc, size, size);
+			Rectangle r2 = new Rectangle(xLoc+3, yLoc+ 4, size, size);
+			Rectangle r3 = new Rectangle(xLoc+6, yLoc+8, size, size);
+			
+			PlasticPanelLayout layout2 = new PlasticPanelLayout(r1, r2, r3);
+			
+			return layout2;
+		}
+		
+		/**
+		 alters the color for the stroke of the panels
+		 */
+		protected Color derivePanelStrokeColor(Color panelColor2) {
+			return panelColor2.darker().darker();
+		}
+		
+		/**given the base color of a panel, returns the fill color used to give the panel a light tint
+		 * @param panelColor2
+		 * @return
+		 */
+		protected Color deriveFillColor(Color panelColor2) {
+			return Color.lightGray;
+		}
+		
+		/**draws the given panel of the icon with some text
+		 * @param g2d
+		 * @param p
+		 * @param count
+		 */
+		protected void drawPanel(Graphics2D g2d, Rectangle2D p, int count) {
+			super.drawPanel(g2d, p, count);
+			String str = "B";
+			if(type==ROLLOVER_ICON_TYPE)
+				str="C";
+			if (count!=2) 
+				str="A";
+			
+			drawLabelOnPanel(g2d, p, str);
+		}
+
+		
+		
+		/**
+		 * @param type
+		 * @return
+		 */
+		@Override
+		protected
+		GeneralLayoutToolIcon generateAnother(int type) {
+			return new ChanelLabelIcon(type);
+		}
+		
+		public GeneralLayoutToolIcon copy(int type) {
+			GeneralLayoutToolIcon another = generateAnother(type);
+			return another;
+		}
+	}
 	
 }

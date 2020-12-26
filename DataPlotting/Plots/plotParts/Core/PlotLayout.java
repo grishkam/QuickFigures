@@ -27,21 +27,21 @@ import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
 import genericPlot.BasicPlot;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.LayoutSpaces;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.LockedItemMenu;
 import utilityClassesForObjects.LocatedObject2D;
 
-public class PlotLayout extends MontageLayoutGraphic implements LayoutSpaces{
+public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 
 	private BasicPlot plotArea;
 
-	public PlotLayout(BasicMontageLayout basicMontageLayout) {
+	public PlotLayout(BasicLayout basicMontageLayout) {
 		super(basicMontageLayout);
 	}
 	/**

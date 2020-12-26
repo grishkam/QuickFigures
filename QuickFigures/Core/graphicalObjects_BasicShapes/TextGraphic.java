@@ -60,8 +60,6 @@ import export.pptx.TextGraphicImmitator;
 import export.svg.SVGExportable;
 import export.svg.SVGExporter;
 import export.svg.TextSVGExporter;
-import externalToolBar.IconSet;
-import externalToolBar.TreeIconForTextGraphic;
 import graphicalObjectHandles.TextActionButtonHandleList;
 import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjectHandles.HasSmartHandles;
@@ -70,6 +68,8 @@ import graphicalObjectHandles.TextHandle;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.HasBackGroundShapeGraphic;
 import graphicalObjects.HasTextInsets;
+import icons.IconSet;
+import icons.TreeIconForTextGraphic;
 import illustratorScripts.*;
 import keyFrameAnimators.TextGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
@@ -138,10 +138,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	private int highlightPosition=-1;
 	private boolean editMode=false;
 	private boolean userEditable=true;
-	
-	
-	
-	
+
 	public TextGraphic() {
 		
 	}
@@ -235,7 +232,6 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	     it then calls another method to determine the polygon 
 	     representing the bounds*/
 	  void setUpBounds(Graphics g) {
-		  //	FontMetrics metrics = g.getFontMetrics(getFont());
 		  	FontMetrics metricsi=textPrecis().getInflatedMetrics(getFont(), g);
 	        Rectangle2D r=metricsi.getStringBounds(getText(), g);
 	        width=r.getWidth()/textPrecis().getInflationFactor();//;
@@ -286,6 +282,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 			return rotatedBoundsPrecise;
 	  }
 	  
+	  /**set the whole bounds field to account for the inset and the rotation*/
 	 protected void setWholeBoundsBasedOnRotated() {
 		 wholebBounds=new Rectangle2D.Double();
 		 wholebBounds.setRect(rotatedBounds.getBounds2D());
@@ -391,7 +388,7 @@ public void draw(Graphics2D g, CordinateConverter<?> cords) {
 }
 
 
-
+/**Draws the text onto the graphics*/
 public void drawRotatedText(Graphics2D g, CordinateConverter<?> cords) {
 	   int sx1 = (int)cords.transformX(getCenterOfRotation().getX());
 	   int sy1 = (int)cords.transformY(getCenterOfRotation().getY());
@@ -405,15 +402,6 @@ public void drawRotatedText(Graphics2D g, CordinateConverter<?> cords) {
       
 	
 }
-
-
-
- 
-/**
-public Point2D getPositionOfCharNRelativeToBounds(int n) {
-	
-	return null;
-}*/
 
 /**draws the given text onto a graphics 2d object*/
 public void drawText(Graphics2D g, CordinateConverter<?> cords) { 
@@ -514,6 +502,7 @@ protected void drawHighlight(Graphics2D g, CordinateConverter<?> cords, double x
 	   
 }
 
+/**draws the outline*/
 public void drawHandlesAndOutline(Graphics2D g2d, CordinateConverter<?> cords) {
 	g2d.setColor(getTextColor());  
 	
@@ -528,12 +517,7 @@ public void drawHandlesAndOutline(Graphics2D g2d, CordinateConverter<?> cords) {
 	  
 	  getGrahpicUtil().drawLine(g2d, cords, getBaseLineStart(), getUpperLeftCornerOfBounds(),false);
 	  getSmartHandleList().draw(g2d, cords);
-	  if (showRectCornerHandes) {
-		  
-		 // getGrahpicUtil().drawHandlesAtPoints(g2d, cords,  RectangleEdges.getLocationsForHandles(this.getBounds()));
-		  //handleBoxes.addAll( getGrahpicUtil().lastHandles);
-		  //getGrahpicUtil().setHandleSize(3);
-	  }
+
 	  try{
 		
 	 }
@@ -559,6 +543,7 @@ public TextGraphic copy() {
 	giveTraitsTo(tg);
 	return tg;
 }
+/***/
 protected void giveTraitsTo(TextGraphic tg) {
 	tg.theText=theText;
 	tg.copyAttributesFrom(this);
@@ -599,32 +584,17 @@ public int getTextWidth() {
 }
 
 
-/**
-@Override
-public int handleNumber(int x, int y) {
-	if (handleBoxes==null||handleBoxes.size()==1) return -1;
-	for(int i=0; i<handleBoxes.size(); i++) {
-		if (handleBoxes.get(i).contains(x, y)) return i;
-	}
-	return -1;
-}*/
 
 @Override
 public double getAngle() {
-	// TODO Auto-generated method stub
 	return angle;
 }
-
-
 public double getAngleInDegrees() {
 	return getAngle()*180/Math.PI;
 }
-
-
 public void setAngleInDegrees(double angle) {
 	setAngle( angle*Math.PI/180);
 }
-
 @Override
 public void setAngle(double angle) {	
 	Point2D p = this.getLocation();
@@ -686,10 +656,8 @@ public void setLocation( Point2D p) {
 
 @Override
 public void moveLocation(double xmov, double ymov) {
-	//IssueLog.log("in location move. currently at  "+x+", "+y) ;
 	x=x+xmov;
 	y=y+ymov;
-	//IssueLog.log("in location move. just moved to "+x+", "+y) ;
 	
 }
 
@@ -699,11 +667,9 @@ public Point2D getLocationUpperLeft() {
 }
 @Override
 public void setLocationUpperLeft(double x, double y) {
-	//IssueLog.log("setting upper left will set upper left locaton "+x+ ", "+y);
 	
 	double dx = x-wholebBounds.x;
 	double dy = y-wholebBounds.y;
-	//IssueLog.log("setting upper left will move text "+dx+ ", "+dy);
 	this.moveLocation(dx, dy);
 }
 
@@ -800,7 +766,6 @@ public Object toIllustrator(ArtLayerRef aref) {
 	}
 	
 	return ti;
-	//return null;
 }
 
 @Override
@@ -816,25 +781,22 @@ public int isUserLocked() {
 }
 @Override
 public Rectangle getExtendedBounds() {
-	// TODO Auto-generated method stub
 	return getBounds();
 }
 transient static IconSet i;//=new IconSet("icons2/TextIcon.jpg");
 
 @Override
 public Icon getTreeIcon() {
-	//output=
-	//return null;
 	return new TreeIconForTextGraphic(this.getFont(), "a");
-	//return createImageIcon();
 }
 
 
 
 public static Icon createImageIcon() {
-	if (i==null) i=new IconSet("iconsTree/TextTreeIcon.png");
-	return i.getIcon(0);
+	return new TreeIconForTextGraphic(new Font("Arial", Font.BOLD, 10) ,"a");
+	
 }
+
 public boolean isDimColor() {
 	return dimColor;
 }
@@ -904,6 +866,7 @@ public void handleKeyTypedEvent(KeyEvent e) {
 	
 }
 
+/**Called in the event that a keyboard shortcut */
 boolean handleNonLetterKey(KeyEvent arg0) {
 	boolean meta = arg0.isMetaDown();
 	if (IssueLog.isWindows()) {
@@ -935,14 +898,14 @@ boolean handleNonLetterKey(KeyEvent arg0) {
 	return false;
 }
 
-
+/**returns true if part of the text is highlighted*/
 public boolean hasHighlightRegion() {
 	if (this.getHighlightPosition()<0) return false;
 	if (this.getHighlightPosition()>getCursorPosition()) return false;
 	return this.getHighlightPosition()!=this.getCursorPosition();
 }
 
-
+/**Called when the text is in editmode and the user types*/
 public void handleKeyPressEvent(KeyEvent arg0) {
 	
 	if(this.handleNonLetterKey(arg0)) return;//returns if the press is not a letter
@@ -1290,8 +1253,6 @@ public int handleNumber(double x, double y) {
 public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoTextEdit(this);
 }
-
-
 
 	
 }

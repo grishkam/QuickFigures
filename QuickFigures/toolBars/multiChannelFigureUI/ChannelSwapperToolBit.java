@@ -15,7 +15,9 @@
  *******************************************************************************/
 package multiChannelFigureUI;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -25,76 +27,57 @@ import javax.swing.JPopupMenu;
 import advancedChannelUseGUI.PanelListDisplayGUI;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.MultiChannelImage;
 import figureEditDialogs.PanelStackDisplayOptions;
-import channelMerging.ImageDisplayLayer;
+import genericMontageLayoutToolKit.GeneralLayoutToolIcon;
+import layout.PanelLayout;
+import layout.plasticPanels.PlasticPanelLayout;
 import menuUtil.SmartPopupJMenu;
 import popupMenusForComplexObjects.ScaleFigureDialog;
-import sUnsortedDialogs.ScaleSettingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import undo.ChannelDisplayUndo;
-import applicationAdapters.HasScaleInfo;
 
+/**A tool for reordering the channels of the source images*/
 public class ChannelSwapperToolBit extends BasicImagePanelTool implements ActionListener, DisplayRangeChangeListener, StandardDialogListener {
 	
-	
-	int swapMode=0;
-	
-	
-	static String scalingCommand="Scale";
-	static String colorModeCommand="ColorMode";
-	static String chanUseCommand="Channel Use";
-	static String panCreateCommand="recreate";
-	static String minMaxCommand="MinMax";
-	static String WLCommand="WinLev";
-	private static String orderCommand="order and luts";
-	private static String orderCommand2="Min, Max, order and luts";
-	private String scalingCommand2="Scale of Panels";
-	private String panContentCommand="Panel Content Gui";
-	private String colorRecolorCommand="Fix Colors";
-
-
-	private String renameChanCommand="Add Channel exposures to summary";
+	static final String SCALING_COMMAND="Scale", COLOR_MODE_COMMAND="ColorMode";
+	static final String CHANNEL_USE_COMMAND="Channel Use", RECREATE_PANELS_COMMAND="recreate";
+	static final String DISPLAY_RANGE_COMMAND="MinMax", DISPLAY_RANGE_COMMAND_2="WinLev";
+	static final String ORDER_AND_COLOR_COMMAND="order and luts", ORDER_DISPLAY_RANGE_AND_COLOR="Min, Max, order and luts";
+	static final String SCALE_PANELS_COMMAND="Scale of Panels",
+			PANEL_CONTENT_GUI_SHOWING_COMMAND="Panel Content Gui",
+			AUTO_COLOR_COMMAND="Fix Colors",
+			RENAME_CHANNEL_COMMAND="rename channel command";
 	
 	
 	public JPopupMenu createJPopup() {
 		JPopupMenu output = new SmartPopupJMenu();
 		 
-		 addButtonToMenu(output, "Window/Level", WLCommand);
-		 addButtonToMenu(output, "Min/Max", minMaxCommand);
-		 addButtonToMenu(output, "Set Units For Scale", scalingCommand);
-		 addButtonToMenu(output, "Set Bilinear Scaling", scalingCommand2);
-		 addButtonToMenu(output, "Change Color Modes ", colorModeCommand);
+		 addButtonToMenu(output, "Window/Level", DISPLAY_RANGE_COMMAND_2);
+		 addButtonToMenu(output, "Min/Max", DISPLAY_RANGE_COMMAND);
+		 addButtonToMenu(output, "Set Units For Scale", SCALING_COMMAND);
+		 addButtonToMenu(output, "Set Bilinear Scaling", SCALE_PANELS_COMMAND);
+		 addButtonToMenu(output, "Change Color Modes ", COLOR_MODE_COMMAND);
 	
 		 
 		
-		 addButtonToMenu(output, "Match Channel Order and LUT Colors", orderCommand);
-		 addButtonToMenu(output, "Match Min, Max, Channel Order and LUT Colors", orderCommand2);
+		 addButtonToMenu(output, "Match Channel Order and LUT Colors", ORDER_AND_COLOR_COMMAND);
+		 addButtonToMenu(output, "Match Min, Max, Channel Order and LUT Colors", ORDER_DISPLAY_RANGE_AND_COLOR);
 		 
-		 addButtonToMenu(output, "Recreate Panels", panCreateCommand);
-		 addButtonToMenu(output, "Channel Use Options", chanUseCommand);
-		 addButtonToMenu(output, "Advanced Channel Use", panContentCommand);
-		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand);
-		 addButtonToMenu(output, "Reset Channel Names", renameChanCommand);
-		 
-		//PanelMenuForMultiChannel allPanels = new PanelMenuForMultiChannel("All Panels", presseddisplay,  getPressedPanelManager().getPanelList(), this.getPressedPanelManager());
-		//output.add(allPanels); 
+		 addButtonToMenu(output, "Recreate Panels", RECREATE_PANELS_COMMAND);
+		 addButtonToMenu(output, "Channel Use Options", CHANNEL_USE_COMMAND);
+		 addButtonToMenu(output, "Advanced Channel Use", PANEL_CONTENT_GUI_SHOWING_COMMAND);
+		 addButtonToMenu(output, "Recolor Channels Automatically", AUTO_COLOR_COMMAND);
+		 addButtonToMenu(output, "Reset Channel Names", RENAME_CHANNEL_COMMAND);
 		
 		return output;
 	}
 	
-
-	  {createIconSet( "icons/ChannelSwapperToolIcon.jpg",
-			"icons/ChannelSwapperToolIconPressed.jpg",
-			"icons/ChannelSwapperRollOverIcon.jpg");	};  
-	
 	
 	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
-		if (swapMode==0)
-			mw.getChannelSwapper().swapChannelsOfImage(getPressChannelOfMultichannel(), getReleaseChannelOfMultichannel());
-	
-		
+			mw.getChannelSwapper().swapChannelsOfImage(getPressChannelOfMultichannel(), getReleaseChannelOfMultichannel());	
 	}
 	
 	protected void showthePopup(Component source, int x, int y) {
@@ -106,21 +89,18 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 	public void actionPerformed(ActionEvent arg0) {
 	
 		
-		if (arg0.getActionCommand().equals(minMaxCommand)) {
+		if (arg0.getActionCommand().equals(DISPLAY_RANGE_COMMAND)) {
 			WindowLevelDialog.showWLDialogs(this.stackSlicePressed.getChannelEntries(),  this.presseddisplay.getMultiChannelImage(), this, WindowLevelDialog.MIN_MAX , ChannelDisplayUndo.createMany(this.getAllWrappers(), this));
 			
 		}
-		if (arg0.getActionCommand().equals(WLCommand)) {
+		if (arg0.getActionCommand().equals(DISPLAY_RANGE_COMMAND_2)) {
 			
 			WindowLevelDialog.showWLDialogs(this.stackSlicePressed.getChannelEntries(),  this.presseddisplay.getMultiChannelImage(), this, WindowLevelDialog.WINDOW_LEVEL, ChannelDisplayUndo.createMany(this.getAllWrappers(), this) );
 			
 		}
+
 		
-		if (arg0.getActionCommand().equals(scalingCommand)) {
-			 showScaleSettingDialog() ;
-		}
-		
-		if(arg0.getActionCommand().equals(scalingCommand2)) {
+		if(arg0.getActionCommand().equals(SCALE_PANELS_COMMAND)) {
 			if (this.pressedInset!=null) {
 				pressedInset.getMenuSupplier().showScaleDialog();
 				return;
@@ -134,7 +114,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 		
 		
 		
-		if (arg0.getActionCommand().equals(colorModeCommand)) {
+		if (arg0.getActionCommand().equals(COLOR_MODE_COMMAND)) {
 			ChannelUseInstructions ins = presseddisplay.getPanelList().getChannelUseInstructions();
 			if (this.pressedInset!=null) {
 				 ins =pressedInset.getPanelManager().getPanelList().getChannelUseInstructions();
@@ -145,32 +125,32 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 			if (value==1) {value=0;} else {value=1;}
 			ins.channelColorMode=value;
 			
-			if (workOn==1 && pressedInset==null) for(ImageDisplayLayer d: super.getAllDisplays()) {
+			if (workOn==ALL_IMAGES_IN_FIGURE && pressedInset==null) for(ImageDisplayLayer d: super.getAllDisplays()) {
 				d.getPanelList().getChannelUseInstructions().channelColorMode=value;
 			}
 			this.updateAllDisplays();
 					;
 		}
 		
-if (	arg0.getActionCommand().equals(colorRecolorCommand)) {
+if (	arg0.getActionCommand().equals(AUTO_COLOR_COMMAND)) {
 		for(MultiChannelImage p: getAllWrappers())
 		p.colorBasedOnRealChannelName();
 			this.updateAllDisplays();
 		}
 
-if (	arg0.getActionCommand().equals(renameChanCommand)) {
+if (	arg0.getActionCommand().equals(RENAME_CHANNEL_COMMAND)) {
 	presseddisplay.getMultiChannelImage().renameBasedOnRealChannelName();
 	this.updateAllDisplays();
 }
 		
 		
-		if (arg0.getActionCommand().equals(chanUseCommand)) {
+		if (arg0.getActionCommand().equals(CHANNEL_USE_COMMAND)) {
 			
 			
 			
 			if (pressedInset!=null) {new PanelStackDisplayOptions(presseddisplay,pressedInset.getPanelManager().getPanelList(),pressedInset.getPanelManager(), false).showDialog();;}
 			else
-			if (workOn==0) {
+			if (workOn==SELECTED_IMAGE_ONLY) {
 				if (pressedInset==null)
 				presseddisplay.showStackOptionsDialog();
 				
@@ -192,7 +172,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		
 		
 		
-		if (arg0.getActionCommand().equals(panCreateCommand)) {
+		if (arg0.getActionCommand().equals(RECREATE_PANELS_COMMAND)) {
 			PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this.presseddisplay, presseddisplay.getPanelList(),null, true);
 			
 			dialog.addAditionalDisplays(this.getAllDisplays());
@@ -200,23 +180,22 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			dialog.setModal(false);
 			dialog.showDialog();
 		}
-		if (arg0.getActionCommand().equals(orderCommand)) {
-			workOn=1;
+		if (arg0.getActionCommand().equals(ORDER_AND_COLOR_COMMAND)) {
+			workOn=ALL_IMAGES_IN_FIGURE;
 			new ChannelOrderAndLutMatching().matchChannels(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			
 		}
 		
-		if (arg0.getActionCommand().equals(orderCommand2)) {
-			workOn=1;
+		if (arg0.getActionCommand().equals(ORDER_DISPLAY_RANGE_AND_COLOR)) {
+			workOn=ALL_IMAGES_IN_FIGURE;
 			new ChannelOrderAndLutMatching().matchChannels(this.getPressedWrapper(), this.getAllWrappers(), 2);
 			for(int c=1; c<=this.getPressedWrapper().nChannels(); c++) {
 				minMaxSet(c, getPressedWrapper().getChannelMin(c),getPressedWrapper().getChannelMax(c));
 			}
 		}
 		
-		if (arg0.getActionCommand().equals(panContentCommand)) {
+		if (arg0.getActionCommand().equals(PANEL_CONTENT_GUI_SHOWING_COMMAND)) {
 			PanelListDisplayGUI distpla = new PanelListDisplayGUI(  getPressedPanelManager(), this.getPressedChannelLabelManager());
-			//getPressedPanelManager().getStack().setChannelUpdateMode(true);
 			distpla.setVisible(true);
 		}
 	
@@ -229,7 +208,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 	
 	
 	
-
+	/**called after the display range for the given channel number is set*/
 	@Override
 	public void minMaxSet(int chan, double min, double max) {
 		ArrayList<MultiChannelImage> wraps = getAllWrappers() ;
@@ -248,31 +227,8 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 
 	
 	
-	public void showScaleSettingDialog() {
-		localScaleSetter lss = new localScaleSetter(presseddisplay.getMultiChannelImage(), null);
-		lss.showDialog();
-	}
 	
-	public class localScaleSetter extends ScaleSettingDialog {
 
-		public localScaleSetter(HasScaleInfo scaled,
-				StandardDialogListener listener) {
-			super(scaled, listener);
-		}
-
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		public void onOK() {
-			super.onOK();
-			 updateAllAfterMenuAction();
-		
-		}
-		
-	}
 
 	@Override
 	public void itemChange(DialogItemChangeEvent event) {
@@ -281,41 +237,74 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		this.updateAllDisplays();
 		this.updateAllAfterMenuAction();
 	}
-	/**
-	public ArrayList<JMenuItem> getPopupMenuItems() {	
-		
-		return new ChannelMatchingMenu();
-	}*/
-	
-	public class dialogAndAction implements ActionListener {
 
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
-			/** for(ChannelEntry c: chans) {
-				 double max = sourceDisplayRanges.getChannalMax(sourceDisplayRanges.getIndexOfChannel(c.getRealChannelName()));
-				 double min = sourceDisplayRanges.getChannalMin(sourceDisplayRanges.getIndexOfChannel(c.getRealChannelName()));
-				 
-				for(MultiChannelWrapper i:items) {
-					if (i.equals(sourceDisplayRanges)) continue;
-					int channum = i.getIndexOfChannel(c.getRealChannelName());
-					i.setChannalMax(channum, max);
-					i.setChannalMin(channum, min);
-					i.updateDisplay();
-				}
-				
-				
-			}*/
-			 
-		}
-		
-	}
 	
 	@Override
 	public String getToolTip() {
 			return "Swap Channels and Edit Channel Properties";
 		}
+	
+	{this.setIconSet(new  SwapperIcon(0).generateIconSet());}
+	public static class SwapperIcon extends GeneralLayoutToolIcon {
+
+		/**
+		 * @param type
+		 */
+		public SwapperIcon(int type) {
+			super(type);
+			super.paintBoundry=false;
+			super.panelColor=new Color[] {Color.red, Color.green, Color.blue};
+			if(type!=NORMAL_ICON_TYPE) {
+				super.panelColor=new Color[] {Color.blue, Color.green, Color.red};
+			}
+		}
+		
+		/**
+		creates a layout for drawing and icon
+		 */
+		protected PanelLayout createSimpleIconLayout( int type) {
+			int xLoc=3;
+			int yLoc=3;
+			int size=11;
+			Rectangle r1 = new Rectangle(xLoc, yLoc, size, size);
+			Rectangle r2 = new Rectangle(xLoc+3, yLoc+ 4, size, size);
+			Rectangle r3 = new Rectangle(xLoc+6, yLoc+8, size, size);
+			
+			PlasticPanelLayout layout2 = new PlasticPanelLayout(r1, r2, r3);
+			
+			return layout2;
+		}
+		
+		/**
+		 alters the color for the stroke of the panels
+		 */
+		protected Color derivePanelStrokeColor(Color panelColor2) {
+			return panelColor2.darker().darker();
+		}
+		
+		/**given the base color of a panel, returns the fill color used to give the panel a light tint
+		 * @param panelColor2
+		 * @return
+		 */
+		protected Color deriveFillColor(Color panelColor2) {
+			return panelColor2;
+		}
+		
+		/**
+		 * @param type
+		 * @return
+		 */
+		@Override
+		protected
+		GeneralLayoutToolIcon generateAnother(int type) {
+			return new SwapperIcon(type);
+		}
+		
+		public GeneralLayoutToolIcon copy(int type) {
+			GeneralLayoutToolIcon another = generateAnother(type);
+			return another;
+		}
+	}
 	
 	
 

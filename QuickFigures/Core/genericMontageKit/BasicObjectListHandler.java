@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import applicationAdapters.ImageWrapper;
-import gridLayout.BasicMontageLayout;
+import layout.basicFigure.BasicLayout;
 import utilityClasses1.ArraySorter;
 import utilityClasses1.ItemPicker;
 import utilityClassesForObjects.ArrayObjectContainer;
@@ -44,7 +44,7 @@ public class BasicObjectListHandler {
 
 	/**When given a layout and an object container, this returns an array of arrays with an array for each 
 	 * layout panel.  the inner arrays contain the objects found inside each panel.*/
-	public ArrayList<ArrayList<LocatedObject2D>> getObjectsInPanels(BasicMontageLayout ml, ObjectContainer imp) {
+	public ArrayList<ArrayList<LocatedObject2D>> getObjectsInPanels(BasicLayout ml, ObjectContainer imp) {
 		ArrayList<ArrayList<LocatedObject2D>> output=new ArrayList<ArrayList<LocatedObject2D>>();
 		ml.setPanelRectangles();
 		for (int i=1; i<=ml.getPanels().length; i++) {
@@ -70,7 +70,7 @@ public class BasicObjectListHandler {
 	
 	/**returns all the Objects inside a given rectangular panel of the image. the index here is 0 based.
 	  Objects that overlaps with the layout panel at the given index will be in the output list*/
-	public ArrayList<LocatedObject2D> getObjectsWithinPanelX(BasicMontageLayout ml,ObjectContainer imp,  int index) {
+	public ArrayList<LocatedObject2D> getObjectsWithinPanelX(BasicLayout ml,ObjectContainer imp,  int index) {
 		ml.setPanelRectangles();
 		return getOverlapOverlaypingItems(ml.getPanel(index+1),  imp); 
 	}
@@ -78,21 +78,21 @@ public class BasicObjectListHandler {
 	
 	/**Takes the xy positions of an object and subtracts the location of the panel at panel index from it.
 	 * if the boolean takeFromImage is true, this will also remove the object lo2D from the ObjectContainer */
-	public void moveObjectToBasicCord(LocatedObject2D lo2D,  BasicMontageLayout ml, ObjectContainer imp,int panelIndex, boolean takeFromImage) {
+	public void moveObjectToBasicCord(LocatedObject2D lo2D,  BasicLayout ml, ObjectContainer imp,int panelIndex, boolean takeFromImage) {
 		lo2D.moveLocation( -ml.getPoint(panelIndex).getX(), -ml.getPoint(panelIndex).getY());
 		if (takeFromImage) imp.takeFromImage(lo2D);
 	}
 	
 	/**Takes the xy positions of an object and adds the location of the panel at panelIndex to it. 
 	if the boolean takeFromImage is true, this will also add the object lo2D to the ObjectContainer */
-	public void moveObjectToPanelCord(LocatedObject2D roi,  BasicMontageLayout ml, ObjectContainer imp, int panelIndex, boolean addToImage){
+	public void moveObjectToPanelCord(LocatedObject2D roi,  BasicLayout ml, ObjectContainer imp, int panelIndex, boolean addToImage){
 		roi.moveLocation( ml.getPoint(panelIndex).getX(), ml.getPoint(panelIndex).getY());
 		if (addToImage) {imp.addItemToImage(roi);
 		}
 	}
 
 	/**Takes the xy positions of several sets of object and subtracts the location of the corresponding panel in the montage layout from each of them.*/
-	public  void moveAllObjectToBasicCordinates(ArrayList<ArrayList<LocatedObject2D>> ro, BasicMontageLayout ml, ObjectContainer imp, boolean takeFromImage) {
+	public  void moveAllObjectToBasicCordinates(ArrayList<ArrayList<LocatedObject2D>> ro, BasicLayout ml, ObjectContainer imp, boolean takeFromImage) {
 		for (int i=0; i<ml.getPanels().length; i++) {
 			if (i> ro.size()) break;
 			for (LocatedObject2D lObject: ro.get(i)) {
@@ -103,7 +103,7 @@ public class BasicObjectListHandler {
 	
 
 	/**Takes the xy positions of several sets of object and adds the location of the corresponding panel in the montage layout to them.*/
-	public void moveAllRoisToPanelCordinates(ArrayList<ArrayList<LocatedObject2D>> ro, BasicMontageLayout ml, ObjectContainer imp, boolean addToImage) {
+	public void moveAllRoisToPanelCordinates(ArrayList<ArrayList<LocatedObject2D>> ro, BasicLayout ml, ObjectContainer imp, boolean addToImage) {
 		if (ro==null ||ml==null) return;
 		for (int i=0; i<ml.getPanels().length; i++) {
 			for (LocatedObject2D roi: ro.get(i)) {
@@ -142,7 +142,7 @@ public class BasicObjectListHandler {
 	  array list of array lists. Also subtracts the locations of the panels from the location 
 	  of each object. stores the objects.
 	  .*/
-	public void liftPanelObjects(BasicMontageLayout ml, ObjectContainer cimp) {
+	public void liftPanelObjects(BasicLayout ml, ObjectContainer cimp) {
 		lastset= new ArrayList<ArrayList<LocatedObject2D>>();
 		ml.resetPtsPanels(ml.xshift, ml.yshift);
 		for (Rectangle2D r: ml.getPanels()) {lastset.add(liftObjectsFromPanelX(cimp, r));}
@@ -152,7 +152,7 @@ public class BasicObjectListHandler {
 	 each object
 	 Precondition: objects must have already been stored by the liftPanelObjects method (see above).
 	 	The locations of panels may move in between the calls for the two methods*/
-	public void setDownPanelObjects(BasicMontageLayout ml, ObjectContainer cimp) {
+	public void setDownPanelObjects(BasicLayout ml, ObjectContainer cimp) {
 		moveAllRoisToPanelCordinates(lastset, ml, cimp,  true);
 	}
 	
@@ -191,7 +191,7 @@ public class BasicObjectListHandler {
 	/**Moves a regions of interest from a single panel to the equivalent point in
 	  any other panel. also sets the point of the montage layout to the location of 
 	  the roi*/
-	 public void moveRoiToSelectedPanel(BasicMontageLayout ml, LocatedObject2D loc2d, int index) {
+	 public void moveRoiToSelectedPanel(BasicLayout ml, LocatedObject2D loc2d, int index) {
 		Point2D r=ml.getPoint(getRoiPanelIndex( ml,  loc2d));
 		loc2d.moveLocation( -r.getX(), -r.getY());
 		r=ml.getPoint(index);
@@ -199,13 +199,13 @@ public class BasicObjectListHandler {
 	}
 
 	 /**Returns the index of the montage panel containing the given object*/
-	public int getRoiPanelIndex(BasicMontageLayout ml, LocatedObject2D loc2D) {
+	public int getRoiPanelIndex(BasicLayout ml, LocatedObject2D loc2D) {
 		Point2D roip = loc2D.getLocation();
 		return ml.getPanelIndex(roip.getX(), roip.getY());
 	}
 	
 	/**Sets the point array within the motnage layout to points corresponding to the roi's location.*/
-	public void setPointsBasedOnRoiLocation(BasicMontageLayout ml, LocatedObject2D roi) {
+	public void setPointsBasedOnRoiLocation(BasicLayout ml, LocatedObject2D roi) {
 		Point2D roip = roi.getLocation();
 		double roix = roip.getX();
 		double roiy = roip.getX();
@@ -293,7 +293,7 @@ public class BasicObjectListHandler {
 
 	
 	/**when given a Rectangular area within in a montage, returns all objects that are in the equivalent position of each panel*/
-	public ArrayList<LocatedObject2D> getMontagePositionObjects(BasicMontageLayout  ml, ObjectContainer imp, Rectangle r) {
+	public ArrayList<LocatedObject2D> getMontagePositionObjects(BasicLayout  ml, ObjectContainer imp, Rectangle r) {
 		ArrayList<LocatedObject2D> rois=new ArrayList<LocatedObject2D>();
 		double x= r.getX();
 		double y= r.getY();

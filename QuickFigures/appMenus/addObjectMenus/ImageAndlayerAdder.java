@@ -27,7 +27,7 @@ import figureFormat.TemplateUserMenuAction;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
 /**this class adds a figure containing a multidimensional images to a layer */
@@ -38,9 +38,6 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	 */
 	private static final int MAX_RECCOMENDED_SIZE_LIMIT = 25;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public AutoFigureGenerationOptions autoFigureGenerationOptions=new AutoFigureGenerationOptions();
@@ -52,11 +49,17 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	/**set to true if limiting the new figure to a single frame*/
 	public boolean useSingleFrame=false;
 	public boolean useSingleSlice=false;
+	public boolean mergeOnly=false;
 	
 	private TemplateUserMenuAction templatesaver =null;
 	
 
 	private FigureOrganizingLayerPane currentFigureOrganizer;
+
+	private boolean useOpen;
+
+
+	
 
 	/**returns the template saver that is used to create objects*/
 	public TemplateUserMenuAction getTemplatesaver() {
@@ -78,6 +81,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	public ImageAndlayerAdder(boolean fromFile, boolean autogen) {
 		openFile=fromFile;
 		this.autoFigureGenerationOptions.autoGenerateFromModel=autogen;
+		this.useOpen=autogen;
 	}
 	
 
@@ -126,7 +130,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		return new FileFinder();	
 	}
 	
-	
+	/**shortens a long name into a shorter form*/
 	public String shorten(String tooLong) {
 		if (tooLong==null) return null;
 		String output = tooLong.split(";")[0];
@@ -219,7 +223,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		
 		if (isAutoGenerateFromModel()) {
 		multiDimensionalImage.eliminateAndRecreate();
-		MontageLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
+		DefaultLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
 		if (makeLabels) temp .createDefaultLabelsObjectsFromTemplate( currentFigureOrganizer, multiDimensionalImage, layout);
 		temp .createScaleBarOffTemplate( currentFigureOrganizer);
 		layout.generateCurrentImageWrapper();
@@ -250,9 +254,9 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	  if no template is found, creates a new default template*/
 	protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
 		FigureTemplate template = getTemplatesaver().loadDefaultTemplate();
-		if (template==null&&display!=null) {
+		if (autoFigureGenerationOptions.ignoreSavedTemplate||(template==null&&display!=null)) {
 			template=new FigureTemplate(display);
-			getTemplatesaver().saveDefaultTemplate(template);
+			if (!autoFigureGenerationOptions.ignoreSavedTemplate)getTemplatesaver().saveDefaultTemplate(template);
 		}
 		return template;
 	}
@@ -290,7 +294,7 @@ public class ImageAndlayerAdder extends LayoutAdder {
 
 	@Override
 	public String getMenuCommand() {
-		if (isAutoGenerateFromModel()) {
+		if (useOpen) {
 			return "Figure from active "+ nameType();
 		}
 		String output= "Figure from open "+ nameType();

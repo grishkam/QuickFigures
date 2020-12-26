@@ -26,8 +26,8 @@ import fLexibleUIKit.MenuItemMethod;
 import genericPlot.BasicPlot;
 import genericPlot.BasicDataSeriesGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import gridLayout.GridLayoutEditListener;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.GridLayoutEditListener;
+import layout.basicFigure.LayoutSpaces;
 import menuUtil.HasUniquePopupMenu;
 import plotParts.Core.PlotArea;
 import undo.CombinedEdit;
@@ -55,16 +55,13 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 		addTitleLabel();
 		
 
-		KaplanDataSeriesGroup primarySeries = this.getAllDataSeries().get(0);
 		 addYAxiLabel();
 		 addXAxiLabel(4);
 		 titleLabel.getParagraph().get(0).get(0).setText(getName() );
 		 
-		//xAxis.setShowText(false);
-		 //xAxis.setIntergerTics(true);
+		
 		 this.resetMinMax(true);
 		
-		 //xAxis.setIntergerTics(false);
 		 
 		 onPlotUpdate();
 		 if (this.getAllDataSeries().size()>1) {createFigureLegends();}
@@ -183,8 +180,9 @@ protected void afterNumberOfDataSeriesChanges() {
 public CombinedEdit defaultPlot() {
 	CombinedEdit undo = new CombinedEdit();
 	for(KaplanDataSeriesGroup a: getAllDataSeries()) {
-	
-
+	//not yet implemented
+		a.getKaplanLine().setStrokeWidth(1);
+		a.getCensorMark().setStrokeWidth(1);
 	}
 	fullPlotUpdate();
 	return undo;

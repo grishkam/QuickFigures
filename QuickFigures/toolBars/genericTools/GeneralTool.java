@@ -21,8 +21,10 @@ import applicationAdapters.ImageWrapper;
 import externalToolBar.*;
 import genericMontageKit.*;
 import graphicActionToolbar.CurrentFigureSet;
-import gridLayout.BasicMontageLayout;
-import gridLayout.MontageEditorDialogs;
+import icons.CompoundIcon;
+import icons.IconSet;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutEditorDialogs;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import utilityClassesForObjects.LocatedObject2D;
@@ -386,7 +388,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	
 
 
-	public void setRowColDragForLayout(BasicMontageLayout ml) {
+	public void setRowColDragForLayout(BasicLayout ml) {
 		if (ml==null) {return;}
 		setPanelIndexDrag(ml.getPanelIndex(getDragCordinateX() , getDragCordinateY() ));
 		int[] gridpos=ml.getGridCordAtIndex(getPanelIndexDrag());
@@ -394,7 +396,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		setRowIndexDrag(gridpos[1]);
 	}
 	
-	public void setRowColClickForLayout(BasicMontageLayout ml) {
+	public void setRowColClickForLayout(BasicLayout ml) {
 		if (ml==null) {IssueLog.log3("Do not have a layout when asked"); return;}
 		setPanelIndexClick(ml.getPanelIndex(getClickedCordinateX() , getClickedCordinateY()));
 		int[] gridpos=ml.getGridCordAtIndex(getPanelIndexClick());
@@ -404,7 +406,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	
 
 	
-	public MontageEditorDialogs getMontageEditorDialogs() {return new MontageEditorDialogs();}
+	public LayoutEditorDialogs getMontageEditorDialogs() {return new LayoutEditorDialogs();}
 
 	
 
@@ -413,7 +415,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		//setMarkerRoi(type, getMainLayout());
 	}
 	
-	public void setMarkerRoi(int type, BasicMontageLayout ml) {
+	public void setMarkerRoi(int type, BasicLayout ml) {
 		if (ml==null) {IssueLog.log3("must have a layout to set a marker roi");return;}
 		setMarkerRoi(ml.getSelectedSpace(1, type));
 	}

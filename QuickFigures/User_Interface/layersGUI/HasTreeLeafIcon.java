@@ -17,7 +17,7 @@ package layersGUI;
 
 import javax.swing.Icon;
 
-import externalToolBar.IconSet;
+import icons.IconSet;
 
 public interface HasTreeLeafIcon {
 

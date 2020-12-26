@@ -24,12 +24,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.undo.UndoManager;
 
-import externalToolBar.IconSet;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ImagePanelGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.MontageEditorDialogs;
+import icons.IconSet;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.LayoutEditorDialogs;
 import logging.IssueLog;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
@@ -44,12 +44,12 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 
 	
 	
-	private BasicMontageLayout maintLayout;
+	private BasicLayout maintLayout;
 	private GenericMontageEditor edit=new GenericMontageEditor();
 	
 	private UndoManager undoManager;
 
-	public MontageEditCommandMenu(BasicMontageLayout l) {
+	public MontageEditCommandMenu(BasicLayout l) {
 		setMainLayout(l);
 	}
 	
@@ -182,11 +182,11 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 			 getEditor().trimCanvas(getMainLayout());
 		}
 		if (st==colWidth.getActionCommand()) {
-			new MontageEditorDialogs().showUniqueDimensionDialog(getMainLayout(),  getEditor(), 0);
+			new LayoutEditorDialogs().showUniqueDimensionDialog(getMainLayout(),  getEditor(), 0);
 		}
-		if (st==rowHeight.getActionCommand()) {new MontageEditorDialogs().showUniqueDimensionDialog(getMainLayout(),  getEditor(), 1);}
+		if (st==rowHeight.getActionCommand()) {new LayoutEditorDialogs().showUniqueDimensionDialog(getMainLayout(),  getEditor(), 1);}
 		
-		if (st==bordersOnly.getActionCommand()) {new MontageEditorDialogs().showBorderEditorDialog(new StandardDialog("Edit Borders", true),   getEditor(),getMainLayout());}
+		if (st==bordersOnly.getActionCommand()) {new LayoutEditorDialogs().showBorderEditorDialog(new StandardDialog("Edit Borders", true),   getEditor(),getMainLayout());}
 		
 		
 		if (st==resizeRowCol.getActionCommand()) {
@@ -200,14 +200,14 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		}
 		
 		if (st==rowColDim.getActionCommand()) {
-			new MontageEditorDialogs().showColumnNumberEditorDialog(getMainLayout().getEditor(), getMainLayout(),1,1);
+			new LayoutEditorDialogs().showColumnNumberEditorDialog(getMainLayout().getEditor(), getMainLayout(),1,1);
 		}
 		
 		if (st==createUniwueWidthsForEachCol.getActionCommand()) {
-			new MontageEditorDialogs().showUniqueDimensionDialog(getMainLayout(), 0);
+			new LayoutEditorDialogs().showUniqueDimensionDialog(getMainLayout(), 0);
 		}
 		if (st==createUniwueHeightsForEachRow.getActionCommand()) {
-			new MontageEditorDialogs().showUniqueDimensionDialog(getMainLayout(), 1);
+			new LayoutEditorDialogs().showUniqueDimensionDialog(getMainLayout(), 1);
 		}
 		
 		if(st==trimLabelSpace.getActionCommand()) {
@@ -223,14 +223,14 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		
 		//if (st==cropPanels) { getEditor().cropPanels(getMainLayout(), getSelectionBounds(getMainLayout().getImage()));}
 		if (st==showEditorDialog.getActionCommand()) {
-			new MontageEditorDialogs() .showGeneralEditorDialog( getEditor(), getMainLayout());}
+			new LayoutEditorDialogs() .showGeneralEditorDialog( getEditor(), getMainLayout());}
 		
 		
 		
 		if (st==invertLayout.getActionCommand()) {
 			
 			 ArrayList<UndoSnappingChange> arraySnapUndo =new ArrayList<UndoSnappingChange>();
-				for(LocatedObject2D loc: getMainLayout().getWrapper().getLocatedObjects()) {
+				for(LocatedObject2D loc: getMainLayout().getEditedImage().getLocatedObjects()) {
 					if (loc.getAttachmentPosition()!=null)
 					arraySnapUndo.add(new UndoSnappingChange(loc));
 				}
@@ -248,12 +248,12 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		addUndo(editUndo);
 		
 		CurrentFigureSet.updateActiveDisplayGroup();
-		getMainLayout().getWrapper().updateDisplay();
+		getMainLayout().getEditedImage().updateDisplay();
 		
 		}
 
 	public void handlePanelSizeFit() {
-		getMainLayout().getEditor().placePanelsInCorners( getMainLayout(),new ArraySorter<LocatedObject2D>().getThoseOfClass(getMainLayout().getWrapper().getLocatedObjects(), ImagePanelGraphic.class));
+		getMainLayout().getEditor().placePanelsInCorners( getMainLayout(),new ArraySorter<LocatedObject2D>().getThoseOfClass(getMainLayout().getEditedImage().getLocatedObjects(), ImagePanelGraphic.class));
 
 		getMainLayout().getEditor().alterPanelWidthAndHeightToFitContents(getMainLayout());
 	}
@@ -299,13 +299,13 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		
 	}
 
-	public BasicMontageLayout getMainLayout() {
+	public BasicLayout getMainLayout() {
 		return maintLayout;
 	}
 
 
 
-	public void setMainLayout(BasicMontageLayout maintLayout) {
+	public void setMainLayout(BasicLayout maintLayout) {
 		this.maintLayout = maintLayout;
 	}
 

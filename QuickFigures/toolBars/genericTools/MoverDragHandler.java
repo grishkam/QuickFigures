@@ -39,12 +39,12 @@ import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.BasicMontageLayout;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import layersGUI.GraphicSetDisplayTree;
 import layersGUI.GraphicTreeTransferHandler;
+import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import messages.ShowMessage;
 import selectedItemMenus.SVG_GraphicAdder2;
@@ -282,15 +282,15 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 		
 		/**If adding many single image panels, takes care of layting them out*/
-		if ((addedPanels.size()>1|| ((roi2 instanceof MontageLayoutGraphic)&&(addedPanels.size()>0))) &&(!multiChannelOpen)) {
+		if ((addedPanels.size()>1|| ((roi2 instanceof DefaultLayoutGraphic)&&(addedPanels.size()>0))) &&(!multiChannelOpen)) {
 			Rectangle rect = addedPanels.get(0).getBounds();
 			boolean moveToNewLayer=false;
 			GraphicLayer newLayer=null;
 			int startingPanelindex = 1;
-				BasicMontageLayout ml;
-				MontageLayoutGraphic mlg;
-				if (roi2 instanceof MontageLayoutGraphic) {
-					 mlg=(MontageLayoutGraphic) roi2;
+				BasicLayout ml;
+				DefaultLayoutGraphic mlg;
+				if (roi2 instanceof DefaultLayoutGraphic) {
+					 mlg=(DefaultLayoutGraphic) roi2;
 					 ml=mlg.getPanelLayout();
 					 startingPanelindex = ml.getPanelIndex((int)location2.getX(), (int)location2.getY());
 				} else {
@@ -298,11 +298,11 @@ public class MoverDragHandler extends BasicDragHandler {
 					newLayer=new GraphicLayerPane("new layer for panels");
 					layer.add(newLayer);
 					
-					ml = new BasicMontageLayout(addedPanels.size(),1,  rect.width, rect.height, 2,2, true);
+					ml = new BasicLayout(addedPanels.size(),1,  rect.width, rect.height, 2,2, true);
 					
 					
 					ml.setLabelSpaces(10, 5, 10, 5);
-					mlg = new MontageLayoutGraphic(ml);
+					mlg = new DefaultLayoutGraphic(ml);
 					mlg.moveLocation(location2.getX(), location2.getY());
 					//layer.add(mlg);
 					//layer.moveItemToIndex(mlg, 0);
@@ -358,7 +358,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		if (layer instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane figure=(FigureOrganizingLayerPane) layer;
 			MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
-			BasicMontageLayout ml = figure.getLayout();
+			BasicLayout ml = figure.getLayout();
 			figure.getMontageLayoutGraphic().generateCurrentImageWrapper();
 			startIndex=figure.getMontageLayout().getPanelIndex((int)location2.getX(), (int) location2.getY());
 			if (item==null) return null;

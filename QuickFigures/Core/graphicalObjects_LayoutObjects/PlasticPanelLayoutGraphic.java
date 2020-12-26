@@ -15,8 +15,8 @@
  *******************************************************************************/
 package graphicalObjects_LayoutObjects;
 
+import layout.plasticPanels.PlasticPanelLayout;
 import menuUtil.PopupMenuSupplier;
-import plasticPanels.PlasticPanelLayout;
 import popupMenusForComplexObjects.PlasticPanelLayoutPanelMenu;
 import utilityClassesForObjects.LocatedObject2D;
 

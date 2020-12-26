@@ -23,7 +23,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import applicationAdapters.CanvasMouseEvent;
-import externalToolBar.MiniToolBarIcon;
+import icons.MiniToolBarIcon;
 
 /**A handle that displays an icon*/
 public class IconHandle extends SmartHandle {

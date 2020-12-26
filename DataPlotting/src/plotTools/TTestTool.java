@@ -27,7 +27,6 @@ import java.util.ArrayList;
 
 import columnPlots.ColumnPlot;
 import dataSeries.DataSeries;
-import externalToolBar.IconWrappingToolIcon;
 import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
@@ -36,6 +35,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import icons.IconWrappingToolIcon;
 import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.DataShowingShape;
 import storedValueDialog.ReflectingFieldSettingDialog;
@@ -47,7 +47,7 @@ import utilityClassesForObjects.RectangleEdges;
 
 public class TTestTool extends BasicPlotTool {
 	{
-		{super.set=IconWrappingToolIcon.createIconSet(new PlotToolIcon());}
+		{super.iconSet=IconWrappingToolIcon.createIconSet(new PlotToolIcon());}
 		
 };
 

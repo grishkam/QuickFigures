@@ -24,16 +24,16 @@ import channelMerging.MultiChannelDisplayWrapper;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import multiChannelFigureUI.BasicChannelLabelTool.ChanelLabelIcon;
 
+/**A tool for chaning the stack slice names of the original image*/
 public class BasicChannelNameTool extends BasicImagePanelTool {
 	
 	
-	 {createIconSet( "icons/NameStackSlicesicon.jpg",
-				"icons/NameStackSlicesiconPressed.jpg",
-				"icons/NameStackSlicesicon.jpg");	};  
+	{this.setIconSet(new  ChanelLabelIcon(0).generateIconSet());}
 				
 				
-				protected void afterMousePress(MultiChannelImage mw, int chan1) {
+	protected void afterMousePress(MultiChannelImage mw, int chan1) {
 		
 		
 		if (this.clickingOnMultiMode=true &&getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {

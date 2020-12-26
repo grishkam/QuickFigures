@@ -29,9 +29,9 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
@@ -55,8 +55,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	public static final int MOVE_FORWARD = 100;
 	public static final int MOVE_BACKWARD = 101;
 	private int type;
-	//public boolean allLayouts=false;
-
+	
 	public AlignItem(int leftSpace) {
 		this.type=leftSpace;
 	}
@@ -81,7 +80,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		return "Unknown";
 	}
 
-	
+	/**returns the parent layer of the object*/
 	private GraphicLayer findParentLayer(ZoomableGraphic item ) {
 		ArrayList<GraphicLayer> layers = selector.getGraphicDisplayContainer().getTopLevelLayer().getSubLayers();
 		if(selector.getGraphicDisplayContainer().getTopLevelLayer().getItemArray().contains(item)) return selector.getGraphicDisplayContainer().getTopLevelLayer();
@@ -94,35 +93,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	@Override
 	public void run() {
 		if(type>99) {
-			ArrayList<ZoomableGraphic> items = selector.getSelecteditems();
-			
-			/**when moving multiple consecutive objects forward, need to reverse the order
-			 If not, the first object might be be switched in front of the second 
-			 in the first cycle of the loop, only to be passed by the second in the next cycle */
-			boolean forwardOrder=true;
-			if (type==MOVE_TO_BACK ||type==MOVE_FORWARD) forwardOrder=false;
-			
-			CombinedEdit edit = new CombinedEdit();//for the undo manager
-			
-			if (forwardOrder) 
-			for(int i=0; i<items.size(); i++)
-				{
-					ZoomableGraphic item=items.get(i);
-				   
-					edit.addEditToList(
-							moveItemForwardOrBack(item, type)//moves the item
-							);
-				}
-			else 
-				for(int i=items.size()-1; i>=0; i--)
-				{
-					ZoomableGraphic item=items.get(i);
-					edit.addEditToList(
-							moveItemForwardOrBack(item, type)
-					);
-				}
-			
-			selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
+			performOrderChange();
 			return;
 		}
 		
@@ -140,7 +111,62 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
 		
 	}
+
+
+
+	/**
+	 * 
+	 */
+	public void performOrderChange() {
+		ArrayList<ZoomableGraphic> items = selector.getSelecteditems();
+		
+		items=performReplace(items);
+		
+		/**when moving multiple consecutive objects forward, need to reverse the order
+		 If not, the first object might be be switched in front of the second 
+		 in the first cycle of the loop, only to be passed by the second in the next cycle */
+		boolean forwardOrder=true;
+		if (type==MOVE_TO_BACK ||type==MOVE_FORWARD) forwardOrder=false;
+		
+		CombinedEdit edit = new CombinedEdit();//for the undo manager
+		
+		if (forwardOrder) 
+		for(int i=0; i<items.size(); i++)
+			{
+				ZoomableGraphic item=items.get(i);
+			   
+				edit.addEditToList(
+						moveItemForwardOrBack(item, type)//moves the item
+						);
+			}
+		else 
+			for(int i=items.size()-1; i>=0; i--)
+			{
+				ZoomableGraphic item=items.get(i);
+				edit.addEditToList(
+						moveItemForwardOrBack(item, type)
+				);
+			}
+		
+		selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
+	}
 	
+	/**
+	 under certain circumstances, the items to be moved forward and backward change
+	 */
+	private ArrayList<ZoomableGraphic> performReplace(ArrayList<ZoomableGraphic> items) {
+		/**if the item is alone in its parent layer, makes more sense if the parent layer is moved forward or back*/
+		if (items.size()==1&&items.get(0).getParentLayer()!=null&&items.get(0).getParentLayer().getItemArray().size()==1) {
+			ArrayList<ZoomableGraphic> output = new ArrayList<ZoomableGraphic> ();
+			output.add(items.get(0).getParentLayer());
+			return output;
+		}
+		return items;
+	}
+
+
+
+	/**moves the item either forward or backward in the array*/
 	UndoReorder moveItemForwardOrBack(ZoomableGraphic item, int type) {
 		if (item==null) return null;
 		GraphicLayer layer = findParentLayer(item);
@@ -175,6 +201,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		return undo;
 	}
 	
+	/**Alligns the items in the array*/
 	public void allignArray(ArrayList<LocatedObject2D> all) { 
 		if(all.size()<2) return;
 		
@@ -250,7 +277,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 			
 			layout.getPanelLayout().resetPtsPanels();
 			
-			layout.getEditor().moveMontage2(((MontageLayoutGraphic)layout).getPanelLayout(), (int)dx,(int)dy);
+			layout.getEditor().moveMontage2(((DefaultLayoutGraphic)layout).getPanelLayout(), (int)dx,(int)dy);
 			
 			return;
 		}

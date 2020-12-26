@@ -50,9 +50,9 @@ import channelLabels.ChannelLabelTextGraphic;
   work with its channels. As the panels are independant objects */
 public class BasicImagePanelTool extends BasicToolBit implements ActionListener {
 
-	
-	int workOn=1;
-//	locatedObject pressPointObject ;
+	public static final int ALL_IMAGES_IN_FIGURE=1, SELECTED_IMAGE_ONLY=0;
+	int workOn= ALL_IMAGES_IN_FIGURE;
+
 	protected MultichannelDisplayLayer presseddisplay;
 	protected PanelListElement stackSlicePressed;
 	protected PanelListElement stackSliceReleased;
@@ -153,7 +153,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	void updateAllAfterMenuAction() {
 		if(presseddisplay!=null)presseddisplay.updatePanels();//.getMultichanalWrapper().updateDisplay();
-		if (workOn==1) {
+		if (workOn==ALL_IMAGES_IN_FIGURE) {
 			for(ImageDisplayLayer d: getAllDisplays()) {
 				d.updatePanels();
 			}
@@ -165,7 +165,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		ArrayList<ImageDisplayLayer> output = new ArrayList<ImageDisplayLayer>();
 		if (presseddisplay==null) return output;
 		output.add(presseddisplay);
-		if (getCurrentOrganizer()!=null&&this.workOn==1) {
+		if (getCurrentOrganizer()!=null&&this.workOn==ALL_IMAGES_IN_FIGURE) {
 			output = new ArrayList<ImageDisplayLayer>();
 			output.addAll( getCurrentOrganizer().getMultiChannelDisplays());
 		}
@@ -231,20 +231,23 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	public ArrayList<MultiChannelImage> getAllWrappers() {
 		ArrayList<MultiChannelImage> output=new ArrayList<MultiChannelImage>();
 		output.addAll(presseddisplay.getAllSourceImages());
-		if (presseddisplay.getParentLayer() instanceof FigureOrganizingLayerPane &&this.workOn==1) {
+		if (presseddisplay.getParentLayer() instanceof FigureOrganizingLayerPane &&this.workOn==ALL_IMAGES_IN_FIGURE) {
 			FigureOrganizingLayerPane pane=(FigureOrganizingLayerPane) presseddisplay.getParentLayer();
 			return pane.getAllSourceImages();
 		}
 		return output;
 	}
 	
-	
+	/**called after a mouse is released*/
 	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
 		int chan1=getBestMatchToChannel(mw, getRealNameOfPressedChannel(), getPressChannelOfMultichannel());
 		int chan2=getBestMatchToChannel(mw, getRealNameOfReleaseChannel(), getReleaseChannelOfMultichannel());	
 		applyReleaseActionToMultiChannel(mw, chan1, chan2);
 	}
-	
+	public void applyReleaseActionToMultiChannel(MultiChannelImage mw, int chan1, int chan2) {
+		mw.getChannelSwapper().swapChannelLuts(chan1, chan2);
+		
+	}
 	/**Tries to find the channel index of the channel names realChanName, if it cant, it just returns the chanNum*/
 	int getBestMatchToChannel(MultiChannelImage mw, String realChanName, int chanNum) {
 		int chan1=mw.getIndexOfChannel(realChanName);
@@ -254,10 +257,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		return chan1;
 	}
 	
-	public void applyReleaseActionToMultiChannel(MultiChannelImage mw, int chan1, int chan2) {
-		mw.getChannelSwapper().swapChannelLuts(chan1, chan2);
-		
-	}
+	
 	
 	
 	protected String getRealNameOfPressedChannel() {

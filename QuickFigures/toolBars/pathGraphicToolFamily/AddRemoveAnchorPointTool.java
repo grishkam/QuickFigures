@@ -22,10 +22,11 @@ import java.awt.geom.Point2D.Double;
 
 import javax.swing.Icon;
 
-import externalToolBar.IconWrappingToolIcon;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import iconGraphicalObjects.IconTraits;
+import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 import storedValueDialog.ReflectingFieldSettingDialog;
 import utilityClassesForObjects.PathPoint;
@@ -41,7 +42,7 @@ public class AddRemoveAnchorPointTool extends PathAnchorPointTool {
 
 	public AddRemoveAnchorPointTool(boolean remove) {
 		this.remove=remove;
-		this.set= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
+		this.iconSet= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
 		
 	}
 	
@@ -159,7 +160,7 @@ public class AddRemoveAnchorPointTool extends PathAnchorPointTool {
 			
 			PathGraphic p = new PathGraphic(new Point(0,0));
 			p.select();
-			p.getPoints().get(0).setAnchorPoint(new Point(14, 12));
+			p.getPoints().get(0).setAnchorPoint(new Point(IconTraits.TREE_ICON_WIDTH, IconTraits.TREE_ICON_HEIGHT));
 			out.getTheLayer().add(p);
 		;
 		//out.setAngle(this.getAngle());

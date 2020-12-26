@@ -38,6 +38,7 @@ import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import export.svg.SVGExportable;
 import export.svg.SVGExporter;
+import graphicalObjectHandles.HasHandles;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ReshapeHandleList;
 import graphicalObjectHandles.SmartHandleList;
@@ -75,6 +76,11 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	/**
 	 * 
 	 */
+	private GraphicLayerPane theLayerPane=new GroupedLayerPane("Group", this);
+{theLayerPane.addLayerStructureChangeListener(this);}
+	private boolean drawGhost;
+
+	private transient ReshapeHandleList reshapeList; 
 	
 	
 	
@@ -108,11 +114,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	private static final long serialVersionUID = 1L;
 	
 	
-	private GraphicLayerPane theLayerPane=new GroupedLayerPane("Group", this);
-{theLayerPane.addLayerStructureChangeListener(this);}
-	private boolean drawGhost;
 
-	private transient ReshapeHandleList reshapeList; 
 	
 	@Override
 	public void select() {
@@ -149,8 +151,11 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 
 	protected void setupReshapeList() {
+		if (reshapeList==null)
 		reshapeList = new ReshapeHandleList(getTheLayer().getLocatedObjects(), 2, 8000000, true, 0, false);
-		
+		else {
+			reshapeList.refreshList(getTheLayer().getLocatedObjects());
+		}
 	}
 	
 	
@@ -342,9 +347,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	public Icon getTreeIcon(boolean open) {
 		
 		return IconUtil.createFolderIcon(open, folderColor);
-	/**
-		if (open) return defaultLeaf;// TODO Auto-generated method stub
-		return defaultLeaf2;*/
+	
 	}
 	
 	@Override
@@ -487,36 +490,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		return new GroupGraphicMenu(this);
 	}
 	
-	class GroupGraphicMenu extends SmartPopupJMenu implements ActionListener,
-	PopupMenuSupplier  {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		public GroupGraphicMenu(GraphicGroup graphicGroup) {
-			
-			JMenuItem j = new JMenuItem("Ungoup");
-			j.addActionListener(this);
-			add(j);
-		}
-
-		@Override
-		public JPopupMenu getJPopup() {
-			return this;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			ungroup();
-			
-			
-		}
-
-		
-		
-	}
+	
 
 	@Override
 	public SmartHandleList getSmartHandleList() {
@@ -524,7 +498,8 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		return getReshapeList();
 	}
 	
-	private ReshapeHandleList getReshapeList() {
+	/**A list of handles for resizing the objects in the group*/
+	public ReshapeHandleList getReshapeList() {
 		if(reshapeList==null)this.setupReshapeList();
 		reshapeList.updateRectangle();
 		
@@ -533,13 +508,14 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		return reshapeList;
 	}
 	
-	public int handleNumber(int x, int y) {
+	@Override
+	public int handleNumber(double x, double y) {
 		return this.getSmartHandleList().handleNumberForClickPoint(x, y);
 	}
 	
 	/**A phantom object. Is not drawn but this can be clicked on by the user
 	 while the group is being treated as a layer*/
-	public class GroupHook extends BasicGraphicalObject implements HasSmartHandles {
+	public class GroupHook extends BasicGraphicalObject implements HasSmartHandles, HasHandles {
 
 		/**
 		 * 
@@ -606,13 +582,14 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		}
 		public SmartHandleList getSmartHandleList() {
 			
-			return getReshapeList();
+			return theGroup.getSmartHandleList();
 		}
 		
-		public int handleNumber(int x, int y) {
+		public int handleNumber(double x, double y) {
 			int num = this.getSmartHandleList().handleNumberForClickPoint(x, y);
 			if (num<0 &&this.getOutline().contains(x, y))
 				return ReshapeHandleList.defaultHandleNumber+RectangleEdges.CENTER;
+			
 			return num;
 		}
 
@@ -632,6 +609,38 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		
 	
 
+	}
+	
+	
+	class GroupGraphicMenu extends SmartPopupJMenu implements ActionListener,
+	PopupMenuSupplier  {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		public GroupGraphicMenu(GraphicGroup graphicGroup) {
+			
+			JMenuItem j = new JMenuItem("Ungoup");
+			j.addActionListener(this);
+			add(j);
+		}
+
+		@Override
+		public JPopupMenu getJPopup() {
+			return this;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ungroup();
+			
+			
+		}
+
+		
+		
 	}
 
 }

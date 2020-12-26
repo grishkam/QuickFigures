@@ -149,7 +149,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		 */
 		private static final long serialVersionUID = 1L;
 		private int theindex;
-		private int panelNumber;
+		//private int panelNumber;
 		private boolean focus;
 		private boolean isSelected;
 		public Component 	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -159,11 +159,11 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			if (out instanceof SpecialCellRenderer) {
 				SpecialCellRenderer c=(SpecialCellRenderer) out;
 				c.focus=cellHasFocus;
-				c.panelNumber=theindex-1;
+				//c.panelNumber=theindex-1;
 				c.isSelected=isSelected;
 					{this.setFont(this.getFont().deriveFont(Font.BOLD).deriveFont((float)20.0));}
 				if (isSelected) {
-					c.panelNumber=theindex-1;
+				//	c.panelNumber=theindex-1;
 		
 					}
 			}
@@ -173,12 +173,10 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		
 		
 		public void paint(Graphics g) {
-			//super.paint(g);
-			
+		
 			int dim=theindex;
 			if (dim==-1) {dim=theindex;}
-			//if (this.channelNumber==-1||channelNumber> theChannelentries.size()) this.channelNumber=box.getSelectedIndex();
-			//dim = this.channelNumber;
+			
 			PanelListElement panel = list.getPanels().get(theindex);
 			ArrayList<ChannelEntry> theChannelentries = panel.getChannelEntries();
 			

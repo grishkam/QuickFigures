@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import logging.IssueLog;
 import undo.CombinedEdit;
@@ -143,6 +143,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 		return new ArrayList<LocatedObject2D>();
 	}
 	/**given a list of items, removes any that are on this lock list*/
+	@SuppressWarnings("unlikely-arg-type")
 	private void ensureThatNoOverlappingItemsStayOnThis(ArrayList<LocatedObject2D> o) {
 		/**Removes items that are locked onto this object*/
 		for(LocatedObject2D t: taker.getLockedItems()) {
@@ -169,7 +170,7 @@ public class LockedItemList extends ArrayList<LocatedObject2D> implements Locati
 		}
 		
 		/**Removes any layouts*/
-		ArraySorter.removeThoseOfClass(output, MontageLayoutGraphic.class);
+		ArraySorter.removeThoseOfClass(output, DefaultLayoutGraphic.class);
 		ArraySorter.removeThoseOfClass(output, PanelLayoutGraphic.class);
 		
 		/**Only allows the locking of certain items*/

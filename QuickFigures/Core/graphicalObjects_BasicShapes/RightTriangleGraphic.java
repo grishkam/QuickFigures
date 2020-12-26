@@ -53,12 +53,20 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		super(rectangle);
 	}
 	
+	/**creates a right triangle graphic with the given bounds*/
+	public RightTriangleGraphic(Rectangle rectangle, int type) {
+		super(rectangle);
+		this.type=type;
+	}
+	
 	public RightTriangleGraphic(RectangularGraphic r) {
 		super(r);
 	}
 
 	public RightTriangleGraphic copy() {
-		return new RightTriangleGraphic(this);
+		RightTriangleGraphic rightTriangleGraphic = new RightTriangleGraphic(this);
+		rightTriangleGraphic.setType(type);
+		return rightTriangleGraphic;
 	}
 
 	/**Creates the shape of a right triangle*/
@@ -140,7 +148,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 
 	
 	RectangularGraphic createIcon() {
-		RectangularGraphic out = rectForIcon() ;//RectangularGraphic.blankRect(new Rectangle(0,0,14,12), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFillColor(), this.getStrokeColor());
+		RectangularGraphic out = rectForIcon() ;
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		out.copyColorsFrom(this);
@@ -212,11 +220,15 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 	}
 	
 	public static RightTriangleGraphic blankShape(Rectangle r, Color c) {
-		RightTriangleGraphic r1 = new RightTriangleGraphic(r);
+		RightTriangleGraphic r1 = new RightTriangleGraphic(r, UPPER_LEFT);
 		
 		r1.setStrokeWidth(THICK_STROKE_4);
 		r1.setStrokeColor(c);
 		return r1;
+	}
+	
+	public String getShapeName() {
+		return "Right Triangle";
 	}
 	
 	

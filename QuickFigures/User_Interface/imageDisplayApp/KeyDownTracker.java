@@ -18,11 +18,9 @@ package imageDisplayApp;
 import java.awt.AWTEvent;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 import includedToolbars.StatusPanel;
-import logging.IssueLog;
 
 /**A simple class that keeps records of key presses and releases.
  Work in progress. Sometimes this class appears to miss events so it is not

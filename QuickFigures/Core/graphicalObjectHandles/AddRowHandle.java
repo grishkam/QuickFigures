@@ -24,21 +24,21 @@ import java.awt.geom.Point2D;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 import java.awt.geom.Rectangle2D;
 
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.LayoutSpaces;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.LayoutSpaces;
 
 /**A handle that adds rows/cols to the end of the layout or */
 public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 
-	private MontageLayoutGraphic layout;
+	private DefaultLayoutGraphic layout;
 	private int type;
 	private boolean subtract=false;
 	boolean dragType=true;
@@ -48,7 +48,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 
 
 
-	public AddRowHandle(MontageLayoutGraphic montageLayoutGraphic, int y, boolean sub) {
+	public AddRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int y, boolean sub) {
 
 		this.subtract=sub;
 		this.layout=montageLayoutGraphic;
@@ -118,7 +118,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		if(!dragType) return;
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
-		BasicMontageLayout bm = layout.getPanelLayout();
+		BasicLayout bm = layout.getPanelLayout();
 		GenericMontageEditor edit = layout.getEditor();
 		int[] rowcol = MontageLayoutRowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), bm);
 		

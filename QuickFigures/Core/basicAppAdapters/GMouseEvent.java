@@ -17,7 +17,6 @@ package basicAppAdapters;
 
 import java.awt.Component;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -27,7 +26,6 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.SelectedSetLayerSelector;
 import graphicalObjects.CordinateConverter;
-import imageDisplayApp.KeyDownTracker;
 import selectedItemMenus.LayerSelector;
 import undo.UndoManagerPlus;
 

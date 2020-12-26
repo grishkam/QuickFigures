@@ -44,7 +44,7 @@ import graphicalObjects_BasicShapes.FrameGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
@@ -73,7 +73,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	private ImagePanelGraphic sourcePanel;
 	public PanelList multiChannelStackofInsets;
 	public InsetGraphicLayer personalLayer;
-	public MontageLayoutGraphic personalLayout;
+	public DefaultLayoutGraphic personalLayout;
 	private ChannelLabelProperties channelLabelProp;//instructions on how this one uses channel labels
 	private ChannelLabelManager channelLabelMan;
 	public InsetLayout previosInsetLayout;
@@ -249,7 +249,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			PanelList stack = createCroppedInsetChannelDisplay(d.getPanelList());
 		
 			this.multiChannelStackofInsets=stack;
-			d.getPanelManager().generatePanelGraphicsFor(stack);
+			getPanelManager().generatePanelGraphicsFor(stack);
 			updateDisplayPanelImages();		
 	}
 	
@@ -391,12 +391,11 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	
 	public InsetMenu getMenuSupplier(){
 		InsetMenu ii = new  InsetMenu(this);
-		MenuForChannelLabelMultiChannel men2 ;
 		
 		ii.add( getChannelLabelMenu());
 		
-		men2=new PanelMenuForMultiChannel("Image Panels", getSourceDisplay(), multiChannelStackofInsets, getPanelManager() );
-		ii.add(men2);
+		PanelMenuForMultiChannel men3 = new PanelMenuForMultiChannel("Image Panels", getSourceDisplay(), multiChannelStackofInsets, getPanelManager() );
+		ii.add(men3.recreateChannelUseMenuItem());
 		return ii;
 	}
 	

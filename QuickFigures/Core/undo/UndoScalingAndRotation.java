@@ -24,8 +24,8 @@ import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
 import utilityClassesForObjects.AttachmentPosition;
 
 
@@ -52,8 +52,8 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 	private double fScale;
 	private Point2D fLoc;
 	private double[] fFrame;
-	private BasicMontageLayout iLayout;
-	private BasicMontageLayout fLayout;
+	private BasicLayout iLayout;
+	private BasicLayout fLayout;
 	private UndoTextEdit tUndo1;
 	private UndoMoveItems tUndo2;
 	private AttachmentPosition iSnap;
@@ -110,9 +110,9 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 		
 		}
 	
-	if (o instanceof MontageLayoutGraphic) {
-		MontageLayoutGraphic m=(MontageLayoutGraphic) o;
-		iLayout=new BasicMontageLayout();
+	if (o instanceof DefaultLayoutGraphic) {
+		DefaultLayoutGraphic m=(DefaultLayoutGraphic) o;
+		iLayout=new BasicLayout();
 		iLayout.setToMatch(m.getPanelLayout());
 		}
 	}
@@ -159,9 +159,9 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			
 			}
 		
-		if (o instanceof MontageLayoutGraphic) {
-			MontageLayoutGraphic m=(MontageLayoutGraphic) o;
-			fLayout=new BasicMontageLayout();
+		if (o instanceof DefaultLayoutGraphic) {
+			DefaultLayoutGraphic m=(DefaultLayoutGraphic) o;
+			fLayout=new BasicLayout();
 			fLayout.setToMatch(m.getPanelLayout());
 			}
 		
@@ -211,8 +211,8 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 		
 			}
 		
-		if (o instanceof MontageLayoutGraphic) {
-			MontageLayoutGraphic m=(MontageLayoutGraphic) o;
+		if (o instanceof DefaultLayoutGraphic) {
+			DefaultLayoutGraphic m=(DefaultLayoutGraphic) o;
 			m.getPanelLayout().setToMatch(fLayout);
 			m.getPanelLayout().resetPtsPanels();
 			}
@@ -283,8 +283,8 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			}
 		
 		
-		if (o instanceof MontageLayoutGraphic) {
-			MontageLayoutGraphic m=(MontageLayoutGraphic) o;
+		if (o instanceof DefaultLayoutGraphic) {
+			DefaultLayoutGraphic m=(DefaultLayoutGraphic) o;
 			m.getPanelLayout().setToMatch(iLayout);
 			m.getPanelLayout().resetPtsPanels();
 			}

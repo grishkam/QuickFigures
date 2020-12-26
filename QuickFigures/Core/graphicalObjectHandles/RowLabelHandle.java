@@ -33,8 +33,8 @@ import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.FigureLabelOrganizer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.LayoutSpaces;
 import menuUtil.SmartPopupJMenu;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -46,7 +46,7 @@ public class RowLabelHandle extends MoveRowHandle {
 	private LabelExamplePicker picker;
 	private int mode=PANELS;
 	
-	public RowLabelHandle(MontageLayoutGraphic montageLayoutGraphic, int y,  int index) {
+	public RowLabelHandle(DefaultLayoutGraphic montageLayoutGraphic, int y,  int index) {
 		super(montageLayoutGraphic, y, false, index);
 		 if (type==ROWS) mode=LayoutSpaces.ROW_OF_PANELS ;
 			if (type==COLS)mode=LayoutSpaces.COLUMN_OF_PANELS ;
@@ -77,9 +77,9 @@ public class RowLabelHandle extends MoveRowHandle {
 	hideIfNotNeeded(montageLayoutGraphic, index, new ChannelLabelExamplePicker(new TextGraphic()));
 	}
 
-	private void hideIfNotNeeded(MontageLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
+	private void hideIfNotNeeded(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index).getBounds();
-		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getWrapper());
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getEditedImage());
 		
 		ArrayList<BasicGraphicalObject> array = pick.getDesiredItemsAsGraphicals(rois);
 		
@@ -143,7 +143,7 @@ public class RowLabelHandle extends MoveRowHandle {
 	private void setUpMatchingLocation(TextGraphic label) {
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
 		if (type==ROWS) space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
-		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getWrapper());
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getEditedImage());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
 		if(array.size()>0) label.setAttachmentPosition(array.get(0).getAttachmentPosition());
 	

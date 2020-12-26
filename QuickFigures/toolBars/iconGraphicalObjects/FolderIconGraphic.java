@@ -55,6 +55,7 @@ public class FolderIconGraphic extends GraphicGroup {
 	public void createItems() {
 		r = new RhombusGraphic();
 		r.setRectangle(new Rectangle(0,2,14,10));
+		;
 		r.setAntialize(true);
 		r2 = RectangularGraphic.filledRect(new Rectangle(2,0, 6,5));
 		 r3 = RectangularGraphic.filledRect(new Rectangle(1,1, 12,9));

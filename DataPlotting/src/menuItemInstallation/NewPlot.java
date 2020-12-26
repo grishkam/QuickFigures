@@ -21,7 +21,6 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import columnPlots.ColumnPlot;
 import dataSeries.ColumnDataSeries;
-import gridLayout.BasicMontageLayout;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
 public class NewPlot implements MenuItemForObj {
@@ -41,12 +40,9 @@ public class NewPlot implements MenuItemForObj {
 		
 		
 				);
-		BasicMontageLayout layout = new BasicMontageLayout(6,6, 25, 25, 2,2, true);
+		
 		set.getImageAsWrapper().getTopLevelLayer().add(plot);
-	//	GenericTileGame testGeneric = new GenericTileGame(layout);
-		//testGeneric.getTileTypes()[5]=1;testGeneric.getTileTypes()[6]=1;testGeneric.getTileTypes()[12]=1;
-	diw.updateDisplay();	diw.updateDisplay();
-		//set.getImageAsWrapper().addRoiToImage(testGeneric);
+		diw.updateDisplay();	diw.updateDisplay();
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import javax.swing.JPopupMenu;
 import fLexibleUIKit.ObjectAction;
 import genericMontageUIKitMenuItems.MontageEditCommandMenu;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
@@ -35,7 +35,7 @@ public class MontageLayoutPanelMenu extends LockedItemMenu {
 	private static final long serialVersionUID = 1L;
 	private MontageEditCommandMenu editmenu;
 
-	public MontageLayoutPanelMenu(MontageLayoutGraphic c) {
+	public MontageLayoutPanelMenu(DefaultLayoutGraphic c) {
 		
 		
 		
@@ -85,7 +85,7 @@ public class MontageLayoutPanelMenu extends LockedItemMenu {
 			}
 		}
 		
-		add(new ObjectAction<MontageLayoutGraphic>(c) {
+		add(new ObjectAction<DefaultLayoutGraphic>(c) {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {item.showOptionsDialog();}	
 	}.createJMenuItem("Other Options"));

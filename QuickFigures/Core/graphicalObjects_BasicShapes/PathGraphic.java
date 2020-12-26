@@ -654,7 +654,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		
 	}
 
-	/**returns the handles for the point in the path */
+	/**returns the handles for the points in the path */
 	public synchronized SmartHandleList getPointHandles() {
 		if (smartHandleBoxes==null) {
 			setSmartHandleBoxes(SmartHandleForPathGraphic.getPathSmartHandles(this));

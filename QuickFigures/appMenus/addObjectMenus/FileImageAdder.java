@@ -29,18 +29,20 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
+import messages.ShowMessage;
 
+/**Adds a simple image panel by opening a file with ImageIO*/
 public class FileImageAdder extends BasicGraphicAdder{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected boolean rg=false;
-	boolean isImageMale=true;
+	protected boolean bufferedImageGraphic=false;
+	boolean isImageMade=true;
 
 	public FileImageAdder(boolean RGBint) {
-		this.rg=RGBint;
+		this.bufferedImageGraphic=RGBint;
 	}
 	
 	public ImagePanelGraphic getImage() {
@@ -52,12 +54,12 @@ public class FileImageAdder extends BasicGraphicAdder{
 		ImagePanelGraphic ag;
 		Iterator<ImageReader> readers = ImageIO.getImageReadersBySuffix(ForDragAndDrop.getExtension(f).toUpperCase());
 		if(!readers.hasNext()) {
-			IssueLog.log("May have touble reading file"+'\n'+f);
+			ShowMessage.showMessages("This kind of file cannot be used with this menu option",""+f);
 			return null;
 		}
-		if (rg) ag=new BufferedImageGraphic(f);
+		if (bufferedImageGraphic) ag=new BufferedImageGraphic(f);
 		else  ag = new ImagePanelGraphic(f);
-		isImageMale=ag.isFilefound();
+		isImageMade=ag.isFilefound();
 		return ag;
 	}
 	
@@ -66,25 +68,23 @@ public class FileImageAdder extends BasicGraphicAdder{
 		
 		ImagePanelGraphic ag= getImage();
 		
-		if(isImageMale) {
-		ag.setEmbed(true);
-		gc.add(ag);;
-		ag.setLocationUpperLeft(0, 0);
-		return  ag;
+		if(isImageMade&&ag!=null) {
+			ag.setEmbed(true);
+			gc.add(ag);;
+			ag.setLocationUpperLeft(0, 0);
+			return  ag;
 		} else 
 			return null;
 	}
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
-		return "FileImage"+rg;
+		return "FileImage"+bufferedImageGraphic;
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
-		if (rg)return "Add RGB Image";
+		if (bufferedImageGraphic)return "Add RGB Image";
 		else return "Add Image File";
 	}
 	

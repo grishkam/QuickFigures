@@ -34,7 +34,6 @@ public class ScaleAboutDialog extends StandardDialog{
 	private double scaleLevel=1;
 	double x=0;
 	double y=0;
-	private CombinedEdit undo;
 	private UndoManager undoManager;
 	
 	

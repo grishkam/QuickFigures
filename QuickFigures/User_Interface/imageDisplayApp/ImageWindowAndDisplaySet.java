@@ -132,7 +132,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		return theFigure;
 	}
 	@Override
-	public Window getWindow() {
+	public GraphicSetDisplayWindow getWindow() {
 		return this.theWindow;
 	}
 	
@@ -195,7 +195,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 
 	/**chooses a zoom level automatically*/
 	public void autoZoom() {
-		this.getTheWindow().comfortZoom();
+		this.getTheWindow().comfortZoomIn();
 		
 	}
 
@@ -215,6 +215,8 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	@Override
 	public void setZoomLevel(double st) {
 		getTheWindow().getZoomer().setZoom(st);
+		updateWindowSize();
+		updateDisplay();
 	}
 
 

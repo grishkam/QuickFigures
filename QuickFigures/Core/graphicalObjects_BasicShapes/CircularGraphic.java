@@ -168,6 +168,8 @@ public class CircularGraphic extends RectangularGraphic {
 
 		
 		public String getShapeName() {
+			if(this.isArc()&&arc==PI_ARC) return "Pie Arc";
+			if(this.isArc()&&arc==CHORD_ARC) return "Chord Arc";
 			if (this.isArc()) return "Arc";
 			return "Oval";
 		}

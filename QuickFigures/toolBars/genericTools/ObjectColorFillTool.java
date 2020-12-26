@@ -22,11 +22,11 @@ import java.awt.Rectangle;
 
 import javax.swing.JColorChooser;
 
-import externalToolBar.GraphicToolIcon;
 import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.SimpleRing;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import icons.GraphicToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.ColorEditUndo;
 
@@ -38,9 +38,9 @@ public class ObjectColorFillTool  extends Object_Mover {
 	{
 		realtimeshow=true;
 		 
-	 set.setIcon(0, new BrushIcon(0));
-	 set.setIcon(1, new BrushIcon(1));
-	 set.setIcon(2, new BrushIcon(2));
+	 iconSet.setIcon(0, new BrushIcon(0));
+	 iconSet.setIcon(1, new BrushIcon(1));
+	 iconSet.setIcon(2, new BrushIcon(2));
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import java.awt.Shape;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
-import gridLayout.BasicMontageLayout;
+import layout.basicFigure.BasicLayout;
 
 /**Objects that implements this interface 
   store information relating to the tools in the toolbar
@@ -148,8 +148,8 @@ public interface ToolCore {
 	public abstract int getReleaseCordinateX();
 	
 	
-	public void setRowColDragForLayout(BasicMontageLayout lay);
-	public void setRowColClickForLayout(BasicMontageLayout lay);
+	public void setRowColDragForLayout(BasicLayout lay);
+	public void setRowColClickForLayout(BasicLayout lay);
 
 	public CanvasMouseEvent getLastDragMouseEvent();
 	public CanvasMouseEvent getLastMouseEvent();

@@ -22,9 +22,9 @@ import java.awt.geom.Point2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
-import externalToolBar.TreeIconWrappingToolIcon;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import icons.TreeIconWrappingToolIcon;
 import utilityClassesForObjects.LocatedObject2D;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
@@ -35,7 +35,7 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	
 	
-	void setUpModel() {super.set=TreeIconWrappingToolIcon.createIconSet(model);model.setStrokeColor(Color.black);}
+	void setUpModel() {super.iconSet=TreeIconWrappingToolIcon.createIconSet(model);model.setStrokeColor(Color.black);}
 		{setUpModel(); }
 	public ArrowGraphicTool() {
 		//setUpModel();

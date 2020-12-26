@@ -23,7 +23,10 @@ import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import utilityClassesForObjects.DefaultPaintProvider;
+import utilityClassesForObjects.PaintProvider;
 import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdges;
 
 /**A class for rendering of a brightness icon
   */
@@ -48,7 +51,15 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 		addItems();
 	}
 	
-	
+	 DefaultPaintProvider getPaintProvider() {
+		 DefaultPaintProvider d=new  DefaultPaintProvider(iconColor);
+		 d.setColor(Color.white);
+		 d.setFillColor2( Color.black);
+		 d.setFe1(RectangleEdges.LEFT);
+		 d.setFe2(RectangleEdges.RIGHT);
+		 d.setType(DefaultPaintProvider.SHAPE_GRADIENT_PAINT);
+		 return d;
+	 }
 	
 	
 	public void createItems() {
@@ -56,9 +67,11 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 		
 		
 		blackPart = CircularGraphic.filledCircle(rectsize);
+		
 		whiteHalf= CircularGraphic.halfCircle(rectsize);
 		whiteHalf.setFillColor(Color.white);
 		blackPart.setStrokeColor(Color.black);
+		blackPart.setFillPaintProvider(getPaintProvider());
 		blackPart.setStrokeWidth(2);
 	
 		/**creates a ring of dots around the black/white circle*/
@@ -86,6 +99,7 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 	public void setItemColors() {
 		 blackPart.setFillColor(getIconColor());
 		whiteHalf.setFillColor(Color.white);
+		blackPart.setFillPaintProvider(getPaintProvider());
 	}
 	
 	/**adds the graphic items for this icon to the layer*/

@@ -22,15 +22,15 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import externalToolBar.IconSet;
 import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
 import genericTools.Object_Mover;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.FigureScaler;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
+import icons.IconSet;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import undo.CombinedEdit;
@@ -41,8 +41,8 @@ import utilityClassesForObjects.LocatedObject2D;
 
 public class LayoutScalerTool extends Object_Mover {
 	{super.bringSelectedToFront=true; 
-	super.onlySelectThoseOfClass=PanelLayoutGraphic.class;
-	set= new IconSet(
+	setSelectOnlyThoseOfClass(PanelLayoutGraphic.class);
+	iconSet= new IconSet(
 			new LayoutScaleIcon(0),
 			new LayoutScaleIcon(1),
 			new LayoutScaleIcon(2)
@@ -53,14 +53,14 @@ public class LayoutScalerTool extends Object_Mover {
 	boolean keepPPI=false;
 	boolean rezisePanels=false;
 	
-	 MontageLayoutGraphic theLayout=null;
+	 DefaultLayoutGraphic theLayout=null;
 	private UndoLayoutEdit undoOriginalUndo;
 	private GenericMontageEditor editor;
 	private double scale;
 	private Point2D loc;
 	private double yMin;
 	private boolean minimalDrag;
-	private MontageLayoutGraphic duplicate;
+	private DefaultLayoutGraphic duplicate;
 	@Override
 	public String getToolTip() {
 			
@@ -77,8 +77,8 @@ public class LayoutScalerTool extends Object_Mover {
 	public void mousePressed() {
 		super.mousePressed();
 		this.minimalDrag=false;
-		if (this.getPrimarySelectedObject() instanceof MontageLayoutGraphic) {
-			theLayout=(MontageLayoutGraphic) getPrimarySelectedObject();
+		if (this.getPrimarySelectedObject() instanceof DefaultLayoutGraphic) {
+			theLayout=(DefaultLayoutGraphic) getPrimarySelectedObject();
 			theLayout.generateCurrentImageWrapper();
 			yMin=theLayout.getPanelLayout().getBoundry().getBounds().getMinY();
 			duplicate=theLayout.copy();
@@ -125,13 +125,13 @@ public class LayoutScalerTool extends Object_Mover {
 		this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo1);
 		
 		if (theLayout!=null) {
-			BasicMontageLayout ml = theLayout.getPanelLayout();
+			BasicLayout ml = theLayout.getPanelLayout();
 			ml.resetPtsPanels();
 			UndoLayoutEdit undo2 = new UndoLayoutEdit(theLayout);
 			editor=new GenericMontageEditor();
 			//editor.setQualificationsForPanelObject(new careFullPanelItentifier());
 			
-			editor.placePanelsInCorners(ml, new ArraySorter<LocatedObject2D>().getThoseOfClass(ml.getWrapper().getLocatedObjects(), ImagePanelGraphic.class));
+			editor.placePanelsInCorners(ml, new ArraySorter<LocatedObject2D>().getThoseOfClass(ml.getEditedImage().getLocatedObjects(), ImagePanelGraphic.class));
 			
 			
 			//getImageWrapperClick().updateDisplay();
@@ -159,7 +159,7 @@ public class LayoutScalerTool extends Object_Mover {
 		
 		
 		if (duplicate!=null) {
-			BasicMontageLayout ml =duplicate.getPanelLayout();
+			BasicLayout ml =duplicate.getPanelLayout();
 		
 			ml.resetPtsPanels();//must be done or strange things happen later. makes no sense why as other methods call this one
 			
@@ -185,7 +185,7 @@ public class LayoutScalerTool extends Object_Mover {
 	}
 	
 	
-	class LayoutScaleIcon extends LayoutShowingToolIcon implements Icon{
+	class LayoutScaleIcon extends GeneralLayoutToolIcon implements Icon{
 		
 
 		public LayoutScaleIcon(int rollover) {
@@ -193,11 +193,11 @@ public class LayoutScalerTool extends Object_Mover {
 			}
 
 		@Override
-		public BasicMontageLayout getDrawnLayout() {
-			BasicMontageLayout layout = new BasicMontageLayout(2, 2, 3, 3, 2,2, true);
+		public BasicLayout getDrawnLayout() {
+			BasicLayout layout = new BasicLayout(2, 2, 3, 3, 2,2, true);
 			
 				if (super.type==2)
-					layout = new BasicMontageLayout(2, 2, 6, 6, 2,2, true);
+					layout = new BasicLayout(2, 2, 6, 6, 2,2, true);
 				layout.setLabelSpaces(2, 2,2,2);
 				layout.move(2,2);
 				return layout;

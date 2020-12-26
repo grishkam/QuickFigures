@@ -20,10 +20,10 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.NoninvertibleTransformException;
 
-import externalToolBar.TreeIconWrappingToolIcon;
 import graphicTools.GraphicTool;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import icons.TreeIconWrappingToolIcon;
 import undo.UndoAddItem;
 import undo.PathEditUndo;
 
@@ -41,7 +41,7 @@ public class PathGraphicTool extends GraphicTool {
 	private PathEditUndo undo;
 
 	protected int nArrow=0; 
-	{super.set=TreeIconWrappingToolIcon.createIconSet(model);}
+	{super.iconSet=TreeIconWrappingToolIcon.createIconSet(model);}
 
 	public PathGraphicTool(boolean fill, int nArrows) {
 		this.nArrow=nArrows;

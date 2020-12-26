@@ -52,6 +52,7 @@ public class SeriesLabel extends PlotLabel  {
 		
 	}
 
+	public DataSeries getTheData() {return theData;}
 
 
 }

@@ -29,6 +29,14 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 	private static final long serialVersionUID = 1L;
 	protected CanvasMouseEvent me;
 	protected UndoManagerPlus undoManager;
+	
+	public BasicSmartMenuItem() {
+		super();
+	}
+	
+	public BasicSmartMenuItem(String st) {
+		super(st);
+	}
 
 	@Override
 	public void setLastMouseEvent(CanvasMouseEvent e) {

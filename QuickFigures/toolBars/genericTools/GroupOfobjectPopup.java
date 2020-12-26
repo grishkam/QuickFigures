@@ -24,6 +24,7 @@ import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.SelectionOperationsMenu;
 
+/**A popup menu that appears when the user right clicks on a group of objects*/
 public class GroupOfobjectPopup extends SmartPopupJMenu {
 
 	/**

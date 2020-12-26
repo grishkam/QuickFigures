@@ -23,7 +23,7 @@ import javax.swing.JMenu;
 import fLexibleUIKit.ObjectAction;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.BarGraphicTool;
-import graphicTools.CircleGraphicTool;
+import graphicTools.ShapeGraphicTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects.ImagePanelGraphic;
@@ -107,7 +107,7 @@ super.addLockedItemMenus();
 		SmartJMenu s = new SmartJMenu("Add Shape ");
 		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer()));
 		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer()));
-		s.add(new PanelShapeAdder(new CircleGraphicTool(CircularGraphic.NO_ARC), imagePanel, imagePanel.getParentLayer()));
+		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer()));
 		this.add(s);
 	}
 

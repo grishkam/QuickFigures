@@ -35,6 +35,7 @@ public class CropIconGraphic extends GraphicGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Color iconColor=Color.black;
+	private Color iconColor2=Color.gray;
 	boolean open;
 	private RectangularGraphic spacefilled;
 
@@ -72,6 +73,7 @@ public class CropIconGraphic extends GraphicGroup {
 			ShapeGraphic bar = RectangularGraphic.filledRect(partRect);
 			
 			bar.setFillColor(iconColor);
+			if(place==2) bar.setFillColor(iconColor2);
 			
 			iconParts.add(bar);
 		}

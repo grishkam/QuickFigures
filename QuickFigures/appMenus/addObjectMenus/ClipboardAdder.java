@@ -73,13 +73,13 @@ public class ClipboardAdder extends FileImageAdder {
 	@Override
 	public String getCommand() {
 		// TODO Auto-generated method stub
-		return "ClipImage"+rg;
+		return "ClipImage"+bufferedImageGraphic;
 	}
 
 	@Override
 	public String getMenuCommand() {
 		// TODO Auto-generated method stub
-		if (rg)return "Add RGB Image From System Clipboard";
+		if (bufferedImageGraphic)return "Add RGB Image From System Clipboard";
 		else return "Paste From System Clipboard";
 	}
 	
@@ -93,16 +93,16 @@ public class ClipboardAdder extends FileImageAdder {
 	        	
 	        	if (ob instanceof BufferedImage) buf=(BufferedImage) ob;
 	        } catch (Throwable t) {
-	        	this.isImageMale=false;
+	        	this.isImageMade=false;
 	        }
 	        
 	      if (buf==null){
-	        	this.isImageMale=false;
+	        	this.isImageMade=false;
 	        	return null;
 	        			
-	        } else {isImageMale=true;}
+	        } else {isImageMade=true;}
 		
-		if (rg) ag=new BufferedImageGraphic(buf);
+		if (bufferedImageGraphic) ag=new BufferedImageGraphic(buf);
 		else  ag = new ImagePanelGraphic(buf);
 		
 		return ag;

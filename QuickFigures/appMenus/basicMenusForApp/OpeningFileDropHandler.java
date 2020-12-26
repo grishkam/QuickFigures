@@ -40,7 +40,7 @@ public class OpeningFileDropHandler extends FileDropHandler {
 	 * @param file the file
 	 */
 	void generateFigureFromFile(File file) {
-		QuickFigureMaker quickFigureMaker = new QuickFigureMaker(true);
+		QuickFigureMaker quickFigureMaker = new QuickFigureMaker(true, false);
 		
 		FigureOrganizingLayerPane f2 = quickFigureMaker.createFigure(file.getAbsolutePath(), null);
 		f2.getPrincipalMultiChannel().getSlot().showImage();

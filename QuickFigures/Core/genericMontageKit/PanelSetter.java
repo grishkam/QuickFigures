@@ -18,10 +18,10 @@ package genericMontageKit;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.GridLayout;
-import gridLayout.RetrievableOption;
+import layout.RetrievableOption;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.GridLayout;
 import logging.IssueLog;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
@@ -132,7 +132,7 @@ public class PanelSetter  implements Serializable{
 			int col=1; 
 			int row=start/insertiontype+1;
 			
-			String lastName=list.getImageName(0);
+			
 			for(PanelListElement p: list.getPanels()) {
 				if (p==null) {IssueLog.log("cannot set up the location for a null panel entry", "problem in map panel placements in panel setter class"); continue;}
 				
@@ -158,12 +158,12 @@ public class PanelSetter  implements Serializable{
 
 	
 	/**resets the points on the layout then inserts a list of panels into them*/
-	public void replacePanels(BasicMontageLayout ml,
+	public void replacePanels(BasicLayout ml,
 			PanelList workingList) {
 		replacePanels(ml, workingList,1);
 	}
 	/**resets the points on the layout then inserts a list of panels into them starting from the layout location at the given index*/
-	public void replacePanels(BasicMontageLayout ml,
+	public void replacePanels(BasicLayout ml,
 			PanelList workingLists, int index) {
 
 	   	  ml.resetPtsPanels();
@@ -172,11 +172,11 @@ public class PanelSetter  implements Serializable{
 	  	 mapPanelPlacements(ml, workingLists);
 	  	editLayoutToFitPanels(ml, workingLists, editMontageToFitPanels);
 	  
-	 	ml.setMontageProperties();
+	 	ml.afterEditDone();
 	}
 	
 	/**edits the layout so that it fits the given panel list*/
-	public void editLayoutToFitPanels(BasicMontageLayout ml,
+	public void editLayoutToFitPanels(BasicLayout ml,
 			PanelList workingStack, int editMontageToFitPanels) {
 			GenericMontageEditor me =new GenericMontageEditor();
 			
@@ -222,7 +222,7 @@ public class PanelSetter  implements Serializable{
 	
 	/**when given a panel list element with a grid index (row r, column c) mapped,
 	   adds rows and columns to make sure the layout contains a place with the given index*/
-	void addRowColToFit(BasicMontageLayout ml, PanelListElement p) {
+	void addRowColToFit(BasicLayout ml, PanelListElement p) {
 		GenericMontageEditor editor = new GenericMontageEditor();
 		if (p.getDisplayGridIndex().getColindex()>ml.nColumns()) {editor.setColNumber(ml, p.getDisplayGridIndex().getColindex());
 		}
@@ -238,13 +238,13 @@ public class PanelSetter  implements Serializable{
 	
 	/**Takes a panel list with located object display panels. Subsequently places each of the said objects 
 	 into the layout*/
-	public void layDisplayPanelsOfStackOnLayout(PanelList thestack, BasicMontageLayout layout, boolean resizeLayoutIfNeeded) {
+	public void layDisplayPanelsOfStackOnLayout(PanelList thestack, BasicLayout layout, boolean resizeLayoutIfNeeded) {
 		layDisplayPanelsOfStackOnLayout(thestack, layout, resizeLayoutIfNeeded, resizeLayoutIfNeeded);
 	}
 	
 	/**Takes a panel list with located object display panels. Subsequently places each of the said objects 
 	 into the layout*/
-	public void layDisplayPanelsOfStackOnLayout(PanelList thestack, BasicMontageLayout layout, boolean resizeLayoutIfNeeded, boolean resizePanels) {
+	public void layDisplayPanelsOfStackOnLayout(PanelList thestack, BasicLayout layout, boolean resizeLayoutIfNeeded, boolean resizePanels) {
 		mapPanelPlacements(layout, thestack);
 	
 		if (resizeLayoutIfNeeded)

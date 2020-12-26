@@ -36,11 +36,7 @@ import javax.swing.Icon;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWrapper;
-import externalToolBar.IconSet;
 import genericMontageKit.BasicObjectListHandler;
-import genericMontageKit.PanelLayout;
-import genericMontageKit.PanelLayoutContainer;
-import genericMontageKit.PanelContentExtract;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.LockedItemHandle;
 import graphicalObjectHandles.SmartHandle;
@@ -52,11 +48,16 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
+import icons.IconSet;
+import icons.LayoutIcon;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import layersGUI.HasTreeLeafIcon;
+import layout.PanelContentExtract;
+import layout.PanelLayout;
+import layout.PanelLayoutContainer;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;
 import popupMenusForComplexObjects.LockedItemMenu;
@@ -113,7 +114,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		this.editMode = editMode;
 	}
 	
-	protected PanelLayout layout=new BasicMontageLayout();
+	protected PanelLayout layout=new BasicLayout();
 	private  HashMap<LocatedObject2D, Integer> panelLocations=new HashMap<LocatedObject2D, Integer>();
 	
 	private int strokeWidth=2;
@@ -801,16 +802,16 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrap1 = new GenericImage(new ArrayObjectContainer(parent2));
-		this.getPanelLayout().setWrapper(wrap1);
-		this.getPanelLayout().getWrapper().takeFromImage(this);
+		this.getPanelLayout().setEditedImage(wrap1);
+		this.getPanelLayout().getEditedImage().takeFromImage(this);
 		return wrap1;
 		
 	}
 	
 	public ImageWrapper generateEditNonpermissiveWrapper() {
 			GenericImage genericImage = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
-			this.getPanelLayout().setWrapper(genericImage);
-			this.getPanelLayout().getWrapper().takeFromImage(this);
+			this.getPanelLayout().setEditedImage(genericImage);
+			this.getPanelLayout().getEditedImage().takeFromImage(this);
 			return genericImage;
 		}
 	
@@ -818,7 +819,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage genericImage = new GenericImage(getParentLayerAsContainer());
-				this.getPanelLayout().setWrapper(genericImage);
+				this.getPanelLayout().setEditedImage(genericImage);
 				if (!this.getEditor().getObjectHandler().getNeverRemove().contains(this))
 				this.getEditor().getObjectHandler().getNeverRemove().add(this);
 				return genericImage;
@@ -900,8 +901,9 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 
 	public static Icon createImageIcon() {
-		if (i==null) i=new IconSet("iconsTree/LayoutTreeIcon.png");
-		return i.getIcon(0);
+	//	if (i==null) i=new IconSet("iconsTree/LayoutTreeIcon.png");
+		//return i.getIcon(0);
+		return new LayoutIcon();
 	}
 
 	@Override

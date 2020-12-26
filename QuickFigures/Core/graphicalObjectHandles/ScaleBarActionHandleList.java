@@ -21,7 +21,6 @@ import java.awt.geom.Point2D;
 
 import actionToolbarItems.EditManyShapes;
 import actionToolbarItems.EditScaleBars;
-import graphicalObjectHandles.ShapeActionButtonHandleList2.ColoringButton;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_BasicShapes.BarGraphic;
 import objectDialogs.DialogIcon;

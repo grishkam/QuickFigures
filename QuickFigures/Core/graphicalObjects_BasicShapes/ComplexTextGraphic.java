@@ -16,6 +16,7 @@
 package graphicalObjects_BasicShapes;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -28,9 +29,9 @@ import java.util.HashMap;
 
 import javax.swing.Icon;
 
-import externalToolBar.TreeIconForTextGraphic;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import icons.TreeIconForTextGraphic;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;
 import logging.IssueLog;
@@ -522,8 +523,12 @@ public class ComplexTextGraphic extends TextGraphic {
 	
 	@Override
 	public Icon getTreeIcon() {
-
 		return new TreeIconForTextGraphic(this.getFont(), "cd", Color.green.darker(), Color.red.darker());
+	}
+	
+	public static Icon createImageIcon() {
+		return new TreeIconForTextGraphic(new Font("Arial", Font.BOLD, 12) ,"a", Color.green.darker(), Color.red.darker());
+		
 	}
 	
 	@Override

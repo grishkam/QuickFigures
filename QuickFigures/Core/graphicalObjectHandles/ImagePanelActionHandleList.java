@@ -35,7 +35,9 @@ import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
 import multiChannelFigureUI.ImagePropertiesButton;
 import multiChannelFigureUI.WindowLevelDialog;
 import objectDialogs.DialogIcon;
+import selectedItemMenus.FrameColorButton;
 import selectedItemMenus.ImageGraphicOptionsSyncer;
+import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
 import selectedItemMenus.SnappingSyncer;
 
@@ -43,6 +45,8 @@ import selectedItemMenus.SnappingSyncer;
 public class ImagePanelActionHandleList extends ActionButtonHandleList {
 
 	
+
+
 
 	/**
 	 * 
@@ -62,6 +66,18 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		if(t.getAttachmentPosition()!=null) {
 			add(new GeneralActionHandle(new SnappingSyncer(true,t), 741905));
 		}
+		
+		addFrameColorButton(t);
+	}
+
+	/**
+	 * @param t
+	 */
+	void addFrameColorButton(ImagePanelGraphic t) {
+		FrameColorButton itemForIcon = new FrameColorButton(t);
+		GeneralActionListHandle hf = new FrameListHandle(itemForIcon, 438254, new FrameColorButton[] {});
+		hf.setAlternativePopup(new ColoringButton(itemForIcon, 452345324));
+		add(hf);
 	}
 
 	protected void createMultiChannelSourceImageOptions(ImagePanelGraphic t) {
@@ -87,7 +103,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 	
 	public void updateLocation() {
 		
-		Rectangle bounds = theImage.getOutline().getBounds();
+		Rectangle bounds = theImage.getExtendedBounds().getBounds();
 		super.setLocation(new Point2D.Double(bounds.getX()+5, bounds.getMaxY()+15));
 	
 	}
@@ -184,8 +200,8 @@ public class ChannelsIconHandle extends IconHandle {
 		  then this handle is hidden. When the panels are in advanced channel use mode,
 		  there is not need for this item*/
 	public boolean isHidden() {
-		if (context!=null &&context.getPressedMultichannel().nChannels()==1) return true;
-		if (context!=null &&context.getPrincipalDisplay().getPanelManager().isAdvancedChannelUse()) return true;
+		if (context!=null &&context.getPressedMultichannel()!=null&&context.getPressedMultichannel().nChannels()==1) return true;
+		if (context!=null &&context.getPrincipalDisplay()!=null&&context.getPrincipalDisplay().getPanelManager().isAdvancedChannelUse()) return true;
 		return false;
 	}
 
@@ -213,4 +229,29 @@ public class ChannelsIconHandle extends IconHandle {
 		
 
 	}
+	
+	
+	/**
+	A frame color handle that is hidden if the frame width is 0
+	 */
+public class FrameListHandle extends GeneralActionListHandle {
+
+	/**
+	 * @param i
+	 * @param num
+	 * @param items
+	 */
+	public FrameListHandle(MultiSelectionOperator i, int num, MultiSelectionOperator[] items) {
+		super(i, num, items);
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public boolean isHidden() {if (theImage.getFrameWidthH()==0)  return true; return false;}
+
+}
 }

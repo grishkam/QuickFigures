@@ -24,17 +24,12 @@ import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 import utilityClassesForObjects.ColorDimmer;
 
-/**A set of objects to be drawn in a color chooser style array. User will be able to select color. 
+/**A set of colored rectangles to be drawn in a color chooser style array. User will be able to select color. 
  */
 public class ColorButtonHandleList extends ActionButtonHandleList {
 	private Color[] standardColor=new Color[] { Color.black, Color.white, Color.blue, Color.green, Color.red,  Color.cyan, Color.magenta, Color.yellow , 
 			new Color(155, 255, 0), new Color(155, 0, 255), new Color( 0,155, 255), new Color( 255,155, 0),new Color( 0,255, 155), new Color( 255,0, 155)};
-	
 
-
-	/**
-	 * 
-	 */
 	
 	private static final long serialVersionUID = 1L;
 	private ColorInputListener coloring;
@@ -88,7 +83,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 				this.setHandleColor(Color.white);
 				super.setSpecialFill(SmartHandle.CROSS_FILL);
 				super.decorationColor=Color.red;
-			}
+			} else
 			super.setSpecialFill(0);
 		}
 		

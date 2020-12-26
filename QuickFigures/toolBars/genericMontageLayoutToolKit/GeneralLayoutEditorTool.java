@@ -20,11 +20,11 @@ import genericMontageKit.*;
 import genericTools.BasicToolBit;
 import genericTools.MoverDragHandler;
 import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.MontageEditorDialogs;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.LayoutEditorDialogs;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
@@ -45,14 +45,14 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 
 	
-	protected MontageLayoutGraphic layoutGraphic;
+	protected DefaultLayoutGraphic layoutGraphic;
 	boolean removalPermissive=false;
 	boolean usesMain=false;
 	boolean resetClickPointOnDrag=true;
 	GenericMontageEditor editor=new GenericMontageEditor();
 	
 	private Cursor currentCursor;
-	private BasicMontageLayout editingLayout;
+	private BasicLayout editingLayout;
 	private UndoLayoutEdit currentUndo;
 	
 	public GenericMontageEditor getLayoutEditor() {
@@ -64,7 +64,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	/**returns the current layout. also sets up the ImageWrapper for that layout
 	  to be a shell. This will be called with each click to set up the layout
 	  used by the tool's getCurrentLayout function.*/
-	private BasicMontageLayout setUpCurrentLayout() {
+	private BasicLayout setUpCurrentLayout() {
 		if (layoutGraphic==null) {
 			return null;
 			}
@@ -72,7 +72,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		if (removalPermissive) {layoutGraphic.generateRemovalPermissiveImageWrapper();}
 		else {
-				ImageWrapper wrapper = layoutGraphic.getPanelLayout().getWrapper();
+				ImageWrapper wrapper = layoutGraphic.getPanelLayout().getEditedImage();
 			ArrayList<LocatedObject2D> excluded = layoutGraphic.getEditor().getObjectHandler().getExcludedRois(layoutGraphic.getPanelLayout().getBoundry().getBounds(), wrapper);
 			for(LocatedObject2D e: excluded) {
 			wrapper.takeFromImage(e);
@@ -91,7 +91,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	protected boolean hasALayoutBeenClicked() {
 		setupClickedLayout();
 		if (layoutGraphic!=null && layoutGraphic.getBounds().contains(getClickedCordinateX(), getClickedCordinateY())) {
-			BasicMontageLayout lay = getCurrentLayout();
+			BasicLayout lay = getCurrentLayout();
 			
 			setRowColClickForLayout(lay);
 			return true;
@@ -141,12 +141,12 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	/**Identifies the layout at the clickpoint and sets it as the current layout. 
 	  */
 	public void setupClickedLayout() {
-		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageClicked(), this.getClickedCordinateX(), this.getClickedCordinateY(), MontageLayoutGraphic.class);
+		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageClicked(), this.getClickedCordinateX(), this.getClickedCordinateY(), DefaultLayoutGraphic.class);
 		ArraySorter.removehideableItems(list);//removes hidden layouts
 		
 		LocatedObject2D layoutGraphic0 = getObjecthandler().nearest(list, new Point(this.getClickedCordinateX(), this.getClickedCordinateY()));
-		if (layoutGraphic0 instanceof MontageLayoutGraphic) {
-			layoutGraphic=(MontageLayoutGraphic) layoutGraphic0;
+		if (layoutGraphic0 instanceof DefaultLayoutGraphic) {
+			layoutGraphic=(DefaultLayoutGraphic) layoutGraphic0;
 			//IssueLog.log("clicked on layout "+ layoutGraphic);
 			editingLayout=setUpCurrentLayout();
 			//IssueLog.log("clicked on layout "+ editingLayout);
@@ -171,7 +171,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		if (layoutGraphic!=null&& layoutGraphic.getBounds().contains(getDragCordinateX(), getDragCordinateY())) {
 			//IssueLog.log(getCurrentLayout().report());
-			BasicMontageLayout lay = getCurrentLayout();
+			BasicLayout lay = getCurrentLayout();
 			super.setRowColDragForLayout(lay);
 		} else {
 			if (getCurrentLayout()==null /**!super.doesClickedImageHAveMaintMontageLayout() */){
@@ -230,7 +230,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	/**Shows a dialog window if user clicks twice, may be overriden*/
 	protected void doubleClickDialog() {
-			new MontageEditorDialogs().showDialogBasedOnLocation( getLayoutEditor(), getCurrentLayout(), getClickedCordinateX(), getClickedCordinateY());
+			new LayoutEditorDialogs().showDialogBasedOnLocation( getLayoutEditor(), getCurrentLayout(), getClickedCordinateX(), getClickedCordinateY());
 		getImageClicked().updateDisplay();
 	}
 	
@@ -288,7 +288,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		if (getCurrentLayout()==null) return null;
 		
 		if (this.markerType()==MONTAGE) {
-			MontageLayoutGraphic m= new MontageLayoutGraphic(getCurrentLayout());
+			DefaultLayoutGraphic m= new DefaultLayoutGraphic(getCurrentLayout());
 			m.setStrokeWidth(4);
 			return m;
 		}
@@ -320,7 +320,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	
 	/**A montage layout object for the clicked graphic with a shell.*/
-	public BasicMontageLayout getCurrentLayout() {
+	public BasicLayout getCurrentLayout() {
 		return editingLayout;
 	}
 	

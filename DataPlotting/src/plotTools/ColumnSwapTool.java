@@ -17,14 +17,14 @@ package plotTools;
 
 import java.awt.Color;
 
-import externalToolBar.IconWrappingToolIcon;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import groupedDataPlots.Grouped_Plot;
+import icons.IconWrappingToolIcon;
 import logging.IssueLog;
 
 public class ColumnSwapTool extends BasicPlotTool {
 
-	{super.set=IconWrappingToolIcon.createIconSet(createIcon(), createIcon2());}
+	{super.iconSet=IconWrappingToolIcon.createIconSet(createIcon(), createIcon2());}
 	
 	protected void afterPlotRelease() {
 		GraphicLayer a1 = getPressShape().getParentLayer();

@@ -23,13 +23,14 @@ import java.io.Serializable;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TextParagraph;
 
+/**A class with methods to add labels to figures*/
 public class FigureLabelOrganizer implements Serializable {
 
 	/**
@@ -74,7 +75,7 @@ public class FigureLabelOrganizer implements Serializable {
 	}
 
 	
-	public static ComplexTextGraphic addPanelLabel(String st, int colNum, GraphicLayer thisLay, MontageLayoutGraphic g) {
+	public static ComplexTextGraphic addPanelLabel(String st, int colNum, GraphicLayer thisLay, DefaultLayoutGraphic g) {
 		if (st==null) return null;
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
@@ -102,7 +103,7 @@ public class FigureLabelOrganizer implements Serializable {
 	}
 	
 	
-	public static ComplexTextGraphic addColLabel(String st, int colNum, GraphicLayer thisLay, MontageLayoutGraphic g) {
+	public static ComplexTextGraphic addColLabel(String st, int colNum, GraphicLayer thisLay, DefaultLayoutGraphic g) {
 		if (st==null) return null;
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
@@ -134,7 +135,7 @@ public class FigureLabelOrganizer implements Serializable {
 	}
 	
 	/**Adds a row label to the figure*/
-	public static ComplexTextGraphic addRowLabel(String st, int rowNum, GraphicLayer thisLay, MontageLayoutGraphic g) {
+	public static ComplexTextGraphic addRowLabel(String st, int rowNum, GraphicLayer thisLay, DefaultLayoutGraphic g) {
 		if (st==null) return null;
 		if (st.trim().equals("")) return null;
 		st=st.replace("_", " ");
@@ -152,13 +153,14 @@ public class FigureLabelOrganizer implements Serializable {
 		g.addLockedItem(tg);
 		return tg;
 	}
-	public static TextGraphic addLabelOfType(int type, int i, GraphicLayer thisLay, MontageLayoutGraphic g) {
+	
+	public static TextGraphic addLabelOfType(int type, int i, GraphicLayer thisLay, DefaultLayoutGraphic g) {
 		TextGraphic item=null;
-		if (type==BasicMontageLayout.ROWS) item=addRowLabel("          Row "+i, i, thisLay, g);
+		if (type==BasicLayout.ROWS) item=addRowLabel("          Row "+i, i, thisLay, g);
 		else 
-			if (type==BasicMontageLayout.COLS) item= addColLabel("Column "+i, i, thisLay, g);
+			if (type==BasicLayout.COLS) item= addColLabel("Column "+i, i, thisLay, g);
 			else 
-				if (type==BasicMontageLayout.PANELS)item= addPanelLabel("Panel "+i, i, thisLay, g);
+				if (type==BasicLayout.PANELS)item= addPanelLabel("Panel "+i, i, thisLay, g);
 		return item;
 	}
 }

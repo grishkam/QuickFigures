@@ -19,7 +19,7 @@ import channelLabels.ChannelLabelTextGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import undo.AbstractUndoableEdit2;
 import utilityClasses1.NumberUse;

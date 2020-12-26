@@ -15,14 +15,16 @@
  *******************************************************************************/
 package genericMontageLayoutToolKit;
 import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
-import gridLayout.LayoutSpaces;
+import layout.PanelLayout;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 
 /**Layout Tool that moves the clicked layout*/
 public class MontageMoverTool  extends GeneralLayoutEditorTool implements LayoutSpaces{
 
 
-	{createIconSet( "icons/MontageMoverIcon.jpg", "icons/MontageMoverPressedIcon.jpg", "icons/MontageMoverRolloverIcon.jpg");}
+	
 
 	
 	public void performDragEdit(boolean shift) {
@@ -42,6 +44,40 @@ public class MontageMoverTool  extends GeneralLayoutEditorTool implements Layout
 			return "Move Figure Layout";
 		}
 
+	{this.setIconSet(new  MoverIcon(0).generateIconSet());}
+	class MoverIcon extends GeneralLayoutToolIcon {
+
+		/**
+		 * @param type
+		 */
+		public MoverIcon(int type) {
+			super(type);
+			// TODO Auto-generated constructor stub
+		}
+		
+		/**
+		creates a layout for drawing and icon
+		 */
+		protected PanelLayout createSimpleIconLayout( int type) {
+			BasicLayout layout = new BasicLayout(2, 1, 6, 6, 2,2, true);
+			layout.setLabelSpaces(2, 2,2,2);
+			layout.move(2,3);
+			if(type!=NORMAL_ICON_TYPE) {
+				layout.move(2, 8);
+			}
+			return layout;
+		}
+		
+		/**
+		 * @param type
+		 * @return
+		 */
+		protected GeneralLayoutToolIcon generateAnother(int type) {
+			return new MoverIcon(type);
+		}
+	}
+	
+	
 
 	
 }

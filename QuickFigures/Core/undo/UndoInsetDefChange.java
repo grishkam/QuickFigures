@@ -38,7 +38,7 @@ public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 	}
 	
 	public void redo() {
-		item.setBilinearScale(fScale);
+		item.setBilinearScale(iScale);
 	}
 	
 	public void undo() {

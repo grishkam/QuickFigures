@@ -58,15 +58,15 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 			
 			handle = new SmartHandleForPathGraphic(p, point);
-			handle.setUphandleType(1, i);
+			handle.setUphandleType( CURVE_CONTROL_POINT1, i);
 			output.add(handle);
 			
 			handle = new SmartHandleForPathGraphic(p, point);
-			handle.setUphandleType(2, i);
+			handle.setUphandleType(CURVE_CONTROL_POINT2, i);
 			output.add(handle);
 			
 			 handle = new SmartHandleForPathGraphic(p, point);
-				handle.setUphandleType(0, i);
+				handle.setUphandleType(ANCHOR_POINT, i);
 				output.add(handle);
 			
 		}
@@ -75,7 +75,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	
 	
-
+	/**constructs a handle for the given point*/
 	public SmartHandleForPathGraphic(PathGraphic p, PathPoint point) {
 		
 		this.pathPoint=point;
@@ -193,7 +193,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	}
 
 
-
+	/**returns true if the this is an anchor point*/
 	public boolean isAnchorPointHandle() {
 		return type==ANCHOR_POINT;
 	}
@@ -233,6 +233,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		}
 	}
 	
+	/**deselects all point except for the selected one*/
 	public void deslectAllExcept(PathPoint pSel) {
 		for(PathPoint pEach: this.pathGraphic.getPoints()) {
 			if(pEach==pSel) {}
@@ -283,9 +284,10 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 				for(utilityClassesForObjects.PathPoint point: pts) {
 					point.move(dx, dy);
 				}
+				if (!pathPoint.isSelected())pathPoint.move(dx, dy);
 			}
 			else
-			pathPoint.move(dx, dy);
+				pathPoint.move(dx, dy);
 		} else {
 			boolean linkedHandles = this.getHandleMode()==PathGraphic.CURVE_CONTROL_HANDLES_LINKED;
 			

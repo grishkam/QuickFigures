@@ -18,8 +18,8 @@ package popupMenusForComplexObjects;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import genericMontageKit.PanelLayout;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import layout.PanelLayout;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputPanel;

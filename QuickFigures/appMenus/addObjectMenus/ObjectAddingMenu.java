@@ -88,7 +88,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 					//imagePlusAdders.add(new ImagePlusAdder());
 					imagePlusAdders.add(new ImageAndlayerAdder(false));
 					imagePlusAdders.add(new ImageAndlayerAdder(true));
-					imagePlusAdders.add(new ImageAndlayerAdder(true, true));
+					
 			}
 			
 		

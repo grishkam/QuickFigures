@@ -28,7 +28,7 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.GraphicComboBox;
@@ -165,7 +165,7 @@ public class TemplateChooserDialog extends StandardDialog {
 		tg4 = new TextGraphic("Hi");
 		tg4.setAttachmentPosition(AttachmentPosition.defaultRowSide());
 		oc1.addItemToImage(tg4);
-		oc1.addItemToImage(new MontageLayoutGraphic());
+		oc1.addItemToImage(new DefaultLayoutGraphic());
 		oc1.addItemToImage(new BarGraphic());
 		//new TemplateChooserDialog(tp, oc1).showDialog();;
 	}

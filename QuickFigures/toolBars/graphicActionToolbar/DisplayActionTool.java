@@ -20,6 +20,7 @@ package graphicActionToolbar;
 import applicationAdapters.DisplayedImage;
 import externalToolBar.ActionToolBlank;
 import graphicalObjects.FigureDisplayContainer;
+import icons.IconSet;
 
 /**An action tool that targets a single object*/
 public class DisplayActionTool extends ActionToolBlank<DisplayedImage>{
@@ -29,6 +30,11 @@ public class DisplayActionTool extends ActionToolBlank<DisplayedImage>{
 	public DisplayActionTool(String actionCommand, String iconpath) {
 		ActionCommand=actionCommand;
 		getIconSet().setIcon(0, "icons3/"+iconpath);
+	}
+	/**Initializes the tool's icons*/
+	public DisplayActionTool(String actionCommand, IconSet iconpath) {
+		ActionCommand=actionCommand;
+		this.setIconSet(iconpath);
 	}
 	
 	protected void perform(FigureDisplayContainer gc) {

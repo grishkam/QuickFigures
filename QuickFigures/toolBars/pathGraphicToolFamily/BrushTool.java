@@ -20,9 +20,9 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.NoninvertibleTransformException;
 
-import externalToolBar.TreeIconWrappingToolIcon;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import icons.TreeIconWrappingToolIcon;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputPanel;
@@ -49,7 +49,7 @@ public class BrushTool extends PathGraphicTool {
 		model.setDashes(new float[] {}); model.setAntialize(true);
 		}
 	
-	{super.set=TreeIconWrappingToolIcon.createIconSet(model);}
+	{super.iconSet=TreeIconWrappingToolIcon.createIconSet(model);}
 
 
 	

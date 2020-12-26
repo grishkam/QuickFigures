@@ -15,8 +15,8 @@
  *******************************************************************************/
 package undo;
 
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
 
 public class UndoLayoutEdit extends UndoMoveItems {
 
@@ -25,18 +25,18 @@ public class UndoLayoutEdit extends UndoMoveItems {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	BasicMontageLayout layout;
-	BasicMontageLayout oldlayout;
-	BasicMontageLayout newlayout;
+	BasicLayout layout;
+	BasicLayout oldlayout;
+	BasicLayout newlayout;
 	
-	public UndoLayoutEdit(MontageLayoutGraphic layoutGraphic) {
+	public UndoLayoutEdit(DefaultLayoutGraphic layoutGraphic) {
 		super(layoutGraphic.generateCurrentImageWrapper().getLocatedObjects());
 		 layout= layoutGraphic.getPanelLayout();
 		 oldlayout=layout.duplicate();
 	}
 	
-	public UndoLayoutEdit(BasicMontageLayout panelLayout) {
-		super(panelLayout.getWrapper().getLocatedObjects());
+	public UndoLayoutEdit(BasicLayout panelLayout) {
+		super(panelLayout.getEditedImage().getLocatedObjects());
 		 layout= panelLayout;
 		 oldlayout=layout.duplicate();
 		 

@@ -19,10 +19,9 @@ import channelMerging.ImageDisplayLayer;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.PanelOrderCorrector;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.LayoutSpaces;
-
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -62,7 +61,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			boolean insertIntoLayout = changeLayout!=null && (changeLayout==ROWS||changeLayout==COLS);
 			if (insertIntoLayout) {
 					
-					MontageLayoutGraphic layout = figure.getMontageLayoutGraphic();
+					DefaultLayoutGraphic layout = figure.getMontageLayoutGraphic();
 					output.addEditToList(new UndoLayoutEdit(layout));	
 					if (changeLayout==ROWS)layout.getEditor().addRow(layout.getPanelLayout(), 1, null);
 					if (changeLayout==COLS)layout.getEditor().addColumn(layout.getPanelLayout(), 1, null);
@@ -89,10 +88,10 @@ public class ChannelPanelRemover implements LayoutSpaces{
 				
 			}
 			
-			MontageLayoutGraphic layout = figure.getMontageLayoutGraphic();
+			DefaultLayoutGraphic layout = figure.getMontageLayoutGraphic();
 			for(int i=0; i<panels.size(); i++) {
 				int index=0;
-				BasicMontageLayout panelLayout = layout.getPanelLayout();
+				BasicLayout panelLayout = layout.getPanelLayout();
 				if (changeLayout!=null&&changeLayout==ROWS) index=panelLayout.getIndexAtPosition(1,i+1);
 				if (changeLayout!=null&&changeLayout==COLS) index=panelLayout.getIndexAtPosition(i+1, 1);
 				
@@ -144,7 +143,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 		Integer changeLayout = orderer.determineChannelLayout();
 	if (changeLayout!=null && (changeLayout==ROWS||changeLayout==COLS)) {
 			
-			MontageLayoutGraphic layout = figure.getMontageLayoutGraphic();
+			DefaultLayoutGraphic layout = figure.getMontageLayoutGraphic();
 			output.addEditToList(new UndoLayoutEdit(layout));
 			
 			ArrayList<Integer> possibleIndex = orderer.indexOfChannel(chaneIndex, changeLayout);

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package graphicalObjects_FigureSpecific;
 
-import gridLayout.RetrievableOption;
+import layout.RetrievableOption;
 
 public class LabelCreationOptions {
 	

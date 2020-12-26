@@ -23,6 +23,7 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
@@ -102,6 +103,10 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	
+			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			
 		lastDrawnConverter=cords;
 		Point2D pt = cords.transformP(getCordinateLocation());
 		
@@ -320,24 +325,26 @@ public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 	
 	public void nudgeHandle(double dx, double dy) {}
 
-
+/**returns true if the mouse event location is within the last drawn shape*/
 public boolean containsClickPoint(Point2D p) {
-	return lastDrawShape.contains(p);
+	return getClickableArea().contains(p);
 }
+
+
 
 
 public boolean containsClickPoint(CanvasMouseEvent canvasMouseEventWrapper) {
-	return lastDrawShape.contains(canvasMouseEventWrapper.getClickedXScreen(),canvasMouseEventWrapper. getClickedYScreen());
+	return getClickableArea().contains(canvasMouseEventWrapper.getClickedXScreen(),canvasMouseEventWrapper. getClickedYScreen());
 }
 
+/**returns the shape within which the mouse is considered inside the handle*/
+public Shape getClickableArea() {return lastDrawShape;}
+
+	/**If the handle has an icon, returns it*/
 	public Icon getIcon() {
 		return icon;
 	}
-
-
-
-
-
+	/**sets an icon for the handle to dra*/
 	public void setIcon(Icon icon) {
 		this.icon = icon;
 	}

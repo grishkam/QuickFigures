@@ -19,7 +19,7 @@ package utilityClassesForObjects;
 import java.awt.geom.Dimension2D;
 import java.io.Serializable;
 
-import gridLayout.RetrievableOption;
+import layout.RetrievableOption;
 
 /**Stores information regarding the
 number of pixels that corresponds to a physical unit distance*/

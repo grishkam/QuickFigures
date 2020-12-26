@@ -34,6 +34,8 @@ import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import icons.GraphicToolIcon;
+import icons.QuickFigureIcon;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
@@ -65,25 +67,29 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	 public boolean hidesImage=true;
 	 
-	 AutoFigureGenerationOptions auto=new AutoFigureGenerationOptions();
+	 public AutoFigureGenerationOptions figureCreationOptions=new AutoFigureGenerationOptions();
 	
 	 void setupAdder() {
-		 auto.autoGenerateFromModel=true;
-		 auto.showPanelDialog=false;
-		 la.autoFigureGenerationOptions=auto;
+		 figureCreationOptions.autoGenerateFromModel=true;
+		 figureCreationOptions.showPanelDialog=false;
+		 la.autoFigureGenerationOptions=figureCreationOptions;
 	 }
 	 
 	
 	public QuickFigureMaker() {
-		super("quickFig", "quickFigure.jpg");
+		super("quickFig",GraphicToolIcon.createIconSet( new QuickFigureIcon(0)));
 		setupAdder() ;
+		
 	}
 	
-	public QuickFigureMaker(boolean mergeOnly) {
+	public QuickFigureMaker(boolean mergeOnly, boolean ignoreSavedTemplate) {
 		super("quickFig", "quickFigure.jpg");
+		
 		this.setMergeOnly(mergeOnly);
 		codeString="Merge";
 		setupAdder() ;
+		figureCreationOptions.ignoreSavedTemplate=ignoreSavedTemplate;
+		
 	}
 	
 	public QuickFigureMaker(String aC) {
@@ -142,7 +148,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		public boolean mergeOnly=false;
+		
 
 		public LocalImageAdder() {
 			super(false);

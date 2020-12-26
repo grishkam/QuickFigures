@@ -74,7 +74,7 @@ public String getCommand() {return "Zoom out to fit"+type;}
 public String getNameText() {
 	if (type.equals(OPTIONS)) return "Zoom Options";
 	if (type.startsWith(OUT)) return "Out (press '-')";
-	if (type.startsWith(IN)) return "In (press '=' or '+')";
+	if (type.startsWith(IN)) return "In (press '=')";
 	if (type.startsWith(USER_SET)) return "Set Zoom Level";
 	return "View All";
 	}

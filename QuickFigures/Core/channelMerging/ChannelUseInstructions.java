@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import channelMerging.SubStackSelectionInstructions.FrameUseInstructions;
 import channelMerging.SubStackSelectionInstructions.SliceUseInstructions;
-import gridLayout.BasicMontageLayout;
+import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
@@ -384,7 +384,7 @@ public class ChannelUseInstructions implements Serializable {
 			/**alters the layout to ensure that sufficient rows and columns are available to fit the image
 			 *if multiple images are present and each has more than one section/time frame this does not produce a perfect result
 			 **/
-			public void setDimensionForPanels(BasicMontageLayout p,ArrayList<MultiChannelImage> image) {
+			public void setDimensionForPanels(BasicLayout p,ArrayList<MultiChannelImage> image) {
 				int[] dims=estimateBestMontageDims(image);
 				int col=dims[1];
 				int row=dims[0];

@@ -19,11 +19,11 @@ import java.awt.Color;
 import java.awt.Shape;
 
 import dataSeries.DataSeries;
-import externalToolBar.IconWrappingToolIcon;
 import genericPlot.BasicDataSeriesGroup;
 import genericTools.Object_Mover;
 import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import icons.IconWrappingToolIcon;
 import plotParts.DataShowingParts.DataShowingShape;
 import utilityClassesForObjects.LocatedObject2D;
 
@@ -38,7 +38,7 @@ public class BasicPlotTool extends Object_Mover {
 	private Shape markDrag;
 
 
-	{super.set=IconWrappingToolIcon.createIconSet(new PlotIcon());}
+	{super.iconSet=IconWrappingToolIcon.createIconSet(new PlotIcon());}
 
 
 	

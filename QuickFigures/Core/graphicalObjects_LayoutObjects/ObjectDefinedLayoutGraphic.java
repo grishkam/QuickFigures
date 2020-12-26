@@ -23,8 +23,8 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layersGUI.LayerStructureChangeListener;
+import layout.plasticPanels.ObjectListPanelLayout;
 import menuUtil.PopupMenuSupplier;
-import plasticPanels.ObjectListPanelLayout;
 import popupMenusForComplexObjects.ObjectPanelLayoutPanelMenu;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
@@ -102,20 +102,20 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrapper = new GenericImage(new ArrayObjectContainer(parent2));
-		this.getPanelLayout().setWrapper(wrapper);
-		this.getPanelLayout().getWrapper().takeFromImage(this);
+		this.getPanelLayout().setEditedImage(wrapper);
+		this.getPanelLayout().getEditedImage().takeFromImage(this);
 		for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-			getPanelLayout().getWrapper().takeFromImage(loc);
+			getPanelLayout().getEditedImage().takeFromImage(loc);
 		}
 		return wrapper;
 	}
 	
 	public ImageWrapper generateEditNonpermissiveWrapper() {
 			GenericImage wrapper = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
-			this.getPanelLayout().setWrapper(wrapper);
-			this.getPanelLayout().getWrapper().takeFromImage(this);
+			this.getPanelLayout().setEditedImage(wrapper);
+			this.getPanelLayout().getEditedImage().takeFromImage(this);
 			for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-				getPanelLayout().getWrapper().takeFromImage(loc);
+				getPanelLayout().getEditedImage().takeFromImage(loc);
 			}
 			return wrapper;
 		}
@@ -124,7 +124,7 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage wrapper = new GenericImage((ObjectContainer) this.getParentLayer());
-				this.getPanelLayout().setWrapper(wrapper);
+				this.getPanelLayout().setEditedImage(wrapper);
 				if (!this.getEditor().getObjectHandler().getNeverRemove().contains(this))
 				this.getEditor().getObjectHandler().getNeverRemove().add(this);
 				for(LocatedObject2D loc: this.getPanelLayout().getArray()) {

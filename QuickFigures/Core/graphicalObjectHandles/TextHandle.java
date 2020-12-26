@@ -24,6 +24,7 @@ import java.awt.geom.Point2D;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.TextGraphic;
 
+/**A smart handle for editing text items. can be used for changing location of font size*/
 public class TextHandle extends SmartHandle {
 
 	public static final int ROTATION_HANDLE = 0, TEXT_FONT_SIZE_HANDLE = 1;
@@ -34,10 +35,9 @@ public class TextHandle extends SmartHandle {
 
 	private Point2D baseLineStart;
 
-	public TextHandle(TextGraphic textGraphic, int rotationHandle) {
-		
+	public TextHandle(TextGraphic textGraphic, int handleForm) {
 		this.textItem=textGraphic;
-		this.setHandleNumber(rotationHandle);
+		this.setHandleNumber(handleForm);
 	}
 	
 	public Point2D getCordinateLocation() {
@@ -51,12 +51,12 @@ public class TextHandle extends SmartHandle {
 			
 		}
 		
-		
 		return super.getCordinateLocation();
 	}
 	
 	public Color getHandleColor() {
 		if (textItem.isEditMode()) return Color.red;
+		if(getHandleNumber()==ROTATION_HANDLE) return Color.orange;
 		return Color.white;
 	}
 	
@@ -66,10 +66,8 @@ public class TextHandle extends SmartHandle {
 	}
 	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-		baseLineStart = textItem.getBaseLineStart();
-		
+		baseLineStart = textItem.getBaseLineStart();//stores the baseline position
 	}
-
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		if (this.getHandleNumber()==ROTATION_HANDLE) {
@@ -95,20 +93,19 @@ public class TextHandle extends SmartHandle {
 				double d = Math.abs(rotLeft.y-rotStart.y);
 				if(d>3) newsize=d;
 				userSetNewSize(newsize);
-				//IssueLog.log("distance between pts "+d);
 				return;
 			
 			} catch (NoninvertibleTransformException e) {
-				/**Sets the font size the old way. not as natural for rotated text*/
-			
-			double distY=-p2.getY()+baseLineStart.getY();
-			double cos = Math.cos(textItem.getAngle());
-			double newsize =textItem.getFont().getSize();
-			if (cos!=0)
-				newsize=distY/cos;//+distX*Math.sin(getAngle());
-			if (newsize>50)newsize =textItem.getFont().getSize();
-			
-			userSetNewSize(newsize);
+				/**if an exception occurs, sets the font size the old way. not as natural for rotated text*/
+				
+				double distY=-p2.getY()+baseLineStart.getY();
+				double cos = Math.cos(textItem.getAngle());
+				double newsize =textItem.getFont().getSize();
+				if (cos!=0)
+					newsize=distY/cos;
+				if (newsize>50)newsize =textItem.getFont().getSize();
+				
+				userSetNewSize(newsize);
 			}
 			
 		}

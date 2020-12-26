@@ -34,8 +34,11 @@ import graphicalObjects.CordinateConverter;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
+import selectedItemMenus.ColorMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.MultiSelectionOperator;
+import standardDialog.colors.ColorInputEvent;
+import standardDialog.colors.ColorInputListener;
 import standardDialog.graphics.GraphicComponent;
 
 /**A set of handles functions as a 'mini-toolbar' for some objects.
@@ -268,8 +271,8 @@ public void updateLocationsForVertical() {
 		}
 		
 		
+		/**The appearance of some icons will change to reflect changes in a target object*/
 		public void updateIcon() {
-			
 			if (itemForIcon!=null) super.setIcon(itemForIcon.getIcon());
 			
 		}
@@ -453,5 +456,53 @@ public void updateLocationsForVertical() {
 	public void updateLocation() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	public static class ColoringButton extends IconHandle implements ColorInputListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private ColorMultiSelectionOperator item;
+		private transient CanvasMouseEvent lastPress;
+
+		public ColoringButton(ColorMultiSelectionOperator itemForIcon, int handleNumber ) {
+			
+			super(itemForIcon.getIcon(), new Point(0,0));
+			
+			this.item=itemForIcon;
+			this.xShift=5;
+			this.yShift=5;
+			this.setIcon(itemForIcon.getIcon());
+			this.setHandleNumber(handleNumber);
+		}
+		
+		@Override
+		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
+			showPopupMenu(canvasMouseEventWrapper);
+		
+		}
+
+		public void showPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
+			lastPress=canvasMouseEventWrapper;
+			String message="Change Fill Color";
+			if(item.doesStroke()) message="Change Stroke Color";
+			new ColorButtonHandleList(this).showInPopupPalete(canvasMouseEventWrapper, message);;
+		}
+
+		@Override
+		public void ColorChanged(ColorInputEvent fie) {
+			
+			item.setSelector(fie.event.getSelectionSystem());
+			item.onColorInput(fie);
+			
+			this.setIcon(item.getIcon());
+			fie.event.getSelectionSystem().getGraphicDisplayContainer().updateDisplay();
+			
+			
+		}
+
 	}
 }

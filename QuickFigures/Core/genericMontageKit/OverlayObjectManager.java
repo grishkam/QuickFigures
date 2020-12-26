@@ -208,8 +208,9 @@ public void removeSelections() {
 }
 
 
-/**sets the selected area to the shape. uses a stroke width i for the shape*/
-public void select(Rectangle2D r1, int i) {
+/**sets the selected area to the shape. uses a stroke width i for the shape
+ * @return */
+public RectangularGraphic select(Rectangle2D r1, int i) {
 	
 	RectangularGraphic bb = new RectangularGraphic();
 	bb.setStrokeWidth(i);
@@ -220,7 +221,7 @@ public void select(Rectangle2D r1, int i) {
 	if(r1==null) selectionGraphic=null; else 
 		bb.setRectangle(r1);
 	setUpShapeProperties(bb);
-	
+	return bb;
 	
 }
 

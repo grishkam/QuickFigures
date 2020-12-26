@@ -89,7 +89,7 @@ public class PDFQuickExport extends QuickExport {
 
 	@Override
 	public String getNameText() {
-		return "Export as PDF";
+		return "PDF";
 	}
 	
 }

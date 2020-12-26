@@ -24,9 +24,9 @@ import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import genericMontageKit.PanelSetter;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.AttachmentPosition;
 
@@ -187,7 +187,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		}
 		
 		/**Creates a montage layout that fit the panel list and the inset*/
-		public	MontageLayoutGraphic createLayout(PanelList list, PanelGraphicInsetDefiner inset) {
+		public	DefaultLayoutGraphic createLayout(PanelList list, PanelGraphicInsetDefiner inset) {
 			ImagePanelGraphic insetPanel = (ImagePanelGraphic) list.getPanels().get(0).getLocatedImageDisplayObject();
 			
 			Rectangle insetPanelDim = insetPanel.getBounds();
@@ -238,7 +238,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			return true;
 		}
 		
-		public static boolean fixorderOfPanels(PanelList output, MontageLayoutGraphic g) {
+		public static boolean fixorderOfPanels(PanelList output, DefaultLayoutGraphic g) {
 			if (g==null) return false;
 			
 			ArrayList<PanelListElement> correctOrder = PanelManager.getPanelsInLayoutOrder(output.getPanels(), g.getPanelLayout().getPanels());
@@ -255,7 +255,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		}
 		
 		/**Creates a layout inwhich npanels of size insetPanelDim are fit around a panel with sourcePanelDim*/
-			public MontageLayoutGraphic createLayout(int npanel, Rectangle insetPanelDim, 	Rectangle sourcePanelDim, int nimages ) {
+			public DefaultLayoutGraphic createLayout(int npanel, Rectangle insetPanelDim, 	Rectangle sourcePanelDim, int nimages ) {
 			AttachmentPosition theSnap = sb.copy();
 			double overallheight = sourcePanelDim.getHeight();
 			double overallwidth = sourcePanelDim.getWidth();
@@ -307,14 +307,14 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			}
 			
 			
-			BasicMontageLayout bml = new BasicMontageLayout(ncol, nrow, (int)insetPanelDim.getWidth(), (int)insetPanelDim.getHeight(), (int)border,(int) border, horizontalMontage());
+			BasicLayout bml = new BasicLayout(ncol, nrow, (int)insetPanelDim.getWidth(), (int)insetPanelDim.getHeight(), (int) border,(int)border, horizontalMontage());
 			
 			
 		
 			
 			
 			
-			MontageLayoutGraphic lg = new MontageLayoutGraphic(bml);
+			DefaultLayoutGraphic lg = new DefaultLayoutGraphic(bml);
 			
 			theSnap=prepareForSnapping(sourcePanelDim, lg);
 			
@@ -326,8 +326,8 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		}
 			
 			/**Edits the layout to be appropriate for snapping and returns the snapping behaviors*/
-			public AttachmentPosition prepareForSnapping(Rectangle sourcePanelDim, MontageLayoutGraphic lg) {
-				BasicMontageLayout bml = lg.getPanelLayout();
+			public AttachmentPosition prepareForSnapping(Rectangle sourcePanelDim, DefaultLayoutGraphic lg) {
+				BasicLayout bml = lg.getPanelLayout();
 				AttachmentPosition theSnap = sb.copy();
 				double overallheight = sourcePanelDim.getHeight();
 				double overallwidth = sourcePanelDim.getWidth();
@@ -404,7 +404,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 				return theSnap;
 			}
 			
-			public void snapLayout(MontageLayoutGraphic lg, Rectangle SourcePanelDim) {
+			public void snapLayout(DefaultLayoutGraphic lg, Rectangle SourcePanelDim) {
 				makeSnapping().snapObjectToRectangle(lg,SourcePanelDim );
 			}
 			
@@ -525,7 +525,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		private void forMontageLayoutAppliestoInset(PanelList list, PanelGraphicInsetDefiner  inset) {
 
 			
-			MontageLayoutGraphic lg = createLayout(list, inset);
+			DefaultLayoutGraphic lg = createLayout(list, inset);
 			
 			 		inset.personalLayer.add(lg);
 			 		inset.personalLayer.swapmoveObjectPositionsInArray(lg, inset.personalLayer.getItemArray().get(0));

@@ -37,7 +37,7 @@ public class PathAnchorPointTool extends GraphicTool {
 	boolean samecurveControlAsLast=false;
 	private LocatedObject2D lastPath;
 	
-	{this.onlySelectThoseOfClass=PathGraphic.class;}
+	{this.setSelectOnlyThoseOfClass(PathGraphic.class);}
 	
 	
 	public void mousePressed() {

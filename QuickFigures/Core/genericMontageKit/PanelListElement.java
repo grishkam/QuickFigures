@@ -33,7 +33,7 @@ import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
-import gridLayout.GridIndex;
+import layout.basicFigure.GridIndex;
 import multiChannelFigureUI.ChannelSwapHandleList;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ScaleInfo;

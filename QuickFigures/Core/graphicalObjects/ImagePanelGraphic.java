@@ -64,7 +64,6 @@ import export.pptx.OfficeObjectMaker;
 import export.svg.ImageSVGExporter;
 import export.svg.SVGExportable;
 import export.svg.SVGExporter;
-import externalToolBar.IconSet;
 import genericMontageKit.PanelListElement;
 import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.ImagePanelActionHandleList;
@@ -74,6 +73,8 @@ import graphicalObjectHandles.SmartHandleList;
 import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
+import icons.IconSet;
+import icons.TreeIconForImageGraphic;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.HasIllustratorOptions;
 import illustratorScripts.IllustratorObjectConvertable;
@@ -262,20 +263,15 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	}
 	
 
-	transient static IconSet i;
-	
 	public static Icon createImageIcon() {
-		if (i==null) i=new IconSet("iconsTree/TreeImageGraphicIcon.png");
-		return i.getIcon(0);//new ImageIcon(i.getIcon(0));
+		return new TreeIconForImageGraphic(Color.white);//return i.getIcon(0);
 	}
 
 	@Override
 	public Icon getTreeIcon() {
-		return createImageIcon();
+		return new TreeIconForImageGraphic(frameColor);
 	}
 
-	
-	
 	
 	public LockedItemList getLockedItems() {
 		if (lockedItems==null) lockedItems=new LockedItemList(this);

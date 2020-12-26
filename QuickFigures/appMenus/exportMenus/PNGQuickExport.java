@@ -85,7 +85,7 @@ public class PNGQuickExport extends QuickExport {
 
 	@Override
 	public String getNameText() {
-		return "Export as Image (.png)";
+		return "Image (.png)";
 	}
 	
 	public static void main(String[] args) throws IOException {

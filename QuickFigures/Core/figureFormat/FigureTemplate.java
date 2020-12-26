@@ -28,8 +28,8 @@ import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
@@ -59,7 +59,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	private LabelExamplePicker channelLabelPicker=new ChannelLabelExamplePicker(new ChannelLabelTextGraphic(new ChannelLabelProperties()));
 	private ScaleBarExamplePicker scaleBarPicker=new ScaleBarExamplePicker(new BarGraphic());
 	MultichannelDisplayPicker	mdp=new MultichannelDisplayPicker(); {mdp.setModelItem(new MultichannelDisplayLayer(null));}
-	GridLayoutExamplePicker layoutpicker =new GridLayoutExamplePicker(new MontageLayoutGraphic());
+	GridLayoutExamplePicker layoutpicker =new GridLayoutExamplePicker(new DefaultLayoutGraphic());
 	
 	
 	private GraphicalItemPicker<?>[] pickers=new GraphicalItemPicker[] {layoutpicker,  rowLabelPicker, colLabelPicker,  titleLabelPicker, getPanelLabelPicker(), getChannelLabelPicker(),scaleBarPicker };
@@ -190,7 +190,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	/**creates a set of starter labels and scale bar from the list of model objects
 	  Does not create channel labels as those are created by another method
 	  */
-	public void createDefaultLabelsObjectsFromTemplate( GraphicLayer l22, MultichannelDisplayLayer display, MontageLayoutGraphic p) {
+	public void createDefaultLabelsObjectsFromTemplate( GraphicLayer l22, MultichannelDisplayLayer display, DefaultLayoutGraphic p) {
 		
 		if (this.awaitingReset) {
 			autoGeneratePickersForDisplay(display);
@@ -297,10 +297,9 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 
 	/**creates new example picker objects that are suitable for the given display layer*/
 	public void autoGeneratePickersForDisplay(MultichannelDisplayLayer chan ) {
-		IssueLog.log("Figure Template Reset, generating standard from multichannel" );
 		
 		for(GraphicalItemPicker<?> pik: getAllExamplePickers())try  {
-			IssueLog.log("Figure Template Reset, generating standard for "+pik.getOptionName());
+			
 			pik.setToStandardFor(chan);
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -350,9 +349,9 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 		CombinedEdit undo = new CombinedEdit();
 		for (ZoomableGraphic z: items) {
 			
-			if (z instanceof MontageLayoutGraphic) {
+			if (z instanceof DefaultLayoutGraphic) {
 				
-				MontageLayoutGraphic m=(MontageLayoutGraphic) z;
+				DefaultLayoutGraphic m=(DefaultLayoutGraphic) z;
 				UndoLayoutEdit lEdit = new UndoLayoutEdit(m);
 				m.snapLockedItems();
 				m.updateDisplay();

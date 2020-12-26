@@ -36,11 +36,12 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.StrokeInputPanel;
 import selectedItemMenus.BasicMultiSelectionOperator;
+import selectedItemMenus.ColorMultiSelectionOperator;
 import standardDialog.StandardDialog;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
@@ -63,7 +64,7 @@ import utilityClassesForObjects.RainbowPaintProvider;
 import utilityClassesForObjects.StrokedItem;
 
 /**Applies a single color or stroke style to all the selected shapes*/
-public class EditManyShapes extends BasicMultiSelectionOperator implements  LayoutSpaces, ColorInputListener,  Serializable {
+public class EditManyShapes extends BasicMultiSelectionOperator implements  LayoutSpaces, ColorInputListener,  ColorMultiSelectionOperator, Serializable {
 
 	/**
 	 * 
@@ -627,6 +628,8 @@ if(a instanceof PathGraphic ) {
 
 	@Override
 	public void ColorChanged(ColorInputEvent fie) {
+		
+		
 		theColor=fie.getColor();
 		run();
 	}
@@ -760,6 +763,17 @@ if(a instanceof PathGraphic ) {
 			output[i]=new EditManyShapes(null,ArrowGraphic.arrowStyleList[i],2, head);
 		
 		return output;
+	}
+
+	/**
+	 * @param fie
+	 */
+	public void onColorInput(ColorInputEvent fie) {
+		ShapeGraphic model = getModelItem();
+		setModelItem(null);
+		setTheColor(fie.getColor());
+		run();
+		setModelItem(model);
 	}
 	
 

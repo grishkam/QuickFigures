@@ -16,6 +16,7 @@
 package graphicActionToolbar;
 
 import graphicalObjects.FigureDisplayContainer;
+import icons.AcronymIcon;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
@@ -23,8 +24,7 @@ public class PSActionTool extends DisplayActionTool {
 	AdobeScriptMaker sm=	new AdobeScriptMaker();
 
 	public PSActionTool() {
-		super("SendTOIL", "PSILicon.jpg");
-		// TODO Auto-generated constructor stub
+		super("SendTOIL", new AcronymIcon("Ai", 0).generateIconSet());
 	}
 
 	

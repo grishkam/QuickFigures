@@ -21,5 +21,6 @@ public class AutoFigureGenerationOptions {
 	public boolean showPanelDialog=false;
 	public boolean autoGenerateFromModel=true;
 	public boolean onlyFirstSetGetsChannelLabels=true;
+	public boolean ignoreSavedTemplate=false;
 	
 }

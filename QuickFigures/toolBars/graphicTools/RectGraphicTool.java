@@ -23,9 +23,9 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
-import externalToolBar.TreeIconWrappingToolIcon;
 import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_BasicShapes.RectangularGraphic;
+import icons.TreeIconWrappingToolIcon;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdgePosisions;
 
@@ -41,7 +41,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	{
 		getModel().setStrokeColor(Color.black);
 	{
-		super.set=TreeIconWrappingToolIcon.createIconSet(getModel());//sets up the tool icons
+		super.iconSet=TreeIconWrappingToolIcon.createIconSet(getModel());//sets up the tool icons
 
 		super.temporaryTool=true;//set to true if the toolbar will switch back to the object mover tool when done
 	}}

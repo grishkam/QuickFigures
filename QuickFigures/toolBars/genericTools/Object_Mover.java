@@ -36,9 +36,6 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.CurrentSetLayerSelector;
 import externalToolBar.DragAndDropHandler;
-import externalToolBar.GraphicToolIcon;
-import externalToolBar.IconSet;
-import genericMontageKit.PanelLayout;
 import genericMontageKit.OverlayObjectManager;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
@@ -57,9 +54,12 @@ import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import icons.GraphicToolIcon;
+import icons.IconSet;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import includedToolbars.StatusPanel;
+import layout.PanelLayout;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
@@ -92,6 +92,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**
 	 * 
 	 */
+	public static final int CODE_FOR_RESHAPE_HANDLE_LIST = 90000000;
+
+	/**
+	 * 
+	 */
 	private static final int NO_HANDLE = HasHandles.NO_HANDLE_;
 
 	/**
@@ -99,7 +104,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 */
 	private static final int NORMAL_OBJECT_MOVER = 0;
 
-	protected IconSet set=GraphicToolIcon.createIconSet(new LocalIcon(0));
+	protected IconSet iconSet=GraphicToolIcon.createIconSet(new LocalIcon(0));
 	
 	/**true if this tool or a subclass allows the user to select regions of the cancas*/
 	protected boolean createSelector=true;	
@@ -122,10 +127,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 
 	 /**The undoable edit that will be added to the undo manager to allow a user to undo mouse drags*/
 		 protected UndoMoveItems currentUndo;
-		 boolean addedToManager=false;//true if the above edit has been added to the manager
+		 protected boolean addedToManager=false;//true if the above edit has been added to the manager
 	  
 		protected Class<?> excludedClass=null;
-		protected Class<?> onlySelectThoseOfClass=Object.class;
+		private Class<?> onlySelectThoseOfClass=Object.class;
 
 	public Object_Mover() {
 		
@@ -150,6 +155,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 
 	private boolean draggingCanvasHandle;
+
+	/**is set to true if the point pressed is not within the primary selected object*/
+	private boolean notWithinPrimary;
 
 	/**Sets which object is the currently selected one*/
 	public LocatedObject2D setPrimarySelectedObject(LocatedObject2D roi) {
@@ -218,7 +226,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void deselect(Object roi1) {
 		if (roi1!=null && roi1 instanceof Selectable) try {
 			((Selectable)roi1).deselect();
-			this.getImageClicked().getOverlaySelectionManagger().setSelection(null, 1);
+			if(getImageClicked()!=null)
+				this.getImageClicked().getOverlaySelectionManagger().setSelection(null, 1);
 		} catch (Throwable t) {
 			IssueLog.logT(t);
 		}
@@ -257,16 +266,21 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public int establishMovedIntoOrClickedHandle(boolean press) {
 		this.setSelectedHandleNumber(NO_HANDLE);//starts off without a handle
 		
-		for(LocatedObject2D object: this.getAllSelectedItems(false))
+		for(LocatedObject2D object: this.getAllSelectedItems(false)) {
+			
 			if (object instanceof HasHandles) {
 				HasHandles handledObject = (HasHandles)object;
 				int handleNumber = handledObject.handleNumber(getMouseXClick(), getMouseYClick());
+				
 				setSelectedHandleNumber(handleNumber);
 				if (handleNumber>0) {
+					
 					if (press)this.setPrimarySelectedObject(object);
 					this.setSelectedHandleNumber(handleNumber);
 					break;
 				}
+			
+		}
 			
 		}
 		
@@ -374,6 +388,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				this.mousePressOnTextCursor((TextGraphic) this.getPrimarySelectedObject());
 			}
 		
+			
+			this.notWithinPrimary=getPrimarySelectedObject()!=null
+					&&
+					!getPrimarySelectedObject().getOutline().contains(pressX, pressY);
 		}
 	
 
@@ -537,7 +555,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWrapper click, int x, int y) {
-		return getObjecthandler().getAllClickedRoi(click, x, y,this.onlySelectThoseOfClass, true);
+		return getObjecthandler().getAllClickedRoi(click, x, y,this.getSelectOnlyThoseOfClass(), true);
 	}
 	
 	/**iterates through the array. whenever it sees a locatedObjectGroup group, it will place the 
@@ -547,7 +565,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			ArrayList<LocatedObject2D> aa = as.getThoseOfClass(therois, LocatedObjectGroup.class);
 			for(LocatedObject2D groupd:aa) {
 				LocatedObjectGroup l=(LocatedObjectGroup)  groupd;
-				ArrayList<LocatedObject2D> newrois = getObjecthandler().getAllClickedRoi(l.getObjectContainer(), x, y,this.onlySelectThoseOfClass);
+				ArrayList<LocatedObject2D> newrois = getObjecthandler().getAllClickedRoi(l.getObjectContainer(), x, y,this.getSelectOnlyThoseOfClass());
 				as.replace(therois, groupd, newrois);
 			}
 	}
@@ -559,7 +577,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			for(LocatedObject2D groupd:therois) {
 				if (groupd instanceof LocatedObjectGroup){
 				LocatedObjectGroup l=(LocatedObjectGroup)  groupd;
-				ArrayList<LocatedObject2D> newrois = getObjecthandler().getAllClickedRoi(l.getObjectContainer(), x, y,this.onlySelectThoseOfClass);
+				ArrayList<LocatedObject2D> newrois = getObjecthandler().getAllClickedRoi(l.getObjectContainer(), x, y,this.getSelectOnlyThoseOfClass());
 				output.addAll(newrois);
 				}
 				else output.add(groupd);
@@ -671,7 +689,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	private ReshapeHandleList getObjectGroupHandleList() {
 		if(this.getClass()!=Object_Mover.class) return null; //not needed for subclasses
 		if(!this.selectionsScale()) return null;
-		ReshapeHandleList newHandleList = new ReshapeHandleList(this.getAllSelectedItems(false), 5, 90000000, selectionsScale2Ways(), 0, false);
+		ReshapeHandleList newHandleList = new ReshapeHandleList(this.getAllSelectedItems(false), 5, CODE_FOR_RESHAPE_HANDLE_LIST, selectionsScale2Ways(), 0, false);
 		
 		/**if the new grouped handle list is much like the old one, just used the old one*/
 		if(newHandleList.isSimilarList(lastGroupHandleList)) newHandleList=lastGroupHandleList;
@@ -1018,18 +1036,24 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	creates a marker for the region that the user is dragging the mouse over
 	 */
 	public void updateSelectingMask() {
-		selection=null;
+	
 		if (useSelectorNow() ) {
 			Rectangle2D rect = OverlayObjectManager.createRectangleFrom2Points(new Point2D.Double(pressX, pressY), this.draggedCord());
 			getImageClicked().getOverlaySelectionManagger().select(rect, 0);
 			selection=rect;
+			} else {
+			
+				selection=null;
+				
 			}
 	}
 
 	/**returns true if the region selector is draw under current circumstances
 	  */
 	public boolean useSelectorNow() {
-		if (this.shiftDown()&&createSelector&&(this.getPrimarySelectedObject()==null|| (getPrimarySelectedObject()!=null&&getPrimarySelectedObject().getOutline().contains(pressX, pressY)))) return true;
+		if (this.shiftDown()&&createSelector&&
+				(this.getPrimarySelectedObject()==null|| 
+				notWithinPrimary)) return true;
 		return (getAllSelectedItems(false).size()==0)&&createSelector&&getSelectedHandleNumber()<0;
 	}
 	
@@ -1159,12 +1183,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 
 	public IconSet getIconSet() {
-		return set;
+		return iconSet;
 	}
 	
 	/**loads icons from the given local resources*/
 	public void createIconSet(String... args) {
-		set=new IconSet(args);
+		iconSet=new IconSet(args);
 		
 	}
 
@@ -1531,8 +1555,24 @@ public String getToolTip() {
 		return false;
 	}
 
+	/**If the user has allowed automatic resizing of the canvas, this method will determine if 
+	 * this particular tool does automatic resizing*/
 	public void setResizeAfterMousDrags(boolean resizeAfterMousDrags) {
 		this.resizeAfterMousDrags = resizeAfterMousDrags;
+	}
+
+	/**If the tool is restricted to instances of a specific class, this returns that class,
+	  if it returns object, the tool will recognize any  located object as selectable*/
+	public Class<?> getSelectOnlyThoseOfClass() {
+		return onlySelectThoseOfClass;
+	}
+
+	/**called to make the tool restricted to instances of one class
+	  If it is set to anything other than Object.class, the tool will ignore items
+	  not of those classes*/
+	public void setSelectOnlyThoseOfClass(Class<?> onlySelectThoseOfClass) {
+		this.onlySelectThoseOfClass = onlySelectThoseOfClass;
+		if (this.onlySelectThoseOfClass==null) this.onlySelectThoseOfClass=Object.class;
 	}
 
 	class LocalIcon extends GraphicToolIcon {

@@ -36,11 +36,11 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.GridLayoutEditEvent;
-import gridLayout.GridLayoutEditListener;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.GridLayoutEditEvent;
+import layout.basicFigure.GridLayoutEditListener;
+import layout.basicFigure.LayoutSpaces;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.AxisLabel;
@@ -112,7 +112,7 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	}
 	
 	public void generateLayout() {
-		this.plotLayout=new PlotLayout(new BasicMontageLayout(1, 1, 200, 150, 0,0 , true));
+		this.plotLayout=new PlotLayout(new BasicLayout(1, 1, 200, 150, 0,0 , true));
 		plotLayout.moveLocation(60, 50);
 		this.add(plotLayout);
 		plotLayout.getPanelLayout().getListeners().add(this);
@@ -239,7 +239,7 @@ public CombinedEdit normalBoxplotPlot() {
 	}
 	
 	public void setLayoutToPlotArea() {
-		BasicMontageLayout layout = this.plotLayout.getPanelLayout();
+		BasicLayout layout = this.plotLayout.getPanelLayout();
 		Rectangle b = areaRect.getBounds();
 		layout.setPanelSizes(b .width, b.height);
 		layout.specialSpaceWidthTop=b.y-layout.labelSpaceWidthTop;
@@ -250,7 +250,7 @@ public CombinedEdit normalBoxplotPlot() {
 	}
 	
 	public void setPlotAreaToLayout() {
-		BasicMontageLayout layout = this.plotLayout.getPanelLayout();
+		BasicLayout layout = this.plotLayout.getPanelLayout();
 		 areaRect.setRectangle(layout.getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds());;
 		
 		

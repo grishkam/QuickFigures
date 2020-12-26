@@ -33,9 +33,9 @@ import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import layout.basicFigure.BasicLayout;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
@@ -269,9 +269,9 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		
 	}
 	
-	static MontageLayoutGraphic getOldLayout(GraphicLayer l) {
+	static DefaultLayoutGraphic getOldLayout(GraphicLayer l) {
 		for(ZoomableGraphic item: l.getItemArray()) {
-			if (item instanceof PanelLayoutGraphic) return (MontageLayoutGraphic) item;
+			if (item instanceof PanelLayoutGraphic) return (DefaultLayoutGraphic) item;
 		}
 		return null;
 	}
@@ -335,7 +335,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		else borderh=(int) (secondLeftMost.getBounds().getMinX()-leftMost.getBounds().getMaxX());
 		
 		
-		BasicMontageLayout layout = new BasicMontageLayout(ncols, nrows, width , heigth, borderv, borderh, true);
+		BasicLayout layout = new BasicLayout(ncols, nrows, width , heigth, borderh, borderv, true);
 		
 		if (this.unique) {
 			int[] rowHeights=new int[nrows] ;
@@ -355,7 +355,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		}
 		
 		
-		MontageLayoutGraphic gra = new MontageLayoutGraphic(layout);
+		DefaultLayoutGraphic gra = new DefaultLayoutGraphic(layout);
 		gra.moveLocation(bounds.x, bounds.y);
 		//gra.setAlwaysShow(true); gra.setUserLocked(0);
 		
@@ -377,9 +377,9 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		UndoReorder undo3;
 		if (oldLayout!=gra)
 			{
-				if (oldLayout instanceof MontageLayoutGraphic) {
-					((MontageLayoutGraphic) oldLayout).getPanelLayout().setToMatch(layout);
-					gra=(MontageLayoutGraphic) oldLayout;
+				if (oldLayout instanceof DefaultLayoutGraphic) {
+					((DefaultLayoutGraphic) oldLayout).getPanelLayout().setToMatch(layout);
+					gra=(DefaultLayoutGraphic) oldLayout;
 				} else {
 					UndoAddItem undo4 = new UndoAddItem(layer, gra);
 					layer.add(gra);;
@@ -413,7 +413,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 
 	/**puts each panel object in the upper left corner. If multiple objects are in that panel,
 	  only moves teh first one*/
-	public static void placeObjectsInUpperLeftCorners(BasicMontageLayout gra, ArrayList<LocatedObject2D> objects ) {
+	public static void placeObjectsInUpperLeftCorners(BasicLayout gra, ArrayList<LocatedObject2D> objects ) {
 		ArrayList<LocatedObject2D> objects2=new  ArrayList<LocatedObject2D>();
 		objects2.addAll(objects);
 		

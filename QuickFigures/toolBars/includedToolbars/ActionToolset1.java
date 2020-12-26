@@ -30,14 +30,14 @@ import actionToolbarItems.SuperTextButton;
 import basicMenusForApp.CurrentSetLayerSelector;
 import basicMenusForApp.MenuItemForObj;
 import basicMenusForApp.OpeningFileDropHandler;
-import externalToolBar.IconSet;
-import externalToolBar.IconWrappingToolIcon;
 import genericMontageLayoutToolKit.FitLayout;
 import genericTools.BasicToolBit;
 import genericTools.GeneralTool;
 import genericTools.ToolBit;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
+import icons.IconSet;
+import icons.IconWrappingToolIcon;
 import imageMenu.ZoomFit;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.TextBackGroundOptionsSyncer;
@@ -221,6 +221,7 @@ public void run(String s) {
 		
 	}
 	
+	/**Used to include menu items */
 	class MenuItemToActionTool extends BasicToolBit {
 
 		
@@ -231,7 +232,8 @@ public void run(String s) {
 
 		public  MenuItemToActionTool( MenuItemForObj iconpath) {
 		this.ad=iconpath;
-			setIconSet(new IconSet(ad.getIcon(),ad.getIcon(),ad.getIcon()));
+		
+			setIconSet(new IconWrappingToolIcon(ad.getIcon(), 0).generateIconSet());
 		}
 		
 		public String getToolTip() {

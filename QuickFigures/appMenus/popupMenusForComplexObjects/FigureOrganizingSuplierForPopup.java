@@ -40,15 +40,16 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import graphicalObjects_FigureSpecific.LabelCreationOptions;
 import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
 import imageDisplayApp.CanvasOptions;
+import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.WindowLevelDialog;
@@ -107,22 +108,18 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 		addOpenImageFromList.addActionListener(this);
 		
 	
-	/**	 mi2 = new JMenuItem("Save Source Image Paths");
-			jj.add(mi2);
-			mi2.addActionListener(this);*/
-		
-			
+
 		JMenu labelMenu = new SmartJMenu("Add Labels");
 		
-			 rowLabelButton = new JMenuItem("Generate Row Labels");
+			 rowLabelButton = new BasicSmartMenuItem("Generate Row Labels");
 			 labelMenu.add(rowLabelButton);
 				rowLabelButton.addActionListener(this);
 				
-				 columnLabelButton = new JMenuItem("Generate Col Labels");
+				 columnLabelButton = new BasicSmartMenuItem("Generate Col Labels");
 				 labelMenu.add(columnLabelButton);
 					columnLabelButton.addActionListener(this);
 					
-					panelLabelButton = new JMenuItem("Generate Panel Labels");
+					panelLabelButton = new BasicSmartMenuItem("Generate Panel Labels");
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
 					
@@ -132,20 +129,20 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 					
 					
 					
-				recropPanelsButton= new JMenuItem("Re-Crop All Images");
+				recropPanelsButton= new BasicSmartMenuItem("Re-Crop All Images");
 				recropPanelsButton.addActionListener(this);
 				recropPanelsButton.setIcon( CropIconGraphic.createsCropIcon());
 				imagesMenu.add(recropPanelsButton);
 				
-				reScalePanelsButton= new JMenuItem("Reset Scale for All Images");
+				reScalePanelsButton= new BasicSmartMenuItem("Reset Scale for All Images");
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				
-				recreatePanelsButton = new JMenuItem("Recreate All Panels");
+				recreatePanelsButton = new BasicSmartMenuItem("Recreate All Panels");
 				jj.add(recreatePanelsButton);
 							recreatePanelsButton.addActionListener(this);
 				jj.add(imagesMenu);
-				rePPIPanelsButton=new JMenuItem("Re-Set Pixel Density for All Images");
+				rePPIPanelsButton=new BasicSmartMenuItem("Re-Set Pixel Density for All Images");
 				rePPIPanelsButton.addActionListener(this);
 				imagesMenu.add(rePPIPanelsButton);
 				
@@ -156,7 +153,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 					
 					
 					
-					 channelUseOptionsButton = new JMenuItem("Channel Use");
+					 channelUseOptionsButton = new BasicSmartMenuItem("Channel Use");
 					 channelUseOptionsButton.setIcon(new ChannelUseIcon());
 					
 					 chanMen.add(channelUseOptionsButton);
@@ -165,12 +162,12 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 						
 					
 						
-					 minMaxButton5 = new JMenuItem("Min/Max");
+					 minMaxButton5 = new BasicSmartMenuItem("Min/Max");
 					 minMaxButton5.setIcon(IconUtil.createBrightnessIcon());
 					 chanMen.add(minMaxButton5);
 						minMaxButton5.addActionListener(this);
 						
-						 windowLevelButton = new JMenuItem("Window/Level");
+						 windowLevelButton = new BasicSmartMenuItem("Window/Level");
 						 chanMen.add(windowLevelButton);
 						 windowLevelButton.setIcon(IconUtil.createBrightnessIcon());
 							windowLevelButton.addActionListener(this);
@@ -181,8 +178,11 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 							
 							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));
 							
-							if (figureOrganizingLayerPane.getMontageLayoutGraphic()!=null)
-								jj.add(new FigureScalerMenu(figureOrganizingLayerPane.getMontageLayoutGraphic()));
+							if (figureOrganizingLayerPane.getMontageLayoutGraphic()!=null) {
+								FigureScalerMenu figureScaler = new FigureScalerMenu(figureOrganizingLayerPane.getMontageLayoutGraphic());
+								imagesMenu.add(figureScaler.createRescaleMenuItem());
+								jj.add(figureScaler);
+							}
 	}
 	
 	public void addRecolorMenu(JMenu j) {
@@ -219,9 +219,9 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 		}
 		
 		if (source==rowLabelButton||source==columnLabelButton||source==panelLabelButton) {
-			int type=BasicMontageLayout.ROWS;
-			if(source==columnLabelButton)  type=BasicMontageLayout.COLS;
-			if(source==panelLabelButton)  type=BasicMontageLayout.PANELS;
+			int type=BasicLayout.ROWS;
+			if(source==columnLabelButton)  type=BasicLayout.COLS;
+			if(source==panelLabelButton)  type=BasicLayout.PANELS;
 			
 			CombinedEdit many = figureOrganizingLayerPane.addRowOrColLabel(type);
 			
@@ -274,7 +274,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 
 
 	/**
-	 * @return
+	generates a channel panel editing menu context for this popup menu
 	 */
 	public ChannelPanelEditingMenu getMenuContext() {
 		return new ChannelPanelEditingMenu( figureOrganizingLayerPane, ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
@@ -282,7 +282,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 
 	
 
-
+	/**returns a label editor for the given text item*/
 	public EditLabels getLabelEditorMenuItemFor(TextGraphic t) {
 		int gridSnap = t.getAttachmentPosition().getGridSpaceCode();
 		EditLabels output = new EditLabels(gridSnap, figureOrganizingLayerPane.getMontageLayoutGraphic(), t);
@@ -332,6 +332,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	return output;
 }
 
+	/**shows a cropping dialog*/
 	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim) {
 		PreProcessInformation original = display.getSlot().getModifications();
 		display.getPanelManager().setupViewLocation();
@@ -354,7 +355,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	}
 
 
-
+	/**Called if the user switches slices or channels*/
 	private static void onViewLocationChange(MultichannelDisplayLayer display, CSFLocation i,
 			CSFLocation f) {
 		
@@ -371,18 +372,15 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 						CSFLocation.sliceLocation(i.slice), CSFLocation.sliceLocation(f.slice)
 						);
 				}	
-			//display.getStack().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());//experimental
-			
-		
 	}
 
 
-
+	/**called to resize the layout in order to match the dimensions of object within the layout*/
 	public static UndoLayoutEdit updateRowColSizesOf(MultichannelDisplayLayer display) {
 		
 		if (display.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) display.getParentLayer();
-			MontageLayoutGraphic l = f.getMontageLayoutGraphic();
+			DefaultLayoutGraphic l = f.getMontageLayoutGraphic();
 			l.generateCurrentImageWrapper();
 			UndoLayoutEdit undo = new UndoLayoutEdit(l);
 			l.getEditor().alterPanelWidthAndHeightToFitContents(l.getPanelLayout());
@@ -422,6 +420,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		return output;
 	}
 	 
+	 /**shows a dialog for the user to input a pixel density for all the images*/
 	 private CombinedEdit showRePPIAll() {
 		 CombinedEdit output = new CombinedEdit();
 		 double newPPI = showPPISingleImage(figureOrganizingLayerPane.getPrincipalMultiChannel());
@@ -436,11 +435,11 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 
-
+	 /**shows a dialog for the user to input a pixel density for an image*/
 	private double showPPISingleImage(ImageDisplayLayer principalMultiChannel) {
 		ImagePanelGraphic panel = principalMultiChannel.getPanelManager().getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
-		double newppi=StandardDialog.getNumberFromUser("Input PPI ", ppi);
+		double newppi=StandardDialog.getNumberFromUser("Input Pixels per inch ", ppi);
 		return newppi;
 	}
 

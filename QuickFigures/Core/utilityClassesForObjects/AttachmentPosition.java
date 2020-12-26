@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 
 /**The positions of certain objects (like text and scale bars). 
@@ -581,27 +581,27 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	
 	
 	/**Handles internal corner to internal corner snapping. snaps location of r1 to r2*/
-	private void doInternalSnapLocationType(int locationType, Rectangle2D.Double r1, Rectangle.Double r2) {
+	private void doInternalSnapLocationType(int locationType, Rectangle2D.Double r1, Rectangle.Double referenceRectangle) {
 		
 		switch (locationType) {
-		case LEFT:  r1.x=r2.x+getHorizontalOffset(); {}; return;
-		case RIGHT: r1.x=r2.x+r2.width-r1.width-getHorizontalOffset(); return;
-		case TOP:	r1.y=r2.y+getVerticalOffset(); return;
-		case BOTTOM:r1.y=r2.y+r2.height-r1.height-getVerticalOffset(); return;
-		case UPPER_LEFT: doInternalSnapLocationType(LEFT,r1,r2);doInternalSnapLocationType(TOP,r1,r2); return;
-		case LOWER_LEFT:doInternalSnapLocationType(LEFT,r1,r2);doInternalSnapLocationType(BOTTOM,r1,r2); return;
-		case UPPER_RIGHT:doInternalSnapLocationType(RIGHT,r1,r2);doInternalSnapLocationType(TOP,r1,r2); return;
-		case LOWER_RIGHT:doInternalSnapLocationType(RIGHT,r1,r2);doInternalSnapLocationType(BOTTOM,r1,r2); return;
-		case LEFT+CENTER: 	r1.y=(int)(r2.getCenterY()-r1.getHeight()/2)+getVerticalOffset();return;
-		case RIGHT+CENTER: r1.y=(int)(r2.getCenterY()-r1.getHeight()/2)+getVerticalOffset();return;
+		case LEFT:  r1.x=referenceRectangle.x+getHorizontalOffset(); {}; return;
+		case RIGHT: r1.x=referenceRectangle.x+referenceRectangle.width-r1.width-getHorizontalOffset(); return;
+		case TOP:	r1.y=referenceRectangle.y+getVerticalOffset(); return;
+		case BOTTOM:r1.y=referenceRectangle.y+referenceRectangle.height-r1.height-getVerticalOffset(); return;
+		case UPPER_LEFT: doInternalSnapLocationType(LEFT,r1,referenceRectangle);doInternalSnapLocationType(TOP,r1,referenceRectangle); return;
+		case LOWER_LEFT:doInternalSnapLocationType(LEFT,r1,referenceRectangle);doInternalSnapLocationType(BOTTOM,r1,referenceRectangle); return;
+		case UPPER_RIGHT:doInternalSnapLocationType(RIGHT,r1,referenceRectangle);doInternalSnapLocationType(TOP,r1,referenceRectangle); return;
+		case LOWER_RIGHT:doInternalSnapLocationType(RIGHT,r1,referenceRectangle);doInternalSnapLocationType(BOTTOM,r1,referenceRectangle); return;
+		case LEFT+CENTER: 	r1.y=(int)(referenceRectangle.getCenterY()-r1.getHeight()/2)+getVerticalOffset();return;
+		case RIGHT+CENTER: r1.y=(int)(referenceRectangle.getCenterY()-r1.getHeight()/2)+getVerticalOffset();return;
 		
-		case TOP+CENTER:    r1.x=(int)(r2.getCenterX()-r1.getWidth()/2)+getHorizontalOffset(); return;
-		case BOTTOM+CENTER:r1.x=(int)(r2.getCenterX()-r1.getWidth()/2)+getHorizontalOffset(); return;
+		case TOP+CENTER:    r1.x=(int)(referenceRectangle.getCenterX()-r1.getWidth()/2)+getHorizontalOffset(); return;
+		case BOTTOM+CENTER:r1.x=(int)(referenceRectangle.getCenterX()-r1.getWidth()/2)+getHorizontalOffset(); return;
 		/**Including a center alone in this method got in the way of the +CENTER versions of the external snaps. so center is not included*/
-		case MIDDLE: {r1.y=(int)(r2.getCenterY()-r1.getHeight()/2)+getVerticalOffset(); r1.x=(int)(r2.getCenterX()-r1.getWidth()/2)+getHorizontalOffset(); }return;
+		case MIDDLE: {r1.y=(int)(referenceRectangle.getCenterY()-r1.getHeight()/2)+getVerticalOffset(); r1.x=(int)(referenceRectangle.getCenterX()-r1.getWidth()/2)+getHorizontalOffset(); }return;
 		
-		case CornerToCenter_LowerLeft: {r1.x=(int)r2.getCenterX()+getHorizontalOffset(); r1.y=(int) (r2.getY()-r1.height)+getVerticalOffset();; return;}
-		case CornerToCenter_UpperRight: {r1.x=(int)r2.getCenterX()+getHorizontalOffset()-r1.width; r1.y=(int) (r2.getMaxY())+getVerticalOffset();; return;}
+		case CornerToCenter_LowerLeft: {r1.x=(int)referenceRectangle.getCenterX()+getHorizontalOffset(); r1.y=(int) (referenceRectangle.getY()-r1.height)+getVerticalOffset();; return;}
+		case CornerToCenter_UpperRight: {r1.x=(int)referenceRectangle.getCenterX()+getHorizontalOffset()-r1.width; r1.y=(int) (referenceRectangle.getMaxY())+getVerticalOffset();; return;}
 		default: return;
 		}
 		

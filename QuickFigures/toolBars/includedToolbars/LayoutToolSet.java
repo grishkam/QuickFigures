@@ -31,13 +31,13 @@ import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 import genericMontageLayoutToolKit.MontageMoverTool;
 import genericMontageLayoutToolKit.LabelSpaceAdjusterTool;
 import genericMontageLayoutToolKit.PanelSizeAdjusterTool;
-import genericMontageLayoutToolKit.Panel_Selector2;
-import genericMontageLayoutToolKit.PannelGrabberTool;
-import genericMontageLayoutToolKit.RowColSwapperTool2;
+import genericMontageLayoutToolKit.SelectPanelsTool;
+import genericMontageLayoutToolKit.PanelGrabberTool;
+import genericMontageLayoutToolKit.RowAndColumnSwapperTool;
 import genericMontageLayoutToolKit.RowLabelIntroducerTool;
 import genericTools.GeneralTool;
 import genericTools.ToolBit;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 
 /**A toolbar containing tools that allow the user to edit the layout.
   This toolbar is useful but not indispensible to the user*/
@@ -98,10 +98,10 @@ for(ToolBit b: getLayoutLabelBits3()) {
 	public static ToolBit[] getBeyondStandardToolBits() {
 		return new ToolBit[] {new MontageLayoutRowColNumberTool(),new PanelSizeAdjusterTool()
 		,new LayoutScalerTool(),
-				new PannelGrabberTool(1),
-				new PannelGrabberTool(2),
-				new PannelGrabberTool(0),
-				new Panel_Selector2()};
+				new PanelGrabberTool(1),
+				new PanelGrabberTool(2),
+				new PanelGrabberTool(0),
+				new SelectPanelsTool()};
 	} 
 	
 	/**returns the tool bits for the layout editor tools*/
@@ -116,9 +116,9 @@ for(ToolBit b: getLayoutLabelBits3()) {
 	public static ArrayList<ToolBit> getStandardLayoutToolBits() {
 		ArrayList<ToolBit> output=new ArrayList<ToolBit>();
 		
-		output.add(new RowColSwapperTool2(1));
-		output.add(new RowColSwapperTool2(2));
-		output.add(new RowColSwapperTool2(0));
+		output.add(new RowAndColumnSwapperTool(1));
+		output.add(new RowAndColumnSwapperTool(2));
+		output.add(new RowAndColumnSwapperTool(0));
 		
 		output.add(new MontageMoverTool());
 		output.add(new LabelSpaceAdjusterTool());

@@ -122,13 +122,15 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	}
 
 	/**updates the handle list according to the listed objects*/
-	protected void refreshList(ArrayList<LocatedObject2D> objects) {
+	public void refreshList(ArrayList<LocatedObject2D> objects) {
 		updateRectangle(objects);
-		if (type!=ROTATION_ONLY_TYPE) for(int i:RectangleEdges.internalLocations) {
-			crateHandleFor(i);
+		if(this.size()<1) {
+			if (type!=ROTATION_ONLY_TYPE) for(int i:RectangleEdges.internalLocations) {
+				crateHandleFor(i);
+			}
+			
+			createRotationHandle();
 		}
-		
-		createRotationHandle();
 	}
 
 	/**
@@ -162,6 +164,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	public void updateRectangle() {
 		updateRectangle(objects);
 	}
+	/**sets the rectangle for this list based on the bounding box of all the objects in the list*/
 	private void updateRectangle(ArrayList<LocatedObject2D> objects) {
 		Shape a = ArrayObjectContainer.combineOutLines(objects);
 		Rectangle r = new Rectangle(a.getBounds());
@@ -183,6 +186,20 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		out.setHandleNumber(handleNumberCorrection+location);
 		out.updateLocation(location);
 				return out;
+	}
+	
+	/**returns a particular handle depending on the given location
+	 * @see RectangleEdgePosisions for internal locations
+	 * */
+	public ReshapeSmartHandle getHandleOfType(int type) {
+		for(SmartHandle sh: this) {
+			if (sh instanceof  ReshapeSmartHandle) {
+				if (((ReshapeSmartHandle) sh).getHandleType()==type)
+					return (ReshapeSmartHandle) sh;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**A handle for moving or resizing selected objects*/
@@ -264,6 +281,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			return true;
 		}
 		
+		/**updates the handle location*/
 		public void updateLocation(int type) {
 			type-=handleNumberCorrection;
 			if (!isRotationHandle()) {

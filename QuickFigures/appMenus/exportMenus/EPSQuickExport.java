@@ -71,7 +71,7 @@ public class EPSQuickExport extends QuickExport {
 		
 		} catch (Throwable t) {
 			if (t instanceof NoClassDefFoundError) {
-				IssueLog.showMessage("Opps"+ "It seems imageJ cant find "+t.getMessage());
+				IssueLog.showMessage("Opps. "+ "It seems imageJ cant find "+t.getMessage());
 			//this.getClass().getClassLoader().loadClass(arg0)
 			}
 			IssueLog.logT(t);
@@ -86,7 +86,7 @@ public class EPSQuickExport extends QuickExport {
 
 	@Override
 	public String getNameText() {
-		return "Export as EPS";
+		return "EPS";
 	}
 	
 }

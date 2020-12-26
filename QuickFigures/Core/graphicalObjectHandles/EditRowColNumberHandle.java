@@ -23,13 +23,13 @@ import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 
 import java.awt.geom.Rectangle2D;
 
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
-import gridLayout.LayoutSpaces;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.LayoutSpaces;
 import undo.UndoLayoutEdit;
 
 /**a handle that allows the user to pack the layout panels into a different number of rows and columns 
@@ -37,14 +37,14 @@ import undo.UndoLayoutEdit;
 public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 
 	private static final int PLUS_SIZE = 3;
-	protected MontageLayoutGraphic layout;
+	protected DefaultLayoutGraphic layout;
 	protected int type;
 	protected int index;
 	private UndoLayoutEdit currentUndo;
 
 	
 
-	public EditRowColNumberHandle(MontageLayoutGraphic montageLayoutGraphic) {
+	public EditRowColNumberHandle(DefaultLayoutGraphic montageLayoutGraphic) {
 		
 		this.layout=montageLayoutGraphic;
 		setHandleColor(Color.red);
@@ -95,7 +95,7 @@ public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
-		BasicMontageLayout current = layout.getPanelLayout();
+		BasicLayout current = layout.getPanelLayout();
 		GenericMontageEditor edit = layout.getEditor();
 		int[] proposedRowColChange = MontageLayoutRowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), current);
 		

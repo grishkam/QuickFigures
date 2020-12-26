@@ -23,7 +23,7 @@ import genericMontageKit.PanelList;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_FigureSpecific.PanelManager;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 
@@ -38,11 +38,11 @@ public class ScaleFigureDialog extends StandardDialog {
 	 */
 
 	private PanelManager def;
-	private MontageLayoutGraphic layout;
+	private DefaultLayoutGraphic layout;
 	ArrayList<PanelManager> theArray;
 	private PanelGraphicInsetDefiner inset;
 /**Dialog for scaling the panels within a layout while still keeping the layout*/
-	public ScaleFigureDialog(MontageLayoutGraphic layout, PanelManager s) {
+	public ScaleFigureDialog(DefaultLayoutGraphic layout, PanelManager s) {
 	this.layout=layout;
 		this.def=s;
 		double ppi=ImageDPIHandler.getStandardDPI()/def.getPanelLevelScale();
@@ -54,7 +54,7 @@ public class ScaleFigureDialog extends StandardDialog {
 	
 	
 	
-	public ScaleFigureDialog(MontageLayoutGraphic personalGraphic, PanelManager panelManager, PanelGraphicInsetDefiner inset) {
+	public ScaleFigureDialog(DefaultLayoutGraphic personalGraphic, PanelManager panelManager, PanelGraphicInsetDefiner inset) {
 				this(personalGraphic, panelManager);
 				this.inset=inset;
 }

@@ -47,9 +47,8 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	private RectangleEdgeParameter arch=new RectangleEdgeParameter(this, 40, UPPER_LEFT, LOWER_LEFT);;{arch.setRatioToMaxLength(0.33333);}
 	
 	boolean [] validCounts=new boolean[] {true, false, false, false};
-	//private CountParameter nNotches=new CountParameter(this, 1); {nNotches.setMaxValue(4);nNotches.setMinValue(1);}
+	
 	private CountParameter notchType=new CountParameter(this, 2); {notchType.setNames(new String[] {"Rect", "Oval", "Bevel", "Rounded", "Round 2"}); notchType.setMaxValue(4);}
-	//private CountParameter starting=new CountParameter(this, 0, 0, 5); { {starting.setNames(new String[] {"ABCD", "BCDA", "CDAB", "DABC", "ACBD", "inside"});}}
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -70,7 +69,8 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		output.arch=arch.copy(output);
 		output.arcw=arcw.copy(output);
 		giveTraitsTo(output);
-		
+		output.validCounts=validCounts.clone();
+		output.notchType.setValue(notchType.getValue());
 		return output;
 	}
 

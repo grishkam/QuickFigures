@@ -18,11 +18,11 @@ package pathGraphicToolFamily;
 import java.awt.Point;
 import javax.swing.Icon;
 
-import externalToolBar.IconWrappingToolIcon;
 import graphicTools.GraphicTool;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 
 public class PathTool extends GraphicTool{
@@ -44,7 +44,7 @@ public class PathTool extends GraphicTool{
 	
 	public PathTool(boolean curve, boolean symetricCurve) {
 		defaultCurved=curve;
-		this.set= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
+		this.iconSet= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
 		if (!curve) this.handleMode=PathGraphic.ANCHOR_HANDLE_ONLY_MODE;
 		else {
 			handleMode=PathGraphic.CURVE_CONTROL_HANDLES_LINKED;

@@ -26,7 +26,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import externalToolBar.MiniToolBarIcon;
+import icons.MiniToolBarIcon;
 
 /**An icon that is merely a colored circle*/
 public class ColorIcon implements Icon, MiniToolBarIcon {

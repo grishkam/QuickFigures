@@ -17,13 +17,13 @@ package addObjectMenus;
 
 import java.awt.geom.Rectangle2D;
 
-import dividedPanels.DividedPanelLayout;
-import dividedPanels.DividedPanelLayoutGraphic;
-import dividedPanels.DividedPanelLayout.layoutDividedArea;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import layout.dividerLayout.DividedPanelLayout;
+import layout.dividerLayout.DividedPanelLayoutGraphic;
+import layout.dividerLayout.DividedPanelLayout.layoutDividedArea;
 
 public class DividedLayoutAdder extends BasicGraphicAdder {
 

@@ -15,23 +15,23 @@
  *******************************************************************************/
 package genericMontageLayoutToolKit;
 
-import externalToolBar.GraphicToolIcon;
 import genericTools.Object_Mover;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import icons.GraphicToolIcon;
 
 public class LayoutMover extends Object_Mover {
 	{super.bringSelectedToFront=true; 
-	super.onlySelectThoseOfClass=PanelLayoutGraphic.class;
+	setSelectOnlyThoseOfClass(PanelLayoutGraphic.class);
 	}
 	{//createIconSet("icons2/LayoutMoverIcon.jpg","icons2/LayoutMoverIconPress.jpg","icons2/LayoutMoverIcon.jpg");
-	set=GraphicToolIcon.createIconSet(prepareIcon());
+	iconSet=GraphicToolIcon.createIconSet(prepareIcon());
 	}
 
 	/**
 	 * @return
 	 */
-	protected LayoutShowingToolIcon prepareIcon() {
-		return new LayoutShowingToolIcon(0, true);
+	protected GeneralLayoutToolIcon prepareIcon() {
+		return new GeneralLayoutToolIcon(0, true);
 	};
 	
 	@Override

@@ -77,7 +77,7 @@ public class SVGQuickExport extends QuickExport {
 
 	@Override
 	public String getNameText() {
-		return "Export as SVG";
+		return "SVG";
 	}
 	
 }

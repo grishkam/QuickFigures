@@ -17,9 +17,9 @@ package objectDialogs;
 
 import java.util.ArrayList;
 
-import genericMontageKit.PanelContentExtract;
 import graphicalObjects_LayoutObjects.SpacedPanelLayoutGraphic;
-import plasticPanels.BasicSpacedPanelLayout;
+import layout.PanelContentExtract;
+import layout.plasticPanels.BasicSpacedPanelLayout;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 

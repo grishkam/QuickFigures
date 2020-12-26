@@ -22,6 +22,7 @@ import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
 import graphicActionToolbar.CurrentFigureSet;
+import menuUtil.BasicSmartMenuItem;
 import undo.AbstractUndoableEdit2;
 
 public abstract class ObjectAction<Type> implements ActionListener {
@@ -39,7 +40,7 @@ public abstract class ObjectAction<Type> implements ActionListener {
 	}
 
 	public JMenuItem createJMenuItem(String st) {
-		JMenuItem out=new JMenuItem(st);
+		JMenuItem out=new BasicSmartMenuItem(st);
 		out.addActionListener(this);
 		return out;
 	}

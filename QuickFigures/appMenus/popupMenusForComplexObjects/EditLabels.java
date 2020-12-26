@@ -24,7 +24,7 @@ import javax.swing.JMenuItem;
 import figureFormat.LabelExamplePicker;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
@@ -34,7 +34,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 	
 	private int type;
 	private LabelExamplePicker picker;
-	private MontageLayoutGraphic layout;
+	private DefaultLayoutGraphic layout;
 	private transient MultiTextGraphicSwingDialog dd;
 	private TextGraphic modelTextItem;
 
@@ -45,7 +45,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 		 modelTextItem=t;
 	}
 	
-	public EditLabels(int type, MontageLayoutGraphic lay, TextGraphic t) {
+	public EditLabels(int type, DefaultLayoutGraphic lay, TextGraphic t) {
 		this.type=type;
 		
 		setUpPickerFortype(type);

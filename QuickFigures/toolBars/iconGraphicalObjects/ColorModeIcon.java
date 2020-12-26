@@ -29,8 +29,8 @@ import java.awt.geom.Arc2D.Double;
 import javax.swing.Icon;
 
 import channelMerging.ChannelUseInstructions;
-import externalToolBar.MiniToolBarIcon;
 import graphicalObjects.ImagePanelGraphic;
+import icons.MiniToolBarIcon;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import utilityClassesForObjects.RectangleEdges;
 

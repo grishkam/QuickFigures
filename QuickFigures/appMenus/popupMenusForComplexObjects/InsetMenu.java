@@ -18,17 +18,20 @@ package popupMenusForComplexObjects;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import graphicalObjects_FigureSpecific.InsetLayoutDialog;
 import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
+import menuUtil.SmartJMenu;
 
 public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		PopupMenuSupplier {
@@ -46,27 +49,37 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	private PanelGraphicInsetDefiner inset;
 	private ScaleFigureDialog ss;
 	
+	/**creates a menu item with this action listener*/
 	void createMenuItem(String st, String ac) {
-		JMenuItem g=new JMenuItem(st);
+		 createMenuItem(st, ac, null);
+	}
+	void createMenuItem(String st, String ac, JMenu submenu) {
+		JMenuItem g=new BasicSmartMenuItem(st);
+		
 		g.setActionCommand(ac);
 		g.addActionListener(this);
-		this.add(g);
+		if(submenu==null)
+			this.add(g);
+		else submenu.add(g);
 	}
 
 	public InsetMenu(PanelGraphicInsetDefiner inset) {
 		this.inset=inset;
-		createMenuItem("Update Panels", UPDATE_PANELS);
-		createMenuItem("Create MultiChannel Display Insets", CREATE_INSETS);
-		createMenuItem("Remove Insets", REMOVE_INSETS);
+		
+		
 		createMenuItem("Remove", REMOVE);
-		createMenuItem("Scale Options", SCALE_OPTIONS);
+		//createMenuItem("Scale Options", SCALE_OPTIONS);
 		createMenuItem("Redo Inset Layout", RECRATE_INSET_LAYOUT);
 		
+		SmartJMenu panels=new SmartJMenu("Expert Options");
+		createMenuItem("Update Panels", UPDATE_PANELS, panels);
+		createMenuItem("Remove inset panels", REMOVE_INSETS, panels);
+		createMenuItem("Create new inset panels", CREATE_INSETS, panels);
+		//this.add(panels);
 	}
 
 	@Override
 	public JPopupMenu getJPopup() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
@@ -122,7 +135,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				double scale = ss.getNumber("scale");
 				inset.setBilinearScale(scale);
 				inset.updateImagePanels();
-				MontageLayoutGraphic layout = inset.personalLayout;
+				DefaultLayoutGraphic layout = inset.personalLayout;
 				layout.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(layout.getPanelLayout());
 				
 			

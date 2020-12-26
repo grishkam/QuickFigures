@@ -345,6 +345,10 @@ private void performTransplant() {
 			currentEdit.addEditToList(undoRe);
 		}
 		
+		if (needsLayerTransplant) {
+			//not yet implemented
+		}
+		
 		} catch (Throwable t) {}
 
 	

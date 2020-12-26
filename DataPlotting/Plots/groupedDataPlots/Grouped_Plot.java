@@ -17,7 +17,6 @@ package groupedDataPlots;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import dataSeries.Basic1DDataSeries;
 import dataSeries.GroupedDataSeries;
@@ -27,8 +26,8 @@ import dialogs.CategoryOrderDialog;
 import dialogs.MeanBarDialog;
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
-import genericPlot.BasicPlot;
 import genericPlot.BasicDataSeriesGroup;
+import genericPlot.BasicPlot;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;

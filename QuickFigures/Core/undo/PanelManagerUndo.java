@@ -22,7 +22,7 @@ import genericMontageKit.PanelList;
 import genericMontageKit.PanelListElement;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_FigureSpecific.PanelManager;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 
 /**An undo for changes made to many parts of a split channel figure. since those edits are ofter done by methods in the
  *  panel manager class, it is called the panel manager undo.
@@ -83,7 +83,7 @@ public class PanelManagerUndo extends CombinedEdit {
 		output.addEditToList(new PanelManagerUndo(pm.getPanelList()));
 		output.addEditToList(new UndoLayerContentChange(pm.getDisplay()));
 		output.addEditToList(new UndoLayerContentChange(pm.getLayer()));
-		MontageLayoutGraphic layout = pm.getGridLayout();
+		DefaultLayoutGraphic layout = pm.getGridLayout();
 		if (layout!=null) {
 			layout.generateCurrentImageWrapper();
 			output.addEditToList(new UndoLayoutEdit(layout));

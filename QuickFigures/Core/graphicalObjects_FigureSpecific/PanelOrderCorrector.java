@@ -23,12 +23,12 @@ import java.util.Comparator;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
 import genericMontageKit.BasicObjectListHandler;
-import genericMontageKit.PanelContentExtract;
 import genericMontageKit.PanelListElement;
 import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.LayoutSpaces;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.PanelContentExtract;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 
@@ -57,9 +57,9 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	 * their location within the layout (Panel #1,2,3) rather than any list
 	  */
 	public ArrayList<PanelListElement> getOrderedPanelList() {
-		MontageLayoutGraphic g = figure.getMontageLayoutGraphic();
+		DefaultLayoutGraphic g = figure.getMontageLayoutGraphic();
 		g.generateCurrentImageWrapper();
-		BasicMontageLayout layout = g.getPanelLayout();
+		BasicLayout layout = g.getPanelLayout();
 		
 		ArrayList<PanelListElement> output = new ArrayList<PanelListElement>();
 		for(int i=1; i<=layout.nPanels(); i++) {
@@ -73,9 +73,9 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	/**returns an ordered set of panel list elements from each row or columns.
 	 * The type given may be ROWS, COLUMNS or PANELS @see MontageLayoutSpaces*/
 	public ArrayList<ArrayList<PanelListElement>> getOrderedPanelList(int type) {
-		MontageLayoutGraphic g = figure.getMontageLayoutGraphic();
+		DefaultLayoutGraphic g = figure.getMontageLayoutGraphic();
 		g.generateCurrentImageWrapper();
-		BasicMontageLayout layout = g.getPanelLayout();
+		BasicLayout layout = g.getPanelLayout();
 		layout=layout.makeAltered(type);
 		ArrayList<PanelContentExtract> read = g.getEditor().cutStack(layout);
 		ArrayList<ArrayList<PanelListElement>> output=new ArrayList<ArrayList<PanelListElement>>();
@@ -217,7 +217,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	 * */
 	public ArrayList<Integer> indexOfChannel( int channel, int type) {
 		ArrayList<Integer> indices=new ArrayList<Integer>();
-		BasicMontageLayout layout = figure.getMontageLayout().makeAltered(type);
+		BasicLayout layout = figure.getMontageLayout().makeAltered(type);
 		for(int i=1; i<=layout.nPanels(); i++) {
 			if (channel==channelIndexAt(type, i))
 				indices.add(i);

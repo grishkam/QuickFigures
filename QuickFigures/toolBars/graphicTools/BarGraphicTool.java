@@ -19,16 +19,18 @@ import java.awt.Color;
 import java.awt.Point;
 
 import applicationAdapters.ImageWrapper;
-import externalToolBar.TreeIconWrappingToolIcon;
 import figureFormat.ScaleBarExamplePicker;
 import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import icons.TreeIconWrappingToolIcon;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.AttachmentPosition;
+
+/**A tool to add scale bars to panels. no longer included in the tool bar but its methods are called by popup menus*/
 public class BarGraphicTool extends GraphicTool {
 	
 	private static BarGraphicTool currentBar;
@@ -40,8 +42,8 @@ public class BarGraphicTool extends GraphicTool {
 	BarGraphic model = new BarGraphic(); {
 		
 		model.setFillColor(Color.white);
-	model.setAttachmentPosition(AttachmentPosition.defaultScaleBar());
-	model.setProjectionType(2);
+		model.setAttachmentPosition(AttachmentPosition.defaultScaleBar());
+		model.setProjectionType(2);
 	}
 	
 	BarGraphic modelIcon() {
@@ -51,7 +53,7 @@ public class BarGraphicTool extends GraphicTool {
 		return output;
 	}
 	
-	{super.set=TreeIconWrappingToolIcon.createIconSet(modelIcon());}
+	{super.iconSet=TreeIconWrappingToolIcon.createIconSet(modelIcon());}
 	
 	/**creates a scale bar for image panel roi2.
 	 * @return */
@@ -98,22 +100,13 @@ public class BarGraphicTool extends GraphicTool {
 			
 			BarGraphic.optimizeBar(bg, b);
 			
-			 new ScaleBarExamplePicker(model).setBarDefaultsBasedOnHeight(b.getBounds().height, bg, model.getFillColor());
+			 
+			ScaleBarExamplePicker.setBarDefaultsBasedOnHeight(b.getBounds().height, bg, model.getFillColor());
 		
 			bg.getAttachmentPosition().setToNearestInternalSnap(bg.getBounds(), b.getBounds(), new Point(x, y));
-			//bg.setLengthInUnits(length);
 			
-			//bg.setSnappingBehaviour(SnappingBehaviour.defaultScaleBar());
-			
-			//bg.setScaleProvider((ScalededItem) roi2);
 		
-						} /**else if (gmp instanceof ImagePlusWrapper) {
-							ImagePlusWrapper ip=(ImagePlusWrapper) gmp;
-							IJ1Bar bg2 = new IJ1Bar();
-							bg2.updateContainerImageObject(ip.getImagePlus());
-							bg2.setScaleInfo(getImageWrapperClick().getScaleInfo());
-							bg=bg2;
-						}*/
+						} 
 		
 		selectedContainer.add(bg);
 		
@@ -135,7 +128,7 @@ public class BarGraphicTool extends GraphicTool {
 	@Override
 	public void showOptionsDialog() {
 		model.showOptionsDialog();
-		{super.set=TreeIconWrappingToolIcon.createIconSet(modelIcon());}
+		{super.iconSet=TreeIconWrappingToolIcon.createIconSet(modelIcon());}
 	}
 	
 	

@@ -16,6 +16,8 @@
 package externalToolBar;
 import javax.swing.Icon;
 
+import icons.IconSet;
+
 
 
 /**A default tool that can be used as both space filler in an external toolset or */

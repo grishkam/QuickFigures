@@ -15,7 +15,7 @@
  *******************************************************************************/
 package imageDisplayApp;
 
-import gridLayout.RetrievableOption;
+import layout.RetrievableOption;
 
 public class ZoomOptions {
 	

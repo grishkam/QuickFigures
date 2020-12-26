@@ -17,10 +17,15 @@ package graphicalObjectHandles;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.CountParameter;
+import menuUtil.BasicSmartMenuItem;
+import menuUtil.SmartJMenu;
+import menuUtil.SmartPopupJMenu;
 import standardDialog.StandardDialog;
 import undo.SimpleItemUndo;
 import utilityClassesForObjects.LocatedObject2D;
@@ -92,7 +97,10 @@ public class CountHandle extends SmartHandle {
 		return new Point2D.Double(px, py);
 	}
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-		
+		if (count.getNames()!=null) {
+			new CountPopupMenu(canvasMouseEventWrapper).showForMouseEvent(canvasMouseEventWrapper);
+			return;
+		}
 		
 		SimpleItemUndo<CountParameter> undo = createUndo();
 		boolean right=canvasMouseEventWrapper. getClickedXScreen()>lastDrawShape.getBounds().getCenterX();
@@ -142,23 +150,85 @@ public class CountHandle extends SmartHandle {
 			
 			graphics.drawString(valueAsString, x2, y2);
 			
-			
-			
-			if(form==ALL_IN_ONE) {
-				float size2 = (float)(getMessageFont().getSize()/2);
-				graphics.setFont(getMessageFont().deriveFont(size2));
-				double tX =s.getBounds().getCenterX();// x2+12+end;
-				graphics.drawLine((int)tX, (int)s.getBounds().getMinY(), (int)tX, (int)s.getBounds().getMaxY());
-				graphics.drawLine((int)tX, (int)s.getBounds().getCenterY(), (int)s.getBounds().getMaxX(), (int)s.getBounds().getCenterY());
-				
-				tX+=5;
-				graphics.drawString(up, (float) tX+3, y2-size2-2);
-				graphics.drawString(down, (float) tX+4, y2+size2/2);
+			if(form==ALL_IN_ONE&&count.getNames()==null) {
+				drawUpsAndDown(graphics, s, y2);
 			}
+	}
+
+	/**
+	draws lines and marks to create a + for count up and a - for count down
+	in regions that the user may click
+	 */
+	public void drawUpsAndDown(Graphics2D graphics, Shape s, int y2) {
+		float size2 = (float)(getMessageFont().getSize()/2);
+		graphics.setFont(getMessageFont().deriveFont(size2));
+		double tX =s.getBounds().getCenterX();// x2+12+end;
+		graphics.drawLine((int)tX, (int)s.getBounds().getMinY(), (int)tX, (int)s.getBounds().getMaxY());
+		graphics.drawLine((int)tX, (int)s.getBounds().getCenterY(), (int)s.getBounds().getMaxX(), (int)s.getBounds().getCenterY());
+		
+		tX+=5;
+		graphics.drawString(up, (float) tX+3, y2-size2-2);
+		graphics.drawString(down, (float) tX+4, y2+size2/2);
 	}
 	
 	public boolean handlesOwnUndo() {
 		return true;
 	}
+	
+	/**A menu that gives the user a means to choose */
+	public class CountPopupMenu extends SmartPopupJMenu {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		public CountPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
+			for(int i=0; i<count.getNames().length; i++) {
+				String name=count.getNames()[i];
+				BasicSmartMenuItem m=new CountMenu (name, canvasMouseEventWrapper) ;
+				add(m);
+			}
+		}
+
+		/**
+		 * 
+		 */
+		public void createItems() {
+			
+			
+		}
+	}
+	
+	/**A menu item for switching the count*/
+	public class CountMenu extends BasicSmartMenuItem {
+		public CountMenu(String string, CanvasMouseEvent canvasMouseEventWrapper) {
+			super(string);
+			this.setActionCommand(string);
+			setLastMouseEvent(canvasMouseEventWrapper);
+			this.setUndoManager(canvasMouseEventWrapper.getUndoManager());
+			
+			this.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SimpleItemUndo<CountParameter> undo = createUndo();
+					count.setValue(e.getActionCommand());
+					undo.establishFinalState();
+					getUndoManager().addEdit(undo);
+				}
+				
+			});
+		}
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+	
+		
+		
+	
+	}
+
+	
 
 }

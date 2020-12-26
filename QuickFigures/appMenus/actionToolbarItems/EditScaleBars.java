@@ -29,7 +29,7 @@ import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import gridLayout.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.StandardDialog;

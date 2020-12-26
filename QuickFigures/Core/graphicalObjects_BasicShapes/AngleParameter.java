@@ -27,7 +27,7 @@ public class AngleParameter implements Serializable, SimpleTraits<AngleParameter
 	 * 
 	 */
 	public static final int ANGLE_TYPE=0, RADIUS_TYPE=1, ANGLE_AND_RADIUS_TYPE=2, ANGLE_RATIO_TYPE=3, ANGLE_RATIO_AND_RAD_TYPE=4;
-	private int type=0;
+	private int type=ANGLE_TYPE;
 	
 	private static final long serialVersionUID = 1L;
 	private double angle=0;

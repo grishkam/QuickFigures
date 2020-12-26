@@ -17,6 +17,8 @@ package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JMenuItem;
+
 import fLexibleUIKit.ObjectAction;
 import graphicalObjects_FigureSpecific.FigureScaler;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -53,17 +55,7 @@ public class FigureScalerMenu extends SmartJMenu{
 	}
 	
 	public void createItems() {
-		add(new ObjectAction<PanelLayoutGraphic>(item) {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				FigureScaler scaler = new FigureScaler(true);
-				CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
-				item.updateDisplay();
-				addEdit(undo);
-				FigureScaler.scaleWarnings(item.getParentLayer());
-				}
-	}.createJMenuItem("Scale (Same PPI, Bilinear Interpolation if needed)"));
-		
+
 	
 		add(new ObjectAction<PanelLayoutGraphic>(item) {
 			@Override
@@ -76,7 +68,7 @@ public class FigureScalerMenu extends SmartJMenu{
 					addEdit(undo);
 					FigureScaler.scaleWarnings(item.getParentLayer());
 			}	
-	}.createJMenuItem("Scale to Slide Size (PPI changes)"));
+	}.createJMenuItem("Scale to Slide Size"));
 		
 		
 		
@@ -92,16 +84,39 @@ public class FigureScalerMenu extends SmartJMenu{
 				}
 
 			
-	}.createJMenuItem("Scale (PPI changes)"));
+	}.createJMenuItem("Scale"));
 		
 		//this.add(jj);
 		
 		
 	}
+
+	/**creates a menu item that would allow the user to rescale the figures 
+	 * @return
+	 */
+	public JMenuItem createRescaleMenuItem() {
+		return new ObjectAction<PanelLayoutGraphic>(item) {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showFigureRescaleDialog();
+				}
+	}.createJMenuItem("Scale objects and Reset scale");
+	}
 	public  double getScaleFromDialog() {
 		return getScaleFromDialog("Scale Layout", null, 2);
 	}
 	
+	/**
+	 shows a dialog that allows the user to both reset the scale for the sources images, and scale everything else
+	 */
+	public void showFigureRescaleDialog() {
+		FigureScaler scaler = new FigureScaler(true);
+		CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
+		item.updateDisplay();
+		addEdit(undo);
+		FigureScaler.scaleWarnings(item.getParentLayer());
+	}
+
 	public static double getScaleFromDialog(String name, String note, double factor) {
 		StandardDialog sd = new StandardDialog(name, true) ;
 		sd.add("scale", new NumberInputPanel("Scale Factor", factor, 4));

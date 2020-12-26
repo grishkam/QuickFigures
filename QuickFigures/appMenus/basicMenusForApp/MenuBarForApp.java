@@ -26,6 +26,7 @@ import javax.swing.JMenuItem;
 
 import addObjectMenus.ObjectAddingMenu;
 import exportMenus.EPSQuickExport;
+import exportMenus.ExportIllustrator;
 import exportMenus.FlatCreator;
 import exportMenus.PDFQuickExport;
 import exportMenus.PNGQuickExport;
@@ -157,7 +158,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			installBatikExportItems();
 			
 			
-			
+			installItem(new ExportIllustrator());
 	
 	}
 

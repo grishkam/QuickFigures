@@ -32,12 +32,12 @@ import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
-import gridLayout.RetrievableOption;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorObjectConvertable;
 import illustratorScripts.PathItemRef;
 import keyFrameAnimators.RectGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
+import layout.RetrievableOption;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import objectDialogs.WidthAndHeightDialog;
 import standardDialog.StandardDialog;
@@ -53,8 +53,8 @@ import utilityClassesForObjects.StrokedItem;
 
 /**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog*/
 public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePosisions, HasSmartHandles {
-	private static final int ROTATION_HANDLE = 10;
-	public static final int STROKE_HANDLE_TYPE = 11;
+	 
+	public static final int STROKE_HANDLE_TYPE = 11, ROTATION_HANDLE = 10;
 	{name="Rectangle ";}
 	
 	private static final long serialVersionUID = 1L;
@@ -94,8 +94,9 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	}
 	
 	public RectangularGraphic(Rectangle2D r) {
-		setLocationType(0);
-		setRectangle(r);
+		setLocationType(RectangleEdgePosisions.UPPER_LEFT);
+		if(r!=null)
+			setRectangle(r);
 	}
 	
 	public RectangularGraphic(RectangularGraphic r) {
@@ -327,7 +328,7 @@ public Rectangle2D.Double getRectangle() {
 	}
 	
 	RectangularGraphic createIcon() {
-		RectangularGraphic out = rectForIcon() ;//RectangularGraphic.blankRect(new Rectangle(0,0,14,12), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFillColor(), this.getStrokeColor());
+		RectangularGraphic out = rectForIcon() ;
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		out.copyColorsFrom(this);
@@ -338,7 +339,7 @@ public Rectangle2D.Double getRectangle() {
 	}
 	
 	RectangularGraphic rectForIcon() {
-		return  RectangularGraphic.blankRect(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
+		return  RectangularGraphic.blankRect(new Rectangle(0,0,12,10), Color.BLACK);
 	
 	
 	}

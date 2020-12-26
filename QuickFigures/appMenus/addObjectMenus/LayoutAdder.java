@@ -19,7 +19,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.SimpleGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 
 class LayoutAdder extends BasicGraphicAdder {
 	
@@ -35,7 +35,7 @@ class LayoutAdder extends BasicGraphicAdder {
 	public ZoomableGraphic add(GraphicLayer gc) {
 		GraphicLayerPane l22 = new GraphicLayerPane("Layout Layer");
 		gc.add(l22);
-		MontageLayoutGraphic p = createStandard() ;
+		DefaultLayoutGraphic p = createStandard() ;
 		p.showOptionsDialog();
 		p.getPanelLayout().resetPtsPanels();
 		p.moveLocation(10, 10);
@@ -44,8 +44,8 @@ class LayoutAdder extends BasicGraphicAdder {
 		return l22;
 	}
 	
-	public MontageLayoutGraphic createStandard() {
-MontageLayoutGraphic p = new MontageLayoutGraphic();
+	public DefaultLayoutGraphic createStandard() {
+DefaultLayoutGraphic p = new DefaultLayoutGraphic();
 		
 		p.getPanelLayout().setStandardPanelWidth(100);
 		p.getPanelLayout().setStandardPanelHeight(100);

@@ -29,12 +29,13 @@ import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.DragAndDropHandler;
-import externalToolBar.IconSet;
 import genericMontageKit.BasicObjectListHandler;
-import gridLayout.BasicMontageLayout;
+import icons.IconSet;
+import imageDisplayApp.CanvasOptions;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import includedToolbars.ObjectToolset1;
+import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import undo.UndoManagerPlus;
 import utilityClasses1.ArraySorter;
@@ -301,7 +302,7 @@ public class BasicToolBit implements ToolBit {
 		return new Point(this.getDragCordinateX(), this.getDragCordinateY());
 	}
 
-	public void setRowColClickForLayout(BasicMontageLayout lay) {
+	public void setRowColClickForLayout(BasicLayout lay) {
 		this.getToolCore().setRowColClickForLayout(lay);
 		
 	}
@@ -316,7 +317,7 @@ public class BasicToolBit implements ToolBit {
 		
 	}
 
-	public void setRowColDragForLayout(BasicMontageLayout lay) {
+	public void setRowColDragForLayout(BasicLayout lay) {
 		getToolCore().setRowColDragForLayout(lay);
 		
 	}
@@ -329,10 +330,12 @@ public class BasicToolBit implements ToolBit {
 	}
 
 	public void resizeCanvas() {
-		resizeCanvas(getImageDisplayWrapperClick());
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			resizeCanvas(getImageDisplayWrapperClick());
 	}
 	
 	protected void resizeCanvas(DisplayedImage wrap) {
+		
 				new CanvasAutoResize().performActionDisplayedImageWrapper(wrap);
 	}
 

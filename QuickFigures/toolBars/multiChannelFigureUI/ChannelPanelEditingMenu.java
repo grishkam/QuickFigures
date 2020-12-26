@@ -65,7 +65,7 @@ import undo.PanelManagerUndo;
 
 
 /**Generates menu items and executes operations related to channel color, channel display range and other properties
-  same set of options will appear in different contexts, as submenus withing different menus or outside of menus*/
+  same set of options will appear in different contexts, as submenus within different menus or outside of menus*/
 public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChangeListener, StandardDialogListener {
 	
 	
@@ -80,23 +80,23 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	private PanelGraphicInsetDefiner pressedInset;
 	
 	protected PanelListElement stackSlicePressed;//the panel that is being targetted 
-	protected int chanNum=ChannelUseInstructions.NONE_SELECTED;
+	protected int targetChannelNumber=ChannelUseInstructions.NONE_SELECTED;
 	private ChannelEntry entryPress;
 	Color colorForColorModeIcon=Color.red;
 	
 	private int workOn=ALL_IMAGES_IN_CLICKED_FIGURE;
 	
 
-	static final String scalingCommand="Scale", colorModeCommand="ColorMode",chanUseCommand="Channel Use";
+	static final String SCALING_COMMAND="Scale", COLOR_MODE_COMMAND="ColorMode",CHANNEL_USE_COMMAND="Channel Use";
 	static final String minMaxCommand="MinMax",WLCommand="WinLev";
-	private static final String orderCommand="order and luts", orderCommand2="Min, Max, order and luts";
-	private static final String panContentCommand="Panel Content Gui",colorRecolorCommand="Fix Colors";
-	private static final String renameChanCommand="Add Channel exposures to summary", channelNameCommand="rename channels";
+	static final String orderCommand="order and luts", orderCommand2="Min, Max, order and luts";
+	static final String panContentCommand="Panel Content Gui",colorRecolorCommand="Fix Colors";
+	static final String renameChanCommand="Add Channel exposures to summary", channelNameCommand="rename channels";
 	
 	/**constructor called within figure organizing menu*/
 	public ChannelPanelEditingMenu(FigureOrganizingLayerPane given, int chanN) {
 		this.givenOrganizer=given;
-		chanNum=chanN;
+		targetChannelNumber=chanN;
 		setPresseddisplay((MultichannelDisplayLayer) given.getPrincipalMultiChannel());
 		if (getPresseddisplay()!=null) try {
 			colorForColorModeIcon=getPresseddisplay().getMultiChannelImage().getChannelColor(1);
@@ -116,7 +116,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		setPresseddisplay(pd);
 		if(ipg==null) return;
 		stackSlicePressed= ipg.getSourcePanel();
-		chanNum=stackSlicePressed.targetChannelNumber;
+		targetChannelNumber=stackSlicePressed.targetChannelNumber;
 		setColorToStackSlice();
 	}
 
@@ -148,7 +148,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			setPresseddisplay(pd);
 			
 			stackSlicePressed= pd.getPanelWithDisplay(imagepanel);
-			chanNum=stackSlicePressed.targetChannelNumber;
+			targetChannelNumber=stackSlicePressed.targetChannelNumber;
 		}
 		setColorToStackSlice();
 	}
@@ -162,8 +162,8 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	public void addChannelRelevantMenuItems(Container output, boolean limitVersionOfMenu) {
 		addButtonToMenu(output, "Window/Level", WLCommand, IconUtil.createBrightnessIcon(0));
 		 addButtonToMenu(output, "Min/Max", minMaxCommand, IconUtil.createBrightnessIcon(0));
-		 addButtonToMenu(output, "Change Color Modes", colorModeCommand, new ColorModeIcon(colorForColorModeIcon));
-		 addButtonToMenu(output, "Channel Use Options", chanUseCommand, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder()));
+		 addButtonToMenu(output, "Change Color Modes", COLOR_MODE_COMMAND, new ColorModeIcon(colorForColorModeIcon));
+		 addButtonToMenu(output, "Channel Use Options", CHANNEL_USE_COMMAND, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder()));
 		
 			 try {
 				addColorMenus("Recolor", output);
@@ -212,7 +212,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			
 		}
 		if(undo!=null) undo.establishFinalState();
-		if (arg0.getActionCommand().equals(scalingCommand)) {
+		if (arg0.getActionCommand().equals(SCALING_COMMAND)) {
 			 showScaleSettingDialog() ;
 		}
 		
@@ -220,7 +220,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		
 		
 		
-		if (arg0.getActionCommand().equals(colorModeCommand)) {
+		if (arg0.getActionCommand().equals(COLOR_MODE_COMMAND)) {
 			undo= changeColorModes();
 		}
 		
@@ -247,7 +247,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 }
 		
 		
-		if (arg0.getActionCommand().equals(chanUseCommand)) {
+		if (arg0.getActionCommand().equals(CHANNEL_USE_COMMAND)) {
 			
 			
 			
@@ -672,7 +672,7 @@ public void setTheColor(Color color, Integer chan1) {
 
 
 public Integer getSelectedChanNumber() {
-	return chanNum;
+	return targetChannelNumber;
 };  
 
 /**An implementation of color input listener that actually performs the channel recoloring*/
@@ -976,10 +976,9 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				}
 				
 				/**
-				 determines if the channel is excluded
+				 determines if the channel is excluded or included
 				 */
 				public boolean isExcludedChannel() {
-					//if (entry.getOriginalChannelIndex()==chanNum) return false;
 					
 					return getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().eachMergeChannel!=entry.getOriginalChannelIndex();
 				}
@@ -989,7 +988,6 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				 Changes the channels present
 				 */
 				public void pressAction() {
-					int chaneIndex = entry.getOriginalChannelIndex();
 					
 					ChannelUseInstructions i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
 					
@@ -1021,7 +1019,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				}
 
 				int fontStyle() {
-						if(entry.getOriginalChannelIndex()==chanNum)
+						if(entry.getOriginalChannelIndex()==targetChannelNumber)
 						return Font.BOLD;
 						else
 						return Font.PLAIN;

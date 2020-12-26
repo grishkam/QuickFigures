@@ -50,7 +50,6 @@ import applicationAdapters.CanvasMouseEvent;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import export.svg.SVGExporter;
-import externalToolBar.IconSet;
 import graphicalObjectHandles.ActionButtonHandleList;
 import graphicalObjectHandles.CountHandle;
 import graphicalObjectHandles.HasSmartHandles;
@@ -60,6 +59,8 @@ import graphicalObjectHandles.SmartHandle;
 import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.HasBackGroundShapeGraphic;
+import iconGraphicalObjects.IconTraits;
+import icons.IconSet;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import keyFrameAnimators.ArrowGraphicKeyFrameAnimator;
@@ -95,7 +96,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	public static final int[] arrowStyleList=new int[] {
 			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL};
 	
-	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle","Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
 	/**some options not available to the user dialog but available to programmer*/
 	public static final int 
 	 HALF_BAR_HEAD = 400,  HALF_BAR_HEAD2 = 500 ,BAR_HEAD = 444,
@@ -123,7 +124,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	
 	
 	
-	/**The second point within the arrow. see superclass for 1st point*/
+	/**The second point within the arrow. see superclass for 1st point (x, y)*/
 	protected double x2=60, y2=60;
 	
 	/**the first head of the arrow at position x2, y2*/
@@ -359,6 +360,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	
 
 
+	/**creates a copy of this arrow*/
 	@Override
 	public ArrowGraphic copy() {
 		ArrowGraphic arrow = new ArrowGraphic();
@@ -372,8 +374,10 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		arrow.outline=outline;
 		arrow.backGroundShape=this.getBackGroundShape().copy();
 	
+		arrow.setHeadsSame(this.headsAreSame());
 		arrow.head1.copyAttributesFrom(head1);
-		arrow.head2.copyAttributesFrom(head1);
+		arrow.head2.copyAttributesFrom(head2);
+		
 		
 		return arrow;
 	}
@@ -778,7 +782,7 @@ protected Point2D getDrawnLineEnd2() {
 	/**creates a small arrow that is used as an icon for the arrow*/
 	ArrowGraphic createIconArrow() {
 		ArrowGraphic out = ArrowGraphic.createDefaltOutlineArrow(this.getFillColor(), this.getStrokeColor());
-		out.setPoints(new Point(0,0), new Point(14,12));
+		out.setPoints(new Point(0,0), new Point(IconTraits.TREE_ICON_WIDTH-1,IconTraits.TREE_ICON_HEIGHT-1));
 		out.copyColorsFrom(this);
 		ArrowHead head = this.getHead();
 		if (head.isOutlineType()) {

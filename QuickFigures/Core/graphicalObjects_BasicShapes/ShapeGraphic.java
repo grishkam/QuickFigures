@@ -207,6 +207,10 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	}
 	
 	public void setStrokeWidth(float strokeWidth) {
+		if(strokeWidth>250) {
+			IssueLog.log("Attmpted to set a strange stroke width for a shape "+strokeWidth);
+			return;
+		}
 		this.strokeWidth = strokeWidth;
 	}
 	
@@ -608,11 +612,10 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	/**a list of handles that serve as a mini toolbar for this shape*/
 	protected transient ActionButtonHandleList buttonList;
 	
-	/**returns the list of handles that take the role of buttons on a mini-toolbar of sorts*/
+	/**returns the list of handles that take the role of buttons on a 'mini-toolbar' of sorts*/
 	public ActionButtonHandleList getButtonList() {
 		if(buttonList==null) {
 			buttonList=createActionHandleList();
-			
 		}
 		buttonList.updateLocation();
 		return buttonList;

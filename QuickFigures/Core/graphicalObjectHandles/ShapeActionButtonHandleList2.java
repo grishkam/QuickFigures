@@ -17,18 +17,14 @@ package graphicalObjectHandles;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import actionToolbarItems.EditManyShapes;
 import actionToolbarItems.SetAngle;
-import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_BasicShapes.ShapeGraphic;
 import selectedItemMenus.MultiSelectionOperator;
-import standardDialog.colors.ColorInputEvent;
-import standardDialog.colors.ColorInputListener;
 
 /**A set of smart handles that acts as a mini toolbar for shapes*/
 public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
@@ -269,54 +265,5 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 				};
 	}
 	
-	public static class ColoringButton extends IconHandle implements ColorInputListener {
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private EditManyShapes item;
-		private transient CanvasMouseEvent lastPress;
-
-		public ColoringButton(EditManyShapes itemForIcon, int handleNumber ) {
-			
-			super(itemForIcon.getIcon(), new Point(0,0));
-			
-			this.item=itemForIcon;
-			this.xShift=5;
-			this.yShift=5;
-			this.setIcon(itemForIcon.getIcon());
-			this.setHandleNumber(handleNumber);
-		}
-		
-		@Override
-		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-			showPopupMenu(canvasMouseEventWrapper);
-		
-		}
-
-		public void showPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
-			lastPress=canvasMouseEventWrapper;
-			String message="Change Fill Color";
-			if(item.doesStroke()) message="Change Stroke Color";
-			new ColorButtonHandleList(this).showInPopupPalete(canvasMouseEventWrapper, message);;
-		}
-
-		@Override
-		public void ColorChanged(ColorInputEvent fie) {
-			
-			item.setSelector(fie.event.getSelectionSystem());
-			ShapeGraphic model = item.getModelItem();
-			item.setModelItem(null);
-			item.setTheColor(fie.getColor());
-			item.run();
-			item.setModelItem(model);
-			
-			this.setIcon(item.getIcon());
-			
-			lastPress.getAsDisplay().updateDisplay();
-			
-		}
-
-	}
 }

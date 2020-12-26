@@ -161,7 +161,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 	}
 	
 	
-	SmartMenuItem2 recreateChannelUseMenuItem() {
+	public SmartMenuItem2 recreateChannelUseMenuItem() {
 		SmartMenuItem2 out=new SmartMenuItem2("Channel Use") {
 			private static final long serialVersionUID = 1L;
 

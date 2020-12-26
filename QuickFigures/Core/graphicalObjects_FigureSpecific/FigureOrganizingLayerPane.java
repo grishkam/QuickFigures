@@ -41,11 +41,11 @@ import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_FigureSpecific.PanelOrderCorrector.ImageOrderComparator;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import iconGraphicalObjects.IconUtil;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.CroppingDialog;
@@ -156,21 +156,21 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 	
 	
 /**returns the layout */
-public BasicMontageLayout getLayout() {
+public BasicLayout getLayout() {
 	return getMontageLayout();
 }
 /**returns the layout */
-public BasicMontageLayout getMontageLayout() {
-	MontageLayoutGraphic mm = getMontageLayoutGraphic();
+public BasicLayout getMontageLayout() {
+	DefaultLayoutGraphic mm = getMontageLayoutGraphic();
 	if (mm!=null) return mm.getPanelLayout();
 	return null;
 }
 /**gets the graphic that displays the layout and allows layout editing by user*/
-public MontageLayoutGraphic getMontageLayoutGraphic() {
+public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	for(ZoomableGraphic a:super.getItemArray()) {
 		if (a==null) continue;
-		if (a instanceof MontageLayoutGraphic) {
-			MontageLayoutGraphic m=(MontageLayoutGraphic) a;
+		if (a instanceof DefaultLayoutGraphic) {
+			DefaultLayoutGraphic m=(DefaultLayoutGraphic) a;
 			
 			m.generateStandardImageWrapper();
 			return m;
@@ -368,9 +368,9 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 		return false;
 	}
 
-	public MontageLayoutGraphic setUpALayoutGraphicForLayerAndImage( MultichannelDisplayLayer display) {
+	public DefaultLayoutGraphic setUpALayoutGraphicForLayerAndImage( MultichannelDisplayLayer display) {
 		/**creates a MontageLayout Graphic if the layer has none*/
-		MontageLayoutGraphic p=getMontageLayoutGraphic();
+		DefaultLayoutGraphic p=getMontageLayoutGraphic();
 		if (p==null) {
 			p=createLayoutForImage(display.getMultiChannelImage(), display);
 			add(p);
@@ -380,8 +380,8 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 	}
 	
 	/**creates a layout that is of the right dimensions for the panel stack display to use to place the image's panels*/
- static MontageLayoutGraphic createLayoutForImage(MultiChannelImage image, ImageDisplayLayer panelStackDisplay) {
-		MontageLayoutGraphic p = new MontageLayoutGraphic();
+ static DefaultLayoutGraphic createLayoutForImage(MultiChannelImage image, ImageDisplayLayer panelStackDisplay) {
+		DefaultLayoutGraphic p = new DefaultLayoutGraphic();
 		//p.getPanelLayout().setNColumns(image.nChannels()+1);
 		p.getPanelLayout().setHorizontalBorder(10);
 		p.getPanelLayout().setVerticalBorder(10);
@@ -389,7 +389,7 @@ public MontageLayoutGraphic getMontageLayoutGraphic() {
 		return p;
 	}
 public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLayer panelStackDisplay,
-		MontageLayoutGraphic p) {
+		DefaultLayoutGraphic p) {
 	if (panelStackDisplay!=null) {
 	int[] dims =  panelStackDisplay.getPanelList().getChannelUseInstructions().estimateBestMontageDims(image);
 	
@@ -462,11 +462,11 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	/**Attempts to identify the names of the images present in either panels, rows or columns
 	  adds label accordingly*/
 	public ArrayList<TextGraphic> addLabelsBasedOnImageNames(int type) {
-		BasicMontageLayout ml = getMontageLayout();
+		BasicLayout ml = getMontageLayout();
 		ArrayList<TextGraphic> addedItems=new ArrayList<TextGraphic>();
 		int limit = ml.nRows();
-		if(type==BasicMontageLayout.COLS) limit=ml.nColumns();
-		if(type==BasicMontageLayout.PANELS) limit=ml.nPanels();
+		if(type==BasicLayout.COLS) limit=ml.nColumns();
+		if(type==BasicLayout.PANELS) limit=ml.nPanels();
 		AttachmentPosition position=null;
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;
@@ -485,11 +485,11 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					{text=text.substring(0, (int)LabelCreationOptions.current.clipLabels);}
 				}
 				
-				if (type==BasicMontageLayout.ROWS)
+				if (type==BasicLayout.ROWS)
 					item=addRowLabel(text, i);
-				if (type==BasicMontageLayout.COLS)
+				if (type==BasicLayout.COLS)
 					item=addColLabel(text, i);
-				if (type==BasicMontageLayout.PANELS)//added on nov 3 thinking that it would fix an issue with generate all labels that I have only been seeing on the Mac
+				if (type==BasicLayout.PANELS)//added on nov 3 thinking that it would fix an issue with generate all labels that I have only been seeing on the Mac
 					item=addPanelLabel(text, i);
 			}
 			
@@ -505,7 +505,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 
 	/**If an entire Multichannel image's set of panels is contained in teh Row, Col, or panel in the layout, returns the image*/
 	public ImageDisplayLayer getPanelForRowindex(int i, int type) {
-		BasicMontageLayout rowshapes = this.getMontageLayout().makeAltered(type);
+		BasicLayout rowshapes = this.getMontageLayout().makeAltered(type);
 		ArrayList<ImageDisplayLayer> list = this.getMultiChannelDisplaysInOrder();
 		for(ImageDisplayLayer l: list) {
 			if (rowshapes.getPanel(i).contains(l.getBoundOfUsedPanels().getCenterX(), l.getBoundOfUsedPanels().getCenterY())) {

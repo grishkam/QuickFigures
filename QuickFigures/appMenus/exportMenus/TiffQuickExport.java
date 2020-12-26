@@ -54,7 +54,7 @@ public class TiffQuickExport extends PNGQuickExport {
 
 	@Override
 	public String getNameText() {
-		return "Export as Image (.tiff)";
+		return "Image (.tiff)";
 	}
 	
 	

@@ -18,9 +18,9 @@ package graphicTools;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import externalToolBar.TreeIconWrappingToolIcon;
 import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_BasicShapes.RegularPolygonGraphic;
+import icons.TreeIconWrappingToolIcon;
 
 /**A tool bit for drawing regular polygons*/
 public class RegularPolygonGraphicTool extends RectGraphicTool {
@@ -36,7 +36,7 @@ public class RegularPolygonGraphicTool extends RectGraphicTool {
 		this.m=m;
 		model=m;
 		getModel().setStrokeColor(Color.black);
-		super.set=TreeIconWrappingToolIcon.createIconSet(getModel());
+		super.iconSet=TreeIconWrappingToolIcon.createIconSet(getModel());
 	}
 	
 	

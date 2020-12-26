@@ -21,8 +21,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import genericMontageKit.PanelList;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnappingPanel;
 import standardDialog.booleans.BooleanInputPanel;
@@ -89,8 +89,8 @@ import utilityClassesForObjects.AttachmentPosition;
 		
 			int npanels=3;
 			if (getInsetLayout().onSides()) npanels=5;
-			MontageLayoutGraphic previewLayout = getInsetLayout().createLayout(npanels,  new Rectangle(0,0, 28,21), snappanel.getSnapBox().getReferenceObject().getBounds(), 1);
-			BasicMontageLayout lg = previewLayout.getPanelLayout();
+			DefaultLayoutGraphic previewLayout = getInsetLayout().createLayout(npanels,  new Rectangle(0,0, 28,21), snappanel.getSnapBox().getReferenceObject().getBounds(), 1);
+			BasicLayout lg = previewLayout.getPanelLayout();
 			previewLayout.setFilledPanels(true);
 			previewLayout.setAlwaysShow(true);
 		
@@ -136,7 +136,7 @@ import utilityClassesForObjects.AttachmentPosition;
 			
 			
 			PanelList panelStack = currentInset.getPanelManager().getPanelList();
-			MontageLayoutGraphic graphicRem = currentInset.personalLayout;
+			DefaultLayoutGraphic graphicRem = currentInset.personalLayout;
 			
 			if (currentInset.sharesPersonalLayer()&&extralist!=null) {
 				panelStack =extralist;

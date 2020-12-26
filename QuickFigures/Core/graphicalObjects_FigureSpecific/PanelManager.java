@@ -37,8 +37,8 @@ import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
@@ -71,12 +71,13 @@ public class PanelManager implements Serializable, EditListener{
 	private int defaultFrameWidth;
 
 	public PanelManager(MultichannelDisplayLayer multichannelImageDisplay, PanelList stack,
-			GraphicLayer multichannelImageDisplay2) {
+			GraphicLayer targetLayer) {
 		this.display=multichannelImageDisplay;
 		this.setPanelList(stack);
-		this.layer=multichannelImageDisplay2;
+		this.layer=targetLayer;
 		if(layer==null) layer=multichannelImageDisplay;
-		setMultiChannelWrapper(multichannelImageDisplay.getMultiChannelImage());
+		if (multichannelImageDisplay!=null)
+			setMultiChannelWrapper(multichannelImageDisplay.getMultiChannelImage());
 		
 	}
 	
@@ -396,7 +397,7 @@ public class PanelManager implements Serializable, EditListener{
 	/**When given a single panel list element, finds an empty spot in the layout
 	   and puts the panel in that location. If no empty spot exists, it creates one*/
 	public void putSingleElementOntoGrid(PanelListElement p, boolean addIfNeeded) {
-		BasicMontageLayout layout = getLayout();
+		BasicLayout layout = getLayout();
 		int index = layout.getEditor().indexOfFirstEmptyPanel(layout, 1, 0);
 		
 		if ((index>layout.nPanels()||index==0)&&addIfNeeded) {
@@ -414,14 +415,14 @@ public class PanelManager implements Serializable, EditListener{
 	
 	
 	/**returns the layout that is used for the given layer*/
-	public static MontageLayoutGraphic getGridLayout(GraphicLayer layer) {
+	public static DefaultLayoutGraphic getGridLayout(GraphicLayer layer) {
 		if (layer==null) return null;
 		ArrayList<ZoomableGraphic> arr = layer.getItemArray();
 		if (arr==null) return null;
 		for(ZoomableGraphic a:arr) {
 			if (a==null) continue;
-			if (a instanceof MontageLayoutGraphic) {
-				MontageLayoutGraphic m=(MontageLayoutGraphic) a;
+			if (a instanceof DefaultLayoutGraphic) {
+				DefaultLayoutGraphic m=(DefaultLayoutGraphic) a;
 				m.generateStandardImageWrapper();
 				return m;
 						};
@@ -433,8 +434,8 @@ public class PanelManager implements Serializable, EditListener{
 	}
 	
 	/**returns the graphical object meant for displaying and editing (via handles) of the figure layout*/
-	public MontageLayoutGraphic getGridLayout() {
-		MontageLayoutGraphic layoutGraphic=getGridLayout(layer);
+	public DefaultLayoutGraphic getGridLayout() {
+		DefaultLayoutGraphic layoutGraphic=getGridLayout(layer);
 		if (layoutGraphic==null &&layer.getParentLayer()!=null) 
 				layoutGraphic=getGridLayout(layer.getParentLayer());
 		if (layoutGraphic==null) return null;
@@ -442,8 +443,8 @@ public class PanelManager implements Serializable, EditListener{
 	}
 	
 	/**Returns the figure layout*/
-	public BasicMontageLayout getLayout() {
-		MontageLayoutGraphic layoutGraphic=getGridLayout();
+	public BasicLayout getLayout() {
+		DefaultLayoutGraphic layoutGraphic=getGridLayout();
 		if (layoutGraphic==null) return null;
 		return layoutGraphic.getPanelLayout();
 	}

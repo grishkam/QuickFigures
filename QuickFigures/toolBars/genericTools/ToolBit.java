@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 
 import externalToolBar.DragAndDropHandler;
-import externalToolBar.IconSet;
+import icons.IconSet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
 public interface ToolBit {

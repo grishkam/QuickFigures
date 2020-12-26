@@ -23,7 +23,6 @@ import java.awt.geom.Point2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
-import externalToolBar.IconWrappingToolIcon;
 import graphicTools.GraphicTool;
 import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_BasicShapes.PathGraphic;
@@ -31,6 +30,7 @@ import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.PathEditUndo;
 import utilityClassesForObjects.LocatedObject2D;
@@ -55,7 +55,7 @@ public class PathReflectTool extends GraphicTool {
 		this.rotate=toolType==ROTATE;
 		this.move=toolType==MOVE;
 		this.scaleuniform=toolType==UNIFORM_SCALE;
-		this.set= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
+		this.iconSet= IconWrappingToolIcon.createIconSet(getDefaultIcon()) ;
 	}
 	
 	public void mousePressed() {

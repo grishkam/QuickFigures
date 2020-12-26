@@ -31,6 +31,8 @@ import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LockedItemList;
 import utilityClassesForObjects.TakesLockedItems;
 
+/**A tool for moving attached items. no longer included in the toolbars but the methods
+ * in this class are accessed via handles that can be clicked on without the use of this tool*/
 public class LockGraphicTool extends GraphicTool {
 	protected CombinedEdit undoer;
 	private ArrayList<LocatedObject2D> allRoi;

@@ -15,15 +15,17 @@
  *******************************************************************************/
 package genericMontageLayoutToolKit;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import genericMontageKit.PanelContentExtract;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import includedToolbars.StatusPanel;
+import layout.PanelContentExtract;
+import layout.PanelLayout;
+import layout.basicFigure.BasicLayout;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
 import utilityClassesForObjects.LocatedObject2D;
@@ -37,8 +39,8 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	boolean movePanelContent=false;
 	
 	/**the layout being worked on. not always the same as the layout that was clicked on*/
-	MontageLayoutGraphic ml;
-	BasicMontageLayout bm;
+	DefaultLayoutGraphic ml;
+	BasicLayout bm;
 	
 	
 	private LocatedObject2D r;
@@ -48,10 +50,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	private UndoLayoutEdit undo;
 	private UndoAddItem undo2;
 	
-	{createIconSet("icons/GirdDimensionIcon.jpg",
-			"icons/GirdDimensionPressIcon.jpg",
-			"icons/GirdDimensionRolloverIcon.jpg"
-			);}
+	
 	
 	/**sets up the fields in this class*/
 	public void mousePressed() {
@@ -70,10 +69,10 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 			if (bounds==null) return;
 			if (bounds.getWidth()==0) return;
 			
-			bm=new BasicMontageLayout();
+			bm=new BasicLayout();
 			bm.setLayoutBasedOnRect(bounds);
 			
-			 ml = new MontageLayoutGraphic(bm);
+			 ml = new DefaultLayoutGraphic(bm);
 			this.getImageClicked().getTopLevelLayer().add(ml);
 			super.layoutGraphic=ml;
 			undo2=new UndoAddItem(getImageClicked().getTopLevelLayer(), ml);
@@ -91,7 +90,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		int[] rowcol=new int[] {};
 		int dragCordinateY = this.getDragCordinateY();
 		int dragCordinateX = this.getDragCordinateX();
-		BasicMontageLayout bm = getCurrentLayout();
+		BasicLayout bm = getCurrentLayout();
 		rowcol = findAddedRowsCols(dragCordinateX, dragCordinateY, bm);
 		
 		ArrayList<PanelContentExtract> panels=null;
@@ -144,7 +143,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	  x and y position. required so that the number of columns and rows can be changed in response to mouse drags 
 	  At the moment this method is accurate for layouts that have rows/columns of uniform width. 
 	  Tools is still usable for non-uniform layouts*/
-	public static int[] findAddedRowsCols(int dragCordinateX, int dragCordinateY, BasicMontageLayout bm) {
+	public static int[] findAddedRowsCols(int dragCordinateX, int dragCordinateY, BasicLayout bm) {
 		int[] rowcol;
 		Rectangle bound = bm.getBoundry().getBounds();
 		
@@ -201,5 +200,39 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 		}
 	
 	
-	
+	{this.setIconSet(new  MoverIcon(0).generateIconSet());}
+	class MoverIcon extends GeneralLayoutToolIcon {
+
+		/**
+		 * @param type
+		 */
+		public MoverIcon(int type) {
+			super(type);
+			super.paintBoundry=false;
+			super.panelColor=new Color[] {GREEN_TONE};
+		}
+		
+		/**
+		creates a layout for drawing and icon
+		 */
+		protected PanelLayout createSimpleIconLayout( int type) {
+			BasicLayout layout = new BasicLayout(1, 2, 5, 5, 2,2, true);
+			
+			if(type!=NORMAL_ICON_TYPE) {
+				layout = new BasicLayout(3, 2, 5, 5, 2,2, true);
+			}
+			layout.setLabelSpaces(1, 1,1,1);
+			layout.move(2,2);
+			
+			return layout;
+		}
+		
+		/**
+		 * @param type
+		 * @return
+		 */
+		protected GeneralLayoutToolIcon generateAnother(int type) {
+			return new MoverIcon(type);
+		}
+	}
 }

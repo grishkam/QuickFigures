@@ -124,13 +124,12 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "To PowerPoint";
 	}
 
 	@Override
 	public String getNameText() {
-		return "Create PowerPoint Slide";
+		return "Create PowerPoint Slide (.ppt)";
 	}
 	
 

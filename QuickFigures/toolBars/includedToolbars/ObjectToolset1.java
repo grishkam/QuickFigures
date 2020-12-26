@@ -25,23 +25,19 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuBarForApp;
 import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
+import genericMontageLayoutToolKit.Shift_Object_Between_Panels;
 import genericTools.GeneralTool;
 import genericTools.ObjectColorFillTool;
 import genericTools.Object_Mover;
-import genericTools.Roi_Into_Multiple_Panels2;
 import genericTools.ToolBit;
 import graphicActionToolbar.PSActionTool;
 import graphicActionToolbar.QuickFigureMaker;
 import graphicTools.ArrowGraphicTool;
-import graphicTools.CircleGraphicTool;
 import graphicTools.ComplexText_GraphicTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.RegularPolygonGraphicTool;
-import graphicTools.RightTriangleGraphicTool;
-import graphicTools.RingGraphicTool;
-import graphicTools.RoundRectGraphicTool;
 import graphicTools.Text_GraphicTool;
-import graphicTools.OtherShapeGraphicTool;
+import graphicTools.ShapeGraphicTool;
 import graphicalObjects_BasicShapes.BlobShape;
 import graphicalObjects_BasicShapes.CircularGraphic;
 import graphicalObjects_BasicShapes.ComplexBlobShape;
@@ -49,6 +45,8 @@ import graphicalObjects_BasicShapes.ComplexStar;
 import graphicalObjects_BasicShapes.GearShape;
 import graphicalObjects_BasicShapes.NotchedRectangleGraphic;
 import graphicalObjects_BasicShapes.PlusGraphic;
+import graphicalObjects_BasicShapes.RightTriangleGraphic;
+import graphicalObjects_BasicShapes.RoundedRectangleGraphic;
 import graphicalObjects_BasicShapes.SimpleRing;
 import graphicalObjects_BasicShapes.SimpleStar;
 import graphicalObjects_BasicShapes.TrapezoidGraphic;
@@ -92,7 +90,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		ArrayList<ToolBit> layoutTools = LayoutToolSet.getMinimumLayoutToolBits();
 		layoutTools.addAll( LayoutToolSet.getStandardLayoutToolBits());
 		
-		layoutTools.add(new Roi_Into_Multiple_Panels2());
+		layoutTools.add(new Shift_Object_Between_Panels());
 		addTool(new GeneralTool(layoutTools));
 		
 		addShapeTools();
@@ -135,8 +133,6 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 			
 			
 			
-		
-		
 			
 			bits.add(new  InsetTool());
 			
@@ -162,37 +158,43 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	public static ArrayList<ToolBit> getRectangularShapeGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
 	out.add(new RectGraphicTool());
-	out.add(new RoundRectGraphicTool());
+	
 	
 	Rectangle standardRectangle = new Rectangle(0,0,5,5);
 	
-	out.add(new OtherShapeGraphicTool(new TrapezoidGraphic(standardRectangle)));
-
-	out.add(new OtherShapeGraphicTool(new TriangleGraphic(standardRectangle)));
+	out.add(new ShapeGraphicTool(new RoundedRectangleGraphic(standardRectangle)));
 	
-	out.add(new RightTriangleGraphicTool(RectangleEdgePosisions.LOWER_RIGHT));
-	out.add(new RightTriangleGraphicTool(RectangleEdgePosisions.LOWER_LEFT));
-	out.add(new OtherShapeGraphicTool(new PlusGraphic(standardRectangle)));
-	out.add(new OtherShapeGraphicTool(new NotchedRectangleGraphic(standardRectangle)));
+	out.add(new ShapeGraphicTool(new TrapezoidGraphic(standardRectangle)));
+
+	out.add(new ShapeGraphicTool(new TriangleGraphic(standardRectangle)));
+	
+	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePosisions.LOWER_RIGHT)));
+	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePosisions.LOWER_LEFT)));
+	out.add(new ShapeGraphicTool(new PlusGraphic(standardRectangle)));
+	out.add(new ShapeGraphicTool(new NotchedRectangleGraphic(standardRectangle)));
 	
 	return out;}
 	
 	public static ArrayList<ToolBit> getCircularShapeGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
-		out.add(new CircleGraphicTool(CircularGraphic.NO_ARC));
-	
-	
 		
-		out.add(new RingGraphicTool(SimpleRing.NO_ARC));
-		out.add(new RingGraphicTool(SimpleRing.PI_ARC));
+		Rectangle standardRectangle = new Rectangle(0,0,5,5);
+		out.add(new ShapeGraphicTool(new CircularGraphic(standardRectangle)));
+		
+
+		out.add(new ShapeGraphicTool(new SimpleRing(standardRectangle, CircularGraphic.NO_ARC)));
+		
+		out.add(new ShapeGraphicTool(new SimpleRing(standardRectangle, CircularGraphic.PI_ARC)));
+		
+		
 		Rectangle sRectangle = new Rectangle(0,0, 2,2);
 		out.add(new RegularPolygonGraphicTool(new GearShape(sRectangle,12, 0.75)));
 		out.add(new RegularPolygonGraphicTool(new BlobShape(sRectangle,7, 0.75)));
 		out.add(new RegularPolygonGraphicTool(new ComplexBlobShape(sRectangle,7, 0.75)));
 
-		
-		out.add(new CircleGraphicTool(CircularGraphic.PI_ARC));
-		out.add(new CircleGraphicTool(CircularGraphic.CHORD_ARC));
+		out.add(new ShapeGraphicTool(new CircularGraphic(standardRectangle, CircularGraphic.PI_ARC)));
+		out.add(new ShapeGraphicTool(new CircularGraphic(standardRectangle, CircularGraphic.CHORD_ARC)));
+
 		return out;
 	}
 	

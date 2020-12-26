@@ -29,7 +29,9 @@ import undo.UndoTakeLockedItem;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.AttachmentPosition;
 import utilityClassesForObjects.TakesLockedItems;
-
+/**A tool for moving attached items, switching their locations. no longer included in the toolbar
+ * but kep in case a need for it appears in later versions
+ * */
 public class LockedObjectSwapper extends LockGraphicTool2 {
 
 	

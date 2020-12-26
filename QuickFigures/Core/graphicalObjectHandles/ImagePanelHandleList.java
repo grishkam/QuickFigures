@@ -15,6 +15,7 @@
  *******************************************************************************/
 package graphicalObjectHandles;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -46,6 +47,7 @@ public class ImagePanelHandleList extends SmartHandleList {
 		
 		}
 		frameHandle=new ImagePanelHandle(panel, FRAME_HANDLE_ID); 
+		frameHandle.setHandleColor(Color.magenta);
 		this.add(frameHandle);
 		frameHandle.setCordinateLocation(getFrameHandlePoint());
 		

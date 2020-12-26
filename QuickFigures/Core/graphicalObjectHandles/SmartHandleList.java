@@ -137,4 +137,15 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		int index=containsLockedItemHandle(l);
 		if (index>=0)remove(index);
 	}
+	
+	/**returns a list of all the handle id numbers*/
+	public ArrayList<Integer> getAllHandleNumbers() {
+		ArrayList<Integer> output=new ArrayList<Integer>();
+		for(SmartHandle sh:this) {
+			if(sh==null) continue;
+			output.add(sh.getHandleNumber());
+		}
+		
+		return output;
+	}
 }

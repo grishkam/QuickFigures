@@ -73,6 +73,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**
 	 * 
 	 */
+	private static final String ZOOM_OUT = "Out", ZOOM_IN = "In";
+	
 	/**keeps a count of how many of these windows have been created*/
 	static int windowCount=0;
 	int windowNumber=windowCount+1; {
@@ -154,6 +156,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	  figure*/
 	void reSetCanvasAndWindowSizes() {
 		/**stores the current on screen locations of the window*/
+		if(!isVisible()) return;
 		lx=this.getLocationOnScreen().getX();
 		ly=this.getLocationOnScreen().getY();
 		
@@ -338,8 +341,10 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**Called after a mouse event. */
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		
 		try {
-		if(arg0.isConsumed()) StatusPanel.updateStatus("Key is consumed  "+arg0.getKeyChar());
+		if(arg0.isConsumed()) 
+			StatusPanel.updateStatus("Key is consumed  "+arg0.getKeyChar());
 		
 		
 		if (getStrokeReader() !=null)  {
@@ -361,8 +366,9 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		}
 		
 		if (arg0.getKeyCode()==KeyEvent.VK_PLUS||arg0.getKeyChar()=='+') {
+			
 			if(!arg0.isConsumed())
-			this.comfortZoom();
+			this.comfortZoomIn();
 		}
 		
 		if (arg0.getKeyChar()=='_') {
@@ -374,12 +380,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		}
  		
  		
- 		boolean WindowsOrMacMeta=false;
- 		if (IssueLog.isWindows() &&arg0.isControlDown()) {
- 			
- 			WindowsOrMacMeta=true;
- 		}
- 		if (!IssueLog.isWindows() &&arg0.isMetaDown()) WindowsOrMacMeta=true;
+ 		boolean WindowsOrMacMeta = isModifierKeyDown(arg0);
  		
  		
  		/**implementation of undo and redo*/
@@ -399,23 +400,23 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		SelectedSetLayerSelector selector = new SelectedSetLayerSelector(this.getTheSet());
 		/**The copy and paste options*/
 				if (arg0.getKeyCode()==KeyEvent.VK_C&&WindowsOrMacMeta) {
-					new FlatCreator().toSystemClip(getTheSet());
-					CopyItem cc = new CopyItem();
-					cc.setSelector(selector);
-					cc.run();
+						new FlatCreator().toSystemClip(getTheSet());
+						CopyItem cc = new CopyItem();
+						cc.setSelector(selector);
+						cc.run();
 					}
 				
 				if (arg0.getKeyCode()==KeyEvent.VK_X&&WindowsOrMacMeta) {
-					new FlatCreator().toSystemClip(getTheSet());
-					CopyItem cc = new CopyItem();
-					cc.setSelector(selector);
-					cc.run();
-					
-					ItemRemover ir = new ItemRemover();
-					ir.setSelector(selector);
-					ir.setSelection(selector.getSelecteditems());
-					ir.run();
-					this.repaint();
+						new FlatCreator().toSystemClip(getTheSet());
+						CopyItem cc = new CopyItem();
+						cc.setSelector(selector);
+						cc.run();
+						
+						ItemRemover ir = new ItemRemover();
+						ir.setSelector(selector);
+						ir.setSelection(selector.getSelecteditems());
+						ir.run();
+						this.repaint();
 					}
 				
 				if (arg0.getKeyCode()==KeyEvent.VK_V&&WindowsOrMacMeta) {
@@ -424,7 +425,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 					pp.setSelector(new SelectedSetLayerSelector(this.getTheSet()));
 					
 					pp.add(new SelectedSetLayerSelector(this.getTheSet()).getSelectedLayer());
-					//IssueLog.log("pasting copy");
+					
 					}
 		
  		
@@ -457,9 +458,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			case KeyEvent.VK_UP: {getZoomer().scroll(0, -numberscroll); ;break;}
 			case KeyEvent.VK_DOWN: {getZoomer().scroll(0, numberscroll); ;break;}
 		}
-		else if (arg0.isShiftDown()&&this.useScrollPane) {
-			
-		}
+		
 		
 		
 		getDisplaySet().updateDisplay();
@@ -468,6 +467,22 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			IssueLog.log(t);
 		}
 
+	}
+
+
+	/**determines if either the apple key (for Mac) or the control key (for windows)
+	 * is down
+	 * @param arg0
+	 * @return
+	 */
+	public static boolean isModifierKeyDown(KeyEvent arg0) {
+		boolean WindowsOrMacMeta=false;
+ 		if (IssueLog.isWindows() &&arg0.isControlDown()) {
+ 			
+ 			WindowsOrMacMeta=true;
+ 		}
+ 		if (!IssueLog.isWindows() &&arg0.isMetaDown()) WindowsOrMacMeta=true;
+		return WindowsOrMacMeta;
 	}
 	
 	/**Performs scrolling action. Exactly how this is implemented depends on whether a JScroll pane object is used
@@ -502,8 +517,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	
 	
 	/**zooms the window so that the canvas can fit inside easily and still be seen
-	  Comfortably. in other words, zooms out than in again*/
-	public void comfortZoom() {
+	  Comfortably. in other words, zooms in again and again*/
+	public void comfortZoomIn() {
 		Dimension dim = determineMaxBoundsForWindow() ;
 		dim.width/=1.2;
 		dim.height/=1.2;
@@ -537,7 +552,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	}
 	
 	/** scrolls such that as much of the canvas is visible as possible
-	If the scroll pane is being used, this means setting the prefered size of the pane to the canvas size*/
+	If the scroll pane is being used, this means setting the preferred size of the pane to the canvas size*/
 	private void scrollToComfort() {
 		
 		moveVirtualScrollingToVisible();
@@ -895,8 +910,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**Zooms the canvas in or out depending on the string*/
 	public void zoom(String st) {
 		if (st==null) return;
-			if (st.contains("In")) this.ZoomIn();
-			if (st.contains("Out")) this.ZoomOut();
+			if (st.contains(ZOOM_IN)) this.ZoomIn();
+			if (st.contains(ZOOM_OUT)) this.ZoomOut();
 	}
 	
 	/**A scroll pane that will contain the canvas*/

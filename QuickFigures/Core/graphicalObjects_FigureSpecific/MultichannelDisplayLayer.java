@@ -28,7 +28,6 @@ import channelMerging.MultiChannelUpdateListener;
 import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
-import externalToolBar.IconSet;
 import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.PanelStackDisplayOptions;
 import genericMontageKit.PanelList;
@@ -43,10 +42,12 @@ import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.MontageLayoutGraphic;
-import gridLayout.BasicMontageLayout;
-import gridLayout.GenericMontageEditor;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import icons.IconSet;
+import icons.SourceImageTreeIcon;
 import layersGUI.HasTreeLeafIcon;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.GenericMontageEditor;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
@@ -365,10 +366,10 @@ private static final long serialVersionUID = 1L;
 	 Does not yet consider other competing that may be in the same grid
 	 * */
 	private void layObjectsOnGrid(boolean fit, boolean expand) {
-		MontageLayoutGraphic grid = this.getPanelManager().getGridLayout();
+		DefaultLayoutGraphic grid = this.getPanelManager().getGridLayout();
 		
 		
-		BasicMontageLayout layout =  this.getPanelManager().getLayout();
+		BasicLayout layout =  this.getPanelManager().getLayout();
 		
 		if (grid==null) return;
 		
@@ -397,7 +398,7 @@ private static final long serialVersionUID = 1L;
 
 	/**Resizes the montage layout panels to fit the first image. changes 
 	 * the standard size not the size of unique rows*/
-	public void resizeMontagePanelsToFitImage(MontageLayoutGraphic grid, PanelListElement p) {
+	public void resizeMontagePanelsToFitImage(DefaultLayoutGraphic grid, PanelListElement p) {
 		try{
 			
 			GenericMontageEditor me =new GenericMontageEditor();
@@ -515,8 +516,10 @@ private static final long serialVersionUID = 1L;
 transient static IconSet i;
 	
 	public static Icon createImageIcon() {
-		if (i==null) i=new IconSet("iconsTree/MultiChannelIcon.jpg");
-		return i.getIcon(0);//new ImageIcon(i.getIcon(0));
+		//if (i==null) i=new IconSet("iconsTree/MultiChannelIcon.jpg");
+	//	return i.getIcon(0);//new ImageIcon(i.getIcon(0));
+		
+		return new SourceImageTreeIcon();
 	}
 
 	@Override
@@ -717,5 +720,7 @@ transient static IconSet i;
 	public void setFrameSliceUseToViewLocation() {
 		getPanelManager().getPanelList().getChannelUseInstructions().shareViewLocation(getSlot().getDisplaySlice());
 		}
+	
+	
 	
 }

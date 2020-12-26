@@ -54,11 +54,7 @@ public class PathTool2 extends PathTool{
 	}
 	
 	GraphicGroup createIcon() {
-		GraphicGroup out = new GraphicGroup(); ;//RectangularGraphic.blankRect(new Rectangle(0,0,14,12), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFillColor(), this.getStrokeColor());
-		/**	Point2D p1=new Point2D.Double(10,9);
-			Point2D p2=new Point2D.Double(10, 11);
-			Point2D p3=new Point2D.Double(9, 10);
-			Point2D p4=new Point2D.Double(11,10);*/
+		GraphicGroup out = new GraphicGroup(); 
 		PathGraphic p = new PathGraphic(new Point(9,9));
 		p.select();
 		p.addPoint(new Point(12, 7));

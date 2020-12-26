@@ -34,13 +34,14 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
-import externalToolBar.IconWrappingToolIcon;
-import externalToolBar.TreeIconWrappingToolIcon;
+import externalToolBar.AbstractExternalToolset;
 import genericMontageKit.BasicObjectListHandler;
 import graphicalObjects.CursorFinder;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import icons.IconWrappingToolIcon;
+import icons.TreeIconWrappingToolIcon;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ShapesUtil;
 import utilityClassesForObjects.AttachmentPosition;
@@ -57,8 +58,7 @@ public class Text_GraphicTool extends GraphicTool {
 	static boolean lowercase=false;
 	TextGraphic model = new TextGraphic();
 	{
-	set=TreeIconWrappingToolIcon.createIconSet(model);
-
+		iconSet=TreeIconWrappingToolIcon.createIconSet(model);
 	}
 	Font font=new Font("Arial", Font.BOLD, 30);
 
@@ -74,7 +74,7 @@ public class Text_GraphicTool extends GraphicTool {
 		
 		if (editorOnly) {
 			
-			set=IconWrappingToolIcon.createIconSet(new textCursorIcon());
+			iconSet=IconWrappingToolIcon.createIconSet(new TextCursorIcon());
 		}
 	}
 	
@@ -316,22 +316,22 @@ public class Text_GraphicTool extends GraphicTool {
 			return "Add Text Tool";
 		}
 	
-	class textCursorIcon implements Icon {
+	class TextCursorIcon implements Icon {
 
 		@Override
 		public int getIconHeight() {
-			// TODO Auto-generated method stub
-			return 25;
+			
+			return AbstractExternalToolset.DEFAULT_ICONSIZE;
 		}
 
 		@Override
 		public int getIconWidth() {
-			// TODO Auto-generated method stub
-			return 25;
+			return AbstractExternalToolset.DEFAULT_ICONSIZE;
 		}
 
 		@Override
 		public void paintIcon(Component arg0, Graphics arg1, int arg2, int arg3) {
+			Font oFont = arg1.getFont();
 			arg3+=2;
 			arg1.setColor(Color.black);
 			arg1.setFont(new Font("Arial", 1, 12));
@@ -353,7 +353,7 @@ public class Text_GraphicTool extends GraphicTool {
 			
 			g2d.setStroke(new BasicStroke(1));
 			g2d.drawRect(x-12, y1-4, 18, 18);
-			
+			arg1.setFont(oFont);
 		}}
 	
 	/**Method below was commented out on may 13 2020 to see effects. from appearances,

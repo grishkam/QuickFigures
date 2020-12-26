@@ -17,8 +17,8 @@ package graphicalObjects_LayoutObjects;
 
 import java.util.ArrayList;
 
-import genericMontageKit.PanelContentExtract;
-import plasticPanels.BasicSpacedPanelLayout;
+import layout.PanelContentExtract;
+import layout.plasticPanels.BasicSpacedPanelLayout;
 
 public class SpacedPanelLayoutGraphic extends PanelLayoutGraphic {
 

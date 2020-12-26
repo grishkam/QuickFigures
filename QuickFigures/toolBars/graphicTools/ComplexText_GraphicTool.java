@@ -15,22 +15,22 @@
  *******************************************************************************/
 package graphicTools;
 
-import externalToolBar.IconWrappingToolIcon;
-import externalToolBar.TreeIconWrappingToolIcon;
 import graphicalObjects_BasicShapes.ComplexTextGraphic;
 import graphicalObjects_BasicShapes.TextGraphic;
+import icons.IconWrappingToolIcon;
+import icons.TreeIconWrappingToolIcon;
 
 /**A tool for adding text items with multiple lines*/
 public class ComplexText_GraphicTool extends Text_GraphicTool{
 
 	{model= new ComplexTextGraphic();;
-	set=TreeIconWrappingToolIcon.createIconSet(model);
+	iconSet=TreeIconWrappingToolIcon.createIconSet(model);
 	}
 
 	public ComplexText_GraphicTool(boolean b) {
 		super(b);
 		if (editorOnly) {
-			set=IconWrappingToolIcon.createIconSet(new textCursorIcon());
+			iconSet=IconWrappingToolIcon.createIconSet(new TextCursorIcon());
 		}
 	}
 	
