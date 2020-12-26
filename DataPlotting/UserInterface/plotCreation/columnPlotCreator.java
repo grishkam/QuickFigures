@@ -17,8 +17,8 @@ package plotCreation;
 
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImage;
 import columnPlots.ColumnPlot;
+import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 

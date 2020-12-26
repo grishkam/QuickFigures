@@ -17,9 +17,9 @@ package menuItemInstallation;
 
 import javax.swing.Icon;
 
+import columnPlots.ColumnPlot;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
-import columnPlots.ColumnPlot;
 import dataSeries.ColumnDataSeries;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 

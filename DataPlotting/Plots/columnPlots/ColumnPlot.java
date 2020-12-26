@@ -22,8 +22,8 @@ import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
 import fLexibleUIKit.MenuItemMethod;
 import fileread.ExcelFileToBarPlot;
-import genericPlot.BasicPlot;
 import genericPlot.BasicDataSeriesGroup;
+import genericPlot.BasicPlot;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layout.basicFigure.GridLayoutEditListener;
 import layout.basicFigure.LayoutSpaces;
@@ -250,6 +250,12 @@ public ArrayList<ColumnPlotDataSeriesGroup> getAllDataSeries() {
 public void setAllData(ArrayList<ColumnPlotDataSeriesGroup> allData) {
 	this.allData = allData;
 }
+
+
+
+
+
+
 
 
 
