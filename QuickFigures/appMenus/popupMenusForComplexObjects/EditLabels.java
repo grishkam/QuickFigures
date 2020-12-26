@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 
 import figureFormat.LabelExamplePicker;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;

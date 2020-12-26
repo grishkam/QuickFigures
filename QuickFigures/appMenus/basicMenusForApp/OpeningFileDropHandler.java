@@ -17,9 +17,9 @@ package basicMenusForApp;
 
 import java.io.File;
 
+import figureOrganizer.FigureOrganizingLayerPane;
 import genericTools.MoverDragHandler;
 import graphicActionToolbar.QuickFigureMaker;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
 import imageDisplayApp.ImageDisplayIO;
 
 public class OpeningFileDropHandler extends FileDropHandler {

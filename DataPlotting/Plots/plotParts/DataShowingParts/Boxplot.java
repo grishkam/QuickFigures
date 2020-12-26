@@ -30,9 +30,9 @@ import dialogs.BoxPlotDialog;
 import export.pptx.OfficeObjectMaker;
 import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.BasicShapeGraphic;
 import plotParts.Core.PlotCordinateHandler;
 
 public class Boxplot extends DataShowingShape {

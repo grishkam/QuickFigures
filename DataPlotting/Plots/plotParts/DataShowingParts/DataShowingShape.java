@@ -28,10 +28,10 @@ import java.util.HashMap;
 
 import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
-import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import handles.HasSmartHandles;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;

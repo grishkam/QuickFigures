@@ -15,7 +15,7 @@
  *******************************************************************************/
 package objectDialogs;
 
-import graphicalObjects_BasicShapes.RoundedRectangleGraphic;
+import graphicalObjects_Shapes.RoundedRectangleGraphic;
 import standardDialog.numbers.NumberInputPanel;
 
 public class RoundRectGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog {

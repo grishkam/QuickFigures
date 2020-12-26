@@ -22,8 +22,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import graphicalObjects_FigureSpecific.InsetLayoutDialog;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
+import figureOrganizer.insetPanels.InsetLayoutDialog;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;

@@ -17,7 +17,7 @@ package dialogs;
 
 import javax.swing.JTabbedPane;
 
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import objectDialogs.GraphicItemOptionsDialog;
 import objectDialogs.TextGraphicSwingDialog;
 import plotParts.Core.AxesGraphic;

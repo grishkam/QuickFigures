@@ -15,8 +15,8 @@
  *******************************************************************************/
 package graphicTools;
 
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
 import icons.TreeIconWrappingToolIcon;
 

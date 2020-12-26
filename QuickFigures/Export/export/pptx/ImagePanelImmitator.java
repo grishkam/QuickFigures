@@ -26,7 +26,7 @@ import org.apache.poi.xslf.usermodel.XSLFPictureData;
 import org.apache.poi.xslf.usermodel.XSLFPictureShape;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import illustratorScripts.PlacedItemRef;
 
 public class ImagePanelImmitator implements OfficeObjectMaker {

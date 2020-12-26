@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import layout.basicFigure.LayoutSpaces;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;

@@ -21,7 +21,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;

@@ -21,8 +21,8 @@ import org.apache.commons.math3.stat.inference.TTest;
 import org.apache.commons.math3.util.Precision;
 
 import dataSeries.DataSeries;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;

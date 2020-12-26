@@ -22,5 +22,4 @@ public interface PanelSwapListener {
 	void onSwapCol(BasicLayout ml, int row1, int row2);
 	void onSwapRow(BasicLayout ml, int row1, int row2);
 	void onSwapPanel(BasicLayout ml, int row1, int row2);
-	//public void setLayout(BasicMontageLayout ml);
 }

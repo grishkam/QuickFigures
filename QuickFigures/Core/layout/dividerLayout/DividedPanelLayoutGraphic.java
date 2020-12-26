@@ -29,11 +29,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
-import graphicalObjectHandles.SmartHandle;
-import graphicalObjectHandles.SmartHandleList;
-import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import handles.HasSmartHandles;
+import handles.SmartHandle;
+import handles.SmartHandleList;
 import layout.PanelContentExtract;
 import layout.dividerLayout.DividedPanelLayout.LayoutDivider;
 import layout.dividerLayout.DividedPanelLayout.layoutDividedArea;

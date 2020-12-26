@@ -99,6 +99,7 @@ public interface MultiChannelImage extends OpenFileReference {
 	public static final int FRAME_DIMENSION=2, SLICE_DIMENSION=1;
 	public Integer getSelectedFromDimension(int i);
 	
+	
 	public double bitDepth();
 	
 }

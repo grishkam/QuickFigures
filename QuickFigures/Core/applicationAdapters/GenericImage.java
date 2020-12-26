@@ -26,10 +26,10 @@ import java.awt.Dimension;
 import java.awt.Window;
 import java.util.ArrayList;
 
-import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.BasicImageInfo;
+import imageDisplayApp.OverlayObjectManager;
 
 
 /** A barebones implementation of the interface

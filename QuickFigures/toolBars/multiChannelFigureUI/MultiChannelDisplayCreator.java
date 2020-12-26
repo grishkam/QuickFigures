@@ -18,7 +18,7 @@ package multiChannelFigureUI;
 import java.awt.Image;
 
 import channelMerging.MultiChannelImage;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
 
 public interface MultiChannelDisplayCreator {
 	static final String useActiveImage="ActiveImage";

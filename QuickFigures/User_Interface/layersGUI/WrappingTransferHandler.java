@@ -27,6 +27,8 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
+/**WORK IN PROGRESS.  a transfer handler that encloses another transfer handler.
+ * involved in drag and drops to and from trees*/
 public class WrappingTransferHandler extends TransferHandler {
 
 	

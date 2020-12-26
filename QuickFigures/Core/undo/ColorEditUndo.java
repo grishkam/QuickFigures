@@ -17,9 +17,9 @@ package undo;
 
 import java.awt.Color;
 
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 
 /**an undoable edit for changes to the color of objects*/
 public class ColorEditUndo extends AbstractUndoableEdit2 {

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
+import graphicalObjects.BasicGraphicalObject;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.numbers.AngleInputPanel;
 import standardDialog.numbers.NumberInputEvent;

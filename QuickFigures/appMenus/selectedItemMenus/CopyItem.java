@@ -18,10 +18,10 @@ package selectedItemMenus;
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 
 public class CopyItem extends BasicMultiSelectionOperator {
 	

@@ -20,8 +20,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
-import genericMontageKit.OverlayObjectManager;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import imageDisplayApp.OverlayObjectManager;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoSnappingChange;

@@ -16,8 +16,8 @@
 package objectDialogs;
 
 import appContext.ImageDPIHandler;
-import graphicalObjects.BufferedImageGraphic;
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.BufferedImageGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import standardDialog.booleans.BooleanArrayInputPanel;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;

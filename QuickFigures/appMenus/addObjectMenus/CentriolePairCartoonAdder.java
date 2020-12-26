@@ -17,8 +17,8 @@ package addObjectMenus;
 
 import javax.swing.Icon;
 
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.CentriolePairCartoon;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import standardDialog.graphics.GraphicDisplayComponent;

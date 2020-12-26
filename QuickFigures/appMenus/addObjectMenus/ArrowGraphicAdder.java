@@ -18,8 +18,8 @@ package addObjectMenus;
 import java.awt.Color;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ArrowGraphic;
 
 /**An implementation of graphic adder that adds an arrow*/
 public class ArrowGraphicAdder extends BasicGraphicAdder {

@@ -19,9 +19,9 @@ import java.awt.Color;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import genericMontageKit.PanelListElement;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelListElement;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ScalededItem;
 import utilityClassesForObjects.AttachmentPosition;

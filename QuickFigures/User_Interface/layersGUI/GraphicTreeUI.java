@@ -56,7 +56,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
@@ -70,12 +69,13 @@ import externalToolBar.ToolBarManager;
 import graphicalObjects.FileStandIn;
 import graphicalObjects.GraphicEncoder;
 import graphicalObjects.FigureDisplayContainer;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.LayerSpecified;
-import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 import graphicalObjects_LayerTypes.ZoomableGraphicGroup;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -95,7 +95,7 @@ import utilityClassesForObjects.Selectable;
 import utilityClassesForObjects.ShowsOptionsDialog;
 import undo.UndoHideUnhide;
 
-/**The user GUI for the layers window. This is a complex window with manipulations of layer structure 
+/**Creates the GUI for the layers window. This is a complex window with manipulations of layer structure 
   being done when the user drags and drops*/
 public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropTargetListener, ActionListener, MouseListener, WindowListener, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>, MouseMotionListener {
 	
@@ -105,8 +105,14 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	static ArrayList <MiscTreeOptions> otherOps=new ArrayList <MiscTreeOptions>();
 	private FigureDisplayContainer graphicDisplayContainer;
 	
+	JButton upButton=null;//button that moves object backward within the layer and the tree structure
+	JButton downButton=null; //button that moves objects forward within the layer and the tree structure
+	TreeBranchOperations<ZoomableGraphic> tu=new ZoomableGraphicBranchOperator();
 	
+	static boolean operatorsMade=false;
+	private static boolean treeDebugMode=false;
 	
+	/**Creates a panel of buttons that are visible near the bottom of the window*/
 	public JPanel createButtonPanel() {
 		JPanel ButtonPanel=new JPanel(); 
 		ButtonPanel.setLayout(new FlowLayout());
@@ -116,31 +122,11 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 		return ButtonPanel;
 	}
 	
-	static boolean operatorsMade=false;
-	private static boolean treeDebugMode=false;
 	
-	TreeUtil<ZoomableGraphic> tu=new graphicTreeUtil();//new TreeUtil<ZoomableGraphic>();
 	
-	class graphicTreeUtil extends TreeUtil<ZoomableGraphic> {
-		@Override
-		public boolean doesNodeRepresentUserObject(TreeNode node, ZoomableGraphic o) {
-			if (o==null) return false;
-			if (node instanceof DefaultMutableTreeNode) {
-				DefaultMutableTreeNode n2=(DefaultMutableTreeNode) node;
-				if (n2.getUserObject()==o) return true;
-				if (n2.getUserObject() instanceof ZoomableGraphicGroup) {
-					ZoomableGraphicGroup o2=(ZoomableGraphicGroup) n2.getUserObject() ;
-					if (o2.getTheLayer()==o) return true;
-					
-				}
-			}
-			
-			
-			return false;
-		}
-	}
 
-	public TreeUtil<ZoomableGraphic> branchOperation() {
+
+	public TreeBranchOperations<ZoomableGraphic> branchOperation() {
 		return tu;
 	}
 	
@@ -155,8 +141,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 		}
 	
 
-	JButton upButton=null;
-	JButton downButton=null; 
+	
 
 	
 	{
@@ -255,13 +240,17 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	
 	
 	
-	
+	/**The scroll pane containing the tree*/
 	JScrollPane pane=new JScrollPane();
-	//pane.
+	
+	/**The layers window*/
+	JFrame frame=null;
+	
+	/**the JTree*/
 	GraphicSetDisplayTree tree;
 	Selectable s=null;
 	TreePath lastPath=null;
-	JFrame frame=null;
+	
 	private GridBagLayout layout;
 	private GridBagConstraints cons;
 	
@@ -355,7 +344,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 
 	
 	
-	
+	/**Called when the tree selections change, changes the stored items*/
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		if (e==null) return;
@@ -386,13 +375,12 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 		getGraphicDisplayContainer().updateDisplay();
 	}
 	
-	
+	/**Adds child nodes for the given graphic to the tree*/
 public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 		if (z instanceof GraphicLayer) {
 			
 			GraphicLayer z1=(GraphicLayer) z;
-			//IssueLog.log("adding layer "+z1+" to tree");
 			
 			DefaultMutableTreeNode node = branchOperation().getOrCreateChildWithUserObject(t, z, true);
 			ArrayList<ZoomableGraphic> graphics2 = z1.getItemArray();
@@ -407,12 +395,11 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 			DefaultMutableTreeNode node = branchOperation().getOrCreateChildWithUserObject(t, z, true);
 			ZoomableGraphicGroup z1=(ZoomableGraphicGroup) z;
 			
-ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
+			ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
 			
 			for (ZoomableGraphic l: graphics2) {
 				addGraphicToTreeNode(node, l);
 			}
-			//	addGraphicToTreeNode(node, z1.getTheLayer());
 			
 		}
 		

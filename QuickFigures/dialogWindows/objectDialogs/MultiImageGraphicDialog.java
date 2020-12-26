@@ -17,9 +17,9 @@ package objectDialogs;
 
 import java.util.ArrayList;
 
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import undo.Edit;
 

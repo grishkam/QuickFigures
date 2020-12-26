@@ -18,10 +18,10 @@ package applicationAdaptersForImageJ1;
 import java.awt.BasicStroke;
 import java.awt.Rectangle;
 
-import genericMontageKit.OverlayObjectManager;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
 import ij.ImagePlus;
 import ij.gui.ShapeRoi;
+import imageDisplayApp.OverlayObjectManager;
 import utilityClassesForObjects.LocatedObject2D;
 
 /**a specialized selection manager that sets the selections

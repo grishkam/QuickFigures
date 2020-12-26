@@ -19,10 +19,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import channelLabels.ChannelLabelManager;
-import genericMontageKit.PanelList;
-import genericMontageKit.PanelSetter;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
-import graphicalObjects_FigureSpecific.PanelManager;
+import figureOrganizer.PanelList;
+import figureOrganizer.PanelManager;
+import figureOrganizer.PanelSetter;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
 /**A specialized object that contains a source multi-dimensional image

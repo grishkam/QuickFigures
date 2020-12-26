@@ -17,7 +17,7 @@ package keyFrameAnimators;
 
 import java.awt.geom.Point2D;
 
-import graphicalObjects_BasicShapes.PathGraphic;
+import graphicalObjects_Shapes.PathGraphic;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;
 

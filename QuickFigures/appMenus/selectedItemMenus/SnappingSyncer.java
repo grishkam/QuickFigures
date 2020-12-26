@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
 import objectDialogs.MultiSnappingDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.LocatedObject2D;

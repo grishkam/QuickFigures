@@ -19,13 +19,16 @@ import java.awt.Rectangle;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 
+/**interface for tools that ass a shape*/
 public interface ShapeAddingTool {
 
 	String getShapeName();
-
-	ShapeGraphic createShape(Rectangle rectangle);
 	public Icon getIcon() ;
+
+	/**Crates a shape with the given boundind box*/
+	ShapeGraphic createShape(Rectangle rectangle);
+	
 
 }

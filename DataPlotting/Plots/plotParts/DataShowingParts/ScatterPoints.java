@@ -32,7 +32,7 @@ import dataSeries.DataPoint;
 import dataSeries.DataSeries;
 import dialogs.ScatterPointsDialog;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 
 public class ScatterPoints extends DataShowingShape {
 

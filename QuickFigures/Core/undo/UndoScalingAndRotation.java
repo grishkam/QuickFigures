@@ -17,14 +17,14 @@ package undo;
 
 import java.awt.geom.Point2D;
 
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
 import utilityClassesForObjects.AttachmentPosition;
 

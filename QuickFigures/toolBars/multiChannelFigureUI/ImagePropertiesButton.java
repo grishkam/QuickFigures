@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import channelMerging.MultiChannelImage;
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;

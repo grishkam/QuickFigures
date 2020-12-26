@@ -32,9 +32,9 @@ import javax.swing.JComponent;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
-import graphicalObjectHandles.SmartHandle;
-import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.BasicCoordinateConverter;
+import handles.SmartHandle;
+import handles.SmartHandleList;
 import layersGUI.GraphicTreeUI;
 
 /**

@@ -22,9 +22,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import channelLabels.ChannelLabelManager;
-import genericMontageKit.PanelList;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelList;
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;

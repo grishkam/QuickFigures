@@ -33,6 +33,7 @@ import javax.swing.TransferHandler;
 
 import graphicalObjects.ZoomableGraphic;
 
+/**Work in progress. a transfer handler for drag and drops on trees*/
 public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 
 	public static DataFlavor selectedItemListFlavor=new DataFlavor(ArrayList.class, "ArrayList"); {
@@ -84,6 +85,7 @@ public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 		
 		return super.getVisualRepresentation(null);
 	}
+	
 	
 	public 	Image 	getDragImage() {
 		

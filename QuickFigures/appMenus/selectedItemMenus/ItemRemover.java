@@ -23,9 +23,9 @@ import javax.swing.Icon;
 
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import standardDialog.graphics.GraphicDisplayComponent;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;

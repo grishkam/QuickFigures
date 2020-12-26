@@ -33,23 +33,28 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.ZoomableGraphicGroup;
 
-/**The JTree for the tree UI*/
+/**The JTree for the layers window UI*/
 public class GraphicSetDisplayTree extends JTree {
 
 	/**
 	 * 
 	 */
-TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
+TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphic>();
 	
 
-	public TreeUtil<ZoomableGraphic> branchOperation() {
+	public TreeBranchOperations<ZoomableGraphic> branchOperation() {
 		return tu;
 	}
 	
 	private static final long serialVersionUID = 1L;
+	
+	/**The object whose layers are being shown*/
 	private FigureDisplayContainer setDisplayContainer;
 
-	 DefaultMutableTreeNode masternode;
+	/**the top of the tree*/
+	DefaultMutableTreeNode masternode;
+	
+	/**The top level layer*/
 	GraphicLayer baseLayer;
 	
 	/**Creates a J tree for the given container*/
@@ -65,15 +70,9 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 	
 	}
 
-	/***/
+	/**returns the object whose layers are being shown in the tree*/
 	public FigureDisplayContainer getSetDisplayContainer() {
 		return setDisplayContainer;
-	}
-	
-	public DefaultMutableTreeNode makeMasterNode(GraphicLayer baseLayer) {
-		this.baseLayer=baseLayer;
-		masternode = new DefaultMutableTreeNode(baseLayer, true);
-		return masternode ;
 	}
 	
 
@@ -167,7 +166,8 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 		return "Display for "+getSetDisplayContainer();
 	}
 	
-	/**generates a hashmap with the graphics as keys*/
+	/**generates a hashmap with the graphics as keys. This map provides
+	 * a simple way to find the correct tree path for a graphic*/
 	private HashMap<ZoomableGraphic, TreePath> getMap() {
 		HashMap<ZoomableGraphic, TreePath> output=new HashMap<ZoomableGraphic, TreePath>();
 		for(int i=0; i<getRowCount(); i++) {
@@ -175,15 +175,12 @@ TreeUtil<ZoomableGraphic> tu=new TreeUtil<ZoomableGraphic>();
 			ZoomableGraphic item = this.getItemForTreePath(tp);
 			output.put(item, tp);
 		}
-		
-		
 		return output;
 	}
 	
-	
-	/**gets the tree paths for the relevant user objects*/
-	TreePath getPathForUserObject(Object z) {
-		return getMap().get(z);
+	/**gets the tree paths for the relevant graphic */
+	TreePath getPathForUserObject(Object graphic) {
+		return getMap().get(graphic);
 	}
 	
 	/**Adds the given used object to the selection*/

@@ -18,9 +18,9 @@ package iconGraphicalObjects;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.RhombusGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.RhombusGraphic;
 import utilityClassesForObjects.DefaultPaintProvider;
 import utilityClassesForObjects.PaintProvider;
 import utilityClassesForObjects.RectangleEdges;

@@ -17,7 +17,7 @@ package figureFormat;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
 import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;

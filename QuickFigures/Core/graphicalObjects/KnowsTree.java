@@ -16,7 +16,7 @@
 package graphicalObjects;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
-import layersGUI.LayerStructureChangeListener;
+import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 
 public interface KnowsTree {
 	public void setTree(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>  t) ;

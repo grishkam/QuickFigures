@@ -33,9 +33,9 @@ import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 
 import appContext.ImageDPIHandler;
-import graphicalObjectHandles.HasSmartHandles;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import handles.HasSmartHandles;
 import logging.IssueLog;
 import utilityClassesForObjects.Selectable;
 

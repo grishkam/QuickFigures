@@ -19,8 +19,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_LayoutObjects.ObjectDefinedLayoutGraphic;
 import sUnsortedDialogs.ObjectListChoice;
 import selectedItemMenus.SnappingSyncer;
@@ -46,7 +46,7 @@ public class LockGraphicTool extends GraphicTool {
 	
 	
 	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
-		if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastClickMouseEvent().isPopupTrigger()) {
+		if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPopupTrigger()) {
 			
 			SnappingSyncer.createFromArray(allRoi, true);
 			
@@ -93,7 +93,7 @@ public class LockGraphicTool extends GraphicTool {
 	@Override
 	public void onRelease(ImageWrapper gmp, LocatedObject2D roi2) {
 		if (roi2==null) return;
-if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastClickMouseEvent().isPopupTrigger()) {
+if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPopupTrigger()) {
 			
 			
 			return;

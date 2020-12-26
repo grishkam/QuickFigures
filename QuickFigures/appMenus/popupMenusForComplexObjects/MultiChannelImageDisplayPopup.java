@@ -23,10 +23,10 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import fLexibleUIKit.ObjectAction;
-import genericMontageKit.PanelList;
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelList;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;

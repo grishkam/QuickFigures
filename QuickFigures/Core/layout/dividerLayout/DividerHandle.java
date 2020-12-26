@@ -25,8 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
-import graphicalObjectHandles.SmartHandle;
 import graphicalObjects.CordinateConverter;
+import handles.SmartHandle;
 import layout.dividerLayout.DividedPanelLayout.LayoutDivider;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.numbers.NumberInputPanel;

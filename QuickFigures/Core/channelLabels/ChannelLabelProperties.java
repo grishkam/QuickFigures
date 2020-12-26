@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import channelMerging.ChannelEntry;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;

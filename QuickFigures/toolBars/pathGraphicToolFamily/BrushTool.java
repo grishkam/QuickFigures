@@ -20,8 +20,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.NoninvertibleTransformException;
 
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.PathGraphic;
 import icons.TreeIconWrappingToolIcon;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;

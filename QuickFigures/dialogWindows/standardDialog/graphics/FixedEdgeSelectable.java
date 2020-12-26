@@ -20,7 +20,7 @@ import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 
 public class FixedEdgeSelectable extends GraphicSelectable{
 

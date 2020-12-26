@@ -14,8 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import channelMerging.ChannelEntry;
-import genericMontageKit.PanelList;
-import genericMontageKit.PanelListElement;
+import figureOrganizer.PanelList;
+import figureOrganizer.PanelListElement;
 import multiChannelFigureUI.BasicChannelEntryMenuItem;
 
 /**a menu item that adds and removes a channel entry from an panel

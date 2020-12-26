@@ -23,7 +23,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import utilityClassesForObjects.Hideable;
 
 /**a tree cell renderer that will display different icons depending on whether 
@@ -34,6 +34,8 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 	 * 
 	 */
 	static boolean useEyeIcon=true;
+	
+	/**set to true if programmer sants a simplified tree */
 	private static boolean treeDebug=false;
 
 	public Component  	getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -50,7 +52,7 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 		 return output;
 	}
 	
-	
+	/**returns a list cell component for graphical objects*/
 TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		TextGraphicListCellComponent panel=new TextGraphicListCellComponent(value.toString(), selected);
 	panel.setIcon(HasTreeLeafIcon.defaultLeaf);
@@ -76,7 +78,8 @@ TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected
 		}
 		
 		
-		if (node.getUserObject() instanceof TextGraphic)panel.setToImmitate((TextGraphic) node.getUserObject());
+		if (node.getUserObject() instanceof TextGraphic)
+			panel.setToImmitate((TextGraphic) node.getUserObject());
 		if (node.getUserObject() instanceof Hideable) {
 			Hideable h=(Hideable) node.getUserObject();
 			if (h.isHidden()) panel.setIcon(HasTreeLeafIcon.defaultHiddenLeaf);// hidden objects are displayed with a red X

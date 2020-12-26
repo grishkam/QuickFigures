@@ -21,10 +21,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
-import graphicalObjects_BasicShapes.CrossGraphic;
-import graphicalObjects_BasicShapes.CircularGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.RegularPolygonGraphic;
+import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.CrossGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.RegularPolygonGraphic;
 import plotParts.DataShowingParts.ScatterPoints.plotPoint;
 import utilityClassesForObjects.RectangleEdges;
 

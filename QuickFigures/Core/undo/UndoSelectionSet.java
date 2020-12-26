@@ -15,7 +15,7 @@
  *******************************************************************************/
 package undo;
 
-import genericMontageKit.OverlayObjectManager;
+import imageDisplayApp.OverlayObjectManager;
 
 public class UndoSelectionSet extends AbstractUndoableEdit2 {
 

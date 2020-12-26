@@ -19,11 +19,11 @@ import java.util.ArrayList;
 
 import appContext.ImageDPIHandler;
 import channelMerging.ImageDisplayLayer;
-import genericMontageKit.PanelList;
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
-import graphicalObjects_FigureSpecific.PanelManager;
+import figureOrganizer.PanelList;
+import figureOrganizer.PanelManager;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 

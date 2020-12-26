@@ -21,8 +21,8 @@ import org.apache.batik.svggen.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 
 /**An SVG exporter for shapes*/
 public class SVGEXporterForShape extends SVGExporter {

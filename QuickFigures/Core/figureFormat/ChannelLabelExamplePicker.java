@@ -16,8 +16,8 @@
 package figureFormat;
 
 import channelLabels.ChannelLabelTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import undo.AbstractUndoableEdit2;
 import undo.ChannelLabelPropertiesUndo;
 import undo.CombinedEdit;

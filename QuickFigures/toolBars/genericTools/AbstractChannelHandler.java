@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import channelMerging.MultiChannelImage;
-import genericMontageKit.SubFigureOrganizer;
+import figureOrganizer.SubFigureOrganizer;
 import logging.IssueLog;
 
 /**an abstract class for dealing with channels.
@@ -65,7 +65,7 @@ public abstract class AbstractChannelHandler<ImageType> {
 	
 	
 	/**Performs the swap in each of the source stacks of the figure organizer given*/
-	public void performUpdaterSwap(SubFigureOrganizer figure, int choice1, int choice2) {
+	private void performUpdaterSwap(SubFigureOrganizer figure, int choice1, int choice2) {
 
 		figure.supress();//do not want updates of figure panels from the source untill after all the edits of the source image are done
 		try {

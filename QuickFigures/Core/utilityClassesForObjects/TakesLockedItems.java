@@ -19,7 +19,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import graphicalObjectHandles.HasSmartHandles;
+import handles.HasSmartHandles;
 
 public interface TakesLockedItems extends Mortal, Selectable, HasSmartHandles {
 	public void addLockedItem(LocatedObject2D l) ;

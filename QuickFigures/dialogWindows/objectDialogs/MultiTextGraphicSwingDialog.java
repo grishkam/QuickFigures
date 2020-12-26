@@ -18,10 +18,10 @@ package objectDialogs;
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;

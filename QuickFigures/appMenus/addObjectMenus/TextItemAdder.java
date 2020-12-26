@@ -21,13 +21,13 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import graphicalObjects.ImagePanelGraphic;
+import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import utilityClassesForObjects.AttachmentPosition;

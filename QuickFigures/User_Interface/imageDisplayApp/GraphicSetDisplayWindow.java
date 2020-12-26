@@ -49,7 +49,7 @@ import javax.swing.JScrollPane;
 
 import addObjectMenus.PasteItem;
 import applicationAdapters.DisplayedImage;
-import basicAppAdapters.GMouseEvent;
+import basicAppAdapters.GenericCanvasMouseAction;
 import basicMenusForApp.SelectedSetLayerSelector;
 import basicMenusForApp.MenuBarForApp;
 import exportMenus.FlatCreator;
@@ -616,7 +616,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mouseDragged(getDisplaySet(), new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mouseDragged(getDisplaySet(), new GenericCanvasMouseAction(getDisplaySet(), arg0));
 		
 	}
 
@@ -625,7 +625,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mouseMoved(getDisplaySet(), new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mouseMoved(getDisplaySet(), new GenericCanvasMouseAction(getDisplaySet(), arg0));
 		
 	}
 
@@ -634,7 +634,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mouseClicked(getDisplaySet(),new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mouseClicked(getDisplaySet(),new GenericCanvasMouseAction(getDisplaySet(), arg0));
 		
 	}
 
@@ -643,7 +643,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mouseEntered(getDisplaySet(), new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mouseEntered(getDisplaySet(), new GenericCanvasMouseAction(getDisplaySet(), arg0));
 		
 	}
 
@@ -652,7 +652,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mouseExited(getDisplaySet(), new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mouseExited(getDisplaySet(), new GenericCanvasMouseAction(getDisplaySet(), arg0));
 		
 	}
 
@@ -662,7 +662,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		lastPointCordinate = this.getZoomer().getConverter().unTransformP(arg0.getPoint());
 		
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mousePressed(getDisplaySet(), new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mousePressed(getDisplaySet(), new GenericCanvasMouseAction(getDisplaySet(), arg0));
 	
 	}
 
@@ -670,7 +670,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	public void mouseReleased(MouseEvent arg0) {
 
 		if (ToolBarManager.getCurrentTool()==null) return;
-		ToolBarManager.getCurrentTool().mouseReleased(getDisplaySet(), new GMouseEvent(getDisplaySet(), arg0));
+		ToolBarManager.getCurrentTool().mouseReleased(getDisplaySet(), new GenericCanvasMouseAction(getDisplaySet(), arg0));
 		
 	}
 

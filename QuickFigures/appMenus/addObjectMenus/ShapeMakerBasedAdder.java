@@ -17,10 +17,10 @@ package addObjectMenus;
 
 import java.awt.Color;
 
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.PathGraphic;
 import utilityClassesForObjects.BasicShapeMaker;
 import utilityClassesForObjects.CiliaryPocketPathCreator;
 

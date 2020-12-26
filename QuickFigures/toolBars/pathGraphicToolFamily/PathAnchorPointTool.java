@@ -18,7 +18,7 @@ package pathGraphicToolFamily;
 import java.util.ArrayList;
 
 import graphicTools.GraphicTool;
-import graphicalObjects_BasicShapes.PathGraphic;
+import graphicalObjects_Shapes.PathGraphic;
 import objectDialogs.PathPointOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;

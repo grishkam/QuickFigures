@@ -19,9 +19,9 @@ import java.awt.Point;
 import javax.swing.Icon;
 
 import graphicTools.GraphicTool;
-import graphicalObjectHandles.SmartHandle;
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.PathGraphic;
+import handles.SmartHandle;
 import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 

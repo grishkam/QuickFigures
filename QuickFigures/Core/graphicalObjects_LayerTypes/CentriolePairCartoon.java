@@ -17,7 +17,7 @@ package graphicalObjects_LayerTypes;
 
 import java.awt.Color;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 
 public class CentriolePairCartoon extends GraphicGroup {
 

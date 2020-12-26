@@ -18,8 +18,8 @@ package objectDialogs;
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import logging.IssueLog;
 import undo.Edit;
 

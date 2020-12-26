@@ -22,7 +22,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;

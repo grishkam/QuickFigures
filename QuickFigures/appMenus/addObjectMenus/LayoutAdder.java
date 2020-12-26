@@ -16,10 +16,10 @@
 package addObjectMenus;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.SimpleGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_Shapes.SimpleGraphicalObject;
 
 class LayoutAdder extends BasicGraphicAdder {
 	

@@ -23,12 +23,12 @@ import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
-import genericMontageKit.BasicObjectListHandler;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import layout.BasicObjectListHandler;
 import sUnsortedDialogs.ObjectListChoice;
 import utilityClassesForObjects.LocatedObject2D;
 

@@ -28,8 +28,8 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.ImageWrapper;
-import graphicalObjectHandles.SmartHandle;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import handles.SmartHandle;
 import imageDisplayApp.KeyDownTracker;
 import undo.CombinedEdit;
 import undo.UndoManagerPlus;
@@ -65,12 +65,12 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		
 		
 		
-		if (this.getLastClickMouseEvent().isPopupTrigger()) {
+		if (this.getLastMouseEvent().isPopupTrigger()) {
 			JPopupMenu menu = showpopup();
 			
 			
-			Component c = getLastClickMouseEvent().getComponent();
-			 if (menu!=null) menu.show(c, getLastClickMouseEvent().getClickedXScreen(),getLastClickMouseEvent().getClickedYScreen());
+			Component c = getLastMouseEvent().getComponent();
+			 if (menu!=null) menu.show(c, getLastMouseEvent().getClickedXScreen(),getLastMouseEvent().getClickedYScreen());
 			
 		}
 		

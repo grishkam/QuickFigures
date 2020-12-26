@@ -36,27 +36,27 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.CurrentSetLayerSelector;
 import externalToolBar.DragAndDropHandler;
-import genericMontageKit.OverlayObjectManager;
-import graphicalObjectHandles.SmartHandle;
-import graphicalObjectHandles.SmartHandleList;
-import graphicalObjectHandles.HasSmartHandles;
-import graphicalObjectHandles.LockedItemHandle;
-import graphicalObjectHandles.ReshapeHandleList;
-import graphicalObjectHandles.HasHandles;
-import graphicalObjects.CursorFinder;
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.BarGraphic.BarTextGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.CursorFinder;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
+import handles.HasHandles;
+import handles.HasSmartHandles;
+import handles.LockedItemHandle;
+import handles.ReshapeHandleList;
+import handles.SmartHandle;
+import handles.SmartHandleList;
 import icons.GraphicToolIcon;
 import icons.IconSet;
 import imageDisplayApp.CanvasOptions;
+import imageDisplayApp.OverlayObjectManager;
 import imageMenu.CanvasAutoResize;
 import includedToolbars.StatusPanel;
 import layout.PanelLayout;
@@ -119,8 +119,6 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	protected boolean bringSelectedToFront=false;
 	private boolean resizeAfterMousDrags=false;
 	
-	  int orix;
-	  int oriy;
 	
 	  	public static final int DO_NOT_SELECT_IN_GROUP=0, SELECT_IN_GROUP=1;
 	 private static int selectingroup=DO_NOT_SELECT_IN_GROUP;
@@ -159,9 +157,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**is set to true if the point pressed is not within the primary selected object*/
 	private boolean notWithinPrimary;
 
+	private static SmartHandle lastMoveOverHandle;
+
 	/**Sets which object is the currently selected one*/
 	public LocatedObject2D setPrimarySelectedObject(LocatedObject2D roi) {
-		CanvasMouseEvent me = getLastClickMouseEvent();
+		CanvasMouseEvent me = getLastMouseEvent();
 		if (me==null) return setPrimarySelectedObject(false, roi);
 		
 		return setPrimarySelectedObject(me.shfitDown(), roi);
@@ -275,7 +275,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				setSelectedHandleNumber(handleNumber);
 				if (handleNumber>0) {
 					
-					if (press)this.setPrimarySelectedObject(object);
+					if (press)
+						this.setPrimarySelectedObject(object);
+					
 					this.setSelectedHandleNumber(handleNumber);
 					break;
 				}
@@ -313,7 +315,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void mousePressed() {
 		
 		selection=null;
-		CanvasMouseEvent e = getLastClickMouseEvent();
+		CanvasMouseEvent e = getLastMouseEvent();
 		pressX= getClickedCordinateX();
 		pressY= getClickedCordinateY();
 		
@@ -331,7 +333,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		/**what to do in the event of a handle press*/
 						if (sh!=null) {
-							sh.handlePress(this.getLastClickMouseEvent());
+							sh.handlePress(this.getLastMouseEvent());
 							this.setPressedSmartHandle(sh);
 						} else setPressedSmartHandle(null);
 				
@@ -362,12 +364,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if (getPrimarySelectedObject()==null) return;
 			
 			if (getPrimarySelectedObject() instanceof HasHandles &&getSelectedHandleNumber()>NO_HANDLE) {
-				getSelectionObjectAshashangles().handleMouseEvent(this.getLastClickMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_PRESSED, null);
+				getSelectionObjectAshashangles().handleMouseEvent(this.getLastMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_PRESSED, null);
 				createUndoForDragHandle() ;
 			
 			}
 			boolean shift=e.shfitDown();
-			boolean copyObjects = this.getLastClickMouseEvent().altKeyDown();
+			boolean copyObjects = this.getLastMouseEvent().altKeyDown();
 			
 		if (startsSelected && shift && this.handle==NO_HANDLE) {
 			/**when holding down the shift key, the user sometimes wants to deselect an item not select it*/
@@ -378,10 +380,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			 		addedToManager=false;
 			 		
 			 		/**remembers the starting location of the selected item*/
-			if (getPrimarySelectedObject()!=null) {
-				orix=(int)getPrimarySelectedObject().getBounds().getX(); 
-				oriy=(int) getPrimarySelectedObject().getBounds().getY();
-				}
+			
 		this.getObjectGroupHandleList();
 		this.getCanvasHandleList();
 			if(this.textEditMode() &&this.handle<0 &&!e.isPopupTrigger()) {
@@ -511,7 +510,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		}
 		
 		
-		 Component c = getLastClickMouseEvent().getComponent();
+		 Component c = getLastMouseEvent().getComponent();
 		 if (menu!=null) menu.show(c, e.getClickedXScreen(), e.getClickedYScreen());
 	}
 
@@ -594,32 +593,39 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		updateCursorIfOverhandle();
 		
+		SmartHandle currentHandle = this.findSelectedSmartHandle();
+		if (currentHandle!=null)
+			currentHandle.mouseMovedOver(this.getLastMouseEvent());
+		
+		if (currentHandle!=lastMoveOverHandle) {
+			if (     currentHandle!=null) 	 currentHandle.mouseEnterHandle(getLastMouseEvent());
+			if (lastMoveOverHandle!=null) lastMoveOverHandle.mouseExitHandle(getLastMouseEvent());
+		}
+		lastMoveOverHandle=currentHandle;
+		
 		StatusPanel.updateStatus("("+getClickedCordinateX()+", "+getClickedCordinateY()+")");
 		
 		
 		/**for certain subclasses, changes the selected item as the mouse moves*/
 		if (!realtimeshow) return;
 		
-		//establishClickedHandle();
+		//TODO: determine if this next part is necesary and delete
+				/**
 		
 		LocatedObject2D roi2 =  getObjectAt(getImageClicked(), getClickedCordinateX(),getClickedCordinateY());
 		
 		
 		
-		
 		if (roi2!=getPrimarySelectedObject()&&getSelectedHandleNumber()==-1) {
 			setPrimarySelectedObject(roi2);
+			IssueLog.log("Obsolete method called");
 		} else select(getPrimarySelectedObject());
 		if (roi2==null) setPrimarySelectedObject(null);
-			//roi1=this.getObjecthandler().getClickedRoi(imp, onscreenx, onscreeny);
 			
 			if (getPrimarySelectedObject()==null) return;
 			
 			
-		
-			if (getPrimarySelectedObject()!=null) {
-				orix=(int)getPrimarySelectedObject().getBounds().getX(); oriy=(int) getPrimarySelectedObject().getBounds().getY();
-				}
+		*/
 			
 			
 			
@@ -633,6 +639,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			super.getImageDisplayWrapperClick().setCursor(getNormalCursor());
 		}
 		else 	super.getImageDisplayWrapperClick().setCursor(getHandleCursor());
+		
 	}
 	
 	
@@ -742,7 +749,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		GraphicItemOptionsDialog.setCurrentImage(getImageClicked());
 		if (getPrimarySelectedObject() instanceof HasHandles &&handle>-1) {
-			getSelectionObjectAshashangles().handleMouseEvent(getLastClickMouseEvent(), handle, getButton(),clickCount(), MouseEvent.MOUSE_CLICKED, null);
+			getSelectionObjectAshashangles().handleMouseEvent(getLastMouseEvent(), handle, getButton(),clickCount(), MouseEvent.MOUSE_CLICKED, null);
 			
 		} else
 		if (getPrimarySelectedObject() instanceof BasicGraphicalObject) {
@@ -750,7 +757,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			//if (getSelectedObject().dropObject(super.getLastClickMouseEvent(), getClickedCordinateX(), getClickedCordinateY())==null) ;
 			
 						BasicGraphicalObject b=(BasicGraphicalObject) getPrimarySelectedObject();
-						b.handleMouseEvent(this.getLastClickMouseEvent(), handle, getButton(), clickCount(), MouseEvent.MOUSE_CLICKED);
+						b.handleMouseEvent(this.getLastMouseEvent(), handle, getButton(), clickCount(), MouseEvent.MOUSE_CLICKED);
 			
 			
 		}
@@ -1092,7 +1099,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	protected boolean isMetaOrControlDown() {
 		boolean performSnap;
 		if ( IssueLog.isWindows()){
-			performSnap=this.getLastClickMouseEvent().isControlDown();
+			performSnap=this.getLastMouseEvent().isControlDown();
 		} else {performSnap=this.getLastDragOrLastReleaseMouseEvent().isMetaDown();}//altKeyDown();
 		return performSnap;
 	}
@@ -1126,7 +1133,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			
 			if (sHandle!=null) {
 				LockedItemHandle demiVersion = sHandle.createDemiVersion();
-				demiVersion.handlePress(getLastClickMouseEvent());
+				demiVersion.handlePress(getLastMouseEvent());
 				manager.setSelectionGraphic3(SmartHandleList.createList( demiVersion));
 				if (this.getPressedSmartHandle()==null)this.setPressedSmartHandle(demiVersion);
 			}

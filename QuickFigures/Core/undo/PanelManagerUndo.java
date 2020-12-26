@@ -18,11 +18,11 @@ package undo;
 import java.util.ArrayList;
 
 import channelMerging.ImageDisplayLayer;
-import genericMontageKit.PanelList;
-import genericMontageKit.PanelListElement;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_FigureSpecific.PanelManager;
+import figureOrganizer.PanelList;
+import figureOrganizer.PanelListElement;
+import figureOrganizer.PanelManager;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 
 /**An undo for changes made to many parts of a split channel figure. since those edits are ofter done by methods in the
  *  panel manager class, it is called the panel manager undo.

@@ -17,8 +17,8 @@ package objectDialogs;
 
 import java.awt.GridBagConstraints;
 
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import standardDialog.ObjectEditEvent;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;

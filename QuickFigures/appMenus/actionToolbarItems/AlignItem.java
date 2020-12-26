@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import layout.basicFigure.LayoutSpaces;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;

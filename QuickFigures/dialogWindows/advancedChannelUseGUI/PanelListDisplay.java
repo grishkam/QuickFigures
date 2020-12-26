@@ -46,10 +46,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import channelMerging.ChannelEntry;
-import genericMontageKit.PanelList;
-import genericMontageKit.PanelListElement;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelManager;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelList;
+import figureOrganizer.PanelListElement;
+import figureOrganizer.PanelManager;
 import standardDialog.colors.ColorDimmingBox;
 
 

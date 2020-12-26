@@ -22,13 +22,13 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
+import figureOrganizer.FigureScaler;
 import genericTools.Object_Mover;
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_FigureSpecific.FigureScaler;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.IconSet;
+import layout.BasicObjectListHandler.LocatedObjectFilter;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import standardDialog.StandardDialog;

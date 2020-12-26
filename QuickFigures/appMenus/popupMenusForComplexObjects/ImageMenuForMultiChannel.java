@@ -18,8 +18,8 @@ package popupMenusForComplexObjects;
 import javax.swing.JMenu;
 
 import channelMerging.MultiChannelSlotDialog;
-import genericMontageKit.PanelList;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelList;
 import iconGraphicalObjects.ChannelUseIcon;
 
 public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {

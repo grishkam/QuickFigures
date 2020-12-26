@@ -23,9 +23,9 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
-import genericMontageKit.OverlayObjectManager;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
+import imageDisplayApp.OverlayObjectManager;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdgePosisions;
 

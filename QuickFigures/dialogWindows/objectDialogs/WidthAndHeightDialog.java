@@ -15,7 +15,7 @@
  *******************************************************************************/
 package objectDialogs;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import standardDialog.numbers.NumberInputPanel;
 
 public class WidthAndHeightDialog extends ShapeGraphicOptionsSwingDialog {

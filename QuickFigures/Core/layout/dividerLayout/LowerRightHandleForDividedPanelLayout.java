@@ -18,7 +18,7 @@ package layout.dividerLayout;
 import java.awt.Color;
 import java.awt.Point;
 
-import graphicalObjectHandles.SmartHandle;
+import handles.SmartHandle;
 import layout.dividerLayout.DividedPanelLayout.layoutDividedArea;
 
 public class LowerRightHandleForDividedPanelLayout extends SmartHandle {

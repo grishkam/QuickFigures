@@ -24,7 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
-import graphicalObjects_BasicShapes.ArrowGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
 import menuUtil.SmartPopupJMenu;
 import undo.UndoScalingAndRotation;
 import menuUtil.PopupMenuSupplier;

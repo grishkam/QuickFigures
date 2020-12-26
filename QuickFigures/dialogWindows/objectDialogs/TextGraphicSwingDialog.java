@@ -20,9 +20,9 @@ import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.CanvasOptions;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;

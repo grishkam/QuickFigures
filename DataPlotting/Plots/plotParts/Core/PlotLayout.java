@@ -23,11 +23,11 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
 import genericPlot.BasicPlot;
-import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import handles.SmartHandleList;
+import layout.BasicObjectListHandler.LocatedObjectFilter;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutSpaces;

@@ -19,12 +19,11 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import graphicalObjects_BasicShapes.CircularGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import utilityClassesForObjects.DefaultPaintProvider;
-import utilityClassesForObjects.PaintProvider;
 import utilityClassesForObjects.RectangleEdgePosisions;
 import utilityClassesForObjects.RectangleEdges;
 

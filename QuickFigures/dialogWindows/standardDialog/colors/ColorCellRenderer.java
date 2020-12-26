@@ -32,7 +32,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import graphicalObjects_BasicShapes.ArrowGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
 import infoStorage.BasicMetaDataHandler;
 import logging.IssueLog;
 import standardDialog.graphics.GraphicDisplayComponent;

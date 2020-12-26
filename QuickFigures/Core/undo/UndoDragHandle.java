@@ -21,8 +21,8 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjectHandles.HasHandles;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import handles.HasHandles;
 
 
 /**An undoable edit for a handle drag. this simply drags the handle back to its original location.

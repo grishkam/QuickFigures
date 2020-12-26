@@ -18,8 +18,8 @@ package applicationAdapters;
 import java.awt.Cursor;
 import java.awt.Window;
 
-import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
+import handles.SmartHandleList;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.Selectable;
 

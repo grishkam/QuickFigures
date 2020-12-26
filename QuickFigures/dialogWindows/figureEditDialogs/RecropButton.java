@@ -22,8 +22,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+import figureOrganizer.MultichannelDisplayLayer;
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import logging.IssueLog;
 import objectDialogs.CroppingDialog;
 import undo.CombinedEdit;

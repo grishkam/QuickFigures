@@ -27,7 +27,7 @@ import java.util.HashMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import graphicalObjects_BasicShapes.PathGraphic;
+import graphicalObjects_Shapes.PathGraphic;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.ArrowSwingDialog;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;

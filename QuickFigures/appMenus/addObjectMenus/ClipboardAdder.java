@@ -25,8 +25,8 @@ import java.io.IOException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.rtf.RTFEditorKit;
 
-import graphicalObjects.BufferedImageGraphic;
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.BufferedImageGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 
 public class ClipboardAdder extends FileImageAdder {

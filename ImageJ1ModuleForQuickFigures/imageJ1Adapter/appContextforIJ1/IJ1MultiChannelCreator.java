@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.MultiChannelImage;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
 
 public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	

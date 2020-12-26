@@ -25,8 +25,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
+import graphicalObjects.BasicGraphicalObject;
+import graphicalObjects_Shapes.RectangularGraphic;
 import menuUtil.SmartJMenu;
 
 public class GraphicJMenuItem extends JMenuItem {

@@ -24,11 +24,10 @@ import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 
-import graphicalObjects.BufferedImageGraphic;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import logging.IssueLog;
+import graphicalObjects_SpecialObjects.BufferedImageGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import messages.ShowMessage;
 
 /**Adds a simple image panel by opening a file with ImageIO*/

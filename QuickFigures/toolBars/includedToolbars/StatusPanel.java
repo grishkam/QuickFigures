@@ -25,8 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
 import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**A panel for displaying the current status of an ongoing process.

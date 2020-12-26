@@ -17,7 +17,7 @@ package objectDialogs;
 
 import java.util.ArrayList;
 
-import graphicalObjects.HasTextInsets;
+import graphicalObjects_SpecialObjects.HasTextInsets;
 import utilityClasses1.ArraySorter;
 
 public class TextInsetsDialog extends GraphicItemOptionsDialog {

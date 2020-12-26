@@ -26,7 +26,7 @@ import java.util.HashMap;
 import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
 import dialogs.MeanBarDialog;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import plotParts.Core.PlotCordinateHandler;
 
 public class DataBarShape extends DataShowingShape implements SeriesLabelPositionAnchor {

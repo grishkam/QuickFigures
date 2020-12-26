@@ -17,12 +17,12 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
-import genericMontageKit.BasicObjectListHandler;
+import figureOrganizer.FigureScaler;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_FigureSpecific.FigureScaler;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import layout.BasicObjectListHandler;
 import sUnsortedDialogs.ScaleAboutDialog;
 import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;

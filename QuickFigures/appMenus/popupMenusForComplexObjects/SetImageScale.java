@@ -19,9 +19,9 @@ import java.awt.event.ActionEvent;
 
 import applicationAdapters.HasScaleInfo;
 import fLexibleUIKit.ObjectAction;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
 import sUnsortedDialogs.ScaleResetListener;
 import sUnsortedDialogs.ScaleSettingDialog;
 import undo.AbstractUndoableEdit2;

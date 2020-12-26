@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartPopupJMenu;
 

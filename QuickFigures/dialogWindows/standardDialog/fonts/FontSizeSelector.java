@@ -30,8 +30,8 @@ import java.awt.geom.Point2D;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import graphicalObjectHandles.TextHandle;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
+import handles.SmartHandleForText;
 import standardDialog.graphics.GraphicComponent;
 
 public class FontSizeSelector  extends GraphicComponent implements MouseListener, MouseMotionListener{
@@ -82,7 +82,7 @@ public class FontSizeSelector  extends GraphicComponent implements MouseListener
 		Point2D p = this.getCord().unTransformClickPoint(arg0);//.getInverse().transformP(new Point(arg0.getX(), arg0.getY()));
 		if(handleclick>0) {
 			textItem.handleMove(handleclick, getMousePosition(), new Point( (int)p.getX(), (int)p.getY()));
-			if (TextHandle.TEXT_FONT_SIZE_HANDLE==handleclick) {
+			if (SmartHandleForText.TEXT_FONT_SIZE_HANDLE==handleclick) {
 				double newsize = textItem.getBaseLineStart().getY()-p.getY();
 				textItem.setFontSize((int) newsize);
 			}

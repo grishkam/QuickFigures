@@ -27,11 +27,11 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import graphicalObjects.BasicCoordinateConverter;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 
-/**Class for rendering tree cells*/
+/**Class for rendering tree cells of the Layers GUI*/
 public class TextGraphicListCellComponent extends JComponent {
 
 	/**

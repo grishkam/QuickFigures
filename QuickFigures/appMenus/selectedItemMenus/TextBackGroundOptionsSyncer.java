@@ -17,7 +17,7 @@ package selectedItemMenus;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
 public class TextBackGroundOptionsSyncer extends BasicMultiSelectionOperator{

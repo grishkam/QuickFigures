@@ -25,12 +25,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import fLexibleUIKit.MenuItemExecuter;
-import graphicalObjectHandles.LockedItemHandle;
-import graphicalObjectHandles.SmartHandle;
-import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.RectangularGraphic;
+import handles.LockedItemHandle;
+import handles.RectangularShapeSmartHandle;
+import handles.SmartHandle;
+import handles.SmartHandleList;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.RectangleGraphicOptionsDialog;
@@ -41,6 +42,7 @@ import utilityClassesForObjects.LockedItemList;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.TakesLockedItems;
 
+/**A special rectangle that defines and draws the plot area*/
 public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePopupMenu, TakesLockedItems {
 
 	/**
@@ -93,13 +95,15 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		
 	}
 	
-	@Override
-	public void handleSmartMove(int handlenum, Point p1, Point p2) {
-		if (handlenum==10)return;
-		super.handleSmartMove(handlenum, p1, p2);
-		
-		
-		if (handlenum==RectangleEdges.CENTER) {
+	
+
+	/**
+	 * @param handleNumber
+	 * @param p1
+	 * @param p2
+	 */
+	public void afterHandleMove(int handleNumber, Point p1, Point p2) {
+		if (handleNumber==RectangleEdges.CENTER) {
 			this.setLocationType(RectangleEdges.CENTER);
 			Point2D l = this.getLocation();
 			double dx = p2.getX()-l.getX();
@@ -112,7 +116,6 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		
 		plotArea.onAxisUpdate();
 		
-		//plotArea.fullPlotUpdate();
 	}
 	
 	class SpecialOptionDialog extends RectangleGraphicOptionsDialog {

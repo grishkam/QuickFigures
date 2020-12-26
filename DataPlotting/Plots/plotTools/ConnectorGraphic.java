@@ -25,7 +25,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
 import utilityClassesForObjects.BasicStrokedItem;
 
 public class ConnectorGraphic extends BasicShapeGraphic {

@@ -21,6 +21,6 @@ import graphicalObjects.ZoomableGraphic;
 
 public interface GraphicHolder {
 	
-	/**returns all the held graphics. experimental*/
+	/**returns all the held graphics.*/
 	public ArrayList<ZoomableGraphic> getAllHeldGraphics();
 }

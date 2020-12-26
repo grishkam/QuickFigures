@@ -19,10 +19,10 @@ import java.util.ArrayList;
 
 import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWrapper;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import layersGUI.LayerStructureChangeListener;
+import graphicalObjects_LayerTypes.LayerStructureChangeListener;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.plasticPanels.ObjectListPanelLayout;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.ObjectPanelLayoutPanelMenu;

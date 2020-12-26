@@ -23,8 +23,8 @@ import java.util.Collection;
 import javax.swing.JMenuItem;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import genericMontageKit.BasicObjectListHandler;
 import layersGUI.HasTreeLeafIcon;
+import layout.BasicObjectListHandler;
 import menuUtil.SmartJMenu;
 import utilityClassesForObjects.LocatedObject2D;
 

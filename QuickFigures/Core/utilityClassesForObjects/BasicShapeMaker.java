@@ -21,7 +21,7 @@ import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 
 import applicationAdapters.ToolbarTester;
-import graphicalObjects_BasicShapes.PathGraphic;
+import graphicalObjects_Shapes.PathGraphic;
 import imageDisplayApp.GraphicContainingImage;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import standardDialog.DialogItemChangeEvent;

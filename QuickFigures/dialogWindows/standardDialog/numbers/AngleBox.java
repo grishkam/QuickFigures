@@ -29,9 +29,9 @@ import java.awt.geom.Point2D;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import graphicalObjects_BasicShapes.BarGraphic;
+import graphicalObjects.BasicGraphicalObject;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import standardDialog.graphics.GraphicComponent;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 
 /**A component that allows a user to input an angle by dragging the mouse at the angles positions
   the graphic indicates the selected angle with lines*/

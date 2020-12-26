@@ -27,7 +27,7 @@ import javax.swing.Icon;
 
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects.BasicCoordinateConverter;
-import graphicalObjects_BasicShapes.ArrowGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
 
 /**interface for tool icons that are placed in the toolbar
    */

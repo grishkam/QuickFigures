@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import externalToolBar.AbstractExternalToolset;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import objectDialogs.TextGraphicSwingDialog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;

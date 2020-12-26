@@ -19,8 +19,8 @@ import utilityClassesForObjects.ObjectContainer;
 
 import java.awt.Window;
 
-import genericMontageKit.OverlayObjectManager;
 import graphicalObjects.FigureDisplayContainer;
+import imageDisplayApp.OverlayObjectManager;
 
 /**a general interface for images and figures.
  The methods in this interface and superinterfaces must work in order for the basics of the layouts

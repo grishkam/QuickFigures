@@ -17,7 +17,7 @@ package keyFrameAnimators;
 
 import java.awt.Color;
 
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 
 public class ImagePanelGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnimator {
 

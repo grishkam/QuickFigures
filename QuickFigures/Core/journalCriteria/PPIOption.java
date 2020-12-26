@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import appContext.ImageDPIHandler;
-import graphicalObjects.ImagePanelGraphic;
+import figureOrganizer.PanelManager;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_FigureSpecific.PanelManager;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import multiChannelFigureUI.ChannelPanelEditingMenu;

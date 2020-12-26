@@ -20,7 +20,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
 
 import fLexibleUIKit.ObjectAction;
-import graphicalObjects_FigureSpecific.FigureScaler;
+import figureOrganizer.FigureScaler;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import imageMenu.CanvasAutoResize;
 import menuUtil.SmartJMenu;

@@ -18,8 +18,8 @@ package graphicalObjects;
 import java.awt.Dimension;
 
 import applicationAdapters.ImageWrapper;
-import genericMontageKit.OverlayObjectManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import imageDisplayApp.OverlayObjectManager;
 import undo.UndoManagerPlus;
 
 /**A super interface for classed that display the figures on a canvas.*/

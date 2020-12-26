@@ -26,15 +26,15 @@ import javax.swing.Icon;
 
 import actionToolbarItems.AlignItem;
 import actionToolbarItems.DistributeItems;
-import genericMontageKit.BasicObjectListHandler;
+import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;

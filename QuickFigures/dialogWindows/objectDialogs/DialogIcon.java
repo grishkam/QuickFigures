@@ -20,9 +20,9 @@ import java.awt.Rectangle;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import standardDialog.graphics.GraphicDisplayComponent;
 
 public class DialogIcon {

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.BasicMenuItemForObj;
-import genericMontageKit.BasicObjectListHandler;
+import layout.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
 import utilityClassesForObjects.LocatedObject2D;
 

@@ -24,8 +24,8 @@ import javax.swing.JPopupMenu;
 
 import fLexibleUIKit.ObjectAction;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ShapeGraphic;
 import menuUtil.SmartPopupJMenu;
 import undo.Edit;
 import utilityClassesForObjects.LocatedObject2D;

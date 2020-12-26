@@ -29,12 +29,12 @@ import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.DragAndDropHandler;
-import genericMontageKit.BasicObjectListHandler;
 import icons.IconSet;
 import imageDisplayApp.CanvasOptions;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import includedToolbars.ObjectToolset1;
+import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
 import undo.UndoManagerPlus;
@@ -227,7 +227,7 @@ public class BasicToolBit implements ToolBit {
 
 	}
 	
-	public CanvasMouseEvent getLastClickMouseEvent() {
+	public CanvasMouseEvent getLastMouseEvent() {
 		return this.getToolCore(). getLastMouseEvent();
 	}
 	

@@ -29,7 +29,7 @@ import standardDialog.strings.InfoDisplayPanel;
 import utilityClassesForObjects.PointsToFile;
 import utilityClassesForObjects.ShowsOptionsDialog;
 
-/**A reference to a specific file. Allows */
+/**A reference to a specific file. Allow the user to input a list of files into the JTree*/
 public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptionsDialog, PointsToFile {
 
 	

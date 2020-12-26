@@ -17,7 +17,7 @@ package keyFrameAnimators;
 
 import java.awt.Color;
 
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 
 public class ShapeGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnimator {
 

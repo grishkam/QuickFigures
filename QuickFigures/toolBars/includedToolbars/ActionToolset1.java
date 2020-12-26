@@ -36,7 +36,6 @@ import genericTools.GeneralTool;
 import genericTools.ToolBit;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
-import icons.IconSet;
 import icons.IconWrappingToolIcon;
 import imageMenu.ZoomFit;
 import selectedItemMenus.MultiSelectionOperator;

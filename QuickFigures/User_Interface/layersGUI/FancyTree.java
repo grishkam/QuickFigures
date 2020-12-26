@@ -15,6 +15,8 @@
  *******************************************************************************/
 package layersGUI;
 
+/**A tree option for changing tree display modes between the simple file system to 
+  on with many different icons. created for debugging and not interesting to users*/
 public class FancyTree implements MiscTreeOptions {
 
 	@Override

@@ -16,9 +16,9 @@
 package figureFormat;
 
 import channelLabels.ChannelLabelTextGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import undo.AbstractUndoableEdit2;

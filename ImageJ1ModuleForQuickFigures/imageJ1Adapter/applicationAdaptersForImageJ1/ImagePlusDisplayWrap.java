@@ -26,8 +26,8 @@ import java.awt.Window;
 import applicationAdapters.ImageWrapper;
 import channelMerging.MultiChannelDisplayWrapper;
 import channelMerging.MultiChannelImage;
-import graphicalObjectHandles.SmartHandleList;
 import graphicalObjects.CordinateConverter;
+import handles.SmartHandleList;
 
 /**See interface.  Very few of the methods from the interfaces 
  need be implemented for this class to perform its function so most are not implemented.

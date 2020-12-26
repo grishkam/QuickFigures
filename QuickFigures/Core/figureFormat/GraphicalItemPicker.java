@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
+import figureOrganizer.MultichannelDisplayLayer;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import utilityClassesForObjects.ObjectContainer;
 

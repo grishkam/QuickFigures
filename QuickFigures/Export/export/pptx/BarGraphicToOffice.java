@@ -22,7 +22,7 @@ import org.apache.poi.xslf.usermodel.XSLFFreeformShape;
 import org.apache.poi.xslf.usermodel.XSLFGroupShape;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 
-import graphicalObjects_BasicShapes.BarGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 
 /**subclass of ShapeToOffice that creates a scale bar in powerpoint*/
 public class BarGraphicToOffice extends ShapeToOffice {

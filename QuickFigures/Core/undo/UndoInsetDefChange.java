@@ -15,7 +15,7 @@
  *******************************************************************************/
 package undo;
 
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 
 public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 

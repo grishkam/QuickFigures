@@ -19,10 +19,10 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import genericMontageKit.BasicObjectListHandler;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
+import layout.BasicObjectListHandler;
 import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoTakeLockedItem;

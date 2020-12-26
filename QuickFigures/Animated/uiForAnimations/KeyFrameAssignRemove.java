@@ -23,9 +23,9 @@ import javax.swing.Icon;
 import animations.KeyFrameCompatible;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import standardDialog.graphics.GraphicDisplayComponent;
 
 public class KeyFrameAssignRemove extends BasicTimeLineOperator{

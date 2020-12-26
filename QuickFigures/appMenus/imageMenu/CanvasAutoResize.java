@@ -23,7 +23,7 @@ import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import basicMenusForApp.MenuItemForObj;
-import genericMontageKit.BasicObjectListHandler;
+import layout.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
 
 public class CanvasAutoResize implements MenuItemForObj {

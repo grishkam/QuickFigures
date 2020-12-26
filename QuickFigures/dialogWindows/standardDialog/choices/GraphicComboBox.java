@@ -20,10 +20,10 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.SimpleGraphicalObject;
 import standardDialog.graphics.GraphicDisplayComponent;
-import graphicalObjects_BasicShapes.SimpleGraphicalObject;
+import graphicalObjects_SpecialObjects.TextGraphic;
 
 import java.awt.Color;
 import java.awt.Component;

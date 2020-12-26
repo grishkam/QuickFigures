@@ -15,7 +15,7 @@
  *******************************************************************************/
 package objectDialogs;
 
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 
 public class StrokeOnlySwingDialog extends ShapeGraphicOptionsSwingDialog{
 

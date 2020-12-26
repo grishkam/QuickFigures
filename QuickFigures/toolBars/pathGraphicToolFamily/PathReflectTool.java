@@ -24,12 +24,12 @@ import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
 import graphicTools.GraphicTool;
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.PathEditUndo;

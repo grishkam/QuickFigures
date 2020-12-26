@@ -17,8 +17,8 @@ package keyFrameAnimators;
 
 import java.awt.geom.Point2D.Double;
 
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic.ArrowHead;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.ArrowGraphic.ArrowHead;
 
 /**Animator for animating changes to arrows*/
 public class ArrowGraphicKeyFrameAnimator extends ShapeGraphicKeyFrameAnimator {

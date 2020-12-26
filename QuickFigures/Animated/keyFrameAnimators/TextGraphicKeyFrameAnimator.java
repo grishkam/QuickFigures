@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.Point2D;
 
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 
 public class TextGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFrameAnimator {
 

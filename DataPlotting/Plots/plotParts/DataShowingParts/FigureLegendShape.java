@@ -23,8 +23,8 @@ import java.awt.geom.Line2D;
 
 import genericPlot.BasicDataSeriesGroup;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BasicShapes.BasicShapeGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 
 public class FigureLegendShape extends RectangularGraphic implements SeriesLabelPositionAnchor {
 

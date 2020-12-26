@@ -26,16 +26,16 @@ import channelMerging.MultiChannelDisplayWrapper;
 import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import externalToolBar.DragAndDropHandler;
-import genericMontageKit.PanelListElement;
+import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelListElement;
+import figureOrganizer.PanelManager;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import genericTools.BasicToolBit;
 import genericTools.MoverDragHandler;
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
-import graphicalObjects_FigureSpecific.PanelGraphicInsetDefiner;
-import graphicalObjects_FigureSpecific.PanelManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
@@ -79,8 +79,8 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 		stackSlicePressed=getElementAtPoint(impw, this.getClickedCordinateX(), this.getClickedCordinateY());
 		
 		
-		CanvasMouseEvent me = super.getLastClickMouseEvent();
-		Object source = super.getLastClickMouseEvent().getSource();
+		CanvasMouseEvent me = super.getLastMouseEvent();
+		Object source = super.getLastMouseEvent().getSource();
 		if (me.isPopupTrigger()||me.altKeyDown()) {
 			showthePopup((Component)source, me.getClickedXScreen(), me.getClickedYScreen()) ;
 		}

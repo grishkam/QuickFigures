@@ -22,8 +22,8 @@ import java.awt.geom.Point2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
-import graphicalObjects_BasicShapes.ArrowGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ArrowGraphic;
 import icons.TreeIconWrappingToolIcon;
 import utilityClassesForObjects.LocatedObject2D;
 

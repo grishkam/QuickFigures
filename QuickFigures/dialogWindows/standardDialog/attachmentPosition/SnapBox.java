@@ -28,9 +28,9 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 
 import graphicalObjects.*;
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import standardDialog.graphics.GraphicSelectable;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.AttachmentPosition;

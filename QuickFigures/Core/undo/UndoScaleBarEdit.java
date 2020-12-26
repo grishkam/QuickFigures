@@ -15,7 +15,7 @@
  *******************************************************************************/
 package undo;
 
-import graphicalObjects_BasicShapes.BarGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 
 public class UndoScaleBarEdit extends AbstractUndoableEdit2 {
 

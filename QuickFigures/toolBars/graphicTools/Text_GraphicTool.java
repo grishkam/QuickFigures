@@ -35,13 +35,13 @@ import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
 import externalToolBar.AbstractExternalToolset;
-import genericMontageKit.BasicObjectListHandler;
-import graphicalObjects.CursorFinder;
 import graphicalObjects.KnowsParentLayer;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_SpecialObjects.CursorFinder;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
 import icons.TreeIconWrappingToolIcon;
+import layout.BasicObjectListHandler;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.ShapesUtil;
 import utilityClassesForObjects.AttachmentPosition;
@@ -168,7 +168,7 @@ public class Text_GraphicTool extends GraphicTool {
 	@Override
 	public void mouseDragged() {
 		
-		if (this.shiftDown()||this.altKeyDown() ||this.getLastClickMouseEvent().isControlDown()||this.getLastClickMouseEvent().isMetaDown())
+		if (this.shiftDown()||this.altKeyDown() ||this.getLastMouseEvent().isControlDown()||this.getLastMouseEvent().isMetaDown())
 				{super.mouseDragged(); return;}
 		
 		if (lastText!=null)  {

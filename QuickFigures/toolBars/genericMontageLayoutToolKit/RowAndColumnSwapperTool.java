@@ -14,7 +14,7 @@
  *    limitations under the License.
  *******************************************************************************/
 package genericMontageLayoutToolKit;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
+import figureOrganizer.FigureOrganizingLayerPane;
 import icons.IconSet;
 import layout.basicFigure.LayoutSpaces;
 

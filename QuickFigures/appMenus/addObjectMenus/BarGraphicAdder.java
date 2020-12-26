@@ -20,8 +20,8 @@ import java.awt.Insets;
 import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.ScaleInfo;
 

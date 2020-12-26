@@ -17,9 +17,10 @@ package channelMerging;
 
 
 import applicationAdapters.PixelWrapper;
-import genericMontageKit.PanelListElement;
+import figureOrganizer.PanelListElement;
 
-/**Implementations of ChannelMerger merges several channels together into an RGB image*/
+/**Implementations of ChannelMerger merges several channels together into an RGB image
+ * that can be displayed in a panel*/
 public interface ChannelMerger {
 	
 	/**Merges the channels listed in entry to generate a merged RGB.

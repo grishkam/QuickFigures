@@ -18,8 +18,8 @@ package graphicTools;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.RegularPolygonGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.RegularPolygonGraphic;
 import icons.TreeIconWrappingToolIcon;
 
 /**A tool bit for drawing regular polygons*/

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import animations.Animation;
 import animations.BasicKeyFrame;
 import animations.KeyFrameAnimation;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
+import graphicalObjects.BasicGraphicalObject;
 import utilityClassesForObjects.Hideable;
 
 /**A simple implementation of animation interfaces that acts as a superclass for other classes*/

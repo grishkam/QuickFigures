@@ -17,10 +17,11 @@ package fileListOpps;
 
 import java.io.File;
 import java.util.ArrayList;
-import genericMontageKit.BasicObjectListHandler;
+
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import imageMenu.CombineImages;
+import layout.BasicObjectListHandler;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import ultilInputOutput.FileChoiceUtil;

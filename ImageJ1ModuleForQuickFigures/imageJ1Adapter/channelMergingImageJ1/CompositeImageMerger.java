@@ -33,8 +33,8 @@ import applicationAdaptersForImageJ1.ProcessorWrapper;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelMerger;
 import channelMerging.ChannelUseInstructions;
-import genericMontageKit.PanelListElement;
-import graphicalObjects.ImagePanelGraphic;
+import figureOrganizer.PanelListElement;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 
 /**this class handles the merging of multiple channels into rgb images that 
  * are to be displayed in image panels*/

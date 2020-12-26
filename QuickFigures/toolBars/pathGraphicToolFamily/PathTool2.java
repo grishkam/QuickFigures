@@ -22,8 +22,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.PathGraphic;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.PathPoint;
 import utilityClassesForObjects.PathPointList;

@@ -21,12 +21,12 @@ import java.awt.Rectangle;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.CircularGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**this class consists of static methods for creating a few of the icons used*/

@@ -19,8 +19,9 @@ import externalToolBar.DragAndDropHandler;
 import genericMontageKit.*;
 import genericTools.BasicToolBit;
 import genericTools.MoverDragHandler;
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import imageDisplayApp.OverlayObjectManager;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutEditorDialogs;
@@ -181,7 +182,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		}
 		
 		
-	try{	performDragEdit(this.getLastClickMouseEvent().shfitDown());} catch (Throwable t) {IssueLog.logT(t);}
+	try{	performDragEdit(this.getLastMouseEvent().shfitDown());} catch (Throwable t) {IssueLog.logT(t);}
 	
 	if (resetClickPointOnDrag) {
 	

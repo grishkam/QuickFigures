@@ -15,7 +15,7 @@
  *******************************************************************************/
 package export.pptx;
 
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 
 public class PathGraphicToOffice extends ShapeToOffice implements OfficeObjectMaker {
 

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package standardDialog.graphics;
 
-import graphicalObjects_BasicShapes.SimpleGraphicalObject;
+import graphicalObjects_Shapes.SimpleGraphicalObject;
 
 public interface DisplaysGraphicalObject {
 	public SimpleGraphicalObject getCurrentDisplayObject() ;

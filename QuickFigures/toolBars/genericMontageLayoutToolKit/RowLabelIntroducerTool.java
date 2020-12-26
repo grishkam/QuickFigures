@@ -31,17 +31,17 @@ import javax.swing.undo.UndoableEdit;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.ImageWrapper;
 import figureFormat.LabelExamplePicker;
-import genericMontageKit.BasicObjectListHandler;
-import genericMontageKit.OverlayObjectManager;
-import graphicalObjects.CursorFinder;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.FigureLabelOrganizer;
+import figureOrganizer.FigureLabelOrganizer;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.CursorFinder;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconSet;
 import icons.ToolIconWithText;
+import imageDisplayApp.OverlayObjectManager;
+import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
@@ -194,7 +194,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 		
 		CombinedEdit undoGroup = new CombinedEdit();
 		
-		CanvasMouseEvent mm = super.getLastClickMouseEvent();
+		CanvasMouseEvent mm = super.getLastMouseEvent();
 		if (mm.isPopupTrigger()) {
 			new popupMenuForRowLabels(lastusedLayout).show(mm.getComponent(), mm.getClickedXScreen(), mm.getClickedYScreen());
 			return;

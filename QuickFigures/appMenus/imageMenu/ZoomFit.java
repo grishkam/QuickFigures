@@ -23,10 +23,10 @@ import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
-import graphicalObjects_BasicShapes.CircularGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.ZoomOptions;
 import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;

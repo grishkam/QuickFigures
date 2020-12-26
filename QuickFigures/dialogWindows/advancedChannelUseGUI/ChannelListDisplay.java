@@ -36,8 +36,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import channelMerging.ChannelEntry;
-import genericMontageKit.PanelListElement;
-import graphicalObjects_FigureSpecific.PanelManager;
+import figureOrganizer.PanelListElement;
+import figureOrganizer.PanelManager;
 import menuUtil.SmartJMenu;
 
 

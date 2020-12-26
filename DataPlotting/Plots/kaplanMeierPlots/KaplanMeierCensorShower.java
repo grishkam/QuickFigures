@@ -25,7 +25,7 @@ import java.awt.geom.Point2D.Double;
 
 import dataSeries.KaplenMeierDataSeries;
 import dialogs.CensorMarkDialog;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.DataShowingParts.DataLineShape;
 import plotParts.DataShowingParts.DataShowingShape;

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
-import layersGUI.LayerStructureChangeListener;
 import utilityClassesForObjects.ItemLayer;
 import utilityClassesForObjects.Keyed;
 import utilityClassesForObjects.Named;

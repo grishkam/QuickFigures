@@ -18,8 +18,8 @@ package objectDialogs;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import graphicalObjects.HasBackGroundShapeGraphic;
-import graphicalObjects_BasicShapes.ShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.HasBackGroundShapeGraphic;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.numbers.AngleInputPanel;

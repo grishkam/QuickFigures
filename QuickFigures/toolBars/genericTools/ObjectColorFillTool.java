@@ -22,10 +22,10 @@ import java.awt.Rectangle;
 
 import javax.swing.JColorChooser;
 
-import graphicalObjects_BasicShapes.CircularGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.SimpleRing;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.SimpleRing;
 import icons.GraphicToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.ColorEditUndo;

@@ -24,9 +24,9 @@ import java.util.Comparator;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoMoveItems;

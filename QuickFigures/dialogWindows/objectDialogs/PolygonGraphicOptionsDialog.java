@@ -15,7 +15,7 @@
  *******************************************************************************/
 package objectDialogs;
 
-import graphicalObjects_BasicShapes.RegularPolygonGraphic;
+import graphicalObjects_Shapes.RegularPolygonGraphic;
 import standardDialog.numbers.NumberInputPanel;
 
 /**An options dialog for regular polygons, includes options for the n-vertices in addition to all other options*/

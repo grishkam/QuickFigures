@@ -20,8 +20,8 @@ import java.awt.Rectangle;
 
 import graphicTools.RectGraphicTool;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.RectangularGraphic;
 
 /**An adding menu item that adds a rectangular object 
   (or at least one that extends the rectangular graphic superclass)*/

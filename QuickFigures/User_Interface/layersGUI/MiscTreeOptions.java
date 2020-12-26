@@ -15,6 +15,7 @@
  *******************************************************************************/
 package layersGUI;
 
+/**An interface for menu items to be added to a tree menu*/
 public interface MiscTreeOptions {
 
 	public String getMenuText();

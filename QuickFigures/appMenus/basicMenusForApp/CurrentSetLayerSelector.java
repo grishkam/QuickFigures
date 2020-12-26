@@ -23,7 +23,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import layersGUI.LayerStructureChangeListener;
+import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 import selectedItemMenus.LayerSelector;
 import utilityClasses1.ArraySorter;
 

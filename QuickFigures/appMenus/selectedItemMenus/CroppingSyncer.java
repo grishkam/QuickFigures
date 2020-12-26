@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import objectDialogs.CroppingDialog;
 
 public class CroppingSyncer extends BasicMultiSelectionOperator{

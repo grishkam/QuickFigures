@@ -19,8 +19,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.PathGraphic;
 import logging.IssueLog;
 import utilityClassesForObjects.ShapeRotatingPolygon;
 

@@ -24,8 +24,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import fLexibleUIKit.ObjectAction;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
+import figureOrganizer.FigureOrganizingLayerPane;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.TextInsetsDialog;

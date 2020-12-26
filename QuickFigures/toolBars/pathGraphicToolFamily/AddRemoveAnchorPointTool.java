@@ -22,9 +22,9 @@ import java.awt.geom.Point2D.Double;
 
 import javax.swing.Icon;
 
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.PathGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.PathGraphic;
 import iconGraphicalObjects.IconTraits;
 import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;

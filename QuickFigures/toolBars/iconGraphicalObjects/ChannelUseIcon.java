@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import channelMerging.ChannelEntry;
-import graphicalObjectHandles.IconHandle;
+import handles.IconHandle;
 import infoStorage.BasicMetaDataHandler;
 
 /**

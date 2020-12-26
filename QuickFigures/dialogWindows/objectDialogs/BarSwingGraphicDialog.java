@@ -17,8 +17,8 @@ package objectDialogs;
 
 import javax.swing.JTabbedPane;
 
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;

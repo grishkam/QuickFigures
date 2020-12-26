@@ -33,7 +33,7 @@ import genericTools.GeneralTool;
 import genericTools.ToolBit;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconSet;
 import icons.IconWrappingToolIcon;
 import selectedItemMenus.MultiSelectionOperator;

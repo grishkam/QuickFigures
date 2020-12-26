@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 import genericTools.ToolBit;
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 
 public class ShapeGraphicTool extends RectGraphicTool implements ToolBit {

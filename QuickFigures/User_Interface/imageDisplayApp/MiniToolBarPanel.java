@@ -31,14 +31,14 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import applicationAdapters.CanvasMouseEvent;
-import basicAppAdapters.GMouseEvent;
+import basicAppAdapters.GenericCanvasMouseAction;
 import basicMenusForApp.MenuItemForObj;
-import graphicalObjectHandles.ActionButtonHandleList;
-import graphicalObjectHandles.IconHandle;
-import graphicalObjectHandles.SmartHandle;
-import graphicalObjectHandles.HasMiniToolBarHandles;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.CordinateConverter;
+import handles.IconHandle;
+import handles.SmartHandle;
+import handles.miniToolbars.ActionButtonHandleList;
+import handles.miniToolbars.HasMiniToolBarHandles;
 import imageMenu.ZoomFit;
 
 /**A components that displays a side panel within each image window or potentially within*/
@@ -211,7 +211,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		GMouseEvent cew = new LocalMouseEvent(getDisplaySet(), e);
+		GenericCanvasMouseAction cew = new LocalMouseEvent(getDisplaySet(), e);
 		mousePressOnHandleList(cew, getStableButtonList());
 		this.mousePressOnHandleList(cew, this.getChangingButtonList());
 	}
@@ -220,7 +220,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
  	determines if the user mouse press was within the handle list
    and calls the handlePress method for the listwhen a mouse press on the panel occurs
 	 */
-	public void mousePressOnHandleList(GMouseEvent cew, ActionButtonHandleList bList) {
+	public void mousePressOnHandleList(GenericCanvasMouseAction cew, ActionButtonHandleList bList) {
 		if(bList==null) return;
 		SmartHandle handle = bList.getHandleForClickPoint(cew.getCoordinatePoint());
 		if (handle!=null) handle.handlePress(cew);
@@ -244,7 +244,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 		
 	}
 	
-	public class LocalMouseEvent extends GMouseEvent {
+	public class LocalMouseEvent extends GenericCanvasMouseAction {
 
 		/**
 		 * 

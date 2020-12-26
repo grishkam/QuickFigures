@@ -25,7 +25,8 @@ import org.apache.poi.xslf.usermodel.LineCap;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFFreeformShape;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
-import graphicalObjects_BasicShapes.ShapeGraphic;
+
+import graphicalObjects_Shapes.ShapeGraphic;
 import logging.IssueLog;
 
 public class ShapeToOffice  implements OfficeObjectMaker{

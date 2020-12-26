@@ -27,10 +27,10 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 
 import graphicalObjects.BasicCoordinateConverter;
-import graphicalObjects_BasicShapes.PathGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_BasicShapes.SimpleGraphicalObject;
+import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.SimpleGraphicalObject;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 
 /**A component object that contains a Graphic. Con be used as a Menu item, icon or other part of a

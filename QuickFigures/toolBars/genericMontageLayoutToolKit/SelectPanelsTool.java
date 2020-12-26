@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Shape;
 
-import genericMontageKit.OverlayObjectManager;
+import imageDisplayApp.OverlayObjectManager;
 import layout.PanelLayout;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;

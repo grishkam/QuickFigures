@@ -25,7 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.undo.UndoManager;
 
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.IconSet;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;

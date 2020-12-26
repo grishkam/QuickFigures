@@ -14,8 +14,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 /**
- 
- * 
+ work in progress
  */
 public interface ChannelColor extends Serializable {
 

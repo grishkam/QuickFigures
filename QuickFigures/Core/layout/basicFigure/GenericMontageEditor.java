@@ -23,13 +23,13 @@ import java.util.ArrayList;
 
 import applicationAdapters.ImageWrapper;
 import channelLabels.ChannelLabelTextGraphic;
-import genericMontageKit.BasicObjectListHandler;
-import genericMontageKit.BasicObjectListHandler.LocatedObjectFilter;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_FigureSpecific.FigureLabelOrganizer.ColumnLabelTextGraphic;
-import graphicalObjects_FigureSpecific.FigureLabelOrganizer.RowLabelTextGraphic;
+import figureOrganizer.FigureLabelOrganizer.ColumnLabelTextGraphic;
+import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import layout.BasicObjectListHandler;
 import layout.PanelContentExtract;
 import layout.PanelLayout;
+import layout.BasicObjectListHandler.LocatedObjectFilter;
 import logging.IssueLog;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.ArrayObjectContainer;

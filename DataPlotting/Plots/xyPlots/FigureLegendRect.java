@@ -15,7 +15,7 @@
  *******************************************************************************/
 package xyPlots;
 
-import graphicalObjects_BasicShapes.RectangularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 
 public class FigureLegendRect  extends RectangularGraphic {
 

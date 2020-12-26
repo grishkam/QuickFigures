@@ -17,8 +17,8 @@ package addObjectMenus;
 
 
 import appContext.CurrentAppContext;
+import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_FigureSpecific.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
 public class ImagePlusAdder extends BasicGraphicAdder{

@@ -24,9 +24,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import undo.CombinedEdit;

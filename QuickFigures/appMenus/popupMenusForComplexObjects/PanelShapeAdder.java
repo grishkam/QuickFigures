@@ -25,8 +25,8 @@ import javax.swing.JMenuItem;
 
 import graphicActionToolbar.CurrentFigureSet;
 import graphicTools.ShapeAddingTool;
-import graphicalObjects_BasicShapes.ShapeGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ShapeGraphic;
 import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
 

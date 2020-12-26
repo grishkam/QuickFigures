@@ -18,8 +18,8 @@ package undo;
 import java.awt.Color;
 import java.awt.Font;
 
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import utilityClassesForObjects.TextParagraph;
 
 public class UndoTextEdit extends AbstractUndoableEdit2 {

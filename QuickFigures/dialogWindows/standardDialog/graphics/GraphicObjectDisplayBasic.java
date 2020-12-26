@@ -29,7 +29,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import graphicalObjects.BasicCoordinateConverter;
-import graphicalObjects_BasicShapes.SimpleGraphicalObject;
+import graphicalObjects_Shapes.SimpleGraphicalObject;
 import logging.IssueLog;
 
 public class GraphicObjectDisplayBasic<Type extends SimpleGraphicalObject> extends JComponent implements Icon {

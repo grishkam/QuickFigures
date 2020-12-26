@@ -22,7 +22,7 @@ import java.awt.geom.Point2D.Double;
 
 import dataSeries.DataSeries;
 import dataSeries.XYDataSeries;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import plotParts.Core.PlotAxes;
 import plotParts.Core.PlotCordinateHandler;
 

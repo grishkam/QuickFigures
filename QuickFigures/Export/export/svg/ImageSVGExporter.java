@@ -27,7 +27,7 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 
 /**An SVG exporter implementation for image panels*/
 public class ImageSVGExporter extends SVGExporter {

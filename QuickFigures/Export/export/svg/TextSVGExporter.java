@@ -29,9 +29,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import applicationAdapters.ToolbarTester;
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import utilityClassesForObjects.TextLine;
 import utilityClassesForObjects.TextLineSegment;

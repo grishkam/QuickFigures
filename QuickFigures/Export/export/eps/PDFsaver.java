@@ -33,7 +33,7 @@ import org.apache.fop.svg.PDFTranscoder;
 import applicationAdapters.DisplayedImage;
 import export.svg.SVGsaver;
 import figureFormat.DirectoryHandler;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 import messages.ShowMessage;
 import undo.CombinedEdit;

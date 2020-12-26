@@ -19,10 +19,10 @@ import java.awt.Font;
 
 import javax.swing.Icon;
 
-import graphicalObjects.ImagePanelGraphic;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;

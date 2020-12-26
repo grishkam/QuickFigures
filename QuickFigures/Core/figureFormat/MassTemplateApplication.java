@@ -18,7 +18,7 @@ package figureFormat;
 import java.io.File;
 import java.util.ArrayList;
 
-import graphicalObjects_FigureSpecific.FigureOrganizingLayerPane;
+import figureOrganizer.FigureOrganizingLayerPane;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;

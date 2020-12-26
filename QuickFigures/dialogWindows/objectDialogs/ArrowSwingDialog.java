@@ -21,8 +21,8 @@
  */
 package objectDialogs;
 
-import graphicalObjects_BasicShapes.ArrowGraphic;
-import graphicalObjects_BasicShapes.ArrowGraphic.ArrowHead;
+import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.ArrowGraphic.ArrowHead;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 

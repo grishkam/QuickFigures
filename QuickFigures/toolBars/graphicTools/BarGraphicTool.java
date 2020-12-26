@@ -20,9 +20,9 @@ import java.awt.Point;
 
 import applicationAdapters.ImageWrapper;
 import figureFormat.ScaleBarExamplePicker;
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_BasicShapes.BarGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.TreeIconWrappingToolIcon;
 import undo.CombinedEdit;
 import undo.UndoAddItem;

@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import channelLabels.ChannelLabelTextGraphic;
-import graphicalObjects.ImagePanelGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import undo.Edit;
 import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;

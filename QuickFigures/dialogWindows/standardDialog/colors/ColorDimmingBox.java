@@ -26,7 +26,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import graphicalObjects_BasicShapes.ComplexTextGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import utilityClassesForObjects.ColorDimmer;
 
 /**A JCombo box designed for the user to select a color dimming effect

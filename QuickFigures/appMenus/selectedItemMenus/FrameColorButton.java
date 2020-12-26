@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.undo.UndoableEdit;
 
-import graphicalObjects.ImagePanelGraphic;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_BasicShapes.RectangularGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.graphics.GraphicDisplayComponent;

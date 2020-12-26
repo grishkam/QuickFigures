@@ -22,6 +22,7 @@ public interface Scales {
 	/**scales the shape about point p. the fold scaling is determined by mag*/
 	public void scaleAbout(Point2D p, double mag);
 	
+	/**returns a group of messages regareding how scale operates for the given object*/
 	public Object getScaleWarning();
 	
 }

@@ -22,13 +22,13 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.FigureDisplayContainer;
-import graphicalObjects_BasicShapes.BarGraphic;
-import graphicalObjects_BasicShapes.TextGraphic;
-import graphicalObjects_BasicShapes.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.GraphicComboBox;
