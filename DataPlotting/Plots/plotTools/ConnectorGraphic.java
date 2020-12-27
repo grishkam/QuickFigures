@@ -38,7 +38,6 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 	public ConnectorGraphic(Point2D... a) {
 		super(new Rectangle());
 		anchors=a;
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Shape getShape() {
@@ -116,7 +115,12 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 	
 	/**creates a copy*/
 	public ConnectorGraphic copy() {
-		ConnectorGraphic out = new ConnectorGraphic(anchors);
+		
+		ConnectorGraphic out = new ConnectorGraphic(new Point2D[anchors.length]);
+		for(int i=0; i<anchors.length; i++) 
+			{	out.anchors[i]=new Point2D.Double();
+				out.anchors[i].setLocation(anchors[i]);
+			}
 		out.copyAttributesFrom(this);
 		out.copyColorsFrom(this);
 		return out;
