@@ -34,7 +34,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.GraphicUtil;
-import handles.HandleRect;
+import handles.DecorativeSmartHandleList;
 import handles.HasHandles;
 import keyFrameAnimators.BasicGraphicObjectKeyFrameAnimator;
 import menuUtil.PopupMenuSupplier;
@@ -81,7 +81,10 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	public HashMap<String, Object> map=new HashMap<String, Object>();
 	transient GraphicUtil Gu=new GraphicUtil();
 	transient boolean isDead=false;
-	protected transient ArrayList<HandleRect> handleBoxes=new ArrayList<HandleRect> ();
+	
+	/**A smart handle list that is just for drawing*/
+	protected transient DecorativeSmartHandleList handleBoxes=new DecorativeSmartHandleList();
+	
 	transient FigureDisplayContainer setContainer;
 	private AttachmentPosition attachementPosition=null;
 
@@ -313,19 +316,14 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	public int handleNumber(double x, double y) {
 		{
 			if (handleBoxes==null||handleBoxes.size()==1) return -1;
-			for(int i=0; i<handleBoxes.size(); i++) {
-				
-				if (handleBoxes.get(i).contains(x, y))  {
-					return i;
-				}
-			}
-			return -1;
+				return handleBoxes.handleNumberForClickPoint(x, y);
+			
 		}
 	}
 
 	
 	public void clearHandleBoxes() {
-		handleBoxes=new ArrayList<HandleRect>();
+		handleBoxes=new DecorativeSmartHandleList();
 	}
 	@Override
 	public void setGraphicSetContainer(FigureDisplayContainer gc) {

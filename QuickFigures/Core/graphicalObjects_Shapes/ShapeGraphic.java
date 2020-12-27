@@ -24,6 +24,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.Icon;
@@ -314,15 +315,18 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	}
 	
 	/**Draws the handle for the fixed edge of the Rectangle*/
-	public void drawLocationAnchorHandle(Graphics2D g2d, CordinateConverter<?> cords) {
+	private void drawLocationAnchorHandle(Graphics2D g2d, CordinateConverter<?> cords) {
 		Point2D p = RectangleEdges.getLocation(getLocationType(), this.getBounds());//gets the point
 		
 		/**if shape has a rotation, there will need to be a correction*/
 		AffineTransform aa = RectangleEdges.getRotationAboutCenter(this.getBounds(), -this.getAngle());
 		aa.transform(p, p);
 		
+		IssueLog.log("Drawing fixed edge ");
 		getGrahpicUtil().setHandleFillColor(Color.red);//the handle color is different for the Anchor
-		getGrahpicUtil().drawHandlesAtPoint(g2d, cords, p);
+		ArrayList<Point2D> ps = new ArrayList<Point2D>();
+		ps.add(p);
+		getGrahpicUtil().drawHandlesAtPoints(g2d, cords, ps);
 		getGrahpicUtil().setHandleFillColor(Color.white);
 	}
 	

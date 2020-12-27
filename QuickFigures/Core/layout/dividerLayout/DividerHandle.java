@@ -71,7 +71,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 
 	public void draw(Graphics2D graphics, CordinateConverter<?> cords) { 
 	
-		super.drawOnShape(graphics, new Rectangle2D.Double(x,y,width, height));
+		super.drawHandleShape(graphics, new Rectangle2D.Double(x,y,width, height));
 	}
 	
 	

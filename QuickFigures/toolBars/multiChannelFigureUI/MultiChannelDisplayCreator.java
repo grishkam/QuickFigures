@@ -21,7 +21,7 @@ import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
 
 public interface MultiChannelDisplayCreator {
-	static final String useActiveImage="ActiveImage";
+	static final String useActiveImage="ActiveImage";//instructions to use the currently active image can be passes as a path to the methods
 	
 	/**Creates a multiChannel Display for the user selected open image or file. if OpenFile is false, this will 
 	  either open a dialog for the user to select an image or use the path string to find an open image*/

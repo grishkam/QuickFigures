@@ -28,6 +28,7 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
 /**this class adds a figure containing a multidimensional images to a layer */
@@ -117,7 +118,12 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	/**when given a file path, opens the Image and returns a the multichannel display layer
 	  that contains the open image*/
 	public MultichannelDisplayLayer createMultiChannel(String path) {
-		return getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(openFile, path);
+		MultichannelDisplayLayer output = getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(openFile, path);
+		if (output==null) {
+			IssueLog.log("no image found");
+			
+		};
+		return output;
 	}
 	
 	/**Adds a figure to the layer*/
@@ -304,7 +310,10 @@ public class ImageAndlayerAdder extends LayoutAdder {
 
 
 	public MultiChannelDisplayCreator getMultiChannelOpener() {
-		if (CurrentAppContext.getMultichannelContext()==null) return null;
+		if (CurrentAppContext.getMultichannelContext()==null) {
+			IssueLog.log("no multichannel opening package is available ");
+			return null;
+		}
 		return CurrentAppContext.getMultichannelContext().getMultichannelOpener() ;
 	}
 	

@@ -192,7 +192,6 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	
 	@Override
 	public DividedPanelLayout getPanelLayout() {
-		// TODO Auto-generated method stub
 		return (DividedPanelLayout)layout;
 	}
 	

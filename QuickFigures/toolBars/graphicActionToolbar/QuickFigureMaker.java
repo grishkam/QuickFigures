@@ -122,7 +122,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 	public FigureOrganizingLayerPane createFigure(String path, PreProcessInformation p2) {
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
 		
-		if (path==null) la.openFile=false; else la.openFile=true;
+		if (path==null) {la.openFile=false; 
+		}else la.openFile=true;
 	
 		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getTopLevelLayer(), path, p2);
 		
@@ -130,7 +131,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 			//if something goes wrong, closes the newly created window
 			
 			diw.getWindow().setVisible(false);
-			IssueLog.showMessage("You need to have an image open to create a figure");
+			IssueLog.showMessage("You need to have an image open to create a figure "+path);
 			return null;
 			}
 		diw.getTheSet().setTitle(added.getName());
@@ -156,10 +157,14 @@ public class QuickFigureMaker extends DisplayActionTool {
 
 		
 		/**Written so that if the path given is null, uses the active image
-		  instead of opening a file chooser*/
+		  instead of opening a file chooser. if that fails, then opens a file chooser*/
 		public MultichannelDisplayLayer createMultiChannel(String path) {
-			if (path==null) return getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(false, MultiChannelDisplayCreator.useActiveImage);
-			//if(this.openFile) getMultiChannelCreator().creatMultiChannelDisplayFromUserSelectedImage(true, path);
+			MultichannelDisplayLayer output=null;
+			if (path==null) 
+				output= getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(false, MultiChannelDisplayCreator.useActiveImage);
+			if (output!=null)
+				return output;
+			
 			return super.createMultiChannel(path);
 		
 		}

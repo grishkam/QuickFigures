@@ -71,6 +71,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	public TailGraphic copy() {
 		TailGraphic output = new TailGraphic(this);
 		output.setNotchAngle(notchAngle);
+		output.divisions=divisions;
 		return output;
 	}
 	

@@ -78,7 +78,7 @@ public static DisplayedImage getChoice(String prompt) {
 
 	@Override
 	public String getNameText() {
-		return "Combine Figure Displays";
+		return "Combine Open Worksheets";
 	}
 
 	@Override

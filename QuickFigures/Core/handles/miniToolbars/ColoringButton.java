@@ -18,7 +18,7 @@ import selectedItemMenus.ColorMultiSelectionOperator;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 
-/**A handle that shows a popup with a color pallete when clicked*/
+/**A handle that shows a popup with a color array when clicked*/
 public class ColoringButton extends IconHandle implements ColorInputListener {
 
 	/**
@@ -28,6 +28,7 @@ public class ColoringButton extends IconHandle implements ColorInputListener {
 	private ColorMultiSelectionOperator item;
 	private transient CanvasMouseEvent lastPress;
 
+	/**Builds a new coloring button*/
 	public ColoringButton(ColorMultiSelectionOperator itemForIcon, int handleNumber ) {
 		
 		super(itemForIcon.getIcon(), new Point(0,0));
@@ -45,11 +46,12 @@ public class ColoringButton extends IconHandle implements ColorInputListener {
 	
 	}
 
+	/**shows the popup menu*/
 	public void showPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
 		lastPress=canvasMouseEventWrapper;
 		String message="Change Fill Color";
 		if(item.doesStroke()) message="Change Stroke Color";
-		new ColorButtonHandleList(this).showInPopupPalete(canvasMouseEventWrapper, message);;
+		new ColorButtonHandleList(this).showInPopupPalete(lastPress, message);;
 	}
 
 	@Override

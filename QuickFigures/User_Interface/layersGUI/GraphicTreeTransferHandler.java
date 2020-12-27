@@ -64,7 +64,7 @@ public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 	}
 	
 	protected Transferable 	createTransferable(JComponent c) {
-		return new treeTransferable(c);
+		return new TreeTransferableItem(c);
 	}
 	
 	public	Icon 	getVisualRepresentation(Transferable t) {
@@ -120,14 +120,14 @@ public class GraphicTreeTransferHandler extends WrappingTransferHandler {
 	}
 
 
-	public class treeTransferable implements Transferable {
+	public class TreeTransferableItem implements Transferable {
 
 		
-		private JComponent component;
+		
 
-		public treeTransferable() {}
-		public treeTransferable(JComponent c) {
-			this.component=c;
+		public TreeTransferableItem() {}
+		public TreeTransferableItem(JComponent c) {
+			
 		}
 		@Override
 		public Object getTransferData(DataFlavor theflavor) throws UnsupportedFlavorException, IOException {

@@ -40,7 +40,6 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import logging.IssueLog;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.Hideable;
 import utilityClassesForObjects.RainbowPaintProvider;
@@ -52,14 +51,16 @@ import utilityClassesForObjects.Selectable;
    that the handles can appear as*/
 public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	
-	public static int CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
+	public static int NORMAL_FILL=0, CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
 	
 	public int handlesize=3;
+	private int specialFill=NORMAL_FILL;
+	
 	protected Color messageColor = Color.BLACK;
 	protected Color handleStrokeColor=Color.black;
 	protected Color decorationColor=Color.LIGHT_GRAY;
 	private Color handleColor=Color.white;
-	private int specialFill=0;
+	
 	private SmartHandle lineto;
 	
 	private Point2D cordinateLocation=new Point();
@@ -90,11 +91,17 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		
 	}
 	
-	
+	/**Sets a the handle's location. not all subclasses use the location that is set with this method*/
 	public void setCordinateLocation(Point2D pt) {
 		cordinateLocation=pt;
 	}
+	/**location of the handle. this determines where in the figure the handle will actually appear
+	   overwritten in many subclasses*/
+	public Point2D getCordinateLocation() {
+		return cordinateLocation;
+	}
 	
+	/**The stroke for drawing the outline of the handle*/
 	protected Stroke getHandleStroke() {
 		BasicStroke bs = new BasicStroke();
 		return bs;
@@ -113,7 +120,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		
 	
 		
-		Shape s = createDrawnRect(pt);
+		Shape s = createStandardHandleShape(pt);
 		
 		if (hasSpecialShape()) {
 			s=createSpecialShape(pt, cords);
@@ -124,7 +131,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		
 		if(lineto!=null) {drawLineTo(graphics, cords, lineto);}
 		
-		drawOnShape(graphics, s);
+		drawHandleShape(graphics, s);
 		
 		if(this.getOverdecorationShape()!=null) {
 			drawOnDecorationShape(graphics, createDecorationShape( pt, cords, getOverdecorationShape()));
@@ -136,11 +143,10 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 			
 	}
 
-
-
+	/**draws the icon at the given point*/
 	public void drawIcon(Graphics2D graphics, Point2D pt) {
 		if (getIcon()!=null) {
-			getIcon().paintIcon(null, graphics, (int)pt.getX()-this.getIcon().getIconWidth()/2, (int)pt.getY()-getIcon().getIconHeight()/2);
+			getIcon().paintIcon(null, graphics, (int)(pt.getX()-this.getIcon().getIconWidth()*0.5), (int)(pt.getY()-getIcon().getIconHeight()*0.5));
 			
 		};
 	}
@@ -153,6 +159,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		return overDecorationShape;
 	}
 
+	/**Draws the handle message next to the given shape*/
 	protected void drawMessage(Graphics2D graphics, Shape s) {
 		if(message!=null) {
 			graphics.setColor(messageColor);
@@ -161,32 +168,39 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		}
 	}
 
+	/**returns true if the handle shape is set to something unique rather than the default rectangle*/
 	protected boolean hasSpecialShape() {
 		return specialShape!=null;
 	}
 
+	/**creates a transformed version of the 'special shape' that can be drawn at the scale of the coordinate converter
+	 * and at the given point*/
 	protected Shape createSpecialShape(Point2D pt, CordinateConverter<?> cords) {
 		AffineTransform g = AffineTransform.getTranslateInstance(pt.getX(), pt.getY());
 		return	g.createTransformedShape(specialShape);
 	}
 	
+	/**creates a transformed version of the given shape that can be drawn at the scale of the coordinate converter
+	 * and at the given point*/
 	protected Shape createDecorationShape(Point2D pt, CordinateConverter<?> cords, Shape shape) {
 		AffineTransform g = AffineTransform.getTranslateInstance(pt.getX(), pt.getY());
 		return	g.createTransformedShape(shape);
 	}
 
+	/**returns the font of the handle message*/
 	protected Font getMessageFont() {
 		return new Font("Arial", 0, 12);
 	}
 	
 	/**Draws the main Shape. mouse clicks inside this shape will result in calls
 	  to methods within this class*/
-	protected void drawOnShape(Graphics2D graphics, Shape s) {
+	protected void drawHandleShape(Graphics2D graphics, Shape s) {
 		lastDrawShape=s;
 		
 		graphics.setColor(getHandleColor());
 	
 		graphics.fill(s);
+		
 		if (specialFill==CROSS_FILL &&s instanceof Rectangle2D) {
 			Rectangle b = s.getBounds();
 			graphics.setColor(decorationColor);
@@ -230,8 +244,8 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		graphics.draw(s);
 	}
 	
+	/**draws an additional shape besides the main handle shape*/
 	protected void drawOnDecorationShape(Graphics2D graphics, Shape s) {
-
 		graphics.setColor(this.decorationColor);
 	
 		graphics.fill(s);
@@ -240,12 +254,13 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		graphics.draw(s);
 	}
 
+	/**returns the handle size*/
 	public int handleSize() {
 		return handlesize;
 	}
 	
 	/**returns the standard shape for the handle. Rectangle or Ellipse*/
-	protected Shape createDrawnRect(Point2D pt) {
+	protected Shape createStandardHandleShape(Point2D pt) {
 		double xr = pt.getX()-handleSize();
 		double yr = pt.getY()-handleSize();
 		double widthr =getDrawnHandleWidth();
@@ -264,20 +279,18 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		return getDrawnHandleWidth();
 	}
 
-	/**location of the handle in the figures' coordinates. this determines where the handle will actually appear*/
-	public Point2D getCordinateLocation() {
-		return cordinateLocation;
-	}
-
+	/**returns the ID number of the given handle. only handles with an id number will work properly*/
 	public int getHandleNumber() {
 		return handleNumber;
 	}
 
+	/**sets the ID number of the given handle. only handles with an id number will work properly
+	  no two handles within the same object should have the same handle number unless they function identically*/
 	public void setHandleNumber(int handleNumber) {
 		this.handleNumber = handleNumber;
 	}
 	
-	/**What to do when a handle is moved from point p1 to p2*/
+	/**Called when a handle is moved from point p1 to p2*/
 	public void handleMove(Point2D p1, Point2D p2) {
 		
 	}
@@ -309,21 +322,25 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 		
 	}
 	
+	/**returns the popup menu for this handle. some subclasses return menus while others do not*/
 	public JPopupMenu getJPopup() {
 		
 		return null;
 	}
 
+	/**Called when a handle is pressed*/
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
 		
 	}
 	
+	/**Called when a handle is released*/
 public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 	
 		
 	}
 	
+	/***/
 	public void nudgeHandle(double dx, double dy) {}
 
 /**returns true if the mouse event location is within the last drawn shape*/
@@ -333,7 +350,7 @@ public boolean containsClickPoint(Point2D p) {
 
 
 
-
+/**returns true if the given mouse event is inside this handle*/
 public boolean containsClickPoint(CanvasMouseEvent canvasMouseEventWrapper) {
 	return getClickableArea().contains(canvasMouseEventWrapper.getClickedXScreen(),canvasMouseEventWrapper. getClickedYScreen());
 }
@@ -351,16 +368,21 @@ public Shape getClickableArea() {return lastDrawShape;}
 	}
 	
 	
+	/**returns the undo manager to use if no other one is found*/
 	public UndoManagerPlus getUndoManager() {
 		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}
 
+	/**called when a user drags a handle */
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	
+	/**returns a shape that consists of arrows pointing in different directions
+	 * @param handlesize the size of the arrows
+	 * @param lenArr the length of the arrow
+	 * @param whether to remove the very middle of the arrow (splitting it into parts)*/
 	protected Area getAllDirectionArrows(int handlesize, int lenArr, boolean middleout) {
 		Area a = createLeftRightArrow(handlesize, lenArr);
 		a.add(new Area(getUpDownArrowShape(handlesize, lenArr)));
@@ -369,10 +391,12 @@ public Shape getClickableArea() {return lastDrawShape;}
 		return a;
 	}
 
+	/**returns a shape of two arros pointing in different directions*/
 	protected Shape getUpDownArrowShape(int handlesize, int lenArr) {
 		return AffineTransform.getRotateInstance(Math.PI/2).createTransformedShape(createLeftRightArrow(handlesize, lenArr));
 	}
 
+	/**returns a shape that looks like an arrow pointing in a particular direction*/
 	protected Shape getDirectionPointer(boolean left) {
 		Area a=new Area();
 		handlesize=4;
@@ -386,6 +410,7 @@ public Shape getClickableArea() {return lastDrawShape;}
 		return t2;
 	}
 	
+	/**returns the shape of an arrow*/
 	protected Shape getArrowPointer(int handlesize, int lenArr, boolean left) {
 		
 		Area a = createRightArrow(handlesize, lenArr);
@@ -395,6 +420,7 @@ public Shape getClickableArea() {return lastDrawShape;}
 		return a ;
 	}
 
+	/**returns the shape of an arrow*/
 	private Area createRightArrow(int handlesize, int lenArr ) {
 		Area a=new Area();
 		int lineHieght = handlesize/2;
@@ -407,10 +433,12 @@ public Shape getClickableArea() {return lastDrawShape;}
 		return a;
 	}
 	
+	/**returns the shape of an arrow that points up or down*/
 	protected Shape createUpDownArrow(int handlesize, int lenArr) {
 		return AffineTransform.getRotateInstance(Math.PI/2).createTransformedShape(createLeftRightArrow(handlesize, lenArr));
 	}
 	
+	/**returns the shape of an arrow that points left or right*/
 	protected Area createLeftRightArrow(int handlesize, int lenArr) {
 		Area arrow1 = createRightArrow(handlesize, lenArr);
 		Shape arrow2 = AffineTransform.getTranslateInstance(-arrow1.getBounds().getMinX(),0).createTransformedShape(arrow1);
@@ -419,11 +447,13 @@ public Shape getClickableArea() {return lastDrawShape;}
 		return output;
 	}
 
+	
 	@Override
 	public boolean makePrimarySelectedItem(boolean isFirst) {
 		return false;
 	}
 
+	/**Sets a special fill type for the arros besides the default solid color*/
 	public void setSpecialFill(int sFill) {
 		specialFill=sFill;
 		
@@ -499,14 +529,14 @@ public Shape getClickableArea() {return lastDrawShape;}
 		
 	}
 
-	/**
+	/** called when a mouse is moved over the handle
 	 * @param lastClickMouseEvent
 	 */
 	public void mouseMovedOver(CanvasMouseEvent lastClickMouseEvent) {
 		
 	}
 
-	/**
+	/**called when a mouse enters the handle
 	 * @param lastMouseEvent
 	 */
 	public void mouseEnterHandle(CanvasMouseEvent lastMouseEvent) {
@@ -514,7 +544,7 @@ public Shape getClickableArea() {return lastDrawShape;}
 		
 	}
 
-	/**
+	/**called when a mouse exits the handle
 	 * @param lastMouseEvent
 	 */
 	public void mouseExitHandle(CanvasMouseEvent lastMouseEvent) {

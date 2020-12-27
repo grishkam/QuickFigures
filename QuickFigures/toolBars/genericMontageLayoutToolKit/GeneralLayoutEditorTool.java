@@ -16,7 +16,6 @@
 package genericMontageLayoutToolKit;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.DragAndDropHandler;
-import genericMontageKit.*;
 import genericTools.BasicToolBit;
 import genericTools.MoverDragHandler;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;

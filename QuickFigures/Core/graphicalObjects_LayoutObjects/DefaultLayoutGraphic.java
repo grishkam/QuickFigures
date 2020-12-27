@@ -518,7 +518,7 @@ public void resizeLayoutToFitContents() {
 			JMenu moveMenu=new JMenu("Switch "+changeText());
 			
 			for(int i=1; i<=nOptions; i++) {
-				moveMenu.add(new rowSwitchMenuItem(""+i,i));
+				moveMenu.add(new RowSwitchMenuItem(""+i,i));
 			}
 		
 			return moveMenu;
@@ -594,15 +594,16 @@ public void resizeLayoutToFitContents() {
 		}
 		
 		
-		
-		class rowSwitchMenuItem extends JMenuItem implements ActionListener{
+		/**A menu item that allos the user to move a row/column label to a
+		 * new location*/
+		class RowSwitchMenuItem extends JMenuItem implements ActionListener{
 
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 			private int index;
-			rowSwitchMenuItem(String t, int index) {
+			RowSwitchMenuItem(String t, int index) {
 				super(t);
 				this.index=index;
 				this.addActionListener(this);

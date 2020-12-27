@@ -43,7 +43,7 @@ public class Plot_ToolInstaller implements PlugIn {
 	
 	private void onFirstRun() {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		InstallAndTest.install();
+		StartWithPlotPackage.install();
 		try {
 			if (true)
 					checkForAutoRun() ;

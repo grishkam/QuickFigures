@@ -16,12 +16,7 @@
 
 
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import applicationAdapters.ToolbarTester;
+import applicationAdapters.StartApplication;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.MenuBarItemInstaller;
 import dialogs.DataShapeSyncer;
@@ -39,33 +34,25 @@ import logging.IssueLog;
 import plotTools.ColumnSwapTool;
 import plotTools.TTestTool;
 import selectedItemMenus.SelectionOperationsMenu;
-import ultilInputOutput.FileChoiceUtil;
 
-public class InstallAndTest  implements MenuBarItemInstaller, ToolInstallers{
+public class StartWithPlotPackage extends StartApplication implements MenuBarItemInstaller, ToolInstallers{
 
-	private static final String pathOfExample =FileChoiceUtil.pathOfDocumentsFolder()+ "/FigureWizold/ExampleGrouped.xlsx";
-	static boolean alreadyInstalled=false;
+		static boolean alreadyInstalled=false;
 	
 	public static void main(String[] args) {
-		IssueLog.sytemprint=true;
-	
+		IssueLog.sytemprint=false;
+		IssueLog.windowPrint=true;
 		install();
-		ToolbarTester.showExample(true);
+		startToolbars(true);
 		
-		try {
-			new ExcelFileToComplexCategoryPlot(1).createPlotFromFileExcelFile(null,
-					new File(pathOfExample));
-		} catch (InvalidFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	
 	public static void install() {
 		if (alreadyInstalled) return;
-		InstallAndTest freeRun = new  InstallAndTest();
+		StartWithPlotPackage freeRun = new  StartWithPlotPackage();
 		MenuBarForApp.addMenuBarItemInstaller(freeRun);
-		ObjectToolset1.includeBonusTool(new InstallAndTest());
+		ObjectToolset1.includeBonusTool(new StartWithPlotPackage());
 		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(0));
 		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(1));
 		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(2));

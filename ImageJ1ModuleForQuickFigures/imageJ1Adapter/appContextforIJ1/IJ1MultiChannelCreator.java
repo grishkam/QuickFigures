@@ -22,8 +22,10 @@ import ij.io.Opener;
 import ij.plugin.FolderOpener;
 import ij.process.ColorProcessor;
 import logging.IssueLog;
+import messages.ShowMessage;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 import standardDialog.SelectImageDialog;
+import ultilInputOutput.FileChoiceUtil;
 
 import java.awt.Image;
 import java.io.File;
@@ -33,6 +35,7 @@ import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
 
+/**implementation of the MultiChannelDisplayCreator interface for ImageJ*/
 public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	
 	/**Creates a multiChannel Display for the user selected open image or file.
@@ -48,33 +51,47 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		MultichannelDisplayLayer display = new MultichannelDisplayLayer(slot);
 		
 		display.setLaygeneratedPanelsOnGrid(true);
-		//slot = new ImagePlusMultiChannelSlot(display);
-		//display.setSlot(slot);
 		slot.setAndInnitializeImagePlus(imp);
 		return display;
 	}
 	
-	/**the current image*/
+	/**Uses the current image to create a display*/
 	@Override
 	public MultichannelDisplayLayer creatMultiChannelDisplayFromOpenImage() {
 		return createDisplayFromImagePlus(WindowManager.getCurrentImage());
 	}
 	
+
+	/**opens the image at the given path 
+	 * or allows the user to select an image
+	 * or uses the active image
+	 * or if one method fails to return an image, tries the others*/
 	private ImagePlus selectImagePlus(boolean openFile, String path) {
 		ImagePlus imp=null;
-		if ((path!=null&& path.equals(MultiChannelDisplayCreator.useActiveImage))) {
+		if (useActiveImage(path)) {
 			
 			imp=WindowManager.getCurrentImage();
 		}
-		else
-		if (openFile) {
+		
+		//next method attempt to open a file. Or if there is no active image, opens one
+		if ((openFile)|| (imp==null&&useActiveImage(path))) {
+			if (MultiChannelDisplayCreator.useActiveImage.equals(path)) {
+				path=null;//that string is not a valid path but may be passed as the path
+				boolean userSelection = ShowMessage.showOptionalMessage("No image open", false,  "please select an image file to continue");
+				if(!userSelection) 
+					return null;
+			
+			}
 			if (path==null)
-				{
-				try {imp=IJ.openImage();} catch (Exception e) {}
-				}
-			else {
+						try {
+							//imp=IJ.openImage();
+							path=FileChoiceUtil.getOpenFile().getAbsolutePath();
+							} catch (Exception e) {}
+			
+			if (path!=null) {
 				try {
 					imp=IJ.openImage(path);
+				
 					if (imp!=null) return imp;
 				} catch (Exception e) {}
 			}
@@ -84,7 +101,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 				ImagePlus shownImage = null;
 				try {
 					
-					 shownImage =WindowManager.getCurrentImage();//if bioformats import occurs then the new image will be the imported on
+					 shownImage =WindowManager.getCurrentImage();//if bioformats import occurs then the new image will be the active one
 					 if (shownImage==null||!new ImagePlusWrapper(shownImage).getPath().equals(path))
 					 		{
 						 IssueLog.log("ImageJ failed to show the image using bioformats so will try again "+path+'\n');
@@ -114,8 +131,16 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		if (imp==null) return null;
 		return imp;
 	}
-	
 
+	/**
+	 * returns true if the path consists of instructions to use the currently active image
+	   rather than open the  path
+	 */
+	boolean useActiveImage(String path) {
+		return path!=null&& path.equals(MultiChannelDisplayCreator.useActiveImage);
+	}
+	
+	/**if open multichannel images are present, displays a dialog to choose them*/
 	public static ImagePlus showImagePlusChoice() {
 		ImagePlus imp=null;
 		ArrayList<MultiChannelImage> list=null;
@@ -134,10 +159,9 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		return "ImageJ Image";
 	}
 
+	/**Creates an image using an AWT image*/
 	@Override
 	public MultiChannelImage creatMultiChannelFromImage(Image img) {
-
-		
 		ColorProcessor cp = new ColorProcessor(img.getWidth(null), img.getHeight(null));
 		
 		cp.insert(new ColorProcessor(img), 0, 0);

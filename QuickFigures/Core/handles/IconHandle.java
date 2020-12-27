@@ -53,7 +53,7 @@ public class IconHandle extends SmartHandle {
 	}
 	
 
-	protected Shape createDrawnRect(Point2D pt) {
+	protected Shape createStandardHandleShape(Point2D pt) {
 		double widthr =getDrawnHandleWidth();
 		double heightr = icon.getIconHeight()-subtract;
 		

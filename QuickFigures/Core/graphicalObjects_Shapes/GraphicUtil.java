@@ -31,14 +31,14 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import graphicalObjects.CordinateConverter;
-import handles.HandleRect;
+import handles.DecorativeSmartHandleList;
 
 
 public class GraphicUtil {
 	static int defaulthandleSize=3;
 	 int handlesize=defaulthandleSize;
 	 Color handleColor=Color.white;
-	 public ArrayList<HandleRect> lastHandles;
+	 public DecorativeSmartHandleList lastHandles;
 	 
 	 public void setHandleFillColor(Color c) {
 		 if (c==null)handleColor=Color.WHITE;
@@ -54,11 +54,11 @@ public class GraphicUtil {
 			return new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, new float[] {2}, 2);
 		}
 	
-	public void drawPolygon(Graphics2D g, CordinateConverter<?> cords, Double[] rotatedBoundsPrecise, boolean handles) {
+	public void drawPolygon(Graphics2D g, CordinateConverter<?> cords, Point2D.Double[] rotatedBoundsPrecise, boolean handles) {
 		Polygon p2 = getAlteredPolygon(g,  cords, rotatedBoundsPrecise);
 		g.drawPolygon(p2);
 		if (handles) {
-			lastHandles=drawHandles(g, p2);
+			lastHandles=drawHandles(g,cords, rotatedBoundsPrecise);
 		}
 	}
 	
@@ -86,7 +86,7 @@ public  void drawRectangle(Graphics2D g, CordinateConverter<?> cords, Rectangle2
 		Rectangle r=cords.getAffineTransform().createTransformedShape(r2).getBounds();//getAlteredRectangle(g,  cords, r2);	
 	
 		g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
-		if (handles) drawHandles(g, r);
+		if (handles) drawHandles(g,cords, r2);
 	}
 
 public  void fillRectangle(Graphics2D g, CordinateConverter<?> cords, Rectangle2D r2) {
@@ -105,20 +105,21 @@ public  void drawLine(Graphics2D g, CordinateConverter<?> cords, Point2D point, 
 	int y2=(int)cords.transformY( baseLineEnd.getY());
 	g.drawLine(x1, y1, x2, y2);
 	if (handles){
-	ArrayList<HandleRect> outhandles = new ArrayList<HandleRect>();
-	HandleRect h1 = new HandleRect( x1, y1);
-	HandleRect h2 = new HandleRect(x2, y2);
-	this.drawHandleRect(g, h1);
-	this.drawHandleRect(g, h2);
-	outhandles.add(h1);
-	outhandles.add(h2);
-	lastHandles=outhandles;
+		ArrayList<Point2D> outhandles = new ArrayList<Point2D>();
+		Point2D h1 = new Point2D.Double( x1, y1);
+		Point2D h2 = new Point2D.Double(x2, y2);
+		
+		outhandles.add(h1);
+		outhandles.add(h2);
+		
+		lastHandles=new DecorativeSmartHandleList(outhandles);
+		lastHandles.draw(g, cords);
 	}
 	//g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
 	//if (handles) drawHandles(g, r);
 }
 
-public  void drawStrokedShape(Graphics2D g, CordinateConverter<?> cords, Shape s) {
+void drawStrokedShape(Graphics2D g, CordinateConverter<?> cords, Shape s) {
 	g.draw(cords.getAffineTransform().createTransformedShape(s));
 }
 
@@ -135,7 +136,7 @@ public  void drawDot(Graphics2D g, CordinateConverter<?> cords, Point2D.Double p
 }
 
 	
-	public  Polygon getAlteredPolygon(Graphics2D g, CordinateConverter<?> cords, Double[] rotatedBoundsPrecise) {
+	private  Polygon getAlteredPolygon(Graphics2D g, CordinateConverter<?> cords, Double[] rotatedBoundsPrecise) {
 		Polygon p2=new Polygon();
 		for(int i=0; i<rotatedBoundsPrecise.length; i++) {
 			int sx = (int)cords.transformX(rotatedBoundsPrecise[i].x);
@@ -144,15 +145,8 @@ public  void drawDot(Graphics2D g, CordinateConverter<?> cords, Point2D.Double p
 		}
 		return p2;
 	}
-/**
-	public  Rectangle getAlteredRectangle(Graphics2D g, CordinateConverter<?> cords, Rectangle2D r2) {
-		int sx = (int)cords.transformX((int)r2.getX());
-	    int sy = (int)cords.transformY((int)r2.getY());
-	    double swidth=cords.getMagnification()*r2.getWidth();
-	    double sheight=cords.getMagnification()*r2.getHeight();
-	    return new Rectangle(sx,sy, (int)swidth, (int)sheight);
-	}*/
-	
+
+	/**A simple method to draw text*/
 	public void drawString(Graphics2D g, CordinateConverter<?> cords, String text, Point2D p,  Font f, Color c, double angle) {
 		
 		
@@ -174,60 +168,59 @@ public  void drawDot(Graphics2D g, CordinateConverter<?> cords, Point2D.Double p
 	
 
 	
-	private void drawHandleRect(Graphics2D g, Rectangle2D r) {
-		g.setStroke(new BasicStroke());
-		g.setColor(handleColor);
-		g.fillRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
-		g.setColor(Color.black);
-		g.drawRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
-	}
 	
-	private  ArrayList<HandleRect> drawHandles(Graphics2D g, Polygon p) {
-		ArrayList<HandleRect> output = new ArrayList<HandleRect>();
-		for(int i=0; i<p.npoints; i++) {
-			HandleRect r=new HandleRect(p.xpoints[i], p.ypoints[i]);
+	
+
+	
+	private  DecorativeSmartHandleList drawHandles(Graphics2D g, CordinateConverter<?> cords, Point2D[] p) {
+		ArrayList<Point2D> output = new ArrayList<Point2D>();
+		for(int i=0; i<p.length; i++) {
+			Point2D r=new Point2D.Double(p[i].getX(), p[i].getY());
 			output.add(r);
-			drawHandleRect(g,r);
+			
 		}
 		
-		return output;
+		return drawHandlesAtPoints(g, cords, output);
 	}
 	
-	/**draws a handle at the given point and returns its rectangle*/
-	private HandleRect drawHandle(Graphics2D g, Point2D p) {
-		HandleRect r=new HandleRect((int)p.getX(), (int)p.getY(), handlesize);
-		drawHandleRect(g,r);
-		return r;
-	}
+
 	
-	public ArrayList<HandleRect> drawHandlesAtPoints(Graphics2D g, CordinateConverter<?> cords, ArrayList<Point2D> points) {
-		ArrayList<HandleRect> output = new ArrayList<HandleRect>();
-		for(Point2D p : points) {
-			Double p2 = new Point2D.Double(cords.transformX(p.getX()), cords.transformY(p.getY()));
-			output.add(drawHandle(g,  p2)) ;
-		}
+	public DecorativeSmartHandleList drawHandlesAtPoints(Graphics2D g, CordinateConverter<?> cords, ArrayList<Point2D> points) {
+		DecorativeSmartHandleList output = new DecorativeSmartHandleList(points);
+		
 		lastHandles=output;
+		lastHandles.draw(g, cords);
 		return output;
 		
 	}
 	
-	public HandleRect drawHandlesAtPoint(Graphics2D g, CordinateConverter<?> cords, Point2D p) {
-		
-			Double p2 = new Point2D.Double(cords.transformX(p.getX()), cords.transformY(p.getY()));
-		return	drawHandle(g,  p2) ;
-	}
 	
-	public HandleRect drawSizeHandlesAtPoint(Graphics2D g, CordinateConverter<?> cords, Point2D p, Point2D pfinish) {
+	/**
+	 * 
+	 
+	 	private  DecorativeSmartHandleList drawHandles(Graphics2D g, CordinateConverter<?> cords, Polygon p) {
+		ArrayList<Point2D> output = new ArrayList<Point2D>();
+		for(int i=0; i<p.npoints; i++) {
+			Point2D r=new Point2D.Double(p.xpoints[i], p.ypoints[i]);
+			output.add(r);
+			
+		}
 		
+		return drawHandlesAtPoints(g, cords, output);
+	}
+	private DecorativeSmartHandleList drawSizeHandlesAtPoint(Graphics2D g, CordinateConverter<?> cords, Point2D p, Point2D pfinish) {
+		ArrayList<Point2D> output = new ArrayList<Point2D>();
 		Double p2 = new Point2D.Double(cords.transformX(p.getX()), cords.transformY(p.getY()));
 		Double p2finish = new Point2D.Double(cords.transformX(pfinish.getX()), cords.transformY(pfinish.getY()));
+		output.add(p);
+		output.add(pfinish);
 		g.setColor(Color.black);
 		g.drawLine((int)p2.getX(), (int)p2.getY(), (int)p2finish.getX(), (int)p2finish.getY());
-		return	drawHandle(g,  p2) ;
+		return	drawHandlesAtPoints(g, cords, output) ;
 	
 }
 	
-	/**
+	
 private  ArrayList<Rectangle> drawHandles(Graphics2D g, Iterable<Point2D.Double> list) {
 		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
 		for(Point2D.Double p : list) {
@@ -244,18 +237,30 @@ private  ArrayList<Rectangle> drawHandles(Graphics2D g, Iterable<Point2D.Double>
 		}
 		lastHandles=output;
 		return output;
+		
+		
+	}
+	/**
+	public  Rectangle getAlteredRectangle(Graphics2D g, CordinateConverter<?> cords, Rectangle2D r2) {
+		int sx = (int)cords.transformX((int)r2.getX());
+	    int sy = (int)cords.transformY((int)r2.getY());
+	    double swidth=cords.getMagnification()*r2.getWidth();
+	    double sheight=cords.getMagnification()*r2.getHeight();
+	    return new Rectangle(sx,sy, (int)swidth, (int)sheight);
 	}*/
+	
 
 	
-	private  void drawHandles(Graphics2D g, Rectangle r) {
-		ArrayList<HandleRect> output = new ArrayList<HandleRect>();
+	private  void drawHandles(Graphics2D g,CordinateConverter<?> cords, Rectangle2D r) {
+		ArrayList<Point2D> output = new ArrayList<Point2D>();
 		
-		output.add(new HandleRect( (int)r.getX(), (int)r.getY()));
-		output.add(new HandleRect( (int)(r.getX()+r.getWidth()), (int)r.getY()));
-		output.add(new HandleRect( (int)(r.getX()+r.getWidth()), (int)(r.getY()+r.getHeight())));
-		output.add(new HandleRect( (int)r.getX(), (int)(r.getY()+r.getHeight())));
-			for(Rectangle2D r2: output) {drawHandleRect(g,r2);}
-		lastHandles=output;
+		output.add(new Point2D.Double( r.getX(), r.getY()));
+		output.add(new Point2D.Double( (r.getX()+r.getWidth()), r.getY()));
+		output.add(new Point2D.Double( (r.getX()+r.getWidth()), (r.getY()+r.getHeight())));
+		output.add(new Point2D.Double( r.getX(), (r.getY()+r.getHeight())));
+			
+		lastHandles=new DecorativeSmartHandleList(output);
+		lastHandles.draw(g, cords);
 	}
 	
 	 public Polygon PolygonFromRect(Rectangle2D rect, AffineTransform af) {

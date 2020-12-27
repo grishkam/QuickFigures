@@ -20,7 +20,7 @@ import ultilInputOutput.FileChoiceUtil;
 import applicationAdapters.DisplayedImage;
 import imageDisplayApp.ImageDisplayIO;
 
-/**Opens a figure display*/
+/**Opens a saved file with figures*/
 public class GraphicSetOpener  extends BasicMenuItemForObj {
 
 	@Override
@@ -33,25 +33,19 @@ public class GraphicSetOpener  extends BasicMenuItemForObj {
 	}
 	
 
-	
-
-	
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "openDisplaySet";
 	}
 
 	@Override
 	public String getNameText() {
-		// TODO Auto-generated method stub
-		return "Figure Display";
+		return "Saved Worksheet";
 	}
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
 		return "File<Open<";
 	}
 

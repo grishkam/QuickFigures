@@ -40,19 +40,16 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 	protected int index;
 	private int endIndex;
 
-	public MoveRowHandle(int x, int y) {
-		
-		// TODO Auto-generated constructor stub
-	}
 
+	
 	public MoveRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int y, boolean sub, int index) {
-		this(0,0);
+		
 		this.left=sub;
 		this.layout=montageLayoutGraphic;
 		this.type=y;
 		this.index=index;
 		this.handlesize=8;
-		int offset=0;
+		int offset=0;//programmer can change this to tweak handle position
 		if(left) offset=-offset;
 		int xoffset=0;
 		int yoffset = 0;
@@ -79,8 +76,16 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		
 		setupSpecialShape();
 		
-		this.setHandleNumber(PanelLayoutGraphic.handleIDFactor*20+type*1000+offset+1*index);
+		this.setHandleNumber(determineHandleNumber(index));
 		
+	}
+
+	/**creates a handle ID number that will not conflict with any of the panel layout handles
+	 * @param index
+	 * @return
+	 */
+	int determineHandleNumber(int index) {
+		return PanelLayoutGraphic.handleIDFactor*20+type*1000+1*index;
 	}
 	
 	protected boolean hasSpecialShape() {
@@ -131,7 +136,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		UndoLayoutEdit currentUndo = new UndoLayoutEdit(layout);
 		
 		endIndex = this.getCurrentLayout().makeAltered(type).getNearestPanelIndex(canvasMouseEventWrapper.getCoordinatePoint());
-		
+		if (index==endIndex) return;//does not need to do anything else if the user has not moved to  a new location
 		if (type==PANELS) {  
 			getEditor().swapPanels(getCurrentLayout(), index, endIndex);
 		
@@ -169,6 +174,21 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 	private GenericMontageEditor getEditor() {
 		this.layout.generateCurrentImageWrapper();
 		return layout.getEditor();
+	}
+	
+	/**called when a mouse enters the handle
+	 * @param lastMouseEvent
+	 */
+	public void mouseEnterHandle(CanvasMouseEvent lastMouseEvent) {
+	
+		
+	}
+
+	/**called when a mouse exits the handle
+	 * @param lastMouseEvent
+	 */
+	public void mouseExitHandle(CanvasMouseEvent lastMouseEvent) {
+		
 	}
 
 }

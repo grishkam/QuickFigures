@@ -20,7 +20,6 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
 import externalToolBar.*;
 import figureOrganizer.PanelListElement;
-import genericMontageKit.*;
 import graphicActionToolbar.CurrentFigureSet;
 import icons.CompoundIcon;
 import icons.IconSet;

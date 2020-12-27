@@ -41,7 +41,7 @@ import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
 
-/**Creates a buffered image for that will be a snapshot of the figure display.
+/**Creates a buffered image for that will be a snapshot of the worksheet.
   That image can in turn be copied to the system clipboard*/
 public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 

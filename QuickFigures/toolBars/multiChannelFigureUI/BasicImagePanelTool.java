@@ -46,8 +46,7 @@ import applicationAdapters.ImageWrapper;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
 
-/**After writing the MultichannelDisplay class, I needed tools to 
-  work with its channels. As the panels are independant objects */
+/**Tools that can work with channels of clicked image panels extend this class. As the panels are independant objects */
 public class BasicImagePanelTool extends BasicToolBit implements ActionListener {
 
 	public static final int ALL_IMAGES_IN_FIGURE=1, SELECTED_IMAGE_ONLY=0;
@@ -382,12 +381,11 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 			setModal(true);
 			this.mover=mover;
 			add("eWorkOn", new ChoiceInputPanel("Select what to work on", new String[] {"On Multichannel Image of Clicked Only", "On all in same figure"}, workOn));
-			//add("allFigure", new BooleanInputPanel("Select in Group", mover.selectingroup));
-		}
+			}
 		@Override
 		public void onOK() {
 			mover.workOn=this.getChoiceIndex("eWorkOn");
-		//	mover.selectingroup=this.getBoolean("groupsel");
+	
 		}
 		
 		

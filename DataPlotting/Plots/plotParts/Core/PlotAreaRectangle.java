@@ -29,7 +29,6 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import handles.LockedItemHandle;
-import handles.RectangularShapeSmartHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import menuUtil.HasUniquePopupMenu;

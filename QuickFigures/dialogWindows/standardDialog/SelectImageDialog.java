@@ -106,11 +106,13 @@ public class SelectImageDialog extends StandardDialog {
 		return  CurrentAppContext.getMultichannelContext().getallVisibleMultichanal();
 	}
 	
-	/**shows a dialog and returns it.*/
+	/**shows a dialog for selecting images and returns it after the user has selected one
+	  or returns immediately*/
 	public static SelectImageDialog getSelectedMultis(boolean includeChans, int num) {
 		ArrayList<MultiChannelImage> multis =getAvailableMultis();
 		
 		SelectImageDialog sd = new SelectImageDialog(multis, includeChans,num);
+		if (multis.size()==0) return sd;//does not waste time showing the dialog if there are not options
 		sd.showDialog();;
 		return sd;
 	}

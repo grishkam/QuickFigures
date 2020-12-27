@@ -32,7 +32,7 @@ public class NewCanvasDialog  extends BasicMenuItemForObj   {
 	
 	@Override
 	public String getNameText() {
-		return "Empty Figure Display"+typeString();
+		return "Empty Worksheet"+typeString();
 	}
 	
 	String typeString() {

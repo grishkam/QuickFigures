@@ -354,10 +354,15 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		}
 		
 		/**if neither a handle nor an object was pressed, then no object is selected*/
-		if(objectAtPressLocation==null&&getSelectedHandleNumber()==NO_HANDLE) setPrimarySelectedObject(null);
+		if(objectAtPressLocation==null&&getSelectedHandleNumber()==NO_HANDLE) 
+			setPrimarySelectedObject(null);
 		
 			
-		if (getPrimarySelectedObject()==null) return;
+		if (getPrimarySelectedObject()==null) {
+			attemptLayerGrab();
+			//nothing left to do
+			return;
+		}
 			
 			if (getPrimarySelectedObject() instanceof HasHandles &&getSelectedHandleNumber()>NO_HANDLE) {
 				getSelectionObjectAshashangles().handleMouseEvent(this.getLastMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_PRESSED, null);
@@ -377,9 +382,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			 		
 			 		/**remembers the starting location of the selected item*/
 			
-		this.getObjectGroupHandleList();
-		this.getCanvasHandleList();
-			if(this.textEditMode() &&this.handle<0 &&!e.isPopupTrigger()) {
+		this.getObjectGroupHandleList();//makes sure it is initialized
+		this.getCanvasHandleList();//makes sure it is initialized
+		
+			if(this.textEditMode() &&this.handle<=NO_HANDLE &&!e.isPopupTrigger()) {
 				this.mousePressOnTextCursor((TextGraphic) this.getPrimarySelectedObject());
 			}
 		
@@ -387,8 +393,20 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			this.notWithinPrimary=getPrimarySelectedObject()!=null
 					&&
 					!getPrimarySelectedObject().getOutline().contains(pressX, pressY);
+			
+			
+			
 		}
 	
+
+	/**
+	not yet implemented, if the press location is barely outside of an object
+	selects all objects in the layer
+	 */
+	private void attemptLayerGrab() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	protected void setPressedSmartHandle(SmartHandle sh) {
 		smartHandle=sh;
@@ -542,6 +560,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 	}
 
+	/**returns the first item on the list that is neither hidden not null*/
 	public LocatedObject2D getFirstNonhiddenItem(ArrayList<LocatedObject2D> therois) {
 		ArraySorter.removeThoseOfClass(therois, getExcludedClass());
 		if (this.ignorehidden)ArraySorter.removehideableItems(therois);

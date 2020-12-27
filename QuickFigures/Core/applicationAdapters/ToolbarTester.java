@@ -28,34 +28,14 @@ import includedToolbars.ObjectToolset1;
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 
-public class ToolbarTester {
+public class ToolbarTester extends StartApplication{
 
 	public static void main(String[] args) {
 		IssueLog.sytemprint=true;
 		startToolbars(true);
 	}
 	
-	public static void startToolbars(boolean appclose) {
-		
-		ObjectToolset1 toolset = showInnitial();
-		if (appclose) {
-			toolset.getframe().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		}
-		
-		}
-	
-	public static ObjectToolset1 showInnitial() {
-		return  showToolSet();
-	}
-	
-	/**shows both object and layout toolsets*/
-	public static ObjectToolset1 showToolSet() {
-		ObjectToolset1 ot = new ObjectToolset1();
-		new LayoutToolSet().run("");
-		new ActionToolset1().run("go");
-		ot.run("hi");
-		return ot;
-	}
+
 
 	
 	

@@ -37,7 +37,6 @@ import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicHolder;
-import handles.HandleRect;
 import handles.HasSmartHandles;
 import handles.PathPointReshapeList;
 import handles.ReshapeHandleList;
@@ -87,8 +86,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	public static final int ANCHOR_HANDLE_ONLY_MODE=0, THREE_HANDLE_MODE=2, TWO_HANDLE_MODE=1, CURVE_CONTROL_HANDLES_LINKED=3, MOVE_ALL_SELECTED_HANDLES=4, CURVE_CONTROL_SYMETRIC_MODE=5;
 	private int handleMode=THREE_HANDLE_MODE; 
 	
-	ArrayList<HandleRect> leftHandles=new ArrayList<HandleRect>();
-	ArrayList<HandleRect> rightHandles=new ArrayList<HandleRect>();
+	
 	
 	/**some paths will end with an arrow head*/
 	ArrowGraphic arrowHead1=null,

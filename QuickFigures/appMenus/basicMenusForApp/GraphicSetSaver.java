@@ -30,7 +30,7 @@ public class GraphicSetSaver  extends BasicMenuItemForObj {
 			GraphicContainingImage theSet=(GraphicContainingImage) diw.getImageAsWrapper();
 			File f=FileChoiceUtil.getSaveFile(theSet.getSavePath(), theSet.getSaveName());
 		if (f==null) return;
-		//diw.getImageAsWrapper();
+		
 		if (theSet.getTitle().equals(f.getName())) {} else {
 			theSet.setTitle(f.getName());
 				
@@ -48,19 +48,16 @@ public class GraphicSetSaver  extends BasicMenuItemForObj {
 	
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "saveDisplaySet";
 	}
 
 	@Override
 	public String getNameText() {
-		// TODO Auto-generated method stub
-		return "Figure Display";
+		return "Current Worksheet";
 	}
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
 		return "File<Save<";
 	}
 
