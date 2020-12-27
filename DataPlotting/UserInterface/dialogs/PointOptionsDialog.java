@@ -25,6 +25,7 @@ import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.AngleInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog for the shapes used to draw points on a scatter plot*/
 public class PointOptionsDialog extends GraphicItemOptionsDialog{
 
 	/**

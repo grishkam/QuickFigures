@@ -27,6 +27,7 @@ import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
+/**The shape of a frame*/
 public class FrameGraphic extends RectangularGraphic {
 
 	
@@ -71,12 +72,9 @@ public class FrameGraphic extends RectangularGraphic {
 	public Rectangle2D getInsideFrameRect() {
 
 		Rectangle r =super.getBounds().getBounds();
-		;
-		;
-		;
-		;
+		
 		return new Rectangle2D.Double(r.x-this.getStrokeWidth()/2, r.y-this.getStrokeWidth()/2, r.width+this.getStrokeWidth(), r.height+this.getStrokeWidth());
-	//return r;
+	
 	}
 
 	

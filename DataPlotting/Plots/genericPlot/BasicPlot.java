@@ -586,7 +586,7 @@ ArrayList<FigureLegendShape> getLegendShapes() {
 	return output;
 }
 
-protected ArrayList<DataBarShape> getMeanBars() {
+public ArrayList<DataBarShape> getMeanBars() {
 	ArrayList<DataBarShape> output=new ArrayList<DataBarShape>();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
 		if (t.getDataBar()!=null) output.add(t.getDataBar());
@@ -1029,6 +1029,17 @@ public void setAvailableStyles(ArrayList<SeriesStyle> availableStyles) {
 public void editDone(GridLayoutEditEvent e) {
 	// TODO Auto-generated method stub
 	
+}
+
+/**checks the parent layers for a basic plot*/
+public static BasicPlot findPlot(ZoomableGraphic z) {
+	while(z!=null && !(z instanceof BasicPlot)) {
+		z=z.getParentLayer();
+	}
+	if(z instanceof BasicPlot)
+		return (BasicPlot) z;
+	
+	return null;
 }
 
 }

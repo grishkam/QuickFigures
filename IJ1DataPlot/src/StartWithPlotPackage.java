@@ -16,6 +16,7 @@
 
 
 
+import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.StartApplication;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.MenuBarItemInstaller;
@@ -27,6 +28,7 @@ import fileread.ExcelFileToKaplanPlot;
 import fileread.ExcelFileToXYPlot;
 import fileread.ExcelRowToJTable;
 import fileread.ShowTable;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import includedToolbars.QuickFiguresToolBar;
 import includedToolbars.ToolInstallers;
@@ -44,7 +46,8 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		IssueLog.windowPrint=true;
 		install();
 		startToolbars(true);
-		
+		ImageDisplayTester.setupImageJ();
+		 ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
 		
 	}
 	

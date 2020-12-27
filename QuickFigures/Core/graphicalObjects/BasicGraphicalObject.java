@@ -82,7 +82,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	transient GraphicUtil Gu=new GraphicUtil();
 	transient boolean isDead=false;
 	
-	/**A smart handle list that is just for drawing*/
+	/**A smart handle list that is just for drawing. is not used by most subclasses*/
 	protected transient DecorativeSmartHandleList handleBoxes=new DecorativeSmartHandleList();
 	
 	transient FigureDisplayContainer setContainer;

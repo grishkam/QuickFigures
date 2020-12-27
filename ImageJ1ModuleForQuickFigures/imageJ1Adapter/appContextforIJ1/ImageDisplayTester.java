@@ -43,7 +43,7 @@ public class ImageDisplayTester extends ToolbarTester {
 	    //  System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Name");
 		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=false;
-		ij1Test(false);
+		setupImageJ(false);
 		showExample(true);
 		
 		
@@ -62,8 +62,11 @@ public class ImageDisplayTester extends ToolbarTester {
 		}
 	}
 	
+	public static void setupImageJ() {
+		setupImageJ(false);
+	} 
 	
-	public static void ij1Test(boolean useNormalPath) {
+	private static void setupImageJ(boolean useNormalPath) {
 		CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
 		
 		try {
@@ -120,6 +123,8 @@ public class ImageDisplayTester extends ToolbarTester {
 	}
 
 
+	/**Attempts to make sure the loci importer is installed into imageJ
+	 * after many tried, this worked*/
 	public static void loadLociImporter(ImageJ ij) {
 		try {
 			//IJ.getClassLoader().loadClass("loci.plugins.LociImporter");
@@ -146,7 +151,7 @@ public class ImageDisplayTester extends ToolbarTester {
 		new ActionToolset1().run("go");;
 		new ActionToolset2().run("go");;
 		
-		ij1Test(false);
+		setupImageJ(false);
 	}
 	
 	

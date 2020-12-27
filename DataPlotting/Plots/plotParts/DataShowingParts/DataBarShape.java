@@ -27,6 +27,7 @@ import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
 import dialogs.MeanBarDialog;
 import graphicalObjects_Shapes.RectangularGraphic;
+import handles.SmartHandleList;
 import plotParts.Core.PlotCordinateHandler;
 
 public class DataBarShape extends DataShowingShape implements SeriesLabelPositionAnchor {
@@ -38,6 +39,7 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 	private int type=Bar;
 	private PointModel pointModel=null;
 	boolean finishStroke=true;
+	private transient BarSmartHandleList smartHandles;
 	
 	public DataBarShape(DataSeries data, int type) {
 		super(data);
@@ -230,6 +232,12 @@ public boolean showsAsPoint() {
 		return super.isHidden();
 	}
 
+	@Override
+	public SmartHandleList getSmartHandleList() {
+		if (smartHandles==null)
+			smartHandles=new BarSmartHandleList(this);
+		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
+	}
 	
 
 }

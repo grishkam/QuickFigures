@@ -117,6 +117,6 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 	}
 	@Override
 	public SmartHandleList getSmartHandleList() {
-		return super.getButtonList();//needs update for lines. fill color not appropriate for lines
+		return super.getButtonList();
 	}
 }

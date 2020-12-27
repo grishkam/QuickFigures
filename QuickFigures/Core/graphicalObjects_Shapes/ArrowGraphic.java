@@ -82,7 +82,8 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	private static final double STANDARD_TIP_ANGLE = Math.PI/4, STANDARD_NOTCH_ANGLE = Math.PI*3/4;
 	
 	/**set to true if an outline of the arrow will be drawn*/
-	public static final int NO_OUTLINE=0, OUTLINE_SHAPE=1, OUTLINE_OF_NORMAL_HEAD=20, OUTLINE_OF_OPEN_HEAD=6;
+	public static final int NO_OUTLINE=0, OUTLINE_SHAPE=1, OUTLINE_OF_NORMAL_HEAD=20, 
+			OUTLINE_OF_OPEN_HEAD=6000;
 	private int outline=NO_OUTLINE;
 	
 	

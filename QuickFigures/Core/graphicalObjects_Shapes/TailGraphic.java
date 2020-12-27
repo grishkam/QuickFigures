@@ -24,6 +24,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.undo.AbstractUndoableEdit;
 
+import handles.CountHandle;
+import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import undo.ColorEditUndo;
@@ -38,12 +40,15 @@ import utilityClassesForObjects.RectangleEdges;
 public class TailGraphic extends RectangularGraphic implements RectangleEdgePosisions{
 	
 	final int[] locations = new int[] { RIGHT,  UPPER_RIGHT, UPPER_LEFT, LEFT,  LOWER_LEFT, LOWER_RIGHT};
-	int divisions=2;
+	
 	double cutAway=0.10;
 	{name="tail";}
 	/**
 	 * 
 	 */
+	
+	private CountParameter divisions=new CountParameter(this, 5); {divisions.parameterName="n divisions"; divisions.setMinValue(1);}
+
 	
 	private double notchAngle=Math.PI/2; 
 	
@@ -51,7 +56,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	
 	public TailGraphic(Rectangle2D rectangle, int nDiv) {
 		super(rectangle);
-		divisions=nDiv;
+		divisions.setValue(nDiv);
 	}
 	
 	
@@ -67,11 +72,15 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	public String getPolygonType() {
 		return "Tail";
 	}
+	
+	public String getShapeName() {
+		return "feather";
+	}
 
 	public TailGraphic copy() {
 		TailGraphic output = new TailGraphic(this);
 		output.setNotchAngle(notchAngle);
-		output.divisions=divisions;
+		output.divisions=divisions.copy(output);
 		return output;
 	}
 	
@@ -95,13 +104,13 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 		
 		
 		Rectangle2D rect = this.getRectangle();
+		int d=divisions.getValue();
 		
-			
-		for(int i=0; i<divisions; i++) {
+		for(int i=0; i<d; i++) {
 			double space = rect.getWidth()*cutAway;
-			if (divisions==1) space=0;
-			double width=rect.getWidth()/divisions-space;
-			Rectangle2D r2 = new Rectangle2D.Double(rect.getX()+i*(space+width), rect.getY(), width, rect.getHeight());
+			if (d==1) space=0;
+			double width=rect.getWidth()/d-space;
+			Rectangle2D r2 = new Rectangle2D.Double(rect.getX()+i*(space+width+space/d), rect.getY(), width, rect.getHeight());
 			addTailPartToPath(path, angle, r2);
 		}
 		
@@ -191,6 +200,11 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 		this.notchAngle = tipAngle;
 	}
 	
-	
+	protected SmartHandleList createSmartHandleList() {
+		SmartHandleList list = super.createSmartHandleList();
+		
+		list.add(new CountHandle(this, divisions, 4561215));
+		return list;
+	}
 	
 }

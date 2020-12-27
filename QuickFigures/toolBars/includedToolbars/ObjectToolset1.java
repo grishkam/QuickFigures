@@ -173,7 +173,6 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePosisions.LOWER_LEFT)));
 	out.add(new ShapeGraphicTool(new PlusGraphic(standardRectangle)));
 	out.add(new ShapeGraphicTool(new NotchedRectangleGraphic(standardRectangle)));
-	out.add(new ShapeGraphicTool(new TailGraphic(standardRectangle, 3)));
 	
 	
 	return out;}

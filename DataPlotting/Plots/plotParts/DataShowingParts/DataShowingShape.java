@@ -40,12 +40,12 @@ import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;
 import utilityClasses1.NumberUse;
 
+/**An abstract class for shapes that reflect a particular data series in a plot*/
 public abstract class DataShowingShape extends BasicShapeGraphic implements HasUniquePopupMenu, HasSmartHandles, PlotComponent{
 
 	protected PlotArea area;
 	/**values are relevant to one dimensional data in categories*/
 	private DataSeries theData;
-	//private int posistion=1;// if this is the nTh scatter in the plot
 	protected transient Shape currentDrawShape;
 	protected HashMap<Shape, DataSeries> partialShapes=new HashMap<Shape, DataSeries>();
 	

@@ -303,18 +303,19 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		 
 		   }
 	
-	/**If the object is selected, draws the handles that the user may drag. may be overwritten by subclasses*/
+	/**If the object is selected, draws the handles that the user may drag. 
+	 * this should be be overwritten by most subclasses*/
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
 		if (selected &&!handlesHidden) {
 
-			   getGrahpicUtil().drawHandlesAtPoints(g2d, cords,  RectangleEdges.getLocationsForHandles(this.getBounds()));
-			   handleBoxes=getGrahpicUtil().lastHandles;
+			handleBoxes= getGrahpicUtil().drawHandlesAtPoints(g2d, cords,  RectangleEdges.getLocationsForHandles(this.getBounds()));
+			 
 			   drawLocationAnchorHandle(g2d,cords);
 		}
 		
 	}
 	
-	/**Draws the handle for the fixed edge of the Rectangle*/
+	/**Draws the handle for the fixed edge of the shape*/
 	private void drawLocationAnchorHandle(Graphics2D g2d, CordinateConverter<?> cords) {
 		Point2D p = RectangleEdges.getLocation(getLocationType(), this.getBounds());//gets the point
 		
@@ -322,7 +323,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		AffineTransform aa = RectangleEdges.getRotationAboutCenter(this.getBounds(), -this.getAngle());
 		aa.transform(p, p);
 		
-		IssueLog.log("Drawing fixed edge ");
+		
 		getGrahpicUtil().setHandleFillColor(Color.red);//the handle color is different for the Anchor
 		ArrayList<Point2D> ps = new ArrayList<Point2D>();
 		ps.add(p);

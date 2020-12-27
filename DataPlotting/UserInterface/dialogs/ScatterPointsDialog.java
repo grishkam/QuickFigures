@@ -22,26 +22,26 @@ import plotParts.DataShowingParts.ScatterPoints;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 
-public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOptionsDialog*/ {
+public class ScatterPointsDialog  extends PointOptionsDialog {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	ScatterPoints rect;
-	ArrayList<ScatterPoints> additionalBars=new ArrayList<ScatterPoints>();
+	ScatterPoints mainTargetPoints;
+	ArrayList<ScatterPoints> additionalPoints=new ArrayList<ScatterPoints>();
 
 	
 	
 	
 	public ScatterPointsDialog(ScatterPoints b, boolean bareBones) {
 		this.bareBones=bareBones;
-		rect=b;
+		mainTargetPoints=b;
 		addOptionsToDialog();
 	}
 	public void addAdditionalBars(ArrayList<ScatterPoints> bars) {
-		additionalBars=bars;
+		additionalPoints=bars;
 	}
 	
 	public  ScatterPointsDialog(ArrayList<?> objects) {
@@ -49,12 +49,12 @@ public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOption
 		
 		for(Object o: objects) {
 			if (o instanceof ScatterPoints ) {
-				if (rect==null) {
-					rect=(ScatterPoints ) o;
+				if (mainTargetPoints==null) {
+					mainTargetPoints=(ScatterPoints ) o;
 					addOptionsToDialog();
 				}
 				else {
-					additionalBars.add((ScatterPoints ) o);
+					additionalPoints.add((ScatterPoints ) o);
 				}
 			}
 		}
@@ -63,7 +63,7 @@ public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOption
 
 	@Override
 	public void addOptionsToDialog() {
-		addShapeAttributesToDialog(rect);
+		addShapeAttributesToDialog(mainTargetPoints);
 		
 		
 	}
@@ -88,7 +88,7 @@ public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOption
 		addPointModelOptions(p);
 		
 		this.add("exclusion",
-				new ChoiceInputPanel("Exclude", new String[] {"None", "Anything withing 1.5x IQR"}, rect.getExclusion()));
+				new ChoiceInputPanel("Exclude", new String[] {"None", "Anything within 1.5x IQR"}, rect.getExclusion()));
 	
 	
 	}
@@ -96,8 +96,8 @@ public class ScatterPointsDialog  extends PointOptionsDialog/**GraphicItemOption
 	
 	@Override
 	public void setItemsToDiaog() {
-		setItemsToDialog(rect);
-		for(ScatterPoints bar: this.additionalBars) {setItemsToDialog(bar);}
+		setItemsToDialog(mainTargetPoints);
+		for(ScatterPoints bar: this.additionalPoints) {setItemsToDialog(bar);}
 		return ;
 	}
 	
