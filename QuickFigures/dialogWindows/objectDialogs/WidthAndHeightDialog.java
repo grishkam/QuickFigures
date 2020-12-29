@@ -17,7 +17,9 @@ package objectDialogs;
 
 import graphicalObjects_Shapes.RectangularGraphic;
 import standardDialog.numbers.NumberInputPanel;
+import utilityClassesForObjects.RectangleEdges;
 
+/**A dialog for setting the width and height of a rectangle*/
 public class WidthAndHeightDialog extends ShapeGraphicOptionsSwingDialog {
 
 	RectangularGraphic rect=null;
@@ -26,7 +28,6 @@ public class WidthAndHeightDialog extends ShapeGraphicOptionsSwingDialog {
 	public WidthAndHeightDialog(RectangularGraphic s) {
 		super(s, true);
 		rect=s;
-		// TODO Auto-generated constructor stub
 	}
 	
 	protected void addOptionsToDialog() {
@@ -52,6 +53,7 @@ public class WidthAndHeightDialog extends ShapeGraphicOptionsSwingDialog {
 	private void setWidthAndHeighttoDialog() {
 		rect.setWidth(this.getNumber("width"));
 		rect.setHeight(this.getNumber("height"));
+		rect.afterHandleMove(RectangleEdges.LOWER_RIGHT, null, null);
 	}
 	
 

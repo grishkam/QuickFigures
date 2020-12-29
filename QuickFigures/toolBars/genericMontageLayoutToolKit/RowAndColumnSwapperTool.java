@@ -51,7 +51,7 @@ public class RowAndColumnSwapperTool extends GeneralLayoutEditorTool implements 
 			
 		}
 		
-		if (layoutGraphic.getParentLayer() instanceof FigureOrganizingLayerPane) {
+		if (layoutGraphic!=null&&layoutGraphic.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane parentLayer = (FigureOrganizingLayerPane) layoutGraphic.getParentLayer();
 			 parentLayer.updateChannelOrder(mode);
 			

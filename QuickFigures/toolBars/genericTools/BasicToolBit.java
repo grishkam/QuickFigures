@@ -384,11 +384,19 @@ public class BasicToolBit implements ToolBit {
 	}
 
 
+	/**Switches the toolbar over to the default tool*/
 	protected Object todefaultTool() {
-		if(this.getClass().equals(Object_Mover.class)) {} else {
+		if(isDefaultTool()) {} else {
 			return ObjectToolset1.setCurrentTool(selectorToolName);
 		}
 		return null;
+	}
+
+	/**
+	returns true if this tool is the starting tool for the toolbar
+	 */
+	protected boolean isDefaultTool() {
+		return this.getClass().equals(Object_Mover.class);
 	}
 
 	@Override

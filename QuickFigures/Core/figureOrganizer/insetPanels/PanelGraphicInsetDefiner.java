@@ -634,6 +634,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	 * @param p1
 	 * @param p2
 	 */
+	@Override
 	public void afterHandleMove(int handleNumber, Point p1, Point p2) {
 		updateImagePanels();
 		resizeMontageLayoutPanels(handleNumber);

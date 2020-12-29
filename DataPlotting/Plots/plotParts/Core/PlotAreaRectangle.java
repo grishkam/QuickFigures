@@ -101,6 +101,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	 * @param p1
 	 * @param p2
 	 */
+	@Override
 	public void afterHandleMove(int handleNumber, Point p1, Point p2) {
 		if (handleNumber==RectangleEdges.CENTER) {
 			this.setLocationType(RectangleEdges.CENTER);

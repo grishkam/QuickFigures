@@ -40,12 +40,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-/**A superclass used for a variety of tool bits. Has methods to access Grid layout*/
+/**A superclass used for a variety of tools that perform an action related to the layout that has been clicked. 
+ * */
 public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpaces, ActionListener{
 
 
 	
-	protected DefaultLayoutGraphic layoutGraphic;
+	protected DefaultLayoutGraphic layoutGraphic;//the layout that has been clicked is stored
 	boolean removalPermissive=false;
 	boolean usesMain=false;
 	boolean resetClickPointOnDrag=true;
@@ -55,10 +56,14 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	private BasicLayout editingLayout;
 	private UndoLayoutEdit currentUndo;
 	
+	/**returns the layout editor for this tool*/
 	public GenericMontageEditor getLayoutEditor() {
 		if ( editor==null) editor=new GenericMontageEditor();
-		
 		return  editor;
+	}
+	public void setEditor(GenericMontageEditor editor2) {
+		editor=editor2;
+		
 	}
 	
 	/**returns the current layout. also sets up the ImageWrapper for that layout
@@ -83,13 +88,10 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 	}
 	
-	public void setEditor(GenericMontageEditor editor2) {
-		editor=editor2;
-		
-	}
-
+	
+/**returns true if a layuout area has been clicked on */
 	protected boolean hasALayoutBeenClicked() {
-		setupClickedLayout();
+		findClickedLayout();
 		if (layoutGraphic!=null && layoutGraphic.getBounds().contains(getClickedCordinateX(), getClickedCordinateY())) {
 			BasicLayout lay = getCurrentLayout();
 			
@@ -100,14 +102,13 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	}
 	
 	public void mousePressed() {
-		setupClickedLayout();
+		findClickedLayout();
 		
 		if (!hasALayoutBeenClicked()) {
-		//	IssueLog.log("layout has not been pressed");
+		
 			return;
 			}	
-		//IssueLog.log("layout has been pressed");
-	
+		
 		
 		
 		try {
@@ -129,7 +130,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	@Override
 	public void mouseMoved() {
-		setupClickedLayout();
+		findClickedLayout();
 		getImageClicked().getOverlaySelectionManagger().setSelection(markerRoi(), 0);
 	}
 	
@@ -140,7 +141,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	/**Identifies the layout at the clickpoint and sets it as the current layout. 
 	  */
-	public void setupClickedLayout() {
+	public void findClickedLayout() {
 		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageClicked(), this.getClickedCordinateX(), this.getClickedCordinateY(), DefaultLayoutGraphic.class);
 		ArraySorter.removehideableItems(list);//removes hidden layouts
 		
@@ -161,7 +162,6 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	@Override
 	public void mouseDragged() {
-		//if (!isMontage(imp)) return;
 		
 		if (getCurrentLayout()!=null) getCurrentLayout().resetPtsPanels();
 		
@@ -170,12 +170,12 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		
 		if (layoutGraphic!=null&& layoutGraphic.getBounds().contains(getDragCordinateX(), getDragCordinateY())) {
-			//IssueLog.log(getCurrentLayout().report());
+			
 			BasicLayout lay = getCurrentLayout();
 			super.setRowColDragForLayout(lay);
 		} else {
 			if (getCurrentLayout()==null /**!super.doesClickedImageHAveMaintMontageLayout() */){
-				IssueLog.log("no longer inside of layout");
+				//IssueLog.log("no longer inside of layout");
 				return;
 				}
 		}
@@ -224,7 +224,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	}
 	
 	protected void performReleaseEdit(boolean b) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -281,9 +281,9 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	} 
 	
 	
-	
+	/**returns the marker that appears over part of the layout as the user
+	 * drags the mouse. this on appears where the user pressed the mouse*/
 	public LocatedObject2D markerRoi() {
-	//	if (usesMain) return null;
 	
 		if (getCurrentLayout()==null) return null;
 		
@@ -295,18 +295,20 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		
 		return RectangularGraphic.blankRect(this.getCurrentLayout().getSelectedSpace(this.getClickedCordinateX(), this.getClickedCordinateY(), markerType()).getBounds(), Color.blue);
-		//return null;
+	
 	}
 	
 	
-	
+	/**returns the second marker that appears over part of the layout as the user
+	 * drags the mouse. this on appears where the user has dragged the mouse to*/
 	public LocatedObject2D MarkerRoi2() {
-		//if (usesMain) return null;
+		
 		if (markerType()==MONTAGE) return null;
 		return RectangularGraphic.blankRect(this.getCurrentLayout().getSelectedSpace(this.getDragCordinateX(), this.getDragCordinateY(), markerType()).getBounds(), Color.green);
-		//return null;
+		
 	}
 
+	/**removes the markers that are shown to user*/
 	public void removeMarkerRoi()  {
 		
 		getImageClicked().getOverlaySelectionManagger().removeSelections();

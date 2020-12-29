@@ -54,7 +54,7 @@ public class MontageLayoutRowColNumberTool extends GeneralLayoutEditorTool {
 	
 	/**sets up the fields in this class*/
 	public void mousePressed() {
-		setupClickedLayout();
+		findClickedLayout();
 		extrapanel=null;
 		if (this.hasALayoutBeenClicked() ) {
 			

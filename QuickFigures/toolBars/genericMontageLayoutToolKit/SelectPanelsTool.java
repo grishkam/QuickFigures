@@ -98,7 +98,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 		
 
 		public void mousePressed() {
-			setupClickedLayout();
+			findClickedLayout();
 			
 			if (!hasALayoutBeenClicked()) {getSelManOfClcikedImage().removeSelections();return;}
 		

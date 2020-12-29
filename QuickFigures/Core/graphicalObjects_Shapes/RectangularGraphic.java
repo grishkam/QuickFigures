@@ -39,6 +39,7 @@ import illustratorScripts.PathItemRef;
 import keyFrameAnimators.RectGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
 import layout.RetrievableOption;
+import logging.IssueLog;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.BasicStrokedItem;
@@ -129,7 +130,7 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		
 		/**if the rectangle is rotated, transforms the points to the equivalent unrotated points.
 		 * this step is not needed for the rotation handle itself*/
-		if (handlenum!=RectangularShapeSmartHandle.ROTATION_HANDLE) {
+		if (handlenum!=RectangularShapeSmartHandle.ROTATION_HANDLE && handlenum!=CENTER) {
 			
 			performRotationCorrection(destination);
 		}
@@ -165,6 +166,7 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		} else if (handlenum==CENTER) {
 			this.setLocationType(CENTER);
 			this.setLocation(destination);
+			
 			}
 		
 		

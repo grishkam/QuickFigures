@@ -27,7 +27,10 @@ import utilityClassesForObjects.LocatedObject2D;
 public class GraphicTool extends Object_Mover {
 
 	{createSelector=false;}
-	protected boolean temporaryTool=false;//not yet implemented
+	
+	/**If set to true, will switch to the default tool when 
+	  the mouse movement is done */
+	protected boolean temporaryTool=false;
 
 	
 	@Override 
@@ -63,7 +66,6 @@ public class GraphicTool extends Object_Mover {
 		super.mouseReleased();
 		onRelease(this.getImageClicked(),getPrimarySelectedObject());
 		if (temporaryTool) {
-			
 			super.todefaultTool();}
 	}
 	

@@ -318,7 +318,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 	public void mouseMoved() {
 		lastEdit=null;
 		removeMarkerRoi();
-		setupClickedLayout();
+		findClickedLayout();
 		if (markerRoi()==null) return;
 		getImageClicked().getOverlaySelectionManagger().setSelection(markerRoi(), 0);
 		

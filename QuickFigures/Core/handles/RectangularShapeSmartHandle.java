@@ -26,6 +26,7 @@ import undo.UndoStrokeEdit;
 import utilityClassesForObjects.RectangleEdges;
 
 /**A handle for editing shapes whose sizes are defined by a rectangle
+ * @see  RectangularGraphic
  * */
 public class RectangularShapeSmartHandle extends SmartHandle {
 	
@@ -51,7 +52,7 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 		
 		if (isRotationHandle()) {
 			this.setHandleColor(Color.orange);
-			//getGrahpicUtil(). drawSizeHandlesAtPoint(graphics, cords,  this.getCordinateLocation(),rect.getCenterOfRotation());
+			super.drawLineBetweenPoints(graphics, cords, rect.getCenterOfRotation(), this.getCordinateLocation());
 		}
 		
 		if (getHandleNumber()==STROKE_HANDLE_TYPE) {
