@@ -76,8 +76,7 @@ import utilityClassesForObjects.TakesLockedItems;
 /**A graphical object that stores a layout, displays the layout, includes handles for editing the layout*/
 public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
 	
-	
-	public static final int UNLOCKED=0, LOCKED=1;
+
 	private int userLocked=LOCKED;//determines whether user handle drags can mobe this item
 	
 	private transient SmartHandleList panelHandleList=new SmartHandleList();;
@@ -106,7 +105,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	protected PanelLayout layout=new BasicLayout();
 	private  HashMap<LocatedObject2D, Integer> panelLocations=new HashMap<LocatedObject2D, Integer>();
 	
-	private int strokeWidth=2;
+	private int strokeWidth=2;//how thick the rectangles for the panels are drawn
 	
 	ArrayList<PanelLayoutHandle> panelMotionHandles=new ArrayList<PanelLayoutHandle>();
 	//
@@ -224,7 +223,6 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	@Override
 	public int isUserLocked() {
-		// TODO Auto-generated method stub
 		return userLocked;
 	}
 
@@ -236,7 +234,6 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	@Override
 	public boolean doesIntersect(Rectangle2D rect) {
-		// TODO Auto-generated method stub
 		if (this.getPanelLayout().getPanel(1).intersects(rect)) return true;
 		return false;
 	}
@@ -255,26 +252,24 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	@Override
 	public Shape getOutline() {
-		// TODO Auto-generated method stub
-		return getPanelLayout().allPanelArea();
+		Shape allPanelArea = getPanelLayout().allPanelArea();
+		return allPanelArea;
 	}
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		//return getPanelLayout().allPanelArea().getBounds();
 		return getPanelLayout().getBoundry().getBounds();
 	}
 
+	/**not implemented */
 	@Override
 	public void setLocationType(int n) {
-		// TODO Auto-generated method stub
 
 	}
 
+	/**not implemented */
 	@Override
 	public int getLocationType() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -300,7 +295,8 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 					 drawPanel(graphics, cords, number, r);
 					number++;
 				 	}
-				 if (this.isSelected())drawHandles(graphics,cords);
+				 if (this.isSelected())
+					 drawHandles(graphics,cords);
 			
 			 
 			 		}
@@ -346,12 +342,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		Rectangle2D[] ps = this.getPanelLayout().getPanels();
 		clearHandleBoxes();
 		
-		int hdisplace=(int) (15/cords.getMagnification());
-		double handleArmDistance2 = handleArmDistance;//*cords.getMagnification();
-		double handleArmsize2 = handleArmsize;//*cords.getMagnification();
-		if (handleArmDistance2<15)handleArmDistance2=15;
-		if (handleArmsize2<3)handleArmsize2=3;
-		if (hdisplace<20)hdisplace=20;
+		
 		
 		addFirstLayerHandles(handleBoxes2);
 		
@@ -362,25 +353,47 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			w++;
 		}
 		
+		
+		createReferencePointHandles(cords);
+		
+		addAdditionalHandles(handleBoxes2);
+		
+		this.getAllSmartHandles().draw(graphics, cords);
+		this.getLocedItemHandleList().draw(graphics, cords);
+	}
+
+	/**creates the handles that are used to adjust the label spaces on
+	 * the sids of some layouts. in other layout types
+	 * @param cords
+	 */
+	void createReferencePointHandles(CordinateConverter cords) {
+		int hdisplace=(int) (15/cords.getMagnification());
+		double handleArmDistance2 = handleArmDistance;
+		double handleArmsize2 = handleArmsize;
+		if (handleArmDistance2<15)handleArmDistance2=15;
+		if (handleArmsize2<3)handleArmsize2=3;
+		if (hdisplace<20)hdisplace=20;
 		this.allrefPointHandles=new SmartHandleList();
 		PanelLayoutHandle rightRefPointHandle;
 		PanelLayoutHandle bottomRefPointHandle;
 		PanelLayoutHandle leftRefPointHandle;
 		PanelLayoutHandle topRefPointHandle;
 		PanelLayoutHandle  refPointHandle;
-		Point p = new Point(this.getBounds().x, this.getBounds().y);
 		
-		p = new Point((int)getBounds().getMaxX(), this.getBounds().y-hdisplace);
+		Rectangle bounds = this.getBounds();
+		
+		Point p = new Point(bounds.x, bounds.y);
+		
+		p = new Point((int)getBounds().getMaxX(), bounds.y-hdisplace);
 		
 		Point p2 = (Point) p.clone();
 		p2.y+=handleArmDistance2+5;
 		rightRefPointHandle =createHandle(  p, RightHandleID, handleArmsize2);
 		rightRefPointHandle.hasLine(p2);
-				//getGrahpicUtil().drawSizeHandlesAtPoint(graphics, cords, p, p2);
-	
+				
 		allrefPointHandles.add(rightRefPointHandle);
 		
-		p = new Point((int)getBounds().getMaxX(), (int)(this.getBounds().getMaxY()+hdisplace));
+		p = new Point((int)bounds.getMaxX(), (int)(bounds.getMaxY()+hdisplace));
 
 		p2 = (Point) p.clone();
 		p2.y-=handleArmDistance2+5;
@@ -388,7 +401,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		rightRefPointHandle.hasLine(p2);
 		allrefPointHandles.add(rightRefPointHandle);
 		
-		p = new Point(getBounds().x-hdisplace, (int)getBounds().getMaxY());
+		p = new Point(bounds.x-hdisplace, (int)bounds.getMaxY());
 	
 		p2 = (Point) p.clone();
 		p2.x+=handleArmDistance+5;
@@ -397,7 +410,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 		allrefPointHandles.add(bottomRefPointHandle);
 		
-		p = new Point((int)getBounds().getMaxX()+hdisplace, (int)getBounds().getMaxY());
+		p = new Point((int)bounds.getMaxX()+hdisplace, (int)bounds.getMaxY());
 
 		p2 = (Point) p.clone();
 		p2.x-=handleArmDistance+5;
@@ -406,7 +419,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 		allrefPointHandles.add(bottomRefPointHandle);
 		
-		p = new Point((int)getBounds().getX(), (int)getBounds().getMaxY()+hdisplace);
+		p = new Point((int)bounds.getX(), (int)bounds.getMaxY()+hdisplace);
 
 		p2 = (Point) p.clone();
 		p2.y-=handleArmDistance2;
@@ -415,7 +428,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 		allrefPointHandles.add(leftRefPointHandle);
 		
-		p = new Point((int)getBounds().getX(), this.getBounds().y-hdisplace);
+		p = new Point((int)bounds.getX(), bounds.y-hdisplace);
 
 		p2 = (Point) p.clone();
 		p2.y+=handleArmDistance2;
@@ -424,7 +437,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 		allrefPointHandles.add(leftRefPointHandle);
 		
-		p = new Point(getBounds().x-hdisplace, (int)getBounds().getY());
+		p = new Point(bounds.x-hdisplace, (int)bounds.getY());
 	
 		p2 = (Point) p.clone();
 		p2.x+=handleArmDistance2;
@@ -432,7 +445,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		topRefPointHandle.hasLine(p2);//this.getGrahpicUtil().setHandleSize(3);
 		allrefPointHandles.add(topRefPointHandle);
 		
-		p = new Point((int)getBounds().getMaxX()+hdisplace, (int)getBounds().getY());
+		p = new Point((int)bounds.getMaxX()+hdisplace, (int)bounds.getY());
 
 		p2 = (Point) p.clone();
 		p2.x-=handleArmDistance2;
@@ -440,21 +453,16 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		topRefPointHandle.hasLine(p2);//this.getGrahpicUtil().setHandleSize(3);
 		allrefPointHandles.add(topRefPointHandle);
 		
-		p = new Point(this.getBounds().x, this.getBounds().y);
+		p = new Point(bounds.x, bounds.y);
 	
 		refPointHandle =createHandle(  p, LocationHandleID, 14);
 	
 		allrefPointHandles.add(refPointHandle);
-		
-		addAdditionalHandles(handleBoxes2);
-		
-		this.getAllSmartHandles().draw(graphics, cords);
-		this.getLocedItemHandleList().draw(graphics, cords);
 	}
 
 	public void createHandlesForPanel(int w, Rectangle2D r, SmartHandleList handleBoxes2) {
 		/**Creates the panel resizing handles*/
-		 Point2D location = RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, r.getBounds());
+		 Point2D location = RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, r.getBounds2D());
 		
 		 PanelLayoutHandle r2 = createHandle( new Point2D.Double(location.getX(), location.getY()-5), w+ROW_HEIGTH_HANDLE*handleIDFactor, 2);
 		this.handleBoxes2.add(r2);
@@ -472,15 +480,15 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			
 		
 		/**creates the panel motion handles*/
-		 PanelLayoutHandle r3=createHandle( RectangleEdges.getLocation(RectangleEdges.CENTER, r.getBounds()), w+PANEL_LOCATION_HANDLE*handleIDFactor, 6);
+		 PanelLayoutHandle r3=createHandle( RectangleEdges.getLocation(RectangleEdges.CENTER, r.getBounds2D()), w+PANEL_LOCATION_HANDLE*handleIDFactor, 6);
 		panelMotionHandles.add(r3);
 		
 
 	}
 	
-	
+	/**subclasses add their own handles*/
 	protected void addFirstLayerHandles(SmartHandleList handleBoxes22) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -961,9 +969,9 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	 
 	 PanelLayoutHandle createHandle(Point2D pt, int handleNum) {
-		 PanelLayoutHandle output = new PanelLayoutHandle(0,0);
+		 PanelLayoutHandle output = new PanelLayoutHandle();
 		 
-		 output.setCordinateLocation(new Point((int)pt.getX(), (int)pt.getY()));
+		 output.setCordinateLocation(new Point2D.Double(pt.getX(), pt.getY()));
 		 output.setHandleNumber(handleNum);
 		 return output;
 	 }
@@ -974,7 +982,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		 return o;
 	 }
 	
-	protected class PanelLayoutHandle extends SmartHandle {
+	protected static class PanelLayoutHandle extends SmartHandle {
 		
 		boolean hasLinkLine=false;
 		Point2D startForLine=null;//cordinate location for start of line
@@ -1001,7 +1009,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			return overDecorationShape;
 		}
 
-		public PanelLayoutHandle(int x, int y) {
+		public PanelLayoutHandle() {
 			
 			super.handlesize=4;
 		}

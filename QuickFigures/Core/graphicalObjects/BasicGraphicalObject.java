@@ -55,7 +55,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int NOT_LOCKED = 0;
+	public static final int NOT_LOCKED = 0, LOCKED=1;
 	protected int locationType=RectangleEdgePositions.UPPER_LEFT;//indicates which location will actually be returned and set by the getlocation and set location methods
 
 	protected double angle=0;

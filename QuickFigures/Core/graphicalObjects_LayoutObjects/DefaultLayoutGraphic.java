@@ -286,10 +286,14 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		return new  MontageLayoutPanelMenu(this);
 	}
 	
+	/**returns the area a user may click on to select the layout
+	 * is is somewhat larger than the layout*/
 	@Override
 	public Shape getOutline() {
-		// TODO Auto-generated method stub
-		return getPanelLayout().getBoundry();
+		Shape boundry = getPanelLayout().getBoundry();
+		Rectangle2D r = boundry.getBounds2D();
+		int padding=25;
+		return new Rectangle2D.Double(r.getX()-padding, r.getY()-padding, r.getWidth()+padding*2, r.getHeight()+padding*2);
 	}
 
 	@Override
