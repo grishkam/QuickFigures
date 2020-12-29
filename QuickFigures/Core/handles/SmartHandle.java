@@ -73,7 +73,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	transient protected Shape specialShape=null;
 	protected String message=null;
 
-	protected CordinateConverter<?> lastDrawnConverter;
+	protected CordinateConverter lastDrawnConverter;
 
 	private boolean selected;
 
@@ -110,7 +110,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 	
 			graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
@@ -175,14 +175,14 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 
 	/**creates a transformed version of the 'special shape' that can be drawn at the scale of the coordinate converter
 	 * and at the given point*/
-	protected Shape createSpecialShape(Point2D pt, CordinateConverter<?> cords) {
+	protected Shape createSpecialShape(Point2D pt, CordinateConverter cords) {
 		AffineTransform g = AffineTransform.getTranslateInstance(pt.getX(), pt.getY());
 		return	g.createTransformedShape(specialShape);
 	}
 	
 	/**creates a transformed version of the given shape that can be drawn at the scale of the coordinate converter
 	 * and at the given point*/
-	protected Shape createDecorationShape(Point2D pt, CordinateConverter<?> cords, Shape shape) {
+	protected Shape createDecorationShape(Point2D pt, CordinateConverter cords, Shape shape) {
 		AffineTransform g = AffineTransform.getTranslateInstance(pt.getX(), pt.getY());
 		return	g.createTransformedShape(shape);
 	}
@@ -255,7 +255,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	}
 
 	/**returns the handle size*/
-	public int handleSize() {
+	public double handleSize() {
 		return handlesize;
 	}
 	
@@ -270,12 +270,12 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	}
 
 	/**Returns the width of the handle used if the handle is defined by the standard shape*/
-	public int getDrawnHandleWidth() {
+	public double getDrawnHandleWidth() {
 		return handleSize()*2;
 	}
 	
 	/**Returns the height of the handle used if the handle is defined by the standard shape*/
-	public int getDrawnHandleHeight() {
+	public double getDrawnHandleHeight() {
 		return getDrawnHandleWidth();
 	}
 
@@ -460,7 +460,7 @@ public Shape getClickableArea() {return lastDrawShape;}
 	}
 	
 	/**when given the coordinate location of points, draws them on the canvas*/
-	public  void drawLineBetweenPoints(Graphics2D g, CordinateConverter<?> cords, Point2D point, Point2D point2) {
+	public  void drawLineBetweenPoints(Graphics2D g, CordinateConverter cords, Point2D point, Point2D point2) {
 		int x1=(int)cords.transformX( point.getX());
 		int y1=(int)cords.transformY( point.getY());
 		int x2=(int)cords.transformX( point2.getX());
@@ -469,7 +469,7 @@ public Shape getClickableArea() {return lastDrawShape;}
 	}
 	
 	/**draws a line between this point and the other point*/
-	private void drawLineTo(Graphics2D graphics, CordinateConverter<?> cords, SmartHandle otherPoint) {
+	private void drawLineTo(Graphics2D graphics, CordinateConverter cords, SmartHandle otherPoint) {
 		graphics.setColor(getHandleColor());
 		graphics.setStroke(getHandleStroke());
 		drawLineBetweenPoints(graphics, cords, this.getCordinateLocation(), otherPoint.getCordinateLocation());

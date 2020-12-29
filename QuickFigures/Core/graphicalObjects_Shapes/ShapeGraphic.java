@@ -276,7 +276,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 
 	/**Draws the shape*/
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, isAntialize()?RenderingHints.VALUE_ANTIALIAS_ON: RenderingHints.VALUE_ANTIALIAS_OFF);
 		
 		/**Sets up the shape that will be used to draw*/
@@ -305,7 +305,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	
 	/**If the object is selected, draws the handles that the user may drag. 
 	 * this should be be overwritten by most subclasses*/
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected &&!handlesHidden) {
 
 			handleBoxes= getGrahpicUtil().drawHandlesAtPoints(g2d, cords,  RectangleEdges.getLocationsForHandles(this.getBounds()));
@@ -316,7 +316,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	}
 	
 	/**Draws the handle for the fixed edge of the shape*/
-	private void drawLocationAnchorHandle(Graphics2D g2d, CordinateConverter<?> cords) {
+	private void drawLocationAnchorHandle(Graphics2D g2d, CordinateConverter cords) {
 		Point2D p = RectangleEdges.getLocation(getLocationType(), this.getBounds());//gets the point
 		
 		/**if shape has a rotation, there will need to be a correction*/

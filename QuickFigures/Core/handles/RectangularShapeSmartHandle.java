@@ -43,7 +43,7 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 		
 		
 	}
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		this.updateLocation(getHandleNumber());
 		if (this.getHandleNumber()==rect.getLocationType()) {
 			this.setHandleColor(Color.red);

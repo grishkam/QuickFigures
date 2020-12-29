@@ -255,7 +255,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 			super(displaySet, e);
 		}
 
-		public CordinateConverter<?> getUsedConverter() {
+		public CordinateConverter getUsedConverter() {
 			return new BasicCoordinateConverter();
 		}
 	}

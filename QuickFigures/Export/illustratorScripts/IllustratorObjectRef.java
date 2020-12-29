@@ -18,10 +18,10 @@ package illustratorScripts;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 
 
-public class IllustratorObjectRef implements RectangleEdgePosisions{
+public class IllustratorObjectRef implements RectangleEdgePositions{
 	
 	boolean addScripts=true;
 	

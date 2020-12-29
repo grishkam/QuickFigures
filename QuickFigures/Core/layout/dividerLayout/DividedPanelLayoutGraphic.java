@@ -61,7 +61,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	}
 
 	
-	public void drawHandles(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void drawHandles(Graphics2D graphics, CordinateConverter cords) {
 		vHandle=new ArrayList<DividerHandle>();
 		hHandle=new ArrayList<DividerHandle>();
 		areaHandles=new ArrayList<AreaHandleForDividedLayout>();
@@ -100,7 +100,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 
 		/**Overrides superclass for drawing a layout*/
 	protected void drawLayoutTypeSpecific(Graphics2D graphics,
-			CordinateConverter<?> cords) {
+			CordinateConverter cords) {
 		if (this.isSelected())drawHandles(graphics, cords);
 		
 	}
@@ -227,7 +227,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		protected layoutDividedArea dividedArea;
 		private int panelnumber;
 
-		public AreaHandleForDividedLayout(layoutDividedArea div, Color orange, CordinateConverter<?> cords, int panelnumber) {
+		public AreaHandleForDividedLayout(layoutDividedArea div, Color orange, CordinateConverter cords, int panelnumber) {
 			
 			super.setCordinateLocation(new Point((int)div.getCenterX(), (int)div.getCenterY()));
 			this.panelnumber=panelnumber;

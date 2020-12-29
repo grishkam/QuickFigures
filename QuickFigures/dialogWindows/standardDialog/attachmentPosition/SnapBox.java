@@ -243,11 +243,11 @@ public class SnapBox extends GraphicSelectable {
 	@Override
 	public int getSelectionNumber() {
 		// TODO Auto-generated method stub
-		return this.getSnappingBehaviour().getSnapType();
+		return this.getSnappingBehaviour().getLocationCategory();
 	}
 	@Override
 	public void setSelectionNumber(int index) {
-		this.getSnappingBehaviour().setLocationType(index);
+		this.getSnappingBehaviour().setLocationCategory(index);
 		
 	}
 

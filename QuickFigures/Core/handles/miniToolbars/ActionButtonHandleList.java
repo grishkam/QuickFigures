@@ -75,7 +75,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	
 	
 	/**draws the handles*/
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		
 		
 		this.updateHandleLocations(cords.getMagnification());
@@ -172,7 +172,7 @@ public void updateLocationsForVertical() {
 		protected IconHandle alternativePopup=null;//if non-null, this will display a popup rather than perform the operation when pressed 
 		public boolean useOperatorPopup=false;
 		
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			updateHandleLocations(cords.getMagnification());
 			updateIcon();
 			super.draw(graphics, cords);

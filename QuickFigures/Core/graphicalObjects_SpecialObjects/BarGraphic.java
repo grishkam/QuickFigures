@@ -43,7 +43,7 @@ import undo.UndoScaleBarEdit;
 import utilityClasses1.NumberUse;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScaleInfo;
 import utilityClassesForObjects.ScalededItem;
@@ -77,7 +77,7 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.BarSwingGraphicDialog;
 
 /**A graphical object that represents a scale bar*/
-public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,RectangleEdgePosisions, HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,GraphicHolder, HasSmartHandles, ProvidesDialogUndoableEdit{
+public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,RectangleEdgePositions, HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,GraphicHolder, HasSmartHandles, ProvidesDialogUndoableEdit{
 	
 
 	/**
@@ -399,7 +399,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		this.getBarText().setText(this.unitlengthString());
 	}
 	
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		
 		;
 		setLengthInUnits();
@@ -424,7 +424,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		 
 		   }
 	
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (this.isSelected())this.getSmartHandleList().draw(g2d, cords);
 	}
 	

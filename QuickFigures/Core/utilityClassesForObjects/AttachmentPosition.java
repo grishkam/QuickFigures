@@ -29,12 +29,15 @@ import logging.IssueLog;
 /**The positions of certain objects (like text and scale bars). 
   are set relative to their parent panels. This class stores the preferred 
   position of one object and contains methods related to placing the object in position
-  and calculating. See rectangleEdgePositions interface for information about
+  and calculating that location (in x,y). 
+  @see RectangleEdgePositions interface for information about
   there location codes. Locations may be internal (within the parent objects bounds) 
   or external (outside of it). In either case, each position is offset from the edge of the 
   parent panel. the magnitude of the offset is a changeable value. the direction of the offset
-  depends on where the attached object is relative to the parent panel*/
-public class AttachmentPosition implements  RectangleEdgePosisions, Serializable  {
+  depends on where the attached object is relative to the parent panel.
+  For row and column labels attached to a layout, another field indicating the type of layout positions
+  is also important @see LayoutSpaces for more information about the layout locations*/
+public class AttachmentPosition implements  RectangleEdgePositions, Serializable  {
 	
 	/**
 	 * 
@@ -43,28 +46,38 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	private double horizontalOffset=0;
 	private double verticalOffset=0;
 	
-	private static String[] boundsChoices=new String[] {"Normal ", "Extened Bounds"};
-	private static int NORMAL_BOUNDS=0, EXTENDED_BOUNDS=1;
+
+	private boolean supressed=false;
+	
+	/**some objects have both a bounds and an extended bounds,
+	 *  the extended bounds option determines how the position is determined
+	 *  see manual
+	 *  */
+	private static final String[] boundsChoices=new String[] {"Normal ", "Extened Bounds"};
+	public static final int NORMAL_BOUNDS=0, EXTENDED_BOUNDS=1;
 	private int useExtendedBounds=NORMAL_BOUNDS;
 	
 	
-	private boolean supressed=false;
 	
 	/**values determine whether the position in question is inside or outside of its parent object*/
-	private String[] stapTypeChoices=new String[] {"Internal Snap", "External Snaps"};
-	public static int INTERNAL=0, EXTERNAL=1;
+	private final String[] locationCategoryChoices=new String[] {"Internal Snap", "External Snaps"};
+	public static final int INTERNAL=0, EXTERNAL=1;
 	/**whether this snaps to an internal or an external location*/
 	private int snapType=INTERNAL; 
 	
-	/**items attached to a layout will require this option to determine what kind of parent panel is used for them*/
+	/**items attached to a layout may be attached to either a row, coloumn, panel or comthing else
+	 * the descriptions of the options for the parent panel are listed here
+	 * */
 	private static String[] gridChoices=new String[] {"To Panel", "To Column", "To Row", "To Montage", "To Block of Panels"};
+	
+	/**the layout space codes for every layout location*/
 	private static int[] gridSpaceCodes=new int[] {LayoutSpaces.PANELS,LayoutSpaces.COLUMN_OF_PANELS,LayoutSpaces.ROW_OF_PANELS, LayoutSpaces.ALL_MONTAGE_SPACE, LayoutSpaces.BLOCK_OF_PANELS};
 	private int gridLayoutSnapType=Arrays.binarySearch(gridSpaceCodes, LayoutSpaces.PANELS);
 	
 	
 	/**the internal and external snapping types. around 20 in total*/
-	private int snapLocationTypeInternal=RectangleEdgePosisions.UPPER_LEFT;
-	private int snapLocationTypeExternal= RectangleEdgePosisions.externalLocations[0];
+	private int snapLocationTypeInternal=RectangleEdgePositions.UPPER_LEFT;
+	private int snapLocationTypeExternal= RectangleEdgePositions.ALL_EXTERNAL_LOCATIONS[0];
 	
 	
 	public AttachmentPosition() {}
@@ -81,13 +94,13 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	
 	/**returns an array with every internal position code*/
 	public static int[] internalSnapOptions() {
-		return RectangleEdgePosisions.internalAttachmentLocations;
+		return RectangleEdgePositions.internalAttachmentLocations;
 		
 	}
 	
 	/**returns an array with every external position code*/
 	public static int[] externalSnapOptions() {
-		return RectangleEdgePosisions.externalLocations;
+		return RectangleEdgePositions.ALL_EXTERNAL_LOCATIONS;
 		
 	}
 	
@@ -124,7 +137,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultExternal() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(ABOVE_AT_MIDDLE);
-		output.setLocationType(EXTERNAL);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -140,7 +153,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(LEFT_SIDE_MIDDLE);
 		output.setGridChoice2(LayoutSpaces.ROW_OF_PANELS);
-		output.setLocationType(EXTERNAL);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -153,7 +166,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(ABOVE_AT_MIDDLE);
 		output.setGridChoice2(LayoutSpaces.COLUMN_OF_PANELS);
-		output.setLocationType(EXTERNAL);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -162,7 +175,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(ABOVE_AT_MIDDLE);
 		output.setGridChoice2(LayoutSpaces.ALL_OF_THE+LayoutSpaces.PANELS);
-		output.setLocationType(EXTERNAL);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -174,7 +187,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		output.setGridChoice2(LayoutSpaces.COLUMN_OF_PANELS);
 		output.setVerticalOffset(6);
 		output.setHorizontalOffset(4);
-		output.setLocationType(EXTERNAL);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -186,7 +199,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		output.setGridChoice2(LayoutSpaces.ROW_OF_PANELS);
 		output.setVerticalOffset(6);
 		output.setHorizontalOffset(4);
-		output.setLocationType(EXTERNAL);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -196,7 +209,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(RIGHT_SIDE_MIDDLE);
 		output.setHorizontalOffset(4);
-		output.setLocationType(1);
+		output.setLocationCategory(1);
 		return output;
 	}
 	
@@ -206,8 +219,8 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	    */
 	public static AttachmentPosition partnerExternal() {
 		AttachmentPosition output = new AttachmentPosition();
-		output.setLocationTypeExternal(RectangleEdgePosisions.RIGHT_SIDE_TOP);
-		output.setLocationType(EXTERNAL);
+		output.setLocationTypeExternal(RectangleEdgePositions.RIGHT_SIDE_TOP);
+		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
 	
@@ -215,27 +228,27 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static ArrayList<AttachmentPosition> externalRightLeft() {
 		ArrayList<AttachmentPosition> out = new  ArrayList<AttachmentPosition>();
 		AttachmentPosition o1 = partnerExternal() ;
-		o1.setLocationTypeExternal(RectangleEdgePosisions.RIGHT_SIDE_TOP);
+		o1.setLocationTypeExternal(RectangleEdgePositions.RIGHT_SIDE_TOP);
 		out.add(o1);
 		
 		o1=partnerExternal() ;
-		o1.setLocationTypeExternal(RectangleEdgePosisions.RIGHT_SIDE_MIDDLE);
+		o1.setLocationTypeExternal(RectangleEdgePositions.RIGHT_SIDE_MIDDLE);
 		out.add(o1);
 		
 		o1=partnerExternal() ;
-		o1.setLocationTypeExternal(RectangleEdgePosisions.RIGHT_SIDE_BOTTOM);
+		o1.setLocationTypeExternal(RectangleEdgePositions.RIGHT_SIDE_BOTTOM);
 		out.add(o1);
 		
 		o1=partnerExternal() ;
-		o1.setLocationTypeExternal(RectangleEdgePosisions.LEFT_SIDE_TOP);
+		o1.setLocationTypeExternal(RectangleEdgePositions.LEFT_SIDE_TOP);
 		out.add(o1);
 		
 		o1=partnerExternal() ;
-		o1.setLocationTypeExternal(RectangleEdgePosisions.LEFT_SIDE_MIDDLE);
+		o1.setLocationTypeExternal(RectangleEdgePositions.LEFT_SIDE_MIDDLE);
 		out.add(o1);
 		
 		o1=partnerExternal() ;
-		o1.setLocationTypeExternal(RectangleEdgePosisions.LEFT_SIDE_BOTTOM);
+		o1.setLocationTypeExternal(RectangleEdgePositions.LEFT_SIDE_BOTTOM);
 		out.add(o1);
 		
 		return out;
@@ -254,10 +267,11 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	}
 	
 
-	
+	/**returns true if the attachment location is inside of the parent panel*/
 	public boolean isInternalSnap() {
 		return snapType==INTERNAL;
 	}
+	/**returns true if the attachment location is outside of the parent panel*/
 	public boolean isExternalSnap() {
 		return snapType==EXTERNAL;
 	}
@@ -266,9 +280,9 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**returns true if this one places the mobile object to the right of the parent, false otherwise*/
 	public boolean isExternalRightSnap() {
 		if (isInternalSnap()) return false;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.RIGHT_SIDE_BOTTOM) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.RIGHT_SIDE_TOP) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.RIGHT_SIDE_MIDDLE) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.RIGHT_SIDE_BOTTOM) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.RIGHT_SIDE_TOP) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.RIGHT_SIDE_MIDDLE) return true;
 		
 		
 		return false;
@@ -277,9 +291,9 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**returns true if this one places the mobile object to the left of the parent, false otherwise*/
 	public boolean isExternalLeftSnap() {
 		if (isInternalSnap()) return false;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.LEFT_SIDE_BOTTOM) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.LEFT_SIDE_TOP) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.LEFT_SIDE_MIDDLE) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.LEFT_SIDE_BOTTOM) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.LEFT_SIDE_TOP) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.LEFT_SIDE_MIDDLE) return true;
 		
 		
 		return false;
@@ -288,9 +302,9 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**returns true if this is an external snap that moves an object below a parent object*/
 	public boolean isExternalBottomEdgeSnap() {
 		if (isInternalSnap()) return false;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.BELOW_AT_RIGHT) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.BELOW_AT_LEFT) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.BELOW_AT_MIDDLE) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.BELOW_AT_RIGHT) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.BELOW_AT_LEFT) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.BELOW_AT_MIDDLE) return true;
 		
 		
 		return false;
@@ -299,9 +313,9 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**returns true if this is an external snap that moves an object below a parent object*/
 	public boolean isExternalTopEdgeSnap() {
 		if (isInternalSnap()) return false;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.ABOVE_AT_RIGHT) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.ABOVE_AT_LEFT) return true;
-		if (this.getSnapLocationTypeExternal()==RectangleEdgePosisions.ABOVE_AT_MIDDLE) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.ABOVE_AT_RIGHT) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.ABOVE_AT_LEFT) return true;
+		if (this.getSnapLocationTypeExternal()==RectangleEdgePositions.ABOVE_AT_MIDDLE) return true;
 		
 		
 		return false;
@@ -336,7 +350,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**takes the location but not the offsets from the argument*/
 	public void copyPositionFrom(AttachmentPosition  s) {
 			if(s==null) return;
-		 setLocationType(s.getSnapType());
+		 setLocationCategory(s.getLocationCategory());
 		 setLocationTypeInternal(s.getSnapLocationTypeInternal());
 		 setLocationTypeExternal(s.getSnapLocationTypeExternal());
 		 setSupressed(s.isSupressed());
@@ -359,7 +373,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(position);
 		output.setLocationTypeInternal(position);
-		output.setLocationType(INTERNAL);
+		output.setLocationCategory(INTERNAL);
 		return output;
 	}
 	
@@ -367,7 +381,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultScaleBar() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeInternal(LOWER_RIGHT);
-		output.setLocationType(INTERNAL);
+		output.setLocationCategory(INTERNAL);
 		output.setVerticalOffset(4);
 		output.setHorizontalOffset(4);
 		return output;
@@ -378,7 +392,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public static AttachmentPosition defaultPanelLabel() {
 		AttachmentPosition output = new AttachmentPosition();
 		output.setLocationTypeExternal(UPPER_LEFT);
-		output.setLocationType(INTERNAL);
+		output.setLocationCategory(INTERNAL);
 		output.setHorizontalOffset(1);
 		return output;
 	}
@@ -414,7 +428,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	
 	/**returns true if the position is outside the parent object and on the left/right sites*/
 	private boolean isHorozontalOutside() {
-		if (this.getSnapType()==INTERNAL) return false;
+		if (this.getLocationCategory()==INTERNAL) return false;
 		 if (this.getSnapLocationTypeExternal()/factor==LEFT) return true;
 		 if (this.getSnapLocationTypeExternal()/factor==RIGHT) return true;
 		
@@ -423,7 +437,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	
 	/**returns true if the position is outside the parent object and on the top/bottom sites*/
 	private boolean isVerticalOutside() {
-			if (this.getSnapType()==INTERNAL) return false;
+			if (this.getLocationCategory()==INTERNAL) return false;
 			if (this.getSnapLocationTypeExternal()/factor==TOP) return true;
 			if (this.getSnapLocationTypeExternal()/factor==BOTTOM) return true;
 			return false;
@@ -440,7 +454,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		r2.setRect(r2b);
 	}
 	
-	/***/
+	/**Changes the location for rectangle r1, setting its location relative to the parent panel  r2*/
 	private void snapRects(Rectangle2D.Double r1, Rectangle2D.Double r2) {
 			if (snapType==INTERNAL) {
 				doInternalSnapEdgePointToEdgePoint(snapLocationTypeInternal,r1,r2);
@@ -454,9 +468,9 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	/**returns a string describing the current position*/
 	public String getDescription() {
 		if (snapType==INTERNAL) {
-			return RectangleEdges.locationToString(getSnapLocationTypeInternal());
+				return RectangleEdges.locationToString(getSnapLocationTypeInternal());
 			}else {
-			return RectangleEdges.locationToString(getSnapLocationTypeExternal());
+				return RectangleEdges.locationToString(getSnapLocationTypeExternal());
 			}
 	}
 	
@@ -467,7 +481,7 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	}
 	
 	/**Assuming the get description string returns something with an internal comma
-	 returns a string with the second half of a descripton*/
+	 returns a string with the second half of a descriptor*/
 	public String getSecondDescription() {
 		String st=this.getDescription();
 		if (st.contains(","))	return st.split(",")[1];
@@ -500,10 +514,10 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	public void setToNearestSnap(Rectangle2D r1, Rectangle2D r2, Point2D p) {
 		if(r2==null||r1==null) return;
 		if (r2.contains(p)) {
-			this.setLocationType(INTERNAL);;
+			this.setLocationCategory(INTERNAL);;
 			setToNearestInternalSnap(r1,r2,p);
 			} else 
-				{this.setLocationType(EXTERNAL);setToNearestExternalSnap(r1,r2,p);}
+				{this.setLocationCategory(EXTERNAL);setToNearestExternalSnap(r1,r2,p);}
 		
 	}
 	
@@ -746,26 +760,48 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	}
 
 	/**returns the location type as internal or external*/
-	public int getSnapType() {
+	public int getLocationCategory() {
 		return snapType;
 	}
-	public void setLocationType(int snapType) {
+	/**sets the location type as internal or external*/
+	public void setLocationCategory(int snapType) {
 		this.snapType = snapType;
 	}
+	
+	/**returns what type of internal location this object uses
+	 * @see RectangleEdgePositions
+	 * @see RectangleEdges
+	 * */
 	public int getSnapLocationTypeInternal() {
 		return snapLocationTypeInternal;
 	}
+	/**sets what type of internal location this object uses
+	 * @see RectangleEdgePositions
+	 * @see RectangleEdges
+	 * */
 	public void setLocationTypeInternal(int snapLocationTypeInternal) {
 		this.snapLocationTypeInternal = snapLocationTypeInternal;
 	}
+	
+	/**returns what type of external location this object uses
+	 * @see RectangleEdgePositions
+	 * @see RectangleEdges
+	 * */
 	public int getSnapLocationTypeExternal() {
 		return snapLocationTypeExternal;
 	}
+	
+	/**returns what type of internal location this object uses
+	 * @see RectangleEdgePositions
+	 * @see RectangleEdges
+	 * */
 	public void setLocationTypeExternal(int snapLocationTypeExternal) {
 		this.snapLocationTypeExternal = snapLocationTypeExternal;
 	}
-	public String[] getStapTypeChoices() {
-		return stapTypeChoices;
+	
+	/**returns the names of the two location categories*/
+	public String[] getLocationCategoryChoices() {
+		return locationCategoryChoices;
 	}
 	
 	public boolean isSupressed() {
@@ -782,53 +818,63 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 		return des;
 	}
 	
-	
+	/**returns whether extended bounds are used as a basis for locations*/
 	public int getUseExtendedBounds() {
 		return useExtendedBounds;
 	}
+	/**set whether extended bounds are used as a basis for locations*/
 	public void setUseExtendedBounds(int useExtendedBounds) {
 		this.useExtendedBounds = useExtendedBounds;
 	}
+	/**the names of the options regarding how to use the bounds of an object*/
 	public static String[] getBoundsChoices() {
 		return boundsChoices;
 	}
 	
-	
-	
-	public static String[] getGridSpaceCodes() {
+	/**returns the names of the grid spaces that may be used*/
+	public static String[] getGridSpaceCodeNames() {
 		return gridChoices;
 	}
+	
+	/**returns the layout space code for the type of layout location chosen
+	 * @see LayoutSpaces*/
 	public int getGridSpaceCode() {
 		return getGridchoices()[this.getGridLayoutSnapType()];
 	}
+	
+	/**returns the choices for grid layout locations for attachment*/
 	public static int[] getGridchoices() {
 		return gridSpaceCodes;
 	}
 	
+	/**returns the index for the type of grid location that this attached to*/
 	public int getGridLayoutSnapType() {
 		return gridLayoutSnapType;
 	}
+	/**set the index for the type of grid location that this attached to*/
 	public void setGridLayoutSnapType(int gridLayoutSnapType) {
 		this.gridLayoutSnapType = gridLayoutSnapType;
 	}
 
 	
-	/**returns the external position that would result from a diagonal flip*/
+	/**returns the external position that would result from a diagonal flip
+	 * of a layout*/
 	private int diagnalFlip() {
 		int e = this.getSnapLocationTypeExternal();
 		switch(e) {
-		case ABOVE_AT_LEFT: return LEFT_SIDE_BOTTOM;
-		case  LEFT_SIDE_BOTTOM: return ABOVE_AT_LEFT;
-		case ABOVE_AT_MIDDLE: return LEFT_SIDE_MIDDLE;
-		case  LEFT_SIDE_MIDDLE: return ABOVE_AT_MIDDLE ;
-		case ABOVE_AT_RIGHT: return LEFT_SIDE_TOP;
-		case LEFT_SIDE_TOP: return ABOVE_AT_RIGHT;
+			case ABOVE_AT_LEFT: return LEFT_SIDE_BOTTOM;
+			case  LEFT_SIDE_BOTTOM: return ABOVE_AT_LEFT;
+			case ABOVE_AT_MIDDLE: return LEFT_SIDE_MIDDLE;
+			case  LEFT_SIDE_MIDDLE: return ABOVE_AT_MIDDLE ;
+			case ABOVE_AT_RIGHT: return LEFT_SIDE_TOP;
+			case LEFT_SIDE_TOP: return ABOVE_AT_RIGHT;
 		}
 		
 		return e;
 	}
 	
-	/**swaps row label positions with column label ones*/
+	/**Performs a diagonal flip of for the layout locations
+	 * swaps row label positions with column label ones. */
 	public void flipDiag(){
 		this.setLocationTypeExternal(diagnalFlip() );
 		
@@ -849,7 +895,6 @@ public class AttachmentPosition implements  RectangleEdgePosisions, Serializable
 	}
 	
 	/**stores the last point object used for scaling to ensure that this object will not be scale itself more than one time
-	
 	*/
 	private Point2D lastScaleAbout;
 	

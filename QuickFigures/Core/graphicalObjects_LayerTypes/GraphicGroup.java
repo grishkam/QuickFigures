@@ -251,8 +251,8 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
-		//CordinateConverter<?> c = cords.getCopyTranslated(-x, -y);
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
+		//CordinateConverter c = cords.getCopyTranslated(-x, -y);
 
 		this.drawLayer(graphics, cords);
 		
@@ -271,7 +271,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 	
 	
-	public void drawLayer(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void drawLayer(Graphics2D graphics, CordinateConverter cords) {
 	
 		for(ZoomableGraphic z: getTheLayer().getGraphicsSync()) try {
 			if (z==null) continue;
@@ -567,7 +567,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		}
 
 		@Override
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			
 			
 		}

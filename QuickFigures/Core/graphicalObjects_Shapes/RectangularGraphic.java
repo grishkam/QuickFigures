@@ -44,14 +44,14 @@ import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.BasicStrokedItem;
 import utilityClassesForObjects.Fillable;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScalesFully;
 import utilityClassesForObjects.ShowsOptionsDialog;
 import utilityClassesForObjects.StrokedItem;
 
 /**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog*/
-public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePosisions, HasSmartHandles {
+public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePositions, HasSmartHandles {
 	 
 	{name="Rectangle ";}
 	
@@ -92,7 +92,7 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	}
 	
 	public RectangularGraphic(Rectangle2D r) {
-		setLocationType(RectangleEdgePosisions.UPPER_LEFT);
+		setLocationType(RectangleEdgePositions.UPPER_LEFT);
 		if(r!=null)
 			setRectangle(r);
 	}
@@ -432,7 +432,7 @@ public Rectangle2D.Double getRectangle() {
 	
 
 	/**draws the handles*/
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected &&!super.handlesHidden) {
 		
 			getSmartHandleList().draw(g2d, cords);

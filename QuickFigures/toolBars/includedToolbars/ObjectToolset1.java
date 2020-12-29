@@ -63,7 +63,7 @@ import pathGraphicToolFamily.PathGraphicTool;
 import pathGraphicToolFamily.PathReflectTool;
 import pathGraphicToolFamily.PathTool;
 import pathGraphicToolFamily.PathTool2;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 
 /**The main toolbar for QuickFigures. Includes all critical tools*/
 public class ObjectToolset1 extends QuickFiguresToolBar{
@@ -169,8 +169,8 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 
 	out.add(new ShapeGraphicTool(new TriangleGraphic(standardRectangle)));
 	
-	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePosisions.LOWER_RIGHT)));
-	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePosisions.LOWER_LEFT)));
+	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePositions.LOWER_RIGHT)));
+	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePositions.LOWER_LEFT)));
 	out.add(new ShapeGraphicTool(new PlusGraphic(standardRectangle)));
 	out.add(new ShapeGraphicTool(new NotchedRectangleGraphic(standardRectangle)));
 	

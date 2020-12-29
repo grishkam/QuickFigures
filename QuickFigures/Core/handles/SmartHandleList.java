@@ -52,7 +52,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	}
 	
 
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		for(SmartHandle sh:this) {
 			if (sh.isHidden()) continue;
 			sh.draw(g, cords);

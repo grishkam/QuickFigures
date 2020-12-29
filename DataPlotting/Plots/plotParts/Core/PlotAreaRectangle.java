@@ -60,7 +60,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	}
 	
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		//mapPanelLocations();
 		 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		snapLockedItems();
@@ -179,7 +179,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	}
 	
 	/**draws the handles*/
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		super.drawHandesSelection(g2d, cords);
 		/**if (selected) {
 		Point2D c = RectangleEdges.getLocation(CENTER, getRectangle());

@@ -32,12 +32,12 @@ import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 
 /**A graphic that was designed to depict the tail of an arrow. 
   TODO: modify it to include options for a variety of interesting shapes*/
-public class TailGraphic extends RectangularGraphic implements RectangleEdgePosisions{
+public class TailGraphic extends RectangularGraphic implements RectangleEdgePositions{
 	
 	final int[] locations = new int[] { RIGHT,  UPPER_RIGHT, UPPER_LEFT, LEFT,  LOWER_LEFT, LOWER_RIGHT};
 	

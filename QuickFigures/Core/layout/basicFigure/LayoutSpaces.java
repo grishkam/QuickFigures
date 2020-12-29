@@ -15,6 +15,9 @@
  *******************************************************************************/
 package  layout.basicFigure;
 
+/**this interface includes codes for specific kinds of locations within a layout
+ * those associated with rows, panels or columns are used the most frequently
+ * others are either rarely used or used only for manual testing related to layouts*/
 public interface LayoutSpaces {
 	public static final int MONTAGE=-1, PANELS=0, COLS=1, ROWS=2, PANELS_WITH_BORDER=3, BORDER=4, POINTS=5, 
 	TOP_SPACE=6, LEFT_SPACE=8, RIGHT_SPACE=9, BOTTOM_SPACE=7, ALL_MONTAGE_SPACE=10, NON_MONTAGE_SPACE=11, 
@@ -28,8 +31,6 @@ public interface LayoutSpaces {
 	COLUMN_OF_PANELS=37, ROW_OF_PANELS=38, BLOCK_OF_PANELS=39,
 	ENTIRE_IMAGE=40, TOP_3rd=41, BOTTOM_3rd=42, LEFT_3rd=43, RIGHT_3rd =44;
 	
-	public static final int GROUP_FACTOR=100;
-	public static final int ONLY_THIS_ONE=0, ALL_OF_THE=1*GROUP_FACTOR, THIS_COLS=2*GROUP_FACTOR, THIS_ROWS=3*GROUP_FACTOR, PAIR=4*GROUP_FACTOR, TRIAD=5*GROUP_FACTOR, QUAD=6*GROUP_FACTOR, PENT=7*GROUP_FACTOR;
 	
 	final String[] stringDescriptors=new String[] {"Panel", "Column", "Row", "Panel with border", "Border", "Points", 
 			"Top Space", "Bottom Space", "Left Space", "Right Space", 
@@ -46,7 +47,11 @@ public interface LayoutSpaces {
 			"Column without labelspace", "Row without labelspace", "All Panels without labelspace",
 			"Entire Image",
 			"Top 3rd of panel", "Bottom 3rd of panel", "Left 3rd of panel", "Right 3rd of panel"};
-		final String[] stringDescriptorsOfModifyers=new String[] {"of the single panel ", "of the entire montage", "of this column", "of this row", "of pair", "of trio", "of quartet", "of pentet"};
+	
+	
+	public static final int GROUP_FACTOR=100;
+	public static final int ONLY_THIS_ONE=0, ALL_OF_THE=1*GROUP_FACTOR, THIS_COLS=2*GROUP_FACTOR, THIS_ROWS=3*GROUP_FACTOR, PAIR=4*GROUP_FACTOR, TRIAD=5*GROUP_FACTOR, QUAD=6*GROUP_FACTOR, PENT=7*GROUP_FACTOR;
+	final String[] stringDescriptorsOfModifyers=new String[] {"of the single panel ", "of the entire montage", "of this column", "of this row", "of pair", "of trio", "of quartet", "of pentet"};
 
 }
 

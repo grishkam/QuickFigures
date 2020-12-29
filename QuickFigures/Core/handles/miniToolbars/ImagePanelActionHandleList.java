@@ -113,7 +113,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		super.updateHandleLocations(magnify);
 	}
 
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		
 		
 		super.draw(g, cords);

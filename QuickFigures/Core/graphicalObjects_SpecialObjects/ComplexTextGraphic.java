@@ -270,7 +270,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	}
 	
 	/**draws the given text onto a graphics 2d object*/
-	 public void drawRotatedText(Graphics2D g, CordinateConverter<?> cords) { 
+	 public void drawRotatedText(Graphics2D g, CordinateConverter cords) { 
 		setAntialiasedText(g, true);
 		setUpBounds(g);
 		
@@ -281,7 +281,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	 
 	
 	/**Draws many lines at the given locatioin*/
-	public void drawAllLinesAtLocation(Graphics2D g, CordinateConverter<?> cords, TextParagraph allLines) {
+	public void drawAllLinesAtLocation(Graphics2D g, CordinateConverter cords, TextParagraph allLines) {
 		if(this.isSelected()) {
 			setUpSelectedSegmentList();
 		}
@@ -312,7 +312,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		
 	}
 	
-	public void drawLineAtLocation(TextLine line1, Graphics2D g, CordinateConverter<?> cords) {
+	public void drawLineAtLocation(TextLine line1, Graphics2D g, CordinateConverter cords) {
 		  // line1.computeLineDimensions(g, x, y);
 		  
 		    for(TextLineSegment t: line1) { 
@@ -324,7 +324,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		    }
 	}
 	
-	public void drawLineSegment(TextLineSegment t, Graphics2D g, CordinateConverter<?> cords) {
+	public void drawLineSegment(TextLineSegment t, Graphics2D g, CordinateConverter cords) {
 		if (t.baseLine==null) {
 			IssueLog.log("failed to draw text segment "+t.getText()+" Its location had not been set up");
 			return;
@@ -358,7 +358,7 @@ public class ComplexTextGraphic extends TextGraphic {
 
 
 /**Depending on whether this segment is on the edges or inside of the highlight region, draws differently*/
-	private void drawAppropriateHighLight(TextLineSegment t, Graphics2D g, CordinateConverter<?> cords, Point2D d) {
+	private void drawAppropriateHighLight(TextLineSegment t, Graphics2D g, CordinateConverter cords, Point2D d) {
 		if (getAllSelectedSegments().size()==1) {
 			   drawHighlight(g, cords,d.getX(),d.getY(), t.getText(), t.getHightLightPosition(), t.getCursorposition(), t.getFont());
 		   } else
@@ -385,7 +385,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		 	    else return c;
 	}
 	
-	public void drawHandlesAndOutline( Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandlesAndOutline( Graphics2D g2d, CordinateConverter cords) {
 		super.drawHandlesAndOutline(g2d, cords);
 		for(TextLine lin: getParagraph()) {
 			//Double[] rect = this.rotateRect();

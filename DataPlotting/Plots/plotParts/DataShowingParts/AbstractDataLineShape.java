@@ -46,7 +46,7 @@ public abstract class AbstractDataLineShape extends DataShowingShape implements 
 
 		}
 
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		super.drawHandesSelection(g2d, cords);
 		if (this.isSelected()) {
 			g2d.setColor(new Color(0, 0, 0, 50));

@@ -21,7 +21,7 @@ import addObjectMenus.BasicGraphicAdder;
 import basicMenusForApp.SVGOpener;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.GraphicContainingImage;
+import imageDisplayApp.StandardWorksheet;
 import ultilInputOutput.FileChoiceUtil;
 
 public class SVG_GraphicAdder2 extends BasicGraphicAdder {
@@ -41,7 +41,7 @@ public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 	}
 	
 	public ZoomableGraphic addFromFile(File f, GraphicLayer gc) {
-		GraphicContainingImage ss = SVGOpener.readFromFile(f);
+		StandardWorksheet ss = SVGOpener.readFromFile(f);
 		GraphicLayer ob = ss.getTopLevelLayer();
 		
 	

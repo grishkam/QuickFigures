@@ -27,7 +27,7 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 import imageDisplayApp.OverlayObjectManager;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 
 /**Tool used to draw a rectangular object on the figure*/
 public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
@@ -80,7 +80,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), currentRect);
 			
 			/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
-			setSelectedHandleNumber( RectangleEdgePosisions.LOWER_RIGHT);
+			setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
 			
 		}
 		

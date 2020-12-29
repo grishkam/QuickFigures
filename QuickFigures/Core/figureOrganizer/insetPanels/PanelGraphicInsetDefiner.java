@@ -663,7 +663,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	}
 	
 	@Override 
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		this.ensureSetup();
 		super.draw(g, cords);
 	}

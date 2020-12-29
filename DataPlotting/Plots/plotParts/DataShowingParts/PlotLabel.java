@@ -62,7 +62,7 @@ public class PlotLabel extends ComplexTextGraphic {
 	
 	
 	
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		if ( true) {
 			putIntoSnapPosition();
 	//	if (snapItem!=null)IssueLog.log(snapItem.getClass().getName());

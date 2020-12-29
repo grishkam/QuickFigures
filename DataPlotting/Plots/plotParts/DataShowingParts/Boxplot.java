@@ -74,7 +74,7 @@ public class Boxplot extends DataShowingShape {
 	}
 
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, isAntialize()?RenderingHints.VALUE_ANTIALIAS_ON: RenderingHints.VALUE_ANTIALIAS_OFF);
 	
 		/**Draws the boxes fill*/

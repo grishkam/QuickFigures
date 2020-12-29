@@ -22,7 +22,7 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ToolbarTester;
 import export.svg.GraphicSVGParser;
 import figureFormat.DirectoryHandler;
-import imageDisplayApp.GraphicContainingImage;
+import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
@@ -63,7 +63,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 		
 		IssueLog.log("showing file "+'\n'+f.getAbsolutePath());
 			
-			GraphicContainingImage set = readFromFile(f);
+			StandardWorksheet set = readFromFile(f);
 			if (set==null) return null;
 			ImageWindowAndDisplaySet output = new ImageWindowAndDisplaySet(set);
 			
@@ -71,7 +71,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 			return output;
 	}
 	
-	public static GraphicContainingImage readFromFile(File f) {
+	public static StandardWorksheet readFromFile(File f) {
 	
 		if (!f.exists()) {
 			IssueLog.log("file "+" is non existent"+f);
@@ -82,7 +82,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 			
 			
 			
-			GraphicContainingImage set = new GraphicSVGParser().openSVG(f.getAbsolutePath());
+			StandardWorksheet set = new GraphicSVGParser().openSVG(f.getAbsolutePath());
 		return set;
 			//return GraphicSVGParser.openSVG(f.getAbsolutePath());
 		} catch (Exception e) {

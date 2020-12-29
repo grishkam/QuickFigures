@@ -41,6 +41,7 @@ import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
+import undo.UndoManagerPlus;
 import undo.UndoMoveItems;
 import undo.UndoReorder;
 import utilityClasses1.ArraySorter;
@@ -48,6 +49,8 @@ import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
 
+/**This class aligns objects into a grid.
+ * Depending on the options, also addsa layout*/
 public class FitLayout extends BasicMultiSelectionOperator {
 
 	/**
@@ -55,10 +58,12 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final int cleanUp=5;
+	public static final int ALIGN_GRID=5, FIT_LAYOUT=0;
 	
+	/**set to true if not all rows/cols are of the same size*/
 	boolean unique=true;
-	int type=0;
+	
+	int type=FIT_LAYOUT;
 	
 	public FitLayout(int u) {
 		type=u;
@@ -76,7 +81,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	}
 
 	private boolean isClenuptype() {
-		return cleanUp==type;
+		return ALIGN_GRID==type;
 	}
 	
 	@Override
@@ -87,7 +92,8 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	return "Align<Create Layout";
 	}
 	
-	/**For certain versions of this operation, layouts are not allowed*/
+	/**For certain versions of this operation, layouts are not allowed.
+	 * returns a list with no layouts*/
 	ArrayList<LocatedObject2D> getListOfObjectWithoutTheLayouts() {
 		ArrayList<LocatedObject2D> layouts = new ArrayList<LocatedObject2D>();
 		ArrayList<LocatedObject2D> objects = super.getAllObjects();
@@ -100,7 +106,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		return objects;
 	}
 	
-	/**gets the cols*/
+	/**Returns a set of list with the object in each column*/
 	ArrayList<ArrayList<LocatedObject2D>> getCols(ArrayList<LocatedObject2D> objects)  {
 		ArrayList<LocatedObject2D> remaining=new ArrayList<LocatedObject2D>();
 		ArrayList<ArrayList<LocatedObject2D>> output = new ArrayList<ArrayList<LocatedObject2D>> ();
@@ -114,7 +120,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		return output;
 	}
 	
-	/**gets the rows*/
+	/**Returns a set of list with the object in each rows*/
 	ArrayList<ArrayList<LocatedObject2D>> getRows(ArrayList<LocatedObject2D> objects)  {
 		ArrayList<LocatedObject2D> remaining=new ArrayList<LocatedObject2D>();
 		ArrayList<ArrayList<LocatedObject2D>> output = new ArrayList<ArrayList<LocatedObject2D>> ();
@@ -153,7 +159,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		return output;
 	}
 	
-	
+	/**returns the objects that represent those in the highest row */
 	ArrayList<LocatedObject2D> getTopMostRow(ArrayList<LocatedObject2D> objects) {
 		ArrayList<LocatedObject2D> output=new ArrayList<LocatedObject2D> ();
 		
@@ -181,7 +187,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	
 	/**Aligns and distributes items to fit a more grid like pattern
 	 * @return */
-	UndoMoveItems cleanUp(ArrayList<LocatedObject2D> objects, boolean targetPanels) {
+	private UndoMoveItems cleanUp(ArrayList<LocatedObject2D> objects, boolean targetPanels) {
 		
 		UndoMoveItems undo = new UndoMoveItems(objects);
 		
@@ -194,7 +200,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		int ncols=cols.size();
 		
 		
-		/**Vertical distribution*/
+		/**horizontal distribution*/
 		DistributeItems dist = new DistributeItems(false);
 		
 		AlignItem align = new AlignItem(RectangleEdges.TOP);
@@ -227,7 +233,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	
 	/**Aligns and distributes items to fit a more grid like format
 	 * @return */
-	UndoMoveItems cleanUp2(ArrayList<LocatedObject2D> objects) {
+	private UndoMoveItems cleanUp2(ArrayList<LocatedObject2D> objects) {
 		
 		UndoMoveItems undo = new UndoMoveItems(objects);
 		
@@ -284,11 +290,13 @@ public class FitLayout extends BasicMultiSelectionOperator {
 			
 			UndoMoveItems undo = cleanUp(objects, fitsLayouts(objects));
 			
-			this.getUndoManager().addEdit(undo);
+			UndoManagerPlus undoManager = this.getUndoManager();
+			if (undoManager!=null)
+			undoManager.addEdit(undo);
 			
 			return;
 		}
-		getUndoManager().addEdit(
+		addUndo(
 				fitLayoutToObjects(getListOfObjectWithoutTheLayouts(), true)
 		);
 	}
@@ -301,6 +309,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		return false;
 	}
 
+	/**alters the figure layout such that the layout matches the panels within the given list*/
 	public CombinedEdit fitLayoutToObjects(ArrayList<LocatedObject2D> objects, boolean addLayout) {
 		CombinedEdit edit = new CombinedEdit();
 		edit.addEditToList(cleanUp(objects, false));//makes the positions more grid-like
@@ -411,8 +420,8 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	}
 	
 
-	/**puts each panel object in the upper left corner. If multiple objects are in that panel,
-	  only moves teh first one*/
+	/**puts each panel object in the upper left corner of the layout panels. If multiple objects are in that panel,
+	  only moves the first one*/
 	public static void placeObjectsInUpperLeftCorners(BasicLayout gra, ArrayList<LocatedObject2D> objects ) {
 		ArrayList<LocatedObject2D> objects2=new  ArrayList<LocatedObject2D>();
 		objects2.addAll(objects);
@@ -431,7 +440,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		GraphicGroup gg=new GraphicGroup();
 		ArrayList<Rectangle> rects = getRectanglesForIcon();
 		Color[] colors=new Color[] {Color.red, Color.green, Color.blue,Color.orange, Color.cyan, Color.magenta, new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
-		if (type!=cleanUp) {
+		if (type!=ALIGN_GRID) {
 			colors=new Color[] {Color.red.darker(), Color.red.darker(), Color.red.darker(),Color.magenta.darker(), Color.magenta.darker(), Color.magenta.darker(), Color.blue.darker(), new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
 			
 		}
@@ -462,7 +471,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 				output.add(new Rectangle(6,8,4,4));
 				output.add(new Rectangle(12,8,4,4));
 		
-				if(type!=cleanUp) {
+				if(type!=ALIGN_GRID) {
 					output.add(
 							new Rectangle(0,0,18,15)
 							);

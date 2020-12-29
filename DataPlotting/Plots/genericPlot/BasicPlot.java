@@ -148,7 +148,7 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	}
 	
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 			xAxis.MatchToPlotArea();
 			yAxis.MatchToPlotArea();
 			super.draw(graphics, cords);

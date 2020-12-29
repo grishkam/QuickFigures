@@ -50,7 +50,7 @@ public class SmartHandleForImageGraphic extends SmartHandle {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 
 		if (rectangle.getLocationType()==position)this.setHandleColor(Color.red); else
 			this.setHandleColor(Color.black);

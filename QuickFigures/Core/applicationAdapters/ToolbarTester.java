@@ -55,8 +55,9 @@ public class ToolbarTester extends StartApplication{
 		 
 		} 
 		{
-			 IssueLog.log("Example File not found "+'\n'+example.getAbsolutePath());
-			 return ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
+			// IssueLog.log("Example File not found "+'\n'+example.getAbsolutePath());
+			return null;
+			// return ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
 		 }
 		
 		

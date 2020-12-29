@@ -53,7 +53,7 @@ public class ImagePlusDisplayWrap implements MultiChannelDisplayWrapper {
 	}
 
 	@Override
-	public CordinateConverter<?> getConverter() {
+	public CordinateConverter getConverter() {
 		return new CordinateConverterIJ1(imp);
 	}
 

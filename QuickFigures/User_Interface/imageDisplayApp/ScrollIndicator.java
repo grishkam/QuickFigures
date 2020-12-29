@@ -76,7 +76,7 @@ public class ScrollIndicator implements ZoomableGraphic{
 	
 	/**draws too rectangles to indicated the size and position of the view ara compared to the entire canvas*/
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		
 		/**if the entire view area contains the entire figure canvas does not need to draw a scroll indicator*/
 		if ( areRectsSame() ) return;

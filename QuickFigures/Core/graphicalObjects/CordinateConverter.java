@@ -20,7 +20,12 @@ import java.awt.Font;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-public interface CordinateConverter<ImageType> {
+/**Depending on the zoom level of used, the coordinate space
+ * of the worksheet will differ from that of the Graphics2D object on which it is 
+ * drawn. in order for the package to function correctly, 
+ * this interface transforms numbers and shapes to account for the difference
+ * between the two */
+public interface CordinateConverter {
 	
 	/**converts from an absolute cordinate system to a display system*/
 	double transformX(double ox);
@@ -35,5 +40,5 @@ public interface CordinateConverter<ImageType> {
 	double unTransformY(double oy);
 	Point2D unTransformP(Point2D op);
 	
-	CordinateConverter<?> getCopyTranslated(int dx, int dy);
+	CordinateConverter getCopyTranslated(int dx, int dy);
 }

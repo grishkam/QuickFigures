@@ -18,11 +18,11 @@ package graphicalObjects_Shapes;
 import java.io.Serializable;
 
 import undo.SimpleTraits;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 
 
 /**keeps information about a length or ratio, used by the angle handle and certain shapes*/
-public class RectangleEdgeParameter implements Serializable, RectangleEdgePosisions, SimpleTraits<RectangleEdgeParameter> {
+public class RectangleEdgeParameter implements Serializable, RectangleEdgePositions, SimpleTraits<RectangleEdgeParameter> {
 	
 	/**
 	 * 

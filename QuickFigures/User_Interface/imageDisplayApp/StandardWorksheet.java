@@ -28,7 +28,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 /**Simple subclass of the generic image
  * that contains an object linking it to the 
  * the window being used to display the */
-public class GraphicContainingImage extends GenericImage implements FigureDisplayContainer {
+public class StandardWorksheet extends GenericImage implements FigureDisplayContainer {
 
 	public static final String SAVE_EXTENSION = ".ser";
 
@@ -40,13 +40,13 @@ public class GraphicContainingImage extends GenericImage implements FigureDispla
 
 	
 	/**minimal constructor*/
-	public GraphicContainingImage() {
+	public StandardWorksheet() {
 		this(new GraphicLayerPane("Name"), new BasicImageInfo());
 	
 	}
 	
 	/**creates an image with the given file info and parent layer*/
-	public GraphicContainingImage(GraphicLayerPane layer2, BasicImageInfo basics) {
+	public StandardWorksheet(GraphicLayerPane layer2, BasicImageInfo basics) {
 		super.setLayer(layer2);
 		super.setObjectContainer(layer2);
 		onItemLoad(layer2);

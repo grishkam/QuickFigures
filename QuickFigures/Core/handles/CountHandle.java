@@ -79,11 +79,11 @@ public class CountHandle extends SmartHandle {
 		return out;
 	}
 	
-	public int getDrawnHandleWidth() {
-		return (int) (handleSize()*2*widthStretch);
+	public double getDrawnHandleWidth() {
+		return (handleSize()*2*widthStretch);
 	}
 	
-	public int getDrawnHandleHeight() {
+	public double getDrawnHandleHeight() {
 		return handleSize()*2;
 	}
 	

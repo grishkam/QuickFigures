@@ -143,7 +143,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	/**Draws a points and lines connecting them*/
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		super.draw(graphics, cords);		
 		drawLinesConnectingPoints(graphics, cords);
 		
@@ -158,7 +158,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	 * @param graphics
 	 * @param cords
 	 */
-	private void drawLinesConnectingPoints(Graphics2D graphics, CordinateConverter<?> cords) {
+	private void drawLinesConnectingPoints(Graphics2D graphics, CordinateConverter cords) {
 		Point2D thep  = cords.transformP(getPathGraphicCordinateLocation(0));
 		Point2D thep1 = cords.transformP(getPathGraphicCordinateLocation(1));
 		Point2D thep2 = cords.transformP(getPathGraphicCordinateLocation(2));  

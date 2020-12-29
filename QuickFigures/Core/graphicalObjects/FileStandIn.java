@@ -50,7 +50,7 @@ public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptio
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		// TODO Auto-generated method stub
 
 	}

@@ -26,13 +26,15 @@ import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
 
-/**Serializes figures and saves to a file. 
-  De-serializes those figures and creates figure display windows*/
+/**Serializes all objects in a worksheet and saves to a file. 
+  De-serializes those figures and creates figure display windows.
+  although this method of saving is sensitive to changes in the
+  code, it is also the most effective to implement. (Without need for devising
+  an entirely new file format)*/
 public class ImageDisplayIO {
-	public static GraphicContainingImage readFromFile(File f) {
-		//GraphicEncoder encoder = new GraphicEncoder(theSet.getGraphicLayerSet());
+	public static StandardWorksheet readFromFile(File f) {
 		FileInputStream fo;
-		GraphicContainingImage output=null;
+		StandardWorksheet output=null;
 		FileFinder.setWorkingDir(f);
 		
 		if (!f.exists()) {
@@ -50,7 +52,7 @@ public class ImageDisplayIO {
 				 GraphicLayerPane g=(GraphicLayerPane) o1;
 				 BasicImageInfo b=(BasicImageInfo) o2;
 				 
-				output= new GraphicContainingImage(g,b);
+				output= new StandardWorksheet(g,b);
 				output.onItemLoad(output.getLayer());
 			}
 			
@@ -78,7 +80,7 @@ public class ImageDisplayIO {
 	
 	
 
-	public static boolean writeToFile(File f, GraphicContainingImage theSet) {
+	public static boolean writeToFile(File f, StandardWorksheet theSet) {
 		FileOutputStream fo;
 		try {
 			fo = new FileOutputStream(f);
@@ -102,7 +104,7 @@ public class ImageDisplayIO {
 	
 	public static ImageWindowAndDisplaySet showFile(File f) {
 		if (f==null) return null;
-			GraphicContainingImage set = ImageDisplayIO.readFromFile(f);
+			StandardWorksheet set = ImageDisplayIO.readFromFile(f);
 			if (set==null) return null;
 			return new ImageWindowAndDisplaySet(set);
 	}

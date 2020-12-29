@@ -26,6 +26,9 @@ import externalToolBar.DragAndDropHandler;
 import icons.IconSet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
+/**interface determines the functions of a tool within one of the toolbars
+ * that can be installed onto the toolbar
+   */
 public interface ToolBit {
 	
 	IconSet getIconSet();
@@ -60,23 +63,23 @@ public interface ToolBit {
 
 	boolean keyTyped(KeyEvent e);
 
-String getToolName();
-
-void handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file);
-
-DragAndDropHandler getDragAndDropHandler();
-
-String getToolTip();
-
-boolean isActionTool();
-
-void performLoadAction();
-
-boolean treeSetSelectedItem(Object o);
-
-void onToolChange(boolean b);
-
-String getToolSubMenuName();
+	String getToolName();
+	
+	void handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file);
+	
+	DragAndDropHandler getDragAndDropHandler();
+	
+	String getToolTip();
+	
+	boolean isActionTool();
+	
+	void performLoadAction();
+	
+	boolean treeSetSelectedItem(Object o);
+	
+	void onToolChange(boolean b);
+	
+	String getToolSubMenuName();
 
 	
 

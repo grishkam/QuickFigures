@@ -67,7 +67,7 @@ public class CropIconGraphic extends GraphicGroup {
 			if(place==1||place==3) continue;
 			AttachmentPosition p=new AttachmentPosition();
 			p.setLocationTypeInternal(place);
-			p.setLocationType(AttachmentPosition.INTERNAL);
+			p.setLocationCategory(AttachmentPosition.INTERNAL);
 			p.snapRects(partRect, fullRect);
 			
 			ShapeGraphic bar = RectangularGraphic.filledRect(partRect);

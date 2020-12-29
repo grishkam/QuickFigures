@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**contains methods for identifying specific points along a rectangular bounds
- * @see  RectangleEdgePosisions */
-public class RectangleEdges implements  RectangleEdgePosisions {
+ * @see  RectangleEdgePositions */
+public class RectangleEdges implements  RectangleEdgePositions {
 
 	
 	/**gets the edge location along a rectangle*/
@@ -73,7 +73,9 @@ public class RectangleEdges implements  RectangleEdgePosisions {
 	}
 	
 	
-	/**Turns a location int into a String*/
+	/**Turns a location code int into a String
+	 * @see RectangleEdgePositions
+	 * */
 	public static String locationToString(int locationType) {
 		switch (locationType) {
 		case UPPER_LEFT: {return "Upper Left";}
@@ -261,10 +263,10 @@ public int getYDirectionOfOffSetForAttachmentType(int locationType){
 	}
 	
 	public static String[] getLocationsForOutside() {
-		return translate(externalLocations);
+		return translate(ALL_EXTERNAL_LOCATIONS);
 	}
 	public static HashMap<Integer, Integer> translatorForOutside() {
-		return generateTranslationMap(externalLocations);
+		return generateTranslationMap(ALL_EXTERNAL_LOCATIONS);
 	}
 	
 	
@@ -285,7 +287,7 @@ public int getYDirectionOfOffSetForAttachmentType(int locationType){
 	}
 	
 	
-	/**sets the location of a rectangle based on the given location type. @see RectangleEdgePosisions*/
+	/**sets the location of a rectangle based on the given location type. @see RectangleEdgePositions*/
 	public static void setLocation(Rectangle r, int locationType, double x, double y) {
 		switch (locationType) {
 		case UPPER_RIGHT: {

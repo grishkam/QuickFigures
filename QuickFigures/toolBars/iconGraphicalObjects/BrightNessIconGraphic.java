@@ -24,12 +24,12 @@ import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import utilityClassesForObjects.DefaultPaintProvider;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 
 /**A class for rendering of a brightness icon
   */
-public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEdgePosisions {
+public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEdgePositions {
 
 	/**
 	 * 

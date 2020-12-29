@@ -17,6 +17,10 @@ package graphicalObjects;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**this contains methods related to the parent layer of an item
+ * @see GraphicLayer
+ * @see ZoomableGraphic
+ * */
 public interface KnowsParentLayer {
 	public GraphicLayer getParentLayer() ;
 	public void setParentLayer(GraphicLayer parent) ;

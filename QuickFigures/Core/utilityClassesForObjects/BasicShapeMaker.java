@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import applicationAdapters.ToolbarTester;
 import graphicalObjects_Shapes.PathGraphic;
-import imageDisplayApp.GraphicContainingImage;
+import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
@@ -61,7 +61,7 @@ public abstract class BasicShapeMaker  implements ShapeMaker, Serializable {
 	
 
 	protected static void showShape(ShapeMaker  cpc) {
-		GraphicContainingImage gl=new GraphicContainingImage();
+		StandardWorksheet gl=new StandardWorksheet();
 		
 		
 		

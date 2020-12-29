@@ -62,7 +62,7 @@ public class OverlayObjectManager {
 	}
 	
 	/**draws the objects. if any are not selected, selects them*/
-	public void drawSelections(Graphics2D g2, CordinateConverter<?> cc ) {
+	public void drawSelections(Graphics2D g2, CordinateConverter cc ) {
 		
 		for(ZoomableGraphic G: getSelectionGraphics()) {
 			if (G==null) continue;

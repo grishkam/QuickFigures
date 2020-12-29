@@ -38,7 +38,7 @@ import undo.UndoMoveItems;
 import undo.UndoScalingAndRotation;
 import utilityClassesForObjects.ArrayObjectContainer;
 import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.RotatesFully;
 import utilityClassesForObjects.Scales;
@@ -48,7 +48,7 @@ import utilityClassesForObjects.ScalesFully;
   The use can make many modifications simply by dragging handles
  The user can drag handles to scale rotate and move objects or groups of objects
  */
-public class ReshapeHandleList extends SmartHandleList implements RectangleEdgePosisions{
+public class ReshapeHandleList extends SmartHandleList implements RectangleEdgePositions{
 	
 
 	public static final int defaultHandleNumber = 8000000;
@@ -190,7 +190,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	}
 	
 	/**returns a particular handle depending on the given location
-	 * @see RectangleEdgePosisions for internal locations
+	 * @see RectangleEdgePositions for internal locations
 	 * */
 	public ReshapeSmartHandle getHandleOfType(int type) {
 		for(SmartHandle sh: this) {
@@ -242,7 +242,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		}
 		
 		/**draws the handle*/
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			
 			this.updateLocation(getHandleNumber());
 			if(this.getLineConnectionHandle() instanceof ReshapeSmartHandle)  {
@@ -526,7 +526,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	}
 	
 	/**draw method for this handle list*/
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		if(this.drawsRectOver) {
 			RectangularGraphic blankRect = RectangularGraphic.blankRect(rect.getBounds(), Color.LIGHT_GRAY);
 			blankRect.setStrokeWidth(RectandleDrawThickness);

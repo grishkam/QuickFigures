@@ -53,11 +53,12 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWrapper;
+import applicationAdapters.OpenFileReference;
 import applicationAdapters.PixelWrapper;
 
 /**An implementation of several interfaces. Some are required for an imageJ image to
   be used by QuickFigures as a multichannel image*/
-public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, ChannelSwapListener {
+public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, ChannelSwapListener, OpenFileReference {
 
 	private static final int FRAME = 2;
 	private static final int SLICE = 1;

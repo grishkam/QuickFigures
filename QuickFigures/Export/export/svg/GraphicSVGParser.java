@@ -72,7 +72,7 @@ import graphicalObjects_SpecialObjects.BufferedImageGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.BasicImageInfo;
-import imageDisplayApp.GraphicContainingImage;
+import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import infoStorage.BasicMetaDataHandler;
@@ -96,7 +96,7 @@ public class GraphicSVGParser {
 	static BridgeContext startingContext=null;
 	
 	
-	public  GraphicContainingImage openSVG(String path) throws IOException {
+	public  StandardWorksheet openSVG(String path) throws IOException {
 		 String parser = XMLResourceDescriptor.getXMLParserClassName();
 		    SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
 		    String uri = path;
@@ -119,7 +119,7 @@ public class GraphicSVGParser {
 			  
 			   
 			 ZoomableGraphic graphic =  parseLayer(element1, mw);
-			 GraphicContainingImage set = new GraphicContainingImage((GraphicLayerPane) graphic, new BasicImageInfo());
+			 StandardWorksheet set = new StandardWorksheet((GraphicLayerPane) graphic, new BasicImageInfo());
 			 
 			// IssueLog.log("from line "+graphic+" "+set);
 			 
@@ -791,8 +791,8 @@ private  ZoomableGraphic parseRect(Node node) {
 		return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(255*opacity));
 	}
 	
-	public  GraphicContainingImage openDisplaySVG(String path) throws IOException {
-		GraphicContainingImage set = openSVG(path);
+	public  StandardWorksheet openDisplaySVG(String path) throws IOException {
+		StandardWorksheet set = openSVG(path);
 		return set;
 	}
 	
@@ -874,7 +874,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		//loadClass("org/w3c/dom/Window");
 		
 		
-		GraphicContainingImage set = new GraphicSVGParser().openSVG(path);
+		StandardWorksheet set = new GraphicSVGParser().openSVG(path);
 		if (set==null) return ;
 		ImageWindowAndDisplaySet output = new ImageWindowAndDisplaySet(set);
 		

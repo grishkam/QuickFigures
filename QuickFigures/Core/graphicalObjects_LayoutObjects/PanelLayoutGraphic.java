@@ -76,6 +76,13 @@ import utilityClassesForObjects.TakesLockedItems;
 /**A graphical object that stores a layout, displays the layout, includes handles for editing the layout*/
 public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
 	
+	
+	public static final int UNLOCKED=0, LOCKED=1;
+	private int userLocked=LOCKED;//determines whether user handle drags can mobe this item
+	
+	private transient SmartHandleList panelHandleList=new SmartHandleList();;
+	private transient SmartHandleList allrefPointHandles=new SmartHandleList();;
+	private transient SmartHandleList handleBoxes2=new SmartHandleList();
 	public Color panelColor=Color.red;
 	public Color boundryColor=Color.blue;
 	private int handleArmDistance=12;
@@ -88,31 +95,13 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			AddColHandle=LocationHandleID+6, 
 			RepackPanelsHandle=LocationHandleID+7;
 	
-	/**
-	 * 
-	 * 
-	 */
-
-	
-	public PanelLayoutGraphic() {}
-	
-	public PanelLayoutGraphic(PanelLayout p) {
-		this.layout=p;
-	}
-	
-	
 	transient ArrayList<PanelContentExtract> contentstack;
 	private int editMode=0;
-	private transient boolean alwaysShow=false;
+	private transient boolean alwaysShow=false;//whether to draw the layout even when not selected
 	private boolean filledPanels=false;
-
-	public int getEditMode() {
-		return editMode;
-	}
-
-	public void setEditMode(int editMode) {
-		this.editMode = editMode;
-	}
+	
+	
+	
 	
 	protected PanelLayout layout=new BasicLayout();
 	private  HashMap<LocatedObject2D, Integer> panelLocations=new HashMap<LocatedObject2D, Integer>();
@@ -122,6 +111,24 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	ArrayList<PanelLayoutHandle> panelMotionHandles=new ArrayList<PanelLayoutHandle>();
 	//
 	protected transient GenericMontageEditor editor;
+
+	
+	public PanelLayoutGraphic() {}
+	
+	public PanelLayoutGraphic(PanelLayout p) {
+		this.layout=p;
+	}
+	
+	
+	public int getEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(int editMode) {
+		this.editMode = editMode;
+	}
+
+	
 	
 	LockedItemList lockedItems=new LockedItemList(this);
 	  private LockedItemList panelSizeDefiningItems=new LockedItemList(this);
@@ -156,17 +163,21 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		}
 
+	/**generates a handle for an attached image panel*/
 	protected void generateHandleForImage(LocatedObject2D l) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**generates a handle for an attached text item*/
 	protected void generateHandleForText(LocatedObject2D l) {
 		SmartHandleList list = this.getLocedItemHandleList();
 		list.add(new LockedItemHandle(this, l, 1000000000+list.size()));
 	}
 		
-	
+	/**If the given item is attached to this layout
+	 * detaches the item from the layout*/
+	@Override
 	public void removeLockedItem(LocatedObject2D l) {
 	
 		getLockedItems().remove(l);
@@ -190,12 +201,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 
-	private GraphicLayer parent;
-
-	private int userLocked=1;
-	private SmartHandleList panelHandleList=new SmartHandleList();;
-	private SmartHandleList allrefPointHandles=new SmartHandleList();;
-	private SmartHandleList handleBoxes2=new SmartHandleList();
+	
 	
 	
 	
@@ -273,7 +279,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		//mapPanelLocations();
 		 graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		snapLockedItems();
@@ -306,12 +312,12 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 	
 	protected void drawLayoutTypeSpecific(Graphics2D graphics,
-			CordinateConverter<?> cords) {
+			CordinateConverter cords) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	protected void drawPanel(Graphics2D graphics, CordinateConverter<?> cords, int number, Rectangle2D r) {
+	protected void drawPanel(Graphics2D graphics, CordinateConverter cords, int number, Rectangle2D r) {
 		if (r==null) return;
 		 graphics.setColor(getPanelColor());
 		this.getGrahpicUtil().drawRectangle(graphics, cords, r, false);
@@ -336,7 +342,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 	
-	public void drawHandles(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void drawHandles(Graphics2D graphics, CordinateConverter cords) {
 		Rectangle2D[] ps = this.getPanelLayout().getPanels();
 		clearHandleBoxes();
 		
@@ -728,17 +734,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	}
 
-	@Override
-	public GraphicLayer getParentLayer() {
-		// TODO Auto-generated method stub
-		return parent;
-	}
-
-	@Override
-	public void setParentLayer(GraphicLayer parent) {
-		this.parent=parent;
-		
-	}
+	
 	
 	
 	
@@ -1011,7 +1007,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		}
 		
 		@Override
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			if (hasLinkLine) {
 				Point2D p2 =  cords.transformP(startForLine);
 				Point2D p2finish = cords.transformP(getCordinateLocation());

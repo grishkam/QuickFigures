@@ -144,7 +144,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 			this.handlesize=6;
 		}
 		
-		public void draw(Graphics2D g, CordinateConverter<?> cords) {
+		public void draw(Graphics2D g, CordinateConverter cords) {
 			updateLocations();
 			updateColors();
 			

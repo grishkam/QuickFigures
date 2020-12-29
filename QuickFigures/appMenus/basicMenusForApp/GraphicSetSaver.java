@@ -18,7 +18,7 @@ package basicMenusForApp;
 import java.io.File;
 import applicationAdapters.DisplayedImage;
 import ultilInputOutput.FileChoiceUtil;
-import imageDisplayApp.GraphicContainingImage;
+import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageDisplayIO;
 
 public class GraphicSetSaver  extends BasicMenuItemForObj {
@@ -26,8 +26,8 @@ public class GraphicSetSaver  extends BasicMenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
-		if (diw.getImageAsWrapper() instanceof GraphicContainingImage) {
-			GraphicContainingImage theSet=(GraphicContainingImage) diw.getImageAsWrapper();
+		if (diw.getImageAsWrapper() instanceof StandardWorksheet) {
+			StandardWorksheet theSet=(StandardWorksheet) diw.getImageAsWrapper();
 			File f=FileChoiceUtil.getSaveFile(theSet.getSavePath(), theSet.getSaveName());
 		if (f==null) return;
 		

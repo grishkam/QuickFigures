@@ -408,7 +408,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 				
 				
 				if (this.positiontype==onOuterSides) {
-						theSnap.setLocationType(AttachmentPosition.INTERNAL);
+						theSnap.setLocationCategory(AttachmentPosition.INTERNAL);
 						
 						if (position.getSnapLocationTypeInternal()==RectangleEdges.TOP||position.getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) {
 							theSnap.setLocationTypeInternal(RectangleEdges.LEFT);
@@ -422,7 +422,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 				
 
 				if (this.positiontype==onSides) {
-					theSnap.setLocationType(AttachmentPosition.INTERNAL);
+					theSnap.setLocationCategory(AttachmentPosition.INTERNAL);
 					theSnap.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
 				}
 				

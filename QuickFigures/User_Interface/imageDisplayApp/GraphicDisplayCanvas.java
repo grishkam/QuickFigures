@@ -40,7 +40,7 @@ import logging.IssueLog;
 import utilityClassesForObjects.Selectable;
 
 /**A component that displays the figure within the display window
-  All objects in the figure are drawn here. 
+  All objects/figures in the worksheet are drawn here. 
   Rulers are also drawn to  indicate size of the figure
   @see GraphicSetDisplayWindow for information on where
   */
@@ -104,13 +104,13 @@ public class GraphicDisplayCanvas extends JComponent {
 	 * @param g2
 	 */
 	void drawObjectsAndRulers(Graphics2D g2) {
-		GraphicContainingImage gmp = window.getTheSet();
+		StandardWorksheet gmp = window.getTheSet();
 		/**draws all of objects*/
 		if (window!=null&&window.getTheSet()!=null) {
 		
 			
 			GraphicLayer layerSet = window.getTheSet().getTopLevelLayer();
-			CordinateConverter<?> conv1 = getConverter();
+			CordinateConverter conv1 = getConverter();
 			
 			layerSet.draw(g2, conv1);
 			
@@ -162,7 +162,7 @@ public class GraphicDisplayCanvas extends JComponent {
 
 	/**if a single item has be set as the primary selected item, any smart handles it has
 	 * will be drawn over th other objects*/
-	protected void drawSmartHandlesForSelectedItem(Graphics2D g2, CordinateConverter<?> conv1) {
+	protected void drawSmartHandlesForSelectedItem(Graphics2D g2, CordinateConverter conv1) {
 		Selectable sel = window.getDisplaySet().getSelectedItem();
 		if (sel!=null&& sel instanceof HasSmartHandles) {
 			 HasSmartHandles h=(HasSmartHandles) sel;
@@ -173,7 +173,7 @@ public class GraphicDisplayCanvas extends JComponent {
 	
 	/**Returns the area of the component where the white canvas is drawn*/
 	public Shape getDisplaySetArea() {
-		GraphicContainingImage gmp = window.getTheSet();
+		StandardWorksheet gmp = window.getTheSet();
 		Rectangle r5 = new Rectangle(0,0, gmp.getWidth(), gmp.getHeight());
 		AffineTransform at = getConverter().getAffineTransform();
 		Point2D p = new Point(0,0);
@@ -198,7 +198,7 @@ public class GraphicDisplayCanvas extends JComponent {
 	}
 	
 	/**returns the cordinate system used*/
-	public CordinateConverter<?> getConverter() {
+	public CordinateConverter getConverter() {
 		return window.getZoomer().getConverter();
 	}
 	
@@ -220,12 +220,15 @@ public class GraphicDisplayCanvas extends JComponent {
 			return new Point2D.Double(xcent, ycent);
 		}
 		
+		/**returns how many units of coordinate space 
+		 * are depicted across the width of the component*/
 		double getCanvasWidthInUnits() {
 			double mag=getZoomer().getZoomMagnification();
 			return getWidth()/mag;
 		}
 		
-		
+		/**returns how many units of coordinate space 
+		 * are dipicted across the height of the component*/
 		double getCanvasHeightInUnits() {
 			double mag=getZoomer().getZoomMagnification();
 			return getHeight()/mag;

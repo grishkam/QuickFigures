@@ -48,7 +48,7 @@ public class FrameGraphic extends RectangularGraphic {
 	}
 
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, this.isAntialize()?RenderingHints.VALUE_ANTIALIAS_ON: RenderingHints.VALUE_ANTIALIAS_OFF);
 		
 		
@@ -78,7 +78,7 @@ public class FrameGraphic extends RectangularGraphic {
 	}
 
 	
-	public void drawFrame(Graphics2D g, CordinateConverter<?> cords, Rectangle2D r) {
+	public void drawFrame(Graphics2D g, CordinateConverter cords, Rectangle2D r) {
 	if(angle==0||angle%Math.PI==0)
 		this.getGrahpicUtil().drawRectangle(g, cords, r, false);
 	else this.getGrahpicUtil().drawStrokedShape(g, cords, getRotatedFrame(r));

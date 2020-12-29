@@ -50,7 +50,7 @@ public class GraphicList implements ZoomableGraphic {
 	}
 
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		for(LocatedObject2D z: items) try {
 			if (z instanceof ZoomableGraphic) {((ZoomableGraphic) z).draw(graphics, cords);}
 		} catch (Throwable r) {}

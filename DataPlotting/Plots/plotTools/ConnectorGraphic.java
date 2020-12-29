@@ -49,7 +49,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		return path1;
 	}
 	
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected) {
 
 			ArrayList<Point2D> anchors2=new ArrayList<Point2D>();

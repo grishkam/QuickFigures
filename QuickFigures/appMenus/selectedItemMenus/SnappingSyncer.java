@@ -114,7 +114,7 @@ public class SnappingSyncer extends BasicMultiSelectionOperator {
 		if(a==null)return;
 		s.setLocationTypeInternal(a.getSnapLocationTypeInternal());
 		s.setLocationTypeExternal(a.getSnapLocationTypeExternal());
-		s.setLocationType(a.getSnapType());
+		s.setLocationCategory(a.getLocationCategory());
 		s.setHorizontalOffset(0);
 		s.setVerticalOffset(0);
 	}

@@ -18,7 +18,7 @@ package utilityClassesForObjects;
 /**contains constants that indicate points within a rectangle as well as constants 
   indicating positions of one objects relative to the bounding box of another.
   Heavily used*/
-public interface RectangleEdgePosisions {
+public interface RectangleEdgePositions {
 
 	static final int factor=100;
 	
@@ -72,8 +72,10 @@ public interface RectangleEdgePosisions {
 					;
 					
 	/**each location on the outside of a rectangle but adjacent to one of the sides*/
-	static final int[] externalLocations=new int[] {ABOVE_AT_LEFT, ABOVE_AT_MIDDLE, ABOVE_AT_RIGHT, BELOW_AT_LEFT, BELOW_AT_MIDDLE, BELOW_AT_RIGHT, LEFT_SIDE_TOP, LEFT_SIDE_MIDDLE, LEFT_SIDE_BOTTOM, RIGHT_SIDE_TOP, RIGHT_SIDE_MIDDLE, RIGHT_SIDE_BOTTOM, CornerToCenter_LowerLeft, CornerToCenter_UpperRight};
+	static final int[] ALL_EXTERNAL_LOCATIONS=new int[] {ABOVE_AT_LEFT, ABOVE_AT_MIDDLE, ABOVE_AT_RIGHT, BELOW_AT_LEFT, BELOW_AT_MIDDLE, BELOW_AT_RIGHT, LEFT_SIDE_TOP, LEFT_SIDE_MIDDLE, LEFT_SIDE_BOTTOM, RIGHT_SIDE_TOP, RIGHT_SIDE_MIDDLE, RIGHT_SIDE_BOTTOM, CornerToCenter_LowerLeft, CornerToCenter_UpperRight};
+	static final int[] PRIMARY_EXTERNAL_LOCATIONS=new int[] {ABOVE_AT_LEFT, ABOVE_AT_MIDDLE, ABOVE_AT_RIGHT, BELOW_AT_LEFT, BELOW_AT_MIDDLE, BELOW_AT_RIGHT, LEFT_SIDE_TOP, LEFT_SIDE_MIDDLE, LEFT_SIDE_BOTTOM, RIGHT_SIDE_TOP, RIGHT_SIDE_MIDDLE, RIGHT_SIDE_BOTTOM};
 
+	
 	
 
 }

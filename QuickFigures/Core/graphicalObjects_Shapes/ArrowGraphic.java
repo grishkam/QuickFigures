@@ -567,7 +567,7 @@ private Line2D getDrawnLineBetweenHeads() {
 	}
 	
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		
 		if (java.lang.Double.isNaN(y)||java.lang.Double.isNaN(x)) return;
 		if (java.lang.Double.isInfinite(y)||java.lang.Double.isInfinite(x)) return;
@@ -966,7 +966,7 @@ class ArrowSmartHandle extends SmartHandle {
 		 */
 		private static final int HANDLE_CONTEXT = 1000;
 
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			
 			super.draw(graphics, cords);
 		}

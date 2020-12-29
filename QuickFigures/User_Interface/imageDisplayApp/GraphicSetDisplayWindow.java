@@ -606,7 +606,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		this.theCanvas = theCanvas;
 	}
 
-	public GraphicContainingImage getTheSet() {
+	public StandardWorksheet getTheSet() {
 		return getDisplaySet().getTheSet();
 	}
 

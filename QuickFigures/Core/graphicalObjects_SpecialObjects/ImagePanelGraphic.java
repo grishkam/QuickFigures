@@ -49,7 +49,7 @@ import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.LockedItemList;
 import utilityClassesForObjects.PointsToFile;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.ScaleInfo;
 import utilityClassesForObjects.ScalededItem;
@@ -89,7 +89,7 @@ import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 
 /**an object that displays an image inside a frame at a specified scale and cropping*/
-public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLockedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePosisions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
+public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLockedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePositions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
 
 	
 	
@@ -458,7 +458,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		 
 		 /**Draws the image*/
 		 @Override
-			public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+			public void draw(Graphics2D graphics, CordinateConverter cords) {
 			 
 			
 			 
@@ -505,7 +505,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 		/**
 		 * Draws the Frame
 		 */
-		public void drawFrame(Graphics2D graphics, CordinateConverter<?> cords, double x1, double x2, double y1,
+		public void drawFrame(Graphics2D graphics, CordinateConverter cords, double x1, double x2, double y1,
 				double y2) {
 			if (getFrameWidthV()>0||getFrameWidthH()>0) {
 				   graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);						

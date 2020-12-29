@@ -18,6 +18,11 @@ package graphicalObjects;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 
+/**All objects that implements this interface are drawn at a certain 
+ * size that depends on a zoom level*/
 public interface ZoomableGraphic extends Serializable, KnowsParentLayer{
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords);
+	
+	/**draws the object onto the Graphics2D
+	 * @param cords the system to determine the zoom level*/
+	public void draw(Graphics2D graphics, CordinateConverter cords);
 }

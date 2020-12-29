@@ -19,13 +19,13 @@ import java.io.Serializable;
 
 import graphicalObjects.ZoomableGraphic;
 import undo.SimpleTraits;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 
 
 /**stores in formation regarding a specific value. used by certain shapes
  * @see CountHandle 
  * */
-public class CountParameter implements Serializable, RectangleEdgePosisions, SimpleTraits<CountParameter> {
+public class CountParameter implements Serializable, RectangleEdgePositions, SimpleTraits<CountParameter> {
 	
 	/**
 	 * 

@@ -64,7 +64,7 @@ public class IconHandle extends SmartHandle {
 		return new Rectangle2D.Double(xr,yr, widthr, heightr);
 	}
 
-	public int getDrawnHandleWidth() {
+	public double getDrawnHandleWidth() {
 		double widthr= icon.getIconWidth()-subtract;
 		if(widthr>this.maxWidth)widthr=this.maxWidth;
 		return (int) widthr;

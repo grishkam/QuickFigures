@@ -25,7 +25,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 import logging.IssueLog;
-/**An implementation of the Coordinate converter interface.
+/**An implementation of the CoordinateConverter interface. @see CordinateConverter
   
   This class stores a magnification and a displacement that determines
   how the graphics (@see ZoomableGraphic) are drawn onto a Graphics2d. 
@@ -34,8 +34,9 @@ import logging.IssueLog;
   In most cases, they will be drawn on a particular component (@see GraphicDisplayCanvas) , 
   in a window (@see GraphicSetDisplayWindow) .
   Certain items, like handles are drawn at the same size regardless of magnification.
+  However, their locations are still shifted
   */
-public class BasicCoordinateConverter implements CordinateConverter<Object>, Serializable {
+public class BasicCoordinateConverter implements CordinateConverter, Serializable {
 
 	/**
 	 * 
@@ -245,8 +246,7 @@ public class BasicCoordinateConverter implements CordinateConverter<Object>, Ser
 	}
 
 	@Override
-	public CordinateConverter<?> getCopyTranslated(int dx, int dy) {
-		// TODO Auto-generated method stub
+	public CordinateConverter getCopyTranslated(int dx, int dy) {
 		return new BasicCoordinateConverter(x+dx,y+dy,magnification);
 	}
 }

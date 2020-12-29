@@ -47,7 +47,7 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	 private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultInternal();
 	JLabel label=new JLabel("Position");
 	 private SnapBox SnapBox=new  SnapBox(snappingBehaviour);
-	 JComboBox<?> jcom=new  JComboBox<String>(AttachmentPosition.getGridSpaceCodes());
+	 JComboBox<?> jcom=new  JComboBox<String>(AttachmentPosition.getGridSpaceCodeNames());
 	 NumberInputPanel xoffSet=new NumberInputPanel("xOffset", 0, true, true, 0,100);
 	 NumberInputPanel yoffSet=new NumberInputPanel("yOffset", 0, true, true, 0,100); {
 		 yoffSet.setSliderOrientation(JScrollBar.VERTICAL);

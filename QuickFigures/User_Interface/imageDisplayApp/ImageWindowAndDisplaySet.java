@@ -38,15 +38,14 @@ import handles.SmartHandleList;
 import layersGUI.GraphicTreeUI;
 
 /**
-Stores everything related to a particular figure image including the
-display window for figures, the layer set inside, the undo manager and what selections are made
-Also used for windows that display multichannel images
+Stores everything related to a particular worksheet including the
+display window, the layer set inside, the undo manager and what selections are made
  */
 public class ImageWindowAndDisplaySet implements DisplayedImage {
 	public static GraphicTreeUI exampletree;
 	private GraphicSetDisplayWindow theWindow=null;
 	private GraphicDisplayCanvas theCanvas=null;
-	private GraphicContainingImage theFigure=null;
+	private StandardWorksheet theFigure=null;
 	private MiniToolBarPanel sidePanel;
 	
 	/**The time frames for animations*/
@@ -58,7 +57,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	transient UndoManagerPlus undoManager=null;
 	
 	/**Generates a Display of the given graphic set*/
-	public ImageWindowAndDisplaySet(GraphicContainingImage graphicSet) {
+	public ImageWindowAndDisplaySet(StandardWorksheet graphicSet) {
 		this.setTheSet( graphicSet);
 		GraphicDisplayCanvas canvas = new GraphicDisplayCanvas();
 		this.setTheCanvas(canvas);
@@ -99,10 +98,10 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	/**getter method for the 'image' containing all the objects and layers*/
-	public GraphicContainingImage getTheSet() {
+	public StandardWorksheet getTheSet() {
 		return theFigure;
 	}
-	public void setTheSet(GraphicContainingImage theSet) {
+	public void setTheSet(StandardWorksheet theSet) {
 		this.theFigure = theSet;
 		theSet.undoManager=this.getUndoManager();
 		if (theSet!=null)	theSet.setDisplayGroup(this);
@@ -139,7 +138,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	
 	/**Creates a new blank image*/
 	public static ImageWindowAndDisplaySet createAndShowNew(String title, int width, int height) {
-		GraphicContainingImage gs = new GraphicContainingImage();
+		StandardWorksheet gs = new StandardWorksheet();
 		gs.setTitle(title);
 		gs.getBasics().setWidth(width);
 		gs.getBasics().setHeight(height);
@@ -147,7 +146,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	/**creates the window an user interface elements needed to display the image*/
-	public static ImageWindowAndDisplaySet  show(GraphicContainingImage gs) {
+	public static ImageWindowAndDisplaySet  show(StandardWorksheet gs) {
 		ImageWindowAndDisplaySet set = new ImageWindowAndDisplaySet(gs);
 		Window win = set.getWindow();
 		win.pack();

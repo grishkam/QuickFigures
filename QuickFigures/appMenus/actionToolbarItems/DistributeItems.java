@@ -27,6 +27,7 @@ import javax.swing.Icon;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
+import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoMoveItems;
@@ -54,11 +55,19 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 	@Override
 	public void run() {
 		
-		UndoMoveItems undo = new UndoMoveItems(super.getAllObjects(), true);//undo
+		ArrayList<LocatedObject2D> allObjects = super.getAllObjects();
 		
-		distributeArray(super.getAllObjects());
+		UndoMoveItems undo = new UndoMoveItems(allObjects, true);//undo
+		if (allObjects==null||allObjects.size()==0) {
+			IssueLog.log("no objects selected");
+			return;
+		}
+		distributeArray(allObjects);
 		
 		undo.establishFinalLocations();
+		
+		
+		
 		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
 		
 		

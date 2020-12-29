@@ -87,7 +87,7 @@ public class FigureLegendShape extends RectangularGraphic implements SeriesLabel
 	}
 	
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		this.update();
 		//line.draw(g, cords);
 		///point.draw(g, cords);

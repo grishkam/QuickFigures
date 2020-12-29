@@ -79,7 +79,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 	/**
 	returns the cordinate converter for the clicked canvas
 	 */
-	public CordinateConverter<?> getUsedConverter() {
+	public CordinateConverter getUsedConverter() {
 		return clickedFigureDisplay.getConverter();
 	}
 	

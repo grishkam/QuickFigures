@@ -35,7 +35,7 @@ public interface DisplayedImage {
 	
 	/**returns the ImageWrapper*/
 	public ImageWrapper getImageAsWrapper() ;
-	public CordinateConverter<?> getConverter();
+	public CordinateConverter getConverter();
 	/**returns the window used to display the image*/
 	public Window getWindow();
 	

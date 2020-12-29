@@ -323,7 +323,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	
 	
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected) {
 			if (getPointHandles()==null) setSmartHandleBoxes(SmartHandleForPathGraphic.getPathSmartHandles(this));
 			getPointHandles().draw(g2d, cords);
@@ -727,18 +727,18 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		super.draw(g, cords);
 		this.drawArrowHeads( g,cords);
 	}
 	
 
-	private void drawArrowHeads(Graphics2D g, CordinateConverter<?> cords) {
+	private void drawArrowHeads(Graphics2D g, CordinateConverter cords) {
 		drawArrow(g, cords, 0);
 		drawArrow(g, cords, 1);
 	}
 
-	private void drawArrow(Graphics2D g, CordinateConverter<?> cords, int i) {
+	private void drawArrow(Graphics2D g, CordinateConverter cords, int i) {
 		;
 		if (getArrowHead2()!=null)
 			{

@@ -17,6 +17,8 @@ package imageDisplayApp;
 
 import layout.RetrievableOption;
 
+/**stores a value that indicates whether to allow automatic resizing of
+  the canvas of worksheets to fit the objects inside*/
 public class CanvasOptions {
 	
 	public static CanvasOptions current=new CanvasOptions();

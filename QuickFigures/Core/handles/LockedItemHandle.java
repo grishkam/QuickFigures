@@ -227,7 +227,7 @@ public boolean absent() {
 }
 
 @Override
-public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+public void draw(Graphics2D graphics, CordinateConverter cords) {
 	
 	this.updateLocation();
 	

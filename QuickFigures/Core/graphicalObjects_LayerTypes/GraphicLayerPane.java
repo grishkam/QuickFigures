@@ -317,7 +317,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 
 	/**draws the layer*/
 	@Override
-	public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
 	
 		ArrayList<ZoomableGraphic> allGraphicsDrawn = getGraphicsSync();
 		

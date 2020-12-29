@@ -285,7 +285,7 @@ public class plotPoint implements Serializable{
 	}
 
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		
 		super.draw(g, cords);
 	}

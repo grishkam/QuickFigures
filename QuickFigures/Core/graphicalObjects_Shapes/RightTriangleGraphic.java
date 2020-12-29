@@ -31,11 +31,11 @@ import handles.SmartHandle;
 import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 
 /**A Right triangle shape. user can flip the triangle by dragging a handle*/
-public class RightTriangleGraphic extends RectangularGraphic implements RectangleEdgePosisions{
+public class RightTriangleGraphic extends RectangularGraphic implements RectangleEdgePositions{
 	
 
 
@@ -203,7 +203,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		
 		/**Draws the handle and the lines to denote the right angle*/
 		@Override
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			graphics.setStroke(new BasicStroke(1));
 			graphics.setColor(Color.black);
 			int t = triangle.getType();

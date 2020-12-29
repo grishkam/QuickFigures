@@ -105,7 +105,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 
 		
 
-		operators.add(new FitLayout(FitLayout.cleanUp));
+		operators.add(new FitLayout(FitLayout.ALIGN_GRID));
 		operators.add(new FitLayout(false));
 		operators.add(new FitLayout(true));
 		

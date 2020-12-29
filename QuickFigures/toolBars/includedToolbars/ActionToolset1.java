@@ -60,7 +60,7 @@ public class ActionToolset1 extends QuickFiguresToolBar{
 		installOperator(new AlignItem(RectangleEdges.CENTER+1));
 		installOperator(new DistributeItems(true));
 		installOperator(new DistributeItems(false));
-		installOperator(new FitLayout(FitLayout.cleanUp));
+		installOperator(new FitLayout(FitLayout.ALIGN_GRID));
 		installOperator(new AlignItem(100));
 		installOperator(new AlignItem(101));
 		installOperator(new AlignItem(102));

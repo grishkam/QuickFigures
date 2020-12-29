@@ -242,7 +242,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 		area.fullPlotUpdate();
 	}
 	
-	public void drawHandesSelection(Graphics2D g2d, CordinateConverter<?> cords) {
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected) {
 				ArrayList<Point2D> list = new ArrayList<Point2D> ();
 				PathIterator shape2 =getRotationTransformShape().getPathIterator(AffineTransform.getTranslateInstance(0, 0));

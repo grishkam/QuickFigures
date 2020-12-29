@@ -60,7 +60,7 @@ public class SmartHandleForText extends SmartHandle {
 		return Color.white;
 	}
 	
-	public int handleSize() {
+	public double handleSize() {
 		if (textItem.isEditMode()) return 1;
 		return handlesize;
 	}

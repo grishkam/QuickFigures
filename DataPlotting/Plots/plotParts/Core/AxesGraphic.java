@@ -187,13 +187,13 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	}
 	
 	@Override
-	public void draw(Graphics2D g, CordinateConverter<?> cords) {
+	public void draw(Graphics2D g, CordinateConverter cords) {
 		super.draw(g, cords);
 		if (this.drawNumericTics) drawNumericTicmarks(g, cords);
 		//u.drawLine(g, cords, point, baseLineEnd, false);
 	}
 	
-	protected void drawNumericTicmarks(Graphics2D g, CordinateConverter<?> cords) {
+	protected void drawNumericTicmarks(Graphics2D g, CordinateConverter cords) {
 		
 		for(ZoomableGraphic a: drawNumericTicmarks()) try {
 			a.draw(g, cords);

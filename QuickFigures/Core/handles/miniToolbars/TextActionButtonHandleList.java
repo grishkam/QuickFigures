@@ -281,7 +281,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			this.button=i;
 		}
 		
-		public void draw(Graphics2D graphics, CordinateConverter<?> cords) {
+		public void draw(Graphics2D graphics, CordinateConverter cords) {
 			updateHandleLocations(cords.getMagnification());
 			if (button.objectIsAlready(text))
 				this.setHandleColor(Color.DARK_GRAY); 

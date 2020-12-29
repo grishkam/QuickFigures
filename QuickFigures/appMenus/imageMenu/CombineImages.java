@@ -26,7 +26,7 @@ import basicMenusForApp.MenuItemForObj;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import imageDisplayApp.GraphicContainingImage;
+import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import layout.BasicObjectListHandler;
 import sUnsortedDialogs.ObjectListChoice;
@@ -142,7 +142,7 @@ public static DisplayedImage getChoice(String prompt) {
 		}
 		recipient.updateDisplay();
 		addition.updateDisplay();
-		GraphicContainingImage set = recipient.getTheSet();
+		StandardWorksheet set = recipient.getTheSet();
 		
 		set.getTopLevelLayer().add(layer);
 		

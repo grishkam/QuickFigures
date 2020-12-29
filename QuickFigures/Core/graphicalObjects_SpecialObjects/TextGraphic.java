@@ -44,7 +44,7 @@ import utilityClassesForObjects.BasicStrokedItem;
 import utilityClassesForObjects.ColorDimmer;
 import utilityClassesForObjects.ColorDims;
 import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.RectangleEdgePosisions;
+import utilityClassesForObjects.RectangleEdgePositions;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.Rotatable;
 import utilityClassesForObjects.Scales;
@@ -82,7 +82,7 @@ import objectDialogs.TextGraphicSwingDialog;
 
 /**A graphical object that consists of text. This one displays a piece of 
  * text with a single font and color. Used for the most simple labels*/
-public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic,GraphicalObject, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePosisions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
+public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic,GraphicalObject, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
 	/**
 	 
 	 */
@@ -364,7 +364,7 @@ public Rectangle2D getBounds2D() {
 }
 
 @Override
-public void draw(Graphics2D g, CordinateConverter<?> cords) {
+public void draw(Graphics2D g, CordinateConverter cords) {
 	setUpBounds(g);
 	
 	if (this.isFillBackGround()) {
@@ -391,7 +391,7 @@ public void draw(Graphics2D g, CordinateConverter<?> cords) {
 
 
 /**Draws the text onto the graphics*/
-public void drawRotatedText(Graphics2D g, CordinateConverter<?> cords) {
+public void drawRotatedText(Graphics2D g, CordinateConverter cords) {
 	   int sx1 = (int)cords.transformX(getCenterOfRotation().getX());
 	   int sy1 = (int)cords.transformY(getCenterOfRotation().getY());
 
@@ -406,7 +406,7 @@ public void drawRotatedText(Graphics2D g, CordinateConverter<?> cords) {
 }
 
 /**draws the given text onto a graphics 2d object*/
-public void drawText(Graphics2D g, CordinateConverter<?> cords) { 
+public void drawText(Graphics2D g, CordinateConverter cords) { 
     
     double sx = cords.transformX(x);
     double sy = cords.transformY(y);
@@ -426,7 +426,7 @@ public void drawText(Graphics2D g, CordinateConverter<?> cords) {
 
 
 /**draws the cursor*/
-protected void drawCursor(Graphics2D g, CordinateConverter<?> cords, double x, double y, String startText, int position, Font f) {
+protected void drawCursor(Graphics2D g, CordinateConverter cords, double x, double y, String startText, int position, Font f) {
 
 	    double sy = cords.transformY(y);
 	    if(startText.length()==0) return;
@@ -467,7 +467,7 @@ protected void drawCursor(Graphics2D g, CordinateConverter<?> cords, double x, d
 }
 
 /**draws the cursor highlight*/
-protected void drawHighlight(Graphics2D g, CordinateConverter<?> cords, double x, double y, String startText, int position, int position2, Font f) {
+protected void drawHighlight(Graphics2D g, CordinateConverter cords, double x, double y, String startText, int position, int position2, Font f) {
 
 	   
 	    if(startText.length()==0) return;
@@ -505,7 +505,7 @@ protected void drawHighlight(Graphics2D g, CordinateConverter<?> cords, double x
 }
 
 /**draws the outline*/
-public void drawHandlesAndOutline(Graphics2D g2d, CordinateConverter<?> cords) {
+public void drawHandlesAndOutline(Graphics2D g2d, CordinateConverter cords) {
 	g2d.setColor(getTextColor());  
 	
 	  g2d.setColor(getTextColor());

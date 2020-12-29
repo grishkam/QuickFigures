@@ -32,6 +32,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import layout.basicFigure.LayoutSpaces;
+import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
@@ -92,6 +93,10 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 
 	@Override
 	public void run() {
+		if (selector==null||selector.getGraphicDisplayContainer()==null) {
+			ShowMessage.showOptionalMessage("", true, "To use this tool, you must have a worksheet open. (and items selected) first");
+			return;
+		}
 		if(type>99) {
 			performOrderChange();
 			return;
@@ -107,8 +112,8 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		allignArray(all);
 		
 		undo.establishFinalLocations();
-		if(selector!=null)
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		if(selector!=null&&selector.getGraphicDisplayContainer()!=null)
+			selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
 		
 	}
 
@@ -147,7 +152,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 						moveItemForwardOrBack(item, type)
 				);
 			}
-		
+		if (selector!=null&&selector.getGraphicDisplayContainer()!=null) 
 		selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
 	}
 	
