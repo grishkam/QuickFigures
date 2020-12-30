@@ -1149,15 +1149,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			setSelectedItemForDisplay(roi1);
 			if (getImageClicked()==null) return;
 			OverlayObjectManager manager = getImageClicked().getOverlaySelectionManagger();
-			LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
-			manager.setSelectionGraphic3(SmartHandleList.createList(sHandle));
-			
-			if (sHandle!=null) {
-				LockedItemHandle demiVersion = sHandle.createDemiVersion();
-				demiVersion.handlePress(getLastMouseEvent());
-				manager.setSelectionGraphic3(SmartHandleList.createList( demiVersion));
-				if (this.getPressedSmartHandle()==null)this.setPressedSmartHandle(demiVersion);
-			}
+			establishAttachedItemClick(roi1);
 			
 			if (bringSelectedToFront&&roi1 instanceof LocatedObject2D){
 				LocatedObject2D locObject = (LocatedObject2D) roi1;
@@ -1174,6 +1166,30 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				}
 					
 			}
+		}
+	}
+
+	/**Check whether the item given is attached to another object
+	 * and has a handle meant to control its movements.
+	 * If so, sets that handle up as the selected handle
+	 * @param roi1
+	 * @param manager
+	 */
+	void establishAttachedItemClick(Object roi1) {
+		LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
+		OverlayObjectManager overlaySelectionManagger = getImageClicked().getOverlaySelectionManagger();
+		 overlaySelectionManagger.setSelectionGraphic3(SmartHandleList.createList(sHandle));
+		
+		if (sHandle!=null) {
+			LockedItemHandle demiVersion = sHandle.createDemiVersion();
+			demiVersion.handlePress(getLastMouseEvent());
+			
+			overlaySelectionManagger.setSelectionGraphic3(SmartHandleList.createList( demiVersion));
+			if (this.getPressedSmartHandle()==null)
+				{
+				this.setPressedSmartHandle(demiVersion);
+				this.setSelectedHandleNumber(demiVersion.getHandleNumber());
+				}
 		}
 	}
 
