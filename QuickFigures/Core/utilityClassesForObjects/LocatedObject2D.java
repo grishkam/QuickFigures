@@ -27,7 +27,7 @@ public interface LocatedObject2D extends Mortal, Hideable, Selectable {
 	public void setLocationUpperLeft(double x, double y);
 	public void setLocationUpperLeft(Point2D p);
 	
-	
+	public static final int NOT_LOCKED = 0, LOCKED=1;
 	public int isUserLocked();
 	
 	

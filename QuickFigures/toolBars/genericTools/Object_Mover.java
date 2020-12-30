@@ -1085,28 +1085,28 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void moveManySelectedObjects(int x, int y) {
 		
 		
-		
 		boolean performSnap=false;
 		performSnap = isMetaOrControlDown();
 		
 		ArrayList<LocatedObject2D> items = getAllSelectedItems(false);
-		
 		for(LocatedObject2D roi: items) {
-			if (roi.isUserLocked()==ShapeGraphic.LOCKED)
-				ShowMessage.showOptionalMessage("object is locked ", false, "one of the selected items is locked and can only be moved using its handles");
-				return;
+			if (roi.isUserLocked()==ShapeGraphic.LOCKED){
+					ShowMessage.showOptionalMessage("object is locked ", false, "one of the selected items is locked and can only be moved using its handles");
+					return;
+					}
 		}
 		
-		for(LocatedObject2D roi: items) {
-			if (roi.isUserLocked()<=0)
-					moveSingleObject(roi, x, y);
+		for(LocatedObject2D item: items) {
+		
+			if (item.isUserLocked()==LocatedObject2D.NOT_LOCKED)
+					moveSingleObject(item, x, y);
 				if (movingAttachedItem() &&items.size()==1) {
 					StatusPanel.updateStatus("moving attached item");
-					moveAttachedObject(roi, x, y);
+					moveAttachedObject(item, x, y);
 				}
 					if (performSnap) {
-						Rectangle2D r4 = getNearestPanelRect(this.getImageClicked(), RectangleEdges.getLocation(RectangleEdges.CENTER, roi.getBounds()), ignorehidden, this.getPrimarySelectedObject());
-						snapRoi(roi, r4, 8, false);
+						Rectangle2D r4 = getNearestPanelRect(this.getImageClicked(), RectangleEdges.getLocation(RectangleEdges.CENTER, item.getBounds()), ignorehidden, this.getPrimarySelectedObject());
+						snapRoi(item, r4, 8, false);
 						}
 		}
 			
@@ -1127,6 +1127,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	/**moves the object x,y units*/
 	protected void moveSingleObject(LocatedObject2D sel, int x, int y) {
+		
 		if (sel==null) return;
 		if (sel instanceof PanelLayoutGraphic ) {
 			PanelLayoutGraphic s=(PanelLayoutGraphic) sel;
