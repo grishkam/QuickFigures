@@ -29,7 +29,10 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import handles.LockedItemHandle;
+import handles.SmartHandle;
 import handles.SmartHandleList;
+import logging.IssueLog;
 import utilityClassesForObjects.DefaultPaintProvider;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.Selectable;
@@ -49,6 +52,7 @@ public class OverlayObjectManager {
 	/**two lists of smart handles may be drawn over other objects*/
 	private SmartHandleList shlist;
 	private SmartHandleList otherList;
+	private SmartHandle extraHandle=null;
 	
 	/**Returns all the objects that are drawn as overlays*/
 	public ArrayList<ZoomableGraphic> getSelectionGraphics() {
@@ -56,6 +60,7 @@ public class OverlayObjectManager {
 		out.add(selectionGraphic);
 		out.add(selectionGraphic2);
 		out.add(selectionGraphic3);
+		out.add(getExtraHandle());
 		if (shlist!=null) out.add(shlist);
 		if ( otherList!=null) out.add( otherList);
 		return out;
@@ -147,6 +152,10 @@ public class OverlayObjectManager {
 	
 	public void setSelectionGraphic3(ZoomableGraphic selectionGraphic3) {
 		ensureSelected() ;
+		if (this.selectionGraphic3 instanceof LockedItemHandle) {
+			IssueLog.log("have selected locked item handle ");
+			throw new NullPointerException();
+		}
 		if (selectionGraphic3==this.selectionGraphic3) return;
 		if (selectionGraphic3 instanceof Selectable) {
 			Selectable s=(Selectable) selectionGraphic3;
@@ -334,6 +343,14 @@ public void setSelectionHandles(SmartHandleList createList) {
 public void setPermanentHandles(SmartHandleList canvasHandleList) {
 	otherList=canvasHandleList;
 	
+}
+
+public SmartHandle getExtraHandle() {
+	return extraHandle;
+}
+
+public void setExtraHandle(SmartHandle extraHandle) {
+	this.extraHandle = extraHandle;
 }
 
 

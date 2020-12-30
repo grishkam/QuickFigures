@@ -211,7 +211,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	protected void deselectAll(ArrayList<?> ls, Object exempt) {
-		getImageClicked().getOverlaySelectionManagger().removeSelections();
+		getSelectionManager().removeSelections();
 		for(Object l: ls) try  {
 			if(l==exempt) continue;
 				deselect(l);
@@ -327,7 +327,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if(objectAtPressLocation!=null) 
 			startsSelected=objectAtPressLocation.isSelected();
 		
-		SmartHandle sh= this.findSelectedSmartHandle();
+		SmartHandle sh= this.findSelectedSmartHandle(true);
 		
 		/**what to do in the event of a handle press*/
 						if (sh!=null) {
@@ -610,7 +610,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		updateCursorIfOverhandle();
 		
-		SmartHandle currentHandle = this.findSelectedSmartHandle();
+		SmartHandle currentHandle = this.findSelectedSmartHandle(false);
 		if (currentHandle!=null)
 			currentHandle.mouseMovedOver(this.getLastMouseEvent());
 		
@@ -670,7 +670,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	/**returns the selected SmartHandle based on the handle number*/
-	private SmartHandle findSelectedSmartHandle() {
+	private SmartHandle findSelectedSmartHandle(boolean press) {
 		SmartHandle output=null;
 		if (getPrimarySelectedObject() instanceof HasSmartHandles){
 			HasSmartHandles handetConatiner = (HasSmartHandles) getPrimarySelectedObject();
@@ -684,7 +684,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 					if (output!=null) {
 						setSelectedExtraHandle(output);
 					} else setSelectedExtraHandle(null);
-			} else 	setSelectedExtraHandle(null);
+			} else setSelectedExtraHandle(null);
 		
 		/**if the selections are scalable, checks for an object group handle list */
 		if(output==null && selectionsScale()) {
@@ -703,6 +703,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return output;
 	}
 
+	/**returns a version of a locked item handle that will appear after 
+	  its attached item is clicked and not when the parent item is clicked*/
 	protected SmartHandle findHandleToUseForLockedItem() {
 		SmartHandle output;
 		output=this.findHandleForLockedItem(getPrimarySelectedObject());
@@ -895,7 +897,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	/**called after a mouse release*/
 	protected void afterRelease() {
-		getImageClicked().getOverlaySelectionManagger().select(null, 0); 
+		getSelectionManager().select(null, 0); 
 		if (getPrimarySelectedObject() instanceof HasHandles &&handle>-1) {
 			getSelectionObjectAshashangles().handleMouseEvent(this.getLastDragOrLastReleaseMouseEvent(), handle, getButton(),this.clickCount(), MouseEvent.MOUSE_RELEASED, null);
 			if(getPrimarySelectedObject() instanceof BasicGraphicalObject &&isResizeCanvasAfterMouseRelease()) 
@@ -910,7 +912,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		/**If the user drags around a rectangle, selects the rois inside*/
 		if ((getPrimarySelectedObject()==null ||this.getPrimarySelectedObject()!=null&&!getPrimarySelectedObject().getOutline().contains(pressX, pressY))&&createSelector) {
 			selectRoisInDrawnSelector() ;
-			findSelectedSmartHandle();
+			findSelectedSmartHandle(false);
 		}
 
 
@@ -1063,13 +1065,20 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 		if (useSelectorNow() ) {
 			Rectangle2D rect = OverlayObjectManager.createRectangleFrom2Points(new Point2D.Double(pressX, pressY), this.draggedCord());
-			getImageClicked().getOverlaySelectionManagger().select(rect, 0);
+			getSelectionManager().select(rect, 0);
 			selection=rect;
 			} else {
 			
 				selection=null;
 				
 			}
+	}
+
+	/**
+	 * @return
+	 */
+	OverlayObjectManager getSelectionManager() {
+		return getImageClicked().getOverlaySelectionManagger();
 	}
 
 	/**returns true if the region selector is draw under current circumstances
@@ -1149,7 +1158,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			((Selectable)roi1).select();
 			setSelectedItemForDisplay(roi1);
 			if (getImageClicked()==null) return;
-			OverlayObjectManager manager = getImageClicked().getOverlaySelectionManagger();
+			OverlayObjectManager manager = getSelectionManager();
 			establishAttachedItemClick(roi1);
 			
 			if (bringSelectedToFront&&roi1 instanceof LocatedObject2D){
@@ -1178,20 +1187,20 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 */
 	void establishAttachedItemClick(Object roi1) {
 		LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
-		OverlayObjectManager overlaySelectionManagger = getImageClicked().getOverlaySelectionManagger();
-		 overlaySelectionManagger.setSelectionGraphic3(SmartHandleList.createList(sHandle));
+		OverlayObjectManager overlaySelectionManagger = getSelectionManager();
 		
 		if (sHandle!=null) {
 			LockedItemHandle demiVersion = sHandle.createDemiVersion();
 			demiVersion.handlePress(getLastMouseEvent());
 			
-			overlaySelectionManagger.setSelectionGraphic3(SmartHandleList.createList( demiVersion));
+			overlaySelectionManagger.setExtraHandle(demiVersion);
 			if (this.getPressedSmartHandle()==null)
 				{
 				this.setPressedSmartHandle(demiVersion);
 				this.setSelectedHandleNumber(demiVersion.getHandleNumber());
 				}
 		}
+		else overlaySelectionManagger.setExtraHandle(null);
 	}
 
 	protected void setSelectedItemForDisplay(Object roi1) {
@@ -1564,7 +1573,8 @@ public String getToolTip() {
 		lockedItemHandle.handleDrag(getLastDragOrLastReleaseMouseEvent());
 	}
 
-	/**If the user clicks on an item that is attached to another, 
+	
+	/**A user user clicks on an item that is attached to another, 
 	 * returns the locked item handle for that attachment*/
 	public LockedItemHandle findHandleForLockedItem(Object r) {
 		if (r instanceof LocatedObject2D) {
