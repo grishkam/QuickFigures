@@ -811,7 +811,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 					//ml.getWrapper().updateImageDisplay();
 			 }
 		   
-		   public void moveMontageLayout(BasicLayout ml, double mx, double my) {	  
+		   public void moveLayout(BasicLayout ml, double mx, double my) {	  
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LOCATION_EDIT, mx,  my);
 			   notifyListenersOfFutureChange(ml, event);
 			   

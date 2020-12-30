@@ -42,6 +42,7 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.CursorFinder;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -62,6 +63,7 @@ import includedToolbars.StatusPanel;
 import layout.PanelLayout;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
@@ -1089,7 +1091,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		ArrayList<LocatedObject2D> items = getAllSelectedItems(false);
 		
-		
+		for(LocatedObject2D roi: items) {
+			if (roi.isUserLocked()==ShapeGraphic.LOCKED)
+				ShowMessage.showOptionalMessage("object is locked ", false, "one of the selected items is locked and can only be moved using its handles");
+				return;
+		}
 		
 		for(LocatedObject2D roi: items) {
 			if (roi.isUserLocked()<=0)

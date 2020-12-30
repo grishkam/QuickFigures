@@ -29,7 +29,7 @@ public class MontageMoverTool  extends GeneralLayoutEditorTool implements Layout
 	
 	public void performDragEdit(boolean shift) {
 		try {
-				 getLayoutEditor().moveMontageLayout(getCurrentLayout(), getMouseDisplacementX(), getMouseDisplacementY());
+				 getLayoutEditor().moveLayout(getCurrentLayout(), getMouseDisplacementX(), getMouseDisplacementY());
 	
 			} catch (Throwable t) {IssueLog.logT(t);}
 	}

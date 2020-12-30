@@ -50,6 +50,7 @@ import popupMenusForComplexObjects.MontageLayoutPanelMenu;
 import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
 import undo.UndoTakeLockedItem;
+import utilityClasses1.ArraySorter;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdges;
 import utilityClassesForObjects.Scales;
@@ -94,7 +95,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	public void moveLayoutAndContents(double dx, double dy) {
 		this.generateCurrentImageWrapper();
 		
-		this.getEditor().moveMontageLayout(this.getPanelLayout(), (int)dx,(int)dy);
+		this.getEditor().moveLayout(this.getPanelLayout(), (int)dx,(int)dy);
 		
 	}
 	
@@ -103,6 +104,10 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	public void handlePress(int handlenum,  Point p2) {
 		super.handlePress(handlenum, p2);
 		currentUndo = new UndoLayoutEdit(this);
+		if (handlenum==SELECT_ALL_HANDLE) {
+			ArraySorter.selectItems(this.getParentLayer().getAllGraphics());
+			this.select();
+		}
 	}
 	
 	@Override
@@ -114,8 +119,8 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		
 		this.generateCurrentImageWrapper();//generateStandardImageWrapper();
 				
-		if (handlenum==LocationHandleID) {
-					getEditor().moveMontageLayout(getPanelLayout(), p2.getX()-this.getBounds().getX(), p2.getY()-this.getBounds().getY());
+		if (handlenum==LAYOUT_LOCATION_HANDLE) {
+					getEditor().moveLayout(getPanelLayout(), p2.getX()-this.getBounds().getX(), p2.getY()-this.getBounds().getY());
 				}
 		
 		if(this.getPanelLayout() instanceof BasicLayout) {
@@ -134,6 +139,8 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		if (handlenum==TopHandleID) {
 			getEditor().addTopLabelSpace(bml, (int) (bml.getBoundry().getBounds().getY()-p2.getY()));	
 		} 
+		
+		
 		
 		
 		}
@@ -206,7 +213,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 						
 						}
 					if (rowIndex==1&&colIndex==1) {
-						getEditor().moveMontageLayout(getPanelLayout(), (int)increaseh, (int)increasev);
+						getEditor().moveLayout(getPanelLayout(), (int)increaseh, (int)increasev);
 					}
 		}
 		
@@ -292,7 +299,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	public Shape getOutline() {
 		Shape boundry = getPanelLayout().getBoundry();
 		Rectangle2D r = boundry.getBounds2D();
-		int padding=25;
+		int padding=10;
 		return new Rectangle2D.Double(r.getX()-padding, r.getY()-padding, r.getWidth()+padding*2, r.getHeight()+padding*2);
 	}
 
@@ -598,7 +605,7 @@ public void resizeLayoutToFitContents() {
 		}
 		
 		
-		/**A menu item that allos the user to move a row/column label to a
+		/**A menu item that allows the user to move a row/column label to a
 		 * new location*/
 		class RowSwitchMenuItem extends JMenuItem implements ActionListener{
 
