@@ -66,8 +66,8 @@ public abstract class AbstractChannelHandler<ImageType> {
 	
 	/**work in progress, performs an action that depends on the option argument
 	 * Performs the swap in each of the source stacks of the figure organizer given*/
-	@SuppressWarnings("unused")
-	private void performAction(SubFigureOrganizer figure, int choice1, int choice2, int option1) {
+	
+	 void performAction(SubFigureOrganizer figure, int choice1, int choice2, int option1) {
 
 		figure.supress();//do not want updates of figure panels from the source untill after all the edits of the source image are done
 		try {
