@@ -44,8 +44,10 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import icons.ToolIconWithText;
 import imageDisplayApp.CanvasOptions;
 import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -63,7 +65,7 @@ import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
 
-public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, ActionListener {
+public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, LayoutSpaces, ActionListener {
 	FigureOrganizingLayerPane figureOrganizingLayerPane;
 	JMenuItem addImageFromFileButton;
 	private JMenuItem addOpenImageFromList;
@@ -111,15 +113,15 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Actio
 
 		JMenu labelMenu = new SmartJMenu("Add Labels");
 		
-			 rowLabelButton = new BasicSmartMenuItem("Generate Row Labels");
+			 rowLabelButton = new BasicSmartMenuItem("Generate Row Labels", new ToolIconWithText(0, ROW_OF_PANELS).getMenuVersion());
 			 labelMenu.add(rowLabelButton);
 				rowLabelButton.addActionListener(this);
 				
-				 columnLabelButton = new BasicSmartMenuItem("Generate Col Labels");
+				 columnLabelButton = new BasicSmartMenuItem("Generate Column Labels", new ToolIconWithText(0, COLUMN_OF_PANELS).getMenuVersion());
 				 labelMenu.add(columnLabelButton);
 					columnLabelButton.addActionListener(this);
 					
-					panelLabelButton = new BasicSmartMenuItem("Generate Panel Labels");
+					panelLabelButton = new BasicSmartMenuItem("Generate Panel Labels", new ToolIconWithText(0, PANELS).getMenuVersion());
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
 					

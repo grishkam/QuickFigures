@@ -677,14 +677,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			output= handetConatiner.getSmartHandleList().getHandleNumber(getSelectedHandleNumber());
 		}
 		
-		/**if no smart handle is already found, checks for a 
-		 * locked item handle (special the handle for moving an item that is attached to another)*/
-		if(output==null && getSelectedHandleNumber()!=NO_HANDLE ) {
-					output = findHandleToUseForLockedItem();
-					if (output!=null) {
-						setSelectedExtraHandle(output);
-					} else setSelectedExtraHandle(null);
-			} else setSelectedExtraHandle(null);
+		
 		
 		/**if the selections are scalable, checks for an object group handle list */
 		if(output==null && selectionsScale()) {
@@ -699,6 +692,14 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			
 		}
 	
+		/**if no smart handle is already found, checks for a 
+		 * locked item handle (special the handle for moving an item that is attached to another)*/
+		if(output==null && getSelectedHandleNumber()!=NO_HANDLE ) {
+					output = findHandleToUseForLockedItem();
+					if (output!=null) {
+						setSelectedExtraHandle(output);
+					} else setSelectedExtraHandle(null);
+			} else setSelectedExtraHandle(null);
 		
 		return output;
 	}

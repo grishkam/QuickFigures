@@ -40,6 +40,9 @@ PopupMenuSupplier  {
 	static final String inset="Inset Options", options="Text Options", backGroundShap="Background Shape", duplicate="Duplicate";
 	
 	TextGraphic textG;
+
+	private boolean excludeExpertOptions=true;
+	
 	public TextGraphicMenu(TextGraphic textG) {
 		super();
 		this.textG = textG;
@@ -49,8 +52,7 @@ PopupMenuSupplier  {
 	public ArrayList<JMenuItem> getItems() {
 		ArrayList<JMenuItem> jm=new ArrayList<JMenuItem>();
 		jm.add(createItem(options));
-		jm.add(createItem(inset));
-		jm.add(createItem(backGroundShap));
+		addExpertOptions(jm);
 		jm.add(new ObjectAction<TextGraphic>(textG) {
 
 			public void actionPerformed(ActionEvent e) {
@@ -68,6 +70,15 @@ PopupMenuSupplier  {
 		}
 		
 		return jm;
+	}
+
+	/**
+	 * @param jm
+	 */
+	void addExpertOptions(ArrayList<JMenuItem> jm) {
+		if(excludeExpertOptions) return;
+		jm.add(createItem(inset));
+		jm.add(createItem(backGroundShap));
 	}
 	
 	public JMenu getJMenu(String st) {

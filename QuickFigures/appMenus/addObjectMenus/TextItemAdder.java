@@ -123,6 +123,7 @@ class TextItemAdder extends BasicGraphicAdder {
 	}
 	
 	public Icon getIcon() {
+		if(!simple) return  ComplexTextGraphic.createImageIcon();
 		return TextGraphic.createImageIcon();
 	}
 	

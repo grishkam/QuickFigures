@@ -352,6 +352,7 @@ public void updateLocationsForVertical() {
 				operate.run();
 				
 				updateIcon();
+				if (hand!=null)hand.updateIcon();
 				lastEvent.getAsDisplay().updateDisplay();
 				
 			}

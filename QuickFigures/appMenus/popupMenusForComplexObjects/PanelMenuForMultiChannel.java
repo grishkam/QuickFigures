@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JMenu;
 
-import advancedChannelUseGUI.PanelListDisplayGUI;
+import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import fLexibleUIKit.ObjectAction;
 import figureEditDialogs.PanelStackDisplayOptions;
 import figureOrganizer.MultichannelDisplayLayer;
@@ -206,9 +206,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 
 			@Override
 			public void onAction() {
-				PanelListDisplayGUI distpla = new PanelListDisplayGUI( panelManager, man);
-				
-				distpla.setVisible(true);
+				showAdvancedChannelUse();
 			}
 			
 		};
@@ -217,6 +215,15 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 		
 			this.add(out);
 			return out;
+	}
+
+	/**
+	shows the advanced channel use dialog
+	 */
+	public void showAdvancedChannelUse() {
+		AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI( panelManager, man);
+		
+		distpla.setVisible(true);
 	}
 	
 }

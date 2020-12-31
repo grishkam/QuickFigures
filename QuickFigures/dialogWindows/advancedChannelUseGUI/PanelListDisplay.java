@@ -17,6 +17,7 @@ package advancedChannelUseGUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -37,9 +38,9 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.event.ListSelectionEvent;
@@ -62,7 +63,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	private static final long serialVersionUID = 1L;
 	private PanelList list=null;
 	Vector<PanelListElement> elements=new Vector<PanelListElement>();
-	private SpecialCellRenderer render= new SpecialCellRenderer();
+	private ListCellRenderer<PanelListElement> render= new PanelListElementCellRenderer();
 	private PanelManager panelManager;
 	
 	
@@ -139,36 +140,43 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	}
 	
 	
-	public  ListCellRenderer	getCellRenderer() {return render;}
+	public  ListCellRenderer<PanelListElement>	getCellRenderer() {return render;}
 	
 	
-	class SpecialCellRenderer extends  DefaultListCellRenderer {
+	class PanelListElementCellRenderer extends  JLabel implements ListCellRenderer<PanelListElement> {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		private int theindex;
-		//private int panelNumber;
 		private boolean focus;
 		private boolean isSelected;
-		public Component 	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		public Component 	getListCellRendererComponent(JList<? extends PanelListElement> list, PanelListElement value, int index, boolean isSelected, boolean cellHasFocus) {
 			theindex=index;
 			focus=cellHasFocus;
-			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (out instanceof SpecialCellRenderer) {
-				SpecialCellRenderer c=(SpecialCellRenderer) out;
+			Component out = this;
+			 setFont(list.getFont());
+			
+			if (out instanceof PanelListElementCellRenderer) {
+				PanelListElementCellRenderer c=(PanelListElementCellRenderer) out;
 				c.focus=cellHasFocus;
-				//c.panelNumber=theindex-1;
+				
 				c.isSelected=isSelected;
 					{this.setFont(this.getFont().deriveFont(Font.BOLD).deriveFont((float)20.0));}
 				if (isSelected) {
-				//	c.panelNumber=theindex-1;
+				
 		
 					}
 			}
-		
-			return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			
+			setEnabled(list.isEnabled());
+	        setFont(list.getFont());
+	        setComponentOrientation(list.getComponentOrientation());
+	       
+	        this.setPreferredSize(new Dimension(200, 18));
+	       return this;
+	
 		}	
 		
 		

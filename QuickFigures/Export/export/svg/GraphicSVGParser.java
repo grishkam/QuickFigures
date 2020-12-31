@@ -340,8 +340,8 @@ public class GraphicSVGParser {
 		return tg;
 	}
 	
-	/**Tries to read the text from a dom node*/
-	private  ZoomableGraphic parseText(SVGOMTextElement node) {
+	/**Work in progress. Tries to read the text from a dom node*/
+	ZoomableGraphic parseText(SVGOMTextElement node) {
 		
 		
 		TextGraphic tg = new TextGraphic();

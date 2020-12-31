@@ -26,7 +26,7 @@ import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import advancedChannelUseGUI.PanelListDisplayGUI;
+import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import applicationAdapters.HasScaleInfo;
 import channelLabels.ChannelLabelManager;
 import channelMerging.ChannelEntry;
@@ -285,7 +285,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		}
 		
 		if (arg0.getActionCommand().equals(panContentCommand)) {
-			PanelListDisplayGUI distpla = new PanelListDisplayGUI(  getPressedPanelManager(), this.getPressedChannelLabelManager());
+			AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI(  getPressedPanelManager(), this.getPressedChannelLabelManager());
 			//getPressedPanelManager().getStack().setChannelUpdateMode(true);
 			distpla.setVisible(true);
 		}

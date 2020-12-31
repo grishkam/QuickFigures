@@ -29,7 +29,7 @@ public abstract class AbstractChannelHandler<ImageType> {
 	public   String[] choicesforSwap= new String[] {"Swap Channels", "Swap Luts only", "Move Channels", "Move Channel Luts"};
 	public final int SWAP_CHANNELS=0, SWAP_CHANNEL_COLORS=1, MOVE_CHANNELS=2, MOVE_CHANNEL_COLORS=3;
 
-	public int option1=SWAP_CHANNELS;
+	
 	
 	/**This method moved channel a into position b. all channels in between are shifted to the left or right depending on the type of move */
 	public   void moveChannelsLuts(ImageType p, int a, int b) {
@@ -67,7 +67,7 @@ public abstract class AbstractChannelHandler<ImageType> {
 	/**work in progress, performs an action that depends on the option argument
 	 * Performs the swap in each of the source stacks of the figure organizer given*/
 	@SuppressWarnings("unused")
-	private void performUpdaterSwap(SubFigureOrganizer figure, int choice1, int choice2) {
+	private void performAction(SubFigureOrganizer figure, int choice1, int choice2, int option1) {
 
 		figure.supress();//do not want updates of figure panels from the source untill after all the edits of the source image are done
 		try {

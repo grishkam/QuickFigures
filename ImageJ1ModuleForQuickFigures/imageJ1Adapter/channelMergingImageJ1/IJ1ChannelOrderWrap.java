@@ -24,6 +24,8 @@ import ij.ImagePlus;
 import ij.process.LUT;
 import logging.IssueLog;
 
+/**ImageJ implementation of the channel order interface 
+ * @see ChannelOrderAndColorWrap*/
 public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 
 	private ImagePlus imp;
@@ -70,7 +72,7 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	
 	private void setLutColor(Color lut, int chan) {
 		if (chan<=0) {
-			IssueLog.log("Error, Was asked to change color for channel '0' but channel numbering starts from 1");
+			IssueLog.log(" Was asked to change color for channel '0' but channel numbering starts from 1");
 			
 			return;
 			}
@@ -85,7 +87,7 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 
 	private void setLut(int chan, LUT createLutFromColor) {
 		if (chan<=0) {
-			IssueLog.log("Error, Was asked to change color for channel '0' but channel numbering starts from 1");
+			IssueLog.log(" Was asked to change color for channel '0' but channel numbering starts from 1");
 			
 			return;
 			}

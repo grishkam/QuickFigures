@@ -372,8 +372,7 @@ public class PathPointList extends ArrayList<PathPoint> {
 				
 				if (type==PathIterator.SEG_MOVETO) {
 					lasomoveTo=newpp;
-					//IssueLog.log("doing move to");
-					newpp.setClosePoint(true);
+					lasomoveTo.setClosePoint(true);
 				}else {/**IssueLog.log("doing line to");*/}
 			}
 			

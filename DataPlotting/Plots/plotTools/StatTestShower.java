@@ -35,6 +35,7 @@ TextGraphic model=new TextGraphic(); {model.setFontSize(10);}
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+boolean showMessages=false;//set to true if details of tests should be printed to the log window.
 private String lastPValue;
 private int tTestType;
 private int numberTails;
@@ -143,6 +144,9 @@ protected TextGraphic createTextForPValue(double pValue) {
 		if(this.tTestType==2) pValue=new TTest().pairedTTest(d1, d2);
 		if (numberTails==1) pValue=pValue/2;
 		lastPValue="t-Test done "+pValue;
+		if (showMessages) {
+			IssueLog.log(lastPValue);
+		}
 		return pValue;
 	}
 	

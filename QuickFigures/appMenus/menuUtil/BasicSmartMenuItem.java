@@ -15,6 +15,7 @@
  *******************************************************************************/
 package menuUtil;
 
+import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -36,6 +37,11 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 	
 	public BasicSmartMenuItem(String st) {
 		super(st);
+	}
+	
+	public BasicSmartMenuItem(String st, Icon icon) {
+		super(st);
+		this.setIcon(icon);
 	}
 
 	@Override

@@ -18,14 +18,12 @@ package graphicTools;
 
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
 import graphicalObjects_Shapes.RectangularGraphic;
-import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.TreeIconWrappingToolIcon;
 import imageDisplayApp.OverlayObjectManager;
 import objectDialogs.RectangleGraphicOptionsDialog;

@@ -145,6 +145,8 @@ import graphicalObjects_Shapes.ArrowGraphic;
 			return createIconSet(this);
 		}
 		
+		public Icon getMenuVersion() {return new ExtractedIcon(this);}
+		
 		
 		/**
 		public NakedIcon getVariablePortion() {return new NakedIcon();}

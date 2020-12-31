@@ -77,7 +77,6 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 		java.awt.geom.Path2D.Double path = new Path2D.Double();
 		double[] all = dKap.getAllPositions();
 		
-		double lastPercent=1;
 			
 		for(int i=0; i<all.length; i++) {
 			double indX = all[i];
@@ -117,7 +116,7 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 			
 			
 			//if (point.getY()!=point2.getY()) path.lineTo(point.getX(), point.getY());
-			lastPercent=depY;
+			
 		}
 		
 		currentDrawShape=path;

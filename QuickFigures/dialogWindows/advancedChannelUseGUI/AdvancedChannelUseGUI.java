@@ -50,7 +50,7 @@ import undo.PanelManagerUndo;
 
 
 /**A gui that show a list of panels*/
-public class PanelListDisplayGUI extends JFrame implements ListSelectionListener, ActionListener{
+public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListener, ActionListener{
 
 	/**
 	 * 
@@ -76,7 +76,7 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 	JLabel chanListLabel=new JLabel("Channel List");
 	
 	
-		public PanelListDisplayGUI(PanelManager pm, ChannelLabelManager cm) {
+		public AdvancedChannelUseGUI(PanelManager pm, ChannelLabelManager cm) {
 			this.cm=cm;
 			pm.setChannelUseMode(PanelManager.ADVANCED_CHANNEL_USE);
 			pm.getPanelList().setChannelUpdateMode(true);
@@ -210,18 +210,11 @@ public class PanelListDisplayGUI extends JFrame implements ListSelectionListener
 				}};
 		}
 
-		public static void main(String[] arg) {
-			
-			;
-			//ImagePlusWrapper wrap = new ImagePlusWrapper(IJ.openImage());
-			//MultichannelImageDisplay multi = new IJ1MultiChannelCreator().creatMultiChannelDisplayFromUserSelectedImage(true, "/Users/mazog/Desktop/Mon Wiz stuff/Control;Model Source Stack.tif");
-		//	showMultiChannel(multi);
-			
-		}
+		
 		
 		public static void showMultiChannel(MultichannelDisplayLayer multi) {
 		
-			PanelListDisplayGUI distpla = new PanelListDisplayGUI(multi.getPanelManager(), multi.getChannelLabelManager());
+			AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI(multi.getPanelManager(), multi.getChannelLabelManager());
 			
 			distpla.setVisible(true);
 			

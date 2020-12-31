@@ -66,7 +66,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		JMenu[] output=new JMenu[3];
 		output[0]=new ImageMenuForMultiChannel("Source Image", displayLayer, list) ;
 		thi.add(output[0]);
-		output[1]=new PanelMenuForMultiChannel("Image Panels", displayLayer, list, displayLayer.getPanelManager());
+		output[1]=generatePanelMenu();
 		thi.add(output[1]);
 		addChannelLabelMenu(thi);
 		
@@ -75,6 +75,13 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		addView(thi);
 		return output;
 		
+	}
+
+	/**
+	 * @return
+	 */
+	public PanelMenuForMultiChannel generatePanelMenu() {
+		return new PanelMenuForMultiChannel("Image Panels", displayLayer, list, displayLayer.getPanelManager());
 	}
 
 	/**creates a menu item to remove the image*/

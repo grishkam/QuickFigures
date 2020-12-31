@@ -125,6 +125,7 @@ public class ImageDisplayTester extends ToolbarTester {
 
 	/**Attempts to make sure the loci importer is installed into imageJ
 	 * after many tried, this worked*/
+	@SuppressWarnings("unchecked")
 	public static void loadLociImporter(ImageJ ij) {
 		try {
 			//IJ.getClassLoader().loadClass("loci.plugins.LociImporter");
