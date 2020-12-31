@@ -22,7 +22,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
-import basicMenusForApp.MenuBarForApp;
 import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
 import genericMontageLayoutToolKit.Shift_Object_Between_Panels;
@@ -66,6 +65,8 @@ import utilityClassesForObjects.RectangleEdgePositions;
 
 /**The main toolbar for QuickFigures. Includes all critical tools*/
 public class ObjectToolset1 extends QuickFiguresToolBar{
+	
+	boolean includeStatusPanel=true;
 	
 	/**Extra tool installers. A programmer can write extensions to quickfigures
 	  the plot package is such an extension. additional tools that are part of an extension 
@@ -308,16 +309,20 @@ private void selectDefaultTool() {
 	setCurrentTool(new Object_Mover().getToolName());
 }
 	
+
+
 	public void showFrame() {
 		super.showFrame();
 		getframe().setTitle("Object Tools");
 		addToolKeyListeners();
 		
-		GridBagConstraints c=new GridBagConstraints(); 
-		c.anchor=GridBagConstraints.WEST;
-		c.gridy=3; 
-		c.gridx=0;
-		getframe().add(new StatusPanel() ,c ); 
+		if (includeStatusPanel) {
+				GridBagConstraints c=new GridBagConstraints(); 
+				c.anchor=GridBagConstraints.WEST;
+				c.gridy=3; 
+				c.gridx=0;
+				getframe().add(new StatusPanel() ,c ); 
+		}
 		getframe().pack();
 		
 	}
