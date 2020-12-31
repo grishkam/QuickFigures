@@ -20,10 +20,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import javax.swing.Timer;
+
+import applicationAdapters.DisplayedImage;
+import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
@@ -53,6 +59,7 @@ public class OverlayObjectManager {
 	private SmartHandleList shlist;
 	private SmartHandleList otherList;
 	private SmartHandle extraHandle=null;
+
 	
 	/**Returns all the objects that are drawn as overlays*/
 	public ArrayList<ZoomableGraphic> getSelectionGraphics() {
@@ -77,6 +84,7 @@ public class OverlayObjectManager {
 			}
 			G.draw(g2, cc);
 		}
+		
 		
 	}
 

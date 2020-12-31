@@ -8,6 +8,7 @@
 	<classpathentry excluding="selectedItemMenus/SaveItemAsXml.java|basicMenusForApp/XMLloadItem.java|selectedItemMenus/AllignLayout.java|menuUtil/SmartRadioButton.java" kind="src" path="appMenus"/>
 	<classpathentry excluding="specialMenus/ColorJMenu.java" kind="src" path="dialogWindows"/>
 	<classpathentry kind="src" path="Export"/>
+	<classpathentry kind="src" path="WorkInProgress"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/ooxml-lib/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-3.12-beta1-20150228.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-3.12-beta1-20150228.jar"/>

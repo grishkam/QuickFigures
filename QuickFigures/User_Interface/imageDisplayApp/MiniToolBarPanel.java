@@ -43,8 +43,6 @@ import imageMenu.ZoomFit;
 
 /**A components that displays a side panel within each image window or potentially within*/
 class MiniToolBarPanel extends JPanel implements MouseListener {
-	
-	boolean inWindow;
 
 	ArrayList<MenuItemForObj> permanentObjects=new ArrayList<MenuItemForObj>();
 	private ImageWindowAndDisplaySet displaySet;
@@ -58,6 +56,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	
 	
 	public MiniToolBarPanel(ImageWindowAndDisplaySet display, boolean vertical) {
@@ -79,7 +78,8 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	}
 
 	public Dimension getPreferredSize() {
-		if (!vertical)new Dimension(330, 50);
+		if (!vertical)
+			return new Dimension(330, 30);
 		return new Dimension(30, 325);
 	}
 	
@@ -190,7 +190,8 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	 returns the location of the first toolbar
 	 */
 	public Double getToolLocations() {
-		if (!vertical)new Dimension(15, 40);
+		if (!vertical) 
+			return new Point2D.Double(2, 14);
 		return new Point2D.Double(15,5);
 	}
 	
@@ -198,7 +199,8 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	 returns the location of the second mini toolbar
 	 */
 	public Double getToolLocations2() {
-		if (!vertical)  new Point2D.Double(90,40);
+		if (!vertical)  
+			return new Point2D.Double(90,14);
 		return new Point2D.Double(15,85);
 	}
 

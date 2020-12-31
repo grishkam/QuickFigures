@@ -1180,7 +1180,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	/**Check whether the item given is attached to another object
-	 * and has a handle meant to control its movements.
+	 * In these cases, there is a handle that is  meant to control its movement.
 	 * If so, sets that handle up as the selected handle
 	 * @param roi1
 	 * @param manager
@@ -1305,7 +1305,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 	public void setHandleCursor(Cursor handleCursor) {
 		this.handleCursor = handleCursor;
+		
 	}
+	
+	
 
 	/**This class of dialog changes the options for this tool*/
 	public static class MoverDialog extends StandardDialog {
@@ -1323,6 +1326,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			String[] groupops=new String[] {"Don't", "Do", "1 Level Down", "2 Level Down"};
 			add("groupsel", new ChoiceInputPanel("Reach into Groups",groupops, mover.getGroupSelectionMode()));
 			add("selGroup", new BooleanInputPanel("Select in Group", GraphicGroup.treatGroupsLikeLayers));
+			
 		}
 		@Override
 		public void onOK() {
@@ -1336,7 +1340,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 	}
 
-	
+	/**responds to keystrokes by the user*/
 	public boolean keyPressed(KeyEvent arg0) {
 		if(this.textEditMode()) {
 			this.keyPressOnSelectedTextItem(arg0);
@@ -1461,7 +1465,8 @@ public String getToolTip() {
 	protected int lastCursor;
 	protected UndoTextEdit lastUndo;
 	protected static LocatedObject2D lastToolsSelectedItem;
-	/**Implemented when a mouse press is done on a test item*/
+	
+	/**called when a mouse press is done on a text item*/
 	public void mousePressOnTextCursor(TextGraphic textob) {
 		
 		int x = this.getClickedCordinateX();
@@ -1517,7 +1522,8 @@ public String getToolTip() {
 	}
 	
 	
-	/**looks through a list of takeslocked items and returns the one that has a given objet
+	/**looks through a list of objects
+	 * items and returns the one that has a given objet
 	 * @return 
 	 */
 	public static TakesLockedItems getLockContainterForObject(LocatedObject2D object, ArrayList<LocatedObject2D> list) {
@@ -1530,7 +1536,8 @@ public String getToolTip() {
 		}
 		return null;
 	}
-	/**gets all the object in a particular image that can take a locked item.*/
+	
+	/**gets all the objects in a particular image that can take on an attached item.*/
 	public static ArrayList<LocatedObject2D> getPotentialLockAcceptors(ImageWrapper gmp) {
 		ArrayList<LocatedObject2D> aRoi;
 		aRoi=gmp.getLocatedObjects();
@@ -1546,6 +1553,7 @@ public String getToolTip() {
 	public TakesLockedItems findLockContainer(LocatedObject2D object2) {
 		return getLockContainterForObject(object2, getPotentialLockAcceptors(getImageClicked()));
 	}
+	
 	/**returns true if the user is trying to move an item that is attached to another object*/
 	private boolean movingAttachedItem() {
 		return isAttachedItem(this.getPrimarySelectedObject());

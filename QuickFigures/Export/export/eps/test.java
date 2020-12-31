@@ -23,13 +23,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.TranscodingHints;
 import org.apache.fop.render.ps.EPSTranscoder;
 import org.apache.fop.svg.PDFDocumentGraphics2D;
 import org.apache.fop.svg.PDFTranscoder;
+
 import ultilInputOutput.FileChoiceUtil;
 
 /**
@@ -69,7 +70,7 @@ public class test {
 	public static void trPDF() throws TranscoderException, IOException {
 		org.apache.fop.svg.PDFTranscoder transcoder = new PDFTranscoder();
 		
-		TranscodingHints hints = transcoder.getTranscodingHints();
+	//	TranscodingHints hints = transcoder.getTranscodingHints();
 	//	hints.put(transcoder.KEY_AUTO_FONTS, false);
 	//	transcoder.setTranscodingHints(hints);
 	

@@ -40,7 +40,6 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import handles.HasSmartHandles;

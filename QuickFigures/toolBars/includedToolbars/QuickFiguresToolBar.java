@@ -20,16 +20,27 @@ import java.awt.dnd.DropTarget;
 import javax.swing.AbstractButton;
 
 import applicationAdapters.DisplayedImage;
+import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.OpeningFileDropHandler;
 import externalToolBar.AbstractExternalToolset;
 import genericTools.GeneralTool;
 import genericTools.ToolBit;
+import logging.IssueLog;
 
+/**The superclass for most of the QuickFigures toolbars*/
 public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>  {
 
 
 	public QuickFiguresToolBar() {
 		this.toolbar.setFloatable(false);
+		
+	}
+	
+	/**shows the JFrame*/
+	public void showFrame() {
+		if (this.usesMenuBar())getframe().setJMenuBar(new MenuBarForApp());
+		super.showFrame();
+		
 	}
 	
 	public synchronized void addToolKeyListeners() {
@@ -46,6 +57,11 @@ public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>
 		new DropTarget(getframe(), new OpeningFileDropHandler());
 	}
 
+	/**whether to set the menu bar for this class*/
+	protected boolean usesMenuBar() {
+		if (!IssueLog.isWindows()) return true;
+		return false;
+	}
 
 
 }

@@ -25,11 +25,11 @@ import includedToolbars.ObjectToolset1;
 /**A Menu item that shows one of several possible toolbars*/
 public class ShowToolBar  extends BasicMenuItemForObj {
 
-	public static final String OBJECT_TOOLS="Object Toolbar", lAYOUT_TOOLS="Layout Tools", ACTION_BAR="Action Tools", SHAPE_AND_TEXT_EDITING_BAR="Shape And Text Edit Actions", MINIMUM_TOOLBAR="Minimum Toolset";
+	public static final String OBJECT_TOOLS="Object Tools", lAYOUT_TOOLS="Layout Tools", ACTION_BAR="Action Tools", SHAPE_AND_TEXT_EDITING_BAR="Shape And Text Edit Actions", MAIN_TOOLBAR="Main Toolbar";
 
 	private static final String SIDE_PANEL="Side Panels";
 	
-	public static String[] names=new String[] {OBJECT_TOOLS, lAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MINIMUM_TOOLBAR, SIDE_PANEL};
+	public static String[] names=new String[] {OBJECT_TOOLS, lAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MAIN_TOOLBAR, SIDE_PANEL};
 	
 	
 	int toolBarType=0;
@@ -44,7 +44,7 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 		if (getToolBarName().equals(lAYOUT_TOOLS))new LayoutToolSet().run("");	
 		if (getToolBarName().equals(ACTION_BAR))new ActionToolset1().run("");
 		if (getToolBarName().equals(SHAPE_AND_TEXT_EDITING_BAR))new ActionToolset2().run("");
-		if (getToolBarName().equals(MINIMUM_TOOLBAR))new ObjectToolset1().run("");
+		if (getToolBarName().equals(MAIN_TOOLBAR))new ObjectToolset1().run("");
 		
 		if (this.getToolBarName().equals(SIDE_PANEL)) {
 			if (diw.getWindow() instanceof GraphicSetDisplayWindow) {

@@ -33,7 +33,7 @@ public class Plot_ToolInstaller implements PlugIn {
 		if (firstRun) {
 			onFirstRun();
 			firstRun=false;
-			new Toolset_Runner().run("FigureWizApp");
+			new Toolset_Runner().run("Object Tools");
 		}
 		
 

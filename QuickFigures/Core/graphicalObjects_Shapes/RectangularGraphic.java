@@ -39,7 +39,6 @@ import illustratorScripts.PathItemRef;
 import keyFrameAnimators.RectGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
 import layout.RetrievableOption;
-import logging.IssueLog;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import utilityClassesForObjects.BasicStrokedItem;

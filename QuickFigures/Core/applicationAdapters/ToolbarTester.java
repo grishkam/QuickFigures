@@ -17,14 +17,9 @@ package applicationAdapters;
 
 import java.io.File;
 
-import javax.swing.JFrame;
-
 import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
-import includedToolbars.ActionToolset1;
-import includedToolbars.LayoutToolSet;
-import includedToolbars.ObjectToolset1;
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 

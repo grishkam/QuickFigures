@@ -231,8 +231,11 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		
 	}
 	
-	/**Aligns and distributes items to fit a more grid like format
+	/**work in progress
+	 * Aligns and distributes items to fit a more grid like format
+	 * with somewhat better results for very disorganized masses of panels
 	 * @return */
+@SuppressWarnings("unused")
 	private UndoMoveItems cleanUp2(ArrayList<LocatedObject2D> objects) {
 		
 		UndoMoveItems undo = new UndoMoveItems(objects);

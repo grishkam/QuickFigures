@@ -350,7 +350,7 @@ public void updateLocationsForVertical() {
 				LayerSelector selector = lastEvent.getSelectionSystem();
 				operate.setSelector(selector);
 				operate.run();
-				//hand.updateIcon();
+				
 				updateIcon();
 				lastEvent.getAsDisplay().updateDisplay();
 				

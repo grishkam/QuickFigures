@@ -42,7 +42,7 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 	private ArrayList<Field> fields=new ArrayList<Field>();
 	private HashMap<String, Method> getters=new HashMap<String, Method> ();
 	private HashMap<String, Method> setters=new HashMap<String, Method> ();
-	private HashMap<Field, FieldSettingCluster> setterData=new HashMap<Field, FieldSettingCluster> ();
+	private HashMap<Field, FieldInformationCluster> setterData=new HashMap<Field, FieldInformationCluster> ();
 	
 	public ReflectingFieldSettingDialog(Object o) {
 		this.o=o;
@@ -110,8 +110,9 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 	
 	
 	
-	public void addItem(String name, String label, Field f, Method getter,Class<?> t ) {
+	public void addItem(String name, String label, Field f, Method getter, Method setter, Class<?> t ) {
 		getters.put(name, getter);
+		setters.put(name, setter);
 		
 		Boolean isFieldPublic=false;
 		if (f!=null)isFieldPublic = Modifier.isPublic(f.getModifiers());
@@ -133,7 +134,7 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 			
 			if (t==int.class)  {
 				
-				FieldSettingCluster data = setterData.get(f);
+				FieldInformationCluster data = setterData.get(f);
 				String[] sar = data.getOptions();
 				
 				int d=0;
@@ -186,11 +187,12 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 	void addFieldToDialog(Field f) {
 		if (!fields.contains(f)) fields.add(f);
 		;
-		setterData.put(f, new FieldSettingCluster(f, o.getClass()));
+		setterData.put(f, new FieldInformationCluster(f, o.getClass()));
 		Method getter = this.findGetter(f, o.getClass());
+		Method setter = this.findSetter(f, o.getClass());
 		Class<?> t = f.getType();
 		String label=makeLabelString(f.getName());
-		addItem(f.getName(), label,f,  getter, t);
+		addItem(f.getName(), label,f,  getter,setter, t);
 	}
 	
 	/**When given a field name, this insets spaces and capitalizaton
@@ -217,7 +219,7 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 	
 		Class<?> t = f.getType();
 		String name=f.getName();	
-		Method setter=this.findSetter(f);
+		Method setter=this.findSetter(f, o.getClass());
 		
 		/**if this objects lacks the field, don't bother*/
 		if (findField(o.getClass(), f.getName())==null) { return;}
@@ -232,7 +234,7 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 		if (t==int.class)  {
 			double d=0; 
 			
-			FieldSettingCluster data = setterData.get(f);
+			FieldInformationCluster data = setterData.get(f);
 			String[] sar = data.getOptions();
 			if (sar==null||sar.length<2) d=this.getNumber(name);
 			else d=this.getChoiceIndex(name);
@@ -290,11 +292,11 @@ Method findGetter(Field f, Class<?> c) {
 	return null;
 }
 
-Method findSetter(Field f) {
+Method findSetter(Field f, Class<?> c) {
 	try{
 	String getterName =  makeGetterSetterString("set", f.getName());
 	
-	Method m1 = findMethod(getterName, o.getClass(), f.getType());
+	Method m1 = findMethod(getterName,c, f.getType());
 	if (m1!=null) return m1;
 
 	
@@ -341,17 +343,17 @@ public void setExtraObjects(ArrayList<?> extraObjects) {
 	this.extraObjects = extraObjects;
 }
 
-class FieldSettingCluster {
-	private Field field;
+class FieldInformationCluster {
+
 	private UserChoiceField anns;
 	Class<?> theClass;
-	private Method getter;
+	
 
-	public FieldSettingCluster(Field f, Class<? extends Object> class1) {
+	public FieldInformationCluster(Field f, Class<? extends Object> class1) {
 		theClass=class1;
-		field=f;
+		
 		anns = f.getAnnotation(UserChoiceField.class);
-		getter =findGetter(f, class1);
+		
 	}
 	
 	public String[] getOptions() {

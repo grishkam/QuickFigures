@@ -19,6 +19,7 @@ import applicationAdapters.ImageWrapper;
 import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import layout.RetrievableOption;
 import logging.IssueLog;
 import undo.UndoAddItem;
 import utilityClassesForObjects.LocatedObject2D;
@@ -30,6 +31,7 @@ public class GraphicTool extends Object_Mover {
 	
 	/**If set to true, will switch to the default tool when 
 	  the mouse movement is done */
+	@RetrievableOption(key = "Switch Back To Defaul Tool after use", label="Switch away from tool after use")
 	protected boolean temporaryTool=false;
 
 	
@@ -65,7 +67,7 @@ public class GraphicTool extends Object_Mover {
 	public void mouseReleased() {
 		super.mouseReleased();
 		onRelease(this.getImageClicked(),getPrimarySelectedObject());
-		if (temporaryTool) {
+		if (isTemporaryTool()) {
 			super.todefaultTool();}
 	}
 	
@@ -84,6 +86,13 @@ public class GraphicTool extends Object_Mover {
 
 	public String getToolName() {
 		return "Graphic Tool";
+	}
+
+
+	/**returns true if the toolbar should switch back to the default tool 
+	 * after a mouse release*/
+	public boolean isTemporaryTool() {
+		return temporaryTool;
 	}
 	
 

@@ -48,7 +48,6 @@ import graphicalObjects_Shapes.RightTriangleGraphic;
 import graphicalObjects_Shapes.RoundedRectangleGraphic;
 import graphicalObjects_Shapes.SimpleRing;
 import graphicalObjects_Shapes.SimpleStar;
-import graphicalObjects_Shapes.TailGraphic;
 import graphicalObjects_Shapes.TrapezoidGraphic;
 import graphicalObjects_Shapes.TriangleGraphic;
 import graphicTools.ShapeGraphicTool;
@@ -289,7 +288,7 @@ public void run(String s) {
 		graphicTools();
 	
 
-		getframe().setJMenuBar(new MenuBarForApp());
+		//if (this.usesMenuBar())getframe().setJMenuBar(new MenuBarForApp());
 		showFrame();
 		currentToolset=this;
 		this.getframe().setLocation(new Point(5, 150));
@@ -300,6 +299,9 @@ public void run(String s) {
 		
 	}
 
+protected boolean usesMenuBar() {
+	return true;
+}
 
 
 private void selectDefaultTool() {

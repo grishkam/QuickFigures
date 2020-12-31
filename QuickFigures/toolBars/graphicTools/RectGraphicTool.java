@@ -18,14 +18,18 @@ package graphicTools;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWrapper;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.TreeIconWrappingToolIcon;
 import imageDisplayApp.OverlayObjectManager;
+import objectDialogs.RectangleGraphicOptionsDialog;
+import storedValueDialog.StoredValueDilaog;
 import utilityClassesForObjects.LocatedObject2D;
 import utilityClassesForObjects.RectangleEdgePositions;
 
@@ -109,10 +113,14 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 		
 	}
 	
+	
+	
 	/**Shows the model shape's options dialog. The options in that dialog fulfill the role of a tool dialog*/
 	@Override
 	public void showOptionsDialog() {
-		getModel().showOptionsDialog();
+		RectangleGraphicOptionsDialog o = getModel().getOptionsDialog(false);
+		StoredValueDilaog.addFieldsForObject(o, this);
+		o.showDialog();
 	}
 	
 	

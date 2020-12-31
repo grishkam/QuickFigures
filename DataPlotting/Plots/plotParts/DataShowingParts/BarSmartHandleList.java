@@ -17,8 +17,6 @@ import applicationAdapters.CanvasMouseEvent;
 import genericPlot.BasicPlot;
 import handles.SmartHandle;
 import handles.SmartHandleList;
-import logging.IssueLog;
-import plotParts.DataShowingParts.BarSmartHandleList.BarWidthSmartHandle;
 import utilityClassesForObjects.RectangleEdges;
 
 /**

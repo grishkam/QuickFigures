@@ -505,8 +505,9 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		ArrayList<ZoomableGraphic> graphics = getAllGraphics();
 		for(ZoomableGraphic item :graphics) {
 			if (item instanceof LocatedObject2D) {
-				if (output.contains(item)) continue;
-				output.add((LocatedObject2D)item);
+				LocatedObject2D item2=(LocatedObject2D) item;
+				if (output.contains(item2)) continue;
+				output.add(item2);
 			}
 		}
 		return output;
