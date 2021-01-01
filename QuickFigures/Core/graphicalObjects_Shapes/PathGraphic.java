@@ -883,6 +883,9 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			this.setHandleNumber(990090+(toStart?500:0));
 		}
 
+		/**returns the location of the point addition handle based on the 
+		 * location of the last handle (or first handle)
+		  in the path*/
 		public Point2D getCordinateLocation() {
 			SmartHandleList boxes = path.getPointHandles();
 			SmartHandle lastOne = boxes.get(boxes.size()-1);
