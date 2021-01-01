@@ -90,14 +90,14 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	/**The choices that appear in the user dialog*/
 	
 	public static final int NORMAL_HEAD=0, OPEN_HEAD=1, REVERSE_HEAD=2, REVERSE_OPEN_HEAD=3,FEATHER_TAIL=5, FEATHER_TAIL_2=6, SQUARE_HEAD=7, BALL_HEAD=8, LINE_CAP=9,HALF_LINE_HEAD2 = 10, TRIANGLE_HEAD=11, 
-			TAIL=12, NARROW_TAIL=13, HALF_CIRCLE_TAIL=14,
-			POLYGON_HEAD=15;
+			TAIL=12, NARROW_TAIL=13, HALF_CIRCLE_TAIL=14, NO_HEAD=15,
+			POLYGON_HEAD=16;
 	public static final int DIAMOND_HEAD=POLYGON_HEAD+1, PENTAGON_HEAD=POLYGON_HEAD+2, HEXAGON_HEAD=POLYGON_HEAD+3;	
 	
 	public static final int[] arrowStyleList=new int[] {
-			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL};
+			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL, NO_HEAD};
 	
-	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle","Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle","No Head","Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
 	/**some options not available to the user dialog but available to programmer*/
 	public static final int 
 	 HALF_BAR_HEAD = 400,  HALF_BAR_HEAD2 = 500 ,BAR_HEAD = 444,
@@ -144,7 +144,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	private BasicShapeGraphic backGroundShape=null;
 
 	
-	
+	/**A simple constructor*/
 	public ArrowGraphic() {}
 
 	/**constructor for an arrow stretching from p1 to p2*/
@@ -163,6 +163,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		x=p1.getX();
 		y=p1.getY();
 	}
+	/**the second point, if there is more than one head, this is the second heads location*/
 	void setPoint2(Point2D p2) {
 		x2=p2.getX();
 		y2=p2.getY();
@@ -524,7 +525,7 @@ private Line2D getDrawnLineBetweenHeads() {
 	private Point2D getLineStart() {
 		 Point2D l1=this.getLineStartLocation();
 		 if (head2.getNotchAngle()>head2.getArrowTipAngle()) {
-		 		if (getNHeads()>1) l1=this.getNotchLocation(SECOND_HEAD);
+		 		if (drawsSecondHead()) l1=this.getNotchLocation(SECOND_HEAD);
 	 									}
 		 return l1;
 		 
@@ -535,7 +536,7 @@ private Line2D getDrawnLineBetweenHeads() {
 	private Point2D getLineEnd2() {
 		 Point2D l2=this.getLineEndLocation();
 		 if (head1.getNotchAngle()>head1.getArrowTipAngle()) {
-			 		if (getNHeads()>0) l2=this.getNotchLocation(FIRST_HEAD);
+			 		if (drawsFirstHead()) l2=this.getNotchLocation(FIRST_HEAD);
 			 		
 		 									}
 		 return l2;
@@ -597,8 +598,8 @@ private Line2D getDrawnLineBetweenHeads() {
 			 		
 			 		
 			 		
-			 		if (getNHeads()>0) this.getHead1DrawShape(FIRST_HEAD).draw(g, cords);
-			 		if (getNHeads()>1) this.getHead1DrawShape(SECOND_HEAD).draw(g, cords);
+			 		if (drawsFirstHead()) this.getHead1DrawShape(FIRST_HEAD).draw(g, cords);
+			 		if (drawsSecondHead()) this.getHead1DrawShape(SECOND_HEAD).draw(g, cords);
 		 			
 		 			}
 	
@@ -753,10 +754,26 @@ protected Point2D getDrawnLineEnd2() {
 			
 		 } else {
 			 Object output = super.toIllustrator(aref2);
-			 if (getNHeads()>0) this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);
-		 		if (getNHeads()>1) this.getHead1DrawShape(SECOND_HEAD).toIllustrator(aref2);
+			 if (drawsFirstHead()) this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);
+		 		if (drawsSecondHead()) this.getHead1DrawShape(SECOND_HEAD).toIllustrator(aref2);
 			return output; 
 		 }
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean drawsSecondHead() {
+		if (head2.isNoHead()) return false;
+		return getNHeads()>1;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean drawsFirstHead() {
+		if (head1.isNoHead()) return false;
+		return getNHeads()>0;
 	}
 	
 	/**required to generate an illustrator script to create a similar arrow*/
@@ -924,14 +941,14 @@ protected Point2D getDrawnLineEnd2() {
 	}
 	
 	
-	
+	/**creates handles specific to the arrows*/
 	protected SmartHandleList createSmartHandleList() {
 		 SmartHandleList smList = new SmartHandleList();
 		 if (!hideNormalHandles) {
-		smList.add(new ArrowSmartHandle(HANDLE_1, this));
-		smList.add(new ArrowSmartHandle(HANDLE_2, this));
-		smList.add(new ArrowSmartHandle(ARROW_STROKE_HANDLE, this));
-		//smList.add(createHeadNumberHandle());
+				smList.add(new ArrowSmartHandle(HANDLE_1, this));
+				smList.add(new ArrowSmartHandle(HANDLE_2, this));
+				smList.add(new ArrowSmartHandle(ARROW_STROKE_HANDLE, this));
+				//smList.add(createHeadNumberHandle());
 		}
 		smList.add(createArrowSizeHandle(2));
 		smList.add(createArrowSizeHandle2(2));
@@ -1126,11 +1143,13 @@ public void moveNotchToHead1() {
 	Point2D n1 = this.getNotchLocation(FIRST_HEAD);
 	moveTipLocation(p1.getX()-n1.getX(), p1.getY()-n1.getY());
 }
+
+/***/
 @Override
 public void rotateAbout(Point2D c, double distanceFromCenterOfRotationtoAngle) {
 	try {
 		if(distanceFromCenterOfRotationtoAngle==0) {
-			IssueLog.log("returned after arrow rotation attempt due to 0 angle");
+			IssueLog.log("returned after arrow rotation attempt failed due to 0 angle");
 			return;
 			}
 		
@@ -1341,6 +1360,8 @@ public class ArrowHead implements Serializable {
 		if (this.getArrowStyle()==HALF_BAR_HEAD2) return true;
 		return false;
 	}
+	
+	boolean isNoHead() {return getArrowStyle()==NO_HEAD;}
 
 }
 

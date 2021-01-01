@@ -159,7 +159,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		EditManyShapes itemForIcon;
 		itemForIcon=new EditManyShapes((ArrowGraphic) shape, 1, 0, 1);
 		 itemForIcon.setModelItem(shape);
-		 addOperationList(itemForIcon,EditManyShapes. createForArrow() );
+		 addOperationList(itemForIcon,EditManyShapes. createOptionsforNumberOfArrowHeads() );
 		 createForArrowHeadType();
 	}
 

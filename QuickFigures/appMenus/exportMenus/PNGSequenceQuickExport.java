@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
+import messages.ShowMessage;
 import uiForAnimations.KeyFrameHandling;
 
 /**exporter for a sequence of .png files representing time frames within an animation*/
@@ -47,7 +48,9 @@ public class PNGSequenceQuickExport extends QuickExport {
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
 		try{
+			
 		File f=getFileAndaddExtension();
+		if(f==null) return;
 		String newpath=f.getAbsolutePath();
 		
 		
@@ -57,12 +60,15 @@ public class PNGSequenceQuickExport extends QuickExport {
 		
 		FlatCreator flat = new FlatCreator(true);
 		flat.showDialog();
+		ShowMessage.showOptionalMessage("Ready to export", false, "click ok to start export", "export will take time", "Please do not click the window or press keys during export");
+		
 		for(int i=0; i<diw.getEndFrame(); i++) {
 			KeyFrameHandling.applyFrameAnimators(diw, i);
 			BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
 			File nameToWrite = new File(basename+"/"+basenameFile+"_"+i+".PNG");
 			nameToWrite.mkdirs();
 			ImageIO.write(bi, "PNG",nameToWrite);
+			
 		}
 		
 		 

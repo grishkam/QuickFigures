@@ -495,6 +495,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return true;
 	}
 	
+	/**returns the outline that represents the area that a user may click on 
+	   for this shape*/
 	@Override
 	public Shape getOutline() {
 		return getRotationTransformShape();
@@ -506,10 +508,12 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return at.createTransformedShape(getShape());
 	} 
 	
+	/**sets the dash array to a very simple form that appears similar to a dash free one*/
 	public void makeNearlyDashLess() {
 		setDashes(NEARLY_DASHLESS);
 	}
 	
+	/**returns the icon*/
 	@Override
 	public Icon getTreeIcon() {
 		return new GraphicDisplayComponent(createIcon() );
@@ -532,6 +536,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return out;
 	}
 	
+	/**returns true if the icon is closer to pure white than is convenient for display */
 	protected boolean isIconTooWhite() {
 		if (this.getStrokeColor().equals(Color.white) &&!isFilled()) return true;
 		if (this.getStrokeColor().equals(Color.white)&&this.getFillColor()!=null &&this.getFillColor().equals(Color.white)) return true;

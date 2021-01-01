@@ -113,12 +113,17 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	protected ArrayList<LocatedObject2D> otherSelectedItems;
 	public boolean realtimeshow=false;
+	
+	/***/
 	protected boolean ignorehidden=true;
+	
 	protected boolean bringSelectedToFront=false;
+	
 	private boolean resizeAfterMousDrags=false;
 	
 	
-	  	public static final int DO_NOT_SELECT_IN_GROUP=0, SELECT_IN_GROUP=1;
+	 public static final int DO_NOT_SELECT_IN_GROUP=0, SELECT_IN_GROUP=1, SELECT_ONE_LEVEL_DOWN=2, SELECT_2_LEVEL_DOWN=3;
+	 /**Determines whether to use a specific method of selecting items within groups*/
 	 private static int selectingroup=DO_NOT_SELECT_IN_GROUP;
 	 
 	 /**The undoable edit that will be added to the undo manager to allow a user to undo mouse drags*/
@@ -135,10 +140,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	private int handle=NO_HANDLE;
 	int mode=NORMAL_OBJECT_MOVER;
 
+	/**For storing a list of selected items*/
 	private ArrayList<LocatedObject2D> rois2;
 
+	/**for storing the most recent mouse press point*/
 	protected int pressX,  pressY;
-	protected Rectangle2D selection;
+	protected Rectangle2D areaSelection;
 	
 	AbstractUndoableEdit2 smartHandleMoveUndo=null;
 	private UndoDragHandle currentundoDragHandle;
@@ -146,15 +153,16 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	private ReshapeHandleList lastGroupHandleList;
 	private SmartHandle smartHandle;
 
-
+	/**the canvas size handle*/
 	private SmartHandleList canvasHandleList;
 
-
+	/**is set to true after the user drags the canvas size handle (this is a special case)*/
 	private boolean draggingCanvasHandle;
 
 	/**is set to true if the point pressed is not within the primary selected object*/
 	private boolean notWithinPrimary;
 
+	/**The handle that the mouse recently moved over*/
 	private static SmartHandle lastMoveOverHandle;
 
 	/**Sets which object is the currently selected one*/
@@ -171,45 +179,54 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 * @param shift is the shift key down
 	 * */
 	public LocatedObject2D setPrimarySelectedObject(boolean shift, LocatedObject2D targetItem) {
+		
 		if (shift){
+				//in the case of a shift down click, the old item will be switch from primary selected to ordinary selected
 				if (primarySelectedItem!=null && primarySelectedItem!=targetItem) 
-					primarySelectedItem.makePrimarySelectedItem(false);//
-		} else
-			{
-			if (primarySelectedItem!=targetItem)
-				{
-				deselect(primarySelectedItem);
-				deselectAllExcept(targetItem) ;
-			}
+					primarySelectedItem.makePrimarySelectedItem(false);
+		} else	{
+				//deselects the previous  item if shift is not down
+				if (primarySelectedItem!=targetItem)
+							{   deselect(primarySelectedItem);
+							    deselectAllExcept(targetItem) ;   }
 		}
 		
 		otherSelectedItems=null;
 		primarySelectedItem=null;
-		
-		
 		primarySelectedItem=targetItem;
-		select(primarySelectedItem);
-		if (primarySelectedItem!=null) {
-					primarySelectedItem.makePrimarySelectedItem(true); 			
-		}
-		if (getImageClicked()!=null) 
+		primarySelect(primarySelectedItem);//makes sure the item is set as selected
+		
+		if (getImageClicked()!=null) //informs the image that it has a primary selected item
 			getImageClicked().setPrimarySelectionObject(primarySelectedItem);
 		
 		return primarySelectedItem;
 	}
+
+	/**
+	sets the item as a primary selected item
+	 */
+	public void primarySelect(LocatedObject2D primarySelectedItem) {
+		select(primarySelectedItem);
+		if (primarySelectedItem!=null) {
+					primarySelectedItem.makePrimarySelectedItem(true); 			
+		}
+	}
 	
-	
+	/**Deselects all items excluding one
+	 * @param exempt the one excluded*/
 	protected void deselectAllExcept(Object exempt) {
 		if (getImageClicked()!=null)
 			deselectAll(this.getImageClicked().getTopLevelLayer(), exempt);
 	}
-	
+	/**Deselects all items in the layer except one
+	 * @param exempt the one excluded*/
 	 void deselectAll(GraphicLayer gl, Object exempt) {
 		if (gl==null) return;
 		ArrayList<ZoomableGraphic> ls = gl.getAllGraphics();
 		deselectAll(ls, exempt);
 	}
-	
+	 /**Deselects all items in the list except one
+		 * @param exempt the one excluded*/
 	protected void deselectAll(ArrayList<?> ls, Object exempt) {
 		getSelectionManager().removeSelections();
 		for(Object l: ls) try  {
@@ -220,7 +237,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		}
 	}
 	
-	
+	/**deselects the given item*/
 	public void deselect(Object roi1) {
 		if (roi1!=null && roi1 instanceof Selectable) try {
 			((Selectable)roi1).deselect();
@@ -230,7 +247,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			IssueLog.logT(t);
 		}
 	}
-	protected void selectAll(ArrayList<?> ls) {
+	
+	/**Selects the items in the list*/
+	public static void selectAll(ArrayList<?> ls) {
 		for(Object l: ls) {
 			
 			if (l instanceof Selectable) {
@@ -255,43 +274,44 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return list;
 	}
 	
-	public void setSelectedHandleNumber(int i) {
-		handle=i;
-	}
 	
-	/**returns the handle id number of the clickpoint. 
+	
+	/**returns the handle id number for the handle that is at the last clickpoint
 	 * Also stores that as the selected handle number*/
 	public int establishMovedIntoOrClickedHandle(boolean press) {
-		this.setSelectedHandleNumber(NO_HANDLE);//starts off without a handle
+		this.setSelectedHandleNumber(NO_HANDLE);//starts off without a handle ID
 		
+		//checks each handle of each item that is set as selected
 		for(LocatedObject2D object: this.getAllSelectedItems(false)) {
 			
 			if (object instanceof HasHandles) {
-				HasHandles handledObject = (HasHandles)object;
-				int handleNumber = handledObject.handleNumber(getMouseXClick(), getMouseYClick());
-				
-				setSelectedHandleNumber(handleNumber);
-				if (handleNumber>0) {
-					
-					if (press)
-						this.setPrimarySelectedObject(object);
-					
-					this.setSelectedHandleNumber(handleNumber);
-					break;
-				}
-			
-		}
+							HasHandles handledObject = (HasHandles)object;
+							int handleNumber = handledObject.handleNumber(getMouseXClick(), getMouseYClick());
+							
+							setSelectedHandleNumber(handleNumber);
+							if (handleNumber!=NO_HANDLE) {
+									if (press)
+										this.setPrimarySelectedObject(object);//in the context of a mouse press, changes the primary selected item
+									
+									this.setSelectedHandleNumber(handleNumber);
+									break;
+							}
+						
+					}
 			
 		}
 		
 		/**if no handle is selected for an individual object at this point,
+		 * check the special case of handle lists that apply to a group of items
 		 *  checks for handles in an object group handle list*/
 		if(getSelectedHandleNumber()==NO_HANDLE && getObjectGroupHandleList()!=null) {
 			int num2 = getObjectGroupHandleList().handleNumberForClickPoint(getMouseXClick(), getMouseYClick());
 			setSelectedHandleNumber(num2);
 		}
 		
-		/**If no handle is set at this point, check to determine if a canvas handle is at that point*/
+		/**If no handle is set at this point, checks
+		 * another special case. There is a handle devoted to changing the canvas size
+		 * determines if a canvas handle is at the click point*/
 		if(getSelectedHandleNumber()==NO_HANDLE) {
 			int num2 = getCanvasHandleList().handleNumberForClickPoint(getMouseXClick(), getMouseYClick());
 			setSelectedHandleNumber(num2);
@@ -299,33 +319,34 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		} else  draggingCanvasHandle=false;
 	
 		
-		
+		/**does not check the special case of an attached item handle*/
+		//not implemented here
 		
 		return getSelectedHandleNumber();
 	}
 	
 
-	
-	
 
-	
-	
 	public void mousePressed() {
 		
-		selection=null;
+		areaSelection=null;//starts without a selected area
 		CanvasMouseEvent e = getLastMouseEvent();
 		pressX= getClickedCordinateX();
 		pressY= getClickedCordinateY();
 		
-		
+		/**first task, determines if a handle has been clicked and
+		  stores the handle id number for the handle*/
 		establishMovedIntoOrClickedHandle(true);
 		
 
-		boolean startsSelected=false;
 		
+		/**second task, determines if there is an object has been clicked
+		   if no handle has been clicked this becomes important*/
 		LocatedObject2D objectAtPressLocation = getObjectAt(getImageClicked(), pressX, pressY);
+		boolean startsSelected=false;
 		if(objectAtPressLocation!=null) 
 			startsSelected=objectAtPressLocation.isSelected();
+	
 		
 		SmartHandle sh= this.findSelectedSmartHandle(true);
 		
@@ -334,28 +355,36 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 							sh.handlePress(this.getLastMouseEvent());
 							this.setPressedSmartHandle(sh);
 						} else setPressedSmartHandle(null);
-				
+			
+		/**in the event that the object pressed does not use smart handles
+		 * will soon be obsolete*/				
 		if (getSelectedHandleNumber()!=NO_HANDLE && getPrimarySelectedObject() instanceof HasHandles) {
 				HasHandles h=(HasHandles) getPrimarySelectedObject();
 				h.handlePress(getSelectedHandleNumber(), new Point(getClickedCordinateX(),  getClickedCordinateY()));
 				}
 					
-		
+		/**in the event of a popup trigger, will display either 
+		 * the handle's popup menu or the objects popup menu*/
 		if (e.isPopupTrigger()) {
 			forPopupTrigger(objectAtPressLocation, e,sh);
 			return;
 		}
 		
-		/**If an object or a handle was pressed, makes sure the object is selected*/
+		
 		if (objectAtPressLocation!=getPrimarySelectedObject()&&getSelectedHandleNumber()==NO_HANDLE) {
+			/**If an object was pressed, selects the object*/
 			objectAtPressLocation=setPrimarySelectedObject(objectAtPressLocation);
 		} else {
+			/**If a handle was pressed, makes sure that the primary selected object is in selected mode
+			 * TODO: double check the circumstances in which this part required and not redundant. */
 			select(getPrimarySelectedObject());
 			if (getPrimarySelectedObject()!=null)
 				getPrimarySelectedObject().makePrimarySelectedItem(true);
 		}
 		
-		/**if neither a handle nor an object was pressed, then no object is selected*/
+		
+		/**if neither a handle nor an object was pressed, then no object is selected.
+		 * De-selects the primary selected object*/
 		if(objectAtPressLocation==null&&getSelectedHandleNumber()==NO_HANDLE) 
 			setPrimarySelectedObject(null);
 		
@@ -366,32 +395,52 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			return;
 		}
 			
+		
 			if (getPrimarySelectedObject() instanceof HasHandles &&getSelectedHandleNumber()>NO_HANDLE) {
+				/**informs the object that a mouse press occurred in its handle
+				 * some classes of object will do something in this case*/
 				getSelectionObjectAshashangles().handleMouseEvent(this.getLastMouseEvent(), handle, getButton(),0, MouseEvent.MOUSE_PRESSED, null);
-				createUndoForDragHandle() ;
-			
+				
+				createUndoForDragHandle() ;//creates a simple undo that will work for certain classes of handle
 			}
+			
 			boolean shift=e.shfitDown();
 			boolean copyObjects = this.getLastMouseEvent().altKeyDown();
 			
 		if (startsSelected && shift && this.handle==NO_HANDLE) {
 			/**when holding down the shift key, the user sometimes wants to deselect an item not select it*/
-			deselect(objectAtPressLocation);
+			deselect(objectAtPressLocation);//this implements that case
 		}
-			 rois2 = getAllSelectedItems(copyObjects);
+					ArrayList<LocatedObject2D> allSelectedrois2 = getAllSelectedItems(false);
+					
+					if (copyObjects)
+						rois2 = getAllSelectedItems(copyObjects);
+					else 
+						rois2=allSelectedrois2 ;
+					
+					if (copyObjects) {
+						this.setSelectedHandleNumber(NO_HANDLE);//selected handle numbers are not relevant 
+						this.deselectAll(allSelectedrois2, null);//sets the orginal as not selected
+						selectAll(rois2);//sets the copies as selected
+					}
+					
 			 		currentUndo=new UndoMoveItems(rois2);//establishes the undo
 			 		addedToManager=false;
 			 		
 			 		/**remembers the starting location of the selected item*/
 			
-		this.getObjectGroupHandleList();//makes sure it is initialized
-		this.getCanvasHandleList();//makes sure it is initialized
+			 		
+			 		
+			 		innitiateSpecialCaseHandleLists();
 		
-			if(this.textEditMode() &&this.handle<=NO_HANDLE &&!e.isPopupTrigger()) {
-				this.mousePressOnTextCursor((TextGraphic) this.getPrimarySelectedObject());
-			}
-		
+			 		/**The special case of mouse presses that target text items*/
+				if(this.textEditMode() &&this.handle<=NO_HANDLE &&!e.isPopupTrigger()) {
+					this.mousePressOnTextCursor((TextGraphic) this.getPrimarySelectedObject());
+				}
 			
+			
+				/**if the mouse press starts outside of the primary selected item, needs to store this
+				   */
 			this.notWithinPrimary=getPrimarySelectedObject()!=null
 					&&
 					!getPrimarySelectedObject().getOutline().contains(pressX, pressY);
@@ -399,6 +448,14 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			
 			
 		}
+
+	/**
+	Calls methods to ensure that handle lists for special cases are visible
+	 */
+	public void innitiateSpecialCaseHandleLists() {
+		this.getObjectGroupHandleList();//makes sure it is initialized
+		this.getCanvasHandleList();//makes sure it is initialized
+	}
 	
 
 	/**
@@ -407,17 +464,21 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 */
 	private void attemptLayerGrab() {
 		// TODO Auto-generated method stub
-		
+		//not yet implemented
 	}
 
+	/**stores the pressed smart handle
+	 * that same object will be accessed when drags and releases occur*/
 	protected void setPressedSmartHandle(SmartHandle sh) {
 		smartHandle=sh;
 	}
-	
+	/**return the pressed smart handle
+	 * that same object will be accessed when drags and releases occur*/
 	protected SmartHandle getPressedSmartHandle() {
 		return smartHandle;
 	}
 
+	/**Creates a generic handle drag undo that works for certain classes*/
 	protected void createUndoForDragHandle() {
 		if (getSelectionObjectAshashangles()==null) return;
 		currentundoDragHandle=new UndoDragHandle(handle, this.getSelectionObjectAshashangles(), new Point(getClickedCordinateX(),  getClickedCordinateY()));
@@ -652,17 +713,15 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 	/**changes the mouse cursor depending on there the mouse is*/
 	public void updateCursorIfOverhandle() {
-		if (this.getSelectedHandleNumber()==-1) {
+		if (super.getImageDisplayWrapperClick()==null) return;
+		if (this.getSelectedHandleNumber()==NO_HANDLE) {
 			super.getImageDisplayWrapperClick().setCursor(getNormalCursor());
 		}
-		else 	super.getImageDisplayWrapperClick().setCursor(getHandleCursor());
+		else super.getImageDisplayWrapperClick().setCursor(getHandleCursor());
 		
 	}
 	
-	
-	
-
-
+	/**performs an instance check for has handles on the selected item and returns it*/
 	private HasHandles getSelectionObjectAshashangles() {
 		if (getPrimarySelectedObject() instanceof HasHandles )
 			return (HasHandles) getPrimarySelectedObject() ;
@@ -713,6 +772,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return output;
 	}
 
+	/**If multiple objects are selected*/
 	private ReshapeHandleList getObjectGroupHandleList() {
 		if(this.getClass()!=Object_Mover.class) return null; //not needed for subclasses
 		if(!this.selectionsScale()) return null;
@@ -919,7 +979,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 		if (this.getPrimarySelectedObject() instanceof PathGraphic&&createSelector &&this.shiftDown()) {
 			PathGraphic path=(PathGraphic) getPrimarySelectedObject() ;
-			path.selectHandlesInside(	selection);//this part does not help
+			path.selectHandlesInside(	areaSelection);//this part does not help
 			
 		}
 		
@@ -933,7 +993,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	protected void selectRoisInDrawnSelector() {
-		Rectangle2D rect = selection;
+		Rectangle2D rect = areaSelection;
 		//getImageWrapperClick().getSelectionManagger().select(rect, 0);
 		if(rect!=null&&rect.getHeight()>2&&rect.getWidth()>2) {
 		//	
@@ -951,7 +1011,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			}
 			
 		}
-		selection=null;
+		areaSelection=null;
 	}
 
 	/**dont remember why i had the button as always 0*/
@@ -973,8 +1033,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if (getPrimarySelectedObject()!=null) {			
 			mousDragForObjectOrHandle();			
 		}  else if (draggingCanvasHandle){
-			/**just for the cavas resize handle*/
-			SmartHandle sh = this.getPressedSmartHandle();//.getSelectionSmartHamndles();
+			/**just for the canvas resize handle, that handle drag will only be called here*/
+			SmartHandle sh = this.getPressedSmartHandle();
 			if (sh!=null) sh.handleDrag(getLastDragOrLastReleaseMouseEvent());
 		}
 		
@@ -1067,10 +1127,10 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		if (useSelectorNow() ) {
 			Rectangle2D rect = OverlayObjectManager.createRectangleFrom2Points(new Point2D.Double(pressX, pressY), this.draggedCord());
 			getSelectionManager().select(rect, 0);
-			selection=rect;
+			areaSelection=rect;
 			} else {
 			
-				selection=null;
+				areaSelection=null;
 				
 			}
 	}
@@ -1101,7 +1161,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		ArrayList<LocatedObject2D> items = getAllSelectedItems(false);
 		for(LocatedObject2D roi: items) {
 			if (roi.isUserLocked()==ShapeGraphic.LOCKED){
-					ShowMessage.showOptionalMessage("object is locked ", false, "one of the selected items is locked and can only be moved using its handles");
+					ShowMessage.showOptionalMessage("object is locked ", true, "one of the selected items is locked but can still be moved using its handles");
 					return;
 					}
 		}
@@ -1223,12 +1283,17 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	@Override
 	public String getToolName() {
-		
 		return selectorToolName;
 	}
 
+	/**returns the handle ID number of the selected handle*/
 	public int getSelectedHandleNumber() {
 		return handle;
+	}
+	
+	/**sets the handle ID number of the selected handle*/
+	public void setSelectedHandleNumber(int i) {
+		handle=i;
 	}
 
 	public LocatedObject2D getPrimarySelectedObject() {
@@ -1283,27 +1348,32 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 
 	}
 	
-	/**Returns the */
+	/**Returns the whether the 'select in group' method of handling groups
+	 * is used*/
 	public int getGroupSelectionMode() {
 		return selectingroup;
 	}
-
+	
+	/**determines whether the 'select in group' method of handling groups
+	 * is used*/
 	public void setSelectingroup(int selectingroup) {
 		Object_Mover.selectingroup = selectingroup;
 	}
 
+	/**returns the cursor for this tool*/
 	public Cursor getNormalCursor() {
 		return normalCursor;
 	}
-
+	/**sets the cursor for this tool*/
 	public void setNormalCursor(Cursor normalCursor) {
 		this.normalCursor = normalCursor;
 	}
-
+	
+	/**returns the cursor used when the mouse is over a handle*/
 	public Cursor getHandleCursor() {
 		return handleCursor;
 	}
-
+	/**set the cursor used when the mouse is over a handle*/
 	public void setHandleCursor(Cursor handleCursor) {
 		this.handleCursor = handleCursor;
 		

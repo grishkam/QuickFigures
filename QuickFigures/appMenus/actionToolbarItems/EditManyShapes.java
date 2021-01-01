@@ -66,8 +66,13 @@ import utilityClassesForObjects.StrokedItem;
 /**Applies a single color or stroke style to all the selected shapes*/
 public class EditManyShapes extends BasicMultiSelectionOperator implements  LayoutSpaces, ColorInputListener,  ColorMultiSelectionOperator, Serializable {
 
+
 	/**
 	 * 
+	 */
+	public static final String FONT_UP = "up", FONT_DOWN="down";
+	/**
+	values stored here determine what this operation does
 	 */
 	private static final long serialVersionUID = 1L;
 	private boolean rainbowColor=false;
@@ -93,22 +98,26 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 	public boolean alwaysDashIcon=false;
 	private int setTargetHead=ArrowGraphic.FIRST_HEAD;
 	
+	
 
+	public static EditManyShapes[]  getForColors(boolean doStroke, Color... color) {
+		EditManyShapes[] out = new EditManyShapes[color.length+1];
+		for(int i=0; i<color.length; i++) {
+			Color c1= color[i];
+			out[i]=new EditManyShapes(doStroke, c1);
+		}
+		out[color.length]=new EditManyShapes();
+		out[color.length].stroke=doStroke;
+		return out;
+	}
+	
+	/**returns true if this targets the stroke.
+	 * for example, one that changes the stroke color rather than the fill color*/
 	public boolean doesStroke() {
 		return stroke;
 	}
 
-	public static EditManyShapes[]  getForColors(boolean Stroke, Color... color) {
-		EditManyShapes[] out = new EditManyShapes[color.length+1];
-		for(int i=0; i<color.length; i++) {
-			Color c1= color[i];
-			out[i]=new EditManyShapes(Stroke, c1);
-		}
-		out[color.length]=new EditManyShapes();
-		out[color.length].stroke=Stroke;
-		return out;
-	}
-
+	/**returns an editor that shows a color choose to the user*/
 	public EditManyShapes() {
 		setTheColor(Color.white);
 		this.rainbowColor=true;
@@ -117,16 +126,16 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 	/**creates an editor for changing the properties of an arrow*/
 	public EditManyShapes(ArrowGraphic a, Integer i, int type, int targetHead) {
 		
-		if(i==null) setArrowHeadNumber(a.getNHeads());
-		else setArrowHeadNumber(i);
+		if(i==null) setNumberOfArrowHeads(a.getNHeads());
+		else setNumberOfArrowHeads(i);
 		if(type==2) {
-			this.setArrowHeadNumber(null);
+			this.setNumberOfArrowHeads(null);
 			this.setArrowStyle(i);
 			this.setTargetHead=targetHead;
 		}
 	}
 	
-
+	/**returns an editor that changes the path between closed and open form*/
 	public EditManyShapes(PathGraphic a, Boolean i) {
 		this.setModelItem(a);
 		this.setPathCloser(i);
@@ -134,17 +143,21 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 
 	
 	
-	/**creates an editor for either stroke color or fill color*/
+	/**creates an editor for either stroke color or fill color
+	 * @param stroke whether to do the stroke color*/
 	public EditManyShapes(boolean stroke, Color c) {
 		this.stroke=stroke;;
 		setTheColor(c);
 	}
 	
+	/**creates an editor that */
 	public EditManyShapes(String special) {
-		if (special.contains("up")) this.fontUp=true;
-		if (special.contains("down")) this.fontDown=true;
+		if (special!=null) special=special.toLowerCase(); else return;
+		if (special.contains(FONT_UP)) this.fontUp=true;
+		if (special.contains(FONT_DOWN)) this.fontDown=true;
 	}
 	
+	/**creates an editor that changes the font style*/
 	public EditManyShapes(int fontStyle) {
 		this.stroke=true;
 		this.fontStyle=fontStyle;
@@ -214,8 +227,8 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 			if (getStrokeCap()==BasicStroke.CAP_ROUND) return "Round";
 			if (getStrokeCap()==BasicStroke.CAP_SQUARE) return "Square";
 		}
-		if(getArrowHeadNumber()!=null) {
-			return getArrowHeadNumber()+ " Headed Arrow";
+		if(getNumberOfArrowHeads()!=null) {
+			return getNumberOfArrowHeads()+ " Headed Arrow";
 		}
 		if (this.getArrowStyle()!=null) 
 			return "Change Arrow Head Style";
@@ -283,7 +296,7 @@ public class EditManyShapes extends BasicMultiSelectionOperator implements  Layo
 			
 			if ( arrowHeadNumber!=null) {
 				SimpleItemUndo<CountParameter> edit2 = b.createHeadNumberHandle().createUndo();
-				b.setNumerOfHeads(this.getArrowHeadNumber());
+				b.setNumerOfHeads(this.getNumberOfArrowHeads());
 				edit2.establishFinalState();
 				edit.addEditToList(edit2);
 			}
@@ -349,7 +362,7 @@ if(a instanceof PathGraphic ) {
 	
 	public GraphicDisplayComponent getItemIcon(boolean selected) {
 		GraphicGroup gg=new GraphicGroup();
-		gg.getTheLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
+		gg.getTheLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,ICON_SIZE,ICON_SIZE), TRANSPARENT_COLOR));
 		
 		//Color[] colors=new Color[] {Color.red, Color.green, Color.blue, new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
 	
@@ -395,7 +408,7 @@ if(a instanceof PathGraphic ) {
 						 
 						 Rectangle r3=new Rectangle(0,0, 15,15); 
 						 RectangularGraphic rect3 = new RectangularGraphic(r3); 
-						 rect3.setFillColor(new Color(0,0,0,0));
+						 rect3.setFillColor(TRANSPARENT_COLOR);
 						 rect3.setStrokeWidth(1); rect3.setStrokeColor(Color.black);rect3.makeNearlyDashLess();
 						
 						 gg.getTheLayer().add(rect3);
@@ -509,7 +522,7 @@ if(a instanceof PathGraphic ) {
 		
 		if(this.arrowHeadNumber!=null||this.arrowStyle!=null) {
 			ArrowGraphic a = new ArrowGraphic();
-			if(this.getArrowHeadNumber()!=null)	a.setNumerOfHeads(getArrowHeadNumber());
+			if(this.getNumberOfArrowHeads()!=null)	a.setNumerOfHeads(getNumberOfArrowHeads());
 			a.setPoints(new Point(2,2), new Point(18,18));
 			
 			a.getHead().setArrowHeadSize(10);
@@ -649,12 +662,16 @@ if(a instanceof PathGraphic ) {
 			return this.getMiterInput();
 			}
 		
-		if(this.getStrokeWidth()!=null)	
-			return StandardDialog.combinePanels(getStrokeWidthInput(),  new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));
+		if(this.getStrokeWidth()!=null) {
+			NumberInputPanel strokeWidthInput = getStrokeWidthInput();
+			return getPaddedPanel(strokeWidthInput);
+		}
 		if(this.getDashes()!=null)
 			return getDashInput();
 		return null;
 	}
+
+	
 
 	protected NumberInputPanel getStrokeWidthInput() {
 		if(this.getStrokeWidth()==null) return null;
@@ -715,12 +732,12 @@ if(a instanceof PathGraphic ) {
 		selector.getGraphicDisplayContainer().updateDisplay();
 	}
 
-	public Integer getArrowHeadNumber() {
+	public Integer getNumberOfArrowHeads() {
 		if(modelItem instanceof ArrowGraphic) return ((ArrowGraphic) modelItem).getNHeads();
 		return arrowHeadNumber;
 	}
 
-	public void setArrowHeadNumber(Integer arrowHeadNumber) {
+	public void setNumberOfArrowHeads(Integer arrowHeadNumber) {
 		this.arrowHeadNumber = arrowHeadNumber;
 	}
 
@@ -738,18 +755,19 @@ if(a instanceof PathGraphic ) {
 		this.arrowStyle = arrowStyle;
 	}
 
+	/**returns true if this action sets shapes to be closed*/
 	public Boolean isPathCloser() {
 		if(pathClosed==null) return null;
 		if (this.modelItem instanceof PathGraphic) return modelItem.isClosedShape();
 		return pathClosed;
 	}
-
+	/**sets whether this action sets shapes to be closed*/
 	public void setPathCloser(Boolean pathClosed) {
 		this.pathClosed = pathClosed;
 	}
 	
-	
-	public static EditManyShapes[] createForArrow() {
+	/**generates a set of operators that change the number of arrow heads*/
+	public static EditManyShapes[] createOptionsforNumberOfArrowHeads() {
 		EditManyShapes[] output = new EditManyShapes[3];
 		for(int i=0; i<3; i++)
 			output[i]=new EditManyShapes(null,i,0, 1);
@@ -757,6 +775,7 @@ if(a instanceof PathGraphic ) {
 		return output;
 	}
 	
+	/**Creates a set of operators for changing the style of an arrow head*/
 	public static EditManyShapes[] createForArrow2(int head) {
 		EditManyShapes[] output = new EditManyShapes[ArrowGraphic.arrowStyleList.length];
 		for(int i=0; i<ArrowGraphic.arrowStyleList.length; i++)
@@ -765,7 +784,7 @@ if(a instanceof PathGraphic ) {
 		return output;
 	}
 
-	/**
+	/**responds to the color palette popup
 	 * @param fie
 	 */
 	public void onColorInput(ColorInputEvent fie) {

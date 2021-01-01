@@ -422,6 +422,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		return (KeyFrameAnimation) animation;
 	}
 	
+	/**returns the rotation transform for the shape*/
 	public AffineTransform getRotationTransform() {
 		double xr = getCenterOfRotation().getX();
 		double yr = getCenterOfRotation().getY();

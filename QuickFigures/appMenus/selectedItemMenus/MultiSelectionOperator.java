@@ -15,6 +15,7 @@
  *******************************************************************************/
 package selectedItemMenus;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ import graphicalObjects.ZoomableGraphic;
 
 /**Implementations of this interface perform some task */
 public interface MultiSelectionOperator extends Serializable, MenuItemInstall {
+	
+	public static final int ICON_SIZE = 25;
+	public static final Color TRANSPARENT_COLOR = new Color(0,0,0,0);
 	
 	/**performs the action.*/
 	public void run();

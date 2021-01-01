@@ -46,6 +46,10 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		return createDisplayFromImagePlus(imp);
 	}
 
+	/**returns an image display layer to display the slices, frames and channels of the
+	 * given imageJ image
+	 * @see ImagePlus
+	 * @see MultichannelDisplayLayer*/
 	protected MultichannelDisplayLayer createDisplayFromImagePlus(ImagePlus imp) {
 		ImagePlusMultiChannelSlot slot = new ImagePlusMultiChannelSlot();
 		MultichannelDisplayLayer display = new MultichannelDisplayLayer(slot);
@@ -76,8 +80,8 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		//next method attempt to open a file. Or if there is no active image, opens one
 		if ((openFile)|| (imp==null&&useActiveImage(path))) {
 			if (MultiChannelDisplayCreator.useActiveImage.equals(path)) {
-				path=null;//that string is not a valid path but may be passed as the path
-				boolean userSelection = ShowMessage.showOptionalMessage("No image open", false,  "please select an image file to continue");
+				path=null;//one string is not a valid path but may be passed as the path
+				boolean userSelection = ShowMessage.showOptionalMessage("No image open", true,  "No active image", "please select an image file to continue");
 				if(!userSelection) 
 					return null;
 			
@@ -181,6 +185,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	}
 
 
+	/**using a sequence of images, generates an image*/
 	@Override
 	public MultiChannelImage createFromImageSequence(String path, int[] dims) {
 		ImagePlus open = FolderOpener.open(path);
@@ -189,7 +194,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	}
 
 	
-
+	
 
 
 

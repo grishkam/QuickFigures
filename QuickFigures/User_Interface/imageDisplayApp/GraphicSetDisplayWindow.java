@@ -341,7 +341,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	/**Called after a mouse event. */
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		
+		StatusPanel.updateStatus("Key press is heard "+arg0.getKeyChar());
 		try {
 		if(arg0.isConsumed()) 
 			StatusPanel.updateStatus("Key is consumed  "+arg0.getKeyChar());

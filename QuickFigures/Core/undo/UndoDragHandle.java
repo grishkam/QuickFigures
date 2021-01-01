@@ -26,7 +26,8 @@ import handles.HasHandles;
 
 
 /**An undoable edit for a handle drag. this simply drags the handle back to its original location.
-   may not faithfully represent original item*/
+  for object that properly implement the handle press and handle move methods
+  this should work perfectly. */
 public class UndoDragHandle extends AbstractUndoableEdit {
 
 	/**

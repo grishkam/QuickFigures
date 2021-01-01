@@ -18,6 +18,7 @@ package handles;
 import utilityClassesForObjects.Selectable;
 
 public interface HasSmartHandles extends Selectable{
+	static final int NO_HANDLE=-1;
 	public SmartHandleList getSmartHandleList();
 	
 }

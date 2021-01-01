@@ -63,7 +63,8 @@ import utilityClassesForObjects.PathPointList;
 import utilityClassesForObjects.ScalesFully;
 import utilityClassesForObjects.ShapeMaker;
 
-/**a curved path or shape. can contain any number of points*/
+/**A shape graphic for an arbitrary shape defined by a Path2D
+ * a curved path or shape. can contain any number of points*/
 public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully ,HasSmartHandles, GraphicHolder {
 	
 
@@ -74,40 +75,45 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public int selectedsegmentindex=-1;
+	private static final int NO_SEGMENT_SELECTED=-1;
+	/**Which path segment is currently selected*/
+	public int selectedsegmentindex=NO_SEGMENT_SELECTED;
 	
 	private boolean useFilledShapeAsOutline=false;
+	
+	/**The list of points within the path*/
 	private PathPointList points=new PathPointList();
 	
 	/**a Path2D object for drawing this PathGraphic on a graphics2D. This item is updated when certain methods make changes to the pathpoint list */
 	private Path2D path=new Path2D.Float();
 	
-	/**constants determine how handles are used and which handles are visible*/
+	/**constants determine how handles are used and which handles are visible and how mouse drags on the handles work*/
 	public static final int ANCHOR_HANDLE_ONLY_MODE=0, THREE_HANDLE_MODE=2, TWO_HANDLE_MODE=1, CURVE_CONTROL_HANDLES_LINKED=3, MOVE_ALL_SELECTED_HANDLES=4, CURVE_CONTROL_SYMETRIC_MODE=5;
 	private int handleMode=THREE_HANDLE_MODE; 
 	
 	
 	
-	/**some paths will end with an arrow head*/
+	/**some paths will end with an arrow head.*/
 	ArrowGraphic arrowHead1=null,
 						arrowHead2=null;
 
 	private transient SmartHandleList smartHandleBoxes;
 
-	/**outline is the area that a user may click on to select the path*/
+	/**outline is the area that a user may click on to select the path. */
 	private Shape outline;
-
-	private boolean useArea=false;
+	private boolean useArea=false;//determines whether the outline is the area enclosed by the path
 	
 	/**creates a path graphic from the given path2d*/
-	public PathGraphic(Path2D path2d) {
+	private PathGraphic(Path2D path2d) {
 		this.setPath(path2d);
 	}
 	
+	/**creates a path graphic from a pathpoint list*/
 	public PathGraphic(PathPointList path) {
 		this.setPoints(path);
 	}
 	
+	/**creates a path from a list of anchor points*/
 	public PathGraphic(Point2D... path) {
 		if (path.length==0) return;
 		setLocationInnitial(path[0]);
@@ -116,6 +122,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		}
 	}
 
+	/**creates a path graphic with the given point as its location*/
 	public PathGraphic(Point2D p) {
 		setLocationInnitial(p);
 	}
@@ -157,6 +164,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		//this.setLeftPoints(in.getLeftPoints());
 	}
 	
+	/**returns the handle number for the point*/
 	@Override
 	public int handleNumber(double x, double y) {
 		if (this.getPointHandles()!=null) {
@@ -166,7 +174,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			return output;
 		}
 		
-		return -1;
+		return NO_HANDLE;
 
 	}
 	
@@ -179,6 +187,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		path.moveTo(0, 0);
 	}
 
+	/**makes a copy*/
 	@Override
 	public PathGraphic copy() {
 		PathGraphic output = new PathGraphic(getPath());
@@ -230,11 +239,15 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return p;
 		}
 	
+	/**converts the location from one within this path graphics coordinate system
+	  to the equivalent in the global coordinate system*/
 	public Point2D.Double convertPointToExternalCrdinates(Point2D p2) {
-		if (angle ==0) return new Point2D.Double(p2.getX()+x, p2.getY()+y);
+		if (getAngle()==0) return new Point2D.Double(p2.getX()+x, p2.getY()+y);
 		return null;
 		}
 	
+	/**converts the location from one within this path graphics coordinate system
+	  to the equivalent in the global coordinate system*/
 	public Point2D getTransformPointsForPathGraphic(Point2D p) {
 		AffineTransform aa = getTransformForPathGraphic();
 		Double output = new Point2D.Double();
@@ -242,7 +255,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return output;
 	}
 	
-	
+	/**Determines whether to close the path at the end or leave it open*/
 	public void setClosedShape(boolean closedShape) {
 		super.setClosedShape(closedShape);
 		updatePathFromPoints();
@@ -297,7 +310,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	public Rectangle getBounds() {
 		return getShape().getBounds();
 	}
-
+	
+	/***/
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		if (this.getPointHandles()==null) return;
@@ -308,7 +322,6 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	@Override
 	public Shape getShape() {
 		if (this.isUseArea()) {
-			//IssueLog.log("Will return area");
 			Area output = new Area();
 			output.add(new Area(getPath()));
 			return transform() .createTransformedShape(output);
@@ -334,24 +347,26 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	
-
+	/**returns the Path2D that is used to draw this shape*/
 	public Path2D getPath() {
 		return path;
 	}
 
-	
-	public void setPath(Path2D path2d) {
+	/**Sets the current Path2D*/
+	private void setPath(Path2D path2d) {
 		this.path = path2d;
 		this.setPathToAnchorPoints(shapeToArray(path2d.getPathIterator(new AffineTransform())));
 	}
 	
-	public void setPathToShape(Shape path2d) {
+	/**When given a shape, extracts the anchor points and makes them
+	 * this paths anchor points. curve control points are not copied*/
+	public void setAnchorPointsTo(Shape path2d) {
 		
 		this.setPathToAnchorPoints(shapeToArray(path2d.getPathIterator(new AffineTransform())));
 		this.updatePathFromPoints();
 	}
 	
-	
+	/**updates the stored path2D that is used to draw this graphic*/
 	public void updatePathFromPoints(){
 		this.path=getPoints().createPath(this.isClosedShape());//updatePathFromPoints(this.getPoints(), isClosedShape());
 		outline=null;
@@ -359,13 +374,11 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		reshapeList2=null;
 	}
 	
-
-	
+	/**returns true if handles for curve control points are currently usable*/
 	public boolean isCurvemode() {
 		if(getHandleMode()==MOVE_ALL_SELECTED_HANDLES) return false;
 		if (getHandleMode()>0) return true;
 		return false;
-		//return curvemode;
 	}
 
 	
@@ -376,12 +389,12 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		if (getHandleMode()==PathGraphic.CURVE_CONTROL_SYMETRIC_MODE) return true;
 		return false;
 	}
-
+	/**sets whether multiple handles for curve control points will be used*/
 	public void setSupercurvemode(boolean supercurvemode) {
 		setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 	}
 	
-	
+	/**overrides superclass method*/
 	public boolean isDrawClosePoint() {
 		return false;
 	}
@@ -420,24 +433,25 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 
-
+	/**returns true if the outline takes the form of a filled shape */
 	public boolean isUseFilledShapeAsOutline() {
 		return useFilledShapeAsOutline;
 	}
-
+	/**set to true for the outline takes the form of a filled shape */
 	public void setUseFilledShapeAsOutline(boolean useFilledShapeAsOutline) {
 		this.useFilledShapeAsOutline = useFilledShapeAsOutline;
 	}
 
+	/**determines what popup menu matches this shape*/
 	public PopupMenuSupplier getMenuSupplier() {
 		return new PathGraphicMenu(this);
 	}
+	
 	
 	@Override
 	public Point getLocationUpperLeft() {
 		Rectangle b = getBounds();
 		return new Point(b.x, b.y);
-		
 	}
 
 	@Override
@@ -554,10 +568,9 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.handleMode = handleMode;
 	}
 	
-	/**This the transform that transform the pathPoint list points into the path graphic's coordiantes on the canvas that 
+	/**This the transform that is used to translate the list of points into the path graphic's coordiantes on the canvas that 
 	  will be displayed*/
 	public AffineTransform getTransformForPathGraphic() {
-		
 		AffineTransform output =getRotationTransform();//the rotation transform will actually have an angle of 0 since. paths are no longer allowed to be.
 		output.concatenate( AffineTransform.getTranslateInstance(getLocation().getX(), getLocation().getY()));
 		return output;
@@ -732,7 +745,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.drawArrowHeads( g,cords);
 	}
 	
-
+	/**draws the arrow heads*/
 	private void drawArrowHeads(Graphics2D g, CordinateConverter cords) {
 		drawArrow(g, cords, 0);
 		drawArrow(g, cords, 1);
@@ -777,7 +790,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return arrowHead1;
 	}
 
-	/**Adds new arrow heads. creates 1 or 2 arrow heads depending on the number given*/
+	/**Adds a new arrow heads. creates 1 or 2 arrow heads depending on the number given*/
 	public void addArrowHeads(int i) {
 		if (i==1) {
 			arrowHead1=new ArrowGraphic();
@@ -796,12 +809,12 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		arrowHead.hideNormalHandles=true;
 		arrowHead.getHead().setArrowHeadSize(this.getStrokeWidth()*8);
 	}
-
+	/**returns true if this path has an arrow head at position 1*/
 	public boolean hasArrowHead1() {
 		if (getArrowHead1()==null) return false;
 		return true;
 	}
-	
+	/**returns true if this path has an arrow head at position 2*/
 	public boolean hasArrowHead2() {
 		if (getArrowHead2()==null) return false;
 		return true;
@@ -815,6 +828,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.arrowHead2 = arrowHead2;
 	}
 
+	/**returns all items that are part of this object but 
+	 * may be clicked on separately*/
 	@Override
 	public ArrayList<ZoomableGraphic> getAllHeldGraphics() {
 		ArrayList<ZoomableGraphic> output = new ArrayList<ZoomableGraphic>();
@@ -823,12 +838,13 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return output;
 	}
 
+	/**sets up the number of arrow heads*/
 	public void setNArrows(int nArrow) {
 		if(nArrow==1) this.addArrowHeads(2);
 		if(nArrow==2) {this.addArrowHeads(2);this.addArrowHeads(1);}
 	}
 	
-	/**returns teh shape that will be used as an icon for thiss*/
+	/**returns the shape that will be used as an icon for this*/
 	ShapeGraphic rectForIcon() {
 		PathGraphic createExample = PathGraphic.createExample();
 		if(this.hasArrowHead1()) {
@@ -852,7 +868,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		private boolean toStart;
 
 		
-
+		/**Creates a handle for adding points
+		 * @param toStart determines whether the handle is at the start or end of a path*/
 		public AddPointSmartHandle(PathGraphic pathGraphic, boolean toStart) {
 			
 			this.toStart=toStart;
@@ -915,6 +932,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 
 	}
 	
+	/**generates the undoable edit that can be used to undo actions of the dialog*/
 	@Override
 	public AbstractUndoableEdit provideUndoForDialog() {
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this), new PathEditUndo(this));

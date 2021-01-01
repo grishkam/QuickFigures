@@ -26,6 +26,9 @@ import javax.swing.Icon;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import standardDialog.StandardDialog;
+import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 import utilityClassesForObjects.LocatedObject2D;
@@ -131,10 +134,19 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	}
 	
 	/**
-	 Adds the undo
+	 Adds the undo if an undo manager is setup
 	 */
 	public void addUndo(AbstractUndoableEdit2 edits) {
 		if (getCurrentUndoManager()!=null) getCurrentUndoManager().addEdit(edits);
+	}
+	
+	/** popup menus will sometimes show input panels below the screen,
+	 * adding a few extra panels below the main one is a workable fix
+	 * @param strokeWidthInput
+	 * @return
+	 */
+	public static Component getPaddedPanel(NumberInputPanel strokeWidthInput) {
+		return StandardDialog.combinePanels(strokeWidthInput,  new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));
 	}
 
 }

@@ -94,7 +94,7 @@ public class PathTool2 extends PathTool{
 	 * the selector region, this selects the points in one of the path graphics of that 
 	 * region*/
 	protected void selectRoisInDrawnSelector() {
-		Rectangle2D rect = selection;
+		Rectangle2D rect = areaSelection;
 		//getImageWrapperClick().getSelectionManagger().select(rect, 0);
 		if(rect!=null&&rect.getHeight()>2&&rect.getWidth()>2) {
 		//	
@@ -120,7 +120,7 @@ public class PathTool2 extends PathTool{
 			}
 			
 		}
-		selection=null;
+		areaSelection=null;
 	}
 	
 }

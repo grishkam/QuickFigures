@@ -92,7 +92,7 @@ public class PathReflectTool extends GraphicTool {
 		ShapeGraphic rect =ArrowGraphic.createLine(Color.BLACK, Color.black, new Point2D.Double(getClickedCordinateX(), this.getClickedCordinateY()), this.draggedCord());
 		if (scale()&&chosenGraphic!=null) {
 			
-			PathGraphic rect2 = new PathGraphic(new Point(0,0)); rect2.setPathToShape(chosenGraphic.getBounds());
+			PathGraphic rect2 = new PathGraphic(new Point(0,0)); rect2.setAnchorPointsTo(chosenGraphic.getBounds());
 			rect2.setFilled(false); rect2.setStrokeColor(Color.BLACK);
 			if (scaleuniform) {
 				rect2.scaleAbout(this.clickedCord(), scaleLevel()[0]);

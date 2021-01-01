@@ -110,11 +110,11 @@ public class SetAngle extends BasicMultiSelectionOperator {
 	
 	
 	public Component getInputPanel() {
-		return getStrokeAngleInput() ;
+		return getPaddedPanel(getAngleInput() );
 	}
 	
 	/**creates a JPanel for setting the angle*/
-	protected NumberInputPanel getStrokeAngleInput() {
+	protected NumberInputPanel getAngleInput() {
 		
 		NumberInputPanel panel = new AngleInputPanel("Set Angle", this.getAngle()*Math.PI/180, true);
 		panel.placeItems(panel, 0, 0);
@@ -136,6 +136,10 @@ public class SetAngle extends BasicMultiSelectionOperator {
 
 	public class AngleIcon implements Icon {
 
+		/**
+		 * 
+		 */
+		
 		private SetAngle angle;
 
 		public AngleIcon(SetAngle setAngle) {
@@ -175,12 +179,12 @@ public class SetAngle extends BasicMultiSelectionOperator {
 		//TODO: fix icon size to be mini toolbar's icon sizes appropriate
 		@Override
 		public int getIconWidth() {
-			return 25;
+			return ICON_SIZE;
 		}
 
 		@Override
 		public int getIconHeight() {
-			return 25;
+			return ICON_SIZE;
 		}
 
 	}
