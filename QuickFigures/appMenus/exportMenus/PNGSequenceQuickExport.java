@@ -20,10 +20,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 import appContext.CurrentAppContext;
 import applicationAdapters.DisplayedImage;
+import logging.IssueLog;
 import messages.ShowMessage;
+import standardDialog.StandardDialog;
 import uiForAnimations.KeyFrameHandling;
 
 /**exporter for a sequence of .png files representing time frames within an animation*/
@@ -60,17 +63,19 @@ public class PNGSequenceQuickExport extends QuickExport {
 		
 		FlatCreator flat = new FlatCreator(true);
 		flat.showDialog();
-		ShowMessage.showOptionalMessage("Ready to export", false, "click ok to start export", "export will take time", "Please do not click the window or press keys during export");
+		StandardDialog window = ShowMessage.showNonModel( "export in progress", "export will take time", "Please do not click the window or press keys during export");
 		
+		IssueLog.waitSeconds(1);
+	
 		for(int i=0; i<diw.getEndFrame(); i++) {
 			KeyFrameHandling.applyFrameAnimators(diw, i);
 			BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
 			File nameToWrite = new File(basename+"/"+basenameFile+"_"+i+".PNG");
 			nameToWrite.mkdirs();
 			ImageIO.write(bi, "PNG",nameToWrite);
-			
+			IssueLog.log("Exported frame "+i);
 		}
-		
+		window.setVisible(false);
 		 
 		/**opens the image as a timeline*/
 		CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
@@ -89,6 +94,11 @@ public class PNGSequenceQuickExport extends QuickExport {
 	@Override
 	public String getNameText() {
 		return "Export Time Line as Image Sequence (.png)";
+	}
+	
+	@Override
+	public String getMenuPath() {
+		return "File<Export<Animations";
 	}
 	
 }

@@ -146,8 +146,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			
 			installItem(new PNGQuickExport(false));
 			installItem(new TiffQuickExport(false));
-			installItem(new PNGSequenceQuickExport(false));
-			
+		
 			
 			try {
 				installItem(new PPTQuickExport(true));} 
@@ -160,6 +159,8 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			
 			installItem(new ExportIllustrator());
 	
+			installItem(new PNGSequenceQuickExport(false));
+			
 	}
 
 

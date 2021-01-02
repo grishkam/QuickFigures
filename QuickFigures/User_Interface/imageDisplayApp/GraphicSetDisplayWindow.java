@@ -237,7 +237,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 
 		
 		this.addKeyListener(this);
-		//this.addKeyListener(new KeyDownTracker());
+		this.getRootPane().addKeyListener(this);//bugfix for loss of key functions. not sure what other effects this would have
 		getTheCanvas().addKeyListener(this);
 		getTheCanvas().addMouseListener(this);
 		getTheCanvas().addMouseMotionListener(this);
@@ -352,7 +352,12 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			
 		}
 		
+		if (arg0.getSource()==this.getRootPane()) {
+			IssueLog.log("issue: "+"key events should not be comming from root pane");
+			
+		}
 		
+	
 		
 		if (arg0.getKeyChar()=='=') {
 			if(!arg0.isConsumed())

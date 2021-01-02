@@ -15,6 +15,7 @@ import java.awt.GridBagLayout;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import standardDialog.GriddedPanel;
@@ -29,6 +30,28 @@ public class ShowMessage {
 	
 	/**A hashmap of message settings objects, helps store information*/
 	static HashMap<String, MessageSettings> settings=new HashMap<String, MessageSettings>();
+	
+	public static StandardDialog showNonModel(String... st) {
+		StandardDialog d = new StandardDialog();
+		d.setModal(false);
+		d.setWindowCentered(true);
+		d.setTitle(st[0]);
+		d.setLayout(new GridBagLayout());
+		int y=1;
+		for(int i=1; i<st.length; i++) {
+			GridBagConstraints c = new GridBagConstraints();
+			c.anchor=GridBagConstraints.NORTHWEST;
+			c.gridy=y;
+			y++;
+			d.add(new JLabel(st[i]), c);
+		} 
+		d.removeOptionsTab();
+		d.setHideCancel(true);
+		d.setWindowCentered(true);
+		d.showDialog();
+		
+		return d;
+	}
 	
 	public static Boolean showMessages(String... texts) {
 		StandardDialog d = new StandardDialog();

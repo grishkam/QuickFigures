@@ -46,7 +46,7 @@ public class TimeLineDialog extends StandardDialog {
 	int timeLineLength=500;
 	
 	
-	TimeLineDialog.timePanel timePanel=new TimeLineDialog.timePanel();
+	TimeLineDialog.TimePanel timePanel=new TimeLineDialog.TimePanel();
 	private SelectedSetLayerSelector selector;
 	private NumberInputPanel timeSlider;
 	
@@ -107,7 +107,7 @@ protected void afterEachItemChange() {
 
 
 
-class timePanel extends JComponent {
+class TimePanel extends JComponent {
 	
 	/**
 	 * 

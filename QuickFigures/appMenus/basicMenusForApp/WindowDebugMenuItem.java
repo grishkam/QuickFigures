@@ -15,11 +15,14 @@
  *******************************************************************************/
 package basicMenusForApp;
 
+import java.awt.AWTEvent;
 import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -53,11 +56,20 @@ public  class WindowDebugMenuItem implements MenuItemForObj{
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (on) {
 			
-		
+			 Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+
+			@Override
+			public void eventDispatched(AWTEvent event) {
+				IssueLog.log("Key event detected "+event.paramString());
+				IssueLog.log("Key event detected from "+event.getSource());
+			}}, AWTEvent.KEY_EVENT_MASK);
+			 
+			 
 		Window window = diw.getWindow();
 		listKeyListeners(window);
 		 simulateKeyStroke((ImageWindowAndDisplaySet) diw, 'd', false);
 		 
+	
 		 
 		 try {
 		        Robot robot = new Robot();

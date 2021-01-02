@@ -245,6 +245,22 @@ public class IssueLog {
 		
 	}
 	 
+	/**pauses the thread for a number of miliseconds*/
+	public static boolean waitMiliseconds(int s) {
+		
+			try {Thread.sleep(s);}
+			catch (Exception e) { 
+				IssueLog.logT(e);
+				return false;
+			}
+		
+			return true;
+	}
+	
+	/**pauses the thread for a number of miliseconds*/
+	public static boolean waitSeconds(int s) {
+		return waitMiliseconds(1000*s);
+	}
 	
 
 }
