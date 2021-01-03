@@ -343,9 +343,11 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			updatePanelDisplay();
 		}
 		
+		/**shows a dialog for the user to change the slice number of selected panels*/
 		private void editPanelSlice() {
 			editPanelSlice(getPrimarySelectedPanel());
 		}
+		/**shows a dialog for the user to change the frame number of selected panels*/
 		private void editPanelFrame() {
 			editPanelFrame(getPrimarySelectedPanel());
 		}

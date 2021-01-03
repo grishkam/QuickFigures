@@ -172,6 +172,9 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		return new ImagePlusWrapper(new ImagePlus("no title", new ColorProcessor(img)));
 	}
 	
+	/**creates a multichannel display from an awt image and saves it
+	 * @param img the image
+	 * @param savePath where to save*/
 	@Override
 	public MultiChannelImage creatRGBFromImage(Image img, String savePath) {
 		File f=new File(savePath);
@@ -195,7 +198,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 
 	
 	
-
+	
 
 
 

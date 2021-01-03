@@ -17,6 +17,7 @@ package basicMenusForApp;
 
 import java.io.File;
 
+import addObjectMenus.FigureAdder;
 import figureOrganizer.FigureOrganizingLayerPane;
 import genericTools.MoverDragHandler;
 import graphicActionToolbar.QuickFigureMaker;
@@ -40,7 +41,7 @@ public class OpeningFileDropHandler extends FileDropHandler {
 	 * @param file the file
 	 */
 	void generateFigureFromFile(File file) {
-		QuickFigureMaker quickFigureMaker = new QuickFigureMaker(true, false);
+		QuickFigureMaker quickFigureMaker = new QuickFigureMaker(FigureAdder.MERGE_PANELS_ONLY, false);
 		
 		FigureOrganizingLayerPane f2 = quickFigureMaker.createFigure(file.getAbsolutePath(), null);
 		f2.getPrincipalMultiChannel().getSlot().showImage();

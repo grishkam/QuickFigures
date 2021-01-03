@@ -32,6 +32,7 @@ import graphicTools.RectGraphicTool;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import includedToolbars.ObjectToolset1;
+import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import selectedItemMenus.LayerSelector;
@@ -75,8 +76,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			
 			adders.add(new BarGraphicAdder());
 			//adders.add(new SavedGraphicAdder());
-			if (new SVGQuickExport().isBatikInstalled())
-				adders.add(new SVG_GraphicAdder2());
+			
 			
 			
 			//adders.add(new layoutAdder());
@@ -86,8 +86,8 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			
 			if (CurrentAppContext.getMultichannelContext()!=null) {
 					//imagePlusAdders.add(new ImagePlusAdder());
-					imagePlusAdders.add(new ImageAndlayerAdder(false));
-					imagePlusAdders.add(new ImageAndlayerAdder(true));
+					imagePlusAdders.add(new FigureAdder(false));
+					imagePlusAdders.add(new FigureAdder(true));
 					
 			}
 			
@@ -112,6 +112,8 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			layoutadders.add(new DividedLayoutAdder());
 			adders.add(new TextItemAdder(true)); 
 			adders.add(new TextItemAdder(false)); 
+			if (new SVGQuickExport().isBatikInstalled())
+				adders.add(new SVG_GraphicAdder2());
 			for(AddingMenuInstaller bonus:  bonusAdders) try {bonus.installOntoMenu(this);} catch (Throwable t) {IssueLog.logT(t);}
 			addersMade=true;
 			}
@@ -154,9 +156,11 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	}
 	
 	public void addMenuItemForAdder(GraphicAdder ad) {
-	
+		if (selector!=null &&!ad.canUseObjects(selector))
+				return;
 		JMenuItem jmi=new AddingMenuItem(ad);
 		
+		/**certain items appear as images in the menu and not as menu items*/
 		if (ad instanceof DisplaysGraphicalObject) {
 			GraphicJMenuItem jmi2 = new GraphicJMenuItem(ad.getMenuCommand());
 			GraphicDisplayComponent g2 = jmi2.getDisplayedGraphicalObject();
@@ -201,26 +205,26 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	
 	public static ObjectAddingMenu getStandardAddingMenu(LayerSelector selection) {
 		ObjectAddingMenu output = new ObjectAddingMenu("Add",selection, adders);
-		ObjectAddingMenu lad = new ObjectAddingMenu("Layout", selection, layoutadders);
+		
+		ObjectAddingMenu lad = new ObjectAddingMenu("Empty Layout", selection, layoutadders);
 		lad.setIcon(PanelLayoutGraphic.createImageIcon());
-		ObjectAddingMenu iad = new ObjectAddingMenu("Image Panel", selection, imageadders);
+		ObjectAddingMenu iad = new ObjectAddingMenu("Raw Image Panel", selection, imageadders);
 		iad.setIcon(ImagePanelGraphic.createImageIcon());
 		
 		ObjectAddingMenu cad = new ObjectAddingMenu("Cell Cartoons", selection,  cartoonadders);
 		//lad.setIconTextGap(-5);
-		output.insert( lad, 2);
+		if (selection instanceof GraphicTreeUI) output.insert( lad, 2);
 		
 		if (CurrentAppContext.getMultichannelContext()!=null) {
 				ObjectAddingMenu iad2 = new ObjectAddingMenu("Figure ", selection, imagePlusAdders);
 				iad2.setIcon(ImagePanelGraphic.createImageIcon());
-				output.insert( iad2, 3);
+				output.insert( iad2, 2);
 				}
 		
 		
 		
-		//iad.setIconTextGap(-5);
-		output.insert( iad, 3);
-		output.insert( cad, 5);
+		output.insert( iad, 2);
+		output.insert( cad, 4);
 		
 		return output;
 	}

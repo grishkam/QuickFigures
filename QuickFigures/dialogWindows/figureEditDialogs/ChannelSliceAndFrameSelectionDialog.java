@@ -122,14 +122,27 @@ public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 		this.showDialog();
 	}
 	
-	public void showFrameDialog() {
+	/**if multiple time frames are available, shows a dialog for changing the slice indices
+	 * of the panels
+	 */
+	public boolean showFrameDialog() {
 		if (addOptions(false, false, true))
-		this.showDialog();
+			{this.showDialog();
+			return true;}
+		
+		return false;
 	}
 	
-	public void showSliceDialog() {
-		if (addOptions(false, true, false));
-		this.showDialog();
+	/**if multiple slices are available, shows a dialog for changing the slice indices
+	 * of the panels*/
+	public boolean showSliceDialog() {
+		if (addOptions(false, true, false))
+		 {
+			this.showDialog();
+		 	return true;
+		 	}
+		 
+		 return false;
 	}
 
 	public int getChannel() {

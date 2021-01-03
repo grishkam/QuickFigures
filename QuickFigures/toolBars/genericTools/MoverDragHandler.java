@@ -26,7 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import addObjectMenus.FileImageAdder;
-import addObjectMenus.ImageAndlayerAdder;
+import addObjectMenus.FigureAdder;
 import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
 import channelMerging.ImageDisplayLayer;
@@ -257,9 +257,24 @@ public class MoverDragHandler extends BasicDragHandler {
 		
 			if (multiChannelOpen) {
 				AbstractUndoableEdit2 handleMultiChannelStackDrop = handleMultiChannelStackDrop(f,imageAndDisplaySet, layer, location2);
+				
 				undo.addEditToList(
-				handleMultiChannelStackDrop
+						handleMultiChannelStackDrop
 				);
+				
+						/**in case that the added figure is the first in a sequence, this sets up the fields so 
+						 * that subsequent images are added*/
+						if (layout==null&& handleMultiChannelStackDrop instanceof UndoAddItem) {
+						
+							ZoomableGraphic added = ((UndoAddItem) handleMultiChannelStackDrop).getAddedItem();
+							if (added instanceof FigureOrganizingLayerPane ) {
+							
+								 FigureOrganizingLayerPane figure=(FigureOrganizingLayerPane) added;
+								 layout=figure.getMontageLayoutGraphic();
+								 roi2=layout;
+								 layer=figure;
+							}
+						}
 				
 			} else 
 			{
@@ -281,7 +296,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		}
 		
 		
-		/**If adding many single image panels, takes care of layting them out*/
+		/**If adding many raw single image panels, takes care of laying them out*/
 		if ((addedPanels.size()>1|| ((roi2 instanceof DefaultLayoutGraphic)&&(addedPanels.size()>0))) &&(!multiChannelOpen)) {
 			Rectangle rect = addedPanels.get(0).getBounds();
 			boolean moveToNewLayer=false;
@@ -382,7 +397,7 @@ public class MoverDragHandler extends BasicDragHandler {
 		}
 		
 		
-		FigureOrganizingLayerPane aa = new ImageAndlayerAdder(true).add(layer, f.getAbsolutePath());
+		FigureOrganizingLayerPane aa = new FigureAdder(true).add(layer, f.getAbsolutePath());
 		aa.getMontageLayoutGraphic().moveLayoutAndContents(location2.getX(), location2.getY());
 		
 		imageAndDisplaySet.updateDisplay();

@@ -18,6 +18,7 @@ package addObjectMenus;
 import ultilInputOutput.FileFinder;
 
 import appContext.CurrentAppContext;
+import basicMenusForApp.CurrentSetLayerSelector;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import figureEditDialogs.SubStackDialog;
@@ -30,9 +31,10 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
+import selectedItemMenus.LayerSelector;
 
 /**this class adds a figure containing a multidimensional images to a layer */
-public class ImageAndlayerAdder extends LayoutAdder {
+public class FigureAdder extends LayoutAdder {
 	
 	/**
 	 a dialog will be shown to users if they attempt to add create with a very large image
@@ -50,7 +52,9 @@ public class ImageAndlayerAdder extends LayoutAdder {
 	/**set to true if limiting the new figure to a single frame*/
 	public boolean useSingleFrame=false;
 	public boolean useSingleSlice=false;
-	public boolean mergeOnly=false;
+	
+	public static final int MERGE_PANELS_ONLY=1, DEFAULT=0, SPLIT_CHANNELS_ONLY=2;
+	public int mergeOnly=DEFAULT;
 	
 	private TemplateUserMenuAction templatesaver =null;
 	
@@ -75,11 +79,11 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		this.templatesaver = templatesaver;
 	}
 	
-	public ImageAndlayerAdder(boolean fromFile) {
+	public FigureAdder(boolean fromFile) {
 		openFile=fromFile;
 	}
 	
-	public ImageAndlayerAdder(boolean fromFile, boolean autogen) {
+	public FigureAdder(boolean fromFile, boolean autogen) {
 		openFile=fromFile;
 		this.autoFigureGenerationOptions.autoGenerateFromModel=autogen;
 		this.useOpen=autogen;
@@ -306,6 +310,11 @@ public class ImageAndlayerAdder extends LayoutAdder {
 		String output= "Figure from open "+ nameType();
 		if (openFile)  output="Figure from saved "+nameType();
 		return output;
+	}
+	
+	@Override
+	public boolean canUseObjects(LayerSelector graphicTreeUI) {
+		return true;
 	}
 
 

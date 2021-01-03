@@ -30,6 +30,8 @@ public interface MenuItemInstall {
 	/**if the menu item must have a non-default font, returns it*/
 	public Font getMenuItemFont();
 	
+	/**returns true if the adder will work for the layer selector given*/
+	public boolean canUseObjects(LayerSelector graphicTreeUI);
 	
 	
 }

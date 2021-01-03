@@ -320,18 +320,44 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	  displays*/
 	public void makeMergeOnly() {
 		if (mdp==null) IssueLog.log("no example image display (innitial template fail)");
-		if (mdp.getModelItem()==null) 
-			{
-			//if no example image display layer is in the template, creates one
-			MultichannelDisplayLayer mid = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromOpenImage();
-			if (mid!=null)
-			mdp.setModelItem(mid);
-			}
+		ensureModelMultiChannel();
 		
 		
 		mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.ONLY_MERGE_PANELS;
 		mdp.getModelItem().getChannelLabelProp().setMergeLabelStyle(ChannelLabelProperties.MULTIPLE_LINES);
 	
+	}
+
+	
+	/**changes the properties of this templates to a version for merge only
+	  displays*/
+	public void makeSplitChannel() {
+		if (mdp==null) IssueLog.log("no example image display (innitial template fail)");
+		ensureModelMultiChannel();
+		
+		/**if the current format is merge only*/
+		boolean change = ChannelUseInstructions.ONLY_MERGE_PANELS==mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing;
+		if(change) {
+			mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.MERGE_LAST;
+		}
+		
+	}
+	
+	/**
+	 if the model multichannel for the default template is null, this creates one from 
+	 the currently open image
+	 */
+	private void ensureModelMultiChannel() {
+		if (mdp.getModelItem()==null) 
+			{
+			//if no example image display layer is in the template, creates one
+			MultichannelDisplayLayer mid = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromOpenImage();
+			if (mid.getMultiChannelImage()==null) {
+				
+			}
+			if (mid!=null)
+				mdp.setModelItem(mid);
+			}
 	}
 	
 	

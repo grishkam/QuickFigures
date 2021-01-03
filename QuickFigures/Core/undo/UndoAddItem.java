@@ -33,7 +33,7 @@ public class UndoAddItem extends AbstractUndoableEdit2 {
 	
 	public UndoAddItem(GraphicLayer layer, ZoomableGraphic added) {
 		this.layer=layer;
-		this.added=added;
+		this.setAddedItem(added);
 		this.actedOnObjects.add(added);
 	}
 	
@@ -43,14 +43,22 @@ public class UndoAddItem extends AbstractUndoableEdit2 {
 	}
 
 	public void undo() {
-		if (layer!=null)layer.remove(added);
+		if (layer!=null)layer.remove(getAddedItem());
 		
 		
 	}
 	public void redo() {
-		if (layer!=null)layer.add(added);
-		if (tree!=null) {tree.addUserObjectToSelection(added);}
+		if (layer!=null)layer.add(getAddedItem());
+		if (tree!=null) {tree.addUserObjectToSelection(getAddedItem());}
 		if (tree!=null) {tree.expandPathForUserObject(layer);}
+	}
+
+	public ZoomableGraphic getAddedItem() {
+		return added;
+	}
+
+	public void setAddedItem(ZoomableGraphic added) {
+		this.added = added;
 	}
 	
 	

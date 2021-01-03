@@ -91,7 +91,7 @@ import standardDialog.SelectImageDialog;
 		@Override
 		public ImagePlusWrapper getMultichannelImage() {
 			if (getImagePlus()==null) {
-				IssueLog.log("Warning. No image in wrapper");
+				//IssueLog.log("Warning. No image in wrapper");
 				return null;
 			}
 			if (multiChannelWrapper!=null && this.multiChannelWrapper.getImagePlus()==this.getImagePlus()) return multiChannelWrapper;

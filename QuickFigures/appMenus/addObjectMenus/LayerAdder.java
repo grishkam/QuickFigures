@@ -17,10 +17,13 @@ package addObjectMenus;
 
 import javax.swing.Icon;
 
+import basicMenusForApp.CurrentSetLayerSelector;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import selectedItemMenus.LayerSelector;
 
+/**implements a menu item that adds a layer*/
 class LayerAdder extends BasicGraphicAdder {
 
 	/**
@@ -39,18 +42,23 @@ class LayerAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "addLayer";
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Add Layer";
 	}
 	public Icon getIcon() {
 		return GraphicLayerPane.createDefaultTreeIcon(false);
 	}
 	
+	
+	@Override
+	public boolean canUseObjects(LayerSelector graphicTreeUI) {
+		if (graphicTreeUI instanceof CurrentSetLayerSelector)
+			return false;
+		return super.canUseObjects(graphicTreeUI);
+	}
 	
 }

@@ -15,12 +15,15 @@
  *******************************************************************************/
 package addObjectMenus;
 
+import basicMenusForApp.CurrentSetLayerSelector;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
+import selectedItemMenus.LayerSelector;
 
+/**An adding menu item that adds a layout*/
 class LayoutAdder extends BasicGraphicAdder {
 	
 	
@@ -56,7 +59,6 @@ DefaultLayoutGraphic p = new DefaultLayoutGraphic();
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "Add Grid Layout";
 	}
 
@@ -67,13 +69,18 @@ DefaultLayoutGraphic p = new DefaultLayoutGraphic();
 
 	
 	public SimpleGraphicalObject getCurrentDisplayObject() {
-		// TODO Auto-generated method stub
 		return createStandard();
+	}
+	
+	@Override
+	public boolean canUseObjects(LayerSelector graphicTreeUI) {
+		if (graphicTreeUI instanceof CurrentSetLayerSelector)
+			return false;
+		return super.canUseObjects(graphicTreeUI);
 	}
 
 	
 	public void setCurrentDisplayObject(
 			SimpleGraphicalObject currentDisplayObject) {
-		// TODO Auto-generated method stub
 		
 	}}

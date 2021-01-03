@@ -206,7 +206,9 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	}
 	
 
-	/**Adds an additional multichannel image to the figure, creates panels as needed
+	/**Adds an additional multi-channel image to the figure, creates panels as needed
+	 @param start the panel index where the added item will be placed
+	 @param display the added multi-channel image
 	 * @return */
 	public CombinedEdit addNovelMultiChannel(MultichannelDisplayLayer display, int start) {
 		if(display==null) return null;
@@ -221,9 +223,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		}
 		
 		if (hasOne) {
-			//IssueLog.log("d scale "+display.getPreprocessScale());
+			
 			display.setPreprocessScale(principalMultiChannel.getPreprocessScale());
-			//IssueLog.log("d scale "+display.getPreprocessScale());
 			principalMultiChannel.getPanelList().giveSettingsTo(display.getPanelList());
 			display.getSetter().startPoint=startpoint;
 			
@@ -246,8 +247,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 				}
 			
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				IssueLog.logT(e);
 			}
 		
 		
@@ -258,7 +258,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		}
 		
 		/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
-		if (hasOne) try {new ChannelOrderAndLutMatching().matchChannels(principalMultiChannel.getMultiChannelImage(), display.getMultiChannelImage(), 2);
+		if (hasOne) try {new ChannelOrderAndLutMatching().matchChannels(principalMultiChannel.getMultiChannelImage(), display.getMultiChannelImage(), ChannelOrderAndLutMatching.ORDER_AND_COLOR);
 				} catch (Throwable t) {IssueLog.logT(t);}
 		
 		this.add(display);

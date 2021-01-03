@@ -24,6 +24,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.StandardWorksheet;
 import ultilInputOutput.FileChoiceUtil;
 
+/**work in progress, adds a saved SVG graphic to the figure*/
 public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 	
 	
@@ -54,13 +55,11 @@ public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "open svg";
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Saved SVG Graphics";
 	}
 }
