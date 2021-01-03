@@ -100,7 +100,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 		public void mousePressed() {
 			findClickedLayout();
 			
-			if (!hasALayoutBeenClicked()) {getSelManOfClcikedImage().removeSelections();return;}
+			if (!hasALayoutBeenClicked()) {getSelManOfClcikedImage().removeObjectSelections();return;}
 		
 			
 				performPressEdit();
@@ -116,7 +116,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 			if (this.getCurrentLayout()==null
 					||!getCurrentLayout().getBoundry().contains(this.getClickedCordinateX(), this.getClickedCordinateY())
 					) {
-				getImageClicked().getOverlaySelectionManagger().removeSelections();return;
+				getImageClicked().getOverlaySelectionManagger().removeObjectSelections();return;
 			}
 			getSelManOfClcikedImage().select(getSelectedRoi(getCurrentLayout(), this.getClickedCordinateX(), this.getClickedCordinateY(), targetType), 4, 0);
 			
@@ -157,7 +157,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 		public void mouseReleased() {
 			
 			
-			this.getImageClicked().getOverlaySelectionManagger().removeSelections();
+			this.getImageClicked().getOverlaySelectionManagger().removeObjectSelections();
 			
 			if ((actionType==SWAP_TWO_PANEL || ( (shiftDown() && actionType==SELECT_PANEL)) ) ) {
 				swapPanels(this.getCurrentLayout(), getLayoutEditor(), getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), targetType );

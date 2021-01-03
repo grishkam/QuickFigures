@@ -295,39 +295,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	}
 
 
-/**
-	    
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		ImageDisplayTester.main(args);
-		
-		
-			GraphicSetDisplayWindow win = new GraphicSetDisplayWindow(new GraphicDisplayCanvas());
-			win.setJMenuBar(new  MenuBarForApp());
-			RectangularGraphic rr = new RectangularGraphic(3,3, 40,40);
-			rr.setFillColor(Color.black); 
-			rr.setFilled(true);
-			win.getTheSet().getGraphicLayerSet().add(rr);
-			
-			RhombusGraphic rr2=new RhombusGraphic();
-			rr=rr2;
-			rr.setRectangle(new Rectangle(30,5, 40,30));
-			rr.setFillColor(Color.green); 
-			rr.setFilled(true);
-			win.getTheSet().getGraphicLayerSet().add(rr);
-			rr2.setAngleBend(Math.PI/8);
-			BasicMontageLayout bl = new BasicMontageLayout(2, 3, 100,100,10,10, true);
-			MontageLayoutGraphic gl = new MontageLayoutGraphic(bl);
-			//gl.setLocationUpperLeft(100, 200);
-		    
-			win.getTheSet().getGraphicLayerSet().add(gl);
-			
-			ObjectToolset1 ot = new ObjectToolset1();
-			ot.run("hi");
-			
-			win.show();
-	}
-*/
+
 	
 	/**returns the key stroke reader object that will be used when keys are pressed*/
 	public InterfaceKeyStrokeReader<DisplayedImage> getStrokeReader() {

@@ -40,6 +40,7 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
+import utilityClasses1.ArraySorter;
 
 /**Creates a buffered image for that will be a snapshot of the worksheet.
   That image can in turn be copied to the system clipboard*/
@@ -49,6 +50,8 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	private BufferedImage image;
 	private boolean useTransparent=true;
 	private FigureDisplayContainer cont;
+
+	private boolean deselectAll=true;
 	static	double ratio=1/ImageDPIHandler.ratioFor300DPI();//So the copied images can be 300ppi when in the equivalent dimensions
 	
 	public FlatCreator() {this(true);}
@@ -74,7 +77,11 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			if (isUseTransparent()) g.setColor(new Color(255,255,255,00));
 			
 			g.fillRect(0, 0, img.getWidth(), img.getHeight());
-		cont.getTopLevelLayer().draw((Graphics2D) g, new BasicCoordinateConverter(0,0,ratio));
+		if (deselectAll) {
+			cont.getOverlaySelectionManagger().clear();
+			ArraySorter.deselectItems(cont.getTopLevelLayer().getAllGraphics());
+		}
+			cont.getTopLevelLayer().draw((Graphics2D) g, new BasicCoordinateConverter(0,0,ratio));
 		
 		return img;
 	}
@@ -144,6 +151,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		private NumberInputPanel nop;
 
 
+
 		public FlatDialog() {
 			super("Export Options");
 			BooleanInputPanel bip = new BooleanInputPanel("Transpartent background?", isUseTransparent());
@@ -157,6 +165,10 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 					if (ne.getSourcePanel()==nop)ratio=nop.getNumber()/ImageDPIHandler.getStandardDPI();
 				}});
 			this.add("ratio" , nop);
+			
+			BooleanInputPanel bip2 = new BooleanInputPanel("deselect all", deselectAll);
+			this.add("Deselect" , bip2);
+			
 			super.setWindowCentered(true);
 			this.setModal(true);
 		}
@@ -165,7 +177,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		@Override
 		public void afterEachItemChange() {
 			setUseTransparent(this.getBoolean("transp"));
-			
+			deselectAll=this.getBoolean("Deselect");
 		}
 	}
 }

@@ -228,7 +228,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 /**Deselects all items in the list except one
 		 * @param exempt the one excluded*/
 	protected void deselectAll(ArrayList<?> ls, Object exempt) {
-		getSelectionManager().removeSelections();
+		getSelectionManager().removeObjectSelections();
 		for(Object l: ls) try  {
 			if(l==exempt) continue;
 				deselect(l);
@@ -442,8 +442,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				/**if the mouse press starts outside of the primary selected item, needs to store this
 				   */
 			this.notWithinPrimary=getPrimarySelectedObject()!=null
-					&&
-					!getPrimarySelectedObject().getOutline().contains(pressX, pressY);
+																&&
+																!getPrimarySelectedObject().getOutline().contains(pressX, pressY);
 			
 			
 			
@@ -488,7 +488,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		addedcurrentundoDragHandle=false;
 	}
 	
-	ArrayList<GraphicLayer> getSelectedLayers(GraphicLayer s) {
+	/**returns every selected sublayer*/
+	static ArrayList<GraphicLayer> getSelectedLayers(GraphicLayer s) {
 		
 		ArrayList<GraphicLayer> output = new ArrayList<GraphicLayer> ();
 		for(GraphicLayer z:s.getSubLayers()) {
@@ -498,6 +499,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return output;
 	}
 	
+	/**returns true if every single item in the layer is selected
+	 * @param the layer*/
 	static boolean isLayerSelected(GraphicLayer l) {
 		for(ZoomableGraphic z: l.getItemArray()) {
 			if (z==null) continue;
@@ -555,11 +558,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {
 		JPopupMenu menu =null;
 		
-		
-		if (super.shiftDown()) {
+		/**if the user is selecting more than one item by holding shift*/
+		if (shiftDown()) {
 			GroupOfobjectPopup menuAll = new GroupOfobjectPopup( new CurrentSetLayerSelector());
 			menu=menuAll;
-			menuAll.addItemsFromJMenu( obtainUniquePopup(roi2,e), "this item");
+			menuAll.addItemsFromJMenu( obtainUniquePopup(roi2), "this item");
 			
 		}
 		if (sh!=null) {
@@ -567,19 +570,13 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		} 
 		
 		if (menu==null&& roi2 instanceof HasUniquePopupMenu) {
-			menu = obtainUniquePopup(roi2, e);
+			menu = obtainUniquePopup(roi2);
 			
-			try {
-				if ( isAttachedItem(roi2)) {
-					LockedItemHandle lockHandle = this.findHandleForLockedItem(roi2);
-					if (lockHandle!=null) menu.add(lockHandle.createAdjustPositionMenuItem());
-				}
-			} catch (Exception e1) {
-			
-			}
+			addAttachmentPositiontoPopup(roi2, menu);
 			
 			}
 		
+		/**smart menus must be informed fo their context*/
 		if (menu instanceof SmartPopupJMenu) {
 			SmartPopupJMenu c = (SmartPopupJMenu) menu;
 			c.setUndoManager(this.getImageDisplayWrapperClick().getUndoManager());
@@ -591,7 +588,25 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 if (menu!=null) menu.show(c, e.getClickedXScreen(), e.getClickedYScreen());
 	}
 
-	protected JPopupMenu obtainUniquePopup(LocatedObject2D roi2, CanvasMouseEvent e) {
+	/**In the special case in which the object is attached to another object
+	 * adds an 'adjust position' option to the popup menu.
+	 * @param roi2
+	 * @param menu
+	 */
+	public void addAttachmentPositiontoPopup(LocatedObject2D roi2, JPopupMenu menu) {
+		try {
+			if ( isAttachedItem(roi2)) {
+				LockedItemHandle lockHandle = this.findHandleForLockedItem(roi2);
+				if (lockHandle!=null) menu.add(lockHandle.createAdjustPositionMenuItem());
+			}
+		} catch (Exception e1) {
+		
+		}
+	}
+
+	/**returns the popup menu for the object
+	 * @param roi2 the object selected*/
+	protected JPopupMenu obtainUniquePopup(LocatedObject2D roi2) {
 		JPopupMenu menu=null;
 		HasUniquePopupMenu has=(HasUniquePopupMenu) roi2;
 		if (has==null) return null;
@@ -1048,7 +1063,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 * 
 	 */
 	protected void mousDragForObjectOrHandle() {
-		if (getSelectedHandleNumber()>-1) {
+		if (getSelectedHandleNumber()>NO_HANDLE) {
 			performHandleDrag();
 		}
 		else
@@ -1238,6 +1253,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 					
 			}
 		}
+		else establishAttachedItemClick(null);
 	}
 
 	/**Check whether the item given is attached to another object

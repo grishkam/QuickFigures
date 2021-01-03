@@ -49,7 +49,7 @@ public class OverlayObjectManager {
 	private Color selColor=Color.blue;
 	private Color selColor2=Color.green;
 	
-	/**two lists of smart handles may be drawn over other objects*/
+	/**lists of smart handles may be drawn over other objects*/
 	private SmartHandleList shlist;
 	private SmartHandleList otherList;
 	private SmartHandle extraHandle=null;
@@ -212,12 +212,23 @@ public class OverlayObjectManager {
 	}
 
 	/**sets all three selections to null*/
-public void removeSelections() {
+public void removeObjectSelections() {
 	this.setSelectionGraphic(null);
 	this.setSelectionGraphic2(null);
 	this.setSelectionGraphic3(null);
 }
 
+/**sets all three selections to null*/
+public void removeHandleSelections() {
+	this.extraHandle=null;
+	this.otherList=null;
+	shlist=null;
+}
+
+public void clear() {
+	removeObjectSelections();
+	removeHandleSelections();
+}
 
 /**sets the selected area to the shape. uses a stroke width i for the shape
  * @return */

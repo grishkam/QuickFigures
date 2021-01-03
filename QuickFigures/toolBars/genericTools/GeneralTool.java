@@ -442,7 +442,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 	
 	public void removeMarkerRoi() {
-		this.getImageWrapperClick().getOverlaySelectionManagger().removeSelections();
+		this.getImageWrapperClick().getOverlaySelectionManagger().removeObjectSelections();
 		//getObjectAdapter().deselect(getImageClick());
 	//	imp.killRoi(); imp.updateAndDraw();
 	}

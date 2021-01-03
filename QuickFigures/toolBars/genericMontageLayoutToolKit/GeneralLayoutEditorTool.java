@@ -311,7 +311,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	/**removes the markers that are shown to user*/
 	public void removeMarkerRoi()  {
 		
-		getImageClicked().getOverlaySelectionManagger().removeSelections();
+		getImageClicked().getOverlaySelectionManagger().removeObjectSelections();
 		
 	}
 	

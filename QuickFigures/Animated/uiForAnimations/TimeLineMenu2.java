@@ -28,6 +28,7 @@ public class TimeLineMenu2 extends TimeLineMenu {
 	void setup() {
 		this.setText("Time Line"); this.setName("Time Line");
 		this.addOperation(new TimeLineRange(0));
+		this.addOperation(new PlayTimeLine(0));
 }
 
 

@@ -23,6 +23,7 @@ import javax.swing.Timer;
 
 import applicationAdapters.DisplayedImage;
 import includedToolbars.StatusPanel;
+import utilityClassesForObjects.LocatedObject2D;
 
 /**Class for displaying animations*/
 public class Animator implements ActionListener{
@@ -36,8 +37,19 @@ public class Animator implements ActionListener{
 	int fps=12;//the number of frames/second
 	Timer timer;
 
-	public Animator(DisplayedImage diw) {
+	/**creates an animator for the display
+	 * @param animateAll whether to include all the available animations in the animation list*/
+	public Animator(DisplayedImage diw, boolean animateAll) {
 		display=diw;
+		if (animateAll) {
+			for(LocatedObject2D t: display.getImageAsWrapper().getLocatedObjects()) {
+				if (t instanceof HasAnimation) {
+					Animation a = ((HasAnimation) t).getAnimation();
+					addAnimation(a);
+				}
+			}
+			nFrames=diw.getEndFrame();
+		}
 	}
 	
 	/**adds an animation object to the list*/
@@ -56,6 +68,7 @@ public class Animator implements ActionListener{
 		
 			StatusPanel.updateStatus("Animating Frame "+frame);
 			StatusPanel.updateStatusBar((100*frame)/nFrames);
+			display.setCurrentFrame(currentFrame);
 			display.updateDisplay();
 			currentFrame=currentFrame+1;
 			

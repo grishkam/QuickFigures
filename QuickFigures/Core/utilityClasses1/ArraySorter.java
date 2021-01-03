@@ -360,6 +360,17 @@ public class ArraySorter<ItemType> {
 			in.select();
 		}
 	}
+	
+	/**Deselects all the items that are selected*/
+	public static void deselectItems(ArrayList<?> arr) {
+		ArrayList<Selectable> deads = new ArrayList<Selectable> ();
+		for(Object i:arr) {
+			if (i instanceof Selectable && ((Selectable) i).isSelected()) deads.add((Selectable) i);
+		}
+		for(Selectable in:deads) {
+			in.deselect();
+		}
+	}
 
 
 	public synchronized Random getRandy() {

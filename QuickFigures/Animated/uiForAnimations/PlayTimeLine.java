@@ -13,27 +13,37 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package undo;
+package uiForAnimations;
 
-import imageDisplayApp.OverlayObjectManager;
+import animations.Animator;
+import logging.IssueLog;
+import standardDialog.numbers.NumberInputPanel;
 
-public class UndoSelectionSet extends AbstractUndoableEdit2 {
+public class PlayTimeLine extends KeyFrameProgress {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private OverlayObjectManager selection;
 
-	public UndoSelectionSet( OverlayObjectManager selection) {
-		this.selection=selection;
-	}
-	public void redo() {
-		
+	public PlayTimeLine(int type) {
+		super(type);
+		// TODO Auto-generated constructor stub
 	}
 	
-	public void undo() {
-		selection.removeObjectSelections();
+	@Override
+	public void run() {
+		Animator animator = new Animator(display, true);
+		try {
+			animator.animate();
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
+	}
+	
+	@Override
+	public String getMenuCommand() {
+		return "Play animation";
 	}
 
 }

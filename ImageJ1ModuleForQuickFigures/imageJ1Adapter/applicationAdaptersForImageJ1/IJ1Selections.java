@@ -42,8 +42,8 @@ public class IJ1Selections extends OverlayObjectManager {
 	public void setImagePlus(ImagePlus imagePlus) {
 		this.imagePlus = imagePlus;
 	}
-public void removeSelections() {
-	super.removeSelections();
+public void removeObjectSelections() {
+	super.removeObjectSelections();
 	if (imagePlus!=null) {
 		imagePlus.killRoi();
 	}

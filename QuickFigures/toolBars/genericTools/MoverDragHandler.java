@@ -170,7 +170,7 @@ public class MoverDragHandler extends BasicDragHandler {
 			displaySet.getImageAsWrapper().getOverlaySelectionManagger().select(panel, 1);
 			
 		}  else {
-			displaySet.getImageAsWrapper().getOverlaySelectionManagger().removeSelections();
+			displaySet.getImageAsWrapper().getOverlaySelectionManagger().removeObjectSelections();
 			
 		}
 		displaySet.updateDisplay();
@@ -277,7 +277,7 @@ public class MoverDragHandler extends BasicDragHandler {
 				if(imageadded!=null) addedPanels.add(imageadded);
 				}
 			
-			imageAndDisplaySet.getImageAsWrapper().getOverlaySelectionManagger().removeSelections();
+			imageAndDisplaySet.getImageAsWrapper().getOverlaySelectionManagger().removeObjectSelections();
 		}
 		
 		

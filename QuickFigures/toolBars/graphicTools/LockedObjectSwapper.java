@@ -159,7 +159,7 @@ public String getToolTip() {
 
 public void removeMarkerRoi()  {
 	
-	getImageClicked().getOverlaySelectionManagger().removeSelections();
+	getImageClicked().getOverlaySelectionManagger().removeObjectSelections();
 	
 }
 

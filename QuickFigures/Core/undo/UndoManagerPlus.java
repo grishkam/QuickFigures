@@ -122,14 +122,14 @@ public class UndoManagerPlus extends UndoManager {
 	}
 	
 	/**undoes the action and returns an animation for the redo*/
-	public Animation doAnimatedUndo(DisplayedImage diw) {
+	private Animation doAnimatedUndo(DisplayedImage diw) {
 		UndoableEdit todo = this.editToBeUndone();
 		if(todo instanceof HasAnimation) {
 			IssueLog.log("This undo can be animated");
 			
 			HasAnimation ani=(HasAnimation) todo;
 			this.undo();
-			Animator animator = new Animator(diw);
+			Animator animator = new Animator(diw, false);
 			animator.addAnimation(ani.getAnimation());
 			try {
 		animator.animate();
