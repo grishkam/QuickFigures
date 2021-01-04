@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ import javax.swing.undo.UndoableEdit;
 
 import addObjectMenus.ObjectAddingMenu;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import externalToolBar.AbstractExternalToolset;
 import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
@@ -76,6 +76,9 @@ import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 import graphicalObjects_LayerTypes.ZoomableGraphicGroup;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.Hideable;
+import locatedObject.Selectable;
+import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -90,9 +93,6 @@ import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoReorder;
-import utilityClassesForObjects.Hideable;
-import utilityClassesForObjects.Selectable;
-import utilityClassesForObjects.ShowsOptionsDialog;
 import undo.UndoHideUnhide;
 
 /**Creates the GUI for the layers window. This is a complex window with manipulations of layer structure 
@@ -1333,7 +1333,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 				}}
 
 	@Override
-	public ImageWrapper getImageWrapper() {
+	public ImageWorkSheet getImageWrapper() {
 		return getGraphicDisplayContainer().getAsWrapper();
 	}
 	

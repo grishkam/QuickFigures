@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -48,18 +48,18 @@ import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.IconUtil;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocationChangeListener;
+import locatedObject.RectangleEdges;
+import locatedObject.ScaleInfo;
 import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
-import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
+import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LocationChangeListener;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.ScaleInfo;
 
 /**A special inset definer object that the user can use to draw insets with the inset tool.
   */
@@ -386,8 +386,8 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		return channelLabelMan;
 	}
 	
-	public MenuForChannelLabelMultiChannel getChannelLabelMenu() {
-		return new MenuForChannelLabelMultiChannel("Channel Label", this.getSourceDisplay(), multiChannelStackofInsets, this.getChannelLabelManager());
+	public MenuForMultiChannelDisplayLayer getChannelLabelMenu() {
+		return new MenuForMultiChannelDisplayLayer("Channel Label", this.getSourceDisplay(), multiChannelStackofInsets, this.getChannelLabelManager());
 		
 	}
 	

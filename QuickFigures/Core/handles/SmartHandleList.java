@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import utilityClassesForObjects.LocatedObject2D;
+import locatedObject.LocatedObject2D;
 
 /**A list of smart handles that has a few methods particularly useful for working with handles*/
 public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableGraphic{

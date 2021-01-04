@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package figureFormat;
 import channelLabels.ChannelLabelTextGraphic;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.AttachmentPosition;
+import locatedObject.ColorDimmer;
 import undo.AbstractUndoableEdit2;
 import undo.ChannelLabelPropertiesUndo;
 import undo.CombinedEdit;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.ColorDimmer;
 
 /**A subclass of label picker that selects only channel labels*/
 public class ChannelLabelExamplePicker extends LabelExamplePicker {

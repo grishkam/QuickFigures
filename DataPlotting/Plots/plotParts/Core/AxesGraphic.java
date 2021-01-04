@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -41,11 +41,11 @@ import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.ScaleInfo;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
+import locatedObject.RectangleEdges;
+import locatedObject.ScaleInfo;
+import locatedObject.Scales;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 
 public class AxesGraphic extends ShapeGraphic  implements Scales{
 

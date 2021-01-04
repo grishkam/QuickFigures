@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -141,6 +141,12 @@ public  class WindowDebugMenuItem implements MenuItemForObj{
 		KeyEvent k = new KeyEvent(c, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), meta? KeyEvent.META_DOWN_MASK: 0, KeyEvent.getExtendedKeyCodeForChar(keyChar), keyChar);
 		c.dispatchEvent(k);
 		
+	}
+
+	@Override
+	public Icon getSuperMenuIcon() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

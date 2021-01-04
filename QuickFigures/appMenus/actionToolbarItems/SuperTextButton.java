@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,6 +31,10 @@ import javax.swing.Icon;
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.ColorDimmer;
+import locatedObject.LocatedObject2D;
+import locatedObject.RainbowPaintProvider;
+import locatedObject.RectangleEdges;
 import objectDialogs.TextGraphicSwingDialog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
@@ -38,14 +42,10 @@ import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 import undo.CombinedEdit;
 import undo.UndoTextEdit;
-import utilityClassesForObjects.ColorDimmer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RainbowPaintProvider;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
 
 /**Performs a certain edit of one or more Text objects*/
 public class SuperTextButton extends BasicMultiSelectionOperator implements Serializable {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import channelMerging.MultiChannelImage;
 import genericMontageLayoutToolKit.GeneralLayoutToolIcon;
 import layout.PanelLayout;
 import layout.plasticPanels.PlasticPanelLayout;
+import locatedObject.RectangleEdges;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
-import utilityClassesForObjects.RectangleEdges;
 
 /**A tool for changing the channel colors of an image*/
 public class LutSwapperTool extends BasicImagePanelTool implements ColorInputListener {

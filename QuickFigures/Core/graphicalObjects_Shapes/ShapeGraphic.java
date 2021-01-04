@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,15 +37,6 @@ import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.DefaultPaintProvider;
-import utilityClassesForObjects.Fillable;
-import utilityClassesForObjects.PaintProvider;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.Rotatable;
-import utilityClassesForObjects.ShowsOptionsDialog;
-import utilityClassesForObjects.StrokedItem;
 import animations.KeyFrameAnimation;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
@@ -64,6 +55,15 @@ import illustratorScripts.IllustratorObjectConvertable;
 import illustratorScripts.PathItemRef;
 import keyFrameAnimators.ShapeGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
+import locatedObject.BasicStrokedItem;
+import locatedObject.DefaultPaintProvider;
+import locatedObject.Fillable;
+import locatedObject.PaintProvider;
+import locatedObject.PathPointList;
+import locatedObject.RectangleEdges;
+import locatedObject.Rotatable;
+import locatedObject.ShowsOptionsDialog;
+import locatedObject.StrokedItem;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
@@ -336,7 +336,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 
 	/**returns true if the units of the angle are radians*/
 	@Override
-	public boolean isRandians() {
+	public boolean isRadians() {
 		return true;
 	}
 	/**returns true if the units of the angle are degrees*/

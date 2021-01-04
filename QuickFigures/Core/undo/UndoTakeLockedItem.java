@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  *******************************************************************************/
 package undo;
 
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.TakesLockedItems;
+import locatedObject.LocatedObject2D;
+import locatedObject.TakesAttachedItems;
 
 public class UndoTakeLockedItem extends AbstractUndoableEdit2 {
 
@@ -24,13 +24,13 @@ public class UndoTakeLockedItem extends AbstractUndoableEdit2 {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private TakesLockedItems taker;
+	private TakesAttachedItems taker;
 	private LocatedObject2D item;
 	boolean remove=false;
 	private UndoMoveItems undomove;
 	private UndoSnappingChange snapundo;
 
-	public UndoTakeLockedItem(TakesLockedItems taker, LocatedObject2D item, boolean remove ) {
+	public UndoTakeLockedItem(TakesAttachedItems taker, LocatedObject2D item, boolean remove ) {
 		snapundo=new UndoSnappingChange(item);
 		undomove=new UndoMoveItems(item);
 		this.taker=taker;

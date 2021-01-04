@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.strings.StringInputEvent;
 import standardDialog.strings.StringInputListener;
 import standardDialog.strings.StringInputPanel;
-import utilityClassesForObjects.TextLineSegment;
+import textObjectProperties.TextLineSegment;
 
 /**A panel within a dialog that allows the user to edit to a specific fragment of text, determining if the text is underlined, superscripted and so on */
 public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInputListener, ChoiceInputListener, OnGridLayout {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import iconGraphicalObjects.IconUtil;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
+import locatedObject.AttachmentPosition;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.CroppingDialog;
@@ -51,7 +52,6 @@ import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAddManyItem;
 import undo.UndoLayoutEdit;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A figure organizing layer*/
 public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFigureOrganizer, HasUniquePopupMenu {
@@ -264,18 +264,28 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		this.add(display);
 		output.addEditToList(new UndoAddItem(this, display));
 		
-		UndoLayoutEdit lUndo = new UndoLayoutEdit(getMontageLayoutGraphic());
+		DefaultLayoutGraphic targetLayout = getMontageLayoutGraphic();
+		UndoLayoutEdit lUndo = new UndoLayoutEdit(targetLayout);
+		
+		/**in the specific case of a layout with one panel, ensures that the addition does to the next column and not the next row*/
+			if (targetLayout!=null) {	
+				BasicLayout pl = targetLayout.getPanelLayout();
+					if (pl!=null&&pl.rowmajor&& pl.nColumns()==1&&pl.nRows()==1) {
+						pl.setNColumns(2);
+					}
+			}
+		
 		display.eliminateAndRecreate(!hasOne, false, !hasOne);//since this method alters the layout, a layout undo is needed. all other actions done do not need to be undone since the new objects are removed
 		output.addEditToList(lUndo);
 		
 		if (hasOne) {
-			display.eliminateChanLabels();
+			display.eliminateChanLabels();//if another multichannel exists, then the new image's channel labels are not needed
 		}
 		boolean alterLayout = areSizesChangedForLayout(principalMultiChannel, display);
 		if(alterLayout) {
 			
 			this.getMontageLayoutGraphic().generateCurrentImageWrapper();//sets of a list of the contents
-			lUndo = new UndoLayoutEdit(getMontageLayoutGraphic());
+			lUndo = new UndoLayoutEdit(targetLayout);
 			this.getLayout().getEditor().alterPanelWidthAndHeightToFitContents(getLayout());
 			output.addEditToList(lUndo);
 		}
@@ -446,7 +456,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
 	
 		if (CanvasOptions.current.resizeCanvasAfterEdit)
-			output.addEditToList(	new  CanvasAutoResize().performUndoableAction(disp));
+			output.addEditToList(	new  CanvasAutoResize(true).performUndoableAction(disp));
 				
 		return output;
 	}

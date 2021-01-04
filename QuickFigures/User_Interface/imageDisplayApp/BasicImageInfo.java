@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class BasicImageInfo implements Serializable {
 
 
 		private int width=500, height=300;
+		private boolean autoResizeBlocked=false;
 
 		public int getHeight() {
 			return height;
@@ -48,5 +49,13 @@ public class BasicImageInfo implements Serializable {
 		public Dimension getDimensions() {
 			return new Dimension(getWidth(), getHeight());
 		}
-	
+
+		public boolean isAutoResizeBlocked() {
+			return autoResizeBlocked;
+		}
+
+		public void setAutoResizeBlocked(boolean autoResizeBlocked) {
+			this.autoResizeBlocked = autoResizeBlocked;
+		}
+		
 }

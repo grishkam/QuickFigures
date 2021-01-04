@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_SpecialObjects;
 
 import java.awt.BasicStroke;
@@ -37,21 +42,12 @@ import javax.swing.Icon;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import popupMenusForComplexObjects.TextSelectionMenu;
 import standardDialog.StandardDialog;
+import textObjectProperties.TextItem;
+import textObjectProperties.TextParagraph;
+import textObjectProperties.TextPrecision;
 import undo.AbstractUndoableEdit2;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoTextEdit;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.ColorDimmer;
-import utilityClassesForObjects.ColorDims;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.Rotatable;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.ShapesUtil;
-import utilityClassesForObjects.Snap2Rectangle;
-import utilityClassesForObjects.TextItem;
-import utilityClassesForObjects.TextPrecision;
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEvent;
 import export.pptx.OfficeObjectConvertable;
@@ -75,6 +71,16 @@ import icons.TreeIconForTextGraphic;
 import illustratorScripts.*;
 import keyFrameAnimators.TextGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
+import locatedObject.BasicStrokedItem;
+import locatedObject.ColorDimmer;
+import locatedObject.ColorDims;
+import locatedObject.PathPointList;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
+import locatedObject.Rotatable;
+import locatedObject.Scales;
+import locatedObject.ShapesUtil;
+import locatedObject.Snap2Rectangle;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;
@@ -91,9 +97,11 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 
 	private boolean fillBackGround=false;
 	transient boolean boundsInnitial=false;
-	private transient int cursorPosition=1000;
 	
-	private Insets insets=null;
+	private transient int cursorPosition=Integer.MAX_VALUE-1000;//the cursor position starts at a number greater then the length of the text
+	private int highlightPosition=-1;//highlight position starts at an invalid value that indicates there is not highlight
+	
+	/**A couple of text items that may be drawn behind the text*/
 	private BasicStrokedItem outlineStroke=null;
 	protected BasicShapeGraphic backGroundShape=null;
 	
@@ -102,9 +110,9 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	String name="graphic text";
 	Color strokeColor=Color.black;
 
-	{ locationType=9;}
+	{ locationType=RectangleEdgePositions.MIDDLE;}
 	
-	protected int colordimming=0;
+	protected int colordimming=ColorDimmer.FULL_BRIGTHNESS;
 	private boolean dimColor=true;
 	
 	transient double width=0;
@@ -116,7 +124,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 
 	Font font=new Font("Arial", Font.BOLD, 12);
 	String theText="Hello";
-	int justtification=0;
+	int justtification=TextParagraph.JUSTIFY_LEFT;
 	
 	transient boolean showRectCornerHandes=false;
 
@@ -126,18 +134,20 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	transient FontMetrics fontMetrics=defaultMetrics(getFont());
 	transient  BufferedImage fmImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 	
-	transient Rectangle2D textDimension=new Rectangle(0,0,0,0);
+	transient Rectangle2D textDimension=new Rectangle2D.Double(0,0,0,0);
 	transient Polygon rotatedBounds=new Polygon();
 	transient Point2D.Double[] basLine=new Point2D.Double[] {new Point2D.Double(), new Point2D.Double()};
 	transient Point2D.Double[] rotatedBoundsPrecise=new Point2D.Double[] { new Point2D.Double(), new Point2D.Double(), new Point2D.Double(), new Point2D.Double()};
 	transient java.awt.geom.Rectangle2D.Double wholebBounds=new Rectangle2D.Double(5,5,5,5);
 	private boolean strokeOutline;
+	
+	private Insets insets=null;//an object of class insets for the text
 	private int lInset;
 	private int tInset;
 	private int rInset;
 	private int bInset;
+	
 	private java.awt.geom.Point2D.Double[] unrotatedTextBoundv;
-	private int highlightPosition=-1;
 	private boolean editMode=false;
 	private boolean userEditable=true;
 
@@ -559,6 +569,8 @@ public void giveTraitsTo(TextGraphic tg) {
 	tg.map= map;
 	tg.backGroundShape=this.getBackGroundShape().copy();
 }
+
+/**Creates another object of this same class*/
 protected TextGraphic createAnother() {
 	return new TextGraphic();
 }
@@ -572,13 +584,13 @@ public void copyBasicTraitsFrom(TextGraphic b) {
 }
 
 @Override
-public int getX() {
-	return (int)x;
+public double getX() {
+	return x;
 }
 
 @Override
-public int getY() {
-	return (int)y;
+public double getY() {
+	return y;
 }
 
 @Override
@@ -612,7 +624,7 @@ public void rotate(double angle) {
 }
 
 @Override
-public boolean isRandians() {
+public boolean isRadians() {
 	return false;
 }
 

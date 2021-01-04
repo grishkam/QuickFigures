@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdaptersForImageJ1;
 
 import java.awt.BasicStroke;
@@ -36,19 +41,21 @@ import illustratorScripts.IllustratorObjectRef;
 import illustratorScripts.PathItemRef;
 import illustratorScripts.PlacedItemRef;
 import illustratorScripts.TextFrame;
+import locatedObject.AttachmentPosition;
+import locatedObject.DefaultPaintProvider;
+import locatedObject.Fillable;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocationChangeListener;
+import locatedObject.LocationChangeListenerList;
+import locatedObject.Named;
+import locatedObject.PaintProvider;
+import locatedObject.StrokedItem;
 import logging.IssueLog;
-import utilityClassesForObjects.DefaultPaintProvider;
-import utilityClassesForObjects.DrawnGraphic;
-import utilityClassesForObjects.HasText;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LocationChangeListener;
-import utilityClassesForObjects.LocationChangeListenerList;
-import utilityClassesForObjects.PaintProvider;
-import utilityClassesForObjects.AttachmentPosition;
+import textObjectProperties.HasText;
 /**An implementation of LocatedObject2D that allows many QuickFigures classes
  to act on ImageJ Rois. not extensively used anymore. The methods in this class
  might be useful to future programmers but not currently important for the package*/
-public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectConvertable,  DrawnGraphic {
+public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectConvertable, StrokedItem, Fillable, Named{
 	Roi roi;
 	
 	
@@ -560,15 +567,7 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 			if (o!=null) o.add(roi);
 			
 		}
-		@Override
-		public int getTypeOfGraphic() {
-			if (roi instanceof TextRoi) return Text_Item;
-			if (roi instanceof ImageRoi) return ImagePanel;
-			if (roi instanceof Arrow) return Arrow;
-			if (roi instanceof ij.gui.Line ||roi instanceof ij.gui.Arrow) return Line;
-
-			return Shape;
-		}
+	
 		@Override
 		public Object toIllustrator(ArtLayerRef aref) {
 			// TODO Auto-generated method stub

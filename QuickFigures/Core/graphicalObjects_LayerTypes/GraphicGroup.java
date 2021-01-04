@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -55,14 +55,14 @@ import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LocatedObjectGroup;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.Selectable;
 import layersGUI.HasTreeBranchIcon;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocatedObjectGroup;
+import locatedObject.ObjectContainer;
+import locatedObject.RectangleEdges;
+import locatedObject.Scales;
+import locatedObject.Selectable;
 
 /**The most straightforward implementation of grouping that I could manage*/
 public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphicGroup, HasSmartHandles, Selectable, HasUniquePopupMenu,  LocatedObjectGroup,HasTreeBranchIcon, IllustratorObjectConvertable,KnowsTree, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>,SVGExportable, OfficeObjectConvertable, Scales{

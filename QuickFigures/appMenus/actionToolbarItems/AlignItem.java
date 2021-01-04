@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,15 +32,15 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
 import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoReorder;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
 
 
 /**Implements the align objects menu, complete with icons.

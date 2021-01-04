@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -42,10 +42,10 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
 import icons.TreeIconWrappingToolIcon;
 import layout.BasicObjectListHandler;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ShapesUtil;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.ShapesUtil;
+import locatedObject.TakesAttachedItems;
 
 /**A tool for adding text items to the image*/
 public class Text_GraphicTool extends GraphicTool {
@@ -78,7 +78,7 @@ public class Text_GraphicTool extends GraphicTool {
 		}
 	}
 	
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		if (!(roi2 instanceof TextGraphic) && !createNewText()) super.onPress(gmp, roi2);
 		handleTextObject(gmp, roi2);
 		
@@ -90,7 +90,7 @@ public class Text_GraphicTool extends GraphicTool {
 	}
 	
 	
-	public void handleTextObject(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void handleTextObject(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		TextGraphic textob=null;
 		lastUndo=null;
 		int x = this.getClickedCordinateX();
@@ -186,7 +186,7 @@ public class Text_GraphicTool extends GraphicTool {
 			startedDragCreation=true;
 			newCreation= makeNewTextObject();
 			
-			ImageWrapper gmp = this.getImageClicked();
+			ImageWorkSheet gmp = this.getImageClicked();
 			gmp.getTopLevelLayer().add(newCreation);
 			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), newCreation);
 			this.setPrimarySelectedObject(newCreation);
@@ -203,7 +203,7 @@ public class Text_GraphicTool extends GraphicTool {
 	
 	
 	public LocatedObject2D findPlaceToLockObject(TextGraphic textob) {
-		LocatedObject2D image = this.getObjecthandler().getClickedRoi(getImageClicked(), getClickedCordinateX(), getClickedCordinateY(), TakesLockedItems.class);
+		LocatedObject2D image = this.getObjecthandler().getClickedRoi(getImageClicked(), getClickedCordinateX(), getClickedCordinateY(), TakesAttachedItems.class);
 		int cx = getClickedCordinateX();
 		int cy = getClickedCordinateY();
 		lockAndSnap(image, textob, cx, cy);
@@ -211,8 +211,8 @@ public class Text_GraphicTool extends GraphicTool {
 	}
 	
 	public static void lockAndSnap(LocatedObject2D image, TextGraphic textob, int cx, int cy) {
-		if (image instanceof TakesLockedItems) {
-			TakesLockedItems taker = (TakesLockedItems) image;
+		if (image instanceof TakesAttachedItems) {
+			TakesAttachedItems taker = (TakesAttachedItems) image;
 			
 			taker.addLockedItem(textob);
 			
@@ -360,7 +360,7 @@ public class Text_GraphicTool extends GraphicTool {
 	 *  this method was meant to make it easier to click on the edge of a text item 
 	 *  but it had the effect of making it impossible to click a text item with something else behind it */
 /***/
-	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWrapper click, int x, int y) {
+	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWorkSheet click, int x, int y) {
 		if (!this.editorOnly) return super.getObjectsAtPressLocationWithoutFiltering(click, x, y);
 		ArrayList<LocatedObject2D> list = getObjecthandler().getOverlapOverlaypingOrContainedItems(new Rectangle(x-5, y-5, 10, 10), click, new BasicObjectListHandler.excluder(this.excludedClass));
 		

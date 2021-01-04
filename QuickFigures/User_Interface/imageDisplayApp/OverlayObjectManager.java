@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,11 +32,11 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import handles.LockedItemHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import locatedObject.DefaultPaintProvider;
+import locatedObject.LocatedObject2D;
+import locatedObject.Selectable;
+import locatedObject.StrokedItem;
 import logging.IssueLog;
-import utilityClassesForObjects.DefaultPaintProvider;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.Selectable;
-import utilityClassesForObjects.StrokedItem;
 
 /**A list of special objects that are drawn over the image. 
  * These objects are always drawn in their selected forms. 

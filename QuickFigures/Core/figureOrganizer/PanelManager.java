@@ -37,6 +37,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.basicFigure.BasicLayout;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
@@ -46,7 +47,6 @@ import undo.PreprocessChangeUndo;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoMoveItems;
 import undo.UndoScalingAndRotation;
-import utilityClassesForObjects.RectangleEdges;
 
 /**handles the adding and removing of channel display panels
   to and from figures.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 
 /**This interface contains all methods that are crucial for any type of panel layout
   Although I have written a few implementations of this, the basic montage layout */
@@ -73,10 +73,10 @@ public interface PanelLayout {
 	/**called when a user drags a corner handle of the panel*/
 	public void nudgePanelDimensions(int panelnum, double dx, double dy);
 	
-	public ImageWrapper getEditedImage() ;
+	public ImageWorkSheet getEditedImage() ;
 
 	public int nPanels();
 
-	public void setEditedImage(ImageWrapper genericImage);
+	public void setEditedImage(ImageWorkSheet genericImage);
 	 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.IconUtil;
+import locatedObject.AttachmentPosition;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.PlotArea;
@@ -51,7 +52,6 @@ import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 import undoForPlots.AxisChangeUndo;
-import utilityClassesForObjects.AttachmentPosition;
 
 public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements PlotComponent {
 	

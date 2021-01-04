@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.awt.Color;
@@ -48,6 +53,7 @@ public class ChannelEntry implements Serializable{
 		return this.getShortLabel()+"  "+getOriginalChannelIndex();
 	}
 	
+	/**returns the channel label*/
 	public String getLabel() {
 		return label;
 	}
@@ -60,52 +66,62 @@ public class ChannelEntry implements Serializable{
 		return short1;
 	}
 
+	/**returns a generic text indicating the channel number*/
 	private String getSimpleLabel() {
 		return "Channel "+ getOriginalChannelIndex();
 	}
 	
+	/**sets the channel label*/
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
+	/**returns the channel color*/
 	public Color getColor() {
 		return originalLutCol;
 	}
 
+	/**sets the channel color*/
 	public void setColor(Color originalLutCol) {
 		this.originalLutCol = originalLutCol;
 	}
 
+	/**if the original stack index containing a given channel panel is stored,
+	 * this returns it*/
 	public int getOriginalStackIndex() {
 		return originalStackIndex;
 	}
 
-	
+	/**stores the original stack index containing a given channel */
 	public void setOriginalStackIndex(int originalStackIndex) {
 		this.originalStackIndex = originalStackIndex;
 	}
 
+	/**returns the channel index for this channel entry, Channel 1, 2, 3, 4 ...*/
 	public int getOriginalChannelIndex() {
 		return originalChannelIndex;
 	}
 
+	/**sets the channel index for this channel entry, Channel 1, 2, 3, 4 ...*/
 	public void setOriginalChannelIndex(int originalChannelIndex) {
 		this.originalChannelIndex = originalChannelIndex;
 	}
 
+	/**return an additional annotation for the channel*/
 	public String getAdditionalString() {
 		return additional;
 	}
-
+	/**sets an Additional annotation for the channel*/
 	public void setAdditionalString(String additional) {
 		this.additional = additional;
 	}
 	
-	/**Getter and setter methods for channel names. not updated properly when channels swap*/
+	/**setter methods for channel names. not updated when channels swap is performed on the source image*/
 	public void setRealChannelName(String realChannelName) {
 		this.realChannelName=realChannelName;
 		
 	}
+	/**Getter methods for channel names. not updated when channels swap is performed on the source image*/
 	public String getRealChannelName() {
 		return realChannelName;
 	}

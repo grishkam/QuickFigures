@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package utilityClasses1;
 
 import java.awt.geom.Point2D;
@@ -54,16 +59,17 @@ public class NumberUse {
 		
 	}
 	
+	/**returns the largest number in the array
+	 * always returns either a positive number or 0*/
 	public static double findMax(ArrayList<Double> d) {
-		double closest=0;
-		
+		double output=0;
 		for(Double numb: d){
-			if (numb>closest)
+			if (numb!=null&&numb>output)
 			{
-				closest=numb;
+				output=numb;
 			}
 		}
-		return closest;
+		return output;
 		
 	}
 	
@@ -92,6 +98,7 @@ public class NumberUse {
 		for (int i: i1) {output.add(i); }
 	}
 	
+	/**Based on the content of a string, returns an array of inegers*/
 	public static  int[] intArrayFromString1(String st) {
 		if (st.toLowerCase().contains("x")) { 
 			return intArrayFromFormulaX(st);

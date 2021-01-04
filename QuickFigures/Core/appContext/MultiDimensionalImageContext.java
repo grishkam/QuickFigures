@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package appContext;
 
 import java.util.ArrayList;
@@ -24,14 +29,18 @@ import multiChannelFigureUI.MultiChannelDisplayCreator;
    A programmer may implements this interface and set the CurrentAppContext
    to an instance of his implementation. As of composing this, there is an ImageJ implementation*/
 public interface MultiDimensionalImageContext {
+	
+	/**returns the system for creating multi dimensional images*/
   public MultiChannelDisplayCreator getMultichannelOpener();
-  
   public MultiChannelDisplayCreator createMultichannelDisplay();
  
+  /**returns a list of all multidimensional images that are open in their own windows*/
   public ArrayList< MultiChannelImage> getallVisibleMultichanal();
   
+  /**Returns the active multi-dimensional image if one is present*/
   public MultiChannelImage getCurrentMultichanal();
 
+  /**returns the default save directory for multidimensional images*/
   public String getDefaultDirectory();
   
   

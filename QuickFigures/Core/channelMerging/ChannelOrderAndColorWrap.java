@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.awt.Color;
 
-/**interface for reordering the channels of a multichannel image*/
+/**interface for reordering the channels of a multichannel image
+ * or reordering their colors*/
 public interface ChannelOrderAndColorWrap {
 
 	/**Swaps the channel at position a with that at position b*/

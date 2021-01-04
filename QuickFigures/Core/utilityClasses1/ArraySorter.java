@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,17 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package utilityClasses1;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
-import utilityClassesForObjects.Hideable;
-import utilityClassesForObjects.Mortal;
-import utilityClassesForObjects.Selectable;
+import locatedObject.Hideable;
+import locatedObject.Mortal;
+import locatedObject.Selectable;
 
 /**contains a variety of useful methods that work on ArrayLists
   The method names a highly self explanatory */
@@ -31,7 +35,7 @@ public class ArraySorter<ItemType> {
 	
 	private Random randy=null;
 
-	
+	/**swaps the locations of two items*/
 	public void swapObjectPositionsInArray(ItemType i1, ItemType i2, ArrayList<ItemType> array) {
 		int ind1 = array.indexOf(i1);
 		int ind2 = array.indexOf(i2);
@@ -41,6 +45,7 @@ public class ArraySorter<ItemType> {
 		
 	}
 	
+	/**returns a random item from the array*/
 	public ItemType getRandom(ArrayList<ItemType> th) {
 		return th.get(Math.abs(this.getRandy().nextInt())%th.size());
 	}
@@ -143,16 +148,7 @@ public class ArraySorter<ItemType> {
 		
 	}
 
-
-	public void swapObjectPositionsInArray(ItemType i1,
-			ItemType i2, LinkedList<ItemType> array) {
-		int ind1 = array.indexOf(i1);
-		int ind2 = array.indexOf(i2);
-		if (ind1<0||ind2<0) return;
-		array.set(ind1, i2);
-		array.set(ind2, i1);
-	}
-	
+	/**returns a sublist with only the items of the given classes*/
 	public ArrayList<ItemType> getThoseOfClass(ArrayList<ItemType> array, Class<?>... c) {
 		ArrayList<ItemType> output = new ArrayList<ItemType>();
 		for(ItemType a: array) {
@@ -161,23 +157,7 @@ public class ArraySorter<ItemType> {
 		return output;
 	}
 	
-/**
-	public ArrayList<ItemType> getThoseThatWrapObjectClass(ArrayList<ItemType> array, Class<?>... c) {
-		ArrayList<ItemType> output = new ArrayList<ItemType>();
-		for(ItemType a: array) {
-			if (wrapsClass(a, c)) output.add(a);
-		}
-		return output;
-	}
-	
-	private boolean wrapsClass(ItemType a, Class<?>[] c) {
-		if (a instanceof ObjectWrapper) {
-			ObjectWrapper<?> o=(ObjectWrapper<?>) a;
-			if (isOfClass(o.getObject(), c)) return true;
-			
-		}
-		return false;
-	}*/
+
 
 	/**counts the number of objects in array that are of class c*/
 	public static int getNOfClass(ArrayList<?> array, Class<?>... c) {
@@ -188,6 +168,9 @@ public class ArraySorter<ItemType> {
 		return i;
 	}
 	
+	/**replaces item with a list of items
+	 * @param array the list being editied
+	 * @param a the item being removed*/
 	public void replace(ArrayList<ItemType> array, ItemType a,ArrayList<ItemType> b ) {
 		int i = array.indexOf(a);
 		array.remove(a);
@@ -249,6 +232,7 @@ public class ArraySorter<ItemType> {
 		return lin2;
 	}
 	
+	/**moves the item backward*/
 	public void moveItemBackward(	ItemType lin, ArrayList<ItemType> t) {
 		int index = t.indexOf(lin);
 		int index2=index-1;
@@ -275,15 +259,7 @@ public class ArraySorter<ItemType> {
 		}
 	}
 	
-	public ArrayList<ItemType> getThosePicked(ArrayList<ItemType> input, ItemPicker p) {
-		ArrayList<ItemType> deads = new ArrayList<ItemType> ();
-		for(ItemType i: input) {
-			if (p.isDesirableItem(i) ) deads.add( i);
-		}
-		
-		return deads;
-	}
-	
+	/**removes any items of class c from the array*/
 	public static void removeThoseOfClass(ArrayList<?> arr, Class<?> c) {
 		if (c==null||arr==null) return;
 		ArrayList<Object> deads = new ArrayList<Object> ();
@@ -295,6 +271,7 @@ public class ArraySorter<ItemType> {
 		}
 	}
 	
+	/**removes any items that are not of class c from the array*/
 	public static void removeThoseNotOfClass(ArrayList<?> arr, Class<?> c) {
 		if (c==null||arr==null) return;
 		ArrayList<Object> deads = new ArrayList<Object> ();
@@ -306,6 +283,7 @@ public class ArraySorter<ItemType> {
 		}
 	}
 	
+	/**removes any mortal items that are set to 'dead'*/
 	public static void removeDeadItems(ArrayList<?> arr) {
 		ArrayList<Mortal> deads = new ArrayList<Mortal> ();
 		for(Object i:arr) {
@@ -316,7 +294,8 @@ public class ArraySorter<ItemType> {
 		}
 	}
 	
-	public static void removehideableItems(ArrayList<?> arr) {
+	/**removes hidden items from the list*/
+	public static void removeHiddenItemsFrom(ArrayList<?> arr) {
 		ArrayList<Hideable> deads = new ArrayList<Hideable> ();
 		if(arr==null) return;
 		for(Object i:arr) {
@@ -373,6 +352,7 @@ public class ArraySorter<ItemType> {
 	}
 
 
+	/**returns a random */
 	public synchronized Random getRandy() {
 		if (randy==null)
 			randy=new  	SecureRandom();

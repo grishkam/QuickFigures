@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.Icon;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicTools.GraphicTool;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicGroup;
@@ -31,9 +31,9 @@ import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import icons.IconWrappingToolIcon;
+import locatedObject.LocatedObject2D;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.PathEditUndo;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**a tool that modifies the clicked pathgraphic*/
 public class PathReflectTool extends GraphicTool {
@@ -111,7 +111,7 @@ public class PathReflectTool extends GraphicTool {
 		}
 	}
 	
-public void onRelease(ImageWrapper imageWrapper, LocatedObject2D roi2) {
+public void onRelease(ImageWorkSheet imageWrapper, LocatedObject2D roi2) {
 	
 			
 		getImageClicked().getOverlaySelectionManagger().setSelectionstoNull();

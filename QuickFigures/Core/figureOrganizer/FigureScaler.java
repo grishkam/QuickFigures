@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.Scales;
 import messages.ShowMessage;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 import undo.UndoScalingAndRotation;
-import utilityClassesForObjects.Scales;
 
 /**performs scaling operations on entire figures*/
 public class FigureScaler {
@@ -49,7 +49,7 @@ public class FigureScaler {
 		double factor=650.00/(item.getBounds().width+item.getBounds().x);
 		
 		double idealPanelPixelDensity = 300.0;
-		double [] factors= new double []{ idealPanelPixelDensity/200, idealPanelPixelDensity/150, idealPanelPixelDensity/100, idealPanelPixelDensity/ImageDPIHandler.getStandardDPI(), idealPanelPixelDensity/50};
+		double [] factors= new double []{ idealPanelPixelDensity/200, idealPanelPixelDensity/150, idealPanelPixelDensity/100, idealPanelPixelDensity/ImageDPIHandler.getInchDefinition(), idealPanelPixelDensity/50};
 		for (int i=0; i<factors.length; i++) {
 		    if (factor<factors[i]&&i>0)  {
 		    	factor=factors[i-1];

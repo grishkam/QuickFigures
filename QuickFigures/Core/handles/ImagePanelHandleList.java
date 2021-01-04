@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import utilityClassesForObjects.RectangleEdges;
+import locatedObject.RectangleEdges;
 
 /**A set of handles for editing of a user selected image*/
 public class ImagePanelHandleList extends SmartHandleList {

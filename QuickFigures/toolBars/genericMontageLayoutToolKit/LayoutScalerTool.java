@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,13 +31,13 @@ import icons.IconSet;
 import layout.BasicObjectListHandler.LocatedObjectFilter;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
+import locatedObject.LocatedObject2D;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.LocatedObject2D;
 
 public class LayoutScalerTool extends Object_Mover {
 	{super.bringSelectedToFront=true; 

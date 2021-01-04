@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdapters;
 
 import java.awt.Component;
@@ -59,10 +64,7 @@ public interface CanvasMouseEvent extends Serializable {
 	/**Returns the LayerSelection*/
 	LayerSelector getSelectionSystem();
 
-	/**Some implementations have a channel, slice and frame*/
-	int getClickedSlice();
-	int getClickedFrame();
-	int getClickedChannel();
+	
 
 	/**returns the mouse event information*/
 	java.awt.event.MouseEvent getAwtEvent();

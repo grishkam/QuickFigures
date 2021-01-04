@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelTextGraphic;
 import figureOrganizer.FigureLabelOrganizer.ColumnLabelTextGraphic;
 import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
@@ -30,13 +30,13 @@ import layout.BasicObjectListHandler;
 import layout.PanelContentExtract;
 import layout.PanelLayout;
 import layout.BasicObjectListHandler.LocatedObjectFilter;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
+import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 
 
 /**This is a form of montage editor that I created as a general class to be adaptable to other 
@@ -97,7 +97,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 	}
 	
 	/**takes the objects in a particular panel and reverses the cutPanelContent method above*/
-	void pastePanelContents(ImageWrapper imp, Rectangle2D r, PanelContentExtract p) {
+	void pastePanelContents(ImageWorkSheet imp, Rectangle2D r, PanelContentExtract p) {
 	
 		getObjectHandler().setObjectsIntoPanelX(p.getObjectList(),imp, r);
 	}
@@ -212,8 +212,8 @@ public class GenericMontageEditor implements LayoutSpaces {
 	}
 	 /**Enlarges area2 to include the items attached to the given object*/
 	protected void expandForAttachedItems(Area area2, LocatedObject2D rObject) {
-		if (rObject instanceof TakesLockedItems) {
-			  TakesLockedItems roi2=(TakesLockedItems) rObject;
+		if (rObject instanceof TakesAttachedItems) {
+			  TakesAttachedItems roi2=(TakesAttachedItems) rObject;
 			  for (LocatedObject2D item: roi2.getLockedItems()) {
 				  
 				 area2.add(new Area(item.getBounds()));

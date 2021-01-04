@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,10 +40,10 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import locatedObject.Hideable;
+import locatedObject.RainbowPaintProvider;
+import locatedObject.Selectable;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.Hideable;
-import utilityClassesForObjects.RainbowPaintProvider;
-import utilityClassesForObjects.Selectable;
 
 /**This class defines a handle that the user can drag to freely edit objects.
    most handles that the user sees are instances of this class. contains the basic methods

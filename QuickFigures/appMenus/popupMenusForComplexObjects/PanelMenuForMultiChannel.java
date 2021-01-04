@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import iconGraphicalObjects.ChannelUseIcon;
 import standardDialog.StandardDialog;
 import undo.PanelManagerUndo;
 
-public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
+public class PanelMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 
 	
 	private PanelManager panelManager;
@@ -78,7 +78,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 					);
 			}
 			
-		}.createJMenuItem("Change Panel Pixel Density (Scale factor)"));
+		}.createJMenuItem("Re-Set Pixel Density"));
 	}
 	
 	SmartMenuItem2 createImagePanelMenuItem(JMenu  thi) {
@@ -221,7 +221,7 @@ public class PanelMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 	shows the advanced channel use dialog
 	 */
 	public void showAdvancedChannelUse() {
-		AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI( panelManager, man);
+		AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI( panelManager, labelManager);
 		
 		distpla.setVisible(true);
 	}

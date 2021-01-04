@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import icons.IconSet;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutEditorDialogs;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
@@ -37,7 +38,6 @@ import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 import undo.UndoSnappingChange;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
 
 public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		ActionListener {

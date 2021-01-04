@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,11 +31,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
 import graphicActionToolbar.CurrentFigureSet;
+import locatedObject.RectangleEdges;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.MenuSupplier;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.RectangleEdges;
 
 /**this will generate working popup menus from the annotated methods in
   an object. I wrote it because I wanted to sometimes write the 

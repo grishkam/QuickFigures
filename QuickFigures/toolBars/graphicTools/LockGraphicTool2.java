@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,23 +27,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import handles.SmartHandle;
 import imageDisplayApp.KeyDownTracker;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.TakesAttachedItems;
 import undo.CombinedEdit;
 import undo.UndoManagerPlus;
 import undo.UndoMoveItems;
 import undo.UndoSnappingChange;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A tool for moving attached items. no longer included in the toolbars but the methods
  * in this class are accessed via handles that can be clicked on without the use of this tool*/
 public class LockGraphicTool2 extends LockGraphicTool {
 	protected LocatedObject2D inside;
-	protected TakesLockedItems lockTaker;
+	protected TakesAttachedItems lockTaker;
 	private UndoSnappingChange undosnap;
 	private UndoMoveItems undoMove;
 	boolean alwaysFine=false;
@@ -53,7 +53,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 	}
 	
 
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		
 		
 		
@@ -86,7 +86,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		return undoer;
 	}
 	
-	public void onRelease(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onRelease(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		if (lockTaker==null&&inside!=null) {
 			super.onRelease(gmp, roi2);
 			lockTaker=getLockContainterForObject(inside, getPotentialLockAcceptors(gmp));
@@ -157,7 +157,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 	}
 
 
-	public static void adjustPosition(int dragx, int dragy, TakesLockedItems lockTaker, LocatedObject2D inside) {
+	public static void adjustPosition(int dragx, int dragy, TakesAttachedItems lockTaker, LocatedObject2D inside) {
 		Rectangle lockbounds2 = lockTaker.getBounds();
 		adjustPosition(dragx, dragy, lockbounds2, inside);
 	}
@@ -230,7 +230,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					TakesLockedItems t=(TakesLockedItems) lockTaker;
+					TakesAttachedItems t=(TakesAttachedItems) lockTaker;
 					t.removeLockedItem(inside);
 					
 				}});
@@ -243,7 +243,7 @@ public class LockGraphicTool2 extends LockGraphicTool {
 		return null;
 	}
 	
-	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {}
+	protected boolean forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {return false;}
 	
 	
 	

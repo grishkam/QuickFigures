@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import java.awt.event.ActionEvent;
@@ -66,17 +71,18 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	/**A hashmap with menu commands and the objects that will execute them*/
 	HashMap<String, MenuItemForObj> isntalledMenuItems=new HashMap<String, MenuItemForObj>();
 	
+	
 	static ArrayList<MenuBarItemInstaller> installers=new ArrayList<MenuBarItemInstaller>();
 	
 	public static void addMenuBarItemInstaller(MenuBarItemInstaller mbi) {
 		installers.add(mbi);
 	}
 	
-	public JMenu imageMenu=setupImageMenu();
+	public JMenu imageMenu=setupEditMenu();
 	
 	
 	public MenuBarForApp() {
-		installItem(new NewCanvasDialog());
+		installItem(new NewWorksheet());
 		installItems(QuickFigureMaker.getMenuBarItems());
 		installItem(new GraphicSetSaver());
 		installItem(new TemplateUserMenuAction(true, false));
@@ -96,11 +102,11 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		
 		installItem(new TreeShower());
 		
-		installItem(new CanvasDialogResize());
-		installItem(new CanvasAutoResize() );
+		installItem(new CanvasDialogResize(true));
+		installItem(new CanvasAutoResize(true) );
 		installItem(new CanvasAutoTrim());
-		installItem(new CanvasAutoResize(CanvasAutoResize.slide) );
-		installItem(new CanvasAutoResize(CanvasAutoResize.page) );
+		installItem(new CanvasAutoResize(CanvasAutoResize.SLIDE_SIZE) );
+		installItem(new CanvasAutoResize(CanvasAutoResize.PAGE_SIZE) );
 		
 		installItem(new ZoomFit());
 		installItem(new ZoomFit(ZoomFit.OUT));
@@ -126,7 +132,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new DebugMenuItems(false));
 		installItem(new WindowDebugMenuItem());
 		
-	String figFormatPath="Image<Figure Format<";
+	String figFormatPath="Edit<Figure Format<";
 	ArrayList<TemplateUserMenuAction> templateMenu = TemplateUserMenuAction.createSeveral(figFormatPath);
 	for(TemplateUserMenuAction i: templateMenu) {
 		installItem(i);
@@ -188,9 +194,9 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 }
 	}
 	
-	
-	public JMenu setupImageMenu() {
-		JMenu output = new SmartJMenu("Image");
+	/**Creates the edit menu*/
+	public JMenu setupEditMenu() {
+		JMenu output = new SmartJMenu("Edit");
 		
 		return output;
 	}
@@ -215,7 +221,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		String delimiter="<";
 		
 		JMenu men2 = getOrCreateSubmenuOfPath(this, menuPath, delimiter);
-		
+		men2.setIcon(obj.getSuperMenuIcon());
 		men2.add(ji);
 		
 		} catch (Throwable t) {

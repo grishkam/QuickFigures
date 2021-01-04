@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package graphicalObjects;
 import java.io.Serializable;
 
 import graphicalObjects_Shapes.SimpleGraphicalObject;
-import utilityClassesForObjects.Named;
-import utilityClassesForObjects.ShowsOptionsDialog;
-import utilityClassesForObjects.Tagged;
+import locatedObject.Named;
+import locatedObject.ShowsOptionsDialog;
+import locatedObject.Tagged;
 
 public interface GraphicalObject extends SimpleGraphicalObject,Tagged, Serializable,Named, ShowsOptionsDialog, LayerSpecified {
 		

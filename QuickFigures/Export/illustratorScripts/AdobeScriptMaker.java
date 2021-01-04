@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import appContext.ImageDPIHandler;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import applicationAdapters.PixelWrapper;
 import graphicalObjects.FigureDisplayContainer;
 import logging.IssueLog;
@@ -52,7 +52,7 @@ public class AdobeScriptMaker {
 	
 
 
-	public  IllustratorDocRef makeRefForWrapper(ImageWrapper iw, boolean makenew) {
+	public  IllustratorDocRef makeRefForWrapper(ImageWorkSheet iw, boolean makenew) {
 		IllustratorDocRef d=new IllustratorDocRef();
 		
 		if (makenew)
@@ -74,7 +74,7 @@ public class AdobeScriptMaker {
 	
 	
 	
-	public void sendWrapperToills(ImageWrapper montage, boolean makenew) {
+	public void sendWrapperToills(ImageWorkSheet montage, boolean makenew) {
 		makeRefForWrapper(montage, makenew);
 		sentToIlls(montage,aref);
 	}

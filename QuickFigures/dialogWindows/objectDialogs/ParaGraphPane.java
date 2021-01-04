@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ import logging.IssueLog;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectEditListener;
 import standardDialog.ObjectInputTab;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextParagraph;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextParagraph;
 
 public class ParaGraphPane extends ObjectInputTab implements ActionListener, MouseListener {
 

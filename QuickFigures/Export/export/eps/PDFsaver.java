@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -34,11 +34,11 @@ import applicationAdapters.DisplayedImage;
 import export.svg.SVGsaver;
 import figureFormat.DirectoryHandler;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import messages.ShowMessage;
 import undo.CombinedEdit;
 import undo.UndoTextEdit;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**Class used for exporting figures to pdf file*/
 public class PDFsaver {

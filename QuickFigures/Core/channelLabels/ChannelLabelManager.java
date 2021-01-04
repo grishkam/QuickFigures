@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelLabels;
 
 import java.awt.GridBagConstraints;
@@ -35,16 +40,17 @@ import figureOrganizer.PanelListElement;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.AttachmentPosition;
+import messages.ShowMessage;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A class containing methods for adding, accessing, removing and editing the channel labels to a figure.
- * 
+ 
   */
 public class ChannelLabelManager implements Serializable {
 
@@ -215,8 +221,12 @@ public class ChannelLabelManager implements Serializable {
 	@MenuItemMethod(menuActionCommand = "chantype", menuText = "Merge Label Options", subMenuName="Channel Labels")
 	public void showChannelLabelPropDialog() {
 		ChannelLabelPropertiesDialog dia = new  ChannelLabelPropertiesDialog(this.getChannelLabelProp());
-		dia.setLabelItems(getPanelList().getChannelLabels());
-		
+		ArrayList<ChannelLabelTextGraphic> channelLabels = getPanelList().getChannelLabels();
+		dia.setLabelItems(channelLabels);
+		if(channelLabels.isEmpty()) {
+			ShowMessage.showMessages("this image does not have attached channel labels", "check the figure and try another image");
+			return;
+		}
 		JTabbedPane tabs = dialogForChannelEntries(getMultiChannel().getChannelEntriesInOrder()).getOptionDisplayTabs();
 		dia.getOptionDisplayTabs().addTab("Channel Names", tabs);
 		dia.showDialog();
@@ -270,6 +280,10 @@ public class ChannelLabelManager implements Serializable {
 	 * handled by this channel label manager*/
 	public void showEditAllChannelLabelsDialog() {
 		ArrayList<ChannelLabelTextGraphic> labels = this.getPanelList().getChannelLabels();
+		if(labels.isEmpty()) {
+			ShowMessage.showMessages("this image does not have attached channel labels", "check the figure and try another image");
+			return;
+		}
 		
 		mt = new MultiTextGraphicSwingDialog( labels, true);
 		

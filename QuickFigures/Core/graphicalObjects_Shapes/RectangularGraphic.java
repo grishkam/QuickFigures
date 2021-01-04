@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -39,15 +39,15 @@ import illustratorScripts.PathItemRef;
 import keyFrameAnimators.RectGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
 import layout.RetrievableOption;
+import locatedObject.BasicStrokedItem;
+import locatedObject.Fillable;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
+import locatedObject.ScalesFully;
+import locatedObject.ShowsOptionsDialog;
+import locatedObject.StrokedItem;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.Fillable;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.ScalesFully;
-import utilityClassesForObjects.ShowsOptionsDialog;
-import utilityClassesForObjects.StrokedItem;
 
 /**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog*/
 public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePositions, HasSmartHandles {

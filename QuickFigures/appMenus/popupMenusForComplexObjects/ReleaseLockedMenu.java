@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import javax.swing.undo.AbstractUndoableEdit;
 import channelLabels.ChannelLabelTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.LocatedObject2D;
+import locatedObject.AttachedItemList;
+import locatedObject.TakesAttachedItems;
 import undo.Edit;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A menu for choosing an attached item and removing it from the attached item list*/
 public class ReleaseLockedMenu extends SelectItemJMenu implements ActionListener{
@@ -35,17 +35,17 @@ public class ReleaseLockedMenu extends SelectItemJMenu implements ActionListener
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	TakesLockedItems lockbox;
+	TakesAttachedItems lockbox;
 
 	protected ReleaseLockedMenu(String st) {
 		super(st);
 	}
 	
-	public ReleaseLockedMenu(TakesLockedItems t, LockedItemList list) {
+	public ReleaseLockedMenu(TakesAttachedItems t, AttachedItemList list) {
 		this(t, list, "Release Attached Item");	
 		
 	}
-	public ReleaseLockedMenu(TakesLockedItems t, LockedItemList list, String st) {
+	public ReleaseLockedMenu(TakesAttachedItems t, AttachedItemList list, String st) {
 		this(st);
 		this.setName(st);
 		this.setText(st);
@@ -66,11 +66,11 @@ public class ReleaseLockedMenu extends SelectItemJMenu implements ActionListener
 
 	
 
-	public TakesLockedItems getLockbox() {
+	public TakesAttachedItems getLockbox() {
 		return lockbox;
 	}
 
-	public void setLockbox(TakesLockedItems lockbox) {
+	public void setLockbox(TakesAttachedItems lockbox) {
 		this.lockbox = lockbox;
 	}
 	

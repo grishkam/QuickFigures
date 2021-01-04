@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public class SVGOpener   extends BasicMenuItemForObj {
 			if (set==null) return null;
 			ImageWindowAndDisplaySet output = new ImageWindowAndDisplaySet(set);
 			
-			new CanvasAutoResize().performActionDisplayedImageWrapper(output);
+			new CanvasAutoResize(true).performActionDisplayedImageWrapper(output);
 			return output;
 	}
 	

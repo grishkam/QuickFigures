@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -60,11 +60,11 @@ import externalToolBar.ToolBarManager;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import includedToolbars.StatusPanel;
+import locatedObject.Mortal;
 import logging.IssueLog;
 import selectedItemMenus.CopyItem;
 import selectedItemMenus.ItemRemover;
 import ultilInputOutput.FileChoiceUtil;
-import utilityClassesForObjects.Mortal;
 
 /**The JFrame containing a canvas that figures are drawn inside.
  mouse actions on that canvas call methods form the toolbar so that the user may edit anything. */

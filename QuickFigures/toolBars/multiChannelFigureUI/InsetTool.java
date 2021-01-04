@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelImage;
@@ -42,6 +42,8 @@ import icons.InsetToolIcon;
 import imageDisplayApp.OverlayObjectManager;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnappingPanel;
@@ -54,8 +56,6 @@ import undo.UndoAddManyItem;
 import undo.UndoInsetDefinerGraphic;
 import undo.UndoLayoutEdit;
 import undo.UndoScalingAndRotation;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
@@ -109,7 +109,7 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
 	
 	
-public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	undo=new CombinedEdit();
 	
 	
@@ -128,7 +128,7 @@ public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
 		}
 	}
 	
-	public void onRelease(ImageWrapper imageWrapper, LocatedObject2D roi2) {
+	public void onRelease(ImageWorkSheet imageWrapper, LocatedObject2D roi2) {
 		
 		if (inset==null) return;
 		if (!inset.isValid()) {

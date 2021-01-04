@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,9 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package externalToolBar;
 import javax.swing.Icon;
 
+import icons.AcronymIcon;
 import icons.IconSet;
 
 
@@ -23,8 +29,8 @@ import icons.IconSet;
 /**A default tool that can be used as both space filler in an external toolset or */
 public class BlankTool<ImageType> extends  DummyTool<ImageType>{
 
-
-	private IconSet iconSet=new IconSet("icons/Blank.jpg", "icons/BlankPressed.jpg", "icons/Blank.jpg","icons/Blank.jpg","icons/Blank.jpg","icons/Blank.jpg", "icons/Blank.jpg");
+	/**An initial icon set*/
+	private IconSet iconSet=new AcronymIcon("_",0).generateIconSet();//;new IconSet("icons/Blank.jpg", "icons/BlankPressed.jpg", "icons/Blank.jpg","icons/Blank.jpg","icons/Blank.jpg","icons/Blank.jpg", "icons/Blank.jpg");
 
 	@Override
 	public Icon getToolImageIcon() {

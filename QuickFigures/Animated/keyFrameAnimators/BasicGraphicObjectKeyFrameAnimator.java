@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import animations.Animation;
 import animations.BasicKeyFrame;
 import animations.KeyFrameAnimation;
 import graphicalObjects.BasicGraphicalObject;
-import utilityClassesForObjects.Hideable;
+import locatedObject.Hideable;
 
 /**A simple implementation of animation interfaces that acts as a superclass for other classes*/
 public class BasicGraphicObjectKeyFrameAnimator implements Animation, KeyFrameAnimation {

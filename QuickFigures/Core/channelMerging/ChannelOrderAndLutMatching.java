@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,20 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.util.ArrayList;
 
 /**Sometimes, the channel order of different images
-  in the same figure will be different
+  in the same figure will be different. 
   This class contains code to reorder the channels of several images to match one another.
-  Also possible to match the colors and the display ranges of the channel*/
+  Also possible to match the colors and the display ranges of the channel.
+  */
 public class ChannelOrderAndLutMatching {
 
-	public static final int ORDER_ONLY=0;
-	public static final int lUT_ONLY=1;
-	public static final int ORDER_AND_COLOR=2;
-	public static final int DISPLAY_RANGE=3;
+	/**Contants for the diffent type of matching that can be done*/
+	public static final int ORDER_ONLY=0, lUT_ONLY=1, ORDER_AND_COLOR=2, DISPLAY_RANGE=3;
 	
 	/**returns a string describing what */
 	public String matchStrategy(int mode) {

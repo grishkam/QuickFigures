@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,14 +22,14 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 import imageDisplayApp.OverlayObjectManager;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdgePositions;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import storedValueDialog.StoredValueDilaog;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdgePositions;
 
 /**Tool used to draw a rectangular object on the figure*/
 public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
@@ -49,7 +49,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	}}
 	
 	/**what occurs when the mouse is pressed. Called from a method in the superclass*/
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		handleRectangularObject(gmp, roi2);
 	}
 	
@@ -59,7 +59,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 		return new RectangularGraphic(r);
 	}
 	
-	public void handleRectangularObject(ImageWrapper gmp, Object roi2) {
+	public void handleRectangularObject(ImageWorkSheet gmp, Object roi2) {
 				
 		RectangularGraphic currentRect;
 		establishMovedIntoOrClickedHandle(true);//if the user clicked a handle on an existing rectangle

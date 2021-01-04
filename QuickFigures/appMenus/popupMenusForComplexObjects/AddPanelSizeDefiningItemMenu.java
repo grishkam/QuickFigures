@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package popupMenusForComplexObjects;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import locatedObject.LocatedObject2D;
+import locatedObject.AttachedItemList;
+import locatedObject.TakesAttachedItems;
 import undo.UndoTakeLockedItem;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.TakesLockedItems;
 
 public class AddPanelSizeDefiningItemMenu extends ReleaseLockedMenu {
 
@@ -32,7 +32,7 @@ public class AddPanelSizeDefiningItemMenu extends ReleaseLockedMenu {
 	
 	private boolean remove=false;
 	
-	public AddPanelSizeDefiningItemMenu(TakesLockedItems items, LockedItemList list) {
+	public AddPanelSizeDefiningItemMenu(TakesAttachedItems items, AttachedItemList list) {
 		super(items, list);
 	}
 	

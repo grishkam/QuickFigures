@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package basicAppAdapters;
 
 import java.awt.Component;
@@ -23,7 +28,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.SelectedSetLayerSelector;
 import graphicalObjects.CordinateConverter;
 import selectedItemMenus.LayerSelector;
@@ -47,7 +52,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 	}
 	
 	public DisplayedImage getImageDispay() {return clickedFigureDisplay;}
-	public ImageWrapper getImage() {return clickedFigureDisplay.getImageAsWrapper();}
+	public ImageWorkSheet getImage() {return clickedFigureDisplay.getImageAsWrapper();}
 	
 	/**returns the cordinate of the clickpoint on the canvas*/
 	@Override
@@ -99,20 +104,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 	}
 	
 	
-	@Override
-	public int getClickedChannel() {
-		return 1;
-	}
 
-	@Override
-	public int getClickedFrame() {
-		return 1;
-	}
-
-	@Override
-	public int getClickedSlice() {
-		return 1;
-	}
 
 	@Override
 	public int mouseButton() {

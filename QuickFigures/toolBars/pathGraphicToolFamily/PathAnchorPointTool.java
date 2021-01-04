@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ import java.util.ArrayList;
 
 import graphicTools.GraphicTool;
 import graphicalObjects_Shapes.PathGraphic;
+import locatedObject.LocatedObject2D;
+import locatedObject.PathPoint;
 import objectDialogs.PathPointOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import undo.*;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.PathPoint;
 
 public class PathAnchorPointTool extends GraphicTool {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package undo;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.TakesLockedItems;
+import locatedObject.LocatedObject2D;
+import locatedObject.TakesAttachedItems;
 
 public class Edit {
 	public static AbstractUndoableEdit2 addItem(GraphicLayer parentLayer, ZoomableGraphic z ) {
@@ -61,7 +61,7 @@ public class Edit {
 		return output;
 	}
 	
-	public static AbstractUndoableEdit2 detachItem(TakesLockedItems t, LocatedObject2D target) {
+	public static AbstractUndoableEdit2 detachItem(TakesAttachedItems t, LocatedObject2D target) {
 		UndoTakeLockedItem undo = new UndoTakeLockedItem(t, target, true);
 		t.removeLockedItem(target);
 		return undo;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_Shapes.RectangleEdgeParameter;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import locatedObject.RectangleEdges;
 import standardDialog.StandardDialog;
 import undo.SimpleItemUndo;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.RectangleEdges;
 
 /**A handle that slides along the edge of a rectangular graphic*/
 public class RectangleEdgeHandle extends SmartHandle {

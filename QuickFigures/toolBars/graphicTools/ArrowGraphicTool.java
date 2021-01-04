@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import java.awt.geom.Point2D;
 
 import javax.swing.Icon;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import icons.TreeIconWrappingToolIcon;
-import utilityClassesForObjects.LocatedObject2D;
+import locatedObject.LocatedObject2D;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
 public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
@@ -69,7 +69,7 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	
 	
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	
 		if (getPrimarySelectedObject() instanceof ArrowGraphic) return;
 		int cx = getClickedCordinateX();

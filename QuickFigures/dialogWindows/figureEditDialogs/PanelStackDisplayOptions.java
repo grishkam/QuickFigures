@@ -176,7 +176,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			
 			}
 		if (this.panelCreationIncluded) {
-			this.add("Panel Level Scale", new NumberInputPanel("Panel Pixel Density",ImageDPIHandler.getStandardDPI()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
+			this.add("Panel Level Scale", new NumberInputPanel("Panel Pixel Density",ImageDPIHandler.getInchDefinition()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
 			this.add("mWidth",  new NumberInputPanel("Ideal Number Columns", ins.getIdealNumberOfColumns() ));
 			}
 	}
@@ -259,7 +259,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	protected void resizeCanvasToFit(MultichannelDisplayLayer dis) {
 		if (getCurrentImageDisplay()!=null) {
 			if (CanvasOptions.current.resizeCanvasAfterEdit)
-							new CanvasAutoResize().makeAllVisible(getCurrentImageDisplay());
+							new CanvasAutoResize(false).makeAllVisible(getCurrentImageDisplay());
 							FigureOrganizingLayerPane fo = FigureOrganizingLayerPane.findFigureOrganizer(dis);
 							if (fo!=null) {
 								 fo.fixLabelSpaces();
@@ -289,8 +289,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		
 		double theScale = this.getNumber("Panel Level Scale");
-		if(theScale<=0) theScale=ImageDPIHandler.getStandardDPI();
-		double panelLevelScale = ImageDPIHandler.getStandardDPI()/theScale;
+		if(theScale<=0) theScale=ImageDPIHandler.getInchDefinition();
+		double panelLevelScale = ImageDPIHandler.getInchDefinition()/theScale;
 		if (panelLevelScale<=0) 
 			{panelLevelScale=1;			}
 		

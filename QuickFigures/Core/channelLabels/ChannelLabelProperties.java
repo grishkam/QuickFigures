@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelLabels;
 
 import java.awt.Color;
@@ -23,9 +28,9 @@ import java.util.HashMap;
 import channelMerging.ChannelEntry;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 
 /**This class stores information that pertains to all of the channel labels*/
 public class ChannelLabelProperties implements Serializable{
@@ -98,13 +103,18 @@ public class ChannelLabelProperties implements Serializable{
 	}
 	
 
-	/**getter and setter method of the merge label style*/
+	/**getter method for the merge label style*/
 	public int getMergeLabelStyle() {return mergeLabelStyleOption;}
+	
+	/** setter method of the merge label style*/
 	public void setMergeLabelStyle(int mergeLabelTypeOption) {
 		this.mergeLabelStyleOption = mergeLabelTypeOption;
 	}
 	
+	/**return a code that determines what the content of the 'merge' label will be*/
 	public int getMergeTextOption() {return mergeTextContentOption;}
+	
+	/**sets the content of the 'merge' label */
 	public void setMergeTextOption(int mergeTextOption) {
 			this.mergeTextContentOption = mergeTextOption;
 		}
@@ -141,14 +151,17 @@ public class ChannelLabelProperties implements Serializable{
 		this.customMergeText=customMergeText;
 	}
 
+	/**returns the separator for single line channel labels*/
 	public String getCustomSeparator() {
 		return customSeparator;
 	}
 
+	/**Sets the separator for single line channel labels*/
 	public void setCustomSeparator(String customSeparator) {
 		this.customSeparator = customSeparator;
 	}
 	
+	/**Sets the separator for single line channel labels*/
 	public void setSeparatorText(String customSeparator) {
 		for(int i=0; i<separatorTexts.length; i++) {
 			String t=separatorTexts[i];

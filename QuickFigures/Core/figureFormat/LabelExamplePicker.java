@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.AttachmentPosition;
 import logging.IssueLog;
 import undo.AbstractUndoableEdit2;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A subclass of graphical item picker for labels.
   Includes/excludes text from its category based on the attachment position (row, column or panel).

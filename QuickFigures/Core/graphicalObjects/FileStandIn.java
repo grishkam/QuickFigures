@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import layersGUI.HasTreeLeafIcon;
+import locatedObject.PointsToFile;
+import locatedObject.ShowsOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.strings.InfoDisplayPanel;
-import utilityClassesForObjects.PointsToFile;
-import utilityClassesForObjects.ShowsOptionsDialog;
 
 /**A reference to a specific file. Allow the user to input a list of files into the JTree*/
 public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptionsDialog, PointsToFile {

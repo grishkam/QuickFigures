@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package graphicalObjects_LayoutObjects;
 
 import layout.plasticPanels.PlasticPanelLayout;
+import locatedObject.LocatedObject2D;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.PlasticPanelLayoutPanelMenu;
-import utilityClassesForObjects.LocatedObject2D;
 
 public class PlasticPanelLayoutGraphic extends SpacedPanelLayoutGraphic {
 

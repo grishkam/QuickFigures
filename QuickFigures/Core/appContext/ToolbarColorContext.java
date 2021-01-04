@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,16 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package appContext;
 
 import java.awt.Color;
 
-/**Interface that keeps track of a toolbar color, not presently used for any critical features
+/**Work in progress
+ * Interface that keeps track of a toolbar color, not presently used for any critical features
   but kept in the event it is needed to program later features*/
 public interface ToolbarColorContext {
 	
 	public Color getForeGroundColor() ;
-
-	
 	public Color getBackGroundColor() ;
 }

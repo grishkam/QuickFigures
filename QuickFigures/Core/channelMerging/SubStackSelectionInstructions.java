@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.io.Serializable;
@@ -25,6 +30,8 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	
 	public static final int ALL_=0, SINGLE_=1, MULTIPLE_SELECTED_=2;
 
 	
@@ -114,7 +121,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 	}
 	
 	/**
-	
+	returns true if all of the numbers in the list are 0 or below
 	 */
 	private boolean allZero(ArrayList<Integer> i) {
 		for(Integer number:i) {
@@ -326,7 +333,9 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 		
 	}
 
-	/**Alters the given CSF location to match the target slice/frame, so that is shows the stack index targeted */
+	/**Alters the given CSF location to match the target slice/frame, 
+	 * so that it reflects stack index targeted by this selection instructions
+	 * if the instructions target more than one slice/frame, does nothing */
 	public abstract void setupLocation(CSFLocation d);
 
 
@@ -341,8 +350,7 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 
 
 	/**
-	 * @param newFrame
-	 * @return
+	  creates a new frame use instructions
 	 */
 	public static FrameUseInstructions createFrameUseInstructions(ArrayList<Integer> newFrame) {
 		FrameUseInstructions n = new  FrameUseInstructions(null);

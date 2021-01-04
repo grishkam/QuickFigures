@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ import java.awt.geom.Point2D;
 import applicationAdapters.ToolbarTester;
 import handles.SmartHandleList;
 import imageDisplayApp.ImageWindowAndDisplaySet;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
 
 /**A blob shape with a number of lobes that can be edited individual by dragging points*/
 public class ComplexBlobShape extends BlobShape {

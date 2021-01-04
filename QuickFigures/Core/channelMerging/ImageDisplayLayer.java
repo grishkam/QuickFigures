@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.awt.Rectangle;
@@ -29,14 +34,19 @@ import graphicalObjects_LayerTypes.GraphicLayer;
  * and a list of panels that display various parts of that image*/
 public interface ImageDisplayLayer extends GraphicLayer {
 	
-	/**Returns the source stack*/
+	/**returns the titble of the image being displayed*/
 	public String getTitle();
-	public MultiChannelImage getMultiChannelImage() ;
+	
+	
 	
 	/**getter method for the panel manager */
 	public PanelManager getPanelManager();
+	/**getter method for the channel label manager */
 	public ChannelLabelManager getChannelLabelManager();
+	
+	/**returns the list of panels*/
 	public PanelList getPanelList();
+	/**sets the list of panels*/
 	public void setPanelList(PanelList stack);
 	
 	/**updates the images in each panel based on the source image, the display colors and display ranges*/
@@ -53,13 +63,20 @@ public interface ImageDisplayLayer extends GraphicLayer {
 	public Rectangle getBoundOfUsedPanels();
 	
 
-	/**getter and setter methods for the crop, rotation and scaling*/
+	/**gets the scale factor that was applied to the source image*/
 	public double getPreprocessScale();
+	
+	/**sets the scale factor that is applied to the source image*/
 	public MultiChannelImage setPreprocessScale(double s);
+	
+/**Information about the crop, rotation and scaling, that was applied to the original image*/
 	PreProcessInformation getPreProcess();
 	
-	/**returns the slot that stores the source image*/
+	/**returns the slot that stores the source image. the slot should contain both the processed and original forms*/
 	MultiChannelSlot getSlot();
+	
+	/**Returns the source stack. not the original source but the processed one*/
+	public MultiChannelImage getMultiChannelImage() ;
 	
 	
 

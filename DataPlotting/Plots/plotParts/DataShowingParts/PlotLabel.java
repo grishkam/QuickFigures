@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import java.awt.geom.Rectangle2D;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import locatedObject.AttachmentPosition;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class PlotLabel extends ComplexTextGraphic {
 

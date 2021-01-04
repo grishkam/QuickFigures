@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,17 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package imageMenu;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.BasicMenuItemForObj;
 import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
 import undo.CanvasResizeUndo;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**A menu bar item that resizes the canvas to precisely the size at which the objects fit.*/
 public class CanvasAutoTrim extends BasicMenuItemForObj{
@@ -39,7 +44,7 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 	}
 
 	public void trimCanvas(DisplayedImage diw) {
-		ImageWrapper iw = diw.getImageAsWrapper();
+		ImageWorkSheet iw = diw.getImageAsWrapper();
 		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		ArrayList<LocatedObject2D> list = iw.getLocatedObjects();
@@ -67,13 +72,12 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 
 	@Override
 	public String getNameText() {
-		
 		return "Trim Canvas To Fit Obects";
 	}
 
 	@Override
 	public String getMenuPath() {
-		return "Image<Canvas";
+		return "Edit<Canvas";
 	}
 	
 

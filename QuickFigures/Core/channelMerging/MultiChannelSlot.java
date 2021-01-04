@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.io.Serializable;
@@ -27,21 +32,16 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	public MultiChannelImage getMultichannelImage() ;
 	
 	
-	
+	/**options for storing an image*/
 	static final int lOAD_FROM_SAVED_FILE=1,  LOAD_EMBEDDED_IMAGE=0;
-	
-	
 	static final String[] retrivalOptions=new String[] {"load from embedded (if failed try File)", "load from file (if fail, try embedded)", "Look in working directory"};
-
-
-	
-
 	public int getRetrieval() ;
 	public void setRetrival(int i);
 
 	
-			
+	/**Adds a listener*/		
 	public void addMultichannelUpdateListener(MultiChannelUpdateListener lis);
+	/**Removes a listener*/	
 	public void removeMultichannelUpdateListener(MultiChannelUpdateListener lis);
 	
 
@@ -59,6 +59,7 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	public void hideImage();
 	/**hides the image. does not ask the user to save*/
 	public void hideImageWihtoutMessage();
+	/**called when the user has chosen to close the image without a prompt to save it*/
 	public void kill();
 	
 	/**returns the cropping and scaling applied*/

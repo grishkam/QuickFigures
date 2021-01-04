@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -41,14 +41,6 @@ import standardDialog.graphics.GraphicDisplayComponent;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoScaleBarEdit;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.ScaleInfo;
-import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.AttachmentPosition;
 import applicationAdapters.CanvasMouseEvent;
 import export.pptx.BarGraphicToOffice;
 import export.pptx.OfficeObjectConvertable;
@@ -71,6 +63,14 @@ import handles.miniToolbars.ScaleBarActionHandleList;
 import icons.IconSet;
 import illustratorScripts.ArtLayerRef;
 import layersGUI.HasTreeLeafIcon;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.PathPointList;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
+import locatedObject.ScaleInfo;
+import locatedObject.ScalededItem;
+import locatedObject.Scales;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;

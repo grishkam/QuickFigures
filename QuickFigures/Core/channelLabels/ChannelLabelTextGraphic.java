@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelLabels;
 
 import java.awt.Color;
@@ -27,18 +32,18 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import includedToolbars.StatusPanel;
+import locatedObject.ColorDimmer;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.ComplexTextGraphicSwingDialog;
-import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
+import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import popupMenusForComplexObjects.TextSelectionMenu;
 import standardDialog.StandardDialog;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 import undo.EditListener;
-import utilityClassesForObjects.ColorDimmer;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
 
 /**A special category of label that changes based on the options
   set in channel label properties and the channel colors*/
@@ -166,6 +171,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		this.setParagraph(paragraph);
 	}
 
+	/**returns true if the target panel is a merge panel*/
 	public boolean isThisMergeLabel() {
 		return getPannelType()==PanelListElement.MERGE_IMAGE_PANEL;
 	}
@@ -248,11 +254,14 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	}
 	
 	
-
+	/**returns the channel label properties object for this label
+	 * Multiple labels will share the same label properties*/
 	public ChannelLabelProperties getChannelLabelProperties() {
 		return ChannelLabelproperties;
 	}
 
+	/**Sets the channel label properties object for this label
+	 * Multiple labels will share the same label properties*/
 	public void setChannelLabelproperties(ChannelLabelProperties channelLabelproperties) {
 		ChannelLabelproperties = channelLabelproperties;
 	}
@@ -263,10 +272,10 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		return dia;
 	}
 	
+	/**Shows an options dialog*/
 	public void showOptionsDialog() {
 		getOptionsDialog().showDialog();
-		//TextLineDialogForChenLabel.showMultiTabDialogDialogss(chanEn, ChannelLabelproperties, null).showDialog();;
-	}
+		}
 
 	/**replaces the split up segment call of the superclass.  also splits of the text segment but
 	  also updates the text stored within the entries*/
@@ -339,7 +348,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		/**finds the Multichannel display in the hierarchy*/
 		GraphicLayer parentLayer = this.getParentLayer();
 		
-		MenuForChannelLabelMultiChannel chanLabelMenu=null;
+		MenuForMultiChannelDisplayLayer chanLabelMenu=null;
 		
 		if (parentLayer instanceof MultichannelDisplayLayer) {
 			MultichannelDisplayLayer m=(MultichannelDisplayLayer) parentLayer;
@@ -348,7 +357,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		else {
 			PanelGraphicInsetDefiner ins = PanelGraphicInsetDefiner.findInsetWith(this);
 			if(ins!=null) {
-				chanLabelMenu = new MenuForChannelLabelMultiChannel("Channel Labels", ins.getSourceDisplay(), ins.getPanelManager().getPanelList(), ins.getChannelLabelManager());
+				chanLabelMenu = new MenuForMultiChannelDisplayLayer("Channel Labels", ins.getSourceDisplay(), ins.getPanelManager().getPanelList(), ins.getChannelLabelManager());
 			}
 		}
 		
@@ -392,13 +401,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 				}
 			}
 		}
-		/**
-		private void updateColor(ChannelEntry c2) {
-			if (c2.getRealChannelName().equals(channel.getRealChannelName())) {
-				channel.setColor(c2.getColor());
-			}
-					updateColor();
-		}*/
+	
 
 		public void updateColor() {
 			Color c = channel.getColor();

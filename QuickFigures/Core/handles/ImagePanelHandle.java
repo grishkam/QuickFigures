@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -34,12 +34,12 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.OverlayObjectManager;
 import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
+import locatedObject.RectangleEdges;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.RectangleEdges;
 
 /**A class for the  handles on an ImagePanel. */
 public class ImagePanelHandle extends SmartHandle {

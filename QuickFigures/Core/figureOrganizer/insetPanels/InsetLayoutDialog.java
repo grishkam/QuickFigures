@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import figureOrganizer.PanelList;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
+import locatedObject.AttachmentPosition;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnappingPanel;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
-import utilityClassesForObjects.AttachmentPosition;
 
 
 	

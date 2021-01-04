@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import iconGraphicalObjects.ChannelUseIcon;
 
-public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
+public class ImageMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 
 	public ImageMenuForMultiChannel(String name, MultichannelDisplayLayer panel,
 			PanelList list) {
@@ -68,18 +68,7 @@ public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 		
 	}
 	
-	private SmartMenuItem2 createSetScaleItem() {
-		SmartMenuItem2 out=new SmartMenuItem2("Set Scale (Pixel Size)") {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void onAction() {
-				new SetImageScale(display). showPixelSizeSetDialog();
-			}
-		};
-		this.add(out);
-		return out;
-		
-	}
+
 
 
 	
@@ -97,21 +86,6 @@ public class ImageMenuForMultiChannel extends MenuForChannelLabelMultiChannel {
 		return out;
 	}
 	
-	SmartMenuItem2 createCropOption() {
-		SmartMenuItem2 out=new SmartMenuItem2("Re-Crop") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onAction() {
-				addUndo(
-						FigureOrganizingSuplierForPopup.showRecropDisplayDialog(display, null)
-						);
-			}
-			
-		};
-		this.add(out);
-		return out;
-	}
 	
 	
 	

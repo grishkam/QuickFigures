@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import javax.swing.JMenuItem;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import externalToolBar.DragAndDropHandler;
 import icons.IconSet;
 import imageDisplayApp.CanvasOptions;
@@ -36,10 +36,10 @@ import imageMenu.CanvasAutoResize;
 import includedToolbars.ObjectToolset1;
 import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import undo.UndoManagerPlus;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**A simple implementation of the ToolBit interface that does not do
   anything in particular but is used as a superclass for other tool bits*/
@@ -129,7 +129,7 @@ public class BasicToolBit implements ToolBit {
 	}
 
 	
-	public ImageWrapper getImageClicked() {
+	public ImageWorkSheet getImageClicked() {
 		if (toolCore==null) {
 			IssueLog.log("no tool core!!!");
 		}
@@ -279,7 +279,7 @@ public class BasicToolBit implements ToolBit {
 		return getToolCore().getMouseYdrag();
 	}
 	
-	public ImageWrapper currentlyInFocusWindowImage() {
+	public ImageWorkSheet currentlyInFocusWindowImage() {
 		return this.getToolCore().currentlyInFocusWindowImage();
 	}
 
@@ -336,7 +336,7 @@ public class BasicToolBit implements ToolBit {
 	
 	protected void resizeCanvas(DisplayedImage wrap) {
 		
-				new CanvasAutoResize().performActionDisplayedImageWrapper(wrap);
+				new CanvasAutoResize(false).performActionDisplayedImageWrapper(wrap);
 	}
 
 	@Override
@@ -408,9 +408,9 @@ public class BasicToolBit implements ToolBit {
 	
 	
 	/**returns the object that may be clicked on at a given point*/
-	public LocatedObject2D getObjectAt(ImageWrapper click, int x, int y) {
+	public LocatedObject2D getObjectAt(ImageWorkSheet click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjecthandler().getAllClickedRoi(click, x, y, Object.class);
-		ArraySorter.removehideableItems(therois);//removes hidden items
+		ArraySorter.removeHiddenItemsFrom(therois);//removes hidden items
 		return new ArraySorter<LocatedObject2D>().getFirstNonNull(therois);
 		
 	}

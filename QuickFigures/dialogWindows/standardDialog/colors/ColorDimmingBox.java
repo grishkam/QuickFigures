@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
-import utilityClassesForObjects.ColorDimmer;
+import locatedObject.ColorDimmer;
 
 /**A JCombo box designed for the user to select a color dimming effect
  * see ColorDimmer class for more information*/

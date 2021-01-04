@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 
@@ -23,7 +28,7 @@ import figureOrganizer.PanelListElement;
  * that can be displayed in a panel*/
 public interface ChannelMerger {
 	
-	/**Merges the channels listed in entry to generate a merged RGB.
+	/**Merges the channels listed in each entry to generate a merged RGB.
 	  If there is only one channel, the second argument indicates whether to create a greyscale*/
 	public PixelWrapper generateMergedRGB( PanelListElement entry, int ChannelsInGrayScale);
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import javax.swing.Icon;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import locatedObject.AttachmentPosition;
 import standardDialog.graphics.GraphicObjectDisplayBasic;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A class for rendering of a cropping icon*/
 public class CropIconGraphic extends GraphicGroup {

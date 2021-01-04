@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,10 +27,10 @@ import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import iconGraphicalObjects.IconTraits;
 import icons.IconWrappingToolIcon;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
 import standardDialog.graphics.GraphicDisplayComponent;
 import storedValueDialog.ReflectingFieldSettingDialog;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
 
 /**A tool for adding and removing points from a PathGraphic. @see PathGraphic*/
 public class AddRemoveAnchorPointTool extends PathAnchorPointTool {

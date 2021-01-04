@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -90,7 +90,9 @@ public class ImagePanelMenu extends LockedItemMenu {
 		
 	addShapeSubmenu();
 	
-	add(new ObjectAction<ImagePanelGraphic>(c) {
+	SmartJMenu expert = new SmartJMenu("Expert Options");
+	add(expert);
+	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {item.showCroppingDialog();}	
 }.createJMenuItem("Crop Only This Panel"));

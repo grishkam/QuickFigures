@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -48,7 +48,13 @@ import illustratorScripts.CompoundPathItemRef;
 import illustratorScripts.IllustratorObjectRef;
 import illustratorScripts.PathItemRef;
 import keyFrameAnimators.PathGraphicKeyFrameAnimator;
+import locatedObject.BasicStrokedItem;
+import locatedObject.PathObject;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
+import locatedObject.ScalesFully;
 import menuUtil.PopupMenuSupplier;
+import objectCartoon.ShapeMaker;
 import popupMenusForComplexObjects.PathGraphicMenu;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
@@ -56,12 +62,6 @@ import undo.PathEditUndo;
 import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.PathObject;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.ScalesFully;
-import utilityClassesForObjects.ShapeMaker;
 
 /**A shape graphic for an arbitrary shape defined by a Path2D
  * a curved path or shape. can contain any number of points*/

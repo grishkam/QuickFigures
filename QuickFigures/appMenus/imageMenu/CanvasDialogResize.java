@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package imageMenu;
 
 import java.awt.Dimension;
@@ -21,17 +26,19 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 
-import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
-import basicMenusForApp.MenuItemForObj;
+import applicationAdapters.ImageWorkSheet;
+import basicMenusForApp.BasicMenuItemForObj;
 import imageDisplayApp.CanvasOptions;
 import layout.BasicObjectListHandler;
+import locatedObject.AttachmentPosition;
+import locatedObject.RectangleEdges;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnapBox;
+import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
 import standardDialog.choices.ChoiceInputPanel;
@@ -41,18 +48,18 @@ import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
 import storedValueDialog.StoredValueDilaog;
 import undo.CanvasResizeUndo;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.RectangleEdges;
 
 /**simple menu item that displays a dialog to allow the user to input a canvas size*/
-public class CanvasDialogResize implements MenuItemForObj {
+public class CanvasDialogResize extends BasicMenuItemForObj {
 
 	public static int NORMAL=0, INCH=1, CENTIMETER=2;
 	static String[] values= {"Points", "Inches", "cm"};
-	public boolean fancy=true;
+	public boolean includePositionBox=true;
 	private int type=NORMAL;
 	
-	public CanvasDialogResize() {}
+	public CanvasDialogResize(boolean pBox) {
+		includePositionBox=pBox;
+	}
 	public CanvasDialogResize(int type) {
 		this.type=type;
 	}
@@ -61,7 +68,7 @@ public class CanvasDialogResize implements MenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
-		ImageWrapper iw = diw.getImageAsWrapper();
+		ImageWorkSheet iw = diw.getImageAsWrapper();
 		performResize(iw);
 		
 		diw.updateDisplay();
@@ -70,16 +77,16 @@ public class CanvasDialogResize implements MenuItemForObj {
 		diw.getUndoManager().addEdit(undo);
 	}
 
-	public void performResize(ImageWrapper iw) {
-		new CanvasDialog(iw, fancy);
+	public void performResize(ImageWorkSheet iw) {
+		new CanvasDialog(iw, includePositionBox);
 	}
 	/**
 	 * @return
 	 */
 	public double getRatio() {
 		double ratio=1;
-		if (type==INCH) ratio=ImageDPIHandler.getStandardDPI();
-		if (type==CENTIMETER) ratio=ImageDPIHandler.getStandardDPI()/2.54;
+		if (type==INCH) ratio=ImageDPIHandler.getInchDefinition();
+		if (type==CENTIMETER) ratio=ImageDPIHandler.getInchDefinition()/2.54;
 		return ratio;
 	}
 	
@@ -100,19 +107,22 @@ public class CanvasDialogResize implements MenuItemForObj {
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
-		return "Image<Canvas";
+		return "Edit<Canvas";
 	}
 	
-
+/**The dialog for canvas edits*/
 public class CanvasDialog extends StandardDialog {
 	
 	/**
 	 * 
 	 */
+	private static final String BLOCK_AUTO_RESIZE = "block resize";
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-	ImageWrapper iw;
-	boolean fancy=true;
+	ImageWorkSheet iw;
+	boolean includePositionBox1=true;
 	Rectangle r1;
 	private Rectangle2D.Double r2;
 	
@@ -120,15 +130,16 @@ public class CanvasDialog extends StandardDialog {
 	 private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultInternal();
 	 
 		JLabel label=new JLabel("Position Of Items");
-		 SnapBox Box=new  SnapBox(snappingBehaviour);
+		 SnapBox relativePositionBox=new  SnapBox(snappingBehaviour);
 		private double width2;
 		private double height2;
 		private NumberInputPanel wInput;
 		private NumberInputPanel hInput;
 		
-	public CanvasDialog(ImageWrapper iw, boolean fancy) {
+	public CanvasDialog(ImageWorkSheet iw, boolean fancy) {
+		this.setTitle("Size of "+iw.getTitle());
 				snappingBehaviour.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
-				this.fancy=fancy;
+				this.includePositionBox1=fancy;
 				setModal(true);
 				this.iw=iw;
 				Dimension d = iw.getCanvasDims();//.getDimensionsXY();
@@ -176,10 +187,14 @@ public class CanvasDialog extends StandardDialog {
 					c.gridwidth=2;
 					c.gridy=super.gymax;
 					super.gymax++;
-					this.add(Box, c);
+					this.add(relativePositionBox, c);
 				}
 				;
+			
 				
+			BooleanInputPanel auto = new BooleanInputPanel("Block Auto Resize", !iw.allowAutoResize());
+			this.add(BLOCK_AUTO_RESIZE, auto);
+			
 				addSubordinateDialog("Other Canvas Options",  new StoredValueDilaog(CanvasOptions.current)  );
 				
 				
@@ -195,12 +210,14 @@ public class CanvasDialog extends StandardDialog {
 		double ww = width2;
 		double hh =height2;
 		
-		if (fancy) {
+		if (includePositionBox1) {
 		r2=new Rectangle2D.Double(0,0,(int)ww,(int)hh);
 		Double r3 = new Rectangle2D.Double(); r3.setRect(r1);
 		snappingBehaviour.doInternalSnapEdgePointToEdgePoint(snappingBehaviour.getSnapLocationTypeInternal(), r3, r2);
 			r1.setRect(r3);
 		}
+		
+		iw.setAllowAutoResize(!this.getBoolean(BLOCK_AUTO_RESIZE));
 		
 		boh.CanvasResizeObjectsIncluded(iw, (int)ww, (int)hh, (int) r1.x, (int) r1.y);
 		iw.setTitle(title);
@@ -210,35 +227,9 @@ public class CanvasDialog extends StandardDialog {
 }
 
 
-@Override
-public Icon getIcon() {
-	// TODO Auto-generated method stub
-	return null;
-}
 
-class PartnerNumbers implements NumberInputListener {
 
-	private NumberInputPanel first;
-	private NumberInputPanel second;
-	private double ratio;
 
-	public PartnerNumbers(NumberInputPanel p1, NumberInputPanel p2, double ratio) {
-		p1.addNumberInputListener(this);
-		p2.addNumberInputListener(this);
-		this.first=p1;
-		this.second=p2;
-		this.ratio=ratio;
-	}
-	
-	@Override
-	public void numberChanged(NumberInputEvent ne) {
-		
-		if(ne.getSourcePanel()==first) second.setNumber(ne.getNumber()/ratio);
-		if(ne.getSourcePanel()==second) first.setNumber(ne.getNumber()*ratio);
-	}
-	
-	
-}
 
 
 }

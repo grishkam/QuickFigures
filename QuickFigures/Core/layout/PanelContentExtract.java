@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.ZoomableGraphic;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
 
 /**a  class for storing the image and the objects within a panel.
   It is used mostly within another class and was originally written 

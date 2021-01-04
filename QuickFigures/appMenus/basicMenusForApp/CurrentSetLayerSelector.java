@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package basicMenusForApp;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
@@ -58,7 +58,7 @@ public class CurrentSetLayerSelector  implements LayerSelector , Serializable{
 	}
 
 	@Override
-	public ImageWrapper getImageWrapper() {
+	public ImageWorkSheet getImageWrapper() {
 		return getGraphicDisplayContainer().getAsWrapper();
 	}
 	

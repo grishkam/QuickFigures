@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package imageMenu;
 
 import java.awt.Color;
@@ -22,7 +27,7 @@ import java.awt.Rectangle;
 import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
-import basicMenusForApp.MenuItemForObj;
+import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -33,11 +38,11 @@ import standardDialog.graphics.GraphicDisplayComponent;
 import storedValueDialog.StoredValueDilaog;
 
 /**This class implements the functions for a menu item that allows the user to zoom in or out*/
-public class ZoomFit implements MenuItemForObj {
+public class ZoomFit extends BasicMenuItemForObj {
 
 	public static final String USER_SET="Set", SCREEN_FIT="fit", IN="In", OUT="Out", OPTIONS="options";
 	
-String type="fit";
+String type=SCREEN_FIT;
 
 
 public ZoomFit() {
@@ -78,7 +83,7 @@ public String getNameText() {
 	if (type.startsWith(USER_SET)) return "Set Zoom Level";
 	return "View All";
 	}
-public String getMenuPath() {return "Image<Zoom";}
+public String getMenuPath() {return "Edit<Zoom";}
 
 
 @Override
@@ -135,6 +140,8 @@ String getCurrentLabel() {
 	
 	return null;
 }
+
+
 
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,16 +37,16 @@ import graphicalObjects_Shapes.GraphicUtil;
 import handles.DecorativeSmartHandleList;
 import handles.HasHandles;
 import keyFrameAnimators.BasicGraphicObjectKeyFrameAnimator;
+import locatedObject.AttachmentPosition;
+import locatedObject.Hideable;
+import locatedObject.LocationChangeListener;
+import locatedObject.LocationChangeListenerList;
+import locatedObject.ObjectContainer;
+import locatedObject.RectangleEdgePositions;
 import menuUtil.PopupMenuSupplier;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 import undo.UndoScalingAndRotation;
-import utilityClassesForObjects.Hideable;
-import utilityClassesForObjects.LocationChangeListener;
-import utilityClassesForObjects.LocationChangeListenerList;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.AttachmentPosition;
 import menuUtil.HasUniquePopupMenu;
 
 /**The abstract superclass for many graphical objects*/

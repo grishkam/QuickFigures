@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
-import utilityClassesForObjects.DefaultPaintProvider;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.RectangleEdges;
+import locatedObject.DefaultPaintProvider;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
 
 /**A class for rendering of a brightness icon
   */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -77,12 +77,12 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import infoStorage.BasicMetaDataHandler;
 import infoStorage.DomMetaInfoWrapper;
+import locatedObject.BasicStrokedItem;
+import locatedObject.PathPointList;
 import logging.IssueLog;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 
 //WORK IN PROGRESS
 /**A quick and dirty class to load svg graphics back into quickfigures
@@ -878,7 +878,7 @@ private  ZoomableGraphic parseRect(Node node) {
 		if (set==null) return ;
 		ImageWindowAndDisplaySet output = new ImageWindowAndDisplaySet(set);
 		
-		new CanvasAutoResize().performActionDisplayedImageWrapper(output);
+		new CanvasAutoResize(true).performActionDisplayedImageWrapper(output);
 		
    
 	}

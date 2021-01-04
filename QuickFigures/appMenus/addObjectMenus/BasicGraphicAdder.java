@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoAddItem;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**A simple implementation of the GraphicAdder interface (@see GraphicAdder).
  subclasses determine which options appear in the adding menu (@see ObjectAddingMenu)

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class ScaleFigureDialog extends StandardDialog {
 	public ScaleFigureDialog(DefaultLayoutGraphic layout, PanelManager s) {
 	this.layout=layout;
 		this.def=s;
-		double ppi=ImageDPIHandler.getStandardDPI()/def.getPanelLevelScale();
+		double ppi=ImageDPIHandler.getInchDefinition()/def.getPanelLevelScale();
 		super.add("PPI", new NumberInputPanel("PPI", ppi, 3));
 		
 		
@@ -97,7 +97,7 @@ public class ScaleFigureDialog extends StandardDialog {
 		void setStackToDislogItems(PanelManager pm, PanelList stack) {
 			
 			if (this.inset!=null) inset.setBilinearScale(getNumber("scale"));
-			double scalePanel = ImageDPIHandler.getStandardDPI()/this.getNumber("PPI");
+			double scalePanel = ImageDPIHandler.getInchDefinition()/this.getNumber("PPI");
 			stack.setPixelDensityRatio(scalePanel);
 			ArrayList<ImagePanelGraphic> graphi = stack.getPanelGraphics();
 			

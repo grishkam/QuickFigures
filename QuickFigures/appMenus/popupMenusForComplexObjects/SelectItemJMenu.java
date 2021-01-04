@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import layersGUI.HasTreeLeafIcon;
 import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
 import menuUtil.SmartJMenu;
-import utilityClassesForObjects.LocatedObject2D;
 
 public abstract class SelectItemJMenu extends SmartJMenu  implements ActionListener {
 	protected ArrayList<LocatedObject2D> o=new ArrayList<LocatedObject2D>();

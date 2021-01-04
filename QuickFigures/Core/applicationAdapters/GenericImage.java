@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdapters;
 
 import infoStorage.MetaInfoWrapper;
+import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
 import logging.IssueLog;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.ScaleInfo;
 
 import java.awt.Dimension;
 import java.awt.Window;
@@ -39,7 +43,7 @@ import imageDisplayApp.OverlayObjectManager;
   Only the subclass is a more complete implementation
    Also @see GraphicContainingImage
   */
-public class GenericImage implements ImageWrapper {
+public class GenericImage implements ImageWorkSheet {
 
 	
 	transient public UndoManagerPlus undoManager;
@@ -147,11 +151,7 @@ public class GenericImage implements ImageWrapper {
 	
 	
 
-	@Override
-	public ScaleInfo getScaleInfo() {
-		// TODO Auto-generated method stub
-		return new ScaleInfo();
-	}
+	
 
 
 	@Override
@@ -190,7 +190,7 @@ public class GenericImage implements ImageWrapper {
 
 
 	@Override
-	public ImageWrapper getAsWrapper() {
+	public ImageWorkSheet getAsWrapper() {
 		return this;
 	}
 
@@ -231,11 +231,7 @@ public class GenericImage implements ImageWrapper {
 		return o==this;
 	}
 
-	@Override
-	public void setScaleInfo(ScaleInfo scaleInfo) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public DisplayedImage getImageDisplay() {
@@ -254,6 +250,16 @@ public class GenericImage implements ImageWrapper {
 		
 		 selected=d;
 		 return true;
+	}
+
+	@Override
+	public boolean allowAutoResize() {
+		return !basics.isAutoResizeBlocked();
+	}
+
+	@Override
+	public void setAllowAutoResize(boolean allow) {
+		basics.setAutoResizeBlocked(!allow);
 	}
 
 

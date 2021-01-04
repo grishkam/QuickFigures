@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,26 +13,33 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package imageMenu;
 
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.Icon;
-
 import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
-import basicMenusForApp.MenuItemForObj;
+import applicationAdapters.ImageWorkSheet;
+import basicMenusForApp.BasicMenuItemForObj;
 import layout.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
 
-public class CanvasAutoResize implements MenuItemForObj {
+/**Performs an automated resize of a worksheet*/
+public class CanvasAutoResize extends BasicMenuItemForObj {
 
-	public static int fitAll=0, page=1, slide=2;
-	int mode=fitAll;
+	public static final int RESIZE_TO_FIT_ALL_OBJECTS=0, PAGE_SIZE=1, SLIDE_SIZE=2;
+	int mode=RESIZE_TO_FIT_ALL_OBJECTS;
 	
+	/**set to true if this autoresize can not be blocked*/
+	boolean mandatory=true;
 	
-	public CanvasAutoResize() {}
+	/**Creates a new canvas auto resizer*/
+	public CanvasAutoResize(boolean mandatory) {this.mandatory=mandatory;}
 	public CanvasAutoResize(int mode) {
 		this.mode=mode;
 	}
@@ -45,20 +52,21 @@ public class CanvasAutoResize implements MenuItemForObj {
 		diw.getUndoManager().addEdit(undo);//adds the undo
 	}
 	public CanvasResizeUndo performUndoableAction(DisplayedImage diw) {
+		if (!mandatory&&!diw.getImageAsWrapper().allowAutoResize()) {return null;}
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
-		ImageWrapper iw = diw.getImageAsWrapper();
+		ImageWorkSheet iw = diw.getImageAsWrapper();
 		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
-		if (mode==fitAll)
+		if (mode==RESIZE_TO_FIT_ALL_OBJECTS)
 			{
 			boolean requiresWindowSizeChange = boh.resizeCanvasToFitAllObjects(iw);
 			if(!requiresWindowSizeChange) return undo;
 			}
-		if (mode!=fitAll) {
-			Rectangle2D.Double r=new Rectangle2D.Double(0,0, ImageDPIHandler.getStandardDPI()*8.5, 490);
+		if (mode!=RESIZE_TO_FIT_ALL_OBJECTS) {
+			Rectangle2D.Double r=new Rectangle2D.Double(0,0, ImageDPIHandler.getInchDefinition()*8.5, 490);
 			
-			if (mode==slide) {
-				r=new Rectangle2D.Double(0,0,ImageDPIHandler.getStandardDPI()*10, ImageDPIHandler.getStandardDPI()*7.5);
+			if (mode==SLIDE_SIZE) {
+				r=new Rectangle2D.Double(0,0,ImageDPIHandler.getInchDefinition()*10, ImageDPIHandler.getInchDefinition()*7.5);
 				}
 			iw.CanvasResize( (int)r.width, (int)r.height, 0,0);
 		}
@@ -81,27 +89,22 @@ public class CanvasAutoResize implements MenuItemForObj {
 	@Override
 	public String getCommand() {
 		String output= "Canvas Resize";
-		if (mode>fitAll) output+=mode;
+		if (mode>RESIZE_TO_FIT_ALL_OBJECTS) output+=mode;
 		return output;
 	}
 
 	@Override
 	public String getNameText() {
-		if (mode==1) return "Make Page Size";
-		if (mode==2) return "Make PowerPoint Slide Size";
+		if (mode==PAGE_SIZE) return "Make Page Size";
+		if (mode==SLIDE_SIZE) return "Make PowerPoint Slide Size";
 		return "Expand Canvas To Fit All Objects";
 	}
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
-		return "Image<Canvas";
+		return "Edit<Canvas";
 	}
-	@Override
-	public Icon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 
 

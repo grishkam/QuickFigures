@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,26 +13,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package imageMenu;
 
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import javax.swing.Icon;
-
 import applicationAdapters.DisplayedImage;
-import basicMenusForApp.MenuItemForObj;
+import basicMenusForApp.BasicMenuItemForObj;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
 import sUnsortedDialogs.ObjectListChoice;
-import utilityClassesForObjects.LocatedObject2D;
 
-public class CombineImages implements MenuItemForObj {
+/**Combines multiple worksheets into one*/
+public class CombineImages extends BasicMenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
@@ -73,7 +77,7 @@ public static DisplayedImage getChoice(String prompt) {
 
 	@Override
 	public String getCommand() {
-		return "Combine two images";
+		return "Combine two or more";
 	}
 
 	@Override
@@ -83,14 +87,10 @@ public static DisplayedImage getChoice(String prompt) {
 
 	@Override
 	public String getMenuPath() {
-		return "Image";
+		return "Edit";
 	}
 
-	@Override
-	public Icon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	
 
@@ -154,6 +154,8 @@ public static DisplayedImage getChoice(String prompt) {
 		addition.closeWindowButKeepObjects();//.getTheWindow().closeGroupWithoutObjectDeath();
 		recipient.updateDisplay();
 	}
+
+
 	
 
 }

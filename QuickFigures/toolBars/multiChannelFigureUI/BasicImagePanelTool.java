@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -36,13 +36,13 @@ import genericTools.MoverDragHandler;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
 import applicationAdapters.CanvasMouseEvent;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
 
@@ -63,7 +63,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	protected PanelGraphicInsetDefiner pressedInset;
 	
 	public void mousePressed() {
-		ImageWrapper impw = getImageClicked();
+		ImageWorkSheet impw = getImageClicked();
 		
 		/**Switches it another mode if the display being clicked is a multichannel itself*/
 		if (this.getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {
@@ -103,7 +103,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 
 	public void mouseReleased() {
 		
-		ImageWrapper impw = getImageClicked();
+		ImageWorkSheet impw = getImageClicked();
 		if (this.clickingOnMultiMode&&this.getImageDisplayWrapperClick() instanceof MultiChannelDisplayWrapper) {
 			 MultiChannelDisplayWrapper m=( MultiChannelDisplayWrapper) getImageDisplayWrapperClick() ;
 			clickingOnMultiModeChan2=m.getCurrentChannel();
@@ -285,7 +285,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	}
 	
 	/***/
-	public PanelListElement getElementAtPoint(ImageWrapper impw, int x, int y) {
+	public PanelListElement getElementAtPoint(ImageWorkSheet impw, int x, int y) {
 		LocatedObject2D pressPointObject = getObjectAt(impw, x, y);
 		ImagePanelGraphic imagepanel = (ImagePanelGraphic )pressPointObject;
 		PanelListElement output=null;
@@ -330,17 +330,17 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	
 	/**returns the clicked object*/
-	public LocatedObject2D getObjectAt(ImageWrapper click, int x, int y) {
+	public LocatedObject2D getObjectAt(ImageWorkSheet click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjecthandler().getAllClickedRoi(click, x, y,ImagePanelGraphic.class);
-		ArraySorter.removehideableItems(therois);
+		ArraySorter.removeHiddenItemsFrom(therois);
 		return new ArraySorter<LocatedObject2D>().getFirstNonNull(therois);
 		
 	}
 	
 	/**returns the clicked object*/
-	public ChannelLabelTextGraphic getClickedLabelObject(ImageWrapper click, int x, int y) {
+	public ChannelLabelTextGraphic getClickedLabelObject(ImageWorkSheet click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjecthandler().getAllClickedRoi(click, x, y,ChannelLabelTextGraphic.class);
-		ArraySorter.removehideableItems(therois);
+		ArraySorter.removeHiddenItemsFrom(therois);
 		if (therois.size()==0) return null;
 		return (ChannelLabelTextGraphic) new ArraySorter<LocatedObject2D>().getFirstNonNull(therois);
 		

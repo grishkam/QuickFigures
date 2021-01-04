@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import icons.IconSet;
 import layout.PanelLayout;
 import layout.basicFigure.BasicLayout;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
 
 /**A tool that moves a selected item from its current location to the equivalent location in another panel*/
 public class Shift_Object_Between_Panels extends Object_Mover {
@@ -72,7 +72,7 @@ public class Shift_Object_Between_Panels extends Object_Mover {
 	
 	public PanelLayoutGraphic getClickContainingLayout() {
 		ArrayList<LocatedObject2D> layouts = this.getObjecthandler().getAllClickedRoi(getImageClicked(), getClickedCordinateX(), getClickedCordinateY(), PanelLayoutGraphic.class);
-		if (this.ignorehidden) ArraySorter.removehideableItems(layouts);
+		if (this.ignorehidden) ArraySorter.removeHiddenItemsFrom(layouts);
 		if (layouts.size()>0) return (PanelLayoutGraphic) new ArraySorter<LocatedObject2D>().getFirstNonNull(layouts);
 		return null;
 	}

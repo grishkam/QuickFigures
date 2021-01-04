@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package imageDisplayApp;
 
 
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.Selectable;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -31,11 +30,12 @@ import javax.swing.JComponent;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects.BasicCoordinateConverter;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import layersGUI.GraphicTreeUI;
+import locatedObject.Selectable;
 
 /**
 Stores everything related to a particular worksheet including the
@@ -47,6 +47,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	private GraphicDisplayCanvas theCanvas=null;
 	private StandardWorksheet theFigure=null;
 	private MiniToolBarPanel sidePanel;
+	
 	
 	/**The time frames for animations*/
 	private int currentFrame=0;
@@ -127,7 +128,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	@Override
-	public ImageWrapper getImageAsWrapper() {
+	public ImageWorkSheet getImageAsWrapper() {
 		return theFigure;
 	}
 	@Override
@@ -322,5 +323,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		if (canvasHandleList==null) canvasHandleList = SmartHandleList.createList(new CanvasResizeHandle(this));
 		return canvasHandleList;
 	}
+
+
 	
 }

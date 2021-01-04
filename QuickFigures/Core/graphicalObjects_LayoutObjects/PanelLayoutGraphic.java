@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import javax.swing.Icon;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.GenericImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.KnowsParentLayer;
@@ -57,23 +57,23 @@ import layout.PanelLayout;
 import layout.PanelLayoutContainer;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocationChangeListener;
+import locatedObject.AttachedItemList;
+import locatedObject.ObjectContainer;
+import locatedObject.RectangleEdges;
+import locatedObject.TakesAttachedItems;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;
 import popupMenusForComplexObjects.LockedItemMenu;
 import popupMenusForComplexObjects.MontageLayoutDisplayOptions;
 import popupMenusForComplexObjects.MontageLayoutPanelModDialog;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LocationChangeListener;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A graphical object that stores a layout, displays the layout, includes handles for editing the layout*/
-public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesLockedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
+public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesAttachedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
 	
 	{this.setName("Layout");}
 	private static final long serialVersionUID = 1L;
@@ -130,11 +130,11 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	
 	
-	LockedItemList lockedItems=new LockedItemList(this);
-	  private LockedItemList panelSizeDefiningItems=new LockedItemList(this);
+	AttachedItemList lockedItems=new AttachedItemList(this);
+	  private AttachedItemList panelSizeDefiningItems=new AttachedItemList(this);
 	  
-	public LockedItemList getLockedItems() {
-		if (lockedItems==null) lockedItems=new LockedItemList(this);
+	public AttachedItemList getLockedItems() {
+		if (lockedItems==null) lockedItems=new AttachedItemList(this);
 		return lockedItems;
 	}
 	
@@ -770,12 +770,12 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		this.strokeWidth = strokeWidth;
 	}
 
-	public LockedItemList getPanelSizeDefiningItems() {
-		if (panelSizeDefiningItems==null)panelSizeDefiningItems=new LockedItemList(this);
+	public AttachedItemList getPanelSizeDefiningItems() {
+		if (panelSizeDefiningItems==null)panelSizeDefiningItems=new AttachedItemList(this);
 		return panelSizeDefiningItems;
 	}
 
-	public void setPanelSizeDefiningItems(LockedItemList panelSizeDefiningItems) {
+	public void setPanelSizeDefiningItems(AttachedItemList panelSizeDefiningItems) {
 		this.panelSizeDefiningItems = panelSizeDefiningItems;
 	}
 
@@ -793,7 +793,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 	
 
-	public ImageWrapper generateCurrentImageWrapper() {
+	public ImageWorkSheet generateCurrentImageWrapper() {
 		if (getEditMode()==0) return  generateStandardImageWrapper() ;
 		if (getEditMode()==1) return generateEditNonpermissiveWrapper() ;
 		return null;
@@ -803,7 +803,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	/**generates an image Wrapper for the layout graphic
 	  This is used in the implementation of montage editor tools
 	 * @return */
-	public ImageWrapper generateStandardImageWrapper() {
+	public ImageWorkSheet generateStandardImageWrapper() {
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrap1 = new GenericImage(new ArrayObjectContainer(parent2));
@@ -813,14 +813,14 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 	}
 	
-	public ImageWrapper generateEditNonpermissiveWrapper() {
+	public ImageWorkSheet generateEditNonpermissiveWrapper() {
 			GenericImage genericImage = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
 			this.getPanelLayout().setEditedImage(genericImage);
 			this.getPanelLayout().getEditedImage().takeFromImage(this);
 			return genericImage;
 		}
 	
-	public ImageWrapper generateRemovalPermissiveImageWrapper() {
+	public ImageWorkSheet generateRemovalPermissiveImageWrapper() {
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage genericImage = new GenericImage(getParentLayerAsContainer());
@@ -1035,7 +1035,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 			if (CanvasOptions.current.resizeCanvasAfterEdit)
-				new CanvasAutoResize().performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
+				new CanvasAutoResize(false).performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
 		}
 	
 	
@@ -1059,7 +1059,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	/**Looks for items in the parent layer that may potentially be accepted as locked items but are not currently attached*/
 	@Override
 	public ArrayList<LocatedObject2D> getNonLockedItems() {
-		TakesLockedItems taker = this;
+		TakesAttachedItems taker = this;
 		return getLockedItems().getEligibleNONLockedItems(taker, getBounds());
 	}
 }

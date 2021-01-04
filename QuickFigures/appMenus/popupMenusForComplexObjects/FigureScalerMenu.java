@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class FigureScalerMenu extends SmartJMenu{
 	public void addEdit(CombinedEdit undo) {
 		if(mouseE!=null)
 			{
-			undo.addEditToList(new CanvasAutoResize().performUndoableAction(mouseE.getAsDisplay()));
+			undo.addEditToList(new CanvasAutoResize(false).performUndoableAction(mouseE.getAsDisplay()));
 			}
 		addUndo(undo);
 		
@@ -77,7 +77,7 @@ public class FigureScalerMenu extends SmartJMenu{
 			public void actionPerformed(ActionEvent arg0) {
 				FigureScaler scaler = new FigureScaler(false);
 				CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
-				undo.addEditToList(new CanvasAutoResize().performUndoableAction(mouseE.getAsDisplay()));
+				undo.addEditToList(new CanvasAutoResize(false).performUndoableAction(mouseE.getAsDisplay()));
 				item.updateDisplay();
 				addEdit(undo);
 				FigureScaler.scaleWarnings(item.getParentLayer());

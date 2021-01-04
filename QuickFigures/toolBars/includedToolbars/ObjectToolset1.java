@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@ import graphicalObjects_Shapes.SimpleRing;
 import graphicalObjects_Shapes.SimpleStar;
 import graphicalObjects_Shapes.TrapezoidGraphic;
 import graphicalObjects_Shapes.TriangleGraphic;
+import locatedObject.RectangleEdgePositions;
 import graphicTools.ShapeGraphicTool;
 import logging.IssueLog;
 import multiChannelFigureUI.BasicChannelLabelTool;
@@ -61,7 +62,6 @@ import pathGraphicToolFamily.PathGraphicTool;
 import pathGraphicToolFamily.PathReflectTool;
 import pathGraphicToolFamily.PathTool;
 import pathGraphicToolFamily.PathTool2;
-import utilityClassesForObjects.RectangleEdgePositions;
 
 /**The main toolbar for QuickFigures. Includes all critical tools*/
 public class ObjectToolset1 extends QuickFiguresToolBar{

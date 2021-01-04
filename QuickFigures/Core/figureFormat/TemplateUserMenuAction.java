@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import java.awt.event.ActionEvent;
@@ -22,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
@@ -51,7 +58,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**set to true if this simply deletes a target template and nothing else. if this is true, it will neither save nor apply*/
 	boolean delete=false;
 	boolean useDefaultpath=false;//set to true if the default path for figure templates is to be used
-	String menuPath="File<Save<";
+	String menuPath="File<Save<";//default meny path
 	
 	
 	/**constructor, creates a menu action for either saving a new figure template or applying a saved one
@@ -62,7 +69,10 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	}
 	
 
-	/**constructor, creates a menu action for a figure template with the pro*/
+	/**constructor, creates a menu action for a figure template 
+	 * @param save set to true if this will be a save template action
+	 * @param defpath the save path to use
+	 * @param menuPath the menu in which this item will appear*/
 	public TemplateUserMenuAction(boolean save, boolean defpath, String menuPath)  {
 			this.save=save;
 		useDefaultpath=defpath;
@@ -372,6 +382,11 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 			CombinedEdit undo = saver.operateOnLayer(layer);
 			if (this.undoManager!=null) this.undoManager.addEdit(undo);
 		}
+	}
+
+	@Override
+	public Icon getSuperMenuIcon() {
+		return null;
 	}
 	
 }

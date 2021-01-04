@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package advancedChannelUseGUI;
 
 import java.awt.Component;
@@ -34,7 +39,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import channelLabels.ChannelLabelManager;
-import channelMerging.ChannelEntry;
 import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
@@ -42,40 +46,40 @@ import figureOrganizer.PanelManager;
 import graphicActionToolbar.CurrentFigureSet;
 import iconGraphicalObjects.ChannelUseIcon;
 import menuUtil.SmartPopupJMenu;
-import standardDialog.StandardDialog;
-import standardDialog.channels.ChannelEntryBox;
-import standardDialog.choices.ChoiceInputPanel;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 
 
-/**A gui that show a list of panels*/
+/**A gui that show a list of panels and their components channels
+  Panels and channel can be edited with the buttons in the GUI*/
 public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListener, ActionListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PanelListDisplay listPanels;
+	
+	
 	private PanelManager pm;
 	private ChannelLabelManager cm;
+	
+	private PanelListDisplay listPanels;
 	private ChannelListDisplay listChannels;
 	
-	JButton addPanelButton=new JButton("+"); 
-	
-	JButton removePanelButton=new JButton("-"); 
-	
-	JButton addChannelButton=new JButton("+");
-	JButton removeChannelButton=new JButton("-");
-	JButton chooseChannelButton=new JButton("Add/Remove Channels");{chooseChannelButton.setIcon(new ChannelUseIcon());}
-	
-	JButton alterZButton=new JButton("Z"); 
-	
-	JButton alterTButton=new JButton("T"); 
 	JLabel panelListLabel=new JLabel("Panel List");
 	JLabel chanListLabel=new JLabel("Channel List");
 	
+	/**buttons to add a panel*/
+	JButton addPanelButton=new JButton("+"); 
+	JButton removePanelButton=new JButton("-"); 
+
+	/***/
+	JButton chooseChannelButton=new JButton("Add/Remove Channels");{chooseChannelButton.setIcon(new ChannelUseIcon());}
+	JButton alterZButton=new JButton("Z"); 
+	JButton alterTButton=new JButton("T"); 
 	
+
+	/**Creates a gui and switches the panel manager to advanced channel use mode*/
 		public AdvancedChannelUseGUI(PanelManager pm, ChannelLabelManager cm) {
 			this.cm=cm;
 			pm.setChannelUseMode(PanelManager.ADVANCED_CHANNEL_USE);
@@ -106,16 +110,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			if ( multipleChannel)this.add(createScrollPane(listChannels, 250), gc);
 			gc.gridwidth=1;
 			
-			/**
-			gc.gridx=6;
-			gc.gridy=2;
-			gc.anchor=GridBagConstraints.WEST;
-			if ( multipleChannel)	this.add(addChannelButton, gc);
-			gc.gridx=7;
-			gc.gridy=2;
-			gc.anchor=GridBagConstraints.WEST;
-			if ( multipleChannel)this.add(removeChannelButton, gc);
-			*/
+		
 			gc.gridx=8;
 			gc.gridy=2;
 			gc.anchor=GridBagConstraints.WEST;
@@ -147,12 +142,10 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			
 			
 			addPanelButton.addActionListener(this);
-			addChannelButton.addActionListener(this);
 			chooseChannelButton.addActionListener(this);
 			alterZButton.addActionListener(this);
 			alterTButton.addActionListener(this);
 			removePanelButton.addActionListener(this);
-			removeChannelButton.addActionListener(this);
 			
 			
 			this.setLocation(400, 300);
@@ -167,6 +160,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			this.pack();
 		}
 
+		/**Generates a scroll pane for the list*/
 		public JScrollPane createScrollPane(JList<?> list, int width) {
 			JScrollPane jScrollPane = new JScrollPane(list);
 			
@@ -174,8 +168,8 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			return jScrollPane;
 		}
 		
+		/**A mouse listener that will respond to double clicks on panels*/
 		private MouseListener createPanelEditListener() {
-			// TODO Auto-generated method stub
 			return new MouseListener() {
 
 				@Override
@@ -211,7 +205,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		}
 
 		
-		
+		/**Creates an advanced channel use gui and shows it*/
 		public static void showMultiChannel(MultichannelDisplayLayer multi) {
 		
 			AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI(multi.getPanelManager(), multi.getChannelLabelManager());
@@ -220,6 +214,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			
 		}
 
+		/**Called to update the channel list to match the panel that has focus*/
 		@Override
 		public void valueChanged(ListSelectionEvent arg0) {
 			int indexsel = listPanels.getSelectedIndex();
@@ -243,30 +238,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 				this.displayMenu(arg0);
 			}
 			
-			if (arg0.getSource()==this.addChannelButton) {
-				
-				{
-						ArrayList<ChannelEntry> chans = pm.getMultiChannelWrapper().getChannelEntriesInOrder();
-					
-						StandardDialog sd = new StandardDialog();
-						sd.add("Channel ", new ChoiceInputPanel("Chan: ", new ChannelEntryBox(pm.getMultiChannelWrapper().getChannelEntriesInOrder())));
-						sd.setModal(true);
-						sd.setWindowCentered(true);
-						sd.showDialog();
-						
-						int chan = sd.getChoiceIndex("Channel ");
-						
-						ChannelEntry newChan = chans .get(chan-1);
-						
-						listChannels.elements.add(newChan);
-						getPrimarySelectedPanel().addChannelEntry(newChan);
-			}
-				afterChannelAddSubtract();
-			}
 			
-			if (arg0.getSource()==this.removeChannelButton) {
-				listChannels.removeSelectedChannels();
-			}
 			if (arg0.getSource()==this.removePanelButton) {
 				listPanels.removeSelectedPanels() ;
 			}
@@ -283,7 +255,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		}
 
 		/**
-		 * 
+		updates the gui after the number of channels has changed
 		 */
 		public void afterChannelAddSubtract() {
 			repaint();
@@ -294,7 +266,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		}
 
 		/**
-		 * @param arg0
+		Called to display the channel addition menu
 		 */
 		public void displayMenu(ActionEvent arg0) {
 			SmartPopupJMenu ppopme = new SmartPopupJMenu();
@@ -313,6 +285,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			ppopme.show((Component) arg0.getSource(), 0,0);
 		}
 
+		/**shows a panel adding dialog*/
 		public void addPanel() {
 			PanelListElement panel = pm.addSingleChannelPanel(pm.getPanelList());
 			  cm.generateChanelLabel(panel);
@@ -325,13 +298,20 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			
 		}
 		
-		private void editPanel() {
-			editPanelSliceAndFrame(getPrimarySelectedPanel());
-		}
+		
+		
 
 		public PanelListElement getPrimarySelectedPanel() {
 			return listChannels.getPanel();
 		}
+		
+	
+		/**called to show a dialog for the selected panel*/
+		private void editPanel() {
+			editPanelSliceAndFrame(getPrimarySelectedPanel());
+		}
+		/**if there are multiple options for the target slice and frame
+		 * this shows a dialog */
 		private void editPanelSliceAndFrame(PanelListElement panel) {
 			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.show2DimensionDialog();
@@ -351,6 +331,8 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		private void editPanelFrame() {
 			editPanelFrame(getPrimarySelectedPanel());
 		}
+		
+		/**shows a dialog for the user to change the slice number of selected panels*/
 		private void editPanelSlice(PanelListElement panel) {
 			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.showSliceDialog();
@@ -360,6 +342,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 				
 			updatePanelDisplay();
 		}
+		/**shows a dialog for the user to change the frame number of selected panels*/
 		private void editPanelFrame(PanelListElement panel) {
 			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
 			dia.showFrameDialog();
@@ -370,12 +353,14 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			updatePanelDisplay();
 		}
 
-		public void updatePanelDisplay() {
+		/**updates the panels in the figure*/
+		private void updatePanelDisplay() {
 			pm.updatePanels();
 			pm.updateDisplay();
 			pack();
 		}
 		
+		/**returns panels that are selected in the gui*/
 		Iterable<PanelListElement> getSelectedPanels() {
 			return listPanels.getSelectedValuesList();
 		}

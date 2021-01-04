@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,16 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
-import applicationAdapters.DisplayedImage;
+import java.awt.Window;
 
-/**a subinterface of displayed image that is written to 
-  contain a multichannel image*/
-public interface MultiChannelDisplayWrapper extends DisplayedImage {
+/**an interface of displayed image that is written to 
+  contain a multi dimensional image that is displayed*/
+public interface MultiChannelDisplayWrapper  {
 
 	public  MultiChannelImage getContainedMultiChannel();
 	public int getCurrentChannel();
 	public int getCurrentFrame();
 	public int getCurrentSlice();
+	
+	public Window getWindow() ;
+	void updateDisplay();
 }

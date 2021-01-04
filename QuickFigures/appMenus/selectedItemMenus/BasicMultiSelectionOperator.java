@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import javax.swing.Icon;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import locatedObject.LocatedObject2D;
+import locatedObject.PointsToFile;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.PointsToFile;
 
 /**abstract implementation of the MultiSelectionOperator.
   Contains methods that are useful for multiple classes*/

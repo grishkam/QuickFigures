@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TextParagraph;
+import locatedObject.AttachmentPosition;
+import locatedObject.RectangleEdges;
+import textObjectProperties.TextParagraph;
 
 /**A class with methods to add labels to figures*/
 public class FigureLabelOrganizer implements Serializable {

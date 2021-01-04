@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import fLexibleUIKit.MenuItemExecuter;
+import locatedObject.AttachedItemList;
+import locatedObject.TakesAttachedItems;
 import menuUtil.SmartPopupJMenu;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.TakesLockedItems;
 import menuUtil.PopupMenuSupplier;
 
 public class LockedItemMenu extends SmartPopupJMenu implements ActionListener, PopupMenuSupplier{
@@ -35,14 +35,14 @@ public class LockedItemMenu extends SmartPopupJMenu implements ActionListener, P
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private TakesLockedItems lockedItem;
+	private TakesAttachedItems lockedItem;
 	JMenuItem snap=new JMenuItem("Snap Locked Items"); {snap.addActionListener(this);}
 	JMenuItem release=new JMenuItem("Release All Locked Items");
-	private LockedItemList list;
+	private AttachedItemList list;
 	
 	
 	public LockedItemMenu() {}
-	public LockedItemMenu(TakesLockedItems tak, LockedItemList list) {
+	public LockedItemMenu(TakesAttachedItems tak, AttachedItemList list) {
 		
 		setLockedItem(tak);
 		this.setList(list);
@@ -81,16 +81,16 @@ public class LockedItemMenu extends SmartPopupJMenu implements ActionListener, P
 		
 		
 	}
-	public TakesLockedItems getLockedItemTaker() {
+	public TakesAttachedItems getLockedItemTaker() {
 		return lockedItem;
 	}
-	public void setLockedItem(TakesLockedItems lockedItem) {
+	public void setLockedItem(TakesAttachedItems lockedItem) {
 		this.lockedItem = lockedItem;
 	}
-	public LockedItemList getList() {
+	public AttachedItemList getList() {
 		return list;
 	}
-	public void setList(LockedItemList list) {
+	public void setList(AttachedItemList list) {
 		this.list = list;
 	}
 

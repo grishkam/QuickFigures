@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import layout.PanelLayout;
 
 /**A very basic panel layout superclass that other classes can extends*/
@@ -33,7 +33,7 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 	 */
 	private static final long serialVersionUID = 1L;
 	protected Point location=new Point();
-	private transient ImageWrapper wrapper;
+	private transient ImageWorkSheet wrapper;
 	
 	@Override
 	public Point2D getReferenceLocation() {
@@ -95,12 +95,12 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 		return p;
 	}
 	@Override
-	public ImageWrapper getEditedImage() {
+	public ImageWorkSheet getEditedImage() {
 		// TODO Auto-generated method stub
 		return wrapper;
 	}
 
-	public void setEditedImage(ImageWrapper wrapper) {
+	public void setEditedImage(ImageWorkSheet wrapper) {
 		this.wrapper = wrapper;
 	}
 	

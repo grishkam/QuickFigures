@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import layout.BasicObjectListHandler;
 import layout.PanelContentExtract;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.LocatedObject2D;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**As the user makes edits to a figure, the channel panels that appear
  * in the figure may no longer match the channel use instructions perfectly. @see ChannelUseInstructions

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ import javax.swing.JTabbedPane;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectEditListener;
 import standardDialog.ObjectInputTab;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextLineSegment;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
 
 public class LinePane  extends ObjectInputTab implements MouseListener, ActionListener{
 	

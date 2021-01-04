@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import externalToolBar.AbstractExternalToolset;
 import icons.GraphicToolIcon;
 import layout.PanelLayout;
 import layout.basicFigure.BasicLayout;
-import utilityClassesForObjects.RectangleEdges;
+import locatedObject.RectangleEdges;
 
 /**An icon that displays a small picture of a layout*/
 public class GeneralLayoutToolIcon extends GraphicToolIcon implements Icon{

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,13 +28,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
+import locatedObject.AttachmentPosition;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, NumberInputListener, ItemListener {
 	

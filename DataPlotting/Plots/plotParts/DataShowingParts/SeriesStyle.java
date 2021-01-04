@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import javax.swing.JColorChooser;
 
 import genericPlot.BasicDataSeriesGroup;
-import utilityClassesForObjects.ColorDimmer;
+import locatedObject.ColorDimmer;
 
 public class SeriesStyle implements Serializable {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import fLexibleUIKit.ObjectAction;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicActionToolbar.CurrentFigureSet;
+import locatedObject.ScaleInfo;
 import sUnsortedDialogs.ScaleResetListener;
 import sUnsortedDialogs.ScaleSettingDialog;
 import undo.AbstractUndoableEdit2;
-import utilityClassesForObjects.ScaleInfo;
 
 /**Similar to ImageJ's 'Set Scale' Displays a user interface that allows the user to set the pixel size of an image.
  * Updates the scale bars*/

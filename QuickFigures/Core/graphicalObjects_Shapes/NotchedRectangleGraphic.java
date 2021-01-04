@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ import handles.SmartHandle;
 import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
+import locatedObject.RectangleEdges;
 import objectDialogs.RectangleGraphicOptionsDialog;
-import utilityClassesForObjects.RectangleEdges;
 
 /**A rectangle with notches cut out of it*/
 public class NotchedRectangleGraphic extends RectangularGraphic {

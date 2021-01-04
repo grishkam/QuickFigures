@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,12 +27,12 @@ import java.io.File;
 import fLexibleUIKit.MenuItemMethod;
 import graphicalObjects.GraphicalObject;
 import illustratorScripts.IllustratorObjectConvertable;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.ScalededItem;
 import logging.IssueLog;
 import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class BufferedImageGraphic extends ImagePanelGraphic implements GraphicalObject,IllustratorObjectConvertable, ScalededItem {
 

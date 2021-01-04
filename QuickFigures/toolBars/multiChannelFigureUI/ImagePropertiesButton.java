@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import locatedObject.LocatedObject2D;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelector;
 import undo.CombinedEdit;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**A multi-selection operation that performs one among a few operations 
   that depend on the setting. each options requires that the user have an image panel selected*/

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextPrecision;
+import locatedObject.PathPointList;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextPrecision;
 
 public class CursorFinder {
 

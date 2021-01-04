@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import layout.PanelLayout;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
-import utilityClassesForObjects.RectangleEdges;
 
 /**A class that locates which rectangles are near each other*/
 public class NeighborFinder<Type extends Rectangle2D> implements Serializable {

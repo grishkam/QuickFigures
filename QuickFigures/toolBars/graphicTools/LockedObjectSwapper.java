@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_Shapes.RectangularGraphic;
 import imageDisplayApp.OverlayObjectManager;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.TakesAttachedItems;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoSnappingChange;
 import undo.UndoTakeLockedItem;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 /**A tool for moving attached items, switching their locations. no longer included in the toolbar
  * but kep in case a need for it appears in later versions
  * */
@@ -45,9 +45,9 @@ public class LockedObjectSwapper extends LockGraphicTool2 {
 	
 	LocatedObject2D object2=null;;
 	
-	private TakesLockedItems lockTaker2=null;
+	private TakesAttachedItems lockTaker2=null;
 	
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		super.onPress(gmp, roi2);
 		setMarkerRoi();
 	}
@@ -87,7 +87,7 @@ public void mouseDragged() {
 
 
 
-public void onRelease(ImageWrapper gmp, LocatedObject2D roi2) {
+public void onRelease(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	removeMarkerRoi();
 	
 	if (lockTaker==null&&lockTaker2==null&&inside!=null&&object2!=null) {
@@ -115,8 +115,8 @@ switchLockedItem(object2, inside);
 
 private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
 	ArrayList<LocatedObject2D> allRoi = getPotentialLockAcceptors(getImageClicked());
-	TakesLockedItems t=(TakesLockedItems) lockTaker;
-	TakesLockedItems t2=(TakesLockedItems) lockTaker2;
+	TakesAttachedItems t=(TakesAttachedItems) lockTaker;
+	TakesAttachedItems t2=(TakesAttachedItems) lockTaker2;
 	
 			removeFromAlltakers(object2, allRoi, undoer);
 			removeFromAlltakers(inside, allRoi, undoer);

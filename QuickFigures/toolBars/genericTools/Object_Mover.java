@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package genericTools;
 
 import java.awt.Component;
@@ -33,7 +38,7 @@ import addObjectMenus.ClipboardAdder;
 import appContext.ImageDPIHandler;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.CurrentSetLayerSelector;
 import externalToolBar.DragAndDropHandler;
 import graphicalObjects.BasicGraphicalObject;
@@ -56,11 +61,19 @@ import handles.SmartHandle;
 import handles.SmartHandleList;
 import icons.GraphicToolIcon;
 import icons.IconSet;
-import imageDisplayApp.CanvasOptions;
 import imageDisplayApp.OverlayObjectManager;
-import imageMenu.CanvasAutoResize;
 import includedToolbars.StatusPanel;
 import layout.PanelLayout;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocatedObjectGroup;
+import locatedObject.LocationChangeListenerList;
+import locatedObject.RectangleEdges;
+import locatedObject.Scales;
+import locatedObject.ScalesFully;
+import locatedObject.Selectable;
+import locatedObject.Snap2Rectangle;
+import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
@@ -74,16 +87,6 @@ import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoTextEdit;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LocatedObjectGroup;
-import utilityClassesForObjects.LocationChangeListenerList;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.ScalesFully;
-import utilityClassesForObjects.Selectable;
-import utilityClassesForObjects.Snap2Rectangle;
-import utilityClassesForObjects.TakesLockedItems;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoDragHandle;
 import undo.UndoManagerPlus;
@@ -119,7 +122,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	protected boolean bringSelectedToFront=false;
 	
-	private boolean resizeAfterMousDrags=false;
+	
 	
 	
 	 public static final int DO_NOT_SELECT_IN_GROUP=0, SELECT_IN_GROUP=1, SELECT_ONE_LEVEL_DOWN=2, SELECT_2_LEVEL_DOWN=3;
@@ -161,6 +164,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 	/**is set to true if the point pressed is not within the primary selected object*/
 	private boolean notWithinPrimary;
+	private boolean popup;//is set to true if a popup is to be shown
 
 	/**The handle that the mouse recently moved over*/
 	private static SmartHandle lastMoveOverHandle;
@@ -367,8 +371,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 * the handle's popup menu or the objects popup menu*/
 		if (e.isPopupTrigger()) {
 			forPopupTrigger(objectAtPressLocation, e,sh);
+			popup=true;
 			return;
-		}
+		} else popup=false;
 		
 		
 		if (objectAtPressLocation!=getPrimarySelectedObject()&&getSelectedHandleNumber()==NO_HANDLE) {
@@ -545,7 +550,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 * Also removes objects of the excluded class*/
 	protected void removeIgnoredAndHidden(ArrayList<LocatedObject2D> rois) {
 		if (this.ignorehidden) {
-			if (this.ignorehidden) ArraySorter.removehideableItems(rois);
+			if (this.ignorehidden) ArraySorter.removeHiddenItemsFrom(rois);
 				}
 		ArraySorter.removeThoseOfClass(rois, getExcludedClass());
 	}
@@ -554,8 +559,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 	
 	
-	/**what to do if a popup menu must be shown*/
-	protected void forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {
+	/**what to do if a popup menu must be shown
+	 @ return true if a popup is being shown*/
+	protected boolean forPopupTrigger(LocatedObject2D roi2, CanvasMouseEvent e, SmartHandle sh ) {
 		JPopupMenu menu =null;
 		
 		/**if the user is selecting more than one item by holding shift*/
@@ -585,7 +591,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		
 		 Component c = getLastMouseEvent().getComponent();
-		 if (menu!=null) menu.show(c, e.getClickedXScreen(), e.getClickedYScreen());
+		 if (menu!=null) 
+			 {menu.show(c, e.getClickedXScreen(), e.getClickedYScreen());
+			 return true;
+			 }
+		 
+		 return false;
 	}
 
 	/**In the special case in which the object is attached to another object
@@ -619,7 +630,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	/**returns the object that is at the given click location*/
-	public LocatedObject2D getObjectAt(ImageWrapper click, int x, int y) {
+	public LocatedObject2D getObjectAt(ImageWorkSheet click, int x, int y) {
 		ArrayList<LocatedObject2D> therois = getObjectsAtPressLocationWithoutFiltering(click, x, y);
 		
 		while (getGroupSelectionMode()==SELECT_IN_GROUP&& hasGroups(therois)) {
@@ -641,12 +652,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**returns the first item on the list that is neither hidden not null*/
 	public LocatedObject2D getFirstNonhiddenItem(ArrayList<LocatedObject2D> therois) {
 		ArraySorter.removeThoseOfClass(therois, getExcludedClass());
-		if (this.ignorehidden)ArraySorter.removehideableItems(therois);
+		if (this.ignorehidden)ArraySorter.removeHiddenItemsFrom(therois);
 		
 		return new ArraySorter<LocatedObject2D>().getFirstNonNull(therois);
 	}
 
-	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWrapper click, int x, int y) {
+	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWorkSheet click, int x, int y) {
 		return getObjecthandler().getAllClickedRoi(click, x, y,this.getSelectOnlyThoseOfClass(), true);
 	}
 	
@@ -888,12 +899,12 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	
-	protected static ArrayList<PanelLayout> getPotentialSnapLayouts(ImageWrapper imageWrapperClick, double x, double y, boolean ignoreHidden, LocatedObject2D exempt) {
+	protected static ArrayList<PanelLayout> getPotentialSnapLayouts(ImageWorkSheet imageWrapperClick, double x, double y, boolean ignoreHidden, LocatedObject2D exempt) {
 		  
 		
 		ArrayList<LocatedObject2D> As = imageWrapperClick.getLocatedObjects();
 		ArraySorter.removeThoseNotOfClass(As, PanelLayoutGraphic.class);
-		if (ignoreHidden) ArraySorter.removehideableItems(As);
+		if (ignoreHidden) ArraySorter.removeHiddenItemsFrom(As);
 		As.remove(exempt);
 		
 		ArrayList<PanelLayout> layouts=new ArrayList<PanelLayout>();
@@ -907,7 +918,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	/**returns the nearest layout panel to point xy*/
-	public static Rectangle2D getNearestPanelRect(ImageWrapper imageWrapperClick, Point2D p, boolean ignoreHidden, LocatedObject2D exempt) {
+	public static Rectangle2D getNearestPanelRect(ImageWorkSheet imageWrapperClick, Point2D p, boolean ignoreHidden, LocatedObject2D exempt) {
 		
 		ArrayList<PanelLayout> layouts = getPotentialSnapLayouts(imageWrapperClick, p.getX(), p.getY(), ignoreHidden, exempt);
 		
@@ -974,10 +985,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**called after a mouse release*/
 	protected void afterRelease() {
 		getSelectionManager().select(null, 0); 
-		if (getPrimarySelectedObject() instanceof HasHandles &&handle>-1) {
+		if (getPrimarySelectedObject() instanceof HasHandles &&handle>NO_HANDLE) {
 			getSelectionObjectAshashangles().handleMouseEvent(this.getLastDragOrLastReleaseMouseEvent(), handle, getButton(),this.clickCount(), MouseEvent.MOUSE_RELEASED, null);
-			if(getPrimarySelectedObject() instanceof BasicGraphicalObject &&isResizeCanvasAfterMouseRelease()) 
-				new CanvasAutoResize().performActionDisplayedImageWrapper(getImageDisplayWrapperClick());
+			
 
 			return;
 		}
@@ -1003,7 +1013,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 currentundoDragHandle=null;
 		addedcurrentundoDragHandle=false;
 		
-		if(this.isResizeCanvasAfterMouseRelease()) new CanvasAutoResize().performActionDisplayedImageWrapper(getImageDisplayWrapperClick());
+		
 		this.setPressedSmartHandle(null);
 	}
 	
@@ -1043,6 +1053,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			mouseDragForTextCursor();
 			return;
 		}
+		
+		if (popup)
+			return;//does not drag if a popup is being shown
 		 
 		
 		if (getPrimarySelectedObject()!=null) {			
@@ -1494,7 +1507,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				if (arg0.isAltDown()) {
 					GraphicLayer cc = getImageClicked().getTopLevelLayer().getSelectedContainer();
 					ImagePanelGraphic image = (ImagePanelGraphic) new ClipboardAdder(false).add(cc);
-					image.setRelativeScale(ImageDPIHandler.ratioFor300DPI());
+					image.setRelativeScale(ImageDPIHandler.ratioForIdealDPI());
 					image.setLocation(this.getClickedCordinateX(), this.getClickedCordinateY());
 					getImageClicked().updateDisplay();
 				}
@@ -1509,7 +1522,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**removes the selected items from the image*/
 	private void deleteSelectedItemsAndLayers(DisplayedImage imageDisplayWrapperClick) {
 		ArrayList<LocatedObject2D> rois3 = getAllSelectedItems(false);
-		ArrayList<GraphicLayer> rois4 = this.getSelectedLayers(this.getImageClicked().getTopLevelLayer());
+		ArrayList<GraphicLayer> rois4 = getSelectedLayers(this.getImageClicked().getTopLevelLayer());
 		CombinedEdit undoableEdit=new CombinedEdit();
 		imageDisplayWrapperClick.getUndoManager().addEdit(undoableEdit);
 		for (LocatedObject2D roi: rois3){
@@ -1613,10 +1626,10 @@ public String getToolTip() {
 	 * items and returns the one that has a given objet
 	 * @return 
 	 */
-	public static TakesLockedItems getLockContainterForObject(LocatedObject2D object, ArrayList<LocatedObject2D> list) {
+	public static TakesAttachedItems getLockContainterForObject(LocatedObject2D object, ArrayList<LocatedObject2D> list) {
 		for(LocatedObject2D t: list) try {
-			if (t==null||!(t instanceof TakesLockedItems)) continue;
-			TakesLockedItems taker=(TakesLockedItems) t;
+			if (t==null||!(t instanceof TakesAttachedItems)) continue;
+			TakesAttachedItems taker=(TakesAttachedItems) t;
 			if (taker.hasLockedItem(object)) return taker;
 		} catch (Throwable t2) {
 			IssueLog.logT(t2);
@@ -1625,11 +1638,11 @@ public String getToolTip() {
 	}
 	
 	/**gets all the objects in a particular image that can take on an attached item.*/
-	public static ArrayList<LocatedObject2D> getPotentialLockAcceptors(ImageWrapper gmp) {
+	public static ArrayList<LocatedObject2D> getPotentialLockAcceptors(ImageWorkSheet gmp) {
 		ArrayList<LocatedObject2D> aRoi;
 		aRoi=gmp.getLocatedObjects();
 		ArraySorter<LocatedObject2D> as = new ArraySorter<LocatedObject2D>();
-		aRoi=as.getThoseOfClass(aRoi, TakesLockedItems.class);
+		aRoi=as.getThoseOfClass(aRoi, TakesAttachedItems.class);
 		
 		return aRoi;
 	}
@@ -1637,7 +1650,7 @@ public String getToolTip() {
 	/**finds what object holds the attached item
 	 * @param object2 the attached item
 	 * @return the item that object2 is attached to*/
-	public TakesLockedItems findLockContainer(LocatedObject2D object2) {
+	public TakesAttachedItems findLockContainer(LocatedObject2D object2) {
 		return getLockContainterForObject(object2, getPotentialLockAcceptors(getImageClicked()));
 	}
 	
@@ -1674,7 +1687,7 @@ public String getToolTip() {
 	public LockedItemHandle findHandleForLockedItem(Object r) {
 		if (r instanceof LocatedObject2D) {
 			LocatedObject2D object=(LocatedObject2D) r;
-			TakesLockedItems tk = findLockContainer(object);
+			TakesAttachedItems tk = findLockContainer(object);
 			if(tk==null) return null;
 			if (tk.getSmartHandleList()==null) return null;
 			LockedItemHandle lockedItemHandle = tk.getSmartHandleList().getLockedItemHandle(object);
@@ -1698,18 +1711,6 @@ public String getToolTip() {
 		
 	}
 	
-	/**determines whether the canvas is automatically resized*/
-	public boolean isResizeCanvasAfterMouseRelease() {
-		if (CanvasOptions.current.resizeCanvasAfterEdit)
-		return resizeAfterMousDrags;
-		return false;
-	}
-
-	/**If the user has allowed automatic resizing of the canvas, this method will determine if 
-	 * this particular tool does automatic resizing*/
-	public void setResizeAfterMousDrags(boolean resizeAfterMousDrags) {
-		this.resizeAfterMousDrags = resizeAfterMousDrags;
-	}
 
 	/**If the tool is restricted to instances of a specific class, this returns that class,
 	  if it returns object, the tool will recognize any  located object as selectable*/

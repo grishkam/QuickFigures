@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 
 import graphicalObjects_Shapes.RectangularGraphic;
+import locatedObject.StrokedItem;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectInputPanel;
 import standardDialog.OnGridLayout;
@@ -33,7 +34,6 @@ import standardDialog.numbers.NumberArrayInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
-import utilityClassesForObjects.StrokedItem;
 
 public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, NumberInputListener, ChoiceInputListener{
 	/**

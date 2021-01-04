@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,11 +18,13 @@ package objectDialogs;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.FigureDisplayContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.StrokedItem;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.SnappingPanel;
@@ -33,8 +35,6 @@ import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.StrokedItem;
 
 public class GraphicItemOptionsDialog extends StandardDialog {
 
@@ -46,7 +46,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	private static final long serialVersionUID = 1L;
 	public GraphicSampleComponent sam;
 	StrokeInputPanel strokeInput;
-	private static ImageWrapper currentImage=null;
+	private static ImageWorkSheet currentImage=null;
 	private static FigureDisplayContainer setContainer;
 	private boolean updateAfterEachItemChange=true;
 	private static CurrentSetInformer informer=new CurrentFigureSet();
@@ -200,13 +200,13 @@ public  Insets getInsetsPanelFromDialog() {
 
 
 
-public static ImageWrapper getCurrentImage() {
+public static ImageWorkSheet getCurrentImage() {
 	return currentImage;
 }
 
 
 
-public static void setCurrentImage(ImageWrapper currentImage) {
+public static void setCurrentImage(ImageWorkSheet currentImage) {
 	GraphicItemOptionsDialog.currentImage = currentImage;
 }
 

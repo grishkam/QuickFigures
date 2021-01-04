@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,21 +15,14 @@
  *******************************************************************************/
 import java.awt.AWTEvent;
 import java.awt.Toolkit;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
-import applicationAdaptersForImageJ1.ImagePlusDisplayWrap;
 import figureFormat.DirectoryHandler;
-import graphicActionToolbar.CurrentFigureSet;
 import ij.IJ;
-import ij.ImageListener;
-import ij.ImagePlus;
-import ij.gui.ImageWindow;
 import ij.plugin.PlugIn;
 import imageDisplayApp.KeyDownTracker;
 import includedToolbars.ActionToolset1;
@@ -86,7 +79,7 @@ public class Toolset_Runner implements PlugIn {
 	
 	private void onFirstRun() {
 		CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
-		ImagePlus.addImageListener(new  WindowAndSet());
+		
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		try {
 			if (!DirectoryHandler.getDefaultHandler().defaultTemplateExits())
@@ -185,77 +178,7 @@ public class Toolset_Runner implements PlugIn {
 	}
 		
 	
-	class WindowAndSet implements WindowListener, ImageListener {
-		
-		//KeyListener kd=new KeyDownTracker();//not as important in recent versions. might not need the image listener added at all
-
-		@Override
-		public void windowActivated(WindowEvent arg0) {
-			if (arg0.getWindow() instanceof ImageWindow) {
-				ImageWindow iw=(ImageWindow) arg0.getWindow();
-				CurrentFigureSet.setCurrentActiveDisplayGroup(new ImagePlusDisplayWrap(iw.getImagePlus()));
-		
-				
-				
-			}
-		}
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowClosing(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {
-			/**if (arg0.getWindow() instanceof ImageWindow) {
-				ImageWindow iw=(ImageWindow) arg0.getWindow();
-		
-			}*/
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowIconified(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowOpened(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void imageClosed(ImagePlus arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void imageOpened(ImagePlus arg0) {
-			arg0.getWindow().addWindowListener(this);
-			
-		}
-
-		@Override
-		public void imageUpdated(ImagePlus arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-}
+	
 
 	
 	

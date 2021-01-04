@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import javax.swing.JColorChooser;
 
 import applicationAdapters.CanvasMouseEvent;
 import handles.SmartHandle;
+import locatedObject.ColorDimmer;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
-import utilityClassesForObjects.ColorDimmer;
 
 /**A set of colored rectangles to be drawn in a color chooser style array. User will be able to select color. 
  */

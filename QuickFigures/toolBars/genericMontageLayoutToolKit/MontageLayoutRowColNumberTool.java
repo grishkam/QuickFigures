@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import includedToolbars.StatusPanel;
 import layout.PanelContentExtract;
 import layout.PanelLayout;
 import layout.basicFigure.BasicLayout;
+import locatedObject.LocatedObject2D;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
-import utilityClassesForObjects.LocatedObject2D;
 
 
 /**A tool to change the number of rows and cols in a layout. when shift is held down

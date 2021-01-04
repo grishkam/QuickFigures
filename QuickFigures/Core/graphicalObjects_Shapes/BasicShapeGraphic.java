@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import java.io.Serializable;
 
 import handles.HasSmartHandles;
 import handles.SmartHandleList;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.StrokedItem;
+import locatedObject.BasicStrokedItem;
+import locatedObject.Scales;
+import locatedObject.StrokedItem;
 
 public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartHandles{
 

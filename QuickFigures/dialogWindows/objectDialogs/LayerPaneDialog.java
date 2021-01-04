@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.strings.StringInputPanel;
 
+/**A dialog for renaming a layer*/
 public class LayerPaneDialog extends GraphicItemOptionsDialog  {
 
 	boolean showKey=false;
@@ -28,7 +29,7 @@ public class LayerPaneDialog extends GraphicItemOptionsDialog  {
 	GraphicLayerPane layer;
 	public LayerPaneDialog(GraphicLayerPane layer) {
 		
-		//super(layer.getName()+" Dialog");
+		this.setWindowCentered(true);
 		this.layer=layer;
 		addOptionsToDialog() ;
 		

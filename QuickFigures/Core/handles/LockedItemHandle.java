@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -39,17 +39,17 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.KeyDownTracker;
 import imageDisplayApp.OverlayObjectManager;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
+import locatedObject.RectangleEdges;
+import locatedObject.TakesAttachedItems;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiSnappingDialog;
 import undo.CombinedEdit;
 import undo.UndoReorder;
 import undo.UndoSnappingChange;
 import undo.UndoTakeLockedItem;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 
 public class LockedItemHandle extends SmartHandle {
 
@@ -58,7 +58,7 @@ public class LockedItemHandle extends SmartHandle {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected TakesLockedItems taker;
+	protected TakesAttachedItems taker;
 	protected LocatedObject2D object;
 	private boolean infineControl=false;
 	private Shape lastInnerShape;
@@ -78,7 +78,7 @@ public class LockedItemHandle extends SmartHandle {
 		handlesize=20;
 	}
 	
-	public LockedItemHandle(TakesLockedItems taker, LocatedObject2D object, int num) {
+	public LockedItemHandle(TakesAttachedItems taker, LocatedObject2D object, int num) {
 		this(0,0);
 		this.taker=taker;
 		this.setObject(object);
@@ -319,7 +319,7 @@ public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 private void performTransplant() {
 	
 	/**These lines of code move the locked item beween lock takers*/
-	TakesLockedItems potentialTransplant2 = (TakesLockedItems) potentialTransplantTarget;
+	TakesAttachedItems potentialTransplant2 = (TakesAttachedItems) potentialTransplantTarget;
 	UndoTakeLockedItem undo = new UndoTakeLockedItem(potentialTransplant2, getObject() , false);
 	potentialTransplant2.addLockedItem(getObject());
 	if(currentEdit!=null) currentEdit.addEditToList(undo);

@@ -49,6 +49,7 @@ import javax.swing.undo.UndoManager;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicActionToolbar.CurrentFigureSet;
+import locatedObject.ScaleInfo;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.booleans.BooleanArrayInputPanel;
@@ -80,7 +81,6 @@ import standardDialog.strings.StringInputListener;
 import standardDialog.strings.StringInputPanel;
 import storedValueDialog.StoredValueDilaog;
 import undo.AbstractUndoableEdit2;
-import utilityClassesForObjects.ScaleInfo;
 
 /**inspired by imageJ's generic dialog. */
 public class StandardDialog extends JDialog implements KeyListener, ActionListener, StringInputListener, NumberInputListener, BooleanInputListener,ChoiceInputListener, FontInputListener, ObjectEditListener ,ColorInputListener {

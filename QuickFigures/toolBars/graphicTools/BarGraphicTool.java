@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@ package graphicTools;
 import java.awt.Color;
 import java.awt.Point;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import figureFormat.ScaleBarExamplePicker;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.TreeIconWrappingToolIcon;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoTakeLockedItem;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A tool to add scale bars to panels. no longer included in the tool bar but its methods are called by popup menus*/
 public class BarGraphicTool extends GraphicTool {
@@ -57,7 +57,7 @@ public class BarGraphicTool extends GraphicTool {
 	
 	/**creates a scale bar for image panel roi2.
 	 * @return */
-	public BarGraphic getOrcreateBar(ImageWrapper gmp, LocatedObject2D roi2) {
+	public BarGraphic getOrcreateBar(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		if (roi2 instanceof 	BarGraphic) {
 			return (BarGraphic) roi2;
 		}
@@ -120,7 +120,7 @@ public class BarGraphicTool extends GraphicTool {
 	}
 	
 	
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		getOrcreateBar(gmp, roi2);
 		
 	}

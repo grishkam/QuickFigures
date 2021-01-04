@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdaptersForImageJ1;
 
 import java.awt.Color;
@@ -30,8 +35,8 @@ import ij.process.ColorProcessor;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import ij.process.ShortProcessor;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
-import utilityClassesForObjects.RectangleEdges;
 
 /**an implementation of pixel wrapper interface for ImageJ images
  *  QuickFigures.  Of the methods below, only a few are crucial for the 

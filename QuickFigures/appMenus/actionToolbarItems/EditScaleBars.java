@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.Fillable;
+import locatedObject.LocatedObject2D;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.StandardDialog;
@@ -43,8 +45,6 @@ import standardDialog.strings.InfoDisplayPanel;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.UndoScaleBarEdit;
-import utilityClassesForObjects.Fillable;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**This class applies specific properties to all the selected scale bars.*/
 public class EditScaleBars extends BasicMultiSelectionOperator implements  LayoutSpaces, ColorInputListener,  Serializable {

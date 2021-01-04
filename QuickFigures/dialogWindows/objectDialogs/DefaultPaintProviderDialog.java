@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  *******************************************************************************/
 package objectDialogs;
 
+import locatedObject.DefaultPaintProvider;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.ItemSelectblePanel;
 import standardDialog.colors.ColorInputPanel;
 import standardDialog.graphics.FixedEdgeSelectable;
-import utilityClassesForObjects.DefaultPaintProvider;
 
 /**A dialog for editing paint provider objects 
  * @see DefaultPaintProvider*/

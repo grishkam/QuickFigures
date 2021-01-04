@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -44,6 +44,9 @@ import layout.basicFigure.GridLayoutEditEvent;
 import layout.basicFigure.GridLayoutEditListener;
 import layout.basicFigure.LayoutEditorDialogs;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
+import locatedObject.Scales;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.MontageLayoutPanelMenu;
@@ -51,9 +54,6 @@ import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
 import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.Scales;
 
 public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayoutEditListener, Scales {
 	

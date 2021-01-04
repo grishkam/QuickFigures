@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutSpaces;
+import undo.CanvasResizeUndo;
+import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 
 /**a handle that allows the user to pack the layout panels into a different number of rows and columns 
@@ -42,6 +44,7 @@ public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 	protected int type;
 	protected int index;
 	private UndoLayoutEdit currentUndo;
+	private CombinedEdit combinedUndo;
 
 	
 
@@ -85,13 +88,14 @@ public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 	/***/
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		if(currentUndo!=null) currentUndo.establishFinalState();
-		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentUndo);
+		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(combinedUndo);
 		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
 	
 	}
 	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		currentUndo = new UndoLayoutEdit(layout);//establishes the undo
+		combinedUndo=new CombinedEdit(currentUndo);
 	}
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
@@ -109,8 +113,10 @@ public class EditRowColNumberHandle extends SmartHandle implements LayoutSpaces{
 		
 		
 		if (CanvasOptions.current.resizeCanvasAfterEdit)
-			new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
-
+			{
+			CanvasResizeUndo undoCanvas = new CanvasAutoResize(false).performUndoableAction(lastDragOrRelMouseEvent.getAsDisplay());
+			combinedUndo.addEditToList(undoCanvas);
+			}
 	}
 
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.awt.geom.Rectangle2D;
 
 import applicationAdapters.ToolbarTester;
 import imageDisplayApp.ImageWindowAndDisplaySet;
-import utilityClassesForObjects.RectangleEdges;
+import locatedObject.RectangleEdges;
 
 /**A graphic that looks like a plus sign*/
 public class PlusGraphic extends TrapezoidGraphic {

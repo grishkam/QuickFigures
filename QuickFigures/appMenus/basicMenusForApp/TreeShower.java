@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import java.awt.Window;
@@ -22,38 +27,37 @@ import java.awt.event.WindowListener;
 import applicationAdapters.DisplayedImage;
 import layersGUI.GraphicTreeUI;
 
+/**A menu item that shows the layers GUI*/
 public class TreeShower  extends BasicMenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		GraphicTreeUI tree = new GraphicTreeUI(diw.getImageAsWrapper());
 		tree.showTreeForLayerSet(diw.getImageAsWrapper()) ;
-		treeWindowCloser closer = new treeWindowCloser(tree, diw.getWindow());
+		TreeWindowCloser closer = new TreeWindowCloser(tree, diw.getWindow());
 		
 		diw.getWindow().addWindowListener(closer);
 	}
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "ShowMeTheTree";
 	}
 
 	@Override
 	public String getNameText() {
-		// TODO Auto-generated method stub
 		return "Show Layers";
 	}
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
-		return "Image";
+		return "Edit";
 	}
 	
-	class treeWindowCloser implements WindowListener {
+	/**A window listener that closes the tree window if the worksheet window is closed*/
+	class TreeWindowCloser implements WindowListener {
 		GraphicTreeUI currentTree=null;
-		public treeWindowCloser(GraphicTreeUI tree, Window w) {
+		public TreeWindowCloser(GraphicTreeUI tree, Window w) {
 			
 			currentTree=tree;
 		}

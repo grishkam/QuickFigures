@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -36,6 +36,9 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
@@ -45,9 +48,6 @@ import undo.UndoManagerPlus;
 import undo.UndoMoveItems;
 import undo.UndoReorder;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
 
 /**This class aligns objects into a grid.
  * Depending on the options, also addsa layout*/

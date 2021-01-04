@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,17 +37,17 @@ import iconGraphicalObjects.IconUtil;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorObjectConvertable;
 import layersGUI.HasTreeBranchIcon;
+import locatedObject.Hideable;
+import locatedObject.Keyed;
+import locatedObject.LocatedObject2D;
+import locatedObject.Mortal;
+import locatedObject.ObjectContainer;
+import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
 import objectDialogs.LayerPaneDialog;
 import undo.UndoManagerPlus;
 import utilityClasses1.ArraySorter;
 import utilityClasses1.ItemSwapper;
-import utilityClassesForObjects.Hideable;
-import utilityClassesForObjects.Keyed;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.Mortal;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.ShowsOptionsDialog;
 
 /**Basic implementation of the GraphicLayer interface. This class defines a layer */
 public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializable, IllustratorObjectConvertable, ShowsOptionsDialog, ObjectContainer, KnowsSetContainer, Mortal, HasTreeBranchIcon,KnowsTree, SVGExportable, ItemSwapper<ZoomableGraphic> {

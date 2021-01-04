@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
 import iconGraphicalObjects.IconUtil;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
 import standardDialog.graphics.GraphicDisplayComponent;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
 
 public class SelectAllButton extends BasicMultiSelectionOperator {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.awt.Dimension;
 
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.ZoomableGraphic;
-import utilityClassesForObjects.LocatedObject2D;
+import locatedObject.LocatedObject2D;
 
 public class GraphicSampleComponent extends GraphicComponent {
 

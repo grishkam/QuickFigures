@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,15 +30,15 @@ import java.awt.geom.Rectangle2D;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocationChangeListener;
+import locatedObject.LocationChangeListenerList;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
+import locatedObject.Scales;
+import locatedObject.ScalesFully;
 import undo.PathEditUndo;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LocationChangeListener;
-import utilityClassesForObjects.LocationChangeListenerList;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.ScalesFully;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class PathPointReshapeList extends ReshapeHandleList {
 

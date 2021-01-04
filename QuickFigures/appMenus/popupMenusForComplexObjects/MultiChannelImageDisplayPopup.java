@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	public void addMenus(SmartPopupJMenu thi, MultichannelDisplayLayer panel, PanelList list) {
 		thi.add(new ImageMenuForMultiChannel("Source Image", panel, list) );
 		thi.add(new PanelMenuForMultiChannel("Image Panels", panel, list, panel.getPanelManager()));
-		thi.add(new MenuForChannelLabelMultiChannel("Channel Labels", panel, list, panel.getChannelLabelManager()));
+		thi.add(new MenuForMultiChannelDisplayLayer("Channel Labels", panel, list, panel.getChannelLabelManager()));
 		addChannelMenu(thi);
 	}
 	
@@ -153,8 +153,8 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		thi.add(createChanLabelMenu());
 	}
 
-	public MenuForChannelLabelMultiChannel createChanLabelMenu() {
-		return new MenuForChannelLabelMultiChannel("Channel Labels", displayLayer, list, displayLayer.getChannelLabelManager());
+	public MenuForMultiChannelDisplayLayer createChanLabelMenu() {
+		return new MenuForMultiChannelDisplayLayer("Channel Labels", displayLayer, list, displayLayer.getChannelLabelManager());
 	}
 	
 	@Override

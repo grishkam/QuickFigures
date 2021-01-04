@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 	}
 	
 	public void addCommonOptionsToDialog() {
-		this.add("scale", new NumberInputPanel("Pixel Desnsity (/inch)", ImageDPIHandler.getStandardDPI()/image.getScale(), 2) );
+		this.add("scale", new NumberInputPanel("Pixel Desnsity (/inch)", ImageDPIHandler.getInchDefinition()/image.getScale(), 2) );
 		this.add("frame", new NumberInputPanel("Frame Width", image.getFrameWidthH(), 3) );
 		this.add("frameC", new ColorComboboxPanel("Frame Color ", null, image.getFrameColor()));
 	}
@@ -130,7 +130,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 	}
 	
 	public void setCommonOptionsToDialog(ImagePanelGraphic   image) {
-		double number = ImageDPIHandler.getStandardDPI()/this.getNumber("scale");
+		double number = ImageDPIHandler.getInchDefinition()/this.getNumber("scale");
 		if (number!=0)
 			image.setRelativeScale(number);
 		image.setFrameWidthH((float)this.getNumber("frame"));

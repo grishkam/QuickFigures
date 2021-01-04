@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package sUnsortedDialogs;
 
 import applicationAdapters.HasScaleInfo;
+import locatedObject.ScaleInfo;
 import standardDialog.GriddedPanel;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
 import standardDialog.StandardDialogListener;
-import utilityClassesForObjects.ScaleInfo;
 
 /**Alternative to the set Scale dialog of imageJ. does exactly that but after this dialog,
    QuickFigures will update the targeted image panels*/

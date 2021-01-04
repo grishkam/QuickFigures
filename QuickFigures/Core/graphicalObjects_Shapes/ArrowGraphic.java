@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,11 +40,6 @@ import popupMenusForComplexObjects.ArrowGraphicMenu;
 import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoScalingAndRotation;
-import utilityClassesForObjects.BasicStrokedItem;
-import utilityClassesForObjects.PathPointList;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.RotatesFully;
-import utilityClassesForObjects.Scales;
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEvent;
 import export.pptx.OfficeObjectConvertable;
@@ -65,6 +60,11 @@ import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import keyFrameAnimators.ArrowGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
+import locatedObject.BasicStrokedItem;
+import locatedObject.PathPointList;
+import locatedObject.RectangleEdges;
+import locatedObject.RotatesFully;
+import locatedObject.Scales;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;

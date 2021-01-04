@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,18 +31,18 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import handles.LockedItemHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import locatedObject.LocatedObject2D;
+import locatedObject.AttachedItemList;
+import locatedObject.RectangleEdges;
+import locatedObject.TakesAttachedItems;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import plotParts.DataShowingParts.PlotLabel;
 import undo.AbstractUndoableEdit2;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A special rectangle that defines and draws the plot area*/
-public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePopupMenu, TakesLockedItems {
+public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePopupMenu, TakesAttachedItems {
 
 	/**
 	 * 
@@ -50,7 +50,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	private static final long serialVersionUID = 1L;
 	
 	private PlotArea plotArea;
-	LockedItemList list=new LockedItemList(this);
+	AttachedItemList list=new AttachedItemList(this);
 	{hideCenterAndRotationHandle=true;}
 	
 	
@@ -167,7 +167,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	}
 
 	@Override
-	public LockedItemList getLockedItems() {
+	public AttachedItemList getLockedItems() {
 		return list;
 	}
 	

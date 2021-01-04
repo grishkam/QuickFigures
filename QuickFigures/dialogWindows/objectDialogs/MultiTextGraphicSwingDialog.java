@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
@@ -29,8 +31,6 @@ import standardDialog.colors.ColorDimmingBox;
 import standardDialog.fonts.FontChooser;
 import standardDialog.numbers.AngleInputPanel;
 import undo.Edit;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 

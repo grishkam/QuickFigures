@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package appContext;
 
 /**A certain number of points on the canvas correspond to 1 inch distance.
@@ -34,18 +39,22 @@ public class ImageDPIHandler {
 	private static int POINTS_PER_INCH = DEFAULT_POINTS_PER_INCH ;
 
 	/**Returns the number of points on the canvas that corresponds to 1 inch distance*/
-	public static int getStandardDPI() {
+	public static int getInchDefinition() {
 		return POINTS_PER_INCH;
+	}
+	public static void setInchDefinition(int anInch) {
+		POINTS_PER_INCH=anInch;
 	}
 	
 	/**returns the pixel density ratio needed for panels with 300 pixels per inch*/
-	public static double ratioFor300DPI() {
-		double i=getStandardDPI();
-		return i/300.0;
+	public static double ratioForIdealDPI() {
+		double i=getInchDefinition();
+		return i/idealPanelPixelDesity();
 	}
 	
 	
 	public static double idealPanelPixelDesity() {return 300;}
 	
+
 
 }

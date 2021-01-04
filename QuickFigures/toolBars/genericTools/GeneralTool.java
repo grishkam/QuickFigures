@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package genericTools;
 import appContext.CurrentAppContext;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import externalToolBar.*;
 import figureOrganizer.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
@@ -26,9 +26,9 @@ import icons.IconSet;
 import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutEditorDialogs;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
-import utilityClassesForObjects.LocatedObject2D;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -108,7 +108,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	private int mouseXdrag;
 	private int mouseYdrag;
 	private DisplayedImage imageClick;
-	private ImageWrapper imageWrapperClick;
+	private ImageWorkSheet imageWrapperClick;
 	
 	protected CanvasMouseEvent event ;//the latest mouse event of any kind
 	protected CanvasMouseEvent eventClick ;
@@ -116,12 +116,6 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	protected CanvasMouseEvent eventRelease ;
 	boolean markEditedRegionsWithRoi=true;
 	
-	private int channelClick;
-	private int channelDrag;
-	private int frameClick;
-	private int frameDrag;
-	private int sliceClick;
-	private int sliceDrag;
 	public boolean isUpdaterImage=false;
 	protected PanelListElement panelClick;
 	protected PanelListElement panelDrag;
@@ -302,9 +296,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		setClickedCordinateX(event.getCoordinateX());
 		setClickedCordinateY(event.getCoordinateY());
 	
-		setChannelClick(event.getClickedChannel());
-		setFrameClick(event.getClickedFrame());
-		setSliceClick(event.getClickedSlice());
+	
 	}
 	
 
@@ -316,9 +308,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		setDragCordinateX(event.getCoordinateX());
 		setDragCordinateY(event.getCoordinateY());
 
-		setChannelDrag(event.getClickedChannel());
-		setFrameDrag(event.getClickedFrame());
-		setSliceDrag(event.getClickedSlice());
+		
 	}
 	private void setXY3(DisplayedImage imp, CanvasMouseEvent  e) {
 		CanvasMouseEvent event=e;
@@ -620,70 +610,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	
-	@Override
-	public int getChannelClick() {
-		return channelClick;
-	}
-
-	@Override
-	public void setChannelClick(int channelClick) {
-		this.channelClick = channelClick;
-	}
-
-
-	@Override
-	public int getChannelDrag() {
-		return channelDrag;
-	}
-
-	@Override
-	public void setChannelDrag(int channelDrag) {
-		this.channelDrag = channelDrag;
-	}
-
-
-	@Override
-	public int getFrameClick() {
-		return frameClick;
-	}
-
-
-	@Override
-	public void setFrameClick(int frameClick) {
-		this.frameClick = frameClick;
-	}
-
-	@Override
-	public int getFrameDrag() {
-		return frameDrag;
-	}
-
-	@Override
-	public void setFrameDrag(int frameDrag) {
-		this.frameDrag = frameDrag;
-	}
-
-	@Override
-	public int getSliceClick() {
-		return sliceClick;
-	}
-
-	@Override
-	public void setSliceClick(int sliceClick) {
-		this.sliceClick = sliceClick;
-	}
-
-	@Override
-	public int getSliceDrag() {
-		return sliceDrag;
-	}
-
-	@Override
-	public void setSliceDrag(int sliceDrag) {
-		this.sliceDrag = sliceDrag;
-	}
-
-
+	
  
 
 
@@ -776,13 +703,13 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	 * @see GenericMontageUIKit.ToolCore#getImageWrapperClick()
 	 */
 	@Override
-	public ImageWrapper getImageWrapperClick() {
+	public ImageWorkSheet getImageWrapperClick() {
 		return imageWrapperClick;
 	}
 
 	
 	@Override
-	public void setImageWrapperClick(ImageWrapper imageWrapperClick) {
+	public void setImageWrapperClick(ImageWorkSheet imageWrapperClick) {
 		this.imageWrapperClick = imageWrapperClick;
 	}
 
@@ -897,7 +824,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 
 	@Override
-	public ImageWrapper currentlyInFocusWindowImage() {
+	public ImageWorkSheet currentlyInFocusWindowImage() {
 		return CurrentFigureSet.getCurrentActiveDisplayGroup().getImageAsWrapper();
 		}
 

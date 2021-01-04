@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,10 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.io.Serializable;
 
+/**A class that stores a reference to a part of a multi-dimensional image
+ * Instances of this class can indicate a frame, channel or slice (or all three).
+   */
 public class CSFLocation implements Serializable {
 	/**
 	 * 
@@ -41,16 +49,16 @@ public class CSFLocation implements Serializable {
 	
 	public static CSFLocation frameLocation(int t) {
 		CSFLocation out = new CSFLocation();
-		out.channel=-1;
+		out.channel=NONE_SELECTED;
 		out.frame=t;
-		out.slice=-1;
+		out.slice=NONE_SELECTED;
 		return out;
 	}
 	
 	public static CSFLocation sliceLocation(int t) {
 		CSFLocation out = new CSFLocation();
-		out.channel=-1;
-		out.frame=-1;
+		out.channel=NONE_SELECTED;
+		out.frame=NONE_SELECTED;
 		out.slice=t;
 		return out;
 	}

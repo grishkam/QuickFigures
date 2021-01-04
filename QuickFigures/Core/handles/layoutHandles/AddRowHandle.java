@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEvent;
-import applicationAdapters.DisplayedImage;
 import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
@@ -30,37 +29,40 @@ import handles.SmartHandle;
 
 import java.awt.geom.Rectangle2D;
 
-import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutSpaces;
+import undo.CombinedEdit;
+import undo.UndoLayoutEdit;
 
 /**A handle that adds rows/cols to the end of the layout or */
 public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 
 	private DefaultLayoutGraphic layout;
 	private int type;
-	private boolean subtract=false;
+	private boolean subtractionOnly=false;//set to true if this 
 	boolean dragType=true;
-	private DisplayedImage wrap;
-	int a=0;
+	int defaultOffSet=0;
 	int plusSize = 5;
+	private UndoLayoutEdit undo;
+	private boolean undoAdded;
+	private CombinedEdit undo2;
 
 
 
 	public AddRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int y, boolean sub) {
 
-		this.subtract=sub;
+		this.subtractionOnly=sub;
 		this.layout=montageLayoutGraphic;
 		this.type=y;
-		int offset = -a; if(subtract) offset=-offset;
+		int offset = -defaultOffSet; if(subtractionOnly) offset=-offset;
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
 		
 		double x2 = space.getCenterX()+offset;
 		double y2 = space.getMaxY()+20;
 		if(type==COLS) {
-			offset = -a; if(!subtract) offset=a;
+			offset = -defaultOffSet; if(!subtractionOnly) offset=defaultOffSet;
 			y2 = space.getCenterY()+offset;
 			x2 = space.getMaxX()+20;
 		}
@@ -70,9 +72,9 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		super.handlesize=4;
 		
 		
-		Area a = addSubtractShape(plusSize, subtract);
+		Area a = addSubtractShape(plusSize, subtractionOnly);
 		specialShape=a;//AffineTransform.getTranslateInstance(x2,y2).createTransformedShape(a);
-		if (subtract)this.setHandleColor(Color.red);
+		if (subtractionOnly)this.setHandleColor(Color.red);
 		else setHandleColor(Color.green);
 		
 		if(type==COLS) this.setHandleNumber(PanelLayoutGraphic.AddColHandle); else
@@ -80,7 +82,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		
 		if(dragType)return;
 		message="Add ";
-		if(subtract) message="Remove ";
+		if(subtractionOnly) message="Remove ";
 		if(type==COLS) message+="Column"; else message+="Row";
 		
 	}
@@ -97,10 +99,9 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	}
 	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-		wrap=canvasMouseEventWrapper.getAsDisplay();
 		
 		if(dragType&&canvasMouseEventWrapper.clickCount()<2) return;
-		if (this.subtract) {
+		if (this.subtractionOnly) {
 			if(type==COLS&&layout.getPanelLayout().nColumns()>1) 
 				layout.getEditor().addCols(layout.getPanelLayout(), -1);
 			if (type==ROWS&&layout.getPanelLayout().nRows()>1) layout.getEditor().addRows(layout.getPanelLayout(), -1);
@@ -110,10 +111,9 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 			else layout.getEditor().addRows(layout.getPanelLayout(), 1);
 		}
 		
-		if (CanvasOptions.current.resizeCanvasAfterEdit)
-			new CanvasAutoResize().performActionDisplayedImageWrapper(wrap);
-
-		
+		undo=new UndoLayoutEdit(layout);
+		undo2=new CombinedEdit(undo);
+		undoAdded=false;
 	}
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
@@ -126,10 +126,21 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		if (rowcol[0]+bm.nRows()>=1 &&type==ROWS)edit.addRows(bm, rowcol[0]);
 		if (rowcol[1]+bm.nColumns()>=1 &&type==COLS)edit.addCols(bm, rowcol[1]);
 		
-		if (CanvasOptions.current.resizeCanvasAfterEdit)
-			new CanvasAutoResize().performActionDisplayedImageWrapper(lastDragOrRelMouseEvent.getAsDisplay());
-
+		if (undo2!=null) {
+			undo2.addEditToList(
+					new CanvasAutoResize(false).performUndoableAction(lastDragOrRelMouseEvent.getAsDisplay())
+			);
+		}
+		if (undo!=null) 
+			{undo.establishFinalLocations();
+			if(!undoAdded) {
+				lastDragOrRelMouseEvent.addUndo(undo2);
+				undoAdded=true;
+			}
+			
+			}
 	}
+	
 	/**What to do when a handle is moved from point p1 to p2*/
 	public void handleMove(Point2D p1, Point2D p2) {
 		

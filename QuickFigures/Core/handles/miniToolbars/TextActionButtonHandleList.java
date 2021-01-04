@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import handles.IconHandle;
+import locatedObject.LocatedObject2D;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.DialogIcon;
 import selectedItemMenus.LayerSelector;
@@ -45,10 +46,9 @@ import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 import standardDialog.fonts.FontChooser;
 import standardDialog.numbers.NumberInputPanel;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 import undo.CombinedEdit;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
 
 /**A list of handles that works like a mini toolbar for text Graphic*/
 public class TextActionButtonHandleList extends ActionButtonHandleList {

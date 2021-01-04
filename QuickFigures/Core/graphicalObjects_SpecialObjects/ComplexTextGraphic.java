@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_SpecialObjects;
 
 import java.awt.Color;
@@ -34,17 +39,17 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import icons.TreeIconForTextGraphic;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;
+import locatedObject.ColorDimmer;
+import locatedObject.ShapesUtil;
 import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.ComplexTextGraphicSwingDialog;
 import standardDialog.StandardDialog;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 import undo.Edit;
 import undo.UndoAbleEditForRemoveItem;
-import utilityClassesForObjects.ColorDimmer;
-import utilityClassesForObjects.ShapesUtil;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
 
 /**A subclass of text graphic that displays text consisting of many lines*/
 public class ComplexTextGraphic extends TextGraphic {
@@ -54,15 +59,36 @@ public class ComplexTextGraphic extends TextGraphic {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private TextParagraph paragraph=new TextParagraph(this); {paragraph.addLine();}
+	
+	/**Creates text graphic with the text given*/
 	public ComplexTextGraphic(String text) {
 		super();
 		this.getParagraph().get(0).get(0).setText(text);
 	}
 	
+	/**Creates a multi-line text graphic with the lines of text given*/
+	public ComplexTextGraphic(String... lines) {
+		super();
+		if(lines.length>0)
+			this.getParagraph().get(0).get(0).setText(lines[0]);
+			else return;
+		
+		if(lines.length>1) {
+			for(int i=1; i<lines.length; i++)  {
+				String line = lines[i];
+				if(line!=null &&!line.equals(""))
+					this.getParagraph().addLine(line);
+				}
+		}
+	}
+	
+	/**Creates and empty text graphic */
 	public ComplexTextGraphic() {
 		super();
 	}
 	
+	/**Creates a copy*/
 	public ComplexTextGraphic copy() {
 		
 		
@@ -79,44 +105,12 @@ public class ComplexTextGraphic extends TextGraphic {
 		return output;
 	}
 
-	
+	/**returns another graphic of the same class*/
 	public ComplexTextGraphic createAnother() {
 		 return new ComplexTextGraphic();
 		}
 	
-	private TextParagraph paragraph=new TextParagraph(this); {paragraph.addLine();}
-	
-	
-	public static ComplexTextGraphic createMultiLine(ArrayList<String> texts, ArrayList<Color> c) {
-		ComplexTextGraphic thi =  new ComplexTextGraphic();
-		int cindex=0;
-		thi.setParagraph(new TextParagraph(thi));
-		if (c==null) c=new ArrayList<Color>();
-		
-		for(int i=0; i<texts.size(); i++, cindex++) {
-			String text=texts.get(i);
-			if (text==null) continue;
-			Color color=Color.black;
-			
-			if (c.size()<=cindex) {
-				cindex=0;
-			}
-			if (c.size()>cindex) {
-				color=c.get(cindex);
-			}
-			thi.getParagraph().addLineFromCodeString(text,color);
-			//thi.getParagraph().add(new TextLine(thi.getParagraph(), text,color));
-		}
-		
-		
-		
-		return thi;
-		
-	}
-	
-	
-	
-	
+	/**Creates a text graphic with several segments of text in different colors*/
 	public static ComplexTextGraphic createMultiSegment(ArrayList<String> texts, ArrayList<Color> c) {
 		ComplexTextGraphic thi = new ComplexTextGraphic();
 		int cindex=0;
@@ -145,12 +139,14 @@ public class ComplexTextGraphic extends TextGraphic {
 		
 	}
 	
+	/**Creates a text graphic with several colors*/
 	public static ComplexTextGraphic createRainbow(String st, int[] arr, Color[] color) {
 		ArrayList<String> sts = splitStringBasedOnArray(st, arr);
 		ArrayList<Color> colors = ComplexTextGraphic.createColorArr(color);
 		return createMultiSegment(sts, colors);
 	}
 	
+	/**splits up the string st with segment lengths determined by the array given*/
 	public static ArrayList<String> splitStringBasedOnArray(String st, int[] arr) {
 		ArrayList<String> o=new ArrayList<String>();
 		char[] arr2 = st.toCharArray();
@@ -171,37 +167,11 @@ public class ComplexTextGraphic extends TextGraphic {
 		return o;
 	}
 	
-	public static ComplexTextGraphic createExample() {
-		ComplexTextGraphic thi =  new ComplexTextGraphic();
-		 TextLine line1=new TextLine(thi.getParagraph()); {
-			line1.setParent(thi.getParagraph());
-			line1.add(new TextLineSegment("Example", 0));
-			line1.add(new TextLineSegment("Line 1", 1));
-			line1.get(1).setTextColor(Color.GREEN);
-		}
-		 TextLine line2=new TextLine(thi.getParagraph()); {
-			line2.setParent(thi.getParagraph());
-			line2.add(new TextLineSegment("Example", 0));
-			line2.add(new TextLineSegment("Two ", 2));
-			line2.get(1).setTextColor(Color.red);
-		}
-		
-		 TextLine line3=new TextLine(thi.getParagraph()); {
-			line3.setParent(thi.getParagraph());
-			line3.add(new TextLineSegment("Example", 0));
-			line3.add(new TextLineSegment("3", 2));
-			line3.get(1).setTextColor(Color.blue);
-		}
-		 
-				thi.getParagraph().add(line1);
-				thi.getParagraph().add(line2);
-				thi.getParagraph().add(line3);
-			return thi;
-	}
-	
+
+	/**A hashmap used for keeping track of the bounding polygon for each text segment*/
 	private transient HashMap<TextLineSegment, Polygon> rotatedSegmentBounds=new HashMap<TextLineSegment, Polygon>();
-	private TextLineSegment cursorSegment;
-	private ArrayList<TextLineSegment> allSelectedSegments;
+	private TextLineSegment cursorSegment;//which text segment currently contains the cursor
+	private ArrayList<TextLineSegment> allSelectedSegments;//Add the highlighted segments; from the cursor location to the highlight location
 	
 
 	/**applies the rotation transformation to the segments*/
@@ -225,6 +195,9 @@ public class ComplexTextGraphic extends TextGraphic {
 		}
 	}
 	
+	
+	/**Calculates the bounding box of the text item
+	 */
 	public void setUpBounds(Graphics g) { 
         textDimension =getParagraph().getDimensionsForAllLines(g, x,y);
         textDimension=ShapesUtil.addInsetsToRectangle((Rectangle2D.Double)textDimension, getInsets());
@@ -245,7 +218,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		return null;
 	}
 	
-	/**Returns the segment at a given point*/
+	/**Returns the segment nearest to the given point*/
 	public  TextLineSegment getNearestSegmentAtPoint(Point2D p) {
 		double d=Integer.MAX_VALUE;
 		TextLineSegment nearest = this.getParagraph().getAllSegments().get(0);
@@ -260,6 +233,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		}
 		return nearest;
 	}
+	
 	
 	@Override
 	public void dropColor(Color ob, Point p) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *    limitations under the License.
  *******************************************************************************/
 package genericMontageLayoutToolKit;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import externalToolBar.DragAndDropHandler;
 import genericTools.BasicToolBit;
 import genericTools.MoverDragHandler;
@@ -25,10 +25,10 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutEditorDialogs;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -77,7 +77,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		if (removalPermissive) {layoutGraphic.generateRemovalPermissiveImageWrapper();}
 		else {
-				ImageWrapper wrapper = layoutGraphic.getPanelLayout().getEditedImage();
+				ImageWorkSheet wrapper = layoutGraphic.getPanelLayout().getEditedImage();
 			ArrayList<LocatedObject2D> excluded = layoutGraphic.getEditor().getObjectHandler().getExcludedRois(layoutGraphic.getPanelLayout().getBoundry().getBounds(), wrapper);
 			for(LocatedObject2D e: excluded) {
 			wrapper.takeFromImage(e);
@@ -143,7 +143,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	  */
 	public void findClickedLayout() {
 		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageClicked(), this.getClickedCordinateX(), this.getClickedCordinateY(), DefaultLayoutGraphic.class);
-		ArraySorter.removehideableItems(list);//removes hidden layouts
+		ArraySorter.removeHiddenItemsFrom(list);//removes hidden layouts
 		
 		LocatedObject2D layoutGraphic0 = getObjecthandler().nearest(list, new Point(this.getClickedCordinateX(), this.getClickedCordinateY()));
 		if (layoutGraphic0 instanceof DefaultLayoutGraphic) {

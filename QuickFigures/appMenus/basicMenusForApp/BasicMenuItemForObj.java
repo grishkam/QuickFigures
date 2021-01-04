@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
 
+/**An abstract superclass for menu bar items*/
 public abstract class BasicMenuItemForObj implements MenuItemForObj {
 
 	@Override
@@ -29,15 +30,19 @@ public abstract class BasicMenuItemForObj implements MenuItemForObj {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return getMenuPath()+getNameText();
 	}
 
 	
 
+	/**The icon for this menu item*/
 	@Override
 	public Icon getIcon() {
-		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**The icon for the menu that contains this item*/
+	public Icon getSuperMenuIcon() {
 		return null;
 	}
 

@@ -61,7 +61,7 @@ public class PanelList implements Serializable{
 	public boolean channelUpdateMode=false;
 	
     /**Determines the pixel density of newly creates image panels*/
-    private double pixelDensityRatio=ImageDPIHandler.ratioFor300DPI();//
+    private double pixelDensityRatio=ImageDPIHandler.ratioForIdealDPI();//
     
     
 		private ArrayList<PanelListElement> panels=new ArrayList<PanelListElement>();

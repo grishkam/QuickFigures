@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
+import locatedObject.ObjectContainer;
 import logging.IssueLog;
 import undo.CombinedEdit;
-import utilityClassesForObjects.ObjectContainer;
 
 /**Class contains methods for 3 purposes.
 	1) Identify items that belong to a certain category

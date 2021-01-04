@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.io.Serializable;
@@ -26,15 +31,21 @@ import utilityClasses1.ArraySorter;
 
 /**
 Instructions on how to take that channels from a multichannel image
-and make panels.
+and combine them into the panels of a figure.
 Used by many classes
 */
 public class ChannelUseInstructions implements Serializable {
 
 		
 		private static final long serialVersionUID = 1L;
+		
+		/**Constants for the types of panels made*/
 		public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=3, NO_MERGE_PANELS=4;
+		
+		/**constant for the color mode*/
 		public static final int CHANNELS_IN_COLOR=0, CHANNELS_IN_GREYSCALE=1;
+		
+		/**indicates that no channel is chosen*/
 		public static final int NONE_SELECTED=0;
 		
 		
@@ -60,8 +71,8 @@ public class ChannelUseInstructions implements Serializable {
 		    private int idealColNum=5;
 
 			private ChannelPanelReorder reorder;
-			private FrameUseInstructions frameUseMethod;
-			private SliceUseInstructions sliceUseMethod;
+			private FrameUseInstructions frameUseMethod;//which frames are used
+			private SliceUseInstructions sliceUseMethod;//which slices are used
 		 
 		    /**returns a set of channel use instrcutions used when one wants to put
 		     * channel panels as insets near or around a merged image*/
@@ -120,10 +131,12 @@ public class ChannelUseInstructions implements Serializable {
 				return false;
 			}
 			
+			/**sets the selected channel index as excluded from the merged image*/
 			public void setMergeExcluded(int c, boolean excluded) {
 				this.noMergeChannels.setExcluded(c,excluded);
 			}
 			
+			/**sets the selected channel index as excluded from the channel panels*/
 			public void setChannelPanelExcluded(int c, boolean excluded) {
 				this.excludedChannelPanels.setExcluded(c,excluded);
 			}
@@ -167,6 +180,7 @@ public class ChannelUseInstructions implements Serializable {
 				chosenChannel.add(c);
 			}
 			
+			/**sets a channel as excluded from the list*/
 			public void setExcluded(int c, boolean excluded) {
 				if (excluded) {
 					excludeThisChannel(c);
@@ -429,30 +443,35 @@ public class ChannelUseInstructions implements Serializable {
 				reorder=null;
 			}
 
-		
+			/**returns the number of columns that is recommended
+			 * This number will be used when recreating figures*/
 			public int getIdealNumberOfColumns() {
 				return idealColNum;
 			}
 
+			/**sets the number of columns that is recommended
+			 * This number will be used when recreating figures*/
 			public void setIdealNumberOfColumns(int idealColNum) {
 				if (idealColNum<1) return;
 				this.idealColNum = idealColNum;
 			}
 
-
+			/**returns a list of which channel panels should be excluded from the figure*/
 			public ArrayList<Integer> getExcludedChannelPanels() {
 				return excludedChannelPanels.chosenChannel;
 			}
 
+			/**sets the list of which channel panels should be excluded from the figure*/
 			public void setExcludedChannelPanels(ArrayList<Integer> excludedChannelPanels) {
 				this.excludedChannelPanels.chosenChannel = excludedChannelPanels;
 			}
 
-
+			/**returns a list of which channel panels should be excluded from the merged image panels*/
 			public ArrayList<Integer> getNoMergeChannels() {
 				return noMergeChannels.chosenChannel;
 			}
 
+			/**set the list of channels to be excluded from the merged image panels*/
 			public void setNoMergeChannels(ArrayList<Integer> noMergeChannels) {
 				this.noMergeChannels.chosenChannel = noMergeChannels;
 			}

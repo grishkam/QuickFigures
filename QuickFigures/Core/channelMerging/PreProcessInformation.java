@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,13 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import java.awt.Rectangle;
 import java.io.Serializable;
 
 /**this class contains information for the rotation, cropping and scaling
-  performed on a multidimensional image. This is the 'preprocess'*/
+  performed on a multidimensional image. This is the 'preprocess'
+  Record of this process is kept in the event the user needs to repeat
+  with an altered set of parameters*/
 public class PreProcessInformation implements Serializable {
 	
 	/**

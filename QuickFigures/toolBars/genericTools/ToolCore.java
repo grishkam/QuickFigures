@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.awt.Shape;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import layout.basicFigure.BasicLayout;
 
 /**Objects that implements this interface 
@@ -30,15 +30,15 @@ import layout.basicFigure.BasicLayout;
 public interface ToolCore {
 
 	
-	public ImageWrapper currentlyInFocusWindowImage();
+	public ImageWorkSheet currentlyInFocusWindowImage();
 	
 	/**Sets and returns the image being worked on by the tool*/
 	public abstract DisplayedImage getClickedImage();
 	public abstract void setClickedImage(DisplayedImage d);
 	
-	public abstract ImageWrapper getImageWrapperClick();
+	public abstract ImageWorkSheet getImageWrapperClick();
 
-	public abstract void setImageWrapperClick(ImageWrapper imageWrapperClick);
+	public abstract void setImageWrapperClick(ImageWorkSheet imageWrapperClick);
 	
 	
 	public abstract boolean shiftDown();
@@ -105,7 +105,7 @@ public interface ToolCore {
 	public abstract int getMouseYrelease();
 
 	//Stores the index of the channel, frame of slice being dragged
-	public abstract int getChannelClick();
+	/**public abstract int getChannelClick();
 	public abstract void setChannelClick(int channelClick);
 	public abstract int getChannelDrag();
 	public abstract void setChannelDrag(int channelDrag);
@@ -116,7 +116,7 @@ public interface ToolCore {
 	public abstract int getSliceClick();
 	public abstract void setSliceClick(int sliceClick);
 	public abstract int getSliceDrag();
-	public abstract void setSliceDrag(int sliceDrag);
+	public abstract void setSliceDrag(int sliceDrag);*/
 
 	
 	public abstract int getPanelIndexClick();

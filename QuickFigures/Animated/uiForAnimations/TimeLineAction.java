@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package uiForAnimations;
-
-
 
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 
+/**A menu action that displays the keyframe animation gui*/
 public class TimeLineAction  extends BasicMenuItemForObj {
 	boolean undo=true;
 	
@@ -29,8 +33,6 @@ public class TimeLineAction  extends BasicMenuItemForObj {
 		
 		}
 	
-
-
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		TimeLineDialog dialog = new TimeLineDialog(diw);
@@ -49,8 +51,7 @@ public class TimeLineAction  extends BasicMenuItemForObj {
 
 	@Override
 	public String getMenuPath() {
-		// TODO Auto-generated method stub
-		return "Image";
+		return "Edit";
 	}
 
 }

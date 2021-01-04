@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -33,16 +33,16 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.GraphicList;
 import imageDisplayApp.OverlayObjectManager;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
+import locatedObject.RotatesFully;
+import locatedObject.Scales;
+import locatedObject.ScalesFully;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoScalingAndRotation;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.RotatesFully;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.ScalesFully;
 
 /**a handle list for resizing, moving and rotating objects.
   The use can make many modifications simply by dragging handles

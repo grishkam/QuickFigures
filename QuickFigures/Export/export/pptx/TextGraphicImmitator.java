@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,10 +30,10 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.TextLine;
-import utilityClassesForObjects.TextLineSegment;
-import utilityClassesForObjects.TextParagraph;
+import locatedObject.RectangleEdges;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
+import textObjectProperties.TextParagraph;
 
 /**implementation of office object maker for text graphics
   needed to export to Powerpoint using apache poi.

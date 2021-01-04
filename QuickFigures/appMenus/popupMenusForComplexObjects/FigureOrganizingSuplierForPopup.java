@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -136,7 +136,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				recropPanelsButton.setIcon( CropIconGraphic.createsCropIcon());
 				imagesMenu.add(recropPanelsButton);
 				
-				reScalePanelsButton= new BasicSmartMenuItem("Reset Scale for All Images");
+				reScalePanelsButton= new BasicSmartMenuItem("Re-Set Scale for All Images");
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -27,5 +27,5 @@ public interface LayerSelector {
 	public GraphicLayer getSelectedLayer();
 	public ArrayList<ZoomableGraphic> getSelecteditems();
 	public FigureDisplayContainer getGraphicDisplayContainer();
-	public ImageWrapper getImageWrapper();
+	public ImageWorkSheet getImageWrapper();
 }

@@ -34,11 +34,11 @@ import channelMerging.MultiChannelImage;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.basicFigure.GridIndex;
+import locatedObject.LocatedObject2D;
+import locatedObject.ScaleInfo;
+import locatedObject.ScalededItem;
+import locatedObject.Selectable;
 import multiChannelFigureUI.ChannelSwapHandleList;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ScaleInfo;
-import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.Selectable;
 import applicationAdapters.PixelWrapper;
 import channelLabels.ChannelLabelTextGraphic;
 

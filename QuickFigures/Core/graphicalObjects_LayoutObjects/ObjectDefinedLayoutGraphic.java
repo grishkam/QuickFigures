@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@ package graphicalObjects_LayoutObjects;
 import java.util.ArrayList;
 
 import applicationAdapters.GenericImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.plasticPanels.ObjectListPanelLayout;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.ObjectPanelLayoutPanelMenu;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ObjectContainer;
 
 public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic implements LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>{
 
@@ -98,7 +98,7 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 	}
 	
 
-	public ImageWrapper generateStandardImageWrapper() {
+	public ImageWorkSheet generateStandardImageWrapper() {
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrapper = new GenericImage(new ArrayObjectContainer(parent2));
@@ -110,7 +110,7 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 		return wrapper;
 	}
 	
-	public ImageWrapper generateEditNonpermissiveWrapper() {
+	public ImageWorkSheet generateEditNonpermissiveWrapper() {
 			GenericImage wrapper = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
 			this.getPanelLayout().setEditedImage(wrapper);
 			this.getPanelLayout().getEditedImage().takeFromImage(this);
@@ -120,7 +120,7 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 			return wrapper;
 		}
 	
-	public ImageWrapper generateRemovalPermissiveImageWrapper() {
+	public ImageWorkSheet generateRemovalPermissiveImageWrapper() {
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage wrapper = new GenericImage((ObjectContainer) this.getParentLayer());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package objectDialogs;
 import java.util.ArrayList;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.attachmentPosition.SnappingPanel;
 import standardDialog.booleans.BooleanInputPanel;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.AttachmentPosition;
 
 public class MultiSnappingDialog extends GraphicItemOptionsDialog {
 

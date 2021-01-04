@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,16 +46,6 @@ import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoScalingAndRotation;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.PointsToFile;
-import utilityClassesForObjects.RectangleEdgePositions;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.ScaleInfo;
-import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.Scales;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 import animations.KeyFrameAnimation;
 import appContext.ImageDPIHandler;
 import export.pptx.ImagePanelImmitator;
@@ -82,6 +72,16 @@ import illustratorScripts.PlacedItemRef;
 import includedToolbars.StatusPanel;
 import keyFrameAnimators.ImagePanelGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.AttachedItemList;
+import locatedObject.PointsToFile;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
+import locatedObject.ScaleInfo;
+import locatedObject.ScalededItem;
+import locatedObject.Scales;
+import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelSwapHandleList;
@@ -89,7 +89,7 @@ import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 
 /**an object that displays an image inside a frame at a specified scale and cropping*/
-public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLockedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePositions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
+public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAttachedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePositions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
 
 	
 	
@@ -127,7 +127,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	 
 	
 	private static final long serialVersionUID = 1L;
-	  LockedItemList lockedItems=new LockedItemList(this);
+	  AttachedItemList lockedItems=new AttachedItemList(this);
 
 	
 	 Rectangle croppingrect=null;
@@ -272,8 +272,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesLock
 	}
 
 	
-	public LockedItemList getLockedItems() {
-		if (lockedItems==null) lockedItems=new LockedItemList(this);
+	public AttachedItemList getLockedItems() {
+		if (lockedItems==null) lockedItems=new AttachedItemList(this);
 		return lockedItems;
 	}
 	
@@ -679,7 +679,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		
 		
 		public void snapLockedItems() {
-			LockedItemList items = getLockedItems();
+			AttachedItemList items = getLockedItems();
 			for(int i=0; i<items.size(); i++) {
 				snapLockedItem(items.get(i));
 			}
@@ -872,7 +872,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 
 		public double getQuickfiguresPPI() {
-			return ImageDPIHandler.getStandardDPI()/getScale();
+			return ImageDPIHandler.getInchDefinition()/getScale();
 		}
 		
 		public String getInkscapePPI() {
@@ -1052,7 +1052,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		/**Looks for items in the parent layer that may potentially be accepted as locked items but are not currently attached*/
 		@Override
 		public ArrayList<LocatedObject2D> getNonLockedItems() {
-			TakesLockedItems taker = this;
+			TakesAttachedItems taker = this;
 			Rectangle rect = extendRect(getExtendedBounds(), 4,4);//in order to consider items just outside the panel
 			ArrayList<LocatedObject2D> potentialAttachments = this.getLockedItems().getEligibleNONLockedItems(taker, rect );
 			ArraySorter.removeThoseOfClass(potentialAttachments, this.getClass());//in order not to consider other panels

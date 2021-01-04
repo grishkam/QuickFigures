@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -45,6 +45,9 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import layersGUI.GraphicSetDisplayTree;
 import layersGUI.GraphicTreeTransferHandler;
 import layout.basicFigure.BasicLayout;
+import locatedObject.LocatedObject2D;
+import locatedObject.Selectable;
+import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import messages.ShowMessage;
 import selectedItemMenus.SVG_GraphicAdder2;
@@ -52,9 +55,6 @@ import ultilInputOutput.ForDragAndDrop;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.Selectable;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A drag and drop handler for the tools on the toolbar.*/
 public class MoverDragHandler extends BasicDragHandler {
@@ -98,8 +98,8 @@ public class MoverDragHandler extends BasicDragHandler {
 						moveItemToSet((ZoomableGraphic) item, displaySet);
 					}
 					
-					if (item instanceof TakesLockedItems) {
-						TakesLockedItems taker=(TakesLockedItems) item;
+					if (item instanceof TakesAttachedItems) {
+						TakesAttachedItems taker=(TakesAttachedItems) item;
 						for(LocatedObject2D i: taker.getLockedItems()) {
 							if (items2.contains(i)) continue;
 							moveItemToSet((ZoomableGraphic) i, displaySet);
@@ -430,7 +430,7 @@ public class MoverDragHandler extends BasicDragHandler {
 	ImagePanelGraphic handleImageFileDrop(GraphicLayer layer, File f,Point2D location2, boolean hasAlpha) {
 		ImagePanelGraphic image = new FileImageAdder(hasAlpha).getImage(f);
 		if (image==null)return null;
-		image.setRelativeScale(ImageDPIHandler.ratioFor300DPI());
+		image.setRelativeScale(ImageDPIHandler.ratioForIdealDPI());
 		layer.add(image);
 		image.setLocation(location2);
 		return image;

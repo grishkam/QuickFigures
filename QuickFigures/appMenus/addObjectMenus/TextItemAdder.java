@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.AttachmentPosition;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**Adds text objects to selected image panels*/
 class TextItemAdder extends BasicGraphicAdder {

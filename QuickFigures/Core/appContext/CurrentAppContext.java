@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package appContext;
 
 import basicAppAdapters.ToolColors;
@@ -29,11 +34,18 @@ public class CurrentAppContext {
 	/**The current context. Determines which package is used to open/find images*/
 	public static MultiDimensionalImageContext currentContext=null;
 	
+	/**Work in progress, a single toolbar will be used by multiple tools*/
 	public static ToolbarColorContext  currentColorContext=new ToolColors();
 	
+	/**Returns the system for handing multidimensional images
+	 * @see MultiDimensionalImageContext 
+	 * */
 	public static MultiDimensionalImageContext getMultichannelContext() {
 		return currentContext;
 	}
+	/**Sets up a system for handing multidimensional images
+	 * @see MultiDimensionalImageContext 
+	 * */
 	public static void setMultichannelContext(MultiDimensionalImageContext mcu) {
 		currentContext=mcu;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicTools.ShapeAddingTool;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ShapeGraphic;
+import locatedObject.LocatedObject2D;
 import undo.UndoAddItem;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**class represents a menu item that adds one shape that will be placed above a panel. 
    The added shape will always be */

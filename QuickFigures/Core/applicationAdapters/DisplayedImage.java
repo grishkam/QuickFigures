@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdapters;
 
 import java.awt.Cursor;
@@ -20,8 +25,8 @@ import java.awt.Window;
 
 import graphicalObjects.CordinateConverter;
 import handles.SmartHandleList;
+import locatedObject.Selectable;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.Selectable;
 
 /**
  Interface with methods to return information related to the
@@ -34,7 +39,7 @@ public interface DisplayedImage {
 	public void updateDisplay() ;
 	
 	/**returns the ImageWrapper*/
-	public ImageWrapper getImageAsWrapper() ;
+	public ImageWorkSheet getImageAsWrapper() ;
 	public CordinateConverter getConverter();
 	/**returns the window used to display the image*/
 	public Window getWindow();
@@ -75,6 +80,8 @@ public interface DisplayedImage {
 
 	/**returns a handle list for the user to resize the canvas*/
 	public SmartHandleList getCanvasHandles();
+
+
 	
 	
 }

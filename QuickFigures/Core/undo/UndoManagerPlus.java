@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,12 +21,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-import animations.HasAnimation;
-import animations.Animation;
-import animations.Animator;
-import applicationAdapters.DisplayedImage;
 import includedToolbars.StatusPanel;
-import logging.IssueLog;
 
 public class UndoManagerPlus extends UndoManager {
 
@@ -121,26 +116,7 @@ public class UndoManagerPlus extends UndoManager {
 		
 	}
 	
-	/**undoes the action and returns an animation for the redo*/
-	private Animation doAnimatedUndo(DisplayedImage diw) {
-		UndoableEdit todo = this.editToBeUndone();
-		if(todo instanceof HasAnimation) {
-			IssueLog.log("This undo can be animated");
-			
-			HasAnimation ani=(HasAnimation) todo;
-			this.undo();
-			Animator animator = new Animator(diw, false);
-			animator.addAnimation(ani.getAnimation());
-			try {
-		animator.animate();
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-			
-		} else this.undo();
-		return null;
-	}
+
 
 
 

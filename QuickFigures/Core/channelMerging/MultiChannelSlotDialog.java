@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package channelMerging;
 
 import javax.swing.JComboBox;
@@ -20,7 +25,8 @@ import javax.swing.JComboBox;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 
-/**"Dialog appears when the user chooses Saving Options for an image.
+/**Work in progress
+ * Dialog appears when the user chooses Saving Options for an image.
   Gives the user an option to load the image from a save location 
   after a figure is de-Serialized. 
   In most cases, the default for embedding the image is convenient. 

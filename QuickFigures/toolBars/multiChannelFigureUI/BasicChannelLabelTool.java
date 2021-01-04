@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import layout.PanelLayout;
 import layout.plasticPanels.PlasticPanelLayout;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
-import popupMenusForComplexObjects.MenuForChannelLabelMultiChannel;
+import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 
 public class BasicChannelLabelTool extends BasicImagePanelTool implements ActionListener{
 	
@@ -69,7 +69,7 @@ public class BasicChannelLabelTool extends BasicImagePanelTool implements Action
 	
 	public JPopupMenu createJPopup() {
 		
-		MenuForChannelLabelMultiChannel menu = new MenuForChannelLabelMultiChannel("All Channel Labels", presseddisplay, this.getPressedPanelManager().getPanelList(), this.getPressedChannelLabelManager());
+		MenuForMultiChannelDisplayLayer menu = new MenuForMultiChannelDisplayLayer("All Channel Labels", presseddisplay, this.getPressedPanelManager().getPanelList(), this.getPressedChannelLabelManager());
 		JPopupMenu output = new SmartPopupJMenu();
 		
 		addChanlabelsMenuItems(output);

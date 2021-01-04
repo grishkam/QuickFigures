@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.PathGraphic;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
 import menuUtil.SmartPopupJMenu;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
 import undo.AbstractUndoableEdit2;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
 
 /**This class of handles is for moving points in a path*/
 public class SmartHandleForPathGraphic extends  SmartHandle {
@@ -53,7 +53,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		SmartHandleList output = new SmartHandleList();
 		PathPointList list = p.getPoints();
 		for(int i=0; i<list.size(); i++) {
-			utilityClassesForObjects.PathPoint point = list.get(i);
+			locatedObject.PathPoint point = list.get(i);
 			SmartHandleForPathGraphic handle;// = new SmartHandleForPathGraphic(p, point);
 		
 			
@@ -281,7 +281,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			double dy=p.getY()-pAnchor.getY();
 			if (pathGraphic.getHandleMode()==PathGraphic.MOVE_ALL_SELECTED_HANDLES||e.shfitDown()) {
 				PathPointList pts = pathGraphic.getPoints().getSelectedPointsOnly();
-				for(utilityClassesForObjects.PathPoint point: pts) {
+				for(locatedObject.PathPoint point: pts) {
 					point.move(dx, dy);
 				}
 				if (!pathPoint.isSelected())pathPoint.move(dx, dy);

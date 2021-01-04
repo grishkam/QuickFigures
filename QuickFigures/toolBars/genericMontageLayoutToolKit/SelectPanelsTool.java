@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.LayoutEditorDialogs;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**The panel selector tool allows one to select regions of interest based on the the MontageLayout available*/
 public class SelectPanelsTool extends GeneralLayoutEditorTool {

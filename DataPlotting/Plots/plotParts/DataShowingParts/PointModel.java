@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.CrossGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RegularPolygonGraphic;
+import locatedObject.RectangleEdges;
 import plotParts.DataShowingParts.ScatterPoints.plotPoint;
-import utilityClassesForObjects.RectangleEdges;
 
 public class PointModel implements Serializable{
 

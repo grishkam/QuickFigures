@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,7 +28,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import graphicalObjects_Shapes.PathGraphic;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
 import menuUtil.SmartPopupJMenu;
+import objectCartoon.BasicShapeMaker;
 import objectDialogs.ArrowSwingDialog;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
 import menuUtil.SmartJMenu;
@@ -39,9 +42,6 @@ import undo.CombinedEdit;
 import undo.Edit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.PathEditUndo;
-import utilityClassesForObjects.BasicShapeMaker;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
 
 public class PathGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ import fileListOpps.LoadFileLists;
 import genericMontageLayoutToolKit.FitLayout;
 import journalCriteria.JournalCriteriaMenuOption;
 import journalCriteria.PPIOption;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
-import utilityClassesForObjects.RectangleEdges;
 
 public class SelectionOperationsMenu extends SmartJMenu implements
 		ActionListener {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import layout.RetrievableOption;
@@ -23,7 +28,10 @@ public class CanvasOptions {
 	
 	public static CanvasOptions current=new CanvasOptions();
 	
-	@RetrievableOption(key = "Resize After Layout Edit", label="Automatically Enlarge Canvas To Fit layouts?")
+	/**The current canvas options determine if automatic edits to the size of worksheets
+	  are performed. Users also have the option to block resizes for an individual worksheet (implemented elsewhere)
+	  */
+	@RetrievableOption(key = "Resize After Layout Edit", label="Automatically enlarge worksheets while editing?")
 	public boolean resizeCanvasAfterEdit=true;
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,18 +18,18 @@ package graphicTools;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.LocatedObject2D;
+import locatedObject.AttachedItemList;
+import locatedObject.TakesAttachedItems;
 import graphicalObjects_LayoutObjects.ObjectDefinedLayoutGraphic;
 import sUnsortedDialogs.ObjectListChoice;
 import selectedItemMenus.SnappingSyncer;
 import undo.CombinedEdit;
 import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LockedItemList;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A tool for moving attached items. no longer included in the toolbars but the methods
  * in this class are accessed via handles that can be clicked on without the use of this tool*/
@@ -45,7 +45,7 @@ public class LockGraphicTool extends GraphicTool {
 	
 	
 	
-	public void onPress(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPopupTrigger()) {
 			
 			SnappingSyncer.createFromArray(allRoi, true);
@@ -64,15 +64,15 @@ public class LockGraphicTool extends GraphicTool {
 	
 	/**goes through a list of lock taking items and removes the selected item*/
 	static void removeFromAlltakers(LocatedObject2D sel, ArrayList<LocatedObject2D> allRoi, CombinedEdit undoer) {
-		LockedItemList.removeFromAlltakers(sel, allRoi, undoer);
+		AttachedItemList.removeFromAlltakers(sel, allRoi, undoer);
 	}
 	
 
-	public static LocatedObject2D getPotentialLockAcceptorAtPoint(Point2D pt, LocatedObject2D item, ImageWrapper gmp) {
+	public static LocatedObject2D getPotentialLockAcceptorAtPoint(Point2D pt, LocatedObject2D item, ImageWorkSheet gmp) {
 		ArrayList<LocatedObject2D> list=getPotentialLockAcceptors( gmp);
 		ArrayList<LocatedObject2D> list2=new ArrayList<LocatedObject2D>();
 		for(LocatedObject2D l: list) {
-			TakesLockedItems t=(TakesLockedItems) l;
+			TakesAttachedItems t=(TakesAttachedItems) l;
 			if(t.hasLockedItem(item)) continue;
 			
 			if(l.getOutline().contains(pt)) list2.add(l);
@@ -91,7 +91,7 @@ public class LockGraphicTool extends GraphicTool {
 
 	
 	@Override
-	public void onRelease(ImageWrapper gmp, LocatedObject2D roi2) {
+	public void onRelease(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		if (roi2==null) return;
 if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPopupTrigger()) {
 			
@@ -109,10 +109,10 @@ if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPo
 	}
 	
 	protected ArrayList<LocatedObject2D> getAllPotentialLocks() {
-		ArrayList<LocatedObject2D> allRoi=this.getObjecthandler().getAllClickedRoi(getImageClicked(), getReleaseCordinateX(), getReleaseCordinateY(), TakesLockedItems.class);
+		ArrayList<LocatedObject2D> allRoi=this.getObjecthandler().getAllClickedRoi(getImageClicked(), getReleaseCordinateX(), getReleaseCordinateY(), TakesAttachedItems.class);
 		ArraySorter<LocatedObject2D> as = new ArraySorter<LocatedObject2D>();
-		if (ignorehidden)ArraySorter.removehideableItems(allRoi);
-		allRoi=as.getThoseOfClass(allRoi, TakesLockedItems.class);
+		if (ignorehidden)ArraySorter.removeHiddenItemsFrom(allRoi);
+		allRoi=as.getThoseOfClass(allRoi, TakesAttachedItems.class);
 		allRoi.remove(getPrimarySelectedObject());
 		return allRoi;
 	}
@@ -126,21 +126,21 @@ if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPo
 		for(Class<?> c: neverLock) {
 			if (c.isInstance(t)) return;
 		}
-		TakesLockedItems tl=	(TakesLockedItems) allRoi.get(0);
+		TakesAttachedItems tl=	(TakesAttachedItems) allRoi.get(0);
 		if (allRoi.size()>1&&askIfMultiple) {
 			if (allRoi.size()==2 &&allRoi.get(0) instanceof ImagePanelGraphic &&allRoi.get(1) instanceof PanelLayoutGraphic) {
-				tl=(TakesLockedItems)allRoi.get(0) ;
+				tl=(TakesAttachedItems)allRoi.get(0) ;
 			} else
 				if (allRoi.size()==2 &&allRoi.get(1) instanceof ImagePanelGraphic &&allRoi.get(0) instanceof PanelLayoutGraphic) {
-					tl=(TakesLockedItems)allRoi.get(1) ;
+					tl=(TakesAttachedItems)allRoi.get(1) ;
 				} else
-			tl=(TakesLockedItems) new ObjectListChoice<LocatedObject2D>("").select("Chose Where to put", allRoi);
+			tl=(TakesAttachedItems) new ObjectListChoice<LocatedObject2D>("").select("Chose Where to put", allRoi);
 			}
 		
 		 onLock(tl,t);
 	}
 	
-	protected void onLock(TakesLockedItems tl, LocatedObject2D t) {
+	protected void onLock(TakesAttachedItems tl, LocatedObject2D t) {
 		UndoTakeLockedItem lockingUndo = new UndoTakeLockedItem(tl, t, false);
 		if (undoer!=null) {
 			

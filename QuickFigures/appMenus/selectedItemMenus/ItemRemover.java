@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import locatedObject.Mortal;
 import standardDialog.graphics.GraphicDisplayComponent;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
-import utilityClassesForObjects.Mortal;
 
 public class ItemRemover extends BasicMultiSelectionOperator {
 

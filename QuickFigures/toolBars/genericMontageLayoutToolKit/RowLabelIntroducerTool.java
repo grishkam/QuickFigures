@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import figureFormat.LabelExamplePicker;
 import figureOrganizer.FigureLabelOrganizer;
 import graphicalObjects.BasicGraphicalObject;
@@ -44,6 +44,7 @@ import imageDisplayApp.OverlayObjectManager;
 import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiTextGraphicSwingDialog;
@@ -53,7 +54,6 @@ import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoManagerPlus;
 import undo.UndoTakeLockedItem;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**introduces Row and Column labels to a montage layout
   and locked them to the layout graphic. Also alows user
@@ -125,7 +125,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 	}
 	
 	/**returns the text graphic relevant to the clickpoint if there is one*/
-	private TextGraphic getDesiredGraphic(Rectangle boundsForThisRowsLabel, ImageWrapper wp ) {
+	private TextGraphic getDesiredGraphic(Rectangle boundsForThisRowsLabel, ImageWorkSheet wp ) {
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, wp);
 		
 		ArrayList<BasicGraphicalObject> array = picker.getDesiredItemsAsGraphicals(rois);
@@ -200,7 +200,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 			return;
 		}
 		
-		ImageWrapper wp = getCurrentLayout().getEditedImage();
+		ImageWorkSheet wp = getCurrentLayout().getEditedImage();
 		
 		
 		item=getDesiredGraphic(markerRoi().getBounds(), wp);
@@ -284,7 +284,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource()==showDialog) {
-				ImageWrapper wp = getCurrentLayout().getEditedImage();
+				ImageWorkSheet wp = getCurrentLayout().getEditedImage();
 				Shape bb = getCurrentLayout().getSelectedSpace(1, LayoutSpaces.ALL_MONTAGE_SPACE);
 				rois = new BasicObjectListHandler().getOverlapOverlaypingItems(bb.getBounds(), wp);
 				

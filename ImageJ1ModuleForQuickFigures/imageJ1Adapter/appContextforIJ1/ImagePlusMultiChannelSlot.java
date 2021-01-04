@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,10 +32,10 @@ import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemMethod;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
-import utilityClassesForObjects.ScaleInfo;
 import ij.IJ;
 import ij.ImageListener;
 import ij.ImagePlus;
+import locatedObject.ScaleInfo;
 import logging.IssueLog;
 import standardDialog.SelectImageDialog;
 
@@ -210,8 +210,8 @@ import standardDialog.SelectImageDialog;
 		/**returns true if the working image file has a save path*/
 		protected boolean imageFileFound() {
 			if (path==null){
-				IssueLog.log("Has looked for image with null path");
-				IssueLog.log("This normally means the multichannel image was either not saved in a file or empty");
+				//IssueLog.log("Has looked for image with null path");
+				//IssueLog.log("This normally means the multichannel image was either not saved in a file or empty");
 				; 
 				return false;
 			

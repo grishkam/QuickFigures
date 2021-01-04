@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import java.util.ArrayList;
 
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
-import utilityClassesForObjects.ItemLayer;
-import utilityClassesForObjects.Keyed;
-import utilityClassesForObjects.Named;
-import utilityClassesForObjects.ShowsOptionsDialog;
+import locatedObject.ItemLayer;
+import locatedObject.Keyed;
+import locatedObject.Named;
+import locatedObject.ShowsOptionsDialog;
 
 public interface GraphicLayer extends ItemLayer<ZoomableGraphic>, Named, KnowsParentLayer,Keyed,ZoomableGraphic, ShowsOptionsDialog, Serializable  {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import javax.swing.undo.AbstractUndoableEdit;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
 import graphicalObjects_SpecialObjects.BarGraphic;
+import locatedObject.AttachmentPosition;
+import locatedObject.ScalededItem;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.ScalededItem;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**An implementation of graphical item picker for scale bars*/
 public class ScaleBarExamplePicker extends GraphicalItemPicker<BarGraphic>{

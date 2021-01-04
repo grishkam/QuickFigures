@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -100,11 +100,11 @@ public class CurrentFigureSet implements CurrentSetInformer {
 	
 	/**performs an automated resize of the current canvas*/
 	public static void canvasResize() {
-		new CanvasAutoResize().performActionDisplayedImageWrapper(CurrentFigureSet.getCurrentActiveDisplayGroup());
+		new CanvasAutoResize(false).performActionDisplayedImageWrapper(CurrentFigureSet.getCurrentActiveDisplayGroup());
 	}
 	/**performs an automated resize of the current canvas and returns an undoable action*/
 	public static CanvasResizeUndo canvasResizeUndoable() {
-		return new CanvasAutoResize().performUndoableAction(CurrentFigureSet.getCurrentActiveDisplayGroup());
+		return new CanvasAutoResize(false).performUndoableAction(CurrentFigureSet.getCurrentActiveDisplayGroup());
 	}
 
 	/**Adds an undo the undo manager if an undo manager is present*/

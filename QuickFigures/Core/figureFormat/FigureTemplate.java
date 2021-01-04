@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.LocatedObject2D;
+import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.TakesLockedItems;
 import appContext.CurrentAppContext;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 
@@ -89,7 +89,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	
 	/**Applies the format defined by this template to the image
 	 * @return */
-	public CombinedEdit applyTemplateTo(ImageWrapper theImage) {
+	public CombinedEdit applyTemplateTo(ImageWorkSheet theImage) {
 		return applyTemplateToLayer(theImage.getTopLevelLayer());
 	}
 	
@@ -258,13 +258,13 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 			int i =stack.getSize();
 			if (i<=0) {IssueLog.log("Cannot create scale bar from template without a panel to put it");return;}
 			Object displayob = stack.getPanels().get(i-1).getImageDisplayObject();
-			if (displayob instanceof TakesLockedItems) {
+			if (displayob instanceof TakesAttachedItems) {
 				BarGraphic newbar = new BarGraphic();
 				newbar.copyAttributesButNotScale(oldsbar);
 				newbar.setAttachmentPosition(oldsbar.getAttachmentPosition());
 				p.add(newbar);
 				
-				TakesLockedItems t= (TakesLockedItems) displayob ;
+				TakesAttachedItems t= (TakesAttachedItems) displayob ;
 				t.addLockedItem(newbar);
 				getScaleBar().applyProperties(newbar);
 				

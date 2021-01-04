@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdaptersForImageJ1;
 
 import ij.CompositeImage;
@@ -28,11 +33,11 @@ import ij.process.LUT;
 import imageDisplayApp.OverlayObjectManager;
 import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
+import locatedObject.LocatedObject2D;
+import locatedObject.ScaleInfo;
 import logging.IssueLog;
 import multiChannelFigureUI.ChannelManipulations;
 import undo.UndoManagerPlus;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ScaleInfo;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -52,13 +57,13 @@ import channelMergingImageJ1.IJ1ChannelOrderWrap;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import applicationAdapters.DisplayedImage;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import applicationAdapters.OpenFileReference;
 import applicationAdapters.PixelWrapper;
 
 /**An implementation of several interfaces. Some are required for an imageJ image to
   be used by QuickFigures as a multichannel image*/
-public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, ChannelSwapListener, OpenFileReference {
+public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, ChannelSwapListener, OpenFileReference {
 
 	private static final int FRAME = 2;
 	private static final int SLICE = 1;
@@ -256,7 +261,7 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 	}
 
 	@Override
-	public ImageWrapper getAsWrapper() {
+	public ImageWorkSheet getAsWrapper() {
 		return this;
 	}
 
@@ -548,7 +553,8 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 	@Override
 	public DisplayedImage getImageDisplay() {
 		if (imp==null) return null;
-		return new ImagePlusDisplayWrap(imp);
+		//return new ImagePlusDisplayWrap(imp);
+		return  null;
 	}
 
 	
@@ -755,6 +761,17 @@ public class ImagePlusWrapper implements  ImageWrapper, MultiChannelImage, Chann
 	@Override
 	public boolean setPrimarySelectionObject(Object d) {
 		return false;
+	}
+
+	@Override
+	public boolean allowAutoResize() {
+		return true;
+	}
+
+	@Override
+	public void setAllowAutoResize(boolean allow) {
+		
+		
 	}
 
 

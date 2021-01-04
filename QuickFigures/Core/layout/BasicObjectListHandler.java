@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,13 +24,12 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import layout.basicFigure.BasicLayout;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
 import utilityClasses1.ArraySorter;
-import utilityClasses1.ItemPicker;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.ObjectContainer;
 
 /**Contains many methods for moving objects from one part of a figure to another
  Most importantly, the methods below determine which objects qualify as inside
@@ -405,13 +404,13 @@ public class BasicObjectListHandler {
 	
 
 	/**resizes the canvas if the given offsets while off setting objects as well*/
-	public void CanvasResizeObjectsIncluded(ImageWrapper iw, int width, int height, int xOff, int yOff) {
+	public void CanvasResizeObjectsIncluded(ImageWorkSheet iw, int width, int height, int xOff, int yOff) {
 		iw.CanvasResize( width, height, xOff, yOff);
 		shiftAll(iw, xOff, yOff);
 	}
 	
 	/**resizes the canvas to fit all objects*/
-	public boolean resizeCanvasToFitAllObjects(ImageWrapper iw) {
+	public boolean resizeCanvasToFitAllObjects(ImageWorkSheet iw) {
 		boolean output=false;
 		ArrayList<LocatedObject2D> arr = iw.getLocatedObjects();
 		for(LocatedObject2D l:arr) {
@@ -423,7 +422,7 @@ public class BasicObjectListHandler {
 	}
 	
 	/**resizes the canvas to fit the object*/
-	public boolean resizeCanvasToFitObject(ImageWrapper iw, LocatedObject2D l) {
+	public boolean resizeCanvasToFitObject(ImageWorkSheet iw, LocatedObject2D l) {
 		int xOff=0;
 		int yOff=0;
 		int xAdded=0;
@@ -452,18 +451,6 @@ public class BasicObjectListHandler {
 	   return true;
 	}
 	
-	
-	
-	/**removes a particular type of object (determined by pick) that is in area r from the area r in the container*/
-	public void clearAreaOfDrawnGraphicType(ObjectContainer container, Rectangle2D r, ItemPicker pick ) {
-		ArrayList<LocatedObject2D> list = this.getOverlapOverlaypingItems(r, container);
-		ArrayList<LocatedObject2D> willRemove = new ArraySorter<LocatedObject2D>().getThosePicked(list,pick);
-		
-		for(LocatedObject2D o: willRemove) {
-			container.takeFromImage(o);
-		}
-		
-	}
 	
 	
 	/**returns the objects that overlap most with the rectangle.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.awt.Rectangle;
@@ -45,6 +50,10 @@ import icons.SourceImageTreeIcon;
 import layersGUI.HasTreeLeafIcon;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
+import locatedObject.LocatedObject2D;
+import locatedObject.Named;
+import locatedObject.PointsToFile;
+import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
@@ -52,10 +61,6 @@ import popupMenusForComplexObjects.MultiChannelImageDisplayPopup;
 import undo.CombinedEdit;
 import undo.UndoAddManyItem;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.Named;
-import utilityClassesForObjects.PointsToFile;
-import utilityClassesForObjects.ShowsOptionsDialog;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;

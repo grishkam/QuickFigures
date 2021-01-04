@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 import graphicalObjects_SpecialObjects.TextGraphic;
-import utilityClassesForObjects.Hideable;
+import locatedObject.Hideable;
 
 /**a tree cell renderer that will display different icons depending on whether 
   the objects in the default mutable tree nodes implement a certain interface*/

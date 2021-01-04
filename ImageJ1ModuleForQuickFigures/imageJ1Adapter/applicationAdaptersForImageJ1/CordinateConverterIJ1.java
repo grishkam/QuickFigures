@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdaptersForImageJ1;
 
 
@@ -20,7 +25,9 @@ package applicationAdaptersForImageJ1;
 import graphicalObjects.BasicCoordinateConverter;
 import ij.ImagePlus;
 
-/**Coordinate converted used if graphics need to be superimposed on an IJ1 image
+/**Coordinate converted designed if either the QuickFiures toolbar needs to operate
+ on an imageJ window or if graphics need to be superimposed on an IJ1 image
+  not used presently but kept in case one later wants to re-introduce the system
   not accessible to users but might be of use to programmers*/
 public class CordinateConverterIJ1 extends BasicCoordinateConverter{
 	/**

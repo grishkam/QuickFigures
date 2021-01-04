@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import handles.SmartHandleList;
-import utilityClassesForObjects.PathPoint;
-import utilityClassesForObjects.PathPointList;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
 
 public class BlobShape extends SimpleStar {
 	{ setStarRatio(0.75);}

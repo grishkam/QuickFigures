@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -41,6 +41,9 @@ import layout.basicFigure.GenericMontageEditor;
 import layout.basicFigure.GridLayoutEditEvent;
 import layout.basicFigure.GridLayoutEditListener;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.ArrayObjectContainer;
+import locatedObject.AttachmentPosition;
+import locatedObject.RectangleEdges;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.AxisLabel;
@@ -69,9 +72,6 @@ import undoForPlots.AxisFlipUndo;
 import undoForPlots.DataShapeUndo;
 import undoForPlots.PlotAreaChangeUndo;
 import utilityClasses1.NumberUse;
-import utilityClassesForObjects.ArrayObjectContainer;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A class for organizing parts of a plot.
    Has methods to produce a layout, and a pair of axes*/

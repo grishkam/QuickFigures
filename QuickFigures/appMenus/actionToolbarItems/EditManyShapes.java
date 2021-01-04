@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,12 +37,15 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.Fillable;
+import locatedObject.LocatedObject2D;
+import locatedObject.RainbowPaintProvider;
+import locatedObject.StrokedItem;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.StrokeInputPanel;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.ColorMultiSelectionOperator;
-import standardDialog.StandardDialog;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -50,7 +53,6 @@ import standardDialog.numbers.NumberArrayInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
-import standardDialog.strings.InfoDisplayPanel;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.PathEditUndo;
@@ -58,10 +60,6 @@ import undo.SimpleItemUndo;
 import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
 import undo.UndoTextEdit;
-import utilityClassesForObjects.Fillable;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RainbowPaintProvider;
-import utilityClassesForObjects.StrokedItem;
 
 /**Applies a single color or stroke style to all the selected shapes*/
 public class EditManyShapes extends BasicMultiSelectionOperator implements  LayoutSpaces, ColorInputListener,  ColorMultiSelectionOperator, Serializable {

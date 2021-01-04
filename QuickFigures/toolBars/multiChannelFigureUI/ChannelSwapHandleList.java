@@ -36,10 +36,10 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import locatedObject.LocatedObject2D;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
-import utilityClassesForObjects.LocatedObject2D;
 
 /**A set of handles that provide a way for the user to re-order channels*/
 public class ChannelSwapHandleList extends SmartHandleList {

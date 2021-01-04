@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
+import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
+import locatedObject.TakesAttachedItems;
 import undo.UndoTakeLockedItem;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.RectangleEdges;
-import utilityClassesForObjects.AttachmentPosition;
-import utilityClassesForObjects.TakesLockedItems;
 
 /**A menu for choosing to attach an item to another object. */
 public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
@@ -37,10 +37,10 @@ public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public AddLockedMenu(TakesLockedItems t) {
+	public AddLockedMenu(TakesAttachedItems t) {
 		this(t, "Attach Item");
 	}
-	public AddLockedMenu(TakesLockedItems t,String st) {
+	public AddLockedMenu(TakesAttachedItems t,String st) {
 		super(st);
 		this.setName(st);
 		this.setText(st);
@@ -77,11 +77,11 @@ public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
 
 	
 
-	public TakesLockedItems getLockbox() {
+	public TakesAttachedItems getLockbox() {
 		return lockbox;
 	}
 
-	public void setLockbox(TakesLockedItems lockbox) {
+	public void setLockbox(TakesAttachedItems lockbox) {
 		this.lockbox = lockbox;
 	}
 	

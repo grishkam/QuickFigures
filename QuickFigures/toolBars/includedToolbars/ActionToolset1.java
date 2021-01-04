@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -38,10 +38,10 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
 import icons.IconWrappingToolIcon;
 import imageMenu.ZoomFit;
+import locatedObject.RectangleEdges;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.TextBackGroundOptionsSyncer;
 import selectedItemMenus.TextOptionsSyncer;
-import utilityClassesForObjects.RectangleEdges;
 
 public class ActionToolset1 extends QuickFiguresToolBar{
 	

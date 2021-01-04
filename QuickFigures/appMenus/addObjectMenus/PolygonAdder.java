@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
 import logging.IssueLog;
-import utilityClassesForObjects.ShapeRotatingPolygon;
+import objectCartoon.ShapeRotatingPolygon;
 
 public class PolygonAdder extends BasicGraphicAdder {
 	/**

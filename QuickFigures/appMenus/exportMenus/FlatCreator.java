@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 import java.awt.Color;
@@ -25,10 +30,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
@@ -52,7 +54,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	private FigureDisplayContainer cont;
 
 	private boolean deselectAll=true;
-	static	double ratio=1/ImageDPIHandler.ratioFor300DPI();//So the copied images can be 300ppi when in the equivalent dimensions
+	static	double ratio=1/ImageDPIHandler.ratioForIdealDPI();//So the copied images can be 300ppi when in the equivalent dimensions
 	
 	public FlatCreator() {this(true);}
 	public FlatCreator(boolean transparent) {setUseTransparent(transparent);}
@@ -62,10 +64,6 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		return createFlat();
 	}
 	
-	public boolean writePNGFile(String newpath) throws IOException {
-		ImageIO.write(createFlat(), "PNG", new File(newpath));
-		return true;
-	}
 	
 	/**creates a buffered image and draws all of the graphics on it*/
 	public BufferedImage createFlat() {
@@ -102,7 +100,6 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	@Override
 	public Object getTransferData(DataFlavor flavor)
 			throws UnsupportedFlavorException, IOException {
-		// TODO Auto-generated method stub
 		return image ;
 	}
 
@@ -130,7 +127,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 
 	@Override
 	public String getMenuPath() {
-		return "Image";
+		return "Edit";
 	}
 	
 	public void showDialog() {new FlatDialog().showDialog();}
@@ -156,13 +153,13 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			super("Export Options");
 			BooleanInputPanel bip = new BooleanInputPanel("Transpartent background?", isUseTransparent());
 			this.add("transp" , bip);
-			nop=new NumberInputPanel("Output PPI (Pixels per inch)", ratio*ImageDPIHandler.getStandardDPI(), 2 );
+			nop=new NumberInputPanel("Output PPI (Pixels per inch)", ratio*ImageDPIHandler.getInchDefinition(), 2 );
 			nop.addNumberInputListener(new NumberInputListener() {
 			
 			
 				@Override
 				public void numberChanged(NumberInputEvent ne) {
-					if (ne.getSourcePanel()==nop)ratio=nop.getNumber()/ImageDPIHandler.getStandardDPI();
+					if (ne.getSourcePanel()==nop)ratio=nop.getNumber()/ImageDPIHandler.getInchDefinition();
 				}});
 			this.add("ratio" , nop);
 			

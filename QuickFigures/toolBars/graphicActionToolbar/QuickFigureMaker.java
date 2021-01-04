@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
 import addObjectMenus.FigureAdder;
@@ -138,7 +139,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 			return null;
 			}
 		diw.getTheSet().setTitle(added.getName());
-		new CanvasAutoResize().performUndoableAction(diw);//resizes the canvas to fit the figure
+		new CanvasAutoResize(true).performUndoableAction(diw);//resizes the canvas to fit the figure
 		diw.autoZoom();
 		ImageWindowAndDisplaySet.centreWindow(diw.getWindow());
 		
@@ -395,6 +396,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 
 	/**Adds a version of the quickfigure maker to the file menu*/
 	class QuickFigureFileMenuItem extends BasicMenuItemForObj {
+		
+		Icon icon=new QuickFigureIcon(QuickFigureIcon.NORMAL_ICON_TYPE).getMenuVersion();
 
 		@Override
 		public String getNameText() {
@@ -419,6 +422,11 @@ public class QuickFigureMaker extends DisplayActionTool {
 			 performLoadAction();
 
 		}
+		public Icon getSuperMenuIcon() {
+			return icon;
+		}
+		
+		
 		
 	}
 	

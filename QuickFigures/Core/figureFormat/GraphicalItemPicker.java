@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import utilityClassesForObjects.ObjectContainer;
+import locatedObject.ObjectContainer;
 
 /**Class contains methods for 3 purposes.
 1) Identify items that belong to a certain category

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package applicationAdaptersForImageJ1;
 
 import java.awt.BasicStroke;
@@ -22,11 +27,11 @@ import graphicalObjects_Shapes.BasicShapeGraphic;
 import ij.ImagePlus;
 import ij.gui.ShapeRoi;
 import imageDisplayApp.OverlayObjectManager;
-import utilityClassesForObjects.LocatedObject2D;
+import locatedObject.LocatedObject2D;
 
 /**a specialized selection manager that sets the selections
  of an imageJ image (or returns the selection) and not a QuickFigures figure
- A programmer might use this while displaying quickfigures objects on top of an ImageJ image.
+ A programmer might use but it in the future but it is not used presently
  */
 public class IJ1Selections extends OverlayObjectManager {
 	private ImagePlus imagePlus;

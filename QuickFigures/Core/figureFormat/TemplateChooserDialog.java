@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -29,12 +29,12 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.AttachmentPosition;
+import locatedObject.ObjectContainer;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.GraphicComboBox;
 import standardDialog.choices.ItemSelectblePanel;
-import utilityClassesForObjects.ObjectContainer;
-import utilityClassesForObjects.AttachmentPosition;
 
 /**A dialog that allows the user to select which example objects are to be used as models
   for a figure template*/

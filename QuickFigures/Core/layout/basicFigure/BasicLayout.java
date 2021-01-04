@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import applicationAdapters.ImageWrapper;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 /**This is the class that keeps the layout of panels. 
@@ -155,7 +155,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 	Point2D[] pts= new Point2D[] {};
 	/**The array of panels. */
 	Rectangle2D[] panels=new Rectangle2D[] {};
-	protected transient ImageWrapper image;
+	protected transient ImageWorkSheet image;
 
 	
 	
@@ -1293,10 +1293,10 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			}
 			
 			
-			public ImageWrapper getEditedImage() {
+			public ImageWorkSheet getEditedImage() {
 				return image;
 			}
-			public void setEditedImage(ImageWrapper wrapper) {
+			public void setEditedImage(ImageWorkSheet wrapper) {
 				this.image = wrapper;
 			}
 			

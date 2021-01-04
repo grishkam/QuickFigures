@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import layout.PanelLayout;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import layout.plasticPanels.PlasticPanelLayout;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
-import utilityClassesForObjects.RectangleEdges;
 
 import java.awt.Color;
 import java.awt.Dimension;

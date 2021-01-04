@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layersGUI.GraphicTreeUI;
+import locatedObject.Hideable;
 import undo.UndoHideUnhide;
-import utilityClassesForObjects.Hideable;
 
 public class HideItem extends BasicMultiSelectionOperator {
 

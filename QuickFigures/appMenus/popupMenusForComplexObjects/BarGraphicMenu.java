@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,13 +27,13 @@ import javax.swing.undo.AbstractUndoableEdit;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.LocatedObject2D;
+import locatedObject.AttachedItemList;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import undo.CombinedEdit;
 import undo.UndoTakeLockedItem;
 import utilityClasses1.ArraySorter;
-import utilityClassesForObjects.LocatedObject2D;
-import utilityClassesForObjects.LockedItemList;
 
 public class BarGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
@@ -103,7 +103,7 @@ PopupMenuSupplier  {
 			ImagePanelGraphic image=(ImagePanelGraphic) target;
 			CombinedEdit output = new CombinedEdit();
 			
-			LockedItemList.removeFromAlltakers( barG, barG.getParentLayer().getTopLevelParentLayer().getAllGraphics(), output);
+			AttachedItemList.removeFromAlltakers( barG, barG.getParentLayer().getTopLevelParentLayer().getAllGraphics(), output);
 			
 			UndoTakeLockedItem undo = new UndoTakeLockedItem(image, barG, false);
 	
