@@ -13,18 +13,33 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
 
+/**interface for objects that are to be installed onto the menu bar*/
 public interface MenuItemForObj {
 	
+	/**perform the action*/
 	public void performActionDisplayedImageWrapper(DisplayedImage diw);
+	
+	/**action command that is unique for this menu item*/
 	public String getCommand();
+	
+	/**name for the meny item*/
 	public String getNameText();
+	
+	/**location of the meny item*/
 	public String getMenuPath();
+	
+	/**Icons used*/
 	public Icon getIcon();
 	public Icon getSuperMenuIcon();
 

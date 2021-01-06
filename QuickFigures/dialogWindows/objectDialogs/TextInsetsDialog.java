@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.util.ArrayList;
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 import graphicalObjects_SpecialObjects.HasTextInsets;
 import utilityClasses1.ArraySorter;
 
+/**A dialog that allows the user to edit the text insets for one or more items*/
 public class TextInsetsDialog extends GraphicItemOptionsDialog {
 
 	/**
@@ -36,11 +42,11 @@ public class TextInsetsDialog extends GraphicItemOptionsDialog {
 	}
 	
 	public TextInsetsDialog(ArrayList<?> items, boolean backgroundShapes) {
-		setArray(items);
-		if (backgroundShapes) setArrayToTextBackGround(items);
-		s=new ArraySorter<HasTextInsets>().getFirstNonNull(array);
-		if (s!=null)
-		addOptionsToDialog();
+			setArray(items);
+			if (backgroundShapes) setArrayToTextBackGround(items);
+			s=new ArraySorter<HasTextInsets>().getFirstNonNull(array);
+			if (s!=null)
+			addOptionsToDialog();
 		}
 	
 	

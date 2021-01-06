@@ -32,7 +32,7 @@ import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 
 /**
- A class related to showing messages to the user. The user will have a 'dont show again' options for some messages
+ A class created to showing messages to the user. The user will have a 'dont show again' options for some messages
  */
 public class ShowMessage {
 	

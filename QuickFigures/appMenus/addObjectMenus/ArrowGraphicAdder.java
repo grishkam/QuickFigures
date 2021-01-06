@@ -13,11 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import java.awt.Color;
 
-import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 
@@ -31,7 +35,7 @@ public class ArrowGraphicAdder extends BasicGraphicAdder {
 	private ArrowGraphic model = new ArrowGraphic(); {model.setStrokeColor(Color.darkGray);}
 	
 	@Override
-	public ZoomableGraphic add(GraphicLayer gc) {
+	public ArrowGraphic add(GraphicLayer gc) {
 		ArrowGraphic ag =  getModelForIcon().copy();
 		gc.add(ag);;
 		return  ag;
@@ -39,7 +43,7 @@ public class ArrowGraphicAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		return "Arrow "+unique;
+		return "Arrow "+unique+" "+model.getNHeads();
 	}
 
 	@Override

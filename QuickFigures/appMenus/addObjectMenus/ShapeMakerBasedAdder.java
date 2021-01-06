@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import java.awt.Color;
@@ -24,6 +29,8 @@ import graphicalObjects_Shapes.PathGraphic;
 import objectCartoon.BasicShapeMaker;
 import objectCartoon.CiliaryPocketPathCreator;
 
+/**an adder for @see  BasicShapeMaker objects
+ * */
 public class ShapeMakerBasedAdder extends BasicGraphicAdder {
 
 	/**

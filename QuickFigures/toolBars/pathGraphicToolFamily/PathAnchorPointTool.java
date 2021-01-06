@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package pathGraphicToolFamily;
 
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import undo.*;
 
+/**a tool for adding or removing points to/from a path*/
 public class PathAnchorPointTool extends GraphicTool {
 
 	{createIconSet("icons2/CurveLineIcon.jpg","icons2/LineIconPressed.jpg","icons2/LineIcon.jpg");

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 
@@ -34,6 +39,7 @@ import standardDialog.ObjectInputTab;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextParagraph;
 
+/**A tab for editing a paragraph of text via dialog*/
 public class ParaGraphPane extends ObjectInputTab implements ActionListener, MouseListener {
 
 	/**
@@ -56,16 +62,13 @@ public class ParaGraphPane extends ObjectInputTab implements ActionListener, Mou
 		PopupMenu pmen=new PopupMenu();  
 		
 	
-		//addLin.addActionListener(this);
-		//removeLin.addActionListener(this);
+		
 		
 		pmen.add(addLin);
 		pmen.add(removeLin);
 		pmen.add(moveLineForward);
 		pmen.add(moveLineBackward);
-	//	IssueLog.log(""+pmen.getItemCount());
 		this.add(pmen);
-		//IssueLog.log(""+pmen.getItemCount());
 		return pmen;
 	}
 	

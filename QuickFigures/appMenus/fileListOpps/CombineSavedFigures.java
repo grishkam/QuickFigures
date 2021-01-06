@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fileListOpps;
 
 import java.io.File;
@@ -21,11 +26,15 @@ import java.util.ArrayList;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import imageMenu.CombineImages;
+import layersGUI.GraphicTreeUI;
 import layout.BasicObjectListHandler;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
+import selectedItemMenus.LayerSelectionSystem;
 import ultilInputOutput.FileChoiceUtil;
 
+/**work in progress. a meny item that can be used to combine saved worksheets into a 
+ * single figure*/
 public class CombineSavedFigures extends BasicMultiSelectionOperator{
 	
 	
@@ -41,6 +50,13 @@ public class CombineSavedFigures extends BasicMultiSelectionOperator{
 	public String getMenuPath() {
 		return "File Lists";
 	}
+	
+	
+	public boolean isValidForLayerSelector(LayerSelectionSystem graphicTreeUI) {
+		if (graphicTreeUI instanceof GraphicTreeUI)
+		return true;
+		return false;
+		}
 
 	@Override
 	public void run() {

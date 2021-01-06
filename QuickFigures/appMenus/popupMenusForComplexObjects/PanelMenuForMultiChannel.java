@@ -48,7 +48,7 @@ public class PanelMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void generateLabelMenuItems() {
+	public void generateIncludedMenuItems() {
 		
 		recreateChannelUseMenuItem();
 		showPanelListItem() ;

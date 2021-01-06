@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.awt.Component;
@@ -35,7 +40,7 @@ import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 
 /**abstract implementation of the MultiSelectionOperator.
-  Contains methods that are useful for multiple classes*/
+  Contains methods that are useful for multiple subclasses*/
 public abstract class BasicMultiSelectionOperator implements MultiSelectionOperator, Serializable {
 
 	/**
@@ -43,7 +48,7 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	 */
 	private static final long serialVersionUID = 1L;
 	protected transient ArrayList<ZoomableGraphic> array;//a list of selected items
-	public transient LayerSelector selector;//the layer selector object that determines which items are selecred
+	public transient LayerSelectionSystem selector;//the layer selector object that determines which items are selecred
 
 	/**Sets the list of all the items*/
 	@Override
@@ -65,6 +70,7 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	}
 
 
+	/**returns all the selected items at an array*/
 	protected ArrayList<LocatedObject2D> getAllObjects() {
 		ArrayList<ZoomableGraphic> arr = getAllArray();
 		ArrayList<LocatedObject2D> output=new ArrayList<LocatedObject2D>();
@@ -81,11 +87,11 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 		return null;
 	}
 	
-	public void setSelector(LayerSelector graphicTreeUI){
+	public void setSelector(LayerSelectionSystem graphicTreeUI){
 		this.selector=graphicTreeUI;
 	}
 	
-	public LayerSelector getSelector() {
+	public LayerSelectionSystem getSelector() {
 		return selector;
 	}
 
@@ -110,16 +116,20 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	
 	/**returns the undo manager for the object*/
 	public UndoManagerPlus getUndoManager() {
-		FigureDisplayWorksheet graphicDisplayContainer = getSelector().getGraphicDisplayContainer();
+		FigureDisplayWorksheet graphicDisplayContainer = getSelector().getWorksheet();
 		return graphicDisplayContainer.getUndoManager();
 	}
 	
+	/**returns true if this operator can act on the objects selected by the given selector */
+	public boolean canUseObjects(LayerSelectionSystem graphicTreeUI) {return true;}
 	
-	public boolean canUseObjects(LayerSelector graphicTreeUI) {return true;}
-	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {return true;}
+	/**returns true if this operator can work with the selector */
+	public boolean isValidForLayerSelector(LayerSelectionSystem graphicTreeUI) {return true;}
 	
 	/**returns the font that will be used for the menu item*/
 	public Font getMenuItemFont() {return null;}
+	
+	/**returns a component that the user can employ to input specific values*/
 	public Component getInputPanel() {return null;}
 	
 	
@@ -128,8 +138,8 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	
 	/**returns the unto manager*/
 	public UndoManagerPlus getCurrentUndoManager() {
-		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
-		return selector.getGraphicDisplayContainer().getUndoManager();
+		if (selector!=null&&selector.getWorksheet()!=null)
+		return selector.getWorksheet().getUndoManager();
 		return undoManager;
 	}
 	

@@ -53,11 +53,9 @@ public class SVGQuickExport extends QuickExport {
 			if (file==null) return;
 		String newpath=file.getAbsolutePath();
 		
-		 
+		saveInPath(diw,newpath);
 		   
-		  SVGsaver saver = new SVGsaver();
-		   
-		  saver.saveFigure(newpath, diw);
+		  
 		    Desktop.getDesktop().open(new File(newpath));
 		
 		} catch (Throwable t) {
@@ -68,6 +66,20 @@ public class SVGQuickExport extends QuickExport {
 			IssueLog.logT(t);
 		}
 	        
+	}
+	
+	
+	/**
+	saves the item in the given path
+	 */
+	public  void saveInPath(DisplayedImage diw, String newpath) {
+		 try {
+			 SVGsaver saver = new SVGsaver();
+			   
+			  saver.saveFigure(newpath, diw);
+		} catch (Exception e) {
+			IssueLog.log(e);
+		} 
 	}
 
 	@Override

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.awt.Container;
@@ -35,6 +40,8 @@ import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog part that contains all needed fields for editing the stroke
+ * or a shape*/
 public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, NumberInputListener, ChoiceInputListener{
 	/**
 	 * 
@@ -152,8 +159,7 @@ public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, 
 	public void numberChanged(NumberInputEvent ne) {
 		this.notifyListeners(new ObjectEditEvent(strokedItem));
 		
-		//setStrokedItemToPanel(strokedItem);
-		
+	
 	}
 
 	/**restores all panels to original values*/

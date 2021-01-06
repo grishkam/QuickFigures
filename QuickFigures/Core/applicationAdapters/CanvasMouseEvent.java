@@ -26,7 +26,7 @@ import java.io.Serializable;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import undo.UndoManagerPlus;
 
 /**An interface with methods that return information about mouse events
@@ -62,7 +62,7 @@ public interface CanvasMouseEvent extends Serializable {
 	/**returns the undo manager*/
 	public UndoManagerPlus getUndoManager();
 	/**Returns the LayerSelection*/
-	LayerSelector getSelectionSystem();
+	LayerSelectionSystem getSelectionSystem();
 
 	
 

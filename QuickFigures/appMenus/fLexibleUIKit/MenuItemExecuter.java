@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fLexibleUIKit;
 
 import java.awt.MenuItem;
@@ -38,8 +43,7 @@ import menuUtil.MenuSupplier;
 import undo.UndoManagerPlus;
 
 /**this will generate working popup menus from the annotated methods in
-  an object. I wrote it because I wanted to sometimes write the 
-  code for popup menus with a little less complexity each time*/
+  an object. It allos a programmer to build complex popup menus with a little less complexity each time*/
 public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	private Object o;
 
@@ -50,6 +54,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	private SmartPopupJMenu popupMenu;
 	private UndoManagerPlus undoManager;
 	
+	/**creates a menu item execuer for the object*/
 	public MenuItemExecuter(Object o) {
 		this.o=o;
 		innitiallizeMap();

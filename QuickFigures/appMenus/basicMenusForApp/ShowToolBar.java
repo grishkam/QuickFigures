@@ -13,11 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import applicationAdapters.DisplayedImage;
 import imageDisplayApp.GraphicSetDisplayWindow;
-import includedToolbars.ActionToolset1;
+import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
 import includedToolbars.ObjectToolset1;
@@ -42,7 +47,7 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (getToolBarName().equals(OBJECT_TOOLS))new ObjectToolset1().run("");
 		if (getToolBarName().equals(lAYOUT_TOOLS))new LayoutToolSet().run("");	
-		if (getToolBarName().equals(ACTION_BAR))new ActionToolset1().run("");
+		if (getToolBarName().equals(ACTION_BAR))new AlignAndArrangeActionTools().run("");
 		if (getToolBarName().equals(SHAPE_AND_TEXT_EDITING_BAR))new ActionToolset2().run("");
 		if (getToolBarName().equals(MAIN_TOOLBAR))new ObjectToolset1().run("");
 		

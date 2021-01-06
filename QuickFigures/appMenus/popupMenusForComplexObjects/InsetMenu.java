@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -27,12 +32,17 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import sUnsortedDialogs.ScaleFigureDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartJMenu;
 
+/**A popup menu forinset definers
+ * TODO: add options for scale changes to menu
+ * @see PanelGraphicInsetDefiner
+ * */
 public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		PopupMenuSupplier {
 	

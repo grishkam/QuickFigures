@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 
@@ -35,6 +40,7 @@ import undo.CombinedEdit;
 import undo.UndoAddOrRemoveAttachedItem;
 import utilityClasses1.ArraySorter;
 
+/**A popup menu for a scale bar*/
 public class BarGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
 
@@ -42,17 +48,16 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	
-	static final String options="Options";//, backGroundShap="Outline Shape";
+	static final String OPTIONS_DIALOG="Options";//, backGroundShap="Outline Shape";
 	
 	BarGraphic barG;
 	public BarGraphicMenu(BarGraphic textG) {
 		super();
 		this.barG = textG;
-		add(createItem(options));
+		add(createItem(OPTIONS_DIALOG));
 		add(new TextGraphicMenu(textG.getBarText()).getJMenu("Bar Text"));
 		add(new SwitchBarToOtherPanelMenu());
 		
-		//add(createItem(backGroundShap));
 	}
 	
 	public JMenuItem createItem(String st) {
@@ -67,7 +72,6 @@ PopupMenuSupplier  {
 
 	@Override
 	public JPopupMenu getJPopup() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
@@ -76,12 +80,13 @@ PopupMenuSupplier  {
 	public void actionPerformed(ActionEvent arg0) {
 		String com=arg0.getActionCommand();
 		
-		if (com.equals(options)) {
+		if (com.equals(OPTIONS_DIALOG)) {
 			barG.showOptionsDialog();
 		}
 		
 	}
 	
+	/**a menu that switches the bar location to another panel*/
 	class SwitchBarToOtherPanelMenu extends SelectItemJMenu {
 		
 		/**

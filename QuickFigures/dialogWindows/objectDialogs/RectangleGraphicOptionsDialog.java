@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -26,7 +31,6 @@ public class RectangleGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialo
 	public RectangleGraphicOptionsDialog(RectangularGraphic s, boolean simple) {
 		super(s, simple);
 		rect=s;
-		// TODO Auto-generated constructor stub
 	}
 	
 	protected void addOptionsToDialogPart1() {
@@ -36,8 +40,8 @@ public class RectangleGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialo
 
 	private void addWidthAndHeightToDialog() {
 		if (s instanceof RectangularGraphic) rect=(RectangularGraphic) s;
-		NumberInputPanel win = new NumberInputPanel("Width", rect.getRectangle().width);
-		NumberInputPanel hin = new NumberInputPanel("Height", rect.getRectangle().height);
+		NumberInputPanel win = new NumberInputPanel("Width", rect.getObjectWidth());
+		NumberInputPanel hin = new NumberInputPanel("Height", rect.getObjectHeight());
 		this.add("width", win);
 		this.add("height", hin);
 	}

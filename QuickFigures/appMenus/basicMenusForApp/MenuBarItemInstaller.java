@@ -13,8 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
+/**a class that install supplemental items onto a QuickFigures menu bar*/
 public interface MenuBarItemInstaller {
 	
 	/**called when a menu bar is created*/

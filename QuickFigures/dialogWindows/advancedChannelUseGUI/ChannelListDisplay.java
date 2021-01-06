@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package advancedChannelUseGUI;
 
 import java.awt.Dimension;
@@ -41,7 +46,7 @@ import figureOrganizer.PanelManager;
 import menuUtil.SmartJMenu;
 
 
-/**A JList that displays a list of possible channels in their respecrive channel names and colors*/
+/**A JList that displays a list of possible channels in their respective channel names and colors*/
 public class ChannelListDisplay extends JList<Object> implements ActionListener, DropTargetListener, KeyListener{
 
 	/**
@@ -113,6 +118,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		if (panelDisp!=null)panelDisp.repaint();
 	}
 	
+	/**switches the locations of two channels*/
 	void swapItems() {
 		int[] ind = this.getSelectedIndices();
 		if (ind.length>1) {
@@ -258,7 +264,6 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -268,6 +273,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	return 	new Dimension(250,200) ;
 	}
 	
+	/**returns the add/remove channels menu elements*/
 	public ArrayList<AvailableChannelsItem> makeentries(PanelListElement e) {
 		ArrayList<AvailableChannelsItem> output=new ArrayList<AvailableChannelsItem>();
 		ArrayList<ChannelEntry> all = panelManager.getMultiChannelWrapper().getChannelEntriesInOrder();
@@ -282,7 +288,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		return j;
 	}
 	
-	/**A versi*/
+	/**a version of the available channel menu item that can target many elements at once*/
 	public class AvailableChannelsItem2 extends AvailableChannelsItem {
 
 		/**
@@ -291,7 +297,6 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		 */
 		public AvailableChannelsItem2(ChannelEntry ce, PanelListElement e) {
 			super(ce, e);
-			// TODO Auto-generated constructor stub
 		}
 
 		/**Adds/removes the channel from all selected panels*/

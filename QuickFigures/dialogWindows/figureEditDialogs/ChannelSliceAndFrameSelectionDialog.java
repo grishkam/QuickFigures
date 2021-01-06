@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package figureEditDialogs;
 
 import channelMerging.MultiChannelImage;
@@ -21,6 +26,7 @@ import standardDialog.channels.ChannelEntryBox;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog that promts the user to slect a channel, a slice, a frame or all three from a multidimensional image*/
 public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 
 	/**

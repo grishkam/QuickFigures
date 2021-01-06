@@ -14,16 +14,16 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
 import javax.swing.Icon;
 
 /**
- 
- * 
+
  */
 public interface MiniToolBarIcon extends Icon {
 	static final int ICON_SIZE= 22;

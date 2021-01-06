@@ -29,7 +29,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.ImageDisplayIO;
 import layersGUI.GraphicTreeUI;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import ultilInputOutput.FileChoiceUtil;
 
 
@@ -85,7 +85,7 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 	}
 	
 	/**this option is only available from the layers window (that window contains a means of storing a file list)*/
-	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {
+	public boolean isValidForLayerSelector(LayerSelectionSystem graphicTreeUI) {
 		if (graphicTreeUI instanceof GraphicTreeUI)
 			return true;
 		return false;

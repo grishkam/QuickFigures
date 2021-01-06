@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package iconGraphicalObjects;
 
 import java.awt.BasicStroke;
@@ -34,7 +39,7 @@ import icons.MiniToolBarIcon;
 import locatedObject.RectangleEdges;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 
-/**An icon for the change color mode option*/
+/**An icon for the change color mode option. displays a colored half and a greyscale half*/
 public class ColorModeIcon implements Icon,MiniToolBarIcon {
 	
 	

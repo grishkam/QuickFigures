@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import locatedObject.DefaultPaintProvider;
@@ -33,7 +38,7 @@ public class DefaultPaintProviderDialog extends GraphicItemOptionsDialog {
 	
 	public DefaultPaintProviderDialog(DefaultPaintProvider d) {
 		this.paintprovider=d;
-		this.add("Color", new ColorInputPanel("Color", paintprovider.getColor() ));
+		this.add("Color1", new ColorInputPanel("Color", paintprovider.getColor() ));
 		this.add("Color2", new ColorInputPanel("Color", paintprovider.getFillColor2() ));
 		FixedEdgeSelectable f = new FixedEdgeSelectable(paintprovider.getFe1());
 		ItemSelectblePanel is = new ItemSelectblePanel("Select Fixed Edge 1", f);
@@ -47,7 +52,7 @@ public class DefaultPaintProviderDialog extends GraphicItemOptionsDialog {
 	}
 	
 	protected void setItemsToDiaog() {
-		paintprovider.setColor(this.getColor("Color"));
+		paintprovider.setColor(this.getColor("Color1"));
 		paintprovider.setFillColor2(this.getColor("Color2"));
 		paintprovider.setType(this.getChoiceIndex("type"));
 		paintprovider.setFe1(this.getChoiceIndex("edge fix1"));

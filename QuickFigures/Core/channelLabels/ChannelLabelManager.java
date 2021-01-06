@@ -32,7 +32,7 @@ import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.ChannelLabelDialog;
 import figureEditDialogs.ChannelLabelPropertiesDialog;
 import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
-import figureEditDialogs.TextLineDialogForChenLabel;
+import figureEditDialogs.TextLineDialogForChannelLabel;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
@@ -265,7 +265,7 @@ public class ChannelLabelManager implements Serializable {
 
 	/**method calls a dialog that allows the user to change the text lines of the channel labels*/
 	public StandardDialog dialogForChannelEntries(ArrayList<ChannelEntry> entries) {
-		return TextLineDialogForChenLabel.showMultiTabDialogDialogss(entries, this.getChannelLabelProp(), new StandardDialogListener() {
+		return TextLineDialogForChannelLabel.showMultiTabDialogDialogss(entries, this.getChannelLabelProp(), new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {

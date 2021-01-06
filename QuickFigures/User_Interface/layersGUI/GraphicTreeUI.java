@@ -84,7 +84,7 @@ import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupCloser;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.GraphicItemOptionsDialog;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.SelectionOperationsMenu;
 import standardDialog.graphics.GraphicDisplayComponent;
 import ultilInputOutput.ForDragAndDrop;
@@ -96,7 +96,7 @@ import undo.UndoHideUnhide;
 
 /**Creates the GUI for the layers window. This is a complex window with manipulations of layer structure 
   being done when the user drags and drops*/
-public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropTargetListener, ActionListener, MouseListener, WindowListener, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>, MouseMotionListener {
+public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem, DropTargetListener, ActionListener, MouseListener, WindowListener, LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>, MouseMotionListener {
 	
 
 	
@@ -280,7 +280,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 			addGraphicToTreeNode(masternode, l);
 		}
 	
-		 GraphicSetDisplayTree output = new GraphicSetDisplayTree(this.getGraphicDisplayContainer(), masternode) ;
+		 GraphicSetDisplayTree output = new GraphicSetDisplayTree(this.getWorksheet(), masternode) ;
 		
 		 output.setPreferredSize(new Dimension(300,500));
 		return output;
@@ -305,7 +305,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	void refreshTreeFrame() {
 		frame.remove(pane);
 		frame.remove(ButtonPanel);
-		tree = makeTreeForSet(getGraphicDisplayContainer().getTopLevelLayer());
+		tree = makeTreeForSet(getWorksheet().getTopLevelLayer());
 		
 		layout=new GridBagLayout();
 		frame.setLayout(layout);
@@ -370,8 +370,8 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 				setSelecteditem((ZoomableGraphic) o);
 			}
 			
-		if (getGraphicDisplayContainer()==null ) return;
-		getGraphicDisplayContainer().updateDisplay();
+		if (getWorksheet()==null ) return;
+		getWorksheet().updateDisplay();
 	}
 	
 	/**Adds child nodes for the given graphic to the tree*/
@@ -585,7 +585,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 		
 		undo.setTree(tree);
-		this.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		this.getWorksheet().getUndoManager().addEdit(undo);
 		
 		
 		/**makes sure that destination paths are visible*/
@@ -778,7 +778,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 		
 		if (source!=tree) {
-			this.getGraphicDisplayContainer().onItemLoad(item);//moved the item in between trees
+			this.getWorksheet().onItemLoad(item);//moved the item in between trees
 			
 			/**updates both displays*/
 			if (graphicDisplayContainer!=null)graphicDisplayContainer.updateDisplay();		
@@ -837,7 +837,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 
 
 	void redoDisplay() {
-		addGraphicToTreeNode(masternode, getGraphicDisplayContainer().getTopLevelLayer());
+		addGraphicToTreeNode(masternode, getWorksheet().getTopLevelLayer());
 		fireModeStructureChange(masternode);
 	}
 	
@@ -908,7 +908,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 		}
 
-		getGraphicDisplayContainer().updateDisplay();
+		getWorksheet().updateDisplay();
 		
 		} catch (Throwable r) {
 			IssueLog.log("problem", r);
@@ -920,7 +920,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 
 	
 	public GraphicLayer getSelectedLayer() {
-		if (getSelecteditem()==null) return getGraphicDisplayContainer().getTopLevelLayer();
+		if (getSelecteditem()==null) return getWorksheet().getTopLevelLayer();
 		if (getSelecteditem() instanceof GraphicLayer) return (GraphicLayer) getSelecteditem();
 		
 		if (lastPath!=null ) {
@@ -930,7 +930,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		}
 		
 		
-		return getGraphicDisplayContainer().getTopLevelLayer();
+		return getWorksheet().getTopLevelLayer();
 		}
 
 
@@ -961,13 +961,13 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 			HasUniquePopupMenu so=(HasUniquePopupMenu) z;
 			currentpopup = so.getMenuSupplier().getJPopup();
 			if (currentpopup instanceof SmartPopupJMenu) {
-				((SmartPopupJMenu) currentpopup).setUndoManager(getGraphicDisplayContainer().getUndoManager());
+				((SmartPopupJMenu) currentpopup).setUndoManager(getWorksheet().getUndoManager());
 			}
 			//tree.add(pp);
 			new PopupCloser(currentpopup);
 			currentpopup.show((Component) tree, arg0.getX(), arg0.getY());
 		} catch (Throwable t) {IssueLog.logT(t);}
-		getGraphicDisplayContainer().updateDisplay();
+		getWorksheet().updateDisplay();
 		frame.repaint();
 	}
 
@@ -975,7 +975,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		//GregGd.setGraphicSetContainer(getGraphicDisplayContainer());
-		GraphicItemOptionsDialog.setSetContainer(getGraphicDisplayContainer());
+		GraphicItemOptionsDialog.setSetContainer(getWorksheet());
 	}
 
 
@@ -1002,7 +1002,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 				undo.setTree(tree);
 				h.setHidden(!h.isHidden());
 				
-				this.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+				this.getWorksheet().getUndoManager().addEdit(undo);
 				
 			}
 		}
@@ -1038,7 +1038,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 				}
 				
 			}
-			getGraphicDisplayContainer().updateDisplay();
+			getWorksheet().updateDisplay();
 			return;
 			}
 		
@@ -1094,7 +1094,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		ZoomableGraphic ob = ag.readGraphicFromFile(f.getAbsolutePath());
 	
 		gc.add(ob);
-		getGraphicDisplayContainer().onItemLoad(ob);
+		getWorksheet().onItemLoad(ob);
 	}
 
 	public ZoomableGraphic getSelecteditem() {
@@ -1136,7 +1136,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		if (e.getWindow()==frame) getGraphicDisplayContainer().getTopLevelLayer().treeEliminated();
+		if (e.getWindow()==frame) getWorksheet().getTopLevelLayer().treeEliminated();
 		
 	}
 
@@ -1280,7 +1280,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		return tree.getSelecteditems();
 	}
 
-	public FigureDisplayWorksheet getGraphicDisplayContainer() {
+	public FigureDisplayWorksheet getWorksheet() {
 		return graphicDisplayContainer;
 	}
 
@@ -1303,7 +1303,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 					// TODO Auto-generated method stub
 					
 					/**implementation of undo and redo*/
-					UndoManager undo = getGraphicDisplayContainer() .getUndoManager();
+					UndoManager undo = getWorksheet() .getUndoManager();
 					boolean meta=arg0.isMetaDown();
 					if (IssueLog.isWindows()) meta=arg0.isControlDown();
 			 		if (arg0.getKeyCode()==KeyEvent.VK_Z&&meta) {
@@ -1316,7 +1316,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 								if (undo .canRedo())undo .redo();
 							}
 					
-					getGraphicDisplayContainer().updateDisplay();
+					getWorksheet().updateDisplay();
 					if (KeyEvent.VK_ESCAPE==arg0.getKeyCode()) {closeWindow();}
 				}
 		
@@ -1328,7 +1328,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 
 	@Override
 	public ImageWorkSheet getImageWrapper() {
-		return getGraphicDisplayContainer().getAsWrapper();
+		return getWorksheet().getAsWrapper();
 	}
 	
 	

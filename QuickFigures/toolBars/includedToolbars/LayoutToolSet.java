@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package includedToolbars;
 
 
@@ -20,9 +25,7 @@ import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImage;
 import basicMenusForApp.OpeningFileDropHandler;
-import externalToolBar.InterfaceExternalTool;
 import genericMontageLayoutToolKit.BorderAdjusterTool;
 import genericMontageLayoutToolKit.LayoutMover;
 import genericMontageLayoutToolKit.LayoutScalerTool;
@@ -39,7 +42,7 @@ import genericTools.ToolBit;
 import layout.basicFigure.LayoutSpaces;
 
 /**A toolbar containing tools that allow the user to edit the layout.
-  This toolbar is useful but not indispensible to the user*/
+  This toolbar is useful but not critical to the user*/
 public class LayoutToolSet extends QuickFiguresToolBar {
 	
 	public static LayoutToolSet currentToolset;

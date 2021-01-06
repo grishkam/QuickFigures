@@ -13,11 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import graphicalObjects_Shapes.RoundedRectangleGraphic;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A specialized dialog for rounded rectangles. 
+ * TODO: make the undo for this dialog reflect changes to the arc sizes */
 public class RoundRectGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog {
 
 	RoundedRectangleGraphic rect=null;
@@ -30,8 +37,8 @@ public class RoundRectGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialo
 	protected void addOptionsToDialogPart1() {
 		super.addOptionsToDialogPart1();
 		if (s instanceof RoundedRectangleGraphic ) rect=(RoundedRectangleGraphic ) s;
-		NumberInputPanel win = new NumberInputPanel("Width", rect.getBounds().width);
-		NumberInputPanel hin = new NumberInputPanel("Height", rect.getBounds().height);
+		NumberInputPanel win = new NumberInputPanel("Width", rect.getObjectWidth());
+		NumberInputPanel hin = new NumberInputPanel("Height", rect.getObjectHeight());
 		NumberInputPanel arcw = new NumberInputPanel("Arc Width", rect.getArcw());
 		NumberInputPanel arch = new NumberInputPanel("Arc Heigth", rect.getArch());
 		this.add("width", win);

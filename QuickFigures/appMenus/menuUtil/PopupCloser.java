@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 import java.awt.AWTEvent;
@@ -36,6 +41,7 @@ public class PopupCloser {
 	public boolean removeAfterDone=true;
 	public boolean dontCloseAfterMenuClick=true;
 	
+	
 	public PopupCloser(JPopupMenu p) {
 		set_Popup(p);
 		armPopup();
@@ -46,7 +52,7 @@ public class PopupCloser {
 		armPopup();
 	}
 
-	
+	/**sets up a lsitener that will close the popup*/
 	public void armPopup()
 	{
 		

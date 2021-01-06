@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
@@ -31,7 +32,8 @@ import javax.swing.Icon;
 import iconGraphicalObjects.IconTraits;
 
 /**
- An icon for display layers. cosmetic improvement on old icon done
+ An icon for display layers. this icon lookd like a stack of panels
+ as it is meant to represent a multidimensional image
  @see MultichannelDisplayLayer
  */
 public class SourceImageTreeIcon  implements Icon, IconTraits{

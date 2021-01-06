@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package iconGraphicalObjects;
 
 import javax.swing.Icon;
 
+/**interface stores constrnats related to the icons*/
 public interface IconTraits extends Icon{
 
 	public static final int TREE_ICON_WIDTH = 14, TREE_ICON_HEIGHT = 12;

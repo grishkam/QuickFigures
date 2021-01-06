@@ -21,10 +21,7 @@
 package genericMontageLayoutToolKit;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-
 import javax.swing.Icon;
 
 import figureOrganizer.FigureScaler;
@@ -33,7 +30,6 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.IconSet;
-import layout.BasicObjectListHandler.LocatedObjectFilter;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GenericMontageEditor;
 import locatedObject.LocatedObject2D;

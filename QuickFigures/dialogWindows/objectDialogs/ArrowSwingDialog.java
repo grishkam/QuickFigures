@@ -16,8 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Dec 7, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Version: 2021.1
  */
 package objectDialogs;
 

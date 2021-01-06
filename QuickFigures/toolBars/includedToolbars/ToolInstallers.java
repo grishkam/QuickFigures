@@ -13,8 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package includedToolbars;
 
+/**Items that install supplemental tools into a quickfigures toolbar implements this interface
+  Created to allow programmers a way to add extensions to the toolbar without altering this project*/
 public interface ToolInstallers {
 		public void installTools(QuickFiguresToolBar toolset);
 }

@@ -39,7 +39,7 @@ import appContext.ImageDPIHandler;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
-import basicMenusForApp.CurrentSetLayerSelector;
+import basicMenusForApp.CurrentWorksheetLayerSelector;
 import externalToolBar.DragAndDropHandler;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
@@ -566,7 +566,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		/**if the user is selecting more than one item by holding shift*/
 		if (shiftDown()) {
-			GroupOfObjectPopup menuAll = new GroupOfObjectPopup( new CurrentSetLayerSelector());
+			GroupOfObjectPopup menuAll = new GroupOfObjectPopup( new CurrentWorksheetLayerSelector());
 			menu=menuAll;
 			menuAll.addItemsFromJMenu( obtainUniquePopup(roi2), "this item");
 			

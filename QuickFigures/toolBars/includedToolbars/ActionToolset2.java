@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package includedToolbars;
 
 
@@ -23,9 +28,9 @@ import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 
-import actionToolbarItems.EditManyShapes;
+import actionToolbarItems.EditManyObjects;
 import actionToolbarItems.SuperTextButton;
-import basicMenusForApp.CurrentSetLayerSelector;
+import basicMenusForApp.CurrentWorksheetLayerSelector;
 import basicMenusForApp.MenuItemForObj;
 import basicMenusForApp.OpeningFileDropHandler;
 import genericTools.BasicToolBit;
@@ -40,6 +45,7 @@ import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.TextBackGroundOptionsSyncer;
 import selectedItemMenus.TextOptionsSyncer;
 
+/**maintains a set of action tools that perform various edits to the objects that are selected*/
 public class ActionToolset2 extends QuickFiguresToolBar{
 	
 	public static ActionToolset2 currentToolset;
@@ -50,15 +56,15 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 	public ActionToolset2() {
 		super.maxGridx=16;
 		
-		installOperator(EditManyShapes.getForColors(false, standardColor));
-		installOperator(EditManyShapes.getForColors(true, standardColor));
+		installOperator(EditManyObjects.getForColors(false, standardColor));
+		installOperator(EditManyObjects.getForColors(true, standardColor));
 		installOperator(getTextColors());
 		
 		installOperator( getDashesAndStrokes());
 		installOperator( getCapsAndJions()
 				);
 		
-		installOperator( new EditManyShapes("up"));
+		installOperator( new EditManyObjects("up"));
 		installOperator( getTextOperations()
 				);
 		installOperator(new SuperTextButton(SuperTextButton.TO_SUPERSCRIPT));
@@ -79,14 +85,14 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 
 
 
-	public static EditManyShapes[] getCapsAndJions() {
-		return new EditManyShapes[] {
-				new EditManyShapes(BasicStroke.JOIN_BEVEL, null),
-				new EditManyShapes(BasicStroke.JOIN_MITER, null),
-				new EditManyShapes(BasicStroke.JOIN_ROUND, null),
-				new EditManyShapes(null, BasicStroke.CAP_BUTT),
-				new EditManyShapes(null, BasicStroke.CAP_ROUND),
-				new EditManyShapes(null, BasicStroke.CAP_SQUARE)
+	public static EditManyObjects[] getCapsAndJions() {
+		return new EditManyObjects[] {
+				new EditManyObjects(BasicStroke.JOIN_BEVEL, null),
+				new EditManyObjects(BasicStroke.JOIN_MITER, null),
+				new EditManyObjects(BasicStroke.JOIN_ROUND, null),
+				new EditManyObjects(null, BasicStroke.CAP_BUTT),
+				new EditManyObjects(null, BasicStroke.CAP_ROUND),
+				new EditManyObjects(null, BasicStroke.CAP_SQUARE)
 				
 				};
 	}
@@ -96,12 +102,12 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 	public static MultiSelectionOperator[] getTextOperations() {
 		return new MultiSelectionOperator[] {
 				
-				new EditManyShapes("down"),
-				new EditManyShapes(Font.BOLD),
-				new EditManyShapes(Font.PLAIN),
+				new EditManyObjects("down"),
+				new EditManyObjects(Font.BOLD),
+				new EditManyObjects(Font.PLAIN),
 				
-				new EditManyShapes(Font.ITALIC),
-				new EditManyShapes(Font.BOLD+Font.ITALIC),
+				new EditManyObjects(Font.ITALIC),
+				new EditManyObjects(Font.BOLD+Font.ITALIC),
 				
 				new TextOptionsSyncer(),
 				new TextBackGroundOptionsSyncer()
@@ -111,20 +117,20 @@ public class ActionToolset2 extends QuickFiguresToolBar{
 
 
 
-	public static EditManyShapes[] getDashesAndStrokes() {
-		return new EditManyShapes[] {
-				new EditManyShapes(true, new float[] {2,2}),
-				new EditManyShapes(true, new float[] {}),
+	public static EditManyObjects[] getDashesAndStrokes() {
+		return new EditManyObjects[] {
+				new EditManyObjects(true, new float[] {2,2}),
+				new EditManyObjects(true, new float[] {}),
 				
-				new EditManyShapes(true, new float[] {4,4}),
-				new EditManyShapes(true, new float[] {8,8}),
-				new EditManyShapes(true, new float[] {8,16}),
-				new EditManyShapes(true, 1),
-				new EditManyShapes(true, 2),
-				new EditManyShapes(true, 4),
-				new EditManyShapes(true, 8),
-				new EditManyShapes(true, 16),
-				new EditManyShapes(true, 30)};
+				new EditManyObjects(true, new float[] {4,4}),
+				new EditManyObjects(true, new float[] {8,8}),
+				new EditManyObjects(true, new float[] {8,16}),
+				new EditManyObjects(true, 1),
+				new EditManyObjects(true, 2),
+				new EditManyObjects(true, 4),
+				new EditManyObjects(true, 8),
+				new EditManyObjects(true, 16),
+				new EditManyObjects(true, 30)};
 	}
 	
 
@@ -181,7 +187,7 @@ public void run(String s) {
 	class SelectionDisplayActionTool extends BasicToolBit{
 
 		
-		CurrentSetLayerSelector selector=new CurrentSetLayerSelector();
+		CurrentWorksheetLayerSelector selector=new CurrentWorksheetLayerSelector();
 		private MultiSelectionOperator ad;
 
 		
@@ -220,7 +226,7 @@ public void run(String s) {
 	class MenuItemToActionTool extends BasicToolBit {
 
 		
-		CurrentSetLayerSelector selector=new CurrentSetLayerSelector();
+		CurrentWorksheetLayerSelector selector=new CurrentWorksheetLayerSelector();
 		private MenuItemForObj ad;
 
 		

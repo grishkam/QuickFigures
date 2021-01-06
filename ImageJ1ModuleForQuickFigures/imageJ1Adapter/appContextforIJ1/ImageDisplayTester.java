@@ -28,7 +28,7 @@ import ij.Menus;
 import ij.Prefs;
 import ij.io.Opener;
 import ij.io.PluginClassLoader;
-import includedToolbars.ActionToolset1;
+import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.ActionToolset2;
 import includedToolbars.ObjectToolset1;
 import loci.formats.FormatException;
@@ -149,7 +149,7 @@ public class ImageDisplayTester extends ToolbarTester {
 		if (appclose) {
 			toolset.getframe().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
-		new ActionToolset1().run("go");;
+		new AlignAndArrangeActionTools().run("go");;
 		new ActionToolset2().run("go");;
 		
 		setupImageJ(false);

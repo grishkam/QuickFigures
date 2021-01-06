@@ -13,15 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import javax.swing.Icon;
 
-import basicMenusForApp.CurrentSetLayerSelector;
+import basicMenusForApp.CurrentWorksheetLayerSelector;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 
 /**implements a menu item that adds a layer*/
 class LayerAdder extends BasicGraphicAdder {
@@ -55,8 +60,8 @@ class LayerAdder extends BasicGraphicAdder {
 	
 	
 	@Override
-	public boolean canUseObjects(LayerSelector graphicTreeUI) {
-		if (graphicTreeUI instanceof CurrentSetLayerSelector)
+	public boolean canUseObjects(LayerSelectionSystem graphicTreeUI) {
+		if (graphicTreeUI instanceof CurrentWorksheetLayerSelector)
 			return false;
 		return super.canUseObjects(graphicTreeUI);
 	}

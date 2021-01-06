@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
@@ -34,12 +35,6 @@ import java.awt.geom.Rectangle2D;
  */
 public class QuickFigureIcon  extends GraphicToolIcon {
 	
-	
-	public QuickFigureIcon(int type) {
-		super(type);
-		
-	}
-
 
 	protected boolean dash=true;
 	
@@ -48,6 +43,11 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 	Paint fillColor=Color.black;
 	
 	Color[] blotchColors=new Color[] {null, null, Color.yellow, Color.red, Color.green, new Color(150,150, 255)};
+	
+	public QuickFigureIcon(int type) {
+		super(type);
+		
+	}
 	
 	
 	/**draws two letters in a black rectangle*/

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -27,7 +32,10 @@ import layersGUI.HasTreeLeafIcon;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import menuUtil.SmartJMenu;
+import undo.CombinedEdit;
 
+/**A JMenu that that displays the names of many objects that the user may chose
+ * @seeLocatedObject2D the types of objects*/
 public abstract class SelectItemJMenu extends SmartJMenu  implements ActionListener {
 	protected ArrayList<LocatedObject2D> o=new ArrayList<LocatedObject2D>();
 	protected ArrayList<JMenuItem> oi=new ArrayList<JMenuItem>();;
@@ -68,6 +76,7 @@ public abstract class SelectItemJMenu extends SmartJMenu  implements ActionListe
 		addUndo(performAction(itemtoremove));
 	}
 	
+	/**A menu item for */
 	protected class ComplexAdder extends JMenuItem implements ActionListener {
 
 		/**
@@ -85,10 +94,11 @@ public abstract class SelectItemJMenu extends SmartJMenu  implements ActionListe
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			CombinedEdit undo = new CombinedEdit();
 			for(LocatedObject2D l:list) {
-				performAction(l);
+				undo.addEditToList(performAction(l));
 			}
-			
+			addUndo(undo);
 		}}
 	
 

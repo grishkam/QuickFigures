@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 import java.awt.event.ActionEvent;
@@ -24,6 +29,8 @@ import javax.swing.JMenuItem;
 
 import logging.IssueLog;
 
+/**A menu that is used to choose a single item for a list of numbers
+ * and perform an action on the i-th item from a list of objects*/
 public class IndexChoiceMenu<Type> extends JMenu implements ActionListener {
 	
 	/**

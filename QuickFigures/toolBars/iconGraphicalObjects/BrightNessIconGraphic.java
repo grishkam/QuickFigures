@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package iconGraphicalObjects;
 
 import java.awt.Color;
@@ -34,16 +39,17 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 	/**
 	 * 
 	 */
+	public static final int NORMAL_FORM=0, OPEN_FORM=1;
 	private static final long serialVersionUID = 1L;
 	private Color iconColor=Color.black;
-	int form;
-	private CircularGraphic blackPart;
+	int form=NORMAL_FORM;
+	private CircularGraphic greyToBlackPart;
 	private CircularGraphic whiteHalf;
 	
 	ArrayList<ShapeGraphic> spokeDots=new ArrayList<ShapeGraphic>();
 	
-	public BrightNessIconGraphic(int open) {
-		this.form=open;
+	public BrightNessIconGraphic() {
+		
 		createItems() ;
 		setItemColors();
 		
@@ -65,13 +71,13 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 		Rectangle rectsize = new Rectangle(4,5,10,10);
 		
 		
-		blackPart = CircularGraphic.filledCircle(rectsize);
+		greyToBlackPart = CircularGraphic.filledCircle(rectsize);
 		
 		whiteHalf= CircularGraphic.halfCircle(rectsize);
 		whiteHalf.setFillColor(Color.white);
-		blackPart.setStrokeColor(Color.black);
-		blackPart.setFillPaintProvider(getPaintProvider());
-		blackPart.setStrokeWidth(2);
+		greyToBlackPart.setStrokeColor(Color.black);
+		greyToBlackPart.setFillPaintProvider(getPaintProvider());
+		greyToBlackPart.setStrokeWidth(2);
 	
 		/**creates a ring of dots around the black/white circle*/
 		for(int i=0; i<8; i++) {
@@ -96,14 +102,14 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 		setItemColors();
 	}
 	public void setItemColors() {
-		 blackPart.setFillColor(getIconColor());
+		 greyToBlackPart.setFillColor(getIconColor());
 		whiteHalf.setFillColor(Color.white);
-		blackPart.setFillPaintProvider(getPaintProvider());
+		greyToBlackPart.setFillPaintProvider(getPaintProvider());
 	}
 	
 	/**adds the graphic items for this icon to the layer*/
 	public void addItems() {
-		getTheInternalLayer().add(blackPart);
+		getTheInternalLayer().add(greyToBlackPart);
 		getTheInternalLayer().add(whiteHalf);
 		for(ShapeGraphic d:spokeDots) {	getTheInternalLayer().add(d);}
 	}

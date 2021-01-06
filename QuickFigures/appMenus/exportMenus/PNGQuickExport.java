@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 
@@ -30,11 +35,10 @@ import applicationAdapters.DisplayedImage;
 /**this supports a menu item that exports a figure as PNG file*/
 public class PNGQuickExport extends QuickExport {
 	/**
-	 * @param openNow
+	 * @param openNow determines if the exported will will be opened right away
 	 */
 	public PNGQuickExport(boolean openNow) {
 		super(openNow);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected String getExtension() {
@@ -58,7 +62,7 @@ public class PNGQuickExport extends QuickExport {
 	        
 	}
 
-	/**
+	/** saves the image into a particular file path
 	 * @param diw
 	 * @param newpath
 	 * @throws IOException

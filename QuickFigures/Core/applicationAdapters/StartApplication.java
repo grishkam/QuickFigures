@@ -22,7 +22,7 @@ package applicationAdapters;
 
 import javax.swing.JFrame;
 
-import includedToolbars.ActionToolset1;
+import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.LayoutToolSet;
 import includedToolbars.ObjectToolset1;
 
@@ -49,7 +49,7 @@ public class StartApplication {
 	public static ObjectToolset1 showToolSet() {
 		ObjectToolset1 ot = new ObjectToolset1();
 		new LayoutToolSet().run("");
-		new ActionToolset1().run("go");
+		new AlignAndArrangeActionTools().run("go");
 		ot.run("hi");
 		return ot;
 	}

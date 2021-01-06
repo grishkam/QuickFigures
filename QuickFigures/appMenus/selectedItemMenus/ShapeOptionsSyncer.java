@@ -13,13 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import javax.swing.Icon;
 
-import objectDialogs.DialogIcon;
+import iconGraphicalObjects.DialogIcon;
 import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
+/**shows a dialog for altering the appearence of many shapes*/
 public class ShapeOptionsSyncer extends BasicMultiSelectionOperator{
 
 	/**

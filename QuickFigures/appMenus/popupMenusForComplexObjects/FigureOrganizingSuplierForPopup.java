@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.Container;
@@ -65,6 +70,7 @@ import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
 
+/**A menu for a figure organizing layer*/
 public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, LayoutSpaces, ActionListener {
 	FigureOrganizingLayerPane figureOrganizingLayerPane;
 	JMenuItem addImageFromFileButton;
@@ -187,6 +193,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 							}
 	}
 	
+	/**Adds the recolor channels menu*/
 	public void addRecolorMenu(JMenu j) {
 		
 		MultiChannelImage mw = getPrimaryMultichannelWrapper();
@@ -306,6 +313,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 	}
 
 
+	/**shows a dialog for changing the drop area for many multichannel images within the figure*/
 public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends ImageDisplayLayer> all) {
 	CombinedEdit output = new CombinedEdit();
 	output.addEditToList(
@@ -392,6 +400,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		return null;
 	}
 	
+	/**shows a dialog for changing the scale factor of many multichannel images within the figure*/
 	CombinedEdit showReScaleAll() {
 		CombinedEdit output     = showReScaleAllDisplayDialog((MultichannelDisplayLayer) figureOrganizingLayerPane.getPrincipalMultiChannel());
 		CanvasResizeUndo output2 = CurrentFigureSet.canvasResizeUndoable();
@@ -401,7 +410,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 
-	
+	/**shows a dialog for changing the scale factor of many multichannel images within the figure*/
 	 CombinedEdit showReScaleAllDisplayDialog(MultichannelDisplayLayer display) {
 		 CombinedEdit output = new CombinedEdit();
 		double newScale = showRescaleDialogSingleFor(display);
@@ -446,7 +455,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	}
 
 
-
+	/**shows a dialog for changing the scale factor one image*/
 	public static double showSingleImageRescale(MultichannelDisplayLayer display) {
 		double newScale = showRescaleDialogSingleFor(display);
 		

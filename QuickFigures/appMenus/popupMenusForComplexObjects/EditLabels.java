@@ -13,23 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
-
 import figureFormat.LabelExamplePicker;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import menuUtil.BasicSmartMenuItem;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 
-public class EditLabels extends JMenuItem implements ActionListener {
+/**A menu item that displays a dialog for a group of labels*/
+public class EditLabels extends BasicSmartMenuItem implements ActionListener {
 	
 	
 	private int type;
@@ -38,13 +43,18 @@ public class EditLabels extends JMenuItem implements ActionListener {
 	private transient MultiTextGraphicSwingDialog dd;
 	private TextGraphic modelTextItem;
 
+	/**creates an edit labels that targets all labels with the same grid attachment type as the given
+	 * text */
 	public EditLabels(TextGraphic t) {
-		
 		 type=t.getAttachmentPosition().getGridSpaceCode();
 		 setUpPickerFortype(type);
 		 modelTextItem=t;
 	}
 	
+	/**Crates an edit labels item that targets a given type of label on the layout given
+	 * @param type the type of label
+	 * @param lay the layout
+	 * @param t the text object*/
 	public EditLabels(int type, DefaultLayoutGraphic lay, TextGraphic t) {
 		this.type=type;
 		
@@ -54,12 +64,14 @@ public class EditLabels extends JMenuItem implements ActionListener {
 		 modelTextItem=t;
 	}
 
+	/***/
 	public void setUpPickerFortype(int type) {
 		picker=new LabelExamplePicker(new ComplexTextGraphic(), type);
 		this.setText("Edit All "+picker.getTypeName());
 		
 	}
 	
+	/**returns all the labels that are compatible with this edit labels action*/
 	ArrayList<TextGraphic> getLabels(TextGraphic t) {
 		ArrayList<TextGraphic> output=new ArrayList<TextGraphic>();
 		ArrayList<?> lockedItems=null;
@@ -98,6 +110,7 @@ public class EditLabels extends JMenuItem implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**creates a dialog for multiple text items and shows it*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		 dd = new MultiTextGraphicSwingDialog(getLabels(modelTextItem), true);

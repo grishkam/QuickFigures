@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -20,8 +25,14 @@ import undo.UndoManagerPlus;
 
 /**A menu item that can store information about the context in which it is called*/
 public interface SmartMenuItem {
+	
+	/**stores the last mouse event*/
 	public void setLastMouseEvent(CanvasMouseEvent e);
+	
+	/**stores an undo manager*/
 	public void setUndoManager(UndoManagerPlus undoManager);
+	
+	/**returns the stored undo manager*/
 	public UndoManagerPlus getUndoManager();
 
 }

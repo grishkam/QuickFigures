@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package advancedChannelUseGUI;
 
 import java.awt.Color;
@@ -31,7 +36,7 @@ public class ChannelColorCellRenerer2 extends DefaultListCellRenderer {
 	
 	private ChannelListDisplay box;
 	public int theindex=-1;// current index is stored here
-	public int channelNumber=0;
+	public int channelNumber=0;//channel numbers are stored here. value is changed for every list cell render
 	private static final long serialVersionUID = 1L;
 	
 	public ChannelColorCellRenerer2(ChannelListDisplay channelEntryBox) {
@@ -43,8 +48,6 @@ public class ChannelColorCellRenerer2 extends DefaultListCellRenderer {
 	public void paint(Graphics g) {
 		if(theindex==-1) theindex=box.getSelectedIndex();
 		int dim=theindex;
-		if (dim==-1) {dim=theindex;}
-		
 		
 		
 		if (box.elements.size()>0&&dim>-1) {

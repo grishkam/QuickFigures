@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package iconGraphicalObjects;
 
 import java.awt.Color;
@@ -27,7 +32,7 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import locatedObject.AttachmentPosition;
 import standardDialog.graphics.GraphicObjectDisplayBasic;
 
-/**A class for rendering of a cropping icon*/
+/**A class for rendering my own design for cropping icon*/
 public class CropIconGraphic extends GraphicGroup {
 
 	/**

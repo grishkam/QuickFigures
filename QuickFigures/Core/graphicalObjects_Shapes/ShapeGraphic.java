@@ -33,10 +33,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.Icon;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import popupMenusForComplexObjects.ShapeGraphicMenu;
 import standardDialog.graphics.GraphicDisplayComponent;
+import undo.AbstractUndoableEdit2;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;
@@ -713,7 +712,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	 *  If the undo for a dialog is set to this edit, 
 	 * undo is performed when the user clicks cancel on a dialog */
 	@Override
-	public AbstractUndoableEdit provideUndoForDialog() {
+	public AbstractUndoableEdit2 provideUndoForDialog() {
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this));
 	}
 }

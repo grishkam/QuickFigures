@@ -31,7 +31,7 @@ import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.SelectedSetLayerSelector;
 import graphicalObjects.CordinateConverter;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import undo.UndoManagerPlus;
 
 /**Simple class that stores information related to the context
@@ -157,7 +157,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 	}
 
 	@Override
-	public LayerSelector getSelectionSystem() {
+	public LayerSelectionSystem getSelectionSystem() {
 		return new SelectedSetLayerSelector(clickedFigureDisplay.getImageAsWrapper());
 		
 	}

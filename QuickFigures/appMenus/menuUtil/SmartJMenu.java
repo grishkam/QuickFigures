@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 import java.awt.Component;
@@ -27,8 +32,10 @@ import selectedItemMenus.MenuItemInstall;
 import undo.UndoManagerPlus;
 
 
-/**normal JMenus often would not vanish when i clicked outside of them. this 
- * class is a fix for that. it also has other useful methods*/
+/** A special JMenu with a lot of useful methods for building a menu structure
+ * containing @see SmartMenuItem items
+ * normal JMenus often would not vanish when i clicked outside of them this 
+ * class includes a fix for that.*/
 public class SmartJMenu extends JMenu implements SmartMenuItem {
 
 	/**

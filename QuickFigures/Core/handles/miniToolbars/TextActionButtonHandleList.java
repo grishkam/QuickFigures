@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package handles.miniToolbars;
@@ -29,7 +29,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JMenuItem;
 
-import actionToolbarItems.EditManyShapes;
+import actionToolbarItems.EditManyObjects;
 import actionToolbarItems.SetAngle;
 import actionToolbarItems.SuperTextButton;
 import applicationAdapters.CanvasMouseEvent;
@@ -38,10 +38,10 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import handles.IconHandle;
+import iconGraphicalObjects.DialogIcon;
 import locatedObject.LocatedObject2D;
 import menuUtil.SmartPopupJMenu;
-import objectDialogs.DialogIcon;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
 import selectedItemMenus.AttachmentPositionAdjuster;
@@ -114,10 +114,17 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		setLocation(location);
 		addAttachmentPositionButton(text);
 		
+		addAngleHandleToList();
+		
+	}
+
+	/**
+	 * 
+	 */
+	private void addAngleHandleToList() {
 		SetAngle itemForIcon2 = new SetAngle(45);
-		 addOperationList(itemForIcon2,SetAngle.createManyAngles() );
-		
-		
+		GeneralActionListHandle h2 = addOperationList(itemForIcon2,SetAngle.createManyAngles() );
+		h2.itemForInputPanel=new SetAngle(text);
 	}
 
 	/**
@@ -232,7 +239,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		
 		if (text instanceof ChannelLabelTextGraphic) return;
 		//SuperscriptButton itemForIcon = new SuperscriptButton(text, text.getTextColor());
-		EditManyShapes i = new EditManyShapes();
+		EditManyObjects i = new EditManyObjects();
 		i.setModelTextItem(text);
 		i.setBigIcon(true);
 		GeneralActionListHandle h = new TextColorHandle2(i, numHandleID,getTextColors());;
@@ -325,7 +332,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			/**performs the action. if the text item is in edit mode, this will only affect the user selected text 
 			  with the object*/
 			if (operateOnAll&&!text.isEditMode()) {
-				LayerSelector selector = canvasMouseEventWrapper.getSelectionSystem();
+				LayerSelectionSystem selector = canvasMouseEventWrapper.getSelectionSystem();
 				button.setSelector(selector);
 				button.run();
 			} else {

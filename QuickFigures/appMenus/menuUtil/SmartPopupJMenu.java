@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 import javax.swing.JMenu;
@@ -25,6 +30,9 @@ import applicationAdapters.CanvasMouseEvent;
 import logging.IssueLog;
 import undo.UndoManagerPlus;
 
+/**A popup menu that storesinformation regarding an undo manager and a mouse event
+ * @see SmartJMenu
+ * @see SmartMenuItem for the items that will be part of this menu*/
 public class SmartPopupJMenu extends JPopupMenu {
 
 	/**
@@ -139,6 +147,7 @@ public void setUndoManager(UndoManagerPlus undoManager) {
 	}
 }
 
+/**returns a j menu with all the same menu items*/
 public JMenu extractToMenu(String label) {
 	JMenu output=new SmartJMenu(label);
 	MenuElement[] elements = this.getSubElements();
@@ -151,6 +160,14 @@ public JMenu extractToMenu(String label) {
 
 protected void addAllMenuItems(Iterable<? extends JMenuItem> i) {
 	for(JMenuItem j:i) {add(j);}
+}
+
+public void addUndo(AbstractUndoableEdit e) {
+	if (undoManager!=null) {
+		undoManager.addEdits(e);
+	} else {
+		IssueLog.log("failed to add undo");
+	}
 }
 
 }

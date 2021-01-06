@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
@@ -36,17 +37,8 @@ import locatedObject.RectangleEdges;
  */
 public class InsetToolIcon  extends GraphicToolIcon {
 	
-	
 
 
-
-	/**
-	
-	 */
-	public InsetToolIcon(int type) {
-		super(type);
-		super.paintCursorIcon=false;
-	}
 
 
 	protected boolean dash=true;
@@ -59,6 +51,14 @@ public class InsetToolIcon  extends GraphicToolIcon {
 	
 	Color[] bigBlotchColors=new Color[] {Color.blue, Color.red.darker(), Color.red.darker(), Color.yellow};
 	
+	
+	/**
+	
+	 */
+	public InsetToolIcon(int type) {
+		super(type);
+		super.paintCursorIcon=false;
+	}
 	
 	/**draws two letters in a black rectangle*/
 	@Override

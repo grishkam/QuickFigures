@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import sUnsortedDialogs.ScaleAboutDialog;
 
+/**opens a scaling dialog for a group of selected objects*/
 public class ScalingSyncer extends BasicMultiSelectionOperator {
 
 	/**
@@ -36,7 +42,7 @@ public String getMenuPath() {
 
 	@Override
 	public void run() {
-		ScaleAboutDialog aa = new ScaleAboutDialog(selector.getGraphicDisplayContainer().getUndoManager());
+		ScaleAboutDialog aa = new ScaleAboutDialog(selector.getWorksheet().getUndoManager());
 		aa.addItemsScalable(super.getAllArray());
 		aa.showDialog();
 	

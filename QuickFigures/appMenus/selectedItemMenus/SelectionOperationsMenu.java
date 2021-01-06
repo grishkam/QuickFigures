@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.awt.event.ActionEvent;
@@ -35,6 +40,8 @@ import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 
+/**Builds a selected item menu with many operatiuons
+ * @see MultiSelectionOperator for the objects that define the menu elements*/
 public class SelectionOperationsMenu extends SmartJMenu implements
 		ActionListener {
 
@@ -82,8 +89,8 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		
 		operators.add(new HideItem());
 		operators.add(new UnHideItem());
-		operators.add(new DeselectItem(false));
-		operators.add(new DeselectItem(true));
+		operators.add(new SelectOrDeselectItem(false));
+		operators.add(new SelectOrDeselectItem(true));
 		
 		
 		operators.add(new DuplicateItem());
@@ -125,11 +132,11 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		}
 		}
 	
-	private LayerSelector selector;
+	private LayerSelectionSystem selector;
 	private ArrayList<MultiSelectionOperator> useroperators;
 	private ArrayList<SelectionOperationsMenu> subordinateMenus=new ArrayList<SelectionOperationsMenu> ();
 	
-	public static SelectionOperationsMenu getStandardMenu(LayerSelector selection) {
+	public static SelectionOperationsMenu getStandardMenu(LayerSelectionSystem selection) {
 			SelectionOperationsMenu out = new  SelectionOperationsMenu("Selected Item(s)", selection, operators);
 			SelectionOperationsMenu o2 = new SelectionOperationsMenu("Options Dialogs", selection, operatorsOp);
 			out.subordinateMenus.add(o2);
@@ -141,13 +148,13 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 			return out;
 	}
 	
-	public static SelectionOperationsMenu getPrunedMenu(LayerSelector selection) {
+	public static SelectionOperationsMenu getPrunedMenu(LayerSelectionSystem selection) {
 		SelectionOperationsMenu output = getStandardMenu(selection);
 		
 		return output;
 	}
 	
-	public void setSelector(LayerSelector selection) {
+	public void setSelector(LayerSelectionSystem selection) {
 		for(MultiSelectionOperator i: useroperators) 
 					{i.setSelector(selection);}
 		for(SelectionOperationsMenu i: subordinateMenus) 
@@ -157,7 +164,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 	private static final long serialVersionUID = 1L;
 	
 
-	public SelectionOperationsMenu(String name, LayerSelector selection, ArrayList<MultiSelectionOperator > adders) {
+	public SelectionOperationsMenu(String name, LayerSelectionSystem selection, ArrayList<MultiSelectionOperator > adders) {
 		super(name);
 		this.useroperators=adders;
 		this.selector=selection;
@@ -193,7 +200,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 			} catch (Throwable t) {IssueLog.logT(t);}
 			
 		}
-		selector.getGraphicDisplayContainer().updateDisplay();
+		selector.getWorksheet().updateDisplay();
 	}
 
 }

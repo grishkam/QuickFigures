@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 
@@ -55,6 +60,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		
 	}
 
+	/**Adds each submenu*/
 	public void addMenus(SmartPopupJMenu thi, MultichannelDisplayLayer panel, PanelList list) {
 		thi.add(new ImageMenuForMultiChannel("Source Image", panel, list) );
 		thi.add(new PanelMenuForMultiChannel("Image Panels", panel, list, panel.getPanelManager()));
@@ -62,6 +68,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		addChannelMenu(thi);
 	}
 	
+	/**returns an array of the menus*/
 	public JMenu[] addMenus(JMenu thi) {
 		JMenu[] output=new JMenu[3];
 		output[0]=new ImageMenuForMultiChannel("Source Image", displayLayer, list) ;
@@ -80,7 +87,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	/**
 	 * @return
 	 */
-	public PanelMenuForMultiChannel generatePanelMenu() {
+	private PanelMenuForMultiChannel generatePanelMenu() {
 		return new PanelMenuForMultiChannel("Image Panels", displayLayer, list, displayLayer.getPanelManager());
 	}
 
@@ -141,6 +148,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		thi.add(act.createJMenuItem("Create second view"));
 	}
 
+	/**Adds a channel menu that is limited to this display layer*/
 	public void addChannelMenu(Container thi) {
 		JMenu oneMore = new SmartJMenu("Channels");
 		ChannelPanelEditingMenu b = new ChannelPanelEditingMenu(displayLayer, clickedPanel);

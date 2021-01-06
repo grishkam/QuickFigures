@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import standardDialog.fonts.FontChooser;
 import standardDialog.numbers.AngleInputPanel;
 import undo.Edit;
 
+/**A dialog for editing multiple text items at once*/
 public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 
 	/**

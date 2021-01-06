@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package pathGraphicToolFamily;
 
 
@@ -30,11 +35,12 @@ import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.PathEditUndo;
 
+/**A tool that allows the user to draw a line
+ * TODO: improve algorithm to something more akin to that used by Jhot draw*/
 public class BrushTool extends PathGraphicTool {
 
 	public BrushTool(boolean fill, int ar) {
 		super(fill, ar);
-		// TODO Auto-generated constructor stub
 	}
 
 

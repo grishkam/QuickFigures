@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package pathGraphicToolFamily;
 
 import java.awt.Color;
@@ -35,7 +40,9 @@ import locatedObject.LocatedObject2D;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.PathEditUndo;
 
-/**a tool that modifies the clicked pathgraphic*/
+/**a tool that modifies the clicked pathgraphic
+ * @see PathGraphic
+ * */
 public class PathReflectTool extends GraphicTool {
 	
 	public static final int 	REFLECT=0, SCALE=1, ROTATE=2, MOVE=3, UNIFORM_SCALE=4;
@@ -214,7 +221,6 @@ PathGraphic createMirrorGraphic() {
 			p2.setStrokeColor(Color.red);
 			
 		;
-		//out.setAngle(this.getAngle());
 		return out;
 	}	
 	

@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
@@ -31,8 +32,7 @@ import javax.swing.Icon;
 import iconGraphicalObjects.IconTraits;
 
 /**
- 
- * 
+ a superclass for a variety of tree icons
  */
 public class GenericTreeIcon  implements Icon, IconTraits{
 	int height = TREE_ICON_HEIGHT;

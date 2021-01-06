@@ -26,9 +26,6 @@ import layout.basicFigure.LayoutSpaces;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JMenuItem;
 
 /**A tool for adjusting the size of panels*/
 public class PanelSizeAdjusterTool extends GeneralLayoutEditorTool implements ActionListener, LayoutSpaces {

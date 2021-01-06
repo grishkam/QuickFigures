@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package pathGraphicToolFamily;
 
 
@@ -27,6 +32,9 @@ import icons.TreeIconWrappingToolIcon;
 import undo.UndoAddItem;
 import undo.PathEditUndo;
 
+/**A tool to draw a path 
+ * @see PathGraphic
+ * */
 public class PathGraphicTool extends GraphicTool {
 	
 	

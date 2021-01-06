@@ -24,11 +24,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
-import actionToolbarItems.EditManyShapes;
+import actionToolbarItems.EditManyObjects;
 import actionToolbarItems.EditScaleBars;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.BarGraphic;
-import objectDialogs.DialogIcon;
+import iconGraphicalObjects.DialogIcon;
 import selectedItemMenus.BarOptionsSyncer;
 import selectedItemMenus.SelectAllButton;
 import selectedItemMenus.AttachmentPositionAdjuster;
@@ -66,9 +66,9 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 	 * @param t
 	 */
 	private void addBarColorButton(BarGraphic t) {
-		EditManyShapes itemForIcon2 = new EditManyShapes(false, t.getFillColor());
+		EditManyObjects itemForIcon2 = new EditManyObjects(false, t.getFillColor());
 		itemForIcon2.setModelItem(t);
-		GeneralActionListHandle hf = addOperationList(itemForIcon2, new EditManyShapes[] {});
+		GeneralActionListHandle hf = addOperationList(itemForIcon2, new EditManyObjects[] {});
 		hf.setAlternativePopup(new ColoringButton(itemForIcon2, 78341));
 	}
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package includedToolbars;
 
 import java.awt.Color;
@@ -30,7 +35,8 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**A panel for displaying the current status of an ongoing process.
-  In general, I designed this so there is one main status panel (the most recent one created)*/
+  In general, One main status panel (the most recent one created)
+  is used */
 public class StatusPanel extends JPanel {
 
 	/**

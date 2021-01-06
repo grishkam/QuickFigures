@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package icons;
 
 import java.awt.BasicStroke;
@@ -27,7 +32,9 @@ import javax.swing.Icon;
 
 import iconGraphicalObjects.IconTraits;
 
-/**An icon that consists of two letter within a rectangle*/
+/**An icon that consists of two letter within a rectangle
+
+ * */
 public class TreeIconForTextGraphic implements Icon, IconTraits {
 
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 
@@ -31,6 +36,7 @@ import menuUtil.SmartPopupJMenu;
 import undo.Edit;
 import menuUtil.PopupMenuSupplier;
 
+/**A menu for shapes*/
 public class ShapeGraphicMenu extends SmartPopupJMenu implements 
 PopupMenuSupplier  {
 
@@ -38,23 +44,23 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	
-	static final String options="Options";//, backGroundShap="Outline Shape";
+	static final String SHOW_OPTIONS_DIALOG="Options";
 	
-	ShapeGraphic barG;
+	ShapeGraphic targetShape;
 	public ShapeGraphicMenu(ShapeGraphic textG) {
 		super();
-		this.barG = textG;
+		this.targetShape = textG;
 		this.addAllMenuItems(createMenuItems());
 	}
 
 	public ArrayList<JMenuItem> createMenuItems() {
 		ArrayList<JMenuItem> j=new ArrayList<JMenuItem>();
-		j.add( new ObjectAction<ShapeGraphic>(barG) {
+		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public void actionPerformed(ActionEvent e) {
 				item.showOptionsDialog();
 			}}.createJMenuItem("Options"));
 			
-		j.add( new ObjectAction<ShapeGraphic>(barG) {
+		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public void actionPerformed(ActionEvent e) {
 				LocatedObject2D copy = item.copy();
 				copy.moveLocation(5, 25);
@@ -63,7 +69,7 @@ PopupMenuSupplier  {
 						);
 			}}.createJMenuItem("Duplicate"));
 		
-		j.add( new ObjectAction<ShapeGraphic>(barG) {
+		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public void actionPerformed(ActionEvent e) {
 				LocatedObject2D copy = item.createPathCopy();
 				copy.moveLocation(5, 25);
@@ -73,7 +79,7 @@ PopupMenuSupplier  {
 				
 			}}.createJMenuItem("Duplicate Points"));
 		
-		j.add( new ObjectAction<ShapeGraphic>(barG) {
+		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public void actionPerformed(ActionEvent e) {
 				ZoomableGraphic copy = (ZoomableGraphic)item.createPathCopy();
 				GraphicLayer layer = item.getParentLayer();
@@ -94,7 +100,6 @@ PopupMenuSupplier  {
 
 	@Override
 	public JPopupMenu getJPopup() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 

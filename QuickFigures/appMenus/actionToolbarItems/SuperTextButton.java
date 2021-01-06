@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package actionToolbarItems;
 
 import java.awt.Color;
@@ -37,7 +42,7 @@ import locatedObject.RainbowPaintProvider;
 import locatedObject.RectangleEdges;
 import objectDialogs.TextGraphicSwingDialog;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
@@ -47,7 +52,7 @@ import textObjectProperties.TextParagraph;
 import undo.CombinedEdit;
 import undo.UndoTextEdit;
 
-/**Performs a certain edit of one or more Text objects*/
+/**Performs a specified edit on a series of Text objects*/
 public class SuperTextButton extends BasicMultiSelectionOperator implements Serializable {
 
 
@@ -341,7 +346,7 @@ public Component getInputPanel() {
 
 
 /**returns a panel meant for the user to input a font size*/
-public NumberInputPanel getFontInputPanel(LayerSelector s) {
+public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 	if(s!=null) this.setSelector(s);
 	NumberInputPanel panel = new NumberInputPanel("Input Font Size", getModelText().getFont().getSize());
 	panel.addNumberInputListener(new NumberInputListener() {
@@ -354,7 +359,7 @@ public NumberInputPanel getFontInputPanel(LayerSelector s) {
 			runner.setSelection(selector.getSelecteditems());
 			runner.run();
 			
-			selector.getGraphicDisplayContainer().updateDisplay();
+			selector.getWorksheet().updateDisplay();
 			
 		}
 	});

@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
@@ -25,7 +26,8 @@ import java.awt.Graphics;
 import javax.swing.Icon;
 
 /**
-
+an icon that draws only the surface parts of a graphic tool icon
+@see GraphicToolIcon
  */
 public class ExtractedIcon implements Icon {
 

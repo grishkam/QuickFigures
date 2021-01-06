@@ -84,7 +84,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	public MenuBarForApp() {
 		installItem(new NewWorksheet());
 		installItems(QuickFigureMaker.getMenuBarItems());
-		installItem(new GraphicSetSaver());
+		installItem(new SaveCurrentWorkSheet());
 		installItem(new TemplateUserMenuAction(TemplateUserMenuAction.SAVE_TEMPLATE, false));
 		
 		
@@ -97,7 +97,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new UndoRedoMenuItem(false));
 		installItem(new TimeLineAction(true));
 		
-		installItem(new  GraphicSetOpener());
+		installItem(new  OpenerSavedWorkSheet());
 		installItem(new SVGOpener());
 		
 		installItem(new TreeShower());
@@ -121,9 +121,9 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new FlatCreator());
 		installItem(new CombineImages());
 		addExportMenus();
-		installItem(new GraphicSetCloser2());
+		installItem(new CloseWorksheet());
 		
-		CurrentSetLayerSelector ls = new CurrentSetLayerSelector();
+		CurrentWorksheetLayerSelector ls = new CurrentWorksheetLayerSelector();
 		add(SelectionOperationsMenu.getStandardMenu(ls));
 		add(ObjectAddingMenu.getStandardAddingMenu(ls));
 		
@@ -165,7 +165,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			
 			installItem(new ExportIllustrator());
 	
-			installItem(new PNGSequenceQuickExport(false));
+			installItem(new PNGSequenceQuickExport());
 			
 	}
 

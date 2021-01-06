@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fLexibleUIKit;
 
 import java.awt.event.ActionListener;
@@ -25,6 +30,8 @@ import graphicActionToolbar.CurrentFigureSet;
 import menuUtil.BasicSmartMenuItem;
 import undo.AbstractUndoableEdit2;
 
+/**an abstract class for action listeners that perform one task targettig one
+ * specific object*/
 public abstract class ObjectAction<Type> implements ActionListener {
 	
 	public Type item;

@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
  */
 package advancedChannelUseGUI;
 
@@ -63,7 +64,7 @@ public void onAction() {
 }
 
 /**
- 
+ either adds the target channel to the panel or removes it
  */
 public void setChannelIsIncluded(boolean include, PanelListElement panel) {
 	

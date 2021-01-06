@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -21,7 +26,7 @@ import fLexibleUIKit.ObjectAction;
 import graphicalObjects_LayoutObjects.SpacedPanelLayoutGraphic;
 import objectDialogs.SpacedPanelLayoutBorder;
 
-public class ObjectPanelLayoutPanelMenu extends LockedItemMenu {
+public class ObjectPanelLayoutPanelMenu extends AttachedItemMenu {
 
 	/**
 	 * 

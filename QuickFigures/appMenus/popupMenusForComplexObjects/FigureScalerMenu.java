@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -54,6 +59,7 @@ public class FigureScalerMenu extends SmartJMenu{
 		
 	}
 	
+	/**generates the JMenu items for this menu*/
 	public void createItems() {
 
 	
@@ -86,7 +92,6 @@ public class FigureScalerMenu extends SmartJMenu{
 			
 	}.createJMenuItem("Scale"));
 		
-		//this.add(jj);
 		
 		
 	}

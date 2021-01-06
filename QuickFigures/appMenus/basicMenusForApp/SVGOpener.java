@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import java.io.File;
@@ -27,7 +32,9 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import logging.IssueLog;
 
-/**does a crude and dirty import of an SVG file. simply used to open shapes*/
+/**Work in progress
+ * will eventually load an SVG file as a QuickFigures object
+ * does a crude and dirty import of an SVG file. simply used to open shapes*/
 public class SVGOpener   extends BasicMenuItemForObj {
 
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -30,6 +35,7 @@ import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.TextInsetsDialog;
 
+/**A menu for text graphics*/
 public class TextGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
 
@@ -37,7 +43,7 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	
-	static final String inset="Inset Options", options="Text Options", backGroundShap="Background Shape", duplicate="Duplicate";
+	static final String TEXT_INSETS="Inset text", OPTIONS_DIALOG="Text Options", FORMAT_BACKGROUND="Fill Background With Colored Shape", DUPLICATE_TEXT="Duplicate";
 	
 	TextGraphic textG;
 
@@ -51,7 +57,7 @@ PopupMenuSupplier  {
 	
 	public ArrayList<JMenuItem> getItems() {
 		ArrayList<JMenuItem> jm=new ArrayList<JMenuItem>();
-		jm.add(createItem(options));
+		jm.add(createItem(OPTIONS_DIALOG));
 		addExpertOptions(jm);
 		jm.add(new ObjectAction<TextGraphic>(textG) {
 
@@ -77,8 +83,8 @@ PopupMenuSupplier  {
 	 */
 	void addExpertOptions(ArrayList<JMenuItem> jm) {
 		if(excludeExpertOptions) return;
-		jm.add(createItem(inset));
-		jm.add(createItem(backGroundShap));
+		jm.add(createItem(TEXT_INSETS));
+		jm.add(createItem(FORMAT_BACKGROUND));
 	}
 	
 	public JMenu getJMenu(String st) {
@@ -106,13 +112,13 @@ PopupMenuSupplier  {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String com=arg0.getActionCommand();
-		if (com.equals(backGroundShap)) {
+		if (com.equals(FORMAT_BACKGROUND)) {
 			textG.getBackGroundShape().showOptionsDialog();
 		}
-		if (com.equals(options)) {
+		if (com.equals(OPTIONS_DIALOG)) {
 			textG.showOptionsDialog();
 		}
-		if (com.equals(inset)) {
+		if (com.equals(TEXT_INSETS)) {
 			TextInsetsDialog id = new TextInsetsDialog(textG);
 			id.showDialog();
 		}

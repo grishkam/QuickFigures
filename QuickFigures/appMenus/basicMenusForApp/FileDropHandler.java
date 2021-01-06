@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import java.awt.datatransfer.DataFlavor;
@@ -25,6 +30,7 @@ import java.util.ArrayList;
 
 import ultilInputOutput.ForDragAndDrop;
 
+/**items of this class respond to drag and drops of a files*/
 public abstract class FileDropHandler implements DropTargetListener{
 
 	@Override

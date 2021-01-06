@@ -27,14 +27,13 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import handles.CountHandle;
 import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import locatedObject.RectangleEdgePositions;
 import locatedObject.RectangleEdges;
+import undo.AbstractUndoableEdit2;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.UndoScalingAndRotation;
@@ -194,7 +193,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	
 	
 	@Override
-	public AbstractUndoableEdit provideUndoForDialog() {
+	public AbstractUndoableEdit2 provideUndoForDialog() {
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this));
 	}
 

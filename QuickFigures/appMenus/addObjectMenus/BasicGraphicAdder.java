@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import java.awt.Font;
@@ -44,6 +49,8 @@ public abstract class BasicGraphicAdder extends BasicMultiSelectionOperator impl
 	protected int unique=(int)Math.random()*1000;
 	
 
+	/**finds any image panels that are selected, adds the object to those panels
+	 * TODO: modify this to that it identifies a selected image panel even if objects other than image panels are selected*/
 	public void addLockedItemToSelectedImage(LocatedObject2D ag) {
 		
 		try {

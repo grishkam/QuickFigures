@@ -13,13 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import javax.swing.Icon;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.MenuItemInstall;
 
 /**This interface is for items that are included in the adding menu
@@ -38,7 +43,7 @@ public interface GraphicAdder extends MenuItemInstall {
 		public Character getKey();
 		
 		/**sets the selection system*/
-		public void setSelector(LayerSelector selector);
+		public void setSelector(LayerSelectionSystem selector);
 		public void run();
 	
 	

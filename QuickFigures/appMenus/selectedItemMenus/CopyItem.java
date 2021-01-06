@@ -13,16 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 
+/**A menu item for copying selected objects*/
 public class CopyItem extends BasicMultiSelectionOperator {
 	
 	/**
@@ -38,7 +43,6 @@ public class CopyItem extends BasicMultiSelectionOperator {
 	
 	@Override
 	public String getMenuCommand() {
-		
 		return "Copy";
 	}
 	
@@ -46,9 +50,7 @@ public class CopyItem extends BasicMultiSelectionOperator {
 	
 	@Override
 	public void setSelection(ArrayList<ZoomableGraphic> array) {
-	thearray=array;
-
-		
+		thearray=array;
 	}
 
 	@Override
@@ -66,19 +68,22 @@ public class CopyItem extends BasicMultiSelectionOperator {
 		}
 
 		if (move) {
+			//not yet implemented
 			//DisplayedImage destination = CombineImages.getChoice("Select where");
 			//GraphicLayer l = this.getSelector().getSelectedLayer();
 		}
 	}
 	
-	static boolean isCompleteLayer(GraphicLayer l, ArrayList<ZoomableGraphic> thearray) {
-		ArrayList<ZoomableGraphic> all = l.getAllGraphics();
+	/**returns true if all of the items in the array list are part of the layer
+	 * and all of the obects in the layer are directly in the layer (no content in sublayers)*/
+	static boolean isCompleteLayer(GraphicLayer layer, ArrayList<ZoomableGraphic> thearray) {
+		ArrayList<ZoomableGraphic> all = layer.getAllGraphics();
 		if (all.size()==thearray.size()) {
 			for(ZoomableGraphic a: all) {
-				if (a.getParentLayer()!=l) return false;
+				if (a.getParentLayer()!=layer) return false;
 			}
 			for(ZoomableGraphic a: thearray) {
-				if (a.getParentLayer()!=l) return false;
+				if (a.getParentLayer()!=layer) return false;
 			}
 		}
 		
@@ -90,11 +95,7 @@ public String getMenuPath() {
 		return "Item";
 	}
 
-public GraphicLayerPane duplicateLayer(GraphicLayer l) {
-	GraphicLayerPane out = new GraphicLayerPane(l.getName());
-	
-	return out;
-}
+
 
 }
 	//

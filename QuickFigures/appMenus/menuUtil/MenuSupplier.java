@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 import java.util.ArrayList;
@@ -21,8 +26,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+/**Menu suppliers contain methods to return their menus in a few forms*/
 public interface MenuSupplier extends PopupMenuSupplier{
 	JPopupMenu getJPopup();
-	public ArrayList<JMenuItem> findJItems();
+	ArrayList<JMenuItem> findJItems();
 	JMenu getJMenu();
 }

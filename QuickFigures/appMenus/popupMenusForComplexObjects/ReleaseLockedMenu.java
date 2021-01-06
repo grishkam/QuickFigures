@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionListener;
@@ -52,7 +57,6 @@ public class ReleaseLockedMenu extends SelectItemJMenu implements ActionListener
 		setLockbox(t);
 		ArrayList<LocatedObject2D> arr = list;
 		if (arr==null) return;
-		//ArraySorter.removeDeadItems(arr);
 		
 		createMenuItemsForList(arr);
 		

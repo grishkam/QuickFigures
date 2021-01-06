@@ -52,7 +52,7 @@ import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import icons.IconSet;
-import icons.LayoutIcon;
+import icons.LayoutTreeIcon;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import layersGUI.HasTreeLeafIcon;
@@ -71,10 +71,10 @@ import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdges;
 import locatedObject.TakesAttachedItems;
 import menuUtil.PopupMenuSupplier;
+import objectDialogs.PanelLayoutDisplayOptions;
 import menuUtil.HasUniquePopupMenu;
-import popupMenusForComplexObjects.LockedItemMenu;
-import popupMenusForComplexObjects.MontageLayoutDisplayOptions;
-import popupMenusForComplexObjects.MontageLayoutPanelModDialog;
+import popupMenusForComplexObjects.AttachedItemMenu;
+import sUnsortedDialogs.LayoutPanelSizeModifyDialog;
 import utilityClasses1.ArraySorter;
 
 /**A graphical object that stores a layout, displays the layout, includes handles for editing the layout
@@ -716,7 +716,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 					{
 						
 						if (handlenum<this.getPanelLayout().getPanels().length&&handlenum>=0) {
-							new MontageLayoutPanelModDialog(this, this.getPanelLayout()).showPaneldimDialog(handlenum+1);
+							new LayoutPanelSizeModifyDialog(this, this.getPanelLayout()).showPaneldimDialog(handlenum+1);
 							return;
 						} else {this.showOptionsDialog();}
 					
@@ -754,7 +754,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 	public PopupMenuSupplier getMenuSupplier(){
-		return new  LockedItemMenu(this, lockedItems);
+		return new  AttachedItemMenu(this, lockedItems);
 	}
 
 	public HashMap<LocatedObject2D, Integer> getPanelLocations() {
@@ -914,7 +914,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	public static Icon createImageIcon() {
 	//	if (i==null) i=new IconSet("iconsTree/LayoutTreeIcon.png");
 		//return i.getIcon(0);
-		return new LayoutIcon();
+		return new LayoutTreeIcon();
 	}
 
 	@Override
@@ -926,7 +926,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	@Override
 	public void showOptionsDialog() {
 		//	BasicMontageLayout b= getPanelLayout();
-		MontageLayoutDisplayOptions dia = new MontageLayoutDisplayOptions(this);
+		PanelLayoutDisplayOptions dia = new PanelLayoutDisplayOptions(this);
 		dia.showDialog();
 	}
 

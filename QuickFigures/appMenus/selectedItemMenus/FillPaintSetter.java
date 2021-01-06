@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import graphicalObjects.ZoomableGraphic;
 import locatedObject.Fillable;
 
+/**shows a dialog for changing the fill paint of an object*/
 public class FillPaintSetter extends BasicMultiSelectionOperator {
 
 	/**
@@ -27,8 +33,7 @@ public class FillPaintSetter extends BasicMultiSelectionOperator {
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
-		return "Set Fill Paint";
+		return "Set Special Fill Paint";
 	}
 
 	@Override

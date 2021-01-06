@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import graphicalObjects_SpecialObjects.BarGraphic;
 import logging.IssueLog;
 import undo.Edit;
 
+/**A dialog for editing the properties of multiple scale bars at once*/
 public class MultiBarDialog extends BarSwingGraphicDialog {
 
 	/**
@@ -47,7 +53,7 @@ public class MultiBarDialog extends BarSwingGraphicDialog {
 			return;
 		}
 		
-			super.rect	=array.get(0);
+			super.primaryBar	=array.get(0);
 			super.undoableEdit=Edit.createGenericEdit(zs);
 	}
 	

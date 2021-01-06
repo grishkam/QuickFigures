@@ -37,12 +37,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import popupMenusForComplexObjects.BarGraphicMenu;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
+import undo.AbstractUndoableEdit2;
 import undo.ProvidesDialogUndoableEdit;
 import undo.UndoScaleBarEdit;
 import utilityClasses1.NumberUse;
@@ -1070,7 +1069,7 @@ public ActionButtonHandleList createActionHandleList()  {
 }
 
 @Override
-public AbstractUndoableEdit provideUndoForDialog() {
+public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoScaleBarEdit(this);
 }
 

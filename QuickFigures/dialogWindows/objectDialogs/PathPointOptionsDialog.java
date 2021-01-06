@@ -13,27 +13,35 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import graphicalObjects_Shapes.PathGraphic;
 import locatedObject.PathPoint;
 import standardDialog.booleans.BooleanInputPanel;
+import undo.PathEditUndo;
 
+/**A dialog for editing the properties of a single path point*/
 public class PathPointOptionsDialog extends GraphicItemOptionsDialog {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected PathGraphic s;
-	PathPoint p;
+	protected PathGraphic targetPath;
+	PathPoint point1;
 	
 	
 
-	public PathPointOptionsDialog(PathGraphic s, PathPoint p) {
-	this.s=s;	
-	this.p=p;
-	 addOptionsToDialog();
+	public PathPointOptionsDialog(PathGraphic s, PathPoint point) {
+		this.targetPath=s;	
+		this.point1=point;
+		 addOptionsToDialog();
+		 undo=new PathEditUndo(s);
 	}
 	
 	
@@ -42,14 +50,14 @@ public class PathPointOptionsDialog extends GraphicItemOptionsDialog {
 	
 	protected void addOptionsToDialog() {
 		
-		this.add("Closed", new BooleanInputPanel("Is closed ", p.isClosePoint()));
+		this.add("Closed", new BooleanInputPanel("Is closed ", point1.isClosePoint()));
 		
 	}
 	
 	
 	protected void setItemsToDiaog() {
-		p.setClosePoint(this.getBoolean("Closed"));
-		s.updatePathFromPoints();
+		point1.setClosePoint(this.getBoolean("Closed"));
+		targetPath.updatePathFromPoints();
 }
 	
 }

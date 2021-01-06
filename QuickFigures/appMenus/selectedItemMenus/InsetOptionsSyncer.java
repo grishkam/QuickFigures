@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import javax.swing.Icon;
@@ -20,6 +25,7 @@ import javax.swing.Icon;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import objectDialogs.TextInsetsDialog;
 
+/**a menu option that displays an insets dialog for text */
 public class InsetOptionsSyncer extends BasicMultiSelectionOperator{
 
 	/**
@@ -29,7 +35,7 @@ public class InsetOptionsSyncer extends BasicMultiSelectionOperator{
 
 	@Override
 	public String getMenuCommand() {
-		return "Set Insets";
+		return "Set Text Item Insets";
 	}
 	
 

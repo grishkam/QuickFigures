@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.Color;
@@ -39,7 +44,7 @@ import undo.Edit;
 import undo.UndoAddOrRemoveAttachedItem;
 
 /**Menu for Image Panels. Displayed  when user right clicks on a panel*/
-public class ImagePanelMenu extends LockedItemMenu {
+public class ImagePanelMenu extends AttachedItemMenu {
 
 	/**
 	 * 
@@ -114,7 +119,7 @@ super.addLockedItemMenus();
 	}
 
 
-
+	/**adds a label to the image panel*/
 	protected void addText() {
 		CombinedEdit undo=new CombinedEdit();
 		String name=null;
@@ -134,7 +139,7 @@ super.addLockedItemMenus();
 	}
 
 
-
+	/**Adds a scale bar tot he image panel*/
 	public void addScaleBar() {
 		CombinedEdit undo = new CombinedEdit();
 		BarGraphicTool.getCurrentBarTool().addBarGraphic(imagePanel, imagePanel.getParentLayer(), undo, (int)imagePanel.getBounds().getMaxX(),(int)imagePanel.getBounds().getMaxY());

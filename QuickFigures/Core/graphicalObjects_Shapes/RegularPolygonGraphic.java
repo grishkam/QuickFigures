@@ -28,13 +28,12 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.undo.AbstractUndoableEdit;
-
 import handles.CountHandle;
 import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import objectDialogs.PolygonGraphicOptionsDialog;
+import undo.AbstractUndoableEdit2;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.SimpleItemUndo;
@@ -207,7 +206,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	
 	
 	@Override
-	public AbstractUndoableEdit provideUndoForDialog() {
+	public AbstractUndoableEdit2 provideUndoForDialog() {
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this),new SimpleItemUndo<CountParameter> (nvertex));
 	}
 	

@@ -13,19 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import java.awt.Color;
 import java.awt.Insets;
 import javax.swing.Icon;
 
-import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import locatedObject.ScaleInfo;
 import standardDialog.graphics.GraphicDisplayComponent;
 
-/**A menu option that adds a scale bar to selected panels*/
+/**A menu option that adds a scale bar to the selected image panel
+ * this assumes that an image panel is selected*/
 public class BarGraphicAdder extends BasicGraphicAdder {
 	
 	/**
@@ -35,12 +40,11 @@ public class BarGraphicAdder extends BasicGraphicAdder {
 	BarGraphic modelbar = new BarGraphic(); {modelbar.moveLocation(-4, 0);}
 	
 	@Override
-	public ZoomableGraphic add(GraphicLayer gc) {
+	public BarGraphic add(GraphicLayer gc) {
 		
 		BarGraphic ag = getModelBar().copy();
-		 addLockedItemToSelectedImage(ag);
+		addLockedItemToSelectedImage(ag);
 		gc.add(ag);
-		
 		
 		return ag;
 	}
@@ -52,7 +56,7 @@ public class BarGraphicAdder extends BasicGraphicAdder {
 	@Override
 	public String getCommand() {
 	
-		return "bar";
+		return "add scale bar";
 	}
 
 	@Override

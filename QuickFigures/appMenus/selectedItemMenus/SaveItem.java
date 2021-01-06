@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.io.File;
@@ -23,6 +28,7 @@ import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**work in progress, saves selected items to a file*/
 public class SaveItem extends BasicMultiSelectionOperator {
 
 	/**
@@ -32,13 +38,11 @@ public class SaveItem extends BasicMultiSelectionOperator {
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
-		return "Save Item";
+		return "Save Selected Graphic";
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		if (array.size()==0) return;
 		ZoomableGraphic item = array.get(0);//getSelecteditem();
 		if (item==null) return;

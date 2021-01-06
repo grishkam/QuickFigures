@@ -35,7 +35,7 @@ import locatedObject.LocatedObject2D;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
-import popupMenusForComplexObjects.LockedItemMenu;
+import popupMenusForComplexObjects.AttachedItemMenu;
 
 public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 
@@ -108,7 +108,7 @@ public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 	}
 	
 	public PopupMenuSupplier getMenuSupplier(){
-		JPopupMenu output = new  LockedItemMenu(this, this.getLockedItems()).getJPopup();
+		JPopupMenu output = new  AttachedItemMenu(this, this.getLockedItems()).getJPopup();
 		
 		GraphicLayer par = this.getParentLayer();
 		if (par instanceof HasUniquePopupMenu) {

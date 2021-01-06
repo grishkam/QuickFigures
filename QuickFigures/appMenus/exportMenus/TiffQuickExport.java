@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 
@@ -25,11 +30,10 @@ import appContext.CurrentAppContext;
 /**this class exports a figure as tiff file using ImageJ*/
 public class TiffQuickExport extends PNGQuickExport {
 	/**
-	 * @param openNow
+	 * @param openNow determines if the file will be opened right away
 	 */
 	public TiffQuickExport(boolean openNow) {
 		super(openNow);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected String getExtension() {

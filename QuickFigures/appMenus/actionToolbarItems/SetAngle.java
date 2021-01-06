@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package actionToolbarItems;
 
 import java.awt.BasicStroke;
@@ -126,14 +131,14 @@ public class SetAngle extends BasicMultiSelectionOperator {
 				SetAngle runner = new SetAngle(angle1*180/Math.PI);
 				runner.setSelector(selector);
 				runner.run();
-				selector.getGraphicDisplayContainer().updateDisplay();
+				selector.getWorksheet().updateDisplay();
 				
 			}
 		});
 		return panel;
 	}
 
-
+	/**An icon that depicts the angle*/
 	public class AngleIcon implements Icon {
 
 		/**
@@ -176,7 +181,7 @@ public class SetAngle extends BasicMultiSelectionOperator {
 			}
 		}
 
-		//TODO: fix icon size to be mini toolbar's icon sizes appropriate
+		
 		@Override
 		public int getIconWidth() {
 			return ICON_SIZE;

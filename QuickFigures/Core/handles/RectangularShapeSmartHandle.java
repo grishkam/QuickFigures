@@ -26,7 +26,7 @@ import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import actionToolbarItems.EditManyShapes;
+import actionToolbarItems.EditManyObjects;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -134,7 +134,7 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 	
 	
 	public void showJPopup(CanvasMouseEvent w) {
-		EditManyShapes multi = new EditManyShapes(true,  targetShape.getStrokeWidth());
+		EditManyObjects multi = new EditManyObjects(true,  targetShape.getStrokeWidth());
 		multi.setSelector(w.getSelectionSystem());
 		multi.getPopup().showForMouseEvent(w);;
 	}

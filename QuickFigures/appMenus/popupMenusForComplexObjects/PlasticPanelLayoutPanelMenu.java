@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -22,10 +27,12 @@ import javax.swing.JMenu;
 import fLexibleUIKit.ObjectAction;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_LayoutObjects.PlasticPanelLayoutGraphic;
+import layout.plasticPanels.AddPanelSizeDefiningItemMenu;
 import menuUtil.IndexChoiceMenu;
+import menuUtil.SmartJMenu;
 import objectDialogs.SpacedPanelLayoutBorder;
 
-public class PlasticPanelLayoutPanelMenu extends LockedItemMenu {
+public class PlasticPanelLayoutPanelMenu extends AttachedItemMenu {
 
 	/**
 	 * 
@@ -56,7 +63,7 @@ public class PlasticPanelLayoutPanelMenu extends LockedItemMenu {
 	}
 	
 	JMenu addCreatePanelMenu(PlasticPanelLayoutGraphic c) {
-		JMenu panelsmen = new JMenu("Panels");
+		JMenu panelsmen = new SmartJMenu("Panels");
 		panelsmen.	add(new ObjectAction<PlasticPanelLayoutGraphic>(c) {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {item.repack();item.repack();item.repack(); item.updateDisplay();}	
@@ -71,7 +78,7 @@ public class PlasticPanelLayoutPanelMenu extends LockedItemMenu {
 			public void actionPerformed(ActionEvent arg0) {item.getPanelLayout().addNewPanel(); item.updateDisplay();}	
 	}.createJMenuItem("Add Panel"));
 		try {
-			panelsmen.add(new removalMenu(c));
+			panelsmen.add(new RemovalPanelMenu(c));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,9 +92,10 @@ public class PlasticPanelLayoutPanelMenu extends LockedItemMenu {
 		return panelsmen ;
 	}
 	
-	public class removalMenu extends IndexChoiceMenu<PlasticPanelLayoutGraphic> {
+	/**a menu item to remove a panel*/
+	public class RemovalPanelMenu extends IndexChoiceMenu<PlasticPanelLayoutGraphic> {
 
-		public removalMenu(PlasticPanelLayoutGraphic o) {
+		public RemovalPanelMenu(PlasticPanelLayoutGraphic o) {
 			super(o, "Remove Panel", 1, o.getPanelLayout().nPanels());
 
 		}

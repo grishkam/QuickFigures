@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.awt.GridBagConstraints;
@@ -24,6 +29,8 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorDimmingBox;
 
+/**A dialog for complex text items, includes text alignment options
+ * and a series of tabs for every single individual segment of text*/
 public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 
 	/**
@@ -58,7 +65,7 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 		
 		addLineTabs();
 		
-		//textItem.setSnappingBehaviour(SnappingBehaviour.defaultInternal());
+	
 		addSnappingBehviourToDialog(textItem);
 		
 		

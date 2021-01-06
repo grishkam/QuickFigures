@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.awt.Color;
@@ -32,6 +37,7 @@ import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 
+/**An operation that removes a selected set of items from the worksheet*/
 public class ItemRemover extends BasicMultiSelectionOperator {
 
 	
@@ -52,13 +58,12 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 			if (item==null) continue;
 			actioinOnSelected(item);
 		}
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undoableEdit);
+		selector.getWorksheet().getUndoManager().addEdit(undoableEdit);
 
 	}
 	
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Remove";
 	}
 	
@@ -70,13 +75,13 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 		if ( selectedItem instanceof KnowsParentLayer) {
 			
 			UndoAbleEditForRemoveItem undo = new UndoAbleEditForRemoveItem(null, (ZoomableGraphic) selectedItem);
-			//selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+			
 			undoableEdit.addEditToList(undo);
 		
 			
 		}
 		
-		selector.getGraphicDisplayContainer().getTopLevelLayer().remove(selectedItem);
+		selector.getWorksheet().getTopLevelLayer().remove(selectedItem);
 		
 		
 		
@@ -90,7 +95,7 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 		
 	}
 	
-
+	/**creates the shape of a red X*/
 	static ShapeGraphic createCartoonX(boolean selected) {
 		Point p1=new Point(5,0);
 		Point p2=new Point(17,24);
@@ -118,11 +123,12 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 			return output;
 	}
 	
+	/**returns the delete icon as a red X*/
 	public GraphicDisplayComponent getDeleteIcon(boolean selected) {
 		 GraphicDisplayComponent output = new GraphicDisplayComponent(createCartoonX( selected));
 		 
 		 output.setRelocatedForIcon(false);
-		 //output.setSelected(selected);
+		
 		 return output;
 	}
 	

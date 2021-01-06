@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
@@ -22,15 +27,17 @@ import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_Shapes.ArrowGraphic;
 import menuUtil.SmartPopupJMenu;
+import undo.AbstractUndoableEdit2;
+import undo.UndoManagerPlus;
 import undo.UndoScalingAndRotation;
 import menuUtil.PopupMenuSupplier;
 
 /**a popup menu for arrows that includes both the standard menu options for shapes
-  and those specific to arrows*/
+  and those specific to arrows.
+  */
 public class ArrowGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
 
@@ -40,7 +47,7 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	/**the arrow specific menu options*/
-	static final String  editOutline="Outline Shape", flipHead="Swap Ends", makeVertical= "Make Vertical",makeHorizontal= "Make Horizontal";
+	static final String  EDIT_ARROW_OUTLINE="Outline Shape", SWAP_HEADS="Swap Ends", MAKE_VERTICAL= "Make Vertical",MAKE_HORIZONTAL= "Make Horizontal";
 	
 	ArrowGraphic targetArrow;
 	ShapeGraphicMenu shapeGraphicMenu;
@@ -55,11 +62,11 @@ PopupMenuSupplier  {
 		this.addAllMenuItems(shapeGraphicMenu.createMenuItems());
 		
 		/**Adds the arrow specific menu options*/
-		add(createMenuItem(editOutline));
+		add(createMenuItem(EDIT_ARROW_OUTLINE));
 		
-		add(createMenuItem(flipHead));
-		add(createMenuItem(makeHorizontal));
-		add(createMenuItem(makeVertical));
+		add(createMenuItem(SWAP_HEADS));
+		add(createMenuItem(MAKE_HORIZONTAL));
+		add(createMenuItem(MAKE_VERTICAL));
 		if (arrow.getNHeads()>1 &&arrow.headsAreSame()) {
 			add(createMenuItem(USE_DIFFERENT_HEADS));
 		}
@@ -88,32 +95,39 @@ PopupMenuSupplier  {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String com=arg0.getActionCommand();
-		if (com.equals(editOutline)) {
+		if (com.equals(EDIT_ARROW_OUTLINE)) {
 			showOutlineDialog();
+			return;
 		}
+		
+		AbstractUndoableEdit2 undo = targetArrow.provideUndoForDialog();
 	
-		if (com.equals(flipHead)) {
+		if (com.equals(SWAP_HEADS)) {
 			swapHeads();
 		}
 		
-		if (com.equals(makeVertical)) {
+		if (com.equals(MAKE_VERTICAL)) {
 			makeVertical();
 			
 			
 		}
-		if (com.equals(makeHorizontal)) {
+		if (com.equals(MAKE_HORIZONTAL)) {
 			makeHorizontal();
 		}
 		
 		if(com.equals(USE_DIFFERENT_HEADS)) {
-			targetArrow.setHeadsSame(false);
+			targetArrow.setHeadsSame(false);//undo has not been implemented for this
 		}
+		undo.establishFinalState();
+		UndoManagerPlus um = getUndoManager();
+		if (um!=null)um.addEdits(undo);
+		
 		targetArrow.updateDisplay();
 		
 	}
 
 	/**
-	 * 
+	shows a dialog for the outline shape
 	 */
 	public void showOutlineDialog() {
 		/**sets the arrow to outline mode if it is not already*/
@@ -128,7 +142,7 @@ PopupMenuSupplier  {
 	}
 
 	/**
-	 * 
+	
 	 */
 	public void swapHeads() {
 		targetArrow.swapDirections();

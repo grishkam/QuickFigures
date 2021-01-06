@@ -23,11 +23,11 @@ import animations.Animation;
 import animations.KeyFrameAnimation;
 import applicationAdapters.DisplayedImage;
 import graphicalObjects.ZoomableGraphic;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 
 public class KeyFrameHandling {
 	/**returns a list of the items that have valid keyframes*/
-	static ArrayList<KeyFrameCompatible> getKeyFrameItems(LayerSelector selector) {
+	static ArrayList<KeyFrameCompatible> getKeyFrameItems(LayerSelectionSystem selector) {
 		
 		ArrayList<KeyFrameCompatible> output = new ArrayList<KeyFrameCompatible>();
 		ArrayList<ZoomableGraphic> selItems = selector.getSelecteditems();
@@ -45,7 +45,7 @@ public class KeyFrameHandling {
 	}
 
 
-static ArrayList<KeyFrameAnimation>  getKeyAnimators(LayerSelector selector) {
+static ArrayList<KeyFrameAnimation>  getKeyAnimators(LayerSelectionSystem selector) {
 	
 	ArrayList<KeyFrameAnimation> output = new ArrayList<KeyFrameAnimation>();
 	ArrayList<ZoomableGraphic> selItems = selector.getSelecteditems();

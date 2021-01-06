@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import ultilInputOutput.FileFinder;
@@ -30,7 +35,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 
 /**this class adds a figure containing a multidimensional images to a layer */
 public class FigureAdder extends LayoutAdder {
@@ -46,7 +51,7 @@ public class FigureAdder extends LayoutAdder {
 	
 	public boolean openFile=false;//set to true if this opens a file to create a figure
 	
-	boolean makeLabels=false;
+	private boolean makeLabels=false;
 	
 	/**set to true if limiting the new figure to a single frame*/
 	public boolean useSingleFrame=false;
@@ -312,7 +317,7 @@ public class FigureAdder extends LayoutAdder {
 	}
 	
 	@Override
-	public boolean canUseObjects(LayerSelector graphicTreeUI) {
+	public boolean canUseObjects(LayerSelectionSystem graphicTreeUI) {
 		return true;
 	}
 

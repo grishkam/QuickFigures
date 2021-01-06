@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import graphicalObjects.ZoomableGraphic;
@@ -55,7 +60,7 @@ public class PasteItem extends BasicGraphicAdder{
 		}
 		
 		UndoAddManyItem undo = new UndoAddManyItem(layer,copiedArray );
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		selector.getWorksheet().getUndoManager().addEdit(undo);
 		
 		return null;
 	}
@@ -69,7 +74,6 @@ public class PasteItem extends BasicGraphicAdder{
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "Paste";
 	}
 
@@ -81,7 +85,6 @@ public class PasteItem extends BasicGraphicAdder{
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return getCommand();
 	}
 

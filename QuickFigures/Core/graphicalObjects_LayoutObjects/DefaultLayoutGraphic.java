@@ -33,7 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
-import genericMontageUIKitMenuItems.MontageEditCommandMenu;
+import genericMontageUIKitMenuItems.LayoutEditCommandMenu;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.AttachmentPositionHandle;
@@ -54,7 +54,7 @@ import locatedObject.RectangleEdges;
 import locatedObject.Scales;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
-import popupMenusForComplexObjects.MontageLayoutPanelMenu;
+import popupMenusForComplexObjects.LayoutMenu;
 import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
 import undo.UndoAddOrRemoveAttachedItem;
@@ -288,7 +288,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 
 	
 	public PopupMenuSupplier getMenuSupplier(){
-		return new  MontageLayoutPanelMenu(this);
+		return new  LayoutMenu(this);
 	}
 	
 	/**returns the area a user may click on to select the layout
@@ -701,7 +701,7 @@ public void resizeLayoutToFitContents() {
 	//	if (this.getPanelLayout().doPanelsUseUniqueHeights())new MontageEditorDialogs().showUniqueDimensionDialog(getPanelLayout(), MontageSpaces.ROWS);
 		//if (this.getPanelLayout().doPanelsUseUniqueWidths())new MontageEditorDialogs().showUniqueDimensionDialog(getPanelLayout(), MontageSpaces.COLS);
 	//	new MontageEditorDialogs().showColumnNumberEditorDialog(getEditor(), getPanelLayout(),1,1);
-		new MontageEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
+		new LayoutEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
 		
 		//new MontageEditorDialogs().showBorderEditorDialog(getEditor(), getPanelLayout());
 		return new String[] {"Scaling figure can sometimes result in mismatches between Image Panel locations and layouts", "Layout measurements are rounded up after scaling", "Object positions/sizes may be rounded to integers during export"};

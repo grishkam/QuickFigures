@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.awt.Dimension;
@@ -54,6 +59,7 @@ import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 
+/**a dialog for setting the crop area for a multi dimensional image*/
 public class CroppingDialog extends GraphicItemOptionsDialog implements MouseListener, MouseMotionListener, ActionListener{
 
 	/**

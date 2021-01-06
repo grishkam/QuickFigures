@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import locatedObject.LocatedObject2D;
 import objectDialogs.LocationSettingDialog;
 
+/**A simple dialog that allows the user to change the location of one selected item*/
 public class LocationSetter extends BasicMultiSelectionOperator {
 
 	/**

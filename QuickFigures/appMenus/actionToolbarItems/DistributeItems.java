@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package actionToolbarItems;
 
 import java.awt.Color;
@@ -33,14 +38,13 @@ import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoMoveItems;
 
+/**Implements the distribute items menu options, complete with icons.
+ * will move a set of objects to make them evenly spaced
+ */
 public class DistributeItems extends BasicMultiSelectionOperator {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private boolean vertical;
-	//boolean layout;//true if this works on panel layouts.
 	
 	public DistributeItems(boolean vert) {
 		vertical=vert;
@@ -48,7 +52,6 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 
 	@Override
 	public String getMenuCommand() {
-		//if (layout) return "Distribute Layouts "+(vertical? "Vertically" : "Horizontally");
 		return "Distribute Evenly "+(vertical? "Vertical" : "Horizontal");
 	}
 
@@ -68,7 +71,7 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 		
 		
 		
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		selector.getWorksheet().getUndoManager().addEdit(undo);
 		
 		
 	}
@@ -143,7 +146,7 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 			
 
 		undo.establishFinalLocations();
-		if (selector!=null) selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		if (selector!=null) selector.getWorksheet().getUndoManager().addEdit(undo);
 	}
 
 	
@@ -186,7 +189,6 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 	
 	@Override
 	public String getMenuPath() {
-		//if (layout) 	return "Align<Layout";
 		return "Align";
 	}
 	

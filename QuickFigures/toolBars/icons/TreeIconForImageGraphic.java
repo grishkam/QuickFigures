@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package icons;
 
 import java.awt.Color;
@@ -25,6 +30,7 @@ import java.awt.Rectangle;
 public class TreeIconForImageGraphic extends GenericTreeIcon {
 
 
+	/**blotches determine the appearance of the drawing*/
 	ColorBlotchForIcon blotch1=new ColorBlotchForIcon(new Rectangle(4,4, 5,5), Color.white);
 	ColorBlotchForIcon blotch3=new ColorBlotchForIcon(new Rectangle(3,3, 3,3), Color.white);
 	ColorBlotchForIcon blotch2=new ColorBlotchForIcon(new Rectangle(10,7, 2,2), Color.white);
@@ -33,10 +39,6 @@ public class TreeIconForImageGraphic extends GenericTreeIcon {
 	public TreeIconForImageGraphic(Color c) {
 		 blotch1.blotchColor=c;
 	}
-	
-
-	
-	
 	
 	/**draws two letters in a black rectangle*/
 	@Override

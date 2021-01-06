@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 import java.awt.Desktop;
 import java.awt.Rectangle;
@@ -35,6 +40,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.ArrayObjectContainer;
 import logging.IssueLog;
 
+/**A menu item for powerpoint export*/
 public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	
 

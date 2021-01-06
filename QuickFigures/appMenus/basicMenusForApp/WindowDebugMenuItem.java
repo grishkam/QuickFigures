@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import java.awt.AWTEvent;
@@ -34,7 +39,8 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 
 /**A menu item that I wrote to help me search our a bug that causes the 
- * key board shortcuts to stop working. */
+ * key board shortcuts to stop working. The bug does not occur during automated testing
+ * but sometimes occurs when certain tasks are manually done*/
 public  class WindowDebugMenuItem implements MenuItemForObj{
 
 	boolean on=true;

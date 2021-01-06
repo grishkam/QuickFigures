@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package actionToolbarItems;
 
 
@@ -142,8 +147,8 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		for(LocatedObject2D a: all) 
 			if(a instanceof BarGraphic) edit.addEditToList(applyTo((BarGraphic) a));
 		
-		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
+		if (selector!=null&&selector.getWorksheet()!=null)
+		selector.getWorksheet().getUndoManager().addEdit(edit);
 		
 	}
 	
@@ -152,7 +157,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 /**applies the change and returns an undoable edit*/
 	private AbstractUndoableEdit applyTo(BarGraphic a) {
 		CombinedEdit edit = new CombinedEdit();
-		ColorEditUndo edit4 = new ColorEditUndo(a);
+		ColorEditUndo editForColor = new ColorEditUndo(a);
 		
 	
 	
@@ -162,7 +167,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 			if (getTheColor()!=null &&s.isFillable())s.setFillColor(getTheColor());
 		}
 		
-		UndoScaleBarEdit edit2 = new UndoScaleBarEdit(a);
+		UndoScaleBarEdit editForBar = new UndoScaleBarEdit(a);
 		if(type==TYPE_CHANGE_PROJECTIONS) {
 			a.setProjectionType(projectionType);
 		}
@@ -176,11 +181,11 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 			a.setLengthInUnits(unitLength);;
 		}
 		
-		edit2.establishFinalState();
-		edit.addEditToList(edit2);
+		editForBar.establishFinalState();
+		edit.addEditToList(editForBar);
 		
-		edit4.establishFinalColors();
-		edit.addEditToList(edit4);
+		editForColor.establishFinalColors();
+		edit.addEditToList(editForColor);
 		
 		return edit;
 		
@@ -189,13 +194,12 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	@Override
 	public String getMenuPath() {
 	
-		return "Actions";
+		return "Edit Scale Bar";
 	}
 	
 	
 	
 	public Icon getIcon() {
-		
 		if(TYPE_CHANGE_PROJECTIONS==type)
 			return getProjectionIcon();
 		
@@ -294,10 +298,10 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	
 	public Component getInputPanel() {
 		if(TYPE_CHANGE_PROJECTIONS==type) 
-			return StandardDialog.combinePanels(getProjectionInput(),getStrokeWidthInput(), new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));;
+			return StandardDialog.combinePanels(getProjectionInput(),getBarStrokeWidthInput(), new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));;
 		
 		
-		return StandardDialog.combinePanels( getUnitInput(),getStrokeWidthInput(), new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));
+		return StandardDialog.combinePanels( getUnitInput(),getBarStrokeWidthInput(), new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));
 	}
 
 
@@ -314,7 +318,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 				runner.setSelector(selector);
 				runner.run();
 				
-				selector.getGraphicDisplayContainer().updateDisplay();
+				selector.getWorksheet().updateDisplay();
 				
 			}
 		});
@@ -322,7 +326,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	}
 
 	/**returns a number input panel for setting the thickness of the scale bar */
-	protected NumberInputPanel getStrokeWidthInput() {
+	protected NumberInputPanel getBarStrokeWidthInput() {
 		
 		NumberInputPanel panel = new NumberInputPanel("Bar Thickness", modelItem.getBarStroke(), 0,50);
 		panel.addNumberInputListener(new NumberInputListener() {
@@ -334,7 +338,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 				runner.setSelector(selector);
 				runner.run();
 				
-				selector.getGraphicDisplayContainer().updateDisplay();
+				selector.getWorksheet().updateDisplay();
 				
 			}
 		});
@@ -353,7 +357,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 				EditScaleBars runner = new EditScaleBars(TYPE_LENGTH_UNITS, (float)ne.getNumber());
 				runner.setSelector(selector);
 				runner.run();
-				selector.getGraphicDisplayContainer().updateDisplay();
+				selector.getWorksheet().updateDisplay();
 				
 			}
 		});

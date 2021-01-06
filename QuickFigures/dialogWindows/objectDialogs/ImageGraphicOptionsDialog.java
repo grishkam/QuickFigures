@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import appContext.ImageDPIHandler;
@@ -28,7 +33,7 @@ import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 import undo.Edit;
 
-
+/**the options dialog for image panels*/
 public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 
 	/**

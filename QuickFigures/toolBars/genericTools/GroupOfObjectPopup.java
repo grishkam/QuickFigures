@@ -26,7 +26,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import menuUtil.SmartPopupJMenu;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.SelectionOperationsMenu;
 
 /**A popup menu that appears when the user right clicks on a group of objects*/
@@ -36,10 +36,10 @@ public class GroupOfObjectPopup extends SmartPopupJMenu {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private LayerSelector selectedItems=null;
+	private LayerSelectionSystem selectedItems=null;
 	private SelectionOperationsMenu allitem;
 
-	public GroupOfObjectPopup(LayerSelector allSelectedRois) {
+	public GroupOfObjectPopup(LayerSelectionSystem allSelectedRois) {
 		selectedItems=allSelectedRois;
 		allitem= SelectionOperationsMenu.getStandardMenu(selectedItems);
 		allitem.setText("All Selected Items");

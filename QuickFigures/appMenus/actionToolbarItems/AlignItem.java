@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package actionToolbarItems;
 
 
@@ -43,7 +48,8 @@ import undo.UndoMoveItems;
 import undo.UndoReorder;
 
 
-/**Implements the align objects menu, complete with icons.
+/**Implements the align objects menu options, complete with icons.
+ * Can also move objects forward and backward in their parent layers
    Also includes code for arrange: moving and item between front and back.*/
 public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpaces {
 
@@ -51,10 +57,13 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**The constant values that are used to indicate that the align item operator will do*/
 	public static final int MOVE_TO_FRONT = 102;
 	public static final int MOVE_TO_BACK = 103;
 	public static final int MOVE_FORWARD = 100;
 	public static final int MOVE_BACKWARD = 101;
+	
 	private int type;
 	
 	public AlignItem(int leftSpace) {
@@ -83,8 +92,8 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 
 	/**returns the parent layer of the object*/
 	private GraphicLayer findParentLayer(ZoomableGraphic item ) {
-		ArrayList<GraphicLayer> layers = selector.getGraphicDisplayContainer().getTopLevelLayer().getSubLayers();
-		if(selector.getGraphicDisplayContainer().getTopLevelLayer().getItemArray().contains(item)) return selector.getGraphicDisplayContainer().getTopLevelLayer();
+		ArrayList<GraphicLayer> layers = selector.getWorksheet().getTopLevelLayer().getSubLayers();
+		if(selector.getWorksheet().getTopLevelLayer().getItemArray().contains(item)) return selector.getWorksheet().getTopLevelLayer();
 		for(GraphicLayer l: layers) {
 			if(l.getItemArray().contains(item)) return l;
 		}
@@ -93,7 +102,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 
 	@Override
 	public void run() {
-		if (selector==null||selector.getGraphicDisplayContainer()==null) {
+		if (selector==null||selector.getWorksheet()==null) {
 			ShowMessage.showOptionalMessage("", true, "To use this tool, you must have a worksheet open. (and items selected) first");
 			return;
 		}
@@ -112,8 +121,8 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		allignArray(all);
 		
 		undo.establishFinalLocations();
-		if(selector!=null&&selector.getGraphicDisplayContainer()!=null)
-			selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		if(selector!=null&&selector.getWorksheet()!=null)
+			selector.getWorksheet().getUndoManager().addEdit(undo);
 		
 	}
 
@@ -152,8 +161,8 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 						moveItemForwardOrBack(item, type)
 				);
 			}
-		if (selector!=null&&selector.getGraphicDisplayContainer()!=null) 
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(edit);
+		if (selector!=null&&selector.getWorksheet()!=null) 
+		selector.getWorksheet().getUndoManager().addEdit(edit);
 	}
 	
 	/**
@@ -254,7 +263,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		
 		undo.establishFinalLocations();
 		if (selector!=null)
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		selector.getWorksheet().getUndoManager().addEdit(undo);
 	}
 	
 	/**If any objects have a negative location, this moves them.
@@ -493,8 +502,8 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	}
 	
 	
-	
-	public static Rectangle panelsCombined(LocatedObject2D ob) {
+	/**Returns the combined bounds of all the objects*/
+	static Rectangle panelsCombined(LocatedObject2D ob) {
 		Area area=new Area();
 		
 		if (ob instanceof PanelLayoutGraphic) {

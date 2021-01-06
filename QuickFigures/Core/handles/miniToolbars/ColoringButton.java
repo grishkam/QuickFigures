@@ -71,7 +71,7 @@ public class ColoringButton extends IconHandle implements ColorInputListener {
 		item.onColorInput(fie);
 		
 		this.setIcon(item.getIcon());
-		fie.event.getSelectionSystem().getGraphicDisplayContainer().updateDisplay();
+		fie.event.getSelectionSystem().getWorksheet().updateDisplay();
 		
 		
 	}

@@ -13,14 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
-/**This interface was written for programmers to have a way to add items to the adding menu
+/**This interface provides a way to add items to the adding menu
  * @see ObjectAddingMenu. Any objects of this class that are added to the bonusAdders ArrayList 
  * in the adding menu will be called every time the menubar is made*/
 public interface AddingMenuInstaller {
 	
-	/***/
+	/**called to install items into an adding menu*/
 	public void installOntoMenu(ObjectAddingMenu menu);
 
 }

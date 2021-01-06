@@ -50,7 +50,7 @@ import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdges;
 import locatedObject.TakesAttachedItems;
 import menuUtil.SmartPopupJMenu;
-import objectDialogs.MultiSnappingDialog;
+import objectDialogs.MultiAttachmentPositionDialog;
 import undo.CombinedEdit;
 import undo.UndoReorder;
 import undo.UndoAttachmentPositionChange;
@@ -218,7 +218,7 @@ public JMenuItem createAdjustPositionMenuItem() {
 	jm.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			MultiSnappingDialog d = new MultiSnappingDialog(false);
+			MultiAttachmentPositionDialog d = new MultiAttachmentPositionDialog(false);
 			ArrayList<Object> array=new ArrayList<Object>(); 
 			array.add(object);
 			d.setGraphics(array);

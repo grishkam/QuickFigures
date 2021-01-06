@@ -13,12 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import graphicalObjects.FigureDisplayWorksheet;
 
-/**A layer selector that returns the selected items in whatever set is the currently active one*/
-public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
+/**A layer selector that returns the selected items in a specific worksheet*/
+public class SelectedSetLayerSelector extends CurrentWorksheetLayerSelector {
 
 
 	/**
@@ -32,7 +37,7 @@ public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
 	} 
 
 	@Override
-	public FigureDisplayWorksheet getGraphicDisplayContainer() {
+	public FigureDisplayWorksheet getWorksheet() {
 		return container;
 	}
 

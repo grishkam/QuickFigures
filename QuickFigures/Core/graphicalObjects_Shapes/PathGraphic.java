@@ -35,8 +35,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
-import javax.swing.undo.AbstractUndoableEdit;
-
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
@@ -61,6 +59,7 @@ import locatedObject.ScalesFully;
 import menuUtil.PopupMenuSupplier;
 import objectCartoon.ShapeMaker;
 import popupMenusForComplexObjects.PathGraphicMenu;
+import undo.AbstractUndoableEdit2;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.PathEditUndo;
@@ -943,7 +942,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	/**generates the undoable edit that can be used to undo actions of the dialog*/
 	@Override
-	public AbstractUndoableEdit provideUndoForDialog() {
+	public AbstractUndoableEdit2 provideUndoForDialog() {
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this), new PathEditUndo(this));
 	}
 

@@ -25,7 +25,7 @@ import figureFormat.DirectoryHandler;
 import ij.IJ;
 import ij.plugin.PlugIn;
 import imageDisplayApp.KeyDownTracker;
-import includedToolbars.ActionToolset1;
+import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
 import includedToolbars.ObjectToolset1;
@@ -49,7 +49,7 @@ public class Toolset_Runner implements PlugIn {
 			///new FileListGui().run("gui");
 		}
 		if (arg0.equals("Position Action Tools")) {
-			new ActionToolset1().run("");
+			new AlignAndArrangeActionTools().run("");
 			new ActionToolset2().run("");
 		}
 		
@@ -70,7 +70,7 @@ public class Toolset_Runner implements PlugIn {
 			ObjectToolset1 tsr = new ObjectToolset1();
 			
 			tsr.run("");
-			new ActionToolset1().run("");
+			new AlignAndArrangeActionTools().run("");
 		}
 
 	}

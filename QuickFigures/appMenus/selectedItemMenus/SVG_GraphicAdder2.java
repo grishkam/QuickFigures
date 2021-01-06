@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.io.File;
@@ -49,7 +54,7 @@ public class SVG_GraphicAdder2 extends BasicGraphicAdder {
 		gc.add(ob);
 		
 		
-		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)selector.getGraphicDisplayContainer().onItemLoad(ob);
+		if (selector!=null&&selector.getWorksheet()!=null)selector.getWorksheet().onItemLoad(ob);
 		return ob;
 	}
 

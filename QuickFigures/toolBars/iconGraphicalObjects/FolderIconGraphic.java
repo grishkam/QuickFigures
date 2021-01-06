@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package iconGraphicalObjects;
 
 import java.awt.Color;
@@ -26,7 +31,7 @@ import locatedObject.PaintProvider;
 import locatedObject.RectangleEdges;
 
 /**A class for creation of a folder icon object. This actually consists of a few objects
- folder icons appear as expected*/
+ * arranges to appear like a folder. The colors of a folder can be changed*/
 public class FolderIconGraphic extends GraphicGroup {
 
 	/**

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package multiChannelFigureUI;
 
 import java.awt.Color;
@@ -160,8 +165,8 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		addChannelRelevantMenuItems(output, false);
 	}
 	public void addChannelRelevantMenuItems(Container output, boolean limitVersionOfMenu) {
-		addButtonToMenu(output, "Window/Level", WLCommand, IconUtil.createBrightnessIcon(0));
-		 addButtonToMenu(output, "Min/Max", minMaxCommand, IconUtil.createBrightnessIcon(0));
+		addButtonToMenu(output, "Window/Level", WLCommand, IconUtil.createBrightnessIcon());
+		 addButtonToMenu(output, "Min/Max", minMaxCommand, IconUtil.createBrightnessIcon());
 		 addButtonToMenu(output, "Change Color Modes", COLOR_MODE_COMMAND, new ColorModeIcon(colorForColorModeIcon));
 		 addButtonToMenu(output, "Channel Use Options", CHANNEL_USE_COMMAND, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder()));
 		

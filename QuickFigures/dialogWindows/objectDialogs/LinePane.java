@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.awt.Component;
@@ -32,6 +37,7 @@ import standardDialog.ObjectInputTab;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 
+/**A tab for editing TextLines via dialog*/
 public class LinePane  extends ObjectInputTab implements MouseListener, ActionListener{
 	
 	/**

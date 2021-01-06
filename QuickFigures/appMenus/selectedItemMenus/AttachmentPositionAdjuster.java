@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.awt.Color;
@@ -25,9 +30,12 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
-import objectDialogs.MultiSnappingDialog;
+import objectDialogs.MultiAttachmentPositionDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 
+/**A shows a dialog for chaning that attachment position of multiple objects
+ * @see AttachmentPosition
+ * */
 public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 
 
@@ -36,15 +44,15 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private boolean copySnap=true;
-	private LocatedObject2D model;
+	private boolean copySnap=true;//set to true if distinct copies of an attachment position are to be used
+	private LocatedObject2D primaryObject;
 
 	public AttachmentPositionAdjuster(LocatedObject2D modelObject) {
-		this.model=modelObject;
+		this.primaryObject=modelObject;
 	}
-	public AttachmentPositionAdjuster(boolean b, LocatedObject2D modelObject) {
+	public AttachmentPositionAdjuster(boolean usesameAttachmentPositionforManyObjects, LocatedObject2D modelObject) {
 		this(modelObject);
-		copySnap=!b;
+		copySnap=!usesameAttachmentPositionforManyObjects;
 	}
 
 
@@ -60,17 +68,18 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 	public void run() {
 		
 		createFromArray(array, copySnap);
-	
 
 	}
 	
+	/**shows an attachment position dialog for the list of items*/
 	public static void createFromArray(ArrayList<?> array, boolean copySnap) {
-		MultiSnappingDialog d = new MultiSnappingDialog(copySnap);
+		MultiAttachmentPositionDialog d = new MultiAttachmentPositionDialog(copySnap);
 		d.setGraphics(array);
 		if(d.isEmpty()) return;
 		d.showDialog();
 	}
 	
+	/**returns an icon containing a red rectangle for tha parent panel and a blue rectangle for the attached item*/
 	public GraphicDisplayComponent getItemIcon(boolean selected) {
 		GraphicGroup gg=new GraphicGroup();
 		ArrayList<Rectangle> rects = getRectanglesForIcon();
@@ -93,30 +102,31 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 		 return output;
 	}
 	
+	/**returns the rectangles that are drawn onto the icon*/
 	private ArrayList<Rectangle> getRectanglesForIcon() {
 		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
 		
-				output.add(new Rectangle(5,5,12,10));
+				output.add(new Rectangle(5,8,12,10));//the large rectangle
 				
 			AttachmentPosition s = AttachmentPosition.defaultColLabel();
-				output.add(new Rectangle(0,0,5,5));
-				setTomodel(s);
+				output.add(new Rectangle(0,0,5,5));//the small rectangle
+				setAttachmentPositionIconToModelItem(s);
 				s.snapRects(output.get(1), output.get(0));
 				
-				output.add(new Rectangle(0,0,20,15));
+				output.add(new Rectangle(0,0,20,20));
 		return output;
 	}
 	
-	
-	private void setTomodel(AttachmentPosition s) {
-		if(this.model==null) return;
-		AttachmentPosition a = this.model.getAttachmentPosition();
+	/***/
+	private void setAttachmentPositionIconToModelItem(AttachmentPosition position) {
+		if(this.primaryObject==null) return;
+		AttachmentPosition a = this.primaryObject.getAttachmentPosition();
 		if(a==null)return;
-		s.setLocationTypeInternal(a.getSnapLocationTypeInternal());
-		s.setLocationTypeExternal(a.getSnapLocationTypeExternal());
-		s.setLocationCategory(a.getLocationCategory());
-		s.setHorizontalOffset(0);
-		s.setVerticalOffset(0);
+		position.setLocationTypeInternal(a.getSnapLocationTypeInternal());
+		position.setLocationTypeExternal(a.getSnapLocationTypeExternal());
+		position.setLocationCategory(a.getLocationCategory());
+		position.setHorizontalOffset(0);
+		position.setVerticalOffset(0);
 	}
 	public Icon getIcon() {
 		return  getItemIcon(true);

@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import graphicalObjects_Shapes.ShapeGraphic;
 
+/**A shape options dialog that only contains the options for the stroke colors and
+ * not the fill colors*/
 public class StrokeOnlySwingDialog extends ShapeGraphicOptionsSwingDialog{
 
 	public StrokeOnlySwingDialog(ShapeGraphic s) {
@@ -24,8 +31,6 @@ public class StrokeOnlySwingDialog extends ShapeGraphicOptionsSwingDialog{
 		addOptionsToDialog2();
 		
 	}
-	
-	
 
 	
 	protected void addOptionsToDialog2() {
@@ -33,20 +38,25 @@ public class StrokeOnlySwingDialog extends ShapeGraphicOptionsSwingDialog{
 		addOptionsToDialogPart2();
 	}
 	
+	/**Overrides the method from the superclass*/
+	@Override
 	protected void addOptionsToDialog() {
 		
 		
 	}
 	
-	
+	/**Overrides the method from the superclass*/
+	@Override
 	protected void addOptionsToDialogPart2() {
-		// TODO Auto-generated method stub
 		
 		addStrokePanelToDialog(s);
 		
 		
 	}
 	
+
+	/**Overrides the method from the superclass*/
+	@Override
 	protected void setItemsToDiaog() {
 		this.setStrokedItemtoPanel(s);
 		

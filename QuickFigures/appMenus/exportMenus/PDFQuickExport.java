@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 
@@ -28,10 +33,11 @@ import applicationAdapters.DisplayedImage;
 import export.eps.PDFsaver;
 import logging.IssueLog;
 
+/**A menu item for PDF export*/
 public class PDFQuickExport extends QuickExport {
 	
 	/**
-	 * @param openNow
+	* @param openNow determines if the file will be opened strait away
 	 */
 	public PDFQuickExport(boolean openNow) {
 		super(openNow);

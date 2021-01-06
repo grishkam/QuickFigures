@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import layersGUI.GraphicTreeUI;
 import locatedObject.Hideable;
 import undo.UndoHideUnhide;
 
+/**A menu item for setting objects as hidden*/
 public class HideItem extends BasicMultiSelectionOperator {
 
 	/**
@@ -54,10 +60,10 @@ public class HideItem extends BasicMultiSelectionOperator {
 				((Hideable) i).setHidden(true);
 			}
 		}
-		this.getSelector().getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		this.getSelector().getWorksheet().getUndoManager().addEdit(undo);
 	}
 	
-	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {
+	public boolean isValidForLayerSelector(LayerSelectionSystem graphicTreeUI) {
 		if (graphicTreeUI instanceof GraphicTreeUI)
 		return true;
 		return false;

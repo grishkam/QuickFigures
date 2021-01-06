@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package basicMenusForApp;
 
 import java.io.File;
@@ -23,12 +28,12 @@ import genericTools.NormalToolDragHandler;
 import graphicActionToolbar.QuickFigureMaker;
 import imageDisplayApp.ImageDisplayIO;
 
+/**items of this class respond to files dropped unto the toolbars*/
 public class OpeningFileDropHandler extends FileDropHandler {
 
 	@Override
 	public void performsingleFileAction(File f) {
 		if (isImageFormat(f)) {
-			//TODO: determine whether I want the user to drag and drog onto the toolbar to create s figure
 			generateFigureFromFile(f);
 			
 			return;

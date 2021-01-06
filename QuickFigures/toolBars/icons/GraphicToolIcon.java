@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 
 package icons;
 
@@ -30,16 +35,17 @@ import externalToolBar.AbstractExternalToolset;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_Shapes.ArrowGraphic;
 
-/**interface for tool icons that are placed in the toolbar
+/**Icons for the tools that appear on the toolbar,
+ *  icon normally have a normal version, a rollover version and a pressed version
    */
 	public abstract class GraphicToolIcon implements Icon{
 
 		protected Component lastComponent;
 		public static final int NORMAL_ICON_TYPE=0, PRESSED_ICON_TYPE=1, ROLLOVER_ICON_TYPE=2;
 		protected int type=NORMAL_ICON_TYPE;
-		private int borderLineWidth=1;
+		int borderLineWidth=1;//width of line at the edge of the icon
 		protected int iconDim=AbstractExternalToolset.DEFAULT_ICONSIZE;
-		protected boolean paintCursorIcon=false;
+		protected boolean paintCursorIcon=false;//set to true if the shape of a cursor should be part of the icon
 		
 		/**two grey values for the pressed and unpressed icon colors*/
 		Color lightColor=new Color(210,210,210);
@@ -149,24 +155,6 @@ import graphicalObjects_Shapes.ArrowGraphic;
 		public Icon getMenuVersion() {return new ExtractedIcon(this);}
 		
 		
-		/**
-		public NakedIcon getVariablePortion() {return new NakedIcon();}
-		
-		class NakedIcon implements Icon {
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				paintObjectOntoIcon(c, g, x, y);
-			}
-
-			@Override
-			public int getIconWidth() {
-				return AbstractExternalToolset.DEFAULT_ICONSIZE;
-			}
-
-			@Override
-			public int getIconHeight() {
-				return AbstractExternalToolset.DEFAULT_ICONSIZE;
-			}}*/
+	
 	
 }

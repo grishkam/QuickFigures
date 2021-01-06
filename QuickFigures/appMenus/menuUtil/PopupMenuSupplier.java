@@ -13,13 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package menuUtil;
 
 
 import javax.swing.JPopupMenu;
 
-
-
+/**supplies a popup menu*/
 public interface PopupMenuSupplier {
+	
+	/**returns  the popup menu*/
 	JPopupMenu getJPopup();
 }

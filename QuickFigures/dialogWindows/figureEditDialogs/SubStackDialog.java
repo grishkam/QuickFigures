@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
  */
 package figureEditDialogs;
 
@@ -72,7 +73,7 @@ public class SubStackDialog extends StandardDialog {
 		
 	}
 
-	/**
+	/**creates tabs for multiple multi-dimensional images
 	 * @param multiChannelDisplaysInOrder
 	 */
 	private void setup(ArrayList<? extends ImageDisplayLayer> multiChannelDisplaysInOrder) {
@@ -109,6 +110,7 @@ public class SubStackDialog extends StandardDialog {
 	
 	private static final long serialVersionUID = 1L;
 	
+	/**A dialog for selecting frames and slices for a single multidimensional image*/
 	public class SingleInstructionDialog extends GraphicItemOptionsDialog {
 
 		

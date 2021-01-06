@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 import undo.Edit;
 
+/**A dialog for editing the options of multiple image panels at once*/
 public class MultiImageGraphicDialog extends ImageGraphicOptionsDialog{
 
 	/**

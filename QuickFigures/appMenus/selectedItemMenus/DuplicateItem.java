@@ -64,7 +64,7 @@ public class DuplicateItem extends BasicMultiSelectionOperator {
 			}
 		}
 		
-		this.getSelector().getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		this.getSelector().getWorksheet().getUndoManager().addEdit(undo);
 
 	}
 

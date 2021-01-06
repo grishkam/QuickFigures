@@ -13,20 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 
 import java.awt.Desktop;
 import java.io.File;
-
 import applicationAdapters.DisplayedImage;
 import export.eps.EPSsaver;
 import logging.IssueLog;
 
+/**A menu item for exporting as an EPS*/
 public class EPSQuickExport extends QuickExport {
 	
 	/**
-	 * @param openNow
+	 * @param openNow determines if the file will be opened strait away
 	 */
 	public EPSQuickExport(boolean openNow) {
 		super(openNow);
@@ -46,8 +51,7 @@ public class EPSQuickExport extends QuickExport {
 			getClass().getClassLoader().loadClass("org.apache.batik.svggen.SVGGraphics2DRuntimeException");
 			return true;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 			return false;
 		}
 	}
@@ -60,11 +64,9 @@ public class EPSQuickExport extends QuickExport {
 			if (file==null) return;
 		String newpath=file.getAbsolutePath();
 		
+		 this.saveInPath(diw, newpath);
+		   
 		 
-		   
-		  EPSsaver saver = new EPSsaver();
-		   
-		  saver.saveWrapper(newpath, diw);
 		  
 		  
 		    Desktop.getDesktop().open(new File(newpath));
@@ -72,11 +74,24 @@ public class EPSQuickExport extends QuickExport {
 		} catch (Throwable t) {
 			if (t instanceof NoClassDefFoundError) {
 				IssueLog.showMessage("Opps. "+ "It seems imageJ cant find "+t.getMessage());
-			//this.getClass().getClassLoader().loadClass(arg0)
+			
 			}
 			IssueLog.logT(t);
 		}
 	        
+	}
+	
+	/**
+	saves the item in the given path
+	 */
+	public  void saveInPath(DisplayedImage diw, String newpath) {
+		 try {
+			EPSsaver saver = new EPSsaver();
+			   
+			  saver.saveWrapper(newpath, diw);
+		} catch (Exception e) {
+			IssueLog.log(e);
+		} 
 	}
 
 	@Override

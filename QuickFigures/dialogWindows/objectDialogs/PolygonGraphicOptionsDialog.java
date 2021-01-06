@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import graphicalObjects_Shapes.RegularPolygonGraphic;
@@ -29,11 +34,13 @@ public class PolygonGraphicOptionsDialog extends ShapeGraphicOptionsSwingDialog 
 		currentPolygon=s;
 	}
 	
+	/**Adds a version of the options from the */
+	@Override
 	protected void addOptionsToDialogPart1() {
 		super.addOptionsToDialogPart1();
 		if (s instanceof RegularPolygonGraphic) currentPolygon=(RegularPolygonGraphic) s;
-		NumberInputPanel win = new NumberInputPanel("Width", currentPolygon.getBounds().width);
-		NumberInputPanel hin = new NumberInputPanel("Height", currentPolygon.getBounds().height);
+		NumberInputPanel win = new NumberInputPanel("Width", currentPolygon.getObjectWidth());
+		NumberInputPanel hin = new NumberInputPanel("Height", currentPolygon.getObjectHeight());
 		NumberInputPanel vin = new NumberInputPanel("N-Vertex", currentPolygon.getNvertex());
 		this.add("width", win);
 		this.add("height", hin);

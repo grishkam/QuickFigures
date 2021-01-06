@@ -40,7 +40,7 @@ import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 
@@ -212,12 +212,12 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		
 		
 		
-		if (super.selector.getGraphicDisplayContainer()==null) return;
+		if (super.selector.getWorksheet()==null) return;
 		ArrayList<ZoomableGraphic> itemsSel = selector.getSelecteditems();
 		CombinedEdit undo=null;
 		
 		if (itemsSel.size()==0) {
-			FigureDisplayWorksheet graphicDisplayContainer = selector.getGraphicDisplayContainer();
+			FigureDisplayWorksheet graphicDisplayContainer = selector.getWorksheet();
 					undo=operateOnContainer(graphicDisplayContainer);
 		} else if (itemsSel.size()==1 && itemsSel.get(0) instanceof GraphicLayer) {
 					undo=operateOnLayer((GraphicLayer) itemsSel.get(0));
@@ -226,7 +226,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 					undo=operateOnList(selector);
 		}
 		
-		selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		selector.getWorksheet().getUndoManager().addEdit(undo);
 		
 	}
 
@@ -299,7 +299,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**will apply the figure template to a set of selected items
 	 * for example, the targets may be the layer and items within the layer
 	 * @return */
-	public CombinedEdit operateOnList(LayerSelector itemsSel ) {
+	public CombinedEdit operateOnList(LayerSelectionSystem itemsSel ) {
 		if (doesDeleteTemplate()) {
 			deleteTemplateFile();
 			return null;

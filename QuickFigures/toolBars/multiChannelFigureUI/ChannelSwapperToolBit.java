@@ -34,7 +34,7 @@ import genericMontageLayoutToolKit.GeneralLayoutToolIcon;
 import layout.PanelLayout;
 import layout.plasticPanels.PlasticPanelLayout;
 import menuUtil.SmartPopupJMenu;
-import popupMenusForComplexObjects.ScaleFigureDialog;
+import sUnsortedDialogs.ScaleFigureDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import undo.ChannelDisplayUndo;
@@ -105,7 +105,7 @@ public class ChannelSwapperToolBit extends BasicImagePanelTool implements Action
 				pressedInset.getMenuSupplier().showScaleDialog();
 				return;
 			}
-			ScaleFigureDialog dialog = new popupMenusForComplexObjects.ScaleFigureDialog(this.getCurrentOrganizer().getMontageLayoutGraphic(), this.presseddisplay.getPanelManager()); ;
+			ScaleFigureDialog dialog = new sUnsortedDialogs.ScaleFigureDialog(this.getCurrentOrganizer().getMontageLayoutGraphic(), this.presseddisplay.getPanelManager()); ;
 			
 			dialog.setAdditionalPanelManagers(getAllDisplays());
 			

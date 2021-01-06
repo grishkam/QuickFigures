@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package iconGraphicalObjects;
 
@@ -51,7 +52,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 	
 	private int style=NORMAL_CHANNEL_USE;
 
-
+	/**set to true if channel names should be used as a basic for the icon colors*/
 	private boolean useNames;
 	
 	

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package advancedChannelUseGUI;
 
 import java.awt.Color;
@@ -54,7 +59,7 @@ import figureOrganizer.PanelManager;
 import standardDialog.colors.ColorDimmingBox;
 
 
-/**experimenting with a way for the user to look through the parts of a panel list*/
+/**A list of panels that are under the control of a single panel manager*/
 public class PanelListDisplay extends JList<PanelListElement> implements ActionListener, DropTargetListener, KeyListener, WindowListener, MouseListener{
 
 	/**
@@ -71,7 +76,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		this.panelManager=man;
 		this.setList(man.getPanelList());
 		this.setDragEnabled(true);
-		addListSelectionListener(new listener1(this));
+		addListSelectionListener(new ObjectsSelectedFromList(this));
 		new DropTarget(this, this);
 		this.addKeyListener(this);
 	}
@@ -118,15 +123,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	
 	}
 	
-	public static void main(String[] arg) {
-		
-		;
-		//ImagePlusWrapper wrap = new ImagePlusWrapper(IJ.openImage());
-	//	MultichannelImageDisplay multi = new IJ1MultiChannelCreator().creatMultiChannelDisplayFromUserSelectedImage(true, null);
-	//	showMultiChannel(multi);
-		
-	}
-	
+
 	public static void showMultiChannel(MultichannelDisplayLayer multi) {
 		JFrame jf = new JFrame();
 		jf.setLayout(new FlowLayout());
@@ -227,17 +224,16 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			g.setColor(Color.blue);
 			if (focus||isSelected) g.fillRect(1,1, (int)w, this.getFont().getSize()+2);
 			ColorDimmingBox.drawRainBowString(g, 1,this.getFont().getSize()+1, names, lengths, colors);
-			//if (theChannelentries.size()>0) ChannelEntryBox.drawRainbowString(g, theChannelentries.get(0), 1,this.getFont().getSize()+1);
-			//else {ChannelEntryBox.drawRainbowString(g, null, 1,this.getFont().getSize()+1);}
 			
 		}
 	
 	}
 	
 
-	class listener1 implements ListSelectionListener {
+	/**A listener that selects the display objects for the panel list elements*/
+	class ObjectsSelectedFromList implements ListSelectionListener {
 
-		public listener1(PanelListDisplay panelListDisplay) {
+		public ObjectsSelectedFromList(PanelListDisplay panelListDisplay) {
 			
 		}
 
@@ -296,7 +292,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			panelManager.updatePanels();
 			panelManager.getImageDisplayLayer().onImageUpdated();
 			
-			//this.setListData(elements);
+			
 			this.repaint();
 		
 		

@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import graphicalObjects.ZoomableGraphic;
 import locatedObject.Hideable;
 import undo.UndoHideUnhide;
 
+/**An option for setting objects as "not hidden"*/
 public class UnHideItem extends HideItem {
 
 	/**
@@ -28,7 +34,6 @@ public class UnHideItem extends HideItem {
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Unhide";
 	}
 
@@ -40,7 +45,7 @@ public class UnHideItem extends HideItem {
 				((Hideable) i).setHidden(false);
 			}
 		}
-		this.getSelector().getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+		this.getSelector().getWorksheet().getUndoManager().addEdit(undo);
 	}
 
 }

@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import appContext.CurrentAppContext;
@@ -30,11 +36,10 @@ import uiForAnimations.KeyFrameHandling;
 /**exporter for a sequence of .png files representing time frames within an animation*/
 public class PNGSequenceQuickExport extends QuickExport {
 	/**
-	 * @param openNow
+	 * @param openNow if the com
 	 */
-	public PNGSequenceQuickExport(boolean openNow) {
-		super(openNow);
-		// TODO Auto-generated constructor stub
+	public PNGSequenceQuickExport() {
+		super(false);
 	}
 
 	protected String getExtension() {
@@ -52,6 +57,24 @@ public class PNGSequenceQuickExport extends QuickExport {
 			
 		File f=getFileAndaddExtension();
 		if(f==null) return;
+		String basename = saveToFolder(diw, f);
+		 
+		/**opens the image as a timeline*/
+		CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
+		
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	        
+	}
+
+	/**
+	 * @param diw
+	 * @param f
+	 * @return
+	 * @throws IOException
+	 */
+	private String saveToFolder(DisplayedImage diw, File f) throws IOException {
 		String newpath=f.getAbsolutePath();
 		
 		
@@ -74,14 +97,7 @@ public class PNGSequenceQuickExport extends QuickExport {
 			IssueLog.log("Exported frame "+i);
 		}
 		window.setVisible(false);
-		 
-		/**opens the image as a timeline*/
-		CurrentAppContext.getMultichannelContext().getMultichannelOpener().createFromImageSequence(basename, null);
-		
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-	        
+		return basename;
 	}
 
 	@Override

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.awt.Container;
@@ -31,7 +36,10 @@ import standardDialog.strings.StringInputListener;
 import standardDialog.strings.StringInputPanel;
 import textObjectProperties.TextLineSegment;
 
-/**A panel within a dialog that allows the user to edit to a specific fragment of text, determining if the text is underlined, superscripted and so on */
+/**A panel within a dialog that allows the user to edit to a specific fragment of text, determining if the text is underlined, superscripted and so on 
+ * @see TextLine
+ * @see ComplexTextGraphic
+ * */
 public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInputListener, ChoiceInputListener, OnGridLayout {
 
 	/**

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.awt.Dimension;
@@ -25,13 +30,14 @@ import illustratorScripts.IllustratorDocRef;
 import illustratorScripts.IllustratorObjectConvertable;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
-/**implements a menu item to generate an illustrator script*/
+/**implements a menu item to generate an illustrator script
+ * for creating the objects selected in Adobe Illustrator*/
 public class IllustratorMimic extends BasicMultiSelectionOperator {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	boolean makeNewDoc=false;
+	boolean makeNewDoc=false;//should illustrator create a new document?
 	
 	public IllustratorMimic(boolean makeNewDoc) {
 		super();
@@ -42,7 +48,6 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 	
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		if (makeNewDoc) {return "Make Objects in new Illustrator Doc";}
 		return "Make Objects in Illustrator";
 	}
@@ -51,13 +56,11 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 	public void run() {
 		
 		ArrayList<ZoomableGraphic> theExportedItems = this.array;
-		Dimension canvasDims = getSelector().getGraphicDisplayContainer().getCanvasDims();
-		if (theExportedItems.size()==0)  theExportedItems.add(getSelector().getGraphicDisplayContainer().getTopLevelLayer());
+		Dimension canvasDims = getSelector().getWorksheet().getCanvasDims();
+		if (theExportedItems.size()==0)  theExportedItems.add(getSelector().getWorksheet().getTopLevelLayer());
 		
 		generateIllustratorScript(theExportedItems, canvasDims);
-		//	aref.setName(Montage.getTitle());
-		//this.getSelector().getGraphicDisplayContainer().
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -81,6 +84,7 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 			 ZIllustratorScriptGenerator.instance.execute() ;
 	}
 	
+	/**creates the entire worksheet in an adobe illustrator art layer*/
 	void sentToIlls(Object mont, ArtLayerRef aref) {
 		if (mont instanceof FigureDisplayWorksheet) {
 			FigureDisplayWorksheet mont2 = (FigureDisplayWorksheet)mont;

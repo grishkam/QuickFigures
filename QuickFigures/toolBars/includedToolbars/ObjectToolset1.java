@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package includedToolbars;
 
 
@@ -21,8 +26,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import applicationAdapters.DisplayedImage;
-import externalToolBar.InterfaceExternalTool;
 import genericMontageLayoutToolKit.Shift_Object_Between_Panels;
 import genericTools.GeneralTool;
 import genericTools.ObjectColorFillTool;
@@ -60,7 +63,7 @@ import pathGraphicToolFamily.BrushTool;
 import pathGraphicToolFamily.PathGraphicTool;
 import pathGraphicToolFamily.PathReflectTool;
 import pathGraphicToolFamily.PathTool;
-import pathGraphicToolFamily.PathTool2;
+import pathGraphicToolFamily.MoveManyPoints;
 
 /**The main toolbar for QuickFigures. Includes all critical tools*/
 public class ObjectToolset1 extends QuickFiguresToolBar{
@@ -79,10 +82,6 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	}
 	
 	public void graphicTools() {
-		//Roi_Mover mover = new Roi_Mover();
-		//mover.setExcludedClass(PanelLayoutGraphic.class);
-		
-		
 		
 		maxGridx=11;
 		
@@ -140,7 +139,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		return bits;
 	} 
 	
-	/** TODO: determine if these obsolete tools have any use.
+	/** TODO: determine if these obsolete tools have any use. deletethese if not
 	private static ArrayList<ToolBit> getLockToolBits() {
 		ArrayList<ToolBit> output = new ArrayList<ToolBit>();
 		output.add(new BarGraphicTool());
@@ -234,7 +233,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		out.add(new PathTool(true, false));
 		out.add(new PathTool(true, true));
 		
-		out.add(new PathTool2());
+		out.add(new MoveManyPoints());
 		out.add(new PathReflectTool(PathReflectTool.REFLECT));
 		out.add(new PathReflectTool(PathReflectTool.SCALE));
 		out.add(new PathReflectTool(PathReflectTool.ROTATE));

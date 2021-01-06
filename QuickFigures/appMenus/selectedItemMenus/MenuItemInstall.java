@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.awt.Font;
@@ -31,7 +36,7 @@ public interface MenuItemInstall {
 	public Font getMenuItemFont();
 	
 	/**returns true if the adder will work for the layer selector given*/
-	public boolean canUseObjects(LayerSelector graphicTreeUI);
+	public boolean canUseObjects(LayerSelectionSystem graphicTreeUI);
 	
 	
 }

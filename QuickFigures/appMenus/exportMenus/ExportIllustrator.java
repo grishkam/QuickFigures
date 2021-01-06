@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 import applicationAdapters.DisplayedImage;
@@ -20,6 +25,7 @@ import basicMenusForApp.BasicMenuItemForObj;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
+/**A menu item for generating an a script that con run in Adobe Illustrator*/
 public class ExportIllustrator extends BasicMenuItemForObj {
 	AdobeScriptMaker sm=	new AdobeScriptMaker();
 
@@ -37,8 +43,6 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 			
 		}
 	}
-	
-
 	
 
 	@Override

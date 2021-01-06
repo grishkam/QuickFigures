@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
  */
 package selectedItemMenus;
 
@@ -64,9 +65,9 @@ public class FrameColorButton extends BasicMultiSelectionOperator implements  Co
 		}
 		
 		/**Adds the edit to the undo manager*/
-		if (selector!=null&&selector.getGraphicDisplayContainer()!=null)
+		if (selector!=null&&selector.getWorksheet()!=null)
 			{
-				selector.getGraphicDisplayContainer().getUndoManager().addEdit(ce);
+				selector.getWorksheet().getUndoManager().addEdit(ce);
 					}
 		else {IssueLog.log("failed to add undo to udo manager "+this);}
 	}

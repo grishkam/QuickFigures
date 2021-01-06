@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import graphicalObjects.GraphicEncoder;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**Used to add a saved object*/
 public class SavedGraphicAdder extends BasicGraphicAdder {
 	
 	
@@ -36,7 +42,7 @@ public class SavedGraphicAdder extends BasicGraphicAdder {
 	
 		gc.add(ob);
 		
-		if (selector.getGraphicDisplayContainer()!=null)selector.getGraphicDisplayContainer().onItemLoad(ob);
+		if (selector.getWorksheet()!=null)selector.getWorksheet().onItemLoad(ob);
 		return ob;
 	}
 
@@ -47,7 +53,6 @@ public class SavedGraphicAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Saved Graphic";
 	}
 }

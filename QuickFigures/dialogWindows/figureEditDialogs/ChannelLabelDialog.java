@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package figureEditDialogs;
 
 import java.awt.GridBagConstraints;
@@ -30,9 +35,9 @@ import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 
+/**A special text item dialog with additional features for channel labels*/
 public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 
-	//private ChannelLabelTextGraphic chanLabel;
 	boolean doMergeLabelMenu=false;
 	private JTabbedPane theTabs;
 
@@ -64,7 +69,7 @@ public class ChannelLabelDialog extends ComplexTextGraphicSwingDialog {
 	StandardDialog createPanelForLines() {
 		
 		if (getChannelLabel() ==null) {IssueLog.log("null channel label issue");}
-		return TextLineDialogForChenLabel.createMultiLineDialog(getChannelLabel() .getChanEntries(), getChannelLabel().getChannelLabelProperties(), createSwingDialogListener());
+		return TextLineDialogForChannelLabel.createMultiLineDialog(getChannelLabel() .getChanEntries(), getChannelLabel().getChannelLabelProperties(), createSwingDialogListener());
 	}
 	protected StandardDialogListener createSwingDialogListener() {
 		return new StandardDialogListener() {

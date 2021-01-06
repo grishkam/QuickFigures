@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ import locatedObject.ArrayObjectContainer;
 import locatedObject.LocatedObject2D;
 import standardDialog.graphics.GraphicDisplayComponent;
 
+/**selects all objects that are of the same class as a currently selected item*/
 public class SelectAllButton extends BasicMultiSelectionOperator {
 
 	/**

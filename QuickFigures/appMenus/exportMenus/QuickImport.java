@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 import java.io.File;
@@ -22,6 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ultilInputOutput.FileChoiceUtil;
 
+/**An abstract class for the import of files*/
 public abstract class QuickImport  extends QuickExport {
 	
 	public QuickImport() {

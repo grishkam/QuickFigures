@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.Toolkit;
@@ -29,6 +34,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import graphicalObjects_SpecialObjects.TextGraphic;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartPopupJMenu;
 
@@ -59,7 +65,7 @@ PopupMenuSupplier, Transferable{
 	}
 
 	protected void addItemToMenu(String item) {
-		JMenuItem jitem = new JMenuItem(item);
+		JMenuItem jitem = new BasicSmartMenuItem(item);
 		jitem.setActionCommand(item);
 		jitem.addActionListener(this);
 		this.add(jitem);

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package exportMenus;
 
 import java.io.File;
@@ -22,6 +27,7 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import ultilInputOutput.FileChoiceUtil;
 
+/**An abstract superclass for export menu items*/
 public abstract class QuickExport  extends BasicMenuItemForObj {
 
 	protected boolean openImmediately;
@@ -74,9 +80,7 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 	 * a method to be accessed by programmer. not implemented for all subclasses
 	 saves the image in the given path
 	 */
-	public void saveInPath(DisplayedImage diw, String newpath) throws Exception {
-		
-	}
+	public void saveInPath(DisplayedImage diw, String newpath) throws Exception {}
 
 	protected  abstract String getExtensionName() ;
 }

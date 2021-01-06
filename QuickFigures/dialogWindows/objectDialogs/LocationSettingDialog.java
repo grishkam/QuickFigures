@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import locatedObject.LocatedObject2D;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog that prompts a user to input an X,Y position*/
 public class LocationSettingDialog extends StandardDialog {
 
 	/**
@@ -51,9 +57,5 @@ public class LocationSettingDialog extends StandardDialog {
 
 	
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

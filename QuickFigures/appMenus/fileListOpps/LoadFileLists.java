@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fileListOpps;
 
 import java.io.File;
@@ -25,9 +30,10 @@ import graphicalObjects.FigureDisplayWorksheet;
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import ultilInputOutput.FileChoiceUtil;
 
+/**work in progress. a menu item to import a list of files into a tree*/
 public class LoadFileLists extends BasicMultiSelectionOperator {
 
 	/**
@@ -59,7 +65,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	public void run() {
 		if (multiFileChooser) {
 			File[] files = FileChoiceUtil.getFiles();
-			FigureDisplayWorksheet container = super.getSelector().getGraphicDisplayContainer();
+			FigureDisplayWorksheet container = super.getSelector().getWorksheet();
 			 for(File f: files) {
 				 FileStandIn fileSI = new FileStandIn(f);
 				 container.getTopLevelLayer().add(fileSI);
@@ -73,7 +79,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	
 	void loadList() {
 		File input=FileChoiceUtil.getOpenFile();
-		FigureDisplayWorksheet container = super.getSelector().getGraphicDisplayContainer();
+		FigureDisplayWorksheet container = super.getSelector().getWorksheet();
 		try{
 			if (input==null ||!input.exists()) return;
 		Scanner scan2 =  new Scanner(input);
@@ -109,7 +115,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 		
 	}
 	
-	public boolean isValidForLayerSelector(LayerSelector graphicTreeUI) {
+	public boolean isValidForLayerSelector(LayerSelectionSystem graphicTreeUI) {
 		if (graphicTreeUI instanceof GraphicTreeUI)
 		return true;
 		return false;

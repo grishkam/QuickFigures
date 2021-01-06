@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package icons;
 
 
@@ -31,7 +36,7 @@ import logging.IssueLog;
 public class IconSet {
 	
 	public static final int ROLLOVER_ICON = 2, PRESSED_ICON = 1, BUTTON_ICON = 0;
-	private Image[] icons;
+	private Image[] icons;//for icons that consist of images
 	 private Icon[] icons2;
 	 
 	 private Image defaultIcon=null;

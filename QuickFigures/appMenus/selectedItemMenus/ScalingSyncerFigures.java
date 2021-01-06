@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ import sUnsortedDialogs.ScaleAboutDialog;
 import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;
 
+/**opens a figure scaling dialog*/
 public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 
 	/**
@@ -53,7 +59,7 @@ public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 		
 		if (!aa.wasOKed()) return;
 		
-			ArrayList<ZoomableGraphic> items = super.getAllArray();//super.selector.getSelecteditems();
+			ArrayList<ZoomableGraphic> items = super.getAllArray();
 			
 			ArrayList<ZoomableGraphic> panelLayouts = new ArraySorter<ZoomableGraphic> ().getThoseOfClass(items, PanelLayoutGraphic.class);
 			removeThoseForInsets(panelLayouts);
@@ -68,9 +74,10 @@ public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 			
 			boh.resizeCanvasToFitAllObjects(selector.getImageWrapper());
 			
-			selector.getGraphicDisplayContainer().getUndoManager().addEdit(undo);
+			selector.getWorksheet().getUndoManager().addEdit(undo);
 	}
 	
+	/**excludes the layouts that are used by inset definers*/
 	void removeThoseForInsets(ArrayList<ZoomableGraphic> panelLayouts) {
 		ArrayList<PanelGraphicInsetDefiner> insets = PanelGraphicInsetDefiner.getInsetDefinersFromLayer(getTopLayer(selector.getSelectedLayer()));
 		

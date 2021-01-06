@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package includedToolbars;
 
 import java.awt.event.KeyEvent;
@@ -22,6 +27,7 @@ import applicationAdapters.DisplayedImage;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 
+/**A key listener for the toolbars. responds to undo/redo keyboard shortcut*/
 public class ToolbarKeyListener implements KeyListener {
 
 	public ToolbarKeyListener() {

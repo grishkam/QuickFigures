@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package selectedItemMenus;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import javax.swing.Icon;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import objectDialogs.CroppingDialog;
 
+/**shows a crop dialog for many image panels*/
 public class CroppingSyncer extends BasicMultiSelectionOperator{
 
 
@@ -32,7 +38,6 @@ public class CroppingSyncer extends BasicMultiSelectionOperator{
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Set Cropping Of Image";
 	}
 

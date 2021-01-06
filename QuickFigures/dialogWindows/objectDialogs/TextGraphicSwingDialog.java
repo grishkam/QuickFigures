@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import java.awt.Font;
@@ -85,17 +90,12 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		bgDialog=new ShapeGraphicOptionsSwingDialog(bgShape, true);
 		
 		this.addSubordinateDialog("Background", bgDialog);
-	
-		//this.getOptionDisplayTabs().addTab("Background", new ShapeGraphicOptionsSwingDialog(bgShape).removeOptionsTab());
-		/**this.moveGrid(2, -1);
-		ColorComboboxPanel cbp = new ColorComboboxPanel("Color Background", null, textItem.getBackGroundColor());
-		this.add("ColorBG", cbp);
-		this.moveGrid(-2, 0);*/
+
 	}
 	
 	protected void setBackgroundOptionsToDialog(TextGraphic t) {
 		t.setFillBackGround(this.getBoolean("backGround"));
-	//	t.setBackGroundColor(this.getColor("ColorBG"));
+	
 	}
 	
 	protected void addDimmingToDialog() {
@@ -131,7 +131,6 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		textItem.setTextColor(this.getColor("tColor"));
 		textItem.setDimColor(this.getBoolean("dim?"));
 		
-		//textItem.setInsets(this.getInsetsPanelFromDialog());
 		setAtrributesToDialog(textItem);
 	}
 	
@@ -148,19 +147,17 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	
 	
 	public static void main(String[] args) { 
-	TextGraphic t = new TextGraphic();
-	t.setFont(new Font("Arial", Font.BOLD, 30));
-	TextGraphicSwingDialog dia = new TextGraphicSwingDialog(t);
-	dia.sam = new GraphicSampleComponent(t);
-	//t.setSnappingBehaviour(SnappingBehaviour.defaultInternal());
-	//SnappingPanel spanel = new SnappingPanel(t.getSnappingBehaviour());
-	//dia.place(spanel);
-	dia.add(dia.sam, new GridBagConstraints());
-	dia.showDialog();
+		TextGraphic t = new TextGraphic();
+		t.setFont(new Font("Arial", Font.BOLD, 30));
+		TextGraphicSwingDialog dia = new TextGraphicSwingDialog(t);
+		dia.sam = new GraphicSampleComponent(t);
+		
+		dia.add(dia.sam, new GridBagConstraints());
+		dia.showDialog();
 	
 	}
 	
-	
+	/**Adds a justification field to the dialog*/
 	public void addJustificationToDialog(TextGraphic tg) {
 		if (tg instanceof ComplexTextGraphic) {
 			ComplexTextGraphic ct=(ComplexTextGraphic) tg;

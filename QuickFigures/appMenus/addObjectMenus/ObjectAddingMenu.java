@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import java.awt.Color;
@@ -36,7 +41,7 @@ import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import objectCartoon.LobeMaker;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.SVG_GraphicAdder2;
 import standardDialog.graphics.DisplaysGraphicalObject;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -49,8 +54,8 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	static ArrayList <GraphicAdder> adders= new ArrayList <GraphicAdder>(); 
 	static ArrayList <GraphicAdder> layoutadders= new ArrayList <GraphicAdder>();
 	static ArrayList <GraphicAdder> imageadders= new ArrayList <GraphicAdder>();
-	static ArrayList <GraphicAdder> imagePlusAdders= new ArrayList <GraphicAdder>();
-	static ArrayList <GraphicAdder> kayadders= new ArrayList <GraphicAdder>();
+	static ArrayList <GraphicAdder> figureAdders= new ArrayList <GraphicAdder>();
+	
 	static ArrayList <GraphicAdder> cartoonadders= new ArrayList <GraphicAdder>();
 	
 	public static ArrayList <AddingMenuInstaller> bonusAdders=new ArrayList<AddingMenuInstaller>();
@@ -85,23 +90,22 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			imageadders.add(new ClipboardAdder(false));
 			
 			if (CurrentAppContext.getMultichannelContext()!=null) {
-					//imagePlusAdders.add(new ImagePlusAdder());
-					imagePlusAdders.add(new FigureAdder(false));
-					imagePlusAdders.add(new FigureAdder(true));
+					figureAdders.add(new FigureAdder(false));
+					figureAdders.add(new FigureAdder(true));
 					
 			}
 			
 		
 			//adders.add(new PasteItem());
-			cartoonadders.add(new PolygonAdder(1));
-			cartoonadders.add(new PolygonAdder(0));
-			cartoonadders.add(new PolygonAdder(2));
-			cartoonadders.add(new PolygonAdder(3));
-			cartoonadders.add(new PolygonAdder(4));
-			cartoonadders.add(new PolygonAdder(5));
-			cartoonadders.add(new PolygonAdder(6));
-			cartoonadders.add(new PolygonAdder(7));
-			cartoonadders.add(new PolygonAdder(8));
+			cartoonadders.add(new CartoonPolygonAdder(1));
+			cartoonadders.add(new CartoonPolygonAdder(0));
+			cartoonadders.add(new CartoonPolygonAdder(2));
+			cartoonadders.add(new CartoonPolygonAdder(3));
+			cartoonadders.add(new CartoonPolygonAdder(4));
+			cartoonadders.add(new CartoonPolygonAdder(5));
+			cartoonadders.add(new CartoonPolygonAdder(6));
+			cartoonadders.add(new CartoonPolygonAdder(7));
+			cartoonadders.add(new CartoonPolygonAdder(8));
 			cartoonadders.add(new CentriolePairCartoonAdder());
 			cartoonadders.add(new ShapeMakerBasedAdder());
 			cartoonadders.add(new ShapeMakerBasedAdder("Golgi", new LobeMaker(), Color.magenta));
@@ -144,9 +148,9 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<GraphicAdder> useradders;
-	private LayerSelector selector;
+	private LayerSelectionSystem selector;
 
-	public ObjectAddingMenu(String name, LayerSelector selection, ArrayList<GraphicAdder> adders) {
+	public ObjectAddingMenu(String name, LayerSelectionSystem selection, ArrayList<GraphicAdder> adders) {
 		super(name);
 		this.useradders=adders;
 		this.selector=selection;
@@ -190,7 +194,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setupAdderAndRun(ad);
-			selector.getGraphicDisplayContainer().updateDisplay();
+			selector.getWorksheet().updateDisplay();
 			
 		}}
 	
@@ -203,7 +207,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 
 	
 	
-	public static ObjectAddingMenu getStandardAddingMenu(LayerSelector selection) {
+	public static ObjectAddingMenu getStandardAddingMenu(LayerSelectionSystem selection) {
 		ObjectAddingMenu output = new ObjectAddingMenu("Add",selection, adders);
 		
 		ObjectAddingMenu lad = new ObjectAddingMenu("Empty Layout", selection, layoutadders);
@@ -216,7 +220,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		if (selection instanceof GraphicTreeUI) output.insert( lad, 2);
 		
 		if (CurrentAppContext.getMultichannelContext()!=null) {
-				ObjectAddingMenu iad2 = new ObjectAddingMenu("Figure ", selection, imagePlusAdders);
+				ObjectAddingMenu iad2 = new ObjectAddingMenu("Figure ", selection, figureAdders);
 				iad2.setIcon(ImagePanelGraphic.createImageIcon());
 				output.insert( iad2, 2);
 				}
@@ -229,7 +233,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		return output;
 	}
 	
-	static ObjectAddingMenu getStandardKeyMenu(LayerSelector selection) {
+	static ObjectAddingMenu getStandardKeyMenu(LayerSelectionSystem selection) {
 		return null;
 		
 	}

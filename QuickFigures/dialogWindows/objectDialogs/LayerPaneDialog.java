@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import graphicalObjects_LayerTypes.GraphicGroup;
@@ -21,7 +26,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.strings.StringInputPanel;
 
-/**A dialog for renaming a layer*/
+/**A dialog for renaming a layer. Also includes option related to groups*/
 public class LayerPaneDialog extends GraphicItemOptionsDialog  {
 
 	boolean showKey=false;

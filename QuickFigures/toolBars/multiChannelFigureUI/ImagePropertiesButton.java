@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
+
 package multiChannelFigureUI;
 
 import java.util.ArrayList;
@@ -28,7 +34,7 @@ import iconGraphicalObjects.IconUtil;
 import locatedObject.LocatedObject2D;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import undo.CombinedEdit;
 
 /**A multi-selection operation that performs one among a few operations 
@@ -47,7 +53,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 	private ChannelPanelEditingMenu context;
 	
 	
-	public ImagePropertiesButton(ImagePanelGraphic i, LayerSelector l) {
+	public ImagePropertiesButton(ImagePanelGraphic i, LayerSelectionSystem l) {
 		super.setSelector(l);
 		
 		firstImage=i;
@@ -145,7 +151,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 		if(actionType==CROP_IMAGE) return CropIconGraphic.createsCropIcon();
 		if(actionType==COLOR_MODE) return new ColorModeIcon(firstImage);
 		
-		return IconUtil.createBrightnessIcon(0);
+		return IconUtil.createBrightnessIcon();
 	}
 	
 	public BasicMultiSelectionOperator[] createMergeContentItems() {

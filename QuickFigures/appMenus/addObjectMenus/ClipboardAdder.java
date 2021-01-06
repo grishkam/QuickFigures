@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package addObjectMenus;
 
 import java.awt.Toolkit;
@@ -29,6 +34,7 @@ import graphicalObjects_SpecialObjects.BufferedImageGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
 
+/**Adds an image panel based on the image in the system clipboard*/
 public class ClipboardAdder extends FileImageAdder {
 	/**
 	 * 
@@ -37,7 +43,6 @@ public class ClipboardAdder extends FileImageAdder {
 
 	public ClipboardAdder(boolean RGBint) {
 		super(RGBint);
-		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) throws UnsupportedFlavorException, IOException {
@@ -72,13 +77,11 @@ public class ClipboardAdder extends FileImageAdder {
 	
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return "ClipImage"+bufferedImageGraphic;
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		if (bufferedImageGraphic)return "Add RGB Image From System Clipboard";
 		else return "Paste From System Clipboard";
 	}

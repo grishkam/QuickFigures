@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package objectDialogs;
 
 import javax.swing.JTabbedPane;
@@ -32,15 +37,15 @@ public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	BarGraphic rect;
+	BarGraphic primaryBar;
 
 	
 	
 	
 	public BarSwingGraphicDialog() {}
 	public BarSwingGraphicDialog(BarGraphic b) {
-		//super(b);
-		rect=b;
+		
+		primaryBar=b;
 		addOptionsToDialog();
 		super.undoableEdit=Edit.createGenericEditForItem(b);
 	}
@@ -48,14 +53,13 @@ public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {
 
 	@Override
 	public void addOptionsToDialog() {
-		addBarAttributesToDialog(rect);
+		addBarAttributesToDialog(primaryBar);
 		
 		
 	}
 	
 	public void addBarAttributesToDialog(BarGraphic rect) {
 	super.addNameField(rect);
-		//this.addStringField("Name ", rect.getName(), 30);
 		super.addFixedEdgeToDialog(rect);
 		
 		NumberInputPanel nip = new NumberInputPanel("Width in "+rect.getScaleInfo().getUnits(), rect.getLengthInUnits());
@@ -85,14 +89,12 @@ public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {
 	
 	@Override
 	public void setItemsToDiaog() {
-		setItemsToDialog(rect);
+		setItemsToDialog(primaryBar);
 		return ;
 	}
 	
 	public void setItemsToDialog(BarGraphic rect) {
 		super.setNameFieldToDialog(rect);
-		//rect.setName(this.getNextString());
-		//rect.setLocationType(this.getNextChoiceIndex());
 		super.setFixedEdgeToDialog(rect);
 		
 		rect.setLengthInUnits(this.getNumber("uwidth"));

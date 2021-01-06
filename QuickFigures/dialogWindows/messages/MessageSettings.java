@@ -14,13 +14,14 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
  */
 package messages;
 
 /**
-
+stores a set of properties related to a particular message
  */
 public class MessageSettings {
 	

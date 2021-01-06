@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import java.awt.Point;
@@ -43,6 +48,7 @@ import undo.Edit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.PathEditUndo;
 
+/**a popup meny for a path*/
 public class PathGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
 
@@ -50,10 +56,16 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	
-	static final String options="Options", moveEnd="Move Endpoint", rotate="Rotate", scale="Scale", vFlip="Flip Vertical", hFlip="Flip Horizontal", redoIt="Split Up Parts", switchHandleModes="Switch Handle Modes", break10Fold="Make Uncurved Copy";//, backGroundShap="Outline Shape";
-	static final String crissCross="Show Crossing Path Lines", addNormIndicators="show vectors",
-			cullMeaningLesspoints="Eliminate extra points", smooth="Smooth", addPoint="Add Point";
-	;
+	static final String OPTIONS_DIALOG="Options", MOVE_ENDPOINT="Move Endpoint", ROTATE="Rotate", SCALE="Scale", 
+			VERTICAL_FLIP="Flip Vertical", HORIZONTAL_FLIP="Flip Horizontal", SPLIT_LOOSE_PARTS="Split Up Parts", 
+			SWITCH_HANDLE_MODES="Switch Handle Modes", UNCURVED_MIMIC="Make Uncurved Copy";//, backGroundShap="Outline Shape";
+	static final String CROSSING_MARKS="Show Crossing Path Lines", NORMAL_MARKS="show vectors",
+			ELIMINATE_UNNEEDED_POINTS="Eliminate extra points", SMOOTH="Smooth", ADD_POINT="Add Point";
+	;private static final String ADD_ARROW_HEAD_1="Arrow Head At Start", ADD_ARROW_HEAD_2="Arrow Head At End";
+	
+	
+	PathGraphic pathForMenuG;
+	
 	
 	HashMap<String, SmartJMenu> subMenus=new HashMap<String, SmartJMenu> ();
 	private SmartJMenu getSubMenu(String st) {
@@ -67,38 +79,37 @@ PopupMenuSupplier  {
 		return out;
 	}
 	
-	PathGraphic pathForMenuG;
-	private static String addArrowHead1="Arrow Head At Start", addArrowHead2="Arrow Head At End";
+	
 	public PathGraphicMenu(PathGraphic textG) {
 		super();
 		this.pathForMenuG = textG;
 		this.addAllMenuItems(new ShapeGraphicMenu(textG).createMenuItems());
 		
-		 addItem(addPoint);
+		 addItem(ADD_POINT);
 		
 		
 		 String tFormMenu = "Transform";
 		 
-		addItem(tFormMenu, rotate);
-		 addItem(tFormMenu, scale);
+		addItem(tFormMenu, ROTATE);
+		 addItem(tFormMenu, SCALE);
 		 
 		 
-		 addItem(tFormMenu, hFlip);
-		 addItem(tFormMenu, vFlip);
+		 addItem(tFormMenu, HORIZONTAL_FLIP);
+		 addItem(tFormMenu, VERTICAL_FLIP);
 		 
 		
 		
 		// addItem(addNormIndicators);
-		 addItem(switchHandleModes);
+		 addItem(SWITCH_HANDLE_MODES);
 		String subMenuName = "expert options";
 		
-		 addItem(tFormMenu, break10Fold);
-		addItem(tFormMenu,smooth);
-		addItem(tFormMenu,redoIt);
+		 addItem(tFormMenu, UNCURVED_MIMIC);
+		addItem(tFormMenu,SMOOTH);
+		addItem(tFormMenu,SPLIT_LOOSE_PARTS);
 		addItem(subMenuName, getAddArrowHead2MenuCommand());
 		 addItem(subMenuName, getAddArrowHead1MenuCommand());
-		 addItem(subMenuName, cullMeaningLesspoints);
-		 addItem(subMenuName, moveEnd);
+		 addItem(subMenuName, ELIMINATE_UNNEEDED_POINTS);
+		 addItem(subMenuName, MOVE_ENDPOINT);
 	}
 	
 	
@@ -122,7 +133,6 @@ PopupMenuSupplier  {
 
 	@Override
 	public JPopupMenu getJPopup() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 
@@ -133,23 +143,23 @@ PopupMenuSupplier  {
 		
 		AbstractUndoableEdit2 undo = new PathEditUndo(pathForMenuG);
 		
-		if (com.equals(options)) {
+		if (com.equals(OPTIONS_DIALOG)) {
 			pathForMenuG.showOptionsDialog();
 		}
-		if (com.equals(moveEnd)) {
+		if (com.equals(MOVE_ENDPOINT)) {
 			pathForMenuG.getPoints().moveEnd();
 		}
-		if (com.equals(rotate)) {
+		if (com.equals(ROTATE)) {
 			pathForMenuG.getPoints().applyAffine(AffineTransformDialog.showRotation(0, new Point(0,0)));
 		}
 		
-		if (com.equals(scale)) {
+		if (com.equals(SCALE)) {
 			pathForMenuG.getPoints().applyAffine(AffineTransformDialog.showScale(new Point(1,1)));
 		}
 		
 
 		
-		if (com.equals(redoIt)) {
+		if (com.equals(SPLIT_LOOSE_PARTS)) {
 			PathIterator pi = pathForMenuG.getPath().getPathIterator(new AffineTransform());
 			
 		/**PathGraphic textG2 = (PathGraphic) textG.copy();
@@ -174,7 +184,7 @@ PopupMenuSupplier  {
 			;
 		}
 		
-		if (com.equals(break10Fold)) {
+		if (com.equals(UNCURVED_MIMIC)) {
 			PathGraphic newpath = pathForMenuG.break10(20);
 		
 			newpath.select();
@@ -182,14 +192,14 @@ PopupMenuSupplier  {
 
 		}
 		
-		if (com.equals(hFlip)) {
+		if (com.equals(HORIZONTAL_FLIP)) {
 			pathForMenuG.getPoints().applyAffine(BasicShapeMaker.createHFlip(pathForMenuG.getPoints().createPath(true).getBounds().getCenterX()));
 		}
 		
-		if (com.equals(vFlip)) {
+		if (com.equals(VERTICAL_FLIP)) {
 			pathForMenuG.getPoints().applyAffine(BasicShapeMaker.createVFlip(pathForMenuG.getPoints().createPath(true).getBounds().getCenterY()));
 		}
-		if (com.equals(switchHandleModes)) {
+		if (com.equals(SWITCH_HANDLE_MODES)) {
 			if (pathForMenuG.getHandleMode()!=PathGraphic.ANCHOR_HANDLE_ONLY_MODE) {
 				
 				pathForMenuG.setHandleMode(PathGraphic.ANCHOR_HANDLE_ONLY_MODE);
@@ -197,13 +207,13 @@ PopupMenuSupplier  {
 				else pathForMenuG.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 		}
 		
-		if (com.equals(crissCross)) {pathForMenuG.setUseArea(!pathForMenuG.isUseArea());}
+		if (com.equals(CROSSING_MARKS)) {pathForMenuG.setUseArea(!pathForMenuG.isUseArea());}
 		
-		if (com.equals(cullMeaningLesspoints)) {
+		if (com.equals(ELIMINATE_UNNEEDED_POINTS)) {
 			pathForMenuG.getPoints().cullUselessPoints(0.98, false, 2, true);
 		}
 		
-		if (com.equals(smooth)) {
+		if (com.equals(SMOOTH)) {
 			for(PathPoint l:pathForMenuG.getPoints() ) {
 				l.evenOutAngleOfCurveControls(0.5);
 				pathForMenuG.updatePathFromPoints();
@@ -211,7 +221,7 @@ PopupMenuSupplier  {
 			
 		}
 		
-		if (com.equals(addNormIndicators)) {
+		if (com.equals(NORMAL_MARKS)) {
 			ArrayList<Point2D[]> vectors = pathForMenuG.getPoints().getTangentVectors();//.getDiffVectors();
 			 pathForMenuG.getPoints().getMidpionts(0.5);
 			for(int it=0; it<vectors.size(); it++) {
@@ -222,7 +232,7 @@ PopupMenuSupplier  {
 			}
 		}
 		
-		if (com.equals(addPoint)) {
+		if (com.equals(ADD_POINT)) {
 			new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathForMenuG, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
 		}
 		
@@ -247,13 +257,13 @@ PopupMenuSupplier  {
 
 	public String getAddArrowHead1MenuCommand() {
 		if(!pathForMenuG.hasArrowHead1()) return "Add Arrow Head To Start";
-		return addArrowHead1;
+		return ADD_ARROW_HEAD_1;
 	}
 
 
 	public  String getAddArrowHead2MenuCommand() {
 		if(!pathForMenuG.hasArrowHead2()) return "Add Arrow Head To End";
-		return addArrowHead2;
+		return ADD_ARROW_HEAD_2;
 	}
 	
 	

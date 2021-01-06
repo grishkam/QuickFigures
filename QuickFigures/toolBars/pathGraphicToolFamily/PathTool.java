@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Version: 2021.1
+ */
 package pathGraphicToolFamily;
 
 import java.awt.Point;
@@ -25,12 +30,14 @@ import handles.SmartHandle;
 import icons.IconWrappingToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 
+/**A tool for editing path
+ * @see PathGraphic
+ * */
 public class PathTool extends GraphicTool{
 	protected PathGraphic pathGraphic;
 
 	boolean defaultCurved=true;
 
-	//PathGraphic model= new PathGraphic(new Point(0,0)); {model.setStrokeColor(Color.green); model.setStrokeWidth(2);}
 	SmartHandle handleSmart ;
 
 	private int handleMode=PathGraphic.ANCHOR_HANDLE_ONLY_MODE;;

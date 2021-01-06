@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package icons;
 
@@ -26,7 +27,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-/***/
+/**a class that daws dabs of color. Used to paint certain icons*/
 class ColorBlotchForIcon {
 	
 	private Rectangle blotchSize=new Rectangle(4,6, 5,5);
@@ -39,6 +40,7 @@ class ColorBlotchForIcon {
 	}
 
 /**
+ * paints a blotch of color for an icon
  */
 public void paintBlotch(Graphics2D g2d, int arg2, int arg3) {
 	Rectangle r2=new Rectangle(arg2+blotchSize.x, arg3+blotchSize.y, blotchSize.width, blotchSize.height);
@@ -52,8 +54,7 @@ public void paintBlotch(Graphics2D g2d, int arg2, int arg3) {
 }
 
 /**
- * @param r2
- * @return
+ returns the radius that will be used for a radial gradient paint of the given shape
  */
 Float getBlotchRadiusFor(Rectangle r2) {
 	if (blotchRadius!=null) return blotchRadius;

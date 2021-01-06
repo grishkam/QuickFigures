@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package popupMenusForComplexObjects;
 
 import javax.swing.JMenu;
@@ -22,12 +27,13 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import iconGraphicalObjects.ChannelUseIcon;
 
+/**one of the submenus for the multichannel display popup*/
 public class ImageMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 
 	public ImageMenuForMultiChannel(String name, MultichannelDisplayLayer panel,
 			PanelList list) {
 		super(name, panel, list, panel.getChannelLabelManager());
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
@@ -36,7 +42,7 @@ public class ImageMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 	private static final long serialVersionUID = 1L;
 
 	
-	public void generateLabelMenuItems() {
+	public void generateIncludedMenuItems() {
 		createSetScaleItem() ;
 		createCropOption();
 		

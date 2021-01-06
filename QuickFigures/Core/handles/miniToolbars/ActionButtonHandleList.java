@@ -42,7 +42,7 @@ import handles.SmartHandleList;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
-import selectedItemMenus.LayerSelector;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.MultiSelectionOperator;
 import standardDialog.graphics.GraphicComponent;
 
@@ -234,7 +234,7 @@ public void updateLocationsForVertical() {
 
 		/**Executes the operation on the target specified by the mouse event*/
 		public void performOperation(CanvasMouseEvent canvasMouseEventWrapper) {
-			LayerSelector selector = canvasMouseEventWrapper.getSelectionSystem();
+			LayerSelectionSystem selector = canvasMouseEventWrapper.getSelectionSystem();
 			operation.setSelector(selector);
 			operation.setSelection(selector.getSelecteditems());
 			operation.run();
@@ -340,12 +340,13 @@ public void updateLocationsForVertical() {
 		
 			if(findInputPanel()!=null) 
 				{
-				if(iPanel!=null)
-					p.remove(iPanel);
-				itemForIcon.setSelector(canvasMouseEventWrapper.getSelectionSystem());
-				iPanel=findInputPanel();
-				p.add(iPanel);
-				p.pack();
+					if(iPanel!=null)
+						p.remove(iPanel);
+					itemForIcon.setSelector(canvasMouseEventWrapper.getSelectionSystem());
+					if (itemForInputPanel!=null )itemForInputPanel.setSelector(canvasMouseEventWrapper.getSelectionSystem());
+					iPanel=findInputPanel();
+					p.add(iPanel);
+					p.pack();
 				}
 			
 			if (alternativePopup!=null) {
@@ -376,7 +377,7 @@ public void updateLocationsForVertical() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LayerSelector selector = lastEvent.getSelectionSystem();
+				LayerSelectionSystem selector = lastEvent.getSelectionSystem();
 				operate.setSelector(selector);
 				operate.run();
 				

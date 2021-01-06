@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fLexibleUIKit;
 
 import java.lang.annotation.ElementType;
@@ -20,7 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**Wanted a simple way to create popup menus for multiple classes without
+/**An annotation that can be placed upon a method call
+ * Wanted a simple way to create popup menus for multiple classes without
   writing any more than minimal code for it each time. Also
   wanted to learn about annotations and  reflection in java
   With this annotation on a few method calls within a class
