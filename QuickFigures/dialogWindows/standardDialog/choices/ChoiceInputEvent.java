@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.choices;
 
 import java.awt.Component;
@@ -21,6 +26,7 @@ import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
 
+/**A component input event for choices*/
 public class ChoiceInputEvent extends ComponentInputEvent {
 
 	private int number;

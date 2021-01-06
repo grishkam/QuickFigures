@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.channels;
 
 import java.awt.Color;
@@ -36,6 +41,12 @@ public class ChannelEntryBox extends JComboBox<Object> {
 	public ChannelEntryBox(ArrayList<ChannelEntry> cl) {
 		this(cl, "none");
 	}
+
+	public ChannelEntryBox(int innitial, ArrayList<ChannelEntry> cl) {
+		this(cl);
+		
+		this.setSelectedIndex(innitial);
+	}
 	
 	
 	/**creates a channel entry box with a specific text for index zero (which can be 'no channel', or 'merge all')*/
@@ -49,6 +60,7 @@ public class ChannelEntryBox extends JComboBox<Object> {
 		this.setRenderer(cc);
 	}
 	
+	/**returns the names used for each of the options in the combo box*/
 	public static String[] namesOfEach(ArrayList<ChannelEntry> theChannelentries, String zeroText) {
 		String[] names = new String[theChannelentries.size()+1];
 		names[0]=zeroText;
@@ -70,11 +82,6 @@ public class ChannelEntryBox extends JComboBox<Object> {
 	}
 	
 	
-	public ChannelEntryBox(int innitial, ArrayList<ChannelEntry> cl) {
-		this(cl);
-		
-		this.setSelectedIndex(innitial);
-	}
 	
 	
 	

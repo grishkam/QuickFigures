@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.attachmentPosition;
 
 import java.awt.Container;
@@ -36,7 +41,8 @@ import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
 
-public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, NumberInputListener, ItemListener {
+/**an object input panel that is used to edit an attachment position*/
+public class AttachmentPositionPanel extends  ObjectInputPanel  implements  OnGridLayout, NumberInputListener, ItemListener {
 	
 	/**
 	 * 
@@ -46,7 +52,7 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	private static final long serialVersionUID = 1L;
 	 private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultInternal();
 	JLabel label=new JLabel("Position");
-	 private SnapBox SnapBox=new  SnapBox(snappingBehaviour);
+	 private AttachmentPositionBox SnapBox=new  AttachmentPositionBox(snappingBehaviour);
 	 JComboBox<?> jcom=new  JComboBox<String>(AttachmentPosition.getGridSpaceCodeNames());
 	 NumberInputPanel xoffSet=new NumberInputPanel("xOffset", 0, true, true, 0,100);
 	 NumberInputPanel yoffSet=new NumberInputPanel("yOffset", 0, true, true, 0,100); {
@@ -63,12 +69,12 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	
 	 
 	 
-	 public SnappingPanel(AttachmentPosition s) {
+	 public AttachmentPositionPanel(AttachmentPosition s) {
 		 this.setSnapping(s);
 		 
 	 }
 	 
-	 public SnappingPanel(AttachmentPosition s, String text) {
+	 public AttachmentPositionPanel(AttachmentPosition s, String text) {
 		this(s);
 		label.setText(text);
 		 
@@ -195,13 +201,13 @@ public class SnappingPanel extends  ObjectInputPanel  implements  OnGridLayout, 
 	
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
-		f.add(new SnappingPanel(AttachmentPosition.defaultInternal()));
+		f.add(new AttachmentPositionPanel(AttachmentPosition.defaultInternal()));
 		
 		f.pack();
 		f.setVisible(true);
 	}
 
-	public SnapBox getSnapBox() {
+	public AttachmentPositionBox getSnapBox() {
 		return SnapBox;
 	}
 

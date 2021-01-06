@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.fonts;
 
 import java.awt.Color;
@@ -34,6 +39,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import handles.SmartHandleForText;
 import standardDialog.graphics.GraphicComponent;
 
+/**A component that allows the user to resize a font by dragging */
 public class FontSizeSelector  extends GraphicComponent implements MouseListener, MouseMotionListener{
 
 	/**
@@ -88,21 +94,18 @@ public class FontSizeSelector  extends GraphicComponent implements MouseListener
 			}
 			
 			setFontSize(textItem.getFont().getSize());
-		//	textItem.getSmartHandleList().getHandleNumber(handleclick).handleDrag(new GMouseEvent(null, arg0));
-
+		
 		}
 		this.repaint();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		//getSnappingBehaviour().snapLocatedObjects(r2, r1);
 		
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(),  this.getHeight());

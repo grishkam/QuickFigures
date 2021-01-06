@@ -13,12 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog;
 
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
+/**A component in whcih the parts of a standard dialog are placed inside
+ **/
 public class GriddedPanel extends JPanel {
 	
 	/**
@@ -37,8 +44,8 @@ public class GriddedPanel extends JPanel {
 		this.setLayout(gbl);
 	}
 	
-
-	public void place(OnGridLayout st) {
+	/**places the particular compnent within this panel*/
+	 void place(OnGridLayout st) {
 	
 		st.placeItems(this, gx, gy);
 		if (gxmax<st.gridWidth())gxmax=st.gridWidth();

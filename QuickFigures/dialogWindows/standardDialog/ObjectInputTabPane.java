@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog;
 
 import java.awt.Component;
@@ -23,7 +28,8 @@ import javax.swing.JTabbedPane;
 
 import logging.IssueLog;
 
-public class ObjectInputTab extends JTabbedPane{
+/**A tab for editing an object */
+public class ObjectInputTabPane extends JTabbedPane{
 	/**
 	 * 
 	 */
@@ -45,11 +51,14 @@ protected ArrayList<ObjectEditListener> lis=new ArrayList<ObjectEditListener>();
 	}
 	
 	public void notifyListeners(ObjectEditEvent oee) {
-		for(ObjectEditListener l:lis) {
+		for(ObjectEditListener l:lis) try {
 			l.objectEdited(oee);
+		} catch (Throwable t) {
+			IssueLog.logT(t);
 		}
 	}
 	
+	/**reorders the tabs within the tabbed pane*/
 	public void moveTabForward(int tabindex) {
 		
 		if (tabindex==this.getTabCount()-1) return;

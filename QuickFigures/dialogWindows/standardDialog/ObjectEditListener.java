@@ -13,8 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog;
 
+/**Object edit listeners respond to object edit events*/
 public interface ObjectEditListener {
+	
+	/**called when an object is edited*/
 	void objectEdited(ObjectEditEvent oee);
 }

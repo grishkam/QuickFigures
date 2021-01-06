@@ -24,7 +24,6 @@ import ij.process.ColorProcessor;
 import logging.IssueLog;
 import messages.ShowMessage;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
-import standardDialog.SelectImageDialog;
 import ultilInputOutput.FileChoiceUtil;
 
 import java.awt.Image;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.MultiChannelImage;
+import figureEditDialogs.SelectImageDialog;
 import figureOrganizer.MultichannelDisplayLayer;
 
 /**implementation of the MultiChannelDisplayCreator interface for ImageJ*/

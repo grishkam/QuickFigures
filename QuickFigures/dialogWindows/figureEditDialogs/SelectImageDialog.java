@@ -13,13 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package standardDialog;
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
+package figureEditDialogs;
 
 import java.util.ArrayList;
 
 import appContext.CurrentAppContext;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
+import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 

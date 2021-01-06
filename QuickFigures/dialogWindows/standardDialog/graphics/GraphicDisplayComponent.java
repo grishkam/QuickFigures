@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.graphics;
 
 import java.awt.Color;
@@ -33,8 +38,10 @@ import graphicalObjects_Shapes.SimpleGraphicalObject;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
 
-/**A component object that contains a Graphic. Con be used as a Menu item, icon or other part of a
-  GUI*/
+/**A component object that contains a Graphic. Can be used as a Menu item, icon or other part of a
+  GUI
+  @see SimpleGraphicalObject
+  */
 public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGraphicalObject> implements DisplaysGraphicalObject, Icon{
 
 	/**
@@ -47,7 +54,6 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 	private boolean selected=false;
 	
 	
-	//private Insets objectInsets=new Insets(1, 1, 1, 1);
 	 static Font defaultFont=new Font("SansSerif", 0, 12);
 	
 	private Icon icon=null;
@@ -144,8 +150,7 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 				}
 				g.fillRect(0, 0, this.getWidth(), getHeight());
 			
-				//this.currentDisplay().setFillBackGround(isSelected());
-
+			
 			
 			if (!this.hideText) {
 				this.textRep.setLocationUpperLeft(0, 0);
@@ -212,12 +217,6 @@ public void setText(String text) {
 	textRep.setText(text);
 	
 }
-
-
-
-
-
-
 
 
 	

@@ -13,9 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog;
 
-
+/**An class that indicates a particular object has been edited*/
 public class ObjectEditEvent {
 	Object o;
 	private String key="";

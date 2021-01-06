@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 
 import java.awt.Color;
 import java.util.List;
 
+/**an interface for ui elements that provide the user with a choice of colors*/
 public interface ColorListChoice {
 	public List<Color> getColors();
 	public Color getSelectedColor();

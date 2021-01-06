@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package multiChannelFigureUI;
 
 import java.awt.Component;
@@ -61,14 +66,7 @@ public class BasicChannelNameTool extends BasicImagePanelTool {
 		return output;
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		if (arg0.getActionCommand().equals(choseCommand)) {
-			
-			
-			
-		}
-	}
+	
 	
 	public void applyReleaseActionToMultiChannel(MultiChannelImage mw) {
 		

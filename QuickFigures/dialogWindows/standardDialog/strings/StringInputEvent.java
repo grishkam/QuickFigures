@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.strings;
 
 import java.awt.Component;
@@ -21,15 +26,16 @@ import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
 
+/**A component input event for boolean values*/
 public class StringInputEvent extends ComponentInputEvent{
 
-	String st="";
+	String inputString="";
 
 	
-	public StringInputEvent(JPanel panel, Component component, String number) {
+	public StringInputEvent(JPanel panel, Component component, String st) {
 		this.setSourcePanel(panel);
 		this.setComponent(component);
-		st=number;
+		inputString=st;
 		
 	}
 

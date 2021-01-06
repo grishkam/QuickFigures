@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -31,6 +36,7 @@ import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 
+/**A special combo box for selecting a color*/
 public class ColorComboBox extends JComboBox<Color> implements ColorListChoice{
 	public int rainbowIndex=Integer.MAX_VALUE-2;
 	{this.setRenderer(new ColorCellRenderer(this));}
@@ -150,9 +156,8 @@ public ColorComboBox(ArrayList<Color> c, int rainbowInd) {
 			Rectangle r=new Rectangle(0, 0, this.getWidth(),  this.getHeight());
 			
 			if (getSelectedColor()!=null)
-		g2.setPaint(this.getSelectedColor());
-			//else g2.setPaint(ColorCellRenderer.getRaindowGradient(r));
-		
+				g2.setPaint(this.getSelectedColor());
+			
 		
 		
 		g2.fill(r);
@@ -193,8 +198,5 @@ public ColorComboBox(ArrayList<Color> c, int rainbowInd) {
 	}
 
 
-
-
-	//public void 
 
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.choices;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -90,20 +95,11 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		//super.paintComponent(g);
 		
 		g.setColor(backgroundColor);
-		//g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
 	
 	
 		 getCurrentDisplaycomp() .paintComponent(g);
-		//new GraphicObjectDisplayBasic<simpleGraphicalObject>();
-	
-		
-		//simpleGraphicalObject zz = getSelectedColor();
-		
-		
-		//if (zz!=null) zz.draw((Graphics2D) g,new BasicCordinateConverter(0,0,1));
-		
-		//if (getSelectedColor()!=null) this.getSelectedColor().draw((Graphics2D) g, new BasicCordinateConverter());
+
 	}
 	
 	
@@ -176,7 +172,6 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 	 
 	@Override
 	public int getSelectionNumber() {
-		// TODO Auto-generated method stub
 		return super.getSelectedIndex();
 	}
 	
@@ -221,8 +216,5 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 	}
 
 	
-	
-	
-	//public void 
 
 }

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -35,12 +35,12 @@ import javax.swing.JTabbedPane;
 import logging.IssueLog;
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectEditListener;
-import standardDialog.ObjectInputTab;
+import standardDialog.ObjectInputTabPane;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextParagraph;
 
 /**A tab for editing a paragraph of text via dialog*/
-public class ParaGraphPane extends ObjectInputTab implements ActionListener, MouseListener {
+public class ParaGraphPane extends ObjectInputTabPane implements ActionListener, MouseListener {
 
 	/**
 	 * 

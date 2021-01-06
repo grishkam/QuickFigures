@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 
 import java.awt.Color;
@@ -23,9 +28,10 @@ import javax.swing.JPanel;
 import applicationAdapters.CanvasMouseEvent;
 import standardDialog.ComponentInputEvent;
 
+/**A component input event for Colors*/
 public class ColorInputEvent extends ComponentInputEvent {
 	
-	private Color font;
+	private Color color;
 	public CanvasMouseEvent event;
 
 	
@@ -35,14 +41,12 @@ public class ColorInputEvent extends ComponentInputEvent {
 		this.setColor(number);
 	}
 
-	
-
 	public Color getColor() {
-		return font;
+		return color;
 	}
 
 	public void setColor(Color number) {
-		this.font = number;
+		this.color = number;
 	}
 
 

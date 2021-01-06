@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package storedValueDialog;
 
 import java.lang.reflect.Field;
@@ -28,7 +33,9 @@ import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
 
 
-/**Takes advantage of reflection to create dialogs for arbitrary objects*/
+/**Takes advantage of reflection to create dialogs for arbitrary objects
+ * @see UserChoiceField the annotation used for these dialogs
+ * work in progress*/
 public class ReflectingFieldSettingDialog extends StandardDialog {
 
 	/**
@@ -329,7 +336,7 @@ static String makeGetterSetterString(String get, String input ) {
 }
 
 public static void main(String[] args) {
-	testMe object = new TestMe2();
+	TestMe object = new TestMe2();
 	ReflectingFieldSettingDialog dialog = new ReflectingFieldSettingDialog(object, new String[] {"x", "theCorrectWayToCode", "options"});
 	dialog.showDialog();
 	
@@ -365,7 +372,7 @@ class FieldInformationCluster {
 
 
 
-static class testMe {
+static class TestMe {
 	private double x=6;
 	private double y=12;
 	private int population=18;
@@ -405,7 +412,7 @@ static class testMe {
 	
 }
 
-static class TestMe2 extends testMe {}
+static class TestMe2 extends TestMe {}
 	
 
 }

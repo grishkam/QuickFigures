@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 
 import java.awt.Color;
@@ -23,7 +28,7 @@ import java.util.List;
 
 import standardDialog.choices.ChoiceInputPanel;
 
-/**A panel for the user to choose from a list of colors*/
+/**A panel containing components that allow the user to choose from a list of colors*/
 public class ColorComboboxPanel extends ChoiceInputPanel implements ColorListChoice, MouseListener {
 
 

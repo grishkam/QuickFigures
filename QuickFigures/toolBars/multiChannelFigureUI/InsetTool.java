@@ -45,7 +45,7 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
-import standardDialog.attachmentPosition.SnappingPanel;
+import standardDialog.attachmentPosition.AttachmentPositionPanel;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
@@ -514,7 +514,7 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		 */
 		private static final long serialVersionUID = 1L;
 		private InsetTool tool;
-		private SnappingPanel snappanel;
+		private AttachmentPositionPanel snappanel;
 		
 		public InsetToolDialog(InsetTool mover) {
 			
@@ -534,7 +534,7 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 			add("add2", new BooleanInputPanel("Add to existing layout", mover.addToExisting));
 			add("aDAPI", new BooleanInputPanel("Exclude "+mover.getExcludedChanName(), mover.avoidDapi));
 			
-			this.snappanel=new SnappingPanel(sb , "placement of internal; Montage");
+			this.snappanel=new AttachmentPositionPanel(sb , "placement of internal; Montage");
 			snappanel.addObjectEditListener(this);
 			
 			GridBagConstraints gc = new GridBagConstraints();

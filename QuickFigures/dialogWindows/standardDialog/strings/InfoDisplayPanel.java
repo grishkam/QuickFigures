@@ -13,12 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.strings;
 
 import java.awt.Rectangle;
 
 import javax.swing.JLabel;
 
+/**A special string panel that simply displays JLabel with information int than 
+  a text field for user input*/
 public class InfoDisplayPanel extends  StringInputPanel{
 
 	private JLabel content=new JLabel();
@@ -28,26 +35,21 @@ public class InfoDisplayPanel extends  StringInputPanel{
 	public InfoDisplayPanel(String labeln, String contend) {
 		super(labeln, contend);
 		setContentText(contend);
-		// TODO Auto-generated constructor stub
 	}
 	
 	
 	public InfoDisplayPanel(String labeln, Rectangle contend) {
 		super(labeln, contend.toString());
 		setToDimension(contend);
-		// TODO Auto-generated constructor stub
 	}
 	
 	
 	
 	public void setContentText(String contend) {
-		//field.setText(contend);
 		getTextField().setText(contend);
 	}
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 

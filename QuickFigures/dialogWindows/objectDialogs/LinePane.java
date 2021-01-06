@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -33,12 +33,12 @@ import javax.swing.JTabbedPane;
 
 import standardDialog.ObjectEditEvent;
 import standardDialog.ObjectEditListener;
-import standardDialog.ObjectInputTab;
+import standardDialog.ObjectInputTabPane;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 
 /**A tab for editing TextLines via dialog*/
-public class LinePane  extends ObjectInputTab implements MouseListener, ActionListener{
+public class LinePane  extends ObjectInputTabPane implements MouseListener, ActionListener{
 	
 	/**
 	 * 

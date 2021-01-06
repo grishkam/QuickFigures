@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -150,9 +150,9 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		TextGraphic t = new TextGraphic();
 		t.setFont(new Font("Arial", Font.BOLD, 30));
 		TextGraphicSwingDialog dia = new TextGraphicSwingDialog(t);
-		dia.sam = new GraphicSampleComponent(t);
+		dia.previewComponent = new GraphicSampleComponent(t);
 		
-		dia.add(dia.sam, new GridBagConstraints());
+		dia.add(dia.previewComponent, new GridBagConstraints());
 		dia.showDialog();
 	
 	}

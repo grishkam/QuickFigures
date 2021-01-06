@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package sUnsortedDialogs;
 
 import java.util.ArrayList;
@@ -20,7 +25,7 @@ import java.util.ArrayList;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 
-
+/**A dialog that is used to select from a list of choices*/
 public class ObjectListChoice<T> extends StandardDialog {
 
 	public ObjectListChoice(String title) {

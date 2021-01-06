@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 
 import java.awt.Color;
@@ -30,7 +35,9 @@ import javax.swing.JFrame;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class ColorChoicePopup extends JComponent implements MouseListener, ActionListener {
+/**A component for choosing colors. Appears as a colored box that displays.
+ * When the user clicks that box, a color chooser appears*/
+public class ColorChoiceSquare extends JComponent implements MouseListener, ActionListener {
 
 	/**
 	 * 
@@ -40,11 +47,10 @@ public class ColorChoicePopup extends JComponent implements MouseListener, Actio
 	JColorChooser cc;
 	private ChangeListener change;
 
-	public  ColorChoicePopup(Color start) {
+	public  ColorChoiceSquare(Color start) {
 		this.setSelectedColor(start);
 		 cc = new JColorChooser(start);
 		
-		// this.add(cc);
 		 this.addMouseListener(this);
 		}
 	
@@ -58,7 +64,7 @@ public class ColorChoicePopup extends JComponent implements MouseListener, Actio
 	
 	public static void main(String[] args) {
 		JFrame jf = new JFrame();
-	jf.add(new ColorChoicePopup(Color.red));
+	jf.add(new ColorChoiceSquare(Color.red));
 		jf.pack();
 		jf.setVisible(true);
 	}
@@ -75,7 +81,6 @@ public class ColorChoicePopup extends JComponent implements MouseListener, Actio
 			
 			g.setColor(getSelectedColor());
 			g.fillRect(0, 0, this.getWidth(),  this.getHeight());
-		//	g.setColor(Color.darkGray);
 			
 			
 		}

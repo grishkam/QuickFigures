@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 
 import java.awt.Color;
@@ -30,7 +35,8 @@ import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import locatedObject.ColorDimmer;
 
 /**A JCombo box designed for the user to select a color dimming effect
- * see ColorDimmer class for more information*/
+ * The menu text appear in the altered colors to indicate the effects of each menu option
+ * @see ColorDimmer class for more information*/
 public class ColorDimmingBox extends JComboBox<String> {
 
 	/**
@@ -76,7 +82,7 @@ public class ColorDimmingBox extends JComboBox<String> {
 	}
 	
 	
-	/**how to render the combo box choices*/
+	/**determines how to render the combo box choices*/
 	public class ColorDimmingCellRenerer extends BasicComboBoxRenderer {
 		
 		/**

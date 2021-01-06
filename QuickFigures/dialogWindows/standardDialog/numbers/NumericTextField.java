@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.numbers;
 
 import javax.swing.JTextField;
@@ -48,7 +53,7 @@ public class NumericTextField extends JTextField  {
 		this.setText(numberToString(d));
 		
 	}
-	//public void getNumber() {}
+	
 	
 	public String numberToString(double d) {
 		double factor = Math.pow(10, getDecimalPlaces());

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.choices;
 
 import java.awt.Component;
@@ -27,6 +32,7 @@ import javax.swing.JPanel;
 
 import standardDialog.OnGridLayout;
 
+/**A JPanel containing components needed to select an object*/
 public class ItemSelectblePanel extends JPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();
@@ -95,7 +101,7 @@ public class ItemSelectblePanel extends JPanel implements OnGridLayout, ItemList
 		//NumberInputEvent ni = new NumberInputEvent(this, getNumberFromField() );
 		for(ChoiceInputListener l :listeners) {
 			if(l==null) continue;
-			l.numberChanged(ni);
+			l.valueChanged(ni);
 		}
 	}
 	

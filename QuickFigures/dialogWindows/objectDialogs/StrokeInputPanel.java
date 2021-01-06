@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -149,7 +149,7 @@ public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, 
 	}
 
 	@Override
-	public void numberChanged(ChoiceInputEvent ne) {
+	public void valueChanged(ChoiceInputEvent ne) {
 		this.notifyListeners(new ObjectEditEvent(strokedItem));
 		//setStrokedItemToPanel(strokedItem);
 		

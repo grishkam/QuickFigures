@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog;
 
 import java.util.ArrayList;
@@ -20,6 +25,9 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import logging.IssueLog;
+
+/**A superclass for multiple panels that edit an object and notify object edit listeners */
 public class ObjectInputPanel extends JPanel{
 	
 /**
@@ -41,8 +49,10 @@ ArrayList<ObjectEditListener> lis=new ArrayList<ObjectEditListener>();
 	}
 	
 	public void notifyListeners(ObjectEditEvent oee) {
-		for(ObjectEditListener l:lis) {
+		for(ObjectEditListener l:lis) try {
 			l.objectEdited(oee);
+		} catch (Throwable t) {
+			IssueLog.logT(t);
 		}
 	}
 }

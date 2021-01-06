@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.numbers;
 
 import java.awt.Component;
@@ -28,7 +33,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**A panel that contains many fields that can be usedto input numbers*/
+/**A number input panel for more than one number 
+ * A panel that contains many fields that can be used to input numbers*/
 public class NumberArrayInputPanel extends NumberInputPanel implements KeyListener{
 	
 	/**
@@ -115,7 +121,6 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 

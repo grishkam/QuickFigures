@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.fonts;
 
 import java.awt.Component;
@@ -41,7 +46,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import standardDialog.OnGridLayout;
 import standardDialog.numbers.NumericTextField;
 
-
+/**A dialog component that allows the user to change a Font*/
 public class FontChooser extends JPanel implements MouseMotionListener, ItemListener, KeyListener,OnGridLayout  {
 	
 	/**
@@ -82,7 +87,6 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 		gc.gridx=x0;
 		gc.gridy=y0;
 		
-		//jp.setLayout(gb);
 		gc.insets=firstInsets;
 		gc.anchor=GridBagConstraints.EAST;
 		jp.add(label, gc);
@@ -102,7 +106,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 		gc.gridheight=2;
 		jp.add(fontdisplay,gc);
 		
-		//return jp;
+		
 	}
 
 	public JPanel createFontPanel() {
@@ -150,7 +154,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 	public JComboBox<?> generateStyleCombo() {
 		JComboBox<?> output=new JComboBox<String>(fontStyles);
 		output.addItemListener(this);
-		output.setRenderer(new styleCellRenerer());
+		output.setRenderer(new FontStyleCellRenerer());
 		return output;
 	}
 	public JComboBox<String> generateFamilyCombo() {
@@ -158,7 +162,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 		 String[] fonts = ge.getAvailableFontFamilyNames();
 		JComboBox<String> output=new JComboBox<String>(fonts);
 		output.addItemListener(this);
-		output.setRenderer(new fontCellRenerer());
+		output.setRenderer(new FontFamilyCellRenerer());
 		return output;
 	}
 	
@@ -226,8 +230,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 	@Override
@@ -258,17 +261,16 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 
 	@Override
 	public int gridHeight() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 
 	@Override
 	public int gridWidth() {
-		// TODO Auto-generated method stub
 		return 3;
 	}
 	
-	public class fontCellRenerer extends BasicComboBoxRenderer {
+	/**A renderer that shows each font family by name and appearance*/
+	public class FontFamilyCellRenerer extends BasicComboBoxRenderer {
 		/**
 		 * 
 		 */
@@ -282,7 +284,7 @@ public class FontChooser extends JPanel implements MouseMotionListener, ItemList
 			return out;
 				}
 	}
-	public class styleCellRenerer extends BasicComboBoxRenderer {
+	public class FontStyleCellRenerer extends BasicComboBoxRenderer {
 		/**
 		 * 
 		 */

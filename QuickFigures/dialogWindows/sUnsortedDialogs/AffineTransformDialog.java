@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package sUnsortedDialogs;
 
 import java.awt.Point;
@@ -23,6 +28,7 @@ import standardDialog.StandardDialog;
 import standardDialog.numbers.AngleInputPanel;
 import standardDialog.numbers.PointInputPanel;
 
+/**shows a dialog that allows the user to define the traits of a tranform*/
 public class AffineTransformDialog extends StandardDialog {
 
 	/**
@@ -34,7 +40,7 @@ public class AffineTransformDialog extends StandardDialog {
 
 	private int type;
 	
-	public AffineTransformDialog( double theta, Point2D about) {
+		AffineTransformDialog( double theta, Point2D about) {
 		super("Transform", true);
 		this.type=ROTATES;
 		if (type==ROTATES) {
@@ -100,6 +106,5 @@ public class AffineTransformDialog extends StandardDialog {
 		AffineTransformDialog affineTransformDialog = new AffineTransformDialog(SCALED, point.getX(), point.getY());
 		affineTransformDialog.showDialog();
 		return affineTransformDialog.getTransform();
-		//return null;
 	}
 }

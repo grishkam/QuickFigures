@@ -16,8 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Dec 6, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Version: 2021.1
  */
 package standardDialog;
 
@@ -546,7 +545,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 
 	@Override
-	public void numberChanged(ChoiceInputEvent ne) {
+	public void valueChanged(ChoiceInputEvent ne) {
 		
 		notifyAllListeners(ne.getSourcePanel(), ne.getKey());
 		

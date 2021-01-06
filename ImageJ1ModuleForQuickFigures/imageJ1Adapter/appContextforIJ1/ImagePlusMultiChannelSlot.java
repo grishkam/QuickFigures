@@ -30,6 +30,7 @@ import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemMethod;
+import figureEditDialogs.SelectImageDialog;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
 import ij.IJ;
@@ -37,7 +38,6 @@ import ij.ImageListener;
 import ij.ImagePlus;
 import locatedObject.ScaleInfo;
 import logging.IssueLog;
-import standardDialog.SelectImageDialog;
 
 
 /**All the what is needed to keep track of a multichannel source stack, save and retrieve it.

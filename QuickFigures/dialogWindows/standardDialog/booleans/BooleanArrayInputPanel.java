@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.booleans;
 
 import java.awt.Container;
@@ -25,9 +30,10 @@ import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+/**An input panel for a series of boolean values*/
 public class BooleanArrayInputPanel extends BooleanInputPanel {
 
-	
+	/**the checkboxes used to change the bool values*/
 	ArrayList<JCheckBox> boxes=new ArrayList<JCheckBox>();
 	
 	public BooleanArrayInputPanel(String labeln, boolean[] b) {
@@ -95,9 +101,7 @@ public class BooleanArrayInputPanel extends BooleanInputPanel {
 		return output;
 	}
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	
 	public void itemStateChanged(ItemEvent arg0) {

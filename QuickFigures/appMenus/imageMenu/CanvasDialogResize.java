@@ -37,7 +37,7 @@ import layout.BasicObjectListHandler;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
 import standardDialog.StandardDialog;
-import standardDialog.attachmentPosition.SnapBox;
+import standardDialog.attachmentPosition.AttachmentPositionBox;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
@@ -130,7 +130,7 @@ public class CanvasDialog extends StandardDialog {
 	 private AttachmentPosition snappingBehaviour=AttachmentPosition.defaultInternal();
 	 
 		JLabel label=new JLabel("Position Of Items");
-		 SnapBox relativePositionBox=new  SnapBox(snappingBehaviour);
+		 AttachmentPositionBox relativePositionBox=new  AttachmentPositionBox(snappingBehaviour);
 		private double width2;
 		private double height2;
 		private NumberInputPanel wInput;
@@ -169,7 +169,7 @@ public class CanvasDialog extends StandardDialog {
 				unitPanel.addChoiceInputListener(new ChoiceInputListener() {
 		
 					@Override
-					public void numberChanged(ChoiceInputEvent ne) {
+					public void valueChanged(ChoiceInputEvent ne) {
 						type=(int) ne.getNumber();
 						double w2 = width2/getRatio();
 						double h2 = height2/getRatio();

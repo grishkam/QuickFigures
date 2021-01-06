@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.graphics;
 
 import java.awt.Color;
@@ -32,6 +37,10 @@ import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 import logging.IssueLog;
 
+/**A component object that contains a Graphic. Can be used as a Menu item, icon or other part of a
+GUI
+@see SimpleGraphicalObject
+*/
 public class GraphicObjectDisplayBasic<Type extends SimpleGraphicalObject> extends JComponent implements Icon {
 
 	/**

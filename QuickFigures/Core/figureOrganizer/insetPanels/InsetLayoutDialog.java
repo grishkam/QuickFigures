@@ -30,7 +30,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
 import locatedObject.AttachmentPosition;
 import standardDialog.StandardDialog;
-import standardDialog.attachmentPosition.SnappingPanel;
+import standardDialog.attachmentPosition.AttachmentPositionPanel;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
@@ -44,7 +44,7 @@ import standardDialog.numbers.NumberInputPanel;
 		 */
 		private static final long serialVersionUID = 1L;
 		private InsetLayout currentLayout;
-		private SnappingPanel snappanel;
+		private AttachmentPositionPanel snappanel;
 		private PanelGraphicInsetDefiner currentInset;
 	
 		
@@ -63,7 +63,7 @@ import standardDialog.numbers.NumberInputPanel;
 			add("horizon", new BooleanInputPanel("Prefer Horizontal Panels", mover.horizontal));
 			
 			
-			this.snappanel=new SnappingPanel(mover.position , "placement of internal; Montage");
+			this.snappanel=new AttachmentPositionPanel(mover.position , "placement of internal; Montage");
 			snappanel.addObjectEditListener(this);
 			
 			GridBagConstraints gc = new GridBagConstraints();

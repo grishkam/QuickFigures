@@ -15,9 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
  */
 package standardDialog.colors;
 
@@ -40,16 +39,20 @@ public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, C
 	/**
 	 * 
 	 */
+	private static final int RAINBOW_CODE = 100000;
+	/**
+	 * 
+	 */
 	JLabel label=new JLabel("Text");
 	private static final long serialVersionUID = 1L;
-	ColorChoicePopup c;
+	ColorChoiceSquare c;
 	private String key;
 	private ArrayList<ColorInputListener> listeners=new ArrayList<ColorInputListener>();
 	private Color originalStatus;
 	
 	public ColorInputPanel(String st, Color i) {
 		label.setText(st);
-		c=new ColorChoicePopup(i);
+		c=new ColorChoiceSquare(i);
 		c.addChangeListener(this);
 		this.originalStatus=i;
 	}
@@ -82,7 +85,6 @@ public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, C
 
 	@Override
 	public List<Color> getColors() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -132,7 +134,7 @@ public class ColorInputPanel extends ObjectInputPanel implements OnGridLayout, C
 
 	@Override
 	public int getRainbow() {
-		return 100000;
+		return RAINBOW_CODE;
 	}
 
 }

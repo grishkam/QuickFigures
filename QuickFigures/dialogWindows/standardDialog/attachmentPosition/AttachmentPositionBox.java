@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.attachmentPosition;
 
 import java.awt.Color;
@@ -33,10 +38,12 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import standardDialog.graphics.GraphicSelectable;
 
-/***/
-public class SnapBox extends GraphicSelectable {
+/**a dialog component for editing the attachment position of an object
+ * User can change position by dragging the mouse within the component*/
+public class AttachmentPositionBox extends GraphicSelectable {
 
 	/**
 	 * 
@@ -60,8 +67,9 @@ public class SnapBox extends GraphicSelectable {
 	
 	
 
-	/**if one wants the gui to depict a grid of squares as the item being relocated, one calls this method*/
-	public void setToMontageMode() {
+	/**Changes the shape used to depict the item being relocated as a grid of squares instead of a square
+	  one calls this method*/
+	public void setToLayoutMode() {
 		 isGridded=true;
 		 double drx2=r2.getBounds().getX()+r2.getObjectWidth()/2;
 		 double dry2=r2.getBounds().getY()+r2.getObjectHeight()/2;
@@ -75,14 +83,13 @@ public class SnapBox extends GraphicSelectable {
 
 	{setTextItemUp(t,100); setTextItemUp(t2,130);}
 	
-	//private String label; 
 	public void setTextItemUp(TextGraphic t, int y) {
 		t.setLocationUpperLeft(220, y); t.setTextColor(Color.black); t.setFont(new Font("Arial", Font.BOLD, 30));
 		}
 	
 	
 	{setRectProp(r2);setRectProp(getReferenceObject());r2.setFillColor(Color.blue.brighter()); getReferenceObject().setFillColor(Color.red.darker());
-	//setRectProp(r2);
+	
 	}
 	
 	public void setRectProp(RectangularGraphic r1) {
@@ -93,7 +100,7 @@ public class SnapBox extends GraphicSelectable {
 	}
 	
 	
-	public SnapBox(AttachmentPosition snappingBehaviour) {
+	public AttachmentPositionBox(AttachmentPosition snappingBehaviour) {
 		this. snappingBehaviour= snappingBehaviour;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
@@ -119,7 +126,7 @@ public class SnapBox extends GraphicSelectable {
 		t2.draw((Graphics2D) g,getCord());
 		
 		if (isGridded) {
-			this.setToMontageMode();
+			this.setToLayoutMode();
 			l1.draw(g2, cords);
 			l2.draw(g2, cords);
 		}
@@ -143,16 +150,6 @@ public class SnapBox extends GraphicSelectable {
 	        return new Dimension(getWidth(),getHeight());
 	    }
 	
-	public static void main(String[] args) {
-	/**	JFrame ff = new JFrame("frame");
-		ff.setLayout(new FlowLayout());
-		ff.add(new JButton("button"));
-		SnapBox sb = new SnapBox();
-		ff.add(sb);
-		ff.pack();
-		
-		ff.setVisible(true);*/
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
@@ -194,8 +191,8 @@ public class SnapBox extends GraphicSelectable {
 		try {
 			this.getCord().getAffineTransform().createInverse().transform(p1, p2);
 		} catch (NoninvertibleTransformException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			IssueLog.logT(e);
 		}
 		
 		LocatedObject2D willSnap=r2;
@@ -232,17 +229,13 @@ public class SnapBox extends GraphicSelectable {
 
 	@Override
 	public Object[] getSelectedObjects() {
-		// TODO Auto-generated method stub
+		
 		return new Object[] {getSnappingBehaviour() };
 	}
 
 
-	
-
-
 	@Override
 	public int getSelectionNumber() {
-		// TODO Auto-generated method stub
 		return this.getSnappingBehaviour().getLocationCategory();
 	}
 	@Override

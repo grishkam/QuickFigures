@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.fonts;
 
 import java.awt.Component;
@@ -22,24 +27,25 @@ import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
 
+/**A component input event for fonts*/
 public class FontInputEvent extends ComponentInputEvent {
 	
 	private Font font;
 
 	
-	public FontInputEvent(JPanel sourcePanel, Component component, Font number) {
+	public FontInputEvent(JPanel sourcePanel, Component component, Font f) {
 		this.setSourcePanel(sourcePanel);
 		this.setComponent(component);
-		this.setNumber(number);
+		this.setFont(f);
 	}
 
 	
 
-	public Font getNumber() {
+	public Font getFont() {
 		return font;
 	}
 
-	public void setNumber(Font number) {
+	public void setFont(Font number) {
 		this.font = number;
 	}
 

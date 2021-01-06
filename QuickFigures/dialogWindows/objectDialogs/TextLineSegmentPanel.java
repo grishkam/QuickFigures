@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -136,7 +136,7 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 	}
 	/**if dialog items are changed, this notifies teh listeners for object edit events*/
 	@Override
-	public void numberChanged(ChoiceInputEvent ne) {
+	public void valueChanged(ChoiceInputEvent ne) {
 		setSegmentToPanels();
 		this.notifyListeners(new ObjectEditEvent(getSegment()));
 	}

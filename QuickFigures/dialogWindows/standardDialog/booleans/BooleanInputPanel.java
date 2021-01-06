@@ -16,8 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Dec 6, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Version: 2021.1
  */
 package standardDialog.booleans;
 
@@ -33,7 +32,7 @@ import javax.swing.JPanel;
 
 import standardDialog.OnGridLayout;
 
-/**A JPanel containing a Label and a checkbox for placement in a dialog*/
+/**A JPanel containing a Label and a checkbox for placement into a standard dialog with a grided panel*/
 public class BooleanInputPanel extends JPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();
@@ -103,13 +102,11 @@ public class BooleanInputPanel extends JPanel implements OnGridLayout, ItemListe
 	
 	@Override
 	public int gridHeight() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
 	@Override
 	public int gridWidth() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 	@Override

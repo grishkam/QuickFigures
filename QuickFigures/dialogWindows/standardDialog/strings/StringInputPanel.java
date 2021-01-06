@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.strings;
 
 import java.awt.Component;
@@ -29,6 +34,7 @@ import javax.swing.JTextField;
 
 import standardDialog.OnGridLayout;
 
+/**A JPanel containing a Label and a Text field for placement into a standard dialog with a grided panel*/
 public class StringInputPanel extends JPanel implements OnGridLayout, KeyListener{
 
 	JLabel label=new JLabel();
@@ -40,7 +46,7 @@ public class StringInputPanel extends JPanel implements OnGridLayout, KeyListene
 	
 	
 	public StringInputPanel(String labeln, String contend) {
-		//field.setColumns(contend.length()+10);
+		
 		label.setText(labeln);
 		setContentText(contend);
 		lasts=contend;
@@ -48,7 +54,7 @@ public class StringInputPanel extends JPanel implements OnGridLayout, KeyListene
 	}
 	
 	public StringInputPanel(String labeln, String contend, int fieldLength) {
-		//field.setColumns(contend.length()+10);
+		
 		label.setText(labeln);
 		field.setText(contend);
 		lasts=contend;
@@ -111,19 +117,19 @@ public class StringInputPanel extends JPanel implements OnGridLayout, KeyListene
 	
 	@Override
 	public int gridHeight() {
-		// TODO Auto-generated method stub
+		
 		return 1;
 	}
 
 	@Override
 	public int gridWidth() {
-		// TODO Auto-generated method stub
+		
 		return 2;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

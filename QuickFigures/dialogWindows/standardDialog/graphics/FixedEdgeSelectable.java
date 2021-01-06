@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.graphics;
 
 import java.awt.Dimension;
@@ -22,6 +27,12 @@ import java.awt.event.MouseEvent;
 
 import graphicalObjects_Shapes.RectangularGraphic;
 
+/**A dialog element that allows the user to change which edge of an item
+ * remains fixed during resizes. the component shows 9 squares around a rectangle
+ *  that the user can click on to change the fixed edge 
+ * @see RectangularGraphic
+ * @see RectangleEdges
+ * */
 public class FixedEdgeSelectable extends GraphicSelectable{
 
 	/**
@@ -97,13 +108,11 @@ public class FixedEdgeSelectable extends GraphicSelectable{
 
 	@Override
 	public Object getSelectedItem() {
-		// TODO Auto-generated method stub
 		return r1.getLocationType();
 	}
 
 	@Override
 	public Object[] getSelectedObjects() {
-		// TODO Auto-generated method stub
 		return new Object[] {r1};
 	}
 	

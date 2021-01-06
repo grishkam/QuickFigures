@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package storedValueDialog;
 
 import java.lang.reflect.Field;
@@ -34,11 +39,7 @@ import standardDialog.numbers.NumberInputPanel;
   annotations*/
 public class StoredValueDilaog extends StandardDialog{
 
-	
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public StoredValueDilaog(Object of) {
@@ -95,8 +96,7 @@ public class StoredValueDilaog extends StandardDialog{
 			dialog.add(o.key(), panel);
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 	}
 
@@ -160,8 +160,6 @@ public class StoredValueDilaog extends StandardDialog{
 
 	}
 	
-	public static void main(String[] args) {
-		
-	}
+	
 
 }

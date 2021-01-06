@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.choices;
 
 import java.awt.Container;
@@ -29,7 +34,7 @@ import javax.swing.JPanel;
 
 import standardDialog.OnGridLayout;
 
-/**A JPanel that displays a label and a means for the user to choose something in */
+/**A JPanel containing a combo box for placement into a standard dialog with a grided panel*/
 public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListener{
 
 	protected JLabel label=new JLabel();
@@ -115,7 +120,6 @@ public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListen
 
 	@Override
 	public int gridHeight() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
@@ -153,10 +157,10 @@ public void setValue(int value) {
 
 	
 	public void notifyListeners(ChoiceInputEvent ni) {
-		//NumberInputEvent ni = new NumberInputEvent(this, getNumberFromField() );
+		
 		for(ChoiceInputListener l :listeners) {
 			if(l==null) continue;
-			l.numberChanged(ni);
+			l.valueChanged(ni);
 		}
 	}
 	

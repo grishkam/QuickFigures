@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package iconGraphicalObjects;
@@ -38,6 +38,7 @@ public class DialogIcon {
 		return new GraphicDisplayComponent(createIcon() );
 	}
 	
+	/**creatsshapes */
 	static GraphicGroup createIcon() {
 		GraphicGroup gg = new GraphicGroup();
 		addRect(gg, new Rectangle(2,2,18,16), new Color(0,0,0,0), null);

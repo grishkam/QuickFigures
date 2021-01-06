@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.graphics;
 
 import java.awt.event.ItemEvent;
@@ -23,6 +28,9 @@ import java.util.ArrayList;
 
 import standardDialog.choices.UserSelectable;
 
+/**a superclass for Graphic components that notify item listeners when edited
+ * @see GraphicComponent
+ * @see ItemListener*/
 public abstract class GraphicSelectable extends GraphicComponent implements MouseListener, MouseMotionListener, UserSelectable{
 
 	

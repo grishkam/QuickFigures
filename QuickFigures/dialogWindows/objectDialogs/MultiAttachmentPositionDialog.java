@@ -26,7 +26,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
-import standardDialog.attachmentPosition.SnappingPanel;
+import standardDialog.attachmentPosition.AttachmentPositionPanel;
 import standardDialog.booleans.BooleanInputPanel;
 
 /**A dialog that allows the user to change an attachment positon
@@ -66,7 +66,7 @@ public class MultiAttachmentPositionDialog extends GraphicItemOptionsDialog {
 			if (ob1.getAttachmentPosition()!=null) primaryObject=ob1; 
 		}
 		
-		SnappingPanel panel = this.addSnappingBehviourToDialog(primaryObject);
+		AttachmentPositionPanel panel = this.addSnappingBehviourToDialog(primaryObject);
 			this.getOptionDisplayTabs().remove(mainPanel);
 			BooleanInputPanel booleanPanel = new BooleanInputPanel("Keep Relative Positions Same", !useDistinctAttachmentPositions);
 			add("create unique", booleanPanel);

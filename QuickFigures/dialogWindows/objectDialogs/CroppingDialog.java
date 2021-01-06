@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -420,8 +420,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 	}
 	
-	public void numberChanged(ChoiceInputEvent ne) {
-		super.numberChanged(ne);
+	public void valueChanged(ChoiceInputEvent ne) {
+		super.valueChanged(ne);
 		
 		if(ne.getKey()==null) {return;}
 		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getNumber();updateDisplayImage();}

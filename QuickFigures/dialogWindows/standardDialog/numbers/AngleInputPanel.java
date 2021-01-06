@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.numbers;
 
 import java.awt.Container;
@@ -20,7 +25,11 @@ import java.awt.GridBagConstraints;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-
+/**A subclass of number input panel that allows the user to input the nuber for an angle
+ * by dragging an angle box
+ * @see AngleBox
+ * @see NumberInputPanel
+ * */
 public class AngleInputPanel extends NumberInputPanel {
 
 	/**
@@ -65,7 +74,6 @@ public class AngleInputPanel extends NumberInputPanel {
    @Override
 	public void keyReleased(KeyEvent arg0) {
 		if(arg0.getSource()==field) {
-			//slider.setValue((int)field.getNumberFromField());
 			number=field.getNumberFromField()/(180/Math.PI);
 			angle.setAngle(number);
 			angle.repaint();

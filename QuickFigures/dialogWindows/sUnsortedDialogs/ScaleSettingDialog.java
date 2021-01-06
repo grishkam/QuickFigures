@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package sUnsortedDialogs;
 
 import applicationAdapters.HasScaleInfo;
@@ -23,8 +28,12 @@ import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
 import standardDialog.StandardDialogListener;
 
-/**Alternative to the set Scale dialog of imageJ. does exactly that but after this dialog,
-   QuickFigures will update the targeted image panels*/
+/**Alternative to the "Set Scale" dialog of imageJ. does exactly that but after this dialog,
+   QuickFigures has other methods that will also update the targeted image panels. 
+   @see ScaleInfo
+   @see HasScaleInfo 
+   @see ScaleResetListener
+   */
 public class ScaleSettingDialog  extends StandardDialog {
 
 	/**
@@ -35,7 +44,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 	ScaleInfo info;
 	private ScaleResetListener scaleResetListen;
 	
-	boolean alternateDialog=false;
+	boolean alternateDialog=false;//two versions of this dialog are possible. indicates which
 	
 	public ScaleSettingDialog(HasScaleInfo scaled, StandardDialogListener listener) {
 		this(scaled, listener, true);
@@ -65,6 +74,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 		this.scaleResetListen = scaleResetListen;
 	}
 	
+	/**Adds components to the dialog*/
 	public void addScaleInfoToDialog(ScaleInfo si) {
 		if (!alternateDialog) { super.addScaleInfoToDialog(si); return;}
 		GriddedPanel omp = this.getMainPanel();
@@ -79,6 +89,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 		this.setMainPanel(omp);
 	}
 
+	/**Alters object to match the dialog*/
 	public void setScaleInfoToDialog(ScaleInfo si) {
 		if (!alternateDialog) {super.setScaleInfoToDialog(si);return;}
 		si.setUnits(this.getString("units"));

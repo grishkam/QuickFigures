@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.numbers;
 
 import java.awt.Color;
@@ -49,9 +54,9 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 	BarGraphic handle2=new BarGraphic(); {setBarProp(handle2);
 	handle2.setFillColor(Color.LIGHT_GRAY);
 	handle2.setStrokeColor(Color.lightGray);handle2.setStrokeWidth(4);}
-	{this.addMouseMotionListener(this);
-	super.getCord().setMagnification(0.2);
-	}
+			{	this.addMouseMotionListener(this);
+				super.getCord().setMagnification(0.2);
+			}
 	
 
 	/**sets the graphic to the right color and locaion to indicate the angle */
@@ -114,7 +119,6 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		//getSnappingBehaviour().snapLocatedObjects(r2, r1);
 		
 		g.setColor(Color.white);
 		g.fillRect(0, 0, this.getWidth(),  this.getHeight());
@@ -122,11 +126,6 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 		
 		handle2.draw((Graphics2D) g,getCord());
 		handle.draw((Graphics2D) g, cords);
-		//r2.draw((Graphics2D) g,getCord());
-		//t.setText(getSnappingBehaviour().getShortDescription());
-		//t2.setText(getSnappingBehaviour().getSecondDescription());
-		//t.draw((Graphics2D) g,getCord());
-		//t2.draw((Graphics2D) g,getCord());
 	}
 	
 	public int getHeight() {

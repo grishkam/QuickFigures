@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.channels;
 
 import java.awt.Component;
@@ -49,9 +54,7 @@ public class ChannelColorCellRenerer extends BasicComboBoxRenderer {
 		if(theindex==-1) theindex=box.getSelectedIndex();
 		int dim=theindex;
 		if (dim==-1) {dim=theindex;}
-		//if (this.channelNumber==-1||channelNumber> theChannelentries.size()) this.channelNumber=box.getSelectedIndex();
-		//dim = this.channelNumber;
-	
+		
 		
 		if (channelEntryBox2.theChannelentries.size()>0&&dim>0) ChannelEntryBox.drawRainbowString(g, channelEntryBox2.theChannelentries.get(dim-1), 1,this.getFont().getSize()+1, box.nullString);
 		else {ChannelEntryBox.drawRainbowString(g, null, 1,this.getFont().getSize()+1, box.nullString);}

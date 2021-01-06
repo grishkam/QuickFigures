@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.colors;
 
 import java.awt.BasicStroke;
@@ -62,8 +67,6 @@ public class ColorCellRenderer extends BasicComboBoxRenderer implements ListCell
 
 	public ColorCellRenderer(ColorListChoice colorComboBox) {
 		this.colorComboBox=colorComboBox;
-		
-		// TODO Auto-generated constructor stub
 	}
 	
 	public static ColorCellRenderer getPalleteRenderer(ColorListChoice colorComboBox) {
@@ -79,8 +82,7 @@ public class ColorCellRenderer extends BasicComboBoxRenderer implements ListCell
 
 	public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 	
-		//list.set
-	//	list.setVisibleRowCount(2);
+		
 		Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		if (out instanceof ColorCellRenderer && value!=null) {
 			ColorCellRenderer cell=(ColorCellRenderer) out;
@@ -100,7 +102,7 @@ public class ColorCellRenderer extends BasicComboBoxRenderer implements ListCell
 				this.currentColor=c2;
 			
 			}
-			//cell.hasFocu=cellHasFocus;
+			
 		
 		}
 		
@@ -114,8 +116,6 @@ public class ColorCellRenderer extends BasicComboBoxRenderer implements ListCell
 	@Override
 	public void paintComponent(Graphics g) {
 	
-		//g.setColor(this.getForeground());
-		//g.fillRect(0, 0, 15, this.getHeight());
 		if (g instanceof Graphics2D) {
 
 			Graphics2D g2d=(Graphics2D) g;

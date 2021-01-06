@@ -13,16 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog;
 
 import java.awt.Container;
 import java.awt.Insets;
 
+/**an interface for objects that arrange compenents onto
+ * a gridded panel*/
 public interface OnGridLayout {
 
-	
+	/**places the items into the container
+	 * @see GriddedPanel*/
 	public void placeItems(Container jp, int x0, int y0) ;
+	
+	/**returns the height in grid units*/
 	public int gridHeight();
+	
+	/**returns the width in grid units*/
 	public int gridWidth();
 	public static Insets lastInsets=new Insets(2,2,2,10);
 	public static Insets firstInsets=new Insets(2,10,2,2);

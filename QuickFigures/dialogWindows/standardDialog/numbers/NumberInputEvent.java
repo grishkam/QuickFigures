@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.numbers;
 
 import java.awt.Component;
@@ -21,6 +26,7 @@ import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
 
+/**A component input event for one or more number values*/
 public class NumberInputEvent extends ComponentInputEvent {
 
 	private double number;

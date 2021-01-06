@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 7, 2020
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -32,7 +32,7 @@ import locatedObject.LocatedObject2D;
 import locatedObject.StrokedItem;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
-import standardDialog.attachmentPosition.SnappingPanel;
+import standardDialog.attachmentPosition.AttachmentPositionPanel;
 import standardDialog.choices.ItemSelectblePanel;
 import standardDialog.graphics.FixedEdgeSelectable;
 import standardDialog.graphics.GraphicSampleComponent;
@@ -49,7 +49,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	{setHideCancel(false);}
 	
 	private static final long serialVersionUID = 1L;
-	public GraphicSampleComponent sam;
+	public GraphicSampleComponent previewComponent;
 	StrokeInputPanel strokeInput;
 	private static ImageWorkSheet currentImage=null;
 	private static FigureDisplayWorksheet setContainer;
@@ -57,7 +57,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	private static CurrentSetInformer informer=new CurrentFigureSet();
 	
 
-	SnappingPanel snappingPanel=null;
+	AttachmentPositionPanel snappingPanel=null;
 	public AbstractUndoableEdit2 undoableEdit;
 	protected transient boolean editAdded=false;
 	
@@ -94,7 +94,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	
 	void updateObjectFromDialog() {
 		this.setItemsToDiaog();
-		if (sam!=null) {sam.repaint();}
+		if (previewComponent!=null) {previewComponent.repaint();}
 		if (getCurrentImage()!=null) getCurrentImage().updateDisplay();
 		else {
 			
@@ -118,13 +118,12 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	
 	
 	
-	public SnappingPanel addSnappingBehviourToDialog(LocatedObject2D l) {
+	public AttachmentPositionPanel addSnappingBehviourToDialog(LocatedObject2D l) {
 		
 		
 		if (l==null||l.getAttachmentPosition()==null) return null;
-		//GriddedPanel newtabContent = new GriddedPanel();
 		
-		snappingPanel = new SnappingPanel(l.getAttachmentPosition());
+		snappingPanel = new AttachmentPositionPanel(l.getAttachmentPosition());
 		snappingPanel.addObjectEditListener(this);
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridwidth=4;
@@ -135,10 +134,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 		gc.gridy=this.gridPositionY;
 		gridPositionY+=2;
 		this.getOptionDisplayTabs().add("Position", snappingPanel);
-		//SnapBox f = new SnapBox();
-		//f.setSnappingBehaviour(l.getSnappingBehaviour().copy());
-		//ItemSelectblePanel is = new ItemSelectblePanel("Select Location", f);
-		//add("snap", is);
+		
 		return snappingPanel;
 	}
 	

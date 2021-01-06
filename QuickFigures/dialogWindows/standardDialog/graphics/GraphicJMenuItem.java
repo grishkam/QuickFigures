@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.graphics;
 
 import java.awt.Color;
@@ -27,9 +32,12 @@ import javax.swing.JMenuItem;
 
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_Shapes.RectangularGraphic;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
 
-public class GraphicJMenuItem extends JMenuItem {
+/**A menu item that is drawn not as text but instead using a particular component of
+ * @see GraphicDisplayComponent*/
+public class GraphicJMenuItem extends BasicSmartMenuItem {
 
 	/**
 	 * 
@@ -85,7 +93,6 @@ public class GraphicJMenuItem extends JMenuItem {
 		m1.add(new GraphicJMenuItem("Wow"));
 		m1.add(new GraphicJMenuItem("nope"));
 		GraphicJMenuItem i = new GraphicJMenuItem("nope", RectangularGraphic.blankRect(new Rectangle(0, 0,49,30), Color.blue));
-		//i. setDisplayedGraphicalObject(new GraphicDisplayComponent(null, new RectangularGraphic(0,0,20,30), false));
 		
 		m1.add(i);
 		

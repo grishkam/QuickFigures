@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.numbers;
 
 import java.awt.Component;
@@ -40,7 +45,7 @@ import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 
 
-
+/**A JPanel containing a Label and a numeric text field for placement into a standard dialog with a grided panel*/
 public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentListener, MouseMotionListener, OnGridLayout{
 
 	/**
@@ -172,8 +177,6 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	             slidermin,
 	             slidermax);
 		
-		//slider.setMinimum(slidermin);
-		//slider.setMaximum(slidermax);
 		slider.repaint();
 	}
 	
@@ -217,6 +220,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	
 	}
 
+	/**when a user releases a key on the field, the number is updated*/
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		if (!isEditable()) return;
@@ -231,7 +235,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
@@ -294,17 +298,17 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	}
 
 	public Component getSlider() {
-		// TODO Auto-generated method stub
+		
 		return slider;
 	}
 
 	public Component getField() {
-		// TODO Auto-generated method stub
+		
 		return field;
 	}
 
 	public Component getLabel() {
-		// TODO Auto-generated method stub
+		
 		return label;
 	}
 

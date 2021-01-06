@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.graphics;
 
 import java.awt.Dimension;
@@ -21,6 +26,8 @@ import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import locatedObject.LocatedObject2D;
 
+/**A component that shows a single graphic
+ * @see ZoomableGraphic*/
 public class GraphicSampleComponent extends GraphicComponent {
 
 	/**
@@ -45,7 +52,7 @@ public class GraphicSampleComponent extends GraphicComponent {
 	}
 	
 	public BasicCoordinateConverter getCord() {
-	//	if (cords==null) {
+	
 		BasicCoordinateConverter bcc = new BasicCoordinateConverter();
 		bcc.setMagnification(1);
 		if (zLoc()!=null) {
@@ -54,7 +61,7 @@ public class GraphicSampleComponent extends GraphicComponent {
 		}
 		
 		cords=bcc;
-		//}
+		
 		return cords;
 	}
 	

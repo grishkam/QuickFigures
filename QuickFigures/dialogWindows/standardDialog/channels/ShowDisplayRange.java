@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package standardDialog.channels;
 
 import java.awt.Color;
@@ -37,10 +42,12 @@ public class ShowDisplayRange extends GraphicComponent  {
 	 height=100;}
 
 
+	/**the right end of the histogram shows this value*/
 	private double maxShow;
+	/**The left ends of the histogram shows this value*/
 	private double minShow;
 
-
+	/**The top of the component corresponds to this histogram value*/
 	private double topShow;
 	
 	double displayRangeMin=0;
@@ -77,7 +84,7 @@ public class ShowDisplayRange extends GraphicComponent  {
 		return slidermax;
 	}
 	
-	public static double findLargestOfDistributionHistogram(int[] basis) {
+	static double findLargestOfDistributionHistogram(int[] basis) {
 		if (basis==null) return 255;
 		double slidermax=0;
 		for(int i=basis.length-1; i>1; i--) {
@@ -88,8 +95,7 @@ public class ShowDisplayRange extends GraphicComponent  {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-	//	getSnappingBehaviour().snapLocatedObjects(r2, r1);
-		
+	
 		g.setColor(background);
 		g.fillRect(0, 0,width,  height);
 		
@@ -103,6 +109,7 @@ public class ShowDisplayRange extends GraphicComponent  {
 		g.drawLine((int)convertValueToXY(displayRangeMin), height, (int)convertValueToXY(displayRangeMax), 0);
 	}
 
+	/**draws a line from the minimum to the maximun of the display range*/
 	private void paintLine(Graphics g, int i, int j) {
 		double linHeight= (j/topShow)*height;
 		double linX=convertValueToXY(i);
