@@ -42,15 +42,15 @@ public class ScaleAboutDialog extends StandardDialog{
 	private UndoManager undoManager;
 	
 	
-	public ScaleAboutDialog(double m, double x, double y) {
+	public ScaleAboutDialog(double factor, double x, double y) {
 		super();
-		this.scaleLevel = m;
+		this.scaleLevel = factor;
 		this.x = x;
 		this.y = y;
 		this.setModal(true);
 		this.setWindowCentered(true);
 		this.add("xy", new PointInputPanel("x y", new Point2D.Double(x,y)));
-		this.add("m", new NumberInputPanel("scale",  m));
+		this.add("m", new NumberInputPanel("scale",  factor));
 	}
 	
 	public ScaleAboutDialog() {
