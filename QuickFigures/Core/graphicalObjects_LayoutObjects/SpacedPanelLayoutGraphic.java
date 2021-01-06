@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayoutObjects;
 
 import java.util.ArrayList;
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 import layout.PanelContentExtract;
 import layout.plasticPanels.BasicSpacedPanelLayout;
 
+/**A layout graphic for a spaced panel layout*/
 public class SpacedPanelLayoutGraphic extends PanelLayoutGraphic {
 
 	/**

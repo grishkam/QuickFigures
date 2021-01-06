@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import javax.swing.undo.UndoableEdit;
 
 import includedToolbars.StatusPanel;
 
+/**A specialized undo manager for QuickFigures*/
 public class UndoManagerPlus extends UndoManager {
 
 	/**
@@ -41,15 +47,18 @@ public class UndoManagerPlus extends UndoManager {
 		super.undo();
 	}
 	
+	/**does not add null edits*/
 	 public synchronized boolean addEdit(UndoableEdit anEdit) {
 		 if(anEdit==null) return false;
 		 return super.addEdit(anEdit);
 	 }
 	
+	 /**returns true if the list of edits includes the object*/
 	public boolean hasUndo(Object o) {
 		return edits.contains(o);
 	}
 	
+	 /**returns an edit at index i*/
 	public UndoableEdit getEditFromList(int i) {
 		return edits.get(i);
 	}
@@ -88,7 +97,7 @@ public class UndoManagerPlus extends UndoManager {
 		return c;
 	}
 	
-	/**Combines the last few edits*/
+	/**Combines the last few edits into one*/
 	public void mergeLastNEdits(int i) {
 		if (edits.size()<i || i<2) return;
 		
@@ -110,6 +119,7 @@ public class UndoManagerPlus extends UndoManager {
 		
 	}
 	
+	/**Combines many edits into one. Adds many edits at one time*/
 	public void addEdits(AbstractUndoableEdit... edits) {
 		if(edits.length==1)this.addEdit(edits[0]);
 		else addEdit(new CombinedEdit(edits));

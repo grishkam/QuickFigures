@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package genericMontageLayoutToolKit;
 
@@ -38,7 +39,9 @@ public class RowSwapperToolIcon extends GeneralLayoutToolIcon implements LayoutS
 	private int form=LayoutSpaces.ROWS;
 
 	/**
-	 * @param type
+	creates an icon for the 
+	@param type determines if the icon is a pressed, rollover or normal icon
+	@param form determines if the icon is a row, column or panel version
 	 */
 	public RowSwapperToolIcon(int type, int form) {
 		super(type);
@@ -94,7 +97,7 @@ public class RowSwapperToolIcon extends GeneralLayoutToolIcon implements LayoutS
 	
 	
 	/**
-	creates a layout for drawing and icon
+	creates a layout for drawing an icon
 	 */
 	protected BasicLayout createSimpleIconLayout( int type) {
 		

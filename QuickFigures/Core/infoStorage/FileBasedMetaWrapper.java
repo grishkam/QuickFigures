@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package infoStorage;
 
 import java.io.BufferedReader;
@@ -25,8 +30,8 @@ import java.io.PrintStream;
 import figureFormat.DirectoryHandler;
 
 
-/**A class that keeps a set of key value pains in a string. Methods innitially written 
-  to modify the info of ImagePlus metadata*/
+/**A class that keeps a set of key value pairs in a string. 
+ * that string is read directly from a file*/
 public class FileBasedMetaWrapper extends StringBasedMetaWrapper {
 	/**
 	 * 

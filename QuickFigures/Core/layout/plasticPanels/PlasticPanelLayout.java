@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.plasticPanels;
 
 import java.awt.geom.Rectangle2D;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import locatedObject.AttachmentPosition;
 import logging.IssueLog;
 
+/**A layout that consists of many arbitrarily defined panels*/
 public class PlasticPanelLayout extends BasicSpacedPanelLayout implements SpacedPanelLayout{
 	
 	

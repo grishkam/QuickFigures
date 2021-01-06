@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -26,11 +31,8 @@ import handles.SmartHandleList;
 /**A star object with two different point lengths*/
 public class ComplexStar extends SimpleStar {
 
-	
-	
 
-
-	{name="Complex Star";}
+	{name="Elegant Star";}
 	{ doesAngleShift=false;}
 	private static final int STAR_RATIO_HANDLE2 = 88;
 	private AngleParameter starRatio2=new AngleParameter(this); {starRatio2.setType(AngleParameter.RADIUS_TYPE); starRatio2.setRatioToMaxRadius(0.15);}
@@ -44,9 +46,6 @@ public class ComplexStar extends SimpleStar {
 		super(complexStar);
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public String getPolygonType() {return "Elegant Star";}
 	
@@ -95,18 +94,21 @@ public class ComplexStar extends SimpleStar {
 		
 	}
 	
+	/**returns the angle between positions along the star*/
 	public double getIntervalAngle() {
 		return Math.PI/(getNvertex()*2);
 	}
 
+	/**returns the ratio that determines the second point length*/
 	public double getRatioInternalToExternal2() {
 		return getRatio2();
 	}
 	
+	/**creates a handle list with handles for both point lengths*/
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		list.add(new RegularPolygonAngleHandle(this, starRatio2, Color.blue, 0, STAR_RATIO_HANDLE2, -2)); 
-		//list.add(new RatioHandle2(this));
+		
 		return list;
 	}
 	/**returns a point inside of the shape, defined by the ratio to the radius of an'
@@ -125,11 +127,12 @@ public class ComplexStar extends SimpleStar {
 
 	
 	
-
+	/**The ratio for the second point length*/
 	public double getRatio2() {
 		return  starRatio2.getRatioToMaxRadius();
 	}
 
+	/**Sets ratio for the second point length*/
 	public void setRatio2(double ieRatio2) {
 		 starRatio2.setRatioToMaxRadius(ieRatio2);
 	}

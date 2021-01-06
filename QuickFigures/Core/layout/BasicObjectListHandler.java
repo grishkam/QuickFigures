@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout;
 
 import java.awt.Dimension;
@@ -375,15 +380,17 @@ public class BasicObjectListHandler {
 	}
 	
 	
-	
+	/**certain items are exempt form the actions of this handleer*/
 	public ArrayList<LocatedObject2D> neverEditLocationOf=new ArrayList<LocatedObject2D>();
+	
+	/**getter for the list of items that are protected from editing*/
 	public ArrayList<LocatedObject2D> getNeverRemove() {
 		if (neverEditLocationOf==null) neverEditLocationOf=new ArrayList<LocatedObject2D>();
 		return neverEditLocationOf;
 	}
 
+	/**set the list of items that are protected from editing*/
 	public void setNeverRemove(ArrayList<LocatedObject2D> neverRemove) {
-		
 		this.neverEditLocationOf = neverRemove;
 	}
 	
@@ -509,10 +516,10 @@ public class BasicObjectListHandler {
 		boolean isObjectDesireableForPanel(Rectangle2D gra, LocatedObject2D objects );
 	}
 	/**an implementation of LocatedObjectFiler that returns false for objects of a given class*/
-	public static class excluder implements LocatedObjectFilter {
+	public static class ExcluderFilter implements LocatedObjectFilter {
 		Class<?> excludeClass;
 		
-		public excluder(Class<?> s) {
+		public ExcluderFilter(Class<?> s) {
 			excludeClass=s;
 		}
 
@@ -523,10 +530,10 @@ public class BasicObjectListHandler {
 		}
 	}
 	/**an implementation of LocatedObjectFiler that returns true for objects of a given class*/
-	public static class includer implements LocatedObjectFilter {
+	public static class IncluderFilter implements LocatedObjectFilter {
 		Class<?> includeClass;
 		
-		public includer(Class<?> s) {
+		public IncluderFilter(Class<?> s) {
 			includeClass=s;
 		}
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.basicFigure;
 
 
@@ -44,6 +49,8 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 		}
 	
 	private static final long serialVersionUID = 1L;
+	public String layoutKey="";
+	private GridLayoutEditListenerList listeners;
 	public double layoutWidth, layoutHeight;
 	
 	/**whether the panels of this montage are rows.*/
@@ -88,12 +95,12 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 	   the space between panels*/
 	@RetrievableOption(key="yBorder", label="Vertical Border Width")
 	public
-	double BorderWidthBottomTop=2;
+	double theBorderWidthBottomTop=2;
 	/**The amount of spacing after a panel in the x-axis. ends up representing the
 	  space between panels*/
 	@RetrievableOption(key="xBorder",label="Horizontal Border Width")
 	public
-	double BorderWidthLeftRight=2;
+	double theBorderWidthLeftRight=2;
 	
 	/**How much space above the columns are alloted to putting labels.
 	  this is part of the montage as well. */
@@ -186,8 +193,8 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 		labelSpaceWidthLeft= labelSpaceWidthLeft*factor;
 		labelSpaceWidthRight= labelSpaceWidthRight*factor;
 		
-		BorderWidthBottomTop= BorderWidthBottomTop*factor;
-		BorderWidthLeftRight= BorderWidthLeftRight*factor;
+		theBorderWidthBottomTop= theBorderWidthBottomTop*factor;
+		theBorderWidthLeftRight= theBorderWidthLeftRight*factor;
 		
 		
 		
@@ -330,16 +337,16 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 	 /**sets the distance between panels in the x direction*/
 	 public void setHorizontalBorder(double t) {
 		 if (t<0) { return;}
-		 double told=BorderWidthLeftRight;
-		 BorderWidthLeftRight=t;
+		 double told=theBorderWidthLeftRight;
+		 theBorderWidthLeftRight=t;
 		 layoutWidth+=(t-told)*nColumns();
 	 }
 	 
 	 /**sets the distance between panels in the y direction*/
 	 public void setVerticalBorder(double t) {
 		 if (t<0) { return;}
-		 double told=BorderWidthBottomTop;
-		 BorderWidthBottomTop=t;
+		 double told=theBorderWidthBottomTop;
+		 theBorderWidthBottomTop=t;
 		 layoutHeight+=(t-told)*nRows();
 	 }
 	 
@@ -376,8 +383,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			return new Rectangle2D.Double((pt.getX()), (pt.getY()), getPanelWidth(i), getPanelHeight(i));
 		}
 		
-	//public int getPanelWidth() {return panelWidth;}
-	//public int getPanelHeight() {return panelHeight;}
+
 		
 		 /**This setter method sets up the spaces that will be reserved for the row and column labels.*/
 		 public void setLabelSpaces(int labelSpaceWidthTop, int labelSpaceWidthBottom, int labelSpaceWidthLeft, int labelSpaceWidthRight) {
@@ -395,24 +401,28 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			 layoutHeight+=t-told;
 			 movePoints(0, t-told);
 		 }
+		 
+		 /**Method sets the extra space on the left which indicates the location of the layout and the size of the canvas*/
 		 public void setSpecialLeftSpace(double t) {
 			 double told=specialSpaceWidthLeft;
 			 specialSpaceWidthLeft= t;
 			 layoutWidth+=t-told;
 			 movePoints(t-told, 0);
 		 }
-		 
+		 /**Method sets the extra space on the bottom which indicates the size of the canvas*/
 		 public void setSpecialBottomSpace(double t) {
 			 double told=specialSpaceWidthBottom;
 			 specialSpaceWidthBottom=t;
 			 layoutHeight+=t-told;
 		 }
+		 /**Method sets the extra space on the right which indicates the size of the canvas*/
 		 public void setSpecialRightSpace(double t) {
 			 double told=specialSpaceWidthRight;
 			 specialSpaceWidthRight=t;
 			 layoutWidth+=t-told;
 		 }
 		 
+		 /**method sets the additional spaces*/
 		 public void setAdditionalSpaces(int topspace, int bottomspace, int leftspace, int rightspace) {
 			 setSpecialTopSpace(topspace); 
 			 setSpecialBottomSpace(bottomspace); 
@@ -423,11 +433,11 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 		  /**when given a montage layout argument, this sets all field in this layout to match the
 	     argument.*/
 	   public void setToMatch(BasicLayout ml) {
-		  // setImage(ml.getImage());
 		   matchLayoutSettings(ml);
 	  		
 	   }
 	   
+	   /**called to make this layout identical to the argument*/
 	   public void matchLayoutSettings(BasicLayout ml) {
 		   pts= ml.pts;        panels=ml.panels;
 	  		layoutWidth=ml.layoutWidth;      layoutHeight=ml.layoutHeight;
@@ -439,9 +449,8 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 	  		labelSpaceWidthTop=ml.labelSpaceWidthTop;             labelSpaceWidthLeft=ml.labelSpaceWidthLeft;
 	  		labelSpaceWidthBottom=ml.labelSpaceWidthBottom;       labelSpaceWidthRight=ml.labelSpaceWidthRight;
 	  		panelWidth=ml.panelWidth;        panelHeight=ml.panelHeight;
-	  		//xincrement=ml.xincrement(1);        yincrement=ml.yincrement(1);
-	  		//frameBorderWidth=ml.frameBorderWidth;
-	  		BorderWidthBottomTop=ml.BorderWidthBottomTop;   BorderWidthLeftRight=ml.BorderWidthLeftRight;
+	  		
+	  		theBorderWidthBottomTop=ml.theBorderWidthBottomTop;   theBorderWidthLeftRight=ml.theBorderWidthLeftRight;
 	  		rowmajor=ml.rowmajor;
 	  		xshift=ml.xshift; yshift=ml.yshift; panelInsertion=ml.panelInsertion;
 	  		firsttoLast=ml.firsttoLast;
@@ -611,14 +620,14 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			/**return the distance between the right edge of a panel in column index
 			  and the left edge of the next panel. In other words the spacing between panels*/
 			double rightBorderOfColumn(int index) {
-				return BorderWidthLeftRight;
+				return theBorderWidthLeftRight;
 			}
 
 			
 			/**returns the distance between the bottom edge of a panel in row index, 
 			  and the top edge of the next panel*/
 			double bottomBorderOfRow(int index) {
-				return BorderWidthBottomTop;
+				return theBorderWidthBottomTop;
 			}
 			
 			/**adds up all the 2 increments up to and including the given column index*/
@@ -653,22 +662,22 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 					xshift=x; yshift=y;
 					Point2D[] p=new Point2D[nColumns()*nRows()];
 				
-					double x2;//=x+BorderWidthLeftRight/2+labelSpaceWidthLeft+specialSpaceWidthLeft;
-					double y2;//=y+BorderWidthBottomTop/2+labelSpaceWidthTop+specialSpaceWidthTop;
+					double x2;
+					double y2;
 					
 						x2=x+labelSpaceWidthLeft+specialSpaceWidthLeft;
 						y2=y+labelSpaceWidthTop+specialSpaceWidthTop;
 					
 					
 					if (rowmajor){
-					for (int i=0; i<nColumns()*nRows(); i++) {
-						int col=i%nColumns();//current column, 0 based
-						int row=i/nColumns();//current row, 0 based
-						 
-						double nx = x2+SumXincrement(col);
-						double ny = y2+SumYincrement(row);
-						p[i]=new Point2D.Double(nx, ny);
-					}}
+							for (int i=0; i<nColumns()*nRows(); i++) {
+								int col=i%nColumns();//current column, 0 based
+								int row=i/nColumns();//current row, 0 based
+								 
+								double nx = x2+SumXincrement(col);
+								double ny = y2+SumYincrement(row);
+								p[i]=new Point2D.Double(nx, ny);
+							}}
 					
 					else {
 						for (int i=0; i<nColumns()*nRows(); i++) {
@@ -690,8 +699,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 					
 				}
 	
-	public String layoutKey="";
-	private GridLayoutEditListenerList listeners;
+	
 	public String getKey() {
 		return layoutKey;
 	}
@@ -830,8 +838,8 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 	 		this. labelSpaceWidthBottom=0;
 	 		this.labelSpaceWidthRight=0;
 	 		this.labelSpaceWidthTop=0;
-	 		this.BorderWidthBottomTop=vBorder;
-	 		this.BorderWidthLeftRight=hBorder;
+	 		this.theBorderWidthBottomTop=vBorder;
+	 		this.theBorderWidthLeftRight=hBorder;
 	 		computeSizes();
 	 		setPoints(xshift, yshift);
 	 		setPanelRectangles();
@@ -889,7 +897,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			   setNRows(1);
 			   labelSpaceWidthTop=0;
 			   labelSpaceWidthBottom=0;
-			   BorderWidthBottomTop=0;
+			   theBorderWidthBottomTop=0;
 			   rowHeights=null;
 			   resetPtsPanels(xshift, 0);
 		   }
@@ -910,7 +918,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			   columnWidths=null;
 			   labelSpaceWidthLeft=0;
 			   labelSpaceWidthRight=0;
-			   BorderWidthLeftRight=0;
+			   theBorderWidthLeftRight=0;
 			  
 			   resetPtsPanels(0, yshift);
 		   }
@@ -924,7 +932,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 		      */
 		   private void converToHorizontalBorderLess(){
 			   panelWidth+=rightBorderOfColumn(0);
-			   BorderWidthLeftRight=0;
+			   theBorderWidthLeftRight=0;
 			   resetPtsPanels(0, yshift); 
 		   }
 		   
@@ -936,7 +944,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 		      */
 		  private  void convertToVerticalBorderLess(){
 			   panelHeight+=bottomBorderOfRow(0);
-			   BorderWidthBottomTop=0;
+			   theBorderWidthBottomTop=0;
 			   resetPtsPanels(xshift, 0);
 		   }
 		   
@@ -949,7 +957,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			  rowHeights=null;
 			  labelSpaceWidthBottom+=  bottomBorderOfRow(nRows());
 			  setNRows(1);
-			  BorderWidthBottomTop=0;
+			  theBorderWidthBottomTop=0;
 			  resetPtsPanels(xshift, 0);
 		  }
 		  
@@ -960,7 +968,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			   columnWidths=null;
 			   labelSpaceWidthRight+=  rightBorderOfColumn(nColumns());
 			   setNColumns(1);
-			   BorderWidthLeftRight=0;
+			   theBorderWidthLeftRight=0;
 			    resetPtsPanels(0, yshift);
 		   }
 		   
@@ -1035,7 +1043,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			  public BasicLayout duplicate() {
 					BasicLayout out = new BasicLayout();
 					out.matchLayoutSettings(this);
-					out.setEditedImage(getEditedImage());
+					out.setEditedWorkSheet(getEditedWorksheet());
 					return out;
 				}
 
@@ -1239,12 +1247,10 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			  }
 			@Override
 			public int nRows() {
-				// TODO Auto-generated method stub
 				return rowMontage;
 			}
 			@Override
 			public int nColumns() {
-				// TODO Auto-generated method stub
 				return colMontage;
 			}
 			public void setNRows(int rowMontage) {
@@ -1254,10 +1260,12 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				this.colMontage = colMontage;
 			}
 			
+			/**returns the panel closest to the point*/
 			public Rectangle2D getNearestPanel(Point2D p) {
 				return getNearestPanel(p.getX(), p.getY());
 			}
 			
+			/**returns the panel closest to the point*/
 			public Rectangle2D getNearestPanel(double x, double y) {
 				double shortest=Double.MAX_VALUE;
 				Rectangle2D closest=null;
@@ -1273,10 +1281,12 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				return closest;
 			}
 			
+			/**returns the index of the panel closest to the point*/
 			public int getNearestPanelIndex(Point2D p) {
 				return getNearestPanelIndex(p.getX(), p.getY());
 			}
 			
+			/**returns the index of the panel closest to the point*/
 			public int getNearestPanelIndex(double x, double y) {
 				double shortest=Double.MAX_VALUE;
 				Integer closest=1;
@@ -1292,11 +1302,11 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				return closest;
 			}
 			
-			
-			public ImageWorkSheet getEditedImage() {
+			/**Sets the worksheet being edited*/
+			public ImageWorkSheet getEditedWorksheet() {
 				return image;
 			}
-			public void setEditedImage(ImageWorkSheet wrapper) {
+			public void setEditedWorkSheet(ImageWorkSheet wrapper) {
 				this.image = wrapper;
 			}
 			
@@ -1328,6 +1338,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				this.resetPtsPanels();
 			}
 			
+			/**returns the base location of the layout*/
 			@Override
 			public Point2D getReferenceLocation() {
 				return new Point2D.Double(specialSpaceWidthLeft,specialSpaceWidthTop);
@@ -1338,7 +1349,6 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			}
 			@Override
 			public Shape getBoundry() {
-				// TODO Auto-generated method stub
 				return this.getSelectedSpace(1, ALL_MONTAGE_SPACE);
 			}
 			
@@ -1359,7 +1369,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				int row=this.getRowAtIndex(panelnum);
 				if (col>1) {
 						dx/=(col-1);
-						double newBorder = this.BorderWidthLeftRight+dx;
+						double newBorder = this.theBorderWidthLeftRight+dx;
 						if(newBorder<1) newBorder=1;
 						
 						this.setHorizontalBorder(newBorder);
@@ -1367,7 +1377,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				
 				if (row>1) {
 							dy/=(row-1);	
-							double newVBorder = BorderWidthBottomTop+dy;
+							double newVBorder = theBorderWidthBottomTop+dy;
 							if(newVBorder<1) newVBorder=1;
 							this.setVerticalBorder(newVBorder);
 				}
@@ -1430,6 +1440,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				
 			}
 			
+			/**returns a string with information about the dimensions of this layout*/
 			public String report() {
 				String out="Rows "+this.nRows()+'\n';
 				out+="Cols "+this.nColumns()+'\n';

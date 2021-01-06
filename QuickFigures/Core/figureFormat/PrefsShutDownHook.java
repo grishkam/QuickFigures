@@ -13,18 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 /**A shutdown hook that saves the preferences of the default directory handler to a file
-  if that file is loaded, the working directory used previously would be used again*/
+  if that file is loaded, the working directory used previously would be used again
+  Work in progress. will use the prefs file to store options in the future.
+  */
 public class PrefsShutDownHook implements Runnable{
 	
-static boolean addedHook=false;
+static boolean addedHookAlready=false;
 	
+	/**Adds the shutdown hook if it has not already need added*/
 	public static void addShutdownHook() {
-		if (addedHook) return;
+		if (addedHookAlready) return;
+		
 		Runtime.getRuntime().addShutdownHook(new Thread(new PrefsShutDownHook()));
-		addedHook=true;
+		addedHookAlready=true;
 	}
 
 	@Override

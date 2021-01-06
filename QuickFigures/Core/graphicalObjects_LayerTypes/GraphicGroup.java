@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayerTypes;
 
 import java.awt.BasicStroke;
@@ -40,7 +45,7 @@ import export.svg.SVGExportable;
 import export.svg.SVGExporter;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.KnowsTree;
 import handles.HasHandles;
@@ -76,7 +81,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	 * 
 	 */
 	private GraphicLayerPane theLayerPane=new GroupedLayerPane("Group", this);
-{theLayerPane.addLayerStructureChangeListener(this);}
+				{theLayerPane.addLayerStructureChangeListener(this);}
 	private boolean drawGhost;
 
 	private transient ReshapeHandleList reshapeList; 
@@ -89,23 +94,26 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	/**creates a group containing all the objects for layer l*/
 	public GraphicGroup(GraphicLayer donor) {
-		for(ZoomableGraphic i: donor.getItemArray()) this.getTheLayer().add(i);
+		for(ZoomableGraphic i: donor.getItemArray()) this.getTheInternalLayer().add(i);
 		this.setName(donor.getName());
 	}
 	
+	/**creates group with many objects*/
 	public GraphicGroup( boolean b, ZoomableGraphic... tzs) {
-		for(ZoomableGraphic tz: tzs) getTheLayer().add(tz);
+		for(ZoomableGraphic tz: tzs) getTheInternalLayer().add(tz);
 	}
 
+	/**creates a group*/
 	public GraphicGroup(ArrayList<? extends LocatedObject2D> o2) {
 		for(LocatedObject2D tz: o2) 
 			{if(tz instanceof ZoomableGraphic)
-				getTheLayer().add((ZoomableGraphic) tz);}
+				getTheInternalLayer().add((ZoomableGraphic) tz);}
 	}
 
 	public static Color defaultFolderColor=new Color(200,180, 140);
 	
 	Color folderColor=  defaultFolderColor;
+	
 	double tx=0;
 	double ty=0;
 	Rectangle bounds=null;
@@ -114,7 +122,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	
 
-	
+	/**Select the group*/
 	@Override
 	public void select() {
 		super.select();
@@ -122,6 +130,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		selectContent();
 	}
 	
+	/**deselect the group*/
 	@Override
 	public void deselect() {
 		super.deselect();
@@ -132,7 +141,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	/**sets all the objects inside the group to not selected*/
 	private void deselectContent() {
-		ArrayList<ZoomableGraphic> allGraphics = this.getTheLayer().getAllGraphics();
+		ArrayList<ZoomableGraphic> allGraphics = this.getTheInternalLayer().getAllGraphics();
 		ArraySorter.removeNonSelectionItems(allGraphics);
 		for(Object z:allGraphics) {
 			((Selectable) z).deselect();
@@ -141,7 +150,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	/**sets all the objects inside the group to not selected*/
 	private void selectContent() {
-		ArrayList<ZoomableGraphic> allGraphics = this.getTheLayer().getAllGraphics();
+		ArrayList<ZoomableGraphic> allGraphics = this.getTheInternalLayer().getAllGraphics();
 		ArraySorter.removeThoseOfClass(allGraphics, GraphicGroup.GroupHook.class);
 		for(Object z:allGraphics) {
 			if (z instanceof Selectable )
@@ -149,20 +158,22 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		}
 	}
 
+	/**Setup a handle list that can be used to resize the group*/
 	protected void setupReshapeList() {
 		if (reshapeList==null)
-		reshapeList = new ReshapeHandleList(getTheLayer().getLocatedObjects(), 2, 8000000, true, 0, false);
+		reshapeList = new ReshapeHandleList(getTheInternalLayer().getLocatedObjects(), 2, 8000000, true, 0, false);
 		else {
-			reshapeList.refreshList(getTheLayer().getLocatedObjects());
+			reshapeList.refreshList(getTheInternalLayer().getLocatedObjects());
 		}
 	}
 	
 	
-	
+	/**returns the parent layer of the graphic group*/
 	private GraphicLayer theParent() {
 		return this.getParentLayer();
 	}
 	
+	/**returns the location*/
 	@Override
 	public Point2D getLocationUpperLeft() {
 		Rectangle b = getBounds();
@@ -170,19 +181,17 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		
 	}
 
+	/**sets the location*/
 	@Override
 	public void setLocationUpperLeft(double x, double y) {
 		Point2D p = getLocationUpperLeft() ;
-		//IssueLog.log("Setting location of group "+this.getBounds(), "will set location to "+new Point2D.Double(x,y));
-
 		moveLocation(x-p.getX(), y-p.getY());
 		
 	}
 
 	@Override
 	public int isUserLocked() {
-		// TODO Auto-generated method stub
-		return 0;
+		return NOT_LOCKED;
 	}
 
 	@Override
@@ -192,8 +201,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	@Override
 	public boolean doesIntersect(Rectangle2D rect) {
-		// TODO Auto-generated method stub
-		for(LocatedObject2D log: this.getTheLayer().getLocatedObjects()) {
+		for(LocatedObject2D log: this.getTheInternalLayer().getLocatedObjects()) {
 			if (log.doesIntersect(rect))return true;
 		}
 		return false;
@@ -205,10 +213,11 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		return getBounds();
 	}
 
+	/**returns the outline of all the objects in the group*/
 	@Override
 	public Shape getOutline() {
 		ArrayObjectContainer.ignoredClass=GraphicGroup.GroupHook.class;
-		Shape a = ArrayObjectContainer.combineOutLines(getTheLayer().getLocatedObjects());
+		Shape a = ArrayObjectContainer.combineOutLines(getTheInternalLayer().getLocatedObjects());
 		ArrayObjectContainer.ignoredClass=null;
 		return transform().createTransformedShape(a);
 	}
@@ -218,7 +227,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	@Override
 	public void moveLocation(double xmov, double ymov) {
-		for(LocatedObject2D l:getTheLayer().getLocatedObjects())  {
+		for(LocatedObject2D l:getTheInternalLayer().getLocatedObjects())  {
 			l.moveLocation(xmov, ymov);
 		}
 		
@@ -232,7 +241,6 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
 		if (bounds==null) {
 			this.updateBoundsFromContents();
 		}
@@ -244,12 +252,13 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 
 
+	/***/
 	@Override
 	public int getLocationType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return RectangleEdges.UPPER_LEFT;
 	}
 
+	/**draws the group*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		//CordinateConverter c = cords.getCopyTranslated(-x, -y);
@@ -271,9 +280,10 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 	
 	
+	/**draws the objects in the group layer*/
 	public void drawLayer(Graphics2D graphics, CordinateConverter cords) {
 	
-		for(ZoomableGraphic z: getTheLayer().getGraphicsSync()) try {
+		for(ZoomableGraphic z: getTheInternalLayer().getGraphicsSync()) try {
 			if (z==null) continue;
 			
 			z.draw(graphics, cords);
@@ -289,6 +299,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	
 
+	/**only informs listeners for large movements*/
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		if (handlenum<0) return;
@@ -305,31 +316,30 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	@Override
 	public void showOptionsDialog() {
-		getTheLayer().showOptionsDialog();
+		getTheInternalLayer().showOptionsDialog();
 	}
 
-	public GraphicLayerPane getTheLayer() {
+	public GraphicLayerPane getTheInternalLayer() {
 		if (theLayerPane==null) {
 			theLayerPane=new GraphicLayerPane("");
+			{theLayerPane.addLayerStructureChangeListener(this);}
 		}
 		return theLayerPane;
 	}
 
-	public void setTheLayer(GraphicLayerPane theLayerPane) {
-		this.theLayerPane = theLayerPane;
-	}
 
+
+	
 	@Override
 	public ObjectContainer getObjectContainer() {
-		// TODO Auto-generated method stub
-		return getTheLayer();
+		return getTheInternalLayer();
 	}
 	
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
 		ArtLayerRef sub = aref.createSubRefG();
 		sub.setName(getName());
-		for(ZoomableGraphic layer: this.getTheLayer() .getItemArray()) try{
+		for(ZoomableGraphic layer: this.getTheInternalLayer() .getItemArray()) try{
 			if (layer instanceof  IllustratorObjectConvertable) {
 				IllustratorObjectConvertable ills = ( IllustratorObjectConvertable)layer;
 				ills.toIllustrator(sub);
@@ -350,16 +360,16 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 	
 	@Override
-	public void setGraphicSetContainer(FigureDisplayContainer gc) {
+	public void setGraphicSetContainer(FigureDisplayWorksheet gc) {
 		super.setGraphicSetContainer(gc);
-		this.getTheLayer().setGraphicSetContainer(gc);
+		this.getTheInternalLayer().setGraphicSetContainer(gc);
 		
 	}
 
 	@Override
 	public void setTree(
 			LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> t) {
-		this.getTheLayer().setTree(t);
+		this.getTheInternalLayer().setTree(t);
 		
 	}
 
@@ -383,19 +393,19 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	@Override
 	public GraphicLayer getSelectedLayer() {
 		// TODO Auto-generated method stub
-		return this.getTheLayer();
+		return this.getTheInternalLayer();
 	}
 	
 	public String getName() {
-		return getTheLayer().getName();
+		return getTheInternalLayer().getName();
 	}
 	public void setName(String name) {
-		getTheLayer().setName(name);
+		getTheInternalLayer().setName(name);
 	}
 
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
-		for(ZoomableGraphic l: this.getTheLayer().getAllGraphics()) {
+		for(ZoomableGraphic l: this.getTheInternalLayer().getAllGraphics()) {
 			if (l instanceof Scales) {
 				 Scales sl=( Scales) l;
 				sl.scaleAbout(p, mag);
@@ -455,8 +465,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	
 	@Override
 	public SVGExporter getSVGEXporter() {
-		// TODO Auto-generated method stub
-		return getTheLayer().getSVGEXporter();
+		return getTheInternalLayer().getSVGEXporter();
 	}
 
 	@Override
@@ -464,13 +473,13 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		return new LayerToOffice(this);
 	}
 	
-	/**ungroups the group*/
+	/**ungroups the group, replacing it with the objects*/
 	public void ungroup() {
-		ArrayList<ZoomableGraphic> l = getTheLayer().getGraphicsSync();
+		ArrayList<ZoomableGraphic> l = getTheInternalLayer().getGraphicsSync();
 		ArrayList<ZoomableGraphic> l2 = new ArrayList<ZoomableGraphic>();l2.addAll(l);
 		int i = getParentLayer().getItemArray().indexOf(this);
 		for(ZoomableGraphic item:l2 ) {
-			getTheLayer().remove(item);
+			getTheInternalLayer().remove(item);
 			getParentLayer().addItemToLayer(item);
 			getParentLayer().moveItemToIndex(item, i);//does not move the item correctly
 			
@@ -546,7 +555,6 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 		@Override
 		public Rectangle getExtendedBounds() {
-			// TODO Auto-generated method stub
 			return getBounds() ;
 		}
 
@@ -568,7 +576,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 		@Override
 		public void draw(Graphics2D graphics, CordinateConverter cords) {
-			
+			//group hooks are not drawn but they can be clicked on 
 			
 		}
 
@@ -576,7 +584,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 		@Override
 		public void showOptionsDialog() {
-			// TODO Auto-generated method stub
+			theGroup.showOptionsDialog();
 			
 		}
 		public SmartHandleList getSmartHandleList() {
@@ -584,6 +592,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 			return theGroup.getSmartHandleList();
 		}
 		
+		/**always returns a positive handle number*/
 		public int handleNumber(double x, double y) {
 			int num = this.getSmartHandleList().handleNumberForClickPoint(x, y);
 			if (num<0 &&this.getOutline().contains(x, y))
@@ -610,7 +619,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	}
 	
-	
+	/**The menu that appears when a user right clicks on a group*/
 	class GroupGraphicMenu extends SmartPopupJMenu implements ActionListener,
 	PopupMenuSupplier  {
 

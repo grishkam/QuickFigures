@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import java.io.File;
@@ -35,7 +40,7 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	TemplateUserMenuAction templateSaver=new TemplateUserMenuAction(false, true);
+	TemplateUserMenuAction templateSaver=new TemplateUserMenuAction(TemplateUserMenuAction.APPLY_TEMPLATE, true);
 	
 	/**Will apply a single default template to a series of files that each contain serialized
   	figures*/

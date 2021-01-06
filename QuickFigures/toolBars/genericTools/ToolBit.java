@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericTools;
 
 import java.awt.Point;
@@ -26,42 +31,40 @@ import externalToolBar.DragAndDropHandler;
 import icons.IconSet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
-/**interface determines the functions of a tool within one of the toolbars
- * that can be installed onto the toolbar
+/**An interface that determines the propertie of a general tool.
+ * @see GeneralTool
+ * @see BasicToolBit
+ * @see ToolCore
+ * Simpler to code that 
+ * interface determines the functions of a tool within one of the toolbars
+  that can be installed onto the toolbar
    */
 public interface ToolBit {
 	
 	IconSet getIconSet();
 
+	/**Called upon certain tool actions*/
 	void mousePressed();
-
 	void mouseDragged();
-
 	void mouseEntered();
-	
 	void mouseExited();
-	
 	void mouseReleased();
-
 	void mouseMoved();
-
 	void mouseClicked();
+	
+	boolean keyPressed(KeyEvent e);
+	boolean keyReleased(KeyEvent e);
+	boolean keyTyped(KeyEvent e);
 
-
+	/**Sets the tool core that stores information about */
 	void setToolCore(ToolCore toolCore);
-
-
 
 	void showOptionsDialog();
 
 
 	ArrayList<JMenuItem> getPopupMenuItems();
 
-	boolean keyPressed(KeyEvent e);
 
-	boolean keyReleased(KeyEvent e);
-
-	boolean keyTyped(KeyEvent e);
 
 	String getToolName();
 	

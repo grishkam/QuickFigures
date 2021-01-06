@@ -13,10 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 
+/**An undoable edit for changes to the scale of an inset definer
+ * not used (nor need) yet but part of work in progress
+ * plan to use with a new scale change dialog*/
 public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 
 	/**

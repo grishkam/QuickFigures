@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package genericMontageLayoutToolKit;
 
@@ -36,17 +37,14 @@ import locatedObject.RectangleEdges;
  */
 public class BorderAdjustToolIcon extends GeneralLayoutToolIcon implements LayoutSpaces {
 
-	/**
-	 * 
-	 */
 	
 	/**
-	 * @param type
+	 creates a new border adjuster tool icon
 	 */
 	public BorderAdjustToolIcon(int type) {
 		super(type);
 		this.paintBoundry=false;
-		panelColor    = new Color[] {YELLOW_TONE};
+		panelColor    = new Color[] {YELLOW_TONE};//all panels are yellow
 	}
 	
 	protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2, int arg3) { 

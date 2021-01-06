@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout;
 
 import java.awt.Shape;
@@ -50,18 +55,23 @@ public interface PanelLayout {
 	public Shape getBoundry();
 	
 	/**sets the Width of the panel*/ 
-	public void setPanelWidth(int panel, double width);
+	public void setPanelWidth(int panelIndex, double width);
 	
 	/**sets the Height of the panel*/ 
-	public void setPanelHeight(int panel, double height);
+	public void setPanelHeight(int panelIndex, double height);
 	
 	/**recalculated the points and panels*/
 	 public void resetPtsPanels() ;
 	 
-	 /**returns the standard panel dimensions*/
+	 /**returns the standard panel width*/
 	 public double getStandardPanelWidth();
+	 /**returns the standard panel Height*/
 	 public double getStandardPanelHeight();
+	 
+	 /**sets the standard panel width*/
 	 public void setStandardPanelWidth(double width);
+	 
+	 /**sets the standard panel hieght*/
 	 public void setStandardPanelHeight(double height);
 	 
 	 /**returns true if panel number panel does not use the standard panel size for the layout*/
@@ -73,10 +83,13 @@ public interface PanelLayout {
 	/**called when a user drags a corner handle of the panel*/
 	public void nudgePanelDimensions(int panelnum, double dx, double dy);
 	
-	public ImageWorkSheet getEditedImage() ;
+	/**the virtual worksheet*/
+	public ImageWorkSheet getEditedWorksheet() ;
 
+	/**The total number of panels*/
 	public int nPanels();
 
-	public void setEditedImage(ImageWorkSheet genericImage);
+	/**Sets the virtual worksheet used for edits*/
+	public void setEditedWorkSheet(ImageWorkSheet genericImage);
 	 
 }

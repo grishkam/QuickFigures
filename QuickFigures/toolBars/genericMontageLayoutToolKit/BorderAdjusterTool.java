@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 import layout.basicFigure.LayoutSpaces;
 
@@ -23,8 +28,7 @@ public class BorderAdjusterTool extends GeneralLayoutEditorTool implements Layou
 
 	{
 		this.setIconSet(new BorderAdjustToolIcon(0).generateIconSet());
-		//createIconSet("icons/Montage_EditorToolIcon.jpg", "icons/Montage_EditorToolIconPressed.jpg", "icons/Montage_EditorToolRollOverIcon.jpg");
-		}
+	}
 	
 	public void performDragEdit(boolean shift) {
 			
@@ -42,6 +46,7 @@ public class BorderAdjusterTool extends GeneralLayoutEditorTool implements Layou
 	/**
 	 * @return true if the location of a user click is valid for horizontal border adjustment. 
 	 * The user must click a column that is the second one or higher for this
+	 * Or click a row that is the second one or beyond
 	 */
 	boolean isMoveableColumn() {
 		return getColIndexClick() > 1 && getColIndexClick() <= getCurrentLayout().nColumns() && getMouseDisplacementX() != 0;

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import java.awt.Color;
@@ -39,6 +44,7 @@ import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
 import utilityClasses1.NumberUse;
 
+/**A tool that can be used to scale layouts*/
 public class LayoutScalerTool extends Object_Mover {
 	{super.bringSelectedToFront=true; 
 	setSelectOnlyThoseOfClass(PanelLayoutGraphic.class);
@@ -49,17 +55,19 @@ public class LayoutScalerTool extends Object_Mover {
 			);
 	}
 	
-	boolean continus=false;
-	boolean keepPPI=false;
-	boolean rezisePanels=false;
+	private boolean continus=false;
+	private boolean keepPPI=false;
+	private boolean rezisePanels=false;
 	
-	 DefaultLayoutGraphic theLayout=null;
+	DefaultLayoutGraphic theLayout=null;
 	private UndoLayoutEdit undoOriginalUndo;
 	private GenericMontageEditor editor;
 	private double scale;
 	private Point2D loc;
 	private double yMin;
 	private boolean minimalDrag;
+	
+	/**A duplicate of the layout that can be used to give a preview of the scaled version*/
 	private DefaultLayoutGraphic duplicate;
 	@Override
 	public String getToolTip() {
@@ -94,7 +102,7 @@ public class LayoutScalerTool extends Object_Mover {
 		
 	}
 
-
+	/**clears the selection that is meant to be used to display a preview of the scaled layout*/
 	public void eliminateSelection() {
 		duplicate=null;
 		getImageClicked().getOverlaySelectionManagger().setSelection(null, 0);
@@ -115,7 +123,6 @@ public class LayoutScalerTool extends Object_Mover {
 			undoOriginalUndo.undo(); 
 			undoOriginalUndo=null;
 			}
-		//this.getImageDisplayWrapperClick().getUndoManager().addEdit(undoOriginalUndo);
 		
 		if (theLayout==null) return;
 		FigureScaler scaler = new FigureScaler(keepPPI);
@@ -129,14 +136,11 @@ public class LayoutScalerTool extends Object_Mover {
 			ml.resetPtsPanels();
 			UndoLayoutEdit undo2 = new UndoLayoutEdit(theLayout);
 			editor=new GenericMontageEditor();
-			//editor.setQualificationsForPanelObject(new careFullPanelItentifier());
 			
-			editor.placePanelsInCorners(ml, new ArraySorter<LocatedObject2D>().getThoseOfClass(ml.getEditedImage().getLocatedObjects(), ImagePanelGraphic.class));
+			editor.placePanelsInCorners(ml, new ArraySorter<LocatedObject2D>().getThoseOfClass(ml.getEditedWorksheet().getLocatedObjects(), ImagePanelGraphic.class));
 			
 			
-			//getImageWrapperClick().updateDisplay();
-			//theLayout.generateCurrentImageWrapper();
-			//new GenericMontageEditor().alterPanelWidthAndHeightToFitContents(ml);
+		
 			if (rezisePanels) editor.alterPanelWidthAndHeightToFitContents(ml);
 			undo2.establishFinalLocations();
 			undo1.addEditToList(undo2);
@@ -184,7 +188,7 @@ public class LayoutScalerTool extends Object_Mover {
 		this.getImageDisplayWrapperClick().updateDisplay();
 	}
 	
-	
+	/**the icon used for the layout scale tool*/
 	class LayoutScaleIcon extends GeneralLayoutToolIcon implements Icon{
 		
 
@@ -207,20 +211,6 @@ public class LayoutScalerTool extends Object_Mover {
 		
 		
 	}
-	
-	class careFullPanelItentifier implements LocatedObjectFilter {
-
-		@Override
-		public boolean isObjectDesireableForPanel(Rectangle2D gra, LocatedObject2D objects) {
-		
-			Rectangle bPanel = gra.getBounds();
-			Rectangle bOb = objects.getBounds();
-			
-			if (bOb.getCenterX()+  bOb.getWidth()*.25 >bPanel.getMaxX()) return false;
-			if (bOb.getCenterY()+ bOb.getHeight()*0.25>bPanel.getMaxY()) return false;
-			
-			return true;
-		}}
 	
 	
 	public void showOptionsDialog() {

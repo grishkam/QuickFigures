@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -24,8 +29,13 @@ import java.awt.geom.Point2D;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_SpecialObjects.TextGraphic;
 
-/**A smart handle for editing text items. can be used for changing location of font size*/
+/**A smart handle for editing text items. can be used for changing font size or rotation of text*/
 public class SmartHandleForText extends SmartHandle {
+
+	/**
+	constants determine the limits of what a user is allowed to set
+	 */
+	private static final int MIN_ALLOWED_FONT = 2,MAX_ALLOWED_FONT = 300;
 
 	public static final int ROTATION_HANDLE = 0, TEXT_FONT_SIZE_HANDLE = 1;
 	
@@ -40,6 +50,7 @@ public class SmartHandleForText extends SmartHandle {
 		this.setHandleNumber(handleForm);
 	}
 	
+	/**returns the location for this handle*/
 	public Point2D getCordinateLocation() {
 		if (this.getHandleNumber()==TEXT_FONT_SIZE_HANDLE) {
 				 return textItem.getUpperLeftCornerOfBounds();
@@ -66,12 +77,12 @@ public class SmartHandleForText extends SmartHandle {
 	}
 	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-		baseLineStart = textItem.getBaseLineStart();//stores the baseline position
+		baseLineStart = textItem.getBaseLineStart();//stores the baseline position at the start of each handle movement
 	}
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		if (this.getHandleNumber()==ROTATION_HANDLE) {
-			double angle=TextGraphic.distanceFromCenterOfRotationtoAngle(textItem.getCenterOfRotation(), lastDragOrRelMouseEvent.getCoordinatePoint());
+				double angle=TextGraphic.distanceFromCenterOfRotationtoAngle(textItem.getCenterOfRotation(), lastDragOrRelMouseEvent.getCoordinatePoint());
 
 				textItem.setAngle(angle);
 				
@@ -83,14 +94,15 @@ public class SmartHandleForText extends SmartHandle {
 			
 			Point2D handleLoc=p2;
 			
-			java.awt.geom.Point2D.Double rotStart = new Point2D.Double();
-			java.awt.geom.Point2D.Double rotLeft = new Point2D.Double();
+			
 			try {
 				/**Sets the font size to match the distance between the drag point and the baseline*/
-				textItem.getRotationTransform().createInverse().transform(baseLineStart, rotStart);
-				textItem.getRotationTransform().createInverse().transform(handleLoc, rotLeft);
+				java.awt.geom.Point2D.Double rotatedBaseLineStart = new Point2D.Double();
+				java.awt.geom.Point2D.Double rotatedDragLocation = new Point2D.Double();
+				textItem.getRotationTransform().createInverse().transform(baseLineStart, rotatedBaseLineStart);
+				textItem.getRotationTransform().createInverse().transform(handleLoc, rotatedDragLocation);
 				double newsize =textItem.getFont().getSize();
-				double d = Math.abs(rotLeft.y-rotStart.y);
+				double d = Math.abs(rotatedDragLocation.y-rotatedBaseLineStart.y);
 				if(d>3) newsize=d;
 				userSetNewSize(newsize);
 				return;
@@ -111,10 +123,13 @@ public class SmartHandleForText extends SmartHandle {
 		}
 		
 	}
+	
+	
+	/**changes the size of the font to the new value. */
 	public void userSetNewSize(double newsize) {
 		if ((int)newsize!=textItem.getFont().getSize()
-				&& newsize>1 
-				&& newsize<300) {
+				&& newsize>=MIN_ALLOWED_FONT 
+				&& newsize<=MAX_ALLOWED_FONT) {
 			Font font = textItem.getFont().deriveFont((float)(newsize));
 			textItem.setFont(font);
 				}

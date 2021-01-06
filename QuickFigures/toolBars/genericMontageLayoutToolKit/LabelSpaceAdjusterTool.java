@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 import java.util.ArrayList;
 
@@ -105,7 +110,7 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 	
 	public String getToolName() {return getToolTip();}
 	
-	
+	/**an icon for the label space adjuster tool*/
 	class LabelSpaceIcon extends GeneralLayoutToolIcon {
 
 		/**
@@ -113,11 +118,11 @@ public class LabelSpaceAdjusterTool  extends GeneralLayoutEditorTool implements 
 		 */
 		public  LabelSpaceIcon(int type) {
 			super(type);
-			// TODO Auto-generated constructor stub
 		}
 		
 		/**
-		creates a layout for drawing and icon
+		creates a layout for drawing and icon.
+		label spaces differ between regular and rollover icon
 		 */
 		protected PanelLayout createSimpleIconLayout( int type) {
 			BasicLayout layout = new BasicLayout(2, 2, 6, 6, 2,2, true);

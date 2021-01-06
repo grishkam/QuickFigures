@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.awt.geom.Point2D;
@@ -30,7 +35,7 @@ import locatedObject.AttachmentPosition;
 
 
 /**Written to undo scaling operations for a few different kinds of objects
-  Also came to use this to undo mouse drags*/
+  Also used to undo mouse drags that resize items. Simply records all starting and ending sizes and angles */
 public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 	/**
 	 * 

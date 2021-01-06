@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import java.io.Serializable;
@@ -40,8 +45,8 @@ import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 
-/**Objects of class figure template alter target figures to match a certain 
-  example objects. 
+/** Figure template alter target figures to match a certain 
+  example objects stored in the figure template. 
   */
 public class FigureTemplate implements LayoutSpaces, Serializable{
 	
@@ -77,15 +82,6 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 		autoGeneratePickersForDisplay(chan);
 	}
 	
-	/**the standard template for new QuickFigure creations.
-	  this template will not have any default for row column or panel labels
-	private static FigureTemplate createStandardTemplate() {
-		FigureTemplate ft = new FigureTemplate();
-		ft.panelLabelPicker=null;
-		ft.colLabelPicker=null;
-		ft.rowLabelPicker=null;
-		return ft;
-	}*/
 	
 	/**Applies the format defined by this template to the image
 	 * @return */
@@ -319,7 +315,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	/**changes the properties of this templates to a version for merge only
 	  displays*/
 	public void makeMergeOnly() {
-		if (mdp==null) IssueLog.log("no example image display (innitial template fail)");
+		if (mdp==null) IssueLog.log("no example image display ( template fail)");
 		ensureModelMultiChannel();
 		
 		
@@ -332,7 +328,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	/**changes the properties of this templates to a version for merge only
 	  displays*/
 	public void makeSplitChannel() {
-		if (mdp==null) IssueLog.log("no example image display (innitial template fail)");
+		if (mdp==null) IssueLog.log("no example image display ( template fail)");
 		ensureModelMultiChannel();
 		
 		/**if the current format is merge only*/
@@ -398,9 +394,12 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	public MultichannelDisplayPicker getMultiChannelPicker() {
 		return mdp;
 	}
+	
+	/**returns the label picker for panel labels*/
 	public LabelExamplePicker getPanelLabelPicker() {
 		return panelLabelPicker;
 	}
+	/**sets the label picker for panel labels*/
 	public void setPanelLabelPicker(LabelExamplePicker panelLabelPicker) {
 		this.panelLabelPicker = panelLabelPicker;
 	}

@@ -103,9 +103,9 @@ public class BrightNessIconGraphic extends GraphicGroup  implements  RectangleEd
 	
 	/**adds the graphic items for this icon to the layer*/
 	public void addItems() {
-		getTheLayer().add(blackPart);
-		getTheLayer().add(whiteHalf);
-		for(ShapeGraphic d:spokeDots) {	getTheLayer().add(d);}
+		getTheInternalLayer().add(blackPart);
+		getTheInternalLayer().add(whiteHalf);
+		for(ShapeGraphic d:spokeDots) {	getTheInternalLayer().add(d);}
 	}
 
 

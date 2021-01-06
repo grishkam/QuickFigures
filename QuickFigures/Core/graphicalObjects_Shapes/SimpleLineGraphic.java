@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
@@ -27,7 +32,7 @@ import java.util.ArrayList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
-/**A diagonal line*/
+/**A diagonal line that is within a bounding rectangle*/
 public class SimpleLineGraphic extends RightTriangleGraphic {
 	{name="Simple Line";}
 	/**
@@ -64,7 +69,7 @@ public class SimpleLineGraphic extends RightTriangleGraphic {
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
-		ArrayList<Point2D> loc = getTrianglePoints();
+		ArrayList<Point2D> loc = getEdgePoints();
 		path.moveTo(loc.get(0).getX(),loc.get(0).getY());
 		path.lineTo(loc.get(1).getX(),loc.get(1).getY());
 		return path;
@@ -72,13 +77,13 @@ public class SimpleLineGraphic extends RightTriangleGraphic {
 	}
 	
 
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		SimpleLineGraphic ss = blankShape(new Rectangle(0,0,12,10), Color.BLACK);
 		ss.setType(getType());
 		return ss;
 	}
 
-	
+	/**Creates the shape*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}

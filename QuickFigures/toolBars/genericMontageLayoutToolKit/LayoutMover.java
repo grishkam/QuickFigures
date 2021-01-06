@@ -13,22 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import genericTools.Object_Mover;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import icons.GraphicToolIcon;
 
+/**A version of the object mover than only selects the default layouts*/
 public class LayoutMover extends Object_Mover {
-	{super.bringSelectedToFront=true; 
-	setSelectOnlyThoseOfClass(PanelLayoutGraphic.class);
-	}
-	{//createIconSet("icons2/LayoutMoverIcon.jpg","icons2/LayoutMoverIconPress.jpg","icons2/LayoutMoverIcon.jpg");
-	iconSet=GraphicToolIcon.createIconSet(prepareIcon());
+	{
+		super.bringSelectedToFront=true; 
+		setSelectOnlyThoseOfClass(PanelLayoutGraphic.class);
+		iconSet=GraphicToolIcon.createIconSet(prepareIcon());
 	}
 
 	/**
-	 * @return
+	
 	 */
 	protected GeneralLayoutToolIcon prepareIcon() {
 		return new GeneralLayoutToolIcon(0, true);

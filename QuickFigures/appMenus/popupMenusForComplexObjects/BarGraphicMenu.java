@@ -32,7 +32,7 @@ import locatedObject.AttachedItemList;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import undo.CombinedEdit;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 import utilityClasses1.ArraySorter;
 
 public class BarGraphicMenu extends SmartPopupJMenu implements ActionListener,
@@ -105,7 +105,7 @@ PopupMenuSupplier  {
 			
 			AttachedItemList.removeFromAlltakers( barG, barG.getParentLayer().getTopLevelParentLayer().getAllGraphics(), output);
 			
-			UndoTakeLockedItem undo = new UndoTakeLockedItem(image, barG, false);
+			UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(image, barG, false);
 	
 			image.addLockedItem(barG);//does the deed
 			

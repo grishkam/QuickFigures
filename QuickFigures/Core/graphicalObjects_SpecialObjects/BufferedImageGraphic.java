@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_SpecialObjects;
 
 import java.awt.Rectangle;
@@ -25,7 +30,6 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 
 import fLexibleUIKit.MenuItemMethod;
-import graphicalObjects.GraphicalObject;
 import illustratorScripts.IllustratorObjectConvertable;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
@@ -34,7 +38,11 @@ import logging.IssueLog;
 import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 
-public class BufferedImageGraphic extends ImagePanelGraphic implements GraphicalObject,IllustratorObjectConvertable, ScalededItem {
+/**A special case of image panel. used for buffered images of specific types
+ * Includes multiple options related to the color model
+ * 
+ * */
+public class BufferedImageGraphic extends ImagePanelGraphic implements IllustratorObjectConvertable, ScalededItem {
 
 
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles.miniToolbars;
 
 import java.awt.Component;
@@ -45,6 +50,7 @@ import standardDialog.graphics.GraphicComponent;
  Each subclass of this list, forms a different grid of handles with icons  */
 public class ActionButtonHandleList extends SmartHandleList {
 
+	
 	private static final int DEFAULT_ICON_SPACING = 1;
 	private static final int DEFAULT_MAX_GRID_ = 8;
 	
@@ -53,20 +59,24 @@ public class ActionButtonHandleList extends SmartHandleList {
 	protected Point2D.Double location=new Point2D.Double(0,0);
 	double rightMostX=50;
 	double lowerMostY=50;
-	private double spacing=DEFAULT_ICON_SPACING;
-	int numHandleID=30;
+	private double spacing=DEFAULT_ICON_SPACING;//the space between icons on the toolbar
+	double between=1;//size of the gap between handles
+	int numHandleID=30;//the handle number id that for newly added handles
 	protected int maxGrid=DEFAULT_MAX_GRID_;
-	double between=1;
+	
 	private boolean vertical=false;
 	
 	
 	public ActionButtonHandleList() {
 		
 	}
+	
+	/***/
 	public ActionButtonHandleList(boolean vertical) {
 		this.vertical=vertical;
 	}
 	
+	/**sets the location of this list*/
 	public void setLocation(Point2D.Double p) {
 		if(p==null) return;
 		this.location=p;
@@ -74,7 +84,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	}
 	
 	
-	/**draws the handles*/
+	/**updates the location of the handles and draws the handles*/
 	public void draw(Graphics2D g, CordinateConverter cords) {
 		
 		
@@ -95,7 +105,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 
 
 /**
- 
+ Sets the handle locations for assuming that the handle list
  */
 public void updateLocationsForHorizontal() {
 	double xi= location.getX();
@@ -165,7 +175,9 @@ public void updateLocationsForVertical() {
 }
 	
 
-	/**An icon that performs an action*/
+	/**An icon that performs an action 
+	 * @see MultiSelectionOperator for the class that defines the action
+	 * */
 	public class GeneralActionHandle extends IconHandle {
 		
 		protected MultiSelectionOperator operation;//the action to be performed
@@ -235,20 +247,28 @@ public void updateLocationsForVertical() {
 	}
 	
 
-	/**A handle that shows a popup menu to the user with options defined by an array of actions*/
+	/**A handle that shows a popup menu to the user with options defined by an array of actions
+	 * @see MultiSelectionOperator for the actions that can be assigned to this handle*/
 	public class GeneralActionListHandle extends GeneralActionHandle {
 
 		public MultiSelectionOperator itemForIcon;
+		public MultiSelectionOperator itemForInputPanel;
 		SmartPopupJMenu p=new SmartPopupJMenu();
+		
+		/**A list of handles for each menu item*/
 		ActionButtonHandleList sublist=new ActionButtonHandleList();
+		
 		CanvasMouseEvent lastEvent;
 		boolean usePalete=false;
 		private Component iPanel;
 
-		public GeneralActionListHandle(MultiSelectionOperator i, int num, MultiSelectionOperator[] items) {
-			super(i, num);
+		/**creates a handle
+		 * @param iconItem the item that will determine which icon is the handle icon
+		 * @param items the items that will appear in the menu*/
+		public GeneralActionListHandle(MultiSelectionOperator iconItem, int num, MultiSelectionOperator[] items) {
+			super(iconItem, num);
 			
-			itemForIcon=i;
+			itemForIcon=iconItem;
 			setItemsforMenu(items);
 		}
 		
@@ -277,10 +297,12 @@ public void updateLocationsForVertical() {
 			
 		}
 		
+		/**Sets the items that will apear in the popup menu*/
 		public void setItemsforMenu(MultiSelectionOperator... items) { 
 			setItemsforMenu(null, items);
 		}
 
+		/**sets which items will apear in the popup menu (or a submenu)*/
 		public JMenuItem setItemsforMenu(String submenu, MultiSelectionOperator... items) {
 			JMenuItem mostRecentAddedItem=null;
 			
@@ -306,16 +328,22 @@ public void updateLocationsForVertical() {
 		 */
 		private static final long serialVersionUID = 1L;
 		
+		public Component findInputPanel() {
+			if (itemForInputPanel!=null)
+				return itemForInputPanel.getInputPanel();
+			return this.itemForIcon.getInputPanel();
+		}
 		
+		/***/
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			lastEvent=canvasMouseEventWrapper;
 		
-			if(this.itemForIcon.getInputPanel()!=null) 
+			if(findInputPanel()!=null) 
 				{
 				if(iPanel!=null)
 					p.remove(iPanel);
 				itemForIcon.setSelector(canvasMouseEventWrapper.getSelectionSystem());
-				iPanel=itemForIcon.getInputPanel();
+				iPanel=findInputPanel();
 				p.add(iPanel);
 				p.pack();
 				}
@@ -335,6 +363,7 @@ public void updateLocationsForVertical() {
 			
 		}
 		
+		/**An action listener for the menu items*/
 		public class MenuAction implements ActionListener {
 
 			private MultiSelectionOperator operate;
@@ -361,6 +390,7 @@ public void updateLocationsForVertical() {
 		
 	}
 	
+	/**Adds a list of actions handle list*/
 	protected GeneralActionListHandle addOperationList(MultiSelectionOperator o, MultiSelectionOperator[] ops) {
 		if (o==null) {IssueLog.log("cannot add for null icon");}
 		GeneralActionListHandle h = new GeneralActionListHandle(o, numHandleID, ops);
@@ -368,28 +398,33 @@ public void updateLocationsForVertical() {
 	}
 
 
-
-	protected GeneralActionListHandle addOperationList(MultiSelectionOperator o, GeneralActionListHandle h) {
-		h.itemForIcon=o;
-		add(h);
+	/**Adds a handle to this list
+	 * @param icon the item that determines the icon
+	 * @param addedHandle the list handle*/
+	protected GeneralActionListHandle addOperationList(MultiSelectionOperator icon, GeneralActionListHandle addedHandle) {
+		addedHandle.itemForIcon=icon;
+		add(addedHandle);
 		numHandleID++;
-		h.setxShift(5);
-		h.setyShift(5);
-		return h;
+		addedHandle.setxShift(5);
+		addedHandle.setyShift(5);
+		return addedHandle;
 	}
 	
+	/**Adds an action to this handle list*/
 	public void createGeneralButton(BasicMultiSelectionOperator i) {
 		GeneralActionHandle h = new GeneralActionHandle(i, numHandleID);
 		add(h);
 		numHandleID++;
 	}
 	
+	/**shows a popup menu for the mouse event*/
 	public void  showInPopupPalete(CanvasMouseEvent canvasMouseEventWrapper, String message) {
 		JPopupMenu j = getPopup(canvasMouseEventWrapper, message);
 		
 		j.show(canvasMouseEventWrapper.getAwtEvent().getComponent(), canvasMouseEventWrapper.getAwtEvent().getX(), canvasMouseEventWrapper.getAwtEvent().getY());
 	}
 
+	/**creates a popup menu for the mouse event*/
 	public JPopupMenu getPopup(CanvasMouseEvent canvasMouseEventWrapper, String message) {
 		this.setLocation(new Point2D.Double(35,35));
 		JPopupMenu j = new SmartPopupJMenu();
@@ -403,11 +438,14 @@ public void updateLocationsForVertical() {
 		return j;
 	}
 	
+	/**creates a popup menu for the mouse event*/
 	public JPopupMenu getPopup(CanvasMouseEvent canvasMouseEventWrapper) {
 		return getPopup(canvasMouseEventWrapper, null);
 	}
 	
-	public class HandlePressMouseListener implements MouseListener {
+	/**A mouse listener that is used when handles are placed into a popup menu with an array of 
+	 * handles drawn in a GraphicComponent (@see GraphicComponent) rather than a JMenu with a list JMenu items*/
+	private class HandlePressMouseListener implements MouseListener {
 
 		private ActionButtonHandleList theList;
 		private DisplayedImage imp;

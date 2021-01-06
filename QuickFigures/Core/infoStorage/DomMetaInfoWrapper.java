@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package infoStorage;
 import java.util.ArrayList;
 
@@ -22,7 +27,9 @@ import org.w3c.dom.NodeList;
 
 import logging.IssueLog;
 
-/**Allows saving as a dom tree of metadata using the classes in this package*/
+/** 
+ * a subclass of @see BasicMetaIndoWrapper that allows 
+ * saving information into a dom tree using the classes in this package*/
 public class DomMetaInfoWrapper extends BasicMetaInfoWrapper {
 
 	
@@ -132,7 +139,6 @@ public class DomMetaInfoWrapper extends BasicMetaInfoWrapper {
 	}
 
 	public String getTextContent() {
-		// TODO Auto-generated method stub
 		return getNode().getTextContent();
 	}
 

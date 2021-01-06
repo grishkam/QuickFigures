@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -41,9 +46,21 @@ public class TrapezoidGraphic extends RectangularGraphic {
 	 * 
 	 */
 	
+	/**Determines the size of the top of the trapezoid*/
 	protected RectangleEdgeParameter parameter=new RectangleEdgeParameter(this, 0.5,  UPPER_LEFT, TOP);
 	
 	
+	public  TrapezoidGraphic(Rectangle rectangle) {
+		super(rectangle);
+	}
+	public TrapezoidGraphic(Rectangle rectangle, double nV) {
+		super(rectangle);
+		this.getParameter().setRatioToMaxLength(nV);
+	}
+	
+	public TrapezoidGraphic(RectangularGraphic r) {
+		super(r);
+	}
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -65,17 +82,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 		return output;
 	}
 	
-	public  TrapezoidGraphic(Rectangle rectangle) {
-		super(rectangle);
-	}
-	public TrapezoidGraphic(Rectangle rectangle, double nV) {
-		super(rectangle);
-		this.getParameter().setRatioToMaxLength(nV);
-	}
 	
-	public TrapezoidGraphic(RectangularGraphic r) {
-		super(r);
-	}
 
 	/**implements a formula to produce a trapezoid*/
 	@Override
@@ -121,7 +128,7 @@ public class TrapezoidGraphic extends RectangularGraphic {
 		}
 		
 	
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  blankShape(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 	}
 

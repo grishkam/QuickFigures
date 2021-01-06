@@ -13,9 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayerTypes;
 
+/**groups of objects implement this interface*/
 public interface ZoomableGraphicGroup {
 	/**gets the internal layer*/
-	public GraphicLayer getTheLayer();
+	public GraphicLayer getTheInternalLayer();
 }

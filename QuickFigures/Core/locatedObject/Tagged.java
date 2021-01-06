@@ -25,5 +25,5 @@ import java.util.HashMap;
 /**interface for an object that might have a list of properties*/
 public interface Tagged {
 	public Object getTag(String Key);
-	public HashMap<String, Object> getHash();
+	public HashMap<String, Object> getTagHashMap();
 }

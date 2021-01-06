@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.awt.geom.Rectangle2D;
@@ -33,7 +38,7 @@ public class PanelSetter  implements Serializable{
 	 /**
 	 * 
 	 */
-	/**the possible options for how this one inserts panels. only the default type is used  but the others
+	/**the possible options for how this panel setter inserts panels. only the default type is used at present but the others
 	  are still present in the event that I may use them to accommodate new features*/
 	public static final int DEFAULT_INSERTION=0, EACH_IMAGE_TO_ROW=1,  EACH_IMAGE_TO_COLUMNS=2, AROUND_RECTANGLE=3;
 	

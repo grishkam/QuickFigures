@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import java.awt.Color;
@@ -53,7 +58,7 @@ import standardDialog.StandardDialogListener;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoManagerPlus;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 
 /**introduces Row and Column labels to a montage layout
   and locked them to the layout graphic. Also alows user
@@ -63,7 +68,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 	
 	
 	private LabelExamplePicker picker;
-	TextGraphic item;
+	TextGraphic item;// the current text item
 	private BasicLayout lastusedLayout;
 	private UndoableEdit lastEdit;
 	
@@ -104,7 +109,6 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 	}
 	
 	void setUpIconSets() {
-		;
 		columnSwapIcons=new IconSet(new ToolIconWithText(0, mode),
 				new ToolIconWithText(1, mode),
 				new ToolIconWithText(2, mode));
@@ -139,13 +143,8 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 		return null;
 	}
 	
-	/**returns the text graphic relevant to the clickpoint if there is one
-	private TextGraphic createNewGraphic(BasicLayout basicMontageLayout, ImageWrapper wp, int x, int y ) {
-		int index = placeItemAtStartingPositionForAttachment(x, y);
-		return generateItemFor(index);
-	}*/
 
-	/**
+	/**generates a text item for the given index
 	 * @param index
 	 * @return
 	 */
@@ -200,7 +199,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 			return;
 		}
 		
-		ImageWorkSheet wp = getCurrentLayout().getEditedImage();
+		ImageWorkSheet wp = getCurrentLayout().getEditedWorksheet();
 		
 		
 		item=getDesiredGraphic(markerRoi().getBounds(), wp);
@@ -236,7 +235,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 			 layoutGraphic.mapPanelLocationsOfLockedItems();
 			 layoutGraphic.snapLockedItems();
 			
-			undoGroup.addEditToList(new UndoTakeLockedItem(layoutGraphic, item, false));
+			undoGroup.addEditToList(new UndoAddOrRemoveAttachedItem(layoutGraphic, item, false));
 		}
 		
 		
@@ -284,7 +283,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource()==showDialog) {
-				ImageWorkSheet wp = getCurrentLayout().getEditedImage();
+				ImageWorkSheet wp = getCurrentLayout().getEditedWorksheet();
 				Shape bb = getCurrentLayout().getSelectedSpace(1, LayoutSpaces.ALL_MONTAGE_SPACE);
 				rois = new BasicObjectListHandler().getOverlapOverlaypingItems(bb.getBounds(), wp);
 				
@@ -378,7 +377,6 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 	
 	@Override
 	public String getToolTip() {
-			
 			return "Create "+ getTextBase()+" Labels";
 		}
 

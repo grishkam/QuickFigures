@@ -13,11 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 import applicationAdapters.ImageWorkSheet;
 import externalToolBar.DragAndDropHandler;
 import genericTools.BasicToolBit;
-import genericTools.MoverDragHandler;
+import genericTools.NormalToolDragHandler;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import imageDisplayApp.OverlayObjectManager;
@@ -41,6 +46,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**A superclass used for a variety of tools that perform an action related to the layout that has been clicked. 
+ * 
  * */
 public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpaces, ActionListener{
 
@@ -48,8 +54,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	protected DefaultLayoutGraphic layoutGraphic;//the layout that has been clicked is stored
 	boolean removalPermissive=false;
-	boolean usesMain=false;
-	boolean resetClickPointOnDrag=true;
+	
+	boolean resetClickPointOnDrag=true;//true if the stored click location should be replaced by the drag location after each drag
 	GenericMontageEditor editor=new GenericMontageEditor();
 	
 	private Cursor currentCursor;
@@ -77,7 +83,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		if (removalPermissive) {layoutGraphic.generateRemovalPermissiveImageWrapper();}
 		else {
-				ImageWorkSheet wrapper = layoutGraphic.getPanelLayout().getEditedImage();
+				ImageWorkSheet wrapper = layoutGraphic.getPanelLayout().getEditedWorksheet();
 			ArrayList<LocatedObject2D> excluded = layoutGraphic.getEditor().getObjectHandler().getExcludedRois(layoutGraphic.getPanelLayout().getBoundry().getBounds(), wrapper);
 			for(LocatedObject2D e: excluded) {
 			wrapper.takeFromImage(e);
@@ -124,7 +130,6 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	
 	protected void performPressEdit() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -174,8 +179,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 			BasicLayout lay = getCurrentLayout();
 			super.setRowColDragForLayout(lay);
 		} else {
-			if (getCurrentLayout()==null /**!super.doesClickedImageHAveMaintMontageLayout() */){
-				//IssueLog.log("no longer inside of layout");
+			if (getCurrentLayout()==null ){
+				
 				return;
 				}
 		}
@@ -184,17 +189,12 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	try{	performDragEdit(this.getLastMouseEvent().shfitDown());} catch (Throwable t) {IssueLog.logT(t);}
 	
 	if (resetClickPointOnDrag) {
-	
-	
-		int xd = getMouseXdrag();
 		
-		
-		setMouseXClick(xd);
+		setMouseXClick(getMouseXdrag());
 		setMouseYClick(getMouseYdrag());
 		
 		}
-			//if (this.getImageWrapperClick().createLayout()!=null)
-				//getImageWrapperClick().createLayout().setMontageProperties();
+			
 		setMarkerRoi();
 		if (currentUndo!=null) currentUndo.establishFinalLocations();
 		
@@ -203,9 +203,6 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 }
 
 
-	
-
-	
 	
 	@Override
 	public void mouseReleased() {
@@ -241,7 +238,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 			} catch (Throwable t) {
 				IssueLog.logT(t);
 				}
-	//if (e.isPopupTrigger()) {IssueLog.log("popup window not finished yet");}
+
 	}
 	
 	public void performDragEdit(boolean shiftDown) {
@@ -345,7 +342,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		return false;
 	}
 	public DragAndDropHandler getDragAndDropHandler() {
-		return new MoverDragHandler(this);
+		return new NormalToolDragHandler(this);
 	}
     
 }

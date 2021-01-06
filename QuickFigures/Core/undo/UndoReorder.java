@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -23,7 +28,8 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layersGUI.GraphicSetDisplayTree;
 
-/**Implements undo for an operation that reorders items in a layer*/
+/**Implements undo for an operation that reorders items in a layer
+ * also updats the layers window to fit*/
 public class UndoReorder extends AbstractUndoableEdit {
 
 	/**

@@ -54,7 +54,7 @@ public class GroupAdder extends BasicGraphicAdder {
 					
 					}
 				if(gg.getParentLayer()!=null)
-				gg.getTheLayer().add(item);
+				gg.getTheInternalLayer().add(item);
 			}
 		
 		}

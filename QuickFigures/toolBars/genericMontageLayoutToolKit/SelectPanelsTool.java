@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import java.awt.Color;
@@ -29,11 +34,12 @@ import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
+import utilityClasses1.ArraySorter;
 
 /**The panel selector tool allows one to select regions of interest based on the the MontageLayout available*/
 public class SelectPanelsTool extends GeneralLayoutEditorTool {
 	
-	public  final int SELECT_PANEL=0, SWAP_TWO_PANEL=1, MOVE_PANEL=2;
+	public static final int SELECT_PANEL=0, SWAP_TWO_PANEL=1, MOVE_PANEL=2;
 	public int actionType=SELECT_PANEL;
 	
 	public int targetType=LayoutSpaces.PANELS;
@@ -67,7 +73,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 		if (ml==null) {IssueLog.log("one is attempting to swap panels in a null layout"); return;}
 		 Rectangle r1=(ml.getSelectedSpace(xc1, yc1, targetType)).getBounds();
 		 Rectangle r2=(ml.getSelectedSpace( xc2, yc2, targetType)).getBounds();
-		me.swapMontagePanels(ml.getEditedImage(), r1, r2);
+		me.swapMontagePanels(ml.getEditedWorksheet(), r1, r2);
 	}
 
 	
@@ -128,23 +134,28 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 				return;
 			
 			/**selects several panels if one has dragged from one to another*/
-				if (this.actionType==this.SELECT_PANEL){
+				if (this.actionType==SELECT_PANEL){
 				
-					this.getSelManOfClcikedImage().select(getCurrentLayout().rangeRoi(getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), targetType), 2, 0);
-				return;
+					Shape selArea = getCurrentLayout().rangeRoi(getClickedCordinateX(), getClickedCordinateY(), getDragCordinateX(), getDragCordinateY(), targetType);
+					this.getSelManOfClcikedImage().select(selArea, 2, 0);
+					if(selArea!=null)
+							try {
+						ArraySorter.selectItems(getObjecthandler().getContainedObjects(selArea.getBounds(), this.getImageClicked()));
+							} catch (Throwable t) {IssueLog.log(t);}
+					return;
 				}
 				
 			OverlayObjectManager man = this.getImageClicked().getOverlaySelectionManagger();
 			man.select(getSelectedRoi(getCurrentLayout(), this.getDragCordinateX(), this.getDragCordinateY(), targetType), 4, 1);
 		}
 		
-
-		public Shape getSelectedRoi(BasicLayout ml, int x, int y, int type) {
+		/**returns the selected area*/
+		private Shape getSelectedRoi(BasicLayout ml, int x, int y, int type) {
 			 	ml=ml.makeAltered(type);//Makes a copy of this MontageLayout with alterations depending on the type.
 			 int index=ml.getPanelIndex(x,y);
 				  
 			  Shape s=ml.getSelectedSpace(index, type); 
-			  if (s instanceof Rectangle) return (Rectangle)s;
+			  
 			return s;
 		
 		}

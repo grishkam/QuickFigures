@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import java.awt.Color;
@@ -50,7 +55,8 @@ import undo.UndoReorder;
 import utilityClasses1.ArraySorter;
 
 /**This class aligns objects into a grid.
- * Depending on the options, also addsa layout*/
+ * Depending on the options, also adds a layout
+ * for easy editing of the grid*/
 public class FitLayout extends BasicMultiSelectionOperator {
 
 	/**
@@ -69,24 +75,26 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		type=u;
 	}
 	
-	public FitLayout(boolean u) {
-		unique=u;
+	/**builds a layout fitter
+	 * @param eachRowAndColumnUserUnqieSize determines if every row/column is assumed to have the same width/height or not*/
+	public FitLayout(boolean eachRowAndColumnUserUnqieSize) {
+		unique=eachRowAndColumnUserUnqieSize;
 	}
 	
 	@Override
 	public String getMenuCommand() {
-		if (isClenuptype()) return "Like Grid";
+		if (isAlignGridOnly()) return "Like Grid";
 		if (unique) return "Fit Layout (multiple panel sizes)";
 		return "Fit Layout";
 	}
 
-	private boolean isClenuptype() {
+	private boolean isAlignGridOnly() {
 		return ALIGN_GRID==type;
 	}
 	
 	@Override
 	public String getMenuPath() {
-	if(this.isClenuptype())
+	if(this.isAlignGridOnly())
 		return "Align";
 	
 	return "Align<Create Layout";
@@ -137,7 +145,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	/**returns the items that are in the left most column*/
 	ArrayList<LocatedObject2D> getLeftMostColumn(ArrayList<LocatedObject2D> objects) {
 		ArrayList<LocatedObject2D> output=new ArrayList<LocatedObject2D> ();
-	//	Rectangle bounds =ArrayObjectContainer.combineOutLines(objects).getBounds();		
+		
 		/**sort by distance from left edge*/
 		Collections.sort(objects, new Comparator<LocatedObject2D>() {
 
@@ -289,7 +297,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	public void run() {
 		
 		ArrayList<LocatedObject2D> objects = super.getAllObjects();
-		if (isClenuptype()) {
+		if (isAlignGridOnly()) {
 			
 			UndoMoveItems undo = cleanUp(objects, fitsLayouts(objects));
 			
@@ -439,7 +447,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	
 
 	
-	public GraphicDisplayComponent getItemIcon(boolean selected) {
+	public GraphicDisplayComponent getItemIcon() {
 		GraphicGroup gg=new GraphicGroup();
 		ArrayList<Rectangle> rects = getRectanglesForIcon();
 		Color[] colors=new Color[] {Color.red, Color.green, Color.blue,Color.orange, Color.cyan, Color.magenta, new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
@@ -452,7 +460,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 			
 			RectangularGraphic rect = RectangularGraphic.blankRect(r, colors[i]);
 			rect.setStrokeWidth(1);
-			gg.getTheLayer().add(rect);
+			gg.getTheInternalLayer().add(rect);
 				}
 		
 		
@@ -463,7 +471,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 		 return output;
 	}
 	
-	
+	/**builds and icon*/
 	private ArrayList<Rectangle> getRectanglesForIcon() {
 		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
 		
@@ -484,7 +492,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	
 	
 	public Icon getIcon() {
-		return  getItemIcon(true);
+		return  getItemIcon();
 	}
 
 

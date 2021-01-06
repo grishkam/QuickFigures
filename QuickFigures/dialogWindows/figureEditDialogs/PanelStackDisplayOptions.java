@@ -225,10 +225,10 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	
 	/**based on the dialog, changes the options*/
 	public void setItemsToDiaog()  {
-		setItemstoDialog(panMan.getDisplay(), panMan.getPanelList().getChannelUseInstructions(), false, true);
+		setItemstoDialog(panMan.getImageDisplayLayer(), panMan.getPanelList().getChannelUseInstructions(), false, true);
 
 		for(MultichannelDisplayLayer p: displural) {
-			if (p!=panMan.getDisplay())
+			if (p!=panMan.getImageDisplayLayer())
 			setItemstoDialog(p, p.getPanelManager().getPanelList().getChannelUseInstructions(), true, false);
 		}
 	}
@@ -339,7 +339,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		/** does*/
 		for(MultichannelDisplayLayer addedDiaply: displural) {
-			addedDiaply.getSetter().startPoint=lastone.getPanelList().getlastPanelsIndex()+1;
+			addedDiaply.getSetter().startPoint=lastone.getPanelList().getlastPanelsGridIndex()+1;
 			lastone=addedDiaply;
 			if (firstImage&&dis==addedDiaply)  {addedDiaply.getSetter().startPoint=0;}
 		}

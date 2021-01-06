@@ -92,7 +92,7 @@ public class CropIconGraphic extends GraphicGroup {
 	
 	public void addItems() {
 		
-		for(ShapeGraphic d:iconParts) {	getTheLayer().add(d);}
+		for(ShapeGraphic d:iconParts) {	getTheInternalLayer().add(d);}
 	}
 
 

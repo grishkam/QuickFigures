@@ -13,13 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicActionToolbar;
 
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import icons.AcronymIcon;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
+/**An action tool that generates an illustrator script for making 
+ * a figure in adobe illustrator*/
 public class PSActionTool extends DisplayActionTool {
 	AdobeScriptMaker sm=	new AdobeScriptMaker();
 
@@ -30,7 +37,7 @@ public class PSActionTool extends DisplayActionTool {
 	
 	
 	
-	protected void perform(FigureDisplayContainer graphic) {
+	protected void perform(FigureDisplayWorksheet graphic) {
 		if (graphic!=null) {
 			
 		sm.sendWrapperToills(graphic.getAsWrapper(), true);

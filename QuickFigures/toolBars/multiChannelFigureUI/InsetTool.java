@@ -30,7 +30,6 @@ import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
 import figureOrganizer.insetPanels.InsetLayout;
-import figureOrganizer.insetPanels.InsetLayoutDialog;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner.InsetGraphicLayer;
 import graphicTools.GraphicTool;
@@ -522,7 +521,7 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 			this.tool=mover;
 			
 			
-			add("arrangementClass", new ChoiceInputPanel("Select arrangement", InsetLayoutDialog.arrangements, mover.arrangement));
+			add("arrangementClass", new ChoiceInputPanel("Select arrangement", InsetLayout.arrangements, mover.arrangement));
 			
 			String[] options2 = new String[] {"Only Single Image", "Multiple Channel Panels"};
 			add("panelType", new ChoiceInputPanel("Select Panel Type", options2, mover.createMultiChannel));
@@ -546,7 +545,6 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 			
 			gc.gridy=7;
 			gridPositionY+=2;
-			// snappanel.getSnapBox().setToMontageMode();
 			add( snappanel.getSnapBox(), gc);
 			
 			

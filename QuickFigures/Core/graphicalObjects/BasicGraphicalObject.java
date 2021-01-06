@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 
@@ -60,32 +65,36 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 
 	protected double angle=0;
 	LocationChangeListenerList listeners=new LocationChangeListenerList();
-	protected boolean handlesHidden=false;;
+	protected boolean handlesHidden=false;
 	
 
-	protected GraphicLayer parent;
-	protected Animation animation=null;
+	protected GraphicLayer parent;// the parent layer
+	protected Animation animation=null;//if an animation has been set up
 	
-	transient boolean hidden=false;
+	transient boolean hidden=false;//set to true if hidden
 	
 	
 	protected String name="";//the name of the object
 	
 	protected transient boolean selected=false, superSelected=false;// the selection state of the object
 
-
-	protected double x=0;
-	protected double y=0;
+	
+	protected double x=0;//location of an object
+	protected double y=0;//location of an object
 	
 	Object key=null;
 	public HashMap<String, Object> map=new HashMap<String, Object>();
+	
 	transient GraphicUtil Gu=new GraphicUtil();
 	transient boolean isDead=false;
 	
 	/**A smart handle list that is just for drawing. is not used by most subclasses*/
 	protected transient DecorativeSmartHandleList handleBoxes=new DecorativeSmartHandleList();
 	
-	transient FigureDisplayContainer setContainer;
+	/**The worksheet that contains this object is stored here. TODO: determine if this is set properly*/
+	private transient FigureDisplayWorksheet parentWorksheet;
+	
+	/***/
 	private AttachmentPosition attachementPosition=null;
 
 	protected int userLocked=NOT_LOCKED;
@@ -113,37 +122,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		return this.getName();
 	}
 	
+	/**The list of items that are informed when the object size changes*/
 	public LocationChangeListenerList getListenerList() {
 		return listeners;
 	}
-	
-	public void notifyListenersOfMoveMent() {
-		
-		LocationChangeListenerList list = getListeners();
-		list.notifyListenersOfMoveMent(this);
-	
-	}
-	
-	public void notifyListenersOfSizeChange() {
-		ArrayList<LocationChangeListener> list = getListeners();
-		for(LocationChangeListener lis: list) {
-			if (lis==null) continue;
-			lis.objectSizeChanged(this);
-		}
-		
-	}
-	
-	public void notifyListenersOfUserSizeChange() {
-		getListeners().notifyListenersOfUserSizeChange(this);
-		
-	}
-	
-	public void notifyListenersOfDeath() {
-		 LocationChangeListenerList list = getListeners();
-		list.notifyListenersOfDeath(this);
-		//IssueLog.log("will notify listeners of death "+this);
-	}
-	
+	/**The list of items that are informed when the object size changes
+	 * never returns null*/
 	public LocationChangeListenerList getListeners() {
 		if (listeners==null) {
 			listeners=new LocationChangeListenerList();
@@ -151,6 +135,38 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		}
 		return listeners;
 	}
+	
+	/**Calls the objectMoved method for each listener */
+	public void notifyListenersOfMoveMent() {
+		
+		LocationChangeListenerList list = getListeners();
+		list.notifyListenersOfMoveMent(this);
+	
+	}
+	
+	/**Calls the object size changed method for each listener */
+	protected void notifyListenersOfSizeChange() {
+		ArrayList<LocationChangeListener> list = getListeners();
+		for(LocationChangeListener lis: list) try {
+			if (lis==null) continue;
+			lis.objectSizeChanged(this);
+		} catch(Throwable t) {}
+		
+	}
+	
+	/**Calls the user size changed method for each listener */
+	public void notifyListenersOfUserSizeChange() {
+		getListeners().notifyListenersOfUserSizeChange(this);
+		
+	}
+	
+	/**Calls the object eliminated method for each listener */
+	public void notifyListenersOfDeath() {
+		 LocationChangeListenerList list = getListeners();
+		list.notifyListenersOfDeath(this);
+	}
+	
+	/**Adds a location change listener*/
 	@Override
 	public void addLocationChangeListener(LocationChangeListener l) {
 		if (getListeners().contains(l)) return;
@@ -158,57 +174,51 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		getListeners().add(l);
 		
 	}
+	/**removes a location change listener*/
 	@Override
 	public void removeLocationChangeListener(LocationChangeListener l) {
 		getListeners().remove(l);
 	}
+	/**removes all location change listener*/
 	@Override
 	public void removeAllLocationChangeListeners() {
 		getListeners().clear();
 	}
 	
 
-	
+	/**sets object as selected*/
 	@Override
 	public void select() {
 		selected=true;
 
 	}
 
+	/**sets object as not selected*/
 	@Override
 	public void deselect() {
 		selected=false;
 		superSelected=false;
 	}
 
+	/**returns true if the object is selected*/
 	@Override
 	public boolean isSelected() {
 		return selected;
 	}
 	
-
+	/**returns a tag*/
 	@Override
 	public Object getTag(String Key) {
 		return map.get(Key);
 	}
 
+	/**returns all the tags*/
 	@Override
-	public HashMap<String, Object> getHash() {
+	public HashMap<String, Object> getTagHashMap() {
 		return map;
 	}
 	
-
-	@Override
-	public Object getLayerKey() {
-		return key;
-	}
-
-	@Override
-	public void setLayerKey(Object o) {
-		key=o;
-		
-	}
-	
+	/**moves the object*/
 	@Override
 	public void moveLocation(double xmov, double ymov) {
 		x=x+xmov;
@@ -216,34 +226,40 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		notifyListenersOfMoveMent();
 	}
 	
-
+	/**returns the location*/
 	public Point2D getLocation() {
 		return new Point2D.Double(x,y);
 	}
 
-	
+	/**sets the location. does not trigger the listeners*/
 	public void setLocation(double x,double y) {
 		this.x=x;
 		this.y=y;
 	}
 	
+	/**sets the location. does not trigger the listeners*/
 	public void setLocation( Point2D p) {
 		setLocation(p.getX(), p.getY());
 	}
 	
+	/**calls the object eliminated method*/
 	public void kill() {
 		notifyListenersOfDeath();
 		isDead=true;
 	}
 	
+	/**this method is called after a mouse event
+	 * shows and options dialog if the item is double clicked.
+	 * will be deprecated in the future*/
 	@Override
 	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
-		if (clickcount<2||handlenum>-1) return;
+		if (clickcount<2||handlenum>NO_HANDLE_) return;
 		if (clickcount==2) showOptionsDialog();
 
 	}
 	
+	/**Implementation depends on the subclass*/
 	@Override
 	public Object dropObject(Object ob, int x, int y) {
 		Point p = new Point((int)getBounds().getCenterX(), (int)getBounds().getCenterY());
@@ -251,37 +267,29 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		if (ob instanceof Color) {
 			Color c = (Color) ob;
 			dropColor(c,new Point(x,y));
-		} /**else 
-		if (ob instanceof MouseEvent) {
-				 return dropMouseEvent( (MouseEvent) ob, new Point(x,y));
-		}*/
+		} 
 		
 		return dropOther(ob, p);
 	}
 
-
+	/**Implementation depends on the subclass*/
 	public Object dropOther(Object ob, Point p) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-/**
-	public Object dropMouseEvent(MouseEvent ob, Point p) {
-				if (ob.getClickCount()==2) this.showOptionsDialog();
-		return null;
-	}
-*/
+
 
 	public void dropColor(Color c, Point p) {
-		// TODO Auto-generated method stub
 		
 	}
 	
+	/**returns the attachment position*/
 	public AttachmentPosition getAttachmentPosition() {
 		return attachementPosition;
 	}
 
-
+	/**sets the attachment position*/
 	public void setAttachmentPosition(AttachmentPosition snappingBehaviour) {
 		this.attachementPosition = snappingBehaviour;
 	}
@@ -290,7 +298,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		return isDead;
 	}
 	
-	
+	/**returns the menu supplier for this object*/
 	public PopupMenuSupplier getMenuSupplier() {
 		return new MenuItemExecuter(this);
 	}
@@ -312,37 +320,42 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	}
 	
 	
+	/**returns the handle number at the raw location of the lickpoint*/
 	@Override
 	public int handleNumber(double x, double y) {
 		{
-			if (handleBoxes==null||handleBoxes.size()==1) return -1;
+			if (handleBoxes==null||handleBoxes.size()==1) return NO_HANDLE_;
 				return handleBoxes.handleNumberForClickPoint(x, y);
 			
 		}
 	}
 
-	
+	/**eliminates the */
 	public void clearHandleBoxes() {
 		handleBoxes=new DecorativeSmartHandleList();
 	}
+	
+	/**sets the worksheet that contains this object*/
 	@Override
-	public void setGraphicSetContainer(FigureDisplayContainer gc) {
-		this.setContainer=gc;
+	public void setGraphicSetContainer(FigureDisplayWorksheet gc) {
+		this.parentWorksheet=gc;
 		
 	}
 	
+	/**if the worksheet is known, this updates the display*/
 	@Override
 	public void updateDisplay() {
-		if( this.setContainer==null) return;
-		setContainer.updateDisplay();
+		if( this.parentWorksheet==null) return;
+		parentWorksheet.updateDisplay();
 	}
 	
+	/**returns the parent layer*/
 	@Override
 	public GraphicLayer getParentLayer() {
 		return parent;
 	}
 
-
+	/**set the parent layer*/
 	@Override
 	public void setParentLayer(GraphicLayer parent) {
 		this.parent=parent;
@@ -357,17 +370,25 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		hidden=b;
 	}
 	
+	/**makes this item a primary selected item*/
 	public boolean makePrimarySelectedItem(boolean isFirst) {
 		this.superSelected=isFirst;
 		if(isFirst) this.select();
 		return superSelected;
 	}
 	
+	/**Sets the location*/
 	public void setLocationUpperLeft(Point2D p2) {
 		setLocationUpperLeft(p2.getX(),p2.getY());
 	}
 	
-	protected static Point2D scaleAbout(Point2D p1, Point2D about, double sx, double sy) {
+	/**scales the point location
+	 * @param p1 the point to be scaled and returned
+	 * @param the center with respect to scaling
+	 * @param sx the x axis scale factor
+	 * @param sy the y axis scale factor
+	 * */
+	protected static Point2D scalePointAbout(Point2D p1, Point2D about, double sx, double sy) {
 		double dx=p1.getX()-about.getX();
 		double dy=p1.getY()-about.getY();
 		dx*=sx;
@@ -378,11 +399,13 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		
 	}
 	
+	/**returns true if this item is inside of the rectangle*/
 	@Override
 	public boolean isInside(Rectangle2D rect) {
 		return rect.contains(getBounds());
 	}
 	
+	/**returns true if this item intersects the rectangle*/
 	@Override
 	public boolean doesIntersect(Rectangle2D rect) {
 		return getOutline().intersects(rect);
@@ -398,24 +421,30 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		this.locationType = locationType;
 	}
 	
+	/**Returns the user locked property
+	 * @see LocatedObject2D  
+	 * 
+	 * */
 	public int isUserLocked() {
 		return userLocked;
 	}
 	
+	/**Called whenever a handle is released. In this case, does nothing */
 	public void handleRelease(int handlenum, Point p1, Point p2) {}
-	/**Called whenever a handle is moved. In this case, does nothing */
+	/**Called whenever a handle is pressed. In this case, does nothing */
 	public void handlePress(int handlenum,  Point p2) {}
 	/**Called whenever a handle is moved. In this case, does nothing*/
 	public void handleMove(int handlenum, Point p1, Point p2) {}
 
+	/**returns the animation for the object*/
 	public Animation getAnimation() {return animation;}
 
-
+	/**sets the animation for the object*/
 	public void setAnimation(Animation animation) {
 		this.animation = animation;
 	}
 	
-	
+	/**if there is not animation, creates one and returns it*/
 	public  KeyFrameAnimation getOrCreateAnimation() {
 		if (animation instanceof KeyFrameAnimation) return (KeyFrameAnimation) animation;
 		animation=new BasicGraphicObjectKeyFrameAnimator(this);
@@ -429,18 +458,18 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		return AffineTransform.getRotateInstance(-angle, xr, yr);
 	}
 	
+	/**returns the pivot point about which this object rotates */
 	public Point2D getCenterOfRotation() {
 		Rectangle b = this.getBounds();
 		return new Point2D.Double(b.getCenterX(), b.getCenterY());
 	}
 	
-	
+	/**returns the current angle*/
 	public double getAngle() {
-		
 		return angle;
 	}
 
-	
+	/**set the current angle*/
 	public void setAngle(double angle) {	
 		if (angle==this.getAngle()) return;
 		Point2D p = this.getLocation();
@@ -457,12 +486,14 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	
 	
 	
-	/**And edit is requested */
+	/**provides an edit that can be used to undo a mouse drag */
 	public AbstractUndoableEdit2 provideDragEdit() {
 		return new UndoScalingAndRotation(this);
 		
 	}
 	
+	/**returns an undo manager that is available
+	 * TODO: find a way to replace this*/
 	public UndoManagerPlus getUndoManager() {
 		return new CurrentFigureSet().getCurrentlyActiveDisplay().getUndoManager();
 	}
@@ -476,11 +507,13 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		
 		return null;
 	}
+	
+	/**set to true to hide the handles*/
 	public void hideHandles(boolean b) {
 		handlesHidden=b;
 	}
 	
-	
+	/**returns nothing but subclass may return  */
 	public Object getScaleWarning() {
 		return null;
 	}

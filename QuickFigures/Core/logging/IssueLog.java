@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package logging;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
@@ -23,15 +28,15 @@ import messages.ShowMessage;
 
 
 public class IssueLog {
-	static MyTextWindow display;
-	static MyTextWindow displayProgress;
+	static IssueLogWindow display;
+	static IssueLogWindow displayProgress;
 	static PrintStream debug=null;
 	static PrintStream oldErr=null;
 	
 	public static boolean sytemprint=false;
 	static boolean reportProgress=true;
 	static boolean reportTypicalFailtures=false;
-	//static boolean println=false;
+	
 	public static boolean windowPrint=true;
 	
 	/**ensures that printed stack traces are shown in a visible
@@ -52,22 +57,18 @@ public class IssueLog {
 		
 	}
 	
-	/**ensures that printlns from the system output are shown in a visible
-	 * window*/
-	public static void reportAllEvents() {
-		createEventDisplay();
-		System.setOut(displayProgress.getStream());
-	}
 	
 	
+	/**creates a window for issues to be displayed*/
 	static void createDisplayForErr() {
 		if (display==null) {
-			display=new MyTextWindow("QuickFigures Messages");
+			display=new IssueLogWindow("QuickFigures Messages");
 			display.setLocation(1200, 400);
 			display.setVisible(true);
 		} 
 	}
 	
+	/**a useful method to check the operating system*/
 	public static boolean isWindows() {
 		
 		return System.getProperty("os.name").toLowerCase().contains("windows");
@@ -86,17 +87,19 @@ public class IssueLog {
 	static double lastTime=-1;
 	public static int countExceptions=0;
 	
+	/**displays the current time and a start message*/
 	public static void logTimeStart(String st ) {
-		log("Starteed"+st);
+		log("Started "+st+" at time ");
 		lastTime=System.currentTimeMillis();
 		log(""+System.currentTimeMillis());
 	}
-	
+	/**displays the current time and an end message*/
 	public static void logTimefinish(String st ) {
 		IssueLog.log("Done "+st);
 		IssueLog.logTime();
 	}
 	
+	/**logs the current time*/
 	public static void logTime() {
 		if (lastTime==-1) {
 			lastTime=System.currentTimeMillis();
@@ -109,6 +112,7 @@ public class IssueLog {
 		lastTime=System.currentTimeMillis();
 	}
 	
+	/**logs the objects as strings*/
 	public static void log(Object... sts){	
 	
 		for (Object o:sts) {
@@ -116,6 +120,8 @@ public class IssueLog {
 			log(o.toString());
 			}
 	}
+	
+	/**logs multiple strings divides by commas*/
 	public static void log(int... sts){
 		if (sts.length==0) return;
 		
@@ -126,7 +132,7 @@ public class IssueLog {
 		log(st);
 	}
 	
-	
+	/**logs the stack traces*/
 	public static void logT(Throwable... ees){
 		countExceptions++;
 		String show="";
@@ -136,16 +142,17 @@ public class IssueLog {
 		}
 	}
 	
+	/**logs the stack trace with a message*/
 	public static void log(String st, Throwable ee){
 		log(st);
 		logT(ee);
 	}
 
 	
-	
-	public static void createEventDisplay() {
+	/**creates a progress window
+	 static void createEventDisplay() {
 		if(displayProgress==null)
-		displayProgress=new MyTextWindow("Montage Wizard Activity Log");
+		displayProgress=new IssueLogWindow("Quickfigures Activity Log");
 		displayProgress.setVisible(true);
 		displayProgress.setLocation(1100, 700);
 	}
@@ -159,7 +166,7 @@ public class IssueLog {
 			for(String st:sts) {displayProgress.appendLine(st);}
 		if (!displayProgress.isVisible())displayProgress.setVisible(true);
 			displayProgress.setVisible(true);
-	}
+	}*/
 	
 	 public static String[] getFieldsValues(Object o) {
 		 	Field[] fields=o.getClass().getSuperclass().getDeclaredFields() ;

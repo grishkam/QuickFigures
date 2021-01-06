@@ -30,11 +30,11 @@ public class ActionToolBlank<ImageType> extends BlankTool<ImageType>{
 	
 	@Override
 	public Icon getToolPressedImageIcon() {
-		return getToolImageIcon();
+		return getToolNormalIcon();
 	}
 	@Override
 	public Icon getToolRollOverImageIcon()  {
-		return getToolImageIcon();
+		return getToolNormalIcon();
 	}
 	
 	

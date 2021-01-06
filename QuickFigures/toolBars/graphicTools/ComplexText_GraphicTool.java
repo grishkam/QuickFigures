@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
@@ -20,7 +25,8 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
 import icons.TreeIconWrappingToolIcon;
 
-/**A tool for adding text items with multiple lines*/
+/**A tool for adding text items with multiple lines.
+ * this class always adds rich text*/
 public class ComplexText_GraphicTool extends Text_GraphicTool{
 
 	{model= new ComplexTextGraphic();;

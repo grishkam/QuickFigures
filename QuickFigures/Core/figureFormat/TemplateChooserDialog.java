@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import java.awt.Color;
@@ -23,7 +28,7 @@ import java.util.Vector;
 import javax.swing.JComboBox;
 
 import graphicalObjects.BasicGraphicalObject;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
@@ -37,7 +42,7 @@ import standardDialog.choices.GraphicComboBox;
 import standardDialog.choices.ItemSelectblePanel;
 
 /**A dialog that allows the user to select which example objects are to be used as models
-  for a figure template*/
+  for a figure template before saving it*/
 public class TemplateChooserDialog extends StandardDialog {
 	
 	/**
@@ -67,7 +72,7 @@ public class TemplateChooserDialog extends StandardDialog {
 	
 	/**Constructor for selecting items for the given figure template. looks in the given layer
 	 figure display container for possible example items*/
-	public TemplateChooserDialog(FigureTemplate tp, FigureDisplayContainer oc) {
+	public TemplateChooserDialog(FigureTemplate tp, FigureDisplayWorksheet oc) {
 		this(tp,oc.getAsWrapper().getTopLevelLayer());
 	}
 

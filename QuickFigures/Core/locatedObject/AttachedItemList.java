@@ -30,7 +30,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.BasicObjectListHandler;
 import logging.IssueLog;
 import undo.CombinedEdit;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 import utilityClasses1.ArraySorter;
 
 /**Maintains a list of attached items*/
@@ -202,7 +202,7 @@ public class AttachedItemList extends ArrayList<LocatedObject2D> implements Loca
 			
 			TakesAttachedItems taker = ((TakesAttachedItems)t);
 			if (taker.hasLockedItem(sel)) {
-				UndoTakeLockedItem undo = new UndoTakeLockedItem(taker, sel, true);
+				UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(taker, sel, true);
 				if (undoer!=null) {
 					
 					undoer.addEditToList(undo);

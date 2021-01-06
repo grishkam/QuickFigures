@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import appContext.ImageDPIHandler;
 import applicationAdapters.ImageWorkSheet;
 import applicationAdapters.PixelWrapper;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import logging.IssueLog;
 import messages.ShowMessage;
 import photoshopScripts.ZPhotoshopScriptGenerator;
@@ -84,8 +84,8 @@ public class AdobeScriptMaker {
 	protected void sentToIlls(Object mont, ArtLayerRef aref) {
 		IssueLog.log("making illustrator script for "+mont);
 		
-		if (mont instanceof FigureDisplayContainer) {
-			FigureDisplayContainer mont2 = (FigureDisplayContainer)mont;
+		if (mont instanceof FigureDisplayWorksheet) {
+			FigureDisplayWorksheet mont2 = (FigureDisplayWorksheet)mont;
 			if (mont2.getTopLevelLayer() instanceof IllustratorObjectConvertable) {
 				((IllustratorObjectConvertable) mont2.getTopLevelLayer()).toIllustrator(aref);
 			}

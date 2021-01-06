@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package journalCriteria;
 
 import java.util.ArrayList;
@@ -20,6 +25,8 @@ import java.util.ArrayList;
 import graphicalObjects.ZoomableGraphic;
 import selectedItemMenus.BasicMultiSelectionOperator;
 
+/**A menu option that allows the user to input speficic criteria
+ * and apply them to all objects in a figure */
 public class JournalCriteriaMenuOption extends BasicMultiSelectionOperator {
 
 	/**
@@ -29,12 +36,10 @@ public class JournalCriteriaMenuOption extends BasicMultiSelectionOperator {
 
 
 	public JournalCriteriaMenuOption() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String getMenuCommand() {
-		// TODO Auto-generated method stub
 		return "Impose Journal Limits";
 	}
 	

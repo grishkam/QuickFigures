@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import graphicalObjects.KnowsParentLayer;
@@ -20,6 +25,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import layersGUI.GraphicSetDisplayTree;
 
+/**an undoable edit for removing and item from a layer*/
 public class UndoAbleEditForRemoveItem extends AbstractUndoableEdit2 {
 
 	/**

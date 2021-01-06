@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
+
 package layout.plasticPanels;
 
 import java.awt.geom.Rectangle2D;
 
+/**A specialised rectangle*/
 public class PlasticPanel extends Rectangle2D.Double {
 
 	public PlasticPanel(double i, double j, double standardPanelWidth,

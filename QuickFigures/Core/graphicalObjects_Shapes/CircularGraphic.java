@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -28,7 +33,7 @@ import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
-/**A graphical object that draws either an ellipse or an Arc
+/**A graphical object that draws either an Ellipse or an Arc
   within the bounds of a rectangle*/
 public class CircularGraphic extends RectangularGraphic {
 
@@ -42,35 +47,11 @@ public class CircularGraphic extends RectangularGraphic {
 	public int arc=NO_ARC;
 	boolean isArc() {return arc>NO_ARC;}
 	
+	/**An angle parameter that determines the start of the arc2d*/
 	AngleParameter parameterArcStart=new AngleParameter(this);
+	/**An angle parameter that determines the end of the arc2d*/
 	AngleParameter parameterArcEnd=new AngleParameter(this); {parameterArcEnd.setAngle(Math.PI/2);}
 	
-	
-	public static RectangularGraphic blankOval(Rectangle r, Color c, int arc) {
-		CircularGraphic r1 = new CircularGraphic(r);
-		r1.arc=arc;
-		
-		r1.setStrokeWidth(THICK_STROKE_4);
-		r1.setStrokeColor(c);
-		return r1;
-	}
-	
-	
-
-	public CircularGraphic copy() {
-		
-		CircularGraphic ovalGraphic = new CircularGraphic(this, arc);
-		giveParametersTo(ovalGraphic);
-	
-		return ovalGraphic;
-	}
-
-
-
-	protected void giveParametersTo(CircularGraphic ovalGraphic) {
-		ovalGraphic.parameterArcStart.setAngle(parameterArcStart.getAngle());
-		ovalGraphic.parameterArcEnd.setAngle(parameterArcEnd.getAngle());
-	}
 	
 	public CircularGraphic(Rectangle2D rectangle) {
 		this(rectangle, 0);
@@ -89,6 +70,27 @@ public class CircularGraphic extends RectangularGraphic {
 		{name="Oval";}
 		if(this.isArc())name="Arc";
 	}
+
+	
+	
+	
+	
+	/**Creates a copy*/
+	public CircularGraphic copy() {
+		
+		CircularGraphic ovalGraphic = new CircularGraphic(this, arc);
+		giveParametersTo(ovalGraphic);
+	
+		return ovalGraphic;
+	}
+
+
+
+	protected void giveParametersTo(CircularGraphic ovalGraphic) {
+		ovalGraphic.parameterArcStart.setAngle(parameterArcStart.getAngle());
+		ovalGraphic.parameterArcEnd.setAngle(parameterArcEnd.getAngle());
+	}
+	
 
 	@Override
 	public Shape getShape() {
@@ -116,7 +118,7 @@ public class CircularGraphic extends RectangularGraphic {
 		pi.setName(getName());
 	}
 	
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  blankOval(new Rectangle(0,0,12,10), Color.BLACK, arc);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 	}
 	
@@ -156,7 +158,8 @@ public class CircularGraphic extends RectangularGraphic {
 			return calculatePointsOnStrokeBetween(pt[0], pt[1]);
 		}
 		
-		
+		/**creates a handle list that contains both the handles for a rectangular shape 
+		 * and the handles that determine the angles of an arc*/
 		protected SmartHandleList createSmartHandleList() {
 			SmartHandleList list = super.createSmartHandleList();
 			if (isArc()) {
@@ -190,5 +193,13 @@ public class CircularGraphic extends RectangularGraphic {
 			output.parameterArcEnd.setAngle(Math.PI/2);
 			return output;
 			}
+		public static RectangularGraphic blankOval(Rectangle r, Color c, int arc) {
+			CircularGraphic r1 = new CircularGraphic(r);
+			r1.arc=arc;
+			
+			r1.setStrokeWidth(THICK_STROKE_4);
+			r1.setStrokeColor(c);
+			return r1;
+		}
 		
 }

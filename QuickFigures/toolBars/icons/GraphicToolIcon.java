@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+
 package icons;
 
 import java.awt.BasicStroke;
@@ -34,7 +35,7 @@ import graphicalObjects_Shapes.ArrowGraphic;
 	public abstract class GraphicToolIcon implements Icon{
 
 		protected Component lastComponent;
-		public static int NORMAL_ICON_TYPE=0, PRESSED_ICON_TYPE=1, ROLLOVER_ICON_TYPE=2;
+		public static final int NORMAL_ICON_TYPE=0, PRESSED_ICON_TYPE=1, ROLLOVER_ICON_TYPE=2;
 		protected int type=NORMAL_ICON_TYPE;
 		private int borderLineWidth=1;
 		protected int iconDim=AbstractExternalToolset.DEFAULT_ICONSIZE;

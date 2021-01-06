@@ -15,9 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 8, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
  */
 package figureOrganizer;
 
@@ -57,16 +56,19 @@ public class PanelManager implements Serializable, EditListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**the two channel use modes*/
 	public static final int NORMAL_CHANNEL_USE=0, ADVANCED_CHANNEL_USE = 1;
 	
-	int channelUseMode=NORMAL_CHANNEL_USE;
+	int channelUseMode=NORMAL_CHANNEL_USE;//the channel use mode
 	
-	private GraphicLayer layer;
-	private PanelList panelList;
-	private MultichannelDisplayLayer display;
 	
-	private transient MultiChannelImage multi;
-	private int defaultFrameWidth;
+	private GraphicLayer layer;//the layer were all the panels are kept
+	private PanelList panelList;//the panel list
+	private MultichannelDisplayLayer display;//the image display layer
+	
+	private transient MultiChannelImage multi;// the source image
+	private int defaultFrameWidth;//the frame width for new panels
 
 	public PanelManager(MultichannelDisplayLayer multichannelImageDisplay, PanelList stack,
 			GraphicLayer targetLayer) {
@@ -124,6 +126,7 @@ public class PanelManager implements Serializable, EditListener{
 			return panelgraphic;
 	}
 	
+	/**returns the display object for the panel*/
 	public ImagePanelGraphic getImagePanelFor(PanelListElement panel) {
 		if (panel==null) return null;
 		if (panel.getImageDisplayObject() instanceof ImagePanelGraphic) {
@@ -255,7 +258,7 @@ public class PanelManager implements Serializable, EditListener{
 	}
 	
 	
-	/**
+	/**The channel use intructions for the panel list
 	 * @return
 	 */
 	public ChannelUseInstructions getChannelUseInstructions() {
@@ -349,7 +352,8 @@ public class PanelManager implements Serializable, EditListener{
 		getPanelList().updateAllPanelsWithImage(multi, realChannelName);
 	}
 	
-	public MultichannelDisplayLayer getDisplay() {
+	/**returns the image display layer for the panel manager*/
+	public MultichannelDisplayLayer getImageDisplayLayer() {
 		return display;
 	}
 	
@@ -407,7 +411,7 @@ public class PanelManager implements Serializable, EditListener{
 		}
 		
 		if (index>0&&index<=layout.nPanels()) {
-			this.getDisplay().getSetter().putDisplayObjectForPanelInRect(p, layout.getPanel(index));
+			this.getImageDisplayLayer().getSetter().putDisplayObjectForPanelInRect(p, layout.getPanel(index));
 			}
 	}
 	
@@ -463,15 +467,15 @@ public class PanelManager implements Serializable, EditListener{
 		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newPanelScale=panel.getScale()*ppi/newppi;
-		double newScale=getDisplay().getPreprocessScale()*newppi/ppi;
+		double newScale=getImageDisplayLayer().getPreprocessScale()*newppi/ppi;
 		
 		CombinedEdit output = new CombinedEdit();
 		
 		output.addEditToList(
 				imposePanelLevelScale(newPanelScale));
 		
-		output.addEditToList(new PreprocessChangeUndo(getDisplay()));
-		getDisplay().setPreprocessScale(newScale);
+		output.addEditToList(new PreprocessChangeUndo(getImageDisplayLayer()));
+		getImageDisplayLayer().setPreprocessScale(newScale);
 		
 		
 		updatePanels();
@@ -507,10 +511,10 @@ public class PanelManager implements Serializable, EditListener{
 	/**sets the initial view location of the image
 	   to match the selected slice and frame*/
 	public void setupViewLocation() {
-		CSFLocation out =getDisplay().getSlot().getDisplaySlice();
+		CSFLocation out =getImageDisplayLayer().getSlot().getDisplaySlice();
 		if(out==null) {
 			out=new CSFLocation();
-			getDisplay().getSlot().setDisplaySlice(out);
+			getImageDisplayLayer().getSlot().setDisplaySlice(out);
 		}
 		this.getPanelList().setupViewLocation(out);
 	}
@@ -633,7 +637,9 @@ private AbstractUndoableEdit2 reorderImagePanels() {
 	 */
 	public void setChannelUseMode(int a) {
 		this.channelUseMode=a;
-		if (channelUseMode==ADVANCED_CHANNEL_USE) this.getPanelList().channelUpdateMode=true; else
+		if (channelUseMode==ADVANCED_CHANNEL_USE)
+			this.getPanelList().channelUpdateMode=true;
+		else
 			getPanelList().channelUpdateMode=false;
 	}
 	
@@ -663,7 +669,8 @@ private AbstractUndoableEdit2 reorderImagePanels() {
 	}
 
 	/**
-	 * 
+	changes the panel level scale used for new panels
+	to match that for existing panels
 	 */
 	public void setPanelLevelScaleToPanels() {
 		for(ImagePanelGraphic p: panelList.getPanelGraphics()) {

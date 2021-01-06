@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package infoStorage;
 
 import java.io.Serializable;
@@ -31,9 +36,15 @@ public abstract class BasicMetaInfoWrapper implements MetaInfoWrapper, Serializa
 	private static final long serialVersionUID = 1L;
 
 
-
+	/**replaces an entry with key with a new value
+	 * @param b the key
+	 * @param entryC the new value*/
 	public abstract void replaceInfoMetaDataEntry(String b, String entryC) ;
+	
+	/**returns an entry as a string*/
 	public abstract String getEntryAsString(String b) ;
+	
+	/**removes an entry*/
 	public abstract void removeEntry(String entryname);
 
 

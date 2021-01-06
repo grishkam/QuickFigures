@@ -15,7 +15,7 @@
  *******************************************************************************/
 package basicMenusForApp;
 
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 
 /**A layer selector that returns the selected items in whatever set is the currently active one*/
 public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
@@ -25,14 +25,14 @@ public class SelectedSetLayerSelector extends CurrentSetLayerSelector {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private FigureDisplayContainer container;
+	private FigureDisplayWorksheet container;
 
-	public SelectedSetLayerSelector(FigureDisplayContainer cont) {
+	public SelectedSetLayerSelector(FigureDisplayWorksheet cont) {
 		this.container=cont;
 	} 
 
 	@Override
-	public FigureDisplayContainer getGraphicDisplayContainer() {
+	public FigureDisplayWorksheet getGraphicDisplayContainer() {
 		return container;
 	}
 

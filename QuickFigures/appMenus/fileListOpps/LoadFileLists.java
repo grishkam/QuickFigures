@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import graphicalObjects.FileStandIn;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -59,7 +59,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	public void run() {
 		if (multiFileChooser) {
 			File[] files = FileChoiceUtil.getFiles();
-			FigureDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
+			FigureDisplayWorksheet container = super.getSelector().getGraphicDisplayContainer();
 			 for(File f: files) {
 				 FileStandIn fileSI = new FileStandIn(f);
 				 container.getTopLevelLayer().add(fileSI);
@@ -73,7 +73,7 @@ public class LoadFileLists extends BasicMultiSelectionOperator {
 	
 	void loadList() {
 		File input=FileChoiceUtil.getOpenFile();
-		FigureDisplayContainer container = super.getSelector().getGraphicDisplayContainer();
+		FigureDisplayWorksheet container = super.getSelector().getGraphicDisplayContainer();
 		try{
 			if (input==null ||!input.exists()) return;
 		Scanner scan2 =  new Scanner(input);

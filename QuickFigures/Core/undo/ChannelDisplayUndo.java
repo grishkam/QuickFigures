@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.awt.Color;
@@ -21,6 +26,9 @@ import java.util.ArrayList;
 import channelMerging.MultiChannelImage;
 import multiChannelFigureUI.DisplayRangeChangeListener;
 
+/**An undoable edit for changes to a channels display range.
+ * stores the final and initial min/max values for a collection of 
+ * channels*/
 public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 
 	/**

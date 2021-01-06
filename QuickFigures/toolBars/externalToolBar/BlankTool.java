@@ -33,7 +33,7 @@ public class BlankTool<ImageType> extends  DummyTool<ImageType>{
 	private IconSet iconSet=new AcronymIcon("_",0).generateIconSet();//;new IconSet("icons/Blank.jpg", "icons/BlankPressed.jpg", "icons/Blank.jpg","icons/Blank.jpg","icons/Blank.jpg","icons/Blank.jpg", "icons/Blank.jpg");
 
 	@Override
-	public Icon getToolImageIcon() {
+	public Icon getToolNormalIcon() {
 		return getIconSet().getIcon(0);
 	}
 
@@ -44,7 +44,7 @@ public class BlankTool<ImageType> extends  DummyTool<ImageType>{
 
 	@Override
 	public Icon getToolRollOverImageIcon() {
-		if (isMenuOnlyTool()||isActionTool()) return  getToolImageIcon();
+		if (isMenuOnlyTool()||isActionTool()) return  getToolNormalIcon();
 		return getIconSet().getIcon(2);//.getIcon(2);
 	}
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package journalCriteria;
 
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import standardDialog.graphics.GraphicDisplayComponent;
 import standardDialog.numbers.NumberInputPanel;
 import undo.CombinedEdit;
 
+/**A user options to change the final pixel density of selected panels*/
 public class PPIOption extends BasicMultiSelectionOperator {
 
 	/**
@@ -83,7 +89,7 @@ public class PPIOption extends BasicMultiSelectionOperator {
 
 
 
-
+	/**shows a dialog to the user*/
 	protected CombinedEdit showPPIChangeDialog(ArrayList<PanelManager> panels, String st, double starting) {
 		CombinedEdit output = new CombinedEdit();
 		StandardDialog sd = new StandardDialog(st);
@@ -108,6 +114,7 @@ public class PPIOption extends BasicMultiSelectionOperator {
 	}
 
 
+	
 	public Icon getIcon() {
 		return new GraphicDisplayComponent(IconUtil.createAllIcon("ppi")  );
 	}

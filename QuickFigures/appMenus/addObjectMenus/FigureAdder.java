@@ -69,7 +69,7 @@ public class FigureAdder extends LayoutAdder {
 	public TemplateUserMenuAction getTemplatesaver() {
 		
 		if (templatesaver==null) {
-			templatesaver = new TemplateUserMenuAction(false, false);
+			templatesaver = new TemplateUserMenuAction(TemplateUserMenuAction.APPLY_TEMPLATE, false);
 		}
 		return templatesaver;
 	}
@@ -231,12 +231,12 @@ public class FigureAdder extends LayoutAdder {
 		
 		
 		if (isAutoGenerateFromModel()) {
-		multiDimensionalImage.eliminateAndRecreate();
-		DefaultLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
-		if (makeLabels) temp .createDefaultLabelsObjectsFromTemplate( currentFigureOrganizer, multiDimensionalImage, layout);
-		temp .createScaleBarOffTemplate( currentFigureOrganizer);
-		layout.generateCurrentImageWrapper();
-		layout.getEditor().fitLabelSpacesToContents(layout.getPanelLayout());
+				multiDimensionalImage.eliminateAndRecreate();
+				DefaultLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
+				if (makeLabels) temp .createDefaultLabelsObjectsFromTemplate( currentFigureOrganizer, multiDimensionalImage, layout);
+				temp .createScaleBarOffTemplate( currentFigureOrganizer);
+				layout.generateCurrentImageWrapper();
+				layout.getEditor().fitLabelSpacesToContents(layout.getPanelLayout());
  
 } 
 

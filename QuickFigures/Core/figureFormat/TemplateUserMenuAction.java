@@ -33,7 +33,7 @@ import javax.swing.Icon;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects.GraphicEncoder;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import logging.IssueLog;
@@ -53,29 +53,31 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	private static final long serialVersionUID = 1L;
 	static DirectoryHandler handler=new DirectoryHandler(); static {handler.makeAllNeededDirsIfAbsent();}
 	
-	/**set to true if this object allows user to create/save a template, false if it allows user to load/apply a template*/
-	boolean save=true;
-	/**set to true if this simply deletes a target template and nothing else. if this is true, it will neither save nor apply*/
-	boolean delete=false;
+	
+	public static final int APPLY_TEMPLATE=0, SAVE_TEMPLATE=1, DELETE_TEMPLATE=2;
+	/**sets whether this object will create/save a template, or load/apply a template or delete a saved template*/
+	int typeOfAction=APPLY_TEMPLATE;
+	
+	
+	
 	boolean useDefaultpath=false;//set to true if the default path for figure templates is to be used
 	String menuPath="File<Save<";//default meny path
 	
 	
 	/**constructor, creates a menu action for either saving a new figure template or applying a saved one
 	  the default template*/
-	public TemplateUserMenuAction(boolean save, boolean willUseDefaultTemplate)  {
-			this.save=save;
+	public TemplateUserMenuAction(int actionType, boolean willUseDefaultTemplate)  {
+			typeOfAction=actionType;
 		useDefaultpath=willUseDefaultTemplate;
 	}
 	
 
 	/**constructor, creates a menu action for a figure template 
-	 * @param save set to true if this will be a save template action
+	 * @param actionType determines if this will be a save, apply or delete template action
 	 * @param defpath the save path to use
 	 * @param menuPath the menu in which this item will appear*/
-	public TemplateUserMenuAction(boolean save, boolean defpath, String menuPath)  {
-			this.save=save;
-		useDefaultpath=defpath;
+	public TemplateUserMenuAction(int actionType, boolean defpath, String menuPath)  {
+			this(actionType, defpath);
 		this.menuPath=menuPath;
 	}
 	
@@ -185,12 +187,14 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	@Override
 	public String getMenuCommand() {
 		String output="";
-		if (!save)  output+= "Apply";
-			else if (delete) {
+		
+		if (doesApplyTemplate())  output+= "Apply";
+			else
+				if (doesDeleteTemplate()) {
 							 output+= "Delete";
 						}
 						else
-					output+="Create";// Template ";
+					output+="Create";
 		
 		if (this.useDefaultpath) output+=" Default";
 		output+=" Template";
@@ -200,11 +204,12 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**Overrides the run command from the selection operations menu*/
 	@Override
 	public void run() {
-		if (delete) {
+		if (doesDeleteTemplate()) {
 			
 			deleteTemplateFile();
 			return;
 		}
+		
 		
 		
 		if (super.selector.getGraphicDisplayContainer()==null) return;
@@ -212,7 +217,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		CombinedEdit undo=null;
 		
 		if (itemsSel.size()==0) {
-			FigureDisplayContainer graphicDisplayContainer = selector.getGraphicDisplayContainer();
+			FigureDisplayWorksheet graphicDisplayContainer = selector.getGraphicDisplayContainer();
 					undo=operateOnContainer(graphicDisplayContainer);
 		} else if (itemsSel.size()==1 && itemsSel.get(0) instanceof GraphicLayer) {
 					undo=operateOnLayer((GraphicLayer) itemsSel.get(0));
@@ -225,10 +230,26 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		
 	}
 
+
+	/**
+	 does this menu action delete a template
+	 */
+	private boolean doesDeleteTemplate() {
+		return typeOfAction==DELETE_TEMPLATE;
+	}
+	/**does this many action save a template*/
+	private boolean doesSaveTemplate() {
+		return typeOfAction==SAVE_TEMPLATE;
+	}
+	/**does this many action apply template*/
+	private boolean doesApplyTemplate() {
+		return typeOfAction==APPLY_TEMPLATE;
+	}
+
 	/**Called when the target of this template saver is the given figure container.
 	 * @return 
 	 */
-	public CombinedEdit operateOnContainer(FigureDisplayContainer graphicDisplayContainer) {
+	public CombinedEdit operateOnContainer(FigureDisplayWorksheet graphicDisplayContainer) {
 		
 		GraphicLayer graphicLayerSet = graphicDisplayContainer.getAsWrapper().getTopLevelLayer();
 		
@@ -241,7 +262,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	 * @return 
 	 */
 	public CombinedEdit operateOnLayer(GraphicLayer graphicLayerSet) {
-		if (delete) {
+		if (doesDeleteTemplate()) {
 			deleteTemplateFile();
 			return null;
 		}
@@ -249,41 +270,43 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		FigureTemplate tp=new FigureTemplate();
 		
 		/***/
-		if (save) {
+		if (doesSaveTemplate()) {
 			TemplateChooserDialog dd = new TemplateChooserDialog(tp, graphicLayerSet);
 			dd.showDialog();
 		
 			saveTemplate(tp, getUserPath());
 			return null;
 		} else 
-			
-		{
-			FigureTemplate temp = loadTemplate( getUserPath());
-			if (temp!=null) {
-					CombinedEdit undo = new CombinedEdit();
-					undo.addEditToList(
-								temp.applyTemplateToLayer(graphicLayerSet));
-					undo.addEditToList(
-								temp.fixupLabelSpaces(graphicLayerSet));
-					return undo;
-			}
-			
-		}
+			if (doesApplyTemplate()) 
+					{
+						FigureTemplate temp = loadTemplate( getUserPath());
+						if (temp!=null) {
+								CombinedEdit undo = new CombinedEdit();
+								undo.addEditToList(
+											temp.applyTemplateToLayer(graphicLayerSet));
+								undo.addEditToList(
+											temp.fixupLabelSpaces(graphicLayerSet));
+								return undo;
+						}
+						
+					}
 		return null;
 	}
 
+
+	
 	
 	/**will apply the figure template to a set of selected items
 	 * for example, the targets may be the layer and items within the layer
 	 * @return */
 	public CombinedEdit operateOnList(LayerSelector itemsSel ) {
-		if (delete) {
+		if (doesDeleteTemplate()) {
 			deleteTemplateFile();
 			return null;
 		}
 		
 		FigureTemplate tp=new FigureTemplate();
-		if (save) {
+		if (doesSaveTemplate()) {
 			TemplateChooserDialog dd = new TemplateChooserDialog(tp, itemsSel.getSelectedLayer());
 			dd.showDialog();
 		
@@ -336,20 +359,15 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**Creates a series of items that will appear in the same menu*/
 	public static ArrayList<TemplateUserMenuAction> createSeveral(String figFormatPath) {
 		ArrayList<TemplateUserMenuAction> t=new ArrayList<TemplateUserMenuAction>();
-		t.add(new TemplateUserMenuAction(true, true, figFormatPath));
-		t.add(new TemplateUserMenuAction(false, true, figFormatPath));
-		t.add(new TemplateUserMenuAction(true, false, figFormatPath));
-		t.add(new TemplateUserMenuAction(false, false, figFormatPath));
-		t.add(createTemplateDeleter(figFormatPath));
+		t.add(new TemplateUserMenuAction(TemplateUserMenuAction.SAVE_TEMPLATE, true, figFormatPath));
+		t.add(new TemplateUserMenuAction(TemplateUserMenuAction.APPLY_TEMPLATE, true, figFormatPath));
+		t.add(new TemplateUserMenuAction(TemplateUserMenuAction.SAVE_TEMPLATE, false, figFormatPath));
+		t.add(new TemplateUserMenuAction(TemplateUserMenuAction.APPLY_TEMPLATE, false, figFormatPath));
+		
+		t.add(new TemplateUserMenuAction(DELETE_TEMPLATE, true, figFormatPath));
 		return t;
 	}
 
-	/**creates a version that deletes templates*/
-	public static TemplateUserMenuAction createTemplateDeleter(String figFormatPath) {
-		TemplateUserMenuAction delTemp = new TemplateUserMenuAction(true, true, figFormatPath);
-		delTemp.delete=true;
-		return delTemp;
-	}
 	
 	/**Returns a menu that the user can use to format figures in a layer */
 	public static SmartJMenu createFormatMenu(GraphicLayer l) {

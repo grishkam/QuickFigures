@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -27,6 +32,7 @@ import java.awt.geom.Ellipse2D.Double;
 import handles.AngleHandle;
 import handles.SmartHandleList;
 
+/**draws a gear with a hole inside*/
 public class GearShape extends SimpleStar {
 
 	{name="Gear";}
@@ -63,7 +69,7 @@ public class GearShape extends SimpleStar {
 	public Shape getShape() {
 		Path2D.Double path = getShapeWithoutHoles();
 		
-		if(hole.getRatioToMaxRadius()>0.1&&hole.getRatioToMaxRadius()<getStatRatio()) try {
+		if(hole.getRatioToMaxRadius()>0.1&&hole.getRatioToMaxRadius()<getStarRadiusRatio()) try {
 			Area a = new Area(path);
 			a.subtract(new Area(getInnerHoleShape()));
 			return a;

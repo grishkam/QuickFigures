@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 
+/**items that update the tree UI after their layer structure has changed implement this */
 public interface KnowsTree {
 	public void setTree(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>  t) ;
 }

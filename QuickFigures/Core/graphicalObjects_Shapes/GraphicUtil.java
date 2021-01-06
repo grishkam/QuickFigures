@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
@@ -33,7 +38,7 @@ import java.util.ArrayList;
 import graphicalObjects.CordinateConverter;
 import handles.DecorativeSmartHandleList;
 
-
+/**this class contains methods that are used by many shapes. many ot its methods will be deprecated in the future*/
 public class GraphicUtil {
 	static int defaulthandleSize=3;
 	 int handlesize=defaulthandleSize;
@@ -193,61 +198,6 @@ public  void drawDot(Graphics2D g, CordinateConverter cords, Point2D.Double poin
 		return output;
 		
 	}
-	
-	
-	/**
-	 * 
-	 
-	 	private  DecorativeSmartHandleList drawHandles(Graphics2D g, CordinateConverter cords, Polygon p) {
-		ArrayList<Point2D> output = new ArrayList<Point2D>();
-		for(int i=0; i<p.npoints; i++) {
-			Point2D r=new Point2D.Double(p.xpoints[i], p.ypoints[i]);
-			output.add(r);
-			
-		}
-		
-		return drawHandlesAtPoints(g, cords, output);
-	}
-	private DecorativeSmartHandleList drawSizeHandlesAtPoint(Graphics2D g, CordinateConverter cords, Point2D p, Point2D pfinish) {
-		ArrayList<Point2D> output = new ArrayList<Point2D>();
-		Double p2 = new Point2D.Double(cords.transformX(p.getX()), cords.transformY(p.getY()));
-		Double p2finish = new Point2D.Double(cords.transformX(pfinish.getX()), cords.transformY(pfinish.getY()));
-		output.add(p);
-		output.add(pfinish);
-		g.setColor(Color.black);
-		g.drawLine((int)p2.getX(), (int)p2.getY(), (int)p2finish.getX(), (int)p2finish.getY());
-		return	drawHandlesAtPoints(g, cords, output) ;
-	
-}
-	
-	
-private  ArrayList<Rectangle> drawHandles(Graphics2D g, Iterable<Point2D.Double> list) {
-		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
-		for(Point2D.Double p : list) {
-			output.add(drawHandle(g,  p)) ;
-		}
-		lastHandles=output;
-		return output;
-	}
-
-	private  ArrayList<Rectangle> drawHandles(Graphics2D g, Point2D.Double... list) {
-		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
-		for(Point2D.Double p : list) {
-			output.add(drawHandle(g,  p)) ;
-		}
-		lastHandles=output;
-		return output;
-		
-		
-	}
-	/**
-	public  Rectangle getAlteredRectangle(Graphics2D g, CordinateConverter cords, Rectangle2D r2) {
-		int sx = (int)cords.transformX((int)r2.getX());
-	    int sy = (int)cords.transformY((int)r2.getY());
-	    double swidth=cords.getMagnification()*r2.getWidth();
-	    double sheight=cords.getMagnification()*r2.getHeight();
-	    return new Rectangle(sx,sy, (int)swidth, (int)sheight);
-	}*/
 	
 
 	

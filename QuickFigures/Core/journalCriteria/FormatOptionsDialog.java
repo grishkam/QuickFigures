@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package journalCriteria;
 
 import java.awt.GraphicsEnvironment;
@@ -25,6 +30,8 @@ import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**Journals typically demand limits fonts and line widths
+ * This dialog allows a user to select limits*/
 public class FormatOptionsDialog extends StandardDialog {
 
 	/**

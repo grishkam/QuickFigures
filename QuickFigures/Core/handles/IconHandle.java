@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Graphics2D;
@@ -29,7 +34,8 @@ import icons.MiniToolBarIcon;
 public class IconHandle extends SmartHandle {
 	
 	public static final int _DEFAULT_MAX_SIZE = MiniToolBarIcon.ICON_SIZE;
-	protected int subtract = 0;
+	
+	
 	
 	/**Some icons are drawn shifted slightly*/
 	protected int xShift=0;
@@ -55,7 +61,7 @@ public class IconHandle extends SmartHandle {
 
 	protected Shape createStandardHandleShape(Point2D pt) {
 		double widthr =getDrawnHandleWidth();
-		double heightr = icon.getIconHeight()-subtract;
+		double heightr = icon.getIconHeight();
 		
 		if(heightr>this.maxHeight)heightr =this.maxHeight;
 		double xr = pt.getX()-widthr/2;
@@ -65,7 +71,7 @@ public class IconHandle extends SmartHandle {
 	}
 
 	public double getDrawnHandleWidth() {
-		double widthr= icon.getIconWidth()-subtract;
+		double widthr= icon.getIconWidth();
 		if(widthr>this.maxWidth)widthr=this.maxWidth;
 		return (int) widthr;
 	}

@@ -13,20 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.dividerLayout;
 
 import java.awt.Color;
 import java.awt.Point;
 
 import handles.SmartHandle;
-import layout.dividerLayout.DividedPanelLayout.layoutDividedArea;
-
+import layout.dividerLayout.DividedPanelLayout.LayoutDividerArea;
+/**the lower right handle for a divided layout changes the area of the layout*/
 public class LowerRightHandleForDividedPanelLayout extends SmartHandle {
-	private layoutDividedArea area;
+	private LayoutDividerArea area;
 	private DividedPanelLayout layout;
 	private int hnum;
 
-	public LowerRightHandleForDividedPanelLayout(DividedPanelLayout dpl, layoutDividedArea area, int num) {
+	public LowerRightHandleForDividedPanelLayout(DividedPanelLayout dpl, LayoutDividerArea area, int num) {
 		
 		hnum = num;
 		super.setHandleNumber(num+40000);
@@ -44,11 +49,11 @@ public class LowerRightHandleForDividedPanelLayout extends SmartHandle {
 	}
 	
 
-	public layoutDividedArea getArea() {
+	public LayoutDividerArea getArea() {
 		return area;
 	}
 
-	public void setArea(layoutDividedArea area) {
+	public void setArea(LayoutDividerArea area) {
 		this.area = area;
 	}
 

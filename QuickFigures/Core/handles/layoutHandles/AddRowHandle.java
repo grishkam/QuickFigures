@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles.layoutHandles;
 
 import java.awt.Color;
@@ -22,7 +27,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEvent;
-import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
+import genericMontageLayoutToolKit.RowColNumberTool;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import handles.SmartHandle;
@@ -36,13 +41,18 @@ import layout.basicFigure.LayoutSpaces;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 
-/**A handle that adds rows/cols to the end of the layout or */
+/**A handle that adds rows/cols to the end of the layout or removes them*/
 public class AddRowHandle extends SmartHandle implements LayoutSpaces{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private DefaultLayoutGraphic layout;
-	private int type;
-	private boolean subtractionOnly=false;//set to true if this 
-	boolean dragType=true;
+	private int type=LayoutSpaces.ROWS;
+	private boolean subtractionOnly=false;//set to true if this will only remove.
+
 	int defaultOffSet=0;
 	int plusSize = 5;
 	private UndoLayoutEdit undo;
@@ -50,12 +60,12 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	private CombinedEdit undo2;
 
 
+	/**creates a handle*/
+	public AddRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int rowColHandleType) {
 
-	public AddRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int y, boolean sub) {
-
-		this.subtractionOnly=sub;
+		
 		this.layout=montageLayoutGraphic;
-		this.type=y;
+		this.type=rowColHandleType;
 		int offset = -defaultOffSet; if(subtractionOnly) offset=-offset;
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
 		
@@ -67,12 +77,11 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 			x2 = space.getMaxX()+20;
 		}
 		this.setCordinateLocation(new Point2D.Double(x2, y2));
-	//this.setLocation(50,50);
 		
 		super.handlesize=4;
 		
 		
-		Area a = addSubtractShape(plusSize, subtractionOnly);
+		Area a = addOrSubtractSymbol(plusSize, subtractionOnly);
 		specialShape=a;//AffineTransform.getTranslateInstance(x2,y2).createTransformedShape(a);
 		if (subtractionOnly)this.setHandleColor(Color.red);
 		else setHandleColor(Color.green);
@@ -80,19 +89,13 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		if(type==COLS) this.setHandleNumber(PanelLayoutGraphic.AddColHandle); else
 		this.setHandleNumber(PanelLayoutGraphic.AddRowHandle);
 		
-		if(dragType)return;
-		message="Add ";
-		if(subtractionOnly) message="Remove ";
-		if(type==COLS) message+="Column"; else message+="Row";
+	
 		
 	}
 
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	public boolean containsClickPoint(Point2D p) {
 		return super.containsClickPoint(p);
@@ -100,7 +103,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
-		if(dragType&&canvasMouseEventWrapper.clickCount()<2) return;
+		if(canvasMouseEventWrapper.clickCount()<2) return;
 		if (this.subtractionOnly) {
 			if(type==COLS&&layout.getPanelLayout().nColumns()>1) 
 				layout.getEditor().addCols(layout.getPanelLayout(), -1);
@@ -117,11 +120,11 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	}
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
-		if(!dragType) return;
+		
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		BasicLayout bm = layout.getPanelLayout();
 		GenericMontageEditor edit = layout.getEditor();
-		int[] rowcol = MontageLayoutRowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), bm);
+		int[] rowcol = RowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), bm);
 		
 		if (rowcol[0]+bm.nRows()>=1 &&type==ROWS)edit.addRows(bm, rowcol[0]);
 		if (rowcol[1]+bm.nColumns()>=1 &&type==COLS)edit.addCols(bm, rowcol[1]);

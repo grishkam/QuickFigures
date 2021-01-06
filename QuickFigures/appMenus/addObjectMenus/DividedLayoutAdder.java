@@ -23,7 +23,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import layout.dividerLayout.DividedPanelLayout;
 import layout.dividerLayout.DividedPanelLayoutGraphic;
-import layout.dividerLayout.DividedPanelLayout.layoutDividedArea;
+import layout.dividerLayout.DividedPanelLayout.LayoutDividerArea;
 
 public class DividedLayoutAdder extends BasicGraphicAdder {
 
@@ -46,7 +46,7 @@ public class DividedLayoutAdder extends BasicGraphicAdder {
 		
 		DividedPanelLayout layout=new DividedPanelLayout(new Rectangle2D.Double(30, 30, 504,648));
 		layout.mainArea.divide(216);
-		layoutDividedArea sub = layout.mainArea.getSubareas().get(1);
+		LayoutDividerArea sub = layout.mainArea.getSubareas().get(1);
 		sub.setHorizontal(false);
 		sub.divide(200);
 		 sub = layout.mainArea.getSubareas().get(0);
@@ -69,6 +69,11 @@ public class DividedLayoutAdder extends BasicGraphicAdder {
 	@Override
 	public String getMenuCommand() {
 		return "Add Divided Layout";
+	}
+	
+	@Override
+	public String getMenuPath() {
+		return "Alternate Layouts";
 	}
 
 }

@@ -85,7 +85,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new NewWorksheet());
 		installItems(QuickFigureMaker.getMenuBarItems());
 		installItem(new GraphicSetSaver());
-		installItem(new TemplateUserMenuAction(true, false));
+		installItem(new TemplateUserMenuAction(TemplateUserMenuAction.SAVE_TEMPLATE, false));
 		
 		
 	

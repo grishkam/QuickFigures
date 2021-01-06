@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -29,6 +34,7 @@ import locatedObject.BasicStrokedItem;
 import locatedObject.Scales;
 import locatedObject.StrokedItem;
 
+/**An object that can take the form of an arbitrary shape. Used as a superclass for many different shapes*/
 public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartHandles{
 
 	/**
@@ -60,7 +66,6 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 
 	@Override
 	public BasicShapeGraphic copy() {
-		// TODO Auto-generated method stub
 		BasicShapeGraphic out = new BasicShapeGraphic(getShape());
 		copyColorAttributeTo(out);
 		return  out;
@@ -72,7 +77,6 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
 		return getShape().getBounds();
 	}
 
@@ -80,13 +84,12 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 
 	@Override
 	public Shape getShape() {
-		// TODO Auto-generated method stub
 		return shape;
 	}
 
 	public void setShape(Shape shape) {
 		if (!(shape instanceof Serializable)) {
-		//	IssueLog.log("non serializable shape", shape.toString());
+		
 		}
 		this.shape = shape;
 	}
@@ -104,7 +107,7 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 		Point2D p2 = this.getLocationUpperLeft();
 		AffineTransform af = new AffineTransform();
 		af.scale(mag, mag);
-		p2=scaleAbout(p2, p,mag,mag);
+		p2=scalePointAbout(p2, p,mag,mag);
 		shape=af.createTransformedShape(shape);
 		this.setLocationUpperLeft(p2);
 		BasicStrokedItem.scaleStrokeProps(this, mag);

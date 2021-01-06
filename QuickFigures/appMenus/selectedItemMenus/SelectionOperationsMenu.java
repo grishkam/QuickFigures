@@ -59,7 +59,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		operatorsOp.add(new TextOptionsSyncer());
 		operatorsOp.add(new BarOptionsSyncer());
 		operatorsOp.add(new ImageGraphicOptionsSyncer());
-		operatorsOp.add(new SnappingSyncer(null));
+		operatorsOp.add(new AttachmentPositionAdjuster(null));
 		operatorsOp.add(new CroppingSyncer());
 		
 		operators.add(new AlignItem(RectangleEdges.RIGHT));

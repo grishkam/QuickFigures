@@ -153,15 +153,15 @@ public class AddRemoveAnchorPointTool extends PathAnchorPointTool {
 			Point2D p4=new Point2D.Double(12,7);
 			ArrowGraphic line = ArrowGraphic.createLine(Color.black, null, p1, p2);
 			line.setStrokeWidth(2);
-			if (!remove)out.getTheLayer().add(line);
+			if (!remove)out.getTheInternalLayer().add(line);
 			line=ArrowGraphic.createLine(Color.black, null, p3, p4);
 			line.setStrokeWidth(2);
-			out.getTheLayer().add(line);
+			out.getTheInternalLayer().add(line);
 			
 			PathGraphic p = new PathGraphic(new Point(0,0));
 			p.select();
 			p.getPoints().get(0).setAnchorPoint(new Point(IconTraits.TREE_ICON_WIDTH, IconTraits.TREE_ICON_HEIGHT));
-			out.getTheLayer().add(p);
+			out.getTheInternalLayer().add(p);
 		;
 		//out.setAngle(this.getAngle());
 		return out;

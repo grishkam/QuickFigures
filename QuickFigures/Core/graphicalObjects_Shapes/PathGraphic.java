@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 
@@ -371,7 +376,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		this.path=getPoints().createPath(this.isClosedShape());//updatePathFromPoints(this.getPoints(), isClosedShape());
 		outline=null;
 		setSmartHandleBoxes(null);
-		reshapeList2=null;
+		reshapeListForSelectedPoints=null;
 	}
 	
 	/**returns true if handles for curve control points are currently usable*/
@@ -459,13 +464,13 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		Point p = getLocationUpperLeft() ;
 		super.moveLocation(x-p.x, y-p.y);
 		outline=null;//so a new outline will be created next time its needed
-		reshapeList2=null;
+		reshapeListForSelectedPoints=null;
 	}
 	
 	public void moveLocation(double x, double y) {
 		super.moveLocation(x, y);
 		outline=null;//so a new outline will be created next time its needed
-		reshapeList2=null;
+		reshapeListForSelectedPoints=null;
 	}
 	
 	/**scales the path about point p, also scale strokes and effects*/
@@ -602,12 +607,12 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 
 	/**the second reshape handle list contains handles for rotating, moving and scaling only a subset of points*/
-	public transient ReshapeHandleList reshapeList2;
+	public transient ReshapeHandleList reshapeListForSelectedPoints;
 	private ReshapeHandleList getReshapeList2() {
 		if(this.getPoints().getSelectedPointsOnly().size()<2) return null;
-		if(reshapeList2==null)reshapeList2=new PathPointReshapeList( 90000000, this);
-		reshapeList2.updateRectangle();
-		return reshapeList2;
+		if(reshapeListForSelectedPoints==null)reshapeListForSelectedPoints=new PathPointReshapeList( 90000000, this);
+		reshapeListForSelectedPoints.updateRectangle();
+		return reshapeListForSelectedPoints;
 	}
 	
 	
@@ -721,7 +726,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 				}
 			}
 		}
-		reshapeList2=null;
+		reshapeListForSelectedPoints=null;
 	}
 	
 	/**when given an area, deselects the points inside the area */
@@ -736,7 +741,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 				}
 			}
 		}
-		reshapeList2=null;
+		reshapeListForSelectedPoints=null;
 	}
 	
 	@Override
@@ -747,42 +752,43 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	/**draws the arrow heads*/
 	private void drawArrowHeads(Graphics2D g, CordinateConverter cords) {
-		drawArrow(g, cords, 0);
 		drawArrow(g, cords, 1);
+		drawArrow(g, cords, 2);
 	}
 
+	/**draws arrow heads*/
 	private void drawArrow(Graphics2D g, CordinateConverter cords, int i) {
 		;
-		if (getArrowHead2()!=null)
+		if (i==2&&getArrowHead2()!=null)
 			{
-			this.getArrowHead2().setStrokeWidth(this.getStrokeWidth());
-			getArrowHead2().copyColorsFrom(this);
-			PathPoint lastPoint = getPoints().getLastPoint();
-			getArrowHead2().setPoint2(getTransformPointsForPathGraphic(lastPoint.getAnchor()));
-			boolean useCC = lastPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
-			if (useCC) getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
-			else getArrowHead2().setPoint1(getTransformPointsForPathGraphic(getPoints().getPreviousPoint(lastPoint).getCurveControl2()));
-			
-			getArrowHead2().moveNotchToHead1();
-			
-			
-			getArrowHead2().draw(g, cords);
+					this.getArrowHead2().setStrokeWidth(this.getStrokeWidth());
+					getArrowHead2().copyColorsFrom(this);
+					PathPoint lastPoint = getPoints().getLastPoint();
+					getArrowHead2().setPoint2(getTransformPointsForPathGraphic(lastPoint.getAnchor()));
+					boolean useCC = lastPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
+					if (useCC) getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
+					else getArrowHead2().setPoint1(getTransformPointsForPathGraphic(getPoints().getPreviousPoint(lastPoint).getCurveControl2()));
+					
+					getArrowHead2().moveNotchToHead1();
+					
+					
+					getArrowHead2().draw(g, cords);
 			}
 		
-		if (getArrowHead1()!=null)
+		if (i==1&&getArrowHead1()!=null)
 		{
-			this.getArrowHead1().setStrokeWidth(this.getStrokeWidth());
-		getArrowHead1().copyColorsFrom(this);
-		PathPoint firstPoint = getPoints().get(0);
-		getArrowHead1().setPoint2(getTransformPointsForPathGraphic(firstPoint.getAnchor()));
-		boolean useCC = firstPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
-		if (useCC) getArrowHead1().setPoint1(getTransformPointsForPathGraphic(firstPoint.getCurveControl2()));
-		else  getArrowHead1().setPoint1(getTransformPointsForPathGraphic(getPoints().getNextPoint(firstPoint).getCurveControl1()));
-
-		getArrowHead1().moveNotchToHead1();
+				this.getArrowHead1().setStrokeWidth(this.getStrokeWidth());
+				getArrowHead1().copyColorsFrom(this);
+				PathPoint firstPoint = getPoints().get(0);
+				getArrowHead1().setPoint2(getTransformPointsForPathGraphic(firstPoint.getAnchor()));
+				boolean useCC = firstPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
+				if (useCC) getArrowHead1().setPoint1(getTransformPointsForPathGraphic(firstPoint.getCurveControl2()));
+				else  getArrowHead1().setPoint1(getTransformPointsForPathGraphic(getPoints().getNextPoint(firstPoint).getCurveControl1()));
 		
-		
-		getArrowHead1().draw(g, cords);
+				getArrowHead1().moveNotchToHead1();
+				
+				
+				getArrowHead1().draw(g, cords);
 		}
 	}
 
@@ -790,7 +796,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return arrowHead1;
 	}
 
-	/**Adds a new arrow heads. creates 1 or 2 arrow heads depending on the number given*/
+	/**Adds a new arrow heads. creates the first or the second arrow head depending on the number given*/
 	public void addArrowHeads(int i) {
 		if (i==1) {
 			arrowHead1=new ArrowGraphic();
@@ -845,7 +851,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 	
 	/**returns the shape that will be used as an icon for this*/
-	ShapeGraphic rectForIcon() {
+	ShapeGraphic shapeUsedForIcon() {
 		PathGraphic createExample = PathGraphic.createExample();
 		if(this.hasArrowHead1()) {
 			createExample.addArrowHeads(1);

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Shape;
@@ -20,7 +25,7 @@ import java.awt.geom.Point2D;
 
 import locatedObject.PathPointList;
 
-/**A Rhomboid shape */
+/**A Rhombus shape. */
 public class RhombusGraphic extends RectangularGraphic {
 
 	/**

@@ -106,7 +106,7 @@ public class FrameColorButton extends BasicMultiSelectionOperator implements  Co
 	/**creates an icon*/
 	public GraphicDisplayComponent getItemIcon(boolean selected, boolean stroke) {
 		GraphicGroup gg=new GraphicGroup();
-		gg.getTheLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
+		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
 		
 		
 		if (getTheColor()!=null) {
@@ -136,9 +136,9 @@ public class FrameColorButton extends BasicMultiSelectionOperator implements  Co
 						 rect3.setFillColor(new Color(0,0,0,0));
 						 rect3.setStrokeWidth(1); rect3.setStrokeColor(Color.black);rect3.makeNearlyDashLess();
 						
-						 gg.getTheLayer().add(rect3);
-						 gg.getTheLayer().add(rect);
-						 gg.getTheLayer().add(rect2);
+						 gg.getTheInternalLayer().add(rect3);
+						 gg.getTheInternalLayer().add(rect);
+						 gg.getTheInternalLayer().add(rect2);
 						
 					 }
 					

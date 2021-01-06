@@ -356,7 +356,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 			RectangularGraphic rect = RectangularGraphic.blankRect(r, colors[i]);
 			if(type>99) {rect = RectangularGraphic.filledRect(r); rect.setFillColor(colors[i]);rect.setDashes(null);rect.setStrokeWidth(1);}
 			rect.setStrokeWidth(1);
-			gg.getTheLayer().add(rect);
+			gg.getTheInternalLayer().add(rect);
 				}
 		
 		

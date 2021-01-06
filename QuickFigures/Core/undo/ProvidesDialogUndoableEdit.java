@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
+/**objects that implement this interface have a specific undable edit that
+ * is used to reverse mouse drags*/
 public interface ProvidesDialogUndoableEdit {
 	AbstractUndoableEdit provideUndoForDialog();
 }

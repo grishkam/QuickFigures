@@ -13,9 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
+/**this contains methods related to setting and retrieving an item
+ * @see FigureDisplayWorksheet
+ * */
 public interface KnowsSetContainer {
-	public void setGraphicSetContainer(FigureDisplayContainer gc);
+	public void setGraphicSetContainer(FigureDisplayWorksheet gc);
 	public void updateDisplay();
 }

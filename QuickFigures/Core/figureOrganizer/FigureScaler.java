@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.awt.geom.Point2D;
@@ -39,6 +44,9 @@ public class FigureScaler {
 	
 	boolean alterSourceImageScale=true;
 	
+	/**creates a figure scaler
+	 * @param linScale determines whether this object alters the scale factor 
+	  applied to the original image */
 	public  FigureScaler(boolean linScale) {
 		this.alterSourceImageScale=linScale;
 	}
@@ -219,6 +227,7 @@ public class FigureScaler {
 		return items;
 	}
 	
+	/**returns every panel manager present in the layer*/
 	public static ArrayList<PanelManager> getPanelManagers(GraphicLayer gl) {
 		GraphicLayer layer = gl;//the search layer
 		ArrayList<PanelManager> output=new ArrayList<PanelManager>();
@@ -237,6 +246,7 @@ public class FigureScaler {
 		return output;
 	}
 	
+	/**Finds the panel manager that controls the size of the object*/
 	public static PanelManager getPanelManagerForObject(Object item) {
 		if (item instanceof ImageDisplayLayer) {
 			return ((ImageDisplayLayer) item).getPanelManager();
@@ -249,22 +259,32 @@ public class FigureScaler {
 		
 	}
 	
-	public static void scaleWarnings(GraphicLayer l) {
-		showScaleWarnings(l.getAllGraphics());
+	
+	/**shows a window to the user with some details about the scaling process*/
+	public static void scaleMessages(GraphicLayer l) {
+		showScaleMessages(l.getAllGraphics());
 	}
 	
-	public static void showScaleWarnings(ArrayList<?> objects) {
+	/**shows a window to the user with some details about the scaling process*/
+	public static void showScaleMessages(ArrayList<?> objects) {
 		HashMap<String, Object> allWarnings=new HashMap<String, Object>();
+		ArrayList<String> orderedWarnings=new ArrayList<String>();
 		for(Object o: objects) {
 			if (o instanceof Scales) {
 				Object w = ((Scales) o).getScaleWarning();
 				if(w!=null && w instanceof String[]) 
-					for(String s: (String[]) w) allWarnings.put(s, o);
+					for(String s: (String[]) w) {
+						if (!allWarnings.containsKey(s)) {
+							allWarnings.put(s, o);
+							orderedWarnings.add(s);
+						}
+						
+					}
 					
 			}
 		}
 		if(allWarnings.keySet().size()>0)
-			ShowMessage.showOptionalMessage("About Scaling", false, allWarnings.keySet());
+			ShowMessage.showOptionalMessage("About Scaling", false, orderedWarnings);
 		
 	}
 }

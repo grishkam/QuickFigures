@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.basicFigure;
 
 import java.io.Serializable;
 
+/**this class stores a ference to a specific location within a grid*/
 public class GridIndex implements Serializable, GridPanelSwapListener {
 	/**
 	 * 

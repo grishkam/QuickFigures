@@ -21,7 +21,7 @@ import javax.swing.Icon;
 
 import graphicalObjects_Shapes.ShapeGraphic;
 
-/**interface for tools that ass a shape*/
+/**interface for tools that add a shape to a worksheet*/
 public interface ShapeAddingTool {
 
 	String getShapeName();

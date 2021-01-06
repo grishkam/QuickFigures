@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import java.awt.BasicStroke;
@@ -62,6 +67,10 @@ public class GeneralLayoutToolIcon extends GraphicToolIcon implements Icon{
 		super(type);
 		super.paintCursorIcon=paintArrow;
 		this.type=type;
+	}
+	
+	public GeneralLayoutToolIcon() {
+		this(NORMAL_ICON_TYPE);
 	}
 	
 	protected Color getPanelColor(int i) {
@@ -208,6 +217,7 @@ public class GeneralLayoutToolIcon extends GraphicToolIcon implements Icon{
 		return ICONSIZE;
 	}
 	
+	/**creates a copy that is of a different category*/
 	public GeneralLayoutToolIcon copy(int type) {
 		GeneralLayoutToolIcon another = generateAnother(type);
 		another.paintCursorIcon=paintCursorIcon;
@@ -215,7 +225,8 @@ public class GeneralLayoutToolIcon extends GraphicToolIcon implements Icon{
 		another.panelColor=this.panelColor;
 		return another;
 	}
-	/**
+	
+	/**creates a similar icon but of a different category
 	 * @param type
 	 * @return
 	 */

@@ -13,13 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer.insetPanels;
 
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -635,7 +639,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	 * @param p2
 	 */
 	@Override
-	public void afterHandleMove(int handleNumber, Point p1, Point p2) {
+	public void afterHandleMove(int handleNumber, Point2D p1, Point2D p2) {
 		updateImagePanels();
 		resizeMontageLayoutPanels(handleNumber);
 		

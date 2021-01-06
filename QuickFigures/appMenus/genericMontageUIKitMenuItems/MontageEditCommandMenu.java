@@ -36,7 +36,7 @@ import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
-import undo.UndoSnappingChange;
+import undo.UndoAttachmentPositionChange;
 import utilityClasses1.ArraySorter;
 
 public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
@@ -229,15 +229,15 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		
 		if (st==invertLayout.getActionCommand()) {
 			
-			 ArrayList<UndoSnappingChange> arraySnapUndo =new ArrayList<UndoSnappingChange>();
-				for(LocatedObject2D loc: getMainLayout().getEditedImage().getLocatedObjects()) {
+			 ArrayList<UndoAttachmentPositionChange> arraySnapUndo =new ArrayList<UndoAttachmentPositionChange>();
+				for(LocatedObject2D loc: getMainLayout().getEditedWorksheet().getLocatedObjects()) {
 					if (loc.getAttachmentPosition()!=null)
-					arraySnapUndo.add(new UndoSnappingChange(loc));
+					arraySnapUndo.add(new UndoAttachmentPositionChange(loc));
 				}
 			
 				getEditor().invertPanelsAndLabels(getMainLayout());
 				
-				for(UndoSnappingChange undo0: arraySnapUndo) {
+				for(UndoAttachmentPositionChange undo0: arraySnapUndo) {
 					undo0.establishFinalState();
 					editUndo.addEditToList(undo0);
 				}
@@ -248,12 +248,12 @@ public class MontageEditCommandMenu extends ArrayList<MenuItem> implements
 		addUndo(editUndo);
 		
 		CurrentFigureSet.updateActiveDisplayGroup();
-		getMainLayout().getEditedImage().updateDisplay();
+		getMainLayout().getEditedWorksheet().updateDisplay();
 		
 		}
 
 	public void handlePanelSizeFit() {
-		getMainLayout().getEditor().placePanelsInCorners( getMainLayout(),new ArraySorter<LocatedObject2D>().getThoseOfClass(getMainLayout().getEditedImage().getLocatedObjects(), ImagePanelGraphic.class));
+		getMainLayout().getEditor().placePanelsInCorners( getMainLayout(),new ArraySorter<LocatedObject2D>().getThoseOfClass(getMainLayout().getEditedWorksheet().getLocatedObjects(), ImagePanelGraphic.class));
 
 		getMainLayout().getEditor().alterPanelWidthAndHeightToFitContents(getMainLayout());
 	}

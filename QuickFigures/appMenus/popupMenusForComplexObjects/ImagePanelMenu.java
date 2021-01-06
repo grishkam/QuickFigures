@@ -36,7 +36,7 @@ import menuUtil.SmartJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import undo.CombinedEdit;
 import undo.Edit;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 
 /**Menu for Image Panels. Displayed  when user right clicks on a panel*/
 public class ImagePanelMenu extends LockedItemMenu {
@@ -125,7 +125,7 @@ super.addLockedItemMenus();
 		text.setTextColor(Color.white);
 		Text_GraphicTool.lockAndSnap(imagePanel, text, (int)imagePanel.getLocationUpperLeft().getX(), (int) imagePanel.getLocationUpperLeft().getY());
 		
-		undo.addEditToList(new UndoTakeLockedItem(imagePanel, text, false));
+		undo.addEditToList(new UndoAddOrRemoveAttachedItem(imagePanel, text, false));
 		GraphicLayer parentLayer = imagePanel.getParentLayer();
 		undo.addEditToList(Edit.addItem(parentLayer, text));
 		

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.BasicStroke;
@@ -37,13 +42,18 @@ import undo.AbstractUndoableEdit2;
 /**This class of handles is for moving points in a path*/
 public class SmartHandleForPathGraphic extends  SmartHandle {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	
-	public static final int ANCHOR_POINT=0, CURVE_CONTROL_POINT1=1, CURVE_CONTROL_POINT2=2,  FACTOR_CODE=1000;
+	/**constant values for the type of point*/
+	public static final int ANCHOR_POINT=0, CURVE_CONTROL_POINT1=1, CURVE_CONTROL_POINT2=2; 
+	public static final int FACTOR_CODE=1000;//the maximum number of handles 
 	private PathPoint pathPoint;
 	private PathGraphic pathGraphic;
 	
-	int pointNumber=-1;
+	int pointNumber=-1;//starts without a valid point number
 	
 	int type=ANCHOR_POINT;
 	
@@ -75,42 +85,49 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	
 	
-	/**constructs a handle for the given point*/
-	public SmartHandleForPathGraphic(PathGraphic p, PathPoint point) {
+	/**constructs a handle for the given point
+	 * @param path the path
+	 * @param point the path point
+	 * */
+	public SmartHandleForPathGraphic(PathGraphic path, PathPoint point) {
 		
 		this.pathPoint=point;
-		this.pathGraphic=p;
+		this.pathGraphic=path;
 	}
 	
-	public SmartHandleForPathGraphic(PathGraphic p, PathPoint point, int type, int number) {
+	/**creates a handle of type type for the given path point
+	 * @param number the index of the path point
+	 * @param type the type of handle, anchor or curve control
+	 * @param path the path
+	 * @param point the path point*/
+	public SmartHandleForPathGraphic(PathGraphic path, PathPoint point, int type, int number) {
 		
 		this.pathPoint=point;
-		this.pathGraphic=p;
+		this.pathGraphic=path;
 		
 		setUphandleType(type, number);
 	}
 
-	
-	static Point2D copyPoint(Point2D p) {
+	/**creates a copy of the point*/
+	static Point2D.Double copyPoint(Point2D p) {
 		return new Point2D.Double(p.getX(), p.getY());
 	}
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
+	/**returns the location of this point*/
 	public Point2D getCordinateLocation() {
 		
 		return getPathGraphicCordinateLocation(type);
 	}
 	
-	public Point2D getPathGraphicCordinateLocation(int type) {
+	/**gets the coordinate location of this point on the worksheet's coordinates
+	 * this method takes into account that a Path object has a displacement*/
+	private Point2D getPathGraphicCordinateLocation(int type) {
 		Point2D p = copyPoint(getPathCordinateLocation(type));
 		pathGraphic.getTransformForPathGraphic().transform(p, p);
 		return p;
 	}
 
-	
+	/**returns the coordinates of the path point as given in the path point list*/
 	private Point2D getPathCordinateLocation(int type) {
 		if (type==CURVE_CONTROL_POINT1) {
 			return pathPoint.getCurveControl1();
@@ -121,7 +138,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		return pathPoint.getAnchor();
 	}
 	
-
+	/**returns the handle color*/
 	public Color getHandleColor() {
 		if (type==CURVE_CONTROL_POINT1) {
 			return Color.green;
@@ -139,6 +156,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		return Color.gray;
 	}
 	
+	/**returns true if the handle should be drawn as an ellipse*/
 	public boolean isEllipseShape() {return pathPoint.isPrimarySelected()&&type==ANCHOR_POINT;}
 	
 	/**Draws a points and lines connecting them*/
@@ -149,8 +167,6 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		  drawMarkForClosePoint(graphics);
 	}
-
-
 
 
 	/**
@@ -226,6 +242,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		 pathPoint.setPrimarySelected(false);
 	}
 	
+	/**Sets a specific point as the primary selected point*/
 	public void setPrimarySelected(PathPoint pSel) {
 		for(PathPoint pEach: this.pathGraphic.getPoints()) {
 			if(pEach==pSel) pSel.setPrimarySelected(true);
@@ -233,7 +250,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		}
 	}
 	
-	/**deselects all point except for the selected one*/
+	/**deselects all points except for the one given*/
 	public void deslectAllExcept(PathPoint pSel) {
 		for(PathPoint pEach: this.pathGraphic.getPoints()) {
 			if(pEach==pSel) {}
@@ -244,22 +261,33 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	@Override
 	public void handlePress(CanvasMouseEvent e){
 		
-		if(e.clickCount()==2) {pathPoint.deselect(); return;}
+		if(e.clickCount()==2) {pathPoint.deselect();clearReshapeHandles(); return;}
 		else if (!isSelected()) {pathPoint.deselect();}
-		else if (e.shfitDown()) {pathPoint.deselect();return;}
+		else if (e.shfitDown()) {pathPoint.deselect();clearReshapeHandles();return;}//clicking on a selected point with shift down will deselect it
 		
 		if(!pathPoint.isSelected())
-			{pathPoint.select();
-			pathGraphic.reshapeList2=null;
+			{
+				pathPoint.select();
+				clearReshapeHandles();
 			}
 		
 		if(pathPoint.isSelected())  setPrimarySelected(pathPoint);
 		
 		if(!e.shfitDown()) {
-			deslectAllExcept(pathPoint);
+			deslectAllExcept(pathPoint);//unless ths user is holding shift to select multiple points, others should not be selected
 		} 
 		pathGraphic.selectedsegmentindex=pathGraphic.getPoints().indexOf(pathPoint);
 		
+	}
+
+
+
+	/**
+	called after there is a change to which points are selected. In this case the 
+	handle list used to move the selected points is no longer valid and can be eliminated
+	 */
+	private void clearReshapeHandles() {
+		pathGraphic.reshapeListForSelectedPoints=null;
 	}
 	
 	
@@ -354,7 +382,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	}
 
 
-
+	/**returns true if this handle is for a curve control point*/
 	boolean isACurveControl() {
 		if (isAnchorPointHandle()) return false;
 		return true;

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -29,26 +34,33 @@ import standardDialog.StandardDialog;
 import undo.SimpleItemUndo;
 import utilityClasses1.NumberUse;
 
-/**A handle that slides along the edge of a rectangular graphic*/
+/**A handle that slides along the edge of a rectangular graphic.
+these allow the user to alter  a rectangle edge parameter*/
 public class RectangleEdgeHandle extends SmartHandle {
 
-	public static int LENGTH_TYPE=0, RATIO_TYPE=1;
+	/**constants of the two varieties of edge handle*/
+	public static final int LENGTH_TYPE=0, RATIO_TYPE=1;
+	
 	private RectangularGraphic theShape;
 	private RectangleEdgeParameter theParameter;
-	double displace=0;
-	int type=0;
+	
+	
+	int type= LENGTH_TYPE;
 	private SimpleItemUndo<RectangleEdgeParameter> undo;
 	private boolean undoaddedAlready;
 
+	/**some handles are drawn at a location that is shifted over by a certain amount. this variable controls that amounts*/
+	private int displaceAmount = 150;
+	/**some handles are drawn at a location that is shifted over by a certain amount. this variable controls that amounts*/
+	double displaceFactor=0;
 
 	
 	public RectangleEdgeHandle(RectangularGraphic r,  RectangleEdgeParameter a, Color c, int handleNumber, int type, double displace) {
-	
 		this.theShape=r;
 		this.theParameter=a;
 		this.setHandleColor(c);
 		this.type=type;
-		this.displace=displace;
+		this.displaceFactor=displace;
 		this.setHandleNumber(handleNumber);
 	}
 
@@ -57,15 +69,18 @@ public class RectangleEdgeHandle extends SmartHandle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**moves shifts a point in a direcion */
 	private void displacePoint(Point2D p) {
 		Point2D pZero = RectangleEdges.getLocation(theParameter.zeroLocation,theShape.getRectangle());
 		Point2D pMax = RectangleEdges.getLocation(theParameter.maxLengthLocation,theShape.getRectangle());
 		double angle = ShapeGraphic.getAngleBetweenPoints(pZero, pMax)+Math.PI/2;
-		//double d = pZero.distance(pMax);
-		double d=displace*150;
+		
+		
+		double d=displaceFactor*displaceAmount;
 		p.setLocation(p.getX()+d*Math.cos(angle), p.getY()+d*Math.sin(angle));
 	} 
 	
+	/**returns the locaiton of this handle*/
 	public Point2D getCordinateLocation() {
 		Point2D pZero = RectangleEdges.getLocation(theParameter.zeroLocation,theShape.getRectangle());
 		Point2D pMax = RectangleEdges.getLocation(theParameter.maxLengthLocation,theShape.getRectangle());
@@ -82,19 +97,21 @@ public class RectangleEdgeHandle extends SmartHandle {
 		return p;
 	}
 	
+	/**returns the location that corresponds to a parameter value of 0*/
 	public Point2D getZeroLocation() {
 		Point2D p = RectangleEdges.getLocation(theParameter.zeroLocation,theShape.getRectangle());
 		theShape.undoRotationCorrection(p);
 		return p;
 		}
 	
+	/**returns the location that corresponds to the maximun parameter value (or a ratio of 1)*/
 	public Point2D getMaxLocation() {
 		Point2D p = RectangleEdges.getLocation(theParameter.maxLengthLocation,theShape.getRectangle());
 		theShape.undoRotationCorrection(p);
 		return p;
 		}
 	
-	
+	/**Called when a handle is dragged*/
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		
 		Point2D pz =  getZeroLocation();
@@ -104,29 +121,24 @@ public class RectangleEdgeHandle extends SmartHandle {
 		double angle = -NumberUse.getAngleBetweenPoints(pz, maxLocation);
 		double maxDistance=distanceOnAxis(pz, maxLocation, angle);
 		double distance=distanceOnAxis(pz, p2, angle);
-		//IssueLog.log("Max distance "+maxDistance);
 		
-		/**if the mouse has been dragged to an invalid location*/
+		/**if the mouse has been dragged to an invalid location (farther than the zero point)*/
 		if (maxLocation.distance(p2)>maxLocation.distance(pz)) distance=0;
 		if(distance<0) distance=0;
 		
 		/**if the mouse drag beyond the point of max distance*/
 		if(distance>maxDistance) distance=maxDistance;
 		
-
-		/**	while (inner>2*Math.PI) inner-=2*Math.PI;
-			while (inner<0) 		inner+=2*Math.PI;
-			while (inner2>2*Math.PI) inner2-=2*Math.PI;
-			while (inner2<0) 		inner2+=2*Math.PI;*/
-			theParameter.setLength(distance);
-			theParameter.setRatioToMaxLength(distance/maxDistance);
+		/**Sets the parameter value*/
+		theParameter.setLength(distance);
+		theParameter.setRatioToMaxLength(distance/maxDistance);
 		addUndo(lastDragOrRelMouseEvent);
 	}
 
 
 	
 	/**Returns the distance between points along an axis of the given angle.
-	  does not actually work properly*/
+	  does not work for every possible combination of points and angles*/
 	private double distanceOnAxis(Point2D pz, Point2D maxLocation, double angle) {
 		AffineTransform a = AffineTransform.getRotateInstance(angle, 0, 0);
 		

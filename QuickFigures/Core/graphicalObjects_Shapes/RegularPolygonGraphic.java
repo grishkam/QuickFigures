@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -42,13 +47,24 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	
 
 	{name="Polygon";}
-	/**
-	 * 
-	 */
 	
-	private CountParameter nvertex=new CountParameter(this, 5); {nvertex.parameterName="n sides";}
+	
+	private final CountParameter nvertex=new CountParameter(this, 5); {nvertex.parameterName="n sides";}
 	
 	private static final long serialVersionUID = 1L;
+	
+	
+	public RegularPolygonGraphic(Rectangle2D rectangle) {
+		super(rectangle);
+	}
+	public RegularPolygonGraphic(Rectangle rectangle, int nV) {
+		super(rectangle);
+		this.setNvertex(nV);
+	}
+	
+	public RegularPolygonGraphic(RectangularGraphic r) {
+		super(r);
+	}
 	
 	
 	public RectangularGraphic blankShape(Rectangle r, Color c) {
@@ -60,6 +76,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 		return r1;
 	}
 	
+	/**returns the name of the polygon*/
 	public String getPolygonType() {
 		switch(getNvertex()) {
 			case 3:
@@ -91,17 +108,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 		return output;
 	}
 	
-	public RegularPolygonGraphic(Rectangle2D rectangle) {
-		super(rectangle);
-	}
-	public RegularPolygonGraphic(Rectangle rectangle, int nV) {
-		super(rectangle);
-		this.setNvertex(nV);
-	}
-	
-	public RegularPolygonGraphic(RectangularGraphic r) {
-		super(r);
-	}
+
 
 	/**implements a formular to produce a regular polygon with a certain number of vertices*/
 	@Override
@@ -126,6 +133,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 		
 	}
 
+	/**returns the angle between points on this polygon*/
 	public double getIntervalAngle() {
 		return 2*Math.PI/getNvertex();
 	}
@@ -150,32 +158,34 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	}
 		
 	
+	/**does nothing in this class but subclasses override this*/
 	protected void selectSegmentForStrokeHandle(PathIterator pi) {
-		// TODO Auto-generated method stub
 		
 	}
 
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  blankShape(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 	}
 
 
-
+	/**returns the number of vertices*/
 	public int getNvertex() {
 		return nvertex.getValue();
 	}
 	
+	/**Sets the number of vertices*/
 	public void setNvertex(int n) {
 		if(n>=minimumNVertex())
-		nvertex.setValue(n);
+			nvertex.setValue(n);
 	}
 
+	/**creates the shape for an illustrator script*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
 
 	
-
+	/**returns the minimum number of vertices*/
 	public int minimumNVertex() {
 		return 3;
 	}
@@ -185,6 +195,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 		new PolygonGraphicOptionsDialog(this, false).showDialog();
 	}
 	
+	/**generates a handle list with handle for the number of vertices*/
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		nvertex.setMinValue(minimumNVertex());

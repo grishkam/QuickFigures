@@ -19,7 +19,7 @@ import java.io.File;
 
 import addObjectMenus.FigureAdder;
 import figureOrganizer.FigureOrganizingLayerPane;
-import genericTools.MoverDragHandler;
+import genericTools.NormalToolDragHandler;
 import graphicActionToolbar.QuickFigureMaker;
 import imageDisplayApp.ImageDisplayIO;
 
@@ -48,9 +48,9 @@ public class OpeningFileDropHandler extends FileDropHandler {
 	}
 
 private boolean isImageFormat(File f) {
-		if (MoverDragHandler.isMicroscopeFormat(f))
+		if (NormalToolDragHandler.isMicroscopeFormat(f))
 			return true;
-		if (MoverDragHandler.isImageFormat(f))
+		if (NormalToolDragHandler.isImageFormat(f))
 			return true;
 		
 		return false;

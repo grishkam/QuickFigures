@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 
 import java.awt.BasicStroke;
@@ -35,8 +40,7 @@ import utilityClasses1.ArraySorter;
 /**A tool that moves a selected item from its current location to the equivalent location in another panel*/
 public class Shift_Object_Between_Panels extends Object_Mover {
 	
-//	{createIconSet("icons/RoiShifterIcon.jpg","icons/RoiShifterIconPressed.jpg","icons/RoiShifterRolloverIcon.jpg");}
-	
+
 	public IconSet getIconSet() {
 		IconSet set1 = new  ShiftToolIcon(0).generateIconSet();
 		setIconSet(set1);
@@ -92,6 +96,7 @@ public class Shift_Object_Between_Panels extends Object_Mover {
 
 {this.setIconSet(new  ShiftToolIcon(0).generateIconSet());}
 	
+	/***/
 	class ShiftToolIcon extends GeneralLayoutToolIcon {
 
 		/**

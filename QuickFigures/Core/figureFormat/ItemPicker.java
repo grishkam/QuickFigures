@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import java.io.Serializable;
@@ -28,6 +33,8 @@ import undo.CombinedEdit;
 	1) Identify items that belong to a certain category
 	2) store and example item of the given category with traits exemplary of a desired format
 	3) Apply the traits that are characteristic of that format to all of the item
+	
+	Each subclass targets a different sort of object
 	 */
 public abstract class ItemPicker<ItemType extends Serializable> implements Serializable {
 	

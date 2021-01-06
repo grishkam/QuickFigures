@@ -53,7 +53,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static int TYPE_CHANGE_PROJECTIONS=0, TYPE_BAR_THICKNESS_WIDTH=1, TYPE_PROJ_LENGTH=2, TYPE_LENGTH_UNITS=3;
+	public static final int TYPE_CHANGE_PROJECTIONS=0, TYPE_BAR_THICKNESS_WIDTH=1, TYPE_PROJ_LENGTH=2, TYPE_LENGTH_UNITS=3;
 
 	public static String[] projTypes=new String[] {"Bar with 2 Projections", "Bar with 1 Projections", "no projection"};
 	
@@ -205,7 +205,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 
 	protected Icon getProjectionIcon() {
 		GraphicGroup gg=new GraphicGroup();
-		gg.getTheLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
+		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
 		
 		BarGraphic barGraphic = new BarGraphic();
 		barGraphic.setProjectionType(projectionType);
@@ -216,7 +216,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		createBarForIcon.setFillColor(Color.black);
 		createBarForIcon.moveLocation(3,5);
 		createBarForIcon.setShowText(false);
-		gg.getTheLayer().add(createBarForIcon);
+		gg.getTheInternalLayer().add(createBarForIcon);
 		GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;
 		
 		
@@ -225,7 +225,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	
 	protected Icon getGenericIcon() {
 		GraphicGroup gg=new GraphicGroup();
-		gg.getTheLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
+		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
 		
 		BarGraphic barGraphic = new BarGraphic();
 		barGraphic.setProjectionType(2);
@@ -237,7 +237,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		createBarForIcon.moveLocation(5,7);
 		createBarForIcon.setShowText(true);
 		if(type==TYPE_LENGTH_UNITS)  createBarForIcon.setLengthInUnits(unitLength);
-		gg.getTheLayer().add(createBarForIcon);
+		gg.getTheInternalLayer().add(createBarForIcon);
 		GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;
 		
 		

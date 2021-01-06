@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -26,7 +31,7 @@ import undo.PanelManagerUndo;
 public class MultichannelDisplayPicker extends
 		ItemPicker<MultichannelDisplayLayer> {
 	
-	/**set to true if the scale factor from the model should also be used, false otherwises*/
+	/**set to true if the scale factor from the model should also be used, false otherwise*/
 	public boolean doesPreprocess=true;
 
 	public MultichannelDisplayPicker() {
@@ -71,12 +76,13 @@ public class MultichannelDisplayPicker extends
 		
 	}
 
-	/**returns true if the scale used by the model available is reasonable for the target image */
+	/**returns true if the scale used by the model available is reasonable for the target image.
+	 * Reasonable is defined as producing final image panels sizes that are below a certain limit */
 	public boolean isProprocessSuitable(MultichannelDisplayLayer imageMulti) {
 		double pScale=1;
 		if (getModelItem()!=null)
 			pScale = getModelItem().getPreprocessScale();
-		/**decides whether the preprocess is appropriate or not*/
+		/**decides whether the 'preprocess' is appropriate or not*/
 		boolean b = imageMulti.getMultiChannelImage().getDimensions().getWidth()*pScale<500;
 		return b;
 	}

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericTools;
 
 import java.awt.Color;
@@ -30,6 +35,7 @@ import icons.GraphicToolIcon;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.ColorEditUndo;
 
+/**A tool that changes the color of an object at the press location*/
 public class ObjectColorFillTool  extends Object_Mover {
 	
 	private Color foregroundColor=Color.red;
@@ -79,6 +85,7 @@ public String getToolTip() {
 		return "Set Object Colors";
 	}
 	
+	/**an icon for the brush tool*/
 	public class BrushIcon extends GraphicToolIcon {
 
 	
@@ -137,10 +144,10 @@ public String getToolTip() {
 		
 		
 		;
-		//Color[] colors=new Color[] {Color.red, Color.green, Color.blue, new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
-		gg.getTheLayer().add(oval);
-		gg.getTheLayer().add(pouringPaint);
-		gg.getTheLayer().add(blankRect);
+	
+		gg.getTheInternalLayer().add(oval);
+		gg.getTheInternalLayer().add(pouringPaint);
+		gg.getTheInternalLayer().add(blankRect);
 		
 		 GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;
 		 output.setRelocatedForIcon(false);

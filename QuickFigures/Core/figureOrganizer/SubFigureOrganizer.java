@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.util.ArrayList;
@@ -26,12 +31,18 @@ public interface SubFigureOrganizer {
 	/**Returns all the multidimensional images in the subfigure*/
 	public ArrayList<MultiChannelImage> getAllSourceImages();
 
+	/**refreshes the panels and labels based on the source images*/
 	public void updatePanelsAndLabelsFromSource();
 	
-	/**These allow any code to stop or set off the process of automatically updating the figure from 
-	 * changes to the source stacks. not implemented in all subclasses */
-	public void release();
+	
+	/**This stops the process of automatically updating the figure from 
+	 changes to the source stacks. not implemented in all subclasses */
 	public void supress();
+	
+	
+	/**This restarts the process of automatically updating the figure from 
+	 changes to the source stacks. not implemented in all subclasses */
+	public void release();
 	
 	
 	

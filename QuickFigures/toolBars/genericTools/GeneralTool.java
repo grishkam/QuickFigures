@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericTools;
 import appContext.CurrentAppContext;
 import applicationAdapters.CanvasMouseEvent;
@@ -901,7 +906,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 			
 			getIconSet().setItemIcons(getToolButton()) ;
 			getToolButton().setIcon(getToolPressedImageIcon());
-			if(bit.isActionTool())getToolButton().setIcon(getToolImageIcon());
+			if(bit.isActionTool())getToolButton().setIcon(getToolNormalIcon());
 			getToolButton().setRolloverEnabled(false);
 			
 			getToolButton().setToolTipText(getToolTip());

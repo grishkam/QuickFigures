@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayoutObjects;
 
 import layout.plasticPanels.PlasticPanelLayout;
@@ -20,6 +25,8 @@ import locatedObject.LocatedObject2D;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.PlasticPanelLayoutPanelMenu;
 
+/**A layout consisting of panels that can be set to arbitrary sizes
+ * and aligned for even spacing*/
 public class PlasticPanelLayoutGraphic extends SpacedPanelLayoutGraphic {
 
 	/**

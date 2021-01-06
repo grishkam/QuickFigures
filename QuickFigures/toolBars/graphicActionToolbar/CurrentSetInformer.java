@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicActionToolbar;
 
 import java.util.Collection;
@@ -20,20 +25,25 @@ import java.util.Collection;
 import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.DisplayedImage;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 
-/**Interface meant to keep track of which figure is the currently active window
+/**implementations of this interface keep track of which figure is the currently active window
  methods tell an object what the currently active display set is*/
 public interface CurrentSetInformer {
 
-	public FigureDisplayContainer getCurrentlyActiveOne() ;
+	/**current worksheet*/
+	public FigureDisplayWorksheet getCurrentlyActiveOne() ;
 	
-	
+	/**current display group*/
 	public DisplayedImage getCurrentlyActiveDisplay() ;
 	
+	/**All display groups from all open windows*/
 	public Collection<DisplayedImage> getVisibleDisplays() ;
 
+	/**updates the display*/
 	public void updateDisplayCurrent();
+	
+	/**adds an undo to the current undo manager*/
 	public void addUndo(UndoableEdit e);
 	
 }

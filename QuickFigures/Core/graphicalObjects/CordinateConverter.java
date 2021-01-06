@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 import java.awt.BasicStroke;
@@ -27,18 +32,26 @@ import java.awt.geom.Point2D;
  * between the two */
 public interface CordinateConverter {
 	
-	/**converts from an absolute cordinate system to a display system*/
+	/**converts from the internal coordinate system to zoomed version that is displayed*/
 	double transformX(double ox);
 	 double transformY(double oy);
 	 Point2D transformP(Point2D op);
+	 
+	 /**converts from the zoomed on screen coordinates to the internal coordinates*/
+		double unTransformX(double ox);
+		double unTransformY(double oy);
+		Point2D unTransformP(Point2D op);
+	 
+		/**returns the zoom level/magnification used*/
 	double getMagnification();
+	
 	public AffineTransform getAffineTransform();
+	
+	/**scales the font from the internally stored size to the sizes needed to draw the item*/
 	Font getScaledFont(Font font) ;
+	/**scales the  stroke from the internally stored one to the size needed to draw the item*/
 	BasicStroke getScaledStroke(BasicStroke bs) ;
 	
-	double unTransformX(double ox);
-	double unTransformY(double oy);
-	Point2D unTransformP(Point2D op);
-	
+	/**returns a copy with the x,y positions shifted*/
 	CordinateConverter getCopyTranslated(int dx, int dy);
 }

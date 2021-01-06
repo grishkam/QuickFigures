@@ -13,8 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
+/**An undoable edit for any objects that implements the interface
+ * @see SimpleTraits
+ * */
 public class SimpleItemUndo<Type> extends AbstractUndoableEdit2  {
 
 	/**

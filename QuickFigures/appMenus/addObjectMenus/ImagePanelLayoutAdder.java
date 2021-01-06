@@ -15,8 +15,8 @@
  *******************************************************************************/
 package addObjectMenus;
 
-import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_LayoutObjects.ObjectDefinedLayoutGraphic;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 public class ImagePanelLayoutAdder extends PlasticLayoutAdder {
 	/**

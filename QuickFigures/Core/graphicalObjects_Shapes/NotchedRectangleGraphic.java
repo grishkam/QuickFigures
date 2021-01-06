@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -35,7 +40,8 @@ import illustratorScripts.PathItemRef;
 import locatedObject.RectangleEdges;
 import objectDialogs.RectangleGraphicOptionsDialog;
 
-/**A rectangle with notches cut out of it*/
+/**A rectangle with notches cut out of it. notches can take several different forms
+ * A user can select which points */
 public class NotchedRectangleGraphic extends RectangularGraphic {
 	/**
 	 * 
@@ -45,36 +51,40 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	/**
 	 * 
 	 */
-
-	private RectangleEdgeParameter arcw=new RectangleEdgeParameter(this, 40, UPPER_LEFT, UPPER_RIGHT); {arcw.setRatioToMaxLength(0.33333);}
-
-	private RectangleEdgeParameter arch=new RectangleEdgeParameter(this, 40, UPPER_LEFT, LOWER_LEFT);;{arch.setRatioToMaxLength(0.33333);}
 	
-	boolean [] validCounts=new boolean[] {true, false, false, false};
+	/**A parameter that determines the notch size*/
+	private RectangleEdgeParameter notchWidth=new RectangleEdgeParameter(this, 40, UPPER_LEFT, UPPER_RIGHT); {notchWidth.setRatioToMaxLength(0.33333);}
+
+	/**A parameter that determines the notch size*/
+	private RectangleEdgeParameter notchHeight=new RectangleEdgeParameter(this, 40, UPPER_LEFT, LOWER_LEFT);;{notchHeight.setRatioToMaxLength(0.33333);}
 	
+	boolean [] notchPositions=new boolean[] {true, false, false, false};
+	
+	/**codes for each notch type*/
 	public static final int CURVE_CUT = 4, QUAD_CUT = 3, BEVEL_CUT = 2, OVAL_CUT = 1, RECTANGLE_CUT=0;
+	/**A count parameter that determines the type of notch*/
 	private CountParameter notchType=new CountParameter(this, 2); {notchType.setNames(new String[] {"Rect", "Oval", "Bevel", "Rounded", "Round 2"}); notchType.setMaxValue(4);}
 	
 	private static final long serialVersionUID = 1L;
 	
-	
-	public static NotchedRectangleGraphic blankShape(Rectangle r, Color c) {
-		NotchedRectangleGraphic r1 = new NotchedRectangleGraphic(r);
-		
-		
-		r1.setStrokeWidth(THICK_STROKE_4);
-		r1.setStrokeColor(c);
-		return r1;
+	public NotchedRectangleGraphic(RectangularGraphic r) {
+		super(r);
+	}
+
+	public NotchedRectangleGraphic(Rectangle r) {
+		super(r);
 	}
 	
 	
 
+	
+
 	public NotchedRectangleGraphic copy() {
 		NotchedRectangleGraphic output = new NotchedRectangleGraphic(this);
-		output.arch=arch.copy(output);
-		output.arcw=arcw.copy(output);
+		output.notchHeight=notchHeight.copy(output);
+		output.notchWidth=notchWidth.copy(output);
 		giveTraitsTo(output);
-		output.validCounts=validCounts.clone();
+		output.notchPositions=notchPositions.clone();
 		output.notchType.setValue(notchType.getValue());
 		return output;
 	}
@@ -86,20 +96,14 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	}
 	
 
-	public NotchedRectangleGraphic(RectangularGraphic r) {
-		super(r);
-	}
-
-	public NotchedRectangleGraphic(Rectangle r) {
-		super(r);
-	}
 	
 	
-	private Shape createShapeforSuctract(int index) {
-		double w = this.getObjectWidth()*arcw.getRatioToMaxLength();
-		double h = this.getObjectHeight()*arch.getRatioToMaxLength();
+	/**returns the shape that will be subtracted to create a notch*/
+	private Shape createShapeforSuctract(int locationCode) {
+		double w = this.getObjectWidth()*notchWidth.getRatioToMaxLength();
+		double h = this.getObjectHeight()*notchHeight.getRatioToMaxLength();
 		
-		int type=getTypeFor(index);
+		int type=locationCode;
 		Point2D loc = RectangleEdges.getLocation(type, getRectangle());
 		if (notchType.getValue()==OVAL_CUT) 
 			return new Ellipse2D.Double(loc.getX()-w, loc.getY()-h, 2*w, 2*h);
@@ -114,25 +118,8 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		return new Rectangle2D.Double(loc.getX()-w, loc.getY()-h, 2*w, 2*h);
 	}
 
-	private int getTypeFor(int index) {
-	/**	int out=index+starting.getValue();
-		if (starting.getValue()<4)
-			return out%4;
-		
-		int[] c=new int[] {UPPER_LEFT, LOWER_RIGHT, LOWER_LEFT, UPPER_RIGHT};
-		
-		if (starting.getValue()==5) {
-			 c=new int[] {LEFT, RIGHT, BOTTOM, TOP};
-			 out=index+starting.getValue()-1;
-				
-		}
-		
-		return c[out%4];*/
-		return index;
-	}
-
-
-
+	
+	/**creates a shape to cut out a bevel from the rectangle*/
 	private Shape createBevel(double d, double e, double f, double g) {
 		Path2D.Double path=new Path2D.Double();
 		
@@ -154,6 +141,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		return path;
 	}
 	
+	/**creates a shape to cut out a quad curve from a rectangle*/
 	private Shape createQuad(double d, double e, double f, double g) {
 		Path2D.Double path=new Path2D.Double();
 		
@@ -180,6 +168,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		return path;
 	}
 	
+	/**creates a shape to cut out a curve from a rectangle*/
 	private Shape createCurve(double d, double e, double f, double g) {
 		Path2D.Double path=new Path2D.Double();
 		
@@ -206,48 +195,39 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		return path;
 	}
 
-
-
-	protected void curveTo(Path2D.Double path, Point2D p1, Point2D p2, Point2D p3) {
+	/**Adds a curve to a path*/
+	private void curveTo(Path2D.Double path, Point2D p1, Point2D p2, Point2D p3) {
 		path.curveTo(p3.getX(), p3.getY(), p2.getX(), p2.getY(), p1.getX(), p1.getY());
 	}
 
 
-
-	public void subtractFromArea(Area a, int type) {
-		Area a2 = new Area(this.createShapeforSuctract(type));
+	/**subtracts a particular notch from the total area of the shape */
+	public void subtractFromArea(Area a, int locationType) {
+		Area a2 = new Area(this.createShapeforSuctract(locationType));
 		a.subtract(a2);
 	}
 
 
 	public Shape getShape() {
 		Rectangle2D.Double double1 = new Rectangle2D.Double(x,y,getObjectWidth(),getObjectHeight());
-	//	if (nNotches.getValue()==0)return double1;
 		
 		Area output = new Area(double1);
-		for(int i=0; i<4;i++) if(validCounts[i]) this.subtractFromArea(output, i);
+		for(int i=0; i<4;i++) if(notchPositions[i]) this.subtractFromArea(output, i);
 		
 		
 		return output;
 	}
-	
-	
-	
-	
-	
-	
-	RectangularGraphic rectForIcon() {
+
+	/**returns the icon*/
+	RectangularGraphic shapeUsedForIcon() {
 		NotchedRectangleGraphic iconshape = blankShape(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
-		iconshape.setArcw(5);
-		iconshape.setArch(5);
+		iconshape.setNotchWidth(5);
+		iconshape.setNotchHeight(5);
 		giveTraitsTo(iconshape);
 		return iconshape;
 	}
 
-
-
-
-
+	/**creates the shape for an illustrator script*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
@@ -261,37 +241,34 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 
 
 
-	public double getArcw() {
-		return arcw.getLength();
+	public double getNotchWidth() {
+		return notchWidth.getLength();
 	}
 
 
 
-	public void setArcw(double arcw) {
-		this.arcw.setLength(arcw);;
+	public void setNotchWidth(double arcw) {
+		this.notchWidth.setLength(arcw);;
 	}
 
 
 
-	public double getArch() {
-		return arch.getLength();
+	public double getNotchHeight() {
+		return notchHeight.getLength();
 	}
 
 
-
-	public void setArch(double arch) {
-		this.arch.setLength( arch);
+	public void setNotchHeight(double arch) {
+		this.notchHeight.setLength( arch);
 	}
 	
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		 {
-			list.add(0,new RectangleEdgeHandle(this, arch, Color.cyan, 18,RectangleEdgeHandle.RATIO_TYPE, 0.05));
-			list.add(0,new RectangleEdgeHandle(this, arcw, Color.orange, 20,RectangleEdgeHandle.RATIO_TYPE, -0.05));
+			list.add(0,new RectangleEdgeHandle(this, notchHeight, Color.cyan, 18,RectangleEdgeHandle.RATIO_TYPE, 0.05));
+			list.add(0,new RectangleEdgeHandle(this, notchWidth, Color.orange, 20,RectangleEdgeHandle.RATIO_TYPE, -0.05));
 			int dx = 45;
-		//	list.add(new CountHandle(this, nNotches, 34912, dx,25, false, 1));
 			list.add(new CountHandle(this, notchType,239124, dx, 50, true, 3));
-		//	list.add(new CountHandle(this, starting,19128, dx, 75, true, 2));
 			for(int i=0; i<4; i++) list.add(new NotchHandle(this, i));
 		 }
 		return list;
@@ -299,9 +276,10 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	
 	
 	public String getShapeName() {
-		return "Notched Rect";
+		return "Notched Rectangle";
 	}
 	
+	/**A special handle for selecting and unselecting position for a notch*/
 	public class NotchHandle extends SmartHandle {
 
 		/**
@@ -324,12 +302,12 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 			return checked()? Color.LIGHT_GRAY: Color.darkGray;
 		}
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-			rect.validCounts[index]=!checked();
+			rect.notchPositions[index]=!checked();
 			if (checked()) this.setSpecialFill(CHECK_MARK); else this.setSpecialFill(0);
 		}
 
 		protected boolean checked() {
-			return rect.validCounts[index];
+			return rect.notchPositions[index];
 		}
 		public Point2D getCordinateLocation() {
 			Double r = rect.getRectangle();
@@ -346,7 +324,14 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 	}
 	
 
-	
+	public static NotchedRectangleGraphic blankShape(Rectangle r, Color c) {
+		NotchedRectangleGraphic r1 = new NotchedRectangleGraphic(r);
+		
+		
+		r1.setStrokeWidth(THICK_STROKE_4);
+		r1.setStrokeColor(c);
+		return r1;
+	}
 	
 	
 }

@@ -68,9 +68,8 @@ import externalToolBar.InterfaceExternalTool;
 import externalToolBar.ToolBarManager;
 import graphicalObjects.FileStandIn;
 import graphicalObjects.GraphicEncoder;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects.LayerSpecified;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.LayerStructureChangeListener;
 import graphicalObjects_LayerTypes.ZoomableGraphicGroup;
@@ -103,7 +102,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	
 	
 	static ArrayList <MiscTreeOptions> otherOps=new ArrayList <MiscTreeOptions>();
-	private FigureDisplayContainer graphicDisplayContainer;
+	private FigureDisplayWorksheet graphicDisplayContainer;
 	
 	JButton upButton=null;//button that moves object backward within the layer and the tree structure
 	JButton downButton=null; //button that moves objects forward within the layer and the tree structure
@@ -262,7 +261,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 	private static GraphicSetDisplayTree lastGradTree;//the last tree clicked in
 	
 	
-	public GraphicTreeUI(FigureDisplayContainer setcont) {
+	public GraphicTreeUI(FigureDisplayWorksheet setcont) {
 		setGraphicDisplayContainer(setcont);
 	}
 	
@@ -287,11 +286,11 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelector, DropT
 		return output;
 	}
 	
-	public void showTreeForLayerSet(FigureDisplayContainer set) {
+	public void showTreeForLayerSet(FigureDisplayWorksheet set) {
 		showTreeForLayerSet(set, set.getTitle());
 	}
 	
-	public void showTreeForLayerSet(FigureDisplayContainer set, String title) {
+	public void showTreeForLayerSet(FigureDisplayWorksheet set, String title) {
 		this.setGraphicDisplayContainer(set);
 		frame = new JFrame("Layer Tree "+title);
 		frame.addWindowListener(this);
@@ -395,7 +394,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 			DefaultMutableTreeNode node = branchOperation().getOrCreateChildWithUserObject(t, z, true);
 			ZoomableGraphicGroup z1=(ZoomableGraphicGroup) z;
 			
-			ArrayList<ZoomableGraphic> graphics2 = z1.getTheLayer().getItemArray();
+			ArrayList<ZoomableGraphic> graphics2 = z1.getTheInternalLayer().getItemArray();
 			
 			for (ZoomableGraphic l: graphics2) {
 				addGraphicToTreeNode(node, l);
@@ -496,7 +495,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	public boolean willItemAcceptContainer(ZoomableGraphic destinatoinContainer, ZoomableGraphic itemtobeadded) {
 		if (destinatoinContainer instanceof ZoomableGraphicGroup) {
 			ZoomableGraphicGroup z=(ZoomableGraphicGroup) destinatoinContainer;
-			return willItemAcceptContainer(z.getTheLayer(), itemtobeadded);
+			return willItemAcceptContainer(z.getTheInternalLayer(), itemtobeadded);
 		}
 		
 		if (destinatoinContainer instanceof GraphicLayer && ((GraphicLayer)destinatoinContainer).canAccept(itemtobeadded)) return true;
@@ -547,7 +546,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 						
 						/**if not selecting in group*/
 						if (g instanceof ZoomableGraphicGroup) {
-							ArrayList<ZoomableGraphic> all2 = ((ZoomableGraphicGroup) g).getTheLayer().getAllGraphics();
+							ArrayList<ZoomableGraphic> all2 = ((ZoomableGraphicGroup) g).getTheInternalLayer().getAllGraphics();
 							for(ZoomableGraphic g2: all2) {
 								if (selectedGraphics.contains(g2)) fixedOrder.add(g2);
 								}
@@ -605,7 +604,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 			if (itemAtDroplocation instanceof ZoomableGraphicGroup) {
 				ZoomableGraphicGroup group = ((ZoomableGraphicGroup) itemAtDroplocation);
-				output=group.getTheLayer();
+				output=group.getTheInternalLayer();
 				/**if the group cannot accept the item, then refers it to a parent layer. 
 				 since the top of the tree is always a layer that can accept anything, output should not be null*/
 				while (!output.canAccept(item)) {
@@ -711,7 +710,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		if (pnode.getUserObject() instanceof GraphicLayer) {
 				origin = (GraphicLayer) pnode.getUserObject() ;  }
 		else if (pnode.getUserObject() instanceof ZoomableGraphicGroup){
-			origin=((ZoomableGraphicGroup ) pnode.getUserObject()).getTheLayer();
+			origin=((ZoomableGraphicGroup ) pnode.getUserObject()).getTheInternalLayer();
 		}
 		
 	
@@ -767,7 +766,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 			undo2.addEditToList(new UndoAddItem(destination, item, tree));
 			
 		origin.remove(item);
-		removeKey(item);
+		
 		destination.add(item);
 		
 		Object object = moveItemPositionsForDrop(destination, item, index);
@@ -1021,12 +1020,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	}
 	
 	
-	void removeKey(ZoomableGraphic z) {
-		if (z instanceof LayerSpecified) {
-			LayerSpecified l=(LayerSpecified)z;
-			l.setLayerKey(null);
-		}
-	}
+	
 	
 	
 
@@ -1286,11 +1280,11 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		return tree.getSelecteditems();
 	}
 
-	public FigureDisplayContainer getGraphicDisplayContainer() {
+	public FigureDisplayWorksheet getGraphicDisplayContainer() {
 		return graphicDisplayContainer;
 	}
 
-	public void setGraphicDisplayContainer(FigureDisplayContainer graphicDisplayContainer) {
+	public void setGraphicDisplayContainer(FigureDisplayWorksheet graphicDisplayContainer) {
 		this.graphicDisplayContainer = graphicDisplayContainer;
 	}
 	

@@ -13,8 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
+/**Edit listener objects are called after an undo or redo is done*/
 public interface EditListener {
 	public void afterEdit();
 }

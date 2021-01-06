@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import channelLabels.ChannelLabelTextGraphic;
@@ -34,6 +39,8 @@ public class LabelExamplePicker extends GraphicalItemPicker<TextGraphic> impleme
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**options for a few types of labels have their number codes listed here*/
 	static int[] typicalTypes=new int[] {LayoutSpaces.ROW_OF_PANELS, LayoutSpaces.COLUMN_OF_PANELS, LayoutSpaces.PANELS};
 	private int desiredGridSnapType=LayoutSpaces.ROW_OF_PANELS;
 	
@@ -56,7 +63,7 @@ public class LabelExamplePicker extends GraphicalItemPicker<TextGraphic> impleme
 		return optionname;
 	}
 	
-	
+	/**returns the name of the type of object that this picker selects*/
 	public String getTypeName() {
 		if (getDesiredGridAttachmentLocation()==LayoutSpaces.ROW_OF_PANELS) return "Row Labels";
 		if (getDesiredGridAttachmentLocation()==LayoutSpaces.COLUMN_OF_PANELS) return "Column Labels";

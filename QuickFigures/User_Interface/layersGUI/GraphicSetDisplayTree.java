@@ -28,7 +28,7 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.ZoomableGraphicGroup;
@@ -49,7 +49,7 @@ TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphi
 	private static final long serialVersionUID = 1L;
 	
 	/**The object whose layers are being shown*/
-	private FigureDisplayContainer setDisplayContainer;
+	private FigureDisplayWorksheet setDisplayContainer;
 
 	/**the top of the tree*/
 	DefaultMutableTreeNode masternode;
@@ -58,7 +58,7 @@ TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphi
 	GraphicLayer baseLayer;
 	
 	/**Creates a J tree for the given container*/
-	public GraphicSetDisplayTree(FigureDisplayContainer cont, DefaultMutableTreeNode masternode) {
+	public GraphicSetDisplayTree(FigureDisplayWorksheet cont, DefaultMutableTreeNode masternode) {
 		super(masternode, true);
 	
 		this.masternode=masternode;
@@ -71,7 +71,7 @@ TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphi
 	}
 
 	/**returns the object whose layers are being shown in the tree*/
-	public FigureDisplayContainer getSetDisplayContainer() {
+	public FigureDisplayWorksheet getSetDisplayContainer() {
 		return setDisplayContainer;
 	}
 	
@@ -109,7 +109,7 @@ TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphi
 			else if 
 			 (s2 instanceof ZoomableGraphicGroup) {
 				ZoomableGraphicGroup output = (ZoomableGraphicGroup)s2;
-				return output.getTheLayer();
+				return output.getTheInternalLayer();
 			}
 			
 			else {

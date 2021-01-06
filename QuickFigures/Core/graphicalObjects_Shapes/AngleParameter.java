@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.io.Serializable;
@@ -20,7 +25,9 @@ import java.io.Serializable;
 import undo.SimpleTraits;
 
 
-/**keeps information about an angle, used by the angle handle and certain shapes*/
+/**stores information about a parameter value that is defined relative to the center of rotation of a rectangular object
+ The value may depend on an angle, a radius, a ratio or some combination
+ * , used by the angle handle and certain shapes*/
 public class AngleParameter implements Serializable, SimpleTraits<AngleParameter> {
 	
 	/**
@@ -37,9 +44,9 @@ public class AngleParameter implements Serializable, SimpleTraits<AngleParameter
 	
 
 	public AngleParameter(RectangularGraphic ovalGraphic) {
-		// TODO Auto-generated constructor stub
 	}
 	
+	/**creates  a copy*/
 	public AngleParameter copy() {
 		AngleParameter output = new AngleParameter(null);
 		giveTraitsTo(output);
@@ -47,8 +54,6 @@ public class AngleParameter implements Serializable, SimpleTraits<AngleParameter
 	}
 	
 	
-	
-
 	public void giveTraitsTo(AngleParameter output) {
 		output.angle=angle;
 		output.ratioToMaxRadius= ratioToMaxRadius;
@@ -56,25 +61,34 @@ public class AngleParameter implements Serializable, SimpleTraits<AngleParameter
 		output.type=type;
 	}
 	
-	
+	/**returns the angle in degrees*/
 	double inDegrees() {
 		return getAngle()*180/Math.PI;
 	}
-	public double getRatioToMaxRadius() {
-		return ratioToMaxRadius;
-	}
+	/**returns the angle*/
 	public double getAngle() {
 		return angle;
 	}
+	/**Sets the angle*/
 	public void setAngle(double angle) {
 		this.angle = angle;
 	}
+	
+	/**returns the radius ratio*/
+	public double getRatioToMaxRadius() {
+		return ratioToMaxRadius;
+	}
+	
+	/**Sets the radius ratio*/
 	public void setRatioToMaxRadius(double ratioToMaxRadius) {
 		this.ratioToMaxRadius = ratioToMaxRadius;
 	}
+	
+	/**returns a code indicating the type of value stored in this parameter*/
 	public int getType() {
 		return type;
 	}
+	/**sets the type of value stored in this parameter*/
 	public void setType(int type) {
 		this.type = type;
 	}
@@ -84,10 +98,12 @@ public class AngleParameter implements Serializable, SimpleTraits<AngleParameter
 		return this;
 	}
 
+	/**returns the stored angle ratio*/
 	public double getRatioToStandardAngle() {
 		return ratioToStandardAngle;
 	}
 
+	/**sets the stored angle ratio*/
 	public void setRatioToStandardAngle(double ratioToStandardAngle) {
 		this.ratioToStandardAngle = ratioToStandardAngle;
 	}
@@ -97,11 +113,12 @@ public class AngleParameter implements Serializable, SimpleTraits<AngleParameter
 		
 	}
 	
-	
+	/**Adds a particular value to the radius ratio*/
 	public void increaseRadiusRatio(double d) {
 		this.ratioToMaxRadius +=d;
 	}
 	
+	/**Adds a particular value to the angle ratio*/
 	public void increaseAngleRatio(double d) {
 		this.ratioToStandardAngle +=d;
 	}

@@ -13,18 +13,32 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package journalCriteria;
 
 import java.awt.Font;
 import java.util.ArrayList;
 
+import layout.RetrievableOption;
 import locatedObject.StrokedItem;
 import textObjectProperties.TextItem;
 
+/**Journals typically demand limits fonts, line widths
+ * and other properties. this class stores a description of those limits
+ * along with methods to force figures to fit those limits*/
 public class JournalCriteria {
+	@RetrievableOption(key="MinStroke", label="Minimun line width")
 	public float minimumStroke=0;
+	@RetrievableOption(key="MinFontSize", label="Minimun font size")
 	public float minimumFont=0;
+	
+	@RetrievableOption(key="theIdealfont", label="Ideal font ")
 	public String prefferedFontFamily="";
+	
 	public ArrayList<String> permittedFontFamilies=new ArrayList<String>();
 	
 	public JournalCriteria() {

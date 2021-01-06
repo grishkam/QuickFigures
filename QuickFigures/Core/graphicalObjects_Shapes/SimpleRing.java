@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -30,9 +35,13 @@ import java.awt.geom.Point2D;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
-/**A star object*/
+/**Circular graphic with a hole inside*/
 public class SimpleRing extends CircularGraphic {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	
 	AngleParameter parameterRing=new AngleParameter(this); {parameterRing.setType(AngleParameter.RADIUS_TYPE); parameterRing.setRatioToMaxRadius(0.5);}
 	
@@ -52,11 +61,12 @@ public class SimpleRing extends CircularGraphic {
 		setupName();
 	}
 
+	/**names the object*/
 	private void setupName() {
 		name=getShapeName();
 	}
 	
-	
+	/**returns the name for this kind of shape*/
 	public String getShapeName() {
 		String name1="Ring";
 		if(this.isArc()) {
@@ -65,11 +75,8 @@ public class SimpleRing extends CircularGraphic {
 		return name1;
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public String getPolygonType() {return "Ring";}
+	
+
 	
 	public SimpleRing copy() {
 		SimpleRing output = new SimpleRing(this, arc);
@@ -99,7 +106,7 @@ public class SimpleRing extends CircularGraphic {
 		
 	}
 	
-	
+	/**returns the shape of the hole*/
 	public Shape getInnerRingShape() {
 		
 		Double r = new Ellipse2D.Double(x, y, getObjectWidth()*getRingRatio(), getObjectHeight()*getRingRatio());
@@ -110,10 +117,7 @@ public class SimpleRing extends CircularGraphic {
 		
 	}
 
-	public double getRatioInternalToExternal() {
-		return getRingRatio();
-	}
-	
+	/**returns a handle list with a handle to control the size of the hole*/
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 	
@@ -129,22 +133,26 @@ public class SimpleRing extends CircularGraphic {
 		return super.getPointInside(factor, currentAngle);
 	}
 	
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  blankOval(new Rectangle(0,0,12,10), Color.BLACK, arc);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 	}
 	
 
-
-	
-	
+	/**Creates the shape for an illustrator script*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
-
+	
+	
+	
+	public double getRatioInternalToExternal() {
+		return getRingRatio();
+	}
+	/**returns the size of the hole relative to the size of the object*/
 	public double getRingRatio() {
 		return parameterRing.getRatioToMaxRadius();
 	}
-
+	/**sets the size of the hole relative to the size of the object*/
 	public void setRingRatio(double ieRatio) {
 		parameterRing.setRatioToMaxRadius(ieRatio);
 	}

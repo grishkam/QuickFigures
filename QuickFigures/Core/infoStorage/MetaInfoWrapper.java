@@ -13,13 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package infoStorage;
 
 
-
+/**an interface with methods designed for extraction of stored values
+ * the form of those stored values depends on the implementation*/
 public interface MetaInfoWrapper {
-	/**The Setter*/
-	public  void setEntry(String entryname, String number);
+	
+	
+	public  void setEntry(String entryKeyName, String value);
 	
 	/**The Setters*/
 	public  String getEntryAsString( String entryname ) ;

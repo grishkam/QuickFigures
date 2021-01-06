@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.plasticPanels;
 
 import java.awt.Point;
@@ -25,7 +30,7 @@ import java.io.Serializable;
 import applicationAdapters.ImageWorkSheet;
 import layout.PanelLayout;
 
-/**A very basic panel layout superclass that other classes can extends*/
+/**A very basic panel layout superclass that other classes can extend*/
 public abstract class FundamentalPanelLayout implements PanelLayout, Serializable {
 
 	/**
@@ -37,7 +42,6 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 	
 	@Override
 	public Point2D getReferenceLocation() {
-		// TODO Auto-generated method stub
 		return location;
 	}
 	
@@ -46,7 +50,6 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 	public Shape allPanelArea() {
 		Area output = new Area();
 		for(int i=0; i<nPanels(); i++) {
-			//panel=this.getPanel(i+1);
 			Rectangle2D panel = getPanel(i+1);
 			if (panel!=null) output.add(new Area(panel));
 		}
@@ -57,10 +60,11 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 
 	@Override
 	public Shape getBoundry() {
-		// TODO Auto-generated method stub
 		return allPanelArea().getBounds();
 	}
 	
+	/**returns the location of the a panel
+	 * @param index the index of the panel*/
 	@Override
 	public Point2D getPoint(int index) {
 		Rectangle2D panel = this.getPanel(index);
@@ -68,39 +72,39 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 		return  new Point2D.Double(panel.getX(), panel.getY());
 	}
 
+	/**returns the nearest panel*/
 	@Override
 	public Rectangle2D getNearestPanel(double d, double e) {
 		PanelOperations<Rectangle2D> pops = new PanelOperations<Rectangle2D> ();
 		return pops.getNearestPanel(this.getPanels(), d, e);
 	}
 	
+	/**returns the  panels*/
 	@Override
 	public Rectangle2D[] getPanels() {
 		Rectangle2D[] p = new Rectangle2D[nPanels()] ;
 		for(int i=0; i<nPanels(); i++) {
-			//panel=this.getPanel(i+1);
 			p[i]=getPanel(i+1);
 		}
 		return p;
 	}
 	
+	/**returns the locations of the panels*/
 	@Override
 	public Point2D[] getPoints() {
 		int size = getPanels().length;
 		Point2D[] p = new Point2D[size] ;
 		for(int i=0; i<size; i++) {
-			//panel=this.getPanel(i+1);
 			p[i]=getPoint(i+1);
 		}
 		return p;
 	}
 	@Override
-	public ImageWorkSheet getEditedImage() {
-		// TODO Auto-generated method stub
+	public ImageWorkSheet getEditedWorksheet() {
 		return wrapper;
 	}
 
-	public void setEditedImage(ImageWorkSheet wrapper) {
+	public void setEditedWorkSheet(ImageWorkSheet wrapper) {
 		this.wrapper = wrapper;
 	}
 	

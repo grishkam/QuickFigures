@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
@@ -34,7 +39,8 @@ import illustratorScripts.PathItemRef;
 import locatedObject.RectangleEdgePositions;
 import locatedObject.RectangleEdges;
 
-/**A Right triangle shape. user can flip the triangle by dragging a handle*/
+/**A Right triangle shape.
+ *  user can change the oritenation of the triangle by dragging a handle*/
 public class RightTriangleGraphic extends RectangularGraphic implements RectangleEdgePositions{
 	
 
@@ -75,7 +81,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		Path2D.Double path=new Path2D.Double();
 		
 	
-		ArrayList<Point2D> loc = getTrianglePoints();
+		ArrayList<Point2D> loc = getEdgePoints();
 		path.moveTo(loc.get(0).getX(),loc.get(0).getY());
 		path.lineTo(loc.get(1).getX(),loc.get(1).getY());
 		path.lineTo(loc.get(2).getX(),loc.get(2).getY());
@@ -88,7 +94,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 	}
 	
 	/**returns the points of the triangle.*/
-	ArrayList<Point2D> getTrianglePoints() {
+	ArrayList<Point2D> getEdgePoints() {
 		ArrayList<Point2D> output=new ArrayList<Point2D>();
 		
 		if(getType()==UPPER_LEFT) {
@@ -120,8 +126,8 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 	
 	
 	
-
-	RectangularGraphic rectForIcon() {
+	/**the shape used to draw the icon*/
+	RectangularGraphic shapeUsedForIcon() {
 		RightTriangleGraphic ss = blankShape(new Rectangle(0,0,12,10), Color.BLACK);
 		ss.setType(getType());
 		return ss;
@@ -129,7 +135,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 	}
 
 	
-
+	/**creates the shape for an illustrator script*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
@@ -148,7 +154,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 
 	
 	RectangularGraphic createIcon() {
-		RectangularGraphic out = rectForIcon() ;
+		RectangularGraphic out = shapeUsedForIcon() ;
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		out.copyColorsFrom(this);

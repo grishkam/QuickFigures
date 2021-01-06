@@ -88,7 +88,7 @@ public class StatusPanel extends JPanel {
 			rect2=RectangularGraphic.blankRect(new Rectangle(2,2, percentdone, barheight-2), Color.blue.darker());
 			rect2.setStrokeWidth(0);
 			rect2.setFillColor(Color.blue.darker());
-				group1.getTheLayer().add(rect1);group1.getTheLayer().add(rect2);
+				group1.getTheInternalLayer().add(rect1);group1.getTheInternalLayer().add(rect2);
 		
 		this.add(lab0, c);	
 		c.gridx=1; 

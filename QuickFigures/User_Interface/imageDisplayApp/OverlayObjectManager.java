@@ -29,7 +29,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import locatedObject.DefaultPaintProvider;
@@ -154,7 +154,7 @@ public class OverlayObjectManager {
 	
 	public void setSelectionGraphic3(ZoomableGraphic selectionGraphic3) {
 		ensureSelected() ;
-		if (this.selectionGraphic3 instanceof LockedItemHandle) {
+		if (this.selectionGraphic3 instanceof AttachmentPositionHandle) {
 			IssueLog.log("have selected locked item handle ");
 			throw new NullPointerException();
 		}

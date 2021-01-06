@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 
@@ -29,8 +34,8 @@ public class UndoLayerContentChange extends AbstractUndoableEdit2 {
 	 */
 	private static final long serialVersionUID = 1L;
 	private GraphicLayer layer;
-	private ArrayList<ZoomableGraphic> iItems;
-	private ArrayList<ZoomableGraphic> fItems;
+	private ArrayList<ZoomableGraphic> iItems;//the original content
+	private ArrayList<ZoomableGraphic> fItems;//the final content
 	
 	public UndoLayerContentChange(GraphicLayer layer) {
 		this.layer=layer;

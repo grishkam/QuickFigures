@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.plasticPanels;
 
 import java.awt.Rectangle;
@@ -22,7 +27,7 @@ import java.util.HashMap;
 
 import locatedObject.LocatedObject2D;
 
-
+/**A panel layout that depends on a list of objects for it locations*/
 public class ObjectListPanelLayout extends BasicSpacedPanelLayout {
 
 /**

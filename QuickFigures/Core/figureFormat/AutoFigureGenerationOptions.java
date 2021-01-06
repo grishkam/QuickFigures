@@ -13,14 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 /**Class stores values that instruct how to go about making a figure*/
 public class AutoFigureGenerationOptions {
-	public boolean addChannelLabels=true;
-	public boolean showPanelDialog=false;
-	public boolean autoGenerateFromModel=true;
-	public boolean onlyFirstSetGetsChannelLabels=true;
-	public boolean ignoreSavedTemplate=false;
+	public boolean addChannelLabels=true;//should channel labels be added?
+	public boolean showPanelDialog=false;//should a recreate panels dialog be shown?
+	public boolean autoGenerateFromModel=true;//should object be generated automatically based on the template?
+	public boolean ignoreSavedTemplate=false;//does one ignore the saved template
 	
 }

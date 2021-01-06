@@ -23,6 +23,8 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.OpeningFileDropHandler;
 import externalToolBar.AbstractExternalToolset;
+import externalToolBar.InterfaceExternalTool;
+import externalToolBar.ToolBarManager;
 import genericTools.GeneralTool;
 import genericTools.ToolBit;
 import logging.IssueLog;
@@ -62,6 +64,11 @@ public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>
 		if (!IssueLog.isWindows()) return true;
 		return false;
 	}
-
+	
+	/**Sets the current tool*/
+	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
+		super.setCurrentTool(currentTool);
+		ToolBarManager.setCurrentTool(currentTool);
+	}
 
 }

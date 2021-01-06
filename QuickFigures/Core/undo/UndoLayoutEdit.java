@@ -13,11 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
 
+/**An undo for changes to a layout.
+ * also an undo for any chages to the objects within a layout
+ * @see UndoMoveItems
+ * @see DefaultLayoutGraphic
+ * @see BasicLayout
+ * */
 public class UndoLayoutEdit extends UndoMoveItems {
 
 	/**
@@ -36,7 +47,7 @@ public class UndoLayoutEdit extends UndoMoveItems {
 	}
 	
 	public UndoLayoutEdit(BasicLayout panelLayout) {
-		super(panelLayout.getEditedImage().getLocatedObjects());
+		super(panelLayout.getEditedWorksheet().getLocatedObjects());
 		 layout= panelLayout;
 		 oldlayout=layout.duplicate();
 		 

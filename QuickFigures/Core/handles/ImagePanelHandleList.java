@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -24,7 +29,7 @@ import java.util.ArrayList;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.RectangleEdges;
 
-/**A set of handles for editing of a user selected image*/
+/**A set of handles for editing of an image panel*/
 public class ImagePanelHandleList extends SmartHandleList {
 
 	public static final int FRAME_HANDLE_ID = 10;
@@ -61,8 +66,8 @@ public class ImagePanelHandleList extends SmartHandleList {
 		frameHandle.setCordinateLocation(getFrameHandlePoint());
 		for(int i=10; i<this.size(); i++) {
 			SmartHandle item = this.get(i);
-			if (item instanceof LockedItemHandle) {
-				LockedItemHandle lh=(LockedItemHandle) item;
+			if (item instanceof AttachmentPositionHandle) {
+				AttachmentPositionHandle lh=(AttachmentPositionHandle) item;
 			lh.updateLocation();
 			}
 		}

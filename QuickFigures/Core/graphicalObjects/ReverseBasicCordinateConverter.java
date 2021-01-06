@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 import java.awt.BasicStroke;
@@ -20,6 +25,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
+/**A coordinate converter that performs the inverse operation to reverse
+ * of a normal one*/
 public class ReverseBasicCordinateConverter extends BasicCoordinateConverter {
 
 	/**

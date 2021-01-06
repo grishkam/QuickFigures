@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout;
 import java.lang.annotation.*;
 
@@ -40,7 +45,7 @@ public @interface RetrievableOption {
 	String key();
 	
 	/**a string array for adding items to a Choice object so the user can pick from a list of choices for
-	   an integer field. if the length of this array is 0 a text field for a number should be created for
+	   an integer field. if the length of this array is 0, a text field for a number should be created for
 	   the field in the user interface
 	   */
 	String[] choices() default {};

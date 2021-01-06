@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.io.Serializable;
@@ -21,7 +26,8 @@ import locatedObject.RectangleEdgePositions;
 import undo.SimpleTraits;
 
 
-/**keeps information about a length or ratio, used by the angle handle and certain shapes*/
+/**keeps information about a length or ratio, used by certain handles and certain shapes.
+ * */
 public class RectangleEdgeParameter implements Serializable, RectangleEdgePositions, SimpleTraits<RectangleEdgeParameter> {
 	
 	/**
@@ -31,6 +37,8 @@ public class RectangleEdgeParameter implements Serializable, RectangleEdgePositi
 	private double length=0;
 	private double ratioToMax=0.75;
 	
+	/**The location codes for the 0 and max length locations on a rectangle.
+	  these determine where the handle is drawn and how far it can be moved*/
 	public int zeroLocation=UPPER_LEFT;
 	public int maxLengthLocation=TOP;
 

@@ -32,7 +32,7 @@ import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import genericTools.BasicToolBit;
-import genericTools.MoverDragHandler;
+import genericTools.NormalToolDragHandler;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -413,6 +413,6 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 			return this.getToolTip();
 		}
 	public DragAndDropHandler getDragAndDropHandler() {
-		return new MoverDragHandler(this);
+		return new NormalToolDragHandler(this);
 	}
 }

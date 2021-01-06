@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 import java.awt.Color;
@@ -22,6 +27,8 @@ import genericTools.ToolBit;
 import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 
+/**A tool for adding a shape to a worksheet
+ * @see RectangularGraphic the superclass for all the shapes that this tool handles*/
 public class ShapeGraphicTool extends RectGraphicTool implements ToolBit {
 
 /**Creates a shape adding tool with the given model shape*/

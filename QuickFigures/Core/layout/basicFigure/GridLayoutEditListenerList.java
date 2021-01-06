@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.basicFigure;
 
 import java.io.IOException;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
+/**A list of grid layout event listeners*/
 public class GridLayoutEditListenerList extends
 		ArrayList<GridLayoutEditListener> implements GridLayoutEditListener{
 

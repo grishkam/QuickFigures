@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericTools;
 
 import java.awt.Color;
@@ -26,6 +31,8 @@ import layout.basicFigure.BasicLayout;
 /**Objects that implements this interface 
   store information relating to the tools in the toolbar
   Interface contains methods relating the the tools
+  @see ToolBit
+  @see GeneralTool
   TODO: */
 public interface ToolCore {
 
@@ -103,21 +110,6 @@ public interface ToolCore {
 	
 	public abstract int getMouseXrelease();
 	public abstract int getMouseYrelease();
-
-	//Stores the index of the channel, frame of slice being dragged
-	/**public abstract int getChannelClick();
-	public abstract void setChannelClick(int channelClick);
-	public abstract int getChannelDrag();
-	public abstract void setChannelDrag(int channelDrag);
-	public abstract int getFrameClick();
-	public abstract void setFrameClick(int frameClick);
-	public abstract int getFrameDrag();
-	public abstract void setFrameDrag(int frameDrag);
-	public abstract int getSliceClick();
-	public abstract void setSliceClick(int sliceClick);
-	public abstract int getSliceDrag();
-	public abstract void setSliceDrag(int sliceDrag);*/
-
 	
 	public abstract int getPanelIndexClick();
 	public abstract void setPanelIndexClick(int panelIndexClick);

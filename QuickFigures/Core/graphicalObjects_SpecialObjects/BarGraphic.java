@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_SpecialObjects;
 
 import java.awt.BasicStroke;
@@ -46,7 +51,7 @@ import export.pptx.BarGraphicToOffice;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import export.pptx.TextGraphicImmitator;
-import graphicTools.LockGraphicTool2;
+import graphicTools.AttachedItemTool2;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicHolder;
@@ -54,7 +59,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasSmartHandles;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import handles.SmartHandleForText;
@@ -76,7 +81,10 @@ import menuUtil.PopupMenuSupplier;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.BarSwingGraphicDialog;
 
-/**A graphical object that represents a scale bar*/
+/**A graphical object that represents a scale bars
+ * Each scale bar may be attached to an image panel
+ * @see ImagePanelGraphic 
+ * */
 public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,RectangleEdgePositions, HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,GraphicHolder, HasSmartHandles, ProvidesDialogUndoableEdit{
 	
 
@@ -619,7 +627,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	public void scaleAbout(Point2D p, double mag) {
 		
 		Point2D p2 = this.getLocation();
-		p2=scaleAbout(p2, p,mag,mag);
+		p2=scalePointAbout(p2, p,mag,mag);
 		this.setBarStroke(this.getBarStroke()*mag);
 		this.setLengthProjection(this.getProjectionLength()*mag);
 		ScaleInfo s2 = this.getScaleInfo().getScaledCopyXY(mag);
@@ -789,7 +797,7 @@ public class BarTextGraphic extends TextGraphic {
 	
 	public PopupMenuSupplier getMenuSupplier() {
 		TextGraphicMenu out = new TextGraphicMenu(this);
-		out.add(new LockedItemHandle(null, this, 10).createAdjustPositionMenuItem());
+		out.add(new AttachmentPositionHandle(null, this, 10).createAdjustPositionMenuItem());
 		return out;
 	}
 	
@@ -881,7 +889,7 @@ class BarSmartHandle extends SmartHandle {
 		if (this.getHandleNumber()==TEXT_LOCATION_HANDLE) {
 	
 		
-			LockGraphicTool2.adjustPositionForBar((int)p2.getX(), (int)p2.getY(), getBarBounds(), getBarText());
+			AttachedItemTool2.adjustPositionForBar((int)p2.getX(), (int)p2.getY(), getBarBounds(), getBarText());
 			getBarText().setLocation(p2.x, p2.y);
 			
 		}

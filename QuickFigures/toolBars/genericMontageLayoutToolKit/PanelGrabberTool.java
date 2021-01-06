@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 import layout.PanelContentExtract;
 import layout.PanelLayout;
@@ -56,6 +61,8 @@ public class PanelGrabberTool extends GeneralLayoutEditorTool implements
 		super.mouseMoved();
 		setCursorBasedOnExcerpt();
 	} 
+	
+	/**either adds a row/column or removes one depending on whether shift is down*/
 	public void  performPressEdit()  {
 		
 		boolean shift=!shiftDown();

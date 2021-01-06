@@ -360,7 +360,7 @@ if(a instanceof PathGraphic ) {
 	
 	public GraphicDisplayComponent getItemIcon(boolean selected) {
 		GraphicGroup gg=new GraphicGroup();
-		gg.getTheLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,ICON_SIZE,ICON_SIZE), TRANSPARENT_COLOR));
+		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,ICON_SIZE,ICON_SIZE), TRANSPARENT_COLOR));
 		
 		//Color[] colors=new Color[] {Color.red, Color.green, Color.blue, new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
 	
@@ -379,7 +379,7 @@ if(a instanceof PathGraphic ) {
 							 rect.setDashes(new float[] {});
 							 rect.setStrokeColor(Color.black);
 							 colorObject=rect;
-							 gg.getTheLayer().add(rect);
+							 gg.getTheInternalLayer().add(rect);
 					 } else {
 						 rect.setStrokeWidth(4);
 						 
@@ -409,9 +409,9 @@ if(a instanceof PathGraphic ) {
 						 rect3.setFillColor(TRANSPARENT_COLOR);
 						 rect3.setStrokeWidth(1); rect3.setStrokeColor(Color.black);rect3.makeNearlyDashLess();
 						
-						 gg.getTheLayer().add(rect3);
-						 gg.getTheLayer().add(rect);
-						 gg.getTheLayer().add(rect2);
+						 gg.getTheInternalLayer().add(rect3);
+						 gg.getTheInternalLayer().add(rect);
+						 gg.getTheInternalLayer().add(rect2);
 						
 					 }
 					
@@ -427,7 +427,7 @@ if(a instanceof PathGraphic ) {
 			if (this.getStrokeWidth()!=null) drawn.setStrokeWidth(getStrokeWidth());
 			if (this.getStrokeWidth()!=null&&this.getStrokeWidth()>18) drawn.setStrokeWidth(18);
 			
-			gg.getTheLayer().add(drawn);
+			gg.getTheInternalLayer().add(drawn);
 		}
 		
 		
@@ -444,7 +444,7 @@ if(a instanceof PathGraphic ) {
 					 path.makeNearlyDashLess();
 					 path.setStrokeColor(Color.black);
 					 gg=new GraphicGroup();
-					 gg.getTheLayer().add(path);
+					 gg.getTheInternalLayer().add(path);
 			 
 			
 		}
@@ -461,7 +461,7 @@ if(a instanceof PathGraphic ) {
 					 path.makeNearlyDashLess();
 					 path.setStrokeColor(Color.black);
 					 gg=new GraphicGroup();
-					 gg.getTheLayer().add(path);
+					 gg.getTheInternalLayer().add(path);
 			 
 			
 		}
@@ -476,7 +476,7 @@ if(a instanceof PathGraphic ) {
 			path.setClosedShape(this.isPathCloser());
 			path.moveLocation(2, 5);
 			 gg=new GraphicGroup();
-			 gg.getTheLayer().add(path);
+			 gg.getTheInternalLayer().add(path);
 		}
 		
 		if (this.fontStyle!=null)  {
@@ -492,7 +492,7 @@ if(a instanceof PathGraphic ) {
 			text.setFontSize(10);
 			text.setFontStyle(this.fontStyle);
 			
-			gg.getTheLayer().add(text);
+			gg.getTheInternalLayer().add(text);
 			
 		}
 		
@@ -505,7 +505,7 @@ if(a instanceof PathGraphic ) {
 			text.setTextColor(Color.BLACK);
 			if (fontUp)text.setFontSize(10); else text.setFontSize(16);
 			
-			gg.getTheLayer().add(text);
+			gg.getTheInternalLayer().add(text);
 			
 			text = new TextGraphic("A");
 			text.setLocation(8, 15);
@@ -514,7 +514,7 @@ if(a instanceof PathGraphic ) {
 			if (fontUp)text.setFontSize(16); else text.setFontSize(10);
 			
 			
-			gg.getTheLayer().add(text);
+			gg.getTheInternalLayer().add(text);
 			
 		}
 		
@@ -542,7 +542,7 @@ if(a instanceof PathGraphic ) {
 			}
 			a.setStrokeColor(Color.black);
 			a.setStrokeWidth(4);
-			gg.getTheLayer().add(a);
+			gg.getTheInternalLayer().add(a);
 		}
 		
 		

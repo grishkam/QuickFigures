@@ -202,14 +202,14 @@ PathGraphic createMirrorGraphic() {
 		
 			p.makeNearlyDashLess();
 			p.updatePathFromPoints();
-			out.getTheLayer().add(p);
+			out.getTheInternalLayer().add(p);
 			PathGraphic p2 =p.copy();  
 			if (scale) {p2.scaleAbout(new Point(14,3), .5);} 
 				else if (rotate) {p2.rotateAbout(new Point(7,7), Math.PI);} 
 				else if (move) {p2.moveLocation(7, 1);} 
 				else p2. reflectPathAboutLine( new Point(10,0), new Point(10,10));
 			
-			out.getTheLayer().add(p2);
+			out.getTheInternalLayer().add(p2);
 			p.setStrokeColor(Color.green);
 			p2.setStrokeColor(Color.red);
 			

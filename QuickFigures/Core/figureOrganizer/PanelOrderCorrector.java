@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.awt.geom.Rectangle2D;
@@ -48,6 +53,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	private static final long serialVersionUID = 1L;
 	private FigureOrganizingLayerPane figure;
 
+	/***/
 	public PanelOrderCorrector(FigureOrganizingLayerPane f) {
 		this.figure=f;
 	}

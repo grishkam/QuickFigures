@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.awt.Color;
@@ -21,7 +26,8 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 
-/**an undoable edit for changes to the color of objects*/
+/**an undoable edit for changes to the color of objects
+ * works for image panels, shapes or text*/
 public class ColorEditUndo extends AbstractUndoableEdit2 {
 
 	/**

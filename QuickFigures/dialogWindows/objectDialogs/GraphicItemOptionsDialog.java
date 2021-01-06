@@ -22,7 +22,7 @@ import applicationAdapters.ImageWorkSheet;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
 import graphicalObjects.BasicGraphicalObject;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import locatedObject.LocatedObject2D;
 import locatedObject.StrokedItem;
 import logging.IssueLog;
@@ -47,7 +47,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	public GraphicSampleComponent sam;
 	StrokeInputPanel strokeInput;
 	private static ImageWorkSheet currentImage=null;
-	private static FigureDisplayContainer setContainer;
+	private static FigureDisplayWorksheet setContainer;
 	private boolean updateAfterEachItemChange=true;
 	private static CurrentSetInformer informer=new CurrentFigureSet();
 	
@@ -212,7 +212,7 @@ public static void setCurrentImage(ImageWorkSheet currentImage) {
 
 
 
-public static FigureDisplayContainer getSetContainer() {
+public static FigureDisplayWorksheet getSetContainer() {
 	return setContainer;
 }
 
@@ -221,7 +221,7 @@ public static void updateCurrentDisplay() {
 }
 
 
-public static void setSetContainer(FigureDisplayContainer setContainer) {
+public static void setSetContainer(FigureDisplayWorksheet setContainer) {
 	GraphicItemOptionsDialog.setContainer = setContainer;
 }
 

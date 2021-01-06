@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.awt.Color;
@@ -28,6 +33,7 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import textObjectProperties.TextParagraph;
 
 /**A class with methods to add labels to figures*/
@@ -37,8 +43,8 @@ public class FigureLabelOrganizer implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/**TODO. write methods to add row label, col label and panel label specific options to the popup menus
-	  and handles*/
+	
+	/**A class dedicated for panel labels*/
 	public static class PanelLabelTextGraphic extends ComplexTextGraphic {
 	
 		/**
@@ -50,6 +56,7 @@ public class FigureLabelOrganizer implements Serializable {
 		}
 	}
 
+	/**A class dedicated for column labels*/
 	public static class ColumnLabelTextGraphic extends ComplexTextGraphic {
 	
 		/**
@@ -62,6 +69,7 @@ public class FigureLabelOrganizer implements Serializable {
 	
 	}
 
+	/**A class dedicated for row labels*/
 	public static class RowLabelTextGraphic extends ComplexTextGraphic {
 	
 		/**
@@ -74,22 +82,26 @@ public class FigureLabelOrganizer implements Serializable {
 	
 	}
 
-	
-	public static ComplexTextGraphic addPanelLabel(String st, int colNum, GraphicLayer thisLay, DefaultLayoutGraphic g) {
-		if (st==null) return null;
-		if (st.trim().equals("")) return null;
-		st=st.replace("_", " ");
+	/**Adds a panel label
+	 * @param textContent the text
+	 * @param index the index
+	 * @param thisLayer the target layer
+	 * @param theLayout the layout*/
+	public static ComplexTextGraphic addPanelLabel(String textContent, int index, GraphicLayer thisLayer, DefaultLayoutGraphic theLayout) {
+		if (textContent==null) return null;
+		if (textContent.trim().equals("")) return null;
+		textContent=textContent.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.PanelLabelTextGraphic();
 		tg.setAttachmentPosition(AttachmentPosition.defaultInternalPanel());
-		tg.getParagraph().setAllLinesToCodeString(st, Color.white);
+		tg.getParagraph().setAllLinesToCodeString(textContent, Color.white);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
-		thisLay.add(tg);
-		Rectangle2D p = g.getPanelLayout().makeAltered(LayoutSpaces.PANELS).getPanel(colNum);
+		thisLayer.add(tg);
+		Rectangle2D p = theLayout.getPanelLayout().makeAltered(LayoutSpaces.PANELS).getPanel(index);
 		
 		
 		try {
 			/**makes sure the panel label can fit*/
-			while (tg.getBounds().getWidth()>g.getPanelLayout().getPanelWidth(colNum) &&tg.getFont().getSize()-2>3) {
+			while (tg.getBounds().getWidth()>theLayout.getPanelLayout().getPanelWidth(index) &&tg.getFont().getSize()-2>3) {
 				tg.setFontSize(tg.getFont().getSize()-2);
 			}
 		} catch (Exception e) {
@@ -98,69 +110,78 @@ public class FigureLabelOrganizer implements Serializable {
 		
 		tg.setLocation(new Point2D.Double(p.getCenterX(), p.getCenterY()));
 		
-		g.addLockedItem(tg);
+		theLayout.addLockedItem(tg);
 		return tg;
 	}
 	
-	
-	public static ComplexTextGraphic addColLabel(String st, int colNum, GraphicLayer thisLay, DefaultLayoutGraphic g) {
-		if (st==null) return null;
-		if (st.trim().equals("")) return null;
-		st=st.replace("_", " ");
+	/**Adds a column label
+	 * @param textContent the text
+	 * @param colIndex the index
+	 * @param thisLayer the target layer
+	 * @param theLayout the layout*/
+	public static ComplexTextGraphic addColLabel(String textContent, int colIndex, GraphicLayer thisLayer, DefaultLayoutGraphic theLayout) {
+		if (textContent==null) return null;
+		if (textContent.trim().equals("")) return null;
+		textContent=textContent.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.ColumnLabelTextGraphic();
 		tg.setAttachmentPosition(AttachmentPosition.defaultColSide());
-		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
+		tg.getParagraph().setAllLinesToCodeString(textContent, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
-		thisLay.add(tg);
-		Rectangle2D p = g.getPanelLayout().makeAltered(LayoutSpaces.COLS).getPanel(colNum);
+		thisLayer.add(tg);
+		Rectangle2D p = theLayout.getPanelLayout().makeAltered(LayoutSpaces.COLS).getPanel(colIndex);
 		
 		try {
-			/**makes sure the row label can fit*/
-			while (tg.getBounds().getWidth()>g.getPanelLayout().getPanelWidthOfColumn(colNum) &&tg.getFont().getSize()-2>3) {
+			/**makes sure the col label can fit*/
+			while (tg.getBounds().getWidth()>theLayout.getPanelLayout().getPanelWidthOfColumn(colIndex) &&tg.getFont().getSize()-2>3) {
 				tg.setFontSize(tg.getFont().getSize()-2);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		tg.setLocationType(RectangleEdges.BOTTOM);
 		tg.setLocation(new Point2D.Double(p.getCenterX(), p.getY()+4));
-	//	g.getEditor().expandSpacesToInclude(g.getPanelLayout(), tg.getBounds());
 		
-		g.addLockedItem(tg);
-		//g.snapLockedItems();
-		//g.mapPanelLocation(tg);
+		theLayout.addLockedItem(tg);
 		
 		return tg;
 	}
 	
-	/**Adds a row label to the figure*/
-	public static ComplexTextGraphic addRowLabel(String st, int rowNum, GraphicLayer thisLay, DefaultLayoutGraphic g) {
-		if (st==null) return null;
-		if (st.trim().equals("")) return null;
-		st=st.replace("_", " ");
+	/**Adds a row label 
+	 * @param textContent the text
+	 * @param rowIndex the index
+	 * @param thisLayer the target layer
+	 * @param theLayout the layout*/
+	public static ComplexTextGraphic addRowLabel(String textContent, int rowIndex, GraphicLayer thisLayer, DefaultLayoutGraphic theLayout) {
+		if (textContent==null) return null;
+		if (textContent.trim().equals("")) return null;
+		textContent=textContent.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.RowLabelTextGraphic();
 		tg.setAttachmentPosition(AttachmentPosition.defaultRowSide());
-		tg.getParagraph().setAllLinesToCodeString(st, Color.black);
+		tg.getParagraph().setAllLinesToCodeString(textContent, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_RIGHT);
-		thisLay.add(tg);
-		Rectangle2D p = g.getPanelLayout().makeAltered(LayoutSpaces.ROWS).getPanel(rowNum);
+		thisLayer.add(tg);
+		Rectangle2D p = theLayout.getPanelLayout().makeAltered(LayoutSpaces.ROWS).getPanel(rowIndex);
 		
 		tg.setLocationType(RectangleEdges.RIGHT);
 		tg.setLocation(new Point2D.Double(p.getX(), p.getCenterY()));
 		//g.getEditor().expandSpacesToInclude(g.getPanelLayout(), tg.getBounds());
 			
-		g.addLockedItem(tg);
+		theLayout.addLockedItem(tg);
 		return tg;
 	}
 	
-	public static TextGraphic addLabelOfType(int type, int i, GraphicLayer thisLay, DefaultLayoutGraphic g) {
+	/**Adds a label to the layout
+	 * @param labelType the type of label
+	 * @param index the index
+	 * @param destinationLayer the target layer
+	 * @param targetLayout the layout*/
+	public static TextGraphic addLabelOfType(int labelType, int index, GraphicLayer destinationLayer, DefaultLayoutGraphic targetLayout) {
 		TextGraphic item=null;
-		if (type==BasicLayout.ROWS) item=addRowLabel("          Row "+i, i, thisLay, g);
+		if (labelType==BasicLayout.ROWS) item=addRowLabel("          Row "+index, index, destinationLayer, targetLayout);
 		else 
-			if (type==BasicLayout.COLS) item= addColLabel("Column "+i, i, thisLay, g);
+			if (labelType==BasicLayout.COLS) item= addColLabel("Column "+index, index, destinationLayer, targetLayout);
 			else 
-				if (type==BasicLayout.PANELS)item= addPanelLabel("Panel "+i, i, thisLay, g);
+				if (labelType==BasicLayout.PANELS)item= addPanelLabel("Panel "+index, index, destinationLayer, targetLayout);
 		return item;
 	}
 }

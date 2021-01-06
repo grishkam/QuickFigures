@@ -23,12 +23,11 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.OpeningFileDropHandler;
 import externalToolBar.InterfaceExternalTool;
-import externalToolBar.ToolBarManager;
 import genericMontageLayoutToolKit.BorderAdjusterTool;
 import genericMontageLayoutToolKit.LayoutMover;
 import genericMontageLayoutToolKit.LayoutScalerTool;
-import genericMontageLayoutToolKit.MontageLayoutRowColNumberTool;
-import genericMontageLayoutToolKit.MontageMoverTool;
+import genericMontageLayoutToolKit.RowColNumberTool;
+import genericMontageLayoutToolKit.DefaultLayoutMoverTool;
 import genericMontageLayoutToolKit.LabelSpaceAdjusterTool;
 import genericMontageLayoutToolKit.PanelSizeAdjusterTool;
 import genericMontageLayoutToolKit.SelectPanelsTool;
@@ -49,10 +48,7 @@ public class LayoutToolSet extends QuickFiguresToolBar {
 		
 	}
 	
-	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
-		super.setCurrentTool(currentTool);
-		ToolBarManager.setCurrentTool(currentTool);
-	}
+	
 	
 
 	
@@ -96,7 +92,7 @@ for(ToolBit b: getLayoutLabelBits3()) {
 		return output;
 	}
 	public static ToolBit[] getBeyondStandardToolBits() {
-		return new ToolBit[] {new MontageLayoutRowColNumberTool(),new PanelSizeAdjusterTool()
+		return new ToolBit[] {new RowColNumberTool(),new PanelSizeAdjusterTool()
 		,new LayoutScalerTool(),
 				new PanelGrabberTool(1),
 				new PanelGrabberTool(2),
@@ -120,7 +116,7 @@ for(ToolBit b: getLayoutLabelBits3()) {
 		output.add(new RowAndColumnSwapperTool(2));
 		output.add(new RowAndColumnSwapperTool(0));
 		
-		output.add(new MontageMoverTool());
+		output.add(new DefaultLayoutMoverTool());
 		output.add(new LabelSpaceAdjusterTool());
 		
 		

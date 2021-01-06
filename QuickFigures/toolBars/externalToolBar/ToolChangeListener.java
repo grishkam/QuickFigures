@@ -13,11 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package externalToolBar;
 
 
-public interface ToolChangeListener<S> {
+public interface ToolChangeListener{
 
-	public void ToolChanged(InterfaceExternalTool<S> tool);
+	public void ToolChanged(InterfaceExternalTool<?> tool);
 	
 }

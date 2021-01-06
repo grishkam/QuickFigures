@@ -27,7 +27,7 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import locatedObject.TakesAttachedItems;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 
 /**A menu for choosing to attach an item to another object. */
 public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
@@ -64,7 +64,7 @@ public class AddLockedMenu extends ReleaseLockedMenu implements ActionListener{
 	}
 	
 	public AbstractUndoableEdit performAction(LocatedObject2D target) {
-		UndoTakeLockedItem undo = new UndoTakeLockedItem(getLockbox(), target, false);
+		UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(getLockbox(), target, false);
 		Rectangle2D b = getLockbox().getContainerForBounds(target);
 		Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, target.getBounds());
 		if (target.getAttachmentPosition()==null) {target.setAttachmentPosition(AttachmentPosition.defaultInternal());}

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -26,8 +31,9 @@ import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import objectDialogs.RoundRectGraphicOptionsDialog;
 
+/**The shape of a rounded rectangle*/
 public class RoundedRectangleGraphic extends RectangularGraphic {
-	{name="Rounded Rect";}
+	{name="Rounded Rectangle";}
 	/**
 	 * 
 	 */
@@ -70,21 +76,16 @@ public class RoundedRectangleGraphic extends RectangularGraphic {
 	}
 	
 	
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		RoundedRectangleGraphic iconshape = blankShape(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 		iconshape.setArcw(6);
 		iconshape.setArch(6);
 		return iconshape;
 	}
 
-
-
-
-
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
-
 	
 	
 	@Override
@@ -115,12 +116,11 @@ public class RoundedRectangleGraphic extends RectangularGraphic {
 		return arch.getLength();
 	}
 
-
-
 	public void setArch(double arch) {
 		this.arch.setLength( arch);
 	}
 	
+	/**Creates a handle list with handles that can be used to alter the roundness of the rectangle*/
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		 {

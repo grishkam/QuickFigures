@@ -14,16 +14,16 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
  */
 package messages;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
-
 import javax.swing.JLabel;
 
 import standardDialog.GriddedPanel;
@@ -105,7 +105,7 @@ public class ShowMessage {
 	
 	
 	/**shows a message with a 'dont show again checkbox'*/
-	public static boolean showOptionalMessage(String title, boolean oneTime, Set<String> st) {
+	public static boolean showOptionalMessage(String title, boolean oneTime, ArrayList<String> st) {
 		String[] ar = new String[st.size()];
 		 st.toArray(ar);
 		return showOptionalMessage(title, oneTime,ar);

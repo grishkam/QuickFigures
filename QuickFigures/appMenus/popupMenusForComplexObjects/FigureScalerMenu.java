@@ -66,7 +66,7 @@ public class FigureScalerMenu extends SmartJMenu{
 					CombinedEdit undo = scaler.scaleFigure(item, factor, item.getPanelLayout().getReferenceLocation());
 					item.updateDisplay();
 					addEdit(undo);
-					FigureScaler.scaleWarnings(item.getParentLayer());
+					FigureScaler.scaleMessages(item.getParentLayer());
 			}	
 	}.createJMenuItem("Scale to Slide Size"));
 		
@@ -80,7 +80,7 @@ public class FigureScalerMenu extends SmartJMenu{
 				undo.addEditToList(new CanvasAutoResize(false).performUndoableAction(mouseE.getAsDisplay()));
 				item.updateDisplay();
 				addEdit(undo);
-				FigureScaler.scaleWarnings(item.getParentLayer());
+				FigureScaler.scaleMessages(item.getParentLayer());
 				}
 
 			
@@ -114,7 +114,7 @@ public class FigureScalerMenu extends SmartJMenu{
 		CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
 		item.updateDisplay();
 		addEdit(undo);
-		FigureScaler.scaleWarnings(item.getParentLayer());
+		FigureScaler.scaleMessages(item.getParentLayer());
 	}
 
 	public static double getScaleFromDialog(String name, String note, double factor) {

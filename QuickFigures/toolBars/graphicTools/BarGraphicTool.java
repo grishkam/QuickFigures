@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 import java.awt.Color;
@@ -28,9 +33,10 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 
-/**A tool to add scale bars to panels. no longer included in the tool bar but its methods are called by popup menus*/
+/**A tool to add scale bars to panels. no longer included in the tool bar but its methods are called by popup menus
+   Excluded from current version due to more convenient ways to add a scale bar*/
 public class BarGraphicTool extends GraphicTool {
 	
 	private static BarGraphicTool currentBar;
@@ -92,7 +98,7 @@ public class BarGraphicTool extends GraphicTool {
 		if (roi2 instanceof ImagePanelGraphic ) {
 			ImagePanelGraphic b=(ImagePanelGraphic) roi2;
 			b.addLockedItem(bg);
-			undo.addEditToList(new UndoTakeLockedItem(b, bg, false));
+			undo.addEditToList(new UndoAddOrRemoveAttachedItem(b, bg, false));
 			
 			/**	double[] dims = b.getScaleInfo().convertPixelsToUnits(new Dimension(b.getUnderlyingImageWidth(), b.getUnderlyingImageHeight()));
 			double num = NumberUse.findNearest(dims[0]/3, BarGraphic.reccomendedBarLengths);

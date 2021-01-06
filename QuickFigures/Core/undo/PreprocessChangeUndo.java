@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 
+/**An undoable edit for changes to the preprocess of an image slot*/
 public class PreprocessChangeUndo extends AbstractUndoableEdit2 {
 
 	/**

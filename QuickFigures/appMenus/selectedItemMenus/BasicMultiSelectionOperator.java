@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.LocatedObject2D;
@@ -110,7 +110,7 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	
 	/**returns the undo manager for the object*/
 	public UndoManagerPlus getUndoManager() {
-		FigureDisplayContainer graphicDisplayContainer = getSelector().getGraphicDisplayContainer();
+		FigureDisplayWorksheet graphicDisplayContainer = getSelector().getGraphicDisplayContainer();
 		return graphicDisplayContainer.getUndoManager();
 	}
 	

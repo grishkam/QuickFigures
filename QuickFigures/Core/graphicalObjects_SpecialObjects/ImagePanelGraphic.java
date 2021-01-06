@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_SpecialObjects;
 
 import java.awt.Color;
@@ -59,7 +64,7 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.SmartHandleList;
 import handles.miniToolbars.HasMiniToolBarHandles;
 import handles.miniToolbars.ImagePanelActionHandleList;
@@ -88,10 +93,15 @@ import multiChannelFigureUI.ChannelSwapHandleList;
 import objectDialogs.CroppingDialog;
 import objectDialogs.ImageGraphicOptionsDialog;
 
-/**an object that displays an image inside a frame at a specified scale and cropping*/
+/**an object that displays an image inside a frame at a specified size.
+ * May also have an additional cropping operation*/
 public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAttachedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePositions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
 
 	
+	/**Images temporarily stored*/
+	transient BufferedImage img;
+	/**image stored long term as a byte array that can be serialized*/
+	byte[] serializedIm=null;
 	
 	/**
 	 * 
@@ -113,7 +123,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	
 	}
 	
-	/**this is the image used to show the actual display*/
+	/**this is the image used to draw*/
 	private transient Image displayedImage;
 	
 	/**the scale relative to the points*/
@@ -129,24 +139,18 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private static final long serialVersionUID = 1L;
 	  AttachedItemList lockedItems=new AttachedItemList(this);
 
-	
+	/**an options crop area that is limited to this specific panel*/
 	 Rectangle croppingrect=null;
 
-
-
-		/**Images temporarily stored*/
-		transient BufferedImage img;
-		/**image stored long term*/
-		byte[] serializedIm=null;
-
-		
 		
 		public ImagePanelGraphic() {}
 		
+		/***/
 		public ImagePanelGraphic(BufferedImage bi) {
 			setImage(bi);
 		}
 		
+		/**loads a file*/
 		public ImagePanelGraphic(File f) {
 			file=f;
 			filederived=true;
@@ -286,7 +290,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		
 		getLockedItems().add(l);
 		SmartHandleList list = getPanelHandleList();
-		getPanelHandleList().add(new LockedItemHandle(this, l, list.size()));
+		getPanelHandleList().add(new AttachmentPositionHandle(this, l, list.size()));
 		this.snapLockedItems();
 	}
 	
@@ -714,6 +718,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			
 		}
 		
+	/**Sets the image*/
 		public void setImage(BufferedImage img) {
 			
 			if (img==null) return;
@@ -848,7 +853,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		@Override
 		public void scaleAbout(Point2D p, double mag) {
 			Point2D p2 = this.getLocationUpperLeft();
-			p2=scaleAbout(p2, p,mag,mag);
+			p2=scalePointAbout(p2, p,mag,mag);
 			this.setRelativeScale(this.getScale()*mag);
 			double nfh = this.getFrameWidthH()*mag;
 			double nfv = this.getFrameWidthV()*mag;

@@ -141,9 +141,9 @@ public class FolderIconGraphic extends GraphicGroup {
 	}
 	
 	public void addItems() {
-		getTheLayer().add(r3);
-		getTheLayer().add(r2);
-		getTheLayer().add(r);
+		getTheInternalLayer().add(r3);
+		getTheInternalLayer().add(r2);
+		getTheInternalLayer().add(r);
 	}
 
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -40,6 +45,7 @@ import locatedObject.Scales;
 import locatedObject.ScalesFully;
 import undo.PathEditUndo;
 
+/**A handle list that allows the user to scale a group of points within a path by dragging the handles*/
 public class PathPointReshapeList extends ReshapeHandleList {
 
 	private PathGraphic path;
@@ -84,7 +90,7 @@ public class PathPointReshapeList extends ReshapeHandleList {
 	
 	
 	
-	
+	/**a marker that is drawn to represent the locations of the path points*/
 	static class PathPointProxy implements LocatedObject2D, ScalesFully, Scales, ZoomableGraphic {
 
 		/**

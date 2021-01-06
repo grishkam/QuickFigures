@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 import java.io.ByteArrayOutputStream;
@@ -29,10 +34,12 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
+/**this class is used to Serialize objects and write them to an output stream*/
 public class GraphicEncoder {
 	Object gc;
+	String graphicpath=".gra";
 
-	
+	/**creates an encoder for the object*/
 	public GraphicEncoder(Object g) {
 		gc=g;
 	}
@@ -47,19 +54,10 @@ public class GraphicEncoder {
 	}
 	
 	public void writeToOS(OutputStream os) {
-		/**try {
-			ObjectOutputStream oos = new ObjectOutputStream(os);
-				oos.writeObject(getItemToBeEncoded());
-			
-			oos.flush();
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		writeToOS(os, this.getItemToBeEncoded());
 	}
 	
+	/**writes the object to an output stream*/
 	public static void writeToOS(OutputStream os, Object o) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(os);
@@ -74,6 +72,7 @@ public class GraphicEncoder {
 		
 	}
 	
+	/**reads and object from an input stream*/
 	public static Object readFromIS(InputStream os) {
 		try {
 			ObjectInputStream oos = new ObjectInputStream(os);
@@ -88,7 +87,7 @@ public class GraphicEncoder {
 		return null;
 	}
 	
-	String graphicpath=".gra";
+
 	
 	public void writeToFile(String file) {
 		file=modifyString(file);
@@ -132,6 +131,7 @@ public class GraphicEncoder {
 		return output;
 	}
 	
+	/**reads a zoomable graphic from a file path*/
 	public  ZoomableGraphic readGraphicFromFile(String file) {
 		ZoomableGraphic output=null;
 		file=modifyString(file);
@@ -148,10 +148,12 @@ public class GraphicEncoder {
 		return output;
 	}
 	
+	/**prompts the user to select a file to open and returns a zoomalbe graphic*/
 	public ZoomableGraphic readFromUserSelectedFile() {
 		return readGraphicFromFile(FileChoiceUtil.getOpenFile().getAbsolutePath());
 	}
 	
+	/**adds an extension to the file*/
 	String modifyString(String file) {
 		if (file.endsWith(graphicpath)) return file;
 		if (file.endsWith(".tif")) file=file.replace(".tif", graphicpath);
@@ -159,6 +161,7 @@ public class GraphicEncoder {
 		return file;
 	}
 	
+	/**returns as a byte array transformed into a string*/
 	public String getBytes() {
 		ByteArrayOutputStream boo = new ByteArrayOutputStream();
 		writeToOS(boo);

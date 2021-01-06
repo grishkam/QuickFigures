@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles.miniToolbars;
 
 import java.awt.Graphics2D;
@@ -40,7 +45,7 @@ import selectedItemMenus.FrameColorButton;
 import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
-import selectedItemMenus.SnappingSyncer;
+import selectedItemMenus.AttachmentPositionAdjuster;
 
 /**this handle list contains a set of handles that act as a minitoolbar for an image panel*/
 public class ImagePanelActionHandleList extends ActionButtonHandleList {
@@ -54,7 +59,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ImagePanelGraphic theImage;
-	private ChannelPanelEditingMenu context;
+	private ChannelPanelEditingMenu context;//the menu context for this list
 	
 	public ImagePanelActionHandleList(ImagePanelGraphic t) {
 	
@@ -64,14 +69,16 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		
 		add(new ImageSyncHandle(1100));
 		createGeneralButton(new SelectAllButton(t));
+		
 		if(t.getAttachmentPosition()!=null) {
-			add(new GeneralActionHandle(new SnappingSyncer(true,t), 741905));
+			add(new GeneralActionHandle(new AttachmentPositionAdjuster(true,t), 741905));
 		}
 		
 		addFrameColorButton(t);
 	}
 
 	/**
+	 * creates the toolbar item for the frame color
 	 * @param t
 	 */
 	void addFrameColorButton(ImagePanelGraphic t) {
@@ -81,6 +88,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		add(hf);
 	}
 
+	/**creates a series of handles for image panels that are part of an image display layer*/
 	protected void createMultiChannelSourceImageOptions(ImagePanelGraphic t) {
 		context= new ChannelPanelEditingMenu(t);
 		
@@ -94,12 +102,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		
 		 winlevelButton = new  ImagePropertiesButton(t, ImagePropertiesButton.CROP_IMAGE);
 		this.add(new GeneralActionHandle(winlevelButton, 584));
-	
-		
-		
-			
-		//decided to omit this one	
-		//this.add(new GeneralActionHandle(new  PPIOption(), 8325));
+
 	}
 	
 	public void updateLocation() {
@@ -208,6 +211,7 @@ public class ChannelsIconHandle extends IconHandle {
 
 }
 	
+/**A channel use icon for the image panel includes colors that depend on the source */
 	public class ChannelIcon2 extends ChannelUseIcon  implements Icon {
 
 		/**

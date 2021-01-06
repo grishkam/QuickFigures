@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 import java.io.Serializable;
@@ -22,7 +27,8 @@ import locatedObject.Named;
 import locatedObject.ShowsOptionsDialog;
 import locatedObject.Tagged;
 
-public interface GraphicalObject extends SimpleGraphicalObject,Tagged, Serializable,Named, ShowsOptionsDialog, LayerSpecified {
+/**An interface for objects that combines many features of other interfaces*/
+public interface GraphicalObject extends SimpleGraphicalObject,Tagged, Serializable,Named, ShowsOptionsDialog{
 		
 
 }

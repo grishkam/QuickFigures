@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -81,7 +86,7 @@ public class PanelManagerUndo extends CombinedEdit {
 	public static CombinedEdit createFor(PanelManager pm) {
 		CombinedEdit output = new CombinedEdit();
 		output.addEditToList(new PanelManagerUndo(pm.getPanelList()));
-		output.addEditToList(new UndoLayerContentChange(pm.getDisplay()));
+		output.addEditToList(new UndoLayerContentChange(pm.getImageDisplayLayer()));
 		output.addEditToList(new UndoLayerContentChange(pm.getLayer()));
 		DefaultLayoutGraphic layout = pm.getGridLayout();
 		if (layout!=null) {
@@ -92,12 +97,14 @@ public class PanelManagerUndo extends CombinedEdit {
 		return output;
 	}
 	
+	/**creates an undoable edit for one imaged isplay layer*/
 	public static CombinedEdit createFor(ImageDisplayLayer pm) {
 		CombinedEdit output = createFor(pm.getPanelManager());
 		output.addEditToList(new PreprocessChangeUndo(pm));
 		return output;
 	}
 	
+	/**creates an undoable edit for every image display layer*/
 	public static CombinedEdit createForMany(ArrayList<? extends ImageDisplayLayer> all) {
 		CombinedEdit output = new CombinedEdit();
 		for(ImageDisplayLayer a:all) {
@@ -106,6 +113,7 @@ public class PanelManagerUndo extends CombinedEdit {
 		return output;
 	}
 	
+	/**an undo for a specific element in thte panel list*/
 	public class ListElementUndo extends AbstractUndoableEdit2  {
 
 		/**

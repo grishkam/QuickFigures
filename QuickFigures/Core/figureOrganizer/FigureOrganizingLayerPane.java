@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import java.awt.Color;
@@ -91,7 +96,9 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 		}
 		return output;
 	}
-	/***/
+	
+	/**user the panel setter to determine grid locations for each panel in the the list of panels
+	 * and but them into the layout locations*/
 	public void mapAllPanelPlacements() {
 		this.subfigureSetter.layDisplayPanelsOfStackOnLayout(getAllPanelLists(), this.getMontageLayoutGraphic().getPanelLayout(), true);
 		
@@ -109,19 +116,21 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 	}
 	
 
-
+	/**not yet implemented*/
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**not yet implemented*/
 	@Override
 	public void supress() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
+	/**Adds an item to the layer*/
 	@Override
 	public void addItemToLayer(ZoomableGraphic z) {
 		super.addItemToLayer(z);
@@ -131,6 +140,7 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 		}
 	}
 	
+	/**removes an item from the layer*/
 	public void removeItemFromLayer(ZoomableGraphic z) {
 		super.removeItemFromLayer(z);
 		if (z instanceof  ImageDisplayLayer) {
@@ -200,19 +210,22 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		return output;
 	}
 	
+	/**returns the display layers within the figure. their order in the returned list is determined by their
+	 * xy positions*/
 	public ArrayList< ImageDisplayLayer> getMultiChannelDisplaysInLayoutOrder() {
 		this.updateImageOrder();
 		return getMultiChannelDisplays();
 	}
 	
 
-	/**Adds an additional multi-channel image to the figure, creates panels as needed
+	/**Adds an additional multi-dimensional  image to the figure, creates panels for the new image
+	 * and sets up the images properties to fit
 	 @param start the panel index where the added item will be placed
 	 @param display the added multi-channel image
 	 * @return */
 	public CombinedEdit addNovelMultiChannel(MultichannelDisplayLayer display, int start) {
 		if(display==null) return null;
-		int startpoint=this.getAllPanelLists().getlastPanelsIndex()+1;
+		int startpoint=this.getAllPanelLists().getlastPanelsGridIndex()+1;
 		if(start>0) startpoint=start;
 		ImageDisplayLayer principalMultiChannel = getPrincipalMultiChannel();
 		boolean hasOne=principalMultiChannel!=null;//true if there is already a multichannel image in figure
@@ -294,7 +307,9 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	}
 
 	/**Sometimes, a user or programmer will have set a cropping region
-	 Written to crop an initial image based on the roi*/
+	 Written to crop an initial image based on the roi. 
+	 If the crop area is strange, displays a dialog asking the user
+	 to change it*/
 	public static void cropIfUserSelectionExists(MultichannelDisplayLayer display) {
 		Rectangle totalImageSize = new Rectangle(display.getMultiChannelImage().getDimensions());
 		Rectangle b=totalImageSize;

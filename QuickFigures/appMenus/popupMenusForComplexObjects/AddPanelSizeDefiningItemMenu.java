@@ -21,7 +21,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import locatedObject.LocatedObject2D;
 import locatedObject.AttachedItemList;
 import locatedObject.TakesAttachedItems;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 
 public class AddPanelSizeDefiningItemMenu extends ReleaseLockedMenu {
 
@@ -45,7 +45,7 @@ public AbstractUndoableEdit performAction(LocatedObject2D target) {
 		if (this.getLockbox() instanceof PanelLayoutGraphic) {
 			
 			PanelLayoutGraphic p=(PanelLayoutGraphic) getLockbox() ;
-			UndoTakeLockedItem undo = new UndoTakeLockedItem(p, target, remove);
+			UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(p, target, remove);
 			if (remove) p.removeSizeDefiner(target); 
 				else	p.addSizeDefiner(target);
 			return undo;

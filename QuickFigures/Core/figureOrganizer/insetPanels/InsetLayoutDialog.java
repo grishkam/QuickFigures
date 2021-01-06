@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer.insetPanels;
 
 import java.awt.Color;
@@ -42,7 +47,6 @@ import standardDialog.numbers.NumberInputPanel;
 		private SnappingPanel snappanel;
 		private PanelGraphicInsetDefiner currentInset;
 	
-		public final static String[] arrangements=new String[] {"Lock to lateral outsides", "Normal Placement" , "Fill Side", "On Both Insides", "On outer sides"};
 		
 		
 		public InsetLayoutDialog(InsetLayout mover) {
@@ -51,7 +55,7 @@ import standardDialog.numbers.NumberInputPanel;
 			this.currentLayout=mover;
 			
 		
-			add("snaptypeClass", new ChoiceInputPanel("Select snaptype", arrangements, mover.positiontype));
+			add("snaptypeClass", new ChoiceInputPanel("Select snaptype", InsetLayout.arrangements, mover.positiontype));
 			
 		
 			add("border", new NumberInputPanel("Border Width", mover.border, 3));
@@ -95,7 +99,7 @@ import standardDialog.numbers.NumberInputPanel;
 			previewLayout.setAlwaysShow(true);
 		
 			getInsetLayout();
-			if (snaptype== InsetLayout.useSnapping) {
+			if (snaptype== InsetLayout.DEFAULT_PLACEMENT) {
 				lg.setVerticalBorder(8);
 				lg.setBottomSpace(lg.labelSpaceWidthBottom-8);
 				lg.setHorizontalBorder(8);
@@ -173,8 +177,10 @@ import standardDialog.numbers.NumberInputPanel;
 			
 			Rectangle sourcePanelDim = currentInset.getSourcePanel().getBounds();
 			InsetLayout inlayout = currentInset.previosInsetLayout;
-			inlayout.prepareForSnapping(sourcePanelDim, currentInset.personalLayout);
-			if (inlayout.useSnapping()) {inlayout.snapLayout(currentInset.personalLayout, sourcePanelDim);}
+			inlayout.prepareLayoutForAttachment(sourcePanelDim, currentInset.personalLayout);
+			if (inlayout.useAttachmentPosition()) {
+				inlayout.snapLayout(currentInset.personalLayout, sourcePanelDim);
+				}
 			
 			currentInset.updateDisplay();
 			
@@ -197,7 +203,7 @@ import standardDialog.numbers.NumberInputPanel;
 		
 		public static void main(String[] args) {
 			
-			InsetLayout inlay=new InsetLayout(2, InsetLayout.fill, true,AttachmentPosition.defaultInternal());
+			InsetLayout inlay=new InsetLayout(2, InsetLayout.FILL_SPACE, true,AttachmentPosition.defaultInternal());
 			new InsetLayoutDialog(inlay).showDialog();
 		}
 		

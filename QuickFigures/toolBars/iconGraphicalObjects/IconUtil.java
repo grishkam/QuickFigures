@@ -83,7 +83,7 @@ public static Icon createBrightnessIcon() {
 		
 		TextGraphic z = new TextGraphic(all);
 		z.moveLocation(2, 15);
-		gg.getTheLayer().add(z);
+		gg.getTheInternalLayer().add(z);
 		
 		return gg;
 	}
@@ -106,7 +106,7 @@ public static Icon createBrightnessIcon() {
 		z.getHead().setArrowStyle(ArrowGraphic.OPEN_HEAD);
 		z.setStrokeWidth(2);
 	//	gg.getTheLayer().add(circleb);
-		gg.getTheLayer().add(z);
+		gg.getTheInternalLayer().add(z);
 		
 		GraphicObjectDisplayBasic<GraphicGroup> object = new GraphicObjectDisplayBasic<GraphicGroup>(gg);
 		return object;
@@ -119,7 +119,7 @@ public static Icon createBrightnessIcon() {
 		out.setStrokeWidth(1);
 		
 		out.makeNearlyDashLess();
-		g.getTheLayer().add(out);
+		g.getTheInternalLayer().add(out);
 		return out;
 	}
 	

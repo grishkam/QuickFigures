@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 import applicationAdapters.ImageWorkSheet;
@@ -24,7 +29,8 @@ import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import undo.UndoAddItem;
 
-/**A tool for adding and manipulating shapes*/
+/**A tool for adding and manipulating shapes.
+ * Is a superclass for many different types of tools*/
 public class GraphicTool extends Object_Mover {
 
 	{createSelector=false;}

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 
@@ -21,6 +26,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
 
+/**contains static methods that perform tasks and return undoable edits
+ * to reverse those tasks*/
 public class Edit {
 	public static AbstractUndoableEdit2 addItem(GraphicLayer parentLayer, ZoomableGraphic z ) {
 		UndoAddItem output = new UndoAddItem(parentLayer, z);
@@ -62,7 +69,7 @@ public class Edit {
 	}
 	
 	public static AbstractUndoableEdit2 detachItem(TakesAttachedItems t, LocatedObject2D target) {
-		UndoTakeLockedItem undo = new UndoTakeLockedItem(t, target, true);
+		UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(t, target, true);
 		t.removeLockedItem(target);
 		return undo;
 	}

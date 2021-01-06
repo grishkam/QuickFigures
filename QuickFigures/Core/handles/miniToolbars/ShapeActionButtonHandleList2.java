@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles.miniToolbars;
 
 import java.awt.BasicStroke;
@@ -32,7 +37,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	private Color[] standardColor=new Color[] { Color.white, Color.black,Color.blue, Color.green, Color.red,  Color.cyan, Color.magenta, Color.yellow , new Color(0,0,0,0)};
 	
 	{maxGrid=12;
-	numHandleID=80000;
+	numHandleID=80000;//large number selected so that id numbers do not conflict with paths
 	}
 
 	private ShapeGraphic shape;
@@ -139,14 +144,14 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 
 
 	/**
-	 returns the stroke colors
+	 returns the stroke colors options
 	 */
 	public EditManyShapes[] strokeColorActs() {
 		return EditManyShapes.getForColors(true, standardColor);
 	}
 
 	/**
-	returns the fill colors
+	returns the fill colors options
 	 */
 	public EditManyShapes[] fillColorActs() {
 		return EditManyShapes.getForColors(false, standardColor);

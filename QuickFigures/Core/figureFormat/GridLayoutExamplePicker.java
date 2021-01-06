@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -28,7 +33,7 @@ public class GridLayoutExamplePicker extends GraphicalItemPicker<DefaultLayoutGr
 	 */
 	private static final long serialVersionUID = 1L;
 
-	{super.optionname="Chose Grid Layout";}
+	{super.optionname="Chose Layout";}
 	
 	public GridLayoutExamplePicker(DefaultLayoutGraphic model) {
 		super(model);

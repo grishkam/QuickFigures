@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.awt.geom.Point2D;
@@ -54,7 +59,7 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 		for(LocatedObject2D l: list) {
 			if (l instanceof PanelLayoutGraphic) {
 				((PanelLayoutGraphic) l).generateCurrentImageWrapper();
-				ArrayList<LocatedObject2D> addons = ((PanelLayoutGraphic) l).getPanelLayout().getEditedImage().getLocatedObjects();
+				ArrayList<LocatedObject2D> addons = ((PanelLayoutGraphic) l).getPanelLayout().getEditedWorksheet().getLocatedObjects();
 				this.list.addAll(addons);
 			}
 		}
@@ -122,6 +127,7 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 		return true;
 	}
 
+	/**creates an animation for this undo*/
 	@Override
 	public Animation getAnimation() {
 		return new GroupsTranslationAnimation( finalLocal, originalLocal);

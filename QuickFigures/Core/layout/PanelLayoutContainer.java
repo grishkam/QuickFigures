@@ -13,11 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout;
 
 import locatedObject.LocatedObject2D;
 
 /**An object that contains a panel layout*/
 public interface PanelLayoutContainer extends LocatedObject2D{
+	
+	/**returns the layout*/
 	public PanelLayout getPanelLayout();
 }

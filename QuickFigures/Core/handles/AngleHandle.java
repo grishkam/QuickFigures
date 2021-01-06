@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -43,9 +48,7 @@ public class AngleHandle extends SmartHandle {
 	private boolean undoadded;
 	
 
-
 	
-
 	public AngleHandle(RectangularGraphic r, AngleParameter angle, Color c, double startAngle, int handleNumber) {
 		
 		this.theShape=r;
@@ -62,19 +65,20 @@ public class AngleHandle extends SmartHandle {
 	private static final long serialVersionUID = 1L;
 	
 	
-	
+	/**returns the point at which the handle is drawn*/
 	public Point2D getCordinateLocation() {
 		double currentAngle=getHandleDrawAngle()+theAngle.getAngle();
 		if (this.doesAngleRatio()) currentAngle=getHandleDrawAngle()+this.getStandardAngle()*theAngle.getRatioToStandardAngle();
 		return  theShape.getPointInside(theAngle.getRatioToMaxRadius(), currentAngle);
 	}
 	
+	/**returns the location corresponding to the maximum radius for the angle parameter*/
 	public Point2D getMaxRadiusLocation() {
 		double currentAngle=getHandleDrawAngle()+theAngle.getAngle();
 		return  theShape.getPointInside(1, currentAngle);
 	}
 	
-	
+	/**returns the location of the handle for an angle of zero*/
 	public Point2D getZeroLocation() {
 		double currentAngle=getHandleDrawAngle();
 		return theShape.getPointInside(theAngle.getRatioToMaxRadius(), currentAngle);
@@ -188,6 +192,7 @@ public class AngleHandle extends SmartHandle {
 		
 	}
 	
+	/***/
 	@Override
 	public void handlePress(CanvasMouseEvent w) {
 		undo = new SimpleItemUndo<AngleParameter> (theAngle);
@@ -230,19 +235,26 @@ public class AngleHandle extends SmartHandle {
 		return type==ANGLE_RATIO_TYPE;
 	}
 
+	/**Adds the undo*/
 	public void addUndoToManager(CanvasMouseEvent w) {
 		undo.establishFinalState();
 		w.addUndo(undo);
 	}
 
+	/**The handle may be drawn at an angle that is shifted from the angle of the parameter.
+	   returns the draw angle*/
 	public double getHandleDrawAngle() {
 		return handleDrawAngle;
 	}
 
+	/**The handle may be drawn at an angle that is shifted from the angle of the parameter.
+	  sets the draw angle*/
 	public void setHandleDrawAngle(double handleDrawAngle) {
 		this.handleDrawAngle = handleDrawAngle;
 	}
 
+	/**this handle is responsible for adding its own undo the the undo mnager*/
+	@Override
 	public boolean handlesOwnUndo() {
 		return true;
 	}

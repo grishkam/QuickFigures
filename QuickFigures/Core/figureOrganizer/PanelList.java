@@ -15,15 +15,13 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 8, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
  */
 package figureOrganizer;
 
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,6 +51,7 @@ public class PanelList implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**How channels, frames and slices are selected for this panel list*/
 	private ChannelUseInstructions instructions=new ChannelUseInstructions() ;
 	
 	//If channelUpdateMode=true The colors of all the channel entires are updated to account for changes in the channel colors of the original image. 
@@ -63,8 +62,12 @@ public class PanelList implements Serializable{
     /**Determines the pixel density of newly creates image panels*/
     private double pixelDensityRatio=ImageDPIHandler.ratioForIdealDPI();//
     
-    
-		private ArrayList<PanelListElement> panels=new ArrayList<PanelListElement>();
+    /**An array list with every panel*/
+	private ArrayList<PanelListElement> panels=new ArrayList<PanelListElement>();
+	
+	
+	public PanelList() {
+	} 
 	
 	 /**The method used by this list to select which channels and panels are created 
 	  never returns null*/
@@ -76,8 +79,7 @@ public class PanelList implements Serializable{
 	} 
 	
 	
-	public PanelList() {
-	} 
+	
 	
 	/**Creates a non-identical duplicate of this list
 	   duplicate will lack objects but have all the same settings, channel indices and so on*/
@@ -165,63 +167,9 @@ public class PanelList implements Serializable{
 	}
 
 	
-	/**returns the number of different original image names present in the list
-	  In most cases this will consist of a single image.
-	public int nDistinctNames() {
-		int output=0;
-		String name=null;
-		for(PanelListElement panel:getPanels()) {
-			if (!panel.originalImageName.equals(name)) {output++;
-			name=panel.originalImageName;
-			}
-		}	
-		return output;	
-	}*/
-	
-	/**returns the number of entries in the list with the orignal image name 'name'
-	public int nWithName(String name) {
-		int output=0;
-		for(PanelListElement panel:getPanels()) {
-			if (panel.originalImageName.equals(name)) output++;
-		}
-		return output;
-	}*/
-	
 	/**Adds all the panels within list b to this list*/
 	public void add( PanelList b ) {
 		getPanels().addAll(b.getPanels());
-	}
-	
-	/**moved through the list. pulls out the images from the panels and returns them*/
-	//TODO: determine if this is obsolete
-	public ArrayList<Image> getAwtImages() {
-		ArrayList<Image> output=new ArrayList<Image>();
-		for (PanelListElement p:getPanels()) {output.add(p.getImageWrapped().image());}
-		return output;
-	}
-	
-	
-	/**creates a new list from an array of lists*/
-	//TODO: determine if this is obsolete
-	public  PanelList createList(PanelList[] array) {
-		PanelList list=createList();
-		for(PanelList list2: array) {add(list2);}
-		return list;
-	}
-	
-		/**creates a new list from an array of lists*/
-	//TODO: determine if this is obsolete
-	public PanelList combine(PanelList[] all) {
-		PanelList i = createList();
-		for (PanelList one: all) {i.add(one);}
-		return i;
-	}
-	/**creates a new list containing the same panels as the given arrayList*/
-	//TODO: determine if this is obsolete
-	public  PanelList createList(Iterable<PanelList> arrayList) {
-		PanelList list=createList();
-		for(PanelList list2: arrayList) {add(list2);}
-		return list;
 	}
 	
 
@@ -300,8 +248,7 @@ public class PanelList implements Serializable{
 		try {
 			sortPanels();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 	}
 
@@ -321,31 +268,6 @@ public class PanelList implements Serializable{
 		Collections.sort(panels2, new PanelCompare());
 	}
 	
-	
-	
-
-	
-	
-	
-	/**
-	ArrayList<Integer> getIncludedChans(MultiChannelWrapper imp) {
-		ArrayList<Integer> out=new ArrayList<Integer>();
-		for(int c=1; c<=imp.nChannels(); c++) {
-			if (!isMergeExcluded(c)) out.add(c);
-		}
-		return out;
-	}*/
-	
-	
-	
-	/**sets the image for panel i to be image
-	void resetImage(ImageDataType image, int i){
-		panels.get(i).image=makeWrapper(image);
-	}*/
-	
-	//public abstract PixelWrapper<ImageDataType> makeWrapper(ImageDataType image);
-	
-
 	
 	
 	
@@ -374,10 +296,12 @@ public class PanelList implements Serializable{
 		return output;
 	}
 	
+	/**returns the height of the panels in this list*/
 	public int getHeight() {
 		if (getPanels().size()==0) return 0;
 		return getPanels().get(0).getHeight();
 	}
+	/**returns the width of the panels in this list*/
 	public int getWidth() {
 		if (getPanels().size()==0) return 0;
 		return getPanels().get(0).getWidth();
@@ -392,10 +316,12 @@ public class PanelList implements Serializable{
 	}
 	
 
+	/**the list of panels*/
 	public ArrayList<PanelListElement> getPanels() {
 		return panels;
 	}
 
+	/**Sets the list of panels*/
 	public void setPanels(ArrayList<PanelListElement> panels) {
 		this.panels = panels;
 	}
@@ -602,7 +528,6 @@ public class PanelList implements Serializable{
 	
 	/**Creates a panel with an RGB of the merged channels in a given slice and frame of the image*/
 	public PanelListElement createMergePanelEntry(MultiChannelImage impw, int frame, int slice) {
-		//ImageTypeWrapper impw = new ImageTypeWrapper(imp);
 		
 		PanelListElement entry=createEntry();
 		if (!impw.containsImage()) {IssueLog.log("Cannot create meged image for null or empty entry"); return entry;}
@@ -619,7 +544,7 @@ public class PanelList implements Serializable{
 		/**the concept of merge panels does not exist when there are not separate channels. As such, this method will return null.*/
 		if (!impw.containsSplitedChannels()) {
 			IssueLog.log("Warning Channel Data is not Split"); 
-			//return null;
+			
 		} else {
 		
 				/**creates the channel entries for the merged image*/
@@ -664,8 +589,8 @@ public class PanelList implements Serializable{
 		
 	}
 	
-	
-	public int getlastPanelsIndex() {
+	/**returns the layout panel index of the very last panel*/
+	public int getlastPanelsGridIndex() {
 		int out=0;
 		for(PanelListElement s:getPanels()) {
 			int j=s.getDisplayGridIndex().getPanelindex();
@@ -676,7 +601,7 @@ public class PanelList implements Serializable{
 	}
 
 	
-
+	/**Sets the channel frame and slice use instructions*/
 	public void setChannelUstInstructions(ChannelUseInstructions instructions) {
 		this.instructions = instructions;
 	}
@@ -685,6 +610,7 @@ public class PanelList implements Serializable{
 	public ArrayList<ChannelLabelTextGraphic> getChannelLabels() {
 		return getChannelLabelsFrom(getPanels());
 	}
+	/**returns all the channel labels attached to the panels in the list*/
 	private ArrayList<ChannelLabelTextGraphic> getChannelLabelsFrom(ArrayList<PanelListElement> eachPanel) {
 		ArrayList<ChannelLabelTextGraphic> out=new ArrayList<ChannelLabelTextGraphic>();
 		for(PanelListElement panel: eachPanel) {
@@ -735,11 +661,12 @@ public class PanelList implements Serializable{
 		return output;
 	}
 	
-/**gets the ratio that determines the panel's pixel density*/
+/**returns the ratio that determines the panel's pixel density*/
 	public double getPixelDensityRatio() {
 		return pixelDensityRatio;
 	}
 
+	/**sets the ratio that determines the panel's pixel density*/
 	public void setPixelDensityRatio(double panelLevelScale) {
 		pixelDensityRatio=panelLevelScale;
 	}

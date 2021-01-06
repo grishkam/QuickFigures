@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericTools;
 
 import java.awt.Cursor;
@@ -58,7 +63,7 @@ public class PanTool extends BasicToolBit {
 	}
 	
 	public DragAndDropHandler getDragAndDropHandler() {
-		return new MoverDragHandler(this);
+		return new NormalToolDragHandler(this);
 	}
 
 }

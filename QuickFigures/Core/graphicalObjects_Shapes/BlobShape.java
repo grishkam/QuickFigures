@@ -13,6 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
+
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -26,14 +32,32 @@ import handles.SmartHandleList;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 
+/**A shape that consists of a curved lobes of */
 public class BlobShape extends SimpleStar {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	{ setStarRatio(0.75);}
 	{name="Blob";}
 	
 	BlobCurveParameterGroup parameters=createParameters();
 
+	private SmartHandleList blobList; 
+	
+	public BlobShape(RectangularGraphic r) {
+		super(r);
+		
+	}
 
-
+	public BlobShape(Rectangle r, int i, double d) {
+		super(r,i);
+	}
+	
+	
+	/**Generates the angle parameters that are used to calculate the points along a path2d
+	 * that enclose the shape*/
 	public BlobCurveParameterGroup createParameters() {
 		AngleParameter ccParameter1=createCCAngleParameter(this); {ccParameter1.setRatioToStandardAngle(-0.25);}
 		AngleParameter ccParameter2=createCCAngleParameter(this);{ccParameter2.setRatioToStandardAngle(0.25);}
@@ -46,16 +70,7 @@ public class BlobShape extends SimpleStar {
 	
 
 	
-	
-	private SmartHandleList blobList; 
-	
-
-
-	public BlobShape(RectangularGraphic r) {
-		super(r);
-		
-	}
-
+	/**creates an angle parapeter that will be used as a cruve control point*/
 	protected AngleParameter createCCAngleParameter(BlobShape blobShape) {
 		AngleParameter n = new AngleParameter(this);
 		n.setType(AngleParameter.ANGLE_RATIO_AND_RAD_TYPE);
@@ -64,9 +79,6 @@ public class BlobShape extends SimpleStar {
 		return n;
 	}
 
-	public BlobShape(Rectangle r, int i, double d) {
-		super(r,i);
-	}
 	
 	public RegularPolygonGraphic copy() {
 		BlobShape output = new BlobShape(this);
@@ -76,10 +88,7 @@ public class BlobShape extends SimpleStar {
 		return output;
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
 	
 	/**implements a formula to produce a blob*/
 	@Override
@@ -102,6 +111,7 @@ public class BlobShape extends SimpleStar {
 		
 	}
 
+	/**Creates a path point. */
 	public PathPoint createPathPointWithStarTransform(int i) {
 		double aa=0;
 		if(i%2!=0) aa=this.getStarAngleRatio();
@@ -112,6 +122,9 @@ public class BlobShape extends SimpleStar {
 		return p2;
 	}
 
+	/**Creates a path point. 
+	 * @param aa an angle that defines the position of the point
+	 * @param i the index of the point along th blob*/
 	public PathPoint getPathPointAtAngularLocation(int i, double aa) {
 		Point2D anchor = getPointForPosition(i, aa,1);
 		Point2D cc1 = getPointForPosition(i, parameters.curve1.getRatioToStandardAngle()+aa,parameters.curve1.getRatioToMaxRadius());
@@ -128,6 +141,10 @@ public class BlobShape extends SimpleStar {
 		return AffineTransform.getTranslateInstance(r.getMaxX(),r.getCenterY());
 	}
 	
+	/**creates a point along the blob
+	 * @param i the index of the lobe. each lobe is at a different angle
+	 * @param angleRatio determines the angle shift
+	 * @param radRatio determines the location radians */
 	public Point2D getPointForPosition( int i, double angleRatio, double radRatio) {
 		double rx=getObjectWidth()/2;
 		double ry=getObjectHeight()/2;
@@ -139,7 +156,7 @@ public class BlobShape extends SimpleStar {
 		double cury=centy+Math.sin(angle)*ry*radRatio;
 		return new Point2D.Double(curx, cury);
 	}
-	
+	/**
 	AffineTransform getTransformForAspectRatioScale() {
 		double rx=getObjectWidth()/2;
 		double ry=getObjectHeight()/2;
@@ -150,9 +167,11 @@ public class BlobShape extends SimpleStar {
 		af.scale(1, ry/rx);
 		af.translate(-centx, -centy);
 		return af;
-	}
+	}*/
 	
-	public AffineTransform getTransformForRatios() {
+	/**Returns the transform that moves a point inward/outward compated to the center
+	 * of rotation*/
+	private AffineTransform getTransformForRatios() {
 		double rx=getObjectWidth()/2;
 		double ry=getObjectHeight()/2;
 		double centx = x+rx;
@@ -160,25 +179,29 @@ public class BlobShape extends SimpleStar {
 		AffineTransform af = new AffineTransform();
 		
 		af.translate(centx, centy);
-		af.scale(getStatRatio(), getStatRatio());
+		af.scale(getStarRadiusRatio(), getStarRadiusRatio());
 		af.translate(-centx, -centy);
 		return af;
 	}
 	
-	
+	/**Returns the angle between lobes on the blob*/
 	public double getIntervalAngle() {
 		return Math.PI/(getNvertex());
 	}
 	
+	/**returns the name of the shape*/
 	public String getPolygonType() {return "Blob";}
 
 	
+	/**creates a handle list*/
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		
 		return list;
 	}
 	
+	/**returns a handle list that includes both handles from the superclass and 
+	 * special handles for the blob shape*/
 	@Override
 	public SmartHandleList getSmartHandleList() {
 		SmartHandleList list1 = super.getSmartHandleList();
@@ -190,7 +213,7 @@ public class BlobShape extends SimpleStar {
 		return SmartHandleList.combindLists(list1, blobList);
 	}
 	
-	/**a group of angle parameters that function as anchor and curve control points*/
+	/**a group of angle parameters that function as anchor and curve control points or a blob*/
 	static class BlobCurveParameterGroup extends SmartHandleList{
 		
 		public AngleParameter anchor;

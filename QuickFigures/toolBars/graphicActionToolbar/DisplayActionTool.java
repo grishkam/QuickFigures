@@ -13,13 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicActionToolbar;
 
 
 
 import applicationAdapters.DisplayedImage;
 import externalToolBar.ActionToolBlank;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import icons.IconSet;
 
 /**An action tool that targets a single object*/
@@ -37,7 +42,7 @@ public class DisplayActionTool extends ActionToolBlank<DisplayedImage>{
 		this.setIconSet(iconpath);
 	}
 	
-	protected void perform(FigureDisplayContainer gc) {
+	protected void perform(FigureDisplayWorksheet gc) {
 		
 	}
 	

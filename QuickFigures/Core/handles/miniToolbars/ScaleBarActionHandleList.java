@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles.miniToolbars;
 
 import java.awt.Graphics2D;
@@ -26,8 +31,9 @@ import graphicalObjects_SpecialObjects.BarGraphic;
 import objectDialogs.DialogIcon;
 import selectedItemMenus.BarOptionsSyncer;
 import selectedItemMenus.SelectAllButton;
-import selectedItemMenus.SnappingSyncer;
+import selectedItemMenus.AttachmentPositionAdjuster;
 
+/**A mini toolbar designed for scale bars. each handle is relvant to scale bars*/
 public class ScaleBarActionHandleList extends ActionButtonHandleList {
 
 	/**
@@ -39,26 +45,43 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 	public ScaleBarActionHandleList(BarGraphic t) {
 	
 		this.theBar=t;
+		addBarColorButton(t);
+	
+		addProjectionButton(t);
+		
+		
+		addBarLengthHandle(t);
+		
+		add(new BarOptionsDialogHandle(1120));
+		
+		createGeneralButton(new SelectAllButton(t));
+		
+		add(new GeneralActionHandle(new AttachmentPositionAdjuster(true, theBar), 741905));
+		
+	}
+
+
+
+	/**
+	 * @param t
+	 */
+	private void addBarColorButton(BarGraphic t) {
 		EditManyShapes itemForIcon2 = new EditManyShapes(false, t.getFillColor());
 		itemForIcon2.setModelItem(t);
 		GeneralActionListHandle hf = addOperationList(itemForIcon2, new EditManyShapes[] {});
 		hf.setAlternativePopup(new ColoringButton(itemForIcon2, 78341));
-			
-		
-	
-		
+	}
+
+
+
+	/**adds a button that control the length of the scale bars
+	 * @param t
+	 */
+	private void addBarLengthHandle(BarGraphic t) {
 		EditScaleBars itemForIcon;
-		addProjectionButton(t);
-		
-		
 		itemForIcon = new EditScaleBars(EditScaleBars.TYPE_BAR_THICKNESS_WIDTH, 4);
 		itemForIcon.setModelItem(t);
 		addOperationList(itemForIcon, EditScaleBars.getUnitLengthList(t.getScaleInfo().getUnits()));
-		
-		add(new BarSyncHandle(1120));
-		createGeneralButton(new SelectAllButton(t));
-		add(new GeneralActionHandle(new SnappingSyncer(true, theBar), 741905));
-		
 	}
 
 
@@ -89,9 +112,9 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 	}
 	
 	
-	public class BarSyncHandle extends GeneralActionHandle {
+	public class BarOptionsDialogHandle extends GeneralActionHandle {
 
-		public  BarSyncHandle( int num) {
+		public  BarOptionsDialogHandle( int num) {
 			super(new BarOptionsSyncer(), num);
 		}
 		

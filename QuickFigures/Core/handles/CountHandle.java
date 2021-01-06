@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Graphics2D;
@@ -29,6 +34,7 @@ import menuUtil.SmartPopupJMenu;
 import standardDialog.StandardDialog;
 import undo.SimpleItemUndo;
 
+/**A handle that allows a user to manipulate a count parameter by clicking on the handle*/
 public class CountHandle extends SmartHandle {
 
 	/**
@@ -135,7 +141,7 @@ public class CountHandle extends SmartHandle {
 		return new SimpleItemUndo<CountParameter> (count);
 	}
 	
-	
+	/**Draws the text of the handle*/
 	protected void drawMessage(Graphics2D graphics, Shape s) {
 		
 			graphics.setColor(messageColor);

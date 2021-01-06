@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import externalToolBar.InterfaceExternalTool;
-import externalToolBar.ToolBarManager;
 import genericMontageLayoutToolKit.Shift_Object_Between_Panels;
 import genericTools.GeneralTool;
 import genericTools.ObjectColorFillTool;
@@ -120,10 +119,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	
 	public static void includeBonusTool(ToolInstallers tool) {bonusTools.add(tool);}
 	
-	public void setCurrentTool(InterfaceExternalTool<DisplayedImage> currentTool) {
-		super.setCurrentTool(currentTool);
-		ToolBarManager.setCurrentTool(currentTool);
-	}
+	
 	
 
 	static ArrayList<ToolBit> bits=null;

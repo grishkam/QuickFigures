@@ -13,22 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import graphicalObjects_SpecialObjects.BarGraphic;
 
+/**an undo for changes to a scale bar properties*/
 public class UndoScaleBarEdit extends AbstractUndoableEdit2 {
 
 	private BarGraphic fBar;
 	private BarGraphic iBar;
 	private BarGraphic theBar;
-	private UndoSnappingChange barTextUndo;
+	private UndoAttachmentPositionChange barTextUndo;
 	
 	public UndoScaleBarEdit(BarGraphic a) {
 		theBar=a;
 		if(theBar!=null)
 			{iBar=theBar.copy();
-			barTextUndo=new UndoSnappingChange(theBar.getBarText());
+			barTextUndo=new UndoAttachmentPositionChange(theBar.getBarText());
 		 }
 	}
 	

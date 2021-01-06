@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -37,8 +42,21 @@ public class TriangleGraphic extends RectangularGraphic {
 	 * 
 	 */
 	
+	/**A parameter that determines where the top of the triangle is drawn*/
 	RectangleEdgeParameter parameter=new RectangleEdgeParameter(this, 0.5,  UPPER_LEFT, UPPER_RIGHT);
 	{parameter.setRatioToMaxLength(0.5);}
+	
+	public  TriangleGraphic(Rectangle rectangle) {
+		super(rectangle);
+	}
+	public TriangleGraphic(Rectangle rectangle, double trapezoidTopSize) {
+		super(rectangle);
+		this.parameter.setRatioToMaxLength(trapezoidTopSize);
+	}
+	
+	public TriangleGraphic(RectangularGraphic r) {
+		super(r);
+	}
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -61,17 +79,7 @@ public class TriangleGraphic extends RectangularGraphic {
 		return output;
 	}
 	
-	public  TriangleGraphic(Rectangle rectangle) {
-		super(rectangle);
-	}
-	public TriangleGraphic(Rectangle rectangle, double nV) {
-		super(rectangle);
-		this.parameter.setRatioToMaxLength(nV);
-	}
 	
-	public TriangleGraphic(RectangularGraphic r) {
-		super(r);
-	}
 
 	/**implements a formula to produce a trapezoid*/
 	@Override
@@ -114,16 +122,17 @@ public class TriangleGraphic extends RectangularGraphic {
 		}
 		
 	
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  blankShape(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 	}
 
+	/**Creates the shape in adobe illustrator*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
 
 	
-	
+	/**creates a handle list that includes a handle for moving the tip of the triangle*/
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		RectangleEdgeHandle handle = new RectangleEdgeHandle(this, parameter, Color.green, 20,1, 0.05);

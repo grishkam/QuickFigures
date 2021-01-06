@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayerTypes;
 
 import java.awt.Color;
 
 import graphicalObjects_Shapes.RectangularGraphic;
 
+/**A group of two rectangles to depict a centriole pair*/
 public class CentriolePairCartoon extends GraphicGroup {
 
 	/**
@@ -34,17 +40,19 @@ public class CentriolePairCartoon extends GraphicGroup {
 	RectangularGraphic centriole1;
 	RectangularGraphic centriole2;
 	
+	/**generates the rectangular objects*/
 	public void generateInnitialCentrioles() {
 		centriole1=new RectangularGraphic(0,0,10,25);
 		centriole2=new RectangularGraphic(20,0,25,10);
-		getTheLayer().add(centriole1);
-		getTheLayer().add(centriole2);
+		getTheInternalLayer().add(centriole1);
+		getTheInternalLayer().add(centriole2);
 		setPropertiesInitialOfCentriole(centriole1);
 		setPropertiesInitialOfCentriole(centriole2);
 		centriole2.setAngle(Math.PI/8);
 		
 	}
 	
+	/**Sets the properties of the rectangle*/
 	private void setPropertiesInitialOfCentriole(RectangularGraphic centriole1) {
 		centriole1.setStrokeWidth(1);
 		centriole1.makeNearlyDashLess();

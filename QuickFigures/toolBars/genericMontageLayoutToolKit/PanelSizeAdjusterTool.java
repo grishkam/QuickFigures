@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 import genericMontageLayoutToolKit.GeneralLayoutEditorTool;
 import layout.PanelLayout;
@@ -25,30 +30,21 @@ import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 
-
+/**A tool for adjusting the size of panels*/
 public class PanelSizeAdjusterTool extends GeneralLayoutEditorTool implements ActionListener, LayoutSpaces {
-	int mode=1;
+	
 	
 
 	@Override
 	public
 	void performDragEdit(boolean b) {
-		if (mode==1) {
+		
 			 getLayoutEditor().augmentPanelHeight(getCurrentLayout(), getYDisplaceMent() , getRowIndexClick());
 			 getLayoutEditor().augmentPanelWidth(getCurrentLayout(), getXDisplaceMent() , getColIndexClick());
-		}
+		
 		
 	}
 	
-
-	public void onActionPerformed(Object sour, String st) {
-		
-	}
-	
-	public ArrayList<JMenuItem> getPopupMenuItems() {
-		//return 	new MontageEditCommandMenu( currentlyInFocusWindowImage().createLayout()).getPanelSizeList();
-		return null;
-	}
 	
 	@Override
 	public String getToolTip() {
@@ -62,6 +58,7 @@ public class PanelSizeAdjusterTool extends GeneralLayoutEditorTool implements Ac
 	
 	{this.setIconSet(new  PanelSizeToolIcon(0).generateIconSet());}
 	
+	/**An icon that show different panel sizes*/
 	class PanelSizeToolIcon extends GeneralLayoutToolIcon {
 
 		/**

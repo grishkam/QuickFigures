@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -26,14 +31,29 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 
-/**A blob shape with a number of lobes that can be edited individual by dragging points*/
+/**A blob shape with a number of distinct lobes that can be edited individually by dragging handles*/
 public class ComplexBlobShape extends BlobShape {
 	{super.setNvertex(12);}
+	
+	/**Additional blob parameters beyond the one used by the superclass*/
 	BlobCurveParameterGroup[] parameters2=new BlobCurveParameterGroup[] {createParameters2(5, 200023, 0.25), createParameters2(6, 243023, 0.25), createParameters2(7, 9324023, 0.25)};
 	private SmartHandleList blobList2;
 	{innitialSetup2() ;}
 	
-	public void innitialSetup() {
+	public ComplexBlobShape(RectangularGraphic r) {
+		super(r);
+		
+	}
+
+
+
+	public ComplexBlobShape(Rectangle r, int i, double d) {
+		super(r,i, d);
+	}
+	
+	/**Sets the positions of the parameter groups within 
+	 *  the blob with manually determined parameters for one style of blob*/
+	void innitialSetup() {
 		double d0=0.25;
 		double baseRadia1 = 0.9;
 		double angleshift1=-0.25;
@@ -48,7 +68,9 @@ public class ComplexBlobShape extends BlobShape {
 		getParameter(0).setPositions(baseRadia, d, -bAngle,angleShift2);
 	}
 	
-	public void innitialSetup2() {
+	/**Sets the positions of the parameter groups within 
+	 * the blob with manually determined parameters for the second style of complex blob*/
+	void innitialSetup2() {
 		
 		for(int i=0; i<this.getNHandleGroups(); i++) { 
 				if(i%2==0) {
@@ -73,6 +95,7 @@ public class ComplexBlobShape extends BlobShape {
 		
 	}
 
+	/**returns the i-th parameter group that determines the curve control points for the */
 	protected BlobCurveParameterGroup getParameter( int i) {
 		if(i==0) return parameters;
 		if(i<=this.getNHandleGroups())
@@ -80,6 +103,10 @@ public class ComplexBlobShape extends BlobShape {
 		return null;
 	}
 
+	/**Generates a parameter group 
+	 * @param a the angle ratio used to shift the curve control points away from the anchor
+	 * @param point the index of the point in the blob
+	 * @param base unique code for each parameter group made*/
 	public BlobCurveParameterGroup createParameters2(int point, int base, double a) {
 		AngleParameter ccParameter1=createCCAngleParameter2(this); {ccParameter1.setRatioToStandardAngle(-a); }
 		AngleParameter ccParameter2=createCCAngleParameter2(this);{ccParameter2.setRatioToStandardAngle(a);}
@@ -91,11 +118,12 @@ public class ComplexBlobShape extends BlobShape {
 		return blobCurveParameterGroup;
 	}
 	
+	/**returns the number of handle groups used*/
 	int getNHandleGroups() {
 		return 1+parameters2.length;
 	}
 	
-	
+	/**creates a group of angle parameters for this blob shape*/
 	public BlobCurveParameterGroup createParameters() {
 		AngleParameter ccParameter1=createCCAngleParameter(this); {ccParameter1.setRatioToStandardAngle(-0.25);}
 		AngleParameter ccParameter2=createCCAngleParameter(this);{ccParameter2.setRatioToStandardAngle(0.25);}
@@ -107,7 +135,7 @@ public class ComplexBlobShape extends BlobShape {
 		return blobCurveParameterGroup;
 	}
 	
-	
+	/**creates an angle parameter for this blob shape*/
 	protected AngleParameter createCCAngleParameter2(BlobShape blobShape) {
 		AngleParameter n = new AngleParameter(this);
 		n.setType(AngleParameter.ANGLE_RATIO_AND_RAD_TYPE);
@@ -116,16 +144,7 @@ public class ComplexBlobShape extends BlobShape {
 		return n;
 	}
 	
-	public ComplexBlobShape(RectangularGraphic r) {
-		super(r);
-		
-	}
 
-
-
-	public ComplexBlobShape(Rectangle r, int i, double d) {
-		super(r,i, d);
-	}
 	
 	public RegularPolygonGraphic copy() {
 		ComplexBlobShape output = new ComplexBlobShape(this);
@@ -189,11 +208,16 @@ public class ComplexBlobShape extends BlobShape {
 	}
 	
 	
-	
+	/**override the superclass*/
+	@Override
 	protected void addStarHandlesToList(SmartHandleList list) {
 
 		}
+
 	
+
+	/**override the superclass*/
+	@Override
 	protected void updateStarHandles() {
 			}
 	

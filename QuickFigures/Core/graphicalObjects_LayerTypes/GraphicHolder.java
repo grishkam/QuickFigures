@@ -13,14 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayerTypes;
 
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
 
+/**Some graphics contain others inside them that do not appear in the layer
+structure but can be clicked on*/
 public interface GraphicHolder {
 	
-	/**returns all the held graphics.*/
+	/**returns all the graphics contained in this object*/
 	public ArrayList<ZoomableGraphic> getAllHeldGraphics();
 }

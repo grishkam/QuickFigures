@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.BasicStroke;
@@ -51,7 +56,7 @@ import undo.UndoManagerPlus;
    that the handles can appear as*/
 public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 	
-	public static int NORMAL_FILL=0, CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
+	public static final int NORMAL_FILL=0, CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
 	
 	public int handlesize=3;
 	private int specialFill=NORMAL_FILL;
@@ -189,7 +194,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
 
 	/**returns the font of the handle message*/
 	protected Font getMessageFont() {
-		return new Font("Arial", 0, 12);
+		return new Font("Arial", Font.BOLD, 12);
 	}
 	
 	/**Draws the main Shape. mouse clicks inside this shape will result in calls
@@ -502,7 +507,7 @@ public Shape getClickableArea() {return lastDrawShape;}
 	}
 	
 	/**creates a shape that is a plus or minus sign*/
-	protected Area addSubtractShape(int plusSize, boolean subtract) {
+	protected Area addOrSubtractSymbol(int plusSize, boolean subtract) {
 		Area a=new Area();
 		a.add(new Area(new Rectangle(-plusSize, 0, plusSize*3, plusSize)));
 		 if(!subtract) a.add(new Area(new Rectangle(0, -plusSize, plusSize, plusSize*3)));

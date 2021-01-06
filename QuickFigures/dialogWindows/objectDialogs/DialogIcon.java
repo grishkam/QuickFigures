@@ -55,7 +55,7 @@ public class DialogIcon {
 		out.setStrokeWidth(1);
 		
 		out.makeNearlyDashLess();
-		g.getTheLayer().add(out);
+		g.getTheInternalLayer().add(out);
 		return out;
 	}
 

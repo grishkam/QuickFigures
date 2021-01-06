@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayoutObjects;
 
 import java.util.ArrayList;
@@ -30,6 +35,8 @@ import locatedObject.ObjectContainer;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.ObjectPanelLayoutPanelMenu;
 
+/**A layout whose panels are determined the the locations of actual objects.
+ * */
 public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic implements LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>{
 
 	/**
@@ -102,20 +109,20 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrapper = new GenericImage(new ArrayObjectContainer(parent2));
-		this.getPanelLayout().setEditedImage(wrapper);
-		this.getPanelLayout().getEditedImage().takeFromImage(this);
+		this.getPanelLayout().setEditedWorkSheet(wrapper);
+		this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
 		for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-			getPanelLayout().getEditedImage().takeFromImage(loc);
+			getPanelLayout().getEditedWorksheet().takeFromImage(loc);
 		}
 		return wrapper;
 	}
 	
 	public ImageWorkSheet generateEditNonpermissiveWrapper() {
 			GenericImage wrapper = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
-			this.getPanelLayout().setEditedImage(wrapper);
-			this.getPanelLayout().getEditedImage().takeFromImage(this);
+			this.getPanelLayout().setEditedWorkSheet(wrapper);
+			this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
 			for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-				getPanelLayout().getEditedImage().takeFromImage(loc);
+				getPanelLayout().getEditedWorksheet().takeFromImage(loc);
 			}
 			return wrapper;
 		}
@@ -124,7 +131,7 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage wrapper = new GenericImage((ObjectContainer) this.getParentLayer());
-				this.getPanelLayout().setEditedImage(wrapper);
+				this.getPanelLayout().setEditedWorkSheet(wrapper);
 				if (!this.getEditor().getObjectHandler().getNeverRemove().contains(this))
 				this.getEditor().getObjectHandler().getNeverRemove().add(this);
 				for(LocatedObject2D loc: this.getPanelLayout().getArray()) {

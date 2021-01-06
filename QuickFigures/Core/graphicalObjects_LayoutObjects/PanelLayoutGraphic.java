@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayoutObjects;
 
 import java.awt.BasicStroke;
@@ -43,7 +48,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import handles.HasSmartHandles;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import icons.IconSet;
@@ -72,7 +77,8 @@ import popupMenusForComplexObjects.MontageLayoutDisplayOptions;
 import popupMenusForComplexObjects.MontageLayoutPanelModDialog;
 import utilityClasses1.ArraySorter;
 
-/**A graphical object that stores a layout, displays the layout, includes handles for editing the layout*/
+/**A graphical object that stores a layout, displays the layout, includes handles for editing the layout
+ * this abstract superclass is somewhat complex*/
 public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements PanelLayoutContainer, TakesAttachedItems,KnowsParentLayer, HasUniquePopupMenu, LocationChangeListener, HasTreeLeafIcon, HasSmartHandles {
 	
 	{this.setName("Layout");}
@@ -94,7 +100,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 					BottomHandleID=LAYOUT_LOCATION_HANDLE+2, LeftHandleID=LAYOUT_LOCATION_HANDLE+3, TopHandleID=LAYOUT_LOCATION_HANDLE+4;
 	public static final int AddRowHandle=LAYOUT_LOCATION_HANDLE+5,
 			AddColHandle=LAYOUT_LOCATION_HANDLE+6, 
-			RepackPanelsHandle=LAYOUT_LOCATION_HANDLE+7, SELECT_ALL_HANDLE=LAYOUT_LOCATION_HANDLE+8;
+			RepackPanelsHandle=LAYOUT_LOCATION_HANDLE+7, SELECT_ALL_HANDLE=LAYOUT_LOCATION_HANDLE+8, SCALE_HANDLE=LAYOUT_LOCATION_HANDLE+9;
 	
 	transient ArrayList<PanelContentExtract> contentstack;
 	private int editMode=0;
@@ -173,7 +179,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	/**generates a handle for an attached text item*/
 	protected void generateHandleForText(LocatedObject2D l) {
 		SmartHandleList list = this.getLocedItemHandleList();
-		list.add(new LockedItemHandle(this, l, 1000000000+list.size()));
+		list.add(new AttachmentPositionHandle(this, l, 1000000000+list.size()));
 	}
 		
 	/**If the given item is attached to this layout
@@ -575,7 +581,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		SmartHandle handle = this.getAllSmartHandles().getHandleNumber(handlenum);
 		
-		if(handle instanceof LockedItemHandle) {
+		if(handle instanceof AttachmentPositionHandle) {
 		//	((LockedItemHandle) handle).setInfineControl((p2.distance(handle.getCordinateLocation())<2.5));
 			handle.handleMove(p1, p2);
 			
@@ -807,16 +813,16 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrap1 = new GenericImage(new ArrayObjectContainer(parent2));
-		this.getPanelLayout().setEditedImage(wrap1);
-		this.getPanelLayout().getEditedImage().takeFromImage(this);
+		this.getPanelLayout().setEditedWorkSheet(wrap1);
+		this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
 		return wrap1;
 		
 	}
 	
 	public ImageWorkSheet generateEditNonpermissiveWrapper() {
 			GenericImage genericImage = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
-			this.getPanelLayout().setEditedImage(genericImage);
-			this.getPanelLayout().getEditedImage().takeFromImage(this);
+			this.getPanelLayout().setEditedWorkSheet(genericImage);
+			this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
 			return genericImage;
 		}
 	
@@ -824,7 +830,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage genericImage = new GenericImage(getParentLayerAsContainer());
-				this.getPanelLayout().setEditedImage(genericImage);
+				this.getPanelLayout().setEditedWorkSheet(genericImage);
 				if (!this.getEditor().getObjectHandler().getNeverRemove().contains(this))
 				this.getEditor().getObjectHandler().getNeverRemove().add(this);
 				return genericImage;

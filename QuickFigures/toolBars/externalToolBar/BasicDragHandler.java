@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package externalToolBar;
 
 import java.awt.dnd.DropTargetDragEvent;
@@ -22,7 +27,8 @@ import java.awt.geom.Point2D;
 
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
-/**Barebones implementation of drag and drop handler
+/**Each tool may handle drag and drops differently. 
+  Barebones implementation of drag and drop handler
   does nothing interesting but subclasses perform other actions*/
 public class BasicDragHandler implements DragAndDropHandler {
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -20,18 +25,14 @@ import java.util.ArrayList;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
+/**an undo for adding many items to a layer*/
 public class UndoAddManyItem extends  CombinedEdit {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/**
-	public UndoAddManyItem(GraphicLayer gl, ArrayList<ZoomableGraphic> xxs) {
-		for(ZoomableGraphic z: xxs) {
-			this.addEditToList(new UndoAddItem(gl, z));
-		}
-	}*/
+
 	
 	public UndoAddManyItem(GraphicLayer gl, ArrayList<?> xxs) {
 		for(Object z: xxs) {

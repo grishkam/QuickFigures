@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -41,7 +46,10 @@ import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import utilityClasses1.ArraySorter;
 
-/**A class for the  handles on an ImagePanel. */
+/**A handle for editing ImagePanels
+ * @see ImagePanelGraphic
+ * @see SmartHandle
+ * */
 public class ImagePanelHandle extends SmartHandle {
 
 	private int handlecode=50;

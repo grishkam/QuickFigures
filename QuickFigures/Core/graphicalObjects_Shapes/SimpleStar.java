@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -24,10 +29,9 @@ import java.awt.geom.Point2D;
 import handles.AngleHandle;
 import handles.SmartHandleList;
 
-/**A star object*/
+/**A star shaped polygon*/
 public class SimpleStar extends RegularPolygonGraphic {
 
-	//private static final int STAR_RATIO_HANDLE = 80, ANGLE_SHIFT_HANDLE=73;
 	
 	{name="Star";}
 	private AngleParameter starRatio=new AngleParameter(this); {starRatio.setType(AngleParameter.ANGLE_RATIO_AND_RAD_TYPE); starRatio.setRatioToMaxRadius(0.5);}
@@ -36,18 +40,17 @@ public class SimpleStar extends RegularPolygonGraphic {
 	
 	protected boolean doesAngleShift=true;
 	
-	
-	
-	public SimpleStar(Rectangle rectangle, int nV) {
-		super(rectangle, nV);
-		// TODO Auto-generated constructor stub
-	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public String getPolygonType() {return "Star";}
+	
+	
+	public SimpleStar(Rectangle rectangle, int nV) {
+		super(rectangle, nV);
+	}
+
 	
 	public SimpleStar(RectangularGraphic r) {
 		super(r);
@@ -61,7 +64,7 @@ public class SimpleStar extends RegularPolygonGraphic {
 
 	public void giveStarTraitsToo(SimpleStar output) {
 		output.setNvertex(this.getNvertex());
-		output.setStarRatio(this.getStatRatio());
+		output.setStarRatio(this.getStarRadiusRatio());
 		output.setStartAngleRatio(this.getStarAngleRatio());
 		output.doesAngleShift=this.doesAngleShift;
 	}
@@ -105,13 +108,17 @@ public class SimpleStar extends RegularPolygonGraphic {
 		return path;
 		
 	}
+
+	public String getPolygonType() {return "Star";}
 	
+	/**distance between points of the star*/
 	public double getIntervalAngle() {
 		return Math.PI/getNvertex();
 	}
 
+	/**returns the ratio  */
 	public double getRatioInternalToExternal() {
-		return getStatRatio();
+		return getStarRadiusRatio();
 	}
 	
 	protected SmartHandleList createSmartHandleList() {
@@ -120,6 +127,7 @@ public class SimpleStar extends RegularPolygonGraphic {
 		return list;
 	}
 
+	/**Adds handles that allow the user to edit the style of the star*/
 	protected void addStarHandlesToList(SmartHandleList list) {
 		list.add(new RegularPolygonAngleHandle(this, starRatio, Color.green, 0, 893, -1)); 
 		if (doesAngleShift) {
@@ -128,6 +136,7 @@ public class SimpleStar extends RegularPolygonGraphic {
 			list.add(e);
 		}
 	}
+	/**Called */
 	protected void updateStarHandles() {
 		angleRatio.setRatioToMaxRadius(starRatio.getRatioToMaxRadius());//keeps the position consistent
 		starRatio.setRatioToStandardAngle(angleRatio.getRatioToStandardAngle()); starRatio.setAngle(angleRatio.getAngle());
@@ -146,19 +155,20 @@ public class SimpleStar extends RegularPolygonGraphic {
 		return 2;
 	}
 
-	public double getStatRatio() {
+	/***/
+	public double getStarRadiusRatio() {
 		return starRatio.getRatioToMaxRadius();
 	}
-
+	/***/
 	public void setStarRatio(double ieRatio) {
 		starRatio.setRatioToMaxRadius(ieRatio);
 		 angleRatio.setRatioToMaxRadius(ieRatio);
 	}
-
+	/***/
 	public double getStarAngleRatio() {
 		return angleRatio.getRatioToStandardAngle();
 	}
-
+	/***/
 	public void setStartAngleRatio(double angleShiftRatio) {
 		angleRatio.setRatioToStandardAngle(angleShiftRatio);
 	}
@@ -172,7 +182,7 @@ public class SimpleStar extends RegularPolygonGraphic {
 
 
 	
-	
+	/**S special angle handle for polygons and starts*/
 	static class RegularPolygonAngleHandle extends  AngleHandle {
 		public RegularPolygonGraphic polygon;
 		

@@ -17,7 +17,6 @@ package plotParts.Core;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
@@ -28,7 +27,7 @@ import fLexibleUIKit.MenuItemExecuter;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import locatedObject.LocatedObject2D;
@@ -102,7 +101,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	 * @param p2
 	 */
 	@Override
-	public void afterHandleMove(int handleNumber, Point p1, Point p2) {
+	public void afterHandleMove(int handleNumber, Point2D p1, Point2D p2) {
 		if (handleNumber==RectangleEdges.CENTER) {
 			this.setLocationType(RectangleEdges.CENTER);
 			Point2D l = this.getLocation();
@@ -136,7 +135,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	@Override
 	public void addLockedItem(LocatedObject2D l) {
 		list.add(l);
-		getSmartHandleList().add(new LockedItemHandle(this, l, 400+list.size()));
+		getSmartHandleList().add(new AttachmentPositionHandle(this, l, 400+list.size()));
 	}
 
 	@Override

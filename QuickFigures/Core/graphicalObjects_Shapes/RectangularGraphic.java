@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -28,7 +33,6 @@ import javax.swing.Icon;
 import animations.KeyFrameAnimation;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.GraphicalObject;
 import handles.HasSmartHandles;
 import handles.RectangularShapeSmartHandle;
 import handles.SmartHandle;
@@ -49,8 +53,9 @@ import locatedObject.StrokedItem;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 
-/**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog*/
-public class RectangularGraphic extends ShapeGraphic implements GraphicalObject, StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePositions, HasSmartHandles {
+/**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog.
+ * This is a superclass for many different shapes*/
+public class RectangularGraphic extends ShapeGraphic implements StrokedItem, ShowsOptionsDialog ,Fillable, HasTreeLeafIcon,ScalesFully,IllustratorObjectConvertable,  RectangleEdgePositions, HasSmartHandles {
 	 
 	{name="Rectangle ";}
 	
@@ -198,20 +203,20 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	}
 	
 	
-	/**
+	/**not implemented by this class but subclasses 
 	 * @param handleNumber
 	 * @param p1
 	 * @param p2
 	 */
-	public void afterHandleMove(int handleNumber, Point p1, Point p2) {
+	public void afterHandleMove(int handleNumber, Point2D p1, Point2D p2) {
 		
 		
 	}
 	
 	
 	
-	/**setter method for this rectangles width. Keeps the location of the
-	  rectangle of its location type in the same place.
+	/**setter method for this rectangles width. Keeps a certain edge of the
+	  rectangle fixed at a position that depends on its location type.
 	  Performs position correction so the final point from getLocation()
 	  will be the same as the initial point.*/
 	public void setWidth(double w) {
@@ -244,7 +249,8 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		}
 	}
 
-	/**setter method for this rectangles size.
+	/**setter method for this rectangles size. Keeps a certain edge of the
+	  rectangle fixed at a position that depends on its location type.
 	  Performs position correction so the final point from getLocation()
 	  will be the same as the initial point*/
 	public void setHeight(double h) {
@@ -262,7 +268,6 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 		setObjectHeight(h);
 		
 		setLocation(p);
-		
 		
 		
 		/**if the item is rotated, a correcting is needed*/
@@ -298,16 +303,16 @@ public class RectangularGraphic extends ShapeGraphic implements GraphicalObject,
 	}
 	
 
-	/**returns the bounds of the rectangle in its unroated form*/
+	/**returns the bounds of the rectangle in its non-roated form*/
 	@Override
 	public Rectangle getBounds() {
 		return getRectangle().getBounds();
 	}
 	
 	/**returns the rectangle in its non-rotated form*/
-public Rectangle2D.Double getRectangle() {
-	return new Rectangle2D.Double(x,y,getObjectWidth(),getObjectHeight());
-}
+	public Rectangle2D.Double getRectangle() {
+		return new Rectangle2D.Double(x,y,getObjectWidth(),getObjectHeight());
+	}
 
 
 
@@ -320,7 +325,7 @@ public Rectangle2D.Double getRectangle() {
 		return new RectangleGraphicOptionsDialog(this, simple);
 	}	
 
-
+	/**Creates shape for an illustrator script*/
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		pi.createRectangle(aref, this.getRectangle());
 		
@@ -339,7 +344,7 @@ public Rectangle2D.Double getRectangle() {
 	}
 	
 	RectangularGraphic createIcon() {
-		RectangularGraphic out = rectForIcon() ;
+		RectangularGraphic out = shapeUsedForIcon() ;
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		out.copyColorsFrom(this);
@@ -351,7 +356,7 @@ public Rectangle2D.Double getRectangle() {
 	
 	
 	/**returns a small rectangle for use as an icon. subclasses generally override this */
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  RectangularGraphic.blankRect(new Rectangle(0,0,12,10), Color.BLACK);
 	
 	
@@ -361,7 +366,7 @@ public Rectangle2D.Double getRectangle() {
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
 		Point2D p2 = this.getLocationUpperLeft();
-		p2=scaleAbout(p2, p,mag,mag);
+		p2=scalePointAbout(p2, p,mag,mag);
 		this.setWidth(getObjectWidth()*mag);
 		this.setHeight(getObjectHeight()*mag);
 		BasicStrokedItem.scaleStrokeProps(this, mag);
@@ -374,7 +379,7 @@ public Rectangle2D.Double getRectangle() {
 	public void scaleAbout(Point2D p, double magx, double magy) {
 		this.setLocationType(CENTER);
 		Point2D p2 = this.getLocation();
-		p2=scaleAbout(p2, p,magx,magy);
+		p2=scalePointAbout(p2, p,magx,magy);
 		
 		try {
 		Rectangle2D r = this.getRectangle();
@@ -392,7 +397,7 @@ public Rectangle2D.Double getRectangle() {
 		
 	}
 	
-	/**Performs a rotation*/
+	/**Performs a rotation transform*/
 	@Override
 	public void rotateAbout(Point2D p, double distanceFromCenterOfRotationtoAngle) {
 		if(distanceFromCenterOfRotationtoAngle==0) return;
@@ -405,15 +410,21 @@ public Rectangle2D.Double getRectangle() {
 		this.setAngle(this.getAngle()-distanceFromCenterOfRotationtoAngle);
 	}
 	
+	/**returns the height of the rectangle*/
 	public double getObjectHeight() {
 		return height;
 	}
-	protected void setObjectHeight(double height) {
-		this.height = height;
-	}
+	/**returns the width of the rectangle*/
 	public double getObjectWidth() {
 		return width;
 	}
+	
+	/**A method that changes the height and does nothing else*/
+	protected void setObjectHeight(double height) {
+		this.height = height;
+	}
+	
+	/**A method that changes the width and does nothing else*/
 	protected void setObjectWidth(double width) {
 		this.width = width;
 	}
@@ -456,6 +467,7 @@ public Rectangle2D.Double getRectangle() {
 		return (KeyFrameAnimation) animation;
 	}
 	
+	/**returns the pivot point. That is at the center of this shape*/
 	public Point2D getCenterOfRotation() {
 		Rectangle2D.Double b = getRectangle();
 		return new Point2D.Double(b.getCenterX(), b.getCenterY());

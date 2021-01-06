@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayoutObjects;
 
 import java.awt.Color;
@@ -29,16 +34,16 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
 import genericMontageUIKitMenuItems.MontageEditCommandMenu;
-import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import handles.layoutHandles.AddRowHandle;
-import handles.layoutHandles.EditRowColNumberHandle;
+import handles.layoutHandles.RepackRowColoumnHandle;
+import handles.layoutHandles.ScaleLayoutHandle;
 import handles.layoutHandles.MoveRowHandle;
-import handles.layoutHandles.RowLabelHandle;
+import handles.layoutHandles.AddLabelHandle;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GridLayoutEditEvent;
 import layout.basicFigure.GridLayoutEditListener;
@@ -52,9 +57,10 @@ import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.MontageLayoutPanelMenu;
 import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
-import undo.UndoTakeLockedItem;
+import undo.UndoAddOrRemoveAttachedItem;
 import utilityClasses1.ArraySorter;
 
+/**A layout graphic containing the standard layout for all figures*/
 public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayoutEditListener, Scales {
 	
 
@@ -80,7 +86,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		return montageLayoutGraphic;
 	}
 
-
+	/**returns the layout*/
 	@Override
 	public BasicLayout getPanelLayout() {
 				if (thelayout==null) {
@@ -110,6 +116,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		}
 	}
 	
+	/**Handle drags for handles are implemented by this method*/
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
 		
@@ -199,16 +206,16 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 						double expansion=increaseh/(colIndex-1);
 					
 						getEditor().expandBorderX2(getPanelLayout(),  expansion);
-						if(getPanelLayout().BorderWidthLeftRight<1) {
-							getEditor().expandBorderX2(getPanelLayout(), 1-getPanelLayout().BorderWidthLeftRight);
+						if(getPanelLayout().theBorderWidthLeftRight<1) {
+							getEditor().expandBorderX2(getPanelLayout(), 1-getPanelLayout().theBorderWidthLeftRight);
 						}
 						} 
 					if (rowIndex>1)
 					{
 						double newHBorder =  (increasev/(rowIndex-1));
 						getEditor().expandBorderY2(getPanelLayout(), newHBorder);
-						if(getPanelLayout().BorderWidthBottomTop<1) {
-							getEditor().expandBorderY2(getPanelLayout(), 1-getPanelLayout().BorderWidthBottomTop);
+						if(getPanelLayout().theBorderWidthBottomTop<1) {
+							getEditor().expandBorderY2(getPanelLayout(), 1-getPanelLayout().theBorderWidthBottomTop);
 						}
 						
 						}
@@ -268,15 +275,6 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	}
 	
 	
-	
-	
-	
-	
-	
-	public void setParentLayer(GraphicLayer parent) {
-		super.setParentLayer(parent);
-		
-	}
 
 	public void showEditingOptions() {
 			
@@ -388,7 +386,7 @@ public void resizeLayoutToFitContents() {
 		double ox = layout1.specialSpaceWidthLeft;
 		double oy = layout1.specialSpaceWidthTop;
 		
-		Point2D pnew = scaleAbout(new Point2D.Double(ox, oy), p, mag, mag);
+		Point2D pnew = scalePointAbout(new Point2D.Double(ox, oy), p, mag, mag);
 		
 		layout1.scale(mag);
 		
@@ -405,9 +403,11 @@ public void resizeLayoutToFitContents() {
 	}
 	
 	protected void addAdditionalHandles(SmartHandleList box) {
-		box.add(new AddRowHandle(this, LayoutSpaces.ROWS, false));
-		box.add(new AddRowHandle(this, LayoutSpaces.COLS, false));
-		box.add(new EditRowColNumberHandle(this));
+		box.add(new AddRowHandle(this, LayoutSpaces.ROWS));
+		box.add(new AddRowHandle(this, LayoutSpaces.COLS));
+		
+		box.add(new RepackRowColoumnHandle(this));
+		box.add(new ScaleLayoutHandle(this));
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.COLS, false, i));
 			}
@@ -418,11 +418,11 @@ public void resizeLayoutToFitContents() {
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
-			box.add(new RowLabelHandle(this, LayoutSpaces.COLS, i));
+			box.add(new AddLabelHandle(this, LayoutSpaces.COLS, i));
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
-			box.add(new RowLabelHandle(this, LayoutSpaces.ROWS,  i));
+			box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i));
 			
 			}
 	
@@ -462,7 +462,7 @@ public void resizeLayoutToFitContents() {
 	/**
 	 A locked item handle with additional menus
 	 */
-	public class LayoutLockedItemHandle extends LockedItemHandle {
+	public class LayoutLockedItemHandle extends AttachmentPositionHandle {
 
 		/**
 		 * 
@@ -475,8 +475,8 @@ public void resizeLayoutToFitContents() {
 		boolean shifted=false;
 		
 
-		public LockedItemHandle copy() {
-			LockedItemHandle output = new LayoutLockedItemHandle((DefaultLayoutGraphic) taker, object, this.getHandleNumber()-100);
+		public AttachmentPositionHandle copy() {
+			AttachmentPositionHandle output = new LayoutLockedItemHandle((DefaultLayoutGraphic) attachmentSite, object, this.getHandleNumber()-100);
 			
 			return output;
 		}
@@ -663,8 +663,8 @@ public void resizeLayoutToFitContents() {
 		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 
 			if(releaseIt) {
-				UndoTakeLockedItem undo = new UndoTakeLockedItem(taker, getObject() , true);
-				taker.removeLockedItem(getObject());
+				UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(attachmentSite, getObject() , true);
+				attachmentSite.removeLockedItem(getObject());
 				if(currentEdit!=null) currentEdit.addEditToList(undo);
 				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
 			}
@@ -685,7 +685,7 @@ public void resizeLayoutToFitContents() {
 			
 		}
 		
-		public LockedItemHandle createDemiVersion() {
+		public AttachmentPositionHandle createDemiVersion() {
 			suppressMenu=true;
 			return  this;
 		}

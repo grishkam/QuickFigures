@@ -13,8 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.basicFigure;
 
+/**an event class that describes changes to a layout*/
 public class GridLayoutEditEvent implements GridEditEventTypes{
 
 	
@@ -24,10 +30,10 @@ public class GridLayoutEditEvent implements GridEditEventTypes{
 	private double arg1;
 	private double arg2;;
 	
-	public  GridLayoutEditEvent(GridLayout l, int type, double n1, double n2) {
+	public  GridLayoutEditEvent(GridLayout l, int type, double argument1, double argument2) {
 		this.setType(type);
-		this.setArg1(n1);
-		this.setArg2(n2);
+		this.setArg1(argument1);
+		this.setArg2(argument2);
 	}
 
 	public int getType() {

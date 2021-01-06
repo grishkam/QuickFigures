@@ -36,7 +36,7 @@ import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputEvent;
@@ -51,7 +51,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	
 	private BufferedImage image;
 	private boolean useTransparent=true;
-	private FigureDisplayContainer cont;
+	private FigureDisplayWorksheet cont;
 
 	private boolean deselectAll=true;
 	static	double ratio=1/ImageDPIHandler.ratioForIdealDPI();//So the copied images can be 300ppi when in the equivalent dimensions
@@ -59,7 +59,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	public FlatCreator() {this(true);}
 	public FlatCreator(boolean transparent) {setUseTransparent(transparent);}
 	
-	public BufferedImage createFlat(FigureDisplayContainer cont) {
+	public BufferedImage createFlat(FigureDisplayWorksheet cont) {
 		this.cont=cont;
 		return createFlat();
 	}
@@ -86,7 +86,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	
 	/**creates a buffered image and draws all of the graphics on it. 
 	 * copies the buffered image to the system clipboard*/
-	public void toSystemClip(FigureDisplayContainer cont) {
+	public void toSystemClip(FigureDisplayWorksheet cont) {
 		image = createFlat( cont) ;
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
         clip.setContents(this, null);

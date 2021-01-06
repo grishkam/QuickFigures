@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Color;
@@ -55,7 +60,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	private static final int DEFAULT_TYPE=0, ROTATION_ONLY_TYPE = 1;
 	protected ArrayList<LocatedObject2D> objects;
 	private RectangularGraphic rect;
-	public  int handleNumberCorrection=defaultHandleNumber;
+	public  int handleNumberCorrection=defaultHandleNumber;//determines the id numbers for the handles
 	private static final int rotationType=RectangularShapeSmartHandle.ROTATION_HANDLE;
 	private double handleSize=2;
 	ReshapeSmartHandle lastDrag;//the most recently draged handle
@@ -120,6 +125,10 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		this.handleSize=handleSize;
 		hideCenterHandle=hidecenter;
 		refreshList(objects);
+	}
+	
+	public ReshapeHandleList(ArrayList<LocatedObject2D> objects, boolean twoway) {
+		this(objects, 5, 100000, twoway, DEFAULT_TYPE, false);
 	}
 
 	/**updates the handle list according to the listed objects*/
@@ -204,7 +213,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	}
 	
 	/**A handle for moving or resizing selected objects*/
-	class ReshapeSmartHandle extends SmartHandle {
+	public class ReshapeSmartHandle extends SmartHandle {
 
 		private RectangularGraphic rect;
 		
@@ -268,6 +277,8 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			
 			super.draw(graphics, cords);
 		}
+		
+		public double getWorkingScaleFactor() {return xyScale;}
 		
 		/**returns the popup menu for the handle*/
 		public JPopupMenu getJPopup() {
@@ -476,7 +487,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 						CombinedEdit edit = performScale(objects);
 						if(w!=null) {
 							addUndo(w, edit);}
-						FigureScaler.showScaleWarnings(objects);
+						FigureScaler.showScaleMessages(objects);
 					}
 				else {
 					CombinedEdit edit =performRotate(objects, -angle);

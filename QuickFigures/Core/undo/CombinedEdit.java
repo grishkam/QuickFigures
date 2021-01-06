@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -30,6 +35,8 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 	 */
 	private static final long serialVersionUID = 1L;
 	ArrayList<UndoableEdit> editlist=new 	ArrayList<UndoableEdit> ();
+	
+	/**Called before and after each undo*/
 	ArrayList<EditListener> afterEdits=new 	ArrayList<EditListener> ();
 	
 	public CombinedEdit(AbstractUndoableEdit... edits) {
@@ -87,6 +94,7 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 	
 	public boolean empty() {return nEdits()==0;}
 
+	/**the number of edits inside of this*/
 	public int nEdits() {
 		return editlist.size();
 	}

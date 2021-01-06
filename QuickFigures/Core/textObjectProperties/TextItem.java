@@ -27,8 +27,8 @@ import locatedObject.Rotatable;
 /**An interface for text items*/
 public interface TextItem extends  HasText, Rotatable{
 
-	public double getX();
-	public double getY();
+	
+	
 	public void setLocation(double x, double y);
 	
 	

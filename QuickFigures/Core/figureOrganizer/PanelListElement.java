@@ -15,9 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 6, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
  */
 package figureOrganizer;
 
@@ -34,7 +33,6 @@ import channelMerging.MultiChannelImage;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.basicFigure.GridIndex;
-import locatedObject.LocatedObject2D;
 import locatedObject.ScaleInfo;
 import locatedObject.ScalededItem;
 import locatedObject.Selectable;
@@ -49,6 +47,8 @@ import channelLabels.ChannelLabelTextGraphic;
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final int MERGE_IMAGE_PANEL=2, CHANNEL_IMAGE_PANEL=1;
+	
+	static final int NONE=0;
 
 		/**The image data. Its pixels. whatever type they may be*/
 		transient PixelWrapper image;
@@ -61,12 +61,12 @@ import channelLabels.ChannelLabelTextGraphic;
 
 		/**The index of the image in its original stack.
 		 *  This represents the index used when the element was first created*/
-		public Integer innitialStackIndex=0;
+		public Integer innitialStackIndex=NONE;
 		
 		/**Specifies the channel slice and frame that the panel is derived from*/
-		public Integer targetChannelNumber=0;	
-		public Integer targetFrameNumber=0;	
-		public Integer targetSliceNumber=0;	
+		public Integer targetChannelNumber=NONE;	
+		public Integer targetFrameNumber=NONE;	
+		public Integer targetSliceNumber=NONE;	
 		
 		/**The location of the panel in a grid layout. In both row-column and panel index formats*/
 		private GridIndex displayGridIndex=new GridIndex();
@@ -164,6 +164,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		  and not their original channel index*/
 		ChannelEntry getChannelEntry(int index) {return getChannelEntries().get(index);}
 		
+		/**returns true if this panel includes a channel with the given index*/
 		public boolean hasChannel(int chanIndex) {
 			for(ChannelEntry chan: hashChannel) {
 				if (chanIndex==chan.getOriginalChannelIndex()) return true;
@@ -206,6 +207,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			addChannelEntry(ce);
 		}
 		
+		/**sets up the channel frame and slice indices that this panel targets*/
 		public void setChannelFrameSlice(int channel,  int frame,int slice) {
 			targetChannelNumber=channel;
 			targetSliceNumber=slice;
@@ -225,27 +227,29 @@ import channelLabels.ChannelLabelTextGraphic;
 	
 		
 	
-	
+		/**Sets the image panel graphic that displays this panels image*/
 		public void setImageDisplayObject(ImagePanelGraphic ob) {
 			imageGObject=ob;
 		}
+		/**returns the image panel graphic that displays this panels image*/
 		public ImagePanelGraphic getImageDisplayObject() {
 			 return imageGObject;
 		}
-		public LocatedObject2D getLocatedImageDisplayObject() {
-			 return (LocatedObject2D) imageGObject;
-		}
 		
+		
+		/**returns the list of channel entries used to track the content of this panel*/
 		public ArrayList<ChannelEntry> getChannelEntries() {
 			return hashChannel;
 		}
 		
+		/**returns a list of channel entries. Not the same one used for internal storage*/
 		public ChannelEntryList getChannelEntryList() {
 			ChannelEntryList ce = new ChannelEntryList();
 			ce.addAll(hashChannel);
 			return ce;
 		}
 		
+		/**Sets the channel entry list used to keep track of the channels*/
 		public void setChannelEntries(ChannelEntryList hashChannel) {
 			this.hashChannel = hashChannel;
 		}
@@ -258,12 +262,11 @@ import channelLabels.ChannelLabelTextGraphic;
 			return this.getImageWrapped().width();
 		}
 
-		
-		
 		public
 		int getHeight() {
 			return this.getImageWrapped().height();
 		}
+		
 		
 		public Dimension getDimensions() {
 			return new Dimension(getWidth(),getHeight());
@@ -376,17 +379,18 @@ import channelLabels.ChannelLabelTextGraphic;
 			}
 		}
 		
-		
+		/**returns the scale bar for this panel*/
 	public BarGraphic getScaleBar() {
-		Object imageDisplayObject = getImageDisplayObject();
-		if (imageDisplayObject instanceof ImagePanelGraphic) {
+		ImagePanelGraphic imageDisplayObject = getImageDisplayObject();
+		if (imageDisplayObject!=null && imageDisplayObject instanceof ImagePanelGraphic) {
 			return ((ImagePanelGraphic) imageDisplayObject).getScaleBar();
 		}
 		return null;
 	}
+	/**set a new scale bar for this panel*/
 	public void setScaleBar(BarGraphic b) {
-		Object imageDisplayObject = getImageDisplayObject();
-		if (imageDisplayObject instanceof ImagePanelGraphic) {
+		ImagePanelGraphic imageDisplayObject = getImageDisplayObject();
+		if (imageDisplayObject!=null && imageDisplayObject instanceof ImagePanelGraphic) {
 			((ImagePanelGraphic) imageDisplayObject).addLockedItem(b);
 		}
 	}

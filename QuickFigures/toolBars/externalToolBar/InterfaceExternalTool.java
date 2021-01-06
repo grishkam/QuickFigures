@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package externalToolBar;
 import java.awt.Component;
 import java.awt.Point;
@@ -69,11 +74,13 @@ public interface InterfaceExternalTool<ImageType>  {
 	/**Text that helps the user understand what the tool does*/
 	public String getToolTip();
 	
-	
-	
 	/**icons for the tool*/
-	Icon getToolImageIcon() ;
+	Icon getToolNormalIcon() ;
+
+	/**icons for the tool to display when it is selected*/
 	Icon getToolPressedImageIcon() ;
+	
+	/**icons for the tool to display when it is rolled over*/
 	Icon getToolRollOverImageIcon() ;
 
 	/**Each tool may function differently for drag and drop operation.
@@ -104,8 +111,5 @@ public interface InterfaceExternalTool<ImageType>  {
 	public void setImageAndClickPoint(ImageType imp, int x, int y);
 	
 	
-	/**returns a text that would have been used*/
-	@Deprecated
-	String getToolIcon() ;
 	
 }

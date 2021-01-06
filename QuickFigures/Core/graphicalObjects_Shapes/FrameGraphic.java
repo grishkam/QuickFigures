@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
@@ -27,15 +32,16 @@ import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 
-/**The shape of a frame*/
+/**The shape of a frame. similar to the rectangle except that the stroke
+  for the frame is drawn such that the stroke appears outside of the rectangular area*/
 public class FrameGraphic extends RectangularGraphic {
 
 	
-	{this.setName("Frame Graphic");
-	this.setStrokeJoin(BasicStroke.JOIN_MITER);
-	this.setAntialize(true);
-	setFilled(false);
-	hideStrokeHandle=true;
+	{       this.setName("Frame Graphic");
+			this.setStrokeJoin(BasicStroke.JOIN_MITER);
+			this.setAntialize(true);
+			setFilled(false);
+			hideStrokeHandle=true;
 	}
 	/**
 	 * 
@@ -69,6 +75,7 @@ public class FrameGraphic extends RectangularGraphic {
 		 
 		   }
 	
+	/**The frame rectangle*/
 	public Rectangle2D getInsideFrameRect() {
 
 		Rectangle r =super.getBounds().getBounds();
@@ -78,11 +85,12 @@ public class FrameGraphic extends RectangularGraphic {
 	}
 
 	
+	/**dras the frame*/
 	public void drawFrame(Graphics2D g, CordinateConverter cords, Rectangle2D r) {
-	if(angle==0||angle%Math.PI==0)
-		this.getGrahpicUtil().drawRectangle(g, cords, r, false);
-	else this.getGrahpicUtil().drawStrokedShape(g, cords, getRotatedFrame(r));
-	
+			if(angle==0||angle%Math.PI==0)
+				this.getGrahpicUtil().drawRectangle(g, cords, r, false);
+			else this.getGrahpicUtil().drawStrokedShape(g, cords, getRotatedFrame(r));
+			
 	}
 	
 	private Shape getRotatedFrame(Rectangle2D r) {

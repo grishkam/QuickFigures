@@ -661,10 +661,10 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 		GraphicGroup output = new GraphicGroup();
 		output.setName(this.getName());
 		
-		output.getTheLayer().add(lineCopy());
+		output.getTheInternalLayer().add(lineCopy());
 		ArrayList<ZoomableGraphic> items = this.drawNumericTicmarks();
 		for(ZoomableGraphic a: items) {
-			output.getTheLayer().add(a);
+			output.getTheInternalLayer().add(a);
 		}
 		return output;
 	}
@@ -680,7 +680,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	@Override
 	public SVGExporter getSVGEXporter() {
 		// TODO Auto-generated method stub
-		return breakToGroup() .getTheLayer().getSVGEXporter();
+		return breakToGroup() .getTheInternalLayer().getSVGEXporter();
 	}
 	
 

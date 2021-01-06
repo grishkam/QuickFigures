@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -65,7 +70,7 @@ public class ChannelUseChangeUndo extends AbstractUndoableEdit {
 		aChannels2.getSliceUseInstructions().giveAllTraitsTo(chanUse.getSliceUseInstructions());
 	}
 	
-	
+	/**creates undoble edits for many multichannel image displays and combines them*/
 	public static CombinedEdit createForMany(ArrayList<? extends ImageDisplayLayer> mws ) {
 		CombinedEdit ce2=new CombinedEdit();
 		for(ImageDisplayLayer mw: mws) {

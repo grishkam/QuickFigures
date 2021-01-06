@@ -24,13 +24,13 @@ import locatedObject.ObjectContainer;
 
 import java.awt.Window;
 
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import imageDisplayApp.OverlayObjectManager;
 
 /**a general interface for worksheets.
  The methods in this interface and superinterfaces must work in order for the basics of the layouts
  and layout editing to work*/
-public interface ImageWorkSheet extends ObjectContainer, FigureDisplayContainer, OpenFileReference{
+public interface ImageWorkSheet extends ObjectContainer, FigureDisplayWorksheet, OpenFileReference{
 	
 	public void updateDisplay();
 	public DisplayedImage getImageDisplay();

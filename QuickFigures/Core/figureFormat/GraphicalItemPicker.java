@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import java.util.ArrayList;
@@ -43,7 +48,9 @@ public abstract class GraphicalItemPicker<ItemType extends BasicGraphicalObject>
 		super(model);
 	}
 
-	/**subclasses overwrite this*/
+	/**Determines if the object is 
+	 * in the right category for this picker
+	 * subclasses overwrite this*/
 	@Override
 	boolean isDesirableItem(Object o) {
 		return false;

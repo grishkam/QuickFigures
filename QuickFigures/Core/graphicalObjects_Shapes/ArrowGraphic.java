@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 
@@ -71,11 +76,12 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.ArrowSwingDialog;
 import objectDialogs.StrokeOnlySwingDialog;
 
-/**Draws an arrow with up to two identical heads. 
- for lines with multiple different arrow heads @see PathGraphic.
- 
+/**Defines the shape of a line with one or more arrows heads at its ends
   Many different arrow appearances are possible
- A zero-headed arrow is also possible*/
+ A zero-headed arrow is also possible
+ for curved lines with arrow heads @see PathGraphic.
+ 
+ */
 public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, HasTreeLeafIcon,HasBackGroundShapeGraphic, HasUniquePopupMenu, OfficeObjectConvertable, HasSmartHandles {
 
 	private static final int STANDARD_HEAD_SIZE = 16;
@@ -241,7 +247,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 	/**
 	 computes the locations of the points on an arrow head.
-	 The two parameters differ depending on the second of first head
+	 The other two parameters differ depending on the second of first head
 	 */
 	public void computeHead(ArrowHead head, int headDirection, double locationShift) {
 		if (head.rreverseHead()) {
@@ -396,6 +402,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		useSameHead=b;
 	}
 	
+	/**Sets the line ends locations to match the arrow given*/
 	public void copyPositionFrom(ArrowGraphic arr) {
 		x2=arr.x2;
 		x=arr.x;
@@ -421,15 +428,19 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		return new Point2D.Double(x,y);
 	}
 	
+	/**returns the end tip of the arrow*/
 	public Point2D.Double getLineEndLocation() {
 		return new Point2D.Double(x2,y2);
 	}
 	
+	/**returns the starting tip of the arrow*/
 	public Point2D.Double getLineStartLocation() {
 		return new Point2D.Double(x,y);
 	}
 	
 
+	/**sets the location. moves both line ends to maintain the arrows
+	  appearance*/
 	@Override
 	public void setLocation(double x,double y) {
 		this.x2+=x-this.x;
@@ -439,15 +450,19 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		
 	}
 	
+	/**moves the arrow*/
 	@Override
 	public void moveLocation(double x, double y) {
 		moveStartLocation(x, y);
 		moveTipLocation(x, y);
 	}
+	
+	/**moves the start of the arrow*/
 	public void moveStartLocation(double x, double y) {
 		this.x+=x;
 		this.y+=y;
 	}
+	/**moves the end of the arrow*/
 	public void moveTipLocation(double x, double y) {
 		this.x2+=x;
 		this.y2+=y;
@@ -851,8 +866,8 @@ protected Point2D getDrawnLineEnd2() {
 		//UndoScalingAndRotation output = new UndoScalingAndRotation(this);
 			Point2D p1 = new Point2D.Double(x,y);
 			Point2D p2 = new Point2D.Double(x2,y2);
-			p2=scaleAbout(p2, p,mag,mag);
-			p1=scaleAbout(p1, p,mag,mag);
+			p2=scalePointAbout(p2, p,mag,mag);
+			p1=scalePointAbout(p1, p,mag,mag);
 			this.setPoints(p1, p2);
 			BasicStrokedItem.scaleStrokeProps(this, mag);
 			//this.setStrokeWidth((float) (this.getStrokeWidth()*mag));
@@ -1144,7 +1159,7 @@ public void moveNotchToHead1() {
 	moveTipLocation(p1.getX()-n1.getX(), p1.getY()-n1.getY());
 }
 
-/***/
+/**rotates the arrow*/
 @Override
 public void rotateAbout(Point2D c, double distanceFromCenterOfRotationtoAngle) {
 	try {

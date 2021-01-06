@@ -13,12 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import locatedObject.Selectable;
 
+/**Object that use smart handles implement this interface
+   Nearly all object use smart handles*/
 public interface HasSmartHandles extends Selectable{
 	static final int NO_HANDLE=-1;
+	
+	/**returns a list of smart handles*/
 	public SmartHandleList getSmartHandleList();
 	
 }

@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
  */
 package handles;
 
@@ -42,7 +43,7 @@ public class DecorativeSmartHandleList extends SmartHandleList {
 	
 	}
 
-	/**
+	/**Replaces the points for this list with new handles at those location
 	 * @param points
 	 */
 	public void setPoints(ArrayList<Point2D> points) {

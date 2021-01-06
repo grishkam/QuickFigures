@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 
@@ -31,7 +36,8 @@ import locatedObject.RectangleEdgePositions;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import storedValueDialog.StoredValueDilaog;
 
-/**Tool used to draw a rectangular object on the figure*/
+/**Tool used to draw a rectangular object on the figure. Used as a superclass 
+ * for several other classes*/
 public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	boolean started=false;

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.dividerLayout;
 
 import java.awt.Color;
@@ -20,7 +25,6 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -40,7 +44,8 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 	int x,y;
 	private int width;
 	private int height;
-	public DividerHandle(Rectangle2D r, Color c, DividedPanelLayoutGraphic layourGraphic) {
+	Rectangle2D shapeOfdivider;
+	private DividerHandle(Rectangle2D r, Color c, DividedPanelLayoutGraphic layourGraphic) {
 		
 		this.x=(int) r.getX();
 		this.y=(int) r.getY();
@@ -54,8 +59,9 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 		return layoutG.smartl.indexOf(this);
 	}
 	
-	public DividerHandle(Rectangle2D.Double rect, Color pink, CordinateConverter cords, DividedPanelLayoutGraphic layourGraphic) {
+	private DividerHandle(Rectangle2D.Double rect, Color pink, CordinateConverter cords, DividedPanelLayoutGraphic layourGraphic) {
 		this(cords.getAffineTransform().createTransformedShape(rect).getBounds(), pink, layourGraphic);
+		
 		if(this.width<6)this.width=6;
 		if(this.height<6)this.height=6;
 	}
@@ -64,6 +70,7 @@ public class DividerHandle extends SmartHandle  implements ActionListener {
 	public DividerHandle(LayoutDivider div, Color orange, CordinateConverter cords,DividedPanelLayoutGraphic layourGraphic) {
 		this(div.rect, orange, cords,layourGraphic);
 		this.divider=div;
+		shapeOfdivider=div.rect;
 	}
 	
 	 

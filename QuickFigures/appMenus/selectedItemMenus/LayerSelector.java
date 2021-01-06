@@ -18,7 +18,7 @@ package selectedItemMenus;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWorkSheet;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
@@ -26,6 +26,6 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 public interface LayerSelector {
 	public GraphicLayer getSelectedLayer();
 	public ArrayList<ZoomableGraphic> getSelecteditems();
-	public FigureDisplayContainer getGraphicDisplayContainer();
+	public FigureDisplayWorksheet getGraphicDisplayContainer();
 	public ImageWorkSheet getImageWrapper();
 }

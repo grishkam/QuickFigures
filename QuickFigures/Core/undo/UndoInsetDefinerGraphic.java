@@ -13,12 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner.InsetGraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 
+/**an undoable edit for changes to an inset definer
+ * @see PanelGraphicInsetDefiner*/
 public class UndoInsetDefinerGraphic extends AbstractUndoableEdit2 {
 	
 	/**

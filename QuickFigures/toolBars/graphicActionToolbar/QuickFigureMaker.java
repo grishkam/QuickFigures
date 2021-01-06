@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicActionToolbar;
 
 import java.awt.event.ActionEvent;
@@ -33,7 +38,7 @@ import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import icons.GraphicToolIcon;
 import icons.QuickFigureIcon;
@@ -44,7 +49,8 @@ import menuUtil.SmartJMenu;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 import ultilInputOutput.FileChoiceUtil;
 
-/**This class is used to create a new figure from either an open image or a saved on
+/**This class is used to create a new figure from either an open image or a saved image file
+  the images used should be multidimensional image files.
   The QuickFigure Button on the toolbar*/
 public class QuickFigureMaker extends DisplayActionTool {
 	private static final String slowFigure = "Slow Figure";
@@ -104,7 +110,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	}
 
 
-	protected void perform(FigureDisplayContainer graphic) {
+	protected void perform(FigureDisplayWorksheet graphic) {
 		createFigureFromOpenImage(null);
 	}
 

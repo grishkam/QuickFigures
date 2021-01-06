@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
@@ -46,7 +51,6 @@ import export.svg.SVGExportable;
 import export.svg.SVGExporter;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.GraphicalObject;
 import handles.miniToolbars.ActionButtonHandleList;
 import handles.miniToolbars.HasMiniToolBarHandles;
 import handles.miniToolbars.ShapeActionButtonHandleList2;
@@ -69,8 +73,9 @@ import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.ShapeGraphicOptionsSwingDialog;
 
-/**An abstract class for the shapes in the figure*/
-public abstract class ShapeGraphic extends BasicGraphicalObject implements GraphicalObject, StrokedItem, ShowsOptionsDialog,IllustratorObjectConvertable, Fillable, Rotatable, HasTreeLeafIcon , OfficeObjectConvertable, HasUniquePopupMenu, SVGExportable, ProvidesDialogUndoableEdit, HasMiniToolBarHandles {
+/**An abstract class for the shapes that are drawn and can be
+ * maniputed by the user*/
+public abstract class ShapeGraphic extends BasicGraphicalObject implements  StrokedItem, ShowsOptionsDialog,IllustratorObjectConvertable, Fillable, Rotatable, HasTreeLeafIcon , OfficeObjectConvertable, HasUniquePopupMenu, SVGExportable, ProvidesDialogUndoableEdit, HasMiniToolBarHandles {
 	
 
 
@@ -521,7 +526,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 	
 	/**creates a small shape that resembles this graphic. that small shape functions as an icon*/
 	ShapeGraphic createIcon() {
-		ShapeGraphic out = rectForIcon() ;//RectangularGraphic.blankRect(new Rectangle(0,0,14,12), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFillColor(), this.getStrokeColor());
+		ShapeGraphic out = shapeUsedForIcon() ;
 		out.setAntialize(true);
 		out.setStrokeWidth(1);
 		out.copyColorsFrom(this);
@@ -545,8 +550,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		return false;
 	}
 	
-	
-	ShapeGraphic rectForIcon() {
+	/**returns the icon*/
+	ShapeGraphic shapeUsedForIcon() {
 		return  PathGraphic.createExample();
 	}
 	
@@ -617,7 +622,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements Graph
 		Point2D p2 = this.getLocationUpperLeft();
 		AffineTransform af = new AffineTransform();
 		af.scale(mag, mag);
-		p2=scaleAbout(p2, p,mag,mag);
+		p2=scalePointAbout(p2, p,mag,mag);
 		this.setLocationUpperLeft(p2);
 		BasicStrokedItem.scaleStrokeProps(this, mag);
 		

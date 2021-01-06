@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_SpecialObjects;
 
 import java.awt.Graphics2D;
@@ -24,7 +29,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.LocatedObject2D;
 
 /**draws multiple objects that can be seen by user but not clicked on or otherwise used.
-  meant only for showing previews, messages and indicators to the user*/
+  meant only for showing previews, messages and indicators to the user (as an overlays). 
+  should not be incorporated into any worksheet*/
 public class GraphicList implements ZoomableGraphic {
 
 	/**
@@ -39,14 +45,12 @@ public class GraphicList implements ZoomableGraphic {
 
 	@Override
 	public GraphicLayer getParentLayer() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setParentLayer(GraphicLayer parent) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 	@Override

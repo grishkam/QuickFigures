@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package externalToolBar;
 
 import java.awt.Color;
@@ -89,10 +94,6 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 		return "Tool";
 	}
 
-	@Override
-	public String getToolIcon() {
-		return "Blank Tool";
-	}
 
 	@Override
 	public boolean isActionTool() {
@@ -105,7 +106,7 @@ public class DummyTool<ImageType> implements InterfaceExternalTool<ImageType>, I
 	}
 
 	@Override
-	public Icon getToolImageIcon() {
+	public Icon getToolNormalIcon() {
 		try{this.getClass().getResource("Blank.jpg");} catch(Throwable t){
 			IssueLog.log("problem could not find Blank.jpg");
 		}

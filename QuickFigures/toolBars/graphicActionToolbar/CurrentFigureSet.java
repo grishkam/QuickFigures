@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicActionToolbar;
 
 import java.util.ArrayList;
@@ -21,25 +26,25 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.DisplayedImage;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import imageMenu.CanvasAutoResize;
 import undo.CanvasResizeUndo;
 
-/**An implementation of the current set informer interface.
-  this class stores which figure window is the currently active one
-  the active one will change depending on which figure the user is working with
+/**An implementation of the  @see CurrentSetInformer interface.
+  this class stores which worksheet is the currently active one
+  the active one will change depending on which window the user has activated
   */
 public class CurrentFigureSet implements CurrentSetInformer {
 	public static String workingDirectory="";
 	private static DisplayedImage  currentActiveDisplayGroup=null;
 	private static ArrayList<DisplayedImage  > allVisible=new ArrayList<DisplayedImage  >();
 	
-	private static FigureDisplayContainer activeGraphicDisplay;
+	private static FigureDisplayWorksheet activeGraphicDisplay;
 	
 	public CurrentFigureSet() {}
 	
 	@Override
-	public FigureDisplayContainer getCurrentlyActiveOne() {
+	public FigureDisplayWorksheet getCurrentlyActiveOne() {
 		if (currentActiveDisplayGroup!=null) return currentActiveDisplayGroup.getImageAsWrapper();
 		
 		return activeGraphicDisplay;
@@ -72,7 +77,7 @@ public class CurrentFigureSet implements CurrentSetInformer {
 	}
 
 	/**Sets the stored figure display. takes an instance of GraphicSetDisplayContainer as an argumant*/
-	public void setActiveGraphicDisplay(FigureDisplayContainer activeGraphicDisplay) {
+	public void setActiveGraphicDisplay(FigureDisplayWorksheet activeGraphicDisplay) {
 		CurrentFigureSet.activeGraphicDisplay = activeGraphicDisplay;
 	}
 
@@ -115,9 +120,9 @@ public class CurrentFigureSet implements CurrentSetInformer {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
 	}
 	
+	/**returns the undo manager for the current group*/
 	public UndoManager getUndoManager() {
 		if (getCurrentActiveDisplayGroup()==null) return null;
 		return getCurrentActiveDisplayGroup().getUndoManager();

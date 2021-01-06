@@ -103,7 +103,7 @@ public GraphicDisplayComponent getItemIcon() {
 	oval2.setFillColor(Color.DARK_GRAY);
 	oval2.setFilled(true);
 	oval2.setAngle(Math.PI/4);
-	gg.getTheLayer().add(oval2);
+	gg.getTheInternalLayer().add(oval2);
 	oval2.setAntialize(true);
 	
 	CircularGraphic oval1 = new CircularGraphic(new Rectangle(1,2, 7, 7));
@@ -111,7 +111,7 @@ public GraphicDisplayComponent getItemIcon() {
 	 oval1.setDashes(new float[] {});
 	 oval1.setAntialize(true);
 	oval1.setStrokeColor(Color.GRAY);
-	gg.getTheLayer().add(oval1);
+	gg.getTheInternalLayer().add(oval1);
 	
 	
 	TextGraphic tg=new TextGraphic(getCurrentLabel() );
@@ -122,7 +122,7 @@ public GraphicDisplayComponent getItemIcon() {
 		tg.setFont(tg.getFont().deriveFont((float) 10).deriveFont(Font.BOLD));
 		tg.moveLocation(2,0);
 	}
-	gg.getTheLayer().add(tg);
+	gg.getTheInternalLayer().add(tg);
 	
 	 GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;
 	 output.setRelocatedForIcon(false);

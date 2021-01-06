@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package genericMontageLayoutToolKit;
 import figureOrganizer.FigureOrganizingLayerPane;
 import icons.IconSet;
@@ -74,7 +79,7 @@ public class RowAndColumnSwapperTool extends GeneralLayoutEditorTool implements 
 	}
 	
 
-	
+	/**the three different types of icon sets depending on the tool type*/
 	IconSet columnSwapIcons=new RowSwapperToolIcon(0, LayoutSpaces.COLS).generateIconSet();//new IconSet("icons/ColumnSwapperIcon.jpg","icons/ColumnSwapperPressIcon.jpg","icons/ColumnSwapperRollIcon.jpg");
 	IconSet rowSwapIcons=new RowSwapperToolIcon(0, LayoutSpaces.ROWS).generateIconSet();//new IconSet("icons/RowSwapperIcon.jpg","icons/RowSwapperPressIcon.jpg", "icons/RowSwapperRollIcon.jpg");
 	IconSet panelSwapIcons=new RowSwapperToolIcon(0, LayoutSpaces.PANELS).generateIconSet();//new IconSet( "icons/PanelSwapperIcon.jpg",	"icons/PanelSwapperIconPressed.jpg","icons/PanelSwapperIconRollOver.jpg");

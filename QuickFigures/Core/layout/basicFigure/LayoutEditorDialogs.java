@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.basicFigure;
 import java.awt.Point;
 
@@ -119,8 +124,8 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	
 	public void showBorderEditorDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
 	gd.setModal(true);
-		gd.add("Horizontal Border",new NumberInputPanel("Horizontal Border", basicMontageLayout.BorderWidthLeftRight, 0));
-	gd.add("Vertical Border",new NumberInputPanel("Vertical Border", basicMontageLayout.BorderWidthBottomTop, 0));	
+		gd.add("Horizontal Border",new NumberInputPanel("Horizontal Border", basicMontageLayout.theBorderWidthLeftRight, 0));
+	gd.add("Vertical Border",new NumberInputPanel("Vertical Border", basicMontageLayout.theBorderWidthBottomTop, 0));	
 	
 	gd.showDialog();
 	
@@ -167,8 +172,8 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	public void addGeneralEditorFieldsToDialog(StandardDialog gd, BasicLayout basicMontageLayout) {
 		gd.add("columns",new NumberInputPanel("Columns", basicMontageLayout.nColumns(), 0));
 		gd.add("rows",new NumberInputPanel("Rows", basicMontageLayout.nRows(), 0));
-		gd.add("Vertical Border",new NumberInputPanel("Vertical Border", basicMontageLayout.BorderWidthBottomTop, 0));
-		gd.add("Horizontal Border",new NumberInputPanel("Horizontal Border", basicMontageLayout.BorderWidthLeftRight, 0));
+		gd.add("Vertical Border",new NumberInputPanel("Vertical Border", basicMontageLayout.theBorderWidthBottomTop, 0));
+		gd.add("Horizontal Border",new NumberInputPanel("Horizontal Border", basicMontageLayout.theBorderWidthLeftRight, 0));
 		
 		addLabelSpacesToDoalog(gd, basicMontageLayout);
 		gd.add("Top Extra Space",new NumberInputPanel("Top Extra Space", basicMontageLayout.specialSpaceWidthTop, 0));
@@ -189,8 +194,8 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 		me.addCols(basicMontageLayout, newcol-basicMontageLayout.nColumns());
 		me.addRows(basicMontageLayout, newrow-basicMontageLayout.nRows());
 		
-		me.expandBorderY2(basicMontageLayout, (int)gd.getNumber("Vertical Border")-basicMontageLayout.BorderWidthBottomTop);
-		me.expandBorderX2(basicMontageLayout, (int)gd.getNumber("Horizontal Border")-basicMontageLayout.BorderWidthLeftRight); 
+		me.expandBorderY2(basicMontageLayout, (int)gd.getNumber("Vertical Border")-basicMontageLayout.theBorderWidthBottomTop);
+		me.expandBorderX2(basicMontageLayout, (int)gd.getNumber("Horizontal Border")-basicMontageLayout.theBorderWidthLeftRight); 
 		editLabelSpaceBasedOnDialog(gd, me, basicMontageLayout);
 		
 		
@@ -279,8 +284,8 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	    gd.add("Panel Width:",new NumberInputPanel("Panel Width:",  ml.panelWidth, pre));
 	    gd.add("Panel Height",new NumberInputPanel("Panel Height", ml.panelHeight, pre));	
 	    addLabelSpaceOptionsToDialog(ml, gd) ;
-	    gd.add("xAxis Border:",new NumberInputPanel("xAxis Border:",   ml.BorderWidthLeftRight, pre));
-	    gd.add("yAxis Border:",new NumberInputPanel("yAxis Border:",  ml.BorderWidthBottomTop, pre));
+	    gd.add("xAxis Border:",new NumberInputPanel("xAxis Border:",   ml.theBorderWidthLeftRight, pre));
+	    gd.add("yAxis Border:",new NumberInputPanel("yAxis Border:",  ml.theBorderWidthBottomTop, pre));
 	  //  gd.add(new NumberInputPanel("Frame Width:", frameBorderWidth, pre);
 	    gd.add("xOffset:",new NumberInputPanel("xOffset:",  ml.xshift, pre));
 	    gd.add("yOffset:",new NumberInputPanel("yOffset:",  ml.yshift, pre));

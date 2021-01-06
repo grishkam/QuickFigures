@@ -157,7 +157,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 			elements.remove(o);
 			panel.removeChannelEntry(o);
 			panelManager.updatePanels();
-			panelManager.getDisplay().onImageUpdated();
+			panelManager.getImageDisplayLayer().onImageUpdated();
 			this.repaint();
 		
 		

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles.miniToolbars;
 
 import java.awt.Color;
@@ -39,7 +44,7 @@ import objectDialogs.DialogIcon;
 import selectedItemMenus.LayerSelector;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
-import selectedItemMenus.SnappingSyncer;
+import selectedItemMenus.AttachmentPositionAdjuster;
 import selectedItemMenus.TextOptionsSyncer;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
@@ -50,7 +55,10 @@ import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
 import undo.CombinedEdit;
 
-/**A list of handles that works like a mini toolbar for text Graphic*/
+/**A list of handles that works like a mini toolbar for Text Graphics
+ * @see TextGraphic
+ * @see ComplexTextGraphic
+ * */
 public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 	
@@ -131,7 +139,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	}
 
 	protected void addAttachmentPositionButton(LocatedObject2D t2) {
-		if (t2.getAttachmentPosition()!=null)this.add(new TextHandleNonEditmode(new SnappingSyncer(true, t2), 741905));
+		if (t2.getAttachmentPosition()!=null)this.add(new TextHandleNonEditmode(new AttachmentPositionAdjuster(true, t2), 741905));
 	}
 	
 	class TextHandleNonEditmode extends GeneralActionHandle {

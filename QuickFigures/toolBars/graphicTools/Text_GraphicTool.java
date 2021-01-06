@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 
@@ -240,7 +245,6 @@ public class Text_GraphicTool extends GraphicTool {
 				 
 			}
 			
-			//textob.setText("");
 		}
 		
 		
@@ -267,7 +271,6 @@ public class Text_GraphicTool extends GraphicTool {
 	
 	@Override
 	public boolean keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
 		
 		if (this.getPrimarySelectedObject() instanceof TextGraphic) {
 			
@@ -362,7 +365,7 @@ public class Text_GraphicTool extends GraphicTool {
 /***/
 	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWorkSheet click, int x, int y) {
 		if (!this.editorOnly) return super.getObjectsAtPressLocationWithoutFiltering(click, x, y);
-		ArrayList<LocatedObject2D> list = getObjecthandler().getOverlapOverlaypingOrContainedItems(new Rectangle(x-5, y-5, 10, 10), click, new BasicObjectListHandler.excluder(this.excludedClass));
+		ArrayList<LocatedObject2D> list = getObjecthandler().getOverlapOverlaypingOrContainedItems(new Rectangle(x-5, y-5, 10, 10), click, new BasicObjectListHandler.ExcluderFilter(this.excludedClass));
 		
 		ArrayList<LocatedObject2D> list2 = new ArrayList<LocatedObject2D>();
 		for(int i=list.size()-1; i>=0; i--) {
@@ -370,7 +373,7 @@ public class Text_GraphicTool extends GraphicTool {
 		}
 		
 		return list2;
-		//return getObjecthandler().getAllClickedRoi(click, x, y,this.onlySelectThoseOfClass);
+		
 	}
 	
 	

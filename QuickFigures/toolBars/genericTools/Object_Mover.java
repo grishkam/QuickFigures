@@ -55,7 +55,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import handles.HasHandles;
 import handles.HasSmartHandles;
-import handles.LockedItemHandle;
+import handles.AttachmentPositionHandle;
 import handles.ReshapeHandleList;
 import handles.SmartHandle;
 import handles.SmartHandleList;
@@ -566,7 +566,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		/**if the user is selecting more than one item by holding shift*/
 		if (shiftDown()) {
-			GroupOfobjectPopup menuAll = new GroupOfobjectPopup( new CurrentSetLayerSelector());
+			GroupOfObjectPopup menuAll = new GroupOfObjectPopup( new CurrentSetLayerSelector());
 			menu=menuAll;
 			menuAll.addItemsFromJMenu( obtainUniquePopup(roi2), "this item");
 			
@@ -607,7 +607,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void addAttachmentPositiontoPopup(LocatedObject2D roi2, JPopupMenu menu) {
 		try {
 			if ( isAttachedItem(roi2)) {
-				LockedItemHandle lockHandle = this.findHandleForLockedItem(roi2);
+				AttachmentPositionHandle lockHandle = this.findHandleForLockedItem(roi2);
 				if (lockHandle!=null) menu.add(lockHandle.createAdjustPositionMenuItem());
 			}
 		} catch (Exception e1) {
@@ -1276,11 +1276,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 * @param manager
 	 */
 	void establishAttachedItemClick(Object roi1) {
-		LockedItemHandle sHandle = this.findHandleForLockedItem(roi1);
+		AttachmentPositionHandle sHandle = this.findHandleForLockedItem(roi1);
 		OverlayObjectManager overlaySelectionManagger = getSelectionManager();
 		
 		if (sHandle!=null) {
-			LockedItemHandle demiVersion = sHandle.createDemiVersion();
+			AttachmentPositionHandle demiVersion = sHandle.createDemiVersion();
 			demiVersion.handlePress(getLastMouseEvent());
 			
 			overlaySelectionManagger.setExtraHandle(demiVersion);
@@ -1539,7 +1539,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 
 
 	public DragAndDropHandler getDragAndDropHandler() {
-		return new MoverDragHandler(this);
+		return new NormalToolDragHandler(this);
 	}
 	
 	
@@ -1675,7 +1675,7 @@ public String getToolTip() {
 			if (b.locationAutoMatic()) b.getLocationHandleForBarText().handleDrag(getLastDragOrLastReleaseMouseEvent());;
 		}
 		
-		LockedItemHandle lockedItemHandle = findHandleForLockedItem(roi);
+		AttachmentPositionHandle lockedItemHandle = findHandleForLockedItem(roi);
 		if(lockedItemHandle==null) return;
 		lockedItemHandle=lockedItemHandle.createDemiVersion();
 		lockedItemHandle.handleDrag(getLastDragOrLastReleaseMouseEvent());
@@ -1684,13 +1684,13 @@ public String getToolTip() {
 	
 	/**A user user clicks on an item that is attached to another, 
 	 * returns the locked item handle for that attachment*/
-	public LockedItemHandle findHandleForLockedItem(Object r) {
+	public AttachmentPositionHandle findHandleForLockedItem(Object r) {
 		if (r instanceof LocatedObject2D) {
 			LocatedObject2D object=(LocatedObject2D) r;
 			TakesAttachedItems tk = findLockContainer(object);
 			if(tk==null) return null;
 			if (tk.getSmartHandleList()==null) return null;
-			LockedItemHandle lockedItemHandle = tk.getSmartHandleList().getLockedItemHandle(object);
+			AttachmentPositionHandle lockedItemHandle = tk.getSmartHandleList().getAttachmentPositionHandle(object);
 			return lockedItemHandle;
 		}
 		return null;

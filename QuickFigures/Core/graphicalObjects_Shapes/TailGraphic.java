@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -47,6 +52,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	 * 
 	 */
 	
+	/**parameter determines if this arrow is split into 'feathers'*/
 	private CountParameter divisions=new CountParameter(this, 5); {divisions.parameterName="n divisions"; divisions.setMinValue(1);}
 
 	
@@ -170,7 +176,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 		
 	}
 
-	RectangularGraphic rectForIcon() {
+	RectangularGraphic shapeUsedForIcon() {
 		return  blankShape(new Rectangle(0,0,12,10), Color.BLACK);//ArrowGraphic.createDefaltOutlineArrow(this.getFi
 	}
 

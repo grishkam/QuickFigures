@@ -26,12 +26,17 @@ import java.awt.event.WindowListener;
 
 import applicationAdapters.DisplayedImage;
 import layersGUI.GraphicTreeUI;
+import messages.ShowMessage;
 
 /**A menu item that shows the layers GUI*/
 public class TreeShower  extends BasicMenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		if(diw==null) {
+			ShowMessage.showMessages("open a worksheet first");
+			return;
+		}
 		GraphicTreeUI tree = new GraphicTreeUI(diw.getImageAsWrapper());
 		tree.showTreeForLayerSet(diw.getImageAsWrapper()) ;
 		TreeWindowCloser closer = new TreeWindowCloser(tree, diw.getWindow());

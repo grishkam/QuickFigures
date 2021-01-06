@@ -20,7 +20,6 @@ import java.awt.Dimension;
 
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.GenericImage;
-import graphicalObjects.FigureDisplayContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.KnowsSetContainer;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -28,7 +27,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 /**Simple subclass of the generic image
  * that contains an object linking it to the 
  * the window being used to display the */
-public class StandardWorksheet extends GenericImage implements FigureDisplayContainer {
+public class StandardWorksheet extends GenericImage {
 
 	public static final String SAVE_EXTENSION = ".ser";
 

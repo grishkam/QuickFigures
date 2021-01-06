@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects;
 
 import java.awt.Graphics2D;
@@ -32,7 +37,7 @@ import standardDialog.strings.InfoDisplayPanel;
 /**A reference to a specific file. Allow the user to input a list of files into the JTree*/
 public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptionsDialog, PointsToFile {
 
-	
+	/**the file*/
 	private File file=null;
 	
 	
@@ -49,9 +54,10 @@ public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptio
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**File stand ins are not drawn but still appear in the layers gui*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -68,6 +74,8 @@ public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptio
 		return new DefaultTreeCellRenderer().getLeafIcon();
 	}
 	
+	/**Adds file stand ins to the layer
+	 * if the file is a directory, adds a sublayer with many file stand ins*/
 	public static void addFileStandIn(File f, GraphicLayer cont) {
 		if (f.isDirectory()) {
 			GraphicLayerPane layer = new GraphicLayerPane(f.getName());
@@ -92,7 +100,6 @@ public class FileStandIn implements ZoomableGraphic, HasTreeLeafIcon, ShowsOptio
 	private transient GraphicLayer layer;
 	@Override
 	public GraphicLayer getParentLayer() {
-		// TODO Auto-generated method stub
 		return layer;
 	}
 

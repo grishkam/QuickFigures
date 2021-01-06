@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package undo;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import graphicalObjects.ZoomableGraphic;
 import layersGUI.GraphicSetDisplayTree;
 
+/**A superclass for many undoable edits*/
 public class AbstractUndoableEdit2 extends AbstractUndoableEdit {
 
 	/**
@@ -29,7 +35,7 @@ public class AbstractUndoableEdit2 extends AbstractUndoableEdit {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//private int index;
+
 	protected GraphicSetDisplayTree tree;
 	
 	ArrayList<ZoomableGraphic> actedOnObjects=new ArrayList<ZoomableGraphic> ();
@@ -38,6 +44,7 @@ public class AbstractUndoableEdit2 extends AbstractUndoableEdit {
 	  return actedOnObjects.contains(o);
   }
 	
+  /**stores the final locations and form of the objects*/
 	public void establishFinalState() {}
 	public void redo() {
 	

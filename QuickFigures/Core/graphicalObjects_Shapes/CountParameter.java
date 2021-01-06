@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.io.Serializable;
@@ -22,7 +27,7 @@ import locatedObject.RectangleEdgePositions;
 import undo.SimpleTraits;
 
 
-/**stores in formation regarding a specific value. used by certain shapes
+/**stores a specific int value and information about that value. used by certain shapes
  * @see CountHandle 
  * */
 public class CountParameter implements Serializable, RectangleEdgePositions, SimpleTraits<CountParameter> {
@@ -117,10 +122,12 @@ public class CountParameter implements Serializable, RectangleEdgePositions, Sim
 		this.maxValue = maxValue;
 	}
 
+	/**if there are specific names associated with each int value, returns them*/
 	public String[] getNames() {
 		return names;
 	}
 
+	/**set names for each int value*/
 	public void setNames(String[] names) {
 		this.names = names;
 	}

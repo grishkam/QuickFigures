@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout;
 
 import java.awt.Color;
@@ -36,14 +41,16 @@ import locatedObject.RectangleEdges;
   as a nested class. */
 public class PanelContentExtract {
 	
+	/**a list of objects that are considered part of the panel*/
 	private ArrayList<LocatedObject2D> objectList;
+	/**bounding box*/
 	Rectangle2D bounds;
 	
 	public PanelContentExtract(Rectangle2D r) {
 		bounds=r;
 	} 
 	
-		public PanelContentExtract(Dimension dim) {
+	public PanelContentExtract(Dimension dim) {
 		bounds =new Rectangle(0,0, dim.width, dim.height);
 	}
 
@@ -57,12 +64,12 @@ public class PanelContentExtract {
 			}
 		}
 		
-		/**Returns the dimensions taken up by everything in the panel*/
+		/**Returns the dimensions of the object panel*/
 		public Dimension dim() {
 			return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
 		}
 		
-		/**returns a buffered image that shows the content of this panel */
+		/**returns a buffered image that shows the extrcted content*/
 		private BufferedImage getImage() {
 			BufferedImage output=null;
 			

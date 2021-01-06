@@ -39,7 +39,7 @@ public class UndoTextEdit extends AbstractUndoableEdit2 {
 	private int fCursor;
 	private Font iFont;
 	private Font fFont;
-	private UndoSnappingChange isnap;
+	private UndoAttachmentPositionChange isnap;
 	private Color iColor;
 	private Color fColor;
 	private int iDim;
@@ -58,7 +58,7 @@ public class UndoTextEdit extends AbstractUndoableEdit2 {
 		iCursor=t.getCursorPosition();
 		
 		iFont=t.getFont().deriveFont(t.getFont().getStyle());
-		isnap=new UndoSnappingChange(t);
+		isnap=new UndoAttachmentPositionChange(t);
 		iColor=t.getTextColor();
 		iDim=t.getDimming();
 	}

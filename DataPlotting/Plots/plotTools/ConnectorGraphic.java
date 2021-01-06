@@ -87,7 +87,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 	public void scaleAbout(Point2D p, double mag) {
 
 		for(Point2D anchor: getAnchors()) {
-			Point2D a = scaleAbout(anchor, p,mag,mag);
+			Point2D a = scalePointAbout(anchor, p,mag,mag);
 			anchor.setLocation(a);
 		}
 		

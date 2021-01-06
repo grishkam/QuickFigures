@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package handles;
 
 import java.awt.Graphics2D;
@@ -33,6 +38,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	private static final long serialVersionUID = 1L;
 	private static final int NO_HANDLE = -1;
 	
+	/**creates a new smart handle list*/
 	public static  SmartHandleList createList(SmartHandle... handles) {
 		SmartHandleList out = new SmartHandleList();
 		for(SmartHandle h: handles) {
@@ -42,6 +48,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		return out;
 	}
 	
+	/**creates a new smart handle list*/
 	public static  SmartHandleList combindLists(SmartHandleList... handles) {
 		SmartHandleList out = new SmartHandleList();
 		for(SmartHandleList h: handles) {
@@ -51,7 +58,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		return out;
 	}
 	
-
+	/**Draws the handles, except for the hidden ones*/
 	public void draw(Graphics2D g, CordinateConverter cords) {
 		for(SmartHandle sh:this) {
 			if (sh.isHidden()) continue;
@@ -59,11 +66,14 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		}
 	}
 	
+	/**Adds handles to the list*/
 	public void addEach(SmartHandle...handles ) {
 		for(SmartHandle h: handles) {add(h);}
 	}
 	
-	
+	/**returns the handle that contains the click location
+	  The point given must be in raw coordinates
+	  and not the coordinate location on the worksheet*/
 	public SmartHandle getHandleForClickPoint(Point2D p) {
 		for(SmartHandle sh:this) {
 			if (sh==null||sh.lastDrawShape==null||sh.isHidden()) continue;
@@ -90,26 +100,28 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		return NO_HANDLE;
 	}
 
-
-	public int containsLockedItemHandle(LocatedObject2D o) {
+	/**returns a number if the list contained an attachment position handle*/
+	public int containsAttachMentPositionHandle(LocatedObject2D o) {
 		for(int i=0; i<this.size();i++) {
 			SmartHandle l = this.get(i);
-			if (l instanceof LockedItemHandle) {
-				LockedItemHandle lih=(LockedItemHandle) l;
+			if (l instanceof AttachmentPositionHandle) {
+				AttachmentPositionHandle lih=(AttachmentPositionHandle) l;
 				if (lih.getObject()==o) {
 					
 					return i;
 					}
 			}
 		}
-		return -1;
+		return NO_HANDLE;
 	}
 	
-	public LockedItemHandle getLockedItemHandle(LocatedObject2D o) {
+	/**returns the attachment position handle that controls the location of the given item
+	 * @see AttachmentPositionHandle*/
+	public AttachmentPositionHandle getAttachmentPositionHandle(LocatedObject2D o) {
 		for(int i=0; i<this.size();i++) {
 			SmartHandle l = this.get(i);
-			if (l instanceof LockedItemHandle) {
-				LockedItemHandle lih=(LockedItemHandle) l;
+			if (l instanceof AttachmentPositionHandle) {
+				AttachmentPositionHandle lih=(AttachmentPositionHandle) l;
 				if (lih.getObject()==o) {
 					
 					return lih;
@@ -120,21 +132,11 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	}
 
 
-	private transient GraphicLayer layer;
-	@Override
-	public GraphicLayer getParentLayer() {
-		return layer;
-	}
 
-	@Override
-	public void setParentLayer(GraphicLayer parent) {
-		layer=parent;
-		
-	}
 	
 	/**Removes a locked item handle that is meant for object l*/
 	public void removeLockedItemHandle(LocatedObject2D l) {
-		int index=containsLockedItemHandle(l);
+		int index=containsAttachMentPositionHandle(l);
 		if (index>=0)remove(index);
 	}
 	
@@ -147,5 +149,18 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		}
 		
 		return output;
+	}
+	
+	/**the parent layer is not important for the function of a smart handle list*/
+	private transient GraphicLayer layer;
+	@Override
+	public GraphicLayer getParentLayer() {
+		return layer;
+	}
+
+	@Override
+	public void setParentLayer(GraphicLayer parent) {
+		layer=parent;
+		
 	}
 }

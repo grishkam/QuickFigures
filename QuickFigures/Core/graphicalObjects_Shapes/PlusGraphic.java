@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_Shapes;
 
 import java.awt.Color;
@@ -36,12 +41,10 @@ public class PlusGraphic extends TrapezoidGraphic {
 	
 	public PlusGraphic(RectangularGraphic r) {
 		super(r);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public PlusGraphic(Rectangle r) {
 		super(r);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -109,13 +112,15 @@ public class PlusGraphic extends TrapezoidGraphic {
 		
 	}
 
-
+	/**Adds a the horizontal line part to the path
+	 * @param hPlus the thickness of the plus at that point. determines the length of the line with center x2,y2*/
 	protected void hLineAt(Path2D.Double path, double x2, double y2, double hPlus) {
 		path.lineTo(x2-hPlus/2, y2);
 		path.lineTo(x2+hPlus/2, y2);
 	}
 
-
+	/**Adds a the vertical line part to the path
+	 * @param vPlus the thickness of the plus at that point. determines the length of the line with center x2,y2*/
 	protected void vLineAt(Path2D.Double path, double x2, double y2, double vPlus) {
 		path.lineTo( x2,y2+vPlus/2);
 		path.lineTo( x2,y2-vPlus/2);

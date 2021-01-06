@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package infoStorage;
 
 import java.awt.Color;
@@ -30,6 +35,7 @@ import layout.RetrievableOption;
 import logging.IssueLog;
 import utilityClasses1.NumberUse;
 
+/**This class helps extract information that is stored in string form*/
 public class BasicMetaDataHandler {
 	public static  String delimiter=";";//The delimiter separates the parts of the list
 	public static String myIndexCode="Greg Channel At Index ";;//"Image Channel Index ";
@@ -49,12 +55,14 @@ public class BasicMetaDataHandler {
 		
 	};
 	
+	/**the channel id keys known for microscopy formats*/
 	String[][] allNumberKeys=new String[][] {
 		new String[] {"Information|Image|Channel|Id ", " "},//for CZI
 		// possible for LIF but not enough information "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|LUT|Channel "
 		
 	};
 	
+	/**exposure time keys known for microscopy formats*/
 	String[][] allExposureTimeKeys=new String[][] {
 		new String[] {"Information|Image|Channel|ExposureTime|", " "},//for CZI
 		
@@ -67,16 +75,19 @@ public class BasicMetaDataHandler {
 		return getMetaDataEntryFromLine(linesOfText,key);
 	}
 	
+	/**Assuming the data contains key value pairs separated by an = sign, extracts the information*/
 	public static String getMetaDataEntryFromLine(String linesOfText, String key) {
 		String[] ss2=linesOfText.split("\n");
 		for (int i=0; i<ss2.length; i++) {if (ss2[i].startsWith(key+"= ")) return ss2[i];}
 		return null;
 	}
 	
-	public  static String getMetaDataEntry(String[] ss2, String key){
-		for (int i=0; i<ss2.length; i++) {if (ss2[i].startsWith(key+"= ")) return ss2[i];}
+	/**Assuming the data contains key value pairs separated by an = sign, extracts the data entry*/
+	public  static String getMetaDataEntry(String[] data, String key){
+		for (int i=0; i<data.length; i++) {if (data[i].startsWith(key+"= ")) return data[i];}
 		return null;
 	}
+	/**Assuming the data contains key value pairs separated by an = sign, extracts the value*/
 	public  static String getMetaDataEntryValue(String[] ss2, String key){
 		for (int i=0; i<ss2.length; i++) {if (ss2[i].startsWith(key+"= ")) return ss2[i].substring(key.length()+1);}
 		return null;
@@ -84,29 +95,31 @@ public class BasicMetaDataHandler {
 	
 	
 
-	
-	public  Integer parseMetadataIntvalue(MetaInfoWrapper a, String b ) {
-		String output=a.getEntryAsString(b);// getEntryFromInfoAsString(a, b) ;
+	/**Extracts the integer value with the given key*/
+	public  Integer parseMetadataIntvalue(MetaInfoWrapper data, String entryKey ) {
+		String output=data.getEntryAsString(entryKey);// getEntryFromInfoAsString(a, b) ;
 		if (output==null) return null;
 	    Integer r;
 	    try {r=Integer.parseInt(output);} catch (NumberFormatException si) {return null; }
 	    return r;
 	}
 	
-	public  int[] parseMetadataIntArrayValue(MetaInfoWrapper a, String b ) {
-		String output= getEntryFromInfoAsString(a, b) ;
+	/**Extracts the integer array value with the given key*/
+	public  int[] parseMetadataIntArrayValue(MetaInfoWrapper data, String entryKey ) {
+		String output= getEntryFromInfoAsString(data, entryKey) ;
 		if (output==null) return null;
 	    return NumberUse.intArrayFromString1(output);
 	}
 	
 
-	
+	/**Extracts the string array value with the given key*/
 	public  String[] parseMetadataStringArrayValue(MetaInfoWrapper a, String b ) {
 		String output= getEntryFromInfoAsString(a, b) ;
 		if (output==null) return null;
 	    return stringArrayFromString(output);
 	}
 	
+	/**Extracts the double value with the given key*/
 	public  Double parseMetadataDoublevalue(MetaInfoWrapper a, String b ) {
 		String output= getEntryFromInfoAsString(a, b) ;
 		if (output==null) return null;
@@ -116,20 +129,21 @@ public class BasicMetaDataHandler {
 	}
 	
 	
-	//public abstract String getEntryFromInfoAsString(ImageType a, String b);
-	
+	/**Extracts the font value with the given key*/
 	Font parseMetadataFontvalue(MetaInfoWrapper a, String b) {
 		String st =getEntryFromInfoAsString( a,  b);
 		return getFont(st);
 	}
+	/**Extracts the point with the given key*/
 	Point parseMetadataPointvalue(MetaInfoWrapper a, String b) {
 		String st =getEntryFromInfoAsString( a,  b);
 		return getPoint(st);
 		
 	}
 	
-	public Object parseMetadataClassValue(MetaInfoWrapper a, String b, Class<?> c) {
-		return getObject(getEntryFromInfoAsString( a,b), c);
+	/**Extracts the object with the given key*/
+	public Object parseMetadataClassValue(MetaInfoWrapper data, String key, Class<?> objectType) {
+		return getObject(getEntryFromInfoAsString( data,key), objectType);
 
 	}
 	
@@ -176,7 +190,7 @@ public class BasicMetaDataHandler {
 		//return null;
 	}	 
 	
-	/**gets the proer delimiter for arrays of class c*/
+	/**gets the proper delimiter for arrays of class c*/
 	static String getDelimitForClass(Class<?> c) {
 		if (c.equals(double.class)||c.equals(Double.class)) {return ",";}
 		if (c.equals(float.class)||c.equals(Float.class)) {return ",";}
@@ -186,6 +200,7 @@ public class BasicMetaDataHandler {
 		return delimiter;
 	}
 
+	/**Extracts the boolean with the given key*/
 	public  Boolean parseMetadataBooleanvalue(MetaInfoWrapper a, String b ) {
 		Integer i1=parseMetadataIntvalue(a,  b ) ;
 		if (i1==0) return false;
@@ -239,43 +254,27 @@ public class BasicMetaDataHandler {
 			return output.replaceAll(" ", " ");
 		}
 		
-		
+		/**stores the array list into the data set*/
 		public  void addArrayListEntryToInfo(MetaInfoWrapper img, String name, ArrayList<?> numbers) {
 			addEntryToInfo(img, name, numbers.toArray(new Object[numbers.size()]));
 		}
 		
-		public  void addEntryToInfo(MetaInfoWrapper img, String name, Object number) {
-			if (number.getClass()==ArrayList.class) try {if (number instanceof ArrayList<?> )addArrayListEntryToInfo(img, name, (ArrayList<?>) number) ; return;} catch (Throwable e) {}
+		/**stores the object inthe data set*/
+		public  void addEntryToInfo(MetaInfoWrapper data, String nameOfKey, Object number) {
+			if (number.getClass()==ArrayList.class) try {if (number instanceof ArrayList<?> )
+				addArrayListEntryToInfo(data, nameOfKey, (ArrayList<?>) number) ; return;} catch (Throwable e) {}
 			
-			try{addEntryToInfo(img, name, entryString(number)) ;} catch (Throwable t) {IssueLog.log(" problem adding entry to metadata", t);}
+			try{addEntryToInfo(data, nameOfKey, entryString(number)) ;} catch (Throwable t) {IssueLog.log(" problem adding entry to metadata", t);}
 		}
 		
 		
 		
-		/**
-		public abstract void addEntryToInfo(ImageType img, String name,
-				String stringfromIntarray) ;*/
-	
-		
-
+		/**Extracts the file path with the given key*/
 		public  String getFileNameFromMetaData(MetaInfoWrapper imp, String key) {
 			return new File(getEntryFromInfoAsString(imp, key)).getName();
 		}
 		
 
-		/**This will replace part of the metadata for the ImageType.
-		   Assumes that the string is the format of keys=###\n
-		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, int newValue){
-			a.replaceInfoMetaDataEntry(b,""+ newValue);
-		}
-		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, double newValue){
-			a.replaceInfoMetaDataEntry(b,""+ newValue);
-		}
-		public  void replaceMetaDataEntry(MetaDataWrapper a, String b, Number newValue){
-			a.replaceInfoMetaDataEntry(b,""+ newValue);
-			//{replaceMetaDataEntry( a, b, ""+ newValue);}
-
-		}*/
 
 		/**if the string ends with .tif, does nothing, else adds .tif to the string*/
 		public String addTifToName(String name) {
@@ -283,20 +282,22 @@ public class BasicMetaDataHandler {
 			return name+".tif";
 		}
 		
-		void addEntryToInfo(MetaInfoWrapper img, String name, Point[] numbers) {
+		/**Stores an array of points*/
+		void addEntryToInfo(MetaInfoWrapper data, String name, Point[] numbers) {
 			int[] intsx=new int[numbers.length];
 			int[] intsy=new int[numbers.length];
 			for (int i=0; i<numbers.length; i++) {
 				intsx[i]=(int)numbers[i].getX();
 				intsy[i]=(int)numbers[i].getY();
 			}
-			addEntryToInfo(img, name+"X", intsx);
-			addEntryToInfo(img, name+"Y", intsy);
+			addEntryToInfo(data, name+"X", intsx);
+			addEntryToInfo(data, name+"Y", intsy);
 		}
 		
-		Point[] parseMetadataPointArrayvalue(MetaInfoWrapper a, String b) {
-			int[] intsx=parseMetadataIntArrayValue(a,  b+"X") ;
-			int[] intsy=parseMetadataIntArrayValue(a,  b+"Y") ;
+		/**returns the array of stored points with the given key*/
+		Point[] parseMetadataPointArrayvalue(MetaInfoWrapper data, String kayName) {
+			int[] intsx=parseMetadataIntArrayValue(data,  kayName+"X") ;
+			int[] intsy=parseMetadataIntArrayValue(data,  kayName+"Y") ;
 			Point[] numbers=new Point[intsx.length];
 			for (int i=0; i<numbers.length; i++) { 
 				numbers[i]=new Point(intsx[i], intsy[i]);
@@ -307,7 +308,7 @@ public class BasicMetaDataHandler {
 		 
 		/**Depending on a channel name, returns an appropriate color
 		 * @param name
-		 * @return
+		 * @return the channel color that is appropirate
 		 */
 		public static Color determineNewChannelColor(String name) {
 			Color newColor=null;
@@ -387,6 +388,8 @@ public class BasicMetaDataHandler {
 			    return null;
 			  }
 		 
+		 /**parses a color that is encodes withing the string
+		  * assumes a format Color[r=x, g=y, b=z]*/
 		 private static Color getColorFromImplied(String st, String method) {
 			 String[] colors=getArgsFromImpliedMethod(st, method);
 			   int r=0; int g=0; int b=0;
@@ -429,6 +432,8 @@ public class BasicMetaDataHandler {
 			    
 			    return null;
 			  }
+		
+		
 			/**undoes the output of the toString method for class Rectangle*/
 		 static Rectangle getRectangle(String st) {		 
 			    if (st.contains("Rectangle[")) {
@@ -448,7 +453,11 @@ public class BasicMetaDataHandler {
 			    return getFont(defaultfont, st);
 			  } 
 		 static Font defaultfont=new Font("Arial", Font.PLAIN, 20);
-			/**undoes the output of the toString method for class Font*/
+		 
+		 
+			/**undoes the output of the toString method for class Font
+			 * if that works returns the font described in the string
+			 * if that fails, returns the default font given*/
 		 public static Font getFont(Font defaultfont, String st) {	
 			 if (st==null) return defaultfont;
 			 if (defaultfont==null) defaultfont=BasicMetaDataHandler.defaultfont;
@@ -471,6 +480,8 @@ public class BasicMetaDataHandler {
 			   // return null;
 			  } 
 		 
+		 /**Assuming that a string contains values enclosed in brackets and separeated by commas
+		    returns the content as a string array*/
 		 public static String[] getArgsFromImpliedMethod(String st, String methodName) {
 			 if (st.contains("["))
 			 return getArgsFromImpliedMethod(st, methodName, "[", "]");
@@ -479,13 +490,15 @@ public class BasicMetaDataHandler {
 			 else return getArgsFromImpliedMethod(st, methodName, "<", ">");
 		 }
 		 
-		 public static String[] getArgsFromImpliedMethod(String st, String methodName, String start, String end) {
+		 /**Assuming that a string contains values enclosed in brackets and separeated by commas
+		    returns the content as a string array*/
+		 public static String[] getArgsFromImpliedMethod(String st, String methodName, String startBracket, String endBracket) {
 		
 			 String delimit=",";
 			 
-			   if (st.contains(methodName+start)) {
-				    int i=st.indexOf(methodName+start);
-				    int i2=st.indexOf(end, i);
+			   if (st.contains(methodName+startBracket)) {
+				    int i=st.indexOf(methodName+startBracket);
+				    int i2=st.indexOf(endBracket, i);
 				    
 				   
 				  
@@ -501,6 +514,7 @@ public class BasicMetaDataHandler {
 			   return null;
 		 }
 		 
+		 /**Assuming that the string contains */
 		 public static Integer[] getIntArgsFromImpliedMethod(String st, String methodName) {
 			   if (st.contains(methodName+"[")) {
 				    String[] outputs=getArgsFromImpliedMethod(st, methodName);
@@ -524,12 +538,7 @@ public class BasicMetaDataHandler {
 			   return st;
 		 }
 		 
-		 /**
-		 public void editObjectMetaData(MetaInfoWrapper imp, Object o, boolean superClass, String subsetWith) {
-			 getFieldsFromMetaData(imp,  o, superClass,subsetWith);
-			 IJdialogUse.setObjectFieldsDialog( o, superClass, subsetWith);
-			 addFieldsToMetaData(imp,  o, superClass, subsetWith);
-		 }*/
+		
 		 
 		 public void addFieldsToMetaData(MetaInfoWrapper imp, Object o, boolean superClass, String subsetWith) {
 			 Field[] fields=o.getClass().getDeclaredFields() ;

@@ -142,7 +142,7 @@ public class PathTool extends GraphicTool{
 			rect1.setStrokeWidth(2);
 			rect1.setStrokeColor(Color.black);*/
 			
-			out.getTheLayer().add(p);
+			out.getTheInternalLayer().add(p);
 		
 			
 		;

@@ -201,7 +201,7 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 			
 			RectangularGraphic rect = RectangularGraphic.blankRect(r, colors[i]);
 			rect.setStrokeWidth(1);
-			gg.getTheLayer().add(rect);
+			gg.getTheInternalLayer().add(rect);
 				}
 		
 		

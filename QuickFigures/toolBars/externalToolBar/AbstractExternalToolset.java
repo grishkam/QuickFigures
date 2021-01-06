@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package externalToolBar;
 
 
@@ -43,17 +48,19 @@ import javax.swing.JToolBar;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 
-/**The methods in this class organize a toolbar, maintain a list of tools, keeps track of the current tool*/
+/**The methods in this class organize a toolbar, maintain a list of tools, keeps track of the current tool
+ * and a list of open toolbars*/
 public class AbstractExternalToolset<ImageType> implements MouseListener, WindowListener {
 	
 	public static final int DEFAULT_ICONSIZE = 25;
 
-	Vector<ToolChangeListener<ImageType>> listeners=new Vector<ToolChangeListener<ImageType>>();
-	 public void addToolChangeListener(ToolChangeListener<ImageType> lis) {
+	/**An arraow of tool change listeners*/
+	Vector<ToolChangeListener> listeners=new Vector<ToolChangeListener>();
+	 public void addToolChangeListener(ToolChangeListener lis) {
 		 listeners.add(lis);
 	 }
 	 
-	/**Keeps track of all toolsets in the app*/
+	/**Keeps track of all toolsets*/
 	public static Vector<AbstractExternalToolset<?>> openToolsets= new Vector<AbstractExternalToolset<?>>();
 	
 	HashMap<AbstractButton, InterfaceExternalTool<ImageType>> buttonToolPairs=new HashMap<AbstractButton, InterfaceExternalTool<ImageType>>();
@@ -71,16 +78,15 @@ public class AbstractExternalToolset<ImageType> implements MouseListener, Window
 	/**the max number of tools that can appear in one row beyond that are added to the subsequent row*/
 	protected int maxGridx=11;
 	
+	/**The JFrame that is used*/
 	private JFrame frame=new JFrame(); {
 		frame.setLayout(new GridBagLayout()); frame.addWindowListener(this);openToolsets.add(this);
 		
 	}
 	
+	/**the JToolbar objects that is used*/
 	protected JToolBar toolbar=new JToolBar();
-
-	
-
-	 { innitializeToolbar();}
+	{ innitializeToolbar();}
 	
 	/**Sets uo the layout of the toolbar. adds the JToolbar object to the window*/
 	public void innitializeToolbar() {
@@ -116,10 +122,9 @@ public class AbstractExternalToolset<ImageType> implements MouseListener, Window
 		this.currentTool=currentTool;
 		this.currentTool.onToolChange(true);//some tools do something when they are activated
 		
-		
-		for(ToolChangeListener<ImageType> tcl: listeners) {//some classes do something when a tool switch is made
+		for(ToolChangeListener tcl: listeners) try {//some classes do something when a tool switch is made
 			if (tcl!=null) tcl.ToolChanged( getCurrentTool() );
-		}
+		} catch (Throwable t) {}
 	}
 	
 	/**Searches through the open toolbars. 
@@ -144,24 +149,27 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 	return null;
 }
 	
+	/**returns the current tool*/
 	public InterfaceExternalTool<ImageType>  getCurrentTool() {
 		return currentTool;
 	}
 	
 	
 	
-	
+	/**moves the grid bag constrants for the next tool*/
 	 protected void gridToNextLine() {
 		toolBarBridConstraints.gridx=Xinnitial;
 		toolBarBridConstraints.gridy=toolBarBridConstraints.gridy+1;
 	}
 	
+	 /**displays a popup menu in response to control clicks*/
 	public void controlClickDialog(Component c, InterfaceExternalTool<ImageType> clickedTool) {
 		SmartPopupJMenu pup = new SmartPopupJMenu();
 		for(JMenuItem stackPanel: clickedTool.getPopupMenuItems())	pup.add(stackPanel); 
 		pup.show(c, 0, 0+c.getHeight());
 	}
 	
+	/**Adds a tool*/
 	public synchronized void addTool(InterfaceExternalTool<ImageType> tool) {
 		
 		try{
@@ -178,8 +186,7 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 		buttonToolPairs.put(jb, tool);
 		Icon i=getIconForTool(tool);
 		
-		//if (i==null) IssueLog.log("cannot find image icon for tool");
-		//try{i=new FileMover().localFileAsImage("icons/ExperimantalIcon.jpg");} catch (Throwable t) {}
+	
 		stripButton(jb);
 		
 		if (i!=null) {jb.setIcon(i);
@@ -200,10 +207,12 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 		
 	}
 	
+	/**extracts the tool icon*/
 	Icon getIconForTool(InterfaceExternalTool<ImageType> tool) {
 		Icon i=null;
-		i=tool.getToolImageIcon();
+		i=tool.getToolNormalIcon();
 		if (i==null) {
+			/**if no icon exists, wills the button with grey*/
 			BufferedImage image = new BufferedImage(DEFAULT_ICONSIZE, DEFAULT_ICONSIZE, BufferedImage.TYPE_INT_RGB);
 			Graphics g = image.getGraphics();g.setColor(Color.gray); g.fillRect(0, 0, DEFAULT_ICONSIZE, DEFAULT_ICONSIZE);
 			i=new ImageIcon(image);
@@ -212,8 +221,7 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 		return i;
 	}
 	
-	
-	
+	/**alters the JButton, removing any unnecesary parts*/
 	public static void stripButton(JButton jb) {
 		jb.setMargin(new Insets(-2, -3, -2, -4));
         jb.setBorderPainted(false);
@@ -221,19 +229,12 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
         jb.setIconTextGap(0); 
 	}
 	
-	public void resetButtonIcons() {
-		resetOwnButtonIcons() ;
-	}
 	
-	public void resetOwnButtonIcons() {
-		for (AbstractButton jb: buttons) {
-			resetButtonIcon(jb);
-		}
-	}
-	
+	 /**updates the icon for the current tool's button*/
 	public void resetButtonIcon() {
 		resetButtonIcon(currentToolButton) ;
 	}
+	/**updates the icon for the button*/
 	public void resetButtonIcon(AbstractButton jb) {
 		if (jb==null) return;
 		InterfaceExternalTool<ImageType> tool1=buttonToolPairs.get(jb);
@@ -253,17 +254,19 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 		
 	}
 	
-	public void showFrame() {frame.pack(); frame.setVisible(true);frame.setResizable(false);
-	}
+	/**shows the JFrame containing this toolbar*/
+	public void showFrame() {frame.pack(); frame.setVisible(true);frame.setResizable(false);}
 	
 	
 
-
+	/**double clicking on a tool displays the options dialog*/
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		int click=arg0.getClickCount();
 		if (click==2&&getCurrentTool()!=null) getCurrentTool() .showOptionsDialog();
 	}
+	
+	
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 	
@@ -336,6 +339,7 @@ public InterfaceExternalTool<ImageType> selectToolWithName(String name) {
 		
 	}
 
+	/**when the window is closed removes the window from the list of toolbars*/
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		if (arg0.getWindow()==frame) openToolsets.remove(this);

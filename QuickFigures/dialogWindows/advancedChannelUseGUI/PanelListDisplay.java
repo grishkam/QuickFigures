@@ -294,7 +294,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			
 			panelManager.removeDisplayObjectsFor(panel12);
 			panelManager.updatePanels();
-			panelManager.getDisplay().onImageUpdated();
+			panelManager.getImageDisplayLayer().onImageUpdated();
 			
 			//this.setListData(elements);
 			this.repaint();

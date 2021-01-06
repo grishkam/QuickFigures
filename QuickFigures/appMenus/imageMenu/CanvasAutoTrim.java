@@ -35,6 +35,7 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		if(diw==null) return;
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
 		
 		trimCanvas(diw);

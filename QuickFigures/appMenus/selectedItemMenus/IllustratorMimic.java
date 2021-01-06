@@ -18,7 +18,7 @@ package selectedItemMenus;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorDocRef;
@@ -82,8 +82,8 @@ public class IllustratorMimic extends BasicMultiSelectionOperator {
 	}
 	
 	void sentToIlls(Object mont, ArtLayerRef aref) {
-		if (mont instanceof FigureDisplayContainer) {
-			FigureDisplayContainer mont2 = (FigureDisplayContainer)mont;
+		if (mont instanceof FigureDisplayWorksheet) {
+			FigureDisplayWorksheet mont2 = (FigureDisplayWorksheet)mont;
 			if (mont2.getTopLevelLayer() instanceof IllustratorObjectConvertable) {
 				((IllustratorObjectConvertable) mont2.getTopLevelLayer()).toIllustrator(aref);
 			}

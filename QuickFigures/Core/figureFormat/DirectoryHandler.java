@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureFormat;
 
 import infoStorage.FileBasedMetaWrapper;
@@ -27,17 +32,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**Class contains methods for creating a subfolder in my documents for saving figures.
+/**Class contains methods for creating a subfolder in my documents for saving figures, templates
+ * and exporter files.
   this in turn has subfolders for saving templates and for saving temporary files*/
 public class DirectoryHandler {
 	private static DirectoryHandler defaultHandler;
 	
 	HashMapBasedMeta prefs;//a list of preferences that may be stored in a file
-	String pathOfDocFolder=FileChoiceUtil.pathOfDocumentsFolder();
+	String pathOfDocFolder=FileChoiceUtil.pathOfDocumentsFolder();//my documents or documents
 	String subPathofDocumentsFolder="/Quick Figures";
-	String subPathofTemplatesFoloder="/Quick Figures/Templates";
+	String subPathofTemplatesFoloder="/Quick Figures/Templates";//template subfolder
 	String prefsFileName="prefs";
-	private String subPathofDefaultTemplate=getSubPathofTemplatesFoloder()+"/default template";;
+	private String subPathofDefaultTemplate=getSubPathofTemplatesFoloder()+"/default template";
 	
 	/**returns the default directory handler*/
 	public static DirectoryHandler getDefaultHandler(){
@@ -105,6 +111,7 @@ public class DirectoryHandler {
 		//makeDirectoryIfAbsent(pathOfDocFolder+subPathofPrefsFoloder+"/"+prefsFolderName) ;
 	}
 
+	/**the path of the templates folder*/
 	public String getSubPathofTemplatesFoloder() {
 		return subPathofTemplatesFoloder;
 	}
@@ -172,9 +179,7 @@ public void savePrefs() {
 		getFileBasedPrefsWrapper().setProperty( prefs.toAString());
 }
 	
-	public static void main(String[] args) {
-
-	}
+	
 
 	public static void setDefaultHandler(DirectoryHandler defaultHandler) {
 		DirectoryHandler.defaultHandler = defaultHandler;

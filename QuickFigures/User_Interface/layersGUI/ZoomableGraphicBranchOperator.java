@@ -32,7 +32,7 @@ class ZoomableGraphicBranchOperator extends TreeBranchOperations<ZoomableGraphic
 			if (n2.getUserObject()==o) return true;
 			if (n2.getUserObject() instanceof ZoomableGraphicGroup) {
 				ZoomableGraphicGroup o2=(ZoomableGraphicGroup) n2.getUserObject() ;
-				if (o2.getTheLayer()==o) return true;
+				if (o2.getTheInternalLayer()==o) return true;
 				
 			}
 		}

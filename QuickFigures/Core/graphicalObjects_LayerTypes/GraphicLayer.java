@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayerTypes;
 
 
@@ -47,6 +52,7 @@ public interface GraphicLayer extends ItemLayer<ZoomableGraphic>, Named, KnowsPa
 	public void moveItemForward(ZoomableGraphic z1);
 	public void moveItemBackward(ZoomableGraphic z1);
 	public void setOrder(ArrayList<ZoomableGraphic> oldOrder);
+	
 	/**Within this layer, puts object il at the given index. starts from 0*/
 	public void moveItemToIndex(ZoomableGraphic il, int index);
 	
@@ -80,19 +86,25 @@ public interface GraphicLayer extends ItemLayer<ZoomableGraphic>, Named, KnowsPa
 	public void removeItemFromLayer(ZoomableGraphic z);
 	
 	
-	/**returns true if this item can accept the given graphic.
+	/**returns true if this layer can accept the given graphic.
 	  Called when the user tries to move items between layers*/
 	public boolean canAccept(ZoomableGraphic z);
+	
+	/**returns true if this layer can let go of the given graphic.
+	  Called when the user tries to move items between layers*/
 	public boolean canRelease(ZoomableGraphic z);
 	
 	
 	/**returns true is the item is either in this container or a sub-container*/
 	public boolean hasItem(ZoomableGraphic z) ;
+	
+	/**if one of the sublayers is selected, returns the sublayer.???? */
 	public GraphicLayer getSelectedContainer();
 	
 	public void addLayerStructureChangeListener(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> listener) ;
 	public void removeLayerStructureChangeListener(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> listener) ;
 	
+	/**returns the layer at the top of the hierarchy*/
 	public GraphicLayer getTopLevelParentLayer();
 	
 	

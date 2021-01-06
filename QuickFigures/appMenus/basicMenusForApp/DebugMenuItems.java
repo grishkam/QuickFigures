@@ -42,7 +42,6 @@ public  class DebugMenuItems implements MenuItemForObj{
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (on) {
 		IssueLog.reportAllFail(on);
-		IssueLog.reportAllEvents();
 		IssueLog.log("Testing Error Logging");
 		}
 		

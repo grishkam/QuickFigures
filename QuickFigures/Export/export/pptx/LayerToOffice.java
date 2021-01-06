@@ -38,7 +38,7 @@ public class LayerToOffice implements OfficeObjectMaker {
 	
 	
 		
-		for(ZoomableGraphic l : layer.getTheLayer().getAllGraphics()) {
+		for(ZoomableGraphic l : layer.getTheInternalLayer().getAllGraphics()) {
 			if (l instanceof OfficeObjectConvertable) {
 				OfficeObjectConvertable o=(OfficeObjectConvertable) l;
 				o.getObjectMaker().addObjectToSlide(ppt, gg);

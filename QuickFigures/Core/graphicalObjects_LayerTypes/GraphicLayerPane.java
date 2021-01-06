@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package graphicalObjects_LayerTypes;
 
 import java.awt.Color;
@@ -27,12 +32,11 @@ import export.svg.SVGExporter;
 import export.svg.SVGExporter_GraphicLayer;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.FigureDisplayContainer;
+import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.KnowsSetContainer;
 import graphicalObjects.KnowsTree;
-import graphicalObjects.LayerSpecified;
 import iconGraphicalObjects.IconUtil;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorObjectConvertable;
@@ -63,7 +67,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	protected ArrayList<ZoomableGraphic> theGraphics=new ArrayList<ZoomableGraphic>();
 	transient LayerStructureChangeListener<ZoomableGraphic, GraphicLayer>  tree;
 	private GraphicLayer parent;
-	transient FigureDisplayContainer graphicSetContainer;
+	transient FigureDisplayWorksheet graphicSetContainer;
 	transient boolean dead=false;
 	protected String description= "A Normal Layer";
 	protected String notes=null;
@@ -189,7 +193,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		if (GraphicGroup.treatGroupsLikeLayers && z instanceof ZoomableGraphicGroup) {
 			ZoomableGraphicGroup z2=(ZoomableGraphicGroup) z; 
 			array.remove(z);
-			array.addAll(z2.getTheLayer().getAllGraphics());
+			array.addAll(z2.getTheInternalLayer().getAllGraphics());
 		}
 	}
 
@@ -214,8 +218,8 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		
 		if (z instanceof ZoomableGraphicGroup) {
 			ZoomableGraphicGroup gl=(ZoomableGraphicGroup) z;
-			gl.getTheLayer().setTree(tree);
-			if (gl.getTheLayer().hasItem(this)) return;
+			gl.getTheInternalLayer().setTree(tree);
+			if (gl.getTheInternalLayer().hasItem(this)) return;
 		}
 		
 		if (z instanceof KnowsTree) {
@@ -223,24 +227,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 			k.setTree(tree);
 		}
 		
-		//no longer used
-		/**
-		if (z instanceof layerSpecified) {
-			layerSpecified l=(layerSpecified)z;
-			Object wantedLayerKey = l.getLayerKey();
-			
-			ZoomableGraphic sublayer = this.getItemWithKey(wantedLayerKey );
-			
-			if (sublayer instanceof GraphicLayer) {
-				GraphicLayer gl=(GraphicLayer) sublayer;
-				gl.add(z);
-				if (tree!=null) tree.itemAddedToContainer(gl, z); 
-				getListenerlist().itemAddedToContainer(gl, z);
-				return;
-			}
-			
-			
-		}*/
+	
 		
 		
 		addItemToLayer(z);
@@ -248,7 +235,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 	
 	public void addItemToLayer(ZoomableGraphic z) {
-		assignKey(z);
+	
 		if (theGraphics.contains(z)) return;
 		if (z instanceof KnowsParentLayer) {
 			KnowsParentLayer l=(KnowsParentLayer) z;
@@ -286,12 +273,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 
 
-	void assignKey(ZoomableGraphic z) {
-		if (z instanceof LayerSpecified) {
-			LayerSpecified l=(LayerSpecified)z;
-			l.setLayerKey(getKey());
-		}
-	}
+	
 	
 
 	/**removes a graphical object from the layer*/
@@ -324,7 +306,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		try {
 			for(ZoomableGraphic z: allGraphicsDrawn) try {
 				if (z==null||isHidden(z)) continue;
-				assignKey(z);
+				
 				z.draw(graphics, cords);
 			}
 			catch (Throwable t) {
@@ -452,7 +434,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		for(ZoomableGraphic g: this.getItemArray()) {
 			if (g instanceof ZoomableGraphicGroup) {
 				 ZoomableGraphicGroup g2=(ZoomableGraphicGroup) g;
-				 g=g2.getTheLayer();
+				 g=g2.getTheInternalLayer();
 			}
 			
 			if (g instanceof GraphicLayer) {
@@ -653,12 +635,12 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	
 	
 	
-	public FigureDisplayContainer getGraphicSetContainer() {
+	public FigureDisplayWorksheet getGraphicSetContainer() {
 		return graphicSetContainer;
 	}
 	
 	@Override
-	public void setGraphicSetContainer(FigureDisplayContainer gc) {
+	public void setGraphicSetContainer(FigureDisplayWorksheet gc) {
 		graphicSetContainer=gc;
 		for(ZoomableGraphic g: this.getItemArray()) {
 			if (g instanceof KnowsSetContainer) {

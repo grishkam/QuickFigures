@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Jan 5, 2021
  * Version: 2021.1
  */
 package graphicalObjects_SpecialObjects;
@@ -58,7 +58,6 @@ import export.svg.SVGExporter;
 import export.svg.TextSVGExporter;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects.GraphicalObject;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.GraphicUtil;
 import handles.HasSmartHandles;
@@ -88,7 +87,7 @@ import objectDialogs.TextGraphicSwingDialog;
 
 /**A graphical object that consists of text. This one displays a piece of 
  * text with a single font and color. Used for the most simple labels*/
-public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic,GraphicalObject, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
+public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
 	/**
 	 
 	 */
@@ -583,12 +582,11 @@ public void copyBasicTraitsFrom(TextGraphic b) {
 	
 }
 
-@Override
 public double getX() {
 	return x;
 }
 
-@Override
+
 public double getY() {
 	return y;
 }
@@ -862,7 +860,7 @@ public PopupMenuSupplier getMenuSupplier() {
 @Override
 public void scaleAbout(Point2D p, double mag) {
 	Point2D p2 = this.getLocation();
-	p2=scaleAbout(p2, p,mag,mag);
+	p2=scalePointAbout(p2, p,mag,mag);
 	this.setFont(this.getFont().deriveFont((float) (this.getFont().getSize2D()*mag)));
 	this.setLocation(p2);
 	if (this.getAttachmentPosition()!=null) this.getAttachmentPosition().scaleAbout(p, mag);

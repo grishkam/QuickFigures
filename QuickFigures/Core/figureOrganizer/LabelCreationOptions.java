@@ -13,18 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 4, 2021
+ * Version: 2021.1
+ */
 package figureOrganizer;
 
 import layout.RetrievableOption;
 
+/**A set of properties that determine how figure labels are automatically generated*/
 public class LabelCreationOptions {
 	
+	/**The current label creation options*/
 	public static LabelCreationOptions current=new LabelCreationOptions() ;
 	
 	@RetrievableOption(key = "use Image anmes", label="Use Image Names To create labels")
-	public boolean useImageNames=true;
+	public boolean useImageNames=true;//use the names of image files for their labels?
 	
 	@RetrievableOption(key = "clip labels", label="Clip Labels Longer Than")
-	public double clipLabels=50;
+	public double clipLabels=50;//The max length at which long labels be truncated
 
 }

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.dividerLayout;
 
 import java.awt.Color;
@@ -36,13 +41,15 @@ import handles.SmartHandle;
 import handles.SmartHandleList;
 import layout.PanelContentExtract;
 import layout.dividerLayout.DividedPanelLayout.LayoutDivider;
-import layout.dividerLayout.DividedPanelLayout.layoutDividedArea;
+import layout.dividerLayout.DividedPanelLayout.LayoutDividerArea;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 
-/**Displays a divided panel layout. Available for use as a ''super* layout that contains 
+/**Work in progress, a layout with a single area divided many times over 
+ * Displays a divided panel layout. Available for use as a ''super* layout that contains 
   other layouts. Offers few advantages*/
 public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements HasSmartHandles{
 
@@ -71,7 +78,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		
 		ArrayList<LayoutDivider> hDiv = getPanelLayout().mainArea.getHorizontalDividerArray(true);
 		ArrayList<LayoutDivider> vDiv = getPanelLayout().mainArea.getHorizontalDividerArray(false);
-		ArrayList<layoutDividedArea> subArea = getPanelLayout().mainArea.getAllBottomLevelSubareas();
+		ArrayList<LayoutDividerArea> subArea = getPanelLayout().mainArea.getAllBottomLevelSubareas();
 		for(int i=0; i<9; i++) edgeHandles.add(new EdgeHandleForDivitedLayout(i));
 		
 		for(LayoutDivider div:hDiv) {
@@ -164,13 +171,15 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 				LayoutDivider divider = d.divider;
 				double dy = p2.getY()-divider.rect.getY();
 				divider.nudgePosition((int)dy);
+				onPositionNudge((DividerHandle) item, hHandle, false);
 			} else
 		
 				if(this.vHandle.contains(item)) {
 					DividerHandle  d=(DividerHandle) item;;
 					LayoutDivider divider = d.divider;
-			double dy = p2.getX()-divider.rect.getX();
-			divider.nudgePosition((int)dy);
+					double dy = p2.getX()-divider.rect.getX();
+					divider.nudgePosition((int)dy);
+					onPositionNudge((DividerHandle) item, vHandle, true);
 		} else  {
 			
 				if(item!=null) {
@@ -190,6 +199,45 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		this.mapPanelLocationsOfLockedItems();
 	}
 	
+	/**performs an action to make the divider handles sticky
+	 * @param item
+	 * @param hHandle2
+	 * @return 
+	 */
+	private boolean onPositionNudge(DividerHandle item, ArrayList<DividerHandle> hHandle2, boolean vertical) {
+		
+			for(DividerHandle eachd: hHandle) {
+				if(eachd==item) continue;
+				double d2=eachd.divider.getPosition()-item.divider.getPosition();
+				if (vertical) {
+					double distance = eachd.shapeOfdivider.getX()-item.shapeOfdivider.getX();
+					
+					
+					if(Math.abs(distance)<10) {
+					
+						IssueLog.log("dividers are close "+d2);
+						
+						return true;
+					}
+				}
+				else {
+					double distance = eachd.shapeOfdivider.getY()-item.shapeOfdivider.getY();
+					
+					if(Math.abs(distance)<10) {
+						IssueLog.log("dividers are close "+d2);
+						
+						return true;
+					}
+					
+				}
+				
+				
+			}
+		
+		return false;
+	}
+
+
 	@Override
 	public DividedPanelLayout getPanelLayout() {
 		return (DividedPanelLayout)layout;
@@ -224,10 +272,10 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	class AreaHandleForDividedLayout  extends SmartHandle  implements ActionListener {
 
 		
-		protected layoutDividedArea dividedArea;
+		protected LayoutDividerArea dividedArea;
 		private int panelnumber;
 
-		public AreaHandleForDividedLayout(layoutDividedArea div, Color orange, CordinateConverter cords, int panelnumber) {
+		public AreaHandleForDividedLayout(LayoutDividerArea div, Color orange, CordinateConverter cords, int panelnumber) {
 			
 			super.setCordinateLocation(new Point((int)div.getCenterX(), (int)div.getCenterY()));
 			this.panelnumber=panelnumber;
@@ -243,7 +291,7 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 		public void actionPerformed(ActionEvent arg0) {
 		
 			
-			layoutDividedArea useA = dividedArea;
+			LayoutDividerArea useA = dividedArea;
 			if (arg0.getActionCommand().equals("+h")) {
 				 if (!useA.isSubdivided()) {useA.setHorizontal(true);}
 				useA.divide(dividedArea.getCenterY()-dividedArea.getY());

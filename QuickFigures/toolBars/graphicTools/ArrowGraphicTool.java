@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package graphicTools;
 
 import java.awt.Color;
@@ -29,33 +34,28 @@ import locatedObject.LocatedObject2D;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
 public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
-	private boolean line=false; 
-
-	ArrowGraphic model = new ArrowGraphic(); {} {super.temporaryTool=true;}
 	
+	ArrowGraphic model = new ArrowGraphic(); {} {super.temporaryTool=true;}
 	
 	
 	void setUpModel() {super.iconSet=TreeIconWrappingToolIcon.createIconSet(model);model.setStrokeColor(Color.black);}
 		{setUpModel(); }
 	public ArrowGraphicTool() {
-		//setUpModel();
 	}
 	
 	public ArrowGraphicTool(int head) {
 		this(head, false);
 	}
 	
-	public ArrowGraphicTool(int head, boolean tail) {
-		this.line= head==0;
-		if(tail) {head=2; this.line=false;}
+	/**constructs a tool
+	 * @param tail determines if this tool creates arrow with a distinct head and tail*/
+	public ArrowGraphicTool(int nHead, boolean tail) {
+		
+		if(tail) {nHead=2; }
 		ArrowGraphic arrow = new ArrowGraphic();
-		if (line) {
+		{
 			model = arrow;
-			model.setNumerOfHeads(0);
-			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
-		} else {
-			model = arrow;
-			model.setNumerOfHeads(head);
+			model.setNumerOfHeads(nHead);
 			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
 			
 			if(tail) {
@@ -93,7 +93,7 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	 */
 	public ArrowGraphic createArrow(double d, double e) {
 		ArrowGraphic bg = new ArrowGraphic();
-		if (line) bg.setName("Line");
+		
 		bg.setHeadsSame(model.headsAreSame());
 		bg.copyAttributesFrom(model);
 		bg.copyArrowAtributesFrom(model);
@@ -119,7 +119,6 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	@Override
 	public String getToolTip() {
-		if(line) return "A Line";
 			return "Draw an Arrow";
 		}
 	
@@ -130,7 +129,6 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	}
 	
 	public String getShapeName() {
-		if(line) return "Line";
 		return "Arrow";
 	}
 	public Icon getIcon() {

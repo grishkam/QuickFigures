@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 5, 2021
+ * Version: 2021.1
+ */
 package layout.plasticPanels;
 
 import java.awt.Rectangle;
@@ -51,23 +56,27 @@ public class NeighborFinder<Type extends Rectangle2D> implements Serializable {
 
 	
 	
-	
+	/**sets the range in the x direction that qualifies as near*/
 	public void setHRange(double d) {
 		this.hRange = d;
 	}
-	public double getVRange() {
-		return vRange;
-	}
-	public double getHRange() {
-		return hRange;
-	}
 	
 	
+	/**sets the range in the y direction that qualifies as near*/
 	public void setVRange(double d) {
 		this.vRange = d;
 	}
 	
+	/**how close panels need to be to be 'near' each other in the y direction*/
+	public double getVRange() {
+		return vRange;
+	}
+	/**how close panels need to be to be 'near' each other in the x direction*/
+	public double getHRange() {
+		return hRange;
+	}
 	
+	/**how close panels need to be to be 'near' each other in the diagonal direction*/
 	public double getDiagnolRange() {
 		double square = getVRange()*getVRange()+getHRange()*getHRange();
 		return Math.sqrt(square);
@@ -85,6 +94,7 @@ public class NeighborFinder<Type extends Rectangle2D> implements Serializable {
 		return getPanelAbove(p,this.getPanels(), vrange);
 	}
 	
+	/**finds the panel just above the given panel*/
 	public Rectangle2D getPanelAbove(Rectangle2D p, Rectangle2D[] panels, double d) {
 		//int vrange=getVRange();
 		ArrayList<Rectangle2D> possibleups = new ArrayList<Rectangle2D> ();
@@ -101,12 +111,14 @@ public class NeighborFinder<Type extends Rectangle2D> implements Serializable {
 		
 	}
 	
+	/**finds the panel just left the given panel*/
 public Rectangle2D getPanelLeftOf(Rectangle2D p) {
 		double hrange=getHRange();
 		return getPanelLeftOf(p,this.getPanels(),hrange);
 		
 	}
 
+/**finds the panel just left the given panel*/
 public Rectangle2D getPanelLeftOf(Rectangle2D p, Rectangle2D[] panels, double d) {
 	ArrayList<Rectangle2D> possibleLefts = new ArrayList<Rectangle2D> ();
 	for(Rectangle2D p2: panels) {
@@ -117,12 +129,12 @@ public Rectangle2D getPanelLeftOf(Rectangle2D p, Rectangle2D[] panels, double d)
 		if (p2.getX()>p.getX()) continue;
 		if (p2.getY()+p2.getHeight()<=p.getY() || p2.getY()>=p.getY()+p.getHeight()) continue;
 		possibleLefts.add(p2);
-		//return p2;
+		
 	}
 	
 	return new PanelOperations<Rectangle2D>().getNearestPanel(possibleLefts, p);
 	
-	//return null;
+	
 	
 }
 
