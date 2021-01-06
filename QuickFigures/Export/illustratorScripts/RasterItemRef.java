@@ -13,13 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
-
+/**a java class that generates scripts to create and modify a raster item object in 
+adobe illustrator*/
 public class RasterItemRef extends  PlacedItemRef {
 
-	/**when given a referance to an illustrator object with a pathitems collection, creates a script to 
-	 att a new pathitem*/
+	/**when given a referance to an illustrator object with a rasteritems collection, creates a script to 
+	 to store a raster item as a variable*/
 	public String setToLastRaster(ArtLayerRef layer) {
 		String output=getAssignment()+layer.refname+"rasterItems["+layer.refname+".rasterItems.length-1]";
 		addScript(output);

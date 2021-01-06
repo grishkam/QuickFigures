@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 
+/**creates an object in a in a powerpoint slide*/
 public interface OfficeObjectMaker {
 	
 	public Object addObjectToSlide( XMLSlideShow ppt, XSLFShapeContainer slide);

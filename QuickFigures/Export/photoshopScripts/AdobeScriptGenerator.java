@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package photoshopScripts;
 
 
@@ -24,9 +29,9 @@ import java.io.IOException;
 import figureFormat.DirectoryHandler;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
-
-public class ZPhotoshopScriptGenerator {
-	public static ZPhotoshopScriptGenerator instance=new ZPhotoshopScriptGenerator();
+/**this class generates text that can be run in adobe's extended script toolkit for illustrator or poerpoint java script*/
+public class AdobeScriptGenerator {
+	public static AdobeScriptGenerator instance=new AdobeScriptGenerator();
 	double x0=0;
 	double y0=0;
 	double scale=1;
@@ -55,10 +60,6 @@ public class ZPhotoshopScriptGenerator {
 			accumulatedscrip+='\n'+st;
 		}
 	}
-	public static void main(String [ ] args)
-	{
-	
-	}
 	
 	
 	public void execute() {
@@ -79,7 +80,7 @@ public class ZPhotoshopScriptGenerator {
 		output+="app.foregroundColor.rgb.green="+c.getGreen()+'\n';
 		output+="app.foregroundColor.rgb.blue="+c.getBlue()+'\n';
 		addScript(output);
-		//IssueLog.log2("will set photoshop color", output);
+		
 		return output;
 	}
 	public  String setPSbgColor(Color c){

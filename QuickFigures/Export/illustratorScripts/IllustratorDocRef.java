@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 import java.awt.Dimension;
 
+/**a java class that generates scripts to create and modify a document in 
+adobe illustrator*/
 public class IllustratorDocRef extends IllustratorObjectRef {
 
 	

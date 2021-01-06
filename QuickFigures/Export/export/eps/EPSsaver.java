@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.eps;
 
 import java.io.File;
@@ -24,12 +29,12 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.fop.render.ps.EPSTranscoder;
 
-
+/**A class that functions to save a Worksheet as an .eps file*/
 public class EPSsaver extends PDFsaver{
 
 
 	/**
-	 
+	 transcodes a SVG file into an EPS file
 	 */
 	public void transcode(String newpath, File tempFile) throws FileNotFoundException, TranscoderException {
 		EPSTranscoder transcoder = new EPSTranscoder();
@@ -40,9 +45,7 @@ public class EPSsaver extends PDFsaver{
 		transcoder.transcode(transcoderInput, transcoderOutput);
 	}
 	
-	public static void main(String[] args ) {
-		
-	}
+
 	
 	
 	

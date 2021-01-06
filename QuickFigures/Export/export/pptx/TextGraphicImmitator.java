@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
 import java.awt.Color;
@@ -35,9 +40,7 @@ import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
 
-/**implementation of office object maker for text graphics
-  needed to export to Powerpoint using apache poi.
-  TODO: clean up commented code*/
+/**subclass of OfficeObjectMaker that creates a shape in powerpoint*/
 public class TextGraphicImmitator implements OfficeObjectMaker {
 	
 	private TextGraphic t;
@@ -98,12 +101,14 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 
 	}
 	
+	/**location adjustment values that are needed in order for the location in powerpoint to match the current location*/
 	 double leftM=7;
 	 double rightM=7;
 	 
 	 double topM=4.5;
 	 double bottomM=4.5;
 	
+	 /**genrates an anchor rectangle*/
 	public Rectangle2D getRectForAnchor(TextGraphic t) {
 	    
 		 //  Rectangle2D b = t.;//.getBounds();

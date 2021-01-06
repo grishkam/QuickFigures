@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
 import java.awt.geom.Rectangle2D;
@@ -23,13 +28,13 @@ import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 
-public class LayerToOffice implements OfficeObjectMaker {
+/**subclass of OfficeObjectMaker that creates a group in powerpoint*/
+public class GroupToOffice implements OfficeObjectMaker {
 
 	private GraphicGroup layer;
 
-	public LayerToOffice(GraphicGroup p1) {
+	public GroupToOffice(GraphicGroup p1) {
 		layer=p1;
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.svg;
 
 import java.awt.BasicStroke;
@@ -84,7 +89,8 @@ import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
 
-//WORK IN PROGRESS
+//WORK IN PROGRESS nees lot of work
+//currently does not function in an acceptable form
 /**A quick and dirty class to load svg graphics back into quickfigures
    since this is a super sloppy attempt for parsing SVG it only really works with
    files that have been exported from Quickfigures. Does not take into account the full complexity

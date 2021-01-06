@@ -38,7 +38,7 @@ import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import export.pptx.LayerToOffice;
+import export.pptx.GroupToOffice;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import export.svg.SVGExportable;
@@ -470,7 +470,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
-		return new LayerToOffice(this);
+		return new GroupToOffice(this);
 	}
 	
 	/**ungroups the group, replacing it with the objects*/

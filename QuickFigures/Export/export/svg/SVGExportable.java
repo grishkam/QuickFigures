@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.svg;
 
 /**Classes that implements this, return an instance of class SVG exporter
   that adds them to the exported SVG file*/
 public interface SVGExportable {
+	
+	/**returns the SVG exporter responsible for exporting the object*/
 	public SVGExporter getSVGEXporter();
 }

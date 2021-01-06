@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
 import java.io.File;
@@ -28,7 +33,9 @@ import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import illustratorScripts.PlacedItemRef;
+import logging.IssueLog;
 
+/**subclass of OfficeObjectMaker that creates an image panel in powerpoint*/
 public class ImagePanelImmitator implements OfficeObjectMaker {
 	
 	private ImagePanelGraphic imagepanel;
@@ -38,8 +45,9 @@ public class ImagePanelImmitator implements OfficeObjectMaker {
 		
 	}
 
+	/**Adds the image panel to the slide*/
 	@Override
-	public Object addObjectToSlide(XMLSlideShow ppt, XSLFShapeContainer slide) {
+	public XSLFPictureShape addObjectToSlide(XMLSlideShow ppt, XSLFShapeContainer slide) {
 		ImagePanelGraphic ipg=imagepanel;
 		try {
 		;
@@ -58,12 +66,8 @@ public class ImagePanelImmitator implements OfficeObjectMaker {
        f.deleteOnExit();
        return pic;
        
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			IssueLog.logT(e);
 		}
 		
 		return null;

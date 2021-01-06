@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.svg;
 
 import java.awt.Color;
@@ -40,7 +45,7 @@ import textObjectProperties.TextLineSegment;
 public class TextSVGExporter extends SVGExporter {
 
 	private TextGraphic textgra;
-	boolean testSave=true;
+	boolean singleObjectExport=true;
 
 	public TextSVGExporter(TextGraphic t) {
 		this.textgra=t;
@@ -54,7 +59,7 @@ public class TextSVGExporter extends SVGExporter {
 		boolean complex=textgra instanceof ComplexTextGraphic;
 		ComplexTextGraphic comp=null;
 		
-		if (complex &&!testSave) {//exports each line as a distinct object
+		if (complex &&!singleObjectExport) {//exports each line as a distinct object
 			GraphicLayerPane units = ((ComplexTextGraphic) textgra).getBreakdownGroup();
 			return units.getSVGEXporter().toSVG(dom, e);
 		}
@@ -107,7 +112,7 @@ public class TextSVGExporter extends SVGExporter {
 			comp=(ComplexTextGraphic) textgra;
 			
 			TextLine line = comp.getParagraph().get(0);
-			//for(int i=1; i<line.size();i++) {createTextSpan(text, line.get(i), dom, false, g2d);}
+			
 			for(int i=0; i<comp.getParagraph().size();i++) {
 				line = comp.getParagraph().get(i);
 				for(int i2=0; i2<line.size();i2++) {
@@ -173,17 +178,6 @@ public class TextSVGExporter extends SVGExporter {
 	}
 	
 	
-	/**opens a display. exports as svg then asks desktop to open the saved file*/
-	public static void main(String[] arts) throws TransformerException, ParserConfigurationException, IOException {
-		ImageWindowAndDisplaySet ex = ToolbarTester.showExample(true);
-		String path="/Users/mazog/Desktop/test2.svg";
-		  new SVGsaver().saveFigure(path, ex);
-		
-		
-		Desktop.getDesktop().open(new File(path));
-		
-		
-	  
-	}
+
 
 }

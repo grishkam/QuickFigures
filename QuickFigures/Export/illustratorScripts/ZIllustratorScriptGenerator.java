@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 import java.awt.Desktop;
@@ -24,6 +29,7 @@ import java.io.IOException;
 import figureFormat.DirectoryHandler;
 import logging.IssueLog;
 
+/**this class generates text that can be run in an adobe illustrator java script*/
 public class ZIllustratorScriptGenerator {
 	
 	public static ZIllustratorScriptGenerator instance=new ZIllustratorScriptGenerator();

@@ -13,8 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
+/**An interface for objects that may be recreated in a powerpoint slide*/
 public interface OfficeObjectConvertable {
 	public OfficeObjectMaker getObjectMaker();
 }

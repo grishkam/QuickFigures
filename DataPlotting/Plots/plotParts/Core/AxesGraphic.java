@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dialogs.AxisDialog;
-import export.pptx.LayerToOffice;
+import export.pptx.GroupToOffice;
 import export.pptx.OfficeObjectMaker;
 import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
@@ -686,7 +686,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
-		return new LayerToOffice(breakToGroup());
+		return new GroupToOffice(breakToGroup());
 	}
 	
 	

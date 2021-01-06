@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.svg;
 
 import org.w3c.dom.Document;
@@ -32,37 +37,33 @@ public class SVGExporter_GraphicLayer extends SVGExporter {
 		this.layer=g;
 	}
 	
-	
+	/**Adds elements for the layer and its content to the dom tree*/
 public Element toSVG(Document dom, Element e) {
-	Element element = dom.createElement("g");
-	e.appendChild(element);
-	element.setAttribute("id",layer.getName());
-	
-	
-	
-	for(ZoomableGraphic z: layer.getItemArray()) try {
-    	if (z instanceof SVGExportable) {
-    		SVGExportable exs=(SVGExportable) z;
-    		exs.getSVGEXporter().toSVG(dom, element);
-    	}
-	
-	
-	
-	} catch (Throwable t) {
-		IssueLog.log("Problem occured when try to export "+z);
-		if (t instanceof ClassNotFoundException) {
-			ShowMessage.showOptionalMessage("Missing class", false, "looks like part of batik is missing. Make sure you have Batik installed correctly");
-		}
-		IssueLog.logT(t);
-	}
-	
-	return element;
+			Element element = dom.createElement("g");
+			e.appendChild(element);
+			element.setAttribute("id",layer.getName());
+			
+			
+			
+			for(ZoomableGraphic z: layer.getItemArray()) try {
+		    	if (z instanceof SVGExportable) {
+		    		SVGExportable exs=(SVGExportable) z;
+		    		exs.getSVGEXporter().toSVG(dom, element);
+		    	}
+			
+			
+			
+			} catch (Throwable t) {
+				IssueLog.log("Problem occured when try to export "+z);
+				if (t instanceof ClassNotFoundException) {
+					ShowMessage.showOptionalMessage("Missing class", false, "looks like part of batik is missing. Make sure you have Batik installed correctly");
+				}
+				IssueLog.logT(t);
+			}
+			
+			return element;
 	}
 
-public static void main(String[] args) {
-	//.getWriterFor();
-	
-	//IssueLog.log(ImageWriterRegistry.getInstance().getWriterFor("image/png"));
-}
+
 
 }

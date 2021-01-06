@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 
@@ -20,7 +25,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import logging.IssueLog;
-
+/**a java class that generates scripts to create and modify a text frame item object in 
+adobe illustrator*/
 public class TextFrame extends IllustratorObjectRef {
 	
 	CharAttributesRef charat=null;

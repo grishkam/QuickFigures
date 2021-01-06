@@ -13,15 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
 import graphicalObjects_Shapes.ShapeGraphic;
 
+/**subclass of OfficeObjectMaker that creates a path in powerpoint*/
 public class PathGraphicToOffice extends ShapeToOffice implements OfficeObjectMaker {
 
 	public PathGraphicToOffice(ShapeGraphic p1) {
 		super(p1);
-		// TODO Auto-generated constructor stub
 	}
 
 	

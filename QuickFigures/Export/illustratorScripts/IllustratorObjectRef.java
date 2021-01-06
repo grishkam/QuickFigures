@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 import java.awt.Color;
@@ -20,7 +25,8 @@ import java.awt.geom.Point2D;
 
 import locatedObject.RectangleEdgePositions;
 
-
+/**a java class that generates scripts to create and modify an object in 
+adobe illustrator*/
 public class IllustratorObjectRef implements RectangleEdgePositions{
 	
 	boolean addScripts=true;

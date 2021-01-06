@@ -13,8 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
+/**a java class that generates scripts to create and modify a raster effect object in 
+adobe illustrator*/
 public class RasterEffectOpsRef extends IllustratorDocRef {
 
 	public String setToDocument(IllustratorDocRef ref) {

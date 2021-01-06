@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.svg;
 
 import java.awt.Color;
@@ -27,22 +32,29 @@ import logging.IssueLog;
 
 /**A class that transforms a QuickFigures objects into svg items for export*/
 public abstract class SVGExporter {
+	boolean logattributes=true;
+	
 	public abstract Element toSVG(Document dom, Element e) ;
 	
+	/**Adds the SVG descriptor to the element*/
 	public void addSVGDescriptor(SVGDescriptor d, Element element) {
 		Map<?,?> map2 = d.getAttributeMap(new HashMap<String,String> ());
 		addAttributeMap(map2, element);
 	}
 	
+	/**Adds an attribute map to the elment*/
 	public void addAttributeMap(Map<?,?> map2 , Element element) {
 		for(Object  key:map2.keySet() ) {
 			element.setAttribute(key+"", ""+map2.get(key));
-			IssueLog.log("Key "+key);
-			IssueLog.log("value "+map2.get(key));
+			if (this.logattributes) {
+				IssueLog.log("Key "+key);
+				IssueLog.log("value "+map2.get(key));
+			}
 		}
 		
 	}
 	
+	/**Adds an attribute describing a color to the element*/
 	public void  setColorString(Element element, String st, String opacity, Color c) {
 		element.setAttribute(st, "rgb("+c.getRed()+","+c.getGreen()+","+c.getBlue()+")");
 		element.setAttribute(opacity, ""+c.getAlpha()/(255.00));

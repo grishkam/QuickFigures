@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.eps;
 
 import java.io.File;
@@ -48,30 +53,19 @@ public class PDFsaver {
 		
 		try {
 			CombinedEdit ce=new CombinedEdit() ;
-			boolean notUsedFont=false;
-			ArrayList<LocatedObject2D> all = diw.getImageAsWrapper().getLocatedObjects();
-			for(LocatedObject2D a: all) {
-				if(a instanceof TextGraphic) {
-					TextGraphic t = (TextGraphic) a;
-					if(t.getFont().getFamily().equals("Arial")) {
-						//Arial font does not export properly to pdf or eps with the library used. Instead of embedding it as a custom font, will be replaced by helvetica. See 'https://xmlgraphics.apache.org/fop/0.95/fonts.html' for some details about the fonts available
-						ce.addEditToList(new UndoTextEdit(t));
-						t.setFontFamily("Helvetica");
-						
-						notUsedFont=true;
-					}
-				}
-			}
+			
+			boolean notUsedFont = fixfonts(diw, ce);
 			
 			
-			
+			/**creates a temporary file*/
 			String tempPath = DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/temp.svg";
-			IssueLog.log(tempPath);
 			File tempFile = new File(tempPath);
 			if(tempFile.exists()) tempFile.delete();
+			
+			/**saves the figure in the temp file as an svg*/
 			new SVGsaver().saveFigure(tempPath, diw);
 			
-			
+			/**transcodes the svg file into a pdf*/
 			transcode(newpath, tempFile);
 			
 			
@@ -92,8 +86,34 @@ public class PDFsaver {
 		}
 	}
 
+
+	/**Alters certain fonts into vertains that are suitable for export
+	 * @param diw the target image
+	 * @param ce
+	 * @return whether font changes were made
+	 */
+	private boolean fixfonts(DisplayedImage diw, CombinedEdit ce) {
+		boolean notUsedFont=false;
+		
+		ArrayList<LocatedObject2D> all = diw.getImageAsWrapper().getLocatedObjects();
+		for(LocatedObject2D a: all) {
+			if(a instanceof TextGraphic) {
+				TextGraphic t = (TextGraphic) a;
+				if(t.getFont().getFamily().equals("Arial")) {
+					//Arial font does not export properly to pdf or eps with the library used. Instead of embedding it as a custom font, will be replaced by helvetica. See 'https://xmlgraphics.apache.org/fop/0.95/fonts.html' for some details about the fonts available
+					ce.addEditToList(new UndoTextEdit(t));
+					t.setFontFamily("Helvetica");
+					
+					notUsedFont=true;
+				}
+			}
+		}
+		return notUsedFont;
+	}
+
+
 	/**
-	 
+	 transcodes a SVG file into an PDF file
 	 */
 	public void transcode(String newpath, File tempFile) throws FileNotFoundException, TranscoderException {
 		org.apache.fop.svg.PDFTranscoder transcoder = new PDFTranscoder();
@@ -104,9 +124,7 @@ public class PDFsaver {
 		transcoder.transcode(transcoderInput, transcoderOutput);
 	}
 	
-	public static void main(String[] args ) {
-		
-	}
+
 	
 	
 	

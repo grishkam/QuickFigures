@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 import java.awt.BasicStroke;
@@ -27,6 +32,8 @@ import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import logging.IssueLog;
 
+/**a java class that generates scripts to create and modify a path item object in 
+adobe illustrator*/
 public class PathItemRef extends IllustratorObjectRef {
 	
 	boolean set=false;

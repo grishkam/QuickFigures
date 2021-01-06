@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.pptx;
 
 import java.awt.BasicStroke;
@@ -29,10 +34,10 @@ import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import graphicalObjects_Shapes.ShapeGraphic;
 import logging.IssueLog;
 
+/**subclass of OfficeObjectMaker that creates a shape in powerpoint*/
 public class ShapeToOffice  implements OfficeObjectMaker{
 
 
-	//protected ShapeGraphic pathGraphic;
 ShapeGraphic shape=null;
 	
 public ShapeToOffice(ShapeGraphic p1) {
@@ -44,7 +49,7 @@ public ShapeToOffice(ShapeGraphic p1) {
 	}
 	
 
-	
+	/**sets the fill color dashes and other traits of the powerpoint shape to match the shape graphic*/
 	public void matchShapeTraits(org.apache.poi.xslf.usermodel.XSLFSimpleShape shape, ShapeGraphic pathGraphic) {
 		
 		
@@ -76,6 +81,7 @@ public ShapeToOffice(ShapeGraphic p1) {
 	        
 	}
 	
+	/**Creates a shape in the powerpoint slide*/
 	@Override
 	public XSLFFreeformShape addObjectToSlide(XMLSlideShow ppt, XSLFShapeContainer slide) {
 		
@@ -87,6 +93,7 @@ public ShapeToOffice(ShapeGraphic p1) {
 		
 	}
 	
+	/**makes the given powerpoint object matche the target shape*/
 	public void createOnFreeForm(XSLFFreeformShape freeshape) {
 		Shape path = this.shape.getShape();
 	
@@ -105,9 +112,9 @@ public ShapeToOffice(ShapeGraphic p1) {
 				//path2.closePath();
 				
 				IssueLog.log("may have issues with strait lines");
-				//freeshape.set
-				}
-		//}
+				
+			}	
+		
         matchShapeTraits(freeshape, this.shape);
 	}
 

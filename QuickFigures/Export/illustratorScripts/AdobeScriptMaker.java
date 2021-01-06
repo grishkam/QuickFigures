@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 import java.awt.Color;
@@ -33,18 +38,19 @@ import applicationAdapters.PixelWrapper;
 import graphicalObjects.FigureDisplayWorksheet;
 import logging.IssueLog;
 import messages.ShowMessage;
-import photoshopScripts.ZPhotoshopScriptGenerator;
+import photoshopScripts.AdobeScriptGenerator;
 import ultilInputOutput.FileChoiceUtil;
 
+/**A class that generates liens of javascript code for an Adobe extened script toolkit*/
 public class AdobeScriptMaker {
 
-	/**there is a bug in here that makes it ask for a file*/
+	
 	public static ArtLayerRef aref;
 	
 	/**the evantual resolution of images the go to illustrator and photosho*/
 	public int ppiResolution=(int) ImageDPIHandler.idealPanelPixelDesity();
 	
-	public ZPhotoshopScriptGenerator sgen=new ZPhotoshopScriptGenerator();
+	public AdobeScriptGenerator sgen=new AdobeScriptGenerator();
 	public  int x0=0;
 	public  int y0=0;
 	public  void setZero(Point pt){int x=(int) pt.getX();int y=(int) pt.getY(); setZero(x,y);}
@@ -193,7 +199,6 @@ public class AdobeScriptMaker {
 			private boolean correct=true;
 			private double performFontsizeCorrection(Font font) {
 				if (!correct) return font.getSize();
-				//IssueLog.log("Adjusting fontsize to account of resolution", "ImageJ fonntsize is "+font.getSize(), "input font size will be"+fontsize, "Photoshop is expected to convert the fontsize based on the ppi");
 				return (font.getSize()*(((double) 72)/ppiResolution));
 			}
 			/**generates a photoshop script to create a new text item in photoshop. It then plates it at position x,y relative to the zero point.
@@ -205,8 +210,7 @@ public class AdobeScriptMaker {
 				String fontsize="new UnitValue( '"+font.getSize()+ " px"+"' )";
 				fontsize=""+performFontsizeCorrection(font) ;
 
-				//int fontsize=font.getSize();
-			
+				
 				String javascript=
 					"var isItVeritcal="+(Vertical? "Direction.VERTICAL":"Direction.HORIZONTAL")+";"+'\n'+
 					"var isItBold="+(font.getStyle()==7)+";"+'\n'+

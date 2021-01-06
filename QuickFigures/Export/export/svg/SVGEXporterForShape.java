@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package export.svg;
 
 import java.awt.Color;
@@ -24,7 +29,8 @@ import org.w3c.dom.Element;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 
-/**An SVG exporter for shapes*/
+/**An SVG exporter for shapes. works somewhat differently in the special case
+ * of scale bars*/
 public class SVGEXporterForShape extends SVGExporter {
 
 	private ShapeGraphic shape;
@@ -49,7 +55,6 @@ public Element toSVG(Document dom, Element e) {
 	
 	SVGGeneratorContext context = SVGGeneratorContext.createDefault(dom);
 	SVGGraphics2D gra2D = new SVGGraphics2D(dom);
-	//DOMTreeManager treman = gra2D.getDOMTreeManager();
 	
 	Color c=shape.getStrokeColor();
 	if(scaleBar) shape.setStrokeWidth(0);
@@ -71,10 +76,7 @@ public Element toSVG(Document dom, Element e) {
 	
 	addSVGDescriptor( strokesvg, element);
 	
-	//gra2D.setColor(this.getStrokeColor());;
-	//SVGColor storkeColor = new SVGColor(context);
-	//SVGDescriptor to = storkeColor.toSVG(gra2D.getGraphicContext());
-	//strokeColor=getStrokeColor();
+	
 	element.setAttribute("id", shape.getName());
 	SVGPaintDescriptor fillpaint = new SVGPaint(context).toSVG(shape.getFillColor());
 	
@@ -89,6 +91,11 @@ public Element toSVG(Document dom, Element e) {
 	
 	
 	}
+
+	//gra2D.setColor(this.getStrokeColor());;
+	//SVGColor storkeColor = new SVGColor(context);
+	//SVGDescriptor to = storkeColor.toSVG(gra2D.getGraphicContext());
+	//strokeColor=getStrokeColor();
 
 	
 }

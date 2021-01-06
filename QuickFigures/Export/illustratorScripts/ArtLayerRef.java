@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package illustratorScripts;
 
 public class ArtLayerRef extends IllustratorObjectRef {
@@ -27,17 +32,7 @@ public class ArtLayerRef extends IllustratorObjectRef {
 		addScript(output);
 		return output;
 	}
-	
-	/**sets this object to the current art layer
-	public String settoCurrentLayerRef(IllustratorDocRef document) {
-		String output="";
-		if (!document.set) output+= document.setReftoActiveDocument()+'\n'; 
-		output+="var "+refname+" ="+ document.refname+currentLayer;
-		addScript(output);
-		return output;
 		
-	}*/
-	
 	
 	public ArtLayerRef createSubRef() {
 		String script="";
