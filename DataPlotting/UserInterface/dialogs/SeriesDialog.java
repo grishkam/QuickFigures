@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import genericPlot.BasicDataSeriesGroup;
 import objectDialogs.LayerPaneDialog;
 import standardDialog.numbers.NumberInputPanel;
 
+/**shows a dialog for editing properties of data series*/
 public class SeriesDialog extends LayerPaneDialog {
 
 	/**

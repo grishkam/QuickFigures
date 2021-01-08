@@ -13,22 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotCreation;
 
 import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import kaplanMeierPlots.KM_Plot;
 import logging.IssueLog;
 
-public class KaplanMeierPlotCreator implements PlotCreator<KaplenMeierDataSeries> {
+/**An implementation of plot creator for Kaplan Meier plots*/
+public class KaplanMeierPlotCreator implements PlotCreator<KaplanMeierDataSeries> {
 	
-	private int type;
+	
 
-	public KaplanMeierPlotCreator(int type) {
-		this.type=type;
+	public KaplanMeierPlotCreator() {
+		
 	}
 
 	@Override
@@ -36,7 +42,7 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplenMeierDataSeries
 		return "Kaplan-Meier Plot";
 	}
 	
-	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImage diw) {
+	public void createPlot(String name, ArrayList<KaplanMeierDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
@@ -46,7 +52,7 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplenMeierDataSeries
 		}
 		KM_Plot plot=new KM_Plot(name, items);
 		
-		if (type==0)  plot.defaultPlot();
+		plot.defaultPlot();
 		
 		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.util.ArrayList;
@@ -20,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+/**An abstract superclass for storing data that is part of a plot*/
 public abstract class AbstractDataSeries implements DataSeries {
 
 	/**
@@ -148,7 +154,7 @@ public abstract class AbstractDataSeries implements DataSeries {
 			
 		}
 		allUniquePositions=allPositions;
-		//return getUniquePositions();
+		
 	}
 
 

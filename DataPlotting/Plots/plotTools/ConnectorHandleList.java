@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
  */
 package plotTools;
 
@@ -28,7 +29,6 @@ import handles.SmartHandleList;
 /**
 A handle list for moving the anchor points of a connector 
 @see ConnectorGraphic
-
  */
 public class ConnectorHandleList extends SmartHandleList{
 
@@ -76,6 +76,7 @@ public class ConnectorHandle extends SmartHandle {
 	@Override
 	public
 	Point2D getCordinateLocation() {
+		if(target==1) return new Point2D.Double(0.5*(connector.getAnchors()[0].getX()+connector.getAnchors()[2].getX()), connector.getAnchors()[1].getY());
 		return connector.getAnchors()[target];
 	}
 	

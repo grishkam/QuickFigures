@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package undoForPlots;
 
 import plotParts.DataShowingParts.Boxplot;
@@ -22,6 +27,8 @@ import plotParts.DataShowingParts.ErrorBarShowingShape;
 import plotParts.DataShowingParts.ScatterPoints;
 import undo.AbstractUndoableEdit2;
 
+/**An undoable edit for changes to the traits of the shape objects 
+ * that dipict ploted data*/
 public class DataShapeUndo extends AbstractUndoableEdit2 {
 
 	/**

@@ -13,20 +13,32 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.io.Serializable;
 
+/**The axes of some plots skip over a particular range
+ * this class defines the properties of a 'gap' in the plot.
+ * */
 public class Gap implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**where does the gap start*/
 	double start;
+	
+	/**the distance from the start of the gap to the end*/
 	double size;
 	
-	public double markerTicWidth=14;
-	public double gapMarkerHeight=4;
+	/**the size of the marker for the gap*/
+	double markerTicWidth=14;
+	double gapMarkerHeight=4;
 	
 	public Gap copy() {
 		Gap g = new Gap(start, size);
@@ -34,6 +46,7 @@ public class Gap implements Serializable {
 		return g;
 	}
 	
+	/**copies the properties of this gap*/
 	public void copyFrom(Gap gap) {
 		start=gap.start;
 		size=gap.size;
@@ -56,17 +69,22 @@ public class Gap implements Serializable {
 		return false;
 	}
 
+	/**returns the start position for the gap*/
 	public double location() {
 		return start;
 	} 
+	
+	/**sets the start position for the gap*/
 	public void setLocation(double s) {
 		start=s;
 	}
 
+	/**return the distance that is skipped over*/
 	public double getSize() {
 		return size;
 	}
 
+	/**sets what distance is skipped over*/
 	public void setSize(double size) {
 		this.size = size;
 	}

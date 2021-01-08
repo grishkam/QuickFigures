@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import plotParts.DataShowingParts.ScatterPoints;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 
+/**shows a dialog for editing scatter point objects*/
 public class ScatterPointsDialog  extends PointOptionsDialog {
 
 	/**

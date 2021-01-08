@@ -13,11 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**objects that contain the data for plots implement
+ * this interface. */
 public interface DataSeries extends Serializable {
 
 	public Basic1DDataSeries getIncludedValues();
@@ -48,6 +55,5 @@ public interface DataSeries extends Serializable {
 	
 	public HashMap<Double, Double> getValueOffsetMap();
 
-	//public ArrayList<DataPoint> getIncludedPoints();
 	 
 }

@@ -13,12 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class KaplenMeierDataSeries implements DataSeries {
+/**A data series for survival data*/
+public class KaplanMeierDataSeries implements DataSeries {
 
 	/**
 	 * 
@@ -32,9 +38,9 @@ public class KaplenMeierDataSeries implements DataSeries {
 	private double pOff;
 
 	private String name="Kaplan-Meier";
-	public KaplenMeierDataSeries() {}
+	public KaplanMeierDataSeries() {}
 	
-	public KaplenMeierDataSeries(String name2, ArrayList<KaplenMeierDataPoint> nums) {
+	public KaplanMeierDataSeries(String name2, ArrayList<KaplenMeierDataPoint> nums) {
 		name=name2;
 		data=nums;
 		
@@ -48,8 +54,8 @@ public class KaplenMeierDataSeries implements DataSeries {
 		}
 	}
 
-	public static KaplenMeierDataSeries createExampleData() {
-		KaplenMeierDataSeries out = new KaplenMeierDataSeries();
+	public static KaplanMeierDataSeries createExampleData() {
+		KaplanMeierDataSeries out = new KaplanMeierDataSeries();
 		out.setName("Example data 1");
 		out.studyEnd=500;
 		out.data.add(new KaplenMeierDataPoint(450, false));
@@ -70,8 +76,8 @@ public class KaplenMeierDataSeries implements DataSeries {
 		return out;
 	}
 	
-	public static KaplenMeierDataSeries createExampleData2() {
-		KaplenMeierDataSeries out = new KaplenMeierDataSeries();
+	public static KaplanMeierDataSeries createExampleData2() {
+		KaplanMeierDataSeries out = new KaplanMeierDataSeries();
 		out.studyEnd=500;
 		out.setName("Example data 2");
 		out.data.add(new KaplenMeierDataPoint(450, false));
@@ -246,7 +252,7 @@ public class KaplenMeierDataSeries implements DataSeries {
 	
 	public String getName() {return name;}
 
-	public void replaceData(KaplenMeierDataSeries novel) {
+	public void replaceData(KaplanMeierDataSeries novel) {
 		data=novel.data;
 		matchStudyEndToDataEnd(novel.data);
 	}

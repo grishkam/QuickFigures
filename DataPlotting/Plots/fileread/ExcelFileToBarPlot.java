@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fileread;
 
 import java.io.File;
@@ -23,19 +28,19 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
-import plotCreation.columnPlotCreator;
+import logging.IssueLog;
+import plotCreation.ColumnPlotCreator;
 
+/**implements a menu item to build a barplot from an excel file*/
 public class ExcelFileToBarPlot extends  ExcelDataImport{
 
 	
 	
-	private columnPlotCreator creator;
+	private ColumnPlotCreator creator;
 
 
-
-
-	public ExcelFileToBarPlot(int t) {
-		creator=new columnPlotCreator(t);
+	public ExcelFileToBarPlot(int plotType) {
+		creator=new ColumnPlotCreator(plotType);
 	}
 	
 	
@@ -64,22 +69,18 @@ public class ExcelFileToBarPlot extends  ExcelDataImport{
 			createPlot(name, items2, diw);
 		
 		} catch (InvalidFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 	}
 
-
-	
-	
+	/**prompts the user to select a file and returns the data series from that file*/
 	public ColumnDataSeries[]  getDataFromFile() {
 		File f=getFileAndaddExtension();
 		ColumnDataSeries[] items=null;
 		try {
 			items = ReadExcelData.read(f.getAbsolutePath());
 		} catch (InvalidFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		return items;
 	}

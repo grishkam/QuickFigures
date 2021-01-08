@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import java.util.ArrayList;
@@ -23,24 +28,37 @@ import plotParts.Core.PlotAreaRectangle;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.StandardDialog;
 
+/**A multi selection operator that displays a dialog for many 
+ * one among a few types of objects*/
 public class DataShapeSyncer extends BasicMultiSelectionOperator{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public int type=0;
+	
+	public static final int
+		Data_Bar=0,
+		Error_Bar=1,
+		Scatter_Point=2,
+		Boxplot=3,
+		Colors_and_styles=4,
+		Censor_Marks=5
+		;
+	
+	
+	public int type=Data_Bar;
 	
 	public DataShapeSyncer(int t) {type=t;}
 
 	@Override
 	public String getMenuCommand() {
-		if (type==0) return "Data Bar Options";
-		if (type==1) return "Error Bar Options";
-		if (type==2) return "Scatter Points Options";
-		if (type==3) return "Boxplot Options";
-		if (type==4) return "Colors and Styles";
-		if (type==5) return "Censor Marks of Kaplan-Meier Plot";
+		if (type==Data_Bar) return "Data Bar Options";
+		if (type==Error_Bar) return "Error Bar Options";
+		if (type==Scatter_Point) return "Scatter Points Options";
+		if (type==Boxplot) return "Boxplot Options";
+		if (type==Colors_and_styles) return "Colors and Styles";
+		if (type==Censor_Marks) return "Censor Marks of Kaplan-Meier Plot";
 		return "Set plot data shape Options";
 	}
 	
@@ -48,12 +66,12 @@ public class DataShapeSyncer extends BasicMultiSelectionOperator{
 	@Override
 	public void run() {
 		StandardDialog mt=null;
-		if (type==0) mt = new MeanBarDialog(getArrayOfAllItems());
-		if (type==1) mt = new ErrorBarDialog(getArrayOfAllItems());
-		if (type==2) mt = new ScatterPointsDialog(getArrayOfAllItems());
-		if (type==3) mt = new BoxPlotDialog(getArrayOfAllItems());
-		if (type==4) mt=SeriesStyleDialog.createForPlotsInList(getArrayOfAllItems());
-		if (type==5) mt=new CensorMarkDialog(getArrayOfAllItems());
+		if (type==Data_Bar) mt = new MeanBarDialog(getArrayOfAllItems());
+		if (type==Error_Bar) mt = new ErrorBarDialog(getArrayOfAllItems());
+		if (type==Scatter_Point) mt = new ScatterPointsDialog(getArrayOfAllItems());
+		if (type==Boxplot) mt = new BoxPlotDialog(getArrayOfAllItems());
+		if (type==Colors_and_styles) mt=SeriesStyleDialog.createForPlotsInList(getArrayOfAllItems());
+		if (type==Censor_Marks) mt=new CensorMarkDialog(getArrayOfAllItems());
 		if (mt!=null&&mt.hasContent()) mt.showDialog();
 	}
 

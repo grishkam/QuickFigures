@@ -49,7 +49,7 @@ public class FigureLegendShape extends RectangularGraphic implements SeriesLabel
 	}
 	
 	void update() {
-		if (series.getDataBar()!=null&&series.getDataBar().getBarType()==DataBarShape.Bar){
+		if (series.getDataBar()!=null&&series.getDataBar().getBarType()==DataBarShape.DATA_BAR_SHAPE){
 			this.type=BAR_TYPE;
 			this.copyColorsFrom(series.getDataBar());
 		} else 

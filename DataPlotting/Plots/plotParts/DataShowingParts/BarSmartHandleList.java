@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
  */
 package plotParts.DataShowingParts;
 
@@ -29,8 +30,7 @@ import handles.SmartHandleList;
 import locatedObject.RectangleEdges;
 
 /**
- 
- * 
+A handle list with a special handle for the width of bars
  */
 public class BarSmartHandleList extends SmartHandleList {
 
@@ -51,8 +51,7 @@ public class BarSmartHandleList extends SmartHandleList {
 	}
 	
 	/**
-	 
-	 * 
+	 a handle used to alter the width of data bars
 	 */
 public class BarWidthSmartHandle extends SmartHandle {
 

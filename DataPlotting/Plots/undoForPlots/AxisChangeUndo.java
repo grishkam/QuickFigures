@@ -13,13 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package undoForPlots;
 
 import genericPlot.BasicDataSeriesGroup;
 import undo.AbstractUndoableEdit2;
 
 
-/**an undo for switching between primary and secondary y axis*/
+/**an undo for switches of a data series between primary and secondary y axis*/
 public class AxisChangeUndo extends AbstractUndoableEdit2 {
 
 	/**

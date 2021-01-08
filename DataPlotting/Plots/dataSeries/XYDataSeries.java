@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**a data seris for an x,y plot*/
 public class XYDataSeries extends AbstractDataSeries{
 	
 	
@@ -121,29 +127,11 @@ public class XYDataSeries extends AbstractDataSeries{
 
 
 
-	public static void main(String[] args) {
-	/**	File f=new ExcelFileToBarPlot(0).getFileAndaddExtension();
-		System.out.println(f.getAbsolutePath());
-		InputStream inp;
-		try {
-			inp = new FileInputStream(f.getAbsolutePath());
-			Workbook wb = WorkbookFactory.create(inp);
-			ArrayList<XYDataSeries> xyData = ReadExcelData.extractXYDataSeriesF(wb);
-			xyData.get(0).getAllPositions();
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    //InputStream inp = new FileInputStream("workbook.xlsx");
-*/
-	    
-	    
-	}
+
 
 	@Override
 	public HashMap<Double, Double> getValueOffsetMap() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.awt.Rectangle;
@@ -20,6 +25,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
+/**this class performs computations to determine the physical location
+  that corresponds to a data value on the plot*/
 public class PlotCordinateHandler implements Serializable {
 
 	/**
@@ -52,7 +59,7 @@ public class PlotCordinateHandler implements Serializable {
 		return this.translate(2, 0,0,0).distance(this.translate(1, 0,0,0));
 	}
 	
-	
+	/**translates a position and value into an x,y location*/
 	public Point2D.Double translate(double position, double value, double positionOffset,  double valueOffset)
 		{
 		if (this.vertical) {
@@ -67,7 +74,8 @@ public class PlotCordinateHandler implements Serializable {
 		
 		}
 
-	/**returns true if the data point can be plotted with the current axis*/
+	/**returns true if the data point can be plotted with the current axis
+	 * TODO: edit to account for gaps*/
 	public boolean isPointWithinPlot(double position, double value) {
 		Double point = this.translate(position, value, 0, 0);
 		Rectangle b = getPlotArea();

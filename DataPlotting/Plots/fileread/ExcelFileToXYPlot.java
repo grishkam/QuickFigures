@@ -30,8 +30,11 @@ public class ExcelFileToXYPlot extends ExcelDataImport{
 
 	private XYPlotCreator creator;
 
+	public ExcelFileToXYPlot() {
+		this(XYPlotCreator.xyPlotForm.DefaultForm);
+	}
 
-	public ExcelFileToXYPlot(int t) {
+	public ExcelFileToXYPlot(XYPlotCreator.xyPlotForm t) {
 		creator=new XYPlotCreator(t);
 	}
 	@Override

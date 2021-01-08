@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import java.util.ArrayList;
@@ -28,6 +33,7 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorDimmingBox;
 
+/**shows a dialog for editing the style of a data series*/
 public class SeriesStyleDialog extends StandardDialog {
 
 	/**

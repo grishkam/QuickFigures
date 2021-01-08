@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotTools;
 
 import java.awt.Color;
@@ -45,6 +50,7 @@ import storedValueDialog.UserChoiceField;
 import undo.UndoAddItem;
 import utilityClasses1.ArraySorter;
 
+/**a tool for t tests on plots, */
 public class TTestTool extends BasicPlotTool {
 	{
 		{super.iconSet=IconWrappingToolIcon.createIconSet(new PlotToolIcon());}

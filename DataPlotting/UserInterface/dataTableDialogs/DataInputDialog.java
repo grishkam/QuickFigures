@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
 import java.util.ArrayList;
@@ -24,6 +29,7 @@ import dataSeries.Basic1DDataSeries;
 import standardDialog.GriddedPanel;
 import standardDialog.StandardDialog;
 
+/**A simple dialog that prompts the user to input data*/
 public class DataInputDialog extends StandardDialog{
 
 	/**
@@ -46,7 +52,7 @@ public class DataInputDialog extends StandardDialog{
     
 	}
 	
-	public static Basic1DDataSeries getUserData(String starting) {
+	private static Basic1DDataSeries getUserData(String starting) {
 		DataInputDialog d = new DataInputDialog(starting);
 		d.showDialog();
 		
@@ -84,9 +90,6 @@ public class DataInputDialog extends StandardDialog{
 		return output;
 	}
 	
-	public static void main(String[] args) {
-		
-	}
 	
 	
 

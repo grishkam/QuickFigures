@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.Rectangle;
@@ -28,6 +33,7 @@ import graphicalObjects_Shapes.RegularPolygonGraphic;
 import locatedObject.RectangleEdges;
 import plotParts.DataShowingParts.ScatterPoints.plotPoint;
 
+/**class stores information regarding the shape used to draw points */
 public class PointModel implements Serializable{
 
 	/**
@@ -35,11 +41,11 @@ public class PointModel implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private  RectangularGraphic modelShape=new  RegularPolygonGraphic(new Rectangle(-2,-2,3,3));
-	private int pType;
+	private int pointType;
 	private double nSides;
 	
 	public int getPointType() {
-		return pType;
+		return pointType;
 	}
 
 
@@ -69,7 +75,7 @@ public class PointModel implements Serializable{
 
 
 	public void setPointType(int choiceIndex) {
-		pType=choiceIndex;
+		pointType=choiceIndex;
 	}
 	public void setPointSize(double number) {
 		this.getModelShape().setHeight(number);

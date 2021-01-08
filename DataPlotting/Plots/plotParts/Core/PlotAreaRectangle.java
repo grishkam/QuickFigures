@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.awt.Color;
@@ -66,9 +71,9 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		super.draw(graphics, cords);	
 	}
 	
-	
+	/**A user cannot drag a plot area directly, returns locked*/
 	public int isUserLocked() {
-		return 1;
+		return LOCKED;
 	}
 	
 	public Rectangle2D.Double getRectangle() {
@@ -76,6 +81,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		return super.getRectangle();
 	}
 	
+	/**returns a menu for the plot area*/
 	public PopupMenuSupplier getMenuSupplier(){
 		GraphicLayer par = this.getParentLayer();
 		if (par instanceof HasUniquePopupMenu) {
@@ -87,6 +93,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 			}
 		return null;
 		}
+	
 	
 	public void showOptionsDialog() {
 		new SpecialOptionDialog(this).showDialog();
@@ -117,13 +124,15 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		
 	}
 	
+	/**An options dialog for a plot area*/
 	class SpecialOptionDialog extends RectangleGraphicOptionsDialog {
 
 		public SpecialOptionDialog(RectangularGraphic s) {
 			super(s, false);
-			// TODO Auto-generated constructor stub
+			
 		}
 
+		/**updates the plot after items are set*/
 		protected void setItemsToDiaog() {
 			super.setItemsToDiaog();
 		//	plotArea.setAreaDims(getNumber("width"), getNumber("height"));
@@ -180,27 +189,20 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	/**draws the handles*/
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		super.drawHandesSelection(g2d, cords);
-		/**if (selected) {
-		Point2D c = RectangleEdges.getLocation(CENTER, getRectangle());
-		Point2D c2 = cords.getAfflineTransform().transform(c, null);
 		
-		Rectangle r = new Rectangle(0, 0, 25, 25);
-		 RectangleEdges.setLocation(r, CENTER, c2.getX(), c2.getY());
-		 g2d.setColor(Color.white);
-		 g2d.fill(r);
-		 g2d.setColor(Color.black);
-		 g2d.draw(r);
-		 super.handleBoxes.set(CENTER, new HandleRect(r));
-		}*/
 	}
 	
+	/**returns the handles*/
+	@Override
 	protected SmartHandleList createSmartHandleList() { 
 		SmartHandleList list2 = super.createSmartHandleList();
 		SmartHandle h2 = this.createSmartHandle(RectangleEdges.CENTER);
 		h2.setHandleColor(Color.black);
+		list2.add(h2);
 		return list2;
 	}
 
+	/**when scaling the object*/
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
 		super.scaleAbout(p, mag);
@@ -212,6 +214,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		return getBounds();
 	}
 
+	
 	@Override
 	public ArrayList<LocatedObject2D> getNonLockedItems() {
 		return new ArrayList<LocatedObject2D>();

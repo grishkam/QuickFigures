@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package fileread;
 
 import java.awt.Component;
@@ -28,12 +33,30 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
+import logging.IssueLog;
 
+/**A menu item that adds an example plot to the worksheet*/
 public class ExampleShower extends BasicMenuItemForObj {
 
+	/**
+	 * 
+	 */
+	private static final int COLUMN_PLOT_TYPE = 3, DEFAULT_PLOT_TYPE_COLS = 0;
+	/**
+	 * 
+	 */
+	private static final int KAPLAN_MEIER_PLOT_TYPE = 4;
+	/**
+	 * 
+	 */
+	private static final int GROUP_PLOT_TYPE = 2;
+	/**
+	 * 
+	 */
+	private static final int XY_PLOT_TYPE = 1;
 	int type;
 	boolean plotToo=false;
-	String[] exampleNames=new String[] {"exampleCols.xlsx", "ExampleXY.xlsx", "ExampleGrouped.xlsx",
+	static final String[] exampleNames=new String[] {"exampleCols.xlsx", "ExampleXY.xlsx", "ExampleGrouped.xlsx",
 			"exampleCols.xlsx", "Kaplan Example.xlsx"};
 	
 	public ExampleShower(int t, boolean plot) {
@@ -41,10 +64,7 @@ public class ExampleShower extends BasicMenuItemForObj {
 		plotToo=plot;
 	}
 	
-	
-	
-	
-	
+
 	@Override
 	public String getNameText() {
 		if(plotToo) return "Show Example Plot";
@@ -53,11 +73,11 @@ public class ExampleShower extends BasicMenuItemForObj {
 
 	@Override
 	public String getMenuPath() {
-		if (type==1) return "Plots<XY Plots";
-		if (type==2) return "Plots<Grouped Plots";
-		if (type==3) return "Plots<Column Plots";
-		if (type==0) return "Plots<Column Plots";
-		if (type==4) return "Plots<Kaplan Plots";
+		if (type==XY_PLOT_TYPE) return "Plots<XY Plots";
+		if (type==GROUP_PLOT_TYPE) return "Plots<Grouped Plots";
+		if (type==COLUMN_PLOT_TYPE) return "Plots<Column Plots";
+		if (type==DEFAULT_PLOT_TYPE_COLS) return "Plots<Column Plots";
+		if (type==KAPLAN_MEIER_PLOT_TYPE) return "Plots<Kaplan Plots";
 		return "Plots";
 	}
 	
@@ -82,13 +102,12 @@ public class ExampleShower extends BasicMenuItemForObj {
 					}
 			
 		} catch (InvalidFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 	}
 
 	
 	public static void main(String[] args) {
-		new ExampleShower(3, false).performActionDisplayedImageWrapper(null);;
+		new ExampleShower(COLUMN_PLOT_TYPE , false).performActionDisplayedImageWrapper(null);;
 	}
 }

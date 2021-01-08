@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import javax.swing.JTabbedPane;
@@ -26,6 +31,7 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog for editing plot axes*/
 public class AxisDialog  extends GraphicItemOptionsDialog {
 
 	/**
@@ -33,19 +39,19 @@ public class AxisDialog  extends GraphicItemOptionsDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	AxesGraphic rect;
+	AxesGraphic axis;
 	
 	
-	public AxisDialog(AxesGraphic b) {
-		//super(b);
-		rect=b;
+	public AxisDialog(AxesGraphic targetAxis) {
+		
+		axis=targetAxis;
 		addOptionsToDialog();
 	}
 
 
 	@Override
 	public void addOptionsToDialog() {
-		addBarAttributesToDialog(rect);
+		addBarAttributesToDialog(axis);
 		
 		
 	}
@@ -53,7 +59,6 @@ public class AxisDialog  extends GraphicItemOptionsDialog {
 	public void addBarAttributesToDialog(AxesGraphic  rect) {
 		
 		super.addNameField(rect);
-		//this.addStringField("Name ", rect.getName(), 30);
 		
 		NumberInputPanel nip = new NumberInputPanel("Minimun ", rect.getAxisData().getMinValue(), 0, 100);
 		NumberInputPanel nip2 = new NumberInputPanel("Maximum ", rect.getAxisData().getMaxValue(), 50, 1000);
@@ -113,7 +118,7 @@ public class AxisDialog  extends GraphicItemOptionsDialog {
 	
 	@Override
 	public void setItemsToDiaog() {
-		setItemsToDialog(rect);
+		setItemsToDialog(axis);
 		return ;
 	}
 	

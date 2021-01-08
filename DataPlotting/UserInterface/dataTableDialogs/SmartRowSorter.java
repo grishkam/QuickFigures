@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
 import java.util.Comparator;
@@ -23,12 +28,12 @@ import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-/**A special row sorter class that leaves the first row alone and
+/**A special row sorter class that leaves the first row alone (the one with column headers) and
   puts blank rows at the very end*/
 public class SmartRowSorter extends TableRowSorter<TableModel> {
 
 
-
+	/**the table being sorted*/
 	private JTable table;
 	HashMap<Integer, String> zeroCells=new HashMap<Integer, String>();
 	
@@ -56,9 +61,11 @@ public class SmartRowSorter extends TableRowSorter<TableModel> {
 	}
 
 	public Comparator<Object> getComparator(int col) {
-		return new smartComparator(col, table);
+		return new SmartJTableComparator(col, table);
 	}
 	
+	/**overrides the superclass as not to fire this*/
+	@Override
 	protected void 	fireSortOrderChanged() {
 		
 	}
@@ -66,12 +73,12 @@ public class SmartRowSorter extends TableRowSorter<TableModel> {
 	
 
 
-	public class smartComparator implements Comparator<Object> {
+	public class SmartJTableComparator implements Comparator<Object> {
 
 		private int col;
 		//private Object zeroCell;
 
-		public smartComparator(int col, JTable tab) {
+		public SmartJTableComparator(int col, JTable tab) {
 			this.col=col;
 			if (zeroCells.get(col)==null) {
 				for(int col2=0; col2<tab.getColumnCount(); col2++){

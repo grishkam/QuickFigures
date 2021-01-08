@@ -51,6 +51,7 @@ public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListen
 	private ArrayList<Integer> originalValues=new ArrayList<Integer>();
 	
 	
+	
 	public ChoiceInputPanel(String labeln, String[] choices, int startingindex) {
 		JComboBox<String> box2 = new JComboBox<String>();
 		box=box2;
@@ -63,6 +64,7 @@ public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListen
 		{box2.addItemListener(this);}
 		this.originalStatus=startingindex;
 		originalValues.add(startingindex);
+		
 	}
 	
 

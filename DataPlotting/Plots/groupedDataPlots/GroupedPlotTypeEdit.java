@@ -13,15 +13,42 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-package xyPlots;
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
+package groupedDataPlots;
 
-import graphicalObjects_Shapes.RectangularGraphic;
+import undo.AbstractUndoableEdit2;
 
-public class FigureLegendRect  extends RectangularGraphic {
+public class GroupedPlotTypeEdit extends AbstractUndoableEdit2 {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Grouped_Plot plot;
+	private int typeI;
+	private int typeF;
+	
+	GroupedPlotTypeEdit(Grouped_Plot p) {
+		plot=p;
+		typeI=plot.getGroupedPlotType();
+	}
+	public void establishFinalState() {
+		typeF=plot.getGroupedPlotType();
+	}
+	public void redo() {
+		plot.setGroupedPlotType(typeF);
+		plot.updateOffsets();
+		plot.fullPlotUpdate();
+	}
+	
+	public void undo() {
+		plot.setGroupedPlotType(typeI);
+		plot.updateOffsets();
+		plot.fullPlotUpdate();
+	}
 
 }

@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
+/**an interface for any sort of target that takes the form of a table*/
 public interface TableReader {
 
+	/**returns the value at the row and column given*/
 	Object getValueAt(int rowNumber, int checkCol);
 
 	int getRowCount();

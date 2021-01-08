@@ -35,7 +35,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	
 	private boolean upper=true;
 	private boolean lower=true;{super.setName("Error Bar");}
-	private int type=Bar;
+	private int type=DRAW_AS_BAR;
 	private int errorShownAs=SEM;
 	
 	public ErrorBarShowingShape(DataSeries data, int type) {
@@ -47,7 +47,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	}
 	
 	public ErrorBarShowingShape(DataSeries data) {
-		this(data, Bar);
+		this(data, DRAW_AS_BAR);
 	}
 	
 	/**sets the traits that must be consistent between series on the same plot*/
@@ -131,7 +131,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	protected Path2D createShapeFor(double mean, double position, double barExtendsDown, double barExtendsUp) {
 		
 		double width=getBarWidth()/2;
-		if (type==LineOnly) {width=0;}
+		if (type==DRAW_AS_LINE_ONLY) {width=0;}
 		double vOffset=getValueOffset(position);
 		double lower=mean-barExtendsDown+vOffset;
 		double upper=mean+barExtendsUp+vOffset;

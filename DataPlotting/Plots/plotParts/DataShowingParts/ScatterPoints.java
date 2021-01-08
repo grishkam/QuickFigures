@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.BasicStroke;
@@ -34,22 +39,23 @@ import dialogs.ScatterPointsDialog;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
 
+/**a data showing shape that draws many points of data*/
 public class ScatterPoints extends DataShowingShape {
 
-	public static int EXCLUDE_WITHIN15IQR=1, NO_Exclusion;
+	public static int EXCLUDE_WITHIN15IQR=1, NO_EXCLUSION=0;
 	private PointModel pointModel=new PointModel();
 	private ArrayList<plotPoint> plottingShapes;
 	public boolean needsPlotPointUpdate=true;
 	public boolean needsJitterUpdate=true;
 	private boolean doesJitter=true;
 
-	private int exclusion=0;
+	private int exclusion=NO_EXCLUSION;
 	
 	{super.setStrokeWidth(0);}{super.setName("Scatter Points");}
 
 	public ScatterPoints(Shape shape2) {
 		super(shape2);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 

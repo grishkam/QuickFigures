@@ -13,10 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -37,6 +41,7 @@ import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.AttachedItemMenu;
 
+/**A special layout object for plot areas*/
 public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 
 	private BasicPlot plotArea;
@@ -50,7 +55,8 @@ public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 	private static final long serialVersionUID = 1L;
 	{this.setName("Plot Layout");}
 	
-	public void reDivideToCols(int nCol) {
+	/**
+	private void reDivideToCols(int nCol) {
 		Rectangle plotArea = getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
 	
 		int h = plotArea.height;
@@ -64,19 +70,20 @@ public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 		getPanelLayout().setHorizontalBorder(1);
 		getPanelLayout().setVerticalBorder(0);
 		
-	}
+	}*/
 	
 	
 	public GenericMontageEditor getEditor() {
 		if (editor==null){
 			editor= new GenericMontageEditor ();
-			editor.setQualificationsForPanelObject(new careFullPanelItentifier());
+			editor.setQualificationsForPanelObject(new PlotLayoutPanelItentifier());
 		}
 		
 		return editor;
 	}
 	
-	class careFullPanelItentifier implements LocatedObjectFilter {
+	/**class modifies the criteria used to itentify something as a panel object*/
+	class PlotLayoutPanelItentifier implements LocatedObjectFilter {
 
 		@Override
 		public boolean isObjectDesireableForPanel(Rectangle2D gra, LocatedObject2D objects) {
@@ -107,6 +114,7 @@ public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 		plotArea.onPlotUpdate();
 	}
 	
+	/**Generates a menu containing options related to plots*/
 	public PopupMenuSupplier getMenuSupplier(){
 		JPopupMenu output = new  AttachedItemMenu(this, this.getLockedItems()).getJPopup();
 		
@@ -124,13 +132,16 @@ public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 
 			@Override
 			public JPopupMenu getJPopup() {
-				// TODO Auto-generated method stub
+				
 				return output;
 			}
 
 			};
 	}
 	
+	/**overrides the superclass method so that any layout handles that are
+	  not needed for plots will not be added */
+	@Override
 	protected void addAdditionalHandles(SmartHandleList box) {}
 
 }

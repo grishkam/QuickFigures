@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.Color;
@@ -23,9 +28,10 @@ import java.awt.geom.Point2D.Double;
 import dataSeries.DataSeries;
 import dataSeries.XYDataSeries;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
-import plotParts.Core.PlotAxes;
+import plotParts.Core.PlotAxisProperties;
 import plotParts.Core.PlotCordinateHandler;
 
+/**The shape of a linear regression line on a plot*/
 public class RegressionLineShape extends AbstractDataLineShape{
 
 	/**This shape can plot a a bar, line or point at the mean value of a dataset*/
@@ -80,7 +86,7 @@ public class RegressionLineShape extends AbstractDataLineShape{
 		else if (getTheData() instanceof XYDataSeries) {
 			regressionResults = ((XYDataSeries) getTheData()) .getLeastSquareLine();
 			PlotCordinateHandler cords = getCordinateHandler();
-			PlotAxes xAxis = cords.getInDependantVariableAxis().getAxisData();
+			PlotAxisProperties xAxis = cords.getInDependantVariableAxis().getAxisData();
 			double minp = xAxis.getMinValue();
 			double maxp = xAxis.getMaxValue();
 			double minv=regressionResults[0]*minp+regressionResults[1];
@@ -91,7 +97,7 @@ public class RegressionLineShape extends AbstractDataLineShape{
 			Double p1 = cords.translate(minp, minv, getPosistion(), 0);
 			Double p2 = cords.translate(maxp, maxv, getPosistion(), 0);
 			
-			PlotAxes yAxis = cords.getDependantVariableAxis().getAxisData();
+			PlotAxisProperties yAxis = cords.getDependantVariableAxis().getAxisData();
 			/**if line attempt dips below the y axis*/
 			if (minv<yAxis.getMinValue()) {
 				double nv = (yAxis.getMinValue()-regressionResults[1])/regressionResults[0];

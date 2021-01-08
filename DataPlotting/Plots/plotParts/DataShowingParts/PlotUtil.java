@@ -13,14 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.util.ArrayList;
 
 import dataSeries.DataSeries;
 
+/**contains static methods for used by many plots*/
 public class PlotUtil {
 	
+	/**checks all the data shapes to determine what position is the ideal maximun position for a plot area*/
 	public static double findMaxNeededPositionFrom(ArrayList<DataShowingShape> shapes) {
 		double output = 0;
 		for(DataShowingShape s: shapes) {
@@ -31,6 +38,7 @@ public class PlotUtil {
 		return output;
 	}
 	
+	/**checks all the data shapes to determine what value is the ideal maximun value for a plot area*/
 	public static double findMaxNeededValueIn(ArrayList<DataShowingShape> shapes) {
 		double output = 0;
 		for(DataShowingShape s: shapes) {
@@ -41,6 +49,8 @@ public class PlotUtil {
 		return output;
 	}
 	
+	/**returns subsets of the data series based on the position
+	 this assumes that data has multiple values of similar position*/
 	public static DataSeries[] getAllSeriesFor(DataSeries data) {
 		double[] p = data.getAllPositions();
 		 DataSeries[] output=new  DataSeries[p.length];

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package kaplanMeierPlots;
 
 import java.awt.Color;
@@ -20,32 +25,37 @@ import java.awt.Rectangle;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D.Double;
 
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.DataShowingParts.AbstractDataLineShape;
 import plotParts.DataShowingParts.RegressionLineShape;
 
+/**A data shape that shows the survival curve for a kaplan meier plot*/
 public class KaplanMeierLineShape extends  AbstractDataLineShape {
 
-	/**This shape can plot a a bar, line or point at the mean value of a dataset*/
-	public static int LineOnly=0;
+	/**if only a line is to be drawn*/
+	public static final int BASIC_LINE=0;
+	
+	/**if a semitransparent spread is drawn with the line. not yet implemented*/
+	public static final int LINE_WITH_SPREAD=1;
+	
 	;{super.setName("Line");}
 	
-	int type=LineOnly;
+	int lineType=BASIC_LINE;
 	
-	KaplenMeierDataSeries dKap=null;
+	KaplanMeierDataSeries dKap=null;
 	
-	public KaplanMeierLineShape(KaplenMeierDataSeries data, int type) {
+	public KaplanMeierLineShape(KaplanMeierDataSeries data, int type) {
 		super(data);
 		dKap=data;
 		this.setDashes(new float[] {});
 		this.setStrokeWidth(1);
 		this.setStrokeColor(Color.BLACK);
-		this.setLineType(type);
+		this.setKaplanLineType(type);
 	}
 	
-	public KaplanMeierLineShape(KaplenMeierDataSeries data) {
-		this(data, LineOnly);
+	public KaplanMeierLineShape(KaplanMeierDataSeries data) {
+		this(data, BASIC_LINE);
 	}
 	
 	
@@ -53,7 +63,7 @@ public class KaplanMeierLineShape extends  AbstractDataLineShape {
 	
 	/**sets the traits that must be consistent between series on the same plot*/
 	public void copyTraitsFrom(RegressionLineShape m) {
-		this.type=m.getLineType();
+		this.lineType=m.getLineType();
 		super.copyStrokeFrom(m);
 	}
 
@@ -98,16 +108,16 @@ public class KaplanMeierLineShape extends  AbstractDataLineShape {
 	}
 	
 
-	public int getLineType() {
-		return type;
+	public int getKaplanLineType() {
+		return lineType;
 	}
 
-	public void setLineType(int type) {
-		this.type = type;
+	public void setKaplanLineType(int type) {
+		this.lineType = type;
 	}
 	
 
-
+	/**kaplan meier plots range from 0 to 1, returns 1 as the maximun*/
 	@Override
 	public double getMaxNeededValue() {return 1;}
 }

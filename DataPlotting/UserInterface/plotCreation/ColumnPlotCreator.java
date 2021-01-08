@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package plotCreation;
 
 import java.util.ArrayList;
@@ -22,11 +27,33 @@ import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 
-public class columnPlotCreator implements PlotCreator<ColumnDataSeries>{
+/**A Plot creator that can generate a few types of column plots*/
+public class ColumnPlotCreator implements PlotCreator<ColumnDataSeries>{
 
-int type=0;
+/**
+	 * 
+	 */
+	public static final int TUKEY_BOX_PLOT = 4;
+/**
+	 * 
+	 */
+	public static final int BOX_PLOT = 3;
+/**
+	 * 
+	 */
+	public static final int SCATTER_POINTS = 2;
+/**
+	 * 
+	 */
+	public static final int STANDARD_BAR_PLOT = 1;
+/**
+	 * 
+	 */
+	public static final int BAR_AND_SCATTER = 0;
 	
-	public columnPlotCreator(int t) {
+	int type=BAR_AND_SCATTER;
+	
+	 public ColumnPlotCreator(int t) {
 		type=t;
 	}
 	
@@ -39,10 +66,10 @@ int type=0;
 		
 		ColumnPlot plot=new ColumnPlot(name, items.toArray(new ColumnDataSeries[items.size()]));
 		
-		if (type==1)  plot.barPlot();
-		if (type==2) plot.scatterPlot();;
-		if (type==3) plot.normalBoxplotPlot();;
-		if (type==4) plot.tukeyBoxplotPlot();;
+		if (type==STANDARD_BAR_PLOT)  plot.barPlot();
+		if (type==SCATTER_POINTS) plot.scatterPlot();;
+		if (type==BOX_PLOT) plot.normalBoxplotPlot();;
+		if (type==TUKEY_BOX_PLOT) plot.tukeyBoxplotPlot();;
 		
 		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();
@@ -50,11 +77,11 @@ int type=0;
 	
 	@Override
 	public String getNameText() {
-		if (type==0) return "Bar Plot With Dots";
-		if (type==1) return "Normal Bar Plot";
-		if (type==2) return "Scatter Point Plot";
-		if (type==3) return "Boxplot";
-		if (type==4) return "Tukey Boxplot";
+		if (type==BAR_AND_SCATTER) return "Bar Plot With Dots";
+		if (type==STANDARD_BAR_PLOT) return "Normal Bar Plot";
+		if (type==SCATTER_POINTS) return "Scatter Point Plot";
+		if (type==BOX_PLOT) return "Boxplot";
+		if (type==TUKEY_BOX_PLOT) return "Tukey Boxplot";
 		return "Bar plot";
 	}
 

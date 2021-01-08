@@ -29,7 +29,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import dataSeries.BasicDataPoint;
 import dataSeries.ColumnDataSeries;
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import dataSeries.XYDataSeries;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.SmartDataInputDialog;
@@ -140,12 +140,12 @@ public static ArrayList<XYDataSeries> readXY(String st) throws InvalidFormatExce
 }
 
 /**reads an xlsx file and returns the data*/
-public static ArrayList<KaplenMeierDataSeries> readKaplan(String st) throws InvalidFormatException, IOException {
+public static ArrayList<KaplanMeierDataSeries> readKaplan(String st) throws InvalidFormatException, IOException {
 
    return extractKaplanDataSeries(fileToWorkBook(st));
 }
 
-private static ArrayList<KaplenMeierDataSeries> extractKaplanDataSeries(Workbook wb) {
+private static ArrayList<KaplanMeierDataSeries> extractKaplanDataSeries(Workbook wb) {
 	Sheet sheet = wb.getSheetAt(0);
 	   
 	 return  SmartDataInputDialog.getKaplanDataSeriesUsingDefaultClassification(new ExcelTableReader(sheet));

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.util.ArrayList;
@@ -31,16 +36,13 @@ public class GroupedDataSeries implements DataSeries {
 	private String name="data";
 	private String xName="Catergories";
 	private String yName="values";
-//	private ArrayList<? extends Point2D> numbers;
-	
-	//private HashMap<Integer, Basic1DDataSeries> dividedSeries=new HashMap<Integer, Basic1DDataSeries> ();
 	HashMap<String, DataSeries> allDividedSeries=new HashMap<String, DataSeries> ();
 	
 	/**This map indicates the position of each data series on the plot. in one
 	  plot, every Category data series object should share the same map (the same hashmap)*/
 	private HashMap<Double, String> indicesForSeries=new HashMap<Double, String>();
 	
-	//ArrayList<Double> allUniquePositions=null;
+	
 	private double pOffset;
 	private HashMap<Double, Double> valueOffsetMap;
 	

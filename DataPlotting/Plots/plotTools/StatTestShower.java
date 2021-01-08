@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotTools;
 
 import java.io.Serializable;
@@ -27,8 +32,11 @@ import logging.IssueLog;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 
+/**A class that performs T-tests on the data series from plots
+  and creates labels and marks to indicate significance*/
 public class StatTestShower implements Serializable {
 
+	public static final int STAR_MARK=1, LESS_THAN_MARK=0, ROUNDED_NUMBER=2;;
 
 TextGraphic model=new TextGraphic(); {model.setFontSize(10);}
 /**
@@ -39,7 +47,7 @@ boolean showMessages=false;//set to true if details of tests should be printed t
 private String lastPValue;
 private int tTestType;
 private int numberTails;
-private int markType;
+private int markType=LESS_THAN_MARK;
 
 
 public StatTestShower() {
@@ -53,13 +61,13 @@ public StatTestShower(int tTestType, int numberTails, int markType) {
 	this.markType=markType;
 }
 
-
+/**returns a text item to display the p value given*/
 protected TextGraphic createTextForPValue(double pValue) {
 		
 		
 		
 		boolean useExponent = !pValueAsStars()&&pValue<0.00001;
-		if (markType==2 &&pValue<0.0001) useExponent =true;
+		if (markType==ROUNDED_NUMBER &&pValue<0.0001) useExponent =true;
 		
 		if (useExponent) {
 			return pValueExponentVersion(pValue);
@@ -71,6 +79,7 @@ protected TextGraphic createTextForPValue(double pValue) {
 		return text;
 	}
 
+	/**returns a text item to display the p value given in scientific notation*/
 	private ComplexTextGraphic pValueExponentVersion(double pValue) {
 		double pval = Math.log10(pValue);
 		double exponent = Math.ceil(pval);
@@ -80,7 +89,7 @@ protected TextGraphic createTextForPValue(double pValue) {
 			TextLine line = text.getParagraph().get(0);
 			line.addSegment(exponent+"", text.getTextColor(), TextLineSegment.SUPER_SCRIPT);
 			text.copyAttributesFrom(model);
-			if (markType==2) {
+			if (markType==ROUNDED_NUMBER) {
 				TextLineSegment seg = text.getParagraph().get(0).get(0);
 				TextLineSegment seg2 = text.getParagraph().get(0).get(1);
 				String st=""+Precision.round(10*Math.pow(10, (pval-((int)pval))), 2)+"*10";
@@ -106,7 +115,7 @@ protected TextGraphic createTextForPValue(double pValue) {
 			return "ns";
 		}
 		
-		if (markType==2) {
+		if (markType==ROUNDED_NUMBER) {
 			
 			
 			if (pValue<0.00001)
@@ -134,7 +143,7 @@ protected TextGraphic createTextForPValue(double pValue) {
 	}
 	
 	
-
+	/**returns the p value for a t test beteen the data series*/
 	protected double calculatePValue(DataSeries data1, DataSeries data2) throws Exception {
 		double[] d1 = data1.getIncludedValues().getRawValues();
 		double[] d2 = data2.getIncludedValues().getRawValues();
@@ -151,5 +160,5 @@ protected TextGraphic createTextForPValue(double pValue) {
 	}
 	
 
-boolean pValueAsStars() {return markType==1;}
+boolean pValueAsStars() {return markType==STAR_MARK;}
 }

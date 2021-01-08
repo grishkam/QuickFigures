@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
 import java.awt.Color;
@@ -42,18 +47,20 @@ import dataSeries.DataPoint;
 import dataSeries.DataSeries;
 import dataSeries.GroupedDataSeries;
 import dataSeries.KaplenMeierDataPoint;
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import dataSeries.XYDataSeries;
 import figureFormat.DirectoryHandler;
 import fileread.ExcelRowToJTable;
 import fileread.UtilForDataReading;
 import graphicActionToolbar.CurrentFigureSet;
+import groupedDataPlots.Grouped_Plot;
 import logging.IssueLog;
 import plotCreation.GroupedPlotCreator;
 import plotCreation.KaplanMeierPlotCreator;
 import plotCreation.PlotCreator;
 import plotCreation.XYPlotCreator;
-import plotCreation.columnPlotCreator;
+import plotCreation.XYPlotCreator.xyPlotForm;
+import plotCreation.ColumnPlotCreator;
 import ultilInputOutput.FileChoiceUtil;
 
 
@@ -105,7 +112,7 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 			setPlotMakerMenu(createPlotMakerMenu2());
 			bp.add(getPlotMakerMenu());
 			bp.add(createPlotMakerMenu3());
-			bp.add(new PlotMakerMenuItem4(new KaplanMeierPlotCreator(0)));
+			bp.add(new PlotMakerMenuItem4(new KaplanMeierPlotCreator()));
 		}
 		if (form==3) {
 			setPlotMakerMenu(createPlotMakerMenu3());
@@ -365,11 +372,11 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 		return subparts;
 	}
 	
-	public ArrayList<KaplenMeierDataSeries> getKaplanDataSeriesUsingDefaultClassification() {
+	public ArrayList<KaplanMeierDataSeries> getKaplanDataSeriesUsingDefaultClassification() {
 		return getKaplanDataSeriesUsingDefaultClassification( area);
 	}
 	
-	public static ArrayList<KaplenMeierDataSeries> getKaplanDataSeriesUsingDefaultClassification(TableReader area2) {
+	public static ArrayList<KaplanMeierDataSeries> getKaplanDataSeriesUsingDefaultClassification(TableReader area2) {
 		int seriesNameCol=0;
 		int censorCol=1;
 		int timeCol=2;
@@ -377,8 +384,8 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 	}
 	
 	/**Experimental Kaplan-Meier data retrieval*/
-	private static ArrayList<KaplenMeierDataSeries> getKaplanDataSeries(int seriesNameCol, int censorCol, int timeCol, TableReader area2) {
-		ArrayList<KaplenMeierDataSeries> subparts=new ArrayList<KaplenMeierDataSeries>();
+	private static ArrayList<KaplanMeierDataSeries> getKaplanDataSeries(int seriesNameCol, int censorCol, int timeCol, TableReader area2) {
+		ArrayList<KaplanMeierDataSeries> subparts=new ArrayList<KaplanMeierDataSeries>();
 		ArrayList<String> u = UtilForDataReading.getUniqueStrings(getStrings(seriesNameCol, new RowFilter.HeaderExcludingFilter(), area2));;
 	
 		for(String name: u) {
@@ -386,7 +393,7 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 			ArrayList<KaplenMeierDataPoint> nums = getPointsKaplan(censorCol, timeCol, filter, area2);
 
 			if (nums.size()>0) {
-				KaplenMeierDataSeries s = new KaplenMeierDataSeries(name, nums);
+				KaplanMeierDataSeries s = new KaplanMeierDataSeries(name, nums);
 				subparts.add(s);
 			}
 			
@@ -477,37 +484,35 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 	
 	public JMenu createPlotMakerMenu1() {
 		JMenu output = new JMenu("Create Column Plot");
-		output.add(new PlotMakerMenuItem2(new columnPlotCreator(0)));
-		output.add(new PlotMakerMenuItem2(new columnPlotCreator(1)));
-		output.add(new PlotMakerMenuItem2(new columnPlotCreator(2)));
-		output.add(new PlotMakerMenuItem2(new columnPlotCreator(3)));
-		output.add(new PlotMakerMenuItem2(new columnPlotCreator(4)));
+		output.add(new PlotMakerMenuItem2(new ColumnPlotCreator(ColumnPlotCreator.BAR_AND_SCATTER)));
+		output.add(new PlotMakerMenuItem2(new ColumnPlotCreator(ColumnPlotCreator.STANDARD_BAR_PLOT)));
+		output.add(new PlotMakerMenuItem2(new ColumnPlotCreator(ColumnPlotCreator.SCATTER_POINTS)));
+		output.add(new PlotMakerMenuItem2(new ColumnPlotCreator(ColumnPlotCreator.BOX_PLOT)));
+		output.add(new PlotMakerMenuItem2(new ColumnPlotCreator(ColumnPlotCreator.TUKEY_BOX_PLOT)));
 		
 		return output;
 	}
 	
 	public JMenu createPlotMakerMenu2() {
 		JMenu output = new JMenu("Create XY Plot");
-		output.add(new PlotMakerMenuItem3(new XYPlotCreator(0)));
-		output.add(new PlotMakerMenuItem3(new XYPlotCreator(1)));
-		output.add(new PlotMakerMenuItem3(new XYPlotCreator(2)));
-		//output.add();
+		for(xyPlotForm form: XYPlotCreator.xyPlotForm.values())
+			output.add(new PlotMakerMenuItem3(new XYPlotCreator(form)));
 		
 		return output;
 	}
 	
 	public JMenu createPlotMakerMenu3() {
 		JMenu output = new JMenu("Create Grouped Plot");
-		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(0)));
-		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(1)));
-		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(2)));
-		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(3)));
+		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(Grouped_Plot.STAGGERED_BARS)));
+		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(Grouped_Plot.STACKED_BARS)));
+		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(Grouped_Plot.SEQUENTIAL_BARS)));
+		output.add(new PlotMakerMenuItem(new GroupedPlotCreator(Grouped_Plot.JITTER_POINTS)));
 		return output;
 	}
 	
 	public JMenu createPlotMakerMenu4() {
 		JMenu output = new JMenu("Create Kaplan Meier Plot");
-		output.add(new PlotMakerMenuItem4(new KaplanMeierPlotCreator(0)));
+		output.add(new PlotMakerMenuItem4(new KaplanMeierPlotCreator()));
 
 		return output;
 	}
@@ -603,10 +608,10 @@ class PlotMakerMenuItem4 extends JMenuItem implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PlotCreator<KaplenMeierDataSeries> maker3;
+	private PlotCreator<KaplanMeierDataSeries> maker3;
 
 	
-	public PlotMakerMenuItem4(PlotCreator<KaplenMeierDataSeries> maker) {
+	public PlotMakerMenuItem4(PlotCreator<KaplanMeierDataSeries> maker) {
 		this.maker3=maker;
 		this.setText(maker.getNameText());
 		this.addActionListener(this);
@@ -617,7 +622,7 @@ class PlotMakerMenuItem4 extends JMenuItem implements ActionListener {
 	
 		if (maker3!=null) {
 		
-			ArrayList<KaplenMeierDataSeries> in = getKaplanDataSeriesUsingDefaultClassification();
+			ArrayList<KaplanMeierDataSeries> in = getKaplanDataSeriesUsingDefaultClassification();
 			
 			
 			maker3.createPlot("New Plot", in, CurrentFigureSet.getCurrentActiveDisplayGroup());
@@ -753,10 +758,10 @@ public static SmartDataInputDialog createGroupedDataDialogFrom(ArrayList<Grouped
 
 }
 
-public static SmartDataInputDialog createKaplanDataDialogFrom(ArrayList<KaplenMeierDataSeries> cols) {
+public static SmartDataInputDialog createKaplanDataDialogFrom(ArrayList<KaplanMeierDataSeries> cols) {
 	DataTable area2=createDataTableToHold(cols);
 	int row=1;
-	for(KaplenMeierDataSeries s: cols) {
+	for(KaplanMeierDataSeries s: cols) {
 		String namenew = s.getName();
 		for(int i=0; i<s.length(); i++) {
 			area2.setValueAt(namenew, row, 0);

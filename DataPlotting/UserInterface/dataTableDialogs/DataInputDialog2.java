@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +30,8 @@ import dataSeries.BasicDataPoint;
 import dataSeries.KaplenMeierDataPoint;
 import standardDialog.StandardDialog;
 
-/**A very generalized dialog for data input. See also DataTable*/
+/**A very generalized dialog for data input. See also 
+ * @see DataTable*/
 public class DataInputDialog2 extends StandardDialog {
 	
 	/**

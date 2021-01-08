@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.awt.Color;
@@ -47,6 +52,7 @@ import locatedObject.Scales;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
 
+/**An shape that depiects the plot axes*/
 public class AxesGraphic extends ShapeGraphic  implements Scales{
 
 	/**
@@ -54,7 +60,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	 */
 	
 	
-	private PlotAxes axis=new PlotAxes();
+	private PlotAxisProperties axis=new PlotAxisProperties();
 	private PlotArea plotArea;
 	TextGraphic labelModel=new TextGraphic();
 	private double ticLength=5;
@@ -70,14 +76,14 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	private HashMap<java.lang.Double, String> alternateNames=new HashMap<java.lang.Double, String> ();
 	String labelSuffix="";
 	
-	//HashMap<Double, ComplexTextGraphic> alternateNames=new HashMap<Double, String>();
 	
-	
-	static int All_TICS_SHOWN=0, NO_TICS=1, MAJOR_ONLY=2;
-	private int hideTics=0;
+	static final int All_TICS_SHOWN=0, NO_TICS=1, MAJOR_ONLY=2;
+	private int hideTics=All_TICS_SHOWN;
 	private transient BasicShapeGraphic gapmarker;
-	private int scaleLabelType=0;
-	public final static int Label_Scientific=1;
+	
+	public final static int LABEL_WITH_SCIENTIFIC_NOTATION=1, LABEL_NORMAL=0;;
+	private int scaleLabelType=LABEL_NORMAL;
+	
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -85,19 +91,20 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 
 	
 	
-	
-	public  AxesGraphic(boolean vert) {
-		//super.setHeadnumber(0);
+	/**builds an axis
+	 * @param verticalAxis determines if the new axes will be vertical or horizontal*/
+	public  AxesGraphic(boolean verticalAxis) {
 		super.setStrokeWidth(1);
-		getAxisData().setVertical(vert);
+		getAxisData().setVertical(verticalAxis);
 		this.setStrokeColor(Color.black);
-		if (vert){ 
+		if (verticalAxis){ 
 			this.setName("y-axis"); 
 		}else {
 			this.setName("x-axis");
 			}
 	}
 	
+	/**creates an identical axis*/
 	public AxesGraphic copy() {
 		AxesGraphic out = new AxesGraphic(axis.isVertical());
 		out.copyEveryThingFrom(this);
@@ -121,17 +128,19 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 		labelModel.copyBasicTraitsFrom(g.labelModel);
 	}
 
+	/**sets the plot for this axis graphic*/
 	public void setPlot(PlotArea plotLayers) {
 		plotArea=plotLayers;
-		 MatchToPlotArea() ;
+		 matchLocationToPlotArea() ;
 		
 	}
 	
+	/**returns the plot for this axis graphic*/
 	public PlotArea getPlot() {return plotArea;}
 	
 	/**Fits the location of this axis graphic to its plot area.
 	  It must be called frequently as the plot area rectangle may change*/
-	public void MatchToPlotArea() {
+	public void matchLocationToPlotArea() {
 		Rectangle rect = plotArea.getPlotArea();
 		if (getAxisData().isVertical()) {
 			double x=	rect.getMinX();
@@ -153,37 +162,16 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	}
 	
 	
-	/**
-	@Override
-	public Point2D getLocation() {
-		//this.MatchToArea();
-		return super.getLocation();
-	}
-
-	protected Point2D getDrawnLineEnd1() {
-		//this.MatchToArea();
-		return super.getDrawnLineEnd1();
-	}
-	
-	protected Point2D getDrawnLineEnd2() {
-		//this.MatchToArea();
-		return super.getDrawnLineEnd2();
-	}
-	
-
-
-*/
-	
 	/**ensures that any attempts to move this item will not place it out of 
 	  position*/
 	@Override
 	public void setLocation(double x,double y) {
-		 MatchToPlotArea() ;
+		 matchLocationToPlotArea() ;
 	}
 	
 	@Override
 	public void moveLocation(double x, double y) {
-		 MatchToPlotArea() ;
+		 matchLocationToPlotArea() ;
 	}
 	
 	@Override
@@ -290,7 +278,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 		TextGraphic label = getLabelText().copy();
 		label.setText(((int)starting)+labelSuffix);
 		
-		if (this.scaleLabelType==Label_Scientific &&!(starting>-0.00001&&starting<0.00001)) {
+		if (this.scaleLabelType==LABEL_WITH_SCIENTIFIC_NOTATION &&!(starting>-0.00001&&starting<0.00001)) {
 			ComplexTextGraphic c = new ComplexTextGraphic();
 			c.copyAttributesFrom(label);
 			//c.draw(new Graphics2D(), cords);
@@ -513,11 +501,11 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 		return new ScaleInfo();
 	}
 
-	public PlotAxes getAxisData() {
+	public PlotAxisProperties getAxisData() {
 		return axis;
 	}
 
-	public void setAxisData(PlotAxes axis) {
+	public void setAxisData(PlotAxisProperties axis) {
 		this.axis = axis;
 	}
 
@@ -733,6 +721,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	public void setScaleLabelType(int scaleLabelType) {
 		this.scaleLabelType = scaleLabelType;
 	}
+	
 	
 	private int getMinorTic() {
 		if (getAxisData().usesLogScale() &&getAxisData().getMinorTic()>=getLogBase()) return 1;

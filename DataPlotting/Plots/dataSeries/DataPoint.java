@@ -13,18 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.io.Serializable;
 
+/**an interface for a datapoint */
 public interface DataPoint extends Serializable {
 	
-	
+	/**returns information regarding the position of the point
+	 * on a plot*/
 	public double getPosition();
+	
+	/**returns the value of the point*/
 	public double getValue();
 	public String getValueString() ;
 	
 	public boolean isExcluded();
-	//public void setExcluded(boolean excluded) ;
 
 }

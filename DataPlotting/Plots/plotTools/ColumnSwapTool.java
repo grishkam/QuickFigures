@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotTools;
 
 import java.awt.Color;
@@ -22,9 +27,10 @@ import groupedDataPlots.Grouped_Plot;
 import icons.IconWrappingToolIcon;
 import logging.IssueLog;
 
+/**a tool that is used to reorder data series on a plot*/
 public class ColumnSwapTool extends BasicPlotTool {
 
-	{super.iconSet=IconWrappingToolIcon.createIconSet(createIcon(), createIcon2());}
+	{super.iconSet=IconWrappingToolIcon.createIconSet(createIcon(), createIconRollover());}
 	
 	protected void afterPlotRelease() {
 		GraphicLayer a1 = getPressShape().getParentLayer();
@@ -50,13 +56,16 @@ public class ColumnSwapTool extends BasicPlotTool {
 			}
 	}
 	
+	/**creats the normal plot icon, a bar graph*/
 	PlotIcon createIcon() {
 		return new PlotIcon(new Color[] {Color.red, Color.green, Color.blue}, new int[] {15, 14, 2});
 	}
-	PlotIcon createIcon2() {
+	/**creats the normal plot icon, a bar graph, with columns in different places*/
+	PlotIcon createIconRollover() {
 		return new PlotIcon(new Color[] {Color.blue, Color.green, Color.red}, new int[] {2, 14, 15});
 	}
 	
+	/***/
 	public String getToolName() {
 		return "Swap Plot Columns";
 	}

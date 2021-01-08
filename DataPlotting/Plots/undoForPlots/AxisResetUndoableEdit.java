@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package undoForPlots;
 
 import plotParts.Core.AxesGraphic;
 import undo.AbstractUndoableEdit2;
 
+/**An undoable edit for changes in a plot axis*/
 public class AxisResetUndoableEdit extends AbstractUndoableEdit2 {
 
 	
@@ -25,25 +31,26 @@ public class AxisResetUndoableEdit extends AbstractUndoableEdit2 {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private AxesGraphic aI;
 	private AxesGraphic item;
-	private AxesGraphic aF;
+	private AxesGraphic aInitalForm;
+	
+	private AxesGraphic aFinalForm;
 
 	public AxisResetUndoableEdit(AxesGraphic ag) {
 		this.item=ag;
-		aI=ag.copy();
+		aInitalForm=ag.copy();
 	}
 	
 	public void establishFinalState() {
-		aF=item.copy();
+		aFinalForm=item.copy();
 	}
 	public void redo() {
-		item.copyEveryThingFrom(aF);
+		item.copyEveryThingFrom(aFinalForm);
 		item.updatePlotArea();
 	}
 	
 	public void undo() {
-		item.copyEveryThingFrom(aI);
+		item.copyEveryThingFrom(aInitalForm);
 		item.updatePlotArea();
 	}
 }

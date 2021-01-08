@@ -24,17 +24,17 @@ import xyPlots.XY_Plot;
 
 public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 	
-	private int type;
+	private xyPlotForm type=xyPlotForm.DefaultForm;
 
-	public XYPlotCreator(int type) {
+	public XYPlotCreator(xyPlotForm type) {
 		this.type=type;
 	}
 
 	@Override
 	public String getNameText() {
-		if (type==1) return "Scatter Plot ";
-		if (type==0) return "Default Plot ";
-		if (type==2) return "Line Plot ";
+		if (type==xyPlotForm.ScatterForm) return "Scatter Plot ";
+		if (type==xyPlotForm.DefaultForm) return "Default Plot ";
+		if (type==xyPlotForm.LineForm) return "Line Plot ";
 		return "Bar plot";
 	}
 	
@@ -44,11 +44,17 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		}
 		XY_Plot plot=new XY_Plot(name, items);
 		
-		if (type==0)  plot.defaultPlot();
-		if (type==1)  plot.scatterPlot();
-		if (type==2)  plot.linePlot();;
+		if (type==xyPlotForm.DefaultForm)  plot.defaultPlot();
+		if (type==xyPlotForm.ScatterForm)  plot.scatterPlot();
+		if (type==xyPlotForm.LineForm)  plot.linePlot();;
 		
 		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
 		diw.updateDisplay();diw.updateDisplay();
+	}
+	
+	public static enum xyPlotForm {
+		DefaultForm,
+		ScatterForm,
+		LineForm
 	}
 }

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
 import java.awt.Color;
@@ -23,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
+/**A special table cell renderer for certain data tables
+ * @see SmartDataInputDialog*/
 public class SmartRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
 
 	/**

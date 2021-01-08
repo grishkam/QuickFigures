@@ -13,13 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-/**The simplest and most base class of data series*/
+/**The simplest and most base class of data series
+ * this data consists of a column of numbers*/
 public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 
 	/**
@@ -43,25 +49,29 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		for(int i=0; i<n.size(); i++) data[i]=n.get(i);
 	}
 
-	
+	/**returns the data*/
 	public double[] getRawValues() {
 		return data.clone();
 	}
 
+	/**returns the name of the data series*/
 	public String getName() {
 		return name;
 	}
 
+	/**sets the name of the data series*/
 	public void setName(String name) {
 		this.name = name;
 	}
 	
+	/**returns the data as many lines of text*/
 	public String getColumnString() {
 		String st=getName();
 		for(double d: data) {st+=System.getProperty("line.separator")+d+"";}
 		return st;
 	}
 	
+	/**returns the mean*/
 	public double getMean() {
 		double total=0;
 		for(Double d: getRawValues()) {
@@ -70,6 +80,7 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return total/getRawValues().length;
 	}
 	
+	/**returns the standard deviation*/
 	public double getSDDev() {
 		double mean=getMean();
 		double total=0;
@@ -79,10 +90,12 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return Math.sqrt(total/(getRawValues().length-1));
 	}
 	
+	/**returns the standard error of the mean*/
 	public double getSEM() {
 		return  getSDDev()/Math.sqrt(getRawValues().length);
 	}
 	
+	/**first the median of a sorted array of numbers*/
 	public static double getMedian(double[] sorted ) {
 		if (sorted.length==0) return 0;
 		if (sorted.length==1) return sorted[0];
@@ -96,25 +109,25 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return (sorted[sorted.length/2]+sorted[sorted.length/2-1])/2;//if no number is the exact middle
 	}
 	
+	/**returns a sorted version of the data*/
 	public double[] getSorted() {
 		double[] sorted=data.clone();
 		Arrays.sort(sorted);
 		return sorted;
 	}
 	
+	/**returns the first quartile*/
 	public double getQ1() {
 		return getMedian(getHalf(data, false));
 	}
 	
+	/**returns the 3rd quartile*/
 	public double getQ3() {
 		return getMedian(getHalf(data, true));
 	}
 	
-	/**
-	private ArrayList<Double> getWithoutOutliers() {
-		double IQR15 = (getQ3()-getQ1())*1.5;
-	}*/
-	
+
+	/**returns either the first or second half of the number array*/
 	public static double[] getHalf(double[] sorted, boolean second ) {
 		double[] output = new double[] {};
 		if (sorted.length%2==0) output = new double[sorted.length/2] ;
@@ -125,13 +138,13 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return output;	
 	}
 	
+	/**returns the median*/
 	public double getMedian() {
 		return getMedian(this.getRawValues().clone());
 	}
 	
 	
-	
-	
+	/**a string containing all the numbers along with other information*/
 	public String toString() {
 		String st=name+": [";
 		for(double d: data)st+=" "+d;
@@ -140,6 +153,7 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return st;
 	}
 	
+	/**turns the array into a string*/
 	static String arrayToString(double[] data) {
 		String st= "[";
 		for(double d: data)st+=" "+d+",";
@@ -162,24 +176,34 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		System.out.println( dataseries1.getQ3());
 	}
 
+	/**sets the position of this data series on the plot*/
 	public void setPositionOnPlot(double position) {
 		this.positionOnPlot=position;
 		
 	}
 	
+	/**returns the position of the data series on the plot*/
 	public double getPositionOnPlot() {
 		return positionOnPlot;
 	}
 	
+	/**returns the position of the data series with the given index on the plot*/
+	@Override
+	public double getPosition(int x) {
+		return positionOnPlot;
+	}
+	
+	/**returns the min*/
 	public double getMin() {
 		return getMin(data);
 	}
 	
+	/**returns the max*/
 	public double getMax() {
 		return getMax(data);
 	}
 	
-	public double getMax(double[] d) {
+	public static double getMax(double[] d) {
 		double output=Double.MIN_VALUE;
 		for(double n: d) {if (n>output) output=n; }
 		return output;
@@ -218,7 +242,8 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return output;
 	}
 	
-	public double getMin(double[] d) {
+	/**finds the minimum number in the array*/
+	public static double getMin(double[] d) {
 		double output=Double.MAX_VALUE;
 		for(double n: d) {if (n<output) output=n; }
 		return output;
@@ -240,14 +265,11 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 	}
 
 	@Override
-	public double getValue(int y) {
-		return data[y];
+	public double getValue(int index) {
+		return data[index];
 	}
 
-	@Override
-	public double getPosition(int x) {
-		return positionOnPlot;
-	}
+	
 
 	/**since this is just one dimension, it has these values for any positions*/
 	@Override
@@ -255,6 +277,7 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return this;
 	}
 
+	/**returns the plot positions for the data series*/
 	@Override
 	public double[] getAllPositions() {
 		return new double[] {this.getPositionOnPlot()};
@@ -279,11 +302,15 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		return this.getAllPositions();
 	}
 
+	/**returns a datapoint*/
 	@Override
 	public DataPoint getDataPoint(int i) {
 		return new BasicDataPoint(positionOnPlot, this.getValue(i));
 	}
 
+	/**returns the length of the error bars
+	 * @param errorDepiction what the error bars are
+	 * @param upperOrLower which direction bar*/
 	public double getErrorBarLength(int errorDepiction, int upperOrLower) {
 		double barExtends= getSDDev();
 		if (errorDepiction==SEM) {barExtends= getSEM();}

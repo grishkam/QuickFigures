@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package undoForPlots;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import groupedDataPlots.Grouped_Plot;
 import undo.AbstractUndoableEdit2;
 import undo.UndoScalingAndRotation;
 
+/**an undo for processes that alter the scale of a plot area or an axis*/
 public class PlotAreaChangeUndo extends AbstractUndoableEdit2 {
 
 	/**

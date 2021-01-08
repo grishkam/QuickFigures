@@ -13,10 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.Rectangle;
 
+/**A data series label will be anchored at a particular position
+ * items that act as anchors implement this interface*/
 public interface SeriesLabelPositionAnchor {
 
 	Rectangle getPlotLabelLocationShape();

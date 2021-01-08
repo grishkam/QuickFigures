@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotTools;
 
 import java.awt.BasicStroke;
@@ -40,6 +45,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		anchors=a;
 	}
 	
+	/**creates the shape*/
 	public Shape getShape() {
 		Path2D path1 = new Path2D.Double();
 		path1.moveTo(getAnchors()[0].getX(), getAnchors()[0].getY());
@@ -49,6 +55,8 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		return path1;
 	}
 	
+	/**draws the handles and selection*/
+	@Override
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected) {
 
@@ -101,7 +109,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		return  new BasicStroke(this.getStrokeWidth()+1).createStrokedShape(getShape());
 	}
 	
-	
+	/**returns the cull handle list*/
 	@Override
 	public SmartHandleList getSmartHandleList() {
 		if (smartHandles==null)
@@ -109,6 +117,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
 	}
 
+	/**returns the anchor locations for the connector*/
 	public Point2D[] getAnchors() {
 		return anchors;
 	}

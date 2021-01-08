@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import plotParts.DataShowingParts.Boxplot;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog for editing the appearance of a boxplot*/
 public class BoxPlotDialog  extends GraphicItemOptionsDialog {
 
 	/**

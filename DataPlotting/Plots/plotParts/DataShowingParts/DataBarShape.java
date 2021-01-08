@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.BasicStroke;
@@ -30,13 +35,14 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import handles.SmartHandleList;
 import plotParts.Core.PlotCordinateHandler;
 
+/**A shape for depiection of the the mean from a list of numbers*/
 public class DataBarShape extends DataShowingShape implements SeriesLabelPositionAnchor {
 
 	/**This shape can plot a a bar, line or point at the mean value of a dataset*/
-	public static int LineOnly=0, Bar=1, Ghost=2, SinglePoint=3;
+	public final static int LINE_ONLY=0, DATA_BAR_SHAPE=1, GHOST=2, SINGLE_POINT=3;
 	;{super.setName("Mean");}
 	
-	private int type=Bar;
+	private int type=DATA_BAR_SHAPE;
 	private PointModel pointModel=null;
 	boolean finishStroke=true;
 	private transient BarSmartHandleList smartHandles;
@@ -50,7 +56,7 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 	}
 	
 	public DataBarShape(DataSeries data) {
-		this(data, Bar);
+		this(data, DATA_BAR_SHAPE);
 	}
 	
 	/**sets the traits that must be consistent between series on the same plot*/
@@ -60,17 +66,19 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 		super.copyStrokeFrom(m);
 	}
 	
+	/**creates a copy*/
 	public DataBarShape copy() {
 		DataBarShape output = new DataBarShape(this.getTheData());
 		output.copyEveryThingFrom(this);
 		return output;
 	}
 	
-	public void copyEveryThingFrom(DataBarShape t) {
-		copyTraitsFrom(t);
-		copyStrokeFrom(t);
-		copyColorsFrom(t);
-		copyAttributesFrom(t);
+	/**changes the appearane of this shape to match the example*/
+	public void copyEveryThingFrom(DataBarShape example) {
+		copyTraitsFrom(example);
+		copyStrokeFrom(example);
+		copyColorsFrom(example);
+		copyAttributesFrom(example);
 	}
 
 	
@@ -107,8 +115,9 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 		}
 	}
 	
+	/**returns the bounds that anchor the location of a plot label*/
 	public Rectangle getPlotLabelLocationShape() {
-		return getShapeForDataPoint(getTheData().getIncludedValues().getMean(),(double)this.getPosistion(), Bar).getBounds();
+		return getShapeForDataPoint(getTheData().getIncludedValues().getMean(),(double)this.getPosistion(), DATA_BAR_SHAPE).getBounds();
 	}
 	
 	/**creates a shape for the data point d*/
@@ -138,15 +147,15 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 		
 		
 		/**A line accross the mean*/
-		if (type==LineOnly) {
+		if (type==LINE_ONLY) {
 			super.lineBetween(output, p1, p2);
 		}
 		
-		if (type==Ghost) {
+		if (type==GHOST) {
 			super.lineBetween(output, p3, p4);
 		}
 		
-		if (type==SinglePoint) {
+		if (type==SINGLE_POINT) {
 			java.awt.geom.Point2D.Double p5 = c.translate(position, valueMean+vOff, offset, 0);
 			
 			PointModel pointModel = this.getPointModel();
@@ -155,7 +164,7 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 			return cop.getRotationTransformShape();
 		}
 		
-		if (type==Bar) {
+		if (type==DATA_BAR_SHAPE) {
 			super.lineBetween(output, p3, p1);
 			output.lineTo(p2.x, p2.y);
 			output.lineTo(p4.x, p4.y);
@@ -174,10 +183,12 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 		new MeanBarDialog(this, false).showDialog();;
 	}
 
+	/**returns the type of object that this data bar appears as*/
 	public int getBarType() {
 		return type;
 	}
 
+	/**sets the type of object that this data bar appears as*/
 	public void setBarType(int type) {
 		this.type = type;
 	}
@@ -185,8 +196,8 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 	/**returns the area that this item takes up for 
 	  receiving user clicks*/
 public Shape getOutline() {
-		if (type==Bar) return super.getOutline();
-		if (type==SinglePoint) return new Area(this.getShape());
+		if (type==DATA_BAR_SHAPE) return super.getOutline();
+		if (type==SINGLE_POINT) return new Area(this.getShape());
 		Rectangle b = super.getOutline().getBounds();
 		if (this.onVertical()) b.height=2; else b.width=2;
 		return b;
@@ -194,19 +205,18 @@ public Shape getOutline() {
 
 @Override
 public Shape createOutlineForShape(Shape s) {
-	if (type==Bar) return s.getBounds();
-	if (type==SinglePoint) {
+	if (type==DATA_BAR_SHAPE) return s.getBounds();
+	if (type==SINGLE_POINT) {
 		Area out = new Area(s);
-		//double cx = s.getBounds().getCenterX();
-		//double cy = s.getBounds().getCenterY();
 		out.add(new Area(new BasicStroke(3).createStrokedShape(s)));
 		return out;
 		};
 	return super.createOutlineForShape(s);
 }
 
+/**returns true if the shape appears as a data point*/
 public boolean showsAsPoint() {
-	return type==SinglePoint;
+	return type==SINGLE_POINT;
 }
 
 	public PointModel getPointModel() {
@@ -228,7 +238,7 @@ public boolean showsAsPoint() {
 	@Override
 	public
 	boolean isHidden() {
-		if (type==Ghost) return true;
+		if (type==GHOST) return true;
 		return super.isHidden();
 	}
 

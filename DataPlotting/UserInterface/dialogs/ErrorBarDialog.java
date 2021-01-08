@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**shows a dialog for editing the style of error bars*/
 public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 
 	/**

@@ -13,9 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
-public interface PlotOrientation {
-	static int BARS_VERTICAL=0;
-	static int BARS_HORIZONTAL=1;;
+/**an enum for two possible plot orientation*/
+public enum PlotOrientation {
+	BARS_VERTICAL, BARS_HORIZONTAL;
 }

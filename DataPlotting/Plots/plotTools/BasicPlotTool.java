@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotTools;
 
 import java.awt.Color;
@@ -27,8 +32,10 @@ import icons.IconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
 import plotParts.DataShowingParts.DataShowingShape;
 
+/**a superclass for multiple tools that edit a plot*/
 public class BasicPlotTool extends Object_Mover {
 	
+	/**stores the objects that were near the mouse press and mouse drag*/
 	protected DataShowingShape pressShape;
 	protected DataShowingShape dragShape;
 	protected ConnectorGraphic preliminaryPath;
@@ -65,22 +72,22 @@ public class BasicPlotTool extends Object_Mover {
 		}
 	}
 	
-	
+	/**attempts to locate the data series that corresponds to a click location*/
 	private DataSeries findPressedSeries(DataShowingShape pressShape2, int dx, int dy) {	
 		pressShape2 = getShapeWithSubshapeList(pressShape2);
 		return pressShape2.getPartialSeriesDrawnAtLocation(dx, dy);
 	}
 	
+	/**returns the shape used to draw the data series at the click location*/
 	private Shape findSubshapeClicked(DataShowingShape pressShape2, int dx, int dy) {	
 		pressShape2 = getShapeWithSubshapeList(pressShape2);
 		return pressShape2.getPartialShapeAtLocation(dx, dy);
 	}
 
-
-	private DataShowingShape getShapeWithSubshapeList(DataShowingShape pressShape2) {
-		/**not all data shapes cary information on the splitting of the data
-		  there is none it must check another datashape*/
-		if (pressShape2.getPartialShapeMap().size()==0) {
+	/**not all data shapes cary information on the splitting of the data into categories
+	  if there is none checks tha parent layer for other data shapes*/
+	private DataShowingShape getShapeWithSubshapeList(DataShowingShape pressShape2) {	
+		if (pressShape2.getPartialShapeMap().size()==0 && pressShape2.getParentLayer() instanceof BasicDataSeriesGroup) {
 			BasicDataSeriesGroup group=(BasicDataSeriesGroup) pressShape2.getParentLayer();
 			if (group.getDataBar()!=null) pressShape2=group.getDataBar();
 			else if (group.getErrorBar()!=null) pressShape2=group.getErrorBar();
@@ -92,7 +99,11 @@ public class BasicPlotTool extends Object_Mover {
 
 	public void mouseDragged() {
 		
-		if (pressShape==null)  {super.mouseDragged(); return;}
+		/***/
+		if (pressShape==null)  {
+			super.mouseDragged(); //if no data showing shape was pressed, nothing else need be done
+			return;
+			}
 		
 		
 		LocatedObject2D roi2 = getObjectAt(getImageClicked(), this.getDragCordinateX(), this.getDragCordinateY());
@@ -118,7 +129,8 @@ public class BasicPlotTool extends Object_Mover {
 
 	
 	
-	
+	/**overlays a marker above the clicked and dragged shapes such that the user
+	 * can see what is being targetted*/
 	protected void createMarker() {
 		
 			GraphicGroup sg = generateMarkerForSwitch();
@@ -127,7 +139,8 @@ public class BasicPlotTool extends Object_Mover {
 		
 	}
 
-
+	
+	/**generates marker rectangles above the clicked data series and the dragged on*/
 	protected GraphicGroup generateMarkerForSwitch() {
 		BasicShapeGraphic z1=null;
 		BasicShapeGraphic z2=null;
@@ -145,7 +158,8 @@ public class BasicPlotTool extends Object_Mover {
 		return sg;
 	}
 
-
+	/**called after a mouse release*/
+	@Override
 	protected void afterRelease() {
 		super.afterRelease();
 		if (   pressShape!=null&&dragShape!=null)  {
@@ -153,7 +167,7 @@ public class BasicPlotTool extends Object_Mover {
 		}
 	}
 
-
+	/**not implemented here, subclasses implements it*/
 	protected void afterPlotRelease() {
 		// TODO Auto-generated method stub
 		
@@ -189,7 +203,7 @@ public class BasicPlotTool extends Object_Mover {
 	
 	@Override
 	public void showOptionsDialog() {
-		//new ReflectingFieldSettingDialog(this).showDialog();
+		
 	}
 
 }

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.BasicStroke;
@@ -35,22 +40,27 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import plotParts.Core.PlotCordinateHandler;
 
+/**The shape of a boxplot*/
 public class Boxplot extends DataShowingShape {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int type;
+	
+	public static final int TYPE_IQR=1, TYPE_NORMAL_BOX_PLOT=0;
+	private int type=TYPE_NORMAL_BOX_PLOT;
+	
 	Path2D allFillRect=new Path2D.Double();
 	private Rectangle2D fillRect;
+	
+	/**the ratio of the cap to the width of the box*/
 	private double capSize=0.5;
-	public static int TYPE_IQR=1, TYPE_Normal;
+
 
 
 	public Boxplot(DataSeries data) {
 		super(data);
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**sets the traits that must be consistent between series on the same plot*/
@@ -90,7 +100,8 @@ public class Boxplot extends DataShowingShape {
 	
 	}
 	
-	
+	/**updates the shape to account for changes to the style and data*/
+	@Override
 	protected void updateShape() {
 		super.partialShapes=new HashMap<Shape, DataSeries> ();
 		allFillRect=new Path2D.Double();
@@ -197,12 +208,11 @@ public class Boxplot extends DataShowingShape {
 
 
 	public void updatePlotArea() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public int getWhiskerType() {
-		// TODO Auto-generated method stub
 		return type;
 	}
 	
@@ -257,12 +267,12 @@ public class Boxplot extends DataShowingShape {
 	}
 	
 
-
+	/**sets the ratio of the cap to the width of the box*/
 	public void setCapSize(double number) {
 		this.capSize=number;
 		
 	}
-
+	/**returns the ratio of the cap to the width of the box*/
 	public double getCapSize() {
 		return capSize;
 	}

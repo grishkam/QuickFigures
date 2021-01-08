@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotCreation;
 
 import java.util.ArrayList;
@@ -20,9 +25,13 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 import dataSeries.DataSeries;
 
+/**items of this interface create a particular kind of plot*/
 public interface PlotCreator<Type extends DataSeries>  {
 	
+	/**creates the plot*/
 	public void createPlot(String name, ArrayList<Type> items, DisplayedImage diw);
+	
+	/**what the plot type is called*/
 	public String getNameText();
 	
 }

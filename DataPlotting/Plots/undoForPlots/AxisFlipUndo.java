@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package undoForPlots;
 
 import genericPlot.BasicPlot;
 import undo.AbstractUndoableEdit2;
 
+/**x and y axes can be switched, this is an unto for that process*/
 public class AxisFlipUndo extends AbstractUndoableEdit2 {
 
 	/**

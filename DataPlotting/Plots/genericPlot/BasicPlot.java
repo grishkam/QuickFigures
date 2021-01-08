@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package genericPlot;
 
 import java.awt.Color;
@@ -49,7 +54,7 @@ import plotParts.Core.AxesGraphic;
 import plotParts.Core.AxisLabel;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotAreaRectangle;
-import plotParts.Core.PlotAxes;
+import plotParts.Core.PlotAxisProperties;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotLayout;
 import plotParts.Core.PlotOrientation;
@@ -82,10 +87,9 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	 */
 	protected boolean autoMaticaxisSetD=true;
 	protected boolean autoMaticaxisSetI=true;//for independant variable axis
-	protected int orientation=PlotOrientation.BARS_VERTICAL;
+	protected PlotOrientation orientation=PlotOrientation.BARS_VERTICAL;
 	
 	
-	//protected static Color[] fillColors=new Color[] {Color.DARK_GRAY, Color.red, Color.green, Color.blue, Color.black, Color.cyan, Color.magenta, Color.darkGray};
 	private ArrayList<SeriesStyle> availableStyles=SeriesStyle.getStyles(1, 15);
 	
 	
@@ -149,35 +153,24 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
-			xAxis.MatchToPlotArea();
-			yAxis.MatchToPlotArea();
+			xAxis.matchLocationToPlotArea();
+			yAxis.matchLocationToPlotArea();
 			super.draw(graphics, cords);
 	}
 
-	/**
-	@Override
-	public double transformX(double x) {
-		return xAxis.translate(x);
-	}
 
-	@Override
-	public double transformY(double y) {
-		return yAxis.translate(y);
-	
-	}
-*/
 	
 	@Override
-	public PlotAxes getXaxis() {
+	public PlotAxisProperties getXaxis() {
 		return xAxis.getAxisData();
 	}
 
 	@Override
-	public PlotAxes getYaxis() {
+	public PlotAxisProperties getYaxis() {
 		return yAxis.getAxisData();
 	}
 	
-	public PlotAxes getSecondaryYaxis() {
+	public PlotAxisProperties getSecondaryYaxis() {
 		if (alternateYaxis==null||!hasItem(alternateYaxis)) return null;
 		return this.alternateYaxis.getAxisData();
 	}
@@ -196,7 +189,7 @@ public CombinedEdit tukeyBoxplotPlot() {
 		undo.addEditToList(
 				forceScatterBarToExclusion(a, ScatterPoints.EXCLUDE_WITHIN15IQR));
 		undo.addEditToList(
-				forceBarToForm(a, DataBarShape.Ghost));
+				forceBarToForm(a, DataBarShape.GHOST));
 		undo.addEditToList(
 				a.removeErrorBar());
 		undo.addEditToList(
@@ -217,11 +210,11 @@ public CombinedEdit normalBoxplotPlot() {
 		undo.addEditToList(
 				a.removeScatter());
 		undo.addEditToList(
-				forceBarToForm(a, DataBarShape.Ghost));
+				forceBarToForm(a, DataBarShape.GHOST));
 		undo.addEditToList(
 				a.removeErrorBar());
 		undo.addEditToList(
-				forceBoxplotWhisker(a,Boxplot.TYPE_Normal));
+				forceBoxplotWhisker(a,Boxplot.TYPE_NORMAL_BOX_PLOT));
 		
 	}
 	fullPlotUpdate();
@@ -244,9 +237,9 @@ public CombinedEdit normalBoxplotPlot() {
 		layout.setPanelSizes(b .width, b.height);
 		layout.specialSpaceWidthTop=b.y-layout.labelSpaceWidthTop;
 				layout.specialSpaceWidthLeft=b.x-layout.labelSpaceWidthLeft;
-		if (xAxis!=null) xAxis.MatchToPlotArea();
-		if (yAxis!=null) yAxis.MatchToPlotArea();
-		if (alternateYaxis!=null) alternateYaxis.MatchToPlotArea();
+		if (xAxis!=null) xAxis.matchLocationToPlotArea();
+		if (yAxis!=null) yAxis.matchLocationToPlotArea();
+		if (alternateYaxis!=null) alternateYaxis.matchLocationToPlotArea();
 	}
 	
 	public void setPlotAreaToLayout() {
@@ -301,7 +294,7 @@ public void addTitleLabel() {
 	titleLabel.getParagraph().get(0).get(0).setText("Plot Title");
 	areaRect.addLockedItem(titleLabel);
 	areaRect.snapLockedItems();
-	titleLabel.putIntoSnapPosition();
+	titleLabel.putIntoAnchorPosition();
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), titleLabel.getBounds());
 	
 }
@@ -318,7 +311,7 @@ public void addYAxiLabel() {
 	yLabel.setAngle(Math.PI/2);
 	yLabel.getAttachmentPosition().setHorizontalOffset((int) (25+yAxis.getTicLength()));
 	areaRect.snapLockedItems();
-	yLabel.putIntoSnapPosition();
+	yLabel.putIntoAnchorPosition();
 	
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 
@@ -338,7 +331,7 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	yLabel2.setAngle(Math.PI/2);
 	yLabel2.getAttachmentPosition().setHorizontalOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
-	yLabel2.putIntoSnapPosition();
+	yLabel2.putIntoAnchorPosition();
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 return new UndoAddItem(this, yLabel2);
 }
@@ -354,7 +347,7 @@ public void addXAxiLabel(int offset) {
 	xLabel.getParagraph().get(0).get(0).setText("X Axis ");
 	areaRect.addLockedItem(xLabel);
 	areaRect.snapLockedItems();
-	xLabel.putIntoSnapPosition();
+	xLabel.putIntoAnchorPosition();
 	
 	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
 	
@@ -491,6 +484,8 @@ public void onPlotUpdate(){
 	}
 }
 
+/**called when an item is removed from a layer. overrides the superclass method
+ * and performs additional closing tasks for data series*/
 @Override
 protected void removeItemFromArray(ZoomableGraphic z) {
 	super.removeItemFromArray(z);
@@ -521,6 +516,9 @@ public void swapItemPositions(ZoomableGraphic z1, ZoomableGraphic z2) {
 	}
 }
 
+/**overrides the superclass, in the event the added item is a data series group
+ performs a setup process*/
+@Override
 protected void addItemToArray(ZoomableGraphic z) {
 	super.addItemToArray(z);
 	if (z instanceof BasicDataSeriesGroup) {
@@ -554,7 +552,8 @@ protected void afterNumberOfDataSeriesChanges() {
 	this.setInDependantVariableAxisBasedOnMax(max, false, getInDependantVariableAxis());
 }
 
-/**Called when the user tries to move objects between layers*/
+/**Called when the user tries to move objects between layers.
+  this specialized layer is restricted to containing only a few types of objects*/
 public boolean canAccept(ZoomableGraphic z) {
 	if (z==this) return false;
 	if (this.getParentLayer()!=null&&!getParentLayer().canAccept(z)) {
@@ -569,7 +568,7 @@ public boolean canAccept(ZoomableGraphic z) {
 	return false;
 }
 
-
+/**returns all of the error bars within the plot*/
 ArrayList<ErrorBarShowingShape> getErrorBars() {
 	ArrayList<ErrorBarShowingShape> output=new ArrayList<ErrorBarShowingShape>();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
@@ -578,6 +577,7 @@ ArrayList<ErrorBarShowingShape> getErrorBars() {
 	return output;
 }
 
+/**returns all of the figure legend components within the plot*/
 ArrayList<FigureLegendShape> getLegendShapes() {
 	ArrayList<FigureLegendShape> output=new ArrayList<FigureLegendShape>();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
@@ -586,6 +586,7 @@ ArrayList<FigureLegendShape> getLegendShapes() {
 	return output;
 }
 
+/**returns all of the data bars within the plot*/
 public ArrayList<DataBarShape> getMeanBars() {
 	ArrayList<DataBarShape> output=new ArrayList<DataBarShape>();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
@@ -625,7 +626,7 @@ public PlotAreaChangeUndo expandPlotToFitMeanBar() {
 	if (this.getOrientation()==PlotOrientation.BARS_HORIZONTAL&& neededSize>this.getPlotArea().getHeight()) {
 		this.areaRect.setHeight(neededSize);
 	}
-	xAxis.MatchToPlotArea();yAxis.MatchToPlotArea();
+	xAxis.matchLocationToPlotArea();yAxis.matchLocationToPlotArea();
 	this.onAxisUpdate();
 	this.fullPlotUpdate();
 	undo.establishFinalState();
@@ -787,7 +788,7 @@ public CombinedEdit barPlot() {
 		undo.addEditToList(a.removeLine());
 		
 		undo.addEditToList(
-				forceBarToForm( a, DataBarShape.Bar));
+				forceBarToForm( a, DataBarShape.DATA_BAR_SHAPE));
 		
 		undo.addEditToList(
 				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
@@ -846,10 +847,10 @@ public AbstractUndoableEdit scatterPlot() {
 		undo.addEditToList(
 				a.removeBoxplot());
 		undo.addEditToList(
-				forceScatterBarToExclusion(a, ScatterPoints.NO_Exclusion)
+				forceScatterBarToExclusion(a, ScatterPoints.NO_EXCLUSION)
 				);
 		undo.addEditToList(
-				forceBarToForm(a,DataBarShape.LineOnly ));
+				forceBarToForm(a,DataBarShape.LINE_ONLY ));
 		undo.addEditToList(
 				forceBarToForm(a, ErrorBarShowingShape.SEM));
 	
@@ -892,6 +893,7 @@ public PlotCordinateHandler getCordinateHandler(int n) {
 }
 
 public void createFigureLegends() {
+	CombinedEdit undo = new CombinedEdit();
 	Point2D p=new Point2D.Double(this.getPlotArea().getMaxX()+2, this.getPlotArea().getMinY());
 	for(BasicDataSeriesGroup aaa: this.getAllDataSeries()) try {
 		
@@ -923,7 +925,7 @@ private void addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
 			l.setSnapTo(aaa.getLegandShape());
 			l.setAttachmentPosition(AttachmentPosition.defaultPlotLegand());
 			l.setAngle(0);
-			l.putIntoSnapPosition();
+			l.putIntoAnchorPosition();
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), aaa.getLegandShape().getBounds());
 	 giveConsistentStanppingToLabelGroup(getSeriesLabels());	
@@ -944,8 +946,8 @@ public AxisFlipUndo axisFlips() {
 }
 
 protected void flipPlotOrientation() {
-	PlotAxes a1 = this.xAxis.getAxisData();
-	PlotAxes a2 = this.yAxis.getAxisData();
+	PlotAxisProperties a1 = this.xAxis.getAxisData();
+	PlotAxisProperties a2 = this.yAxis.getAxisData();
 	
 	a1.setVertical(true);
 	a2.setVertical(false);
@@ -997,7 +999,7 @@ public void editPlotColors() {
 }
 
 
-public int getOrientation() {return orientation;}
+public PlotOrientation getOrientation() {return orientation;}
 
 @Override
 public boolean moveEntirePlot(double dx, double dy) {

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dialogs;
 
 import java.util.ArrayList;
@@ -28,6 +33,7 @@ import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.numbers.NumberInputPanel;
 
+/**A dialog for editing the appearance of centor marks*/
 public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 
 	/**
@@ -35,8 +41,8 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	KaplanMeierCensorShower rect;
-	ArrayList<KaplanMeierCensorShower> additionalBars=new ArrayList<KaplanMeierCensorShower>();
+	KaplanMeierCensorShower censorMark;
+	ArrayList<KaplanMeierCensorShower> additionalMarks=new ArrayList<KaplanMeierCensorShower>();
 
 	private boolean bareBones;
 
@@ -47,7 +53,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 	
 	public CensorMarkDialog(KaplanMeierCensorShower b, boolean bareBones) {
 		this.bareBones=bareBones;
-		rect=b;
+		censorMark=b;
 		addOptionsToDialog();
 	}
 	
@@ -56,12 +62,12 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 		
 		for(Object o: objects) {
 			if (o instanceof KaplanMeierCensorShower ) {
-				if (rect==null) {
-					rect=(KaplanMeierCensorShower ) o;
+				if (censorMark==null) {
+					censorMark=(KaplanMeierCensorShower ) o;
 					addOptionsToDialog();
 				}
 				else {
-					additionalBars.add((KaplanMeierCensorShower ) o);
+					additionalMarks.add((KaplanMeierCensorShower ) o);
 					addToPointList((KaplanMeierCensorShower) o);
 				}
 			}
@@ -69,7 +75,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 	}
 	
 	public void addAdditionalBars(ArrayList<KaplanMeierCensorShower> bars) {
-		additionalBars=bars;
+		additionalMarks=bars;
 		for(KaplanMeierCensorShower b: bars) {
 			addToPointList(b);
 		}
@@ -82,7 +88,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 
 	@Override
 	public void addOptionsToDialog() {
-		addBarAttributesToDialog(rect);
+		addBarAttributesToDialog(censorMark);
 		
 		
 	}
@@ -96,7 +102,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 			this.add("FillColor", filpanel);
 		}
 		
-		if (rect.showsAsPoint()) {
+		if (rect.showsAsCustomMarkPoint()) {
 			points=true;
 			PointModel m = rect.getPointModel();
 			dia2 = new PointOptionsDialog(m, bareBones, new StandardDialogListener() {
@@ -122,13 +128,13 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 		this.add("width", nip);
 		
 		this.add("typ",
-				new ChoiceInputPanel("Show as", new String[] {"Line only", "Crossing Line", "Plus", "Circle", "Shape"}, rect.getBarType()));
+				new ChoiceInputPanel("Show as", new String[] {"Line only", "Crossing Line", "Plus", "Circle", "Shape"}, rect.getMarkType()));
 	}
 	
 	@Override
 	public void setItemsToDiaog() {
-		setItemsToDialog(rect);
-		for(KaplanMeierCensorShower bar: this.additionalBars) {setItemsToDialog(bar);}
+		setItemsToDialog(censorMark);
+		for(KaplanMeierCensorShower bar: this.additionalMarks) {setItemsToDialog(bar);}
 		return ;
 	}
 	
@@ -146,7 +152,7 @@ public class CensorMarkDialog  extends GraphicItemOptionsDialog {
 	protected void setMeanBarSpecific(KaplanMeierCensorShower rect) {
 		if (rect==null) return;
 		rect.setBarWidth((int)getNumber("width"));
-		rect.setBarType(this.getChoiceIndex("typ"));
+		rect.setMarkType(this.getChoiceIndex("typ"));
 		
 		rect.requestShapeUpdate();
 		rect.updatePlotArea();

@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
 import java.io.Serializable;
 
+/**a Data point for a kaplen-meier plot*/
 public class KaplenMeierDataPoint implements Serializable, DataPoint {
 
 	/**

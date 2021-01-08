@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.Graphics2D;
@@ -28,19 +33,24 @@ import plotParts.Core.PlotArea;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;
 
+/**A special label for plot areasc*/
 public class PlotLabel extends ComplexTextGraphic {
 
-	boolean snapNeeded;
+	
+	/**is the label for a figure legend*/
+	private boolean legend;
+	
+	/**stored as true if the text needs to be moved to its location anchor object*/
+	boolean locationUpdateNeeded=false;
 
 	
-	private boolean legend;
-	SeriesLabelPositionAnchor snapItem;
+	SeriesLabelPositionAnchor anchorObject;
+	
 	Double position;
 	PlotArea plotArea;
-	int orientation;
-	/**
-	 * 
-	 */
+	
+	PlotOrientation orientation=PlotOrientation.BARS_VERTICAL;
+	
 	
 	public PlotLabel(String name) {
 		super(name);
@@ -56,22 +66,21 @@ public class PlotLabel extends ComplexTextGraphic {
 	private static final long serialVersionUID = 1L;
 	
 	public void setSnapTo(SeriesLabelPositionAnchor bar) {
-		this.snapItem=bar;
-		snapNeeded=true;
+		this.anchorObject=bar;
+		locationUpdateNeeded=true;
 	}
 	
 	
 	
 	public void draw(Graphics2D g, CordinateConverter cords) {
-		if ( true) {
-			putIntoSnapPosition();
-	//	if (snapItem!=null)IssueLog.log(snapItem.getClass().getName());
-		}
+		
+			putIntoAnchorPosition();
+	
 		super.draw(g, cords);
 	}
 	
-	public void putIntoSnapPosition() {
-		if (snapItem==null) 
+	public void putIntoAnchorPosition() {
+		if (anchorObject==null) 
 		{ 
 			Rectangle srect = getLabelLocationOnPlot() .getBounds();
 	
@@ -79,16 +88,16 @@ public class PlotLabel extends ComplexTextGraphic {
 		
 		}
 		else 
-			 getAttachmentPosition().snapObjectToRectangle(this, snapItem.getPlotLabelLocationShape());;
-		 snapNeeded=false;
+			 getAttachmentPosition().snapObjectToRectangle(this, anchorObject.getPlotLabelLocationShape());;
+		 locationUpdateNeeded=false;
 		 ;
 	}
 	
-	/**Returns the logical location on the plot based on the 'position' of this plot label*/
-	Rectangle2D getLabelLocationOnPlot() {
+	/**Returns the logical location anchor on the plot based on the 'position' of this plot label*/
+	private Rectangle2D getLabelLocationOnPlot() {
 		double wide=20;
-	
-		if (plotArea==null) return new Rectangle();
+		if (plotArea==null) 
+			return new Rectangle();
 		PlotCordinateHandler cordCalc = plotArea.getCordinateHandler(0);
 		java.awt.geom.Point2D.Double pos = cordCalc.translate(position, 0, 0, 0);
 		double x1 = pos.getX();
@@ -101,28 +110,32 @@ public class PlotLabel extends ComplexTextGraphic {
 		}
 	}
 	
-	
-
+	/**sets the position of the label*/
 	public void setPosition(Double d) {
 		this.position=d;
-		snapNeeded=true;
+		locationUpdateNeeded=true;
 	}
 
+	/**sets the plot area for the label*/
 	public void setPlotArea(PlotArea plotArea) {
 		this.plotArea=plotArea;
-		snapNeeded=true;
+		locationUpdateNeeded=true;
 	}
 	
+	/**returns true if the plot orientation of this label is vertical
+	 * Also sets the plot orietnation of this label to match the plot area*/
 	boolean isVertical() {
 		if (plotArea!=null) {
-			if (plotArea.getOrientation()!=this.orientation) this.setPlotOrientation(plotArea.getOrientation());
+			if (plotArea.getOrientation()!=this.orientation)
+				this.setPlotOrientation(plotArea.getOrientation());
 			
 			return plotArea.getOrientation()==PlotOrientation.BARS_VERTICAL;
 		}
 		return this.orientation==PlotOrientation.BARS_VERTICAL;
 	}
 
-	public void setPlotOrientation(int orientation2) {
+	/**sets the plot orientation*/
+	public void setPlotOrientation(PlotOrientation orientation2) {
 		this.orientation=orientation2;
 		
 		if (legend) {}
@@ -180,7 +193,7 @@ public class PlotLabel extends ComplexTextGraphic {
 		super.scaleAbout(p, mag);
 		
 	
-		this.putIntoSnapPosition();
+		this.putIntoAnchorPosition();
 		
 	}
 

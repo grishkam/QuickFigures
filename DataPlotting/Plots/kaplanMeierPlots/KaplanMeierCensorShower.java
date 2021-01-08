@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package kaplanMeierPlots;
 
 import java.awt.BasicStroke;
@@ -23,7 +28,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D.Double;
 
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import dialogs.CensorMarkDialog;
 import graphicalObjects_Shapes.RectangularGraphic;
 import plotParts.Core.PlotCordinateHandler;
@@ -31,29 +36,30 @@ import plotParts.DataShowingParts.DataLineShape;
 import plotParts.DataShowingParts.DataShowingShape;
 import plotParts.DataShowingParts.PointModel;
 
+/**A data shape that shows the censor marks for a kaplan meier plot*/
 public class KaplanMeierCensorShower extends  DataShowingShape implements DataLineShape{
 
 	/**This shape can plot a a bar, line or point at the mean value of a dataset*/
-	public static final int LineOnly=0, CrossingLine=1, PlusMark=2, Circle=3, ShapeMark=4;;
+	public static final int LINE_ONLY=0, CROSSING_LINE=1, PLUS_MARK=2, CIRCLE=3, OTHER_SHAPE_MARK=4;;
 	;{super.setName("Censored");
 	super.setBarWidth(3);
 	}
 	
-	int type=LineOnly;
+	int markType=LINE_ONLY;
 	PointModel pointModel=new PointModel();
-	KaplenMeierDataSeries dKap=null;
+	KaplanMeierDataSeries dKap=null;
 	
-	public KaplanMeierCensorShower(KaplenMeierDataSeries data, int type) {
+	public KaplanMeierCensorShower(KaplanMeierDataSeries data, int type) {
 		super(data);
 		dKap=data;
 		this.setDashes(new float[] {});
 		this.setStrokeWidth(1);
 		this.setStrokeColor(Color.BLACK);
-		this.setLineType(type);
+		this.setMarkType(type);
 	}
 	
-	public KaplanMeierCensorShower(KaplenMeierDataSeries data) {
-		this(data, LineOnly);
+	public KaplanMeierCensorShower(KaplanMeierDataSeries data) {
+		this(data, LINE_ONLY);
 	}
 	
 	/**sets the traits that must be consistent between series on the same plot*/
@@ -67,6 +73,8 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**updates the shape to fit the data and settings*/
+	@Override
 	protected void updateShape() {
 		if (dKap==null||getTheData().getAllPositions().length==1||area==null) {
 			if (area==null)currentDrawShape= new Rectangle(0,0,10,10);return;
@@ -89,25 +97,25 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 			Double point2 = c.translate(indX, depY, 0,-barWidth);//the previous height
 			
 			
-			if (type==Circle) {
+			if (markType==CIRCLE) {
 				java.awt.geom.Ellipse2D.Double e = new Ellipse2D.Double(point.getX()-barWidth, point.getY()-barWidth,  2*barWidth, 2*barWidth);
 				path.append(e, false); continue;
 			}
-			if (type==ShapeMark) {
+			if (markType==OTHER_SHAPE_MARK) {
 				RectangularGraphic cop = pointModel.createBasShapeCopy();
 				cop.setWidth(2*barWidth);cop.setHeight(2*barWidth);
 				cop.setLocation(point);
 				path.append(cop.getRotationTransformShape(), false); continue;
 			}
 			
-			if (type==CrossingLine||type==PlusMark) {
+			if (markType==CROSSING_LINE||markType==PLUS_MARK) {
 				 point = c.translate(indX, depY, 0,barWidth);
 			}
 			
 			path.moveTo(point.getX(), point.getY());
 			path.lineTo(point2.getX(), point2.getY());
 			
-			if (type==PlusMark) {
+			if (markType==PLUS_MARK) {
 				 point = c.translate(indX, depY, barWidth, 0);
 				 point2 = c.translate(indX, depY, -barWidth, 0);
 				 path.moveTo(point.getX(), point.getY());
@@ -123,13 +131,7 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 	}
 	
 
-	public int getLineType() {
-		return type;
-	}
-
-	public void setLineType(int type) {
-		this.type = type;
-	}
+	
 	
 	/**returns the area that this item takes up for 
 	  receiving user clicks*/
@@ -139,26 +141,31 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 
 	}
 
+	/**kaplan meier plots range from 0 to 1, returns 1 as the maximun*/
 	@Override
 	public double getMaxNeededValue() {return 1;}
 
-	public int getBarType() {
-		// TODO Auto-generated method stub
-		return type;
+	/**returns style of mark to be used */
+	public int getMarkType() {
+		return markType;
 	}
-
+	
+	/**sets the style of mark to be used */
+	public void setMarkType(int choiceIndex) {
+		markType=choiceIndex;
+	}
+	
 	public void updatePlotArea() {
 		area.fullPlotUpdate();
 		
 	}
 
-	public boolean showsAsPoint() {
-		return type==ShapeMark;
+	/**return true if the mark type is an unspecified shape*/
+	public boolean showsAsCustomMarkPoint() {
+		return markType==OTHER_SHAPE_MARK;
 	}
 
-	public void setBarType(int choiceIndex) {
-		type=choiceIndex;
-	}
+	
 	
 	public void showOptionsDialog() {
 		new CensorMarkDialog(this, false).showDialog();;

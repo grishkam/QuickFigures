@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package columnPlots;
 
 import java.util.ArrayList;
@@ -28,6 +33,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import layout.basicFigure.GridLayoutEditListener;
 import layout.basicFigure.LayoutSpaces;
 import menuUtil.HasUniquePopupMenu;
+import plotCreation.ColumnPlotCreator;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.PlotUtil;
@@ -37,11 +43,11 @@ import undoForPlots.AxisFlipUndo;
 public class ColumnPlot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
 
 
-
+	/**each data series in the plot*/
 	private ArrayList<ColumnPlotDataSeriesGroup> allData=new ArrayList<ColumnPlotDataSeriesGroup>();
 	
 
-	/**What to do when given the data for a scatter plot*/
+	/**A constructor that uses the data given for a scatter plot*/
 	public ColumnPlot(String name, ColumnDataSeries... numbers) {
 		super(name);
 		
@@ -121,7 +127,7 @@ public void addDataSeriesFromUser() {
 }
 
 
-/**Replaces the data with new input data*/
+/**Displays a data input dialog to the user then Replaces the data with new input data*/
 @MenuItemMethod(menuActionCommand = "Replace Data", menuText = "Replace data", subMenuName="Data", orderRank=23)
 public void replaceDataWithSeriesFromUser() {
 
@@ -177,7 +183,7 @@ private void replaceData(ArrayList<ColumnPlotDataSeriesGroup> olderSeries, Array
 	this.fullPlotUpdate();
 }
 
-
+/**shows a dialog for the user to input new data*/
 protected ArrayList<ColumnDataSeries> getNewDataSeriesFromUser() {
 	DataTable tab = new DataTable(100, 6);
 	tab.setValueAt("New Data Series", 0,0);
@@ -188,14 +194,16 @@ protected ArrayList<ColumnDataSeries> getNewDataSeriesFromUser() {
 	return cols;
 }
 
+/**displays a file chooser that the user an employ to input data*/
 @MenuItemMethod(menuActionCommand = "Add Data File", menuText = "New Data Series From Excel File", subMenuName="Data", orderRank=18)
 public void addDataSeriesFromFile() {
-	ColumnDataSeries[] datas = new ExcelFileToBarPlot(0).getDataFromFile();
+	ColumnDataSeries[] datas = new ExcelFileToBarPlot(ColumnPlotCreator.BAR_AND_SCATTER).getDataFromFile();
 	for(ColumnDataSeries data: datas)
 		addNew(data);
 	
 }
 
+/**Adds several new data series to the plot*/
 protected void addManyNew(ColumnDataSeries... numbers) {
 	
 	
@@ -219,7 +227,8 @@ protected void addNew(ColumnDataSeries data) {
 }
 
 
-/***/
+/**Called after a data series is added or removed from the plot
+ * updates the plot axis*/
 @Override
 protected void afterNumberOfDataSeriesChanges() {
 	setInDependantVariableAxisFor1DData(this.getAllDataSeries().size(), this.getInDependantVariableAxis());
@@ -229,7 +238,7 @@ protected void afterNumberOfDataSeriesChanges() {
 
 
 
-
+/**Flips the x and y axis*/
 @MenuItemMethod(menuActionCommand = "Flip axes", menuText = "Flip Axes", subMenuName="Edit")
 public AxisFlipUndo axisFlips() {
 	super.flipPlotOrientation();
@@ -242,11 +251,12 @@ public AxisFlipUndo axisFlips() {
 	return new AxisFlipUndo(this);
 }
 
-
+/**returns all the data series in the plot*/
 public ArrayList<ColumnPlotDataSeriesGroup> getAllDataSeries() {
 	return allData;
 }
 
+/**sets all the data series in the plot*/
 public void setAllData(ArrayList<ColumnPlotDataSeriesGroup> allData) {
 	this.allData = allData;
 }

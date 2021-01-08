@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package xyPlots;
 
 import java.util.ArrayList;
@@ -37,7 +42,7 @@ import plotParts.DataShowingParts.ErrorBarShowingShape;
 import plotParts.DataShowingParts.ScatterPoints;
 import undo.CombinedEdit;
 
-/**A special layer for a plot with single dimensional data*/
+/**A special layer for a plot with two dimensional data*/
 public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
 
 
@@ -46,17 +51,17 @@ public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 	
 
 	/**What to do when given the data for a scatter plot*/
-	public XY_Plot(String name, XYDataSeries... numbers) {
+	public XY_Plot(String name, XYDataSeries... newData) {
 		super(name);
 		
-		addManyNew( numbers);
+		addManyNew( newData);
 		
 		
 		onConstruction();
 			
 	}
 
-
+	/**setups the starting labels and axes for the plot*/
 	private void onConstruction() {
 		addTitleLabel();
 		
@@ -68,11 +73,9 @@ public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 		 this.yLabel.getParagraph().get(0).get(0).setText(primarySeries.getDataSeries().getDependantVariableName());
 		 titleLabel.getParagraph().get(0).get(0).setText(getName() );
 		 
-		//xAxis.setShowText(false);
-		 //xAxis.setIntergerTics(true);
+		
 		 this.resetMinMax(true);
 		
-		 //xAxis.setIntergerTics(false);
 		 
 		 onPlotUpdate();
 		 if (this.getAllDataSeries().size()>1) {createFigureLegends();}
@@ -138,7 +141,7 @@ public void addDataSeriesFromUser() {
 
 @MenuItemMethod(menuActionCommand = "Add Data File", menuText = "New Data Series From Excel File", subMenuName="Data", orderRank=18)
 public void addDataSeriesFromFile() {
-	ArrayList<XYDataSeries> newseries = new ExcelFileToXYPlot(0).readExcelDataXY();
+	ArrayList<XYDataSeries> newseries = new ExcelFileToXYPlot().readExcelDataXY();
 	addManyNew( newseries.toArray(new XYDataSeries[newseries.size()] ) );
 }
 
@@ -168,13 +171,14 @@ protected void addNew(XYDataSeries data) {
 }
 
 
-/***/
+/**called after data series are added to or removed from the plot*/
 @Override
 protected void afterNumberOfDataSeriesChanges() {
 	this.resetMinMax(false);
 }
 
 
+/**changes the plot objects such that the plot format matches a line with error bars and points, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "To default", menuText = "Make Default Plot", subMenuName="Change Format", orderRank=1)
 public CombinedEdit defaultPlot() {
 	CombinedEdit undo = new CombinedEdit();
@@ -189,14 +193,14 @@ public CombinedEdit defaultPlot() {
 		undo.addEditToList(
 				a.removeScatter());
 		undo.addEditToList(
-				forceBarToForm(a, DataBarShape.SinglePoint));
+				forceBarToForm(a, DataBarShape.SINGLE_POINT));
 
 	}
 	fullPlotUpdate();
 	return undo;
 }
 
-/**Edits the parts of each data series as to create a proper scatterplot*/
+/**Edits the parts of each data series as to create a proper scatterplot, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "To Scatter Plot", menuText = "Make Scatter", subMenuName="Change Format", orderRank=3)
 public AbstractUndoableEdit scatterPlot() {
 	CombinedEdit undo = new CombinedEdit();
@@ -207,9 +211,9 @@ public AbstractUndoableEdit scatterPlot() {
 		undo.addEditToList(
 				a.removeErrorBar());
 		undo.addEditToList(
-				this.forceScatterBarToExclusion(a, ScatterPoints.NO_Exclusion));	
+				this.forceScatterBarToExclusion(a, ScatterPoints.NO_EXCLUSION));	
 		undo.addEditToList(
-				forceBarToForm(a, DataBarShape.Ghost));
+				forceBarToForm(a, DataBarShape.GHOST));
 
 	}
 	fullPlotUpdate();
@@ -217,7 +221,7 @@ public AbstractUndoableEdit scatterPlot() {
 }
 
 
-
+/**Edits the parts of each data series as to create a line plot, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "To Line", menuText = "Make Line Plot", subMenuName="Change Format", orderRank=5)
 public void linePlot() {
 	CombinedEdit undo = new CombinedEdit();
@@ -230,13 +234,15 @@ public void linePlot() {
 		undo.addEditToList(
 				a.removeScatter());
 		undo.addEditToList(
-				forceBarToForm(a, DataBarShape.SinglePoint));
+				forceBarToForm(a, DataBarShape.SINGLE_POINT));
 		undo.addEditToList(
 				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
 	}
 	fullPlotUpdate();
 }
 
+/**updates the shapes and axes to replect chanes in the settings for the plot*/
+@Override
 public void fullPlotUpdate() {
 	this.onPlotUpdate();
 	this.onAxisUpdate();
@@ -244,17 +250,19 @@ public void fullPlotUpdate() {
 
 
 
-
+/**returns all the data series in the plot*/
 public ArrayList<XYPlotDataSeriesGroup> getAllDataSeries() {
 	return allData;
 }
 
+/**sets all the data series in the plot*/
 public void setAllData(ArrayList<XYPlotDataSeriesGroup> allData) {
 	this.allData = allData;
 }
 
 
 
+/**removes the lines for every data series, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Remove Lines", menuText = "Lines", subMenuName="Remove")
 public CombinedEdit removeLines() {
 	CombinedEdit undo = new CombinedEdit();
@@ -262,6 +270,7 @@ public CombinedEdit removeLines() {
 	return undo;
 }
 
+/**adds lines for the xy data of every data series, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Add Lines", menuText = "New Lines", subMenuName="Add")
 public CombinedEdit addLine() {
 	CombinedEdit undo = new CombinedEdit();
@@ -269,13 +278,14 @@ public CombinedEdit addLine() {
 	return undo;
 }
 
+/**creates the figure legend, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Add Legends", menuText = "New Figure Legends", subMenuName="Add")
 public void createFigureLegends() {
 	super.createFigureLegends();
 }
 
 
-/**Replaces the data with new input data*/
+/**Replaces the data with new input data that is provided by the user via dialog, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Replace Data", menuText = "Replace data", subMenuName="Data", orderRank=23)
 public void replaceDataWithSeriesFromUser() {
 
@@ -292,15 +302,15 @@ public void replaceDataWithSeriesFromUser() {
 	
 }
 
-
-private void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> cols) {
-	for(int i=0; i<cols.size()||i<olderSeries.size(); i++) {
+/**replaces the old data series with new data*/
+private void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> newAddedData) {
+	for(int i=0; i<newAddedData.size()||i<olderSeries.size(); i++) {
 		
 		XYDataSeries  novel = null;
-		if (i<cols.size()) novel=cols.get(i);
+		if (i<newAddedData.size()) novel=newAddedData.get(i);
 		
 		/**if Replacement need be done*/
-		if (i<cols.size()&&i<olderSeries.size()) {
+		if (i<newAddedData.size()&&i<olderSeries.size()) {
 			XYDataSeries old = olderSeries.get(i).getDataSeries();
 			
 			boolean sameName = (old.getName().equals(novel.getName()));
@@ -313,11 +323,11 @@ private void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList
 			
 		}
 		
-		if (i<cols.size()&&!(i<olderSeries.size())) {
+		if (i<newAddedData.size()&&!(i<olderSeries.size())) {
 			addNew(novel);
 		}
 		
-		if (!(i<cols.size())&&(i<olderSeries.size())) {
+		if (!(i<newAddedData.size())&&(i<olderSeries.size())) {
 			this.remove(olderSeries.get(i));
 		}
 		

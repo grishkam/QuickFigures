@@ -23,7 +23,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import plotCreation.KaplanMeierPlotCreator;
 
 public class ExcelFileToKaplanPlot extends  ExcelDataImport{
@@ -35,8 +35,8 @@ public class ExcelFileToKaplanPlot extends  ExcelDataImport{
 
 
 
-	public ExcelFileToKaplanPlot(int t) {
-		creator=new KaplanMeierPlotCreator(t);
+	public ExcelFileToKaplanPlot() {
+		creator=new KaplanMeierPlotCreator();
 	}
 	
 	
@@ -57,10 +57,10 @@ public class ExcelFileToKaplanPlot extends  ExcelDataImport{
 			File f=getFileAndaddExtension();
 			if (f==null) return;
 			
-			ArrayList<KaplenMeierDataSeries> items = ReadExcelData.readKaplan(f.getAbsolutePath());
+			ArrayList<KaplanMeierDataSeries> items = ReadExcelData.readKaplan(f.getAbsolutePath());
 			String name=f.getName();
-			ArrayList<KaplenMeierDataSeries> items2 = new ArrayList<KaplenMeierDataSeries>();
-			for(KaplenMeierDataSeries i: items)items2.add(i);
+			ArrayList<KaplanMeierDataSeries> items2 = new ArrayList<KaplanMeierDataSeries>();
+			for(KaplanMeierDataSeries i: items)items2.add(i);
 			
 			createPlot(name, items2, diw);
 		
@@ -86,7 +86,7 @@ public class ExcelFileToKaplanPlot extends  ExcelDataImport{
 	}
 
 
-	public void createPlot(String name, ArrayList<KaplenMeierDataSeries> items, DisplayedImage diw) {
+	public void createPlot(String name, ArrayList<KaplanMeierDataSeries> items, DisplayedImage diw) {
 		creator.createPlot(name, items, diw);
 		
 	}

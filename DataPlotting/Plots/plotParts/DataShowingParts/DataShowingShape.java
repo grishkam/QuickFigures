@@ -52,7 +52,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	
 	private double barWidth=6;
 
-	private int orientation;//orietnation is either PlotOrientation.barsvertical or horizontal
+	private PlotOrientation orientation=PlotOrientation.BARS_VERTICAL;//orietnation is either PlotOrientation.barsvertical or horizontal
 
 	private int axisChoice=0;
 	
@@ -159,7 +159,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 		return null;
 		}
 	
-	public void setOrientation(int orientation2) {
+	public void setOrientation(PlotOrientation orientation2) {
 		this.orientation=orientation2;
 	}
 

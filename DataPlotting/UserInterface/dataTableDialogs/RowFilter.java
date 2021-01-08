@@ -13,9 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
-
+/**implementations of RowFilter(see below) select certain rows of a
+ * table as fitting a particular category and others as not*/
 public interface RowFilter {
 	
 	public boolean isChosenRow(TableReader table, int rowNumber);

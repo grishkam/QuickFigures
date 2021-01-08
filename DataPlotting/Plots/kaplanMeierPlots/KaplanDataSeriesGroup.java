@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package kaplanMeierPlots;
 
 
@@ -20,7 +25,7 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import fLexibleUIKit.MenuItemMethod;
 import genericPlot.BasicDataSeriesGroup;
 import menuUtil.HasUniquePopupMenu;
@@ -33,31 +38,21 @@ import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
-
+/**A specialized layer that contains and organizes objects for displaying kaplan meier plots*/
 public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUniquePopupMenu, PlotComponent{
 
 	
-	
-	
-	private KaplenMeierDataSeries data;
-	//private int position;//The position on the plot,The data series on this plot are on a particular order
+	private KaplanMeierDataSeries data;
 	private KaplanMeierLineShape kaplanLine;
 	private KaplanMeierCensorShower censorMark;
 	
 	
-
-	protected void setFieldsToAdded(DataShowingShape z) {
-		super.setFieldsToAdded(z);
-		if (z instanceof KaplanMeierCensorShower ) {censorMark=(KaplanMeierCensorShower ) z;}
-		if (z instanceof KaplanMeierLineShape) kaplanLine= (KaplanMeierLineShape) z;
-	}
-
 	
 	private KaplanDataSeriesGroup(String name) {
 		super(name);
 	}
 	
-	public KaplanDataSeriesGroup(KaplenMeierDataSeries data2, BasicDataSeriesGroup template) {
+	public KaplanDataSeriesGroup(KaplanMeierDataSeries data2, BasicDataSeriesGroup template) {
 		super(data2.getName());
 		this.data=data2;
 		
@@ -66,21 +61,30 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 
 
 
-	public KaplanDataSeriesGroup(KaplenMeierDataSeries data) {
+	public KaplanDataSeriesGroup(KaplanMeierDataSeries data) {
 		super(data.getName());
 		this.data=data;
 		addStandardParts();
 	}
 	
+	
+	/**called after a new data shape is added to the plot*/
+	@Override
+	protected void setFieldsToAdded(DataShowingShape z) {
+		super.setFieldsToAdded(z);
+		if (z instanceof KaplanMeierCensorShower ) {censorMark=(KaplanMeierCensorShower ) z;}
+		if (z instanceof KaplanMeierLineShape) kaplanLine= (KaplanMeierLineShape) z;
+	}
+
+	/**Adds the line and censor marks for this plot*/
+	@Override
 	protected void addStandardParts() {
 		 addKaplanLine() ;
 		 addKaplanCensor();
 	}
 
 	
-	protected ScatterPoints createScatter() {
-		return null;
-	}
+	
 
 	@MenuItemMethod(menuActionCommand = "Edit data", menuText = "Input New Data", subMenuName="Data", orderRank=100)
 	public void showDataEditDialog() {
@@ -125,6 +129,9 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		this.seriesLabel=new SeriesLabel(this.getDataSeries().getName(), true);
 	}
 	
+	/**adds plot parts to this data series such that it contains everything the argument contains
+	 * @param template */
+	@Override
 	protected void addPartsBasedOn(BasicDataSeriesGroup template) {
 		if (template==null)	{addStandardParts(); return;}//without template, no more is needed
 		
@@ -139,9 +146,10 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 	
 	}
 
+	/**returns the data series*/
+	public KaplanMeierDataSeries getDataSeries() {return data;}
 	
-	public KaplenMeierDataSeries getDataSeries() {return data;}
-	
+	/**adds a line for the survival curve, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "New KaplanMeier Line", menuText = "New Kaplan-Meier Line", subMenuName="Add", orderRank=50)
 	public CombinedEdit addKaplanLine() {
 		AbstractUndoableEdit e1=null;
@@ -157,6 +165,7 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		return new CombinedEdit(e1, new UndoAddItem(this, kaplanLine));
 	}
 	
+	/**removes line for the survival curve, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Remove Line", menuText = "Line", subMenuName="Remove", orderRank=21, permissionMethod="getLine")
 	public UndoAbleEditForRemoveItem removeLine() {
 		if (kaplanLine!=null&&hasItem(kaplanLine)) {
@@ -167,6 +176,7 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		return null;
 	}
 	
+	/**adds a censor mark for the survival curve, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "New Censor Indicator", menuText = "Censor Marks for Kaplan-Meier", subMenuName="Add", orderRank=50)
 	public CombinedEdit addKaplanCensor() {
 		AbstractUndoableEdit e1=null;
@@ -182,6 +192,8 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		return new CombinedEdit(e1, new UndoAddItem(this, censorMark));
 	}
 	
+	
+	/**removes a line for the survival curve, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Remove Regression Line", menuText = "Line", subMenuName="Remove", orderRank=31, permissionMethod="getKaplanLine")
 	public UndoAbleEditForRemoveItem removeKaplanLine() {
 		if (kaplanLine!=null&&hasItem(kaplanLine)) {
@@ -193,6 +205,8 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		return null;
 	}
 	
+	/**returns the data shapes for this group*/
+	@Override
 	public ArrayList<DataShowingShape> getDataShapes() {
 		ArrayList<DataShowingShape> out = super.getDataShapes();
 		out.add(kaplanLine);
@@ -200,13 +214,18 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		return out;
 	}
 	
+	/**returns the line for the survival curve*/
 	@Override
 	public DataLineShape getFunctionLine() {
 		return kaplanLine;
 	}
+	
+	/**returns the line for the survival curve*/
 	public KaplanMeierLineShape getKaplanLine() {
 		return kaplanLine;
 	}
+	
+	/**sets the line for the survival curve*/
 	public void setKaplanLine(KaplanMeierLineShape lineReg) {
 		this.kaplanLine = lineReg;
 	}
@@ -215,12 +234,15 @@ public class KaplanDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 	
 	public KaplanMeierCensorShower getCensorMark() {return censorMark;}
 	
+	/**kaplan plot type does not contain data bars, scatter points or many other items from the */
 	public AbstractUndoableEdit addDataBar() {return null;}
 	public AbstractUndoableEdit addScatter() {return null;}
 	public CombinedEdit addErrorBar() {return null;}
 	public CombinedEdit addBoxPlot() {return null;}
 	public CombinedEdit addLine() {return null;}
-
+	protected ScatterPoints createScatter() {
+		return null;
+	}
 	
 
 	

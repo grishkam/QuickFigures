@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotTools;
 
 import java.awt.BasicStroke;
@@ -26,6 +31,7 @@ import java.io.Serializable;
 
 import javax.swing.Icon;
 
+/**An icon for charts, plots. contains a tiny bargraph*/
 public class PlotIcon implements Icon, Serializable {
 	
 	
@@ -35,6 +41,7 @@ public class PlotIcon implements Icon, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**icon will have */
 	Color[] barColors=new Color[] {Color.red, Color.green, Color.blue, Color.gray};
 	
 	int positionAx1=4;
@@ -88,7 +95,6 @@ public class PlotIcon implements Icon, Serializable {
 		Graphics2D g2d=(Graphics2D) g;
 		g2d.setStroke(new BasicStroke(1));
 		
-		//g.translate(arg2, arg3);
 		g2d.draw(xAxis);
 		g2d.draw(yAxis);
 		
@@ -100,7 +106,6 @@ public class PlotIcon implements Icon, Serializable {
 		
 		g.setColor(barColors[2]);
 		g2d.fill(bar3);
-		//g.translate(-arg2, -arg3);
 		this.paintLayer2Icon(arg0, g2d, arg2, arg3);
 	}
 	

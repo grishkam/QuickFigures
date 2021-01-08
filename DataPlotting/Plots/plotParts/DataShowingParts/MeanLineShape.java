@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.Color;
@@ -25,30 +30,27 @@ import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
 import plotParts.Core.PlotCordinateHandler;
 
+/**A data showing shape that consists of a line connecting several distinct points*/
 public class MeanLineShape extends AbstractDataLineShape implements DataLineShape{
 
-	/**This shape can plot a a bar, line or point at the mean value of a dataset*/
-	public static int LineOnly=0;
+	
 	;{super.setName("Line");}
 	
-	int type=LineOnly;
 	
 	
-	public MeanLineShape(DataSeries data, int type) {
+	 public MeanLineShape(DataSeries data) {
 		super(data);
 		this.setDashes(new float[] {});
 		this.setStrokeWidth(1);
 		this.setStrokeColor(Color.BLACK);
-		this.setLineType(type);
+		
 	}
 	
-	public MeanLineShape(DataSeries data) {
-		this(data, LineOnly);
-	}
+	
 	
 	/**sets the traits that must be consistent between series on the same plot*/
 	public void copyTraitsFrom(MeanLineShape m) {
-		this.type=m.getLineType();
+		
 		this.setBarWidth(m.getBarWidth());
 		super.copyStrokeFrom(m);
 	}
@@ -90,14 +92,10 @@ public class MeanLineShape extends AbstractDataLineShape implements DataLineShap
 	}
 	
 	
+	
 	/**creates a shape for the data point d*/
 	Point2D getShapeForDataPoint(Basic1DDataSeries datai) {
 		if (datai==null||datai.length()==0) return null;
-		return getShapeForDataPoint(datai, type);
-	}
-	
-	/**creates a shape for the data point d*/
-	Point2D getShapeForDataPoint(Basic1DDataSeries datai, int type) {
 		if (area==null) return new Point(0,0);
 		double mean = datai.getMean();
 		double offset = datai.getPositionOffset();
@@ -110,18 +108,12 @@ public class MeanLineShape extends AbstractDataLineShape implements DataLineShap
 	}
 
 	public void updatePlotArea() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
 
-	public int getLineType() {
-		return type;
-	}
-
-	public void setLineType(int type) {
-		this.type = type;
-	}
+	
 	
 
 }

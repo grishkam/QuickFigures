@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,6 +25,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import fileread.ReadExcelData;
 
+/**an implementation of the table reader interface for excel files
+ * @see TableReader*/
 public class ExcelTableReader implements TableReader {
 
 	private  org.apache.poi.ss.usermodel.Sheet sheet;

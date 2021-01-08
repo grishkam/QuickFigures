@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package groupedDataPlots;
 
 
@@ -25,9 +30,10 @@ import plotParts.DataShowingParts.PlotComponent;
 import plotParts.DataShowingParts.ScatterPoints;
 import plotParts.DataShowingParts.SeriesLabel;
 import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
-
+/**A specialized layer that contains and organizes objects for displaying parts of a grouped plot*/
 public class GroupedPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUniquePopupMenu, PlotComponent{
 
+	/**The data*/
 	private GroupedDataSeries data;
 
 	private GroupedPlotDataSeriesGroup(String name) {
@@ -46,16 +52,19 @@ public class GroupedPlotDataSeriesGroup extends BasicDataSeriesGroup implements 
 		addStandardParts();
 	}
 	
+	/**Adds the standard plot parts that are components of any grouped plot*/
 	protected void addStandardParts() {
 		this.addDataBar();
 		this.addErrorBar();
 	}
 
-	
+	/**creates the scatter points for this group*/
+	@Override
 	protected ScatterPoints createScatter() {
 		return new ScatterPoints(getDataSeries(), true);
 	}
 
+	/**shows a data input dialog to the user, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Edit data", menuText = "Input New Data", subMenuName="Data", orderRank=100)
 	public void showDataEditDialog() {
 		GroupedDataSeries newdata = SeriesInoutForGroupPlots.getUserInputSeries(getDataSeries(), false);
@@ -71,9 +80,9 @@ public class GroupedPlotDataSeriesGroup extends BasicDataSeriesGroup implements 
 	private static final long serialVersionUID = 1L;
 
 	
-
-	void setPositionOffset(int nthSeries) {
-		position=nthSeries;
+	/**sets the position for this data series group*/
+	void setPositionOffset(int newOffset) {
+		position=newOffset;
 		if (this.getSeriesLabel()!=null) setFor(getSeriesLabel());
 		getTheData().setPositionOffset(position);
 	}
@@ -109,7 +118,8 @@ public class GroupedPlotDataSeriesGroup extends BasicDataSeriesGroup implements 
 	}*/
 	
 
-	
+	/**returns the anchor object for the data series label,
+	 * In the case of grouped plots, it is the figure legend shape*/
 	protected SeriesLabelPositionAnchor getSeriesLabelPositionAnchor() {
 		return getLegandShape();
 	}
@@ -133,7 +143,8 @@ public class GroupedPlotDataSeriesGroup extends BasicDataSeriesGroup implements 
 		
 	}
 	
-	
+	/**creates a data series label for this data group*/
+	@Override
 	protected void createLabel() {
 		this.seriesLabel=new SeriesLabel(this.getDataSeries().getName(), true);
 	}

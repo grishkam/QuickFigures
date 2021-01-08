@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package dataTableDialogs;
 
 import java.awt.GridBagConstraints;
@@ -35,6 +40,7 @@ import logging.IssueLog;
 import standardDialog.GriddedPanel;
 import standardDialog.strings.StringInputPanel;
 
+/**A special data input dialog for grouped data*/
 public class SeriesInoutForGroupPlots extends DataInputDialog2 {
 	int checkedColumn=0;
 	int checkedColumn2=1;

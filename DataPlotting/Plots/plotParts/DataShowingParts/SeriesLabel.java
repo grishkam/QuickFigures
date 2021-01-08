@@ -13,11 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import dataSeries.DataSeries;
 import locatedObject.AttachmentPosition;
 
+/**A plot label for a specific data series*/
 public class SeriesLabel extends PlotLabel  {
 
 	/**
@@ -37,14 +43,9 @@ public class SeriesLabel extends PlotLabel  {
 	}
 
 	public void requestSnap() {
-		this.snapNeeded=true;
+		this.locationUpdateNeeded=true;
 		
 	}
-
-
-	
-	
-	
 
 
 	public void setTheData(DataSeries data) {

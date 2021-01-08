@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package columnPlots;
 
 
@@ -24,6 +29,7 @@ import plotParts.DataShowingParts.ScatterPoints;
 import plotParts.DataShowingParts.SeriesLabel;
 import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
 
+/**A specialized layer for display of a specific data series*/
 public class ColumnPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUniquePopupMenu, PlotComponent{
 
 	private ColumnDataSeries data;
@@ -39,13 +45,13 @@ public class ColumnPlotDataSeriesGroup extends BasicDataSeriesGroup implements H
 	}
 
 
-
 	public ColumnPlotDataSeriesGroup(ColumnDataSeries data) {
 		super(data.getName());
 		this.data=data;
 		addStandardParts();
 	}
 	
+	/**creates a set of scatter points for the data series*/
 	protected ScatterPoints createScatter() {
 		return new ScatterPoints(getDataSeries(), true);
 	}
@@ -66,20 +72,22 @@ public class ColumnPlotDataSeriesGroup extends BasicDataSeriesGroup implements H
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
+	/**sets the location of this data series in the column plot*/
 	void setPosition(int nthSeries) {
 		position=nthSeries;
 		if (this.getSeriesLabel()!=null) setFor(getSeriesLabel());
 		data.setPositionOnPlot(position);
 	}
 	
+	/**returns the data bar as an anchor for the label*/
 	protected SeriesLabelPositionAnchor getSeriesLabelPositionAnchor() {
 		return getDataBar();
 	}
 
-
+	/**returns the stored data series*/
 	public ColumnDataSeries getDataSeries() {return data;}
 
+	/**not implemented*/
 	public void setUpSeriesLabel(SeriesLabel l) {
 		
 	}

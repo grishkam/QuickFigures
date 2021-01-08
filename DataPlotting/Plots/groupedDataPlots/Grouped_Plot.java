@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package groupedDataPlots;
 
 import java.util.ArrayList;
@@ -46,18 +51,19 @@ import standardDialog.numbers.NumberInputPanel;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undoForPlots.AxisFlipUndo;
-import undoForPlots.GroupedPlotTypeEdit;
 import undoForPlots.PlotAreaChangeUndo;
 import utilityClasses1.ArraySorter;
 
+/**A class for organizing parts of a plot with data divided into multiple groups
+Has methods to produce a layout, and a pair of axes*/
 public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 
 	/**
 	 * 
 	 */
-	static final int Staggered_Bars=0, Stacked_Bars=1, JitterPoints=2, SequentialBars=3;
+	public static final int STAGGERED_BARS=0, STACKED_BARS=1, JITTER_POINTS=2, SEQUENTIAL_BARS=3;
 	
-	private int type=Stacked_Bars;
+	private int type=STACKED_BARS;
 	
 	ArrayList<GroupedPlotDataSeriesGroup> allData=new ArrayList<GroupedPlotDataSeriesGroup> ();
 	HashMap<String, PlotLabel> categoryLabels=new HashMap<String, PlotLabel>();
@@ -65,12 +71,19 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	/**The bar spacing for stggered bars*/
 	private int spacing=3;
 	
+	public Grouped_Plot(String name, ArrayList<GroupedDataSeries> items) {
+		super(name);
+		addManyNew(items.toArray(new GroupedDataSeries[items.size()] ));
+		 onConstruction();
+	}
 	
+	/**peforms the setup process for plot labels*/
 	public void setUpPlotLabels() {
 		if (allData.size()>0) {
 			setUpPlotLabels(allData.get(0).getTheData().getCategoryToLocationMap());
 		}
 	}
+	/**peforms the setup process for plot labels*/
 	public void setUpPlotLabels(HashMap<Double, String> map) {
 		PlotLabel lastLabel=null;
 		for(Double d: map.keySet()) {
@@ -87,11 +100,12 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			
 			}
 			label1.setPosition(d);
-			label1.putIntoSnapPosition();
+			label1.putIntoAnchorPosition();
 			
 		}
 	}
 	
+	/**removes any plot labels that are not stored within the map*/
 	public void clearUnusedPlotLabels(HashMap<Double, String> map) {
 		map=allData.get(0).getTheData().getCategoryToLocationMap();
 	
@@ -112,12 +126,8 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	
 	private static final long serialVersionUID = 1L;
 
-	public Grouped_Plot(String name, ArrayList<GroupedDataSeries> items) {
-		super(name);
-		addManyNew(items.toArray(new GroupedDataSeries[items.size()] ));
-		 onConstruction();
-	}
 	
+	/**Adds new layers and objects to dipict the data series given*/
 	protected void addManyNew(GroupedDataSeries... numbers) {
 		
 		for(GroupedDataSeries data: numbers) {
@@ -132,6 +142,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		afterNumberOfDataSeriesChanges();
 	}
 	
+	/**setups the starting labels and axes for the plot*/
 	private void onConstruction() {
 		addTitleLabel();
 		
@@ -161,14 +172,16 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return out;
 	} 
 
+	/**calculates how wide the plot will need to be to fit all of its bars*/
 	public int getNeededWidthOfPlot() {
-		if (this.type==Stacked_Bars) {
+		if (this.type==STACKED_BARS) {
 			return super.getNeededWidthOfPlot()/this.getAllDataSeries().size()+
 					(this.getMeanBars().size()-1)*2;
 		}
 		return super.getNeededWidthOfPlot();
 	}
-
+	
+	/**Called to create new figure legends, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Add Legends", menuText = "New Figure Legends", subMenuName="Add")
 	public void createFigureLegends() {
 		super.createFigureLegends();
@@ -203,13 +216,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		super.afterNumberOfDataSeriesChanges();
 		}
 
-	/**staggers the bars of the data sets so they dont overlap*/
+	/**calculates the locations for of the different groupd on the plot
+	 * staggers the bars of the data sets so they dont overlap*/
 	public void updateOffsets() {
 		ArrayList<GroupedPlotDataSeriesGroup> orderedList = seriesInOrder();
 		double totalWidth=0;
 		
 		for(GroupedPlotDataSeriesGroup o: orderedList) {
-			if (o.getDataBar()!=null&&o.getDataBar().getBarType()!=DataBarShape.Ghost) {
+			if (o.getDataBar()!=null&&o.getDataBar().getBarType()!=DataBarShape.GHOST) {
 				totalWidth+=o.getDataBar().getBarWidth()*2;
 			}
 			else if (o.getBoxPlot()!=null) {
@@ -219,12 +233,12 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		}
 		
 		
-		if (getGroupedPlotType()==Staggered_Bars) {
+		if (getGroupedPlotType()==STAGGERED_BARS) {
 			double minOffset=-(totalWidth+spacing*orderedList.size())/2+totalWidth*0.5/orderedList.size();
 			for(GroupedPlotDataSeriesGroup o: orderedList) {
 				o.getDataSeries().setPositionOffset(minOffset);
 				o.getDataSeries().setValueOffsetMap(null);
-				if (o.getDataBar()!=null&&o.getDataBar().getBarType()!=DataBarShape.Ghost) {
+				if (o.getDataBar()!=null&&o.getDataBar().getBarType()!=DataBarShape.GHOST) {
 					minOffset+=o.getDataBar().getBarWidth()*2+spacing;
 					
 				} else
@@ -234,13 +248,13 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			}
 		}
 		
-		if (getGroupedPlotType()==JitterPoints) {
+		if (getGroupedPlotType()==JITTER_POINTS) {
 			for(GroupedPlotDataSeriesGroup o: orderedList) {
 				o.getDataSeries().setPositionOffset(0);
 				o.getDataSeries().setValueOffsetMap(null);
 			}
 		}
-				if (getGroupedPlotType()==SequentialBars) {
+				if (getGroupedPlotType()==SEQUENTIAL_BARS) {
 					//HashMap<Double, Double> vOffsets = new HashMap<Double, Double> ();
 					for(int i=orderedList.size()-1; i>=0; i--) {
 						//GroupedPlotDataSeriesGroup groupSeries = orderedList.get(i);
@@ -256,7 +270,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 					}
 					}
 				
-				if (getGroupedPlotType()==Stacked_Bars) {
+				if (getGroupedPlotType()==STACKED_BARS) {
 					HashMap<Double, Double> vOffsets = new HashMap<Double, Double> ();
 					for(int i=orderedList.size()-1; i>=0; i--) {
 						GroupedDataSeries thedata = orderedList.get(i).getTheData();
@@ -314,6 +328,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			}
 	}
 	
+	/**called after a data series is added to this plot layer*/
 	@Override
 	protected void afterSeriesAdditionToLayer(BasicDataSeriesGroup g) {
 	
@@ -345,14 +360,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return allData;
 	}
 
-	
+	/**changes the plot type to a taggered barplot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "To Staggered Bars", menuText = "Make Staggered Bar Plot", subMenuName="Change Format", orderRank=2)
 	public CombinedEdit defaultPlot() {
 		CombinedEdit undo =barPlot();
 		undo.addEditToList(
 				barPlot());
 		undo.addEditToList(
-				forcePlotTypeTo(Staggered_Bars));
+				forcePlotTypeTo(STAGGERED_BARS));
 		undo.addEditToList( 
 				setRangeToFitBars());
 		
@@ -368,12 +383,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return undo;
 	}
 
+	/**changes the plot type to a plot with bars of different colors stacked atop each other, 
+	 * annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "To Stacked Bars", menuText = "Make Stacked Bar Plot", subMenuName="Change Format", orderRank=2)
 	public CombinedEdit stackedPlot() {
 		CombinedEdit undo =barPlot();
 		
 		undo.addEditToList(
-				forcePlotTypeTo(Stacked_Bars));
+				forcePlotTypeTo(STACKED_BARS));
 		undo.addEditToList(
 				setRangeToFitBars());
 		
@@ -382,12 +399,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return undo;
 	}
 	
+	/**changes the plot type to a sequential bar plot type
+	 * annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "To Sequential Bars", menuText = "Make Sequential Bar Plot", subMenuName="Change Format", orderRank=4)
 	public CombinedEdit sequentialBarPlot() {
 		CombinedEdit undo = barPlot();
 		
 		undo.addEditToList(
-				forcePlotTypeTo(SequentialBars));
+				forcePlotTypeTo(SEQUENTIAL_BARS));
 		
 		PlotAreaChangeUndo undo3 = new PlotAreaChangeUndo(this);
 		
@@ -410,9 +429,11 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return undo;
 		
 	}
-	private GroupedPlotTypeEdit forcePlotTypeTo( int tp1) {
+	
+	/**changes the plot type*/
+	private GroupedPlotTypeEdit forcePlotTypeTo( int targetPlotType) {
 		GroupedPlotTypeEdit undo2 = new GroupedPlotTypeEdit(this);
-		setGroupedPlotType(tp1);
+		setGroupedPlotType(targetPlotType);
 		this.updateOffsets();
 		undo2.establishFinalState();
 		return undo2;
@@ -427,27 +448,28 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		double size = this.getAllDataSeries().size();
 		size*=getAllDataSeries().get(0).getTheData().getAllPositions().length;
 		 size+=1;
-		if (getGroupedPlotType()!=SequentialBars) size=getAllDataSeries().get(0).getTheData().getAllPositions().length;
-		if (getGroupedPlotType()!=SequentialBars) size+=0.75;
+		if (getGroupedPlotType()!=SEQUENTIAL_BARS) size=getAllDataSeries().get(0).getTheData().getAllPositions().length;
+		if (getGroupedPlotType()!=SEQUENTIAL_BARS) size+=0.75;
 		getInDependantVariableAxis().getAxisData().setMaxValue(size);
 		updateOffsets();
 		undo3.establishFinalState();
 		return undo3;
 	}
 	
+	/**changes the plot type to one that shows scatter points*/
 	@MenuItemMethod(menuActionCommand = "To Scatter Plot", menuText = "Make Scatter", subMenuName="Change Format", orderRank=6)
 	public CombinedEdit scatterPlot() {
 		GroupedPlotTypeEdit undo2 = new GroupedPlotTypeEdit(this);
-		setGroupedPlotType(JitterPoints);
+		setGroupedPlotType(JITTER_POINTS);
 		CombinedEdit undo = new CombinedEdit();//unfinished undo
 		this.updateOffsets();
 		for(BasicDataSeriesGroup a: getAllDataSeries()) {
 			undo.addEditToList(
 					a.removeBoxplot());
 			undo.addEditToList(
-					forceScatterBarToExclusion(a, ScatterPoints.NO_Exclusion));
+					forceScatterBarToExclusion(a, ScatterPoints.NO_EXCLUSION));
 			undo.addEditToList(
-					forceBarToForm(a, DataBarShape.LineOnly));
+					forceBarToForm(a, DataBarShape.LINE_ONLY));
 			undo.addEditToList(
 					forceItemColors(a, a.getDataBar()));
 			undo.addEditToList(
@@ -461,6 +483,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return undo;
 	}
 	
+	/**changes the colors for one object to match the style of a data series group*/
 	private ColorEditUndo forceItemColors(BasicDataSeriesGroup a, ShapeGraphic s) {
 		ColorEditUndo undo3 = new ColorEditUndo(s);
 		s.setStrokeColor(a.getStyle().getColor().darker().darker().darker());
@@ -468,27 +491,29 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return undo3;
 	}
 	
+	/**changes the plot to a tukey boxplot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "To Tukey", menuText = "Make Tukey Boxplot", subMenuName="Change Format", orderRank=12)
 	public CombinedEdit tukeyBoxplotPlot() {
 		CombinedEdit output = super.tukeyBoxplotPlot();
 		output.addEditToList(
-				forcePlotTypeTo(Staggered_Bars));
+				forcePlotTypeTo(STAGGERED_BARS));
 		return output;
 	}
 
+	/**changes the plot to a boxplot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "To normal box", menuText = "Make Boxplot", subMenuName="Change Format", orderRank=11)
 	public CombinedEdit normalBoxplotPlot() {
 		
 		CombinedEdit output =super.normalBoxplotPlot();
 		
 		output.addEditToList(
-				forcePlotTypeTo(Staggered_Bars));
+				forcePlotTypeTo(STAGGERED_BARS));
 		
 		this.fullPlotUpdate();
 		return output;
 	}
 
-	
+	/**work in progress, */
 	public CombinedEdit barPlot() {
 		return super.barPlot();
 		/**CompoundEdit2 undo = new CompoundEdit2();
@@ -507,6 +532,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		fullPlotUpdate();*/
 	}
 	
+	/**called after the plot axes are altered, updates the data*/
 	@Override
 	public void onAxisUpdate() {
 		setLayoutToPlotArea();
@@ -517,12 +543,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			updateOffsets();
 		} 
 	
+	/**returns the popup menu*/
 	public PopupMenuSupplier getMenuSupplier() {
 		//IssueLog.log("Menu requested");
 		return new MenuItemExecuter(this);
 	}
 	
 	
+	/**shows a dialog for adding a new data series to the plot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Add Data", menuText = "New Data Series", subMenuName="Data", orderRank=19)
 	public void addDataSeriesFromUser() {
 		try {
@@ -542,6 +570,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 	
 	
+	/**shows a dialog for the user to add a category to the plot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Add Category", menuText = "New Catagory", subMenuName="Data", orderRank=22)
 	public void addCategoryFromUser() {
 		try {
@@ -582,6 +611,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	
 	}
 	
+	/**shows a dialog for the user to reorder the categories on the plot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Reorder Category Data", menuText = "Change Category Order", subMenuName="Edit", orderRank=19)
 	public void changeCategoryOrder() {
 		HashMap<Double, String> map = getLocationMap();
@@ -639,6 +669,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		}
 	}
 	
+	/**swaps the locations of two categoeis on the data plot*/
 	public void swapCategorySpots(String name1, String name2) {
 		ArrayList<String> order1 = this.getAllDataSeries().get(0).getTheData().getSeriesNamesInorder();
 		if (!order1.contains(name1)) return ;
@@ -647,6 +678,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		imposeNewCategoryOrder(getLocationMap(), order1);
 	}
 	
+	/**reorders the categories on the plot*/
 	private void imposeNewCategoryOrder(HashMap<Double, String> map, ArrayList<String> order) {
 		map.clear();
 		for(double di=0; di<order.size(); di++) {
@@ -662,6 +694,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		this.fullPlotUpdate();
 	}
 	
+	/**returns a map that is used to keep track of the locations of each category*/
 	private HashMap<Double, String> getLocationMap() {
 		HashMap<Double, String> map1=null;
 		for(GroupedPlotDataSeriesGroup d: getAllDataSeries()) {
@@ -677,6 +710,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return map1;
 	}
 	
+	/**shows a dialog for editing the bars of the plot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Edit Plot Bar", menuText = "Data Bars", subMenuName="Edit")
 	public void editMeanBar() {
 		ArrayList<DataBarShape> bars = getMeanBars();
@@ -696,6 +730,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	}
 	
 	
+	/**Flips the plot between vertical and horixontal orientations, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Flip axes", menuText = "Flip Axes", subMenuName="Edit")
 	public AxisFlipUndo axisFlips() {
 		flipPlotOrientation();
@@ -714,7 +749,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	
 	
 	
-	/**Replaces the data with new input data*/
+	/**Replaces the data with new input data, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Replace Data", menuText = "Replace data", subMenuName="Data", orderRank=23)
 	public void replaceDataWithSeriesFromUser() {
 
@@ -731,6 +766,8 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		replaceData(olderSeries, cols);
 		
 	}
+	
+	/**Replaces the data series with new data*/
 	private void replaceData(ArrayList<GroupedPlotDataSeriesGroup> olderSeries, ArrayList<GroupedDataSeries> cols) {
 		for(int i=0; i<cols.size()||i<olderSeries.size(); i++) {
 			

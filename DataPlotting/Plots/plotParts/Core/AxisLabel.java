@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.awt.geom.Point2D;
@@ -20,6 +25,7 @@ import java.awt.geom.Point2D;
 import genericPlot.BasicPlot;
 import plotParts.DataShowingParts.PlotLabel;
 
+/**A plot label for an axis*/
 public class AxisLabel extends PlotLabel {
 
 	
@@ -45,7 +51,7 @@ public class AxisLabel extends PlotLabel {
 		
 		getAttachmentPosition().setHorizontalOffset( Math.round(h*mag));
 		getAttachmentPosition().setVerticalOffset( Math.round(v*mag));
-		this.putIntoSnapPosition();
+		this.putIntoAnchorPosition();
 		
 	}
 }

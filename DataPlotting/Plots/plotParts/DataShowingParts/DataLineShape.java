@@ -13,10 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import locatedObject.StrokedItem;
 
+/**Different kinds of plots will display different lines
+ interface for the data lines of a plot.
+ TODO: determine if this is really needed*/
 public interface DataLineShape extends StrokedItem {
 
 }

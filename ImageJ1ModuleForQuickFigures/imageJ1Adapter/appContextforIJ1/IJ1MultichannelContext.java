@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package appContextforIJ1;
 
 import java.util.ArrayList;
@@ -27,19 +32,20 @@ import ij.io.OpenDialog;
 import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 
+/**implementation of @see MultiDimensionalImageContext  for ImageJ*/
 public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 
 	IJ1MultiChannelCreator item=new IJ1MultiChannelCreator();
 	
 	@Override
 	public MultiChannelDisplayCreator getMultichannelOpener() {
-		// TODO Auto-generated method stub
+		
 		return item;
 	}
 
 	@Override
 	public MultiChannelDisplayCreator createMultichannelDisplay() {
-		// TODO Auto-generated method stub
+		
 		return new IJ1MultiChannelCreator();
 	}
 	
@@ -47,7 +53,7 @@ public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 
 	@Override
 	public ArrayList<MultiChannelImage> getallVisibleMultichanal() {
-		// TODO Auto-generated method stub
+		
 		int[] list1 = WindowManager.getIDList();
 		ArrayList<MultiChannelImage> output=new ArrayList<MultiChannelImage>();
 		
@@ -63,7 +69,7 @@ public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 
 	@Override
 	public MultiChannelImage getCurrentMultichanal() {
-		// TODO Auto-generated method stub
+		
 		return new ImagePlusWrapper(IJ.getImage());
 	}
 

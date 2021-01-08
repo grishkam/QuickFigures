@@ -13,35 +13,40 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.io.Serializable;
 
-
-public class PlotAxes implements Serializable {
+/**stores the propereis of a plot axis*/
+public class PlotAxisProperties implements Serializable {
 	
 	/**
 	 * 
 	 */
-	static int LOG_SCALE=1, NORMAL_SCALE=0;
+	static final int LOG_SCALE=1, NORMAL_SCALE=0;
 	private static final long serialVersionUID = 1L;
 	
 	private int majorTic=25;
 	private int minorTic=5;
-	int scaleType=0;
+	int scaleType=NORMAL_SCALE;
 	private Gap gap=new Gap(0,0);
 	
 	private double minValue=0;
 	private double maxValue=100;
 	private boolean vertical=true;
 	
-	PlotAxes copy(){
-		PlotAxes pa = new PlotAxes();
+	PlotAxisProperties copy(){
+		PlotAxisProperties pa = new PlotAxisProperties();
 		pa.copyFieldsFrom(this);
 		return pa;
 	}
 	
-	public void copyFieldsFrom(PlotAxes pa) {
+	public void copyFieldsFrom(PlotAxisProperties pa) {
 		this.maxValue=pa.maxValue;
 		this.minValue=pa.minValue;
 		this.vertical=pa.vertical;
@@ -55,6 +60,7 @@ public class PlotAxes implements Serializable {
 		return "From "+minValue+" to "+maxValue+";  Major tics at "+
 					majorTic+ "minor tics at "+minorTic;}
 	
+	/**returns the distance between the minimum and maximum values of the axis*/
 	public double getRange() {
 		return getMaxValue()- getMinValue();
 	}
@@ -76,7 +82,6 @@ public class PlotAxes implements Serializable {
 	}
 
 	public int getMajorTic() {
-	
 		return majorTic;
 	}
 
@@ -111,7 +116,7 @@ public class PlotAxes implements Serializable {
 		this.gap = gap;
 	}
 	
-	
+	/**returns true if the axis is on a log scale*/
 	public boolean usesLogScale() {
 		return this.scaleType==LOG_SCALE;
 	}

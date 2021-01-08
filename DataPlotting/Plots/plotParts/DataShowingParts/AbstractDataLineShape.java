@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.BasicStroke;
@@ -23,6 +28,8 @@ import java.awt.Shape;
 import dataSeries.DataSeries;
 import graphicalObjects.CordinateConverter;
 
+/**A shape of a line that is to be drawn on plots, sublcasses include regression lines, kaplan meier plot lines
+ * and ordinary connecting lines*/
 public abstract class AbstractDataLineShape extends DataShowingShape implements DataLineShape {
 
 	public AbstractDataLineShape(DataSeries data) {
@@ -41,16 +48,18 @@ public abstract class AbstractDataLineShape extends DataShowingShape implements 
 	 return	new BasicStroke(3).createStrokedShape(this.getShape());
 
 	}
-	public Shape getOutline2() {
+	private Shape getSelectedOutline() {
 		 return	new BasicStroke(5).createStrokedShape(this.getShape());
 
 		}
 
+	/**dras a special line appearance when selected*/
+	@Override
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		super.drawHandesSelection(g2d, cords);
 		if (this.isSelected()) {
 			g2d.setColor(new Color(0, 0, 0, 50));
-			g2d.fill(cords.getAffineTransform().createTransformedShape(getOutline2()));
+			g2d.fill(cords.getAffineTransform().createTransformedShape(getSelectedOutline()));
 		}
 	}
 

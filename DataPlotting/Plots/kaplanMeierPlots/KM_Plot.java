@@ -13,13 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package kaplanMeierPlots;
 
 import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import dataSeries.KaplenMeierDataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import dataTableDialogs.SmartDataInputDialog;
 import dialogs.CensorMarkDialog;
 import fLexibleUIKit.MenuItemMethod;
@@ -32,7 +37,7 @@ import menuUtil.HasUniquePopupMenu;
 import plotParts.Core.PlotArea;
 import undo.CombinedEdit;
 
-/**A special layer for a plot with single dimensional data*/
+/**A special layer for a kaplan meier plot*/
 public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
 
 
@@ -41,7 +46,7 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 	
 
 	/**What to do when given the data for a scatter plot*/
-	public KM_Plot(String name, KaplenMeierDataSeries... numbers) {
+	public KM_Plot(String name, KaplanMeierDataSeries... numbers) {
 		super(name);
 		
 		addManyNew( numbers);
@@ -50,7 +55,7 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 			
 	}
 
-
+	/**Performs the innitial setup for the plot*/
 	private void onConstruction() {
 		addTitleLabel();
 		
@@ -68,10 +73,10 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 	}
 
 
-	public KM_Plot(String name, ArrayList<KaplenMeierDataSeries> items) {
+	public KM_Plot(String name, ArrayList<KaplanMeierDataSeries> items) {
 		super(name);
 		if (items!=null)
-		addManyNew(items.toArray(new KaplenMeierDataSeries[items.size()]));
+		addManyNew(items.toArray(new KaplanMeierDataSeries[items.size()]));
 		
 		
 		onConstruction();
@@ -112,7 +117,7 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 		}
 	}
 	
-
+/**shows a dialog for editing the censor marks for the survival curve, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Edit Censor Marks", menuText = "Censor Marks", subMenuName="Edit")
 public void editCensorMarkBar() {
 	ArrayList<KaplanMeierCensorShower> bars = getCensorMarks();
@@ -122,13 +127,14 @@ public void editCensorMarkBar() {
 	d.showDialog();
 }
 
+/**returns all the censor marks in the plot*/
 private ArrayList<KaplanMeierCensorShower> getCensorMarks() {
 	ArrayList<KaplanMeierCensorShower> marks=new ArrayList<KaplanMeierCensorShower>();
 	for(KaplanDataSeriesGroup d: this.getAllDataSeries()) marks.add(d.getCensorMark());
 	return marks;
 }
 
-
+//work in progress
 //@MenuItemMethod(menuActionCommand = "Add Data", menuText = "New Data Series", subMenuName="Data", orderRank=19)
 public void addDataSeriesFromUser() {
 	//KaplenMeierDataSeries dat2 = SeriesInoutForGroupPlots.getUserPointDataData(new KaplenMeierDataSeries(new ArrayList<Point2D> ()));
@@ -136,16 +142,18 @@ public void addDataSeriesFromUser() {
 	//addNew(dat2);
 }
 
+//work in progress
 //@MenuItemMethod(menuActionCommand = "Add Data File", menuText = "New Data Series From Excel File", subMenuName="Data", orderRank=18)
 public void addDataSeriesFromFile() {
 	//ArrayList<KaplenMeierDataSeries> newseries = new ExcelFileToXYPlot(0).readExcelDataXY();
 	//addManyNew( newseries.toArray(new KaplenMeierDataSeries[newseries.size()] ) );
 }
 
-protected void addManyNew(KaplenMeierDataSeries... numbers) {
+/**Adds layers and shapes to the plot to dipict many new data series*/
+protected void addManyNew(KaplanMeierDataSeries... newDataSeriesList) {
 	
 	
-	for(KaplenMeierDataSeries data: numbers) {
+	for(KaplanMeierDataSeries data: newDataSeriesList) {
 		if (data==null||data.length()<1) continue;
 		
 		KaplanDataSeriesGroup template=null;
@@ -163,19 +171,19 @@ protected void addManyNew(KaplenMeierDataSeries... numbers) {
 }
 
 /**Adds one additional data series for the plot*/
-protected void addNew(KaplenMeierDataSeries data) {
+protected void addNew(KaplanMeierDataSeries data) {
 	this.addManyNew(data);
 	onPlotUpdate();
 }
 
 
-/***/
+/**called after new data is added to the plot*/
 @Override
 protected void afterNumberOfDataSeriesChanges() {
 	this.resetMinMax(false);
 }
 
-
+/**work in progress, changes the plot appearance pack to default*/
 //@MenuItemMethod(menuActionCommand = "To default", menuText = "Make Default Plot", subMenuName="Change Format", orderRank=1)
 public CombinedEdit defaultPlot() {
 	CombinedEdit undo = new CombinedEdit();
@@ -189,6 +197,7 @@ public CombinedEdit defaultPlot() {
 }
 
 
+@Override
 public void fullPlotUpdate() {
 	this.onPlotUpdate();
 	this.onAxisUpdate();
@@ -206,7 +215,7 @@ public void setAllData(ArrayList<KaplanDataSeriesGroup> allData) {
 }
 
 
-
+/**removes the lines for all the survival curves, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Remove Lines", menuText = "Lines", subMenuName="Remove")
 public CombinedEdit removeLines() {
 	CombinedEdit undo = new CombinedEdit();
@@ -214,6 +223,7 @@ public CombinedEdit removeLines() {
 	return undo;
 }
 
+/**adds lines for all the survival curves, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Add Lines", menuText = "New Lines", subMenuName="Add")
 public CombinedEdit addLine() {
 	CombinedEdit undo = new CombinedEdit();
@@ -221,26 +231,28 @@ public CombinedEdit addLine() {
 	return undo;
 }
 
+/**adds censor marks for all the survival curves, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Add Censors ", menuText = "New Censor Marks", subMenuName="Add")
-public CombinedEdit addCensorMarke() {
+public CombinedEdit addCensorMarks() {
 	CombinedEdit undo = new CombinedEdit();
 	for(KaplanDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.addKaplanCensor());;}
 	return undo;
 }
 
+/**adds a figure legend, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Add Legends", menuText = "New Figure Legends", subMenuName="Add")
 public void createFigureLegends() {
 	super.createFigureLegends();
 }
 
 
-/**Replaces the data with new input data*/
+/**Replaces the data with new input data, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Replace Data", menuText = "Replace data", subMenuName="Data", orderRank=23)
 public void replaceDataWithSeriesFromUser() {
 
 	ArrayList<KaplanDataSeriesGroup> olderSeries = this.getAllDataSeries();
 	
-	ArrayList<KaplenMeierDataSeries> cols = new ArrayList<KaplenMeierDataSeries>();
+	ArrayList<KaplanMeierDataSeries> cols = new ArrayList<KaplanMeierDataSeries>();
 	for(KaplanDataSeriesGroup o: olderSeries) {cols.add(o.getDataSeries());}
 	SmartDataInputDialog d2 = SmartDataInputDialog.createKaplanDataDialogFrom(cols);
 	d2.setModal(true);d2.setWindowCentered(true);
@@ -252,16 +264,16 @@ public void replaceDataWithSeriesFromUser() {
 	this.fullPlotUpdate();
 }
 
-
-private void replaceData(ArrayList<KaplanDataSeriesGroup> olderSeries, ArrayList<KaplenMeierDataSeries> cols) {
-	for(int i=0; i<cols.size()||i<olderSeries.size(); i++) {
+/**replaces the old data series with new data*/
+private void replaceData(ArrayList<KaplanDataSeriesGroup> olderSeries, ArrayList<KaplanMeierDataSeries> newlyAddedData) {
+	for(int i=0; i<newlyAddedData.size()||i<olderSeries.size(); i++) {
 		
-		KaplenMeierDataSeries  novel = null;
-		if (i<cols.size()) novel=cols.get(i);
+		KaplanMeierDataSeries  novel = null;
+		if (i<newlyAddedData.size()) novel=newlyAddedData.get(i);
 		
 		/**if Replacement need be done*/
-		if (i<cols.size()&&i<olderSeries.size()) {
-			KaplenMeierDataSeries old = olderSeries.get(i).getDataSeries();
+		if (i<newlyAddedData.size()&&i<olderSeries.size()) {
+			KaplanMeierDataSeries old = olderSeries.get(i).getDataSeries();
 			
 			boolean sameName = (old.getName().equals(novel.getName()));
 			old.replaceData(novel);
@@ -273,11 +285,11 @@ private void replaceData(ArrayList<KaplanDataSeriesGroup> olderSeries, ArrayList
 			
 		}
 		
-		if (i<cols.size()&&!(i<olderSeries.size())) {
+		if (i<newlyAddedData.size()&&!(i<olderSeries.size())) {
 			addNew(novel);
 		}
 		
-		if (!(i<cols.size())&&(i<olderSeries.size())) {
+		if (!(i<newlyAddedData.size())&&(i<olderSeries.size())) {
 			this.remove(olderSeries.get(i));
 		}
 		

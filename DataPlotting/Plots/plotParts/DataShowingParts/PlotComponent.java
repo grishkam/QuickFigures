@@ -13,8 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
+/**all compoents drawn on the plot implement this interface*/
 public interface PlotComponent {
 	
 	/**returns the maximum values needed to plot the component*/

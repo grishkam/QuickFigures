@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.Color;
@@ -24,6 +29,8 @@ import javax.swing.JColorChooser;
 import genericPlot.BasicDataSeriesGroup;
 import locatedObject.ColorDimmer;
 
+/**a data series style object defines a particular appearance that the objects in 
+ * one data series of a plot should take*/
 public class SeriesStyle implements Serializable {
 
 	/**

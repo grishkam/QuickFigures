@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package dataSeries;
 
+/**this interface contains constants that determine how error bars are drawn*/
 public interface ErrorBarStyle {
-	public static int LineOnly=0, Bar=1;
+	public static int DRAW_AS_LINE_ONLY=0, DRAW_AS_BAR=1;
 	
 	public static int SD=0, SEM=1, SEM2=2, SEM3=3;;
 	

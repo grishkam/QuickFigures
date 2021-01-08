@@ -13,39 +13,45 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 7, 2021
+ * Version: 2021.1
+ */
 package plotParts.Core;
 
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+/**A defines the key features of a plot area*/
 public interface PlotArea extends Serializable {
 	public Rectangle getPlotArea() ;
-
-	//public void pullTopAxisTo(double y);
-
-	//public void pullRightAxisTo(double x);
-	
-	
-	/**Transforms a data x,y into plot cordintates x and y**/
-	//public double transformX(double x);
-	//public double transformY(double y);
-	//public boolean isPointWithinPlot(double x, double y);
 	
 	PlotCordinateHandler getCordinateHandler();
 	PlotCordinateHandler getCordinateHandler(int i);
 	
-	public PlotAxes getXaxis();
-	public PlotAxes getYaxis();
-	public PlotAxes getSecondaryYaxis();
+	/**returns the independent variable axis*/
+	public PlotAxisProperties getXaxis();
+	
+	/**returns the dependant variable axis*/
+	public PlotAxisProperties getYaxis();
+	
+	/**returns an alternative dependant variable axis*/
+	public PlotAxisProperties getSecondaryYaxis();
+	
+	/**called to reset the range of the plot axis*/
 	public void autoCalculateAxisRanges();
 	
-	
-
+	/**methods to update the plot in response to changes in the data and format*/
 	public void onAxisUpdate();
 	public void fullPlotUpdate();
 
+	/**sets the size of the plot area*/
 	public void setAreaDims(double number, double number2);
-	public int getOrientation();
 	
+	/**returns the plot orientation as either vertical or horizontal*/
+	public PlotOrientation getOrientation();
+	
+	/**moves the plot a certain distance*/
 	public boolean moveEntirePlot(double dx, double dy);
 }

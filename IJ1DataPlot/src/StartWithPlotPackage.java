@@ -33,6 +33,9 @@ import includedToolbars.ObjectToolset1;
 import includedToolbars.QuickFiguresToolBar;
 import includedToolbars.ToolInstallers;
 import logging.IssueLog;
+import plotCreation.ColumnPlotCreator;
+import plotCreation.XYPlotCreator;
+import plotCreation.XYPlotCreator.xyPlotForm;
 import plotTools.ColumnSwapTool;
 import plotTools.TTestTool;
 import selectedItemMenus.SelectionOperationsMenu;
@@ -56,12 +59,9 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		StartWithPlotPackage freeRun = new  StartWithPlotPackage();
 		MenuBarForApp.addMenuBarItemInstaller(freeRun);
 		ObjectToolset1.includeBonusTool(new StartWithPlotPackage());
-		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(0));
-		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(1));
-		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(2));
-		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(3));
-		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(4));
-		SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(5));
+		
+		for(int i=0; i<=5; i++)SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(i));
+	
 		alreadyInstalled=true;
 		
 	}
@@ -80,19 +80,18 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		installer.installItem(new ExampleShower(4, false));
 		
 		
-		installer.installItem(new ExcelFileToBarPlot(0));
-		installer.installItem(new ExcelFileToBarPlot(1));
-		installer.installItem(new ExcelFileToBarPlot(2));
-		installer.installItem(new ExcelFileToBarPlot(3));
-		installer.installItem(new ExcelFileToBarPlot(4));
-		installer.installItem(new ExcelFileToXYPlot(0));
-		installer.installItem(new ExcelFileToXYPlot(1));
-		installer.installItem(new ExcelFileToXYPlot(2));
+		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.BAR_AND_SCATTER));
+		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.STANDARD_BAR_PLOT));
+		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.SCATTER_POINTS));
+		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.BOX_PLOT));
+		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.TUKEY_BOX_PLOT));
+		for(xyPlotForm form:XYPlotCreator.xyPlotForm.values()) installer.installItem(new ExcelFileToXYPlot(form));
+		
 		installer.installItem(new ExcelFileToComplexCategoryPlot(0));
 		installer.installItem(new ExcelFileToComplexCategoryPlot(1));
 		installer.installItem(new ExcelFileToComplexCategoryPlot(2));
 		installer.installItem(new ExcelFileToComplexCategoryPlot(3));
-		installer.installItem(new ExcelFileToKaplanPlot(0));
+		installer.installItem(new ExcelFileToKaplanPlot());
 		installer.installItem(new ExcelRowToJTable());
 		installer.installItem(new ShowTable(1));
 		installer.installItem(new ShowTable(9));
