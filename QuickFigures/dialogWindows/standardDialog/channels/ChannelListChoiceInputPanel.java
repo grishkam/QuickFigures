@@ -393,6 +393,14 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem implements ActionLi
 		if(super.entry==null) return false;
 		return currentValues.contains(entry.getOriginalChannelIndex());
 	}
+	
+	/**
+	 * @return the color used for this item
+	 */
+	public Color getDisplayColor() {
+		if (entry==null) return Color.black;
+		return entry.getColor().darker();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
