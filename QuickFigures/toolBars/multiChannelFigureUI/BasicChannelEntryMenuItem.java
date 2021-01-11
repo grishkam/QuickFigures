@@ -69,7 +69,7 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 				this.setIcon(null);
 			} else {
 				mm.put(TextAttribute.STRIKETHROUGH, !TextAttribute.STRIKETHROUGH_ON);
-				mm.put(TextAttribute.FOREGROUND, getDisplayColor());
+				mm.put(TextAttribute.FOREGROUND,  getTextColor());
 				this.setIcon(new ColorIcon(getDisplayColor()));
 			} 
 		}
@@ -77,6 +77,10 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 		
 	}
 
+	/**The color of the text of the menu item*/
+	public Color getTextColor() {
+		return getDisplayColor();
+	}
 
 	/**
 	 * @return the color used for this item
