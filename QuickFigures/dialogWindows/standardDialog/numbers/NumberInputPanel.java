@@ -40,13 +40,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
+import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 
 
 /**A JPanel containing a Label and a numeric text field for placement into a standard dialog with a grided panel*/
-public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentListener, MouseMotionListener, OnGridLayout{
+public class NumberInputPanel extends InputPanel implements KeyListener, AdjustmentListener, MouseMotionListener, OnGridLayout{
 
 	/**
 	 * 
@@ -120,7 +121,6 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 	double number=0;
 	int slidermin=0; 
 	int slidermax=100;
-	private String key;
 	public double originalStatus;
 	
 	/**meant to be implicit constructor for subclasses*/
@@ -312,10 +312,7 @@ public class NumberInputPanel extends JPanel implements KeyListener, AdjustmentL
 		return label;
 	}
 
-	public void setKey(String key) {
-		this.key=key;
-		
-	}
+	
 	
 	
 	/**used for easy way to obtain a number from the user*/

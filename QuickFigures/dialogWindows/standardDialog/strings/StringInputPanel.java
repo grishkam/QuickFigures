@@ -32,16 +32,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
 /**A JPanel containing a Label and a Text field for placement into a standard dialog with a grided panel*/
-public class StringInputPanel extends JPanel implements OnGridLayout, KeyListener{
+public class StringInputPanel extends InputPanel implements OnGridLayout, KeyListener{
 
 	JLabel label=new JLabel();
 	JTextField field=new JTextField(15); {field.addKeyListener(this);}
 	ArrayList<StringInputListener> lis=new ArrayList<StringInputListener>();
 	String lasts="";
-	private String key;
+	
 	private String originalStatus;
 	
 	
@@ -150,10 +151,7 @@ public class StringInputPanel extends JPanel implements OnGridLayout, KeyListene
 
 
 
-	public void setKey(String key) {
-	this.key=key;
-		
-	}
+	
 	
 	public void setToDimension(Rectangle contend) {
 		String st= contend.width+" X "+contend.height;

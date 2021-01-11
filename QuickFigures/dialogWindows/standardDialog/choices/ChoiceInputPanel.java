@@ -32,10 +32,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
 /**A JPanel containing a combo box for placement into a standard dialog with a grided panel*/
-public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListener{
+public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemListener{
 
 	protected JLabel label=new JLabel();
 	protected JComboBox<? extends Object> box=new JComboBox<String>();
@@ -45,10 +46,12 @@ public class ChoiceInputPanel extends JPanel implements OnGridLayout, ItemListen
 	
 	public JComboBox<? extends Object> getBox() {return box;}
 	ArrayList<ChoiceInputListener> listeners=new ArrayList<ChoiceInputListener>();
-	private String key;
+	
 	
 	public int originalStatus;
 	private ArrayList<Integer> originalValues=new ArrayList<Integer>();
+	
+	
 	
 	
 	
@@ -188,14 +191,32 @@ public void setValue(int value) {
 		
 	}
 
-	public void setKey(String key) {
-		this.key=key;
-		
-	}
+	
 	
 	/**the number of choices available*/
 	public int getNChoices() {return box.getModel().getSize();}
 	
 	public int howManyMayBeSelected() {return 1;}
+	
+	/**returns the names of the enums*/
+	public static String[] enumNames(Enum<?>[] en) {
+		String[] output = new String[en.length];
+		for(int i=0; i<output.length; i++) {
+			output[i]=en[i].name().toLowerCase();
+			output[i]=output[i].replaceAll("_", " ");
+		}
+		
+		return output;
+		
+	}
+	
+	/**Builds a choice input panel for enums*/
+	public static ChoiceInputPanel buildForEnum(String label, Enum<?>[] en, Enum<?> start) {
+		String[] names = enumNames(en);
+	
+		int startIndex = start.ordinal();
+		return new ChoiceInputPanel(label, names, startIndex);
+	}
+
 	
 }

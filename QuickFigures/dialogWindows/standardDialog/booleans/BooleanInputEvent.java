@@ -25,13 +25,14 @@ import java.awt.Component;
 import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
+import standardDialog.InputPanel;
 
 /**A component input event for boolean values*/
 public class BooleanInputEvent extends ComponentInputEvent {
 	private boolean bool=false;
 	
 	
-	public BooleanInputEvent(JPanel panel, Component component, boolean number) {
+	public BooleanInputEvent(InputPanel panel, Component component, boolean number) {
 		this.setSourcePanel(panel);
 		this.setComponent(component);
 		setBool(number);

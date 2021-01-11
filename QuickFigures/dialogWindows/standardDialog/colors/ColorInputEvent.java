@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import applicationAdapters.CanvasMouseEvent;
 import standardDialog.ComponentInputEvent;
+import standardDialog.InputPanel;
 
 /**A component input event for Colors*/
 public class ColorInputEvent extends ComponentInputEvent {
@@ -35,7 +36,7 @@ public class ColorInputEvent extends ComponentInputEvent {
 	public CanvasMouseEvent event;
 
 	
-	public ColorInputEvent(JPanel sourcePanel, Component component, Color number) {
+	public ColorInputEvent(InputPanel sourcePanel, Component component, Color number) {
 		this.setSourcePanel(sourcePanel);
 		this.setComponent(component);
 		this.setColor(number);

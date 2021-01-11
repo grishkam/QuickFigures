@@ -25,6 +25,7 @@ import java.awt.Component;
 import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
+import standardDialog.InputPanel;
 
 /**A component input event for choices*/
 public class ChoiceInputEvent extends ComponentInputEvent {
@@ -33,7 +34,7 @@ public class ChoiceInputEvent extends ComponentInputEvent {
 	Object chosen;
 	
 	
-	public ChoiceInputEvent(JPanel panel, Component component, int number, Object chosenObject) {
+	public ChoiceInputEvent(InputPanel panel, Component component, int number, Object chosenObject) {
 		this.setSourcePanel(panel);
 		this.setComponent(component);
 		this.setIndex(number);
@@ -42,7 +43,7 @@ public class ChoiceInputEvent extends ComponentInputEvent {
 
 
 
-	public double getNumber() {
+	public double getChoiceIndex() {
 		return number;
 	}
 

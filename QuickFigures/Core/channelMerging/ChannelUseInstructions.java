@@ -141,7 +141,7 @@ public class ChannelUseInstructions implements Serializable {
 				this.excludedChannelPanels.setExcluded(c,excluded);
 			}
 
-			private class ChannelExclusionInstructions implements Serializable {
+			public class ChannelExclusionInstructions implements Serializable {
 				
 				/**
 				 * 
@@ -149,6 +149,10 @@ public class ChannelUseInstructions implements Serializable {
 				private static final long serialVersionUID = 1L;
 				ArrayList<Integer> chosenChannel=new ArrayList<Integer>();
 			
+				
+				/**returns the list of selected channels*/
+				public ArrayList<Integer> getList(){return chosenChannel;}
+				
 			/**
 			if the given channel is excluded from the merge, removes it from the excluded channel list
 			 */
@@ -460,6 +464,8 @@ public class ChannelUseInstructions implements Serializable {
 			public ArrayList<Integer> getExcludedChannelPanels() {
 				return excludedChannelPanels.chosenChannel;
 			}
+			
+			
 
 			/**sets the list of which channel panels should be excluded from the figure*/
 			public void setExcludedChannelPanels(ArrayList<Integer> excludedChannelPanels) {
@@ -470,6 +476,8 @@ public class ChannelUseInstructions implements Serializable {
 			public ArrayList<Integer> getNoMergeChannels() {
 				return noMergeChannels.chosenChannel;
 			}
+			
+			
 
 			/**set the list of channels to be excluded from the merged image panels*/
 			public void setNoMergeChannels(ArrayList<Integer> noMergeChannels) {

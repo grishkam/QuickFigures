@@ -30,10 +30,11 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
 /**A JPanel containing components needed to select an object*/
-public class ItemSelectblePanel extends JPanel implements OnGridLayout, ItemListener{
+public class ItemSelectblePanel extends InputPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();
 	UserSelectable box=null;

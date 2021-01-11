@@ -25,6 +25,7 @@ import java.awt.Component;
 import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
+import standardDialog.InputPanel;
 
 /**A component input event for boolean values*/
 public class StringInputEvent extends ComponentInputEvent{
@@ -32,7 +33,7 @@ public class StringInputEvent extends ComponentInputEvent{
 	String inputString="";
 
 	
-	public StringInputEvent(JPanel panel, Component component, String st) {
+	public StringInputEvent(InputPanel panel, Component component, String st) {
 		this.setSourcePanel(panel);
 		this.setComponent(component);
 		inputString=st;

@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 /**A superclass for different types of standard dialog parts*/
 public class ComponentInputEvent {
 
-	private JPanel sourcePanel;
+	private InputPanel sourcePanel;
 	private Component component;
 	protected String key;
 	
@@ -39,11 +39,11 @@ public class ComponentInputEvent {
 		this.component = component;
 	}
 	
-	public JPanel getSourcePanel() {
+	public InputPanel getSourcePanel() {
 		return sourcePanel;
 	}
 
-	public void setSourcePanel(JPanel sourcePanel) {
+	public void setSourcePanel(InputPanel sourcePanel) {
 		this.sourcePanel = sourcePanel;
 	}
 	

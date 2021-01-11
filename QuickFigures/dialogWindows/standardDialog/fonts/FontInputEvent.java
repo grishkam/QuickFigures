@@ -26,6 +26,7 @@ import java.awt.Font;
 import javax.swing.JPanel;
 
 import standardDialog.ComponentInputEvent;
+import standardDialog.InputPanel;
 
 /**A component input event for fonts*/
 public class FontInputEvent extends ComponentInputEvent {
@@ -33,7 +34,7 @@ public class FontInputEvent extends ComponentInputEvent {
 	private Font font;
 
 	
-	public FontInputEvent(JPanel sourcePanel, Component component, Font f) {
+	public FontInputEvent(InputPanel sourcePanel, Component component, Font f) {
 		this.setSourcePanel(sourcePanel);
 		this.setComponent(component);
 		this.setFont(f);

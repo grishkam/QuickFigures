@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 10, 2021
  * Version: 2021.1
  */
 package genericPlot;
@@ -49,6 +49,7 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.AxisLabel;
@@ -112,9 +113,10 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	public BasicPlot(String name) {
 		super(name);
 		generateLayout() ;
-		GenerateAxes() ;
+		generateAxes() ;
 	}
 	
+	/**generates a plot layout object*/
 	public void generateLayout() {
 		this.plotLayout=new PlotLayout(new BasicLayout(1, 1, 200, 150, 0,0 , true));
 		plotLayout.moveLocation(60, 50);
@@ -123,8 +125,8 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 		plotLayout.setPlotArea(this);
 	}
 
-	
-	public void GenerateAxes() {
+	/**creates the plot area and the axes of the plot. Adds those to the layer*/
+	public void generateAxes() {
 		areaRect = new  PlotAreaRectangle(this,new Rectangle(60, 50, 150, 125));
 		this.add(areaRect);
 		areaRect.setStrokeColor(Color.black);
@@ -140,21 +142,26 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	
 	}
 	
+	/**returns the bounds of the plot area*/
 	public Rectangle getPlotArea() {
-		if (areaRect==null) {}
+		if (areaRect==null) {IssueLog.log("missing plot area");}
 		return areaRect.getBounds();
-	//	return this.plotLayout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
-
+	
 	}
 	
+	/**returns the plot area object*/
 	public PlotAreaRectangle plotAreaDefiningRectangle() {
 		return areaRect;
 	}
 	
+	/**overrides the daw method of the superclass*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
-			xAxis.matchLocationToPlotArea();
+			xAxis.matchLocationToPlotArea();//makes sure axes are at teh sides of plot area
 			yAxis.matchLocationToPlotArea();
+			if (alternateYaxis!=null) {
+				//TODO: determine if the match location method is required at this spot
+			}
 			super.draw(graphics, cords);
 	}
 
@@ -458,12 +465,14 @@ public void resetMinMax(boolean ticDistance) {
 	resetIndependantVariableAxis(ticDistance);
 }
 
+
 protected final void resetIndependantVariableAxis(boolean ticReset) {
 	ArrayList<DataShowingShape> shapes2 = getAllDataShapes();
 	double max2 = PlotUtil.findMaxNeededPositionFrom(shapes2);
 	this.setInDependantVariableAxisBasedOnMax(max2,ticReset, this.getInDependantVariableAxis());
 }
 
+/**returns all of the data showing shapes that are being used by each data series group to display data*/
 protected ArrayList<DataShowingShape> getAllDataShapes() {
 	ArrayList<? extends BasicDataSeriesGroup> series = getAllDataSeries();
 	ArrayList<DataShowingShape> allshapes = new ArrayList<DataShowingShape>();
@@ -568,6 +577,26 @@ public boolean canAccept(ZoomableGraphic z) {
 	return false;
 }
 
+/**returns true if there are error bar objects in the plot*/
+public boolean hasErrorBars() {
+	return getErrorBars().size()>0;
+}
+
+/**returns true if there are data bar objects in the plot*/
+public boolean hasDataBars() {
+	return this.getMeanBars().size()>0;
+}
+
+/**returns true if there are data bar objects in the plot*/
+public boolean hasBoxplots() {
+	return this.getBoxplots().size()>0;
+}
+
+/**returns true if there are scatter pints in the plot*/
+public boolean hasScatterPoints() {
+	return this.getScatterPoints().size()>0;
+}
+
 /**returns all of the error bars within the plot*/
 ArrayList<ErrorBarShowingShape> getErrorBars() {
 	ArrayList<ErrorBarShowingShape> output=new ArrayList<ErrorBarShowingShape>();
@@ -595,7 +624,8 @@ public ArrayList<DataBarShape> getMeanBars() {
 	return output;
 }
 
-@MenuItemMethod(menuActionCommand = "Edit Error Bar", menuText = "Error Bars", subMenuName="Edit")
+/**shows a dialog to change the error bar style for all error bars, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "Edit Error Bar", menuText = "Error Bars", subMenuName="Edit", permissionMethod="hasErrorBars")
 public void editErrorBar() {
 	ArrayList<ErrorBarShowingShape> bars = getErrorBars();
 	if (bars.size()==0) return;
@@ -604,7 +634,8 @@ public void editErrorBar() {
 	d.showDialog();
 }
 
-@MenuItemMethod(menuActionCommand = "Edit Plot Bar", menuText = "Data Bars", subMenuName="Edit")
+/**method shows a dialog to change the data bar, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "Edit Plot Bar", menuText = "Data Bars", subMenuName="Edit", permissionMethod="hasDataBars")
 public void editMeanBar() {
 	ArrayList<DataBarShape> bars = getMeanBars();
 	if (bars.size()==0) return;
@@ -613,7 +644,9 @@ public void editMeanBar() {
 	d.showDialog();
 }
 
+
 //@MenuItemMethod(menuActionCommand = "Expand Plot to fit Plot Bar", menuText = "Expand Plot Size to Fit Data Bars", subMenuName="Edit")
+/**expands the plot area to fit all the data bars*/
 public PlotAreaChangeUndo expandPlotToFitMeanBar() {
 	PlotAreaChangeUndo undo = new PlotAreaChangeUndo(this);
 	
@@ -633,6 +666,7 @@ public PlotAreaChangeUndo expandPlotToFitMeanBar() {
 	return undo;
 }
 
+/**estimates the number of units needed to display all the data bars on the plot*/
 public int getNeededWidthOfPlot() {
 	ArrayList<DataBarShape> bars = getMeanBars();
 	if (bars.size()==0) return 0;
@@ -643,7 +677,8 @@ public int getNeededWidthOfPlot() {
 	return neededSize;
 }
 
-@MenuItemMethod(menuActionCommand = "Edit Points", menuText = "Scatter Points", subMenuName="Edit")
+/**shows a dialog to change the scatter points, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "Edit Points", menuText = "Scatter Points", subMenuName="Edit", permissionMethod="hasScatterPoints")
 public void editScatterPoints() {
 	ArrayList<ScatterPoints> bars = getScatterPoints();
 	if (bars.size()==0) return;
@@ -652,7 +687,8 @@ public void editScatterPoints() {
 	d.showDialog();
 }
 
-@MenuItemMethod(menuActionCommand = "Edit Boxes", menuText = "Boxplots", subMenuName="Edit")
+/**shows a dialog to change the box plot appearance, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "Edit Boxes", menuText = "Boxplots", subMenuName="Edit", permissionMethod="hasBoxplots")
 public void editBoxplots() {
 	ArrayList<Boxplot> bars = getBoxplots();
 	if (bars.size()==0) return;
@@ -661,7 +697,7 @@ public void editBoxplots() {
 	d.showDialog();
 }
 
-
+/**returns the boxplots in the figure*/
 private ArrayList<Boxplot> getBoxplots() {
 	ArrayList<Boxplot>  output=new ArrayList<Boxplot> ();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
@@ -670,6 +706,7 @@ private ArrayList<Boxplot> getBoxplots() {
 	return output;
 }
 
+/**returns the scatter points in the figure*/
 private ArrayList<ScatterPoints> getScatterPoints() {
 	ArrayList<ScatterPoints> output=new ArrayList<ScatterPoints> ();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
@@ -678,6 +715,7 @@ private ArrayList<ScatterPoints> getScatterPoints() {
 	return output;
 }
 
+/**Adds labels for every data series on the plot*/
 private ArrayList<PlotLabel> getSeriesLabels() {
 	ArrayList<PlotLabel> output=new ArrayList<PlotLabel> ();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){
@@ -686,6 +724,7 @@ private ArrayList<PlotLabel> getSeriesLabels() {
 	return output;
 }
 
+/**Adds the scatter points, annotation indicates that it should be called by a popup menu*/
 @MenuItemMethod(menuActionCommand = "Add Scatter Plot", menuText = "New Scatter Points", subMenuName="Add")
 public AbstractUndoableEdit addScatter() {
 	CombinedEdit undo = new CombinedEdit();
@@ -693,6 +732,7 @@ public AbstractUndoableEdit addScatter() {
 	return undo;
 }
 
+/**Adds an additional dependent variable axis (y axis) to the plot*/
 @MenuItemMethod(menuActionCommand = "Add Secondary Vertical Axis", menuText = "Secondary Vertical Axis", subMenuName="Add", orderRank=500)
 public AbstractUndoableEdit addVAxis() {
 	CombinedEdit undo = new CombinedEdit();
@@ -741,7 +781,7 @@ public AbstractUndoableEdit addBoxplotBar() {
 
 
 
-@MenuItemMethod(menuActionCommand = "Remove Scatter Plot", menuText = "Points", subMenuName="Remove")
+@MenuItemMethod(menuActionCommand = "Remove Scatter Plot", menuText = "Points", subMenuName="Remove", permissionMethod="hasScatterPoints")
 public AbstractUndoableEdit removeScatter() {
 	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeScatter());}
@@ -755,7 +795,8 @@ public AbstractUndoableEdit removeLabel() {
 	return undo;
 }
 
-@MenuItemMethod(menuActionCommand = "Remove Data Bar", menuText = "Data Bars", subMenuName="Remove")
+/**removes the data bars, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "Remove Data Bar", menuText = "Data Bars", subMenuName="Remove", permissionMethod="hasDataBars")
 public CombinedEdit removeDataBar() {
 	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeDataBar());;}
@@ -763,14 +804,15 @@ public CombinedEdit removeDataBar() {
 }
 
 
-@MenuItemMethod(menuActionCommand = "Remove Error Bar", menuText = "Error Bars", subMenuName="Remove")
+@MenuItemMethod(menuActionCommand = "Remove Error Bar", menuText = "Error Bars", subMenuName="Remove", permissionMethod="hasErrorBars")
 public CombinedEdit removeErrorBar() {
 	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeErrorBar());;}
 	return undo;
 }
 
-@MenuItemMethod(menuActionCommand = "Remove Boxplot Bar", menuText = "Boxplots", subMenuName="Remove")
+/**removes the boxplot shapes, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "Remove Boxplot Bar", menuText = "Boxplots", subMenuName="Remove", permissionMethod="hasBoxplots")
 public CombinedEdit removeBoxplots() {
 	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeBoxplot());;;}
@@ -935,7 +977,7 @@ public Rectangle getPlotLabelLocationShape() {
 	return this.areaRect.getBounds();
 }
 
-
+/**switches the two axes*/
 @MenuItemMethod(menuActionCommand = "Flip axes", menuText = "Flip Axes", subMenuName="Edit")
 public AxisFlipUndo axisFlips() {
 	flipPlotOrientation();
@@ -945,6 +987,7 @@ public AxisFlipUndo axisFlips() {
 	
 }
 
+/**switches the roles of the x-axis with the y-axis of the plot*/
 protected void flipPlotOrientation() {
 	PlotAxisProperties a1 = this.xAxis.getAxisData();
 	PlotAxisProperties a2 = this.yAxis.getAxisData();
@@ -981,6 +1024,7 @@ protected void flipPlotOrientation() {
 	
 }
 
+/**Adds data series labels*/
 @MenuItemMethod(menuActionCommand = "Add Label", menuText = "New Series Labels", subMenuName="Add<Label", orderRank=40)
 public CombinedEdit addSeriesLabels() {
 	CombinedEdit undo = new CombinedEdit();
@@ -993,6 +1037,7 @@ public CombinedEdit addSeriesLabels() {
 	return undo;
 }
 
+/**displays a dialog for editing of the colors of the objects*/
 @MenuItemMethod(menuActionCommand = "Color edit 121", menuText = "Edit Series Colors", subMenuName="Edit", orderRank=40)
 public void editPlotColors() {
 	new SeriesStyleDialog(availableStyles, this.getAllDataSeries()).showDialog();;

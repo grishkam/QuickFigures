@@ -15,9 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 8, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Date Modified: Jan 10, 2021
+ * Version: 2021.1
  */
 package multiChannelFigureUI;
 
@@ -29,6 +28,7 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.ChannelEntry;
+import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
@@ -60,6 +60,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	private ArrayList<ChannelEntry> channels;
 	LocatedObject2D anchorObject=null;
 	
+	
 	int pressHandleIndex=0;
 	
 	private MultichannelDisplayLayer theDisplayLayer;
@@ -74,7 +75,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	}
 
 
-	/***/
+	/**Creates channel swap handles. Also sets the locations and colors for the handes*/
 	public void innitializeHandles() {
 		createHandles();
 		updateLocations();
@@ -251,12 +252,12 @@ public class ChannelSwapHandleList extends SmartHandleList {
 			
 			SmartPopupJMenu output = new SmartPopupJMenu ();
 			
-			ChannelPanelEditingMenu out = new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
-			if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
-				figure=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer();
-			}
+			figure=FigureOrganizingLayerPane.findFigureOrganizer(theDisplayLayer);
 			
-			
+			ChannelPanelEditingMenu out;
+			if(anchorObject instanceof ImagePanelGraphic)
+				out= new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
+			else out=new ChannelPanelEditingMenu(figure, ChannelUseInstructions.NONE_SELECTED);
 			if (figure.getMultiChannelDisplaysInLayoutOrder().size()==1) {out.addChannelRelevantMenuItems(output);} 
 			else {
 				SmartJMenu jEveryImage=new SmartJMenu("For Each Image");

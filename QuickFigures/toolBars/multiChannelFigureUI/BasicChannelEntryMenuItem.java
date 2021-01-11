@@ -15,11 +15,12 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 10, 2021
  * Version: 2021.1
  */
 package multiChannelFigureUI;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
@@ -45,6 +46,8 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 	 
 	 */
 	public BasicChannelEntryMenuItem(ChannelEntry ce) {
+		if(ce==null)
+			return;
 		this.entry=ce;
 		this.setText(entry.getShortLabel());
 		updateFont();
@@ -59,20 +62,28 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 		Font font2 = super.getFont();
 		font2=font2.deriveFont(fontStyle());
 		boolean strike=isExcludedChannel();
-		if (strike) 
-			{
-			mm.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-			mm.put(TextAttribute.FOREGROUND, entry.getColor().darker().darker().darker());
-			this.setIcon(null);
-			}
-		else 
-		{
-			mm.put(TextAttribute.STRIKETHROUGH, !TextAttribute.STRIKETHROUGH_ON);
-			mm.put(TextAttribute.FOREGROUND, entry.getColor());
-			this.setIcon(new ColorIcon(entry.getColor()));
+		if (entry!=null) {
+			if (strike) {
+				mm.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+				mm.put(TextAttribute.FOREGROUND, getDisplayColor().darker().darker().darker());
+				this.setIcon(null);
+			} else {
+				mm.put(TextAttribute.STRIKETHROUGH, !TextAttribute.STRIKETHROUGH_ON);
+				mm.put(TextAttribute.FOREGROUND, getDisplayColor());
+				this.setIcon(new ColorIcon(getDisplayColor()));
+			} 
 		}
 		this.setFont(font2.deriveFont(mm));
 		
+	}
+
+
+	/**
+	 * @return the color used for this item
+	 */
+	public Color getDisplayColor() {
+		if (entry==null) return Color.black;
+		return entry.getColor();
 	}
 
 	int fontStyle() {return Font.BOLD;}

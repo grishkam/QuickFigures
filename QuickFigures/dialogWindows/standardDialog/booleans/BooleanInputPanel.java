@@ -30,17 +30,18 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
 /**A JPanel containing a Label and a checkbox for placement into a standard dialog with a grided panel*/
-public class BooleanInputPanel extends JPanel implements OnGridLayout, ItemListener{
+public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();
 	JCheckBox checkBox=new JCheckBox("", false); {checkBox.addItemListener(this);}
 	boolean originAlStatus=false;
 	
 	ArrayList<BooleanInputListener> lis =new 	ArrayList<BooleanInputListener>();
-	private String key;
+	
 	public void addBooleanInputListener(BooleanInputListener l) {
 		lis.add(l);
 	}
@@ -129,10 +130,7 @@ public class BooleanInputPanel extends JPanel implements OnGridLayout, ItemListe
 			l.booleanInput(bi);
 		}
 	}
-	public void setKey(String key) {
-		this.key=key;
-		
-	}
+	
 	
 	/**Changes the status of the item to its original*/
 	public void revert() {

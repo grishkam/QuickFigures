@@ -424,7 +424,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		super.valueChanged(ne);
 		
 		if(ne.getKey()==null) {return;}
-		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getNumber();updateDisplayImage();}
+		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getChoiceIndex();updateDisplayImage();}
 	}
 
 	@Override

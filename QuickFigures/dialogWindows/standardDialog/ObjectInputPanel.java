@@ -20,6 +20,7 @@
  */
 package standardDialog;
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,7 +29,7 @@ import javax.swing.JPanel;
 import logging.IssueLog;
 
 /**A superclass for multiple panels that edit an object and notify object edit listeners */
-public class ObjectInputPanel extends JPanel{
+public abstract class ObjectInputPanel extends InputPanel{
 	
 /**
 	 * 
@@ -55,4 +56,6 @@ ArrayList<ObjectEditListener> lis=new ArrayList<ObjectEditListener>();
 			IssueLog.logT(t);
 		}
 	}
+
+	
 }

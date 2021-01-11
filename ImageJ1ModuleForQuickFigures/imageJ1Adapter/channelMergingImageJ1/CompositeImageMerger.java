@@ -131,7 +131,7 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 		
 		
 		}  catch (Throwable t) {
-			IssueLog.logT(t);
+			IssueLog.log("Empty image panel created ");
 			return createEmpty(imp);
 			}
 		

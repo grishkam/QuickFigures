@@ -43,11 +43,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.numbers.NumericTextField;
 
 /**A dialog component that allows the user to change a Font*/
-public class FontChooser extends JPanel implements MouseMotionListener, ItemListener, KeyListener,OnGridLayout  {
+public class FontChooser extends InputPanel implements MouseMotionListener, ItemListener, KeyListener,OnGridLayout  {
 	
 	/**
 	 * 

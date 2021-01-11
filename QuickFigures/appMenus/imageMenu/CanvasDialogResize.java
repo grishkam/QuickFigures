@@ -170,7 +170,7 @@ public class CanvasDialog extends StandardDialog {
 		
 					@Override
 					public void valueChanged(ChoiceInputEvent ne) {
-						type=(int) ne.getNumber();
+						type=(int) ne.getChoiceIndex();
 						double w2 = width2/getRatio();
 						double h2 = height2/getRatio();
 						wInput.setNumber(w2);

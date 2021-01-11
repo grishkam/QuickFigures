@@ -55,6 +55,7 @@ import standardDialog.booleans.BooleanArrayInputPanel;
 import standardDialog.booleans.BooleanInputEvent;
 import standardDialog.booleans.BooleanInputListener;
 import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.channels.ChannelListChoiceInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.choices.ChoiceInputListener;
 import standardDialog.choices.ChoiceInputPanel;
@@ -196,6 +197,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	protected HashMap<String, ColorListChoice> colors=new HashMap<String, ColorListChoice>();
 	protected HashMap<String, BooleanArrayInputPanel> boolSets=new HashMap<String, BooleanArrayInputPanel>();
 
+	private HashMap<String, ChannelListChoiceInputPanel> chanChoices=new HashMap<String, ChannelListChoiceInputPanel>();;
+
+	
 
 	
 	private ArrayList<ChannelEntry> channelEnt;
@@ -341,6 +345,13 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return ob.isChecked();
 	}
 	
+	/**returns the channel choices*/
+	public ArrayList<Integer> getChannelChoices(String key) {
+		ChannelListChoiceInputPanel ob = chanChoices.get(key);
+		if(ob==null) return new ArrayList<Integer>();
+		return  ob.getSelectedIndices();
+	}
+	
 	public boolean[] getBooleanArray(String key) {
 		BooleanArrayInputPanel ob = boolSets.get(key);
 		if(ob==null) return new boolean[] {false};
@@ -360,7 +371,15 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return ob.getBox().getSelectedObjects();
 	}
 
-
+	
+	/**Adds a channel list choice to the dialog*/
+	public void add(String key, ChannelListChoiceInputPanel st) {
+		
+		chanChoices.put(key, st);
+		st.addChoiceInputListener(this);
+		st.setKey(key);
+		place(st);
+	}
 	
 	
 	public void place(OnGridLayout st) {
@@ -746,6 +765,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		
 	}
 	
+	/**returns the channels chosen by checkbox. not currently used but kept in the event of future use*/
 	public ArrayList<ChannelEntry> getChannelsChosen() {
 		ArrayList<ChannelEntry> channelEnt2 = new ArrayList<ChannelEntry>();
 		if (channelEnt==null) return channelEnt2;
@@ -796,6 +816,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 			i.revert();
 		}
 		for(FontChooser i:fonts.values()) {
+			i.revert();
+		}
+		for(ChannelListChoiceInputPanel i:chanChoices.values()) {
 			i.revert();
 		}
 		
