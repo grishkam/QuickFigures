@@ -22,7 +22,6 @@ package standardDialog.numbers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,8 +32,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Arc2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Arc2D.Double;
+import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
@@ -52,7 +51,6 @@ public class AngleBox2 extends JComponent implements MouseListener, MouseMotionL
 	private static final long serialVersionUID = 1L;
 
 	private double angle=0;
-	
 	int x=18;
 	int y=18;
 	
@@ -102,7 +100,7 @@ public class AngleBox2 extends JComponent implements MouseListener, MouseMotionL
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -114,19 +112,19 @@ public class AngleBox2 extends JComponent implements MouseListener, MouseMotionL
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -140,18 +138,16 @@ public class AngleBox2 extends JComponent implements MouseListener, MouseMotionL
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
 	public int getHeight() {
-		return 36;
-		
+		return 36;	
 	}
 	
 	public int getWidth() {
 		return 36;
-		
 	}
 	
 	  public Dimension getPreferredSize() {
@@ -170,7 +166,6 @@ public class AngleBox2 extends JComponent implements MouseListener, MouseMotionL
 	 * @return
 	 */
 	public double getAngle() {
-		
 		return angle*Math.PI/180;
 	}
 
@@ -179,7 +174,6 @@ public class AngleBox2 extends JComponent implements MouseListener, MouseMotionL
 	 */
 	public void setAngle(double number) {
 		angle=number/(Math.PI/180);
-		
 	}
 	
 	
