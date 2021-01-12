@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 6, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import java.awt.BasicStroke;
@@ -61,17 +66,34 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	
 	public MiniToolBarPanel(ImageWindowAndDisplaySet display, boolean vertical) {
 		this.vertical=vertical;
-		this.displaySet=display;
+		setDisplay(display);
+		
 		addAction(new ZoomFit("In"));
 		addAction(new ZoomFit("Out"));
 		addAction(new ZoomFit(ZoomFit.SCREEN_FIT));
 		
 		
 		buttonList=createActionList();
+		
 		this.addMouseListener(this);
+		
+	}
+
+
+
+	/**changes the display set for this panels
+	 * @param display
+	 */
+	public void setDisplay(ImageWindowAndDisplaySet display) {
+		if(display==this.displaySet)
+			return;
+		this.displaySet=display;
 		if (display!=null)
 			display.setSidePanel(this);
+		getChangingButtonList();
 	}
+	
+	
 
 	public MiniToolBarPanel(ImageWindowAndDisplaySet display) {
 		this(display, true);

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 11, 2021
  * Version: 2021.1
  */
 package standardDialog.channels;
@@ -67,7 +67,7 @@ public class ChannelColorCellRenerer extends BasicComboBoxRenderer {
 		if (out instanceof ChannelColorCellRenerer) {
 			ChannelColorCellRenerer c=(ChannelColorCellRenerer) out;
 			c.channelNumber=theindex-1;
-				{this.setFont(this.getFont().deriveFont(Font.BOLD).deriveFont((float)20.0));}
+				{this.setFont(this.getFont().deriveFont(Font.BOLD).deriveFont((float)18.0));}
 			if (cellHasFocus) {
 				c.channelNumber=theindex-1;
 	

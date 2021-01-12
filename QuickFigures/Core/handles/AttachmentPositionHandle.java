@@ -36,6 +36,7 @@ import javax.swing.JPopupMenu;
 
 import actionToolbarItems.AlignItem;
 import applicationAdapters.CanvasMouseEvent;
+import genericTools.Object_Mover;
 import graphicTools.AttachedItemTool;
 import graphicTools.AttachedItemTool2;
 import graphicalObjects.CordinateConverter;
@@ -48,6 +49,7 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdges;
+import locatedObject.ShowsOptionsDialog;
 import locatedObject.TakesAttachedItems;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiAttachmentPositionDialog;
@@ -279,10 +281,17 @@ public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 	transplantIt=false;
 	currentEdit=new CombinedEdit();
 	
-	//	double distance = this.getCordinateLocation().distance(canvasMouseEventWrapper.getClickedXImage(), canvasMouseEventWrapper.getClickedYImage());
-	
-	//if (distance<2.5) setInfineControl(true); else setInfineControl(false);
-	
+	/**options dialog for the item*/
+	int clickCount = canvasMouseEventWrapper.clickCount();
+	if (object instanceof ShowsOptionsDialog && clickCount>1) {
+		
+		if(object instanceof TextGraphic) {
+			TextGraphic t=(TextGraphic) object;
+			if (!t.isEditMode())t.setEditMode(true);
+			else if (clickCount>3)t.showOptionsDialog();
+		}
+		else ((ShowsOptionsDialog) object).showOptionsDialog();
+	}
 }
 
 public boolean isInfineControl() {

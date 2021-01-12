@@ -22,8 +22,6 @@ package standardDialog;
 
 import java.awt.Component;
 
-import javax.swing.JPanel;
-
 /**A superclass for different types of standard dialog parts*/
 public class ComponentInputEvent {
 

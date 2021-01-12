@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 
 /**A subclass of number input panel that allows the user to input the nuber for an angle
  * by dragging an angle box
- * @see AngleBox2
+ * @see AngleBox2 the component with an angle
  * @see NumberInputPanel
  * */
 public class AngleInputPanel extends NumberInputPanel {

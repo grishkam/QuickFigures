@@ -40,6 +40,7 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 
 	/**Constructs a dialog for the given channel label properties*/
 	public  ChannelLabelPropertiesDialog(ChannelLabelProperties p) {
+		this.setTitle("Merge Label");
 		properties = p;
 		this.addOptionsToDialog();
 	}

@@ -24,7 +24,9 @@ import javax.swing.JMenuItem;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.MultiChannelImage;
+import figureEditDialogs.DisplayRangeChangeListener;
 import figureEditDialogs.SelectImageDialog;
+import figureEditDialogs.WindowLevelDialog;
 import undo.ChannelDisplayUndo;
 import undo.CombinedEdit;
 

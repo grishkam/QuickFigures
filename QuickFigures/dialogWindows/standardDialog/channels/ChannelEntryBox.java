@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 11, 2021
  * Version: 2021.1
  */
 package standardDialog.channels;
@@ -74,9 +74,7 @@ public class ChannelEntryBox extends JComboBox<Object> {
 	public static String getUsedChanName(ChannelEntry c1, String zeroText) {
 		String st = zeroText; 
 		if (c1!=null) {
-			st=c1.getRealChannelName();
-			if (st==null) st=c1.getLabel();
-			if (st==null) st="Ch "+c1.getOriginalChannelIndex();
+			st=c1.getLabelForMenuItem();
 		}
 		return st;
 	}

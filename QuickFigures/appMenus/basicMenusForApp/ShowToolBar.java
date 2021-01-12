@@ -21,6 +21,7 @@
 package basicMenusForApp;
 
 import applicationAdapters.DisplayedImage;
+import imageDisplayApp.AdaptiveToolbar;
 import imageDisplayApp.GraphicSetDisplayWindow;
 import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.ActionToolset2;
@@ -32,9 +33,9 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 
 	public static final String OBJECT_TOOLS="Object Tools", lAYOUT_TOOLS="Layout Tools", ACTION_BAR="Action Tools", SHAPE_AND_TEXT_EDITING_BAR="Shape And Text Edit Actions", MAIN_TOOLBAR="Main Toolbar";
 
-	private static final String SIDE_PANEL="Side Panels";
+	private static final String SIDE_PANEL="Side Panels", SMART_TOOL_BAR="Smart Toolbar";
 	
-	public static String[] names=new String[] {OBJECT_TOOLS, lAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MAIN_TOOLBAR, SIDE_PANEL};
+	public static String[] names=new String[] {OBJECT_TOOLS, lAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MAIN_TOOLBAR, SMART_TOOL_BAR};
 	
 	
 	int toolBarType=0;
@@ -50,7 +51,10 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 		if (getToolBarName().equals(ACTION_BAR))new AlignAndArrangeActionTools().run("");
 		if (getToolBarName().equals(SHAPE_AND_TEXT_EDITING_BAR))new ActionToolset2().run("");
 		if (getToolBarName().equals(MAIN_TOOLBAR))new ObjectToolset1().run("");
-		
+		if (getToolBarName().equals(SMART_TOOL_BAR)) {
+			AdaptiveToolbar a = new AdaptiveToolbar();
+			a.setVisible(true);
+		}
 		if (this.getToolBarName().equals(SIDE_PANEL)) {
 			if (diw.getWindow() instanceof GraphicSetDisplayWindow) {
 				GraphicSetDisplayWindow g=(GraphicSetDisplayWindow) diw.getWindow();

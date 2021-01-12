@@ -454,7 +454,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		return false;
 	}
 	
-	
+	/**Displays a recreate panels dialog for the given figure*/
 	public static PanelStackDisplayOptions recreateFigurePanels(FigureOrganizingLayerPane f, boolean cropToo) {
 		
 		ArrayList<ImageDisplayLayer> d1 = f.getMultiChannelDisplaysInLayoutOrder();

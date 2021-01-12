@@ -21,23 +21,14 @@
 package export.svg;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Font;
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
 import org.apache.batik.svggen.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import applicationAdapters.ToolbarTester;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
-import imageDisplayApp.ImageWindowAndDisplaySet;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 

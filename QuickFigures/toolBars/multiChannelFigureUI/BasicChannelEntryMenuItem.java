@@ -49,7 +49,7 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 		if(ce==null)
 			return;
 		this.entry=ce;
-		this.setText(entry.getShortLabel());
+		this.setText(entry.getLabelForMenuItem());
 		updateFont();
 	}
 

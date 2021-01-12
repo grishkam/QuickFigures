@@ -23,8 +23,6 @@ package standardDialog.colors;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.JPanel;
-
 import applicationAdapters.CanvasMouseEvent;
 import standardDialog.ComponentInputEvent;
 import standardDialog.InputPanel;

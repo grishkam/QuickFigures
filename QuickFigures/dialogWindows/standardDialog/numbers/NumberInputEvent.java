@@ -22,8 +22,6 @@ package standardDialog.numbers;
 
 import java.awt.Component;
 
-import javax.swing.JPanel;
-
 import standardDialog.ComponentInputEvent;
 import standardDialog.InputPanel;
 

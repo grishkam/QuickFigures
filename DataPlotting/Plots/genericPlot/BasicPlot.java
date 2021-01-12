@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 10, 2021
+ * Date Modified: Jan 11, 2021
  * Version: 2021.1
  */
 package genericPlot;
@@ -74,6 +74,8 @@ import plotTools.PlotIcon;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
+import undo.UndoLayoutEdit;
+import undo.UndoMoveItems;
 import undoForPlots.AxisFlipUndo;
 import undoForPlots.DataShapeUndo;
 import undoForPlots.PlotAreaChangeUndo;
@@ -934,8 +936,9 @@ public PlotCordinateHandler getCordinateHandler(int n) {
 
 }
 
+/**creates new figure legend bjects*/
 public void createFigureLegends() {
-	CombinedEdit undo = new CombinedEdit();
+	
 	Point2D p=new Point2D.Double(this.getPlotArea().getMaxX()+2, this.getPlotArea().getMinY());
 	for(BasicDataSeriesGroup aaa: this.getAllDataSeries()) try {
 		
@@ -954,23 +957,36 @@ protected void giveConsistentStanppingToLabelGroup(ArrayList<PlotLabel> labels) 
 	}
 }
 
-
-private void addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
+/**Adds a figure legend shape for the given data series
+ * The undo returned does not address all possible changes
+ * @return */
+private CombinedEdit addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
+	CombinedEdit undo=new CombinedEdit();
 	if (aaa.getLegandShape()==null||!aaa.hasItem(aaa.getLegandShape()))
-		aaa.addLegendShape();
+		undo.addEditToList(
+				aaa.addLegendShape());
+	
+	/**moved the legend into position*/
+	undo.addEditToList(new UndoMoveItems(aaa.getLegandShape()));
 	aaa.getLegandShape().setLocation(p.getX(), p.getY());
 
+	/**Ensures that there is a series label*/
 	if (aaa.getSeriesLabel()==null||!aaa.hasItem(aaa.getSeriesLabel()))
-		aaa.addLabel();
+		undo.addEditToList(aaa.addLabel());
 	
 	SeriesLabel l = aaa.getSeriesLabel();
 			l.setSnapTo(aaa.getLegandShape());
 			l.setAttachmentPosition(AttachmentPosition.defaultPlotLegand());
 			l.setAngle(0);
 			l.putIntoAnchorPosition();
+			undo.addEditToList(
+					new UndoLayoutEdit(plotLayout)
+					);
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
 			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), aaa.getLegandShape().getBounds());
 	 giveConsistentStanppingToLabelGroup(getSeriesLabels());	
+	 undo.establishFinalState();
+	 return undo;
 }
 
 public Rectangle getPlotLabelLocationShape() {

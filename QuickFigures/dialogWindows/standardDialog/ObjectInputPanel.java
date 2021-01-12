@@ -20,11 +20,8 @@
  */
 package standardDialog;
 
-import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.swing.JPanel;
 
 import logging.IssueLog;
 

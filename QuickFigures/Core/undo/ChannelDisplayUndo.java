@@ -24,7 +24,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import channelMerging.MultiChannelImage;
-import multiChannelFigureUI.DisplayRangeChangeListener;
+import figureEditDialogs.DisplayRangeChangeListener;
 
 /**An undoable edit for changes to a channels display range.
  * stores the final and initial min/max values for a collection of 

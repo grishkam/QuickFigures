@@ -23,8 +23,6 @@ package standardDialog.fonts;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JPanel;
-
 import standardDialog.ComponentInputEvent;
 import standardDialog.InputPanel;
 

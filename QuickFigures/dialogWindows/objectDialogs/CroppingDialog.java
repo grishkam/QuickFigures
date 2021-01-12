@@ -70,7 +70,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	public boolean wasEliminated=false;
 	String instructions="Set Crop Area";
 	
-	JButton elim=new JButton("Eliminate Cropping Rect"); {elim.addActionListener(new cropLis());}
+	JButton elim=new JButton("Eliminate Cropping Rectangle"); {elim.addActionListener(new cropLis());}
 	private ArrayList<ImagePanelGraphic> imagepanels=new ArrayList<ImagePanelGraphic>();
 	boolean includeAngle=false;
 	

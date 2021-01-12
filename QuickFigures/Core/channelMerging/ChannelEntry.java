@@ -71,6 +71,15 @@ public class ChannelEntry implements Serializable{
 		return "Channel "+ getOriginalChannelIndex();
 	}
 	
+	/**returns the recomended label for use in menu items*/
+	public String getLabelForMenuItem() {
+		String st=getRealChannelName();
+		if (st==null) st=getLabel();
+		if (st==null) st=getShortLabel();
+		if (st==null) st="Ch "+getOriginalChannelIndex();
+		return st;
+	}
+	
 	/**sets the channel label*/
 	public void setLabel(String label) {
 		this.label = label;

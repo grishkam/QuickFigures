@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import channelMerging.MultiChannelImage;
+import figureEditDialogs.WindowLevelDialog;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.ColorModeIcon;

@@ -19,7 +19,7 @@
  * Copyright (C) 2020 Gregory Mazo
  * 
  */
-package multiChannelFigureUI;
+package figureEditDialogs;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;

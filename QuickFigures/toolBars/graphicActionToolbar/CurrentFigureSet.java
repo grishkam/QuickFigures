@@ -27,6 +27,7 @@ import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.DisplayedImage;
 import graphicalObjects.FigureDisplayWorksheet;
+import imageDisplayApp.AdaptiveToolbar;
 import imageMenu.CanvasAutoResize;
 import undo.CanvasResizeUndo;
 
@@ -73,7 +74,7 @@ public class CurrentFigureSet implements CurrentSetInformer {
 			DisplayedImage  currentActiveDisplayGroup) {
 		CurrentFigureSet.currentActiveDisplayGroup = currentActiveDisplayGroup;
 		activeGraphicDisplay=currentActiveDisplayGroup.getImageAsWrapper();
-		
+		AdaptiveToolbar.onDisplayChange(currentActiveDisplayGroup);
 	}
 
 	/**Sets the stored figure display. takes an instance of GraphicSetDisplayContainer as an argumant*/

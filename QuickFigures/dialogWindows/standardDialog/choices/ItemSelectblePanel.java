@@ -28,8 +28,6 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 

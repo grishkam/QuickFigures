@@ -437,9 +437,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			 		
 			 		
 			 		innitiateSpecialCaseHandleLists();
-		
+	
 			 		/**The special case of mouse presses that target text items*/
-				if(this.textEditMode() &&this.handle<=NO_HANDLE &&!e.isPopupTrigger()) {
+				if(this.textEditMode() &&!e.isPopupTrigger()&&this.getSelectedHandleNumber()==NO_HANDLE) {
 					this.mousePressOnTextCursor((TextGraphic) this.getPrimarySelectedObject());
 				}
 			
@@ -854,7 +854,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		
 		GraphicItemOptionsDialog.setCurrentImage(getImageClicked());
-		if (getPrimarySelectedObject() instanceof HasHandles &&handle>-1) {
+		if (getPrimarySelectedObject() instanceof HasHandles) {
 			getSelectionObjectAshashangles().handleMouseEvent(getLastMouseEvent(), handle, getButton(),clickCount(), MouseEvent.MOUSE_CLICKED, null);
 			
 		} else
@@ -1049,7 +1049,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	public void mouseDragged() {
 		
 		/**selects text if text edit mode */
-		if (this.textEditMode())  {
+		if (this.textEditMode()&&this.getSelectedHandleNumber()==NO_HANDLE)  {
 			mouseDragForTextCursor();
 			return;
 		}
@@ -1283,14 +1283,21 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			AttachmentPositionHandle demiVersion = sHandle.createDemiVersion();
 			demiVersion.handlePress(getLastMouseEvent());
 			
-			overlaySelectionManagger.setExtraHandle(demiVersion);
-			if (this.getPressedSmartHandle()==null)
+			
+				overlaySelectionManagger.setExtraHandle(demiVersion);
+			
+			if (this.getPressedSmartHandle()==null&&!textEditMode())
 				{
 				this.setPressedSmartHandle(demiVersion);
 				this.setSelectedHandleNumber(demiVersion.getHandleNumber());
 				}
 		}
 		else overlaySelectionManagger.setExtraHandle(null);
+		
+		if(this.textEditMode()) {
+			
+			overlaySelectionManagger.setExtraHandle(null);
+		}
 	}
 
 	protected void setSelectedItemForDisplay(Object roi1) {
@@ -1726,6 +1733,7 @@ public String getToolTip() {
 		if (this.onlySelectThoseOfClass==null) this.onlySelectThoseOfClass=Object.class;
 	}
 
+	/**The tool icon*/
 	class LocalIcon extends GraphicToolIcon {
 		
 		public LocalIcon(int type) {

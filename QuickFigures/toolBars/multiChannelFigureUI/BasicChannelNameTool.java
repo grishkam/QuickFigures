@@ -21,8 +21,6 @@
 package multiChannelFigureUI;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-
 import javax.swing.JPopupMenu;
 
 import channelMerging.MultiChannelDisplayWrapper;

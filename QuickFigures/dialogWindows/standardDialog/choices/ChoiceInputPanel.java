@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 

@@ -16,6 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Jan 11, 2021
+ * Date Created: Jan 10, 2021
  * Version: 2021.1
  */
 package standardDialog.channels;
@@ -37,7 +38,6 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
 import menuUtil.SmartPopupJMenu;
@@ -94,13 +94,13 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	}
 	
 	/**constructor for a single value version of the combo box*/
-	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, int start, String alltext) {
+	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, int start, String noneText) {
 		
 		label.setText(labeln);
 		
 		this.setValues(start); this.maxChannelSelectable=1;//so that only one value is ever selected
 		originalValues=this.currentValues;
-		this.noneSelectedLabel=alltext;
+		this.noneSelectedLabel=noneText;
 		items = new ArrayList<ChannelEntryMenuItem>();
 		items.add(new ChannelEntryMenuItem("none"));
 		for(ChannelEntry entry: availableChannels) {
@@ -247,10 +247,11 @@ public class ChanListBox extends JPanel implements MouseListener {
 			this.add(l);
 		}
 		resetLabels();
+		
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void resetLabels() {
 		if(currentValues!=null)
@@ -286,6 +287,8 @@ public class ChanListBox extends JPanel implements MouseListener {
 		private static final long serialVersionUID = 1L;
 
 	/**
+	 * returns the selected channel's channel index (if there is at least one).
+	 * If there is no selected channel, returns 0.
 	 * @return
 	 */
 	public int getSelectedIndex() {

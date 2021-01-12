@@ -58,6 +58,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	int actioncount=1;
 	
 	private TextParagraph paragraph=new TextParagraph(this); {paragraph.addLine();}
 	
@@ -615,7 +616,7 @@ public class ComplexTextGraphic extends TextGraphic {
 			}
 		
 		if (meta&&arg0.getKeyCode()==KeyEvent.VK_U) {
-		underlineSelectedRegion();
+			underlineSelectedRegion();
 		return;
 		}
 		
@@ -879,7 +880,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	}
 
 
-	/**Is the highlight begins or ends inside of a segment, splits the segments
+	/**If the highlight begins or ends inside of a segment, splits the segments
 	 * Line object should not be replaced*/
 	public void splitHighLightedSegments() {
 		if (!hasHighlightRegion()) return;
@@ -888,6 +889,8 @@ public class ComplexTextGraphic extends TextGraphic {
 		if (segments.size()==1) {
 			TextLineSegment thisSegment = segments.get(0);
 			splitUpSingleHighLightSegment(thisSegment);
+			
+			actioncount++;
 			return;
 		}
 		
@@ -947,7 +950,9 @@ public class ComplexTextGraphic extends TextGraphic {
 			newseg = thisLine.splitSegment(thisSegment, high);
 			high2++;
 			cursor2++;
+			
 		}
+		
 		
 		this.setSelectedRange(high2, cursor2);
 		setUpSelectedSegmentList() ;

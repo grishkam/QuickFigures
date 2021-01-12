@@ -30,6 +30,7 @@ import javax.swing.Icon;
 
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.ChannelEntry;
+import figureEditDialogs.WindowLevelDialog;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -40,7 +41,6 @@ import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
 import multiChannelFigureUI.ImagePropertiesButton;
-import multiChannelFigureUI.WindowLevelDialog;
 import selectedItemMenus.FrameColorButton;
 import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.MultiSelectionOperator;
