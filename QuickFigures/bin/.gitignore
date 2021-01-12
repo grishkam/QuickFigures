@@ -1,16 +1,2 @@
 /writeTextWithJavascript
 *.class
-/handles/
-/genericTools/
-/graphicalObjects_SpecialObjects/
-/figureEditDialogs/
-/multiChannelFigureUI/
-/popupMenusForComplexObjects/
-/undo/
-/imageDisplayApp/
-/basicMenusForApp/
-/graphicActionToolbar/
-/imageMenu/
-/actionToolbarItems/
-/applicationAdapters/
-/layout/
