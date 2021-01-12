@@ -155,7 +155,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 
 	/**resizes the canvas of pixels but does not move the objects*/
 	@Override
-	public void CanvasResize(int width, int height, int xOff, int yOff) {
+	public void worksheetResize(int width, int height, int xOff, int yOff) {
 		Prefs.set("resizer.zero", false); 
 		Toolbar.setBackgroundColor(Color.white);
 		ImageStack newStack=new CanvasResizer().expandStack(imp.getStack(), width, height, xOff, yOff);	

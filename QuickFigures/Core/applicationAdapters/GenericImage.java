@@ -104,7 +104,7 @@ public class GenericImage implements ImageWorkSheet {
 	
 
 	@Override
-	public void CanvasResize(int width, int height, int xOff, int yOff) {
+	public void worksheetResize(int width, int height, int xOff, int yOff) {
 		
 	}
 

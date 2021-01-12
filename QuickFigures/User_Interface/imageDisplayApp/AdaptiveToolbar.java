@@ -37,7 +37,7 @@ public class AdaptiveToolbar extends JFrame implements MouseMotionListener, Mous
 		this.addMouseMotionListener(this);
 		setToCurrentlyActiveWindow(true);
 		this.addWindowListener(this);
-		this.setTitle("Mini Toolbar");
+		this.setTitle("Smart Toolbar");
 		this.pack();
 	}
 	

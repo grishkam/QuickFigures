@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import java.awt.BasicStroke;
@@ -52,8 +57,8 @@ public class ScrollIndicator implements ZoomableGraphic{
 	
 	/**returns the outer rectangle that indicates the entire image size*/
 	Rectangle2D getTotalRect() {
-		double width = this.getDisplay().getTheSet().getWidth()*factor;
-		double height = this.getDisplay().getTheSet().getHeight()*factor;
+		double width = this.getDisplayWindow().getTheSet().getWidth()*factor;
+		double height = this.getDisplayWindow().getTheSet().getHeight()*factor;
 		return new Rectangle(0,0,(int)width, (int)height);
 	}
 	
@@ -64,14 +69,14 @@ public class ScrollIndicator implements ZoomableGraphic{
 		x+=display.getZoomer().getX0();
 		y+=display.getZoomer().getY0();
 		double mag=getDisplayMag();
-		double canWidth=this.getDisplay().getTheCanvas().getWidth()/mag;
-		double canHeight=this.getDisplay().getTheCanvas().getHeight()/mag;
+		double canWidth=this.getDisplayWindow().getTheCanvas().getWidth()/mag;
+		double canHeight=this.getDisplayWindow().getTheCanvas().getHeight()/mag;
 		return new Rectangle((int)(x*factor),(int)(y*factor),(int)(canWidth*factor), (int)(canHeight*factor));
 	}
 	
 	/**returns the magnification*/
 	double getDisplayMag() {
-		return getDisplay().getZoomer().getZoomMagnification();
+		return getDisplayWindow().getZoomer().getZoomMagnification();
 	}
 	
 	/**draws too rectangles to indicated the size and position of the view ara compared to the entire canvas*/
@@ -124,11 +129,11 @@ public class ScrollIndicator implements ZoomableGraphic{
  }
  
 
-	public GraphicSetDisplayWindow getDisplay() {
+	public GraphicSetDisplayWindow getDisplayWindow() {
 		return display;
 	}
 
-	public void setDisplay(GraphicSetDisplayWindow display) {
+	public void setDisplayWindow(GraphicSetDisplayWindow display) {
 		this.display = display;
 	}
 

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import java.awt.BasicStroke;
@@ -114,11 +119,6 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	private Point2D lastPointCordinate;
 	
 
-	
-	
-	
-
-	
 	/**constructor for the window*/
 	public GraphicSetDisplayWindow(ImageWindowAndDisplaySet set, GraphicDisplayCanvas canvas) {
 		display=set;

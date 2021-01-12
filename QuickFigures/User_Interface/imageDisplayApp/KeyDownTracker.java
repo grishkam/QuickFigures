@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import java.awt.AWTEvent;
@@ -42,10 +47,12 @@ public class KeyDownTracker implements AWTEventListener {
 		return output;
 	}
 	
+	/**is the key with the given character down?*/
 	public static boolean isKeyDown(char c) {
 		if (keysDown.get(c)==null) return false;
 		return keysDown.get(c);
 	}
+	/**is the key with the given code down?*/
 	public static boolean isKeyDown(int code) {
 		if (keysDownCode==null) {return false;}
 		Boolean b=keysDownCode.get(code);
@@ -53,13 +60,14 @@ public class KeyDownTracker implements AWTEventListener {
 		return b;
 	}
 	
+	/**called when a key is pressed*/
 	public static void setKeyDown(KeyEvent arg0) {
 		keysDown.put(arg0.getKeyChar(), true);
 		keysDownCode.put(arg0.getKeyCode(), true);
 		StatusPanel.updateStatus(arg0.getKeyChar()+" press");
 	}
 	
-
+	/**called when a key is released*/
 	public static void setKeyUp(KeyEvent arg0) {
 		keysDown.put(arg0.getKeyChar(), false);
 		keysDownCode.put(arg0.getKeyCode(), false);

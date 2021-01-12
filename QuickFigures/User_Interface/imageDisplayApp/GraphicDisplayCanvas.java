@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import java.awt.BasicStroke;
@@ -39,7 +44,7 @@ import handles.HasSmartHandles;
 import locatedObject.Selectable;
 import logging.IssueLog;
 
-/**A component that displays the figure within the display window
+/**A component that displays the figures and objects within the display window
   All objects/figures in the worksheet are drawn here. 
   Rulers are also drawn to  indicate size of the figure
   @see GraphicSetDisplayWindow for information on where

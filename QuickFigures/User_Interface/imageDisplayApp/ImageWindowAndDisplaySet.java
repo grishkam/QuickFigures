@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 
@@ -46,7 +51,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	private GraphicSetDisplayWindow theWindow=null;
 	private GraphicDisplayCanvas theCanvas=null;
 	private StandardWorksheet theFigure=null;
-	private MiniToolBarPanel sidePanel;
+	private MiniToolBarPanel sidePanel;//optional side panel
 	
 	
 	/**The time frames for animations*/
@@ -212,6 +217,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		getTheWindow().zoom(actionCommand);
 	}
 	
+	/**changes the zoom lebel and updates the window size*/
 	@Override
 	public void setZoomLevel(double st) {
 		getTheWindow().getZoomer().setZoom(st);

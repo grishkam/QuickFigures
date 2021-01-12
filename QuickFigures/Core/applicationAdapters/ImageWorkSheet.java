@@ -53,7 +53,7 @@ public interface ImageWorkSheet extends ObjectContainer, FigureDisplayWorksheet,
 	public int height();
 	
 	/**resizes the Canvas filling all the newly added space with white*/
-	public void CanvasResize(int width, int height, int xOff, int yOff);
+	public void worksheetResize(int width, int height, int xOff, int yOff);
 	
 	/**
 	 */

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import java.awt.BasicStroke;
@@ -225,6 +230,7 @@ public void removeHandleSelections() {
 	shlist=null;
 }
 
+/**removes all the selections*/
 public void clear() {
 	removeObjectSelections();
 	removeHandleSelections();

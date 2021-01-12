@@ -67,7 +67,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 	/**Alters the canvas size of the image while preserving the positions of the objects relative to the pixels of the image*/
 	public void resetMontageImageSize(BasicLayout ml,  double xOff, double yOff) {
 		if (ml==null||ml.getEditedWorksheet()==null) return;
-		ml.getEditedWorksheet().CanvasResize( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
+		ml.getEditedWorksheet().worksheetResize( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
 		getObjectHandler().shiftAll(ml.getEditedWorksheet(), xOff, yOff);
 		this.finishEdit(ml);
 			}

@@ -13,10 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 import layout.RetrievableOption;
 
+/**stored options related to the zooming*/
 public class ZoomOptions {
 	
 	public static ZoomOptions current=new ZoomOptions();

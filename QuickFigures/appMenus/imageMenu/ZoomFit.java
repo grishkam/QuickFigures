@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Jan 12, 2021
  * Version: 2021.1
  */
 package imageMenu;
@@ -94,8 +94,11 @@ public Icon getIcon() {
 public GraphicDisplayComponent getItemIcon() {
 	GraphicGroup gg=new GraphicGroup();
 	
-	
-	
+	/**object to keep the others at a consistent size*/
+	RectangularGraphic iconArea=new RectangularGraphic(new Rectangle(1,1, 20, 20));
+	iconArea.setFillColor(new Color(0,0,0,0));
+	iconArea.setStrokeColor(new Color(0,0,0,0));
+	gg.getTheInternalLayer().add(iconArea);
 	
 	RectangularGraphic oval2 = new RectangularGraphic(new Rectangle(9,7, 2, 9));
 	oval2.setStrokeWidth(1);
@@ -115,12 +118,12 @@ public GraphicDisplayComponent getItemIcon() {
 	
 	
 	TextGraphic tg=new TextGraphic(getCurrentLabel() );
-	tg.setLocation(10, 13); 
+	tg.setLocation(9, 12); 
 	
 	tg.setFont(tg.getFont().deriveFont((float) 14).deriveFont(Font.BOLD));
 	if (type.equals(SCREEN_FIT)) { 
 		tg.setFont(tg.getFont().deriveFont((float) 10).deriveFont(Font.BOLD));
-		tg.moveLocation(2,0);
+		tg.moveLocation(1,-2);
 	}
 	gg.getTheInternalLayer().add(tg);
 	

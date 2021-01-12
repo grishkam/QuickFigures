@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Jan 12, 2021
+ * Version: 2021.1
+ */
 package imageDisplayApp;
 
 
@@ -32,7 +37,7 @@ public class StandardWorksheet extends GenericImage {
 	public static final String SAVE_EXTENSION = ".ser";
 
 	
-	private String savePath=null;
+	private String savePath=null;//where was this saved
 	
 	/**The window that displays the item*/
 	private transient ImageWindowAndDisplaySet displayItems=null;
@@ -59,19 +64,20 @@ public class StandardWorksheet extends GenericImage {
 		return displayItems;
 	}
 	
-
+	/**the title always matches the name of the top level layer*/
 	@Override
 	public String getTitle() {
 		if (getTopLevelLayer()==null) return null;
 		return this.getTopLevelLayer().getName();
 	}
 	
+	/**returns the name used when this will be saved*/
 	public String getSaveName() {
 		if (getTopLevelLayer()==null) return null;
 		return this.getTopLevelLayer().getName()+SAVE_EXTENSION;
 	}
 	
-	
+	/**Sets the title*/
 	public void setTitle(String t) {
 		this.getTopLevelLayer().setName(t);
 	}
@@ -146,9 +152,9 @@ public class StandardWorksheet extends GenericImage {
 		getBasics().setHeight(height);
 	}
 	
-	/***/
+	/**called when the worksheet is resized*/
 	@Override
-	public void CanvasResize(int width, int height, int xOff, int yOff) {
+	public void worksheetResize(int width, int height, int xOff, int yOff) {
 		getBasics().setWidth(width);
 		getBasics().setHeight(height);
 		

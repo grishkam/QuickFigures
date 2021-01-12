@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 12, 2021
  * Version: 2021.1
  */
 package imageDisplayApp;
@@ -46,7 +46,8 @@ import handles.miniToolbars.ActionButtonHandleList;
 import handles.miniToolbars.HasMiniToolBarHandles;
 import imageMenu.ZoomFit;
 
-/**A components that displays a side panel within each image window or potentially within*/
+/**A components that displays a mini toolbar
+ that depends on the item selected and the worksheet*/
 class MiniToolBarPanel extends JPanel implements MouseListener {
 
 	ArrayList<MenuItemForObj> permanentObjects=new ArrayList<MenuItemForObj>();
@@ -187,8 +188,10 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	public class MenuBarIconHandle extends IconHandle {
 
 		private MenuItemForObj item;
-		public MenuBarIconHandle(MenuItemForObj i, Point2D p) {
-			super(i.getIcon(), p);
+		public MenuBarIconHandle(MenuItemForObj i, Point2D offSet) {
+			super(i.getIcon(), new Point());
+			super.xShift=(int) offSet.getX();
+			super.yShift=(int) offSet.getY();
 			item=i;
 		}
 
@@ -203,7 +206,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	/**creates a set of action handles*/
 	public ActionButtonHandleList createActionList() {
 		ActionButtonHandleList output = new ActionButtonHandleList(vertical);
-		for(MenuItemForObj ob:permanentObjects)output.add(new  MenuBarIconHandle(ob, new Point()));
+		for(MenuItemForObj ob:permanentObjects)output.add(new  MenuBarIconHandle(ob, new Point(1,1)));
 		output.setLocation(getToolLocations());
 		return output;
 	}
