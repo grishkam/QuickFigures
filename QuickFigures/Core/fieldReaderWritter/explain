@@ -1,3 +1,0 @@
-This package contains methods to write QuickFigures objects to a DOM tree
-and export to SVG using Apache Batik. Names of layers and objects are preserved
-
