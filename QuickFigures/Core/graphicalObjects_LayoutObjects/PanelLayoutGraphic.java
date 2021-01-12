@@ -334,9 +334,10 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 	public void clearHandleBoxes() {
-		
-		panelMotionHandles.clear();
-		handleBoxes2.clear();
+		if (panelMotionHandles!=null)
+			panelMotionHandles.clear();
+		if (getHandleBoxes2()!=null)
+			getHandleBoxes2().clear();
 		
 	}
 	
@@ -348,11 +349,11 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		
 		
-		addFirstLayerHandles(handleBoxes2);
+		addFirstLayerHandles(getHandleBoxes2());
 		
 		int w=0;//panel numer from 
 		for(Rectangle2D r:ps) {
-			createHandlesForPanel(w, r, handleBoxes2);
+			createHandlesForPanel(w, r, getHandleBoxes2());
 			
 			w++;
 		}
@@ -360,7 +361,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		createReferencePointHandles(cords);
 		
-		addAdditionalHandles(handleBoxes2);
+		addAdditionalHandles(getHandleBoxes2());
 		
 		this.getAllSmartHandles().draw(graphics, cords);
 		this.getLocedItemHandleList().draw(graphics, cords);
@@ -472,14 +473,14 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		 Point2D location = RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, r.getBounds2D());
 		
 		 PanelLayoutHandle r2 = createHandle( new Point2D.Double(location.getX(), location.getY()-5), w+ROW_HEIGTH_HANDLE*handleIDFactor, 2);
-		this.handleBoxes2.add(r2);
+		this.getHandleBoxes2().add(r2);
 		if (getPanelLayout().doesPanelUseUniqueWidth(w+1)) {
 			r2.handlesize=3;
 			r2.setHandleColor(Color.red);
 			}
 		 
 		  r2 = createHandle( new Point2D.Double(location.getX()-5, location.getY()), w+COLUMN_WIDTH_HANDLE*handleIDFactor, 2);
-		  this.handleBoxes2.add(r2);
+		  this.getHandleBoxes2().add(r2);
 		  if (getPanelLayout().doesPanelUseUniqueHeight(w+1)) {
 			  r2.handlesize=3;
 			  r2.setHandleColor(Color.red);
@@ -965,9 +966,12 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	public SmartHandleList getAllSmartHandles() {
 		SmartHandleList output = new SmartHandleList();
 		output.addAll(getLocedItemHandleList());
-		output.addAll(panelMotionHandles);
-		output.addAll(allrefPointHandles);
-		output.addAll(handleBoxes2);
+		if(panelMotionHandles!=null)
+			output.addAll(panelMotionHandles);
+		if(allrefPointHandles!=null)
+			output.addAll(allrefPointHandles);
+		if(getHandleBoxes2()!=null)
+			output.addAll(getHandleBoxes2());
 		
 		
 		return output;
@@ -1067,5 +1071,11 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	public ArrayList<LocatedObject2D> getNonLockedItems() {
 		TakesAttachedItems taker = this;
 		return getLockedItems().getEligibleNONLockedItems(taker, getBounds());
+	}
+
+	private SmartHandleList getHandleBoxes2() {
+		if(handleBoxes2==null)
+			handleBoxes2=new SmartHandleList();
+		return handleBoxes2;
 	}
 }

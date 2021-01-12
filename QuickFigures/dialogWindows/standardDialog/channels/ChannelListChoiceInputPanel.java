@@ -76,13 +76,33 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	
 	
 	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, ArrayList<Integer> start, String alltext) {
-		
+		currentValues=new ArrayList<Integer>();
 		label.setText(labeln);
 		this.setValues(start);
 		originalValues=this.currentValues;
 		this.noneSelectedLabel=alltext;
 		items = new ArrayList<ChannelEntryMenuItem>();
 		items.add(new ChannelEntryMenuItem("dont exclude any"));
+		for(ChannelEntry entry: availableChannels) {
+			items.add(new ChannelEntryMenuItem(entry));
+			this.availableValues.add(entry.getOriginalChannelIndex());
+		}
+		
+		/**called so a separate array list stores the current and the originala*/
+		this.setValues(start);
+		box.resetLabels();
+	}
+	
+	/**constructor for a single value version of the combo box*/
+	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, int start, String alltext) {
+		
+		label.setText(labeln);
+		
+		this.setValues(start); this.maxChannelSelectable=1;//so that only one value is ever selected
+		originalValues=this.currentValues;
+		this.noneSelectedLabel=alltext;
+		items = new ArrayList<ChannelEntryMenuItem>();
+		items.add(new ChannelEntryMenuItem("none"));
 		for(ChannelEntry entry: availableChannels) {
 			items.add(new ChannelEntryMenuItem(entry));
 			this.availableValues.add(entry.getOriginalChannelIndex());
@@ -154,14 +174,25 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 
 	
 	/**
- * @param originalValues2
+ * @param values2
  */
-private void setValues(ArrayList<Integer> originalValues2) {
+private void setValues(ArrayList<Integer> values2) {
 	currentValues=new ArrayList<Integer>();
-	for(Integer v: originalValues2) {
+	for(Integer v: values2) {
 		currentValues.add(v);
 	}
 	
+}
+
+/**
+* @param values2
+*/
+private void setValues(int v) {
+currentValues=new ArrayList<Integer>();
+
+	currentValues.add(v);
+
+
 }
 
 	public void notifyChoiceListeners(int i) {

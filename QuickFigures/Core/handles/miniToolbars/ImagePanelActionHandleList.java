@@ -122,6 +122,12 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		super.draw(g, cords);
 	}
 	
+	public ChannelPanelEditingMenu getMenuContext() {
+		if(context==null)
+			context= new ChannelPanelEditingMenu(theImage);
+		return context;
+	}
+
 	/**a handle that generates a multi image dialog */
 	public class ImageSyncHandle extends GeneralActionHandle {
 
@@ -204,8 +210,8 @@ public class ChannelsIconHandle extends IconHandle {
 		  then this handle is hidden. When the panels are in advanced channel use mode,
 		  there is not need for this item*/
 	public boolean isHidden() {
-		if (context!=null &&context.getPressedMultichannel()!=null&&context.getPressedMultichannel().nChannels()==1) return true;
-		if (context!=null &&context.getPrincipalDisplay()!=null&&context.getPrincipalDisplay().getPanelManager().isAdvancedChannelUse()) return true;
+		if (getMenuContext()!=null &&getMenuContext().getPressedMultichannel()!=null&&getMenuContext().getPressedMultichannel().nChannels()==1) return true;
+		if (getMenuContext()!=null &&getMenuContext().getPrincipalDisplay()!=null&&getMenuContext().getPrincipalDisplay().getPanelManager().isAdvancedChannelUse()) return true;
 		return false;
 	}
 
@@ -223,8 +229,8 @@ public class ChannelsIconHandle extends IconHandle {
 
 		@Override
 		public ArrayList<ChannelEntry> getAllColors() {
-			if (context==null) return super.getAllColors();
-			return context.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder();
+			if (getMenuContext()==null||getMenuContext().getPrincipalDisplay()==null||getMenuContext().getPrincipalDisplay().getMultiChannelImage()==null) return super.getAllColors();
+			return getMenuContext().getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder();
 		}
 		/**
 		 * 

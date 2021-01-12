@@ -241,13 +241,20 @@ import logging.IssueLog;
 		/**Turns the image data into a byte array*/
 		@MenuItemMethod(menuActionCommand = "saveEm", menuText = "Save Embedded", subMenuName="Image")
 		public void saveImageEmbed() {
+			saveWorkingImage();
+			
+			/**needed to keep the original around in case imageJ disposes of it*/
+			if (original!=null)original.saveImage();
+			
+		}
+
+		/**
+		stores the working version of this image
+		 */
+		private void saveWorkingImage() {
 			if (getImagePlus()==null)return;
 			
 			serializedIM=new ij.io.FileSaver(getImagePlus()).serialize();
-			
-			/**needed to keep the original around in case imageJ disposes of it*/
-			original.saveImage();
-			
 		}
 		
 
@@ -609,6 +616,15 @@ import logging.IssueLog;
 		public CSFLocation getDisplaySlice() {
 			return this.displayLocation;
 			
+		}
+		
+		/**Before serialization of the object, this will serialize the ImagePlus into its Byte[]*/
+		private void writeObject(java.io.ObjectOutputStream out)
+			     throws IOException {
+		
+			
+			saveWorkingImage();
+			out.defaultWriteObject();
 		}
 
 		/**a subcompartment for storing the original version of the image*/

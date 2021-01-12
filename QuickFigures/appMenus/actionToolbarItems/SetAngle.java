@@ -139,7 +139,7 @@ public class SetAngle extends BasicMultiSelectionOperator {
 	}
 
 	/**An icon that depicts the angle*/
-	public class AngleIcon implements Icon {
+	public static class AngleIcon implements Icon {
 
 		/**
 		 * 

@@ -55,7 +55,7 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 	handle2.setFillColor(Color.LIGHT_GRAY);
 	handle2.setStrokeColor(Color.lightGray);handle2.setStrokeWidth(4);}
 			{	this.addMouseMotionListener(this);
-				super.getCord().setMagnification(0.2);
+				super.getCord().setMagnification(1);
 			}
 	
 
@@ -142,16 +142,7 @@ public class AngleBox extends GraphicComponent implements MouseListener, MouseMo
 	        return new Dimension(getWidth(),getHeight());
 	    }
 	  
-		public static void main(String[] args) {
-			JFrame ff = new JFrame("frame");
-			ff.setLayout(new FlowLayout());
-			ff.add(new JButton("button"));
-			AngleBox sb = new AngleBox();
-			ff.add(sb);
-			ff.pack();
-			
-			ff.setVisible(true);
-		}
+	
 
 		public double getAngle() {
 			return angle;

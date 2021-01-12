@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 
 /**A subclass of number input panel that allows the user to input the nuber for an angle
  * by dragging an angle box
- * @see AngleBox
+ * @see AngleBox2
  * @see NumberInputPanel
  * */
 public class AngleInputPanel extends NumberInputPanel {
@@ -36,7 +36,7 @@ public class AngleInputPanel extends NumberInputPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-   AngleBox angle=new AngleBox(); {angle.addMouseMotionListener(this);field.setDecimalPlaces(3);field.setColumns(7);}
+   AngleBox2 angleBox=new AngleBox2(0); {angleBox.addMouseMotionListener(this);field.setDecimalPlaces(3);field.setColumns(7);}
    
    {includeSlider=false; }
    
@@ -61,7 +61,7 @@ public class AngleInputPanel extends NumberInputPanel {
 		
 		
 			gc.insets=middleInsets;
-			jp.add(getPanelForContents(angle, field), gc);
+			jp.add(getPanelForContents(angleBox, field), gc);
 			gc.gridx++;
 		
 		//gc.insets=lastInsets;
@@ -75,19 +75,19 @@ public class AngleInputPanel extends NumberInputPanel {
 	public void keyReleased(KeyEvent arg0) {
 		if(arg0.getSource()==field) {
 			number=field.getNumberFromField()/(180/Math.PI);
-			angle.setAngle(number);
-			angle.repaint();
+			angleBox.setAngle(number);
+			angleBox.repaint();
 			notifyListeners(new NumberInputEvent(this, field, number) );
 			this.repaint();
 		}
 	}
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		if (arg0.getSource()==angle) {
+		if (arg0.getSource()==angleBox) {
 			if (field!=null)
-			field.setNumber(angle.getAngle()*180/Math.PI);
-			if (angle!=null)
-			this.number=angle.getAngle();
+			field.setNumber(angleBox.getAngle()*180/Math.PI);
+			if (angleBox!=null)
+			this.number=angleBox.getAngle();
 			notifyListeners(new NumberInputEvent(this, slider, number) );
 			this.repaint();
 		}
@@ -100,7 +100,7 @@ public class AngleInputPanel extends NumberInputPanel {
 		
 		number=d;
 		if (field!=null)field.setNumber(d*180/Math.PI);
-		if (angle!=null)angle.setAngle(d);
+		if (angleBox!=null)angleBox.setAngle(d);
 	}
 	public double getNumber() {
 		return number;

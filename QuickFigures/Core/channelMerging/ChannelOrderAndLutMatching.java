@@ -22,6 +22,8 @@ package channelMerging;
 
 import java.util.ArrayList;
 
+import logging.IssueLog;
+
 /**Sometimes, the channel order of different images
   in the same figure will be different. 
   This class contains code to reorder the channels of several images to match one another.
@@ -101,7 +103,9 @@ public class ChannelOrderAndLutMatching {
 	
 	/**lists the real channel names. Example: eGFP, texasred, Cy5*/
 	ArrayList<String> getAllRealChannelNames(MultiChannelImage m1) {
-		if(m1==null) {}
+		if(m1==null) {
+			IssueLog.log("no image detected");
+		}
 		ArrayList<String> names1=new ArrayList<String>();
 		for(int i=1; i<=m1.nChannels(); i++) {
 			names1.add(m1.getRealChannelName(i));

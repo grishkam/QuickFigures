@@ -355,10 +355,10 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private PanelListElement sourcePanel;
 
 
-	private ImagePanelHandleList panelHandleList;
+	private transient ImagePanelHandleList panelHandleList;
 	private transient ImagePanelActionHandleList aHandleList;
 
-	private ChannelSwapHandleList extraHandles;
+	private transient ChannelSwapHandleList extraHandles;
 
 
 	
@@ -1023,15 +1023,17 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		@Override
 		public SmartHandleList getSmartHandleList() {
-			if (this.extraHandles!=null) {
+			 {
 				SmartHandleList out = new SmartHandleList();
-				out.addAll(extraHandles);
+				if (this.extraHandles!=null) 
+					out.addAll(extraHandles);
 				out.addAll(getPanelHandleList());
+				
 				getActionHandleList().updateLocation();
 				out.addAll(this.getActionHandleList());
 				return out;
 			}
-			return getPanelHandleList();
+			//return getPanelHandleList();
 		}
 		
 		@Override
