@@ -27,7 +27,7 @@ public class ZoomOptions {
 	
 	public static ZoomOptions current=new ZoomOptions();
 	
-	@RetrievableOption(key = "resiepostzoom", label="Resize Window After Every Zooming")
+	@RetrievableOption(key = "resizepostzoom", label="Resize Window After Every Zooming")
 	public boolean resizeWindowsAfterZoom=true;
 
 }
