@@ -864,6 +864,10 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	/**the angle field is not used by this class*/
 	public double getAngle() {return 0;}
 	public void setAngle(double angle) {this.angle=0;}
+	/**this class does not use the angle*/
+	public boolean doesHaveRotationAngle() {
+		return false;
+	}
 
 	/**class defines the handle for adding point to the start or end of the path*/
 	public class AddPointSmartHandle extends SmartHandle {

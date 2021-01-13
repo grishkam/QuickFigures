@@ -43,12 +43,12 @@ public class ChannelLabelProperties implements Serializable{
 	
 	/**The possibles values for the standard merge text content option*/
 	public static String[] mergeTexts=new String[] {"Merge", "merge", "Merged", "merged", "use custom", "Overlay", "overlay"};
-	public static int USE_CUSTOM_MERGE_TEXT=4;
+	public static final int USE_CUSTOM_MERGE_TEXT=4;
 	
 	/**these arrays are used when the rainbow style option is chosen, depending on the number of colors, the standard merge texts are split up */
-	public static String[][] split2MergeTexts=new String[][] {new String[]{"Mer", "ge"},new String[]{"mer", "ge"} ,new String[]{"Mer", "ged"},new String[]{"mer", "ged"}, new String[]{"Mer", "ge"}, new String[]{"Over", "lay"}, new String[]{"over", "lay"}};
-	public static String[][] split3MergeTexts=new String[][] {new String[]{"M","er", "ge"},new String[]{"m","er", "ge"} ,new String[]{"Me","rg", "ed"},new String[]{"me","rg", "ed"}, new String[]{"Me","rg", "e"}, new String[]{"Ov","er", "lay"}, new String[]{"ov", "er", "lay"}};
-	public static String[][] split4MergeTexts=new String[][] {new String[]{"M","e","r", "ge"},new String[]{"m","e","r", "ge"} ,new String[]{"M","er","ge", "d"},new String[]{"m","er","ge", "d"},new String[]{"m","er","ge", "d"}, new String[]{"Ov","er", "la","y"}, new String[]{"ov", "er", "la","y"}};
+	public static String[][] split2MergeTexts=new String[][] {new String[]{"Mer", "ge"},      new String[]{"mer", "ge"} ,      new String[]{"Mer", "ged"},       new String[]{"mer", "ged"}, new String[]{"Mer", "ge"}, new String[]{"Over", "lay"}, new String[]{"over", "lay"}};
+	public static String[][] split3MergeTexts=new String[][] {new String[]{"M","er", "ge"},   new String[]{"m","er", "ge"} ,   new String[]{"Me","rg", "ed"},    new String[]{"me","rg", "ed"}, new String[]{"Me","rg", "e"}, new String[]{"Ov","er", "lay"}, new String[]{"ov", "er", "lay"}};
+	public static String[][] split4MergeTexts=new String[][] {new String[]{"M","e","r", "ge"},new String[]{"m","e","r", "ge"} ,new String[]{"M","er","ge", "d"}, new String[]{"m","er","ge", "d"},new String[]{"m","er","ge", "d"}, new String[]{"Ov","er", "la","y"}, new String[]{"ov", "er", "la","y"}};
 	
 	public static final int SPACE_SEPARATOR=1, NO_SEPARATOR=0, SLASH_SEPARATOR=2, CUSTOM_SEPATOR=3;
 	public static Color emptyColor=new Color(255,255,255, 255);
@@ -56,7 +56,6 @@ public class ChannelLabelProperties implements Serializable{
 	public static String[] separatorTexts=new String[] {"", " ", "/", "?"};
 	
 	public static String[] mergeLabelOptions=new String[] {"'Merge' text",   "Multiline Channel Labels", "Single Line Channel Labels", "Soni Style", "Color Merge Style"};
-	public static final int SIMPLY_lABEL_AS_MERGE=0,  MULTIPLE_LINES=1, ONE_LINE_WITH_ALL_CHANNEL_NAMES=2, RAINBOW_STYLE=3, OVERLAY_THE_COLORS=4;
 	
 	
 	private String customMergeText="Merge";
@@ -64,7 +63,7 @@ public class ChannelLabelProperties implements Serializable{
 	private int separatorOption=NO_SEPARATOR;
 	
 	private int mergeTextContentOption=0;//the index of "Merge" in the mergeTexts arrays
-	private int mergeLabelStyleOption=SIMPLY_lABEL_AS_MERGE;
+	private MergeLabelStyle mergeLabelStyleOption=MergeLabelStyle.SIMPLY_LABEL_AS_MERGE;
 	
 	/**the text for each channel is stored here. Hashmap Links channel names to text lines. */
 	private HashMap<String, TextLine> list=null;
@@ -104,10 +103,10 @@ public class ChannelLabelProperties implements Serializable{
 	
 
 	/**getter method for the merge label style*/
-	public int getMergeLabelStyle() {return mergeLabelStyleOption;}
+	public MergeLabelStyle getMergeLabelStyle() {return mergeLabelStyleOption;}
 	
 	/** setter method of the merge label style*/
-	public void setMergeLabelStyle(int mergeLabelTypeOption) {
+	public void setMergeLabelStyle(MergeLabelStyle mergeLabelTypeOption) {
 		this.mergeLabelStyleOption = mergeLabelTypeOption;
 	}
 	

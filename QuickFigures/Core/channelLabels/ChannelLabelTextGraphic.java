@@ -31,6 +31,8 @@ import figureOrganizer.PanelListElement;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import handles.miniToolbars.ChannelLabelTextActionButtonHandleList;
+import handles.miniToolbars.TextActionButtonHandleList;
 import includedToolbars.StatusPanel;
 import locatedObject.ColorDimmer;
 import logging.IssueLog;
@@ -43,7 +45,11 @@ import standardDialog.StandardDialog;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
+import undo.AbstractUndoableEdit2;
+import undo.ChannelLabelPropertiesUndo;
+import undo.CombinedEdit;
 import undo.EditListener;
+import undo.UndoTextEdit;
 
 /**A special category of label that changes based on the options
   set in channel label properties and the channel colors*/
@@ -103,16 +109,16 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		updateMap.clear();//when paragraph is reset the old text lines no longer have any relationship with the text lined in the channel label properties 
 		
 		/**The merge label is a complicated entity*/
-		int mergeLabelType = this.getChannelLabelProperties().getMergeLabelStyle();
+		MergeLabelStyle mergeLabelType = this.getChannelLabelProperties().getMergeLabelStyle();
 		
 		if (isThisMergeLabel()) {
-			if (mergeLabelType==ChannelLabelProperties.SIMPLY_lABEL_AS_MERGE) {
+			if (mergeLabelType==MergeLabelStyle.SIMPLY_LABEL_AS_MERGE) {
 				paragraph.addLineFromCodeString(getChannelLabelProperties().getMergeText(), Color.black);
 				this.setParagraph(paragraph);
 				return;
 			}
 			
-			if (mergeLabelType==ChannelLabelProperties.OVERLAY_THE_COLORS) {
+			if (mergeLabelType==MergeLabelStyle.OVERLAY_THE_COLORS) {
 				paragraph.addLineFromCodeString(getChannelLabelProperties().getMergeText(), ChannelLabelProperties.fuseColors(getChanEntries()));
 				this.setParagraph(paragraph);
 				return;
@@ -120,7 +126,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 			
 			
 			
-			if (mergeLabelType==ChannelLabelProperties.RAINBOW_STYLE) {
+			if (mergeLabelType==MergeLabelStyle.RAINBOW_STYLE) {
 				TextLine lin = paragraph.addLine();	
 				lin.removeAllSegments();
 				ArrayList<ChannelEntry> entries = this.getChanEntries();
@@ -142,7 +148,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		
 		
 		/**What to do if every channel entry must be placed in the same line*/
-			if (mergeLabelType==ChannelLabelProperties.ONE_LINE_WITH_ALL_CHANNEL_NAMES) {
+			if (mergeLabelType==MergeLabelStyle.ONE_LINE_WITH_ALL_CHANNEL_NAMES) {
 				TextLine lin = paragraph.addLine();	
 				lin.removeAllSegments();
 				//lin.addSegment();
@@ -332,7 +338,7 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 				p.record.replaceSegmentsWithoutColor(p.segments);
 				}
 		}
-		if (this.isThisMergeLabel()&&ChannelLabelproperties.getMergeLabelStyle()==0) {
+		if (this.isThisMergeLabel()&&ChannelLabelproperties.getMergeLabelStyle()==MergeLabelStyle.SIMPLY_LABEL_AS_MERGE) {
 			
 			ChannelLabelproperties.setMergeText(this.getParagraph().getText());
 		}
@@ -437,7 +443,19 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 			}};
 	}
 	
-	
+	/**provides a more complex edit than the superclass*/
+	@Override
+	public AbstractUndoableEdit2 provideUndoForDialog() {
+		CombinedEdit output = new CombinedEdit(super.provideUndoForDialog());
+		output.addEditToList(new ChannelLabelPropertiesUndo(this.getChannelLabelProperties()));
+		return output;
+	}
+
+	/**creates a handle list that appears similar to a mini-toolbar*/
+	@Override
+	public TextActionButtonHandleList createActionHandleList() {
+		return new ChannelLabelTextActionButtonHandleList(this);
+	}
 	
 	
 }

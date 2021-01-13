@@ -655,6 +655,12 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		return true;
 	}
 	
+	/**returns true if the angle stored in the getangle and setAngle method is used
+	 * Some subclasses override this*/
+	public boolean doesHaveRotationAngle() {
+		return true;
+	}
+	
 	/**returns the angle of a line between the two points*/
 	public static double getAngleBetweenPoints(Point2D p1, Point2D p2) {
 		double angle=Math.atan(((double)(p2.getY()-p1.getY()))/(p2.getX()-p1.getX()));

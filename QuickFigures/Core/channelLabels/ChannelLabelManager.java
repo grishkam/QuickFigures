@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JTabbedPane;
+import javax.swing.undo.AbstractUndoableEdit;
 
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
@@ -46,13 +47,16 @@ import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
+import undo.AbstractUndoableEdit2;
+import undo.ChannelLabelPropertiesUndo;
 import undo.CombinedEdit;
+import undo.ProvidesDialogUndoableEdit;
 import undo.UndoAbleEditForRemoveItem;
 
 /**A class containing methods for adding, accessing, removing and editing the channel labels to a figure.
  
   */
-public class ChannelLabelManager implements Serializable {
+public class ChannelLabelManager implements Serializable, ProvidesDialogUndoableEdit {
 
 	/**
 	 * 
@@ -343,6 +347,18 @@ public class ChannelLabelManager implements Serializable {
 	/**returns a list of channel labels*/
 	public ArrayList<ChannelLabelTextGraphic> getAllLabels() {
 		return panelList.getChannelLabels();
+	}
+
+	/**returns an undoable edit for any changes that may be made to the traits of
+	 * the existing channel labels*/
+	@Override
+	public AbstractUndoableEdit2 provideUndoForDialog() {
+		CombinedEdit output = new CombinedEdit(new ChannelLabelPropertiesUndo(this.getChannelLabelProp()));
+		ArrayList<ChannelLabelTextGraphic> label = this.getAllLabels();
+		for(ChannelLabelTextGraphic l:label) {
+			output.addEditToList(l.provideUndoForDialog());
+		}
+		return output;
 	}
 	
 	

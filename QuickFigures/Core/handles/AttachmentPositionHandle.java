@@ -287,8 +287,9 @@ public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
 		if(object instanceof TextGraphic) {
 			TextGraphic t=(TextGraphic) object;
-			if (!t.isEditMode())t.setEditMode(true);
-			else if (clickCount>3)t.showOptionsDialog();
+			boolean inside=t.getBounds().contains(canvasMouseEventWrapper.getCoordinatePoint());
+			if (!t.isEditMode() && inside)t.setEditMode(true);
+			else if (clickCount>3 && inside)t.showOptionsDialog();
 		}
 		else ((ShowsOptionsDialog) object).showOptionsDialog();
 	}

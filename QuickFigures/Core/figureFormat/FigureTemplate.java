@@ -43,6 +43,7 @@ import undo.UndoLayoutEdit;
 import appContext.CurrentAppContext;
 import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelProperties;
+import channelLabels.MergeLabelStyle;
 import channelLabels.ChannelLabelTextGraphic;
 
 /** Figure template alter target figures to match a certain 
@@ -320,7 +321,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 		
 		
 		mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.ONLY_MERGE_PANELS;
-		mdp.getModelItem().getChannelLabelProp().setMergeLabelStyle(ChannelLabelProperties.MULTIPLE_LINES);
+		mdp.getModelItem().getChannelLabelProp().setMergeLabelStyle(MergeLabelStyle.MULTIPLE_LINES);
 	
 	}
 

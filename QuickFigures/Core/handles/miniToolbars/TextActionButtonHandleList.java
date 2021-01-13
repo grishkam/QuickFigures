@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 12, 2021
  * Version: 2021.1
  */
 package handles.miniToolbars;
@@ -65,7 +65,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 
 	{maxGrid=12;}
 
-	private TextGraphic text;
+	protected TextGraphic text;
 	
 	public TextActionButtonHandleList(TextGraphic t) {
 		this.text=t;

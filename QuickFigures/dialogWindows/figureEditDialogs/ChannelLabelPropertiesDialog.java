@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 12, 2021
  * Version: 2021.1
  */
 package figureEditDialogs;
@@ -24,11 +24,15 @@ import java.util.ArrayList;
 
 import channelLabels.ChannelLabel;
 import channelLabels.ChannelLabelProperties;
+import channelLabels.MergeLabelStyle;
 import graphicActionToolbar.CurrentFigureSet;
 import imageDisplayApp.CanvasOptions;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.strings.StringInputPanel;
+import undo.ChannelLabelPropertiesUndo;
+import undo.CombinedEdit;
+import undo.ProvidesDialogUndoableEdit;
 
 /**A dialog that allows the user to change how the channel label's are shown
  */
@@ -43,18 +47,29 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 		this.setTitle("Merge Label");
 		properties = p;
 		this.addOptionsToDialog();
+		undo=new ChannelLabelPropertiesUndo(p);
 	}
 	
 	/**sets the channel labels that this dialog affects*/
 	public void setLabelItems(Iterable<?> items) {
 	labels=new ArrayList<ChannelLabel>();
+	CombinedEdit labelUndo = new CombinedEdit(undo);
 		for(Object  i:items) {
-			if (i instanceof ChannelLabel)  labels.add((ChannelLabel) i);
+			if (i instanceof ChannelLabel) {
+				ChannelLabel i2 = (ChannelLabel) i;
+				labels.add(i2);
+				
+			}
+			if (i instanceof ProvidesDialogUndoableEdit) {
+				labelUndo.addEditToList(((ProvidesDialogUndoableEdit) i).provideUndoForDialog());
+			}
 		}
+		undo=labelUndo;
 	}
 	
+	/**Adds the options to the dialog*/
 	protected void addOptionsToDialog() {
-		ChoiceInputPanel mergeTypeCombo = new ChoiceInputPanel("How To label Merge",ChannelLabelProperties.mergeLabelOptions, properties.getMergeLabelStyle() );
+		ChoiceInputPanel mergeTypeCombo = new ChoiceInputPanel("How To label Merge",ChannelLabelProperties.mergeLabelOptions, properties.getMergeLabelStyle().ordinal() );
 		this.add("mergeType", mergeTypeCombo );
 		ChoiceInputPanel mergeTextCombo = new ChoiceInputPanel("Merge Label",ChannelLabelProperties.mergeTexts, properties.getMergeTextOption() );
 		this.add("mergeText", mergeTextCombo  );
@@ -64,7 +79,9 @@ public class ChannelLabelPropertiesDialog extends GraphicItemOptionsDialog {
 		this.add("Custom Separator ", new StringInputPanel("Custom Separator ",properties.getCustomSeparator() ));
 	}
 	protected void setItemsToDiaog() {
-		properties.setMergeLabelStyle(this.getChoiceIndex("mergeType"));
+		int choiceIndex = this.getChoiceIndex("mergeType");
+		
+		properties.setMergeLabelStyle(MergeLabelStyle.values()[choiceIndex]);
 		properties.setMergeTextOption(this.getChoiceIndex("mergeText"));
 		properties.setSaparatorOption(this.getChoiceIndex("sepText"));
 		properties.setCustomMergeText(this.getString("Custom Merge Text "));

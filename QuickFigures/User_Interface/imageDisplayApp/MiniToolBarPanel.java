@@ -102,7 +102,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 
 	public Dimension getPreferredSize() {
 		if (!vertical)
-			return new Dimension(330, 30);
+			return new Dimension(360, 30);
 		return new Dimension(30, 325);
 	}
 	

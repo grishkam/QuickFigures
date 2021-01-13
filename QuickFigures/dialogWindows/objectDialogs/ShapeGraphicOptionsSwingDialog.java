@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 12, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -42,12 +42,15 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 	public boolean omitPart1=false;
 	
 	ArrayList<ShapeGraphic> array=new 	ArrayList<ShapeGraphic>();
+	private boolean angleExists;
 
 	public ShapeGraphicOptionsSwingDialog(ShapeGraphic s, boolean omit) {
 		 this.s=s;	
 		 addOptionsToDialog();
 		 omitPart1=omit;
 		 super.undoableEdit=Edit.createGenericEditForItem(s);
+		 angleExists=s.doesHaveRotationAngle();
+		 this.setTitle("Shape Options");
 	}
 	
 	public boolean hasItems() {
@@ -120,8 +123,11 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		moveGrid(2, -1);
 		this.add("fill", fillpanel2 );
 		moveGrid(-2, 0);
-		AngleInputPanel aip = new AngleInputPanel("Angle", s.getAngle(), true);
-		this.add("Angle", aip);
+		if(angleExists) {
+			AngleInputPanel aip = new AngleInputPanel("Angle", s.getAngle(), true);
+			this.add("Angle", aip);
+		}
+		
 		if (s.isHasCloseOption()) {
 			BooleanInputPanel colsepanel2 = new BooleanInputPanel("Closed?", s.isClosedShape());
 			add("Closed", colsepanel2);
@@ -148,7 +154,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		
 		s.setFilled(this.getBoolean("fill"));
 		s.setAntialize(this.getBoolean("AntiA"));
-		s.setAngle(this.getNumber("Angle"));
+		if(angleExists) s.setAngle(this.getNumber("Angle"));
 		if (s.isHasCloseOption()) {
 			s.setClosedShape(this.getBoolean("Closed"));
 		}
