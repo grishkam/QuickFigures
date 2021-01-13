@@ -37,4 +37,6 @@ public enum MergeLabelStyle {
 		this.menuText=menuText;
 	}
 	public String getMenuText() {return menuText;}
+	
+	
 }
