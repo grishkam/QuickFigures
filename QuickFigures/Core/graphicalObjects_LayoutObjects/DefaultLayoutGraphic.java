@@ -697,15 +697,22 @@ public void resizeLayoutToFitContents() {
 
 	public String[] getScaleWarning() {
 		//showEditingOptions();
-		this.getEditor().roundUpAll(getPanelLayout());
+	
 	//	if (this.getPanelLayout().doPanelsUseUniqueHeights())new MontageEditorDialogs().showUniqueDimensionDialog(getPanelLayout(), MontageSpaces.ROWS);
 		//if (this.getPanelLayout().doPanelsUseUniqueWidths())new MontageEditorDialogs().showUniqueDimensionDialog(getPanelLayout(), MontageSpaces.COLS);
 	//	new MontageEditorDialogs().showColumnNumberEditorDialog(getEditor(), getPanelLayout(),1,1);
+		this.generateCurrentImageWrapper();
+		this.getEditor().roundUpAll(getPanelLayout());
+		
+		new LayoutEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
+		
+		return new String[] {"Layout panels were resized after scaling", "Scaling figure can sometimes result in mismatches between Image Panel locations and layouts", "Layout measurements are rounded up after scaling", "Object positions/sizes may be rounded to integers during export"};
+		/**this.getEditor().roundUpAll(getPanelLayout());
 		new LayoutEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
 		
 		//new MontageEditorDialogs().showBorderEditorDialog(getEditor(), getPanelLayout());
-		return new String[] {"Scaling figure can sometimes result in mismatches between Image Panel locations and layouts", "Layout measurements are rounded up after scaling", "Object positions/sizes may be rounded to integers during export"};
-	}
+		
+	*/}
 	
 	
 }

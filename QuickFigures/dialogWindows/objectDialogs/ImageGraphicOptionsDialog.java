@@ -75,8 +75,8 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 				this.moveGrid(-2, 0);
 			}
 			
-			this.add("Dimensions", new InfoDisplayPanel("Dimensions", image.getDimensionString()));
-			this.add("Dimensions2", new InfoDisplayPanel("", image.getRealDimensionString()));
+			this.add("Dimensions", new InfoDisplayPanel("Space occupied", image.getDimensionString()));
+			this.add("Dimensions2", new InfoDisplayPanel("Dimensions", image.getRealDimensionString()));
 			
 			this.add("PPI", 
 					new InfoDisplayPanel("Points per Inch ", image.getIllustratorPPI() /**+" ("+image.getScreenPPI()+" on screen)"*/));
@@ -118,8 +118,8 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 				if (image.isFilederived()) {
 					image.setLoadFromFile(this.getBoolean("fileLoad"));
 				}
-				allStrings.get("Dimensions").setContentText(image.getRealDimensionString());
-				allStrings.get("Dimensions2").setContentText(image.getDimensionString());
+				allStrings.get("Dimensions2").setContentText(image.getRealDimensionString());
+				allStrings.get("Dimensions").setContentText(image.getDimensionString());
 				allStrings.get("PPI").setContentText(image.getIllustratorPPI() /**+" "+image.getScreenPPI()*/);
 				
 				

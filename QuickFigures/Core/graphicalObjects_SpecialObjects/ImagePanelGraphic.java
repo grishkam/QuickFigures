@@ -890,6 +890,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return (int)(Toolkit.getDefaultToolkit().getScreenResolution()/getScale());
 		}
 
+		
 		public String getDimensionString() {
 			return  (getBounds().getWidth()+" X "+this.getBounds().getHeight()+" units");
 		}
