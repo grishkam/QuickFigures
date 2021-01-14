@@ -68,7 +68,7 @@ public interface CanvasMouseEvent extends Serializable {
 
 	/**returns the mouse event information*/
 	java.awt.event.MouseEvent getAwtEvent();
-	public boolean shfitDown();
+	public boolean shiftDown();
 	public int clickCount();
 	public boolean altKeyDown();
 	int mouseButton();

@@ -35,6 +35,7 @@ import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.GraphicList;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.OverlayObjectManager;
@@ -116,7 +117,7 @@ public class ImagePanelHandle extends SmartHandle {
 		for(ZoomableGraphic item: items) {
 			if (item instanceof ImagePanelGraphic) {
 				
-				PanelMovementGroupItems p2 = createPassengerList(e, (ImagePanelGraphic) item, allMovementGroups, e.shfitDown());
+				PanelMovementGroupItems p2 = createPassengerList(e, (ImagePanelGraphic) item, allMovementGroups, e.shiftDown());
 				if (item==thePanel)passengers=p2;
 				allMovementGroups.add(p2);
 				draggedGroups.add(p2);
@@ -158,6 +159,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**performed to drag the handles*/
 	public void handleDrag(CanvasMouseEvent e) {
 		super.handleDrag(e);
+		thePanel.dragOngoing=true;
 		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
 		Point p2 = e.getCoordinatePoint();
 		int handlenum = this.getHandleNumber();
@@ -184,7 +186,7 @@ public class ImagePanelHandle extends SmartHandle {
 		}	
 		
 		/**if the user is holding shift while adjusting the frame it adjust all of the image panels*/
-		if (isFrameHandle()&&e.shfitDown()) {
+		if (isFrameHandle()&&e.shiftDown()) {
 			for (ZoomableGraphic item: e.getSelectionSystem().getSelecteditems()) {
 				if (item instanceof ImagePanelGraphic) {
 					((ImagePanelGraphic) item).setFrameWidthH(thePanel.getFrameWidthH());
@@ -248,18 +250,18 @@ public class ImagePanelHandle extends SmartHandle {
 		}
 		
 		
-		selectionManagger.setSelection(new GraphicGroup(markers), 0);
+		selectionManagger.setSelectionGraphic(new GraphicList(markers));
 	}
 
 	
 	
 	
 	public void handleRelease(CanvasMouseEvent e) {
-		
+		thePanel.dragOngoing=false;
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
-		{
-		releaseCenterHandle(e);
-		}
+			{
+			releaseCenterHandle(e);
+			}
 		e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
 		
 	}

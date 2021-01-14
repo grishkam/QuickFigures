@@ -78,7 +78,7 @@ public class BarWidthSmartHandle extends SmartHandle {
 			
 			BasicPlot plot = BasicPlot.findPlot(bar);
 			ArrayList<DataBarShape> bars = plot.getMeanBars();
-			if (!mouse.shfitDown())for(DataBarShape b: bars) {
+			if (!mouse.shiftDown())for(DataBarShape b: bars) {
 				b.setBarWidth(shift);
 				b.requestShapeUpdate();
 			}

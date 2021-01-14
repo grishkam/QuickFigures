@@ -103,6 +103,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	/**image stored long term as a byte array that can be serialized*/
 	byte[] serializedIm=null;
 	
+	/**set to true while certain handles are being dragged*/
+	public boolean dragOngoing=false;
 	/**
 	 * 
 	 */
@@ -498,7 +500,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			
 				  if (selected) {
 					  getPanelHandleList().updateHandleLocs();
-					  getPanelHandleList().draw(graphics, cords);
+					  getSmartHandleList().draw(graphics, cords);
 					
 					   
 				   }
@@ -1025,12 +1027,14 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		public SmartHandleList getSmartHandleList() {
 			 {
 				SmartHandleList out = new SmartHandleList();
-				if (this.extraHandles!=null) 
+				if (this.extraHandles!=null&&superSelected) 
 					out.addAll(extraHandles);
 				out.addAll(getPanelHandleList());
 				
-				getActionHandleList().updateLocation();
-				out.addAll(this.getActionHandleList());
+			if (!dragOngoing&&superSelected)	{
+					getActionHandleList().updateLocation();
+					out.addAll(this.getActionHandleList());
+				}
 				return out;
 			}
 			//return getPanelHandleList();
@@ -1045,7 +1049,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				return output;
 			}
 			
-			return -1;
+			return NO_HANDLE;
 
 		}
 
@@ -1081,8 +1085,10 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		@Override
 		public void select() {
 			selected=true;
+			dragOngoing=false;
 			try {
 				StatusPanel.updateStatus(getMinimalSummary());
+				
 			} catch (Exception e) {
 			}
 		}

@@ -47,6 +47,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.Hideable;
 import locatedObject.RainbowPaintProvider;
+import locatedObject.RectangleEdgePositions;
 import locatedObject.Selectable;
 import undo.UndoManagerPlus;
 
@@ -54,7 +55,7 @@ import undo.UndoManagerPlus;
    most handles that the user sees are instances of this class. contains the basic methods
    that subclasses may variously override. also contains methods for creating many shapes
    that the handles can appear as*/
-public class SmartHandle implements Selectable, Hideable, ZoomableGraphic{
+public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, RectangleEdgePositions{
 	
 	public static final int NORMAL_FILL=0, CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
 	
@@ -444,11 +445,33 @@ public Shape getClickableArea() {return lastDrawShape;}
 	}
 	
 	/**returns the shape of an arrow that points left or right*/
-	protected Area createLeftRightArrow(int handlesize, int lenArr) {
-		Area arrow1 = createRightArrow(handlesize, lenArr);
+	protected Area createLeftRightArrow(int arrowSize, int lenArr) {
+		Area arrow1 = createRightArrow(arrowSize, lenArr);
 		Shape arrow2 = AffineTransform.getTranslateInstance(-arrow1.getBounds().getMinX(),0).createTransformedShape(arrow1);
 		Shape arrow3 = AffineTransform.getRotateInstance(-Math.PI).createTransformedShape(arrow2);
 		Area output=new Area(arrow2); output.add(new Area(arrow3));
+		return output;
+	}
+	
+	/**Creates an arrow pointing away from the 0,0 location
+	 * @param direction which way the arrow points*/
+	protected Shape createDirectionArrow(int handlesize, int lenArr, int direction) {
+		Shape output = createRightArrow(handlesize, lenArr);
+		double angle=0;
+		
+		switch(direction) {
+			case LEFT: {angle=180;break;}
+			case RIGHT: {break;}
+			case TOP: {angle=270;break;}
+			case BOTTOM: {angle=90;break;}
+			case UPPER_RIGHT: {angle=315;break;}
+			case LOWER_RIGHT: {angle=45;break;}
+			case LOWER_LEFT: {angle=135;break;}
+			case UPPER_LEFT: {angle=225;break;}
+		}
+		output =AffineTransform.getTranslateInstance(-output.getBounds().getMinX(), 0).createTransformedShape(output);
+		output = AffineTransform.getRotateInstance(angle*Math.PI/180).createTransformedShape(output);
+		
 		return output;
 	}
 

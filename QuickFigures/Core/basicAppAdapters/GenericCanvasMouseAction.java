@@ -121,7 +121,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 		return e.isAltDown();
 	}
 	
-	public boolean shfitDown() {
+	public boolean shiftDown() {
 		return e.isShiftDown();
 	}
 

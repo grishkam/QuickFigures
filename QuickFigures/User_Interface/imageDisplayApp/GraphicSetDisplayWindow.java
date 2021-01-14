@@ -321,7 +321,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		}
 		
 		if (arg0.getSource()==this.getRootPane()) {
-			IssueLog.log("issue: "+"key events should not be comming from root pane");
+			//IssueLog.log("issue: "+"key events should not be comming from root pane");
 			
 		}
 		

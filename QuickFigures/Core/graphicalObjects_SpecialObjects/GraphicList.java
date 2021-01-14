@@ -37,9 +37,9 @@ public class GraphicList implements ZoomableGraphic {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<LocatedObject2D> items;
+	private ArrayList<? extends LocatedObject2D> items;
 
-	public GraphicList(ArrayList<LocatedObject2D> o2) {
+	public GraphicList(ArrayList<? extends LocatedObject2D> o2) {
 		this.items=o2;
 	}
 

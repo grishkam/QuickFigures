@@ -186,7 +186,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		}
 		
 		
-	try{	performDragEdit(this.getLastMouseEvent().shfitDown());} catch (Throwable t) {IssueLog.logT(t);}
+	try{	performDragEdit(this.getLastMouseEvent().shiftDown());} catch (Throwable t) {IssueLog.logT(t);}
 	
 	if (resetClickPointOnDrag) {
 		

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Jan 13, 2021
  * Version: 2021.1
  */
 package handles;
@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 
 	public static final int defaultHandleNumber = 8000000;
 	private static final int DEFAULT_TYPE=0, ROTATION_ONLY_TYPE = 1;
+	boolean specialShapeUser=false;
 	protected ArrayList<LocatedObject2D> objects;
 	private RectangularGraphic rect;
 	public  int handleNumberCorrection=defaultHandleNumber;//determines the id numbers for the handles
@@ -81,9 +83,9 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	/**returns true if the argument contains the same objects as this list*/
 	public boolean isSimilarList(ReshapeHandleList l) {
 		if(l==null) return false;
-		if(l.objects.size()!=this.objects.size()) return false;
-		for(int i=0; i<objects.size(); i++) {
-			if(l.objects.get(i)!=objects.get(i)) return false;
+		if(l.getTargetedObjects().size()!=this.getTargetedObjects().size()) return false;
+		for(int i=0; i<getTargetedObjects().size(); i++) {
+			if(l.getTargetedObjects().get(i)!=getTargetedObjects().get(i)) return false;
 		}
 		
 		return true;
@@ -95,8 +97,8 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 	public ReshapeHandleList(int type, LocatedObject2D... o) {
 		this.type=type;
 		objects=new ArrayList<LocatedObject2D>();
-		for(LocatedObject2D o1:o) {objects.add(o1);}
-		refreshList(objects);
+		for(LocatedObject2D o1:o) {getTargetedObjects().add(o1);}
+		refreshList(getTargetedObjects());
 	}
 	
 	/**Constructs a reshape handle list with the objects in o.
@@ -107,8 +109,8 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		this.type=type;
 		this.handleNumberCorrection=hNumber;
 		objects=new ArrayList<LocatedObject2D>();
-		for(LocatedObject2D o1:o) {objects.add(o1);}
-		refreshList(objects);
+		for(LocatedObject2D o1:o) {getTargetedObjects().add(o1);}
+		refreshList(getTargetedObjects());
 	}
 
 	/**Constructs a reshape handle list with the objects in o.
@@ -125,6 +127,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		this.handleSize=handleSize;
 		hideCenterHandle=hidecenter;
 		refreshList(objects);
+		specialShapeUser=true;
 	}
 	
 	public ReshapeHandleList(ArrayList<LocatedObject2D> objects, boolean twoway) {
@@ -172,7 +175,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 
 	/**sets the rectangle for this list based on the bounding box of all the objects in the list*/
 	public void updateRectangle() {
-		updateRectangle(objects);
+		updateRectangle(getTargetedObjects());
 	}
 	/**sets the rectangle for this list based on the bounding box of all the objects in the list*/
 	private void updateRectangle(ArrayList<LocatedObject2D> objects) {
@@ -248,6 +251,37 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			this.rect=r;
 			
 			
+		}
+		
+		/**returns true if the handle list
+		 * is set to use a special shape
+		 * Also sets up a special shape in which an outward 
+		 * displaced fragment is present near the original handle */
+		protected boolean hasSpecialShape() {
+			if(!specialShapeUser)
+				return false;
+			if(specialShape==null) {
+				int size = 6;
+				int sizeHalf = size/2;
+				int t = this.getHandleType();
+				if(t!=RectangleEdgePositions.CENTER)
+					specialShape=createDirectionArrow(size, sizeHalf, t);
+				/**
+				Rectangle rmain = new Rectangle(-size,-size, size*2, size*2);
+				Rectangle rInward = new Rectangle(-sizeHalf,-sizeHalf, size, size);
+			
+				
+				if(t!=RectangleEdgePositions.CENTER) {
+					Point2D p = RectangleEdges.getLocation(t, rmain);
+					
+					Rectangle rOutward = new Rectangle(-sizeHalf,-sizeHalf, size, size);
+					RectangleEdges.setLocation(rOutward, CENTER, p.getX(), p.getY());;
+					Area a = new Area(new Ellipse2D.Double(rOutward.getX(), rOutward.getY(), rOutward.getWidth(), rOutward.getHeight()));
+					a.add(new Area(rInward));
+					specialShape=a;
+				}*/
+			}
+			return specialShape!=null;
 		}
 		
 		/**draws the handle*/
@@ -377,7 +411,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		}
 		
 		
-		/**returns the handle type of this handle. See Interface RectangleEdgePosisions*/
+		/**returns the handle type of this handle. @see RectangleEdgePositions*/
 		protected int getHandleType() {
 			return this.getHandleNumber()-handleNumberCorrection;
 		}
@@ -459,7 +493,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		  */
 		private ArrayList<LocatedObject2D>  copyObjects() {
 			ArrayList<LocatedObject2D> output=new ArrayList<LocatedObject2D> ();
-			for(LocatedObject2D o: objects) {
+			for(LocatedObject2D o: getTargetedObjects()) {
 				output.add(o.copy());
 			}
 			
@@ -479,18 +513,18 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			
 			/**Performs the edit on the selected objects*/
 			if(isMoveHandle()) {
-				UndoMoveItems edit =performMove(objects);
+				UndoMoveItems edit =performMove(getTargetedObjects());
 				addUndo(w, edit);
 			} else
 				if (!isRotationHandle()) 
 					{
-						CombinedEdit edit = performScale(objects);
+						CombinedEdit edit = performScale(getTargetedObjects());
 						if(w!=null) {
 							addUndo(w, edit);}
-						FigureScaler.showScaleMessages(objects);
+						FigureScaler.showScaleMessages(getTargetedObjects());
 					}
 				else {
-					CombinedEdit edit =performRotate(objects, -angle);
+					CombinedEdit edit =performRotate(getTargetedObjects(), -angle);
 					
 					if(w!=null) {
 						addUndo(w, edit);
@@ -544,6 +578,10 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			blankRect.draw(g, cords);
 		}
 		super.draw(g, cords);
+	}
+
+	public ArrayList<LocatedObject2D> getTargetedObjects() {
+		return objects;
 	}
 	
 

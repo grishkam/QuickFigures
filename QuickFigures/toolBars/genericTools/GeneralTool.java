@@ -779,7 +779,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 	}
 	
 	public boolean shiftDown() {
-		return event.shfitDown();
+		return event.shiftDown();
 	}
 	
 	public boolean altKeyDown() {

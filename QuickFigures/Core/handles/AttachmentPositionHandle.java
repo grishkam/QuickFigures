@@ -36,7 +36,6 @@ import javax.swing.JPopupMenu;
 
 import actionToolbarItems.AlignItem;
 import applicationAdapters.CanvasMouseEvent;
-import genericTools.Object_Mover;
 import graphicTools.AttachedItemTool;
 import graphicTools.AttachedItemTool2;
 import graphicalObjects.CordinateConverter;
@@ -54,9 +53,9 @@ import locatedObject.TakesAttachedItems;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiAttachmentPositionDialog;
 import undo.CombinedEdit;
-import undo.UndoReorder;
-import undo.UndoAttachmentPositionChange;
 import undo.UndoAddOrRemoveAttachedItem;
+import undo.UndoAttachmentPositionChange;
+import undo.UndoReorder;
 
 /**A handle that allows a user to move an item that is attached to another
  * @see AttachmentPosition
@@ -82,7 +81,15 @@ public class AttachmentPositionHandle extends SmartHandle {
 	protected Rectangle originalBounds;
 	boolean willTransplant=true;
 	protected boolean suppressMenu;
-	private AttachmentPositionHandle demiVerion;
+	
+	/**An alternate version of the handle that is less visible and has fewer functions*/
+	private AttachmentPositionHandle demiVersion;
+	
+	/**Set to true if this is a minimal version of the handle*/
+	boolean isADemiversion=false;
+	
+	/**set to true if both base position and offsets are to be changedd*/
+	private boolean useFullControlMode=false;
 
 	public AttachmentPositionHandle() {
 	
@@ -115,7 +122,7 @@ public class AttachmentPositionHandle extends SmartHandle {
 	}
 	
 	protected boolean fineControlMode() {
-		if (isInfineControl()) return true;
+		if (isInFineControlMode()) return true;
 		return KeyDownTracker.isKeyDown('f')||KeyDownTracker.isKeyDown('F');
 	}
 
@@ -130,6 +137,12 @@ public class AttachmentPositionHandle extends SmartHandle {
 	public void handleDrag(CanvasMouseEvent mEvent) {
 		Point2D p2=mEvent.getCoordinatePoint();
 		UndoAttachmentPositionChange undo = new UndoAttachmentPositionChange(object);
+		
+		if (this.isUseFullControlMode()) {
+			getObject().getAttachmentPosition().setToNearestSnap(getObject().getBounds().getBounds(), attachmentSite.getContainerForBounds(object), new Point((int)p2.getX(), (int)p2.getY() ));
+			AttachedItemTool2.adjustPosition((int)p2.getX(), (int)p2.getY(), attachmentSite, object);
+		}
+		else
 		if (this.fineControlMode()) {
 			AttachedItemTool2.adjustPosition((int)p2.getX(), (int)p2.getY(), attachmentSite, object);
 		} else
@@ -295,7 +308,7 @@ public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 	}
 }
 
-public boolean isInfineControl() {
+public boolean isInFineControlMode() {
 	return infineControl;
 }
 
@@ -376,11 +389,21 @@ private void performTransplant() {
 
 /**Creates a simplified version of this handle that will be used for dragging the attached object directly*/
 public AttachmentPositionHandle createDemiVersion() {
-	if (demiVerion==null) demiVerion = copyForSimpleDrag();
-	 demiVerion.suppressMenu=true;
-	 demiVerion.handlesize=handlesize/2;
-	 demiVerion.handleStrokeColor=new Color(0,0,0,0);
-	return  demiVerion;
+	if (demiVersion==null) demiVersion = copyForSimpleDrag();
+	demiVersion.isADemiversion=true;
+	 demiVersion.suppressMenu=demiVersion.isADemiversion;
+	 demiVersion.handlesize=handlesize/2;
+	 demiVersion.handleStrokeColor=new Color(0,0,0,0);
+	 
+	return  demiVersion;
+}
+
+public boolean isUseFullControlMode() {
+	return useFullControlMode;
+}
+
+public void setUseFullControlMode(boolean useFullControlMode) {
+	this.useFullControlMode = useFullControlMode;
 }
 
 

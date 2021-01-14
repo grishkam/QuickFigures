@@ -246,6 +246,8 @@ public Component getInputPanel() {
 					arg1.setFont(new Font("Arial", Font.BOLD, 20));
 					arg1.drawString("=", arg2, arg3+22);
 				}
+				
+				arg1.setColor(Color.black);
 				arg1.setFont(startFont);
 				
 			}

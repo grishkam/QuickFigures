@@ -263,7 +263,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		if(e.clickCount()==2) {pathPoint.deselect();clearReshapeHandles(); return;}
 		else if (!isSelected()) {pathPoint.deselect();}
-		else if (e.shfitDown()) {pathPoint.deselect();clearReshapeHandles();return;}//clicking on a selected point with shift down will deselect it
+		else if (e.shiftDown()) {pathPoint.deselect();clearReshapeHandles();return;}//clicking on a selected point with shift down will deselect it
 		
 		if(!pathPoint.isSelected())
 			{
@@ -273,7 +273,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		if(pathPoint.isSelected())  setPrimarySelected(pathPoint);
 		
-		if(!e.shfitDown()) {
+		if(!e.shiftDown()) {
 			deslectAllExcept(pathPoint);//unless ths user is holding shift to select multiple points, others should not be selected
 		} 
 		pathGraphic.selectedsegmentindex=pathGraphic.getPoints().indexOf(pathPoint);
@@ -300,14 +300,14 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		java.awt.geom.Point2D.Double p =pathGraphic.convertPointToInternalCrdinates(p2);
 		boolean b = e.altKeyDown()&&e.isControlDown();
-		if (isAnchorPointHandle()||e.shfitDown()) {
+		if (isAnchorPointHandle()||e.shiftDown()) {
 			
 			
 			java.awt.geom.Point2D.Double pAnchor = pathPoint.getAnchor();
 			
 			double dx=p.getX()-pAnchor.getX();
 			double dy=p.getY()-pAnchor.getY();
-			if (pathGraphic.getHandleMode()==PathGraphic.MOVE_ALL_SELECTED_HANDLES||e.shfitDown()) {
+			if (pathGraphic.getHandleMode()==PathGraphic.MOVE_ALL_SELECTED_HANDLES||e.shiftDown()) {
 				PathPointList pts = pathGraphic.getPoints().getSelectedPointsOnly();
 				for(locatedObject.PathPoint point: pts) {
 					point.move(dx, dy);

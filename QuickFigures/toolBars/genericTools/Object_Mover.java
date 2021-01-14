@@ -174,7 +174,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		CanvasMouseEvent me = getLastMouseEvent();
 		if (me==null) return setPrimarySelectedObject(false, roi);
 		
-		return setPrimarySelectedObject(me.shfitDown(), roi);
+		return setPrimarySelectedObject(me.shiftDown(), roi);
 	}
 	
 	/**Sets the currently selected object, 
@@ -389,13 +389,17 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		
 		/**if neither a handle nor an object was pressed, then no object is selected.
-		 * De-selects the primary selected object*/
+		 * De-selects the primary selected object and set the stored primary selected object to null*/
 		if(objectAtPressLocation==null&&getSelectedHandleNumber()==NO_HANDLE) 
-			setPrimarySelectedObject(null);
+			{
+				setPrimarySelectedObject(null);
+				this.getObjectGroupHandleList();//updates the group handles
+			}
 		
 			
 		if (getPrimarySelectedObject()==null) {
 			attemptLayerGrab();
+			
 			//nothing left to do
 			return;
 		}
@@ -409,12 +413,15 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				createUndoForDragHandle() ;//creates a simple undo that will work for certain classes of handle
 			}
 			
-			boolean shift=e.shfitDown();
+			boolean shift=e.shiftDown();
 			boolean copyObjects = this.getLastMouseEvent().altKeyDown();
 			
 		if (startsSelected && shift && this.handle==NO_HANDLE) {
 			/**when holding down the shift key, the user sometimes wants to deselect an item not select it*/
 			deselect(objectAtPressLocation);//this implements that case
+			if(this.getPrimarySelectedObject()==objectAtPressLocation)
+				this.setPrimarySelectedObject(null);
+			this.getObjectGroupHandleList();//updates the group handles
 		}
 					ArrayList<LocatedObject2D> allSelectedrois2 = getAllSelectedItems(false);
 					
@@ -432,10 +439,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			 		currentUndo=new UndoMoveItems(rois2);//establishes the undo
 			 		addedToManager=false;
 			 		
-			 		/**remembers the starting location of the selected item*/
-			
-			 		
-			 		
+			 	
 			 		innitiateSpecialCaseHandleLists();
 	
 			 		/**The special case of mouse presses that target text items*/
@@ -781,10 +785,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		 * locked item handle (special the handle for moving an item that is attached to another)*/
 		if(output==null && getSelectedHandleNumber()!=NO_HANDLE ) {
 					output = findHandleToUseForLockedItem();
-					if (output!=null) {
-						setSelectedExtraHandle(output);
-					} else setSelectedExtraHandle(null);
-			} else setSelectedExtraHandle(null);
+			} 
 		
 		return output;
 	}
@@ -798,10 +799,14 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return output;
 	}
 
-	/**If multiple objects are selected*/
+	/**If multiple objects are selected, creates a group handle list*/
 	private ReshapeHandleList getObjectGroupHandleList() {
-		if(this.getClass()!=Object_Mover.class) return null; //not needed for subclasses
-		if(!this.selectionsScale()) return null;
+		if(this.getClass()!=Object_Mover.class) {return null;} //not needed for subclasses
+		if(!this.selectionsScale()) {
+			getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setSelectionHandles(null);
+			return null;
+		}
+		
 		ReshapeHandleList newHandleList = new ReshapeHandleList(this.getAllSelectedItems(false), 5, CODE_FOR_RESHAPE_HANDLE_LIST, selectionsScale2Ways(), 0, false);
 		
 		/**if the new grouped handle list is much like the old one, just used the old one*/
@@ -844,9 +849,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		return true;
 	}
 
-	public void setSelectedExtraHandle(SmartHandle output) {
-		this.getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setSelectionHandles(SmartHandleList.createList(output));
-	}
+
 	
 	public void mouseClicked() {
 		
@@ -968,7 +971,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 						}
 						
 		/**what to do in the case of all types of handle release*/
-		if (getSelectedHandleNumber()>-1&&getPrimarySelectedObject() instanceof HasHandles) {
+		if (getSelectedHandleNumber()>NO_HANDLE&&getPrimarySelectedObject() instanceof HasHandles) {
 
 			HasHandles h=(HasHandles) getPrimarySelectedObject();
 			h.handleRelease(getSelectedHandleNumber(), new Point(getClickedCordinateX(),  getClickedCordinateY()), new Point(getDragCordinateX(), getDragCordinateY()));
@@ -1027,7 +1030,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			if(items.size()==0) return;
 			LocatedObject2D lastItem = items.get(items.size()-1);
 			boolean selLast=pressX>this.getLastDragOrLastReleaseMouseEvent().getCoordinatePoint().getX();
-			if (selLast)this.setPrimarySelectedObject(lastItem);
+			if (selLast)
+				this.setPrimarySelectedObject(lastItem);
 			else this.setPrimarySelectedObject(items.get(0));
 			for(Object i: items) {
 				select(i);
@@ -1278,6 +1282,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	void establishAttachedItemClick(Object roi1) {
 		AttachmentPositionHandle sHandle = this.findHandleForLockedItem(roi1);
 		OverlayObjectManager overlaySelectionManagger = getSelectionManager();
+		if(this.getLastMouseEvent()!=null &&this.getLastMouseEvent().shiftDown())
+			sHandle=null;
 		
 		if (sHandle!=null) {
 			AttachmentPositionHandle demiVersion = sHandle.createDemiVersion();

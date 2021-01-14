@@ -218,7 +218,8 @@ public void updateLocationsForVertical() {
 		
 		/**when the user presses the handle*/
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
-			
+			if ( canvasMouseEventWrapper.shiftDown())
+				return;//nothing  is
 			if (alternativePopup!=null) {
 				alternativePopup.showPopupMenu(canvasMouseEventWrapper);
 				return;
@@ -336,6 +337,8 @@ public void updateLocationsForVertical() {
 		
 		/***/
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
+			if(canvasMouseEventWrapper.shiftDown())
+				return;//nothing is done if shift is down
 			lastEvent=canvasMouseEventWrapper;
 		
 			if(findInputPanel()!=null) 
