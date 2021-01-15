@@ -122,4 +122,9 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 	public SmartHandleList getSmartHandleList() {
 		return super.getButtonList();
 	}
+
+	@Override
+	public String getShapeName() {
+		return "Shape";
+	}
 }

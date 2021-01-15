@@ -950,4 +950,9 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this), new PathEditUndo(this));
 	}
 
+	@Override
+	public String getShapeName() {
+		return "Path";
+	}
+
 }

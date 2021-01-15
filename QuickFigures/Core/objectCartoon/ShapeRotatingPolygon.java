@@ -494,7 +494,7 @@ public void moveCurvePointToward(Point2D towardthis, Point2D startingpoint, int 
 	}
 	
 	public void showDialog(PathObject p) {
-		diaLog d = new diaLog(this,p);
+		ShapeCreatorDialog d = new ShapeCreatorDialog(this,p);
 		d.showDialog();
 		if (p==null) {
 		d.setToFields() ;
@@ -529,7 +529,7 @@ public void moveCurvePointToward(Point2D towardthis, Point2D startingpoint, int 
 		this.alternateDistorts = alternateDistorts;
 	}
 
-	public class diaLog extends StandardDialog{
+	public class ShapeCreatorDialog extends StandardDialog{
 
 		/**
 		 * 
@@ -539,7 +539,7 @@ public void moveCurvePointToward(Point2D towardthis, Point2D startingpoint, int 
 		boolean realtome=false;
 		PathObject p=null;
 		
-		public diaLog(ShapeRotatingPolygon s, PathObject p) {
+		public ShapeCreatorDialog(ShapeRotatingPolygon s, PathObject p) {
 			this.p=p;
 			if (p!=null) {this.realtome=true;
 			this.setModal(false);

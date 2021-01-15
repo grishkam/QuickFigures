@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 12, 2021
+ * Date Modified: Jan 15, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -47,10 +47,12 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 	public ShapeGraphicOptionsSwingDialog(ShapeGraphic s, boolean omit) {
 		 this.s=s;	
 		 addOptionsToDialog();
+		
+		 
 		 omitPart1=omit;
 		 super.undoableEdit=Edit.createGenericEditForItem(s);
 		 angleExists=s.doesHaveRotationAngle();
-		 this.setTitle("Shape Options");
+		 this.setTitle("Edit "+s.getShapeName() +" Shape");
 	}
 	
 	public boolean hasItems() {

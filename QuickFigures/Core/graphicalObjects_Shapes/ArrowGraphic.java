@@ -1406,6 +1406,11 @@ public static ArrowGraphic createLine(Color fill, Color stroke, Point2D p1, Poin
 	return output;
 }
 
+@Override
+public String getShapeName() {
+	return "Arrow";
+}
+
 
 
 }

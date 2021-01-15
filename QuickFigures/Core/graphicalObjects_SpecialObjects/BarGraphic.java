@@ -1073,6 +1073,11 @@ public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoScaleBarEdit(this);
 }
 
+@Override
+public String getShapeName() {
+	return "Scale Bar";
+}
+
 
 
 }

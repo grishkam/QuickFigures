@@ -36,6 +36,7 @@ import genericTools.ToolBit;
 import graphicTools.RectGraphicTool;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import icons.QuickFigureIcon;
 import includedToolbars.ObjectToolset1;
 import layersGUI.GraphicTreeUI;
 import logging.IssueLog;
@@ -216,12 +217,12 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		iad.setIcon(ImagePanelGraphic.createImageIcon());
 		
 		ObjectAddingMenu cad = new ObjectAddingMenu("Cell Cartoons", selection,  cartoonadders);
-		//lad.setIconTextGap(-5);
+		
 		if (selection instanceof GraphicTreeUI) output.insert( lad, 2);
 		
 		if (CurrentAppContext.getMultichannelContext()!=null) {
 				ObjectAddingMenu iad2 = new ObjectAddingMenu("Figure ", selection, figureAdders);
-				iad2.setIcon(ImagePanelGraphic.createImageIcon());
+				iad2.setIcon(new QuickFigureIcon().getMenuVersion());
 				output.insert( iad2, 2);
 				}
 		

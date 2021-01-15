@@ -26,6 +26,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 
 import javax.swing.Icon;
 
@@ -60,23 +61,34 @@ public class GenericTreeIcon  implements Icon, IconTraits{
 	@Override
 	public void paintIcon(Component arg0, Graphics arg1, int arg2, int arg3) {
 		
+		
 		if (arg1 instanceof Graphics2D) {
-		Graphics2D g2d = (Graphics2D) arg1;
-		Rectangle r = new Rectangle(arg2, arg3, width,height);
-		
-		arg1.setColor(fillColor);
-		g2d.fill(r);
-		
-		int dashForm = 2;
-		BasicStroke bs = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 12, new float[] {dashForm,dashForm}, 0);
-		arg1.setColor(dashColor1);
-		g2d.setStroke(bs);
-		g2d.draw(r);
-		
-		bs = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 12, new float[] {dashForm,dashForm}, dashForm);
-		arg1.setColor(dashColor2);
-		g2d.setStroke(bs);
-		g2d.draw(r);
+			
+			
+			Graphics2D g2d = (Graphics2D) arg1;
+			
+			Color oldColor=arg1.getColor();
+			Stroke oldStroke=g2d.getStroke();
+			
+			
+			Rectangle r = new Rectangle(arg2, arg3, width,height);
+			
+			arg1.setColor(fillColor);
+			g2d.fill(r);
+			
+			int dashForm = 2;
+			BasicStroke bs = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 12, new float[] {dashForm,dashForm}, 0);
+			arg1.setColor(dashColor1);
+			g2d.setStroke(bs);
+			g2d.draw(r);
+			
+			bs = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 12, new float[] {dashForm,dashForm}, dashForm);
+			arg1.setColor(dashColor2);
+			g2d.setStroke(bs);
+			g2d.draw(r);
+			
+			g2d.setColor(oldColor);
+			g2d.setStroke(oldStroke);
 		}
 		}
 	

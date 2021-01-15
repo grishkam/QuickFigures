@@ -732,5 +732,10 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 		if (getAxisData().usesLogScale() && getAxisData().getMajorTic()>=getLogBase()) return getLogBase();
 		return getAxisData().getMajorTic();
 	}
+
+	@Override
+	public String getShapeName() {
+		return "Plot axis";
+	}
 	
 }

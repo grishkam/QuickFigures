@@ -721,4 +721,11 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	public AbstractUndoableEdit2 provideUndoForDialog() {
 		return new CombinedEdit(new UndoStrokeEdit(this), new UndoScalingAndRotation(this), new ColorEditUndo(this));
 	}
+	
+	
+	/**
+	 returns the name for the type of shape
+	 */
+	public abstract String getShapeName();
+	
 }

@@ -25,6 +25,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 
 /**An icon that consists of a rectangle with a tiny drawing in it*/
 public class TreeIconForImageGraphic extends GenericTreeIcon {
@@ -47,9 +48,17 @@ public class TreeIconForImageGraphic extends GenericTreeIcon {
 		if (arg1 instanceof Graphics2D) {
 			
 			Graphics2D g2d=(Graphics2D) arg1;
+			
+			Color oldColor=arg1.getColor();
+			Stroke oldStroke=g2d.getStroke();
+			
+			
 			blotch1.paintBlotch(g2d, arg2, arg3);
 			blotch2.paintBlotch(g2d, arg2, arg3);
 			blotch3.paintBlotch(g2d, arg2, arg3);
+			
+			g2d.setColor(oldColor);
+			g2d.setStroke(oldStroke);
 		}
 	
 	}

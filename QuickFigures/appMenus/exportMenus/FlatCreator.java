@@ -139,6 +139,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 		this.useTransparent = useTransparent;
 	}
 
+	/**A simple dialog with a new options regarding how to export*/
 	class FlatDialog extends StandardDialog {
 		/**
 		 * 

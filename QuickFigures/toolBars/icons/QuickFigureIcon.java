@@ -44,6 +44,10 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 	
 	Color[] blotchColors=new Color[] {null, null, Color.yellow, Color.red, Color.green, new Color(150,150, 255)};
 	
+	
+	public QuickFigureIcon() {
+		super(0);
+	}
 	public QuickFigureIcon(int type) {
 		super(type);
 		
