@@ -31,6 +31,7 @@ import standardDialog.numbers.AngleInputPanel;
 import undo.Edit;
 import utilityClasses1.ArraySorter;
 
+/**A dialog for editing the color, line width and other properties of a shape*/
 public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 
 	/**
@@ -52,9 +53,11 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		 omitPart1=omit;
 		 super.undoableEdit=Edit.createGenericEditForItem(s);
 		 angleExists=s.doesHaveRotationAngle();
-		 this.setTitle("Edit "+s.getShapeName() +" Shape");
+		 if(s!=null)
+			 this.setTitle("Edit "+s.getShapeName() +" Shape");
 	}
 	
+	/**returns true if at least one shape is setup*/
 	public boolean hasItems() {
 		if (s!=null)
 		return true;
@@ -89,12 +92,15 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 	public void setArrayToTextBackGround(ArrayList<?> items) {
 		array=new 	ArrayList<ShapeGraphic>();
 		for(Object i: items) {
-			addShapeToDialog(i);
+			addBackgroundShapeToDialog(i);
 		}
 		
 	}
 	
-	public void addShapeToDialog(Object i) {
+	/**If another shape is set as the background for the given object
+	  adds the background shape to the list of shapes for the dialog
+	 * @see HasBackGroundShapeGraphic*/
+	public void addBackgroundShapeToDialog(Object i) {
 		if (i instanceof HasBackGroundShapeGraphic) {
 			if (!array.contains(i)) {
 				HasBackGroundShapeGraphic i2 = (HasBackGroundShapeGraphic) i;
@@ -144,6 +150,7 @@ public class ShapeGraphicOptionsSwingDialog extends GraphicItemOptionsDialog {
 		}
 }
 	
+	/***/
 	protected void setItemsToDiaog(ShapeGraphic s) {
 		if (s==null) return;
 		

@@ -115,7 +115,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 		addBackgroundOptionsToDialog();
 	
 		for(TextGraphic t: array) {
-			super.bgDialog. addShapeToDialog(t.getBackGroundShape());
+			super.bgDialog. addBackgroundShapeToDialog(t.getBackGroundShape());
 		}
 		
 		addSnappingBehviourToDialog(textItem);

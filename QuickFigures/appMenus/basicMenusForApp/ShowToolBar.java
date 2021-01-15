@@ -31,14 +31,14 @@ import includedToolbars.ObjectToolset1;
 /**A Menu item that shows one of several possible toolbars*/
 public class ShowToolBar  extends BasicMenuItemForObj {
 
-	public static final String OBJECT_TOOLS="Object Tools", lAYOUT_TOOLS="Layout Tools", ACTION_BAR="Action Tools", SHAPE_AND_TEXT_EDITING_BAR="Shape And Text Edit Actions", MAIN_TOOLBAR="Main Toolbar";
+	public static final String OBJECT_TOOLS="Object Tools", LAYOUT_TOOLS="Layout Tools", ACTION_BAR="Align and Arrange Action Tools", SHAPE_AND_TEXT_EDITING_BAR="Shape And Text Edit Action Tools", MAIN_TOOLBAR="Main Toolbar";
 
 	private static final String SIDE_PANEL="Side Panels", SMART_TOOL_BAR="Smart Toolbar";
 	
-	public static String[] names=new String[] {OBJECT_TOOLS, lAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MAIN_TOOLBAR, SMART_TOOL_BAR};
+	public static String[] names=new String[] {OBJECT_TOOLS, LAYOUT_TOOLS, ACTION_BAR,SHAPE_AND_TEXT_EDITING_BAR, MAIN_TOOLBAR, SMART_TOOL_BAR};
 	
 	
-	int toolBarType=0;
+	int toolBarType;
 	
 	public ShowToolBar(int type) {
 		toolBarType=type;
@@ -47,7 +47,7 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (getToolBarName().equals(OBJECT_TOOLS))new ObjectToolset1().run("");
-		if (getToolBarName().equals(lAYOUT_TOOLS))new LayoutToolSet().run("");	
+		if (getToolBarName().equals(LAYOUT_TOOLS))new LayoutToolSet().run("");	
 		if (getToolBarName().equals(ACTION_BAR))new AlignAndArrangeActionTools().run("");
 		if (getToolBarName().equals(SHAPE_AND_TEXT_EDITING_BAR))new ActionToolset2().run("");
 		if (getToolBarName().equals(MAIN_TOOLBAR))new ObjectToolset1().run("");

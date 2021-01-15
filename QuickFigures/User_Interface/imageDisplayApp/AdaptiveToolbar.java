@@ -91,19 +91,19 @@ public class AdaptiveToolbar extends JFrame implements MouseMotionListener, Mous
 	/**
 	 * 
 	 */
-	private void setToCurrentlyActiveWindow(boolean active) {
+	private void setToCurrentlyActiveWindow(boolean moveToolbar) {
 		DisplayedImage d = CurrentFigureSet.getCurrentActiveDisplayGroup();
-		setToDisplay(active, d);
+		setToDisplay(moveToolbar, d);
 		
 	}
 
 	/**Called when there is a change to which display group is active
-	 * @param active
+	 * @param moveToolbar
 	 * @param d
 	 */
-	private void setToDisplay(boolean active, DisplayedImage d) {
+	private void setToDisplay(boolean moveToolbar, DisplayedImage d) {
 		panel.setDisplay((ImageWindowAndDisplaySet) d);
-		if(active) {
+		if(moveToolbar) {
 			Point p = d.getWindow().getLocation();
 			this.setLocation(p.x, p.y-70);
 		}
@@ -162,7 +162,7 @@ public class AdaptiveToolbar extends JFrame implements MouseMotionListener, Mous
 	public static void onDisplayChange(DisplayedImage currentActiveDisplayGroup) {
 		if(current!=null)
 			try {
-				current.setToDisplay(true, currentActiveDisplayGroup);
+				current.setToDisplay(false, currentActiveDisplayGroup);
 			} 
 		catch (Throwable t) {
 			IssueLog.logT(t);

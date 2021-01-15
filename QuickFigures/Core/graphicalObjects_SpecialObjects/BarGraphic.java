@@ -110,7 +110,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	public static String[] projTypes=new String[] {"normal", "1 direction", "no projection"};
 	public static final int normalProj=0,  no_proj=2,HalfProjection = 1;
 
-	private static final int ROTATION_HANDLE = 0, TEXT_LOCATION_HANDLE2 = 14, TEXT_LOCATION_HANDLE = 12, BAR_THICKNESS_HANDLE=2, L_HANDLE=3;
+	private static final int ROTATION_HANDLE = 0, TEXT_LOCATION_HANDLE2 = 14, TEXT_LOCATION_HANDLE = 12, BAR_THICKNESS_HANDLE=2, LENGTH_HANDLE=3;
 	
 	
 	
@@ -912,27 +912,48 @@ class BarSmartHandle extends SmartHandle {
 			setBarStroke(Math.abs(dy*Math.cos(getAngle()))+   Math.abs(dx*Math.sin(getAngle())));
 			
 		}
+		
 		if (isBarLengthHandle()) {
 			int dir=getAttachmentPosition().getOffSetPolarities()[0];
-			double oneUnit=getBarWidthBasedOnUnits()/getLengthInUnits();
+			double oldLengthInUnits = getLengthInUnits();
+			double oneUnit=getBarWidthBasedOnUnits()/oldLengthInUnits;
 			int change=(int)(this.getCordinateLocation().distance(p2)/oneUnit);
 			if(this.getCordinateLocation().getX()<p2.getX() &&dir<0) change=-change;
 			if(this.getCordinateLocation().getX()>p2.getX() &&dir>0) change=-change;
-			double newLengthInUnits = getLengthInUnits()+change;
+			
+			
+			
+			double newLengthInUnits = oldLengthInUnits+change;
+			
+			/**set of operation that jumps to round numbers if the scale bar size is large
+			 * For example,user drag would set the length to 40 rather than 38 or 100 rather than 101*/
+			if(change<oldLengthInUnits/50&&oldLengthInUnits>50) {
+				newLengthInUnits = Math.round(newLengthInUnits/10)*10;
+			}else
+			if(change<oldLengthInUnits/20&&oldLengthInUnits>20) {
+				newLengthInUnits = Math.round(newLengthInUnits/5)*5;
+			}else
+			if(change<oldLengthInUnits/10&&oldLengthInUnits>10) {
+				newLengthInUnits = Math.round(newLengthInUnits/2.5)*2.5;
+			}
+			
+			
 			if (newLengthInUnits==0)newLengthInUnits=0.5;
 			if (newLengthInUnits>0.5) newLengthInUnits=(int)newLengthInUnits;
-			if (change<11 && newLengthInUnits>0)
+			
+			if (change<=20 && newLengthInUnits>0)
 				{
-				if(newLengthInUnits==getLengthInUnits()) return; else
+				if(newLengthInUnits==oldLengthInUnits) return; else
 				setLengthInUnits(newLengthInUnits);
 				}
 			
 		}
+		
 		addUndo(lastDragOrRelMouseEvent);
 	}
 
 	protected boolean isBarLengthHandle() {
-		return this.getHandleNumber()==L_HANDLE;
+		return this.getHandleNumber()==LENGTH_HANDLE;
 	}
 
 	protected boolean isBarThicknessHandle() {
@@ -1032,7 +1053,7 @@ public SmartHandleList getSmartHandleList() {
 			
 			
 			smartList.add(new BarSmartHandle(this, BAR_THICKNESS_HANDLE));
-			smartList.add(new BarSmartHandle(this, L_HANDLE));
+			smartList.add(new BarSmartHandle(this, LENGTH_HANDLE));
 		}
 		return SmartHandleList.combindLists(smartList, getActionList());
 	//return smartList;
