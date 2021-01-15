@@ -77,6 +77,8 @@ public class TreeIconForTextGraphic implements Icon, IconTraits {
 	@Override
 	public void paintIcon(Component arg0, Graphics arg1, int arg2, int arg3) {
 		Font oFont = arg1.getFont();
+		Color oColor=arg1.getColor();
+		
 		if (arg1 instanceof Graphics2D) {
 		Graphics2D g2d = (Graphics2D) arg1;
 		
@@ -95,6 +97,7 @@ public class TreeIconForTextGraphic implements Icon, IconTraits {
 			
 		}
 		arg1.setFont(oFont);
+		arg1.setColor(oColor);
 	}
 
 	/**
