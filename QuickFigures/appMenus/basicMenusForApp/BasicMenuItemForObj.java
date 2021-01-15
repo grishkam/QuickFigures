@@ -27,6 +27,7 @@ import applicationAdapters.DisplayedImage;
 /**An abstract superclass for menu bar items*/
 public abstract class BasicMenuItemForObj implements MenuItemForObj {
 
+	/**Performs a task specific to the menu item. */
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		

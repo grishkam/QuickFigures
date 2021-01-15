@@ -48,14 +48,17 @@ public interface ImageWorkSheet extends ObjectContainer, FigureDisplayWorksheet,
 	/**sets the primary selected object for the image*/
 	public boolean setPrimarySelectionObject(Object d);
 	
-	/**returns the dimensions*/
+	/**returns the width of the worksheet*/
 	public int width();
+	
+	/**returns the height of the worksheet*/
 	public int height();
 	
 	/**resizes the Canvas filling all the newly added space with white*/
 	public void worksheetResize(int width, int height, int xOff, int yOff);
 	
 	/**
+	 * does the worksheet allow automatic resizes
 	 */
 	boolean allowAutoResize();
 	void setAllowAutoResize(boolean allow);

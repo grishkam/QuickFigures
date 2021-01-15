@@ -892,7 +892,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		
 		public String getDimensionString() {
-			return  (getBounds().getWidth()+" X "+this.getBounds().getHeight()+" units");
+			return  (getBounds().getWidth()+" X "+this.getBounds().getHeight()+" points");
 		}
 		
 		public String getInchDimensionString() {
