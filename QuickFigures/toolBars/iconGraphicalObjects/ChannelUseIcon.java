@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 	public void paintIcon(Component c, Graphics g1, int x, int y) {
 		if (g1 instanceof Graphics2D) {
 			Graphics2D g2d=(Graphics2D) g1;
+			Stroke oldStroke = g2d.getStroke();
 			g2d.setStroke(new BasicStroke(3));
 			
 			if (style==VERTICAL_BARS) {
@@ -104,7 +106,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 			else
 				drawStandard(g2d, x, y);
 			
-			
+			g2d.setStroke(oldStroke);
 			
 		}
 		g1.setColor(Color.black);

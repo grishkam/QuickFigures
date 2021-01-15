@@ -45,6 +45,7 @@ import figureOrganizer.LabelCreationOptions;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
@@ -104,10 +105,10 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 
 	/**Adds the menu items from this popup to an arbitrary container*/
 	protected void addMenus(Container jj) {
-		JMenu imagesMenu = new SmartJMenu("Images");	
+		JMenu imagesMenu = new SmartJMenu("Images", new SourceImageTreeIcon());	
 		
-		JMenu addImage=new SmartJMenu("Add Image");
-		addImage.setIcon(new SourceImageTreeIcon());
+		JMenu addImage=new SmartJMenu("Add Image",new SourceImageTreeIcon());
+		
 		jj.add(addImage);
 		addImageFromFileButton = new BasicSmartMenuItem("Image From File");
 		addImage.add(addImageFromFileButton);
@@ -119,7 +120,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		
 	
 
-		JMenu labelMenu = new SmartJMenu("Add Labels");
+		JMenu labelMenu = new SmartJMenu("Add Labels", ComplexTextGraphic.createImageIcon());
 		
 			 rowLabelButton = new BasicSmartMenuItem("Generate Row Labels", new ToolIconWithText(0, ROW_OF_PANELS).getMenuVersion());
 			 labelMenu.add(rowLabelButton);
@@ -163,8 +164,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 					
 					
 					
-					 channelUseOptionsButton = new BasicSmartMenuItem("Channel Use");
-					 channelUseOptionsButton.setIcon(new ChannelUseIcon());
+					 channelUseOptionsButton = new BasicSmartMenuItem("Channel Use", new ChannelUseIcon());
 					
 					 chanMen.add(channelUseOptionsButton);
 						channelUseOptionsButton.addActionListener(this);
@@ -184,6 +184,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 							try {addRecolorMenu(chanMen);} catch (Throwable t) {IssueLog.logT(t);};
 							jj.add(chanMen);
 							SmartJMenu excluders = this.getMenuContext().createChannelMergeMenu(ChannelPanelEditingMenu.EXCLUDED_CHANNEL_AND_DONT_MERGE);
+							excluders.setIcon(new ChannelUseIcon());
 							jj.add(excluders);
 							
 							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));

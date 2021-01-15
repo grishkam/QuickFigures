@@ -35,8 +35,11 @@ import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
+import icons.SourceImageTreeIcon;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import undo.CombinedEdit;
@@ -74,7 +77,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		/**If the panel is part of a MultichannelDisplayLayer, adds another submenu*/
 		if (c.getParentLayer() instanceof MultichannelDisplayLayer) {
 			MultichannelDisplayLayer m=(MultichannelDisplayLayer) c.getParentLayer();
-			JMenu mc=new SmartJMenu("This Image");
+			JMenu mc=new SmartJMenu("This Image", new SourceImageTreeIcon());
 			MultiChannelImageDisplayPopup everyMenu = new MultiChannelImageDisplayPopup(m, m.getPanelList(), imagePanel);
 			everyMenu.addMenus(mc);
 			this.add(mc);
@@ -89,7 +92,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		/**Creates a menu option for add a label*/
 		add(new ObjectAction<ImagePanelGraphic>(c) {
 			public void actionPerformed(ActionEvent arg0) {addText();}	
-	}.createJMenuItem("Add Text"));
+	}.createJMenuItem("Add Text", ComplexTextGraphic.createImageIcon()));
 		
 		
 		

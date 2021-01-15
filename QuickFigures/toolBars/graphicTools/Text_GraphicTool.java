@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Jan 14, 2021
  * Version: 2021.1
  */
 package graphicTools;
@@ -256,7 +256,7 @@ public class Text_GraphicTool extends GraphicTool {
 		return output;
 	}
 	
-	/**creates a new text graphic*/
+	/**creates a new text item*/
 	public TextGraphic makeNewTextObject() {
 		TextGraphic textob = new TextGraphic();
 		textob.copyAttributesFrom(model);
@@ -364,9 +364,11 @@ public class Text_GraphicTool extends GraphicTool {
 		}}
 	
 	/**Method below was commented out on may 13 2020 to see effects. from appearances,
-	 *  this method was meant to make it easier to click on the edge of a text item 
-	 *  but it had the effect of making it impossible to click a text item with something else behind it */
-/***/
+	 *  this method was meant to make it easier to click on the edge of a text item .
+	 *  
+	 */
+	/***/
+	@Override
 	protected ArrayList<LocatedObject2D> getObjectsAtPressLocationWithoutFiltering(ImageWorkSheet click, int x, int y) {
 		if (!this.editorOnly) return super.getObjectsAtPressLocationWithoutFiltering(click, x, y);
 		ArrayList<LocatedObject2D> list = getObjecthandler().getOverlapOverlaypingOrContainedItems(new Rectangle(x-5, y-5, 10, 10), click, new BasicObjectListHandler.ExcluderFilter(this.excludedClass));

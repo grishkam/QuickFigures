@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
@@ -61,19 +62,24 @@ public class SourceImageTreeIcon  implements Icon, IconTraits{
 	/**draws two letters in a black rectangle*/
 	@Override
 	public void paintIcon(Component arg0, Graphics arg10, int arg2, int arg3) {
+		Color oldColor = arg10.getColor();
 		
 		if (arg10 instanceof Graphics2D) {
-		Graphics2D g2d = (Graphics2D) arg10;
-		int w = width;
-		int h = height;
-		int size=Math.min(w, h)/2+1;
-		Rectangle2D[] r2 = new Rectangle2D[] {
-				new Rectangle2D.Double(arg2, arg3,size, size),
-				new Rectangle2D.Double(arg2+size/2+1, arg3+size/2+1,size, size),
-				new Rectangle2D.Double(arg2+size+1, arg3+size,size, size)};
-		for(Rectangle2D r:r2)
-			drawRectangle(g2d, r);
+			Graphics2D g2d = (Graphics2D) arg10;
+			Stroke oldStroke = g2d.getStroke();
+			int w = width;
+			int h = height;
+			int size=Math.min(w, h)/2+1;
+			Rectangle2D[] r2 = new Rectangle2D[] {
+					new Rectangle2D.Double(arg2, arg3,size, size),
+					new Rectangle2D.Double(arg2+size/2+1, arg3+size/2+1,size, size),
+					new Rectangle2D.Double(arg2+size+1, arg3+size,size, size)};
+			for(Rectangle2D r:r2)
+				drawRectangle(g2d, r);
+			g2d.setStroke(oldStroke);
 		}
+		
+		arg10.setColor(oldColor);
 		}
 
 	/**

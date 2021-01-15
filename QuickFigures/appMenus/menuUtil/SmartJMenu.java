@@ -22,6 +22,7 @@ package menuUtil;
 
 import java.awt.Component;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -46,14 +47,20 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public SmartJMenu(String string) {
-		super(string);
-	}
 	
 	private transient UndoManagerPlus undoManager;
 	protected transient CanvasMouseEvent mouseE;
 	
+	public SmartJMenu(String string) {
+		super(string);
+	}
 	
+	public SmartJMenu(String string, Icon icon) {
+		super(string);
+		this.setIcon(icon);
+	}
+	
+	/**shows the popup menu or hides it*/
 	public void setPopupMenuVisible(boolean b) {
 		super.setPopupMenuVisible(b);
 		if (b==true) {new PopupCloser(this);new PopupCloser(this.getPopupMenu());}
