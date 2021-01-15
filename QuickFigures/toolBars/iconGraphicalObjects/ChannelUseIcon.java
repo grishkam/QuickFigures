@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.io.Serializable;
@@ -98,6 +99,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 			Graphics2D g2d=(Graphics2D) g1;
 			Stroke oldStroke = g2d.getStroke();
 			g2d.setStroke(new BasicStroke(3));
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
 			if (style==VERTICAL_BARS) {
 				g2d.setStroke(new BasicStroke(2));
@@ -144,7 +146,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 	}
 
 
-	/**
+	/** draws a horizontal series of strokes for each channel
 	 * @param g2d
 	 * @param x
 	 * @param y
@@ -156,7 +158,7 @@ public class ChannelUseIcon implements Icon, Serializable {
 		ArrayList<ChannelEntry> channels = getAllColors();
 		if (channels==null) return;
 		double nChan=channels.size();
-		double yi = y+this.getIconHeight()*0.2;
+		double yi = y+this.getIconHeight()*0.2+3;
 		double yf = y+this.getIconHeight()*(1);
 		double yWidth = yf-yi;
 		for(int i=0; i<nChan; i++) {
