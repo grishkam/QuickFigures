@@ -79,7 +79,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 			this.add("Dimensions2", new InfoDisplayPanel("Dimensions", image.getRealDimensionString()));
 			
 			this.add("PPI", 
-					new InfoDisplayPanel("Points per Inch ", image.getIllustratorPPI() /**+" ("+image.getScreenPPI()+" on screen)"*/));
+					new InfoDisplayPanel("Pixels per Inch", image.getIllustratorPPI() /**+" ("+image.getScreenPPI()+" on screen)"*/));
 			
 		if (image instanceof BufferedImageGraphic) {
 			BufferedImageGraphic image2=(BufferedImageGraphic) image;
