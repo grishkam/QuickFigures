@@ -214,7 +214,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 		out.add(new ComplexText_GraphicTool(true));
 		out.add(new Text_GraphicTool(false));
-		out.add(new ComplexText_GraphicTool(false));
+		//out.add(new ComplexText_GraphicTool(false));
 		out.addAll(LayoutToolSet.getLayoutLabelBits3());
 		
 		return out;

@@ -706,7 +706,7 @@ public void resizeLayoutToFitContents() {
 		
 		new LayoutEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
 		
-		return new String[] {"Layout panels were resized after scaling", "Scaling figure can sometimes result in mismatches between Image Panel locations and layouts", "Layout measurements are rounded up after scaling", "Object positions/sizes may be rounded to integers during export"};
+		return new String[] {"Layout panels were resized after scaling","Layout measurements are rounded up after scaling"};
 		/**this.getEditor().roundUpAll(getPanelLayout());
 		new LayoutEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
 		

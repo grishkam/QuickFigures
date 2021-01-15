@@ -1212,7 +1212,7 @@ public void handleMouseEvent(CanvasMouseEvent me,int handlenum, int button, int 
 	if (handlenum!=NO_HANDLE_) return;
 	if(clickcount==2 && !editMode) {
 		editMode=true;
-		IssueLog.log("Edit mode with handle "+handlenum);
+		
 	}
 	else
 	if(clickcount>2) this.showOptionsDialog();//super.handleMouseEvent(me, handlenum, button, clickcount, type, other);

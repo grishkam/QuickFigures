@@ -50,6 +50,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import icons.SourceImageTreeIcon;
 import icons.ToolIconWithText;
 import imageDisplayApp.CanvasOptions;
 import layout.basicFigure.BasicLayout;
@@ -106,12 +107,13 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		JMenu imagesMenu = new SmartJMenu("Images");	
 		
 		JMenu addImage=new SmartJMenu("Add Image");
+		addImage.setIcon(new SourceImageTreeIcon());
 		jj.add(addImage);
-		addImageFromFileButton = new JMenuItem("Image From File");
+		addImageFromFileButton = new BasicSmartMenuItem("Image From File");
 		addImage.add(addImageFromFileButton);
 		addImageFromFileButton.addActionListener(this);
 		
-		addOpenImageFromList = new JMenuItem("Currently Open Image");
+		addOpenImageFromList = new BasicSmartMenuItem("Currently Open Image");
 		addImage.add(addOpenImageFromList);
 		addOpenImageFromList.addActionListener(this);
 		

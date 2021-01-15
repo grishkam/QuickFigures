@@ -42,6 +42,7 @@ import applicationAdapters.ImageWorkSheet;
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.CursorFinder;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
@@ -56,7 +57,7 @@ import locatedObject.TakesAttachedItems;
 public class Text_GraphicTool extends GraphicTool {
 	
 	private Cursor textCursor=new Cursor(Cursor.TEXT_CURSOR);
-	{excludedClass=PanelLayoutGraphic.class;super.temporaryTool=true;}
+	{excludedClass=PanelLayoutGraphic.class;super.temporaryTool=false;}
 	
 	
 
@@ -206,8 +207,8 @@ public class Text_GraphicTool extends GraphicTool {
 	
 	
 	
-	
-	public LocatedObject2D findPlaceToLockObject(TextGraphic textob) {
+	/***/
+	private LocatedObject2D findPlaceToLockObject(TextGraphic textob) {
 		LocatedObject2D image = this.getObjecthandler().getClickedRoi(getImageClicked(), getClickedCordinateX(), getClickedCordinateY(), TakesAttachedItems.class);
 		int cx = getClickedCordinateX();
 		int cy = getClickedCordinateY();
@@ -227,7 +228,7 @@ public class Text_GraphicTool extends GraphicTool {
 		}
 	}
 	
-	static AttachmentPosition createStartingDefaultSnap(LocatedObject2D image, TextGraphic textob , int cx,int cy) {
+	private static AttachmentPosition createStartingDefaultSnap(LocatedObject2D image, TextGraphic textob , int cx,int cy) {
 		AttachmentPosition output = AttachmentPosition.defaultPanelLabel();
 		Rectangle2D snapBounds = image.getBounds();
 		
@@ -255,6 +256,7 @@ public class Text_GraphicTool extends GraphicTool {
 		return output;
 	}
 	
+	/**creates a new text graphic*/
 	public TextGraphic makeNewTextObject() {
 		TextGraphic textob = new TextGraphic();
 		textob.copyAttributesFrom(model);
@@ -315,8 +317,10 @@ public class Text_GraphicTool extends GraphicTool {
 	
 	@Override
 	public String getToolName() {
-			if (editorOnly) return "Text Edit Tool";
-			return "Add Text Tool";
+			if (editorOnly) return "Add Text Tool";
+			if(model instanceof ComplexTextGraphic) 
+				return "Add Rich Text";
+			return "Add Simple Text"; 
 		}
 	
 	class TextCursorIcon implements Icon {
