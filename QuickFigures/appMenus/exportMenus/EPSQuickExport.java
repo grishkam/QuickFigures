@@ -26,6 +26,7 @@ import java.io.File;
 import applicationAdapters.DisplayedImage;
 import export.eps.EPSsaver;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 /**A menu item for exporting as an EPS*/
 public class EPSQuickExport extends QuickExport {
@@ -63,6 +64,8 @@ public class EPSQuickExport extends QuickExport {
 			File file = getFileAndaddExtension();
 			if (file==null) return;
 		String newpath=file.getAbsolutePath();
+		
+		FileChoiceUtil.overrideQuestion(new File(newpath));
 		
 		 this.saveInPath(diw, newpath);
 		   

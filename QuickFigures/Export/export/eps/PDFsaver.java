@@ -60,7 +60,15 @@ public class PDFsaver {
 			/**creates a temporary file*/
 			String tempPath = DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/temp.svg";
 			File tempFile = new File(tempPath);
-			if(tempFile.exists()) tempFile.delete();
+			
+			if(tempFile.exists()) 
+				{
+				
+					tempFile.delete();
+					IssueLog.log("temp file exists "+tempFile.exists());
+					tempFile = new File(tempPath);
+					
+				}
 			
 			/**saves the figure in the temp file as an svg*/
 			new SVGsaver().saveFigure(tempPath, diw);
@@ -120,8 +128,15 @@ public class PDFsaver {
 	
 
 		TranscoderInput transcoderInput = new TranscoderInput(new FileInputStream(tempFile));
-		TranscoderOutput transcoderOutput = new TranscoderOutput(new FileOutputStream(newpath));
+		FileOutputStream fileOutputStream = new FileOutputStream(newpath);
+		TranscoderOutput transcoderOutput = new TranscoderOutput(fileOutputStream);
 		transcoder.transcode(transcoderInput, transcoderOutput);
+		try {
+			fileOutputStream.close();
+		} catch (IOException e) {
+			IssueLog.logT(e);
+		}
+		
 	}
 	
 

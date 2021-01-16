@@ -39,24 +39,7 @@ import logging.IssueLog;
 public class FileChoiceUtil {
 	private static String workingDirectory=DirectoryHandler.getDefaultHandler().getFigureFolderPath();
 	
-	public static boolean overrideExistingOrNot(File f) {
-		
-			if (f.exists()) {
-				int i=JOptionPane.showConfirmDialog(null, 	
-						"Are you sure?. This will eliminate the existing file\n"
-					    + new File("").getName()+"\n",
-					    "Override?",
-					    JOptionPane.YES_NO_OPTION
-					    );
-				if (i==0) {
-					IssueLog.log("will override");
-					return true;
-					
-				}
-			}
-			return false;
-		
-	}
+
 	
 	/**Displays a modal dialog that presents the user with a question. returns the answer */
 	public static boolean yesOrNo(String s) {
@@ -248,21 +231,22 @@ public class FileChoiceUtil {
 		return output;
 	}
 	
-	
+	/**Asked the user if the file should be overwritten
+	 * returns yes if the file does not exist*/
 	public static int overrideQuestion(File f) {
 		if (f.exists()) {
 			int i=JOptionPane.showConfirmDialog(null, 	
 					"Are you sure?. This will eliminate the existing file\n"
-				    + new File("").getName()+"\n",
+				    + f.getName()+"\n",
 				    "Override?",
 				    JOptionPane.YES_NO_OPTION
 				    );
-			if (i==0) {
+			if (i==JOptionPane.YES_OPTION) {
 				f.delete();
 				
 			}
 			return i;
 		}
-		return 0;
+		return JOptionPane.YES_OPTION;
 	}
 }

@@ -31,6 +31,7 @@ import javax.imageio.ImageIO;
 import org.apache.batik.ext.awt.image.codec.png.PNGImageWriter;
 
 import applicationAdapters.DisplayedImage;
+import ultilInputOutput.FileChoiceUtil;
 
 /**this supports a menu item that exports a figure as PNG file*/
 public class PNGQuickExport extends QuickExport {
@@ -54,6 +55,7 @@ public class PNGQuickExport extends QuickExport {
 		try{
 		
 		String newpath=getFileAndaddExtension().getAbsolutePath();
+		FileChoiceUtil.overrideQuestion(new File(newpath));
 		saveInPath(diw, newpath);
 		
 		} catch (Throwable t) {

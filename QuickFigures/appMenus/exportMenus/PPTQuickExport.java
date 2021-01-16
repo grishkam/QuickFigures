@@ -39,6 +39,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.ArrayObjectContainer;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 /**A menu item for powerpoint export*/
 public class PPTQuickExport extends QuickExport implements MenuItemForObj{
@@ -61,6 +62,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		File f=getFileAndaddExtension();
+		FileChoiceUtil.overrideQuestion(f);
 		saveToPath(diw, f);
 	}
 

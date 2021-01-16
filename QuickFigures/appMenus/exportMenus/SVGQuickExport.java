@@ -22,6 +22,7 @@ import java.io.File;
 import applicationAdapters.DisplayedImage;
 import export.svg.SVGsaver;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 public class SVGQuickExport extends QuickExport {
 	
@@ -52,10 +53,10 @@ public class SVGQuickExport extends QuickExport {
 			File file = getFileAndaddExtension();
 			if (file==null) return;
 		String newpath=file.getAbsolutePath();
-		
+		FileChoiceUtil.overrideQuestion(new File(newpath));
 		saveInPath(diw,newpath);
 		   
-		  
+		  if (openImmediately)
 		    Desktop.getDesktop().open(new File(newpath));
 		
 		} catch (Throwable t) {

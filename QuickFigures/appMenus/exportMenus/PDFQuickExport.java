@@ -32,6 +32,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import applicationAdapters.DisplayedImage;
 import export.eps.PDFsaver;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 /**A menu item for PDF export*/
 public class PDFQuickExport extends QuickExport {
@@ -63,9 +64,10 @@ public class PDFQuickExport extends QuickExport {
 	                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
 			File file = getFileAndaddExtension();
 			if (file==null) return;
-		String newpath=file.getAbsolutePath();
 		
-		 
+			String newpath=file.getAbsolutePath();
+		
+			FileChoiceUtil.overrideQuestion(new File(newpath));
 		   
 		  saveInPath(diw, newpath);
 		
