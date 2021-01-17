@@ -230,7 +230,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	/**Not implemented here, subclasses may implement this*/
 	@Override
-	public LocatedObject2D copy() {
+	public PanelLayoutGraphic copy() {
 		return null;
 	}
 

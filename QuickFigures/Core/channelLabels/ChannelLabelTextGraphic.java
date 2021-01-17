@@ -49,7 +49,6 @@ import undo.AbstractUndoableEdit2;
 import undo.ChannelLabelPropertiesUndo;
 import undo.CombinedEdit;
 import undo.EditListener;
-import undo.UndoTextEdit;
 
 /**A special category of label that changes based on the options
   set in channel label properties and the channel colors*/

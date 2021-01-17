@@ -25,8 +25,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JTabbedPane;
-import javax.swing.undo.AbstractUndoableEdit;
-
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import fLexibleUIKit.MenuItemMethod;

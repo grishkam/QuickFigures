@@ -36,7 +36,7 @@ import javax.swing.Icon;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import icons.TreeIconForTextGraphic;
+import icons.TreeIconWithText;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;
 import locatedObject.ColorDimmer;
@@ -498,11 +498,11 @@ public class ComplexTextGraphic extends TextGraphic {
 	
 	@Override
 	public Icon getTreeIcon() {
-		return new TreeIconForTextGraphic(this.getFont(), "cd", Color.green.darker(), Color.red.darker());
+		return new TreeIconWithText(this.getFont(), "cd", Color.green.darker(), Color.red.darker());
 	}
 	
 	public static Icon createImageIcon() {
-		return new TreeIconForTextGraphic(new Font("Arial", Font.BOLD, 12) ,"a", Color.green.darker(), Color.red.darker());
+		return new TreeIconWithText(new Font("Arial", Font.BOLD, 12) ,"cd", Color.green.darker(), Color.red.darker());
 		
 	}
 	

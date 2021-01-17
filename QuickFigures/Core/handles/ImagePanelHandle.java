@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import applicationAdapters.CanvasMouseEvent;
 import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.GraphicList;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;

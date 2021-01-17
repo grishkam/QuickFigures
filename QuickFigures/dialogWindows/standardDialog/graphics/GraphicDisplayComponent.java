@@ -20,6 +20,7 @@
  */
 package standardDialog.graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -30,6 +31,7 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_Shapes.PathGraphic;
@@ -200,15 +202,22 @@ public class GraphicDisplayComponent extends GraphicObjectDisplayBasic<SimpleGra
 public static void main(String[] args) {
 	JFrame f = new JFrame();
 	f.setLayout(new FlowLayout());
-	GraphicDisplayComponent gg = new GraphicDisplayComponent("Choice 1",new RectangularGraphic(100,100,50,10), true);
+	RectangularGraphic r1 = new RectangularGraphic(100,100,50,10);
+	r1.setStrokeColor(Color.blue);
+	GraphicDisplayComponent gg = new GraphicDisplayComponent("Choice 1",r1, true);
 	f.add(gg);
-	GraphicDisplayComponent gg2 = new GraphicDisplayComponent("Choice 2", new RectangularGraphic(8,80,50,80), false);
+	RectangularGraphic r2 = new RectangularGraphic(8,80,50,80);
+	GraphicDisplayComponent gg2 = new GraphicDisplayComponent("Choice 2", r2, false);
 	f.add(gg2);
-	PathGraphic pp = new PathGraphic(new Point(3,2)); pp.addPoint(new Point(6,6));
+	PathGraphic pp = new PathGraphic(new Point(3,2)); pp.addPoint(new Point(16,20));
+	pp.setStroke(new BasicStroke(5));
 	pp.setName("path1");
-	GraphicDisplayComponent gg3 =  (GraphicDisplayComponent) pp.getTreeIcon();
-	gg3.setText("text2");
-	f.add(gg3);
+	
+	JLabel j1 = new JLabel("icon 1");
+	r1.setFillColor(Color.orange);
+	j1.setIcon(new GraphicObjectDisplayBasic<RectangularGraphic>(r1));
+	f.add(j1);
+	
 	f.pack();
 	f.setVisible(true);
 }

@@ -372,9 +372,9 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 		
 		public Icon getIcon() {
 			if(this.setsJustification()) {
-				if(getJustification()==TextParagraph.JUSTIFY_LEFT) return new AlignItem(RectangleEdges.LEFT).getIcon();
-				if(getJustification()==TextParagraph.JUSTIFY_CENTER) return new AlignItem(RectangleEdges.MIDDLE).getIcon();
-				if(getJustification()==TextParagraph.JUSTIFY_RIGHT) return new AlignItem(RectangleEdges.RIGHT).getIcon();
+				if(getJustification()==TextParagraph.JUSTIFY_LEFT) return new AlignItem(RectangleEdges.LEFT).getDarkIcon();
+				if(getJustification()==TextParagraph.JUSTIFY_CENTER) return new AlignItem(RectangleEdges.MIDDLE).getDarkIcon();
+				if(getJustification()==TextParagraph.JUSTIFY_RIGHT) return new AlignItem(RectangleEdges.RIGHT).getDarkIcon();
 			}
 			return  new SuperTextIcon();
 		}
@@ -571,6 +571,7 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 		}
 		
 		
+		/**returns the justification change operations*/
 		public static MultiSelectionOperator[]  getJustifications() {
 			MultiSelectionOperator[] out = new MultiSelectionOperator[3];
 			for(int i=0; i<3; i++) {

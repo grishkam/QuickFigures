@@ -100,6 +100,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	 {super.setAttachmentPosition(AttachmentPosition.defaultScaleBar());}
 	 private ScalededItem scaleProvider=null;
 	 
+	 /**transient values that are stored prior to drawing the shape*/
 	 transient Rectangle2D mainBarRect=null;
 	 transient Rectangle2D leftBarRect=null;
 	 transient Rectangle2D rightBarRect=null;
@@ -108,7 +109,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	 
 	 private int projectionType=2;
 	public static String[] projTypes=new String[] {"normal", "1 direction", "no projection"};
-	public static final int normalProj=0,  no_proj=2,HalfProjection = 1;
+	public static final int ORGINARY_PROJECTIONS=0,  NO_PROJECTIONS=2,HALF_PROJECTION = 1;
 
 	private static final int ROTATION_HANDLE = 0, TEXT_LOCATION_HANDLE2 = 14, TEXT_LOCATION_HANDLE = 12, BAR_THICKNESS_HANDLE=2, LENGTH_HANDLE=3;
 	
@@ -124,7 +125,12 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 
 	private boolean considerAngle;
 	 
+	public BarGraphic() {}
 	 
+	public BarGraphic(Color c) {
+		this.setFillColor(c);
+		this.setStrokeColor(c);
+	}
 	 
 	 public String unitlengthString() {
 		 String suffix=" "+ this.getScaleInfo().getUnits();
@@ -196,7 +202,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		
 		
 		 double projectionH = projectionDown+getBarStroke();
-		 if(this.getProjectionType()==normalProj) projectionH+=projectionDown;
+		 if(this.getProjectionType()==ORGINARY_PROJECTIONS) projectionH+=projectionDown;
 		 
 		leftBarRect= new Rectangle2D.Double(0-projectionwidth, y2Projection, projectionwidth, projectionH);
 		 rightBarRect= new Rectangle2D.Double(0+barWidth,    y2Projection, projectionwidth, projectionH);
@@ -219,7 +225,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	 }
 
 	protected boolean usesProjections() {
-		return this.getProjectionType()!=no_proj&&getProjectionLength()>0;
+		return this.getProjectionType()!=NO_PROJECTIONS&&getProjectionLength()>0;
 	}
 	 
 	 public double getProjectionLength() {
@@ -327,8 +333,13 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		return  getShape().getBounds();
 	}
 	
-
-
+	/**returns a box containing the entire shape and its bounds*/
+	@Override
+	public Rectangle getExtendedBounds() {
+		Area a=new Area(this.getBounds());
+		a.add(new Area(this.getBarText().getBounds()));
+		return a.getBounds();
+	}
 
 
 
@@ -747,6 +758,7 @@ public Rectangle getBarBounds() {
 	return getBounds();
 }
 
+/**Special subclass of text item for scale bar labels*/
 public class BarTextGraphic extends TextGraphic {
 
 	/**
@@ -760,7 +772,7 @@ public class BarTextGraphic extends TextGraphic {
 		
 	}
 	
-	/**does not create an object for writing into office, the bar text will create a group
+	/**does not create an object for writing into office, the object maker for the bar will create a group
 	  for this instead*/
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
@@ -819,6 +831,8 @@ public class BarTextGraphic extends TextGraphic {
 	public boolean locationAutoMatic() {
 		return isSnapBarText();
 	}
+	
+	
 }
 
 class BarSmartHandle extends SmartHandle {
@@ -927,7 +941,10 @@ class BarSmartHandle extends SmartHandle {
 			
 			/**set of operation that jumps to round numbers if the scale bar size is large
 			 * For example,user drag would set the length to 40 rather than 38 or 100 rather than 101*/
-			if(change<oldLengthInUnits/50&&oldLengthInUnits>50) {
+			if(change<oldLengthInUnits/200&&oldLengthInUnits>200) {
+				newLengthInUnits = Math.round(newLengthInUnits/50)*50;
+			}else
+				if(change<oldLengthInUnits/50&&oldLengthInUnits>50) {
 				newLengthInUnits = Math.round(newLengthInUnits/10)*10;
 			}else
 			if(change<oldLengthInUnits/20&&oldLengthInUnits>20) {

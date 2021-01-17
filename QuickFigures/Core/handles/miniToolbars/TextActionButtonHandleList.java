@@ -102,10 +102,12 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		}
 		
 		addFontSizeHandle();
+		addFontFamilyHandle();
+		
 		addTextColor();
 		createColorDimmer();
 		
-		addFontFamilyHandle();
+		
 		
 		
 		this.add(new TextDialogHandle(800210));
@@ -149,6 +151,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		if (t2.getAttachmentPosition()!=null)this.add(new TextHandleNonEditmode(new AttachmentPositionAdjuster(true, t2), 741905));
 	}
 	
+	/**An action handle that is hidden if the text is in edit mode */
 	class TextHandleNonEditmode extends GeneralActionHandle {
 
 

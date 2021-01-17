@@ -195,7 +195,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	}
 
 	@Override
-	public LocatedObject2D copy() {
+	public GraphicGroup copy() {
 		return new GraphicGroup();
 	}
 
@@ -548,7 +548,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 		}
 
 		@Override
-		public LocatedObject2D copy() {
+		public GroupHook copy() {
 			// TODO Auto-generated method stub
 			return null;
 		}

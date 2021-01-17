@@ -72,8 +72,9 @@ public void setMagnification(double magnification) {
 	public void paintIcon(Component arg0, Graphics g, int arg2, int arg3) {
 		Color oldcol = g.getColor();
 		Font oldcon=g.getFont();
+		
 		if (currentDisplay()==null) return;
-		if ( isRelocatedForIcon() &&currentDisplay()!=null) {
+		if ( isRelocatedForIcon() ) {
 			
 				currentDisplay().setLocationUpperLeft(arg2, arg3);
 				currentDisplay().setLocationUpperLeft(getLocationInIcon().x, getLocationInIcon().y);

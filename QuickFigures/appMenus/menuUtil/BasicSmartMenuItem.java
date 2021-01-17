@@ -24,6 +24,7 @@ import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
 import applicationAdapters.CanvasMouseEvent;
+import icons.EmptyIcon;
 import undo.UndoManagerPlus;
 
 /**A special JMenu item that also stores an undo manager*/
@@ -41,7 +42,7 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 	}
 	
 	public BasicSmartMenuItem(String st) {
-		super(st);
+		this(st, new EmptyIcon());
 	}
 	
 	public BasicSmartMenuItem(String st, Icon icon) {

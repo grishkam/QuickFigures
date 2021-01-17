@@ -66,7 +66,7 @@ import handles.SmartHandleForText;
 import handles.miniToolbars.HasMiniToolBarHandles;
 import handles.miniToolbars.TextActionButtonHandleList;
 import icons.IconSet;
-import icons.TreeIconForTextGraphic;
+import icons.TreeIconWithText;
 import illustratorScripts.*;
 import keyFrameAnimators.TextGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
@@ -800,13 +800,13 @@ transient static IconSet i;//=new IconSet("icons2/TextIcon.jpg");
 
 @Override
 public Icon getTreeIcon() {
-	return new TreeIconForTextGraphic(this.getFont(), "a");
+	return new TreeIconWithText(this.getFont(), "ab");
 }
 
 
 
 public static Icon createImageIcon() {
-	return new TreeIconForTextGraphic(new Font("Arial", Font.BOLD, 10) ,"a");
+	return new TreeIconWithText(new Font("Arial", Font.BOLD, 10) ,"ab");
 	
 }
 
@@ -1269,6 +1269,8 @@ public int handleNumber(double x, double y) {
 public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoTextEdit(this);
 }
+
+
 
 	
 }

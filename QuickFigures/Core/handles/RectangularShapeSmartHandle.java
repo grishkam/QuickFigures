@@ -21,6 +21,7 @@
 package handles;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
@@ -51,8 +52,17 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 		
 		this.setHandleNumber(type);
 		this.targetShape=r;
+		if(this.isRotationHandle()) {
+			
+			//	this.message=""+'\u21ba';//TODO: determine a pleasing way to draw a rotation symbol with this icon
+		}
 		
 		
+	}
+	
+	/**returns the font of the handle message*/
+	protected Font getMessageFont() {
+		return new Font("Monospaced", Font.BOLD, 24);
 	}
 	
 	/**Draws the handle*/

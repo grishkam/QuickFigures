@@ -74,7 +74,8 @@ public class LabelExamplePicker extends GraphicalItemPicker<TextGraphic> impleme
 	
 	/**returns true if the object is a TextGraphi with the desired snap type*/
 	public boolean isDesirableItem(Object o) {
-		if (modelItem instanceof BarGraphic.BarTextGraphic) return false;
+		if (o instanceof BarGraphic.BarTextGraphic)
+			return false;
 		if (!(o instanceof TextGraphic))
 			return false;
 		if (o instanceof ChannelLabelTextGraphic) 

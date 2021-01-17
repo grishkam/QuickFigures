@@ -65,6 +65,9 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	public static final int MOVE_BACKWARD = 101;
 	
 	private int type;
+
+	/**set to a grey tone if the dark grey version of the icon should be used*/
+	public Color darkFillForIcon;
 	
 	public AlignItem(int leftSpace) {
 		this.type=leftSpace;
@@ -363,12 +366,23 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 			Rectangle r=rects.get(i);
 			
 			RectangularGraphic rect = RectangularGraphic.blankRect(r, colors[i]);
-			if(type>99) {rect = RectangularGraphic.filledRect(r); rect.setFillColor(colors[i]);rect.setDashes(null);rect.setStrokeWidth(1);}
-			rect.setStrokeWidth(1);
-			gg.getTheInternalLayer().add(rect);
+			if(type>99) {
+				rect = RectangularGraphic.filledRect(r); rect.setFillColor(colors[i]);rect.setDashes(null);rect.setStrokeWidth(1);
+				}
+			
+				rect.setStrokeWidth(1);
+				gg.getTheInternalLayer().add(rect);
+				
+				if (darkFillForIcon!=null) {
+					rect.setFillColor(darkFillForIcon);rect.setFilled(true);
+					rect.setStrokeWidth(0);
+				}
 				}
 		
 		
+		if(darkFillForIcon!=null) {
+			gg.moveLocation(0, 2);
+		}
 		
 		 GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;
 		 output.setRelocatedForIcon(false);
@@ -450,7 +464,10 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		return  getItemIcon(true);
 	}
 	
-	
+	public Icon getDarkIcon() {
+		this.darkFillForIcon=Color.darkGray;
+		return  getItemIcon(true);
+	}
 	
 	
 	

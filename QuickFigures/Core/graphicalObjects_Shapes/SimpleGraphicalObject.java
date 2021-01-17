@@ -25,5 +25,7 @@ import locatedObject.LocatedObject2D;
 
 /**All graphical objects implements the two interfaces*/
 public interface SimpleGraphicalObject extends LocatedObject2D, ZoomableGraphic{
+	public SimpleGraphicalObject copy();
 
+	public String getName();
 }

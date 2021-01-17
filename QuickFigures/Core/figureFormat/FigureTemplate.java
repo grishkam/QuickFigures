@@ -20,6 +20,7 @@
  */
 package figureFormat;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	private LabelExamplePicker panelLabelPicker=new LabelExamplePicker(new TextGraphic() , LayoutSpaces.PANELS);
 	
 	private LabelExamplePicker channelLabelPicker=new ChannelLabelExamplePicker(new ChannelLabelTextGraphic(new ChannelLabelProperties()));
-	private ScaleBarExamplePicker scaleBarPicker=new ScaleBarExamplePicker(new BarGraphic());
+	private ScaleBarExamplePicker scaleBarPicker=new ScaleBarExamplePicker(new BarGraphic(Color.white));
 	MultichannelDisplayPicker	mdp=new MultichannelDisplayPicker(); {mdp.setModelItem(new MultichannelDisplayLayer(null));}
 	GridLayoutExamplePicker layoutpicker =new GridLayoutExamplePicker(new DefaultLayoutGraphic());
 	
@@ -256,7 +257,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 			if (i<=0) {IssueLog.log("Cannot create scale bar from template without a panel to put it");return;}
 			Object displayob = stack.getPanels().get(i-1).getImageDisplayObject();
 			if (displayob instanceof TakesAttachedItems) {
-				BarGraphic newbar = new BarGraphic();
+				BarGraphic newbar = new BarGraphic(Color.white);
 				newbar.copyAttributesButNotScale(oldsbar);
 				newbar.setAttachmentPosition(oldsbar.getAttachmentPosition());
 				p.add(newbar);

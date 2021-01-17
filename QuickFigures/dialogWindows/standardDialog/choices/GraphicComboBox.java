@@ -15,25 +15,22 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 16, 2021
  * Version: 2021.1
  */
 package standardDialog.choices;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-
+import javax.swing.ListCellRenderer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
-import standardDialog.graphics.GraphicDisplayComponent;
+import standardDialog.graphics.GraphicComboBoxIcon;
 import graphicalObjects_SpecialObjects.TextGraphic;
-
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -41,19 +38,21 @@ import java.util.ArrayList;
 public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements UserSelectable{
 	
 	Color backgroundColor = Color.white;
-
+	boolean usename=false;
+	
 	
 	{this.setRenderer(new GraphicalObjectCellRenerer());}
-	private SimpleGraphicalObject selectedColor=null;
+	private SimpleGraphicalObject selectedGraphic=null;
 	private static final long serialVersionUID = 1L;
-	ArrayList<SimpleGraphicalObject> colors=new ArrayList<SimpleGraphicalObject> ();
+	ArrayList<SimpleGraphicalObject> objectList=new ArrayList<SimpleGraphicalObject> ();
 	
 	public GraphicComboBox(ArrayList<? extends SimpleGraphicalObject> c, Color background) {
 		if (background!=null) backgroundColor =background;
 		addItem(getNullComponent() );
-		for(SimpleGraphicalObject ci:c) {this.addItem(ci);colors.add(ci);}
+		for(SimpleGraphicalObject ci:c) {this.addItem(ci);objectList.add(ci);}
 	}
 	
+	@Override
 	public Object getSelectedItem() {
 		if (this.getSelectedIndex()==0) return null;
 		else return super.getSelectedItem();
@@ -80,42 +79,19 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		ff.pack();
 	}
 	
+	/**returns the selected graphic, if the selected index is 0 will return null as the index of 0 indicates nothing is selected*/
 	public SimpleGraphicalObject getSelectedGraphicalObject() {
 		int i=this.getSelectedIndex();
 		if (i<1) return null;
-		 selectedColor=colors.get(this.getSelectedIndex()-1);
-		return selectedColor;
+		 selectedGraphic=objectList.get(this.getSelectedIndex()-1);
+		return selectedGraphic;
 	}
-	
 	
 
 	
-	@Override
-	public void paint(Graphics g) {
-		//super.paintComponent(g);
-		
-		g.setColor(backgroundColor);
-		
 	
-	
-		 getCurrentDisplaycomp() .paintComponent(g);
-
-	}
-	
-	
-	public int getWidth() {
-		return  200;
-	}
-	
-	public int getHeight() {
-		return  80;
-	}
-	
-	
-	
-	
-	/**a cell renderer that paints the graphic*/
-	class GraphicalObjectCellRenerer extends BasicComboBoxRenderer {
+	/**a cell renderer that paints the graphics into a combo box*/
+	class GraphicalObjectCellRenerer extends JLabel implements ListCellRenderer<SimpleGraphicalObject> {
 		/**
 		 * 
 		 */
@@ -123,53 +99,65 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		
 		public Color currentColor=Color.black;
 
-		public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			
+		public  Component	getListCellRendererComponent(JList<? extends SimpleGraphicalObject> list, SimpleGraphicalObject value, int index, boolean isSelected, boolean cellHasFocus) {
 			
 				try {
+					boolean noneSelected=false;
+					
+					SimpleGraphicalObject item =null;
+					if (index!=0) item=value;
+					if (value==null||index==0) {
+						item=getNullComponent();
+						noneSelected=true;
+					}
+					
+					String s="none";
+					
+					if (item!=null) s=item.toString();
+					
+					item.deselect();
+					this.setText(s);
 					
 					
-					return getDisplayedForIndex(index,isSelected);
+					if (isSelected) {
+			            
+			            this.setBackground(new Color(50,50,200));
+			           this.setOpaque(true);
+			        } else {
+			            setBackground(list.getBackground());
+			            setForeground(list.getForeground());
+			        }
+					
+					if (index!=0)
+						this.setIcon( new GraphicComboBoxIcon(item, isSelected&&index!=-1));
+					else setIcon(null);
+					
+					
+					
+				if(index==-1&&getSelectedItem()==null) {
+					this.setIcon(null);
+					this.setText("no item selected");
+					noneSelected=true;
+				}
+				
+				/**test in an icon followed by more text would be repetitive*/
+				if (value instanceof TextGraphic &&!noneSelected)
+					this.setText(""); 
+				
+					return this;
 				} catch (Exception e) {
 					
-					return out;
+					return this;
 				}
 				
 			
 				}
-	
-		
-		boolean selected=false;
-		
-		@Override
-		public void paintComponent(Graphics g) {
-			g.setColor(Color.darkGray);
-			if (selected) {
-				g.fillRect(0, 0, 25, this.getHeight());
-			}
-			
-			
-			g.setColor(this.getForeground());
-			g.fillRect(20, 0, this.getWidth()-20,  this.getHeight());
-			getSelectedDC().paintComponent(g);
-			
-			
-		}
 		
 		
 	}
 	
-	private GraphicDisplayComponent getSelectedDC() {
-		
-		GraphicDisplayComponent graphicDisplayComponent = new GraphicDisplayComponent(null,getSelectedGraphicalObject(),  false);
-		graphicDisplayComponent.canvasColor=backgroundColor;
-		return graphicDisplayComponent;
-		
-	}
 
-	 
-	 
+ 
 	@Override
 	public int getSelectionNumber() {
 		return super.getSelectedIndex();
@@ -180,40 +168,17 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 		super.setSelectedIndex(index);
 		
 	}
-	
-	boolean usename=false;
-	
-	public GraphicDisplayComponent  getCurrentDisplaycomp() {
-		return getDisplayedForIndex(getSelectedIndex(), false);
-	}
+
 	
 	/**What is drawn when a null appears on the list*/
 	private TextGraphic getNullComponent() {
-		TextGraphic tg = new TextGraphic("no item selected");
+		TextGraphic tg = new TextGraphic("none");
 	
 		tg.setFont(tg.getFont().deriveFont((float)10));
 		return tg;
 	}
 	
-	public GraphicDisplayComponent getDisplayedForIndex(int index, boolean isSelected) {
-		SimpleGraphicalObject item =null;
-		if (index>0) item=colors.get(index-1);
-		if (index<=0) {
-			
-		
-			item=getNullComponent();
-		}
-		
-		String s="none";
-		
-		if (item!=null) s=item.toString();
-		if (!usename) s=null;
-		item.deselect();
-		GraphicDisplayComponent com = new GraphicDisplayComponent(s,item,  isSelected);
-		com.canvasColor=backgroundColor;
-		com.setCurrentItemInsets(new Insets(6,6,6,6));
-		return com;
-	}
+	
 
 	
 
