@@ -33,6 +33,7 @@ import menuUtil.SmartPopupJMenu;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 import undo.UndoScalingAndRotation;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 
 /**a popup menu for arrows that includes both the standard menu options for shapes
@@ -41,7 +42,7 @@ import menuUtil.PopupMenuSupplier;
 public class ArrowGraphicMenu extends SmartPopupJMenu implements ActionListener,
 PopupMenuSupplier  {
 
-	private static final String USE_DIFFERENT_HEADS = "Use different heads";
+	private static final String USE_DIFFERENT_HEADS = "Use two different heads", USE_IDENTICAL_HEADS = "Use two identical heads";
 
 	/**
 	 * 
@@ -67,8 +68,12 @@ PopupMenuSupplier  {
 		add(createMenuItem(SWAP_HEADS));
 		add(createMenuItem(MAKE_HORIZONTAL));
 		add(createMenuItem(MAKE_VERTICAL));
-		if (arrow.getNHeads()>1 &&arrow.headsAreSame()) {
+		
+		if (arrow.headsAreSame()) {
 			add(createMenuItem(USE_DIFFERENT_HEADS));
+		}
+		if (!arrow.headsAreSame()) {
+			add(createMenuItem(USE_IDENTICAL_HEADS));
 		}
 	}
 	
@@ -78,9 +83,13 @@ PopupMenuSupplier  {
 	}
 	
 	public JMenuItem createMenuItem(String st) {
-		JMenuItem o=new JMenuItem(st);
+		return createMenuItem(st, false);
+	}
+	public JMenuItem createMenuItem(String st, boolean grey) {
+		BasicSmartMenuItem o=new BasicSmartMenuItem(st);
 		o.addActionListener(this);
 		o.setActionCommand(st);
+		o.setGreyOut(grey);
 		return o;
 	}
 
@@ -116,8 +125,15 @@ PopupMenuSupplier  {
 		}
 		
 		if(com.equals(USE_DIFFERENT_HEADS)) {
-			targetArrow.setHeadsSame(false);//undo has not been implemented for this
+			targetArrow.setNumerOfHeads(2);
+			targetArrow.setHeadsSame(false);
 		}
+		
+		if(com.equals(USE_IDENTICAL_HEADS)) {
+			targetArrow.setNumerOfHeads(2);
+			targetArrow.setHeadsSame(true);
+		}
+		
 		undo.establishFinalState();
 		UndoManagerPlus um = getUndoManager();
 		if (um!=null)um.addEdits(undo);

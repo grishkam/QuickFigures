@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 23, 2021
  * Version: 2021.1
  */
 package popupMenusForComplexObjects;
@@ -143,7 +143,11 @@ super.addLockedItemMenus();
 	/**Adds a scale bar tot he image panel*/
 	public void addScaleBar() {
 		CombinedEdit undo = new CombinedEdit();
-		BarGraphicTool.getCurrentBarTool().addBarGraphic(imagePanel, imagePanel.getParentLayer(), undo, (int)imagePanel.getBounds().getMaxX(),(int)imagePanel.getBounds().getMaxY());
+		GraphicLayer parentLayer = imagePanel.getParentLayer();
+		if(parentLayer instanceof MultichannelDisplayLayer) {
+			parentLayer=parentLayer.getParentLayer();
+		}
+		BarGraphicTool.getCurrentBarTool().addBarGraphic(imagePanel, parentLayer, undo, (int)imagePanel.getBounds().getMaxX(),(int)imagePanel.getBounds().getMaxY());
 		imagePanel.getUndoManager().addEdit(undo);
 	}
 	

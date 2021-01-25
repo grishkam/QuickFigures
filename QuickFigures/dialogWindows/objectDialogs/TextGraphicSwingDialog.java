@@ -29,6 +29,7 @@ import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.CanvasOptions;
+import locatedObject.ColorDimmer;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
@@ -99,7 +100,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	}
 	
 	protected void addDimmingToDialog() {
-		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
 		this.add("dim", cp);
 		this.getMainPanel().moveGrid(2, -1);
 		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
@@ -138,7 +139,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		this.setFixedEdgeToDialog(textItem);
 		textItem.setFont(this.getFont("font"));
 		textItem.setAngle(this.getNumber("angle"));
-		textItem.setDimming(this.getChoiceIndex("dim"));
+		textItem.setDimming(ColorDimmer.values()[this.getChoiceIndex("dim")]);
 		setBackgroundOptionsToDialog(textItem);
 		setObjectSnappingBehaviourToDialog(textItem);
 		if (CanvasOptions.current.resizeCanvasAfterEdit)

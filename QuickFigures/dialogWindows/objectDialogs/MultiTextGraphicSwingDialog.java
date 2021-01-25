@@ -110,7 +110,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 		
 		AngleInputPanel pai2 = new AngleInputPanel("Angle ", textItem.getAngle(), true);
 		add("angle", pai2);
-		ChoiceInputPanel cp = new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp = new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
 		this.add("dim", cp);
 		addBackgroundOptionsToDialog();
 	

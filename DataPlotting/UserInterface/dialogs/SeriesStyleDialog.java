@@ -26,6 +26,7 @@ import genericPlot.BasicPlot;
 import genericPlot.BasicDataSeriesGroup;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import locatedObject.ColorDimmer;
 import plotParts.Core.PlotAreaRectangle;
 import plotParts.DataShowingParts.SeriesStyle;
 import standardDialog.StandardDialog;
@@ -82,7 +83,7 @@ public class SeriesStyleDialog extends StandardDialog {
 	}
 	
 	protected void addDimmingToDialog(SeriesStyle textItem) {
-		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming()));
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
 		this.add("dim", cp);
 		this.getMainPanel().moveGrid(2, -1);
 		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
@@ -102,7 +103,7 @@ public class SeriesStyleDialog extends StandardDialog {
 	}
 
 	private void changeStyleToDialog(SeriesStyle s) {
-		s.setDimming(this.getChoiceIndex("dim"));
+		s.setDimming(ColorDimmer.values()[this.getChoiceIndex("dim")]);
 		s.setDimColor(this.getBoolean("dim?"));
 	}
 }

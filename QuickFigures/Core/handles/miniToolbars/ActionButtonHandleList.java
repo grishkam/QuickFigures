@@ -105,7 +105,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 
 
 /**
- Sets the handle locations for assuming that the handle list
+ Sets the handle locations each handle to form a horizontal 
  */
 public void updateLocationsForHorizontal() {
 	double xi= location.getX();
@@ -254,7 +254,7 @@ public void updateLocationsForVertical() {
 
 		public MultiSelectionOperator itemForIcon;
 		public MultiSelectionOperator itemForInputPanel;
-		SmartPopupJMenu p=new SmartPopupJMenu();
+		SmartPopupJMenu popupMenuForListHandle=new SmartPopupJMenu();
 		
 		/**A list of handles for each menu item*/
 		ActionButtonHandleList sublist=new ActionButtonHandleList();
@@ -309,6 +309,10 @@ public void updateLocationsForVertical() {
 			
 			for(MultiSelectionOperator i: items) {
 				JMenuItem j = new JMenuItem(i.getMenuCommand());
+				if(i.getMenuItemRenderer()!=null) {
+					j=i.getMenuItemRenderer();
+					j.setText(i.getMenuCommand());
+				}
 				j.setIcon(i.getIcon());
 				if(i.getMenuItemFont()!=null) {
 					j.setFont(i.getMenuItemFont());
@@ -316,8 +320,8 @@ public void updateLocationsForVertical() {
 				j.addActionListener(new MenuAction(i, this));
 				sublist.add(new GeneralActionHandle(i, (int)(Math.random()*100000)));
 				
-				if (submenu!=null) {p.getSubmenuOfName(submenu).add(j);} else
-				p.add(j);
+				if (submenu!=null) {popupMenuForListHandle.getSubmenuOfName(submenu).add(j);} else
+				popupMenuForListHandle.add(j);
 				mostRecentAddedItem = j;
 			}
 			
@@ -341,16 +345,7 @@ public void updateLocationsForVertical() {
 				return;//nothing is done if shift is down
 			lastEvent=canvasMouseEventWrapper;
 		
-			if(findInputPanel()!=null) 
-				{
-					if(iPanel!=null)
-						p.remove(iPanel);
-					itemForIcon.setSelector(canvasMouseEventWrapper.getSelectionSystem());
-					if (itemForInputPanel!=null )itemForInputPanel.setSelector(canvasMouseEventWrapper.getSelectionSystem());
-					iPanel=findInputPanel();
-					p.add(iPanel);
-					p.pack();
-				}
+			updateInputPanel(canvasMouseEventWrapper);
 			
 			if (alternativePopup!=null) {
 				alternativePopup.showPopupMenu(canvasMouseEventWrapper);
@@ -358,13 +353,31 @@ public void updateLocationsForVertical() {
 			}
 			if (usePalete) {
 				 sublist.showInPopupPalete(canvasMouseEventWrapper, null);
+			} else {
+				int clickedYScreen = canvasMouseEventWrapper.getClickedYScreen();
+				if (this.lastDrawShape!=null) clickedYScreen=(int) lastDrawShape.getBounds().getMaxY();
+				popupMenuForListHandle.show(canvasMouseEventWrapper.getComponent(),canvasMouseEventWrapper.getClickedXScreen(), clickedYScreen);
 			}
-			else 
-			p.show(canvasMouseEventWrapper.getComponent(),canvasMouseEventWrapper.getClickedXScreen(), canvasMouseEventWrapper.getClickedYScreen());
 			
 			
 			canvasMouseEventWrapper.getAsDisplay().updateDisplay();
 			
+		}
+
+		/**
+		sets up the input panel, a component that will be placed after the menu items
+		 */
+		private void updateInputPanel(CanvasMouseEvent canvasMouseEventWrapper) {
+			if(findInputPanel()!=null) 
+				{
+					if(iPanel!=null)
+						popupMenuForListHandle.remove(iPanel);
+					itemForIcon.setSelector(canvasMouseEventWrapper.getSelectionSystem());
+					if (itemForInputPanel!=null )itemForInputPanel.setSelector(canvasMouseEventWrapper.getSelectionSystem());
+					iPanel=findInputPanel();
+					popupMenuForListHandle.add(iPanel);
+					popupMenuForListHandle.pack();
+				}
 		}
 		
 		/**An action listener for the menu items*/

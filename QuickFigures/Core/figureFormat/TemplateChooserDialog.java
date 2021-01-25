@@ -21,21 +21,20 @@
 package figureFormat;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
-import graphicalObjects_SpecialObjects.BarGraphic;
-import graphicalObjects_SpecialObjects.TextGraphic;
-import locatedObject.AttachmentPosition;
-import locatedObject.ObjectContainer;
+import iconGraphicalObjects.DialogIcon;
+import locatedObject.ShowsOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.choices.GraphicComboBox;
@@ -130,6 +129,7 @@ public class TemplateChooserDialog extends StandardDialog {
 		JComboBox<Object> rlc = new JComboBox<Object>(vv);
 		setOfPanels2.put(picker.getKeyName(), rlc);
 		ChoiceInputPanel panel1 = new ChoiceInputPanel(picker.getOptionName(), rlc);
+		
 		if (rowlabelpotentials.size()>0) rlc.setSelectedIndex(1);
 		super.add(title, panel1);
 	}
@@ -158,21 +158,38 @@ public class TemplateChooserDialog extends StandardDialog {
 		
 	}
 	
-	
-	
-	public static void main(String[] args) {
-		//FigureTemplate tp=new FigureTemplate();
-		ObjectContainer oc1=new GraphicLayerPane("");
-		TextGraphic tg4 = new TextGraphic("Hello");
-		tg4.setAttachmentPosition(AttachmentPosition.defaultRowSide());
-		oc1.addItemToImage(tg4);
+	/**A button for displaying an options dialog*/
+	public class DialogButton extends JButton implements ActionListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private ItemPicker<?> target;
 		
-		tg4 = new TextGraphic("Hi");
-		tg4.setAttachmentPosition(AttachmentPosition.defaultRowSide());
-		oc1.addItemToImage(tg4);
-		oc1.addItemToImage(new DefaultLayoutGraphic());
-		oc1.addItemToImage(new BarGraphic());
-		//new TemplateChooserDialog(tp, oc1).showDialog();;
+		public DialogButton(ItemPicker<?> target) {
+			this.setIcon(DialogIcon.getIcon());
+			this.target=target;
+			this.addActionListener(this);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(target==null)
+				return;
+			
+			if(target.getModelItem()==null)
+				return;
+			if(target.getModelItem() instanceof ShowsOptionsDialog) {
+				ShowsOptionsDialog s=(ShowsOptionsDialog) target.getModelItem();
+				s.showOptionsDialog();
+			}
+			
+		}
+		
 	}
+	
+	
+	
 
 }

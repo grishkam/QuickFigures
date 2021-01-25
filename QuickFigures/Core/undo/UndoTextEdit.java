@@ -20,6 +20,7 @@ import java.awt.Font;
 
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.ColorDimmer;
 import textObjectProperties.TextParagraph;
 
 public class UndoTextEdit extends AbstractUndoableEdit2 {
@@ -42,8 +43,8 @@ public class UndoTextEdit extends AbstractUndoableEdit2 {
 	private UndoAttachmentPositionChange isnap;
 	private Color iColor;
 	private Color fColor;
-	private int iDim;
-	private int fDim;
+	private ColorDimmer iDim;
+	private ColorDimmer fDim;
 
 	public UndoTextEdit(TextGraphic t) {
 		

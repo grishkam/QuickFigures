@@ -421,6 +421,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		this.outline=arr.outline;
 		this.head1.copyAttributesFrom(arr.head1);
 		this.head2.copyAttributesFrom(arr.head2);
+		this.setHeadsSame(arr.headsAreSame());
 	}
 
 	@Override
@@ -863,14 +864,14 @@ protected Point2D getDrawnLineEnd2() {
 	@Override
 	public void scaleAbout(Point2D p, double mag) {
 		try {
-		//UndoScalingAndRotation output = new UndoScalingAndRotation(this);
+		
 			Point2D p1 = new Point2D.Double(x,y);
 			Point2D p2 = new Point2D.Double(x2,y2);
 			p2=scalePointAbout(p2, p,mag,mag);
 			p1=scalePointAbout(p1, p,mag,mag);
 			this.setPoints(p1, p2);
 			BasicStrokedItem.scaleStrokeProps(this, mag);
-			//this.setStrokeWidth((float) (this.getStrokeWidth()*mag));
+			
 			head1.setArrowHeadSize(head1.getArrowHeadSize()*mag);
 			if (head2!=head1)head2.setArrowHeadSize(head2.getArrowHeadSize()*mag);
 			
@@ -925,10 +926,11 @@ protected Point2D getDrawnLineEnd2() {
 	public SmartHandleList getSmartHandleList() {
 		if (smartList==null)smartList=createSmartHandleList(); 
 		if (!superSelected||hideNormalHandles) 
-			return SmartHandleList.combindLists(smartList, getButtonList());
+			return SmartHandleList.combindLists(smartList);
 		return SmartHandleList.combindLists(smartList, getButtonList(), getRotateList());
 	}
 	
+	/**returns a handle list containing a handle for rotation of the arrow*/
 	private SmartHandleList getRotateList() {
 		if (rotList==null)rotList=new ReshapeHandleList(1,400, this);
 		rotList.updateRectangle();

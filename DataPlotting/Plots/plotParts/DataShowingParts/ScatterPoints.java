@@ -42,9 +42,9 @@ import graphicalObjects_Shapes.RectangularGraphic;
 /**a data showing shape that draws many points of data*/
 public class ScatterPoints extends DataShowingShape {
 
-	public static int EXCLUDE_WITHIN15IQR=1, NO_EXCLUSION=0;
+	public static final int EXCLUDE_WITHIN15IQR=1, NO_EXCLUSION=0;
 	private PointModel pointModel=new PointModel();
-	private ArrayList<plotPoint> plottingShapes;
+	private ArrayList<PlotPoint> plottingShapes;
 	public boolean needsPlotPointUpdate=true;
 	public boolean needsJitterUpdate=true;
 	private boolean doesJitter=true;
@@ -111,10 +111,10 @@ public class ScatterPoints extends DataShowingShape {
 	
 	
 	
-	private Shape combineShapes(ArrayList<plotPoint> list, boolean complete) {
+	private Shape combineShapes(ArrayList<PlotPoint> list, boolean complete) {
 		Area output = new Area();
 		
-		for(plotPoint d: list) {
+		for(PlotPoint d: list) {
 			if (this.getExclusion()==EXCLUDE_WITHIN15IQR) {
 				if (this.getTheData().getIncludedValues().isWith15IQR(d.value)) continue;
 			}
@@ -127,7 +127,7 @@ public class ScatterPoints extends DataShowingShape {
 		return output;
 	}
 	
-	public ArrayList<plotPoint> getPlotingShapes() {
+	public ArrayList<PlotPoint> getPlotingShapes() {
 		if (this.plottingShapes==null||needsPlotPointUpdate) {
 			plottingShapes=createPlotPointShapeList();
 			needsPlotPointUpdate=false;
@@ -139,11 +139,11 @@ public class ScatterPoints extends DataShowingShape {
 	}
 	
 	/**returns the point list. */
-	private ArrayList<plotPoint> createPlotPointShapeList() {
-		ArrayList<plotPoint> shapes=new ArrayList<plotPoint>();
+	private ArrayList<PlotPoint> createPlotPointShapeList() {
+		ArrayList<PlotPoint> shapes=new ArrayList<PlotPoint>();
 		for(int i=0; i<getTheData().length() ;i++) {
 			if (area==null) continue;
-			plotPoint pt = this.getPlottingPointFor(i);
+			PlotPoint pt = this.getPlottingPointFor(i);
 			if (pt!=null && this.area.getPlotArea().contains(pt.position))	{
 				pt.graphic=getPointModel().getShapeGraphicForCordinatePoint(pt);
 				shapes.add(pt);
@@ -154,13 +154,13 @@ public class ScatterPoints extends DataShowingShape {
 	
 	/**returns the shapes for the scatter points. If some overlap, it shifts them over
 	 * @return */
-	private ArrayList<plotPoint> updateListWithJitter(ArrayList<plotPoint> plottingShapes) {
+	private ArrayList<PlotPoint> updateListWithJitter(ArrayList<PlotPoint> plottingShapes) {
 		//ArrayList<plotPoint> plottingShapes=createPlotPointShapeList();
 		
 		/**Sorts based on their y axis position*/
-		Collections.sort(plottingShapes, new Comparator<plotPoint>() {
+		Collections.sort(plottingShapes, new Comparator<PlotPoint>() {
 			@Override
-			public int compare(plotPoint arg0, plotPoint arg1) {
+			public int compare(PlotPoint arg0, PlotPoint arg1) {
 				 return (int) (arg0.value-arg1.value);
 				
 			}});
@@ -169,8 +169,8 @@ public class ScatterPoints extends DataShowingShape {
 		
 		int direction=1;
 		for(int i=1; i<plottingShapes.size(); i++)  {
-			plotPoint shape1=plottingShapes.get(i);
-			ArrayList<plotPoint> list = createListUpTo(plottingShapes, shape1);
+			PlotPoint shape1=plottingShapes.get(i);
+			ArrayList<PlotPoint> list = createListUpTo(plottingShapes, shape1);
 			Rectangle2D b = shape1.graphic.getBounds();
 			boolean moved=false;
 			while(combineShapes(list, false).intersects(shape1.getPointBoundsPostJitter().getBounds2D())  ) {
@@ -197,9 +197,9 @@ public class ScatterPoints extends DataShowingShape {
 	
 
 	
-	private ArrayList<plotPoint> createListUpTo(ArrayList<plotPoint> shapes, plotPoint shape1) {
-		ArrayList<plotPoint> output = new ArrayList<plotPoint>();
-		for(plotPoint s: shapes) {
+	private ArrayList<PlotPoint> createListUpTo(ArrayList<PlotPoint> shapes, PlotPoint shape1) {
+		ArrayList<PlotPoint> output = new ArrayList<PlotPoint>();
+		for(PlotPoint s: shapes) {
 			if (s==shape1) break;
 			output.add(s);
 		}
@@ -210,10 +210,10 @@ public class ScatterPoints extends DataShowingShape {
 
 	
 	
-	plotPoint getPlottingPointFor(int i) {
+	PlotPoint getPlottingPointFor(int i) {
 		DataPoint dataPoint = this.getTheData().getDataPoint(i);
 		if (dataPoint.isExcluded()) return null;
-		plotPoint point = new plotPoint();
+		PlotPoint point = new PlotPoint();
 		double d=dataPoint.getValue();
 		double p=dataPoint.getPosition();
 		point.setDataValues(p,d);
@@ -224,7 +224,7 @@ public class ScatterPoints extends DataShowingShape {
 	}
 	
 
-public class plotPoint implements Serializable{
+public class PlotPoint implements Serializable{
 	/**
 	 * 
 	 */
@@ -235,7 +235,7 @@ public class plotPoint implements Serializable{
 	public Point2D.Double position;//XY cordinate of plotting
 	AffineTransform jitterTransform=new AffineTransform();
 	
-	public plotPoint() {}
+	public PlotPoint() {}
 	
 	public void add(AffineTransform tf) {
 		jitterTransform.concatenate(tf);
@@ -335,13 +335,13 @@ public class plotPoint implements Serializable{
 
 
 
-	public ArrayList<plotPoint> getPlottingShapes() {
+	public ArrayList<PlotPoint> getPlottingShapes() {
 		return plottingShapes;
 	}
 
 
 
-	public void setPlottingShapes(ArrayList<plotPoint> plottingShapes) {
+	public void setPlottingShapes(ArrayList<PlotPoint> plottingShapes) {
 		this.plottingShapes = plottingShapes;
 	}
 

@@ -426,7 +426,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	
 			JMenuItem jM = new JMenuItem("More Fonts");
 			jM.addActionListener(this);
-			p.add(jM);
+			popupMenuForListHandle.add(jM);
 		}
 		
 		public boolean isHidden() {

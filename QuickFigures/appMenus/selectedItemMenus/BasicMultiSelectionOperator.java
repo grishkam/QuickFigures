@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
+import javax.swing.JMenuItem;
 
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
@@ -158,5 +159,8 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	public static Component getPaddedPanel(NumberInputPanel strokeWidthInput) {
 		return StandardDialog.combinePanels(strokeWidthInput,  new InfoDisplayPanel("  ", ""), new InfoDisplayPanel("  ", ""));
 	}
+	
+	/**if the menu item is rendered in a special way returns the renderer*/
+	public JMenuItem getMenuItemRenderer() {return null;}
 
 }

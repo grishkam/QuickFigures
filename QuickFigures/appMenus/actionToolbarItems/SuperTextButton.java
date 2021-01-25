@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
+import javax.swing.JMenuItem;
 
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
@@ -57,13 +58,15 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 
 
 
+
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Color color=null;
-	public int colorDimming=ColorDimmer.FULL_BRIGTHNESS;
+	public ColorDimmer colorDimming=ColorDimmer.FULL_BRIGTHNESS;
 
 	
 	private TextGraphic modelText;
@@ -101,7 +104,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		color=c;
 		 setModelText(m);
 	}
-	public SuperTextButton(TextGraphic m, int c) {
+	public SuperTextButton(TextGraphic m, ColorDimmer c) {
 		this.type=DIMS_COLOR;
 		colorDimming=c;
 		 setModelText(m);
@@ -174,7 +177,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		if (this.italicizes()) return "Make Italic "+getKeyBoardCommand() ;
 		if (this.underlines()) return "Make Underlined "+getKeyBoardCommand() ;
 		if (this.strikes()) return "Strike-through "+getKeyBoardCommand() ;
-		if (this.doesDimColor()) return "Dim Color to: "+ ColorDimmer.colorModChoices2[colorDimming];
+		if (this.doesDimColor()) return "Dim Color to: "+ ColorDimmer.colorModChoices2[colorDimming.ordinal()];
 		if (this.setsFontSize()) return "Resize Font ("+startFontSize+")";
 		if (setsJustification() ) return "Align Text "+ TextGraphicSwingDialog.JUSTIFICATION_CHOICES[getJustification()];
 		if(doesRecolor()) return "";
@@ -423,8 +426,8 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 					int h=4;
 					Color baseColor = getColorForDimmerText();
 					
-					for(int i=0; i<5; i++) {
-						Color col = ColorDimmer.modifyColor(baseColor , i, true);
+					for(int i=0; i<ColorDimmer.OUTSIDE_WHITE_INSITE_BLACK.ordinal(); i++) {
+						Color col = ColorDimmer.modifyColor(baseColor , ColorDimmer.values()[i], true);
 						arg1.setColor(col);
 						arg1.fillRect(x, y, w, h);
 						y+=4;
@@ -525,9 +528,9 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 		}
 		
 		public static SuperTextButton[]  getForDims(TextGraphic t) {
-			SuperTextButton[] out = new SuperTextButton[6];
+			SuperTextButton[] out = new SuperTextButton[ColorDimmer.values().length];
 			for(int i=0; i<out.length; i++) {
-				out[i]=new SuperTextButton(t, i);
+				out[i]=new SuperTextButton(t, ColorDimmer.values()[i]);
 			}
 			return out;
 		}
@@ -598,6 +601,50 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 		public void setModelText(TextGraphic modelText) {
 			this.modelText = modelText;
 		}
+		
+		
+		/**if the menu item is rendered in a special way returns the renderer*/
+		public JMenuItem getMenuItemRenderer() {
+			//if(this.doesDimColor())
+			//	return new ColorDimRenderer(this.colorDimming);
+			return null;
+		}
+		
+		/**
+		 Work in progress, a component that more clearly shows what colors are the target
+		 */
+	public class ColorDimRenderer extends JMenuItem {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			private ColorDimmer dim;
+
+			/**
+			 * @param colorDimming
+			 */
+			public ColorDimRenderer(ColorDimmer colorDimming) {
+				this.dim=colorDimming;
+				
+			}
+			
+			public void paintComponent(Graphics g) {
+				
+				
+				super.paintComponent(g);
+				
+				/**paints a rectangle with possible colors*/
+				if (g instanceof Graphics2D) try {
+					Graphics2D g2=(Graphics2D) g;
+					int gStart=this.getIconTextGap()+this.getIcon().getIconWidth();
+					int gW=g2.getFontMetrics().stringWidth("Dim Color to:");
+					g2.setPaint(RainbowPaintProvider.getRaindowGradient(gStart, gStart+gW, dim, new Color[] {Color.RED, Color.GREEN, Color.BLUE, Color.cyan,Color.magenta, Color.YELLOW}));
+					g2.fillRect(gStart, 0,  gW, 20);
+				} catch (Throwable t) {}
+			}
+
+	}
 		
 	}
 	

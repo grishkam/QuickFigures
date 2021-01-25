@@ -17,6 +17,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 
 import applicationAdapters.DisplayedImage;
+import basicMenusForApp.MenuBarForApp;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 
@@ -38,7 +39,9 @@ public class AdaptiveToolbar extends JFrame implements MouseMotionListener, Mous
 		setToCurrentlyActiveWindow(true);
 		this.addWindowListener(this);
 		this.setTitle("Smart Toolbar");
+		if (!IssueLog.isWindows()) this.setJMenuBar(new MenuBarForApp());
 		this.pack();
+		
 	}
 	
 	@Override

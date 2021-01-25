@@ -41,7 +41,7 @@ public class SeriesStyle implements Serializable {
 	int nSides=0;
 	private Color color=Color.red;
 	private int nSeries=3;
-	private int dimming=0;
+	private ColorDimmer dimming=ColorDimmer.FULL_BRIGTHNESS;
 	private Color[] possibleColors=new Color[] {Color.DARK_GRAY, Color.red, Color.green, Color.blue, Color.yellow.darker(),  Color.magenta, Color.cyan, Color.lightGray, Color.orange};
 	
 	boolean colorBarStroke=true;
@@ -147,12 +147,12 @@ public class SeriesStyle implements Serializable {
 
 	public Color getEffectiveColor() {
 		if (dimColor) {
-			if (dimming==4) {
+			if (dimming==ColorDimmer.OUTSIDE_BLACK_INSITE_WHITE) {
 				double cn = 0.5*color.getRed() +0.25*color.getBlue()+0.1*color.getGreen();
 				int nc=(int) cn;
 				return new Color(nc, nc, nc);
 			}
-			if (dimming==5) {
+			if (dimming==ColorDimmer.OUTSIDE_WHITE_INSITE_BLACK) {
 				double cn = 0.1*color.getRed() +0.25*color.getBlue()+0.5*color.getGreen();
 				int nc=(int) cn;
 				return new Color(nc, nc, nc);
@@ -172,12 +172,12 @@ public class SeriesStyle implements Serializable {
 	}
 
 
-	public int getDimming() {
+	public ColorDimmer getDimming() {
 		return dimming;
 	}
 
 
-	public void setDimming(int dimming) {
+	public void setDimming(ColorDimmer dimming) {
 		this.dimming = dimming;
 	}
 

@@ -31,7 +31,7 @@ import graphicalObjects_Shapes.CrossGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RegularPolygonGraphic;
 import locatedObject.RectangleEdges;
-import plotParts.DataShowingParts.ScatterPoints.plotPoint;
+import plotParts.DataShowingParts.ScatterPoints.PlotPoint;
 
 /**class stores information regarding the shape used to draw points */
 public class PointModel implements Serializable{
@@ -92,7 +92,7 @@ public class PointModel implements Serializable{
 	
 	/**creates a shape for the data point d. Numbers are 
 	 * cordinates to draw, not the values*/
-	public RectangularGraphic getShapeGraphicForCordinatePoint(plotPoint pt) {
+	public RectangularGraphic getShapeGraphicForCordinatePoint(PlotPoint pt) {
 		RectangularGraphic baseShape =getModelShape().copy();
 		baseShape.setLocationType(RectangleEdges.CENTER);;
 		baseShape.setLocation(0, 0);

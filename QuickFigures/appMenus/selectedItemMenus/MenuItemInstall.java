@@ -23,6 +23,7 @@ package selectedItemMenus;
 import java.awt.Font;
 
 import javax.swing.Icon;
+import javax.swing.JMenuItem;
 
 /**This interface is for any class that specifies the traits of a menu item*/
 public interface MenuItemInstall {
@@ -34,6 +35,9 @@ public interface MenuItemInstall {
 	public Icon getIcon();
 	/**if the menu item must have a non-default font, returns it*/
 	public Font getMenuItemFont();
+	
+	/**if the menu item is rendered in a special way returns the renderer*/
+	public JMenuItem getMenuItemRenderer();
 	
 	/**returns true if the adder will work for the layer selector given*/
 	public boolean canUseObjects(LayerSelectionSystem graphicTreeUI);

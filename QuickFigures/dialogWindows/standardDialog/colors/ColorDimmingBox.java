@@ -102,14 +102,18 @@ public class ColorDimmingBox extends JComboBox<String> {
 			super.paint(g);
 			int dim = this.colorDims;
 			if (this.colorDims==-1) dim=box.getSelectedIndex();
-			drawRainbowStringForDimmingBox(g, dim, this.getText());
+			drawRainbowStringForDimmingBox(g, ColorDimmer.values()[dim], this.getText());
 			
 		}
 
 		/**Based on the dimming type, draws a many colored text from the string given with the dimmed colors*/
-		public void drawRainbowStringForDimmingBox(Graphics g, int dimmingType, String text) {
-			ColorDimmingBox.drawRainbowString(g, 1,this.getFont().getSize()+1, text, new int[]{3,2,2}, ColorDimmer.modifyArray( segColors, dimmingType, true));
+		public void drawRainbowStringForDimmingBox(Graphics g, ColorDimmer dimmingType, String text) {
+			Font font = this.getFont();
+			drawRainbowStringForBox(g, dimmingType, text, font, 1,1);
 		}
+
+
+
 		
 		public  Component	getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			Component out = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
@@ -138,7 +142,10 @@ public class ColorDimmingBox extends JComboBox<String> {
 		}
 	}
 	
-	
+	/**Based on the dimming type, draws a many colored text from the string given with the dimmed colors using the */
+	public static void drawRainbowStringForBox(Graphics g, ColorDimmer dimmingType, String text, Font font, int x, int y) {
+		ColorDimmingBox.drawRainbowString(g, x,font.getSize()+y, text, new int[]{3,2,2}, ColorDimmer.modifyArray( segColors, dimmingType, true));
+	}
 	
 	public static void main(String[] arg) {
 	

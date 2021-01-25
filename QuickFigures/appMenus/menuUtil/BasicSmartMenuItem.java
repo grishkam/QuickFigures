@@ -20,6 +20,8 @@
  */
 package menuUtil;
 
+import java.awt.Color;
+
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
@@ -65,6 +67,16 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 	@Override
 	public UndoManagerPlus getUndoManager() {
 		return undoManager;
+	}
+	
+	/**sets whether the menu item is greyed out*/
+	public void setGreyOut(boolean grey) {
+		if(grey) {
+			this.setForeground(Color.lightGray);
+		}
+		else {
+			this.setForeground(Color.black);
+		}
 	}
 
 }

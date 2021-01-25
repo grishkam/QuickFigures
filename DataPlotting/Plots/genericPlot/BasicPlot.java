@@ -1094,7 +1094,7 @@ public void editDone(GridLayoutEditEvent e) {
 	
 }
 
-/**checks the parent layers for a basic plot*/
+/**checks the parent layers of the object for basic plot*/
 public static BasicPlot findPlot(ZoomableGraphic z) {
 	while(z!=null && !(z instanceof BasicPlot)) {
 		z=z.getParentLayer();

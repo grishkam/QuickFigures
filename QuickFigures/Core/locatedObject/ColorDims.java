@@ -24,8 +24,8 @@ import java.awt.Color;
 
 /**An interface for objects that have the color dimming property*/
 public interface ColorDims {
-	public int getDimming();
-	public void setDimming(int i);
+	public ColorDimmer getDimming();
+	public void setDimming(ColorDimmer i);
 	public Color getDimmedColor(Color c);
 
 }

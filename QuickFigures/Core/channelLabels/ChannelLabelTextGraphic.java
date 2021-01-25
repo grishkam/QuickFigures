@@ -246,11 +246,11 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		 	  
 		 	    else return c;
 		
-		if (!dontinvert&&colordimming<4) {
+		if (!dontinvert&&colordimming.ordinal()<4) {
 			if (c.equals(Color.black)) return Color.white;
 			//if (c.equals(Color.white)) return Color.black;
 		}
-		if (dontinvert&&colordimming<4) {
+		if (dontinvert&&colordimming.ordinal()<4) {
 			//if (c.equals(Color.black)) return Color.white;
 			if (c.equals(Color.white)) return Color.black;
 		}

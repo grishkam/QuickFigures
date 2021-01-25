@@ -26,7 +26,7 @@ import standardDialog.channels.ChannelEntryBox;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
-/**A dialog that promts the user to slect a channel, a slice, a frame or all three from a multidimensional image*/
+/**A dialog that promts the user to select a channel, a slice, a frame or all three from a multidimensional image*/
 public class ChannelSliceAndFrameSelectionDialog extends StandardDialog {
 
 	/**

@@ -39,21 +39,29 @@ import graphicalObjects_Shapes.SimpleGraphicalObject;
 public class GraphicComboBoxIcon implements Icon{
 
 
-	int inset=5;
+	int inset=10;
 	 
 	 private SimpleGraphicalObject object;
 	 boolean selected=false;
-
-
-	public GraphicComboBoxIcon(SimpleGraphicalObject s, boolean selected) { 
-		this.object=s;
-		this.selected=selected;
-	 }
-	 
+	Color selectionBackground = new Color(50,50, 230);
 
 	public GraphicComboBoxIcon(SimpleGraphicalObject s) { 
 		this.object=s;
 	 }
+	
+	public GraphicComboBoxIcon(SimpleGraphicalObject s, boolean selected) { 
+		this(s);
+		this.selected=selected;
+	 }
+	
+	public GraphicComboBoxIcon(SimpleGraphicalObject s, boolean selected, Color background) { 
+		this(s,selected);
+		selectionBackground =background;
+	 }
+
+	 
+
+	
 
 @Override
 public int getIconWidth() {
@@ -78,7 +86,8 @@ public void paintIcon(Component c, Graphics g, int x, int y) {
 		return;
 	Rectangle b = object.getExtendedBounds();
 	if(selected) {
-		g.setColor(new Color(50,50, 230));
+		
+		g.setColor(selectionBackground);
 		g.fillRect(x, y, this.getIconWidth(), this.getIconHeight());
 	}
 	object.draw((Graphics2D) g, new BasicCoordinateConverter(x+b.getX()-inset, y+b.getY()-inset, 1));
