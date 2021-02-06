@@ -48,9 +48,9 @@ public class BasicMetaDataHandler {
 	/**Channel name keys for determining channel colors, can retrieved lut names or channel names*/
 	static String[][] allNameKeys=new String[][] {
 		new String[] {"DisplaySetting|Channel|DyeName|", " "},//for CZI
-		new String[] {"ChannelDescription|LUTName ", " "},   //for lif possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
+		new String[] {"ChannelDescription|LUTName ", " "},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
 		new String[] {"LUT Channel ", " name "},   //the most reliable key for lei
-		new String[] {"Block 2 csLutName", " "} ,           // alternate key for lei for LEI files. not sure if block 2 part is consistent between files
+		new String[] {"Block 2 csLutName", " "} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
 		new String[] {"Channel Name ", " "} //For .zvi
 		
 	};

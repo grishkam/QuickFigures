@@ -23,6 +23,7 @@ package figureFormat;
 import infoStorage.FileBasedMetaWrapper;
 import infoStorage.HashMapBasedMeta;
 import infoStorage.MetaInfoWrapper;
+import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
 import java.io.BufferedWriter;
@@ -124,8 +125,7 @@ public class DirectoryHandler {
 			f.mkdirs();
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				IssueLog.logT(e);
 			}
 	
 	}
@@ -146,8 +146,7 @@ public class DirectoryHandler {
 			}
 			out.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		
 	}

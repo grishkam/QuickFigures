@@ -29,6 +29,7 @@ import applicationAdapters.DisplayedImage;
 import graphicalObjects.FigureDisplayWorksheet;
 import imageDisplayApp.AdaptiveToolbar;
 import imageMenu.CanvasAutoResize;
+import logging.IssueLog;
 import undo.CanvasResizeUndo;
 
 /**An implementation of the  @see CurrentSetInformer interface.
@@ -119,7 +120,7 @@ public class CurrentFigureSet implements CurrentSetInformer {
 		try {
 			getCurrentActiveDisplayGroup().getUndoManager().addEdit(e);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			IssueLog.logT(e1);
 		}
 	}
 	

@@ -29,6 +29,7 @@ import graphicTools.GraphicTool;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
 import icons.TreeIconWrappingToolIcon;
+import logging.IssueLog;
 import undo.UndoAddItem;
 import undo.PathEditUndo;
 
@@ -156,8 +157,7 @@ public class PathGraphicTool extends GraphicTool {
 			try {
 				p.transform().createInverse().transform(newp, newp);
 			} catch (NoninvertibleTransformException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				IssueLog.logT(e);
 			}
 			p.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 

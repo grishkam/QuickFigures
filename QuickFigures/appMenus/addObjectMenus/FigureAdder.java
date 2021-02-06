@@ -246,7 +246,7 @@ public class FigureAdder extends LayoutAdder {
 } 
 
 	}catch (Throwable t) {
-	t.printStackTrace();
+		IssueLog.logT(t);
 	}
 		
 	}
@@ -279,7 +279,7 @@ public class FigureAdder extends LayoutAdder {
 			try{
 				getUsedTemplate().applyTemplateToLayer(g);
 				}catch (Throwable t) {
-						t.printStackTrace();
+					IssueLog.logT(t);
 					}
 	}
 	

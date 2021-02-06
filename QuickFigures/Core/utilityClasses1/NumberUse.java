@@ -98,7 +98,7 @@ public class NumberUse {
 		for (int i: i1) {output.add(i); }
 	}
 	
-	/**Based on the content of a string, returns an array of inegers*/
+	/**Based on the content of a string, returns an array of integers*/
 	public static  int[] intArrayFromString1(String st) {
 		if (st.toLowerCase().contains("x")) { 
 			return intArrayFromFormulaX(st);

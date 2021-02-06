@@ -35,6 +35,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.PathGraphic;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
 import undo.AbstractUndoableEdit2;
@@ -344,7 +345,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		pathGraphic.updatePathFromPoints();
 		
 		} catch (Throwable t) {
-			t.printStackTrace();
+			IssueLog.logT(t);
 		}
 	}
 

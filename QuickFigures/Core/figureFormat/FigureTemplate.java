@@ -108,7 +108,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 		}
 		
 			catch (Throwable t) {
-			t.printStackTrace();
+				IssueLog.logT(t);
 			return null;
 		}
 	}
@@ -300,7 +300,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 			
 			pik.setToStandardFor(chan);
 		} catch (Throwable t) {
-			t.printStackTrace();
+			IssueLog.logT(t);
 		}
 		
 	}

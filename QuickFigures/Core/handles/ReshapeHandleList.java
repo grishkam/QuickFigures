@@ -45,6 +45,7 @@ import locatedObject.RectangleEdges;
 import locatedObject.RotatesFully;
 import locatedObject.Scales;
 import locatedObject.ScalesFully;
+import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import undo.UndoScalingAndRotation;
@@ -450,7 +451,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 					((RotatesFully) ob).rotateAbout(centerOfRotation, angle);
 					undo.establishFinalState();
 					edit.addEditToList(undo);
-				} catch (Throwable t) {t.printStackTrace();}
+				} catch (Throwable t) {IssueLog.logT(t);}
 			}
 			return edit;
 		}

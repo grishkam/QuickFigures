@@ -91,7 +91,7 @@ public abstract class BasicMetaInfoWrapper implements MetaInfoWrapper, Serializa
 		if (output==null) return null;
 	    return BasicMetaDataHandler.stringArrayFromString(output);
 	}
-	/**returns the entry as an int array*/
+	/**returns the entry as an int array, may sort the array*/
 	public  int[] parseMetadataIntArrayValue(String b ) {
 		String output= getEntryAsString( b) ;
 		if (output==null) return null;
