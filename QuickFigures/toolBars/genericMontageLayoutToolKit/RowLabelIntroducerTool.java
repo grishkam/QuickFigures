@@ -199,7 +199,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 			return;
 		}
 		
-		ImageWorkSheet wp = getCurrentLayout().getEditedWorksheet();
+		ImageWorkSheet wp = getCurrentLayout().getVirtualWorksheet();
 		
 		
 		item=getDesiredGraphic(markerRoi().getBounds(), wp);
@@ -283,7 +283,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource()==showDialog) {
-				ImageWorkSheet wp = getCurrentLayout().getEditedWorksheet();
+				ImageWorkSheet wp = getCurrentLayout().getVirtualWorksheet();
 				Shape bb = getCurrentLayout().getSelectedSpace(1, LayoutSpaces.ALL_MONTAGE_SPACE);
 				rois = new BasicObjectListHandler().getOverlapOverlaypingItems(bb.getBounds(), wp);
 				
@@ -317,7 +317,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 	public void mouseMoved() {
 		lastEdit=null;
 		removeMarkerRoi();
-		findClickedLayout();
+		findClickedLayout(false);
 		if (markerRoi()==null) return;
 		getImageClicked().getOverlaySelectionManagger().setSelection(markerRoi(), 0);
 		

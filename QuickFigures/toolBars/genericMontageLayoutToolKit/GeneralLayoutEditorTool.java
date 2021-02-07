@@ -24,10 +24,11 @@ import externalToolBar.DragAndDropHandler;
 import genericTools.BasicToolBit;
 import genericTools.NormalToolDragHandler;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import imageDisplayApp.OverlayObjectManager;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutEditorDialogs;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
@@ -56,18 +57,18 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	boolean removalPermissive=false;
 	
 	boolean resetClickPointOnDrag=true;//true if the stored click location should be replaced by the drag location after each drag
-	GenericMontageEditor editor=new GenericMontageEditor();
+	BasicLayoutEditor editor=new BasicLayoutEditor();
 	
 	private Cursor currentCursor;
 	private BasicLayout editingLayout;
 	private UndoLayoutEdit currentUndo;
 	
 	/**returns the layout editor for this tool*/
-	public GenericMontageEditor getLayoutEditor() {
-		if ( editor==null) editor=new GenericMontageEditor();
+	public BasicLayoutEditor getLayoutEditor() {
+		if ( editor==null) editor=new BasicLayoutEditor();
 		return  editor;
 	}
-	public void setEditor(GenericMontageEditor editor2) {
+	public void setEditor(BasicLayoutEditor editor2) {
 		editor=editor2;
 		
 	}
@@ -79,25 +80,30 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		if (layoutGraphic==null) {
 			return null;
 			}
-		layoutGraphic.generateStandardImageWrapper();
+		layoutGraphic.generateCurrentImageWrapper();
 		
-		if (removalPermissive) {layoutGraphic.generateRemovalPermissiveImageWrapper();}
+		if (removalPermissive) 
+			{layoutGraphic.generateRemovalPermissiveImageWrapper();}
 		else {
-				ImageWorkSheet wrapper = layoutGraphic.getPanelLayout().getEditedWorksheet();
+			ImageWorkSheet wrapper = layoutGraphic.getPanelLayout().getVirtualWorksheet();
 			ArrayList<LocatedObject2D> excluded = layoutGraphic.getEditor().getObjectHandler().getExcludedRois(layoutGraphic.getPanelLayout().getBoundry().getBounds(), wrapper);
 			for(LocatedObject2D e: excluded) {
 			wrapper.takeFromImage(e);
 			} 
+			
 		}
 		this.setEditor(layoutGraphic.getEditor());
+		
 		return layoutGraphic.getPanelLayout();
 		
 	}
 	
+
+	
 	
 /**returns true if a layuout area has been clicked on */
 	protected boolean hasALayoutBeenClicked() {
-		findClickedLayout();
+		findClickedLayout(false);
 		if (layoutGraphic!=null && layoutGraphic.getBounds().contains(getClickedCordinateX(), getClickedCordinateY())) {
 			BasicLayout lay = getCurrentLayout();
 			
@@ -108,7 +114,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	}
 	
 	public void mousePressed() {
-		findClickedLayout();
+		findClickedLayout(true);
 		
 		if (!hasALayoutBeenClicked()) {
 		
@@ -125,6 +131,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		} catch (Throwable e) {
 			IssueLog.logT(e);
 		}
+		
 	}
 	
 	
@@ -135,7 +142,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	@Override
 	public void mouseMoved() {
-		findClickedLayout();
+		findClickedLayout(false);
 		getImageClicked().getOverlaySelectionManagger().setSelection(markerRoi(), 0);
 	}
 	
@@ -145,8 +152,9 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	}
 	
 	/**Identifies the layout at the clickpoint and sets it as the current layout. 
+	 * @param press 
 	  */
-	public void findClickedLayout() {
+	public void findClickedLayout(boolean press) {
 		ArrayList<LocatedObject2D> list = super.getObjecthandler().getAllClickedRoi(getImageClicked(), this.getClickedCordinateX(), this.getClickedCordinateY(), DefaultLayoutGraphic.class);
 		ArraySorter.removeHiddenItemsFrom(list);//removes hidden layouts
 		
@@ -156,6 +164,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 			//IssueLog.log("clicked on layout "+ layoutGraphic);
 			editingLayout=setUpCurrentLayout();
 			//IssueLog.log("clicked on layout "+ editingLayout);
+			if(press)
+				layoutGraphic.onhandlePress();
 		} else {
 			layoutGraphic=null;
 			editingLayout=null;
@@ -167,6 +177,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 	
 	@Override
 	public void mouseDragged() {
+		setUpCurrentLayout();
+		
 		
 		if (getCurrentLayout()!=null) getCurrentLayout().resetPtsPanels();
 		
@@ -200,6 +212,7 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 		
 		getImageClicked().updateDisplay();
 		
+		
 }
 
 
@@ -227,7 +240,8 @@ public class GeneralLayoutEditorTool extends BasicToolBit implements LayoutSpace
 
 	/**Shows a dialog window if user clicks twice, may be overriden*/
 	protected void doubleClickDialog() {
-			new LayoutEditorDialogs().showDialogBasedOnLocation( getLayoutEditor(), getCurrentLayout(), getClickedCordinateX(), getClickedCordinateY());
+		layoutGraphic.generateStandardImageWrapper();
+			new LayoutEditorDialogs().showDialogBasedOnLocation( getLayoutEditor(), getCurrentLayout(), new Point(getClickedCordinateX(), getClickedCordinateY()));
 		getImageClicked().updateDisplay();
 	}
 	

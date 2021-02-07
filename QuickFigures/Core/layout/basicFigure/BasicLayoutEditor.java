@@ -47,7 +47,7 @@ import utilityClasses1.NumberUse;
 /**This is a form of montage editor that I created as a general class to be adaptable to other 
  Methods in this class Both alter the layout and move the contents appropriately
  */
-public class GenericMontageEditor implements LayoutSpaces {
+public class BasicLayoutEditor implements LayoutSpaces {
 	
 	
 	
@@ -58,6 +58,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 	   public PanelContentExtract lastCol;	
 		public PanelContentExtract lastRow;
 		public PanelContentExtract lastPanel;
+		private ImageWorkSheet virtualWorksheet;
 	
 	public BasicObjectListHandler getObjectHandler() {
 		return objecthandler;
@@ -66,9 +67,9 @@ public class GenericMontageEditor implements LayoutSpaces {
 	
 	/**Alters the canvas size of the image while preserving the positions of the objects relative to the pixels of the image*/
 	public void resetMontageImageSize(BasicLayout ml,  double xOff, double yOff) {
-		if (ml==null||ml.getEditedWorksheet()==null) return;
-		ml.getEditedWorksheet().worksheetResize( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
-		getObjectHandler().shiftAll(ml.getEditedWorksheet(), xOff, yOff);
+		if (ml==null||ml.getVirtualWorksheet()==null) return;
+		ml.getVirtualWorksheet().worksheetResize( (int)ml.layoutWidth, (int)ml.layoutHeight, (int)xOff, (int) yOff);
+		getObjectHandler().shiftAll(ml.getVirtualWorksheet(), xOff, yOff);
 		this.finishEdit(ml);
 			}
 
@@ -78,7 +79,10 @@ public class GenericMontageEditor implements LayoutSpaces {
 		ArrayList <PanelContentExtract> output=new ArrayList <PanelContentExtract>();
 		ml.resetPtsPanels();
 		Rectangle2D[] panels = ml.getPanels();
-		for (Rectangle2D panel: panels) {output.add(cutPanelContents(ml.getEditedWorksheet(), panel) );}
+		virtualWorksheet = ml.getVirtualWorksheet();
+		for (Rectangle2D panel: panels) {
+			output.add(cutPanelContents(virtualWorksheet, panel) );}
+		
 		return output;	
 	}
 	
@@ -86,7 +90,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 	public  void pasteStack(PanelLayout ml, ArrayList <PanelContentExtract> panels) {
 		Rectangle2D[] rpanels = ml.getPanels();
 		for (int i=0; i<rpanels.length&&i<panels.size(); i++) {
-			pastePanelContents(ml.getEditedWorksheet(), rpanels[i], panels.get(i));
+			pastePanelContents(virtualWorksheet, rpanels[i], panels.get(i));
 		}
 	}
 	
@@ -197,7 +201,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 		    area.add(new Area(ml.allPanelArea()));
 		   
 		  //Rectangle area = getRecomendedContentArea(ml);//retrieves panel areas
-		  ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(area.getBounds(), ml.getEditedWorksheet());
+		  ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(area.getBounds(), ml.getVirtualWorksheet());
 		  Area area2=new Area(new Area(ml.allPanelArea()));
 		 	
 		  for(LocatedObject2D roi:rois) {
@@ -436,7 +440,9 @@ public class GenericMontageEditor implements LayoutSpaces {
 		}
 		/**Changes the vertical border between panels*/
 		public void setVerticalBorder(BasicLayout ml, double border) {
-			expandBorderY2(ml, border-ml.theBorderWidthBottomTop);
+			double t = border-ml.theBorderWidthBottomTop;
+			if(t!=0)
+				expandBorderY2(ml, t);
 		}
 		
 		
@@ -447,6 +453,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 		public void expandBorderX2(BasicLayout ml, double t) {
 			GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.BORDER_EDIT_H, t, 0 );
 			   notifyListenersOfFutureChange(ml, event);
+			 
 			ArrayList<PanelContentExtract> stack=cutStack(ml.makeAltered(COLS));
 			
 			ml.setHorizontalBorder(ml.theBorderWidthLeftRight+t);
@@ -455,12 +462,15 @@ public class GenericMontageEditor implements LayoutSpaces {
 			ml.resetPtsPanels() ;
 			
 			pasteStack(ml.makeAltered(COLS), stack);
+		
 			finishEdit(ml);
 			notifyListenersOfCompleteChange(ml, event);
 		}
 		/**Changes the horizontal border between panels*/
 		public void setHorizontalBorder(BasicLayout ml, double border) {
-			expandBorderX2(ml, border-ml.theBorderWidthLeftRight);
+			double t = border-ml.theBorderWidthLeftRight;
+			if(t!=0)
+			expandBorderX2(ml, t);
 		}
 		
 		/**called after the end of each layout edit. the array of points and rectangles must
@@ -555,7 +565,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 
 		/**Changes the snap position of objects to reflect a row column flip*/
 		protected void flipSnappings(BasicLayout ml) {
-			ArrayList<LocatedObject2D> objects = ml.getEditedWorksheet().getLocatedObjects();
+			ArrayList<LocatedObject2D> objects = ml.getVirtualWorksheet().getLocatedObjects();
 			
 			ArrayList<AttachmentPosition> bahs = AttachmentPosition.findAllPositions(objects);
 			
@@ -636,7 +646,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 					resetMontageImageSize(ml, 0, 0);
 					}
 				
-				if (ml.getEditedWorksheet()!=null) {
+				if (ml.getVirtualWorksheet()!=null) {
 					pasteStack( ml.makeAltered(ROWS), stack);
 					ml.afterEditDone();
 					}
@@ -678,7 +688,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 				if (increase*ml.nRows()<ml.specialSpaceWidthBottom) {ml.setSpecialBottomSpace(-increase*ml.nRows()+ml.specialSpaceWidthBottom);}
 				else resetMontageImageSize(ml, 0, 0);
 				
-				if (ml.getEditedWorksheet()!=null) {
+				if (ml.getVirtualWorksheet()!=null) {
 					pasteStack( ml.makeAltered(ROWS), stack);
 					ml.afterEditDone();
 					}
@@ -858,7 +868,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 		   public  void movePanelOffset(BasicLayout ml,  int increasex, int increasey) {
 			   ArrayList<PanelContentExtract> stack= cutStack(ml);
 			   
-			   getObjectHandler().liftPanelObjects(ml, ml.getEditedWorksheet());
+			   getObjectHandler().liftPanelObjects(ml, ml.getVirtualWorksheet());
 			
 				if (!(Math.abs(ml.xshift+increasex)>ml.theBorderWidthLeftRight/2
 					||  Math.abs(ml.yshift+increasey)>ml.theBorderWidthBottomTop/2	) && ml.type%10==BasicLayout.Center_Of_Border)
@@ -1186,7 +1196,7 @@ public class GenericMontageEditor implements LayoutSpaces {
 					
 					  GridLayoutEditEvent event = new GridLayoutEditEvent(ml,GridLayoutEditEvent.PANEL_SWAP, index1,  index2);
 					   notifyListenersOfFutureChange(ml, event);
-					try{swapMontagePanels( ml.getEditedWorksheet(),  ml.getPanel(index1),  ml.getPanel(index2));} catch (Exception e) {IssueLog.logT(e);}
+					try{swapMontagePanels( ml.getVirtualWorksheet(),  ml.getPanel(index1),  ml.getPanel(index2));} catch (Exception e) {IssueLog.logT(e);}
 					 this.notifyListenersOfCompleteChange(ml, event);	
 				}
 				

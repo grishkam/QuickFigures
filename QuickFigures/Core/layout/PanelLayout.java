@@ -84,12 +84,12 @@ public interface PanelLayout {
 	public void nudgePanelDimensions(int panelnum, double dx, double dy);
 	
 	/**the virtual worksheet*/
-	public ImageWorkSheet getEditedWorksheet() ;
+	public ImageWorkSheet getVirtualWorksheet() ;
 
 	/**The total number of panels*/
 	public int nPanels();
 
 	/**Sets the virtual worksheet used for edits*/
-	public void setEditedWorkSheet(ImageWorkSheet genericImage);
+	public void setVirtualWorkSheet(ImageWorkSheet genericImage);
 	 
 }

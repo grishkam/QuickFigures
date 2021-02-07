@@ -25,6 +25,8 @@ import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
 import layout.PanelLayout;
 import layout.RetrievableOption;
+import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -32,7 +34,11 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWorkSheet;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 /**This is the class that keeps the layout of panels. 
@@ -1043,7 +1049,11 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			  public BasicLayout duplicate() {
 					BasicLayout out = new BasicLayout();
 					out.matchLayoutSettings(this);
-					out.setEditedWorkSheet(getEditedWorksheet());
+					try {
+						out.image=image;
+					} catch (Exception e) {
+						
+					}
 					return out;
 				}
 
@@ -1303,11 +1313,14 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			}
 			
 			/**Sets the worksheet being edited*/
-			public ImageWorkSheet getEditedWorksheet() {
+			public ImageWorkSheet getVirtualWorksheet() {
 				return image;
 			}
-			public void setEditedWorkSheet(ImageWorkSheet wrapper) {
+			/**sets a virtual worksheet that the layout editor class can safely alter without tampering with the 
+			 * layer structure or content of the parent layer for this layout*/
+			public void setVirtualWorkSheet(ImageWorkSheet wrapper) {
 				this.image = wrapper;
+			
 			}
 			
 			/**Searches the list of layout listeneras to determine if one
@@ -1455,9 +1468,24 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			}
 			
 			/**returns the editor class that is used to change these layouts*/
-			public GenericMontageEditor getEditor() { 
-		    	return new GenericMontageEditor(); 
+			public BasicLayoutEditor getEditor() { 
+		    	return new BasicLayoutEditor(); 
 		    	};
 			
 			 
+		    	/**
+		    	 included during testing to warn programmer of a particular issue
+		    	 */
+		    	public void checkWorksheetValidity(String st) {
+		    		/**
+		    		ArrayList<LocatedObject2D> list = getVirtualWorksheet().getLocatedObjects();
+		    		for(LocatedObject2D i : list) {
+		    			if (i instanceof PanelLayoutGraphic) {
+		    				IssueLog.log("checking after "+st);
+		    				IssueLog.log("virtual contains i "+i+" in list of "+list.size());
+		    				IssueLog.log("something went wrong");
+		    				
+		    			}
+		    		}*/
+		    	}
 }

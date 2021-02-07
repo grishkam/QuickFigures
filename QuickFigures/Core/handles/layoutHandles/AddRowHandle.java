@@ -36,7 +36,7 @@ import java.awt.geom.Rectangle2D;
 
 import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
@@ -123,7 +123,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		BasicLayout bm = layout.getPanelLayout();
-		GenericMontageEditor edit = layout.getEditor();
+		BasicLayoutEditor edit = layout.getEditor();
 		int[] rowcol = RowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), bm);
 		
 		if (rowcol[0]+bm.nRows()>=1 &&type==ROWS)edit.addRows(bm, rowcol[0]);

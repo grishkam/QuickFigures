@@ -47,7 +47,7 @@ public class UndoLayoutEdit extends UndoMoveItems {
 	}
 	
 	public UndoLayoutEdit(BasicLayout panelLayout) {
-		super(panelLayout.getEditedWorksheet().getLocatedObjects());
+		super(panelLayout.getVirtualWorksheet().getLocatedObjects());
 		 layout= panelLayout;
 		 oldlayout=layout.duplicate();
 		 

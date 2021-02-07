@@ -27,7 +27,7 @@ import java.awt.Shape;
 import imageDisplayApp.OverlayObjectManager;
 import layout.PanelLayout;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutEditorDialogs;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
@@ -69,18 +69,18 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 	}
 	
 	/**based on two points, determines which targeted areas are at those points and swaps the locations of the objects inside of them*/
-	 private void swapPanels(BasicLayout ml,  GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2, int type){
+	 private void swapPanels(BasicLayout ml,  BasicLayoutEditor me, int xc1, int yc1, int xc2, int yc2, int type){
 		if (ml==null) {IssueLog.log("one is attempting to swap panels in a null layout"); return;}
 		 Rectangle r1=(ml.getSelectedSpace(xc1, yc1, targetType)).getBounds();
 		 Rectangle r2=(ml.getSelectedSpace( xc2, yc2, targetType)).getBounds();
-		me.swapMontagePanels(ml.getEditedWorksheet(), r1, r2);
+		me.swapMontagePanels(ml.getVirtualWorksheet(), r1, r2);
 	}
 
 	
 
 		
 	 	/**moves the layout panel at the first location to the second*/
-		private void moveLayoutPanel(BasicLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2, int type){
+		private void moveLayoutPanel(BasicLayout basicMontageLayout, BasicLayoutEditor me, int xc1, int yc1, int xc2, int yc2, int type){
 			checkExpansion(basicMontageLayout, me, xc1, yc1, xc2, yc2);
 			basicMontageLayout=basicMontageLayout.makeAltered(type);
 			me.moveMontagePanels(basicMontageLayout, basicMontageLayout.getPanelIndex(xc1, yc1), basicMontageLayout.getPanelIndex(xc2, yc2), type);
@@ -88,7 +88,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 		}
 		
 		/**determines whether than panel movement demands a layout edit*/
-		private void checkExpansion(BasicLayout basicMontageLayout, GenericMontageEditor me, int xc1, int yc1, int xc2, int yc2) {
+		private void checkExpansion(BasicLayout basicMontageLayout, BasicLayoutEditor me, int xc1, int yc1, int xc2, int yc2) {
 			try{
 			if (yc1>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom || yc2>basicMontageLayout.layoutHeight-basicMontageLayout.specialSpaceWidthBottom ) {getLayoutEditor().addRows(basicMontageLayout, 1); return;}
 			if (xc1>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight || xc2>basicMontageLayout.layoutWidth-basicMontageLayout.specialSpaceWidthRight) {getLayoutEditor().addCols(basicMontageLayout, 1); return;}
@@ -104,7 +104,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 		
 
 		public void mousePressed() {
-			findClickedLayout();
+			findClickedLayout(true);
 			
 			if (!hasALayoutBeenClicked()) {getSelManOfClcikedImage().removeObjectSelections();return;}
 		

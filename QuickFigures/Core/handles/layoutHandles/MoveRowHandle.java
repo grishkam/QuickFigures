@@ -27,7 +27,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import handles.SmartHandle;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
 import undo.UndoLayoutEdit;
 
@@ -171,7 +171,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		
 	}
 
-	private GenericMontageEditor getEditor() {
+	private BasicLayoutEditor getEditor() {
 		this.layout.generateCurrentImageWrapper();
 		return layout.getEditor();
 	}

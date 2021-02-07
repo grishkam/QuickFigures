@@ -32,9 +32,11 @@ import java.util.ArrayList;
 
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 
 /**a  class for storing the image and the objects within a panel.
   It is used mostly within another class and was originally written 
@@ -130,6 +132,7 @@ public class PanelContentExtract {
 		/**setter method for the objects in this panel*/
 		public void setObjectList(ArrayList<LocatedObject2D> obs) {
 			this.objectList = obs;
+		
 		}
 	}
 

@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 import layout.RetrievableOption;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.GridLayout;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
@@ -183,7 +183,7 @@ public class PanelSetter  implements Serializable{
 	/**edits the layout so that it fits the given panel list*/
 	public void editLayoutToFitPanels(BasicLayout ml,
 			PanelList workingStack, int editMontageToFitPanels) {
-			GenericMontageEditor me =new GenericMontageEditor();
+			BasicLayoutEditor me =new BasicLayoutEditor();
 			
 			/**resizes the panels to fit if it is in flow insertion mode*/
 		if (insertiontype==DEFAULT_INSERTION&&(ml.getPanelHeightOfRow(0)!= workingStack.getHeight()|| ml.getPanelWidthOfColumn(0)!= workingStack.getWidth()) &&  RESIZE_LAYOUT_FIT_FIRST_PANEL==editMontageToFitPanels){
@@ -228,7 +228,7 @@ public class PanelSetter  implements Serializable{
 	/**when given a panel list element with a grid index (row r, column c) mapped,
 	   adds rows and columns to make sure the layout contains a place with the given index*/
 	void addRowColToFit(BasicLayout ml, PanelListElement p) {
-		GenericMontageEditor editor = new GenericMontageEditor();
+		BasicLayoutEditor editor = new BasicLayoutEditor();
 		if (p.getDisplayGridIndex().getColindex()>ml.nColumns()) {editor.setColNumber(ml, p.getDisplayGridIndex().getColindex());
 		}
 		if (p.getDisplayGridIndex().getRowindex()>ml.nRows()){editor.setRowNumber(ml, p.getDisplayGridIndex().getRowindex());

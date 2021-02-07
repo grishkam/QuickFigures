@@ -107,7 +107,5 @@ public interface GraphicLayer extends ItemLayer<ZoomableGraphic>, Named, KnowsPa
 	/**returns the layer at the top of the hierarchy*/
 	public GraphicLayer getTopLevelParentLayer();
 	
-	
-	
 
 }

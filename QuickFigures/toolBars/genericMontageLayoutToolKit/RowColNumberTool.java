@@ -59,7 +59,7 @@ public class RowColNumberTool extends GeneralLayoutEditorTool {
 	
 	/**sets up the fields in this class*/
 	public void mousePressed() {
-		findClickedLayout();
+		findClickedLayout(true);
 		extrapanel=null;
 		if (this.hasALayoutBeenClicked() ) {
 			

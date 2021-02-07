@@ -30,10 +30,11 @@ import javax.swing.JMenuItem;
 import javax.swing.undo.UndoManager;
 
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.IconSet;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutEditorDialogs;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
@@ -51,12 +52,18 @@ public class LayoutEditCommandMenu extends ArrayList<MenuItem> implements
 	
 	
 	private BasicLayout maintLayout;
-	private GenericMontageEditor edit=new GenericMontageEditor();
 	
 	private UndoManager undoManager;
-
+/*
 	public LayoutEditCommandMenu(BasicLayout l) {
 		setMainLayout(l);
+	}*/
+	
+	public LayoutEditCommandMenu(DefaultLayoutGraphic l) {
+		
+		l.generateStandardImageWrapper();
+		setMainLayout(l.getPanelLayout());
+		
 	}
 	
 	/**
@@ -236,7 +243,7 @@ public class LayoutEditCommandMenu extends ArrayList<MenuItem> implements
 		if (st==invertLayout.getActionCommand()) {
 			
 			 ArrayList<UndoAttachmentPositionChange> arraySnapUndo =new ArrayList<UndoAttachmentPositionChange>();
-				for(LocatedObject2D loc: getMainLayout().getEditedWorksheet().getLocatedObjects()) {
+				for(LocatedObject2D loc: getMainLayout().getVirtualWorksheet().getLocatedObjects()) {
 					if (loc.getAttachmentPosition()!=null)
 					arraySnapUndo.add(new UndoAttachmentPositionChange(loc));
 				}
@@ -254,12 +261,12 @@ public class LayoutEditCommandMenu extends ArrayList<MenuItem> implements
 		addUndo(editUndo);
 		
 		CurrentFigureSet.updateActiveDisplayGroup();
-		getMainLayout().getEditedWorksheet().updateDisplay();
+		getMainLayout().getVirtualWorksheet().updateDisplay();
 		
 		}
 
 	public void handlePanelSizeFit() {
-		getMainLayout().getEditor().placePanelsInCorners( getMainLayout(),new ArraySorter<LocatedObject2D>().getThoseOfClass(getMainLayout().getEditedWorksheet().getLocatedObjects(), ImagePanelGraphic.class));
+		getMainLayout().getEditor().placePanelsInCorners( getMainLayout(),new ArraySorter<LocatedObject2D>().getThoseOfClass(getMainLayout().getVirtualWorksheet().getLocatedObjects(), ImagePanelGraphic.class));
 
 		getMainLayout().getEditor().alterPanelWidthAndHeightToFitContents(getMainLayout());
 	}
@@ -271,8 +278,8 @@ public class LayoutEditCommandMenu extends ArrayList<MenuItem> implements
 			getUndoManager().addEdit(editUndo);
 	}
 
-	private GenericMontageEditor getEditor() {
-		return edit;
+	private BasicLayoutEditor getEditor() {
+		return getMainLayout().getEditor();
 	}
 
 

@@ -61,7 +61,7 @@ import layout.PanelContentExtract;
 import layout.PanelLayout;
 import layout.PanelLayoutContainer;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
@@ -70,6 +70,7 @@ import locatedObject.AttachedItemList;
 import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdges;
 import locatedObject.TakesAttachedItems;
+import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.PanelLayoutDisplayOptions;
 import menuUtil.HasUniquePopupMenu;
@@ -116,7 +117,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	private int strokeWidth=2;//how thick the rectangles for the panels are drawn
 	
 	
-	protected transient GenericMontageEditor editor;
+	protected transient BasicLayoutEditor editor;
 
 	
 	public PanelLayoutGraphic() {}
@@ -515,7 +516,9 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		this.mapPanelLocationsOfLockedItems();
 	}
 	
+	/**called when the handle is pressed but before edits are done*/
 	public void onhandlePress() {
+		/**not entirely sure why the layout edits dont work without this step*/
 		this.generateCurrentImageWrapper();
 		 contentstack = this.getEditor().cutStack(getPanelLayout());
 		 this.getEditor().pasteStack(getPanelLayout(),  contentstack);
@@ -807,31 +810,48 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 	
 
-	/**generates an image Wrapper for the layout graphic
+	/**generates a virtual image for the layout graphic
 	  This is used in the implementation of montage editor tools
 	 * @return */
 	public ImageWorkSheet generateStandardImageWrapper() {
-	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
-	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
-		GenericImage wrap1 = new GenericImage(new ArrayObjectContainer(parent2));
-		this.getPanelLayout().setEditedWorkSheet(wrap1);
-		this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
-		return wrap1;
+		ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
+		if (getParentLayer()!=null) 
+				{parent2=this.getParentLayer().getAllGraphics();
+				}
+			parent2.remove(this);
+			ArrayObjectContainer contains = new ArrayObjectContainer(parent2);
+			
+			GenericImage wrap1 = new GenericImage(contains);
+			this.getPanelLayout().setVirtualWorkSheet(wrap1);
+			this.getPanelLayout().getVirtualWorksheet().takeFromImage(this);
+			if (this.getPanelLayout().getVirtualWorksheet().getLocatedObjects().contains(this)) {
+				IssueLog.log("somthing went wrong");
+			}
+			for(Object o: contains.getLocatedObjects()) {
+				if(o instanceof PanelLayoutGraphic) {
+					IssueLog.log("problem "+"layouts should not be in this list");
+				}
+			}
+			return wrap1;
 		
 	}
 	
-	public ImageWorkSheet generateEditNonpermissiveWrapper() {
-			GenericImage genericImage = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
-			this.getPanelLayout().setEditedWorkSheet(genericImage);
-			this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
+	/**generates a virtual worksheet with no objects*/
+	private ImageWorkSheet generateEditNonpermissiveWrapper() {
+			ArrayObjectContainer cotnainer = new ArrayObjectContainer(new ArrayList<ZoomableGraphic>());
+			GenericImage genericImage = new GenericImage(cotnainer);
+			this.getPanelLayout().setVirtualWorkSheet(genericImage);
+			this.getPanelLayout().getVirtualWorksheet().takeFromImage(this);
 			return genericImage;
 		}
 	
+	/**generates a virtual worksheet for the row/col grabber tools*/
 	public ImageWorkSheet generateRemovalPermissiveImageWrapper() {
+		IssueLog.log("may remove objects");
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage genericImage = new GenericImage(getParentLayerAsContainer());
-				this.getPanelLayout().setEditedWorkSheet(genericImage);
+				this.getPanelLayout().setVirtualWorkSheet(genericImage);
 				if (!this.getEditor().getObjectHandler().getNeverRemove().contains(this))
 				this.getEditor().getObjectHandler().getNeverRemove().add(this);
 				return genericImage;
@@ -866,8 +886,8 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 	
 	
-	public GenericMontageEditor getEditor() {
-		if (editor==null) editor= new GenericMontageEditor ();
+	public BasicLayoutEditor getEditor() {
+		if (editor==null) editor= new BasicLayoutEditor ();
 		return editor;
 	}
 	

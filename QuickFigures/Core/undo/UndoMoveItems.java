@@ -59,7 +59,7 @@ public class UndoMoveItems extends AbstractUndoableEdit implements HasAnimation 
 		for(LocatedObject2D l: list) {
 			if (l instanceof PanelLayoutGraphic) {
 				((PanelLayoutGraphic) l).generateCurrentImageWrapper();
-				ArrayList<LocatedObject2D> addons = ((PanelLayoutGraphic) l).getPanelLayout().getEditedWorksheet().getLocatedObjects();
+				ArrayList<LocatedObject2D> addons = ((PanelLayoutGraphic) l).getPanelLayout().getVirtualWorksheet().getLocatedObjects();
 				this.list.addAll(addons);
 			}
 		}

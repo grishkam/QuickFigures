@@ -100,11 +100,11 @@ public abstract class FundamentalPanelLayout implements PanelLayout, Serializabl
 		return p;
 	}
 	@Override
-	public ImageWorkSheet getEditedWorksheet() {
+	public ImageWorkSheet getVirtualWorksheet() {
 		return wrapper;
 	}
 
-	public void setEditedWorkSheet(ImageWorkSheet wrapper) {
+	public void setVirtualWorkSheet(ImageWorkSheet wrapper) {
 		this.wrapper = wrapper;
 	}
 	

@@ -89,7 +89,7 @@ public class AddLabelHandle extends MoveRowHandle {
 
 	private void hideIfNotNeeded(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index).getBounds();
-		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getEditedWorksheet());
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getVirtualWorksheet());
 		
 		ArrayList<BasicGraphicalObject> array = pick.getDesiredItemsAsGraphicals(rois);
 		
@@ -141,7 +141,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	private void setUpMatchingLocation(TextGraphic label) {
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
 		if (type==ROWS) space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
-		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getEditedWorksheet());
+		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getVirtualWorksheet());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
 		if(array.size()>0) label.setAttachmentPosition(array.get(0).getAttachmentPosition());
 	

@@ -33,7 +33,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import handles.SmartHandleList;
 import layout.BasicObjectListHandler.LocatedObjectFilter;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
 import menuUtil.SmartPopupJMenu;
@@ -73,9 +73,9 @@ public class PlotLayout extends DefaultLayoutGraphic implements LayoutSpaces{
 	}*/
 	
 	
-	public GenericMontageEditor getEditor() {
+	public BasicLayoutEditor getEditor() {
 		if (editor==null){
-			editor= new GenericMontageEditor ();
+			editor= new BasicLayoutEditor ();
 			editor.setQualificationsForPanelObject(new PlotLayoutPanelItentifier());
 		}
 		

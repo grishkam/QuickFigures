@@ -34,7 +34,7 @@ import handles.SmartHandle;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
 import undo.CanvasResizeUndo;
 import undo.CombinedEdit;
@@ -106,7 +106,7 @@ public class RepackRowColoumnHandle extends SmartHandle implements LayoutSpaces{
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		BasicLayout current = layout.getPanelLayout();
-		GenericMontageEditor edit = layout.getEditor();
+		BasicLayoutEditor edit = layout.getEditor();
 		int[] proposedRowColChange = RowColNumberTool.findAddedRowsCols((int)p2.getX(), (int)p2.getY(), current);
 		
 		int r=current.nRows();

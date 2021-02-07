@@ -42,7 +42,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.GridLayoutEditEvent;
 import layout.basicFigure.GridLayoutEditListener;
 import layout.basicFigure.LayoutSpaces;
@@ -304,7 +304,7 @@ public void addTitleLabel() {
 	areaRect.addLockedItem(titleLabel);
 	areaRect.snapLockedItems();
 	titleLabel.putIntoAnchorPosition();
-	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), titleLabel.getBounds());
+	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), titleLabel.getBounds());
 	
 }
 
@@ -322,7 +322,7 @@ public void addYAxiLabel() {
 	areaRect.snapLockedItems();
 	yLabel.putIntoAnchorPosition();
 	
-	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
+	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 
 }
 
@@ -341,7 +341,7 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	yLabel2.getAttachmentPosition().setHorizontalOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel2.putIntoAnchorPosition();
-	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
+	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
 return new UndoAddItem(this, yLabel2);
 }
 
@@ -358,7 +358,7 @@ public void addXAxiLabel(int offset) {
 	areaRect.snapLockedItems();
 	xLabel.putIntoAnchorPosition();
 	
-	new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
+	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
 	
 }
 
@@ -982,8 +982,8 @@ private CombinedEdit addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
 			undo.addEditToList(
 					new UndoLayoutEdit(plotLayout)
 					);
-			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
-			new GenericMontageEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), aaa.getLegandShape().getBounds());
+			new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
+			new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), aaa.getLegandShape().getBounds());
 	 giveConsistentStanppingToLabelGroup(getSeriesLabels());	
 	 undo.establishFinalState();
 	 return undo;

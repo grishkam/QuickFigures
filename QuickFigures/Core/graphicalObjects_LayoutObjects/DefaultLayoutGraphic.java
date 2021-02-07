@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
+import applicationAdapters.ImageWorkSheet;
 import genericMontageUIKitMenuItems.LayoutEditCommandMenu;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -249,13 +250,19 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		
 		if (clickcount<2) return;
 		LayoutEditorDialogs med = new  LayoutEditorDialogs();
-		generateStandardImageWrapper();
+		this.generateCurrentImageWrapper();
+		
 		int handleType = handlenum/handleIDFactor;
 		UndoLayoutEdit undo = new UndoLayoutEdit(this);
+		 ImageWorkSheet virtualWorksheet = this.getPanelLayout().getVirtualWorksheet();
+		 
 		
 		 if (handlenum==-1) {
-				med.showDialogBasedOnLocation(getEditor(), thelayout, me.getCoordinatePoint());
 			
+			
+				med.showDialogBasedOnLocation(getEditor(), getPanelLayout(), me.getCoordinatePoint());
+				
+						
 		 }
 		 else
 		if (handleType==COLUMN_WIDTH_HANDLE)
@@ -272,6 +279,10 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		 
 		undo.establishFinalLocations();
 		me.getAsDisplay().getUndoManager().addEdit(undo);
+		
+		
+		 
+		 virtualWorksheet = this.getPanelLayout().getVirtualWorksheet();
 	}
 	
 	
@@ -704,7 +715,7 @@ public void resizeLayoutToFitContents() {
 		this.generateCurrentImageWrapper();
 		this.getEditor().roundUpAll(getPanelLayout());
 		
-		new LayoutEditCommandMenu(this.getPanelLayout()).handlePanelSizeFit();
+		new LayoutEditCommandMenu(this).handlePanelSizeFit();
 		
 		return new String[] {"Layout panels were resized after scaling","Layout measurements are rounded up after scaling"};
 		/**this.getEditor().roundUpAll(getPanelLayout());

@@ -38,6 +38,8 @@ public class IssueLog {
 	static boolean reportTypicalFailtures=false;
 	
 	public static boolean windowPrint=true;
+	public static boolean startChecking=false;
+	
 	
 	/**ensures that printed stack traces are shown in a visible
 	 window. easier to debug*/
@@ -75,12 +77,14 @@ public class IssueLog {
 	}
 	
 	public static void log(String... sts){	
+		
 		createDisplayForErr();
 		for(String st:sts) {		
 			if (windowPrint)display.appendLine(st);
 			if ( sytemprint &&!System.out.equals(display.getStream())  ) System.out.println(st);
 		}
 		if (!display.isVisible() &&windowPrint)display.setVisible(true);
+		
 	}
 	
 	

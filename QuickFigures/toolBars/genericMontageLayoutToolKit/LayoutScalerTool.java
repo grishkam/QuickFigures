@@ -31,7 +31,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.IconSet;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import locatedObject.LocatedObject2D;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
@@ -57,7 +57,7 @@ public class LayoutScalerTool extends Object_Mover {
 	
 	DefaultLayoutGraphic theLayout=null;
 	private UndoLayoutEdit undoOriginalUndo;
-	private GenericMontageEditor editor;
+	private BasicLayoutEditor editor;
 	private double scale;
 	private Point2D loc;
 	private double yMin;
@@ -110,7 +110,7 @@ public class LayoutScalerTool extends Object_Mover {
 			/**repeated up and down scalings can cause the layout to fits its contents poorly,
 			   this fixes it. If the layouts and panel sizes had double precision then this would 
 			   not be an issue. However this helps*/
-			new GenericMontageEditor().alterPanelWidthAndHeightToFitContents(this.theLayout.getPanelLayout());
+			new BasicLayoutEditor().alterPanelWidthAndHeightToFitContents(this.theLayout.getPanelLayout());
 			eliminateSelection();
 			return;
 		}
@@ -131,9 +131,9 @@ public class LayoutScalerTool extends Object_Mover {
 			BasicLayout ml = theLayout.getPanelLayout();
 			ml.resetPtsPanels();
 			UndoLayoutEdit undo2 = new UndoLayoutEdit(theLayout);
-			editor=new GenericMontageEditor();
+			editor=new BasicLayoutEditor();
 			
-			editor.placePanelsInCorners(ml, new ArraySorter<LocatedObject2D>().getThoseOfClass(ml.getEditedWorksheet().getLocatedObjects(), ImagePanelGraphic.class));
+			editor.placePanelsInCorners(ml, new ArraySorter<LocatedObject2D>().getThoseOfClass(ml.getVirtualWorksheet().getLocatedObjects(), ImagePanelGraphic.class));
 			
 			
 		

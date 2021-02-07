@@ -28,10 +28,10 @@ import standardDialog.numbers.NumberInputPanel;
 
 
 
-
+/**displays dialogs used to alter the layouts.*/
 public class LayoutEditorDialogs implements LayoutSpaces {
 	
-	public void showGeneralEditorDialog( GenericMontageEditor me, BasicLayout basicMontageLayout) {
+	public void showGeneralEditorDialog( BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 		if (basicMontageLayout==null) return;
 		StandardDialog gd = new StandardDialog("Layout Editor", true);
 		gd.setWindowCentered(true);
@@ -47,7 +47,7 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	}
 	
 	
-	public void showSpecialSpaceEditorDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
+	public void showSpecialSpaceEditorDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 		gd.add("Space Above Montage",new NumberInputPanel("Space Above ", basicMontageLayout.specialSpaceWidthTop, 0));
 		gd.add("Space Below Montage",new NumberInputPanel("Space Below ", basicMontageLayout.specialSpaceWidthBottom, 0));
 		gd.add("Space Left of Montage",new NumberInputPanel("Space Left ", basicMontageLayout.specialSpaceWidthLeft, 0));
@@ -71,7 +71,7 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 		gd.add("Rows",new NumberInputPanel("Rows", basicMontageLayout.nRows(), 0));
 	}
 	
-	void editRowColNumbersToDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
+	void editRowColNumbersToDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 			int newcol=(int)gd.getNumber("Columns");
 	int newrow=(int)gd.getNumber("Rows");
 	   me.addCols(basicMontageLayout, newcol-basicMontageLayout.nColumns());
@@ -85,10 +85,10 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	}
 	
 	
-	public void showColumnNumberEditorDialog(GenericMontageEditor me, BasicLayout basicMontageLayout, int colindex, int rowindex) {
+	public void showColumnNumberEditorDialog(BasicLayoutEditor me, BasicLayout basicMontageLayout, int colindex, int rowindex) {
 		showColumnNumberEditorDialog(new StandardDialog("Edit", true), me,basicMontageLayout,1,1);
 	}
-	public void showColumnNumberEditorDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout, int colindex, int rowindex) {
+	public void showColumnNumberEditorDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout, int colindex, int rowindex) {
 		addColumnAndRowFieldToDialog( gd, basicMontageLayout);
 		addPanelDimensionFieldToDialog(gd, basicMontageLayout, colindex,rowindex);
 		gd.add("Row Major Layout", new BooleanInputPanel("Row Major Layout", basicMontageLayout.rowmajor));
@@ -106,7 +106,7 @@ public class LayoutEditorDialogs implements LayoutSpaces {
  basicMontageLayout.afterEditDone();
 	}
 	
-	void editRowColWidthBasedOnDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout, int colindex, int rowindex) {
+	void editRowColWidthBasedOnDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout, int colindex, int rowindex) {
 		int newpwidth=(int)gd.getNumber("Panel Width");
     int newpheight=(int)gd.getNumber("Panel Height");
 
@@ -122,22 +122,26 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	
 	
 	
-	public void showBorderEditorDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
+	public void showBorderEditorDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 	gd.setModal(true);
 		gd.add("Horizontal Border",new NumberInputPanel("Horizontal Border", basicMontageLayout.theBorderWidthLeftRight, 0));
-	gd.add("Vertical Border",new NumberInputPanel("Vertical Border", basicMontageLayout.theBorderWidthBottomTop, 0));	
 	
+		gd.add("Vertical Border",new NumberInputPanel("Vertical Border", basicMontageLayout.theBorderWidthBottomTop, 0));	
+		
 	gd.showDialog();
 	
 	if (gd.wasOKed()) {
+		
 		me.setHorizontalBorder(basicMontageLayout, (int) (gd.getNumber("Horizontal Border"))); 
+		
 		me.setVerticalBorder(basicMontageLayout, (int) (gd.getNumber("Vertical Border")));
+		
 	basicMontageLayout.afterEditDone();
 	}
 
 }
 	
-	public void showBorderEditorDialog(GenericMontageEditor me, BasicLayout basicMontageLayout) {
+	public void showBorderEditorDialog(BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 		showBorderEditorDialog(getModalCentered("Borders") , me, basicMontageLayout);
 	}
 
@@ -150,18 +154,24 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	}
 	
 	
-	public void showDialogBasedOnLocation( GenericMontageEditor me, BasicLayout basicMontageLayout, int x, int y) {
-		 showDialogBasedOnLocation(me, basicMontageLayout, new Point(x,y));
-	}
 	
-	public void showDialogBasedOnLocation( GenericMontageEditor me, BasicLayout basicMontageLayout, Point p) {
+	
+	public void showDialogBasedOnLocation( BasicLayoutEditor me, BasicLayout basicMontageLayout, Point p) {
 		if (basicMontageLayout==null) {IssueLog.log("you have requested a dialog for a null layout");return;}
-		StandardDialog gd = new StandardDialog("Edit", true);
+		if (basicMontageLayout.getSelectedSpace(1, ALL_OF_THE+BORDER).contains(p)) {
+			
+			showBorderEditorDialog(new StandardDialog("Border Between Panels", true), me, basicMontageLayout); 
+			return;
+			};
+			
+			StandardDialog gd = new StandardDialog("Edit", true);
 		
 		basicMontageLayout.resetPtsPanels();
 		int index=basicMontageLayout.getPanelIndex((int)p.getX(), (int)p.getY());
-		if (basicMontageLayout.getSelectedSpace(1, ALL_OF_THE+BORDER).contains(p)) {showBorderEditorDialog(gd, me, basicMontageLayout); return;};
-		if (basicMontageLayout.getSelectedSpace(1, ALL_OF_THE+PANELS).contains(p)) {showColumnNumberEditorDialog(gd, me, basicMontageLayout, basicMontageLayout.getGridCordAtIndex(index)[0], basicMontageLayout.getGridCordAtIndex(index)[1]); return;};
+		
+			
+		if (basicMontageLayout.getSelectedSpace(1, ALL_OF_THE+PANELS).contains(p)) 
+			{showColumnNumberEditorDialog(gd, me, basicMontageLayout, basicMontageLayout.getGridCordAtIndex(index)[0], basicMontageLayout.getGridCordAtIndex(index)[1]); return;};
 		if (basicMontageLayout.getSelectedSpace(1, ALL_OF_THE+PANEL_WITH_SPACES).contains(p)) {showLabelSpaceEditorDialog(gd, me, basicMontageLayout);; return;};
 		showSpecialSpaceEditorDialog(gd, me, basicMontageLayout);	
 	}
@@ -185,7 +195,7 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	
 	
 	
-	public void performEditBasedOnDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
+	public void performEditBasedOnDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 
 		basicMontageLayout.afterEditDone();
 		int newcol=(int)gd.getNumber("columns");
@@ -212,7 +222,7 @@ public class LayoutEditorDialogs implements LayoutSpaces {
 	
 
 	
-	public void showUniqueDimensionDialog(BasicLayout basicMontageLayout, GenericMontageEditor me, int kind) {
+	public void showUniqueDimensionDialog(BasicLayout basicMontageLayout, BasicLayoutEditor me, int kind) {
 		if (basicMontageLayout==null) return;
 		int nNumbers=basicMontageLayout.nColumns();
 		if (kind==1) nNumbers=basicMontageLayout.nRows();
@@ -330,7 +340,7 @@ void addLabelSpacesToDoalog(StandardDialog gd, BasicLayout basicMontageLayout) {
 }
 
 
-void editLabelSpaceBasedOnDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
+void editLabelSpaceBasedOnDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 	me.setTopLabelSpace(basicMontageLayout, (int)gd.getNumber("Top Label Space"));
 	me.setBottomLabelSpace(basicMontageLayout, (int)gd.getNumber("Bottom Label Space"));
 	me.setLeftLabelSpace(basicMontageLayout, (int)gd.getNumber("Left Label Space"));
@@ -345,7 +355,7 @@ public void addLabelSpaceOptionsToDialog(BasicLayout ml, StandardDialog gd) {
 	 
 }
 
-public void showLabelSpaceEditorDialog(StandardDialog gd, GenericMontageEditor me, BasicLayout basicMontageLayout) {
+public void showLabelSpaceEditorDialog(StandardDialog gd, BasicLayoutEditor me, BasicLayout basicMontageLayout) {
 	addLabelSpaceOptionsToDialog(basicMontageLayout, gd);
 	gd.showDialog();
 	if (gd.wasOKed()) {

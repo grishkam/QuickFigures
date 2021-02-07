@@ -45,7 +45,7 @@ public class LayoutMenu extends AttachedItemMenu {
 		
 	
 		c.generateCurrentImageWrapper();
-		  editmenu = new LayoutEditCommandMenu(c.getPanelLayout());
+		  editmenu = new LayoutEditCommandMenu(c);
 	
 		add(editmenu.getInclusiveList());
 		

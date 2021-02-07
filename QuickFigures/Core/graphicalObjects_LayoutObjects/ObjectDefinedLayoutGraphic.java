@@ -109,20 +109,20 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 	ArrayList<ZoomableGraphic> parent2 = new ArrayList<ZoomableGraphic>();
 	if (getParentLayer()!=null) parent2=this.getParentLayer().getAllGraphics();
 		GenericImage wrapper = new GenericImage(new ArrayObjectContainer(parent2));
-		this.getPanelLayout().setEditedWorkSheet(wrapper);
-		this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
+		this.getPanelLayout().setVirtualWorkSheet(wrapper);
+		this.getPanelLayout().getVirtualWorksheet().takeFromImage(this);
 		for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-			getPanelLayout().getEditedWorksheet().takeFromImage(loc);
+			getPanelLayout().getVirtualWorksheet().takeFromImage(loc);
 		}
 		return wrapper;
 	}
 	
 	public ImageWorkSheet generateEditNonpermissiveWrapper() {
 			GenericImage wrapper = new GenericImage(new ArrayObjectContainer(new ArrayList<ZoomableGraphic>()));
-			this.getPanelLayout().setEditedWorkSheet(wrapper);
-			this.getPanelLayout().getEditedWorksheet().takeFromImage(this);
+			this.getPanelLayout().setVirtualWorkSheet(wrapper);
+			this.getPanelLayout().getVirtualWorksheet().takeFromImage(this);
 			for(LocatedObject2D loc: this.getPanelLayout().getArray()) {
-				getPanelLayout().getEditedWorksheet().takeFromImage(loc);
+				getPanelLayout().getVirtualWorksheet().takeFromImage(loc);
 			}
 			return wrapper;
 		}
@@ -131,7 +131,7 @@ public class ObjectDefinedLayoutGraphic extends SpacedPanelLayoutGraphic impleme
 			if (this.getParentLayer() instanceof ObjectContainer)
 			{
 				GenericImage wrapper = new GenericImage((ObjectContainer) this.getParentLayer());
-				this.getPanelLayout().setEditedWorkSheet(wrapper);
+				this.getPanelLayout().setVirtualWorkSheet(wrapper);
 				if (!this.getEditor().getObjectHandler().getNeverRemove().contains(this))
 				this.getEditor().getObjectHandler().getNeverRemove().add(this);
 				for(LocatedObject2D loc: this.getPanelLayout().getArray()) {

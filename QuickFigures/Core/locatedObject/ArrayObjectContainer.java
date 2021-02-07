@@ -24,6 +24,9 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import logging.IssueLog;
+
 /**the most basic object container. used for storing a collection of objects*/
 public class ArrayObjectContainer implements ObjectContainer {
 
@@ -34,15 +37,18 @@ public class ArrayObjectContainer implements ObjectContainer {
 	/**Creates an object container from the list*/
 	public ArrayObjectContainer(ArrayList<?> list) {
 		array=new ArrayList<LocatedObject2D>();
+		if(list==null) return;
 		for(Object l: list) {
 			if (l instanceof LocatedObject2D) {array.add((LocatedObject2D) l);}
 		}
+	
 	}
 
 	@Override
 	public void takeFromImage(LocatedObject2D roi) {
 		if (this.getNeverRemove().contains(roi)) return;
 		array.remove(roi);
+		
 		
 	}
 
@@ -60,10 +66,12 @@ public class ArrayObjectContainer implements ObjectContainer {
 		
 	}
 
+	/**returns all the objects in the container
+	 * On feb 6 2021 determined that returning a different array and not the one used to contain the objects
+	 * internally fixed a bug that occurs with layout edits*/
 	@Override
 	public ArrayList<LocatedObject2D> getLocatedObjects() {
-		// TODO Auto-generated method stub
-		return array;
+		ArrayList<LocatedObject2D> out = new ArrayList<LocatedObject2D>();out.addAll(array); return out;
 	}
 
 	/**this */

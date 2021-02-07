@@ -68,6 +68,9 @@ public class GenericImage implements ImageWorkSheet {
 	public void setObjectContainer(ObjectContainer c) {
 		objects =c;
 	}
+	public ObjectContainer getObjectContainer() {
+		return objects;
+	}
 	
 	
 	@Override

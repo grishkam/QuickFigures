@@ -49,7 +49,7 @@ import icons.IconSet;
 import icons.SourceImageTreeIcon;
 import layersGUI.HasTreeLeafIcon;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.GenericMontageEditor;
+import layout.basicFigure.BasicLayoutEditor;
 import locatedObject.LocatedObject2D;
 import locatedObject.Named;
 import locatedObject.PointsToFile;
@@ -386,7 +386,7 @@ private static final long serialVersionUID = 1L;
 			if (fit)
 				resizeMontagePanelsToFitImage(grid, this.getPanelList().getPanels().get(0));
 			if (expand) {
-				GenericMontageEditor me =new GenericMontageEditor();
+				BasicLayoutEditor me =new BasicLayoutEditor();
 				
 				me.alterPanelWidthAndHeightToFitContents(layout);
 			}
@@ -403,7 +403,7 @@ private static final long serialVersionUID = 1L;
 	public void resizeMontagePanelsToFitImage(DefaultLayoutGraphic grid, PanelListElement p) {
 		try{
 			
-			GenericMontageEditor me =new GenericMontageEditor();
+			BasicLayoutEditor me =new BasicLayoutEditor();
 			
 			if (p.getImageDisplayObject() instanceof LocatedObject2D ) {
 				LocatedObject2D l=(LocatedObject2D) p.getImageDisplayObject();
