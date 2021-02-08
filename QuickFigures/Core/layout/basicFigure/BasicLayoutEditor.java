@@ -311,6 +311,12 @@ public class BasicLayoutEditor implements LayoutSpaces {
 			addTopSpecialSpace(ml, space-ml.specialSpaceWidthTop);
 		}
 		
+		/**Sets the base location for the layout.
+		 */
+		public void setBaseLocation(BasicLayout ml,double lx, double ly) {
+			this.setLeftSpecialSpace(ml, ly);
+			this.setTopSpecialSpace(ml, ly);
+		}
 		
 		 /**Changes the label space at the bottom of the layout*/
 		public void addBottomLabelSpace(BasicLayout ml, double space) {
@@ -581,7 +587,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		   public void augmentPanelWidth(BasicLayout ml,  double widthincrease, int colIndex) {
 			   
 			   if (!ml.columnHasIndividualWidth(colIndex)) {
-				   augmentPanelWidthold( ml,  widthincrease); 
+				   augmentStandardPanelWidth( ml,  widthincrease); 
 				   return;
 			   }
 			   augmentPanelWidthOfCol( ml,  widthincrease, colIndex) ;
@@ -610,7 +616,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 				notifyListenersOfCompleteChange(ml, event);
 		   }
 		   
-		   public void setPanelWidthOfColumn(BasicLayout ml, int width, int rowIndex) {
+		   public void setPanelWidthOfColumn(BasicLayout ml, double width, int rowIndex) {
 			   augmentPanelWidthOfCol(ml, width-ml.getPanelWidthOfColumn(rowIndex), rowIndex);
 		   }
 		   
@@ -618,7 +624,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		     this alters the standard height for all the panels*/
 		   public void augmentPanelHeight(BasicLayout ml,  double increase, int rowIndex) {
 			   if (!ml.rowHasIndividualHeight(rowIndex)) {
-				   augmentPanelHeightold( ml,  increase); 
+				   augmentStandardPanelHeight( ml,  increase); 
 				   return;
 			   }
 			   augmentPanelHeightOfRow( ml,   increase,rowIndex);
@@ -659,8 +665,8 @@ public class BasicLayoutEditor implements LayoutSpaces {
 			   augmentPanelHeightOfRow(ml, height-ml.getPanelHeightOfRow(rowIndex), rowIndex);
 		   }
 		   
-			  /**Alters the size alloted to a panel. does this for the general width. not an individual panels width*/
-		   public void augmentPanelWidthold(BasicLayout ml,  double widthincrease) {
+			  /**Alters the size alloted to a panel. does this for the general width of the whole layout. not for an individual panels width*/
+		   public void augmentStandardPanelWidth(BasicLayout ml,  double widthincrease) {
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.PANEL_RESIZE_H, widthincrease,  1);
 			   notifyListenersOfFutureChange(ml, event);
 			   
@@ -677,7 +683,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 				notifyListenersOfCompleteChange(ml, event);
 		   }
 		   
-		   public void augmentPanelHeightold(BasicLayout ml,  double increase) {
+		   public void augmentStandardPanelHeight(BasicLayout ml,  double increase) {
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.PANEL_RESIZE_V, increase,  1);
 			   notifyListenersOfFutureChange(ml, event);
 			   
@@ -763,7 +769,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 			   
 			   
 			   if (ml.allColsSameWidth()&&NumberUse.allSame(widths)) {
-				   augmentPanelWidthold(ml,  widths[0]-ml.panelWidth);
+				   augmentStandardPanelWidth(ml,  widths[0]-ml.panelWidth);
 			   }else 
 			    for(int i=0; i<widths.length; i++) {
 				  this.setPanelWidthOfColumn(ml, widths[i],i+1);
@@ -793,7 +799,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 			   /**must do the setting before the stack paste. the method called also does a 
 			     'cut/paste but strange effects occur when this is done one by one*/
 			   if (ml.allRowsSameHeight()&&NumberUse.allSame(heights)) {
-				   augmentPanelHeightold(ml,  heights[0]-ml.panelHeight);
+				   augmentStandardPanelHeight(ml,  heights[0]-ml.panelHeight);
 			   }else  for(int i=0; i<heights.length; i++) {
 				   this.setPanelHeightOfRow(ml, heights[i],i+1);
 			   }
@@ -826,6 +832,8 @@ public class BasicLayoutEditor implements LayoutSpaces {
 					//ml.getWrapper().updateImageDisplay();
 			 }
 		   
+			 /**moves the layout and contents of the layout
+			  * does not allow negative locations*/
 		   public void moveLayout(BasicLayout ml, double mx, double my) {	  
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LOCATION_EDIT, mx,  my);
 			   notifyListenersOfFutureChange(ml, event);
@@ -846,7 +854,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 			   notifyListenersOfCompleteChange(ml, event);
 			   }
 		   
-		   /**moves the contents of the layout, allows negative positions*/
+		   /**moves the layout and contents of the layout, allows negative positions*/
 		   public void moveMontage2(BasicLayout ml, int mx, int my) {	  
 			   GridLayoutEditEvent event = new GridLayoutEditEvent(ml, GridLayoutEditEvent.LOCATION_EDIT, mx,  my);
 			   notifyListenersOfFutureChange(ml, event);
@@ -917,8 +925,8 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		   /**alters the standrd sizes for the panels. only alters the default size. if some panels have unique sizes,
 		      the unique sizes stay the same*/
 		   public void resizePanels(BasicLayout ml, double width, double height) {
-			   augmentPanelWidthold(ml,  width-ml.panelWidth);
-			   augmentPanelHeightold(ml,  height-ml.panelHeight);
+			   augmentStandardPanelWidth(ml,  width-ml.panelWidth);
+			   augmentStandardPanelHeight(ml,  height-ml.panelHeight);
 		   }
 		   
 		   

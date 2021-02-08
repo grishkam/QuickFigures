@@ -24,9 +24,6 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
-import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
-import logging.IssueLog;
-
 /**the most basic object container. used for storing a collection of objects*/
 public class ArrayObjectContainer implements ObjectContainer {
 

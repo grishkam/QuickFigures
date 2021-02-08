@@ -23,6 +23,7 @@ package standardDialog.graphics;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -82,6 +83,8 @@ public int getIconHeight() {
 
 @Override
 public void paintIcon(Component c, Graphics g, int x, int y) {
+	Font ifont = g.getFont();
+	Color iColor = g.getColor();
 	if(object==null)
 		return;
 	Rectangle b = object.getExtendedBounds();
@@ -91,7 +94,8 @@ public void paintIcon(Component c, Graphics g, int x, int y) {
 		g.fillRect(x, y, this.getIconWidth(), this.getIconHeight());
 	}
 	object.draw((Graphics2D) g, new BasicCoordinateConverter(x+b.getX()-inset, y+b.getY()-inset, 1));
-	
+	g.setFont(ifont);
+	g.setColor(iColor);
 	
 }
 

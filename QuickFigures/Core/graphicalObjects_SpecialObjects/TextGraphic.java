@@ -35,6 +35,7 @@ import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.Icon;
@@ -209,7 +210,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 		return rotatedBoundsPrecise[0];
 	}
 	public Point2D getCenterOfRotation() {
-		return new Point2D.Double(x,y);
+		return getBaseLocation();
 	}
 	
 	public void copyAttributesFrom(TextGraphic t) {
@@ -268,7 +269,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 		  if (r2==null) IssueLog.log("null rectangle for bounds outline in text");
 		    innitializeArrays();
 	         unrotatedTextBoundv = Snap2Rectangle.RectangleVertices(r2);
-	        java.awt.geom.Point2D.Double[] bend=new Point2D.Double[] {new Point2D.Double(x, y), new Point2D.Double(x+width*1.1, y)};
+	        java.awt.geom.Point2D.Double[] bend=new Point2D.Double[] {getBaseLocation(), new Point2D.Double(x+width*1.1, y)};
 	        if (unrotatedTextBoundv==null) IssueLog.log("null set of vertices");
 	        if (rotatedBoundsPrecise==null) IssueLog.log("null set of 4 vertices");
 	        
@@ -638,9 +639,15 @@ public Point2D getLocation() {
 		return new Point2D.Double(p2.getX(), p2.getY());
 	}
 	if (locationType>CENTER) {
-		Point2D p2 = RectangleEdges.getRelativeLocation( new Point2D.Double(x,y), locationType, getBounds());
+		Point2D p2 = RectangleEdges.getRelativeLocation( getBaseLocation(), locationType, getBounds());
 		return new Point2D.Double(p2.getX(), p2.getY());
 	}
+	return getBaseLocation();
+}
+/**
+ * @return
+ */
+public Double getBaseLocation() {
 	return new Point2D.Double(x,y);
 }
 

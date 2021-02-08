@@ -25,20 +25,13 @@ import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
 import layout.PanelLayout;
 import layout.RetrievableOption;
-import locatedObject.LocatedObject2D;
-import logging.IssueLog;
-
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import java.util.ArrayList;
-
-import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWorkSheet;
-import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 
 /**This is the class that keeps the layout of panels. 
@@ -552,6 +545,11 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				else {i=row+(column-1)*(nRows()); }
 				if (!firsttoLast) return panels.length+1-i;
 				return i;
+			}
+			/**when given a column and row number, this returns the panel*/
+			public Rectangle2D getPanelAtPosition( int row, int column) {
+				int i = getIndexAtPosition(row, column);
+				return getPanel(i);
 			}
 			
 			/**When given a pair of x,y cordinates, returns the position in the montage of the cordinates 

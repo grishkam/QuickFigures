@@ -33,7 +33,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
-import applicationAdapters.ImageWorkSheet;
 import genericMontageUIKitMenuItems.LayoutEditCommandMenu;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -189,9 +188,9 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 			increasev/=divv;
 			//int rowIndex=this.getPanelLayout().getRowAtIndex(panelnum);
 			//int colIndex=this.getPanelLayout().getColAtIndex(panelnum);
-				if ( adjustH2 )getEditor().augmentPanelHeightold(getPanelLayout(),  increasev);
+				if ( adjustH2 )getEditor().augmentStandardPanelHeight(getPanelLayout(),  increasev);
 			
-				if ( adjustW2 )getEditor().augmentPanelWidthold(getPanelLayout(), increaseh);
+				if ( adjustW2 )getEditor().augmentStandardPanelWidth(getPanelLayout(), increaseh);
 			
 		}
 		
@@ -254,7 +253,6 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		
 		int handleType = handlenum/handleIDFactor;
 		UndoLayoutEdit undo = new UndoLayoutEdit(this);
-		 ImageWorkSheet virtualWorksheet = this.getPanelLayout().getVirtualWorksheet();
 		 
 		
 		 if (handlenum==-1) {
@@ -282,7 +280,6 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		
 		
 		 
-		 virtualWorksheet = this.getPanelLayout().getVirtualWorksheet();
 	}
 	
 	

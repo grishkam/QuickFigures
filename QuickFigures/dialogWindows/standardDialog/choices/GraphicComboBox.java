@@ -30,6 +30,8 @@ import javax.swing.ListCellRenderer;
 
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import layersGUI.GraphicCellRenderer;
+import layersGUI.TextGraphicListCellComponent;
 import standardDialog.graphics.GraphicComboBoxIcon;
 
 /**a combo box that lets the user choose various objects that are each drawn within the menu*/
@@ -136,6 +138,15 @@ public class GraphicComboBox extends JComboBox<SimpleGraphicalObject> implements
 					this.setIcon(null);
 					this.setText("no item selected");
 					noneSelected=true;
+				}
+				if(index==-1&&getSelectedItem()!=null) {
+					Component output = new GraphicCellRenderer().getTreeCellRendererComponent(null, getSelectedItem(), false, false, true, 0, false);
+					if (output instanceof TextGraphicListCellComponent && getSelectedItem() instanceof TextGraphic) {
+						TextGraphicListCellComponent t=(TextGraphicListCellComponent) output;
+						t.setIcon(null);//icon not needed for text
+					}
+					
+					return output;
 				}
 				
 				/**test in an icon followed by more text would be repetitive*/

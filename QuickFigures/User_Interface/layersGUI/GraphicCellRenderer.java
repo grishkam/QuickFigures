@@ -27,7 +27,9 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.Hideable;
 
 /**a tree cell renderer that will display different icons depending on whether 
-  the objects in the default mutable tree nodes implement a certain interface*/
+  the objects in the default mutable tree nodes implement a certain interface.
+  also used to render a certain kind of combo box
+  @see GraphicComboBox*/
 public class GraphicCellRenderer implements TreeCellRenderer  {
 	
 	/**
@@ -52,8 +54,8 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 		 return output;
 	}
 	
-	/**returns a list cell component for graphical objects*/
-TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+	/**returns a list cell component for graphical objects, assumes that the value is either a default mutable tree node*/
+TextGraphicListCellComponent getPanel(JTree treee, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		TextGraphicListCellComponent panel=new TextGraphicListCellComponent(value.toString(), selected);
 	panel.setIcon(HasTreeLeafIcon.defaultLeaf);
 	if (!leaf) {
@@ -62,15 +64,21 @@ TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected
 		}
 		else panel.setIcon(HasTreeBranchIcon.defaultLeaf2);
 	}
+	
+	Object userObject=value;
+	
 	if (value instanceof DefaultMutableTreeNode) {
 		DefaultMutableTreeNode node=(DefaultMutableTreeNode) value;
 		
-		if (leaf&& (node.getUserObject() instanceof HasTreeLeafIcon)) {
-			HasTreeLeafIcon t=(HasTreeLeafIcon) node.getUserObject() ;
+		userObject = node.getUserObject();
+		}
+	{
+		if (leaf&& (userObject instanceof HasTreeLeafIcon)) {
+			HasTreeLeafIcon t=(HasTreeLeafIcon) userObject ;
 			panel.setIcon(t.getTreeIcon());
 		}
-		if (!leaf&& (node.getUserObject() instanceof HasTreeBranchIcon)) {
-			HasTreeBranchIcon t=(HasTreeBranchIcon) node.getUserObject() ;
+		if (!leaf&& (userObject instanceof HasTreeBranchIcon)) {
+			HasTreeBranchIcon t=(HasTreeBranchIcon) userObject ;
 			if (expanded) {
 				panel.setIcon(t.getTreeIcon(true));
 			}
@@ -78,10 +86,10 @@ TextGraphicListCellComponent getPanel(JTree tree, Object value, boolean selected
 		}
 		
 		
-		if (node.getUserObject() instanceof TextGraphic)
-			panel.setToImmitate((TextGraphic) node.getUserObject());
-		if (node.getUserObject() instanceof Hideable) {
-			Hideable h=(Hideable) node.getUserObject();
+		if (userObject instanceof TextGraphic)
+			panel.setToImmitate((TextGraphic) userObject);
+		if (userObject instanceof Hideable) {
+			Hideable h=(Hideable) userObject;
 			if (h.isHidden()) panel.setIcon(HasTreeLeafIcon.defaultHiddenLeaf);// hidden objects are displayed with a red X
 		}
 	

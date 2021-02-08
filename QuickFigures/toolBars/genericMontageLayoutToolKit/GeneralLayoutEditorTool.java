@@ -24,7 +24,6 @@ import externalToolBar.DragAndDropHandler;
 import genericTools.BasicToolBit;
 import genericTools.NormalToolDragHandler;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
-import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import imageDisplayApp.OverlayObjectManager;
 import layout.basicFigure.BasicLayout;
