@@ -1,0 +1,64 @@
+package appContextforIJ1;
+
+import java.awt.Rectangle;
+
+import org.junit.jupiter.api.Test;
+import channelMerging.PreProcessInformation;
+import ij.IJ;
+import ij.ImagePlus;
+import multiChannelFigureUI.MultiChannelDisplayCreator;
+import objectDialogs.CroppingDialog;
+
+class ImagePlusMultiChannelSlotTest {
+
+	@Test
+	void test() {
+		IJ1MultichannelContext c = new IJ1MultichannelContext();
+		ImageDisplayTester.setupImageJ();
+		MultiChannelDisplayCreator cc = c.getMultichannelOpener();
+		
+		ImagePlus i = IJ.createHyperStack("b", 600, 500, 3, 5, 8, 16);
+		
+		
+		i.show();
+		
+		ImagePlusMultiChannelSlot mm2 = (ImagePlusMultiChannelSlot) cc.creatMultiChannelDisplayFromOpenImage().getSlot();
+		
+		assert(mm2.getImagePlus()!=null);
+		
+		/**tests ability to hide the image*/
+		mm2.hideImageWihtoutMessage();
+		assert(c.getallVisibleMultichanal().size()==0);
+		i.createImagePlus().show();;
+		
+		//assert(FileChoiceUtil.yesOrNo("Testing: the test class will show a few images. You will click yes to confirm that"+ "they look as described"));
+		
+		
+		/**test the crop function*/
+		int x = 150;
+		int y = 40;
+		int width = 200;
+		int h= 170;
+		double scale=1;
+		mm2.applyCropAndScale(new PreProcessInformation(new Rectangle(x, y, width, h), Math.PI*30/180, scale));
+		assert(mm2.getImagePlus().getWidth()==width*scale);
+		assert(mm2.getImagePlus().getHeight()==h*scale);
+		CroppingDialog.showCropDialogOfSize(mm2, null);
+		//assert(FileChoiceUtil.yesOrNo("Did you see a cropping dialog with a rectangle (200 X 170) at 30 degrees?"));
+		
+		mm2.getImagePlus().duplicate().show();
+		//assert(FileChoiceUtil.yesOrNo("You should see a cropped+scaled vertion of the image. Is the image cropped to  (200 X 170) at an angle?"));
+		
+		/**test ability to retrieve scale info from an ImageJ image*/
+		i.getCalibration().pixelHeight=18;
+		i.getCalibration().pixelWidth=10;
+		i.getCalibration().setUnit("Greg Unit");
+		assert(mm2.getScaleInfo().getPixelWidth()==10);
+		assert(mm2.getScaleInfo().getPixelHeight()==18);
+		assert(mm2.getScaleInfo().getUnits().equals("Greg Unit"));
+		
+		mm2.saveImageEmbed();
+		
+	}
+
+}

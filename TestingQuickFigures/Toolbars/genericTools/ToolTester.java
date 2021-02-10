@@ -1,0 +1,146 @@
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 19, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
+/**
+ 
+ * 
+ */
+package genericTools;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+
+import javax.swing.JComponent;
+
+import handles.HasSmartHandles;
+import handles.SmartHandle;
+import ij.IJ;
+import imageDisplayApp.GraphicSetDisplayWindow;
+import imageDisplayApp.ImageWindowAndDisplaySet;
+import logging.IssueLog;
+
+/**
+ A superclass for classes that test tools
+ */
+public abstract class ToolTester {
+
+	
+	/**simulates handle drags in several directions for every handle that is available
+	 * @param image
+	 * @param testRect the object being tested
+	 * @param d1 the magnitude of one movement direction
+	 * @param d2 the magnitude of the other movement direction
+	 */
+	void tryEveryHandle(ImageWindowAndDisplaySet image, HasSmartHandles testRect, double d1, double d2) {
+		ArrayList<Integer> handles = testRect.getSmartHandleList().getAllHandleNumbers();
+		IssueLog.log(handles.toString());
+		for(Integer handleID: handles)
+			simulateHandleMovements(image, testRect, handleID, d1, d2);
+	}
+
+	/**simulates a user mouse click
+	 * @param image
+	 * @param double1
+	 */
+	protected void simulateMouseCordinateEvent(ImageWindowAndDisplaySet image, Point2D p, int code) {
+		simulateMouseCordinateEvent(image, p, code, 0, 1);
+	}
+	
+	
+	
+	protected void simulateMouseCordinateEvent(ImageWindowAndDisplaySet image, Point2D p, int code, int modifiers, int clickCount) {
+		JComponent canvas = image.getTheCanvas();
+		/**will transform the cordinate system into mouse event cordinages*/
+		double x = image.getConverter().transformX(p.getX());
+		double y = image.getConverter().transformY(p.getY());
+		MouseEvent event = new MouseEvent(canvas,code, System.currentTimeMillis(), modifiers, (int)x, (int)y, clickCount, false);
+		canvas.dispatchEvent(event);
+		IJ.wait(10);
+	}
+	
+	/**Assuming the handle includes its co-ordinate location, this simjulates an event
+	 * @return */
+	protected Point2D simulateHandlePressCordinateEvent(ImageWindowAndDisplaySet image, HasSmartHandles s, int handleID) {
+		SmartHandle handle = s.getSmartHandleList().getHandleNumber(handleID);
+		return simulateHandlePressEvent(image, handle);
+	}
+
+	/**
+	 * @param image
+	 * @param handle
+	 * @return
+	 */
+	Point2D simulateHandlePressEvent(ImageWindowAndDisplaySet image, SmartHandle handle) {
+		assert(handle!=null);
+		Point2D cordinateLocation = handle.getCordinateLocation();
+		simulateMouseCordinateEvent(image, cordinateLocation, MouseEvent.MOUSE_PRESSED);
+		return cordinateLocation;
+	}
+	
+	/**Assuming the handle includes its co-ordinate location, this simjulates an event
+	 * @param dx how far from its original location the handle will be dragged to
+	 * @param dy how far from its original location the handle will be dragged to*/
+	private void simulateHandleMovement(ImageWindowAndDisplaySet image, HasSmartHandles s, int handleID, double dx, double dy) {
+		s.makePrimarySelectedItem(true);
+		SmartHandle handle = s.getSmartHandleList().getHandleNumber(handleID);
+		if (handle==null) {IssueLog.log("Handle with id "+handleID+" is not longer available");return;}
+		Point2D cordinateLocation = handle.getCordinateLocation();
+		simulateMouseCordinateEvent(image, cordinateLocation, MouseEvent.MOUSE_PRESSED);
+		Point2D dragTo = new Point2D.Double(cordinateLocation.getX()+dx, cordinateLocation.getY()+dy);
+		simulateMouseCordinateEvent(image, dragTo , MouseEvent.MOUSE_DRAGGED);
+		simulateMouseCordinateEvent(image, dragTo , MouseEvent.MOUSE_RELEASED);
+		image.updateDisplay();
+	}
+	
+	
+	/**Assuming the handle includes its co-ordinate location, this simulates handle movements in 
+	 * several possible directions.
+	 * The object given must already be selected with its handles drawn onto the canvas for this to work*/
+	private void simulateHandleMovements(ImageWindowAndDisplaySet image, HasSmartHandles s, int handleID, double d1, double d2) {
+		
+		this.simulateHandleMovement(image, s, handleID, d1, d2);
+		this.simulateHandleMovement(image, s, handleID, -d1, -d2);
+		
+		this.simulateHandleMovement(image, s, handleID, -d1, d2);
+		this.simulateHandleMovement(image, s, handleID, d1, -d2);
+		
+		this.simulateHandleMovement(image, s, handleID, d1, -d2);
+		this.simulateHandleMovement(image, s, handleID, -d1, d2);
+		
+		this.simulateHandleMovement(image, s, handleID, -d1, -d2);
+		this.simulateHandleMovement(image, s, handleID, d1, d2);
+		
+		
+		this.simulateHandleMovement(image, s, handleID, 0, d2);
+		this.simulateHandleMovement(image, s, handleID, 0, -d2);
+		
+		this.simulateHandleMovement(image, s, handleID, d1, 0);
+		this.simulateHandleMovement(image, s, handleID, -d1, 0);
+		
+		this.simulateHandleMovement(image, s, handleID, 0, -d2);
+		this.simulateHandleMovement(image, s, handleID, 0, d2);
+		
+		this.simulateHandleMovement(image, s, handleID, -d1, 0);
+		this.simulateHandleMovement(image, s, handleID, d1, 0);
+	}
+	
+	public static void simulateKeyEvents(ImageWindowAndDisplaySet image, CharSequence cs) {
+		for(int i=0; i<cs.length(); i++) {
+			simulateKeyStroke(image, cs.charAt(i), false);
+		}
+	}
+	
+	
+	/**simulates a key stroke*/
+	public static void simulateKeyStroke(ImageWindowAndDisplaySet image, char keyChar, boolean meta) {
+		GraphicSetDisplayWindow c = image.getWindow();
+		KeyEvent k = new KeyEvent(c, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), meta? KeyEvent.META_DOWN_MASK: 0, KeyEvent.getExtendedKeyCodeForChar(keyChar), keyChar);
+		c.dispatchEvent(k);
+		
+	}
+}

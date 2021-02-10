@@ -1,0 +1,159 @@
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 7, 2020
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
+/**
+ 
+ * 
+ */
+package testing;
+
+import java.awt.Color;
+import java.util.HashMap;
+
+import logging.IssueLog;
+import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ChoiceInputPanel;
+import standardDialog.colors.ColorComboBox;
+import standardDialog.colors.ColorInputPanel;
+import standardDialog.numbers.NumberInputPanel;
+
+/**
+ 
+ * 
+ */
+public class DialogTester {
+
+	boolean printUpdates=true;
+	boolean testInvalidNums=true;
+	boolean testNumbers=true;
+	protected boolean testAllcombinations=false;
+	protected int testNCombinations=2;
+	private boolean testBools=true;
+	private boolean testColors;
+	
+	/**tests different combinations of settings for the chioces in the dialog
+	 */
+	protected void testCombinations(StandardDialog dialog) {
+		HashMap<String, Object> inputs = dialog.getAllInputPanels();
+		testCombinations(inputs, testNCombinations);
+		dialog.revertAll();
+	}
+
+	/**
+	 recursively tests different 
+	 */
+	private void testCombinations(HashMap<String, Object> inputs, int cycle) {
+		for(String key1: inputs.keySet()) {
+			Object o=inputs.get(key1);
+			
+				testInputCombinations(key1, o, inputs, cycle);
+			
+		}
+	}
+	
+	/**
+	Tests all combinations of choices that a single input panel may have. If any combination of setting returns
+	in an uncaught exception or an endless loop, this test would reveal it. The hashmap may contain 
+	 * @param cycle 
+	 */
+	private void testInputCombinations(String key, Object inputPanel, HashMap<String, Object> inputs, int cycle) {
+		boolean continueRecursion = testAllcombinations||cycle>1;
+		if (inputPanel instanceof ChoiceInputPanel) {
+			ChoiceInputPanel c=(ChoiceInputPanel) inputPanel;
+			/**does not automatically test color combo boxes as that would entail a dialog*/
+			if (c.getBox() instanceof ColorComboBox) {
+				ColorComboBox c2=(ColorComboBox) c.getBox();
+				c2.showsChooserDialog=false;
+			}
+			for(int i=0; i<c.getNChoices(); i++) {
+				log("Combo box "+key + " set to "+i);
+				c.setValue(i);
+				
+				/**tests all the other combinations of all the other panels*/
+				if (continueRecursion)testCombinations(getMapWithout(key,inputPanel, inputs), cycle-1);
+				
+			}
+			c.revert();
+		}
+		
+		if (inputPanel instanceof NumberInputPanel &&testNumbers) {
+			NumberInputPanel c=(NumberInputPanel) inputPanel;
+			double n = c.getNumber();
+			
+			/**in many circumstances, 0 and negative numbers will be a nonsense value
+			 If those nonsense values result in any infinite loops, uncaught exceptions or crashes
+			 this would be a good change to learn*/
+			double[] testNumber = new double[] {0, n*0.5, n*2, n*4, -2, n};
+			if (!testInvalidNums) testNumber = new double[] {n*0.5, n*2, n*4, n};
+			
+			for(int i=0; i<testNumber.length; i++) {
+				double testValue = testNumber[i];
+				log("Number "+key + " set to "+testValue);
+				c.setNumberAndNotify(testValue);
+				
+				/**tests all the other combinations of all the other panels*/
+				if (continueRecursion)testCombinations(getMapWithout(key,inputPanel, inputs), cycle-1);
+				
+			}
+			c.revert();
+		}
+		
+		
+		if (inputPanel instanceof BooleanInputPanel &&testBools) {
+			BooleanInputPanel c=(BooleanInputPanel) inputPanel;
+			
+			c.setChecked(true);
+			/**tests all the other combinations of all the other panels*/
+			if (continueRecursion)testCombinations(getMapWithout(key,inputPanel, inputs), cycle-1);
+			c.setChecked(false);
+			/**tests all the other combinations of all the other panels*/
+			if (continueRecursion)testCombinations(getMapWithout(key,inputPanel, inputs), cycle-1);
+			c.revert();
+			
+		}
+		
+		
+		if (inputPanel instanceof ColorInputPanel &&testColors) {
+			ColorInputPanel c=(ColorInputPanel) inputPanel;
+			Color[] testCaseColors =new Color[] { Color.black, Color.red, Color.green};
+			for(Color color: testCaseColors ) {
+				c.setSimulateSelectColor(color);
+				/**tests all the other combinations of all the other panels*/
+				if (continueRecursion)testCombinations(getMapWithout(key,inputPanel, inputs), cycle-1);
+			}
+			
+		}
+		
+	}
+
+	/**returns a version of the given map that lacks the object and key. used to move recursively accross the combinations*/
+	private HashMap<String, Object> getMapWithout(String key, Object value, HashMap<String, Object> map ) {
+		
+		HashMap<String, Object> output=new HashMap<String, Object>();
+		output.putAll(map);
+		
+		boolean containsKey = output.containsKey(key);
+		
+		
+		output.remove(key, value);
+		output.remove(key);
+
+		boolean containsKeyEnd = output.containsKey(key);
+		if (containsKey&&!containsKeyEnd) {}
+			else
+			if (containsKey&&containsKeyEnd) 
+				IssueLog.showMessage("Key removal failed");
+		
+		return output;
+	}
+	
+	void log(String st) {
+		if (printUpdates) IssueLog.log(st);
+	}
+	
+	void performChecks() {}
+}
