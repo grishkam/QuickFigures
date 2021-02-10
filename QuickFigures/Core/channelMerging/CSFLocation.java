@@ -63,6 +63,14 @@ public class CSFLocation implements Serializable {
 		return out;
 	}
 	
+	public static CSFLocation channelLocation(int t) {
+		CSFLocation out = new CSFLocation();
+		out.channel=t;
+		out.frame=NONE_SELECTED;
+		out.slice=NONE_SELECTED;
+		return out;
+	}
+	
 	public boolean isFrameLocation() {return frame>0;}
 	public boolean isSliceLocation() {return slice>0;}
 	public CSFLocation duplicate() {return new CSFLocation(channel, slice, frame);}

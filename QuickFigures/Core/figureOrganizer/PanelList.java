@@ -119,13 +119,24 @@ public class PanelList implements Serializable{
 		return null;
 	}
 	
-	/**returns the merge panel with the given slice and frame*/
+	/**returns a merge panel */
 	public PanelListElement getMergePanel() {
 		for(PanelListElement p: this.getPanels()) {
 			if (p==null) continue;
-			if (p.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) return p;
+			if (p.designation==PanelListElement.MERGE_IMAGE_PANEL) return p;
 		}
 		return null;
+	}
+	
+	/**returns a list of either merge panels or channel panels 
+	 * depending on the argument*/
+	public ArrayList<PanelListElement> getPanelSubset(int type) {
+		ArrayList<PanelListElement> output = new ArrayList<PanelListElement>();
+		for(PanelListElement p: this.getPanels()) {
+			if (p==null) continue;
+			if (p.designation==type) output.add( p);
+		}
+		return output;
 	}
 	
 	/**removes all the panels*/
@@ -651,13 +662,26 @@ public class PanelList implements Serializable{
 	 if one value in the argument (c.frame for example) is set to -1, the frame is unspecified and 
 	 every panel with that frame will be returned*/
 	public 	ArrayList<PanelListElement> getPanelsWith(CSFLocation c) {
+		Integer paneltype=null;
+		return getPanelsWith(c, paneltype);
+	}
+
+	/**Given a channel, frame and slice location, returns that panel at that location
+	 if one value in the argument (c.frame for example) is set to -1, the frame is unspecified and 
+	 every panel with that frame will be returned.
+	 @param paneltype indicates whether merge panels or a channel panels should be returneds*/
+	public ArrayList<PanelListElement> getPanelsWith(CSFLocation c, Integer paneltype) {
 		ArrayList<PanelListElement> output = new ArrayList<PanelListElement>();
 		for(PanelListElement p:panels) {
 			if(c.channel>-1 &&p.targetChannelNumber!=c.channel) continue;
 			if(c.frame>-1 &&p.targetFrameNumber!=c.frame) continue;
 			if(c.slice>-1 &&p.targetSliceNumber!=c.slice) continue;
+			if(paneltype!=null&&p.designation!=paneltype) 
+				continue;
+			
 			output.add(p);
 		}
+		
 		return output;
 	}
 	

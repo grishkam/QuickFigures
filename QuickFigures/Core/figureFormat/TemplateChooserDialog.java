@@ -142,20 +142,28 @@ public class TemplateChooserDialog extends StandardDialog {
 		boolean ss = setOfPanels2.containsKey(key);
 		if (!ss) return;
 		JComboBox<?> combobox1 = setOfPanels2.get(key);
-		picker.setModelItem(combobox1.getSelectedItem());
+		Object selectedItem = combobox1.getSelectedItem();
+		picker.setModelItem(selectedItem);
 	}
 	
 	
 	/**when ok is pressed, sets the model items of each picker based on the dialog*/
 	protected void onOK() {
+		setTemplateToChoices();
+		
+		
+	}
+
+	/**
+	 * 
+	 */
+	public void setTemplateToChoices() {
 		for(GraphicalItemPicker<?> pick: temp.getAllExamplePickers())  {
 			setGraphicalPickerToComboBoxChoice(pick);
 		}
 		for(ItemPicker<?> pick: temp.pickersReg)  {
 			setPickerToComboBoxChoice(pick);
 		}
-		
-		
 	}
 	
 	/**A button for displaying an options dialog*/

@@ -81,9 +81,10 @@ public class CanvasAutoResize extends BasicMenuItemForObj {
 	
 
 	
-	public void makeAllVisible(DisplayedImage diw) {
-		performActionDisplayedImageWrapper(diw);
+	public CanvasResizeUndo makeAllVisible(DisplayedImage diw) {
+		CanvasResizeUndo undo = performUndoableAction(diw);
 		diw.zoomOutToDisplayEntireCanvas();
+		return undo;
 	}
 
 	@Override

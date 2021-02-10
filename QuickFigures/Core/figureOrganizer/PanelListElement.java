@@ -46,7 +46,9 @@ import channelLabels.ChannelLabelTextGraphic;
 	 	/**
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int MERGE_IMAGE_PANEL=2, CHANNEL_IMAGE_PANEL=1;
+	
+	public static final int MERGE_IMAGE_PANEL=2;
+	public static final int CHANNEL_IMAGE_PANEL=1;
 	
 	static final int NONE=0;
 
@@ -85,6 +87,14 @@ import channelLabels.ChannelLabelTextGraphic;
 
 		/**Maintains a list of the channel entries*/
 		private ArrayList<ChannelEntry> hashChannel =new  ChannelEntryList();
+		
+		
+		public String toString() {
+			String out="Channel Panel";
+			if(designation==MERGE_IMAGE_PANEL) out="Merged Panel";
+			out+= "("+targetFrameNumber+","+targetSliceNumber+")";
+			return out;
+		}
 		
 		/**creates a similar panel targeting the same stack location but 
 		  without any Channel Label or Image*/
@@ -359,7 +369,14 @@ import channelLabels.ChannelLabelTextGraphic;
 			}
 			
 			
-		
+			public boolean hasChannelWithIndex(int channelIndex) {
+				for(ChannelEntry chan: this) {
+					if (chan.getOriginalChannelIndex()==channelIndex)
+						return true;
+				}
+				
+				return false;
+			}
 			
 			
 			
@@ -474,5 +491,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			if(csf.slice>0) this.targetSliceNumber=csf.slice;
 			return false;
 		}
+		
+		
 		
 	}

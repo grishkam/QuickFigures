@@ -40,7 +40,7 @@ public class ChannelUseInstructions implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		/**Constants for the types of panels made*/
-		public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=3, NO_MERGE_PANELS=4;
+		public static final int MERGE_LAST=0, MERGE_FIRST=1, ONLY_MERGE_PANELS=2, NO_MERGE_PANELS=3;
 		
 		/**constant for the color mode*/
 		public static final int CHANNELS_IN_COLOR=0, CHANNELS_IN_GREYSCALE=1;

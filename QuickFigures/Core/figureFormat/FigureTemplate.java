@@ -405,4 +405,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	public void setPanelLabelPicker(LabelExamplePicker panelLabelPicker) {
 		this.panelLabelPicker = panelLabelPicker;
 	}
+	
+	public GridLayoutExamplePicker getLayoutChooser() {return layoutpicker;}
+	
 }

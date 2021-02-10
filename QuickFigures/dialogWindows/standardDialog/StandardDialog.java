@@ -188,8 +188,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	protected HashMap<String, StringInputPanel> allStrings=new HashMap<String, StringInputPanel>();
-	protected HashMap<String, NumberInputPanel> Numbers=new HashMap<String, NumberInputPanel>();
-	protected HashMap<String, NumberArrayInputPanel> NumberSets=new HashMap<String, NumberArrayInputPanel>();
+	public HashMap<String, NumberInputPanel> allNumbers=new HashMap<String, NumberInputPanel>();
+	protected HashMap<String, NumberArrayInputPanel> allNumberSets=new HashMap<String, NumberArrayInputPanel>();
 	protected HashMap<String, ChoiceInputPanel> choices=new HashMap<String, ChoiceInputPanel>();
 	protected HashMap<String, FontChooser> fonts=new HashMap<String, FontChooser>();
 	protected HashMap<String, BooleanInputPanel> bools=new HashMap<String, BooleanInputPanel>();
@@ -242,8 +242,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	public void add(String key, NumberInputPanel st) {
-		if (st instanceof NumberArrayInputPanel) {NumberSets.put(key, (NumberArrayInputPanel) st);} else
-		Numbers.put(key, st);
+		if (st instanceof NumberArrayInputPanel) {allNumberSets.put(key, (NumberArrayInputPanel) st);} else
+		allNumbers.put(key, st);
 		st.setKey(key);
 		st.addNumberInputListener(this);
 		place(st);
@@ -260,19 +260,19 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	public double getNumber(String key) {
-		NumberInputPanel ob = Numbers.get(key);
+		NumberInputPanel ob = allNumbers.get(key);
 		if(ob==null) return 0;
 		return ob.getNumber();
 	}
 	
 	public int getNumberInt(String key) {
-		NumberInputPanel ob = Numbers.get(key);
+		NumberInputPanel ob = allNumbers.get(key);
 		if(ob==null) return 0;
 		return (int)ob.getNumber();
 	}
 	
 	public void setNumber(String key, double number) {
-		NumberInputPanel ob = Numbers.get(key);
+		NumberInputPanel ob = allNumbers.get(key);
 		if(ob==null) return;
 		ob.setNumber(number);
 	}
@@ -281,7 +281,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	/**will return the nubmer array with specified key. Or an empty array if not found*/
 	public float[] getNumberArray(String key) {
-		NumberArrayInputPanel ob = NumberSets.get(key);
+		NumberArrayInputPanel ob = allNumberSets.get(key);
 		if(ob==null) return new float[] {};
 		return ob.getArray();
 	}
@@ -303,6 +303,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		
 		place(st);
 	}
+	/**returns the choice index for the given key*/
 	public int getChoiceIndex(String key) {
 		ChoiceInputPanel ob = choices.get(key);
 		if(ob==null) {
@@ -311,6 +312,12 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 			return ob2.getSelectedItemNumber();
 		}
 		return ob.getSelectedIndex();
+	}
+	
+	/**sets the value of a choice index for the given key, listeners will respond as
+	 * if the user has made a change*/
+	public void setChoiceIndex(String key, int value) {
+		choices.get(key).setValue(value);
 	}
 	
 	public void add(String key, FontChooser st) {
@@ -345,11 +352,25 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return ob.isChecked();
 	}
 	
-	/**returns the channel choices*/
+	/**returns the channel choices for the given key*/
 	public ArrayList<Integer> getChannelChoices(String key) {
 		ChannelListChoiceInputPanel ob = chanChoices.get(key);
 		if(ob==null) return new ArrayList<Integer>();
 		return  ob.getSelectedIndices();
+	}
+	/**changes the given key, called durring testing*/
+	public void setChannelChoices(String key, ArrayList<Integer> ints) {
+		ChannelListChoiceInputPanel ob = chanChoices.get(key);
+		if(ob==null) return;
+		ob.setValues(ints);
+		ob.notifyChoiceListeners(0);
+	}
+	/**changes the given key, called durring testing*/
+	public void setChannelChoices(String key, int ints) {
+		ChannelListChoiceInputPanel ob = chanChoices.get(key);
+		if(ob==null) return;
+		ob.setValues(ints);
+		ob.notifyChoiceListeners(0);
 	}
 	
 	public boolean[] getBooleanArray(String key) {
@@ -794,10 +815,10 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		for(StringInputPanel i:allStrings.values()) {
 			i.revert();
 		}
-		for(NumberInputPanel i:Numbers.values()) {
+		for(NumberInputPanel i:allNumbers.values()) {
 			i.revert();
 		}
-		for(NumberInputPanel i:NumberSets.values()) {
+		for(NumberInputPanel i:allNumberSets.values()) {
 			i.revert();
 		}
 		for(ChoiceInputPanel i:choices.values()) {
@@ -835,8 +856,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	public boolean hasContent() {
 		if (allStrings.keySet().size()>0) return true;
-		if (Numbers.keySet().size()>0) return true;
-		if (NumberSets.keySet().size()>0) return true;
+		if (allNumbers.keySet().size()>0) return true;
+		if (allNumberSets.keySet().size()>0) return true;
 		if (choices.keySet().size()>0) return true;
 		if (fonts.keySet().size()>0) return true;
 		if (bools.keySet().size()>0) return true;
@@ -913,8 +934,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	/**returns a map of very input panel. used by testing functions*/
 	public HashMap<String, Object> getAllInputPanels() {
 		HashMap<String, Object> output=new HashMap<String, Object> ();
-		output.putAll(Numbers);
-		output.putAll(NumberSets);
+		output.putAll(allNumbers);
+		output.putAll(allNumberSets);
 		output.putAll(choices);
 		output.putAll(bools);
 		output.putAll(allStrings);

@@ -174,9 +174,9 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 
 	
 	/**
- * @param values2
+ changes the currently set values. 
  */
-private void setValues(ArrayList<Integer> values2) {
+public void setValues(ArrayList<Integer> values2) {
 	currentValues=new ArrayList<Integer>();
 	for(Integer v: values2) {
 		currentValues.add(v);
@@ -187,7 +187,7 @@ private void setValues(ArrayList<Integer> values2) {
 /**
 * @param values2
 */
-private void setValues(int v) {
+public void setValues(int v) {
 currentValues=new ArrayList<Integer>();
 
 	currentValues.add(v);
