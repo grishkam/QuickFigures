@@ -95,19 +95,19 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			this.pm=pm;
 			listPanels=new PanelListDisplay(pm);
 			listChannels=new ChannelListDisplay(pm, pm.getPanelList().getMergePanel());
-			listChannels.setPanelListPartner(listPanels);
+			getJListForChannels().setPanelListPartner(getPanelJList());
 			this.setTitle("Panels for: "+pm.getMultiChannelWrapper().getTitle());
-			listPanels.addListSelectionListener(this);
+			getPanelJList().addListSelectionListener(this);
 			
 			
 			gc.gridwidth=4;
-			this.add(createScrollPane(listPanels, 300), gc);
-			listPanels.addMouseListener(createPanelEditListener());
-			this.addWindowListener(listPanels);
-			this.addMouseListener(listPanels);
+			this.add(createScrollPane(getPanelJList(), 300), gc);
+			getPanelJList().addMouseListener(createPanelEditListener());
+			this.addWindowListener(getPanelJList());
+			this.addMouseListener(getPanelJList());
 			gc.gridx=6;
 			gc.gridy=1;
-			if ( multipleChannel)this.add(createScrollPane(listChannels, 250), gc);
+			if ( multipleChannel)this.add(createScrollPane(getJListForChannels(), 250), gc);
 			gc.gridwidth=1;
 			
 		
@@ -217,10 +217,10 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		/**Called to update the channel list to match the panel that has focus*/
 		@Override
 		public void valueChanged(ListSelectionEvent arg0) {
-			int indexsel = listPanels.getSelectedIndex();
-			if (indexsel>-1&&indexsel<listPanels.elements.size()) {
-				PanelListElement panel= listPanels.elements.get(listPanels.getSelectedIndex());
-				listChannels.setPanel(panel);
+			int indexsel = getPanelJList().getSelectedIndex();
+			if (indexsel>-1&&indexsel<getPanelJList().elements.size()) {
+				PanelListElement panel= getPanelJList().elements.get(getPanelJList().getSelectedIndex());
+				getJListForChannels().setPanel(panel);
 				}
 		}
 		
@@ -240,7 +240,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			
 			
 			if (arg0.getSource()==this.removePanelButton) {
-				listPanels.removeSelectedPanels() ;
+				getPanelJList().removeSelectedPanels() ;
 			}
 			
 			if(arg0.getSource()==this.alterTButton) {
@@ -259,8 +259,8 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		 */
 		public void afterChannelAddSubtract() {
 			repaint();
-			listChannels.updateDisplay();
-			listChannels.repaint();
+			getJListForChannels().updateDisplay();
+			getJListForChannels().repaint();
 			
 			pack();
 		}
@@ -270,7 +270,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		 */
 		public void displayMenu(ActionEvent arg0) {
 			SmartPopupJMenu ppopme = new SmartPopupJMenu();
-			ArrayList<AvailableChannelsItem> items = listChannels.makeentries(listChannels.getPanel());
+			ArrayList<AvailableChannelsItem> items = getJListForChannels().makeentries(getJListForChannels().getPanel());
 			for(AvailableChannelsItem item: items) {
 				ppopme.add(item);
 				item.addActionListener(new ActionListener() {
@@ -290,7 +290,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			PanelListElement panel = pm.addSingleChannelPanel(pm.getPanelList());
 			  cm.generateChanelLabel(panel);
 			
-			  listPanels.setList(pm.getPanelList());
+			  getPanelJList().setList(pm.getPanelList());
 			  pm.putSingleElementOntoGrid(panel, true);
 			  panel.getChannelLabelDisplay().updateDisplay();
 			
@@ -302,7 +302,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		
 
 		public PanelListElement getPrimarySelectedPanel() {
-			return listChannels.getPanel();
+			return getJListForChannels().getPanel();
 		}
 		
 	
@@ -362,13 +362,21 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		
 		/**returns panels that are selected in the gui*/
 		Iterable<PanelListElement> getSelectedPanels() {
-			return listPanels.getSelectedValuesList();
+			return getPanelJList().getSelectedValuesList();
 		}
 		
 		@Override
 		public
 		Dimension  	getPreferredSize() {
 			return 	new Dimension(600,400) ;
+		}
+
+		public PanelListDisplay getPanelJList() {
+			return listPanels;
+		}
+
+		public ChannelListDisplay getJListForChannels() {
+			return listChannels;
 		}
 		
 		

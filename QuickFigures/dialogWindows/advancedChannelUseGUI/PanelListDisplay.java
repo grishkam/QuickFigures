@@ -56,7 +56,14 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
+import graphicActionToolbar.CurrentFigureSet;
+import logging.IssueLog;
 import standardDialog.colors.ColorDimmingBox;
+import undo.AbstractUndoableEdit2;
+import undo.EditListener;
+import undo.PanelManagerUndo;
+import undo.UndoManagerPlus;
+import undo.UndoReorderVector;
 
 
 /**A list of panels that are under the control of a single panel manager*/
@@ -104,6 +111,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		super.setSelectedIndices(ar);
 	}
 
+	/**sets the selected items to a selected form*/
 	void selectListSelectedDisplays() {
 		for(int i=0; i<elements.size(); i++) {
 			 elements.get(i).selectLabelAndPanel(false);;
@@ -261,23 +269,36 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		
 	}
 	
-	void swapItems(PanelListElement panel1, PanelListElement panel2) {
+	/**swaps the items and returns an undoable edit
+	 * That undoable edit will not perfectly undo
+	 * affect the dialog. TODO: edit so that dialog is updated*/
+	PanelManagerUndo swapItems(PanelListElement panel1, PanelListElement panel2) {
 		
 		int ind1 = elements.indexOf(panel1);
 				int ind2 = elements.indexOf(panel2);
-			
-			panelManager.getPanelList().swapPanelLocations(panel1, panel2);
-			
+			if(panel1==null||panel2==null)
+				return null;
+		PanelManagerUndo undo = panelManager.getPanelList().swapPanelLocations(panel1, panel2);
+			undo.addEditToList(new UndoReorderVector<PanelListElement>(elements));
 			
 			panelManager.updatePanels();
-			if (panel1.getChannelLabelDisplay()!=null)panel1.getChannelLabelDisplay().updateDisplay(); 
+			if (panel1.getChannelLabelDisplay()!=null) panel1.getChannelLabelDisplay().updateDisplay(); 
 			
+			undo.addEditListener(new EditListener() {
+
+				@Override
+				public void afterEdit() {
+					panelManager.updatePanels();
+					if (panel1.getChannelLabelDisplay()!=null) panel1.getChannelLabelDisplay().updateDisplay(); 
+				
+				}});
 			
 			elements.set(ind1, panel2);
 			elements.set(ind2, panel1);
-			//this.setListData(elements);
+			
+
 			this.repaint();
-		
+		return undo;
 		
 	}
 	
@@ -336,11 +357,21 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			if (index>-1) {
 				PanelListElement e1 = elements.get(index);
 				PanelListElement e2 = elements.get(this.getSelectedIndex());
-				swapItems(e1, e2);
+				PanelManagerUndo undo = swapItems(e1, e2);
+				addToUndoManager(undo);
 			}
 			;
 		}
 		
+	}
+
+	/**
+	 * @param undo
+	 */
+	public static void addToUndoManager(AbstractUndoableEdit2 undo) {
+		UndoManagerPlus man = CurrentFigureSet.getCurrentActiveDisplayGroup().getUndoManager();
+		if(man!=null&&undo!=null)
+			man.addEdit(undo);
 	}
 
 

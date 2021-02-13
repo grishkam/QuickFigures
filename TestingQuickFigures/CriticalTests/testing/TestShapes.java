@@ -57,8 +57,8 @@ public class TestShapes {
 	
 	};
 	
-	
-
+	/**Creates a worksheet with example objects
+	 * @param type the sort of example object*/
 	public static ImageWindowAndDisplaySet createExample(int type) {
 		ImageWindowAndDisplaySet i = ImageWindowAndDisplaySet.createAndShowNew("Figure", 500,400);
 		addExampleObjects(i, type);

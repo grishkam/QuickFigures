@@ -17,8 +17,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.util.ArrayList;
 
-import javax.swing.undo.UndoManager;
-
 import org.junit.Test;
 
 import channelMerging.CSFLocation;
@@ -26,7 +24,6 @@ import channelMerging.ChannelUseInstructions;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
-import graphicActionToolbar.CurrentSetInformer;
 import graphicActionToolbar.QuickFigureMakerTest;
 import ij.IJ;
 import logging.IssueLog;

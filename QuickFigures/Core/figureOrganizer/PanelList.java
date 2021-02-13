@@ -37,6 +37,9 @@ import channelMerging.ChannelUseInstructions.ChannelPanelReorder;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
+import undo.PanelManagerUndo;
+import undo.UndoMoveItems;
+import undo.UndoReorderArray;
 import utilityClasses1.ArraySorter;
 
 /**This class stores a list of the panels that are part of a figure
@@ -698,15 +701,21 @@ public class PanelList implements Serializable{
 	
 	
 	/**swaps the locations of two elements in the list. Also swaps the locations of the
-	 * objects which show the image to the user (which is visible)*/
-	public void swapPanelLocations(PanelListElement p1, PanelListElement p2) {
+	 * objects which show the image to the user (which is visible)
+	 * @return */
+	public PanelManagerUndo swapPanelLocations(PanelListElement p1, PanelListElement p2) {
+		PanelManagerUndo undo = new PanelManagerUndo(this);
+		undo.addEditToList(new UndoMoveItems(p1.getPanelGraphic(),p2.getPanelGraphic()));
+		undo.addEditToList(new UndoReorderArray<PanelListElement>(panels));
+		
 		new ArraySorter<PanelListElement>().swapObjectPositionsInArray(p1, p2, panels);
 		
 		Point2D l1 = p1.getPanelGraphic().getLocation();
 		Point2D l2 = p2.getPanelGraphic().getLocation();
 		p1.getPanelGraphic().setLocation(l2);
 		p2.getPanelGraphic().setLocation(l1);
-		
+		undo.establishFinalState();
+		return undo;
 	}
 	
 	

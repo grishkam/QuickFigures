@@ -43,7 +43,11 @@ import javax.swing.ListSelectionModel;
 import channelMerging.ChannelEntry;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
+import logging.IssueLog;
 import menuUtil.SmartJMenu;
+import undo.CombinedEdit;
+import undo.EditListener;
+import undo.UndoReorderArray;
 
 
 /**A JList that displays a list of possible channels in their respective channel names and colors*/
@@ -97,12 +101,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	PanelListElement getPanel() {return panel;}
 	
 
-	
-	public static void main(String[] arg) {
-		
-		
-		
-	}
+
 	
 	
 	
@@ -118,35 +117,44 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		if (panelDisp!=null)panelDisp.repaint();
 	}
 	
-	/**switches the locations of two channels*/
-	void swapItems() {
+	/**switches the locations of two channels
+	 * @return */
+	CombinedEdit swapItems() {
 		int[] ind = this.getSelectedIndices();
 		if (ind.length>1) {
 			ChannelEntry panel1 = elements.get(ind[0]);
 			ChannelEntry panel2 = elements.get(ind[1]);
-			swapItems(panel1, panel2);
+			return swapItems(panel1, panel2);
 		}
-		
+		return null;
 	}
 	
 	/**swaps the channel entry locations in the panel.
 	  If the  multiple channels are shown in the merge label
 	  a swap will be visible to the user 
-	  (the swap is undone when the channel entries for that panel are updated)*/
-	void swapItems(ChannelEntry cl1, ChannelEntry cl2) {
-		
+	  (the swap is undone when the channel entries for that panel are updated)
+	 * @return */
+	CombinedEdit swapItems(ChannelEntry cl1, ChannelEntry cl2) {
+		CombinedEdit undo = new CombinedEdit();
 		int ind1 = elements.indexOf(cl1);
 				int ind2 = elements.indexOf(cl2);
-			
+			undo.addEditToList(new UndoReorderArray<ChannelEntry>(panel.getChannelEntries()));
 				elements.set(ind1, cl2);
 				elements.set(ind2, cl1);
 				panel.getChannelEntries().set(ind1, cl2);
 				panel.getChannelEntries().set(ind2, cl1);
-				 updateDisplay();
-			
+				updateDisplay();
+				 
+			undo.addEditListener(new EditListener() {
+				@Override
+				public void afterEdit() {
+					updateDisplay();
+					IssueLog.log("performing undo "+panel.getChannelEntries());
+				}});
 			
 			if (this.panelDisp!=null) panelDisp.repaint();
 			this.repaint();
+			return undo;
 	}
 	
 	
@@ -200,7 +208,8 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 			if (index>-1) {
 				ChannelEntry e1 = elements.get(index);
 				ChannelEntry e2 = elements.get(this.getSelectedIndex());
-				swapItems(e1, e2);
+				CombinedEdit undo = swapItems(e1, e2);
+				PanelListDisplay.addToUndoManager(undo);
 			}
 			;
 		}

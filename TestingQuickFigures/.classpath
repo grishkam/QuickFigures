@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="LowImportanceTests"/>
 	<classpathentry kind="src" path="Core"/>
 	<classpathentry kind="src" path="dialogWindows"/>
 	<classpathentry kind="src" path="User_Interface"/>

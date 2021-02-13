@@ -59,7 +59,7 @@ public class TemplateChooserDialogTest {
 			assert(template.getLayoutChooser().getModelItem()==layout1);
 			
 			
-			IssueLog.waitSeconds(30);
+			IssueLog.waitSeconds(5);
 	}
 
 }
