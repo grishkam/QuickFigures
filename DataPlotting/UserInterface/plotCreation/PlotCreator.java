@@ -23,15 +23,34 @@ package plotCreation;
 import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
+import columnPlots.ColumnPlot;
 import dataSeries.DataSeries;
+import genericPlot.BasicPlot;
+import graphicalObjects_LayerTypes.GraphicLayer;
+import undo.AbstractUndoableEdit2;
+import undo.UndoAddItem;
 
 /**items of this interface create a particular kind of plot*/
 public interface PlotCreator<Type extends DataSeries>  {
 	
 	/**creates the plot*/
-	public void createPlot(String name, ArrayList<Type> items, DisplayedImage diw);
+	public AbstractUndoableEdit2 createPlot(String name, ArrayList<Type> items, DisplayedImage diw);
 	
 	/**what the plot type is called*/
 	public String getNameText();
+	
+	/** adds a plot to the figure. returns an undo for the addition
+	 * @param diw
+	 * @param plot
+	 * @return
+	 */
+	public static UndoAddItem addPlotToWorksheet(DisplayedImage diw, BasicPlot plot) {
+		GraphicLayer targetLayer = diw.getImageAsWrapper().getTopLevelLayer();
+		targetLayer.add(plot);
+		UndoAddItem undo = new UndoAddItem(targetLayer , plot);
+		diw.getUndoManager().addEdit(undo);
+		diw.updateDisplay();diw.updateDisplay();
+		return undo;
+	}
 	
 }

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 import dataSeries.XYDataSeries;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import undo.UndoAddItem;
 import xyPlots.XY_Plot;
 
 public class XYPlotCreator implements PlotCreator<XYDataSeries> {
@@ -38,7 +39,7 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		return "Bar plot";
 	}
 	
-	public void createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImage diw) {
+	public UndoAddItem createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
@@ -48,8 +49,7 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		if (type==xyPlotForm.ScatterForm)  plot.scatterPlot();
 		if (type==xyPlotForm.LineForm)  plot.linePlot();;
 		
-		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
-		diw.updateDisplay();diw.updateDisplay();
+		return PlotCreator.addPlotToWorksheet(diw, plot);
 	}
 	
 	public static enum xyPlotForm {

@@ -27,6 +27,7 @@ import dataSeries.KaplanMeierDataSeries;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import kaplanMeierPlots.KM_Plot;
 import logging.IssueLog;
+import undo.UndoAddItem;
 
 /**An implementation of plot creator for Kaplan Meier plots*/
 public class KaplanMeierPlotCreator implements PlotCreator<KaplanMeierDataSeries> {
@@ -42,19 +43,18 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplanMeierDataSeries
 		return "Kaplan-Meier Plot";
 	}
 	
-	public void createPlot(String name, ArrayList<KaplanMeierDataSeries> items, DisplayedImage diw) {
+	public UndoAddItem createPlot(String name, ArrayList<KaplanMeierDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
 		if(items.size()==0) {
 			IssueLog.showMessage("Unable to extract data");
-			return;
+			return null;
 		}
 		KM_Plot plot=new KM_Plot(name, items);
 		
 		plot.defaultPlot();
 		
-		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
-		diw.updateDisplay();diw.updateDisplay();
+		return PlotCreator.addPlotToWorksheet(diw, plot);
 	}
 }

@@ -209,6 +209,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 		ensureBounds();
 		return rotatedBoundsPrecise[0];
 	}
+	
 	public Point2D getCenterOfRotation() {
 		return getBaseLocation();
 	}
@@ -1236,7 +1237,7 @@ public boolean isUserEditable() {
 }
 
 protected transient TextActionButtonHandleList aList;
-transient SmartHandleList smartList=null;
+protected transient SmartHandleList smartList=null;
 
 
 /**creates a handle list that appears similar to a mini-toolbar*/

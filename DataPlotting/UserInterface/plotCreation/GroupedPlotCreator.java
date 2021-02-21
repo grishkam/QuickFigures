@@ -26,6 +26,7 @@ import applicationAdapters.DisplayedImage;
 import dataSeries.GroupedDataSeries;
 import groupedDataPlots.Grouped_Plot;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import undo.UndoAddItem;
 
 public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 	int type=Grouped_Plot.STAGGERED_BARS;
@@ -45,7 +46,7 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 		if (type==Grouped_Plot.JITTER_POINTS) return "Superimposed Scatter Plot ";
 		return "Stagered";
 	}
-	public void createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImage diw) {
+	public UndoAddItem createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
@@ -57,7 +58,6 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 		if (type==Grouped_Plot.SEQUENTIAL_BARS)  plot.sequentialBarPlot();;
 		if (type==Grouped_Plot.JITTER_POINTS)  plot.scatterPlot();
 		
-		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
-		diw.updateDisplay();diw.updateDisplay();
+		return PlotCreator.addPlotToWorksheet(diw, plot);
 	}
 }

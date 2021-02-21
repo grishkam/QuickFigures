@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import columnPlots.ColumnPlot;
 import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import undo.UndoAddItem;
 
 /**A Plot creator that can generate a few types of column plots*/
 public class ColumnPlotCreator implements PlotCreator<ColumnDataSeries>{
@@ -59,7 +61,7 @@ public class ColumnPlotCreator implements PlotCreator<ColumnDataSeries>{
 	
 	
 	
-	public void createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImage diw) {
+	public UndoAddItem createPlot(String name, ArrayList<ColumnDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {
 			diw=ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		}
@@ -71,9 +73,12 @@ public class ColumnPlotCreator implements PlotCreator<ColumnDataSeries>{
 		if (type==BOX_PLOT) plot.normalBoxplotPlot();;
 		if (type==TUKEY_BOX_PLOT) plot.tukeyBoxplotPlot();;
 		
-		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
-		diw.updateDisplay();diw.updateDisplay();
+		return PlotCreator.addPlotToWorksheet(diw, plot);
 	}
+
+
+
+	
 	
 	@Override
 	public String getNameText() {

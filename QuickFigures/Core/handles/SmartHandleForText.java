@@ -28,6 +28,7 @@ import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.RectangleEdges;
 
 /**A smart handle for editing text items. can be used for changing font size or rotation of text*/
 public class SmartHandleForText extends SmartHandle {
@@ -37,7 +38,7 @@ public class SmartHandleForText extends SmartHandle {
 	 */
 	private static final int MIN_ALLOWED_FONT = 2,MAX_ALLOWED_FONT = 300;
 
-	public static final int ROTATION_HANDLE = 0, TEXT_FONT_SIZE_HANDLE = 1;
+	public static final int ROTATION_HANDLE = 0, TEXT_FONT_SIZE_HANDLE = 1, LOCATION_HANDLE=2;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -62,11 +63,24 @@ public class SmartHandleForText extends SmartHandle {
 			
 		}
 		
+		if (this.getHandleNumber()==LOCATION_HANDLE) {
+			Point2D p = RectangleEdges.getLocation(RectangleEdges.CENTER, textItem.getBounds());
+		 	 return p;
+		
+	}
+		
 		return super.getCordinateLocation();
+	}
+	
+	@Override
+	public boolean isHidden() {
+		if (textItem.isEditMode()&&this.getHandleNumber()==LOCATION_HANDLE) return true;
+		return super.isHidden();
 	}
 	
 	public Color getHandleColor() {
 		if (textItem.isEditMode()) return Color.red;
+		
 		if(getHandleNumber()==ROTATION_HANDLE) return Color.orange;
 		return Color.white;
 	}

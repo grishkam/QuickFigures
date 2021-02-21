@@ -28,7 +28,11 @@ import java.awt.geom.Rectangle2D;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import handles.SmartHandleForText;
+import handles.SmartHandleList;
 import locatedObject.AttachmentPosition;
+import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;
@@ -64,6 +68,7 @@ public class PlotLabel extends ComplexTextGraphic {
 	
 	
 	private static final long serialVersionUID = 1L;
+
 	
 	public void setSnapTo(SeriesLabelPositionAnchor bar) {
 		this.anchorObject=bar;
@@ -148,12 +153,25 @@ public class PlotLabel extends ComplexTextGraphic {
 		}
 	}
 	
+	/**returns a handle list with on additional handle for the location*/
+	public SmartHandleList getStandardHandles() {
+		if (smartList==null) {
+			smartList=new SmartHandleList ();
+			smartList.add(new SmartHandleForText(this, SmartHandleForText.ROTATION_HANDLE));
+			smartList.add(new SmartHandleForText(this, SmartHandleForText.TEXT_FONT_SIZE_HANDLE));
+			smartList.add(new SmartHandleForText(this, SmartHandleForText.LOCATION_HANDLE));
+			
+		}
+	return smartList;
+	}
 	
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
-		if (handlenum==1) {
+		
+		if (handlenum==SmartHandleForText.LOCATION_HANDLE) {
 			AttachmentPosition s = this.getAttachmentPosition();
-			Point2D p = getUpperLeftCornerOfBounds();
+			Point2D p = RectangleEdges.getLocation(RectangleEdges.CENTER, getBounds());
+			
 			double dx = p2.getX()-p.getX();
 			double dy = p2.getY()-p.getY();
 			int[] poles = s.getOffSetPolarities();
