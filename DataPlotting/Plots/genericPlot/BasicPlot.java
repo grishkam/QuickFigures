@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 11, 2021
+ * Date Modified: Feb 21, 2021
  * Version: 2021.1
  */
 package genericPlot;
@@ -1192,6 +1192,14 @@ public static BasicPlot findPlot(ZoomableGraphic z) {
 		return (BasicPlot) z;
 	
 	return null;
+}
+
+public ArrayList<AxesGraphic> getAllAxes() {
+	ArrayList<AxesGraphic> output = new ArrayList<AxesGraphic>();
+	output.add(xAxis);
+	output.add(yAxis);
+	output.add(alternateYaxis);
+	return output;
 }
 
 }

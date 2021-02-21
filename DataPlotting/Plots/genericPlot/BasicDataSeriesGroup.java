@@ -58,6 +58,7 @@ import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 import undoForPlots.AxisChangeUndo;
+import undoForPlots.AxisResetUndoableEdit;
 
 /**A specialized layer that contains and organizes objects for displaying a particular data series*/
 public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements PlotComponent {
@@ -513,10 +514,16 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	
 	/**removes a data series from the plot, annotation indicates that it should be called by a popup menu*/
 	@MenuItemMethod(menuActionCommand = "Remove Data Series From Plot", menuText = "Remove Data Series From Plot", subMenuName="Data", orderRank=43)
-	public UndoAbleEditForRemoveItem removeDataSeries() {
+	public CombinedEdit removeDataSeries() {
+		CombinedEdit cc = new CombinedEdit();
+		if(getParentLayer() instanceof BasicPlot) {
+			cc.addEditToList(AxisResetUndoableEdit.createFor((BasicPlot) getParentLayer()));
+		}
 		UndoAbleEditForRemoveItem undo = new UndoAbleEditForRemoveItem(getParentLayer(), this);
 		getParentLayer().remove(this);
-		return undo;
+		cc.addEditToList(undo);
+
+		return cc;
 	}
 
 	/**returns the menu supplier for this layer*/

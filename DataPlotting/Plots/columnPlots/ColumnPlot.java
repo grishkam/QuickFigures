@@ -15,9 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Feb 21, 2021
  * Version: 2021.1
- * 
  */
 package columnPlots;
 
@@ -261,25 +260,6 @@ public ArrayList<ColumnPlotDataSeriesGroup> getAllDataSeries() {
 public void setAllData(ArrayList<ColumnPlotDataSeriesGroup> allData) {
 	this.allData = allData;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

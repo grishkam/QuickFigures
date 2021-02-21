@@ -20,8 +20,10 @@
  */
 package undoForPlots;
 
+import genericPlot.BasicPlot;
 import plotParts.Core.AxesGraphic;
 import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
 
 /**An undoable edit for changes in a plot axis*/
 public class AxisResetUndoableEdit extends AbstractUndoableEdit2 {
@@ -52,5 +54,16 @@ public class AxisResetUndoableEdit extends AbstractUndoableEdit2 {
 	public void undo() {
 		item.copyEveryThingFrom(aInitalForm);
 		item.updatePlotArea();
+	}
+	
+	public static CombinedEdit createFor(BasicPlot b) {
+		 CombinedEdit cc=new  CombinedEdit();
+		
+		 for(AxesGraphic axis: b.getAllAxes()) {
+			 if(axis==null) continue;
+			 cc.addEditToList(
+					 new AxisResetUndoableEdit(axis));
+		 }
+		 return cc;
 	}
 }
