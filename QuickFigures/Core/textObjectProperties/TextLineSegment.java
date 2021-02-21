@@ -77,7 +77,7 @@ public class TextLineSegment implements  Serializable {
 	double xbase;
 	
 	Rectangle2D LineBounds;
-	private int uniqueStyle;
+	private int uniqueStyle=0;
 	private int cursorposition;
 	private int highlightPosition;
 	
@@ -126,14 +126,6 @@ public class TextLineSegment implements  Serializable {
 	
 
 	
-	public void boldUnbold() {
-		if (getFont().isPlain()) {
-			this.setUniqueStyle(Font.BOLD);
-			} else if (getFont().isItalic()) {
-				this.setUniqueStyle(Font.BOLD+Font.ITALIC);
-			} else {this.setUniqueStyle(Font.PLAIN);}
-	}
-	
 	public void move(double x, double y) {
 		if (baseLine!=null) {
 			baseLine.setLocation(baseLine.x+x, baseLine.y+y);
@@ -169,7 +161,7 @@ public class TextLineSegment implements  Serializable {
 		text=st;
 	}
 
-	
+	/**returns the font that will actually be used to draw the segment*/
 	public Font getFont() {
 		Font output=defaultFont;
 		if (parent==null) return output;
@@ -202,7 +194,7 @@ public class TextLineSegment implements  Serializable {
 	
 	/**Whether or not there is a unique font stype. 0 if not unique.
 	 1 if plain, 2 bold 3 italic, 4 both*/
-	private int getUniqueStyle() {
+	public int getUniqueStyle() {
 		return uniqueStyle;
 	}
 	/**used to set if this item has a unique font style. 0 if none.
@@ -213,6 +205,7 @@ public class TextLineSegment implements  Serializable {
 
 	public void setFont(Font font) {
 			this.setUniqueStyle(font.getStyle()+1);
+			
 	}
 
 	
@@ -364,7 +357,7 @@ public class TextLineSegment implements  Serializable {
 	}
 
 	/**returns an int  that indicates whether the text has an underline or a strike through*/
-	public int getLines() {
+	public int getLineType() {
 		return lines;
 	}
 

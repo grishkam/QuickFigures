@@ -33,25 +33,25 @@ import undo.PanelManagerUndo;
  Have not devised ways to automatically test the every feature of the advanced channel use dialog
  so this class just displays the dialog for manual edits to occur
  */
-public class AdvancedChannelUseGUITest {
+public class AdvancedChannelUseGUITest extends FigureTest {
 
-	private DisplayedImage gg;
+	
 
 	@Test
 	public void test() {
-		FigureTester.setup();
-		FigureOrganizingLayerPane f = new FigureTester(). createFigureFromExample1AImages();
+		FigureOrganizingLayerPane f = createFirstExample();
 		testForFigureIncurrentImage(f);
 		
 		IssueLog.waitSeconds(120);
 	}
 
+
+
 	/**
 	 * @param f
 	 */
 	public void testForFigureIncurrentImage(FigureOrganizingLayerPane f) {
-		gg=CurrentFigureSet.getCurrentActiveDisplayGroup();
-		gg.getWindow().setLocation(10, 400);
+		chooseCurrentWindow();
 		ImageDisplayLayer mm = f.getPrincipalMultiChannel();
 		if (mm instanceof MultichannelDisplayLayer) {
 			MultichannelDisplayLayer m=(MultichannelDisplayLayer) mm;
@@ -107,6 +107,10 @@ public class AdvancedChannelUseGUITest {
 			gg.updateDisplay();
 		}
 	}
+
+
+
+	
 	
 
 }

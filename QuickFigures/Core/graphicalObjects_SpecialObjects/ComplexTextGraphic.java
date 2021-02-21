@@ -697,7 +697,6 @@ public class ComplexTextGraphic extends TextGraphic {
 
 
 
-
 	public void emboldenSelectedRegion() {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();
@@ -1095,8 +1094,12 @@ public TextParagraph copyParagraph() {
 	return this.getParagraph().copy();
 }
 
-	
 
+/**overrides the superclass method*/
+@Override
+public String getText() {
+	return this.getParagraph().getText();
+}
 
 
 

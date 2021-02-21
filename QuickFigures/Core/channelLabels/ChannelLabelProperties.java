@@ -66,13 +66,13 @@ public class ChannelLabelProperties implements Serializable{
 	private MergeLabelStyle mergeLabelStyleOption=MergeLabelStyle.SIMPLY_LABEL_AS_MERGE;
 	
 	/**the text for each channel is stored here. Hashmap Links channel names to text lines. */
-	private HashMap<String, TextLine> list=null;
+	private HashMap<String, TextLine> eachChannelTextList=null;
 	private HashMap<String, TextLine> getTextList() {
-		if (list==null) {
-			list=new HashMap<String, TextLine>();
+		if (eachChannelTextList==null) {
+			eachChannelTextList=new HashMap<String, TextLine>();
 		}
 		
-		return list;
+		return eachChannelTextList;
 	}
 	
 	/**If a certain string is meant to separate single line channel labels, this returns it*/
@@ -239,8 +239,10 @@ public class ChannelLabelProperties implements Serializable{
 			} else
 		lin.addFromCodeString(label, c.getColor());
 		
+		
 		for(TextLineSegment seg:lin) {
 			seg.setTextColor(new Color(0,0,0,0));//makes sure the color is transparent so it will not be copied 
+			seg.setUniqueStyle(0);
 		}
 		if (lin.getText().length()>20) {
 			IssueLog.log("Line for channel  name is is too long: "+lin.getText());

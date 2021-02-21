@@ -177,7 +177,7 @@ public class ChannelLabelManager implements Serializable, ProvidesDialogUndoable
 				slice.targetSliceNumber>firstSliceIndex();
 	}
 
-	/**
+	/**creates a channel label for the panel list element
 	 * @param slice
 	 * @return
 	 */
@@ -188,7 +188,7 @@ public class ChannelLabelManager implements Serializable, ProvidesDialogUndoable
 	
 
 	/**
-	
+	returns the index of the first slice in the panel list
 	 */
 	public int firstSliceIndex() {
 		int first = source.getPanelList().getChannelUseInstructions().getSliceUseInstructions().getFirstIndex();
@@ -196,7 +196,7 @@ public class ChannelLabelManager implements Serializable, ProvidesDialogUndoable
 	}
 
 	/**
-	 
+	 returns the index of the first frame in the panel list
 	 */
 	public int firstFrameIndex() {
 		int first = source.getPanelList().getChannelUseInstructions().getFrameUseInstructions().getFirstIndex();

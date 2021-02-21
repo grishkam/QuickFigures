@@ -69,8 +69,8 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 		if (includeColor)	colorPanal=new ColorComboboxPanel("Text Color", null, t.getUniqueTextColor());
 		
 		scriptType=new ChoiceInputPanel("Text is", new String[] {"normal", "superscript", "subscript"},t.isSubOrSuperScript());
-		scriptStyle=new ChoiceInputPanel("Text style", new String[] {"normal","Plain", "Bold", "Italic", "Bold+Italic"},t.getFont().getStyle());
-		scriptLine=new ChoiceInputPanel("Line Type", new String[] {"no line","Underline", "Strike Through"},t.getLines());
+		scriptStyle=new ChoiceInputPanel("Text style", new String[] {"normal","Plain", "Bold", "Italic", "Bold+Italic"},t.getUniqueStyle());
+		scriptLine=new ChoiceInputPanel("Line Type", new String[] {"no line","Underline", "Strike Through"},t.getLineType());
 		
 		addListeners();
 		this.setLayout(new GridBagLayout());

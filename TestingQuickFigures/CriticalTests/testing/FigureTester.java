@@ -37,7 +37,7 @@ public class FigureTester {
 								new Rectangle(300, 200, 300,250), 
 								new Rectangle(300, 200, 300,250),
 								new Rectangle(380, 390, 300,250)};
-	private boolean ignoreTemplate;
+	public boolean ignoreTemplate;
 	
 	/**
 	 * @return
