@@ -564,8 +564,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			this.resetMinMax(false);
 			this.fullPlotUpdate();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 	
 	}

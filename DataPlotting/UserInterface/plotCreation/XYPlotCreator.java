@@ -23,6 +23,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import undo.UndoAddItem;
 import xyPlots.XY_Plot;
 
+/**implementation of a the plot creator for xy data*/
 public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 	
 	private xyPlotForm type=xyPlotForm.DefaultForm;

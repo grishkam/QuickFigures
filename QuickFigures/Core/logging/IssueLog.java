@@ -152,25 +152,7 @@ public class IssueLog {
 		logT(ee);
 	}
 
-	
-	/**creates a progress window
-	 static void createEventDisplay() {
-		if(displayProgress==null)
-		displayProgress=new IssueLogWindow("Quickfigures Activity Log");
-		displayProgress.setVisible(true);
-		displayProgress.setLocation(1100, 700);
-	}
-	
-	
-	public static void log2(String... sts){
-		if (!reportProgress) return ;
-		if (displayProgress==null) {
-			createEventDisplay();
-		} else
-			for(String st:sts) {displayProgress.appendLine(st);}
-		if (!displayProgress.isVisible())displayProgress.setVisible(true);
-			displayProgress.setVisible(true);
-	}*/
+
 	
 	 public static String[] getFieldsValues(Object o) {
 		 	Field[] fields=o.getClass().getSuperclass().getDeclaredFields() ;

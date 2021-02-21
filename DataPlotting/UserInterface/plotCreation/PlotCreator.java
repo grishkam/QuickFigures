@@ -40,6 +40,7 @@ public interface PlotCreator<Type extends DataSeries>  {
 	public String getNameText();
 	
 	/** adds a plot to the figure. returns an undo for the addition
+	 * that undo is also added to the undo manager
 	 * @param diw
 	 * @param plot
 	 * @return

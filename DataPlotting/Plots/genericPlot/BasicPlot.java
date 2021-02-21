@@ -83,7 +83,8 @@ import undoForPlots.PlotAreaChangeUndo;
 import utilityClasses1.NumberUse;
 
 /**A class for organizing parts of a plot.
-   Has methods to produce a layout, and a pair of axes*/
+   Has methods to produce a layout, and a pair of axes
+   */
 public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  GridLayoutEditListener , LayoutSpaces, SeriesLabelPositionAnchor {
 
 	/**
