@@ -71,8 +71,11 @@ public class CSFLocation implements Serializable {
 		return out;
 	}
 	
+	/**if a plausible frame index is stored, returns true */
 	public boolean isFrameLocation() {return frame>0;}
+	/**if a plausible slice index is stored, returns true */
 	public boolean isSliceLocation() {return slice>0;}
+	
 	public CSFLocation duplicate() {return new CSFLocation(channel, slice, frame);}
 	public boolean changesT(CSFLocation c) {return (c.frame!=frame);}
 	public boolean changesZ(CSFLocation c) {return (c.slice!=slice);}

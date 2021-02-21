@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 /**Information about a particular channel of a particular frame and slice.
   Used to keep track of information such as
-  which channels are in a particular panel, what color a channel is, channel name, exposure time
+  which channels are in a particular panel, what color a channel is, channel name ...
   */
 public class ChannelEntry implements Serializable{
 	

@@ -1,3 +1,8 @@
+/**
+ * Author: Greg Mazo
+ * Date Modified: Feb 20, 2021
+ * Version: 2021.1
+ */
 package testing;
 
 import java.util.ArrayList;
@@ -5,12 +10,6 @@ import java.util.ArrayList;
 import applicationAdapters.DisplayedImage;
 
 /**iterates through a sequence of example images*/
-/**
- * Author: Greg Mazo
- * Date Modified: Dec 2, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
- */
 public class TestProvider {
 	
 	private static final int TEST_SHAPES = 0;
@@ -33,7 +32,7 @@ public class TestProvider {
 		return null;
 	}
 	
-	
+	/**returns every example for shape tests*/
 	public static ArrayList<TestProvider> getStandardExportTestsImages() {
 		ArrayList<TestProvider> output = new ArrayList<TestProvider>();
 		for(int i: TestShapes.each)
@@ -43,5 +42,4 @@ public class TestProvider {
 	}
 	
 	
-	class LittleTest {}
 }

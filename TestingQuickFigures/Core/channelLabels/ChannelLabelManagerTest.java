@@ -64,9 +64,9 @@ public class ChannelLabelManagerTest extends FigureTest {
 		testChannelLabelName(displayLayer, 3, "texasred");
 		testChannelLabelName(displayLayer, 4, "cy5");
 		
-		manager.nameChannels();
 		
-		IssueLog.waitSeconds(25);
+		
+		
 
 	}
 

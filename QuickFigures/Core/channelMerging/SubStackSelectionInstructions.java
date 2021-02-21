@@ -62,7 +62,8 @@ public abstract class SubStackSelectionInstructions implements Serializable {
 
 
 	
-	/**returns the list of selected indices*/
+	/**returns the list of selected indices.
+	 * Always returns at least one index*/
 	public ArrayList<Integer> selectedIndices() {
 		if (selected==null||selected.isEmpty()) {
 			 selected=new ArrayList<Integer>();

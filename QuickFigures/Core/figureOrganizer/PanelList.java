@@ -57,8 +57,8 @@ public class PanelList implements Serializable{
 	/**How channels, frames and slices are selected for this panel list*/
 	private ChannelUseInstructions instructions=new ChannelUseInstructions() ;
 	
-	//If channelUpdateMode=true The colors of all the channel entires are updated to account for changes in the channel colors of the original image. 
-	//if channelUpdateMode=false, this will create new channel entries which at the moment dont always update to the channel handles and color mode button. need to figure out why
+	//if channelUpdateMode=true The colors of all the channel entires are updated to account for changes in the channel colors of the original image. 
+	//if channelUpdateMode=false, this will create new channel entries 
 	/**Determines the method of updating the channel entries. Is changed to true for advanced channel use*/
 	public boolean channelUpdateMode=false;
 	

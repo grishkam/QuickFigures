@@ -495,17 +495,50 @@ public class ChannelUseInstructions implements Serializable {
 				private ArrayList<Integer> currentOrder;
 				
 				public ChannelPanelReorder() {
+					ArrayList<Integer> order = createDefaultOrder();
+					this.currentOrder=order;
+				}
+				
+				/**returns the default channel order
+				 * @return
+				 */
+				private ArrayList<Integer> createDefaultOrder() {
 					ArrayList<Integer> order = new ArrayList<Integer>();
 					for(int i: defaultOrder) {order.add(i);}
-					this.currentOrder=order;
+					return order;
 				}
 				public ChannelPanelReorder(ArrayList<Integer> order) {
 					this.currentOrder = new ArrayList<Integer>();
 					currentOrder.addAll(order);
 				}
 				
+				/**returns an array list with the channel order*/
+				public ArrayList<Integer> copyOfOrder() {
+					ArrayList<Integer> order = new ArrayList<Integer>();
+					order.addAll(currentOrder);
+					return order;
+				}
+				
+				/**returns an array list with the channel order*/
+				public ArrayList<Integer> shortCopyOfOrder() {
+					ArrayList<Integer> order = new ArrayList<Integer>();
+					
+					for(Integer i: currentOrder)
+						{	if(i==0)
+							break;
+							order.add(i);
+						}
+						
+					if (order.size()==0)
+						order.addAll(currentOrder);
+					return order;
+				}
+				
 				public String toString() {
-					return "Channel Reorder "+ currentOrder;
+					if (createDefaultOrder().equals(currentOrder))
+						return "default order";
+					
+					return "Channel Reorder "+ shortCopyOfOrder();
 				}
 				
 				/**swaps the locations of two channels within the order*/

@@ -90,7 +90,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		
 		
 		public String toString() {
-			String out="Channel Panel";
+			String out="Channel Panel "+"c="+this.targetChannelNumber+" ";
 			if(designation==MERGE_IMAGE_PANEL) out="Merged Panel";
 			out+= "("+targetFrameNumber+","+targetSliceNumber+")";
 			return out;
@@ -487,8 +487,8 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**Changes the panel's channel slice and frame based on the argument given*/
 		public boolean changeStackLocation(CSFLocation csf) {
 			if(csf.channel>-1) this.targetChannelNumber=csf.channel;
-			if(csf.frame>0) this.targetFrameNumber=csf.frame;
-			if(csf.slice>0) this.targetSliceNumber=csf.slice;
+			if(csf.isFrameLocation()) this.targetFrameNumber=csf.frame;
+			if(csf.isSliceLocation()) this.targetSliceNumber=csf.slice;
 			return false;
 		}
 		

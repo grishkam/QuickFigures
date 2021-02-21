@@ -40,6 +40,7 @@ import standardDialog.channels.ChannelEntryBox;
 import standardDialog.channels.ChannelListChoiceInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import storedValueDialog.StoredValueDilaog;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CanvasResizeUndo;
@@ -75,7 +76,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 			MERGE_PANEL_POSITION_KEY = "merge",
 			DONT_MERGE_CHANNELS_KEY = "don't merge",
 			COLOR_MODE_KEY = "grey",
-					MERGE_TO_EACH_CHANNEL_PANEL_KEY = "mergeeach";
+					MERGE_TO_EACH_CHANNEL_PANEL_KEY = "mergeeach",
+					CHANNEL_ORDER_KEY = "channel order";
 
 	
 	private static final long serialVersionUID = 1L;
@@ -101,6 +103,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	
 	/**The text for the combo */
 	static final String[] MergePositions=new String[] {"Merged Panel Last", "Merged Panel First",  "Merge Panel Only (No Channel Panels)", "No Merge Panel (Channel Panels Only)"};
+
+
 	
 	
 	public PanelStackDisplayOptions(MultichannelDisplayLayer display, PanelList stack, PanelManager panMan, boolean panelCreationIncluded) {
@@ -184,7 +188,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 				
 			ChannelListChoiceInputPanel p=new ChannelListChoiceInputPanel("Exclude These Channel Panel(s)", entries, ex, "none selected");
 			this.add(EXCLUDE_CHANNEL_KEY, p);
-		
+			this.add(CHANNEL_ORDER_KEY,  new InfoDisplayPanel("Order",ins.getChanPanelReorder().toString() ));
+			
 		
 		}
 		
@@ -200,7 +205,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		if (this.panelCreationIncluded) {
 			this.add(PANEL_SIZE_KEY, new NumberInputPanel("Panel Pixel Density",ImageDPIHandler.getInchDefinition()/ principalMultiChannel.getPanelManager().getPanelLevelScale(),3));
 			this.add(IDEAL_LAYOUT_SIZE_KEY,  new NumberInputPanel("Ideal Number Columns", ins.getIdealNumberOfColumns() ));
-			}
+			
+		}
 	}
 
 	/**

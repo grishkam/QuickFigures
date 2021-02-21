@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Feb 20, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -34,6 +34,7 @@ import layout.PanelContentExtract;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
 /**As the user makes edits to a figure, the channel panels that appear
@@ -59,7 +60,8 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	}
 	
 	/**Returns the panel list elements in an order that is determined by 
-	 * their location within the layout (Panel #1,2,3) rather than any list
+	 * their location within the layout (Panel #1,2,3) rather than any stored
+	 * list
 	  */
 	public ArrayList<PanelListElement> getOrderedPanelList() {
 		DefaultLayoutGraphic g = figure.getMontageLayoutGraphic();
@@ -120,7 +122,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	
 	/**attempts to generate a channel use instructions with the same order as the panels in the figure.
 	 * May return null if the current order does not fit with a set of instructions*/
-	ChannelUseInstructions determineChannelOrder() {
+	public ChannelUseInstructions determineChannelOrder() {
 		if (singleChannelPer(ROWS)) {
 			return getChannelOrder(ROWS);
 		} else
@@ -143,7 +145,8 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		return false;
 	}
 	
-	/**returns the kind of layout */
+	/**returns the kind of layout, returns null if the layout does not match 
+	   the expected patterns */
 	public Integer determineChannelLayout() {
 		if (singleChannelPer(ROWS)) {
 			return ROWS;
@@ -196,9 +199,10 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		if (order.size()==0)
 			whereIsMerge=ChannelUseInstructions.ONLY_MERGE_PANELS;
 	 ChannelUseInstructions output = new ChannelUseInstructions();
-	 if (order.size()==0)
+	 if (order.size()!=0)
 		 output.getChanPanelReorder().setOrder(order);
 	 output.MergeHandleing=whereIsMerge;
+	 
 		return output;
 	}
 	

@@ -181,10 +181,11 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		return super.getNeededWidthOfPlot();
 	}
 	
-	/**Called to create new figure legends, annotation indicates that it should be called by a popup menu*/
+	/**Called to create new figure legends, annotation indicates that it should be called by a popup menu
+	 * @return */
 	@MenuItemMethod(menuActionCommand = "Add Legends", menuText = "New Figure Legends", subMenuName="Add")
-	public void createFigureLegends() {
-		super.createFigureLegends();
+	public CombinedEdit createFigureLegends() {
+		return super.createFigureLegends();
 	}
 
 	

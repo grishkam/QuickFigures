@@ -339,20 +339,17 @@ private static final long serialVersionUID = 1L;
 		this.laygeneratedPanelsOnGrid = laygeneratedPanelsOnGrid;
 	}
 	
-	
-	
 
 	
-
-	
-	
+	/**shows the recreate panels dialog in non-modal form*/
 	@MenuItemMethod(menuActionCommand = "paneloptions", menuText = "Recreate Panels", subMenuName="Image Panels")
 	public void showOptionsThenRegeneratePanelGraphics() {
 		showRecreatePanelOptions(false);
 		
 	}
 	
-
+	/**shows the recreate panels dialog.
+	 * @param indicated whether the dialog should be modal*/
 	public void showRecreatePanelOptions(boolean modal) {
 		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(this,this.getPanelList(),null, true);
 		dialog.setModal(modal);

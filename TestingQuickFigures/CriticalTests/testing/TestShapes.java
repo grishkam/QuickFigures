@@ -1,8 +1,7 @@
 /**
- * Author: Gregory Mazo
- * Date Modified: ${date}
- * Copyright (C) ${year} Gregory Mazo
- * 
+ * Author: Greg Mazo
+ * Date Modified: Feb 20, 2021
+ * Version: 2021.1
  */
 package testing;
 
@@ -45,6 +44,7 @@ import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.MultiSelectionOperator;
 import textObjectProperties.TextLineSegment;
 
+/**contains methods that generate example worksheets containing different types of shapes*/
 public class TestShapes {
 	
 	public static final int DIVERSE_SHAPES=1, RECTANGLE_AND_OTHERS=0, MANY_COLORS=200;

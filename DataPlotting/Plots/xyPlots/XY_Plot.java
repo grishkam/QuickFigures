@@ -278,10 +278,11 @@ public CombinedEdit addLine() {
 	return undo;
 }
 
-/**creates the figure legend, annotation indicates that it should be called by a popup menu*/
+/**creates the figure legend, annotation indicates that it should be called by a popup menu
+ * @return */
 @MenuItemMethod(menuActionCommand = "Add Legends", menuText = "New Figure Legends", subMenuName="Add")
-public void createFigureLegends() {
-	super.createFigureLegends();
+public CombinedEdit createFigureLegends() {
+	return super.createFigureLegends();
 }
 
 

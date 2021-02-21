@@ -74,6 +74,7 @@ import plotTools.PlotIcon;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
+import undo.UndoAttachmentPositionChange;
 import undo.UndoLayoutEdit;
 import undo.UndoMoveItems;
 import undoForPlots.AxisFlipUndo;
@@ -190,6 +191,7 @@ public void fullPlotUpdate() {
 	this.onAxisUpdate();
 }
 
+/**changes the plot to a tukey boxplot format*/
 @MenuItemMethod(menuActionCommand = "To Tukey", menuText = "Make Tukey Boxplot", subMenuName="Change Format", orderRank=12)
 public CombinedEdit tukeyBoxplotPlot() {
 	CombinedEdit undo = new CombinedEdit();
@@ -309,8 +311,9 @@ public void addTitleLabel() {
 }
 
 @MenuItemMethod(menuActionCommand = "Add Y label", menuText = "New Y-Axis Label", subMenuName="Add<Label", orderRank=40)
-public void addYAxiLabel() {
-	if (this.hasItem(yLabel)) this.remove(yLabel);
+public CombinedEdit addYAxiLabel() {
+	CombinedEdit cc = new CombinedEdit();
+	cc.addEditToList(removeYAxiLabel());
 	yLabel=new AxisLabel("Y-Axis Label", this);
 	this.add(yLabel);
 	yLabel.getParagraph().get(0).get(0).setText("Y Axis ");
@@ -322,13 +325,17 @@ public void addYAxiLabel() {
 	areaRect.snapLockedItems();
 	yLabel.putIntoAnchorPosition();
 	
-	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
-
+	cc.addEditToList(
+			expandLayoutForLabel(yLabel));
+	cc.addEditToList(new UndoAddItem(this, yLabel));
+	return cc;
 }
 
 @MenuItemMethod(menuActionCommand = "Add YLab2", menuText = "New Secondary Y-Axis Label", subMenuName="Add<Label", orderRank=50)
-public UndoAddItem addSecondaryYAxiLabel() {
-	if (this.hasItem(yLabel2)) this.remove(yLabel2);
+public CombinedEdit addSecondaryYAxiLabel() {
+	CombinedEdit cc = new CombinedEdit();
+	cc.addEditToList(removeSecondaryYAxiLabel());
+	
 	yLabel2=new AxisLabel("Y-Axis Label", this);
 	this.add(yLabel2);
 	yLabel2.getParagraph().get(0).get(0).setText("Y Axis 2");
@@ -341,13 +348,29 @@ public UndoAddItem addSecondaryYAxiLabel() {
 	yLabel2.getAttachmentPosition().setHorizontalOffset((int) (25+this.alternateYaxis.getTicLength()));
 	areaRect.snapLockedItems();
 	yLabel2.putIntoAnchorPosition();
-	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), yLabel.getBounds());
-return new UndoAddItem(this, yLabel2);
+	cc.addEditToList(
+			expandLayoutForLabel(yLabel2));
+	cc.addEditToList(new UndoAddItem(this, yLabel2));
+	return cc;
 }
 
+/**
+expands the label space in the layout to fit the given label.
+returns an undoable edit
+ */
+public UndoLayoutEdit expandLayoutForLabel(TextGraphic label) {
+	UndoLayoutEdit undo = new UndoLayoutEdit(this.plotLayout);
+	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(),label.getBounds());
+	return undo;
+}
+
+
+/**Adds a label to the x axis*/
 @MenuItemMethod(menuActionCommand = "Add X Label", menuText = "New X-Axis Label", subMenuName="Add<Label", orderRank=40)
-public void addXAxiLabel(int offset) {
-	if (this.hasItem(xLabel)) this.remove(xLabel);
+public CombinedEdit addXAxiLabel() { return addXAxiLabel(0);}
+public CombinedEdit addXAxiLabel(int offset) {
+	CombinedEdit cc = new CombinedEdit();
+	cc.addEditToList(removeXAxiLabel());
 	xLabel=new  AxisLabel("X-Axis Label", this);
 	xLabel.setAttachmentPosition(AttachmentPosition.defaultRowLabel());
 	xLabel.getAttachmentPosition().setLocationTypeExternal(RectangleEdges.BELOW_AT_MIDDLE);
@@ -357,9 +380,12 @@ public void addXAxiLabel(int offset) {
 	areaRect.addLockedItem(xLabel);
 	areaRect.snapLockedItems();
 	xLabel.putIntoAnchorPosition();
+	cc.addEditToList(
+			expandLayoutForLabel(xLabel));
+	cc.addEditToList(new UndoAddItem(this, xLabel));
+	IssueLog.log("Adding label for x axis");
 	
-	new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), xLabel.getBounds());
-	
+	return cc;
 }
 
 /**Moves the axis labels such that they don't overlap with column/category labels*/
@@ -781,8 +807,7 @@ public AbstractUndoableEdit addBoxplotBar() {
 }
 
 
-
-
+/**removes the scatter plots*/
 @MenuItemMethod(menuActionCommand = "Remove Scatter Plot", menuText = "Points", subMenuName="Remove", permissionMethod="hasScatterPoints")
 public AbstractUndoableEdit removeScatter() {
 	CombinedEdit undo = new CombinedEdit();
@@ -790,7 +815,8 @@ public AbstractUndoableEdit removeScatter() {
 	return undo;
 }
 
-@MenuItemMethod(menuActionCommand = "Remove Label", menuText = "Labels", subMenuName="Remove")
+/**removes the labels for each data series*/
+@MenuItemMethod(menuActionCommand = "Remove Label", menuText = "Series Labels", subMenuName="Remove<Label")
 public AbstractUndoableEdit removeLabel() {
 	CombinedEdit undo = new CombinedEdit();
 	for(BasicDataSeriesGroup t: this.getAllDataSeries()){undo.addEditToList(t.removeLabel());;}
@@ -821,6 +847,60 @@ public CombinedEdit removeBoxplots() {
 	return undo;
 }
 
+/**
+removes the secondary y-axis
+ * @return 
+ */
+@MenuItemMethod(menuActionCommand = "remove 2nd Y-axis label", menuText = "2nd Y-axis label", subMenuName="Remove<Label", permissionMethod="has2ndYlabel")
+public UndoAbleEditForRemoveItem removeSecondaryYAxiLabel() {
+	return removeLabel(yLabel2);
+}
+
+public boolean has2ndYlabel() {return yLabel2!=null;}
+
+/**
+removes the y-axis label
+ */
+@MenuItemMethod(menuActionCommand = "remove Y-axis label", menuText = "Y-axis label", subMenuName="Remove<Label", permissionMethod="hasYLabel")
+public UndoAbleEditForRemoveItem  removeYAxiLabel() {
+	return removeLabel(yLabel);
+}
+
+public boolean hasYLabel() {return yLabel!=null;}
+
+/**
+removes the x-axis label
+ */
+@MenuItemMethod(menuActionCommand = "remove X-axis label", menuText = "X-axis label", subMenuName="Remove<Label", permissionMethod="hasXLabel")
+public UndoAbleEditForRemoveItem  removeXAxiLabel() {
+	return removeLabel(xLabel);
+}
+
+public boolean hasXLabel() {return xLabel!=null;}
+
+/**
+removes the x-axis label
+ */
+@MenuItemMethod(menuActionCommand = "remove Title label", menuText = "Title label", subMenuName="Remove<Label", permissionMethod="hasTitleLabel")
+public UndoAbleEditForRemoveItem  removeTitleLabel() {
+	return removeLabel(titleLabel);
+}
+
+/**removes a label from the plot
+ * @param label2 the plot label to be removed
+ * @return
+ */
+private UndoAbleEditForRemoveItem removeLabel(PlotLabel label2) {
+	if (this.hasItem(label2)) 
+				{
+				this.remove(label2);
+				return 
+				new UndoAbleEditForRemoveItem(this, label2);
+				}
+	return null;
+}
+
+public boolean hasTitleLabel() {return titleLabel!=null;}
 
 @MenuItemMethod(menuActionCommand = "To Barplot", menuText = "Make Barplot", subMenuName="Change Format", orderRank=4)
 public CombinedEdit barPlot() {
@@ -936,25 +1016,31 @@ public PlotCordinateHandler getCordinateHandler(int n) {
 
 }
 
-/**creates new figure legend bjects*/
-public void createFigureLegends() {
-	
+/**creates new figure legend bjects
+ * @return */
+public CombinedEdit createFigureLegends() {
+	CombinedEdit cc = new CombinedEdit();
 	Point2D p=new Point2D.Double(this.getPlotArea().getMaxX()+2, this.getPlotArea().getMinY());
 	for(BasicDataSeriesGroup aaa: this.getAllDataSeries()) try {
-		
-		addLegandShapeTo(p, aaa);
+		cc.addEditToList(
+				addLegandShapeTo(p, aaa));
 		
 		p.setLocation(p.getX(), p.getY()+aaa.getLegandShape().getBounds().height+2);
 	} catch (Throwable t) {t.printStackTrace();}
-	
-	giveConsistentStanppingToLabelGroup(getSeriesLabels());
+	cc.addEditToList(
+	giveConsistentPositionsToLabelGroup(getSeriesLabels()));
+	return cc;
 }
 
-protected void giveConsistentStanppingToLabelGroup(ArrayList<PlotLabel> labels) {
+protected CombinedEdit giveConsistentPositionsToLabelGroup(ArrayList<PlotLabel> labels) {
+	CombinedEdit cc = new CombinedEdit();
+	
 	PlotLabel lab1 = labels.get(0);
 	for(PlotLabel l: labels) {
+		cc.addEditToList(new  UndoAttachmentPositionChange(l));
 		l.setAttachmentPosition(lab1.getAttachmentPosition());
 	}
+	return cc;
 }
 
 /**Adds a figure legend shape for the given data series
@@ -984,7 +1070,9 @@ private CombinedEdit addLegandShapeTo(Point2D p, BasicDataSeriesGroup aaa) {
 					);
 			new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), l.getBounds());
 			new BasicLayoutEditor().expandSpacesToInclude(plotLayout.getPanelLayout(), aaa.getLegandShape().getBounds());
-	 giveConsistentStanppingToLabelGroup(getSeriesLabels());	
+	 undo.addEditToList(
+			 giveConsistentPositionsToLabelGroup(getSeriesLabels())
+			 );	
 	 undo.establishFinalState();
 	 return undo;
 }
