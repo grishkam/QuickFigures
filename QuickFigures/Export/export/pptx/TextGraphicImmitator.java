@@ -36,6 +36,7 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
@@ -53,10 +54,11 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 	public XSLFTextBox addObjectToSlide(XMLSlideShow ppt, XSLFShapeContainer slide) {
 		 XSLFTextBox shape = slide.createTextBox();
 		
-
+		  shape.clearText();//needed to prevent empty space before text
 		    XSLFTextParagraph p = shape.addNewTextParagraph();
 
 		    shape.setWordWrap(false);
+		  
 		    
 		    if (t instanceof ComplexTextGraphic) {
 		    	TextParagraph paragraph = ((ComplexTextGraphic) t).getParagraph();
@@ -76,6 +78,9 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		    			  r1.setFontSize((double)seg.getParent().getFont().getSize());
 		    			  r1.setUnderlined(seg.isUnderlined());
 		    			  r1.setStrikethrough(seg.isStrikeThrough());
+		    			  
+		    			  IssueLog.log("adding text run "+seg.getText());
+				    		IssueLog.log("r "+p.getTextRuns());
 		    		}
 		    		firstLine=false;
 		    		 
@@ -120,7 +125,7 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 			   b2.setRect( t.getOutline().getBounds2D());
 			   java.awt.geom.Point2D.Double p = new Point2D.Double(b2.getCenterX(), b2.getCenterY());
 			
-			   double versionShift=t.getFont().getSize();//added after switch from poi 3.12 to later version done on feb 22 2021
+			   double versionShift=0;t.getFont().getSize();//added after switch from poi 3.12 to later version done on feb 22 2021
 			  //creates teh anchor rect
 			   Rectangle2D.Double b=new Rectangle2D.Double();
 			   b.setRect( t.getBoundPriorToRotation());

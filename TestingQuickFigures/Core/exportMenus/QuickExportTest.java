@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
 import figureFormat.DirectoryHandler;
-import ij.IJ;
 import logging.IssueLog;
 import testing.FigureTester;
 import testing.TestProvider;
@@ -35,7 +34,7 @@ abstract class QuickExportTest {
 		for(TestProvider ex: testsCases) {
 			if(testCase!=ALL_CASES &&testCase!=count) { count++; continue;}
 			long time=System.currentTimeMillis();
-			System.out.println("starting test "+count);
+			IssueLog.log("starting test "+count);
 			String testOutput = DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"+count+" Export Test "+count+"("+Math.random()+")."+qe.getExtension();
 			
 			File file = new File(testOutput);
@@ -48,21 +47,20 @@ abstract class QuickExportTest {
 			createsFiles.add(testOutput);
 			
 			
-			System.out.println(System.currentTimeMillis()-time);
-			System.out.println("ending test "+count);
-			System.out.println("Find saved file in "+file);
+			IssueLog.log(System.currentTimeMillis()-time);
+			IssueLog.log("ending test "+count);
+			IssueLog.log("Find saved file in "+file);
 			count++;
 				}
 		Desktop.getDesktop().open(new File(DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"));
 		
 		if (opensFiles)openFiles(createsFiles);
 		
-		IssueLog.waitSeconds(50);
+		
 		
 		assert(FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no. The exported images should look highly similar to the originals. are they?"));
 		
 		
-		IssueLog.waitSeconds(60);
 	}
 
 	/**
