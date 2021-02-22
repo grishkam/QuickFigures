@@ -9,6 +9,7 @@ import figureFormat.DirectoryHandler;
 import graphicalObjects.ZoomableGraphic;
 import ij.IJ;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import testing.FigureTester;
 import testing.TestProvider;
 import testing.TestShapes;
@@ -46,8 +47,11 @@ class ImageDisplayIOTest {
 		   if it had been selected*/
 		 for(LocatedObject2D l:i.getTheSet().getLocatedObjects()) {
 			 l.select();
+			 l.makePrimarySelectedItem(true);
 			 i.updateDisplay();
+			 IssueLog.waitMiliseconds(5);
 			 l.deselect();
+			
 		 }
 		 
 		ImageDisplayIO.writeToFile(f, i.getTheSet());

@@ -1,0 +1,7 @@
+Images were taken on a Zeiss microscope, imported to imageJ by locitools and resaved.
+The cells have microtubules, cilia and nuclei staining. Since the three localizations are
+very distinct, I decided that they would be a good demo
+
+
+originally were part of the layout demo
+Image- 0001_taken_05_23_2014.zvi 

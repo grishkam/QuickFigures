@@ -143,4 +143,44 @@ public abstract class ToolTester {
 		c.dispatchEvent(k);
 		
 	}
+	
+	/**
+	 * @param image
+	 * @param pointInsideRectanglePress
+	 */
+	public void simulatePress(ImageWindowAndDisplaySet image, Point2D.Double pointInsideRectanglePress) {
+		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+	}
+	/**
+	 * @param image
+	 * @param dragPoint
+	 */
+	public void simulateRelease(ImageWindowAndDisplaySet image, Point2D.Double dragPoint) {
+		simulateMouseCordinateEvent(image, dragPoint,  MouseEvent.MOUSE_RELEASED);
+	}
+	/**
+	 * @param image
+	 * @param dragPoint
+	 */
+	public void simulateDrag(ImageWindowAndDisplaySet image, Point2D.Double dragPoint) {
+		simulateMouseCordinateEvent(image, dragPoint,  MouseEvent.MOUSE_DRAGGED);
+	}
+	
+	public ToolSimulation getSimulation(ImageWindowAndDisplaySet image) {
+		return new ToolSimulation(image);
+	}
+	
+	public class ToolSimulation {
+		ImageWindowAndDisplaySet image;
+		
+		public ToolSimulation(ImageWindowAndDisplaySet im) {
+			this.image=im;
+		}
+		
+		public void simulate(Point2D.Double p1, Point2D.Double p2) {
+			simulatePress(image, p1);
+			simulateDrag(image, p2);
+			simulateRelease(image, p2);
+		}
+	}
 }

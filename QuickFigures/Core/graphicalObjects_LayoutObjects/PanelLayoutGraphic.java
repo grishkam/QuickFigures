@@ -825,13 +825,9 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			this.getPanelLayout().setVirtualWorkSheet(wrap1);
 			this.getPanelLayout().getVirtualWorksheet().takeFromImage(this);
 			if (this.getPanelLayout().getVirtualWorksheet().getLocatedObjects().contains(this)) {
-				IssueLog.log("somthing went wrong");
+				IssueLog.log("something went wrong  ");
 			}
-			for(Object o: contains.getLocatedObjects()) {
-				if(o instanceof PanelLayoutGraphic) {
-					IssueLog.log("problem "+"layouts should not be in this list");
-				}
-			}
+			
 			return wrap1;
 		
 	}

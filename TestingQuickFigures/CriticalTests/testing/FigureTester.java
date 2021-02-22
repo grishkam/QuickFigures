@@ -8,15 +8,22 @@ import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
+import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.PreProcessInformation;
 import figureFormat.DirectoryHandler;
 import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.PanelListElement;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.QuickFigureMaker;
 import ij.IJ;
 import ij.ImagePlus;
+import imageMenu.CanvasAutoResize;
+import locatedObject.AttachmentPosition;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import messages.ShowMessage;
+import multiChannelFigureUI.InsetTool;
 
 /**main method from this class creates a figure from a set of saved images
  * figures appear immediately and use can visually confirm 
@@ -88,11 +95,36 @@ public class FigureTester {
 		
 	}
 	
-	/**returns the standard versio of example 1*/
+	/**returns the standard version of example 1*/
 	public FigureOrganizingLayerPane createFigureFromExample1AImages() {return createFigureFromExample1Images(example1FigureMaker(), 2);}
 
-	/**returns the standard versio of example 1*/
+	/**returns a version of example 1 with merge panels only*/
 	public FigureOrganizingLayerPane createFigureFromExample1BImages() {return createFigureFromExample1Images(example1BFigureMaker(), 4);}
+
+	/**returns the versionof example 1 with inset panels*/
+	public FigureOrganizingLayerPane createFigureFromExample1CImages() {
+		FigureOrganizingLayerPane createFigureFromExample1Images = createFigureFromExample1Images(example1BFigureMaker(), 1);
+		 DisplayedImage image1 = CurrentFigureSet.getCurrentActiveDisplayGroup();
+		PanelListElement panel = createFigureFromExample1Images.getAllPanelLists().getMergePanel();
+		InsetTool tool = new InsetTool();
+		
+		PanelGraphicInsetDefiner inset1 = tool.createInsetOnImagePanel( image1.getImageAsWrapper(), panel.getImageDisplayObject(), new Rectangle(20,25, 12,10));
+	
+		PanelGraphicInsetDefiner inset2 = tool.createInsetOnImagePanel(image1.getImageAsWrapper(),panel.getImageDisplayObject(), new Rectangle(42,47, 15,10));
+		inset2.setAngle(-Math.PI/12);inset2.updateImagePanels();
+		
+		new CanvasAutoResize(true).performUndoableAction(image1);
+		panel.getImageDisplayObject().getScaleBar().getAttachmentPosition().setLocationTypeInternal(RectangleEdges.LOWER_LEFT);
+		
+		AttachmentPosition a=null;
+		for(ChannelLabelTextGraphic c: inset1.getPanelManager().getPanelList().getChannelLabels()) {
+			if (a!=null) c.setAttachmentPosition(a); else a=c.getAttachmentPosition();
+			c.getAttachmentPosition().setLocationCategory(AttachmentPosition.EXTERNAL);
+			c.getAttachmentPosition().setLocationTypeExternal(RectangleEdges.ABOVE_AT_MIDDLE);
+			c.getAttachmentPosition().setHorizontalOffset(0);
+		}
+		return createFigureFromExample1Images;
+		}
 
 	
 	/**
@@ -177,6 +209,11 @@ public class FigureTester {
 		 
 		 figureTester. createFigureFromExample1BImages();
 		 CurrentFigureSet .updateActiveDisplayGroup();
+		 
+		 figureTester. createFigureFromExample1CImages();
+		 CurrentFigureSet .updateActiveDisplayGroup();
+		 
+		
 	}
 
 	/**
@@ -191,7 +228,7 @@ public class FigureTester {
 	}
 	
 	public static TestProvider[] getTests() {
-		return new TestProvider[] {new FigureProvider(FigureProvider.form1), new FigureProvider(FigureProvider.form1b)};
+		return new TestProvider[] {new FigureProvider(FigureProvider.form1), new FigureProvider(FigureProvider.form1b),new FigureProvider(FigureProvider.form1c)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -199,7 +236,7 @@ public class FigureTester {
 		
 		
 		
-		static final int form1=0, form1b=1;
+		static final int form1=0, form1b=1, form1c=2;
 		int form=form1;
 		
 		public FigureProvider() {}
@@ -214,6 +251,8 @@ public class FigureTester {
 			new FigureTester(). createFigureFromExample1AImages();
 			if (form==form1b)
 				new FigureTester(). createFigureFromExample1BImages();
+			if (form==form1c)
+				new FigureTester(). createFigureFromExample1CImages();
 			return  CurrentFigureSet.getCurrentActiveDisplayGroup();
 		}
 	}

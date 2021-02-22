@@ -88,12 +88,24 @@ public class AddLabelHandle extends MoveRowHandle {
 	}
 
 	private void hideIfNotNeeded(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
+		boolean needLabel = labelSpaceNotAvailable(montageLayoutGraphic, index, pick);
+		if(needLabel) this.setHidden(true);
+	}
+
+	/**returns true if the space for the label of the given index is occupied by another label
+	 * @param montageLayoutGraphic
+	 * @param index
+	 * @param pick
+	 * @return
+	 */
+	public boolean labelSpaceNotAvailable(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getVirtualWorksheet());
 		
 		ArrayList<BasicGraphicalObject> array = pick.getDesiredItemsAsGraphicals(rois);
 		
-		if(array.size()>0) this.setHidden(true);
+		boolean needLabel = array.size()>0;
+		return needLabel;
 	}
 	
 	private Rectangle2D getSpaceForLabel(int index) {

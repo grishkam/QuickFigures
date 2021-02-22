@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Feb 22, 2021
  * Version: 2021.1
  */
 package journalCriteria;
@@ -23,6 +23,7 @@ package journalCriteria;
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
+import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 
 /**A menu option that allows the user to input speficic criteria
@@ -47,6 +48,13 @@ public class JournalCriteriaMenuOption extends BasicMultiSelectionOperator {
 	@Override
 	public void run() {
 		ArrayList<ZoomableGraphic> arrayTaret = getAllArray();
+		if (arrayTaret.size()==0) {
+			boolean result = ShowMessage.showOptionalMessage("none selected", true, "no objects are selected, do you want to target all objects?");
+			if(result) {
+				arrayTaret=super.getSelector().getImageWrapper().getTopLevelLayer().getAllGraphics();
+			}
+			else return;
+		}
 		new FormatOptionsDialog(arrayTaret, new JournalCriteria()).showDialog();
 
 	}

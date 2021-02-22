@@ -18,6 +18,7 @@ package multiChannelFigureUI;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
+import locatedObject.ObjectContainer;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.AttachmentPositionPanel;
@@ -58,6 +60,12 @@ import undo.UndoScalingAndRotation;
 
 public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
+	/**
+	 * 
+	 */
+	public static final String INSET_TOOL_NAME = "Inset Tool";
+
+
 	static boolean locksItems=false;
 	
 
@@ -84,6 +92,7 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	ImagePanelGraphic SourceImageforInset=null;
 	PanelGraphicInsetDefiner inset=null;
 	PanelGraphicInsetDefiner preExisting=null;
+	ObjectContainer imageTargetted ;
 	
 	int arrangement=ATTACH_TO_PARENT_PANEL;//How to arrange the many panel insets
 	
@@ -100,32 +109,47 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	public boolean addToExisting=true;
 
 
-	private CombinedEdit undo;
+	private CombinedEdit undo=new CombinedEdit();
 	
 	public InsetTool() {
 		super.iconSet=new InsetToolIcon(0).generateIconSet();
 	}
 	
-	
+	/**returns the most recently edited inset object*/
+	public PanelGraphicInsetDefiner getMostRecentDrawnInset() {return inset;};
 	
 public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	undo=new CombinedEdit();
 	
-	
+	imageTargetted = this.getImageClicked();
 	if (roi2 instanceof PanelGraphicInsetDefiner) {
 		
-		inset= (PanelGraphicInsetDefiner) roi2;
-		SourceImageforInset=inset.getSourcePanel();
-		sizeDefiningMouseDrag=false;
+		setupToolToEditExistingInset(roi2);
 		return;
-	} else sizeDefiningMouseDrag=true;
-	
+	} else 
+		setupToolForImagePanel(roi2);
+	}
+
+/**
+ * @param roi2
+ */
+public void setupToolToEditExistingInset(LocatedObject2D roi2) {
+	inset= (PanelGraphicInsetDefiner) roi2;
+	SourceImageforInset=inset.getSourcePanel();
+	sizeDefiningMouseDrag=false;
+}
+
+/**
+ * @param roi2
+ */
+public void setupToolForImagePanel(LocatedObject2D roi2) {
 	inset=null;
+	sizeDefiningMouseDrag=true;
 		if (roi2 instanceof ImagePanelGraphic) {
 			
 			SourceImageforInset=(ImagePanelGraphic) roi2;
 		}
-	}
+}
 	
 	public void onRelease(ImageWorkSheet imageWrapper, LocatedObject2D roi2) {
 		
@@ -247,10 +271,14 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 				if(fontsize<6) fontsize=6;
 				if(fontsize>12) fontsize=12;
 				
+				
+				
+				if (imageTargetted!=null)
 				for(ChannelLabelTextGraphic l: labels) {
 					l.setFont(l.getFont().deriveFont(fontsize));
 					
-					ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(this.getImageClicked(), l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.getSelectOnlyThoseOfClass());
+					
+					ArrayList<LocatedObject2D> itemsInway = getObjecthandler().getAllClickedRoi(imageTargetted, l.getBounds().getCenterX(), l.getBounds().getCenterY(),this.getSelectOnlyThoseOfClass());
 					itemsInway.remove(l);
 					itemsInway.remove(inset.personalLayout);
 					if (itemsInway.size()>0&&l.getAttachmentPosition().isExternalSnap()) {
@@ -356,9 +384,30 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		if (!getImageDisplayWrapperClick().getUndoManager().hasUndo(undo)){
 				this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
 		}
-		UndoScalingAndRotation scalingUndo = new UndoScalingAndRotation(inset);
+	
 		Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
+		createOrEditInset(r);
+	}
+
+	
+	/**when given an image panel and a bounds location (relative to the origin of the image panel)*/
+	public PanelGraphicInsetDefiner createInsetOnImagePanel(ObjectContainer ob,
+			ImagePanelGraphic g, Rectangle r) {
+		this.setupToolForImagePanel(g);
+		imageTargetted=ob;
+		Point2D p = g.getLocationUpperLeft();
+		r.setLocation((int)p.getX()+r.x, (int)p.getY()+r.y);
+		this.createOrEditInset(r);
+		return inset;
+	}
+	
+	/**creates an inset for the drawn rectangle
+	 * @param r
+	 */
+	public void createOrEditInset(Rectangle2D r) {
+		UndoScalingAndRotation scalingUndo = new UndoScalingAndRotation(inset);
 		undo.addEditToList(scalingUndo);
+		
 		boolean isRectValid=validRect(r);
 		
 		if (sizeDefiningMouseDrag==true) {
@@ -431,6 +480,7 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 		undo.addEditToList( 
 				createInsets(inset));
 		
+		if (this.getImageDisplayWrapperClick()!=null)
 		this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
 	}
 	
@@ -608,7 +658,7 @@ public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	@Override
 	public String getToolName() {
 			
-			return "Inset Tool";
+			return INSET_TOOL_NAME;
 		}
 
 }

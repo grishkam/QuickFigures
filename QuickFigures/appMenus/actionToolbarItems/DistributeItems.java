@@ -34,6 +34,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
+import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.UndoMoveItems;
@@ -61,8 +62,8 @@ public class DistributeItems extends BasicMultiSelectionOperator {
 		ArrayList<LocatedObject2D> allObjects = super.getAllObjects();
 		
 		UndoMoveItems undo = new UndoMoveItems(allObjects, true);//undo
-		if (allObjects==null||allObjects.size()==0) {
-			IssueLog.log("no objects selected");
+		if (allObjects==null||allObjects.size()<=1) {
+			ShowMessage.showOptionalMessage("no object", true, "this option requires user to select more than one object");
 			return;
 		}
 		distributeArray(allObjects);

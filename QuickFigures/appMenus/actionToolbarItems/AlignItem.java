@@ -110,6 +110,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 			return;
 		}
 		if(type>99) {
+			
 			performOrderChange();
 			return;
 		}
@@ -120,6 +121,11 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 		ArrayList<LocatedObject2D> all = getAllObjects();
 		//allLayouts=allLayouts(all);
 		UndoMoveItems undo = new UndoMoveItems(all, true);//undo
+		
+		if (all==null||all.size()<=1) {
+			ShowMessage.showOptionalMessage("no object", true, "this option requires user to select more than one object");
+			return;
+		}
 		
 		allignArray(all);
 		
@@ -136,7 +142,10 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	 */
 	public void performOrderChange() {
 		ArrayList<ZoomableGraphic> items = selector.getSelecteditems();
-		
+		if (items==null||items.size()<=0) {
+			ShowMessage.showOptionalMessage("no object selected", true, "this option requires user to select an object");
+			return;
+		}
 		items=performReplace(items);
 		
 		/**when moving multiple consecutive objects forward, need to reverse the order

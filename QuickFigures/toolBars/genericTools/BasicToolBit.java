@@ -136,7 +136,7 @@ public class BasicToolBit implements ToolBit {
 	
 	public ImageWorkSheet getImageClicked() {
 		if (toolCore==null) {
-			IssueLog.log("no tool core!!!");
+			return null;
 		}
 		return toolCore.getImageWrapperClick();
 	}
@@ -144,7 +144,8 @@ public class BasicToolBit implements ToolBit {
 	
 	public DisplayedImage getImageDisplayWrapperClick() {
 		if (toolCore==null) {
-			IssueLog.log("no tool core!!!");
+			return null;
+			//sIssueLog.log("no tool core!!!");
 		}
 		return toolCore.getClickedImage();//.getImageWrapperClick();
 	}

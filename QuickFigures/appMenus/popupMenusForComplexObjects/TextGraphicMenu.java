@@ -29,11 +29,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import fLexibleUIKit.ObjectAction;
+import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
 import figureOrganizer.FigureOrganizingLayerPane;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.TextInsetsDialog;
+import undo.UndoAddItem;
 
 /**A menu for text graphics*/
 public class TextGraphicMenu extends SmartPopupJMenu implements ActionListener,
@@ -59,24 +62,41 @@ PopupMenuSupplier  {
 		ArrayList<JMenuItem> jm=new ArrayList<JMenuItem>();
 		jm.add(createItem(OPTIONS_DIALOG));
 		addExpertOptions(jm);
-		jm.add(new ObjectAction<TextGraphic>(textG) {
-
-			public void actionPerformed(ActionEvent e) {
-				TextGraphic c = textG.copy();
-				c.moveLocation(5, 2);
-				if(textG.getParentLayer()==null) return;
-				textG.getParentLayer().add(c);
-			}}.createJMenuItem("Duplicate"));
+		jm.add(createDuplicatorAction(false).createJMenuItem("Duplicate"));
 		
 		FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(textG);
 		if(f!=null) {
-			JMenuItem menuItem = f.getMenuSupplier().getLabelEditorMenuItemFor(textG);
+			EditLabels menuItem = f.getMenuSupplier().getLabelEditorMenuItemFor(textG);
 			if (menuItem==null ) menuItem=new EditLabels(textG);
 			if (menuItem!=null)jm.add(menuItem);
+			
 		}
 		
 		return jm;
 	}
+
+	/**an action that duplicates a text item
+	 * @return
+	 */
+	public ObjectAction<TextGraphic> createDuplicatorAction(boolean rowLabel) {
+		return new ObjectAction<TextGraphic>(textG) {
+
+			public void actionPerformed(ActionEvent e) {
+				TextGraphic c = textG.copy();
+				c.moveLocation(5, 2);
+				
+				
+				
+				GraphicLayer targetLayer = textG.getParentLayer();
+				if(targetLayer==null) return;
+				targetLayer.add(c);
+				this.addUndo(new UndoAddItem(targetLayer, c));
+				
+				
+				
+			}};
+	}
+
 
 	/**
 	 * @param jm

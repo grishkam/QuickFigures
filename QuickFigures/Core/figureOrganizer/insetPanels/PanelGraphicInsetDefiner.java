@@ -380,6 +380,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		return channelLabelProp;
 	}
 	
+	/**returns a channel label manager, known to have problems*/
 	public ChannelLabelManager getChannelLabelManager() {
 		GraphicLayer usedLayer = this.getParentLayer();
 		if(this.personalLayer!=null) usedLayer =personalLayer;

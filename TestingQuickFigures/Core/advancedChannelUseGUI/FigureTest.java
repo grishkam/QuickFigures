@@ -16,7 +16,7 @@ import testing.FigureTester;
  * 
  */
 public class FigureTest {
-	protected DisplayedImage gg;
+	public DisplayedImage gg;
 	
 	/**
 	 * @return
@@ -26,6 +26,7 @@ public class FigureTest {
 		FigureTester figureTester = new FigureTester();
 		figureTester.ignoreTemplate=true;
 		FigureOrganizingLayerPane f = figureTester. createFigureFromExample1AImages();
+		chooseCurrentWindow() ;
 		return f;
 	}
 	

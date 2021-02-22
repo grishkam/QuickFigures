@@ -95,11 +95,11 @@ public class Object_MoverTest extends ToolTester {
 		double px=50;//a point known to be within the rectangle
 		double py=100;
 		Point2D.Double pointInsideRectanglePress = new Point2D.Double(px, py);
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideRectanglePress);
 		assert(testRect.isSelected());
 		assert(!testCircle.isSelected());//nothing should be done to objects outside of the click location
 		Point2D.Double pointInsideCirclePress = new Point2D.Double(140,100);
-		simulateMouseCordinateEvent(image, pointInsideCirclePress ,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideCirclePress);
 		assert(!testRect.isSelected());//should no longer be selected after the circle is clicked on
 		assert(testCircle.isSelected());// now selected
 		testRect.deselect();//deselect after test of selection is over
@@ -108,12 +108,12 @@ public class Object_MoverTest extends ToolTester {
 		
 		/**tests to determine if a mouse drag (without shift down) changes the location*/
 		testRect.setRectangle(r);
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideRectanglePress);
 		double dx=5;//displacement x
 		double dy=20;//displacement y
 		Point2D.Double dragPoint = new Point2D.Double(px+dx, py+dy);
 		IssueLog.log(dragPoint);
-		simulateMouseCordinateEvent(image, dragPoint,  MouseEvent.MOUSE_DRAGGED);
+		simulateDrag(image, dragPoint);
 		assert(!testRect.getRectangle().equals(r));
 		
 		/**the new location for the rectangle*/
@@ -126,7 +126,7 @@ public class Object_MoverTest extends ToolTester {
 		
 		/**tests to see if undo works*/
 		//undo is added upon mouse release
-		simulateMouseCordinateEvent(image, dragPoint,  MouseEvent.MOUSE_RELEASED);
+		simulateRelease(image, dragPoint);
 		image.getUndoManager().undo();
 		assert(testRect.getRectangle().equals(r));//the original rectangle
 		assert(!testRect.getRectangle().equals(r2));
@@ -138,7 +138,7 @@ public class Object_MoverTest extends ToolTester {
 		testRect.select();
 		testCircle.select();
 		Point2D.Double pointPress2 = new Point2D.Double(r.getMaxX()+80, r.getMaxY()+80);
-		simulateMouseCordinateEvent(image, pointPress2,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointPress2);
 		assert(!testRect.isSelected());
 		assert(!testCircle.isSelected());
 		
@@ -153,12 +153,12 @@ public class Object_MoverTest extends ToolTester {
 		
 		
 		/**tests to determine whether a mouse press in a handle resizes the rectangle*/
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);//selects the rectangle so that the handles are visible
+		simulatePress(image, pointInsideRectanglePress);//selects the rectangle so that the handles are visible
 		simulateHandlePressCordinateEvent(image, testRect, RectangleEdges.LOWER_RIGHT);
 		int finalWidth=100, finalHeight=120;
 		Point2D.Double dragPointResize = new Point2D.Double(testRect.getRectangle().getX()+finalWidth, testRect.getRectangle().getY()+finalHeight);
 		IssueLog.log(dragPointResize);
-		simulateMouseCordinateEvent(image, dragPointResize,  MouseEvent.MOUSE_DRAGGED);
+		simulateDrag(image, dragPointResize);
 		assert(testRect.getObjectWidth()==finalWidth);
 		assert(testRect.getObjectHeight()==finalHeight);
 		
@@ -194,27 +194,27 @@ public class Object_MoverTest extends ToolTester {
 		testRect.deselect();
 		testCircle.deselect();		
 		currentTool.setExcludedClass(RectangularGraphic.class);//exclude rectangles
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideRectanglePress);
 		assert(!testRect.isSelected());//should not be selected
 		
 		currentTool.setExcludedClass(CircularGraphic.class);//exclude rectangles
-		simulateMouseCordinateEvent(image, pointInsideCirclePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideCirclePress);
 		assert(!testCircle.isSelected());//circle should not be selected
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideRectanglePress);
 		assert(testRect.isSelected());//should be selected. Even though circle is a subclass of rectangle, rectangles are not circles
 		
 		testRect.deselect();
 		currentTool.setExcludedClass(null);//no longer excludes rectangles
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideRectanglePress);
 		assert(testRect.isSelected());//should be selected
 		
 		/**tests whether option for the tool to select only instances of a certain class is working */
 		testRect.deselect();
 		testCircle.deselect();
 		currentTool.setSelectOnlyThoseOfClass(testCircle.getClass());
-		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideRectanglePress);
 		assert(!testRect.isSelected());//should only select circles at this point
-		simulateMouseCordinateEvent(image, pointInsideCirclePress,  MouseEvent.MOUSE_PRESSED);
+		simulatePress(image, pointInsideCirclePress);
 		assert(testCircle.isSelected());//circle should be selected
 		currentTool.setSelectOnlyThoseOfClass(null);
 		
@@ -235,8 +235,8 @@ public class Object_MoverTest extends ToolTester {
 		testCircle.deselect();
 		simulateMouseCordinateEvent(image, new Point2D.Double(-250, -250),  MouseEvent.MOUSE_PRESSED);
 		Point2D.Double notInCircle = new Point2D.Double(testCircle.getRectangle().x-2, 900);//dragpoint not within the circle chosen for test
-		simulateMouseCordinateEvent(image, notInCircle,  MouseEvent.MOUSE_DRAGGED);
-		simulateMouseCordinateEvent(image, notInCircle,  MouseEvent.MOUSE_RELEASED);
+		simulateDrag(image, notInCircle);
+		simulateRelease(image, notInCircle);
 		assert(testRect.isSelected());
 		assert(!testCircle.isSelected());
 		
@@ -249,7 +249,7 @@ public class Object_MoverTest extends ToolTester {
 		testRect.deselect();
 		testCircle.deselect();
 		/**Selects the rectangle with shift down so more than one object will be selected*/
-		simulateMouseCordinateEvent(image, pointInsideCirclePress,  MouseEvent.MOUSE_PRESSED );
+		simulatePress(image, pointInsideCirclePress);
 		simulateMouseCordinateEvent(image, pointInsideRectanglePress,  MouseEvent.MOUSE_PRESSED, MouseEvent.SHIFT_DOWN_MASK, 1);
 		//since the circle extends farther down and right, its lower right corner should be the same as the reshape handles
 		Point2D expectedHandleLocation = new Point2D.Double(rCircle.getMaxX(), rCircle.getMaxY());
@@ -290,6 +290,12 @@ public class Object_MoverTest extends ToolTester {
 		
 		
 	}
+
+	
+
+	
+
+	
 
 	/**
 	 * @param image

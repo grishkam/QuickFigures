@@ -28,6 +28,7 @@ import figureFormat.LabelExamplePicker;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import layout.basicFigure.LayoutSpaces;
 import menuUtil.BasicSmartMenuItem;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
@@ -64,10 +65,11 @@ public class EditLabels extends BasicSmartMenuItem implements ActionListener {
 		 modelTextItem=t;
 	}
 
-	/***/
+	/**setup up the label picker for the label*/
 	public void setUpPickerFortype(int type) {
 		picker=new LabelExamplePicker(new ComplexTextGraphic(), type);
 		this.setText("Edit All "+picker.getTypeName());
+		if (type==LayoutSpaces.ROWS) {}
 		
 	}
 	
@@ -128,6 +130,8 @@ public class EditLabels extends BasicSmartMenuItem implements ActionListener {
 		dd.showDialog();
 		
 	}
+	
+
 	
 }
 

@@ -27,6 +27,7 @@ import genericPlot.BasicDataSeriesGroup;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.ColorDimmer;
+import messages.ShowMessage;
 import plotParts.Core.PlotAreaRectangle;
 import plotParts.DataShowingParts.SeriesStyle;
 import standardDialog.StandardDialog;
@@ -48,8 +49,13 @@ public class SeriesStyleDialog extends StandardDialog {
 	{
 		this.styles=styles;
 		this.dataSeries=data;
-		
+		if (data.size()==0) {
+			ShowMessage.showOptionalMessage("need to select", true, "must select data series to use this dialog");
+			return;
+		}
 		addDimmingToDialog(data.get(0).getStyle());
+		
+		
 	}
 	
 	static SeriesStyleDialog createForPlotsInList(ArrayList<ZoomableGraphic> objects) {
