@@ -101,7 +101,7 @@ public class ExampleShower extends BasicMenuItemForObj {
 						}
 					}
 			
-		} catch (InvalidFormatException | IOException e) {
+		} catch ( Exception e) {
 			IssueLog.logT(e);
 		}
 	}

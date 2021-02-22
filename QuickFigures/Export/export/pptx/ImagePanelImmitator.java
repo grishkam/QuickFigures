@@ -22,6 +22,8 @@ package export.pptx;
 
 import java.io.File;
 import java.io.FileInputStream;
+
+import org.apache.poi.sl.usermodel.PictureData.PictureType;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFPictureData;
@@ -54,7 +56,7 @@ public class ImagePanelImmitator implements OfficeObjectMaker {
 			pictureData = IOUtils.toByteArray(new FileInputStream(f.getAbsolutePath()));
 		
 
-        int idx = ppt.addPicture(pictureData, XSLFPictureData.PICTURE_TYPE_PNG);
+        XSLFPictureData idx = ppt.addPicture(pictureData, PictureType.PNG);
        
         XSLFPictureShape pic = slide.createPicture(idx);
      

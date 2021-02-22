@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import applicationAdapters.DisplayedImage;
 import figureFormat.DirectoryHandler;
 import ij.IJ;
+import logging.IssueLog;
 import testing.FigureTester;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
@@ -53,11 +54,15 @@ abstract class QuickExportTest {
 			count++;
 				}
 		Desktop.getDesktop().open(new File(DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"));
-		assert(FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no. The exported images should look highly similar to the originals. are they?"));
 		
 		if (opensFiles)openFiles(createsFiles);
 		
-		IJ.wait(400);
+		IssueLog.waitSeconds(50);
+		
+		assert(FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no. The exported images should look highly similar to the originals. are they?"));
+		
+		
+		IssueLog.waitSeconds(60);
 	}
 
 	/**

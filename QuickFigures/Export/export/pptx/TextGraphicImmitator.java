@@ -26,7 +26,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 
-import org.apache.poi.xslf.usermodel.TextAlign;
+import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import org.apache.poi.xslf.usermodel.XSLFTextBox;
@@ -73,8 +73,8 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		    			  setTextRunFont(r1, seg.getFont(),t.getDimmedColor(seg.getTextColor()));
 		    			  r1.setSubscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);//export appears to work for subscripts even though this makes no sense
 		    			  r1.setSuperscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);
-		    			  r1.setFontSize(seg.getParent().getFont().getSize());
-		    			  r1.setUnderline(seg.isUnderlined());
+		    			  r1.setFontSize((double)seg.getParent().getFont().getSize());
+		    			  r1.setUnderlined(seg.isUnderlined());
 		    			  r1.setStrikethrough(seg.isStrikeThrough());
 		    		}
 		    		firstLine=false;
@@ -115,21 +115,22 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		   
 		   
 		  	/**Because of differences in how rotation works, must set the right anchor rect*/
-		  // if (experimental) {
-				//finds the correct x,y position for the anchor rect
+	
 			   Rectangle2D.Double b2=new Rectangle2D.Double();
 			   b2.setRect( t.getOutline().getBounds2D());
 			   java.awt.geom.Point2D.Double p = new Point2D.Double(b2.getCenterX(), b2.getCenterY());
 			
+			   double versionShift=t.getFont().getSize();//added after switch from poi 3.12 to later version done on feb 22 2021
 			  //creates teh anchor rect
 			   Rectangle2D.Double b=new Rectangle2D.Double();
 			   b.setRect( t.getBoundPriorToRotation());
-			   RectangleEdges.setLocation(b, RectangleEdges.CENTER, p.getX(), p.getY());
+			   RectangleEdges.setLocation(b, RectangleEdges.CENTER, p.getX(), p.getY()-versionShift);
 			  
-		 //  }
+		
 		  
 		 
 			//adds margins to the anchor rect so the text can be depicted normally  
+			   
 		   Double anchor = new Rectangle2D.Double(b.getX()-leftM, b.getY()-topM, b.getWidth(), b.getHeight());
 		   anchor.width+=rightM+leftM;
 		   anchor.height+=topM+bottomM;
@@ -184,7 +185,7 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 	/**sets the font of a particular text run*/
 	void setTextRunFont(XSLFTextRun r1, Font f, Color c) {
 		 r1.setFontColor(c);
-		    r1.setFontSize(f.getSize());
+		    r1.setFontSize((double)f.getSize());
 		    r1.setFontFamily(f.getFamily());
 
 		   r1.setBold(f.isBold());

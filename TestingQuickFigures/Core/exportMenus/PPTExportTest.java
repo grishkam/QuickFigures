@@ -10,6 +10,8 @@
  */
 package exportMenus;
 
+import logging.IssueLog;
+
 /**
  
  * 
@@ -20,6 +22,7 @@ public class PPTExportTest extends QuickExportTest {
 	 * @return
 	 */
 	QuickExport createExporter() {
+		IssueLog.sytemprint=true;
 		return new PPTQuickExport(false);
 	}
 

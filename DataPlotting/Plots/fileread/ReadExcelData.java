@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.CellType;
 
 import dataSeries.BasicDataPoint;
 import dataSeries.ColumnDataSeries;
@@ -53,9 +54,9 @@ public class ReadExcelData {
 				 for(int i=0; i<validColumns.size(); i++) {
 					 Integer index = validColumns.get(i);
 					 System.out.println("Checking Column "+index+" named "+validNames.get(i));
-					 System.out.println("Col is Number: "+ReadExcelData.isTypeColumn(sheet, index, 0));
+					 System.out.println("Col is Number: "+ReadExcelData.isTypeColumn(sheet, index, CellType.NUMERIC));
 					
-					 boolean sCol=ReadExcelData.isTypeColumn(sheet, index, 1);
+					 boolean sCol=ReadExcelData.isTypeColumn(sheet, index, CellType.STRING);
 					 System.out.println("Col is Strings: "+sCol);
 					 if (sCol) 
 						 {
@@ -86,9 +87,9 @@ public class ReadExcelData {
 		ArrayList<Row> rowlist=new ArrayList<Row>();
 		for(Row row: sheet) {
 			 for(Cell cell: row) {
-				 if (cell.getCellType()==1&&cell.getColumnIndex()==colIndex &&cell.getStringCellValue().equals(value))
+				 if (cell.getCellType()==CellType.STRING&&cell.getColumnIndex()==colIndex &&cell.getStringCellValue().equals(value))
 					 rowlist.add(row);else 
-				 if (cell.getCellType()==0&&cell.getColumnIndex()==colIndex &&(cell.getNumericCellValue()+"").equals(value))
+				 if (cell.getCellType()==CellType.NUMERIC&&cell.getColumnIndex()==colIndex &&(cell.getNumericCellValue()+"").equals(value))
 					 rowlist.add(row);
 			 }
 		 }
@@ -191,7 +192,7 @@ public static ArrayList<XYDataSeries> extractXYDataSeriesF(Workbook wb) {
 protected static void findValidColumns(Sheet sheet, ArrayList<Integer> validColumns, ArrayList<String> validNames) {
 	Row firstrow = sheet.getRow(0);
 		for(Cell cell: firstrow) {
-			if (cell.getCellType()==1) {
+			if (cell.getCellType()==CellType.STRING) {
 				validColumns.add(cell.getColumnIndex());
 				validNames.add(cell.getStringCellValue());
 				
@@ -201,7 +202,7 @@ protected static void findValidColumns(Sheet sheet, ArrayList<Integer> validColu
 
 
 /**Returns true if the values in the row are numbers*/
-protected static boolean isTypeColumn(Sheet sheet, int colIndex, int type) {
+protected static boolean isTypeColumn(Sheet sheet, int colIndex, CellType type) {
 	
 	  for(Row row: sheet) {
 		  if (sheet.getFirstRowNum()==row.getRowNum()) continue;//does not count the first row
@@ -217,7 +218,7 @@ protected static boolean isTypeColumn(Sheet sheet, int colIndex, int type) {
 }
 
 /**Returns true if the values in the row are numbers*/
-protected static boolean isTypeColumn(Iterable<Row> sheet, int colIndex, int type) {
+protected static boolean isTypeColumn(Iterable<Row> sheet, int colIndex, CellType type) {
 	
 	  for(Row row: sheet) {
 		   for(Cell cell: row) try {
@@ -237,7 +238,7 @@ public static ArrayList<Double> getNumbersForColumn(Iterable<Row> sheet, int col
 		 
 		 // if (wantedRows!=null&&wantedRows.contains(row.getRowNum())) {continue;}
 		   for(Cell cell: row) try {
-			  if (cell.getCellType()==0&&cell.getColumnIndex()==col)
+			  if (cell.getCellType()==CellType.NUMERIC&&cell.getColumnIndex()==col)
 				  output.add(cell.getNumericCellValue());
 			 
 		   } catch (Throwable t) {t.printStackTrace();}
@@ -254,7 +255,7 @@ public static ArrayList<String> getStringsForColumn(Iterable<Row> sheet, int col
 		  if (row.getRowNum()<startingRow) continue;
 		 // if (wantedRows!=null&&wantedRows.contains(row.getRowNum())) {continue;}
 		   for(Cell cell: row) try {
-			  if (cell.getCellType()==1&&cell.getColumnIndex()==col)
+			  if (cell.getCellType()==CellType.STRING&&cell.getColumnIndex()==col)
 				  output.add(cell.getStringCellValue());
 			 
 		   } catch (Throwable t) {t.printStackTrace();}
@@ -271,9 +272,9 @@ public static ArrayList<String> getTextForColumn(Iterable<Row> sheet, int col, A
 		  if (row.getRowNum()<startingRow) continue;
 		 // if (wantedRows!=null&&wantedRows.contains(row.getRowNum())) {continue;}
 		   for(Cell cell: row) try {
-			  if (cell.getCellType()==1&&cell.getColumnIndex()==col)
+			  if (cell.getCellType()==CellType.STRING&&cell.getColumnIndex()==col)
 				  output.add(cell.getStringCellValue());
-			  if (cell.getCellType()==0&&cell.getColumnIndex()==col)
+			  if (cell.getCellType()==CellType.NUMERIC&&cell.getColumnIndex()==col)
 				  output.add(cell.getNumericCellValue()+"");
 		   } catch (Throwable t) {t.printStackTrace();}
 		  
@@ -289,9 +290,9 @@ public static ArrayList<BasicDataPoint> getNumbersForTwoColumn(Iterable<Row>  sh
 		 Double x=null;
 		   Double y=null;
 		   for(Cell cell: row) try {
-			  if (cell.getCellType()==0&&cell.getColumnIndex()==col)
+			  if (cell.getCellType()==CellType.NUMERIC&&cell.getColumnIndex()==col)
 				 x=cell.getNumericCellValue()  ;
-			  if (cell.getCellType()==0&&cell.getColumnIndex()==col2)
+			  if (cell.getCellType()==CellType.NUMERIC&&cell.getColumnIndex()==col2)
 					 y=cell.getNumericCellValue()  ;
 		   } catch (Throwable t) {}
 		   
@@ -311,10 +312,10 @@ public static ArrayList<BasicDataPoint> getNumbersForTwoColumn(Iterable<Row>  sh
 
 
 	protected static void getCellInfo(Cell cell) {
-		if (cell.getCellType()==1) {
+		if (cell.getCellType()==CellType.STRING) {
 			IssueLog.log(" "+cell.getStringCellValue());
 		} else 
-		if (cell.getCellType()==0) {
+		if (cell.getCellType()==CellType.NUMERIC) {
 			IssueLog.log(" "+cell.getNumericCellValue());
 		} else {
 			IssueLog.log("	");
@@ -326,10 +327,10 @@ public static ArrayList<BasicDataPoint> getNumbersForTwoColumn(Iterable<Row>  sh
 	
 	
 	public static Object getObjectInCell(Cell cell) {
-		if (cell.getCellType()==1) {
+		if (cell.getCellType()==CellType.STRING) {
 			return cell.getStringCellValue();
 		} else 
-		if (cell.getCellType()==0) {
+		if (cell.getCellType()==CellType.NUMERIC) {
 			return cell.getNumericCellValue();
 		} else {
 

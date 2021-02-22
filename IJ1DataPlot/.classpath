@@ -8,13 +8,12 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/DataPlotting"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/ij.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-examples-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-excelant-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-schemas-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-scratchpad-3.12-beta1-20150228.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ImageJ1ModuleForQuickFigures"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-excelant-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-schemas-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-scratchpad-4.1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

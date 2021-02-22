@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -174,7 +175,7 @@ public class ExcelRowSubset extends ArrayList<Row> {
 				
 			for(int i=0; i<valid.size()-1; i++) {
 				int col1 = valid.get(i).getColumnIndex();
-				if (ReadExcelData.isTypeColumn(rows, col1, 0)) return col1;
+				if (ReadExcelData.isTypeColumn(rows, col1, CellType.NUMERIC)) return col1;
 					}
 			
 			return 1;
@@ -195,7 +196,7 @@ public class ExcelRowSubset extends ArrayList<Row> {
 		ArrayList<Cell> validCols=new ArrayList<Cell>();
 		
 			for(Cell cell: columnNames) {
-				if (cell.getCellType()==1) {
+				if (cell.getCellType()==CellType.STRING) {
 					validCols.add(cell);
 					
 				}

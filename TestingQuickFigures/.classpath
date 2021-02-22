@@ -24,15 +24,14 @@
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-1.8/batik-squiggle-1.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-1.8/batik-svgpp-1.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-1.8/batik-ttf2svg-1.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-examples-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-excelant-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-ooxml-schemas-3.12-beta1-20150228.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/poi-3.12-beta1 2/poi-scratchpad-3.12-beta1-20150228.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Desktop/ImageJ/ij.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="src" path="CriticalTests"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/commons-codec-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-schemas-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-scratchpad-4.1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

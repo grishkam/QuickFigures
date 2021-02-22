@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -101,18 +102,18 @@ public class ExcelRowToJTable extends QuickImport  {
 		for(Row row: sheet) {
 			int rNum = row.getRowNum();
 			for(Cell cell: row) try {
-				int typeCell = cell.getCellType();
+				CellType typeCell = cell.getCellType();
 				Object value=null;
-				if (typeCell==0) value=cell.getNumericCellValue();
+				if (typeCell==CellType.NUMERIC) value=cell.getNumericCellValue();
 				else
-					if (typeCell==2) {
+					if (typeCell==CellType.FORMULA) {
 						String st="does not handle formulas";
 						IssueLog.log(st);
 					}
 					else 
-				if (typeCell==1) value=cell.getStringCellValue();
+				if (typeCell==CellType.STRING/**1*/) value=cell.getStringCellValue();
 				else 
-				if (typeCell==4) value=cell.getBooleanCellValue();
+				if (typeCell==CellType.BOOLEAN/**4*/) value=cell.getBooleanCellValue();
 					else{
 					IssueLog.log("Table unprepared for value tyepe"+typeCell);
 				}
