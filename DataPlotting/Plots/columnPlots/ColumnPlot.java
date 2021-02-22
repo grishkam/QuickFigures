@@ -37,7 +37,10 @@ import plotCreation.ColumnPlotCreator;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.PlotUtil;
+import undo.CombinedEdit;
+import undo.UndoAddItem;
 import undoForPlots.AxisFlipUndo;
+import undoForPlots.AxisResetUndoableEdit;
 
 /**A special layer for a plot with single dimensional data*/
 public class ColumnPlot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
@@ -194,19 +197,24 @@ protected ArrayList<ColumnDataSeries> getNewDataSeriesFromUser() {
 	return cols;
 }
 
-/**displays a file chooser that the user an employ to input data*/
+/**displays a file chooser that the user an employ to input data
+ * @return */
 @MenuItemMethod(menuActionCommand = "Add Data File", menuText = "New Data Series From Excel File", subMenuName="Data", orderRank=18)
-public void addDataSeriesFromFile() {
+public CombinedEdit addDataSeriesFromFile() {
+	CombinedEdit cc = new CombinedEdit();
 	ColumnDataSeries[] datas = new ExcelFileToBarPlot(ColumnPlotCreator.BAR_AND_SCATTER).getDataFromFile();
 	for(ColumnDataSeries data: datas)
-		addNew(data);
-	
+		cc.addEditToList(
+				addNew(data)
+				);
+	return cc;
 }
 
-/**Adds several new data series to the plot*/
-protected void addManyNew(ColumnDataSeries... numbers) {
-	
-	
+/**Adds several new data series to the plot
+ * @return */
+protected CombinedEdit addManyNew(ColumnDataSeries... numbers) {
+	CombinedEdit cc = new CombinedEdit();
+	cc.addEditToList(AxisResetUndoableEdit.createFor(this));
 	for(ColumnDataSeries data: numbers) {
 		if (data==null||data.length()<1) continue;
 		
@@ -214,16 +222,21 @@ protected void addManyNew(ColumnDataSeries... numbers) {
 		if (this.getAllDataSeries().size()>0) template=getAllDataSeries().get(0);
 		ColumnPlotDataSeriesGroup group = new ColumnPlotDataSeriesGroup(data, template);
 			this.add(group);
+			cc.addEditToList(new UndoAddItem(this, group));
 			setStylesForNewData(group);
 	}
+	
 	onSeriesPositionInLayerChanges();
 	afterNumberOfDataSeriesChanges();
+	return cc;
 }
 
-/**Adds one additional data series for the plot*/
-protected void addNew(ColumnDataSeries data) {
-	this.addManyNew(data);
+/**Adds one additional data series for the plot
+ * @return */
+protected CombinedEdit addNew(ColumnDataSeries data) {
+	CombinedEdit out = this.addManyNew(data);
 	onPlotUpdate();
+	return out;
 }
 
 

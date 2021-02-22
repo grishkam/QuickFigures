@@ -76,6 +76,8 @@ public class ExcelFileToBarPlot extends  ExcelDataImport{
 	/**prompts the user to select a file and returns the data series from that file*/
 	public ColumnDataSeries[]  getDataFromFile() {
 		File f=getFileAndaddExtension();
+		if(f==null)
+			return null;
 		ColumnDataSeries[] items=null;
 		try {
 			items = ReadExcelData.read(f.getAbsolutePath());
