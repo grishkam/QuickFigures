@@ -79,8 +79,7 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		    			  r1.setUnderlined(seg.isUnderlined());
 		    			  r1.setStrikethrough(seg.isStrikeThrough());
 		    			  
-		    			  IssueLog.log("adding text run "+seg.getText());
-				    		IssueLog.log("r "+p.getTextRuns());
+		    			
 		    		}
 		    		firstLine=false;
 		    		 

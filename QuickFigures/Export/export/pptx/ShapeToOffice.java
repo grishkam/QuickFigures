@@ -31,6 +31,7 @@ import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFFreeformShape;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 
+import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import logging.IssueLog;
 
@@ -57,7 +58,33 @@ public ShapeToOffice(ShapeGraphic p1) {
 		 
 		 if (!pathGraphic.isFilled()||pathGraphic.getFillColor().getAlpha()==0) shape.setFillColor(null); 
 		
-		 if (pathGraphic.getDashes()!=null &&pathGraphic.getDashes().length>1) {
+		 setupDashes(shape, pathGraphic);
+		
+	       shape.setLineColor(pathGraphic.getStrokeColor());
+	       if (pathGraphic.getStrokeColor().getAlpha()==0)  shape.setLineColor(null);
+	        shape.setLineWidth(pathGraphic.getStrokeWidth());
+	        shape.setRotation(pathGraphic.getAngle()*(-180/Math.PI));
+	        
+	        setupStrokeCap(shape, pathGraphic);
+	        
+	        
+	}
+
+	/**sets the line cap for the exported shape
+	 * @param shape
+	 * @param pathGraphic
+	 */
+	public void setupStrokeCap(org.apache.poi.xslf.usermodel.XSLFSimpleShape shape, ShapeGraphic pathGraphic) {
+		if (pathGraphic.getStrokeCap()==BasicStroke.CAP_SQUARE) shape.setLineCap(LineCap.SQUARE);
+		if (pathGraphic.getStrokeCap()==BasicStroke.CAP_ROUND) shape.setLineCap(LineCap.ROUND);
+	}
+
+	/**
+	 * @param shape
+	 * @param pathGraphic
+	 */
+	public void setupDashes(org.apache.poi.xslf.usermodel.XSLFSimpleShape shape, ShapeGraphic pathGraphic) {
+		if (pathGraphic.getDashes()!=null &&pathGraphic.getDashes().length>1) {
 			
 			 float[] dash = pathGraphic.getDashes();
 			 if (dash[0]==dash[1]) {
@@ -69,16 +96,6 @@ public ShapeToOffice(ShapeGraphic p1) {
 				 shape.setLineDash(LineDash.LG_DASH_DOT);
 			 }
 		 }
-		
-	       shape.setLineColor(pathGraphic.getStrokeColor());
-	       if (pathGraphic.getStrokeColor().getAlpha()==0)  shape.setLineColor(null);
-	        shape.setLineWidth(pathGraphic.getStrokeWidth());
-	        shape.setRotation(pathGraphic.getAngle()*(-180/Math.PI));
-	        
-	        if (pathGraphic.getStrokeCap()==BasicStroke.CAP_SQUARE) shape.setLineCap(LineCap.SQUARE);
-	        if (pathGraphic.getStrokeCap()==BasicStroke.CAP_ROUND) shape.setLineCap(LineCap.ROUND);
-	        
-	        
 	}
 	
 	/**Creates a shape in the powerpoint slide*/
@@ -104,9 +121,12 @@ public ShapeToOffice(ShapeGraphic p1) {
 			//path2.append(path, true);//true
 			
 			
+			
+			if (shape instanceof PathGraphic) {
+				IssueLog.log("with some shapes, powerpoint will need to repair the exported file");
+				
+			}
 			freeshape.setPath(path2);
-			
-			
 			if (path instanceof Line2D) {
 				//path2.append(path, true);
 				//path2.closePath();

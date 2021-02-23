@@ -39,6 +39,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.ArrayObjectContainer;
 import logging.IssueLog;
+import messages.ShowMessage;
 import ultilInputOutput.FileChoiceUtil;
 
 /**A menu item for powerpoint export*/
@@ -156,6 +157,9 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			
 		}
 		catch (Throwable t) {
+			if (t instanceof NoClassDefFoundError) {
+				ShowMessage.showOptionalMessage("missing file", false, "it appears the either an older version of Apache POI is installed (or POI is not installed correctly)", "Please install POI 4.1.2");
+			}
 			IssueLog.logT(t);
 		}
 		

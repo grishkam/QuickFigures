@@ -18,12 +18,26 @@ abstract class QuickExportTest {
 	
 	private static final int ALL_CASES = 0;
 
-	boolean opensFiles=false;
+	boolean opensFiles=true;
 	
 	int testCase=ALL_CASES;//which cases to test
 
 	@Test
 	void test() throws Exception {
+		exportTest();
+		
+		
+		
+		assert(FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no. The exported images should look highly similar to the originals. are they?"));
+		
+		
+	}
+
+	/**
+	 * @throws Exception
+	 * @throws IOException
+	 */
+	public void exportTest() throws Exception, IOException {
 		QuickExport qe=createExporter();
 		int count=1;
 		ArrayList<String> createsFiles=new ArrayList<String>(); 
@@ -55,12 +69,6 @@ abstract class QuickExportTest {
 		Desktop.getDesktop().open(new File(DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"));
 		
 		if (opensFiles)openFiles(createsFiles);
-		
-		
-		
-		assert(FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no. The exported images should look highly similar to the originals. are they?"));
-		
-		
 	}
 
 	/**
