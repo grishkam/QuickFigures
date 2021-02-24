@@ -23,7 +23,9 @@ import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
+import testing.FigureTest;
 import testing.FigureTester;
+import testing.TestingOptions;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 
@@ -42,7 +44,7 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 		FigureOrganizingLayerPane f = createFirstExample();
 		testForFigureIncurrentImage(f);
 		
-		IssueLog.waitSeconds(120);
+		if (TestingOptions.performManualTests)IssueLog.waitSeconds(120);
 	}
 
 

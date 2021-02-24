@@ -967,11 +967,13 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	
 	
 	/**returns true if the window is setup with a side panel*/
+	/**side panels are a work in progress and do not appear in current version*/
 	public boolean usesBuiltInSidePanel() {
 		return usesBuiltInSidePanel;
 	}
 	
 	/**Alters the window to show built in side panels*/
+	/**side panels are a work in progress and do not appear in current version*/
 	public void setUsesBuiltInSidePanel(boolean b) {
 		if (usesBuiltInSidePanel==b) return;
 		

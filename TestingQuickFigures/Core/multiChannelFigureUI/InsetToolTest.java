@@ -17,7 +17,6 @@ import java.awt.geom.Point2D;
 
 import org.junit.Test;
 
-import advancedChannelUseGUI.FigureTest;
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
@@ -33,6 +32,7 @@ import genericTools.ToolTester;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import logging.IssueLog;
+import testing.FigureTest;
 
 /**
  

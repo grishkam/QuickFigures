@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import advancedChannelUseGUI.FigureTest;
 import channelMerging.ImageDisplayLayer;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
 import logging.IssueLog;
+import testing.FigureTest;
 
 /**
  

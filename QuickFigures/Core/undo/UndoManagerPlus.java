@@ -42,6 +42,7 @@ public class UndoManagerPlus extends UndoManager {
 	}
 	
 	public void undo() {
+		if ( editToBeUndone()!=null)
 		StatusPanel.updateStatus("Undoing "+ editToBeUndone().getClass().getName());
 		
 		super.undo();

@@ -3,13 +3,12 @@
  * Date Modified: Feb 20, 2021
  * Version: 2021.1
  */
-package advancedChannelUseGUI;
+package testing;
 
 import applicationAdapters.DisplayedImage;
 import figureOrganizer.FigureOrganizingLayerPane;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
-import testing.FigureTester;
 
 /**
  

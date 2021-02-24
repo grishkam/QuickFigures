@@ -47,13 +47,15 @@ class GraphicSetDisplayWindowTest {
 		
 		assert(FileChoiceUtil.yesOrNo("Testing: scroll bars work fine?"));
 		
+		/**side panels are a work in progress and do not appear in current version*/
+		/**
 		w.setUsesBuiltInSidePanel(true);
 		assert(FileChoiceUtil.yesOrNo("A side panel with some icons should have appeared on the far left of the window?"));
 		
 		IJ.wait(10000);
 		w.setUsesBuiltInSidePanel(false);
 		assert(FileChoiceUtil.yesOrNo("The side panel should have vanished?"));
-		
+		*/
 	}
 	
 	/**

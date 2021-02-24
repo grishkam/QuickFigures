@@ -29,16 +29,16 @@ import ij.IJ;
 import logging.IssueLog;
 import messages.ShowMessage;
 import testing.DialogTester;
+import testing.TestingOptions;
 import testing.TestingUtils;
 
 /**
  Tests the recreate panels dialog.
  This actually takes a long time since 
  */
-public class PanelStackDisplayOptionsTest extends  DialogTester {
+public class PanelStackDisplayOptionsTest extends  DialogTester  {
 	
 
-	//int CombinatonLimit=3;
 	
 
 	@Test
@@ -63,7 +63,7 @@ public class PanelStackDisplayOptionsTest extends  DialogTester {
 		
 		checkColorMode(qf, dialog);
 		
-		if (ShowMessage.showOptionalMessage("next step", false, "Automated tests done, do you want to check combinations of settings and then perform manual tests?"))
+		if (TestingOptions.performManualTests && ShowMessage.showOptionalMessage("next step", false, "Automated tests done, do you want to check combinations of settings and then perform manual tests?"))
 			performCombinationsAndManual(dialog);
 	}
 

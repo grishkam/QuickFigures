@@ -12,11 +12,11 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import advancedChannelUseGUI.FigureTest;
 import channelMerging.ChannelUseInstructions;
 import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
+import testing.FigureTest;
 import undo.UndoLayoutEdit;
 
 /**

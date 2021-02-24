@@ -27,6 +27,7 @@ import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import messages.ShowMessage;
 import testing.TestShapes;
+import testing.TestingOptions;
 
 /**
  The tool used to select and move objects is critical.
@@ -42,12 +43,14 @@ public class Object_MoverTest extends ToolTester {
 		ImageDisplayTester.startToolbars(true);
 		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=false;
-	//	ShowMessage.showOptionalMessage("Testing start", false, "Automated tests will simulate mouse actions. do not click on figure, nor any other windows until automated tests over");
 		
 		testTool();
-		ShowMessage.showOptionalMessage("Testing done", false,"Automated tests for object selector done. now user may perform manual edits for 30 seconds");
-		IssueLog.waitSeconds(30);
 		
+		if (TestingOptions.performManualTests) {
+			ShowMessage.showOptionalMessage("Testing done", false,"Automated tests for object selector done. now user may perform manual edits for 30 seconds");
+			IssueLog.waitSeconds(30);
+		
+		}
 		
 		
 	}

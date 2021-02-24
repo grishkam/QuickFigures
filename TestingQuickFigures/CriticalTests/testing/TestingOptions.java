@@ -10,5 +10,5 @@ contains static fields used during testing
  */
 public class TestingOptions {
 	public static boolean performManualTests=true;
-	public static boolean performSlowTestsForExceptions=true;
+	public static boolean performSlowTestsForExceptions=false;
 }

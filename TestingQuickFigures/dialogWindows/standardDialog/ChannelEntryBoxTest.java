@@ -10,6 +10,7 @@ import logging.IssueLog;
 import standardDialog.channels.ChannelEntryBox;
 import testing.FigureTester;
 
+/**this contains a manual test to confirm the appearance of the channel entry box */
 class ChannelEntryBoxTest {
 
 	@Test

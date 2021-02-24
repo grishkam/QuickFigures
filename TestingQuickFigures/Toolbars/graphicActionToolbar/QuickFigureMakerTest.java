@@ -26,6 +26,7 @@ import imageMenu.CanvasAutoResize;
 import imageMenu.CanvasAutoTrim;
 import logging.IssueLog;
 import testing.FigureTester;
+import testing.TestingOptions;
 import ultilInputOutput.FileChoiceUtil;
 import utilityClasses1.ArraySorter;
 
@@ -39,7 +40,8 @@ public class QuickFigureMakerTest {
 	
 		prepareForTest();
 		
-		//testManyCombinations();
+		if (TestingOptions.performSlowTestsForExceptions)
+			testManyCombinations();
 		
 		
 		
@@ -67,6 +69,19 @@ public class QuickFigureMakerTest {
 		
 		
 		makeVisible() ;
+		if (TestingOptions.performManualTests)
+			manualTesting();
+	}
+
+
+
+
+
+	/**
+	 * 
+	 */
+	public void manualTesting() {
+		ArrayList<ZoomableGraphic> allGraphics;
 		assert(FileChoiceUtil.yesOrNo("Passed automated testing. portion. A figure should have appeared. Do you see it?"));
 		
 		ImagePlus j = IJ.openImage(FigureTester.testFolderPath+1+"/Test 1 Split Channels.png");
