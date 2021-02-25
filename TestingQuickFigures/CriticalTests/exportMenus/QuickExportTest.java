@@ -20,7 +20,9 @@ abstract class QuickExportTest {
 	
 	private static final int ALL_ = 0;
 
-	boolean opensFiles=true;
+	/**set to true if one want each file to be opened automatically.
+	  Dye to dialogs comming up in powerpoint and other softwares, decided it best not to do this*/
+	boolean opensFiles=false;
 	
 	int testCase=ALL_;//which cases to test
 

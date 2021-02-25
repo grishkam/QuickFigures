@@ -65,7 +65,7 @@ public class GraphicComboBoxTest extends VisualTest {
 			StandardDialog.center(ff);
 			ff.pack();
 			
-			comboBoxVisualTest(sb);
+			comboBoxVisualTest(ff, sb);
 			
 			ff.setVisible(false);
 	}

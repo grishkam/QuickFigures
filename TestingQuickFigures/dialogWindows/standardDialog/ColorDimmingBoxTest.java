@@ -22,7 +22,7 @@ class ColorDimmingBoxTest  extends VisualTest{
 		jf.add(box);
 		jf.pack();jf.setVisible(true);
 
-		this.comboBoxVisualTest(box);
+		comboBoxVisualTest(jf, box);
 		jf.setVisible(false);
 		
 	}

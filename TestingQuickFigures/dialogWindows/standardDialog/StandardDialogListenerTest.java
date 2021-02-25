@@ -5,10 +5,14 @@
  */
 package standardDialog;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
+import genericTools.ToolTester;
 import logging.IssueLog;
 import standardDialog.booleans.BooleanInputPanel;
+import testing.DialogTester;
 
 /**
  tests to see if the dialog listeners are working.
@@ -17,21 +21,34 @@ import standardDialog.booleans.BooleanInputPanel;
  */
 public class StandardDialogListenerTest {
 
+	boolean eventHeard=false;
 	@Test
 	public void test() {
 		StandardDialog sd = new StandardDialog("Test dialog");
 		sd.setWindowCentered(true);
 		BooleanInputPanel b = new BooleanInputPanel("Check true or false to complete test", false) ;
 		sd.add("Boolean", b);
+		
+		
 		sd.addDialogListener(new StandardDialogListener() {
 
 			@Override
 			public void itemChange(DialogItemChangeEvent event) {
 				IssueLog.log("Listener notified of event "+event.getStringKey());
+				eventHeard=true;
 				sd.setVisible(false);
 			}});
-		sd.setModal(true);
+		
+		b.getCheckBox().setSelected(true);
+		
 		sd.showDialog();
+		ToolTester.clickComponent(b.getCheckBox(),0);
+		
+		if(!eventHeard) 
+			fail("event not heard");
+		
+	
+		
 	}
 
 }

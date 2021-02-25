@@ -71,6 +71,8 @@ public class QuickFigureMakerTest {
 		makeVisible() ;
 		if (TestingOptions.performManualTests)
 			manualTesting();
+		
+		FigureTester.closeAllWindows();
 	}
 
 
@@ -87,7 +89,7 @@ public class QuickFigureMakerTest {
 		ImagePlus j = IJ.openImage(FigureTester.testFolderPath+1+"/Test 1 Split Channels.png");
 		j.show();; 
 		new Zoom().run("out");;	new Zoom().run("out");;
-		IJ.wait(1000);
+		IJ.wait(100);
 		assert(FileChoiceUtil.yesOrNo("Compare the figure produced to the expected result 'Test 1 Split Channels' in the 'Test 1' folder. Are they similar?"));
 	
 		

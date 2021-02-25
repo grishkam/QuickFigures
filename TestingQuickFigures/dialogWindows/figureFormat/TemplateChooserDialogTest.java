@@ -13,6 +13,8 @@ import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.AttachmentPosition;
 import logging.IssueLog;
+import standardDialog.StandardDialog;
+import testing.DialogTester;
 
 /**
  this is not a fully automated test. 
@@ -47,7 +49,11 @@ public class TemplateChooserDialogTest {
 			TemplateChooserDialog dialog = new TemplateChooserDialog(template, oc1);
 			dialog.setWindowCentered(true);
 			dialog.setTitle("Manually check dialog appearance and close to finish test");
+			
+			dialog.setModal(false);
 			dialog.showDialog();;
+			
+			DialogTester.testInputPanelApperance(dialog, 1);
 			
 			dialog.setTemplateToChoices();
 			
@@ -60,8 +66,8 @@ public class TemplateChooserDialogTest {
 			/**to confirm that first row label in the layer is automatically chosen*/
 			assert(template.getLayoutChooser().getModelItem()==layout1);
 			
-			
-			IssueLog.waitSeconds(5);
+			/**long enough for the user to try clicking an item*/
+			IssueLog.waitSeconds(25);
 	}
 
 }

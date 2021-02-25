@@ -35,7 +35,7 @@ import standardDialog.OnGridLayout;
 public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemListener{
 
 	JLabel label=new JLabel();
-	JCheckBox checkBox=new JCheckBox("", false); {checkBox.addItemListener(this);}
+	private JCheckBox checkBox=new JCheckBox("", false); {getCheckBox().addItemListener(this);}
 	boolean originAlStatus=false;
 	
 	ArrayList<BooleanInputListener> lis =new 	ArrayList<BooleanInputListener>();
@@ -55,8 +55,8 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	}
 	
 	public BooleanInputPanel(String labeln, boolean b, JCheckBox field2) {
-		checkBox=field2;
-		checkBox.addItemListener(this);
+		setCheckBox(field2);
+		getCheckBox().addItemListener(this);
 		label.setText(labeln);
 		setChecked(b);
 		 originAlStatus=b;
@@ -65,15 +65,15 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	sets the box to selected
 	 */
 	public void setChecked(boolean b) {
-		checkBox.setSelected(b);
+		getCheckBox().setSelected(b);
 	}
 	
 	public String getTextFromField() {
-		return checkBox.getText();
+		return getCheckBox().getText();
 	}
 	
 	public boolean isChecked() {
-		return checkBox.isSelected();
+		return getCheckBox().isSelected();
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 		gc.gridx++;
 		gc.insets=lastInsets;
 		gc.anchor = GridBagConstraints.WEST;
-		jp.add(checkBox, gc);
+		jp.add(getCheckBox(), gc);
 		
 		
 	}
@@ -110,7 +110,7 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	}
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
-		if (arg0.getSource()==checkBox) {
+		if (arg0.getSource()==getCheckBox()) {
 			notigyListeners();
 		}
 		
@@ -119,7 +119,7 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	notifies the listeners of a change
 	 */
 	private void notigyListeners() {
-		BooleanInputEvent bi = new BooleanInputEvent(this, checkBox, checkBox.isSelected());
+		BooleanInputEvent bi = new BooleanInputEvent(this, getCheckBox(), getCheckBox().isSelected());
 		bi.setKey(key);
 		this.notifyListeners(bi);
 	}
@@ -132,7 +132,13 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	
 	/**Changes the status of the item to its original*/
 	public void revert() {
-		checkBox.setSelected(originAlStatus);
+		getCheckBox().setSelected(originAlStatus);
+	}
+	public JCheckBox getCheckBox() {
+		return checkBox;
+	}
+	public void setCheckBox(JCheckBox checkBox) {
+		this.checkBox = checkBox;
 	}
 
 	

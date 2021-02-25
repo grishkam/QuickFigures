@@ -50,6 +50,27 @@ public class DialogTester {
 		}
 	}
 	
+	
+	
+	/**
+	 makes each combo box popup menu appear to they can be seen
+	 */
+	public static void testInputPanelApperance(StandardDialog d, int i) {
+		HashMap<String, Object> inputs=d.getAllInputPanels();
+		for(String key1: inputs.keySet()) {
+			Object o=inputs.get(key1);
+			if(o instanceof ChoiceInputPanel) {
+				ChoiceInputPanel panel=(ChoiceInputPanel) o;
+				if(panel.getBox() !=null) {
+					VisualTest.comboBoxVisualTest(d, panel.getBox());
+				}
+				IssueLog.waitSeconds(i);
+				IssueLog.log("popup menu from combo box will be seen "+panel.getName());
+			}
+			
+		}
+	}
+	
 	/**
 	Tests all combinations of choices that a single input panel may have. If any combination of setting returns
 	in an uncaught exception or an endless loop, this test would reveal it. The hashmap may contain 

@@ -10,7 +10,10 @@
  */
 package testing;
 
+import java.awt.Window;
+
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
 import logging.IssueLog;
 import messages.ShowMessage;
@@ -31,10 +34,11 @@ public class VisualTest {
 	/**
 	 * @param sb
 	 */
-	public void comboBoxVisualTest(JComboBox<?> sb) {
+	public static void comboBoxVisualTest(Window jf, JComboBox<?> sb) {
+		jf.setVisible(true);
 		sb.showPopup();
          sb.setPopupVisible(true);
 		
-		IssueLog.waitSeconds(10);
+		IssueLog.waitSeconds(15);
 	}
 }

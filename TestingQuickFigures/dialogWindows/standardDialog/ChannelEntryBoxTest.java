@@ -35,12 +35,11 @@ class ChannelEntryBoxTest extends VisualTest {
 			jf.setLocation(350, 350);
 	
 			
-			super.comboBoxVisualTest(box);
+			super.comboBoxVisualTest(jf, box);
+			
+			jf.setVisible(false);
 			
 			
-			
-			//String st="you should see a windos with a channel entry box.try clicking on it. a colorfull menu should come up";
-			//visualTestMessage(st);
 		
 			
 	}

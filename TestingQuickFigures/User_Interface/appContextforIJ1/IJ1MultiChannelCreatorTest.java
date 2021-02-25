@@ -15,6 +15,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import logging.IssueLog;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
+import testing.FigureTester;
 
 class IJ1MultiChannelCreatorTest {
 
@@ -28,6 +29,7 @@ class IJ1MultiChannelCreatorTest {
 		/**tests the user dialog when there is no image open*/
 		cc.creatMultiChannelDisplayFromUserSelectedImage(false, null);
 		//tests what image is returned as the currently open one. if this test is run in isolation, none will be open
+		FigureTester.closeAllWindows();
 		assert(cc.creatMultiChannelDisplayFromOpenImage().getSlot().getMultichannelImage()==null);
 		
 		/**tests to see if a multichannel is created*/

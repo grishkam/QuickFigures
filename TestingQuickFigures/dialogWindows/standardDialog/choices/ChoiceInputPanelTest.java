@@ -22,8 +22,7 @@ import standardDialog.StandardDialog;
 import testing.VisualTest;
 
 /**
- 
- * 
+ Tests to determine if a combo box based on the names of an enum appears
  */
 public class ChoiceInputPanelTest  extends VisualTest{
 
@@ -46,8 +45,9 @@ public class ChoiceInputPanelTest  extends VisualTest{
 		w.pack();
 		w.setVisible(true);
 		
-		super.comboBoxVisualTest(c.box);
+		super.comboBoxVisualTest(w, c.box);
 		
+		w.setVisible(false);
 	
 	}
 

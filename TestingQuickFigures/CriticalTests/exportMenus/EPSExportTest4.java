@@ -16,7 +16,7 @@ public class EPSExportTest4 extends QuickExportTest {
 	 * @return
 	 */
 	QuickExport createExporter() {
-		opensFiles=false;
+		
 		return new EPSQuickExport(false);
 	}
 

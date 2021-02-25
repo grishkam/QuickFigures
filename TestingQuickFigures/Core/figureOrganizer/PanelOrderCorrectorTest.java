@@ -97,7 +97,7 @@ public class PanelOrderCorrectorTest  extends FigureTest {
 	
 
 	/**
-	 * 
+	 tests the methods that determine panel order
 	 */
 	public void performOrderTest() {
 		FigureOrganizingLayerPane f = createFirstExample();

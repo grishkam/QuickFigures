@@ -215,6 +215,9 @@ public void setValue(int value) {
 		int startIndex = start.ordinal();
 		return new ChoiceInputPanel(label, names, startIndex);
 	}
+	
+	/**returns the name of the panel*/
+	public String getName() {return label.getText();}
 
 	
 }

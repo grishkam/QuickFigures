@@ -62,11 +62,20 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 		checkPanelPixelDensityfield(qf, dialog);
 		
 		checkColorMode(qf, dialog);
+		DialogTester.testInputPanelApperance(dialog, 1);
 		
-		if (TestingOptions.performManualTests && ShowMessage.showOptionalMessage("next step", false, "Automated tests done for recreate panels dialog, do you want to check combinations of settings and then perform manual tests?"))
-			performCombinationsAndManual(dialog);
+		/** these tests take a long time, so a conditional */
+		if (TestingOptions.performSlowTestsForExceptions)askAboutManualTests(dialog);
 		
 		dialog.setVisible(false);
+	}
+
+	/**
+	 * @param dialog
+	 */
+	public void askAboutManualTests(PanelStackDisplayOptions dialog) {
+		if (TestingOptions.performManualTests && ShowMessage.showOptionalMessage("next step", false, "Automated tests done for recreate panels dialog, do you want to check combinations of settings and then perform manual tests?"))
+			performCombinationsAndManual(dialog);
 	}
 
 	/**
