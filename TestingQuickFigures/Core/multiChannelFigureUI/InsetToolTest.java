@@ -86,7 +86,7 @@ public class InsetToolTest extends ToolTester{
 		
 		
 		currentTool.createInsetOnImagePanel(currentTool.getImageClicked(),panel.getImageDisplayObject(), new Rectangle(2,2, 15, 16));
-		IssueLog.waitSeconds(30);
+		image.closeWindowButKeepObjects();
 	}
 
 }

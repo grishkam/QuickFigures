@@ -21,6 +21,7 @@
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -28,6 +29,8 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
+import export.svg.SVGEXporterForShape;
+import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
@@ -75,6 +78,19 @@ public class FrameGraphic extends RectangularGraphic {
 		 
 		   }
 	
+	/**returns a copy of this item in the form of a normal rectangle*/
+	public RectangularGraphic rectCopy() {
+		RectangularGraphic output = new  RectangularGraphic(this.getInsideFrameRect());
+		
+		output.setAngle(this.getAngle());
+		output.copyStrokeFrom(this);
+		
+		
+		return output;
+		
+	}
+	
+	
 	/**The frame rectangle*/
 	public Rectangle2D getInsideFrameRect() {
 
@@ -108,4 +124,13 @@ public class FrameGraphic extends RectangularGraphic {
 	public boolean isFillable() {
 		return false;
 	}
+	
+	
+	/**Called when the user exports to adobe illustrator*/
+	@Override
+	public SVGExporter getSVGEXporter() {
+		return new SVGEXporterForShape(this.rectCopy());
+	}
+	
+	
 }

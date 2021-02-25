@@ -27,7 +27,7 @@ public class KeyDownTrackerTest {
 
 	@Test
 	public void test() {
-		JFrame jFrame = new JFrame("press keys to test ");
+		JFrame jFrame = new JFrame("press keys to test manually");
 		jFrame.setVisible(true);
 		Toolkit.getDefaultToolkit().addAWTEventListener(new KeyDownTracker(), AWTEvent.KEY_EVENT_MASK);
 		
@@ -35,6 +35,7 @@ public class KeyDownTrackerTest {
 		int vkC = KeyEvent.VK_C;
 		
 		testKeyTracking(jFrame, keyChar, vkC);
+		jFrame.setVisible(false);
 	}
 
 	/**

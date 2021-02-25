@@ -19,7 +19,7 @@ class GraphicSetDisplayWindowTest {
 		
 		ShowMessage.showMessages("Automated test of window passed "
 				,"user will be shown instructions for manual test");
-		manualTest();
+		//manualTest();//manual test is not often done. commented out so it will not be autmatically run
 
 	}
 
@@ -79,6 +79,8 @@ class GraphicSetDisplayWindowTest {
 		assert(endZoom<startZoom);
 		
 		w.closeGroupWithoutObjectDeath();
+		
+		
 		
 	}
 	

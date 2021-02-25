@@ -59,19 +59,7 @@ public class Object_MoverTest extends ToolTester {
 	 tests several aspects of the object mover tool
 	 */
 	void testTool() {
-		Object_Mover currentTool=null;
-		
-		
-		InterfaceExternalTool<?> mover = ObjectToolset1.setCurrentTool(Object_Mover.selectorToolName);
-		assert(mover instanceof GeneralTool) ;
-		if (mover instanceof GeneralTool) {
-			GeneralTool t=(GeneralTool) mover;
-			ToolBit bit = t.getToolbit();
-			assert(bit instanceof Object_Mover) ;
-			currentTool=(Object_Mover) bit;
-			assert(currentTool!=null);
-			
-		}
+		Object_Mover currentTool = setUpCurrentTool();
 		ImageWindowAndDisplaySet image = TestShapes.createExample(TestShapes.DIVERSE_SHAPES);
 		
 		image.setZoomLevel(2);// must be whole number so that the cordinates match the canvas. otherwise, rounding of numbers will make the rest of this test fail ( since 44 does not equal 45 )
@@ -292,6 +280,26 @@ public class Object_MoverTest extends ToolTester {
 		
 		
 		
+	}
+
+	/**set thecurrent tool to the object mover
+	 * @return
+	 */
+	public Object_Mover setUpCurrentTool() {
+		Object_Mover currentTool=null;
+		
+		
+		InterfaceExternalTool<?> mover = ObjectToolset1.setCurrentTool(Object_Mover.selectorToolName);
+		assert(mover instanceof GeneralTool) ;
+		if (mover instanceof GeneralTool) {
+			GeneralTool t=(GeneralTool) mover;
+			ToolBit bit = t.getToolbit();
+			assert(bit instanceof Object_Mover) ;
+			currentTool=(Object_Mover) bit;
+			assert(currentTool!=null);
+			
+		}
+		return currentTool;
 	}
 
 	

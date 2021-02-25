@@ -98,6 +98,9 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 
 public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		super(r);
+		this.setFilled(false);
+		this.setFillColor(new Color(0,0,0,0));
+		this.setFillColor(null);
 		setSourcePanel(p);
 		updateImagePanels();
 	}

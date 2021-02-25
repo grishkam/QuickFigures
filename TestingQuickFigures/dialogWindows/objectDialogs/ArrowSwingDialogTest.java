@@ -45,7 +45,8 @@ public class ArrowSwingDialogTest extends  DialogTester  {
 		testCombinations(d);
 		
 
-		IJ.wait(30000);
+		
+		d.setVisible(false);
 	}
 
 }

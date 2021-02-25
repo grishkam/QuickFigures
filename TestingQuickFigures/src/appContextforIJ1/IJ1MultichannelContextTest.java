@@ -9,6 +9,7 @@ package appContextforIJ1;
 import org.junit.jupiter.api.Test;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.WindowManager;
 
 /***/
 class IJ1MultichannelContextTest {
@@ -18,8 +19,9 @@ class IJ1MultichannelContextTest {
 		IJ1MultichannelContext c = new IJ1MultichannelContext();
 		ImageDisplayTester.setupImageJ();
 		
+		WindowManager.closeAllWindows();
 		//test getter method for all visible image 
-		assert(c.getallVisibleMultichanal().size()==0);
+		assert(c.getallVisibleMultichanal().size()==0);//if test is run in isolation, size will be 0
 		ImagePlus i = IJ.createHyperStack("b", 400, 300, 3, 1, 1, 16);
 		i.show();
 		assert(c.getallVisibleMultichanal().size()==1);

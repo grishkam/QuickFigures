@@ -22,6 +22,8 @@ package export.svg;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.geom.Point2D;
+
 import org.apache.batik.svggen.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,20 +31,25 @@ import org.w3c.dom.Element;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import logging.IssueLog;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 
-/**An  SVG exporter implementation for text items*/
+/**An  SVG exporter implementation for text items
+ * Text items will appear faithfully when the exported SVG files are opened in 
+ * Firefox or Inkscape but will not appear correctly in other softwares*/
 public class TextSVGExporter extends SVGExporter {
 
 	private TextGraphic textgra;
-	boolean singleObjectExport=true;
+	private boolean singleObjectExport=true;
+	String rotAttribute=null;
 
 	public TextSVGExporter(TextGraphic t) {
 		this.textgra=t;
+		 rotAttribute=null;
 	}
 	
-	String rotAttribute=null;
+	
 	
 	@Override
 	public Element toSVG(Document dom, Element e) {
@@ -61,7 +68,7 @@ public class TextSVGExporter extends SVGExporter {
 		SVGFont font2 = new SVGFont(generatorCtx);
 		double x=textgra.getX();
 		double y=textgra.getY();
-		double angle=(-textgra.getAngleInDegrees());
+		
 		Font font=textgra.getFont();
 		String sstringText=textgra.getText();
 		if (complex) {
@@ -69,8 +76,7 @@ public class TextSVGExporter extends SVGExporter {
 			sstringText=comp.getParagraph().get(0).get(0).getText();
 			
 		}
-		double rotx = textgra.getCenterOfRotation().getX();
-		double roty = textgra.getCenterOfRotation().getY();
+		
 		
 		
 		g2d.setFont(font);
@@ -94,20 +100,18 @@ public class TextSVGExporter extends SVGExporter {
 		SVGFontDescriptor fd = font2.toSVG(font, g2d.getFontRenderContext());
 		addSVGDescriptor(fd,text);	  
 		setColorString(text, "fill", "opacity",c);
-		rotAttribute="rotate("+angle+" "+rotx+","+roty+")";
 		
-		if (rotAttribute!=null)
-		text.setAttribute("transform", rotAttribute);
+		setUprotation(text);
 		
 		if (complex) {
 			comp=(ComplexTextGraphic) textgra;
 			
 			TextLine line = comp.getParagraph().get(0);
-			
+			Point2D.Double pcenter=new Point2D.Double(x, y);
 			for(int i=0; i<comp.getParagraph().size();i++) {
 				line = comp.getParagraph().get(i);
 				for(int i2=0; i2<line.size();i2++) {
-					createTextSpan(text, line.get(i2), dom, i2==0, g2d);
+					createTextSpan(text, line.get(i2), dom, i2==0, g2d, i==0, pcenter);
 				
 					}
 				}
@@ -115,26 +119,60 @@ public class TextSVGExporter extends SVGExporter {
 	
 		return text;
 	}
+
+
+	/**makes the rotation attribute of the text match the text item
+	 * @param text
+	 */
+	public void setUprotation(Element text) {
+		
+		double angle=(-textgra.getAngleInDegrees());
+		if(angle<0) angle+=360;
+		if (angle==0)
+			return;
+		double rotx = textgra.getCenterOfRotation().getX();
+		double roty = textgra.getCenterOfRotation().getY();
+		setRotationAttribute(angle, rotx, roty, text);
+	}
+
+
+	/**introduces a rotation attribute to the text
+	 * 
+	 * @param angle
+	 * @param rotx
+	 * @param roty
+	 * @param text
+	 */
+	public void setRotationAttribute(double angle, double rotx, double roty, Element text) {
+		rotAttribute="rotate("+angle+" "+rotx+","+roty+")";
+		
+		if (rotAttribute!=null)
+		text.setAttribute("transform", rotAttribute);
+	}
 	
 	
 	/**adds a text span element
 	 * @param generatorCtx */
-	Element createTextSpan(Element parent, TextLineSegment seg, Document dom, boolean line, SVGGraphics2D g2d) {
+	Element createTextSpan(Element parent, TextLineSegment seg, Document dom, boolean lineStart, SVGGraphics2D g2d, boolean firstLine, Point2D.Double centerOfRotation) {
 		g2d.setFont(seg.getFont());
 		g2d.setColor(seg.getTextColor());
 		SVGGeneratorContext generatorCtx=g2d.getGeneratorContext();
 		Element text = dom.createElementNS(SVGSyntax.SVG_NAMESPACE_URI, SVGSyntax.SVG_TSPAN_TAG);
-		if (line) {	
-		text.setAttribute(SVGSyntax. SVG_X_ATTRIBUTE,
-                generatorCtx.doubleString(seg.baseLine.getX()));
 		
-		text.setAttribute(SVGSyntax. SVG_Y_ATTRIBUTE,
-                generatorCtx.doubleString(seg.baseLine.getY()));
+		/**for some reason the code for the test cases is not consistent without this step*/
+		IssueLog.log("creating text span "+seg.getText()+" "+seg.baseLine);
+		if (lineStart ) {	
+				text.setAttribute(SVGSyntax. SVG_X_ATTRIBUTE,
+		                generatorCtx.doubleString(seg.baseLine.getX()));
+				
+				text.setAttribute(SVGSyntax. SVG_Y_ATTRIBUTE,
+		                generatorCtx.doubleString(seg.baseLine.getY()));
 		
-		
-		
+				
 		
 		}
+		
+		this.setUprotation(text);
 		
 		/**takes care of the super and subscripts*/
 		if(seg.isSuperscript()) {text.setAttribute("baseline-shift", "super");}

@@ -34,6 +34,8 @@ import java.util.HashMap;
 
 import javax.swing.Icon;
 
+import export.svg.SVGExporter;
+import export.svg.TextSVGExporter;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import icons.TreeIconWithText;

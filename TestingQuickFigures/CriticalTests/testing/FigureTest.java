@@ -38,10 +38,17 @@ public class FigureTest {
 	}
 	
 	/**
+	 stores the current window
+	 */
+	public void closeCurrentWindow() {
+		gg.closeWindowButKeepObjects();
+	}
+	
+	/**
 	 * 
 	 */
 	public void showUser() {
 		gg.updateDisplay();
-		IssueLog.waitSeconds(5);
+		IssueLog.waitSeconds(4);
 	}
 }

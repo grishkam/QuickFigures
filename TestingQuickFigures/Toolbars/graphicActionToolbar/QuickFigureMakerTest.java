@@ -88,11 +88,13 @@ public class QuickFigureMakerTest {
 		j.show();; 
 		new Zoom().run("out");;	new Zoom().run("out");;
 		IJ.wait(1000);
-		assert(FileChoiceUtil.yesOrNo("Compare the figure produced to the expected result 'Test 1 Split Channels' in the 'Test 1' folder. Are they same?"));
+		assert(FileChoiceUtil.yesOrNo("Compare the figure produced to the expected result 'Test 1 Split Channels' in the 'Test 1' folder. Are they similar?"));
 	
 		
-		IJ.wait(1000);
+		IssueLog.waitSeconds(1);
 		makeNonVisible() ;
+		
+		FigureTester.closeAllWindows();
 		
 		/**now tests the merge only version*/
 		FigureOrganizingLayerPane fig2 = new FigureTester().createFigureFromExample1Images(new QuickFigureMaker(FigureAdder.MERGE_PANELS_ONLY, true), 4);
@@ -100,17 +102,19 @@ public class QuickFigureMakerTest {
 		makeVisible();
 		
 		allGraphics = fig2.getAllGraphics();
-		IJ.wait(1000);
+		IssueLog.waitSeconds(1);
 		assert(FileChoiceUtil.yesOrNo("A figure with only merge panels should have appeared. Do you see it?"));
 		
 		
-		IJ.wait(10000);
+		IssueLog.waitSeconds(1);
 		
 		
 		assert(ArraySorter.getNOfClass(allGraphics, ImagePanelGraphic.class)==4);
 		assert(ArraySorter.getNOfClass(allGraphics, ChannelLabelTextGraphic.class)==1);
 		assert(ArraySorter.getNOfClass(allGraphics, BarGraphic.class)==1);
 		assert(ArraySorter.getNOfClass(allGraphics, PanelLayoutGraphic.class)==1);
+		makeNonVisible() ;
+		FigureTester.closeAllWindows();
 	}
 
 

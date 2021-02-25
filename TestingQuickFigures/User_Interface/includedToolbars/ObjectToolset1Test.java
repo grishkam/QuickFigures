@@ -47,6 +47,8 @@ class ObjectToolset1Test {
 		IJ.wait(5000);
 		
 		assert(FileChoiceUtil.yesOrNo("Were you able to switch tools?"));
+		
+		i.closeWindowButKeepObjects();
 	}
 	
 	

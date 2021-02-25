@@ -63,8 +63,10 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 		
 		checkColorMode(qf, dialog);
 		
-		if (TestingOptions.performManualTests && ShowMessage.showOptionalMessage("next step", false, "Automated tests done, do you want to check combinations of settings and then perform manual tests?"))
+		if (TestingOptions.performManualTests && ShowMessage.showOptionalMessage("next step", false, "Automated tests done for recreate panels dialog, do you want to check combinations of settings and then perform manual tests?"))
 			performCombinationsAndManual(dialog);
+		
+		dialog.setVisible(false);
 	}
 
 	/**
@@ -161,7 +163,7 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 		dialog.revertAll();
 		new CurrentFigureSet().getCurrentlyActiveDisplay().setZoomLevel(2);// to fix any excessive zooming that may have occred
 		TestingUtils.askUser("Dialog has cycled through combinations of settings. For 30 seconds.Manually determine that the dialog still works ");
-		IJ.wait(30000); 
+		IssueLog.waitSeconds(30);
 		TestingUtils.askUser("were you still able to edit the figure with the dialog? ");
 		
 		
@@ -172,8 +174,10 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 		  dialog = PanelStackDisplayOptions.recreateFigurePanels(qf, false);
 		 int g= dialog.getOptionDisplayTabs().getSelectedIndex();
 		assert( dialog.getOptionDisplayTabs().getTitleAt(g)==PanelStackDisplayOptions.FRAMES_AND_SLICES_TAB_NAME);
-		 ShowMessage.showMessages("now for 30 seconds, user may manually test dialog windows frames and slices tab");
+		 ShowMessage.showMessages("now for 30 seconds, user may manually test dialog windows frames and slices tab by typing in a number (1 or 2)");
 		 IssueLog.waitSeconds(30);
+		 
+		 dialog.setVisible(false);
 	}
 
 	/**checks to determine if changes to the panel pixel density work

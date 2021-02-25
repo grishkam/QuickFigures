@@ -20,6 +20,7 @@
  */
 package exportMenus;
 
+import java.awt.Window;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -76,6 +77,10 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 		return jc.getSelectedFile();
 	}
 	
+	
+	/**shows the saved file*/
+	public Window viewSavedFile(File f) {return null;}
+	
 	/**
 	 * a method to be accessed by programmer. not implemented for all subclasses
 	 saves the image in the given path
@@ -83,4 +88,5 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 	public void saveInPath(DisplayedImage diw, String newpath) throws Exception {}
 
 	protected  abstract String getExtensionName() ;
+	
 }

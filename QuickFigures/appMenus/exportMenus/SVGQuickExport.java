@@ -17,6 +17,7 @@ package exportMenus;
 
 
 import java.awt.Desktop;
+import java.awt.Window;
 import java.io.File;
 
 import applicationAdapters.DisplayedImage;
@@ -75,6 +76,8 @@ public class SVGQuickExport extends QuickExport {
 	 */
 	public  void saveInPath(DisplayedImage diw, String newpath) {
 		 try {
+			 diw.getWindow().setVisible(true);
+			 diw.updateDisplay();
 			 SVGsaver saver = new SVGsaver();
 			   
 			  saver.saveFigure(newpath, diw);
@@ -91,6 +94,13 @@ public class SVGQuickExport extends QuickExport {
 	@Override
 	public String getNameText() {
 		return "SVG";
+	}
+	
+	/**shows the saved file*/
+	@Override
+	public Window viewSavedFile(File f) {
+		SVGsaver saver = new SVGsaver();;
+		return saver.viewSavedSVG(f);
 	}
 	
 }

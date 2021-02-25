@@ -26,8 +26,10 @@ import org.apache.batik.svggen.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
+import logging.IssueLog;
 
 /**An SVG exporter for shapes. works somewhat differently in the special case
  * of scale bars*/
@@ -52,6 +54,11 @@ public Element toSVG(Document dom, Element e) {
 		//return b.getBreakdownGroup().getSVGEXporter().toSVG(dom, e);
 	}
 	
+	
+	if (shape instanceof FrameGraphic) {
+		IssueLog.log("frames notperfect");
+		
+	}
 	
 	SVGGeneratorContext context = SVGGeneratorContext.createDefault(dom);
 	SVGGraphics2D gra2D = new SVGGraphics2D(dom);
@@ -81,7 +88,11 @@ public Element toSVG(Document dom, Element e) {
 	SVGPaintDescriptor fillpaint = new SVGPaint(context).toSVG(shape.getFillColor());
 	
 	
-	if (shape.isFilled()) addSVGDescriptor( fillpaint, element);
+	
+	if (shape.isFilled()) {
+		
+		addSVGDescriptor( fillpaint, element);
+	}
 
 	setColorString(element, "stroke", "stroke-opacity", c);
 	

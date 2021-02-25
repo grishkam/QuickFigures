@@ -1,6 +1,7 @@
 package testing;
 
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.io.File;
 
 import addObjectMenus.FigureAdder;
@@ -254,6 +255,14 @@ public class FigureTester {
 			if (form==form1c)
 				new FigureTester(). createFigureFromExample1CImages();
 			return  CurrentFigureSet.getCurrentActiveDisplayGroup();
+		}
+	}
+	
+	
+	public static void closeAllWindows() {
+		Window[] windows = Window.getWindows();
+		for(Window w: windows) {
+			w.setVisible(false);
 		}
 	}
 }

@@ -25,12 +25,14 @@ import graphicalObjects_Shapes.SimpleGraphicalObject;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
+import standardDialog.StandardDialog;
+import testing.VisualTest;
 
 /**
  
  * 
  */
-public class GraphicComboBoxTest {
+public class GraphicComboBoxTest extends VisualTest {
 
 	/**displays a window with a combo box, user must click on it to confirm that appearance and function are normal*/
 	@Test
@@ -60,8 +62,14 @@ public class GraphicComboBoxTest {
 			ff.pack();
 			
 			ff.setVisible(true);
+			StandardDialog.center(ff);
 			ff.pack();
-			IssueLog.waitSeconds(50);
+			
+			comboBoxVisualTest(sb);
+			
+			ff.setVisible(false);
 	}
+
+	
 
 }

@@ -8,6 +8,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 import objectDialogs.CroppingDialog;
+import testing.FigureTester;
 
 class ImagePlusMultiChannelSlotTest {
 
@@ -18,7 +19,7 @@ class ImagePlusMultiChannelSlotTest {
 		MultiChannelDisplayCreator cc = c.getMultichannelOpener();
 		
 		ImagePlus i = IJ.createHyperStack("b", 600, 500, 3, 5, 8, 16);
-		
+		i=i.flatten();
 		
 		i.show();
 		
@@ -27,8 +28,9 @@ class ImagePlusMultiChannelSlotTest {
 		assert(mm2.getImagePlus()!=null);
 		
 		/**tests ability to hide the image*/
+		int start=c.getallVisibleMultichanal().size();
 		mm2.hideImageWihtoutMessage();
-		assert(c.getallVisibleMultichanal().size()==0);
+		assert(c.getallVisibleMultichanal().size()==start-1);
 		i.createImagePlus().show();;
 		
 		//assert(FileChoiceUtil.yesOrNo("Testing: the test class will show a few images. You will click yes to confirm that"+ "they look as described"));
@@ -58,7 +60,7 @@ class ImagePlusMultiChannelSlotTest {
 		assert(mm2.getScaleInfo().getUnits().equals("Greg Unit"));
 		
 		mm2.saveImageEmbed();
-		
+		FigureTester.closeAllWindows();
 	}
 
 }

@@ -20,9 +20,13 @@
  */
 package export.svg;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.io.File;
+import java.io.IOException;
 
+import javax.swing.JFrame;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,6 +37,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.batik.svggen.SVGGeneratorContext;
+import org.apache.batik.swing.JSVGCanvas;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -85,7 +90,24 @@ public class SVGsaver {
 		}
 	}
 	
-	
+	/**returns a window to view a specific svg file*/
+	public JFrame viewSavedSVG(File f) {
+		JSVGCanvas svgCanvas = new JSVGCanvas();
+		 try {
+             svgCanvas.setURI(f.toURI().toString());
+             IssueLog.log("opening "+f);
+             svgCanvas.setSize(900, 600);
+             svgCanvas.setEnableImageZoomInteractor(true);
+             svgCanvas.setPreferredSize(new Dimension(900, 600));
+         } catch (Exception ex) {
+             ex.printStackTrace();
+         }
+		
+		JFrame window = new JFrame(f.getName());
+		window.add(svgCanvas);
+		window.pack();
+		return window;
+	}
 
 	
 	private Element createSVGelememnt(Document doc) {
@@ -121,6 +143,7 @@ public class SVGsaver {
 		  
 			createContext(doc);
 			
+			
 		  
 		  for(ZoomableGraphic z: set.getItemArray()) try {
 	        	if (z instanceof SVGExportable) {
@@ -148,4 +171,7 @@ public class SVGsaver {
 	private SVGGeneratorContext createContext(Document doc) {
 		return SVGGeneratorContext.createDefault(doc);
 	}
+	
+	
+	
 }

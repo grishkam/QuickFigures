@@ -31,7 +31,7 @@ import testing.FigureTester;
 
 /**
  Testing of the scale bar sizes. 
- 
+ Uses a series of saved images of known pixel size 
  */
 public class BarGraphicTest {
 
@@ -151,6 +151,8 @@ public class BarGraphicTest {
 		
 		performScaleInfoConsistencyTests();
 		
+		FigureTester.closeAllWindows();
+	
 	}
 
 	/** calls the test case method a few times

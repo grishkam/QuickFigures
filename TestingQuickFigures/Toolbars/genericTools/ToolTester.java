@@ -1,17 +1,15 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 19, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
- */
-/**
- 
- * 
+ * Date Modified: Feb 24, 2021
+ * Version: 2021.1
  */
 package genericTools;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -23,6 +21,7 @@ import ij.IJ;
 import imageDisplayApp.GraphicSetDisplayWindow;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**
  A superclass for classes that test tools
@@ -60,7 +59,35 @@ public abstract class ToolTester {
 		double y = image.getConverter().transformY(p.getY());
 		MouseEvent event = new MouseEvent(canvas,code, System.currentTimeMillis(), modifiers, (int)x, (int)y, clickCount, false);
 		canvas.dispatchEvent(event);
-		IJ.wait(10);
+		IssueLog.waitMiliseconds(10);
+	}
+	
+	/**simulates mouse clicks forevery coponent in the container*/
+	public static void clickAllcomponents(Container jf) {
+		
+		for (Component canvas: jf.getComponents()) {
+			clickComponent(canvas,0);
+			if(canvas instanceof Container) {
+				clickAllcomponents((Container) canvas);
+			}
+		}
+	}
+	
+	/**simulates a mouse press, release and click on a component*/
+	public static void clickComponent(Component canvas, int pausetime) {
+
+		
+		int x = 1;
+		int y = 1;
+		MouseEvent event = new MouseEvent(canvas,MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), 0, x, y, 1, false);
+		canvas.dispatchEvent(event);
+		IssueLog.waitMiliseconds(1000+pausetime);
+		
+		event = new MouseEvent(canvas,MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, x, y, 1, false);
+		canvas.dispatchEvent(event);
+		
+		event = new MouseEvent(canvas,MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, x, y, 1, false);
+		canvas.dispatchEvent(event);
 	}
 	
 	/**Assuming the handle includes its co-ordinate location, this simjulates an event
@@ -70,7 +97,7 @@ public abstract class ToolTester {
 		return simulateHandlePressEvent(image, handle);
 	}
 
-	/**
+	/** presses the mouse within a given handle
 	 * @param image
 	 * @param handle
 	 * @return
@@ -78,6 +105,15 @@ public abstract class ToolTester {
 	Point2D simulateHandlePressEvent(ImageWindowAndDisplaySet image, SmartHandle handle) {
 		assert(handle!=null);
 		Point2D cordinateLocation = handle.getCordinateLocation();
+		if (!handle.containsClickPoint(cordinateLocation))
+		{
+			double xc = handle.getClickableArea().getBounds().getCenterX();
+			double yc = handle.getClickableArea().getBounds().getCenterY();
+			xc=image.getTheCanvas().getConverter().unTransformX(xc);
+			yc=image.getTheCanvas().getConverter().unTransformX(yc);
+			cordinateLocation =new Point2D.Double(xc, yc);
+		}
+		
 		simulateMouseCordinateEvent(image, cordinateLocation, MouseEvent.MOUSE_PRESSED);
 		return cordinateLocation;
 	}

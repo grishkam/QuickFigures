@@ -1,12 +1,7 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 25, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
- */
-/**
- 
- * 
+ * Date Modified: Feb 24, 2021
+ * Version: 2021.1
  */
 package graphicalObjects_LayerTypes;
 
@@ -25,7 +20,6 @@ import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import handles.ReshapeHandleList;
 import handles.SmartHandle;
-import ij.IJ;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
@@ -33,6 +27,7 @@ import testing.TestShapes;
 
 /**
 Test to determine if groups are working properly
+If so, objects should be resizable by clicking on the groups handles
  */
 public class GraphicGroupTest extends ToolTester {
 
@@ -44,7 +39,7 @@ public class GraphicGroupTest extends ToolTester {
 		IssueLog.windowPrint=false;
 		
 		testTool();
-	IJ.wait(30000);
+	
 	}
 
 	/**
@@ -80,10 +75,11 @@ public class GraphicGroupTest extends ToolTester {
 		assert(testCircle.isSelected());
 		ReshapeHandleList startList = gg.getReshapeList();
 		image.updateDisplay();
-		IJ.wait(10);
+		
 		assert(startList==gg.getSmartHandleList());//checks to make sure list is not changing
 		
-		/**simulates mouse drags on the group handles. confirms that objects within the group change*/
+		/**simulates mouse drags on the group handles.
+		 *  confirms that objects within the group change size*/
 		for(int aHandle: RectangleEdges.internalLocations){
 			testRect.setRectangle(r);
 			testCircle.setRectangle(rCircle);
@@ -94,15 +90,19 @@ public class GraphicGroupTest extends ToolTester {
 				
 				Point2D spot = super.simulateHandlePressCordinateEvent(image, gg, n);
 				assert(gg.getSmartHandleList().getHandleNumber(n)==sh);
-				this.simulateMouseCordinateEvent(image, new Point2D.Double(spot.getX()+15, spot.getY()+15), MouseEvent.MOUSE_DRAGGED);
-				this.simulateMouseCordinateEvent(image, new Point2D.Double(spot.getX()+15, spot.getY()+15), MouseEvent.MOUSE_RELEASED);
+				int shift = 45;//suffidient distance for change to shapes to be certain
+				this.simulateMouseCordinateEvent(image, new Point2D.Double(spot.getX()+shift, spot.getY()+shift), MouseEvent.MOUSE_DRAGGED);
+				this.simulateMouseCordinateEvent(image, new Point2D.Double(spot.getX()+shift, spot.getY()+shift), MouseEvent.MOUSE_RELEASED);
 				
 				gg.select();
 				image.updateDisplay();
-				IssueLog.log("dragging handle "+aHandle);
+				
+				
 				assert(!testRect.getRectangle().equals(r));//rectangle should have changed size or location
 				assert(!testCircle.getRectangle().equals(rCircle));//circle should have changed size or location
 	}
+		
+		image.closeWindowButKeepObjects();
 	}
 
 }

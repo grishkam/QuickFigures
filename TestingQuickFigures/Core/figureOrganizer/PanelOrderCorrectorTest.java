@@ -17,6 +17,7 @@ import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import testing.FigureTest;
+import testing.FigureTester;
 import undo.UndoLayoutEdit;
 
 /**
@@ -29,7 +30,7 @@ public class PanelOrderCorrectorTest  extends FigureTest {
 	public void test() {
 		performOrderTest();
 		performChannelEachTest();
-		
+		FigureTester.closeAllWindows();
 	}
 	
 	/**
@@ -89,7 +90,7 @@ public class PanelOrderCorrectorTest  extends FigureTest {
 		assert(panelOrderCorrector.isEachPanelADifferentChannel());
 		assert(panelOrderCorrector.determineChannelLayout()==LayoutSpaces.PANELS);
 		
-		
+	super.closeCurrentWindow();
 		
 	}
 
@@ -107,6 +108,7 @@ public class PanelOrderCorrectorTest  extends FigureTest {
 		for(int i=0; i<n; i++)
 			for(int j=0; j<n; j++)
 		testOrderfinding(panelOrderCorrector, i, j);
+		super.closeCurrentWindow();
 	}
 
 	/**a test to make sure that changes in the physical location of panels

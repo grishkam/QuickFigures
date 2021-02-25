@@ -18,15 +18,17 @@ import javax.swing.JFrame;
 import org.junit.Test;
 
 import logging.IssueLog;
+import testing.TestingOptions;
+import testing.VisualTest;
 
 /**
  test to determine if angle box appearance is normal.
  Use may also drag to test if angle box responds to mouse drags with changes
  to the angle
  */
-public class AngleBoxTest {
+public class AngleBoxTest extends VisualTest {
 
-	@Test
+	//@Test//does not need to be regularly tested
 	public void test() {
 		JFrame ff = new JFrame("frame");
 		ff.setLayout(new FlowLayout());
@@ -38,7 +40,9 @@ public class AngleBoxTest {
 		ff.setVisible(true);
 		
 		/**enough time for the human tester to see how it looks*/
-		IssueLog.waitSeconds(50);
+		super.visualTestMessage("look at the window with the angle box");
+		TestingOptions.waitTimeAfterVisualTests();
+		ff.setVisible(false);
 	}
 	
 	

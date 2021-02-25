@@ -45,6 +45,8 @@ public class TemplateChooserDialogTest {
 			
 			FigureTemplate template = new FigureTemplate();
 			TemplateChooserDialog dialog = new TemplateChooserDialog(template, oc1);
+			dialog.setWindowCentered(true);
+			dialog.setTitle("Manually check dialog appearance and close to finish test");
 			dialog.showDialog();;
 			
 			dialog.setTemplateToChoices();

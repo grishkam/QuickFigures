@@ -20,7 +20,7 @@ jpeg files are used for relatively few icons
  */
 public class RowSwapperToolIconTest {
 
-	@Test
+	//@Test//test does not need to be regularly performed
 	public void test() {
 		long time=System.currentTimeMillis();
 		new RowSwapperToolIcon(0, LayoutSpaces.COLS).generateIconSet();

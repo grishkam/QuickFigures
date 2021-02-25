@@ -27,7 +27,7 @@ class IJ1MultiChannelCreatorTest {
 		
 		/**tests the user dialog when there is no image open*/
 		cc.creatMultiChannelDisplayFromUserSelectedImage(false, null);
-		//tests what image is returned as the currently open one
+		//tests what image is returned as the currently open one. if this test is run in isolation, none will be open
 		assert(cc.creatMultiChannelDisplayFromOpenImage().getSlot().getMultichannelImage()==null);
 		
 		/**tests to see if a multichannel is created*/

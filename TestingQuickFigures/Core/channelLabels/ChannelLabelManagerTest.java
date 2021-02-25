@@ -65,7 +65,7 @@ public class ChannelLabelManagerTest extends FigureTest {
 		testChannelLabelName(displayLayer, 4, "cy5");
 		
 		
-		
+		super.closeCurrentWindow();
 		
 
 	}

@@ -1,6 +1,7 @@
 package exportMenus;
 
 import java.awt.Desktop;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
 import figureFormat.DirectoryHandler;
+import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
 import testing.FigureTester;
 import testing.TestProvider;
@@ -16,14 +18,19 @@ import ultilInputOutput.FileChoiceUtil;
 
 abstract class QuickExportTest {
 	
-	private static final int ALL_CASES = 0;
+	private static final int ALL_ = 0;
 
 	boolean opensFiles=true;
 	
-	int testCase=ALL_CASES;//which cases to test
+	int testCase=ALL_;//which cases to test
+
+	/**set to true if user will test files one by one*/
+	private boolean viewOnebyOne=true;
 
 	@Test
 	void test() throws Exception {
+		IssueLog.sytemprint=true;
+		PNGQuickExport.showDialogEverytime=false;
 		exportTest();
 		
 		
@@ -46,7 +53,7 @@ abstract class QuickExportTest {
 			testsCases.add(t);
 		}
 		for(TestProvider ex: testsCases) {
-			if(testCase!=ALL_CASES &&testCase!=count) { count++; continue;}
+			if(testCase!=ALL_ &&testCase!=count) { count++; continue;}
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
 			String testOutput = DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"+count+" Export Test "+count+"("+Math.random()+")."+qe.getExtension();
@@ -65,6 +72,11 @@ abstract class QuickExportTest {
 			IssueLog.log("ending test "+count);
 			IssueLog.log("Find saved file in "+file);
 			count++;
+			
+			if (viewOnebyOne) {
+			createExample.setZoomLevel(1);
+			ImageDisplayIOTest.assertCompareWindows(createExample.getWindow(), this.createExporter().viewSavedFile(file));
+			}
 				}
 		Desktop.getDesktop().open(new File(DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"));
 		
@@ -82,7 +94,9 @@ abstract class QuickExportTest {
 	 */
 	void openFiles(ArrayList<String> createsFiles) throws IOException {
 		for(String testOutput:createsFiles) {
-			Desktop.getDesktop().open(new File(testOutput));
+			
+				Desktop.getDesktop().open(new File(testOutput));
+			
 		}
 	}
 

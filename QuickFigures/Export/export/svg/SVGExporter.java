@@ -32,7 +32,7 @@ import logging.IssueLog;
 
 /**A class that transforms a QuickFigures objects into svg items for export*/
 public abstract class SVGExporter {
-	boolean logattributes=true;
+	boolean logattributes=false;
 	
 	public abstract Element toSVG(Document dom, Element e) ;
 	

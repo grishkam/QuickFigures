@@ -1,5 +1,6 @@
 package imageDisplayApp;
 
+import java.awt.Window;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ import testing.TestShapes;
 import ultilInputOutput.FileChoiceUtil;
 
 /**needs additional examples*/
-class ImageDisplayIOTest {
+public class ImageDisplayIOTest {
 
 	@Test
 	/**creates a series of example images, containing every type of object, shape, Text and so on
@@ -62,16 +63,38 @@ class ImageDisplayIOTest {
 		
 		ImageWindowAndDisplaySet i2 = ImageDisplayIO.showFile(f);
 		
-		i.getWindow().setLocation(200, 20);
-		i2.getWindow().setLocation(800, 20);
+		GraphicSetDisplayWindow windowOriginal = i.getWindow();
+		
+		GraphicSetDisplayWindow windowNew = i2.getWindow();
 		i.setZoomLevel(1);
 		i2.setZoomLevel(1);
-		IJ.wait(400);
-		assert(FileChoiceUtil.yesOrNo("One window contains the original example image, "+
-				"the other a saved copy that was re opened. Do they appear to be the same?"));
+		assertCompareWindows( windowOriginal, windowNew);
 		f.delete();
 		
 		compare(i, i2);
+	}
+
+	/**
+	 * @param i
+	 * @param i2
+	 * @param windowOriginal
+	 * @param windowNew
+	 */
+	public static void assertCompareWindows(
+			Window windowOriginal, Window windowNew) {
+		if (windowOriginal==null||windowNew==null)
+			return;
+		windowNew.setVisible(true);
+		windowOriginal.setVisible(true);
+		windowOriginal.setLocation(200, 20);
+		windowNew.setLocation(800, 20);
+		
+		IJ.wait(100);
+		assert(FileChoiceUtil.yesOrNo("One window contains the original example image, "+
+				"the other a saved copy that was re opened. Do they appear to be the same?"));
+		windowNew.setVisible(false);
+		windowOriginal.setVisible(false);
+	
 	}
 
 	/**Checks to make sure the same number and kind of object is present*/

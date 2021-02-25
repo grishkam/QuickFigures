@@ -78,6 +78,7 @@ class AttachmentPositionTest {
 		}
 		
 		TestingUtils.askUser("look at the locations of the attached items. Does each location match the text?");
+		image.closeWindowButKeepObjects();
 	}
 	
 	/**

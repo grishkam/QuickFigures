@@ -1,11 +1,7 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 6, 2021
- * Copyright (C) 2021 Gregory Mazo
- */
-/**
- 
- * 
+ * Date Modified: Feb 24, 2021
+ * Version: 2021.1
  */
 package layout.basicFigure;
 
@@ -27,12 +23,13 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import testing.FigureTester;
+import testing.TestingOptions;
 import undo.UndoLayoutEdit;
 
 /**
  Performs a series of automated tests on the layout editor class that both alters a layout and moves
  the objects within that layout accordingly.
- Suring these tests, the figure being edited remains visible to the user
+ During these tests, the figure being edited remains visible to the user
  who may observe in order to spot any irregularities that were not anticipated by the manual tests
  Manual tests for the the layout tools and handles were also performed
  
@@ -63,7 +60,7 @@ public class BasicLayoutEditorTest implements LayoutSpaces {
 		}
 		
 		/**pauses to allow user to observe */
-		IssueLog.waitSeconds(5);
+		IssueLog.waitSeconds(TestingOptions.waitTimeAfterTests);
 	
 	}
 
@@ -104,7 +101,7 @@ public class BasicLayoutEditorTest implements LayoutSpaces {
 		
 		testRowColSizeChangesForEachRowCol();
 		
-		waitTime=500;
+		
 		
 		
 		performTestsForLayoutInversion();

@@ -51,7 +51,7 @@ public class TestShapes {
 	public static final int MANY_STROKES = 300, MANY_ANGLES = 4,MANY_ANGLE_TEXT = 5, MANY_ANGLE_COMPLEX_TEXT = 6, MANY_ARROWS=7;
 	public static final int EMPTY = 10000;;
 	
-	public static int[] each=new int[] {
+	public static int[] each=new int[] {MANY_ANGLE_COMPLEX_TEXT,
 			 DIVERSE_SHAPES, RECTANGLE_AND_OTHERS, MANY_STROKES, MANY_COLORS, MANY_ANGLES, MANY_ANGLE_TEXT, MANY_ANGLE_COMPLEX_TEXT
 	,MANY_ARROWS
 	
@@ -192,7 +192,7 @@ if (type==MANY_ANGLE_COMPLEX_TEXT) {
 	 * @return
 	 */
 	public static BasicMultiSelectionOperator[] createManyAngles() {
-		return SetAngle.createManyAngles();
+		return SetAngle.createManyAnglesLimited();
 	}
 	
 	public static void  addMultipleVersions(ImageWindowAndDisplaySet h, LocatedObject2D object, MultiSelectionOperator[] o1, MultiSelectionOperator[] o2) {

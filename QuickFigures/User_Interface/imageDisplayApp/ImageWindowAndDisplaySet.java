@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 12, 2021
+ * Date Modified: Feb 24, 2021
  * Version: 2021.1
  */
 package imageDisplayApp;
@@ -81,7 +81,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	/**returns the component that all the edited object are drawn onto*/
-	public JComponent getTheCanvas() {
+	public GraphicDisplayCanvas getTheCanvas() {
 		return theCanvas;
 	}
 	

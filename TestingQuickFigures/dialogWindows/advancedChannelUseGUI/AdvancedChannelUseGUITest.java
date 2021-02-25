@@ -44,7 +44,8 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 		FigureOrganizingLayerPane f = createFirstExample();
 		testForFigureIncurrentImage(f);
 		
-		if (TestingOptions.performManualTests)IssueLog.waitSeconds(120);
+		
+		FigureTester.closeAllWindows();
 	}
 
 

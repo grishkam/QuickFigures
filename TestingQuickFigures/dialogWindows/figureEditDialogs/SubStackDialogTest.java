@@ -16,12 +16,11 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import graphicActionToolbar.QuickFigureMakerTest;
 
 /**
- 
- * 
+ tests the appearance of the substack selection dialog
  */
 public class SubStackDialogTest {
 
-	@Test
+	//@Test//test does not need to be regularly performed
 	public void test() {
 		FigureOrganizingLayerPane qf = QuickFigureMakerTest.generateQuickFigure(3, 4, 1);
 		SubStackDialog ss = new SubStackDialog(qf.getMultiChannelDisplaysInOrder());

@@ -55,9 +55,26 @@ public class SetAngle extends BasicMultiSelectionOperator {
 	private double angle=45;
 
 	private BasicGraphicalObject modelItem;
-	private static final int[] options=new int[] {-45, -30, 0, 30, 45, 60, 90, 135, 180, 210, 270};
+	private static final int[] options2=new int[] {-45, -30, 0, 30, 45, 60, 90, 135, 180, 210, 270};
+	
+	private static final int[] optionsLimited=new int[] { 0, 30, 45, 60, 90, 135, 180, 210, 270};
+	
 	
 	public static BasicMultiSelectionOperator[] createManyAngles() {
+		int[] options=options2;
+		return createManyAngles(options);
+	}
+	
+	public static BasicMultiSelectionOperator[] createManyAnglesLimited() {
+
+		return createManyAngles(optionsLimited);
+	}
+
+	/**
+	 * @param options
+	 * @return
+	 */
+	public static BasicMultiSelectionOperator[] createManyAngles(int[] options) {
 		BasicMultiSelectionOperator[] output=new BasicMultiSelectionOperator[options.length] ;
 		for(int i=0; i<options.length; i++) {
 			output[i]=new SetAngle(options[i]);

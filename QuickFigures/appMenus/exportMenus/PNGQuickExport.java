@@ -35,6 +35,8 @@ import ultilInputOutput.FileChoiceUtil;
 
 /**this supports a menu item that exports a figure as PNG file*/
 public class PNGQuickExport extends QuickExport {
+	public static boolean showDialogEverytime=true;
+
 	/**
 	 * @param openNow determines if the exported will will be opened right away
 	 */
@@ -72,7 +74,7 @@ public class PNGQuickExport extends QuickExport {
 	public void saveInPath(DisplayedImage diw, String newpath) throws IOException {
 		FlatCreator flat = new FlatCreator();
 		flat.setUseTransparent(false);
-		flat.showDialog();
+		if (showDialogEverytime)flat.showDialog();
 		BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
 		writeImage(newpath, bi);
 	}

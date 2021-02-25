@@ -20,12 +20,12 @@ import org.junit.Test;
 
 import graphicalObjects_Shapes.RectangularGraphic;
 import logging.IssueLog;
+import testing.VisualTest;
 
 /**
- 
- * 
+ this test verifies the appearance of the icons for the combo box
  */
-public class GraphicComboBoxIconTest {
+public class GraphicComboBoxIconTest extends VisualTest {
 
 	@Test
 	public void test() {
@@ -39,7 +39,8 @@ public class GraphicComboBoxIconTest {
 		frame.pack();
 		frame.setVisible(true);
 		
-		IssueLog.waitSeconds(30);
+		IssueLog.waitSeconds(5);
+		frame.setVisible(false);
 	}
 
 	/**
