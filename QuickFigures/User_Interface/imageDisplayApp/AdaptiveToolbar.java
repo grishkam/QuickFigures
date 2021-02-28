@@ -105,6 +105,8 @@ public class AdaptiveToolbar extends JFrame implements MouseMotionListener, Mous
 	 * @param d
 	 */
 	private void setToDisplay(boolean moveToolbar, DisplayedImage d) {
+		if(d==null||panel==null)
+			return;
 		panel.setDisplay((ImageWindowAndDisplaySet) d);
 		if(moveToolbar) {
 			Point p = d.getWindow().getLocation();
