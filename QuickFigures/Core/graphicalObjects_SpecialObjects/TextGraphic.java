@@ -771,6 +771,7 @@ public void BackGroundToIllustrator(ArtLayerRef aref) {
 }
 @Override
 public Object toIllustrator(ArtLayerRef aref) {
+	this.updateDisplay();
 	BackGroundToIllustrator(aref);
 	TextFrame ti = new TextFrame();
 	ti.createLinePathItem(aref, getBaseLineStart(), getBaseLineEnd());

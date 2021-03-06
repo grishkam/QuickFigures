@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 5, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -29,8 +29,32 @@ public class CharAttributesRef extends IllustratorObjectRef {
 	String setfont(String font) {
 		if (font.equals("SansSerif")) font="SerifBold";
 		String output="try{";
-		output+=refname+".textFont = app.textFonts.getByName('"+font+"');} catch (err) {}";
+		output+=refname+".textFont = app.textFonts.getByName('"+font+"');} catch (err) {"
+				+ findFont(font)+"}";
 		addScript(output);
+		return output;
+	}
+	
+	private String findFont(String fullname) {
+		String name=fullname.split(" ")[0].toLowerCase();
+		String style=fullname.split(" ")[1].toLowerCase();
+		String output="try{";
+		output+="var iCount=app.textFonts.length;";
+		output+="var textFonts=app.textFonts;";
+		output+="for(var i=0; i<iCount; i++){";
+		output+="var aFontName=textFonts[i].family.toLowerCase();";
+		output+="var aFontStyle=textFonts[i].style.toLowerCase();";
+		 output+="try{";
+		output+="var found=true;";
+		output+="if ((aFontStyle==='" +style +"') & (aFontName==="+"'"+name.toLowerCase()+"')) {"+refname+".textFont=textFonts[i];"+"}";
+		
+		output+="} catch (err) {alert('failed to find font '+i+aFontName+err);}";
+		
+		//output+="if (i=="+5+")"+"alert('looking for font'+'"+name+"');";
+		//output+="if (i<"+5+")"+"alert('looking at font'+aFontName);";
+		output+="};";
+		
+		output+="} catch (err) {alert('failed to find font');}";
 		return output;
 	}
 	
@@ -51,7 +75,9 @@ public class CharAttributesRef extends IllustratorObjectRef {
 	
 	public String setfont(Font f) {
 		
-			String o=setfont(f.getFontName())+'\n' ;
+			String fontName = f.getFontName();
+			//if(super.creativeCloud)fontName=fontName.replace(" ", "-");
+			String o=setfont(fontName)+'\n' ;
 		return o+ setfontSize(f.getSize());
 	}
 	

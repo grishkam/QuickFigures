@@ -28,10 +28,13 @@ import java.io.IOException;
 
 import figureFormat.DirectoryHandler;
 import logging.IssueLog;
+import photoshopScripts.AdobeScriptGenerator;
 
 /**this class generates text that can be run in an adobe illustrator java script*/
 public class ZIllustratorScriptGenerator {
 	
+	//IssueLog.log(accumulatedscrip);
+		
 	public static ZIllustratorScriptGenerator instance=new ZIllustratorScriptGenerator();
 	double x0=0;
 	double y0=0;
@@ -43,7 +46,7 @@ public class ZIllustratorScriptGenerator {
 	public void setScale(double d) {scale=d;}
 	
 	public String accumulatedscrip="";
-	private String pathOfImages="/temp/";
+	private String pathOfImages="temp";
 	boolean deleteonExit=true;
 	
 	public void setZero(int x, int y) {
@@ -68,8 +71,8 @@ public class ZIllustratorScriptGenerator {
 	
 	
 	public void execute() {
-		//IssueLog.log(accumulatedscrip);
-		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+"output.jsx");
+		
+		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFile);
 		accumulatedscrip="";
 	}
 	public  static void savejsxAndRun(String javascript, String directoryJSX){

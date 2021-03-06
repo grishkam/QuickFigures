@@ -31,6 +31,9 @@ import illustratorScripts.ZIllustratorScriptGenerator;
 
 /**this class generates text that can be run in adobe's extended script toolkit for illustrator or poerpoint java script*/
 public class AdobeScriptGenerator {
+	
+	public static String outputFile = "output.jsx";
+	
 	public static AdobeScriptGenerator instance=new AdobeScriptGenerator();
 	double x0=0;
 	double y0=0;
@@ -64,7 +67,7 @@ public class AdobeScriptGenerator {
 	
 	public void execute() {
 		//IssueLog.log(accumulatedscrip);
-		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+"output.jsx");
+		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+outputFile);
 		accumulatedscrip="";
 	}
 	public  static void savejsxAndRun(String javascript, String directoryJSX){

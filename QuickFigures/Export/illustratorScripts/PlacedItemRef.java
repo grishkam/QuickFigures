@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 5, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -24,11 +24,13 @@ import java.awt.Image;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 import javax.imageio.ImageIO;
 
 import figureFormat.DirectoryHandler;
 import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 /**a java class that generates scripts to create and modify a placed item object in 
 adobe illustrator*/
@@ -54,9 +56,21 @@ public class PlacedItemRef extends IllustratorObjectRef{
 	}
 	
 	String setToFile(String path) {
-		String output="var fileRef = File( '"+path+"'); " +'\n';
+		super.startTryCatch();
+		
+		if(super.creativeCloud) {
+			URI uri = new File(path).toURI();
+			path=uri.toString();
+			path=path.replace("file:/", "");//without this javascript will just not look in the correct file 
+			IssueLog.log("Path will be "+path);
+			
+			}
+			
+		String output="var fileRef = new File( '"+path+"'); " +'\n';
 		output+=refname+".file=fileRef;";
 		addScript(output);
+		
+		super.endTryCatch("'Cannot find file'+"+"fileRef.toString");
 		return output;
 	}
 	
@@ -75,7 +89,8 @@ public class PlacedItemRef extends IllustratorObjectRef{
 	public  File prepareImageForJavaScript(Image colorProcessor, String name, double x, double y, boolean link) {
 		
 		File f=prepareFile(colorProcessor, getGenerator().getPathOfImages()+ name);
-		setToFile(f.getAbsolutePath());
+		String absolutePath = f.getAbsolutePath();
+			setToFile(absolutePath);
 		if (getGenerator().scale!=1) {
 			
 			scale(getGenerator().scale*100);
@@ -137,7 +152,7 @@ public class PlacedItemRef extends IllustratorObjectRef{
 		if (name.contains("<")) {name=name.replace("<", " ");}
 		if (name.contains(".zvi")) {name=name.replace(" zvi", " ");}
 		
-		String directory=DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/"+name+" "+((int)(1000000000*Math.random()))+".png";
+		String directory=DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/"+name+""+((int)(1000000000*Math.random()))+".png";
 		 
 		File f=(new File(directory)); 
 		
@@ -158,8 +173,7 @@ public class PlacedItemRef extends IllustratorObjectRef{
 			
 			return f;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 			return null;
 		}
 		

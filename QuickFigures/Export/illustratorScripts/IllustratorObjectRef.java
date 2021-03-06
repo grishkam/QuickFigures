@@ -29,6 +29,7 @@ import locatedObject.RectangleEdgePositions;
 adobe illustrator*/
 public class IllustratorObjectRef implements RectangleEdgePositions{
 	
+	boolean creativeCloud=true;
 	boolean addScripts=true;
 	
 	ZIllustratorScriptGenerator getGenerator() {
@@ -146,7 +147,20 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 		addScript(output);
 		return output;
 		}
-	public String endTryCatch() {
+public String endTryCatch() {
+		
+		String output="} catch (err) {"+"}";
+		addScript(output);
+		return output;
+		}
+	public String endTryCatch(String alert) {
+		
+		String output="} catch (err) { alert("+alert+");}";
+		addScript(output);
+		return output;
+		}
+	
+	public String alert(String st) {
 		String output="} catch (err) {}";
 		addScript(output);
 		return output;

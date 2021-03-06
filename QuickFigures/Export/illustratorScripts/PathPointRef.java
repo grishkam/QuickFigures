@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 5, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -43,6 +43,7 @@ public class PathPointRef extends IllustratorObjectRef {
 	}
 	
 	public String setleftDirection(double x, double y) {
+		setSmooth();
 		String out = this.refname+".leftDirection"+equalNumberArray(x,y); ;
 		this.addScript(out);
 		return out;
@@ -50,8 +51,10 @@ public class PathPointRef extends IllustratorObjectRef {
 	}
 	
 	public String setrightDirection(double x, double y) {
+		setSmooth();
 		String out = this.refname+".rightDirection"+equalNumberArray(x,y); 
 		this.addScript(out);
+		
 		return out;
 		
 	}
@@ -63,8 +66,17 @@ public class PathPointRef extends IllustratorObjectRef {
 		
 	}
 	
+	public String setSmooth() {
+		String out = this.refname+".pointType=PointType.SMOOTH;"; 
+		this.addScript(out);
+		return out;
+		
+	}
+	
 String equalNumberArray(double x, double y) {
 		return "="+pointToJSarray(x,y)+";";
 	}
+
+
 	
 }

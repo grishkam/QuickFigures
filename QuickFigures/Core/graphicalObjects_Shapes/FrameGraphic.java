@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Mar 5, 2021
  * Version: 2021.1
  */
 package graphicalObjects_Shapes;
@@ -34,6 +34,7 @@ import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
+import logging.IssueLog;
 
 /**The shape of a frame. similar to the rectangle except that the stroke
   for the frame is drawn such that the stroke appears outside of the rectangular area*/
@@ -84,7 +85,7 @@ public class FrameGraphic extends RectangularGraphic {
 		
 		output.setAngle(this.getAngle());
 		output.copyStrokeFrom(this);
-		
+		IssueLog.log("angle is"+this.getAngle());
 		
 		return output;
 		
@@ -114,10 +115,11 @@ public class FrameGraphic extends RectangularGraphic {
 		return AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
 	}
 	
-	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
-		pi.createRectangle(aref, getInsideFrameRect());
-		
-	
+	/**creates a string encoding an illustrator script for the item*/
+	/**implementation of an interface required for generating adobe illustrator scripts*/
+	@Override
+	public Object toIllustrator(ArtLayerRef aref) {
+		return this.rectCopy().toIllustrator(aref);
 	}
 	
 	/**frames should only have a stroke color and are not fillable by user*/
@@ -131,6 +133,8 @@ public class FrameGraphic extends RectangularGraphic {
 	public SVGExporter getSVGEXporter() {
 		return new SVGEXporterForShape(this.rectCopy());
 	}
+	
+	
 	
 	
 }

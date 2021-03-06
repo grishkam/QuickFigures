@@ -355,6 +355,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	
 	
 	private static boolean completeMoveToIlls=true;
+	
+	
 	/**Method used during production of illustrator scripts*/
 	protected void setPathItemColorsToImmitate(	PathItemRef pi) {
 		pi.setStrokeColor(getStrokeColor());
@@ -380,7 +382,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		pi.setStrokeCap(end);
 		pi.setStrokeJion(join);
 		pi.setMiterLimit(getMiterLimit());
-	}
+		}
 	
 	/**implementation of an interface required for generating adobe illustrator scripts*/
 	@Override
@@ -394,9 +396,11 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		basicCreateShapeOnPathItem(	aref,pi);
 	}
+	
+	/**Method to create on path item*/
 	protected void basicCreateShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
 		if (this.isCompleteMoveToIlls()) {
-			pi.addPathWithCurves(aref, getShape().getPathIterator(new AffineTransform()), true, isDrawClosePoint());
+			pi.addPathWithCurves2(aref, getShape().getPathIterator(new AffineTransform()), true, isDrawClosePoint());
 			
 			//IssueLog.log("trying experimental illustrator export on "+this);
 		} else

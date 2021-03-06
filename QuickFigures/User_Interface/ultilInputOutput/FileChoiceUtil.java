@@ -210,6 +210,11 @@ public class FileChoiceUtil {
 		return new JFileChooser().getFileSystemView().getDefaultDirectory().toString()+"/Documents";
 	}
 	
+	/**returns the path of the documents folder for the user*/
+	public static String pathOfDocumentsFolderWithHome() {
+		return "~"+"/Documents";
+	}
+	
 	/**Reads the input stream and returns the content as a string*/
 	public static String readStringFrom(InputStream is) {
 		BufferedReader br = new BufferedReader( new InputStreamReader(is));

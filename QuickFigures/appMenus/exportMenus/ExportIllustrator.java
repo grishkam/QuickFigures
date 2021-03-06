@@ -37,7 +37,7 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 	
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (diw!=null) {
-			
+			diw.updateDisplay();
 		sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true);
 		 ZIllustratorScriptGenerator.instance.execute();
 			

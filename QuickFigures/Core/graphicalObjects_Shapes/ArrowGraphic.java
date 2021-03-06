@@ -478,10 +478,13 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		if(headOnly) ar=new Area();
 		ArrowHead head = head1;
 		Shape a1 = this.getShapeToDrawHead(FIRST_HEAD);
+		
 		if (head.isOpenHeadType())
 			a1=this.getStroke().createStrokedShape(a1);
 		
-		ar.add(new Area(a1));
+		if(!head.isNoHead())
+			ar.add(new Area(a1));
+		
 		if (this.getNHeads()==1) 
 			return ar;
 		
@@ -489,7 +492,10 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		a1=getShapeToDrawHead(SECOND_HEAD);
 		if (head.isOpenHeadType()) 
 			a1=this.getStroke().createStrokedShape(a1);
-		ar.add(new Area(a1));
+		
+		if(!head.isNoHead())
+			ar.add(new Area(a1));
+		
 		return ar;
 	}
 

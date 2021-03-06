@@ -26,6 +26,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 
 import locatedObject.PathPoint;
@@ -37,6 +38,7 @@ adobe illustrator*/
 public class PathItemRef extends IllustratorObjectRef {
 	
 	boolean set=false;
+	boolean normal=true;
 	
 	/**when given a referance to an illustrator object with a pathitems collection, creates a script to 
 	 att a new pathitem*/
@@ -168,8 +170,12 @@ public class PathItemRef extends IllustratorObjectRef {
 		
 		for (PathPoint p:pi) {
 			PathPointRef pp = new PathPointRef(this);
-			pp.setleftDirection(p.getCurveControl1().x, p.getCurveControl1().y);
-			pp.setrightDirection(p.getCurveControl2().x, p.getCurveControl2().y);
+			Double curveControl1 = p.getCurveControl1();
+			
+			Double curveControl2 = p.getCurveControl2();
+			
+			pp.setleftDirection(curveControl1.x, curveControl1.y);
+			pp.setrightDirection(curveControl2.x, curveControl2.y);
 			pp.setAnchor(p.getAnchor().x,p.getAnchor().y);
 			
 		}
@@ -177,7 +183,14 @@ public class PathItemRef extends IllustratorObjectRef {
 		if (drawclose) setClosed(true);
 	}
 	
+	/**adds a path, new method*/
+	public void addPathWithCurves2(ArtLayerRef aref, PathIterator pi, boolean create, boolean drawclose) {
+		
+		PathPointList list = PathPointList.createFromIterator(pi);
+		this.addPathWithCurves(aref, list, create, drawclose);
+	}
 	
+	/***/
 	public void addPathWithCurves(ArtLayerRef aref, PathIterator pi, boolean create, boolean drawclose) {
 		if (create)createItem(aref);
 		double[] d=new double[6];
