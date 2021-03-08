@@ -1,30 +1,58 @@
+/**
+ * Author: Greg Mazo
+ * Date Modified: Mar 7, 2021
+ * Version: 2021.1
+ */
 package testing;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
 
+import actionToolbarItems.AlignItem;
+import actionToolbarItems.EditScaleBars;
+import actionToolbarItems.SetAngle;
+import actionToolbarItems.SuperTextButton;
 import addObjectMenus.FigureAdder;
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
+import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
+import channelMerging.ChannelEntry;
 import channelMerging.PreProcessInformation;
 import figureFormat.DirectoryHandler;
+import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
+import genericMontageLayoutToolKit.FitLayout;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.QuickFigureMaker;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import ij.IJ;
 import ij.ImagePlus;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
+import imageMenu.ZoomFit;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import messages.ShowMessage;
+import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
+import textObjectProperties.TextLine;
+import utilityClasses1.ArraySorter;
 
 /**main method from this class creates a figure from a set of saved images
  * figures appear immediately and use can visually confirm 
@@ -50,11 +78,30 @@ public class FigureTester {
 	/**
 	 * @return
 	 */
-	public static String getTestImagePath(int group, int image) {
+	public static String getTest1ImagePath(int group, int image) {
 		
 		String string = testFolderPath+group+"/"+image+".tif";
 		if (!(new File(string)).exists()) IssueLog.showMessage("One must place the testing files in the QuickFigures folder to perform this test");;
 		return string;
+	}
+	
+	/**
+	checks the subfolders for Test image group3 which consists of many small images
+	 */
+	public static File[] getTest3ImagePaths( int subfoldIndex) {
+		
+		String string = testFolderPath+3+"/"+subfoldIndex+"/";
+		File dir=new File(string);
+		
+		
+		File[] matches = dir.listFiles();
+		if (!(new File(string)).exists()) IssueLog.showMessage("One must place the testing files in the QuickFigures folder to perform this test");;
+		
+		for(File f: matches) {IssueLog.log("file used will be "+f.getAbsolutePath());}
+		if (matches.length==0)IssueLog.log("was unable to obtain images");
+		
+		
+		return matches;
 	}
 	
 	/**
@@ -85,15 +132,80 @@ public class FigureTester {
 	 */
 	public FigureOrganizingLayerPane createFigureFromExample1Images(QuickFigureMaker qm, int nImages) {
 		PreProcessInformation p1 = new PreProcessInformation(cropRectsForExample1[0]);
-		FigureOrganizingLayerPane figure = qm.createFigure(FigureTester.getTestImagePath(1,1), p1);
+		FigureOrganizingLayerPane figure = qm.createFigure(FigureTester.getTest1ImagePath(1,1), p1);
 		for(int imageIndex=2; imageIndex<= nImages; imageIndex++) {
 			PreProcessInformation p2 = new PreProcessInformation(cropRectsForExample1[imageIndex-1]);
-			figure.nextMultiChannel(FigureTester.getTestImagePath(1,imageIndex), p2);
+			figure.nextMultiChannel(FigureTester.getTest1ImagePath(1,imageIndex), p2);
 		}
 		figure.updateDisplay();
 		
 		return figure;
 		
+	}
+	
+	
+	
+	/**
+	creates a figure for testing. Test 3 are groups of tiny split channel images
+	with control and RNAi 
+	 */
+	public FigureOrganizingLayerPane createFigureFromExample3Images(ImageWindowAndDisplaySet diw, QuickFigureMaker qm, int nIndex, Point2D displace) {
+		this.ignoreTemplate=true;
+		qm.figureCreationOptions.ignoreSavedTemplate=true;
+		File[] files = FigureTester.getTest3ImagePaths(nIndex);
+		File control=null;
+		File siRNA=null;
+		for(File f: files) {
+			if(f.getName().toLowerCase().contains("control"))
+				control=f;
+			else siRNA=f;
+		}
+		
+		PreProcessInformation p1 = new PreProcessInformation(null, 0, 10);
+		FigureOrganizingLayerPane figure = qm.createFigure(diw, control.getAbsolutePath(), p1);
+		
+		
+		
+		figure.getPrincipalMultiChannel().getSlot().applyCropAndScale(p1);
+		figure.getMontageLayoutGraphic().resizeLayoutToFitContents();
+		
+		changeChannelLabe(figure);
+			
+		figure.nextMultiChannel(siRNA.getAbsolutePath(), p1);
+		figure.getMontageLayoutGraphic().resizeLayoutToFitContents();
+		
+		/**removes the 4th channel*/
+	
+		new ChannelPanelEditingMenu(figure, 4).setChannelExcludedFromFigure(4, true, true, false);
+		
+		figure.updateDisplay();
+		figure.addLabelsBasedOnImageNames(BasicLayout.ROWS);
+		figure.fixLabelSpaces();
+		if(displace!=null) {
+			figure.getMontageLayoutGraphic().generateCurrentImageWrapper();
+			figure.getMontageLayoutGraphic().changeLayoutLocation(new Point((int)displace.getX(), (int)displace.getY()));
+		
+		}
+		
+		
+		return figure;
+		
+	}
+
+	/**
+	 * @param figure
+	 */
+	public void changeChannelLabe(FigureOrganizingLayerPane figure) {
+		/**changes the channel labels*/
+		
+		ArrayList<ChannelLabelTextGraphic> allLabels = figure.getPrincipalMultiChannel().getChannelLabelManager().getAllLabels();
+		for(int i=0; i<allLabels.size(); i++)
+				{
+			ChannelLabelTextGraphic l= allLabels.get(i);
+			if(l.isThisMergeLabel())
+				continue;
+			l.changeText("Gene "+(i+1));
+			}
 	}
 	
 	/**returns the standard version of example 1*/
@@ -183,25 +295,25 @@ public class FigureTester {
 	}
 	
 	public static ImagePlus openExample1(int i) {
-		return IJ.openImage(FigureTester.getTestImagePath(1,i));
+		return IJ.openImage(FigureTester.getTest1ImagePath(1,i));
 	}
 	
 	
 	public static void main(String[] args) {
 		
-		
+		FigureOrganizingLayerPane.suppressCropDialog=true;
 		setup();
 		FigureTester figureTester = new FigureTester();
 		
 		 figureTester.ignoreTemplate=true;
 		showExamples(figureTester);
 		 
-		 figureTester.ignoreTemplate=false;
+		 /**figureTester.ignoreTemplate=false;
 		 showExamples(figureTester);
-		 
+		 */
 	}
 
-	/**
+	/**Shows several split channel 
 	 * @param figureTester
 	 */
 	public static void showExamples(FigureTester figureTester) {
@@ -214,7 +326,95 @@ public class FigureTester {
 		 figureTester. createFigureFromExample1CImages();
 		 CurrentFigureSet .updateActiveDisplayGroup();
 		 
+		 figureTester. createFromExample3Images(false);
+		 CurrentFigureSet .updateActiveDisplayGroup();
+		 
+		 figureTester. createFromExample3Images(true);
+		 CurrentFigureSet .updateActiveDisplayGroup();
+	}
+
+	/**
+	 * @param figureTester
+	 */
+	public void createFromExample3Images(boolean diversidy) {
+		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
+			
+		int space=200;
 		
+		 Point2D[] points=new Point2D[] {new Point(50,0),  new Point(500,0), 
+				 						new Point(50,space), new Point(500, space), 
+				 						new Point(50,2*space), new Point(500, 2*space)};
+		ArrayList<FigureOrganizingLayerPane> list=new ArrayList<FigureOrganizingLayerPane>();
+		 
+		 for(int i=0; i<6; i++) {
+			 list.add(
+			 createFigureFromExample3Images(diw, new FigureTester().example1FigureMaker(), i+1, points[i])
+		 		);
+		 }
+		 
+		 new ZoomFit(ZoomFit.SCREEN_FIT).performActionDisplayedImageWrapper(diw);;
+		
+		ArrayList<LocatedObject2D> listObuects = diw.getTheSet().getLocatedObjects();
+		ArraySorter.removeThoseNotOfClass(listObuects,DefaultLayoutGraphic.class);
+		 new FitLayout(FitLayout.ALIGN_GRID).alignObjects(listObuects);;
+		 
+		 if(diversidy)
+			 diversifyFigures(diw, listObuects, list);
+			
+		 
+		 CurrentFigureSet .updateActiveDisplayGroup();
+		 
+	}
+
+	/**Makes edits to the objects within the figure such that no 
+	 * two figures within the group will be the same
+	 * @param diw
+	 * @param listObuects
+	 * @param list 
+	 */
+	public void diversifyFigures(ImageWindowAndDisplaySet diw, ArrayList<LocatedObject2D> listObuects, ArrayList<FigureOrganizingLayerPane> list) {
+		int i=0;
+		 
+		 for(LocatedObject2D layout: listObuects) {
+			 if(layout instanceof DefaultLayoutGraphic) {
+				 DefaultLayoutGraphic dl=(DefaultLayoutGraphic) layout;
+				 dl.generateCurrentImageWrapper();
+				 dl.getEditor().setHorizontalBorder(dl.getPanelLayout(), 12+2*i);
+				 dl.getEditor().setVerticalBorder(dl.getPanelLayout(), 12-2*i);
+			
+			 }
+		 }
+		 
+		 /**changes the color modes*/
+		 for (int j=0; j<list.size(); j++) {
+			 if(j%2==0)
+			 new ChannelPanelEditingMenu(list.get(j), 1).changeColorModes();
+		 }
+		 
+		 ArrayList<LocatedObject2D> listObuects2 = diw.getTheSet().getLocatedObjects();
+			ArraySorter.removeThoseNotOfClass(listObuects2,BarGraphic.class);
+		 TestShapes.diversify(listObuects2, EditScaleBars.getProjectionList());
+		 TestShapes.diversify(listObuects2,EditScaleBars.getUnitLengthList("um", EditScaleBars.shortBarLengths));
+		 CurrentFigureSet .updateActiveDisplayGroup();
+		 
+		 
+		 listObuects2 = diw.getTheSet().getLocatedObjects();
+			ArraySorter.removeThoseNotOfClass(listObuects2,ChannelLabelTextGraphic.class);
+		 diversifyText(listObuects2);
+		 
+		 listObuects2 = diw.getTheSet().getLocatedObjects();
+			ArraySorter.removeThoseNotOfClass(listObuects2,RowLabelTextGraphic.class);
+		 diversifyText(listObuects2);
+	}
+
+	/**
+	 * @param listObuects2
+	 */
+	public void diversifyText(ArrayList<LocatedObject2D> listObuects2) {
+		TestShapes.diversify(listObuects2, SetAngle.createManyAnglesVeryLimited());
+		 TestShapes.diversify(listObuects2, SuperTextButton.getForDims(null));
+		 TestShapes.diversify(listObuects2, SuperTextButton.getForFonts(new TextGraphic()));
+		 TestShapes.diversify(listObuects2, SuperTextButton.getForFontSizes());
 	}
 
 	/**
@@ -229,7 +429,8 @@ public class FigureTester {
 	}
 	
 	public static TestProvider[] getTests() {
-		return new TestProvider[] {new FigureProvider(FigureProvider.form1), new FigureProvider(FigureProvider.form1b),new FigureProvider(FigureProvider.form1c)};
+		return new TestProvider[] {new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
+				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -237,23 +438,28 @@ public class FigureTester {
 		
 		
 		
-		static final int form1=0, form1b=1, form1c=2;
-		int form=form1;
+		TestExample form=TestExample.SPLIT_CHANNEL_FIGURE;
 		
 		public FigureProvider() {}
-		public FigureProvider(int type) {
+		public FigureProvider(TestExample type) {
 			this.form=type;
+			super.parameter1=type;
 		}
 	
 		
 		public DisplayedImage createExample() {
 			CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
-			if (form==form1)
+			if (form==TestExample.SPLIT_CHANNEL_FIGURE)
 			new FigureTester(). createFigureFromExample1AImages();
-			if (form==form1b)
+			if (form==TestExample.MERGE_PANEL_FIGURE)
 				new FigureTester(). createFigureFromExample1BImages();
-			if (form==form1c)
+			if (form==TestExample.FIGURE_WITH_INSETS)
 				new FigureTester(). createFigureFromExample1CImages();
+			if (form==TestExample.MANY_SPLIT_CHANNEL)
+				new FigureTester().createFromExample3Images(false);
+			if (form==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)
+				new FigureTester().createFromExample3Images(true);
+			
 			return  CurrentFigureSet.getCurrentActiveDisplayGroup();
 		}
 	}

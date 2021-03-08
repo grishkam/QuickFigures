@@ -1,7 +1,6 @@
 package exportMenus;
 
 import java.awt.Desktop;
-import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,18 +12,18 @@ import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
 import testing.FigureTester;
+import testing.TestExample;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
 
 abstract class QuickExportTest {
 	
-	private static final int ALL_ = 0;
 
 	/**set to true if one want each file to be opened automatically.
 	  Dye to dialogs comming up in powerpoint and other softwares, decided it best not to do this*/
 	boolean opensFiles=false;
 	
-	int testCase=ALL_;//which cases to test
+	TestExample testCase=TestExample.MANY_SPLIT_CHANNEL;//which cases to test. set to null if all should be tested
 
 	/**set to true if user will test files one by one*/
 	private boolean viewOnebyOne=true;
@@ -55,15 +54,16 @@ abstract class QuickExportTest {
 			testsCases.add(t);
 		}
 		for(TestProvider ex: testsCases) {
-			if(testCase!=ALL_ &&testCase!=count) { count++; continue;}
+			if(testCase!=null &&testCase!=ex.getType()) { count++; continue;}
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
-			String testOutput = DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"+count+" Export Test "+count+"("+Math.random()+")."+qe.getExtension();
+			String testOutput = DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"+"Export Test "+count+ex.getType().name()+"("+Math.random()+")."+qe.getExtension();
 			
 			File file = new File(testOutput);
 			file.delete();
 			file.deleteOnExit();
 			DisplayedImage createExample = ex.createExample();
+			createExample.getImageAsWrapper().setTitle("Example "+ex.getType().ordinal()+" "+ex.getType().name());
 			createExample.getImageAsWrapper().setTitle(testOutput);
 			qe.saveInPath(createExample, testOutput);
 			
@@ -71,7 +71,7 @@ abstract class QuickExportTest {
 			
 			
 			IssueLog.log(System.currentTimeMillis()-time);
-			IssueLog.log("ending test "+count);
+			IssueLog.log("ending test "+count+" "+ex.getType().name());
 			IssueLog.log("Find saved file in "+file);
 			count++;
 			

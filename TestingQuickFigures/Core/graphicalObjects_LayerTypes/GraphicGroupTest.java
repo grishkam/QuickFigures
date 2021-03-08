@@ -23,6 +23,7 @@ import handles.SmartHandle;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import testing.TestExample;
 import testing.TestShapes;
 
 /**
@@ -46,7 +47,7 @@ public class GraphicGroupTest extends ToolTester {
 	tests to make sure that the user can resize and move the objects in the group using the groups handles
 	 */
 	private void testTool() {
-		ImageWindowAndDisplaySet image = TestShapes.createExample(TestShapes.EMPTY);
+		ImageWindowAndDisplaySet image = TestShapes.createExample(TestExample.EMPTY);
 		
 		java.awt.geom.Rectangle2D.Double r = new Rectangle2D.Double(40, 80, 50, 70);
 		java.awt.geom.Rectangle2D.Double rCircle = new Rectangle2D.Double(110, 80, 60, 90);

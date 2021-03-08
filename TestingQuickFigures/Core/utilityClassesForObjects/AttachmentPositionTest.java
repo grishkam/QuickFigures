@@ -20,6 +20,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdgePositions;
 import logging.IssueLog;
+import testing.TestExample;
 import testing.TestShapes;
 import testing.TestingUtils;
 
@@ -53,7 +54,7 @@ class AttachmentPositionTest {
 	 asks user to visually confirm that every location appears appropriate.
 	 */
 	void manuallyTestInternalAttachment(boolean text) {
-		ImageWindowAndDisplaySet image = TestShapes.createExample(TestShapes.EMPTY);
+		ImageWindowAndDisplaySet image = TestShapes.createExample(TestExample.EMPTY);
 		ImagePanelGraphic panel = createMockPanel("parent","panel", 400, 300);
 		image.getImageAsWrapper().addItemToImage(panel);
 		image.getWindow().setLocation(0, 200);
@@ -86,7 +87,7 @@ class AttachmentPositionTest {
 	 asks user to visually confirm that every location appears appropriate.
 	 */
 	void manuallyTestExternalAttachment(boolean text) {
-		ImageWindowAndDisplaySet image = TestShapes.createExample(TestShapes.EMPTY);
+		ImageWindowAndDisplaySet image = TestShapes.createExample(TestExample.EMPTY);
 		ImagePanelGraphic panel = createMockPanel("parent", "panel", 300, 250);
 		image.getImageAsWrapper().addItemToImage(panel);
 		image.getWindow().setLocation(0, 200);

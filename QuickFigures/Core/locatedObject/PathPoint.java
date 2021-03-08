@@ -103,6 +103,16 @@ import utilityClasses1.NumberUse;
 			f.transform(getCurveControl2(), getCurveControl2());
 		}
 		
+		/**returns true if at least on approuch to this point is a curve*/
+		public boolean isCurved() {
+			if(!getCurveControl1().equals(this.getAnchor()))
+				return true;
+			if(!getCurveControl2().equals(this.getAnchor()))
+				return true;
+			
+			return false;
+		}
+		
 		/**not yet implemented. assuming that the point is located around an ellipse
 		 * transforms the position such that it matches the rectangle instead*/
 		static void applyCircletoRectDistort(Ellipse2D e, Rectangle2D r, Point2D p) {

@@ -15,6 +15,7 @@ import org.junit.Test;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import testing.FigureTester;
+import testing.TestExample;
 import testing.TestShapes;
 
 /**
@@ -26,7 +27,7 @@ public class PNGSequenceQuickExportTest {
 	@Test
 	public void test() {
 		FigureTester.setup();
-		 ImageWindowAndDisplaySet i = TestShapes.createExample( TestShapes.DIVERSE_SHAPES);
+		 ImageWindowAndDisplaySet i = TestShapes.createExample( TestExample.DIVERSE_SHAPES);
 		 i.getTheSet().getLocatedObjects().get(0);
 		 i.setEndFrame(400);
 		 new PNGSequenceQuickExport().performActionDisplayedImageWrapper(i);

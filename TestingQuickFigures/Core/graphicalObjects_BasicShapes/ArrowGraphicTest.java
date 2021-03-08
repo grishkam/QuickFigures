@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import appContextforIJ1.ImageDisplayTester;
 import logging.IssueLog;
 import messages.ShowMessage;
+import testing.TestExample;
 import testing.TestShapes;
 import testing.TestingOptions;
 import ultilInputOutput.FileChoiceUtil;
@@ -34,7 +35,7 @@ class ArrowGraphicTest {
 		
 		ShowMessage.showMessages("A window with examples of every arrow head and arrow tail style will appear. for manual testing. Tester can examine arrows");
 		
-		 TestShapes.createExample( TestShapes.MANY_ARROWS);
+		 TestShapes.createExample( TestExample.MANY_ARROWS);
 		
 		
 		

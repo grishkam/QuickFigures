@@ -22,6 +22,7 @@ package graphicActionToolbar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -132,24 +133,39 @@ public class QuickFigureMaker extends DisplayActionTool {
 	public FigureOrganizingLayerPane createFigure(String path, PreProcessInformation p2) {
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
 		
+		return createFigure(diw, path, p2);
+	}
+
+
+	/**Creates a figure within the 
+	 * @param displayedWorksheet
+	 * @param path
+	 * @param p2 the preprocess information (crop rotate and scale) for the item
+	 * @param location the displacement to use
+	 * @return
+	 */
+	public FigureOrganizingLayerPane createFigure(ImageWindowAndDisplaySet displayedWorksheet, String path, PreProcessInformation p2) {
 		if (path==null) {la.openFile=false; 
 		}else la.openFile=true;
-	
-		FigureOrganizingLayerPane added = la.add(diw.getImageAsWrapper().getTopLevelLayer(), path, p2);
+		
+		FigureOrganizingLayerPane added = la.add(displayedWorksheet.getImageAsWrapper().getTopLevelLayer(), path, p2);
+		
 		
 		if(added==null) {
 			//if something goes wrong, closes the newly created window
 			
-			diw.getWindow().setVisible(false);
+			displayedWorksheet.getWindow().setVisible(false);
 			IssueLog.showMessage("You need to have an image open to create a figure "+path);
 			return null;
 			}
-		diw.getTheSet().setTitle(added.getName());
-		new CanvasAutoResize(true).performUndoableAction(diw);//resizes the canvas to fit the figure
-		diw.autoZoom();
-		ImageWindowAndDisplaySet.centreWindow(diw.getWindow());
 		
-			
+		
+		displayedWorksheet.getTheSet().setTitle(added.getName());
+		new CanvasAutoResize(true).performUndoableAction(displayedWorksheet);//resizes the canvas to fit the figure
+		displayedWorksheet.autoZoom();
+		ImageWindowAndDisplaySet.centreWindow(displayedWorksheet.getWindow());
+		
+		
 		return added;
 	}
 	

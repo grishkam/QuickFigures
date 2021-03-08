@@ -314,7 +314,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		return undo;
 	}
 
-	protected CombinedEdit changeColorModes() {
+	public CombinedEdit changeColorModes() {
 		ChannelUseInstructions ins = getPresseddisplay().getPanelList().getChannelUseInstructions();
 		if (this.getPressedInset()!=null) {
 			 ins =getPressedInset().getPanelManager().getPanelList().getChannelUseInstructions();
@@ -787,14 +787,18 @@ public CombinedEdit setChannelExcludedFromMerge(int chaneIndex, boolean excluded
 /**WORK IN PROGRESS
 Changes whether the given channel is displayed in each of the merged images
 * @return 
+* @param chanIndex which channel to exclude
+* @param excluded is the channel already exclucluded
+* @param mergeToo should the channel also be removed from the merge
+* @param message should the user be shown a message
 */
-public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean excluded, boolean mergeToo) {
+public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean excluded, boolean mergeToo, boolean message) {
 	boolean alreadyExcluded = this.getPressedFigure().getPrincipalMultiChannel().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
 	if (excluded&&alreadyExcluded) return null;
 	if (!excluded&&!alreadyExcluded) return null;
 	CombinedEdit output=null;
 	if(excluded && !alreadyExcluded) {
-		if (ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
+		if (!message||ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
 			 {
 				output=new ChannelPanelRemover(this.getPressedFigure()).removeChannelPanels(chaneIndex);
 				if (mergeToo) output.addEditToList(setChannelExcludedFromMerge(chaneIndex, excluded));
@@ -956,7 +960,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				public void pressAction() {
 					int chaneIndex = entry.getOriginalChannelIndex();
 					boolean i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
-					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso);
+					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso, true);
 					
 					this.getUndoManager().addEdit(
 						undo	

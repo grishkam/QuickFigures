@@ -144,10 +144,17 @@ public class AddLabelHandle extends MoveRowHandle {
 		d.updateDisplay();
 		
 		UndoLayoutEdit undo2 = new UndoLayoutEdit(layout);
-		layout.getEditor().expandSpacesToInclude(layout.getPanelLayout(), label.getBounds());
+		expandLabelSpace(label);
 		undo2.establishFinalLocations();
 		
 		cEdit.addEditToList(undo2);
+	}
+
+	/**
+	 * @param label
+	 */
+	public void expandLabelSpace(TextGraphic label) {
+		layout.getEditor().expandSpacesToInclude(layout.getPanelLayout(), label.getBounds());
 	}
 
 	private void setUpMatchingLocation(TextGraphic label) {

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import ij.IJ;
 import logging.IssueLog;
 import messages.ShowMessage;
+import testing.TestExample;
 import testing.TestShapes;
 import ultilInputOutput.FileChoiceUtil;
 
@@ -27,7 +28,7 @@ class GraphicSetDisplayWindowTest {
 	performs a set of tests that require input from the user
 	 */
 	void manualTest() {
-		ImageWindowAndDisplaySet i = TestShapes.createExample(TestShapes.DIVERSE_SHAPES);
+		ImageWindowAndDisplaySet i = TestShapes.createExample(TestExample.DIVERSE_SHAPES);
 		GraphicSetDisplayWindow w =i.getTheWindow();
 		
 	
@@ -63,7 +64,7 @@ class GraphicSetDisplayWindowTest {
 	but are tested elsewhere
 	 */
 	void autoTest() {
-		ImageWindowAndDisplaySet i = TestShapes.createExample(TestShapes.DIVERSE_SHAPES);
+		ImageWindowAndDisplaySet i = TestShapes.createExample(TestExample.DIVERSE_SHAPES);
 		GraphicSetDisplayWindow w =i.getTheWindow();
 		
 		double startZoom=w.getZoomer().getZoomMagnification();

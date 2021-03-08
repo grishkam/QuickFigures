@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 7, 2021
  * Version: 2021.1
  */
 package actionToolbarItems;
@@ -80,6 +80,8 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 
 	private String unit="";
 	
+	public static final double[] shortBarLengths=new double[] {1,2,5,10};
+	
 	
 	public boolean doesStroke() {
 		return stroke;
@@ -111,10 +113,22 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		};
 	}
 	
+	/**returns a list of bar length operations to change the scale bar length
+	 * @param unit the name of the units*/
 	public static EditScaleBars[] getUnitLengthList(String unit) {
-		EditScaleBars[] output = new  EditScaleBars[BarGraphic.reccomendedBarLengths.length];
+		double[] barLengths = BarGraphic.reccomendedBarLengths;
+		return getUnitLengthList(unit, barLengths);
+	}
+
+	/**
+	 * @param unit
+	 * @param barLengths
+	 * @return
+	 */
+	public static EditScaleBars[] getUnitLengthList(String unit, double[] reccomendedBarLengths) {
+		EditScaleBars[] output = new  EditScaleBars[reccomendedBarLengths.length];
 		for(int i=0; i<output.length; i++) {
-			output[i]=new  EditScaleBars(TYPE_LENGTH_UNITS, BarGraphic.reccomendedBarLengths[i]);
+			output[i]=new  EditScaleBars(TYPE_LENGTH_UNITS, reccomendedBarLengths[i]);
 			output[i].setUnit(unit);
 		}
 		return output;

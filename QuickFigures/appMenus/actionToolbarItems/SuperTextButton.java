@@ -41,6 +41,7 @@ import locatedObject.ColorDimmer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RainbowPaintProvider;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import objectDialogs.TextGraphicSwingDialog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelectionSystem;
@@ -213,10 +214,11 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		if(this.getModelText()!=null)
 			{
 			startFont=this.getModelText().getFont();
-				if (this.resizesFont()&&type==8) startFontSize=this.getModelText().getFont().getSize()+2;
-				if (this.resizesFont()&&type==9) startFontSize=this.getModelText().getFont().getSize()-2;
+				if (this.resizesFont()&&type==RESIZES_FONT_UP) startFontSize=this.getModelText().getFont().getSize()+2;
+				if (this.resizesFont()&&type==RESIZES_FONT_DOWN) startFontSize=this.getModelText().getFont().getSize()-2;
 		
 			}
+		
 		
 		for(LocatedObject2D a: all) {
 			actOnObject(edits, a);
@@ -570,6 +572,19 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 			}
 			SuperTextButton c = new SuperTextButton(t.getFont().getFamily());
 			out[f.length]=c;
+			return out;
+		}
+		
+		/**a set of operators that changes the font size, used for testing*/
+		public static MultiSelectionOperator[]  getForFontSizes() {
+			int[] sizes=new int[] {8, 12, 16, 20, 24};
+			MultiSelectionOperator[] out = new MultiSelectionOperator[sizes.length];
+			for(int i=0; i<sizes.length; i++) {
+				SuperTextButton c = new SuperTextButton(null, RESIZES_FONT_TO, sizes[i]);
+				out[i]=c;
+				IssueLog.log("font size set "+c.startFontSize);
+			}
+			
 			return out;
 		}
 		

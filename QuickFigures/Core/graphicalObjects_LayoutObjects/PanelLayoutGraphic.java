@@ -529,7 +529,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		onSmartHandleMove(handlenum, p1, p2);
 	
 		if (handlenum==LAYOUT_LOCATION_HANDLE) {
-			moveLayoutAndContents(p2.x-this.getBounds().x, p2.y-this.getBounds().y);
+			changeLayoutLocation(p2);
 			return;
 			
 		} 
@@ -579,6 +579,13 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		
 		this.mapPanelLocationsOfLockedItems();
+	}
+
+	/**
+	 moves the layout such that its upper left corner ends up at the given location
+	 */
+	public void changeLayoutLocation(Point p2) {
+		moveLayoutAndContents(p2.x-this.getBounds().x, p2.y-this.getBounds().y);
 	}
 
 	protected void onSmartHandleMove(int handlenum, Point p1, Point p2) {

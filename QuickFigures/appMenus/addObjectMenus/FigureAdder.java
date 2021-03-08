@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 7, 2021
  * Version: 2021.1
  */
 package addObjectMenus;
@@ -164,6 +164,7 @@ public class FigureAdder extends LayoutAdder {
 	public FigureOrganizingLayerPane add(GraphicLayer targetLayer, String path, PreProcessInformation p) {
 		
 		/***/
+		
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
 		if(display==null) return null;
 		
@@ -185,7 +186,10 @@ public class FigureAdder extends LayoutAdder {
 			new SubStackDialog(display, true, n+" would be a lot of panels " +"please select substack").showDialog();
 		}
 		
-		return addFigureOrganizerFor(targetLayer, display);
+		FigureOrganizingLayerPane figureOrganizerFor = addFigureOrganizerFor(targetLayer, display);
+		
+		
+		return figureOrganizerFor;
 		}
 
 	/**when given a normal parent layer and a multidimensional image display layer,

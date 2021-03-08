@@ -23,6 +23,7 @@ package figureOrganizer;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -62,6 +63,9 @@ import undo.UndoLayoutEdit;
 public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFigureOrganizer, HasUniquePopupMenu {
 
 	{description= "A Figure Organizing Layer";}
+	
+	/**set to true if the crop dialog shoule be skipped*/
+	public static boolean suppressCropDialog=false;
 	
 	PanelSetter subfigureSetter=new PanelSetter(); 
 	private ArrayList< ImageDisplayLayer> displays=new 	ArrayList<ImageDisplayLayer>();
@@ -247,16 +251,17 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			double w = principalMultiChannel.getMultiChannelImage().getDimensions().getWidth()/pScale;
 			double h = principalMultiChannel.getMultiChannelImage().getDimensions().getHeight()/pScale;
 			
-			if ( mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage()))
+			if ( (mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
 				{
-				CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
-				display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
-			
-			
-			if (crop.wasCanceled()) {
-				this.remove(display);//the user may chose not to add the image by clicking cancel
-				return output;
-				}
+					
+						CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
+						display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
+					
+					
+					if (crop.wasCanceled()) {
+						this.remove(display);//the user may chose not to add the image by clicking cancel
+						return output;
+						}
 				}
 			
 			} catch (Exception e) {
@@ -346,7 +351,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		if (valid&&totalImageSize.equals(b)) 
 			return;
 		
-		if(!valid) {
+		if(!valid && !suppressCropDialog) {
 			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
 		} else {
@@ -484,6 +489,8 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	/**Attempts to identify the names of the images present in either panels, rows or columns
 	  adds label accordingly*/
 	public ArrayList<TextGraphic> addLabelsBasedOnImageNames(int type) {
+		IssueLog.sytemprint=true;
+		
 		BasicLayout ml = getMontageLayout();
 		ArrayList<TextGraphic> addedItems=new ArrayList<TextGraphic>();
 		int limit = ml.nRows();
@@ -492,7 +499,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		AttachmentPosition position=null;
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;
-			ImageDisplayLayer pan = getPanelForRowindex(i, type);//may return null
+			ImageDisplayLayer pan = getDisplayLayerForRowindex(i, type);//may return null
 			
 			boolean useImageNames = (pan!=null) && LabelCreationOptions.current.useImageNames;
 			
@@ -502,7 +509,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			
 			if (useImageNames) {
 				String text=pan.getMultiChannelImage().getTitle();
-				
+				if(text.startsWith("DUP")) text=text.replace("DUP","");//imagej adds dup
 				if (text!=null&&text.length()>LabelCreationOptions.current.clipLabels) {
 					{text=text.substring(0, (int)LabelCreationOptions.current.clipLabels);}
 				}
@@ -526,11 +533,14 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 
 
 	/**If an entire Multichannel image's set of panels is contained in teh Row, Col, or panel in the layout, returns the image*/
-	public ImageDisplayLayer getPanelForRowindex(int i, int type) {
+	public ImageDisplayLayer getDisplayLayerForRowindex(int i, int type) {
 		BasicLayout rowshapes = this.getMontageLayout().makeAltered(type);
 		ArrayList<ImageDisplayLayer> list = this.getMultiChannelDisplaysInOrder();
 		for(ImageDisplayLayer l: list) {
-			if (rowshapes.getPanel(i).contains(l.getBoundOfUsedPanels().getCenterX(), l.getBoundOfUsedPanels().getCenterY())) {
+			Rectangle boundOfUsedPanels = l.getBoundOfUsedPanels();
+			Rectangle2D panel = rowshapes.getPanel(i);
+			
+			if (panel.contains(boundOfUsedPanels.getCenterX(), boundOfUsedPanels.getCenterY())) {
 				return l;
 			}
 		}

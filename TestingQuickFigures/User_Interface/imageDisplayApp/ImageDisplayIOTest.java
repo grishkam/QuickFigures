@@ -12,6 +12,7 @@ import ij.IJ;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import testing.FigureTester;
+import testing.TestExample;
 import testing.TestProvider;
 import testing.TestShapes;
 import ultilInputOutput.FileChoiceUtil;
@@ -30,7 +31,7 @@ public class ImageDisplayIOTest {
 	void test() {
 		
 		/***/
-		for(int i: TestShapes.each) {
+		for(TestExample i: TestShapes.each) {
 			testExampleImage(TestShapes.createExample( i));
 		}
 		TestProvider[] ex = FigureTester.getTests();

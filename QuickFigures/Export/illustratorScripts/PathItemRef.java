@@ -170,12 +170,16 @@ public class PathItemRef extends IllustratorObjectRef {
 		
 		for (PathPoint p:pi) {
 			PathPointRef pp = new PathPointRef(this);
-			Double curveControl1 = p.getCurveControl1();
 			
-			Double curveControl2 = p.getCurveControl2();
 			
-			pp.setleftDirection(curveControl1.x, curveControl1.y);
-			pp.setrightDirection(curveControl2.x, curveControl2.y);
+				Double curveControl1 = p.getCurveControl1();
+				
+				Double curveControl2 = p.getCurveControl2();
+				pp.setleftDirection(curveControl1.x, curveControl1.y);
+				pp.setrightDirection(curveControl2.x, curveControl2.y);
+			
+				
+				
 			pp.setAnchor(p.getAnchor().x,p.getAnchor().y);
 			
 		}

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Mar 7, 2021
  * Version: 2021.1
  */
 package genericMontageLayoutToolKit;
@@ -44,6 +44,7 @@ import layout.basicFigure.BasicLayout;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;
@@ -297,13 +298,24 @@ public class FitLayout extends BasicMultiSelectionOperator {
 	public void run() {
 		
 		ArrayList<LocatedObject2D> objects = super.getAllObjects();
+		alignObjects(objects);
+	}
+
+	/**
+	 * @param objects
+	 */
+	public void alignObjects(ArrayList<LocatedObject2D> objects) {
 		if (isAlignGridOnly()) {
 			
 			UndoMoveItems undo = cleanUp(objects, fitsLayouts(objects));
 			
-			UndoManagerPlus undoManager = this.getUndoManager();
-			if (undoManager!=null)
-			undoManager.addEdit(undo);
+			try {
+				UndoManagerPlus undoManager = this.getUndoManager();
+				if (undoManager!=null)
+				undoManager.addEdit(undo);
+			} catch (Exception e) {
+				IssueLog.logT(e);
+			}
 			
 			return;
 		}

@@ -46,6 +46,11 @@ public class PreProcessInformation implements Serializable {
 		this(r2, 0, 1);
 	}
 	
+	/**creates an instance that is scaled but not cropped*/
+	public PreProcessInformation(double scale) {
+		this(null, 0, scale);
+	}
+	
 	/**creates an instance cropped at an angle with the given rectangle and then scaled*/
 	public PreProcessInformation(Rectangle rectangle2, double angle2, double scale2) {
 		this.rectangle=rectangle2;

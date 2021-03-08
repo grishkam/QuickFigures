@@ -95,6 +95,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	private static final long serialVersionUID = 1L;
 
 	public static final double[] reccomendedBarLengths=new double[] {0.5, 1,2,5,10, 20, 50, 100};
+	public static final double[] shortBarLengths=new double[] {0.5, 1,2,5,10, 20, 50, 100};
+	
 	
 	 ScaleInfo info=new ScaleInfo();
 	 {super.setAttachmentPosition(AttachmentPosition.defaultScaleBar());}

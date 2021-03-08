@@ -24,6 +24,7 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
+import messages.ShowMessage;
 
 /**A menu item for generating an a script that con run in Adobe Illustrator*/
 public class ExportIllustrator extends BasicMenuItemForObj {
@@ -38,6 +39,7 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (diw!=null) {
 			diw.updateDisplay();
+			ShowMessage.showOptionalMessage("Illustrator script creator ", false, "Illustrator script generator will create a .jsx file", "open that file with Adobe Illustrator" , "always wait for one .jsx script to finish before another",  "For alternative (with better results for text and shapes), export as SVG first and open with Illustrator");
 		sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true);
 		 ZIllustratorScriptGenerator.instance.execute();
 			

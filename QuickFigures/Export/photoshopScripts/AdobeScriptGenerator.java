@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 6, 2021
  * Version: 2021.1
  */
 package photoshopScripts;
@@ -29,9 +29,11 @@ import java.io.IOException;
 import figureFormat.DirectoryHandler;
 import illustratorScripts.ZIllustratorScriptGenerator;
 
-/**this class generates text that can be run in adobe's extended script toolkit for illustrator or poerpoint java script*/
+/**this class generates text that can be run in adobe's 
+ * extended script toolkit  java script*/
 public class AdobeScriptGenerator {
 	
+	public static String outputFileSubPath="tmp/jsx/";
 	public static String outputFile = "output.jsx";
 	
 	public static AdobeScriptGenerator instance=new AdobeScriptGenerator();
@@ -50,7 +52,7 @@ public class AdobeScriptGenerator {
 	
 	public void setZero(int x, int y) {
 		x0=x*scale; y0=y*scale;
-	//	IJ.log("Zero is "+x+", "+y);
+	
 	}
 	
 	/**Generates a random integer*/
@@ -66,8 +68,8 @@ public class AdobeScriptGenerator {
 	
 	
 	public void execute() {
-		//IssueLog.log(accumulatedscrip);
-		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+outputFile);
+		
+		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+outputFile);
 		accumulatedscrip="";
 	}
 	public  static void savejsxAndRun(String javascript, String directoryJSX){

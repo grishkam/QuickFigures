@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 7, 2021
  * Version: 2021.1
  */
 package channelLabels;
@@ -456,5 +456,8 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 		return new ChannelLabelTextActionButtonHandleList(this);
 	}
 	
-	
+	public void changeText(String st) {
+		this.getParagraph().get(0).get(0).setText(st);
+		this.afterSplitUp();
+	}
 }

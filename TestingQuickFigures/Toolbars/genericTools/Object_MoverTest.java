@@ -26,6 +26,7 @@ import locatedObject.ArrayObjectContainer;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import messages.ShowMessage;
+import testing.TestExample;
 import testing.TestShapes;
 import testing.TestingOptions;
 
@@ -60,7 +61,7 @@ public class Object_MoverTest extends ToolTester {
 	 */
 	void testTool() {
 		Object_Mover currentTool = setUpCurrentTool();
-		ImageWindowAndDisplaySet image = TestShapes.createExample(TestShapes.DIVERSE_SHAPES);
+		ImageWindowAndDisplaySet image = TestShapes.createExample(TestExample.DIVERSE_SHAPES);
 		
 		image.setZoomLevel(2);// must be whole number so that the cordinates match the canvas. otherwise, rounding of numbers will make the rest of this test fail ( since 44 does not equal 45 )
 		

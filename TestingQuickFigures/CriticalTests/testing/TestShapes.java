@@ -1,6 +1,6 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 20, 2021
+ * Date Modified: Mar 6, 2021
  * Version: 2021.1
  */
 package testing;
@@ -22,6 +22,8 @@ import genericTools.ToolBit;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.RectGraphicTool;
 import graphicalObjects.BasicGraphicalObject;
+import graphicalObjects.FigureDisplayWorksheet;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
@@ -41,25 +43,23 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import selectedItemMenus.BasicMultiSelectionOperator;
+import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.MultiSelectionOperator;
 import textObjectProperties.TextLineSegment;
 
 /**contains methods that generate example worksheets containing different types of shapes*/
 public class TestShapes {
 	
-	public static final int DIVERSE_SHAPES=1, RECTANGLE_AND_OTHERS=0, MANY_COLORS=200;
-	public static final int MANY_STROKES = 300, MANY_ANGLES = 4,MANY_ANGLE_TEXT = 5, MANY_ANGLE_COMPLEX_TEXT = 6, MANY_ARROWS=7;
-	public static final int EMPTY = 10000;;
 	
-	public static int[] each=new int[] {MANY_ANGLE_COMPLEX_TEXT,
-			 DIVERSE_SHAPES, RECTANGLE_AND_OTHERS, MANY_STROKES, MANY_COLORS, MANY_ANGLES, MANY_ANGLE_TEXT, MANY_ANGLE_COMPLEX_TEXT
-	,MANY_ARROWS
+	public static TestExample[] each=new TestExample[] {
+			TestExample.DIVERSE_SHAPES, TestExample.RECTANGLE_AND_OTHERS, TestExample.MANY_STROKES, TestExample.MANY_COLORS, TestExample.MANY_ANGLES, TestExample.MANY_ANGLE_TEXT, TestExample.MANY_ANGLE_COMPLEX_TEXT
+	,TestExample.MANY_ARROWS
 	
 	};
 	
 	/**Creates a worksheet with example objects
 	 * @param type the sort of example object*/
-	public static ImageWindowAndDisplaySet createExample(int type) {
+	public static ImageWindowAndDisplaySet createExample(TestExample type) {
 		ImageWindowAndDisplaySet i = ImageWindowAndDisplaySet.createAndShowNew("Figure", 500,400);
 		addExampleObjects(i, type);
 		i.updateDisplay();
@@ -67,11 +67,11 @@ public class TestShapes {
 	}
 	
 	/**creates an example image with a diversity of shapes*/
-	public static void addExampleObjects(ImageWindowAndDisplaySet ids, int type) {
+	public static void addExampleObjects(ImageWindowAndDisplaySet ids, TestExample type) {
 		GraphicLayer l=ids.getImageAsWrapper().getTopLevelLayer();
-		if (type== DIVERSE_SHAPES)addDiverseShapes(l);
-		if (type==RECTANGLE_AND_OTHERS)addAllRectangleShapeTools(l);
-		if (type==MANY_COLORS) {
+		if (type== TestExample.DIVERSE_SHAPES)addDiverseShapes(l);
+		if (type==TestExample.RECTANGLE_AND_OTHERS)addAllRectangleShapeTools(l);
+		if (type==TestExample.MANY_COLORS) {
 			
 			RectangularGraphic r = RectangularGraphic.blankRect(new Rectangle(10,10, 32, 22), Color.black);
 			ShapeActionButtonHandleList2 sa = new ShapeActionButtonHandleList2(r);
@@ -80,7 +80,7 @@ public class TestShapes {
 		}
 		
 		
-		if (type==MANY_STROKES) {
+		if (type==TestExample.MANY_STROKES) {
 			
 			RectangularGraphic r = RightTriangleGraphic.blankShape(new Rectangle(20,20, 40, 30), Color.red.darker());
 			r.setFillColor(Color.cyan.darker());
@@ -98,7 +98,7 @@ public class TestShapes {
 		}
 		
 		Rectangle rect1 = new Rectangle(20,100, 40, 30);
-	if (type==MANY_ANGLES) {
+	if (type==TestExample.MANY_ANGLES) {
 			
 			
 			RectangularGraphic r = RightTriangleGraphic.blankShape(rect1, Color.red.darker());
@@ -111,7 +111,7 @@ public class TestShapes {
 
 		}
 	
-	if (type==MANY_ARROWS) {
+	if (type==TestExample.MANY_ARROWS) {
 		
 		
 		ArrowGraphic r = new ArrowGraphic(new Point(25,25), new Point(80, 80));
@@ -129,7 +129,7 @@ public class TestShapes {
 
 	}
 	
-	if (type==MANY_ANGLE_TEXT) {
+	if (type==TestExample.MANY_ANGLE_TEXT) {
 		
 		TextGraphic textGraphic = new TextGraphic("Plain Text");
 		textGraphic.getBounds();
@@ -147,7 +147,7 @@ public class TestShapes {
 		
 	}
 	
-if (type==MANY_ANGLE_COMPLEX_TEXT) {
+if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		
 		
 		ComplexTextGraphic createRainbow = ComplexTextGraphic.createRainbow("Hello World 2 day", new int[] {3,4,4},  new Color[] {Color.red, Color.blue, Color.green});
@@ -292,6 +292,51 @@ if (type==MANY_ANGLE_COMPLEX_TEXT) {
 				p++;
 			}
 			
+		}
+	}
+	
+	
+	/**uses a selection operator to alter the objects in the list*/
+	public static void diversify(ArrayList<LocatedObject2D> list, MultiSelectionOperator[] o1) {
+		for(int i=0; i<list.size(); i++) {
+			LocatedObject2D object = list.get(i);
+
+			int operation=i%(o1.length);
+			MultiSelectionOperator multiSelectionOperator = o1[operation];
+			multiSelectionOperator.setSelector(new LayerSelectionSystem() {
+
+				@Override
+				public GraphicLayer getSelectedLayer() {
+					if(object instanceof ZoomableGraphic) {
+						return ((ZoomableGraphic) object).getParentLayer();
+						
+					}
+					return null;
+				}
+
+				@Override
+				public ArrayList<ZoomableGraphic> getSelecteditems() {
+					if(object instanceof ZoomableGraphic) {
+						ArrayList<ZoomableGraphic> arrayList = new ArrayList<ZoomableGraphic> ();
+						arrayList.add((ZoomableGraphic) object);
+						return arrayList;
+					}
+					return null;
+				}
+
+				@Override
+				public FigureDisplayWorksheet getWorksheet() {
+					
+					return null;
+				}
+
+				@Override
+				public ImageWorkSheet getImageWrapper() {
+					// TODO Auto-generated method stub
+					return null;
+				}});
+			
+			multiSelectionOperator.run();
 		}
 	}
 

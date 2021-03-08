@@ -178,15 +178,23 @@ private static final long serialVersionUID = 1L;
 
 	
 	/**returns the bounding box of all the panel graphics in this layer
+	
 	 */
 	public Rectangle getBoundOfUsedPanels() {
 		ArrayList<ImagePanelGraphic> graphi =this.getPanelList(). getPanelGraphics();
+		
+		
 		if (graphi.size()==0) return null;
 		if (graphi.size()==1) return graphi.get(0).getBounds();
 		
-		Area a=new Area(graphi.get(0).getBounds());
-		for(int i=1; i<graphi.size(); i++) {
-			a.add(new Area(graphi.get(i).getBounds()));
+		Area a=new Area();
+		for(int i=0; i<graphi.size(); i++) {
+			Rectangle bounds = graphi.get(i).getBounds();
+			
+			/**if the item is inside of the layer*/
+			if(this.hasItem(graphi.get(i)))
+				a.add(new Area(bounds));
+			
 		}
 		return a.getBounds();
 		

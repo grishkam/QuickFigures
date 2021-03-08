@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 6, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -33,7 +33,7 @@ import photoshopScripts.AdobeScriptGenerator;
 /**this class generates text that can be run in an adobe illustrator java script*/
 public class ZIllustratorScriptGenerator {
 	
-	//IssueLog.log(accumulatedscrip);
+
 		
 	public static ZIllustratorScriptGenerator instance=new ZIllustratorScriptGenerator();
 	double x0=0;
@@ -59,6 +59,7 @@ public class ZIllustratorScriptGenerator {
 		return ((int)(10000*Math.random()));
 	}
 	
+	/**Adds lines of code the the accumulated javascript*/
 	void addScript(String... arg) {
 		for (String st: arg) {
 			accumulatedscrip+='\n'+st;
@@ -69,18 +70,22 @@ public class ZIllustratorScriptGenerator {
 	
 	}
 	
-	
+	/**saves the string containing javascript code and opens it.
+	 * resets the accumulated script*/
 	public void execute() {
-		
-		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFile);
+		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+AdobeScriptGenerator.outputFile);
 		accumulatedscrip="";
 	}
 	public  static void savejsxAndRun(String javascript, String directoryJSX){
 		IssueLog.log("File inside "+directoryJSX);
+		File file = new File(directoryJSX);
+		file.getParentFile().mkdirs();//creates the parent directories
 		saveString("#target illustrator"+'\n'+javascript, directoryJSX, false);
-		try {Desktop.getDesktop().open(new File(directoryJSX));} catch (IOException e) {}
+		try {
+		Desktop.getDesktop().open(file);} catch (IOException e) {}
 	}
 
+	/**returns the path for saving images files temporarily*/
 	public String getPathOfImages() {
 		File f=new File(pathOfImages);
 		if (!f.exists()) {
@@ -96,7 +101,7 @@ public class ZIllustratorScriptGenerator {
 	boolean invertvertical=true;
 	
 	
-	
+	/**saves a string*/
 	 public static String saveString(String string, String path, boolean append) {
 	        
 	        try {

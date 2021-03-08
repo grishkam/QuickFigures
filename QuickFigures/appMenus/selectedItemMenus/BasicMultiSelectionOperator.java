@@ -117,8 +117,10 @@ public abstract class BasicMultiSelectionOperator implements MultiSelectionOpera
 	
 	/**returns the undo manager for the object*/
 	public UndoManagerPlus getUndoManager() {
-		FigureDisplayWorksheet graphicDisplayContainer = getSelector().getWorksheet();
-		return graphicDisplayContainer.getUndoManager();
+		
+			FigureDisplayWorksheet graphicDisplayContainer = getSelector().getWorksheet();
+			return graphicDisplayContainer.getUndoManager();
+		
 	}
 	
 	/**returns true if this operator can act on the objects selected by the given selector */

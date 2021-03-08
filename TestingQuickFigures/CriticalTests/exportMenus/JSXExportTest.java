@@ -15,17 +15,16 @@ import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
 import photoshopScripts.AdobeScriptGenerator;
 import testing.FigureTester;
+import testing.TestExample;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
 
 /**a test to determine if code to generate adobe illustrator scripts works*/
  class JSXExportTest {
 	
-	private static final int ALL_ = 0;
-
 	
 	
-	int testCase=12;//which cases to test
+	TestExample testCase=TestExample.RECTANGLE_AND_OTHERS;//which cases to test. set to null if all should be tested
 
 
 	@Test
@@ -51,7 +50,7 @@ import ultilInputOutput.FileChoiceUtil;
 			testsCases.add(t);
 		}
 		for(TestProvider ex: testsCases) {
-			if(testCase!=ALL_ &&testCase!=count) { count++; continue;}
+			if(testCase!=null &&testCase!=ex.getType()) { count++; continue;}
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
 			AdobeScriptGenerator.outputFile=count+"output.jsx";
