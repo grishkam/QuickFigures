@@ -77,7 +77,9 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		    			  r1.setFontSize((double)seg.getParent().getFont().getSize());
 		    			  
 		    			  if (seg.isSubscript()) {
-		    				  r1.setSubscript(seg.getScript()==TextLineSegment.SUB_SCRIPT);//export appears to work for subscripts even though this makes no sense
+		    				  r1.setSubscript(true);//export appears to work for subscripts even though this makes no sense
+		    				 
+		    				  /**for some reason, the set subscript does not work. decided that a font change*/
 		    				  r1.setFontSize((double)seg.getParent().getFont().getSize()/2);
 		    				 
 		    			  }
