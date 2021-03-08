@@ -104,6 +104,8 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 				this.applyTemplateToList(theLayer.getAllGraphics()));
 		undo.addEditToList(
 				applyTemplateToList(l));
+		
+		FigureOrganizingLayerPane.updateAllPanelsFromSource(theLayer);//so that the color mode changes take effect
 		return undo;
 		}
 		

@@ -57,7 +57,6 @@ import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
 import graphicActionToolbar.CurrentFigureSet;
-import logging.IssueLog;
 import standardDialog.colors.ColorDimmingBox;
 import undo.AbstractUndoableEdit2;
 import undo.EditListener;

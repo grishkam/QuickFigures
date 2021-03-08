@@ -21,7 +21,6 @@
 package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -33,7 +32,6 @@ import export.svg.SVGEXporterForShape;
 import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
-import illustratorScripts.PathItemRef;
 import logging.IssueLog;
 
 /**The shape of a frame. similar to the rectangle except that the stroke

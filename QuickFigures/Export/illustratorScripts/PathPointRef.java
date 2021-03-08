@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 5, 2021
+ * Date Modified: Mar 8, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -42,6 +42,7 @@ public class PathPointRef extends IllustratorObjectRef {
 		this.parent = parent;
 	}
 	
+	/**sets the left direction curve control point*/
 	public String setleftDirection(double x, double y) {
 		setSmooth();
 		String out = this.refname+".leftDirection"+equalNumberArray(x,y); ;
@@ -50,6 +51,7 @@ public class PathPointRef extends IllustratorObjectRef {
 		
 	}
 	
+	/**sets the right direction curve control point*/
 	public String setrightDirection(double x, double y) {
 		setSmooth();
 		String out = this.refname+".rightDirection"+equalNumberArray(x,y); 
@@ -59,6 +61,7 @@ public class PathPointRef extends IllustratorObjectRef {
 		
 	}
 	
+	/**sets the anchor point*/
 	public String setAnchor(double x, double y) {
 		String out = this.refname+".anchor"+equalNumberArray(x,y); 
 		this.addScript(out);
@@ -66,6 +69,7 @@ public class PathPointRef extends IllustratorObjectRef {
 		
 	}
 	
+	/**Sets the point type to smooth*/
 	public String setSmooth() {
 		String out = this.refname+".pointType=PointType.SMOOTH;"; 
 		this.addScript(out);

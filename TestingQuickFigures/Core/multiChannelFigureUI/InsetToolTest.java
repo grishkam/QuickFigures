@@ -10,8 +10,6 @@
  */
 package multiChannelFigureUI;
 
-import static org.junit.Assert.*;
-
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
@@ -20,13 +18,11 @@ import org.junit.Test;
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
-import applicationAdapters.DisplayedImage;
 import externalToolBar.InterfaceExternalTool;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import genericTools.GeneralTool;
-import genericTools.Object_Mover;
 import genericTools.ToolBit;
 import genericTools.ToolTester;
 import imageDisplayApp.ImageWindowAndDisplaySet;

@@ -212,4 +212,9 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 		return list;
 	}
 	
+	/**overwritten so that object can be created with illustrator script*/
+	public Object toIllustrator(ArtLayerRef aref) { 
+		return this.createPathCopy().toIllustrator(aref);
+	}
+	
 }

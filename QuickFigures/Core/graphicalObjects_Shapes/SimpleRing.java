@@ -156,4 +156,8 @@ public class SimpleRing extends CircularGraphic {
 	public void setRingRatio(double ieRatio) {
 		parameterRing.setRatioToMaxRadius(ieRatio);
 	}
+	
+	public Object toIllustrator(ArtLayerRef aref) { 
+		return this.createPathCopy().toIllustrator(aref);
+	}
 }

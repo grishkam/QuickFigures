@@ -1,21 +1,13 @@
 package standardDialog;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 import org.junit.jupiter.api.Test;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
-import genericTools.ToolTester;
-import ij.IJ;
-import logging.IssueLog;
-import messages.ShowMessage;
 import standardDialog.channels.ChannelEntryBox;
 import testing.FigureTester;
-import testing.TestingOptions;
 import testing.VisualTest;
 
 /**this contains a manual test to confirm the appearance of the channel entry box */

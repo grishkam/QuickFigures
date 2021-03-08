@@ -12,7 +12,6 @@ import org.junit.Test;
 import genericTools.ToolTester;
 import logging.IssueLog;
 import standardDialog.booleans.BooleanInputPanel;
-import testing.DialogTester;
 
 /**
  tests to see if the dialog listeners are working.

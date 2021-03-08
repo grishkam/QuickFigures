@@ -9,7 +9,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -17,11 +16,9 @@ import javax.swing.JComponent;
 
 import handles.HasSmartHandles;
 import handles.SmartHandle;
-import ij.IJ;
 import imageDisplayApp.GraphicSetDisplayWindow;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
-import messages.ShowMessage;
 
 /**
  A superclass for classes that test tools

@@ -10,8 +10,6 @@
  */
 package channelLabels;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -19,7 +17,6 @@ import org.junit.Test;
 import channelMerging.ImageDisplayLayer;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
-import logging.IssueLog;
 import testing.FigureTest;
 
 /**

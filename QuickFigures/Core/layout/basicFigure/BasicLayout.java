@@ -1300,6 +1300,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				Integer closest=1;
 				for(int i=0; i<this.nPanels(); i++) {
 					Rectangle2D p=this.getPanel(i+1);
+					if(p==null) continue;
 					if (p.contains(x, y)) return i+1;
 					double dist=(new Point2D.Double(p.getCenterX(), p.getCenterY())).distance(x, y);
 				if (dist<shortest) {

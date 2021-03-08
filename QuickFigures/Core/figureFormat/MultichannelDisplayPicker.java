@@ -67,6 +67,7 @@ public class MultichannelDisplayPicker extends
 		MultichannelDisplayLayer imageMulti=(MultichannelDisplayLayer) item;
 		CombinedEdit undo = PanelManagerUndo.createFor(imageMulti);
 		imageMulti.partialCopyTraitsFrom(this.getModelItem(), doesPreprocess);
+		
 		return undo;
 		
 		} catch (Exception e) {

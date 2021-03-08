@@ -13,11 +13,8 @@ package testing;
 import java.awt.Window;
 
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-
 import logging.IssueLog;
 import messages.ShowMessage;
-import standardDialog.choices.GraphicComboBox;
 
 /**
  superclass for several tests that rely on the human to visually confirm 

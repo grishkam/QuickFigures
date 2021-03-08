@@ -1,17 +1,11 @@
 package exportMenus;
 
-import java.awt.Desktop;
-import java.awt.Window;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
-import figureFormat.DirectoryHandler;
-import illustratorScripts.ZIllustratorScriptGenerator;
-import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
 import photoshopScripts.AdobeScriptGenerator;
 import testing.FigureTester;

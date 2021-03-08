@@ -5,10 +5,7 @@ import javax.swing.JFrame;
 
 import org.junit.jupiter.api.Test;
 
-import ij.IJ;
-import logging.IssueLog;
 import standardDialog.colors.ColorDimmingBox;
-import testing.TestingOptions;
 import testing.VisualTest;
 
 class ColorDimmingBoxTest  extends VisualTest{

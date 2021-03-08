@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 
 import org.junit.Test;
 
-import logging.IssueLog;
 import standardDialog.GriddedPanel;
 import standardDialog.StandardDialog;
 import testing.VisualTest;

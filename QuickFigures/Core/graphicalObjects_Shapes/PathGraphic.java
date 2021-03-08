@@ -57,6 +57,7 @@ import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import locatedObject.ScalesFully;
 import menuUtil.PopupMenuSupplier;
+import messages.ShowMessage;
 import objectCartoon.ShapeMaker;
 import popupMenusForComplexObjects.PathGraphicMenu;
 import undo.AbstractUndoableEdit2;
@@ -526,7 +527,6 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	public Object toIllustrator(ArtLayerRef aref) {
 		ArrayList<PathPointList> secs = this.getPoints().createAtCloseSubsections();
 	
-		
 			if (secs.size()==1) {
 		return super.toIllustrator(aref);
 		
@@ -534,16 +534,14 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			IllustratorObjectRef wantspathITems;
 			
 			
-	//	if (compound) {
+	
 			CompoundPathItemRef ci=new CompoundPathItemRef();
+			
+			
+			
 			ci.createItem(aref);
 			wantspathITems=ci;
 			
-		/**} else {
-			GroupItemRef gr = new GroupItemRef();
-			gr.createNewRef(aref);
-			wantspathITems=gr;
-		}*/
 	
 		for(PathPointList s: secs) {
 			createShapeIllustrator(wantspathITems,s);

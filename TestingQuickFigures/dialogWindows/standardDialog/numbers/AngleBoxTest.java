@@ -15,9 +15,6 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import org.junit.Test;
-
-import logging.IssueLog;
 import testing.TestingOptions;
 import testing.VisualTest;
 

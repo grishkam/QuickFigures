@@ -25,7 +25,6 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.QuickFigureMakerTest;
-import ij.IJ;
 import logging.IssueLog;
 import messages.ShowMessage;
 import testing.DialogTester;

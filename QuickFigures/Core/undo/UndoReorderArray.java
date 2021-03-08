@@ -24,9 +24,6 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
-import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_LayerTypes.GraphicLayer;
-import layersGUI.GraphicSetDisplayTree;
 import utilityClasses1.ArraySorter;
 import utilityClasses1.ItemSwapper;
 

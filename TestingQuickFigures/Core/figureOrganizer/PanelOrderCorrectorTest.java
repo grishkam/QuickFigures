@@ -5,17 +5,13 @@
  */
 package figureOrganizer;
 
-import static org.junit.Assert.*;
-
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.junit.Test;
 
-import channelMerging.ChannelUseInstructions;
 import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
-import logging.IssueLog;
 import testing.FigureTest;
 import testing.FigureTester;
 import undo.UndoLayoutEdit;

@@ -10,10 +10,8 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 
-import actionToolbarItems.AlignItem;
 import actionToolbarItems.EditScaleBars;
 import actionToolbarItems.SetAngle;
 import actionToolbarItems.SuperTextButton;
@@ -22,9 +20,7 @@ import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
-import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
-import channelMerging.ChannelEntry;
 import channelMerging.PreProcessInformation;
 import figureFormat.DirectoryHandler;
 import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
@@ -43,7 +39,6 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import imageMenu.ZoomFit;
 import layout.basicFigure.BasicLayout;
-import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
@@ -51,7 +46,6 @@ import logging.IssueLog;
 import messages.ShowMessage;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
-import textObjectProperties.TextLine;
 import utilityClasses1.ArraySorter;
 
 /**main method from this class creates a figure from a set of saved images
@@ -86,18 +80,18 @@ public class FigureTester {
 	}
 	
 	/**
-	checks the subfolders for Test image group3 which consists of many small images
+	checks the subfolders for Test image group 3 which consists of many small images
 	 */
-	public static File[] getTest3ImagePaths( int subfoldIndex) {
+	public static File[] getTest3ImagePaths( int subfolderIndex) {
 		
-		String string = testFolderPath+3+"/"+subfoldIndex+"/";
+		String string = testFolderPath+3+"/"+subfolderIndex+"/";
 		File dir=new File(string);
 		
 		
 		File[] matches = dir.listFiles();
 		if (!(new File(string)).exists()) IssueLog.showMessage("One must place the testing files in the QuickFigures folder to perform this test");;
 		
-		for(File f: matches) {IssueLog.log("file used will be "+f.getAbsolutePath());}
+		
 		if (matches.length==0)IssueLog.log("was unable to obtain images");
 		
 		

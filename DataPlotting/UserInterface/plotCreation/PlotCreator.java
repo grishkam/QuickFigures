@@ -23,7 +23,6 @@ package plotCreation;
 import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
-import columnPlots.ColumnPlot;
 import dataSeries.DataSeries;
 import genericPlot.BasicPlot;
 import graphicalObjects_LayerTypes.GraphicLayer;

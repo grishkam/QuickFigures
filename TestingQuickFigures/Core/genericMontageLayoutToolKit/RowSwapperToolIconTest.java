@@ -7,8 +7,6 @@
 
 package genericMontageLayoutToolKit;
 
-import org.junit.Test;
-
 import icons.IconSet;
 import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;

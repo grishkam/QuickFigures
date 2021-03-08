@@ -119,6 +119,15 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 		}
 	}
 	
+	/**looks for figure organizing layers within the target layer. updates all the panels*/
+	public static void updateAllPanelsFromSource(GraphicLayer l) {
+		ArrayList<?> subLayers = l.getSubLayers();
+		for (Object layer: subLayers) {
+			if (layer instanceof FigureOrganizingLayerPane) {
+				((FigureOrganizingLayerPane) layer).updatePanelsAndLabelsFromSource();
+			}
+		}
+	}
 
 	/**not yet implemented*/
 	@Override

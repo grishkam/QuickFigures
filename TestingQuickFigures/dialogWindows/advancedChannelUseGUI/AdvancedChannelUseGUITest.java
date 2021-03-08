@@ -14,18 +14,14 @@ import java.awt.geom.Point2D;
 
 import org.junit.Test;
 
-import applicationAdapters.DisplayedImage;
 import channelMerging.ChannelEntry;
 import channelMerging.ImageDisplayLayer;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
-import graphicActionToolbar.CurrentFigureSet;
-import logging.IssueLog;
 import testing.FigureTest;
 import testing.FigureTester;
-import testing.TestingOptions;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 

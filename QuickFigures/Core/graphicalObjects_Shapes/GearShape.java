@@ -31,6 +31,7 @@ import java.awt.geom.Ellipse2D.Double;
 
 import handles.AngleHandle;
 import handles.SmartHandleList;
+import illustratorScripts.ArtLayerRef;
 
 /**draws a gear with a hole inside*/
 public class GearShape extends SimpleStar {
@@ -139,6 +140,10 @@ public class GearShape extends SimpleStar {
 			list.add(holeHandle);
 			
 		return list;
+	}
+	
+	public Object toIllustrator(ArtLayerRef aref) { 
+		return this.createPathCopy().toIllustrator(aref);
 	}
 	
 	

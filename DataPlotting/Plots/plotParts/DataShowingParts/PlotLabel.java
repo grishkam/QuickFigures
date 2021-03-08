@@ -32,7 +32,6 @@ import handles.SmartHandleForText;
 import handles.SmartHandleList;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.Core.PlotOrientation;

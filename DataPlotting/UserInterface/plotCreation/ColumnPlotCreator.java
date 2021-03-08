@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import columnPlots.ColumnPlot;
 import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
-import graphicalObjects_LayerTypes.GraphicLayer;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import undo.UndoAddItem;
 

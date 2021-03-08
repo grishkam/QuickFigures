@@ -24,7 +24,6 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import testing.VisualTest;
 

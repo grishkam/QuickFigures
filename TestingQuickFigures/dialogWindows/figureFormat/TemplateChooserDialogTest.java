@@ -13,7 +13,6 @@ import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.AttachmentPosition;
 import logging.IssueLog;
-import standardDialog.StandardDialog;
 import testing.DialogTester;
 
 /**

@@ -10,8 +10,6 @@
  */
 package figureEditDialogs;
 
-import org.junit.Test;
-
 import figureOrganizer.FigureOrganizingLayerPane;
 import graphicActionToolbar.QuickFigureMakerTest;
 

@@ -36,7 +36,6 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;

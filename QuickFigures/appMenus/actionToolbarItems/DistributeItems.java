@@ -33,7 +33,6 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import locatedObject.LocatedObject2D;
-import logging.IssueLog;
 import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;

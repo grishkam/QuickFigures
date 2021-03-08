@@ -29,7 +29,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import fLexibleUIKit.ObjectAction;
-import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
 import figureOrganizer.FigureOrganizingLayerPane;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.TextGraphic;

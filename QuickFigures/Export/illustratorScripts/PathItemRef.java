@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 8, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -66,13 +66,7 @@ public class PathItemRef extends IllustratorObjectRef {
 	}
 	
 	
-	/**
-	public String setClosed(boolean close) {
-		String output=refname+".closed="+close+";";
-		addScript(output);
-		return output;
-	}
-	*/
+	
 	public String setStoke(double b) {
 		b*=getGenerator().scale;
 		String output=refname+".strokeWidth="+b+";";

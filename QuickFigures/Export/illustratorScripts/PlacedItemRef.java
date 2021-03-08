@@ -30,7 +30,6 @@ import javax.imageio.ImageIO;
 
 import figureFormat.DirectoryHandler;
 import logging.IssueLog;
-import ultilInputOutput.FileChoiceUtil;
 
 /**a java class that generates scripts to create and modify a placed item object in 
 adobe illustrator*/

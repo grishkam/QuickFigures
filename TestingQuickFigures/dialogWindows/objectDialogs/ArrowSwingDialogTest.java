@@ -16,7 +16,6 @@ import java.awt.Point;
 import org.junit.Test;
 
 import graphicalObjects_Shapes.ArrowGraphic;
-import ij.IJ;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import testing.DialogTester;
 

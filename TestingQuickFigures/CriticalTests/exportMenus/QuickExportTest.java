@@ -23,7 +23,7 @@ abstract class QuickExportTest {
 	  Dye to dialogs comming up in powerpoint and other softwares, decided it best not to do this*/
 	boolean opensFiles=false;
 	
-	TestExample testCase=TestExample.MANY_SPLIT_CHANNEL;//which cases to test. set to null if all should be tested
+	TestExample testCase=TestExample.RECTANGLE_AND_OTHERS;//which cases to test. set to null if all should be tested
 
 	/**set to true if user will test files one by one*/
 	private boolean viewOnebyOne=true;

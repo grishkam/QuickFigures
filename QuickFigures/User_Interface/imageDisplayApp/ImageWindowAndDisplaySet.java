@@ -31,8 +31,6 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.geom.Point2D;
 
-import javax.swing.JComponent;
-
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;

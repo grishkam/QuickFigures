@@ -22,10 +22,7 @@ package export.svg;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.io.File;
-import java.io.IOException;
-
 import javax.swing.JFrame;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

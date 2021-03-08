@@ -34,7 +34,6 @@ import layout.PanelContentExtract;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
-import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
 /**As the user makes edits to a figure, the channel panels that appear

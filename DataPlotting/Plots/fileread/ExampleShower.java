@@ -22,10 +22,8 @@ package fileread;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
