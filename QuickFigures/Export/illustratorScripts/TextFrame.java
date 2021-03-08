@@ -43,6 +43,58 @@ public class TextFrame extends IllustratorObjectRef {
 	}
 	
 	
+	/**removes the insertion points*/
+	public String removeInsertionPointFromRange() {
+		String output="";
+	
+		output+="var ip;"+'\n'+"for(var i=0; i<"+refname+".insertionPoints.length; i++)"+'\n'+" {  ip = "+refname+".insertionPoints[i];"+'\n'+" ip.characters.removeAll();}";
+		
+		addScript(output);
+		return output;
+	}
+
+
+	/**for debugging, 
+	 * @param output
+	 * @return
+	 */
+	public String removeCharacter(int index) {
+		String output="";
+		
+			output+=""+refname+".lines[0].characters["+index+"].remove();";
+			
+			addScript(output);
+		
+		return output;
+	}
+	
+	/**for debugging, 
+	 * @param output
+	 * @return
+	 */
+	public String removeCharacterWalert(int index) {
+		String output="";
+		if(!alertadded) {
+			output+="alert("+refname+".lines[0].contents"+");";
+			output+="alert("+refname+".lines[0].textRanges["+index+"].contents"+");";
+			output+=""+refname+".lines[0].textRanges["+index+"].remove();";
+			
+			addScript(output);
+			alertadded=true;
+		}
+		return output;
+	}
+	
+	/**removes the spaces that illustrator inserts between words*/
+	public String wordSpacing() {
+		String output="";
+	
+		
+		
+		addScript(output);
+		return output;
+	}
+		
 	
 	public String createAreaItem(IllustratorObjectRef layer, Rectangle r, String contents) {
 		
@@ -108,6 +160,8 @@ public class TextFrame extends IllustratorObjectRef {
 	}
 
 
+	
+	
 
 	public void createLinePathItem(ArtLayerRef aref, Point2D baseLineStart,
 			Point2D baseLineEnd) {

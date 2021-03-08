@@ -32,6 +32,8 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 	boolean creativeCloud=true;
 	boolean addScripts=true;
 	
+	static boolean alertadded=false;//true is alert has been shown. for debugging purposes only
+	
 	ZIllustratorScriptGenerator getGenerator() {
 		return 	ZIllustratorScriptGenerator.instance;
 	}

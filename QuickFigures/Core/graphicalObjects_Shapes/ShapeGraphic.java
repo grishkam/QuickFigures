@@ -677,6 +677,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		return angle;
 	}
 	
+	/**returns the midpoint*/
 	public static Point2D midPoint(Point2D p1, Point2D p2) {
 		double nx = (p1.getX()+p2.getX())/2;
 		double ny = (p1.getY()+p2.getY())/2;

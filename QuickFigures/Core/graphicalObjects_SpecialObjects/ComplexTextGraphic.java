@@ -36,9 +36,11 @@ import javax.swing.Icon;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.ShapeGraphic;
 import icons.TreeIconWithText;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;
+import illustratorScripts.TextRange;
 import locatedObject.ColorDimmer;
 import locatedObject.ShapesUtil;
 import logging.IssueLog;
@@ -425,9 +427,79 @@ public class ComplexTextGraphic extends TextGraphic {
 		return output;
 	}
 	
+	/**returns a point that is on a line defined by p1 and p2. If d2 is above 1, that point will be beyond the second point */
+	public static Point2D extendPoint(Point2D p1, Point2D p2, double d2) {
+		double d=1-d2;
+		double nx = (p1.getX()*d+p2.getX()*d2);
+		double ny = (p1.getY()*d+p2.getY()*d2);
+		return new Point2D.Double(nx, ny);
+	}
 	
+	/**Generates a similar text item in an adobe illustrator script*/
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
+		BackGroundToIllustrator(aref);
+		for(TextLine line:this.getParagraph()) {
+			TextFrame ti = new TextFrame();
+			
+			TextLineSegment seg2=line.get(0);
+			
+			
+			double distanceChange=(line.getAllBaselineLengths()/seg2.baseLineDistance());
+			//double slope= (seg2.transformedBaseLineEnd.getY()-seg2.transformedBaseLineStart.getY())/ (seg2.transformedBaseLineEnd.getX()-seg2.transformedBaseLineStart.getX());
+			Point2D p2 = extendPoint(seg2.transformedBaseLineStart, seg2.transformedBaseLineEnd, distanceChange);
+			ti.createLinePathItem(aref, seg2.transformedBaseLineStart, p2);
+			
+			int count=0;
+			int length=0;
+			for(TextLineSegment seg:line) {
+			
+		
+					TextRange tr = new TextRange();
+					
+					tr.createItem(ti, seg.getText());
+					ti.wordSpacing();
+					
+					tr.createCharAttributesRef();
+					tr.setContents2(seg.getText());
+					tr.getCharAttributesRef().setfont(seg.getFont());
+					tr.getCharAttributesRef().setFillColor(this.getDimmedColor(seg.getTextColor()));
+					if (seg.isUnderlined()) tr.getCharAttributesRef().setUnderline(true);
+					if (seg.isStrikeThrough()) tr.getCharAttributesRef().setStrikeThrough(true);
+					if (seg.isSuperscript()) {
+						
+						tr.getCharAttributesRef().setSuperScript();
+						tr.getCharAttributesRef().setfontSize(seg.getFont().getSize()*2);
+					}
+					else if (seg.isSubscript()) {
+						tr.getCharAttributesRef().setSubScript();
+						tr.getCharAttributesRef().setfontSize(seg.getFont().getSize()*2);
+					}
+					else {
+						tr.getCharAttributesRef().setNormalScript();
+					}
+		
+					
+					
+					count++;
+					
+					length+=seg.getText().length();
+			}
+			ti.removeInsertionPointFromRange();
+			if (getAngle()!=0) {
+				
+				IssueLog.log("text in illustrator should be rotated");
+				ti.rotate(this.getAngle());
+				
+			}
+		
+		}
+		return null;
+	}
+	
+	
+	
+	public Object toIllustratorOld(ArtLayerRef aref) {
 		BackGroundToIllustrator(aref);
 		for(TextLine line:this.getParagraph()) {
 			for(TextLineSegment seg:line) {
@@ -435,6 +507,8 @@ public class ComplexTextGraphic extends TextGraphic {
 	//	IssueLog.log("will try to create text in illustrator");
 		TextFrame ti = new TextFrame();
 		ti.createLinePathItem(aref, seg.transformedBaseLineStart, seg.transformedBaseLineEnd);
+		
+		
 		ti.createCharAttributesRef();
 		ti.setContents2(seg.getText());
 		ti.getCharAttributesRef().setfont(seg.getFont());

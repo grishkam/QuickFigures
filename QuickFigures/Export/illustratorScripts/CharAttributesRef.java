@@ -72,6 +72,36 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return output;
 	}
 	
+	/**makes the section of text into a superscript*/
+	public String setSuperScript() {
+		String output="try{";
+		output+=refname+".baselinePosition = FontBaselineOption.SUPERSCRIPT;} catch (err) {}";
+		addScript(output);
+		return output;
+		
+		
+	}
+	
+	/**makes the section of text into a superscript*/
+	public String setSubScript() {
+		String output="try{";
+		output+=refname+".baselinePosition = FontBaselineOption.SUBSCRIPT;} catch (err) {}";
+		addScript(output);
+		return output;
+		
+		
+	}
+	
+	/**makes the section of text into a superscript*/
+	public String setNormalScript() {
+		String output="try{";
+		output+=refname+".baselinePosition = FontBaselineOption.NORMALBASELINE;} catch (err) {}";
+		addScript(output);
+		return output;
+		
+		
+	}
+	
 	
 	public String setfont(Font f) {
 		
@@ -81,9 +111,9 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return o+ setfontSize(f.getSize());
 	}
 	
-
 	
-	String setfontSize(double font) {
+	/**Adds the font size to the script*/
+	public String setfontSize(double font) {
 		
 		font*=getGenerator().scale;
 		if (font==0) return "";

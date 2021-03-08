@@ -342,7 +342,15 @@ public void fuseSegments(TextLineSegment previousSeg, TextLineSegment thisSegmen
 	
 }
 
-
+/**returns the length of the line that the text is drawn on top of
+ * particularly important for illustrator export*/
+public double getAllBaselineLengths() {
+	double output=0;
+	for(TextLineSegment seg: this) {
+		output+=seg.baseLineDistance();
+	}
+	return output;
+}
 
 
 

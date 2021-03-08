@@ -61,7 +61,7 @@ public class TextLineSegment implements  Serializable {
 	public Point2D.Double baseLine;
 	public Point2D.Double baseLineend;
 	
-	/**the bounds of the segment*/
+	/**the bounds of the segment. does not take into account rotation*/
 	public Rectangle2D bounds=null;
 	
 	/**the location of a rotated baseline start of the segment*/
@@ -161,12 +161,15 @@ public class TextLineSegment implements  Serializable {
 		text=st;
 	}
 
-	/**returns the font that will actually be used to draw the segment*/
+	/**returns the font that will actually be used to draw the segment.
+	 * If the item is a superscript or subscript, font willreturn at half value*/
 	public Font getFont() {
 		Font output=defaultFont;
 		if (parent==null) return output;
 		output=parent.getFont();
-		if (getScript()>0) output= parent.getFont().deriveFont((float) (parent.getFont().getSize()/2));
+		if (getScript()>0) 
+			output= parent.getFont().deriveFont((float) (parent.getFont().getSize()/2));
+		
 		if (this.getUniqueStyle()>0) output=output.deriveFont(getUniqueStyle()-1);
 		if (isUnderlined()) {
 			output=deriveUnderlinedFont(output);
@@ -385,6 +388,10 @@ public class TextLineSegment implements  Serializable {
 		
 	}
 	
-	
+	/**returns the length of the line that the text is drawn on top of
+	 * particularly important for illustrator*/
+	public double baseLineDistance() {
+		return  transformedBaseLineStart.distance(transformedBaseLineEnd);
+	}
 	
 }
