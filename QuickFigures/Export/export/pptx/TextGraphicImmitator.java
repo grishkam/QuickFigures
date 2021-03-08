@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 8, 2021
  * Version: 2021.1
  */
 package export.pptx;
@@ -36,6 +36,7 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
@@ -72,9 +73,16 @@ public class TextGraphicImmitator implements OfficeObjectMaker {
 		    			  XSLFTextRun r1 = p.addNewTextRun();
 		    			  r1.setText(seg.getText());
 		    			  setTextRunFont(r1, seg.getFont(),t.getDimmedColor(seg.getTextColor()));
-		    			  r1.setSubscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);//export appears to work for subscripts even though this makes no sense
-		    			  r1.setSuperscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);
+		    			 
 		    			  r1.setFontSize((double)seg.getParent().getFont().getSize());
+		    			  
+		    			  if (seg.isSubscript()) {
+		    				  r1.setSubscript(seg.getScript()==TextLineSegment.SUB_SCRIPT);//export appears to work for subscripts even though this makes no sense
+		    				  r1.setFontSize((double)seg.getParent().getFont().getSize()/2);
+		    				 
+		    			  }
+		    			  r1.setSuperscript(seg.getScript()==TextLineSegment.SUPER_SCRIPT);
+		    			 
 		    			  r1.setUnderlined(seg.isUnderlined());
 		    			  r1.setStrikethrough(seg.isStrikeThrough());
 		    			  

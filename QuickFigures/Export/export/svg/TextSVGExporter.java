@@ -189,6 +189,9 @@ public class TextSVGExporter extends SVGExporter {
 		}
 		
 		Font font = seg.getFont();
+		if(seg.isSuperscript()||seg.isSubscript()) {
+			font=font.deriveFont((float) font.getSize()/2);
+		}
 		SVGFont font2 = new SVGFont(generatorCtx);
 		SVGFontDescriptor fd = font2.toSVG(font, g2d.getFontRenderContext());
 		addSVGDescriptor(fd,text);

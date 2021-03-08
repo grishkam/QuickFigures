@@ -163,6 +163,7 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		createRainbow.getParagraph().get(1).get(0).setUniqueStyle(Font.ITALIC);
 		createRainbow.getParagraph().get(1).addSegment("Bold", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.BOLD);;
 		createRainbow.getParagraph().get(1).addSegment("Italic", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.ITALIC);;
+		createRainbow.getParagraph().get(1).addSegment("B+I", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.ITALIC+Font.BOLD);;
 		
 		 
 		System.out.println("finished creating text "+(System.currentTimeMillis()-time));

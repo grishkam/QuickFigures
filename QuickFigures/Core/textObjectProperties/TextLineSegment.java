@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 8, 2021
  * Version: 2021.1
  */
 package textObjectProperties;
@@ -167,8 +167,7 @@ public class TextLineSegment implements  Serializable {
 		Font output=defaultFont;
 		if (parent==null) return output;
 		output=parent.getFont();
-		if (getScript()>0) 
-			output= parent.getFont().deriveFont((float) (parent.getFont().getSize()/2));
+		output = applySuperOrSubscript(output);
 		
 		if (this.getUniqueStyle()>0) output=output.deriveFont(getUniqueStyle()-1);
 		if (isUnderlined()) {
@@ -179,6 +178,34 @@ public class TextLineSegment implements  Serializable {
 		}
 		
 		return output;
+	}
+
+	/**if the text is a subscript or a superscript
+	 * @param output
+	 * @return
+	 */
+	public Font applySuperOrSubscript(Font output) {
+		/**if (getScript()>0) 
+			output= parent.getFont().deriveFont((float) (parent.getFont().getSize()/2));
+		*/
+		if(this.isSuperscript()) 
+			return deriveSuperScriptFont(output);
+		if(this.isSubscript()) 
+			return deriveSubScriptFont(output);
+		return output;
+	}
+	
+	/**derives an superscript version of the font*/
+	public static Font deriveSuperScriptFont(Font f) {
+		HashMap<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
+		attributes.put(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER);
+		return f.deriveFont( attributes);
+	}
+	/**derives an subscript version of the font*/
+	public static Font deriveSubScriptFont(Font f) {
+		HashMap<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
+		attributes.put(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB);
+		return f.deriveFont( attributes);
 	}
 
 	/**derives an underlined version of the font*/
@@ -298,8 +325,7 @@ public class TextLineSegment implements  Serializable {
 	        double descent = metricsi.getDescent()/this.inflationfactor();
 	       
 			yrect=y-fontHeight+descent;//changes the y from baseline to corner
-			  if (this.isSuperscript()) //TODO: check the 
-				  yrect-=getFont().getSize();
+			 // if (this.isSuperscript()) 	 yrect-=getFont().getSize();
 			 
 			  double newwidth = metricsi.stringWidth(text)/inflationfactor();
 			  

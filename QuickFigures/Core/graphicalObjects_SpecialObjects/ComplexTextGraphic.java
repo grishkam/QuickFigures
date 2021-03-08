@@ -469,11 +469,11 @@ public class ComplexTextGraphic extends TextGraphic {
 					if (seg.isSuperscript()) {
 						
 						tr.getCharAttributesRef().setSuperScript();
-						tr.getCharAttributesRef().setfontSize(seg.getFont().getSize()*2);
+						//tr.getCharAttributesRef().setfontSize(seg.getFont().getSize()*2);
 					}
 					else if (seg.isSubscript()) {
 						tr.getCharAttributesRef().setSubScript();
-						tr.getCharAttributesRef().setfontSize(seg.getFont().getSize()*2);
+						//tr.getCharAttributesRef().setfontSize(seg.getFont().getSize()*2);
 					}
 					else {
 						tr.getCharAttributesRef().setNormalScript();
