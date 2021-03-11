@@ -19,23 +19,23 @@ j.	Restart ImageJ
 #### Step 1: Install an up to date version of ImageJ. 
 You can either download a fresh copy of ImageJ (recommended especially if you have an old install) or go to Help menu and choose ‘Update ImageJ…’
 #### Step 2: 
-a.	Download QuickFigures
-https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
-	copy the file into the plugins folder of ImageJ
-#### Step 3: Download optional dependencies for extra features
-a.	If you will be opening microscopy file formats, download “loci_tools.jar” file and copy it into the plugins folder
-https://downloads.openmicroscopy.org/bio-formats/4.4.12/
-After installation of loci tools, one should be able to import microscopy files into ImageJ using Bio-formats (File->Import->Bio-Formats). One should set the Bio-Formats import Options to import the files as a ‘Hyperstack’ (in the stack viewing section), the import Color Mode should be set to ‘Composite’ preferably with the ‘Autoscale’ Checkbox set. All other part of the Bio-Formats import options can be left unchecked. Once those options are set, one should try a windowless Bio-formats import (also in the import menu).
-b.	If you intend to export as SVG, PDF, or EPS you will need to download apache batik
-https://xmlgraphics.apache.org/batik/download.html
-As of this moment, Batik 1.13 or higher is required. Unzip the downloaded file and place that folder into the plugins folder of ImageJ
-c.	If you intend to export as PowerPoint or use the plot package for QuickFigures you will need Apache POI.
-https://poi.apache.org/download.html
-As of this moment, QuickFigures is being updated to work with the latest version of apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12.
-Copy the Apache POI folder into the plugins folder of ImageJ. Any .jar files that are in subfolders of the poi folder may need to be moved into the main POI folder
-d.	Certain features of the Plot Package within QuickFigures also require Apache Commons-Math3 package. Math3 should be included in downloads of apache poi. If it is absent, 
-https://commons.apache.org/proper/commons-math/
-4	Go to the QuickFigures menu and select ‘Show Main Toolbar’. 
+-	Download QuickFigures
+o	https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
+o	copy the file into the plugins folder of ImageJ
+-	#### Step 3: Download optional dependencies for extra features
+-	If you will be opening microscopy file formats, download “loci_tools.jar” file and copy it into the plugins folder
+o	https://downloads.openmicroscopy.org/bio-formats/4.4.12/
+-	After installation of loci tools, one should be able to import microscopy files into ImageJ using Bio-formats (File->Import->Bio-Formats). One should set the Bio-Formats import Options to import the files as a ‘Hyperstack’ (in the stack viewing section), the import Color Mode should be set to ‘Composite’ preferably with the ‘Autoscale’ Checkbox set. All other part of the Bio-Formats import options can be left unchecked. Once those options are set, one should try a windowless Bio-formats import (also in the import menu).
+-	If you intend to export as SVG, PDF, or EPS you will need to download apache batik
+o	https://xmlgraphics.apache.org/batik/download.html
+o	As of this moment, Batik 1.13 or higher is required. Unzip the downloaded file and place that folder into the plugins folder of ImageJ
+-	If you intend to export as PowerPoint or use the plot package for QuickFigures you will need Apache POI.
+o	https://poi.apache.org/download.html
+o	As of this moment, QuickFigures is being updated to work with the latest version of apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12.
+o	Copy the Apache POI folder into the plugins folder of ImageJ. Any .jar files that are in subfolders of the poi folder may need to be moved into the main POI folder
+-	Certain features of the Plot Package within QuickFigures also require Apache Commons-Math3 package. Math3 should be included in downloads of apache poi. If it is absent, 
+o	https://commons.apache.org/proper/commons-math/
+-	Go to the QuickFigures menu and select ‘Show Main Toolbar’. 
 
 ## Section 2: Getting Started 
 ### Creating Figures from images
@@ -57,7 +57,8 @@ Note: For each of these options. The new figures created will be based on the de
 - See other sections for details of specialized tools.
 
 ## Section 3: Editing Figures and Channels
-### **Popup Menus** appear when a user right clicks on image panels, insets, layouts, or figures. The submenus contain options for many types of edits. The most important submenus and menu items are described below.
+### **Popup Menus** 
+Popup menus appear when a user right clicks on image panels, insets, layouts, or figures. The submenus contain options for many types of edits. The most important submenus and menu items are described below.
 1.	The **Channels** submenus contain options related to the channels within figure. Depending on the object clicked and the context, slightly different versions of the channels submenu will appear. The channels menus contain the following items
 a.	**Display Range**, **Window/Level**, or **Min/Max**. These options open display range adjuster similar to the display range adjuster found in ImageJ and other Software. Adjustments done with this adjuster affect both split channel panels and merge panels (see Display range dialog for detail) 
 b.	**Change color modes** menu item switches channel panels between ‘colorized’ and ‘greyscale’ displays. Panels with more than one channel will always be displayed in a colorized form regardless of this option.
@@ -91,7 +92,7 @@ f.	**Re-Set Pixel Density**, See re-set pixel density from the figure menu secti
 7.	**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. See supplemental user guide for details of these options (not yet written).
 8.	**Attach Item** and **Release Item** submenus appear in the popup menus for layouts or image panels if there is an object in position for attachment (or already attached). See section on attached items for details. Since labels and scale bars are automatically attached to panels and can be moved by drag/drop, users should rarely have any need to attach/detach objects manually. If not relevant object is available, these submenus will not appear.
 ### Attached Items
-	Certain items like labels and scale bars are ‘attached’ to image panels (or attached to layouts). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their ‘parent’ panel. Attached item positions can be edited in a few ways.
+Certain items like labels and scale bars are ‘attached’ to image panels (or attached to layouts). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their ‘parent’ panel. Attached item positions can be edited in a few ways.
 -	Dragging the attached item directly. Normal mouse drags will alter the type of attachment location. For example, an item that is anchored at the lower right of a parent panel can be moved to the equivalent location in the upper right by a simple mouse drag. A user can also move an item from one parent panel to another or detach the item from its parent by dragging and dropping.
 -	Using the attached item handle. Attached scale bars and text items will have an additional handle that allows the user to alter their attachment position (this appears as a red dot). By clicking and dragging within the red dot, a user can make small adjustments to the attachment position. A user can also click just outside of the red dot to change the type of location.
 -	Using the attachment “Position” dialog. A menu item to display this dialog will be present in the popup menu for the attached item. (as well as other menus and mini toolbars). A simpler version of this dialog will also appear in the position tab of other dialogs. A user can click and drag the blue square within the dialog to change the base location (from the Upper Left to Top for example). Finer adjustment to the location can be done with the sliders and numeric fields in this dialog. The attachment position dialog can also be used to assign the same attachment position to many labels ensuring consistent spacing of labels (using the checkbox is present in the complete dialog). Labels can also be attached to a row, column, or panel of a layout. The dialog also contains an option for switching the attachment position between row, column and panel modes (rarely used).
