@@ -24,7 +24,7 @@
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-1.8/batik-squiggle-1.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-1.8/batik-svgpp-1.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/batik-1.8/batik-ttf2svg-1.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Desktop/ImageJ/ij.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/ImageJ/ij.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="src" path="CriticalTests"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
