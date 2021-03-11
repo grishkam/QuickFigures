@@ -4,17 +4,19 @@
 ### Full Install instructions
 ### Fiji Install: 
 #### Step 1: update Fiji (if not already up to date)
-a.	Go the Help menu and select “Update…”
-b.	Apply changes to make sure your Fiji is up to date
-c.	Restart Fiji
+-	Go the Help menu and select “Update…”
+-	Apply changes to make sure your Fiji is up to date
+-	Restart Fiji
 #### Step 2: Install QuickFigures
-d.	Go the Help->Update… menu item again
-e.	After a moment, Fiji will tell you that you are up to date
-f.	In the next dialog window click “Manage Update Sites”
-g.	QuickFigures will appear in the update site list
-h.	Check QuickFigures and close that window.
-i.	Click Apply changes to download QuickFigures
-j.	Restart ImageJ
+-	Go the Help->Update… menu item again
+-	After a moment, Fiji will tell you that you are up to date
+-	In the next dialog window click “Manage Update Sites”
+-	QuickFigures will appear in the update site list
+-	Check QuickFigures 
+-	If you don’t already have the bioformats importers installed, you should check those too so you will be able to import microscopy files
+-	close that window.
+-	Click Apply changes to download QuickFigures
+-	Restart ImageJ
 ### Ordinary ImageJ Install. 
 #### Step 1: Install an up to date version of ImageJ. 
 You can either download a fresh copy of ImageJ (recommended especially if you have an old install) or go to Help menu and choose ‘Update ImageJ…’
