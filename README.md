@@ -4,6 +4,9 @@ QuickFigures is a toolset for creating scientific figures.
 See tutorial video playlist for instructions
 https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1
 
+Or you may read the user guide
+https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md
+
 See publication for more details
 https://www.biorxiv.org/content/10.1101/2020.09.24.311282v2
 
