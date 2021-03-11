@@ -20,21 +20,21 @@ j.	Restart ImageJ
 You can either download a fresh copy of ImageJ (recommended especially if you have an old install) or go to Help menu and choose ‘Update ImageJ…’
 #### Step 2: 
 -	Download QuickFigures
-o	https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
-o	copy the file into the plugins folder of ImageJ
--	#### Step 3: Download optional dependencies for extra features
+https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
+copy the file into the plugins folder of ImageJ
+#### Step 3: Download optional dependencies for extra features
 -	If you will be opening microscopy file formats, download “loci_tools.jar” file and copy it into the plugins folder
-o	https://downloads.openmicroscopy.org/bio-formats/4.4.12/
+https://downloads.openmicroscopy.org/bio-formats/4.4.12/
 -	After installation of loci tools, one should be able to import microscopy files into ImageJ using Bio-formats (File->Import->Bio-Formats). One should set the Bio-Formats import Options to import the files as a ‘Hyperstack’ (in the stack viewing section), the import Color Mode should be set to ‘Composite’ preferably with the ‘Autoscale’ Checkbox set. All other part of the Bio-Formats import options can be left unchecked. Once those options are set, one should try a windowless Bio-formats import (also in the import menu).
 -	If you intend to export as SVG, PDF, or EPS you will need to download apache batik
-o	https://xmlgraphics.apache.org/batik/download.html
-o	As of this moment, Batik 1.13 or higher is required. Unzip the downloaded file and place that folder into the plugins folder of ImageJ
+https://xmlgraphics.apache.org/batik/download.html
+As of this moment, Batik 1.13 or higher is required. Unzip the downloaded file and place that folder into the plugins folder of ImageJ
 -	If you intend to export as PowerPoint or use the plot package for QuickFigures you will need Apache POI.
-o	https://poi.apache.org/download.html
-o	As of this moment, QuickFigures is being updated to work with the latest version of apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12.
-o	Copy the Apache POI folder into the plugins folder of ImageJ. Any .jar files that are in subfolders of the poi folder may need to be moved into the main POI folder
+https://poi.apache.org/download.html
+As of this moment, QuickFigures works with the latest version of apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12.
+Copy the Apache POI folder into the plugins folder of ImageJ. Any .jar files that are in subfolders of the poi folder may need to be moved into the main POI folder
 -	Certain features of the Plot Package within QuickFigures also require Apache Commons-Math3 package. Math3 should be included in downloads of apache poi. If it is absent, 
-o	https://commons.apache.org/proper/commons-math/
+https://commons.apache.org/proper/commons-math/
 -	Go to the QuickFigures menu and select ‘Show Main Toolbar’. 
 
 ## Section 2: Getting Started 
@@ -104,8 +104,8 @@ A user can click on a figure layout just like any other object. Several kinds of
 -	Layout location handle. This handle (near the upper left of the layout) can also be used to move the entire figure
 -	↕↔. Row Swap Handles, Column Swap Handles, and Panel Swap handles. allow the user to swap the contents of two rows, columns or panels within the layout.
 -	Add label handles. Clicking on each of these handles adds at their respective location. That may be either a row or a column label.
--	+ Add (or Subtract) Row (or Column) handles. Allow the user to increase or decrease of number of rows or columns manually by dragging each handle. Objects within the layout are not moved by these handles.
--	+ Repack panels handle. This handle also adds or subtracts the number of rows and columns. However, this handle also redistributes the objects within the layout.
+-	Add (or Subtract) Row (or Column) handles. Allow the user to increase or decrease of number of rows or columns manually by dragging each handle. Objects within the layout are not moved by these handles.
+-	Repack panels handle. This handle also adds or subtracts the number of rows and columns. However, this handle also redistributes the objects within the layout.
 -	Label Space handles. The spaces above, to the left, below, and to the right of the panels are meant for labels. Although these spaces are adjusted automatically, the user is also allowed to make manual changes using these handles.
 -	Panel Size handles are on the bottom or right edges of panels. Although panel sizes are adjusted automatically, in the user may also perform manual edits using these handles.
 -	Layout scale handle. Scales the layout and all objects within it. This handle is more convenient than selecting all the objects and then scaling them.
@@ -120,9 +120,9 @@ An addition toolbar for layout tools is available. The user can go to Toolbars->
 -	**Label Text Tools**. Allow the user to add row, column or panel labels.
 -	**Scale layout** tool. Scales the figure.
 -	**Expert tools** (see Appendix)
-#### **Editing the layout using popup menus and dialogs**
+#### 3) **Editing the layout using popup menus and dialogs**
 A popup menu will appear if the user right clicks on a layout (using the object selector tool). The “Edit Layout” submenu allows the user to perform the same tasks as the layout handles and layout tools. Different dialog windows will appear for each menu item. Within the dialog windows, users may input specific numbers for the measurements of their layouts. If a user double clicks on a layout, (or a layout handle) similar dialog windows will appear. Depending on the location being clicked, a different dialog will be shown. 
-#### **Layout content** 
+#### 4) **Layout content** 
 Layout handles, layout tools and menus only affect objects that are within the layout. Objects that are both within the same parent layer as a layout and within the bounds of the layout are treated as within the layout. Although the layer structure is organized automatically, a user can also manually move objects between layers using the layers window (see section on layers window). 
 ### Specialized Dialog windows
 
@@ -130,8 +130,8 @@ Layout handles, layout tools and menus only affect objects that are within the l
 The **Recreate All Panels** dialog allows the user to change the options for generated image panels, and create new image panels according to the new options. Panels are recreated from the original source images when the user changes an option within this window. The window is divided into a **Channels and Panels** tab and a **Frames and Slices** tab
 **Channels and Panels** tab: contains options related to channels and panels.
 -	**Create Panels** option allows the user to select which panels to create for the channels. A user can choose to include a Merge Panel, Split channel panels, or Both. A user can choose to place the merged panel, after the channel panels or before. 
--	**Exclude These Channels Panel(s) ** If channel panels are being made, a user can choose not to omit one or more of them. This excludes that panel for that channel but does not affect the merged image. 
--	**Don’t Merge These Channel(s) **  If a merge panel is being made, a user can choose not to include every channel in the merged image. A user can select one or more channels using this option.
+-	**Exclude These Channels Panel(s)** If channel panels are being made, a user can choose not to omit one or more of them. This excludes that panel for that channel but does not affect the merged image. 
+-	**Don’t Merge These Channel(s)**  If a merge panel is being made, a user can choose not to include every channel in the merged image. A user can select one or more channels using this option.
 -	**Channel Color Mode** options changes the color mode for the channel panels between colorized and greyscale.
 -	The **Merge Each Channel With** option. Split channel figures sometimes contain two channels per panel. A user can select one channel to merge into every channel panel. A separate channel panel for the channel chosen will not be created.
 -	**Scale Factor** field. The user can choose to apply a scale factor to every image. This scaling process is equivalent to using the ‘Scale…’ command in ImageJ. Although the ‘Scale…’ command in ImageJ has a few options for interpolation method, QuickFigures simply uses the default (Bilinear interpolation). 
@@ -139,7 +139,7 @@ The **Recreate All Panels** dialog allows the user to change the options for gen
 -	**Ideal number of columns** field. A user sets a limit on the number of columns created. The newly created panels are not to occupy more than the number of columns set here.
 -	**Frames and Slices tab** If any of the multidimensional images used for the figure contain more than a single time frame or more than a single optical section, this tab will appear. A user can change what frames or slices are used by typing into the field. One can type the numbers as a list, write in a range or a formula (examples are shown in the dialog). A separate subtab for each source image will appear. If the source image(s) contain one channel and many frames or slices, the dialog will open with this tab in focus.
 #### Channel Use Dialog
-The Channel Use Dialog allows the user to change how the channels are merged to create the image panels. Although it contains similar options to the Re-create panels dialog, the channel use dialog only changes how existing panels appear and does not create new panels nor delete old ones. Options in this dialog include Channel Color Mode, Don’t Merge These Channel(s) and a Merge Each Channel With. Each work as described above for the re-create panels dialog.
+The **Channel Use** Dialog allows the user to change how the channels are merged to create the image panels. Although it contains similar options to the Re-create panels dialog, the channel use dialog only changes how existing panels appear and does not create new panels nor delete old ones. Options in this dialog include **Channel Color Mode**, **Don’t Merge These Channel(s)** and a **Merge Each Channel With**. Each work as described above for the re-create panels dialog.
 #### Display Range Dialog
 Display range dialog windows are used to change the display range for one or more channels. A user can open them using popup menus that appear when one right clicks on an image. These menu items are equivalent to the “Min/Max…” and “Window/Level…” commands in ImageJ. The window functions similarly to the ImageJ versions except that both merged images and split channel panels are adjusted in the same way. Depending on which channels are present in the image panel that was clicked on, these dialogs may have multiple tabs for different channels. Depending on which popup menu was used to open these windows, the adjustments may apply to either one source image or multiple source images. The target images for a display range dialog do not change while the dialog is open (unlike the ImageJ equivalent).
 #### Crop Dialog
@@ -210,6 +210,7 @@ Several types of shapes can be drawn within QuickFigures. Shapes may be resized 
 ### Plot Package 
 The QuickFigures Plot package allows the user to create and edit about a dozen different styles of plots. Although the Plot Package is fully functional, it is less powerful and somewhat less convenient than commercial software such as Prism. Work to improve the plot package is in progress. Any ideas and suggestions are welcome. 
 Assuming the plot package is installed, a **Plots** menu will appear in the QuickFigures menu bars. The Plots menu contains submenus for each general category of plot. The categories are:  XY Plots, Column Plots, Grouped Plots and Kaplan-Meier Plots. Within these submenus, a user can create a plot from either an excel file or example data. A user may choose the **Show Example Data** menu option in order to understand the excel data format needed by QuickFigures Plot Package. Alternatively, a user may use the **New Data Table** option to open a window for pasting or typing in data (copy/paste shortcuts work within the data table). After a user has created a plot, the plot objects may be edited. Each plot contains a rectangular plot area, two axes, a plot layout, labels and various objects within the plot (points, bars, error bars). Double clicking on the x axis or the y axis will bring up a dialog window for changing the appearance of that axis. Right clicking on either a plot area or an object within the plot brings up popup menus for every type of plot edit. Depending on the type of plot and what objects that plot contains, the exact contents of the popup menus will differ. Although most of the options in these submenus can be undone, a few of the options in the “Data” submenu cannot be undone (work in progress). 
-The **T-Test Tool** will also appear in the main toolbar if the Plot Package is installed. Assuming that the Math3 package is also installed, a user should be able to perform a T-test simply by clicking on one data series in the plot and dragging the mouse to anther data series. 
-The **Swap Plot Columns Tool** will also appear in the main toolbar if the Plot Package is installed. This tool can be used to re-order the data series within plot by dragging and dropping.
-The **Plot Objects** submenu will appear in the Selected Item(s) menu. Each menu item in this submenu will open a dialog to edit a certain type of plot object (assuming that type is selected).
+#### Plot package tools
+-	The **T-Test Tool** will also appear in the main toolbar if the Plot Package is installed. Assuming that the Math3 package is also installed, a user should be able to perform a T-test simply by clicking on one data series in the plot and dragging the mouse to anther data series. 
+-	The **Swap Plot Columns Tool** will also appear in the main toolbar if the Plot Package is installed. This tool can be used to re-order the data series within plot by dragging and dropping.
+-	The **Plot Objects** submenu will appear in the Selected Item(s) menu. Each menu item in this submenu will open a dialog to edit a certain type of plot object (assuming that type is selected).
