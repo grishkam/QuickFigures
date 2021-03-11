@@ -190,6 +190,7 @@ there are many types of text items. The major types are described below.
 **Simple Text Items** are fragments of text with only one font, one line, one color and one format.
 **Complex Text Items** may contain multiple lines of text with sections that may be superscript, subscript, different font styles, underline, strikethrough, or colors. Row Labels, Column Labels and Plot labels are special kinds of complex labels.
 **Channel Labels** a special kind of text item that indicates the color and name of a channel. Label Color may change if user changes a channel’s color. The merge label can take several forms (options for merge label appearance are accessible in the mini toolbars or the dialog windows).
+#### Shapes
 Several types of shapes can be drawn within QuickFigures. Shapes may be resized or rotated using the handles. The main shape categories are summarized below.
 -	Rectangle is the simplest shape available. Contains several handles for resizing the rectangle. An orange handle allows user to rotate the rectangle. A magenta colored handle provides the user a means of changing the stroke width. Double clicking on a handle opens a dialog window where specific values can be entered in place of dragging the handle. 
 -	Rounded Rectangle- Works similarly to the rectangle. Two additional handles for altering the rounding are present on this shape.
