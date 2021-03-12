@@ -58,7 +58,7 @@ public class SetAngle extends BasicMultiSelectionOperator {
 	private static final int[] options2=new int[] {-45, -30, 0, 30, 45, 60, 90, 135, 180, 210, 270};
 	
 	private static final int[] optionsLimited=new int[] { 0, 30, 45, 60, 90, 135, 180, 210, 270};
-	private static final int[] optionsVeryLimited=new int[] { 0, 30, 320};
+	private static final int[] optionsVeryLimited=new int[] { 0, 0, 30, 0, 30};
 	
 	
 	public static BasicMultiSelectionOperator[] createManyAngles() {

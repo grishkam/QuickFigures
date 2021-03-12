@@ -19,12 +19,6 @@
  * Version: 2021.1
  */
 package illustratorScripts;
-
-
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-
-import logging.IssueLog;
 /**a java class that generates scripts to create and modify a text frame item object in 
 adobe illustrator*/
 public class TextRange extends IllustratorObjectRef {

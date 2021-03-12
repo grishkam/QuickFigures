@@ -28,6 +28,7 @@ import logging.IssueLog;
   adobe illustrator*/
 public class CharAttributesRef extends IllustratorObjectRef {
 	
+	/**Sets the font style and the family to fit the given font*/
 	String setfontStyleandFamily(Font f) {
 		String fullname = f.getFontName();
 		if (fullname.equals("SansSerif")) fullname="SerifBold";
@@ -38,12 +39,12 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return output;
 	}
 	
-	/**sets the font
+	/**sets the font. old version that may be removed or reused later
 	 * @param family
 	 * @param style
 	 * @return
 	 */
-	private String setFont(String family, int fontStyle) {
+	 String setFont(String family, int fontStyle) {
 		String styleName="Regular";
 		if (fontStyle==Font.BOLD) styleName="Bold";
 		if (fontStyle==Font.ITALIC) styleName="Italic";
@@ -52,18 +53,17 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return setFont(family,styleName);
 	}
 
-	/**given a full font name, sets the font*/
+	/**Adds series of code that helps find a font with the given name
+	 * within the illustrator fonts
+	 * given a full font name, sets the font*/
 	private String findFont(String fullname) {
-		IssueLog.log("working on font "+fullname);
 		String[] split = fullname.split(" ");
 		String name=split[0].toLowerCase();
 		String style="Regular";
 		if (split.length>1)style=split[1].toLowerCase();
-		else {style="Regular";
-		IssueLog.log("");}
+		else {style="Regular";}
 		if(split.length>2)style+=" "+split[2].toLowerCase();
-		IssueLog.log(split.length+" long");
-		IssueLog.log("will set style to "+style);
+		
 		return setFont(name, style);
 	}
 

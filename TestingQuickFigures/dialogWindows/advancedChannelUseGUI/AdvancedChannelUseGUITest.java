@@ -94,7 +94,7 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 						ChannelListDisplay lc = dialog.getJListForChannels();
 						ChannelEntry chanI=mergePanel.getChannelEntryList().get(i);
 						ChannelEntry chanJ=mergePanel.getChannelEntryList().get(j);
-						CombinedEdit undo = lc.swapItems(chanI, chanJ);
+						 lc.swapItems(chanI, chanJ);
 						/**Checks to determine if channel switch occured*/
 						assert(chanI==mergePanel.getChannelEntryList().get(j));
 						assert(chanJ==mergePanel.getChannelEntryList().get(i));

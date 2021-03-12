@@ -18,7 +18,7 @@ import ultilInputOutput.FileChoiceUtil;
 	
 	
 	
-	TestExample testCase=TestExample.MANY_ANGLE_COMPLEX_TEXT;//which cases to test. set to null if all should be tested
+	TestExample testCase=null;//which cases to test. set to null if all should be tested
 
 
 	@Test

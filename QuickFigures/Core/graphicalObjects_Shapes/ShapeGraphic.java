@@ -376,7 +376,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		
 		pi.setName(getName());
 		pi.setStoke((int)getStrokeWidth());
-		if (this.getStrokeWidth()<0) pi.setStoke(0);
+		if (this.getStrokeWidth()<=0) {pi.setStoke(0);pi.setNoColorStroke();}
+			
 		
 		if (getAngle()!=0) {
 			pi.rotate((getAngle()*(180/Math.PI)));

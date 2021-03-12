@@ -662,9 +662,9 @@ protected Point2D getDrawnLineEnd2() {
 
 
 /**creates a shape graphic that corresponds to an arrow head*/
-	private BasicShapeGraphic getHead1DrawShape(int headnumber) {
+	private ShapeGraphic getHead1DrawShape(int headnumber) {
 		BasicShapeGraphic b = getBackGroundShape();
-		BasicShapeGraphic out = b;
+		ShapeGraphic out = b;
 		
 		ArrowHead head = this.getHead(headnumber);
 		
@@ -673,8 +673,10 @@ protected Point2D getDrawnLineEnd2() {
 		if (head.isBarHead()) {
 			
 		}
-		if (head.getArrowStyle()==OPEN_HEAD||head.getArrowStyle()==REVERSE_OPEN_HEAD||head.isLineHead()||outline==OUTLINE_OF_NORMAL_HEAD) {
-			out=BasicShapeGraphic.createStroked(this, s);
+		boolean strokeHead = head.getArrowStyle()==OPEN_HEAD||head.getArrowStyle()==REVERSE_OPEN_HEAD||head.isLineHead();
+		if (strokeHead||outline==OUTLINE_OF_NORMAL_HEAD) {
+			out=BasicShapeGraphic.createStroked(this, s).createPathCopy();
+			out.setClosedShape(false);
 		}else 
 		if (head.getArrowStyle()==NORMAL_HEAD||head.getArrowStyle()==REVERSE_HEAD||head.isTail()||head.isSquareHead()||head.isCircleHead()||head.isTriangleHead()||head.isPolygonHead()||head.halfCircleTail()) {
 			out=BasicShapeGraphic.createFilled(getFillColor(), s);
@@ -683,12 +685,13 @@ protected Point2D getDrawnLineEnd2() {
 		if (outline==OUTLINE_OF_NORMAL_HEAD) {
 			out.copyAttributesFrom(b);
 		}
-		
-		
-		
-		out.setShape(s);
+		else
+		if (out instanceof BasicShapeGraphic)
+			((BasicShapeGraphic) out).setShape(s);
+		if (head.isTail()) out=out.createPathCopy();
 		out.setAntialize(true);
 		out.setClosedShape(notopen);
+		if(strokeHead) out.setClosedShape(false);
 		out.setDashes(new float[] {});
 		return out;
 	}
@@ -777,7 +780,7 @@ protected Point2D getDrawnLineEnd2() {
 		 } else {
 			 Object output = super.toIllustrator(aref2);
 			 if (drawsFirstHead()) this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);
-		 		if (drawsSecondHead()) this.getHead1DrawShape(SECOND_HEAD).toIllustrator(aref2);
+		 	if (drawsSecondHead()) this.getHead1DrawShape(SECOND_HEAD).toIllustrator(aref2);
 			return output; 
 		 }
 	}

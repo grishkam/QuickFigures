@@ -36,7 +36,6 @@ import javax.swing.Icon;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_Shapes.ShapeGraphic;
 import icons.TreeIconWithText;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.TextFrame;

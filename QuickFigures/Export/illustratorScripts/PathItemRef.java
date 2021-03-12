@@ -158,7 +158,7 @@ public class PathItemRef extends IllustratorObjectRef {
 	}
 	
 	
-	/**Adds a given pathpoint list*/
+	/**Adds a given pathpoint list to the accumulated illustrator script*/
 	public void addPathWithCurves(IllustratorObjectRef aref, PathPointList pi, boolean create, boolean drawclose) {
 		if (create)createItem(aref);
 		
@@ -188,8 +188,8 @@ public class PathItemRef extends IllustratorObjectRef {
 		this.addPathWithCurves(aref, list, create, drawclose);
 	}
 	
-	/***/
-	public void addPathWithCurves(ArtLayerRef aref, PathIterator pi, boolean create, boolean drawclose) {
+	/**
+	private void addPathWithCurves(ArtLayerRef aref, PathIterator pi, boolean create, boolean drawclose) {
 		if (create)createItem(aref);
 		double[] d=new double[6];
 		while (!pi.isDone()) {
@@ -204,7 +204,7 @@ public class PathItemRef extends IllustratorObjectRef {
 			
 			pi.next();
 		}
-	}
+	}*/
 	
 	PathPointRef addPathFromIterat0rSegment(int type, double[] d, boolean close) {
 		PathPointRef pp = new PathPointRef(this);

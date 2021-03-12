@@ -314,7 +314,7 @@ public class FitLayout extends BasicMultiSelectionOperator {
 				if (undoManager!=null)
 				undoManager.addEdit(undo);
 			} catch (Exception e) {
-				IssueLog.logT(e);
+				//does not add to an undo manager if none is available
 			}
 			
 			return;

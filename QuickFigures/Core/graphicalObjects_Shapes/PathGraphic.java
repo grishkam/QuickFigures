@@ -57,7 +57,6 @@ import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import locatedObject.ScalesFully;
 import menuUtil.PopupMenuSupplier;
-import messages.ShowMessage;
 import objectCartoon.ShapeMaker;
 import popupMenusForComplexObjects.PathGraphicMenu;
 import undo.AbstractUndoableEdit2;

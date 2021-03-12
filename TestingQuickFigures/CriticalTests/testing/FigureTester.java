@@ -12,8 +12,10 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
+import actionToolbarItems.ChannelLabelButton;
 import actionToolbarItems.EditScaleBars;
 import actionToolbarItems.SetAngle;
+import actionToolbarItems.SetLayoutProperty;
 import actionToolbarItems.SuperTextButton;
 import addObjectMenus.FigureAdder;
 import appContext.CurrentAppContext;
@@ -67,7 +69,7 @@ public class FigureTester {
 								new Rectangle(300, 200, 300,250), 
 								new Rectangle(300, 200, 300,250),
 								new Rectangle(380, 390, 300,250)};
-	public boolean ignoreTemplate;
+	public static boolean ignoreTemplate;
 	
 	/**
 	 * @return
@@ -299,7 +301,7 @@ public class FigureTester {
 		setup();
 		FigureTester figureTester = new FigureTester();
 		
-		 figureTester.ignoreTemplate=true;
+		 FigureTester.ignoreTemplate=true;
 		showExamples(figureTester);
 		 
 		 /**figureTester.ignoreTemplate=false;
@@ -320,17 +322,17 @@ public class FigureTester {
 		 figureTester. createFigureFromExample1CImages();
 		 CurrentFigureSet .updateActiveDisplayGroup();
 		 
-		 figureTester. createFromExample3Images(false);
+		 figureTester. createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
 		 CurrentFigureSet .updateActiveDisplayGroup();
 		 
-		 figureTester. createFromExample3Images(true);
+		 figureTester. createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
 		 CurrentFigureSet .updateActiveDisplayGroup();
 	}
 
 	/**
 	 * @param figureTester
 	 */
-	public void createFromExample3Images(boolean diversidy) {
+	public void createFromExample3Images(TestExample manySplitChannelScramble) {
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
 			
 		int space=200;
@@ -352,9 +354,14 @@ public class FigureTester {
 		ArraySorter.removeThoseNotOfClass(listObuects,DefaultLayoutGraphic.class);
 		 new FitLayout(FitLayout.ALIGN_GRID).alignObjects(listObuects);;
 		 
-		 if(diversidy)
-			 diversifyFigures(diw, listObuects, list);
-			
+		 
+		 if(manySplitChannelScramble==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)
+			 diversifyFigures(diw, listObuects, list, true);
+		 
+		 if(manySplitChannelScramble==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE_LIGHT)
+			 diversifyFigures(diw, listObuects, list, false);
+		 
+		 new ZoomFit(ZoomFit.SCREEN_FIT).performActionDisplayedImageWrapper(diw);;
 		 
 		 CurrentFigureSet .updateActiveDisplayGroup();
 		 
@@ -366,19 +373,12 @@ public class FigureTester {
 	 * @param listObuects
 	 * @param list 
 	 */
-	public void diversifyFigures(ImageWindowAndDisplaySet diw, ArrayList<LocatedObject2D> listObuects, ArrayList<FigureOrganizingLayerPane> list) {
-		int i=0;
-		 
-		 for(LocatedObject2D layout: listObuects) {
-			 if(layout instanceof DefaultLayoutGraphic) {
-				 DefaultLayoutGraphic dl=(DefaultLayoutGraphic) layout;
-				 dl.generateCurrentImageWrapper();
-				 dl.getEditor().setHorizontalBorder(dl.getPanelLayout(), 12+2*i);
-				 dl.getEditor().setVerticalBorder(dl.getPanelLayout(), 12-2*i);
-			
-			 }
-		 }
-		 
+	public void diversifyFigures(ImageWindowAndDisplaySet diw, ArrayList<LocatedObject2D> listObuects, ArrayList<FigureOrganizingLayerPane> list, boolean angles) {
+		
+		ArrayList<LocatedObject2D> listObuects0 = diw.getTheSet().getLocatedObjects();
+		ArraySorter.removeThoseNotOfClass(listObuects0,DefaultLayoutGraphic.class);
+		 TestShapes.diversify(listObuects0, SetLayoutProperty.createManyBorders());
+		
 		 /**changes the color modes*/
 		 for (int j=0; j<list.size(); j++) {
 			 if(j%2==0)
@@ -394,18 +394,19 @@ public class FigureTester {
 		 
 		 listObuects2 = diw.getTheSet().getLocatedObjects();
 			ArraySorter.removeThoseNotOfClass(listObuects2,ChannelLabelTextGraphic.class);
-		 diversifyText(listObuects2);
+		 diversifyText(listObuects2, angles);
+		 TestShapes.diversify(listObuects2, ChannelLabelButton.getAllMergeLabelFroms());
 		 
 		 listObuects2 = diw.getTheSet().getLocatedObjects();
 			ArraySorter.removeThoseNotOfClass(listObuects2,RowLabelTextGraphic.class);
-		 diversifyText(listObuects2);
+		 diversifyText(listObuects2, angles);
 	}
 
 	/**
 	 * @param listObuects2
 	 */
-	public void diversifyText(ArrayList<LocatedObject2D> listObuects2) {
-		TestShapes.diversify(listObuects2, SetAngle.createManyAnglesVeryLimited());
+	public void diversifyText(ArrayList<LocatedObject2D> listObuects2, boolean angles) {
+		if (angles)TestShapes.diversify(listObuects2, SetAngle.createManyAnglesVeryLimited());
 		 TestShapes.diversify(listObuects2, SuperTextButton.getForDims(null));
 		 TestShapes.diversify(listObuects2, SuperTextButton.getForFonts(new TextGraphic()));
 		 TestShapes.diversify(listObuects2, SuperTextButton.getForFontSizes());
@@ -423,8 +424,9 @@ public class FigureTester {
 	}
 	
 	public static TestProvider[] getTests() {
+		ignoreTemplate=true;
 		return new TestProvider[] {new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
-				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL)};
+				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -443,6 +445,7 @@ public class FigureTester {
 		
 		public DisplayedImage createExample() {
 			CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
+			
 			if (form==TestExample.SPLIT_CHANNEL_FIGURE)
 			new FigureTester(). createFigureFromExample1AImages();
 			if (form==TestExample.MERGE_PANEL_FIGURE)
@@ -450,9 +453,9 @@ public class FigureTester {
 			if (form==TestExample.FIGURE_WITH_INSETS)
 				new FigureTester(). createFigureFromExample1CImages();
 			if (form==TestExample.MANY_SPLIT_CHANNEL)
-				new FigureTester().createFromExample3Images(false);
+				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
 			if (form==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)
-				new FigureTester().createFromExample3Images(true);
+				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
 			
 			return  CurrentFigureSet.getCurrentActiveDisplayGroup();
 		}

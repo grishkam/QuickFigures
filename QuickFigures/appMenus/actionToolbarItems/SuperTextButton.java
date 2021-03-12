@@ -582,7 +582,7 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 			for(int i=0; i<sizes.length; i++) {
 				SuperTextButton c = new SuperTextButton(null, RESIZES_FONT_TO, sizes[i]);
 				out[i]=c;
-				IssueLog.log("font size set "+c.startFontSize);
+				
 			}
 			
 			return out;
