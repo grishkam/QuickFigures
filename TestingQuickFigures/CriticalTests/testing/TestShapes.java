@@ -150,32 +150,32 @@ public class TestShapes {
 if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		
 		
-		ComplexTextGraphic createRainbow = ComplexTextGraphic.createRainbow("Hello World 2 day", new int[] {3,4,4},  new Color[] {Color.red, Color.blue, Color.green});
-		 createRainbow.getParagraph().addLineFromCodeString("line 2", Color.pink);
+		ComplexTextGraphic createRainbow = ComplexTextGraphic.createRainbow("Hello", new int[] {1,1,2},  new Color[] {Color.red, Color.blue, Color.green});
+		createRainbow.setFontSize(10);
+		 createRainbow.getParagraph().addLineFromCodeString("style", Color.pink);
 		 
-		System.out.println("starting to create complex text for image ");
+		
 		 long time=System.currentTimeMillis();
 		 
-		createRainbow.getParagraph().get(0).get(3).makeSuperScript();
-		createRainbow.getParagraph().get(0).get(4).makeSubScript();
-		createRainbow.getParagraph().get(0).get(2).setUnderlined(true);
-		createRainbow.getParagraph().get(0).get(5).setStrikeThough(true);
-		createRainbow.getParagraph().get(1).get(0).setUniqueStyle(Font.ITALIC);
+		 createRainbow.getParagraph().get(0).addSegment("Super", Color.DARK_GRAY, TextLineSegment.SUPER_SCRIPT);
+		 createRainbow.getParagraph().get(0).addSegment("Sub", Color.DARK_GRAY, TextLineSegment.SUB_SCRIPT);
+		 createRainbow.getParagraph().get(0).addSegment("Under", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUnderlined(true);;
+		 createRainbow.getParagraph().get(0).addSegment("Strike", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setStrikeThough(true);
+		 
+		//createRainbow.getParagraph().get(1).addSegment("Plain", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.PLAIN);;
 		createRainbow.getParagraph().get(1).addSegment("Bold", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.BOLD);;
 		createRainbow.getParagraph().get(1).addSegment("Italic", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.ITALIC);;
 		createRainbow.getParagraph().get(1).addSegment("B+I", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.ITALIC+Font.BOLD);;
-		
+		createRainbow.getParagraph().get(1).addSegment("Plain", Color.DARK_GRAY, TextLineSegment.NORMAL_SCRIPT).setUniqueStyle(1+Font.PLAIN);;
 		 
-		System.out.println("finished creating text "+(System.currentTimeMillis()-time));
 		
 	
-		rect1 = new Rectangle(0,0, 80, 30);
 		LocatedObject2D[] s = new LocatedObject2D[] { createRainbow};
 		
-		BasicLayout bl = new BasicLayout( 5, 5, 20, 30, 70, 70, true);
+		BasicLayout bl = new BasicLayout( 5, 5, 40, 80, 70, 80, true);
 		
 		 time=System.currentTimeMillis();
-		addMultipleVersions(ids.getImageAsWrapper(), s,createManyAngles(), 50, 50, bl);
+		addMultipleVersions(ids.getImageAsWrapper(), s,createManyAngles(), 20, 70, bl);
 		System.out.println("finished creating multiple angle versions of text "+(System.currentTimeMillis()-time));
 		
 		
@@ -246,6 +246,8 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		}
 	}
 	
+	
+	/**Adds several objects to the displayed worksheet, */
 	public static void  addMultipleVersions(ImageWindowAndDisplaySet h, LocatedObject2D[] objects, MultiSelectionOperator[] o1, double dx, double dy, Rectangle r) {
 		ImageWorkSheet l = h.getImageAsWrapper();
 		int row = objects.length;

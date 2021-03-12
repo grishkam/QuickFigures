@@ -450,8 +450,7 @@ public class ComplexTextGraphic extends TextGraphic {
 			Point2D p2 = extendPoint(seg2.transformedBaseLineStart, seg2.transformedBaseLineEnd, distanceChange);
 			ti.createLinePathItem(aref, seg2.transformedBaseLineStart, p2);
 			
-			int count=0;
-			int length=0;
+		
 			for(TextLineSegment seg:line) {
 			
 		
@@ -464,8 +463,8 @@ public class ComplexTextGraphic extends TextGraphic {
 					tr.setContents2(seg.getText());
 					tr.getCharAttributesRef().setfont(seg.getFont());
 					tr.getCharAttributesRef().setFillColor(this.getDimmedColor(seg.getTextColor()));
-					if (seg.isUnderlined()) tr.getCharAttributesRef().setUnderline(true);
-					if (seg.isStrikeThrough()) tr.getCharAttributesRef().setStrikeThrough(true);
+					 tr.getCharAttributesRef().setUnderline(seg.isUnderlined());
+					tr.getCharAttributesRef().setStrikeThrough(seg.isStrikeThrough());
 					if (seg.isSuperscript()) {
 						
 						tr.getCharAttributesRef().setSuperScript();
@@ -481,9 +480,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		
 					
 					
-					count++;
-					
-					length+=seg.getText().length();
+				
 			}
 			ti.removeInsertionPointFromRange();
 			if (getAngle()!=0) {
