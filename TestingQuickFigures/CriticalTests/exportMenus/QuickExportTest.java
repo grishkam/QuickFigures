@@ -49,7 +49,7 @@ abstract class QuickExportTest {
 		QuickExport qe=createExporter();
 		int count=1;
 		ArrayList<String> createsFiles=new ArrayList<String>(); 
-		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsImages();
+		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsAndImages();
 		for(TestProvider t: FigureTester.getTests()) {
 			testsCases.add(t);
 		}

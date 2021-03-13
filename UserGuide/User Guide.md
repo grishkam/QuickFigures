@@ -106,15 +106,19 @@ Popup menus appear when a user right clicks on image panels, insets, layouts, or
 6.	**Add Shape** submenu along with the **Add Scale Bar**, **Add Text** options are part of the image panel popup menus. Added object are placed above the panel and subject to the same layout.
 7.	**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. See supplemental user guide for details of these options (not yet written).
 8.	**Attach Item** and **Release Item** submenus appear in the popup menus for layouts or image panels if there is an object in position for attachment (or already attached). See section on attached items for details. Since labels and scale bars are automatically attached to panels and can be moved by drag/drop, users should rarely have any need to attach/detach objects manually. If not relevant object is available, these submenus will not appear.
+
 ### Attached Items
 Certain items like labels and scale bars are 'attached' to image panels (or attached to layouts). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their parent panel. Attached item positions can be edited in a few ways.
--	Dragging the attached item directly. Normal mouse drags will alter the type of attachment location. For example, an item that is anchored at the lower right of a parent panel can be moved to the equivalent location in the upper right by a simple mouse drag. A user can also move an item from one parent panel to another or detach the item from its parent by dragging and dropping.
--	Using the attached item handle. Attached scale bars and text items will have an additional handle that allows the user to alter their attachment position (this appears as a red dot). By clicking and dragging within the red dot, a user can make small adjustments to the attachment position. A user can also click just outside of the red dot to change the type of location.
--	Using the attachment **Position** dialog. A menu item to display this dialog will be present in the popup menu for the attached item. (as well as other menus and mini toolbars). A simpler version of this dialog will also appear in the position tab of other dialogs. A user can click and drag the blue square within the dialog to change the base location (from the Upper Left to Top for example). Finer adjustment to the location can be done with the sliders and numeric fields in this dialog. The attachment position dialog can also be used to assign the same attachment position to many labels ensuring consistent spacing of labels (using the checkbox is present in the complete dialog). Labels can also be attached to a row, column, or panel of a layout. The dialog also contains an option for switching the attachment position between row, column and panel modes (rarely used).
+  1.	Dragging the attached item directly. Normal mouse drags will alter the type of attachment location. For example, an item that is anchored at the lower right of a parent panel can be moved to the equivalent location in the upper right by a simple mouse drag. A user can also move an item from one parent panel to another or detach the item from its parent by dragging and dropping.
+  2.	Using the attached item handle. Attached scale bars and text items will have an additional handle that allows the user to alter their attachment position (this appears as a red dot). By clicking and dragging within the red dot, a user can make small adjustments to the attachment position. A user can also click just outside of the red dot to change the type of location.
+  3.	Using the attachment **Position** dialog. A menu item to display this dialog will be present in the popup menu for the attached item. (as well as other menus and mini toolbars). A simpler version of this dialog will also appear in the position tab of other dialogs. A user can click and drag the blue square within the dialog to change the base location (from the Upper Left to Top for example). Finer adjustment to the location can be done with the sliders and numeric fields in this dialog. The attachment position dialog can also be used to assign the same attachment position to many labels ensuring consistent spacing of labels (using the checkbox is present in the complete dialog). Labels can also be attached to a row, column, or panel of a layout. The dialog also contains an option for switching the attachment position between row, column and panel modes (rarely used).  
+  ![image](images/Dialogs/PositionDialog.png)
+
 ### Editing Figure Layouts
 Figure layouts can be edited in three ways 1) by clicking the layout and dragging the handles or 2) by using the tools in the 'layout tools' toolbar or 3) by right clicking on the layout and using the options in popup menu. Since all three of these methods allow the same types of edits, one does not need to learn every single method.
 #### 1) Editing using handles.
-A user can click on a figure layout just like any other object. Several kinds of handles allow the user to edit the figure layout simply by clicking and dragging. A user may also double click on layout handle to display a dialog where specific measurements can be entered.  The handles available for a standard figure layout are…
+A user can click on a figure layout just like any other object. Several kinds of handles allow the user to edit the figure layout simply by clicking and dragging. A user may also double click on layout handle to display a dialog where specific measurements can be entered.  The handles available for a standard figure layout area are detailed below
+
 -	Panel Handles. Alter the distance between panels. The first panel handle can be used to move the entire figure.
 -	Layout location handle. This handle (near the upper left of the layout) can also be used to move the entire figure
 -	↕↔. Row Swap Handles, Column Swap Handles, and Panel Swap handles. allow the user to swap the contents of two rows, columns or panels within the layout.
@@ -123,9 +127,13 @@ A user can click on a figure layout just like any other object. Several kinds of
 -	Repack panels handle. This handle also adds or subtracts the number of rows and columns. However, this handle also redistributes the objects within the layout.
 -	Label Space handles. The spaces above, to the left, below, and to the right of the panels are meant for labels. Although these spaces are adjusted automatically, the user is also allowed to make manual changes using these handles.
 -	Panel Size handles are on the bottom or right edges of panels. Although panel sizes are adjusted automatically, in the user may also perform manual edits using these handles.
--	Layout scale handle. Scales the layout and all objects within it. This handle is more convenient than selecting all the objects and then scaling them.
+-	Layout scale handle. Scales the layout and all objects within it. This handle is more convenient than selecting all the objects and then scaling them.  
+![image](images/layout/LayoutHandles.png) 
+
 #### 2) Editing layouts using the layout tools.
-An addition toolbar for layout tools is available. The user can go to Toolbars->Show Layout Tools to display this toolbar. These tools accomplish the same specific tasks as the layout handles. Although the layout handles are more convenient, the layout tools are somewhat easier to learn (since each tool icon demonstrates the function of the tool and each tool performs exactly one function). None of the layout tools are essential. 
+An addition toolbar for layout tools is available. The user can go to Toolbars->Show Layout Tools to display this toolbar. These tools accomplish the same specific tasks as the layout handles. Although the layout handles are more convenient, the layout tools are somewhat easier to learn (since each tool icon demonstrates the function of the tool and each tool performs exactly one function). None of the layout tools are essential.
+
+![image](images/layout/LayoutTools.png)  
 -	**Select layout** tool. This tool will only select layouts and ignore anything else. Although a user can always click on and select a layout, this tool becomes convenient if most of a layout is behind other objects (such as panels). After clicking on a layout with this tool, a user can edit the layout by clicking, dragging the handles, right clicking, double clicking and so on. The other layout tools cannot be used in this way.
 -	**Adjust border** tool. This tool alters the distance between rows/columns of the clicked layout.  
 -	**Swap Row Tool**, Swap Column Tool and Swap Panel Tool. These tools swap the contents of two rows, two columns or two panels.
@@ -135,8 +143,11 @@ An addition toolbar for layout tools is available. The user can go to Toolbars->
 -	**Label Text Tools**. Allow the user to add row, column or panel labels.
 -	**Scale layout** tool. Scales the figure.
 -	**Expert tools** (see Appendix)
+
 #### 3) **Editing the layout using popup menus and dialogs**
 A popup menu will appear if the user right clicks on a layout (using the object selector tool). The **Edit Layout** submenu allows the user to perform the same tasks as the layout handles and layout tools. Different dialog windows will appear for each menu item. Within the dialog windows, users may input specific numbers for the measurements of their layouts. If a user double clicks on a layout, (or a layout handle) similar dialog windows will appear. Depending on the location being clicked, a different dialog will be shown. 
+![image](images/layout/LayoutEditMenu.png)  
+
 #### 4) **Layout content** 
 Layout handles, layout tools and menus only affect objects that are within the layout. Objects that are both within the same parent layer as a layout and within the bounds of the layout are treated as within the layout. Although the layer structure is organized automatically, a user can also manually move objects between layers using the layers window (see section on layers window). 
 ### Specialized Dialog windows
@@ -149,7 +160,7 @@ The **Recreate All Panels** dialog allows the user to change the options for gen
 -	**Don't Merge These Channel(s)**  If a merge panel is being made, a user can choose not to include every channel in the merged image. A user can select one or more channels using this option.
 -	**Channel Color Mode** options changes the color mode for the channel panels between colorized and greyscale.
 -	The **Merge Each Channel With** option. Split channel figures sometimes contain two channels per panel. A user can select one channel to merge into every channel panel. A separate channel panel for the channel chosen will not be created.
--	**Scale Factor** field. The user can choose to apply a scale factor to every image. This scaling process is equivalent to using the 'Scale…' command in ImageJ. Although the 'Scale…' command in ImageJ has a few options for interpolation method, QuickFigures simply uses the default (Bilinear interpolation). 
+-	**Scale Factor** field. The user can choose to apply a scale factor to every image. This scaling process is equivalent to using the 'Scale...' command in ImageJ. Although the 'Scale…' command in ImageJ has a few options for interpolation method, QuickFigures simply uses the default (Bilinear interpolation). 
 -	The **Panel Pixel Density** field determines the final pixel density of the newly created panels. This is equivalent to resizing image panel objects in Adobe Illustrator until the panels reach a certain pixel density (by dragging the corners). Changing this field will also resize the panels. This is not to be confused with the Re-Set Pixel density menu item.
 -	**Ideal number of columns** field. A user sets a limit on the number of columns created. The newly created panels are not to occupy more than the number of columns set here.
 -	**Frames and Slices tab** If any of the multidimensional images used for the figure contain more than a single time frame or more than a single optical section, this tab will appear. A user can change what frames or slices are used by typing into the field. One can type the numbers as a list, write in a range or a formula (examples are shown in the dialog). A separate subtab for each source image will appear. If the source image(s) contain one channel and many frames or slices, the dialog will open with this tab in focus.
@@ -158,11 +169,15 @@ The **Channel Use** Dialog allows the user to change how the channels are merged
 
 #### Display Range Dialog
 Display range dialog windows are used to change the display range for one or more channels. A user can open them using popup menus that appear when one right clicks on an image. These menu items are equivalent to the **Min/Max** and **Window/Level** commands in ImageJ. The window functions similarly to the ImageJ versions except that both merged images and split channel panels are adjusted in the same way. Depending on which channels are present in the image panel that was clicked on, these dialogs may have multiple tabs for different channels. Depending on which popup menu was used to open these windows, the adjustments may apply to either one source image or multiple source images. The target images for a display range dialog do not change while the dialog is open (unlike the ImageJ equivalent).
+![image](images/Dialogs/DisplayRangeDialog.png)
 #### Crop Dialog
-The Crop dialog window provides a way to change the crop area and rotation angle used for a source image. A user can either input numbers in the fields to the right of the window or drag the handles of rectangle. Depending on the image, the dialog may also contain option to change which channel, frame and slice is being shown while one edits the crop area. At the bottom of the window, there is an **Eliminate Cropping Rectangle** button which offers the options not to crop (nor rotate). A few different popup menu options will open a crop dialog. 
+The Crop dialog window provides a way to change the crop area and rotation angle used for a source image. A user can either input numbers in the fields to the right of the window or drag the handles of rectangle. Depending on the image, the dialog may also contain option to change which channel, frame and slice is being shown while one edits the crop area. At the bottom of the window, there is an **Eliminate Cropping Rectangle** button which offers the options not to crop (nor rotate). A few different popup menu options can open a crop dialog. 
+![image](images/Dialogs/CropDialog.png)
 #### Layers Window
 The layers window contains a tree with objects and layers displayed with their names and icons. All objects in QuickFigures are organized into layers. Using the layers window (access via Show Layers menu option is in the Edit menu), a user can change the order of objects within a layer by clicking and dragging. Users can also add new objects/layers using a menu bar that is specific to the layers window. The layers window is most useful when creating illustrations or drawings. A user can manually create a layer using the menu bar, select that layer and then use the toolbar to draw objects within that layer.
-For automatically created figures, the layer structure is organized automatically and is critical for QuickFigures to work properly. Certain specialized layers perform other functions besides simply acting as passive containers. Removal of an automatically generated object (such as an image panel that is part of a split channel figure) from its specialized layer is not recommended as it can alter or turn off some of the specialized functions. For reference, ordinary layers are have a blue folder icon while specialized layers are colored differently. 
+For automatically created figures, the layer structure is organized automatically and is critical for QuickFigures to work properly. Certain specialized layers perform other functions besides simply acting as passive containers. Removal of an automatically generated object (such as an image panel that is part of a split channel figure) from its specialized layer is not recommended as it can alter or turn off some of the specialized functions. For reference, ordinary layers are have a blue folder icon while specialized layers are colored differently.  
+![image](images/Dialogs/Layers.png)
+
 ## The Menus and Menu Bar
 The **Menu Bar** contains only a few major menus. File, Edit, Selected Item(s) and Add.
 ### File Menu
@@ -195,7 +210,8 @@ The 'shape and text edit action tools' provide a quick way of making specific ty
 
 ### Object types 
 #### Scale bars 
-These can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles. Each scale bar has a special text object that displays the length of the scale bar. 
+These can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles (see diagram below). Each scale bar has a special text object that displays the length of the scale bar. As with other items, a scale bar specific popup menu will appear when one right clicks while a scale bar specific dialog will appear if one double clicks.
+![image](images/objects/ScaleBar.png)  
 
 #### Image Panels
 Image Panels display images. Image Panels may either be part of a figure or stand-alone objects. Those that are part of a figure may change appearance when the user changes channel colors or alters the display range for a channel. Users will rarely or never need to edit image panels directly. If a user wants to avoid accidental edits, that user may select the **Protect from mouse drags** checkbox in the options dialog for image panels. Image Panels may have a colored 'frame' drawn around them. A user can change the width of the frame by dragging the magenta handle. For precise alignment of image panels to layouts, a user can drag the center handle of the image panel and drop near the desired panel. While the user drags the center handle, a rectangle will appear in the destination location. If another image panel occupies the destination location, the locations of the two image panels will be swapped.
@@ -226,7 +242,9 @@ Several types of shapes can be drawn within QuickFigures. Shapes may be resized 
 -	Stars- Work similarly to the regular polygons. Except the number of points rather than the number of sides may be changed. Additional handles for altering the form of the star are present.
 -	Gear- Works similarly to the Ring and Regular Polygons. User may change the shape or the number of teeth by dragging or double clicking additional colored handles.
 -	Blob- A complex shape designed to mimic a natural looking form. Works similarly to the Stars.
--	Paths/Bezier Curves. A path of points. There are shapes that can take any form. These may be resized, rotated, or edited one point at a time. An arrowhead may be attached to the ends of a path using the popup menu. Anchor points and curve control points may be edited by clicking and dragging handles.
+-	Paths/Bezier Curves. A path of points. There are shapes that can take any form. These may be resized, rotated, or edited one point at a time. An arrowhead may be attached to the ends of a path using the popup menu. Anchor points and curve control points may be edited by clicking and dragging handles.  
+![image](images/objects/Shapes.png)   
+
 
 ### Plot Package 
 The QuickFigures Plot package allows the user to create and edit about a dozen different styles of plots. Although the Plot Package is fully functional, it is less powerful and somewhat less convenient than commercial software such as Prism. Work to improve the plot package is in progress. Any ideas and suggestions are welcome. 

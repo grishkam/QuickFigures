@@ -33,7 +33,7 @@ public class TestProvider {
 	}
 	
 	/**returns every example for shape tests*/
-	public static ArrayList<TestProvider> getStandardExportTestsImages() {
+	public static ArrayList<TestProvider> getStandardExportTestsAndImages() {
 		ArrayList<TestProvider> output = new ArrayList<TestProvider>();
 		for(TestExample i: TestShapes.each)
 			output.add(createShapeTestProvider(i));

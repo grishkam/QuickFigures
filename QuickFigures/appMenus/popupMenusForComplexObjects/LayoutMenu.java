@@ -53,14 +53,14 @@ public class LayoutMenu extends AttachedItemMenu {
 		super.addLockedItemMenus();
 		
 		GraphicLayer par = c.getParentLayer();
-		if (par instanceof HasUniquePopupMenu) {
+		if (par instanceof HasUniquePopupMenu) try {
 			JPopupMenu jp = ((HasUniquePopupMenu) par).getMenuSupplier().getJPopup();
 			if (jp instanceof SmartPopupJMenu) {
 				JMenu menuadded = ((SmartPopupJMenu) jp).extractToMenu("Figure");
 				add(menuadded, 0);
 				
 			}
-		}
+		} catch (Throwable t) {}
 		
 		add(new ObjectAction<DefaultLayoutGraphic>(c) {
 			@Override

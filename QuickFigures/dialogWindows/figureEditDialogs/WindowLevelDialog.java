@@ -45,9 +45,7 @@ public class WindowLevelDialog extends StandardDialog  {
 	
 
 	public static final String MIN_TYPE = "Min", MAX_TYPE = "Max";
-	/**
-	 * 
-	 */
+	
 
 	
 	private static final long serialVersionUID = 1L;
@@ -86,9 +84,10 @@ public class WindowLevelDialog extends StandardDialog  {
 		}
 		
 	
+		/**shows a */
 		public static void showWLDialogs(ArrayList<ChannelEntry> chans, MultiChannelImage mrp, DisplayRangeChangeListener listen, int winLev, AbstractUndoableEdit2 undo) {
 			
-			StandardDialog jf = new StandardDialog();
+			StandardDialog jf = new StandardDialog("Display Range");
 			new CurrentFigureSet();
 			jf.currentUndoManager= CurrentFigureSet.getCurrentActiveDisplayGroup().getUndoManager();
 			jf.undo=undo;

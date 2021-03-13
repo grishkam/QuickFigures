@@ -39,7 +39,7 @@ import ultilInputOutput.FileChoiceUtil;
 	public void exportTest() throws Exception, IOException {
 		
 		int count=1;
-		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsImages();
+		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsAndImages();
 		for(TestProvider t: FigureTester.getTests()) {
 			testsCases.add(t);
 		}
