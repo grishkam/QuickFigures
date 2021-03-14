@@ -76,12 +76,9 @@ Note: For each of these options. The new figures created will be based on the de
 ## Section 3: Editing Figures and Channels
 ### **Popup Menus** 
 Popup menus appear when a user right clicks on image panels, insets, layouts, or figures. The submenus contain options for many types of edits. The most important submenus and menu items are described below.
-<<<<<<< HEAD
+
 #### 1)**Channels** Submenu
 The **Channels** submenus contain options related to the channels within figure. Depending on the object clicked and the context, slightly different versions of the channels submenu will appear. The channels menus contain the following items
-    -	**Display Range**, **Window/Level**, or **Min/Max**. These options open display range adjuster similar to the display range adjuster found in ImageJ and other Software. Adjustments done with this adjuster affect both split channel panels and merge panels [see Display range dialog for details](#Display-Range-Dialog)
-# Channels Submenu
-1.	The **Channels** submenus contain options related to the channels within figure. Depending on the object clicked and the context, slightly different versions of the channels submenu will appear. The channels menus contain the following items
     -	**Display Range**, **Window/Level**, or **Min/Max**. These options open display range adjuster similar to the display range adjuster found in ImageJ and other Software. Adjustments done with this adjuster affect both split channel panels and merge panels. [see Display range dialog for details](#Display-Range-Dialog)
     -	**Change color modes** menu item switches channel panels between 'colorized' and 'greyscale' displays. Panels with more than one channel will always be displayed in a colorized form regardless of this option.
     -	**Channel Use Options**. Displays the **Channel Use** options dialog (see section on channel use options). This dialog allows the user to select which channels are used in the merge panel, change color modes and also merge an additional channels into the channel panels. [See channel use dialog](#Channel-Use-Dialog)
