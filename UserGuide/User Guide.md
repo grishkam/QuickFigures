@@ -64,10 +64,10 @@ Note: For each of these options. The new figures created will be based on the de
 - The **Object Tools** toolbar is the main toolbar for QuickFigures. It contains all the critical tools for selecting and drawing objects. Like the ImageJ toolbar, double clicking on a tool icon displays an options dialog relevant to that tool. Similarly to the ImageJ toolbar, control clicking/right clicking on many of the tool icons allows the user to access additional tools. The most important tool families are summarized below.  
 
 ![image](images/tools/Object_Selector.png)
-    - The **Object Selector Tool** is used to click on, select and move objects within the figures. Clicking on any object selects it and deselects all others. A user can select multiple objects by holding shift while clicking on one object after another. If a user starts a mouse drag in a location without an object and drags over an area, all objects in the area will be selected after the mouse is released. When an object is selected, its handles will appear. A user can edit an object simply by dragging the handles. A user can right click on an object or handle to display a popup menu specific to the clicked object. If the user double clicks on an object or a handle, a dialog window with options specific to that object or handle may appear. If the user double clicks a text item, that item switches to **text edit mode** in which a user can edit its text via the keyboard. Clicking on another item, switches off text edit mode. For most objects, a set of icons composing a 'mini toolbar' will also appear below the clicked item. By clicking the icons in the mini toolbars one can perform nearly every type of edit. Most edits done with the mini toolbars apply to all selected objects.
+    - The **Object Selector Tool** is used to click on, select and move objects within the figures. Clicking on any object selects it and deselects all others. A user can select multiple objects by holding shift while clicking on one object after another. If a user starts a mouse drag in a location without an object and drags over an area, all objects in the area will be selected after the mouse is released. When an object is selected, its handles will appear. A user can edit an object simply by dragging the handles. A user can right click on an object or handle to display a popup menu specific to the clicked object. If the user double clicks on an object or a handle, a dialog window with options specific to that object or handle may appear. If the user double clicks a [text item](#Text), that item switches to **text edit mode** in which a user can edit its text via the keyboard. Clicking on another item, switches off text edit mode. For most objects, a set of icons composing a 'mini toolbar' will also appear below the clicked item. By clicking the icons in the mini toolbars one can perform nearly every type of edit. Most edits done with the mini toolbars apply to all selected objects.
   
 ![image](images/tools/Layout_Selector.png) 
-    - The **Layout Selector Tool** is a version of the object selector that selects only layouts (even if a layout is behind another object).  
+    - The **Layout Selector Tool** is a version of the object selector that selects only [layouts](#Layouts) (even if a layout is behind another object). Although layouts may be selected using the **Object Selector Tool**, users may find the **Layout Selector Tool** more convenient if a lot of objects are in front of the layout. 
  
 ![image](images/tools/Shape_Tools.png)     
     - The shape tools can be used to draw a variety of shapes. A user can switch back to the **Object Selector Tool** by pressing the spacebar or enter. Right clicking on the tool icons shows the variety of alternate shapes. One may draw rectangles, circles, arrows, polygons, lines, curves, stars, gears, triangles, blobs, and other shapes.
@@ -78,8 +78,12 @@ Note: For each of these options. The new figures created will be based on the de
 ![image](images/tools/QuickFigure.png)     
     - **The Quick Figure Tool** creates a new figure from a multidimensional image. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. New figures may either be split channel or contain only the merged image depending on what the user has set as the default template.
    -See other sections for details of specialized tools.
+   
+![image](images/tools/InsetTool.png)     
+    - **The Inset Tool** creates a set of small panels that represent a subsection of the parent panel. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double cliking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right cliking on the regions of interest brings up a popup menu with options related to the daughter panels.
 
 ## Section 3: Editing Figures and Channels
+
 ### **Popup Menus** 
 Popup menus appear when a user right clicks on image panels, insets, layouts, or figures. The submenus contain options for many types of edits. The most important submenus and menu items are described below.
 
@@ -98,7 +102,7 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	**Add Image** submenu allows a user to add a new multidimensional image to the clicked figure. Although users can add source images by dragging/dropping files onto the figure, this option provides an alternative. The scale, the number of channel panels created, and other properties from the existing source image are used for the new one. 
  -	Items in the **Add Labels** submenu create an entire set of labels for the rows, columns or panels of the figure.
  -	The **Recreate All Panels** menu item displays the recreate panels dialog. [See sections on recreate panels dialog for details.](#Recreate-All-Panels-Dialog)
- -	The **Images** submenu of the figure Menu contains several menu items that affect how the source images are used to create the image panels. Each of these items go back to the source images (the 'original datasource') to repeat certain processing steps and update the image panels.
+ -	The **Images** submenu of the Figure Menu contains several menu items that affect how the source images are used to create the image panels. Each of these items go back to the source images (the 'original datasource') to repeat certain processing steps and update the image panels.
      -   **Re-crop** option displays crop dialog windows for the user to change the region of interest and the rotation angle for each of the source images. After the user has changed the size of the first images' selected region, the size chosen becomes the starting size for each subsequent dialog. That allows the user to apply a consistently sized crop area to every image. For users familiar with ImageJ this process is equivalent to opening all the original image files, redrawing the crop areas precisely, using the **Crop** and **Rotate** commands in ImageJ and replacing each image panel in a figure with the newly cropped/rotated version. This single option replaces that entire process (along with the scale step).
     -   **Re-Set Scale** option. This changes the scale factor applied to each image and updates the image panels. For users familiar with ImageJ, this process is equivalent to opening all the original image files, using the **'Scale...'** command in ImageJ repeatedly and replacing every image panel in a figure with the new scaled version. This single option replaces that entire process (along with the rotate and crop steps). 
     -   **Re-Set pixel density**. Functions similarly to the Re-Set scale command. Except this option does not alter the apparent size of the image panels. Instead, the user is prompted to choose a final pixel density (200 pixels per inch for example). Both the scale factor and the panel size are changed such that the final pixel density of each image panel becomes the desired amount. Since journals normally require a certain pixel density (either for the overall figure or for image panels) a user should not choose a pixel density much lower or much higher than their requirements. QuickFigures uses the same inch definition as Adobe Illustrator (72 points).
@@ -115,7 +119,7 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	**Set Pixel Size**. Equivalent the **Set scale...** menu item within ImageJ. Allows the user to change the physical distance measurements for the size of a pixel. For example, a user can input that 100 pixels of the original source image correspond to 60 micrometers in physical distance. Afterwards, scale bars for each image panel are changed to reflect the new values. 
  -	**Advanced Channel and Frame Use** changes the image to advanced channel use mode and displays the Advanced Channel Use dialog. Although the options in the normal **Channel Use** dialog will be sufficient for most purposes, advanced channel use allows for more customization of panels. Using the buttons in the 'Advanced' channel use dialog, a user can assign a completely arbitrary combination of channels to image panels, add panels, or set an arbitrary stack slice to a panel. A user can also re-order panels or channels via drag/drop (using either the panel list on the left or the channel list on the right). However if the user later selects the normal channel use options (or related menu options), the image will return to normal channel use mode and actions done in advanced channel use mode will not be preserved. 
  -	**Re-Crop** crops only the selected image. Although this changes the crop area, an uncropped version of the full size image is still stored.
- -	**Re-Set Pixel Density**, See re-set pixel density from the figure menu section. This menu item only targets the clicked image.
+ -	**Re-Set Pixel Density**, See re-set pixel density from the [figure menu](#Figure-Submenu) section. This menu item only targets the clicked image.
  
 #### Edit Layout Submenu
 see section on [editing layouts](#Editing-Figure-Layouts) for details.
@@ -124,13 +128,14 @@ see section on [editing layouts](#Editing-Figure-Layouts) for details.
 **Channel Label** submenu contains options related to the [channel labels](#Text). Will only affect the channel labels for the clicked image and not other images in the figure. 
  
 #### Other submenus
-7.	**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. See supplemental user guide for details of these options (not yet written).
-
-
+7.	**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. To avoid confusing new users, this user manual does not contain details of those tools. See [supplemental user guide](SupplementalUserGuide.md) for details of these options (not yet written).
 
 #### Image Panel Popup Menu
-The popup menu contains options for [image panel](#Image-Panels). 
-The **Add Shape** submenu along with the **Add Scale Bar**, **Add Text** options are part of this popup menu. Added object are placed above the panel and subject to the same layout. The added scale bar and added text will be [attached](#Attached-Items) to the [image panel](#Image-Panels).
+The popup menu contains options realted to the clicked [image panel](#Image-Panels) or the figure containing that panel. When an image panel is part of a figure, Image Panel popup menus can contain options related to the [channels](#Channels-Submenu), [This Image](#This-Image-Submenu) and the [figure](#Figure-Submenu).
+The **Add Shape** submenu along with the **Add Scale Bar**, **Add Text** options are part of this popup menu for every image panel. Added object are placed in the same layer as the figure and subject to the same layout. The added scale bar and added text will be [attached](#Attached-Items) to the [image panel](#Image-Panels).
+
+#### Scale Bar Popup Menu
+The popup menu contains options realted to the clicked [Scale Bar](#Scale-bars). The **Bar Text** submenu contains options related to the label which indicates a scale bar's length including an option to show or hide the [text](#Text). The **Adjust Position** menu option will display a [Attachment Position Dialog](#Attached-Items) that the user may use to input specific numeric values for the position of the scale bar. Although the scale bars can be moved beteen panels by drag and drop, the **Switch Panels** submenu provides an additional means of transplanting a scale bar.
 
 ### Attached Items
 Certain items like labels and scale bars are 'attached' to image panels (or attached to layouts). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their parent panel. Attached item positions can be edited in a few ways.
@@ -140,7 +145,7 @@ Certain items like labels and scale bars are 'attached' to image panels (or atta
   ![image](images/Dialogs/PositionDialog.png)
   
 ### Attachment Submenus
-**Attach Item** and **Release Item** submenus appear in the popup menus for [layouts](#Layouts) or [image panels](#Image-Panels) if there is an object in position for attachment (or already attached). See section on [attached items](#Attached-Items) for details. Since labels and scale bars are automatically attached to panels and can be moved by drag/drop, users should rarely have any need to attach/detach objects manually. If not relevant object is available, these submenus will not appear.
+**Attach Item** and **Release Item** submenus appear in the popup menus for [layouts](#Layouts) or [image panels](#Image-Panels) if there is an object in position for attachment (or already attached). See section on [attached items](#Attached-Items) for details. Since labels and scale bars are automatically attached to panels and can be moved by drag/drop, users should rarely have any need to attach/detach objects manually. If no relevant object is available, these submenus will not appear. In order to move an object into position for attachment, drag the item above the parent that you want to attach it to.
 
 ### Editing Figure Layouts
 Figure layouts can be edited in three ways 1) by clicking the layout and dragging the handles or 2) by using the tools in the 'layout tools' toolbar or 3) by right clicking on the layout and using the options in popup menu. Since all three of these methods allow the same types of edits, one does not need to learn every single method.
@@ -170,14 +175,15 @@ An addition toolbar for layout tools is available. The user can go to Toolbars->
 -	**Panel number change** tool. Changes the number of rows and columns.
 -	**Label Text Tools**. Allow the user to add row, column or panel labels.
 -	**Scale layout** tool. Scales the figure.
--	**Expert tools** (see Appendix)
+-	**Expert tools** These will appear in the popup menu for the panelnumber change tool. Since these tools will be of itnerest to only a few users, details of their function are not included in this user guide. See [supplemental user guide](SupplementalUserGuide.md) (not yet created). 
 
 #### 3) **Editing the layout using popup menus and dialogs**
 A popup menu will appear if the user right clicks on a layout (using the object selector tool). The **Edit Layout** submenu allows the user to perform the same tasks as the layout handles and layout tools. Different dialog windows will appear for each menu item. Within the dialog windows, users may input specific numbers for the measurements of their layouts. If a user double clicks on a layout, (or a layout handle) similar dialog windows will appear. Depending on the location being clicked, a different dialog will be shown. 
 ![image](images/layout/LayoutEditMenu.png)  
 
 #### 4) **Layout content** 
-Layout handles, layout tools and menus only affect objects that are within the layout. Objects that are both within the same parent layer as a layout and within the bounds of the layout are treated as within the layout. Although the layer structure is organized automatically, a user can also manually move objects between layers using the layers window (see section on layers window). 
+Layout handles, layout tools and menus only affect objects that are within the layout. Objects that are both within the same parent layer as a layout and within the bounds of the layout are treated as within the layout. Although the layer structure is organized automatically, a user can also manually move objects between layers using the [layers window](#Layers-Window). 
+
 ### Specialized Dialog windows
 
 #### Recreate All Panels Dialog
@@ -217,7 +223,7 @@ For automatically created figures, the layer structure is organized automaticall
 ## The Menus and Menu Bar
 The **Menu Bar** contains only a few major menus. File, Edit, Selected Item(s) and Add.
 ### File Menu
-- The **File** menu is designed similarly to the file menu in any software. The export submenu contains menu items to export into one of several possible file formats (PPT, SVG, PDF, TIF, PNG or EPS ). The **New**, **Save**, and **Open**, submenus contain menu items that create, store and retrieve QuickFigures worksheets and all of the figures/objects within them. Although both the save and the open menu items are fully functional, the form that the saved files take will change in future updates to QuickFigures. Although the saved files may be used for short term storage, users should export the files into a format such as SVG, PDF or PowerPoint.
+- The **File** menu is designed similarly to the file menu in any software. The **Export** submenu contains menu items to export into one of several possible file formats (PPT, SVG, PDF, TIF, PNG or EPS ). The export submenu also contains an option to generate the figure in Adobe Illustrator. The **New**, **Save**, and **Open**, submenus contain menu items that create, store and retrieve QuickFigures worksheets and all of the figures/objects within them. Although both the save and the open menu items are fully functional, the form that the saved files take will change in future updates to QuickFigures. Although the saved files may be used for short term storage, users should export the files into a format such as SVG, PDF or PowerPoint.
 
 ### Edit Menu
 The **Edit** menu contains a variety of options that do not depend on which objects have been selected.
@@ -242,7 +248,7 @@ Within the **Selected Item(s)**  menu there are several submenus.
 -	**Align** submenu contains options to align the currently selected items. Since items in automatically generated figures are automatically aligned to the layout, users will rarely need to user this menu. These options are also available via the **Align and Arrange** toolbar.
 -	**Arrange** submenu contains options to move and item forward or backwards within a layer. Since items in automatically generated figures are automatically arranged, users will rarely need to user this menu. These options are also available via the **Align and Arrange** toolbar.
 -	**Options Dialogs** submenu provides a way of opening dialogs for editing of objects. If multiple objects of the same type are selected, the dialogs will affect all items that were selected when the dialog was opened. Similar dialogs can be accessed via popup menus, double clicking objects, and clicking certain items in the mini toolbar. Some journals demand a specific font, minimum font size and minimum line width. The **Impose Journal Limits** menu option provides the user an easy was to change those properties via dialog.  Other options are specific to each category of object (text, image panel, scale bar, shape).
--	**Applications Scripts** is a specific submenu for generating scripts to create the objects in adobe illustrator. The script feature was tested using Adobe Creative Suite 5 on MacOS. However it has not been updated for Adobe creative cloud and will not function. Identical options is present in the export menu (will be exclusively in the export menu in later versions of QuickFigures).
+-	**Applications Scripts** is a specific submenu for generating scripts to create the objects in adobe illustrator. The script feature was developed using Adobe Creative Suite 5 on MacOS but later updated and retested with illustrator 25.2.1 on windows. Although it is optimal for users who want to continue their work in adobe Illustrator, it is only useful when a working copy of Illustrator is available. Adobe Illustrator must be set as the default software for opening .jsx files for these features to work. Identical options are present in the export menu (will be exclusively in the export menu in later versions of QuickFigures).
 -	**Figure Format** The version of the figure format submenu in the selected items menu will act on the currently selected items only. See section on figure format. 
 - The **Toolbars** menu allows the user to open specific toolbars. Users may close toolbars that they do not need and open them again using this menu. Only the main toolbar is critical for use of QuickFigures, the others are optional.
 Smart Toolbar and mini toolbars. When a user selects an item, a set of icons will appear below the selected item. These function as a mini toolbar providing quick access to options specific to the selected item. If a user selects multiple items, the mini toolbar will only appear under one item but will (in most cases) affect every selected item. Furthermore, the user may find it more convenient to use the Smart toolbar (Toolbar) which will show the same icons in a separate window. Whenever a user selects a new item, the icons in the smart toolbar will change to reflect what options are available for that object type.
@@ -252,11 +258,11 @@ The 'shape and text edit action tools' provide a quick way of making specific ty
 
 ## Object types 
 ### Scale bars 
-Scale Bars can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles (see diagram below). Each scale bar has a special text object that displays the length of the scale bar. As with other items, a scale bar specific popup menu will appear when one right clicks while a scale bar specific dialog will appear if one double clicks.
+Scale Bars can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles (see diagram below). Each scale bar has a special text object that displays the length of the scale bar. As with other items, a scale bar specific [popup menu](#Scale-Bar-Popup-Menu) will appear when one right clicks while a scale bar specific dialog will appear if one double clicks.  
 ![image](images/objects/ScaleBar.png)  
 
 ### Image Panels
-Image Panels display images. Image Panels may either be part of a figure or stand-alone objects. Those that are part of a figure may change appearance when the user changes channel colors or alters the display range for a channel. Panels that are part of a figure will also contain additional handles (see diagram below). Image Panel popup menus can contain options related to the [channels](#Channels-Submenu), [This Image](#This-Image-Submenu) and the [figure](#Figure-Submenu). For precise alignment of image panels to layouts, a user can drag the center handle of the image panel and drop near the desired panel. While the user drags the center handle, a rectangle will appear in the destination location. If another image panel occupies the destination location, the locations of the two image panels will be swapped. Image Panels may have a colored 'frame' drawn around them (see below). A user can change the width of the frame by dragging the magenta handle. Users will rarely or never need to move image panels directly. If a user wants to avoid accidental edits, that user may select the **Protect from mouse drags** checkbox in the options dialog for image panels.
+Image Panels display images. Image Panels may either be part of a figure or stand-alone objects. Those that are part of a figure may change appearance when the user changes channel colors or alters the display range for a channel. Panels that are part of a figure will also contain additional handles (see diagram below) and a more complex [popup menu](#Image-Panel-Popup-Menu). For precise alignment of image panels to layouts, a user can drag the center handle of the image panel and drop near the desired panel. While the user drags the center handle, a rectangle will appear in the destination location. If another image panel occupies the destination location, the locations of the two image panels will be swapped. Image Panels may have a colored 'frame' drawn around them (see below). A user can change the width of the frame by dragging the magenta handle. Users will rarely or never need to move image panels directly. If a user wants to avoid accidental edits, that user may select the **Protect from mouse drags** checkbox in the options dialog for image panels.
 ![image](images/objects/ImagePanel.png)  
 
 ### Layouts
@@ -264,14 +270,20 @@ Layouts are also a type of object. See section on [editing layouts](#Editing-Fig
 
 ### Text 
 There are multiple types of text items. The major types are described below.  
-**Simple Text Items** are fragments of text with only one font, one line, one color and one format.  
-**Complex Text Items** may contain multiple lines of text with sections that may be superscript, subscript, different font styles, underline, strikethrough, or colors. A user can select a section of text while in edit mode and click one of the icons that appear below it to change the format (icons shown in screenshot below). Row Labels, Column Labels and Plot labels are special kinds of complex labels.  
+
+**Simple Text Items** are fragments of text with only one font, one line, one color and one format. When text is selected, the handles shown below will be visible. Users can click or drag handles to perform any type of edit.  
+![image](images/objects/SimpleText.png)  
+
+**Complex Text Items** may contain multiple lines of text with sections that may be superscript, subscript, different font styles, underline, strikethrough, or colors. A user can select a section of text while in edit mode and click one of the icons that appear below it to change the format making the section of text  Bold, Italic, Subperscript, unserlined or strikethrough (icons shown in screenshot below). Row Labels, Column Labels and Plot labels are special kinds of complex labels.  
 ![image](images/objects/TextComplex.png) 
-**Channel Labels** a special kind of text item that indicates the color and name of a channel. Label Color may change if user changes a channel's color. The merge label can take several forms. Additional options specific for the merge label appearance are accessible in the mini toolbars (see screenshot below) or the dialog windows.  
+
+**Channel Labels** a special kind of text item that indicates the color and name of a channel. Label Color may change if user changes a channel's color. Users can rename a channel by editing the text of these labels. The label for a merged image panel (merge label) can take several forms. Additional options specific for the merge label appearance are accessible in the mini toolbars (see screenshot below) or the dialog windows.  
 ![image](images/objects/MergeLabel.png) 
 
 ### Shapes
-Several types of shapes can be drawn within QuickFigures. Shapes may be resized or rotated using the handles. The main shape categories are summarized below.
+Several types of shapes can be drawn within QuickFigures. Shapes may be resized or rotated using the handles that appear when a shape is selected. The diagram below shows a selected shape with the handles.
+![image](images/objects/ShapeExample.png)  
+The main shape categories are summarized below.  
 -	Rectangle is the simplest shape available. Contains several handles for resizing the rectangle. An orange handle allows user to rotate the rectangle. A magenta colored handle provides the user a means of changing the stroke width. Double clicking on a handle opens a dialog window where specific values can be entered in place of dragging the handle. 
 -	Rounded Rectangle- Works similarly to the rectangle. Two additional handles for altering the rounding are present on this shape.
 -	Notched Rectangle- Works similarly to the rectangle. Two additional handles for altering the shape of the notch are also present on this shape. A third additional handle operates as a menu for changing the type of notch. Yet more handles allow the user to change which corner of the rectangle is notched.
