@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.AbstractUndoableEdit;
@@ -48,14 +49,20 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	
-	static final String OPTIONS_DIALOG="Options";//, backGroundShap="Outline Shape";
+	static final String OPTIONS_DIALOG="Options", HIDE_TEXT="Hide Text", SHOW_TEXT="Show Text";//, backGroundShap="Outline Shape";
 	
 	BarGraphic barG;
 	public BarGraphicMenu(BarGraphic textG) {
 		super();
 		this.barG = textG;
 		add(createItem(OPTIONS_DIALOG));
-		add(new TextGraphicMenu(textG.getBarText()).getJMenu("Bar Text"));
+		TextGraphicMenu textGraphicMenu = new TextGraphicMenu(textG.getBarText());		
+		JMenu jMenu = textGraphicMenu.getJMenu("Bar Text");
+		if (barG.isShowText())
+			jMenu.add(createItem(HIDE_TEXT));
+		else 
+			jMenu.add(createItem(SHOW_TEXT));
+		add(jMenu);
 		add(new SwitchBarToOtherPanelMenu());
 		
 	}
@@ -82,6 +89,17 @@ PopupMenuSupplier  {
 		
 		if (com.equals(OPTIONS_DIALOG)) {
 			barG.showOptionsDialog();
+		}
+		else {
+		
+			
+				if (com.equals(HIDE_TEXT)) {
+					barG.setShowText(false);
+				}
+				if (com.equals(SHOW_TEXT)) {
+					barG.setShowText(true);
+				}
+		
 		}
 		
 	}

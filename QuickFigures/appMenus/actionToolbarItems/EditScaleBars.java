@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 7, 2021
+ * Date Modified: Mar 13, 2021
  * Version: 2021.1
  */
 package actionToolbarItems;
@@ -34,6 +34,7 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
+import iconGraphicalObjects.IconUtil;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.Fillable;
 import locatedObject.LocatedObject2D;
@@ -58,7 +59,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int TYPE_CHANGE_PROJECTIONS=0, TYPE_BAR_THICKNESS_WIDTH=1, TYPE_PROJ_LENGTH=2, TYPE_LENGTH_UNITS=3;
+	public static final int TYPE_CHANGE_PROJECTIONS=0, TYPE_BAR_THICKNESS_WIDTH=1, TYPE_PROJ_LENGTH=2, TYPE_LENGTH_UNITS=3, TYPE_HIDE_TEXT=4;
 
 	public static String[] projTypes=new String[] {"Bar with 2 Projections", "Bar with 1 Projections", "no projection"};
 	
@@ -103,6 +104,10 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		if(type==TYPE_PROJ_LENGTH)  projectionLength= input;
 		if(type==TYPE_LENGTH_UNITS) unitLength=input;
 	}
+	public EditScaleBars(int form, double input, BarGraphic model) {
+		this(form, input);
+		this.setModelItem(model);
+	}
 	
 	
 	public static EditScaleBars[] getProjectionList() {
@@ -143,7 +148,13 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 			return projTypes[projectionType]; 
 		if(type==TYPE_LENGTH_UNITS)
 			return "make "+unitLength+" "+unit;
-			
+		if(type==TYPE_HIDE_TEXT)
+			{
+			if(this.modelItem!=null &&modelItem.isShowText())
+				return "Hide Text";
+			else if(this.modelItem!=null &&!modelItem.isShowText())
+				return "Show Text";
+			}
 
 		
 		return "Alter Scale Bars";
@@ -195,6 +206,10 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 			a.setLengthInUnits(unitLength);;
 		}
 		
+		if(type==TYPE_HIDE_TEXT) {
+			a.setShowText(!modelItem.isShowText());
+		}
+		
 		editForBar.establishFinalState();
 		edit.addEditToList(editForBar);
 		
@@ -216,7 +231,8 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	public Icon getIcon() {
 		if(TYPE_CHANGE_PROJECTIONS==type)
 			return getProjectionIcon();
-		
+		if (type==TYPE_HIDE_TEXT)
+			return new BarTextIcon(modelItem);
 		return getGenericIcon();
 	}
 

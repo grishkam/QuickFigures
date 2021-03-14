@@ -52,6 +52,9 @@ public class ScaleBarActionHandleList extends ActionButtonHandleList {
 		
 		addBarLengthHandle(t);
 		
+		//createGeneralButton(new EditScaleBars(EditScaleBars.TYPE_HIDE_TEXT, 0, t));
+		
+		
 		add(new BarOptionsDialogHandle(1120));
 		
 		createGeneralButton(new SelectAllButton(t));

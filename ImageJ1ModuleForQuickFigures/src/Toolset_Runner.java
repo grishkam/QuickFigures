@@ -70,7 +70,7 @@ public class Toolset_Runner implements PlugIn {
 			ObjectToolset1 tsr = new ObjectToolset1();
 			
 			tsr.run("");
-			new AlignAndArrangeActionTools().run("");
+			
 		}
 
 	}

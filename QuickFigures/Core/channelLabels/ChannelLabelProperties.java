@@ -55,7 +55,7 @@ public class ChannelLabelProperties implements Serializable{
 	public static String[] separatorOptions=new String[] { "nothing", "a space", "/", "use custom"};
 	public static String[] separatorTexts=new String[] {"", " ", "/", "?"};
 	
-	public static String[] mergeLabelOptions=new String[] {"'Merge' text",   "Multiline Channel Labels", "Single Line Channel Labels", "Soni Style", "Color Merge Style"};
+	public static String[] mergeLabelOptions=new String[] {"'Merge' text",   "Multiline Channel Labels", "Single Line Channel Labels", "Rainbow Text", "Color Merge Style"};
 	
 	
 	private String customMergeText="Merge";
