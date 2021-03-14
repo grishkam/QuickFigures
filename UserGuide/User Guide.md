@@ -1,5 +1,8 @@
-# QuickFigures User Guide
-# By Gregory Mazo
+#QuickFigures User Guide
+#By Gregory Mazo
+
+
+
 ## Section 1: Install 
 ### Install instructions
 ### Fiji Install: 
@@ -68,7 +71,6 @@ Note: For each of these options. The new figures created will be based on the de
 
 ![image](images/tools/QuickFigure.png)     
     - **The Quick Figure Tool** creates a new figure from a multidimensional image. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. New figures may either be split channel or contain only the merged image depending on what the user has set as the default template.
-
    -See other sections for details of specialized tools.
 
 ## Section 3: Editing Figures and Channels
@@ -166,9 +168,7 @@ The **Recreate All Panels** dialog allows the user to change the options for gen
 -	**Frames and Slices tab** If any of the multidimensional images used for the figure contain more than a single time frame or more than a single optical section, this tab will appear. Otherwise this tab will not appear. A user can change what frames or slices are used by typing into the field. One can type the numbers as a list, write in a range or a formula (examples are shown in the dialog). A separate subtab for each source image will appear. If the source image(s) contain one channel and many frames or slices, the dialog will open with this tab in focus.  
 ![image](images/Dialogs/RecreatePanels.png)
 
-<a id="Channel Use"></a>
-
-#### Channel Use Dialog
+#### Channel Use Dialog 
 The **Channel Use** Dialog allows the user to change how the channels are merged to create the image panels. Although it contains similar options to the Re-create panels dialog, the channel use dialog only changes how existing panels appear and does not create new panels nor delete old ones. Options in this dialog include **Channel Color Mode**, **Don't Merge These Channel(s)** and a **Merge Each Channel With**. Each work as described above for the re-create panels dialog.  
 ![image](images/Dialogs/ChannelUse.png)
 
@@ -266,3 +266,5 @@ Assuming the plot package is installed, a **Plots** menu will appear in the Quic
 -	The **T-Test Tool** will also appear in the main toolbar if the Plot Package is installed. Assuming that the Math3 package is also installed, a user should be able to perform a T-test simply by clicking on one data series in the plot and dragging the mouse to anther data series. 
 -	The **Swap Plot Columns Tool** will also appear in the main toolbar if the Plot Package is installed. This tool can be used to re-order the data series within plot by dragging and dropping.
 -	The **Plot Objects** submenu will appear in the Selected Item(s) menu. Each menu item in this submenu will open a dialog to edit a certain type of plot object (assuming that type is selected).
+
+[shapes](User Guide.md/By Gregory Mazo)
