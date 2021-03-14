@@ -266,5 +266,3 @@ Assuming the plot package is installed, a **Plots** menu will appear in the Quic
 -	The **T-Test Tool** will also appear in the main toolbar if the Plot Package is installed. Assuming that the Math3 package is also installed, a user should be able to perform a T-test simply by clicking on one data series in the plot and dragging the mouse to anther data series. 
 -	The **Swap Plot Columns Tool** will also appear in the main toolbar if the Plot Package is installed. This tool can be used to re-order the data series within plot by dragging and dropping.
 -	The **Plot Objects** submenu will appear in the Selected Item(s) menu. Each menu item in this submenu will open a dialog to edit a certain type of plot object (assuming that type is selected).
-
-[shapes](User Guide.md/By Gregory Mazo)
