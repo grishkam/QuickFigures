@@ -1,5 +1,5 @@
 #QuickFigures User Guide
-#By Gregory Mazo
+By Gregory Mazo
 
 
 
@@ -22,6 +22,7 @@
 -	close that window.
 -	Click Apply changes to download QuickFigures
 -	Restart ImageJ
+-  A QuickFigures Menu will be present on the menu bar 
 
 ### Ordinary ImageJ Install. 
 Although installing on a Fiji distribution is the easiest way to install with all the features, users can also install QuickFigures on a standared ImageJ distribution.  
@@ -70,17 +71,16 @@ Note: For each of these options. The new figures created will be based on the de
     - The **Layout Selector Tool** is a version of the object selector that selects only [layouts](#Layouts) (even if a layout is behind another object). Although layouts may be selected using the **Object Selector Tool**, users may find the **Layout Selector Tool** more convenient if a lot of objects are in front of the layout. 
  
 ![image](images/tools/Shape_Tools.png)     
-    - The shape tools can be used to draw a variety of shapes. A user can switch back to the **Object Selector Tool** by pressing the spacebar or enter. Right clicking on the tool icons shows the variety of alternate shapes. One may draw rectangles, circles, arrows, polygons, lines, curves, stars, gears, triangles, blobs, and other shapes.
+    - The shape tools can be used to draw a variety of [shapes](#Shapes). A user can switch back to the **Object Selector Tool** by pressing the spacebar or enter. Right clicking on the tool icons shows the variety of alternate shapes. One may draw rectangles, circles, arrows, polygons, lines, curves, stars, gears, triangles, blobs, and other shapes.
 
 ![image](images/tools/TextTool.png)       
-    - **Add Text Tool** is used to draw a fragment of text. A user can right click on this tool for access to specialized versions of it. The tool may also be used to edit text.
+    - **Add Text Tool** is used to draw a fragment of [text](#Text). A user can right click on this tool for access to specialized versions of it. The tool may also be used to edit text.
 
 ![image](images/tools/QuickFigure.png)     
     - **The Quick Figure Tool** creates a new figure from a multidimensional image. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. New figures may either be split channel or contain only the merged image depending on what the user has set as the default template.
-   -See other sections for details of specialized tools.
    
 ![image](images/tools/InsetTool.png)     
-    - **The Inset Tool** creates a set of small panels that represent a subsection of the parent panel. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double cliking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right cliking on the regions of interest brings up a popup menu with options related to the daughter panels.
+    - **The Inset Tool** creates a set of small panels that show a subsection of the parent image. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double cliking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right cliking on the regions of interest (the ['frames'](#Insets-and-Frames)) brings up a popup menu with options related to the daughter panels.
 
 ## Section 3: Editing Figures and Channels
 
@@ -92,8 +92,8 @@ The **Channels** submenus contain options related to the channels within figure.
 
   -	**Display Range**, **Window/Level**, or **Min/Max**. These options open display range adjuster similar to the display range adjuster found in ImageJ and other Software. Adjustments done with this adjuster affect both split channel panels and merge panels. [see Display range dialog for details](#Display-Range-Dialog)
   -	**Change color modes** menu item switches channel panels between 'colorized' and 'greyscale' displays. Panels with more than one channel will always be displayed in a colorized form regardless of this option.
-  -	**Channel Use Options**. Displays the **Channel Use** options dialog (see section on channel use options). This dialog allows the user to select which channels are used in the merge panel, change color modes and also merge an additional channels into the channel panels. [See channel use dialog](#Channel-Use-Dialog)
-  - **Recolor channels** submenu. This allows the user to change the color of channels from one pseudo-color to another. Colors for channel panels, merged panels and [channel labels](#Text) will all change in response to this item. For user's familiar with ImageJ, this menu item changes the lookup table.
+  -	**Channel Use Options**. Displays the **Channel Use** dialog ([See section on Channel Use Dialog](#Channel-Use-Dialog)). This dialog allows the user to select which channels are used in the merge panel, change color modes and also merge an additional channels into the channel panels. 
+  - **Recolor channels** submenu. This allows the user to change the color of channels from one pseudo-color to another. Colors for channel panels, merged panels and [channel labels](#Channel-Label-Text) will all change in response to this item. For user's familiar with ImageJ, this menu item changes the lookup table.
   -	**Recolor Channels Automatically**. Changes the color of every channel based on the channel names. Images imported from certain microscopy formats (.czi, .zvi) will have channel names that reflect the dye names (eGFP, Cy5, mCherry) while others will have channel names that reflect colors. This automatic recoloring can also be performed in other contexts.
   - 'Match' menu items. Each figure may contain several images. The options can be used to make sure that variables such as channel display ranges, channel colors and channel order are consistent between images. If only one source image is part of the figure, this menu item will not appear.
 
@@ -120,12 +120,10 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	**Advanced Channel and Frame Use** changes the image to advanced channel use mode and displays the Advanced Channel Use dialog. Although the options in the normal **Channel Use** dialog will be sufficient for most purposes, advanced channel use allows for more customization of panels. Using the buttons in the 'Advanced' channel use dialog, a user can assign a completely arbitrary combination of channels to image panels, add panels, or set an arbitrary stack slice to a panel. A user can also re-order panels or channels via drag/drop (using either the panel list on the left or the channel list on the right). However if the user later selects the normal channel use options (or related menu options), the image will return to normal channel use mode and actions done in advanced channel use mode will not be preserved. 
  -	**Re-Crop** crops only the selected image. Although this changes the crop area, an uncropped version of the full size image is still stored.
  -	**Re-Set Pixel Density**, See re-set pixel density from the [figure menu](#Figure-Submenu) section. This menu item only targets the clicked image.
- 
-#### Edit Layout Submenu
-see section on [editing layouts](#Editing-Figure-Layouts) for details.
+
 
 #### Channel Label Submenu
-**Channel Label** submenu contains options related to the [channel labels](#Text). Will only affect the channel labels for the clicked image and not other images in the figure. 
+**Channel Label** submenu contains options related to the [channel labels](#Channel-Label-Text). Will only affect the channel labels for the clicked image and not other images in the figure. 
  
 #### Other submenus
 7.	**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. To avoid confusing new users, this user manual does not contain details of those tools. See [supplemental user guide](SupplementalUserGuide.md) for details of these options (not yet written).
@@ -137,15 +135,18 @@ The **Add Shape** submenu along with the **Add Scale Bar**, **Add Text** options
 #### Scale Bar Popup Menu
 The popup menu contains options realted to the clicked [Scale Bar](#Scale-bars). The **Bar Text** submenu contains options related to the label which indicates a scale bar's length including an option to show or hide the [text](#Text). The **Adjust Position** menu option will display a [Attachment Position Dialog](#Attached-Items) that the user may use to input specific numeric values for the position of the scale bar. Although the scale bars can be moved beteen panels by drag and drop, the **Switch Panels** submenu provides an additional means of transplanting a scale bar.
 
+#### Layout Popup Menu
+The popup menu contains options realted to the clicked [layouts](#Layouts). The **Edit Layout** Submenu is detailed in the section on [editing layouts](#Editing-Figure-Layouts) for details. If the layout is part of a figure, it may also contain a [Figure submenu](#Figure-Submenu). If objects are either attached or available for attachment to the layout, the menu will contain [submenus](#Attachment-Submenus) related to those items.
+
 ### Attached Items
-Certain items like labels and scale bars are 'attached' to image panels (or attached to layouts). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their parent panel. Attached item positions can be edited in a few ways.
+Certain items like [labels](#Text) and [scale bars](#Scale-Bars) are 'attached' to [image panels](#Image-Panels) (or attached to [layouts](#Layouts)). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their parent panel. Attached item positions can be edited in a few ways.
   1.	Dragging the attached item directly. Normal mouse drags will alter the type of attachment location. For example, an item that is anchored at the lower right of a parent panel can be moved to the equivalent location in the upper right by a simple mouse drag. A user can also move an item from one parent panel to another or detach the item from its parent by dragging and dropping.
   2.	Using the attached item handle. Attached scale bars and text items will have an additional handle that allows the user to alter their attachment position (this appears as a red dot). By clicking and dragging within the red dot, a user can make small adjustments to the attachment position. A user can also click just outside of the red dot to change the type of location.
   3.	Using the attachment **Position** dialog. A menu item to display this dialog will be present in the popup menu for the attached item. (as well as other menus and mini toolbars). A simpler version of this dialog will also appear in the position tab of other dialogs. A user can click and drag the blue square within the dialog to change the base location (from the Upper Left to Top for example). Finer adjustment to the location can be done with the sliders and numeric fields in this dialog. The attachment position dialog can also be used to assign the same attachment position to many labels ensuring consistent spacing of labels (using the checkbox is present in the complete dialog). Labels can also be attached to a row, column, or panel of a layout. The dialog also contains an option for switching the attachment position between row, column and panel modes (rarely used).  
   ![image](images/Dialogs/PositionDialog.png)
   
 ### Attachment Submenus
-**Attach Item** and **Release Item** submenus appear in the popup menus for [layouts](#Layouts) or [image panels](#Image-Panels) if there is an object in position for attachment (or already attached). See section on [attached items](#Attached-Items) for details. Since labels and scale bars are automatically attached to panels and can be moved by drag/drop, users should rarely have any need to attach/detach objects manually. If no relevant object is available, these submenus will not appear. In order to move an object into position for attachment, drag the item above the parent that you want to attach it to.
+**Attach Item** and **Release Item** submenus appear in the popup menus for [layouts](#Layouts) or [image panels](#Image-Panels) if there is an object in position for attachment (or already attached). See section on [attached items](#Attached-Items). Since labels and scale bars are automatically attached to panels and can be moved by drag/drop, users should rarely have any need to attach/detach objects manually. If no relevant object is available, these submenus will not appear. In order to move an object into position for attachment, drag the item above the parent that you want to attach it to.
 
 ### Editing Figure Layouts
 Figure layouts can be edited in three ways 1) by clicking the layout and dragging the handles or 2) by using the tools in the 'layout tools' toolbar or 3) by right clicking on the layout and using the options in popup menu. Since all three of these methods allow the same types of edits, one does not need to learn every single method.
@@ -268,7 +269,7 @@ Image Panels display images. Image Panels may either be part of a figure or stan
 ### Layouts
 Layouts are also a type of object. See section on [editing layouts](#Editing-Figure-Layouts).
 
-### Text 
+### Text
 There are multiple types of text items. The major types are described below.  
 
 **Simple Text Items** are fragments of text with only one font, one line, one color and one format. When text is selected, the handles shown below will be visible. Users can click or drag handles to perform any type of edit.  
@@ -277,6 +278,7 @@ There are multiple types of text items. The major types are described below.
 **Complex Text Items** may contain multiple lines of text with sections that may be superscript, subscript, different font styles, underline, strikethrough, or colors. A user can select a section of text while in edit mode and click one of the icons that appear below it to change the format making the section of text  Bold, Italic, Subperscript, unserlined or strikethrough (icons shown in screenshot below). Row Labels, Column Labels and Plot labels are special kinds of complex labels.  
 ![image](images/objects/TextComplex.png) 
 
+### Channel Label Text
 **Channel Labels** a special kind of text item that indicates the color and name of a channel. Label Color may change if user changes a channel's color. Users can rename a channel by editing the text of these labels. The label for a merged image panel (merge label) can take several forms. Additional options specific for the merge label appearance are accessible in the mini toolbars (see screenshot below) or the dialog windows.  
 ![image](images/objects/MergeLabel.png) 
 
@@ -295,13 +297,24 @@ The main shape categories are summarized below.
 -	Pie Arc- Works similarly to the oval except with a chunk but out. User may change the angle of the cut by dragging or double clicking additional colored handles.
 -	Chord Arc- Works similarly to the Pie Arc.
 -	Part Ring- Works similarly to the Pie Arc and the Ring.
--	Arrow- A line connecting two points with an arrowhead at one or both ends. User may create an arrow with one head, two identical heads or two distinct heads. Head size may be changed by dragging a handle. Mini toolbar allows user to switch head types. Edits to arrow heads may also be made using the options dialog for the arrow.
--	Regular Polygons- Works similarly to the rectangle. An handle that allows user to change the number of sides (the type of polygon) is present.
+-	Arrow- A line connecting two points with an arrowhead at one or both ends. User may create an arrow with one head, two identical heads or two distinct heads. Head size may be changed by dragging a handle. "Mini toolbar" allows user to switch head types (see screenshot of a selected arrow below). Edits to arrow heads may also be made using the options dialog for the arrow.  
+![image](images/objects/Arrow.png) 
+-	Regular Polygons- Works similarly to the rectangle. A handle that allows user to change the number of sides (the type of polygon) is present.
 -	Stars- Work similarly to the regular polygons. Except the number of points rather than the number of sides may be changed. Additional handles for altering the form of the star are present.
 -	Gear- Works similarly to the Ring and Regular Polygons. User may change the shape or the number of teeth by dragging or double clicking additional colored handles.
 -	Blob- A complex shape designed to mimic a natural looking form. Works similarly to the Stars.
--	Paths/Bezier Curves. A path of points. There are shapes that can take any form. These may be resized, rotated, or edited one point at a time. An arrowhead may be attached to the ends of a path using the popup menu. Anchor points and curve control points may be edited by clicking and dragging handles.  
+-	Paths/Bezier Curves. A path of points. There are shapes that can take any form. These may be resized, rotated, or edited one point at a time. An arrowhead may be attached to the ends of a path using the popup menu. Anchor points and curve control points may be edited by clicking and dragging handles. User may transform the path in several ways using the handles and popup menus.  
 ![image](images/objects/Shapes.png)   
+
+### Insets and Frames
+Using the inset tool located within the [main toolbar](#The-Basics-of-Using-QuickFigures) one can draw a region of interest on an image panel and create several additional 'daughter' panels that show that region of interest at a higher level of magnification (see image below). When that shape is moved, resized or rotated by the user, the area shown by the daughter panels changes. This object also has a special popup menu with options that affect the daughter panels. 
+That popup menu has few functions.
+ - **Remove** menu option removes both the region of interest and the daughter panels
+ - **Channel Use** menu option opens up a [Channel Use](#Channel-Use-Dialog) dialog that applies only to the daughter panels.
+ - **Redo Inset Layout** displays a dialog with options to alter the position of the daughter panels
+ - **Channel Label** submenu contains options that apply to the channel labels attached to the daughter panels. See section on the [Channel Label Submenu](#Channel-Label-Submenu)
+ 
+![image](images/objects/InsetsAndFrames.png)
 
 
 ### Plot Package 

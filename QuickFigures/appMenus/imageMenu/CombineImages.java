@@ -58,7 +58,7 @@ public class CombineImages extends BasicMenuItemForObj {
 public static ArrayList<DisplayedImage> getChoices() {
 	 
 		 ArrayList<DisplayedImage> alldisp = new CurrentFigureSet().getVisibleDisplays();
-		ArrayList<DisplayedImage> foruse = new ObjectListChoice<DisplayedImage>("").selectMany("Chose Which to combine", alldisp, 4);
+		ArrayList<DisplayedImage> foruse = new ObjectListChoice<DisplayedImage>("").selectMany("Choose Which to combine", alldisp, 4);
 		 
 		 return foruse;
 	 

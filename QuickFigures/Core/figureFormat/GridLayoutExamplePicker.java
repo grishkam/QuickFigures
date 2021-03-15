@@ -33,7 +33,7 @@ public class GridLayoutExamplePicker extends GraphicalItemPicker<DefaultLayoutGr
 	 */
 	private static final long serialVersionUID = 1L;
 
-	{super.optionname="Chose Layout";}
+	{super.optionname="Choose Layout";}
 	
 	public GridLayoutExamplePicker(DefaultLayoutGraphic model) {
 		super(model);

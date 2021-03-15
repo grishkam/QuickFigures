@@ -38,7 +38,7 @@ public class ScaleBarExamplePicker extends GraphicalItemPicker<BarGraphic>{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	{super.optionname="Chose Scale Bar";}
+	{super.optionname="Choose Scale Bar";}
 	boolean autoComfortBarSize=true;
 	
 	/**creates a scale bar picker with the given example scale bar*/
