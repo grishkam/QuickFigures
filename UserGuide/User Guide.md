@@ -23,6 +23,7 @@ By Gregory Mazo
 -	Click Apply changes to download QuickFigures
 -	Restart ImageJ
 -  A QuickFigures Menu will be present on the menu bar 
+-  Go to the QuickFigures menu and select 'Show Main Toolbar'. 
 
 ### Ordinary ImageJ Install. 
 Although installing on a Fiji distribution is the easiest way to install with all the features, users can also install QuickFigures on a standared ImageJ distribution.  
@@ -54,7 +55,7 @@ https://commons.apache.org/proper/commons-math/
 1.	QuickFigures' toolbars and windows have their own menu bars (not the same as the ImageJ Menu bar). If using a MacOS, the menu bar will appear at the top of the screen after you select one of the toolbars.
 2.	You can create a new Figure using the options in the New menu (File->New) to creates figures Each of these options will create a new worksheet. The types of options are summarized below.
     -	**Empty Worksheet** creates a worksheet without objects. Figures can be added to any worksheet by drag and drop of image files. Dragging an image file onto an existing figure, adds another image to the figure. 
-    -	**Figure With Split Channels** always creates a figure with split channels in a new worksheet. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. 
+    -	**Figure With Split Channels** always creates a figure with split channels in a new worksheet. If a multichannel image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. 
     -	**Figure With Merge Panels Only** always creates a figure with all channels merged in a new worksheet. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file.
 Note: For each of these options. The new figures created will be based on the default template. Read sections on [figure format and templates](#Figure-Format-Submenu). A use can customize the default template based on their own needs.
 3.	Alternatively, a user can click the **Quick Figure** button on the toolbar which works like the options in the **New** menu.

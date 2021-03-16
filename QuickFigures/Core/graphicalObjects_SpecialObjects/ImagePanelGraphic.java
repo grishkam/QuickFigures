@@ -283,6 +283,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		return lockedItems;
 	}
 	
+	/**Adds an attached item to the panel*/
 	public void addLockedItem(LocatedObject2D l) {
 		if (l==null) return;
 		if (l instanceof BarGraphic) {
@@ -291,9 +292,16 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			}
 		
 		getLockedItems().add(l);
+		addHandleForAttachedItem(l);
+		this.snapLockedItems();
+	}
+
+	/**creates a handle for adjusting the location of an attached item
+	 * @param l
+	 */
+	public void addHandleForAttachedItem(LocatedObject2D l) {
 		SmartHandleList list = getPanelHandleList();
 		getPanelHandleList().add(new AttachmentPositionHandle(this, l, list.size()));
-		this.snapLockedItems();
 	}
 	
 	public void removeLockedItem(LocatedObject2D l) {
@@ -1004,8 +1012,15 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return new Dimension(getBounds().width, getBounds().height);
 		}
 		
+		/**returns a list that contains both the image panels handles and the attached item handles*/
 		protected ImagePanelHandleList getPanelHandleList() {
-			if (panelHandleList==null) panelHandleList=new ImagePanelHandleList(this);
+			if (panelHandleList==null) 
+				{
+						panelHandleList=new ImagePanelHandleList(this);
+						for(LocatedObject2D l: this.getLockedItems()) {
+							this.addHandleForAttachedItem(l);
+						}
+				}
 				return panelHandleList;
 		}
 		
