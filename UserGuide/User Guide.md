@@ -1,4 +1,4 @@
-#QuickFigures User Guide
+#QuickFigures User Guide  
 By Gregory Mazo
 
 
