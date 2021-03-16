@@ -145,6 +145,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		return lockedItems;
 	}
 	
+	/**Adds an attached item to the layout*/
 	public void addLockedItem(LocatedObject2D l) {
 	
 		getLockedItems().add(l);
@@ -158,6 +159,14 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 		this.snapLockedItems();
 		
+		generateHandlesForAttachedItems(l);
+		
+		}
+
+	/**creates handles for the attached item
+	 * @param l
+	 */
+	public void generateHandlesForAttachedItems(LocatedObject2D l) {
 		if (l instanceof TextGraphic) {
 			generateHandleForText(l);	
 		
@@ -167,8 +176,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			generateHandleForImage(l);	
 		
 		}
-		
-		}
+	}
 
 	/**generates a handle for an attached image panel
 	 * not implemented here. see subclass*/
@@ -981,8 +989,14 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	}
 	
 	
+	/**returns the list of handles for attached items*/
 	protected SmartHandleList getLocedItemHandleList() {
-		if (panelHandleList==null) panelHandleList=new SmartHandleList();
+		if (panelHandleList==null) {
+			panelHandleList=new SmartHandleList();
+			for(LocatedObject2D l: this.getLockedItems())  {
+				this.generateHandlesForAttachedItems(l);
+			}
+		}
 			return panelHandleList;
 	}
 	

@@ -644,6 +644,7 @@ public void resizeLayoutToFitContents() {
 
 	}
 
+	/**A handle for attached image panels*/
 	class ImagePanelHandle extends LayoutLockedItemHandle {
 
 		private Rectangle2D panel;
