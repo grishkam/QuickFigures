@@ -260,7 +260,7 @@ The 'shape and text edit action tools' provide a quick way of making specific ty
 
 ## Object types 
 ### Scale bars 
-Scale Bars can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles (see diagram below). Each scale bar has a special text object that displays the length of the scale bar. As with other items, a scale bar specific [popup menu](#Scale-Bar-Popup-Menu) will appear when one right clicks while a scale bar specific dialog will appear if one double clicks.  
+Scale Bars can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles (see diagram below). Each scale bar has a special text object that displays the length of the scale bar. As with other items, a scale bar specific [popup menu](#Scale-Bar-Popup-Menu) will appear when one right clicks while a scale bar specific dialog will appear if one double clicks. The icons below a selected scale bar serve as a 'mini' toolbar whose options will affect every selected scale bar.  
 ![image](images/objects/ScaleBar.png)  
 
 ### Image Panels
