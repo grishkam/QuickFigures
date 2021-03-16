@@ -24,6 +24,7 @@ By Gregory Mazo
 -	Restart ImageJ
 -  A QuickFigures Menu will be present on the menu bar 
 -  Go to the QuickFigures menu and select 'Show Main Toolbar'. 
+-  Open an image and get to work!
 
 ### Ordinary ImageJ Install. 
 Although installing on a Fiji distribution is the easiest way to install with all the features, users can also install QuickFigures on a standared ImageJ distribution.  
