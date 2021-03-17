@@ -1,4 +1,4 @@
-#QuickFigures User Guide  
+# QuickFigures User Guide  
 By Gregory Mazo
 
 
@@ -18,10 +18,9 @@ By Gregory Mazo
 -	In the next dialog window click **Manage Update Sites**
 -	QuickFigures will appear in the update site list
 -	Check QuickFigures 
--	If you don't already have the bioformats importers installed, you should check Bio-Formats too so you will be able to import microscopy files
--	close that window.
+-	Close that window.
 -	Click Apply changes to download QuickFigures
--	Restart ImageJ
+-	Restart Fiji
 -  A QuickFigures Menu will be present on the menu bar 
 -  Go to the QuickFigures menu and select 'Show Main Toolbar'. 
 -  Open an image and get to work!
@@ -164,7 +163,8 @@ A user can click on a figure layout just like any other object. Several kinds of
 -	Label Space handles. The spaces above, to the left, below, and to the right of the panels are meant for labels. Although these spaces are adjusted automatically, the user is also allowed to make manual changes using these handles.
 -	Panel Size handles are on the bottom or right edges of panels. Although panel sizes are adjusted automatically, in the user may also perform manual edits using these handles.
 -	Layout scale handle. Scales the layout and all objects within it. This handle is more convenient than selecting all the objects and then scaling them.  
-![image](images/layout/LayoutHandles.png) 
+![image](images/layout/LayoutHandles.png)  
+![image](images/layout/LayoutHandles2.png) 
 
 #### 2) Editing layouts using the layout tools.
 An addition toolbar for layout tools is available. The user can go to Toolbars->Show Layout Tools to display this toolbar. These tools accomplish the same specific tasks as the layout handles. Although the layout handles are more convenient, the layout tools are somewhat easier to learn (since each tool icon demonstrates the function of the tool and each tool performs exactly one function). None of the layout tools are essential.
@@ -221,6 +221,8 @@ The figure format dialog will be shown when the user chooses to create a templat
 #### Layers Window
 The layers window contains a tree with objects and layers displayed with their names and icons. All objects in QuickFigures are organized into layers. Using the layers window (access via Show Layers menu option is in the Edit menu), a user can change the order of objects within a layer by clicking and dragging. Users can also add new objects/layers using a menu bar that is specific to the layers window. The layers window is most useful when creating illustrations or drawings. A user can manually create a layer using the menu bar, select that layer and then use the toolbar to draw objects within that layer.
 For automatically created figures, the layer structure is organized automatically and is critical for QuickFigures to work properly. Certain specialized layers perform other functions besides simply acting as passive containers. Removal of an automatically generated object (such as an image panel that is part of a split channel figure) from its specialized layer is not recommended as it can alter or turn off some of the specialized functions. For reference, ordinary layers use a blue folder icon while specialized layers are colored differently.  
+Objets can be hidden and un-hidden using the layers window (just click the icon next to the object name. layers cannot be hidden in this way).  
+
 ![image](images/Dialogs/Layers.png)
 
 ## The Menus and Menu Bar
