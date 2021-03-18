@@ -26,8 +26,11 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.util.ArrayList;
 
+import graphicalObjects.CordinateConverter;
 import infoStorage.BasicMetaDataHandler;
 import logging.IssueLog;
 import utilityClasses1.ArraySorter;
@@ -352,6 +355,25 @@ public double getAllBaselineLengths() {
 	return output;
 }
 
+
+/**returns an attributed String for this line of text*/
+public AttributedString getAttributedString(DimsColor context, CordinateConverter c) {
+	
+	
+	AttributedString output = new  AttributedString(this.getText());
+	int begin=0;
+	for(int i=0; i<this.size(); i++) try {
+		TextLineSegment textLineSegment = this.get(i);
+		int end=begin+textLineSegment.getText().length();
+		if (begin!=end)
+			output.addAttributes(textLineSegment.getAttributeMap(context, c), begin, end);
+		begin=end;
+	} catch (Throwable t) {
+		IssueLog.logT(t);
+	}
+	return output;
+	
+}
 
 
 

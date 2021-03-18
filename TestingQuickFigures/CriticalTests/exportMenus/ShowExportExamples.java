@@ -14,7 +14,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=null;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.MANY_ANGLE_COMPLEX_TEXT;//which cases to test. set to null if all should be tested
 
 
 
@@ -25,13 +25,15 @@ import testing.TestProvider;
 	 */
 	public static void main(String[] args) throws Exception, IOException {
 		ImageDisplayTester.startToolbars(true);
-		
+		IssueLog.sytemprint=true;
 		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsAndImages();
 		for(TestProvider t: FigureTester.getTests()) {
 			testsCases.add(t);
 		}
 		for(TestProvider ex: testsCases) {
+			if (testCase==null||testCase==ex.getType())
 			ex.createExample();
+			
 				}
 		
 		

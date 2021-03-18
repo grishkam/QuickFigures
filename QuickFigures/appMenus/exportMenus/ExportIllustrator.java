@@ -39,7 +39,7 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (diw!=null) {
 			diw.updateDisplay();
-			ShowMessage.showOptionalMessage("Illustrator script creator ", false, "Illustrator script generator will create a .jsx file", "open that file with Adobe Illustrator" , "always wait for one .jsx script to finish before another",  "For alternative (with better results for text and shapes), export as SVG first and open with Illustrator");
+			ShowMessage.showOptionalMessage("Illustrator script creator ", false, "Illustrator script generator will create a .jsx file", "open that file with Adobe Illustrator" , "always wait for one .jsx script to finish before another",  "For alternative, export as SVG first and open with Illustrator");
 		sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true);
 		 ZIllustratorScriptGenerator.instance.execute();
 			

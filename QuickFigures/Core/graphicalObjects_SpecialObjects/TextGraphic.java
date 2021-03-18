@@ -43,6 +43,7 @@ import javax.swing.Icon;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import popupMenusForComplexObjects.TextSelectionMenu;
 import standardDialog.StandardDialog;
+import textObjectProperties.DimsColor;
 import textObjectProperties.TextItem;
 import textObjectProperties.TextParagraph;
 import textObjectProperties.TextPrecision;
@@ -88,7 +89,7 @@ import objectDialogs.TextGraphicSwingDialog;
 
 /**A graphical object that consists of text. This one displays a piece of 
  * text with a single font and color. Used for the most simple labels*/
-public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit {
+public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit, DimsColor {
 	/**
 	 
 	 */
@@ -729,6 +730,8 @@ public void setDimming(ColorDimmer i) {
 	colordimming=i;
 	
 }
+
+/**returns a dimmed version of the color*/
 @Override
 public Color getDimmedColor(Color c) {
 	if (isDimColor())
@@ -736,6 +739,7 @@ public Color getDimmedColor(Color c) {
 	else return getTextColor();
 }
 
+/**returns a dimmed version of the color*/
 public Color getDimmedColor() {
 	return getDimmedColor(getTextColor());
 }

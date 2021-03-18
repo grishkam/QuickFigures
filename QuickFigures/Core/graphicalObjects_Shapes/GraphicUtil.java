@@ -33,10 +33,13 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedString;
 import java.util.ArrayList;
 
 import graphicalObjects.CordinateConverter;
 import handles.DecorativeSmartHandleList;
+import textObjectProperties.DimsColor;
+import textObjectProperties.TextLine;
 
 /**this class contains methods that are used by many shapes. many ot its methods will be deprecated in the future*/
 public class GraphicUtil {
@@ -169,7 +172,19 @@ public  void drawDot(Graphics2D g, CordinateConverter cords, Point2D.Double poin
 	
 
 	
-	
+	/**A simple method to draw text*/
+	public void drawString(Graphics2D g, CordinateConverter cords, DimsColor context, TextLine text, Point2D p, double angle) {
+		
+		AttributedString as = text.getAttributedString(context, cords);
+		
+		 double sx = cords.transformX(p.getX());
+		 double sy = cords.transformY(p.getY());
+		 
+		 g.rotate(-angle, sx, sy);
+		 
+	 	 g.drawString(as.getIterator(), (int)sx, (int)sy); 
+	 	 g.rotate(angle, sx, sy);
+	}
 	
 
 	

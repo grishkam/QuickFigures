@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 8, 2021
+ * Date Modified: Mar 18, 2021
  * Version: 2021.1
  */
 package textObjectProperties;
@@ -30,7 +30,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
+import graphicalObjects.CordinateConverter;
 import logging.IssueLog;
 
 /**stores the properties of a fragment of text that is part of a
@@ -164,9 +166,8 @@ public class TextLineSegment implements  Serializable {
 	/**returns the font that will actually be used to draw the segment.
 	 * If the item is a superscript or subscript, font willreturn at half value*/
 	public Font getFont() {
-		Font output=defaultFont;
-		if (parent==null) return output;
-		output=parent.getFont();
+		Font output = getBaseFont();
+		
 		output = applySuperOrSubscript(output);
 		
 		if (this.getUniqueStyle()>0) output=output.deriveFont(getUniqueStyle()-1);
@@ -177,6 +178,16 @@ public class TextLineSegment implements  Serializable {
 			output= deriveStrikedFont(output);
 		}
 		
+		return output;
+	}
+
+	/**returns the Font without subscript, underlines or superscript
+	 * @return
+	 */
+	private Font getBaseFont() {
+		Font output=defaultFont;
+		if (parent!=null) 
+		output=parent.getFont();
 		return output;
 	}
 
@@ -418,6 +429,21 @@ public class TextLineSegment implements  Serializable {
 	 * particularly important for illustrator*/
 	public double baseLineDistance() {
 		return  transformedBaseLineStart.distance(transformedBaseLineEnd);
+	}
+	
+	
+	/**returns all the text attributes for the fragment*/
+	public Map<TextAttribute, ?> getAttributeMap(DimsColor context, CordinateConverter c) {
+		Map<TextAttribute, Object> output = new HashMap<TextAttribute, Object>();
+		output.put(TextAttribute.FONT, c.getScaledFont(this.getFont()));
+		if (this.isUnderlined())output.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+		if (this.isStrikeThrough())output.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+		if (this.isSuperscript()) output.put(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER);
+		else if (this.isSubscript())output.put(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB);
+		
+		output.put(TextAttribute.FOREGROUND, context.getDimmedColor(this.getTextColor()));
+		
+		return output;
 	}
 	
 }

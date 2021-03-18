@@ -290,7 +290,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	
 	public void drawLineAtLocation(TextLine line1, Graphics2D g, CordinateConverter cords) {
 		  // line1.computeLineDimensions(g, x, y);
-		  
+		  if (this.isEditMode())
 		    for(TextLineSegment t: line1) { 
 		    	
 		    	if (t==null) continue;
@@ -298,6 +298,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		    	drawLineSegment(t,g,cords);
 		 	    
 		    }
+		  else this.drawLine(line1, g, cords);
 	}
 	
 	public void drawLineSegment(TextLineSegment t, Graphics2D g, CordinateConverter cords) {
@@ -330,6 +331,23 @@ public class ComplexTextGraphic extends TextGraphic {
 				   g.rotate(this.getAngle(),  sx,sy);
 			   }
 	}
+	
+	/**draws a line of text*/
+	public void drawLine(TextLine tLine, Graphics2D g, CordinateConverter cords) {
+		TextLineSegment t = tLine.get(0);
+		if (t.baseLine==null) {
+			IssueLog.log("failed to draw text segment "+t.getText()+" Its location had not been set up");
+			return;
+		}
+		   Point2D d = this.createAffline().transform(t.baseLine, new Point2D.Double());
+		   
+		
+			   getGrahpicUtil().drawString(g, cords, this,
+					   	tLine, 
+					   	d,  getAngle());
+			  
+			    
+	}
 
 
 
@@ -354,6 +372,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	}
 	
 	
+	/**returns a dimmed color*/
 	public Color getDimmedColor(Color c) {
 	
 		if (this.isDimColor()) return ColorDimmer.modifyColor( c, colordimming, true);

@@ -1193,6 +1193,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		ArrayList<LocatedObject2D> items = getAllSelectedItems(false);
 		for(LocatedObject2D roi: items) {
 			if (roi.isUserLocked()==ShapeGraphic.LOCKED){
+					if (items.size()>1)
 					ShowMessage.showOptionalMessage("object is locked ", true, "one of the selected items is locked but can still be moved using its handles");
 					return;
 					}
