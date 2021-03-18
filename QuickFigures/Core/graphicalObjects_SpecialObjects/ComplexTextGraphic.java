@@ -288,19 +288,21 @@ public class ComplexTextGraphic extends TextGraphic {
 		
 	}
 	
+	/**draws a line of text. depending on whether the text is in edit mode, may draw differently*/
 	public void drawLineAtLocation(TextLine line1, Graphics2D g, CordinateConverter cords) {
 		  // line1.computeLineDimensions(g, x, y);
 		  if (this.isEditMode())
-		    for(TextLineSegment t: line1) { 
-		    	
-		    	if (t==null) continue;
-		
-		    	drawLineSegment(t,g,cords);
-		 	    
-		    }
+				    for(TextLineSegment t: line1) { 
+				    	
+				    	if (t==null) continue;
+				
+				    	drawLineSegment(t,g,cords);
+				 	    
+				    }
 		  else this.drawLine(line1, g, cords);
 	}
 	
+	/**Dras a fragment of text with a cursor */
 	public void drawLineSegment(TextLineSegment t, Graphics2D g, CordinateConverter cords) {
 		if (t.baseLine==null) {
 			IssueLog.log("failed to draw text segment "+t.getText()+" Its location had not been set up");
@@ -331,6 +333,7 @@ public class ComplexTextGraphic extends TextGraphic {
 				   g.rotate(this.getAngle(),  sx,sy);
 			   }
 	}
+	
 	
 	/**draws a line of text*/
 	public void drawLine(TextLine tLine, Graphics2D g, CordinateConverter cords) {

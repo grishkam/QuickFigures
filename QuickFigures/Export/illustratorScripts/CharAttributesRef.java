@@ -57,14 +57,35 @@ public class CharAttributesRef extends IllustratorObjectRef {
 	 * within the illustrator fonts
 	 * given a full font name, sets the font*/
 	private String findFont(String fullname) {
-		String[] split = fullname.split(" ");
-		String name=split[0].toLowerCase();
+		String[] split = splitFontName(fullname);
+		String string = split[0].trim();
+		if (string.equals("SansSerif")) string="Liberation Sans";//illustrator is not great with this font
+		if (string.equals("Monospaced")) string="Liberation Mono";
+		IssueLog.log("parsing font =["+string+"[");
+		String name=string.toLowerCase();
 		String style="Regular";
 		if (split.length>1)style=split[1].toLowerCase();
 		else {style="Regular";}
 		if(split.length>2)style+=" "+split[2].toLowerCase();
 		
 		return setFont(name, style);
+	}
+
+	/**
+	 * @param fullname
+	 * @return
+	 */
+	private String[] splitFontName(String fullname) {
+		IssueLog.log("moving font "+fullname);
+		
+		if (fullname.endsWith(".bolditalic")) return new String[] {fullname.substring(0,fullname.length()-11), "Bold Italic"};
+		if (fullname.endsWith(" bold italic")) return new String[] {fullname.substring(0,fullname.length()-11), "Bold Italic"};
+		if (fullname.endsWith(" Bold Italic")) return new String[] {fullname.substring(0,fullname.length()-11), "Bold Italic"};
+		if (fullname.endsWith(".bold")) return new String[] {fullname.substring(0,fullname.length()-5), "Bold"};
+		if (fullname.endsWith(" Bold")) return new String[] {fullname.substring(0,fullname.length()-5), "Bold"};
+		if (fullname.endsWith(".italic")) return new String[] {fullname.substring(0,fullname.length()-6), "Italic"};
+		if (fullname.endsWith(" italic")) return new String[] {fullname.substring(0,fullname.length()-6), "Italic"};
+		return fullname.split(" ");
 	}
 
 	/**
