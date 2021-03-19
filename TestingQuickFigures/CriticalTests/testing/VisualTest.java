@@ -36,6 +36,6 @@ public class VisualTest {
 		sb.showPopup();
          sb.setPopupVisible(true);
 		
-		IssueLog.waitSeconds(15);
+		IssueLog.waitSeconds(10);
 	}
 }

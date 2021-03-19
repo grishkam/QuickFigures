@@ -66,7 +66,7 @@ public class TemplateChooserDialogTest {
 			assert(template.getLayoutChooser().getModelItem()==layout1);
 			
 			/**long enough for the user to try clicking an item*/
-			IssueLog.waitSeconds(25);
+			IssueLog.waitSeconds(10);
 	}
 
 }

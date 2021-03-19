@@ -77,8 +77,10 @@ public class InsetToolTest extends ToolTester{
 		this.getSimulation(image).simulate(location3,location4);
 		
 		PanelGraphicInsetDefiner inset2 = currentTool.getMostRecentDrawnInset();
-		inset2.setAngle(Math.PI/3);
-		inset2.updateImagePanels();
+		if (inset2!=null) {
+			inset2.setAngle(Math.PI/3);
+			inset2.updateImagePanels();
+		}
 		
 		
 		currentTool.createInsetOnImagePanel(currentTool.getImageClicked(),panel.getImageDisplayObject(), new Rectangle(2,2, 15, 16));

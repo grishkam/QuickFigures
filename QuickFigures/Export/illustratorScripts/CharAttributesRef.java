@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 5, 2021
+ * Date Modified: Mar 18, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -61,7 +61,7 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		String string = split[0].trim();
 		if (string.equals("SansSerif")) string="Liberation Sans";//illustrator is not great with this font
 		if (string.equals("Monospaced")) string="Liberation Mono";
-		IssueLog.log("parsing font =["+string+"[");
+		
 		String name=string.toLowerCase();
 		String style="Regular";
 		if (split.length>1)style=split[1].toLowerCase();
@@ -71,12 +71,12 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return setFont(name, style);
 	}
 
-	/**
+	/**divides the font name into style and family sections, may not work for all fonts
 	 * @param fullname
 	 * @return
 	 */
 	private String[] splitFontName(String fullname) {
-		IssueLog.log("moving font "+fullname);
+		
 		
 		if (fullname.endsWith(".bolditalic")) return new String[] {fullname.substring(0,fullname.length()-11), "Bold Italic"};
 		if (fullname.endsWith(" bold italic")) return new String[] {fullname.substring(0,fullname.length()-11), "Bold Italic"};
@@ -84,7 +84,7 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		if (fullname.endsWith(".bold")) return new String[] {fullname.substring(0,fullname.length()-5), "Bold"};
 		if (fullname.endsWith(" Bold")) return new String[] {fullname.substring(0,fullname.length()-5), "Bold"};
 		if (fullname.endsWith(".italic")) return new String[] {fullname.substring(0,fullname.length()-6), "Italic"};
-		if (fullname.endsWith(" italic")) return new String[] {fullname.substring(0,fullname.length()-6), "Italic"};
+		if (fullname.endsWith(" Italic")) return new String[] {fullname.substring(0,fullname.length()-6), "Italic"};
 		return fullname.split(" ");
 	}
 

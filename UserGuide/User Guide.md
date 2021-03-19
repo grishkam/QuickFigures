@@ -1,6 +1,6 @@
 # QuickFigures User Guide  
-By Gregory Mazo
-
+By Gregory Mazo  
+Publications involving fluorescent microscopy generally contain many panels with split channels, merged images, scale bars and label text. Similar layouts of panels are used when displaying photographs, electron micrographs and other forms of images. Assembling and editing these figures with even spacing, consistent font, text position, accurate scale bars and other features can be tedious and time consuming. In order to save time and streamline the process I have created a toolset and ImageJ Plugin called QuickFigures. This user guide covers the key features. Please reach out to me if you have any questions or recommendations.  
 
 
 ## Section 1: Install 
