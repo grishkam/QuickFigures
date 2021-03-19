@@ -1,0 +1,4 @@
+Images were cropped centrioles
+
+1) The frist through 4th set of images were RPE1 cells taken on Septemer 21. Test of siRNAs of 3 genes. RPE1 cells stained with ODf2 green, cnap1 red, ninein cy5 680. This particular stain had weak ninein at the appendages and was inconsitent with most other stains (This might be because the Cy5 dye was a bit on the weak side. Or were the wrong cells used?). Due to the strange and non-reproducible result, chose not to present it as data. However, the images were good enough for dummy figures. Although the images are labeled as ninein cy5, ninen localization to subdistal appendages, ninein stain looks abnormal, it appears that cross reacted with cnap1. Various KO wer done. Test 0023 was used for #1_control RNAi.
+Nin, gene 1. cnap1 gene 2, odf2 gene 3
