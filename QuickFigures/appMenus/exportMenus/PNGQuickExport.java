@@ -96,15 +96,7 @@ public class PNGQuickExport extends QuickExport {
 		return "Image (.png)";
 	}
 	
-	public static void main(String[] args) throws IOException {
-		String path=args[0];
-		BufferedImage image = ImageIO.read(new File(path));
-		PNGImageWriter pngwrit = new PNGImageWriter();
-		ByteArrayOutputStream bao = new ByteArrayOutputStream();
-		pngwrit.writeImage(image, bao);
-		
-		
-	}
+
 	
 	
 	

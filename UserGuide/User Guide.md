@@ -26,7 +26,7 @@ Publications involving fluorescent microscopy generally contain many panels with
 -  Open an image and get to work!
 
 ### Ordinary ImageJ Install. 
-Although installing on a Fiji distribution is the easiest way to install with all the features, users can also install QuickFigures on a standared ImageJ distribution.  
+Although installing on a Fiji distribution is the easiest way to install QuickFigures with all the features (including Export), users can also install QuickFigures on a standared ImageJ distribution.  
 #### Step 1: Install an up to date version of ImageJ. 
 You can either download a fresh copy of ImageJ (recommended especially if you have an old install) or go to Help menu and choose 'Update ImageJ'
 
@@ -228,7 +228,7 @@ Objets can be hidden and un-hidden using the layers window (just click the icon 
 ## The Menus and Menu Bar
 The **Menu Bar** contains only a few major menus. File, Edit, Selected Item(s) and Add.
 ### File Menu
-- The **File** menu is designed similarly to the file menu in any software. The **Export** submenu contains menu items to export into one of several possible file formats (PPT, SVG, PDF, TIF, PNG or EPS ). The export submenu also contains an option to generate the figure in Adobe Illustrator. The **New**, **Save**, and **Open**, submenus contain menu items that create, store and retrieve QuickFigures worksheets and all of the figures/objects within them. Although both the save and the open menu items are fully functional, the form that the saved files take will change in future updates to QuickFigures. Although the saved files may be used for short term storage, users should export the files into a format such as SVG, PDF or PowerPoint.
+- The **File** menu is designed similarly to the file menu in any software. The **Export** submenu contains menu items to export into one of several possible file formats (PPT, SVG, PDF, TIF, PNG or EPS ). The export submenu also contains an option to generate the figure in Adobe Illustrator. Users can open exported files to finish editing in their preferred software. The **New**, **Save**, and **Open**, submenus contain menu items that create, store and retrieve QuickFigures worksheets and all of the figures/objects within them. Although both the save and the open menu items are fully functional, the form that the saved files take will change in future updates to QuickFigures. Although the saved files may be used for short term storage, users should export the files into a format such as SVG, PDF or PowerPoint.
 
 ### Edit Menu
 The **Edit** menu contains a variety of options that do not depend on which objects have been selected.
