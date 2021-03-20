@@ -785,11 +785,11 @@ public Object toIllustrator(ArtLayerRef aref) {
 	ti.getCharAttributesRef().setFillColor(getDimmedColor());
 	
 	
-	if (getAngle()!=0) {
+	/**if (getAngle()!=0) {
 		
 		ti.rotate(angle);
 		
-	}
+	}*/
 	
 	return ti;
 }

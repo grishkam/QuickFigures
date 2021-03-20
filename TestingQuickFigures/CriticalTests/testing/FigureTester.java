@@ -146,7 +146,7 @@ public class FigureTester {
 	with control and RNAi 
 	 */
 	public FigureOrganizingLayerPane createFigureFromExample3Images(ImageWindowAndDisplaySet diw, QuickFigureMaker qm, int nIndex, Point2D displace) {
-		this.ignoreTemplate=true;
+		FigureTester.ignoreTemplate=true;
 		qm.figureCreationOptions.ignoreSavedTemplate=true;
 		File[] files = FigureTester.getTest3ImagePaths(nIndex);
 		File control=null;

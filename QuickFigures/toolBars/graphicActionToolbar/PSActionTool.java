@@ -40,7 +40,7 @@ public class PSActionTool extends DisplayActionTool {
 	protected void perform(FigureDisplayWorksheet graphic) {
 		if (graphic!=null) {
 			
-		sm.sendWrapperToills(graphic.getAsWrapper(), true);
+		sm.sendWrapperToills(graphic.getAsWrapper(), true, null);
 		 ZIllustratorScriptGenerator.instance.execute();
 			
 		}

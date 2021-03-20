@@ -80,9 +80,15 @@ public class AdobeScriptMaker {
 	
 	
 	
-	public void sendWrapperToills(ImageWorkSheet montage, boolean makenew) {
-		makeRefForWrapper(montage, makenew);
+	public void sendWrapperToills(ImageWorkSheet montage, boolean makenew, File saveFile) {
+		IllustratorDocRef ref = makeRefForWrapper(montage, makenew);
 		sentToIlls(montage,aref);
+		if (makenew) 
+			{
+			if(saveFile==null) 
+				saveFile=new File(AdobeScriptGenerator.outputPathAI());
+			ref.saveAs(saveFile);
+			};
 	}
 	
 

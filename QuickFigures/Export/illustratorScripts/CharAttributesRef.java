@@ -22,8 +22,6 @@ package illustratorScripts;
 
 import java.awt.Font;
 
-import logging.IssueLog;
-
 /**a java class that generates scripts to create and modify a character attributes object in 
   adobe illustrator*/
 public class CharAttributesRef extends IllustratorObjectRef {

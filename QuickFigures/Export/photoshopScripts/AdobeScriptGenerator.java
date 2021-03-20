@@ -35,6 +35,7 @@ public class AdobeScriptGenerator {
 	
 	public static String outputFileSubPath="tmp/jsx/";
 	public static String outputFile = "output.jsx";
+	public static String outputFile2 = "output.ai";
 	
 	public static AdobeScriptGenerator instance=new AdobeScriptGenerator();
 	double x0=0;
@@ -69,9 +70,27 @@ public class AdobeScriptGenerator {
 	
 	public void execute() {
 		
-		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+outputFile);
+		savejsxAndRun(accumulatedscrip, outputPath());
 		accumulatedscrip="";
 	}
+	
+	
+	/**returns the output path for .jsx files
+	 * @return
+	 */
+	private String outputPath() {
+		return DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+outputFile;
+	}
+	
+	/**returns the output path for .ai files
+	 * @return
+	 */
+	public static String outputPathAI() {
+		return DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+outputFile2;
+	}
+	
+	
+	
 	public  static void savejsxAndRun(String javascript, String directoryJSX){
 		ZIllustratorScriptGenerator.saveString("#target photoshop"+'\n'+javascript, directoryJSX, false);
 		try {Desktop.getDesktop().open(new File(directoryJSX));} catch (IOException e) {}

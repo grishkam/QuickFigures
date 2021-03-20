@@ -44,7 +44,6 @@ import layout.basicFigure.BasicLayout;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CombinedEdit;

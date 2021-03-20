@@ -22,7 +22,6 @@ import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import testing.FigureTest;
 import testing.FigureTester;
-import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 
 /**

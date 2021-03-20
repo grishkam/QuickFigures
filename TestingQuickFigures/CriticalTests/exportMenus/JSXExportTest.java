@@ -48,6 +48,7 @@ import ultilInputOutput.FileChoiceUtil;
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
 			AdobeScriptGenerator.outputFile=count+"output.jsx";
+			AdobeScriptGenerator.outputFile2=ex.getType().name()+count+"output.ai";
 		
 			DisplayedImage createExample = ex.createExample();
 			new ExportIllustrator().performActionDisplayedImageWrapper(createExample);

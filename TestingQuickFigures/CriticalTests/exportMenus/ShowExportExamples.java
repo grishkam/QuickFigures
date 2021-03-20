@@ -14,7 +14,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.MANY_ANGLE_TEXT;//which cases to test. set to null if all should be tested
 
 
 

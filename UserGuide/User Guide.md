@@ -62,7 +62,7 @@ Note: For each of these options. The new figures created will be based on the de
 4.	You can export anything you create into other file formats using the Export menu (File->Export). Some export menu items will only appear if the required packages are installed. 
 
 ### The Basics of Using QuickFigures
-![image](images/Object_Tools.png)
+![image](images/tools/Object_Tools.png)
 - The **Object Tools** toolbar is the main toolbar for QuickFigures. It contains all the critical tools for selecting and drawing objects. Like the ImageJ toolbar, double clicking on a tool icon displays an options dialog relevant to that tool. Similarly to the ImageJ toolbar, control clicking/right clicking on many of the tool icons allows the user to access additional tools. The most important tool families are summarized below.  
 
 ![image](images/tools/Object_Selector.png)
@@ -73,10 +73,10 @@ Note: For each of these options. The new figures created will be based on the de
  
 ![image](images/tools/Shape_Tools.png)     
     - The shape tools can be used to draw a variety of [shapes](#Shapes). A user can switch back to the **Object Selector Tool** by pressing the spacebar or enter. Right clicking on the tool icons shows the variety of alternate shapes. One may draw rectangles, circles, arrows, polygons, lines, curves, stars, gears, triangles, blobs, and other shapes.
-
+  
 ![image](images/tools/TextTool.png)       
     - **Add Text Tool** is used to draw a fragment of [text](#Text). A user can right click on this tool for access to specialized versions of it. The tool may also be used to edit text.
-
+  
 ![image](images/tools/QuickFigure.png)     
     - **The Quick Figure Tool** creates a new figure from a multidimensional image. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. New figures may either be split channel or contain only the merged image depending on what the user has set as the default template.
    
@@ -127,7 +127,7 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
 **Channel Label** submenu contains options related to the [channel labels](#Channel-Label-Text). Will only affect the channel labels for the clicked image and not other images in the figure. 
  
 #### Other submenus
-7.	**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. To avoid confusing new users, this user manual does not contain details of those tools. See [supplemental user guide](SupplementalUserGuide.md) for details of these options (not yet written).
+**Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. To avoid confusing new users, this user manual does not contain details of those tools. See [supplemental user guide](SupplementalUserGuide.md) for details of these options (not yet written).
 
 #### Image Panel Popup Menu
 The popup menu contains options realted to the clicked [image panel](#Image-Panels) or the figure containing that panel. When an image panel is part of a figure, Image Panel popup menus can contain options related to the [channels](#Channels-Submenu), [This Image](#This-Image-Submenu) and the [figure](#Figure-Submenu).
@@ -143,7 +143,8 @@ The popup menu contains options realted to the clicked [layouts](#Layouts). The 
 Certain items like [labels](#Text) and [scale bars](#Scale-Bars) are 'attached' to [image panels](#Image-Panels) (or attached to [layouts](#Layouts)). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their parent panel. Attached item positions can be edited in a few ways.
   1.	Dragging the attached item directly. Normal mouse drags will alter the type of attachment location. For example, an item that is anchored at the lower right of a parent panel can be moved to the equivalent location in the upper right by a simple mouse drag. A user can also move an item from one parent panel to another or detach the item from its parent by dragging and dropping.
   2.	Using the attached item handle. Attached scale bars and text items will have an additional handle that allows the user to alter their attachment position (this appears as a red dot). By clicking and dragging within the red dot, a user can make small adjustments to the attachment position. A user can also click just outside of the red dot to change the type of location.
-  3.	Using the attachment **Position** dialog. A menu item to display this dialog will be present in the popup menu for the attached item. (as well as other menus and mini toolbars). A simpler version of this dialog will also appear in the position tab of other dialogs. A user can click and drag the blue square within the dialog to change the base location (from the Upper Left to Top for example). Finer adjustment to the location can be done with the sliders and numeric fields in this dialog. The attachment position dialog can also be used to assign the same attachment position to many labels ensuring consistent spacing of labels (using the checkbox is present in the complete dialog). Labels can also be attached to a row, column, or panel of a layout. The dialog also contains an option for switching the attachment position between row, column and panel modes (rarely used).  
+  3.	Using the attachment **Position** dialog. A menu item to display this dialog will be present in the popup menu for the attached item (as well as other menus and mini toolbars). A simpler version of this dialog will also appear in the position tab of other dialogs. A user can click and drag the blue square within the dialog to change the base location (from the Upper Left to Top for example). Finer adjustment to the location can be done with the sliders and numeric fields in this dialog.  
+Users can also click the ![image](images/minitoolbar/AP icon.png) icon seen below a selected item to show a position dialog that applies to all the selected items. This attachment position dialog can also be used to assign the same attachment position to many labels ensuring consistent spacing of labels (using the **Keep Relative Positions Same** checkbox that is present in the complete dialog).  Labels can also be attached to a row, column, or panel of a layout. The dialog also contains an option for switching the attachment position between row, column and panel modes (rarely used).  
   ![image](images/Dialogs/PositionDialog.png)
   
 ### Attachment Submenus
@@ -204,14 +205,17 @@ The **Recreate All Panels** dialog allows the user to change the options for gen
 ![image](images/Dialogs/RecreatePanels.png)
 
 #### Channel Use Dialog 
-The **Channel Use** Dialog allows the user to change how the channels are merged to create the image panels. Although it contains similar options to the Re-create panels dialog, the channel use dialog only changes how existing panels appear and does not create new panels nor delete old ones. Options in this dialog include **Channel Color Mode**, **Don't Merge These Channel(s)** and a **Merge Each Channel With**. Each work as described above for the re-create panels dialog.  
+The **Channel Use** Dialog allows the user to change how the channels are merged to create the image panels. Although it contains similar options to the Re-create panels dialog, the channel use dialog only changes how existing panels appear and does not create new panels nor delete old ones. Options in this dialog include **Channel Color Mode**, **Don't Merge These Channel(s)** and a **Merge Each Channel With**. Each work as described above for the [re-create panels dialog](#Recreate-All-Panels-Dialog).  
 ![image](images/Dialogs/ChannelUse.png)
 
 #### Display Range Dialog
-Display range dialog windows are used to change the display range for one or more channels. A user can open them using popup menus that appear when one right clicks on an image. These menu items are equivalent to the **Min/Max** and **Window/Level** commands in ImageJ. The window functions similarly to the ImageJ versions except that both merged images and split channel panels are adjusted in the same way. Depending on which channels are present in the image panel that was clicked on, these dialogs may have multiple tabs for different channels. Depending on which popup menu was used to open these windows, the adjustments may apply to either one source image or multiple source images. The target images for a display range dialog do not change while the dialog is open (unlike the ImageJ equivalent).
-![image](images/Dialogs/DisplayRangeDialog.png)
+Display range dialog windows are used to change the display range for one or more channels. A user can open them using popup menus that appear when one right clicks on an image. These menu items are equivalent to the **Min/Max** and **Window/Level** commands in ImageJ. The window functions similarly to the ImageJ versions except that both merged images and split channel panels are adjusted in the same way. Depending on which channels are present in the image panel that was clicked on, these dialogs may have multiple tabs for different channels. Depending on which popup menu was used to open these windows, the adjustments may apply to either one source image or multiple source images. By setting the same consistent display range for multiple source images, this dialog ensures that any visual comparison of intensity is valid.  
+A user can select multiple images and click the ![image](images/minitoolbar/BC icon.png) that appears below one to display a dialog that applies its affects to the selected images.  
+The target images for a display range dialog do not change while the dialog is open (unlike the ImageJ equivalent).  
+![image](images/Dialogs/DisplayRangeDialog.png)  
 #### Crop Dialog
-The Crop dialog window provides a way to change the crop area and rotation angle used for a source image. A user can either input numbers in the fields to the right of the window or drag the handles of rectangle. Depending on the image, the dialog may also contain option to change which channel, frame and slice is being shown while one edits the crop area. At the bottom of the window, there is an **Eliminate Cropping Rectangle** button which offers the options not to crop (nor rotate). A few different popup menu options can open a crop dialog.  
+The Crop dialog window provides a way to change the crop area and rotation angle used for a source image. A user can either input numbers in the fields to the right of the window or drag the handles of rectangle. Depending on the image, the dialog may also contain an option to change which channel, frame and slice is being shown while one edits the crop area. At the bottom of the window, there is an **Eliminate Cropping Rectangle** button which offers the options not to crop (nor rotate). A few different popup menu options can open a crop dialog.  
+A user can select multiple images and click the ![image](images/minitoolbar/C icon.png) icon to display a series of crop dialogs for those images only.
 ![image](images/Dialogs/CropDialog.png)
 
 #### Figure Format Dialog
@@ -245,21 +249,26 @@ The **Edit** menu contains a variety of options that do not depend on which obje
 Changes to the default template are particularly important. The default template is applied to automatically generated figures. Using the **Create Default Template** menu item, a user can change the default template according to their own style. Afterwards, whenever the user creates a figure (whether done with the menu items, the QuickFigure Button or drag/drop) the figure will automatically be made in their style. A user can also delete the default template at any time.
 
 ### Add Menu
-- The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the Layers Window than for the menu bars of the other windows in that the **Add Layer** menu item and several other options will only be present for the layers window. After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details. 
+The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the [Layers Window](#Layers-Window) than for the menu bars of the other windows. For example the **Add Layer** menu item and several other options will only be present for the [Layers Window](#Layers-Window). After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details. 
 
 ### Selected Item(s) Menu
 The **Selected Item(s)** menu performs specific operations that apply to the objects that the user currently has selected. A user can select an object by clicking on it within the worksheet or clicking within the layers window. Exactly which objects are treated as selected will differ if the menu bar for the layers window is used rather than the bar for the worksheet. 
 Within the **Selected Item(s)**  menu there are several submenus. 
--	**Align** submenu contains options to align the currently selected items. Since items in automatically generated figures are automatically aligned to the layout, users will rarely need to user this menu. These options are also available via the **Align and Arrange** toolbar.
--	**Arrange** submenu contains options to move and item forward or backwards within a layer. Since items in automatically generated figures are automatically arranged, users will rarely need to user this menu. These options are also available via the **Align and Arrange** toolbar.
+-	**Align** submenu contains options to align the currently selected items. Since items in automatically generated figures are automatically aligned to the layout, users will rarely need to user this menu.
+-	**Arrange** submenu contains options to move and item forward or backwards within a layer. Since items in automatically generated figures are automatically arranged, users will rarely need to user this menu.
 -	**Options Dialogs** submenu provides a way of opening dialogs for editing of objects. If multiple objects of the same type are selected, the dialogs will affect all items that were selected when the dialog was opened. Similar dialogs can be accessed via popup menus, double clicking objects, and clicking certain items in the mini toolbar. Some journals demand a specific font, minimum font size and minimum line width. The **Impose Journal Limits** menu option provides the user an easy was to change those properties via dialog.  Other options are specific to each category of object (text, image panel, scale bar, shape).
--	**Applications Scripts** is a specific submenu for generating scripts to create the objects in adobe illustrator. The script feature was developed using Adobe Creative Suite 5 on MacOS but later updated and retested with illustrator 25.2.1 on windows. Although it is optimal for users who want to continue their work in adobe Illustrator, it is only useful when a working copy of Illustrator is available. Adobe Illustrator must be set as the default software for opening .jsx files for these features to work. Identical options are present in the export menu (will be exclusively in the export menu in later versions of QuickFigures).
+-	**Applications Scripts** is a specific submenu for generating scripts to create the objects in adobe illustrator. The script feature was developed using Adobe Creative Suite 5 on MacOS but later updated and retested with illustrator 25.2.1 on windows 10. This option is optimal for users who want to continue their work in Adobe Illustrator. Adobe Illustrator must be set as the default software for opening .jsx files for these features to work. Identical options are present in the export menu (will be exclusively in the export menu in later versions of QuickFigures). Users must have Abobe Illustrator installed for this option to work.
 -	**Figure Format** The version of the figure format submenu in the selected items menu will act on the currently selected items only. See section on figure format. 
 - The **Toolbars** menu allows the user to open specific toolbars. Users may close toolbars that they do not need and open them again using this menu. Only the main toolbar is critical for use of QuickFigures, the others are optional.
-Smart Toolbar and mini toolbars. When a user selects an item, a set of icons will appear below the selected item. These function as a mini toolbar providing quick access to options specific to the selected item. If a user selects multiple items, the mini toolbar will only appear under one item but will (in most cases) affect every selected item. Furthermore, the user may find it more convenient to use the Smart toolbar (Toolbar) which will show the same icons in a separate window. Whenever a user selects a new item, the icons in the smart toolbar will change to reflect what options are available for that object type.
-The align and arrange toolbar functions the same way as the align menu items and the arrange menu items. The toolbar provides somewhat faster access to these options.
-The main toolbar includes the most critical tools. Object tools is an alternate name for the main toolbar. 
-The 'shape and text edit action tools' provide a quick way of making specific types of changes to selected object. The functions overlap with the smart toolbar. This toolbar will be absent in later releases of QuickFigures. 
+     - **Smart Toolbar and mini toolbars**. When a user selects an item, a set of icons will appear below the selected item. These function as a mini toolbar providing quick access to options specific to the selected item. If a user selects multiple items, the mini toolbar will only appear under one item but will (in most cases) affect every selected item. Furthermore, the user may find it more convenient to use the Smart toolbar (Toolbar) which will show the same icons in a separate window. Whenever a user selects a new item, the icons in the smart toolbar will change to reflect what options are available for that object type.  
+	![image](images/minitoolbar/Smart Toolbar3.png)  
+
+     - The align and arrange toolbar functions the same way as the align menu items and the arrange menu items. The toolbar provides somewhat faster access to these options (some users may prefer this).  
+	![image](images/tools/AlignArrange.png)    
+
+     - The main toolbar includes the most critical tools. Object tools is an alternate name for the main toolbar.  
+     ![image](images/tools/Object_Tools.png)  
+     - The **shape and text edit action tools** provide a quick way of making specific types of changes to selected object. The functions overlap with the smart toolbar. This toolbar will be absent in later releases of QuickFigures. 
 
 ## Object types 
 ### Scale bars 

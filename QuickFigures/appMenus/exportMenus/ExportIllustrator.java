@@ -20,6 +20,8 @@
  */
 package exportMenus;
 
+import java.io.File;
+
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import illustratorScripts.AdobeScriptMaker;
@@ -40,10 +42,25 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 		if (diw!=null) {
 			diw.updateDisplay();
 			ShowMessage.showOptionalMessage("Illustrator script creator ", false, "Illustrator script generator will create a .jsx file", "open that file with Adobe Illustrator" , "always wait for one .jsx script to finish before another",  "For alternative, export as SVG first and open with Illustrator");
-		sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true);
-		 ZIllustratorScriptGenerator.instance.execute();
+		
+			File file=null;
+			createInIllustrator(diw, file);
 			
 		}
+	}
+
+
+	
+
+
+	/**creates an illustrator script to generate the figure in illustrator
+	 * @param diw 
+	 * @param file the save location where illustrator will save
+	 */
+	public void createInIllustrator(DisplayedImage diw, File file) {
+		diw.updateDisplay();
+		sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true, file);
+		ZIllustratorScriptGenerator.instance.execute();
 	}
 	
 

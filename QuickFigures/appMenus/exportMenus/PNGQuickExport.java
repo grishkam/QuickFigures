@@ -22,13 +22,10 @@ package exportMenus;
 
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import org.apache.batik.ext.awt.image.codec.png.PNGImageWriter;
 
 import applicationAdapters.DisplayedImage;
 import ultilInputOutput.FileChoiceUtil;

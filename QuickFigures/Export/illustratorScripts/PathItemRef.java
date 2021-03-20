@@ -113,18 +113,18 @@ public class PathItemRef extends IllustratorObjectRef {
 	
 	public String setPointsOnPath(Point2D[] pt, boolean looptostart) {
 		if (pt.length==0) return "";
-	String output=	refname+".setEntirePath([";
-	output+=pointToJSarray(pt[0]);
-	for (int i=1; i<pt.length; i++) {
-		if (pt[i]!=null) {
-			output+=","+pointToJSarray(pt[i]); 
+		String output=	refname+".setEntirePath([";
+		output+=pointToJSarray(pt[0]);
+		for (int i=1; i<pt.length; i++) {
+			if (pt[i]!=null) {
+				output+=","+pointToJSarray(pt[i]); 
+			}
 		}
-	}
-	if (looptostart) output+=","+pointToJSarray(pt[0]);;
-	
-	output+= ""+"]);";
-	addScript(output);
-	return output;
+		if (looptostart) output+=","+pointToJSarray(pt[0]);;
+		
+		output+= ""+"]);";
+		addScript(output);
+		return output;
 	}
 	
 	public String createPathWithoutCurves(ArtLayerRef aref, Shape p) {

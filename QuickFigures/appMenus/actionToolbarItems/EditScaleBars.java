@@ -34,7 +34,6 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
-import iconGraphicalObjects.IconUtil;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.Fillable;
 import locatedObject.LocatedObject2D;

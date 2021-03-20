@@ -21,6 +21,7 @@
 package illustratorScripts;
 
 import java.awt.Dimension;
+import java.io.File;
 
 /**a java class that generates scripts to create and modify a document in 
 adobe illustrator*/
@@ -52,13 +53,26 @@ public class IllustratorDocRef extends IllustratorObjectRef {
 			return output;
 		}
 		
-		String setToOpen(String path) {
+	/**sets this referance to a saved document*/
+	public	String setToOpen(String path) {
 			set=true;
 			String output= getAssignment()+"app.open('"+path+"');";
 			
 			addScript(output);
 			 return output;
 		}
+		
+	
+	/**Creates Script that Saves the document*/
+		public String saveAs(File path) {
+			String output=this.createFileRef(path.getAbsolutePath());
+			
+			output+=this.refname+'\n'+".saveAs(fileRef);";
+			addScript(output);
+			 return output;
+		}
+		
+		
 		String setToPSFile(String path) {
 			set=true;
 			String output="var fileRef = File( '"+path+"'); " +'\n'+

@@ -25,8 +25,8 @@ abstract class QuickExportTest {
 	
 	TestExample testCase=null;//which cases to test. set to null if all should be tested
 
-	/**set to true if user will test files one by one*/
-	private boolean viewOnebyOne=true;
+	/**set to true if user will view files one by one as they are being created*/
+	private boolean viewOnebyOne=false;
 
 	@Test
 	void test() throws Exception {

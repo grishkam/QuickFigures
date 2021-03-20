@@ -24,8 +24,6 @@ import java.awt.Image;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-
 import javax.imageio.ImageIO;
 
 import figureFormat.DirectoryHandler;
@@ -57,21 +55,16 @@ public class PlacedItemRef extends IllustratorObjectRef{
 	String setToFile(String path) {
 		super.startTryCatch();
 		
-		if(super.creativeCloud) {
-			URI uri = new File(path).toURI();
-			path=uri.toString();
-			path=path.replace("file:/", "");//without this javascript will just not look in the correct file 
-			IssueLog.log("Path will be "+path);
-			
-			}
-			
-		String output="var fileRef = new File( '"+path+"'); " +'\n';
+		String output = createFileRef(path);
+		
 		output+=refname+".file=fileRef;";
 		addScript(output);
 		
 		super.endTryCatch("'Cannot find file'+"+"fileRef.toString");
 		return output;
 	}
+
+
 	
 
 	public static String trimfilename(String name ) {

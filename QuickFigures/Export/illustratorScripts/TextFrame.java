@@ -162,20 +162,21 @@ public class TextFrame extends IllustratorObjectRef {
 
 	
 	
-
+	/**creates a line*/
 	public void createLinePathItem(ArtLayerRef aref, Point2D baseLineStart,
 			Point2D baseLineEnd) {
-		this.createLinePathItem(aref, new Point2D[] {
-				new Point2D.Double(
-						baseLineStart.getX(),
-						baseLineStart.getY()
-						), 
-				new Point2D.Double(
-					baseLineEnd.getX(), 
-					baseLineEnd.getY()
-						)
-		}
-		);
+		Point2D[] point2ds = new Point2D[] {
+						new Point2D.Double(
+								baseLineStart.getX(),
+								baseLineStart.getY()
+								), 
+						new Point2D.Double(
+							baseLineEnd.getX(), 
+							baseLineEnd.getY()
+								)
+				};
+		
+		this.createLinePathItem(aref, point2ds);
 	}
 
 }

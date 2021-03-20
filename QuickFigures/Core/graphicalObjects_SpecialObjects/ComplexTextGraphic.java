@@ -448,12 +448,19 @@ public class ComplexTextGraphic extends TextGraphic {
 		return output;
 	}
 	
-	/**returns a point that is on a line defined by p1 and p2. If d2 is above 1, that point will be beyond the second point */
-	public static Point2D extendPoint(Point2D p1, Point2D p2, double d2) {
+	/**Flawed codereturns a point that is on a line defined by p1 and p2. 
+	 * If d2 is above 1, that point will be beyond the second point */
+	public Point2D extendPoint(Point2D p1, Point2D p2, double d2) {
+		
+	
+		
 		double d=1-d2;
 		double nx = (p1.getX()*d+p2.getX()*d2);
 		double ny = (p1.getY()*d+p2.getY()*d2);
 		return new Point2D.Double(nx, ny);
+		
+		
+		
 	}
 	
 	/**Generates a similar text item in an adobe illustrator script*/
@@ -467,7 +474,7 @@ public class ComplexTextGraphic extends TextGraphic {
 			
 			
 			double distanceChange=(line.getAllBaselineLengths()/seg2.baseLineDistance());
-			//double slope= (seg2.transformedBaseLineEnd.getY()-seg2.transformedBaseLineStart.getY())/ (seg2.transformedBaseLineEnd.getX()-seg2.transformedBaseLineStart.getX());
+			
 			Point2D p2 = extendPoint(seg2.transformedBaseLineStart, seg2.transformedBaseLineEnd, distanceChange);
 			ti.createLinePathItem(aref, seg2.transformedBaseLineStart, p2);
 			
@@ -504,12 +511,12 @@ public class ComplexTextGraphic extends TextGraphic {
 				
 			}
 			ti.removeInsertionPointFromRange();
-			if (getAngle()!=0) {
+			/**if (getAngle()!=0) {
 				
 				IssueLog.log("text in illustrator should be rotated");
 				ti.rotate(this.getAngle());
 				
-			}
+			}*/
 		
 		}
 		return null;

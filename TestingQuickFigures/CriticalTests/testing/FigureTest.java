@@ -23,7 +23,7 @@ public class FigureTest {
 	public FigureOrganizingLayerPane createFirstExample() {
 		FigureTester.setup();
 		FigureTester figureTester = new FigureTester();
-		figureTester.ignoreTemplate=true;
+		FigureTester.ignoreTemplate=true;
 		FigureOrganizingLayerPane f = figureTester. createFigureFromExample1AImages();
 		chooseCurrentWindow() ;
 		return f;

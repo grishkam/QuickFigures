@@ -41,7 +41,6 @@ import locatedObject.ColorDimmer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RainbowPaintProvider;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import objectDialogs.TextGraphicSwingDialog;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelectionSystem;

@@ -22,8 +22,11 @@ package illustratorScripts;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.io.File;
+import java.net.URI;
 
 import locatedObject.RectangleEdgePositions;
+import logging.IssueLog;
 
 /**a java class that generates scripts to create and modify an object in 
 adobe illustrator*/
@@ -69,6 +72,8 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 		addScript(output);
 		return output;
 	}
+	
+	/**sets the top left locatin of the object*/
 	public String setLeftandTop(double d, double d2) {
 		return setLeftandTop(d,  d2, 0, 0);
 	}
@@ -79,6 +84,11 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 		return pointToJSarray(x, y);
 	}
 	
+	/**returns a string that matches the location of a point in illustrator.
+	  since the 
+	  @param x the point in java coordinates
+	  @param y the point in java coordinates
+	  */
 	String pointToJSarray(double x, double y) {
 		y*=getGenerator().scale;
 		x*=getGenerator().scale;
@@ -210,7 +220,7 @@ public String endTryCatch() {
 		return out+"CENTER";
 		
 	}
-	/**
+	/**Adds a tag to the item
 	BOTTOM
 	LEFT
 	BOTTOMLEFT
@@ -226,6 +236,23 @@ public String endTryCatch() {
 		String output=tr.setToNewTag(this);
 		tr.setName(name);
 		tr.setValue(value);
+		return output;
+	}
+	
+	/**creates a file ref for the given file
+	 * @param path
+	 * @return
+	 */
+	protected String createFileRef(String path) {
+		if(creativeCloud) {
+			URI uri = new File(path).toURI();
+			path=uri.toString();
+			path=path.replace("file:/", "");//without this javascript will just not look in the correct file 
+			IssueLog.log("Path will be "+path);
+			
+			}
+			
+		String output="var fileRef = new File( '"+path+"'); " +'\n';
 		return output;
 	}
 	
