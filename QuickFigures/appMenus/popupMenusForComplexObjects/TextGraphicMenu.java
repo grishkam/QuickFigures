@@ -63,7 +63,7 @@ PopupMenuSupplier  {
 	public ArrayList<JMenuItem> getItems() {
 		ArrayList<JMenuItem> jm=new ArrayList<JMenuItem>();
 		jm.add(createItem(OPTIONS_DIALOG));
-		jm.add(createItem(EDIT_MODE));
+		//if (textG!=null && textG.isSelected())jm.add(createItem(EDIT_MODE));
 		addExpertOptions(jm);
 		jm.add(createDuplicatorAction(false).createJMenuItem("Duplicate"));
 		
