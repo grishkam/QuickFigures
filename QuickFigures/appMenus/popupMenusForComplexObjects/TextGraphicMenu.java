@@ -28,11 +28,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import channelLabels.ChannelLabelTextGraphic;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.TextInsetsDialog;
 import undo.UndoAddItem;
@@ -45,7 +48,7 @@ PopupMenuSupplier  {
 	 * 
 	 */
 	
-	static final String TEXT_INSETS="Inset text", OPTIONS_DIALOG="Text Options", FORMAT_BACKGROUND="Fill Background With Colored Shape", DUPLICATE_TEXT="Duplicate";
+	static final String TEXT_INSETS="Inset text", OPTIONS_DIALOG="Text Options", FORMAT_BACKGROUND="Fill Background With Colored Shape", DUPLICATE_TEXT="Duplicate", EDIT_MODE="Enter Text Edit Move";
 	
 	TextGraphic textG;
 
@@ -60,11 +63,13 @@ PopupMenuSupplier  {
 	public ArrayList<JMenuItem> getItems() {
 		ArrayList<JMenuItem> jm=new ArrayList<JMenuItem>();
 		jm.add(createItem(OPTIONS_DIALOG));
+		jm.add(createItem(EDIT_MODE));
 		addExpertOptions(jm);
 		jm.add(createDuplicatorAction(false).createJMenuItem("Duplicate"));
 		
+		
 		FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(textG);
-		if(f!=null) {
+		if(f!=null && !(textG instanceof ChannelLabelTextGraphic)) {
 			EditLabels menuItem = f.getMenuSupplier().getLabelEditorMenuItemFor(textG);
 			if (menuItem==null ) menuItem=new EditLabels(textG);
 			if (menuItem!=null)jm.add(menuItem);
@@ -140,6 +145,13 @@ PopupMenuSupplier  {
 		if (com.equals(TEXT_INSETS)) {
 			TextInsetsDialog id = new TextInsetsDialog(textG);
 			id.showDialog();
+		}
+		
+		
+		if (com.equals(EDIT_MODE)&& !(textG instanceof BarTextGraphic)) {
+			ShowMessage.showOptionalMessage("There is a better day", true, "You can enter text edit move by double cliking on a text item");
+			textG.select();
+			textG.setEditMode(true);
 		}
 	}
 	

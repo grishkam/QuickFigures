@@ -123,7 +123,8 @@ public class AttachmentPositionHandle extends SmartHandle {
 	
 	protected boolean fineControlMode() {
 		if (isInFineControlMode()) return true;
-		return KeyDownTracker.isKeyDown('f')||KeyDownTracker.isKeyDown('F');
+		return false;
+		//return KeyDownTracker.isKeyDown('f')||KeyDownTracker.isKeyDown('F');the keyboard control was buggy so I omited it
 	}
 
 	public void updateLocation() {

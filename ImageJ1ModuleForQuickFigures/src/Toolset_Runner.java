@@ -47,7 +47,7 @@ public class Toolset_Runner implements PlugIn {
 		}
 		
 		if (arg0.contains("main menu bar")) {
-			ShowMessage.showOptionalMessage("QuickFigures is moving the the Plugins Menu", true, "QuickFigures is moving the the Plugins Menu", "You can already find it there", "Later updates will only contain a QuickFigures submenu in the Plugins menu", "Later updates will not contain a 'QuickFigures' Menu in the main menubar");
+			ShowMessage.showOptionalMessage("QuickFigures is moving the the Plugins Menu", true, "QuickFigures is moving the the Plugins Menu", "You can already find it there", "Later updates will only contain a QuickFigures submenu in the Plugins menu", "Later updates will not contain a QuickFigures Menu in the main ImageJ menubar");
 		}
 		
 		

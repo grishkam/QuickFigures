@@ -601,7 +601,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		SmartHandle handle = this.getAllSmartHandles().getHandleNumber(handlenum);
 		
 		if(handle instanceof AttachmentPositionHandle) {
-		//	((LockedItemHandle) handle).setInfineControl((p2.distance(handle.getCordinateLocation())<2.5));
+		
 			handle.handleMove(p1, p2);
 			
 		}
