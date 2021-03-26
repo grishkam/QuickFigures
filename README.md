@@ -3,7 +3,7 @@ QuickFigures is a toolset for creating scientific figures.
 
 See [tutorial video playlist](https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1) for instructions or you may read the [user guide](https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md)
 
-You can download [here](https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar)
+You can install using the ImageJ update site or download [here](https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar)
 
 See [publication](https://www.biorxiv.org/content/10.1101/2020.09.24.311282v2) for more details
 
