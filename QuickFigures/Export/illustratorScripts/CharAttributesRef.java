@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 18, 2021
+ * Date Modified: Mar 20, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -37,7 +37,7 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return output;
 	}
 	
-	/**sets the font. old version that may be removed or reused later
+	/**sets the font. method is an old version that may be removed or reused later
 	 * @param family
 	 * @param style
 	 * @return
@@ -52,15 +52,15 @@ public class CharAttributesRef extends IllustratorObjectRef {
 	}
 
 	/**Adds series of code that helps find a font with the given name
-	 * within the illustrator fonts
+	 * within the list of illustrator fonts
 	 * given a full font name, sets the font*/
 	private String findFont(String fullname) {
 		String[] split = splitFontName(fullname);
-		String string = split[0].trim();
-		if (string.equals("SansSerif")) string="Liberation Sans";//illustrator is not great with this font
-		if (string.equals("Monospaced")) string="Liberation Mono";
+		String familyName = split[0].trim();
+		if (familyName.equals("SansSerif")) familyName="Liberation Sans";//illustrator is not great with this font
+		if (familyName.equals("Monospaced")) familyName="Liberation Mono";
 		
-		String name=string.toLowerCase();
+		String name=familyName.toLowerCase();
 		String style="Regular";
 		if (split.length>1)style=split[1].toLowerCase();
 		else {style="Regular";}
@@ -107,16 +107,14 @@ public class CharAttributesRef extends IllustratorObjectRef {
 				
 		output+="} catch (err) {alert('failed to find font '+i+aFontName+err);}";
 		
-	//	int loc=50;
-		//output+="if (i=="+loc+")"+"alert('looking for font'+'"+name+"');";
-		//output+="if (i=="+loc+")"+"alert('looking at font'+aFontName);";
+
 		output+="};";
 		
-		//output+="if(notfound) alert('failed to find font');";
 		output+="} catch (err) {alert('failed to find font');}";
 		return output;
 	}
 	
+	/**sets whether the text is stikethrough*/
 	public String setStrikeThrough(boolean strike) {
 		String output="try{";
 		if (strike)
@@ -126,6 +124,7 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		return output;
 	}
 	
+	/**sets whether the text is underlined*/
 	public String setUnderline(boolean strike) {
 		String output="try{";
 		if(strike)
@@ -167,11 +166,9 @@ public class CharAttributesRef extends IllustratorObjectRef {
 		
 	}
 	
-	
+	/**sets the font*/
 	public String setfont(Font f) {
 		
-			
-			//if(super.creativeCloud)fontName=fontName.replace(" ", "-");
 			String o=setfontStyleandFamily(f)+'\n' ;
 		return o+ setfontSize(f.getSize());
 	}

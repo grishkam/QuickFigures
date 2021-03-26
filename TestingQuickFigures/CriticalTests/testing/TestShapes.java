@@ -60,7 +60,7 @@ public class TestShapes {
 	/**Creates a worksheet with example objects
 	 * @param type the sort of example object*/
 	public static ImageWindowAndDisplaySet createExample(TestExample type) {
-		ImageWindowAndDisplaySet i = ImageWindowAndDisplaySet.createAndShowNew("Figure", 500,400);
+		ImageWindowAndDisplaySet i = ImageWindowAndDisplaySet.createAndShowNew(type.name(), 500,400);
 		addExampleObjects(i, type);
 		i.updateDisplay();
 		return i;
@@ -93,7 +93,7 @@ public class TestShapes {
 			r = RightTriangleGraphic.blankShape(new Rectangle(20,20, 40, 30), Color.magenta.darker());
 			r.setFillColor(Color.cyan.brighter());
 			
-			addMultipleVersions(ids, r, ShapeActionButtonHandleList2.getJions(), ShapeActionButtonHandleList2.getStrokes(), 0, 200);
+			addMultipleVersions(ids, r, ShapeActionButtonHandleList2.getJoins(), ShapeActionButtonHandleList2.getStrokes(), 0, 200);
 			
 		}
 		

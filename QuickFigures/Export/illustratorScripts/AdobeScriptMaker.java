@@ -79,25 +79,37 @@ public class AdobeScriptMaker {
 	
 	
 	
-	
-	public void sendWrapperToills(ImageWorkSheet montage, boolean makenew, File saveFile) {
-		IllustratorDocRef ref = makeRefForWrapper(montage, makenew);
-		sentToIlls(montage,aref);
+	/**generate an illustrator script to replicate the objects in the worksheet
+	 * @param worksheet the worksheet containing the objects
+	 * @param makenew set to true if a new illustator document should be created
+	 * @param saveFile specifies where illustrator should save the file*/
+	public void sendWrapperToills(ImageWorkSheet worksheet, boolean makenew, File saveFile) {
+		IllustratorDocRef ref = makeRefForWrapper(worksheet, makenew);
+		sentToIlls(worksheet,aref);
 		if (makenew) 
 			{
 			if(saveFile==null) 
 				saveFile=new File(AdobeScriptGenerator.outputPathAI());
-			ref.saveAs(saveFile);
+			if(saveFile.getAbsolutePath().toLowerCase().endsWith("eps"))
+				ref.saveAsEPS(saveFile);
+			else
+			if(saveFile.getAbsolutePath().toLowerCase().endsWith("pdf"))
+				ref.saveAsEPS(saveFile);
+			else
+				ref.saveAs(saveFile);
 			};
 	}
 	
-
 	
-	protected void sentToIlls(Object mont, ArtLayerRef aref) {
-		IssueLog.log("making illustrator script for "+mont);
+	
+	
+
+	/**Add the given worksheet to the artlayer*/
+	protected void sentToIlls(Object worksheet, ArtLayerRef aref) {
+		IssueLog.log("making illustrator script for "+worksheet);
 		
-		if (mont instanceof FigureDisplayWorksheet) {
-			FigureDisplayWorksheet mont2 = (FigureDisplayWorksheet)mont;
+		if (worksheet instanceof FigureDisplayWorksheet) {
+			FigureDisplayWorksheet mont2 = (FigureDisplayWorksheet)worksheet;
 			if (mont2.getTopLevelLayer() instanceof IllustratorObjectConvertable) {
 				((IllustratorObjectConvertable) mont2.getTopLevelLayer()).toIllustrator(aref);
 			}
@@ -106,33 +118,24 @@ public class AdobeScriptMaker {
 }
 	
 	
-	/**creates a document in PS*/
-	public String createImageInPSifNeeded(String name, int width, int height, int ppiResolution) {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**second half of the file is for photoshop versions, these are outdated but may be replaced later*/
+	
+	
+	/**creates a document. Written for the photoshop version in PS*/
+	private String createImageInPSifNeeded(String name, int width, int height, int ppiResolution) {
 		String output='\n'+"if (app.documents.length==0 ||"+true+") {var mergedDoc = app.documents.add("+width+", "+height+", "+ppiResolution+", '"+name+"');}"+'\n';;
 		return output;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/**second half is for ps*/
-	
 	
 	  String newLayerSet(String title) {
 			 return  '\n'+"var layerSetRef = app.activeDocument.layerSets.add()"+'\n'+"layerSetRef.name='"+title+"'"+'\n';

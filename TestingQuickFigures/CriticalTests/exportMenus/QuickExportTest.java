@@ -57,7 +57,9 @@ abstract class QuickExportTest {
 			if(testCase!=null &&testCase!=ex.getType()) { count++; continue;}
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
-			String testOutput = DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"+"Export Test "+count+ex.getType().name()+"("+Math.random()+")."+qe.getExtension();
+			
+			String variation ="";// " ("+Math.random()+")";//
+			String testOutput = DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"+"Export Test "+count+" "+ex.getType().name()+variation+"."+qe.getExtension();
 			
 			File file = new File(testOutput);
 			file.delete();

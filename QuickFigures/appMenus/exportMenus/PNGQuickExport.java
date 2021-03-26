@@ -70,6 +70,7 @@ public class PNGQuickExport extends QuickExport {
 	 */
 	public void saveInPath(DisplayedImage diw, String newpath) throws IOException {
 		FlatCreator flat = new FlatCreator();
+		diw.updateDisplay();
 		flat.setUseTransparent(false);
 		if (showDialogEverytime)flat.showDialog();
 		BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());

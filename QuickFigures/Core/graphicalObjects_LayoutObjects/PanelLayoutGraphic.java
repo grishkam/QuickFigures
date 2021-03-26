@@ -667,7 +667,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 				}
 			Integer rw = getPanelLocations().get(o);
 			
-			if(rw<0) return;//some items may have a -1 for no location
+			if(rw!=null&&rw<0) return;//some items may have a -1 for no location
 			if (rw==null||rw==-1) mapPanelLocation(o);
 			Rectangle2D rectForSnap = getRectForSnap(getPanelLocations().get(o), o);
 			

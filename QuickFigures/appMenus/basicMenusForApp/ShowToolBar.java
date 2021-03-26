@@ -44,6 +44,29 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 		toolBarType=type;
 	}
 	
+	/**creates a toolbar shower for the target text*/
+	public ShowToolBar(String type) {
+		for(int i=-1; i<names.length; i++) {
+			
+			if(i>=0 && type.equals(names[i]))
+				toolBarType=i;
+		}
+	}
+	
+	/**shows the toolbar of the given name*/
+	public static void showToolbarFor(String text) {
+		for(String st: names) {
+			if(text.contains(st)) {
+				ShowToolBar output = new ShowToolBar(st);
+				if(output.toolBarType==-1)
+					return;
+				output.performActionDisplayedImageWrapper(null);
+			}
+		}
+		
+	}
+	
+	
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (getToolBarName().equals(OBJECT_TOOLS))new ObjectToolset1().run("");
@@ -52,10 +75,14 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 		if (getToolBarName().equals(SHAPE_AND_TEXT_EDITING_BAR))new ActionToolset2().run("");
 		if (getToolBarName().equals(MAIN_TOOLBAR))new ObjectToolset1().run("");
 		if (getToolBarName().equals(SMART_TOOL_BAR)) {
+			if(AdaptiveToolbar.current!=null) {
+				AdaptiveToolbar.current.setVisible(false);
+			}
 			AdaptiveToolbar a = new AdaptiveToolbar();
 			a.setVisible(true);
+			a.setLocation(850, 200);
 		}
-		if (this.getToolBarName().equals(SIDE_PANEL)) {
+		if (this.getToolBarName().equals(SIDE_PANEL)&&diw!=null) {
 			if (diw.getWindow() instanceof GraphicSetDisplayWindow) {
 				GraphicSetDisplayWindow g=(GraphicSetDisplayWindow) diw.getWindow();
 				g.setUsesBuiltInSidePanel(!g.usesBuiltInSidePanel());

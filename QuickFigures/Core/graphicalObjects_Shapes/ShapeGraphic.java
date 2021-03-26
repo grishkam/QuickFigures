@@ -383,7 +383,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 			pi.rotate((getAngle()*(180/Math.PI)));
 		}
 		pi.setStrokeCap(end);
-		pi.setStrokeJion(join);
+		pi.setStrokeJoin(join);
 		pi.setMiterLimit(getMiterLimit());
 		}
 	

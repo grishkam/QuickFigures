@@ -108,7 +108,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		
 			itemForIcon=new EditManyObjects(BasicStroke.JOIN_BEVEL, null);
 			itemForIcon.setModelItem(shape);
-			GeneralActionListHandle cj =new GeneralActionHandleJoiner(itemForIcon, this.numHandleID,getJions()) ;
+			GeneralActionListHandle cj =new GeneralActionHandleJoiner(itemForIcon, this.numHandleID,getJoins()) ;
 			super. addOperationList(itemForIcon, cj );
 			cj.setxShift(cj.getxShift() + 4);
 			cj.setyShift(cj.getyShift() + 6);
@@ -259,7 +259,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	}
 	
 
-	public static EditManyObjects[] getJions() {
+	public static EditManyObjects[] getJoins() {
 		return new EditManyObjects[] {
 				new EditManyObjects(BasicStroke.JOIN_BEVEL, null),
 				new EditManyObjects(BasicStroke.JOIN_MITER, null),

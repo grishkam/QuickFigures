@@ -78,17 +78,24 @@ public class AdobeScriptGenerator {
 	/**returns the output path for .jsx files
 	 * @return
 	 */
-	private String outputPath() {
-		return DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+outputFile;
+	private static String outputPath() {
+		return destinationFolder(outputFile);
 	}
 	
 	/**returns the output path for .ai files
 	 * @return
 	 */
 	public static String outputPathAI() {
-		return DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+outputFile2;
+		return destinationFolder(outputFile2);
 	}
 	
+	
+	/**returns the output path than the temporary files will be saved to
+	 * @return
+	 */
+	public static String destinationFolder(String file2) {
+		return DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+file2;
+	}
 	
 	
 	public  static void savejsxAndRun(String javascript, String directoryJSX){

@@ -64,6 +64,7 @@ public class FigureTester {
 	
 	public static final String testFolderPath = new DirectoryHandler().getFigureFolderPath()+"/Testing/Test ";
 
+	/**lists the rectangles that will be used for a sequence of example images*/
 	Rectangle[] cropRectsForExample1=new Rectangle[] {new Rectangle(280, 200, 300,250),
 								new Rectangle(630, 600, 300,250),
 								new Rectangle(300, 200, 300,250), 
@@ -456,7 +457,7 @@ public class FigureTester {
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
 			if (form==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
-			
+			CurrentFigureSet.getCurrentActiveDisplayGroup().getImageAsWrapper().setTitle(form.name());
 			return  CurrentFigureSet.getCurrentActiveDisplayGroup();
 		}
 	}

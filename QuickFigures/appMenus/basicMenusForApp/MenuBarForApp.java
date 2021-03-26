@@ -38,6 +38,7 @@ import exportMenus.PNGQuickExport;
 import exportMenus.PNGSequenceQuickExport;
 import exportMenus.PPTQuickExport;
 import exportMenus.SVGQuickExport;
+import exportMenus.ShowInformation;
 import exportMenus.TiffQuickExport;
 import figureFormat.TemplateUserMenuAction;
 import graphicActionToolbar.CurrentFigureSet;
@@ -152,20 +153,31 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			
 			installItem(new PNGQuickExport(false));
 			installItem(new TiffQuickExport(false));
-		
 			
+			boolean exportPackagesInstall=true;
 			try {
 				installItem(new PPTQuickExport(true));} 
 			catch (Throwable t) {	
-			//if there is any problem with installation the menu item will not be added
+				exportPackagesInstall=false;
 		}
 			
-			installBatikExportItems();
+			boolean batikInstall = installBatikExportItems();
 			
 			
 			installItem(new ExportIllustrator());
+			installItem(new ExportIllustrator(true, "eps"));
+			installItem(new ExportIllustrator(true, "pdf"));
 	
 			installItem(new PNGSequenceQuickExport());
+			
+			if (! batikInstall)
+				{
+				installItem(new ShowInformation("SVG, PDF and EPS export packages not installed"));
+				}
+			if (! exportPackagesInstall)
+			{
+				installItem(new ShowInformation("PowerPoint export packages not installed"));
+			}
 			
 	}
 
@@ -173,7 +185,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	/**
 	 * 
 	 */
-	public void installBatikExportItems() {
+	public boolean  installBatikExportItems() {
 		try {
 			SVGQuickExport obj = new SVGQuickExport();
 			if (obj.isBatikInstalled())
@@ -187,10 +199,10 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 				installItem(ep);
 			}
 			
-			
+			return true;
 			} 
 		catch (Throwable t) {	
-			//if there is any problem with installation the menu item will not be added
+			return false;
 }
 	}
 	

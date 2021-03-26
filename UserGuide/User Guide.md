@@ -164,8 +164,10 @@ A user can click on a figure layout just like any other object. Several kinds of
 -	Label Space handles. The spaces above, to the left, below, and to the right of the panels are meant for labels. Although these spaces are adjusted automatically, the user is also allowed to make manual changes using these handles.
 -	Panel Size handles are on the bottom or right edges of panels. Although panel sizes are adjusted automatically, in the user may also perform manual edits using these handles.
 -	Layout scale handle. Scales the layout and all objects within it. This handle is more convenient than selecting all the objects and then scaling them.  
+
 ![image](images/layout/LayoutHandles.png)  
 ![image](images/layout/LayoutHandles2.png) 
+![image](images/layout/LayoutHandles3.png)  
 
 #### 2) Editing layouts using the layout tools.
 An addition toolbar for layout tools is available. The user can go to Toolbars->Show Layout Tools to display this toolbar. These tools accomplish the same specific tasks as the layout handles. Although the layout handles are more convenient, the layout tools are somewhat easier to learn (since each tool icon demonstrates the function of the tool and each tool performs exactly one function). None of the layout tools are essential.
@@ -173,7 +175,7 @@ An addition toolbar for layout tools is available. The user can go to Toolbars->
 ![image](images/layout/LayoutTools.png)  
 -	**Select layout** tool. This tool will only select layouts and ignore anything else. Although a user can always click on and select a layout, this tool becomes convenient if most of a layout is behind other objects (such as panels). After clicking on a layout with this tool, a user can edit the layout by clicking, dragging the handles, right clicking, double clicking and so on. The other layout tools cannot be used in this way.
 -	**Adjust border** tool. This tool alters the distance between rows/columns of the clicked layout.  
--	**Swap Row Tool**, Swap Column Tool and Swap Panel Tool. These tools swap the contents of two rows, two columns or two panels.
+-	**Swap Row Tool**, **Swap Column Tool** and **Swap Panel Tool**. These tools swap the contents of two rows, two columns or two panels.
 -	**Move layout** tool. Moves the figure and all of its contents.
 -	**Adjust label space** tool. Used to manually change the label spaces. 
 -	**Panel number change** tool. Changes the number of rows and columns.

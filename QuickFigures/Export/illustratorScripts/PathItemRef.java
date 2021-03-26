@@ -52,7 +52,7 @@ public class PathItemRef extends IllustratorObjectRef {
 	
 	
 	
-	
+	/**sets the item as filled*/
 	public String setFilled(boolean b) {
 		String output=refname+".filled="+b+";";
 		addScript(output);
@@ -66,7 +66,7 @@ public class PathItemRef extends IllustratorObjectRef {
 	}
 	
 	
-	
+	/**sets the stroke width*/
 	public String setStoke(double b) {
 		b*=getGenerator().scale;
 		String output=refname+".strokeWidth="+b+";";
@@ -338,8 +338,8 @@ public class PathItemRef extends IllustratorObjectRef {
 	}
 	
 	/**sets the stroke join based on java's basic stroke*/
-	public String setStrokeJion(int cap) {
-		String out = refname+".strokeJion=";
+	public String setStrokeJoin(int cap) {
+		String out = refname+".strokeJoin=";
 		if (cap==BasicStroke.JOIN_ROUND) out+="StrokeJoin.ROUNDENDJOIN;";
 			else
 		if (cap==BasicStroke.JOIN_BEVEL) out+="StrokeJoin.BEVELENDJOIN;";

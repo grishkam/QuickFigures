@@ -22,7 +22,7 @@ item75989629.fillColor = new NoColor();
 try{item75989629.name='Rectangle ';} catch (err) {}
 item75989629.strokeWidth=1.0;
 item75989629.strokeCap=StrokeCap.BUTTENDCAP;
-item75989629.strokeJion=StrokeJoin.BEVELENDJOIN;
+item75989629.strokeJoin=StrokeJoin.BEVELENDJOIN;
 item75989629.strokeMiterLimit=8.0;
 
 var item55474685 =item94801724.pathItems.ellipse(157.0,58.0,133.0,88.0);
@@ -42,7 +42,7 @@ item55474685.fillColor = newRGBColor
 try{item55474685.name='Oval';} catch (err) {}
 item55474685.strokeWidth=1.0;
 item55474685.strokeCap=StrokeCap.BUTTENDCAP;
-item55474685.strokeJion=StrokeJoin.BEVELENDJOIN;
+item55474685.strokeJoin=StrokeJoin.BEVELENDJOIN;
 item55474685.strokeMiterLimit=8.0;
 
 var item29739848 =item94801724.pathItems.add();
@@ -75,7 +75,7 @@ item29739848.fillColor = new NoColor();
 try{item29739848.name='Path';} catch (err) {}
 item29739848.strokeWidth=2.0;
 item29739848.strokeCap=StrokeCap.BUTTENDCAP;
-item29739848.strokeJion=StrokeJoin.BEVELENDJOIN;
+item29739848.strokeJoin=StrokeJoin.BEVELENDJOIN;
 item29739848.strokeMiterLimit=8.0;
 
 var item17629809 =item94801724.pathItems.add();
@@ -128,7 +128,7 @@ item17629809.fillColor = newRGBColor
 try{item17629809.name='Polygon';} catch (err) {}
 item17629809.strokeWidth=5.0;
 item17629809.strokeCap=StrokeCap.BUTTENDCAP;
-item17629809.strokeJion=StrokeJoin.ROUNDENDJOIN;
+item17629809.strokeJoin=StrokeJoin.ROUNDENDJOIN;
 item17629809.strokeMiterLimit=8.0;
 
 var item42823019 =item94801724.pathItems.add();
@@ -177,7 +177,7 @@ item42823019.fillColor = new NoColor();
 try{item42823019.name='Polygon';} catch (err) {}
 item42823019.strokeWidth=1.0;
 item42823019.strokeCap=StrokeCap.BUTTENDCAP;
-item42823019.strokeJion=StrokeJoin.BEVELENDJOIN;
+item42823019.strokeJoin=StrokeJoin.BEVELENDJOIN;
 item42823019.strokeMiterLimit=8.0;
 
 var item60044422 =item94801724.pathItems.add();
@@ -214,7 +214,7 @@ item60044422.fillColor = new NoColor();
 try{item60044422.name='Triangle';} catch (err) {}
 item60044422.strokeWidth=2.0;
 item60044422.strokeCap=StrokeCap.BUTTENDCAP;
-item60044422.strokeJion=StrokeJoin.BEVELENDJOIN;
+item60044422.strokeJoin=StrokeJoin.BEVELENDJOIN;
 item60044422.strokeMiterLimit=8.0;
 
 var item102561 =item94801724.pathItems.add();
@@ -241,7 +241,7 @@ item102561.fillColor = new NoColor();
 try{item102561.name='Simple Line';} catch (err) {}
 item102561.strokeWidth=1.0;
 item102561.strokeCap=StrokeCap.BUTTENDCAP;
-item102561.strokeJion=StrokeJoin.BEVELENDJOIN;
+item102561.strokeJoin=StrokeJoin.BEVELENDJOIN;
 item102561.strokeMiterLimit=8.0;
 
 var item97266530 =item94801724.pathItems.add();

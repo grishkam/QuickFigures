@@ -18,7 +18,7 @@ import ultilInputOutput.FileChoiceUtil;
 	
 	
 	
-	TestExample testCase=TestExample.MANY_ANGLE_COMPLEX_TEXT;//which cases to test. set to null if all should be tested
+	TestExample testCase=null;//which cases to test. set to null if all should be tested
 
 
 	@Test
@@ -43,15 +43,21 @@ import ultilInputOutput.FileChoiceUtil;
 		for(TestProvider t: FigureTester.getTests()) {
 			testsCases.add(t);
 		}
+		
+		ArrayList<DisplayedImage> examples=new ArrayList<DisplayedImage>();
+		
 		for(TestProvider ex: testsCases) {
 			if(testCase!=null &&testCase!=ex.getType()) { count++; continue;}
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
 			AdobeScriptGenerator.outputFile=count+"output.jsx";
-			AdobeScriptGenerator.outputFile2=ex.getType().name()+count+"output.ai";
-		
+			AdobeScriptGenerator.outputFile2="Export Test "+count+" "+ex.getType().name()+count+".ai";
+			String st = "Export Test "+count+" "+ex.getType().name();
+			
+			
 			DisplayedImage createExample = ex.createExample();
-			new ExportIllustrator().performActionDisplayedImageWrapper(createExample);
+			createExample.getImageAsWrapper().setTitle(st);
+			examples.add(createExample);
 			
 			
 			IssueLog.log(System.currentTimeMillis()-time);
@@ -61,10 +67,11 @@ import ultilInputOutput.FileChoiceUtil;
 			
 				}
 		
+		new ExportIllustrator().createInIllustrator(AdobeScriptGenerator.destinationFolder(""), examples);
 		
 		assert(FileChoiceUtil.yesOrNo("run the script in adobe illustrator. determine if it worked before clicking yes"));
 		
-		IssueLog.waitSeconds(215);
+		IssueLog.waitSeconds(15);
 		
 	}
 

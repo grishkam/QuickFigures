@@ -87,7 +87,7 @@ public class AlignAndArrangeActionTools extends QuickFiguresToolBar{
 
 
 
-	public static EditManyObjects[] getCapsAndJions() {
+	public static EditManyObjects[] getCapsAndJoins() {
 		return new EditManyObjects[] {
 				new EditManyObjects(BasicStroke.JOIN_BEVEL, null),
 				new EditManyObjects(BasicStroke.JOIN_MITER, null),

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 20, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -154,17 +154,22 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 	static String startTry="try{";
 	static String endTry="} catch (err) {}";
 	
+	/**Adds the start of a try/catch block to the script*/
 	public String startTryCatch() {
 		String output="try{";
 		addScript(output);
 		return output;
 		}
-public String endTryCatch() {
+	
+	/**Adds the end of a try/catch block to the script*/
+	public String endTryCatch() {
 		
 		String output="} catch (err) {"+"}";
 		addScript(output);
 		return output;
 		}
+	
+	/**Adds the end of a try/catch block to the script along with an alert*/
 	public String endTryCatch(String alert) {
 		
 		String output="} catch (err) { alert("+alert+");}";
@@ -172,12 +177,8 @@ public String endTryCatch() {
 		return output;
 		}
 	
-	public String alert(String st) {
-		String output="} catch (err) {}";
-		addScript(output);
-		return output;
-		}
 	
+	/***/
 	public String scale(double amount) {
 		return resize(amount, amount) ;
 	}

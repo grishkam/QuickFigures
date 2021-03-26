@@ -15,16 +15,45 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 20, 2021
+ * Date Modified: Jan 6, 2021
  * Version: 2021.1
  */
-package illustratorScripts;
+package exportMenus;
 
+import java.awt.Window;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import applicationAdapters.DisplayedImage;
+import basicMenusForApp.BasicMenuItemForObj;
+import ultilInputOutput.FileChoiceUtil;
 
-/**objects that can be re-created in Adobe illustrator implement this interface*/
-public interface IllustratorObjectConvertable {
+/**An class that only shows information*/
+public class ShowInformation  extends BasicMenuItemForObj {
+
 	
-	/**creates the object within an illustrator art layer*/
-	Object toIllustrator(ArtLayerRef aref);
+
+	private String name;
+	String path = "File<Export";
+	
+	public ShowInformation(String name) {
+		this.name=name;
+	}
+
+	@Override
+	public String getMenuPath() {
+		
+		return path;
+	}
+	
+	
+	/**name for the meny item*/
+	public String getNameText() {
+		return name;
+	}
+	
+	
+	
+	
 	
 }

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 20, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -45,7 +45,7 @@ public class IllustratorDocRef extends IllustratorObjectRef {
 		}
 		
 		
-		
+		/**sets this doc reference to the active document*/
 	public 	String setReftoActiveDocument() {
 			set=true;
 			String output=getAssignment()+" app.activeDocument;";
@@ -65,14 +65,35 @@ public class IllustratorDocRef extends IllustratorObjectRef {
 	
 	/**Creates Script that Saves the document*/
 		public String saveAs(File path) {
-			String output=this.createFileRef(path.getAbsolutePath());
-			
-			output+=this.refname+'\n'+".saveAs(fileRef);";
+			String output=createFileRef(path.getAbsolutePath());
+			output+=this.refname+".title='"+path.getName()+ "';";
+			output+=this.refname+".saveAs(fileRef);";
+			addScript(output);
+			 return output;
+		}
+		
+		/**Creates Script that Saves the document as an esp file*/
+		public String saveAsEPS(File path) {
+			String output=createFileRef(path.getAbsolutePath());
+			output+=this.refname+".title='"+path.getName()+ "';";
+			output+="var saveO= new EPSSaveOptions();"+'\n';
+			output+=this.refname+".saveAs(fileRef, saveO);";
+			addScript(output);
+			 return output;
+		}
+		
+		/**Creates Script that Saves the document as an PDF file*/
+		public String saveAsPDF(File path) {
+			String output=createFileRef(path.getAbsolutePath());
+			output+=this.refname+".title='"+path.getName()+ "';";
+			output+="var saveO= new PDFSaveOptions();"+'\n';
+			output+=this.refname+".saveAs(fileRef, saveO);";
 			addScript(output);
 			 return output;
 		}
 		
 		
+		/**for opens a particular file*/
 		String setToPSFile(String path) {
 			set=true;
 			String output="var fileRef = File( '"+path+"'); " +'\n'+

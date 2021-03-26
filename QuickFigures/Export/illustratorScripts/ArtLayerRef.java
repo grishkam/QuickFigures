@@ -15,16 +15,20 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 20, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
 
+/**A java object that generates text that can be understood by adobe illustrator javascript
+ * this class contains methods related to one Art layer
+ * */
 public class ArtLayerRef extends IllustratorObjectRef {
 
 	String addLayer=".layers.add();";
 	//String currentLayer=".layers.activeLayer;";
 	
+	/**creates a new art layer*/
 	public String createNewRef(IllustratorDocRef document) {
 		String output="";
 		if (!document.set) output+= document.setReftoActiveDocument()+'\n'; 
@@ -33,7 +37,7 @@ public class ArtLayerRef extends IllustratorObjectRef {
 		return output;
 	}
 		
-	
+	/**creates a sublayer and returns it*/
 	public ArtLayerRef createSubRef() {
 		String script="";
 		ArtLayerRef output = new ArtLayerRef();
@@ -42,6 +46,7 @@ public class ArtLayerRef extends IllustratorObjectRef {
 		return output;
 	}
 	
+	/**creates a group and returns it*/
 	public GroupItemRef createSubRefG() {
 		String script="";
 		GroupItemRef output = new GroupItemRef();

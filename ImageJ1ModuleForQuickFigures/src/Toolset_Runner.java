@@ -17,10 +17,12 @@ import java.awt.AWTEvent;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
+import basicMenusForApp.ShowToolBar;
 import figureFormat.DirectoryHandler;
 import ij.IJ;
 import ij.plugin.PlugIn;
@@ -30,6 +32,7 @@ import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
 import includedToolbars.ObjectToolset1;
 import logging.IssueLog;
+import messages.ShowMessage;
 import ultilInputOutput.FileChoiceUtil;
 
 /**This class is used by imageJ to make the toolbars appear*/
@@ -43,18 +46,18 @@ public class Toolset_Runner implements PlugIn {
 			firstRun=false;
 		}
 		
-		
-		
-		if (arg0.equals("file list")) {
-			///new FileListGui().run("gui");
+		if (arg0.contains("main menu bar")) {
+			ShowMessage.showOptionalMessage("QuickFigures is moving the the Plugins Menu", true, "QuickFigures is moving the the Plugins Menu", "You can already find it there", "Later updates will only contain a QuickFigures submenu in the Plugins menu", "Later updates will not contain a 'QuickFigures' Menu in the main menubar");
 		}
-		if (arg0.equals("Position Action Tools")) {
+		
+		
+		if (arg0.contains("Position Action Tools")) {
 			new AlignAndArrangeActionTools().run("");
 			new ActionToolset2().run("");
 		}
 		
 		
-		if (arg0.equals("LayoutToolSet")) {
+		if (arg0.contains("LayoutToolSet")) {
 			LayoutToolSet tsr = new LayoutToolSet();
 			
 			tsr.run("");
@@ -65,13 +68,16 @@ public class Toolset_Runner implements PlugIn {
 			IJ.doCommand("Specify...");
 		}
 		
-		if (arg0.equals("FigureWizApp")||arg0.equals("Object Tools")) {
+		if (arg0.contains("FigureWizApp")) {
 			
 			ObjectToolset1 tsr = new ObjectToolset1();
 			
 			tsr.run("");
 			
 		}
+		
+		ShowToolBar.showToolbarFor(arg0);
+	
 
 	}
 	

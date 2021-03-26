@@ -50,7 +50,7 @@ public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, 
 	
 	private static final long serialVersionUID = 1L;
 	static String[] strokecaps=new String[] {"Cap Blunt", "Cap Round", "Cap Square"};
-	static String[] strokejoins=new String[] {"Jion Miter", "Jion Round", "Jion Bevel"};
+	static String[] strokejoins=new String[] {"Join Miter", "Join Round", "Join Bevel"};
 	
 	
 	StrokedItem strokedItem;

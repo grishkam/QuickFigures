@@ -21,20 +21,33 @@
 package exportMenus;
 
 import java.io.File;
+import java.util.Collection;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import figureFormat.DirectoryHandler;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
 import messages.ShowMessage;
 
 /**A menu item for generating an a script that con run in Adobe Illustrator*/
-public class ExportIllustrator extends BasicMenuItemForObj {
+public class ExportIllustrator extends QuickExport  {
+	
+	boolean askforFile=false;
 	AdobeScriptMaker sm=	new AdobeScriptMaker();
+	private String ext="ai";
 
-	public ExportIllustrator() {
+	/**creates a new illustrator export
+	   @param askForFile set to true if a file chooser should be shown*/
+	public ExportIllustrator(boolean askForFile, String extension) {
+		this.askforFile=askForFile;
+		if (extension!=null)
+			this.ext=extension;
 	}
 
+	public ExportIllustrator() {
+		this(false, null);
+	}
 	
 	
 	
@@ -44,6 +57,9 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 			ShowMessage.showOptionalMessage("Illustrator script creator ", false, "Illustrator script generator will create a .jsx file", "open that file with Adobe Illustrator" , "always wait for one .jsx script to finish before another",  "For alternative, export as SVG first and open with Illustrator");
 		
 			File file=null;
+			if (askforFile) {
+				file=super.getFileAndaddExtension();
+			}
 			createInIllustrator(diw, file);
 			
 		}
@@ -63,11 +79,35 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 		ZIllustratorScriptGenerator.instance.execute();
 	}
 	
+	/**creates an illustrator script to generate the figure in illustrator
+	 * @param diw 
+	 * @param file the save location where illustrator will save
+	 */
+	public void createInIllustrator(String folder, Collection<? extends DisplayedImage> diws) {
+		for(DisplayedImage diw: diws) {
+			
+			diw.updateDisplay();
+			
+			String filename=folder+diw.getImageAsWrapper().getTitle()+".ai";
+			sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true, new File(filename));
+		}
+		ZIllustratorScriptGenerator.instance.execute();
+	}
+	
+	
+	
 
 	@Override
 	public String getNameText() {
-		
-		return "Create and run Illustrator Script (.jsx)";
+		if (ext.equals("eps"))
+			return "Create in Illustrator and save as EPS";
+		if (ext.equals("pdf"))
+			return "Create in Illustrator and save as PDF";
+		if (ext.equals("ai"))
+			return  "Create in Illustrator";
+		if (ext.equals("psd"))
+			return  "Create in Illustrator and save as Photoshop";
+		return "Create and run Illustrator Script";
 	}
 
 
@@ -75,7 +115,23 @@ public class ExportIllustrator extends BasicMenuItemForObj {
 
 	@Override
 	public String getMenuPath() {
-		return "File<Export";
+		return "File<Export<Adobe Illustrator";
+	}
+
+
+
+
+	@Override
+	protected String getExtension() {
+		return ext;
+	}
+
+
+
+
+	@Override
+	protected String getExtensionName() {
+		return "Illustrator "+this.getExtension().toUpperCase();
 	}
 	
 }

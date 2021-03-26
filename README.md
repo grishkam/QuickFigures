@@ -1,21 +1,13 @@
 # QuickFigures
 QuickFigures is a toolset for creating scientific figures. 
 
-See tutorial video playlist for instructions
-https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1
+See [tutorial video playlist](https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1) for instructions or you may read the [user guide](https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md)
 
-Or you may read the user guide
-https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md
+See [publication](https://www.biorxiv.org/content/10.1101/2020.09.24.311282v2) for more details
 
-See publication for more details
-https://www.biorxiv.org/content/10.1101/2020.09.24.311282v2
+Download [here](https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar)
 
-Download here
-https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
-
-Of if you want the latest features download this one. 
-https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_Daily_Version.jar
-the most recent one uses the most recent version of Apache Batik (1.13) for SVG, PDF and EPS export
+The most recent version uses the most recent version of Apache Batik (1.13) for SVG, PDF and EPS export. 
 
 Note from the author: 
 You have permission to use parts of the QuickFigures project. 
