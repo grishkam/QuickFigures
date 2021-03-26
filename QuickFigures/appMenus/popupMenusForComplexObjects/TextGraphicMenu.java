@@ -149,7 +149,7 @@ PopupMenuSupplier  {
 		
 		
 		if (com.equals(EDIT_MODE)&& !(textG instanceof BarTextGraphic)) {
-			ShowMessage.showOptionalMessage("There is a better day", true, "You can enter text edit move by double cliking on a text item");
+			ShowMessage.showOptionalMessage("There is a better way", true, "You can enter text edit move by double cliking on a text item");
 			textG.select();
 			textG.setEditMode(true);
 		}
