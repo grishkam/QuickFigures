@@ -152,6 +152,7 @@ PopupMenuSupplier  {
 			ShowMessage.showOptionalMessage("There is a better way", true, "You can enter text edit move by double cliking on a text item");
 			textG.select();
 			textG.setEditMode(true);
+			
 		}
 	}
 	
