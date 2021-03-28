@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 18, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package textObjectProperties;
@@ -79,9 +79,9 @@ public class TextLineSegment implements  Serializable {
 	double xbase;
 	
 	Rectangle2D LineBounds;
-	private int uniqueStyle=0;
-	private int cursorposition;
-	private int highlightPosition;
+	private int uniqueStyle=0;//if non-zero, then the segment have a style different from the parent
+	private int cursorposition;//the location of the cursor in the segment, if the cursor is there
+	private int highlightPosition;//the location of the highlight in the segment, if the cursor is there
 	
 	/**returns a copy. and stores an indication that the new segment is s copy */
 	TextLineSegment copy() {

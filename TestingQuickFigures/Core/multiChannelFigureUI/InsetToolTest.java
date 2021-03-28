@@ -4,10 +4,6 @@
  * Copyright (C) 2021 Gregory Mazo
  * 
  */
-/**
- 
- * 
- */
 package multiChannelFigureUI;
 
 import java.awt.Rectangle;
@@ -31,8 +27,7 @@ import logging.IssueLog;
 import testing.FigureTest;
 
 /**
- 
- * 
+ runs an automated text to determine if the functions of the inset tool work
  */
 public class InsetToolTest extends ToolTester{
 

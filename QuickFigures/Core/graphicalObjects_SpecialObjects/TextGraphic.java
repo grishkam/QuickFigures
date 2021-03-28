@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package graphicalObjects_SpecialObjects;
@@ -784,12 +784,7 @@ public Object toIllustrator(ArtLayerRef aref) {
 	ti.getCharAttributesRef().setfont(getFont());
 	ti.getCharAttributesRef().setFillColor(getDimmedColor());
 	
-	
-	/**if (getAngle()!=0) {
-		
-		ti.rotate(angle);
-		
-	}*/
+
 	
 	return ti;
 }

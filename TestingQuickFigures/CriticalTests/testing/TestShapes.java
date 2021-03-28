@@ -1,6 +1,6 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 6, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package testing;
@@ -156,7 +156,7 @@ public class TestShapes {
 		textGraphic.getBounds();
 		rect1 = new Rectangle(0,0, 80, 30);
 		
-		String[] fonts =new String[] {"Arial","Monospaced", "SansSerif", "Times New Roman", "Helvetica"};
+		String[] fonts =new String[] {"Arial","Monospaced", "Courier New", "SansSerif", "Times New Roman", "Helvetica"};
 		int[] styles=  new int[] {Font.PLAIN, Font.BOLD, Font.ITALIC, Font.BOLD+Font.ITALIC};
 		
 		
@@ -184,27 +184,7 @@ public class TestShapes {
 	
 	if (type==TestExample.MULTIPLE_FONT_DIMS) {
 		
-		TextGraphic textGraphic = new TextGraphic("Plain Text");
-		textGraphic.getBounds();
-		textGraphic.setTextColor(Color.red);
-	
-		
-		int size=16;
-			
-			int count=1;
-			for(ColorDimmer v: ColorDimmer.values())
-			{
-					 TextGraphic t2 = textGraphic.copy();
-					 t2.setDimming(v);t2.setDimColor(true);
-					 t2.setText(v.name());
-					 t2.moveLocation(5, (5+size)*count);
-					 
-					TextGraphic t3=t2.copy();
-					t3.moveLocation(200, 0);t3.setTextColor(Color.green);
-					l.addItemToLayer(t2);
-					l.addItemToLayer(t3);
-					count++;
-				}
+		addMultipleColorText(l);
 		
 	
 		
@@ -250,6 +230,33 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 	
 		
 		
+	}
+
+	/**Adds text items of a few different colors
+	 * @param l
+	 */
+	protected static void addMultipleColorText(GraphicLayer l) {
+		TextGraphic textGraphic = new TextGraphic("Plain Text");
+		textGraphic.getBounds();
+		textGraphic.setTextColor(Color.red);
+	
+		
+		int size=16;
+			
+			int count=1;
+			for(ColorDimmer v: ColorDimmer.values())
+			{
+					 TextGraphic t2 = textGraphic.copy();
+					 t2.setDimming(v);t2.setDimColor(true);
+					 t2.setText(v.name());
+					 t2.moveLocation(5, (5+size)*count);
+					 
+					TextGraphic t3=t2.copy();
+					t3.moveLocation(200, 0);t3.setTextColor(Color.green);
+					l.addItemToLayer(t2);
+					l.addItemToLayer(t3);
+					count++;
+				}
 	}
 
 	/**

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package textObjectProperties;
@@ -129,7 +129,8 @@ public class TextParagraph extends ArrayList<TextLine> {
 		
 		}
 	 
-	
+	/**replaces the text with the given text. Information about spliting the text into fragments of different style
+	  may be included*/
 	public TextLine setAllLinesToCodeString(String st,Color c) {
 		this.removeAllLines();
 		
@@ -148,8 +149,8 @@ public class TextParagraph extends ArrayList<TextLine> {
 	}
 	
 	/**switches the line of text with the one above it*/
-public void moveLineBackward(	TextLine lin) {
-		
+	public void moveLineBackward(	TextLine lin) {
+			
 		ArraySorter<TextLine> as = new ArraySorter<TextLine>();
 		as.moveItemBackward(lin, this);
 	}
@@ -183,10 +184,10 @@ public void moveLineBackward(	TextLine lin) {
 	}
 
 	/**returns the upper left hand corner of the text line*/
-public Point2D getLocationForLine(TextLine t) {
-	Rectangle2D r = linedims.get(t);
-	return new Point2D.Double(r.getX(), r.getY());
-}
+	public Point2D getLocationForLine(TextLine t) {
+		Rectangle2D r = linedims.get(t);
+		return new Point2D.Double(r.getX(), r.getY());
+	}
 
 
 	/**returns a bounding box that contains all of the lines of text*/
@@ -281,7 +282,7 @@ public Point2D getLocationForLine(TextLine t) {
 		return output;
 	}
 	
-	
+	/**returns the line that contains the given segment of text*/
 	public TextLine getLineWithSegment(TextLineSegment t) {
 		for(TextLine l: this) {
 			if(l.contains(t))return l;

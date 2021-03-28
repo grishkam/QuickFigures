@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Mar 28, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.BasicStroke;
@@ -29,6 +34,7 @@ import dataSeries.ErrorBarStyle;
 import dialogs.ErrorBarDialog;
 import plotParts.Core.PlotCordinateHandler;
 
+/**a shape that depicts error bars*/
 public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarStyle{
 
 	

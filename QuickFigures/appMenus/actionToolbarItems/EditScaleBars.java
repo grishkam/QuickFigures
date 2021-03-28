@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 13, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package actionToolbarItems;
@@ -58,14 +58,19 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**constants determine which type of scale bar edit is done*/
 	public static final int TYPE_CHANGE_PROJECTIONS=0, TYPE_BAR_THICKNESS_WIDTH=1, TYPE_PROJ_LENGTH=2, TYPE_LENGTH_UNITS=3, TYPE_HIDE_TEXT=4;
 
 	public static String[] projTypes=new String[] {"Bar with 2 Projections", "Bar with 1 Projections", "no projection"};
 	
 
 	private boolean stroke;
+	
+	/**the color to set*/
 	private Color theColor=null;
 	
+	/**the width to set */
 	private Float strokeWidth=null;
 
 	RectangularGraphic colorObject=new RectangularGraphic();
@@ -78,14 +83,28 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	private double projectionLength=8;
 	private double unitLength=1;
 
+	/**what unit should be displayed*/
 	private String unit="";
 	
+	/**some possible scale bar lengths*/
 	public static final double[] shortBarLengths=new double[] {1,2,5,10};
 	
-	
-	public boolean doesStroke() {
-		return stroke;
+	/**Constructor for this operator
+	 * @parm form indicates which type of operation this object does
+	 * @parm input value to set, what that is depends on the value of @parm form */
+	public EditScaleBars(int form, double input) {
+		this.type=form;
+		if(type==TYPE_CHANGE_PROJECTIONS) projectionType=(int) input;
+		if(type==TYPE_BAR_THICKNESS_WIDTH) strokeWidth=(float) input;
+		if(type==TYPE_PROJ_LENGTH)  projectionLength= input;
+		if(type==TYPE_LENGTH_UNITS) unitLength=input;
 	}
+	
+	public EditScaleBars(int form, double input, BarGraphic model) {
+		this(form, input);
+		this.setModelItem(model);
+	}
+	
 	
 	public void setUnit(String un) {unit=un;}
 	
@@ -96,19 +115,9 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	}
 
 
-	public EditScaleBars(int form, double input) {
-		this.type=form;
-		if(type==TYPE_CHANGE_PROJECTIONS) projectionType=(int) input;
-		if(type==TYPE_BAR_THICKNESS_WIDTH) strokeWidth=(float) input;
-		if(type==TYPE_PROJ_LENGTH)  projectionLength= input;
-		if(type==TYPE_LENGTH_UNITS) unitLength=input;
-	}
-	public EditScaleBars(int form, double input, BarGraphic model) {
-		this(form, input);
-		this.setModelItem(model);
-	}
+
 	
-	
+	/**returns a list of scale bar editors that change the projection to each type*/
 	public static EditScaleBars[] getProjectionList() {
 		return new  EditScaleBars[] {
 				new  EditScaleBars(TYPE_CHANGE_PROJECTIONS, 0),
@@ -236,6 +245,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	}
 
 
+	/**returns an icon that depicts a scale bar with projections*/
 	protected Icon getProjectionIcon() {
 		GraphicGroup gg=new GraphicGroup();
 		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
@@ -256,6 +266,7 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		 return output;
 	}
 	
+	/**returns an icon that shows a simple scale bar*/
 	protected Icon getGenericIcon() {
 		GraphicGroup gg=new GraphicGroup();
 		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));

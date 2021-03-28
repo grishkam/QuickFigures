@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package textObjectProperties;
@@ -129,7 +129,7 @@ public void matchWithoutColor(ArrayList<TextLineSegment> origin) {
 	}
 }
 
-/**returns the font*/
+	/**returns the font*/
 	public Font getFont() {
 		
 		return this.getParent().getFont();
@@ -154,7 +154,8 @@ public void matchWithoutColor(ArrayList<TextLineSegment> origin) {
 	
 
 	
-	/**decodes certain information regarding color and subscript/superscript from a string and adds the test with properties described by that string to the text line*/
+	/**decodes certain information regarding color and subscript/superscript from a string and adds the test 
+	 * with properties described by that string to the text line*/
 	public void addFromCodeString(String st, Color c) {
 		String[] sts=new String[] {st};
 		

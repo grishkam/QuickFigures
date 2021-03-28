@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Mar 28, 2021
+ * Version: 2021.1
+ */
 package plotParts.DataShowingParts;
 
 import java.awt.BasicStroke;
@@ -51,7 +56,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	protected transient Shape currentDrawShape;
 	protected HashMap<Shape, DataSeries> partialShapes=new HashMap<Shape, DataSeries>();
 	
-	
+	/**width used for object*/
 	private double barWidth=6;
 
 	private PlotOrientation orientation=PlotOrientation.BARS_VERTICAL;//orietnation is either PlotOrientation.barsvertical or horizontal
@@ -70,7 +75,6 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	
 	public DataShowingShape(Shape shape2) {
 		super(shape2);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public DataShowingShape(DataSeries data) {
@@ -84,15 +88,18 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**returns the shape being drawn*/
 	public Shape getShape() {
 		if (currentDrawShape==null)updateShape();;
 		return currentDrawShape;
 	}
 	
+	/**each subclass implements this differently*/
 	protected void updateShape() {
 		
 	}
 	
+	/**lets the object know that the shape must be updated to reflect the current plot axes*/
 	public void requestShapeUpdate() {
 		currentDrawShape=null;
 	}
@@ -104,12 +111,13 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	}
 	
 
-	
+	/**sets the plot area that the shape is drawn on*/
 	public void setPlotArea(PlotArea plotArea) {
 		this.area=plotArea;
 		
 	}
 	
+	/**returns the plot area*/
 	public PlotArea getPlotArea() {
 		return area;
 	}
@@ -298,7 +306,7 @@ public Shape getPartialShapeAtLocation(double dx, double dy) {
 	
 	
 	/**returns the shape that will be used for the path copy
-	 * @return
+	needed for proper export
 	 */
 	public Shape getShapeForPathCopy() {
 		return getRotationTransformShape();

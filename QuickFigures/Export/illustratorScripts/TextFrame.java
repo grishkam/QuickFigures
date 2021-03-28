@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package illustratorScripts;
@@ -115,7 +115,7 @@ public class TextFrame extends IllustratorObjectRef {
 	}
 	
 
-	
+	/**returns the path item that the text is written on*/
 	public PathItemRef getPath() {
 		return path;
 	}
@@ -133,6 +133,7 @@ public class TextFrame extends IllustratorObjectRef {
 		return output;
 	}
 	
+	/**creates a char attributes object*/
 	public String createCharAttributesRef() {
 		charat= new CharAttributesRef();
 		String output=charat.getAssignment()+refname+".textRange.characterAttributes;";
@@ -144,7 +145,7 @@ public class TextFrame extends IllustratorObjectRef {
 	}
 	
 	
-
+	/**sets the contents of the text range*/
 	public String setContents(String contents) {
 		String output="";
 		output+=refname+".textRange.contents= '"+contents+"';";

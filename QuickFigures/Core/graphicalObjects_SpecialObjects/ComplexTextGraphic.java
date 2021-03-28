@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package graphicalObjects_SpecialObjects;
@@ -511,50 +511,14 @@ public class ComplexTextGraphic extends TextGraphic {
 				
 			}
 			ti.removeInsertionPointFromRange();
-			/**if (getAngle()!=0) {
-				
-				IssueLog.log("text in illustrator should be rotated");
-				ti.rotate(this.getAngle());
-				
-			}*/
+			
 		
 		}
 		return null;
 	}
 	
 	
-	
-	public Object toIllustratorOld(ArtLayerRef aref) {
-		BackGroundToIllustrator(aref);
-		for(TextLine line:this.getParagraph()) {
-			for(TextLineSegment seg:line) {
-			
-	//	IssueLog.log("will try to create text in illustrator");
-		TextFrame ti = new TextFrame();
-		ti.createLinePathItem(aref, seg.transformedBaseLineStart, seg.transformedBaseLineEnd);
-		
-		
-		ti.createCharAttributesRef();
-		ti.setContents2(seg.getText());
-		ti.getCharAttributesRef().setfont(seg.getFont());
-		ti.getCharAttributesRef().setFillColor(this.getDimmedColor(seg.getTextColor()));
-		if (seg.isUnderlined()) ti.getCharAttributesRef().setUnderline(true);
-		if (seg.isStrikeThrough()) ti.getCharAttributesRef().setStrikeThrough(true);
-		
-		
-		if (getAngle()!=0) {
-			
-			IssueLog.log("text in illustrator should be rotated");
-			ti.rotate(this.getAngle());
-			
-		}
-		
-		//return ti;
-			}
-		
-		}
-		return null;
-	}
+
 
 	/**Keeps a hashmap of each rotsegment bounds*/
 	private HashMap<TextLineSegment, Polygon> getRotatedSegmentBounds() {
@@ -562,26 +526,13 @@ public class ComplexTextGraphic extends TextGraphic {
 		return rotatedSegmentBounds;
 	}
 
-	/**
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("");
-		
-		ComplexTextGraphic g=ComplexTextGraphic.createExample();
-		 g=ComplexTextGraphic.createRainbow("Rainbow Strings", new int[] {3,2,2}, new Color[] {Color.red, Color.blue, Color.black});
-		g.setLocationUpperLeft(0, 0);
-		 GraphicSampleComponent gs = new GraphicSampleComponent(g);
-		frame.add(gs);
-		ComplexTextGraphicSwingDialog dialog = new ComplexTextGraphicSwingDialog(g);
-		dialog.sam=gs;
-		frame.setVisible(true);
-		dialog.showDialog();
-	}*/
-	
+	/**returns an array list of string with the given strings*/
 	public static ArrayList<String> createStringArr(String... sts) {
 		ArrayList<String> o=new ArrayList<String>();
 		for(String st:sts) o.add(st);
 		return o;
 	}
+	/**returns an array list of colors with the given colors*/
 	public static ArrayList<Color> createColorArr(Color... sts) {
 		ArrayList<Color> o=new ArrayList<Color>();
 		for(Color st:sts) o.add(st);
@@ -605,11 +556,13 @@ public class ComplexTextGraphic extends TextGraphic {
 		
 	}
 	
+	/**not yet implemented*/
 	@Override
 	public void handleKeyTypedEvent(KeyEvent arg0) {
-		//handleKeyTypedEvent(arg0);
+		
 	}
 	
+	/**sets which segment contains the cursor*/
 	public void setCursorSegment(TextLineSegment segment) {
 		
 		ArrayList<TextLineSegment> segs = this.getParagraph().getAllSegments();
@@ -669,6 +622,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	
 	protected void afterSplitUp() {}
 
+	/**Called when the user presses a key*/
 	@Override
 	public void handleKeyPressEvent(KeyEvent arg0) {
 		
@@ -795,7 +749,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	}
 
 
-
+	/**set the selected text to bold font style*/
 	public void emboldenSelectedRegion() {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();
@@ -808,13 +762,15 @@ public class ComplexTextGraphic extends TextGraphic {
 		afterSplitUp();
 	}
 
+	/**returns true if the selected text is bold
+	 * used to determine if the ital icon should be down*/
 	public boolean isSelectionBold() {
 		return getAllSelectedSegments().get(0).getFont().isBold();
 	}
 
 
 
-
+	/**set the selected text to italic font style*/
 	public void italicizeSelectedRegion() {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();
@@ -828,10 +784,13 @@ public class ComplexTextGraphic extends TextGraphic {
 		afterSplitUp();
 	}
 
+	/**returns true if the selected text is italic
+	 * used to determine if the ital icon should be down*/
 	public boolean isSelectionItalic() {
 		return getAllSelectedSegments().get(0).getFont().isItalic();
 	}
 	
+	/**set the selected text to underline*/
 	public void underlineSelectedRegion() {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();
@@ -850,6 +809,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		return lastCopy;
 	}
 
+	/**returns the selected text as a string. used to copy that text*/
 	public String getSelectedText() {
 		if (!this.hasHighlightRegion()) return null;
 		splitHighLightedSegments();
@@ -883,10 +843,12 @@ public class ComplexTextGraphic extends TextGraphic {
 		afterSplitUp();
 	}
 
+	/**returns true if selected text is underlines*/
 	public boolean isSelectionUnderlined() {
 		return getAllSelectedSegments().get(0).isUnderlined();
 	}
 	
+	/**makes the selected part a strikethrough region*/
 	public void strikeLineThroughSelectedRegion() {
 		if (!this.hasHighlightRegion()) return;
 		splitHighLightedSegments();

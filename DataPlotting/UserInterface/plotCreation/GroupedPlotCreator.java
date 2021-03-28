@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package plotCreation;
@@ -42,11 +42,11 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 	
 	@Override
 	public String getNameText() {
-		if (type==Grouped_Plot.STAGGERED_BARS) return "  Stagered Barplot ";
+		if (type==Grouped_Plot.STAGGERED_BARS) return "  Staggered Barplot ";
 		if (type==Grouped_Plot.STACKED_BARS) return "   Stacked Barplot ";
 		if (type==Grouped_Plot.SEQUENTIAL_BARS) return "Sequential Barplot ";
 		if (type==Grouped_Plot.JITTER_POINTS) return "Superimposed Scatter Plot ";
-		return "Stagered";
+		return "Staggered";
 	}
 	public UndoAddItem createPlot(String name, ArrayList<GroupedDataSeries> items, DisplayedImage diw) {
 		if (diw==null|| (diw.getWindow().isVisible()==false)) {

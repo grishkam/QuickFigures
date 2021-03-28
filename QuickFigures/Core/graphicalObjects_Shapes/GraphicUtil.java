@@ -41,7 +41,7 @@ import handles.DecorativeSmartHandleList;
 import textObjectProperties.DimsColor;
 import textObjectProperties.TextLine;
 
-/**this class contains methods that are used by many shapes. many ot its methods will be deprecated in the future*/
+/**this class contains methods that are used by many shapes. many of its methods will be deprecated in the future*/
 public class GraphicUtil {
 	static int defaulthandleSize=3;
 	 int handlesize=defaulthandleSize;

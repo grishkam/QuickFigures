@@ -14,7 +14,11 @@
  *    limitations under the License.
  *******************************************************************************/
 
-
+/**
+ * Author: Greg Mazo
+ * Date Modified: Mar 28, 2021
+ * Version: 2021.1
+ */
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
