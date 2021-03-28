@@ -45,11 +45,14 @@ public class QuickFigureMakerTest {
 		
 		
 		
-		FigureOrganizingLayerPane fig1 =new FigureTester(). createFigureFromExample1Images(new QuickFigureMaker(), 2);
+		QuickFigureMaker qm = new QuickFigureMaker();
+		qm.figureCreationOptions.ignoreSavedTemplate=true;
+		FigureOrganizingLayerPane fig1 =new FigureTester(). createFigureFromExample1Images(qm, 2);
 		ArrayList<ZoomableGraphic> allGraphics = fig1.getAllGraphics();
 		
 		/**makes sure all of the objects were creates*/
 		assert(allGraphics.size()==18);//makes sure all the objects were created
+		
 		assert(ArraySorter.getNOfClass(allGraphics, ImagePanelGraphic.class)==10);
 		assert(ArraySorter.getNOfClass(allGraphics, ChannelLabelTextGraphic.class)==5);
 		assert(ArraySorter.getNOfClass(allGraphics, BarGraphic.class)==1);
