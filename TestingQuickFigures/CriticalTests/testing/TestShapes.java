@@ -41,6 +41,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import layout.basicFigure.BasicLayout;
 import locatedObject.AttachmentPosition;
+import locatedObject.ColorDimmer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -53,7 +54,7 @@ public class TestShapes {
 	
 	
 	public static TestExample[] each=new TestExample[] {
-			TestExample.DIVERSE_SHAPES, TestExample.RECTANGLE_AND_OTHERS, TestExample.MANY_STROKES, TestExample.MANY_COLORS, TestExample.MANY_ANGLES, TestExample.MANY_ANGLE_TEXT, TestExample.MULTIPLE_FONTS, TestExample.MANY_ANGLE_COMPLEX_TEXT
+			TestExample.DIVERSE_SHAPES, TestExample.RECTANGLE_AND_OTHERS, TestExample.MANY_STROKES, TestExample.MANY_COLORS, TestExample.MANY_ANGLES, TestExample.MANY_ANGLE_TEXT, TestExample.MULTIPLE_FONTS, TestExample.MULTIPLE_FONT_DIMS, TestExample.MANY_ANGLE_COMPLEX_TEXT
 	,TestExample.MANY_ARROWS
 	
 	};
@@ -176,6 +177,35 @@ public class TestShapes {
 				}
 			step++;//changes horizontal position
 		}
+	
+		
+	}
+	
+	
+	if (type==TestExample.MULTIPLE_FONT_DIMS) {
+		
+		TextGraphic textGraphic = new TextGraphic("Plain Text");
+		textGraphic.getBounds();
+		textGraphic.setTextColor(Color.red);
+	
+		
+		int size=16;
+			
+			int count=1;
+			for(ColorDimmer v: ColorDimmer.values())
+			{
+					 TextGraphic t2 = textGraphic.copy();
+					 t2.setDimming(v);t2.setDimColor(true);
+					 t2.setText(v.name());
+					 t2.moveLocation(5, (5+size)*count);
+					 
+					TextGraphic t3=t2.copy();
+					t3.moveLocation(200, 0);t3.setTextColor(Color.green);
+					l.addItemToLayer(t2);
+					l.addItemToLayer(t3);
+					count++;
+				}
+		
 	
 		
 	}

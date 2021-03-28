@@ -14,7 +14,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.MULTIPLE_FONTS;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.MULTIPLE_FONT_DIMS;//which cases to test. set to null if all should be tested
 
 
 
