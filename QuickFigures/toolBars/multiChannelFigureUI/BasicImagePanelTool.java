@@ -329,7 +329,7 @@ public class BasicImagePanelTool extends BasicToolBit implements ActionListener 
 	
 	public MultiChannelImage getPressedWrapper() {
 		if (clickingOnMultiMode) return m.getContainedMultiChannel();
-		if (presseddisplay==null) {IssueLog.log("You are not clicking on a figure panel"); return null;}
+		if (presseddisplay==null) {return null;}
 		return presseddisplay.getMultiChannelImage();
 	}
 	

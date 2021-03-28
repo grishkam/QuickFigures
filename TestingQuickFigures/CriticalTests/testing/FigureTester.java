@@ -34,6 +34,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.QuickFigureMaker;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import ij.IJ;
 import ij.ImagePlus;
@@ -48,6 +49,8 @@ import logging.IssueLog;
 import messages.ShowMessage;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
+import popupMenusForComplexObjects.ImagePanelMenu;
+import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;
 
 /**main method from this class creates a figure from a set of saved images
@@ -446,7 +449,7 @@ public class FigureTester {
 	public static TestProvider[] getTests() {
 		ignoreTemplate=true;
 		return new TestProvider[] {new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
-				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)};
+				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL),  new FigureProvider(TestExample.SCALE_BAR_STYLES_)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -466,8 +469,13 @@ public class FigureTester {
 		public DisplayedImage createExample() {
 			CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
 			
+			
+			if (form==TestExample.MANY_SIZE_IMAGEPANEL)
+				new FigureTester().createManySizeExample(1.5, false);
+			if (form==TestExample.SCALE_BAR_STYLES_)
+				new FigureTester().createManySizeExample(1, true);
 			if (form==TestExample.SPLIT_CHANNEL_FIGURE)
-			new FigureTester(). createFigureFromExample1AImages();
+				new FigureTester(). createFigureFromExample1AImages();
 			if (form==TestExample.MERGE_PANEL_FIGURE)
 				new FigureTester(). createFigureFromExample1BImages();
 			if (form==TestExample.FIGURE_WITH_INSETS)
@@ -476,9 +484,49 @@ public class FigureTester {
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
 			if (form==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
-			CurrentFigureSet.getCurrentActiveDisplayGroup().getImageAsWrapper().setTitle(form.name());
-			return  CurrentFigureSet.getCurrentActiveDisplayGroup();
+			
+			DisplayedImage currentActiveDisplayGroup = CurrentFigureSet.getCurrentActiveDisplayGroup();
+			currentActiveDisplayGroup.getImageAsWrapper().setTitle(form.name());
+		
+			new CanvasAutoResize(true).performUndoableAction(currentActiveDisplayGroup);
+			return  currentActiveDisplayGroup;
 		}
+	}
+	
+	
+	/**creates an example with a series of image panels showing the same image
+	 * @param factor
+	 * @return */
+	public FigureOrganizingLayerPane createManySizeExample(double factor, boolean barProjectionVaries) {
+		FigureOrganizingLayerPane out = createFigureFromExample1Images(example1BFigureMaker(), 1);
+		
+		ImagePanelGraphic image = out.getAllPanelLists().getMergePanel().getImageDisplayObject();
+		
+		BarGraphic scaleBar = image.getScaleBar();
+		
+		if(scaleBar==null) {
+			scaleBar=ImagePanelMenu.createScaleBar(new CombinedEdit(), image);
+		}
+		
+		for(int i=1;i<=3; i++)	{
+			ImagePanelGraphic image2 = image.copy();
+			
+			BarGraphic bar2 = scaleBar.copy();
+			
+			out.add(image2);
+			out.add(bar2);
+			image2.moveLocation(i*(10+image.getObjectWidth()*Math.pow(factor, i-1)), 0);
+			image2.addLockedItem(bar2);
+			image2.setRelativeScale(image2.getScale()*Math.pow(factor, i));
+			if(barProjectionVaries) {
+				bar2.setProjectionType(i-1);
+			}
+			
+			//image=image2;
+			}
+		
+		return out;
+
 	}
 	
 	

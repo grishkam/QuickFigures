@@ -35,6 +35,7 @@ import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.SourceImageTreeIcon;
@@ -143,12 +144,25 @@ super.addLockedItemMenus();
 	/**Adds a scale bar tot he image panel*/
 	public void addScaleBar() {
 		CombinedEdit undo = new CombinedEdit();
+		createScaleBar(undo, imagePanel);
+		
+		imagePanel.getUndoManager().addEdit(undo);
+	}
+
+
+
+	/**Creates a scale bar and adds it to the image panel
+	 * @param undo
+	 * @param imagePanel 
+	 * @return 
+	 */
+	public static BarGraphic createScaleBar(CombinedEdit undo, ImagePanelGraphic imagePanel) {
 		GraphicLayer parentLayer = imagePanel.getParentLayer();
 		if(parentLayer instanceof MultichannelDisplayLayer) {
 			parentLayer=parentLayer.getParentLayer();
 		}
 		BarGraphicTool.getCurrentBarTool().addBarGraphic(imagePanel, parentLayer, undo, (int)imagePanel.getBounds().getMaxX(),(int)imagePanel.getBounds().getMaxY());
-		imagePanel.getUndoManager().addEdit(undo);
+		return imagePanel.getScaleBar();
 	}
 	
 }

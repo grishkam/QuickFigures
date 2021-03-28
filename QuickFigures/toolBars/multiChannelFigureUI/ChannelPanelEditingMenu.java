@@ -166,11 +166,15 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	public void addChannelRelevantMenuItems(Container output) {
 		addChannelRelevantMenuItems(output, false);
 	}
+	
+	/**Adds meny items related to the channels to the given container*/
 	public void addChannelRelevantMenuItems(Container output, boolean limitVersionOfMenu) {
 		addButtonToMenu(output, "Window/Level", WLCommand, IconUtil.createBrightnessIcon());
 		 addButtonToMenu(output, "Min/Max", minMaxCommand, IconUtil.createBrightnessIcon());
 		 addButtonToMenu(output, "Change Color Modes", COLOR_MODE_COMMAND, new ColorModeIcon(colorForColorModeIcon));
-		 addButtonToMenu(output, "Channel Use Options", CHANNEL_USE_COMMAND, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder()));
+		 MultichannelDisplayLayer principalDisplay = this.getPrincipalDisplay();
+		 if(principalDisplay!=null)
+			 	addButtonToMenu(output, "Channel Use Options", CHANNEL_USE_COMMAND, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder()));
 		
 			 try {
 				addColorMenus("Recolor", output);
@@ -180,7 +184,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			
 		 
 		 
-		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(this.getPrincipalDisplay().getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
+		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
 		 
 		 if(!limitVersionOfMenu) {
 		 JMenu chanLabelMenu=new JMenu("Channel Label");
@@ -548,7 +552,7 @@ public void addButtonToMenu(Container pop, String text, String actionCommand, Ic
 
 /**returns the multichannel image that is the primary target*/
 public MultiChannelImage getPressedMultichannel() {
-	if (getPresseddisplay()==null) {IssueLog.log("You are not clicking on a figure panel"); return null;}
+	if (getPresseddisplay()==null) {return null;}
 	return getPresseddisplay().getMultiChannelImage();
 }
 

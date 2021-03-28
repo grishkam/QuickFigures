@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 28, 2021
  * Version: 2021.1
  */
 package imageMenu;
@@ -38,7 +38,8 @@ public class CanvasAutoResize extends BasicMenuItemForObj {
 	/**set to true if this autoresize can not be blocked*/
 	boolean mandatory=true;
 	
-	/**Creates a new canvas auto resizer*/
+	/**Creates a new canvas auto resizer. 
+	 * @param mandatory set to true if the canvas object is not allowed to block this resize*/
 	public CanvasAutoResize(boolean mandatory) {this.mandatory=mandatory;}
 	public CanvasAutoResize(int mode) {
 		this.mode=mode;

@@ -560,7 +560,7 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 			return standardFonts;
 		}
 
-		public static final String[] standardFonts=new String[] {"Arial","Courier", "SansSerif", "Times New Roman", "Helvetica"};
+		public static final String[] standardFonts=new String[] {"Arial","Courier New", "SansSerif", "Times New Roman", "Helvetica"};
 		
 		public static MultiSelectionOperator[]  getForFonts(TextGraphic t, String... f) {
 			MultiSelectionOperator[] out = new MultiSelectionOperator[f.length+1];

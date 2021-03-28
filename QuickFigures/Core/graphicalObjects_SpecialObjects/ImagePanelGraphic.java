@@ -782,6 +782,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			if (getCroppingRect()!=null) out.setCroppingRect(getCroppingRect().getBounds());
 			out.copyAttributesFrom(this);
 			out.setLocationUpperLeft(this.getLocationUpperLeft().getX(), this.getLocationUpperLeft().getY());
+			out.setScaleInfo(getScaleInfo().copy());
 			return out;
 		}
 		
