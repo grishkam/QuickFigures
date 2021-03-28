@@ -57,6 +57,6 @@ public class ShowTable extends BasicMenuItemForObj {
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		if (type==1) {SmartDataInputDialog.showTableFromUserFile(false);}
 		else
-		SmartDataInputDialog.createDialog(PlotType.DEFAULT_PLOT_TYPE_COLS).showDialog();;
+		SmartDataInputDialog.createDialog(null).showDialog();;
 	}
 }
