@@ -116,15 +116,14 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 		if (form==PlotType.XY_PLOT_TYPE||form==null) {
 			setPlotMakerMenu(createXYPlotMakerMenu());
 			bp.add(getPlotMakerMenu());
-			//bp.add(createGroupedPlotMakerMenu());
-			//bp.add(new PlotMakerMenuItem2(new KaplanMeierPlotCreator(), this));
+		
 		}
-		if (form==PlotType.GROUP_PLOT_TYPE) {
+		if (form==PlotType.GROUP_PLOT_TYPE||form==null) {
 			setPlotMakerMenu(createGroupedPlotMakerMenu());
 			bp.add(createGroupedPlotMakerMenu());
 		}
 		
-		if (form==PlotType.KAPLAN_MEIER_PLOT_TYPE) {
+		if (form==PlotType.KAPLAN_MEIER_PLOT_TYPE||form==null) {
 			setPlotMakerMenu(createKMPlotMakerMenu());
 			bp.add(getPlotMakerMenu());
 		}
