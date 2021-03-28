@@ -45,5 +45,20 @@ public class TestProvider {
 		return parameter1;
 	}
 	
+	/**return both shape and figure tests
+	 * @return
+	 */
+	public static ArrayList<TestProvider> getTestProviderListWithfigures() {
+		ArrayList<TestProvider> testsCases = getStandardExportTestsAndImages();
+		for(TestProvider t: FigureTester.getTests()) {
+			testsCases.add(t);
+		}
+		for(TestProvider t: PlotTester.getTests()) {
+			testsCases.add(t);
+		}
+		
+		return testsCases;
+	}
+	
 	
 }

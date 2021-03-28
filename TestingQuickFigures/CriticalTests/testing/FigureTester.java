@@ -62,6 +62,11 @@ public class FigureTester {
 	
 	
 	
+	/**
+	 * 
+	 */
+	private static final String  FILE_NOT_FOUND = "One must place the testing files in the QuickFigures folder to perform this test. they are on github";
+
 	public static final String testFolderPath = new DirectoryHandler().getFigureFolderPath()+"/Testing/Test ";
 
 	/**lists the rectangles that will be used for a sequence of example images*/
@@ -78,8 +83,21 @@ public class FigureTester {
 	public static String getTest1ImagePath(int group, int image) {
 		
 		String string = testFolderPath+group+"/"+image+".tif";
-		if (!(new File(string)).exists()) IssueLog.showMessage("One must place the testing files in the QuickFigures folder to perform this test");;
+		checkForFile(string);
+		
+		
 		return string;
+	}
+
+	/**
+	 * @param string
+	 */
+	protected static void checkForFile(String string) {
+		if (!(new File(string)).exists()) 
+		{
+			IssueLog.showMessage(FILE_NOT_FOUND);;
+			
+		}
 	}
 	
 	/**
@@ -92,7 +110,7 @@ public class FigureTester {
 		
 		
 		File[] matches = dir.listFiles();
-		if (!(new File(string)).exists()) IssueLog.showMessage("One must place the testing files in the QuickFigures folder to perform this test");;
+		if (!(new File(string)).exists()) IssueLog.showMessage(FILE_NOT_FOUND);;
 		
 		
 		if (matches.length==0)IssueLog.log("was unable to obtain images");
@@ -107,7 +125,8 @@ public class FigureTester {
 	public static String[] getScaleTestPaths() {
 		String string = getFolderForScaleBarTests();
 		
-		if (!(new File(string)).exists()) IssueLog.showMessage("One must place the testing files in the QuickFigures folder to perform this test "+string);;		
+		if (!(new File(string)).exists())
+			IssueLog.showMessage(FILE_NOT_FOUND+string);;		
 		File f = new File(string);
 		return f.list();
 		

@@ -18,7 +18,7 @@ import ultilInputOutput.FileChoiceUtil;
 	
 	
 	
-	TestExample testCase=null;//which cases to test. set to null if all should be tested
+	TestExample testCase=TestExample.COLUMN_PLOTS;//which cases to test. set to null if all should be tested
 
 
 	@Test
@@ -39,10 +39,7 @@ import ultilInputOutput.FileChoiceUtil;
 	public void exportTest() throws Exception, IOException {
 		
 		int count=1;
-		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsAndImages();
-		for(TestProvider t: FigureTester.getTests()) {
-			testsCases.add(t);
-		}
+		ArrayList<TestProvider> testsCases =TestProvider.getTestProviderListWithfigures();
 		
 		ArrayList<DisplayedImage> examples=new ArrayList<DisplayedImage>();
 		
@@ -74,6 +71,8 @@ import ultilInputOutput.FileChoiceUtil;
 		IssueLog.waitSeconds(15);
 		
 	}
+
+	
 
 	
 

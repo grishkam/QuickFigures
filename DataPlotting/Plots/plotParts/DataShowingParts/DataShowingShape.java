@@ -32,6 +32,8 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import handles.HasSmartHandles;
+import illustratorScripts.ArtLayerRef;
+import illustratorScripts.PathItemRef;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
@@ -154,7 +156,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	public PopupMenuSupplier getMenuSupplier(){
 		GraphicLayer par = this.getParentLayer();
 		if (par instanceof HasUniquePopupMenu) {
-			return ((HasUniquePopupMenu) par).getMenuSupplier();
+				return ((HasUniquePopupMenu) par).getMenuSupplier();
 			}
 		return null;
 		}
@@ -294,6 +296,22 @@ public Shape getPartialShapeAtLocation(double dx, double dy) {
 			requestShapeUpdate();
 	}
 	
+	
+	/**returns the shape that will be used for the path copy
+	 * @return
+	 */
+	public Shape getShapeForPathCopy() {
+		return getRotationTransformShape();
+	}
+	
+	
+	/**implementation of an interface required for generating adobe illustrator scripts*/
+	@Override
+	public Object toIllustrator(ArtLayerRef aref) {
+		return this.createPathCopy().toIllustrator(aref);
+	}
+	
 
+	
 
 }

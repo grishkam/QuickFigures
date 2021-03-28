@@ -376,7 +376,10 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		
 		pi.setName(getName());
 		pi.setStoke((int)getStrokeWidth());
-		if (this.getStrokeWidth()<=0) {pi.setStoke(0);pi.setNoColorStroke();}
+		if (this.getStrokeWidth()<=0) {
+				pi.setStoke(0);
+			pi.setNoColorStroke();
+		}
 			
 		
 		if (getAngle()!=0) {
@@ -712,7 +715,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	/**returns a pathGraphic that looks just like this shape
 	 * @see PathGraphic*/
 	public PathGraphic createPathCopy() {
-		PathPointList list = PathPointList.createFromIterator(this.getOutline().getPathIterator(new AffineTransform()));
+		PathPointList list = PathPointList.createFromIterator(getShapeForPathCopy().getPathIterator(new AffineTransform()));
 		PathGraphic oo = new PathGraphic(list);
 		oo.copyColorsFrom(this);
 		oo.copyAttributesFrom(this);
@@ -720,6 +723,14 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		oo.setClosedShape(true);
 		if(this.isSelected())oo.select();
 		return oo;
+	}
+	
+	
+	/**returns the shape that will be used for the path copy
+	 * @return
+	 */
+	public Shape getShapeForPathCopy() {
+		return this.getOutline();
 	}
 	
 	/**Provides an edit that can be used to undo changes to this item.

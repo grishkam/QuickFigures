@@ -49,10 +49,8 @@ abstract class QuickExportTest {
 		QuickExport qe=createExporter();
 		int count=1;
 		ArrayList<String> createsFiles=new ArrayList<String>(); 
-		ArrayList<TestProvider> testsCases = TestProvider.getStandardExportTestsAndImages();
-		for(TestProvider t: FigureTester.getTests()) {
-			testsCases.add(t);
-		}
+		ArrayList<TestProvider> testsCases = TestProvider.getTestProviderListWithfigures();
+	
 		for(TestProvider ex: testsCases) {
 			if(testCase!=null &&testCase!=ex.getType()) { count++; continue;}
 			long time=System.currentTimeMillis();

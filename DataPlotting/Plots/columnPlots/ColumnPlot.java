@@ -27,6 +27,7 @@ import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
 import fLexibleUIKit.MenuItemMethod;
 import fileread.ExcelFileToBarPlot;
+import fileread.PlotType;
 import genericPlot.BasicDataSeriesGroup;
 import genericPlot.BasicPlot;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -190,7 +191,7 @@ private void replaceData(ArrayList<ColumnPlotDataSeriesGroup> olderSeries, Array
 protected ArrayList<ColumnDataSeries> getNewDataSeriesFromUser() {
 	DataTable tab = new DataTable(100, 6);
 	tab.setValueAt("New Data Series", 0,0);
-	SmartDataInputDialog s = new SmartDataInputDialog(tab, 1);
+	SmartDataInputDialog s = new SmartDataInputDialog(tab, PlotType.DEFAULT_PLOT_TYPE_COLS);
 	s.setModal(true);s.setWindowCentered(true);
 	s.showDialog();
 	ArrayList<ColumnDataSeries> cols = s.getAllColumns();
@@ -202,7 +203,7 @@ protected ArrayList<ColumnDataSeries> getNewDataSeriesFromUser() {
 @MenuItemMethod(menuActionCommand = "Add Data File", menuText = "New Data Series From Excel File", subMenuName="Data", orderRank=18)
 public CombinedEdit addDataSeriesFromFile() {
 	CombinedEdit cc = new CombinedEdit();
-	ColumnDataSeries[] datas = new ExcelFileToBarPlot(ColumnPlotCreator.BAR_AND_SCATTER).getDataFromFile();
+	ColumnDataSeries[] datas = new ExcelFileToBarPlot(ColumnPlotCreator.ColumnPlotStyle.BAR_AND_SCATTER).getDataFromFile();
 	for(ColumnDataSeries data: datas)
 		cc.addEditToList(
 				addNew(data)

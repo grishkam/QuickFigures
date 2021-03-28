@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
+import fileread.PlotType;
+
 /**A special table cell renderer for certain data tables
  * @see SmartDataInputDialog*/
 public class SmartRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
@@ -38,7 +40,7 @@ public class SmartRenderer extends DefaultTableCellRenderer implements TableCell
 	private static final long serialVersionUID = 1L;
 	private Color theColor=new Color(245, 180, 180);
 
-	public SmartRenderer(SmartDataInputDialog smartDataInputDialog, int form, Color c) {
+	public SmartRenderer(SmartDataInputDialog smartDataInputDialog, PlotType form, Color c) {
 		theColor=c;
 	}
 

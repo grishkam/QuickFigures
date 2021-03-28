@@ -20,6 +20,7 @@
  */
 package groupedDataPlots;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,6 +40,7 @@ import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
+import plotParts.Core.PlotAreaRectangle;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.DataShowingShape;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
@@ -64,6 +66,9 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 	public static final int STAGGERED_BARS=0, STACKED_BARS=1, JITTER_POINTS=2, SEQUENTIAL_BARS=3;
 	
 	private int type=STACKED_BARS;
+	
+	
+	
 	
 	ArrayList<GroupedPlotDataSeriesGroup> allData=new ArrayList<GroupedPlotDataSeriesGroup> ();
 	HashMap<String, PlotLabel> categoryLabels=new HashMap<String, PlotLabel>();
@@ -152,7 +157,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		 addXAxiLabel(54);
 		 this.xLabel.getParagraph().get(0).get(0).setText(primarySeries.getDataSeries().getxName());
 		 this.yLabel.getParagraph().get(0).get(0).setText(primarySeries.getDataSeries().getyName());
-		 titleLabel.getParagraph().get(0).get(0).setText(getName() );
+		 getTitleLabel().getParagraph().get(0).get(0).setText(getName() );
 		  expandPlotToFitMeanBar();
 		//xAxis.setShowText(false);
 		 //xAxis.setIntergerTics(true);
@@ -809,6 +814,14 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		this.fullPlotUpdate();
 	}
 	
+	
+	
+	/**called when the plot area is innitialized
+	 * @return
+	 */
+	protected PlotAreaRectangle createStartingPlotArea() {
+		return new  PlotAreaRectangle(this,new Rectangle(60, 50, startPlotWidth+75, startPlotHeight));
+	}
 
 
 }

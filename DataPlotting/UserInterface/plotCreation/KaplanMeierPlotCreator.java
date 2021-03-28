@@ -24,9 +24,11 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.KaplanMeierDataSeries;
+import dataTableDialogs.SmartDataInputDialog;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import kaplanMeierPlots.KM_Plot;
 import logging.IssueLog;
+import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 /**An implementation of plot creator for Kaplan Meier plots*/
@@ -56,5 +58,11 @@ public class KaplanMeierPlotCreator implements PlotCreator<KaplanMeierDataSeries
 		plot.defaultPlot();
 		
 		return PlotCreator.addPlotToWorksheet(diw, plot);
+	}
+
+	@Override
+	public UndoAddItem createPlot(String name, SmartDataInputDialog items, DisplayedImage diw) {
+		ArrayList<KaplanMeierDataSeries> in = items.getKaplanDataSeriesUsingDefaultClassification();
+		return this.createPlot(name, in, diw);
 	}
 }

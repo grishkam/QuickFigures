@@ -24,9 +24,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 
 import dataSeries.DataSeries;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_Shapes.PathGraphic;
+import locatedObject.PathPointList;
 
 /**A shape of a line that is to be drawn on plots, sublcasses include regression lines, kaplan meier plot lines
  * and ordinary connecting lines*/
@@ -62,5 +65,15 @@ public abstract class AbstractDataLineShape extends DataShowingShape implements 
 			g2d.fill(cords.getAffineTransform().createTransformedShape(getSelectedOutline()));
 		}
 	}
+	
+	
+	/**returns a pathGraphic that looks just like this shape
+	 * @see PathGraphic*/
+	public PathGraphic createPathCopy() {
+		PathGraphic oo = super.createPathCopy();
+		oo.setClosedShape(false);
+		return oo;
+	}
+	
 
 }

@@ -62,7 +62,7 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 
 		 addYAxiLabel();
 		 addXAxiLabel(4);
-		 titleLabel.getParagraph().get(0).get(0).setText(getName() );
+		 getTitleLabel().getParagraph().get(0).get(0).setText(getName() );
 		 
 		
 		 this.resetMinMax(true);

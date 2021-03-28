@@ -94,7 +94,7 @@ public class AdobeScriptMaker {
 				ref.saveAsEPS(saveFile);
 			else
 			if(saveFile.getAbsolutePath().toLowerCase().endsWith("pdf"))
-				ref.saveAsEPS(saveFile);
+				ref.saveAsPDF(saveFile);
 			else
 				ref.saveAs(saveFile);
 			};

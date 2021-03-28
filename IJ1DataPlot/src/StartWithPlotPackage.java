@@ -21,12 +21,13 @@ import applicationAdapters.StartApplication;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.MenuBarItemInstaller;
 import dialogs.DataShapeSyncer;
-import fileread.ExampleShower;
+import fileread.PlotExampleShower;
 import fileread.ExcelFileToBarPlot;
 import fileread.ExcelFileToComplexCategoryPlot;
 import fileread.ExcelFileToKaplanPlot;
 import fileread.ExcelFileToXYPlot;
 import fileread.ExcelRowToJTable;
+import fileread.PlotType;
 import fileread.ShowTable;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
@@ -34,6 +35,7 @@ import includedToolbars.QuickFiguresToolBar;
 import includedToolbars.ToolInstallers;
 import logging.IssueLog;
 import plotCreation.ColumnPlotCreator;
+import plotCreation.ColumnPlotCreator.ColumnPlotStyle;
 import plotCreation.XYPlotCreator;
 import plotCreation.XYPlotCreator.xyPlotForm;
 import plotTools.ColumnSwapTool;
@@ -69,22 +71,18 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 	@Override
 	public void addToMenuBar(MenuBarForApp installer) {
 		try {
-			installer.installItem(new ExampleShower(0, true));
-			installer.installItem(new ExampleShower(1, true));
-			installer.installItem(new ExampleShower(2, true));
-		installer.installItem(new ExampleShower(0, false));
-		installer.installItem(new ExampleShower(1, false));
-		installer.installItem(new ExampleShower(2, false));
+			PlotType[] types=new PlotType[] {PlotType.DEFAULT_PLOT_TYPE_COLS, PlotType.XY_PLOT_TYPE, PlotType.GROUP_PLOT_TYPE, PlotType.KAPLAN_MEIER_PLOT_TYPE};
+			for(PlotType t: types)
+			installer.installItem(new PlotExampleShower(t, true));
+			
+			
+			for(PlotType t: types)
+				installer.installItem(new PlotExampleShower(t, false));
+			
 		
-		installer.installItem(new ExampleShower(4, true));
-		installer.installItem(new ExampleShower(4, false));
+		for(ColumnPlotStyle plotform: ColumnPlotCreator.ColumnPlotStyle.values())
+			installer.installItem(new ExcelFileToBarPlot(plotform));
 		
-		
-		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.BAR_AND_SCATTER));
-		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.STANDARD_BAR_PLOT));
-		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.SCATTER_POINTS));
-		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.BOX_PLOT));
-		installer.installItem(new ExcelFileToBarPlot(ColumnPlotCreator.TUKEY_BOX_PLOT));
 		for(xyPlotForm form:XYPlotCreator.xyPlotForm.values()) installer.installItem(new ExcelFileToXYPlot(form));
 		
 		installer.installItem(new ExcelFileToComplexCategoryPlot(0));

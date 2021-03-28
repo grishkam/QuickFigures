@@ -40,6 +40,8 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.BasicLayoutEditor;
@@ -110,6 +112,9 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	private AxesGraphic alternateYaxis;
 	private PlotLabel yLabel2;
 	
+	/**The starting width for the plot*/
+	protected static int startPlotWidth=150, startPlotHeight=125;;
+	
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -131,7 +136,7 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 
 	/**creates the plot area and the axes of the plot. Adds those to the layer*/
 	public void generateAxes() {
-		areaRect = new  PlotAreaRectangle(this,new Rectangle(60, 50, 150, 125));
+		areaRect = createStartingPlotArea();
 		this.add(areaRect);
 		areaRect.setStrokeColor(Color.black);
 		areaRect.setStrokeWidth(1);
@@ -144,6 +149,13 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 		this.add(xAxis);
 		this.add(yAxis);
 	
+	}
+
+	/**called when the plot area is innitialized
+	 * @return
+	 */
+	protected PlotAreaRectangle createStartingPlotArea() {
+		return new  PlotAreaRectangle(this,new Rectangle(60, 50, startPlotWidth, startPlotHeight));
 	}
 	
 	/**returns the bounds of the plot area*/
@@ -901,7 +913,9 @@ private UndoAbleEditForRemoveItem removeLabel(PlotLabel label2) {
 	return null;
 }
 
+/**returns true if there is a title label*/
 public boolean hasTitleLabel() {return titleLabel!=null;}
+
 
 @MenuItemMethod(menuActionCommand = "To Barplot", menuText = "Make Barplot", subMenuName="Change Format", orderRank=4)
 public CombinedEdit barPlot() {
@@ -924,13 +938,16 @@ public CombinedEdit barPlot() {
 	return undo;
 }
 
+/**Changes the form of the bar shape*/
 protected CombinedEdit forceBarToForm( BasicDataSeriesGroup a, int type) {
 	CombinedEdit undo = new CombinedEdit();
 	if (a.getDataBar()==null) 
 		undo.addEditToList(a.addDataBar());
-	DataShapeUndo undo2 = new DataShapeUndo(a.getDataBar());
-	a.getDataBar().setBarType(type);
-	undo2.establishFinalState();undo.addEditToList(undo2);
+	DataBarShape bar = a.getDataBar();
+	DataShapeUndo undo2 = new DataShapeUndo(bar);
+	bar.setBarType(type);
+	undo2.establishFinalState();
+	undo.addEditToList(undo2);
 	return undo;
 }
 
@@ -964,6 +981,7 @@ protected CombinedEdit forceScatterBarToExclusion( BasicDataSeriesGroup a, int  
 	return undo;
 }
 
+/**makes the plot into a scatter form*/
 @MenuItemMethod(menuActionCommand = "To Scatter Plot", menuText = "Make Scatter", subMenuName="Change Format", orderRank=6)
 public AbstractUndoableEdit scatterPlot() {
 	CombinedEdit undo = new CombinedEdit();
@@ -977,7 +995,7 @@ public AbstractUndoableEdit scatterPlot() {
 		undo.addEditToList(
 				forceBarToForm(a,DataBarShape.LINE_ONLY ));
 		undo.addEditToList(
-				forceBarToForm(a, ErrorBarShowingShape.SEM));
+				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
 	
 		
 	}
@@ -986,6 +1004,24 @@ public AbstractUndoableEdit scatterPlot() {
 }
 
 
+/**creates a series of shapes that are similar to the plot shapes*/
+@MenuItemMethod(menuActionCommand = "shape copies", menuText = "Make Shape Copy", subMenuName="Change Format", orderRank=6)
+public AbstractUndoableEdit copyShapes() {
+	CombinedEdit undo = new CombinedEdit();
+	for(ZoomableGraphic a: this.getAllGraphics()) {
+		
+	if(a instanceof ShapeGraphic) {
+		ShapeGraphic s=(ShapeGraphic) a;
+		PathGraphic createPathCopy = s.createPathCopy();
+		createPathCopy.moveLocation(100, 80);
+		add(createPathCopy);
+	}
+	
+		
+	}
+	fullPlotUpdate();
+	return undo;
+}
 
 
 /**Called when the order of data series in the layer changes */
@@ -1200,6 +1236,10 @@ public ArrayList<AxesGraphic> getAllAxes() {
 	output.add(yAxis);
 	output.add(alternateYaxis);
 	return output;
+}
+
+public PlotLabel getTitleLabel() {
+	return titleLabel;
 }
 
 }

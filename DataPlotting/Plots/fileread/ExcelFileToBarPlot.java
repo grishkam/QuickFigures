@@ -39,7 +39,7 @@ public class ExcelFileToBarPlot extends  ExcelDataImport{
 	private ColumnPlotCreator creator;
 
 
-	public ExcelFileToBarPlot(int plotType) {
+	public ExcelFileToBarPlot(ColumnPlotCreator.ColumnPlotStyle plotType) {
 		creator=new ColumnPlotCreator(plotType);
 	}
 	

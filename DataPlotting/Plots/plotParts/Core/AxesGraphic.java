@@ -46,6 +46,7 @@ import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import illustratorScripts.ArtLayerRef;
 import locatedObject.RectangleEdges;
 import locatedObject.ScaleInfo;
 import locatedObject.Scales;
@@ -675,6 +676,12 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
 		return new GroupToOffice(breakToGroup());
+	}
+	
+	/**implementation of an interface required for generating adobe illustrator scripts*/
+	@Override
+	public Object toIllustrator(ArtLayerRef aref) {
+		return this.breakToGroup().toIllustrator(aref);
 	}
 	
 	

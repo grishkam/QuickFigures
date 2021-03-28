@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.DataSeries;
+import dataTableDialogs.SmartDataInputDialog;
 import genericPlot.BasicPlot;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import undo.AbstractUndoableEdit2;
@@ -33,7 +34,11 @@ import undo.UndoAddItem;
 public interface PlotCreator<Type extends DataSeries>  {
 	
 	/**creates the plot*/
-	public AbstractUndoableEdit2 createPlot(String name, ArrayList<Type> items, DisplayedImage diw);
+	public UndoAddItem createPlot(String name, ArrayList<Type> items, DisplayedImage diw);
+	
+	/**creates the plot*/
+	public UndoAddItem createPlot(String name, SmartDataInputDialog items, DisplayedImage diw);
+	
 	
 	/**what the plot type is called*/
 	public String getNameText();
@@ -52,5 +57,7 @@ public interface PlotCreator<Type extends DataSeries>  {
 		diw.updateDisplay();diw.updateDisplay();
 		return undo;
 	}
+	
+	
 	
 }

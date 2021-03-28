@@ -19,7 +19,9 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.XYDataSeries;
+import dataTableDialogs.SmartDataInputDialog;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 import xyPlots.XY_Plot;
 
@@ -57,5 +59,11 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		DefaultForm,
 		ScatterForm,
 		LineForm
+	}
+
+	@Override
+	public UndoAddItem createPlot(String name, SmartDataInputDialog items, DisplayedImage diw) {
+		ArrayList<XYDataSeries> in = items.getXYDataSeriesUsingDefaultClassification();
+		return this.createPlot(name, in, diw);
 	}
 }

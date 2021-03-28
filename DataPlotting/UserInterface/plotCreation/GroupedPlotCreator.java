@@ -24,8 +24,10 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.GroupedDataSeries;
+import dataTableDialogs.SmartDataInputDialog;
 import groupedDataPlots.Grouped_Plot;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
@@ -59,5 +61,13 @@ public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {
 		if (type==Grouped_Plot.JITTER_POINTS)  plot.scatterPlot();
 		
 		return PlotCreator.addPlotToWorksheet(diw, plot);
+	}
+
+
+
+	@Override
+	public UndoAddItem createPlot(String name, SmartDataInputDialog items, DisplayedImage diw) {
+		ArrayList<GroupedDataSeries> in = items.getCategoryDataSeriesUsingClassificationFolumn(0,1,2);
+		return this.createPlot(name, in, diw);
 	}
 }

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import actionToolbarItems.EditManyObjects;
 import actionToolbarItems.SetAngle;
+import actionToolbarItems.SuperTextButton;
 import addObjectMenus.CartoonPolygonAdder;
 import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.SelectedSetLayerSelector;
@@ -52,7 +53,7 @@ public class TestShapes {
 	
 	
 	public static TestExample[] each=new TestExample[] {
-			TestExample.DIVERSE_SHAPES, TestExample.RECTANGLE_AND_OTHERS, TestExample.MANY_STROKES, TestExample.MANY_COLORS, TestExample.MANY_ANGLES, TestExample.MANY_ANGLE_TEXT, TestExample.MANY_ANGLE_COMPLEX_TEXT
+			TestExample.DIVERSE_SHAPES, TestExample.RECTANGLE_AND_OTHERS, TestExample.MANY_STROKES, TestExample.MANY_COLORS, TestExample.MANY_ANGLES, TestExample.MANY_ANGLE_TEXT, TestExample.MULTIPLE_FONTS, TestExample.MANY_ANGLE_COMPLEX_TEXT
 	,TestExample.MANY_ARROWS
 	
 	};
@@ -143,6 +144,38 @@ public class TestShapes {
 		
 		
 		
+	
+		
+	}
+	
+	
+	if (type==TestExample.MULTIPLE_FONTS) {
+		
+		TextGraphic textGraphic = new TextGraphic("Plain Text");
+		textGraphic.getBounds();
+		rect1 = new Rectangle(0,0, 80, 30);
+		
+		String[] fonts =new String[] {"Arial","Monospaced", "SansSerif", "Times New Roman", "Helvetica"};
+		int[] styles=  new int[] {Font.PLAIN, Font.BOLD, Font.ITALIC, Font.BOLD+Font.ITALIC};
+		
+		
+		int step=0;
+		
+		for( int size=8; size<=16; size+=4)
+		{
+			
+			int count=1;
+			for(String font: fonts)
+				for(int style: styles) {
+					Font f=new Font(font, style, size);
+					 TextGraphic t = textGraphic.copy();
+					 t.setFont(f);t.setText(f.getFontName());
+					 t.moveLocation(5+150*step, (5+size)*count);
+					l.addItemToLayer(t);
+					count++;
+				}
+			step++;//changes horizontal position
+		}
 	
 		
 	}
@@ -261,7 +294,7 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		
 	}
 
-	/**
+	/**Adds several versions of the objects in the list
 	 * @param objects
 	 * @param o1
 	 * @param dx

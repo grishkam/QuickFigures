@@ -25,38 +25,26 @@ import java.util.ArrayList;
 import columnPlots.ColumnPlot;
 import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
+import dataTableDialogs.SmartDataInputDialog;
+import fileread.PlotType;
+import graphicActionToolbar.CurrentFigureSet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 /**A Plot creator that can generate a few types of column plots*/
 public class ColumnPlotCreator implements PlotCreator<ColumnDataSeries>{
 
-/**
-	 * 
-	 */
-	public static final int TUKEY_BOX_PLOT = 4;
-/**
-	 * 
-	 */
-	public static final int BOX_PLOT = 3;
-/**
-	 * 
-	 */
-	public static final int SCATTER_POINTS = 2;
-/**
-	 * 
-	 */
-	public static final int STANDARD_BAR_PLOT = 1;
-/**
-	 * 
-	 */
-	public static final int BAR_AND_SCATTER = 0;
+public enum ColumnPlotStyle {STANDARD_BAR_PLOT ,TUKEY_BOX_PLOT , BOX_PLOT , SCATTER_POINTS,  BAR_AND_SCATTER }
 	
-	int type=BAR_AND_SCATTER;
+ColumnPlotStyle type=ColumnPlotStyle.BAR_AND_SCATTER;
+
 	
-	 public ColumnPlotCreator(int t) {
+	 public ColumnPlotCreator(ColumnPlotStyle t) {
 		type=t;
 	}
+	 
+	// public static ArrayList<ColumnPlotCreator> getAlltypes
 	
 	
 	
@@ -67,26 +55,39 @@ public class ColumnPlotCreator implements PlotCreator<ColumnDataSeries>{
 		
 		ColumnPlot plot=new ColumnPlot(name, items.toArray(new ColumnDataSeries[items.size()]));
 		
-		if (type==STANDARD_BAR_PLOT)  plot.barPlot();
-		if (type==SCATTER_POINTS) plot.scatterPlot();;
-		if (type==BOX_PLOT) plot.normalBoxplotPlot();;
-		if (type==TUKEY_BOX_PLOT) plot.tukeyBoxplotPlot();;
+		if (type==ColumnPlotStyle.STANDARD_BAR_PLOT)  plot.barPlot();
+		if (type==ColumnPlotStyle.SCATTER_POINTS) plot.scatterPlot();;
+		if (type==ColumnPlotStyle.BOX_PLOT) plot.normalBoxplotPlot();;
+		if (type==ColumnPlotStyle.TUKEY_BOX_PLOT) plot.tukeyBoxplotPlot();;
 		
 		return PlotCreator.addPlotToWorksheet(diw, plot);
 	}
 
-
+	
+	
 
 	
 	
 	@Override
 	public String getNameText() {
-		if (type==BAR_AND_SCATTER) return "Bar Plot With Dots";
-		if (type==STANDARD_BAR_PLOT) return "Normal Bar Plot";
-		if (type==SCATTER_POINTS) return "Scatter Point Plot";
-		if (type==BOX_PLOT) return "Boxplot";
-		if (type==TUKEY_BOX_PLOT) return "Tukey Boxplot";
+		if (type==ColumnPlotStyle.BAR_AND_SCATTER) return "Bar Plot With Dots";
+		if (type==ColumnPlotStyle.STANDARD_BAR_PLOT) return "Normal Bar Plot";
+		if (type==ColumnPlotStyle.SCATTER_POINTS) return "Scatter Point Plot";
+		if (type==ColumnPlotStyle.BOX_PLOT) return "Boxplot";
+		if (type==ColumnPlotStyle.TUKEY_BOX_PLOT) return "Tukey Boxplot";
 		return "Bar plot";
+	}
+
+	@Override
+	public UndoAddItem createPlot(String name, SmartDataInputDialog items, DisplayedImage diw) {
+		ArrayList<ColumnDataSeries> in;
+		if (items.getPlotForm()==PlotType.COLUMN_PLOT_TYPE ) 
+			in= items.getDataSeriesUsingClassificationFolumn(0,1, items.getDataTable());
+		else in=items.getAllColumns();
+		
+		return createPlot(name, in, CurrentFigureSet.getCurrentActiveDisplayGroup());
+		
+		
 	}
 
 }

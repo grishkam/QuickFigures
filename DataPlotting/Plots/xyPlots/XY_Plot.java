@@ -71,7 +71,7 @@ public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 		 addXAxiLabel(4);
 		 this.xLabel.getParagraph().get(0).get(0).setText(primarySeries.getDataSeries().getxName());
 		 this.yLabel.getParagraph().get(0).get(0).setText(primarySeries.getDataSeries().getDependantVariableName());
-		 titleLabel.getParagraph().get(0).get(0).setText(getName() );
+		 getTitleLabel().getParagraph().get(0).get(0).setText(getName() );
 		 
 		
 		 this.resetMinMax(true);

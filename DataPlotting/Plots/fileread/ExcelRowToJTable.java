@@ -73,7 +73,7 @@ public class ExcelRowToJTable extends QuickImport  {
 			Sheet sheet = wb.getSheetAt(0);
 			DataTable table = DataTableFromWorkBookSheet(sheet);
 			
-			SmartDataInputDialog ss = new SmartDataInputDialog(table, 0);
+			SmartDataInputDialog ss = new SmartDataInputDialog(table, PlotType.DEFAULT_PLOT_TYPE_COLS);
 			ss.getDataTable().shiftToTopLeft();
 			ss.showDialog();;
 			diw.updateDisplay();diw.updateDisplay();

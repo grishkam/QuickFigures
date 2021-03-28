@@ -556,11 +556,11 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 			return out;
 		}
 		
-		private static String[] getStandardFonts() {
+		public static String[] getStandardFonts() {
 			return standardFonts;
 		}
 
-		public static String[] standardFonts=new String[] {"Arial","Courier", "SansSerif", "Times New Roman", "Helvetica"};
+		public static final String[] standardFonts=new String[] {"Arial","Courier", "SansSerif", "Times New Roman", "Helvetica"};
 		
 		public static MultiSelectionOperator[]  getForFonts(TextGraphic t, String... f) {
 			MultiSelectionOperator[] out = new MultiSelectionOperator[f.length+1];
