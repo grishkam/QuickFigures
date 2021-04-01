@@ -2,7 +2,7 @@
 QuickFigures is a toolset for creating scientific figures. 
 
 If you are in a hurry you can learn the basics in less than 10 minutes with [this tutorial video](https://www.youtube.com/watch?v=__pkILuLfzc). 
-You can also watch the full length [tutorial video playlist](https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1) for instructions or you may read the [user guide](https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md) which is more up to date then full length playlist.
+You can also watch the older full length [tutorial video playlist](https://www.youtube.com/watch?v=uRGPBT1mhHg&list=PLM5I73cb55tCEjT7qdU7XDrAnSxg6ZNxp&index=1) for instructions or you may read the [user guide](https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md) which is more up to date than the full length playlist.
 
 You can install using the ImageJ update site or download [here](https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar)
 
