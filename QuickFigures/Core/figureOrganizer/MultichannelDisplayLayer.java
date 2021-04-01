@@ -260,6 +260,8 @@ private static final long serialVersionUID = 1L;
  * or put a scale bar into when one recreates the all the panels*/
 	ImagePanelGraphic getDefaultPanelForScaleBar() {
 		PanelListElement mp = getPanelList().getMergePanelFor( 1,1);
+		if(mp==null)     mp = getPanelList().getMergePanel();//will use any merge panel if the one from slice and frame 1 is not available. Mar 31 bugfix
+		
 		ImagePanelGraphic MergePanel = null;
 		if(mp!=null) MergePanel =(ImagePanelGraphic) mp.getImageDisplayObject();
 		
@@ -296,7 +298,7 @@ private static final long serialVersionUID = 1L;
 	public void eliminateAndRecreate(boolean redoDimensions, boolean expandDimensions, boolean labels) {
 		CombinedEdit output = new CombinedEdit();
 		output.addEditToList(
-		eliminateChanLabels()); 
+				eliminateChanLabels()); 
 		
 		ImagePanelGraphic merpan =getAnyPanelWithScaleBar() ;
 		
