@@ -73,7 +73,7 @@ public class MultichannelDisplayLayer extends GraphicLayerPane implements Zoomab
 	 */
 	{description= "A layer containing the components of a multichannel image";}
 	
-private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L; 
 	
 
 	public MultiChannelSlot slot=null;//the original image is stored within this variable
