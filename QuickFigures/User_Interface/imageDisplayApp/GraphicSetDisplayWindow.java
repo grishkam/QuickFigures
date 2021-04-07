@@ -35,11 +35,14 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -73,7 +76,7 @@ import ultilInputOutput.FileChoiceUtil;
 
 /**The JFrame containing a canvas that figures are drawn inside.
  mouse actions on that canvas call methods form the toolbar so that the user may edit anything. */
-public class GraphicSetDisplayWindow extends JFrame implements KeyListener, MouseListener, MouseMotionListener, DropTargetListener{
+public class GraphicSetDisplayWindow extends JFrame implements KeyListener, MouseListener, MouseMotionListener,MouseWheelListener, DropTargetListener{
 	
 	/**
 	 * 
@@ -241,6 +244,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		getTheCanvas().addKeyListener(this);
 		getTheCanvas().addMouseListener(this);
 		getTheCanvas().addMouseMotionListener(this);
+		getTheCanvas().addMouseWheelListener(this);
 		getTheCanvas().setDispWindow(this);
 		new DropTarget(getTheCanvas(), this);
 		getDisplaySet().updateDisplay();
@@ -303,7 +307,20 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		return ToolBarManager.getCurrentTool().getCurrentKeyStrokeReader();
 	}
 	
-	
+	/**scrolls in or out in response to wheel movements with control down*/
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		boolean WindowsOrMacMeta = isModifierKeyDown(e);
+		if(e.isConsumed())
+			return;
+		else
+		if(WindowsOrMacMeta) {
+			if(e.getUnitsToScroll()>0)
+				ZoomOut();
+			else
+				ZoomIn();
+		}
+	}
 	
 
 	/**Called after a mouse event. */
@@ -345,6 +362,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		}
 		
 		if (arg0.getKeyChar()=='_') {
+			
 			scrollToComfort();
 		}
 		
@@ -448,7 +466,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 	 * @param arg0
 	 * @return
 	 */
-	public static boolean isModifierKeyDown(KeyEvent arg0) {
+	public static boolean isModifierKeyDown(InputEvent arg0) {
 		boolean WindowsOrMacMeta=false;
  		if (IssueLog.isWindows() &&arg0.isControlDown()) {
  			
@@ -986,6 +1004,9 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		this.addComponentsToWindow();
 		this.pack();
 	}
+
+
+	
 
 
 	
