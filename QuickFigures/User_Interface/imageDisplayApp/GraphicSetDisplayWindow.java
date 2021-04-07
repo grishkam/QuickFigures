@@ -320,6 +320,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			else
 				ZoomIn();
 		}
+		e.consume();
 	}
 	
 
