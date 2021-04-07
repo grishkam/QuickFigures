@@ -33,7 +33,7 @@ public class ArrowSwingDialogTest extends  DialogTester  {
 		ArrowGraphic arrowGraphic = new ArrowGraphic(new Point(50,30), new Point(150,130));
 		arrowGraphic.setHeadsSame(false);
 		arrowGraphic.setStrokeColor(Color.black);
-		i.getImageAsWrapper().addItemToImage(arrowGraphic);
+		i.getImageAsWorksheet().addItemToImage(arrowGraphic);
 		
 		ArrowSwingDialog d = arrowGraphic .getOptionsDialog();
 		d.showDialog();

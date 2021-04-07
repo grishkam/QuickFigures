@@ -128,7 +128,7 @@ public class ImagePanelHandle extends SmartHandle {
 	creates a PanelMovementGroup for moving the objects that are above the image panel
 	 */
 	public 	PanelMovementGroupItems createPassengerList(CanvasMouseEvent e, ImagePanelGraphic panel, Iterable<PanelMovementGroupItems> exclude, boolean shift) {
-		ArrayList<LocatedObject2D> objects = getObjetsAbove(panel, e.getAsDisplay().getImageAsWrapper());
+		ArrayList<LocatedObject2D> objects = getObjetsAbove(panel, e.getAsDisplay().getImageAsWorksheet());
 		if(exclude!=null) {
 			for(PanelMovementGroupItems exc:exclude) {
 				if (exc==null) continue;
@@ -159,7 +159,7 @@ public class ImagePanelHandle extends SmartHandle {
 	public void handleDrag(CanvasMouseEvent e) {
 		super.handleDrag(e);
 		thePanel.dragOngoing=true;
-		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
+		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 		Point p2 = e.getCoordinatePoint();
 		int handlenum = this.getHandleNumber();
 		if (this.getHandleNumber()<RectangleEdges.CENTER){
@@ -261,7 +261,7 @@ public class ImagePanelHandle extends SmartHandle {
 			{
 			releaseCenterHandle(e);
 			}
-		e.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
+		e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 		
 	}
 
@@ -330,7 +330,7 @@ public class ImagePanelHandle extends SmartHandle {
 		void snapPanel(CanvasMouseEvent e) {
 			Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, panel.getBounds());
 			
-			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), center, true, null);
+			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWorksheet(), center, true, null);
 			
 			Object_Mover.snapRoi(panel,r, 2, true);
 			movePassengers();
@@ -371,7 +371,7 @@ public class ImagePanelHandle extends SmartHandle {
 		RectangularGraphic[] markDestinationAndRival(CanvasMouseEvent e) {
 			Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, panel.getBounds());
 			
-			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWrapper(), center, true, null);
+			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWorksheet(), center, true, null);
 			
 			Rectangle b = panel.getBounds();
 			RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);
@@ -381,7 +381,7 @@ public class ImagePanelHandle extends SmartHandle {
 			
 			
 			/**check if another panel is in that destination location*/
-			ArrayList<LocatedObject2D> allObjects = e.getAsDisplay().getImageAsWrapper().getLocatedObjects();
+			ArrayList<LocatedObject2D> allObjects = e.getAsDisplay().getImageAsWorksheet().getLocatedObjects();
 			allObjects.remove(panel);
 			
 			ArraySorter.removeThoseNotOfClass(allObjects, ImagePanelGraphic.class);

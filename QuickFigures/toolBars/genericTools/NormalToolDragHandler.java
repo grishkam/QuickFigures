@@ -140,12 +140,12 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	/**handles the transplant of a graphic to a new image*/
 	void moveItemToSet(ZoomableGraphic z, ImageWindowAndDisplaySet displaySet) {
 		select(z);
-		if (displaySet.getImageAsWrapper().getTopLevelLayer().hasItem(z))
+		if (displaySet.getImageAsWorksheet().getTopLevelLayer().hasItem(z))
 					return;
 		
 		
 		GraphicLayer oldparent = z.getParentLayer();
-		GraphicLayer newLayer = displaySet.getImageAsWrapper().getTopLevelLayer().getSelectedContainer();
+		GraphicLayer newLayer = displaySet.getImageAsWorksheet().getTopLevelLayer().getSelectedContainer();
 		
 		if (newLayer.canAccept(z)) {
 			oldparent.remove(z);
@@ -171,11 +171,11 @@ public class NormalToolDragHandler extends BasicDragHandler {
 			Rectangle2D panel = p.getPanelLayout().getPanel(i);
 		
 			
-			displaySet.getImageAsWrapper().getOverlaySelectionManagger().setSelectionGraphic(p);
-			displaySet.getImageAsWrapper().getOverlaySelectionManagger().select(panel, 1);
+			displaySet.getImageAsWorksheet().getOverlaySelectionManagger().setSelectionGraphic(p);
+			displaySet.getImageAsWorksheet().getOverlaySelectionManagger().select(panel, 1);
 			
 		}  else {
-			displaySet.getImageAsWrapper().getOverlaySelectionManagger().removeObjectSelections();
+			displaySet.getImageAsWorksheet().getOverlaySelectionManagger().removeObjectSelections();
 			
 		}
 		displaySet.updateDisplay();
@@ -184,7 +184,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 
 	/**returns the object at the given location*/
 	private LocatedObject2D getObjectAtPoint(ImageWindowAndDisplaySet displaySet, Point2D position) {
-		return tool.getObjectAt(displaySet.getImageAsWrapper(), (int)position.getX(), (int) position.getY());
+		return tool.getObjectAt(displaySet.getImageAsWorksheet(), (int)position.getX(), (int) position.getY());
 	}
 	
 	
@@ -198,7 +198,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 		PanelLayoutGraphic layout=null;
 	
 		
-		GraphicLayer layer = imageAndDisplaySet.getImageAsWrapper().getTopLevelLayer();
+		GraphicLayer layer = imageAndDisplaySet.getImageAsWorksheet().getTopLevelLayer();
 		ArrayList<ImagePanelGraphic> addedPanels=new ArrayList<ImagePanelGraphic>();
 		
 		if(roi2 instanceof KnowsParentLayer) {
@@ -287,7 +287,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 				if(imageadded!=null) addedPanels.add(imageadded);
 				}
 			
-			imageAndDisplaySet.getImageAsWrapper().getOverlaySelectionManagger().removeObjectSelections();
+			imageAndDisplaySet.getImageAsWorksheet().getOverlaySelectionManagger().removeObjectSelections();
 		}
 		
 		

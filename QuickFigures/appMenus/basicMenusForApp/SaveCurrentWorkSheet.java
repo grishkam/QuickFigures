@@ -32,8 +32,8 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		
-		if (diw.getImageAsWrapper() instanceof StandardWorksheet) {
-			StandardWorksheet theSet=(StandardWorksheet) diw.getImageAsWrapper();
+		if (diw.getImageAsWorksheet() instanceof StandardWorksheet) {
+			StandardWorksheet theSet=(StandardWorksheet) diw.getImageAsWorksheet();
 			File f=FileChoiceUtil.getSaveFile(theSet.getSavePath(), theSet.getSaveName());
 		if (f==null) return;
 		

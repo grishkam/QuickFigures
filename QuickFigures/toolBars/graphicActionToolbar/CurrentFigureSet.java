@@ -47,7 +47,7 @@ public class CurrentFigureSet implements CurrentSetInformer {
 	
 	@Override
 	public FigureDisplayWorksheet getCurrentlyActiveOne() {
-		if (currentActiveDisplayGroup!=null) return currentActiveDisplayGroup.getImageAsWrapper();
+		if (currentActiveDisplayGroup!=null) return currentActiveDisplayGroup.getImageAsWorksheet();
 		
 		return activeGraphicDisplay;
 	}
@@ -74,7 +74,7 @@ public class CurrentFigureSet implements CurrentSetInformer {
 	public static void setCurrentActiveDisplayGroup(
 			DisplayedImage  currentActiveDisplayGroup) {
 		CurrentFigureSet.currentActiveDisplayGroup = currentActiveDisplayGroup;
-		activeGraphicDisplay=currentActiveDisplayGroup.getImageAsWrapper();
+		activeGraphicDisplay=currentActiveDisplayGroup.getImageAsWorksheet();
 		AdaptiveToolbar.onDisplayChange(currentActiveDisplayGroup);
 	}
 

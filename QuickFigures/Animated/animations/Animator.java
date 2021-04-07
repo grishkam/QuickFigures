@@ -42,7 +42,7 @@ public class Animator implements ActionListener{
 	public Animator(DisplayedImage diw, boolean animateAll) {
 		display=diw;
 		if (animateAll) {
-			for(LocatedObject2D t: display.getImageAsWrapper().getLocatedObjects()) {
+			for(LocatedObject2D t: display.getImageAsWorksheet().getLocatedObjects()) {
 				if (t instanceof HasAnimation) {
 					Animation a = ((HasAnimation) t).getAnimation();
 					addAnimation(a);

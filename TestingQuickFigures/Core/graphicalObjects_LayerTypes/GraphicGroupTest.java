@@ -59,7 +59,7 @@ public class GraphicGroupTest extends ToolTester {
 		
 		GraphicGroup gg = new GraphicGroup(true, testRect, testCircle);
 		
-		image.getImageAsWrapper().addItemToImage(gg);
+		image.getImageAsWorksheet().addItemToImage(gg);
 		
 		/**test to determine if user can still click the objects to select them*/
 		double px=50;//a point known to be within the rectangle

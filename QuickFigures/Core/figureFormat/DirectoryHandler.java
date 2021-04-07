@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**Class contains methods for creating a subfolder in my documents for saving figures, templates
- * and exporter files.
+ * and exported files.
   this in turn has subfolders for saving templates and for saving temporary files*/
 public class DirectoryHandler {
 	private static DirectoryHandler defaultHandler;
@@ -43,8 +43,8 @@ public class DirectoryHandler {
 	String pathOfDocFolder=FileChoiceUtil.pathOfDocumentsFolder();//my documents or documents
 	String subPathofDocumentsFolder="/Quick Figures";
 	String subPathofTemplatesFoloder="/Quick Figures/Templates";//template subfolder
-	String prefsFileName="prefs";
-	private String subPathofDefaultTemplate=getSubPathofTemplatesFoloder()+"/default template";
+	String prefsFileName="preferences.txt";
+	private String subPathofDefaultTemplate=getSubPathofTemplatesFolder()+"/default template";
 	
 	/**returns the default directory handler*/
 	public static DirectoryHandler getDefaultHandler(){
@@ -107,13 +107,13 @@ public class DirectoryHandler {
 	  */
 	void makeAllNeededDirsIfAbsent() {
 		makeDirectoryIfAbsent(pathOfDocFolder+subPathofDocumentsFolder);
-		makeDirectoryIfAbsent(pathOfDocFolder+getSubPathofTemplatesFoloder());
+		makeDirectoryIfAbsent(pathOfDocFolder+getSubPathofTemplatesFolder());
 		makeDirectoryIfAbsent(pathOfDocFolder+subPathofDocumentsFolder+"/tmp");
 		//makeDirectoryIfAbsent(pathOfDocFolder+subPathofPrefsFoloder+"/"+prefsFolderName) ;
 	}
 
 	/**the path of the templates folder*/
-	public String getSubPathofTemplatesFoloder() {
+	public String getSubPathofTemplatesFolder() {
 		return subPathofTemplatesFoloder;
 	}
 	

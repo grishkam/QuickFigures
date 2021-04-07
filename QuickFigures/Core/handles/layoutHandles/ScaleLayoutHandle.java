@@ -101,7 +101,7 @@ public class ScaleLayoutHandle extends SmartHandle implements LayoutSpaces{
 								);
 		if(currentUndo!=null) currentUndo.establishFinalState();
 		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(combinedUndo);
-		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
+		canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 		
 		updateLocation();
 	}

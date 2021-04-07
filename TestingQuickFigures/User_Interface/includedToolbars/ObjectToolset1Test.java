@@ -35,8 +35,8 @@ class ObjectToolset1Test {
 		
 		IJ.wait(5000);
 		
-		i.getImageAsWrapper().getTopLevelLayer().add(new RectangularGraphic(new Rectangle(0,0,40,40)));
-		TestShapes.addAllRectangleShapeTools(i.getImageAsWrapper().getTopLevelLayer());
+		i.getImageAsWorksheet().getTopLevelLayer().add(new RectangularGraphic(new Rectangle(0,0,40,40)));
+		TestShapes.addAllRectangleShapeTools(i.getImageAsWorksheet().getTopLevelLayer());
 		i.updateDisplay();
 		IJ.wait(400);
 		

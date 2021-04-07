@@ -572,7 +572,7 @@ public void resizeLayoutToFitContents() {
 					setDragMask(lastDragOrRelMouseEvent, r2);
 			} else {
 				shifted=false;
-				lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(null, 0);
+				lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(null, 0);
 				super.handleDrag(lastDragOrRelMouseEvent);
 			}
 
@@ -581,12 +581,12 @@ public void resizeLayoutToFitContents() {
 		}
 
 		protected void setDragMask(CanvasMouseEvent lastDragOrRelMouseEvent, Rectangle2D r2) {
-			if(r2==null) {lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(null, 0);
+			if(r2==null) {lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(null, 0);
 				return;
 			}
 			RectangularGraphic r = RectangularGraphic.blankRect(r2, Color.green, true, true);
 			r.hideHandles(true);
-			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(r, 0);
+			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(r, 0);
 		}
 		
 		

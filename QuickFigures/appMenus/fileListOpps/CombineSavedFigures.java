@@ -82,7 +82,7 @@ public class CombineSavedFigures extends BasicMultiSelectionOperator{
 				 CombineImages.combineInto(figure, figure2, false);
 					BasicObjectListHandler boh = new BasicObjectListHandler();
 				
-				 boh.resizeCanvasToFitAllObjects(figure.getImageAsWrapper());
+				 boh.resizeCanvasToFitAllObjects(figure.getImageAsWorksheet());
 				 figure.updateDisplay();
 				} catch (Throwable t) {IssueLog.logT(t);}
 			figure.autoZoom();

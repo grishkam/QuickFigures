@@ -36,14 +36,23 @@ public class ImageDPIHandler {
 							 	SVG_PIXELS_PER_INCH = 96;
 	
 	
-	private static int POINTS_PER_INCH = DEFAULT_POINTS_PER_INCH ;
+	
+	public static int inchDefinition= DEFAULT_POINTS_PER_INCH;
+	public static RulerUnit rulerUnit=RulerUnit.DEFAULT_INCH;
 
 	/**Returns the number of points on the canvas that corresponds to 1 inch distance*/
 	public static int getInchDefinition() {
-		return POINTS_PER_INCH;
+		return inchDefinition;
+		
 	}
-	public static void setInchDefinition(int anInch) {
-		POINTS_PER_INCH=anInch;
+	
+	
+	public static void setRulerUnit(RulerUnit rl) {
+		
+		rulerUnit=rl;
+	}
+	public static RulerUnit getRulerUnit() {
+		return rulerUnit;
 	}
 	
 	/**returns the pixel density ratio needed for panels with 300 pixels per inch*/
@@ -54,6 +63,15 @@ public class ImageDPIHandler {
 	
 	
 	public static double idealPanelPixelDesity() {return 300;}
+
+
+	/**
+	 */
+	public static double getCMDefinition() {
+		return ImageDPIHandler.getInchDefinition()/2.54;
+	}
+	
+	
 	
 
 

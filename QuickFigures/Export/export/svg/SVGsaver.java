@@ -132,11 +132,11 @@ public class SVGsaver {
 	/**Saved the figure to the given path*/
 	public void saveFigure(String newpath, DisplayedImage diw) throws TransformerException, ParserConfigurationException {
 		
-		 GraphicLayer set = diw.getImageAsWrapper().getTopLevelLayer();
+		 GraphicLayer set = diw.getImageAsWorksheet().getTopLevelLayer();
 		  Document doc = makeDocument(newpath);
 		  Element element = createSVGelememnt(doc);
 		  element.setAttribute("id", set.getName());
-		  setRectAttributes(element, new Rectangle(diw.getImageAsWrapper().getCanvasDims()));
+		  setRectAttributes(element, new Rectangle(diw.getImageAsWorksheet().getCanvasDims()));
 		  
 			createContext(doc);
 			

@@ -149,7 +149,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	public ActionButtonHandleList getChangingButtonList() {
 		ImageWindowAndDisplaySet displaySet2 = getDisplaySet();
 		if(displaySet2==null) return null;
-		Object selectedItem = displaySet2.getImageAsWrapper().getSelectionObject();
+		Object selectedItem = displaySet2.getImageAsWorksheet().getSelectionObject();
 		if (selectedItem!=lastItem) {
 			updateAlternateList(selectedItem);
 			lastItem=selectedItem;

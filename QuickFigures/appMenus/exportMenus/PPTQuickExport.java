@@ -84,13 +84,13 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			     
 			   
 			   Rectangle r ;
-			   r=ArrayObjectContainer.combineOutLines(figure.getImageAsWrapper().getLocatedObjects()).getBounds();
+			   r=ArrayObjectContainer.combineOutLines(figure.getImageAsWorksheet().getLocatedObjects()).getBounds();
 			 
 			   group.setAnchor(r);
 			   group.setInteriorAnchor(r);
 			  
 			
-			   GraphicLayer set = figure.getImageAsWrapper().getTopLevelLayer();
+			   GraphicLayer set = figure.getImageAsWorksheet().getTopLevelLayer();
 			   
 			   
 			        for(ZoomableGraphic z: set.getAllGraphics()) try {

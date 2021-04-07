@@ -164,7 +164,7 @@ public class AttachmentPositionHandle extends SmartHandle {
 	public void showMessageForOutOfRange(CanvasMouseEvent mEvent) {
 		boolean out = outOfRange(mEvent);
 		Point2D p2=mEvent.getCoordinatePoint();
-		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
+		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 		if(out &&willTransplant) {
 			releaseIt=true;
 			TextGraphic marker = new TextGraphic("Release Item?");marker.setLocation(p2);
@@ -173,7 +173,7 @@ public class AttachmentPositionHandle extends SmartHandle {
 			selectionManagger.setSelection(marker2, 0);
 			//getObject().getSnappingBehaviour().copyPositionFrom(s);
 			
-			LocatedObject2D a = AttachedItemTool.getPotentialLockAcceptorAtPoint(mEvent.getCoordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWrapper());
+			LocatedObject2D a = AttachedItemTool.getPotentialLockAcceptorAtPoint(mEvent.getCoordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWorksheet());
 			if (a!=null)
 				{
 				RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
@@ -347,7 +347,7 @@ public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 	if(currentEdit!=null)
 	 canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentEdit);
 	
-	canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
+	canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 }
 
 private void performTransplant() {

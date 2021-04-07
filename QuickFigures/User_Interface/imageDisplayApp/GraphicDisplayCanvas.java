@@ -38,6 +38,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 
 import appContext.ImageDPIHandler;
+import appContext.RulerUnit;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import handles.HasSmartHandles;
@@ -56,11 +57,14 @@ public class GraphicDisplayCanvas extends JComponent {
 	 */
 	private static final int ADDITIONAL_SIZE = 60;
 	
+	
 	/**
 	 These numbers define the ruler appearance
 	 */
-	static final int INCH_MARK_SIZE = 10, MAX_INCH_MARKS = 20;
-	static final int FRACTION_OF_INCH = 4, FRACTION_OF_INCH_MARK_SIZE = 5;
+	static final int INCH_MARK_SIZE = 10;
+	static final int  FRACTION_OF_INCH_MARK_SIZE = 5;
+	
+	
 	
 	/**
 	 * 
@@ -70,7 +74,6 @@ public class GraphicDisplayCanvas extends JComponent {
 	
 	public GraphicDisplayCanvas() {
 		super();
-		//this.addKeyListener(new KeyDownTracker());
 	
 	}
 
@@ -267,14 +270,21 @@ public class GraphicDisplayCanvas extends JComponent {
 			
 			double positionx = areaWhite.getMinX();
 			double positiony = areaWhite.getMaxY();
-			g.setFont(new Font("Arial", Font.BOLD, 14));
+			g.setFont(new Font("Arial", Font.BOLD, getRulerUnit().getFontSize()));
 			
 				/**Draws the inch markers*/	
 			for(int i=0; i<20; i++) {
-				positionx+=ImageDPIHandler.getInchDefinition()*this.getZoomer().getZoomMagnification();
+				positionx+=getRulerUnit().getUnitSize()*this.getZoomer().getZoomMagnification();
 				if (positionx>areaWhite.getMaxX()) break;
-				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+10);
-				g.drawString((i+1)+" in ", (int)positionx-10, (int)positiony+10+g.getFont().getSize());
+				int markSize=10;
+				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+markSize);
+				
+				String str = (i+1)+getRulerUnit().getLabel();
+				int shift=10;
+				
+				if (getRulerUnit().getUnitSize()*this.getZoomer().getZoomMagnification()<50) { str=""+(i+1);shift=4;}//so that the cm text does not overlap the numbers
+				
+				g.drawString(str, (int)positionx-shift, (int)positiony+markSize+g.getFont().getSize());
 				
 			}
 			
@@ -282,8 +292,8 @@ public class GraphicDisplayCanvas extends JComponent {
 			positiony = areaWhite.getBounds().getMaxY();
 			
 			/**Draws the 1/4 inch markers for horizontal ruler*/	
-			for(int i=0; i<MAX_INCH_MARKS*FRACTION_OF_INCH; i++) {
-				positionx+=ImageDPIHandler.getInchDefinition()*this.getZoomer().getZoomMagnification()/FRACTION_OF_INCH;
+			for(int i=0; i<getRulerUnit().getMaxMark()*getRulerUnit().getFractionMark(); i++) {
+				positionx+=getRulerUnit().getUnitSize()*this.getZoomer().getZoomMagnification()/getRulerUnit().getFractionMark();
 				if (positionx>areaWhite.getMaxX()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx, (int)positiony+FRACTION_OF_INCH_MARK_SIZE);
 				
@@ -296,20 +306,20 @@ public class GraphicDisplayCanvas extends JComponent {
 			positionx = areaWhite.getBounds().getMaxX();
 			positiony = areaWhite.getBounds().getMinY();
 			
-			/**Draws the inch markers for the vertical super*/	
-			for(int i=0; i<MAX_INCH_MARKS; i++) {
-				positiony+=ImageDPIHandler.getInchDefinition()*this.getZoomer().getZoomMagnification();
+			/**Draws the inch markers for the vertical ruler*/	
+			for(int i=0; i<getRulerUnit().getMaxMark(); i++) {
+				positiony+=getRulerUnit().getUnitSize()*this.getZoomer().getZoomMagnification();
 				if (positiony>areaWhite.getMaxY()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx+INCH_MARK_SIZE, (int)positiony);
-				g.drawString((i+1)+" in ", (int)positionx+15, (int)positiony+g.getFont().getSize()/2);
+				g.drawString((i+1)+getRulerUnit().getLabel(), (int)positionx+15, (int)positiony+g.getFont().getSize()/2);
 				
 			}
 			
 			positionx = areaWhite.getBounds().getMaxX();
 			positiony = areaWhite.getBounds().getMinY();
 			/**Draws the 1/4 inch markers for the vertical ruler*/	
-			for(int i=0; i<MAX_INCH_MARKS*FRACTION_OF_INCH; i++) {
-				positiony+=ImageDPIHandler.getInchDefinition()*this.getZoomer().getZoomMagnification()/FRACTION_OF_INCH;
+			for(int i=0; i<getRulerUnit().getMaxMark()*getRulerUnit().getFractionMark(); i++) {
+				positiony+=getRulerUnit().getUnitSize()*this.getZoomer().getZoomMagnification()/getRulerUnit().getFractionMark();
 				if (positiony>areaWhite.getMaxY()) break;
 				g.drawLine((int)positionx, (int)positiony, (int)positionx+FRACTION_OF_INCH_MARK_SIZE, (int)positiony);
 				
@@ -329,5 +339,10 @@ public class GraphicDisplayCanvas extends JComponent {
 			double h = b.getHeight()+ADDITIONAL_SIZE;
 			
 			return new Dimension((int)w, (int)h);
+		}
+
+
+		public static RulerUnit getRulerUnit() {
+			return ImageDPIHandler.getRulerUnit();
 		}
 }

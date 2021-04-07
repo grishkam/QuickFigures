@@ -466,7 +466,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			}
 			
 			scalingUndo.establishFinalState();
-			inset.resizeMontageLayoutPanels();
+			inset.resizeLayoutPanels();
 			
 			return;
 		}

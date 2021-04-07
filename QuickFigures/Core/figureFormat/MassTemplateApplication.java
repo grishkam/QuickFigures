@@ -48,7 +48,7 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 		 FigureTemplate template = templateSaver.loadDefaultTemplate();
 		for(File f: files) {
 			ImageWindowAndDisplaySet figure = ImageDisplayIO.showFile(f);
-			GraphicLayer layer = figure.getImageAsWrapper().getTopLevelLayer();
+			GraphicLayer layer = figure.getImageAsWorksheet().getTopLevelLayer();
 			ArrayList<GraphicLayer> allsublayers = layer.getSubLayers();
 			
 			for(GraphicLayer figLayer: allsublayers) {

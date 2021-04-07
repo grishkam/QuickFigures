@@ -598,7 +598,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 			
 			/**returns the panel height in row number index of the montage
 			   this class was initially designed with uniform widths heights
-			   different rows so bugs may exist in forms with differently sized 
+			  TODO: check for any bugs that may exist in forms with differently sized 
 			   panels */
 			public double getPanelHeightOfRow(int index) {
 				if (rowHasIndividualHeight(index)) return rowHeights[index-1];

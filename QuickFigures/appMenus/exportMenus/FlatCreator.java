@@ -111,7 +111,7 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		toSystemClip(diw.getImageAsWrapper());
+		toSystemClip(diw.getImageAsWorksheet());
 		
 	}
 

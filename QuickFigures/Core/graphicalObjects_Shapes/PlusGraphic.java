@@ -147,7 +147,7 @@ public class PlusGraphic extends TrapezoidGraphic {
 		ComplexBlobShape z = new ComplexBlobShape(new Rectangle(20,20,200,200), 5, 0);
 		z.setStrokeColor(Color.BLACK);
 		PlusGraphic z2 = new PlusGraphic(z);
-		ex.getImageAsWrapper().getTopLevelLayer().add(z2);
+		ex.getImageAsWorksheet().getTopLevelLayer().add(z2);
 		ex.updateDisplay();
 	}
 	

@@ -11,8 +11,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 
 /**
- 
- * 
+ superclass for tests to figue
  */
 public class FigureTest {
 	public DisplayedImage gg;

@@ -52,7 +52,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 	}
 	
 	public DisplayedImage getImageDispay() {return clickedFigureDisplay;}
-	public ImageWorkSheet getImage() {return clickedFigureDisplay.getImageAsWrapper();}
+	public ImageWorkSheet getImage() {return clickedFigureDisplay.getImageAsWorksheet();}
 	
 	/**returns the cordinate of the clickpoint on the canvas*/
 	@Override
@@ -158,7 +158,7 @@ public class GenericCanvasMouseAction implements CanvasMouseEvent {
 
 	@Override
 	public LayerSelectionSystem getSelectionSystem() {
-		return new SelectedSetLayerSelector(clickedFigureDisplay.getImageAsWrapper());
+		return new SelectedSetLayerSelector(clickedFigureDisplay.getImageAsWorksheet());
 		
 	}
 

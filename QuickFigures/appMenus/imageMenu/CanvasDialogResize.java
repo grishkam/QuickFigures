@@ -29,13 +29,16 @@ import java.awt.geom.Rectangle2D.Double;
 import javax.swing.JLabel;
 
 import appContext.ImageDPIHandler;
+import appContext.RulerUnit;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.BasicMenuItemForObj;
+import figureFormat.DirectoryHandler;
 import imageDisplayApp.CanvasOptions;
 import layout.BasicObjectListHandler;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.AttachmentPositionBox;
 import standardDialog.booleans.BooleanInputPanel;
@@ -68,7 +71,7 @@ public class CanvasDialogResize extends BasicMenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
-		ImageWorkSheet iw = diw.getImageAsWrapper();
+		ImageWorkSheet iw = diw.getImageAsWorksheet();
 		performResize(iw);
 		
 		diw.updateDisplay();
@@ -86,7 +89,7 @@ public class CanvasDialogResize extends BasicMenuItemForObj {
 	public double getRatio() {
 		double ratio=1;
 		if (type==INCH) ratio=ImageDPIHandler.getInchDefinition();
-		if (type==CENTIMETER) ratio=ImageDPIHandler.getInchDefinition()/2.54;
+		if (type==CENTIMETER) ratio=ImageDPIHandler.getCMDefinition();
 		return ratio;
 	}
 	
@@ -144,18 +147,18 @@ public class CanvasDialog extends StandardDialog {
 				this.iw=iw;
 				Dimension d = iw.getCanvasDims();//.getDimensionsXY();
 				r1=new Rectangle(d);
-				String adder="";
-				if(type==INCH) adder=" (inches)";
-				if(type==CENTIMETER) adder=" (cm)";
+				//String adder="";
+				//if(type==INCH) adder=" (inches)";
+				//if(type==CENTIMETER) adder=" (cm)";
 				this.add("name", new StringInputPanel("Title", iw.getTitle()));
 				
 				ChoiceInputPanel unitPanel = new ChoiceInputPanel("Units", values, type);
 				this.add("unit", unitPanel);
 				width2 = d.getWidth();
-				wInput = new NumberInputPanel("Width"+adder, width2/ getRatio(), 1);
+				wInput = new NumberInputPanel("Width", width2/ getRatio(), 1);
 				this.add("width", wInput);
 				height2 = d.getHeight();
-				hInput = new NumberInputPanel("Height"+adder, height2/ getRatio(), 1);
+				hInput = new NumberInputPanel("Height", height2/ getRatio(), 1);
 				this.add("height", hInput);
 				hInput.addNumberInputListener(new NumberInputListener() {
 					public void numberChanged(NumberInputEvent ne) {
@@ -203,6 +206,15 @@ public class CanvasDialog extends StandardDialog {
 	
 	
 
+	/**updates the ruler units*/
+	public void updateRulerUnits() {
+		RulerUnit unit = ImageDPIHandler.getRulerUnit();
+		if (type==INCH) unit=ImageDPIHandler.getRulerUnit().getInchVersion();
+		if (type==CENTIMETER) unit= ImageDPIHandler.getRulerUnit().getCMVersion();
+		DirectoryHandler.getDefaultHandler().getPrefsStorage().setEntry(RulerUnit.key, unit.getShortName());
+		ImageDPIHandler.setRulerUnit(unit);
+		
+	}
 	
 	public void onOK() {
 		BasicObjectListHandler boh = new BasicObjectListHandler();
@@ -221,6 +233,8 @@ public class CanvasDialog extends StandardDialog {
 		
 		boh.CanvasResizeObjectsIncluded(iw, (int)ww, (int)hh, (int) r1.x, (int) r1.y);
 		iw.setTitle(title);
+		
+		updateRulerUnits();
 		
 	}
 	

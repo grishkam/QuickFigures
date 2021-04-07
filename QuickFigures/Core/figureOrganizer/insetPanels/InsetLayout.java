@@ -38,7 +38,7 @@ import locatedObject.RectangleEdges;
 
 
 	/**Class used to position the inset's image panels
-	  It basically just creates a Layout Graphic
+	  It basically just creates a Layout
 	  that is appropriate for insets and places it in 
 	  the right location relative to the source panel*/
 public 	class InsetLayout implements LayoutSpaces, Serializable{

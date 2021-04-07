@@ -103,7 +103,7 @@ public class PDFsaver {
 	private boolean fixfonts(DisplayedImage diw, CombinedEdit ce) {
 		boolean notUsedFont=false;
 		
-		ArrayList<LocatedObject2D> all = diw.getImageAsWrapper().getLocatedObjects();
+		ArrayList<LocatedObject2D> all = diw.getImageAsWorksheet().getLocatedObjects();
 		for(LocatedObject2D a: all) {
 			if(a instanceof TextGraphic) {
 				TextGraphic t = (TextGraphic) a;

@@ -75,7 +75,7 @@ public class ExportIllustrator extends QuickExport  {
 	 */
 	public void createInIllustrator(DisplayedImage diw, File file) {
 		diw.updateDisplay();
-		sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true, file);
+		sm.sendWrapperToills(diw.getImageAsWorksheet().getAsWrapper(), true, file);
 		ZIllustratorScriptGenerator.instance.execute();
 	}
 	
@@ -88,8 +88,8 @@ public class ExportIllustrator extends QuickExport  {
 			
 			diw.updateDisplay();
 			
-			String filename=folder+diw.getImageAsWrapper().getTitle()+".ai";
-			sm.sendWrapperToills(diw.getImageAsWrapper().getAsWrapper(), true, new File(filename));
+			String filename=folder+diw.getImageAsWorksheet().getTitle()+".ai";
+			sm.sendWrapperToills(diw.getImageAsWorksheet().getAsWrapper(), true, new File(filename));
 		}
 		ZIllustratorScriptGenerator.instance.execute();
 	}

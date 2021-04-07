@@ -31,6 +31,7 @@ import locatedObject.Keyed;
 import locatedObject.Named;
 import locatedObject.ShowsOptionsDialog;
 
+/**an interface for layers*/
 public interface GraphicLayer extends ItemLayer<ZoomableGraphic>, Named, KnowsParentLayer,Keyed,ZoomableGraphic, ShowsOptionsDialog, Serializable  {
 
 	/***/

@@ -321,7 +321,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 		if (markerRoi()==null) return;
 		getImageClicked().getOverlaySelectionManagger().setSelection(markerRoi(), 0);
 		
-		TextGraphic dd = this.getDesiredGraphic(markerRoi().getBounds(),this.getImageDisplayWrapperClick().getImageAsWrapper());
+		TextGraphic dd = this.getDesiredGraphic(markerRoi().getBounds(),this.getImageDisplayWrapperClick().getImageAsWorksheet());
 		if (dd==null) {
 			//dd=createNewGraphic(getCurrentLayout(),this.getImageDisplayWrapperClick().getImageAsWrapper(), this.getClickedCordinateX(), this.getClickedCordinateY());
 		//	Rectangle r2 = this.getCurrentLayout().getSelectedSpace(this.getClickedCordinateX(), this.getClickedCordinateY(), mode).getBounds();

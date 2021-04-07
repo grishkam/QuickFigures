@@ -147,7 +147,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		if (path==null) {la.openFile=false; 
 		}else la.openFile=true;
 		
-		FigureOrganizingLayerPane added = la.add(displayedWorksheet.getImageAsWrapper().getTopLevelLayer(), path, p2);
+		FigureOrganizingLayerPane added = la.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
 		
 		if(added==null) {

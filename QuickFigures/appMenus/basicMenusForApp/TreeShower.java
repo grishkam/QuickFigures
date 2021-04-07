@@ -37,8 +37,8 @@ public class TreeShower  extends BasicMenuItemForObj {
 			ShowMessage.showMessages("open a worksheet first");
 			return;
 		}
-		GraphicTreeUI tree = new GraphicTreeUI(diw.getImageAsWrapper());
-		tree.showTreeForLayerSet(diw.getImageAsWrapper()) ;
+		GraphicTreeUI tree = new GraphicTreeUI(diw.getImageAsWorksheet());
+		tree.showTreeForLayerSet(diw.getImageAsWorksheet()) ;
 		TreeWindowCloser closer = new TreeWindowCloser(tree, diw.getWindow());
 		
 		diw.getWindow().addWindowListener(closer);

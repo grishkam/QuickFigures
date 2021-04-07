@@ -131,7 +131,7 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 	}
 	
 	@Override
-	public ImageWorkSheet getImageAsWrapper() {
+	public ImageWorkSheet getImageAsWorksheet() {
 		return theFigure;
 	}
 	@Override

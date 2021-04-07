@@ -240,9 +240,9 @@ public class FigureTester {
 		PanelListElement panel = createFigureFromExample1Images.getAllPanelLists().getMergePanel();
 		InsetTool tool = new InsetTool();
 		
-		PanelGraphicInsetDefiner inset1 = tool.createInsetOnImagePanel( image1.getImageAsWrapper(), panel.getImageDisplayObject(), new Rectangle(20,25, 12,10));
+		PanelGraphicInsetDefiner inset1 = tool.createInsetOnImagePanel( image1.getImageAsWorksheet(), panel.getImageDisplayObject(), new Rectangle(20,25, 12,10));
 	
-		PanelGraphicInsetDefiner inset2 = tool.createInsetOnImagePanel(image1.getImageAsWrapper(),panel.getImageDisplayObject(), new Rectangle(42,47, 15,10));
+		PanelGraphicInsetDefiner inset2 = tool.createInsetOnImagePanel(image1.getImageAsWorksheet(),panel.getImageDisplayObject(), new Rectangle(42,47, 15,10));
 		inset2.setAngle(-Math.PI/12);inset2.updateImagePanels();
 		
 		new CanvasAutoResize(true).performUndoableAction(image1);
@@ -486,7 +486,7 @@ public class FigureTester {
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
 			
 			DisplayedImage currentActiveDisplayGroup = CurrentFigureSet.getCurrentActiveDisplayGroup();
-			currentActiveDisplayGroup.getImageAsWrapper().setTitle(form.name());
+			currentActiveDisplayGroup.getImageAsWorksheet().setTitle(form.name());
 		
 			new CanvasAutoResize(true).performUndoableAction(currentActiveDisplayGroup);
 			return  currentActiveDisplayGroup;

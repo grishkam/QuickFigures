@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
+import basicMenusForApp.BasicMenuItemForObj;
 import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
+import messages.ShowMessage;
+import standardDialog.StandardDialog;
+import standardDialog.choices.ChoiceInputPanel;
 import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
@@ -27,6 +31,7 @@ abstract class QuickExportTest {
 	/**set to true if one want each file to be opened automatically.
 	  Dye to dialogs comming up in powerpoint and other softwares, decided it best not to do this*/
 	boolean opensFiles=false;
+	boolean prompt=false;
 	
 	TestExample testCase=null;//which cases to test. set to null if all should be tested
 
@@ -68,8 +73,15 @@ abstract class QuickExportTest {
 			file.delete();
 			file.deleteOnExit();
 			DisplayedImage createExample = ex.createExample();
-			createExample.getImageAsWrapper().setTitle("Example "+ex.getType().ordinal()+" "+ex.getType().name());
-			createExample.getImageAsWrapper().setTitle(testOutput);
+			
+			createExample.getImageAsWorksheet().setTitle("Example "+ex.getType().ordinal()+" "+ex.getType().name());
+			createExample.getImageAsWorksheet().setTitle(testOutput);
+			if (prompt) {
+				createExample .updateDisplay();
+				createExample.getWindow().repaint();
+				IssueLog.waitSeconds(5);
+				ShowMessage.showMessages("Take a look at the new example. Will test export of this");
+			}
 			qe.saveInPath(createExample, testOutput);
 			
 			createsFiles.add(testOutput);
@@ -106,5 +118,8 @@ abstract class QuickExportTest {
 			
 		}
 	}
+	
+
+	
 
 }

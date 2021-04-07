@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 6, 2021
  * Version: 2021.1
  */
 package standardDialog.fonts;
@@ -34,7 +34,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -43,6 +45,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.numbers.NumericTextField;
@@ -62,26 +65,77 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 	GridBagConstraints gc=new GridBagConstraints();
 	
 	{this.setLayout(new FlowLayout());}
+	
+	
+	
+	/**lists of fonts that will appear in the combo box*/
+
+	public static final int LIMITED_FONT_LIST=0,  SHORT_FONT_LIST=2, LONG_FONT_LIST=3, FULL_FONT_LIST=1;
+	public int useFullfontList=0;
+	private static Vector<String> limitedfontList;
+	private static Vector<String> fullfontList;
+	private  Vector<String> fontList;
+	
+	
 	public static String[] fontStyles= {"Plain", "Bold", "Italic", "Bold+Italic"}; 
 	
+	public static String[] excludeFonts= {"Bookshelf Symbol 7","MS Outlook","EmojiOne Color", "MS Reference Specialty", "OpenSymbol", 
+			"Marlett", "Symbol", "MT Extra", "Webdings", "Miriam CLM", "Alef", "Myanmar Text", "Mongolian Baiti", "Javanese Text", "Sylfaen", 
+			"Scheherazade", "Algerian", "Agency FB", "Amiri", "Rubik", "Gigi", "Mistral", "Vivaldi", 
+			"Bauhaus 93", "Ravie", "Chiller", "Trebuchet MS", "Forte", "Haettenschweiler"}; 
+	String[] excludeFontGroups = new String[] {	"Noto","Wingdings","Yu ","MDL2","Quran","Arabic"	,"Kacst"
+				
+			,"Source ","Sitka ","Segoe"	,"JhengHei","HP Simplified","Gill Sans","Eras ","Dubai","DejaVu "
+				
+			,"Franklin Gothic","Copperplate Gothic","Bodoni MT","Berlin Sans FB"
+				
+			,"Leelawadee UI","Malgun Gothic","YaHei UI","Niagara","Nirmala"
+				
+			,"Tw Cen","MingLiU","David","Frank R","Linux", "Rage", "Goudy"
+				
+			,"Microsoft ","MS "	,"Miriam"	,"Symbol"," ITC"
+				
+			,"Dialog","SimSun","Gentium","French","Script","Rockwell","Handwriting"
+				
+			,"Extra", " FB", " MT", "Lucida", "Extended", " Gothic", "Kufi", "Stencil", "Harlow", "Candara", "Georgia"};
+	
 	JLabel label=new JLabel("Font ");
+	
 	JComboBox<?> styleChooser=generateStyleCombo();
-	JComboBox<?> famChooser=generateFamilyCombo();
+	
+	JComboBox<?> famChooser2=null;
 	NumericTextField sizeField=new NumericTextField(12); {sizeField.addKeyListener(this);}
 	FontSizeSelector fontdisplay=new FontSizeSelector();
 	private String key;
-	private Font originalValue; {fontdisplay.addMouseMotionListener(this);}
+	private Font originalValue;
+	
+	
+	
+	
+	 {fontdisplay.addMouseMotionListener(this);}
 	{
 		this.setLayout(gb);
-		placeItems(this,0,0);}
+		}
 	
 	public void setUIFontSize(float f) {
 		Font UIfont = label.getFont().deriveFont(f);
-		famChooser.setFont(UIfont);
+		getFontFamilyComboBox().setFont(UIfont);
 		label.setFont(UIfont);
 		styleChooser.setFont(UIfont);
 		sizeField.setFont(UIfont);
 	}
+
+	/**returns the font family combo box
+	 * @return
+	 */
+	public JComboBox<?> getFontFamilyComboBox() {
+		if(famChooser2==null) {
+			famChooser2=generateFamilyCombo();
+		}
+		return famChooser2;
+	}
+	
+
 	
 	public void placeItems(Container jp, int x0, int y0) {
 		 gc=new GridBagConstraints();
@@ -115,7 +169,7 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 		panel.setLayout(new GridBagLayout());
 		 GridBagConstraints gc2 = new GridBagConstraints();
 		 gc2.gridx=1; gc2.gridy=1;
-		 panel.add(famChooser, gc2);
+		 panel.add(getFontFamilyComboBox(), gc2);
 		 gc2.gridy++; 
 		 gc2.anchor=GridBagConstraints.WEST;
 		 panel.add(createStyleSizePanel() , gc2);
@@ -129,9 +183,11 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 		return panel;
 	}
 	
-	public FontChooser(Font f) {
-		setSelectedFont(f);
+	public FontChooser(Font f, int fullList) {
+		useFullfontList=fullList;
 		this.originalValue=f;
+		setSelectedFont(f);
+		placeItems(this,0,0);
 		
 	}
 	
@@ -139,43 +195,117 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 		setSelectedFont(originalValue);
 	}
 	
+	/**sets the font*/
 	public void setSelectedFont(Font f) {
+		
 		styleChooser.setSelectedIndex(f.getStyle());
-		famChooser.setSelectedItem(f.getName());
+		
+		String fontName=f.getName();
+	
+		
+		JComboBox<?> box = getFontFamilyComboBox();
+		long time = System.currentTimeMillis();
+		box.setSelectedItem(fontName);
+		time= System.currentTimeMillis()-time;
+		
 		setFieldAndDisplayFont(f);
 	}
 	
+	/**sets the font that is shown in the field*/
 	private void setFieldAndDisplayFont(Font f) {
 		sizeField.setNumber(f.getSize());
 		fontdisplay.setFont(f);
 	}
 	
 	
-	
+	/**generates the font style combo box*/
 	public JComboBox<?> generateStyleCombo() {
 		JComboBox<?> output=new JComboBox<String>(fontStyles);
 		output.addItemListener(this);
 		output.setRenderer(new FontStyleCellRenerer());
 		return output;
 	}
+	
+	/**generates the font family combo box. user will see the appearance of each font family as well as the name
+	 * @param name */
 	public JComboBox<String> generateFamilyCombo() {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		 String[] fonts = ge.getAvailableFontFamilyNames();
-		JComboBox<String> output=new JComboBox<String>(fonts);
+		Vector<String> pfont = prepareFontList();
+	
+		JComboBox<String> output=new JComboBox<String>(pfont);
+		output.setEditable(true);
+		
 		output.addItemListener(this);
 		output.setRenderer(new FontFamilyCellRenerer());
+		output.getEditor().getEditorComponent().addKeyListener(new FontSearcher(output, this));
 		return output;
+	}
+
+	/**returns a list of fonts
+	 * @return
+	 */
+	protected Vector<String> prepareFontList() {
+		
+		if(fontList!=null)
+			return fontList;
+		
+		String[] possibleFonts = getPossibleFonts();
+		limitedfontList = new Vector<String>();
+		fullfontList = new Vector<String>();
+		
+		/**fonts that do not appear properly on my system are excluded */
+		for(String p: possibleFonts)
+			{ 
+			fullfontList.add(p);
+			boolean useFont=true;
+					for(String p2: excludeFonts)
+							if(p.equals(p2)) {useFont=false;break;}
+					if (useFont)
+						for(String p2: excludeFontGroups)
+						if(p.contains(p2)) {useFont=false;break;}
+					if(useFont)	{
+						limitedfontList.add(p);
+						//System.out.println(p+",");
+						}
+					
+					}
+		
+		resetFontList();
+		
+		return fontList;
+	}
+
+	/**
+	 * 
+	 */
+	protected void resetFontList() {
+		if(useFullfontList==FULL_FONT_LIST)	
+				fontList=fullfontList;	
+			else  
+				fontList= limitedfontList;
+	}
+	
+	public void setUseFullFontList(int b) {
+		this.useFullfontList=b;
+		this.resetFontList();
+		
+	}
+
+	/**returns a list of possible fonts
+	 * @return
+	 */
+	protected String[] getPossibleFonts() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		 String[] possibleFonts = ge.getAvailableFontFamilyNames();
+		
+		return possibleFonts;
 	}
 	
 	public Font getSelectedFont() {
-		font=new Font(famChooser.getSelectedItem()+"", this.styleChooser.getSelectedIndex(),(int) sizeField.getNumberFromField() );
+		font=new Font(getFontFamilyComboBox().getSelectedItem()+"", this.styleChooser.getSelectedIndex(),(int) sizeField.getNumberFromField() );
 		return  font;
 	}
 	
-	public JComboBox<?> getFamChoser() {
-		return famChooser;
-	}
-	
+
 	private void updateDisplayFromComboBox() {
 		fontdisplay.setFont(getSelectedFont());;
 		fontdisplay.repaint();
@@ -185,7 +315,7 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 		JFrame ff = new JFrame("frame");
 		ff.setLayout(new FlowLayout());
 		ff.add(new JButton("button"));
-		FontChooser sb = new FontChooser(new Font("Arial", Font.BOLD, 12));
+		FontChooser sb = new FontChooser(new Font("Arial", Font.BOLD, 12), FontChooser.LIMITED_FONT_LIST);
 		
 		ff.add(sb);
 		ff.pack();
@@ -285,6 +415,8 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 			return out;
 				}
 	}
+	
+	/**a renderer that renders the bold option as a bold font, plain as plain and so on*/
 	public class FontStyleCellRenerer extends BasicComboBoxRenderer {
 		/**
 		 * 
@@ -302,6 +434,28 @@ public class FontChooser extends InputPanel implements MouseMotionListener, Item
 	public void setKey(String key) {
 		this.key=key;
 		
+	}
+	
+	
+	/**returns true if that font is an option*/
+	public boolean isFontFamilyPossible(String st) {
+		for(String font: getPossibleFonts()) {
+			if(font.equals(st))
+				return true;
+		}	
+		
+		return false;
+	}
+	
+	/**returns true if that font is an option*/
+	public ArrayList<String> getSimilarNames(String st) {
+		ArrayList<String> output=new ArrayList<String>();
+		for(String font: getPossibleFonts()) {
+			if(font.toLowerCase().startsWith(st.toLowerCase()))
+				output.add(font);
+		}	
+		
+		return output;
 	}
 	
 }

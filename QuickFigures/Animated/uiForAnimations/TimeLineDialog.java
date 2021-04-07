@@ -72,8 +72,8 @@ public class TimeLineDialog extends StandardDialog {
 	
 	public TimeLineDialog(DisplayedImage diw) {
 		this.image=diw;
-		this.setTitle("Timeline for "+diw.getImageAsWrapper().getTitle());
-		selector=new SelectedSetLayerSelector(diw.getImageAsWrapper());
+		this.setTitle("Timeline for "+diw.getImageAsWorksheet().getTitle());
+		selector=new SelectedSetLayerSelector(diw.getImageAsWorksheet());
 		
 		 timeSlider = new NumberInputPanel("Frame", diw.getCurrentFrame(), true, true, 0, diw.getEndFrame());
 		add("frame", timeSlider);

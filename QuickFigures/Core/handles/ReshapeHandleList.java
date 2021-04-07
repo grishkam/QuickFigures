@@ -402,7 +402,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 			
 			
 			
-			selectionManagger = w.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger();
+			selectionManagger = w.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 			
 			/**displays copy over the original image so the user can see the new locations or transformations being implemented*/
 			GraphicList g = new GraphicList(o2);

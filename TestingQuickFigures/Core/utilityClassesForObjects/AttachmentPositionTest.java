@@ -56,7 +56,7 @@ class AttachmentPositionTest {
 	void manuallyTestInternalAttachment(boolean text) {
 		ImageWindowAndDisplaySet image = TestShapes.createExample(TestExample.EMPTY);
 		ImagePanelGraphic panel = createMockPanel("parent","panel", 400, 300);
-		image.getImageAsWrapper().addItemToImage(panel);
+		image.getImageAsWorksheet().addItemToImage(panel);
 		image.getWindow().setLocation(0, 200);
 		panel.setLocationUpperLeft(20,  20);
 		
@@ -74,7 +74,7 @@ class AttachmentPositionTest {
 			panel2.setFrameWidthV(12);
 			position.setUseExtendedBounds(AttachmentPosition.EXTENDED_BOUNDS);
 			position.snapObjectToRectangle(panel2, panel.getBounds());
-			image.getImageAsWrapper().addItemToImage(panel2);
+			image.getImageAsWorksheet().addItemToImage(panel2);
 			}
 		}
 		
@@ -89,7 +89,7 @@ class AttachmentPositionTest {
 	void manuallyTestExternalAttachment(boolean text) {
 		ImageWindowAndDisplaySet image = TestShapes.createExample(TestExample.EMPTY);
 		ImagePanelGraphic panel = createMockPanel("parent", "panel", 300, 250);
-		image.getImageAsWrapper().addItemToImage(panel);
+		image.getImageAsWorksheet().addItemToImage(panel);
 		image.getWindow().setLocation(0, 200);
 		panel.setLocationUpperLeft(150,  80);
 		
@@ -109,7 +109,7 @@ class AttachmentPositionTest {
 					position.setUseExtendedBounds(AttachmentPosition.EXTENDED_BOUNDS);
 					
 					position.snapObjectToRectangle(panel2, panel.getBounds());
-					image.getImageAsWrapper().addItemToImage(panel2);
+					image.getImageAsWorksheet().addItemToImage(panel2);
 			}
 		}
 		
@@ -127,7 +127,7 @@ class AttachmentPositionTest {
 		t.setAttachmentPosition(position);
 		t.setTextColor(Color.green);
 		position.snapObjectToRectangle(t, panel.getBounds());
-		image.getImageAsWrapper().addItemToImage(t);
+		image.getImageAsWorksheet().addItemToImage(t);
 	}
 
 	/**

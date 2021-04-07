@@ -53,9 +53,9 @@ public class CanvasAutoResize extends BasicMenuItemForObj {
 		diw.getUndoManager().addEdit(undo);//adds the undo
 	}
 	public CanvasResizeUndo performUndoableAction(DisplayedImage diw) {
-		if (!mandatory&&!diw.getImageAsWrapper().allowAutoResize()) {return null;}
+		if (!mandatory&&!diw.getImageAsWorksheet().allowAutoResize()) {return null;}
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
-		ImageWorkSheet iw = diw.getImageAsWrapper();
+		ImageWorkSheet iw = diw.getImageAsWorksheet();
 		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		if (mode==RESIZE_TO_FIT_ALL_OBJECTS)

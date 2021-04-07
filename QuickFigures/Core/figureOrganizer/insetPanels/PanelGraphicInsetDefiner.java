@@ -75,13 +75,21 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	}
 	
 	/**The source panel for the inset definer*/
-	
 	private ImagePanelGraphic sourcePanel;
+	
+	/**A list of the minor panels */
 	public PanelList multiChannelStackofInsets;
+	
+	/**insetpanels and layout will be placed in this layer*/
 	public InsetGraphicLayer personalLayer;
+	
+	/**inset panels will be placed within this layout*/
 	public DefaultLayoutGraphic personalLayout;
+	
 	private ChannelLabelProperties channelLabelProp;//instructions on how this one uses channel labels
 	private ChannelLabelManager channelLabelMan;
+	
+	
 	public InsetLayout previosInsetLayout;
 	private double bilinearScale=2;
 	
@@ -122,29 +130,9 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		return getSourcePanel().getScaleInfo();
 	}
 
-	/**returns the buffered image for the source panel*/
-	public BufferedImage getBuffImage() {
-		
-		try {
-		
-		BufferedImage b=getSourcePanel().getBufferedImage();
-		
-		BufferedImage b2=new BufferedImage(b.getWidth(), b.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		
-		Graphics g = b2.getGraphics();
-		g.setColor(Color.red);
-		g.fillRect(0, 0, b.getWidth(), b.getHeight());
-		g.drawImage(b,0,  0, b.getWidth(), b.getHeight(), 0, 0, b.getWidth(), b.getHeight(), null);
-		
-		return b2;
-		} catch (Throwable t) {
-			IssueLog.logT(t);
-			return null;
-		}
-	}
-
 	
-	/**Returns an indicator rectangle to be used by the cropping dialog*/
+	/**Returns an indicator rectangle to be used by the cropping dialog on the original image,
+	 * At the moment, those rectanges merely function to indicate the use of an inset*/
 	public RectangularGraphic mapRectBackToUnprocessedVersion(PreProcessInformation p) {
 		try{
 			
@@ -186,8 +174,8 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		Rectangle2D.Double outputRect = new Rectangle2D.Double(nx, ny, dw, dh);
 		double angleOutput = getAngle();
 		if (p.getRectangle()!=null) try
-		{
-			//this part does not put the rect in the right place
+			{
+			
 			AffineTransform t = AffineTransform.getTranslateInstance(p.getRectangle().getX(), p.getRectangle().getY());
 			RectangularGraphic rCrop1=new RectangularGraphic(p.getRectangle()); rCrop1.setAngle(p.getAngle());
 			//t.concatenate(rCrop1.getRotationTransform().createInverse());
@@ -210,34 +198,13 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 
 	@Override
 	public void userSizeChanged(LocatedObject2D object) {
-		// TODO Auto-generated method stub
+		
 		
 	}
-
-	/**does the bilinear scale and returns the scaled up version of the image
-	@Deprecated
-	public Image getImagePixelsScaledBilinear(double bilinearScale) {
-		IssueLog.log("Called get scaled picture");
-		PanelListElement potentialPanel1 = getSourcePanel().getSourcePanel();
-		
-		if (potentialPanel1!=null) {
-			//this.setCropping();
-			PixelWrapper outputpanel = potentialPanel1.getImageWrapped().copy(null);
-			outputpanel.crop(getproperCropping().getBounds());
-			outputpanel.resizeBilinear(outputpanel.width()*this.getBilinearScale(), outputpanel.height()*this.getBilinearScale());
-			
-			return outputpanel.image();
-		}
-		
-		
-		super.getImageInset().setCroppingRect(getproperCropping().getBounds());
-		return getBuffImage();
-
-	}*/
 	
 	
-	/**super experimental. Creates a panel list for this cropper*/
-	public PanelList createCroppedInsetChannelDisplay(PanelList p) {
+	/** Creates a panel list for this cropper. not used for important functions yet. work in progress*/
+	private PanelList createCroppedInsetChannelDisplay(PanelList p) {
 		PanelList output = p.createDouble();
 	//	setUpListToMakeInset(output, p);
 		return output;
@@ -262,6 +229,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			updateDisplayPanelImages();		
 	}
 	
+	/**returns the source multichannel*/
 	public MultichannelDisplayLayer getSourceDisplay() {
 		if (this.getParentLayer() instanceof MultichannelDisplayLayer) {
 			MultichannelDisplayLayer d=(MultichannelDisplayLayer) getParentLayer();
@@ -301,14 +269,9 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		
 	}
 
-	/**
-	 */
-	@Deprecated
-	protected void oldPanelUpdate(String name) {
-		multiChannelStackofInsets.updateAllPanelsWithImage(getSourceImageForUpdates(), name);
-	}
 	
 	
+	/**updates the image panels that display the inset region*/
 	public void updateImagePanels() {
 		if (!isValid()) return;//returns if the inset definer is not inside of the source panel
 		
@@ -321,16 +284,17 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		return this.sourcePanel.getBounds().contains(this.getBounds());
 	}
 
-
+	/**returns the image panel that the inset in drawn onto*/
 	public ImagePanelGraphic getSourcePanel() {
 		return sourcePanel;
 	}
 
-
+	/**sets the panel that the inset is drawn onto*/
 	public void setSourcePanel(ImagePanelGraphic sourcePanel) {
 		this.sourcePanel = sourcePanel;
 	}
 	
+	/**removes all of the image panels and returns an undoable edit*/
 	public CombinedEdit removePanels() {
 		CombinedEdit output = new CombinedEdit();
 		
@@ -394,11 +358,13 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		return channelLabelMan;
 	}
 	
+	/**returns the channel label menu for the inset*/
 	public MenuForMultiChannelDisplayLayer getChannelLabelMenu() {
 		return new MenuForMultiChannelDisplayLayer("Channel Label", this.getSourceDisplay(), multiChannelStackofInsets, this.getChannelLabelManager());
 		
 	}
 	
+	/**retrns the popup menu that is used for this inset definers*/
 	public InsetMenu getMenuSupplier(){
 		InsetMenu ii = new  InsetMenu(this);
 		
@@ -409,6 +375,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		return ii;
 	}
 	
+	/**returns the inset panel manager*/
 	public PanelManager getPanelManager() {
 		
 		MultichannelDisplayLayer sourceDisplay = this.getSourceDisplay();
@@ -418,18 +385,15 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	}
 	
 	public void afterUserScaleResize() {
-		resizeMontageLayoutPanels(CENTER);
-		
+		resizeLayoutPanels(CENTER);
 	}
 
-	public void resizeMontageLayoutPanels() {
-		
-		resizeMontageLayoutPanels(LOWER_RIGHT);
-		
+	public void resizeLayoutPanels() {
+		resizeLayoutPanels(LOWER_RIGHT);
 	}
 	
-	/**whan a certain handle is moved, resizes the panels*/
-	public void resizeMontageLayoutPanels(int handlenum) {
+	/**whan a certain handle is moved, resizes the layout panels*/
+	private void resizeLayoutPanels(int handlenum) {
 		if (this.personalLayout!=null) {
 			
 			personalLayout.snapLockedItems();
@@ -562,6 +526,7 @@ static Color  folderColor2= new Color(0,140, 0);
 		
 		
 		
+	/**A special panel manager designed for the inset panels*/
 	public class InsetPanelManager extends PanelManager {
 
 		private PanelGraphicInsetDefiner inset;
@@ -572,6 +537,8 @@ static Color  folderColor2= new Color(0,140, 0);
 			this.inset=panelGraphicInsetDef;
 		}
 		
+		/**a working change ppi function*/
+		@Override
 		public CombinedEdit changePPI(double newppi) {
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
@@ -638,6 +605,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	
 
 	/**Called after a rectangular graphics handle is moved
+	 * overrides the superclass function
 	 * @param handleNumber
 	 * @param p1
 	 * @param p2
@@ -645,7 +613,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	@Override
 	public void afterHandleMove(int handleNumber, Point2D p1, Point2D p2) {
 		updateImagePanels();
-		resizeMontageLayoutPanels(handleNumber);
+		resizeLayoutPanels(handleNumber);
 		
 	}
 	
@@ -657,13 +625,14 @@ static Color  folderColor2= new Color(0,140, 0);
 		return null;
 	}
 	
-	
+	/**checks if the setup function has run already, it not, runs that function*/
 	protected void ensureSetup() {
 		if (setup) return;
 		onsetup();
 		setup=true;
 	}
 	
+	/**refreshers the image panels*/
 	public void onsetup() {
 		
 		updateImagePanels();

@@ -440,8 +440,8 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		public void actionPerformed(ActionEvent e) {
 			StandardDialog s = new StandardDialog("Select font", true);
 			s.setWindowCentered(true);
-			fontChoser = new FontChooser(text.getFont());
-		
+			fontChoser = new FontChooser(text.getFont(), FontChooser.LIMITED_FONT_LIST);
+			
 			s.add("font", fontChoser);
 			
 			s.addDialogListener(this);
@@ -449,7 +449,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 			StandardDialog s2 = new StandardDialog("Select font", true);
 			s2.setWindowCentered(true);
 			s2.remove(s2.getOptionDisplayTabs());
-			s2.add(fontChoser.getFamChoser());
+			s2.add(fontChoser.getFontFamilyComboBox());
 			s2.showDialog();
 		}
 

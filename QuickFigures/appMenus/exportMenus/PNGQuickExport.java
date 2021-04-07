@@ -73,7 +73,7 @@ public class PNGQuickExport extends QuickExport {
 		diw.updateDisplay();
 		flat.setUseTransparent(false);
 		if (showDialogEverytime)flat.showDialog();
-		BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
+		BufferedImage bi = flat.createFlat(diw.getImageAsWorksheet());
 		writeImage(newpath, bi);
 	}
 

@@ -159,7 +159,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		diw.getUndoManager().addEdit(
-				this.operateOnContainer(diw.getImageAsWrapper()));
+				this.operateOnContainer(diw.getImageAsWorksheet()));
 	}
 
 

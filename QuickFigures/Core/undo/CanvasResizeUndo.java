@@ -35,27 +35,27 @@ public class CanvasResizeUndo extends AbstractUndoableEdit2 {
 
 	public CanvasResizeUndo(DisplayedImage diw) {
 		this.image=diw;
-		oldDims=(Dimension2D) image.getImageAsWrapper().getCanvasDims().clone();
-		items=image.getImageAsWrapper().getLocatedObjects();
+		oldDims=(Dimension2D) image.getImageAsWorksheet().getCanvasDims().clone();
+		items=image.getImageAsWorksheet().getLocatedObjects();
 		itemMovments=new UndoMoveItems(items);//in the event that objects are moved in the canvas resize undo, will undo those movements
 	}
 	
 	public void undo() {
-		image.getImageAsWrapper().worksheetResize( (int)oldDims.getWidth(), (int)oldDims.getHeight(), 0,0);
+		image.getImageAsWorksheet().worksheetResize( (int)oldDims.getWidth(), (int)oldDims.getHeight(), 0,0);
 		itemMovments.undo();
 		image.updateDisplay();
 		image.updateWindowSize();
 	}
 	
 	public void redo() {
-		image.getImageAsWrapper().worksheetResize( (int)newDims.getWidth(), (int)newDims.getHeight(), 0,0);
+		image.getImageAsWorksheet().worksheetResize( (int)newDims.getWidth(), (int)newDims.getHeight(), 0,0);
 		itemMovments.redo();
 		image.updateDisplay();
 		image.updateWindowSize();
 	}
 	
 	public void establishFinalState() {
-		newDims=(Dimension2D) image.getImageAsWrapper().getCanvasDims().clone();
+		newDims=(Dimension2D) image.getImageAsWorksheet().getCanvasDims().clone();
 		itemMovments.establishFinalLocations();
 	}
 	

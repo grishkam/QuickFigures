@@ -336,7 +336,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		
 		mouseButton=event.mouseButton();
 		
-		setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
+		setImageWrapperClick(event.getAsDisplay().getImageAsWorksheet());
 		setXY1(imp, event);
 		
 		clickCount=event.clickCount();
@@ -369,14 +369,14 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 		this.event=e;
 		this.eventDrag=event;
 		lastDragOrReleaseEvent=e;
-		this.setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
+		this.setImageWrapperClick(event.getAsDisplay().getImageAsWorksheet());
 		setXY_Point2(imp,e);
 	}
 	
 	private void setReleasePoint(DisplayedImage imp, CanvasMouseEvent e) {
 		this.eventRelease=e;
 		this.setImageClick(imp);
-		this.setImageWrapperClick(event.getAsDisplay().getImageAsWrapper());
+		this.setImageWrapperClick(event.getAsDisplay().getImageAsWorksheet());
 		setXY3(imp,e);
 		
 	}
@@ -830,7 +830,7 @@ public class GeneralTool extends BlankTool<DisplayedImage> implements ActionList
 
 	@Override
 	public ImageWorkSheet currentlyInFocusWindowImage() {
-		return CurrentFigureSet.getCurrentActiveDisplayGroup().getImageAsWrapper();
+		return CurrentFigureSet.getCurrentActiveDisplayGroup().getImageAsWorksheet();
 		}
 
 	@Override

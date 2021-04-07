@@ -68,9 +68,9 @@ public class ToolbarTester extends StartApplication{
 
 	private static ImageWindowAndDisplaySet setSavedExample(File example) {
 		ImageWindowAndDisplaySet file = ImageDisplayIO.showFile(example);
-		 ImageWindowAndDisplaySet.exampletree = new GraphicTreeUI(file.getImageAsWrapper());
+		 ImageWindowAndDisplaySet.exampletree = new GraphicTreeUI(file.getImageAsWorksheet());
 		
-		 ImageWindowAndDisplaySet. exampletree  .showTreeForLayerSet(file.getImageAsWrapper()) ;
+		 ImageWindowAndDisplaySet. exampletree  .showTreeForLayerSet(file.getImageAsWorksheet()) ;
 		 
 		//locatedObject object0 = file.getImageAsWrapper().getLocatedObjects().get(0);
 		//PathGraphic p2=(PathGraphic) object0;

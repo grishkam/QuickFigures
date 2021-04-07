@@ -80,6 +80,10 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 	public boolean hideStrokeHandle=false;
 	public boolean hideRotationHandle=false;
 
+
+	/**if set to true, mouse drags will maintain a square shape*/
+	private transient boolean squareLock;
+
 	
 	
 	public RectangularGraphic(){}
@@ -150,9 +154,17 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		double newwidth = Math.abs(destination.getX()-l2.getX());
 		double newheight = Math.abs(destination.getY()-l2.getY());
 		
-		
+		boolean squareLock=isSquareLock();//should the shape stay a square?
 		
 		if (handlenum<LEFT) {
+				if(squareLock &&newwidth==this.getObjectWidth()) {newwidth=newheight;}
+				else 
+				if(squareLock &&newheight==this.getObjectHeight()) {newheight=newwidth;}
+				else  if (squareLock){
+					newheight=(newwidth+newheight)/2;
+					newwidth=newheight;
+					}
+			
 			this.setWidth(newwidth);
 			this.setHeight(newheight);
 			getListenerList().notifyListenersOfUserSizeChange(this);
@@ -160,11 +172,13 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		}
 		if(handlenum==TOP||handlenum==BOTTOM) {
 			this.setHeight(newheight);
+			if(squareLock) this.setWidth(newheight);
 			getListenerList().notifyListenersOfUserSizeChange(this);
 			
 		} else 
 		if(handlenum==LEFT||handlenum==RIGHT) {
 			this.setWidth(newwidth);
+			if(squareLock) this.setHeight(newwidth);
 			getListenerList().notifyListenersOfUserSizeChange(this);
 			
 		} else if (handlenum==CENTER) {
@@ -183,6 +197,19 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		
 	}
 	
+	/**
+returns true if any mouse drags should maintain a sqaure shape
+ */
+public boolean isSquareLock() {
+	return squareLock;
+}
+/**
+sets if any mouse drags should maintain a sqaure shape
+*/
+public void setSquareLock(boolean b) {
+	squareLock=b;
+}
+
 	/**Some times the user drags handles past each other, this switches the handle number accordingly*/
 	int checkForHandleInvalidity(int handlenum, Point2D p2) {
 		Point2D bot = RectangleEdges.getLocation(BOTTOM, this.getRectangle());

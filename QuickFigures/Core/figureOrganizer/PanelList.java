@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ChannelUseInstructions.ChannelPanelReorder;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.RectangleEdges;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
 import undo.PanelManagerUndo;
@@ -584,7 +585,7 @@ public class PanelList implements Serializable{
 		return entry;
 	}
 	
-
+	/**returns the number of panels in the list*/
 	public int getSize() {
 		
 		return getPanels().size();
@@ -688,7 +689,7 @@ public class PanelList implements Serializable{
 		return output;
 	}
 	
-/**returns the ratio that determines the panel's pixel density*/
+/**returns the ratio that determines the panel's pixel density. this ratio affects the size of newly created panels not exising ones*/
 	public double getPixelDensityRatio() {
 		return pixelDensityRatio;
 	}
@@ -710,12 +711,23 @@ public class PanelList implements Serializable{
 		
 		new ArraySorter<PanelListElement>().swapObjectPositionsInArray(p1, p2, panels);
 		
-		Point2D l1 = p1.getPanelGraphic().getLocation();
-		Point2D l2 = p2.getPanelGraphic().getLocation();
-		p1.getPanelGraphic().setLocation(l2);
-		p2.getPanelGraphic().setLocation(l1);
+		Point2D l1 = p1.getPanelGraphic().getLocationUpperLeft();
+		Point2D l2 = p2.getPanelGraphic().getLocationUpperLeft();
+		p1.getPanelGraphic().setLocationUpperLeft(l2);
+		p2.getPanelGraphic().setLocationUpperLeft(l1);
 		undo.establishFinalState();
 		return undo;
+	}
+	
+	/**set the fixed corner of every panel to the same type*/
+	public void setPanelFixedEdges() {
+		int locationType=RectangleEdges.UPPER_LEFT;
+		for(PanelListElement l:this.getPanels()) {
+			ImagePanelGraphic imagePanel = l.getPanelGraphic();
+			if(imagePanel!=null) {
+				imagePanel.setLocationType(locationType);
+			}
+		}
 	}
 	
 	

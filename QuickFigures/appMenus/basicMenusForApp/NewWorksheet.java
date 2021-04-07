@@ -55,7 +55,7 @@ public class NewWorksheet  extends BasicMenuItemForObj   {
 		diw=ImageWindowAndDisplaySet.createAndShowNew("New Workseet", width, height);
 		CanvasDialogResize cdr = new CanvasDialogResize(false);
 		cdr.includePositionBox=false;
-		diw.getImageAsWrapper().setAllowAutoResize(false);
+		diw.getImageAsWorksheet().setAllowAutoResize(false);
 		cdr.performActionDisplayedImageWrapper(diw);
 	}
 

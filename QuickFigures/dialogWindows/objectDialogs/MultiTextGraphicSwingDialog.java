@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 6, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -105,7 +105,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 	protected void addOptionsToDialog() {
 		this.addFixedEdgeToDialog(textItem);
 		if (this.hasComplexGraphic) this.addJustificationToDialog(textItem);
-		FontChooser sb = new FontChooser(textItem.getFont());
+		FontChooser sb = new FontChooser(textItem.getFont(), FontChooser.LIMITED_FONT_LIST);
 		add("font", sb);
 		
 		AngleInputPanel pai2 = new AngleInputPanel("Angle ", textItem.getAngle(), true);

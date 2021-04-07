@@ -45,7 +45,7 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 	}
 
 	public void trimCanvas(DisplayedImage diw) {
-		ImageWorkSheet iw = diw.getImageAsWrapper();
+		ImageWorkSheet iw = diw.getImageAsWorksheet();
 		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		ArrayList<LocatedObject2D> list = iw.getLocatedObjects();

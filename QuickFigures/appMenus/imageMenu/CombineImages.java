@@ -48,7 +48,7 @@ public class CombineImages extends BasicMenuItemForObj {
 				CombineImages.combineInto(figure, figure2, false);
 			BasicObjectListHandler boh = new BasicObjectListHandler();
 		
-		 boh.resizeCanvasToFitAllObjects(figure.getImageAsWrapper());
+		 boh.resizeCanvasToFitAllObjects(figure.getImageAsWorksheet());
 		 figure.updateDisplay();
 		}
 	figure.autoZoom();
@@ -116,14 +116,14 @@ public static DisplayedImage getChoice(String prompt) {
 		int w=0;
 		int h=0;
 		if (horizontal)
-			w=recipient.getTheSet().getWidth()+ figure2.getImageAsWrapper().width();
+			w=recipient.getTheSet().getWidth()+ figure2.getImageAsWorksheet().width();
 		else
-			w=Math.max(recipient.getTheSet().getWidth(), figure2.getImageAsWrapper().width());
+			w=Math.max(recipient.getTheSet().getWidth(), figure2.getImageAsWorksheet().width());
 		
 		if (!horizontal)
-			h=recipient.getTheSet().getHeight()+ figure2.getImageAsWrapper().height();
+			h=recipient.getTheSet().getHeight()+ figure2.getImageAsWorksheet().height();
 		else
-			h=Math.max(recipient.getTheSet().height(), figure2.getImageAsWrapper().height());
+			h=Math.max(recipient.getTheSet().height(), figure2.getImageAsWorksheet().height());
 		
 		return new Dimension(w,h);
 	}
@@ -133,7 +133,7 @@ public static DisplayedImage getChoice(String prompt) {
 	
 	/**Combines two displays by adding one of them to the other*/
 	public static void combineInto(ImageWindowAndDisplaySet recipient, DisplayedImage addition, Point XYDisplace) {
-		GraphicLayer layer = addition.getImageAsWrapper().getTopLevelLayer();
+		GraphicLayer layer = addition.getImageAsWorksheet().getTopLevelLayer();
 		for(ZoomableGraphic ob1: layer.getAllGraphics()) {
 			if (ob1 instanceof LocatedObject2D) {
 				LocatedObject2D ob2=(LocatedObject2D) ob1;

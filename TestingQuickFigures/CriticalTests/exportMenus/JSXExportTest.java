@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
+import basicMenusForApp.BasicMenuItemForObj;
+import basicMenusForApp.MenuItemForObj;
 import logging.IssueLog;
 import photoshopScripts.AdobeScriptGenerator;
 import testing.FigureTester;
@@ -19,7 +21,7 @@ import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
 
 /**a test to determine if code to generate adobe illustrator scripts works*/
- class JSXExportTest {
+ class JSXExportTest  {
 	
 	
 	
@@ -58,7 +60,7 @@ import ultilInputOutput.FileChoiceUtil;
 			
 			
 			DisplayedImage createExample = ex.createExample();
-			createExample.getImageAsWrapper().setTitle(st);
+			createExample.getImageAsWorksheet().setTitle(st);
 			examples.add(createExample);
 			
 			
@@ -77,6 +79,7 @@ import ultilInputOutput.FileChoiceUtil;
 		
 	}
 
+	
 	
 
 	

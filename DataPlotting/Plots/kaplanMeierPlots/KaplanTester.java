@@ -27,7 +27,7 @@ public class KaplanTester {
 		KaplanMeierDataSeries data2 = KaplanMeierDataSeries.createExampleData2();
 		KM_Plot plot = new KM_Plot("Test plot", data, data2);
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
-		diw.getImageAsWrapper().getTopLevelLayer().add(plot);
+		diw.getImageAsWorksheet().getTopLevelLayer().add(plot);
 	}
 
 }

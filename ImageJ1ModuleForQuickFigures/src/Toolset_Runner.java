@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import appContext.CurrentAppContext;
+import appContext.ImageDPIHandler;
+import appContext.RulerUnit;
 import appContextforIJ1.IJ1MultichannelContext;
 import basicMenusForApp.ShowToolBar;
 import figureFormat.DirectoryHandler;
@@ -91,6 +93,9 @@ public class Toolset_Runner implements PlugIn {
 	private void onFirstRun() {
 		CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
 		
+		
+		loadUserPreferences();
+		
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		try {
 			if (!DirectoryHandler.getDefaultHandler().defaultTemplateExits())
@@ -100,6 +105,17 @@ public class Toolset_Runner implements PlugIn {
 		}
 		Toolkit.getDefaultToolkit().addAWTEventListener(new KeyDownTracker(), AWTEvent.KEY_EVENT_MASK);
 		
+	}
+
+
+
+	/**
+	 * 
+	 */
+	protected void loadUserPreferences() {
+		String unitName = DirectoryHandler.getDefaultHandler().getPrefsStorage().getEntryAsString(RulerUnit.key);
+		;
+		ImageDPIHandler.setRulerUnit(RulerUnit.getUnirByName(unitName));
 	}
 	
 	

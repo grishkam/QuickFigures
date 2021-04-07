@@ -803,7 +803,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	private ReshapeHandleList getObjectGroupHandleList() {
 		if(this.getClass()!=Object_Mover.class) {return null;} //not needed for subclasses
 		if(!this.selectionsScale()) {
-			getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setSelectionHandles(null);
+			getImageDisplayWrapperClick().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionHandles(null);
 			return null;
 		}
 		
@@ -817,7 +817,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		lastGroupHandleList=newHandleList;
 		lastGroupHandleList.updateRectangle();
-		getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setSelectionHandles(lastGroupHandleList);
+		getImageDisplayWrapperClick().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionHandles(lastGroupHandleList);
 		return lastGroupHandleList;
 	}
 	
@@ -825,7 +825,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		canvasHandleList = this.getImageDisplayWrapperClick().getCanvasHandles();
 		
-		getImageDisplayWrapperClick().getImageAsWrapper().getOverlaySelectionManagger().setPermanentHandles(canvasHandleList);
+		getImageDisplayWrapperClick().getImageAsWorksheet().getOverlaySelectionManagger().setPermanentHandles(canvasHandleList);
 		return canvasHandleList;
 	}
 
@@ -1502,7 +1502,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				imageDisplayWrapperClick.setSelectedItem(null);
 				;break;}
 			case KeyEvent.VK_A: {
-				ArrayList<LocatedObject2D> all = imageDisplayWrapperClick.getImageAsWrapper().getLocatedObjects();
+				ArrayList<LocatedObject2D> all = imageDisplayWrapperClick.getImageAsWorksheet().getLocatedObjects();
 				if (arg0.isControlDown()||arg0.isMetaDown()) {
 					
 					for(LocatedObject2D item: all) {

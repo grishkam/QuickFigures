@@ -90,7 +90,7 @@ public class PNGSequenceQuickExport extends QuickExport {
 	
 		for(int i=0; i<diw.getEndFrame(); i++) {
 			KeyFrameHandling.applyFrameAnimators(diw, i);
-			BufferedImage bi = flat.createFlat(diw.getImageAsWrapper());
+			BufferedImage bi = flat.createFlat(diw.getImageAsWorksheet());
 			File nameToWrite = new File(basename+"/"+basenameFile+"_"+i+".PNG");
 			nameToWrite.mkdirs();
 			ImageIO.write(bi, "PNG",nameToWrite);

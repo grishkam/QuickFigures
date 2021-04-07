@@ -39,7 +39,7 @@ public interface DisplayedImage {
 	public void updateDisplay() ;
 	
 	/**returns the ImageWrapper*/
-	public ImageWorkSheet getImageAsWrapper() ;
+	public ImageWorkSheet getImageAsWorksheet() ;
 	public CordinateConverter getConverter();
 	/**returns the window used to display the image*/
 	public Window getWindow();

@@ -100,10 +100,10 @@ public class ImageDisplayIOTest {
 
 	/**Checks to make sure the same number and kind of object is present*/
 	private void compare(ImageWindowAndDisplaySet i, ImageWindowAndDisplaySet i2) {
-		assert(i.getImageAsWrapper().getTitle().equals(i.getImageAsWrapper().getTitle()));
+		assert(i.getImageAsWorksheet().getTitle().equals(i.getImageAsWorksheet().getTitle()));
 	
-		ArrayList<ZoomableGraphic> c1 = i.getImageAsWrapper().getTopLevelLayer().getAllGraphics();
-		ArrayList<ZoomableGraphic> c2 = i.getImageAsWrapper().getTopLevelLayer().getAllGraphics();
+		ArrayList<ZoomableGraphic> c1 = i.getImageAsWorksheet().getTopLevelLayer().getAllGraphics();
+		ArrayList<ZoomableGraphic> c2 = i.getImageAsWorksheet().getTopLevelLayer().getAllGraphics();
 		assert(c2.size()==c1.size());
 		for(int j=0; j<c2.size();j++) {
 			ZoomableGraphic z1 = c1.get(j);

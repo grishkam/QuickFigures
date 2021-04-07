@@ -74,8 +74,8 @@ public class Object_MoverTest extends ToolTester {
 		testRect.setStrokeColor(Color.green);
 		testCircle.setFillColor(Color.orange);
 		
-		image.getImageAsWrapper().addItemToImage(testRect);
-		image.getImageAsWrapper().addItemToImage(testCircle);
+		image.getImageAsWorksheet().addItemToImage(testRect);
+		image.getImageAsWorksheet().addItemToImage(testCircle);
 		
 		
 		assert(testRect.getRectangle().equals(r));
@@ -258,7 +258,7 @@ public class Object_MoverTest extends ToolTester {
 		
 		/**simulate clicking on a text item*/
 		TextGraphic text = new TextGraphic("text 1");
-		image.getImageAsWrapper().addItemToImage(text);
+		image.getImageAsWorksheet().addItemToImage(text);
 		text.setLocationUpperLeft(50,50);
 		Point2D.Double p = new Point2D.Double(50+5, 50+5);
 		

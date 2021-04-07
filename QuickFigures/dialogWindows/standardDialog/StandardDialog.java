@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Gregory Mazo
+ * Copyright (c) 2021 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -495,7 +495,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		sd.add("text1", new StringInputPanel("give me text ", "default input"));
 		sd.add("num", new NumberInputPanel("Select number", 5));
 		sd.add("combo", new ChoiceInputPanel("Select", new String[] {"a","b", "v", "d"}, 3));
-		FontChooser sb = new FontChooser(new Font("Arial", Font.BOLD, 12));
+		FontChooser sb = new FontChooser(new Font("Arial", Font.BOLD, 12), FontChooser.LIMITED_FONT_LIST);
 		sd.add("font", sb);
 		NumberArrayInputPanel pai = new NumberArrayInputPanel(4, 0);
 		sd.add("array panel", pai);

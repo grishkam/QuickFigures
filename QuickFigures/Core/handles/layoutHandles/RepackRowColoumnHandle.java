@@ -94,7 +94,7 @@ public class RepackRowColoumnHandle extends SmartHandle implements LayoutSpaces{
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		if(currentUndo!=null) currentUndo.establishFinalState();
 		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(combinedUndo);
-		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
+		canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 	
 	}
 	

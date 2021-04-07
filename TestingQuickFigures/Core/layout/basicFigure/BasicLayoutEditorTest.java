@@ -48,7 +48,7 @@ public class BasicLayoutEditorTest implements LayoutSpaces {
 		IssueLog.sytemprint=true;
 		
 		example = new FigureTester.FigureProvider().createExample();
-		LocatedObject2D objects = example.getImageAsWrapper().getLocatedObjects().get(0);
+		LocatedObject2D objects = example.getImageAsWorksheet().getLocatedObjects().get(0);
 		if (objects instanceof DefaultLayoutGraphic) {
 			DefaultLayoutGraphic inputLayout = (DefaultLayoutGraphic) objects;
 			performLayoutEditingTests(inputLayout);

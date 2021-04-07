@@ -127,8 +127,8 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		Rectangle2D startingPanel = makeAltered.getPanel(startIndex);
 		Rectangle2D ending = makeAltered.getPanel(endIndex);
 		;
-		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(RectangularGraphic.blankRect(startingPanel, Color.blue, true, true), 0);
-		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelection(RectangularGraphic.blankRect(ending, Color.green, true, true), 1);
+		canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(RectangularGraphic.blankRect(startingPanel, Color.blue, true, true), 0);
+		canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(RectangularGraphic.blankRect(ending, Color.green, true, true), 1);
 		
 	}
 	
@@ -156,7 +156,7 @@ public class MoveRowHandle extends SmartHandle implements LayoutSpaces{
 		layout.mapPanelLocationsOfLockedItems();
 		currentUndo.establishFinalLocations();
 		canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentUndo);
-		canvasMouseEventWrapper.getAsDisplay().getImageAsWrapper().getOverlaySelectionManagger().setSelectionstoNull();
+		canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 		
 		
 		if (layout.getParentLayer() instanceof FigureOrganizingLayerPane) {

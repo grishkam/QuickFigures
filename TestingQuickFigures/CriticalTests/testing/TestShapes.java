@@ -70,7 +70,7 @@ public class TestShapes {
 	
 	/**creates an example image with a diversity of shapes*/
 	public static void addExampleObjects(ImageWindowAndDisplaySet ids, TestExample type) {
-		GraphicLayer l=ids.getImageAsWrapper().getTopLevelLayer();
+		GraphicLayer l=ids.getImageAsWorksheet().getTopLevelLayer();
 		if (type== TestExample.DIVERSE_SHAPES)addDiverseShapes(l);
 		if (type==TestExample.RECTANGLE_AND_OTHERS)addAllRectangleShapeTools(l);
 		if (type==TestExample.MANY_COLORS) {
@@ -127,7 +127,7 @@ public class TestShapes {
 		Rectangle bounds = new Rectangle(20,20, 80, 80);
 		BasicLayout bl = new BasicLayout( 5,5, bounds.width, bounds.height,  bounds.y,  bounds.x, true);
 		
-		addMultipleVersions(ids.getImageAsWrapper(), s, EditManyObjects.createForArrow2(ArrowGraphic.FIRST_HEAD), 0,0, bl);
+		addMultipleVersions(ids.getImageAsWorksheet(), s, EditManyObjects.createForArrow2(ArrowGraphic.FIRST_HEAD), 0,0, bl);
 
 	}
 	
@@ -141,7 +141,7 @@ public class TestShapes {
 		BasicLayout bl = new BasicLayout( 5, 5, 20, 30, 70, 70, true);
 		
 		
-		addMultipleVersions(ids.getImageAsWrapper(), s,createManyAngles(), 50, 50, bl);
+		addMultipleVersions(ids.getImageAsWorksheet(), s,createManyAngles(), 50, 50, bl);
 		
 		
 		
@@ -218,7 +218,7 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		BasicLayout bl = new BasicLayout( 5, 5, 40, 80, 70, 80, true);
 		
 		 time=System.currentTimeMillis();
-		addMultipleVersions(ids.getImageAsWrapper(), s,createManyAngles(), 20, 70, bl);
+		addMultipleVersions(ids.getImageAsWorksheet(), s,createManyAngles(), 20, 70, bl);
 		System.out.println("finished creating multiple angle versions of text "+(System.currentTimeMillis()-time));
 		
 		
@@ -271,7 +271,7 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 	}
 	
 	public static void  addMultipleVersions(ImageWindowAndDisplaySet h, LocatedObject2D object, MultiSelectionOperator[] o1, MultiSelectionOperator[] o2, double dx, double dy) {
-		ImageWorkSheet l = h.getImageAsWrapper();
+		ImageWorkSheet l = h.getImageAsWorksheet();
 		int row = o1.length;
 		int col= o2.length;
 		BasicLayout bl = new BasicLayout( col, row, object.getBounds().width, object.getBounds().height, object.getBounds().x, object.getBounds().y, true);
@@ -319,7 +319,7 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 	
 	/**Adds several objects to the displayed worksheet, */
 	public static void  addMultipleVersions(ImageWindowAndDisplaySet h, LocatedObject2D[] objects, MultiSelectionOperator[] o1, double dx, double dy, Rectangle r) {
-		ImageWorkSheet l = h.getImageAsWrapper();
+		ImageWorkSheet l = h.getImageAsWorksheet();
 		int row = objects.length;
 		int col=o1.length; 
 		if(col>8) { row*=(row+col/8);col=8;}

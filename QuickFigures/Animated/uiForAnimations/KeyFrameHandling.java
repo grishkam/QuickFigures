@@ -86,7 +86,7 @@ public static int findLastKeyFrame(ArrayList<KeyFrameAnimation> frameLists, int 
 
 public static void applyFrameAnimators(DisplayedImage image, int frame2) {
 	
-	ArrayList<ZoomableGraphic> listedObjects = image.getImageAsWrapper().getTopLevelLayer().getAllGraphics();
+	ArrayList<ZoomableGraphic> listedObjects = image.getImageAsWorksheet().getTopLevelLayer().getAllGraphics();
 	image.setCurrentFrame(frame2);
 	for(ZoomableGraphic z: listedObjects) {
 		if(z instanceof HasAnimation) {

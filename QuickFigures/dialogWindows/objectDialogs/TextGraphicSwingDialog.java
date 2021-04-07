@@ -20,8 +20,6 @@
  */
 package objectDialogs;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 
 import graphicActionToolbar.CurrentFigureSet;
@@ -35,13 +33,22 @@ import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorComboboxPanel;
 import standardDialog.colors.ColorDimmingBox;
 import standardDialog.fonts.FontChooser;
-import standardDialog.graphics.GraphicSampleComponent;
 import standardDialog.numbers.AngleInputPanel;
 import standardDialog.strings.StringInputPanel;
 import undo.Edit;
 
-/**A dialog for text graphics*/
+/**A dialog for text items*/
 public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
+
+	/**
+	 * 
+	 */
+	private static final String DOES_DIM_KEU = "dim?";
+
+	/**
+	 * 
+	 */
+	private static final String DIM_KEY = "dim";
 
 	public static final String[] JUSTIFICATION_CHOICES = new String[] {"Left", "Center", "Right"};
 
@@ -49,6 +56,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	 * 
 	 */
 	
+	/**A list of the text items that this dialog applied to*/
 	protected ArrayList<TextGraphic> array=new ArrayList<TextGraphic>();//used by multitext graphic subclass
 	
 	private static final long serialVersionUID = 1L;
@@ -71,12 +79,14 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		 addFontAngleToDialog();
 		ColorComboboxPanel cbp = new ColorComboboxPanel("Color", null, textItem.getTextColor());
 		this.add("tColor", cbp);
+		
 		addDimmingToDialog();
 		addBackgroundOptionsToDialog();
 		addSnappingBehviourToDialog(textItem);
 		
 	}
 	
+	/**The text mey be draw a little bit inward compared to the bounding box, a tab is added with options related to this*/
 	void addInsetsTab() {
 		
 		TextInsetsDialog id = new TextInsetsDialog(textItem);
@@ -84,6 +94,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		
 	}
 	
+	/**text items may have a background*/
 	protected void addBackgroundOptionsToDialog() {
 		this.add("backGround", new BooleanInputPanel("Use background", textItem.isFillBackGround()));
 		addInsetsTab();
@@ -99,18 +110,22 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	
 	}
 	
+	
 	protected void addDimmingToDialog() {
 		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
-		this.add("dim", cp);
+		this.add(DIM_KEY, cp);
 		this.getMainPanel().moveGrid(2, -1);
-		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
+		this.add(DOES_DIM_KEU, new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
 		this.getMainPanel().moveGrid(-2, 0);
 	}
 	
+	/**Adds the font and the angle fields to the dialog*/
 	protected void addFontAngleToDialog() {
-		FontChooser sb = new FontChooser(textItem.getFont());
+		
+		FontChooser sb = new FontChooser(textItem.getFont(), FontChooser.LIMITED_FONT_LIST);
 		sb.setUIFontSize(10);
 		add("font", sb);
+		
 	
 		AngleInputPanel pai2 = new AngleInputPanel("Angle ", textItem.getAngle(), true);
 		
@@ -120,7 +135,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	
 
 	
-	
+	/**changes the text object's properties to match the fields in this dialog*/
 	protected void setItemsToDiaog() {
 				setItemsToDiaog(textItem);
 	}
@@ -130,7 +145,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		
 		textItem.setText(this.getString("Text"));
 		textItem.setTextColor(this.getColor("tColor"));
-		textItem.setDimColor(this.getBoolean("dim?"));
+		textItem.setDimColor(this.getBoolean(DOES_DIM_KEU));
 		
 		setAtrributesToDialog(textItem);
 	}
@@ -139,24 +154,14 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		this.setFixedEdgeToDialog(textItem);
 		textItem.setFont(this.getFont("font"));
 		textItem.setAngle(this.getNumber("angle"));
-		textItem.setDimming(ColorDimmer.values()[this.getChoiceIndex("dim")]);
+		textItem.setDimming(ColorDimmer.values()[this.getChoiceIndex(DIM_KEY)]);
 		setBackgroundOptionsToDialog(textItem);
 		setObjectSnappingBehaviourToDialog(textItem);
 		if (CanvasOptions.current.resizeCanvasAfterEdit)
 			CurrentFigureSet.canvasResize();
 	}
 	
-	
-	public static void main(String[] args) { 
-		TextGraphic t = new TextGraphic();
-		t.setFont(new Font("Arial", Font.BOLD, 30));
-		TextGraphicSwingDialog dia = new TextGraphicSwingDialog(t);
-		dia.previewComponent = new GraphicSampleComponent(t);
-		
-		dia.add(dia.previewComponent, new GridBagConstraints());
-		dia.showDialog();
-	
-	}
+
 	
 	/**Adds a justification field to the dialog*/
 	public void addJustificationToDialog(TextGraphic tg) {

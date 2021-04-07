@@ -50,7 +50,7 @@ public interface PlotCreator<Type extends DataSeries>  {
 	 * @return
 	 */
 	public static UndoAddItem addPlotToWorksheet(DisplayedImage diw, BasicPlot plot) {
-		GraphicLayer targetLayer = diw.getImageAsWrapper().getTopLevelLayer();
+		GraphicLayer targetLayer = diw.getImageAsWorksheet().getTopLevelLayer();
 		targetLayer.add(plot);
 		UndoAddItem undo = new UndoAddItem(targetLayer , plot);
 		diw.getUndoManager().addEdit(undo);

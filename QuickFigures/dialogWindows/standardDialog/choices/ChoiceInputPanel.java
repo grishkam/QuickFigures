@@ -211,7 +211,7 @@ public void setValue(int value) {
 	/**Builds a choice input panel for enums*/
 	public static ChoiceInputPanel buildForEnum(String label, Enum<?>[] en, Enum<?> start) {
 		String[] names = enumNames(en);
-		
+		if(start==null) start=en[0];
 		int startIndex = start.ordinal();
 		return new ChoiceInputPanel(label, names, startIndex);
 	}
