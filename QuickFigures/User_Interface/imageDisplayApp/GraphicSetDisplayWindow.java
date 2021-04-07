@@ -345,7 +345,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 	
 		
-		if (arg0.getKeyChar()=='=') {
+		if (arg0.getKeyCode()==KeyEvent.VK_PLUS||arg0.getKeyChar()=='='||arg0.getKeyChar()=='+') {
 			if(!arg0.isConsumed())
 			ZoomIn();
 			
@@ -358,7 +358,7 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 		if (arg0.getKeyCode()==KeyEvent.VK_PLUS||arg0.getKeyChar()=='+') {
 			
-			if(!arg0.isConsumed())
+			if(!arg0.isConsumed() &&arg0.isShiftDown())
 			this.comfortZoomIn();
 		}
 		
