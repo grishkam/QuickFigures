@@ -28,7 +28,6 @@ import dataTableDialogs.SmartDataInputDialog;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import kaplanMeierPlots.KM_Plot;
 import logging.IssueLog;
-import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 /**An implementation of plot creator for Kaplan Meier plots*/

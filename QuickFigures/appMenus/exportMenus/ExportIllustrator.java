@@ -24,8 +24,6 @@ import java.io.File;
 import java.util.Collection;
 
 import applicationAdapters.DisplayedImage;
-import basicMenusForApp.BasicMenuItemForObj;
-import figureFormat.DirectoryHandler;
 import illustratorScripts.AdobeScriptMaker;
 import illustratorScripts.ZIllustratorScriptGenerator;
 import messages.ShowMessage;

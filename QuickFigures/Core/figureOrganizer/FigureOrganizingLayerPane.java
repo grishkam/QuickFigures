@@ -519,6 +519,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			if (useImageNames) {
 				String text=pan.getMultiChannelImage().getTitle();
 				if(text.startsWith("DUP")) text=text.replace("DUP","");//imagej adds dup
+				if(text.endsWith(".tiff")) text=text.replace(".tiff","");//imagej tiffs dont need that in their label
 				if (text!=null&&text.length()>LabelCreationOptions.current.clipLabels) {
 					{text=text.substring(0, (int)LabelCreationOptions.current.clipLabels);}
 				}

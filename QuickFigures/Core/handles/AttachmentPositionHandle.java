@@ -42,7 +42,6 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
-import imageDisplayApp.KeyDownTracker;
 import imageDisplayApp.OverlayObjectManager;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;

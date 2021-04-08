@@ -26,7 +26,6 @@ import applicationAdapters.DisplayedImage;
 import dataSeries.XYDataSeries;
 import dataTableDialogs.SmartDataInputDialog;
 import imageDisplayApp.ImageWindowAndDisplaySet;
-import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 import xyPlots.XY_Plot;
 

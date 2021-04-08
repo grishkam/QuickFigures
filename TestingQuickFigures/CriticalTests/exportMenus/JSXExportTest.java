@@ -11,11 +11,8 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
-import basicMenusForApp.BasicMenuItemForObj;
-import basicMenusForApp.MenuItemForObj;
 import logging.IssueLog;
 import photoshopScripts.AdobeScriptGenerator;
-import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;

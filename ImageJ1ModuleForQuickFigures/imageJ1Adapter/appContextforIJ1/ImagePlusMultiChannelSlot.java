@@ -45,7 +45,9 @@ import locatedObject.ScaleInfo;
 import logging.IssueLog;
 
 
-/**All the what is needed to keep track of a multichannel source stack, save and retrieve it.
+/**This class holds an imageJ image, information on how to crop and scale the image, a scaled copy
+ * abd more. when this object is serialized for storage, the imageJ images are also serialized and stored in arrays.
+ * All the what is needed to keep track of a multichannel source stack, save and retrieve it.
   Before this object is serialized, it saves its images as serialized arrays.
   */
 	public class ImagePlusMultiChannelSlot implements MultiChannelSlot {
@@ -72,6 +74,7 @@ import logging.IssueLog;
 		ArrayList<MultiChannelUpdateListener> listens=new ArrayList<MultiChannelUpdateListener>();
 		private int retreival=LOAD_EMBEDDED_IMAGE;
 
+		/**the information about how scale and cropping are performed*/
 		private PreProcessInformation preprocessRecord;
 
 		private ImageDisplayLayer display;
@@ -156,6 +159,7 @@ import logging.IssueLog;
 			
 		}
 		
+		/**restores the image from the serialized array*/
 		public void setToByteArray() {
 			if (serializedIM==null) return;
 			sourceImagePlus=	new ij.io.Opener().deserialize(serializedIM);
@@ -180,7 +184,7 @@ import logging.IssueLog;
 		}
 
 		/**
-		opens an image
+		opens an image in the file path
 		 */
 		protected static ImagePlus getImageInPath(String path) {
 			return IJ.openImage(getFileFinder().findExistingFilePath(path));
@@ -696,6 +700,7 @@ import logging.IssueLog;
 			private void askUserToSave() {
 			}
 
+			/**returns the stored image*/
 			public ImagePlus getStoredImage() {
 				return backupUncroppedImagePlus;
 			}
@@ -714,13 +719,15 @@ import logging.IssueLog;
 				return originalSavePath;
 			}
 
+			/**returns an estimate on the file size*/
 			public int getEstimatedFileSize() {
 				return estimatedFileSize;
 			}
 		}
 
 
-		/**returns a slot that uses the same source image as this one*/
+		/**returns a slot that uses the same source image as this one
+		 * user may set different crop are and scale for the second one*/
 		@Override
 		public MultiChannelSlot createPartner() {
 			ImagePlusMultiChannelSlot c = this.copy();

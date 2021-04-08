@@ -10,8 +10,6 @@
  */
 package objectDialogs;
 
-import static org.junit.Assert.*;
-
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 

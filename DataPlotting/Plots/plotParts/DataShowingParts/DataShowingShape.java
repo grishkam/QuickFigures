@@ -38,7 +38,6 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import handles.HasSmartHandles;
 import illustratorScripts.ArtLayerRef;
-import illustratorScripts.PathItemRef;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;

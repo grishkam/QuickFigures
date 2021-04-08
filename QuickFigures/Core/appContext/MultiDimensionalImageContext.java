@@ -42,6 +42,10 @@ public interface MultiDimensionalImageContext {
 
   /**returns the default save directory for multidimensional images*/
   public String getDefaultDirectory();
+
+  
+  /**returns an aritififial image */
+  MultiChannelImage getDemoExample(boolean show,String path, int nChan, int rowIndex, int scale);
   
   
 

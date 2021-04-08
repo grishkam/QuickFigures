@@ -1,0 +1,158 @@
+/**
+ * Author: Greg Mazo
+ * Date Modified: Apr 8, 2021
+ * Date Created: Apr 7, 2021
+ * Version: 2021.1
+ */
+package figureFormat;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+
+import javax.swing.JLabel;
+
+import addObjectMenus.FigureAdder;
+import appContext.CurrentAppContext;
+import channelLabels.ChannelLabelManager;
+import channelLabels.ChannelLabelTextGraphic;
+import channelMerging.ChannelUseInstructions;
+import figureOrganizer.FigureOrganizingLayerPane;
+import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import layout.basicFigure.BasicLayoutEditor;
+import locatedObject.AttachmentPosition;
+import locatedObject.ColorDimmer;
+import logging.IssueLog;
+import standardDialog.graphics.GraphicObjectDisplayBasic;
+
+/**
+This class stores an option for a possible figure template
+and maintains an preview of that that figure would look like
+ */
+public class TemplateChoice   {
+	
+	
+	String name="";
+	FigureTemplate template;
+	private JLabel item;
+	MutateFigure[] special=new MutateFigure[] {};
+	private boolean mockMade;
+	private FigureOrganizingLayerPane figure;
+	private JLabel comboBoxLabel;
+	
+	
+	public TemplateChoice(FigureTemplate t) {
+		template=t;
+	}
+	
+	
+public TemplateChoice(MutateFigure... special) {
+		this.special=special;
+		if(special.length>0) name=special[0].name().toLowerCase().replace("_", " ");
+	}
+	
+	
+	public JLabel getComboBoxItem(boolean focus, boolean selected) {
+		if(item==null)
+			item = generateComboBoxComponent() ;
+			comboBoxLabel.setBackground(item.getForeground());
+		 if (focus) {
+			 comboBoxLabel.setBackground(Color.DARK_GRAY);
+			 };
+		if (selected) {
+			 comboBoxLabel.setBackground(Color.blue);
+			 };
+		return item;
+		
+		
+	}
+	
+	public JLabel generateComboBoxComponent() {
+		 comboBoxLabel = new JLabel(name);
+		 comboBoxLabel.setIcon(generateIconObject());
+		 return comboBoxLabel;
+	}
+	
+	
+	
+	GraphicObjectDisplayBasic<GraphicGroup> generateIconObject() {
+		
+		createMock(1);
+		GraphicGroup output = new GraphicGroup();
+		GraphicLayerPane layerPaneWithFigure = new GraphicLayerPane("figure");
+		FigureAdder added = new FigureAdder(true);
+		added.autoFigureGenerationOptions.ignoreSavedTemplate=true;
+		this.createMock(1);
+		String mockFilePath = this.getMockFilePath(1);
+		
+		
+		figure = added.add(layerPaneWithFigure, mockFilePath);
+		changeChannelLabels(figure, "CH ");
+		if(template!=null)
+			template.applyTemplateToLayer(figure);
+		for(MutateFigure m: special) 
+			m.mutate(figure);
+		
+		GraphicObjectDisplayBasic<GraphicGroup> component = new GraphicObjectDisplayBasic<GraphicGroup>();
+		output.getTheInternalLayer().addItemToLayer(layerPaneWithFigure);
+		component.setCurrentDisplayObject(output);
+		
+		;
+		return component;
+		
+	}
+	
+
+	
+
+	/**
+	 * @param mockIndex
+	 */
+	protected void createMock(int mockIndex) {
+		if (!mockMade)
+		CurrentAppContext.getMultichannelContext().getDemoExample(false, getMockFilePath(mockIndex), 3, mockIndex, 1);
+		mockMade=true;
+	}
+
+	/**returns the path for saving the mock images as files
+	 * @param mockIndex
+	 * @return
+	 */
+	protected String getMockFilePath(int mockIndex) {
+		return DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+"Row "+mockIndex+".tiff";
+	}
+
+	
+	/**Changes the row labels for the figure into a more generic form
+	 * @param figure
+	 */
+	public static void changeChannelLabels(FigureOrganizingLayerPane figure, String gene) {
+		/**changes the channel labels*/
+		
+		ArrayList<ChannelLabelTextGraphic> allLabels = figure.getPrincipalMultiChannel().getChannelLabelManager().getAllLabels();
+		for(int i=0; i<allLabels.size(); i++)
+				{
+			ChannelLabelTextGraphic l= allLabels.get(i);
+			if(l.isThisMergeLabel())
+				continue;
+			l.changeText(gene+(i+1));
+			}
+	}
+
+
+	/**
+	 * 
+	 */
+	public FigureTemplate getUseableTemplate() {
+		FigureTemplate output = new FigureTemplate();
+		output.setToFigure(figure);
+		
+		return output;
+		
+	}
+	
+	
+	
+}

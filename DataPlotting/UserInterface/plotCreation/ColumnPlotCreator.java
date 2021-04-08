@@ -29,7 +29,6 @@ import dataTableDialogs.SmartDataInputDialog;
 import fileread.PlotType;
 import graphicActionToolbar.CurrentFigureSet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
-import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 /**A Plot creator that can generate a few types of column plots*/

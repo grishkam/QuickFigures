@@ -27,7 +27,7 @@ import ultilInputOutput.FileChoiceUtil;
  */
 class ArrowGraphicTest {
 
-	@Test//test does not need to be regularly performed
+	//@Test//test does not need to be regularly performed. user will see the same arrows 
 	void test() {
 		ImageDisplayTester.showInnitial();
 		IssueLog.sytemprint=true;

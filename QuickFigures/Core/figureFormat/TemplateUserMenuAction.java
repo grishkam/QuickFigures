@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import applicationAdapters.DisplayedImage;
+import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects.GraphicEncoder;
 import graphicalObjects.FigureDisplayWorksheet;
@@ -54,14 +55,14 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	static DirectoryHandler handler=new DirectoryHandler(); static {handler.makeAllNeededDirsIfAbsent();}
 	
 	
-	public static final int APPLY_TEMPLATE=0, SAVE_TEMPLATE=1, DELETE_TEMPLATE=2;
+	public static final int APPLY_TEMPLATE=0, SAVE_TEMPLATE=1, DELETE_TEMPLATE=2, SUGGEST_TEMPLATE_DIALOG=3;
 	/**sets whether this object will create/save a template, or load/apply a template or delete a saved template*/
 	int typeOfAction=APPLY_TEMPLATE;
 	
 	
 	
 	boolean useDefaultpath=false;//set to true if the default path for figure templates is to be used
-	String menuPath="File<Save<";//default meny path
+	String menuPath="File<Save<";//default menu path
 	
 	
 	/**constructor, creates a menu action for either saving a new figure template or applying a saved one
@@ -158,8 +159,14 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**operates with the entire image given as its target for creating templates or applying a saved template*/
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		diw.getUndoManager().addEdit(
-				this.operateOnContainer(diw.getImageAsWorksheet()));
+		
+			ImageWorkSheet imageAsWorksheet = null;
+			if (diw!=null)
+				{imageAsWorksheet =diw.getImageAsWorksheet();
+			
+				diw.getUndoManager().addEdit(
+						this.operateOnContainer(imageAsWorksheet));
+			} else operateOnContainer(imageAsWorksheet);//for the template choice one this still needs to be called
 	}
 
 
@@ -187,7 +194,8 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	@Override
 	public String getMenuCommand() {
 		String output="";
-		
+		if(this.doesSinpleDialogApplyTemplate()) 
+			return "See examples ";
 		if (doesApplyTemplate())  output+= "Apply";
 			else
 				if (doesDeleteTemplate()) {
@@ -246,12 +254,18 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		return typeOfAction==APPLY_TEMPLATE;
 	}
 
+	
+	/**returns true if the dialog to select a template is used*/
+	private boolean  doesSinpleDialogApplyTemplate() {return typeOfAction==SUGGEST_TEMPLATE_DIALOG;};
+	
 	/**Called when the target of this template saver is the given figure container.
 	 * @return 
 	 */
 	public CombinedEdit operateOnContainer(FigureDisplayWorksheet graphicDisplayContainer) {
 		
-		GraphicLayer graphicLayerSet = graphicDisplayContainer.getAsWrapper().getTopLevelLayer();
+		GraphicLayer graphicLayerSet = null;
+		if (graphicDisplayContainer!=null) 
+			graphicLayerSet =graphicDisplayContainer.getAsWrapper().getTopLevelLayer();
 		
 		return operateOnLayer(graphicLayerSet);
 	}
@@ -262,6 +276,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	 * @return 
 	 */
 	public CombinedEdit operateOnLayer(GraphicLayer graphicLayerSet) {
+		CombinedEdit output=null;
 		if (doesDeleteTemplate()) {
 			deleteTemplateFile();
 			return null;
@@ -270,27 +285,54 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		FigureTemplate tp=new FigureTemplate();
 		
 		/***/
-		if (doesSaveTemplate()) {
-			TemplateChooserDialog dd = new TemplateChooserDialog(tp, graphicLayerSet);
-			dd.showDialog();
-		
+		if (this.doesSinpleDialogApplyTemplate()) {
+			FigureTemplate temp =SuggestTemplateDialog.getTemplate();
+			output=applyTemplate(graphicLayerSet, temp);
+		}else 
+			if (doesSaveTemplate()) {
+				TemplateChooserDialog dd = new TemplateChooserDialog(tp, graphicLayerSet);
+				dd.showDialog();
+			
 			saveTemplate(tp, getUserPath());
 			return null;
 		} else 
 			if (doesApplyTemplate()) 
 					{
-						FigureTemplate temp = loadTemplate( getUserPath());
-						if (temp!=null) {
-								CombinedEdit undo = new CombinedEdit();
-								undo.addEditToList(
-											temp.applyTemplateToLayer(graphicLayerSet));
-								undo.addEditToList(
-											temp.fixupLabelSpaces(graphicLayerSet));
-								return undo;
-						}
-						
+						output = applySavedTemplate(graphicLayerSet);
 					}
-		return null;
+			
+		return output;
+	}
+
+
+	/**applies the saved template and returns an undo
+	 * @param graphicLayerSet
+	 * @return
+	 */
+	protected CombinedEdit applySavedTemplate(GraphicLayer graphicLayerSet) {
+		FigureTemplate temp = loadTemplate( getUserPath());
+		return applyTemplate(graphicLayerSet, temp);
+	}
+
+
+	/**
+	 * @param graphicLayerSet
+	 * @param temp
+	 * @return
+	 */
+	protected CombinedEdit applyTemplate(GraphicLayer graphicLayerSet, FigureTemplate temp) {
+		CombinedEdit output;
+		
+		if (temp!=null) {
+				CombinedEdit undo = new CombinedEdit();
+				undo.addEditToList(
+							temp.applyTemplateToLayer(graphicLayerSet));
+				undo.addEditToList(
+							temp.fixupLabelSpaces(graphicLayerSet));
+				output=undo;
+		}
+		output=null;
+		return output;
 	}
 
 
@@ -314,6 +356,10 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		} else 
 		{
 			FigureTemplate temp = loadTemplate( getUserPath());
+			if (this.doesSinpleDialogApplyTemplate()) {
+				temp =SuggestTemplateDialog.getTemplate();
+				
+			}
 			if (temp!=null) {
 				CombinedEdit undo = new CombinedEdit();
 				undo.addEditToList(
@@ -365,6 +411,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		t.add(new TemplateUserMenuAction(TemplateUserMenuAction.APPLY_TEMPLATE, false, figFormatPath));
 		
 		t.add(new TemplateUserMenuAction(DELETE_TEMPLATE, true, figFormatPath));
+		t.add(new TemplateUserMenuAction(SUGGEST_TEMPLATE_DIALOG, true, figFormatPath));
 		return t;
 	}
 

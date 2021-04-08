@@ -42,7 +42,6 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.LocatedObject2D;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import utilityClasses1.ArraySorter;

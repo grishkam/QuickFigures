@@ -1,12 +1,7 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 31, 2020
- * Copyright (C) 2020 Gregory Mazo
- * Version 2021.1
- */
-/**
- 
- * 
+ * Date Modified: April 7, 2021
+ * Version: 2021.1
  */
 package advancedChannelUseGUI;
 
@@ -20,6 +15,7 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
+import logging.IssueLog;
 import testing.FigureTest;
 import testing.FigureTester;
 import undo.PanelManagerUndo;
@@ -33,10 +29,18 @@ import undo.PanelManagerUndo;
 public class AdvancedChannelUseGUITest extends FigureTest {
 
 	
+/**how long to wait between steps so user cansee*/
+	private int waitTime=00;
+
+
 
 	@Test
 	public void test() {
 		FigureOrganizingLayerPane f = createFirstExample();
+		testForFigureIncurrentImage(f);
+		
+		
+		f = super.createMockExample();
 		testForFigureIncurrentImage(f);
 		
 		
@@ -60,6 +64,7 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 			
 			PanelList panelList = mm.getPanelManager().getPanelList();
 			int count =  panelList.getSize();
+			
 			for(int i=0; i<count;i++) 
 				for(int j=0; j<count;j++){
 				PanelListElement panelJ = panelList.getPanels().get(j);
@@ -81,6 +86,7 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 				assert(panelI== panelList.getPanels().get(i));
 				assert(pJstart.equals(panelJ.getImageDisplayObject().getLocationUpperLeft()));
 				assert(pIstart.equals(panelI.getImageDisplayObject().getLocationUpperLeft()));
+				IssueLog.waitMiliseconds(waitTime);
 				}
 			
 			PanelListElement mergePanel = panelList.getMergePanel();

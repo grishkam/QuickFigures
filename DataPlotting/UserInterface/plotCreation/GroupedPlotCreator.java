@@ -27,7 +27,6 @@ import dataSeries.GroupedDataSeries;
 import dataTableDialogs.SmartDataInputDialog;
 import groupedDataPlots.Grouped_Plot;
 import imageDisplayApp.ImageWindowAndDisplaySet;
-import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 public class GroupedPlotCreator implements PlotCreator<GroupedDataSeries> {

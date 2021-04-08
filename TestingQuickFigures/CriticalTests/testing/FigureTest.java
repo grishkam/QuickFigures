@@ -29,6 +29,18 @@ public class FigureTest {
 	}
 	
 	/**
+	 * @return
+	 */
+	public FigureOrganizingLayerPane createMockExample() {
+		FigureTester.setup();
+		FigureTester figureTester = new FigureTester();
+		FigureTester.ignoreTemplate=true;
+		FigureOrganizingLayerPane f = figureTester.createFigureFromMockImages();
+		chooseCurrentWindow() ;
+		return f;
+	}
+	
+	/**
 	 stores the current window
 	 */
 	public void chooseCurrentWindow() {

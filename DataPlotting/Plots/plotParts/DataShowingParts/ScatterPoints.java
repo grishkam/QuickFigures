@@ -38,8 +38,6 @@ import dataSeries.DataSeries;
 import dialogs.ScatterPointsDialog;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
-import illustratorScripts.ArtLayerRef;
-import logging.IssueLog;
 
 /**a data showing shape that draws many points of data*/
 public class ScatterPoints extends DataShowingShape {

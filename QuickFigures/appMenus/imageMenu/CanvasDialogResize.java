@@ -38,7 +38,6 @@ import imageDisplayApp.CanvasOptions;
 import layout.BasicObjectListHandler;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.AttachmentPositionBox;
 import standardDialog.booleans.BooleanInputPanel;

@@ -23,8 +23,10 @@ import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
 import channelLabels.ChannelLabelTextGraphic;
+import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import figureFormat.DirectoryHandler;
+import figureFormat.TemplateChoice;
 import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
@@ -71,7 +73,9 @@ public class FigureTester {
 	private static final String  FILE_NOT_FOUND = "One must place the testing files in the QuickFigures folder to perform this test. they are on github";
 
 	public static final String testFolderPath = new DirectoryHandler().getFigureFolderPath()+"/Testing/Test ";
-
+	public static final String mockFilePath=testFolderPath+"Mock/";
+	
+	
 	/**lists the rectangles that will be used for a sequence of example images*/
 	Rectangle[] cropRectsForExample1=new Rectangle[] {new Rectangle(280, 200, 300,250),
 								new Rectangle(630, 600, 300,250),
@@ -162,6 +166,44 @@ public class FigureTester {
 		
 	}
 	
+	/**
+	creates a figure for testing. figure 1 is a simple split channel figure with 4 channels plus merge
+	It includes two source images so has two rows and 5 columns for a total of 10 images.
+	 */
+	public FigureOrganizingLayerPane createFigureFromMockImages() {
+		
+		createMock(1);
+		
+		
+		
+		FigureOrganizingLayerPane figure = example1FigureMaker().createFigureFromOpenImage(null);
+		createMock(2);
+		figure.nextMultiChannel(this.getMockFilePath(2), null);
+		figure.addLabelsBasedOnImageNames(BasicLayout.ROWS);
+		TemplateChoice.changeChannelLabels(figure, "Gene ");
+		
+		figure.updateDisplay();
+		
+		return figure;
+		
+	}
+
+	/**
+	 * @param mockIndex
+	 */
+	protected void createMock(int mockIndex) {
+		CurrentAppContext.getMultichannelContext().getDemoExample(true, getMockFilePath(mockIndex), 3, mockIndex, 1);
+	}
+
+	/**returns the path for saving the mock images as files
+	 * @param mockIndex
+	 * @return
+	 */
+	protected String getMockFilePath(int mockIndex) {
+		return mockFilePath+"Row "+mockIndex+".tiff";
+	}
+	
+	
 	
 	
 	/**
@@ -188,7 +230,7 @@ public class FigureTester {
 		figure.getPrincipalMultiChannel().getSlot().applyCropAndScale(p1);
 		figure.getMontageLayoutGraphic().resizeLayoutToFitContents();
 		
-		changeChannelLabe(figure);
+		TemplateChoice.changeChannelLabels(figure, "Gene ");
 			
 		figure.nextMultiChannel(siRNA.getAbsolutePath(), p1);
 		figure.getMontageLayoutGraphic().resizeLayoutToFitContents();
@@ -211,21 +253,7 @@ public class FigureTester {
 		
 	}
 
-	/**
-	 * @param figure
-	 */
-	public void changeChannelLabe(FigureOrganizingLayerPane figure) {
-		/**changes the channel labels*/
-		
-		ArrayList<ChannelLabelTextGraphic> allLabels = figure.getPrincipalMultiChannel().getChannelLabelManager().getAllLabels();
-		for(int i=0; i<allLabels.size(); i++)
-				{
-			ChannelLabelTextGraphic l= allLabels.get(i);
-			if(l.isThisMergeLabel())
-				continue;
-			l.changeText("Gene "+(i+1));
-			}
-	}
+
 	
 	/**returns the standard version of example 1*/
 	public FigureOrganizingLayerPane createFigureFromExample1AImages() {return createFigureFromExample1Images(example1FigureMaker(), 2);}
@@ -448,7 +476,7 @@ public class FigureTester {
 	
 	public static TestProvider[] getTests() {
 		ignoreTemplate=true;
-		return new TestProvider[] {new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
+		return new TestProvider[] {new FigureProvider(TestExample._FIGURE), new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
 				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL),  new FigureProvider(TestExample.SCALE_BAR_STYLES_)};
 	}
 	
@@ -484,6 +512,8 @@ public class FigureTester {
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
 			if (form==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
+			if (form==TestExample._FIGURE)
+				new FigureTester().createFigureFromMockImages();
 			
 			DisplayedImage currentActiveDisplayGroup = CurrentFigureSet.getCurrentActiveDisplayGroup();
 			currentActiveDisplayGroup.getImageAsWorksheet().setTitle(form.name());

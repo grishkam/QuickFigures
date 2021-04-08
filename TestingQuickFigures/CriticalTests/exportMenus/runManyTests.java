@@ -3,30 +3,18 @@ import java.awt.Desktop;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Author: Greg Mazo
- * Date Modified: Feb 20, 2021
- * Version: 2021.1
- */
-import org.junit.jupiter.api.Test;
-
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.StartApplication;
 import basicMenusForApp.BasicMenuItemForObj;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.MenuBarItemInstaller;
-import dialogs.DataShapeSyncer;
 import figureFormat.DirectoryHandler;
-import fileread.ShowTable;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import includedToolbars.QuickFiguresToolBar;
 import includedToolbars.ToolInstallers;
 import logging.IssueLog;
-import selectedItemMenus.SelectionOperationsMenu;
-import standardDialog.StandardDialog;
-import standardDialog.choices.ChoiceInputPanel;
 import testing.TestExample;
 import testing.TestProvider;
 

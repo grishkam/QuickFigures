@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import actionToolbarItems.EditManyObjects;
 import actionToolbarItems.SetAngle;
-import actionToolbarItems.SuperTextButton;
 import addObjectMenus.CartoonPolygonAdder;
 import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.SelectedSetLayerSelector;

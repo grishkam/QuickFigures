@@ -114,7 +114,8 @@ public class FigureAdder extends LayoutAdder {
 					{
 					while (gc!=null&&!gc.canAccept(l22)) gc=gc.getParentLayer();
 				
-					if (gc==null) return null;
+					if (gc==null) 
+						return null;
 					gc.add(l22);
 						}
 		
@@ -201,13 +202,13 @@ public class FigureAdder extends LayoutAdder {
 		 currentFigureOrganizer = getOrCreateUsedFigureOrganizingLayerPane(ordinaryLayer);
 		 
 		 /**If the figure organizer is newly created, it will need a new name which depends on the multichannel*/
-		if (currentFigureOrganizer.getPrincipalMultiChannel()==null) {
+		if (currentFigureOrganizer!=null&&currentFigureOrganizer.getPrincipalMultiChannel()==null) {
 			currentFigureOrganizer.setName("Figure For "+multiDimensionalImage.getName());
 		}
 		
 		/**opens a figure template or creates one if one does not exist*/
 		FigureTemplate temp = getUsedTemplate( multiDimensionalImage);
-		/**If there is not template*/
+		/**If there is not a template*/
 		if (temp==null){
 				currentFigureOrganizer.addNovelMultiChannel(multiDimensionalImage, -1);
 				showRecreateDialog();

@@ -22,7 +22,6 @@ import java.awt.AWTEvent;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import appContext.CurrentAppContext;

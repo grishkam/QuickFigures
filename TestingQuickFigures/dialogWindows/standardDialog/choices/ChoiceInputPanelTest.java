@@ -35,6 +35,7 @@ public class ChoiceInputPanelTest  extends VisualTest{
 		String[] names = ChoiceInputPanel.enumNames(MOCK.values());
 		
 		Window w=new JFrame("Input panel");
+		w.setLocation(1000, 1000);
 		GriddedPanel panel = new GriddedPanel();
 		w.add(panel);
 		StandardDialog.center(w);

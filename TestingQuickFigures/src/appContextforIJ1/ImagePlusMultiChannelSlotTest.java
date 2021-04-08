@@ -1,3 +1,8 @@
+/**
+ * Author: Greg Mazo
+ * Date Modified: April 7, 2021
+ * Version: 2021.1
+ */
 package appContextforIJ1;
 
 import java.awt.Rectangle;
@@ -10,6 +15,8 @@ import multiChannelFigureUI.MultiChannelDisplayCreator;
 import objectDialogs.CroppingDialog;
 import testing.FigureTester;
 
+/**performs a few checks related to the @see ImagePlusMultiChannelSlot
+ * a class that holds an imageJ image, cropped copy and has methods that retrieve information related to the image */
 class ImagePlusMultiChannelSlotTest {
 
 	@Test

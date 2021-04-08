@@ -204,7 +204,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	private ArrayList<ChannelEntry> channelEnt;
 
-	private boolean wasOKed;
+	protected boolean wasOKed;
 	private boolean wasCanceled;
 
 	private JPanel theButtonPanel;

@@ -27,7 +27,6 @@ import dataSeries.DataSeries;
 import dataTableDialogs.SmartDataInputDialog;
 import genericPlot.BasicPlot;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 /**items of this interface create a particular kind of plot*/

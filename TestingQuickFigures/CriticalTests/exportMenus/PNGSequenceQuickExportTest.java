@@ -24,7 +24,9 @@ import testing.TestShapes;
  */
 public class PNGSequenceQuickExportTest {
 
-	@Test
+	//commented out so that this test is nto run every time that I choose to run all tests
+	//
+	//@Test
 	public void test() {
 		FigureTester.setup();
 		 ImageWindowAndDisplaySet i = TestShapes.createExample( TestExample.DIVERSE_SHAPES);

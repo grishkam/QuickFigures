@@ -11,7 +11,8 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 
-/***/
+/**test to determine if the methods in the IJ1MultichannelContext class 
+ * really reflect what imagej has open*/
 class IJ1MultichannelContextTest {
 
 	@Test

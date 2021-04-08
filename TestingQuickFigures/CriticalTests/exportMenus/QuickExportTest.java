@@ -13,14 +13,10 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import applicationAdapters.DisplayedImage;
-import basicMenusForApp.BasicMenuItemForObj;
 import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
 import messages.ShowMessage;
-import standardDialog.StandardDialog;
-import standardDialog.choices.ChoiceInputPanel;
-import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
@@ -33,7 +29,7 @@ abstract class QuickExportTest {
 	boolean opensFiles=false;
 	boolean prompt=false;
 	
-	TestExample testCase=null;//which cases to test. set to null if all should be tested
+	TestExample testExample=TestExample.RECTANGLE_AND_OTHERS;//which cases to test. set to null if all should be tested
 
 	/**set to true if user will view files one by one as they are being created*/
 	private boolean viewOnebyOne=false;
@@ -51,7 +47,8 @@ abstract class QuickExportTest {
 		
 	}
 
-	/**
+	/**creates the example and exports it (file format determined by the subclass)
+	 * if there is not test example, iterates through a list of them)
 	 * @throws Exception
 	 * @throws IOException
 	 */
@@ -62,7 +59,7 @@ abstract class QuickExportTest {
 		ArrayList<TestProvider> testsCases = TestProvider.getTestProviderListWithfigures();
 	
 		for(TestProvider ex: testsCases) {
-			if(testCase!=null &&testCase!=ex.getType()) { count++; continue;}
+			if(testExample!=null &&testExample!=ex.getType()) { count++; continue;}
 			long time=System.currentTimeMillis();
 			IssueLog.log("starting test "+count);
 			

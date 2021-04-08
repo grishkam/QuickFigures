@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import appContextforIJ1.ImageDisplayTester;
 import basicMenusForApp.BasicMenuItemForObj;
 import logging.IssueLog;
-import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
 
@@ -20,7 +19,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.FIGURE_WITH_INSETS;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample._FIGURE;//which cases to test. set to null if all should be tested
 
 
 

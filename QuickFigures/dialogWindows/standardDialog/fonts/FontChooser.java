@@ -36,7 +36,6 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -45,7 +44,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.numbers.NumericTextField;

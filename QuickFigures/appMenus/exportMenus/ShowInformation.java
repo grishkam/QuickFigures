@@ -20,13 +20,7 @@
  */
 package exportMenus;
 
-import java.awt.Window;
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
-import ultilInputOutput.FileChoiceUtil;
 
 /**An class that only shows information*/
 public class ShowInformation  extends BasicMenuItemForObj {

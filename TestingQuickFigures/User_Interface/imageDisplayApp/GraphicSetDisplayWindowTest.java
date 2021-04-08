@@ -18,8 +18,8 @@ class GraphicSetDisplayWindowTest {
 	void test() {
 		autoTest();
 		
-		ShowMessage.showMessages("Automated test of window passed "
-				,"user will be shown instructions for manual test");
+	/**	ShowMessage.showMessages("Automated test of window passed "
+				,"user will be shown instructions for manual test");*/
 		//manualTest();//manual test is not often done. commented out so it will not be autmatically run
 
 	}

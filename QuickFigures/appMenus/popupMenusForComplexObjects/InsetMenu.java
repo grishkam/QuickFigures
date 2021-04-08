@@ -23,8 +23,6 @@ package popupMenusForComplexObjects;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -38,10 +36,10 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import popupMenusForComplexObjects.InsetMenu.ChangeInsetScale.ScaleType;
 import sUnsortedDialogs.ScaleFigureDialog;
-import standardDialog.DialogItemChangeEvent;
-import standardDialog.StandardDialogListener;
+import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 import undo.UndoInsetDefChange;
 import undo.UndoLayoutEdit;
@@ -99,16 +97,24 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		
 		createMenuItem("Square Lock "+(inset.isSquareLock()? "Off": "On"), TURN_SQUARE_LOCK);
 		
-		SmartJMenu rescale=new SmartJMenu("Change Scale");
-			for(double scaleA: possibleScales)
-				rescale.add(new ChangeScaleMenuItem(scaleA));
-			rescale.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_PARENT_WIDTH));
-			rescale.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_PARENT_HEIGHT));
-			rescale.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_SIZE_TO_PARENT));
-			rescale.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_LAYOUT_TO_HEIGHT));
-			rescale.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_LAYOUT_TO_WIDTH));
+		SmartJMenu scaleMenu=new SmartJMenu("Change Scale");
+		SmartJMenu scaleMenuValue=new SmartJMenu("To value");
+		SmartJMenu scaleMenuFit=new SmartJMenu("To fit");
 		
-		add(rescale);//panels menu needs upgrade
+		scaleMenu.add(scaleMenuValue);
+		scaleMenu.add(scaleMenuFit);
+		
+		
+			for(double scaleA: possibleScales)
+				scaleMenuValue.add(new ChangeScaleMenuItem(scaleA));
+			scaleMenuValue.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.USER_INPUT));
+			scaleMenuFit.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_PARENT_WIDTH));
+			scaleMenuFit.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_PARENT_HEIGHT));
+			scaleMenuFit.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_SIZE_TO_PARENT));
+			scaleMenuFit.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_LAYOUT_TO_HEIGHT));
+			scaleMenuFit.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.MATCH_LAYOUT_TO_WIDTH));
+		
+		add(scaleMenu);//panels menu needs upgrade
 	}
 
 	@Override
@@ -234,7 +240,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	/**a class that changes the scale level of the insets*/
 	public static class ChangeInsetScale {
 		
-		static enum ScaleType {USER_DEFINED, MATCH_PARENT_WIDTH, MATCH_PARENT_HEIGHT, MATCH_SIZE_TO_PARENT, MATCH_LAYOUT_TO_HEIGHT, MATCH_LAYOUT_TO_WIDTH;}
+		static enum ScaleType {USER_DEFINED, MATCH_PARENT_WIDTH, MATCH_PARENT_HEIGHT, MATCH_SIZE_TO_PARENT, MATCH_LAYOUT_TO_HEIGHT, MATCH_LAYOUT_TO_WIDTH, USER_INPUT;}
 
 		private PanelGraphicInsetDefiner primaryInset;
 		private double scale=2;
@@ -274,6 +280,14 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			
 			output.addEditToList(new UndoLayoutEdit(targetInset.personalLayout));
 		
+			
+			if(type==ScaleType.USER_INPUT) {
+				scale=StandardDialog.getNumberFromUser("input scale factor", 2);
+				if (scale<=1||scale>20) {
+					scale=2;
+					ShowMessage.showOptionalMessage("invalid input", false, "Please select a value in the 1-20 range");
+				}
+			}
 			
 			if(type==ScaleType.MATCH_PARENT_WIDTH||type== ScaleType.MATCH_SIZE_TO_PARENT) {
 				scale=sPanel.getObjectWidth()/targetInset.getRectangle().getWidth();
@@ -337,14 +351,18 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		
 		/**returns a description of the scale change that will be done*/
 		public String getName() {
+			
+			if(type==ScaleType.USER_INPUT) {
+				return "Set scale factor";
+			}
 			if(type==ScaleType.MATCH_PARENT_WIDTH) {
-				return "To width of parent panel";
+				return "Width of parent panel";
 			}
 			if(type==ScaleType.MATCH_PARENT_HEIGHT) {
-				return "To height of parent panel";
+				return "Height of parent panel";
 			}
 			if(type==  ScaleType.MATCH_SIZE_TO_PARENT) { 
-				return "To size of parent panel";
+				return "Size of parent panel";
 			}
 			if(type==ScaleType.MATCH_LAYOUT_TO_HEIGHT) {
 				return "Group to height of parent panel";
@@ -353,7 +371,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				return "Group to width of parent panel";
 			}
 			
-			return ""+scale+" fold";
+			return ""+scale+" ";
 		}
 
 		/**changes the size of the inset panels

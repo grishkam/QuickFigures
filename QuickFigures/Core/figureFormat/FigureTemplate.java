@@ -335,7 +335,7 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 		if (mdp==null) IssueLog.log("no example image display ( template fail)");
 		ensureModelMultiChannel();
 		
-		/**if the current format is merge only*/
+		/**if the current format is merge only, changes it to merge last*/
 		boolean change = ChannelUseInstructions.ONLY_MERGE_PANELS==mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing;
 		if(change) {
 			mdp.getModelItem().getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.MERGE_LAST;
@@ -409,5 +409,21 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	}
 	
 	public GridLayoutExamplePicker getLayoutChooser() {return layoutpicker;}
+	
+	
+	/**
+	 * @param figure
+	 */
+	public void setToFigure(FigureOrganizingLayerPane figure) {
+		ImageDisplayLayer m = figure.getPrincipalMultiChannel();
+		this.getMultiChannelPicker().setModelItem(m);;
+		this.getLayoutChooser().setModelItem(figure.getMontageLayoutGraphic());
+		ArrayList<ChannelLabelTextGraphic> allLabels = m.getChannelLabelManager().getAllLabels();
+		if (allLabels.size()>0)this.getChannelLabelPicker().setModelItem(allLabels.get(0));
+		
+		for(ZoomableGraphic all:figure.getAllGraphics())
+			if (all instanceof BarGraphic )this.getScaleBar().setModelItem(all);
+		
+	}
 	
 }

@@ -22,13 +22,11 @@ package figureOrganizer.insetPanels;
 
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
@@ -56,7 +54,6 @@ import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
 import locatedObject.ScaleInfo;
-import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
 import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
