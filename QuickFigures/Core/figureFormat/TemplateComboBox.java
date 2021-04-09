@@ -55,6 +55,7 @@ public class TemplateComboBox extends JComboBox<TemplateChoice>{
 	        Color fg = (Color) UIManager.get("ComboBox.foreground");
 	        UIManager.put("ComboBox.selectionBackground", bg);
 	        UIManager.put("ComboBox.selectionForeground", fg);
+	        
 	        setUI(new MetalComboBoxUI());
 	      
 	    }

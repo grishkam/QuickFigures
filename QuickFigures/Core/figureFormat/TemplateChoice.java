@@ -36,12 +36,16 @@ public class TemplateChoice   {
 	
 	String name="";
 	FigureTemplate template;
+	
+	/**Text for preview to show*/
 	private JLabel item;
+	
+	/**which mutate ones*/
 	MutateFigure[] special=new MutateFigure[] {};
 	private boolean mockMade;
 	private FigureOrganizingLayerPane figure;
 	private JLabel comboBoxLabel;
-	
+	boolean twoImages=false;
 	
 	public TemplateChoice(FigureTemplate t) {
 		template=t;
@@ -51,7 +55,16 @@ public class TemplateChoice   {
 public TemplateChoice(MutateFigure... special) {
 		this.special=special;
 		if(special.length>0) name=special[0].name().toLowerCase().replace("_", " ");
+		for(MutateFigure m: special) {
+			if(m.forMergedPanels)
+				twoImages=true;//must display two images for preview in this case
+		}
 	}
+
+public TemplateChoice(String name,  MutateFigure... special) {
+	this(special);
+	this.name=name;
+}
 	
 	
 	public JLabel getComboBoxItem(boolean focus, boolean selected) {
@@ -79,16 +92,18 @@ public TemplateChoice(MutateFigure... special) {
 	
 	GraphicObjectDisplayBasic<GraphicGroup> generateIconObject() {
 		
-		createMock(1);
+		createMock();
 		GraphicGroup output = new GraphicGroup();
 		GraphicLayerPane layerPaneWithFigure = new GraphicLayerPane("figure");
 		FigureAdder added = new FigureAdder(true);
 		added.autoFigureGenerationOptions.ignoreSavedTemplate=true;
-		this.createMock(1);
-		String mockFilePath = this.getMockFilePath(1);
 		
 		
-		figure = added.add(layerPaneWithFigure, mockFilePath);
+		/**creates a mock figure for displaying what the template looks like*/
+		figure = added.add(layerPaneWithFigure, getMockFilePath(1));
+		if (this.twoImages)
+			figure.nextMultiChannel(getMockFilePath(2), null);
+		
 		changeChannelLabels(figure, "CH ");
 		if(template!=null)
 			template.applyTemplateToLayer(figure);
@@ -110,9 +125,10 @@ public TemplateChoice(MutateFigure... special) {
 	/**
 	 * @param mockIndex
 	 */
-	protected void createMock(int mockIndex) {
+	protected void createMock() {
 		if (!mockMade)
-		CurrentAppContext.getMultichannelContext().getDemoExample(false, getMockFilePath(mockIndex), 3, mockIndex, 1);
+			for(int mockIndex: new int[] {1,2})
+				CurrentAppContext.getMultichannelContext().getDemoExample(false, getMockFilePath(mockIndex), 3, mockIndex, 1);
 		mockMade=true;
 	}
 

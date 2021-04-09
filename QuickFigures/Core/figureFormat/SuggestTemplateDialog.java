@@ -45,9 +45,19 @@ public class SuggestTemplateDialog extends StandardDialog {
 	public void addTemplateComboBox() {
 		Vector<TemplateChoice> options=new Vector<TemplateChoice>();
 		MutateFigure[] shortList = MutateFigure.getShortList();
+	
+		
 		for(int i=0; i<shortList.length; i++) {
 			options.add(new TemplateChoice(shortList[i]));
 		}
+		
+		options.add(new TemplateChoice("Wide form", MutateFigure.BORDER_8, MutateFigure.FONT_12));
+		options.add(new TemplateChoice("Square", MutateFigure.CHANNEL_LABELS_INSIDE,   MutateFigure.TWO_COLUMN));
+		options.add(new TemplateChoice("Merged Figure", MutateFigure.CHANNEL_LABELS_MERGED_ONLY,MutateFigure.MERGE_ONLY,   
+				MutateFigure.TWO_COLUMN,   MutateFigure.CHANNEL_LABELS_MERGED_ONLY));
+	//	options.add(new TemplateChoice(MutateFigure.BORDER_8, MutateFigure.FONT_12));
+		
+	
 		
 		
 		box=new TemplateComboBox(options);

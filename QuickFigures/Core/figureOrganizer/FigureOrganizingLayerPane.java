@@ -482,11 +482,14 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			output.addEditToList(	
 					addNovelMultiChannel(item, start)
 					);
-		DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
-	
-		if (CanvasOptions.current.resizeCanvasAfterEdit)
-			output.addEditToList(	new  CanvasAutoResize(true).performUndoableAction(disp));
-				
+			
+			
+			/**if the container can be found, there needs to be a canvas resize*/
+			if(getGraphicSetContainer()!=null) {
+					DisplayedImage disp = getGraphicSetContainer() .getAsWrapper().getImageDisplay();
+					if (CanvasOptions.current.resizeCanvasAfterEdit)
+						output.addEditToList(	new  CanvasAutoResize(true).performUndoableAction(disp));
+			}
 		return output;
 	}
 	

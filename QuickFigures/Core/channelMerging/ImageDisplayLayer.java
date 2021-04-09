@@ -77,6 +77,13 @@ public interface ImageDisplayLayer extends GraphicLayer {
 	
 	/**Returns the source stack. not the original source but the processed one*/
 	public MultiChannelImage getMultiChannelImage() ;
+
+
+
+	/**
+	eliminates the current panels and creates replacements
+	 */
+	public void eliminateAndRecreate();
 	
 	
 

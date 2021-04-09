@@ -473,16 +473,26 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	/**Displays a recreate panels dialog for the given figure*/
 	public static PanelStackDisplayOptions recreateFigurePanels(FigureOrganizingLayerPane f, boolean cropToo) {
 		
-		ArrayList<ImageDisplayLayer> d1 = f.getMultiChannelDisplaysInLayoutOrder();
-		MultichannelDisplayLayer in = (MultichannelDisplayLayer)f.getPrincipalMultiChannel();
-		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getPanelList(),null, true);
+		PanelStackDisplayOptions dialog = createForFigure(f);
 		
-		dialog.addAditionalDisplays(d1);
 		dialog.setCurrentImageDisplay(CurrentFigureSet. getCurrentActiveDisplayGroup());
 		dialog.setModal(false);
 		
 		dialog.showDialog();
 		f.fixLabelSpaces();
+		return dialog;
+	}
+
+	/**creates a recreate panels dialog for the figure
+	 * @param f
+	 * @return
+	 */
+	protected static PanelStackDisplayOptions createForFigure(FigureOrganizingLayerPane f) {
+		ArrayList<ImageDisplayLayer> d1 = f.getMultiChannelDisplaysInLayoutOrder();
+		MultichannelDisplayLayer in = (MultichannelDisplayLayer)f.getPrincipalMultiChannel();
+		PanelStackDisplayOptions dialog = new PanelStackDisplayOptions(in, in.getPanelList(),null, true);
+		
+		dialog.addAditionalDisplays(d1);
 		return dialog;
 	}
 	
