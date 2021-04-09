@@ -55,7 +55,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		PopupMenuSupplier {
 	
 	/**
-	 * 
+	 codes for each menu action
 	 */
 	private static final String RECRATE_INSET_LAYOUT = "inset layout",
 			 REMOVE = "i6", REMOVE_PANEL_INSETS = "i4",
@@ -97,9 +97,9 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		
 		createMenuItem("Square Lock "+(inset.isSquareLock()? "Off": "On"), TURN_SQUARE_LOCK);
 		
-		SmartJMenu scaleMenu=new SmartJMenu("Change Scale");
-		SmartJMenu scaleMenuValue=new SmartJMenu("To value");
-		SmartJMenu scaleMenuFit=new SmartJMenu("To fit");
+		SmartJMenu scaleMenu=new SmartJMenu("Scale");
+		SmartJMenu scaleMenuValue=new SmartJMenu("Change Scale to");
+		SmartJMenu scaleMenuFit=new SmartJMenu("Change Scale to fit");
 		
 		scaleMenu.add(scaleMenuValue);
 		scaleMenu.add(scaleMenuFit);

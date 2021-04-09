@@ -90,11 +90,13 @@ public class SuggestTemplateDialog extends StandardDialog {
 			
 			this.wasOKed=true;
 			this.setVisible(false);
-			resolveUndo();
+			
 		}
 		
 		if (arg0.getSource()==defaultB) {
-			ShowMessage.showOptionalMessage("Saved Default Template", true, "this will now be applied to newly created figures", "some features may also be applied to existing figures");
+			boolean ans = ShowMessage.showOptionalMessage("Saved Default Template", true, "Are you sure?", "", "new template be applied to newly created figures", "you may also apply the default template to existing figures (without removing panels)");
+			if(!ans)
+				return;
 			new  TemplateUserMenuAction( TemplateUserMenuAction.SAVE_TEMPLATE, true).saveDefaultTemplate(this.getSelectedTemplate());
 			
 		}

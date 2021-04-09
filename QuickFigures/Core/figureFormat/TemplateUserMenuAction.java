@@ -166,7 +166,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 			
 				diw.getUndoManager().addEdit(
 						this.operateOnContainer(imageAsWorksheet));
-			} else operateOnContainer(imageAsWorksheet);//for the template choice one this still needs to be called
+			} else operateOnContainer(null);//for the template choice one this still needs to be called
 	}
 
 
@@ -195,7 +195,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	public String getMenuCommand() {
 		String output="";
 		if(this.doesSinpleDialogApplyTemplate()) 
-			return "See examples ";
+			return "See example formats ";
 		if (doesApplyTemplate())  output+= "Apply";
 			else
 				if (doesDeleteTemplate()) {
@@ -315,23 +315,23 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	}
 
 
-	/**
-	 * @param graphicLayerSet
+	/**Applies the given template to the layer and the objects in the layer
+	 * @param layer
 	 * @param temp
 	 * @return
 	 */
-	protected CombinedEdit applyTemplate(GraphicLayer graphicLayerSet, FigureTemplate temp) {
-		CombinedEdit output;
+	protected CombinedEdit applyTemplate(GraphicLayer layer, FigureTemplate temp) {
+		CombinedEdit output=null;
 		
 		if (temp!=null) {
 				CombinedEdit undo = new CombinedEdit();
 				undo.addEditToList(
-							temp.applyTemplateToLayer(graphicLayerSet));
+							temp.applyTemplateToLayer(layer));
 				undo.addEditToList(
-							temp.fixupLabelSpaces(graphicLayerSet));
+							temp.fixupLabelSpaces(layer));
 				output=undo;
 		}
-		output=null;
+		
 		return output;
 	}
 
@@ -449,6 +449,8 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		}
 	}
 
+	
+	/**The no icon designed yet, */
 	@Override
 	public Icon getSuperMenuIcon() {
 		return null;
