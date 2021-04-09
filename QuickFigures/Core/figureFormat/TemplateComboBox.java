@@ -29,7 +29,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.plaf.metal.MetalComboBoxUI;
 
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 
@@ -47,6 +49,12 @@ public class TemplateComboBox extends JComboBox<TemplateChoice>{
 	
 	  public TemplateComboBox(Vector<TemplateChoice> items) {
 	        super(items);
+	        Color bg = (Color) UIManager.get("ComboBox.background");
+	        Color fg = (Color) UIManager.get("ComboBox.foreground");
+	        UIManager.put("ComboBox.selectionBackground", bg);
+	        UIManager.put("ComboBox.selectionForeground", fg);
+	        setUI(new MetalComboBoxUI());
+	      
 	    }
 
 
