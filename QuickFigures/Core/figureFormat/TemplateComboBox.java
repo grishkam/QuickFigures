@@ -49,6 +49,8 @@ public class TemplateComboBox extends JComboBox<TemplateChoice>{
 	
 	  public TemplateComboBox(Vector<TemplateChoice> items) {
 	        super(items);
+	        
+	        /**these ensure that the combo box looks right on a mac*/
 	        Color bg = (Color) UIManager.get("ComboBox.background");
 	        Color fg = (Color) UIManager.get("ComboBox.foreground");
 	        UIManager.put("ComboBox.selectionBackground", bg);

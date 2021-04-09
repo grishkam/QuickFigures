@@ -155,6 +155,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			setPresseddisplay(pd);
 			
 			stackSlicePressed= pd.getPanelWithDisplay(imagepanel);
+				if(stackSlicePressed!=null)
 			targetChannelNumber=stackSlicePressed.targetChannelNumber;
 		}
 		setColorToStackSlice();

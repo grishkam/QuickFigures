@@ -140,9 +140,6 @@ public class GraphicDisplayCanvas extends JComponent {
 	}
 
 
-
-
-
 	/**
 	 Draws the canvas
 	 */
@@ -150,10 +147,11 @@ public class GraphicDisplayCanvas extends JComponent {
 		/**Fills the canvas with a greyish gradient.
 		  After the white of the canvas is drawn,
 		  the parts of the canvas object beyond the display canvas area will be greyish
+		  with rulers on top
 		 */
 		g2.setPaint(getGrayFillPaint());
 		Rectangle r = new Rectangle(-1, -1, this.getWidth(), this.getHeight());
-		Shape da = getDisplaySetArea();
+		Shape da = getDisplayArea();
 		Area greyArea = (new Area(r));
 		greyArea.subtract(new Area(da));;
 		g2.fill(greyArea);
@@ -163,6 +161,8 @@ public class GraphicDisplayCanvas extends JComponent {
 		/**fills the display canvas area with white so that user knows this is where they draw*/
 		g2.setColor(Color.white);
 		g2.fill( da);
+		
+		/**draws a black border around the white canvas*/
 		g2.setColor(Color.black);
 		g2.drawRect(-1, -1, this.getWidth(), this.getHeight());
 	}
@@ -172,15 +172,17 @@ public class GraphicDisplayCanvas extends JComponent {
 	 * will be drawn over th other objects*/
 	protected void drawSmartHandlesForSelectedItem(Graphics2D g2, CordinateConverter conv1) {
 		Selectable sel = window.getDisplaySet().getSelectedItem();
-		if (sel!=null&& sel instanceof HasSmartHandles) {
+		if (sel!=null&& sel instanceof HasSmartHandles) try {
 			 HasSmartHandles h=(HasSmartHandles) sel;
 			 h.getSmartHandleList().draw(g2, conv1);
+		}catch (Throwable t) {
+			IssueLog.logT(t);
 		}
 	}
 	
 	
 	/**Returns the area of the component where the white canvas is drawn*/
-	public Shape getDisplaySetArea() {
+	public Shape getDisplayArea() {
 		StandardWorksheet gmp = window.getTheSet();
 		Rectangle r5 = new Rectangle(0,0, gmp.getWidth(), gmp.getHeight());
 		AffineTransform at = getConverter().getAffineTransform();
@@ -198,11 +200,11 @@ public class GraphicDisplayCanvas extends JComponent {
 	
 	/**returns the amount of grey space*/
 	double getSlackSpaceW() {
-		return getWidth()-getDisplaySetArea().getBounds2D().getMaxX();
+		return getWidth()-getDisplayArea().getBounds2D().getMaxX();
 	}
 	/**returns the amount of grey space*/
 	double getSlackSpaceH() {
-		return getHeight()-getDisplaySetArea().getBounds2D().getMaxY();
+		return getHeight()-getDisplayArea().getBounds2D().getMaxY();
 	}
 	
 	/**returns the cordinate system used*/
@@ -214,11 +216,13 @@ public class GraphicDisplayCanvas extends JComponent {
 
 
 
-
+	/**returns the object which stores information about the zoom level of the image*/
 		private ImageZoom getZoomer() {
 			return this.window.getZoomer();
 		}
 	
+		/**returns the point on the canvas that should remain the center of the window (if possible)
+		 * while the user zooms in and out*/
 		public Point2D getCenterOfZoom() {
 			double canWidth=this.getCanvasWidthInUnits();//etTheCanvas().getWidth()/mag;
 			double canHeight=this.getCanvasHeightInUnits();//getTheCanvas().getHeight()/mag;
@@ -262,7 +266,7 @@ public class GraphicDisplayCanvas extends JComponent {
 		
 		/**Draws rulers so that each inch is 72 units*/
 		protected void drawRulers(Graphics2D g) {
-			Rectangle areaWhite = getDisplaySetArea().getBounds();
+			Rectangle areaWhite = getDisplayArea().getBounds();
 			
 			g.setColor(Color.black);
 			g.setStroke(new BasicStroke(2));
@@ -334,7 +338,7 @@ public class GraphicDisplayCanvas extends JComponent {
 		public Dimension getPreferredSize() {
 			if (window==null||window.getTheSet()==null ||!window.usesScrollPane()) 
 				return super.getPreferredSize();
-			Rectangle b = this.getDisplaySetArea().getBounds();
+			Rectangle b = this.getDisplayArea().getBounds();
 			double w = b.getWidth()+ADDITIONAL_SIZE;
 			double h = b.getHeight()+ADDITIONAL_SIZE;
 			
@@ -342,6 +346,7 @@ public class GraphicDisplayCanvas extends JComponent {
 		}
 
 
+		/**returns the unit used by the ruler (inches or cm)*/
 		public static RulerUnit getRulerUnit() {
 			return ImageDPIHandler.getRulerUnit();
 		}
