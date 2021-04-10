@@ -195,7 +195,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	public String getMenuCommand() {
 		String output="";
 		if(this.doesSinpleDialogApplyTemplate()) 
-			return "See example formats ";
+			return "Select Example ";
 		if (doesApplyTemplate())  output+= "Apply";
 			else
 				if (doesDeleteTemplate()) {
