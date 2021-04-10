@@ -197,7 +197,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 				
 				PDFQuickExport ep=new PDFQuickExport(false);
 				installItem(ep);
-			}
+			} else return false;
 			
 			return true;
 			} 
