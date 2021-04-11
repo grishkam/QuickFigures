@@ -99,7 +99,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 	}
 	
 	public void addCommonOptionsToDialog() {
-		this.add("scale", new NumberInputPanel("Pixel Desnsity (/inch)", ImageDPIHandler.getInchDefinition()/image.getScale(), 2) );
+		this.add("scale", new NumberInputPanel("Pixel Desnsity (/inch)", ImageDPIHandler.getInchDefinition()/image.getRelativeScale(), 2) );
 		this.add("frame", new NumberInputPanel("Frame Width", image.getFrameWidthH(), 3) );
 		this.add("frameC", new ColorComboboxPanel("Frame Color ", null, image.getFrameColor()));
 	}

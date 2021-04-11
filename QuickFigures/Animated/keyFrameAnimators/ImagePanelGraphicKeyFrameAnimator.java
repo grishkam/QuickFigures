@@ -107,7 +107,7 @@ public class ImagePanelGraphicKeyFrameAnimator extends BasicGraphicObjectKeyFram
 			frameColor=image.getFrameColor();
 			frameWidthH=image.getFrameWidthH();
 			frameWidthV=image.getFrameWidthV();
-			scale = image.getScale();
+			scale = image.getRelativeScale();
 			angle=image.getAngle();
 		}
 		

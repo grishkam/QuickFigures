@@ -95,7 +95,7 @@ public class FigureScaler {
 				/**undoes the scaling for panels if a redo of the source image scale will be performed*/
 				if (( alterSourceImageScale&&(xg instanceof ImagePanelGraphic))&&panelsInFigure.contains(xg)) {
 					ImagePanelGraphic image=(ImagePanelGraphic) xg;
-					image.setRelativeScale(image.getScale()/factor);
+					image.setRelativeScale(image.getRelativeScale()/factor);
 					edit.establishFinalState();
 				}
 				

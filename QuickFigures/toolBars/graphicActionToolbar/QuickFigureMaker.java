@@ -53,18 +53,23 @@ import ultilInputOutput.FileChoiceUtil;
   the images used should be multidimensional image files.
   The QuickFigure Button on the toolbar*/
 public class QuickFigureMaker extends DisplayActionTool {
+	/**
+	 * 
+	 */
+	private static final String SELECTED_SLICE_AND_FRAME = "+Z+T", SELECTED_FRAME = "+T", SELECTED_SLICE = "+Z", SPLIT = "Split", MERGE = "Merge";
 	private static final String slowFigure = "Slow Figure";
-	static String[] possibleCodes=new String[] {"Split+C+",		 "Split+C+T", 				"Split+C+Z", 							"Split+C+Z+T","Merge", 		"Merge+T"				,"Merge+Z"                 ,"Merge+Z+T"
+	static String[] possibleCodes=new String[] {"Split+C+",		 "Split+C+T", 				"Split+C+Z", 							"Split+C+Z+T",MERGE, 		"Merge+T"				,"Merge+Z"                 ,"Merge+Z+T"
 			};
 	String[] menuTextForCodes=new String[] {"Default", "Selected T Frame only"  , "Selected Z Slice only", "Selected Slice and Frame"          };
 
+	/**text indicates whether to create a figure with merge or split, C+ indicates to follow the template*/
 	private String codeString="C+";
 	
 	public String getMenuTextForCode(String t) {
 		if(t==null) return  menuTextForCodes[0];
-		if(t.contains("+Z+T")) return  menuTextForCodes[3];
-		if(t.contains("+T")) return  menuTextForCodes[1];
-		if(t.contains("+Z")) return  menuTextForCodes[2];
+		if(t.contains(SELECTED_SLICE_AND_FRAME)) return  menuTextForCodes[3];
+		if(t.contains(SELECTED_FRAME)) return  menuTextForCodes[1];
+		if(t.contains(SELECTED_SLICE)) return  menuTextForCodes[2];
 		return  menuTextForCodes[0];
 	}
 	
@@ -94,8 +99,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		
 			this.setMergeOrSplit(mergeOnly);
-			if (mergeOnly==FigureAdder.MERGE_PANELS_ONLY)codeString="Merge";
-			if (mergeOnly==FigureAdder.SPLIT_CHANNELS_ONLY)codeString="Split";
+			if (mergeOnly==FigureAdder.MERGE_PANELS_ONLY)codeString=MERGE;
+			if (mergeOnly==FigureAdder.SPLIT_CHANNELS_ONLY)codeString=SPLIT;
 			
 		setupAdder() ;
 		figureCreationOptions.ignoreSavedTemplate=ignoreSavedTemplate;
@@ -223,7 +228,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		SmartJMenu sm2 = new SmartJMenu("Create Figure With Split Channels");
 		
 		
-		sm.add(addToMenu("Default",  "Merge"));
+		sm.add(addToMenu("Default",  MERGE));
 		sm.add(addToMenu("For Selected T Frame only",  "Merge+T"));
 		sm.add(addToMenu("For Selected Z Slice only",  "Merge+Z"));
 		sm.add(addToMenu("Single Panel Only",  "Merge+Z+T"));
@@ -279,7 +284,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 			
 			String aC = arg0.getActionCommand();
 			codeString=aC;
-			if (aC.contains("Merge")||aC.contains("C+")||aC.contains(slowFigure)) {
+			if (aC.contains(MERGE)||aC.contains("C+")||aC.contains(slowFigure)) {
 				setOptionsBasedOnCodeString(aC);
 				FigureOrganizingLayerPane f = createFigureFromOpenImage(null);
 				
@@ -322,13 +327,13 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	/**Changes the settings on this object based on a particular string*/
 	public void setOptionsBasedOnCodeString(String aC) {
-		if (aC.contains("Merge")) 
+		if (aC.contains(MERGE)) 
 			setMergeOrSplit(FigureAdder.MERGE_PANELS_ONLY);
-		if (aC.contains("Split")) 
+		if (aC.contains(SPLIT)) 
 			setMergeOrSplit(FigureAdder.SPLIT_CHANNELS_ONLY);
-		boolean singleSlice = aC.contains("+Z");
+		boolean singleSlice = aC.contains(SELECTED_SLICE);
 		setSingleSliceMode(singleSlice);
-		boolean singleFrame = aC.contains("+T");
+		boolean singleFrame = aC.contains(SELECTED_FRAME);
 		setSingleFrameMode(singleFrame);
 	}
 

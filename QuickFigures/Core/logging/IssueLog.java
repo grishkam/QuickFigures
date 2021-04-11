@@ -137,11 +137,11 @@ public class IssueLog {
 	}
 	
 	/**logs the stack traces*/
-	public static void logT(Throwable... ees){
+	public static void logT(Throwable... e){
 		countExceptions++;
 		String show="";
-		for(Throwable ee: ees) {
-		for (Object e: ee.getStackTrace()) show+='\n'+e.toString();
+		for(Throwable ee: e) {
+		for (Object e1: ee.getStackTrace()) show+='\n'+e1.toString();
 		log(ee+show);
 		}
 	}

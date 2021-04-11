@@ -501,7 +501,7 @@ import logging.IssueLog;
 				 return;
 			 }
 			 if(process==null) {
-				 IssueLog.log("tried to apply a null process");;
+				 //IssueLog.log("tried to apply a null process");;
 				 process=new PreProcessInformation(null, 0, 1);
 			 }
 			ImagePlusWrapper m =unprocessedVersion.cropAtAngle(process);

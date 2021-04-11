@@ -146,10 +146,10 @@ public class LabelExamplePicker extends GraphicalItemPicker<TextGraphic> impleme
 	/**Alters the font size of the model label to fit the image in the multi channel display layer
 	 */
 	@Override
-public void setToStandardFor(MultichannelDisplayLayer wrap) {
+public void setTheSizeFor(MultichannelDisplayLayer wrap) {
 		
 		/**Calculation to get a comfortable font size for the panel*/
-		float h2=(float) (wrap.getPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
+		float h2=(float) wrap.estimatePanelHeight();
 		float h=h2/5;
 		h=(float)NumberUse.findNearest(h, new double[] {0,2,4,6,8,10,12,14,16,20, 18,24,28, 32,36,40});
 		

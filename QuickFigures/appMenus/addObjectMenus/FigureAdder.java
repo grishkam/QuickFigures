@@ -57,6 +57,7 @@ public class FigureAdder extends LayoutAdder {
 	public boolean useSingleFrame=false;
 	public boolean useSingleSlice=false;
 	
+	/**constants indicate what sort of figure, defaul indicates to folow the template*/
 	public static final int MERGE_PANELS_ONLY=1, DEFAULT=0, SPLIT_CHANNELS_ONLY=2;
 	public int mergeOnly=DEFAULT;
 	

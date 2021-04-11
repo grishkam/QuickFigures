@@ -87,9 +87,9 @@ public class ScaleBarExamplePicker extends GraphicalItemPicker<BarGraphic>{
 	 * to be more appropriate for the size of the panels within the display
 	 * if there are no panels, does nothing*/
 	@Override
-public void setToStandardFor(MultichannelDisplayLayer wrap) {
+public void setTheSizeFor(MultichannelDisplayLayer wrap) {
 		if (wrap.getPanelList().getSize()<1) return;
-		float h=(float) (wrap.getPanelList().getHeight()*wrap.getPanelManager().getPanelLevelScale());
+		float h=(float) wrap.estimatePanelHeight();
 		
 		PanelListElement panel = wrap.getPanelList().getPanels().get(0);
 		
@@ -113,6 +113,7 @@ public void setToStandardFor(MultichannelDisplayLayer wrap) {
 		double num = NumberUse.findNearest(dims[0]/3, BarGraphic.reccomendedBarLengths);
 		return num;		
 	}
+	
 	
 	
 	/**Based on the height h, alters the scale bar thickness to be a fraction of the height given.

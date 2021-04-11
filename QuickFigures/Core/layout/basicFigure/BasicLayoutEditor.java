@@ -754,7 +754,8 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		   /**some objects do not enter into the calculations when optimizing panel sizes*/
 		   static Class<?>[] nonConsideredClasses=new Class<?>[] {BarGraphic.class, BarGraphic.BarTextGraphic.class, ChannelLabelTextGraphic.class, ColumnLabelTextGraphic.class, RowLabelTextGraphic.class};
 		   
-		   /**experimental. makes the column fit objects*/
+		   
+		   /**makes the column fit objects*/
 		   public void alterPanelWidthsToFitContents(BasicLayout ml) {
 			   
 			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.COLUMN_OF_PANELS));
@@ -787,10 +788,15 @@ public class BasicLayoutEditor implements LayoutSpaces {
 	
 	
 		   	   
-		   /**experimental. makes the row to fit objects*/
+		   /**makes the row to fit objects*/
 		   public void alterPanelHeightsToFitContents(BasicLayout ml) {
 			
 			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.ROW_OF_PANELS));
+			   ArrayObjectContainer.ignoredClass=BarGraphic.class;
+			   ArrayObjectContainer.ignoredClass2=ChannelLabelTextGraphic.class;
+			   ArrayObjectContainer.ignoredClasses=nonConsideredClasses;
+			   
+			   
 			   int[] heights=new int[stack.size()];
 			   for(int i=0; i<stack.size(); i++) {
 				   heights[i]=stack.get(i).getAreaSpannelByContents2().height;
@@ -804,6 +810,9 @@ public class BasicLayoutEditor implements LayoutSpaces {
 				   this.setPanelHeightOfRow(ml, heights[i],i+1);
 			   }
 			   
+			   ArrayObjectContainer.ignoredClass=null;
+			   ArrayObjectContainer.ignoredClass2=null;
+			   ArrayObjectContainer.ignoredClasses=null;
 			   pasteStack( ml.makeAltered(ROW_OF_PANELS), stack);
 			  
 			   

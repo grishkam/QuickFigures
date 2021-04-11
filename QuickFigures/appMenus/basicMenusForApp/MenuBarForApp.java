@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 10, 2021
  * Version: 2021.1
  */
 package basicMenusForApp;
@@ -128,7 +128,6 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		add(SelectionOperationsMenu.getStandardMenu(ls));
 		add(ObjectAddingMenu.getStandardAddingMenu(ls));
 		
-		//installItem(new XMLloadItem());
 		installItem(new DebugMenuItems());
 		installItem(new DebugMenuItems(false));
 		installItem(new WindowDebugMenuItem());
@@ -172,18 +171,18 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			
 			if (! batikInstall)
 				{
-				installItem(new ShowInformation("SVG, PDF and EPS export packages not installed"));
+				installItem(new ShowInformation("SVG, PDF and EPS export packages not installed", "To export in some formats, one must install Apache Batik 1.13 (into the plugins folder)"));
 				}
 			if (! exportPackagesInstall)
 			{
-				installItem(new ShowInformation("PowerPoint export packages not installed"));
+				installItem(new ShowInformation("PowerPoint export packages not installed", "To export in some format, one must install Apache POI 4.1.2 (into the plugins folder)"));
 			}
 			
 	}
 
 
 	/**
-	 * 
+	returns true if install of batik export options works, false otherwise
 	 */
 	public boolean  installBatikExportItems() {
 		try {

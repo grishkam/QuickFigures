@@ -26,7 +26,7 @@ Publications involving fluorescent microscopy generally contain many panels with
 -  Open an image and get to work!
 
 ### Ordinary ImageJ Install. 
-Although installing on a Fiji distribution is the easiest way to install QuickFigures with all the features (including Export), users can also install QuickFigures on a standared ImageJ distribution.  
+Although installing on a Fiji distribution is the easiest way to install QuickFigures with all the features (including Export), users can also install QuickFigures on a standard ImageJ distribution.  
 #### Step 1: Install an up to date version of ImageJ. 
 You can either download a fresh copy of ImageJ (recommended especially if you have an old install) or go to Help menu and choose 'Update ImageJ'
 
@@ -35,7 +35,7 @@ https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar
 copy the file into the plugins folder of ImageJ
 
 #### Step 3: Download optional dependencies for extra features
-If you are using orginary ImageJ1 and not FIJI, additional files must be downloaded to use some features of QuickFigures.
+If you are using ordinary ImageJ1 and not FIJI, additional files must be downloaded to use some features of QuickFigures.
 -	If you will be opening microscopy file formats, download **loci_tools.jar** file and copy it into the plugins folder
 https://downloads.openmicroscopy.org/bio-formats/4.4.12/
 -	After installation of loci tools, one should be able to import microscopy files into ImageJ using Bio-formats (File->Import->Bio-Formats). One should set the Bio-Formats import Options to import the files as a 'Hyperstack' (in the stack viewing section), the import Color Mode should be set to 'Composite' preferably with the 'Autoscale' Checkbox set. All other part of the Bio-Formats import options can be left unchecked. Once those options are set, one should try a windowless Bio-formats import (also in the import menu).
@@ -44,7 +44,7 @@ https://xmlgraphics.apache.org/batik/download.html
 As of this moment, Batik 1.13 or higher is required. Unzip the downloaded file and place that folder into the plugins folder of ImageJ
 -	If you intend to export as PowerPoint or use the plot package for QuickFigures you will need Apache POI.
 https://poi.apache.org/download.html
-As of this moment, QuickFigures works with the latest version of apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12.
+As of this moment, QuickFigures works with the Apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12. 
 Copy the Apache POI folder into the plugins folder of ImageJ. Any .jar files that are in subfolders of the poi folder may need to be moved into the main POI folder
 -	Certain features of the Plot Package within QuickFigures also require Apache Commons-Math3 package. Math3 should be included in downloads of apache poi. If it is absent, 
 https://commons.apache.org/proper/commons-math/
@@ -81,7 +81,7 @@ Note: For each of these options. The new figures created will be based on the de
     - **The Quick Figure Tool** creates a new figure from a multidimensional image. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. New figures may either be split channel or contain only the merged image depending on what the user has set as the default template.
    
 ![image](images/tools/InsetTool.png)     
-    - **The Inset Tool** creates a set of small panels that show a subsection of the parent image. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double cliking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right cliking on the regions of interest (the ['frames'](#Insets-and-Frames)) brings up a popup menu with options related to the daughter panels.
+    - **The Inset Tool** creates a set of small panels that show a subsection of the parent image. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double clicking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right clicking on the [regions of interest](#Insets)) brings up a popup menu with options related to the daughter panels.
 
 ## Section 3: Editing Figures and Channels
 
@@ -104,10 +104,11 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	Items in the **Add Labels** submenu create an entire set of labels for the rows, columns or panels of the figure.
  -	The **Recreate All Panels** menu item displays the recreate panels dialog. [See sections on recreate panels dialog for details.](#Recreate-All-Panels-Dialog)
  -	The **Images** submenu of the Figure Menu contains several menu items that affect how the source images are used to create the image panels. Each of these items go back to the source images (the 'original datasource') to repeat certain processing steps and update the image panels.
-     -   **Re-crop** option displays crop dialog windows for the user to change the region of interest and the rotation angle for each of the source images. After the user has changed the size of the first images' selected region, the size chosen becomes the starting size for each subsequent dialog. That allows the user to apply a consistently sized crop area to every image. For users familiar with ImageJ this process is equivalent to opening all the original image files, redrawing the crop areas precisely, using the **Crop** and **Rotate** commands in ImageJ and replacing each image panel in a figure with the newly cropped/rotated version. This single option replaces that entire process (along with the scale step).
-    -   **Re-Set Scale** option. This changes the scale factor applied to each image and updates the image panels. For users familiar with ImageJ, this process is equivalent to opening all the original image files, using the **'Scale...'** command in ImageJ repeatedly and replacing every image panel in a figure with the new scaled version. This single option replaces that entire process (along with the rotate and crop steps). 
-    -   **Re-Set pixel density**. Functions similarly to the Re-Set scale command. Except this option does not alter the apparent size of the image panels. Instead, the user is prompted to choose a final pixel density (200 pixels per inch for example). Both the scale factor and the panel size are changed such that the final pixel density of each image panel becomes the desired amount. Since journals normally require a certain pixel density (either for the overall figure or for image panels) a user should not choose a pixel density much lower or much higher than their requirements. QuickFigures uses the same inch definition as Adobe Illustrator (72 points).
-    - **Scale Object** and **Re-set scale** this option scales everything in the figure (labels, layouts, shapes…) not just the scale factor for the image panels. Otherwise it is similar to the **Re-Set** scale menu option.
+     -   **Re-crop** option displays crop dialog windows for the user to change the region of interest and the rotation angle for each of the source images. After the user has changed the size of the first images' selected region, the size chosen becomes the starting size for each subsequent dialog. That allows the user to apply a consistently sized crop area to every image. For users familiar with ImageJ this process is equivalent to opening all the original image files, redrawing the crop areas precisely, using the **Crop** and **Rotate** commands in ImageJ and replacing each image panel in a figure with the newly cropped/rotated version. This single option replaces that entire process (along with the scale step). While a cropped version is displayed by the image panels, the original image is keptby QuickFigures.
+    -   **Re-Set Scale** option. This changes the scale factor applied to each image and updates the image panels. For users familiar with ImageJ, this process is equivalent to opening all the original image files, using the **'Scale...'** command in ImageJ repeatedly and replacing every image panel in a figure with the new scaled version. This single option replaces that entire process (along with the rotate and crop steps). While a scaled version of the image will be displayed in the panels, the original image is always kept by QuickFigures. If one re-sets the scale again, it will create a new scaled version from the original. The scaled version will have some loss of image quality compared to the original.  
+    -   **Re-Set pixel density**. Functions similarly to the Re-Set scale command. Except this option does not alter the apparent size of the image panels. Instead, the user is prompted to choose a final pixel density (200 pixels per inch for example). Both the scale factor and the panel size are changed such that the final pixel density of each image panel becomes the desired amount. Since journals normally require a certain pixel density (either for the overall figure or for image panels) a user should not choose a pixel density much lower or much higher than their requirements. QuickFigures uses the same inch definition as Adobe Illustrator (72 points). Users of Inkscale may be confused to find that the inches and font size displayed in Inkscape differs from QuickFigures and Adobe Illustrator.
+    - **Scale Object** and **Re-set scale**. This option scales everything in the figure (labels, layouts, shapes) not just the scale factor for the image panels. Otherwise it is similar to the **Re-Set** scale menu option. 
+    - **Resize panels without scale reset**. This option only changes the panel size without changing the scale factor. This is equavalent to dragging the handles to scale image panels in PowerPoint or Illustrator. This will change the pixel density but not result in any changes to the pixels. 
  -	**All Channels**. A channels menu. The content of this channels submenu does not depend on which channels are present in the clicked panel. Otherwise it is similar to the other channels menu. [see the section on the channels menu for details](#Channels-Submenu) 
  - **Exclude channel**. Items within this menu can be used to add or remove channel panels from the figure. The same channels will also be removed from the merge image panels. Unlike the 'Recreate Panels' dialog, this menu only affects items with the targeted channel.
  - **Format Figure** submenu. See section on [figure format](#Figure-Format-Dialog) submenus and templates. The submenu that appears in the popup will target only the clicked figure. 
@@ -118,7 +119,7 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	**Create Second View**. Adds another image and another set of panels to the figure using the same data source but with a different crop area
  -	**Remove From figure**. Removes the image from the figure. This will remove all image panels and channel labels (if the channel label are with those image panels).
  -	**Set Pixel Size**. Equivalent the **Set scale...** menu item within ImageJ. Allows the user to change the physical distance measurements for the size of a pixel. For example, a user can input that 100 pixels of the original source image correspond to 60 micrometers in physical distance. Afterwards, scale bars for each image panel are changed to reflect the new values. 
- -	**Advanced Channel and Frame Use** changes the image to advanced channel use mode and displays the Advanced Channel Use dialog. Although the options in the normal **Channel Use** dialog will be sufficient for most purposes, advanced channel use allows for more customization of panels. Using the buttons in the 'Advanced' channel use dialog, a user can assign a completely arbitrary combination of channels to image panels, add panels, or set an arbitrary stack slice to a panel. A user can also re-order panels or channels via drag/drop (using either the panel list on the left or the channel list on the right). However if the user later selects the normal channel use options (or related menu options), the image will return to normal channel use mode and actions done in advanced channel use mode will not be preserved. 
+ -	**Advanced Channel and Frame Use** changes the image to advanced channel use mode and displays the [Advanced Channel Use](#Advanced-Channel-And-Frame-Use-Dialog) dialog. Although the options in the normal **Channel Use** dialog will be sufficient for most purposes, advanced channel use allows for more customization of panels.
  -	**Re-Crop** crops only the selected image. Although this changes the crop area, an uncropped version of the full size image is still stored.
  -	**Re-Set Pixel Density**, See re-set pixel density from the [figure menu](#Figure-Submenu) section. This menu item only targets the clicked image.
 
@@ -130,14 +131,14 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
 **Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. To avoid confusing new users, this user manual does not contain details of those tools. See [supplemental user guide](SupplementalUserGuide.md) for details of these options (not yet written).
 
 #### Image Panel Popup Menu
-The popup menu contains options realted to the clicked [image panel](#Image-Panels) or the figure containing that panel. When an image panel is part of a figure, Image Panel popup menus can contain options related to the [channels](#Channels-Submenu), [This Image](#This-Image-Submenu) and the [figure](#Figure-Submenu).
+The popup menu contains options related to the clicked [image panel](#Image-Panels) or the figure containing that panel. When an image panel is part of a figure, Image Panel popup menus can contain options related to the [channels](#Channels-Submenu), [This Image](#This-Image-Submenu) and the [figure](#Figure-Submenu).
 The **Add Shape** submenu along with the **Add Scale Bar**, **Add Text** options are part of this popup menu for every image panel. Added object are placed in the same layer as the figure and subject to the same layout. The added scale bar and added text will be [attached](#Attached-Items) to the [image panel](#Image-Panels).
 
 #### Scale Bar Popup Menu
-The popup menu contains options realted to the clicked [Scale Bar](#Scale-bars). The **Bar Text** submenu contains options related to the label which indicates a scale bar's length including an option to show or hide the [text](#Text). The **Adjust Position** menu option will display a [Attachment Position Dialog](#Attached-Items) that the user may use to input specific numeric values for the position of the scale bar. Although the scale bars can be moved beteen panels by drag and drop, the **Switch Panels** submenu provides an additional means of transplanting a scale bar.
+The popup menu contains options related to the clicked [Scale Bar](#Scale-bars). The **Bar Text** submenu contains options related to the label which indicates a scale bar's length including an option to show or hide the [text](#Text). The **Adjust Position** menu option will display a [Attachment Position Dialog](#Attached-Items) that the user may use to input specific numeric values for the position of the scale bar. Although the scale bars can be moved between panels by drag and drop, the **Switch Panels** submenu provides an additional means of transplanting a scale bar.
 
 #### Layout Popup Menu
-The popup menu contains options realted to the clicked [layouts](#Layouts). The **Edit Layout** Submenu is detailed in the section on [editing layouts](#Editing-Figure-Layouts) for details. If the layout is part of a figure, it may also contain a [Figure submenu](#Figure-Submenu). If objects are either attached or available for attachment to the layout, the menu will contain [submenus](#Attachment-Submenus) related to those items.
+The popup menu contains options related to the clicked [layouts](#Layouts). The **Edit Layout** Submenu is detailed in the section on [editing layouts](#Editing-Figure-Layouts) for details. If the layout is part of a figure, it may also contain a [Figure submenu](#Figure-Submenu). If objects are either attached or available for attachment to the layout, the menu will contain [submenus](#Attachment-Submenus) related to those items.
 
 ### Attached Items
 Certain items like [labels](#Text) and [scale bars](#Scale-Bars) are 'attached' to [image panels](#Image-Panels) (or attached to [layouts](#Layouts)). When a user moves the parent panel, the attached items will move accordingly. When a user attempts to drag an attached item, it will respond differently than a free object. Locations of attached items are determined by their attachment position and the location of their parent panel. Attached item positions can be edited in a few ways.
@@ -181,7 +182,7 @@ An addition toolbar for layout tools is available. The user can go to Toolbars->
 -	**Panel number change** tool. Changes the number of rows and columns.
 -	**Label Text Tools**. Allow the user to add row, column or panel labels.
 -	**Scale layout** tool. Scales the figure.
--	**Expert tools** These will appear in the popup menu for the panelnumber change tool. Since these tools will be of itnerest to only a few users, details of their function are not included in this user guide. See [supplemental user guide](SupplementalUserGuide.md) (not yet created). 
+-	**Expert tools** These will appear in the popup menu for the panel number change tool. Since these tools will be of interest to only a few users, details of their function are not included in this user guide. See [supplemental user guide](SupplementalUserGuide.md) (not yet created). 
 
 #### 3) **Editing the layout using popup menus and dialogs**
 A popup menu will appear if the user right clicks on a layout (using the object selector tool). The **Edit Layout** submenu allows the user to perform the same tasks as the layout handles and layout tools. Different dialog windows will appear for each menu item. Within the dialog windows, users may input specific numbers for the measurements of their layouts. If a user double clicks on a layout, (or a layout handle) similar dialog windows will appear. Depending on the location being clicked, a different dialog will be shown. 
@@ -220,9 +221,14 @@ The Crop dialog window provides a way to change the crop area and rotation angle
 A user can select multiple images and click the ![image](images/minitoolbar/C icon.png) icon to display a series of crop dialogs for those images only.
 ![image](images/Dialogs/CropDialog.png)
 
+#### Select Example Dialog
+This dialog is shown when the user chooses the **select example** menu option in the Figure Format menu. A user can browse through a list of figures, each of which is visible in the popup menu. After selecting a figure, a user may choose it to be the default template by clicking the button on the bottom of the dialog. Although this contains fewer options than the Figure Format Dialog, a user can use this dialog even if no figure is open. 
+![image](images/Dialogs/SelectTemplate.png)
+
 #### Figure Format Dialog
-The figure format dialog will be shown when the user chooses to create a template using figure format menu. This dialog allows the user to choose example objects for the template. A user may select an example scale bar, an example channel label, an example image, an example layout and so on. One object of each category will be automatically chosen. Template with example objects will be saved after user presses OK. Later, when the user goes back to the figure format to apply a template to another figure, the saved objects will be used as models and the appearance of targeted figure will be altered to match the style of the example object.   
+The dialog will be shown when the user chooses to create a custom template using Figure Format menu. This dialog allows the user to choose example objects for their custom template. One object of each category will be automatically chosen. The example objects in the current figure will be available as options. A user may select an example scale bar, an example channel label, an example image, an example layout and so on. Template with example objects will be saved after user presses OK. Later, when the user goes back to the Figure Format menu to apply a template to another figure, the saved objects will be used as models and the appearance of targeted figure will be altered to match the style of the example objects. Since saved objects.   
 ![image](images/Dialogs/FigureFormat.png)
+
 
 #### Layers Window
 The layers window contains a tree with objects and layers displayed with their names and icons. All objects in QuickFigures are organized into layers. Using the layers window (access via Show Layers menu option is in the Edit menu), a user can change the order of objects within a layer by clicking and dragging. Users can also add new objects/layers using a menu bar that is specific to the layers window. The layers window is most useful when creating illustrations or drawings. A user can manually create a layer using the menu bar, select that layer and then use the toolbar to draw objects within that layer.
@@ -230,6 +236,14 @@ For automatically created figures, the layer structure is organized automaticall
 Objets can be hidden and un-hidden using the layers window (just click the icon next to the object name. layers cannot be hidden in this way).  
 
 ![image](images/Dialogs/Layers.png)
+
+#### Advanced Channel And Frame Use Dialog
+Using the buttons in the 'Advanced' channel use dialog, a user can assign a completely arbitrary combination of channels to image panels, add panels, or set an arbitrary stack slice to a panel. A user can also re-order panels or channels via drag/drop (using either the panel list on the left or the channel list on the right). However, if the user later selects the normal channel use options (or related menu options), the image will return to normal channel use mode and actions done in advanced channel use mode will not be preserved. Multichannel images are either in advanced channel use mode or in normal channel use mode. Users will rarely need this dialog.
+![image](images/Dialogs/AdvancedChannelUse.png)
+
+#### Page Size Dialog
+Dialog shown when a user selects the "Resize Canvas" menu option in the Canvas submenu (Edit->Canvas->Resize Canvas). This dialog works similarly to the page size or canvas size options in other applications. Users who do not want the automatic increases to page size (those occur when a user edits a layout beyond the edge of the canvas) may click the checkbox to block them. Also, if a user changes the units to cm, the rulers for figues will also change to centimeter and will stay metric (even after ImageJ is closed and restarted). 
+![image](images/Dialogs/CanvasResize.png)
 
 ## The Menus and Menu Bar
 The **Menu Bar** contains only a few major menus. File, Edit, Selected Item(s) and Add.
@@ -242,8 +256,8 @@ The **Edit** menu contains a variety of options that do not depend on which obje
 -	**Show Timeline** displays a timeline GUI for creating simple animations. 
 -	**Show Layers** displays the layers window for the current worksheet
 -	The **Canvas** submenu contains options for changing the current worksheet. The equivalent concept is called canvas size in many applications. The **Resize Canvas** menu item displays a dialog where the user may input a specific size. QuickFigures may also attempt to automatically resize the worksheet to fit increases in figure size. An option to **Block Auto Resize** is available in the Resize Canvas dialog.
--	The **Zoom** submenu provides options for zooming in, zooming out, and setting a specific zoom level. The **Set Zoom Level** dialog has an option for the current zoom level. A window may be resized after a zoom level change. If the user wants the window size to stay constant after every zoom, there is an option for that in the **Set Zoom level** dialog.
--	The **Copy to System Clipboard** works as its name suggests. It creates an image of the current worksheet and copies it the clipboard. The copied image can then be pasted into any application (Word, PowerPoint, Paint…). Since the copied image includes transparent pixels, the **System Clipboard** command in ImageJ will not create a proper version.
+-	The **Zoom** submenu provides options for zooming in, zooming out, and setting a specific zoom level. The **Set Zoom Level** dialog has an option for the current zoom level. A window may be resized after a zoom level change. If the user wants the window size to stay constant after every zoom, there is an option for that in the **Set Zoom level** dialog. Users may also zoom in ans out by either pressing +/- keys or holding control down while using the mouse wheel.
+-	The **Copy to System Clipboard** works as its name suggests. It creates an image of the current worksheet and copies it the clipboard. The copied image can then be pasted into any application (Word, PowerPoint, Paint). Since the copied image includes transparent pixels, the **System Clipboard** command in ImageJ will not create a proper version.
 -	The **Combine Open Worksheets** menu item displays a dialog in which the user chooses 2 or more worksheets. It then creates a single worksheet with all figures, objects and layers from the selected worksheets. 
 
 #### Figure Format Submenu
@@ -251,7 +265,7 @@ The **Edit** menu contains a variety of options that do not depend on which obje
 Changes to the default template are particularly important. The default template is applied to automatically generated figures. Using the **Create Default Template** menu item, a user can change the default template according to their own style. Afterwards, whenever the user creates a figure (whether done with the menu items, the QuickFigure Button or drag/drop) the figure will automatically be made in their style. A user can also delete the default template at any time.
 
 ### Add Menu
-The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the [Layers Window](#Layers-Window) than for the menu bars of the other windows. For example the **Add Layer** menu item and several other options will only be present for the [Layers Window](#Layers-Window). After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details. 
+The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the [Layers Window](#Layers-Window) than for the menu bars of the other windows. For example, the **Add Layer** menu item and several other options will only be present for the [Layers Window](#Layers-Window). After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details. 
 
 ### Selected Item(s) Menu
 The **Selected Item(s)** menu performs specific operations that apply to the objects that the user currently has selected. A user can select an object by clicking on it within the worksheet or clicking within the layers window. Exactly which objects are treated as selected will differ if the menu bar for the layers window is used rather than the bar for the worksheet. 
@@ -290,7 +304,7 @@ There are multiple types of text items. The major types are described below.
 **Simple Text Items** are fragments of text with only one font, one line, one color and one format. When text is selected, the handles shown below will be visible. Users can click or drag handles to perform any type of edit.  
 ![image](images/objects/SimpleText.png)  
 
-**Complex Text Items** may contain multiple lines of text with sections that may be superscript, subscript, different font styles, underline, strikethrough, or colors. A user can select a section of text while in edit mode and click one of the icons that appear below it to change the format making the section of text  Bold, Italic, Subperscript, unserlined or strikethrough (icons shown in screenshot below). Row Labels, Column Labels and Plot labels are special kinds of complex labels.  
+**Complex Text Items** may contain multiple lines of text with sections that may be superscript, subscript, different font styles, underline, strikethrough, or colors. A user can select a section of text while in edit mode and click one of the icons that appear below it to change the format making the section of text  Bold, Italic, Superscript, underlined or strikethrough (icons shown in screenshot below). Row Labels, Column Labels and Plot labels are special kinds of complex labels.  
 ![image](images/objects/TextComplex.png) 
 
 ### Channel Label Text
@@ -321,13 +335,15 @@ The main shape categories are summarized below.
 -	Paths/Bezier Curves. A path of points. There are shapes that can take any form. These may be resized, rotated, or edited one point at a time. An arrowhead may be attached to the ends of a path using the popup menu. Anchor points and curve control points may be edited by clicking and dragging handles. User may transform the path in several ways using the handles and popup menus.  
 ![image](images/objects/Shapes.png)   
 
-### Insets and Frames
+### Insets
 Using the inset tool located within the [main toolbar](#The-Basics-of-Using-QuickFigures) one can draw a region of interest on an image panel and create several additional 'daughter' panels that show that region of interest at a higher level of magnification (see image below). When that shape is moved, resized or rotated by the user, the area shown by the daughter panels changes. This object also has a special popup menu with options that affect the daughter panels. 
 That popup menu has few functions.
  - **Remove** menu option removes both the region of interest and the daughter panels
  - **Channel Use** menu option opens up a [Channel Use](#Channel-Use-Dialog) dialog that applies only to the daughter panels.
  - **Redo Inset Layout** displays a dialog with options to alter the position of the daughter panels
  - **Channel Label** submenu contains options that apply to the channel labels attached to the daughter panels. See section on the [Channel Label Submenu](#Channel-Label-Submenu)
+  - **Scale** submenu contains options for the user to choose a scale to the inset panels. If the scale is 3, the inset panels will be scaled to appear 3 times as large as the region of interest on the parent panel. A user may also choose to change the scale of the inset panels to fit the dimensions of their parent panel.
+  - **Square Lock On/Off** changes the inset between square lock mode and normal mode. When in square lock mode, the region of interest will maintain a square shape whenever the user drags a handle.
  
 ![image](images/objects/InsetsAndFrames.png)
 

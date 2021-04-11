@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 11, 2021
  * Version: 2021.1
  */
 package figureFormat;
@@ -149,7 +149,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 			os.flush();
 			//os.close();//TODO: determine if closing the output stream makes a difference
 		} catch (Exception e) {
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		
 		
@@ -204,7 +204,10 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 						else
 					output+="Create";
 		
-		if (this.useDefaultpath) output+=" Default";
+		if (this.useDefaultpath) output+=" Default"; else {
+			if (doesApplyTemplate())  output+=" Saved";
+			else output+=" and Save";
+		}
 		output+=" Template";
 		return output;
 	}

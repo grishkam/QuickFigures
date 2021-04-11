@@ -203,7 +203,7 @@ public class ImagePanelHandle extends SmartHandle {
 		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, thePanel.getCroppedImageSize());
 		 double dist2= RectangleEdges.getLocation(thePanel.getLocationType(), thePanel.getBounds()).distance(p2);
 		
-		if (thePanel.getScale()==dist2/dist1) {} else {
+		if (thePanel.getRelativeScale()==dist2/dist1) {} else {
 			thePanel.setRelativeScale( dist2/dist1);		
 			thePanel.notifyListenersNow();
 		}

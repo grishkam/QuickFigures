@@ -274,7 +274,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			primaryInset.getPanelManager().getPanelList().setPanelFixedEdges();
 			
 			/**makes sure the panels are set to the same panel scale so the dpi ends up the same*/
-			double panelScale=sPanel.getScale();
+			double panelScale=sPanel.getRelativeScale();
 			
 			PanelGraphicInsetDefiner targetInset = primaryInset;
 			

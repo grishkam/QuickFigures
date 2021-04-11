@@ -539,7 +539,7 @@ static Color  folderColor2= new Color(0,140, 0);
 		public CombinedEdit changePPI(double newppi) {
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
-			double newPanelScale=panel.getScale()*ppi/newppi;
+			double newPanelScale=panel.getRelativeScale()*ppi/newppi;
 			double newScale=inset.getBilinearScale()*newppi/ppi;
 			if (getSourceDisplay().getSlot().getModifications()!=null) newScale/=getSourceDisplay().getSlot().getModifications().getScale();
 			

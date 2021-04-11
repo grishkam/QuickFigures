@@ -56,7 +56,7 @@ public TemplateChoice(MutateFigure... special) {
 		this.special=special;
 		if(special.length>0) name=special[0].name().toLowerCase().replace("_", " ");
 		for(MutateFigure m: special) {
-			if(m.forMergedPanels)
+			if(m.needsSecondImage)
 				twoImages=true;//must display two images for preview in this case
 		}
 	}

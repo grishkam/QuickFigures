@@ -29,14 +29,14 @@ public class SuggestTemplateDialog extends StandardDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JComboBox<TemplateChoice> box;
-	JButton defaultB=new JButton("Make this the new default");{defaultB.addActionListener(this);}
+	JButton defaultTemplateButton=new JButton("Make this the new default");{defaultTemplateButton.addActionListener(this);}
 	JButton applyButton=new JButton("Apply this template"); {applyButton.addActionListener(this);}
 	
 	public  SuggestTemplateDialog() {
 		super("Select an example from the list");
 		this.setWindowCentered(true);
 		addTemplateComboBox() ;
-		super.setBonusButtons(defaultB, applyButton);
+		super.setBonusButtons(defaultTemplateButton, applyButton);
 		this.setHideOK(true);
 	}
 	
@@ -46,17 +46,15 @@ public class SuggestTemplateDialog extends StandardDialog {
 		Vector<TemplateChoice> options=new Vector<TemplateChoice>();
 		MutateFigure[] shortList = MutateFigure.getShortList();
 	
-		
+		options.add(new TemplateChoice("Normal", MutateFigure.FONT_12));
 		for(int i=0; i<shortList.length; i++) {
-			options.add(new TemplateChoice(shortList[i]));
+			options.add(new TemplateChoice(shortList[i], MutateFigure.FONT_12));
 		}
 		
 		options.add(new TemplateChoice("Wide form", MutateFigure.BORDER_8, MutateFigure.FONT_12));
-		options.add(new TemplateChoice("Square", MutateFigure.CHANNEL_LABELS_INSIDE,   MutateFigure.TWO_COLUMN));
-		options.add(new TemplateChoice("Merged Figure", MutateFigure.CHANNEL_LABELS_MERGED_ONLY,MutateFigure.MERGE_ONLY,   
-				MutateFigure.TWO_COLUMN,   MutateFigure.CHANNEL_LABELS_MERGED_ONLY));
-	//	options.add(new TemplateChoice(MutateFigure.BORDER_8, MutateFigure.FONT_12));
-		
+		options.add(new TemplateChoice("Square", MutateFigure.MERGE_FIRST, MutateFigure.CHANNEL_LABELS_INSIDE,   MutateFigure.TWO_COLUMN, MutateFigure.FONT_12));
+		options.add(new TemplateChoice("Merged Figure", MutateFigure.FONT_12, MutateFigure.CHANNEL_LABELS_MERGED_ONLY,MutateFigure.MERGE_ONLY,   
+				MutateFigure.TWO_COLUMN,   MutateFigure.CHANNEL_LABELS_MERGED_ONLY, MutateFigure.FONT_12));
 	
 		
 		
@@ -103,12 +101,12 @@ public class SuggestTemplateDialog extends StandardDialog {
 			
 		}
 		
-		if (arg0.getSource()==defaultB) {
+		if (arg0.getSource()==defaultTemplateButton) {
 			boolean ans = ShowMessage.showOptionalMessage("Saved Default Template", true, "Are you sure?", "", "new template be applied to newly created figures", "you may also apply the default template to existing figures (without removing panels)");
 			if(!ans)
 				return;
 			new  TemplateUserMenuAction( TemplateUserMenuAction.SAVE_TEMPLATE, true).saveDefaultTemplate(this.getSelectedTemplate());
-			
+			this.setVisible(false);
 		}
 		
 	}

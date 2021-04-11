@@ -298,8 +298,8 @@ public class BarGraphicTest {
 			double units=100;
 			setScaleBarSize(p, units);
 			assertSimilarNumber(knownDistance, p.getScaleInfo().getPixelWidth());
-			assertSimilarNumber(knownDistance,p.getDisplayScaleInfo().getPixelWidth()*p.getScale());
-			assertSimilarNumber(knownDistance,p.getScaleBar().getScaleInfo().getPixelWidth()*p.getScale());
+			assertSimilarNumber(knownDistance,p.getDisplayScaleInfo().getPixelWidth()*p.getRelativeScale());
+			assertSimilarNumber(knownDistance,p.getScaleBar().getScaleInfo().getPixelWidth()*p.getRelativeScale());
 		}
 		
 		IssueLog.log("Passed consitency of all panels test. added scale bars to each panel");
@@ -315,7 +315,7 @@ public class BarGraphicTest {
 			assertSimilarNumber(bar.getScaleInfo().getPixelWidth(), imagePanel.getDisplayScaleInfo().getPixelWidth());
 			double scaleBarKnownDistance=bar.getLengthInUnits()/bar.getBarWidthBasedOnUnits();
 			
-			assertSimilarNumber(knownDistance,scaleBarKnownDistance*imagePanel.getScale());
+			assertSimilarNumber(knownDistance,scaleBarKnownDistance*imagePanel.getRelativeScale());
 			
 				}
 		
@@ -401,8 +401,8 @@ public class BarGraphicTest {
 			p.setRelativeScale(relativeDisplayScale);
 			IssueLog.log("Comparing Scale information to ensure that the expected ratios are held");
 			assertSimilarNumber(expectedPixelSize, p.getScaleInfo().getPixelWidth());
-			assertSimilarNumber(expectedPixelSize,p.getDisplayScaleInfo().getPixelWidth()*p.getScale());
-			assertSimilarNumber(expectedPixelSize,p.getScaleBar().getScaleInfo().getPixelWidth()*p.getScale());
+			assertSimilarNumber(expectedPixelSize,p.getDisplayScaleInfo().getPixelWidth()*p.getRelativeScale());
+			assertSimilarNumber(expectedPixelSize,p.getScaleBar().getScaleInfo().getPixelWidth()*p.getRelativeScale());
 		}
 	}
 

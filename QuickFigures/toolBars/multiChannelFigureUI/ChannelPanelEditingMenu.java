@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: April 10, 2021
  * Version: 2021.1
  */
 package multiChannelFigureUI;
@@ -76,14 +76,15 @@ import undo.PanelManagerUndo;
 public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChangeListener, StandardDialogListener {
 	
 	
-	public static int ALL_IMAGES_IN_CLICKED_FIGURE=1, CLICKED_IMAGES_ONLY=0;
+	public static final int ALL_IMAGES_IN_CLICKED_FIGURE=1, CLICKED_IMAGES_ONLY=0;
+	
 	/***/
 	FigureOrganizingLayerPane givenOrganizer=null;//the targetted figure organizing layer
 	private MultichannelDisplayLayer presseddisplay;//the primary target of the actions and options
 	private ArrayList<MultiChannelImage> extraWrappers=null;//in some contexts, additional items that are not directly clicked on are included
 	private ArrayList<MultichannelDisplayLayer> extraDisplays=null;
 	
-	boolean updateInsets=true;
+	boolean updateInsets=true;//
 	private PanelGraphicInsetDefiner pressedInset;
 	
 	protected PanelListElement stackSlicePressed;//the panel that is being targetted 
@@ -789,7 +790,7 @@ public CombinedEdit setChannelExcludedFromMerge(int chaneIndex, boolean excluded
 }
 
 
-/**WORK IN PROGRESS
+/**
 Changes whether the given channel is displayed in each of the merged images
 * @return 
 * @param chanIndex which channel to exclude
@@ -827,7 +828,7 @@ public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean exclude
 
 
 
-
+/**constants used to indicate what types of men items*/
 public static final int NO_MERGE_CHANNEL_MENU=0, EXCLUDED_CHANNEL_MENU=1, MERGE_WITH_EACH_MENU=2,EXCLUDED_CHANNEL_AND_DONT_MERGE=3;;
 
 
@@ -842,7 +843,7 @@ public SmartJMenu createChannelMergeMenu(int form) {
 	return output;
 }
 
-/**returns a */
+/**returns a list of menu items of a given type*/
 public ArrayList<ChannelMergeMenuItem> createChannelMergeMenuItems(int form) {
 	ArrayList<ChannelMergeMenuItem> m =new  ArrayList<ChannelMergeMenuItem> ();
 	for(ChannelEntry e: getPresseddisplay().getMultiChannelImage().getChannelEntriesInOrder()) {
@@ -858,10 +859,12 @@ public ArrayList<ChannelMergeMenuItem> createChannelMergeMenuItems(int form) {
 	return m;
 }
 
+/**returns the inset that is selected*/
 public PanelGraphicInsetDefiner getPressedInset() {
 	return pressedInset;
 }
 
+/**sets which inset is selected*/
 public void setPressedInset(PanelGraphicInsetDefiner pressedInset) {
 	this.pressedInset = pressedInset;
 }
@@ -980,16 +983,14 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 		/**Menu item that allows the used to select/deselct which channels belong in the merged image*/
 		public class ChannelWithEachMenuItem extends ChannelMergeMenuItem{
 		
-			/**
-			 * 
-			 */
+			
 			private static final long serialVersionUID = 1L;
 			
 			
-			
-		public 	ChannelWithEachMenuItem(ChannelEntry ce) {
-					super(ce);
-				}
+			/***/
+			public 	ChannelWithEachMenuItem(ChannelEntry ce) {
+						super(ce);
+					}
 				
 				/**
 				 determines if the channel is excluded or included
@@ -1034,6 +1035,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 					
 				}
 
+				/**returns the font style that is used for this menu item*/
 				int fontStyle() {
 						if(entry.getOriginalChannelIndex()==targetChannelNumber)
 						return Font.BOLD;

@@ -729,6 +729,17 @@ transient static IconSet i;
 	public void setFrameSliceUseToViewLocation() {
 		getPanelManager().getPanelList().getChannelUseInstructions().shareViewLocation(getSlot().getDisplaySlice());
 		}
+
+	
+	/**work in progress, returns an estimate of what height each panel is expected to have
+	 * @return
+	 */
+	public float estimatePanelHeight() {
+		double panelLevelScale = getPanelManager().getPanelLevelScale();
+		float h = (float) (getPanelList().getHeight()*panelLevelScale);
+		
+		return h;
+	}
 	
 	
 	

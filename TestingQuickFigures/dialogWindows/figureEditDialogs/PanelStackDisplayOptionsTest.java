@@ -188,13 +188,13 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 	 * @param dialog
 	 */
 	public void checkPanelPixelDensityfield(FigureOrganizingLayerPane qf, PanelStackDisplayOptions dialog) {
-		double oSize = qf.getAllPanelLists().getMergePanel().getPanelGraphic().getScale();
+		double oSize = qf.getAllPanelLists().getMergePanel().getPanelGraphic().getRelativeScale();
 		
 		changeNumber(dialog, PanelStackDisplayOptions.PANEL_SIZE_KEY, 95);
 		ArrayList<PanelListElement> panels = qf.getAllPanelLists().getPanels();
 		for(PanelListElement panel: panels  )
 			{
-				double nSize = panel.getPanelGraphic().getScale();
+				double nSize = panel.getPanelGraphic().getRelativeScale();
 				
 				assert(nSize!=oSize);
 				

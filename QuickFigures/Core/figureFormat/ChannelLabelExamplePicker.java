@@ -54,8 +54,8 @@ public class ChannelLabelExamplePicker extends LabelExamplePicker {
 	/**when given a display layer. modifies the example label to make it more appropriate 
 	  for the display layer*/
 	@Override
-public void setToStandardFor(MultichannelDisplayLayer wrap) {
-		super.setToStandardFor(wrap);
+public void setTheSizeFor(MultichannelDisplayLayer wrap) {
+		super.setTheSizeFor(wrap);
 		if (getModelItem()==null) return;
 		this.getModelItem().setDimming(ColorDimmer.NORMAL_DIM);
 	}

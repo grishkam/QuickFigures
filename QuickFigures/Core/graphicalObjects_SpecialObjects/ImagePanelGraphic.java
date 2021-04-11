@@ -197,7 +197,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			
 			
 			if (img==null && embed==false){ 
-				img=new BufferedImage((int)(getObjectWidth()/getScale()), (int)(getObjectHeight()/getScale()),  BufferedImage.TYPE_INT_RGB);}
+				img=new BufferedImage((int)(getObjectWidth()/getRelativeScale()), (int)(getObjectHeight()/getRelativeScale()),  BufferedImage.TYPE_INT_RGB);}
 			
 			
 			if (img==null && embed==true) {
@@ -205,7 +205,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 					img=getImageFromByteArray(serializedIm);
 					
 						} catch (Throwable t) {
-								img=new BufferedImage((int)(getObjectWidth()/getScale()), (int)(getObjectHeight()/getScale()),  BufferedImage.TYPE_INT_RGB);
+								img=new BufferedImage((int)(getObjectWidth()/getRelativeScale()), (int)(getObjectHeight()/getRelativeScale()),  BufferedImage.TYPE_INT_RGB);
 								}
 			}
 			
@@ -231,7 +231,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		this.setFrameWidthV(bg.getFrameWidthV());
 		this.setFrameColor(bg.getFrameColor());
 		this.setEmbed(bg.isEmbed());
-		this.setRelativeScale(bg.getScale());
+		this.setRelativeScale(bg.getRelativeScale());
 
 	 }
 	 
@@ -352,7 +352,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	/**returns a version of the scale information that can be used by the scale bar*/
 	@Override
 	public ScaleInfo getDisplayScaleInfo() {
-		return info.getScaledCopyXY(getScale());
+		return info.getScaledCopyXY(getRelativeScale());
 	}
 	
 	
@@ -374,12 +374,12 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	
 	 
 	 	/**returns the scale factor that determines the size at which the image panel is displayed.*/
-		public double getScale() {
+		public double getRelativeScale() {
 			return scale;
 		}
 		/**sets the scale factor that determines the size at which the image panel is displayed.*/
 		public void setRelativeScale(double scale) {
-			if (scale==getScale()) return;
+			if (scale==getRelativeScale()) return;
 			if (scale<=0) return;
 			Point2D pi=getLocation();
 			this.scale = scale;
@@ -483,8 +483,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 				double y1 =cords.transformY(y);
 				double y2 = cords.transformY( (y+getObjectHeight()));
 				
-				int displaywidth=(int) (getObjectWidth()/this.getScale());
-				int displayheight=(int) (getObjectHeight()/this.getScale());
+				int displaywidth=(int) (getObjectWidth()/this.getRelativeScale());
+				int displayheight=(int) (getObjectHeight()/this.getRelativeScale());
 				
 				
 				if (getDisplayedImage()==null) ensureDisplayedImage();
@@ -594,14 +594,14 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		/**Based on the number of pixels in the image, the scale and the crop area,
 		  calculates the width and height of this object. */
 		private void computeWidths() {
-			double newwidth=getScale()* getUnderlyingImageWidth();
-			double newheight=getScale()* getUnderlyingImageHeight();
+			double newwidth=getRelativeScale()* getUnderlyingImageWidth();
+			double newheight=getRelativeScale()* getUnderlyingImageHeight();
 			
 			this.setObjectWidth(newwidth);
 			this.setObjectHeight(newheight);
 			if (this.isCroppintRectValid()) {
-				setObjectWidth(getScale()*croppingrect.getWidth());
-				setObjectHeight(getScale()*croppingrect.getHeight());
+				setObjectWidth(getRelativeScale()*croppingrect.getWidth());
+				setObjectHeight(getRelativeScale()*croppingrect.getHeight());
 			}
 			updateBarScale();
 			
@@ -658,7 +658,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			
 			if (typeIllsEx==1) {
 				prepareImageForExport(pir);
-			pir.resize(100*this.getScale(), 100*getScale());
+			pir.resize(100*this.getRelativeScale(), 100*getRelativeScale());
 			if (getName()!=null) pir.setName(getName()); //Bug fix: a null name would previously case a problem with the position of the panel
 	//./this.
 			pir.setLeftandTop(x, y);
@@ -667,7 +667,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			else {
 				Image i=this.getPNGExportImage() ;
 				pir.prepareImageForJavaScript(i, getName(), x,y, false);
-				pir.resize(100*this.getScale(), 100*getScale());
+				pir.resize(100*this.getRelativeScale(), 100*getRelativeScale());
 		//./this.
 				pir.setLeftandTop(x, y);
 			}
@@ -789,8 +789,8 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		/**Creates a buffered image with the words "File not found" printeds*/
 		 protected BufferedImage createFileNotFountImage(double width, double height) {
 			 String text = "Image File"+'\n'+" Not Found";
-			 int w = (int)(width/getScale());
-			int h = (int)(height/getScale());
+			 int w = (int)(width/getRelativeScale());
+			int h = (int)(height/getRelativeScale());
 			return createImageWithText(text, w, h, 10);
 		}
 
@@ -865,7 +865,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		public void scaleAbout(Point2D p, double mag) {
 			Point2D p2 = this.getLocationUpperLeft();
 			p2=scalePointAbout(p2, p,mag,mag);
-			this.setRelativeScale(this.getScale()*mag);
+			this.setRelativeScale(this.getRelativeScale()*mag);
 			double nfh = this.getFrameWidthH()*mag;
 			double nfv = this.getFrameWidthV()*mag;
 			this.setFrameWidthH(nfh);
@@ -888,15 +888,15 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 
 		public double getQuickfiguresPPI() {
-			return ImageDPIHandler.getInchDefinition()/getScale();
+			return ImageDPIHandler.getInchDefinition()/getRelativeScale();
 		}
 		
 		public String getInkscapePPI() {
-			return  ""+(int)(90/getScale());
+			return  ""+(int)(90/getRelativeScale());
 		}
 		
 		public int getScreenPPI() {
-			return (int)(Toolkit.getDefaultToolkit().getScreenResolution()/getScale());
+			return (int)(Toolkit.getDefaultToolkit().getScreenResolution()/getRelativeScale());
 		}
 
 		

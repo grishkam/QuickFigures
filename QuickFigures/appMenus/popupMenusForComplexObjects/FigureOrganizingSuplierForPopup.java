@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.undo.UndoableEdit;
 
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
@@ -43,7 +44,9 @@ import figureFormat.TemplateUserMenuAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.LabelCreationOptions;
 import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -71,6 +74,7 @@ import undo.ChannelDisplayUndo;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
+import undo.UndoScalingAndRotation;
 
 /**A menu for a figure organizing layer*/
 public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, LayoutSpaces, ActionListener {
@@ -86,6 +90,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 	private JMenuItem panelLabelButton;
 	private JMenuItem recropPanelsButton;
 	private JMenuItem reScalePanelsButton;
+	private JMenuItem rePanelSizePanelsButton;
 	private JMenuItem rePPIPanelsButton;
 	
 	
@@ -149,6 +154,8 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				
+				
+				
 				recreatePanelsButton = new BasicSmartMenuItem("Recreate All Panels");
 				jj.add(recreatePanelsButton);
 							recreatePanelsButton.addActionListener(this);
@@ -158,6 +165,19 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				imagesMenu.add(rePPIPanelsButton);
 				
 				
+			
+				
+				if (figureOrganizingLayerPane.getMontageLayoutGraphic()!=null) {
+					FigureScalerMenu figureScaler = new FigureScalerMenu(figureOrganizingLayerPane.getMontageLayoutGraphic());
+					imagesMenu.add(figureScaler.createRescaleMenuItem());
+					jj.add(figureScaler);
+				}	
+				
+				SmartJMenu more = new SmartJMenu("more options");	
+				rePanelSizePanelsButton= new BasicSmartMenuItem("Resize panels without scale Re-Set");
+				rePanelSizePanelsButton.addActionListener(this);
+				more.add(rePanelSizePanelsButton);
+				imagesMenu.add(more);
 							
 				JMenu chanMen=new SmartJMenu("All Channels");
 					
@@ -189,11 +209,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 							
 							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));
 							
-							if (figureOrganizingLayerPane.getMontageLayoutGraphic()!=null) {
-								FigureScalerMenu figureScaler = new FigureScalerMenu(figureOrganizingLayerPane.getMontageLayoutGraphic());
-								imagesMenu.add(figureScaler.createRescaleMenuItem());
-								jj.add(figureScaler);
-							}
+							
 	}
 	
 	/**Adds the recolor channels menu*/
@@ -255,6 +271,10 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		
 		if (source ==reScalePanelsButton) {
 			undo=showReScaleAll();
+		}
+		
+		if (source ==rePanelSizePanelsButton) {
+			undo=showReDoPanelSizeAll();
 		}
 		
 		if (source ==rePPIPanelsButton) {
@@ -411,6 +431,12 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	}
 
 
+	/**shows a dialog for changing the panelSize within the figure*/
+	CombinedEdit showReDoPanelSizeAll() {
+		CombinedEdit output     = showReDoPanelSizeAllDisplayDialog((MultichannelDisplayLayer) figureOrganizingLayerPane.getPrincipalMultiChannel());
+		CanvasResizeUndo output2 = CurrentFigureSet.canvasResizeUndoable();
+		return new CombinedEdit(output, output2);
+	}
 
 
 	/**shows a dialog for changing the scale factor of many multichannel images within the figure*/
@@ -434,7 +460,25 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		return output;
 	}
 	 
-	 /**shows a dialog for the user to input a pixel density for all the images*/
+	 /**shows a dialog for changing the scale factor of many multichannel images within the figure*/
+	 CombinedEdit showReDoPanelSizeAllDisplayDialog(MultichannelDisplayLayer display) {
+		 CombinedEdit output = new CombinedEdit();
+		double newScale = showDoPanelSizeDialogSingleFor(display);
+		
+		ArrayList<ImageDisplayLayer> all = figureOrganizingLayerPane.getMultiChannelDisplays();
+		
+		for(ImageDisplayLayer crop2: all) {
+				output.addEditToList(
+							applyNewPanelSizeTo((MultichannelDisplayLayer) crop2, newScale));
+		}
+		
+		return output;
+	}
+	 
+	
+
+
+	/**shows a dialog for the user to input a pixel density for all the images*/
 	 private CombinedEdit showRePPIAll() {
 		 CombinedEdit output = new CombinedEdit();
 		 double newPPI = showPPISingleImage(figureOrganizingLayerPane.getPrincipalMultiChannel());
@@ -468,6 +512,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 
+	/**shows a rescale dialog for the single image*/
 	protected static double showRescaleDialogSingleFor(MultichannelDisplayLayer display) {
 		PreProcessInformation original = display.getSlot().getModifications();
 		
@@ -477,6 +522,15 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		
 		double newScale = FigureScalerMenu.getScaleFromDialog("Change Image Scale", "Scaling with Bilinear Interpolation is done", oldScale);
 		return newScale;
+	}
+	
+	/**a dialog to scale the panel objects only*/
+	protected static double showDoPanelSizeDialogSingleFor(MultichannelDisplayLayer display) {
+		
+		double original = display.getPanelList().getPanelGraphics().get(0).getRelativeScale();
+		
+		double newScale = StandardDialog.getNumberFromUser("Change Panel Size",1);
+		return newScale* original;
 	}
 
 
@@ -492,6 +546,29 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		
 		return new CombinedEdit(output1,output2 );
 	}
+	
+	 /**applies a new panel size to all of the images in the the layer
+		 * @param layer
+		 * @param newScale
+		 * @return
+		 */
+		private UndoableEdit applyNewPanelSizeTo(MultichannelDisplayLayer layer, double newScale) {
+			CombinedEdit undoOutPut = new CombinedEdit();
+			for(ZoomableGraphic object:layer.getAllGraphics()) {
+				if (object instanceof ImagePanelGraphic) {
+					ImagePanelGraphic imagepanel=(ImagePanelGraphic) object;
+					UndoScalingAndRotation undo = new UndoScalingAndRotation(imagepanel);
+					imagepanel.setRelativeScale(newScale);
+					undo.establishFinalState();
+					undoOutPut.addEditToList(undo);
+				}
+			}
+			
+			undoOutPut.addEditToList( updateRowColSizesOf(layer));
+			
+			return undoOutPut;
+		}
+
 	
 	/**shows a labeling options dialog*/
 	@MenuItemMethod(menuActionCommand = "Label Creation Options", menuText = "Label Creation Options")

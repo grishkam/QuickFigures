@@ -20,7 +20,9 @@
  */
 package channelMerging;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 /**this class contains information for the rotation, cropping and scaling
@@ -98,6 +100,20 @@ public class PreProcessInformation implements Serializable {
 		return scale;
 	}
 
+	/**returns the expected size of the cropped and scaled image*/
+	public Rectangle2D getOutputDimensions(Dimension input) {
+		if(rectangle==null)
+			{
+			double width = input.getWidth()*scale;
+			double height = input.getHeight()*scale;
+			return new Rectangle2D.Double(0, 0, width, height);
+			}
+		double width = rectangle.getWidth()*scale;
+		double height = rectangle.getHeight()*scale;
+		return new Rectangle2D.Double(0, 0, width, height);
+	}
+	
+	
 	/**returns true if the argument's information is identical to this object*/
 	public boolean isSame(PreProcessInformation original) {
 		if(original==null) return false;

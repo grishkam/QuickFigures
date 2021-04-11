@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: April 11, 2021
+ * Version: 2021.1
+ */
 package ultilInputOutput;
 
 
@@ -90,6 +95,7 @@ public class FileChoiceUtil {
 		 return files;
 	}
 	
+	/**opens a file dialog that resembles the imagej file dialog*/
 	private static File showIJDDFileDialog(FileDialog fd, String dir, String name) {
 		ensureWindowsLook();
 		if (dir==null) {
@@ -132,7 +138,10 @@ public class FileChoiceUtil {
 		 if (!(new File(dd).isDirectory())) {
 			 dd=(new File(dd)).getParent();
 		 }
-	       return showIJDDFileDialog(fd, CurrentAppContext.getDefaultDirectory(), null);
+		 if(dd==null) {
+			 dd=CurrentAppContext.getDefaultDirectory();
+		 }
+	       return showIJDDFileDialog(fd, dd, null);
 	      
 	}
 	

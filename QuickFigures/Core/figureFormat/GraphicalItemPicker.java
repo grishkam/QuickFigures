@@ -101,7 +101,7 @@ public abstract class GraphicalItemPicker<ItemType extends BasicGraphicalObject>
 	
 	/**When given a display layer for a multidimensional image, changes the format of this object
 	  to better fit the image*/
-	public void setToStandardFor(MultichannelDisplayLayer wrap) {
+	public void setTheSizeFor(MultichannelDisplayLayer wrap) {
 		
 	}
 

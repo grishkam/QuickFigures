@@ -466,7 +466,7 @@ public class PanelManager implements Serializable, EditListener{
 	public CombinedEdit changePPI(double newppi) {
 		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
-		double newPanelScale=panel.getScale()*ppi/newppi;
+		double newPanelScale=panel.getRelativeScale()*ppi/newppi;
 		double newScale=getImageDisplayLayer().getPreprocessScale()*newppi/ppi;
 		
 		CombinedEdit output = new CombinedEdit();
@@ -674,7 +674,7 @@ private AbstractUndoableEdit2 reorderImagePanels() {
 	 */
 	public void setPanelLevelScaleToPanels() {
 		for(ImagePanelGraphic p: panelList.getPanelGraphics()) {
-			this.setPanelLevelScale(p.getScale());
+			this.setPanelLevelScale(p.getRelativeScale());
 		}
 	}
 

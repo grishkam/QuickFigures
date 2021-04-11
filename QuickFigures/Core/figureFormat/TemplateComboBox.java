@@ -35,7 +35,7 @@ import javax.swing.plaf.metal.MetalComboBoxUI;
 
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 
-/**a combo box that lets the user choose various objects that are each drawn within the menu*/
+/**a combo box that lets the user choose an example template*/
 public class TemplateComboBox extends JComboBox<TemplateChoice>{
 	
 	Color backgroundColor = Color.white;

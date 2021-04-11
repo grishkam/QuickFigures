@@ -15,23 +15,29 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 10, 2021
  * Version: 2021.1
  */
 package exportMenus;
 
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import messages.ShowMessage;
 
-/**An class that only shows information*/
+/**Implements a menu item that only shows the user a message. 
+ * An class that only shows information*/
 public class ShowInformation  extends BasicMenuItemForObj {
 
 	
 
 	private String name;
-	String path = "File<Export";
+	public String path = "File<Export";
+	private String message=null;
 	
-	public ShowInformation(String name) {
+	
+	public ShowInformation(String name, String dialogMessage) {
 		this.name=name;
+		this.message=dialogMessage;
 	}
 
 	@Override
@@ -46,7 +52,12 @@ public class ShowInformation  extends BasicMenuItemForObj {
 		return name;
 	}
 	
-	
+	/**Performs a task specific to the menu item. */
+	@Override
+	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		if (message!=null)
+			ShowMessage.showMessages(message);
+	}
 	
 	
 	

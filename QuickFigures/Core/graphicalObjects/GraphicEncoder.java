@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 11, 2021
  * Version: 2021.1
  */
 package graphicalObjects;
@@ -36,23 +36,24 @@ import ultilInputOutput.FileChoiceUtil;
 
 /**this class is used to Serialize objects and write them to an output stream*/
 public class GraphicEncoder {
-	Object gc;
+	Object targetObject;
 	String graphicpath=".gra";
 
 	/**creates an encoder for the object*/
 	public GraphicEncoder(Object g) {
-		gc=g;
+		targetObject=g;
 	}
 
 	
 	
 	public Object getItemToBeEncoded() {
-		if(gc!=null)
-		return gc;
+		if(targetObject!=null)
+		return targetObject;
 		
 		return null;
 	}
 	
+	/**writes the serializable object to the stream*/
 	public void writeToOS(OutputStream os) {
 		writeToOS(os, this.getItemToBeEncoded());
 	}
@@ -66,8 +67,7 @@ public class GraphicEncoder {
 			oos.flush();
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		
 	}
@@ -81,14 +81,13 @@ public class GraphicEncoder {
 			return object;
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		return null;
 	}
 	
 
-	
+	/**writes the object to the file path given*/
 	public void writeToFile(String file) {
 		file=modifyString(file);
 		
@@ -101,6 +100,8 @@ public class GraphicEncoder {
 		} catch (Throwable T) {IssueLog.logT(T);}
 	}
 	
+	/**reads object from the given file path and returns it was a layer
+	 * @see GraphicLayerPane*/
 	public  GraphicLayerPane readFromFile(String file) {
 		GraphicLayerPane output=null;
 		file=modifyString(file);
@@ -118,7 +119,7 @@ public class GraphicEncoder {
 		
 		//IssueLog.log("attempting to read graphics at ", file);
 		try{
-			if (!f.exists()) {return output;}
+			if (f==null||!f.exists()) {return output;}
 			FileInputStream fo = new FileInputStream(f);
 			Object ob = readFromIS(fo);
 			output=ob;
@@ -170,8 +171,7 @@ public class GraphicEncoder {
 		
 		boo.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IssueLog.logT(e);
 		}
 		return boo.toString();
 	}

@@ -352,7 +352,7 @@ public class FigureTester {
 		setup();
 		FigureTester figureTester = new FigureTester();
 		
-		 FigureTester.ignoreTemplate=true;
+		 FigureTester.ignoreTemplate=false;
 		showExamples(figureTester);
 		 
 		 /**figureTester.ignoreTemplate=false;
@@ -547,7 +547,7 @@ public class FigureTester {
 			out.add(bar2);
 			image2.moveLocation(i*(10+image.getObjectWidth()*Math.pow(factor, i-1)), 0);
 			image2.addLockedItem(bar2);
-			image2.setRelativeScale(image2.getScale()*Math.pow(factor, i));
+			image2.setRelativeScale(image2.getRelativeScale()*Math.pow(factor, i));
 			if(barProjectionVaries) {
 				bar2.setProjectionType(i-1);
 			}

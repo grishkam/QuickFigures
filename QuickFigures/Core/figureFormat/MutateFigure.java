@@ -11,13 +11,13 @@ import channelLabels.ChannelLabelTextGraphic;
 import channelLabels.MergeLabelStyle;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
-import channelMerging.MultiChannelImage;
 import figureOrganizer.FigureOrganizingLayerPane;
+import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.basicFigure.BasicLayoutEditor;
 import locatedObject.AttachmentPosition;
 import locatedObject.ColorDimmer;
-import logging.IssueLog;
 
 /**Class is used to generate the options for figure templates
  * Each enum performs a perticular edit used to create a template
@@ -30,19 +30,31 @@ public enum MutateFigure   {
 	CHANNEL_LABELS_INSIDE,
 	COLOR_CHANNEL_PANELS,
 	BORDER_4,
-	FONT_12(12),
+	FONT_12(12,10),
+	FONT_10(10,8),
 	BORDER_8,
 	TWO_COLUMN, VERTICAL,
-	 MERGE_ONLY(true), CHANNEL_LABELS_MERGED_ONLY;
+	 MERGE_ONLY( true, ChannelUseInstructions.ONLY_MERGE_PANELS, true), 
+	 MERGE_FIRST( true, ChannelUseInstructions.MERGE_FIRST, false), 
+	 CHANNEL_LABELS_MERGED_ONLY;
 	
 	
+	/**
+	 * 
+	 */
+
 	boolean forMergedPanels=false;
 	Long channelLabelFontSize=null;
+	Integer scaleBarFont=null;
+	
+	private Integer mergePanelStatus=null;
+	public boolean needsSecondImage;
+	
 	
 	
 	MutateFigure() {}
-	MutateFigure(long f) {channelLabelFontSize=f;}
-	MutateFigure(boolean  b) {forMergedPanels=b;}
+	MutateFigure(long f, int scaleBarFont) {channelLabelFontSize=f; this.scaleBarFont=scaleBarFont;}
+	MutateFigure(boolean  b, int megreP, boolean needsSecondRow) {forMergedPanels=b; this.mergePanelStatus=megreP; this.needsSecondImage=needsSecondRow;}
 	
 
 	public static MutateFigure[] getShortList() {return new MutateFigure[] {CHANNEL_LABELS_INSIDE,COLOR_CHANNEL_PANELS};}
@@ -96,9 +108,18 @@ public enum MutateFigure   {
 			
 		}
 		
-		if(this==MERGE_ONLY) { 
+		if(scaleBarFont!=null) {
+			for(ZoomableGraphic f: figure.getAllGraphics()) {
+				if(f instanceof BarGraphic.BarTextGraphic) {
+					((BarGraphic.BarTextGraphic) f).setFontSize(scaleBarFont);}
+			
+		}
+		}
+		
+		if(mergePanelStatus!=null) { 
 			for(ImageDisplayLayer f:figure.getMultiChannelDisplays()) {
-				f.getPanelManager().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.ONLY_MERGE_PANELS;
+				if(mergePanelStatus!=null)
+					f.getPanelManager().getChannelUseInstructions().MergeHandleing=mergePanelStatus;
 				f.eliminateAndRecreate();
 			}
 			figure.fixLabelSpaces();
@@ -147,5 +168,5 @@ public enum MutateFigure   {
 	
 	
 	
-	
-}
+	}
+

@@ -296,11 +296,20 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	
 
 	/**creates new example picker objects that are suitable for the given display layer*/
-	public void autoGeneratePickersForDisplay(MultichannelDisplayLayer chan ) {
+	public void autoGeneratePickersForDisplay(MultichannelDisplayLayer multichannelDisplayLayer ) {
+		
+		try {
+			/**if the image is small, this creates a picker with suitbale scale*/
+			this.getMultiChannelPicker().setScaleAppropriateFor(multichannelDisplayLayer);
+			if (getMultiChannelPicker().forceScale!=null)
+				getMultiChannelPicker().applyProperties(multichannelDisplayLayer);
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 		
 		for(GraphicalItemPicker<?> pik: getAllExamplePickers())try  {
 			
-			pik.setToStandardFor(chan);
+			pik.setTheSizeFor(multichannelDisplayLayer);
 		} catch (Throwable t) {
 			IssueLog.logT(t);
 		}
