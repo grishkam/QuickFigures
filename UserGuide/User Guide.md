@@ -81,7 +81,13 @@ Note: For each of these options. The new figures created will be based on the de
     - **The Quick Figure Tool** creates a new figure from a multidimensional image. If an image is open in ImageJ, that image will be used to create a figure, otherwise the user will be asked to choose a file. New figures may either be split channel or contain only the merged image depending on what the user has set as the default template.
    
 ![image](images/tools/InsetTool.png)     
-    - **The Inset Tool** creates a set of small panels that show a subsection of the parent image. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double clicking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right clicking on the [regions of interest](#Insets)) brings up a popup menu with options related to the daughter panels.
+    - **The Inset Tool** creates a set of small panels that show a subsection of the parent image. To use this tool, a figure must already be created. The user can draw a region of interest on one of the image panels in an existing figure. This tool then creates a series of smaller "daughter" panels beside the parent panel. Users can later resize or rotate those regions of interest to change what is displayed in the daughter panels. By double clicking on the inset tool, users can access a dialog that may be used to change how the tool creates daughter panels (altering preferred location, scale factor or number of panels). The regions of interest are editable objects that can be altered just like any [shape](#Shapes). Right clicking on the [regions of interest](#Insets)) brings up a popup menu with options related to the daughter panels.  
+    
+      
+![image](images/tools/ChannelSwapTool.png)     
+    - **The Channel Tools**. These tools have been made partly obsolete by alternative functions. Channel Swap and Color Swap tools are rarely needed and may or may not be included in later versions of QuickFigures. Under very specific circumstances in which some source images are saved with different/inconsistent channel order this channel swap tool may be used to switch the channel order of the source images.
+
+
 
 ## Section 3: Editing Figures and Channels
 

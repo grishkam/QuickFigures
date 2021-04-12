@@ -49,7 +49,7 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 		/**does the actual saving*/
 		ImageDisplayIO.writeToFile(f, theSet);
 		
-		ShowMessage.showOptionalMessage("You have saved", true, "You haved stored your work", "files saved with earlier versions of QuickFigures will not always be openable", "it is helpful to export files to a stable format");
+		ShowMessage.showOptionalMessage("You have saved", true, "You haved stored your work", "files saved with earlier versions of QuickFigures will not always be openable", "it is also helpful to export files to a stable format");
 		}
 			
 		
