@@ -24,9 +24,10 @@ import java.io.File;
 import applicationAdapters.DisplayedImage;
 import ultilInputOutput.FileChoiceUtil;
 import imageDisplayApp.StandardWorksheet;
+import messages.ShowMessage;
 import imageDisplayApp.ImageDisplayIO;
 
-/**A meny item for saving a worksheet*/
+/**implements a menu item for saving a worksheet*/
 public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 
 	@Override
@@ -47,6 +48,8 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 		
 		/**does the actual saving*/
 		ImageDisplayIO.writeToFile(f, theSet);
+		
+		ShowMessage.showOptionalMessage("You have saved", true, "You haved stored your work", "files saved with earlier versions of QuickFigures will not always be openable", "it is helpful to export files to a stable format");
 		}
 			
 		
