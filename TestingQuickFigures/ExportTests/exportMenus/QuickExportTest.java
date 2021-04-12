@@ -29,7 +29,7 @@ abstract class QuickExportTest {
 	boolean opensFiles=false;
 	boolean prompt=false;
 	
-	TestExample testExample=TestExample.RECTANGLE_AND_OTHERS;//which cases to test. set to null if all should be tested
+	TestExample testExample=null;//which cases to test. set to null if all should be tested
 
 	/**set to true if user will view files one by one as they are being created*/
 	private boolean viewOnebyOne=false;
@@ -42,7 +42,8 @@ abstract class QuickExportTest {
 		
 		
 		
-		assert(FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no. The exported images should look highly similar to the originals. are they?"));
+		boolean yesOrNo = FileChoiceUtil.yesOrNo("Check the newly created files before clicking yes/no (they will be deleted). The exported images should look highly similar to the originals. are they?");
+		assert yesOrNo;
 		
 		
 	}

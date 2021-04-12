@@ -13,7 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
-
+/**
+ * Author: Greg Mazo
+ * Date Modified: Aoril 11, 2021
+ * Version: 2021.1
+ */
 
 
 import appContextforIJ1.ImageDisplayTester;
@@ -42,32 +46,37 @@ import plotTools.ColumnSwapTool;
 import plotTools.TTestTool;
 import selectedItemMenus.SelectionOperationsMenu;
 
+/**this class contains methods to install the plot package onto QuickFigure*/
 public class StartWithPlotPackage extends StartApplication implements MenuBarItemInstaller, ToolInstallers{
 
-		static boolean alreadyInstalled=false;
+	static boolean alreadyInstalled=false;
 	
 	public static void main(String[] args) {
 		IssueLog.sytemprint=false;
 		IssueLog.windowPrint=true;
-		install();
+		installPlotPackageOntoQuickFigures();
 		startToolbars(true);
 		ImageDisplayTester.setupImageJ();
 		 ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
 		
 	}
 	
-	public static void install() {
+	/***Installs the plot package*/
+	public static void installPlotPackageOntoQuickFigures() {
 		if (alreadyInstalled) return;
 		StartWithPlotPackage freeRun = new  StartWithPlotPackage();
+		
 		MenuBarForApp.addMenuBarItemInstaller(freeRun);
 		ObjectToolset1.includeBonusTool(new StartWithPlotPackage());
 		
-		for(int i=0; i<=5; i++)SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(i));
+		for(int i=0; i<=5; i++)
+			SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(i));
 	
 		alreadyInstalled=true;
 		
 	}
 
+	/**Adds the menu items for the plot package onto the menu bar*/
 	@Override
 	public void addToMenuBar(MenuBarForApp installer) {
 		try {
@@ -99,6 +108,7 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		}
 	}
 
+	/***Adds the plot package tools to the given toolbar*/
 	@Override
 	public void installTools(QuickFiguresToolBar toolset) {
 		try {toolset.addToolBit(new TTestTool());} catch (Throwable t) {

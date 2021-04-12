@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 7, 2021
+ * Date Modified: April 11, 2021
  * Version: 2021.1
  */
 package addObjectMenus;
@@ -68,7 +68,16 @@ public class FigureAdder extends LayoutAdder {
 
 	private boolean useOpen;
 
-
+	/**creates a figure adder that relies on a file*/
+	public FigureAdder(boolean fromFile) {
+			openFile=fromFile;
+		}
+	
+	public FigureAdder(boolean fromFile, boolean autogen) {
+		openFile=fromFile;
+		this.autoFigureGenerationOptions.autoGenerateFromModel=autogen;
+		this.useOpen=autogen;
+	}
 	
 
 	/**returns the template saver that is used to create objects*/
@@ -80,19 +89,12 @@ public class FigureAdder extends LayoutAdder {
 		return templatesaver;
 	}
 
+	/**sets the template saver that is used to determine which template to load*/
 	public void setTemplatesaver(TemplateUserMenuAction templatesaver) {
 		this.templatesaver = templatesaver;
 	}
 	
-	public FigureAdder(boolean fromFile) {
-		openFile=fromFile;
-	}
 	
-	public FigureAdder(boolean fromFile, boolean autogen) {
-		openFile=fromFile;
-		this.autoFigureGenerationOptions.autoGenerateFromModel=autogen;
-		this.useOpen=autogen;
-	}
 	
 
 	/**when given a layer, will return a figure organizing layer pane for that layer

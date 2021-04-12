@@ -16,7 +16,7 @@
 
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 28, 2021
+ * Date Modified:April 11, 2021
  * Version: 2021.1
  */
 import java.io.File;
@@ -28,8 +28,8 @@ import ij.plugin.PlugIn;
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
-/**This class is used by imageJ to make the toolbars appear*/
-public class Plot_ToolInstaller implements PlugIn {
+/**This class is used by imageJ to add the ploth package items to QuickFigures*/
+public class Plot_Tool_Installer implements PlugIn {
 	static boolean firstRun=true;
 
 	@Override
@@ -45,12 +45,12 @@ public class Plot_ToolInstaller implements PlugIn {
 	}
 	
 	
-	
+	/**Called the frist time a plot tool installer is run*/
 	private void onFirstRun() {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		StartWithPlotPackage.install();
+		StartWithPlotPackage.installPlotPackageOntoQuickFigures();
 		try {
-			if (true)
+			
 					checkForAutoRun() ;
 			} catch (Throwable t) {
 			IssueLog.logT(t);
@@ -79,6 +79,7 @@ public class Plot_ToolInstaller implements PlugIn {
 		    return hasString;
 	}
 	
+	/**Checks if an autorun file exists in this isntallation of image j*/
 	static boolean hasAutoRun() throws Exception {
 		return hasAutoRunInTXTfile()||hasAutoRunInIJMfile();
 	}
@@ -114,24 +115,25 @@ public class Plot_ToolInstaller implements PlugIn {
 	}
 		
 		
+	/**Check the startup macros of the plot package, it not present*/
 	public static void checkForAutoRun() throws Exception {
 		
-		//IssueLog.log("path is");
+		
 		
 			    
 			    if (!hasAutoRun() ) {
-			    //	IssueLog.log("autorun not found");
+			   
 			    	boolean start =   FileChoiceUtil.yesOrNo("Start Plot Package at ImageJ startup"); 
 			    	
 			    	if (start) try {
 			    		
 			    		File mFile = new File( macrosStartupFilePathIJM());
 			    		if (!mFile.exists()) { 
-			    			FileChoiceUtil.writeLocalStringToFile(macrosStartupFilePathIJM(), "AutoRunPlot.txt", Plot_ToolInstaller.class.getClassLoader(), false);
+			    			FileChoiceUtil.writeLocalStringToFile(macrosStartupFilePathIJM(), "AutoRunPlot.txt", Plot_Tool_Installer.class.getClassLoader(), false);
 			    		}
 			    			else
 			    		if (mFile.exists()) {
-			    			FileChoiceUtil.addLocalStringToFile(macrosStartupFilePathIJM(), "AutoRunPlot.txt", Plot_ToolInstaller.class.getClassLoader());
+			    			FileChoiceUtil.addLocalStringToFile(macrosStartupFilePathIJM(), "AutoRunPlot.txt", Plot_Tool_Installer.class.getClassLoader());
 			    		}
 			    		
 			    	

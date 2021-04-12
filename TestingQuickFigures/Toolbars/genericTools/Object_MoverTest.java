@@ -32,7 +32,8 @@ import testing.TestingOptions;
 
 /**
  The tool used to select and move objects is critical.
- This test checks the basic functions of the tool
+ This test checks the basic functions of the tool.
+ however if a person clicks during this test, it may fail
  After automated tests are done, paused for a little while to allow user to 
  attempt some manual tinkering
  */

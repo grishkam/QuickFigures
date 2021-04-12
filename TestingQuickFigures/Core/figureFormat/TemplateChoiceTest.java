@@ -10,31 +10,33 @@
  */
 package figureFormat;
 
-import static org.junit.Assert.*;
+import java.awt.Window;
 
-import java.util.Vector;
-
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 import org.junit.Test;
 
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
-import graphicalObjects_LayerTypes.GraphicGroup;
-import logging.IssueLog;
-import standardDialog.graphics.GraphicObjectDisplayBasic;
+import testing.VisualTest;
 
 /**
  
  * 
  */
-public class TemplateChoiceTest {
+public class TemplateChoiceTest extends VisualTest {
 
 	@Test
 	public void test() {
 		CurrentAppContext.setMultichannelContext(new IJ1MultichannelContext());
-			new SuggestTemplateDialog().showDialog();;
-			IssueLog.waitSeconds(50);
+			SuggestTemplateDialog sd = new SuggestTemplateDialog();
+			Window j=new JFrame();
+			JComboBox<TemplateChoice> templateComboBox = sd.getTemplateComboBox();
+			j.add(templateComboBox);
+			j.pack();
+			super.comboBoxVisualTest(j, templateComboBox);
+			
 		}
 	}
 

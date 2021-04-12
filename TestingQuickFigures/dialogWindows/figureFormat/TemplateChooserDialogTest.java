@@ -24,7 +24,6 @@ public class TemplateChooserDialogTest {
 	/**displays a template choser dialog.
 	 * A few example objects are added to a layer as its target (mock of an actual figure)
 	 * */
-	@Test
 	public void test() {
 
 

@@ -59,7 +59,7 @@ public class SuggestTemplateDialog extends StandardDialog {
 		
 		
 		box=new TemplateComboBox(options);
-		super.add("choice", new ChoiceInputPanel("Select Example", box));
+		super.add("choice", new ChoiceInputPanel("Select Example", getTemplateComboBox()));
 	}
 
 
@@ -87,7 +87,7 @@ public class SuggestTemplateDialog extends StandardDialog {
 	
 	
 	public FigureTemplate getSelectedTemplate() {
-		TemplateChoice templateChoice = (TemplateChoice) box.getSelectedItem();
+		TemplateChoice templateChoice = (TemplateChoice) getTemplateComboBox().getSelectedItem();
 		return templateChoice.getUseableTemplate();
 	}
 	
@@ -109,6 +109,11 @@ public class SuggestTemplateDialog extends StandardDialog {
 			this.setVisible(false);
 		}
 		
+	}
+
+
+	public JComboBox<TemplateChoice> getTemplateComboBox() {
+		return box;
 	}
 
 }
