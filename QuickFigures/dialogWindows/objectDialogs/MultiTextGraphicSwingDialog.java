@@ -106,12 +106,12 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 		this.addFixedEdgeToDialog(textItem);
 		if (this.hasComplexGraphic) this.addJustificationToDialog(textItem);
 		FontChooser sb = new FontChooser(textItem.getFont(), FontChooser.LIMITED_FONT_LIST);
-		add("font", sb);
+		add(FONT_KEY, sb);
 		
 		AngleInputPanel pai2 = new AngleInputPanel("Angle ", textItem.getAngle(), true);
-		add("angle", pai2);
-		ChoiceInputPanel cp = new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
-		this.add("dim", cp);
+		add(ANGLE_KEY, pai2);
+		ChoiceInputPanel cp = new ChoiceInputPanel("Color Dim Type ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
+		this.add(DIM_KEY, cp);
 		addBackgroundOptionsToDialog();
 	
 		for(TextGraphic t: array) {
@@ -141,8 +141,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 	void addInsetsTab() {
 		
 		TextInsetsDialog id = new TextInsetsDialog(array, false);
-		this.addSubordinateDialog("Insets", id);
-		//this.getOptionDisplayTabs().addTab("Insets", id.removeOptionsTab());
+		this.addSubordinateDialog(NAME_OF_TEXT_INSET_TAB, id);
 		
 	}
 	

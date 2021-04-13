@@ -57,10 +57,10 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 		this.addFixedEdgeToDialog(textItem);
 		super.addFontAngleToDialog();
 		addBackgroundOptionsToDialog();
-		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
-		this.add("dim", cp);
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dim Type ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
+		this.add(DIM_KEY, cp);
 		this.getMainPanel().moveGrid(2, -1);
-		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
+		this.add(DOES_DIM_KEY, new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
 		this.getMainPanel().moveGrid(-2, 0);
 		
 		addLineTabs();

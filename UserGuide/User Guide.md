@@ -99,7 +99,7 @@ The **Channels** submenus contain options related to the channels within figure.
 
   -	**Display Range**, **Window/Level**, or **Min/Max**. These options open display range adjuster similar to the display range adjuster found in ImageJ and other Software. Adjustments done with this adjuster affect both split channel panels and merge panels. [see Display range dialog for details](#Display-Range-Dialog)
   -	**Change color modes** menu item switches channel panels between 'colorized' and 'greyscale' displays. Panels with more than one channel will always be displayed in a colorized form regardless of this option.
-  -	**Channel Use Options**. Displays the **Channel Use** dialog ([See section on Channel Use Dialog](#Channel-Use-Dialog)). This dialog allows the user to select which channels are used in the merge panel, change color modes and also merge an additional channels into the channel panels. 
+  -	**Channel Use Options**. Displays the **Channel Use** dialog ([See section on Channel Use Dialog](#Channel-Use-Dialog)). This dialog allows the user to select which channels are used in the merge panel, change color modes and also merge an itional channels into the channel panels. 
   - **Recolor channels** submenu. This allows the user to change the color of channels from one pseudo-color to another. Colors for channel panels, merged panels and [channel labels](#Channel-Label-Text) will all change in response to this item. For user's familiar with ImageJ, this menu item changes the lookup table.
   -	**Recolor Channels Automatically**. Changes the color of every channel based on the channel names. Images imported from certain microscopy formats (.czi, .zvi) will have channel names that reflect the dye names (eGFP, Cy5, mCherry) while others will have channel names that reflect colors. This automatic recoloring can also be performed in other contexts.
   - 'Match' menu items. Each figure may contain several images. The options can be used to make sure that variables such as channel display ranges, channel colors and channel order are consistent between images. If only one source image is part of the figure, this menu item will not appear.
@@ -271,7 +271,13 @@ The **Edit** menu contains a variety of options that do not depend on which obje
 Changes to the default template are particularly important. The default template is applied to automatically generated figures. Using the **Create Default Template** menu item, a user can change the default template according to their own style. Afterwards, whenever the user creates a figure (whether done with the menu items, the QuickFigure Button or drag/drop) the figure will automatically be made in their style. A user can also delete the default template at any time.
 
 ### Add Menu
-The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the [Layers Window](#Layers-Window) than for the menu bars of the other windows. For example, the **Add Layer** menu item and several other options will only be present for the [Layers Window](#Layers-Window). After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details. 
+The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the [Layers Window](#Layers-Window) than for the menu bars of the other windows. For example, the **Add Layer** menu item and several other options will only be present for the [Layers Window](#Layers-Window). After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details.  
+The add menu has a few submenus
+ - **Shapes** submenu contains options to add or group shapes.
+ - **to selected panels** submenu contains options to add text or scale bars to image panels. Those items will be attached to the selected panels. Text items added with the same action will be maintain the same position relative to their parent panels.
+ - **Raw Image Panel** will add a lone image that is not organized as part of a figure. This option allows users to insert anything into the figure. 
+ - **Figure** submenu adds a figure to the worksheet. Functions like the QuickFigure tool. Users can also drag and drop image files onto the worksheet to add them.
+ - **Cell Cartoons** submenu contains options to add a family of shapes that have a different style than the ones in the shapes menu.
 
 ### Selected Item(s) Menu
 The **Selected Item(s)** menu performs specific operations that apply to the objects that the user currently has selected. A user can select an object by clicking on it within the worksheet or clicking within the layers window. Exactly which objects are treated as selected will differ if the menu bar for the layers window is used rather than the bar for the worksheet. 
@@ -340,6 +346,28 @@ The main shape categories are summarized below.
 -	Blob- A complex shape designed to mimic a natural looking form. Works similarly to the Stars.
 -	Paths/Bezier Curves. A path of points. There are shapes that can take any form. These may be resized, rotated, or edited one point at a time. An arrowhead may be attached to the ends of a path using the popup menu. Anchor points and curve control points may be edited by clicking and dragging handles. User may transform the path in several ways using the handles and popup menus.  
 ![image](images/objects/Shapes.png)   
+
+
+## Object Specific Dialogs
+There are specialized dialogs for each type of item. By double clicking on a single object a user can open a dialog that affects on item. Certain menu options will also open these dialogs or versions that apply their affects to more than one object. Users may also click on the ![image](images/minitoolbar/DialogIcon.png) below an selected object to open a dialog that can affect a list of object of a certain type (those that were selected when the icon is clicked). However, users do not need to user the object dialogs at all. The most importnat options are also available via the handles, minitoolbars and popup menus.  
+### Text Dialogs
+Most parts of a text dialog are similar to other applications. Users will notice an options called 'color dimm' which alters the text color without a change in hue. In general, colored text that appears in front of a mostly black image panel appears more readable when dimming is 'Bright' while text in front of a white background is more readable when dimming is set to 'Dim' or 'Dark'. Users may also uncheck the dimming checkbox to turn off the color modification. There is also a 'Use Background' checkbox that users can employ to put a colored box behind the text. The background box wont appear unless the user chooses a color in the 'Background' tab. Users can go to the 'Inset the text' tab to change the size of the box. The background for text is something very few users will need (and might be improved on or eleiminated based on user input).  
+![image](images/Dialogs/TextDialog.png)
+
+### Shape Dialogs
+Shape dialogs have options similar to those found in other software (colors, corners, line dash, line width and so on). Certain shapes will have an additional option to specify the number of sides on a polygon or points on a star.
+
+### Arrow Dialogs
+Arrow dialog is mostly similar to the shape options dialog except that it contains options specific to arrows and arrow head tabs. If the arrow contains one arrow head (or two identical heads), then only one arrow head tab will appear.  
+![image](images/Dialogs/ArrowDialog.png)
+
+### Scale Bar Dialogs
+Options related to the scale bar are listed in this dialog. Options to change the length, color, thickness or angle of the scale bar require no explanation. There is also a 'projection type' and 'projection length' option that can be used if a user wants a scale bar to be shaped like a bracket, or line. The user can use the 'Show Text' checkbox to hide the label. If a user wants to freely move the scale bar's label without having it attached to the scale bar there is an 'Autolocate Text' checkbox.
+![image](images/Dialogs/ScaleBarDialog.png)
+
+### Image Panel Dialogs
+Image panel dialogs show the size and pixel density of their image panels. Users will rearly need to access these dialogs. A user can avoid accidentlally moving images panels while editing the figure by clicking the 'protect from mouse drags' option (applies to all image panels). A user who wants a box to appear around an image panel can use the frame width and frame color options.  
+![image](images/Dialogs/ImagePanelDialog.png)
 
 ### Insets
 Using the inset tool located within the [main toolbar](#The-Basics-of-Using-QuickFigures) one can draw a region of interest on an image panel and create several additional 'daughter' panels that show that region of interest at a higher level of magnification (see image below). When that shape is moved, resized or rotated by the user, the area shown by the daughter panels changes. This object also has a special popup menu with options that affect the daughter panels. 

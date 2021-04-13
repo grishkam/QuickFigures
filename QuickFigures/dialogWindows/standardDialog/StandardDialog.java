@@ -683,6 +683,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		mainPanel=g;
 	}
 	
+	/**Adds the content of another dialog as a tab to this dialog*/
 	public void addSubordinateDialog(String shortLabel,
 			StandardDialog dis) {
 		if (dis==null) return;
@@ -696,6 +697,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 			}
 		subordinateDialogs.add(dis);
 	}
+	
 	/**
 	returns the first tab component of the item
 	 */

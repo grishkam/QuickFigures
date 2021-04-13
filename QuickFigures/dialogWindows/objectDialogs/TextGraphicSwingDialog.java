@@ -43,12 +43,13 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	/**
 	 * 
 	 */
-	private static final String DOES_DIM_KEU = "dim?";
+	protected static final String NAME_OF_TEXT_INSET_TAB = "Inset the text";
 
 	/**
-	 * 
+	 string keys used to retrive certain values from the dialog 
 	 */
-	private static final String DIM_KEY = "dim";
+	protected static final String ANGLE_KEY = "angle",  FONT_KEY = "font", JUSTIFICATION_KEY = "Justification",
+			TEXT_CONTENT_KEY = "Text", TEXT_COLOR_KEY = "tColor",  DOES_DIM_KEY = "dim?", DIM_KEY = "dim";
 
 	public static final String[] JUSTIFICATION_CHOICES = new String[] {"Left", "Center", "Right"};
 
@@ -74,11 +75,11 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	
 	protected void addOptionsToDialog() {
 		this.addNameField(textItem);
-		this.add("Text", new StringInputPanel("Text", textItem.getText()));
+		this.add(TEXT_CONTENT_KEY, new StringInputPanel(TEXT_CONTENT_KEY, textItem.getText()));
 		this.addFixedEdgeToDialog(textItem);
 		 addFontAngleToDialog();
 		ColorComboboxPanel cbp = new ColorComboboxPanel("Color", null, textItem.getTextColor());
-		this.add("tColor", cbp);
+		this.add(TEXT_COLOR_KEY, cbp);
 		
 		addDimmingToDialog();
 		addBackgroundOptionsToDialog();
@@ -90,7 +91,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	void addInsetsTab() {
 		
 		TextInsetsDialog id = new TextInsetsDialog(textItem);
-		this.addSubordinateDialog("Insets", id);
+		this.addSubordinateDialog(NAME_OF_TEXT_INSET_TAB, id);
 		
 	}
 	
@@ -110,12 +111,12 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	
 	}
 	
-	
+	/***/
 	protected void addDimmingToDialog() {
-		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dims ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
+		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dim Type ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
 		this.add(DIM_KEY, cp);
 		this.getMainPanel().moveGrid(2, -1);
-		this.add(DOES_DIM_KEU, new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
+		this.add(DOES_DIM_KEY, new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
 		this.getMainPanel().moveGrid(-2, 0);
 	}
 	
@@ -124,12 +125,12 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		
 		FontChooser sb = new FontChooser(textItem.getFont(), FontChooser.LIMITED_FONT_LIST);
 		sb.setUIFontSize(10);
-		add("font", sb);
+		add(FONT_KEY, sb);
 		
 	
 		AngleInputPanel pai2 = new AngleInputPanel("Angle ", textItem.getAngle(), true);
 		
-		add("angle", pai2);
+		add(ANGLE_KEY, pai2);
 	
 	}
 	
@@ -143,17 +144,17 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	protected void setItemsToDiaog(TextGraphic textItem) {
 		super.setNameFieldToDialog(textItem);
 		
-		textItem.setText(this.getString("Text"));
-		textItem.setTextColor(this.getColor("tColor"));
-		textItem.setDimColor(this.getBoolean(DOES_DIM_KEU));
+		textItem.setText(this.getString(TEXT_CONTENT_KEY));
+		textItem.setTextColor(this.getColor(TEXT_COLOR_KEY));
+		textItem.setDimColor(this.getBoolean(DOES_DIM_KEY));
 		
 		setAtrributesToDialog(textItem);
 	}
 	
 	public void setAtrributesToDialog(TextGraphic textItem) {
 		this.setFixedEdgeToDialog(textItem);
-		textItem.setFont(this.getFont("font"));
-		textItem.setAngle(this.getNumber("angle"));
+		textItem.setFont(this.getFont(FONT_KEY));
+		textItem.setAngle(this.getNumber(ANGLE_KEY));
 		textItem.setDimming(ColorDimmer.values()[this.getChoiceIndex(DIM_KEY)]);
 		setBackgroundOptionsToDialog(textItem);
 		setObjectSnappingBehaviourToDialog(textItem);
@@ -167,12 +168,12 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 	public void addJustificationToDialog(TextGraphic tg) {
 		if (tg instanceof ComplexTextGraphic) {
 			ComplexTextGraphic ct=(ComplexTextGraphic) tg;
-			ChoiceInputPanel st = new ChoiceInputPanel("Justification", JUSTIFICATION_CHOICES, ct.getParagraph().getJustification());
-			this.add("Justification", st);
+			ChoiceInputPanel st = new ChoiceInputPanel(JUSTIFICATION_KEY, JUSTIFICATION_CHOICES, ct.getParagraph().getJustification());
+			this.add(JUSTIFICATION_KEY, st);
 		}
 	}
 	public void setComplexProperteisToDialog(ComplexTextGraphic ct) {
-		int jus = this.getChoiceIndex("Justification");
+		int jus = this.getChoiceIndex(JUSTIFICATION_KEY);
 		ct.getParagraph().setJustification(jus);
 	}
 	
