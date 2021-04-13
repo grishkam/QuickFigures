@@ -224,11 +224,11 @@ The target images for a display range dialog do not change while the dialog is o
 ![image](images/Dialogs/DisplayRangeDialog.png)  
 #### Crop Dialog
 The Crop dialog window provides a way to change the crop area and rotation angle used for a source image. A user can either input numbers in the fields to the right of the window or drag the handles of rectangle. Depending on the image, the dialog may also contain an option to change which channel, frame and slice is being shown while one edits the crop area. At the bottom of the window, there is an **Eliminate Cropping Rectangle** button which offers the options not to crop (nor rotate). A few different popup menu options can open a crop dialog.  
-A user can select multiple images and click the ![image](images/minitoolbar/C icon.png) icon to display a series of crop dialogs for those images only.
+A user can select multiple images and click the ![image](images/minitoolbar/C icon.png) icon to display a series of crop dialogs for those images only.  
 ![image](images/Dialogs/CropDialog.png)
 
 #### Select Example Dialog
-This dialog is shown when the user chooses the **select example** menu option in the Figure Format menu. A user can browse through a list of figures, each of which is visible in the popup menu. After selecting a figure, a user may choose it to be the default template by clicking the button on the bottom of the dialog. Although this contains fewer options than the Figure Format Dialog, a user can use this dialog even if no figure is open. 
+This dialog is shown when the user chooses the **select example** menu option in the Figure Format menu. A user can browse through a list of figures, each of which is visible in the popup menu. After selecting a figure, a user may choose it to be the default template by clicking the button on the bottom of the dialog. Although this contains fewer options than the Figure Format Dialog, a user can use this dialog even if no figure is open.  
 ![image](images/Dialogs/SelectTemplate.png)
 
 #### Figure Format Dialog
@@ -376,7 +376,7 @@ Arrow dialog is mostly similar to the shape options dialog except that it contai
 ![image](images/Dialogs/ArrowDialog.png)
 
 ### Scale Bar Dialogs
-Options related to the scale bar are listed in this dialog. Options to change the length, color, thickness or angle of the scale bar require no explanation. There is also a 'projection type' and 'projection length' option that can be used if a user wants a scale bar to be shaped like a bracket, or line. The user can use the 'Show Text' checkbox to hide the label. If a user wants to freely move the scale bar's label without having it attached to the scale bar there is an 'Autolocate Text' checkbox.
+Options related to the scale bar are listed in this dialog. Options to change the length, color, thickness or angle of the scale bar require no explanation. There is also a 'projection type' and 'projection length' option that can be used if a user wants a scale bar to be shaped like a bracket, or line. The user can use the 'Show Text' checkbox to hide the label. If a user wants to freely move the scale bar's label without having it attached to the scale bar there is an 'Autolocate Text' checkbox.  
 ![image](images/Dialogs/ScaleBarDialog.png)
 
 ### Image Panel Dialogs
