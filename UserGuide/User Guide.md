@@ -348,6 +348,19 @@ The main shape categories are summarized below.
 ![image](images/objects/Shapes.png)   
 
 
+### Insets
+Using the inset tool located within the [main toolbar](#The-Basics-of-Using-QuickFigures) one can draw a region of interest on an image panel and create several additional 'daughter' panels that show that region of interest at a higher level of magnification (see image below). When that shape is moved, resized or rotated by the user, the area shown by the daughter panels changes. This object also has a special popup menu with options that affect the daughter panels. 
+That popup menu has few functions.
+ - **Remove** menu option removes both the region of interest and the daughter panels
+ - **Channel Use** menu option opens up a [Channel Use](#Channel-Use-Dialog) dialog that applies only to the daughter panels.
+ - **Redo Inset Layout** displays a dialog with options to alter the position of the daughter panels
+ - **Channel Label** submenu contains options that apply to the channel labels attached to the daughter panels. See section on the [Channel Label Submenu](#Channel-Label-Submenu)
+  - **Scale** submenu contains options for the user to choose a scale to the inset panels. If the scale is 3, the inset panels will be scaled to appear 3 times as large as the region of interest on the parent panel. A user may also choose to change the scale of the inset panels to fit the dimensions of their parent panel.
+  - **Square Lock On/Off** changes the inset between square lock mode and normal mode. When in square lock mode, the region of interest will maintain a square shape whenever the user drags a handle.
+ 
+![image](images/objects/InsetsAndFrames.png)
+
+
 ## Object Specific Dialogs
 There are specialized dialogs for each type of item. By double clicking on a single object a user can open a dialog that affects on item. Certain menu options will also open these dialogs or versions that apply their affects to more than one object. Users may also click on the ![image](images/minitoolbar/DialogIcon.png) below an selected object to open a dialog that can affect a list of object of a certain type (those that were selected when the icon is clicked). However, users do not need to user the object dialogs at all. The most importnat options are also available via the handles, minitoolbars and popup menus.  
 ### Text Dialogs
@@ -366,20 +379,8 @@ Options related to the scale bar are listed in this dialog. Options to change th
 ![image](images/Dialogs/ScaleBarDialog.png)
 
 ### Image Panel Dialogs
-Image panel dialogs show the size and pixel density of their image panels. Users will rearly need to access these dialogs. A user can avoid accidentlally moving images panels while editing the figure by clicking the 'protect from mouse drags' option (applies to all image panels). A user who wants a box to appear around an image panel can use the frame width and frame color options.  
+Image panel dialogs show the size and pixel density of their image panels. Users will rarely need to access these dialogs. A user can avoid accidentlally moving images panels while editing the figure by clicking the 'protect from mouse drags' option (applies to all image panels). A user who wants a box to appear around an image panel can use the frame width and frame color options.  
 ![image](images/Dialogs/ImagePanelDialog.png)
-
-### Insets
-Using the inset tool located within the [main toolbar](#The-Basics-of-Using-QuickFigures) one can draw a region of interest on an image panel and create several additional 'daughter' panels that show that region of interest at a higher level of magnification (see image below). When that shape is moved, resized or rotated by the user, the area shown by the daughter panels changes. This object also has a special popup menu with options that affect the daughter panels. 
-That popup menu has few functions.
- - **Remove** menu option removes both the region of interest and the daughter panels
- - **Channel Use** menu option opens up a [Channel Use](#Channel-Use-Dialog) dialog that applies only to the daughter panels.
- - **Redo Inset Layout** displays a dialog with options to alter the position of the daughter panels
- - **Channel Label** submenu contains options that apply to the channel labels attached to the daughter panels. See section on the [Channel Label Submenu](#Channel-Label-Submenu)
-  - **Scale** submenu contains options for the user to choose a scale to the inset panels. If the scale is 3, the inset panels will be scaled to appear 3 times as large as the region of interest on the parent panel. A user may also choose to change the scale of the inset panels to fit the dimensions of their parent panel.
-  - **Square Lock On/Off** changes the inset between square lock mode and normal mode. When in square lock mode, the region of interest will maintain a square shape whenever the user drags a handle.
- 
-![image](images/objects/InsetsAndFrames.png)
 
 
 ### Plot Package 
