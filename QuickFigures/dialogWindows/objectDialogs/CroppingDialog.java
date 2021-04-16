@@ -42,6 +42,7 @@ import channelMerging.CSFLocation;
 import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import channelMerging.PreProcessInformation.Interpolation;
 import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
@@ -523,7 +524,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	
 	
-
+	/**shows a recrop dialog*/
 	public static void showCropDialogOfSize(MultiChannelSlot slot, Dimension recommmendation) {
 		if (recommmendation==null)
 			{showCropDialog(slot, null, 0);
@@ -558,17 +559,22 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		RectangularGraphic r = crop.getRectangle();
 		double oldScale=1;
-		if (slot.getModifications()!=null) oldScale=slot.getModifications().getScale();
+		Interpolation oldInterpolation=null;
+		
+		if (slot.getModifications()!=null) { 
+			oldScale=slot.getModifications().getScale();
+			oldInterpolation = slot.getModifications().getInterpolationType();
+		}
 		
 		PreProcessInformation process;
 		if (!crop.wasEliminated)
-		process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), oldScale);
+		process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), oldScale,oldInterpolation);
 		else {
-			process = new PreProcessInformation(null, 0, oldScale);
+			process = new PreProcessInformation(null, 0, oldScale, oldInterpolation);
 		}
 		
 		try {
-			/***/
+			
 			slot.setDisplaySlice(crop.display);
 			slot.applyCropAndScale(process);
 			
@@ -580,6 +586,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 
 	
+	/**Changes the channel, slice and frame that is shown*/
 	public void setDisplaySlice(CSFLocation l) {
 		display=l;
 		this.updateDisplayImage();

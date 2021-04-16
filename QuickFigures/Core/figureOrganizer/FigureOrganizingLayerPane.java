@@ -364,7 +364,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
 		} else {
-			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
+			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale(), display.getPreprocessInterpolation()));
 		}
 	}
 	

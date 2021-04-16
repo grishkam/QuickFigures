@@ -267,7 +267,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 				@Override
 				public void onAction() {
 					addUndo(
-							FigureOrganizingSuplierForPopup.showRecropDisplayDialog(display, null)
+							FigureOrganizingSuplierForPopup.showRecropDisplayDialog(display, null, null)
 							);
 				}
 				

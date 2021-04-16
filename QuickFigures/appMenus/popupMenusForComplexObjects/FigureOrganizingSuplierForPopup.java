@@ -340,13 +340,18 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends ImageDisplayLayer> all) {
 	CombinedEdit output = new CombinedEdit();
 	output.addEditToList(
-			showRecropDisplayDialog( crop1, null)
+			showRecropDisplayDialog( crop1, null, null)
 			);
 	PreProcessInformation modifications = crop1.getSlot().getModifications();
 	Rectangle r1=null;
-	if (modifications!=null)
-		r1= modifications.getRectangle();
 	Dimension d1;
+	PreProcessInformation.Interpolation interpolate=null;
+	
+	if (modifications!=null) {
+		r1= modifications.getRectangle();
+		interpolate=modifications.getInterpolationType();
+	}
+	
 	if (r1==null) {
 		d1=crop1.getMultiChannelImage().getDimensions();
 	}else d1=new Dimension(r1.width, r1.height);
@@ -355,7 +360,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	for(ImageDisplayLayer crop2: all) {
 		if(crop2==crop1) continue;
 		output.addEditToList(
-				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1)
+				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1, interpolate)
 		);
 	}
 	if (CanvasOptions.current.resizeCanvasAfterEdit)
@@ -366,7 +371,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 }
 
 	/**shows a cropping dialog*/
-	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim) {
+	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim, PreProcessInformation.Interpolation interpolate) {
 		PreProcessInformation original = display.getSlot().getModifications();
 		display.getPanelManager().setupViewLocation();
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(display);

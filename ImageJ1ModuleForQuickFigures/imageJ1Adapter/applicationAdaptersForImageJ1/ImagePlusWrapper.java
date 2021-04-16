@@ -685,14 +685,13 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 			IssueLog.log("no preprocess given");
 			return this;
 		}
-		return cropAtAngle(p.getRectangle(), p.getAngle(), p.getScale());
+		return cropAtAngle(p.getRectangle(), p.getAngle(), p.getScale(), p.getInterpolationType());
 		
 	}
 	
 	/** returns a scaled version of this that is also cropped using a rectangle that 
 	  may be rotated at a certain angle*/
-	@Override
-	public ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale) {
+	private ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale, PreProcessInformation.Interpolation interpolateMethod) {
 		imp.deleteRoi();
 		ImagePlus d = imp.duplicate();
 		ImageStack oldstack = d.getStack();

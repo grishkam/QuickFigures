@@ -33,6 +33,7 @@ import channelMerging.MultiChannelUpdateListener;
 import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
+import channelMerging.PreProcessInformation.Interpolation;
 import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.PanelStackDisplayOptions;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
@@ -686,6 +687,15 @@ transient static IconSet i;
 		return info.getScale();
 	}
 	
+	/**getter and setter methods for the preprocess scale. experimental*/
+	public Interpolation getPreprocessInterpolation() {
+		MultiChannelSlot slot2 = this.getSlot();
+		if(slot2==null) return null;
+		PreProcessInformation info = slot2.getModifications();
+		if(info==null) return null;
+		return info.getInterpolationType();
+	}
+	
 	/**sets the preprocess scale*/
 	public MultiChannelImage setPreprocessScale(double s) {
 		if (s<=0) return this.getMultiChannelImage();
@@ -695,8 +705,8 @@ transient static IconSet i;
 		PreProcessInformation info = slot2.getModifications();
 		if(info!=null&&s==info.getScale()) return this.getMultiChannelImage();
 		PreProcessInformation newscale;
-		if (info!=null) newscale= new PreProcessInformation(info.getRectangle(), info.getAngle(), s);
-		else  newscale= new PreProcessInformation(null, 0, s);
+		if (info!=null) newscale= new PreProcessInformation(info.getRectangle(), info.getAngle(), s, info.getInterpolationType());
+		else  newscale= new PreProcessInformation(null, 0, s, null);
 		slot.applyCropAndScale(newscale);
 		return this.getMultiChannelImage();
 	}

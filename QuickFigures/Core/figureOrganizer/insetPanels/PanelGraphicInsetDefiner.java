@@ -161,7 +161,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
 		Rectangle2D b = inv.createTransformedShape(this.getBounds()).getBounds2D();
 		if (p==null) 
-			return new PreProcessInformation(b.getBounds(), this.getAngle(), getBilinearScale());;
+			return new PreProcessInformation(b.getBounds(), this.getAngle(), getBilinearScale(), p.getInterpolationType());;
 		
 		double nx=b.getX()/p.getScale();
 		double ny=b.getY()/p.getScale();
@@ -189,7 +189,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			angleOutput+=p.getAngle();
 		} catch (Throwable t) {}
 		
-		return new PreProcessInformation(outputRect.getBounds(), angleOutput, p.getScale()*getBilinearScale());
+		return new PreProcessInformation(outputRect.getBounds(), angleOutput, p.getScale()*getBilinearScale(), p.getInterpolationType());
 		
 	}
 

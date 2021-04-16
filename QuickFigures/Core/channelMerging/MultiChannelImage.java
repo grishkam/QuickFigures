@@ -115,7 +115,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	public MultiChannelImage scaleBilinear(double d);
 	
 	/** returns a cropped and scaled version of this*/
-	public MultiChannelImage  cropAtAngle(Rectangle r, double angle, double scale);
+//	public MultiChannelImage  cropAtAngle(Rectangle r, double angle, double scale, Interpolation interpolateMethod);
 	public MultiChannelImage  cropAtAngle(PreProcessInformation p);
 	
 	public static final int FRAME_DIMENSION=2, SLICE_DIMENSION=1;
@@ -123,5 +123,6 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	
 	/**returns the bit depth*/
 	public double bitDepth();
+
 	
 }

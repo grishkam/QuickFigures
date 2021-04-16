@@ -519,6 +519,7 @@ import logging.IssueLog;
 			
 			if (preprocessRecord.getAngle()!=process.getAngle()) return false;
 			if (preprocessRecord.getScale()!=process.getScale()) return false;
+			if (preprocessRecord.getInterpolationType()!=process.getInterpolationType()) return false;
 			Rectangle r1 = preprocessRecord.getRectangle();
 			Rectangle r2 =process.getRectangle();
 			if(r1==null && r2!=null) return false;

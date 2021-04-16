@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 13, 2021
  * Version: 2021.1
  */
 package channelMerging;
@@ -39,6 +39,9 @@ public class PreProcessInformation implements Serializable {
 	private Rectangle rectangle;//the dimensions of the crop region
 	private double scale=1;//the scale factor applied
 	
+	public static enum Interpolation{BILINEAR, BICUBIC, NONE};
+	Interpolation interpolationType=Interpolation.BILINEAR;
+	
 	public String toString() {
 		return "[Rectangle="+rectangle+" angle="+angle+" scale="+scale+"]";
 	}
@@ -58,6 +61,12 @@ public class PreProcessInformation implements Serializable {
 		this.rectangle=rectangle2;
 		this.angle=angle2;
 		this.scale=scale2;
+	}
+	
+	/**creates an instance cropped at an angle with the given rectangle and then scaled*/
+	public PreProcessInformation(Rectangle rectangle2, double angle2, double scale2, Interpolation type) {
+		this(rectangle2,angle2,scale2);
+		this.interpolationType=type;
 	}
 
 	/**returns true if this object instructs nothing to be done to the image*/
@@ -83,7 +92,7 @@ public class PreProcessInformation implements Serializable {
 	}
 	
 	PreProcessInformation copy() {
-		return new PreProcessInformation(getRectangle(), getAngle(), getScale());
+		return new PreProcessInformation(getRectangle(), getAngle(), getScale(), getInterpolationType());
 	}
 
 	public Rectangle getRectangle() {
@@ -119,6 +128,7 @@ public class PreProcessInformation implements Serializable {
 		if(original==null) return false;
 		if(scale!= original.getScale()) return false;
 		if(angle!= original.getAngle()) return false;
+		if(this.getInterpolationType()!=original.getInterpolationType()) return false;
 		
 		if(rectangle==null &&original.getRectangle()!=null)
 			return false;
@@ -134,6 +144,13 @@ public class PreProcessInformation implements Serializable {
 		return true;
 	}
 	
+	
+	/**returns the interpolation type*/
+	public Interpolation getInterpolationType() {
+		if(interpolationType==null)
+			interpolationType=Interpolation.BILINEAR;
+		return interpolationType;
+	}
 
 	
 
