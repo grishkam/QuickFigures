@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -33,6 +33,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import imageScaling.ScaleInformation;
 import locatedObject.Scales;
 import messages.ShowMessage;
 import undo.CombinedEdit;
@@ -192,11 +193,13 @@ public class FigureScaler {
 		}
 		
 	}
+	
+	/**changes the scale of the display by a certain factor, if the scale level starts at*/
 	private PreprocessChangeUndo scaleDisplay(ImageDisplayLayer layer, double factor) {
 		PreprocessChangeUndo undoer = new PreprocessChangeUndo(layer);//scaleStack( layer.getStack(), factor);
 		
-		double nScale = layer.getPreprocessScale();
-		layer.setPreprocessScale(nScale*factor);
+		ScaleInformation nScale = layer.getPreprocessScale().multiplyBy(factor);
+		layer.setPreprocessScale(nScale);
 		undoer.establishFinalLocations();
 		return undoer;
 	}

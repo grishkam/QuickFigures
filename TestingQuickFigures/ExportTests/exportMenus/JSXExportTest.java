@@ -22,7 +22,7 @@ import ultilInputOutput.FileChoiceUtil;
 	
 	
 	
-	TestExample testCase=TestExample.COLUMN_PLOTS;//which cases to test. set to null if all should be tested
+	TestExample testCase=null;//which cases to test. set to null if all should be tested
 
 
 	@Test

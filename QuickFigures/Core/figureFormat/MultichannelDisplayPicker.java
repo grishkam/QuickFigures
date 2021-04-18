@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 11, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureFormat;
@@ -27,6 +27,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import channelMerging.PreProcessInformation;
 import figureOrganizer.MultichannelDisplayLayer;
+import imageScaling.ScaleInformation;
 import logging.IssueLog;
 import messages.ShowMessage;
 import undo.CombinedEdit;
@@ -40,7 +41,7 @@ public class MultichannelDisplayPicker extends
 	public boolean doesPreprocess=true;
 	
 	/**if this is set to a value, will overrule the scale factor */
-	public Double forceScale=null;
+	public ScaleInformation forceScale=null;
 
 	public MultichannelDisplayPicker() {
 		this(null);
@@ -116,11 +117,11 @@ public class MultichannelDisplayPicker extends
 	/**returns true if the scale used by the model available is reasonable for the target image.
 	 * Reasonable is defined as producing final image panels sizes that are below a certain limit */
 	public boolean isProprocessSuitable(MultichannelDisplayLayer imageMulti) {
-		double pScale=1;
+		ScaleInformation pScale=new ScaleInformation();
 		if (getModelItem()!=null)
 			pScale = getModelItem().getPreprocessScale();
 		/**decides whether the 'preprocess' is appropriate or not*/
-		boolean b = imageMulti.getMultiChannelImage().getDimensions().getWidth()*pScale<500;
+		boolean b = imageMulti.getMultiChannelImage().getDimensions().getWidth()*pScale.getScale()<500;
 		return b;
 	}
 
@@ -164,7 +165,7 @@ public class MultichannelDisplayPicker extends
 		PreProcessInformation modifications = multichannelDisplayLayer.getSlot().getModifications();
 		if(modifications==null)  modifications=new PreProcessInformation(1);
 		Rectangle2D info = modifications.getOutputDimensions(dimensions);
-		double scale=multichannelDisplayLayer.getPreprocessScale();
+		double scale=multichannelDisplayLayer.getPreprocessScale().getScale();
 		double targetSize=200;
 		
 		int minHeight = 80;
@@ -172,7 +173,7 @@ public class MultichannelDisplayPicker extends
 			
 			double newscale = Math.ceil(targetSize/info.getHeight())*scale;
 				if (ShowMessage.showOptionalMessage("Small image", true, "It looks like your region of interest or your image is very small", "will chnage the scale for the default template and scale up the image", "You can delete or override the default template later", "Is this ok?"))
-				  forceScale=newscale;
+				  forceScale=new ScaleInformation(newscale);
 		}
 	}
 

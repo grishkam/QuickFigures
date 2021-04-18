@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 6, 2020
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureEditDialogs;
@@ -34,6 +34,7 @@ import figureOrganizer.PanelManager;
 import graphicActionToolbar.CurrentFigureSet;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import imageScaling.ScaleInformation;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.channels.ChannelEntryBox;
@@ -71,7 +72,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	public static final String 
 			IDEAL_LAYOUT_SIZE_KEY = "mWidth", 
 			PANEL_SIZE_KEY = "Panel Level Scale", 
-			PREPROCESS_SCALE_KEY = "preScale",
+					
 			EXCLUDE_CHANNEL_KEY = "exclude channel panel ",
 			MERGE_PANEL_POSITION_KEY = "merge",
 			DONT_MERGE_CHANNELS_KEY = "don't merge",
@@ -198,7 +199,8 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		
 		if (this.panelCreationIncluded)
 			{
-			this.add(PREPROCESS_SCALE_KEY, new NumberInputPanel("Scale Factor (Bilinear)", principalMultiChannel.getPreprocessScale(),3));
+			PanelStackDisplayOptions scaleLevelDialog = this;
+			ScaleLevelInputDialog.addScaleInformationToDialog(principalMultiChannel.getPreprocessScale(), scaleLevelDialog);
 			
 			
 			}
@@ -313,24 +315,22 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 	 */
 	protected void setPanelCreationOptionsToDialog(MultichannelDisplayLayer dis, ChannelUseInstructions ins) {
 		
-		double preScale=this.getNumber(PREPROCESS_SCALE_KEY); 
-		if (preScale<=0) preScale=dis.getPreprocessScale();
+		ScaleInformation preScale=ScaleLevelInputDialog.getScaleLevelInformationFromDialog(this);
 		
-		if (preScale>0.01)dis.setPreprocessScale(preScale);
+		if (preScale.getScale()<=0) preScale=dis.getPreprocessScale();
+		
+		boolean validScale = preScale.getScale()>0.01;
+		if (validScale) {dis.setPreprocessScale(preScale);}
 		
 		setMergeHandlingToDialog(this, ins);
-		ArrayList<Integer> noChan =this.getChannelChoices(EXCLUDE_CHANNEL_KEY) ; /**=new ArrayList<Integer>();
-		for(int i=0; i<3; i++) {
-			
-			noChan.add(this.getChoiceIndex("exclude channel panel "+i));
-		}*/
-		
+		ArrayList<Integer> noChan =this.getChannelChoices(EXCLUDE_CHANNEL_KEY) ; 
 		ins.setExcludedChannelPanels(noChan);
 		ins.setIdealNumberOfColumns(this.getNumberInt(IDEAL_LAYOUT_SIZE_KEY)); 
 		
 		
 		double theScale = this.getNumber(PANEL_SIZE_KEY);
 		if(theScale<1) theScale=ImageDPIHandler.getInchDefinition();//the pixels per inch must be an integer above 0
+		
 		double panelLevelScale = ImageDPIHandler.getInchDefinition()/theScale;
 		if (panelLevelScale<=0) 
 			{panelLevelScale=1;			}
@@ -341,7 +341,7 @@ public class PanelStackDisplayOptions extends GraphicItemOptionsDialog {
 		for(MultichannelDisplayLayer addedDiaply: displural) {
 			if ( panelLevelScale>0.01)addedDiaply.getPanelManager().setPanelLevelScale(panelLevelScale);
 			
-			if (preScale>0.01)addedDiaply.setPreprocessScale(preScale);
+			if (validScale)addedDiaply.setPreprocessScale(preScale);
 		}
 	}
 

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -48,6 +48,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.IconUtil;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import locatedObject.AttachmentPosition;
 import logging.IssueLog;
@@ -256,9 +257,9 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 			try {
 				boolean mustResize=areSizesDifferent(principalMultiChannel, display) ;
-			double pScale = principalMultiChannel.getPreprocessScale();
-			double w = principalMultiChannel.getMultiChannelImage().getDimensions().getWidth()/pScale;
-			double h = principalMultiChannel.getMultiChannelImage().getDimensions().getHeight()/pScale;
+			ScaleInformation pScale = principalMultiChannel.getPreprocessScale();
+			double w = principalMultiChannel.getMultiChannelImage().getDimensions().getWidth()/pScale.getScale();
+			double h = principalMultiChannel.getMultiChannelImage().getDimensions().getHeight()/pScale.getScale();
 			
 			if ( (mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
 				{
@@ -364,7 +365,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
 		} else {
-			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale(), display.getPreprocessInterpolation()));
+			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
 		}
 	}
 	

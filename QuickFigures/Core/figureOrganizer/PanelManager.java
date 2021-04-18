@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -35,6 +35,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
@@ -467,7 +468,7 @@ public class PanelManager implements Serializable, EditListener{
 		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newPanelScale=panel.getRelativeScale()*ppi/newppi;
-		double newScale=getImageDisplayLayer().getPreprocessScale()*newppi/ppi;
+		ScaleInformation newScale=getImageDisplayLayer().getPreprocessScale().multiplyBy(newppi/ppi);
 		
 		CombinedEdit output = new CombinedEdit();
 		

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 13, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package channelMerging;
@@ -24,6 +24,9 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+
+import imageScaling.Interpolation;
+import imageScaling.ScaleInformation;
 
 /**this class contains information for the rotation, cropping and scaling
   performed on a multidimensional image. This is the 'preprocess'
@@ -39,7 +42,6 @@ public class PreProcessInformation implements Serializable {
 	private Rectangle rectangle;//the dimensions of the crop region
 	private double scale=1;//the scale factor applied
 	
-	public static enum Interpolation{BILINEAR, BICUBIC, NONE};
 	Interpolation interpolationType=Interpolation.BILINEAR;
 	
 	public String toString() {
@@ -64,9 +66,9 @@ public class PreProcessInformation implements Serializable {
 	}
 	
 	/**creates an instance cropped at an angle with the given rectangle and then scaled*/
-	public PreProcessInformation(Rectangle rectangle2, double angle2, double scale2, Interpolation type) {
-		this(rectangle2,angle2,scale2);
-		this.interpolationType=type;
+	public PreProcessInformation(Rectangle rectangle2, double angle2, ScaleInformation scaleInfo) {
+		this(rectangle2,angle2,scaleInfo.getScale());
+		this.interpolationType=scaleInfo.getInterpolationType();
 	}
 
 	/**returns true if this object instructs nothing to be done to the image*/
@@ -92,7 +94,7 @@ public class PreProcessInformation implements Serializable {
 	}
 	
 	PreProcessInformation copy() {
-		return new PreProcessInformation(getRectangle(), getAngle(), getScale(), getInterpolationType());
+		return new PreProcessInformation(getRectangle(), getAngle(), this.getScaleInformation());
 	}
 
 	public Rectangle getRectangle() {
@@ -152,6 +154,7 @@ public class PreProcessInformation implements Serializable {
 		return interpolationType;
 	}
 
-	
+	/**returns the scale information*/
+	public ScaleInformation getScaleInformation() {return new ScaleInformation(scale, interpolationType);}
 
 }

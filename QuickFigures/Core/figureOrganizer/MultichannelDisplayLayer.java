@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -33,7 +33,6 @@ import channelMerging.MultiChannelUpdateListener;
 import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
-import channelMerging.PreProcessInformation.Interpolation;
 import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.PanelStackDisplayOptions;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
@@ -48,6 +47,8 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconSet;
 import icons.SourceImageTreeIcon;
+import imageScaling.Interpolation;
+import imageScaling.ScaleInformation;
 import layersGUI.HasTreeLeafIcon;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.BasicLayoutEditor;
@@ -679,12 +680,12 @@ transient static IconSet i;
 	
 	
 	/**getter and setter methods for the preprocess scale. experimental*/
-	public double getPreprocessScale() {
+	public ScaleInformation getPreprocessScale() {
 		MultiChannelSlot slot2 = this.getSlot();
-		if(slot2==null) return 1;
+		if(slot2==null) return new ScaleInformation();
 		PreProcessInformation info = slot2.getModifications();
-		if(info==null) return 1;
-		return info.getScale();
+		if(info==null) return new ScaleInformation();
+		return info.getScaleInformation();
 	}
 	
 	/**getter and setter methods for the preprocess scale. experimental*/
@@ -697,17 +698,18 @@ transient static IconSet i;
 	}
 	
 	/**sets the preprocess scale*/
-	public MultiChannelImage setPreprocessScale(double s) {
-		if (s<=0) return this.getMultiChannelImage();
-		if (s>10) s=10; //does not allow user to scale more than 10 fold. it is never really needed and may cause heap space issues
+	public MultiChannelImage setPreprocessScale(ScaleInformation s) {
+		if (s.getScale()<=0) return this.getMultiChannelImage();
+		if (s.getScale()>10) s=s.getAtDifferentScale(10); //does not allow user to scale more than 10 fold. it is never really needed and may cause heap space issues
 		MultiChannelSlot slot2 = this.getSlot();
 		if (slot2==null) return this.getMultiChannelImage();
 		PreProcessInformation info = slot2.getModifications();
-		if(info!=null&&s==info.getScale()) return this.getMultiChannelImage();
-		PreProcessInformation newscale;
-		if (info!=null) newscale= new PreProcessInformation(info.getRectangle(), info.getAngle(), s, info.getInterpolationType());
-		else  newscale= new PreProcessInformation(null, 0, s, null);
-		slot.applyCropAndScale(newscale);
+		if(info!=null&&s==info.getScaleInformation()) return this.getMultiChannelImage();
+		PreProcessInformation newProcess;
+		if (info!=null) 
+			newProcess= new PreProcessInformation(info.getRectangle(), info.getAngle(),s);
+		else  newProcess= new PreProcessInformation(null, 0, s);
+		slot.applyCropAndScale(newProcess);
 		return this.getMultiChannelImage();
 	}
 	/**returns the 'pre-process' information object for this image*/

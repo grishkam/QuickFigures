@@ -203,17 +203,17 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 		
 	}
 
-	/**
+	/** check the scale key
 	 * @param qf
 	 * @param dialog
 	 */
 	public void checkPreprocessScaleField(FigureOrganizingLayerPane qf, PanelStackDisplayOptions dialog) {
-		double oScale = qf.getPrincipalMultiChannel().getPreprocessScale();
+		double oScale = qf.getPrincipalMultiChannel().getPreprocessScale().getScale();
 		Dimension oSize = qf.getAllPanelLists().getMergePanel().getPanelGraphic().getDimensions();
-		changeNumber(dialog, PanelStackDisplayOptions.PREPROCESS_SCALE_KEY, oScale*2);
+		changeNumber(dialog, ScaleLevelInputDialog.SCALE_KEY, oScale*2);
 		IssueLog.log("scale starts at "+oScale);
 		/**makes sure the scale has change*/
-		double nScale = qf.getPrincipalMultiChannel().getPreprocessScale();
+		double nScale = qf.getPrincipalMultiChannel().getPreprocessScale().getScale();
 		IssueLog.log("scale ends at "+nScale);
 		assert(nScale==2*oScale);
 		//makes sure the size of the panel object has changed
@@ -221,7 +221,7 @@ public class PanelStackDisplayOptionsTest extends  DialogTester  {
 		assert(!oSize.equals(dimensions));
 		
 		/**return to original size*/
-		changeNumber(dialog, PanelStackDisplayOptions.PREPROCESS_SCALE_KEY, oScale);
+		changeNumber(dialog, ScaleLevelInputDialog.SCALE_KEY, oScale);
 		dimensions = qf.getAllPanelLists().getMergePanel().getPanelGraphic().getDimensions();
 		assert(oSize.equals(dimensions));
 		

@@ -25,6 +25,7 @@ import graphicActionToolbar.QuickFigureMaker;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import ij.IJ;
+import imageScaling.ScaleInformation;
 import logging.IssueLog;
 import popupMenusForComplexObjects.ImagePanelMenu;
 import testing.FigureTester;
@@ -411,7 +412,7 @@ public class BarGraphicTest {
 	 * @param scaleTest
 	 */
 	void switchScale(FigureOrganizingLayerPane figure, double scaleTest) {
-		figure.getPrincipalMultiChannel().setPreprocessScale( scaleTest);
+		figure.getPrincipalMultiChannel().setPreprocessScale( new ScaleInformation(scaleTest));
 		 figure.updatePanelsAndLabelsFromSource();
 		 figure.updateDisplay();
 	}

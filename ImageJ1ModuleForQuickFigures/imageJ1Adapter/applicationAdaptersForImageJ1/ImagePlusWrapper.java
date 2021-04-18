@@ -31,6 +31,7 @@ import ij.plugin.CanvasResizer;
 import ij.process.ImageProcessor;
 import ij.process.LUT;
 import imageDisplayApp.OverlayObjectManager;
+import imageScaling.Interpolation;
 import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
 import locatedObject.LocatedObject2D;
@@ -691,7 +692,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	
 	/** returns a scaled version of this that is also cropped using a rectangle that 
 	  may be rotated at a certain angle*/
-	private ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale, PreProcessInformation.Interpolation interpolateMethod) {
+	private ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale, Interpolation interpolateMethod) {
 		imp.deleteRoi();
 		ImagePlus d = imp.duplicate();
 		ImageStack oldstack = d.getStack();

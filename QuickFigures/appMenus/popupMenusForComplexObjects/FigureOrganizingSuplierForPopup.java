@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 11, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package popupMenusForComplexObjects;
@@ -39,6 +39,7 @@ import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
+import figureEditDialogs.ScaleLevelInputDialog;
 import figureEditDialogs.WindowLevelDialog;
 import figureFormat.TemplateUserMenuAction;
 import figureOrganizer.FigureOrganizingLayerPane;
@@ -57,6 +58,8 @@ import iconGraphicalObjects.IconUtil;
 import icons.SourceImageTreeIcon;
 import icons.ToolIconWithText;
 import imageDisplayApp.CanvasOptions;
+import imageScaling.Interpolation;
+import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
@@ -345,7 +348,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	PreProcessInformation modifications = crop1.getSlot().getModifications();
 	Rectangle r1=null;
 	Dimension d1;
-	PreProcessInformation.Interpolation interpolate=null;
+	Interpolation interpolate=null;
 	
 	if (modifications!=null) {
 		r1= modifications.getRectangle();
@@ -371,7 +374,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 }
 
 	/**shows a cropping dialog*/
-	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim, PreProcessInformation.Interpolation interpolate) {
+	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim, Interpolation interpolate) {
 		PreProcessInformation original = display.getSlot().getModifications();
 		display.getPanelManager().setupViewLocation();
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(display);
@@ -447,7 +450,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	/**shows a dialog for changing the scale factor of many multichannel images within the figure*/
 	 CombinedEdit showReScaleAllDisplayDialog(MultichannelDisplayLayer display) {
 		 CombinedEdit output = new CombinedEdit();
-		double newScale = showRescaleDialogSingleFor(display);
+		ScaleInformation newScale = showRescaleDialogSingleFor(display);
 		
 		output.addEditToList(
 				applyNewScaleTo(display, newScale)
@@ -508,8 +511,8 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 	/**shows a dialog for changing the scale factor one image*/
-	public static double showSingleImageRescale(MultichannelDisplayLayer display) {
-		double newScale = showRescaleDialogSingleFor(display);
+	public static ScaleInformation showSingleImageRescale(MultichannelDisplayLayer display) {
+		ScaleInformation newScale = showRescaleDialogSingleFor(display);
 		
 		applyNewScaleTo(display, newScale);
 		return newScale;
@@ -518,14 +521,13 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 	/**shows a rescale dialog for the single image*/
-	protected static double showRescaleDialogSingleFor(MultichannelDisplayLayer display) {
+	protected static ScaleInformation showRescaleDialogSingleFor(MultichannelDisplayLayer display) {
 		PreProcessInformation original = display.getSlot().getModifications();
 		
-		double oldScale =1;
+		ScaleInformation oldScale =new ScaleInformation();
 		if (original!=null)
-				oldScale= original.getScale();
-		
-		double newScale = FigureScalerMenu.getScaleFromDialog("Change Image Scale", "Scaling with Bilinear Interpolation is done", oldScale);
+				oldScale= original.getScaleInformation();
+		ScaleInformation newScale = ScaleLevelInputDialog.showUserTheDialog(oldScale);
 		return newScale;
 	}
 	
@@ -541,7 +543,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 /**Sets a new preprocess scale for the image, panels will be resized by this change and
   layout rows and columns will also be resized*/
-	public static AbstractUndoableEdit2 applyNewScaleTo(MultichannelDisplayLayer display, double newScale) {
+	public static AbstractUndoableEdit2 applyNewScaleTo(MultichannelDisplayLayer display, ScaleInformation newScale) {
 		if (display.getPreprocessScale()==newScale)
 			return null;
 		PreprocessChangeUndo output1 = new PreprocessChangeUndo(display);

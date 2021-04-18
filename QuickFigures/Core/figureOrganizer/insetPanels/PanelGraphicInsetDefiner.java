@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package figureOrganizer.insetPanels;
@@ -50,6 +50,7 @@ import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.IconUtil;
+import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
@@ -161,7 +162,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
 		Rectangle2D b = inv.createTransformedShape(this.getBounds()).getBounds2D();
 		if (p==null) 
-			return new PreProcessInformation(b.getBounds(), this.getAngle(), getBilinearScale(), p.getInterpolationType());;
+			return new PreProcessInformation(b.getBounds(), this.getAngle(), new ScaleInformation(getBilinearScale()));;
 		
 		double nx=b.getX()/p.getScale();
 		double ny=b.getY()/p.getScale();
@@ -189,7 +190,8 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			angleOutput+=p.getAngle();
 		} catch (Throwable t) {}
 		
-		return new PreProcessInformation(outputRect.getBounds(), angleOutput, p.getScale()*getBilinearScale(), p.getInterpolationType());
+		ScaleInformation scaleInfo = new ScaleInformation(p.getScale()*getBilinearScale(), p.getInterpolationType());
+		return new PreProcessInformation(outputRect.getBounds(), angleOutput, scaleInfo);
 		
 	}
 

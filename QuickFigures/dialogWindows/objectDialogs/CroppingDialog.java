@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package objectDialogs;
@@ -42,7 +42,6 @@ import channelMerging.CSFLocation;
 import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
-import channelMerging.PreProcessInformation.Interpolation;
 import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
@@ -51,6 +50,8 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import imageScaling.Interpolation;
+import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import standardDialog.choices.ChoiceInputEvent;
@@ -558,19 +559,17 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		if(!crop.isCroppingRectangleValid()) return crop;
 		
 		RectangularGraphic r = crop.getRectangle();
-		double oldScale=1;
-		Interpolation oldInterpolation=null;
+		ScaleInformation oldScale=new ScaleInformation();
 		
 		if (slot.getModifications()!=null) { 
-			oldScale=slot.getModifications().getScale();
-			oldInterpolation = slot.getModifications().getInterpolationType();
+			oldScale=slot.getModifications().getScaleInformation();
 		}
 		
 		PreProcessInformation process;
 		if (!crop.wasEliminated)
-		process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), oldScale,oldInterpolation);
+		process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), oldScale);
 		else {
-			process = new PreProcessInformation(null, 0, oldScale, oldInterpolation);
+			process = new PreProcessInformation(null, 0, oldScale);
 		}
 		
 		try {

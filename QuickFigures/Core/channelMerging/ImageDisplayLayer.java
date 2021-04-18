@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package channelMerging;
@@ -29,6 +29,7 @@ import figureOrganizer.PanelManager;
 import figureOrganizer.PanelSetter;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import imageScaling.ScaleInformation;
 
 /**A specialized object that contains a source multi-dimensional image
  * and a list of panels that display various parts of that image*/
@@ -64,10 +65,10 @@ public interface ImageDisplayLayer extends GraphicLayer {
 	
 
 	/**gets the scale factor that was applied to the source image*/
-	public double getPreprocessScale();
+	public ScaleInformation getPreprocessScale();
 	
 	/**sets the scale factor that is applied to the source image*/
-	public MultiChannelImage setPreprocessScale(double s);
+	public MultiChannelImage setPreprocessScale(ScaleInformation s);
 	
 /**Information about the crop, rotation and scaling, that was applied to the original image*/
 	PreProcessInformation getPreProcess();
