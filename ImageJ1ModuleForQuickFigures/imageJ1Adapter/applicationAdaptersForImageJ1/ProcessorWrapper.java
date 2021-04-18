@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package applicationAdaptersForImageJ1;
@@ -35,15 +35,17 @@ import ij.process.ColorProcessor;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import ij.process.ShortProcessor;
+import imageScaling.Interpolation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 
 /**an implementation of pixel wrapper interface for ImageJ images
- *  QuickFigures.  Of the methods below, only a few are crucial for the 
+ *   Of the methods below, only a few are crucial for the 
  *  function of QuickFigures in its current form
  *  */
 public class ProcessorWrapper implements PixelWrapper {
 	public ImageProcessor object;
+	private Interpolation interpolate ;
 	
 	public ProcessorWrapper(ImageProcessor ip) {
 		this.object=ip;
@@ -51,19 +53,12 @@ public class ProcessorWrapper implements PixelWrapper {
 	
 	public ProcessorWrapper createnew(
 			ImageProcessor object) {
-		return new ProcessorWrapper(object);
+		ProcessorWrapper processorWrapper = new ProcessorWrapper(object);
+		processorWrapper.setInterpolationType(interpolate);
+		return processorWrapper;
 	}
 
 
-	/**Inserts this items pixels into the target
-	public void insertInto(PixelWrapper recipient, int x, int y) {
-		Object ob = recipient.getPixels();
-		if (ob instanceof ImageProcessor) {
-		((ImageProcessor)ob ).insert(getPixels(), x, y);
-		}
-		
-	}
-*/
 
 	public ImageProcessor getPixels() {
 		return object;
@@ -80,20 +75,38 @@ public class ProcessorWrapper implements PixelWrapper {
 
 	@Override
 	public void resize(double x, double y) {
+		setInterPolationMethodFor(object);
 		object=object.resize((int)x, (int)y);
 		
 	}
 	
+	/**sets theinterpolation method for the image processor
+	 * @param object2
+	 */
+	private void setInterPolationMethodFor(ImageProcessor object2) {
+		if(object2==null)
+			return;
+		if (interpolate==Interpolation.BILINEAR) 
+			object2.setInterpolationMethod(ImageProcessor.BILINEAR);
+		if (interpolate==Interpolation.BICUBIC) 
+			object2.setInterpolationMethod(ImageProcessor.BICUBIC);
+		if (interpolate==Interpolation.NONE)
+			object2.setInterpolationMethod(ImageProcessor.NONE);
+		
+		
+	}
+
 	@Override
-	public void resizeBilinear(double width, double height) {
-		object.setInterpolationMethod(ImageProcessor.BILINEAR);
+	public void resizeWithInterpolationMethod(double width, double height) {
+		this.setInterPolationMethodFor(object);
 		object=object.resize((int)width, (int)height);
 		
 	}
 	
 	@Override
-	public void scaleBilinear(double scale) {
-		resizeBilinear(object.getWidth()*scale, object.getHeight()*scale);
+	public void scaleWithCurrentInterpolationMethod(double scale) {
+		this.setInterPolationMethodFor(object);
+		resizeWithInterpolationMethod(object.getWidth()*scale, object.getHeight()*scale);
 		
 	}
 
@@ -231,7 +244,7 @@ public void cropAtAngle(Rectangle r, double angle) {
 	this.crop(bounds);
 	
 	/**now rotates the smaller image*/
-	object.setInterpolationMethod(ImageProcessor.BILINEAR);
+	this.setInterPolationMethodFor(object);
 	object.rotate(angle);
 	
 	Rectangle r2 = new Rectangle(r);
@@ -248,6 +261,14 @@ public int getBitsPerPixel() {
 	if (object instanceof FloatProcessor) return 32;
 	if (object instanceof ColorProcessor) return 32;
 	return 8;
+}
+
+/**
+ * @param interpolateMe
+ */
+public void setInterpolationType(Interpolation interpolateMe) {
+	this.interpolate=interpolateMe;
+	
 }
 
 

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 18, 2021
  * Version: 2021.1
  */
 package applicationAdapters;
@@ -52,7 +52,7 @@ public interface PixelWrapper {
 	
 	/**resize. Sets the image to a copy with width and height specified*/
 	public void resize( double width, double height) ;
-	public void resizeBilinear(double width, double height);
+	public void resizeWithInterpolationMethod(double width, double height);
 	
 	/**returns the dimensions*/
 	public int width();
@@ -75,7 +75,7 @@ public interface PixelWrapper {
 	public int[] getDistribution();
 
 	/**performs a scaling with bilinear interpolation*/
-	void scaleBilinear(double scale);
+	void scaleWithCurrentInterpolationMethod(double scale);
 
 	
 }

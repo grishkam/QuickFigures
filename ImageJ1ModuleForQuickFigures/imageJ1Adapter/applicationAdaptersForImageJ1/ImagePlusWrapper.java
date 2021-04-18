@@ -700,12 +700,13 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		ImageStack nstack = null;
 		for(int i=1; i<=oldstack.getSize(); i++) {
 			ProcessorWrapper p = new ProcessorWrapper(oldstack.getProcessor(i));
-			
+			p.setInterpolationType(interpolateMethod);
 			if(r!=null)
 				p.cropAtAngle(r, angle);
 			
 			if (scale!=1) {
-				p.scaleBilinear(scale);
+				p.setInterpolationType(interpolateMethod);
+				p.scaleWithCurrentInterpolationMethod(scale);
 			}
 			
 			if (nstack == null)
