@@ -18,12 +18,11 @@ that it takes off with incredible popularity, I might need to start making many 
 possibly start asking for help. 
 Furthermore, I would be flattered if parts of my work were re-used or repurposed by others.
 I am currently pushing recent changes to this repository.
-The sourcecode for my journal submission is in the QuickFigures.zip file while 
-the .jar file can be used as an ImageJ plugin.
 
 Please feel free to contact me with any bug reports, questions, recommendations or comments.
 
 Enjoy the toolset,
+
 Gregory 
 
 For anyone who is interested in the code, JUnit tests are in [the testing folder](https://github.com/grishkam/QuickFigures/tree/master/TestingQuickFigures). If you will be running those tests, you will need the image files in [this location](https://github.com/grishkam/QuickFigures/tree/master/TestingQuickFigures/Testing) and put them in your documents folder in '~\Documents\Quick Figures\Testing'.
