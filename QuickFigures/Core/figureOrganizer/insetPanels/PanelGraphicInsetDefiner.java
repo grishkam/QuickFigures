@@ -89,12 +89,17 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	
 	
 	public InsetLayout previosInsetLayout;
+	
+	/**the scale level of the inset relative to the parent panel*/
 	private double bilinearScale=2;
+	
+	/**Number indicates a factor that the size that the panel is multiplied by*/
+	private double sizeInflation=1;
 	
 	{this.setName("Inset Definer");}
 	transient boolean setup=false;
 
-	public double getBilinearScale() {
+	public double getInsetScale() {
 		return bilinearScale;
 	}
 
@@ -162,7 +167,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
 		Rectangle2D b = inv.createTransformedShape(this.getBounds()).getBounds2D();
 		if (p==null) 
-			return new PreProcessInformation(b.getBounds(), this.getAngle(), new ScaleInformation(getBilinearScale()));;
+			return new PreProcessInformation(b.getBounds(), this.getAngle(), new ScaleInformation(getInsetScale()));;
 		
 		double nx=b.getX()/p.getScale();
 		double ny=b.getY()/p.getScale();
@@ -190,7 +195,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			angleOutput+=p.getAngle();
 		} catch (Throwable t) {}
 		
-		ScaleInformation scaleInfo = new ScaleInformation(p.getScale()*getBilinearScale(), p.getInterpolationType());
+		ScaleInformation scaleInfo = new ScaleInformation(p.getScale()*getInsetScale(), p.getInterpolationType());
 		return new PreProcessInformation(outputRect.getBounds(), angleOutput, scaleInfo);
 		
 	}
@@ -542,7 +547,7 @@ static Color  folderColor2= new Color(0,140, 0);
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newPanelScale=panel.getRelativeScale()*ppi/newppi;
-			double newScale=inset.getBilinearScale()*newppi/ppi;
+			double newScale=inset.getInsetScale()*newppi/ppi;
 			if (getSourceDisplay().getSlot().getModifications()!=null) newScale/=getSourceDisplay().getSlot().getModifications().getScale();
 			
 			for(PanelListElement panel2: getPanelList().getPanels()) {
@@ -642,6 +647,19 @@ static Color  folderColor2= new Color(0,140, 0);
 	public void draw(Graphics2D g, CordinateConverter cords) {
 		this.ensureSetup();
 		super.draw(g, cords);
+	}
+
+	
+	/**returns the resize applied to the panels*/
+	public double getPanelSizeInflation() {
+		if(sizeInflation<1)
+			sizeInflation=1;//cannot be zero
+		return sizeInflation;
+	}
+
+	/**sets the resize applied to the panels*/
+	public void setPanelSizeInflation(double sizeInflation) {
+		this.sizeInflation = sizeInflation;
 	}
 
 }

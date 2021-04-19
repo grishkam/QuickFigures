@@ -246,6 +246,9 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		private double scale=2;
 		private ImagePanelGraphic sPanel;
 		private ScaleType type=ScaleType.USER_DEFINED;
+		
+		/**set to true if the number of pixels in the panels should not be altered*/
+		private boolean inflateSize;
 
 		/**
 		 * @param inset
@@ -273,10 +276,11 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			sPanel=primaryInset.getSourcePanel();
 			primaryInset.getPanelManager().getPanelList().setPanelFixedEdges();
 			
-			/**makes sure the panels are set to the same panel scale so the dpi ends up the same*/
-			double panelScale=sPanel.getRelativeScale();
+			
 			
 			PanelGraphicInsetDefiner targetInset = primaryInset;
+			
+		
 			
 			output.addEditToList(new UndoLayoutEdit(targetInset.personalLayout));
 		
@@ -321,19 +325,34 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		
 					}
 					
-					scale= primaryInset.getBilinearScale()*scaleChange;
+					scale= primaryInset.getInsetScale()*scaleChange;
 					if(scale<1) scale=1;;
 					
 			}
 			
+			
+			/**makes sure the panels are set to the same panel scale so the dpi ends up the same*/
+			double panelScale=sPanel.getRelativeScale();
+			panelScale=panelScale*targetInset.getPanelSizeInflation();
+			
+			if(inflateSize) {
+				panelScale=sPanel.getRelativeScale();
+				targetInset.setPanelSizeInflation(scale);
+				panelScale=panelScale*targetInset.getPanelSizeInflation();
+				scale=1;
+				
+			}
 			
 			/**changes the scale of the inset that was clicked on */
 			output.addEditToList(
 					resizeInsetPanels(panelScale, scale, targetInset)
 					);
 			
+			
+			
 			/**changes the scale of each other inset */
 			for(PanelGraphicInsetDefiner inset1: primaryInset.getInsetDefinersThatShareLayout()) {
+				inset1.setPanelSizeInflation(targetInset.getPanelSizeInflation());
 				if(type== ScaleType.MATCH_SIZE_TO_PARENT) {
 					output.addEditToList(new UndoInsetDefChange(inset1, true));
 					inset1.setWidth(targetInset.getRectangle().getWidth());

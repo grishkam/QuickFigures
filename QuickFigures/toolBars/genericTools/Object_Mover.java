@@ -61,6 +61,7 @@ import handles.SmartHandle;
 import handles.SmartHandleList;
 import icons.GraphicToolIcon;
 import icons.IconSet;
+import imageDisplayApp.KeyDownTracker;
 import imageDisplayApp.OverlayObjectManager;
 import includedToolbars.StatusPanel;
 import layout.PanelLayout;
@@ -121,6 +122,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	protected boolean ignorehidden=true;
 	
 	protected boolean bringSelectedToFront=false;
+	
+	 boolean paneMode=false;
 	
 	
 	
@@ -1052,6 +1055,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	@Override
 	public void mouseDragged() {
 		
+		if (panMode()) 
+			return;;
+		
 		/**selects text if text edit mode */
 		if (this.textEditMode()&&this.getSelectedHandleNumber()==NO_HANDLE)  {
 			mouseDragForTextCursor();
@@ -1074,6 +1080,33 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		getImageClicked().updateDisplay();	
 		
+	}
+
+	/**
+	 * @return 
+	 * 
+	 */
+	protected boolean panMode() {
+		try {
+		paneMode=this.isMetaOrControlDown()&&this.shiftDown();
+		
+			if (paneMode ) {
+			
+				if (paneMode) {
+					int x = (int) -getXDisplaceMent();
+					int y = (int) -getYDisplaceMent();
+					
+					this.getImageDisplayWrapperClick().scrollPane(x, y);
+				}
+				
+				return true;
+			} else
+				paneMode = false;
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
+		
+		return false;
 	}
 
 	/**
@@ -1314,12 +1347,14 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	
 	@Override
 	public void mouseEntered() {
+		KeyDownTracker.reset();
 		super.getImageDisplayWrapperClick().setCursor(getNormalCursor());
 		
 	}
 	
 
 	public void mouseExited() {
+		KeyDownTracker.reset();
 		if (this.getImageClicked()!=null) getImageClicked().updateDisplay();
 		
 	}
@@ -1739,6 +1774,12 @@ public String getToolTip() {
 		this.onlySelectThoseOfClass = onlySelectThoseOfClass;
 		if (this.onlySelectThoseOfClass==null) this.onlySelectThoseOfClass=Object.class;
 	}
+
+	public boolean isPaneMode() {
+		return paneMode;
+	}
+
+
 
 	/**The tool icon*/
 	class LocalIcon extends GraphicToolIcon {

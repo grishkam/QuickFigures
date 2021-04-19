@@ -47,14 +47,14 @@ public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 	/**creates the undo, */
 	public UndoInsetDefChange(PanelGraphicInsetDefiner insetDefiner, boolean updateImagePanels) {
 		this.item=insetDefiner;
-		iScale=item.getBilinearScale();
+		iScale=item.getInsetScale();
 		iRect=item.getRectangle();
 		update=updateImagePanels;
 	}
 	
 
 	public void establishFinalState() {
-		fScale=item.getBilinearScale();
+		fScale=item.getInsetScale();
 		fRect=item.getRectangle();
 	}
 	

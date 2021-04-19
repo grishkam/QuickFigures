@@ -74,6 +74,13 @@ public class KeyDownTracker implements AWTEventListener {
 		StatusPanel.updateStatus(arg0.getKeyChar()+" release");
 	}
 	
+	
+	/**resets the keys that are down*/
+	public static void reset() {
+		keysDown.clear();
+		keysDownCode.clear();
+	}
+	
 
 
 	public void keyPressed(KeyEvent arg0) {
