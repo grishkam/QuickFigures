@@ -54,7 +54,6 @@ import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
-import locatedObject.ScaleInfo;
 import popupMenusForComplexObjects.InsetMenu;
 import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
@@ -64,6 +63,7 @@ import undo.UndoAbleEditForRemoveItem;
 import utilityClasses1.ArraySorter;
 
 /**A special inset definer object that the user can use to draw insets with the inset tool.
+ * This is the region of interest
   */
 public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener{
 
@@ -87,10 +87,12 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	
 	public InsetLayout previosInsetLayout;
 	
-	/**the scale level of the inset relative to the parent panel*/
+	/**the scale level of the inset relative to the parent panel. any interpolation method may be used. not just bilinear*/
 	private double bilinearScale=2;
 	
-	/**Number indicates a factor that the size that the panel is multiplied by*/
+	/**can set to true to avoid applying a scale operation to the image
+	 * in this case, images for panels will be created with the same number of pixels 
+	  and panels will be set to a large panel size*/
 	private boolean doNotScale=false;
 	
 	{this.setName("Inset Definer");}
@@ -105,10 +107,12 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		updateImagePanels();
 	}
 
+	/**returns how many fold larger the inset panels should be compared to the region of interest on the parent panel*/
 	public double getInsetScale() {
 		return bilinearScale;
 	}
 
+	/**sets how many fold larger the inset panels should be*/
 	public void setInsetScale(double bilinearScale) {
 		this.bilinearScale = bilinearScale;
 	}
@@ -119,7 +123,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		return new PanelGraphicInsetDefiner(getSourcePanel(), this.getBounds());
 	}
 
-	
+	/**creates a special layer where panels and labels for an inset whould go*/
 	public InsetGraphicLayer createPersonalLayer(String st) {
 		return new InsetGraphicLayer(st);
 	}
@@ -130,10 +134,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ScaleInfo getScaleInfoForSourceImage() {
-		
-		return getSourcePanel().getScaleInfo();
-	}
+	
 
 	
 	/**Returns an indicator rectangle to be used by the cropping dialog on the original image,
@@ -232,7 +233,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	/** Creates a panel list for this cropper. not used for important functions yet. work in progress*/
 	private PanelList createCroppedInsetChannelDisplay(PanelList p) {
 		PanelList output = p.createDouble();
-	//	setUpListToMakeInset(output, p);
+	
 		return output;
 	}
 	
@@ -242,9 +243,8 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	
 	
 	
-	/**Creates inset versions of the multichannel insets*/
+	/**Creates inset panels  */
 	public void createMultiChannelInsets() {
-		//GraphicLayer layer = this.getParentLayer();
 		
 			MultichannelDisplayLayer d=getSourceDisplay();
 			if (d==null) return;
