@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 7, 2021
+ * Date Modified: April 20, 2021
  * Version: 2021.1
  */
 package undo;
@@ -43,12 +43,15 @@ public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 	private Rectangle2D.Double iRect;
 	
 	boolean update=false;
+	private boolean iDoNot;
+	private boolean fDoNot;
 
 	/**creates the undo, */
 	public UndoInsetDefChange(PanelGraphicInsetDefiner insetDefiner, boolean updateImagePanels) {
 		this.item=insetDefiner;
 		iScale=item.getInsetScale();
 		iRect=item.getRectangle();
+		iDoNot=insetDefiner.isDoNotScale();
 		update=updateImagePanels;
 	}
 	
@@ -56,17 +59,20 @@ public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 	public void establishFinalState() {
 		fScale=item.getInsetScale();
 		fRect=item.getRectangle();
+		fDoNot=item.isDoNotScale();
 	}
 	
 	public void redo() {
-		item.setBilinearScale(fScale);
+		item.setInsetScale(fScale);
 		item.setRectangle(fRect);
+		item.setDoNotScale(fDoNot);
 		if(update) item.updateImagePanels();
 	}
 	
 	public void undo() {
-		item.setBilinearScale(iScale);
+		item.setInsetScale(iScale);
 		item.setRectangle(iRect);
+		item.setDoNotScale(iDoNot);
 		if(update) item.updateImagePanels();
 	}
 	

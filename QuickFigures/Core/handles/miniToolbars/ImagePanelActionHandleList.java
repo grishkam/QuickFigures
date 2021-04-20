@@ -37,6 +37,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.IconHandle;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.DialogIcon;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
@@ -90,18 +91,18 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 
 	/**creates a series of handles for image panels that are part of an image display layer*/
 	protected void createMultiChannelSourceImageOptions(ImagePanelGraphic t) {
-		context= new ChannelPanelEditingMenu(t);
-		
-		
-		ImagePropertiesButton winlevelButton = new  ImagePropertiesButton(t, WindowLevelDialog.ALL);
-		this.add(new GeneralActionHandle(winlevelButton, 550));
-	
-			 winlevelButton = new  ImagePropertiesButton(t, ImagePropertiesButton.COLOR_MODE);
+		try {
+			context = new ChannelPanelEditingMenu(t);
+			ImagePropertiesButton winlevelButton = new ImagePropertiesButton(t, WindowLevelDialog.ALL);
+			this.add(new GeneralActionHandle(winlevelButton, 550));
+			winlevelButton = new ImagePropertiesButton(t, ImagePropertiesButton.COLOR_MODE);
 			this.add(new GeneralActionHandle(winlevelButton, 289));
 			this.add(new ChannelsIconHandle());
-		
-		 winlevelButton = new  ImagePropertiesButton(t, ImagePropertiesButton.CROP_IMAGE);
-		this.add(new GeneralActionHandle(winlevelButton, 584));
+			winlevelButton = new ImagePropertiesButton(t, ImagePropertiesButton.CROP_IMAGE);
+			this.add(new GeneralActionHandle(winlevelButton, 584));
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 
 	}
 	

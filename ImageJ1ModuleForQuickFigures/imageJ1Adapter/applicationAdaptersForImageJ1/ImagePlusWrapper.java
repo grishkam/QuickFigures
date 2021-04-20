@@ -511,23 +511,30 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	@Override
 	public void setChannelMax(int chan, double max) {
 		if (lutsNotAvailable(chan)) return ;
-		imp.setSlice(chan);
-		imp.setC(chan);
-		 double smin = getLut(chan).min;
-		 
-		 imp.setDisplayRange(smin, max);
-		 imp.updateImage();
+		try {
+			imp.setSlice(chan);
+			imp.setC(chan);
+			double smin = getLut(chan).min;
+			imp.setDisplayRange(smin, max);
+			imp.updateImage();
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 		
 	}
 
 	@Override
 	public void setChannelMin(int chan, double min) {
 		if (lutsNotAvailable(chan)) return ;
-		imp.setSlice(chan);
-		imp.setC(chan);
-		double smax = getLut(chan).min;
-		 imp.setDisplayRange(min, smax);
-		 imp.updateImage();
+		try {
+			imp.setSlice(chan);
+			imp.setC(chan);
+			double smax = getLut(chan).min;
+			imp.setDisplayRange(min, smax);
+			imp.updateImage();
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 	}
 	
 	

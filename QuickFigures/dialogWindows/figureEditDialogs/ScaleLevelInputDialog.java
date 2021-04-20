@@ -1,7 +1,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: April 18, 2021
- * Date Modified: April 18, 2021
+ * Date Modified: April 20, 2021
  * Version: 2021.1
  */
  
@@ -9,13 +9,13 @@ package figureEditDialogs;
 
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 
 /**
- A dialog that allows the user to input a scale
+ A dialog that allows the user to input a scale level and
+ an interpolation method
  */
 public class ScaleLevelInputDialog extends StandardDialog {
  
@@ -24,7 +24,9 @@ public class ScaleLevelInputDialog extends StandardDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	public static final String SCALE_KEY="pre scale", INTERPOLATION_KEY="interpolarion";
+	
 	private ScaleInformation scalingInformation=null;
 	
 	
@@ -32,9 +34,10 @@ public class ScaleLevelInputDialog extends StandardDialog {
 		this.scalingInformation=scale;
 		if(scale==null)
 			scalingInformation=new ScaleInformation();
-		
+		this.setTitle("Input scale factor");
+		this.setWindowCentered(true);
 		ScaleLevelInputDialog targetDialog = this;
-		addScaleInformationToDialog(scale, targetDialog);
+		addScaleInformationToDialog(scalingInformation, targetDialog);
 		
 	}
 

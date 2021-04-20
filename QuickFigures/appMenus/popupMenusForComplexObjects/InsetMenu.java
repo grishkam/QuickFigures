@@ -168,29 +168,8 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	}
 
 	
-	/**old version of dialog that was designed to scale the inset panels, decided that it was not
-	  helpful enough and a rewrite is called for
-	private void showFigureScalerDialog() {
-		ss=new ScaleFigureDialog(inset.personalLayout, inset.getPanelManager());
-		IssueLog.log("Scale starts as "+inset.getBilinearScale());
-		ss.addDialogListener(new StandardDialogListener() {
-
-			@Override
-			public void itemChange(DialogItemChangeEvent event) {
-				
-				
-				double scale = ss.getNumber("scale");
-				inset.setBilinearScale(scale);
-				inset.updateImagePanels();
-				DefaultLayoutGraphic layout = inset.personalLayout;
-				layout.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(layout.getPanelLayout());
-				
-			
-			}});
-		ss.showDialog();
-	}*/
 	
-	/**Sbows a scaling dialog for the inset panels*/
+	/**Shows a scaling dialog for the inset panels*/
 	public void showScaleDialog() {
 		new ScaleFigureDialog(inset.personalLayout, inset.getPanelManager(), inset).showDialog();
 		
@@ -335,13 +314,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			double panelScale=sPanel.getRelativeScale();
 			panelScale=panelScale*targetInset.getPanelSizeInflation();
 			
-			if(inflateSize) {
-				panelScale=sPanel.getRelativeScale();
-				targetInset.setPanelSizeInflation(scale);
-				panelScale=panelScale*targetInset.getPanelSizeInflation();
-				scale=1;
-				
-			}
+		
 			
 			/**changes the scale of the inset that was clicked on */
 			output.addEditToList(
@@ -352,7 +325,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			
 			/**changes the scale of each other inset */
 			for(PanelGraphicInsetDefiner inset1: primaryInset.getInsetDefinersThatShareLayout()) {
-				inset1.setPanelSizeInflation(targetInset.getPanelSizeInflation());
+				
 				if(type== ScaleType.MATCH_SIZE_TO_PARENT) {
 					output.addEditToList(new UndoInsetDefChange(inset1, true));
 					inset1.setWidth(targetInset.getRectangle().getWidth());
@@ -406,9 +379,11 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				p.setRelativeScale(panelScale);
 				
 			}
-			targetInset.setBilinearScale(scale);
+			targetInset.setInsetScale(scale);
 			targetInset.updateImagePanels();
 			DefaultLayoutGraphic layout = targetInset.personalLayout;
+			if(targetInset.isDoNotScale())
+				targetInset.updateRelativeScaleOfPanels();
 			layout.getPanelLayout().getEditor().alterPanelWidthAndHeightToFitContents(layout.getPanelLayout());
 			output.establishFinalState();
 			return output;

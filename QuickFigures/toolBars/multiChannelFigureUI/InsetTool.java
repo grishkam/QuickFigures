@@ -68,7 +68,7 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 
 	static boolean locksItems=false;
 	
-
+	/**constants for different placement options*/
 	static final int FREE_PLACEMENT=5, OUTSIDE_ON_LEFT_RIGHT=0, 
 			ATTACH_TO_PARENT_PANEL=1,
 			FILL_SPACE_ON_SIDE=2,
@@ -90,17 +90,24 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
 	
 	ImagePanelGraphic SourceImageforInset=null;
+	
 	PanelGraphicInsetDefiner inset=null;
 	PanelGraphicInsetDefiner preExisting=null;
+	
+	
 	ObjectContainer imageTargetted ;
 	
 	int arrangement=ATTACH_TO_PARENT_PANEL;//How to arrange the many panel insets
 	
 	public int border=2;//The width of the frames around the newly created insets
 	public double scale=2;//The width of the frames around the newly created insets
-	boolean avoidDapi=false;
-	int createMultiChannel=1;
-	AttachmentPosition sb=AttachmentPosition.partnerExternal() ;//.defaultInternalPanel();
+	boolean avoidDapi=false;//true if dapi channel should not be included
+	int createMultiChannel=1;//should split channel insets be created?
+	AttachmentPosition sb=AttachmentPosition.partnerExternal() ;
+	
+	/**set to true is insets should be created without scaling the source images*/
+	public boolean dontScale;
+	
 	boolean sizeDefiningMouseDrag=true;
 
 
@@ -110,6 +117,9 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 
 
 	private CombinedEdit undo=new CombinedEdit();
+
+
+
 	
 	public InsetTool() {
 		super.iconSet=new InsetToolIcon(0).generateIconSet();
@@ -180,7 +190,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 	
 	}
 	
-	
+	/**creates the inset panels*/
 	private CombinedEdit createInsets(PanelGraphicInsetDefiner inset) {
 				CombinedEdit undo = new CombinedEdit();
 				if(!inset.isValid()) return undo;
@@ -193,7 +203,8 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 				PanelList list = new PanelList();
 				 setUpChannelUse(list,display);
 			
-				inset.setBilinearScale(scale);
+				inset.setInsetScale(scale);
+				inset.setDoNotScale(this.dontScale);
 				inset.multiChannelStackofInsets=list;
 				
 				
@@ -228,13 +239,14 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 				
 				ArrayList<ImagePanelGraphic> newpanels = pm.generatePanelGraphicsFor(list);
 				undo.addEditToList(new UndoAddManyItem(pm.getLayer(), newpanels));
+				
+				inset.updateRelativeScaleOfPanels();
 				inset.updateImagePanels();
 				
 				
-				/**for inexplicable reasons the list might not be set up at this point*/
+				/**TODO: fix issue, for inexplicable reasons the list might not be set up at this point*/
 				
-				//BarGraphic bar = BarGraphicTool.createBar(getImageWrapperClick(), mergeImage);
-				// mergeImage.addLockedItem(bar);
+				
 			
 			
 				if (!usePreexisting(inset)) { 
@@ -584,6 +596,8 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			add("add2", new BooleanInputPanel("Add to existing layout", mover.addToExisting));
 			add("aDAPI", new BooleanInputPanel("Exclude "+mover.getExcludedChanName(), mover.avoidDapi));
 			
+			add("do not scale", new BooleanInputPanel("dont scale ", mover.dontScale));
+			
 			this.snappanel=new AttachmentPositionPanel(sb , "placement of internal; Montage");
 			snappanel.addObjectEditListener(this);
 			
@@ -609,6 +623,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			tool.createMultiChannel=this.getChoiceIndex("panelType");
 			tool.horizontal=this.getBoolean("horizon");
 			tool.avoidDapi=this.getBoolean("aDAPI");
+			tool.dontScale=this.getBoolean("do not scale");
 			sb= snappanel.getSnappingBehaviour();
 			int npanelsForDialog=3;
 			 tool.addToExisting=this.getBoolean("add2");

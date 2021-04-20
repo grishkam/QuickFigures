@@ -68,9 +68,6 @@ import utilityClasses1.ArraySorter;
 public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener{
 
 
-	public InsetGraphicLayer createPersonalLayer(String st) {
-		return new InsetGraphicLayer(st);
-	}
 	
 	/**The source panel for the inset definer*/
 	private ImagePanelGraphic sourcePanel;
@@ -94,20 +91,12 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	private double bilinearScale=2;
 	
 	/**Number indicates a factor that the size that the panel is multiplied by*/
-	private double sizeInflation=1;
+	private boolean doNotScale=false;
 	
 	{this.setName("Inset Definer");}
 	transient boolean setup=false;
-
-	public double getInsetScale() {
-		return bilinearScale;
-	}
-
-	public void setBilinearScale(double bilinearScale) {
-		this.bilinearScale = bilinearScale;
-	}
-
-public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
+	
+	public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		super(r);
 		this.setFilled(false);
 		this.setFillColor(new Color(0,0,0,0));
@@ -115,12 +104,25 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		setSourcePanel(p);
 		updateImagePanels();
 	}
+
+	public double getInsetScale() {
+		return bilinearScale;
+	}
+
+	public void setInsetScale(double bilinearScale) {
+		this.bilinearScale = bilinearScale;
+	}
+
+	
 	
 	public PanelGraphicInsetDefiner copy() {
 		return new PanelGraphicInsetDefiner(getSourcePanel(), this.getBounds());
 	}
 
 	
+	public InsetGraphicLayer createPersonalLayer(String st) {
+		return new InsetGraphicLayer(st);
+	}
 	
 
 	/**
@@ -155,10 +157,17 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 	/**Applies the appropriate crop and scale and returns a version of the source image that is original*/
 	public MultiChannelImage generatePreProcessedVersion() {
 		MultiChannelImage unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion(false);
-		 MultiChannelImage cropped = unprocessed .cropAtAngle(generateInsetPreprocess(getSourceDisplay().getSlot().getModifications()));
+		 MultiChannelImage cropped = unprocessed .cropAtAngle(generateInsetPreprocess(getSourcePreprocess()));
 		 getSourceDisplay().getSlot().matchOrderAndLuts(cropped);
 		 return cropped;
 	
+	}
+
+	/**returns the proprocess information from the source image
+	 * @return
+	 */
+	protected PreProcessInformation getSourcePreprocess() {
+		return getSourceDisplay().getSlot().getModifications();
 	}
 	
 	/**When given the preprocess modifications done on the original image, 
@@ -167,7 +176,7 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
 		Rectangle2D b = inv.createTransformedShape(this.getBounds()).getBounds2D();
 		if (p==null) 
-			return new PreProcessInformation(b.getBounds(), this.getAngle(), new ScaleInformation(getInsetScale()));;
+			return new PreProcessInformation(b.getBounds(), this.getAngle(), createInsetScaleInformation(p));;
 		
 		double nx=b.getX()/p.getScale();
 		double ny=b.getY()/p.getScale();
@@ -195,9 +204,22 @@ public PanelGraphicInsetDefiner(ImagePanelGraphic p, Rectangle r) {
 			angleOutput+=p.getAngle();
 		} catch (Throwable t) {}
 		
-		ScaleInformation scaleInfo = new ScaleInformation(p.getScale()*getInsetScale(), p.getInterpolationType());
+		ScaleInformation scaleInfo = createInsetScaleInformation(p);
 		return new PreProcessInformation(outputRect.getBounds(), angleOutput, scaleInfo);
 		
+	}
+
+	/**returns the scale information that will be used to scale the image that will be displayed as an inset
+	 * @param p
+	 * @return
+	 */
+	protected ScaleInformation createInsetScaleInformation(PreProcessInformation p) {
+		double scaleFactor =getInsetScale();
+		if(p!=null)
+			 scaleFactor =p.getScale()*getInsetScale();
+		if(this.isDoNotScale())
+			scaleFactor=1;
+		return new ScaleInformation(scaleFactor, p.getInterpolationType());
 	}
 
 	@Override
@@ -556,7 +578,7 @@ static Color  folderColor2= new Color(0,140, 0);
 				panelGraphic.setRelativeScale(newPanelScale);
 			}
 			this.setPanelLevelScale(newPanelScale);
-			inset.setBilinearScale(newScale);
+			inset.setInsetScale(newScale);
 			updatePanels();
 			inset.updateDisplayPanelImages();
 			return null;
@@ -652,14 +674,41 @@ static Color  folderColor2= new Color(0,140, 0);
 	
 	/**returns the resize applied to the panels*/
 	public double getPanelSizeInflation() {
-		if(sizeInflation<1)
-			sizeInflation=1;//cannot be zero
-		return sizeInflation;
+		if(this.isDoNotScale())
+			return bilinearScale;
+					
+					return 1;
 	}
 
-	/**sets the resize applied to the panels*/
-	public void setPanelSizeInflation(double sizeInflation) {
-		this.sizeInflation = sizeInflation;
+	/**returns the relative size/scale that should be applied to inset panels
+	 * @return
+	 */
+	public double getReccomendedPanelScale() {
+		double output=sourcePanel.getRelativeScale();
+		if (this.isDoNotScale())
+			output=output*this.getInsetScale()*getSourcePreprocess().getScale();
+		return output;
 	}
+
+	/**set to true if scaling should be avoided
+	 * @param dontScale
+	 */
+	public void setDoNotScale(boolean dontScale) {
+		this.doNotScale=dontScale;
+		
+	}
+
+	/**updates the panel size to match the reccomended sise*/
+	public void updateRelativeScaleOfPanels() {
+			ArrayList<ImagePanelGraphic> newpanels = this.getPanelManager().getPanelList().getPanelGraphics();
+		for(ImagePanelGraphic panel1:newpanels) {
+			panel1.setRelativeScale(getReccomendedPanelScale());
+		}
+	}
+
+	public boolean isDoNotScale() {
+		return doNotScale;
+	}
+	
 
 }

@@ -157,6 +157,10 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				
+				rePanelSizePanelsButton= new BasicSmartMenuItem("Re-size panels without scale Re-Set");
+				rePanelSizePanelsButton.addActionListener(this);
+				imagesMenu.add(rePanelSizePanelsButton);
+				
 				
 				
 				recreatePanelsButton = new BasicSmartMenuItem("Recreate All Panels");
@@ -176,11 +180,8 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 					jj.add(figureScaler);
 				}	
 				
-				SmartJMenu more = new SmartJMenu("more options");	
-				rePanelSizePanelsButton= new BasicSmartMenuItem("Resize panels without scale Re-Set");
-				rePanelSizePanelsButton.addActionListener(this);
-				more.add(rePanelSizePanelsButton);
-				imagesMenu.add(more);
+				
+				
 							
 				JMenu chanMen=new SmartJMenu("All Channels");
 					

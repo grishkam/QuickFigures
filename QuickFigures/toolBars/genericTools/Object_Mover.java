@@ -1088,7 +1088,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 */
 	protected boolean panMode() {
 		try {
-		paneMode=this.isMetaOrControlDown()&&this.shiftDown();
+		paneMode=(this.isMetaOrControlDown()&&this.shiftDown())||KeyDownTracker.isKeyDown(KeyEvent.VK_SPACE);
 		
 			if (paneMode ) {
 			

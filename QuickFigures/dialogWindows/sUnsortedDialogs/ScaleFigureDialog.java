@@ -103,7 +103,7 @@ public class ScaleFigureDialog extends StandardDialog {
 		
 		void setStackToDislogItems(PanelManager pm, PanelList stack) {
 			
-			if (this.inset!=null) inset.setBilinearScale(getNumber("scale"));
+			if (this.inset!=null) inset.setInsetScale(getNumber("scale"));
 			double scalePanel = ImageDPIHandler.getInchDefinition()/this.getNumber("PPI");
 			stack.setPixelDensityRatio(scalePanel);
 			ArrayList<ImagePanelGraphic> graphi = stack.getPanelGraphics();
