@@ -118,7 +118,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	}
 
 	
-	
+	/**creates a copy*/
 	public PanelGraphicInsetDefiner copy() {
 		return new PanelGraphicInsetDefiner(getSourcePanel(), this.getBounds());
 	}
@@ -172,7 +172,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	}
 	
 	/**When given the preprocess modifications done on the original image, 
-	 * returns what preprocess would need to be used by the inset*/
+	 * returns what preprocess would need to be used by the inset to create panels*/
 	public PreProcessInformation generateInsetPreprocess(PreProcessInformation p) {
 		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
 		Rectangle2D b = inv.createTransformedShape(this.getBounds()).getBounds2D();
@@ -211,6 +211,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	}
 
 	/**returns the scale information that will be used to scale the image that will be displayed as an inset
+	 * may return a scale of 1
 	 * @param p
 	 * @return
 	 */
@@ -706,6 +707,7 @@ static Color  folderColor2= new Color(0,140, 0);
 		}
 	}
 
+	/**returns true if the inset should avoid creating a scaled version*/
 	public boolean isDoNotScale() {
 		return doNotScale;
 	}
