@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 24, 2021
  * Version: 2021.1
  */
 package graphicalObjects_LayoutObjects;
@@ -49,6 +49,7 @@ import layout.basicFigure.GridLayoutEditEvent;
 import layout.basicFigure.GridLayoutEditListener;
 import layout.basicFigure.LayoutEditorDialogs;
 import layout.basicFigure.LayoutSpaces;
+import layout.basicFigure.TransformFigure;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import locatedObject.Scales;
@@ -122,7 +123,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		
 		int handleType = handlenum/PanelLayoutGraphic.handleIDFactor;
 		
-		onSmartHandleMove(handlenum, p1, p2);//call method in case any smart handle has a special task. otherwise, each smart handle is here
+		onSmartHandleMove(handlenum, p1, p2);//call method in case any smart handle has a special task. otherwise, each smart handle is implemented here
 		
 		this.generateCurrentImageWrapper();//generateStandardImageWrapper();
 				
@@ -370,6 +371,11 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 		if(!panel.intersects(o.getBounds())&&!panel.contains(o.getBounds()))
 			return false;
 	return true;
+	}
+	
+	/**returns a transform object for this layout*/
+	public TransformFigure transform() {
+		return new TransformFigure(this);
 	}
 	
 	/**both resizes the panels and shifts the panel contents to fit better*/

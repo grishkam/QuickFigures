@@ -167,17 +167,15 @@ public class FigureTester {
 	}
 	
 	/**
-	creates a figure for testing. figure 1 is a simple split channel figure with 4 channels plus merge
-	It includes two source images so has two rows and 5 columns for a total of 10 images.
+	creates a figure for testing. figure 1 is a simple split channel figure with 3 channels plus merge
+	It includes two source images so has two rows and 4 columns for a total of 8 images.
 	 */
 	public FigureOrganizingLayerPane createFigureFromMockImages() {
 		
-		createMock(1);
+		createMock(1, true);
 		
-		
-		
-		FigureOrganizingLayerPane figure = example1FigureMaker().createFigureFromOpenImage(null);
-		createMock(2);
+		FigureOrganizingLayerPane figure = example1FigureMaker().createFigure(getMockFilePath(1), null);
+		createMock(2, true);
 		figure.nextMultiChannel(this.getMockFilePath(2), null);
 		figure.addLabelsBasedOnImageNames(BasicLayout.ROWS);
 		TemplateChoice.changeChannelLabels(figure, "Gene ");
@@ -191,8 +189,9 @@ public class FigureTester {
 	/**
 	 * @param mockIndex
 	 */
-	protected void createMock(int mockIndex) {
-		CurrentAppContext.getMultichannelContext().getDemoExample(true, getMockFilePath(mockIndex), 3, mockIndex, 1);
+	protected void createMock(int mockIndex, boolean close) {
+		MultiChannelImage ex = CurrentAppContext.getMultichannelContext().getDemoExample(!close, getMockFilePath(mockIndex), 3, mockIndex, 1);
+	
 	}
 
 	/**returns the path for saving the mock images as files

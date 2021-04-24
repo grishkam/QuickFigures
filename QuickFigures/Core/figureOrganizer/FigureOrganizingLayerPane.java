@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 18, 2021
+ * Date Modified: April 24, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -50,6 +50,7 @@ import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
+import layout.basicFigure.TransformFigure;
 import locatedObject.AttachmentPosition;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
@@ -723,6 +724,9 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		
 	}
 	
-	
+	/**returns a transform object for this figure*/
+	public TransformFigure transform() {
+		return new TransformFigure(this,getMontageLayoutGraphic());
+	}
 	
 }
