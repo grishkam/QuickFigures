@@ -21,9 +21,14 @@
 package basicMenusForApp;
 
 import java.io.File;
+import java.io.IOException;
+
 import applicationAdapters.DisplayedImage;
+import exportMenus.FlatCreator;
+import exportMenus.PNGQuickExport;
 import ultilInputOutput.FileChoiceUtil;
 import imageDisplayApp.StandardWorksheet;
+import logging.IssueLog;
 import messages.ShowMessage;
 import imageDisplayApp.ImageDisplayIO;
 
@@ -49,10 +54,30 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 		/**does the actual saving*/
 		ImageDisplayIO.writeToFile(f, theSet);
 		
+		
+		
 		ShowMessage.showOptionalMessage("You have saved", true, "You haved stored your work", "files saved with earlier versions of QuickFigures will not always be openable", "it is also helpful to export files to a stable format");
+		
+		savePreview(diw, f);
 		}
 			
 		
+	}
+
+	/**saves a preview to accompany the saved worksheets
+	 * @param diw
+	 * @param f
+	 * @throws IOException
+	 */
+	protected void savePreview(DisplayedImage diw, File f)  {
+		try {
+			String aPath = f.getAbsolutePath();
+			aPath=aPath.replace(".ser", "");
+			aPath = aPath + " preview.png";
+			new PNGQuickExport(false).writePNGFile(diw, aPath, new FlatCreator());
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 	}
 	
 	@Override

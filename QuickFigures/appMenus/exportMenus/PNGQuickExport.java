@@ -70,9 +70,21 @@ public class PNGQuickExport extends QuickExport {
 	 */
 	public void saveInPath(DisplayedImage diw, String newpath) throws IOException {
 		FlatCreator flat = new FlatCreator();
-		diw.updateDisplay();
+		
 		flat.setUseTransparent(false);
 		if (showDialogEverytime)flat.showDialog();
+		
+		writePNGFile(diw, newpath, flat);
+	}
+
+	/**writes a png file with the given flag creator
+	 * @param diw
+	 * @param newpath
+	 * @param flat
+	 * @throws IOException
+	 */
+	public void writePNGFile(DisplayedImage diw, String newpath, FlatCreator flat) throws IOException {
+		diw.updateDisplay();
 		BufferedImage bi = flat.createFlat(diw.getImageAsWorksheet());
 		writeImage(newpath, bi);
 	}
