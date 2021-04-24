@@ -19,7 +19,12 @@ import testing.FigureTester;
 
 class IJ1MultiChannelCreatorTest {
 
-	@Test
+	
+	public static void main(String[] args) {
+		new IJ1MultiChannelCreatorTest().test();
+	}
+	
+
 	void test() {
 		IJ1MultichannelContext c = new IJ1MultichannelContext();
 		ImageDisplayTester.setupImageJ();

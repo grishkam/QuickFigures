@@ -19,7 +19,11 @@ import ultilInputOutput.FileChoiceUtil;
 
 class ObjectToolset1Test {
 
-	@Test
+	public static void main(String[] args) {
+		new ObjectToolset1Test().test();
+	}
+	
+	
 	void test() {
 		ImageDisplayTester.showInnitial();
 		ImageWindowAndDisplaySet i = ImageWindowAndDisplaySet.createAndShowNew("Figure", 450,300);
