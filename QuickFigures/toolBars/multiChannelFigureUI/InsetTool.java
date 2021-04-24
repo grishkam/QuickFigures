@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: April 24, 2021
+ * Version: 2021.1
+ */
 package multiChannelFigureUI;
 
 import java.awt.Color;
@@ -58,6 +63,9 @@ import undo.UndoInsetDefinerGraphic;
 import undo.UndoLayoutEdit;
 import undo.UndoScalingAndRotation;
 
+
+/**Tool used for drawing regions of interest to define the area displayed in inset panels
+  */
 public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
 	/**
@@ -596,7 +604,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			add("add2", new BooleanInputPanel("Add to existing layout", mover.addToExisting));
 			add("aDAPI", new BooleanInputPanel("Exclude "+mover.getExcludedChanName(), mover.avoidDapi));
 			
-			add("do not scale", new ChoiceInputPanel("How to create panels ", new String[] {"Create scaled images", "Enlarge images, dont scale"} ,mover.dontScale?1:0));
+			add("do not scale", new ChoiceInputPanel("How to create panels ", new String[] {"Scale pixels when creating panels", "Do not scale pixels when creating panels"} ,mover.dontScale?1:0));
 			
 			this.snappanel=new AttachmentPositionPanel(sb , "placement of internal; Montage");
 			snappanel.addObjectEditListener(this);
