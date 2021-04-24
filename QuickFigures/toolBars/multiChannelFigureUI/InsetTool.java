@@ -579,7 +579,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 		private AttachmentPositionPanel snappanel;
 		
 		public InsetToolDialog(InsetTool mover) {
-			
+			this.setTitle("Inset tool options");
 			this.tool=mover;
 			
 			
