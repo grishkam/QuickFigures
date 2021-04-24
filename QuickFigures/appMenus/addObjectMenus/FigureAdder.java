@@ -176,8 +176,7 @@ public class FigureAdder extends LayoutAdder {
 		if (p==null)
 			FigureOrganizingLayerPane.cropIfUserSelectionExists(display); 
 		else display.getSlot().applyCropAndScale(p);
-		IssueLog.log("applying crop and scale "+p);
-		IssueLog.log("applying crop and scale "+display.getSlot().getModifications());
+		
 		
 		boolean useSingleFrame2 = useSingleFrame;
 		boolean useSingleSlice2 = useSingleSlice;
@@ -232,8 +231,11 @@ public class FigureAdder extends LayoutAdder {
 	protected void addImageToFigureUsingTemplate(FigureOrganizingLayerPane currentFigureOrganizer, MultichannelDisplayLayer multiDimensionalImage, FigureTemplate temp, PreProcessInformation p) {
 		/**if the template scale is very large this fixes the issue*/
 		boolean d = temp.getMultiChannelPicker()!=null&&temp.getMultiChannelPicker().isProprocessSuitable(multiDimensionalImage);
-		temp.getMultiChannelPicker().doesPreprocess=!d;
 		
+		/**if no preprocss information is given as an argument and the template's process is suitable, this sets*/
+		if(p==null)
+			temp.getMultiChannelPicker().doesPreprocess=d;
+		else temp.getMultiChannelPicker().doesPreprocess=false;
 		
 		
 		/**must apply before creating the layout so the minimum number of columns can be created
@@ -244,10 +246,9 @@ public class FigureAdder extends LayoutAdder {
 
 
 		try{
-			IssueLog.log(d+" pre "+ multiDimensionalImage.getSlot().getModifications()+" starts at");
+			
 		if (temp!=null) 
 			temp.applyTemplateToLayer(currentFigureOrganizer);
-		IssueLog.log( multiDimensionalImage.getSlot().getModifications()+" ends at");
 		
 		
 		if (isAutoGenerateFromModel()) {

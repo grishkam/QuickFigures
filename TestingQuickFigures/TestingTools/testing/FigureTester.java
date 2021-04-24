@@ -488,7 +488,7 @@ public class FigureTester {
 	public static TestProvider[] getTests() {
 		ignoreTemplate=true;
 		return new TestProvider[] {new FigureProvider(TestExample._FIGURE), new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
-				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL),  new FigureProvider(TestExample.SCALE_BAR_STYLES_)};
+				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL), new FigureProvider(TestExample.MANY_SCALE_IMAGEPANEL), new FigureProvider(TestExample.SCALE_BAR_STYLES_)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -511,6 +511,8 @@ public class FigureTester {
 			
 			if (form==TestExample.MANY_SIZE_IMAGEPANEL)
 				new FigureTester().createManySizeExample(1.5, false);
+			if (form==TestExample.MANY_SCALE_IMAGEPANEL)
+				new FigureTester().createManyScaleExample(2, false);
 			if (form==TestExample.SCALE_BAR_STYLES_)
 				new FigureTester().createManySizeExample(1, true);
 			if (form==TestExample.SPLIT_CHANNEL_FIGURE)
@@ -536,6 +538,7 @@ public class FigureTester {
 	
 	
 	/**creates an example with a series of image panels showing the same image
+	 * but with a few different panel sizes
 	 * @param factor
 	 * @return */
 	public FigureOrganizingLayerPane createManySizeExample(double factor, boolean barProjectionVaries) {
@@ -570,6 +573,30 @@ public class FigureTester {
 
 	}
 	
+	
+	/**creates an example with a series of image panels showing the same image
+	 * but with different scale factors
+	 * @param factor
+	 * @return */
+	public ImageWindowAndDisplaySet createManyScaleExample(double factor, boolean barProjectionVaries) {
+		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
+		PreProcessInformation p1 = new PreProcessInformation(cropRectsForExample1[0]);
+		QuickFigureMaker qm = example1BFigureMaker();
+		qm.figureCreationOptions.ignoreSavedTemplate=true;
+		FigureOrganizingLayerPane figure = qm.createFigure(diw, FigureTester.getTest1ImagePath(1,1), p1);
+		FigureOrganizingLayerPane last = figure;
+		int w=0;
+		for(int i=1;i<3; i++)	{
+			PreProcessInformation p2 = new PreProcessInformation(p1, p1.getScaleInformation().getAtDifferentScale(factor*i));
+			figure = qm.createFigure(diw, FigureTester.getTest1ImagePath(1,1), p2);
+			 w+= last.getMontageLayoutGraphic().getBounds().width;
+			figure.transform().move(w+10, 0);
+			last=figure;
+			}
+		
+		return diw;
+
+	}
 	
 	public static void closeAllWindows() {
 		Window[] windows = Window.getWindows();

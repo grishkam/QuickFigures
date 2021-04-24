@@ -18,8 +18,9 @@ public class ScaleInformation {
 	
 	/***/
 	public ScaleInformation(double scale, Interpolation interpolation) {
-		this.scale=scale;
+		this(scale);
 		this.interpolationType=interpolation;
+		
 	}
 
 	/**
@@ -33,6 +34,8 @@ public class ScaleInformation {
 	/***/
 	public ScaleInformation(double scale) {
 		this.scale=scale;
+		if(scale<=0)
+			this.scale=1;
 		
 	}
 

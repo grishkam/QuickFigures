@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 24, 2021
  * Version: 2021.1
  */
 package standardDialog.choices;
@@ -200,8 +200,8 @@ public void setValue(int value) {
 	public static String[] enumNames(Enum<?>[] en) {
 		String[] output = new String[en.length];
 		for(int i=0; i<output.length; i++) {
-			output[i]=en[i].name().toLowerCase();
-			output[i]=output[i].replaceAll("_", " ");
+			output[i]=titleCase(en[i].name());//().toLowerCase();
+			//output[i]=output[i].replaceAll("_", " ");
 		}
 		
 		return output;
@@ -218,6 +218,29 @@ public void setValue(int value) {
 	
 	/**returns the name of the panel*/
 	public String getName() {return label.getText();}
+	
+	/**changes the text to title case*/
+	public static String titleCase(String st) {
+		StringBuilder sb = new StringBuilder();
+		st=st.replace("_", " ");
+		boolean capital=true;
+		
+		for(int i=0; i<st.length(); i++) {
+			String next =""+ st.charAt(i);
+			if(capital)
+				sb.append(next.toUpperCase());
+			else sb.append(next.toLowerCase());
+			
+			if(" ".equals(next))
+				capital=true;
+			else capital=false;
+			
+		}
+		
+		return sb.toString();
+		
+		
+	}
 
 	
 }
