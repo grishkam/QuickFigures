@@ -45,7 +45,7 @@ import standardDialog.numbers.NumberInputPanel;
 import utilityClasses1.ArraySorter;
 
 /**Creates a buffered image for that will be a snapshot of the worksheet.
-  That image can in turn be copied to the system clipboard*/
+  That image can in turn be copied to the system clipboard or saved*/
 public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 
 	

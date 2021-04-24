@@ -32,7 +32,7 @@ public class TextGraphicSwingDialogTest {
 			showDialog();
 			
 			/**provides user enough time to tinker with dialog*/
-			IssueLog.waitSeconds(30);
+			IssueLog.waitSeconds(10);
 		
 		
 	}

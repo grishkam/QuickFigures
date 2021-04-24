@@ -50,7 +50,7 @@ public class FigureTemplateTest {
 		
 		
 		/**pauses long enough for the user to observe a change. Changes will visibly affect, panels, labels,layouts and scale bars*/
-		IssueLog.waitSeconds(50);
+		IssueLog.waitSeconds(5);
 	}
 
 	/**Tests to ensure that a new color mode is applied

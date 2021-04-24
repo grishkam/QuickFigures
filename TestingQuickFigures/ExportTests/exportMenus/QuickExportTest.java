@@ -17,6 +17,7 @@ import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageDisplayIOTest;
 import logging.IssueLog;
 import messages.ShowMessage;
+import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
@@ -94,6 +95,8 @@ abstract class QuickExportTest {
 			createExample.setZoomLevel(1);
 			ImageDisplayIOTest.assertCompareWindows(createExample.getWindow(), this.createExporter().viewSavedFile(file));
 			}
+			
+			FigureTester.closeAllWindows();
 				}
 		Desktop.getDesktop().open(new File(DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"));
 		

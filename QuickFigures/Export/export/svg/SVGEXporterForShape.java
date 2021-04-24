@@ -41,6 +41,7 @@ public class SVGEXporterForShape extends SVGExporter {
 		this.shape=shape;
 	}
 	
+	/***/
 public Element toSVG(Document dom, Element e) {
 	
 	boolean scaleBar=false;
