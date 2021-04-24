@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import applicationAdapters.DisplayedImage;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 
 public class CanvasResizeUndo extends AbstractUndoableEdit2 {
 
@@ -34,6 +35,8 @@ public class CanvasResizeUndo extends AbstractUndoableEdit2 {
 	private UndoMoveItems itemMovments;
 
 	public CanvasResizeUndo(DisplayedImage diw) {
+		if(diw==null)
+			IssueLog.log("There is no canvas");
 		this.image=diw;
 		oldDims=(Dimension2D) image.getImageAsWorksheet().getCanvasDims().clone();
 		items=image.getImageAsWorksheet().getLocatedObjects();

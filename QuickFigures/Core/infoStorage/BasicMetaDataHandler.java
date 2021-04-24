@@ -617,13 +617,12 @@ public class BasicMetaDataHandler {
 
 				if (o!=null) try {
 					f.setAccessible(true);
-					// IJ.log("will attempt to add "+o.key()+" entry to metadata");
+					
 					if (o.save()) addEntryToInfo(imp, o.key()+suffix, f.get(of));
 				} catch (Exception e) {
 					IssueLog.log("problem adding entry "+o.key()+suffix +" reported in save annotated fields method "+'\n' );
 					IssueLog.logT(e);
-					//if (imp==null)
-					//IssueLog.log("problem adding entry "+o.key()+suffix +"" );
+					
 				}
 			 }
 			 c=c.getSuperclass();

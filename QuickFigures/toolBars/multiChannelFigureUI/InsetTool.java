@@ -596,7 +596,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			add("add2", new BooleanInputPanel("Add to existing layout", mover.addToExisting));
 			add("aDAPI", new BooleanInputPanel("Exclude "+mover.getExcludedChanName(), mover.avoidDapi));
 			
-			add("do not scale", new BooleanInputPanel("dont scale ", mover.dontScale));
+			add("do not scale", new ChoiceInputPanel("How to create panels ", new String[] {"Create scaled images", "Enlarge images, dont scale"} ,mover.dontScale?1:0));
 			
 			this.snappanel=new AttachmentPositionPanel(sb , "placement of internal; Montage");
 			snappanel.addObjectEditListener(this);
@@ -615,7 +615,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			
 		}
 		
-		
+		/**updates the inset tool */
 		protected void afterEachItemChange() {
 			tool.border=(int) this.getNumber("border");
 			tool.arrangement=this.getChoiceIndex("arrangementClass");
@@ -623,7 +623,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			tool.createMultiChannel=this.getChoiceIndex("panelType");
 			tool.horizontal=this.getBoolean("horizon");
 			tool.avoidDapi=this.getBoolean("aDAPI");
-			tool.dontScale=this.getBoolean("do not scale");
+			tool.dontScale=this.getChoiceIndex("do not scale")==1;
 			sb= snappanel.getSnappingBehaviour();
 			int npanelsForDialog=3;
 			 tool.addToExisting=this.getBoolean("add2");

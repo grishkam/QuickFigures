@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 6, 2020
+ * Date Modified: April 24, 2020
  * Version: 2021.1
  */
 package standardDialog.booleans;
@@ -51,9 +51,10 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	public BooleanInputPanel(String labeln, boolean b) {
 		label.setText(labeln);
 		setChecked(b);
-		 originAlStatus=b;
+		originAlStatus=b;
 	}
 	
+	/**creates a panel with the custom checkbox*/
 	public BooleanInputPanel(String labeln, boolean b, JCheckBox field2) {
 		setCheckBox(field2);
 		getCheckBox().addItemListener(this);
@@ -61,20 +62,24 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 		setChecked(b);
 		 originAlStatus=b;
 	}
+	
+	
 	/**
 	sets the box to selected
 	 */
 	public void setChecked(boolean b) {
 		getCheckBox().setSelected(b);
 	}
-	
+		public boolean isChecked() {
+		return getCheckBox().isSelected();
+	}
+		
+		
 	public String getTextFromField() {
 		return getCheckBox().getText();
 	}
 	
-	public boolean isChecked() {
-		return getCheckBox().isSelected();
-	}
+
 	
 	/**
 	 * 

@@ -63,6 +63,7 @@ import icons.GraphicToolIcon;
 import icons.IconSet;
 import imageDisplayApp.KeyDownTracker;
 import imageDisplayApp.OverlayObjectManager;
+import imageDisplayApp.UserPreferences;
 import includedToolbars.StatusPanel;
 import layout.PanelLayout;
 import locatedObject.ArrayObjectContainer;
@@ -1083,21 +1084,20 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 
 	/**
-	 * @return 
-	 * 
+	if the user is holding down the keys to navigate the canvas by panning around,
+	this performs the task and returns true. 
 	 */
 	protected boolean panMode() {
 		try {
-		paneMode=(this.isMetaOrControlDown()&&this.shiftDown())||KeyDownTracker.isKeyDown(KeyEvent.VK_SPACE);
+		paneMode=keysForPanModeDown();
 		
 			if (paneMode ) {
 			
-				if (paneMode) {
 					int x = (int) -getXDisplaceMent();
 					int y = (int) -getYDisplaceMent();
 					
 					this.getImageDisplayWrapperClick().scrollPane(x, y);
-				}
+				
 				
 				return true;
 			} else
@@ -1107,6 +1107,16 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		}
 		
 		return false;
+	}
+
+	/**returns true if the user is holding down the right combination of keys to navigate the page by panning
+	 * @return
+	 */
+	protected boolean keysForPanModeDown() {
+		boolean output = this.isMetaOrControlDown()&&this.shiftDown();
+		if(KeyDownTracker.isKeyDown(KeyEvent.VK_SPACE) &&UserPreferences.current.spaceBarScrolling)
+			output=true;
+			return output;
 	}
 
 	/**

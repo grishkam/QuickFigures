@@ -396,7 +396,7 @@ public CombinedEdit addXAxiLabel(int offset) {
 	cc.addEditToList(
 			expandLayoutForLabel(xLabel));
 	cc.addEditToList(new UndoAddItem(this, xLabel));
-	IssueLog.log("Adding label for x axis");
+	
 	
 	return cc;
 }

@@ -46,6 +46,7 @@ import graphicActionToolbar.CurrentSetInformer;
 import graphicActionToolbar.QuickFigureMaker;
 import imageMenu.CombineImages;
 import imageMenu.UndoRedoMenuItem;
+import imageMenu.UserPreferenceDialog;
 import imageMenu.CanvasAutoResize;
 import imageMenu.CanvasAutoTrim;
 import imageMenu.CanvasDialogResize;
@@ -113,6 +114,8 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new ZoomFit(ZoomFit.OUT));
 		installItem(new ZoomFit(ZoomFit.IN));
 		installItem(new ZoomFit(ZoomFit.USER_SET));
+		installItem(new ZoomFit(ZoomFit.OPTIONS));
+		installItem(new UserPreferenceDialog());
 		
 		
 		for(int i=0; i<ShowToolBar.names.length; i++)

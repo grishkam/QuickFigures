@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 24, 2021
  * Version: 2021.1
  */
 package storedValueDialog;
@@ -42,13 +42,20 @@ public class StoredValueDilaog extends StandardDialog{
 
 	private static final long serialVersionUID = 1L;
 	
-	public StoredValueDilaog(Object of) {
+	/**creates a dialog */
+	public StoredValueDilaog(String item, Object of) {
+		this.setTitle(item);
 		this.setWindowCentered(true);
 		 addFieldsForObject(this, of);
 		
 		 return;
 		
 	}
+	
+	public StoredValueDilaog(Object of) {
+		this("", of);
+	}
+	
 
 	/**
 	 looks for annotated fields in the object and add items to the dialog for each 

@@ -33,6 +33,7 @@ import imageDisplayApp.StandardWorksheet;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
+import messages.ShowMessage;
 import sUnsortedDialogs.ObjectListChoice;
 
 /**Combines multiple worksheets into one*/
@@ -41,6 +42,12 @@ public class CombineImages extends BasicMenuItemForObj {
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		ArrayList<DisplayedImage> choices = getChoices();
+		if(choices.size()==0) {
+			
+			ShowMessage.showOptionalMessage("no worksheet", true, "no worksheet selected");
+			return;
+		}
+		
 		ImageWindowAndDisplaySet figure =  ImageWindowAndDisplaySet.createAndShowNew("new set", 0,0);;
 		
 		

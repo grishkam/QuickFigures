@@ -111,6 +111,11 @@ public class ShowMessage {
 		return showOptionalMessage(title, oneTime,ar);
 	}
 	
+	/***/
+	public static boolean showOptionalMessage(String title) {
+		return showOptionalMessage(title, false, title);
+	}
+	
 	/**shows a message with a 'dont show again checkbox'*/
 	public static boolean showOptionalMessage(String title, boolean oneTime, String... st) {
 		MessageSettings set = settings.get(title);

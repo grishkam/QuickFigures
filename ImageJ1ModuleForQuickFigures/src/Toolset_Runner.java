@@ -33,6 +33,7 @@ import figureFormat.DirectoryHandler;
 import ij.IJ;
 import ij.plugin.PlugIn;
 import imageDisplayApp.KeyDownTracker;
+import imageDisplayApp.UserPreferences;
 import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
@@ -112,9 +113,14 @@ public class Toolset_Runner implements PlugIn {
 	 * 
 	 */
 	protected void loadUserPreferences() {
-		String unitName = DirectoryHandler.getDefaultHandler().getPrefsStorage().getEntryAsString(RulerUnit.key);
-		;
-		ImageDPIHandler.setRulerUnit(RulerUnit.getUnirByName(unitName));
+		try {
+			String unitName = DirectoryHandler.getDefaultHandler().getPrefsStorage().getEntryAsString(RulerUnit.key);
+			;
+			ImageDPIHandler.setRulerUnit(RulerUnit.getUnirByName(unitName));
+			UserPreferences.current.load();
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 	}
 	
 	

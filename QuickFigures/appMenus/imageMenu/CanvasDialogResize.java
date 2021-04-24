@@ -38,6 +38,7 @@ import imageDisplayApp.CanvasOptions;
 import layout.BasicObjectListHandler;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
+import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.AttachmentPositionBox;
 import standardDialog.booleans.BooleanInputPanel;
@@ -69,6 +70,12 @@ public class CanvasDialogResize extends BasicMenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		if(diw==null) {
+			ShowMessage.showOptionalMessage("No worksheet!", true, "You must have an open worksheet to use this option");
+			
+			return;
+		}
+		
 		CanvasResizeUndo undo = new CanvasResizeUndo(diw);//creates an undo
 		ImageWorkSheet iw = diw.getImageAsWorksheet();
 		performResize(iw);
