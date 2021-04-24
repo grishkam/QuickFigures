@@ -391,18 +391,19 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 
 		
 
-		
+		/**returns the information used to calculate the scale bar's length*/
 		@Override
 		public ScaleInfo getScaleInfo() {
 			return info;
 		}
-
+		/**sets the information used to calculate the scale bar's length*/
 		@Override
 		public void setScaleInfo(ScaleInfo s) {
 			info=s;
 			updateBarScale();
 		}
 		
+		/**returns the rectangle used to draw the frame*/
 		public Rectangle2D getFrameRect() {
 			return new Rectangle2D.Double(x-getFrameWidthV(), y-getFrameWidthV(), getObjectWidth()+2*getFrameWidthV(), getObjectHeight()+2*getFrameWidthV());
 		}
