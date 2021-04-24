@@ -49,11 +49,19 @@ public class ScaleInformation {
 	}
 
 	/**gets a version of this with different scale
-	 * @param i
+	 * @param i the new scale
 	 * @return
 	 */
 	public ScaleInformation getAtDifferentScale(double i) {
 		return new ScaleInformation(i, interpolationType);
+	}
+	
+	/**gets a version of this with different scale
+	 * @param i
+	 * @return
+	 */
+	public ScaleInformation getAtDifferentIterpolation(Interpolation i) {
+		return new ScaleInformation(scale, i);
 	}
 	
 	/**returns a version of this that has been multiplied*/

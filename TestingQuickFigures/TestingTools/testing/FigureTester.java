@@ -171,20 +171,32 @@ public class FigureTester {
 	It includes two source images so has two rows and 4 columns for a total of 8 images.
 	 */
 	public FigureOrganizingLayerPane createFigureFromMockImages() {
-		
+		QuickFigureMaker example1FigureMaker = example1FigureMaker();
 		createMock(1, true);
+		PreProcessInformation p=null;
 		
-		FigureOrganizingLayerPane figure = example1FigureMaker().createFigure(getMockFilePath(1), null);
+		return createMock(example1FigureMaker, p);
+		
+	}
+
+	/**creates a mock figure 
+	 * @param figureMaker
+	 * @param process
+	 * @return
+	 */
+	protected FigureOrganizingLayerPane createMock(QuickFigureMaker figureMaker, PreProcessInformation process) {
+		FigureOrganizingLayerPane figure = figureMaker.createFigure(getMockFilePath(1), process);
 		createMock(2, true);
-		figure.nextMultiChannel(this.getMockFilePath(2), null);
+		figure.nextMultiChannel(this.getMockFilePath(2), process);
 		figure.addLabelsBasedOnImageNames(BasicLayout.ROWS);
 		TemplateChoice.changeChannelLabels(figure, "Gene ");
 		
 		figure.updateDisplay();
 		
 		return figure;
-		
 	}
+	
+	
 
 	/**
 	 * @param mockIndex
@@ -309,7 +321,7 @@ public class FigureTester {
 	/**
 	creates a figure maker that generated split channel figures
 	 */
-	private QuickFigureMaker example1BFigureMaker() {
+	protected QuickFigureMaker example1BFigureMaker() {
 		QuickFigureMaker out = figureMaker();
 		out.setMergeOrSplit(FigureAdder.MERGE_PANELS_ONLY);
 		return out;

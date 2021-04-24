@@ -70,6 +70,12 @@ public class PreProcessInformation implements Serializable {
 		this(rectangle2,angle2,scaleInfo.getScale());
 		this.interpolationType=scaleInfo.getInterpolationType();
 	}
+	
+	/**creates an instance that uses the scame crop area as the argument but different scale*/
+	public PreProcessInformation(PreProcessInformation p1, ScaleInformation scaleInfo) {
+		this(p1.getRectangle(),p1.getAngle(),scaleInfo.getScale());
+		this.interpolationType=scaleInfo.getInterpolationType();
+	}
 
 	/**returns true if this object instructs nothing to be done to the image*/
 	boolean nothingDone() {
@@ -157,4 +163,6 @@ public class PreProcessInformation implements Serializable {
 	/**returns the scale information*/
 	public ScaleInformation getScaleInformation() {return new ScaleInformation(scale, interpolationType);}
 
+	
+	
 }

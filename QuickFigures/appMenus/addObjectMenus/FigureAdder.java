@@ -176,7 +176,8 @@ public class FigureAdder extends LayoutAdder {
 		if (p==null)
 			FigureOrganizingLayerPane.cropIfUserSelectionExists(display); 
 		else display.getSlot().applyCropAndScale(p);
-		
+		IssueLog.log("applying crop and scale "+p);
+		IssueLog.log("applying crop and scale "+display.getSlot().getModifications());
 		
 		boolean useSingleFrame2 = useSingleFrame;
 		boolean useSingleSlice2 = useSingleSlice;
@@ -190,7 +191,7 @@ public class FigureAdder extends LayoutAdder {
 			new SubStackDialog(display, true, n+" would be a lot of panels " +"please select substack").showDialog();
 		}
 		
-		FigureOrganizingLayerPane figureOrganizerFor = addFigureOrganizerFor(targetLayer, display);
+		FigureOrganizingLayerPane figureOrganizerFor = addFigureOrganizerFor(targetLayer, display, p);
 		
 		
 		return figureOrganizerFor;
@@ -198,8 +199,9 @@ public class FigureAdder extends LayoutAdder {
 
 	/**when given a normal parent layer and a multidimensional image display layer,
 	 places the multichannel display layer into a figure organizing layer (which is created if the ordinary layer is not inside of an existing figure organizer). 
-	 that figure organizer will contain the multidimensional image inside of it  */
-	public FigureOrganizingLayerPane addFigureOrganizerFor(GraphicLayer ordinaryLayer, MultichannelDisplayLayer multiDimensionalImage) {
+	 that figure organizer will contain the multidimensional image inside of it  
+	 * @param p */
+	public FigureOrganizingLayerPane addFigureOrganizerFor(GraphicLayer ordinaryLayer, MultichannelDisplayLayer multiDimensionalImage, PreProcessInformation p) {
 
 		/**Sets up which figure organizing layer pane should be used*/
 		 currentFigureOrganizer = getOrCreateUsedFigureOrganizingLayerPane(ordinaryLayer);
@@ -218,29 +220,34 @@ public class FigureAdder extends LayoutAdder {
 				return currentFigureOrganizer;
 			} 
 			else 
-				addImageToFigureUsingTemplate(currentFigureOrganizer, multiDimensionalImage, temp);
+				addImageToFigureUsingTemplate(currentFigureOrganizer, multiDimensionalImage, temp, p);
 				
 		return currentFigureOrganizer;
 	}
 
 	/**
 	 Using the figure template given, adds the multichannel display layer to the figure organizer given
+	 * @param p 
 	 */
-	protected void addImageToFigureUsingTemplate(FigureOrganizingLayerPane currentFigureOrganizer, MultichannelDisplayLayer multiDimensionalImage, FigureTemplate temp) {
+	protected void addImageToFigureUsingTemplate(FigureOrganizingLayerPane currentFigureOrganizer, MultichannelDisplayLayer multiDimensionalImage, FigureTemplate temp, PreProcessInformation p) {
 		/**if the template scale is very large this fixes the issue*/
 		boolean d = temp.getMultiChannelPicker()!=null&&temp.getMultiChannelPicker().isProprocessSuitable(multiDimensionalImage);
-		temp.getMultiChannelPicker().doesPreprocess=d;
+		temp.getMultiChannelPicker().doesPreprocess=!d;
+		
+		
 		
 		/**must apply before creating the layout so the minimum number of columns can be created
-		  it appears that without a template the display will not be added to the figure. TODO: fit this */
+		  it appears that without a template the display will not be added to the figure. TODO: fix this */
 		
 			temp .addDisplayToFigure(currentFigureOrganizer, multiDimensionalImage);
 			showRecreateDialog();
 
 
 		try{
-		if (temp!=null) temp.applyTemplateToLayer(currentFigureOrganizer);
-		
+			IssueLog.log(d+" pre "+ multiDimensionalImage.getSlot().getModifications()+" starts at");
+		if (temp!=null) 
+			temp.applyTemplateToLayer(currentFigureOrganizer);
+		IssueLog.log( multiDimensionalImage.getSlot().getModifications()+" ends at");
 		
 		
 		if (isAutoGenerateFromModel()) {

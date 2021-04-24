@@ -423,11 +423,14 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		if (display.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) display.getParentLayer();
 			DefaultLayoutGraphic l = f.getMontageLayoutGraphic();
-			l.generateCurrentImageWrapper();
-			UndoLayoutEdit undo = new UndoLayoutEdit(l);
-			l.getEditor().alterPanelWidthAndHeightToFitContents(l.getPanelLayout());
-			undo.establishFinalLocations();
-			return undo;
+			if(l!=null)
+			{
+				l.generateCurrentImageWrapper();
+				UndoLayoutEdit undo = new UndoLayoutEdit(l);
+				l.getEditor().alterPanelWidthAndHeightToFitContents(l.getPanelLayout());
+				undo.establishFinalLocations();
+				return undo;
+			}
 		}
 		return null;
 	}
