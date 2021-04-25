@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
+import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
 import figureOrganizer.CollectivePanelManagement;
 import figureOrganizer.FigureOrganizingLayerPane;
@@ -74,7 +75,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	 * @param chan The channel added
 	 * @return an undoable edit
 	 */
-	public CombinedEdit addChannelPanels(int chan) {
+	public CombinedEdit addChannelPanels(Integer chan) {
 		panelManagement.updatePanelLevelScale();
 		
 		CombinedEdit output=new CombinedEdit();
@@ -96,11 +97,13 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			for(PanelManager d: panelManagement.getPanelManagersInLayoutOrder()) {
 				output.addEditToList(new UndoLayerContentChange(d));
 				panels.addAll(
-						d.generateManyChannelPanels(chan)
+						d.generateManyPanels(chan)
 						);
 				
-				d.getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chan, false);
-				
+				if(chan!=null)
+					d.getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chan, false);
+				if(chan==null)
+					d.getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.MERGE_FIRST;
 				
 				/**check if this manager is the same one that has channel labels*/
 				if (panelManagement.getChannelLabelManager().getPanelList()==d.getPanelList()) {
@@ -148,16 +151,19 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	}
 
 	/**Adds a channel label for a newly created channel panel
+	 * if the channel number given is null, creates label for merge panel
 	 * @param chan the channel that is being added
 	 * @param channelLabelManager2 the multidimensional images' display layer
 	 */
-	void addChannelLabel(int chan, ChannelLabelManager channelLabelManager) {
+	void addChannelLabel(Integer chan, ChannelLabelManager channelLabelManager) {
 		/**Adds a channel label to the selected channel*/
 		
 		for( PanelListElement panel: channelLabelManager.getPanelList().getPanels()) {
 					if(channelLabelManager.isNonLabeledSlice(panel)
-							|| panel.targetChannelNumber!=chan
-							|| panel.isTheMerge()) 
+							|| (chan!=null && panel.targetChannelNumber!=chan)
+							|| (panel.isTheMerge()&&chan!=null)
+							|| (!panel.isTheMerge()&&chan==null)
+							) 
 						continue;
 					ArrayList<ChannelLabelTextGraphic> oldLabels = channelLabelManager.getAllLabels();
 					ChannelLabelTextGraphic newLabel = channelLabelManager.generateChannelLabelFor(panel);
@@ -169,7 +175,9 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	/**
 	 removes the channel panels for the given channel
 	 */
-	public CombinedEdit removeChannelPanels(int chaneIndex) {
+	public CombinedEdit removeChannelPanels(Integer chaneIndex) {
+		if(chaneIndex==null)
+			chaneIndex=0;
 		CombinedEdit output=new CombinedEdit();
 		
 		output.addEditToList(
@@ -198,14 +206,21 @@ public class ChannelPanelRemover implements LayoutSpaces{
 		
 		for(PanelManager d: panelManagement.getPanelManagers()) {
 			for(PanelListElement l:d.getPanelList().getPanels()) {
-				if (!l.isTheMerge()&&l.targetChannelNumber==chaneIndex) {
+				boolean remove = (!l.isTheMerge()&&l.targetChannelNumber==chaneIndex)
+						|| (l.isTheMerge()&&chaneIndex==0);
+				if (remove) {
 					output.addEditToList(
 							d.removeDisplayObjectsFor(l)
 							);
 					
 				}
 			}
-			d.getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chaneIndex, true);
+			
+			
+			if(chaneIndex>PanelListElement.NONE)
+				d.getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chaneIndex, true);
+			if(chaneIndex==PanelListElement.NONE)
+				d.getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.NO_MERGE_PANELS;
 			d.updatePanels();
 		}
 

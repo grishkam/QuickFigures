@@ -221,7 +221,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		return output;
 	}
 	
-	/**looks for panel list elements that are present in the row, column or panel viven*/
+	/**looks for panel list elements that are present in the row, column or panel given*/
 	public int channelIndexAt(int type, int rowIndex) {
 		ArrayList<ArrayList<PanelListElement>> list = getOrderedPanelList(type);
 		ArrayList<PanelListElement> l = list.get(rowIndex-1);
@@ -231,13 +231,11 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 			return panelListElement.targetChannelNumber;
 			}
 
-		return -1;
+		return PanelListElement.NONE;
 	}
 	
 	/**returns the indices of where in the layout the given channels are stored
-	 * 
-	 * @param type 
-	 * 
+	
 	 * */
 	public ArrayList<Integer> indexOfChannel( int channel, int type) {
 		ArrayList<Integer> indices=new ArrayList<Integer>();

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 18, 2021
+ * Date Modified: April 25, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -242,8 +242,9 @@ public class PanelManager implements Serializable, EditListener{
 	
 	
 	/**returns a channel panel at the given slice and frame.
-	  If the list does not already contain such a panel, this will create one*/
-	public ArrayList<PanelListElement> generateManyChannelPanels( int channel) {
+	  If the list does not already contain such a panel, this will create one
+	  if the integer given is null, then this will create merge panels*/
+	public ArrayList<PanelListElement> generateManyPanels( Integer channel) {
 		ArrayList<PanelListElement> output=new ArrayList<PanelListElement>();
 		
 		int frames= this.getMultiChannelWrapper().nFrames();
@@ -252,7 +253,10 @@ public class PanelManager implements Serializable, EditListener{
 			for(int s=1; s<=slices; s++) {
 				if(this.getChannelUseInstructions().isFrameExcluded(f)) continue;
 				if(this.getChannelUseInstructions().isSliceExcluded(s)) continue;
-		output.add( generateSingleChannelPanel(getPanelList(),channel, s, f));
+				if(channel==null)
+					output.add(this.generateSingleMergePanel(getPanelList(), s,f ));
+				else
+					output.add( generateSingleChannelPanel(getPanelList(),channel, s, f));
 			}
 			}
 		return output;

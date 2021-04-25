@@ -25,7 +25,9 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.Icon;
 import javax.swing.JMenu;
@@ -59,8 +61,10 @@ import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.IconUtil;
 import includedToolbars.StatusPanel;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
+import multiChannelFigureUI.ChannelPanelEditingMenu.ExcludeMergePanel;
 import sUnsortedDialogs.ScaleSettingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
@@ -78,6 +82,7 @@ import undo.PanelManagerUndo;
 public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChangeListener, StandardDialogListener {
 	
 	
+
 	public static final int ALL_IMAGES_IN_CLICKED_FIGURE=1, CLICKED_IMAGES_ONLY=0;
 	
 	/***/
@@ -858,6 +863,9 @@ public SmartJMenu createChannelMergeMenu(int form) {
 	else if (form==EXCLUDED_CHANNEL_AND_DONT_MERGE) output.setText("Exclude Channel");
 	ArrayList<ChannelMergeMenuItem> f = createChannelMergeMenuItems(form);
 	for(ChannelMergeMenuItem item: f) {output.add(item);}
+	if (form== EXCLUDED_CHANNEL_MENU) {
+		output.add(new ExcludeMergePanel());
+	}
 
 	return output;
 }
@@ -897,10 +905,26 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 }
 
 
+/**
+returns the panel manager group that applies the clicked image panel,
+that will differ depending on whether the user clicked a main panel or an inset panel
+*/
 public CollectivePanelManagement getPanelManagementGroup() {
 	if(this.getPressedInset()!=null)
 		return new InsetPanelManagementGroup(this.getPressedInset());
 	return new PanelManagementGroup(this.getPressedFigure());
+}
+
+
+/**
+ returns the panel manager that applies the clicked image panel,
+ that will differ depending on whether the user clicked a main panel or an inset panel
+ */
+protected PanelManager getPressPanelManagerForUser() {
+	PanelManager panelManager = getPresseddisplay().getPanelManager();
+	if(pressedInset!=null)
+		panelManager=pressedInset.getPanelManager();
+	return panelManager;
 }
 
 /**Menu item that allows the used to select/deselct which channels belong in the merged image*/
@@ -916,9 +940,8 @@ public CollectivePanelManagement getPanelManagementGroup() {
 			
 		public 	ChannelMergeMenuItem(ChannelEntry ce) {
 					super(ce);
-					instructions=getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
-					if(getPressedInset()!=null)
-						instructions=getPressedInset().getPanelManager().getChannelUseInstructions();
+					instructions=getPressPanelManagerForUser().getPanelList().getChannelUseInstructions();
+					
 					
 					boolean strike=isExcludedChannel();
 					super.setSelected(!strike);
@@ -940,11 +963,7 @@ public CollectivePanelManagement getPanelManagementGroup() {
 				 determines if the channel is excluded
 				 */
 				public boolean isExcludedChannel() {
-					if (getPressedInset()!=null) {
-						
-						return getPressedInset().getPanelManager().getPanelList().getChannelUseInstructions().isMergeExcluded(entry.getOriginalChannelIndex());
-					}
-					return getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().getNoMergeChannels().contains(entry.getOriginalChannelIndex());
+					return getPressPanelManagerForUser().getPanelList().getChannelUseInstructions().getNoMergeChannels().contains(entry.getOriginalChannelIndex());
 				}
 				
 				
@@ -986,9 +1005,8 @@ public CollectivePanelManagement getPanelManagementGroup() {
 				 determines if the channel is excluded
 				 */
 				public boolean isExcludedChannel() {
-					ChannelUseInstructions channelUseInstructions = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
-					if(pressedInset!=null)
-						channelUseInstructions=pressedInset.getPanelManager().getChannelUseInstructions();
+					ChannelUseInstructions channelUseInstructions = getPressPanelManagerForUser().getPanelList().getChannelUseInstructions();
+					
 					
 					return channelUseInstructions.getExcludedChannelPanels().contains(entry.getOriginalChannelIndex());
 				}
@@ -999,9 +1017,7 @@ public CollectivePanelManagement getPanelManagementGroup() {
 				 */
 				public void pressAction() {
 					int chaneIndex = entry.getOriginalChannelIndex();
-					PanelManager panelManager = getPresseddisplay().getPanelManager();
-					if(pressedInset!=null)
-						panelManager=pressedInset.getPanelManager();
+					PanelManager panelManager =getPressPanelManagerForUser();
 					
 					boolean i = panelManager.getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
 					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso, true);
@@ -1015,6 +1031,66 @@ public CollectivePanelManagement getPanelManagementGroup() {
 
 
 }
+		
+
+		/**
+			 a menu item for adding and removing merge panels
+			 */
+		public class ExcludeMergePanel extends BasicSmartMenuItem implements ActionListener {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+			public ExcludeMergePanel() {
+				super("merge");
+				this.addActionListener(this);
+				updateFont() ;
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getUndoManager().addEdit(
+						performAction()
+						);
+				updateFont() ;
+			}
+
+			/**
+			 * @return 
+			 * 
+			 */
+			protected CombinedEdit performAction() {
+				PanelManager panelManager = getPressPanelManagerForUser();
+				if(panelManager.getChannelUseInstructions().addsMergePanel())
+					return createChannelPanelRemover().removeChannelPanels(null);
+				else return createChannelPanelRemover().addChannelPanels(null);
+			}
+			
+			
+			/**
+			 changes the font depecting on the state of the channel
+			 */
+			public void updateFont() {
+				HashMap<TextAttribute, Object> mm = new HashMap<TextAttribute, Object> ();
+				Font font2 = super.getFont();
+				
+				boolean strike=!getPressPanelManagerForUser().getChannelUseInstructions().addsMergePanel();
+				
+					if (strike) {
+						mm.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+						
+					} else {
+						mm.put(TextAttribute.STRIKETHROUGH, !TextAttribute.STRIKETHROUGH_ON);
+						
+					}
+				
+				this.setFont(font2.deriveFont(mm));
+				
+			}
+
+		}
 		
 		/**Menu item that allows the used to select/deselct which channels belong in the merged image*/
 		public class ChannelWithEachMenuItem extends ChannelMergeMenuItem{
@@ -1083,15 +1159,7 @@ public CollectivePanelManagement getPanelManagementGroup() {
 						return Font.PLAIN;
 					}
 				
-				/**
-				 * @return
-				 */
-				protected PanelManager getPressPanelManagerForUser() {
-					PanelManager panelManager = getPresseddisplay().getPanelManager();
-					if(pressedInset!=null)
-						panelManager=pressedInset.getPanelManager();
-					return panelManager;
-				}
+			
 				
 }
 

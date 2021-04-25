@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 25, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -50,7 +50,7 @@ import channelLabels.ChannelLabelTextGraphic;
 	public static final int MERGE_IMAGE_PANEL=2;
 	public static final int CHANNEL_IMAGE_PANEL=1;
 	
-	static final int NONE=0;
+	public static final int NONE=0;
 
 		/**The image data. Its pixels. whatever type they may be*/
 		transient PixelWrapper image;
