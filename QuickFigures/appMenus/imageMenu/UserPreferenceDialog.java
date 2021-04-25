@@ -59,7 +59,7 @@ public UserPreferenceDialog() {
 public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	
 		StoredValueDilaog storedValueDilaog = new StoredValueDilaog("Preferences", UserPreferences.current);
-		
+		storedValueDilaog.setModal(true);
 		storedValueDilaog.showDialog();
 		UserPreferences.current.store();
 		
