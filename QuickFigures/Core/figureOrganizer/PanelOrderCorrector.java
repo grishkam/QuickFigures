@@ -27,7 +27,6 @@ import java.util.Comparator;
 
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.BasicObjectListHandler;
