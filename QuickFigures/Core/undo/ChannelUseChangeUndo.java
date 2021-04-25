@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: April 25, 2021
  * Version: 2021.1
  */
 package undo;
@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import javax.swing.undo.AbstractUndoableEdit;
 import channelMerging. ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
+import figureOrganizer.PanelManager;
 
 /**An undoable edit for changes in channel use instructions*/
 public class ChannelUseChangeUndo extends AbstractUndoableEdit {
@@ -48,6 +49,12 @@ public class ChannelUseChangeUndo extends AbstractUndoableEdit {
 		iChannels=chanUse.duplicate();
 				
 	}
+	
+	public ChannelUseChangeUndo(PanelManager mw) {
+		this(mw.getPanelList().getChannelUseInstructions());
+		this.display=mw.getImageDisplayLayer();
+	}
+	
 		public void establishFinalLocations() {
 		fChannels=chanUse.duplicate();
 		
@@ -74,6 +81,16 @@ public class ChannelUseChangeUndo extends AbstractUndoableEdit {
 	public static CombinedEdit createForMany(ArrayList<? extends ImageDisplayLayer> mws ) {
 		CombinedEdit ce2=new CombinedEdit();
 		for(ImageDisplayLayer mw: mws) {
+			ce2.addEditToList(new ChannelUseChangeUndo(mw));
+		}
+		
+		return ce2;
+	}
+	
+	/**creates undoble edits for many multichannel image displays and combines them*/
+	public static CombinedEdit createForManyManagers(ArrayList<PanelManager> mws ) {
+		CombinedEdit ce2=new CombinedEdit();
+		for(PanelManager mw: mws) {
 			ce2.addEditToList(new ChannelUseChangeUndo(mw));
 		}
 		

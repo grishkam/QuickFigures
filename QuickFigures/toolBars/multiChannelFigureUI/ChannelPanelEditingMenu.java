@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 10, 2021
+ * Date Modified: April 25, 2021
  * Version: 2021.1
  */
 package multiChannelFigureUI;
@@ -42,9 +42,11 @@ import channelMerging.MultiChannelImage;
 import figureEditDialogs.DisplayRangeChangeListener;
 import figureEditDialogs.PanelStackDisplayOptions;
 import figureEditDialogs.WindowLevelDialog;
+import figureOrganizer.CollectivePanelManagement;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
+import figureOrganizer.PanelManagementGroup;
 import figureOrganizer.PanelManager;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicActionToolbar.CurrentFigureSet;
@@ -799,14 +801,20 @@ Changes whether the given channel is displayed in each of the merged images
 * @param message should the user be shown a message
 */
 public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean excluded, boolean mergeToo, boolean message) {
-	boolean alreadyExcluded = this.getPressedFigure().getPrincipalMultiChannel().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
+	ChannelUseInstructions channelUseInstructions = this.getPressedFigure().getPrincipalMultiChannel().getPanelList().getChannelUseInstructions();
+	if(this.pressedInset!=null) 
+		 channelUseInstructions =pressedInset.getPanelManager().getChannelUseInstructions();
+	boolean alreadyExcluded = channelUseInstructions.getExcludedChannelPanels().contains(chaneIndex);
+	
+		
+	
 	if (excluded&&alreadyExcluded) return null;
 	if (!excluded&&!alreadyExcluded) return null;
 	CombinedEdit output=null;
 	if(excluded && !alreadyExcluded) {
 		if (!message||ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
 			 {
-				output=new ChannelPanelRemover(this.getPressedFigure()).removeChannelPanels(chaneIndex);
+				output=createChannelPanelRemover().removeChannelPanels(chaneIndex);
 				if (mergeToo) output.addEditToList(setChannelExcludedFromMerge(chaneIndex, excluded));
 			 }
 	}
@@ -814,13 +822,24 @@ public CombinedEdit setChannelExcludedFromFigure(int chaneIndex, boolean exclude
 	if(!excluded && alreadyExcluded) {
 		if (ShowMessage.showOptionalMessage("Channel panel removal menu is a work in progress", true, "Are you sure you want to remove the channel panels? "))
 			 {
-				output=new ChannelPanelRemover(this.getPressedFigure()).addChannelPanels(chaneIndex);
+				output=createChannelPanelRemover().addChannelPanels(chaneIndex);
 				if (mergeToo) output.addEditToList(setChannelExcludedFromMerge(chaneIndex, excluded));
 			 }
 			 
 			 }
 	
 	return output;
+}
+
+/**creates a channel panel remover that can be used to remove channels
+ * @return
+ */
+protected ChannelPanelRemover createChannelPanelRemover() {
+	if(this.pressedInset!=null) {
+		
+		return new ChannelPanelRemover(pressedInset);
+		}
+	return new ChannelPanelRemover(this.getPressedFigure());
 }
 
 
@@ -877,6 +896,13 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 	this.presseddisplay = presseddisplay;
 }
 
+
+public CollectivePanelManagement getPanelManagementGroup() {
+	if(this.getPressedInset()!=null)
+		return new InsetPanelManagementGroup(this.getPressedInset());
+	return new PanelManagementGroup(this.getPressedFigure());
+}
+
 /**Menu item that allows the used to select/deselct which channels belong in the merged image*/
 		public class ChannelMergeMenuItem extends BasicChannelEntryMenuItem {
 		
@@ -891,6 +917,8 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 		public 	ChannelMergeMenuItem(ChannelEntry ce) {
 					super(ce);
 					instructions=getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
+					if(getPressedInset()!=null)
+						instructions=getPressedInset().getPanelManager().getChannelUseInstructions();
 					
 					boolean strike=isExcludedChannel();
 					super.setSelected(!strike);
@@ -958,7 +986,11 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				 determines if the channel is excluded
 				 */
 				public boolean isExcludedChannel() {
-					return getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(entry.getOriginalChannelIndex());
+					ChannelUseInstructions channelUseInstructions = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
+					if(pressedInset!=null)
+						channelUseInstructions=pressedInset.getPanelManager().getChannelUseInstructions();
+					
+					return channelUseInstructions.getExcludedChannelPanels().contains(entry.getOriginalChannelIndex());
 				}
 				
 				
@@ -968,6 +1000,9 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				public void pressAction() {
 					int chaneIndex = entry.getOriginalChannelIndex();
 					PanelManager panelManager = getPresseddisplay().getPanelManager();
+					if(pressedInset!=null)
+						panelManager=pressedInset.getPanelManager();
+					
 					boolean i = panelManager.getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
 					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso, true);
 					
@@ -997,9 +1032,12 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				 determines if the channel is excluded or included
 				 */
 				public boolean isExcludedChannel() {
+					PanelManager panelManager = getPressPanelManagerForUser();
 					
-					return getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().eachMergeChannel!=entry.getOriginalChannelIndex();
+					return panelManager.getPanelList().getChannelUseInstructions().eachMergeChannel!=entry.getOriginalChannelIndex();
 				}
+
+				
 				
 				
 				/**
@@ -1007,7 +1045,7 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				 */
 				public void pressAction() {
 					
-					ChannelUseInstructions i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions();
+					ChannelUseInstructions i = getPressPanelManagerForUser().getPanelList().getChannelUseInstructions();
 					
 					
 					int newState=entry.getOriginalChannelIndex();
@@ -1016,15 +1054,16 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 					CombinedEdit undo = new CombinedEdit();
 							
 						
-						for(ImageDisplayLayer d: getAllDisplays()) {
+						for(PanelManager d:  getPanelManagementGroup().getPanelManagers()) {
 							
-							i=d.getPanelManager().getChannelUseInstructions();
-							ChannelUseChangeUndo edit = new ChannelUseChangeUndo(i);
-							undo.addEditToList(edit);
-					
-					i.eachMergeChannel=newState;
-					edit.establishFinalLocations();
-					d.getPanelManager().updatePanels();
+									i=d.getChannelUseInstructions();
+									ChannelUseChangeUndo edit = new ChannelUseChangeUndo(i);
+									undo.addEditToList(edit);
+							
+							i.eachMergeChannel=newState;
+							edit.establishFinalLocations();
+							d.updatePanels();
+							
 						}
 					updateFont();
 					this.getUndoManager().addEdit(
@@ -1043,6 +1082,16 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 						else
 						return Font.PLAIN;
 					}
+				
+				/**
+				 * @return
+				 */
+				protected PanelManager getPressPanelManagerForUser() {
+					PanelManager panelManager = getPresseddisplay().getPanelManager();
+					if(pressedInset!=null)
+						panelManager=pressedInset.getPanelManager();
+					return panelManager;
+				}
 				
 }
 

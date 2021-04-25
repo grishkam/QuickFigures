@@ -554,7 +554,7 @@ static Color  folderColor2= new Color(0,140, 0);
 		
 		
 	/**A special panel manager designed for the inset panels*/
-	public class InsetPanelManager extends PanelManager {
+	public static class InsetPanelManager extends PanelManager {
 
 		private PanelGraphicInsetDefiner inset;
 
@@ -573,7 +573,7 @@ static Color  folderColor2= new Color(0,140, 0);
 			double ppi = panel.getQuickfiguresPPI();
 			double newPanelScale=panel.getRelativeScale()*ppi/newppi;
 			double newScale=inset.getInsetScale()*newppi/ppi;
-			if (getSourceDisplay().getSlot().getModifications()!=null) newScale/=getSourceDisplay().getSlot().getModifications().getScale();
+			if (inset.getSourceDisplay().getSlot().getModifications()!=null) newScale/=inset.getSourceDisplay().getSlot().getModifications().getScale();
 			
 			for(PanelListElement panel2: getPanelList().getPanels()) {
 				ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();

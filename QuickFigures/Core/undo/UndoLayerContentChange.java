@@ -23,6 +23,7 @@ package undo;
 
 import java.util.ArrayList;
 
+import figureOrganizer.PanelManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
@@ -40,6 +41,11 @@ public class UndoLayerContentChange extends AbstractUndoableEdit2 {
 	public UndoLayerContentChange(GraphicLayer layer) {
 		this.layer=layer;
 		iItems=currentItems(layer);
+		
+	}
+	
+	public UndoLayerContentChange(PanelManager layer) {
+		this(layer.getLayer());
 		
 	}
 

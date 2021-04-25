@@ -27,7 +27,6 @@ import java.util.Comparator;
 
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
-import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -53,19 +52,28 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private FigureOrganizingLayerPane figure;
+
+	private CollectivePanelManagement panelManagement;
 
 	/***/
 	public PanelOrderCorrector(FigureOrganizingLayerPane f) {
-		this.figure=f;
+
+		panelManagement=new PanelManagementGroup(f);
 	}
 	
+	/**
+	 * @param panelManagement2
+	 */
+	public PanelOrderCorrector(CollectivePanelManagement panelManagement2) {
+		panelManagement=panelManagement2;
+	}
+
 	/**Returns the panel list elements in an order that is determined by 
 	 * their location within the layout (Panel #1,2,3) rather than any stored
 	 * list
 	  */
 	public ArrayList<PanelListElement> getOrderedPanelList() {
-		DefaultLayoutGraphic g = getTargetLayout();
+		DefaultLayoutGraphic g = panelManagement.getTargetLayout();
 		g.generateCurrentImageWrapper();
 		BasicLayout layout = g.getPanelLayout();
 		
@@ -83,7 +91,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	/**returns an ordered set of panel list elements from each row or columns.
 	 * The type given may be ROWS, COLUMNS or PANELS @see MontageLayoutSpaces*/
 	public ArrayList<ArrayList<PanelListElement>> getOrderedPanelList(int type) {
-		DefaultLayoutGraphic g = getTargetLayout();
+		DefaultLayoutGraphic g = panelManagement.getTargetLayout();
 		g.generateCurrentImageWrapper();
 		BasicLayout layout = g.getPanelLayout();
 		layout=layout.makeAltered(type);
@@ -105,7 +113,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 
 	/**finds the panel list elements with panels inside of the given rectangle and adds them to the array*/
 	public void addElementsInPanel(ArrayList<PanelListElement> output, Rectangle2D rect) {
-		ArrayList<LocatedObject2D> inPanel = new BasicObjectListHandler().getAllClickedRoi(getTargetLayer(), rect.getCenterX(), rect.getCenterY(), ImagePanelGraphic.class);
+		ArrayList<LocatedObject2D> inPanel = new BasicObjectListHandler().getAllClickedRoi(panelManagement.getTargetLayer(), rect.getCenterX(), rect.getCenterY(), ImagePanelGraphic.class);
 		addPanelListElements(output, inPanel);
 	}
 	
@@ -143,7 +151,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	
 	/**returns true if each channel in the image is represented by only one image panel*/
 	boolean isEachPanelADifferentChannel() {
-		ImageDisplayLayer pm = getMultichannel();
+		ImageDisplayLayer pm = panelManagement.getMultichannel();
 		if(getDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
 			return true;
 		
@@ -233,7 +241,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	 * */
 	public ArrayList<Integer> indexOfChannel( int channel, int type) {
 		ArrayList<Integer> indices=new ArrayList<Integer>();
-		BasicLayout layout = getUsedLayout().makeAltered(type);
+		BasicLayout layout = panelManagement.getUsedLayout().makeAltered(type);
 		for(int i=1; i<=layout.nPanels(); i++) {
 			if (channel==channelIndexAt(type, i))
 				indices.add(i);
@@ -250,7 +258,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		
 		ChannelUseInstructions cOrder = determineChannelOrder();
 		if (cOrder!=null)
-		for(ChannelUseInstructions c: getChannelUserInformation())
+		for(ChannelUseInstructions c: panelManagement.getChannelUserInformation())
 			try {
 					c.MergeHandleing=cOrder.MergeHandleing;
 					c.getChanPanelReorder().setOrder(cOrder.getChanPanelReorder());
@@ -276,9 +284,10 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		return new ImageOrderComparator(getDisplaysInLayoutImageOrder());
 	}
 	
+	/**returns a list of the display layers in layout order*/
 	public ArrayList< ImageDisplayLayer> getDisplaysInLayoutImageOrder() {
 		ArrayList<PanelListElement> list = getOrderedPanelList();
-		ArrayList<ImageDisplayLayer> allContainedDisplays = getDisplaysInOrder();
+		ArrayList<? extends ImageDisplayLayer> allContainedDisplays = getDisplaysInOrder();
 		ArrayList< ImageDisplayLayer> displays=new 	ArrayList<ImageDisplayLayer>();
 		
 		for(PanelListElement l: list) {
@@ -314,45 +323,15 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		}
 		
 	}
-	
-	
-	/**
-	 * @return
-	 */
-	protected BasicLayout getUsedLayout() {
-		return figure.getMontageLayout();
-	}
-	
-	/**
-	returns the layout on which the panels are arranged
-	 */
-	protected DefaultLayoutGraphic getTargetLayout() {
-		return figure.getMontageLayoutGraphic();
-	}
+
 
 	/**
 	 * @return
 	 */
-	protected ArrayList<ImageDisplayLayer> getDisplaysInOrder() {
-		return figure.getMultiChannelDisplaysInOrder();
+	public ArrayList<? extends ImageDisplayLayer> getDisplaysInOrder() {
+		return panelManagement.getDisplaysInOrder();
 	}
 	
-	/**
-	 * @return
-	 */
-	protected ImageDisplayLayer getMultichannel() {
-		return figure.getPrincipalMultiChannel();
-	}
 	
-	/**returns the layer that contains each panel*/
-	public GraphicLayerPane getTargetLayer() {
-		return figure;
-	}
-	
-	/**
-	 * @return
-	 */
-	protected ArrayList<ChannelUseInstructions> getChannelUserInformation() {
-		return figure.getChannelUseInfo();
-	}
+
 }

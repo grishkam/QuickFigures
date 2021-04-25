@@ -206,6 +206,18 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	public ArrayList< ImageDisplayLayer> getMultiChannelDisplays() {
 		return displays;
 	}
+	
+	/**returns a list of all panel managers for the main panels in the figure*/
+	public ArrayList< PanelManager> getPanelManagers() {
+		ArrayList<PanelManager> output = new ArrayList< PanelManager> ();
+		for(ImageDisplayLayer d: displays) {
+			output.add(d.getPanelManager());
+		}
+		
+		return output;
+	}
+	
+	
 	/**returns the first display layers for the first image in the figure*/
 	public  ImageDisplayLayer getPrincipalMultiChannel() {
 		for (ImageDisplayLayer p: getMultiChannelDisplays()) {
@@ -714,15 +726,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	}
 
 
-	/**
-	 sets the relative scale of the panel manager to match the scale of the panels
-	 */
-	public void updatePanelLevelScale() {
-		for(ImageDisplayLayer i: this.getMultiChannelDisplays()) {
-			i.getPanelManager().setPanelLevelScaleToPanels();
-		}
-		
-	}
+	
 	
 	/**returns a transform object for this figure*/
 	public TransformFigure transform() {

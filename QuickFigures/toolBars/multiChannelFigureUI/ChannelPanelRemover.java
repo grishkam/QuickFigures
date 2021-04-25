@@ -26,9 +26,13 @@ import java.util.ArrayList;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.ImageDisplayLayer;
+import figureOrganizer.CollectivePanelManagement;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
+import figureOrganizer.PanelManagementGroup;
+import figureOrganizer.PanelManager;
 import figureOrganizer.PanelOrderCorrector;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
@@ -46,13 +50,24 @@ public class ChannelPanelRemover implements LayoutSpaces{
 
 	private FigureOrganizingLayerPane figure;
 	private PanelOrderCorrector orderer;
+	private CollectivePanelManagement panelManagement;
 
 	/**Creates a channel panel remover for the figure
 	 * @param pressedFigure
 	 */
-	public ChannelPanelRemover(FigureOrganizingLayerPane pressedFigure) {
+	 ChannelPanelRemover(FigureOrganizingLayerPane pressedFigure) {
 		this.figure=pressedFigure;
-		orderer=new PanelOrderCorrector(figure);
+		panelManagement=new  PanelManagementGroup(figure);
+		orderer=new PanelOrderCorrector(panelManagement);
+		
+	}
+
+	/**
+	 * @param pressedInset
+	 */
+	public ChannelPanelRemover(PanelGraphicInsetDefiner pressedInset) {
+		panelManagement=new  InsetPanelManagementGroup(pressedInset);
+		orderer=new PanelOrderCorrector(panelManagement);
 	}
 
 	/**Adds channel panels for the given channel to the figure
@@ -60,12 +75,12 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	 * @return an undoable edit
 	 */
 	public CombinedEdit addChannelPanels(int chan) {
-		figure.updatePanelLevelScale();
+		panelManagement.updatePanelLevelScale();
 		
 		CombinedEdit output=new CombinedEdit();
 				
 				output.addEditToList(
-						PanelManagerUndo.createForMany(figure.getMultiChannelDisplaysInOrder()));
+						PanelManagerUndo.createForMany(orderer.getDisplaysInOrder() ));
 				
 				Integer changeLayout = orderer.determineChannelLayout();
 			boolean insertIntoLayout = changeLayout!=null && (changeLayout==ROWS||changeLayout==COLS);
@@ -78,21 +93,22 @@ public class ChannelPanelRemover implements LayoutSpaces{
 				}
 			
 			ArrayList<PanelListElement> panels =new ArrayList<PanelListElement>();
-			for(ImageDisplayLayer d: figure.getMultiChannelDisplaysInLayoutOrder()) {
+			for(PanelManager d: panelManagement.getPanelManagersInLayoutOrder()) {
 				output.addEditToList(new UndoLayerContentChange(d));
 				panels.addAll(
-						d.getPanelManager().generateManyChannelPanels(chan)
+						d.generateManyChannelPanels(chan)
 						);
 				
-				d.getPanelManager().getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chan, false);
+				d.getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chan, false);
 				
 				
-				if (figure.getPrincipalMultiChannel()==d) {
-					addChannelLabel(chan, d);
+				/**check if this manager is the same one that has channel labels*/
+				if (panelManagement.getChannelLabelManager().getPanelList()==d.getPanelList()) {
+					addChannelLabel(chan, panelManagement.getChannelLabelManager());
 				}
 				
 				
-				d.getPanelManager().updatePanels();
+				d.updatePanels();
 				
 				
 				
@@ -113,7 +129,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 				
 			}
 			
-		if (changeLayout!=null)
+		if (figure!=null&&changeLayout!=null)
 			figure.updateChannelOrder(changeLayout);
 		
 			
@@ -122,20 +138,22 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			
 	}
 
+	
+
 	/**
 	 returns the layout that contains the targetted panels
 	 */
 	protected DefaultLayoutGraphic getTargetLayout() {
-		return figure.getMontageLayoutGraphic();
+		return panelManagement.getTargetLayout();
 	}
 
 	/**Adds a channel label for a newly created channel panel
 	 * @param chan the channel that is being added
-	 * @param d the multidimensional images' display layer
+	 * @param channelLabelManager2 the multidimensional images' display layer
 	 */
-	void addChannelLabel(int chan, ImageDisplayLayer d) {
+	void addChannelLabel(int chan, ChannelLabelManager channelLabelManager) {
 		/**Adds a channel label to the selected channel*/
-		ChannelLabelManager channelLabelManager = d.getChannelLabelManager();
+		
 		for( PanelListElement panel: channelLabelManager.getPanelList().getPanels()) {
 					if(channelLabelManager.isNonLabeledSlice(panel)
 							|| panel.targetChannelNumber!=chan
@@ -155,7 +173,9 @@ public class ChannelPanelRemover implements LayoutSpaces{
 		CombinedEdit output=new CombinedEdit();
 		
 		output.addEditToList(
-				new ChannelUseChangeUndo(figure.getPrincipalMultiChannel().getPanelList().getChannelUseInstructions()));
+				ChannelUseChangeUndo.createForManyManagers(panelManagement.getPanelManagers())
+				//new ChannelUseChangeUndo(figure.getPrincipalMultiChannel().getPanelList().getChannelUseInstructions())
+				);
 		
 		Integer changeLayout = orderer.determineChannelLayout();
 	if (changeLayout!=null && (changeLayout==ROWS||changeLayout==COLS)) {
@@ -176,22 +196,24 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			
 		}
 		
-		for(ImageDisplayLayer d: figure.getMultiChannelDisplays()) {
+		for(PanelManager d: panelManagement.getPanelManagers()) {
 			for(PanelListElement l:d.getPanelList().getPanels()) {
 				if (!l.isTheMerge()&&l.targetChannelNumber==chaneIndex) {
 					output.addEditToList(
-							d.getPanelManager().removeDisplayObjectsFor(l)
+							d.removeDisplayObjectsFor(l)
 							);
 					
 				}
 			}
-			d.getPanelManager().getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chaneIndex, true);
-			d.getPanelManager().updatePanels();
+			d.getPanelList().getChannelUseInstructions().setChannelPanelExcluded(chaneIndex, true);
+			d.updatePanels();
 		}
 
 		
 		output.establishFinalState();
 		return output;
 	}
+
+	
 
 }

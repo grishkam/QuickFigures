@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import appContextforIJ1.ImageDisplayTester;
 import basicMenusForApp.BasicMenuItemForObj;
 import logging.IssueLog;
+import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
 
@@ -19,7 +20,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.MANY_SCALE_IMAGEPANEL;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample._FIGURE;//which cases to test. set to null if all should be tested
 
 
 
@@ -39,9 +40,9 @@ import testing.TestProvider;
 				}
 		
 		
-		
+		/**pauses long enough for the user to test out */
 		IssueLog.waitSeconds(215);
-		
+		FigureTester.closeAllWindows();
 	}
 
 
