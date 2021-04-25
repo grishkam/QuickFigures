@@ -16,7 +16,6 @@ import logging.IssueLog;
 import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
-import undo.CombinedEdit;
 
 /**
  A dialog that allows the user to select a template from a

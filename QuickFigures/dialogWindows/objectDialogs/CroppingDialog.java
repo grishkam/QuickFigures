@@ -50,7 +50,6 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;

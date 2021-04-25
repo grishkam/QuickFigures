@@ -22,25 +22,9 @@
  */
 package imageMenu;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Rectangle;
-
-import javax.swing.Icon;
-
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
-import figureFormat.DirectoryHandler;
-import graphicalObjects_LayerTypes.GraphicGroup;
-import graphicalObjects_Shapes.CircularGraphic;
-import graphicalObjects_Shapes.RectangularGraphic;
-import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.UserPreferences;
-import imageDisplayApp.ZoomOptions;
-import infoStorage.BasicMetaDataHandler;
-import infoStorage.MetaInfoWrapper;
-import standardDialog.StandardDialog;
-import standardDialog.graphics.GraphicDisplayComponent;
 import storedValueDialog.StoredValueDilaog;
 
 /**This class shows the preferences dialog for quickfigures*/

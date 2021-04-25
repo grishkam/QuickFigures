@@ -43,7 +43,6 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
-import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.IconUtil;

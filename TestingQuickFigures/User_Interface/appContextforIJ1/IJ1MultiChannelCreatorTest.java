@@ -7,8 +7,6 @@ package appContextforIJ1;
 
 import java.awt.Dimension;
 
-import org.junit.jupiter.api.Test;
-
 import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
 import ij.IJ;

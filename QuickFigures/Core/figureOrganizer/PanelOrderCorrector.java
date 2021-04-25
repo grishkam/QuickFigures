@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 20, 2021
+ * Date Modified: April 25, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -27,6 +27,8 @@ import java.util.Comparator;
 
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
+import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import layout.BasicObjectListHandler;
@@ -63,7 +65,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	 * list
 	  */
 	public ArrayList<PanelListElement> getOrderedPanelList() {
-		DefaultLayoutGraphic g = figure.getMontageLayoutGraphic();
+		DefaultLayoutGraphic g = getTargetLayout();
 		g.generateCurrentImageWrapper();
 		BasicLayout layout = g.getPanelLayout();
 		
@@ -75,11 +77,13 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	
 	return output;
 	}
+
+
 	
 	/**returns an ordered set of panel list elements from each row or columns.
 	 * The type given may be ROWS, COLUMNS or PANELS @see MontageLayoutSpaces*/
 	public ArrayList<ArrayList<PanelListElement>> getOrderedPanelList(int type) {
-		DefaultLayoutGraphic g = figure.getMontageLayoutGraphic();
+		DefaultLayoutGraphic g = getTargetLayout();
 		g.generateCurrentImageWrapper();
 		BasicLayout layout = g.getPanelLayout();
 		layout=layout.makeAltered(type);
@@ -96,14 +100,16 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		
 		 g.getEditor().pasteStack(layout, read);
 	
-	return output;
+		 return output;
 	}
 
-	/**finds the panel list elements with panels inside of the given rectangle and adds them to the arraw*/
+	/**finds the panel list elements with panels inside of the given rectangle and adds them to the array*/
 	public void addElementsInPanel(ArrayList<PanelListElement> output, Rectangle2D rect) {
-		ArrayList<LocatedObject2D> inPanel = new BasicObjectListHandler().getAllClickedRoi(figure, rect.getCenterX(), rect.getCenterY(), ImagePanelGraphic.class);
+		ArrayList<LocatedObject2D> inPanel = new BasicObjectListHandler().getAllClickedRoi(getTargetLayer(), rect.getCenterX(), rect.getCenterY(), ImagePanelGraphic.class);
 		addPanelListElements(output, inPanel);
 	}
+	
+	
 
 	/**when given a list of located objects, determines whether those objects are display panels for panel list elements
 	  and adds the elements to the list*/
@@ -137,12 +143,14 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	
 	/**returns true if each channel in the image is represented by only one image panel*/
 	boolean isEachPanelADifferentChannel() {
-		ImageDisplayLayer pm = figure.getPrincipalMultiChannel();
-		if(figure.getMultiChannelDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
+		ImageDisplayLayer pm = getMultichannel();
+		if(getDisplaysInOrder().size()==1 &&pm.getMultiChannelImage().nFrames()==1&&pm.getMultiChannelImage().nSlices()==1)
 			return true;
 		
 		return false;
 	}
+
+	
 	
 	/**returns the kind of layout, returns null if the layout does not match 
 	   the expected patterns */
@@ -225,13 +233,14 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	 * */
 	public ArrayList<Integer> indexOfChannel( int channel, int type) {
 		ArrayList<Integer> indices=new ArrayList<Integer>();
-		BasicLayout layout = figure.getMontageLayout().makeAltered(type);
+		BasicLayout layout = getUsedLayout().makeAltered(type);
 		for(int i=1; i<=layout.nPanels(); i++) {
 			if (channel==channelIndexAt(type, i))
 				indices.add(i);
 		}
 		return indices;
 	}
+
 
 
 	/**determines how the channel panels actually appear in the figure
@@ -241,7 +250,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		
 		ChannelUseInstructions cOrder = determineChannelOrder();
 		if (cOrder!=null)
-		for(ChannelUseInstructions c: figure.getChannelUseInfo())
+		for(ChannelUseInstructions c: getChannelUserInformation())
 			try {
 					c.MergeHandleing=cOrder.MergeHandleing;
 					c.getChanPanelReorder().setOrder(cOrder.getChanPanelReorder());
@@ -251,6 +260,8 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		
 		
 	}
+
+	
 
 	/**if the channels are layed out in the form given,
 	  updates the channel order*/
@@ -267,7 +278,7 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 	
 	public ArrayList< ImageDisplayLayer> getDisplaysInLayoutImageOrder() {
 		ArrayList<PanelListElement> list = getOrderedPanelList();
-		ArrayList<ImageDisplayLayer> allContainedDisplays = figure.getMultiChannelDisplaysInOrder();
+		ArrayList<ImageDisplayLayer> allContainedDisplays = getDisplaysInOrder();
 		ArrayList< ImageDisplayLayer> displays=new 	ArrayList<ImageDisplayLayer>();
 		
 		for(PanelListElement l: list) {
@@ -283,6 +294,8 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		return displays;
 	}
 
+	
+	/**compares the order*/
 	public static class ImageOrderComparator implements Comparator<ImageDisplayLayer> {
 		private ArrayList<ImageDisplayLayer> newOrder;
 
@@ -302,4 +315,44 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		
 	}
 	
+	
+	/**
+	 * @return
+	 */
+	protected BasicLayout getUsedLayout() {
+		return figure.getMontageLayout();
+	}
+	
+	/**
+	returns the layout on which the panels are arranged
+	 */
+	protected DefaultLayoutGraphic getTargetLayout() {
+		return figure.getMontageLayoutGraphic();
+	}
+
+	/**
+	 * @return
+	 */
+	protected ArrayList<ImageDisplayLayer> getDisplaysInOrder() {
+		return figure.getMultiChannelDisplaysInOrder();
+	}
+	
+	/**
+	 * @return
+	 */
+	protected ImageDisplayLayer getMultichannel() {
+		return figure.getPrincipalMultiChannel();
+	}
+	
+	/**returns the layer that contains each panel*/
+	public GraphicLayerPane getTargetLayer() {
+		return figure;
+	}
+	
+	/**
+	 * @return
+	 */
+	protected ArrayList<ChannelUseInstructions> getChannelUserInformation() {
+		return figure.getChannelUseInfo();
+	}
 }

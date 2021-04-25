@@ -7,8 +7,6 @@ package includedToolbars;
 
 import java.awt.Rectangle;
 
-import org.junit.jupiter.api.Test;
-
 import appContextforIJ1.ImageDisplayTester;
 import graphicalObjects_Shapes.RectangularGraphic;
 import ij.IJ;

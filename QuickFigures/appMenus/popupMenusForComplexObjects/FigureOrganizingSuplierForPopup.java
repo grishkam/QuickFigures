@@ -45,7 +45,6 @@ import figureFormat.TemplateUserMenuAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.LabelCreationOptions;
 import figureOrganizer.MultichannelDisplayLayer;
-import figureOrganizer.PanelListElement;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;

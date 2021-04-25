@@ -59,8 +59,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	 */
 	private static final String RECRATE_INSET_LAYOUT = "inset layout",
 			 REMOVE = "i6", REMOVE_PANEL_INSETS = "i4",
-			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup", TURN_SQUARE_LOCK="SQUARE LOCK",
-			CHANGE_SCALE_MODE="change scale mode";
+			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup", TURN_SQUARE_LOCK="SQUARE LOCK";
 	/**
 	 * 
 	 */

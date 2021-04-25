@@ -10,8 +10,6 @@
  */
 package graphicalObjects_BasicShapes;
 
-import org.junit.jupiter.api.Test;
-
 import appContextforIJ1.ImageDisplayTester;
 import logging.IssueLog;
 import messages.ShowMessage;

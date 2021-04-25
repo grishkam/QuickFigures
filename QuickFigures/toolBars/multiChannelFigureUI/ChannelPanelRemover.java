@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: April 25, 2021
+ * Version: 2021.1
  */
 package multiChannelFigureUI;
 
@@ -70,7 +71,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			boolean insertIntoLayout = changeLayout!=null && (changeLayout==ROWS||changeLayout==COLS);
 			if (insertIntoLayout) {
 					
-					DefaultLayoutGraphic layout = figure.getMontageLayoutGraphic();
+					DefaultLayoutGraphic layout = getTargetLayout();
 					output.addEditToList(new UndoLayoutEdit(layout));	
 					if (changeLayout==ROWS)layout.getEditor().addRow(layout.getPanelLayout(), 1, null);
 					if (changeLayout==COLS)layout.getEditor().addColumn(layout.getPanelLayout(), 1, null);
@@ -97,7 +98,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 				
 			}
 			
-			DefaultLayoutGraphic layout = figure.getMontageLayoutGraphic();
+			DefaultLayoutGraphic layout = getTargetLayout();
 			for(int i=0; i<panels.size(); i++) {
 				int index=0;
 				BasicLayout panelLayout = layout.getPanelLayout();
@@ -119,6 +120,13 @@ public class ChannelPanelRemover implements LayoutSpaces{
 			output.establishFinalState();
 			return output;
 			
+	}
+
+	/**
+	 returns the layout that contains the targetted panels
+	 */
+	protected DefaultLayoutGraphic getTargetLayout() {
+		return figure.getMontageLayoutGraphic();
 	}
 
 	/**Adds a channel label for a newly created channel panel
@@ -152,7 +160,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 		Integer changeLayout = orderer.determineChannelLayout();
 	if (changeLayout!=null && (changeLayout==ROWS||changeLayout==COLS)) {
 			
-			DefaultLayoutGraphic layout = figure.getMontageLayoutGraphic();
+			DefaultLayoutGraphic layout = getTargetLayout();
 			output.addEditToList(new UndoLayoutEdit(layout));
 			
 			ArrayList<Integer> possibleIndex = orderer.indexOfChannel(chaneIndex, changeLayout);

@@ -5,8 +5,6 @@
  */
 package figureFormat;
 
-import org.junit.Test;
-
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;

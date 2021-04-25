@@ -28,6 +28,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWorkSheet;
+import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.MultiChannelImage;
@@ -391,7 +392,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 		try {
 			refreshInsetOnMouseDrag();
 		} catch (Exception e) {
-			IssueLog.log(e);
+			IssueLog.logT(e);
 		}
 	}
 
@@ -491,8 +492,11 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			return;
 		}
 		if(inset==null) return;
+		
+		ChannelLabelManager labels = inset.getChannelLabelManager();
+		if(labels!=null)
 		undo.addEditToList(
-				inset.getChannelLabelManager().eliminateChanLabels()
+				labels.eliminateChanLabels()
 				);
 		undo.addEditToList(
 				inset.removePanels());

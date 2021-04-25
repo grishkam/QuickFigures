@@ -50,7 +50,7 @@ public class InterpolationTest extends FigureTester {
 	}
 
 	/**
-	 * 
+	
 	 */
 	protected void showInterpolationTest() {
 		FigureOrganizingLayerPane.suppressCropDialog=true;
@@ -66,7 +66,7 @@ public class InterpolationTest extends FigureTester {
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
 		
 		int location =0;
-		int factor=0;
+		
 		for(Interpolation inter: Interpolation.values()) {
 			String mockFilePath2 = getFilePath(figureTester);
 			
@@ -80,7 +80,7 @@ public class InterpolationTest extends FigureTester {
 			f.updatePanelsAndLabelsFromSource();
 			f.transform().move(location, 0);
 			removeClass(f, BarGraphic.class);
-			factor++;
+			
 			location+=f.getMontageLayoutGraphic().getBounds().width+10;
 		}
 		new CanvasAutoResize(true).performUndoableAction(diw);

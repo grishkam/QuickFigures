@@ -967,7 +967,8 @@ public void setPresseddisplay(MultichannelDisplayLayer presseddisplay) {
 				 */
 				public void pressAction() {
 					int chaneIndex = entry.getOriginalChannelIndex();
-					boolean i = getPresseddisplay().getPanelManager().getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
+					PanelManager panelManager = getPresseddisplay().getPanelManager();
+					boolean i = panelManager.getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
 					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso, true);
 					
 					this.getUndoManager().addEdit(

@@ -23,7 +23,6 @@ import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
 import channelLabels.ChannelLabelTextGraphic;
-import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import figureFormat.DirectoryHandler;
 import figureFormat.TemplateChoice;
@@ -202,7 +201,7 @@ public class FigureTester {
 	 * @param mockIndex
 	 */
 	protected void createMock(int mockIndex, boolean close) {
-		MultiChannelImage ex = CurrentAppContext.getMultichannelContext().getDemoExample(!close, getMockFilePath(mockIndex), 3, mockIndex, 1);
+		CurrentAppContext.getMultichannelContext().getDemoExample(!close, getMockFilePath(mockIndex), 3, mockIndex, 1);
 	
 	}
 

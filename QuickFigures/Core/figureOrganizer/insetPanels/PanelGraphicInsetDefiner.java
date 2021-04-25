@@ -564,9 +564,11 @@ static Color  folderColor2= new Color(0,140, 0);
 			this.inset=panelGraphicInsetDef;
 		}
 		
-		/**a working change ppi function*/
+		/**a working change ppi function. Alters the pixel density of the inset panels if the inset is set to scale its panels */
 		@Override
 		public CombinedEdit changePPI(double newppi) {
+			if(inset.isDoNotScale())
+				return null;
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newPanelScale=panel.getRelativeScale()*ppi/newppi;

@@ -7,24 +7,16 @@
 package figureFormat;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
 import addObjectMenus.FigureAdder;
 import appContext.CurrentAppContext;
-import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
-import channelMerging.ChannelUseInstructions;
 import figureOrganizer.FigureOrganizingLayerPane;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import layout.basicFigure.BasicLayoutEditor;
-import locatedObject.AttachmentPosition;
-import locatedObject.ColorDimmer;
-import logging.IssueLog;
 import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**

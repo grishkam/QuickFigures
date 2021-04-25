@@ -10,8 +10,6 @@
  */
 package exportMenus;
 
-import org.junit.Test;
-
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import testing.FigureTester;
