@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 25, 2021
+ * Date Modified: April 26, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -49,6 +49,7 @@ import channelLabels.ChannelLabelTextGraphic;
 	
 	public static final int MERGE_IMAGE_PANEL=2;
 	public static final int CHANNEL_IMAGE_PANEL=1;
+	public static final int CUSTOM_IMAGE_PANEL=3;
 	
 	public static final int NONE=0;
 
@@ -490,6 +491,14 @@ import channelLabels.ChannelLabelTextGraphic;
 			if(csf.isFrameLocation()) this.targetFrameNumber=csf.frame;
 			if(csf.isSliceLocation()) this.targetSliceNumber=csf.slice;
 			return false;
+		}
+
+		/**
+		working on method for user to add custom panels that are always treated
+		like those in advanced channel use mode. those are custom panels
+		 */
+		public boolean isCustomPanel() {
+			return designation==CUSTOM_IMAGE_PANEL;
 		}
 		
 		

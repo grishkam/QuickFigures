@@ -988,7 +988,6 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		@Override
 		public SVGExporter getSVGEXporter() {
-			// TODO Auto-generated method stub
 			return new ImageSVGExporter(this);
 		}
 

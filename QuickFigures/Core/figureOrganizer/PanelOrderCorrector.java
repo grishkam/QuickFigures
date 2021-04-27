@@ -299,6 +299,31 @@ public class PanelOrderCorrector  implements Serializable, LayoutSpaces{
 		}
 		return displays;
 	}
+	
+	
+	/**returns a list of the panel managers in layout order. work in progress*/
+	public ArrayList< PanelManager> getPanelManagersInLayoutImageOrder() {
+		ArrayList<PanelListElement> list = getOrderedPanelList();
+		ArrayList<? extends PanelManager> allContainedManagers = panelManagement.getPanelManagers();;
+		ArrayList< PanelManager> displays=new 	ArrayList<PanelManager>();
+		
+		for(PanelListElement l: list) {
+			PanelManager managerForL=null;
+			for(PanelManager m: allContainedManagers) {
+				if(m.getPanelList().getPanels().contains(l))
+					managerForL=m;
+			}
+			
+			if (allContainedManagers.contains(managerForL)&&!displays.contains(managerForL)) 
+			{
+				displays.add(managerForL);
+				
+			};
+			
+			
+		}
+		return displays;
+	}
 
 	
 	/**compares the order*/

@@ -36,10 +36,12 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.AttachmentPosition;
+import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
@@ -358,6 +360,8 @@ public class ChannelLabelManager implements Serializable, ProvidesDialogUndoable
 		}
 		return output;
 	}
+	
+	
 	
 	
 }

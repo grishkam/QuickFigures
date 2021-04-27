@@ -18,7 +18,9 @@ import channelMerging.ImageDisplayLayer;
 import figureOrganizer.CollectivePanelManagement;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelManager;
+import figureOrganizer.PanelOrderCorrector;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner.InsetPanelManager;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
@@ -90,14 +92,28 @@ public class InsetPanelManagementGroup implements CollectivePanelManagement {
 			return output;
 	}
 
+	/**not yet properly implemented*/
 	@Override
 	public ArrayList<PanelManager> getPanelManagersInLayoutOrder() {
-		 return getPanelManagers() ;
+		return  new PanelOrderCorrector(this).getPanelManagersInLayoutImageOrder();
+		// return getPanelManagers() ;
 	}
 
+	
+	/**returns one channel label manager. specifically, the first one to appear in the layout*/
 	@Override
 	public ChannelLabelManager getChannelLabelManager() {
-		return targetInset.getChannelLabelManager();
+		
+		ChannelLabelManager channelLabelManager = null;
+		ArrayList<PanelManager> managers = this.getPanelManagersInLayoutOrder();
+		for(PanelGraphicInsetDefiner p: targetInset.getInsetDefinersThatShareLayout()) {
+			InsetPanelManager i=(InsetPanelManager) managers.get(0);
+			if(i.getInset()==p)
+				 {channelLabelManager = p.getChannelLabelManager();
+				
+				 }
+		}
+		return channelLabelManager;
 	}
 
 	@Override

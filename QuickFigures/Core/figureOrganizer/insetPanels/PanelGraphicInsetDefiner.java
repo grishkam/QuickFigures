@@ -50,6 +50,7 @@ import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.IconUtil;
+import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
@@ -217,11 +218,15 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	 */
 	protected ScaleInformation createInsetScaleInformation(PreProcessInformation p) {
 		double scaleFactor =getInsetScale();
+		Interpolation inter=Interpolation.BILINEAR;
 		if(p!=null)
-			 scaleFactor =p.getScale()*getInsetScale();
+			 {
+			scaleFactor =p.getScale()*getInsetScale();
+			 inter=p.getInterpolationType();
+			 }
 		if(this.isDoNotScale())
 			scaleFactor=1;
-		return new ScaleInformation(scaleFactor, p.getInterpolationType());
+		return new ScaleInformation(scaleFactor,  inter);
 	}
 
 	@Override
@@ -403,10 +408,10 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	}
 	
 	/**returns the inset panel manager*/
-	public PanelManager getPanelManager() {
+	public InsetPanelManager getPanelManager() {
 		
 		MultichannelDisplayLayer sourceDisplay = this.getSourceDisplay();
-		PanelManager panMan = new InsetPanelManager(sourceDisplay, this.multiChannelStackofInsets, this.personalLayer, this);
+		InsetPanelManager panMan = new InsetPanelManager(sourceDisplay, this.multiChannelStackofInsets, this.personalLayer, this);
 		panMan.setMultiChannelWrapper( this.generatePreProcessedVersion());
 		return panMan;
 	}
@@ -567,13 +572,13 @@ static Color  folderColor2= new Color(0,140, 0);
 		/**a working change ppi function. Alters the pixel density of the inset panels if the inset is set to scale its panels */
 		@Override
 		public CombinedEdit changePPI(double newppi) {
-			if(inset.isDoNotScale())
+			if(getInset().isDoNotScale())
 				return null;
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newPanelScale=panel.getRelativeScale()*ppi/newppi;
-			double newScale=inset.getInsetScale()*newppi/ppi;
-			if (inset.getSourceDisplay().getSlot().getModifications()!=null) newScale/=inset.getSourceDisplay().getSlot().getModifications().getScale();
+			double newScale=getInset().getInsetScale()*newppi/ppi;
+			if (getInset().getSourceDisplay().getSlot().getModifications()!=null) newScale/=getInset().getSourceDisplay().getSlot().getModifications().getScale();
 			
 			for(PanelListElement panel2: getPanelList().getPanels()) {
 				ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();
@@ -581,10 +586,14 @@ static Color  folderColor2= new Color(0,140, 0);
 				panelGraphic.setRelativeScale(newPanelScale);
 			}
 			this.setPanelLevelScale(newPanelScale);
-			inset.setInsetScale(newScale);
+			getInset().setInsetScale(newScale);
 			updatePanels();
-			inset.updateDisplayPanelImages();
+			getInset().updateDisplayPanelImages();
 			return null;
+		}
+
+		public PanelGraphicInsetDefiner getInset() {
+			return inset;
 		}
 
 		/**

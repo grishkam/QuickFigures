@@ -37,6 +37,7 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import logging.IssueLog;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -158,7 +159,10 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	void addChannelLabel(Integer chan, ChannelLabelManager channelLabelManager) {
 		/**Adds a channel label to the selected channel*/
 		
-		for( PanelListElement panel: channelLabelManager.getPanelList().getPanels()) {
+		ArrayList<PanelListElement> panels2 = channelLabelManager.getPanelList().getPanels();
+		
+		
+		for( PanelListElement panel: panels2) {
 					if(channelLabelManager.isNonLabeledSlice(panel)
 							|| (chan!=null && panel.targetChannelNumber!=chan)
 							|| (panel.isTheMerge()&&chan!=null)

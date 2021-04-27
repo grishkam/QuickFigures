@@ -369,7 +369,8 @@ public class PanelList implements Serializable{
 	 * source image have been changed.*/
 	public void resetChannelEntriesForAll(MultiChannelImage  imp) {
 		for(PanelListElement entry: this.getPanels()) {
-			if (this.channelUpdateMode==true) this.updateChannelEntries(imp, entry);
+			if (this.channelUpdateMode==true||entry.isCustomPanel()) 
+				this.updateChannelEntries(imp, entry);
 			else this.resetChannelEntriesForPanel(imp, entry);
 			
 			updateChannelColors(imp, entry);
@@ -379,7 +380,7 @@ public class PanelList implements Serializable{
 	
 	/**updates the channel entry list for the panel to match the image*/
 	private void resetChannelEntriesForPanel(MultiChannelImage  impw, PanelListElement panel) {
-		if (panel.designation+0==PanelListElement.MERGE_IMAGE_PANEL+0) {
+		if (panel.designation==PanelListElement.MERGE_IMAGE_PANEL) {
 			this.setUpChannelEntryForMerge(impw, panel, panel.targetFrameNumber, panel.targetSliceNumber);
 		}
 		else {
@@ -546,7 +547,7 @@ public class PanelList implements Serializable{
 		
 		PanelListElement entry=createEntry();
 		if (!impw.containsImage()) {IssueLog.log("Cannot create meged image for null or empty entry"); return entry;}
-		entry.designation=2;
+		entry.designation=PanelListElement.MERGE_IMAGE_PANEL;
 		entry.originalImageName=impw.getTitle();
 		entry.originalImageID=impw.getID();
 		entry.targetChannelNumber=1;//not truly relevant as all the channels are included but the number must be set
