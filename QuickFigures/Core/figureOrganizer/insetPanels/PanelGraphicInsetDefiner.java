@@ -221,8 +221,8 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		Interpolation inter=Interpolation.BILINEAR;
 		if(p!=null)
 			 {
-			scaleFactor =p.getScale()*getInsetScale();
-			 inter=p.getInterpolationType();
+				scaleFactor =p.getScale()*getInsetScale();
+				inter=p.getInterpolationType();
 			 }
 		if(this.isDoNotScale())
 			scaleFactor=1;
