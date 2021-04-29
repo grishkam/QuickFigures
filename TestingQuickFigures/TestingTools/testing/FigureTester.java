@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import actionToolbarItems.ChannelLabelButton;
@@ -51,6 +52,8 @@ import messages.ShowMessage;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
 import popupMenusForComplexObjects.ImagePanelMenu;
+import testing.FigureTester.FileFinder2;
+import ultilInputOutput.FileFinder;
 import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;
 
@@ -65,13 +68,19 @@ public class FigureTester {
 	
 	
 	
-	
+
+
+	/**
+	 * 
+	 */
+	private static final String TESTING_TEST_PATH = "/Testing/Test ";
+
 	/**
 	 * 
 	 */
 	private static final String  FILE_NOT_FOUND = "One must place the testing files in the QuickFigures folder to perform this test. they are on github";
 
-	public static final String testFolderPath = new DirectoryHandler().getFigureFolderPath()+"/Testing/Test ";
+	public static final String testFolderPath = new DirectoryHandler().getFigureFolderPath()+TESTING_TEST_PATH;
 	public static final String mockFilePath=testFolderPath+"Mock/";
 	
 	
@@ -100,10 +109,22 @@ public class FigureTester {
 	 */
 	protected static void checkForFile(String string) {
 		if (!(new File(string)).exists()) 
-		{
-			IssueLog.showMessage(FILE_NOT_FOUND);;
+		try {
 			
-		}
+			IssueLog.showMessage(FILE_NOT_FOUND);;
+			/**
+			int index = string.indexOf(TESTING_TEST_PATH);
+			String check = "TestingQuickFigures"+string.substring(index);
+			IssueLog.log("will look for "+check);
+			
+			
+			FileFinder2 fileFinder2 = new FileFinder2();
+			 fileFinder2.moveLocalResourceTo(new File(string).getName(), new File(string));
+			
+		*/
+			
+			
+		} catch (Throwable t) {IssueLog.logT(t);}
 	}
 	
 	/**
@@ -357,7 +378,8 @@ public class FigureTester {
 	
 	
 	public static void main(String[] args) {
-		
+		FigureTester.getTest1ImagePath(1, 2);
+		FigureTester.getTest1ImagePath(1, 5);
 		FigureOrganizingLayerPane.suppressCropDialog=true;
 		setup();
 		FigureTester figureTester = new FigureTester();
@@ -602,5 +624,21 @@ public class FigureTester {
 		for(Window w: windows) {
 			w.setVisible(false);
 		}
+	}
+	
+	
+	
+	/**
+		 
+		 * 
+		 */
+	public static class FileFinder2 extends DirectoryHandler {
+		
+		/**takes a resource stored within the jar file and copies it to the given folder*/
+		public void moveLocalResourceTo(String local, File folerPath) {
+			
+			super.moveLocalResourceToFile(local, folerPath);
+		}
+
 	}
 }

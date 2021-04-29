@@ -37,6 +37,7 @@ import javax.swing.JMenuItem;
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphicContainer;
 import locatedObject.ColorDimmer;
 import locatedObject.LocatedObject2D;
 import locatedObject.RainbowPaintProvider;
@@ -232,6 +233,8 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	/**returns true if the object is already in sthe stake that this class would transform it into*/
 	public boolean objectIsAlready(Object a) {
 		
+		
+		
 		if (a instanceof ComplexTextGraphic && ((ComplexTextGraphic) a).isEditMode()) {
 			
 			ComplexTextGraphic c=(ComplexTextGraphic) a;
@@ -260,6 +263,11 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 	}
 
 	public void actOnObject(CombinedEdit edits, LocatedObject2D a) {
+		if(a instanceof TextGraphicContainer) {
+			a=((TextGraphicContainer) a).getText();
+		}
+		
+		
 		if (a instanceof ComplexTextGraphic && ((ComplexTextGraphic) a).isEditMode()) {
 			
 			ComplexTextGraphic c=(ComplexTextGraphic) a;

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Aoril 11, 2021
+ * Date Modified: April 28, 2021
  * Version: 2021.1
  */
 
@@ -33,6 +33,7 @@ import fileread.ExcelFileToXYPlot;
 import fileread.ExcelRowToJTable;
 import fileread.PlotType;
 import fileread.ShowTable;
+import groupedDataPlots.Grouped_Plot;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import includedToolbars.QuickFiguresToolBar;
@@ -94,14 +95,14 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		
 		for(xyPlotForm form:XYPlotCreator.xyPlotForm.values()) installer.installItem(new ExcelFileToXYPlot(form));
 		
-		installer.installItem(new ExcelFileToComplexCategoryPlot(0));
-		installer.installItem(new ExcelFileToComplexCategoryPlot(1));
-		installer.installItem(new ExcelFileToComplexCategoryPlot(2));
-		installer.installItem(new ExcelFileToComplexCategoryPlot(3));
+		installer.installItem(new ExcelFileToComplexCategoryPlot(Grouped_Plot.STAGGERED_BARS));
+		installer.installItem(new ExcelFileToComplexCategoryPlot(Grouped_Plot.STACKED_BARS));
+		installer.installItem(new ExcelFileToComplexCategoryPlot(Grouped_Plot.SEQUENTIAL_BARS));
+		installer.installItem(new ExcelFileToComplexCategoryPlot(Grouped_Plot.JITTER_POINTS));
 		installer.installItem(new ExcelFileToKaplanPlot());
 		installer.installItem(new ExcelRowToJTable());
-		installer.installItem(new ShowTable(1));
-		installer.installItem(new ShowTable(9));
+		installer.installItem(new ShowTable(ShowTable.OPEN_FILE));
+		installer.installItem(new ShowTable(ShowTable.NEW_TABLE));
 		
 		} catch (Throwable t) {
 			t.printStackTrace();

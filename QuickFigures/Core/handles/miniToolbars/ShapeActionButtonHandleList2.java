@@ -136,16 +136,18 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 			addSetAngleButton();
 		}
 
-		setLocation(location);
+		setLocation(getLocation());
 	}
 
 	/**
 	adds a set angle button to the list
 	 */
 	private void addSetAngleButton() {
-		SetAngle itemForIcon2 = new SetAngle(45);
-		GeneralActionListHandle h4 = addOperationList(itemForIcon2,SetAngle.createManyAngles() );
-			h4.itemForInputPanel=new SetAngle(shape);
+		if(shape.doesSetAngle()) {
+			SetAngle itemForIcon2 = new SetAngle(45);
+			GeneralActionListHandle h4 = addOperationList(itemForIcon2,SetAngle.createManyAngles() );
+				h4.itemForInputPanel=new SetAngle(shape);
+			}
 	}
 
 

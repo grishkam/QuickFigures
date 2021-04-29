@@ -24,9 +24,13 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import dataTableDialogs.SmartDataInputDialog;
 
+
+/**A manu item that opens a data table*/
 public class ShowTable extends BasicMenuItemForObj {
 
-	int type=0;
+	public static final int NEW_TABLE=0, OPEN_FILE=1;
+	
+	int type=NEW_TABLE;
 	
 	public ShowTable(int t) {
 		type=t;
@@ -36,14 +40,14 @@ public class ShowTable extends BasicMenuItemForObj {
 	
 	@Override
 	public String getNameText() {
-		if (type==1) return "Open text file as Data Table";
+		if (type==OPEN_FILE) return "Open text file as Data Table";
 		return "New Data Table";
 	}
 
 
 	
 	public static void main(String[] args) {
-		new ShowTable(1).performActionDisplayedImageWrapper(null);;
+		new ShowTable(OPEN_FILE).performActionDisplayedImageWrapper(null);;
 	}
 
 
@@ -55,7 +59,7 @@ public class ShowTable extends BasicMenuItemForObj {
 	
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		if (type==1) {SmartDataInputDialog.showTableFromUserFile(false);}
+		if (type==OPEN_FILE) {SmartDataInputDialog.showTableFromUserFile(false);}
 		else
 		SmartDataInputDialog.createDialog(null).showDialog();;
 	}

@@ -28,6 +28,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D.Double;
 
+import dataSeries.DataSeries;
 import dataSeries.KaplanMeierDataSeries;
 import dialogs.CensorMarkDialog;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -173,5 +174,16 @@ public class KaplanMeierCensorShower extends  DataShowingShape implements DataLi
 	
 	public PointModel getPointModel() {
 		return pointModel;
+	}
+	
+	
+	/**returns the data series that this object drew at a given xy coordinate
+	 */
+	public DataSeries getPartialSeriesDrawnAtLocation(double dx, double dy) {
+		return dKap;
+	}
+	
+	public Shape getPartialShapeAtLocation(double dx, double dy) {
+		return this.getBounds();
 	}
 }

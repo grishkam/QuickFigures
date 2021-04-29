@@ -33,7 +33,7 @@ public class KaplenMeierDataPoint implements Serializable, DataPoint {
 	public static final int Event_Occured_Status=0, Censored_Status=1;
 	
 	private double serialTime=0;
-	int status=0;
+	int status=Event_Occured_Status;
 	
 	public KaplenMeierDataPoint(double time, boolean censor) {
 		serialTime=(time);

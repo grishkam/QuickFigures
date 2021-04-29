@@ -22,9 +22,11 @@ package kaplanMeierPlots;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D.Double;
 
+import dataSeries.DataSeries;
 import dataSeries.KaplanMeierDataSeries;
 import plotParts.Core.PlotCordinateHandler;
 import plotParts.DataShowingParts.AbstractDataLineShape;
@@ -120,4 +122,15 @@ public class KaplanMeierLineShape extends  AbstractDataLineShape {
 	/**kaplan meier plots range from 0 to 1, returns 1 as the maximun*/
 	@Override
 	public double getMaxNeededValue() {return 1;}
+	
+	/**returns the data series that this object drew at a given xy coordinate
+	 */
+	public DataSeries getPartialSeriesDrawnAtLocation(double dx, double dy) {
+		return dKap;
+	}
+	
+	/**returns the outline of the line*/
+	public Shape getPartialShapeAtLocation(double dx, double dy) {
+		return this.getBounds();
+	}
 }

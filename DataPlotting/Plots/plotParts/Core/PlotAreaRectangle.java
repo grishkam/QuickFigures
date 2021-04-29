@@ -219,5 +219,11 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 	public ArrayList<LocatedObject2D> getNonLockedItems() {
 		return new ArrayList<LocatedObject2D>();
 	}
+	
+	/**override superclass*/
+	public boolean doesSetAngle() {
+			
+			return false;
+		}
 
 }

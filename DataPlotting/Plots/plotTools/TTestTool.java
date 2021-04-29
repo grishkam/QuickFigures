@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: April 28, 2021
  * Version: 2021.1
  */
 package plotTools;
@@ -43,6 +43,7 @@ import icons.IconWrappingToolIcon;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.DataShowingShape;
 import storedValueDialog.ReflectingFieldSettingDialog;
@@ -58,18 +59,20 @@ public class TTestTool extends BasicPlotTool {
 };
 
 
-
 @UserChoiceField(optionsForUser = { "p-Vale<x", "Stars", "Exact" })
-public int markType=0;
+public int markType=StatTestShower .LESS_THAN_MARK;
 
+
+public static final int LINK_WITH_LINE=0, NO_LINK=1;
 @UserChoiceField(optionsForUser = { "Connection Line", "Put significance above databar" })
-public int linkType=0;
+public int linkType=LINK_WITH_LINE;
 
 @UserChoiceField(optionsForUser = { "Assume Unequal Variances", "Assume Equal Variances", "Paired T-Test" })
-public int tTestType=0;
+public int tTestType=StatTestShower.NORMAL_T_TEST;
+
 
 @UserChoiceField(optionsForUser = { "Two-Tailed", "One-Tailed" })
-public int numberTails=0;
+public int numberTails=StatTestShower.TW0_TAIL;
 
 
 	
@@ -122,7 +125,7 @@ public int numberTails=0;
 		return overlapsDataShapes;
 	}
 
-
+	/**returns the point in the shape with the lowest y value*/
 	private Point2D.Double highestPointInDataShape(DataShowingShape pressShape2, double x, double y) {
 		/**if (pressShape2 instanceof DataBarShape) {
 			GraphicLayer p = pressShape2.getParentLayer();
@@ -140,7 +143,7 @@ public int numberTails=0;
 	
 	}
 	
-
+	/**Called after the mouse is released ober a plot, */
 	protected void afterPlotRelease() {
 		
 		PlotArea a1 = getPressShape().getPlotArea();
@@ -201,7 +204,7 @@ public int numberTails=0;
 	
 
 	private boolean useLinkingLine() {
-		return linkType==0;
+		return linkType==LINK_WITH_LINE;
 	}
 
 
@@ -210,6 +213,7 @@ public int numberTails=0;
 		return "Perform T-Test (Drag from one column to another)";
 	}
 	
+	/**creates a text item that displays the results of the test*/
 	private TextGraphic createTextForTest(DataSeries data1, DataSeries data2) {
 		if (data1.getIncludedValues().length()<3) return null;
 		if (data2.getIncludedValues().length()<3) return null;
@@ -217,14 +221,19 @@ public int numberTails=0;
 		double pValue;
 		try {
 			pValue = test.calculatePValue(data1, data2);
+			
 		} catch (Exception e) {
 			return null;
 		}
 		
 		
 		TextGraphic text = test.createTextForPValue(pValue);
-		double ty = preliminaryPath.getBounds().getMinY();
-		double tx = preliminaryPath.getBounds().getCenterX();
+		double ty=0; 
+		double tx=0;
+		if(preliminaryPath!=null) {
+			ty = preliminaryPath.getBounds().getMinY();
+			tx = preliminaryPath.getBounds().getCenterX();
+		}
 		if (!useLinkingLine()) {
 			Point2D.Double h = this.highestPointInDataShape(getDragShape(), this.getDragCordinateX(), this.getDragCordinateY());
 			ty=h.getY();

@@ -20,7 +20,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.FIGURE_WITH_INSETS;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.KM_PLOTS;//which cases to test. set to null if all should be tested
 
 
 

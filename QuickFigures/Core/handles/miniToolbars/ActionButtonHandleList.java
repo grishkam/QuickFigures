@@ -56,7 +56,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	
 	
 	private static final long serialVersionUID = 1L;
-	protected Point2D.Double location=new Point2D.Double(0,0);
+	private Point2D location=new Point2D.Double(0,0);
 	double rightMostX=50;
 	double lowerMostY=50;
 	private double spacing=DEFAULT_ICON_SPACING;//the space between icons on the toolbar
@@ -77,7 +77,7 @@ public class ActionButtonHandleList extends SmartHandleList {
 	}
 	
 	/**sets the location of this list*/
-	public void setLocation(Point2D.Double p) {
+	public void setLocation(Point2D p) {
 		if(p==null) return;
 		this.location=p;
 		updateHandleLocations(1);
@@ -108,8 +108,8 @@ public class ActionButtonHandleList extends SmartHandleList {
  Sets the handle locations each handle to form a horizontal 
  */
 public void updateLocationsForHorizontal() {
-	double xi= location.getX();
-	double y= location.getY();
+	double xi= getLocation().getX();
+	double y= getLocation().getY();
 	int colIndex = 0;
 	lowerMostY=0;
 	rightMostX=0;
@@ -122,7 +122,7 @@ public void updateLocationsForHorizontal() {
 		
 		colIndex++;
 		if(colIndex>=maxGrid) {
-			xi=location.getX();
+			xi=getLocation().getX();
 			y+=handleXSpace;//not the y space? might cause issues if the handles are not square
 			colIndex=0;
 		}
@@ -142,8 +142,8 @@ public void updateLocationsForHorizontal() {
 sets the locations of each handle to form a vertical array
 */
 public void updateLocationsForVertical() {
-	double xi= location.getX();
-	double yi= location.getY();
+	double xi= getLocation().getX();
+	double yi= getLocation().getY();
 	int rowIndex = 0;
 	lowerMostY=0;
 	rightMostX=0;
@@ -156,7 +156,7 @@ public void updateLocationsForVertical() {
 		
 		rowIndex++;
 		if(rowIndex>=maxGrid) {
-			xi=location.getX();
+			xi=getLocation().getX();
 			yi+=handleYSpace;//not the y space? might cause issues if the handles are not square
 			rowIndex=0;
 		}
@@ -509,8 +509,14 @@ public void updateLocationsForVertical() {
 		this.vertical=b;
 		
 	}
+	
+	/**implemented by subclasses*/
 	public void updateLocation() {
-		// TODO Auto-generated method stub
 		
+		
+	}
+
+	public Point2D getLocation() {
+		return location;
 	}
 }

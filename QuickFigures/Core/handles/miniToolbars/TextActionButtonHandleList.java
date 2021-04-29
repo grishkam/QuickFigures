@@ -66,8 +66,14 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 	{maxGrid=12;}
 
 	protected TextGraphic text;
+	private boolean hideAngleAndDialogHandles;
 	
 	public TextActionButtonHandleList(TextGraphic t) {
+		this(t, false);
+	}
+	
+	public TextActionButtonHandleList(TextGraphic t, boolean hideangle) {
+		this.hideAngleAndDialogHandles=hideangle;
 		this.text=t;
 		addItems();
 		updateLocationBasedOnParentItem();
@@ -110,13 +116,15 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		
 		
 		
-		this.add(new TextDialogHandle(800210));
-		this.add(new TextHandleNonEditmode(new SelectAllButton(text), 819100));
+		if (!this.hideAngleAndDialogHandles)this.add(new TextDialogHandle(800210));
+		if (!this.hideAngleAndDialogHandles)this.add(new TextHandleNonEditmode(new SelectAllButton(text), 819100));
 		add(new JustifyButtonForText(1488925));
-		setLocation(location);
+		setLocation(getLocation());
+		
+		
 		addAttachmentPositionButton(text);
 		
-		addAngleHandleToList();
+		if (!this.hideAngleAndDialogHandles)addAngleHandleToList();
 		
 	}
 

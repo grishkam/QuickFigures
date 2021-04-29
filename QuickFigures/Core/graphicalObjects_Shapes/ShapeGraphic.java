@@ -747,4 +747,12 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	 */
 	public abstract String getShapeName();
 	
+	
+	/**
+	returns true if the shapes angle can be set to a number
+	 */
+	public boolean doesSetAngle() {
+		return true;
+	}
+	
 }

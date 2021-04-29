@@ -53,6 +53,8 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	private FigureOrganizingLayerPane figure;
 	private PanelOrderCorrector orderer;
 	private CollectivePanelManagement panelManagement;
+	
+	public static final int ADD_CUSTOM_PANEL=-1;
 
 	/**Creates a channel panel remover for the figure
 	 * @param pressedFigure

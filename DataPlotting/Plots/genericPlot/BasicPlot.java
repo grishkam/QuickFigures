@@ -165,6 +165,14 @@ public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  G
 	
 	}
 	
+	/**returns the bounds of the plot area*/
+	public void setPlotArea(Rectangle r) {
+		if (areaRect==null) {IssueLog.log("missing plot area");}
+		areaRect.setRectangle(r);
+		areaRect.afterHandleMove(0,RectangleEdges.getLocation(RectangleEdges.LOWER_LEFT, r), RectangleEdges.getLocation(RectangleEdges.LOWER_LEFT, r));
+	
+	}
+	
 	/**returns the plot area object*/
 	public PlotAreaRectangle plotAreaDefiningRectangle() {
 		return areaRect;
@@ -431,10 +439,11 @@ public PopupMenuSupplier getMenuSupplier() {
 	return new MenuItemExecuter(this);
 }
 
+/**
 @Override
 public void setAreaDims(double number, double number2) {
 	this.plotLayout.getPanelLayout().setPanelSizes((int)number, (int)number2);
-}
+}*/
 
 
 

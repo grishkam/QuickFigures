@@ -52,6 +52,7 @@ public class KM_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, 
 		addManyNew( numbers);
 		
 		onConstruction();
+		
 			
 	}
 

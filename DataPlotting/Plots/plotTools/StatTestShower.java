@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: April 28, 2021
  * Version: 2021.1
  */
 package plotTools;
@@ -26,6 +26,7 @@ import org.apache.commons.math3.stat.inference.TTest;
 import org.apache.commons.math3.util.Precision;
 
 import dataSeries.DataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import logging.IssueLog;
@@ -37,6 +38,8 @@ import textObjectProperties.TextLineSegment;
 public class StatTestShower implements Serializable {
 
 	public static final int STAR_MARK=1, LESS_THAN_MARK=0, ROUNDED_NUMBER=2;;
+	
+	public static final int NORMAL_T_TEST=0, PAIRED=2, HOMOSCEDASTIC = 1;
 
 TextGraphic model=new TextGraphic(); {model.setFontSize(10);}
 /**
@@ -45,8 +48,12 @@ TextGraphic model=new TextGraphic(); {model.setFontSize(10);}
 	private static final long serialVersionUID = 1L;
 boolean showMessages=false;//set to true if details of tests should be printed to the log window.
 private String lastPValue;
-private int tTestType;
-private int numberTails;
+
+
+
+private int tTestType=NORMAL_T_TEST;
+public static final int TW0_TAIL=0, ONE_TAIL=1;
+private int numberTails=TW0_TAIL;
 private int markType=LESS_THAN_MARK;
 
 
@@ -145,12 +152,17 @@ protected TextGraphic createTextForPValue(double pValue) {
 	
 	/**returns the p value for a t test beteen the data series*/
 	protected double calculatePValue(DataSeries data1, DataSeries data2) throws Exception {
+		if  ((data1 instanceof KaplanMeierDataSeries)&&(data2 instanceof KaplanMeierDataSeries)) {
+			return new LogRank((KaplanMeierDataSeries)data1, (KaplanMeierDataSeries)data2).getPValue();
+		}
+		
+		
 		double[] d1 = data1.getIncludedValues().getRawValues();
 		double[] d2 = data2.getIncludedValues().getRawValues();
 		if (d1.length<3||d2.length<3) throw new Exception();
 		double pValue = new TTest().tTest(d1, d2);
-		if(this.tTestType==1) pValue=new TTest().homoscedasticTTest(d1, d2);
-		if(this.tTestType==2) pValue=new TTest().pairedTTest(d1, d2);
+		if(this.tTestType==HOMOSCEDASTIC) pValue=new TTest().homoscedasticTTest(d1, d2);
+		if(this.tTestType==PAIRED) pValue=new TTest().pairedTTest(d1, d2);
 		if (numberTails==1) pValue=pValue/2;
 		lastPValue="t-Test done "+pValue;
 		if (showMessages) {

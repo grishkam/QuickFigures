@@ -135,6 +135,15 @@ public class DirectoryHandler {
 	/**takes a resource stored within the jar file and copies it to the given folder*/
 	protected void moveLocalResourceToFolder(String local, String folerPath) {
 		File fo=new File(folerPath+"/"+local);
+		moveLocalResourceToFile(local, fo);
+		
+	}
+
+	/**
+	 * @param local
+	 * @param fo
+	 */
+	protected void moveLocalResourceToFile(String local, File fo) {
 		try {
 			FileOutputStream out = new FileOutputStream(fo);
 			InputStream in = getClass().getClassLoader().getResourceAsStream( local);	;
@@ -147,8 +156,8 @@ public class DirectoryHandler {
 			out.close();
 		} catch (Exception e) {
 			IssueLog.logT(e);
+			IssueLog.log("Failed to find local resource "+local);
 		}
-		
 	}
 	
 	/**Saves String st as a text file to the given file path*/

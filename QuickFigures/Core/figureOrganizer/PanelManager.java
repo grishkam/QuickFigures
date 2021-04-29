@@ -243,7 +243,7 @@ public class PanelManager implements Serializable, EditListener{
 	
 	/**returns a channel panel at the given slice and frame.
 	  If the list does not already contain such a panel, this will create one
-	  if the integer given is null, then this will create merge panels*/
+	  if the integer given is 0 or null, then this will create merge panels*/
 	public ArrayList<PanelListElement> generateManyPanels( Integer channel) {
 		ArrayList<PanelListElement> output=new ArrayList<PanelListElement>();
 		
@@ -253,7 +253,7 @@ public class PanelManager implements Serializable, EditListener{
 			for(int s=1; s<=slices; s++) {
 				if(this.getChannelUseInstructions().isFrameExcluded(f)) continue;
 				if(this.getChannelUseInstructions().isSliceExcluded(s)) continue;
-				if(channel==null)
+				if(channel==null||channel ==0)
 					output.add(this.generateSingleMergePanel(getPanelList(), s,f ));
 				else
 					output.add( generateSingleChannelPanel(getPanelList(),channel, s, f));

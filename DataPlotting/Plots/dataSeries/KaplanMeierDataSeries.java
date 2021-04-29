@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 28, 2021
  * Version: 2021.1
  */
 package dataSeries;
@@ -98,6 +98,44 @@ public class KaplanMeierDataSeries implements DataSeries {
 		return out;
 	}
 	
+	public static KaplanMeierDataSeries createExampleData3() {
+		KaplanMeierDataSeries out = new KaplanMeierDataSeries();
+		out.studyEnd=500;
+		out.setName("Example data 2");
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(200, false));
+		out.data.add(new KaplenMeierDataPoint(50, false));
+		out.data.add(new KaplenMeierDataPoint(130, true));
+		out.data.add(new KaplenMeierDataPoint(130, false));
+		out.data.add(new KaplenMeierDataPoint(20, false));
+		out.data.add(new KaplenMeierDataPoint(20, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(100, false));
+		out.data.add(new KaplenMeierDataPoint(500, false));
+		
+		
+		return out;
+	}
+	
+	
 	/**
 	private ArrayList<Double> getAllVaidDays() {
 		ArrayList<Double> out=new ArrayList<Double> ();
@@ -136,7 +174,8 @@ public class KaplanMeierDataSeries implements DataSeries {
 	}
 	
 	/**returns the number of events that occurred at the given time*/
-	private double getNumberEventsAtTime(double theTime) {
+	//TODO: determine if this needs to be public
+	 public double getNumberEventsAtTime(double theTime) {
 		int total=0;
 		for(KaplenMeierDataPoint d: data) {
 			if (d.getSerialTime()==theTime
@@ -148,7 +187,8 @@ public class KaplanMeierDataSeries implements DataSeries {
 	}
 	
 	/**returns the number at risk the given time*/
-	private double getNumberAtRiskAtTime(double theTime) {
+	//TODO: determine if this needs to be public
+	public double getNumberAtRiskAtTime(double theTime) {
 		int total=0;
 		for(KaplenMeierDataPoint d: data) {
 			if (d.getSerialTime()>=theTime
@@ -187,7 +227,7 @@ public class KaplanMeierDataSeries implements DataSeries {
 	/**returns the percent survival on day x*/
 	@Override
 	public Basic1DDataSeries getValuesForPosition(double position) {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 
@@ -241,7 +281,6 @@ public class KaplanMeierDataSeries implements DataSeries {
 
 	@Override
 	public HashMap<Double, Double> getValueOffsetMap() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -255,6 +294,21 @@ public class KaplanMeierDataSeries implements DataSeries {
 	public void replaceData(KaplanMeierDataSeries novel) {
 		data=novel.data;
 		matchStudyEndToDataEnd(novel.data);
+	}
+
+	/**
+	 * @param v1
+	 * @return
+	 */
+	public boolean hasPointAtTime(Double v1) {
+		if(v1==0)
+			return true;
+		
+		for(KaplenMeierDataPoint p: data) {
+			if(p.getSerialTime()==v1)
+				return true;
+		}
+		return false;
 	}
 
 }

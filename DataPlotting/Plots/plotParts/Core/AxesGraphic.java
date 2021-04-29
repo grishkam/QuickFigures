@@ -32,8 +32,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
+import applicationAdapters.CanvasMouseEvent;
 import dialogs.AxisDialog;
 import export.pptx.GroupToOffice;
 import export.pptx.OfficeObjectMaker;
@@ -46,15 +48,25 @@ import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import graphicalObjects_SpecialObjects.TextGraphicContainer;
+import handles.HasSmartHandles;
+import handles.SmartHandle;
+import handles.SmartHandleList;
+import handles.miniToolbars.ActionButtonHandleList;
+import handles.miniToolbars.TextActionButtonHandleList;
 import illustratorScripts.ArtLayerRef;
+import locatedObject.RectangleEdgePositions;
 import locatedObject.RectangleEdges;
 import locatedObject.ScaleInfo;
 import locatedObject.Scales;
+import logging.IssueLog;
+import plotParts.Core.AxesGraphic.AxesSmartHandle;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
 
 /**An shape that depiects the plot axes*/
-public class AxesGraphic extends ShapeGraphic  implements Scales{
+public class AxesGraphic extends ShapeGraphic  implements Scales, HasSmartHandles, TextGraphicContainer{
+
 
 	/**
 	 * 
@@ -84,6 +96,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	
 	public final static int LABEL_WITH_SCIENTIFIC_NOTATION=1, LABEL_NORMAL=0;;
 	private int scaleLabelType=LABEL_NORMAL;
+	private transient SmartHandleList smartList;
 	
 	
 	
@@ -498,7 +511,6 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	}
 
 	public ScaleInfo getScaleInfo() {
-		// TODO Auto-generated method stub
 		return new ScaleInfo();
 	}
 
@@ -527,10 +539,12 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 		return labelModel;
 	}
 	
+	
 	public void showOptionsDialog() {
 		new AxisDialog(this).showDialog();;
 	}
 
+	/**returns true if the value is withing the range of the axis*/
 	boolean isWithinAxis(double displayed) {
 		
 		if (getAxisData().isVertical()) {
@@ -553,12 +567,10 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	
 	@Override
 	public void handleMove(int handlenum, Point p1, Point p2) {
-		//IssueLog.log("Set ");
 		
 		
 		if (handlenum==1) {
-			//if (this.axis.isVertical()) plotArea.pullTopAxisTo(p2.getY());
-			//else plotArea.pullRightAxisTo(p2.getX());
+		
 		}
 		
 	}
@@ -743,6 +755,157 @@ public class AxesGraphic extends ShapeGraphic  implements Scales{
 	@Override
 	public String getShapeName() {
 		return "Plot axis";
+	}
+	
+	
+	transient TextActionButtonHandleList textButtons;
+	transient ActionButtonHandleList buttonListWithText;
+	
+	/**returns the list of handles for the shape*/
+	public SmartHandleList getSmartHandleList() {
+		if (smartList==null)
+			{
+			smartList=this.createSmartHandleList(); 
+			}
+		
+		if (!superSelected) return smartList;
+		
+		return SmartHandleList.combindLists(smartList, getButtonList());
+	}
+	
+	/**returns the list of handles that take the role of buttons on a 'mini-toolbar' of sorts*/
+	public ActionButtonHandleList getButtonList() {
+		if(!labelsVisible)
+			return super.getButtonList();
+		if(buttonListWithText==null) {
+			buttonListWithText=createActionHandleList();
+			buttonListWithText.addAll(getTextButtonList())	;
+			
+		}
+		buttonListWithText.updateLocation();
+		Double loc = new Point2D.Double(this.getBounds().getMaxX(), this.getBounds().getMaxY()+90);
+		textButtons.setLocation(loc);
+		return buttonListWithText;
+	}
+
+	/**
+	returns the buttons for the text graphic
+	 */
+	protected TextActionButtonHandleList getTextButtonList() {
+		if(textButtons==null) {
+			textButtons= new TextActionButtonHandleList(labelModel, true);
+			
+					
+		}
+		Double loc = new Point2D.Double(this.getBounds().getMaxX(), this.getBounds().getMaxY()+90);
+		textButtons.setLocation(loc);
+		if(!labelsVisible)
+			return null;
+		return textButtons;
+	}
+	
+	
+	
+	/**
+	 * @return
+	 */
+	private SmartHandleList createSmartHandleList() {
+		SmartHandleList smartHandleList = new  SmartHandleList();
+		AxesSmartHandle ash = new AxesSmartHandle(this);
+		smartHandleList.add(ash);
+		return smartHandleList;
+	}
+
+	/**draws the handles*/
+	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
+		if (selected &&!super.handlesHidden) {
+		
+			getSmartHandleList().draw(g2d, cords);
+		}
+		
+	}
+	
+	/**returns the handle id for the location*/
+	@Override
+	public int handleNumber(double x, double y) {
+		return getSmartHandleList().handleNumberForClickPoint(x, y);
+	}
+	
+	/**set to true if the shape is fillable*/
+	public boolean isFillable() {
+		return false;
+	}
+	public boolean doesSetAngle() {
+		
+		return false;
+	}
+	/**returns false as stroke joins are not relevant*/
+	public boolean doesJoins() {
+		return false;
+	}
+	
+	/**
+	 
+	 A smart handle for changeing the size of the plot
+	 */
+	public static class AxesSmartHandle extends SmartHandle {
+
+		private AxesGraphic axes;
+
+		/**
+		 * @param axesGraphic
+		 */
+		public AxesSmartHandle(AxesGraphic axesGraphic) {
+			this.axes=axesGraphic;
+		}
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		/**location of the handle. this determines where in the figure the handle will actually appear
+		   overwritten in many subclasses*/
+		public Point2D getCordinateLocation() {
+			if(axes.getAxisData().isVertical()) {
+				return RectangleEdges.getLocation(RectangleEdges.TOP, axes.getBounds());
+			}
+			return RectangleEdges.getLocation(RectangleEdges.RIGHT, axes.getBounds());
+		}
+		
+		
+		/**called when a user drags a handle */
+		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
+			
+			
+			Rectangle area = axes.getPlot().getPlotArea();
+			
+			if(axes.getAxisData().isVertical()) {
+				double min = area.getMinY();
+				double changeY = min-lastDragOrRelMouseEvent.getCoordinateY();
+				int newH = (int) (area.height+changeY);
+				if(newH>1) {
+					area.height=newH;
+					area.y=(int) (area.y-changeY);
+				}
+			} 
+			
+			else {
+				double max = area.getMaxX();
+				double changeWidth = lastDragOrRelMouseEvent.getCoordinateX()-max;
+				int newW = (int) (area.width+changeWidth);
+				if(newW>1)
+					area.width=newW;
+			}
+			axes.getPlot().setPlotArea(area);
+			
+		}
+
+}
+
+	@Override
+	public TextGraphic getText() {
+		return labelModel;
 	}
 	
 }

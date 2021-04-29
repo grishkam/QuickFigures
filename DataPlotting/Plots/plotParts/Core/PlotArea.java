@@ -47,11 +47,16 @@ public interface PlotArea extends Serializable {
 	public void fullPlotUpdate();
 
 	/**sets the size of the plot area*/
-	public void setAreaDims(double number, double number2);
+	//public void setAreaDims(double number, double number2);
 	
 	/**returns the plot orientation as either vertical or horizontal*/
 	public PlotOrientation getOrientation();
 	
 	/**moves the plot a certain distance*/
 	public boolean moveEntirePlot(double dx, double dy);
+
+	/**
+	 * @param area
+	 */
+	public void setPlotArea(Rectangle area);
 }

@@ -24,7 +24,7 @@ public class KaplanTester {
 	public static void main(String[] a) {
 		 ToolbarTester.showExample(true);
 		KaplanMeierDataSeries data = KaplanMeierDataSeries.createExampleData();
-		KaplanMeierDataSeries data2 = KaplanMeierDataSeries.createExampleData2();
+		KaplanMeierDataSeries data2 = KaplanMeierDataSeries.createExampleData3();
 		KM_Plot plot = new KM_Plot("Test plot", data, data2);
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("Figure", 300,300);
 		diw.getImageAsWorksheet().getTopLevelLayer().add(plot);
