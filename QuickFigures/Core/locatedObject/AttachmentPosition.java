@@ -184,6 +184,15 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		return output;
 	}
 	
+	/**returns the default location for an object that is beside a column of a layout*/
+	public static AttachmentPosition defaultLaneLabel() {
+		AttachmentPosition output = new AttachmentPosition();
+		output.setLocationTypeExternal(CornerToCenter_LowerLeft);
+		output.setGridChoice2(LayoutSpaces.COLUMN_OF_PANELS);
+		output.setLocationCategory(EXTERNAL);
+		return output;
+	}
+	
 	/**returns the default location for an external label that is positioned to be a title for a plot*/
 	public static AttachmentPosition defaultPlotTitle() {
 		AttachmentPosition output = new AttachmentPosition();

@@ -188,9 +188,19 @@ public class AddLabelHandle extends MoveRowHandle {
 		layout.getEditor().expandSpacesToInclude(layout.getPanelLayout(), label.getBounds());
 	}
 
+	/**sets the attachment position */
 	private void setUpMatchingLocation(TextGraphic label) {
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
-		if (type==ROWS) space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
+		
+		if (type==COLS &&opposite)  {
+			layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+LayoutSpaces.LABEL_ALLOTED_BOT).getBounds();
+		}
+		if (type==ROWS) 
+			space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
+		if (type==ROWS &&opposite) 
+			space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_RIGHT).getBounds();
+		
+		
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getVirtualWorksheet());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
 		if(array.size()>0) label.setAttachmentPosition(array.get(0).getAttachmentPosition());

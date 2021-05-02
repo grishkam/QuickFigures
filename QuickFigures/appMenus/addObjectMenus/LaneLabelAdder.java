@@ -79,6 +79,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 		TextGraphic out = new TextGraphic();
 		if(!simple) out=new ComplexTextGraphic();
 		out.setLocationUpperLeft(50, 50);
+		out.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
 		ArrayList<TextGraphic> list = addLockedItemToSelectedImages(out);
 		
 		
@@ -116,7 +117,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 					
 					for(int f=1; f<=nLanes; f++){
 						TextGraphic  ag2 = ag;
-						ag2.setFontSize(wCol);
+						ag2.setFontSize(wCol/2);
 						ag2.setAngle(45);
 						
 						if (output) {
@@ -145,6 +146,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 					for(TextGraphic a: added)height=a.getBounds().getHeight();
 					roi.getPanelLayout().labelSpaceWidthTop=height;
 					roi.moveLayoutAndContents(0, -height);
+					
 					
 					roi.setLocation(it.getLocation());
 					break;
