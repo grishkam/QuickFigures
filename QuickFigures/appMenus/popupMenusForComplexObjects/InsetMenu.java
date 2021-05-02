@@ -23,6 +23,8 @@ package popupMenusForComplexObjects;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -39,8 +41,10 @@ import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import popupMenusForComplexObjects.InsetMenu.ChangeInsetScale.ScaleType;
 import sUnsortedDialogs.ScaleFigureDialog;
+import selectedItemMenus.MirrorObjects;
 import standardDialog.StandardDialog;
 import undo.CombinedEdit;
+import undo.UndoAddItem;
 import undo.UndoInsetDefChange;
 import undo.UndoLayoutEdit;
 import menuUtil.BasicSmartMenuItem;
@@ -59,7 +63,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	 */
 	private static final String RECRATE_INSET_LAYOUT = "inset layout",
 			 REMOVE = "i6", REMOVE_PANEL_INSETS = "i4",
-			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup", TURN_SQUARE_LOCK="SQUARE LOCK";
+			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup", TURN_SQUARE_LOCK="SQUARE LOCK", MIRROR_TO_PANELS="Mirror to sister panels";
 	/**
 	 * 
 	 */
@@ -89,6 +93,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		createMenuItem("Remove", REMOVE);
 	
 		createMenuItem("Redo Inset Layout", RECRATE_INSET_LAYOUT);
+		createMenuItem(MIRROR_TO_PANELS, MIRROR_TO_PANELS);
 		
 		SmartJMenu panels=new SmartJMenu("Expert Options");
 		createMenuItem("Update Panels", UPDATE_PANELS, panels);
@@ -146,7 +151,17 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 			inset.getParentLayer().remove(inset);
 			}
 		
-	
+		if (c.equals(MIRROR_TO_PANELS)) {
+			ImagePanelGraphic source = inset.getSourcePanel();
+			ArrayList<ImagePanelGraphic> list = inset.getSourceDisplay().getPanelList().getPanelGraphics();
+			list.remove(source);
+			if(list.size()>0) {
+					UndoAddItem undo = new MirrorObjects().createMirror(inset, source, list);
+					this.addUndo(undo);
+			}
+			
+			ShowMessage.showOptionalMessage("Mirrors", false, "Several identical rectangles were createsd", "when you move, rotate or resize the original, copies will be updated", "This feature is still experimental");
+		}
 		
 	if (c.equals(TURN_SQUARE_LOCK)) {
 				

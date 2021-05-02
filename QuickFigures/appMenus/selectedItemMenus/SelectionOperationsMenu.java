@@ -128,6 +128,9 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		if (IssueLog.isDebugMode()) operators.add(new ListItems());
 		operators.add(new FillPaintSetter());
 		operators.add(new LocationSetter());
+		
+		operators.add(new MirrorObjects());
+		
 		operatorsMade=true;
 		}
 		}

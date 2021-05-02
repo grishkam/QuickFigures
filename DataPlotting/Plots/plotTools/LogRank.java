@@ -1,23 +1,17 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Apr 28, 2021
- * Copyright (C) 2021 Gregory Mazo
- * 
- */
-/**
- 
- * 
+ * Date Created: April 28, 2021
+ * Date Modified: April 28, 2021
+ * Version: 2021.1
  */
 package plotTools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.apache.commons.math3.stat.inference.ChiSquareTest;
 
-import dataSeries.Basic1DDataSeries;
 import dataSeries.KaplanMeierDataSeries;
-import logging.IssueLog;
+import messages.ShowMessage;
 
 /**
  rough draft for a log rankk test implementation
@@ -28,6 +22,8 @@ public class LogRank {
 	
 	private double pValue;
 
+	/**constructor that performs a log rank, this implementation is new and needs more testing
+	 * to make sure it is accurate*/
 	public LogRank(KaplanMeierDataSeries a, KaplanMeierDataSeries b) {
 		ArrayList<Double> allValues = getAllValues(a, b);
 		
@@ -83,6 +79,7 @@ public class LogRank {
 	}
 
 	public double getPValue() {
+		ShowMessage.showOptionalMessage("Log rank", false, "I,plementation of the log rank test for survival is a work in progress", "use with caution");
 		return pValue;
 	}
 	

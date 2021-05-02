@@ -158,6 +158,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	
 	/**Applies the appropriate crop and scale and returns a version of the source image that is original*/
 	public MultiChannelImage generatePreProcessedVersion() {
+		
 		MultiChannelImage unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion(false);
 		 MultiChannelImage cropped = unprocessed .cropAtAngle(generateInsetPreprocess(getSourcePreprocess()));
 		 getSourceDisplay().getSlot().matchOrderAndLuts(cropped);

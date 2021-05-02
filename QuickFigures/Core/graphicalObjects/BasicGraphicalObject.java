@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: May 1, 2021
  * Version: 2021.1
  */
 package graphicalObjects;
@@ -48,6 +48,7 @@ import locatedObject.LocationChangeListener;
 import locatedObject.LocationChangeListenerList;
 import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdgePositions;
+import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
@@ -139,8 +140,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	/**Calls the objectMoved method for each listener */
 	public void notifyListenersOfMoveMent() {
 		
-		LocationChangeListenerList list = getListeners();
-		list.notifyListenersOfMoveMent(this);
+		try {
+			LocationChangeListenerList list = getListeners();
+			list.notifyListenersOfMoveMent(this);
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 	
 	}
 	

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 5, 2021
+ * Date Modified: May 1, 2021
  * Version: 2021.1
  */
 package graphicalObjects_Shapes;
@@ -51,7 +51,7 @@ public class FrameGraphic extends RectangularGraphic {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public FrameGraphic(Rectangle r) {
+	public FrameGraphic(Rectangle2D r) {
 		super(r);
 	}
 
@@ -83,7 +83,7 @@ public class FrameGraphic extends RectangularGraphic {
 		
 		output.setAngle(this.getAngle());
 		output.copyStrokeFrom(this);
-		IssueLog.log("angle is"+this.getAngle());
+		
 		
 		return output;
 		

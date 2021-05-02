@@ -1096,9 +1096,11 @@ class ArrowSmartHandle extends SmartHandle {
 			Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 			if (this.getHandleNumber()==HANDLE_1) {
 				setPoint1(p2);
+				notifyListenersOfMoveMent();
 			}
 			if (this.getHandleNumber()==HANDLE_2) {
 				setPoint2(p2);
+				notifyListenersOfMoveMent();
 			}
 			
 			if (isArrowSizeHandle()) {
@@ -1119,6 +1121,7 @@ class ArrowSmartHandle extends SmartHandle {
 				rect.setStrokeWidth((float) (d*2));
 			}
 			setupUndo(lastDragOrRelMouseEvent);
+			
 		}
 		
 		@Override
