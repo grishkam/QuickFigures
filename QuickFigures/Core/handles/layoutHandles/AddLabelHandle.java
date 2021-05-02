@@ -53,11 +53,20 @@ public class AddLabelHandle extends MoveRowHandle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	boolean opposite=false;
+	
 	private LabelExamplePicker picker;//determines what labels are already considered as already present
 	private int mode=PANELS;
 	
-	public AddLabelHandle(DefaultLayoutGraphic montageLayoutGraphic, int y,  int index) {
+	/**The constructor
+	 * @param montageLayoutGraphic the layouts
+	 * @param index the row or column index
+	 * @param y the code indicating whether it is a row of column label @see LayoutSpaces
+	 * @param otherSide indicates whether the label should be added opposite to the normal side*/
+	public AddLabelHandle(DefaultLayoutGraphic montageLayoutGraphic, int y,  int index, boolean otherSide) {
 		super(montageLayoutGraphic, y, false, index);
+		this.opposite= otherSide;
+		
 		 if (type==ROWS) mode=LayoutSpaces.ROW_OF_PANELS ;
 			if (type==COLS)mode=LayoutSpaces.COLUMN_OF_PANELS ;
 			
@@ -66,9 +75,19 @@ public class AddLabelHandle extends MoveRowHandle {
 		Rectangle2D space = getSpaceForHandle(index);
 		
 	if(type==ROWS) 
-	this.setCordinateLocation(new Point2D.Double(space.getMinX(), space.getCenterY()));
-	else 
+		{
+		this.setCordinateLocation(new Point2D.Double(space.getMinX(), space.getCenterY()));
+		if(otherSide) 
+			this.setCordinateLocation(new Point2D.Double(space.getMaxX(), space.getCenterY()));
+		}
+	else {
 		this.setCordinateLocation(new Point2D.Double(space.getCenterX(), space.getMinY()));
+		if(otherSide) 
+			setCordinateLocation(new Point2D.Double(space.getCenterX(), space.getMaxY()));
+		
+		}
+	
+	
 	this.setHandleNumber(90000+100*type+index);
 	
 	
@@ -78,9 +97,14 @@ public class AddLabelHandle extends MoveRowHandle {
 	int hight=20;
 	this.setHandleColor(new Color(0,0,0,0));
 	if(type==ROWS) 
-	this.specialShape=new Rectangle(-width,-hight/2, width, hight);
+		this.specialShape=new Rectangle(-width,-hight/2, width, hight);
 	else this.specialShape=new Rectangle(-width/2,-hight, width, hight);
 	
+	if(otherSide) {
+		if(type==ROWS) 
+			this.specialShape=new Rectangle(0,-hight/2, width, hight);
+		else this.specialShape=new Rectangle(-width/2,hight, width, hight);
+	}
 
 	
 	hideIfNotNeeded(montageLayoutGraphic, index, getPicker(mode));
@@ -99,7 +123,10 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @return
 	 */
 	public boolean labelSpaceNotAvailable(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
-		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index).getBounds();
+		boolean opposite=false;
+		if(type==ROWS&&montageLayoutGraphic.rowLabelsOnRight)
+			opposite=true;
+		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index, opposite).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getVirtualWorksheet());
 		
 		ArrayList<BasicGraphicalObject> array = pick.getDesiredItemsAsGraphicals(rois);
@@ -108,10 +135,14 @@ public class AddLabelHandle extends MoveRowHandle {
 		return needLabel;
 	}
 	
-	private Rectangle2D getSpaceForLabel(int index) {
+	private Rectangle2D getSpaceForLabel(int index, boolean opposite) {
 		Rectangle2D space = layout.getPanelLayout().makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
 	if(type==ROWS)  space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
-		return space;
+	if(type==ROWS&&opposite)  
+		space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_RIGHT).getBounds();
+	
+	
+	return space;
 	}
 	
 	private Rectangle2D getSpaceForHandle(int index) {

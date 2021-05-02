@@ -555,10 +555,12 @@ public static void setAntialiasedText(Graphics g, boolean antialiasedText) {
 public TextGraphic copy() {
 	TextGraphic tg = createAnother();
 	giveTraitsTo(tg);
+	tg.getTagHashMap().putAll(map);
 	return tg;
 }
 
-/***/
+/**Gives the traits of this text tiem to the argument
+ * does not copy the tags*/
 public void giveTraitsTo(TextGraphic tg) {
 	tg.theText=theText;
 	tg.copyAttributesFrom(this);
@@ -568,7 +570,7 @@ public void giveTraitsTo(TextGraphic tg) {
 	tg.strokeColor=strokeColor;
 	if (getAttachmentPosition()!=null)
 	tg.setAttachmentPosition(getAttachmentPosition().copy());
-	tg.map= map;
+	
 	tg.backGroundShape=this.getBackGroundShape().copy();
 }
 
@@ -1277,6 +1279,8 @@ public int handleNumber(double x, double y) {
 public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoTextEdit(this);
 }
+
+
 
 
 

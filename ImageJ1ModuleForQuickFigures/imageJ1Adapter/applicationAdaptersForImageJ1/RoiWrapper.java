@@ -31,6 +31,7 @@ import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ij.ImagePlus;
 import ij.gui.*;
@@ -702,6 +703,13 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 		public boolean isFillable() {
 			// TODO Auto-generated method stub
 			return true;
+		}
+
+
+		@Override
+		public HashMap<String, Object> getTagHashMap() {
+			// TODO Auto-generated method stub
+			return new HashMap<String, Object>();
 		}
 		
 		

@@ -694,9 +694,22 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		getPanelLocations().put(o, r);
 	}
 	
+	/**Checks if the object can be assigned to a panel,
+	 * puts the panel index in a hashmap if possible*/
 	public void mapPanelLocationIfValid(LocatedObject2D o) {
 		if (o==null) return;
 		int r = getPanelForObject(o);
+		
+		/**If a permanent index has been assigned, sets that one*/
+		if (o.getTagHashMap().containsKey("Index")) {
+			Object index = o.getTagHashMap().get("Index");
+			if(index instanceof Integer)
+			{
+				getPanelLocations().put(o, ((Integer) index).intValue());
+				return;
+			}
+		}
+		
 		if(isPanelValid(r, o)) 
 			getPanelLocations().put(o, r);
 		
@@ -713,7 +726,16 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	return true;
 	}
 
+	/**returns the panel index of the object*/
 	public int getPanelForObject(LocatedObject2D o) {
+		
+		Object tag = o.getTagHashMap().get("Index");
+		if(tag!=null && tag instanceof Integer) {
+			IssueLog.log(o+" Panel is indexed at "+tag);
+			return ((Integer)tag);
+			}
+		
+		/**if not index is permanently set, returns the nearest panel*/
 		return this.getPanelLayout().getNearestPanelIndex(o.getBounds().getCenterX(),o.getBounds().getCenterY());
 	}
 	

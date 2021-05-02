@@ -69,6 +69,8 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	private static final long serialVersionUID = 1L;
 	private BasicLayout thelayout;
 	private transient UndoLayoutEdit currentUndo;
+	public boolean rowLabelsOnRight=false;
+	public boolean columnLabelsBelow=false;
 	 
 	public DefaultLayoutGraphic() {}
 	
@@ -416,6 +418,7 @@ public void resizeLayoutToFitContents() {
 			}
 	}
 	
+	/**Adds several handles to the list for label addition*/
 	protected void addAdditionalHandles(SmartHandleList box) {
 		box.add(new AddRowHandle(this, LayoutSpaces.ROWS));
 		box.add(new AddRowHandle(this, LayoutSpaces.COLS));
@@ -432,11 +435,11 @@ public void resizeLayoutToFitContents() {
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
-			box.add(new AddLabelHandle(this, LayoutSpaces.COLS, i));
+			box.add(new AddLabelHandle(this, LayoutSpaces.COLS, i, false));
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
-			box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i));
+			box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i, rowLabelsOnRight));
 			
 			}
 	
@@ -569,7 +572,7 @@ public void resizeLayoutToFitContents() {
 				shifted=true;
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 
-					//int panel = getPanelForObject(new RectangularGraphic(cordinatePoint));
+					
 					Rectangle2D nearestPanel = rLayout.getNearestPanel(cordinatePoint);
 					Rectangle r2 = getObject().getBounds();
 					if (originalSnap!=null)originalSnap.snapRects(r2, nearestPanel); else

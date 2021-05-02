@@ -24,7 +24,10 @@ import logging.IssueLog;
 import selectedItemMenus.PanelMirror.Reflection;
 
 /**
+ * Soemtimes a user wants an shape displayed over a few different parent panels.
+ * 
  A special layer that contains items whose location is determined by a parent item
+ 
  */
 public class PanelMirror extends GraphicLayerPane implements LocationChangeListener {
 

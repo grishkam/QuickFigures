@@ -160,6 +160,12 @@ public class FigureLabelOrganizer implements Serializable {
 		tg.getParagraph().setAllLinesToCodeString(textContent, Color.black);
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_RIGHT);
 		thisLayer.add(tg);
+		
+		if(theLayout.rowLabelsOnRight) {
+			tg.setAttachmentPosition(AttachmentPosition.rightOfRowSide());
+			tg.getParagraph().setJustification(TextParagraph.JUSTIFY_LEFT);
+		}
+		
 		Rectangle2D p = theLayout.getPanelLayout().makeAltered(LayoutSpaces.ROWS).getPanel(rowIndex);
 		
 		tg.setLocationType(RectangleEdges.RIGHT);
@@ -177,7 +183,7 @@ public class FigureLabelOrganizer implements Serializable {
 	 * @param targetLayout the layout*/
 	public static TextGraphic addLabelOfType(int labelType, int index, GraphicLayer destinationLayer, DefaultLayoutGraphic targetLayout) {
 		TextGraphic item=null;
-		if (labelType==BasicLayout.ROWS) item=addRowLabel("          Row "+index, index, destinationLayer, targetLayout);
+		if (labelType==BasicLayout.ROWS) item=addRowLabel((targetLayout.rowLabelsOnRight?"Row":"          Row ")+index, index, destinationLayer, targetLayout);
 		else 
 			if (labelType==BasicLayout.COLS) item= addColLabel("Column "+index, index, destinationLayer, targetLayout);
 			else 

@@ -162,6 +162,15 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		return output;
 	}
 	
+	/**returns the default location for an object that is beside a row of a layout*/
+	public static AttachmentPosition rightOfRowSide() {
+		AttachmentPosition output = new AttachmentPosition();
+		output.setLocationTypeExternal(RIGHT_SIDE_MIDDLE);
+		output.setGridChoice2(LayoutSpaces.ROW_OF_PANELS);
+		output.setLocationCategory(EXTERNAL);
+		return output;
+	}
+	
 	/**returns the location for a label that is a column label and located above the columns, centered*/
 	public static AttachmentPosition defaultColLabel() {
 		AttachmentPosition out = defaultColSide(); out.setVerticalOffset(1); return out;

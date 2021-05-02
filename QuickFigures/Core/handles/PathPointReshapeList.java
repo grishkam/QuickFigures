@@ -32,6 +32,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
@@ -358,6 +359,12 @@ public class PathPointReshapeList extends ReshapeHandleList {
 			dd.setHandleColor(Color.magenta);
 			dd.handlesize=4;
 			dd.draw(graphics, cords);
+		}
+
+		@Override
+		public HashMap<String, Object> getTagHashMap() {
+			// TODO Auto-generated method stub
+			return new HashMap<String, Object>();
 		}
 		
 	}

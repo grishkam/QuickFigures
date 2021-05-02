@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
 
 /**An interface for objects within a 2D drawing*/
 public interface LocatedObject2D extends Mortal, Hideable, Selectable {
@@ -85,6 +86,6 @@ public interface LocatedObject2D extends Mortal, Hideable, Selectable {
 	 * @see RectangleEdgePositions*/
 	public void setLocationType(int n) ;
 	public int getLocationType() ;
-	
+	public HashMap<String, Object> getTagHashMap();
 	
 }

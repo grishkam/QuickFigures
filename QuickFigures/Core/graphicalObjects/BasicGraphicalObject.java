@@ -84,7 +84,7 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	protected double y=0;//location of an object
 	
 	Object key=null;
-	public HashMap<String, Object> map=new HashMap<String, Object>();
+	public final HashMap<String, Object> map=new HashMap<String, Object>();
 	
 	transient GraphicUtil Gu=new GraphicUtil();
 	transient boolean isDead=false;
