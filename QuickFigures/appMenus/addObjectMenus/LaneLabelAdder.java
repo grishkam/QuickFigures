@@ -104,8 +104,11 @@ class LaneLabelAdder extends BasicGraphicAdder {
 					ImagePanelGraphic it = (ImagePanelGraphic) item;
 					Rectangle b = it.getBounds();
 					int nLanes=StandardDialog.getNumberFromUser("how many lanes", 5).intValue();
-					int wCol = b.width/nLanes;
-					int border = 0;
+					int border = 2;
+					
+					/**calculates the column width needed to fill tne space*/
+					int wCol = b.width/nLanes-border+border/(nLanes-1);
+					
 					
 					BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height, border, border, true);
 					layout.move(it.getLocationUpperLeft().getX(), it.getLocationUpperLeft().getY());

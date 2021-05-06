@@ -731,7 +731,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		Object tag = o.getTagHashMap().get("Index");
 		if(tag!=null && tag instanceof Integer) {
-			IssueLog.log(o+" Panel is indexed at "+tag);
+			//if a permanent index is assigned;
 			return ((Integer)tag);
 			}
 		
