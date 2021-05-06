@@ -95,7 +95,7 @@ Note: For each of these options. The new figures created will be based on the de
 Popup menus appear when a user right clicks on image panels, insets, layouts, or figures. The submenus contain options for many types of edits. The most important submenus and menu items are described below.
 
 #### **Channels** Submenu
-The **Channels** submenus contain options related to the channels within figure. It will appear inside of the popup menu for [image panels](#Image Panels) and other objects. Depending on the object clicked and the context, slightly different versions of the channels submenu will appear. The channels menus contain the following items
+The **Channels** submenus contain options related to the channels within figure. It will appear inside of the popup menu for [image panels](#Image-Panels) and other objects. Depending on the object clicked and the context, slightly different versions of the channels submenu will appear. The channels menus contain the following items
 
   -	**Display Range**, **Window/Level**, or **Min/Max**. These options open display range adjuster similar to the display range adjuster found in ImageJ and other Software. Adjustments done with this adjuster affect both split channel panels and merge panels. [see Display range dialog for details](#Display-Range-Dialog)
   -	**Change color modes** menu item switches channel panels between 'colorized' and 'greyscale' displays. Panels with more than one channel will always be displayed in a colorized form regardless of this option.
@@ -105,7 +105,7 @@ The **Channels** submenus contain options related to the channels within figure.
   - 'Match' menu items. Each figure may contain several images. The options can be used to make sure that variables such as channel display ranges, channel colors and channel order are consistent between images. If only one source image is part of the figure, this menu item will not appear.
 
 #### Figure Submenu
-The **Figure** submenu appears in the popup menus for layouts and image panels if those objects are part of a figure. It will appear inside of the popup menu for [image panels](#Image Panels) and [layouts](#Layouts).
+The **Figure** submenu appears in the popup menus for layouts and image panels if those objects are part of a figure. It will appear inside of the popup menu for [image panels](#Image-Panels) and [layouts](#Layouts).
  -	**Add Image** submenu allows a user to add a new multidimensional image to the clicked figure. Although users can add source images by dragging/dropping files onto the figure, this option provides an alternative. The scale, the number of channel panels created, and other properties from the existing source image are used for the new one. 
  -	Items in the **Add Labels** submenu create an entire set of labels for the rows, columns or panels of the figure.
  -	The **Recreate All Panels** menu item displays the recreate panels dialog. [See sections on recreate panels dialog for details.](#Recreate-All-Panels-Dialog)
@@ -304,7 +304,7 @@ Within the **Selected Item(s)**  menu there are several submenus.
 Scale Bars can be attached to an image panel. User can change the length, thickness or appearance of a scale bar by dragging the handles (see diagram below). Each scale bar has a special text object that displays the length of the scale bar. As with other items, a scale bar specific [popup menu](#Scale-Bar-Popup-Menu) will appear when one right clicks while a scale bar specific dialog will appear if one double clicks. The icons below a selected scale bar serve as a 'mini' toolbar whose options will affect every selected scale bar.  
 ![image](images/objects/ScaleBar.png)  
 
-### Image Panels 
+### Image Panels
 Image Panels display images. Image Panels may either be part of a figure or stand-alone objects. Those that are part of a figure may change appearance when the user changes channel colors or alters the display range for a channel. Panels that are part of a figure will also contain additional handles (see diagram below) and a more complex [popup menu](#Image-Panel-Popup-Menu). For precise alignment of image panels to layouts, a user can drag the center handle of the image panel and drop near the desired panel. While the user drags the center handle, a rectangle will appear in the destination location. If another image panel occupies the destination location, the locations of the two image panels will be swapped. Image Panels may have a colored 'frame' drawn around them (see below). A user can change the width of the frame by dragging the magenta handle. Users will rarely or never need to move image panels directly. If a user wants to avoid accidental edits, that user may select the **Protect from mouse drags** checkbox in the options dialog for image panels.
 ![image](images/objects/ImagePanel.png)  
 
