@@ -52,7 +52,7 @@ class ImagePlusMultiChannelSlotTest {
 		mm2.applyCropAndScale(new PreProcessInformation(new Rectangle(x, y, width, h), Math.PI*30/180, scale));
 		assert(mm2.getImagePlus().getWidth()==width*scale);
 		assert(mm2.getImagePlus().getHeight()==h*scale);
-		CroppingDialog.showCropDialogOfSize(mm2, null);
+		CroppingDialog.showCropDialogOfSize(mm2, null, null);
 		//assert(FileChoiceUtil.yesOrNo("Did you see a cropping dialog with a rectangle (200 X 170) at 30 degrees?"));
 		
 		mm2.getImagePlus().duplicate().show();

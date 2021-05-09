@@ -53,6 +53,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import objectDialogs.CroppingDialog.CropDialogContext;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.graphics.GraphicComponent;
 import standardDialog.numbers.AngleInputPanel;
@@ -71,9 +72,39 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	public boolean wasEliminated=false;
 	String instructions="Set Crop Area";
 	
-	JButton elim=new JButton("Eliminate Cropping Rectangle"); {elim.addActionListener(new cropLis());}
+	JButton eliminateButton=new JButton("Eliminate Cropping Rectangle"); {eliminateButton.addActionListener(new cropLis());}
+	JButton yesAll=new JButton("OK for all"); {yesAll.addActionListener(new allOKLis());}
+	
 	private ArrayList<ImagePanelGraphic> imagepanels=new ArrayList<ImagePanelGraphic>();
 	boolean includeAngle=false;
+	
+
+	
+	RectangularGraphic rect;
+	int handle=-1;
+	Point2D press=new Point();
+	double mag=1;
+	ImagePanelGraphic image;
+	private double cropAngle=0;
+	private ArrayList<ZoomableGraphic> extraItems=new ArrayList<ZoomableGraphic>();
+	public boolean hideRotateHandle;
+	private MultiChannelImage multiChannelSource;
+	private CSFLocation display=new CSFLocation();
+	private ImagePanelGraphic dialogDisplayImage;
+	private CropDialogContext dialogContext;
+	
+	{this.setLayout(new GridBagLayout());
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.insets=new Insets(10,10,10,10);
+		gc.gridwidth=4;
+		this.add(panel, gc);
+		this.moveGrid(0, 1);
+		}
+	
+	
+	public CroppingDialog() {
+		
+	}
 	
 	public void setArray(ArrayList<?> array2) {
 		setImagepanels(new ArrayList<ImagePanelGraphic>());
@@ -89,31 +120,6 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 				addGraphicsToArray(array,	((GraphicLayer) z).getAllGraphics());
 			}
 					}
-	}
-	
-	RectangularGraphic rect;
-	int handle=-1;
-	Point2D press=new Point();
-	double mag=1;
-	ImagePanelGraphic image;
-	private double cropAngle=0;
-	private ArrayList<ZoomableGraphic> extraItems=new ArrayList<ZoomableGraphic>();
-	public boolean hideRotateHandle;
-	private MultiChannelImage multiChannelSource;
-	private CSFLocation display=new CSFLocation();
-	private ImagePanelGraphic dialogDisplayImage;
-	
-	{this.setLayout(new GridBagLayout());
-		GridBagConstraints gc = new GridBagConstraints();
-		gc.insets=new Insets(10,10,10,10);
-		gc.gridwidth=4;
-		this.add(panel, gc);
-		this.moveGrid(0, 1);
-		}
-	
-	
-	public CroppingDialog() {
-		
 	}
 	
 	public CroppingDialog(MultiChannelSlot s, MultiChannelImage multichanalWrapper, PreProcessInformation preprocessRecord) {
@@ -146,7 +152,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 	}
 
-
+	/**shows the crip dialog*/
 	public void showDialog() {
 		this.showDialog(image);
 	}
@@ -268,7 +274,11 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		{panel.addMouseListener(this); panel.addMouseMotionListener(this);}
 		
-		this.addButton(elim);
+		this.addButton(eliminateButton);
+		if(dialogContext!=null &&dialogContext.nInseries>1) {
+			this.addButton(yesAll);
+		}
+		
 		this.add("ins", new InfoDisplayPanel("", instructions));
 		this.add("x", new NumberInputPanel("x", rect.getBounds().getX()));
 		this.moveGrid(2, -1);
@@ -293,7 +303,24 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.moveGrid(-2, 0);
 		
 		this.pack();
+		boolean allOK = false;
+		if (dialogContext!=null) allOK =dialogContext.okToAll;
+		if(this.dialogContext!=null&&allOK) {
+			this.setModal(false);
+		}
+		
 		super.showDialog();
+		
+		if(this.dialogContext!=null) {
+			dialogContext.current+=1;
+		}
+		
+		if(this.dialogContext!=null&&allOK) {
+			super.wasOKed=true;
+			super.onOK();
+			super.setVisible(false);
+		}
+		
 		if(rect==null)return null;
 		return rect.getBounds();
 	}
@@ -508,6 +535,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 
+	/**A listener object that responds to the 'eliminate crop rectangle' button*/
 	public class cropLis implements ActionListener {
 
 		@Override
@@ -520,39 +548,62 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 		
 	}
+	
+	/**A listener object that responds to the 'ok to all' button */
+	public class allOKLis implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			dialogContext.okToAll=true;
+			wasOKed=true;
+			setVisible(false);
+			if (CroppingDialog.getSetContainer()!=null) CroppingDialog.getSetContainer().updateDisplay();	
+		}
+		
+	}
 
 	
 	
 	
 	/**shows a recrop dialog*/
-	public static void showCropDialogOfSize(MultiChannelSlot slot, Dimension recommmendation) {
+	public static void showCropDialogOfSize(MultiChannelSlot slot, Dimension recommmendation,  CropDialogContext context) {
 		if (recommmendation==null)
-			{showCropDialog(slot, null, 0);
-			return;}
+			{showCropDialog(slot, null, 0, context);
+			return;
+			}
 		
 		if (slot.getModifications()!=null &&slot.getModifications().getRectangle()!=null) {
 			Rectangle rold = slot.getModifications().getRectangle();
 			if(rold!=null)
 				showCropDialog(slot, new Rectangle(rold.x, rold.y, recommmendation.width, recommmendation.height), slot.getModifications().getAngle());
-			else showCropDialog(slot, null, 0);
+			else showCropDialog(slot, null, 0, context);
 		}
 		else if (recommmendation!=null)
-			showCropDialog(slot, new Rectangle(0,0, recommmendation.width, recommmendation.height),0);
+			showCropDialog(slot, new Rectangle(0,0, recommmendation.width, recommmendation.height),0, context);
 		
 	
 	}
 	
-	
 	public static CroppingDialog showCropDialog(MultiChannelSlot slot, Rectangle recommmendation, double recAngle) {
+		return showCropDialog(slot, recommmendation, recAngle, null);
+	}
+	
+	/**Shows a crop dialog based on a suggested rectangle*/
+	public static CroppingDialog showCropDialog(MultiChannelSlot slot, Rectangle recommmendation, double recAngle, CropDialogContext context) {
 		
 		CroppingDialog crop;
 		if(recommmendation==null)
-		 crop= new CroppingDialog(slot, slot.getUnprocessedVersion(true), slot.getModifications());
+			crop= new CroppingDialog(slot, slot.getUnprocessedVersion(true), slot.getModifications());
 		else {
 			crop = new CroppingDialog(slot, slot.getUnprocessedVersion(true), recommmendation, recAngle);
 		}
-		if(slot.getDisplaySlice()!=null) crop.setDisplaySlice(slot.getDisplaySlice());
+		crop.setContext(context);
+		
+		if(slot.getDisplaySlice()!=null) 
+			crop.setDisplaySlice(slot.getDisplaySlice());
+		
 		crop.showDialog();
+		
 		if(!crop.wasOKed()&&!crop.wasEliminated) return crop;
 		
 		if(!crop.isCroppingRectangleValid()) return crop;
@@ -584,11 +635,37 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 
 	
+	/**sets the context for the crop dialog
+	 * @param context
+	 */
+	private void setContext(CropDialogContext context) {
+		this.dialogContext=context;
+		
+	}
+
 	/**Changes the channel, slice and frame that is shown*/
 	public void setDisplaySlice(CSFLocation l) {
 		display=l;
 		this.updateDisplayImage();
 	}
+	
+	public static class CropDialogContext {
+		
+		/**indicates the number of crop dialogs that will be shown in a sequence*/
+		int nInseries=1;
+		
+		/**indicates the index of the current crop dialog*/
+		public int current=1;
+		
+		/**set to true if the user clicks the 'OK for all option' */
+		boolean okToAll=false;
+		
+		public CropDialogContext(int nImages) {
+			this.nInseries=nImages;
+		}
+		
+	}
+	
 	
 }
 	

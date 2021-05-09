@@ -31,6 +31,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 import objectDialogs.CroppingDialog;
+import objectDialogs.CroppingDialog.CropDialogContext;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 
@@ -66,10 +67,13 @@ public class RecropButton extends JButton implements ActionListener {
 		undo.establishFinalState();
 		Rectangle r = mainDisplayItem.getSlot().getModifications().getRectangle();
 		
+		 CropDialogContext context=new  CropDialogContext(dialog.getAdditionalDisplayLayers().size());
+		
 		for(MultichannelDisplayLayer dp:dialog.getAdditionalDisplayLayers()) try {
 			if (dp==null||dp==mainDisplayItem) continue;
 			PreprocessChangeUndo undo2 = new PreprocessChangeUndo(dp);
-			CroppingDialog.showCropDialogOfSize(dp.getSlot(), new Dimension(r.width, r.height));
+			CroppingDialog.showCropDialogOfSize(dp.getSlot(), new Dimension(r.width, r.height), context);
+			
 			dp.setFrameSliceUseToViewLocation();
 			dialog.afterEachItemChange();
 			undo2.establishFinalState();

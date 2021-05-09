@@ -68,6 +68,7 @@ import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import objectDialogs.CroppingDialog;
+import objectDialogs.CroppingDialog.CropDialogContext;
 import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.AbstractUndoableEdit2;
@@ -341,9 +342,14 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 
 	/**shows a dialog for changing the drop area for many multichannel images within the figure*/
 public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends ImageDisplayLayer> all) {
+	
+	
+	
 	CombinedEdit output = new CombinedEdit();
+	CropDialogContext context = new CroppingDialog.CropDialogContext(all.size());
+	
 	output.addEditToList(
-			showRecropDisplayDialog( crop1, null, null)
+			showRecropDisplayDialog( crop1, null, null, context)
 			);
 	PreProcessInformation modifications = crop1.getSlot().getModifications();
 	Rectangle r1=null;
@@ -363,7 +369,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	for(ImageDisplayLayer crop2: all) {
 		if(crop2==crop1) continue;
 		output.addEditToList(
-				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1, interpolate)
+				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1, interpolate, context)
 		);
 	}
 	if (CanvasOptions.current.resizeCanvasAfterEdit)
@@ -374,13 +380,13 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 }
 
 	/**shows a cropping dialog*/
-	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim, Interpolation interpolate) {
+	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim, Interpolation interpolate, CropDialogContext context) {
 		PreProcessInformation original = display.getSlot().getModifications();
 		display.getPanelManager().setupViewLocation();
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(display);
 		CSFLocation csfInitial = display.getSlot().getDisplaySlice().duplicate();
 		
-		CroppingDialog.showCropDialogOfSize(display.getSlot(), dim);
+		CroppingDialog.showCropDialogOfSize(display.getSlot(), dim, context);
 		
 		onViewLocationChange(display, csfInitial, display.getSlot().getDisplaySlice());
 		

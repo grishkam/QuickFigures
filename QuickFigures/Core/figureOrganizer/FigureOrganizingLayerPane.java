@@ -399,7 +399,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
 			display.cropShown=true;
-			IssueLog.log("Calling crip dialog because of invalid");
+			
 		} else {
 			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
 		}
