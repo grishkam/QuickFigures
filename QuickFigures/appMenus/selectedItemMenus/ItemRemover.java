@@ -32,6 +32,7 @@ import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import locatedObject.Mortal;
+import messages.ShowMessage;
 import standardDialog.graphics.GraphicDisplayComponent;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
@@ -51,7 +52,10 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 	@Override
 	public void run() {
 		undoableEdit=new CombinedEdit();
-		
+		if(array.size()==0) {
+			ShowMessage.showOptionalMessage("No item selected");
+			return;
+		}
 		boolean b= FileChoiceUtil.yesOrNo("Are you sure you want to delete these "+array.size()+" items?"); if (b==false) return;
 		
 		for(ZoomableGraphic item: array) {
@@ -95,7 +99,7 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 		
 	}
 	
-	/**creates the shape of a red X*/
+	/**creates the shape of a red X meant for the icon*/
 	static ShapeGraphic createCartoonX(boolean selected) {
 		Point p1=new Point(5,0);
 		Point p2=new Point(17,24);

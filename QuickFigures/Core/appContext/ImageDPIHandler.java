@@ -46,7 +46,7 @@ public class ImageDPIHandler {
 		
 	}
 	
-	
+	/**sets the units for the rulers*/
 	public static void setRulerUnit(RulerUnit rl) {
 		
 		rulerUnit=rl;
