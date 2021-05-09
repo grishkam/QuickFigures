@@ -142,7 +142,7 @@ public class TextLineSegmentPanel extends  ObjectInputPanel implements StringInp
 	}
 	/**if dialog items are changed, this notifies teh listeners for object edit events*/
 	@Override
-	public void StringInput(StringInputEvent sie) {
+	public void stringInput(StringInputEvent sie) {
 		setSegmentToPanels();
 		this.notifyListeners(new ObjectEditEvent(getSegment()));
 	}

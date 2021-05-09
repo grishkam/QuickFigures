@@ -28,7 +28,9 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayerTypes.LayerStructureChangeListener;
+import messages.ShowMessage;
 import selectedItemMenus.LayerSelectionSystem;
 import utilityClasses1.ArraySorter;
 
@@ -43,7 +45,13 @@ public class CurrentWorksheetLayerSelector  implements LayerSelectionSystem , Se
 	/**returns the selected layer*/
 	@Override
 	public GraphicLayer getSelectedLayer() {
-		LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> tree = getWorksheet().getTopLevelLayer().getTree();
+		FigureDisplayWorksheet ws = getWorksheet();
+		if(ws==null) 
+			{
+			ShowMessage.showOptionalMessage("no worksheet is open");
+			return new GraphicLayerPane("no worksheet");
+			}
+		LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> tree = ws.getTopLevelLayer().getTree();
 		if (tree!=null)
 		return getWorksheet().getTopLevelLayer().getTree().getSelectedLayer();
 		return getWorksheet().getTopLevelLayer();

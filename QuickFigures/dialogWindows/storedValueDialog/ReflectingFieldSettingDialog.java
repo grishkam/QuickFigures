@@ -116,7 +116,7 @@ public class ReflectingFieldSettingDialog extends StandardDialog {
 	}
 	
 	
-	
+	/**Adds an item to the dialog*/
 	public void addItem(String name, String label, Field f, Method getter, Method setter, Class<?> t ) {
 		getters.put(name, getter);
 		setters.put(name, setter);

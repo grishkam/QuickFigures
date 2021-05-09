@@ -31,6 +31,9 @@ import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.StringInputEvent;
+import standardDialog.strings.StringInputListener;
+import standardDialog.strings.StringInputPanel;
 
 /**Created this class to that generating dialogs to change simple options
  * would not take much effort.
@@ -77,6 +80,9 @@ public class StoredValueDilaog extends StandardDialog{
 					addNumberField(d, of, f, o);
 				}
 				
+				if (f.getType()==String.class) {
+					addStringField(d, of, f, o);
+				}
 				
 			} catch (Throwable e) {
 			
@@ -87,6 +93,7 @@ public class StoredValueDilaog extends StandardDialog{
 		 } catch (Exception e) {IssueLog.logT(e);}
 	}
 
+	/**Adds a numeric field to a dialog*/
 	private static void addNumberField(StandardDialog dialog, Object of, Field f, RetrievableOption o) {
 		String label = o.label();
 		int[] range = o.minmax();
@@ -116,6 +123,12 @@ public class StoredValueDilaog extends StandardDialog{
 		d.add(o.key(), new BooleanObjectInput(label, of, f));
 	}
 	
+	public static void addStringField(StandardDialog d, Object of, Field f, RetrievableOption o)
+			throws IllegalAccessException {
+		String label = o.label();
+		d.add(o.key(), new StringInput(label, of, f));
+	}
+	
 	/**Class changes a specific field in a specific object in response to a number input*/
 	public static class NumberInput implements NumberInputListener {
 
@@ -132,6 +145,32 @@ public class StoredValueDilaog extends StandardDialog{
 		public void numberChanged(NumberInputEvent ne) {
 			try {
 				field.set(object, ne.getNumber());
+			} catch (Exception e) {
+				IssueLog.logT(e);
+			} 
+		}}
+	
+	/**Class changes a specific field in a specific object in response to a number input*/
+	public static class StringInput extends StringInputPanel implements StringInputListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private Field field;
+		private Object object;
+
+		public StringInput(String label, Object of, Field f) throws IllegalArgumentException, IllegalAccessException {
+			super(label, ""+ f.get(of));
+			addStringInputListener(this);
+			this.field=f;
+			this.object=of;
+		}
+		
+		@Override
+		public void stringInput(StringInputEvent  ne) {
+			try {
+				field.set(object, ne.getInputString());
 			} catch (Exception e) {
 				IssueLog.logT(e);
 			} 

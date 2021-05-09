@@ -85,7 +85,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 		lis.remove(l);
 	}
 	public void notifyLiseners(StringInputEvent e) {
-		for(StringInputListener l:lis) {l.StringInput(e);}
+		for(StringInputListener l:lis) {l.stringInput(e);}
 	}
 	
 	/**

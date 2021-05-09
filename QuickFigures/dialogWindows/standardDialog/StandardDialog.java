@@ -604,7 +604,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 
 	@Override
-	public void StringInput(StringInputEvent sie) {
+	public void stringInput(StringInputEvent sie) {
 		notifyAllListeners(sie.getSourcePanel(), sie.getKey());
 		
 	}

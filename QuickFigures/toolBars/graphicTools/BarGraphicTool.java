@@ -149,6 +149,7 @@ public class BarGraphicTool extends GraphicTool {
 		}
 
 
+	/**returns a scale bar tool object*/
 	public static BarGraphicTool getCurrentBarTool() {
 		if(currentBar==null) currentBar=new BarGraphicTool();
 		return currentBar;

@@ -105,8 +105,8 @@ public class ImagePanelMenu extends AttachedItemMenu {
 }.createJMenuItem("Crop Only This Panel"));
 
 
-super.setLockedItem(c);
-super.addLockedItemMenus();
+		super.setLockedItem(c);
+		super.addLockedItemMenus();
 	}
 
 

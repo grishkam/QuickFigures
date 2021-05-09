@@ -157,6 +157,10 @@ private static final long serialVersionUID = 1L;
 	private ChannelLabelManager channelLabelMan;
 
 	private PanelManager panelMan;
+
+
+	/**set to true, if false, channel labels will not be automatically created*/
+	public boolean channelLabelsEnabled=true;
 	
 	/**returns the list of panels that display this Image*/
 	public PanelList getPanelList() {
@@ -294,7 +298,7 @@ private static final long serialVersionUID = 1L;
 
 	/**eliminates old panels and recreates new ones*/
 	public void eliminateAndRecreate() {
-		eliminateAndRecreate(true, true, true);
+		eliminateAndRecreate(true, true, channelLabelsEnabled);
 	}
 	/**eliminates old panels and recreates new ones*/
 	public void eliminateAndRecreate(boolean redoDimensions, boolean expandDimensions, boolean labels) {

@@ -22,5 +22,5 @@ package standardDialog.strings;
 
 /**an interface for items that respond to changes in a text value within a standard dialog*/
 public interface StringInputListener {
-	public void StringInput(StringInputEvent sie);
+	public void stringInput(StringInputEvent sie);
 }

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: May 8, 2021
  * Version: 2021.1
  */
 package locatedObject;
@@ -34,9 +34,11 @@ public interface LocatedObject2D extends Mortal, Hideable, Selectable {
 	public void setLocationUpperLeft(double x, double y);
 	public void setLocationUpperLeft(Point2D p);
 	
-	public static final int NOT_LOCKED = 0, LOCKED=1;
-	public int isUserLocked();
 	
+	
+	/**result determines if the uer is allowed to move the item by direct click and drag*/
+	public int isUserLocked();
+	public static final int NOT_LOCKED = 0, LOCKED=1;
 	
 	/**returns a duplicate. the wrapped object is also duplicated*/
 	public LocatedObject2D copy();

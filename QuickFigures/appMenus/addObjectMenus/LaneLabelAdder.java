@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
+import figureOrganizer.LabelCreationOptions;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -41,6 +42,7 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 
@@ -53,6 +55,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 	 */
 	private static final long serialVersionUID = 1L;
 	boolean simple=false;
+	LaneLabelCreationOptions options=new LaneLabelCreationOptions();
 	
 	public LaneLabelAdder(boolean isSimple) {
 		simple=isSimple;
@@ -103,14 +106,23 @@ class LaneLabelAdder extends BasicGraphicAdder {
 				if (item instanceof ImagePanelGraphic) {
 					ImagePanelGraphic it = (ImagePanelGraphic) item;
 					Rectangle b = it.getBounds();
-					int nLanes=StandardDialog.getNumberFromUser("how many lanes", 5).intValue();
+					
+					
+					
+					StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);storedValueDilaog .setModal(true);
+					storedValueDilaog.showDialog();
+					
+					int nLanes=(int) options.nLanes;
+					
+					
+					
 					int border = 2;
 					
 					/**calculates the column width needed to fill tne space*/
 					int wCol = b.width/nLanes-border+border/(nLanes-1);
 					
 					
-					BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height, border, border, true);
+					BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height/5, border, border, true);
 					layout.move(it.getLocationUpperLeft().getX(), it.getLocationUpperLeft().getY());
 					DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
 					addedLayer.add(roi);
@@ -132,7 +144,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 						}
 						Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(f);
 						ag2.setLocation(panel.getCenterX(), panel.getMinY());
-						ag2.setText("Label "+count); count++;
+						ag2.setText(options.prefix+count+options.suffix); count++;
 						ag2.setTextColor(Color.black);
 						ag2.getTagHashMap().put("Index",f);
 						added.add(ag2);

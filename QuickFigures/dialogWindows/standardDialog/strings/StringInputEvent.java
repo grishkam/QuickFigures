@@ -38,6 +38,11 @@ public class StringInputEvent extends ComponentInputEvent{
 		
 	}
 
+
+	public String getInputString() {
+		return inputString;
+	}
+
 	
 	
 }

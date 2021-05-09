@@ -118,7 +118,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		private double frameWidthh=2;
 		private boolean uniformFrameWidth=true;
 		
-	protected static int imagePanelUserLocked=0;//determines if the user is allowed to move image panels by directly clicking and draging
+	protected static int imagePanelUserLocked=NOT_LOCKED;//determines if the user is allowed to move image panels by directly clicking and draging
 
 	{setLocationType(UPPER_LEFT);
 	name="Image Graphic";

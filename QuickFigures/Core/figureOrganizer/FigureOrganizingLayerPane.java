@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 24, 2021
+ * Date Modified: May 9, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -168,6 +168,10 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 	
 	/**in the tree, figure organizing layers are shown in a different color from normal layers*/
 	static Color  folderColorForFigureOrganizers= new Color(140,0, 0);
+
+	/**set to true if the user has been shown a cropping dialog for the item at lease one time*/
+	private static boolean cropShown;
+	
 	public static Icon createDefaultTreeIcon2(boolean open) {
 		return IconUtil.createFolderIcon(open, folderColorForFigureOrganizers);
 	}
@@ -276,15 +280,17 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 			if ( (mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
 				{
+					if(!cropShown) {
+								CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
+								display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
+								cropShown=true;
+							
+							if (crop.wasCanceled()) {
+								this.remove(display);//the user may chose not to add the image by clicking cancel
+								return output;
+								}
 					
-						CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
-						display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
-					
-					
-					if (crop.wasCanceled()) {
-						this.remove(display);//the user may chose not to add the image by clicking cancel
-						return output;
-						}
+					}
 				}
 			
 			} catch (Exception e) {
@@ -313,7 +319,13 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 				BasicLayout pl = targetLayout.getPanelLayout();
 					if (pl!=null&&pl.rowmajor&& pl.nColumns()==1&&pl.nRows()==1) {
 						pl.setNColumns(2);
+						
+					} else
+					if (pl!=null&&!pl.rowmajor&& pl.nColumns()==1&&pl.nRows()==1) {
+						pl.setNRows(2);
+						
 					}
+					
 			}
 		
 		display.eliminateAndRecreate(!hasOne, false, !hasOne);//since this method alters the layout, a layout undo is needed. all other actions done do not need to be undone since the new objects are removed
@@ -377,6 +389,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		if(!valid && !suppressCropDialog) {
 			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
+			cropShown=true;
 		} else {
 			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
 		}
@@ -719,6 +732,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					}
 					
 					CroppingDialog.showCropDialog(secondView.getSlot(), r, 0);
+					cropShown=true;
 					
 			}
 		
