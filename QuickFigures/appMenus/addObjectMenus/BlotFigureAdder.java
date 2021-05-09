@@ -28,7 +28,9 @@ import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import messages.ShowMessage;
 /**
- Adds a special kind of figure, assumes the input is a blot.
+ Adds a special kind of figure adder, assumes the input is a blot.
+ row labels will be added on the right and additional images 
+ will be added below. No scale bar or channel labels are created.
  */
 public class BlotFigureAdder extends FigureAdder {
 

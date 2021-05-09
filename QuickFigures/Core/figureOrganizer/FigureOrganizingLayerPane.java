@@ -64,6 +64,15 @@ import undo.UndoLayoutEdit;
 /**A figure organizing layer*/
 public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFigureOrganizer, HasUniquePopupMenu {
 
+	
+	/**if crop area is below this value, asks user to re-draw the crop area */
+	public static int MIN_WIDTH_FOR_CROP_AREA = 25;
+	/**if crop area width/hieght or height/width is above this ratio, will ask user to re-draw*/
+	public static double MAX_ASPECT_RATIO_FOR_CROP_AREA = 3.5;
+
+
+
+
 	{description= "A Figure Organizing Layer";}
 	
 	/**set to true if the crop dialog shoule be skipped*/
@@ -169,8 +178,7 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 	/**in the tree, figure organizing layers are shown in a different color from normal layers*/
 	static Color  folderColorForFigureOrganizers= new Color(140,0, 0);
 
-	/**set to true if the user has been shown a cropping dialog for the item at lease one time*/
-	private static boolean cropShown;
+
 	
 	public static Icon createDefaultTreeIcon2(boolean open) {
 		return IconUtil.createFolderIcon(open, folderColorForFigureOrganizers);
@@ -262,7 +270,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		boolean hasOne=principalMultiChannel!=null;//true if there is already a multichannel image in figure
 		CombinedEdit output = new CombinedEdit();
 		
-		if(!hasOne) {
+		/**if current is the first multichannel to be added to the figure, sets up an innitial crop area*/
+		if(!hasOne&&!display.cropShown) {
 			cropIfUserSelectionExists(display);
 		}
 		
@@ -280,17 +289,17 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 			if ( (mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
 				{
-					if(!cropShown) {
+					
 								CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
 								display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
-								cropShown=true;
+								display.cropShown=true;
 							
 							if (crop.wasCanceled()) {
 								this.remove(display);//the user may chose not to add the image by clicking cancel
 								return output;
 								}
 					
-					}
+					
 				}
 			
 			} catch (Exception e) {
@@ -370,9 +379,9 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 				}
 			
 		/**for rectangles that are either small or have strange aspect ratios, rectangle is declared invalid*/
-		if(b.height>3.5*b.width) valid=false;
-		if(b.width>3.5*b.height) valid=false;
-		if(b.width<25||b.height<25) valid=false;	
+		if(b.height>MAX_ASPECT_RATIO_FOR_CROP_AREA*b.width) valid=false;
+		if(b.width>MAX_ASPECT_RATIO_FOR_CROP_AREA*b.height) valid=false;
+		if(b.width<MIN_WIDTH_FOR_CROP_AREA||b.height<MIN_WIDTH_FOR_CROP_AREA) valid=false;	
 		
 		/**if area is very large, rectangle is declared invalid and 
 		  a smaller one is set. Asks user to crop anyway*/
@@ -389,7 +398,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		if(!valid && !suppressCropDialog) {
 			
 			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
-			cropShown=true;
+			display.cropShown=true;
+			IssueLog.log("Calling crip dialog because of invalid");
 		} else {
 			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
 		}
@@ -732,7 +742,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					}
 					
 					CroppingDialog.showCropDialog(secondView.getSlot(), r, 0);
-					cropShown=true;
+					displayLayer.cropShown=true;
 					
 			}
 		

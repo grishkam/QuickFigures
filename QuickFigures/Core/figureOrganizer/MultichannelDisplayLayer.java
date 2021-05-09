@@ -161,6 +161,10 @@ private static final long serialVersionUID = 1L;
 
 	/**set to true, if false, channel labels will not be automatically created*/
 	public boolean channelLabelsEnabled=true;
+
+
+	/**is set to true if the user has seen the crop dialog at least one time. record is used to prevent repetitive displays of crop dialog when figure is innitially created*/
+	public boolean cropShown=false;
 	
 	/**returns the list of panels that display this Image*/
 	public PanelList getPanelList() {
