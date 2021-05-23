@@ -119,7 +119,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 		ArrayList<MultichannelDisplayLayer> foundDisplays=new ArrayList<MultichannelDisplayLayer>();
 		ArrayList<MultiChannelImage> foundImages=new ArrayList<MultiChannelImage>();
 		
-		 
+		  
 		for(LocatedObject2D i: items) {
 			if(i instanceof ImagePanelGraphic)  {
 				

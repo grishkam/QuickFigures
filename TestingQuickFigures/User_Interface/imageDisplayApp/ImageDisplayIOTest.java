@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import applicationAdapters.DisplayedImage;
 import figureFormat.DirectoryHandler;
 import graphicalObjects.ZoomableGraphic;
 import ij.IJ;
@@ -20,7 +21,7 @@ import ultilInputOutput.FileChoiceUtil;
 /**needs additional examples*/
 public class ImageDisplayIOTest {
 
-	@Test
+	
 	/**creates a series of example images, containing every type of object, shape, Text and so on
 	  in a variety of forms. Generally, only 3 kinds of problems might be predicted if there is something wrong. 
 	  1)a NonSerializable object can result in an exception or
@@ -28,16 +29,25 @@ public class ImageDisplayIOTest {
 	  
 	   The variety of test cases including all possible objects should trigger these if they can occur
 	   */
+	@Test
 	void test() {
-		
-		/***/
+		/**
+		/**
 		for(TestExample i: TestShapes.each) {
 			testExampleImage(TestShapes.createExample( i));
 		}
 		TestProvider[] ex = FigureTester.getTests();
 		for(TestProvider createExample: ex)testExampleImage(	(ImageWindowAndDisplaySet) createExample.createExample());
 		;
-	
+	*/
+		
+		ArrayList<TestProvider> testsCases = TestProvider.getTestProviderListWithfigures();
+		for(TestProvider ex: testsCases) {
+			
+			DisplayedImage p = ex.createExample();
+			testExampleImage((ImageWindowAndDisplaySet )p);
+				}
+		
 	}
 
 	private void testExampleImage(ImageWindowAndDisplaySet i) {

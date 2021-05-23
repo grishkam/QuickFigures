@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: May 9, 2021
  * Version: 2021.1
  */
 package figureEditDialogs;
@@ -58,16 +58,19 @@ public class RecropButton extends JButton implements ActionListener {
 		
 	}
 
+	/**shows the recrop dialog*/
 	public  CombinedEdit showRecropDialog() {
+		
 		MultichannelDisplayLayer mainDisplayItem = dialog.getMainDisplayItem();
 		CombinedEdit undo = new CombinedEdit(new PreprocessChangeUndo(mainDisplayItem));
-		CroppingDialog.showCropDialog(mainDisplayItem.getSlot(), null, 0);
+		CropDialogContext context=new  CropDialogContext(dialog.getAdditionalDisplayLayers().size());
+		CroppingDialog.showCropDialog(mainDisplayItem.getSlot(), null, 0,context);
 		mainDisplayItem .setFrameSliceUseToViewLocation();
 		dialog.afterEachItemChange();
 		undo.establishFinalState();
 		Rectangle r = mainDisplayItem.getSlot().getModifications().getRectangle();
 		
-		 CropDialogContext context=new  CropDialogContext(dialog.getAdditionalDisplayLayers().size());
+		 
 		
 		for(MultichannelDisplayLayer dp:dialog.getAdditionalDisplayLayers()) try {
 			if (dp==null||dp==mainDisplayItem) continue;

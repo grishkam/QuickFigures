@@ -163,6 +163,7 @@ public class PreProcessInformation implements Serializable {
 	/**returns the scale information*/
 	public ScaleInformation getScaleInformation() {return new ScaleInformation(scale, interpolationType);}
 
+
 	
 	
 }

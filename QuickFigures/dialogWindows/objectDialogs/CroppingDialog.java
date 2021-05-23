@@ -227,14 +227,19 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	public double getDisplayScale(ImagePanelGraphic imagePanelGraphic) {
-		if (imagePanelGraphic.getUnderlyingImageWidth()<200) {return 200/imagePanelGraphic.getUnderlyingImageWidth();}
 		
-		if (imagePanelGraphic.getUnderlyingImageWidth()>4000){return 0.1;}
-		if (imagePanelGraphic.getUnderlyingImageWidth()>3000){return 0.15;}
+		int w = imagePanelGraphic.getUnderlyingImageWidth();
+		int h=imagePanelGraphic.getUnderlyingImageHeight();
+		if (h>w)
+			w=h;
+		if (w<200) {return 200/w;}
 		
-		if (imagePanelGraphic.getUnderlyingImageWidth()>2000){return 0.25;}
+		if (w>4000){return 0.1;}
+		if (w>3000){return 0.15;}
 		
-		if (imagePanelGraphic.getUnderlyingImageWidth()>1000){return 0.5;}
+		if (w>2000){return 0.2;}
+		
+		if (w>1000){return 0.4;}
 	
 		
 		return 1;
@@ -305,6 +310,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.pack();
 		boolean allOK = false;
 		if (dialogContext!=null) allOK =dialogContext.okToAll;
+		
 		if(this.dialogContext!=null&&allOK) {
 			this.setModal(false);
 		}
@@ -315,6 +321,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			dialogContext.current+=1;
 		}
 		
+		/**if the user chose to ok an entire sequence of crop dialogs including this one*/
 		if(this.dialogContext!=null&&allOK) {
 			super.wasOKed=true;
 			super.onOK();

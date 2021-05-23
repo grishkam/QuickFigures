@@ -36,6 +36,7 @@ import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.SelectImageDialog;
+import graphicalObjects_Shapes.RectangularGraphic;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
 import ij.IJ;
@@ -511,6 +512,8 @@ import logging.IssueLog;
 			
 			getDisplayUpdater().imageUpdated(getImagePlus());
 		}
+	
+	
 
 	/**returns true if the two modifications are the same*/
 		private boolean areTheySame(PreProcessInformation process) {
@@ -646,6 +649,7 @@ import logging.IssueLog;
 			private String originalSavePath;
 			private String lastSavePath=null;
 			private int estimatedFileSize;
+			private Rectangle originalDimensions;
 			/**
 			 * 
 			 */
@@ -713,6 +717,8 @@ import logging.IssueLog;
 					this.originalSavePath=new ImagePlusWrapper(backupUncroppedImagePlus).getPath();
 					this.lastSavePath=originalSavePath;
 					this.estimatedFileSize=backupUncroppedImagePlus.getBitDepth()*backupUncroppedImagePlus.getWidth()*backupUncroppedImagePlus.getHeight()*backupUncroppedImagePlus.getStackSize();
+					this.originalDimensions=new Rectangle(0,0, backupUncroppedImagePlus.getWidth(), backupUncroppedImagePlus.getHeight());
+				
 				}
 			}
 
@@ -723,6 +729,10 @@ import logging.IssueLog;
 			/**returns an estimate on the file size*/
 			public int getEstimatedFileSize() {
 				return estimatedFileSize;
+			}
+
+			public Rectangle getOriginalDimensions() {
+				return originalDimensions;
 			}
 		}
 
@@ -739,6 +749,18 @@ import logging.IssueLog;
 		@Override
 		public int getEstimatedSizeOriginal() {
 			return original.getEstimatedFileSize();
+		}
+		
+		
+		/**returns true if the crop area is inside of the original image*/
+		public boolean isCropAreaInsideImage(PreProcessInformation p) {
+			RectangularGraphic possibleCropRect = new RectangularGraphic(p.getRectangle());
+			possibleCropRect.setAngle(p.getAngle());
+			if(
+					this.original.getOriginalDimensions().contains(possibleCropRect.getRotationTransformShape().getBounds()))
+				return true;
+			
+			return false;
 		}
 		
 		

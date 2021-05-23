@@ -346,7 +346,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	
 	
 	CombinedEdit output = new CombinedEdit();
-	CropDialogContext context = new CroppingDialog.CropDialogContext(all.size());
+	CropDialogContext context = new CroppingDialog.CropDialogContext(all.size()+1);
 	
 	output.addEditToList(
 			showRecropDisplayDialog( crop1, null, null, context)
@@ -378,6 +378,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 				);
 	return output;
 }
+
 
 	/**shows a cropping dialog*/
 	public static CombinedEdit showRecropDisplayDialog(MultichannelDisplayLayer display, Dimension dim, Interpolation interpolate, CropDialogContext context) {
