@@ -41,6 +41,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
+import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
@@ -79,6 +80,9 @@ class LaneLabelAdder extends BasicGraphicAdder {
 	   if not, just adds one text item to the figure*/
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
+		boolean proceed = ShowMessage.showOptionalMessage("Lane labels are an experimental feature for blot images", false, "Lane labels for western blots are a work in progress, are you sure you want to proceed?");
+		if(!proceed)
+			return null;
 		TextGraphic out = new TextGraphic();
 		if(!simple) out=new ComplexTextGraphic();
 		out.setLocationUpperLeft(50, 50);
@@ -93,6 +97,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 	/**Adds many copies of the text item to the selected images. Attaches each text to 
 	  an image panel. font size is decreased if panels are too small*/
 	public ArrayList<TextGraphic> addLockedItemToSelectedImages(TextGraphic ag) {
+		
 		undo=new CombinedEdit();
 		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
 		
