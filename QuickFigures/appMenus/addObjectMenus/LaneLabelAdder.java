@@ -80,7 +80,7 @@ class LaneLabelAdder extends BasicGraphicAdder {
 	   if not, just adds one text item to the figure*/
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
-		boolean proceed = ShowMessage.showOptionalMessage("Lane labels are an experimental feature for blot images", false, "Lane labels for western blots are a work in progress, are you sure you want to proceed?");
+		boolean proceed = ShowMessage.showOptionalMessage("Lane labels are an experimental feature for western blot and gel images", false, "Lane labels for western blots are a work in progress, are you sure you want to proceed?");
 		if(!proceed)
 			return null;
 		TextGraphic out = new TextGraphic();
