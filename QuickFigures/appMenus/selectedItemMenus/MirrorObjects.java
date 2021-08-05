@@ -50,6 +50,7 @@ public class MirrorObjects extends BasicMultiSelectionOperator {
 
 	@Override
 	public void run() {
+		
 		ArrayList<LocatedObject2D> objects = super.getAllObjects();
 		ShapeGraphic s=null;
 		ImagePanelGraphic startPanel=null;
@@ -65,6 +66,10 @@ public class MirrorObjects extends BasicMultiSelectionOperator {
 			ShowMessage.showOptionalMessage("A shape and multiple image panels must be selected");
 			return;
 		}
+		
+		boolean proceed = ShowMessage.showOptionalMessage("mirror is a new experimental feature", true, "Do you wish to mirror the object "+s);
+		if(!proceed)
+			return;
 		
 		ArraySorter.removeThoseNotOfClass(objects, ImagePanelGraphic.class);
 		for(LocatedObject2D o: objects) {
