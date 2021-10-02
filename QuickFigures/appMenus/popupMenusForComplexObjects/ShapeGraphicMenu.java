@@ -32,6 +32,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ShapeGraphic;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import undo.Edit;
 import menuUtil.PopupMenuSupplier;
@@ -90,6 +91,12 @@ PopupMenuSupplier  {
 						Edit.removeItem(layer, item)
 						);
 			}}.createJMenuItem("Replace With Points"));
+		
+		try {
+			j.add(DonatesMenu.MenuFinder.addDonatedMenusTo(null, targetShape));
+		} catch (Exception e1) {
+			IssueLog.log(e1);
+		}
 		
 		return j;
 	}

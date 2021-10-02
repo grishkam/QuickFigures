@@ -20,15 +20,20 @@
  */
 package popupMenusForComplexObjects;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_Shapes.ArrowGraphic;
+import locatedObject.LocationChangeListener;
 import menuUtil.SmartPopupJMenu;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
@@ -75,7 +80,12 @@ PopupMenuSupplier  {
 		if (!arrow.headsAreSame()) {
 			add(createMenuItem(USE_IDENTICAL_HEADS));
 		}
+		JComponent addedMenu=this;
+		DonatesMenu.MenuFinder.addDonatedMenusTo(addedMenu, arrow);
+		
 	}
+
+	
 	
 	public void setLastMouseEvent(CanvasMouseEvent e) {
 		super.setLastMouseEvent(e);

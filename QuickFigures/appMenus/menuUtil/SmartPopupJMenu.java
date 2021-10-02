@@ -159,7 +159,10 @@ public JMenu extractToMenu(String label) {
 }
 
 protected void addAllMenuItems(Iterable<? extends JMenuItem> i) {
-	for(JMenuItem j:i) {add(j);}
+	for(JMenuItem j:i) {
+		if(j!=null)
+			add(j);
+		}
 }
 
 public void addUndo(AbstractUndoableEdit e) {
