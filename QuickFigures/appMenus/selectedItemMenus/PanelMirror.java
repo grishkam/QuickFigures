@@ -129,6 +129,7 @@ public class Reflection implements Serializable {
 			reflectedObject.moveLocation(dx, dy);
 		}
 
+		/**updates the location of the reflected object*/
 		public void updateLocation() {
 			updateLocation(targetPanel, primaryPanel,  reflectedObject, primaryShape) ;
 		}
