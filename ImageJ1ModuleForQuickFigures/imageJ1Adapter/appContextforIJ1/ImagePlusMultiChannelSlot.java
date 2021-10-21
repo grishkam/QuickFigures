@@ -103,7 +103,8 @@ import logging.IssueLog;
 				//IssueLog.log("Warning. No image in wrapper");
 				return null;
 			}
-			if (multiChannelWrapper!=null && this.multiChannelWrapper.getImagePlus()==this.getImagePlus()) return multiChannelWrapper;
+			if (multiChannelWrapper!=null && this.multiChannelWrapper.getImagePlus()==this.getImagePlus())
+				return multiChannelWrapper;
 			multiChannelWrapper =new ImagePlusWrapper(getImagePlus());
 			return multiChannelWrapper;
 		}
@@ -534,8 +535,8 @@ import logging.IssueLog;
 		/**returns the original image*/
 		public ImagePlusWrapper getUnprocessedVersion(boolean b) {
 			ImagePlus backup = getBackup(b);
-			ImagePlusWrapper bwrap=null;
-			if (backup!=null&&bwrap==null)
+			ImagePlusWrapper bwrap=getBackupAsWrapper();
+			if (backup!=null&&bwrap==null) 
 				bwrap=new ImagePlusWrapper(backup);
 			if(backup==null) {
 				/**If the backup once existed will ask user to reopen*/
@@ -545,7 +546,7 @@ import logging.IssueLog;
 					if (reopen) {
 						original.setStoredImage(IJ.openImage());
 						if (original.getStoredImage()!=null) 
-							return new ImagePlusWrapper(original.getStoredImage());
+							return original.wrappedUpVersion;
 					}
 					return null;
 					}
@@ -558,6 +559,8 @@ import logging.IssueLog;
 			return bwrap;
 		}
 		
+	
+
 		/**Returns the uncropped backup. If the parameter is set to true, it will be returned with any changes to channel order
 		 * display range and colors set to the current ones */
 		private ImagePlus getBackup(boolean matchColors) {
@@ -567,15 +570,24 @@ import logging.IssueLog;
 			if(backup!=null) {
 				/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
 				try {
-				if (matchColors)matchOrderAndLuts(new ImagePlusWrapper(getUncroppedOriginal()));
+				if (matchColors)matchOrderAndLuts(
+						 getBackupAsWrapper()
+						);
 				} catch (Throwable t) {IssueLog.logT(t);}
 			}
 			return backup;
 		}
 		
+		/**
+		 * @param b
+		 * @return
+		 */
+		private ImagePlusWrapper getBackupAsWrapper() {
+			return original.wrappedUpVersion;
+			}
 		
 
-		/**changes the channel order, Display range and luts of a to match the main source stack*/
+		/**changes the channel order, Display range and luts of a target image to match the main source stack*/
 		public void matchOrderAndLuts(MultiChannelImage a) {
 			ChannelOrderAndLutMatching m = new ChannelOrderAndLutMatching();
 			m. matchDisplayRangeLUTandOrder(getMultichannelImage(),a);
@@ -615,10 +627,6 @@ import logging.IssueLog;
 		public ImagePlus getUncroppedOriginal() {
 			return original.getStoredImage();
 		}
-		
-		public ImagePlusWrapper getUncroppedOriginalAsWrapper() {
-			return original.getStoredImageAsWrapper();
-		}
 
 
 		@Override
@@ -651,7 +659,7 @@ import logging.IssueLog;
 			/**An uncropped backup version used in case user wants to change scale or cropping later
 			  Current working on a way for multiple sets of panels to share this one*/
 			private transient ImagePlus backupUncroppedImagePlus;//the imageplus
-			private transient ImagePlusWrapper storedWrapper;
+			private transient ImagePlusWrapper wrappedUpVersion;
 			
 			protected byte[] serializedBackup;
 			boolean innitialized=false;
@@ -659,7 +667,6 @@ import logging.IssueLog;
 			private String lastSavePath=null;
 			private int estimatedFileSize;
 			private Rectangle originalDimensions;
-			
 			/**
 			 * 
 			 */
@@ -673,8 +680,6 @@ import logging.IssueLog;
 				saveImage();
 				out.defaultWriteObject();
 			}
-
-		
 
 			/**
 			sets the save path
@@ -721,24 +726,18 @@ import logging.IssueLog;
 			public ImagePlus getStoredImage() {
 				return backupUncroppedImagePlus;
 			}
-			
-			/**
-			 * @return
-			 */
-			public ImagePlusWrapper getStoredImageAsWrapper() {
-				return storedWrapper;
-			}
 
 			public void setStoredImage(ImagePlus backupUncroppedImagePlus) {
 				this.backupUncroppedImagePlus = backupUncroppedImagePlus;
 				if (backupUncroppedImagePlus!=null) {
 					this.innitialized=true;
-					this.storedWrapper=new ImagePlusWrapper(backupUncroppedImagePlus);
-					this.originalSavePath=storedWrapper.getPath();
+					wrappedUpVersion = new ImagePlusWrapper(backupUncroppedImagePlus);
+					wrappedUpVersion.setUpChanNames();
+					this.originalSavePath=wrappedUpVersion.getPath();
 					this.lastSavePath=originalSavePath;
 					this.estimatedFileSize=backupUncroppedImagePlus.getBitDepth()*backupUncroppedImagePlus.getWidth()*backupUncroppedImagePlus.getHeight()*backupUncroppedImagePlus.getStackSize();
 					this.originalDimensions=new Rectangle(0,0, backupUncroppedImagePlus.getWidth(), backupUncroppedImagePlus.getHeight());
-					
+				
 				}
 			}
 

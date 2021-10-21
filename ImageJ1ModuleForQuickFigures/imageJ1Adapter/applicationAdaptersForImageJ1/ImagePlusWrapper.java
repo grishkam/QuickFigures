@@ -46,7 +46,7 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.util.ArrayList;
 
-
+import channelMerging.ChannelColorWrap;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelMerger;
 import channelMerging.ChannelOrderAndColorWrap;
@@ -77,6 +77,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	private ArrayList<String> chanexposures;
 	
 	public ImagePlusWrapper(ImagePlus imp) {
+		
 		this.imp=imp;
 		{
 			this.setSelectionManagger(new IJ1Selections(imp));
@@ -455,6 +456,12 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		this.channames=null;
 		return cs;
 	}
+	
+	@Override
+	public ChannelColorWrap getChannelColors() {
+		IJ1ChannelOrderWrap cs = new IJ1ChannelOrderWrap(imp, this);
+		return cs;
+	}
 
 	@Override
 	public int[] convertIndexToPosition(int i) {
@@ -566,8 +573,10 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	}
 
 	
-	void setUpChanNames() {
+	/**makes sure the channel names are set up*/
+	public void setUpChanNames() {
 		if (this.channames==null){
+			
 			ImagePlusMetaDataWrapper mcw = new ImagePlusMetaDataWrapper(imp);
 			this.channames  =
 				(new BasicMetaDataHandler()).channelNamesInOrder(mcw);
@@ -728,6 +737,8 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 
 		
 		ImagePlusWrapper imagePlusWrapper = new ImagePlusWrapper(d);
+		imagePlusWrapper.setChannelNames(this.channames);
+		
 		
 		ScaleInfo scaled = this.getScaleInfo().getScaledCopyXY(scale);
 		imagePlusWrapper.setScaleInfo(scaled);
@@ -735,6 +746,14 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		return imagePlusWrapper;
 		
 	
+	}
+
+	/**
+	sets the channel names of this image wrapper. sometimes called to avoid time lag that comes with digging channel names out of metadata
+	 */
+	private void setChannelNames(ArrayList<String> channames2) {
+		this.channames=channames2;
+		
 	}
 
 	@Override
@@ -781,6 +800,13 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		
 		
 	}
+
+	@Override
+	public boolean hasChannelNameList() {
+		return channames!=null;
+	}
+
+
 
 
 

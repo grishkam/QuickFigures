@@ -93,12 +93,13 @@ public class IssueLog {
 	
 	/**displays the current time and a start message*/
 	public static void logTimeStart(String st ) {
+		log("Since last finish it has been Milliseconds "+(System.currentTimeMillis()-lastTime)) ;
 		log("Started "+st+" at time ");
 		lastTime=System.currentTimeMillis();
 		log(""+System.currentTimeMillis());
 	}
 	/**displays the current time and an end message*/
-	public static void logTimefinish(String st ) {
+	public static void logTimeFinish(String st ) {
 		IssueLog.log("Done "+st);
 		IssueLog.logTime();
 	}

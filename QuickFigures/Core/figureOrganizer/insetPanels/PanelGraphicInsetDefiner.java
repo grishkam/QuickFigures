@@ -55,6 +55,7 @@ import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
 import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
@@ -161,7 +162,9 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		
 		MultiChannelImage unprocessed = this.getSourceDisplay().getSlot().getUnprocessedVersion(false);
 		 MultiChannelImage cropped = unprocessed .cropAtAngle(generateInsetPreprocess(getSourcePreprocess()));
-		 getSourceDisplay().getSlot().matchOrderAndLuts(cropped);
+		
+		 getSourceDisplay().getSlot().matchOrderAndLuts(cropped);//there was an issue reported on oct 20 2021 with slow performance for this. really the channel order and luts should be same
+		 
 		 return cropped;
 	
 	}
@@ -309,6 +312,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		if (!isValid()) return;//returns if the inset definer is not inside of the source panel
 		
 		updateDisplayPanelImages() ;
+		
 	}
 	
 	/**returns true if the inset graphic is large enough and inside of the parent image panel*/

@@ -62,6 +62,7 @@ public class ChannelOrderAndLutMatching {
 	public void matchChannels(MultiChannelImage reference, MultiChannelImage edited, int command) {
 		ArrayList<String> ChannelNamesA = getAllRealChannelNames(reference);
 		ArrayList<String> ChannelNamesB= getAllRealChannelNames(edited);
+		boolean sameOrder = isOrderSame(ChannelNamesA, ChannelNamesB);
 		
 		for (int i=0; i<ChannelNamesA.size()&& i<ChannelNamesB.size();i++) {
 			
@@ -72,22 +73,59 @@ public class ChannelOrderAndLutMatching {
 			
 			
 			
-			if (command!=ORDER_ONLY) edited.getChannelSwapper().setChannelColor(reference.getChannelColor(channelOfRef),channelToEdit);
-			if (command==ORDER_ONLY||command==ORDER_AND_COLOR)edited.getChannelSwapper().swapChannelsOfImage( channelOfRef, channelToEdit);
+			if (command!=ORDER_ONLY) edited.getChannelColors().setChannelColor(reference.getChannelColor(channelOfRef),channelToEdit);
+			if (command==ORDER_ONLY||command==ORDER_AND_COLOR) {
+				if(!sameOrder)
+					edited.getChannelSwapper().swapChannelsOfImage( channelOfRef, channelToEdit);
+				
+			}
+			
 			
 		}
+		
 	}
 	
+	
+	/**
+	 * returns true if the channel orders do not need to be matched
+	 * @param channelNamesA
+	 * @param channelNamesB
+	 * @return
+	 */
+	private boolean isOrderSame(ArrayList<String> channelNamesA, ArrayList<String> channelNamesB) {
+		if(channelNamesA.size()!=channelNamesB.size())
+			return false;
+		if(channelNamesA.size()==1||1==channelNamesB.size())
+			return true;
+		for(int i=0; i<channelNamesA.size()&& i<channelNamesB.size(); i++) {
+			boolean match1 = channelNamesA.get(i).equals(channelNamesB.get(i));
+			if(!(match1))
+					return false;
+		}
+		
+		return true;
+	}
+
+
+	//TODO this is slow for czi files
 	/** will alter the display range and channel order of the edited multichannel image to that of the reference. */
 	public void matchDisplayRangeLUTandOrder(MultiChannelImage reference, MultiChannelImage edited) {
-		matchChannels(reference,edited , ChannelOrderAndLutMatching.ORDER_AND_COLOR);
+		
 		matchDisplayRange(reference, edited);
+	
+		matchChannels(reference,edited , ChannelOrderAndLutMatching.ORDER_AND_COLOR);
+		
+		
+		
+		
 	}
 	
 	/** will alter the display range of the edited multichannel image to that of the reference. 
 	 * of every channel. Uses the channel names to determine which channel is which*/
 	public void matchDisplayRange(MultiChannelImage reference, MultiChannelImage edited) {
+		
 		ArrayList<String> ChannelNamesA = getAllRealChannelNames(reference);
+		
 		ArrayList<String> ChannelNamesB= getAllRealChannelNames(edited);
 		
 		for (int i=0; i<ChannelNamesA.size()&& i<ChannelNamesB.size();i++) {

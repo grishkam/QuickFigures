@@ -245,7 +245,7 @@ public class ChannelLabelProperties implements Serializable{
 			seg.setUniqueStyle(0);
 		}
 		if (lin.getText().length()>20) {
-			IssueLog.log("Line for channel  name is is too long: "+lin.getText());
+			IssueLog.log("Line for channel  name is is too long: "+lin.getText().length()+" characters");
 			String newT = lin.getText();
 			newT=newT.substring(newT.length()-20);
 			lin.getFirstSegment().setText(newT);
