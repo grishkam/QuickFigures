@@ -732,7 +732,7 @@ import logging.IssueLog;
 				if (backupUncroppedImagePlus!=null) {
 					this.innitialized=true;
 					wrappedUpVersion = new ImagePlusWrapper(backupUncroppedImagePlus);
-					wrappedUpVersion.setUpChanNames();
+					wrappedUpVersion.setUpChannelNames();
 					this.originalSavePath=wrappedUpVersion.getPath();
 					this.lastSavePath=originalSavePath;
 					this.estimatedFileSize=backupUncroppedImagePlus.getBitDepth()*backupUncroppedImagePlus.getWidth()*backupUncroppedImagePlus.getHeight()*backupUncroppedImagePlus.getStackSize();

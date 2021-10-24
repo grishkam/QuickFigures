@@ -44,7 +44,9 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 	private final ArrayList<Reflection> reflections=new ArrayList<Reflection>();
 	
 	/**mirror can be paused*/
+	private boolean mirrorActive=true;
 	private boolean locationMirrorActive=true;
+	private boolean colorMirrowActive=false;
 	
 
 	/**
@@ -211,7 +213,30 @@ protected void mirrorProperties(RectangularGraphic r) {
 	 r.copyStrokeFrom(primaryShape);
 }
 
-@MenuItemMethod(menuActionCommand = "Update color all mirrors", menuText = "line/colors",subMenuName="copy to reflections", orderRank=8)
+@MenuItemMethod(menuActionCommand = "Update color all mirrors", menuText = "line widths and colors",subMenuName="copy to reflections", orderRank=8, iconMethod="isColorMirrorActive")
+public void turnColorMirrorOnOff() {
+	if(this.isColorMirrorActive()) {
+		this.setColorMirrorActive(false);
+	}
+	else {
+		this.setColorMirrorActive(true);
+		copyColors();
+	}
+}
+
+@MenuItemMethod(menuActionCommand = "Update location all mirrors", menuText = "location, size and angle",subMenuName="copy to reflections", orderRank=9, iconMethod="isLocationMirrorActive")
+public void turnLocationMirrorOnOff() {
+	if(this.isLocationMirrorActive()) {
+		this.setLocationMirrorActive(false);
+	}
+	else {
+		this.setLocationMirrorActive(true);
+		this.updateAllReflections();
+	}
+}
+
+
+/**copies the colors from the original to all reflections*/
 public void copyColors() {
 	for(Reflection r: reflections) try {
 		r.mirrorColors();
@@ -224,12 +249,17 @@ public void copyColors() {
 /**whenever the primary object is moved, this updates every reflection*/
 	@Override
 	public void objectMoved(LocatedObject2D object) {
-		if (locationMirrorActive)
+		if(!isMirrorActive())
+			return;
+		if (isLocationMirrorActive())
 			updateAllReflections();
+		if(isColorMirrorActive())
+			copyColors();
 		
 	}
 
-@MenuItemMethod(menuActionCommand = "Update location all mirrors", menuText = "Location",subMenuName="copy to reflections", orderRank=9)
+
+/**updates the location of all reflections. does not affect the original*/
 public void updateAllReflections() {
 	for(Reflection r: reflections) try {
 		r.updateLocation();
@@ -241,23 +271,24 @@ public void updateAllReflections() {
 
 @MenuItemMethod(menuActionCommand = "Stop mirroring", menuText = "Stop mirroring",permissionMethod="mirrorActive", orderRank=1)
 public void stopMirror() {
-	this.locationMirrorActive=false;
+	this.setMirrorActive(false);
 }
 
 @MenuItemMethod(menuActionCommand = "Start mirroring", menuText = "Start mirroring",permissionMethod="mirrorPaused", orderRank=1)
 public void startMirror() {
-	this.locationMirrorActive=true;
-	updateAllReflections();
+	this.setMirrorActive(true);
+	if(isLocationMirrorActive())
+		updateAllReflections();
 }
 
 /**returns true if the mirror is active*/
 public boolean mirrorActive() {
-	return this.locationMirrorActive;
+	return this.isMirrorActive();
 }
 
 /**returns true if the mirror is not active, mirrored objects will not be modified if this is the case*/
 public boolean mirrorPaused() {
-	return !locationMirrorActive;
+	return !isMirrorActive();
 }
 
 	@Override
@@ -274,13 +305,14 @@ public boolean mirrorPaused() {
 
 	@Override
 	public void userMoved(LocatedObject2D object) {
-		if(locationMirrorActive) {
+		if(isMirrorActive()) {
 			
 			if(object!=primaryShape) {
 				
 			}
 			else
-			updateAllReflections();
+				if(isLocationMirrorActive())
+					updateAllReflections();
 			
 		}
 		
@@ -319,6 +351,30 @@ public boolean mirrorPaused() {
 				return true;
 		}
 		return false;
+	}
+
+	public boolean isColorMirrorActive() {
+		return colorMirrowActive;
+	}
+
+	public void setColorMirrorActive(boolean colorMirrowActive) {
+		this.colorMirrowActive = colorMirrowActive;
+	}
+
+	public boolean isLocationMirrorActive() {
+		return locationMirrorActive;
+	}
+
+	public void setLocationMirrorActive(boolean locationMirrorActive) {
+		this.locationMirrorActive = locationMirrorActive;
+	}
+
+	public boolean isMirrorActive() {
+		return mirrorActive;
+	}
+
+	public void setMirrorActive(boolean mirrorActive) {
+		this.mirrorActive = mirrorActive;
 	}
 
 }

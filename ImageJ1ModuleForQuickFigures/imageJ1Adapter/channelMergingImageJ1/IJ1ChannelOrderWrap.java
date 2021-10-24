@@ -34,7 +34,7 @@ import logging.IssueLog;
 public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 
 	private ImagePlus imp;
-	
+	private ImagePlusWrapper container;
 	
 	private IJ1ChannelSwapper swapper=new IJ1ChannelSwapper();
 
@@ -49,12 +49,14 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	
 	public IJ1ChannelOrderWrap(ImagePlus imp2, ImagePlusWrapper imagePlusWrapper) {
 		imp=imp2;
+		container= imagePlusWrapper;
 	}
 
 	@Override
 	public void swapChannelsOfImage(int a, int b) {
 		
 		swapper.swapChannelsOfImage(imp, a, b);
+		
 		listener.afterChanSwap();
 	}
 

@@ -20,7 +20,7 @@
  */
 package channelMerging;
 
-import java.awt.Color;
+
 
 /**interface for reordering the channels of a multichannel image
  * or reordering their colors*/

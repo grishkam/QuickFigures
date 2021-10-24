@@ -41,19 +41,23 @@ public class BasicMetaDataHandler {
 	public static String myIndexCode="Greg Channel At Index ";;//"Image Channel Index ";
 	public static String myColorCode="Greg Channel Color ";
 	Hashtable <String, String> hash=new Hashtable <String, String>();
-	String[] ZviChanKey= new String[] {"Channel Name ", " "};
-	String[] ZviExposureKey=new String[] {"Exposure Time [ms] ", " "};
+	String[] ZviChanKey= new String[] {"Channel Name ", " ", "zvi"};
+	//String[] ZviExposureKey=new String[] {"Exposure Time [ms] ", " "};
 	String[] myChanKey= new String[] {myIndexCode, " "};
 	
-	/**Channel name keys for determining channel colors, can retrieved lut names or channel names*/
+	/**Channel name keys for determining channel colors, can retrieved lut names or channel names
+	   */
 	static String[][] allNameKeys=new String[][] {
-		new String[] {"DisplaySetting|Channel|DyeName|", " "},//for CZI
-		new String[] {"ChannelDescription|LUTName ", " "},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
-		new String[] {"LUT Channel ", " name "},   //the most reliable key for lei
-		new String[] {"Block 2 csLutName", " "} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
-		new String[] {"Channel Name ", " "} //For .zvi
+		new String[] {"DisplaySetting|Channel|DyeName|", " ", "czi"},//for CZI
+		
+		new String[] {"ChannelDescription|LUTName ", " ", "lif"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
+		new String[] {"LUT Channel ", " name ", "lei"},   //the most reliable key for lei. only tested on one lei file
+		new String[] {"Block 2 csLutName", " ", "lei"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
+		new String[] {"Channel Name ", " ", "zvi"} //For .zvi
 		
 	};
+	
+	
 	
 	/**the channel id keys known for microscopy formats*/
 	String[][] allNumberKeys=new String[][] {
@@ -64,7 +68,9 @@ public class BasicMetaDataHandler {
 	
 	/**exposure time keys known for microscopy formats*/
 	String[][] allExposureTimeKeys=new String[][] {
-		new String[] {"Information|Image|Channel|ExposureTime|", " "},//for CZI
+		new String[] {"Exposure Time [ms] ", " "}, //for ZVI files opened with bioformats
+		new String[] {"Experiment|AcquisitionBlock|MultiTrackSetup|Track|Channel|DataGrabberSetup|CameraFrameSetup|ExposureTime|", " "},//for CZI
+		
 		
 	};
 	
@@ -767,10 +773,11 @@ public class BasicMetaDataHandler {
 			   Seems to work but no longer understand why. needs new testing*/
 			public  ArrayList<String> channelNamesInOrder(MetaInfoWrapper select){
 				
-				/**method reflects an old format of CZI channel names that I have not seen in recent tests. */
+				/**this method reflects an old format of CZI channel names that I have not seen in recent tests. */
 				String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
 				if (CZItest!=null) {
-					return CZIChannelNamesInOrder2(select);
+					IssueLog.log("CZI meta data found");
+					return CZIChannelNamesInOrder2(select, null);
 				}
 				
 				
@@ -872,11 +879,17 @@ public class BasicMetaDataHandler {
 			/**Given an image opened originally from a zvi file, this method 
 			   returns a list of each channel's exposure time.
 			   Seems to work but no longer understand why. needs new testing*/
-			public  ArrayList<String> ZviChannelExposuresInOrder(MetaInfoWrapper select){
+			public  ArrayList<String> getChannelExposuresInOrder(MetaInfoWrapper select){
 				
 				
-				/**not yet modified to work with czis*/
-				//String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
+				/**new modification to get exposure data from czi. seems to work but will perform more testing*/
+				String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
+				if (CZItest!=null) {
+					
+					return CZIChannelNamesInOrder2(select, "Information|Image|Channel|ExposureTime #");
+				}
+				
+				
 				
 				createChanDataIfnotEstablished(select);
 				
@@ -889,8 +902,10 @@ public class BasicMetaDataHandler {
 								   c1=c3.trim();
 								   c2=Integer.parseInt(c1);
 						try {
-									c1=getRealChannelInformationBasedOnMetaData(select,ZviExposureKey ,c2 ) ;
+							String[] key1 = this.findAppropriateKey(select, allExposureTimeKeys);
+									c1=getRealChannelInformationBasedOnMetaData(select,key1 ,c2 ) ;
 									ChannelExposures.add(c1);
+									IssueLog.log("Channel exposures "+c1);
 				} catch (Exception nn) {}
 			} catch (Exception nn) {}	
 				}
@@ -899,47 +914,44 @@ public class BasicMetaDataHandler {
 				}
 			
 			
-			/**possibly OBSOLETE: Given an image opened originally from a zvi file, this method 
+			/**possibly OBSOLETE: Given an image opened originally from a czi file, this method 
 			   returns a list of each channel's name. example {texasred, eGFP, DAPI}.
+			   If an argument is provided @param intoType then this may return another kind of information
 			   Seems to work but not extensively tested. 
 			   Takes into account the possibility that the channel IDs are not in order
 			   */
-			public  ArrayList<String> CZIChannelNamesInOrder2(MetaInfoWrapper select){
+			private  ArrayList<String> CZIChannelNamesInOrder2(MetaInfoWrapper select, String infoType){
+				if(infoType==null)
+					infoType="Information|Image|Channel|Fluor #";//the key for the names of the dyes for each channel.
 				
 				
+				/**obtains the id numbers for each channel used. Those id numbers may start from 0. 
+				 * Assumes that the numbers in 'Channel:' section correspond to the location in the stack. 
+				 * need more examples to test to be sure this is alays the case*/
 				ArrayList<Integer> list = getIntEntryListByNumber(select, "Information|Image|Channel|Id #"," ", 1,6, new String[] {"Channel:"});
 				
 				
-				ArrayList <String> ChannelNames=new ArrayList <String> ();
+				ArrayList <String> outputChannelNames=new ArrayList <String> ();
 					String c1;
 					int c2;
 					for (int j=0; j<6; j++) {
-						int ind1 = list.indexOf((j));
+						//assuming that an image has less than 6 channels, fints each on the list. This 0-6 iteration should be through the order of the channel in the stack
+						int ind1 = list.indexOf((j));//returns the location of channel j on the list. For example the channel at position 0 in the stack might be called channel 
 						try {String c3=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Id #"+(ind1+1)+ " " ) ;
 						
 						c3=c3.replace("Channel:", "");
 						c1=c3.trim();
 						c2=Integer.parseInt(c1);
 						
-						try {c1=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #"+(c2+1)+" ") ;
+						try {c1=(String) getEntryFromInfoAsString(select, infoType+(c2+1)+" ") ;
 						
-						ChannelNames.add(c1);
+						outputChannelNames.add(c1);
 						
 				} catch (Exception nn) {}
 						
 						}catch (Throwable t) {}
 						
-						/** old version
-						try {String c3=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Id #"+j+ " " ) ;
-				c3=c3.replace("Channel:", "");
-						c1=c3.trim();
-				
-				c2=Integer.parseInt(c1);
-						try {c1=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #"+(c2+1)+" ") ;
-						
-						ChannelNames.add(c1);
-				} catch (Exception nn) {}
-			} catch (Exception nn) {}	*/
+			
 						
 						
 						
@@ -949,7 +961,7 @@ public class BasicMetaDataHandler {
 					
 					
 					
-				return ChannelNames;	
+				return outputChannelNames;	
 					
 				}
 			
@@ -977,7 +989,17 @@ public class BasicMetaDataHandler {
 			/**Tests the image metadata to determine if any of the known channel name keys are present*/
 			public String[] findChannelNameKey(MetaInfoWrapper handle) {
 				
-				for(String[] key : allNameKeys) try {
+				String[][] targetKeyList = allNameKeys;
+				return findAppropriateKey(handle, targetKeyList);
+			}
+
+			/**checks a list of keys to determine which key 1) exists in the metadata and 2) can be used to get information about a channel
+			 * @param handle
+			 * @param targetKeyList
+			 * @return
+			 */
+			protected String[] findAppropriateKey(MetaInfoWrapper handle, String[][] targetKeyList) {
+				for(String[] key : targetKeyList) try {
 					for(int i=0; i<7; i++) try {
 						
 					String f = getRealChannelInformationBasedOnMetaData(handle, key, i);

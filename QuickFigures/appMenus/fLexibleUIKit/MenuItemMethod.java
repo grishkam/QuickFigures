@@ -60,6 +60,8 @@ public @interface MenuItemMethod {
 	  If it returns null or false, the menu item will not be included*/
 	public String permissionMethod() default "";
 	
+	/**The name of a method that may return an icon*/
+	public String iconMethod() default "";
 	
 
 }

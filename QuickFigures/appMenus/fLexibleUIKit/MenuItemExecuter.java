@@ -20,6 +20,7 @@
  */
 package fLexibleUIKit;
 
+import java.awt.Color;
 import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,7 +37,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
 import graphicActionToolbar.CurrentFigureSet;
+import iconGraphicalObjects.ColorIcon;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.MenuSupplier;
@@ -105,7 +108,25 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 					
 				}
 				
-			}catch (Throwable t) {t.printStackTrace();}
+			}catch (Throwable t) {IssueLog.log(t);}
+			
+			
+			/**sets up the icon*/
+			if (!k.iconMethod().equals("")) try{
+				Method pMethod = o.getClass().getMethod(k.iconMethod());
+				if (pMethod!=null) {
+					Object b = pMethod.invoke(o);
+				
+					if (b==null||b.toString().equals("false")) {};
+					if(b.toString().equals("true")) {
+						item.setIcon(new ColorIcon(Color.black));
+					}
+					
+					
+				}
+				
+				
+			}catch (Throwable t) {IssueLog.log(t);}
 			
 			
 			

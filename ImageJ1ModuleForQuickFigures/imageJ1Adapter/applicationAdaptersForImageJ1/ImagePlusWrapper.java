@@ -453,7 +453,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	public ChannelOrderAndColorWrap getChannelSwapper() {
 		IJ1ChannelOrderWrap cs = new IJ1ChannelOrderWrap(imp, this);
 		cs.addChannelSwapListener(this);
-		this.channames=null;
+		this.channames=null;//since the channel swapper might change the channel order, making the chan names null ensures 
 		return cs;
 	}
 	
@@ -573,8 +573,10 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	}
 
 	
-	/**makes sure the channel names are set up*/
-	public void setUpChanNames() {
+	/**makes sure the channel names are set up
+	 * returns the channel names
+	 * @return */
+	public ArrayList<String> setUpChannelNames() {
 		if (this.channames==null){
 			
 			ImagePlusMetaDataWrapper mcw = new ImagePlusMetaDataWrapper(imp);
@@ -582,14 +584,15 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 				(new BasicMetaDataHandler()).channelNamesInOrder(mcw);
 			if (channames.size()==0) 
 				(new BasicMetaDataHandler()).createChanNamesFor(mcw, imp.getNChannels());//if there are no channel names, creates artificial ones
-			this.chanexposures=(new BasicMetaDataHandler()).ZviChannelExposuresInOrder(mcw);
+			this.chanexposures=(new BasicMetaDataHandler()).getChannelExposuresInOrder(mcw);
 		}
+		return channames;
 	}
 	
 	/**returns the real channel name from a list field. first channel is 1, second is 2*/
 	@Override
 	public String getRealChannelName(int i) {
-		 setUpChanNames() ;
+		 setUpChannelNames() ;
 		if (channames.size()>=i) {
 			return channames.get(i-1);
 			
@@ -600,7 +603,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	/**if the exposure of the given channel is available, returns it*/
 	@Override
 	public String getRealChannelExposure(int i) {
-		 setUpChanNames() ;
+		 setUpChannelNames() ;
 		if (this.chanexposures.size()>=i) {
 			
 			return chanexposures.get(i-1);
