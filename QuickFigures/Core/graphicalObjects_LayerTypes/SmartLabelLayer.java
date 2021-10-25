@@ -1,7 +1,7 @@
 /**
  * Author: Greg Mazo
- * Date Created: May 1, 2021
- * Date Modified: Sept 29, 2021
+ * Date Created: Oct 24, 2021
+ * Date Modified: October 25, 2021
  * Version: 2021.1
  */
 package graphicalObjects_LayerTypes;
@@ -23,11 +23,8 @@ import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
+import objectDialogs.SmartLabelLayerDialog;
 import popupMenusForComplexObjects.DonatesMenu;
-import standardDialog.StandardDialog;
-import standardDialog.booleans.BooleanInputPanel;
-import standardDialog.choices.ChoiceInputPanel;
-import standardDialog.numbers.NumberInputPanel;
 import textObjectProperties.TextPattern;
 import undo.CombinedEdit;
 import undo.SimpleItemUndo;
@@ -50,9 +47,9 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	private HashMap<ZoomableGraphic, TextGraphic> records=new  HashMap<ZoomableGraphic, TextGraphic>();
 
 	/**the pattern that the labels take*/
-	private  TextPattern textPattern=new  TextPattern(TextPattern.PatternType.ABC);
+	TextPattern textPattern=new  TextPattern(TextPattern.PatternType.ABC);
 	
-	private boolean continuouseUpdate=true;
+	boolean continuouseUpdate=true;
 
 	
 	/**
@@ -253,7 +250,13 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	public void turnUpdateOnOff() {
 		this.setContinuouseUpdate(!isContinuouseUpdate());
 	}
-	
+
+	@MenuItemMethod(menuActionCommand = "Select All", menuText ="Select All", orderRank=10)
+	public void selectAll() {
+		for(TextGraphic i:records.values()) {
+			i.select();
+		}
+	}
 	
 	/**Shows a modal options dialog for the item, and returns an undoable edit*/
 	@MenuItemMethod(menuActionCommand = "options", menuText ="Show Options", orderRank=4)
@@ -276,7 +279,7 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 		ArraySorter.removeNonSelectionItems(items);
 		
 		for(ZoomableGraphic item: items) {
-			if(records.keySet().contains(item)&&hasItem(records.get(item)))
+			if(records.keySet().contains(item)&&topLevelParentLayer.hasItem(records.get(item)))
 				continue;//if the item is already being tracked and already has a label in the figure
 			if(item instanceof TakesAttachedItems) {
 				TextGraphic example=null; for(TextGraphic text:records.values()) {example=text; if(example!=null)break;}
@@ -310,66 +313,6 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	
 	
 	
-	/**An options dialog that allows the user to change the pattern for the labels*/
-	static class SmartLabelLayerDialog extends StandardDialog {
-
-		
-		static final String patternKey="pattern",
-				constantUpdateKey="update",
-				startIndexKey="Start at";
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
-		
-		ArrayList<TextPattern> patterns;
-		private SmartLabelLayer labelLayer;
-		
-		public SmartLabelLayerDialog(SmartLabelLayer l) {
-			labelLayer=l;
-			this.setTitle("Smart Label Options");
-			this.addOptionsToDialog();
-			this.setWindowCentered(true);
-			this.setModal(true);
-		}
-		
-		public void addOptionsToDialog() {
-			patterns=TextPattern.getList();
-			patterns.add(0, labelLayer.textPattern);
-			String[] patternOption=new String[patterns.size()];
-			for(int i=0; i<patternOption.length; i++) {
-				patternOption[i]=patterns.get(i).getSummary();
-			}
-			ChoiceInputPanel patternCombo = new ChoiceInputPanel("Select Pattern", patternOption,0);
-			this.add(patternKey, patternCombo);
-			
-			
-			this.add(constantUpdateKey, new BooleanInputPanel("Update Labels Constantly", labelLayer.continuouseUpdate)) ;
-			
-			this.add(startIndexKey, new NumberInputPanel("Start at", labelLayer.textPattern.getStartIndex()));
-			
-		}
-		
-		public void setOptionsToDialog() {
-			labelLayer.textPattern=patterns.get((int) this.getChoiceIndex(patternKey));
-			labelLayer.textPattern.setStartIndex(this.getNumberInt(startIndexKey));
-			labelLayer.continuouseUpdate=this.getBoolean(constantUpdateKey);
-			
-		}
-		
-		/**what action to take when the ok button is pressed*/
-		protected void onOK() {
-			setOptionsToDialog();
-			labelLayer.updateLabels();
-			labelLayer.updateDisplay();
-		}
-		
-	}
-
-
-
-
 	@Override
 	public SmartLabelLayer self() {
 		return this;

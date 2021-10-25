@@ -41,6 +41,7 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
+import objectDialogs.TextPatternDialog;
 import textObjectProperties.TextPattern;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -54,7 +55,7 @@ class TextItemAdder extends BasicGraphicAdder {
 	 */
 	private static final long serialVersionUID = 1L;
 	boolean simple=false;
-	String label_prefix = "Label ";
+	
 	TextPattern pattern=new TextPattern();
 	boolean addSmartLabels=false;
 	SmartLabelLayer smartLayer =null;
@@ -62,20 +63,18 @@ class TextItemAdder extends BasicGraphicAdder {
 	/**constructor for  text item adder. */
 	public TextItemAdder(boolean isSimple) {
 		simple=isSimple;
+		pattern.setPrefix("Panel ");
 	}
 
-	/**constructor for  text item adder. */
-	public TextItemAdder(boolean isSimple, String prefix) {
-		this(isSimple);
-		label_prefix=prefix;
-	}
+	
 	
 	
 
 	/**constructor for  text item adder. */
 	public TextItemAdder(boolean isSimple, TextPattern p, String prefix, boolean smart) {
-		this(isSimple, prefix);
+		this(isSimple);
 		this.pattern=p;
+		pattern.setPrefix(prefix);
 		addSmartLabels=smart;
 		
 	}
@@ -102,6 +101,10 @@ class TextItemAdder extends BasicGraphicAdder {
 	public ZoomableGraphic add(GraphicLayer gc) {
 		TextGraphic out = new TextGraphic();
 		if(!simple) out=new ComplexTextGraphic();
+		
+		TextPattern input=this.pattern;
+		
+		this.pattern=TextPatternDialog.getPatternFromUser(input);
 		
 		out.setLocationUpperLeft(50, 50);
 		
@@ -234,7 +237,12 @@ class TextItemAdder extends BasicGraphicAdder {
 	 */
 	protected void processItemAttachment(ArrayList<TextGraphic> listOfLabels, int count, ZoomableGraphic attachmentLocation,
 			TextGraphic ag2, TakesAttachedItems taker) {
-		ag2.setText(label_prefix+pattern.getSymbol(count)); 
+		String text = pattern.getText(count);
+		ag2.setText(text); 
+		 if (ag2 instanceof ComplexTextGraphic) {
+			 ((ComplexTextGraphic) ag2).getParagraph().get(0).get(0).setText(text);
+		 }
+		
 		
 		listOfLabels.add(ag2);
 		if(taker!=null)
@@ -263,11 +271,13 @@ class TextItemAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getMenuCommand() {
-		String output = "Add Text   ";
+		String output = "Add Text  ";
 		if(!simple) 
-			output= "Add Rich Text  ";
-		if (isSequence())
-			output=pattern.getSummary();
+			output= "Add Rich Text ";
+		if(addSmartLabels) {
+			output="Smart Label Sequence ";
+		}
+			output=output+"("+pattern.getSummary()+")   ";
 		
 		return output;
 	}
@@ -294,21 +304,11 @@ class TextItemAdder extends BasicGraphicAdder {
 	@Override
 	public String getMenuPath() {
 		String mainMenu = "to selected panels";
-		if(addSmartLabels) {
-			mainMenu+="<Smart Label Sequence   ";
-		}else
-		if(isSequence()) {
-			mainMenu+="<Label Sequence   ";
-		}
+		
 		return mainMenu;
 	}
 
-	/**
-	 * @return
-	 */
-	protected boolean isSequence() {
-		return "".equals(label_prefix);
-	}
+	
 	
 
 	

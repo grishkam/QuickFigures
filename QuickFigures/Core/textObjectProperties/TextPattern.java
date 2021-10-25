@@ -26,25 +26,30 @@ public class TextPattern implements Serializable {
 	/**contains the first 20 roman numerals*/
 	public static final String[] romanNumerals=new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"};
 	
+	/**contains the first 20 roman numerals*/
+	public static final String[] wordNumerals=new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Twenty"};
+	
+	
 	/**numbering starts from one*/
 	private int startIndex=1;
 	
-	String prefix="";
-	String suffix="";
+	private String prefix="";
+	private String suffix="";
 
 	public static enum PatternType  {
 		ABC, 
 		ROMAN_NUMBERAL,
-		NUMBERS;
+		NUMBERS,
+		ONE_TWO_THREE;
 	}
 	
-	PatternType curruentType=PatternType.NUMBERS;
+	PatternType currentType=PatternType.NUMBERS;
 	private boolean lowerCase=false;
 
 	public TextPattern() {}
 	
 	public TextPattern(PatternType theType) {
-		 curruentType=theType;
+		 currentType=theType;
 	}
 	public TextPattern(PatternType theType, boolean lowerCase) {
 		this(theType);
@@ -53,7 +58,7 @@ public class TextPattern implements Serializable {
 	
 	/**creates a copy of this pattern*/
 	 public TextPattern copy() {
-		 TextPattern textPattern = new  TextPattern(this.curruentType, lowerCase);
+		 TextPattern textPattern = new  TextPattern(this.currentType, lowerCase);
 		 giveTraitsTo(textPattern);
 		return textPattern;
 	 }
@@ -63,8 +68,8 @@ public class TextPattern implements Serializable {
 	 */
 	protected void giveTraitsTo(TextPattern textPattern) {
 		textPattern.setStartIndex(startIndex);
-		 textPattern.prefix=prefix;
-		 textPattern.suffix=suffix;
+		 textPattern.setPrefix(prefix);
+		 textPattern.setSuffix(suffix);
 	}
 	
 	/**returns the summary of the pattern. For example: 'a, b, c... ' */
@@ -85,7 +90,7 @@ public class TextPattern implements Serializable {
 	
 	/**returns the label for the n=th item*/
 	public String getText(int n) {
-		return prefix+getSymbol(n)+suffix;
+		return getPrefix()+getSymbol(n)+getSuffix();
 	}
 	
 	/**returns the n-th symbol in the sequence*/
@@ -94,10 +99,10 @@ public class TextPattern implements Serializable {
 			n=n+getStartIndex()-1;
 		
 		String output=""+n;
-		if(this.curruentType==PatternType.NUMBERS)
+		if(this.currentType==PatternType.NUMBERS)
 			return output;
 		
-		if(this.curruentType==PatternType.ABC) {
+		if(this.currentType==PatternType.ABC) {
 			int i=(int) 'A';
 			int fold = (n-1)%(26);
 			int shift = (n-1)/26;
@@ -109,7 +114,7 @@ public class TextPattern implements Serializable {
 		}
 		
 		/**return roman numerals up to 100*/
-		if(this.curruentType==PatternType.ROMAN_NUMBERAL) {
+		if(this.currentType==PatternType.ROMAN_NUMBERAL) {
 			if(n<=20)
 				output= romanNumerals[n-1];
 			else
@@ -151,6 +156,11 @@ public class TextPattern implements Serializable {
 				output="M"+this.getSymbol(n-1000);
 		}
 		
+		if(currentType==PatternType.ONE_TWO_THREE) {
+			if(n<21)
+				output=wordNumerals[(n-1)];
+		}
+		
 		if(this.lowerCase)
 			output=output.toLowerCase();
 		
@@ -167,7 +177,7 @@ public class TextPattern implements Serializable {
 		
 		output.add(new TextPattern( PatternType.NUMBERS, false));
 		
-		PatternType[] patterns = new PatternType[] {PatternType.ABC, PatternType.ROMAN_NUMBERAL};
+		PatternType[] patterns = new PatternType[] {PatternType.ABC, PatternType.ROMAN_NUMBERAL, PatternType.ONE_TWO_THREE};
 		boolean[] cases = new boolean[] {true, false};
 		for(PatternType type: patterns) {
 			
@@ -190,6 +200,22 @@ public class TextPattern implements Serializable {
 
 	public void setStartIndex(int startIndex) {
 		this.startIndex = startIndex;
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	public String getSuffix() {
+		return suffix;
+	}
+
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
 	}
 	
 	

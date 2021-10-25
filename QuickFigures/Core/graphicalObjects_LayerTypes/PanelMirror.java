@@ -33,8 +33,6 @@ import popupMenusForComplexObjects.DonatesMenu;
  but at the equivalent location in each panel.
  A special layer that contains items whose location is determined by a parent item
  Whenever a user changes the location of the parent item, the reflections will be updated.
- 
- 
  */
 public class PanelMirror extends GraphicLayerPane implements LocationChangeListener , HasUniquePopupMenu, DonatesMenu {
 
@@ -121,7 +119,7 @@ public class Reflection implements Serializable {
 		}
 
 		/**
-		 * 
+		Assuming that a reflected objects starts in one panel (primary panel), moves the object to the equivalent location in the target panel
 		 */
 		protected void moveReflectionToDestinationPanel(ImagePanelGraphic targetPanel, ImagePanelGraphic primaryPanel, SimpleGraphicalObject reflectedObject) {
 			Point2D pf = targetPanel.getLocationUpperLeft();
