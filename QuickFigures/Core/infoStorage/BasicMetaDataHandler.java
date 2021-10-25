@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Oct 24, 2021
  * Version: 2021.1
  */
 package infoStorage;
@@ -48,7 +48,7 @@ public class BasicMetaDataHandler {
 	/**Channel name keys for determining channel colors, can retrieved lut names or channel names
 	   */
 	static String[][] allNameKeys=new String[][] {
-		new String[] {"DisplaySetting|Channel|DyeName|", " ", "czi"},//for CZI
+		//new String[] {"DisplaySetting|Channel|DyeName|", " ", "czi"},//for CZI does not work the same way others do
 		
 		new String[] {"ChannelDescription|LUTName ", " ", "lif"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
 		new String[] {"LUT Channel ", " name ", "lei"},   //the most reliable key for lei. only tested on one lei file
@@ -905,7 +905,7 @@ public class BasicMetaDataHandler {
 							String[] key1 = this.findAppropriateKey(select, allExposureTimeKeys);
 									c1=getRealChannelInformationBasedOnMetaData(select,key1 ,c2 ) ;
 									ChannelExposures.add(c1);
-									IssueLog.log("Channel exposures "+c1);
+									
 				} catch (Exception nn) {}
 			} catch (Exception nn) {}	
 				}
@@ -964,24 +964,6 @@ public class BasicMetaDataHandler {
 				return outputChannelNames;	
 					
 				}
-			
-			/**Given an image opened originally from a CZI file, this method 
-			   returns a list of each channel's name. example {texasred, eGFP, DAPI}
-			public  ArrayList<String> CZIChannelNamesInOrder(MetaInfoWrapper select){
-				ArrayList <String> ChannelNames=new ArrayList <String> ();
-					
-					for (int j=0; j<6; j++) {
-						
-						try {String c3=(String) getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #"+(j+1)+" " ) ;
-						
-						ChannelNames.add(c3);
-				} catch (Exception nn) {}
-			
-				}
-				return ChannelNames;	
-					
-				}*/
-			
 			
 
 			

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: October 24, 2021
  * Version: 2021.1
  */
 package graphicalObjects_LayoutObjects;
@@ -62,6 +62,7 @@ import layout.PanelLayout;
 import layout.PanelLayoutContainer;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.BasicLayoutEditor;
+import layout.basicFigure.LayoutSpaces;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
@@ -667,11 +668,40 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 				}
 			Integer rw = getPanelLocations().get(o);
 			
-			if(rw!=null&&rw<0) return;//some items may have a -1 for no location
-			if (rw==null||rw==-1) mapPanelLocation(o);
+			
+			boolean isSnapLocationDependentOnSpecificPanels = sb.getGridSpaceCode()!=LayoutSpaces.ALL_MONTAGE_SPACE&&sb.getGridSpaceCode()!=LayoutSpaces.BLOCK_OF_PANELS;
+			boolean locationDependsOnPanel=isSnapLocationDependentOnSpecificPanels;
+			if(!locationDependsOnPanel){
+				rw=0;
+				
+			}
+			
+			if(rw!=null&&rw<0) 
+				return;//some items may have a -1 for no location
+			if (rw==null||rw==-1) 
+				mapPanelLocation(o);
+			
+			
 			Rectangle2D rectForSnap = getRectForSnap(getPanelLocations().get(o), o);
 			
+			/**for the labels attached to the entire layout, only need the bound*/
+			if(sb.getGridSpaceCode()==LayoutSpaces.ALL_MONTAGE_SPACE) {
+				rectForSnap=this.getBounds();
+				
+			}
+			
+			/**for the labels attached to all the panels, the bounds of a specific panel will not be used*/
+			if(sb.getGridSpaceCode()==LayoutSpaces.BLOCK_OF_PANELS) {
+				layout=this.getPanelLayout();
+				rectForSnap=layout.allPanelArea().getBounds();
+				
+			}
+			
+		
 			if(rectForSnap==null) return;
+			
+			
+			
 			sb.snapObjectToRectangle(o, rectForSnap);
 			
 			

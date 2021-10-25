@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Oct 24, 2021
  * Version: 2021.1
  */
 package addObjectMenus;
@@ -23,19 +23,28 @@ package addObjectMenus;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.Icon;
 
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.SmartLabelLayer;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
+import locatedObject.LocatedObject2D;
+import locatedObject.TakesAttachedItems;
+import logging.IssueLog;
+import textObjectProperties.TextPattern;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
+import utilityClasses1.ArraySorter;
 
 /**Adds text objects to selected image panels*/
 class TextItemAdder extends BasicGraphicAdder {
@@ -45,10 +54,33 @@ class TextItemAdder extends BasicGraphicAdder {
 	 */
 	private static final long serialVersionUID = 1L;
 	boolean simple=false;
+	String label_prefix = "Label ";
+	TextPattern pattern=new TextPattern();
+	boolean addSmartLabels=false;
+	SmartLabelLayer smartLayer =null;
 	
+	/**constructor for  text item adder. */
 	public TextItemAdder(boolean isSimple) {
 		simple=isSimple;
 	}
+
+	/**constructor for  text item adder. */
+	public TextItemAdder(boolean isSimple, String prefix) {
+		this(isSimple);
+		label_prefix=prefix;
+	}
+	
+	
+
+	/**constructor for  text item adder. */
+	public TextItemAdder(boolean isSimple, TextPattern p, String prefix, boolean smart) {
+		this(isSimple, prefix);
+		this.pattern=p;
+		addSmartLabels=smart;
+		
+	}
+	
+	
 	
 	private CombinedEdit undo;
 	
@@ -70,7 +102,17 @@ class TextItemAdder extends BasicGraphicAdder {
 	public ZoomableGraphic add(GraphicLayer gc) {
 		TextGraphic out = new TextGraphic();
 		if(!simple) out=new ComplexTextGraphic();
+		
 		out.setLocationUpperLeft(50, 50);
+		
+		if(addSmartLabels) {
+			 smartLayer = new SmartLabelLayer();
+			 smartLayer.setTextPattern(this.pattern);
+			gc.getTopLevelParentLayer().add(smartLayer);
+		}
+		else 
+			smartLayer =null;
+		
 		ArrayList<TextGraphic> list = addLockedItemToSelectedImages(out);
 		if (list.size()<1
 				) {
@@ -86,34 +128,132 @@ class TextItemAdder extends BasicGraphicAdder {
 	  an image panel. font size is decreased if panels are too small*/
 	public ArrayList<TextGraphic> addLockedItemToSelectedImages(TextGraphic ag) {
 		undo=new CombinedEdit();
-		ArrayList<ZoomableGraphic> possibleTargets = selector.getSelecteditems();
+		ArrayList<ZoomableGraphic> possibleTargets =  SmartLabelLayer.getInRowMajorOrder(getSelectedItems());
 		boolean output=false;//true if at least one object has been added
 		ArrayList<TextGraphic> added=new ArrayList<TextGraphic>();
+		
+		
 		int count = 1;
-		for(ZoomableGraphic item :possibleTargets) 
+		for(ZoomableGraphic item :possibleTargets) {
 				if (item instanceof ImagePanelGraphic) {
-					ImagePanelGraphic it = (ImagePanelGraphic) item;
-					TextGraphic  ag2 = ag;
 					
-					if (output) {
-						ag2=ag.copy();
-						ag2.setAttachmentPosition(ag.getAttachmentPosition());
-					} else {
-						ag.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
-						while (ag.getBounds().width>0.9*it.getObjectWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
-					}
-					ag2.setText("Label "+count); count++;
-					ag2.setTextColor(Color.white);
-					added.add(ag2);
-					it.addLockedItem(ag2);
+					attachTextToSelectedImagePanel(ag, output, added, count, item);
+					
 					output=true;
-					GraphicLayer p = it.getParentLayer();
-					if (p instanceof MultichannelDisplayLayer) {p=p.getParentLayer();}
-					p.addItemToLayer(ag2);
-					undo.addEditToList(new UndoAddItem(p, ag2));
+					count++;//progress the loop
 				}
+			if (item instanceof PanelLayoutGraphic) {
+			
+				 attachTextToSelectedLayout(ag, output, added, count, item);
+				
+				output=true;
+				count++;//progress the loop
+			}
+		
+		}
 		if (added.size()==0) undo=null;
 		return added;
+	}
+
+	/**
+	 * @param exampleTextItem the model text item, properties of each text item in the series is based on this one
+	 * @param labelListStartedAlready has another text item already been added
+	 * @param listOfLabels a list of the text items that have been added by the loop
+	 * @param count the count within the loop
+	 * @param imagePanel the imagepanel that the text is being attached to 
+	 */
+	protected void attachTextToSelectedImagePanel(TextGraphic exampleTextItem, boolean labelListStartedAlready, ArrayList<TextGraphic> listOfLabels,
+			int count, ZoomableGraphic imagePanel) {
+		ImagePanelGraphic it = (ImagePanelGraphic) imagePanel;
+		
+		TextGraphic  ag2 = exampleTextItem;
+		
+		if (labelListStartedAlready) {
+			ag2=exampleTextItem.copy();
+			ag2.setAttachmentPosition(exampleTextItem.getAttachmentPosition());
+		} else {
+			exampleTextItem.setAttachmentPosition(AttachmentPosition.defaultPanelLabel());
+			while (exampleTextItem.getBounds().width>0.9*it.getObjectWidth()) {exampleTextItem.setFontSize(exampleTextItem.getFont().getSize()-1);}
+		}
+		
+		
+		TakesAttachedItems taker=it;
+		
+		processItemAttachment(listOfLabels, count, it, ag2, taker);
+		
+		
+		ag2.setTextColor(Color.white);
+		
+	}
+	
+	/**
+	 * @param exampleTextItem the model text item, properties of each text item in the series is based on this one
+	 * @param labelListStartedAlready has another text item already been added
+	 * @param listOfLabels a list of the text items that have been added by the loop
+	 * @param count the count within the loop
+	 * @param layoutForAttachment the layout that the text is being attached to 
+	 */
+	protected void attachTextToSelectedLayout(TextGraphic exampleTextItem, boolean labelListStartedAlready, ArrayList<TextGraphic> listOfLabels,
+			int count, ZoomableGraphic layoutForAttachment) {
+		PanelLayoutGraphic it = (PanelLayoutGraphic) layoutForAttachment;
+		
+		TextGraphic  ag2 = exampleTextItem;
+		
+		if (labelListStartedAlready) {
+			ag2=exampleTextItem.copy();
+			ag2.setAttachmentPosition(exampleTextItem.getAttachmentPosition());
+		} else {
+			exampleTextItem.setAttachmentPosition(AttachmentPosition.defaultColLabel());
+			exampleTextItem.getAttachmentPosition().setLocationTypeExternal(AttachmentPosition.ABOVE_AT_LEFT);
+			//int newGrid = Arrays.binarySearch(AttachmentPosition.getGridchoices(), LayoutSpaces.ALL_MONTAGE_SPACE);
+			exampleTextItem.getAttachmentPosition().setGridLayoutSnapType(4);
+			exampleTextItem.getAttachmentPosition().setHorizontalOffset(-50);
+			
+			while(ag2.getFont().getSize()<it.getBounds().height/6) {
+				ag2.setFontSize(ag2.getFont().getSize()+1);
+			}
+			
+		}
+		
+		
+		TakesAttachedItems taker=it;
+		
+		processItemAttachment(listOfLabels, count, it, ag2, taker);
+		
+		
+		ag2.setTextColor(Color.black);
+		
+	}
+
+	/**
+	 * @param listOfLabels
+	 * @param count
+	 * @param attachmentLocation
+	 * @param ag2
+	 * @param taker
+	 */
+	protected void processItemAttachment(ArrayList<TextGraphic> listOfLabels, int count, ZoomableGraphic attachmentLocation,
+			TextGraphic ag2, TakesAttachedItems taker) {
+		ag2.setText(label_prefix+pattern.getSymbol(count)); 
+		
+		listOfLabels.add(ag2);
+		if(taker!=null)
+			taker.addLockedItem(ag2);
+		GraphicLayer p = attachmentLocation.getParentLayer();
+		if (p instanceof MultichannelDisplayLayer) {p=p.getParentLayer();}
+		if(addSmartLabels) {
+			p=this.smartLayer;
+			smartLayer.addLabel(ag2, attachmentLocation);
+		}
+		p.addItemToLayer(ag2);
+		undo.addEditToList(new UndoAddItem(p, ag2));
+	}
+
+	/**
+	 * @return
+	 */
+	protected ArrayList<ZoomableGraphic> getSelectedItems() {
+		return selector.getSelecteditems();
 	}
 	
 	@Override
@@ -123,8 +263,13 @@ class TextItemAdder extends BasicGraphicAdder {
 
 	@Override
 	public String getMenuCommand() {
-		if(!simple) return "Add Rich Text";
-		return "Add Text";
+		String output = "Add Text   ";
+		if(!simple) 
+			output= "Add Rich Text  ";
+		if (isSequence())
+			output=pattern.getSummary();
+		
+		return output;
 	}
 	
 	public Icon getIcon() {
@@ -148,8 +293,26 @@ class TextItemAdder extends BasicGraphicAdder {
 	
 	@Override
 	public String getMenuPath() {
-		return "to selected panels";
+		String mainMenu = "to selected panels";
+		if(addSmartLabels) {
+			mainMenu+="<Smart Label Sequence   ";
+		}else
+		if(isSequence()) {
+			mainMenu+="<Label Sequence   ";
+		}
+		return mainMenu;
 	}
+
+	/**
+	 * @return
+	 */
+	protected boolean isSequence() {
+		return "".equals(label_prefix);
+	}
+	
+
+	
+	
 
 	
 }

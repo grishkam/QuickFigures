@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 25, 2021
+ * Date Modified: October 25, 2021
  * Version: 2021.1
  */
 package multiChannelFigureUI;
@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import channelLabels.ChannelLabelManager;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.ChannelUseInstructions;
-import channelMerging.ImageDisplayLayer;
 import figureOrganizer.CollectivePanelManagement;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
@@ -37,7 +36,6 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
-import logging.IssueLog;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;

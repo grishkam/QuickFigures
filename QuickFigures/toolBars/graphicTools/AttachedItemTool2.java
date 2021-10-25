@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Oct 24, 2021
  * Version: 2021.1
  */
 package graphicTools;
@@ -164,11 +164,11 @@ public class AttachedItemTool2 extends AttachedItemTool {
 
 	public static void adjustPosition(int dragx, int dragy, TakesAttachedItems lockTaker, LocatedObject2D inside) {
 		Rectangle lockbounds2 = lockTaker.getBounds();
-		adjustPosition(dragx, dragy, lockbounds2, inside);
+		adjustPosition(dragx, dragy, lockbounds2, inside, 0.3);
 	}
 
 
-	public static void adjustPosition(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside) {
+	public static void adjustPosition(int dragx, int dragy, Rectangle lockbounds2, LocatedObject2D inside, double limitRatio) {
 		AttachmentPosition s = inside.getAttachmentPosition();
 		
 		
@@ -179,14 +179,14 @@ public class AttachedItemTool2 extends AttachedItemTool {
 		
 		if (dx!=0) {
 			double newdx = dx*poles[0]+s.getHorizontalOffset();
-			if (Math.abs(newdx)<lockbounds2.width/4)s.setHorizontalOffset(newdx);
+			if (Math.abs(newdx)<lockbounds2.width*limitRatio)s.setHorizontalOffset(newdx);
 		}
 		
 		
 		
 		if (dy!=0){
 			double newdy = dy*poles[1]+s.getVerticalOffset();
-		if (Math.abs(newdy)<lockbounds2.height/4 )s.setVerticalOffset(newdy);
+		if (Math.abs(newdy)<lockbounds2.height*limitRatio )s.setVerticalOffset(newdy);
 		
 		}
 	}

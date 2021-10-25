@@ -1,10 +1,10 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 1, 2021
- * Date Modified: Sept 29, 2021
+ * Date Modified: October 24, 2021
  * Version: 2021.1
  */
-package selectedItemMenus;
+package graphicalObjects_LayerTypes;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -15,7 +15,6 @@ import javax.swing.JMenu;
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -30,9 +29,11 @@ import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.DonatesMenu;
 
 /**
- * Soemtimes a user wants an shape displayed over a few different parent panels.
- * 
+ Soemtimes a user wants an shape displayed over a few different parent panels
+ but at the equivalent location in each panel.
  A special layer that contains items whose location is determined by a parent item
+ Whenever a user changes the location of the parent item, the reflections will be updated.
+ 
  
  */
 public class PanelMirror extends GraphicLayerPane implements LocationChangeListener , HasUniquePopupMenu, DonatesMenu {

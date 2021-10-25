@@ -6,7 +6,6 @@
 package exportMenus;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import appContextforIJ1.ImageDisplayTester;
 import basicMenusForApp.BasicMenuItemForObj;
@@ -14,9 +13,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import layout.basicFigure.BasicLayout;
 import logging.IssueLog;
-import testing.FigureTester;
 import testing.TestExample;
-import testing.TestProvider;
 
 /**a class that displays a layout with row labels on the right. for testing only*/
  class ShowManualLayoutTest extends BasicMenuItemForObj {

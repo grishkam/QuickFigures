@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: October, 2021
  * Version: 2021.1
  */
 package addObjectMenus;
@@ -47,6 +47,7 @@ import selectedItemMenus.SVG_GraphicAdder2;
 import standardDialog.graphics.DisplaysGraphicalObject;
 import standardDialog.graphics.GraphicDisplayComponent;
 import standardDialog.graphics.GraphicJMenuItem;
+import textObjectProperties.TextPattern;
 
 /**The menu used to add graphics to graphic layers*/
 public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
@@ -116,7 +117,15 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			layoutadders.add(new PlasticLayoutAdder());
 			layoutadders.add(new DividedLayoutAdder());
 			adders.add(new TextItemAdder(true)); 
+			adders.add(new TextItemAdder(true));
 			adders.add(new TextItemAdder(false)); 
+			for( TextPattern a: TextPattern.getList()) {
+				adders.add(new TextItemAdder(true, a, "", true));
+			}
+			for( TextPattern a: TextPattern.getList()) {
+				adders.add(new TextItemAdder(true, a, "", false));
+			}
+			
 			adders.add(new LaneLabelAdder(false)); 
 			if (new SVGQuickExport().isBatikInstalled())
 				adders.add(new SVG_GraphicAdder2());

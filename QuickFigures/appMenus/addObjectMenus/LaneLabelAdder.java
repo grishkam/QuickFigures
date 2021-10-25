@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
-import figureOrganizer.LabelCreationOptions;
-import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
@@ -42,7 +40,6 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import messages.ShowMessage;
-import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;

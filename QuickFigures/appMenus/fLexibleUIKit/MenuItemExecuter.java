@@ -55,7 +55,11 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	private MenuSupplier partner=null;
 
 	private SmartPopupJMenu popupMenu;
+	private SmartJMenu theSmartMenu;
+	
 	private UndoManagerPlus undoManager;
+
+	
 	
 	/**creates a menu item execuer for the object*/
 	public MenuItemExecuter(Object o) {
@@ -171,9 +175,9 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	}
 	
 	public JMenu getJMenu() {
-		JMenu p=new SmartJMenu("");
+		SmartJMenu p=new SmartJMenu("");
 		addToJMenu(p);
-		
+		theSmartMenu=p;
 		return p;
 	}
 
@@ -246,6 +250,9 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	public UndoManagerPlus getUndoManager() {
 		if (undoManager==null & popupMenu!=null && this.popupMenu.getUndoManager()!=null) {
 			this.undoManager=popupMenu.getUndoManager();
+		}
+		if (undoManager==null & theSmartMenu!=null && this.theSmartMenu.getUndoManager()!=null) {
+			this.undoManager=theSmartMenu.getUndoManager();
 		}
 		return undoManager;
 	}

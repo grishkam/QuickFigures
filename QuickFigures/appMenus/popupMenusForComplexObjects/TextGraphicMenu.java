@@ -58,6 +58,7 @@ PopupMenuSupplier  {
 		super();
 		this.textG = textG;
 		for(JMenuItem i: getItems() ) {add(i);}
+		DonatesMenu.MenuFinder.addDonatedMenusTo(this, textG);
 	}
 	
 	public ArrayList<JMenuItem> getItems() {
