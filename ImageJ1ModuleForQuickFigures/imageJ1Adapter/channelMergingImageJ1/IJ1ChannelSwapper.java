@@ -138,10 +138,12 @@ public class IJ1ChannelSwapper extends AbstractChannelHandler<ImagePlus> {
 		
 		/**CZI derived meta data alteration. Has known flaws. not tested on a variety of channel orders. */
 		try {
-			ArrayList<Integer> list = IJMetaDatause.getIntEntryListByNumber(new ImagePlusWrapper(p).getMetadataWrapper(), "Information|Image|Channel|Id #"," ", 1,6, new String[] {"Channel:"});
+			/**this meta data swap will ruin the agreement between exposure time. Also it appears that this does not even work properly*/
+			/**ArrayList<Integer> list = IJMetaDatause.getIntEntryListByNumber(new ImagePlusWrapper(p).getMetadataWrapper(), "Information|Image|Channel|Id #"," ", 1,6, new String[] {"Channel:"});
 			int inda = list.indexOf((a-1));
 			int indb = list.indexOf((b-1));
 			IJMetaDatause.switchMetaDataEntries(new ImagePlusWrapper(p).getMetadataWrapper(), "Information|Image|Channel|Id #"+(inda+1)+ " " , "Information|Image|Channel|Id #"+ (indb+1)+" ");
+			*/
 		} catch (NullPointerException np) {}	
 	}
 

@@ -41,6 +41,7 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
+import messages.ShowMessage;
 import objectDialogs.TextPatternDialog;
 import textObjectProperties.TextPattern;
 import undo.CombinedEdit;
@@ -59,6 +60,12 @@ class TextItemAdder extends BasicGraphicAdder {
 	TextPattern pattern=new TextPattern();
 	boolean addSmartLabels=false;
 	SmartLabelLayer smartLayer =null;
+	
+	String[] addingClasses=new String[] {"Panels and Layouts", "Panels only", "Layouts only"};
+	Class<?>[] addingClasses2= new Class<?>[] {ZoomableGraphic.class, ImagePanelGraphic.class, PanelLayoutGraphic.class};
+	
+	
+	
 	
 	/**constructor for  text item adder. */
 	public TextItemAdder(boolean isSimple) {
@@ -132,6 +139,17 @@ class TextItemAdder extends BasicGraphicAdder {
 	public ArrayList<TextGraphic> addLockedItemToSelectedImages(TextGraphic ag) {
 		undo=new CombinedEdit();
 		ArrayList<ZoomableGraphic> possibleTargets =  SmartLabelLayer.getInRowMajorOrder(getSelectedItems());
+		
+		Class<?> targetClass = ZoomableGraphic.class;
+		
+		if(ArraySorter.getNOfClass(possibleTargets, addingClasses2[1])>0 && ArraySorter.getNOfClass(possibleTargets, addingClasses2[2])>0)
+			{
+			ShowMessage.showOptionalMessage("You have selected both layouts and panels", false, "You have selected both layouts and image panels", "labels can be added to either panels or layouts", "If you select a mixture, labels will be added to image panels only");
+			targetClass=ImagePanelGraphic.class;
+			ArraySorter.removeThoseNotOfClass(possibleTargets, targetClass);
+			}
+		
+		
 		boolean output=false;//true if at least one object has been added
 		ArrayList<TextGraphic> added=new ArrayList<TextGraphic>();
 		

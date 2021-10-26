@@ -48,7 +48,9 @@ public interface PixelWrapper {
 	public PixelWrapper makenew(Dimension d);
 	
 
+	/**returns the forms in which the data for the channel pixels is stored internally*/
 	public Object getPixels();
+	public Object getRawData();
 	
 	/**resize. Sets the image to a copy with width and height specified*/
 	public void resize( double width, double height) ;

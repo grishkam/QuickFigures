@@ -809,6 +809,14 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		return channames!=null;
 	}
 
+	/**returns a copy of the channel name list in the order that they appear*/
+	@Override
+	public ArrayList<String> getRealChannelNamesInOrder() {
+		ArrayList<String> output = new ArrayList<String>();
+		output.addAll(this.setUpChannelNames());
+		return output;
+	}
+
 
 
 

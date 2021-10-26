@@ -45,6 +45,16 @@ public class ArraySorter<ItemType> {
 		
 	}
 	
+	/**swaps the locations of two items*/
+	public void swapObjectPositionsInArrayIndex(int ind1,  int ind2, ArrayList<ItemType> array) {
+		ItemType i1 = array.get(ind1);
+		ItemType i2 = array.get(ind2);
+		if (ind1<0||ind2<0) return;
+		array.set(ind1, i2);
+		array.set(ind2, i1);
+		
+	}
+	
 	/**returns a random item from the array*/
 	public ItemType getRandom(ArrayList<ItemType> th) {
 		return th.get(Math.abs(this.getRandy().nextInt())%th.size());

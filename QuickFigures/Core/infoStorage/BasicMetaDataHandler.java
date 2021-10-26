@@ -42,14 +42,14 @@ public class BasicMetaDataHandler {
 	public static String myColorCode="Greg Channel Color ";
 	Hashtable <String, String> hash=new Hashtable <String, String>();
 	String[] ZviChanKey= new String[] {"Channel Name ", " ", "zvi"};
-	//String[] ZviExposureKey=new String[] {"Exposure Time [ms] ", " "};
+	
 	String[] myChanKey= new String[] {myIndexCode, " "};
 	
 	/**Channel name keys for determining channel colors, can retrieved lut names or channel names
 	   */
 	static String[][] allNameKeys=new String[][] {
 		//new String[] {"DisplaySetting|Channel|DyeName|", " ", "czi"},//for CZI does not work the same way others do
-		
+		new String[] {myColorCode, " ", "any"},   //A system created by me
 		new String[] {"ChannelDescription|LUTName ", " ", "lif"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
 		new String[] {"LUT Channel ", " name ", "lei"},   //the most reliable key for lei. only tested on one lei file
 		new String[] {"Block 2 csLutName", " ", "lei"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
@@ -320,13 +320,13 @@ public class BasicMetaDataHandler {
 			Color newColor=null;
 			if(name==null) return null;
 			name=name.trim().toLowerCase();
-			if (name.equals("texasred"))
+			if (name.equals("texasred")||name.equals("mcherry"))
 				newColor=Color.red;
 			if (name.contains("egfp")||name.contains("488"))
 				newColor=Color.green;
 			if (name.contains("yfp"))
 				newColor=Color.yellow;
-			if (name.contains("rfp")||name.contains("568")||name.contains("mplum"))
+			if (name.contains("rfp")||name.contains("568")||name.contains("mplum")||name.contains("mcherry"))
 				newColor=Color.red;
 			if (name.equals("dapi")||name.contains("ebfp"))
 				newColor=Color.blue;
@@ -371,9 +371,9 @@ public class BasicMetaDataHandler {
 			    }
 			    
 			    if (st.contains("rgb(")) {
-			    	IssueLog.log("trying to parse color "+st);
+			    	
 			    	Color parsedC = getColorFromImplied(st, "rgb");
-			    	IssueLog.log("parsed color as "+parsedC);
+			    	
 			    	
 		    		return parsedC;
 		    
@@ -773,18 +773,29 @@ public class BasicMetaDataHandler {
 			   Seems to work but no longer understand why. needs new testing*/
 			public  ArrayList<String> channelNamesInOrder(MetaInfoWrapper select){
 				
+				/**CZI name system worked poorly so changed it*/
+				/**ArrayList<String> cziNames=getCZINames(select);
+				if(cziNames!=null)
+					return cziNames;*/
+				
+				return chanOrderBasedInMyIndex(select);	
+					
+				}
+
+			/**
+			 * @param select
+			 * @return
+			 */
+			private ArrayList<String> getCZINames(MetaInfoWrapper select) {
 				/**this method reflects an old format of CZI channel names that I have not seen in recent tests. */
 				String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
 				if (CZItest!=null) {
 					IssueLog.log("CZI meta data found");
 					return CZIChannelNamesInOrder2(select, null);
 				}
-				
-				
-				
-				return chanOrderBasedInMyIndex(select);	
-					
-				}
+				IssueLog.log("CZI meta data not found");
+				return null;
+			}
 
 			public boolean hasmyIndexSystem(MetaInfoWrapper select) {
 				try {String c3=(String) getEntryFromInfoAsString(select, myIndexCode+0+ " " ) ;
@@ -801,7 +812,7 @@ public class BasicMetaDataHandler {
 				createChanDataIfnotEstablished(select);
 				String[] chanKey =findChannelNameKey(select);
 				if (chanKey==null)
-					chanKey =ZviChanKey;//the default channel key
+					chanKey =ZviChanKey;//the default channel key if my own key is not present
 				
 				
 				ArrayList <String> ChannelNames=new ArrayList <String> ();
@@ -814,10 +825,13 @@ public class BasicMetaDataHandler {
 						try {	String c3=(String) getEntryFromInfoAsString(select, myIndexCode+j+ " " ) ;
 								c1=c3.trim();
 								c2=Integer.parseInt(c1);
+								
 						try {
 							
 							c1=getRealChannelInformationBasedOnMetaData(select, chanKey, c2) ;
+							
 							ChannelNames.add(c1);
+							
 				} catch (Exception nn) {}
 			} catch (Exception nn) {}	
 				}
@@ -835,6 +849,7 @@ public class BasicMetaDataHandler {
 			/**Checks the file for my metadta regarding he channel indeces, creates the info if not already present*/
 			public void createChanDataIfnotEstablished(MetaInfoWrapper select) {
 				boolean establish=hasmyIndexSystem(select);
+				
 				if (!establish) 
 					createGregIndexSystem(select);
 			}
@@ -845,10 +860,19 @@ public class BasicMetaDataHandler {
 				ArrayList <String> ChannelNames=new ArrayList <String> ();
 				ArrayList <Integer> ChannelNums=new ArrayList <Integer> ();
 				
-				String[] chanKey =findChannelNameKey(select);
+				String[] chanKey =findChannelNameKey(select);//finds whichevery channel name key is appropriate for the metadata
 				if (chanKey==null)
 					chanKey =ZviChanKey;
 				
+				ArrayList<String> cziNames = this.getCZINames(select);
+				if(cziNames!=null) {
+					ChannelNames.addAll(cziNames);
+					for(int i=0; i<cziNames.size(); i++)  ChannelNums.add(i);
+					
+				}
+
+				else 
+				{
 				/**list all the channel numbers that appear in the metadata. And each of their channel anmes */
 				for (int j=0; j<6; j++) {
 								try {
@@ -864,14 +888,13 @@ public class BasicMetaDataHandler {
 								} catch (Exception nn) {}
 							}
 				
-				//IssueLog.log("listed channel names in order");
-				//IssueLog.log(ChannelNames);
-				
+			}
+			
+			
 				for (int j=0; j<ChannelNames.size(); j++) {
 					select.setEntry(myIndexCode+j+ " ", ""+ChannelNums.get(j));
 					select.setEntry(myColorCode+ChannelNums.get(j)+ " ", ""+ChannelNames.get(j));
-					
-					 //setEntryFromInfoAsString(select, myIndexCode+j+ " " );
+				
 				}
 				
 			}

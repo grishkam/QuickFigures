@@ -65,6 +65,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	public String getRealChannelExposure(int i);
 	public String getGenericChannelName(int i);
 	public boolean hasChannelNameList();
+	public ArrayList<String> getRealChannelNamesInOrder();
 	
 	/**recolors the channels based on the channel names */
 	public void colorBasedOnRealChannelName();
@@ -125,6 +126,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	
 	/**returns the bit depth*/
 	public double bitDepth();
+	
 	
 
 	

@@ -147,6 +147,47 @@ public class FigureTester {
 	}
 	
 	/**
+	checks the subfolders for Test image group 3 which consists of many small images
+	 */
+	public static ArrayList<File> getTestFilesForTestNumber( String folderIndex) {
+		ArrayList<File> allFiles=new ArrayList<File>();
+		
+		String string = testFolderPath+folderIndex+"/";
+		File dir=new File(string);
+		
+		if (!(new File(string)).exists()) 
+			IssueLog.showMessage(FILE_NOT_FOUND);
+			
+		File[] matches = dir.listFiles();
+		for(File f: matches) {
+			addToList(f, allFiles);
+		}
+		
+		
+		if (allFiles.size()==0)IssueLog.log("was unable to obtain images");
+		
+		
+		return allFiles;
+	}
+	
+	/**Adds all of the files in file math f to the arraylist of files
+	 * if the file is a subfolder, will add its contents not the folder
+	 * @param f
+	 * @param allFiles
+	 */
+	private static void addToList(File f, ArrayList<File> allFiles) {
+		if(f.isDirectory()) {
+			File[] folderContent = f.listFiles();
+			for(File s: folderContent) {
+				addToList(s, allFiles);
+			}
+		}
+			else 
+		{allFiles.add(f);}
+		
+	}
+
+	/**
 	 * @return
 	 */
 	public static String[] getScaleTestPaths() {

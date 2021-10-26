@@ -380,7 +380,7 @@ public class BarGraphicTest {
 	 * @param fig1
 	 * @return
 	 */
-	FigureOrganizingLayerPane createFigure(File fig1) {
+	public FigureOrganizingLayerPane createFigure(File fig1) {
 		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, fig1.getAbsolutePath());
 		item.getSlot().showImage();
 		//opens a copy of that saved image. 

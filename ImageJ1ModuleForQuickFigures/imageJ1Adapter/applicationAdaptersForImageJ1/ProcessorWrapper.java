@@ -63,10 +63,15 @@ public class ProcessorWrapper implements PixelWrapper {
 	public ImageProcessor getPixels() {
 		return object;
 	}
+	
+	public float[][] getRawData() {
+		float[][] floatArray = getPixels().getFloatArray();
+		return floatArray;
+	}
 
 
 	public void setPixels(ImageProcessor ip) {
-		object=ip;
+		object=ip;;
 		
 	}
 
@@ -269,6 +274,25 @@ public int getBitsPerPixel() {
 public void setInterpolationType(Interpolation interpolateMe) {
 	this.interpolate=interpolateMe;
 	
+}
+
+
+public boolean equals(Object o) {
+	if(o instanceof ProcessorWrapper)
+		{
+		ProcessorWrapper o2=(ProcessorWrapper) o;
+		if(o2.getProcessor().equals(getProcessor()))
+			return true;
+		for(int i=0; i<this.getProcessor().getWidth()*this.getProcessor().getHeight(); i++)
+			if(this.getProcessor().get(i)!=o2.getProcessor().get(i))
+				return false;
+		
+		
+		
+		return true;
+		}
+	else
+	 return false;
 }
 
 
