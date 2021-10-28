@@ -106,17 +106,17 @@ public class TextPattern implements Serializable {
 	
 	/**returns the label for the n=th item*/
 	public String getText(int n) {
+		
+		if(getStartIndex()!=1)
+			n=n+getStartIndex()-1;
+		n=n*getCountBy();
 		return getPrefix()+getSymbol(n)+getSuffix();
 	}
 	
 	/**returns the n-th symbol in the sequence*/
 	public String getSymbol(int n) {
 		
-		if(getStartIndex()!=1)
-			n=n+getStartIndex()-1;
-		
-		n=n*getCountBy();
-		
+
 		
 		String output=""+n;
 		if(this.currentType==PatternType.NUMBERS)
@@ -161,6 +161,7 @@ public class TextPattern implements Serializable {
 		
 		/**return roman numerals up to 100*/
 		if(this.currentType==PatternType.ROMAN_NUMBERAL) {
+			
 			if(n<=0)
 				return " ";
 			if(n<=20)
@@ -287,6 +288,8 @@ public class TextPattern implements Serializable {
 	}
 
 	public void setCountBy(int countBy) {
+		if(countBy<1)
+			countBy=1;
 		this.countBy = countBy;
 	}
 	
