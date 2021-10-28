@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Oct 28, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -28,10 +28,29 @@ public class LabelCreationOptions {
 	/**The current label creation options*/
 	public static LabelCreationOptions current=new LabelCreationOptions() ;
 	
-	@RetrievableOption(key = "use Image anmes", label="Use Image Names To create labels")
-	public boolean useImageNames=true;//use the names of image files for their labels?
+	public static final int useFileNames=1,useFolderNames=2;
+	@RetrievableOption(key = "use Image anmes", label="Use Image File Names to create labels", choices={"number", "use image file names", "use folder names"})
+	public int useNames=1;//use the names of image files for their labels?
 	
 	@RetrievableOption(key = "clip labels", label="Clip Labels Longer Than")
 	public double clipLabels=50;//The max length at which long labels be truncated
+	
+	/**returns true if file names will be used for labels*/
+	boolean useFileOrFoldeName() {
+		if (useNames==useFileNames)
+			return true;
+		if (useNames==useFolderNames)
+			return true;
+		return false;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean usesFolderNames() {
+		if (useNames==useFolderNames)
+			return true;
+		return false;
+	}
 
 }

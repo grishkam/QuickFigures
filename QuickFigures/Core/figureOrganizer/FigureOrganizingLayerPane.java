@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: May 9, 2021
+ * Date Modified: Oct 28, 2021
  * Version: 2021.1
  */
 package figureOrganizer;
@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -550,7 +551,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			TextGraphic item=null;
 			ImageDisplayLayer pan = getDisplayLayerForRowindex(i, type);//may return null
 			
-			boolean useImageNames = (pan!=null) && LabelCreationOptions.current.useImageNames;
+			boolean useImageNames = (pan!=null) && (LabelCreationOptions.current.useFileOrFoldeName());
 			
 			if (!useImageNames) {
 				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic());
@@ -558,8 +559,17 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			
 			if (useImageNames) {
 				String text=pan.getMultiChannelImage().getTitle();
+				if(LabelCreationOptions.current.usesFolderNames()) {
+					;
+					String path = pan.getSlot().getOriginalPath();
+					
+					if(path!=null)
+						text = new File(path).getParentFile().getName();
+					else IssueLog.log("could not find file path");
+				}
 				if(text.startsWith("DUP")) text=text.replace("DUP","");//imagej adds dup
 				if(text.endsWith(".tiff")) text=text.replace(".tiff","");//imagej tiffs dont need that in their label
+				if(text.endsWith(".tif")) text=text.replace(".tif","");//imagej tiffs dont need that in their label
 				if (text!=null&&text.length()>LabelCreationOptions.current.clipLabels) {
 					{text=text.substring(0, (int)LabelCreationOptions.current.clipLabels);}
 				}

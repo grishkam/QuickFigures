@@ -108,6 +108,12 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	returns the number of bits needed to save the original version of the file
 	 */
 	public int getEstimatedSizeOriginal();
+	/**
+	 * @return
+	 */
+	
+	/**returns the file path for the orginal source image*/
+	public String getOriginalPath();
 	
 	
 }

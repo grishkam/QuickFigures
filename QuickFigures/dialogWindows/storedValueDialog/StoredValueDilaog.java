@@ -21,6 +21,7 @@
 package storedValueDialog;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import layout.RetrievableOption;
 import logging.IssueLog;
@@ -28,6 +29,9 @@ import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputEvent;
 import standardDialog.booleans.BooleanInputListener;
 import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.choices.ChoiceInputEvent;
+import standardDialog.choices.ChoiceInputListener;
+import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
@@ -73,6 +77,12 @@ public class StoredValueDilaog extends StandardDialog{
 			if (o!=null) try {
 				f.setAccessible(true);
 				
+				if(o.choices().length>1) {
+					String[] theChoices = o.choices();
+					addChoice(d, of, f, o, theChoices);
+					
+				}else {
+				 
 				if(f.getType()==boolean.class) {
 					addBooleanField(d, of, f, o);
 				}
@@ -81,8 +91,12 @@ public class StoredValueDilaog extends StandardDialog{
 				}
 				
 				if (f.getType()==String.class) {
+					
 					addStringField(d, of, f, o);
 				}
+				}
+				
+				/**need option to add a choice*/
 				
 			} catch (Throwable e) {
 			
@@ -91,6 +105,33 @@ public class StoredValueDilaog extends StandardDialog{
 		 c=c.getSuperclass();
 		 }
 		 } catch (Exception e) {IssueLog.logT(e);}
+	}
+
+	/**Adds a choice field to a dialog
+	 * @param d
+	 * @param of
+	 * @param f
+	 * @param o
+	 * @param theChoices
+	 */
+	private static void addChoice(StandardDialog d, Object of, Field f, RetrievableOption o, String[] theChoices) {
+		int startIndex=1;
+		try {
+		if (f.getType()==int.class) {
+				startIndex=f.getInt(of);
+			} 
+		if (f.getType()==String.class) {
+			startIndex=Arrays.binarySearch(theChoices, f.get(of).toString());
+		} 
+		 ChoiceInputPanel panel = new  ChoiceInput(of, f, o, startIndex);
+		 d.add(o.key(), panel);
+		
+		}catch (Throwable e) {
+			IssueLog.logT(e);
+		}
+		
+		
+		
 	}
 
 	/**Adds a numeric field to a dialog*/
@@ -171,6 +212,34 @@ public class StoredValueDilaog extends StandardDialog{
 		public void stringInput(StringInputEvent  ne) {
 			try {
 				field.set(object, ne.getInputString());
+			} catch (Exception e) {
+				IssueLog.logT(e);
+			} 
+		}}
+	
+	/**Class changes a specific field in a specific object in response to a choice input*/
+	public static class ChoiceInput extends ChoiceInputPanel implements ChoiceInputListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private Field field;
+		private Object object;
+
+		public ChoiceInput( Object of, Field f, RetrievableOption o, int startIndex) throws IllegalArgumentException, IllegalAccessException {
+			super(o.label(), o.choices(), startIndex);
+			addChoiceInputListener(this);
+			this.field=f;
+			this.object=of;
+		}
+		
+		
+
+		@Override
+		public void valueChanged(ChoiceInputEvent ne) {
+			try {
+				field.set(object, (int)ne.getChoiceIndex());
 			} catch (Exception e) {
 				IssueLog.logT(e);
 			} 

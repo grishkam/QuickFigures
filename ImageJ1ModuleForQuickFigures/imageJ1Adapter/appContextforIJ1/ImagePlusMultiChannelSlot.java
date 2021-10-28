@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Oct 28, 2021
  * Version: 2021.1
  */
 package appContextforIJ1;
@@ -780,6 +780,12 @@ import logging.IssueLog;
 				return true;
 			
 			return false;
+		}
+
+		/**returns the original file location of the saved image*/
+		@Override
+		public String getOriginalPath() {
+			return original.getOriginalSavePath();
 		}
 		
 		

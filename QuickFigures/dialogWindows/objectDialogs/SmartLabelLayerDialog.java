@@ -35,14 +35,12 @@ public class SmartLabelLayerDialog extends TextPatternDialog {
 	}
 	
 	public void addLayerOptionsToDialog() {
-	
-		
 		this.add(constantUpdateKey, new BooleanInputPanel("Update Labels Constantly", labelLayer.isContinuouseUpdate())) ;
 		
 	}
 
 
-	
+	/**sets the pattern for this series of smart labels to the dialog*/
 	public TextPattern setOptionsToDialog() {
 		TextPattern theTextPattern = super.setOptionsToDialog();
 		
@@ -53,7 +51,9 @@ public class SmartLabelLayerDialog extends TextPatternDialog {
 		return theTextPattern;
 	}
 
-
+	protected void afterEachItemChange() {
+		 onOK();
+	}	
 	
 	/**what action to take when the ok button is pressed*/
 	protected void onOK() {

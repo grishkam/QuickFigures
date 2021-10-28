@@ -27,7 +27,7 @@ public class TextPattern implements Serializable {
 	/**contains the first 20 roman numerals*/
 	public static final String[] romanNumerals=new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"};
 	
-	/**contains the first 20 roman numerals*/
+	/**contains the first 20 word numerals*/
 	public static final String[] wordNumerals=new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"};
 	
 	
@@ -109,7 +109,10 @@ public class TextPattern implements Serializable {
 		
 		if(getStartIndex()!=1)
 			n=n+getStartIndex()-1;
-		n=n*getCountBy();
+		
+		if (n>getStartIndex())
+			n=getStartIndex()+(n-getStartIndex())*getCountBy();
+		
 		return getPrefix()+getSymbol(n)+getSuffix();
 	}
 	
