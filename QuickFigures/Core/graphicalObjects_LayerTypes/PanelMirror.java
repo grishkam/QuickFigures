@@ -2,7 +2,7 @@
  * Author: Greg Mazo
  * Date Created: May 1, 2021
  * Date Modified: October 24, 2021
- * Version: 2021.1
+ * Version: 2021.2
  */
 package graphicalObjects_LayerTypes;
 

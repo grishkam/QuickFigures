@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Feb 22, 2021
- * Version: 2021.1
+ * Version: 2021.2
  */
 package journalCriteria;
 
