@@ -275,7 +275,7 @@ Changes to the default template are particularly important. The default template
 The **Add** menu contains a variety of menu items that add something to the current worksheet. The contents of this menu will be slightly different for the [Layers Window](#Layers-Window) than for the menu bars of the other windows. For example, the **Add Layer** menu item and several other options will only be present for the [Layers Window](#Layers-Window). After a user creates a layer manually and selects it, newly added items are added to the currently selected layer. See section on layers window for details.  
 The add menu has a few submenus
  - **Shapes** submenu contains options to add or group shapes.
- - **to selected panels** submenu contains options to add text or scale bars to image panels. Those items will be attached to the selected panels. Text items added with the same action will be maintain the same position relative to their parent panels.
+ - **To selected panels** submenu contains options to add text or scale bars to image panels. Those items will be attached to the selected panels. Text items added with the same action will be maintain the same position relative to their parent panels.
  - **Raw Image Panel** will add a lone image that is not organized as part of a figure. This option allows users to insert anything into the figure. 
  - **Figure** submenu adds a figure to the worksheet. Functions like the QuickFigure tool. Users can also drag and drop image files onto the worksheet to add them.
  - **Cell Cartoons** submenu contains options to add a family of shapes that have a different style than the ones in the shapes menu.

@@ -43,6 +43,7 @@ import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import objectCartoon.LobeMaker;
 import selectedItemMenus.LayerSelectionSystem;
+import selectedItemMenus.MirrorObjects;
 import selectedItemMenus.SVG_GraphicAdder2;
 import standardDialog.graphics.DisplaysGraphicalObject;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -123,7 +124,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			TextPattern a = new TextPattern(TextPattern.PatternType.ABC, false);
 			adders.add(new TextItemAdder(true, a, "", true));
 			
-			
+			adders.add(new MirrorObjects());
 		
 			
 			

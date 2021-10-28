@@ -42,20 +42,22 @@ class IJ1ChannelOrderWrapTest {
 	static final String modeName="chan names", modeData="chan data";
 	String themode= modeData;
 	
-	@Test
+	
 	void test() {
 		ImageDisplayTester.main(new String[] {});
 		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=false;
 		IssueLog.waitSeconds(1);
 		
-		ArrayList<File> files = FigureTester.getTestFilesForTestNumber("4/");
+		ArrayList<File> files = FigureTester.getTestFilesForTestNumber("4/Test Tif/");
 		IssueLog.log(files);
 		
 		for(File f: files) {
 			testChannelSwap(f);
+			FigureTester.closeAllWindows();
 		}
 		
+	
 		IssueLog.waitSeconds(30);
 	}
 

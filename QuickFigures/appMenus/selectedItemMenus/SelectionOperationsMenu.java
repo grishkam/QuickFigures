@@ -129,7 +129,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		operators.add(new FillPaintSetter());
 		operators.add(new LocationSetter());
 		
-		operators.add(new MirrorObjects());
+	
 		
 		operatorsMade=true;
 		}

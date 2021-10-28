@@ -89,6 +89,6 @@ public class BarGraphicAdder extends BasicGraphicAdder {
 	
 	@Override
 	public String getMenuPath() {
-		return "to selected panels";
+		return "To selected panels";
 	}
 }

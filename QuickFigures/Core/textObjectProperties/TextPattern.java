@@ -1,8 +1,9 @@
 /**
  * Author: Greg Mazo
+ * Date Created: Oct 24, 2021
  * Date Modified: Oct 24, 2021
  * Copyright (C) 2021 Gregory Mazo
- * 
+ * Version: 2021.1
  */
 /**
  
@@ -27,7 +28,7 @@ public class TextPattern implements Serializable {
 	public static final String[] romanNumerals=new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"};
 	
 	/**contains the first 20 roman numerals*/
-	public static final String[] wordNumerals=new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Twenty"};
+	public static final String[] wordNumerals=new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"};
 	
 	
 	/**numbering starts from one*/
@@ -35,12 +36,15 @@ public class TextPattern implements Serializable {
 	
 	private String prefix="";
 	private String suffix="";
-
+	private int minimunLength=1;//if the numbers must be a certain number of characters long (example 01, 0001 instead of 1). this can be set to numbers above 1
+	private int countBy=1;
+	
 	public static enum PatternType  {
 		ABC, 
 		ROMAN_NUMBERAL,
 		NUMBERS,
-		ONE_TWO_THREE;
+		ONE_TWO_THREE,
+		MINUTES_SECONDS;
 	}
 	
 	PatternType currentType=PatternType.NUMBERS;
@@ -54,6 +58,12 @@ public class TextPattern implements Serializable {
 	public TextPattern(PatternType theType, boolean lowerCase) {
 		this(theType);
 		this.lowerCase=lowerCase;
+	}
+	
+	/**creates a pattern for numbers*/
+	public TextPattern(int minLength) {
+		this(PatternType.NUMBERS);
+		this.minimunLength=minLength;
 	}
 	
 	/**creates a copy of this pattern*/
@@ -74,7 +84,13 @@ public class TextPattern implements Serializable {
 	
 	/**returns the summary of the pattern. For example: 'a, b, c... ' */
 	public String getSummary() {
-		return getSymbols(new int[] {1, 2, 3, 4}) +" ...";
+		
+		
+		String output = getSymbols(new int[] {1, 2, 3, 4}) +" ...";
+		if(currentType==PatternType.MINUTES_SECONDS) {
+			output+= " (m:s)";
+		}
+		return output;
 	}
 	
 	/**returns the list of symbols as a single String*/
@@ -95,12 +111,42 @@ public class TextPattern implements Serializable {
 	
 	/**returns the n-th symbol in the sequence*/
 	public String getSymbol(int n) {
-		if(getStartIndex()>1)
+		
+		if(getStartIndex()!=1)
 			n=n+getStartIndex()-1;
+		
+		n=n*getCountBy();
+		
 		
 		String output=""+n;
 		if(this.currentType==PatternType.NUMBERS)
-			return output;
+					{
+						if(output.length()<this.getMinimunLength()) {
+							int difference = getMinimunLength()-output.length();
+							for(int i=0; i<difference; i++) {output="0"+output;}
+						}
+						
+						return output;
+					}
+		
+		if(this.currentType==PatternType.MINUTES_SECONDS) {
+			String hour=null;
+			String min =""+ (n/60);
+			if(n/60>=60)
+				{
+				min=""+(n/60)%60;
+				hour=""+(n/60)/60;
+				if(min.length()<2) 
+					min="0"+min;
+				}
+			String sec = ""+(n%60);
+			if(sec.length()<2) 
+				sec="0"+sec;
+			String min_sec = min+":"+sec;
+			if(hour!=null)
+				return hour+":"+min_sec;
+			return min_sec;
+		}
 		
 		if(this.currentType==PatternType.ABC) {
 			int i=(int) 'A';
@@ -115,6 +161,8 @@ public class TextPattern implements Serializable {
 		
 		/**return roman numerals up to 100*/
 		if(this.currentType==PatternType.ROMAN_NUMBERAL) {
+			if(n<=0)
+				return " ";
 			if(n<=20)
 				output= romanNumerals[n-1];
 			else
@@ -157,7 +205,9 @@ public class TextPattern implements Serializable {
 		}
 		
 		if(currentType==PatternType.ONE_TWO_THREE) {
-			if(n<21)
+			if(n==0)
+				return "Zero";
+			if(n<=wordNumerals.length)
 				output=wordNumerals[(n-1)];
 		}
 		
@@ -189,6 +239,12 @@ public class TextPattern implements Serializable {
 			
 		}
 		
+		output.add(new TextPattern( 2));
+		output.add(new TextPattern( 3));
+		
+		/**Adds a minutes/second one*/
+		TextPattern e = new TextPattern(PatternType.MINUTES_SECONDS);
+		output.add(e);
 		
 		return output;
 		
@@ -216,6 +272,22 @@ public class TextPattern implements Serializable {
 
 	public void setSuffix(String suffix) {
 		this.suffix = suffix;
+	}
+
+	public int getMinimunLength() {
+		return minimunLength;
+	}
+
+	public void setMinimunLength(int minimunLength) {
+		this.minimunLength = minimunLength;
+	}
+
+	public int getCountBy() {
+		return countBy;
+	}
+
+	public void setCountBy(int countBy) {
+		this.countBy = countBy;
 	}
 	
 	

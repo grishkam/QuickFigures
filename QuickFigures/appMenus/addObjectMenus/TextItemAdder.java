@@ -321,7 +321,7 @@ class TextItemAdder extends BasicGraphicAdder {
 	
 	@Override
 	public String getMenuPath() {
-		String mainMenu = "to selected panels";
+		String mainMenu = "To selected panels";
 		
 		return mainMenu;
 	}

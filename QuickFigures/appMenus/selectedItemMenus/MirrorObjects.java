@@ -22,22 +22,20 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
-import javax.swing.Icon;
-
+import addObjectMenus.BasicGraphicAdder;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import iconGraphicalObjects.DialogIcon;
 import locatedObject.LocatedObject2D;
 import messages.ShowMessage;
-import objectDialogs.MultiBarDialog;
 import undo.UndoAddItem;
 import utilityClasses1.ArraySorter;
 
 /**A menu options for showing a scale bar dialog for selected scale bars*/
-public class MirrorObjects extends BasicMultiSelectionOperator {
+public class MirrorObjects extends BasicGraphicAdder {
 	
 	/**
 	 * 
@@ -120,5 +118,24 @@ public class MirrorObjects extends BasicMultiSelectionOperator {
 		
 	}
 
+	
+	@Override
+	public String getMenuPath() {
+		String mainMenu = "To selected panels";
+		
+		return mainMenu;
+	}
+
+	@Override
+	public ZoomableGraphic add(GraphicLayer gc) {
+		this.run();
+		return null;
+	}
+
+	@Override
+	public String getCommand() {
+		// TODO Auto-generated method stub
+		return getMenuCommand();
+	}
 }
 

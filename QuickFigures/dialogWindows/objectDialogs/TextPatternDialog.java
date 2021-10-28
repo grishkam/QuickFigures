@@ -24,7 +24,7 @@ public class TextPatternDialog extends StandardDialog {
 	
 	public static final String patternKey="pattern",
 			constantUpdateKey="update",
-			startIndexKey="Start at", 
+			startIndexKey="Start at", countByKey="Count by",
 			prefixKey="prefix", suffixKey="suffix";
 	/**
 	 * 
@@ -70,11 +70,12 @@ public class TextPatternDialog extends StandardDialog {
 		
 	
 		
-		this.add(startIndexKey, new NumberInputPanel("Start at", theTextPattern.getStartIndex()));
+		this.add(startIndexKey, new NumberInputPanel("Start at", theTextPattern.getStartIndex(), 3));
+		this.add(countByKey, new NumberInputPanel(countByKey, theTextPattern.getCountBy(), 3));
 		
-		this.add(prefixKey, new StringInputPanel("prefix", theTextPattern.getPrefix()));
+		this.add(prefixKey, new StringInputPanel(prefixKey, theTextPattern.getPrefix()));
 
-		this.add(suffixKey, new StringInputPanel("sufix", theTextPattern.getSuffix()));
+		this.add(suffixKey, new StringInputPanel(suffixKey, theTextPattern.getSuffix()));
 	}
 	
 	public TextPattern setOptionsToDialog() {
@@ -91,6 +92,7 @@ public class TextPatternDialog extends StandardDialog {
 		 theTextPattern.setStartIndex(this.getNumberInt(startIndexKey));
 		 theTextPattern.setPrefix(this.getString(prefixKey));
 		 theTextPattern.setSuffix(this.getString(suffixKey));
+		 theTextPattern.setCountBy(this.getNumberInt(countByKey));
 		return theTextPattern;
 	}
 	

@@ -64,7 +64,7 @@ public class BlotFigureAdder extends FigureAdder {
 		FigureOrganizingLayerPane output = super.addFigureOrganizerFor(ordinaryLayer, multiDimensionalImage, p);
 		output.getMontageLayoutGraphic().rowLabelsOnRight=true;
 		output.getMontageLayoutGraphic().getPanelLayout().rowmajor=false;
-		ShowMessage.showOptionalMessage("Lane labels", false, "To add a series of labels for blot lanes", "first select an image panel, then", "go to the Add menu and choose 'to selected panels->Lane Labels' ");
+		ShowMessage.showOptionalMessage("Lane labels", false, "To add a series of labels for blot lanes", "first select an image panel, then", "go to the Add menu and choose 'To selected panels->Lane Labels' ");
 		output.transform().move(0, 200);
 		return output;
 	}

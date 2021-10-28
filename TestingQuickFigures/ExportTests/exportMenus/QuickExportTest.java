@@ -22,6 +22,7 @@ import testing.TestExample;
 import testing.TestProvider;
 import ultilInputOutput.FileChoiceUtil;
 
+/**superclass for export tests*/
 abstract class QuickExportTest {
 	
 
