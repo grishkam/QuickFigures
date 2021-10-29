@@ -29,7 +29,7 @@ public class LabelCreationOptions {
 	public static LabelCreationOptions current=new LabelCreationOptions() ;
 	
 	public static final int useFileNames=1,useFolderNames=2;
-	@RetrievableOption(key = "use Image anmes", label="Use Image File Names to create labels", choices={"number", "use image file names", "use folder names"})
+	@RetrievableOption(key = "use image names", label="Get label names from", choices={"numbers", "use image file names", "use folder names"})
 	public int useNames=1;//use the names of image files for their labels?
 	
 	@RetrievableOption(key = "clip labels", label="Clip Labels Longer Than")

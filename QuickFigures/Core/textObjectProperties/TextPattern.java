@@ -44,7 +44,8 @@ public class TextPattern implements Serializable {
 		ROMAN_NUMBERAL,
 		NUMBERS,
 		ONE_TWO_THREE,
-		MINUTES_SECONDS;
+		MINUTES_SECONDS,
+		SKIP;
 	}
 	
 	PatternType currentType=PatternType.NUMBERS;
@@ -84,11 +85,14 @@ public class TextPattern implements Serializable {
 	
 	/**returns the summary of the pattern. For example: 'a, b, c... ' */
 	public String getSummary() {
-		
+	
 		
 		String output = getSymbols(new int[] {1, 2, 3, 4}) +" ...";
 		if(currentType==PatternType.MINUTES_SECONDS) {
 			output+= " (m:s)";
+		}
+		if(currentType==PatternType.SKIP) {
+			output="Skip";
 		}
 		return output;
 	}
@@ -119,7 +123,9 @@ public class TextPattern implements Serializable {
 	/**returns the n-th symbol in the sequence*/
 	public String getSymbol(int n) {
 		
-
+		if(currentType==PatternType.SKIP) {
+			return "";
+		}
 		
 		String output=""+n;
 		if(this.currentType==PatternType.NUMBERS)
@@ -248,6 +254,9 @@ public class TextPattern implements Serializable {
 		
 		/**Adds a minutes/second one*/
 		TextPattern e = new TextPattern(PatternType.MINUTES_SECONDS);
+		output.add(e);
+		
+		e = new TextPattern(PatternType.SKIP);
 		output.add(e);
 		
 		return output;

@@ -790,10 +790,10 @@ public class BasicMetaDataHandler {
 				/**this method reflects an old format of CZI channel names that I have not seen in recent tests. */
 				String CZItest=getEntryFromInfoAsString(select, "Information|Image|Channel|Fluor #1 ");
 				if (CZItest!=null) {
-					IssueLog.log("CZI meta data found");
+					
 					return CZIChannelNamesInOrder2(select, null);
 				}
-				IssueLog.log("CZI meta data not found");
+				
 				return null;
 			}
 

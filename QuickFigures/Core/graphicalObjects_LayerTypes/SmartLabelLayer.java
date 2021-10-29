@@ -15,8 +15,10 @@ import javax.swing.JMenu;
 
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
+import figureOrganizer.PanelListElement;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
@@ -87,7 +89,18 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 		ArrayList<ZoomableGraphic> anchorPanels=new ArrayList<ZoomableGraphic>();
 		 anchorPanels.addAll(records.keySet());
 		 
-		 ArrayList<ZoomableGraphic> order = getInRowMajorOrder(anchorPanels);
+		 updatePanelLabelsBasedonOrder(anchorPanels);
+
+		 
+		 
+	}
+
+
+	/**updates the labels to be in a sequence matching the physical order of the image panels
+	 * @param anchorPanels
+	 */
+	protected void updatePanelLabelsBasedonOrder(ArrayList<ZoomableGraphic> anchorPanels) {
+		ArrayList<ZoomableGraphic> order = getInRowMajorOrder(anchorPanels);
 		 
 		 for(ZoomableGraphic panel: anchorPanels) {
 			if(this.hasItem(records.get(panel)))
@@ -98,11 +111,31 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 		 for(int i=1; i<=order.size(); i++) {
 			 TextGraphic textItem = records.get(order.get(i-1));//finds the text item for this round of the loop
 			 String text=getTextPattern().getText(i);//update of the symbol
+			 text = insertTandZintoNames(order, i, text);
+			 
 			 textItem.setText(text);
 		 }
+	}
 
-		 
-		 
+
+	/** Adds time frame and slice index to the label and returns the new label
+	 * @param order
+	 * @param i
+	 * @param text
+	 * @return
+	 */
+	protected String insertTandZintoNames(ArrayList<ZoomableGraphic> order, int i, String text) {
+		if(order.get(i-1) instanceof ImagePanelGraphic) {
+			 ImagePanelGraphic image=(ImagePanelGraphic) order.get(i-1); 
+			 PanelListElement panel = image.getSourcePanel();
+			 if(panel!=null) {
+				
+				 text=text.replace("%t%",  this.getTextPattern().getSymbol(panel.targetFrameNumber)+"");
+				 text=text.replace("%z%", this.getTextPattern().getSymbol(panel.targetSliceNumber)+"");
+				 text=text.replace("%c%", this.getTextPattern().getSymbol(panel.targetChannelNumber)+"");
+			 }
+		 }
+		return text;
 	}
 	
 	
