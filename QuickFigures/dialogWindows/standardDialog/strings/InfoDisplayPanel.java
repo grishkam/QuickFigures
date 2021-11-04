@@ -44,7 +44,7 @@ public class InfoDisplayPanel extends  StringInputPanel{
 	}
 	
 	
-	
+	/**sets the text that is displayed as information*/
 	public void setContentText(String contend) {
 		getTextField().setText(contend);
 	}

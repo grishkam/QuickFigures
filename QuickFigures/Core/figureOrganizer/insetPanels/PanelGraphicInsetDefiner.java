@@ -55,7 +55,6 @@ import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
 import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;

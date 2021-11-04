@@ -10,12 +10,11 @@ package objectDialogs;
 
 import java.util.ArrayList;
 
-import graphicalObjects_LayerTypes.SmartLabelLayer;
 import standardDialog.StandardDialog;
-import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
+import textObjectProperties.SmartLabelDataType;
 import textObjectProperties.TextPattern;
 
 /**An options dialog that allows the user to change the pattern for the labels*/
@@ -24,7 +23,7 @@ public class TextPatternDialog extends StandardDialog {
 	
 	public static final String patternKey="pattern",
 			constantUpdateKey="update",
-			startIndexKey="Start at", countByKey="Count by",
+			startIndexKey="Start at", countByKey="Count by", patternTypeKey="Index based on",
 			prefixKey="prefix", suffixKey="suffix";
 	/**
 	 * 
@@ -33,10 +32,12 @@ public class TextPatternDialog extends StandardDialog {
 	
 	
 	ArrayList<TextPattern> patterns;
-	private TextPattern theTextPattern;
+	protected TextPattern theTextPattern;
+	private boolean includeDataType=true;
 	
-	public TextPatternDialog(TextPattern l) {
+	public TextPatternDialog(TextPattern l,boolean includeType) {
 		this.theTextPattern=l;
+		this.includeDataType=includeType;
 		this.setTitle("Smart Label Options");
 		this.addOptionsToDialog();
 		this.setWindowCentered(true);
@@ -65,6 +66,10 @@ public class TextPatternDialog extends StandardDialog {
 			patternOption[i]=patterns.get(i).getSummary();
 		}
 		ChoiceInputPanel patternCombo = new ChoiceInputPanel("Select Pattern", patternOption,0);
+		
+		if (includeDataType)
+			this.add(patternTypeKey, ChoiceInputPanel.buildForEnum("Label Index Derived From",SmartLabelDataType.values(),theTextPattern.getCurrentIndexSystem()));
+		
 		this.add(patternKey, patternCombo);
 		
 		
@@ -76,6 +81,7 @@ public class TextPatternDialog extends StandardDialog {
 		this.add(prefixKey, new StringInputPanel(prefixKey, theTextPattern.getPrefix()));
 
 		this.add(suffixKey, new StringInputPanel(suffixKey, theTextPattern.getSuffix()));
+		
 	}
 	
 	public TextPattern setOptionsToDialog() {
@@ -93,6 +99,9 @@ public class TextPatternDialog extends StandardDialog {
 		 theTextPattern.setPrefix(this.getString(prefixKey));
 		 theTextPattern.setSuffix(this.getString(suffixKey));
 		 theTextPattern.setCountBy(this.getNumberInt(countByKey));
+		 
+		 if (includeDataType)
+			 theTextPattern.setCurrentIndexSystem(SmartLabelDataType.values()[getChoiceIndex(patternTypeKey)]);
 		return theTextPattern;
 	}
 	
@@ -103,8 +112,8 @@ public class TextPatternDialog extends StandardDialog {
 	}
 	
 	/**Shows a modal dialog and returns the pattern*/
-	public static TextPattern getPatternFromUser(TextPattern input) {
-		TextPatternDialog dialog = new TextPatternDialog(input);
+	public static TextPattern getPatternFromUser(TextPattern input, boolean includeData) {
+		TextPatternDialog dialog = new TextPatternDialog(input,includeData);
 		dialog.showDialog();
 		
 		return dialog.getTheTextPattern();

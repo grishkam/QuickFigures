@@ -53,7 +53,6 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
-import objectDialogs.CroppingDialog.CropDialogContext;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.graphics.GraphicComponent;
 import standardDialog.numbers.AngleInputPanel;

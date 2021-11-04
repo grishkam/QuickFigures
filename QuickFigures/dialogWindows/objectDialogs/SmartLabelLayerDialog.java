@@ -10,23 +10,29 @@ package objectDialogs;
 
 import graphicalObjects_LayerTypes.SmartLabelLayer;
 import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import textObjectProperties.TextPattern;
 
 /**An options dialog that allows the user to change the pattern for the labels*/
 public class SmartLabelLayerDialog extends TextPatternDialog {
 
 	
-	public static final String constantUpdateKey="update";;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String constantUpdateKey="update", patternTypeKey="Index based on", previewKey="preview";;
+	/**
+	 * 
+	 */
+
 	
 	
 	private SmartLabelLayer labelLayer;
+	InfoDisplayPanel previewPanel;
 	
-	public SmartLabelLayerDialog(SmartLabelLayer l) {
-		super(l.getTextPattern());
+	public SmartLabelLayerDialog(SmartLabelLayer l, boolean includeData) {
+		super(l.getTextPattern(), includeData);
 		labelLayer=l;
 		this.setTitle("Smart Label Options");
 		addLayerOptionsToDialog();
@@ -36,7 +42,16 @@ public class SmartLabelLayerDialog extends TextPatternDialog {
 	
 	public void addLayerOptionsToDialog() {
 		this.add(constantUpdateKey, new BooleanInputPanel("Update Labels Constantly", labelLayer.isContinuouseUpdate())) ;
-		
+		previewPanel = new InfoDisplayPanel("Labels will show " ,theTextPattern.prefixAndSuffix(theTextPattern.getCurrentIndexSystem().getCode()));
+		this.add(previewKey, previewPanel);
+	
+	}
+	
+	public void updatePreviewPanel() {
+		if(previewPanel!=null) {
+			TextPattern patternNew = labelLayer.getTextPattern();
+			previewPanel.setContentText(patternNew .prefixAndSuffix(theTextPattern.getCurrentIndexSystem().getCode()));
+		}
 	}
 
 
@@ -48,6 +63,8 @@ public class SmartLabelLayerDialog extends TextPatternDialog {
 		
 		labelLayer.setContinuouseUpdate(this.getBoolean(constantUpdateKey));
 		
+		
+		updatePreviewPanel();
 		return theTextPattern;
 	}
 
@@ -61,5 +78,7 @@ public class SmartLabelLayerDialog extends TextPatternDialog {
 		labelLayer.updateLabels();
 		labelLayer.updateDisplay();
 	}
+
+	
 	
 }

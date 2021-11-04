@@ -12,10 +12,7 @@ import graphicalObjects.ZoomableGraphic;
 import ij.IJ;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
-import testing.FigureTester;
-import testing.TestExample;
 import testing.TestProvider;
-import testing.TestShapes;
 import ultilInputOutput.FileChoiceUtil;
 
 /**needs additional examples*/

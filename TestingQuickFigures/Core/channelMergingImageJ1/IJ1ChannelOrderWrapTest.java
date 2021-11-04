@@ -11,25 +11,14 @@
  */
 package channelMergingImageJ1;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
-
-import appContext.CurrentAppContext;
 import appContextforIJ1.ImageDisplayTester;
-import applicationAdaptersForImageJ1.ImagePlusWrapper;
-import channelMerging.ChannelOrderAndColorWrap;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.MultiChannelImage;
-import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_SpecialShapes.BarGraphicTest;
-import ij.IJ;
-import ij.ImagePlus;
 import logging.IssueLog;
-import messages.ShowMessage;
 import testing.FigureTester;
 import utilityClasses1.ArraySorter;
 

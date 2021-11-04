@@ -32,7 +32,6 @@ import export.svg.SVGEXporterForShape;
 import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
 import illustratorScripts.ArtLayerRef;
-import logging.IssueLog;
 
 /**The shape of a frame. similar to the rectangle except that the stroke
   for the frame is drawn such that the stroke appears outside of the rectangular area*/

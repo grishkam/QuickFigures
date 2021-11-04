@@ -20,20 +20,16 @@
  */
 package popupMenusForComplexObjects;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
-import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_Shapes.ArrowGraphic;
-import locatedObject.LocationChangeListener;
 import menuUtil.SmartPopupJMenu;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;

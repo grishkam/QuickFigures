@@ -64,7 +64,6 @@ import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
-import multiChannelFigureUI.ChannelPanelEditingMenu.ExcludeMergePanel;
 import sUnsortedDialogs.ScaleSettingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;

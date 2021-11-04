@@ -21,8 +21,6 @@
 
 package channelMergingImageJ1;
 import java.awt.Color;
-import java.util.ArrayList;
-
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import genericTools.AbstractChannelHandler;
 import ij.CompositeImage;

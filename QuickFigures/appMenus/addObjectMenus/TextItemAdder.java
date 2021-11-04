@@ -23,8 +23,6 @@ package addObjectMenus;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.swing.Icon;
 
 import figureOrganizer.MultichannelDisplayLayer;
@@ -36,13 +34,11 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
-import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
-import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
-import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.TextPatternDialog;
+import textObjectProperties.SmartLabelDataType;
 import textObjectProperties.TextPattern;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -63,6 +59,7 @@ class TextItemAdder extends BasicGraphicAdder {
 	
 	String[] addingClasses=new String[] {"Panels and Layouts", "Panels only", "Layouts only"};
 	Class<?>[] addingClasses2= new Class<?>[] {ZoomableGraphic.class, ImagePanelGraphic.class, PanelLayoutGraphic.class};
+	
 	
 	
 	
@@ -111,7 +108,13 @@ class TextItemAdder extends BasicGraphicAdder {
 		
 		TextPattern input=this.pattern;
 		
-		this.pattern=TextPatternDialog.getPatternFromUser(input);
+		boolean allImages=areAllSelectedItemsImages();
+		
+		/**only one system is usable if not all of the labels are images*/
+		if(!allImages)
+			pattern.setCurrentIndexSystem(SmartLabelDataType.LOCATION_IN_FIGURE);
+		
+		this.pattern=TextPatternDialog.getPatternFromUser(input, allImages);
 		
 		out.setLocationUpperLeft(50, 50);
 		
@@ -133,6 +136,26 @@ class TextItemAdder extends BasicGraphicAdder {
 		return out;
 		
 	}
+
+	/**
+	 * @return
+	 */
+	private boolean areAllSelectedItemsImages() {
+		ArrayList<ZoomableGraphic> possibleTargets =  SmartLabelLayer.getInRowMajorOrder(getSelectedItems());
+		for(ZoomableGraphic p :possibleTargets ) {
+			if(p instanceof ImagePanelGraphic)
+				{
+				
+				}
+			else return false;
+		}
+		
+		return true;
+	}
+
+
+
+
 
 	/**Adds many copies of the text item to the selected images. Attaches each text to 
 	  an image panel. font size is decreased if panels are too small*/
@@ -246,7 +269,7 @@ class TextItemAdder extends BasicGraphicAdder {
 		
 	}
 
-	/**
+	/**Attaches a text item to the given attachment location and places it in a list of labels
 	 * @param listOfLabels
 	 * @param count
 	 * @param attachmentLocation
@@ -255,7 +278,14 @@ class TextItemAdder extends BasicGraphicAdder {
 	 */
 	protected void processItemAttachment(ArrayList<TextGraphic> listOfLabels, int count, ZoomableGraphic attachmentLocation,
 			TextGraphic ag2, TakesAttachedItems taker) {
-		String text = pattern.getText(count);
+		int n=count;
+		if(pattern.getCurrentIndexSystem()!=SmartLabelDataType.LOCATION_IN_FIGURE && attachmentLocation instanceof ImagePanelGraphic) {
+			Integer n2 = SmartLabelLayer.getDataFromPanel(pattern.getCurrentIndexSystem(), (ImagePanelGraphic) attachmentLocation);
+			if (n2!=null)
+				n=n2;
+		}
+		String text = pattern.getText(n);
+		
 		ag2.setText(text); 
 		 if (ag2 instanceof ComplexTextGraphic) {
 			 ((ComplexTextGraphic) ag2).getParagraph().get(0).get(0).setText(text);

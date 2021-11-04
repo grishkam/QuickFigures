@@ -32,7 +32,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -55,12 +54,9 @@ import handles.SmartHandleList;
 import handles.miniToolbars.ActionButtonHandleList;
 import handles.miniToolbars.TextActionButtonHandleList;
 import illustratorScripts.ArtLayerRef;
-import locatedObject.RectangleEdgePositions;
 import locatedObject.RectangleEdges;
 import locatedObject.ScaleInfo;
 import locatedObject.Scales;
-import logging.IssueLog;
-import plotParts.Core.AxesGraphic.AxesSmartHandle;
 import textObjectProperties.TextLineSegment;
 import textObjectProperties.TextParagraph;
 

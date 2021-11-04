@@ -44,11 +44,13 @@ public class TextPattern implements Serializable {
 		ROMAN_NUMBERAL,
 		NUMBERS,
 		ONE_TWO_THREE,
-		MINUTES_SECONDS,
-		SKIP;
+		MINUTES_SECONDS;
 	}
 	
+	
 	PatternType currentType=PatternType.NUMBERS;
+	private SmartLabelDataType indexSystem=SmartLabelDataType.LOCATION_IN_FIGURE;
+	
 	private boolean lowerCase=false;
 
 	public TextPattern() {}
@@ -91,9 +93,7 @@ public class TextPattern implements Serializable {
 		if(currentType==PatternType.MINUTES_SECONDS) {
 			output+= " (m:s)";
 		}
-		if(currentType==PatternType.SKIP) {
-			output="Skip";
-		}
+		
 		return output;
 	}
 	
@@ -117,16 +117,22 @@ public class TextPattern implements Serializable {
 		if (n>getStartIndex())
 			n=getStartIndex()+(n-getStartIndex())*getCountBy();
 		
-		return getPrefix()+getSymbol(n)+getSuffix();
+		String symbol = getSymbol(n);
+		return prefixAndSuffix(symbol);
+	}
+
+	/**
+	 * @param symbol
+	 * @return
+	 */
+	public String prefixAndSuffix(String symbol) {
+		return getPrefix()+symbol+getSuffix();
 	}
 	
 	/**returns the n-th symbol in the sequence*/
 	public String getSymbol(int n) {
 		
-		if(currentType==PatternType.SKIP) {
-			return "";
-		}
-		
+	
 		String output=""+n;
 		if(this.currentType==PatternType.NUMBERS)
 					{
@@ -256,9 +262,7 @@ public class TextPattern implements Serializable {
 		TextPattern e = new TextPattern(PatternType.MINUTES_SECONDS);
 		output.add(e);
 		
-		e = new TextPattern(PatternType.SKIP);
-		output.add(e);
-		
+	
 		return output;
 		
 	}
@@ -299,10 +303,21 @@ public class TextPattern implements Serializable {
 		return countBy;
 	}
 
+	/**sets which integer the pattern advances by as it moves from the first index*/
 	public void setCountBy(int countBy) {
 		if(countBy<1)
 			countBy=1;
 		this.countBy = countBy;
+	}
+	
+	
+	
+	public SmartLabelDataType getCurrentIndexSystem() {
+		return indexSystem;
+	}
+
+	public void setCurrentIndexSystem(SmartLabelDataType currentNumber) {
+		this.indexSystem = currentNumber;
 	}
 	
 	

@@ -27,6 +27,7 @@ import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.SmartLabelLayerDialog;
 import popupMenusForComplexObjects.DonatesMenu;
+import textObjectProperties.SmartLabelDataType;
 import textObjectProperties.TextPattern;
 import undo.CombinedEdit;
 import undo.SimpleItemUndo;
@@ -51,8 +52,10 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	/**the pattern that the labels take*/
 	TextPattern textPattern=new  TextPattern(TextPattern.PatternType.ABC);
 	
+	
+	
 	boolean continuouseUpdate=true;
-
+	
 	
 	/**
 	 * @param name
@@ -81,6 +84,7 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	
 	public void addLabel(TextGraphic label, ZoomableGraphic parent) {
 		records.put(parent, label);
+		label.setUserEditable(false);
 	}
 	
 	/**updates the labels to match the order of the panels.
@@ -110,12 +114,15 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 		 
 		 for(int i=1; i<=order.size(); i++) {
 			 TextGraphic textItem = records.get(order.get(i-1));//finds the text item for this round of the loop
-			 String text=getTextPattern().getText(i);//update of the symbol
-			 text = insertTandZintoNames(order, i, text);
+			 int n = SmartLabelLayer.getIndexNumber(getTextPattern().getCurrentIndexSystem(), order, i);
+			 String text=getTextPattern().getText(n);//update of the symbol
+			 text = insertTandZintoNames(order, this.getTextPattern(), i, text);
 			 
 			 textItem.setText(text);
 		 }
 	}
+
+	
 
 
 	/** Adds time frame and slice index to the label and returns the new label
@@ -124,31 +131,62 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	 * @param text
 	 * @return
 	 */
-	protected String insertTandZintoNames(ArrayList<ZoomableGraphic> order, int i, String text) {
+	protected String insertTandZintoNames(ArrayList<ZoomableGraphic> order, TextPattern pattern, int i, String text) {
 		if(order.get(i-1) instanceof ImagePanelGraphic) {
 			 ImagePanelGraphic image=(ImagePanelGraphic) order.get(i-1); 
 			 PanelListElement panel = image.getSourcePanel();
 			 if(panel!=null) {
-				
-				 text=text.replace("%t%",  this.getTextPattern().getSymbol(panel.targetFrameNumber)+"");
-				 text=text.replace("%z%", this.getTextPattern().getSymbol(panel.targetSliceNumber)+"");
-				 text=text.replace("%c%", this.getTextPattern().getSymbol(panel.targetChannelNumber)+"");
+				 for(SmartLabelDataType code: SmartLabelDataType.values())
+					 text=text.replace(code.getCode(),   pattern.getSymbol(getIndexNumber(code, order, i))+"");
 			 }
 		 }
 		return text;
 	}
 	
+	/**returns the number index of the panel (depends on the 
+	 * @param theCode which type of number should be used
+	 * ) */
+	public static int getIndexNumber(SmartLabelDataType theCode, ArrayList<ZoomableGraphic> order, int i) {
+			if (SmartLabelDataType.LOCATION_IN_FIGURE==theCode)
+				return i;
+			
+			if(order.get(i-1) instanceof ImagePanelGraphic) {
+				 ImagePanelGraphic image=(ImagePanelGraphic) order.get(i-1); 
+				 Integer dataFromPanel = getDataFromPanel(theCode, image);
+				 if(dataFromPanel!=null)
+					 return dataFromPanel;
+			 }
+			return i;
+	}
+
+
+	/**returns a specific type of information about the panel
+	 * @param theCode
+	 * @param image
+	 */
+	public static Integer getDataFromPanel(SmartLabelDataType theCode, ImagePanelGraphic image) {
+		PanelListElement panel = image.getSourcePanel();
+		 if(panel!=null) {
+			if(theCode==SmartLabelDataType.TIME)
+				   return panel.targetFrameNumber;
+			if(theCode==SmartLabelDataType.SLICE)
+				   return panel.targetSliceNumber;
+			if(theCode==SmartLabelDataType.CHANNEL)
+				   return panel.targetChannelNumber;
+			
+		 }
+		 return null;
+	}
 	
+	
+	/**updates the labels and draws the layer*/
 	public void draw(Graphics2D graphics, CordinateConverter cords) { 
 		if(this.isContinuouseUpdate())
 			this.updateLabels();
 		super.draw(graphics, cords);
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 
 
 
@@ -295,7 +333,7 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	@MenuItemMethod(menuActionCommand = "options", menuText ="Show Options", orderRank=4)
 	public SimpleItemUndo<SmartLabelLayer> showOptions() {
 		SimpleItemUndo<SmartLabelLayer> undo = new SimpleItemUndo<SmartLabelLayer>(this);
-		new SmartLabelLayerDialog(this).showDialog();
+		new SmartLabelLayerDialog(this, true).showDialog();
 		undo.establishFinalState();
 		return undo;
 	}
@@ -352,8 +390,11 @@ public class SmartLabelLayer extends GraphicLayerPane implements  HasUniquePopup
 	}
 
 
+	private static final long serialVersionUID = 1L;
+	
 
-
+	
+	
 
 
 }

@@ -43,7 +43,6 @@ import icons.IconWrappingToolIcon;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.DataShowingShape;
 import storedValueDialog.ReflectingFieldSettingDialog;

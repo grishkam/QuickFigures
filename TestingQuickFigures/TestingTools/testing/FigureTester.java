@@ -10,7 +10,6 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import actionToolbarItems.ChannelLabelButton;
@@ -52,8 +51,6 @@ import messages.ShowMessage;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
 import popupMenusForComplexObjects.ImagePanelMenu;
-import testing.FigureTester.FileFinder2;
-import ultilInputOutput.FileFinder;
 import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;
 
