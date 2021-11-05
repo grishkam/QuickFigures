@@ -250,7 +250,7 @@ import logging.IssueLog;
 			saveWorkingImage();
 			
 			/**needed to keep the original around in case imageJ disposes of it*/
-			if (original!=null)original.saveImage();
+			if (original!=null)original.saveSubslotImage();
 			
 		}
 
@@ -644,7 +644,9 @@ import logging.IssueLog;
 		/**Before serialization of the object, this will serialize the ImagePlus into its Byte[]*/
 		private void writeObject(java.io.ObjectOutputStream out)
 			     throws IOException {
-		
+			
+			
+					getBackup(true);//needed to ensure that the colors match
 			
 			saveWorkingImage();
 			out.defaultWriteObject();
@@ -677,7 +679,8 @@ import logging.IssueLog;
 				     throws IOException {
 			
 				
-				saveImage();
+				
+				saveSubslotImage();
 				out.defaultWriteObject();
 			}
 
@@ -694,7 +697,12 @@ import logging.IssueLog;
 			 */
 			public ImagePlus getOrCreateImagePlus() {
 				if(getStoredImage()==null &&serializedBackup!=null) {
-					setStoredImage(new ij.io.Opener().deserialize(serializedBackup));
+					ImagePlus deserializedImage = new ij.io.Opener().deserialize(serializedBackup);
+					
+					
+					setStoredImage(deserializedImage);
+					
+					
 					if (storage!=STORE_IN_ARRAY_ALWAYS) serializedBackup=null;
 				}
 				String p = lastSavePath;
@@ -708,7 +716,7 @@ import logging.IssueLog;
 			/**
 			saves the image inside of this object into an array that can be serialized
 			 */
-			public void saveImage() {
+			public void saveSubslotImage() {
 				if(getStoredImage()!=null&& storage!=STORE_IN_EXTERNAL_FILE)
 					this.serializedBackup=new ij.io.FileSaver(getStoredImage()).serialize();
 				else {
