@@ -646,8 +646,7 @@ import logging.IssueLog;
 			     throws IOException {
 			
 			
-					getBackup(true);//needed to ensure that the colors match
-			
+		
 			saveWorkingImage();
 			out.defaultWriteObject();
 		}
