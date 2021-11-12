@@ -20,7 +20,6 @@
  */
 package plotParts.DataShowingParts;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
@@ -81,25 +80,34 @@ public static class BarWidthSmartHandle extends SmartHandle {
 		/**location of the handle. this determines where in the figure the handle will actually appear
 		   overwritten in many subclasses*/
 		public Point2D getCordinateLocation() {
-			Point2D location = RectangleEdges.getLocation(RectangleEdges.RIGHT, theBar.getBounds());
+			Rectangle bounds = getRectangleBar();
+			Point2D location = RectangleEdges.getLocation(RectangleEdges.RIGHT, bounds);
+			if(!theBar.onVertical()) {
+				location = RectangleEdges.getLocation(RectangleEdges.BOTTOM, bounds);
+			}
 			return location;
 		}
 		
+		/**returns the rectangle that has the shape attached to it*/
+		public Rectangle getRectangleBar() {
+			Rectangle bounds = theBar.getBounds();
+			Shape partial = theBar.getLastPartialShape();
+			if(partial!=null)
+				bounds=partial.getBounds();
+			return bounds;
+		}
 		
 		/**called when a user drags a handle, changes the width of the data bars in the plot
 		  if shift is down, only alters one data bar */
 		public void handleDrag(CanvasMouseEvent mouse) {
 			
-			Rectangle barBounds = theBar.getBounds();
-			
-			/**if the bar shape in fact consists of a few subshapes*/
-			Point2D loc = this.getCordinateLocation();
-			Shape barBounds2 = theBar.getPartialShapeAtLocation(loc.getX()-3, loc.getY());
-			if(barBounds2!=null)
-				barBounds=barBounds2.getBounds();
+			Rectangle barBounds = getRectangleBar();
 					
 			Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, barBounds);
 			double shift = mouse.getCoordinateX()-location.getX();
+			if(!theBar.onVertical()) {
+				shift = mouse.getCoordinateY()-location.getY();
+			}
 			boolean shiftDown = mouse.shiftDown();
 			
 			setBarWidths(theBar, shift, shiftDown);
@@ -122,7 +130,9 @@ public static class BarWidthSmartHandle extends SmartHandle {
 		}
 		
 		
-		/**returns all targets shapes
+		
+		
+		/**returns all targets shapes that will be modifed along with the primary shape
 		 * @param theTargetShape the primary target shape
 		 * */
 		protected ArrayList<? extends DataShowingShape> getTargets(DataShowingShape theTargetShape, boolean shiftDown) {
@@ -139,6 +149,7 @@ public static class BarWidthSmartHandle extends SmartHandle {
 			}
 			return output;
 		}
+		
 		
 	
 		/**Called when a handle is pressed*/
@@ -217,6 +228,7 @@ public static class OrderSwapSmartHandle extends SmartHandle {
 	public void handlePress(CanvasMouseEvent m) {
 		tool.setPressShape(theShape);
 		tool.alternativeMouseEvent=m;
+		setupSpecialShape() ;
 	}
 	
 	/**called when a user drags a handle */
@@ -241,9 +253,18 @@ public static class OrderSwapSmartHandle extends SmartHandle {
 	}
 	
 	
-	/**sets up the arrow shapes*/
+	/**sets up the arrow shape that will indicate what the handle does*/
 	public void setupSpecialShape() {
+		
+			
 		if (specialShape==null) {
+			if(!theShape.onVertical()) {
+				specialShape=super.getUpDownArrowShape(4, 3);
+			}
+			else if (this.theShape.onVertical()) {
+				specialShape=super.createLeftRightArrow(4,3);
+			}
+			else 
 									{
 					specialShape=getAllDirectionArrows(3, 2, false);
 					}

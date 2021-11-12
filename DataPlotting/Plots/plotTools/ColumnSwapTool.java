@@ -40,7 +40,7 @@ public class ColumnSwapTool extends BasicPlotTool {
 	}
 
 	/**
-	 * 
+	 Swaps the locations of two data series
 	 */
 	public void performSwap() {
 		
@@ -54,11 +54,11 @@ public class ColumnSwapTool extends BasicPlotTool {
 		
 		GraphicLayer a2 = dragShape2.getParentLayer();
 		
-		IssueLog.log(a1+"  "+a2);
+		//IssueLog.log(a1+"  "+a2);
 		
 		if (a1.getParentLayer()!=null&&a2.getParentLayer()!=null&&a1.getParentLayer()==a2.getParentLayer()) {
 			a1.getParentLayer().swapmoveObjectPositionsInArray(a1, a2);
-			IssueLog.log("will swap groups");
+			//IssueLog.log("will swap groups");
 		}
 		
 		if ( pressShape2== dragShape2 
@@ -66,7 +66,7 @@ public class ColumnSwapTool extends BasicPlotTool {
 				&& dataSeriesDragged!=null
 				&&!super.dataSeriesPressed.equals(dataSeriesDragged))
 			{
-			IssueLog.log("will swap groups for complex plot");
+			//IssueLog.log("will swap groups for complex plot");
 			if (pressShape2.getPlotArea()instanceof Grouped_Plot) {
 				Grouped_Plot g=(Grouped_Plot) pressShape2.getPlotArea();
 				g.swapCategorySpots(dataSeriesPressed.getName(), dataSeriesDragged.getName());

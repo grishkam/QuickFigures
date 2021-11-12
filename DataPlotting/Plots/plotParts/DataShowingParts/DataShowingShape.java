@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 28, 2021
+ * Date Modified: Nov 12, 2021
  * Version: 2021.2
  */
 package plotParts.DataShowingParts;
@@ -30,6 +30,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
@@ -37,6 +38,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import handles.HasSmartHandles;
+import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
@@ -60,6 +62,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 
 	private PlotOrientation orientation=PlotOrientation.BARS_VERTICAL;//orietnation is either PlotOrientation.barsvertical or horizontal
 
+	/**the index of the axis that will be used to display data*/
 	private int axisChoice=0;
 	
 	protected transient BarSmartHandleList smartHandles;
@@ -255,6 +258,10 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected) {
+			SmartHandleList smlist = this.getSmartHandleList();
+			if(smlist!=null)
+				smlist.draw(g2d, cords);
+			else {
 				ArrayList<Point2D> list = new ArrayList<Point2D> ();
 				PathIterator shape2 =getRotationTransformShape().getPathIterator(AffineTransform.getTranslateInstance(0, 0));
 				while(!shape2.isDone())
@@ -267,7 +274,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 				
 				getGrahpicUtil().drawHandlesAtPoints(g2d, cords, list);
 			   handleBoxes=getGrahpicUtil().lastHandles;
-			  
+			}
 		}
 		
 	}
@@ -299,6 +306,38 @@ public Shape getPartialShapeAtLocation(double dx, double dy) {
 	public HashMap<Shape, DataSeries> getPartialShapeMap() {
 		return partialShapes;
 	}
+	
+	/**returns one partial shape that is the rightmost shape*/
+	public Shape getLastPartialShape() {
+		Set<Shape> set = getPartialShapeMap().keySet();
+		
+		if(set.size()==0)
+			return null;
+		
+		Shape output=null;
+		double  maxX = Double.MIN_VALUE;
+		for(Shape s: set) {
+			if(this.orientation==PlotOrientation.BARS_VERTICAL) {
+					if(s.getBounds().getMaxX()>maxX) {
+						
+						output=s;
+						maxX=s.getBounds().getMaxX();
+					}
+					
+					}
+			if(this.orientation==PlotOrientation.BARS_HORIZONTAL) {
+				if(s.getBounds().getMaxY()>maxX) {
+					
+					output=s;
+					maxX=s.getBounds().getMaxY();
+				}
+				
+				}
+		} 
+		
+		return output;
+	}
+	
 	
 	@Override
 	public void onAxisUpdate() {
