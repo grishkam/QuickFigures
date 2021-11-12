@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: Nov 12, 2021
  * Version: 2021.2
  */
 package plotParts.Core;
@@ -225,5 +225,14 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 			
 			return false;
 		}
+
+	/**
+	 * @return the plot area
+	 * 
+	 */
+	public PlotArea getPlotArea() {
+		return plotArea;
+		
+	}
 
 }

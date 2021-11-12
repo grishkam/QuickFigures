@@ -15,26 +15,44 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: Nov 12, 2021
  * Version: 2021.2
  */
 package plotTools;
 
 import java.awt.Color;
 
+import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import groupedDataPlots.Grouped_Plot;
 import icons.IconWrappingToolIcon;
 import logging.IssueLog;
+import plotParts.DataShowingParts.DataShowingShape;
 
 /**a tool that is used to reorder data series on a plot*/
 public class ColumnSwapTool extends BasicPlotTool {
 
+
 	{super.iconSet=IconWrappingToolIcon.createIconSet(createIcon(), createIconRollover());}
 	
 	protected void afterPlotRelease() {
-		GraphicLayer a1 = getPressShape().getParentLayer();
-		GraphicLayer a2 = getDragShape().getParentLayer();
+		performSwap();
+	}
+
+	/**
+	 * 
+	 */
+	public void performSwap() {
+		
+		
+		DataShowingShape pressShape2 = getPressShape();
+		DataShowingShape dragShape2 = getDragShape();
+		if(dragShape2==null||pressShape2==null)
+			return;
+		
+		GraphicLayer a1 = pressShape2.getParentLayer();
+		
+		GraphicLayer a2 = dragShape2.getParentLayer();
 		
 		IssueLog.log(a1+"  "+a2);
 		
@@ -43,14 +61,14 @@ public class ColumnSwapTool extends BasicPlotTool {
 			IssueLog.log("will swap groups");
 		}
 		
-		if ( getPressShape()== getDragShape() 
+		if ( pressShape2== dragShape2 
 				&& dataSeriesPressed!=null
 				&& dataSeriesDragged!=null
 				&&!super.dataSeriesPressed.equals(dataSeriesDragged))
 			{
 			IssueLog.log("will swap groups for complex plot");
-			if (getPressShape().getPlotArea()instanceof Grouped_Plot) {
-				Grouped_Plot g=(Grouped_Plot) getPressShape().getPlotArea();
+			if (pressShape2.getPlotArea()instanceof Grouped_Plot) {
+				Grouped_Plot g=(Grouped_Plot) pressShape2.getPlotArea();
 				g.swapCategorySpots(dataSeriesPressed.getName(), dataSeriesDragged.getName());
 			}
 			}

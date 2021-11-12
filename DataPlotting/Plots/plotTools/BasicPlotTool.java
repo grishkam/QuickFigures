@@ -22,14 +22,27 @@ package plotTools;
 
 import java.awt.Color;
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
+import java.util.ArrayList;
 
+import applicationAdapters.CanvasMouseEvent;
+import applicationAdapters.ImageWorkSheet;
 import dataSeries.DataSeries;
 import genericPlot.BasicDataSeriesGroup;
+import genericPlot.BasicPlot;
 import genericTools.Object_Mover;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import icons.IconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
+import plotParts.Core.PlotAreaRectangle;
+import plotParts.Core.PlotOrientation;
+import plotParts.DataShowingParts.Boxplot;
+import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.DataShowingShape;
 
 /**a superclass for multiple tools that edit a plot*/
@@ -44,6 +57,7 @@ public class BasicPlotTool extends Object_Mover {
 	private Shape markPress;
 	private Shape markDrag;
 
+	public CanvasMouseEvent alternativeMouseEvent;
 
 	{super.iconSet=IconWrappingToolIcon.createIconSet(new PlotIcon());}
 
@@ -106,24 +120,78 @@ public class BasicPlotTool extends Object_Mover {
 			}
 		
 		
-		LocatedObject2D roi2 = getObjectAt(getImageClicked(), this.getDragCordinateX(), this.getDragCordinateY());
+		int dragX = this.getDragCordinateX();
+		int dragY = this.getDragCordinateY();
+		
+		ImageWorkSheet imageClicked = getImageClicked();
+		
+		onDragWithinImage(dragX, dragY, imageClicked);
+		
+	
+	}
+
+	/**Determines which shape is being dragged over and displays a marker over it
+	 * @param dragX
+	 * @param dragY
+	 * @param imageClicked
+	 */
+	public void onDragWithinImage(int dragX, int dragY, ImageWorkSheet imageClicked) {
+		LocatedObject2D roi2 = getObjectAt(imageClicked, dragX, dragY);
+		
+		if (!(roi2 instanceof DataShowingShape) && roi2 instanceof PlotAreaRectangle) try {
+			 PlotAreaRectangle plot=(PlotAreaRectangle) roi2;
+			BasicPlot layer = (BasicPlot) plot.getParentLayer();
+			PlotOrientation or = layer.getOrientation();
+			
+			int searchWidth=30;
+			Rectangle2D searchArea = new Rectangle2D.Double(dragX, plot.getBounds().getY(), searchWidth, plot.getBounds().getHeight());
+			if (or==PlotOrientation.BARS_HORIZONTAL) {
+				searchArea = new Rectangle2D.Double(plot.getBounds().getX(), dragY,  plot.getBounds().getWidth(), searchWidth);
+			}
+			
+			
+			ArrayList<LocatedObject2D> allObjects = imageClicked.getLocatedObjects();
+			for(LocatedObject2D possibleShape: allObjects) {
+				if ((possibleShape instanceof DataShowingShape) && (possibleShape.getOutline().intersects(searchArea)) ) {
+					roi2=possibleShape;
+					if(roi2 instanceof DataBarShape)
+						break;
+					if(roi2 instanceof Boxplot)
+						break;
+				}
+			}
+		}
+		 catch (Throwable t) {
+			 IssueLog.logT(t);
+		 }
+		
 		if (roi2 instanceof DataShowingShape) {
 			dragShape=(DataShowingShape) roi2;
-			DataSeries dataDrag = dragShape.getTheData();
-			if (dataDrag .getAllPositions().length>1) {
-				dataSeriesDragged=findPressedSeries(dragShape, this.getDragCordinateX(), this.getDragCordinateY());
-			}
-			if (dataDrag .getAllPositions().length==1) {
-				dataSeriesDragged=dataDrag.getIncludedValues();
-			}
-			markDrag=findSubshapeClicked(dragShape,getDragCordinateX(), getDragCordinateY());
+			setupDragDataSeries(dragX, dragY);
 			
 			}
 		else dragShape=null;
 		if(dragShape==null||pressShape==null) return;
 		createMarker();
+	}
+
+	/**stores the dragged data series 
+	 * @param dragX
+	 * @param dragY
+	 */
+	public void setupDragDataSeries(int dragX, int dragY) {
+		DataSeries dataDrag = dragShape.getTheData();
+		if (dataDrag .getAllPositions().length>1) {
+			dataSeriesDragged=findPressedSeries(dragShape, dragX, dragY);
+		}
+		if (dataDrag .getAllPositions().length==1) {
+			dataSeriesDragged=dataDrag.getIncludedValues();
+		}
+		markDrag=findSubshapeClicked(dragShape,dragX, dragY);
 		
-	
+		if (markDrag==null) {
+			markDrag=dragShape.getOutline();
+		}
 	}
 
 
@@ -134,8 +202,17 @@ public class BasicPlotTool extends Object_Mover {
 	protected void createMarker() {
 		
 			GraphicGroup sg = generateMarkerForSwitch();
+			sg.deselect();
+			sg.hideHandles(true);
 			
-			super.getImageClicked().getOverlaySelectionManagger().setSelection(sg, 0);
+			ImageWorkSheet imageClicked = super.getImageClicked();
+				if(imageClicked==null)
+					{
+					/**find another way to show marker*/
+					 imageClicked =alternativeMouseEvent.getAsDisplay().getImageAsWorksheet();
+					}
+				
+			imageClicked.getOverlaySelectionManagger().setSelection(sg, 0);
 		
 	}
 
@@ -146,8 +223,8 @@ public class BasicPlotTool extends Object_Mover {
 		BasicShapeGraphic z2=null;
 		
 		if (markPress!=null) {
-		z1= new BasicShapeGraphic(markPress);
-		z1.setStrokeColor(Color.green.darker().darker());z1.setStrokeWidth(6);
+			z1= new BasicShapeGraphic(markPress);
+			z1.setStrokeColor(Color.green.darker().darker());z1.setStrokeWidth(6);
 		}
 		if (markDrag!=null) {
 			z2= new BasicShapeGraphic(markDrag);
@@ -155,6 +232,7 @@ public class BasicPlotTool extends Object_Mover {
 			z2.setStrokeWidth(6);
 		}
 		GraphicGroup sg = new GraphicGroup(true, z1, z2);
+		
 		return sg;
 	}
 

@@ -20,6 +20,9 @@
  */
 package plotParts.DataShowingParts;
 
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -28,7 +31,7 @@ import genericPlot.BasicPlot;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
+import plotTools.ColumnSwapTool;
 import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 import undoForPlots.DataShapeUndo;
@@ -52,7 +55,7 @@ public class BarSmartHandleList extends SmartHandleList {
 	public BarSmartHandleList(DataShowingShape dataBarShape) {
 		this.bar=dataBarShape;
 		this.add(new BarWidthSmartHandle(bar));
-		
+		this.add(new OrderSwapSmartHandle(bar));
 	}
 	
 	/**
@@ -86,7 +89,16 @@ public static class BarWidthSmartHandle extends SmartHandle {
 		/**called when a user drags a handle, changes the width of the data bars in the plot
 		  if shift is down, only alters one data bar */
 		public void handleDrag(CanvasMouseEvent mouse) {
-			Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, theBar.getBounds());
+			
+			Rectangle barBounds = theBar.getBounds();
+			
+			/**if the bar shape in fact consists of a few subshapes*/
+			Point2D loc = this.getCordinateLocation();
+			Shape barBounds2 = theBar.getPartialShapeAtLocation(loc.getX()-3, loc.getY());
+			if(barBounds2!=null)
+				barBounds=barBounds2.getBounds();
+					
+			Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, barBounds);
 			double shift = mouse.getCoordinateX()-location.getX();
 			boolean shiftDown = mouse.shiftDown();
 			
@@ -176,6 +188,69 @@ public static class BarWidthSmartHandle extends SmartHandle {
 			
 		}
 		
+}
+
+
+public static class OrderSwapSmartHandle extends SmartHandle {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private DataShowingShape theShape;
+	private ColumnSwapTool tool;
+	
+	/**
+	 * @param shape
+	 */
+	public OrderSwapSmartHandle(DataShowingShape shape) {
+		this.theShape=shape;
+		tool=new ColumnSwapTool();
+		tool.setPressShape(theShape);
+		this.setHandleNumber(879023);
+		this.setEllipseShape(true);
+		this.setHandleColor(shape.getFillColor());
+		setupSpecialShape() ;
+	}
+	
+	/**called when a user drags a handle */
+	public void handlePress(CanvasMouseEvent m) {
+		tool.setPressShape(theShape);
+		tool.alternativeMouseEvent=m;
+	}
+	
+	/**called when a user drags a handle */
+	public void handleDrag(CanvasMouseEvent m) {
+		tool.onDragWithinImage(m.getCoordinateX(), m.getCoordinateY(), m.getAsDisplay().getImageAsWorksheet());
+		
+	}
+	
+	/**called when a user drags a handle */
+	public void handleRelease(CanvasMouseEvent m) {
+		m.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().clear();
+		tool.performSwap();
+	}
+	
+	/**location of the handle. this determines where in the figure the handle will actually appear
+	   overwritten in many subclasses*/
+	public Point2D getCordinateLocation() {
+		Point2D location = RectangleEdges.getLocation(RectangleEdges.TOP, theShape.getBounds());
+		double y = location.getY()-20;
+		double x = location.getX();
+		return new Point2D.Double(x, y);
+	}
+	
+	
+	/**sets up the arrow shapes*/
+	public void setupSpecialShape() {
+		if (specialShape==null) {
+									{
+					specialShape=getAllDirectionArrows(3, 2, false);
+					}
+		
+		}
+	}
+	
 }
 
 

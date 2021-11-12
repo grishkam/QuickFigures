@@ -20,6 +20,7 @@
  */
 package undo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -28,7 +29,7 @@ import graphicalObjects.ZoomableGraphic;
 import layersGUI.GraphicSetDisplayTree;
 
 /**A superclass for many undoable edits*/
-public class AbstractUndoableEdit2 extends AbstractUndoableEdit {
+public class AbstractUndoableEdit2 extends AbstractUndoableEdit implements Serializable {
 
 	/**
 	 * 

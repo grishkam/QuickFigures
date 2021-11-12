@@ -83,6 +83,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 	private GraphicLayerPane theLayerPane=new GroupedLayerPane("Group", this);
 				{theLayerPane.addLayerStructureChangeListener(this);}
 	private boolean drawGhost;
+	
 
 	private transient ReshapeHandleList reshapeList; 
 	
@@ -270,7 +271,7 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 			graphics.setColor(getOutlineColor());
 
 		}
-		else if (this.isSelected()&&this.reshapeList!=null) {
+		else if (this.isSelected()&&this.reshapeList!=null&&!this.handlesHidden) {
 			
 			getReshapeList().draw(graphics, cords);
 			

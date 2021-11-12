@@ -68,18 +68,21 @@ public class PointModel implements Serializable{
 		
 	}
 	
+	/**returns the point size*/
 	public double getPointSize() {
 		return this.getModelShape().getObjectWidth();
 	}
 
-
-
-	public void setPointType(int choiceIndex) {
-		pointType=choiceIndex;
-	}
+	/**sets the point size*/
 	public void setPointSize(double number) {
 		this.getModelShape().setHeight(number);
 		this.getModelShape().setWidth(number);
+	}
+	
+	
+
+	public void setPointType(int choiceIndex) {
+		pointType=choiceIndex;
 	}
 	
 
