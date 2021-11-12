@@ -1251,4 +1251,22 @@ public PlotLabel getTitleLabel() {
 	return titleLabel;
 }
 
+/**returns a list of data showing shapes of the given class
+ * @param class1
+ * @return
+ */
+public ArrayList<? extends DataShowingShape> getDataShape(Class<? extends DataShowingShape> class1) {
+	if (class1==DataBarShape.class)
+		return getMeanBars();
+	
+	if (class1==ErrorBarShowingShape.class)
+		return getErrorBars();
+	
+	if (class1==Boxplot.class)
+		return  getBoxplots();
+	
+	return new ArrayList<DataShowingShape>();
+	
+}
+
 }

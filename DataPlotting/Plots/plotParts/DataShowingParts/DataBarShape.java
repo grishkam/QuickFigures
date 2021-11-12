@@ -45,7 +45,7 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 	private int type=DATA_BAR_SHAPE;
 	private PointModel pointModel=null;
 	boolean finishStroke=true;
-	private transient BarSmartHandleList smartHandles;
+
 	
 	public DataBarShape(DataSeries data, int type) {
 		super(data);
@@ -174,10 +174,7 @@ public class DataBarShape extends DataShowingShape implements SeriesLabelPositio
 		
 	}
 
-	public void updatePlotArea() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	public void showOptionsDialog() {
 		new MeanBarDialog(this, false).showDialog();;
@@ -247,6 +244,14 @@ public boolean showsAsPoint() {
 		if (smartHandles==null)
 			smartHandles=new BarSmartHandleList(this);
 		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
+	}
+
+	/**
+	 * 
+	 */
+	public void updatePlotArea() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

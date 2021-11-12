@@ -38,6 +38,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.BasicShapeGraphic;
+import handles.SmartHandleList;
 import plotParts.Core.PlotCordinateHandler;
 
 /**The shape of a boxplot*/
@@ -275,6 +276,14 @@ public class Boxplot extends DataShowingShape {
 	/**returns the ratio of the cap to the width of the box*/
 	public double getCapSize() {
 		return capSize;
+	}
+	
+	/**returns a smart handle list with a hangle for changing the width*/
+	@Override
+	public SmartHandleList getSmartHandleList() {
+		if (smartHandles==null)
+			smartHandles=new BarSmartHandleList(this);
+		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
 	}
 
 }

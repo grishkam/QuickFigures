@@ -32,6 +32,7 @@ import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
 import dataSeries.ErrorBarStyle;
 import dialogs.ErrorBarDialog;
+import handles.SmartHandleList;
 import plotParts.Core.PlotCordinateHandler;
 
 /**a shape that depicts error bars*/
@@ -274,6 +275,13 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	public void setErrorDepiction(int form) {
 		errorShownAs=form;
 	}
-	
 
+
+	/**returns a smart handle list with a hangle for changing the width*/
+	@Override
+	public SmartHandleList getSmartHandleList() {
+		if (smartHandles==null)
+			smartHandles=new BarSmartHandleList(this);
+		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
+	}
 }

@@ -62,6 +62,8 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 
 	private int axisChoice=0;
 	
+	protected transient BarSmartHandleList smartHandles;
+	
 	/**returns the dependent and independent variable values for i-th point*/
 	protected double getDependantVariableValue(int i) {
 		return getTheData().getValue(i);
