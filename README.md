@@ -6,7 +6,7 @@ You can also watch the full length [tutorial video playlist](https://www.youtube
 
 You can install using the 'Update...' command in Fiji and selecting QuickFigures from the list of ImageJ update sites. This will download QuickFigure and all the dependencies. If you need to perform a manual install, you can download [here](https://github.com/grishkam/QuickFigures/raw/master/QuickFigures_.jar). 
 
-See [publication](https://www.biorxiv.org/content/10.1101/2020.09.24.311282v2) for more details
+See [publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0240280) for more details
 
 The most recent version uses the most recent version of Apache Batik (1.13) for SVG, PDF and EPS export. 
 
