@@ -408,7 +408,7 @@ public void updateLocationsForVertical() {
 	}
 	
 	/**Adds a list of actions handle list*/
-	protected GeneralActionListHandle addOperationList(MultiSelectionOperator o, MultiSelectionOperator[] ops) {
+	public GeneralActionListHandle addOperationList(MultiSelectionOperator o, MultiSelectionOperator[] ops) {
 		if (o==null) {IssueLog.log("cannot add for null icon");}
 		GeneralActionListHandle h = new GeneralActionListHandle(o, numHandleID, ops);
 		return addOperationList(o, h);

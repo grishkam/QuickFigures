@@ -66,18 +66,7 @@ public class GroupedDataSeries implements DataSeries {
 		
 	}
 	
-	/***
-	public MultiCategorySeries(String name2, DataSeries... number) {
-		name=name2;
-		Double m=1.0;
-		for(DataSeries s: number) {
-			 allDividedSeries.put(s.getName(), s);
-			 indicesForSeries.put(m, s.getName());
-			 m+=1;
-		}
-		
-	}
-	*/
+
 	
 	public static  HashMap<Double, String> createLocationMapFor(ArrayList<String> s) {
 		HashMap<Double, String> ser=new HashMap<Double, String>();
@@ -89,7 +78,7 @@ public class GroupedDataSeries implements DataSeries {
 		return ser;
 	}
 	
-	/***/
+	/**Adds a new category to the plot*/
 	public void addNewCategory(String name, DataSeries numbers) {
 		numbers.setName(name);
 		allDividedSeries.put(name, numbers);

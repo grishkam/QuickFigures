@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 12, 2021
+ * Date Modified: Nov 13, 2021
  * Version: 2021.2
  */
 package plotParts.DataShowingParts;
@@ -38,6 +38,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import handles.HasSmartHandles;
+import handles.miniToolbars.ActionButtonHandleList;
 import illustratorScripts.ArtLayerRef;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
@@ -364,6 +365,23 @@ public Shape getPartialShapeAtLocation(double dx, double dy) {
 	}
 	
 
+	/**user does not control the angles of these shapes*/
+	public boolean doesSetAngle() {return false;}
+	
+	
+	/**
+	Creates an action handle list for the object
+	 */
+	public ActionButtonHandleList createActionHandleList()  {
+		ActionButtonHandleList list = super.createActionHandleList();
+		
+		MiniToolbars.addExtraHandles(this,list);
+		
+		return list;
+		
+		
+	}
+	
 	
 
 }

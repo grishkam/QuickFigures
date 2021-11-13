@@ -34,6 +34,12 @@ public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 	/**
 	 * 
 	 */
+	private static final String[] ERROR_BAR_TYPE_CHOICES = new String[] {"Standard Dev", "SEM", "95% Interval (2*SEM)", "99% (3*SEM)"},
+									   CHOICES_FOR_LINES = new String[] {"Lines only", "Capped Lines"};
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	
 	ErrorBarShowingShape rect;
@@ -97,10 +103,10 @@ public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 		this.add("width", nip);
 		
 		this.add("typ",
-				new ChoiceInputPanel("Show as", new String[] {"Lines only", "Capped Lines"}, rect.getBarType()));
+				new ChoiceInputPanel("Show as", CHOICES_FOR_LINES, rect.getBarType()));
 		
 		this.add("errorT",
-				new ChoiceInputPanel("Show Error Bar as", new String[] {"Standard Dev", "SEM", "95% Interval (2*SEM)", "99% (3*SEM)"}, rect.getErrorDepiction()));
+				new ChoiceInputPanel("Show Error Bar as", ERROR_BAR_TYPE_CHOICES, rect.getErrorDepiction()));
 	}
 	
 	@Override

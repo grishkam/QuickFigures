@@ -20,12 +20,14 @@
  */
 package undoForPlots;
 
+import genericPlot.BasicPlot;
 import plotParts.DataShowingParts.Boxplot;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.DataShowingShape;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
 import plotParts.DataShowingParts.ScatterPoints;
 import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
 
 /**An undoable edit for changes to the traits of the shape objects 
  * that dipict ploted data*/
@@ -116,5 +118,10 @@ public class DataShapeUndo extends AbstractUndoableEdit2 {
 			ScatterPoints box2 = (ScatterPoints) item;
 			 box2.copyEverythingFrom(sI);
 		}
+	}
+	
+	/**returns a combined edit for both the data shape and the plot*/
+	public static AbstractUndoableEdit2 createCompleteUndoForShape(DataShowingShape d) {
+		return new CombinedEdit(new PlotAreaChangeUndo(BasicPlot.findPlot(d)), new DataShapeUndo(d));
 	}
 }

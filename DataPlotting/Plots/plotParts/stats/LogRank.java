@@ -14,7 +14,7 @@ import dataSeries.KaplanMeierDataSeries;
 import messages.ShowMessage;
 
 /**
- rough draft for a log rankk test implementation
+ rough draft for a log rank test 
  */
 public class LogRank {
 	
@@ -79,7 +79,7 @@ public class LogRank {
 	}
 
 	public double getPValue() {
-		ShowMessage.showOptionalMessage("Log rank", false, "I,plementation of the log rank test for survival is a work in progress", "use with caution");
+		ShowMessage.showOptionalMessage("Log rank", false, "Implementation of the log rank test for survival is a work in progress", "use with caution");
 		return pValue;
 	}
 	

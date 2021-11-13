@@ -8,23 +8,28 @@
 package plotParts.stats;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JMenu;
 
 import dataSeries.DataSeries;
+import dataSeries.KaplanMeierDataSeries;
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
+import genericPlot.BasicPlot;
+import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
-import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import locatedObject.ObjectContainer;
@@ -40,18 +45,9 @@ import utilityClasses1.ArraySorter;
 
 /**
  An object with methods related to creating graphics to show a statistical test
+ and keeping them in the correct locations
  */
 public class StatTestOrganizer extends GraphicLayerPane implements Serializable, DonatesMenu {
-
-	
-	/**
-	 * @param name
-	 */
-	public StatTestOrganizer() {
-		super("test");
-		// TODO Auto-generated constructor stub
-	}
-
 
 	@UserChoiceField(optionsForUser = { "p-Vale<x", "Stars", "Exact" })
 	public int markType=StatTestShower .LESS_THAN_MARK;
@@ -67,6 +63,9 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 
 	@UserChoiceField(optionsForUser = { "Two-Tailed", "One-Tailed" })
 	public int numberTails=StatTestShower.TW0_TAIL;
+	
+	
+	public boolean anchorConnector=true;
 
 
 	/**the text that displays the result*/
@@ -78,11 +77,84 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 	public DataSeries data1, data2;
 
 
+	private DataShowingShape anchor1, anchor2;
+
+
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * @param name
+	 */
+	public StatTestOrganizer() {
+		super("test");
+		// TODO Auto-generated constructor stub
+	}
+
+	
+	/**draws the layer*/
+	@Override
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
+		if(this.anchorConnector) {
+			updateConnctor(connector, anchor1, anchor2);
+		}
+		super.draw(graphics, cords);
+	}
+
+
+
+	/**updates the ends of the connector
+	 * @param connector2
+	 */
+	private void updateConnctor(ConnectorGraphic connector2, DataShowingShape anchor1, DataShowingShape anchor2) {
+		BasicPlot plot = BasicPlot.findPlot(this);
+		if(plot==null||connector2==null)
+			return;
+		PlotOrientation orientation = plot.getOrientation();
+		
+		
+		
+		if (orientation.isVertical()) {
+			
+			if(anchor1==null||anchor2==null)
+				return;
+			 connector2.horizontal=false;
+			 Point2D p1 = connector2.getAnchors()[0];
+			Rectangle subshapeFor1 = getSubshapeFor(anchor1, data1);
+			if(subshapeFor1!=null)
+				p1.setLocation(subshapeFor1.getCenterX(), p1.getY());
+			
+			 Point2D p2 = connector2.getAnchors()[2];
+			 Rectangle subshapeFor2 = getSubshapeFor(anchor2, data2);
+				if(subshapeFor2!=null)
+				p2.setLocation(getSubshapeFor(anchor2, data2).getCenterX(), p2.getY());
+			 
+		}
+	}
+	
+	/**finds the subshape that contains the given data series of its equivalent*/
+	Rectangle getSubshapeFor(DataShowingShape anchor1, DataSeries d) {
+		Rectangle output = anchor1.getBounds();
+		HashMap<Shape, DataSeries> map = anchor1.getPartialShapeMap();
+		
+		if(map.keySet().size()>1) {
+				for(Shape s: map.keySet()) {
+					if(map.get(s)==d||
+							d.toString().equals(map.get(s).toString())//this same exact data will show the same exact string
+							) {
+						
+						return s.getBounds();
+					}
+				}
+				//fails to find the right shape
+				return null;
+			}
+		
+		return output;
+	}
+
 
 	/**When given two data shapes and where they were clicked on, creates a linker graphic for the shapes*/
 	public ConnectorGraphic createLinkingLineForShapes(DataShowingShape pressShape2, DataShowingShape dragShape2, double pressX, double pressY, double dragX, double dragY) {
@@ -93,7 +165,7 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 		}
 		
 		/**moves the shape a bit further to from the shapes*/
-		if(p3.horizontal)
+		if(p3.isHorizontal())
 			p3 .moveLocation(20, 0);
 		else
 			p3 .moveLocation(0, -20);
@@ -233,7 +305,9 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 		 textResult.setupSegOutlines();
 		 IssueLog.log("Updated test to "+textResult.toString()+"   willshow="+this.hasItem(textResult));
 		 textResult.updateDisplay();
-		 
+		 if(this.useLinkingLine()) {
+			 
+		 }
 	}
 	
 	
@@ -326,10 +400,25 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 	@MenuItemMethod(menuActionCommand = "Update stat test", menuText = "test properties")
 	public void options() {
 		ReflectingFieldSettingDialog dialog = new ReflectingFieldSettingDialog(this, "markType", "linkType", "tTestType", "numberTails");
+		
+		if(data1 instanceof KaplanMeierDataSeries) {// a simpler version is needed for KM plot
+			dialog = new ReflectingFieldSettingDialog(this, "markType", "linkType");
+			
+		}
+		
 		dialog.setModal(true);
 				dialog.showDialog();
 		this.updateTest();
 	}
+	
+	@MenuItemMethod(menuActionCommand = "anchor connector true", menuText = "Anchor Conector", iconMethod="anchorsConnector")
+	public void turnOnOffAnchorConnector() {
+		this.anchorConnector=!anchorConnector;
+	}
+	
+	public boolean anchorsConnector() {return anchorConnector;}
+	
+	
 
 
 	/**
@@ -350,6 +439,17 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 			return jMenu;
 		}
 		return null;
+	}
+
+
+	/**
+	 * @param pressShape
+	 * @param dragShape
+	 */
+	public void setAnchorShapes(DataShowingShape pressShape, DataShowingShape dragShape) {
+		this.anchor1=pressShape;
+		this.anchor2=dragShape;
+		
 	}
 	
 }

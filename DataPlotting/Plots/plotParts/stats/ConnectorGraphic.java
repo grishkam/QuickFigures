@@ -40,6 +40,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 
 	Point2D[] anchors=new Point2D[] {new Point(), new Point(), new Point()};
 	private transient ConnectorHandleList smartHandles;
+	
 	boolean horizontal=false;
 	
 	public ConnectorGraphic(boolean horizontal, Point2D... a) {
@@ -50,7 +51,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 	
 	/**creates the shape*/
 	public Shape getShape() {
-		if(horizontal) {
+		if(isHorizontal()) {
 			Path2D path1 = new Path2D.Double();
 			path1.moveTo(getAnchors()[0].getX(), getAnchors()[0].getY());
 			path1.lineTo(getAnchors()[1].getX(), getAnchors()[0].getY());
@@ -87,7 +88,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		if (handlenum<getAnchors().length) 
 			getAnchors()[handlenum].setLocation(p2);
 		
-		if(this.horizontal) {
+		if(this.isHorizontal()) {
 			
 		} else {
 			double nx=getAnchors()[0].getX()+getAnchors()[2].getX();
@@ -141,7 +142,7 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 	/**creates a copy*/
 	public ConnectorGraphic copy() {
 		
-		ConnectorGraphic out = new ConnectorGraphic(this.horizontal,new Point2D[anchors.length]);
+		ConnectorGraphic out = new ConnectorGraphic(this.isHorizontal(),new Point2D[anchors.length]);
 		for(int i=0; i<anchors.length; i++) 
 			{	out.anchors[i]=new Point2D.Double();
 				out.anchors[i].setLocation(anchors[i]);
@@ -149,6 +150,10 @@ public class ConnectorGraphic extends BasicShapeGraphic {
 		out.copyAttributesFrom(this);
 		out.copyColorsFrom(this);
 		return out;
+	}
+
+	public boolean isHorizontal() {
+		return horizontal;
 	}
 
 }

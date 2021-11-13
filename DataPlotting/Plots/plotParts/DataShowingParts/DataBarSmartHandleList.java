@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 12, 2021
+ * Date Modified: Nov 13, 2021
  * Version: 2021.2
  */
 package plotParts.DataShowingParts;
@@ -24,12 +24,15 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import applicationAdapters.CanvasMouseEvent;
+import dataSeries.DataSeries;
 import genericPlot.BasicPlot;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import plotTools.ColumnSwapTool;
 import plotTools.TTestTool;
 import standardDialog.StandardDialog;
@@ -58,6 +61,27 @@ public class DataBarSmartHandleList extends SmartHandleList {
 		
 		
 		this.add(new OrderSwapSmartHandle(bar));
+		
+		
+		addStatTestHandles();
+	}
+
+
+	/**
+	 Adds handles for t tests 
+	 */
+	public void addStatTestHandles() {
+		DataSeries dataPress = bar.getTheData();
+		if(dataPress.getAllPositions().length>1) {
+			HashMap<Shape, DataSeries> map = bar.getPartialShapeMap();
+			int i=1;
+			for(Shape key: map.keySet()) {
+				this.add( new StatTestSmartHandle(bar, key,map.get(key), i));
+				i++;
+			}
+		}
+		else
+		
 		this.add( new StatTestSmartHandle(bar));
 	}
 	
@@ -232,6 +256,7 @@ public static class OrderSwapSmartHandle extends SmartHandle {
 	public void handlePress(CanvasMouseEvent m) {
 		tool.setPressShape(theShape);
 		tool.alternativeMouseEvent=m;
+		tool.pressOnShape(theShape, m.getCoordinateX(),m.getCoordinateY());
 		setupSpecialShape() ;
 	}
 	
@@ -288,6 +313,9 @@ public static class StatTestSmartHandle extends SmartHandle {
 	private static final long serialVersionUID = 1L;
 	private DataShowingShape theShape;
 	private TTestTool tool;
+	private Shape subshape;
+	private DataSeries dataSeries;
+	private double positionOnPlot;
 	
 	/**
 	 * @param shape
@@ -302,6 +330,20 @@ public static class StatTestSmartHandle extends SmartHandle {
 		
 	}
 	
+	/**
+	 * @param bar
+	 * @param key
+	 * @param dataSeries
+	 * @param i
+	 */
+	public StatTestSmartHandle(DataShowingShape bar, Shape keyShape, DataSeries dataSeries, int i) {
+		this(bar);
+		this.setHandleNumber(this.getHandleNumber()+i);
+		this.subshape=keyShape;
+		this.dataSeries=dataSeries;
+		this.positionOnPlot=dataSeries.getAllPositions()[0];
+	}
+
 	/**called when a user drags a handle */
 	public void handlePress(CanvasMouseEvent m) {
 		tool.setPressShape(theShape);
@@ -324,10 +366,32 @@ public static class StatTestSmartHandle extends SmartHandle {
 	/**location of the handle. this determines where in the figure the handle will actually appear
 	   overwritten in many subclasses*/
 	public Point2D getCordinateLocation() {
-		Point2D location = RectangleEdges.getLocation(RectangleEdges.TOP, theShape.getBounds());
-		double y = location.getY()-40;
+		
+		Rectangle bounds = theShape.getBounds();
+		if(subshape!=null) {
+			subshape=findShapWithDataSeries(this.positionOnPlot);
+			bounds=subshape.getBounds();
+		}
+		Point2D location = RectangleEdges.getLocation(RectangleEdges.CENTER, bounds);
+		double y = location.getY();
 		double x = location.getX();
 		return new Point2D.Double(x, y);
+	}
+
+	/**finds the shape that displays the given data series
+	 * @param dataSeries2
+	 * @return
+	 */
+	private Shape findShapWithDataSeries(double positionOnPlot) {
+		HashMap<Shape, DataSeries> map = theShape.getPartialShapeMap();
+		
+		for(Shape s: map.keySet()) {
+			if(map.get(s).getAllPositions()[0]==positionOnPlot)
+				return s;
+		}
+		
+		IssueLog.log("failed to find shape "+positionOnPlot);
+		return null;
 	}
 	
 	

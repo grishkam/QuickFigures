@@ -24,11 +24,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
 
 import applicationAdapters.ImageWorkSheet;
 import columnPlots.ColumnPlot;
@@ -36,25 +31,15 @@ import dataSeries.DataSeries;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
-import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
-import layout.BasicObjectListHandler;
-import locatedObject.LocatedObject2D;
-import locatedObject.RectangleEdges;
 import plotParts.Core.PlotArea;
-import plotParts.Core.PlotOrientation;
-import plotParts.DataShowingParts.DataShowingShape;
 import plotParts.stats.ConnectorGraphic;
 import plotParts.stats.StatTestOrganizer;
-import plotParts.stats.StatTestShower;
 import storedValueDialog.ReflectingFieldSettingDialog;
-import storedValueDialog.UserChoiceField;
 import undo.UndoAddItem;
-import utilityClasses1.ArraySorter;
 
 /**a tool for t tests on plots, */
 public class TTestTool extends BasicPlotTool {
@@ -111,7 +96,9 @@ public class TTestTool extends BasicPlotTool {
 				
 					StatTestOrganizer pane = this.testProperties.copy();
 					pane.setDataSeries(testProperties.data1, testProperties.data2);
+					pane.setAnchorShapes(this.pressShape, this.dragShape);
 					pane.setTheText(text);
+					
 					
 					
 					

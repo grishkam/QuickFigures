@@ -149,7 +149,7 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		String st=name+": [";
 		for(double d: data)st+=" "+d;
 		st+="]";
-		st+=" median: "+getMedian();
+		st+=" median: "+getMedian()+" mean: "+getMean()+"  position"+positionOnPlot;
 		return st;
 	}
 	
@@ -318,5 +318,20 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		if (errorDepiction==SEM3) {barExtends= 3*getSEM();}
 		return barExtends;
 	}
+	
+	/**
+	@Override
+	public boolean equals(Object o) {
+		if(! (o instanceof Basic1DDataSeries))
+			return false;
+		
+		Basic1DDataSeries d=(Basic1DDataSeries) o;
+		if(!d.data.equals(data))
+			return false;
+		if(!d.name.equals(name))
+			return false;
+		
+		return true;
+	}*/
 
 }

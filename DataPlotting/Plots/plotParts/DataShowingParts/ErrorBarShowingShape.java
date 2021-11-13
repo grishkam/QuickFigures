@@ -41,9 +41,10 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	
 	
 	private boolean upper=true;
-	private boolean lower=true;{super.setName("Error Bar");}
+	private boolean lower=true;
 	private int type=DRAW_AS_BAR;
 	private int errorShownAs=SEM;
+	{super.setName("Error Bar");}
 	
 	public ErrorBarShowingShape(DataSeries data, int type) {
 		super(data);
@@ -231,7 +232,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	
 	public Shape getOutline() {
 		return	new BasicStroke(3).createStrokedShape(this.getShape());
-	//	return this.getShape().getBounds2D();
+	
 	}
 
 	public void updatePlotArea() {
@@ -268,7 +269,6 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	}
 
 	public int getErrorDepiction() {
-		// TODO Auto-generated method stub
 		return errorShownAs;
 	}
 	

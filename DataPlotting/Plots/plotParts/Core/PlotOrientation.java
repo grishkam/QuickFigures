@@ -23,4 +23,11 @@ package plotParts.Core;
 /**an enum for two possible plot orientation*/
 public enum PlotOrientation {
 	BARS_VERTICAL, BARS_HORIZONTAL;
+	
+	public boolean isVertical() {
+		return this==BARS_VERTICAL;
+	}
+	
+	
+	
 }

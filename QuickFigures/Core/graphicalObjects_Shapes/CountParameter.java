@@ -30,7 +30,7 @@ import undo.SimpleTraits;
 /**stores a specific int value and information about that value. used by certain shapes
  * @see CountHandle 
  * */
-public class CountParameter implements Serializable, RectangleEdgePositions, SimpleTraits<CountParameter> {
+public class CountParameter extends NumberParameter implements Serializable, RectangleEdgePositions, SimpleTraits<CountParameter> {
 	
 	/**
 	 * 
@@ -59,6 +59,7 @@ public class CountParameter implements Serializable, RectangleEdgePositions, Sim
 		this.setValue(i);
 	}
 
+	/**creates a copy with the given parent*/
 	public CountParameter copy(RectangularGraphic ovalGraphic) {
 		CountParameter out = new CountParameter(ovalGraphic);
 		this.giveTraitsTo(out);
@@ -130,6 +131,17 @@ public class CountParameter implements Serializable, RectangleEdgePositions, Sim
 	/**set names for each int value*/
 	public void setNames(String[] names) {
 		this.names = names;
+	}
+
+	@Override
+	public void setNumber(double n) {
+		value=(int) n;
+		
+	}
+
+	@Override
+	public double getNumber() {
+		return value;
 	}
 	
 	

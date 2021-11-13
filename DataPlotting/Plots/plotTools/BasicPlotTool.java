@@ -92,6 +92,8 @@ public class BasicPlotTool extends Object_Mover {
 				dataSeriesPressed=dataPress.getIncludedValues();
 			}
 			markPress=findSubshapeClicked(pressShape, clickedCordinateX, clickedCordinateY);
+			if(markPress==null)
+				markPress=pressShape.getOutline();
 			
 		} else
 		{

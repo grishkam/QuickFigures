@@ -129,8 +129,10 @@ public class KaplanMeierLineShape extends  AbstractDataLineShape {
 		return dKap;
 	}
 	
-	/**returns the outline of the line*/
+	/**returns the bounds of the line*/
 	public Shape getPartialShapeAtLocation(double dx, double dy) {
 		return this.getBounds();
 	}
+	
+	
 }
