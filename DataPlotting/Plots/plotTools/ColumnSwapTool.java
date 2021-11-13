@@ -22,11 +22,10 @@ package plotTools;
 
 import java.awt.Color;
 
-import applicationAdapters.CanvasMouseEvent;
+import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import groupedDataPlots.Grouped_Plot;
 import icons.IconWrappingToolIcon;
-import logging.IssueLog;
 import plotParts.DataShowingParts.DataShowingShape;
 
 /**a tool that is used to reorder data series on a plot*/
@@ -35,7 +34,8 @@ public class ColumnSwapTool extends BasicPlotTool {
 
 	{super.iconSet=IconWrappingToolIcon.createIconSet(createIcon(), createIconRollover());}
 	
-	protected void afterPlotRelease() {
+	@Override
+	public void afterPlotRelease(ImageWorkSheet imageClicked) {
 		performSwap();
 	}
 

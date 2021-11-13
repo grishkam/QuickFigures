@@ -67,18 +67,31 @@ public class BasicPlotTool extends Object_Mover {
 	public void mousePressed() {
 		super.mousePressed();
 		LocatedObject2D o = this.getPrimarySelectedObject();
+		int clickedCordinateX = getClickedCordinateX();
+		int clickedCordinateY = getClickedCordinateY();
 		
+		pressOnShape(o, clickedCordinateX, clickedCordinateY);
+	}
+
+	/**Called when the user presses their mouse key on the object at a given location
+	 * @param o
+	 * @param clickedCordinateX
+	 * @param clickedCordinateY
+	 */
+	public void pressOnShape(LocatedObject2D o, int clickedCordinateX, int clickedCordinateY) {
 		if (o instanceof DataShowingShape) {
 			pressShape=(DataShowingShape) o;
 			DataSeries dataPress = pressShape.getTheData();
 		
+			
+			
 			if (dataPress .getAllPositions().length>1) {
-				dataSeriesPressed=findPressedSeries(pressShape, this.getClickedCordinateX(), this.getClickedCordinateY());
+				dataSeriesPressed=findPressedSeries(pressShape, clickedCordinateX, clickedCordinateY);
 			}
 			if (dataPress .getAllPositions().length==1) {
 				dataSeriesPressed=dataPress.getIncludedValues();
 			}
-			markPress=findSubshapeClicked(pressShape, getClickedCordinateX(), this.getClickedCordinateY());
+			markPress=findSubshapeClicked(pressShape, clickedCordinateX, clickedCordinateY);
 			
 		} else
 		{
@@ -126,7 +139,7 @@ public class BasicPlotTool extends Object_Mover {
 		
 		ImageWorkSheet imageClicked = getImageClicked();
 		
-		onDragWithinImage(dragX, dragY, imageClicked);
+		onDragWithinImage(this.getClickedCordinateX(), this.getClickedCordinateY(),dragX, dragY, imageClicked);
 		
 	
 	}
@@ -136,7 +149,7 @@ public class BasicPlotTool extends Object_Mover {
 	 * @param dragY
 	 * @param imageClicked
 	 */
-	public void onDragWithinImage(int dragX, int dragY, ImageWorkSheet imageClicked) {
+	public void onDragWithinImage(int pressX, int pressY, int dragX, int dragY, ImageWorkSheet imageClicked) {
 		LocatedObject2D roi2 = getObjectAt(imageClicked, dragX, dragY);
 		
 		if (!(roi2 instanceof DataShowingShape) && roi2 instanceof PlotAreaRectangle) try {
@@ -173,7 +186,7 @@ public class BasicPlotTool extends Object_Mover {
 			}
 		else dragShape=null;
 		if(dragShape==null||pressShape==null) return;
-		createMarker();
+		createMarker(pressX,  pressY, dragX, dragY,  imageClicked);
 	}
 
 	/**stores the dragged data series 
@@ -200,13 +213,13 @@ public class BasicPlotTool extends Object_Mover {
 	
 	/**overlays a marker above the clicked and dragged shapes such that the user
 	 * can see what is being targetted*/
-	protected void createMarker() {
+	protected void createMarker(int pressX, int pressY, int dragX, int dragY, ImageWorkSheet imageClicked) {
 		
 			GraphicGroup sg = generateMarkerForSwitch();
 			sg.deselect();
 			sg.hideHandles(true);
 			
-			ImageWorkSheet imageClicked = super.getImageClicked();
+			
 				if(imageClicked==null)
 					{
 					/**find another way to show marker*/
@@ -242,13 +255,13 @@ public class BasicPlotTool extends Object_Mover {
 	protected void afterRelease() {
 		super.afterRelease();
 		if (   pressShape!=null&&dragShape!=null)  {
-			afterPlotRelease();
+			afterPlotRelease(this.getImageClicked());
 		}
 	}
 
 	/**not implemented here, subclasses implements it*/
-	protected void afterPlotRelease() {
-		// TODO Auto-generated method stub
+	public void afterPlotRelease(ImageWorkSheet imageClicked) {
+		
 		
 	}
 

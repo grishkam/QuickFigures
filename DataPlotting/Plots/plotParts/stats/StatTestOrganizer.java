@@ -341,6 +341,7 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 	}
 
 
+	/**returns a menu related to statistical tests to the */
 	@Override
 	public JMenu getDonatedMenuFor(Object requestor) {
 		if(requestor instanceof ZoomableGraphic && this.hasItem((ZoomableGraphic) requestor)) {

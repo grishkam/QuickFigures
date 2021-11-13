@@ -31,6 +31,7 @@ import handles.SmartHandle;
 import handles.SmartHandleList;
 import locatedObject.RectangleEdges;
 import plotTools.ColumnSwapTool;
+import plotTools.TTestTool;
 import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 import undoForPlots.DataShapeUndo;
@@ -57,6 +58,7 @@ public class DataBarSmartHandleList extends SmartHandleList {
 		
 		
 		this.add(new OrderSwapSmartHandle(bar));
+		this.add( new StatTestSmartHandle(bar));
 	}
 	
 	/**
@@ -235,7 +237,7 @@ public static class OrderSwapSmartHandle extends SmartHandle {
 	
 	/**called when a user drags a handle */
 	public void handleDrag(CanvasMouseEvent m) {
-		tool.onDragWithinImage(m.getCoordinateX(), m.getCoordinateY(), m.getAsDisplay().getImageAsWorksheet());
+		tool.onDragWithinImage(tool.alternativeMouseEvent.getCoordinateX(), tool.alternativeMouseEvent.getCoordinateY(),m.getCoordinateX(), m.getCoordinateY(), m.getAsDisplay().getImageAsWorksheet());
 		
 	}
 	
@@ -276,5 +278,60 @@ public static class OrderSwapSmartHandle extends SmartHandle {
 	
 }
 
+
+/**A handle that allows one to reorder the data series*/
+public static class StatTestSmartHandle extends SmartHandle {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private DataShowingShape theShape;
+	private TTestTool tool;
+	
+	/**
+	 * @param shape
+	 */
+	public StatTestSmartHandle(DataShowingShape shape) {
+		this.theShape=shape;
+		tool=new TTestTool();
+		tool.setPressShape(theShape);
+		this.setHandleNumber(5467093);
+		this.setEllipseShape(true);
+		this.setHandleColor(shape.getFillColor());
+		
+	}
+	
+	/**called when a user drags a handle */
+	public void handlePress(CanvasMouseEvent m) {
+		tool.setPressShape(theShape);
+		tool.alternativeMouseEvent=m;
+		tool.pressOnShape(theShape, m.getCoordinateX(),m.getCoordinateY());
+	}
+	
+	/**called when a user drags a handle */
+	public void handleDrag(CanvasMouseEvent m) {
+		
+		tool.onDragWithinImage(tool.alternativeMouseEvent.getCoordinateX(), tool.alternativeMouseEvent.getCoordinateY(),m.getCoordinateX(), m.getCoordinateY(), m.getAsDisplay().getImageAsWorksheet());
+		
+	}
+	
+	/**called when a user releases a handle */
+	public void handleRelease(CanvasMouseEvent m) {
+		tool.afterPlotRelease(m.getAsDisplay().getImageAsWorksheet());
+	}
+	
+	/**location of the handle. this determines where in the figure the handle will actually appear
+	   overwritten in many subclasses*/
+	public Point2D getCordinateLocation() {
+		Point2D location = RectangleEdges.getLocation(RectangleEdges.TOP, theShape.getBounds());
+		double y = location.getY()-40;
+		double x = location.getX();
+		return new Point2D.Double(x, y);
+	}
+	
+	
+	
+}
 
 }

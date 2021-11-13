@@ -30,6 +30,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import applicationAdapters.ImageWorkSheet;
 import columnPlots.ColumnPlot;
 import dataSeries.DataSeries;
 import graphicalObjects.ZoomableGraphic;
@@ -66,23 +67,27 @@ public class TTestTool extends BasicPlotTool {
 	StatTestOrganizer testProperties=new  StatTestOrganizer();
 
 
-	
-	protected void createMarker() {
-		preliminaryPath = testProperties.createLinkingLineForShapes(getPressShape(), getDragShape(), this.getClickedCordinateX(), this.getClickedCordinateY(), this.getDragCordinateX(), this.getDragCordinateY());
+	@Override
+	protected void createMarker(int pressX, int pressY, int dragX, int dragY, ImageWorkSheet imageClicked) {
+		preliminaryPath = testProperties.createLinkingLineForShapes(getPressShape(), getDragShape(), pressX, pressY, dragX, dragY);
 		
-		super.getImageClicked().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true, preliminaryPath), generateMarkerForSwitch()), 0);
+		GraphicGroup group1 = new GraphicGroup(true, getTTextMarkingGraphic(true, preliminaryPath), generateMarkerForSwitch());
+		group1.hideHandles(true);
+		imageClicked.getOverlaySelectionManagger().setSelection(group1, 0);
 	}
 
 
 	
 	
 	/**Called after the mouse is released ober a plot, */
-	protected void afterPlotRelease() {
-		
+	@Override
+	public void afterPlotRelease(ImageWorkSheet imageClicked) {
+		if(this.getPressShape()==null||this.getDragShape()==null)
+			return;
 		PlotArea a1 = getPressShape().getPlotArea();
 		PlotArea a2 = getDragShape().getPlotArea();
 		
-		if (a1!=a2) return;
+		if (a1!=a2) return;// cannot compare from two different plots
 		
 		ZoomableGraphic toAdd = getTTextMarkingGraphic(testProperties.useLinkingLine(), preliminaryPath);
 			if (toAdd instanceof ShapeGraphic) return;
@@ -91,7 +96,7 @@ public class TTestTool extends BasicPlotTool {
 			
 			layer.add(toAdd);
 			
-			this.getImageDisplayWrapperClick().getUndoManager().addEdit(new UndoAddItem(layer, toAdd));
+			imageClicked.getUndoManager().addEdit(new UndoAddItem(layer, toAdd));
 		
 	}
 
