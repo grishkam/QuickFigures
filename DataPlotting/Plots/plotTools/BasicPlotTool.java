@@ -44,6 +44,7 @@ import plotParts.Core.PlotOrientation;
 import plotParts.DataShowingParts.Boxplot;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.DataShowingShape;
+import plotParts.stats.ConnectorGraphic;
 
 /**a superclass for multiple tools that edit a plot*/
 public class BasicPlotTool extends Object_Mover {

@@ -18,7 +18,7 @@
  * Date Modified: Jan 7, 2021
  * Version: 2021.2
  */
-package plotTools;
+package plotParts.stats;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -33,6 +33,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import handles.SmartHandleList;
 import locatedObject.BasicStrokedItem;
+import plotTools.ConnectorHandleList;
 
 /**A path consisting of three strait vertical or horizontal lines */
 public class ConnectorGraphic extends BasicShapeGraphic {

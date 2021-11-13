@@ -25,6 +25,7 @@ import java.awt.geom.Point2D;
 import applicationAdapters.CanvasMouseEvent;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import plotParts.stats.ConnectorGraphic;
 
 /**
 A handle list for moving the anchor points of a connector 

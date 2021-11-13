@@ -4,7 +4,7 @@
  * Date Modified: April 28, 2021
  * Version: 2021.2
  */
-package plotTools;
+package plotParts.stats;
 
 import java.util.ArrayList;
 

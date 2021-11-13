@@ -38,15 +38,18 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconWrappingToolIcon;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import plotParts.Core.PlotArea;
 import plotParts.Core.PlotOrientation;
 import plotParts.DataShowingParts.DataShowingShape;
+import plotParts.stats.ConnectorGraphic;
+import plotParts.stats.StatTestOrganizer;
+import plotParts.stats.StatTestShower;
 import storedValueDialog.ReflectingFieldSettingDialog;
 import storedValueDialog.UserChoiceField;
 import undo.UndoAddItem;
@@ -60,169 +63,18 @@ public class TTestTool extends BasicPlotTool {
 };
 
 
-@UserChoiceField(optionsForUser = { "p-Vale<x", "Stars", "Exact" })
-public int markType=StatTestShower .LESS_THAN_MARK;
-
-
-public static final int LINK_WITH_LINE=0, NO_LINK=1;
-@UserChoiceField(optionsForUser = { "Connection Line", "Put significance above databar" })
-public int linkType=LINK_WITH_LINE;
-
-@UserChoiceField(optionsForUser = { "Assume Unequal Variances", "Assume Equal Variances", "Paired T-Test" })
-public int tTestType=StatTestShower.NORMAL_T_TEST;
-
-
-@UserChoiceField(optionsForUser = { "Two-Tailed", "One-Tailed" })
-public int numberTails=StatTestShower.TW0_TAIL;
+	StatTestOrganizer testProperties=new  StatTestOrganizer();
 
 
 	
 	protected void createMarker() {
-		preliminaryPath = createLinkingLineForShapes(getPressShape(), getDragShape(), this.getClickedCordinateX(), this.getClickedCordinateY(), this.getDragCordinateX(), this.getDragCordinateY());
+		preliminaryPath = testProperties.createLinkingLineForShapes(getPressShape(), getDragShape(), this.getClickedCordinateX(), this.getClickedCordinateY(), this.getDragCordinateX(), this.getDragCordinateY());
 		
-		super.getImageClicked().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true), generateMarkerForSwitch()), 0);
+		super.getImageClicked().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true, preliminaryPath), generateMarkerForSwitch()), 0);
 	}
 
 
-	/**When given two data shapes and where they were clicked on, creates a linker graphic for the shapes*/
-	private ConnectorGraphic createLinkingLineForShapes(DataShowingShape pressShape2, DataShowingShape dragShape2, double pressX, double pressY, double dragX, double dragY) {
-		if (pressShape2==null||dragShape2==null) return null;
-		ConnectorGraphic p3 = prepareForVerticalBar(pressShape2, dragShape2, pressX, pressY, dragX, dragY);
-		if(pressShape2.getOrientation()==PlotOrientation.BARS_HORIZONTAL) {
-			 p3 = prepareForHorizontalBar(pressShape2, dragShape2, pressX, pressY, dragX, dragY);
-		}
-		
-		/**moves the shape a bit further to from the shapes*/
-		if(p3.horizontal)
-			p3 .moveLocation(20, 0);
-		else
-			p3 .moveLocation(0, -20);
-		;
-		 p3.setStrokeColor(Color.black);
-		 p3.setStrokeWidth(1);
-		return p3;
-	}
-
-
-	/**prepares a connector for comparison of vertical bars
-	 * @param pressShape2
-	 * @param dragShape2
-	 * @param pressX
-	 * @param pressY
-	 * @param dragX
-	 * @param dragY
-	 * @return
-	 */
-	public ConnectorGraphic prepareForVerticalBar(DataShowingShape pressShape2, DataShowingShape dragShape2,
-			double pressX, double pressY, double dragX, double dragY) {
-		Point2D.Double pt0 = highestPointInDataShape(pressShape2, pressX, pressY) ;
-		Point2D.Double pt1 = highestPointInDataShape(pressShape2, pressX, pressY) ;//end of horizontal bar
-		Point2D.Double pt2 = highestPointInDataShape(dragShape2, dragX, dragY) ;//end of horixontal bar
-		Point2D.Double pt3 = highestPointInDataShape(dragShape2, dragX, dragY) ;
-		if (pt1.y<pt2.y) pt2.y=pt1.y; else pt1.y=pt2.y; 
-		
-		PathGraphic p1=new PathGraphic(pt1, pt2);
-		
-		while (doesOverLapDataShapes(p1)) {
-			p1.getPoints().applyAffine(AffineTransform.getTranslateInstance(0, -5));
-			p1.updatePathFromPoints();
-			pt1.y-=5;
-			pt2.y-=5;
-		}
-		
-		//p1.moveLocation(0, -10);
-		p1=new PathGraphic(pt0, pt1, pt2, pt3);
-		
-		
-		Double pmid = new Point2D.Double((pt1.getX()+pt2.getX())/2, pt1.getY());
-		ConnectorGraphic p3 = new ConnectorGraphic(false,pt0, pmid, pt3);
-		return p3;
-	}
 	
-	/**prepares a connector for comparison of vertical bars
-	 * @param pressShape2
-	 * @param dragShape2
-	 * @param pressX
-	 * @param pressY
-	 * @param dragX
-	 * @param dragY
-	 * @return
-	 */
-	public ConnectorGraphic prepareForHorizontalBar(DataShowingShape pressShape2, DataShowingShape dragShape2,
-			double pressX, double pressY, double dragX, double dragY) {
-		Point2D.Double pt0 = rightmostPointInDataShape(pressShape2, pressX, pressY) ;
-		Point2D.Double pt1 = rightmostPointInDataShape(pressShape2, pressX, pressY) ;//end of bar
-		Point2D.Double pt2 = rightmostPointInDataShape(dragShape2, dragX, dragY) ;//end of bar
-		Point2D.Double pt3 = rightmostPointInDataShape(dragShape2, dragX, dragY) ;
-		if (pt1.x>pt2.x) pt2.x=pt1.x; else pt1.x=pt2.x; 
-		
-		
-		PathGraphic p1=new PathGraphic(pt1, pt2);
-		
-		/**moves line to the right until it no longer overlaps any data shape*/
-		while (doesOverLapDataShapes(p1)) {
-			p1.getPoints().applyAffine(AffineTransform.getTranslateInstance(5, 0));
-			p1.updatePathFromPoints();
-			pt1.x+=5;
-			pt2.x+=5;
-		}
-		
-		//p1.moveLocation(0, -10);
-		p1=new PathGraphic(pt0, pt1, pt2, pt3);
-		
-		
-		Double pmid = new Point2D.Double( pt1.getX(), (pt1.getY()+pt2.getY())/2);
-		ConnectorGraphic p3 = new ConnectorGraphic( true, pt0, pmid, pt3);
-		
-		return p3;
-	}
-
-/**returns true if the horizontal line overlaps with data shapes*/
-	protected boolean doesOverLapDataShapes(PathGraphic p1) {
-		Rectangle r = p1.getBounds();
-		r.height=2;
-		ArrayList<LocatedObject2D> items = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(r, this.getImageClicked());
-		items=new ArraySorter<LocatedObject2D>().getThoseOfClass(items, DataShowingShape.class);
-		boolean overlapsDataShapes=items.size()>0;
-		
-		return overlapsDataShapes;
-	}
-
-	/**returns the point in the shape with the lowest y value*/
-	private Point2D.Double highestPointInDataShape(DataShowingShape pressShape2, double x, double y) {
-		/**if (pressShape2 instanceof DataBarShape) {
-			GraphicLayer p = pressShape2.getParentLayer();
-			if (p instanceof GenericDataSeriesGroup) {
-				if (null!=((GenericDataSeriesGroup) p).getErrorBar())
-				return highestPointInDataShape(((GenericDataSeriesGroup) p).getErrorBar(), x, y);
-			}
-		}*/
-		
-		Rectangle bounds = pressShape2.getBounds();
-		DataSeries part = pressShape2.getPartialSeriesDrawnAtLocation(x, y);
-		if (part!=null) bounds=pressShape2.getPartialShapeAtLocation(x, y).getBounds();
-		
-		return new Point2D.Double(bounds.getCenterX(),bounds.getMinY());
-	
-	}
-	
-	/**returns the point in the shape with the highest value*/
-	private Point2D.Double rightmostPointInDataShape(DataShowingShape pressShape2, double x, double y) {
-		/**if (pressShape2 instanceof DataBarShape) {
-			GraphicLayer p = pressShape2.getParentLayer();
-			if (p instanceof GenericDataSeriesGroup) {
-				if (null!=((GenericDataSeriesGroup) p).getErrorBar())
-				return highestPointInDataShape(((GenericDataSeriesGroup) p).getErrorBar(), x, y);
-			}
-		}*/
-		
-		Rectangle bounds = pressShape2.getBounds();
-		DataSeries part = pressShape2.getPartialSeriesDrawnAtLocation(x, y);
-		if (part!=null) bounds=pressShape2.getPartialShapeAtLocation(x, y).getBounds();
-		
-		return new Point2D.Double(bounds.getMaxX(),bounds.getCenterY());
-	
-	}
 	
 	/**Called after the mouse is released ober a plot, */
 	protected void afterPlotRelease() {
@@ -232,7 +84,7 @@ public int numberTails=StatTestShower.TW0_TAIL;
 		
 		if (a1!=a2) return;
 		
-		ZoomableGraphic toAdd = getTTextMarkingGraphic(this.useLinkingLine());
+		ZoomableGraphic toAdd = getTTextMarkingGraphic(testProperties.useLinkingLine(), preliminaryPath);
 			if (toAdd instanceof ShapeGraphic) return;
 		
 			GraphicLayer layer = getPressShape().getParentLayer().getParentLayer();
@@ -244,23 +96,34 @@ public int numberTails=StatTestShower.TW0_TAIL;
 	}
 
 	
-	private ZoomableGraphic getTTextMarkingGraphic(boolean linkline) {
+	private ZoomableGraphic getTTextMarkingGraphic(boolean linkline, ConnectorGraphic preliminaryPath) {
 		ZoomableGraphic toAdd=null;
-			TextGraphic text = getTTestResult();
-			if (linkline)
+			ComplexTextGraphic text = getTTestResult();
+			
 					{
 				if (text==null) return preliminaryPath;
-					GraphicLayerPane pane = new GraphicLayerPane("t-test");
+				
+				
+					StatTestOrganizer pane = this.testProperties.copy();
+					pane.setDataSeries(testProperties.data1, testProperties.data2);
+					pane.setTheText(text);
+					
+					
+					
 					toAdd=pane;
-					pane.add(preliminaryPath);
-					pane.add(text);
+					if (linkline)
+						{
+							pane.addItemToLayer(preliminaryPath);
+						    pane.setLinker(preliminaryPath);
+					    }
 					}
-			else toAdd=text;
+			
 		return toAdd;
 	}
 
-	private TextGraphic getTTestResult() {
+	private ComplexTextGraphic getTTestResult() {
 		if (isColumnPlot() &&pressShape==dragShape ) return null;
+		
 		DataSeries d1;
 		
 		DataSeries d2; 
@@ -275,7 +138,10 @@ public int numberTails=StatTestShower.TW0_TAIL;
 		
 		if ( dataSeriesPressed==dataSeriesDragged) return null;
 		
-		TextGraphic text = createTextForTest(d1, d2);
+		testProperties.setDataSeries(d1, d2);
+		
+		ComplexTextGraphic text = testProperties.createTextForTest(d1, d2, super.preliminaryPath,  this.getDragShape());
+		
 		return text;
 	}
 
@@ -285,9 +151,7 @@ public int numberTails=StatTestShower.TW0_TAIL;
 
 	
 
-	private boolean useLinkingLine() {
-		return linkType==LINK_WITH_LINE;
-	}
+	
 
 
 	
@@ -295,36 +159,7 @@ public int numberTails=StatTestShower.TW0_TAIL;
 		return "Perform T-Test (Drag from one column to another)";
 	}
 	
-	/**creates a text item that displays the results of the test*/
-	private TextGraphic createTextForTest(DataSeries data1, DataSeries data2) {
-		if (data1.getIncludedValues().length()<3) return null;
-		if (data2.getIncludedValues().length()<3) return null;
-		StatTestShower test = new StatTestShower(tTestType, numberTails, markType);
-		double pValue;
-		try {
-			pValue = test.calculatePValue(data1, data2);
-			
-		} catch (Exception e) {
-			return null;
-		}
-		
-		
-		TextGraphic text = test.createTextForPValue(pValue);
-		double ty=0; 
-		double tx=0;
-		if(preliminaryPath!=null) {
-			ty = preliminaryPath.getBounds().getMinY();
-			tx = preliminaryPath.getBounds().getCenterX();
-		}
-		if (!useLinkingLine()) {
-			Point2D.Double h = this.highestPointInDataShape(getDragShape(), this.getDragCordinateX(), this.getDragCordinateY());
-			ty=h.getY();
-			tx=h.getX();
-		}
-		text.setLocationType(RectangleEdges.BOTTOM);
-		text.setLocation(tx, ty);
-		return text;
-	}
+
 	
 	public class PlotToolIcon extends PlotIcon {
 		
@@ -351,6 +186,6 @@ public int numberTails=StatTestShower.TW0_TAIL;
 	
 	@Override
 	public void showOptionsDialog() {
-		new ReflectingFieldSettingDialog(this, "markType", "linkType", "tTestType", "numberTails").showDialog();
+		new ReflectingFieldSettingDialog(this.testProperties, "markType", "linkType", "tTestType", "numberTails").showDialog();
 	}
 }

@@ -18,7 +18,7 @@
  * Date Modified: April 28, 2021
  * Version: 2021.2
  */
-package plotTools;
+package plotParts.stats;
 
 import java.io.Serializable;
 
@@ -36,25 +36,28 @@ import textObjectProperties.TextLineSegment;
 /**A class that performs T-tests on the data series from plots
   and creates labels and marks to indicate significance*/
 public class StatTestShower implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	TextGraphic model=new TextGraphic(); {model.setFontSize(10);}
 
 	public static final int STAR_MARK=1, LESS_THAN_MARK=0, ROUNDED_NUMBER=2;;
-	
-	public static final int NORMAL_T_TEST=0, PAIRED=2, HOMOSCEDASTIC = 1;
+	private int markType=LESS_THAN_MARK;
 
-TextGraphic model=new TextGraphic(); {model.setFontSize(10);}
-/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
+
+
+	
 boolean showMessages=false;//set to true if details of tests should be printed to the log window.
 private String lastPValue;
 
 
-
+public static final int NORMAL_T_TEST=0, PAIRED=2, HOMOSCEDASTIC = 1;
 private int tTestType=NORMAL_T_TEST;
+
 public static final int TW0_TAIL=0, ONE_TAIL=1;
 private int numberTails=TW0_TAIL;
-private int markType=LESS_THAN_MARK;
+
+
 
 
 public StatTestShower() {
@@ -69,7 +72,7 @@ public StatTestShower(int tTestType, int numberTails, int markType) {
 }
 
 /**returns a text item to display the p value given*/
-protected TextGraphic createTextForPValue(double pValue) {
+public ComplexTextGraphic createTextForPValue(double pValue) {
 		
 		
 		
@@ -81,7 +84,7 @@ protected TextGraphic createTextForPValue(double pValue) {
 			
 		}
 		
-		TextGraphic text = new ComplexTextGraphic(pValueToString(pValue));
+		ComplexTextGraphic text = new ComplexTextGraphic(pValueToString(pValue));
 		text.copyAttributesFrom(model);
 		return text;
 	}
@@ -151,7 +154,7 @@ protected TextGraphic createTextForPValue(double pValue) {
 	
 	
 	/**returns the p value for a t test beteen the data series*/
-	protected double calculatePValue(DataSeries data1, DataSeries data2) throws Exception {
+	public double calculatePValue(DataSeries data1, DataSeries data2) throws Exception {
 		if  ((data1 instanceof KaplanMeierDataSeries)&&(data2 instanceof KaplanMeierDataSeries)) {
 			return new LogRank((KaplanMeierDataSeries)data1, (KaplanMeierDataSeries)data2).getPValue();
 		}
