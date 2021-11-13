@@ -38,7 +38,6 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import handles.HasSmartHandles;
-import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
@@ -65,7 +64,7 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	/**the index of the axis that will be used to display data*/
 	private int axisChoice=0;
 	
-	protected transient BarSmartHandleList smartHandles;
+	protected transient DataBarSmartHandleList smartHandles;
 	
 	/**returns the dependent and independent variable values for i-th point*/
 	protected double getDependantVariableValue(int i) {
@@ -176,6 +175,11 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	public void setOrientation(PlotOrientation orientation2) {
 		this.orientation=orientation2;
 	}
+	
+	/**the plot orientation*/
+	public PlotOrientation getOrientation() {
+		return this.orientation;
+	}
 
 	
 	@Override
@@ -258,10 +262,10 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 	
 	public void drawHandesSelection(Graphics2D g2d, CordinateConverter cords) {
 		if (selected) {
-			SmartHandleList smlist = this.getSmartHandleList();
+			/**SmartHandleList smlist = getSmartHandleList();
 			if(smlist!=null)
 				smlist.draw(g2d, cords);
-			else {
+			else */{
 				ArrayList<Point2D> list = new ArrayList<Point2D> ();
 				PathIterator shape2 =getRotationTransformShape().getPathIterator(AffineTransform.getTranslateInstance(0, 0));
 				while(!shape2.isDone())

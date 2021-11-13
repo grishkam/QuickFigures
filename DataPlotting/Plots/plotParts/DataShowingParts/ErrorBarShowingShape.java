@@ -281,7 +281,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	@Override
 	public SmartHandleList getSmartHandleList() {
 		if (smartHandles==null)
-			smartHandles=new BarSmartHandleList(this);
+			smartHandles=new DataBarSmartHandleList(this);
 		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
 	}
 }

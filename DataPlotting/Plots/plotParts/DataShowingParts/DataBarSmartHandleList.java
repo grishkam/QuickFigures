@@ -39,7 +39,7 @@ import undoForPlots.PlotAreaChangeUndo;
 /**
 A handle list with a special handle for the width of bars
  */
-public class BarSmartHandleList extends SmartHandleList {
+public class DataBarSmartHandleList extends SmartHandleList {
 
 
 	/**
@@ -51,9 +51,11 @@ public class BarSmartHandleList extends SmartHandleList {
 	/**
 	 * @param dataBarShape
 	 */
-	public BarSmartHandleList(DataShowingShape dataBarShape) {
+	public DataBarSmartHandleList(DataShowingShape dataBarShape) {
 		this.bar=dataBarShape;
 		this.add(new BarWidthSmartHandle(bar));
+		
+		
 		this.add(new OrderSwapSmartHandle(bar));
 	}
 	
@@ -201,7 +203,7 @@ public static class BarWidthSmartHandle extends SmartHandle {
 		
 }
 
-
+/**A handle that allows one to reorder the data series*/
 public static class OrderSwapSmartHandle extends SmartHandle {
 
 	/**

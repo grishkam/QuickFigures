@@ -120,7 +120,9 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 	}
 	@Override
 	public SmartHandleList getSmartHandleList() {
-		return super.getButtonList();
+		if(this.superSelected)
+			return super.getButtonList();
+		return new SmartHandleList();
 	}
 
 	@Override

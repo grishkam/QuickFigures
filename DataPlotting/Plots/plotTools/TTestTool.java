@@ -43,7 +43,9 @@ import icons.IconWrappingToolIcon;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import plotParts.Core.PlotArea;
+import plotParts.Core.PlotOrientation;
 import plotParts.DataShowingParts.DataShowingShape;
 import storedValueDialog.ReflectingFieldSettingDialog;
 import storedValueDialog.UserChoiceField;
@@ -77,19 +79,46 @@ public int numberTails=StatTestShower.TW0_TAIL;
 	
 	protected void createMarker() {
 		preliminaryPath = createLinkingLineForShapes(getPressShape(), getDragShape(), this.getClickedCordinateX(), this.getClickedCordinateY(), this.getDragCordinateX(), this.getDragCordinateY());
-		preliminaryPath .moveLocation(0, -20);
-		;
+		
 		super.getImageClicked().getOverlaySelectionManagger().setSelection(new GraphicGroup(true, getTTextMarkingGraphic(true), generateMarkerForSwitch()), 0);
 	}
 
 
 	/**When given two data shapes and where they were clicked on, creates a linker graphic for the shapes*/
-	private ConnectorGraphic createLinkingLineForShapes(DataShowingShape pressShape2, DataShowingShape dragShape2, double px, double py, double dx, double dy) {
+	private ConnectorGraphic createLinkingLineForShapes(DataShowingShape pressShape2, DataShowingShape dragShape2, double pressX, double pressY, double dragX, double dragY) {
 		if (pressShape2==null||dragShape2==null) return null;
-		Point2D.Double pt0 = highestPointInDataShape(pressShape2, px, py) ;
-		Point2D.Double pt1 = highestPointInDataShape(pressShape2, px, py) ;//end of horizontal bar
-		Point2D.Double pt2 = highestPointInDataShape(dragShape2, dx, dy) ;//end of horixontal bar
-		Point2D.Double pt3 = highestPointInDataShape(dragShape2, dx, dy) ;
+		ConnectorGraphic p3 = prepareForVerticalBar(pressShape2, dragShape2, pressX, pressY, dragX, dragY);
+		if(pressShape2.getOrientation()==PlotOrientation.BARS_HORIZONTAL) {
+			 p3 = prepareForHorizontalBar(pressShape2, dragShape2, pressX, pressY, dragX, dragY);
+		}
+		
+		/**moves the shape a bit further to from the shapes*/
+		if(p3.horizontal)
+			p3 .moveLocation(20, 0);
+		else
+			p3 .moveLocation(0, -20);
+		;
+		 p3.setStrokeColor(Color.black);
+		 p3.setStrokeWidth(1);
+		return p3;
+	}
+
+
+	/**prepares a connector for comparison of vertical bars
+	 * @param pressShape2
+	 * @param dragShape2
+	 * @param pressX
+	 * @param pressY
+	 * @param dragX
+	 * @param dragY
+	 * @return
+	 */
+	public ConnectorGraphic prepareForVerticalBar(DataShowingShape pressShape2, DataShowingShape dragShape2,
+			double pressX, double pressY, double dragX, double dragY) {
+		Point2D.Double pt0 = highestPointInDataShape(pressShape2, pressX, pressY) ;
+		Point2D.Double pt1 = highestPointInDataShape(pressShape2, pressX, pressY) ;//end of horizontal bar
+		Point2D.Double pt2 = highestPointInDataShape(dragShape2, dragX, dragY) ;//end of horixontal bar
+		Point2D.Double pt3 = highestPointInDataShape(dragShape2, dragX, dragY) ;
 		if (pt1.y<pt2.y) pt2.y=pt1.y; else pt1.y=pt2.y; 
 		
 		PathGraphic p1=new PathGraphic(pt1, pt2);
@@ -106,10 +135,45 @@ public int numberTails=StatTestShower.TW0_TAIL;
 		
 		
 		Double pmid = new Point2D.Double((pt1.getX()+pt2.getX())/2, pt1.getY());
-		ConnectorGraphic p3 = new ConnectorGraphic(pt0, pmid, pt3);
+		ConnectorGraphic p3 = new ConnectorGraphic(false,pt0, pmid, pt3);
+		return p3;
+	}
+	
+	/**prepares a connector for comparison of vertical bars
+	 * @param pressShape2
+	 * @param dragShape2
+	 * @param pressX
+	 * @param pressY
+	 * @param dragX
+	 * @param dragY
+	 * @return
+	 */
+	public ConnectorGraphic prepareForHorizontalBar(DataShowingShape pressShape2, DataShowingShape dragShape2,
+			double pressX, double pressY, double dragX, double dragY) {
+		Point2D.Double pt0 = rightmostPointInDataShape(pressShape2, pressX, pressY) ;
+		Point2D.Double pt1 = rightmostPointInDataShape(pressShape2, pressX, pressY) ;//end of bar
+		Point2D.Double pt2 = rightmostPointInDataShape(dragShape2, dragX, dragY) ;//end of bar
+		Point2D.Double pt3 = rightmostPointInDataShape(dragShape2, dragX, dragY) ;
+		if (pt1.x>pt2.x) pt2.x=pt1.x; else pt1.x=pt2.x; 
 		
-		 p3.setStrokeColor(Color.black);
-		 p3.setStrokeWidth(1);
+		
+		PathGraphic p1=new PathGraphic(pt1, pt2);
+		
+		/**moves line to the right until it no longer overlaps any data shape*/
+		while (doesOverLapDataShapes(p1)) {
+			p1.getPoints().applyAffine(AffineTransform.getTranslateInstance(5, 0));
+			p1.updatePathFromPoints();
+			pt1.x+=5;
+			pt2.x+=5;
+		}
+		
+		//p1.moveLocation(0, -10);
+		p1=new PathGraphic(pt0, pt1, pt2, pt3);
+		
+		
+		Double pmid = new Point2D.Double( pt1.getX(), (pt1.getY()+pt2.getY())/2);
+		ConnectorGraphic p3 = new ConnectorGraphic( true, pt0, pmid, pt3);
+		
 		return p3;
 	}
 
@@ -142,6 +206,24 @@ public int numberTails=StatTestShower.TW0_TAIL;
 	
 	}
 	
+	/**returns the point in the shape with the highest value*/
+	private Point2D.Double rightmostPointInDataShape(DataShowingShape pressShape2, double x, double y) {
+		/**if (pressShape2 instanceof DataBarShape) {
+			GraphicLayer p = pressShape2.getParentLayer();
+			if (p instanceof GenericDataSeriesGroup) {
+				if (null!=((GenericDataSeriesGroup) p).getErrorBar())
+				return highestPointInDataShape(((GenericDataSeriesGroup) p).getErrorBar(), x, y);
+			}
+		}*/
+		
+		Rectangle bounds = pressShape2.getBounds();
+		DataSeries part = pressShape2.getPartialSeriesDrawnAtLocation(x, y);
+		if (part!=null) bounds=pressShape2.getPartialShapeAtLocation(x, y).getBounds();
+		
+		return new Point2D.Double(bounds.getMaxX(),bounds.getCenterY());
+	
+	}
+	
 	/**Called after the mouse is released ober a plot, */
 	protected void afterPlotRelease() {
 		
@@ -161,6 +243,7 @@ public int numberTails=StatTestShower.TW0_TAIL;
 		
 	}
 
+	
 	private ZoomableGraphic getTTextMarkingGraphic(boolean linkline) {
 		ZoomableGraphic toAdd=null;
 			TextGraphic text = getTTestResult();
