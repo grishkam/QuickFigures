@@ -1,20 +1,30 @@
+/*******************************************************************************
+ * Copyright (c) 2021 Gregory Mazo
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
 /**
  * Author: Greg Mazo
+ * Date Created: Nov 14, 2021
  * Date Modified: Nov 14, 2021
- * Copyright (C) 2021 Gregory Mazo
- * 
- */
-/**
- 
- * 
+ * Version: 2021.2
  */
 package figureOrganizer;
 
 import java.awt.Color;
 
 /**
- 
- * 
+ An enum that lists different types of figures. Methods determine how each type of figure will be treated
  */
 public enum FigureType {
 	FLUORESCENT_CELLS, WESTERN_BLOT("Western Blot "), ELECTRON_MICROSCOPY, H_AND_E;
@@ -22,7 +32,7 @@ public enum FigureType {
 	/**if crop area is below this value, asks user to re-draw the crop area */
 	 static int MIN_WIDTH_FOR_CROP_AREA = 25;
 	/**if crop area is below this value, asks user to re-draw the crop area */
-	static int MIN_HIEGHT_FOR_CROP_AREA = 25;
+	static int MIN_HEIGHT_FOR_CROP_AREA = 25;
 	/**if crop area width/hieght or height/width is above this ratio, will ask user to re-draw*/
 	static double MAX_ASPECT_RATIO_FOR_CROP_AREA = 3.5;
 	
@@ -49,19 +59,22 @@ public enum FigureType {
 		
 	}
 
-	public  int getMIN_WIDTH_FOR_CROP_AREA() {
+	/**a minimum width to determine when crop areas are valid and when to ask the user to adjust it*/
+	public  int getMinWidthForCropArea() {
 		return MIN_WIDTH_FOR_CROP_AREA;
 	}
 
-	public  int getMIN_HIEGHT_FOR_CROP_AREA() {
+	/**a minimum height to determine when crop areas are valid and when to ask the user to adjust it*/
+	public  int getMinHeightForCropArea() {
 		if(this==WESTERN_BLOT)
-			return 10;
-		return MIN_HIEGHT_FOR_CROP_AREA;
+			return 10;// western blots can have very long narrow crop areas. 
+		return MIN_HEIGHT_FOR_CROP_AREA;
 	}
 
+	/***/
 	public double getMaxAspectRatioForCropArea() {
 		if(this==WESTERN_BLOT)
-			return 100;
+			return 100;// western blots can have very long narrow crop areas. 
 		return MAX_ASPECT_RATIO_FOR_CROP_AREA;
 	}
 	/**

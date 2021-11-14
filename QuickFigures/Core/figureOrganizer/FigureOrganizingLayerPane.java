@@ -388,7 +388,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		/**for rectangles that are either small or have strange aspect ratios, rectangle is declared invalid*/
 		if(b.height>figureType1.getMaxAspectRatioForCropArea()*b.width) valid=false;
 		if(b.width>figureType1.getMaxAspectRatioForCropArea()*b.height) valid=false;
-		if(b.width<figureType1.getMIN_WIDTH_FOR_CROP_AREA()||b.height<figureType1.getMIN_HIEGHT_FOR_CROP_AREA()) valid=false;	
+		if(b.width<figureType1.getMinWidthForCropArea()||b.height<figureType1.getMinHeightForCropArea()) valid=false;	
 		
 		/**if area is very large, rectangle is declared invalid and 
 		  a smaller one is set. Asks user to crop anyway*/
