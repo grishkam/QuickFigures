@@ -146,7 +146,9 @@ class LaneLabelAdder extends BasicGraphicAdder {
 						}
 						Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(f);
 						ag2.setLocation(panel.getCenterX(), panel.getMinY());
-						ag2.setText(options.prefix+count+options.suffix); count++;
+						
+						TextItemAdder.setTextContent(ag2, options.prefix+count+options.suffix);
+						count++;
 						ag2.setTextColor(Color.black);
 						ag2.getTagHashMap().put("Index",f);
 						added.add(ag2);

@@ -286,10 +286,7 @@ class TextItemAdder extends BasicGraphicAdder {
 		}
 		String text = pattern.getText(n);
 		
-		ag2.setText(text); 
-		 if (ag2 instanceof ComplexTextGraphic) {
-			 ((ComplexTextGraphic) ag2).getParagraph().get(0).get(0).setText(text);
-		 }
+		setTextContent(ag2, text);
 		
 		
 		listOfLabels.add(ag2);
@@ -303,6 +300,21 @@ class TextItemAdder extends BasicGraphicAdder {
 		}
 		p.addItemToLayer(ag2);
 		undo.addEditToList(new UndoAddItem(p, ag2));
+	}
+
+
+
+
+
+	/**
+	 * @param ag2
+	 * @param text
+	 */
+	public static void setTextContent(TextGraphic ag2, String text) {
+		ag2.setText(text); 
+		 if (ag2 instanceof ComplexTextGraphic) {
+			 ((ComplexTextGraphic) ag2).getParagraph().get(0).get(0).setText(text);
+		 }
 	}
 
 	/**

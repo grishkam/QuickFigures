@@ -64,6 +64,7 @@ import layout.basicFigure.LayoutSpaces;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
@@ -591,6 +592,16 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	@MenuItemMethod(menuActionCommand = "Label Creation Options", menuText = "Label Creation Options")
 	public void changeLabelProperties() {
 		new StoredValueDilaog(LabelCreationOptions.current).showDialog();;
+	}
+	
+	/**shows an options dialog for the label positions*/
+	@MenuItemMethod(menuActionCommand = "Row/Col Label Positions", menuText = "Row/Column Label Positions", subMenuName="Advanced Options")
+	public void changeLabelPositions() {
+		DefaultLayoutGraphic layout = figureOrganizingLayerPane.getMontageLayoutGraphic();
+		if(layout==null) {
+			ShowMessage.showOptionalMessage("No layout found ", true, "There is no layout");
+		}
+		new StoredValueDilaog("Advanced Label Options", layout).showDialog();;
 	}
 	
 	

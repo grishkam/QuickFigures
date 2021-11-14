@@ -53,6 +53,7 @@ public class IconUtil {
 	}
 
 
+	/**returns the brightness/contrast icon*/
 public static Icon createBrightnessIcon() {
 	
 	return new BrightnessIcon( );
@@ -73,6 +74,7 @@ public static Icon createBrightnessIcon() {
 		
 	}
 	
+	/**returns an icon that displays a short String*/
 	public static GraphicGroup createAllIcon(String all) {
 		GraphicGroup gg = new GraphicGroup();
 		addRect(gg, new Rectangle(2,2,18,16), new Color(0,0,0,0), null);
@@ -85,7 +87,7 @@ public static Icon createBrightnessIcon() {
 	}
 	
 	
-	
+	/**Adds a rectangular graphic to the given group*/
 	private static ShapeGraphic addRect(GraphicGroup g, Rectangle r, Color c, Color cFill) {
 		ShapeGraphic out = RectangularGraphic.blankRect(r, c);
 		if (cFill!=null) {out.setFillColor(cFill); out.setFilled(true);}

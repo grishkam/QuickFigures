@@ -37,6 +37,7 @@ import figureEditDialogs.PanelStackDisplayOptions;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
 import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.FigureType;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -56,11 +57,13 @@ public class QuickFigureMaker extends DisplayActionTool {
 	/**
 	 * 
 	 */
-	private static final String SELECTED_SLICE_AND_FRAME = "+Z+T", SELECTED_FRAME = "+T", SELECTED_SLICE = "+Z", SPLIT = "Split", MERGE = "Merge";
+	private static final String SELECTED_SLICE_AND_FRAME = "+Z+T", SELECTED_FRAME = "+T", SELECTED_SLICE = "+Z", SPLIT = "Split", MERGE = "Merge", GEL="Gel or Blot";
 	private static final String slowFigure = "Slow Figure";
+	
+	/**A list of the possible codes. This determines what variety of FigureMakers are displayed in a menu*/
 	static String[] possibleCodes=new String[] {"Split+C+",		 "Split+C+T", 				"Split+C+Z", 							"Split+C+Z+T",MERGE, 		"Merge+T"				,"Merge+Z"                 ,"Merge+Z+T"
-			};
-	String[] menuTextForCodes=new String[] {"Default", "Selected T Frame only"  , "Selected Z Slice only", "Selected Slice and Frame"          };
+		,GEL	};
+	String[] menuTextForCodes=new String[] {"Default", "Selected T Frame only"  , "Selected Z Slice only", "Selected Slice and Frame" , "Blot Figure"         };
 
 	/**text indicates whether to create a figure with merge or split, C+ indicates to follow the template*/
 	private String codeString="C+";
@@ -70,11 +73,15 @@ public class QuickFigureMaker extends DisplayActionTool {
 		if(t.contains(SELECTED_SLICE_AND_FRAME)) return  menuTextForCodes[3];
 		if(t.contains(SELECTED_FRAME)) return  menuTextForCodes[1];
 		if(t.contains(SELECTED_SLICE)) return  menuTextForCodes[2];
+		if(t.contains(GEL)) {
+			this.localFigureAdder.setFigureType(FigureType.WESTERN_BLOT);
+			return  menuTextForCodes[4];
+		}
 		return  menuTextForCodes[0];
 	}
 	
 	
-	 LocalImageAdder  la=new LocalImageAdder();
+	 LocalImageAdder  localFigureAdder=new LocalImageAdder();
 	 
 	
 	 public boolean hidesImage=true;
@@ -84,7 +91,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	 void setupAdder() {
 		 figureCreationOptions.autoGenerateFromModel=true;
 		 figureCreationOptions.showPanelDialog=false;
-		 la.autoFigureGenerationOptions=figureCreationOptions;
+		 localFigureAdder.autoFigureGenerationOptions=figureCreationOptions;
 	 }
 	 
 	
@@ -149,10 +156,10 @@ public class QuickFigureMaker extends DisplayActionTool {
 	 * @return
 	 */
 	public FigureOrganizingLayerPane createFigure(ImageWindowAndDisplaySet displayedWorksheet, String path, PreProcessInformation p2) {
-		if (path==null) {la.openFile=false; 
-		}else la.openFile=true;
+		if (path==null) {localFigureAdder.openFile=false; 
+		}else localFigureAdder.openFile=true;
 		
-		FigureOrganizingLayerPane added = la.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
+		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
 		
 		if(added==null) {
@@ -342,7 +349,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	set to true if the current frame must be used rather than all time frames
 	 */
 	protected boolean setSingleFrameMode(boolean singleFrame) {
-		return la.useSingleFrame=singleFrame;
+		return localFigureAdder.useSingleFrame=singleFrame;
 	}
 
 
@@ -350,13 +357,13 @@ public class QuickFigureMaker extends DisplayActionTool {
 	 set to true if the current slice must be used rather than all z slices
 	 */
 	protected boolean setSingleSliceMode(boolean singleSlice) {
-		return la.useSingleSlice=singleSlice;
+		return localFigureAdder.useSingleSlice=singleSlice;
 	}
 	
 	/**Sets the quick figure maker back to its defaults*/
 	public void setOptionsBackToDefault() {
-		la.useSingleFrame=false;
-		la.useSingleSlice=false;
+		localFigureAdder.useSingleFrame=false;
+		localFigureAdder.useSingleSlice=false;
 		setMergeOrSplit(FigureAdder.DEFAULT);
 	}
 	
@@ -406,18 +413,18 @@ public class QuickFigureMaker extends DisplayActionTool {
 	/**returns true if the quick figure maker creates figures
 	 * with only the merge panel regardless of the figure template*/
 	public boolean isMergeOnly() {
-		return la.mergeOnly==FigureAdder.MERGE_PANELS_ONLY;
+		return localFigureAdder.mergeOnly==FigureAdder.MERGE_PANELS_ONLY;
 	}
 	/**returns true if the quick figure maker creates figures
 	 * with split channels regardless of the figure template*/
 	public boolean isSplitChannelOnly() {
-		return la.mergeOnly==FigureAdder.SPLIT_CHANNELS_ONLY;
+		return localFigureAdder.mergeOnly==FigureAdder.SPLIT_CHANNELS_ONLY;
 	}
 
 	/**Determines how this figure maker determines whether
 	 * to add split channels or merged images*/
 	public void setMergeOrSplit(int mergeOnly) {
-		la.mergeOnly = mergeOnly;
+		localFigureAdder.mergeOnly = mergeOnly;
 	}
 
 	/**Adds a version of the quickfigure maker to the file menu*/

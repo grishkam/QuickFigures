@@ -67,11 +67,13 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 
 	
 	/**if crop area is below this value, asks user to re-draw the crop area */
-	public static int MIN_WIDTH_FOR_CROP_AREA = 25;
+	//public static int MIN_WIDTH_FOR_CROP_AREA = 25;
+	/**if crop area is below this value, asks user to re-draw the crop area */
+	//public static int MIN_HIEGHT_FOR_CROP_AREA = 25;
 	/**if crop area width/hieght or height/width is above this ratio, will ask user to re-draw*/
-	public static double MAX_ASPECT_RATIO_FOR_CROP_AREA = 3.5;
+	//public static double MAX_ASPECT_RATIO_FOR_CROP_AREA = 3.5;
 
-
+	private FigureType figureType=null;
 
 
 	{description= "A Figure Organizing Layer";}
@@ -265,6 +267,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	 * @return */
 	public CombinedEdit addNovelMultiChannel(MultichannelDisplayLayer display, int start) {
 		if(display==null) return null;
+		display.setFigureType(getFigureType());
 		int startpoint=this.getAllPanelLists().getlastPanelsGridIndex()+1;
 		if(start>0) startpoint=start;
 		ImageDisplayLayer principalMultiChannel = getPrincipalMultiChannel();
@@ -327,13 +330,14 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		/**in the specific case of a layout with one panel, ensures that the addition does to the next column and not the next row*/
 			if (targetLayout!=null) {	
 				BasicLayout pl = targetLayout.getPanelLayout();
-					if (pl!=null&&pl.rowmajor&& pl.nColumns()==1&&pl.nRows()==1) {
+				boolean singlePanel = pl.nColumns()==1&&pl.nRows()==1&&this.getFigureType().doesExpandLayoutToBox();
+					if (pl!=null&&pl.rowmajor&& singlePanel) {
 						pl.setNColumns(2);
-						
+						IssueLog.log("Added column for new image"+this.getFigureType());
 					} else
-					if (pl!=null&&!pl.rowmajor&& pl.nColumns()==1&&pl.nRows()==1) {
+					if (pl!=null&&!pl.rowmajor&& singlePanel) {
 						pl.setNRows(2);
-						
+						IssueLog.log("Added row for new image "+this.getFigureType());
 					}
 					
 			}
@@ -379,10 +383,12 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 				//in some contexts, a crop region might already be set
 				}
 			
+		FigureType figureType1 = display.getFigureType();
+		
 		/**for rectangles that are either small or have strange aspect ratios, rectangle is declared invalid*/
-		if(b.height>MAX_ASPECT_RATIO_FOR_CROP_AREA*b.width) valid=false;
-		if(b.width>MAX_ASPECT_RATIO_FOR_CROP_AREA*b.height) valid=false;
-		if(b.width<MIN_WIDTH_FOR_CROP_AREA||b.height<MIN_WIDTH_FOR_CROP_AREA) valid=false;	
+		if(b.height>figureType1.getMaxAspectRatioForCropArea()*b.width) valid=false;
+		if(b.width>figureType1.getMaxAspectRatioForCropArea()*b.height) valid=false;
+		if(b.width<figureType1.getMIN_WIDTH_FOR_CROP_AREA()||b.height<figureType1.getMIN_HIEGHT_FOR_CROP_AREA()) valid=false;	
 		
 		/**if area is very large, rectangle is declared invalid and 
 		  a smaller one is set. Asks user to crop anyway*/
@@ -504,6 +510,8 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	public CombinedEdit nextMultiChannel(String path, PreProcessInformation p) {
 		
 		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().getMultichannelOpener().creatMultiChannelDisplayFromUserSelectedImage(true, path);
+		item.setFigureType(this.getFigureType());
+		
 		item.getSlot().applyCropAndScale(p);
 		CombinedEdit output = nextMultiChannel(item);
 		
@@ -765,6 +773,18 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	/**returns a transform object for this figure*/
 	public TransformFigure transform() {
 		return new TransformFigure(this,getMontageLayoutGraphic());
+	}
+
+
+	public FigureType getFigureType() {
+		if(figureType==null)
+			return FigureType.FLUORESCENT_CELLS;
+		return figureType;
+	}
+
+	/**sets ths figure type*/
+	public void setFigureType(FigureType figureType) {
+		this.figureType = figureType;
 	}
 
 

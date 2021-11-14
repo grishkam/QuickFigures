@@ -130,7 +130,7 @@ private static final long serialVersionUID = 1L;
 		this.getChannelLabelProp().copyOptionsFrom(multi.getChannelLabelProp().copy());
 		
 		multi.getPanelList().giveSettingsTo(getPanelList());
-		
+		this.setFigureType(multi.getFigureType());
 		
 		if (preprocessToo)this.setPreprocessScale(multi.getPreprocessScale());
 	}
@@ -165,6 +165,10 @@ private static final long serialVersionUID = 1L;
 
 	/**is set to true if the user has seen the crop dialog at least one time. record is used to prevent repetitive displays of crop dialog when figure is innitially created*/
 	public boolean cropShown=false;
+
+	/**indicates whether the figure is an IF image, a western blot or some other form*/
+	private FigureType figureType=null;
+	
 	
 	/**returns the list of panels that display this Image*/
 	public PanelList getPanelList() {
@@ -759,6 +763,23 @@ transient static IconSet i;
 		float h = (float) (getPanelList().getHeight()*panelLevelScale);
 		
 		return h;
+	}
+
+	/**
+	 * @return
+	 */
+	public FigureType getFigureType() {
+		if(this.figureType!=null)
+			return this.figureType;
+		return FigureType.FLUORESCENT_CELLS;
+	}
+
+	/**
+	 * @param figureType
+	 */
+	public void setFigureType(FigureType figureType) {
+		this.figureType=figureType;
+		
 	}
 	
 	

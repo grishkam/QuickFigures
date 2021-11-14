@@ -158,9 +158,10 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 		AbstractUndoableEdit2 undo = createUndo(a);
 		
 		this.setValue(a, this.value);
-		
-		undo.establishFinalState();
-		c1.addEditToList(undo);
+		if(undo!=null) {
+			undo.establishFinalState();
+			c1.addEditToList(undo);
+		}
 	}
 	
 	/**
@@ -200,13 +201,16 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 	
 	
 	public Component getInputPanel() {
-		return getPaddedPanel(getAngleInput() );
+		return getPaddedPanel(getNumerInput() );
 	}
 	
 	/**creates a JPanel for setting the angle*/
-	protected NumberInputPanel getAngleInput() {
+	protected NumberInputPanel getNumerInput() {
 		
-		NumberInputPanel panel = new NumberInputPanel(name, this.value);
+		int min=0;
+		int max=50;
+		
+		NumberInputPanel panel = new NumberInputPanel(name, this.value, min, max);
 		panel.placeItems(panel, 0, 0);
 		panel.addNumberInputListener(new NumberInputListener() {
 			

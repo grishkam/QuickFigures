@@ -30,6 +30,7 @@ import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
 import figureFormat.TemplateUserMenuAction;
 import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.FigureType;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
@@ -57,7 +58,7 @@ public class FigureAdder extends LayoutAdder {
 	public boolean useSingleFrame=false;
 	public boolean useSingleSlice=false;
 	
-	/**constants indicate what sort of figure, defaul indicates to folow the template*/
+	/**constants indicate what sort of figure, default indicates to folow the saved template*/
 	public static final int MERGE_PANELS_ONLY=1, DEFAULT=0, SPLIT_CHANNELS_ONLY=2;
 	public int mergeOnly=DEFAULT;
 	
@@ -67,6 +68,8 @@ public class FigureAdder extends LayoutAdder {
 	private FigureOrganizingLayerPane currentFigureOrganizer;
 
 	private boolean useOpen;
+
+	private FigureType figureType;
 
 	/**creates a figure adder that relies on a file*/
 	public FigureAdder(boolean fromFile) {
@@ -208,7 +211,10 @@ public class FigureAdder extends LayoutAdder {
 		 /**If the figure organizer is newly created, it will need a new name which depends on the multichannel*/
 		if (currentFigureOrganizer!=null&&currentFigureOrganizer.getPrincipalMultiChannel()==null) {
 			currentFigureOrganizer.setName("Figure For "+multiDimensionalImage.getName());
+			currentFigureOrganizer.setFigureType(this.getFigureType());
 		}
+		
+		multiDimensionalImage.setFigureType(this.getFigureType());
 		
 		/**opens a figure template or creates one if one does not exist*/
 		FigureTemplate temp = getUsedTemplate( multiDimensionalImage);
@@ -222,6 +228,15 @@ public class FigureAdder extends LayoutAdder {
 				addImageToFigureUsingTemplate(currentFigureOrganizer, multiDimensionalImage, temp, p);
 				
 		return currentFigureOrganizer;
+	}
+
+	/**
+	 returns the figure type that will be used
+	 */
+	private FigureType getFigureType() {
+		if (this.figureType!=null)
+			return figureType;
+		return FigureType.FLUORESCENT_CELLS;
 	}
 
 	/**
@@ -254,11 +269,23 @@ public class FigureAdder extends LayoutAdder {
 		if (isAutoGenerateFromModel()) {
 				multiDimensionalImage.eliminateAndRecreate();
 				DefaultLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
-				if (makeLabels) 
+				if (getFigureType()==FigureType.WESTERN_BLOT) {
+					layout.rowLabelsOnRight=true;//I prefer to label western blots on right
+				}
+				
+				if (makeLabels&&getFigureType().needsLabels()) 
 					temp .createDefaultLabelsObjectsFromTemplate( currentFigureOrganizer, multiDimensionalImage, layout);
-				temp .createScaleBarOffTemplate( currentFigureOrganizer);
+				if (getFigureType()==FigureType.WESTERN_BLOT) {
+					multiDimensionalImage.eliminateChanLabels();//do not need channel labels for a western blot?
+				}
+				if (getFigureType().needsScaleBar()) 
+					temp .createScaleBarOffTemplate( currentFigureOrganizer);
 				layout.generateCurrentImageWrapper();
 				layout.getEditor().fitLabelSpacesToContents(layout.getPanelLayout());
+				
+				if (getFigureType()==FigureType.WESTERN_BLOT) {
+					multiDimensionalImage.eliminateChanLabels();//do not need channel labels for a western blot?
+				}
  
 } 
 
@@ -352,6 +379,14 @@ public class FigureAdder extends LayoutAdder {
 			return "Image";
 		
 	}
+
+	public void setFigureType(FigureType figureType) {
+		this.figureType = figureType;
+	}
+	
+	
+	
+	
 	}
 	
 	

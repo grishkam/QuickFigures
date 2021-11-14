@@ -44,6 +44,7 @@ import handles.layoutHandles.RepackRowColoumnHandle;
 import handles.layoutHandles.ScaleLayoutHandle;
 import handles.layoutHandles.MoveRowHandle;
 import handles.layoutHandles.AddLabelHandle;
+import layout.RetrievableOption;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.GridLayoutEditEvent;
 import layout.basicFigure.GridLayoutEditListener;
@@ -69,7 +70,10 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	private static final long serialVersionUID = 1L;
 	private BasicLayout thelayout;
 	private transient UndoLayoutEdit currentUndo;
+	
+	@RetrievableOption(key = "Row labels on right side", label="Place new row labels on right")
 	public boolean rowLabelsOnRight=false;
+	@RetrievableOption(key = "Column labels at bottom", label="Place new column labels on bottom")
 	public boolean columnLabelsBelow=false;
 	 
 	public DefaultLayoutGraphic() {}
