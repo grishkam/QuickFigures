@@ -20,9 +20,7 @@
  */
 package addObjectMenus;
 
-import channelMerging.ChannelUseInstructions;
 import channelMerging.PreProcessInformation;
-import figureFormat.FigureTemplate;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.FigureType;
 import figureOrganizer.MultichannelDisplayLayer;
@@ -56,6 +54,11 @@ public class BlotFigureAdder extends FigureAdder {
 	@Override
 	public String getMenuCommand() {
 		return "Blot "+super.getMenuCommand();
+	}
+	
+	@Override
+	public String getCommand() {
+		return "Blot"+super.getCommand();
 	}
 	
 	

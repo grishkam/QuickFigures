@@ -716,8 +716,9 @@ public void addChenEntryColorMenus(Container j, ArrayList<ChannelEntry> iFin) {
 	for(int i=0; i<iFin.size(); i++) {
 		ChannelEntry channelEntry = iFin.get(i);
 		String nameRC = channelEntry.getRealChannelName();
-		if (nameRC==null||nameRC.trim().equals("")) nameRC="Chan "+channelEntry.getOriginalChannelIndex();
-		ChanReColorer colorer = new ChanReColorer(channelEntry.getOriginalChannelIndex());
+		int originalChannelIndex = channelEntry.getOriginalChannelIndex();
+		if (nameRC==null||nameRC.trim().equals("")) nameRC="Chan "+originalChannelIndex;
+		ChanReColorer colorer =new ChanReColorer(originalChannelIndex);
 		if (iFin.size()>1) {
 		SmartJMenu b = ChannelColorJMenu.getStandardColorJMenu(colorer);
 		b.setIcon(new ColorIcon(channelEntry.getColor()));
@@ -734,6 +735,8 @@ public void addChenEntryColorMenus(Container j, ArrayList<ChannelEntry> iFin) {
 	
 	j.add(output);
 }
+
+
 
 public ArrayList<MultiChannelImage> getExtraWrappers() {
 	return extraWrappers;

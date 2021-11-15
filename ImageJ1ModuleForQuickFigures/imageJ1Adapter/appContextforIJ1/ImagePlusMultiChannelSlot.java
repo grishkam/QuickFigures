@@ -46,10 +46,12 @@ import locatedObject.ScaleInfo;
 import logging.IssueLog;
 
 
-/**This class holds an imageJ image, information on how to crop and scale the image, a scaled copy
+/**
+ * This class holds an imageJ image, information on how to crop and scale the image, a scaled copy
  * abd more. when this object is serialized for storage, the imageJ images are also serialized and stored in arrays.
  * All the what is needed to keep track of a multichannel source stack, save and retrieve it.
   Before this object is serialized, it saves its images as serialized arrays.
+  TODO: make the storing of the image less confusing
   */
 	public class ImagePlusMultiChannelSlot implements MultiChannelSlot {
 
@@ -63,12 +65,12 @@ import logging.IssueLog;
 		/**The image that is used. Compared to the original, this version may be cropped or scaled*/
 		private transient ImagePlus sourceImagePlus;//the imageplus
 		protected byte[] serializedIM;//the serialized version of the image 
-		
+		transient ImagePlusWrapper multiChannelWrapper;
 		
 	
 		
 		transient displayUpdater di;
-		transient ImagePlusWrapper multiChannelWrapper;
+		
 		
 		
 		private static final long serialVersionUID = 1L;
@@ -97,6 +99,7 @@ import logging.IssueLog;
 			
 		}
 
+		/**returns the working image*/
 		@Override
 		public ImagePlusWrapper getMultichannelImage() {
 			if (getImagePlus()==null) {
@@ -138,6 +141,7 @@ import logging.IssueLog;
 			if (sourceImagePlus!=null){
 				return sourceImagePlus;
 			}
+			
 			try{
 			
 			if (loadFromFile()) 
@@ -258,7 +262,11 @@ import logging.IssueLog;
 		stores the working version of this image
 		 */
 		private void saveWorkingImage() {
-			if (getImagePlus()==null)return;
+			if (getImagePlus()==null)
+				{
+				IssueLog.log("Was asked to store a working image that was not found in the slot");
+				return;
+				}
 			
 			serializedIM=new ij.io.FileSaver(getImagePlus()).serialize();
 		}
@@ -570,7 +578,8 @@ import logging.IssueLog;
 			if(backup!=null) {
 				/**Tries to match the channel order and luts. this part is prone to errors so it is in a try catch*/
 				try {
-				if (matchColors)matchOrderAndLuts(
+				if (matchColors)
+					matchOrderAndLuts(
 						 getBackupAsWrapper()
 						);
 				} catch (Throwable t) {IssueLog.logT(t);}
@@ -646,7 +655,7 @@ import logging.IssueLog;
 			     throws IOException {
 			
 			
-		
+			
 			saveWorkingImage();
 			out.defaultWriteObject();
 		}

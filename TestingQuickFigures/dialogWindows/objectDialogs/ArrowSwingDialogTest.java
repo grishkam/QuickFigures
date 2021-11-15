@@ -27,6 +27,7 @@ import org.junit.Test;
 import graphicalObjects_Shapes.ArrowGraphic;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import testing.DialogTester;
+import testing.FigureTester;
 
 /**
  
@@ -53,7 +54,7 @@ public class ArrowSwingDialogTest extends  DialogTester  {
 		testCombinations(d);
 		
 
-		
+		FigureTester.closeAllWindows(true);
 		d.setVisible(false);
 	}
 

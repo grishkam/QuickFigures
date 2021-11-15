@@ -84,7 +84,8 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 			return;
 			}
 		LUT createLutFromColor = LUT.createLutFromColor(lut);
-		/**inverted lut*/
+		
+		/**inverted lut created for some colors*/
 		if (Color.black.equals(lut)) {
 			createLutFromColor = LUT.createLutFromColor(Color.white);
 			createLutFromColor=createLutFromColor.createInvertedLut();
@@ -100,12 +101,13 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 			}
 		
 		if (imp instanceof CompositeImage)
-		setLutColorWithoutDisplayRangeEdit((CompositeImage)imp, createLutFromColor, chan);
+			setLutColorWithoutDisplayRangeEdit((CompositeImage)imp, createLutFromColor, chan);
 		else {
 			imp.getProcessor().setLut(createLutFromColor);
 		}
 	}
 	
+	/**Sets the channel LUT of the channel*/
 	private static void setLutColorWithoutDisplayRangeEdit(CompositeImage ci4, LUT lut, int a) {
 		if (a==0) {
 			IssueLog.log("Error, Was asked to chang color for channel '0' but channel numbering starts from 1");

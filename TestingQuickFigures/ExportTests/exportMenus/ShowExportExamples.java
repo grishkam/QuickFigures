@@ -24,20 +24,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import appContextforIJ1.ImageDisplayTester;
+import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import imageDisplayApp.ImageDisplayIOTest;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import testing.FigureTester;
 import testing.TestExample;
 import testing.TestProvider;
 
 /**Shows the example figures that are used for the export tests*/
- class ShowExportExamples extends BasicMenuItemForObj {
+ public class ShowExportExamples extends BasicMenuItemForObj {
 	
 	
 	
-	static TestExample testCase=TestExample._FIGURE;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.SPLIT_CHANNEL_FIGURE;//which cases to test. set to null if all should be tested
+	private static boolean saveAndReopen=true;
 
-
+	
 
 
 	/**
@@ -45,20 +49,51 @@ import testing.TestProvider;
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws Exception, IOException {
-		ImageDisplayTester.startToolbars(true);
-		IssueLog.sytemprint=true;
-		ArrayList<TestProvider> testsCases = TestProvider.getTestProviderListWithfigures();
-		for(TestProvider ex: testsCases) {
-			if (testCase==null||testCase==ex.getType())
-			ex.createExample();
-			
-				}
+		showExample(testCase);
 		
 		
 		/**pauses long enough for the user to test out */
 		IssueLog.waitSeconds(215);
 		FigureTester.closeAllWindows();
+		
+		
 	}
+
+
+
+
+	/**shows the given example and returns it
+	 * @return 
+	 * 
+	 */
+	public static DisplayedImage showExample(TestExample testCase) {
+		ImageDisplayTester.startToolbars(true);
+		IssueLog.sytemprint=true;
+		ArrayList<TestProvider> testsCases = TestProvider.getTestProviderListWithfigures();
+		DisplayedImage ex2 = null;
+		for(TestProvider ex: testsCases) {
+			if (testCase==null||testCase==ex.getType())
+				{ 
+				ex2 = ex.createExample();
+				if((ex2 instanceof ImageWindowAndDisplaySet) && saveAndReopen)
+					testSaveAndReopen(ex2);
+				}
+			
+				}
+		return  ex2;
+	}
+
+
+
+
+	/**
+	 * @param ex2
+	 */
+	public static void testSaveAndReopen(DisplayedImage ex2) {
+		new ImageDisplayIOTest().saveAndReopen((ImageWindowAndDisplaySet) ex2, false);
+	}
+	
+	
 
 
 	@Override

@@ -27,6 +27,9 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import actionToolbarItems.ChannelLabelButton;
 import actionToolbarItems.EditScaleBars;
 import actionToolbarItems.SetAngle;
@@ -673,8 +676,16 @@ public class FigureTester {
 	}
 	
 	public static void closeAllWindows() {
+		closeAllWindows(false);
+	}
+	
+	/**closes all windows*/
+	public static void closeAllWindows(boolean dispose) {
 		Window[] windows = Window.getWindows();
 		for(Window w: windows) {
+			if (dispose && w instanceof JFrame) {
+				((JFrame)w).setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			}
 			w.setVisible(false);
 		}
 	}

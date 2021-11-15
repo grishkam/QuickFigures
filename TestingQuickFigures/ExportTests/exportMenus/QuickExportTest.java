@@ -112,7 +112,8 @@ abstract class QuickExportTest {
 			ImageDisplayIOTest.assertCompareWindows(createExample.getWindow(), this.createExporter().viewSavedFile(file));
 			}
 			
-			FigureTester.closeAllWindows();
+			
+			FigureTester.closeAllWindows(true);
 				}
 		Desktop.getDesktop().open(new File(DirectoryHandler.getDefaultHandler().getTempFolderPath(qe.getExtension())+"/"));
 		

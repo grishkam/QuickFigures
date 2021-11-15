@@ -63,8 +63,8 @@ public class ImageDisplayIOTest {
 	}
 
 	private void testExampleImage(ImageWindowAndDisplaySet i) {
-		String path = new DirectoryHandler().getTempFolderPath()+"testSave1.ser";
-		 File f = new File(path);
+		
+		
 		 
 		 /**selects and deselects each to ensure that selection history does not affect serialization
 		   during manual testing one class with not serializable handles can interfere with serialization
@@ -77,21 +77,38 @@ public class ImageDisplayIOTest {
 			 l.deselect();
 			
 		 }
+		 boolean askuserToCompare=true;
+		 
+		 saveAndReopen(i, askuserToCompare);
+	}
+
+	/**
+	 * @param i
+	 * @param askuserToCompare
+	 */
+	public void saveAndReopen(ImageWindowAndDisplaySet i, boolean askuserToCompare) {
+		String path = new DirectoryHandler().getTempFolderPath()+"testSave1.ser";
+		 File f = new File(path);
 		 
 		ImageDisplayIO.writeToFile(f, i.getTheSet());
 	;
 		
 		
-		IJ.wait(200);
+		IssueLog.waitMiliseconds(200);
 		
 		ImageWindowAndDisplaySet i2 = ImageDisplayIO.showFile(f);
 		
-		GraphicSetDisplayWindow windowOriginal = i.getWindow();
 		
-		GraphicSetDisplayWindow windowNew = i2.getWindow();
-		i.setZoomLevel(1);
-		i2.setZoomLevel(1);
-		assertCompareWindows( windowOriginal, windowNew);
+		if(askuserToCompare) {
+		
+			GraphicSetDisplayWindow windowOriginal = i.getWindow();
+			
+			GraphicSetDisplayWindow windowNew = i2.getWindow();
+			i.setZoomLevel(1);
+			i2.setZoomLevel(1);
+			assertCompareWindows( windowOriginal, windowNew);
+		}
+		
 		f.delete();
 		
 		compare(i, i2);
