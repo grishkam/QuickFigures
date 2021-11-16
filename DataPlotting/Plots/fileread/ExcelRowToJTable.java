@@ -35,6 +35,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import undo.CombinedEdit;
 
+/**creates a menu item to open an excel file in a window with options to create a plot*/
 public class ExcelRowToJTable extends QuickImport implements genericTools.NormalToolDragHandler.FileDropListener {
 
 	
