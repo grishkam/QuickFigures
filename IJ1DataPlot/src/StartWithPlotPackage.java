@@ -33,6 +33,7 @@ import fileread.ExcelFileToXYPlot;
 import fileread.ExcelRowToJTable;
 import fileread.PlotType;
 import fileread.ShowTable;
+import genericTools.NormalToolDragHandler;
 import groupedDataPlots.Grouped_Plot;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
@@ -72,7 +73,8 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		
 		for(int i=0; i<=5; i++)
 			SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(i));
-	
+		NormalToolDragHandler.fileDropExtras.add(new ExcelRowToJTable());
+		;
 		alreadyInstalled=true;
 		
 	}

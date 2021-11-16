@@ -38,6 +38,7 @@ import channelMerging.ImageDisplayLayer;
 import externalToolBar.BasicDragHandler;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
+import genericTools.NormalToolDragHandler.FileDropListener;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
@@ -63,7 +64,11 @@ import undo.UndoAddItem;
 
 /**A drag and drop handler for the tools on the toolbar.*/
 public class NormalToolDragHandler extends BasicDragHandler {
+	
+
 	private BasicToolBit tool ;
+	
+	public static ArrayList<FileDropListener> fileDropExtras=new ArrayList<FileDropListener>();
 
 	public NormalToolDragHandler(BasicToolBit roi_Mover) {
 		this.tool=roi_Mover;
@@ -193,6 +198,18 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	  If there are single images. Adds them to the 
 	 * @return */
 	public CombinedEdit handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
+		
+		for(FileDropListener thisFileDrop:fileDropExtras) try {
+			if(thisFileDrop.canTarget(file))
+				{
+				return thisFileDrop.handleFileListDrop(imageAndDisplaySet, location, file);
+				}
+			
+		} catch (Throwable t) {
+			IssueLog.logT(t);
+		}
+		
+		
 		Point2D location2 = imageAndDisplaySet.getConverter().unTransformP(location);
 		LocatedObject2D roi2 = getObjectAtPoint(imageAndDisplaySet, location2);
 		PanelLayoutGraphic layout=null;
@@ -440,4 +457,28 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	public void dragEnter(ImageWindowAndDisplaySet displaySet, DropTargetDragEvent arg0) {
 		super.dragEnter(displaySet, arg0);
 	}
+	
+	/**
+	 
+	 * 
+	 */
+public static interface FileDropListener {
+
+		/**returns true if this listener should target the file
+		 * @param file
+		 * @return
+		 */
+		public boolean canTarget(ArrayList<File> file);
+
+		/**handles the file list drop
+		 * @param imageAndDisplaySet
+		 * @param location
+		 * @param file
+		 * @return
+		 */
+		public CombinedEdit handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location,
+				ArrayList<File> file) ;
+	
+}
+
 }

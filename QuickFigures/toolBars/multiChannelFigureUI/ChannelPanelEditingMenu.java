@@ -667,8 +667,9 @@ public static int getBestMatchToChannel(MultiChannelImage mw, String realChanNam
 	setTheColor(color, chan1);
 }
 
-/**sets the color of the channel*/
-public void setTheColor(Color color, Integer chan1) {
+/**sets the color of the channel
+ * @return */
+public CombinedEdit setTheColor(Color color, Integer chan1) {
 	String realName=getPressedMultichannel().getRealChannelName(chan1);
 	
 	
@@ -687,6 +688,7 @@ public void setTheColor(Color color, Integer chan1) {
 	} catch (Exception e) {
 		IssueLog.logT(e);
 	}
+	return undo;
 }
 
 

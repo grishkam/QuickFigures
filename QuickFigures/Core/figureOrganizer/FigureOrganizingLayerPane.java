@@ -66,12 +66,7 @@ import undo.UndoLayoutEdit;
 public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFigureOrganizer, HasUniquePopupMenu {
 
 	
-	/**if crop area is below this value, asks user to re-draw the crop area */
-	//public static int MIN_WIDTH_FOR_CROP_AREA = 25;
-	/**if crop area is below this value, asks user to re-draw the crop area */
-	//public static int MIN_HIEGHT_FOR_CROP_AREA = 25;
-	/**if crop area width/hieght or height/width is above this ratio, will ask user to re-draw*/
-	//public static double MAX_ASPECT_RATIO_FOR_CROP_AREA = 3.5;
+
 
 	private FigureType figureType=null;
 

@@ -150,6 +150,7 @@ import logging.IssueLog;
 			
 			if (sourceImagePlus==null) {
 				setToByteArray();
+				IssueLog.log("loading from saved byte array");
 			}
 			
 			if (sourceImagePlus==null) {
@@ -159,7 +160,7 @@ import logging.IssueLog;
 			}
 			
 			catch (Throwable t) {
-				t.printStackTrace();
+				IssueLog.logT(t);
 			}
 			return sourceImagePlus;
 			
@@ -554,7 +555,7 @@ import logging.IssueLog;
 					if (reopen) {
 						original.setStoredImage(IJ.openImage());
 						if (original.getStoredImage()!=null) 
-							return original.wrappedUpVersion;
+							return original.getWrappedUpVersion();
 					}
 					return null;
 					}
@@ -592,7 +593,7 @@ import logging.IssueLog;
 		 * @return
 		 */
 		private ImagePlusWrapper getBackupAsWrapper() {
-			return original.wrappedUpVersion;
+			return original.getWrappedUpVersion();
 			}
 		
 
@@ -658,6 +659,30 @@ import logging.IssueLog;
 			
 			saveWorkingImage();
 			out.defaultWriteObject();
+		
+		}
+
+		/**
+		 * Created during testing of color saving
+		 */
+		public void progressReportOnColors(String write) {
+			IssueLog.log(write+" object working version "+this.getMultichannelImage().getChannelColor(1));
+			IssueLog.log(write+" object original "+this.getBackup(false).getLuts()[0]);
+			IssueLog.log(write+" object original "+this.getBackupAsWrapper().getChannelColor(1));
+		}
+		
+		/**Before serialization of the object, this will serialize the ImagePlus into its Byte[]
+		 * @throws ClassNotFoundException */
+		private void readObject(java.io.ObjectInputStream out)
+			     throws IOException, ClassNotFoundException {
+			
+			
+			
+			
+			out.defaultReadObject();
+			
+			
+			
 		}
 
 		/**a subcompartment for storing the original version of the image*/
@@ -748,8 +773,8 @@ import logging.IssueLog;
 				if (backupUncroppedImagePlus!=null) {
 					this.innitialized=true;
 					wrappedUpVersion = new ImagePlusWrapper(backupUncroppedImagePlus);
-					wrappedUpVersion.setUpChannelNames();
-					this.originalSavePath=wrappedUpVersion.getPath();
+					getWrappedUpVersion().setUpChannelNames();
+					this.originalSavePath=getWrappedUpVersion().getPath();
 					this.lastSavePath=originalSavePath;
 					this.estimatedFileSize=backupUncroppedImagePlus.getBitDepth()*backupUncroppedImagePlus.getWidth()*backupUncroppedImagePlus.getHeight()*backupUncroppedImagePlus.getStackSize();
 					this.originalDimensions=new Rectangle(0,0, backupUncroppedImagePlus.getWidth(), backupUncroppedImagePlus.getHeight());
@@ -768,6 +793,12 @@ import logging.IssueLog;
 
 			public Rectangle getOriginalDimensions() {
 				return originalDimensions;
+			}
+
+			public ImagePlusWrapper getWrappedUpVersion() {
+				if(wrappedUpVersion==null)
+					new ImagePlusWrapper(getOrCreateImagePlus());
+				return wrappedUpVersion;
 			}
 		}
 

@@ -15,8 +15,11 @@
  *******************************************************************************/
 package fileread;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -30,8 +33,9 @@ import dataTableDialogs.SmartDataInputDialog;
 import exportMenus.QuickImport;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
+import undo.CombinedEdit;
 
-public class ExcelRowToJTable extends QuickImport  {
+public class ExcelRowToJTable extends QuickImport implements genericTools.NormalToolDragHandler.FileDropListener {
 
 	
 
@@ -44,13 +48,11 @@ public class ExcelRowToJTable extends QuickImport  {
 
 	@Override
 	protected String getExtension() {
-		// TODO Auto-generated method stub
 		return "xlsx";
 	}
 
 	@Override
 	protected String getExtensionName() {
-		// TODO Auto-generated method stub
 		return "excel files";
 	}
 
@@ -69,19 +71,29 @@ public class ExcelRowToJTable extends QuickImport  {
 			File f=getFileAndaddExtension();
 			if (f==null) return;
 			
-			Workbook wb = ReadExcelData.fileToWorkBook(f.getAbsolutePath());
-			Sheet sheet = wb.getSheetAt(0);
-			DataTable table = DataTableFromWorkBookSheet(sheet);
-			
-			SmartDataInputDialog ss = new SmartDataInputDialog(table, PlotType.DEFAULT_PLOT_TYPE_COLS);
-			ss.getDataTable().shiftToTopLeft();
-			ss.showDialog();;
-			diw.updateDisplay();diw.updateDisplay();
+			showFile(diw, f);
 		
 		} catch (InvalidFormatException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**shows a data table for teh given excel file
+	 * @param diw
+	 * @param f
+	 * @throws InvalidFormatException
+	 * @throws IOException
+	 */
+	public void showFile(DisplayedImage diw, File f) throws InvalidFormatException, IOException {
+		Workbook wb = ReadExcelData.fileToWorkBook(f.getAbsolutePath());
+		Sheet sheet = wb.getSheetAt(0);
+		DataTable table = DataTableFromWorkBookSheet(sheet);
+		
+		SmartDataInputDialog ss = new SmartDataInputDialog(table, null);
+		ss.getDataTable().shiftToTopLeft();
+		ss.showDialog();;
+		diw.updateDisplay();diw.updateDisplay();
 	}
 
 	public static DataTable DataTableFromWorkBookSheet(Sheet sheet) {
@@ -122,6 +134,28 @@ public class ExcelRowToJTable extends QuickImport  {
 			} catch (Throwable t) {t.printStackTrace();}
 		}
 		return table;
+	}
+
+	@Override
+	public boolean canTarget(ArrayList<File> file) {
+		for(File f: file) {
+			if(f.getAbsolutePath().toLowerCase().endsWith(".xls"))
+				return true;
+			if(f.getAbsolutePath().toLowerCase().endsWith(".xlsx"))
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public CombinedEdit handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location,
+			ArrayList<File> file) {
+		for(File f: file) try {
+			showFile(imageAndDisplaySet, f);
+		} catch (Throwable t) {
+			IssueLog.log(t);
+		}
+		return null;
 	}
 	
 
