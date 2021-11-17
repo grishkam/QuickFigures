@@ -62,6 +62,7 @@ import export.svg.SVGExporter;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_Shapes.RectangularGraphic;
 import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
 import handles.AttachmentPositionHandle;
@@ -132,6 +133,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private double scale=1;
 	boolean embed=false;
 	 
+	/**If the image is the product of opening a file, these fields store information on that*/
 	protected File file=null;
 	private boolean filederived=false;
 	private boolean loadFromFile=false;
@@ -143,6 +145,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 
 	/**an options crop area that is limited to this specific panel*/
 	 Rectangle croppingrect=null;
+	
 
 		
 		public ImagePanelGraphic() {}
@@ -369,6 +372,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private transient ImagePanelActionHandleList aHandleList;
 
 	private transient ChannelSwapHandleList extraHandles;
+	
 
 
 	
@@ -569,11 +573,13 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			return isItAValidCrop(getCroppingRect());
 		}
 		
-		/**returns true if the given rectangle can be used as a crop area for the image*/
+		/**returns true if the given rectangle can be used as a crop area for the image
+		 * @param cropAngle2 */
 		public boolean isItAValidCrop(Rectangle2D r) {
 			if (r==null) return false;
+			Rectangle rectangle = new Rectangle(0,0, this.getUnderlyingImageWidth(), this.getUnderlyingImageHeight());
 			
-			return new Rectangle(0,0, this.getUnderlyingImageWidth(), this.getUnderlyingImageHeight()).contains(r);
+			return rectangle.contains(r);
 		}
 		
 		/**returns the cropping rectangle*/
@@ -581,11 +587,16 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			return croppingrect;
 		}
 
-		/**Sets a cropping rectangle if the given rectangle is appropriate for defining a crop area*/
+		
+		/**Sets a cropping rectangle if the given rectangle is appropriate for defining a crop area
+		 * @param cropAngle */
 		public void setCroppingRect(Rectangle croppingrect) {
+			
 			if (this.croppingrect!=null && this.croppingrect.equals(croppingrect)) return;
 			if (!this.isItAValidCrop(croppingrect)&&croppingrect!=null) return;
+		
 			this.croppingrect = croppingrect;
+			
 			this.computeWidths();
 			this.ensureDisplayedImage();
 		}

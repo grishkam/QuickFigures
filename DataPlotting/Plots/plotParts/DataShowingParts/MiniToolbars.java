@@ -34,6 +34,14 @@ public class MiniToolbars {
 	 * @param list
 	 */
 	public static void addExtraHandles(DataShowingShape dataShape, ActionButtonHandleList list) {
+		addBarWidthButton(dataShape, list);
+	}
+
+	/**
+	 * @param dataShape
+	 * @param list
+	 */
+	public static void addBarWidthButton(DataShowingShape dataShape, ActionButtonHandleList list) {
 		ValueSetter widthSetter = new SetNumberX.ValueSetter() {
 			
 			@Override

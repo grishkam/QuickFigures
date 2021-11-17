@@ -20,6 +20,8 @@
  */
 package handles.miniToolbars;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -28,15 +30,20 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
+import actionToolbarItems.SetNumberX;
+import actionToolbarItems.SetNumberX.ValueSetter;
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.ChannelEntry;
 import figureEditDialogs.WindowLevelDialog;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.IconHandle;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.DialogIcon;
+import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
@@ -46,6 +53,8 @@ import selectedItemMenus.FrameColorButton;
 import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
+import standardDialog.graphics.GraphicDisplayComponent;
+import undo.AbstractUndoableEdit2;
 import selectedItemMenus.AttachmentPositionAdjuster;
 
 /**this handle list contains a set of handles that act as a minitoolbar for an image panel*/
@@ -76,6 +85,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		}
 		
 		addFrameColorButton(t);
+		addFrameWidthButton(t, this);
 	}
 
 	/**
@@ -123,6 +133,7 @@ public class ImagePanelActionHandleList extends ActionButtonHandleList {
 		super.draw(g, cords);
 	}
 	
+	/**returns the menu */
 	public ChannelPanelEditingMenu getMenuContext() {
 		if(context==null)
 			context= new ChannelPanelEditingMenu(theImage);
@@ -266,4 +277,83 @@ public class FrameListHandle extends GeneralActionListHandle {
 	public boolean isHidden() {if (theImage.getFrameWidthH()==0)  return true; return false;}
 
 }
+
+/**
+ * @param dataShape
+ * @param list
+ */
+public static void addFrameWidthButton(ImagePanelGraphic dataShape, ActionButtonHandleList list) {
+	ValueSetter widthSetter = new SetNumberX.ValueSetter() {
+		
+		@Override
+		public void setValue(Object a, double value2) {
+			if(a instanceof ImagePanelGraphic) {
+				ImagePanelGraphic d=(ImagePanelGraphic) a;
+				d.setFrameWidthH(value2);
+				d.setFrameWidthV(value2);
+			}
+			
+		}
+		
+		@Override
+		public double getValue(Object a) {
+			if(a instanceof ImagePanelGraphic) {
+				
+				return ((ImagePanelGraphic) a).getFrameWidthH();
+			}
+			throw new NullPointerException();
+			
+		}
+		
+		@Override
+		public AbstractUndoableEdit2 createUndo(Object a) {
+			if(a instanceof ImagePanelGraphic) {
+				ImagePanelGraphic d=(ImagePanelGraphic) a;
+				
+				;
+				return d.provideDragEdit();
+			}
+			return null;
+		}
+	};
+	
+	SetNumberX operator = new SetNumberX(dataShape, dataShape.getFrameWidthH(), widthSetter, "Frame Width", null);
+	operator.setIcon(getFrameWidthIcon(true, true));
+	list.addOperationList(operator, operator.createManyNumberSetters(new double[] {1,1.5, 2,4,5}));
+}
+
+
+
+/**creates an icon*/
+public static Icon getFrameWidthIcon(boolean selected, boolean stroke) {
+	GraphicGroup gg=new GraphicGroup();
+	gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
+	
+	
+	if (Color.black!=null) {
+				
+				 {
+					 
+					 
+					 Rectangle r3=new Rectangle(0,0, 15,15); 
+					 RectangularGraphic rect3 = new RectangularGraphic(r3); 
+					 rect3.setFillColor(new Color(0,0,0,0));
+					 rect3.setStrokeWidth(1); rect3.setStrokeColor(Color.black);rect3.setDashes(new float[] {2,2});
+					
+					 gg.getTheInternalLayer().add(rect3);
+					
+					
+				 }
+				
+	}
+	
+	
+	 GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;
+	 output.setRelocatedForIcon(false);
+	
+	
+	 return output;
+}
+
+
 }

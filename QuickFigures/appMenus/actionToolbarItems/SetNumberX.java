@@ -44,8 +44,7 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 
 
 	/**
-		 
-		 * 
+		 An object that implements the Value setter determines how this works
 		 */
 	public static interface ValueSetter {
 
@@ -97,6 +96,18 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 	 * @return
 	 */
 	public BasicMultiSelectionOperator[] createManyNumberSetters(int[] options) {
+		BasicMultiSelectionOperator[] output=new BasicMultiSelectionOperator[options.length] ;
+		for(int i=0; i<options.length; i++) {
+			output[i]=new SetNumberX(options[i], setter, name, null);
+		}
+		return output;
+	}
+	
+	/**Creates a list of number setters
+	 * @param options
+	 * @return
+	 */
+	public BasicMultiSelectionOperator[] createManyNumberSetters(double[] options) {
 		BasicMultiSelectionOperator[] output=new BasicMultiSelectionOperator[options.length] ;
 		for(int i=0; i<options.length; i++) {
 			output[i]=new SetNumberX(options[i], setter, name, null);
@@ -227,6 +238,10 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 		return panel;
 	}
 
+	public void setIcon(Icon icon) {
+		this.icon = icon;
+	}
+
 	/**An icon that depicts the angle*/
 	public static class NumberDisplayIcon implements Icon {
 
@@ -242,7 +257,7 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
-			
+			Font oldfont = g.getFont();
 			if (g instanceof Graphics2D) {
 				Graphics2D g2d=(Graphics2D) g;
 				g2d.setStroke(new BasicStroke(1));
@@ -275,6 +290,7 @@ public class SetNumberX extends BasicMultiSelectionOperator {
 				g2d.drawString(text, x, y+12);
 				
 			}
+			g.setFont(oldfont);
 		}
 
 		

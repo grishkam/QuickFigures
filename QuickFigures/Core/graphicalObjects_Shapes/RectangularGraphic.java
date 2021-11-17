@@ -105,6 +105,12 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 			setRectangle(r);
 	}
 	
+	/**Creates a rotated rectangle*/
+	public RectangularGraphic(Rectangle2D r, double angle) {
+		this(r);
+		this.setAngle(angle);
+	}
+	
 	public RectangularGraphic(RectangularGraphic r) {
 		this(r.getBounds());
 		copyAttributesFrom(r);

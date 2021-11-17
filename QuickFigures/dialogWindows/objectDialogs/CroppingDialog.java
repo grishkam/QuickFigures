@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 18, 2021
+ * Date Modified: Nov 17, 2021
  * Version: 2021.2
  */
 package objectDialogs;
@@ -62,40 +62,70 @@ import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 
-/**a dialog for setting the crop area for a multi dimensional image*/
+/**a dialog for setting the crop area for a multi dimensional image.
+ * Can also be used to set a crop area for one or more image panels.*/
 public class CroppingDialog extends GraphicItemOptionsDialog implements MouseListener, MouseMotionListener, ActionListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**The component that will display a preview image and a crop area*/
 	public GraphicComponent panel=new GraphicComponent();
+	
+	/**is set to true if the user presses the eliminate crop rectangle button*/
 	public boolean wasEliminated=false;
 	String instructions="Set Crop Area";
 	
-	JButton eliminateButton=new JButton("Eliminate Cropping Rectangle"); {eliminateButton.addActionListener(new cropLis());}
-	JButton yesAll=new JButton("OK for all"); {yesAll.addActionListener(new allOKLis());}
+	/**A buttons that appears near the bottom of the dialog*/
+	JButton eliminateButton=new JButton("Eliminate Cropping Rectangle"); {eliminateButton.addActionListener(new EliminageCropAreaListener());}
+	
+	/**A buttons that appears near the bottom of the dialog under certain circumstances.
+	 * if the context is a sequence of crop dialogs, this will appear*/
+	JButton yesAll=new JButton("OK for all"); {yesAll.addActionListener(new AllOKListener());}
 	
 	private ArrayList<ImagePanelGraphic> imagepanels=new ArrayList<ImagePanelGraphic>();
+	
+	/**Determines whether a rotation angle option is included*/
 	boolean includeAngle=false;
 	
-
+	/**the innitial crop angle of the dialog*/
+	private double cropAngle=0;
 	
+	/**The rectangular graphic that a user modifies to set the crop area*/
 	RectangularGraphic cropAreaRectangle;
+	
+	
+	
 	int handle=-1;
 	Point2D press=new Point();
-	double mag=1;
+	
+	
+	
+	public static final int CROP_FOR_IMAGE_PANEL=0, CROP_FOR_SLOT=1;
+	private int dialogType= CROP_FOR_IMAGE_PANEL;
+
+	/**the factor that determines what size the image within this dialog is shown at*/
+	double displayMagnification=1;
+	/**The image that is being cropped if 
+	 *  @field dialogType is set to @field CROP_FOR_IMAGE_PANEL, that images crop area will be set*/
 	ImagePanelGraphic image;
-	private double cropAngle=0;
+	
 	private ArrayList<ZoomableGraphic> extraItems=new ArrayList<ZoomableGraphic>();
 	public boolean hideRotateHandle;
 	private MultiChannelImage multiChannelSource;
 	private CSFLocation display=new CSFLocation();
+	
+	/**This object displays the full size uncropped image for the user to see*/
 	private ImagePanelGraphic dialogDisplayImage;
+	
 	private CropDialogContext dialogContext;
 	
 	/**the stroke color for the rectangle*/
 	private Color rectangleStrokeColor=new Color(200, 200, 250);
+	
+	private PreProcessInformation startingCrop;
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -126,6 +156,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 					}
 	}
 	
+	/**Creats a crop dialog
+	 * @param s the slot that contains the original uncropped image
+	 * @param multichanalWrapper the image*/
 	public CroppingDialog(MultiChannelSlot s, MultiChannelImage multichanalWrapper, PreProcessInformation preprocessRecord) {
 		includeInsets(s);
 		
@@ -134,15 +167,19 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		if(preprocessRecord!=null) 
 			{
-			image.setCroppingRect(preprocessRecord.getRectangle());
 			this.cropAngle=preprocessRecord.getAngle();
+			
+			this.startingCrop=preprocessRecord;
+			
+			//image.setCroppingRect(preprocessRecord.getRectangle(), this.cropAngle);//TODO:delete this
+			
 			
 			}
 		this.setModal(true);
 		this.setWindowCentered(true);
 	}
 
-
+	/**adds indicators regarding the position of insets to the crop dialog*/
 	public void includeInsets(MultiChannelSlot s) {
 		for(PanelGraphicInsetDefiner i: s.getDisplayLayer().getInsets()) {
 			if(i==null) continue;
@@ -161,40 +198,55 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.showDialog(image);
 	}
 	
+	/**creates a cropping dialog
+	 * @param recAngle the rotation angle
+	 * @param r the starting rectangle bounds*/
 	public CroppingDialog(MultiChannelSlot s, MultiChannelImage multichanalWrapper, Rectangle r, double recAngle) {
 		includeInsets(s);
 		setImageToCrop(multichanalWrapper, display.channel, display.frame, display.slice);
 		
 		Rectangle rDefault = getRectForEntireImage();
-		
+		this.cropAngle=recAngle;
 		
 		if(r!=null) 
 			{
-			
-			if (r.width>rDefault.width) {
-				r.width=rDefault.width;
-			}
-			if (r.height>rDefault.height) {
-				r.height=rDefault.height;
-			}
-			this.cropAngle=recAngle;
-			image.setCroppingRect(r);//sets the crop rect
+				/**series of lines deal with specific ircumstances of an roi that is too large*/
+				RectangularGraphic rotatedRactangle = new RectangularGraphic(r);
+				rotatedRactangle.setAngle(recAngle);
+				Rectangle rotatedBounds = rotatedRactangle.getRotationTransformShape().getBounds();
+				if (!rDefault.contains(rotatedBounds)) {
+					if (r.width>rDefault.width) {
+						IssueLog.log("crop area width is larger than the bounds of the image "+rotatedBounds);
+						r.width=rDefault.width;
+					}
+					if (r.height>rDefault.height) {
+						IssueLog.log("crop area height is larger than the bounds of the image "+rotatedBounds);
+						r.height=rDefault.height;
+					}
+				}
+				
+				//image.setCroppingRect(r, cropAngle);//sets the crop rect
 			
 			}
 		this.setModal(true);
 		this.setWindowCentered(true);
+		
+		
 	}
 
 
+	/**sets the target multichannel image*/
 	private void setImageToCrop(MultiChannelImage multichanalWrapper,int chan, int frame, int slice) {
 		multiChannelSource= multichanalWrapper;
 		this.setTitle("Crop: "+multichanalWrapper.getTitle());
 		this.display.frame=frame;
 		this.display.slice=slice;
+		
 		BufferedImage image3 = createDisplayImage(chan, frame, slice);
 		this.image=new ImagePanelGraphic(image3);
 		includeAngle=true;
 		
+		this.dialogType=CROP_FOR_SLOT;//makes sure the crop area that is used will be the one provided by the multichannel and not the image graphis
 	
 	}
 	
@@ -224,12 +276,14 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	
-	
+	/**the simplest form of crop dialog*/
 	public CroppingDialog(ImagePanelGraphic image) {
 		this.image=image;
 		showDialog(image);
 	}
 	
+	
+	/**returns the magnification that will be used when displaying the given image in the crop dialog*/
 	public double getDisplayScale(ImagePanelGraphic imagePanelGraphic) {
 		
 		int w = imagePanelGraphic.getUnderlyingImageWidth();
@@ -249,37 +303,32 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		return 1;
 	}
 	
+	/**shows the dialog for the particular image*/
 	public Rectangle showDialog(ImagePanelGraphic imagePanelGraphic) {
 		Rectangle r=imagePanelGraphic.getCroppingRect();
+		if (this.startingCrop!=null)
+			r=this.startingCrop.getRectangle();//if the crop area comes from a set of instructions and not the image
 		
-		mag=this.getDisplayScale(imagePanelGraphic);
+		
+		displayMagnification=this.getDisplayScale(imagePanelGraphic);
 		
 		
 		this.image=imagePanelGraphic;
-		panel.setMagnification(mag);
-	//	IssueLog.log("the magnification of the display will be "+mag);
+		
+		panel.setMagnification(displayMagnification);
+	
 		ImagePanelGraphic b = new ImagePanelGraphic(imagePanelGraphic.getBufferedImage());
 		panel.getGraphicLayers().add(b);
 		dialogDisplayImage=b;
-		double width2 = imagePanelGraphic.getUnderlyingImageWidth()*mag;
-		double height2 = imagePanelGraphic.getUnderlyingImageHeight()*mag;
+		double width2 = imagePanelGraphic.getUnderlyingImageWidth()*displayMagnification;
+		double height2 = imagePanelGraphic.getUnderlyingImageHeight()*displayMagnification;
 		panel.setPrefferedSize(width2, height2);
 		b.setLocationUpperLeft(0, 0);
 		
 		if (r==null) {r=getRectForEntireImage(imagePanelGraphic);}
-		cropAreaRectangle=new RectangularGraphic(r);
-		cropAreaRectangle.hideStrokeHandle=true;
-		cropAreaRectangle.handleSize=4;
-		if(this.hideRotateHandle) {
-			cropAreaRectangle.hideCenterAndRotationHandle=true;
-		}
-		cropAreaRectangle.setAngle(cropAngle);
-		cropAreaRectangle.setStrokeColor(rectangleStrokeColor);
 		
-		cropAreaRectangle.select();
+		setupCropAreaRectangle(r);
 		
-		
-		panel.getGraphicLayers().add(cropAreaRectangle);
 		for(ZoomableGraphic eItem:this.extraItems) {
 			panel.getGraphicLayers().add(eItem);
 		}
@@ -337,6 +386,25 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		if(cropAreaRectangle==null)return null;
 		return cropAreaRectangle.getBounds();
+	}
+
+	/**Creates a rectangular graphic to display the crop area
+	 * @param r
+	 */
+	public void setupCropAreaRectangle(Rectangle r) {
+		cropAreaRectangle=new RectangularGraphic(r);
+		cropAreaRectangle.hideStrokeHandle=true;
+		cropAreaRectangle.handleSize=4;
+		if(this.hideRotateHandle) {
+			cropAreaRectangle.hideCenterAndRotationHandle=true;
+		}
+		cropAreaRectangle.setAngle(cropAngle);
+		cropAreaRectangle.setStrokeColor(rectangleStrokeColor);
+		
+		cropAreaRectangle.select();
+		
+		
+		panel.getGraphicLayers().add(cropAreaRectangle);
 	}
 
 
@@ -403,11 +471,20 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		
 		
-		setImageCropping();
+		if (controlsCropAreaForImagePanel()) 
+			setImageCropping();
+		
 		setFieldsToRect();
 		
 		this.onOK();
 		panel.repaint();
+	}
+
+	/**returns true if this dialog controls the crop area for an image panel
+	 * @return
+	 */
+	public boolean controlsCropAreaForImagePanel() {
+		return this.dialogType==CROP_FOR_IMAGE_PANEL;
 	}
 
 
@@ -418,13 +495,16 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 
 
+	/**Returns true if the current crop rectangle is valid. If the rectangle is partly outside the image, this will return false*/
 	public boolean isCroppingRectangleValid() {
 		Rectangle rmax = getRectForEntireImage();
 		if (cropAreaRectangle==null) return true;
 		boolean isNewRectValid = rmax.contains(cropAreaRectangle.getOutline().getBounds());
+		
 		return isNewRectValid;
 	}
 	
+	/**Changes the stored rectangle to match the dialog fields*/
 	public void setRectToDialog() {
 		RectangularGraphic rect2 = cropAreaRectangle.copy();
 		Rectangle r = new Rectangle(this.getNumberInt("x"), this.getNumberInt("y"),this.getNumberInt("width"), this.getNumberInt("height"));
@@ -439,6 +519,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 	}
 	
+	/**Changes the values in the dialog field sto match the rectangle*/
 	public void setFieldsToRect() {
 		this.setNumber("x", cropAreaRectangle.getBounds().getX());
 		this.setNumber("y", cropAreaRectangle.getBounds().getY());
@@ -511,10 +592,11 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	@Override
 	public void setVisible(boolean b) {
 		
-	//if (b==false)	setImageCropping();
+	//if (b==false)	setImageCropping();TODO: determines if this part of the code is obsolete and delete if it is
 		super.setVisible(b);
 	}
 	
+	/**sets the crop area for the image panel*/
 	public void setImageCropping() {
 		try{
 		image.setCroppingRect(cropAreaRectangle.getBounds());
@@ -528,18 +610,21 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 	}
 	
-	public void removeCroppingRect() {
+	/**removes the crop area from the image panels*/
+	public void removeCroppingRectFromImagePanels() {
 		image.setCroppingRect(null);
 		for(ImagePanelGraphic image: getImagepanels()) {
 			image.setCroppingRect(null);
 		}
 	}
 	
+	/**returns a list of image panels whose crop area may be set by this dialog*/
 	public ArrayList<ImagePanelGraphic> getImagepanels() {
 		return imagepanels;
 	}
 
 
+	/**sets a list of image panels whose crop area may be set by this dialog*/
 	public void setImagepanels(ArrayList<ImagePanelGraphic> imagepanels) {
 		this.imagepanels = imagepanels;
 	}
@@ -551,11 +636,12 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 
 	/**A listener object that responds to the 'eliminate crop rectangle' button*/
-	public class cropLis implements ActionListener {
+	public class EliminageCropAreaListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			removeCroppingRect();
+			if (controlsCropAreaForImagePanel())
+				removeCroppingRectFromImagePanels();
 			cropAreaRectangle=null;
 			wasEliminated=true;
 			setVisible(false);
@@ -565,7 +651,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	/**A listener object that responds to the 'ok to all' button */
-	public class allOKLis implements ActionListener {
+	public class AllOKListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -599,6 +685,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	}
 	
+	/**Shows a crop dialog based on a suggested rectangle*/
 	public static CroppingDialog showCropDialog(MultiChannelSlot slot, Rectangle recommmendation, double recAngle) {
 		return showCropDialog(slot, recommmendation, recAngle, null);
 	}
@@ -624,17 +711,17 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		if(!crop.isCroppingRectangleValid()) return crop;
 		
 		RectangularGraphic r = crop.getRectangle();
-		ScaleInformation oldScale=new ScaleInformation();
+		ScaleInformation scaleInformation=new ScaleInformation();
 		
-		if (slot.getModifications()!=null) { 
-			oldScale=slot.getModifications().getScaleInformation();
+		if (slot.getModifications()!=null) { //the former scale information
+			scaleInformation=slot.getModifications().getScaleInformation();
 		}
 		
 		PreProcessInformation process;
 		if (!crop.wasEliminated)
-		process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), oldScale);
+			process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), scaleInformation);
 		else {
-			process = new PreProcessInformation(null, 0, oldScale);
+			process = new PreProcessInformation(null, 0, scaleInformation);
 		}
 		
 		try {
@@ -679,7 +766,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		/**indicates the index of the current crop dialog*/
 		public int current=1;
 		
-		/**set to true if the user clicks the 'OK for all option' */
+		/**set to true if the user clicks the 'OK for all option' in one of the dialogs*/
 		boolean okToAll=false;
 		
 		/**What sort of figure is this*/
