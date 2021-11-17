@@ -150,7 +150,7 @@ import logging.IssueLog;
 			
 			if (sourceImagePlus==null) {
 				setToByteArray();
-				IssueLog.log("loading from saved byte array");
+				
 			}
 			
 			if (sourceImagePlus==null) {

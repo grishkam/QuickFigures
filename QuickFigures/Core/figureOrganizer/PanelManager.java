@@ -117,6 +117,7 @@ public class PanelManager implements Serializable, EditListener{
 			
 			panelgraphic.setName(name);
 			
+			panelgraphic.setFrameColor(display.getFigureType().getForeGroundDrawColor());// to ensure that the frame is a different color from the image
 			
 			layer.add(panelgraphic);
 			

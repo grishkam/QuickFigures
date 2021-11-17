@@ -174,7 +174,7 @@ public class FigureAdder extends LayoutAdder {
 		
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
 		if(display==null) return null;
-		
+		display.setFigureType(getFigureType());//sets the figure type before th
 		/**determines the crop for this image*/
 		if (p==null)
 			FigureOrganizingLayerPane.cropIfUserSelectionExists(display); 

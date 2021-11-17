@@ -20,6 +20,7 @@
  */
 package objectDialogs;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -43,6 +44,7 @@ import channelMerging.MultiChannelSlot;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
 import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
+import figureOrganizer.FigureType;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
@@ -79,7 +81,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 
 	
-	RectangularGraphic rect;
+	RectangularGraphic cropAreaRectangle;
 	int handle=-1;
 	Point2D press=new Point();
 	double mag=1;
@@ -91,6 +93,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private CSFLocation display=new CSFLocation();
 	private ImagePanelGraphic dialogDisplayImage;
 	private CropDialogContext dialogContext;
+	
+	/**the stroke color for the rectangle*/
+	private Color rectangleStrokeColor=new Color(200, 200, 250);
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -262,16 +267,19 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		b.setLocationUpperLeft(0, 0);
 		
 		if (r==null) {r=getRectForEntireImage(imagePanelGraphic);}
-		rect=new RectangularGraphic(r);
-		rect.hideStrokeHandle=true;
-		rect.handleSize=4;
+		cropAreaRectangle=new RectangularGraphic(r);
+		cropAreaRectangle.hideStrokeHandle=true;
+		cropAreaRectangle.handleSize=4;
 		if(this.hideRotateHandle) {
-			rect.hideCenterAndRotationHandle=true;
+			cropAreaRectangle.hideCenterAndRotationHandle=true;
 		}
-		rect.setAngle(cropAngle);
-		rect.select();
+		cropAreaRectangle.setAngle(cropAngle);
+		cropAreaRectangle.setStrokeColor(rectangleStrokeColor);
 		
-		panel.getGraphicLayers().add(rect);
+		cropAreaRectangle.select();
+		
+		
+		panel.getGraphicLayers().add(cropAreaRectangle);
 		for(ZoomableGraphic eItem:this.extraItems) {
 			panel.getGraphicLayers().add(eItem);
 		}
@@ -284,15 +292,15 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 		
 		this.add("ins", new InfoDisplayPanel("", instructions));
-		this.add("x", new NumberInputPanel("x", rect.getBounds().getX()));
+		this.add("x", new NumberInputPanel("x", cropAreaRectangle.getBounds().getX()));
 		this.moveGrid(2, -1);
-		this.add("y", new NumberInputPanel("y", rect.getBounds().getY()));
+		this.add("y", new NumberInputPanel("y", cropAreaRectangle.getBounds().getY()));
 		this.moveGrid(-2, 0);
-		this.add("width", new NumberInputPanel("width", rect.getBounds().getWidth()));
+		this.add("width", new NumberInputPanel("width", cropAreaRectangle.getBounds().getWidth()));
 		this.moveGrid(2, -1);
-		this.add("height", new NumberInputPanel("height", rect.getBounds().getHeight()));
+		this.add("height", new NumberInputPanel("height", cropAreaRectangle.getBounds().getHeight()));
 		if(includeAngle) {
-				this.add("angle", new AngleInputPanel("angle", rect.getAngle(), true));
+				this.add("angle", new AngleInputPanel("angle", cropAreaRectangle.getAngle(), true));
 		}
 		if(showsFrameSlider()) {
 			ChannelSliceAndFrameSelectionDialog.addFrameSelectionToDialog(this, multiChannelSource, display.frame);
@@ -327,8 +335,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			super.setVisible(false);
 		}
 		
-		if(rect==null)return null;
-		return rect.getBounds();
+		if(cropAreaRectangle==null)return null;
+		return cropAreaRectangle.getBounds();
 	}
 
 
@@ -355,26 +363,27 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		Point2D drag=panel.getCord().unTransformClickPoint(arg0);
-		RectangularGraphic rect2 = rect.copy();
+		RectangularGraphic rect2 = cropAreaRectangle.copy();
 		
 		
-		{rect.handleMove(handle, new Point((int)press.getX(),(int) press.getY()), new Point((int)drag.getX(),(int) drag.getY()));
+		{cropAreaRectangle.handleMove(handle, new Point((int)press.getX(),(int) press.getY()), new Point((int)drag.getX(),(int) drag.getY()));
 		if (handle==8||handle==-1) {
-			rect.setLocationType(RectangleEdges.CENTER);
-			rect.setLocation((int)drag.getX(), (int)drag.getY());
+			cropAreaRectangle.setLocationType(RectangleEdges.CENTER);
+			cropAreaRectangle.setLocation((int)drag.getX(), (int)drag.getY());
 			}
 		
 		
-		if(rect.getBounds().getX()<0) {
-			rect.setLocationUpperLeft(0, rect.getLocationUpperLeft().getY());
-			//rect.setWidth(rect.getBounds().getWidth()+rect.getBounds().getX());
+		/**
+		if(cropAreaRectangle.getBounds().getX()<0) {
+			cropAreaRectangle.setLocationUpperLeft(0, cropAreaRectangle.getLocationUpperLeft().getY());
+			
 		}
 		
-		if(rect.getBounds().getY()<0) {
-			rect.setLocationUpperLeft(rect.getLocationUpperLeft().getX(), 0);
-			//rect.setHeight(rect.getBounds().getHeight()+rect.getBounds().getY());
-		} 
+		if(cropAreaRectangle.getBounds().getY()<0) {
+			cropAreaRectangle.setLocationUpperLeft(cropAreaRectangle.getLocationUpperLeft().getX(), 0);
 		
+		} 
+		*/
 		boolean isNewRectValid = isCroppingRectangleValid();
 		
 		/**if the new rectangle location is outside the area, reverts the Rectangular Graphic*/
@@ -403,27 +412,27 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 
 	public void setRectangleTo(RectangularGraphic rect2) {
-		rect.setRectangle(rect2.getRectangle());
-		rect.setAngle(rect2.getAngle());
-		rect.setLocationType(rect2.getLocationType());
+		cropAreaRectangle.setRectangle(rect2.getRectangle());
+		cropAreaRectangle.setAngle(rect2.getAngle());
+		cropAreaRectangle.setLocationType(rect2.getLocationType());
 	}
 
 
 	public boolean isCroppingRectangleValid() {
 		Rectangle rmax = getRectForEntireImage();
-		if (rect==null) return true;
-		boolean isNewRectValid = rmax.contains(rect.getOutline().getBounds());
+		if (cropAreaRectangle==null) return true;
+		boolean isNewRectValid = rmax.contains(cropAreaRectangle.getOutline().getBounds());
 		return isNewRectValid;
 	}
 	
 	public void setRectToDialog() {
-		RectangularGraphic rect2 = rect.copy();
+		RectangularGraphic rect2 = cropAreaRectangle.copy();
 		Rectangle r = new Rectangle(this.getNumberInt("x"), this.getNumberInt("y"),this.getNumberInt("width"), this.getNumberInt("height"));
 		
-		rect.setRectangle(r);
+		cropAreaRectangle.setRectangle(r);
 		if(includeAngle) {
 			double angle = this.getNumber("angle");
-			rect.setAngle(angle);
+			cropAreaRectangle.setAngle(angle);
 				}
 		if (!this.isCroppingRectangleValid()) {
 			this.setRectangleTo(rect2);
@@ -431,12 +440,12 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	}
 	
 	public void setFieldsToRect() {
-		this.setNumber("x", rect.getBounds().getX());
-		this.setNumber("y", rect.getBounds().getY());
-		this.setNumber("width", rect.getBounds().getWidth());
-		this.setNumber("height", rect.getBounds().getHeight());
+		this.setNumber("x", cropAreaRectangle.getBounds().getX());
+		this.setNumber("y", cropAreaRectangle.getBounds().getY());
+		this.setNumber("width", cropAreaRectangle.getBounds().getWidth());
+		this.setNumber("height", cropAreaRectangle.getBounds().getHeight());
 		if(includeAngle) {
-			this.setNumber("angle", rect.getAngle());
+			this.setNumber("angle", cropAreaRectangle.getAngle());
 		}
 	}
 	
@@ -488,7 +497,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 	press = panel.getCord().unTransformClickPoint(arg0);
-		handle=rect.handleNumber(arg0.getX(), arg0.getY());
+		handle=cropAreaRectangle.handleNumber(arg0.getX(), arg0.getY());
 		
 
 	}
@@ -508,10 +517,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	public void setImageCropping() {
 		try{
-		image.setCroppingRect(rect.getBounds());
+		image.setCroppingRect(cropAreaRectangle.getBounds());
 
 		for(ImagePanelGraphic image: getImagepanels()) {
-			image.setCroppingRect(rect.getBounds());
+			image.setCroppingRect(cropAreaRectangle.getBounds());
 		}
 		
 		} catch (Throwable t) {
@@ -537,7 +546,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	/**returns the crop rect*/
 	public RectangularGraphic getRectangle() {
-		return rect;
+		return cropAreaRectangle;
 	}
 	
 
@@ -547,7 +556,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			removeCroppingRect();
-			rect=null;
+			cropAreaRectangle=null;
 			wasEliminated=true;
 			setVisible(false);
 			if (CroppingDialog.getSetContainer()!=null) CroppingDialog.getSetContainer().updateDisplay();	
@@ -646,7 +655,12 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	 */
 	private void setContext(CropDialogContext context) {
 		this.dialogContext=context;
-		
+		if(context!=null ) {
+			this.rectangleStrokeColor=context.getFigureType().getForeGroundDrawColor();
+			
+			if(this.cropAreaRectangle!=null)
+				this.cropAreaRectangle.setStrokeColor(rectangleStrokeColor);
+		}
 	}
 
 	/**Changes the channel, slice and frame that is shown*/
@@ -655,6 +669,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.updateDisplayImage();
 	}
 	
+	
+	/**An object that contains information about the circumstances that resulted in opening of a crop dialog*/
 	public static class CropDialogContext {
 		
 		/**indicates the number of crop dialogs that will be shown in a sequence*/
@@ -666,8 +682,20 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		/**set to true if the user clicks the 'OK for all option' */
 		boolean okToAll=false;
 		
-		public CropDialogContext(int nImages) {
+		/**What sort of figure is this*/
+		FigureType type=FigureType.FLUORESCENT_CELLS;
+		
+		public CropDialogContext(int nImages, FigureType type) {
 			this.nInseries=nImages;
+			this.type=type;
+			
+		}
+
+		/**
+		returns the figure type
+		 */
+		public FigureType getFigureType() {
+			return type;
 		}
 		
 	}

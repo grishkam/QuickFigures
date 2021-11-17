@@ -347,7 +347,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	
 	
 	CombinedEdit output = new CombinedEdit();
-	CropDialogContext context = new CroppingDialog.CropDialogContext(all.size()+1);
+	CropDialogContext context = new CroppingDialog.CropDialogContext(all.size()+1, crop1.getFigureType());
 	
 	output.addEditToList(
 			showRecropDisplayDialog( crop1, null, null, context)

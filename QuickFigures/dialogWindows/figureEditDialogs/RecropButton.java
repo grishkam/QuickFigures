@@ -63,7 +63,7 @@ public class RecropButton extends JButton implements ActionListener {
 		
 		MultichannelDisplayLayer mainDisplayItem = dialog.getMainDisplayItem();
 		CombinedEdit undo = new CombinedEdit(new PreprocessChangeUndo(mainDisplayItem));
-		CropDialogContext context=new  CropDialogContext(dialog.getAdditionalDisplayLayers().size());
+		CropDialogContext context=new  CropDialogContext(dialog.getAdditionalDisplayLayers().size(), mainDisplayItem.getFigureType());
 		CroppingDialog.showCropDialog(mainDisplayItem.getSlot(), null, 0,context);
 		mainDisplayItem .setFrameSliceUseToViewLocation();
 		dialog.afterEachItemChange();

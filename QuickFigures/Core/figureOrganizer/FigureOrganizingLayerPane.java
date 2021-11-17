@@ -56,6 +56,7 @@ import locatedObject.AttachmentPosition;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import objectDialogs.CroppingDialog;
+import objectDialogs.CroppingDialog.CropDialogContext;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -289,7 +290,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			if ( (mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
 				{
 					
-								CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0);
+								CropDialogContext context = new CroppingDialog.CropDialogContext(1, display.getFigureType());
+								CroppingDialog crop = CroppingDialog.showCropDialog(display.getSlot(), new Rectangle(0,0,(int) w,(int) h), 0, context);
 								display.getPanelList().getChannelUseInstructions().shareViewLocation(display.getSlot().getDisplaySlice());
 								display.cropShown=true;
 							
@@ -328,11 +330,11 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 				boolean singlePanel = pl.nColumns()==1&&pl.nRows()==1&&this.getFigureType().doesExpandLayoutToBox();
 					if (pl!=null&&pl.rowmajor&& singlePanel) {
 						pl.setNColumns(2);
-						IssueLog.log("Added column for new image"+this.getFigureType());
+						
 					} else
 					if (pl!=null&&!pl.rowmajor&& singlePanel) {
 						pl.setNRows(2);
-						IssueLog.log("Added row for new image "+this.getFigureType());
+						
 					}
 					
 			}
@@ -399,7 +401,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		
 		if(!valid && !suppressCropDialog) {
 			
-			CroppingDialog.showCropDialog(display.getSlot(), b, 0);
+			CroppingDialog.showCropDialog(display.getSlot(), b, 0, new CroppingDialog.CropDialogContext(1, display.getFigureType()));
 			display.cropShown=true;
 			
 		} else {
