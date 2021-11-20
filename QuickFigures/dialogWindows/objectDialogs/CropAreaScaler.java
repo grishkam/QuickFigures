@@ -9,6 +9,7 @@ package objectDialogs;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import javax.swing.JPopupMenu;
 
@@ -28,7 +29,7 @@ public class CropAreaScaler extends GraphicItemOptionsDialog {
 	public static final String scaleFactorKey="factor", propagateKey="Change Image Scale To Fit in same area";
 	
 	/**suggested scales*/
-	double[] scales=new double[] {0.1, 0.25, 0.5, 0.75, 1, 2, 3, 4, 5, 10};
+	double[] scales=new double[] {0.1, 0.25, 0.5, 0.75, 1, 2, 2.5, 3, 4, 5, 10};
 	private double currentScale=1;
 	private boolean changeScaleOfImage=false;
 	private Component triggerButton;
@@ -41,7 +42,7 @@ public class CropAreaScaler extends GraphicItemOptionsDialog {
 		this.setTitle("Scale Crop Area to the desired scale factor");
 		this.parentDialog=croppingDialog;
 		this.innitialCroparea=parentDialog.cropAreaRectangle.copy();
-		this.innitialScaleRecord=croppingDialog.scaleDialogRecord;
+		this.innitialScaleRecord=croppingDialog.scaleFactorForCropArea;
 		super.setUpdateAfterEachItemChange(true);
 		this.addOptionsToDialog();
 		this.setWindowCentered(true);
@@ -63,8 +64,11 @@ public class CropAreaScaler extends GraphicItemOptionsDialog {
 	
 	
 	protected void addOptionsToDialog() {
-		this.add(scaleFactorKey, new NumberInputPanel("Scale Factor", this.currentScale, 4));
-		this.add( propagateKey, new BooleanInputPanel("Change image scale to Fit panels in same area", this.changeScaleOfImage));
+		NumberInputPanel inputPanel = new NumberInputPanel("Scale Factor", this.currentScale, true, true, 0, 100);
+		inputPanel.setSliderConstants(determinePossibleScaleFactors());
+		inputPanel.setDecimalPlaces(3);
+		this.add(scaleFactorKey, inputPanel);
+		this.add( propagateKey, new BooleanInputPanel("Change image scale to fit panels in same area?", this.changeScaleOfImage));
 	}
 	
 	@Override
@@ -75,12 +79,28 @@ public class CropAreaScaler extends GraphicItemOptionsDialog {
 		RectangularGraphic newCropArea = createScaledRect(innitialCroparea, currentScale);
 		if (parentDialog.isCropRectangleValid(newCropArea)) {
 			parentDialog.setRectangleTo(newCropArea);
-			parentDialog.scaleDialogRecord=this.innitialScaleRecord*this.currentScale;//records what scaling has been done to the crop area
+			parentDialog.scaleFactorForCropArea=this.innitialScaleRecord*this.currentScale;//records what scaling has been done to the crop area
 			parentDialog.changeScale=changeScaleOfImage;
 			parentDialog.repaint();
 		}
 		
 	}
+	
+	/**returns a list of scale factors*/
+	public ArrayList<Double> determinePossibleScaleFactors() {
+		ArrayList<Double> output = new ArrayList<Double> ();
+		for(double d: scales) {
+			RectangularGraphic newCropArea = createScaledRect(innitialCroparea, d);
+			if (parentDialog.isCropRectangleValid(newCropArea)) {
+				output.add(d);
+			}
+		}
+		
+		return output;
+		
+		
+	}
+	
 
 	/**
 	 * 

@@ -133,7 +133,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private Rectangle reccomendedRectangle;
 
 	/**The scale factor that is a product of using the crop dialog scaler*/
-	public double scaleDialogRecord=1;
+	public double scaleFactorForCropArea=1;
 	/**set to true if this dialog changes the scale as well*/
 	public boolean changeScale=false;
 	
@@ -757,12 +757,17 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 		
 		/**If the user chose to edit the scale in the crop dialog, this changes the scale information*/
-		if(crop.changeScale&&crop.scaleDialogRecord!=1) {
-			context.userScaledCropArea=true;
-			context.userRescale=crop.scaleDialogRecord;
+		if(crop.changeScale&&crop.scaleFactorForCropArea!=1) {
 			
-			scaleInformation=scaleInformation.multiplyBy(1/crop.scaleDialogRecord);
-			context.scaleInformation=scaleInformation;
+			scaleInformation=scaleInformation.multiplyBy(1/crop.scaleFactorForCropArea);
+			
+				/**stores the scale information in the context so can be used for the next crop dialog*/
+					if(context!=null){
+						context.userScaledCropArea=true;
+						context.userRescale=crop.scaleFactorForCropArea;
+						context.scaleInformation=scaleInformation;
+						}
+					
 		} else if (context!=null&&context.scaleInformation!=null) {
 			scaleInformation=context.scaleInformation;
 		}

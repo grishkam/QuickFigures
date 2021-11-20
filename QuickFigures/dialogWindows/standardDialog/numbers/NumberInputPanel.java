@@ -40,6 +40,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
+import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;
@@ -97,14 +98,20 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	{this.setLayout(new FlowLayout());}
 	NumericTextField field=new NumericTextField(0);// {field.addKeyListener(this);}
 	JLabel label=new JLabel("Text");
+	
 	JScrollBar slider=new JScrollBar(JScrollBar.HORIZONTAL);
+	
 	private int slidelength=150; {}
+	
+	
+	
 	{
 		slider.addAdjustmentListener(this); slider.addMouseMotionListener(this);field.addKeyListener(this);
 		setSliderToDefaultPrefferedSize() ;
 	//slider.setPreferredSize(new Dimension(350, 25));
 	}
 	
+	/**sets the length of the slider in the dialog. May be set to larger or smaller values as needed*/
 	public void setSlideLength(int length) {
 		this.slidelength=length;
 		setSliderToDefaultPrefferedSize() ;
@@ -121,7 +128,12 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	double number=0;
 	int slidermin=0; 
 	int slidermax=100;
+	
+	/**The innitial value that is stored within the input panel*/
 	public double originalStatus;
+	
+	/**if the slider positions corresponds to a list of values. If set to null, slider position between min and max vlue will determine number*/
+	private ArrayList<Double> sliderConstants=null;
 	
 	/**meant to be implicit constructor for subclasses*/
 	public  NumberInputPanel() {
@@ -149,6 +161,7 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		this.originalStatus=number;
 	}
 	
+	/**creates a number input apnel with a slider*/
 	public  NumberInputPanel(String label, double number, boolean includeField, boolean includeSlider, int slidermin, int slidermax) {
 		this.setNumber(number);
 		this.label.setText(label);
@@ -169,10 +182,11 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		return comp;
 	}
 	
+	/**Sets the min/max for the slider*/
 	public void setSliderRange(int min, int max) {
 		slidermin=min;
 		slidermax=max;
-		slider.setValues((int)number,
+		slider.setValues(this.transLateDoubleToSliderValue(number),
 	            (int) 0,
 	             slidermin,
 	             slidermax);
@@ -194,7 +208,7 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	public void setNumber(double d) {
 		number=d;
 		field.setNumber(d);
-		slider.setValue((int)d);
+		setValueOfSlider(d);
 	}
 	public double getNumber() {
 		return number;
@@ -224,14 +238,27 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		if (!isEditable()) return;
+		
 		if(arg0.getSource()==field) {
-			slider.setValue((int)field.getNumberFromField());
-			number=field.getNumberFromField();
+			
+			double newNumber = field.getNumberFromField();
+			setValueOfSlider(newNumber);
+			
+			number=newNumber;
 			NumberInputEvent ne = new NumberInputEvent(this, field, number);
 			ne.setKey(key);
 			notifyListeners( ne);
 		}
 	}
+
+	/**Sets the slider value
+	 * @param newNumber
+	 */
+	private void setValueOfSlider(double newNumber) {
+		slider.setValue(transLateDoubleToSliderValue(newNumber));
+	}
+
+	
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
@@ -245,7 +272,7 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		ff.add(new JButton("button"));
 		NumberInputPanel sb = new NumberInputPanel("Select number", 9, -100,100);
 		sb.setItemFont(sb.getField().getFont().deriveFont((float)10));
-
+		sb.setSliderConstants(new double[] {0, 1, 15, 150, 1000});
 		ff.add(sb);
 		ff.pack();
 		
@@ -254,13 +281,53 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
+		
 		if (arg0.getSource()==slider) {
-			this.setNumber(slider.getValue());
+			setNumberToSliderValue();
+			
 			NumberInputEvent ne = new NumberInputEvent(this, slider, number);
 			ne.setKey(key);
 			notifyListeners(ne );
 		}
 		
+	}
+
+	/**
+	 sets the current number to the value of the slider
+	 */
+	private void setNumberToSliderValue() {
+		setNumber(transLateSliderValueToDouble());
+	}
+
+	/**returns what number the current slider value corresponds to 
+	 * @return
+	 */
+	private double transLateSliderValueToDouble() {
+		if(isSliderValueListValid()) {
+			double percentSlide=((double)slider.getValue()-(double)slider.getMinimum())/((double)slider.getMaximum()-(double)slider.getMinimum());
+			double increment=((double)1.0)/sliderConstants.size();//the distance between the choices
+			double notchNumber = percentSlide/increment;
+			
+			long index = Math.round(notchNumber );
+			if(index>=sliderConstants.size())
+				index=sliderConstants.size()-1;
+			return sliderConstants.get((int) index);
+		}
+		return slider.getValue();
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean isSliderValueListValid() {
+		return this.sliderConstants!=null &&this.sliderConstants.size()>=2;
+	}
+	/**
+	 * @param newNumber
+	 * @return
+	 */
+	private int transLateDoubleToSliderValue(double newNumber) {
+		return (int)newNumber;
 	}
 
 	@Override
@@ -338,6 +405,19 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 		field.setEditable(editable);
+	}
+
+	/**Sets the slider constants*/
+	public void setSliderConstants(ArrayList<Double> sliderConstants) {
+		this.sliderConstants = sliderConstants;
+	}
+	/**Sets the slider constants*/
+	public void setSliderConstants(double[] sliderConstants) {
+		ArrayList<Double> newsliderConstants = new ArrayList<Double>();
+		for (double d: sliderConstants) {
+			newsliderConstants.add(d);
+		}
+		this.setSliderConstants(newsliderConstants);
 	}
 
 	
