@@ -362,15 +362,18 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		interpolate=modifications.getInterpolationType();
 	}
 	
+	
+	
 	if (r1==null) {
 		d1=crop1.getMultiChannelImage().getDimensions();
 	}else d1=new Dimension(r1.width, r1.height);
 	
 	
-	for(ImageDisplayLayer crop2: all) {
-		if(crop2==crop1) continue;
+	
+	for(ImageDisplayLayer cropTarget2: all) {
+		if(cropTarget2==crop1) continue;
 		output.addEditToList(
-				showRecropDisplayDialog( (MultichannelDisplayLayer) crop2, d1, interpolate, context)
+				showRecropDisplayDialog( (MultichannelDisplayLayer) cropTarget2, d1, interpolate, context)
 		);
 	}
 	if (CanvasOptions.current.resizeCanvasAfterEdit)
@@ -387,6 +390,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		display.getPanelManager().setupViewLocation();
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(display);
 		CSFLocation csfInitial = display.getSlot().getDisplaySlice().duplicate();
+		
 		
 		CroppingDialog.showCropDialogOfSize(display.getSlot(), dim, context);
 		

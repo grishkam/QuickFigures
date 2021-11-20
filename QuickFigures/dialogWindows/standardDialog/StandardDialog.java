@@ -41,7 +41,9 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.undo.UndoManager;
 
@@ -216,6 +218,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public UndoManager currentUndoManager=new CurrentFigureSet().getUndoManager();
 
 	private final ArrayList<StandardDialog> subordinateDialogs =new ArrayList<StandardDialog> ();
+
+	private JPopupMenu thePopup;
 
 	
 	
@@ -478,10 +482,18 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	  }
 	  
 	  public void showDialog() {
-		this.theButtonPanel=addButtonPanel(this);
+		setUpButtonPanel();
 		  makeVisible();
 		  
 	  }
+	/**
+	 Creates a new button panel for this dialog
+	 * @return 
+	 */
+	protected JPanel setUpButtonPanel() {
+		this.theButtonPanel=addButtonPanel(this);
+		return theButtonPanel;
+	}
 	  
 	  
 	  public void makeVisible() {
@@ -515,15 +527,23 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		if (arg0.getSource()==OKBut) {
 			this.onOK();
 			this.wasOKed=true;
-			this.setVisible(false);
+			closeDialog();
 			resolveUndo();
 		}
 		if (arg0.getSource()==CancelBut) {
 			afterCancelButtonPress();
 			this.wasCanceled=true;
-			this.setVisible(false);
+			closeDialog();
 		}
 		
+	}
+	
+	/**sets the visibility to false*/
+	public void closeDialog() {
+		this.setVisible(false);
+		if(this.thePopup!=null) {
+			thePopup.setVisible(false);
+		}
 	}
 	
 	/**
@@ -918,7 +938,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		
 	}
 	
-	/**returns a popup menu with the compoents of this dialog*/
+	/**returns a popup menu with the compoents of this dialog but no cancel nor op buttons*/
 	public SmartPopupJMenu createInPopup() {
 		SmartPopupJMenu output = new SmartPopupJMenu();
 		output.add(this.getMainPanel());
@@ -947,6 +967,19 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		for(StandardDialog d: this.subordinateDialogs) {output.putAll(d.getAllInputPanels());}
 		
 		return output;
+	}
+	
+	/**returns a popup menu with the options of this standard dialog inside
+	 * @return
+	 */
+	public JPopupMenu createPopupMenuVersion() {
+		JPopupMenu popup = new JPopupMenu();
+		popup.add(new JLabel(this.getTitle()));
+		popup.add(this.getMainPanel());
+		popup.add(setUpButtonPanel());
+		popup.pack();
+		this.thePopup=popup;
+		return popup;
 	}
 	
 }

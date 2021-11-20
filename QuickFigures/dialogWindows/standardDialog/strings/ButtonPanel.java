@@ -20,29 +20,25 @@
  */
 package standardDialog.strings;
 
-import java.awt.Rectangle;
+import java.awt.event.ActionListener;
 
-import javax.swing.JLabel;
+import javax.swing.JButton;
 
-/**A special string panel that simply displays JLabel with information int than 
-  a text field for user input*/
-public class InfoDisplayPanel extends  StringInputPanel{
+/**A special string panel that simply displays a button with text on it */
+public class ButtonPanel extends  StringInputPanel{
 
-	private JLabel content=new JLabel();
+	private JButton content=new JButton();
 	
-	
-	/**creates a panel with the given information*/
-	public InfoDisplayPanel(String labeln, String theTextContent) {
-		super(labeln, theTextContent);
-		setContentText(theTextContent);
+
+	public ButtonPanel(String labeln, JButton contend, ActionListener listentome) {
+		super(labeln, contend.getText());
+		this.content=contend;
+		contend.addActionListener(listentome);
 	}
 	
-	
-	public InfoDisplayPanel(String labeln, Rectangle contend) {
-		super(labeln, contend.toString());
-		setToDimension(contend);
+	public ButtonPanel(String labeln, String contend, ActionListener l) {
+		this(labeln, new JButton(contend), l);
 	}
-	
 	
 	/**sets the text that is displayed as information*/
 	public void setContentText(String contend) {
@@ -53,10 +49,17 @@ public class InfoDisplayPanel extends  StringInputPanel{
 	private static final long serialVersionUID = 1L;
 
 
-	
-	protected JLabel getTextField() {
+	@Override
+	protected JButton getTextField() {
+		return getTheButton();
+	}
+
+	/**return the JButton
+	 * @return
+	 */
+	public JButton getTheButton() {
 		if (content==null) {
-			content=new JLabel();
+			content=new JButton();
 		}
 		return content;
 	}
