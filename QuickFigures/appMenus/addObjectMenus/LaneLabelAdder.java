@@ -39,6 +39,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
+import locatedObject.RectangleEdges;
 import messages.ShowMessage;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
@@ -46,7 +47,7 @@ import undo.UndoAddItem;
 
 /**Adds text objects to a selected image panel
  * Meant to represent lane labels*/
-class LaneLabelAdder extends BasicGraphicAdder {
+public class LaneLabelAdder extends BasicGraphicAdder {
 	
 	/**
 	 * 
@@ -80,28 +81,35 @@ class LaneLabelAdder extends BasicGraphicAdder {
 		boolean proceed = ShowMessage.showOptionalMessage("Lane labels are an experimental feature for western blot and gel images", false, "Lane labels for western blots are a work in progress, are you sure you want to proceed?");
 		if(!proceed)
 			return null;
-		TextGraphic out = new TextGraphic();
-		if(!simple) out=new ComplexTextGraphic();
-		out.setLocationUpperLeft(50, 50);
-		out.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
-		ArrayList<TextGraphic> list = addLockedItemToSelectedImages(out);
+		TextGraphic out = createTextItem();
+		 addLockedItemToSelectedImage(out);
 		
 		
 		return out;
 		
 	}
 
+	/**Creates the text item that is the model for all of the lane labels
+	 * @return
+	 */
+	public TextGraphic createTextItem() {
+		TextGraphic out = new TextGraphic();
+		if(!simple) out=new ComplexTextGraphic();
+		out.setLocationUpperLeft(50, 50);
+		out.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
+		return out;
+	}
+
 	/**Adds many copies of the text item to the selected images. Attaches each text to 
 	  an image panel. font size is decreased if panels are too small*/
-	public ArrayList<TextGraphic> addLockedItemToSelectedImages(TextGraphic ag) {
+	public ArrayList<TextGraphic> addLockedItemToSelectedImage(TextGraphic ag) {
 		
 		undo=new CombinedEdit();
-		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
+		
 		
 		ArrayList<ZoomableGraphic> possibleTargets = selector.getSelecteditems();
-		boolean output=false;//true if at least one object has been added
+		
 		ArrayList<TextGraphic> added=new ArrayList<TextGraphic>();
-		int count = 1;
 		
 		
 		for(ZoomableGraphic item :possibleTargets) 
@@ -110,70 +118,96 @@ class LaneLabelAdder extends BasicGraphicAdder {
 					Rectangle b = it.getBounds();
 					
 					
-					
-					StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);storedValueDilaog .setModal(true);
-					storedValueDilaog.showDialog();
-					
-					int nLanes=(int) options.nLanes;
-					
-					
-					
-					int border = 2;
-					
-					/**calculates the column width needed to fill tne space*/
-					int wCol = b.width/nLanes-border+border/(nLanes-1);
-					
-					
-					BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height/5, border, border, true);
-					layout.move(it.getLocationUpperLeft().getX(), it.getLocationUpperLeft().getY());
-					DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
-					addedLayer.add(roi);
-					
-					undo.addEditToList(new UndoAddItem(it.getParentLayer(), addedLayer));
-					it.getParentLayer().add(addedLayer);
-					
-					for(int f=1; f<=nLanes; f++){
-						TextGraphic  ag2 = ag;
-						ag2.setFontSize(wCol/2);
-						ag2.setAngle(45);
-						
-						if (output) {
-							ag2=ag.copy();
-							ag2.setAttachmentPosition(ag.getAttachmentPosition());
-						} else {
-							ag.setAttachmentPosition(AttachmentPosition.defaultColLabel());
-							while (ag.getBounds().width>0.9*it.getObjectWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
-						}
-						Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(f);
-						ag2.setLocation(panel.getCenterX(), panel.getMinY());
-						
-						TextItemAdder.setTextContent(ag2, options.prefix+count+options.suffix);
-						count++;
-						ag2.setTextColor(Color.black);
-						ag2.getTagHashMap().put("Index",f);
-						added.add(ag2);
-						addedLayer.add(ag2);
-						roi.addLockedItem(ag2);
-						output=true;
-						
-						GraphicLayer p = addedLayer;
-						
-						undo.addEditToList(new UndoAddItem(p, ag2));
-					}
-					
-					double height = 10;
-					for(TextGraphic a: added)height=a.getBounds().getHeight();
-					roi.getPanelLayout().labelSpaceWidthTop=height;
-					roi.moveLayoutAndContents(0, -height);
-					
-					
-					roi.setLocation(it.getLocation());
+					addLaneLabel(ag, false, added, it.getParentLayer(), b, undo);
 					break;
 				}
 		
 		
 		if (added.size()==0) undo=null;
 		return added;
+	}
+
+	/**
+	 * @param ag
+	 * @param output
+	 * @param added
+	 * @param it
+	 * @param b
+	 * @return
+	 */
+	public DefaultLayoutGraphic addLaneLabel(TextGraphic ag, boolean output, ArrayList<TextGraphic> added, GraphicLayer parentLayer,
+			Rectangle b, CombinedEdit undo) {
+		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
+		showLaneLabelDialog();
+		int count = 1;
+		
+		int nLanes=(int) options.nLanes;
+		
+		
+		
+		int border = 5;
+		
+		/**calculates the column width needed to fill tne space*/
+		int wCol = b.width/nLanes-border+border/(nLanes-1);
+		
+		
+		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height/5, border, border, true);
+		layout.move(b.getX(), b.getY());
+		DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
+		addedLayer.add(roi);
+		
+		undo.addEditToList(new UndoAddItem(parentLayer, addedLayer));
+		parentLayer.add(addedLayer);
+		
+		for(int f=1; f<=nLanes; f++){
+			TextGraphic  ag2 = ag;
+			ag2.setFontSize(wCol/2);
+			ag2.setAngle(45);
+			
+			if (output) {
+				ag2=ag.copy();
+				ag2.setAttachmentPosition(ag.getAttachmentPosition());
+			} else {
+				ag.setAttachmentPosition(AttachmentPosition.defaultColLabel());
+				while (ag.getBounds().width>0.9*b.getWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
+			}
+			Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(f);
+			ag2.setLocation(panel.getCenterX(), panel.getMinY());
+			
+			TextItemAdder.setTextContent(ag2, options.prefix+count+options.suffix);
+			count++;
+			ag2.setTextColor(Color.black);
+			
+			ag2.getTagHashMap().put("Index",f);
+			
+			added.add(ag2);
+			addedLayer.add(ag2);
+			roi.addLockedItem(ag2);
+			output=true;
+			
+			GraphicLayer p = addedLayer;
+			
+			undo.addEditToList(new UndoAddItem(p, ag2));
+		}
+		
+		double height = 10;
+		for(TextGraphic a: added)height=a.getBounds().getHeight();
+		roi.getPanelLayout().labelSpaceWidthTop=height;
+		roi.moveLayoutAndContents(0, -height);
+		
+		
+		roi.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, b));
+		return roi;
+	}
+
+	/**
+	 * Shos the dialog which allods the user to choose how many lane labels to create
+	 */
+	protected void showLaneLabelDialog() {
+		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);
+		storedValueDilaog .setModal(true);
+		 storedValueDilaog.setTitle("How many lane labels?");
+		storedValueDilaog.showDialog();
 	}
 	
 	@Override

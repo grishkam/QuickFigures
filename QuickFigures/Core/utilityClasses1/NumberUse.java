@@ -46,6 +46,23 @@ public class NumberUse {
 		
 	}
 	
+	/**when given one number and a list of numbers, returns the number from the list that is nearest to the input*/
+	public static Double findNearest(Number n, ArrayList<Double> numbers) {
+		
+		int closest=0;
+		double diff=Double.MAX_VALUE;
+		
+		for(int i=0; i<numbers.size(); i++) {
+			double diff2=Math.abs(n.doubleValue()-numbers.get(i));
+			if (diff2<diff) {
+				diff=diff2;
+				closest=i;
+			}
+		}
+		return numbers.get(closest);
+		
+	}
+	
 	public static double findMax(double[] numbers) {
 		double closest=0;
 		

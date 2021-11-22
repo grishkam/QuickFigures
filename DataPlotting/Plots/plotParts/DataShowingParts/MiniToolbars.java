@@ -57,7 +57,7 @@ public class MiniToolbars {
 			public double getValue(Object a) {
 				if(a instanceof DataShowingShape) {
 					DataShowingShape d=(DataShowingShape) a;
-					return ((DataShowingShape) a).getBarWidth();
+					return d.getBarWidth();
 				}
 				throw new NullPointerException();
 				

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 20, 2021
  * Version: 2021.2
  */
 package genericTools;
@@ -38,7 +38,6 @@ import channelMerging.ImageDisplayLayer;
 import externalToolBar.BasicDragHandler;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
-import genericTools.NormalToolDragHandler.FileDropListener;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects.ZoomableGraphic;
@@ -68,6 +67,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 
 	private BasicToolBit tool ;
 	
+	/**Extensions to QuickFigures can modify this array*/
 	public static ArrayList<FileDropListener> fileDropExtras=new ArrayList<FileDropListener>();
 
 	public NormalToolDragHandler(BasicToolBit roi_Mover) {
@@ -459,8 +459,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	}
 	
 	/**
-	 
-	 * 
+	 An interface that can be used by extensions to quickfigures to add drag/drop functionality to the tools
 	 */
 public static interface FileDropListener {
 

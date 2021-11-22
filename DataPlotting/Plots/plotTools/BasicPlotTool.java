@@ -23,7 +23,6 @@ package plotTools;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -32,9 +31,7 @@ import dataSeries.DataSeries;
 import genericPlot.BasicDataSeriesGroup;
 import genericPlot.BasicPlot;
 import genericTools.Object_Mover;
-import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
-import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import icons.IconWrappingToolIcon;
 import locatedObject.LocatedObject2D;

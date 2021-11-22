@@ -212,7 +212,7 @@ public class RowLabelIntroducerTool extends RowAndColumnSwapperTool{
 			int index = getCurrentLayout().makeAltered(markerType()).getPanelIndex(mm.getCoordinateX(), mm.getCoordinateY());//placeItemAtStartingPositionForAttachment(mm.getCoordinateX(), mm.getCoordinateY());
 			
 			
-			item=FigureLabelOrganizer.addLabelOfType(markerType(), index, layerFor,  layoutGraphic);
+			item=FigureLabelOrganizer.addLabelOfType(markerType(), index, layerFor,  layoutGraphic, false);
 		
 			layerFor.add(item);
 				UndoAddItem addingEdit = new 	UndoAddItem(layerFor, item);

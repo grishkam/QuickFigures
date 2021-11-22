@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 20, 2021
  * Version: 2021.2
  */
 package standardDialog.numbers;
@@ -40,11 +40,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
-import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
+import utilityClasses1.NumberUse;
 
 
 /**A JPanel containing a Label and a numeric text field for placement into a standard dialog with a grided panel*/
@@ -270,9 +270,9 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		JFrame ff = new JFrame("frame");
 		ff.setLayout(new FlowLayout());
 		ff.add(new JButton("button"));
-		NumberInputPanel sb = new NumberInputPanel("Select number", 9, -100,100);
+		NumberInputPanel sb = new NumberInputPanel("Select number", 300, -100,100);
 		sb.setItemFont(sb.getField().getFont().deriveFont((float)10));
-		sb.setSliderConstants(new double[] {0, 1, 15, 150, 1000});
+		sb.setSliderConstants(new double[] {-8, 0, 1, 9, 15, 150, 300, 1000});
 		ff.add(sb);
 		ff.pack();
 		
@@ -322,11 +322,23 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	private boolean isSliderValueListValid() {
 		return this.sliderConstants!=null &&this.sliderConstants.size()>=2;
 	}
-	/**
+	
+	/**returns the slider value tthat corresponds to the given number
 	 * @param newNumber
 	 * @return
 	 */
 	private int transLateDoubleToSliderValue(double newNumber) {
+		
+		/**if the slider has a list of numbers, sets the position to the nearest number on the list*/
+		if(isSliderValueListValid()) {
+			 Double near = NumberUse.findNearest(newNumber, sliderConstants);
+			double index = sliderConstants.indexOf(near);
+			double increment=((double)1.0)/sliderConstants.size();//the distance between the choices
+			int output = (int) (slider.getMinimum()+(slider.getMaximum()-slider.getMinimum())*(index*increment));
+			return output;
+			
+		}
+		
 		return (int)newNumber;
 	}
 
@@ -381,7 +393,6 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 
 	
 	
-	
 	/**used for easy way to obtain a number from the user*/
 	public static double getNumber(String prompt, double startnumber, int precis, boolean slider, StandardDialogListener dialogListener) {
 		StandardDialog sd = new StandardDialog();
@@ -410,6 +421,9 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	/**Sets the slider constants*/
 	public void setSliderConstants(ArrayList<Double> sliderConstants) {
 		this.sliderConstants = sliderConstants;
+		setValueOfSlider(number);
+	
+		
 	}
 	/**Sets the slider constants*/
 	public void setSliderConstants(double[] sliderConstants) {

@@ -304,7 +304,7 @@ public static class OrderSwapSmartHandle extends SmartHandle {
 }
 
 
-/**A handle that allows one to reorder the data series*/
+/**A handle that allows one to introduce a statistical text to the data series*/
 public static class StatTestSmartHandle extends SmartHandle {
 
 	/**
@@ -314,7 +314,7 @@ public static class StatTestSmartHandle extends SmartHandle {
 	private DataShowingShape theShape;
 	private TTestTool tool;
 	private Shape subshape;
-	private DataSeries dataSeries;
+	
 	private double positionOnPlot;
 	
 	/**
@@ -340,7 +340,7 @@ public static class StatTestSmartHandle extends SmartHandle {
 		this(bar);
 		this.setHandleNumber(this.getHandleNumber()+i);
 		this.subshape=keyShape;
-		this.dataSeries=dataSeries;
+		
 		this.positionOnPlot=dataSeries.getAllPositions()[0];
 	}
 

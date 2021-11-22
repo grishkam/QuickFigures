@@ -443,13 +443,15 @@ public void resizeLayoutToFitContents() {
 			}
 		
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
-			box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i, rowLabelsOnRight));
-			
+			box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i, false));
+			if(rowLabelsOnRight)
+				box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i, true));
 			}
 	
 	}
 	
 	/**creates a locked item handle for use in this layout*/
+	@Override
 	protected void generateHandleForText(LocatedObject2D l) {
 		SmartHandleList list = this.getLocedItemHandleList();
 		list.add(new LayoutLockedItemHandle(this, l, 1000000000+list.size()));
@@ -519,6 +521,7 @@ public void resizeLayoutToFitContents() {
 			if (this.isCols())nOptions=myLayout.nColumns();
 		}
 		
+		/**returns which type of attachment position this item has*/
 		String changeText() {
 			if(isCols()) {
 				return "Columns";
@@ -556,6 +559,7 @@ public void resizeLayoutToFitContents() {
 			return moveMenu;
 		}
 		
+		/**Changes the position of the label*/
 		void advanceLabel(int direction) {
 			Integer newind = getPanelLocations().get(getObject())+amount*direction;
 			
@@ -572,17 +576,19 @@ public void resizeLayoutToFitContents() {
 			Point cordinatePoint = lastDragOrRelMouseEvent.getCoordinatePoint();
 			double d = cordinatePoint.distance(p1);
 			if(originalBounds!=null) d = cordinatePoint.distance(originalBounds.getCenterX(), originalBounds.getCenterY());
-			if(d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent)) {
+			
+			/**determine whether the object is being dragged out of range of its hone row of column*/
+			boolean outsideOfHomeRow = d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent) &&super.object.getTagHashMap().get("Index")==null;
+			if(outsideOfHomeRow) {
 				shifted=true;
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 
-					
 					Rectangle2D nearestPanel = rLayout.getNearestPanel(cordinatePoint);
 					Rectangle r2 = getObject().getBounds();
 					if (originalSnap!=null)originalSnap.snapRects(r2, nearestPanel); else
 						getObject().getAttachmentPosition().snapRects(r2, nearestPanel);
 					
-					setDragMask(lastDragOrRelMouseEvent, r2);
+					setDragMask(lastDragOrRelMouseEvent, r2);//displays the new destination row to the user
 			} else {
 				shifted=false;
 				lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(null, 0);
@@ -646,6 +652,10 @@ public void resizeLayoutToFitContents() {
 				getPanelLocations().put(getObject(), index);
 				if (myLayout.rowmajor&&isRows()) {
 					getPanelLocations().put(getObject(), index*myLayout.nColumns());
+					
+					/**If the index is fixed, makes it possible to change it*/
+					if (getObject().getTagHashMap().containsKey("Index"))
+						getObject().getTagHashMap().put("Index", index);
 				}
 				snapLockedItem(getObject());
 			}

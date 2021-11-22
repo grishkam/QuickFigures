@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 21, 2021
  * Version: 2021.2
  */
 package handles.layoutHandles;
@@ -29,18 +29,24 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import addObjectMenus.LaneLabelAdder;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import figureFormat.ChannelLabelExamplePicker;
 import figureFormat.LabelExamplePicker;
 import figureOrganizer.FigureLabelOrganizer;
+import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.FigureType;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.BasicObjectListHandler;
+import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
@@ -53,6 +59,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**set to true if opposite side*/
 	boolean opposite=false;
 	
 	private LabelExamplePicker picker;//determines what labels are already considered as already present
@@ -88,7 +95,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		}
 	
 	
-	this.setHandleNumber(90000+100*type+index);
+	this.setHandleNumber(90000+100*type+index+(opposite?900000:0));
 	
 	
 	this.message="Add Label";
@@ -123,9 +130,9 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @return
 	 */
 	public boolean labelSpaceNotAvailable(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
-		boolean opposite=false;
-		if(type==ROWS&&montageLayoutGraphic.rowLabelsOnRight)
-			opposite=true;
+		//boolean opposite=false;
+		//if(type==ROWS&&montageLayoutGraphic.rowLabelsOnRight)
+		//	opposite=true;
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index, opposite).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getVirtualWorksheet());
 		
@@ -135,6 +142,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		return needLabel;
 	}
 	
+	/**returns the section the layout where the label belongs*/
 	private Rectangle2D getSpaceForLabel(int index, boolean opposite) {
 		Rectangle2D space = layout.getPanelLayout().makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
 	if(type==ROWS)  space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
@@ -156,12 +164,56 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		if (canvasMouseEventWrapper.isPopupTrigger()) {return;}
 		
-		TextGraphic label = FigureLabelOrganizer.addLabelOfType(type, index, layout.getParentLayer(), layout);
+		if (mode==LayoutSpaces.COLUMN_OF_PANELS &&layout.getParentLayer() instanceof FigureOrganizingLayerPane) {
+			FigureOrganizingLayerPane figure=(FigureOrganizingLayerPane) layout.getParentLayer();
+			if(figure.getFigureType()==FigureType.WESTERN_BLOT) {
+				boolean decision = FileChoiceUtil.yesOrNo("Do you want to add multiple lane labels? This feature is a work in progress");
+				if (decision) {
+					addLaneLabels(canvasMouseEventWrapper);
+					return;
+					}
+				
+			}
+		}
+		
+		TextGraphic label = FigureLabelOrganizer.addLabelOfType(type, index, layout.getParentLayer(), layout, opposite);
 		
 		addLabel(canvasMouseEventWrapper, label);
 		
 	}
 
+	/**Adds lane labels to the column i. This feature is a work in progress
+	 * @param canvasMouseEventWrapper
+	 */
+	private void addLaneLabels(CanvasMouseEvent canvasMouseEventWrapper) {
+		CombinedEdit undo = new CombinedEdit();
+		
+		LaneLabelAdder laneLabelAdder = new LaneLabelAdder(false);
+		TextGraphic textItem = laneLabelAdder. createTextItem();
+		
+		
+		
+		Rectangle box = layout.getPanelLayout().getSelectedSpace(this.index, LayoutSpaces.PANELS).getBounds();
+		
+		ArrayList<TextGraphic> labelList = new ArrayList<TextGraphic>();
+		DefaultLayoutGraphic laneLabelLayout = laneLabelAdder.addLaneLabel(textItem, true, labelList, layout.getParentLayer(), box, undo);
+		
+		
+		
+		textItem=labelList.get(0);
+		if(textItem.getBounds().getMaxY()>box.getMinY()+1) {
+			IssueLog.log("Lane labels are too low");
+			undo.addEditToList(new UndoLayoutEdit(layout));
+			double height =textItem.getBounds().getMaxY()-box.getMinY();
+			layout.moveLayoutAndContents(0, height);//to make sure lane labels are above
+			laneLabelLayout.moveLayoutAndContents(0, -height);
+		}
+		
+		
+		canvasMouseEventWrapper.addUndo(undo);
+	}
+
+	/**Adds the label and adds an undo to the undo manager*/
 	protected void addLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label) {
 		setUpMatchingLocation(label);
 		

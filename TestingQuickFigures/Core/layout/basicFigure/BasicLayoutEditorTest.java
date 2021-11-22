@@ -527,8 +527,8 @@ public class BasicLayoutEditorTest implements LayoutSpaces {
 		if(i==j)
 			return;
 		
-		TextGraphic t1 = FigureLabelOrganizer.addRowLabel("starts in row "+i, i, targetLayer, layout);
-		TextGraphic t2 = FigureLabelOrganizer.addRowLabel("starts in row "+j, j, targetLayer, layout);
+		TextGraphic t1 = FigureLabelOrganizer.addRowLabel("starts in row "+i, i, targetLayer, layout, false);
+		TextGraphic t2 = FigureLabelOrganizer.addRowLabel("starts in row "+j, j, targetLayer, layout, false);
 		
 		setTextMarkR(t1);
 		setTextMarkR(t2);

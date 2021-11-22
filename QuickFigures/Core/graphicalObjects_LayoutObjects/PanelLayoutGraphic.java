@@ -140,6 +140,9 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	AttachedItemList lockedItems=new AttachedItemList(this);
 	  private AttachedItemList panelSizeDefiningItems=new AttachedItemList(this);
+	 
+	  /***/
+	
 	  
 	public AttachedItemList getLockedItems() {
 		if (lockedItems==null) lockedItems=new AttachedItemList(this);
@@ -1001,6 +1004,14 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		return new LayoutTreeIcon();
 	}
 
+	/**
+	 * @param canvasMouseEventWrapper
+	 */
+	public static void performCanvasResize(CanvasMouseEvent canvasMouseEventWrapper) {
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			new CanvasAutoResize(false).performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
+	}
+
 	@Override
 	public void userMoved(LocatedObject2D object) {
 		// TODO Auto-generated method stub
@@ -1045,6 +1056,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	protected SmartHandleList getLocedItemHandleList() {
 		if (panelHandleList==null) {
 			panelHandleList=new SmartHandleList();
+			
 			for(LocatedObject2D l: this.getLockedItems())  {
 				this.generateHandlesForAttachedItems(l);
 			}
@@ -1133,8 +1145,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		private static final long serialVersionUID = 1L;
 		
 		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
-			if (CanvasOptions.current.resizeCanvasAfterEdit)
-				new CanvasAutoResize(false).performActionDisplayedImageWrapper(canvasMouseEventWrapper.getAsDisplay());
+			performCanvasResize(canvasMouseEventWrapper);
 		}
 	
 	

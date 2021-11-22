@@ -55,7 +55,6 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
-import messages.ShowMessage;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.graphics.GraphicComponent;
 import standardDialog.numbers.AngleInputPanel;

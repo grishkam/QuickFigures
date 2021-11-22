@@ -445,7 +445,11 @@ public class QuickFigureMaker extends DisplayActionTool {
 		@Override
 		public String getMenuPath() {
 			String string = "File<New";
-			if(isMergeOnly()) string+="<Figure With Merge Panels Only";
+			if (localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT)
+				{}//blot figue option will not be in a submenu 
+			else
+			if(isMergeOnly()) 
+				string+="<Figure With Merge Panels Only";
 			else string+="<Figure With Split Channels";
 			return string;
 		}

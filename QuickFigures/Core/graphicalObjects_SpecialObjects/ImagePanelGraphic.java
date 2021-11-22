@@ -62,7 +62,6 @@ import export.svg.SVGExporter;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_Shapes.RectangularGraphic;
 import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
 import handles.AttachmentPositionHandle;

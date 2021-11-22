@@ -559,7 +559,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			boolean useImageNames = (pan!=null) && (LabelCreationOptions.current.useFileOrFoldeName());
 			
 			if (!useImageNames) {
-				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic());
+				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic(), false);
 			}
 			
 			if (useImageNames) {
@@ -652,7 +652,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	
 	/**Adds a row label to the figure*/
 	public ComplexTextGraphic addRowLabel(String st, int rowNum) {
-		return FigureLabelOrganizer.addRowLabel(st, rowNum, this, this.getMontageLayoutGraphic());
+		return FigureLabelOrganizer.addRowLabel(st, rowNum, this, this.getMontageLayoutGraphic(), false);
 	}
 	
 	/**Adds a column label to the figure*/

@@ -38,6 +38,7 @@ import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
+import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 
@@ -103,6 +104,8 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
+		createUndos();
+		
 		if(canvasMouseEventWrapper.clickCount()<2) return;
 		if (this.subtractionOnly) {
 			if(type==COLS&&layout.getPanelLayout().nColumns()>1) 
@@ -114,6 +117,17 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 			else layout.getEditor().addRows(layout.getPanelLayout(), 1);
 		}
 		
+		
+	}
+
+
+
+
+
+	/**
+	 * 
+	 */
+	protected void createUndos() {
 		undo=new UndoLayoutEdit(layout);
 		undo2=new CombinedEdit(undo);
 		undoAdded=false;
@@ -142,6 +156,17 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 			}
 			
 			}
+	}
+	
+	@Override
+	public void handleRelease(CanvasMouseEvent lastDragOrRelMouseEvent) {
+	
+		if (undo2!=null) {
+			
+			undo2.addEditToList(
+					new CanvasAutoResize(false).performUndoableAction(lastDragOrRelMouseEvent.getAsDisplay())
+			);
+		}
 	}
 	
 	/**What to do when a handle is moved from point p1 to p2*/

@@ -233,7 +233,7 @@ public class FigureAdder extends LayoutAdder {
 	/**
 	 returns the figure type that will be used
 	 */
-	private FigureType getFigureType() {
+	public FigureType getFigureType() {
 		if (this.figureType!=null)
 			return figureType;
 		return FigureType.FLUORESCENT_CELLS;

@@ -150,8 +150,9 @@ public class FigureLabelOrganizer implements Serializable {
 	 * @param textContent the text
 	 * @param rowIndex the index
 	 * @param thisLayer the target layer
-	 * @param theLayout the layout*/
-	public static ComplexTextGraphic addRowLabel(String textContent, int rowIndex, GraphicLayer thisLayer, DefaultLayoutGraphic theLayout) {
+	 * @param theLayout the layout
+	 * @param rightSide if true, label will be added to the right of row instead of the deault left*/
+	public static ComplexTextGraphic addRowLabel(String textContent, int rowIndex, GraphicLayer thisLayer, DefaultLayoutGraphic theLayout, boolean rightSide) {
 		if (textContent==null) return null;
 		if (textContent.trim().equals("")) return null;
 		textContent=textContent.replace("_", " ");
@@ -161,7 +162,8 @@ public class FigureLabelOrganizer implements Serializable {
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_RIGHT);
 		thisLayer.add(tg);
 		
-		if(theLayout.rowLabelsOnRight) {
+		
+		if(rightSide) {
 			tg.setAttachmentPosition(AttachmentPosition.rightOfRowSide());
 			tg.getParagraph().setJustification(TextParagraph.JUSTIFY_LEFT);
 		}
@@ -181,9 +183,9 @@ public class FigureLabelOrganizer implements Serializable {
 	 * @param index the index
 	 * @param destinationLayer the target layer
 	 * @param targetLayout the layout*/
-	public static TextGraphic addLabelOfType(int labelType, int index, GraphicLayer destinationLayer, DefaultLayoutGraphic targetLayout) {
+	public static TextGraphic addLabelOfType(int labelType, int index, GraphicLayer destinationLayer, DefaultLayoutGraphic targetLayout, boolean opposideSide) {
 		TextGraphic item=null;
-		if (labelType==BasicLayout.ROWS) item=addRowLabel((targetLayout.rowLabelsOnRight?"Row":"          Row ")+index, index, destinationLayer, targetLayout);
+		if (labelType==BasicLayout.ROWS) item=addRowLabel((opposideSide?"Row ":"          Row ")+index, index, destinationLayer, targetLayout, opposideSide);
 		else 
 			if (labelType==BasicLayout.COLS) item= addColLabel("Column "+index, index, destinationLayer, targetLayout);
 			else 

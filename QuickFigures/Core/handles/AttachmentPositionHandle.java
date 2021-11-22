@@ -192,6 +192,7 @@ public class AttachmentPositionHandle extends SmartHandle {
 		}
 	}
 
+	/**returns true if the user mouse event has dragged the objects beyond the range of its attachment point*/
 	protected boolean outOfRange(CanvasMouseEvent mEvent) {
 		return AttachedItemTool2.outofRange(this.getObject().getBounds(), attachmentSite.getBounds(), mEvent.getCoordinatePoint());
 	}

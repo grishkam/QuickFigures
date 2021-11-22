@@ -20,7 +20,6 @@
  */
 package handles.miniToolbars;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -43,19 +42,18 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.IconHandle;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.DialogIcon;
-import iconGraphicalObjects.IconUtil;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu.ChannelMergeMenuItem;
 import multiChannelFigureUI.ImagePropertiesButton;
+import selectedItemMenus.AttachmentPositionAdjuster;
 import selectedItemMenus.FrameColorButton;
 import selectedItemMenus.ImageGraphicOptionsSyncer;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.AbstractUndoableEdit2;
-import selectedItemMenus.AttachmentPositionAdjuster;
 
 /**this handle list contains a set of handles that act as a minitoolbar for an image panel*/
 public class ImagePanelActionHandleList extends ActionButtonHandleList {
