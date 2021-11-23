@@ -130,16 +130,35 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @return
 	 */
 	public boolean labelSpaceNotAvailable(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
-		//boolean opposite=false;
-		//if(type==ROWS&&montageLayoutGraphic.rowLabelsOnRight)
-		//	opposite=true;
 		Rectangle boundsForThisRowsLabel=getSpaceForLabel(index, opposite).getBounds();
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(boundsForThisRowsLabel, montageLayoutGraphic.getPanelLayout().getVirtualWorksheet());
 		
 		ArrayList<BasicGraphicalObject> array = pick.getDesiredItemsAsGraphicals(rois);
+		ArrayList<BasicGraphicalObject> spaceFillerList = pick.getDesiredItemsAsGraphicals(rois);
 		
-		boolean needLabel = array.size()>0;
-		return needLabel;
+		boolean spaceFilled = array.size()>0;
+		
+		
+		
+		/**account for the circumstance where there is only a partial overlap between a label in a nearby column and the space meant for   */
+		for (BasicGraphicalObject currentObject : array) {
+			
+			Rectangle b2 = currentObject.getBounds();
+			Rectangle2D intersection = b2.createIntersection(boundsForThisRowsLabel);
+			if(intersection.getHeight()*intersection.getWidth()*2.5<b2.height*b2.width)
+				{
+				spaceFillerList.remove(currentObject);
+				}
+			
+			if(currentObject.getTagHashMap().get("Index")!=null&&(int)currentObject.getTagHashMap().get("Index")==index)// what to do if the tag on the object says it belongs to this locaiton
+				spaceFillerList.add(currentObject);
+			if(currentObject.getTagHashMap().get("Index")!=null&&(int)currentObject.getTagHashMap().get("Index")!=index)// what to do if the tag on the object says it belongs to another location
+				spaceFillerList.remove(currentObject);
+		}
+		spaceFilled =spaceFillerList.size()>0;
+		
+		
+		return spaceFilled;
 	}
 	
 	/**returns the section the layout where the label belongs*/
@@ -164,6 +183,8 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		if (canvasMouseEventWrapper.isPopupTrigger()) {return;}
 		
+		
+		/**conditional for the special circumstance of this being a western blot figure*/
 		if (mode==LayoutSpaces.COLUMN_OF_PANELS &&layout.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane figure=(FigureOrganizingLayerPane) layout.getParentLayer();
 			if(figure.getFigureType()==FigureType.WESTERN_BLOT) {
@@ -178,6 +199,8 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		TextGraphic label = FigureLabelOrganizer.addLabelOfType(type, index, layout.getParentLayer(), layout, opposite);
 		
+		
+		
 		addLabel(canvasMouseEventWrapper, label);
 		
 	}
@@ -188,7 +211,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	private void addLaneLabels(CanvasMouseEvent canvasMouseEventWrapper) {
 		CombinedEdit undo = new CombinedEdit();
 		
-		LaneLabelAdder laneLabelAdder = new LaneLabelAdder(false);
+		LaneLabelAdder laneLabelAdder = new LaneLabelAdder();
 		TextGraphic textItem = laneLabelAdder. createTextItem();
 		
 		
@@ -215,7 +238,7 @@ public class AddLabelHandle extends MoveRowHandle {
 
 	/**Adds the label and adds an undo to the undo manager*/
 	protected void addLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label) {
-		setUpMatchingLocation(label);
+		setUpMatchingLocation(label, true);
 		
 		
 		DisplayedImage d = canvasMouseEventWrapper.getAsDisplay();
@@ -241,7 +264,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	}
 
 	/**sets the attachment position */
-	private void setUpMatchingLocation(TextGraphic label) {
+	private void setUpMatchingLocation(TextGraphic label, boolean font) {
 		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
 		
 		if (type==COLS &&opposite)  {
@@ -255,8 +278,18 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getVirtualWorksheet());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
-		if(array.size()>0) label.setAttachmentPosition(array.get(0).getAttachmentPosition());
-	
+		if(array.size()>0) {
+				BasicGraphicalObject seniorTextItem = array.get(0);
+				 label.setAttachmentPosition(seniorTextItem.getAttachmentPosition());
+				
+				if(font && seniorTextItem instanceof TextGraphic) {
+					TextGraphic t = (TextGraphic) seniorTextItem;
+					label.setFont(t.getFont());
+					label.setAngle(t.getAngle());
+					if(t.getTagHashMap().get("Index")!=null)
+						label.getTagHashMap().put("Index", this.index);
+				}
+		}
 	}
 	public void handleDrag(CanvasMouseEvent canvasMouseEventWrapper) {}
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {}
@@ -270,6 +303,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	}
 
 	
+	/**returns the font that will be used for the 'add label' message */
 	protected Font getMessageFont() {
 		return new Font("Arial", 0, 11);
 	}

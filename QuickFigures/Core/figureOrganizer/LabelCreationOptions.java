@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Oct 28, 2021
+ * Date Modified: Nov 22, 2021
  * Version: 2021.2
  */
 package figureOrganizer;
@@ -28,12 +28,12 @@ public class LabelCreationOptions {
 	/**The current label creation options*/
 	public static LabelCreationOptions current=new LabelCreationOptions() ;
 	
-	public static final int useFileNames=1,useFolderNames=2;
-	@RetrievableOption(key = "use image names", label="Get label names from", choices={"numbers", "use image file names", "use folder names"})
+	public static final int useFileNames=1,useFolderNames=2, userPastes=3;
+	@RetrievableOption(key = "use image names", label="Get label names from", choices={"numbers", "use image file names", "use folder names", "ask user to paste"})
 	public int useNames=1;//use the names of image files for their labels?
 	
 	@RetrievableOption(key = "clip labels", label="Clip Labels Longer Than")
-	public double clipLabels=50;//The max length at which long labels be truncated
+	public double clipLabels=50;//The max length at which long labels are to be truncated
 	
 	/**returns true if file names will be used for labels*/
 	boolean useFileOrFoldeName() {
@@ -45,12 +45,19 @@ public class LabelCreationOptions {
 	}
 
 	/**
-	 * @return
+	 * @return true if the label text is derived from folder names
 	 */
 	public boolean usesFolderNames() {
 		if (useNames==useFolderNames)
 			return true;
 		return false;
+	}
+
+	/**
+	 * @return true if user is expected to paste a list of row labels
+	 */
+	public boolean useLabelList() {
+		return  useNames==userPastes;
 	}
 
 }

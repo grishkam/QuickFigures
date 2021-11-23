@@ -190,6 +190,7 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		output.setLocationTypeExternal(CornerToCenter_LowerLeft);
 		output.setGridChoice2(LayoutSpaces.COLUMN_OF_PANELS);
 		output.setLocationCategory(EXTERNAL);
+		output.horizontalOffset=-4;
 		return output;
 	}
 	

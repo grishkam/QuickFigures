@@ -58,6 +58,7 @@ import menuUtil.HasUniquePopupMenu;
 import objectDialogs.CroppingDialog;
 import objectDialogs.CroppingDialog.CropDialogContext;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
+import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoAddManyItem;
@@ -552,6 +553,10 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		if(type==BasicLayout.COLS) limit=ml.nColumns();
 		if(type==BasicLayout.PANELS) limit=ml.nPanels();
 		AttachmentPosition position=null;
+		String[] nameList=new String[] {};
+		if (LabelCreationOptions.current.useLabelList())
+				nameList=StandardDialog.getStringArrayFromUser("Paste Labels Here", "");
+		
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;
 			ImageDisplayLayer pan = getDisplayLayerForRowindex(i, type);//may return null
@@ -560,6 +565,8 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 			
 			if (!useImageNames) {
 				item = FigureLabelOrganizer.addLabelOfType(type, i,  this, this.getMontageLayoutGraphic(), false);
+				if(i<=nameList.length)
+					item.setContent(nameList[i-1]);
 			}
 			
 			if (useImageNames) {
@@ -572,6 +579,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 						text = new File(path).getParentFile().getName();
 					else IssueLog.log("could not find file path");
 				}
+				
 				if(text.startsWith("DUP")) text=text.replace("DUP","");//imagej adds dup
 				if(text.endsWith(".tiff")) text=text.replace(".tiff","");//imagej tiffs dont need that in their label
 				if(text.endsWith(".tif")) text=text.replace(".tif","");//imagej tiffs dont need that in their label

@@ -22,6 +22,7 @@ package standardDialog.strings;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -29,7 +30,9 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
@@ -38,7 +41,7 @@ import standardDialog.OnGridLayout;
 public class StringInputPanel extends InputPanel implements OnGridLayout, KeyListener{
 
 	JLabel label=new JLabel();
-	JTextField field=new JTextField(15); {field.addKeyListener(this);}
+	JTextComponent field=new JTextField(15);
 	ArrayList<StringInputListener> lis=new ArrayList<StringInputListener>();
 	String lasts="";
 	
@@ -46,20 +49,32 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	
 	
 	public StringInputPanel(String labeln, String contend) {
-		
-		label.setText(labeln);
-		setContentText(contend);
-		lasts=contend;
-		this.originalStatus=contend;
+		this(labeln, contend, 15);
 	}
 	
+	/**Creates a sring input panel with a text field of given length */
 	public StringInputPanel(String labeln, String contend, int fieldLength) {
+		field=new JTextField(contend, fieldLength);
+		setupInnitialText(labeln, contend);
 		
+	}
+
+	/**
+	 * @param labeln
+	 * @param contend
+	 */
+	protected void setupInnitialText(String labeln, String contend) {
 		label.setText(labeln);
-		field.setText(contend);
+		getTextComponent().setText(contend);
 		lasts=contend;
-		field.setColumns(fieldLength);
 		this.originalStatus=contend;
+		{getTextComponent().addKeyListener(this);}
+	}
+	
+	public StringInputPanel(String labeln, String contend, int rows, int cols) {
+		field=new JTextArea(rows, cols);
+		
+		setupInnitialText(labeln, contend);
 	}
 	
 	public void revert() {
@@ -67,7 +82,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	}
 	
 	public void setContentText(String contend) {
-		field.setText(contend);
+		getTextComponent().setText(contend);
 	}
 	
 	
@@ -75,7 +90,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	
 	
 	public String getTextFromField() {
-		return field.getText();
+		return getTextComponent().getText();
 	}
 	
 	public void addStringInputListener(StringInputListener l) {
@@ -111,7 +126,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	}
 	
 	protected Component getTextField() {
-		return field;
+		return getTextComponent();
 	}
 
 	
@@ -135,9 +150,9 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if (this.getTextFromField().equals(lasts)||arg0.getSource()!=field) return;
+		if (this.getTextFromField().equals(lasts)||arg0.getSource()!=getTextComponent()) return;
 		
-		StringInputEvent e = new StringInputEvent(this, this.field, this.getTextFromField());
+		StringInputEvent e = new StringInputEvent(this, this.getTextComponent(), this.getTextFromField());
 		e.setKey(key);
 		this.notifyLiseners(e);
 		lasts=this.getTextFromField();
@@ -155,6 +170,11 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	public void setToDimension(Rectangle contend) {
 		String st= contend.width+" X "+contend.height;
 		 setContentText(st);
+	}
+
+	/**Returns the text component that the user types into*/
+	public JTextComponent getTextComponent() {
+		return field;
 	}
 
 

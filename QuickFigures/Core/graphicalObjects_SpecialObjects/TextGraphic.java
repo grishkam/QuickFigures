@@ -312,6 +312,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 		return theText;
 	}
 
+	/**sets the text stored within the object, note: this does not affect complex text*/
 	@Override
 	public void setText(String st) {
 		if (st==null) st="";
@@ -321,6 +322,12 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 		this.setLocation(p.getX(), p.getY());
 	}
 
+	/**sets the content of the first fragment of text*/
+	public void setContent(String st) {
+		this.setText(st);
+	
+	}
+	
 	@Override
 	public Font getFont() {
 		return font;

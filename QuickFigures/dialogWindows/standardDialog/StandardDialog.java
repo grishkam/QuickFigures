@@ -238,6 +238,13 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		return ob.getTextFromField();
 	}
 	
+	public String[] getLinesFromString(String key) {
+		String string = this.getString(key);
+		if(string.length()==0)
+			return null;
+		return string.split('\n'+"");
+	}
+	
 	protected boolean setStringField(String key, String content) {
 		StringInputPanel ob = allStrings.get(key);
 		if(ob==null) return false;
@@ -980,6 +987,28 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		popup.pack();
 		this.thePopup=popup;
 		return popup;
+	}
+	
+	/**Asks user for a String array. Each element in the array should be pasted on a separate line
+	 * @return
+	 */
+	public static String[] getStringArrayFromUser(String label, String start, Object... otherOptions) {
+		StandardDialog sd = new StandardDialog(label);
+		sd.setModal(true);
+		sd.setWindowCentered(true);
+		
+		sd.add(label, new StringInputPanel(label, start, 16, 25));
+		if (otherOptions!=null &&otherOptions.length>0) {
+			for(Object of: otherOptions)StoredValueDilaog.addFieldsForObject(sd, of);
+		}
+		sd.showDialog();
+		
+		if(sd.wasOKed) {
+			return sd.getString(label).split(""+'\n');
+		}
+		if(start==null)
+			return null;
+		return start.split(""+'\n');
 	}
 	
 }

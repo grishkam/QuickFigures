@@ -1162,6 +1162,11 @@ public String getText() {
 	return this.getParagraph().getText();
 }
 
+/***/
+public void setContent(String st) {
+	this.setText(st);
+	getParagraph().get(0).get(0).setText(st);
+}
 
 
 

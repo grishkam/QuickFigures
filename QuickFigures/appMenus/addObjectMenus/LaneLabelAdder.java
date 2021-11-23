@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 2, 2021
- * Date Modified: May 2, 2021
+ * Date Modified: Nov 23, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 
+import figureOrganizer.FigureLabelOrganizer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
@@ -41,6 +42,7 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
 import messages.ShowMessage;
+import standardDialog.strings.StringInputPanel;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -52,18 +54,26 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	/**
 	 * 
 	 */
+	private static final String LABEL_PASTE_TEXT_AREA_KEY = "Custom";
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-	boolean simple=false;
-	LaneLabelCreationOptions options=new LaneLabelCreationOptions();
 	
-	public LaneLabelAdder(boolean isSimple) {
-		simple=isSimple;
+	LaneLabelCreationOptions options=new LaneLabelCreationOptions();
+	private String[] labelList;
+	
+	public LaneLabelAdder() {
+		
 	}
 	
 	private CombinedEdit undo;
 	
 	/**A text item to show as an icon. along with the menu item*/
 	TextGraphic iconText=new TextGraphic();
+
+	
 	 {
 		iconText.setFont(iconText.getFont().deriveFont((float) 42));	
 		iconText.setFillBackGround(true);
@@ -93,8 +103,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 * @return
 	 */
 	public TextGraphic createTextItem() {
-		TextGraphic out = new TextGraphic();
-		if(!simple) out=new ComplexTextGraphic();
+		TextGraphic out=new FigureLabelOrganizer.ColumnLabelTextGraphic();
 		out.setLocationUpperLeft(50, 50);
 		out.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
 		return out;
@@ -161,20 +170,28 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		for(int f=1; f<=nLanes; f++){
 			TextGraphic  ag2 = ag;
-			ag2.setFontSize(wCol/2);
+			ag2.setFontSize((int) (wCol/2));
 			ag2.setAngle(45);
 			
 			if (output) {
 				ag2=ag.copy();
 				ag2.setAttachmentPosition(ag.getAttachmentPosition());
 			} else {
-				ag.setAttachmentPosition(AttachmentPosition.defaultColLabel());
-				while (ag.getBounds().width>0.9*b.getWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
+				ag.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
+				while (ag.getBounds().width>0.8*b.getWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
 			}
 			Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(f);
 			ag2.setLocation(panel.getCenterX(), panel.getMinY());
 			
-			TextItemAdder.setTextContent(ag2, options.prefix+count+options.suffix);
+			/**Sets the text of the label*/
+			String text_for_label = options.prefix+count+options.suffix;
+			if(labelList!=null &&labelList.length>=f) {
+				text_for_label=labelList[f-1];
+			}
+			ag2.setContent(text_for_label);
+			
+			
+			
 			count++;
 			ag2.setTextColor(Color.black);
 			
@@ -207,7 +224,12 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
+		 labelList=null;
+		 storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list below", null, 15, 20));
+		 
 		storedValueDilaog.showDialog();
+		
+		labelList=storedValueDilaog.getLinesFromString(LABEL_PASTE_TEXT_AREA_KEY);
 	}
 	
 	@Override
@@ -221,8 +243,8 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	}
 	
 	public Icon getIcon() {
-		if(!simple) return  ComplexTextGraphic.createImageIcon();
-		return TextGraphic.createImageIcon();
+		return  ComplexTextGraphic.createImageIcon();
+		
 	}
 	
 	/**performs the action.*/
