@@ -173,6 +173,7 @@ public class ComplexTextGraphic extends TextGraphic {
 	/**A hashmap used for keeping track of the bounding polygon for each text segment*/
 	private transient HashMap<TextLineSegment, Polygon> rotatedSegmentBounds=new HashMap<TextLineSegment, Polygon>();
 	private TextLineSegment cursorSegment;//which text segment currently contains the cursor
+	private TextLineSegment highlightSegment ;
 	private ArrayList<TextLineSegment> allSelectedSegments;//Add the highlighted segments; from the cursor location to the highlight location
 	
 
@@ -274,8 +275,9 @@ public class ComplexTextGraphic extends TextGraphic {
 	private void setUpSelectedSegmentList() {
 		TextLineSegment lastCursorSegment = cursorSegment;
 		cursorSegment = findCursorSegment(getCursorPosition(), false);
-		TextLineSegment highlightSegment = findCursorSegment(this.getHighlightPosition(), true);
-		if (lastCursorSegment!=null&&cursorSegment !=lastCursorSegment)lastCursorSegment.setCursorPosition(lastCursorSegment.getText().length());//added on may 13 2020 to fix bug
+		highlightSegment = findCursorSegment(this.getHighlightPosition(), true);
+		if (lastCursorSegment!=null&&cursorSegment !=lastCursorSegment)
+			lastCursorSegment.setCursorPosition(lastCursorSegment.getText().length());//added on may 13 2020 to fix bug. cursor should be moved out of the last cursor segment
 		
 		this.allSelectedSegments = this.getParagraph().getAllSegmentsInRange(highlightSegment, cursorSegment);
 	
@@ -712,16 +714,49 @@ public class ComplexTextGraphic extends TextGraphic {
 			onBackspace();
 			return;
 		}
+		
+		/**A list of segments in the highlight region that will be deleted when the user types a key*/
+		ArrayList<TextLineSegment> segmentsToDelete = new ArrayList<TextLineSegment>();
+		TextLineSegment segmentToDeleteForHighLight=null;
+		Integer delIndex=null;
+		
+		/**work in progress. need to edit so that the selected region is removed when a highlight overlaps multiple segments*/
 		if (this.hasHighlightRegion()) 
 			{
+			//need to determine what do do with the other segments
+			this.setUpSelectedSegmentList();
+			segmentsToDelete.addAll(allSelectedSegments);
+			segmentsToDelete.remove(thisSegment);
+			if (highlightSegment.getHightLightPosition()!=0)
+				{
+				segmentsToDelete.remove(highlightSegment);
+				segmentToDeleteForHighLight=highlightSegment;
+				 delIndex=highlightSegment.getHightLightPosition();
+				}
 			
 			}
 		
-		String st = KeyOnString(arg0,thisSegment .getText(),thisSegment.getCursorposition());
+		String st = handleKeyOnString(arg0,thisSegment .getText(),thisSegment.getCursorposition(), thisSegment.getHightLightPosition());
 		String oldText=thisSegment.getText();
 		thisSegment .setText(st);
 		setCursorPosition(getCursorPosition()+thisSegment.getText().length()-oldText.length());
 			
+		
+		/**removes some segment entirely if they are within the highlight region*/
+		for(TextLineSegment segment: segmentsToDelete ) {
+			this.getParagraph().removeSegment(segment);
+			setCursorPosition(getCursorPosition()-segment.getText().length()-1);
+		}
+		
+		if(segmentToDeleteForHighLight!=null) {
+			
+			String oldHText = segmentToDeleteForHighLight.getText();
+			
+			String newHText = oldHText.substring(0,delIndex);
+			segmentToDeleteForHighLight.setText(newHText);
+			setCursorPosition(getCursorPosition()-(oldHText.length()-newHText.length()));
+		}
+		
 			
 		String subscript="subscript";
 		if ( thisSegment.getText().endsWith(subscript)) {
@@ -1019,11 +1054,13 @@ public class ComplexTextGraphic extends TextGraphic {
 		return newseg;
 	}
 
+	/**Handles backspace stroke for the hightlight region*/
 	private void handleBackSpaceForHighlightRegion() {
 		if (this.hasHighlightRegion()) {
 			
 			int start=this.getCursorPosition();
 			int end=this.getHighlightPosition();
+			/**repeats the backspace stroke*/
 			for(int i=start; i>end; i--) {
 				
 				this.setHighlightPositionToCursor();
@@ -1048,6 +1085,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		boolean noTextInthisSegment= thisSegment.getText().length()==0;
 		int linIndex=this.getParagraph().indexOf(thisLine);
 		
+		/**if only one segment is in the highlight region, just backspace that segment*/
 		if (oneSegmentInline&&noTextInthisSegment) {
 			
 			if (getParagraph().size()>1)this.getParagraph().remove(thisLine);
@@ -1056,6 +1094,7 @@ public class ComplexTextGraphic extends TextGraphic {
 			return;
 		}
 		
+		/**if cursor position is 0, then things can get deleted*/
 		if (thisSegment.getCursorposition()==0)  {
 						///IssueLog.log("back space on start of segment:"+thisSegment.getText()+"'"+thisSegment.getText().length());
 						

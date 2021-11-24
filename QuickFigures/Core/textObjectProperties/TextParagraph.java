@@ -308,4 +308,19 @@ public class TextParagraph extends ArrayList<TextLine> {
 	TextPrecision textPrecis() {
 		  return TextPrecision.createPrecisForFont(getFont());
 	}
+	
+	/**removes the given segment from the paragraph*/
+	public void removeSegment(TextLineSegment t) {
+		TextLine removeLine=null;
+		for(TextLine line: this) {
+			if(line.contains(t)&&line.size()==1)
+				removeLine=line;
+			line.remove(t);
+		}
+		if(removeLine!=null&&this.size()>1)
+			this.remove(t);
+		
+		
+	}
+	
 }

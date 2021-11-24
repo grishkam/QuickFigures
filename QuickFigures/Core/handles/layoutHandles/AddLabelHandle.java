@@ -267,23 +267,22 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		ArrayList<TextGraphic> labelList = new ArrayList<TextGraphic>();
 		DefaultLayoutGraphic laneLabelLayout = laneLabelAdder.addLaneLabel(textItem, true, labelList, layout.getParentLayer(), box, undo);
-		
+		Rectangle laneLabelBounds = laneLabelLayout.getBounds();
 		
 		
 		textItem=labelList.get(0);
-		if(textItem.getBounds().getMaxY()>box.getMinY()+1) {
-			IssueLog.log("Lane labels are too low");
+		if( laneLabelBounds.getMaxY()>box.getMinY()+1) {
+			
 			undo.addEditToList(new UndoLayoutEdit(layout));
-			double height =textItem.getBounds().getMaxY()-box.getMinY();
+			double height = laneLabelBounds.getMaxY()-box.getMinY();
+			
 			layout.moveLayoutAndContents(0, height);//to make sure lane labels are above
 			laneLabelLayout.moveLayoutAndContents(0, -height);
 		}
 		
 		/**expands the figure label pace for new lane labels*/
-		//for(TextGraphic label:labelList) {
-			//IssueLog.log("will expand label space for "+label);
 			undo.addEditToList(performLabelSpaceExpansion( laneLabelLayout));
-		//}
+		
 		canvasMouseEventWrapper.addUndo(undo);
 	}
 

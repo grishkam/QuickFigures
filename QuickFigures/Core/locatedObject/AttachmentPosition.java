@@ -421,6 +421,16 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		return output;
 	}
 	
+	/**returns the position for panel labels*/
+	public static AttachmentPosition detaultPanelMarkLabel() {
+		AttachmentPosition output = new AttachmentPosition();
+		output.setLocationTypeInternal(TOP);
+		output.setLocationCategory(INTERNAL);
+		output.setHorizontalOffset(0);
+		output.setVerticalOffset(4);
+		return output;
+	}
+	
 	
 	/**Sets the location of the target object to the bounds given*/
 	public void snapObjectToRectangle(LocatedObject2D attachedObject, Rectangle2D parentBounds) {

@@ -22,6 +22,7 @@
 package addObjectMenus;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			Rectangle b, CombinedEdit undo) {
 		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
 		showLaneLabelDialog();
-		int count = 1;
+		//int count = 1;
 		
 		int nLanes=(int) options.nLanes;
 		
@@ -170,7 +171,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		undo.addEditToList(new UndoAddItem(parentLayer, addedLayer));
 		parentLayer.add(addedLayer);
 		
-		for(int f=1; f<=nLanes; f++){
+		for(int laneIndex=1; laneIndex<=nLanes; laneIndex++){
 			TextGraphic  ag2 = ag;
 			ag2.setFontSize((int) (wCol/2));
 			ag2.setAngle(45);
@@ -182,22 +183,22 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				ag.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
 				while (ag.getBounds().width>0.8*b.getWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
 			}
-			Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(f);
+			Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(laneIndex);
 			ag2.setLocation(panel.getCenterX(), panel.getMinY());
 			
 			/**Sets the text of the label*/
-			String text_for_label = options.prefix+count+options.suffix;
-			if(labelList!=null &&labelList.length>=f) {
-				text_for_label=labelList[f-1];
+			String text_for_label = options.prefix+laneIndex+options.suffix;
+			if(labelList!=null &&labelList.length>=laneIndex) {
+				text_for_label=labelList[laneIndex-1];
 			}
 			ag2.setContent(text_for_label);
 			
 			
 			
-			count++;
+			
 			ag2.setTextColor(Color.black);
 			
-			ag2.getTagHashMap().put("Index",f);
+			ag2.getTagHashMap().put("Index",laneIndex);
 			
 			added.add(ag2);
 			addedLayer.add(ag2);
@@ -209,13 +210,37 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			undo.addEditToList(new UndoAddItem(p, ag2));
 		}
 		
+		
+		
 		double height = 10;
 		for(TextGraphic a: added)height=a.getBounds().getHeight();
 		roi.getPanelLayout().labelSpaceWidthTop=height;
 		roi.moveLayoutAndContents(0, -height);
 		
 		
-		roi.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, b));
+		roi.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, b));//sets the location to the corner of the specific box. Not sure if this is necesary
+		
+		if(options.nPlusMarks>0) {
+			AttachmentPosition attach = AttachmentPosition.detaultPanelMarkLabel();
+			roi.getPanelLayout().setNRows((int) options.nPlusMarks);
+			for(int i=1; i<=roi.getPanelLayout().nPanels(); i++) {
+				TextGraphic  ag2 = new TextGraphic("+");
+				ag2.setTextColor(Color.black);
+				
+				ag2.setFont(new Font("Courier New", Font.BOLD, 10));
+				addedLayer.add(ag2);
+				roi.addLockedItem(ag2);
+				ag2.setAttachmentPosition(attach );
+				Rectangle2D panel = layout.getPanel(i);
+				ag2.setLocation(panel.getCenterX(), panel.getMinY());
+				ag2.getTagHashMap().put("Index",i);
+			
+				undo.addEditToList(new UndoAddItem(addedLayer, ag2));
+			}
+		}
+		
+		
+		
 		return roi;
 	}
 

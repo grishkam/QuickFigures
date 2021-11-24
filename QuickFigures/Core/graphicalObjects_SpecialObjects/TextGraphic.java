@@ -942,15 +942,16 @@ public void handleKeyPressEvent(KeyEvent arg0) {
 	
 	if (arg0.getKeyCode()==KeyEvent.VK_BACK_SPACE || (this.hasHighlightRegion()&&arg0.getKeyCode()==KeyEvent.VK_DELETE)) {
 		handleBackspaceKeyStroke();
+		arg0.consume();
 		return;
 	}
 	
 	boolean deletesChar=arg0.getKeyCode()==KeyEvent.VK_DELETE&&this.getText().length()>0&&getCursorPosition()<getText().length();
 	
-	String st = KeyOnString(arg0,this.getText(),this.getCursorPosition());
-	
+	String st = handleKeyOnString(arg0,this.getText(),this.getCursorPosition(), this.getHighlightPosition());
+	arg0.consume();
 	if (!deletesChar)
-	setCursorPosition(getCursorPosition() + st.length()-getText().length());
+		setCursorPosition(getCursorPosition() + st.length()-getText().length());
 
 	if(st.equals(this.getText())) return;
 	this.setText(st);
@@ -1021,18 +1022,28 @@ protected static String handlePasteForString(String st, String newText, int curs
 	return newST;
 }
 
-/**adds a key to a string based on a key event*/
-static String KeyOnString(KeyEvent e, String st, int cursor) {
+/**adds a key char to a string based on a key event
+ * @param highlight */
+static String handleKeyOnString(KeyEvent e, String st, int cursor, int highlight) {
 	if (modifierKey(e)) {return st;}
 	if (ArrowKey(e)) {return st;}
 	if(cursor<0||cursor>st.length()) cursor=st.length();
 	char enteredKey=e.getKeyChar();
-	String newST=st.substring(0, cursor)+enteredKey+st.substring(cursor);
+	
+	int startCut = cursor;
+	int endCut = cursor;
+	
+	if(highlight>cursor) endCut=highlight;
+	if(highlight<cursor) startCut=highlight;
+	
+	
 	if (e.getKeyCode()==KeyEvent.VK_BACK_SPACE&&st.length()>0) {
 		
 		return handleBackSpaceForString(st, cursor);
 		
 	} 
+	
+	String newST=st.substring(0, startCut)+enteredKey+st.substring(endCut);
 	if (e.getKeyCode()==KeyEvent.VK_DELETE&&st.length()>0&&cursor<st.length()) {
 		if (cursor<st.length()) {newST=st.substring(0, cursor)+st.substring(cursor+1);}
 		
