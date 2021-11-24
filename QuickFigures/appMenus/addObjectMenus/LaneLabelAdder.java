@@ -163,6 +163,8 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height/5, border, border, true);
 		layout.move(b.getX(), b.getY());
 		DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
+		roi.hideAttachedItemHandles=true;
+		roi.hidePanelSwapHandles=true;
 		addedLayer.add(roi);
 		
 		undo.addEditToList(new UndoAddItem(parentLayer, addedLayer));
@@ -225,7 +227,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
 		 labelList=null;
-		 storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list below", null, 15, 20));
+		 storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list here", null, 15, 20));
 		 
 		storedValueDilaog.showDialog();
 		

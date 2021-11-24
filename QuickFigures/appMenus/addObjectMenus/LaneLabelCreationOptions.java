@@ -36,6 +36,9 @@ public class LaneLabelCreationOptions {
 	@RetrievableOption(key = "nLanes", label="How many lanes?")
 	public double nLanes=7;
 	
+	@RetrievableOption(key = "mark conditions", label="How many lines of +/- marks")
+	public double nPlusMarks=0;
+	
 	
 
 }

@@ -25,9 +25,13 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
+import javax.swing.JPopupMenu;
 
 import addObjectMenus.LaneLabelAdder;
 import applicationAdapters.CanvasMouseEvent;
@@ -46,6 +50,8 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
+import menuUtil.SmartPopupJMenu;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -68,10 +74,10 @@ public class AddLabelHandle extends MoveRowHandle {
 	/**The constructor
 	 * @param montageLayoutGraphic the layouts
 	 * @param index the row or column index
-	 * @param y the code indicating whether it is a row of column label @see LayoutSpaces
+	 * @param newType the code indicating whether it is a row of column label @see LayoutSpaces
 	 * @param otherSide indicates whether the label should be added opposite to the normal side*/
-	public AddLabelHandle(DefaultLayoutGraphic montageLayoutGraphic, int y,  int index, boolean otherSide) {
-		super(montageLayoutGraphic, y, false, index);
+	public AddLabelHandle(DefaultLayoutGraphic montageLayoutGraphic, int newType,  int index, boolean otherSide) {
+		super(montageLayoutGraphic, newType, false, index);
 		this.opposite= otherSide;
 		
 		 if (type==ROWS) mode=LayoutSpaces.ROW_OF_PANELS ;
@@ -119,8 +125,8 @@ public class AddLabelHandle extends MoveRowHandle {
 	}
 
 	private void hideIfNotNeeded(DefaultLayoutGraphic montageLayoutGraphic, int index, LabelExamplePicker pick) {
-		boolean needLabel = labelSpaceNotAvailable(montageLayoutGraphic, index, pick);
-		if(needLabel) this.setHidden(true);
+		boolean labelShouldBeHidden = labelSpaceNotAvailable(montageLayoutGraphic, index, pick);
+		if(labelShouldBeHidden) this.setHidden(true);
 	}
 
 	/**returns true if the space for the label of the given index is occupied by another label
@@ -140,7 +146,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		
 		
-		/**account for the circumstance where there is only a partial overlap between a label in a nearby column and the space meant for   */
+		/**account for the circumstance where there is only a partial overlap between a label in a nearby column. Also considers if the space meant for   */
 		for (BasicGraphicalObject currentObject : array) {
 			
 			Rectangle b2 = currentObject.getBounds();
@@ -157,6 +163,9 @@ public class AddLabelHandle extends MoveRowHandle {
 		}
 		spaceFilled =spaceFillerList.size()>0;
 		
+		if(type==PANELS) {
+			 spaceFilled=false;
+		}
 		
 		return spaceFilled;
 	}
@@ -181,8 +190,11 @@ public class AddLabelHandle extends MoveRowHandle {
 	/**Adds a label in response to a handle press*/
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		
-		if (canvasMouseEventWrapper.isPopupTrigger()) {return;}
+		if (canvasMouseEventWrapper.isPopupTrigger()) 
+			{return;}
 		
+		
+		CombinedEdit cEdit = new CombinedEdit();
 		
 		/**conditional for the special circumstance of this being a western blot figure*/
 		if (mode==LayoutSpaces.COLUMN_OF_PANELS &&layout.getParentLayer() instanceof FigureOrganizingLayerPane) {
@@ -197,12 +209,47 @@ public class AddLabelHandle extends MoveRowHandle {
 			}
 		}
 		
+		if(canvasMouseEventWrapper.shiftDown()) {
+			performSingleAllLabelAddition(canvasMouseEventWrapper, cEdit);
+		}else
+		
+		performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
+		
+		canvasMouseEventWrapper.addUndo(cEdit);
+		
+	}
+	
+	
+
+	/**Adds labels to all the single label additions
+	 * @param canvasMouseEventWrapper
+	 * @param cEdit
+	 */
+	private void performSingleAllLabelAddition(CanvasMouseEvent canvasMouseEventWrapper, CombinedEdit cEdit) {
+		int n=layout.getPanelLayout().nPanels();
+		if (type==BasicLayout.ROWS) n=layout.getPanelLayout().nRows();
+		else 
+			if (type==BasicLayout.COLS) n=layout.getPanelLayout().nColumns();
+		for(int i=0; i<n; i++) {
+			AddLabelHandle current = new AddLabelHandle(layout, type, i+1, opposite);
+			
+			if(!current.isHidden()) {
+				current.performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
+			}
+		}
+		
+	}
+
+	/**Adds a single label
+	 * @param canvasMouseEventWrapper
+	 * @param cEdit
+	 */
+	protected void performSingleLabelAddition(CanvasMouseEvent canvasMouseEventWrapper, CombinedEdit cEdit) {
 		TextGraphic label = FigureLabelOrganizer.addLabelOfType(type, index, layout.getParentLayer(), layout, opposite);
 		
 		
 		
-		addLabel(canvasMouseEventWrapper, label);
-		
+		addLabel(canvasMouseEventWrapper, label, cEdit);
 	}
 
 	/**Adds lane labels to the column i. This feature is a work in progress
@@ -232,34 +279,50 @@ public class AddLabelHandle extends MoveRowHandle {
 			laneLabelLayout.moveLayoutAndContents(0, -height);
 		}
 		
-		
+		/**expands the figure label pace for new lane labels*/
+		//for(TextGraphic label:labelList) {
+			//IssueLog.log("will expand label space for "+label);
+			undo.addEditToList(performLabelSpaceExpansion( laneLabelLayout));
+		//}
 		canvasMouseEventWrapper.addUndo(undo);
 	}
 
 	/**Adds the label and adds an undo to the undo manager*/
-	protected void addLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label) {
+	protected void addLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label, CombinedEdit cEdit) {
+		
 		setUpMatchingLocation(label, true);
 		
 		
 		DisplayedImage d = canvasMouseEventWrapper.getAsDisplay();
 		
-		CombinedEdit cEdit=new CombinedEdit();
+		
 		UndoAddItem anEdit = new UndoAddItem(layout.getParentLayer(), label);
 		cEdit.addEditToList(anEdit);
-		d.getUndoManager().addEdit(cEdit);
+		
 		d.updateDisplay();
 		
+		
+		
+		cEdit.addEditToList(performLabelSpaceExpansion(label));
+		
+		
+	}
+
+	/**
+	 * @param label
+	 * @return
+	 */
+	protected UndoLayoutEdit performLabelSpaceExpansion(BasicGraphicalObject label) {
 		UndoLayoutEdit undo2 = new UndoLayoutEdit(layout);
 		expandLabelSpace(label);
 		undo2.establishFinalLocations();
-		
-		cEdit.addEditToList(undo2);
+		return undo2;
 	}
 
 	/**
 	 * @param label
 	 */
-	public void expandLabelSpace(TextGraphic label) {
+	public void expandLabelSpace(BasicGraphicalObject label) {
 		layout.getEditor().expandSpacesToInclude(layout.getPanelLayout(), label.getBounds());
 	}
 
@@ -316,8 +379,47 @@ public class AddLabelHandle extends MoveRowHandle {
 	}
 
 	
+	/**returns the popup menu for this handle. */
+	public JPopupMenu getJPopup() {
+		SmartPopupJMenu menu=new SmartPopupJMenu();
+		
+		BasicSmartMenuItem[] b = new BasicSmartMenuItem[] {
+				new AddAllLabelsMenuItem(LayoutSpaces.ROWS, false),
+				new AddAllLabelsMenuItem(LayoutSpaces.COLS, false),
+				new AddAllLabelsMenuItem(LayoutSpaces.PANELS, false)
+				};
+		for(BasicSmartMenuItem m: b) {menu.add(m);}
+		
+		return menu;
+	}
 
+	/**A popup meny item that adds many labels instead of the default single label*/
+	class AddAllLabelsMenuItem extends BasicSmartMenuItem implements ActionListener {
 
+		private AddLabelHandle handle;
 
+		/**
+		 * @param rows
+		 */
+		public AddAllLabelsMenuItem(int rows, boolean opposite) {
+		
+			this.addActionListener(this);
+			handle=new AddLabelHandle(layout, rows, 1, opposite);
+			this.setText("Add labels to "+stringDescriptors[rows]+"s");
+		}
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			CombinedEdit cEdit = new CombinedEdit();
+			handle.performSingleAllLabelAddition(me, cEdit);
+			this.getUndoManager().addEdit(cEdit);
+		}
+		
+	}
 	
 }

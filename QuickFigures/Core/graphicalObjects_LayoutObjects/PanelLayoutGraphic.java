@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: October 24, 2021
+ * Date Modified: Nov 23, 2021
  * Version: 2021.2
  */
 package graphicalObjects_LayoutObjects;
@@ -92,6 +92,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	private transient SmartHandleList handleBoxes2=new SmartHandleList();
 	ArrayList<PanelLayoutHandle> panelMotionHandles=new ArrayList<PanelLayoutHandle>();
 	
+	
 	public Color panelColor=Color.red;
 	public Color boundryColor=Color.blue;
 	private int handleArmDistance=12;
@@ -110,7 +111,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	private boolean filledPanels=false;
 	
 	
-	
+	public boolean hideAttachedItemHandles=false;
 	
 	protected PanelLayout layout=new BasicLayout();
 	private  HashMap<LocatedObject2D, Integer> panelLocations=new HashMap<LocatedObject2D, Integer>();
@@ -191,7 +192,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 
 	/**generates a handle for an attached text item*/
 	protected void generateHandleForText(LocatedObject2D l) {
-		SmartHandleList list = this.getLocedItemHandleList();
+		SmartHandleList list = this.getAttachedItemHandleList();
 		list.add(new AttachmentPositionHandle(this, l, 1000000000+list.size()));
 	}
 		
@@ -207,7 +208,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			this.getPanelSizeDefiningItems().remove(l);
 			l.removeLocationChangeListener(this);
 		}
-		getLocedItemHandleList().removeLockedItemHandle(l);
+		getAttachedItemHandleList().removeLockedItemHandle(l);
 		
 	}
 	
@@ -377,7 +378,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		addAdditionalHandles(getHandleBoxes2());
 		
 		this.getAllSmartHandles().draw(graphics, cords);
-		this.getLocedItemHandleList().draw(graphics, cords);
+		
 	}
 
 	/**creates the handles that are used to adjust the label spaces on
@@ -1053,7 +1054,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 	/**returns the list of handles for attached items*/
-	protected SmartHandleList getLocedItemHandleList() {
+	protected SmartHandleList getAttachedItemHandleList() {
 		if (panelHandleList==null) {
 			panelHandleList=new SmartHandleList();
 			
@@ -1061,12 +1062,17 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 				this.generateHandlesForAttachedItems(l);
 			}
 		}
+		
 			return panelHandleList;
 	}
 	
 	public SmartHandleList getAllSmartHandles() {
 		SmartHandleList output = new SmartHandleList();
-		output.addAll(getLocedItemHandleList());
+		
+			output.addAll(getAttachedItemHandleList());
+			if (hideAttachedItemHandles) 
+				for(SmartHandle s: output) {s.setHidden(true);}
+			
 		if(panelMotionHandles!=null)
 			output.addAll(panelMotionHandles);
 		if(allrefPointHandles!=null)

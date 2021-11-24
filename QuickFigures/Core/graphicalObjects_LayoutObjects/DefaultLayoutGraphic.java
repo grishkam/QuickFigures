@@ -75,6 +75,8 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	public boolean rowLabelsOnRight=false;
 	@RetrievableOption(key = "Column labels at bottom", label="Place new column labels on bottom")
 	public boolean columnLabelsBelow=false;
+	public boolean hidePanelSwapHandles=false;
+	
 	 
 	public DefaultLayoutGraphic() {}
 	
@@ -415,7 +417,9 @@ public void resizeLayoutToFitContents() {
 		layout1.resetPtsPanels();
 	}
 	
+	/**Adds the panel swap handles*/
 	protected void addFirstLayerHandles(SmartHandleList box) {
+		if(!hidePanelSwapHandles)
 		for(int i=1; i<=this.getPanelLayout().nPanels(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.PANELS, false, i));
 			
@@ -453,12 +457,12 @@ public void resizeLayoutToFitContents() {
 	/**creates a locked item handle for use in this layout*/
 	@Override
 	protected void generateHandleForText(LocatedObject2D l) {
-		SmartHandleList list = this.getLocedItemHandleList();
+		SmartHandleList list = this.getAttachedItemHandleList();
 		list.add(new LayoutLockedItemHandle(this, l, 1000000000+list.size()));
 	}
 	/**creates a locked item handle for use in this layout*/
 	protected void generateHandleForImage(LocatedObject2D l) {
-		SmartHandleList list = this.getLocedItemHandleList();
+		SmartHandleList list = this.getAttachedItemHandleList();
 		list.add(new ImagePanelHandle(this, (ImagePanelGraphic) l, 1000000000+list.size()));
 	}
 	
