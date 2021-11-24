@@ -232,7 +232,7 @@ public class AddLabelHandle extends MoveRowHandle {
 			if (type==BasicLayout.COLS) n=layout.getPanelLayout().nColumns();
 		for(int i=0; i<n; i++) {
 			AddLabelHandle current = new AddLabelHandle(layout, type, i+1, opposite);
-			
+			  
 			if(!current.isHidden()) {
 				current.performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
 			}
