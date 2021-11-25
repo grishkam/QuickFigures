@@ -586,7 +586,7 @@ public void resizeLayoutToFitContents() {
 			
 			/**determine whether the object is being dragged out of range of its hone row of column*/
 			boolean outsideOfHomeRow = d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent) &&super.object.getTagHashMap().get("Index")==null;
-			if(outsideOfHomeRow) {
+			if(outsideOfHomeRow&&!super.isInFineControlMode()) {
 				shifted=true;
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 

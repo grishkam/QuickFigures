@@ -32,7 +32,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
 
 import addObjectMenus.ClipboardAdder;
 import appContext.ImageDPIHandler;
@@ -55,6 +58,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import handles.HasHandles;
 import handles.HasSmartHandles;
+import handles.ItemGlueSmartHandle;
 import handles.AttachmentPositionHandle;
 import handles.ReshapeHandleList;
 import handles.SmartHandle;
@@ -80,6 +84,7 @@ import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import menuUtil.HasUniquePopupMenu;
+import menuUtil.SmartJMenu;
 import objectDialogs.GraphicItemOptionsDialog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
@@ -616,7 +621,15 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		try {
 			if ( isAttachedItem(roi2)) {
 				AttachmentPositionHandle lockHandle = this.findHandleForLockedItem(roi2);
-				if (lockHandle!=null) menu.add(lockHandle.createAdjustPositionMenuItem());
+				
+				JMenu attach = new SmartJMenu("Attachment");
+				for(MenuElement e: lockHandle.getJPopup().getSubElements()) {
+					if(e instanceof JMenuItem)
+						attach.add((JMenuItem) e);
+				}
+				
+				if (lockHandle!=null) 
+					menu.add(attach);
 			}
 		} catch (Exception e1) {
 		
@@ -799,7 +812,9 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	protected SmartHandle findHandleToUseForLockedItem() {
 		SmartHandle output;
 		output=this.findHandleForLockedItem(getPrimarySelectedObject());
-		if (output!=null) output=findHandleForLockedItem(getPrimarySelectedObject()).createDemiVersion();
+		if (output!=null) 
+			output=findHandleForLockedItem(getPrimarySelectedObject()).createDemiVersion();
+		
 		return output;
 	}
 
@@ -1342,11 +1357,18 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				this.setSelectedHandleNumber(demiVersion.getHandleNumber());
 				}
 		}
+	
 		else overlaySelectionManagger.setExtraHandle(null);
 		
 		if(this.textEditMode()) {
 			
 			overlaySelectionManagger.setExtraHandle(null);
+		}
+		
+		/**The glue handle is used to attach items that are not already attached*/
+		if(this.getPrimarySelectedObject() instanceof TextGraphic) {
+			 TextGraphic t=(TextGraphic) getPrimarySelectedObject() ;
+			 t.getGlueHandle().setHidden(overlaySelectionManagger.getExtraHandle()!=null);
 		}
 	}
 
@@ -1710,7 +1732,17 @@ public String getToolTip() {
 	 * @param object2 the attached item
 	 * @return the item that object2 is attached to*/
 	public TakesAttachedItems findLockContainer(LocatedObject2D object2) {
-		return getLockContainterForObject(object2, getPotentialLockAcceptors(getImageClicked()));
+		ImageWorkSheet imageClicked = getImageClicked();
+		return findLockContainer(object2, imageClicked);
+	}
+
+	/**finds what object holds the attached item
+	 * @param object2
+	 * @param imageClicked
+	 * @return
+	 */
+	public static TakesAttachedItems findLockContainer(LocatedObject2D object2, ImageWorkSheet imageClicked) {
+		return getLockContainterForObject(object2, getPotentialLockAcceptors(imageClicked));
 	}
 	
 	/**returns true if the user is trying to move an item that is attached to another object*/

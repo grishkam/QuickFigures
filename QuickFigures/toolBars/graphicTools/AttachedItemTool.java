@@ -72,13 +72,13 @@ public class AttachedItemTool extends GraphicTool {
 		AttachedItemList.removeFromAlltakers(sel, allRoi, undoer);
 	}
 	
-
-	public static LocatedObject2D getPotentialLockAcceptorAtPoint(Point2D pt, LocatedObject2D item, ImageWorkSheet gmp) {
+	/**Searches through the potential lock acceptors at teh location, returns the one that does not contain the item*/
+	public static LocatedObject2D getPotentialLockAcceptorAtPoint(Point2D pt, LocatedObject2D item, ImageWorkSheet gmp, boolean excludeCurrentAttachmentSite) {
 		ArrayList<LocatedObject2D> list=getPotentialLockAcceptors( gmp);
 		ArrayList<LocatedObject2D> list2=new ArrayList<LocatedObject2D>();
 		for(LocatedObject2D l: list) {
 			TakesAttachedItems t=(TakesAttachedItems) l;
-			if(t.hasLockedItem(item)) continue;
+			if(t.hasLockedItem(item)&& excludeCurrentAttachmentSite) continue;
 			
 			if(l.getOutline().contains(pt)) list2.add(l);
 		}

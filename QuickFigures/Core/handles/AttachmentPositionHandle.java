@@ -49,6 +49,7 @@ import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdges;
 import locatedObject.ShowsOptionsDialog;
 import locatedObject.TakesAttachedItems;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiAttachmentPositionDialog;
 import undo.CombinedEdit;
@@ -172,8 +173,8 @@ public class AttachmentPositionHandle extends SmartHandle {
 			selectionManagger.setSelection(marker2, 0);
 			//getObject().getSnappingBehaviour().copyPositionFrom(s);
 			
-			LocatedObject2D a = AttachedItemTool.getPotentialLockAcceptorAtPoint(mEvent.getCoordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWorksheet());
-			if (a!=null)
+			LocatedObject2D a = AttachedItemTool.getPotentialLockAcceptorAtPoint(mEvent.getCoordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWorksheet(),true);
+			if (a!=null&&!this.isInFineControlMode())
 				{
 				RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
 				selectionManagger.setSelection(marker3, 0);
@@ -214,15 +215,23 @@ public JPopupMenu getJPopup() {
 
 		men.add(jm);
 		
-		JMenuItem jm2 = new JMenuItem("Release Locked item");
-		men.add(jm2);
-		
-		jm2.addActionListener(new ActionListener() {
-		
+		BasicSmartMenuItem jm2 = new BasicSmartMenuItem("Release Attached Item") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+			
 				attachmentSite.removeLockedItem(object);
-			}});
+				
+				addUndo(new UndoAddOrRemoveAttachedItem(attachmentSite, object, true));
+			}
+		};
+		men.add(jm2);
+		
+		
 		
 		
 		

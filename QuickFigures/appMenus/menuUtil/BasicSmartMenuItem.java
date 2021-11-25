@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
+import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
 import icons.EmptyIcon;
@@ -71,6 +72,13 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem, Act
 	@Override
 	public UndoManagerPlus getUndoManager() {
 		return undoManager;
+	}
+	
+	public boolean addUndo(AbstractUndoableEdit undo) {
+		if(this.getUndoManager()!=null)
+			this.getUndoManager().addEdit(undo);
+		
+		return false;
 	}
 	
 	/**sets whether the menu item is greyed out*/

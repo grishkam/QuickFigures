@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 28, 2021
+ * Date Modified: Nov 24, 2021
  * Version: 2021.2
  */
 package graphicalObjects_SpecialObjects;
@@ -63,6 +63,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.GraphicUtil;
 import handles.HasSmartHandles;
+import handles.ItemGlueSmartHandle;
 import handles.SmartHandleList;
 import handles.SmartHandleForText;
 import handles.miniToolbars.HasMiniToolBarHandles;
@@ -1284,7 +1285,7 @@ public SmartHandleList getStandardHandles() {
 		smartList=new SmartHandleList ();
 		smartList.add(new SmartHandleForText(this, SmartHandleForText.ROTATION_HANDLE));
 		smartList.add(new SmartHandleForText(this, SmartHandleForText.TEXT_FONT_SIZE_HANDLE));
-		
+		smartList.add(getGlueHandle());
 	}
 return smartList;
 }
@@ -1298,7 +1299,12 @@ public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoTextEdit(this);
 }
 
-
+private transient ItemGlueSmartHandle glueHandle;
+public ItemGlueSmartHandle getGlueHandle() {
+	if (glueHandle==null)
+		glueHandle= new ItemGlueSmartHandle(this);
+	return glueHandle;
+}
 
 
 

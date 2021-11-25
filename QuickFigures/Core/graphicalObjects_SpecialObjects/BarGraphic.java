@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 25, 2021
  * Version: 2021.2
  */
 package graphicalObjects_SpecialObjects;
@@ -58,6 +58,7 @@ import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasSmartHandles;
+import handles.ItemGlueSmartHandle;
 import handles.AttachmentPositionHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
@@ -833,7 +834,9 @@ public class BarTextGraphic extends TextGraphic {
 	public boolean locationAutoMatic() {
 		return isSnapBarText();
 	}
-	
+	public ItemGlueSmartHandle getGlueHandle() {
+		return null;
+	}
 	
 }
 
