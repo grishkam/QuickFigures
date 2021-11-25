@@ -430,7 +430,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	}
 	
 	/**a j menu item for a popup menu that targets a particular layer*/
-	static class TemplateSaverAction extends BasicSmartMenuItem implements ActionListener{
+	static class TemplateSaverAction extends BasicSmartMenuItem {
 
 		/**
 		 * 

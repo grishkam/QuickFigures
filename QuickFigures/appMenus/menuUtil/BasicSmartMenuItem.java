@@ -21,6 +21,8 @@
 package menuUtil;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
@@ -30,7 +32,7 @@ import icons.EmptyIcon;
 import undo.UndoManagerPlus;
 
 /**A special JMenu item that also stores an undo manager*/
-public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
+public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem, ActionListener {
 
 	/**
 	 * 
@@ -41,6 +43,7 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 	
 	public BasicSmartMenuItem() {
 		super();
+		this.addActionListener(this);
 	}
 	
 	public BasicSmartMenuItem(String st) {
@@ -50,6 +53,7 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 	public BasicSmartMenuItem(String st, Icon icon) {
 		super(st);
 		this.setIcon(icon);
+		this.addActionListener(this);
 	}
 
 	@Override
@@ -77,6 +81,13 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem{
 		else {
 			this.setForeground(Color.black);
 		}
+	}
+
+	/**Called when this menu item is pressed*/
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// may be used by subclasses
+		
 	}
 
 }

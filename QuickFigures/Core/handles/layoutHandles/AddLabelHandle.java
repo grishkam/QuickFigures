@@ -274,8 +274,8 @@ public class AddLabelHandle extends MoveRowHandle {
 		DefaultLayoutGraphic laneLabelLayout = laneLabelAdder.addLaneLabel(textItem, true, labelList, layout.getParentLayer(), box, undo);
 		Rectangle laneLabelBounds = laneLabelLayout.getBounds();
 		
-		
-		textItem=labelList.get(0);
+		if(labelList.size()>0)
+			textItem=labelList.get(0);
 		if( laneLabelBounds.getMaxY()>box.getMinY()+1) {
 			
 			undo.addEditToList(new UndoLayoutEdit(layout));
@@ -350,7 +350,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getVirtualWorksheet());
 		ArrayList<BasicGraphicalObject> array =this.getPicker(mode).getDesiredItemsAsGraphicals(rois);
 		if(array.size()>0) {
-				BasicGraphicalObject seniorTextItem = array.get(0);
+				BasicGraphicalObject seniorTextItem = array.get(array.size()-1);
 				 label.setAttachmentPosition(seniorTextItem.getAttachmentPosition());
 				
 				if(font && seniorTextItem instanceof TextGraphic) {
@@ -402,7 +402,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	}
 
 	/**A popup meny item that adds many labels instead of the default single label*/
-	class AddAllLabelsMenuItem extends BasicSmartMenuItem implements ActionListener {
+	class AddAllLabelsMenuItem extends BasicSmartMenuItem  {
 
 		private AddLabelHandle handle;
 
@@ -411,7 +411,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		 */
 		public AddAllLabelsMenuItem(int rows, boolean opposite) {
 		
-			this.addActionListener(this);
+			
 			handle=new AddLabelHandle(layout, rows, 1, opposite);
 			this.setText("Add labels to "+stringDescriptors[rows]+"s");
 		}

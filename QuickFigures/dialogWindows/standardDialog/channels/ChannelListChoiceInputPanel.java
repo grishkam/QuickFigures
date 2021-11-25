@@ -400,7 +400,7 @@ public class ChanListBox extends JPanel implements MouseListener {
 }
 
 /**Menu items for each channel entry*/
-class ChannelEntryMenuItem extends BasicChannelEntryMenuItem implements ActionListener {
+class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 
 	/**
 	 * @param ce

@@ -29,13 +29,14 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.LayoutSpaces;
+import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import objectDialogs.MultiTextGraphicSwingDialog;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 
 /**A menu item that displays a dialog for a group of labels*/
-public class EditLabels extends BasicSmartMenuItem implements ActionListener {
+public class EditLabels extends BasicSmartMenuItem  {
 	
 	
 	private int type;
@@ -46,10 +47,12 @@ public class EditLabels extends BasicSmartMenuItem implements ActionListener {
 
 	/**creates an edit labels that targets all labels with the same grid attachment type as the given
 	 * text */
-	public EditLabels(TextGraphic t) {
+	EditLabels(TextGraphic t) {
 		 type=t.getAttachmentPosition().getGridSpaceCode();
 		 setUpPickerFortype(type);
 		 modelTextItem=t;
+		 
+		 IssueLog.log("TODO, confirm that this version of edit labels works");
 	}
 	
 	/**Crates an edit labels item that targets a given type of label on the layout given

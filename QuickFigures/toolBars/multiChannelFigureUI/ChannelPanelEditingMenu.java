@@ -1040,7 +1040,7 @@ protected PanelManager getPressPanelManagerForUser() {
 		/**
 			 a menu item for adding and removing merge panels
 			 */
-		public class ExcludeMergePanel extends BasicSmartMenuItem implements ActionListener {
+		public class ExcludeMergePanel extends BasicSmartMenuItem{
 
 			/**
 			 * 
@@ -1049,7 +1049,7 @@ protected PanelManager getPressPanelManagerForUser() {
 			
 			public ExcludeMergePanel() {
 				super("merge");
-				this.addActionListener(this);
+				
 				updateFont() ;
 			}
 

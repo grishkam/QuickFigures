@@ -204,7 +204,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	
 	
 	/**A menu item for changing the scale*/
-	public class ChangeScaleMenuItem extends BasicSmartMenuItem implements ActionListener {
+	public class ChangeScaleMenuItem extends BasicSmartMenuItem  {
 
 		/**
 		 * 

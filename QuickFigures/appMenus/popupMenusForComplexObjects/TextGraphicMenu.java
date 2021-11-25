@@ -72,8 +72,10 @@ PopupMenuSupplier  {
 		FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(textG);
 		if(f!=null && !(textG instanceof ChannelLabelTextGraphic)) {
 			EditLabels menuItem = f.getMenuSupplier().getLabelEditorMenuItemFor(textG);
-			if (menuItem==null ) menuItem=new EditLabels(textG);
-			if (menuItem!=null)jm.add(menuItem);
+			if (menuItem==null ) 
+				menuItem=new EditLabels(textG);//TODO: determine if this is ever called
+			if (menuItem!=null)
+				jm.add(menuItem);
 			
 		}
 		

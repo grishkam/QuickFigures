@@ -76,6 +76,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	@RetrievableOption(key = "Column labels at bottom", label="Place new column labels on bottom")
 	public boolean columnLabelsBelow=false;
 	public boolean hidePanelSwapHandles=false;
+	public boolean hideRowColSwapHandles=false;
 	
 	 
 	public DefaultLayoutGraphic() {}
@@ -433,10 +434,12 @@ public void resizeLayoutToFitContents() {
 		
 		box.add(new RepackRowColoumnHandle(this));
 		box.add(new ScaleLayoutHandle(this));
+		
+		if(!hideRowColSwapHandles)
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.COLS, false, i));
 			}
-		
+		if(!hideRowColSwapHandles)
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.ROWS, false, i));
 			

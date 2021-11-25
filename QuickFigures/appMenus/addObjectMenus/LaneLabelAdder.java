@@ -163,10 +163,13 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		if(hRow<wCol ||options.nPlusMarks>0) hRow=wCol;
 		
 		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, hRow, border, border, true);
+		layout.setLeftSpace(border/2);
 		layout.move(b.getX(), b.getY());
 		DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
 		roi.hideAttachedItemHandles=true;
 		roi.hidePanelSwapHandles=true;
+		roi.hideRowColSwapHandles=true;
+		
 		addedLayer.add(roi);
 		
 		undo.addEditToList(new UndoAddItem(parentLayer, addedLayer));
