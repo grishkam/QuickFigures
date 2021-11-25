@@ -1342,7 +1342,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 				
 			}
 			
-			/**moves the layout*/
+			/**moves the layout. Does not move teh content of the layout*/
 			@Override
 			public void move(double x, double y) {
 				this.setSpecialTopSpace( (y+specialSpaceWidthTop));

@@ -45,6 +45,7 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import imageMenu.CanvasAutoResize;
 import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
@@ -215,6 +216,10 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
 		
+		cEdit.addEditToList(
+				new CanvasAutoResize(false).performUndoableAction(canvasMouseEventWrapper.getAsDisplay())
+		);
+		
 		canvasMouseEventWrapper.addUndo(cEdit);
 		
 	}
@@ -283,6 +288,10 @@ public class AddLabelHandle extends MoveRowHandle {
 		/**expands the figure label pace for new lane labels*/
 			undo.addEditToList(performLabelSpaceExpansion( laneLabelLayout));
 		
+			undo.addEditToList(
+					new CanvasAutoResize(false).performUndoableAction(canvasMouseEventWrapper.getAsDisplay())
+			);
+			
 		canvasMouseEventWrapper.addUndo(undo);
 	}
 

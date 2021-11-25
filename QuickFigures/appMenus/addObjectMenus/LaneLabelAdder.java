@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 2, 2021
- * Date Modified: Nov 23, 2021
+ * Date Modified: Nov 24, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -158,10 +158,11 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		int border = 5;
 		
 		/**calculates the column width needed to fill tne space*/
-		int wCol = b.width/nLanes-border+border/(nLanes-1);
+		int wCol = b.width/nLanes-border+border/(nLanes-1);		
+		int hRow = b.height/5;
+		if(hRow<wCol ||options.nPlusMarks>0) hRow=wCol;
 		
-		
-		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, b.height/5, border, border, true);
+		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, hRow, border, border, true);
 		layout.move(b.getX(), b.getY());
 		DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
 		roi.hideAttachedItemHandles=true;
@@ -187,14 +188,16 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			ag2.setLocation(panel.getCenterX(), panel.getMinY());
 			
 			/**Sets the text of the label*/
-			String text_for_label = options.prefix+laneIndex+options.suffix;
+			String text_for_label = options.prefix;
+			text_for_label =text_for_label.replace(LaneLabelCreationOptions.numberCode, ""+laneIndex);
 			if(labelList!=null &&labelList.length>=laneIndex) {
 				text_for_label=labelList[laneIndex-1];
 			}
 			ag2.setContent(text_for_label);
 			
 			
-			
+			if(ag2.getText()==null||ag2.getText().equals(""))
+				continue;//if the user deleted the text
 			
 			ag2.setTextColor(Color.black);
 			
@@ -224,7 +227,22 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			AttachmentPosition attach = AttachmentPosition.detaultPanelMarkLabel();
 			roi.getPanelLayout().setNRows((int) options.nPlusMarks);
 			for(int i=1; i<=roi.getPanelLayout().nPanels(); i++) {
+				
+				//determine which row to read from when determining the mark text content. User may input multiple lines of marks
+				int nColumns = roi.getPanelLayout().nColumns();
+				int markTextRow = (i-1)/nColumns;
+				if(markTextRow>=options.markText.length)
+					markTextRow=options.markText.length-1;
+				
+				String currentMarkText = options.markText[markTextRow];
 				TextGraphic  ag2 = new TextGraphic("+");
+				if(currentMarkText.length()>0) {
+					int charLocation = ((i-nColumns*markTextRow)-1)%currentMarkText.length();
+					String newText = ""+currentMarkText.charAt(charLocation);
+					if (currentMarkText.contains(LaneLabelCreationOptions.numberCode))
+						ag2.setText(currentMarkText.replace(LaneLabelCreationOptions.numberCode, i+""));
+					ag2.setText(""+newText);
+				}
 				ag2.setTextColor(Color.black);
 				
 				ag2.setFont(new Font("Courier New", Font.BOLD, 10));
@@ -252,7 +270,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
 		 labelList=null;
-		 storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list here", null, 15, 20));
+		 storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list here", "", 15, 20));
 		 
 		storedValueDilaog.showDialog();
 		

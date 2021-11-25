@@ -640,11 +640,15 @@ public class ComplexTextGraphic extends TextGraphic {
 		int linIndex=this.getParagraph().indexOf(thisLine);
 		
 		if (arg0.getKeyCode()==KeyEvent.VK_UP) {
-			if (linIndex>0) this.setCursorPosition(this.getCursorPosition() - (this.getParagraph().get(linIndex-1).getText().length()+getParagraph().get(linIndex-1).size()));
+			if (linIndex>0) 
+				this.setCursorPosition(this.getCursorPosition() - (this.getParagraph().get(linIndex-1).getText().length()+getParagraph().get(linIndex-1).size()));
+			this.setHighlightPositionToCursor();//bug fix done on nov 24th 2021 
 			return;
 		}
 		if (arg0.getKeyCode()==KeyEvent.VK_DOWN) {
-			if (linIndex<this.getParagraph().size()-1)this.setCursorPosition(this.getCursorPosition() + this.getParagraph().get(linIndex).getText().length()+getParagraph().get(linIndex).size());
+			if (linIndex<this.getParagraph().size()-1)
+				this.setCursorPosition(this.getCursorPosition() + this.getParagraph().get(linIndex).getText().length()+getParagraph().get(linIndex).size());
+			this.setHighlightPositionToCursor();//bug fix done on nov 24th 2021 
 			return;
 		}
 		

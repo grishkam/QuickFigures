@@ -94,6 +94,12 @@ public class StoredValueDilaog extends StandardDialog{
 					
 					addStringField(d, of, f, o);
 				}
+				
+				if (f.getType()==String[].class) {
+					
+					addStringArrayField(d, of, f, o);
+				}
+				
 				}
 				
 				/**need option to add a choice*/
@@ -167,7 +173,13 @@ public class StoredValueDilaog extends StandardDialog{
 	public static void addStringField(StandardDialog d, Object of, Field f, RetrievableOption o)
 			throws IllegalAccessException {
 		String label = o.label();
-		d.add(o.key(), new StringInput(label, of, f));
+		d.add(o.key(), new StringInput(label, of, f, o));
+	}
+	
+	public static void addStringArrayField(StandardDialog d, Object of, Field f, RetrievableOption o)
+			throws IllegalAccessException {
+		String label = o.label();
+		d.add(o.key(), new StringInput(label, of, f, o, true));
 	}
 	
 	/**Class changes a specific field in a specific object in response to a number input*/
@@ -200,18 +212,33 @@ public class StoredValueDilaog extends StandardDialog{
 		private static final long serialVersionUID = 1L;
 		private Field field;
 		private Object object;
+		private boolean array;
 
-		public StringInput(String label, Object of, Field f) throws IllegalArgumentException, IllegalAccessException {
+		public StringInput(String label, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
 			super(label, ""+ f.get(of));
 			addStringInputListener(this);
 			this.field=f;
 			this.object=of;
 		}
 		
+		/**Creates a string input for an array*/
+		public StringInput(String label, Object of, Field f, RetrievableOption o, boolean b) throws IllegalArgumentException, IllegalAccessException {
+			super(label, (String[]) f.get(of));
+			addStringInputListener(this);
+			this.field=f;
+			this.object=of;
+			array=true;
+		}
+		
 		@Override
 		public void stringInput(StringInputEvent  ne) {
 			try {
-				field.set(object, ne.getInputString());
+				String inputString = ne.getInputString();
+				
+				if(array)
+				{field.set(object, inputString.split(lineseparator));}
+				else
+				field.set(object, inputString);
 			} catch (Exception e) {
 				IssueLog.logT(e);
 			} 

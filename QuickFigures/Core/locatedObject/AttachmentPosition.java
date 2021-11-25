@@ -427,7 +427,7 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		output.setLocationTypeInternal(TOP);
 		output.setLocationCategory(INTERNAL);
 		output.setHorizontalOffset(0);
-		output.setVerticalOffset(4);
+		output.setVerticalOffset(0);
 		return output;
 	}
 	

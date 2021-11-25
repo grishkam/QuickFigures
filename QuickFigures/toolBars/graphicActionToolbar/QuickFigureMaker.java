@@ -161,6 +161,9 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
+		if(localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT) {
+			added.getMontageLayoutGraphic().moveLayoutAndContents(80, 80);//western blot figure should be created with more space for expansion
+		}
 		
 		if(added==null) {
 			//if something goes wrong, closes the newly created window

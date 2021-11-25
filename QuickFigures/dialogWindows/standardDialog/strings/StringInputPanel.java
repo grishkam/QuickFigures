@@ -40,6 +40,11 @@ import standardDialog.OnGridLayout;
 /**A JPanel containing a Label and a Text field for placement into a standard dialog with a grided panel*/
 public class StringInputPanel extends InputPanel implements OnGridLayout, KeyListener{
 
+	/**
+	 * 
+	 */
+	private static final int STANDARD_NUMBER_OF_COLUMNS_IN_TEXT_FIELD = 15;
+	public static final String lineseparator = ""+'\n';
 	JLabel label=new JLabel();
 	JTextComponent field=new JTextField(15);
 	ArrayList<StringInputListener> lis=new ArrayList<StringInputListener>();
@@ -49,7 +54,11 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	
 	
 	public StringInputPanel(String labeln, String contend) {
-		this(labeln, contend, 15);
+		this(labeln, contend, STANDARD_NUMBER_OF_COLUMNS_IN_TEXT_FIELD);
+	}
+	
+	public StringInputPanel(String labeln, String[] contents) {
+		this(labeln, contents,  contents.length+1, 15);
 	}
 	
 	/**Creates a sring input panel with a text field of given length */
@@ -75,6 +84,14 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 		field=new JTextArea(rows, cols);
 		
 		setupInnitialText(labeln, contend);
+	}
+	
+	/**creates a string input panel for many strings that are separated by lines*/
+	public StringInputPanel(String labeln, String[] contend, int rows, int cols) {
+		field=new JTextArea(rows, cols);
+		String starting="";
+		for(String s: contend)starting+=s+lineseparator;
+		setupInnitialText(labeln, starting);
 	}
 	
 	public void revert() {
