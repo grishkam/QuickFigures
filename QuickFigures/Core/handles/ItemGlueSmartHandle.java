@@ -50,7 +50,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	/**
 	 * 
 	 */
-	public static final int GLUE_HANDLEid = 9803720;
+	public static final int GLUE_HANDLE_ID = 9803720;
 	/**
 	 * 
 	 */
@@ -67,7 +67,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	public ItemGlueSmartHandle(TextGraphic textGraphic) {
 		this.target=textGraphic;
 		this.setHandleColor(Color.red);
-		this.setHandleNumber(GLUE_HANDLEid);
+		this.setHandleNumber(GLUE_HANDLE_ID);
 	}
 	
 	/**location of the handle. this determines where in the figure the handle will actually appear
@@ -75,7 +75,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	public Point2D getCordinateLocation() {
 		double locy = target.getBounds().getMaxY();
 		double locx = target.getBounds().getCenterX();
-		return new Point2D.Double(locx, locy+target.getFont().getSize()/2);
+		return new Point2D.Double(locx, locy+target.getFont().getSize()/5);
 	}
 
 	
