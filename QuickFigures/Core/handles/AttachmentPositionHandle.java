@@ -238,6 +238,7 @@ public JPopupMenu getJPopup() {
 		return men;
 	}
 
+/**returns a menu item that makes the adjust position dialog appear*/
 public JMenuItem createAdjustPositionMenuItem() {
 	JMenuItem jm = new JMenuItem("Adjust Position");
 	jm.addActionListener(new ActionListener() {
@@ -252,6 +253,7 @@ public JMenuItem createAdjustPositionMenuItem() {
 	return jm;
 }
 
+/**returns true if the attached item has been removed*/
 public boolean absent() {
 	if(!attachmentSite.getLockedItems().contains(object)) return true;//if the item has been removed from the locked item list
 	ObjectContainer cont = attachmentSite.getTopLevelContainer();

@@ -55,11 +55,16 @@ import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import locatedObject.Scales;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
+import menuUtil.SmartJMenu;
 import popupMenusForComplexObjects.LayoutMenu;
 import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
+import undo.UndoMoveItems;
+import undo.CombinedEdit;
 import undo.UndoAddOrRemoveAttachedItem;
+import undo.UndoAttachmentPositionChange;
 import utilityClasses1.ArraySorter;
 
 /**A layout graphic containing the standard layout for all figures*/
@@ -557,7 +562,7 @@ public void resizeLayoutToFitContents() {
 		}
 
 		private JMenu getRowSwithMenu() {
-			JMenu moveMenu=new JMenu("Switch "+changeText());
+			JMenu moveMenu=new SmartJMenu("Switch "+changeText());
 			
 			for(int i=1; i<=nOptions; i++) {
 				moveMenu.add(new RowSwitchMenuItem(""+i,i));
@@ -641,7 +646,7 @@ public void resizeLayoutToFitContents() {
 		
 		/**A menu item that allows the user to move a row/column label to a
 		 * new location*/
-		class RowSwitchMenuItem extends JMenuItem implements ActionListener{
+		class RowSwitchMenuItem extends BasicSmartMenuItem {
 
 			/**
 			 * 
@@ -651,20 +656,34 @@ public void resizeLayoutToFitContents() {
 			RowSwitchMenuItem(String t, int index) {
 				super(t);
 				this.index=index;
-				this.addActionListener(this);
 			}
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				LocatedObject2D target1 = getObject();
+				CombinedEdit undo = new CombinedEdit();
+				undo.addEdit(new UndoMoveItems(target1));
+				undo.addEditToList(new UndoAttachmentPositionChange(target1, (PanelLayoutGraphic) attachmentSite));
+				undo.addEdit(new UndoMoveItems(target1));
+				
 				getPanelLocations().put(getObject(), index);
 				if (myLayout.rowmajor&&isRows()) {
 					getPanelLocations().put(getObject(), index*myLayout.nColumns());
 					
-					/**If the index is fixed, makes it possible to change it*/
-					if (getObject().getTagHashMap().containsKey("Index"))
-						getObject().getTagHashMap().put("Index", index);
+					
 				}
-				snapLockedItem(getObject());
+				
+				/**If the index is fixed, makes it possible to change it*/
+				if (getObject().getTagHashMap().containsKey("Index"))
+					getObject().getTagHashMap().put("Index", index);
+				
+				snapLockedItem(target1);
+				
+				undo.establishFinalState();
+				this.addUndo(undo);
+				
+				
 			}
 		}
 		

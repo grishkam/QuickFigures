@@ -1736,7 +1736,7 @@ public String getToolTip() {
 		return findLockContainer(object2, imageClicked);
 	}
 
-	/**finds what object holds the attached item
+	/**finds what object holds the attached item. Searches within the given worksheet
 	 * @param object2
 	 * @param imageClicked
 	 * @return
