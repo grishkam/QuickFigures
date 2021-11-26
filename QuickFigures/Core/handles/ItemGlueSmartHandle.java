@@ -16,13 +16,12 @@
 /**
  * Author: Greg Mazo
  * Date Created: Nov 24, 2021
- * Date Modified: Nov 24, 2021
+ * Date Modified: Nov 25, 2021
  * Version: 2021.2
  */
 package handles;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
