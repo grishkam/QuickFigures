@@ -545,11 +545,11 @@ public void resizeLayoutToFitContents() {
 		}
 
 		private boolean isRows() {
-			return getObject().getAttachmentPosition().getGridSpaceCode()==LayoutSpaces.ROW_OF_PANELS;
+			return getObject().getAttachmentPosition().isRowAttachment();
 		}
 
 		private boolean isCols() {
-			return getObject().getAttachmentPosition().getGridSpaceCode()==LayoutSpaces.COLUMN_OF_PANELS;
+			return getObject().getAttachmentPosition().isColumnAttachment();
 		}
 		
 		public JPopupMenu getJPopup() {

@@ -890,6 +890,15 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		this.gridLayoutSnapType = gridLayoutSnapType;
 	}
 
+	/**returns true if this position should be defined relative to a column of a layout*/
+	public boolean isColumnAttachment() {
+		return getGridSpaceCode()==LayoutSpaces.COLUMN_OF_PANELS;
+	}
+	/**returns true if this position should be defined relative to a row of a layout*/
+	public boolean isRowAttachment() {
+		return getGridSpaceCode()==LayoutSpaces.ROW_OF_PANELS;
+	}
+	
 	
 	/**returns the external position that would result from a diagonal flip
 	 * of a layout*/

@@ -22,6 +22,8 @@
 package handles;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -31,9 +33,15 @@ import genericTools.Object_Mover;
 import graphicTools.AttachedItemTool;
 import graphicTools.AttachedItemTool2;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.OverlayObjectManager;
+import layout.PanelLayout;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
@@ -60,6 +68,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	private CanvasMouseEvent pressLocation;
 	private boolean attach;
 	private LocatedObject2D newAttachmentSite;
+	private ArrowGraphic lineMark;
 
 	/**
 	 * @param textGraphic
@@ -75,7 +84,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	public Point2D getCordinateLocation() {
 		double locy = target.getBounds().getMaxY();
 		double locx = target.getBounds().getCenterX();
-		return new Point2D.Double(locx, locy+target.getFont().getSize()/5);
+		return new Point2D.Double(locx, locy+target.getFont().getSize()/15);
 	}
 
 	
@@ -87,11 +96,13 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	
 	/**called when a user drags a handle */
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
+		
 		OverlayObjectManager selectionManagger =lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 		if(pressLocation!=null&&pressLocation.getCoordinatePoint().distance(lastDragOrRelMouseEvent.getCoordinatePoint())>10)
 				showMessageForPredictedAction(lastDragOrRelMouseEvent, target.getAttachmentPosition());
 		else selectionManagger.setSelectionstoNull();
 		
+	
 	}
 	
 	
@@ -103,14 +114,26 @@ public class ItemGlueSmartHandle extends SmartHandle {
 		TakesAttachedItems b = Object_Mover.findLockContainer(getObject(), mEvent.getAsDisplay().getImageAsWorksheet());
 		
 		
+		
+		lineMark = new ArrowGraphic(pressLocation.getCoordinatePoint(),mEvent.getCoordinatePoint());
+		lineMark.setStrokeColor(Color.red.darker());
+		lineMark.setStrokeWidth(1);
+		lineMark.hideNormalHandles=true;
+		lineMark.setNumerOfHeads(0);
+		lineMark.setDashes(new float[] {1,1});
+		
 		Point2D p2=mEvent.getCoordinatePoint();
 		OverlayObjectManager selectionManagger = mEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 		
-		if(potentialNewAttachmentSite==b)
+		if(potentialNewAttachmentSite==b&&b!=null)
 			selectionManagger.setSelectionstoNull();
 		else
+			if(potentialNewAttachmentSite==null)
+				selectionManagger.setSelection(lineMark, 0);
+			else
 		if(b==null &&potentialNewAttachmentSite!=null) {
-			createAttachMarker(p2, selectionManagger,potentialNewAttachmentSite);
+			Rectangle bounds = findBoundsOfAttachmentLocation(potentialNewAttachmentSite, this.getObject().getAttachmentPosition(), mEvent.getCoordinatePoint());
+			createAttachMarker(p2, selectionManagger,bounds);
 			this.attach=true;
 			this. newAttachmentSite= potentialNewAttachmentSite;
 			}
@@ -145,6 +168,51 @@ public class ItemGlueSmartHandle extends SmartHandle {
 		}*/
 	}
 
+	/**Returns a rectangle that best depicts where the label be be attached
+	 * @param potentialNewAttachmentSite
+	 * @param point 
+	 * @param attachmentPosition 
+	 * @return
+	 */
+	protected Rectangle findBoundsOfAttachmentLocation(LocatedObject2D potentialNewAttachmentSite, AttachmentPosition attachmentPosition, Point2D point) {
+		if( potentialNewAttachmentSite==null)
+			return null;
+		
+		if(attachmentPosition==null)
+			attachmentPosition=AttachmentPosition.defaultInternalPanel();
+		
+		Rectangle bounds = potentialNewAttachmentSite.getBounds();
+		
+		if(potentialNewAttachmentSite instanceof PanelLayoutGraphic) {
+			 PanelLayoutGraphic layout=(PanelLayoutGraphic) potentialNewAttachmentSite ;
+			
+				PanelLayout panelLayout = layout.getPanelLayout();
+				
+				
+				
+				bounds= panelLayout.getNearestPanel(point.getX(), point.getY()).getBounds();
+			
+		}
+		
+		
+		if(potentialNewAttachmentSite instanceof DefaultLayoutGraphic) {
+			DefaultLayoutGraphic layout=(DefaultLayoutGraphic) potentialNewAttachmentSite ;
+			
+			 BasicLayout panelLayout = layout.getPanelLayout();
+				
+				
+				if(attachmentPosition.isColumnAttachment())
+					panelLayout =panelLayout.makeAltered(LayoutSpaces.COLS);
+				if(attachmentPosition.isRowAttachment())
+					panelLayout =panelLayout.makeAltered(LayoutSpaces.ROWS);
+				
+				bounds= panelLayout.getNearestPanel(point.getX(), point.getY()).getBounds();
+			
+		}
+		
+		return bounds;
+	}
+
 	/**
 	 * @param p2
 	 * @param selectionManagger
@@ -167,7 +235,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	 */
 	protected TextGraphic createTransplantMarker(Point2D p2, OverlayObjectManager selectionManagger, LocatedObject2D a) {
 		TextGraphic marker = new TextGraphic("Transplant Item?");
-		RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
+		RectangularGraphic marker3 = RectangularGraphic.blankRect(findBoundsOfAttachmentLocation(a, a.getAttachmentPosition(), p2), Color.green);
 		selectionManagger.setSelection(marker3, 0);
 		
 		marker.setTextColor(Color.red);
@@ -188,19 +256,21 @@ public class ItemGlueSmartHandle extends SmartHandle {
 	 * @param selectionManagger
 	 * @return
 	 */
-	protected TextGraphic createAttachMarker(Point2D p2, OverlayObjectManager selectionManagger, LocatedObject2D a) {
-		TextGraphic marker = new TextGraphic("Attach Item?");
-		RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
+	protected TextGraphic createAttachMarker(Point2D p2, OverlayObjectManager selectionManagger,Rectangle rect) {
+		TextGraphic messageMarker = new TextGraphic("Attach Item?");
+		RectangularGraphic marker3 = RectangularGraphic.blankRect(rect, Color.green);
 		selectionManagger.setSelection(marker3, 0);
 		
-		marker.setTextColor(Color.red);
-		marker.setLocation(p2);
+		messageMarker.setTextColor(Color.red);
+		messageMarker.setLocation(p2);
 		LocatedObject2D marker2 = getObject().copy();
+		
 		marker2.setLocation(p2.getX(), p2.getY()+10);
-		selectionManagger.setSelection(marker, 1);
+		marker2=this.lineMark;
+		selectionManagger.setSelection(marker3, 1);
 		selectionManagger.setSelection(marker2, 0);
-		selectionManagger.setSelection(marker3, 2);
-		return marker;
+		selectionManagger.setSelection(messageMarker, 2);
+		return messageMarker;
 	}
 	
 	

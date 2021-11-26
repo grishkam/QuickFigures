@@ -1368,7 +1368,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		/**The glue handle is used to attach items that are not already attached*/
 		if(this.getPrimarySelectedObject() instanceof TextGraphic) {
 			 TextGraphic t=(TextGraphic) getPrimarySelectedObject() ;
-			 t.getGlueHandle().setHidden(overlaySelectionManagger.getExtraHandle()!=null);
+			 if(t.getGlueHandle()!=null)
+				 t.getGlueHandle().setHidden(overlaySelectionManagger.getExtraHandle()!=null);
 		}
 	}
 
