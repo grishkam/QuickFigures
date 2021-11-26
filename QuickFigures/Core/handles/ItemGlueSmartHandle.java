@@ -116,7 +116,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 		
 		lineMark = new ArrowGraphic(pressLocation.getCoordinatePoint(),mEvent.getCoordinatePoint());
 		lineMark.setStrokeColor(Color.red.darker());
-		lineMark.setStrokeWidth(1);
+		lineMark.setStrokeWidth(2);
 		lineMark.hideNormalHandles=true;
 		lineMark.setNumerOfHeads(0);
 		lineMark.setDashes(new float[] {1,1});
