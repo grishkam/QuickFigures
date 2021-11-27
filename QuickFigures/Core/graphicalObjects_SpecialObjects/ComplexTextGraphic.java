@@ -731,13 +731,15 @@ public class ComplexTextGraphic extends TextGraphic {
 			this.setUpSelectedSegmentList();
 			segmentsToDelete.addAll(allSelectedSegments);
 			segmentsToDelete.remove(thisSegment);
-			if (highlightSegment.getHightLightPosition()!=0)
+			if (highlightSegment.getHightLightPosition()!=0&&thisSegment!=highlightSegment)
 				{
 				segmentsToDelete.remove(highlightSegment);
 				segmentToDeleteForHighLight=highlightSegment;
 				 delIndex=highlightSegment.getHightLightPosition();
 				}
 			
+			if(highlightSegment==thisSegment)
+				segmentsToDelete.remove(highlightSegment);
 			}
 		
 		String st = handleKeyOnString(arg0,thisSegment .getText(),thisSegment.getCursorposition(), thisSegment.getHightLightPosition());

@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 2, 2021
- * Date Modified: Nov 24, 2021
+ * Date Modified: Nov 25, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -137,7 +137,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		return added;
 	}
 
-	/**
+	/**creates a series of lane labels with current parameters
 	 * @param ag
 	 * @param output
 	 * @param added
@@ -148,19 +148,22 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	public DefaultLayoutGraphic addLaneLabel(TextGraphic ag, boolean output, ArrayList<TextGraphic> added, GraphicLayer parentLayer,
 			Rectangle b, CombinedEdit undo) {
 		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
-		showLaneLabelDialog();
-		//int count = 1;
+		boolean result = showLaneLabelDialog();
+		if(result==false)
+			return null;
 		
 		int nLanes=(int) options.nLanes;
 		
 		
 		
-		int border = 5;
+		int border = 4;
 		
-		/**calculates the column width needed to fill tne space*/
+		/**calculates the column width needed to fill the space*/
 		int wCol = b.width/nLanes-border+border/(nLanes-1);		
 		int hRow = b.height/5;
-		if(hRow<wCol ||options.nPlusMarks>0) hRow=wCol;
+		if(hRow<wCol ||options.nPlusMarks>0) 
+			hRow=wCol;
+		
 		
 		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, hRow, border, border, true);
 		layout.setLeftSpace(border/2);
@@ -177,7 +180,11 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		for(int laneIndex=1; laneIndex<=nLanes; laneIndex++){
 			TextGraphic  ag2 = ag;
-			ag2.setFontSize((int) (wCol/2));
+			
+			int newFontSize = (int) (wCol/2);
+			if(newFontSize<=2)
+				newFontSize=2;
+			ag2.setFontSize(newFontSize);
 			ag2.setAngle(45);
 			
 			if (output) {
@@ -267,8 +274,9 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 
 	/**
 	 * Shos the dialog which allods the user to choose how many lane labels to create
+	 * @return 
 	 */
-	protected void showLaneLabelDialog() {
+	protected boolean showLaneLabelDialog() {
 		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
@@ -278,6 +286,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		storedValueDilaog.showDialog();
 		
 		labelList=storedValueDilaog.getLinesFromString(LABEL_PASTE_TEXT_AREA_KEY);
+		return storedValueDilaog.wasOKed();
 	}
 	
 	@Override

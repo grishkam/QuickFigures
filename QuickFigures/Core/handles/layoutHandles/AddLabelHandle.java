@@ -272,6 +272,10 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		ArrayList<TextGraphic> labelList = new ArrayList<TextGraphic>();
 		DefaultLayoutGraphic laneLabelLayout = laneLabelAdder.addLaneLabel(textItem, true, labelList, layout.getParentLayer(), box, undo);
+		
+		if(laneLabelLayout ==null)
+			return;//if user clicks cancel will not return a layout
+		
 		Rectangle laneLabelBounds = laneLabelLayout.getBounds();
 		
 		if(labelList.size()>0)
@@ -397,6 +401,15 @@ public class AddLabelHandle extends MoveRowHandle {
 				new AddAllLabelsMenuItem(LayoutSpaces.PANELS, false)
 				};
 		for(BasicSmartMenuItem m: b) {menu.add(m);}
+		
+		
+		menu.add(new BasicSmartMenuItem("Add Lane Labels") {
+				private static final long serialVersionUID = 1L;
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addLaneLabels(me);
+				}	
+			}) ;
 		
 		return menu;
 	}

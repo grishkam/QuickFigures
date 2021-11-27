@@ -143,11 +143,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		if (rowcol[0]+bm.nRows()>=1 &&type==ROWS)edit.addRows(bm, rowcol[0]);
 		if (rowcol[1]+bm.nColumns()>=1 &&type==COLS)edit.addCols(bm, rowcol[1]);
 		
-		if (undo2!=null) {
-			undo2.addEditToList(
-					new CanvasAutoResize(false).performUndoableAction(lastDragOrRelMouseEvent.getAsDisplay())
-			);
-		}
+	
 		if (undo!=null) 
 			{undo.establishFinalLocations();
 			if(!undoAdded) {

@@ -34,6 +34,7 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
 import genericMontageUIKitMenuItems.LayoutEditCommandMenu;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.AttachmentPositionHandle;
@@ -63,6 +64,7 @@ import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
 import undo.UndoMoveItems;
 import undo.CombinedEdit;
+import undo.Edit;
 import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoAttachmentPositionChange;
 import utilityClasses1.ArraySorter;
@@ -561,11 +563,11 @@ public void resizeLayoutToFitContents() {
 			return out;
 		}
 
-		private JMenu getRowSwithMenu() {
+		private JMenu getRowSwithMenu(boolean copy) {
 			JMenu moveMenu=new SmartJMenu("Switch "+changeText());
 			
 			for(int i=1; i<=nOptions; i++) {
-				moveMenu.add(new RowSwitchMenuItem(""+i,i));
+				moveMenu.add(new RowSwitchMenuItem(""+i,i, copy));
 			}
 		
 			return moveMenu;
@@ -653,23 +655,34 @@ public void resizeLayoutToFitContents() {
 			 */
 			private static final long serialVersionUID = 1L;
 			private int index;
-			RowSwitchMenuItem(String t, int index) {
+			private boolean copy;
+			RowSwitchMenuItem(String t, int index, boolean copy) {
 				super(t);
 				this.index=index;
+				this.copy=copy;
 			}
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				LocatedObject2D target1 = getObject();
+				
+				
 				CombinedEdit undo = new CombinedEdit();
+				if(copy) {
+					LocatedObject2D target2 = target1.copy();
+					if(target1 instanceof ZoomableGraphic && target2 instanceof ZoomableGraphic)
+						undo.addEditToList(Edit.addItem(((ZoomableGraphic) target1).getParentLayer(), (ZoomableGraphic) target2));
+					target1=target2;
+				}
+				
 				undo.addEdit(new UndoMoveItems(target1));
 				undo.addEditToList(new UndoAttachmentPositionChange(target1, (PanelLayoutGraphic) attachmentSite));
 				undo.addEdit(new UndoMoveItems(target1));
 				
-				getPanelLocations().put(getObject(), index);
+				getPanelLocations().put(target1, index);
 				if (myLayout.rowmajor&&isRows()) {
-					getPanelLocations().put(getObject(), index*myLayout.nColumns());
+					getPanelLocations().put(target1, index*myLayout.nColumns());
 					
 					
 				}

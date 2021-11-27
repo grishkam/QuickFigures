@@ -957,7 +957,7 @@ public void handleKeyPressEvent(KeyEvent arg0) {
 	if(st.equals(this.getText())) return;
 	this.setText(st);
 	setHighlightPositionToCursor();
-	
+	IssueLog.log("After press "+this.getText());
 }
 
 public void onBackspace() {
@@ -1045,6 +1045,7 @@ static String handleKeyOnString(KeyEvent e, String st, int cursor, int highlight
 	} 
 	
 	String newST=st.substring(0, startCut)+enteredKey+st.substring(endCut);
+	
 	if (e.getKeyCode()==KeyEvent.VK_DELETE&&st.length()>0&&cursor<st.length()) {
 		if (cursor<st.length()) {newST=st.substring(0, cursor)+st.substring(cursor+1);}
 		
