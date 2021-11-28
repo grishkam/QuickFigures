@@ -43,6 +43,7 @@ import genericPlot.BasicPlot;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.ConnectorGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import layout.BasicObjectListHandler;
@@ -105,7 +106,6 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 	 */
 	public StatTestOrganizer() {
 		super("test");
-		// TODO Auto-generated constructor stub
 	}
 
 	
@@ -135,7 +135,7 @@ public class StatTestOrganizer extends GraphicLayerPane implements Serializable,
 			
 			if(anchor1==null||anchor2==null)
 				return;
-			 connector2.horizontal=false;
+			 connector2.setHorizontal(false);
 			 Point2D p1 = connector2.getAnchors()[0];
 			Rectangle subshapeFor1 = getSubshapeFor(anchor1, data1);
 			if(subshapeFor1!=null)

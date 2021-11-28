@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 6, 2021
+ * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
 package illustratorScripts;
@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import figureFormat.DirectoryHandler;
 import logging.IssueLog;
+import messages.ShowMessage;
 import photoshopScripts.AdobeScriptGenerator;
 
 /**this class generates text that can be run in an adobe illustrator java script*/
@@ -65,10 +66,7 @@ public class ZIllustratorScriptGenerator {
 			accumulatedscrip+='\n'+st;
 		}
 	}
-	public static void main(String [ ] args)
-	{
-	
-	}
+
 	
 	/**saves the string containing javascript code and opens it.
 	 * resets the accumulated script*/
@@ -82,7 +80,10 @@ public class ZIllustratorScriptGenerator {
 		file.getParentFile().mkdirs();//creates the parent directories
 		saveString("#target illustrator"+'\n'+javascript, directoryJSX, false);
 		try {
-		Desktop.getDesktop().open(file);} catch (IOException e) {}
+		Desktop.getDesktop().open(file);} catch (IOException e) {
+			ShowMessage.showOptionalMessage("Failed to find Adobe Illustrator", false, "Did not run script in Adobe Illustrator", "Make sure you have Illustrator recently installed and set as the default software for .jsx files");
+			IssueLog.logT(e);
+		}
 	}
 
 	/**returns the path for saving images files temporarily*/

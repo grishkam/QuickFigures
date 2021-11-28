@@ -18,15 +18,15 @@
  * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
-package plotTools;
+package handles;
 
 import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEvent;
+import graphicalObjects_Shapes.ConnectorGraphic;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import logging.IssueLog;
-import plotParts.stats.ConnectorGraphic;
 
 /**
 A handle list for moving the anchor points of a connector 

@@ -33,6 +33,7 @@ import genericPlot.BasicPlot;
 import genericTools.Object_Mover;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.ConnectorGraphic;
 import icons.IconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
@@ -41,7 +42,6 @@ import plotParts.Core.PlotOrientation;
 import plotParts.DataShowingParts.Boxplot;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.DataShowingShape;
-import plotParts.stats.ConnectorGraphic;
 
 /**a superclass for multiple tools that edit a plot*/
 public class BasicPlotTool extends Object_Mover {

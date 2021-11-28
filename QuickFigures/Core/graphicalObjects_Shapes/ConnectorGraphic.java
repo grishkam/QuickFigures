@@ -18,7 +18,7 @@
  * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
-package plotParts.stats;
+package graphicalObjects_Shapes;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -32,13 +32,13 @@ import javax.swing.Icon;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.ShapeGraphic;
+import handles.ConnectorHandleList;
 import handles.HasSmartHandles;
 import handles.SmartHandleList;
 import iconGraphicalObjects.IconTraits;
 import locatedObject.BasicStrokedItem;
 import locatedObject.RectangleEdges;
 import locatedObject.Scales;
-import plotTools.ConnectorHandleList;
 import standardDialog.graphics.GraphicDisplayComponent;
 
 /**A path consisting of strait vertical or horizontal lines with no curves */
@@ -47,12 +47,12 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	Point2D[] anchors=new Point2D[] {new Point(), new Point(), new Point()};
 	private transient ConnectorHandleList smartHandles;
 	
-	boolean horizontal=false;
+	private boolean horizontal=false;
 	
 	public ConnectorGraphic(boolean horizontal, Point2D... a) {
 		this.setName("Line link");
 		anchors=a;
-		this.horizontal=horizontal;
+		this.setHorizontal(horizontal);
 	}
 	
 	/**creates the shape*/
@@ -215,6 +215,10 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 			
 		}
 		
+	}
+
+	public void setHorizontal(boolean horizontal) {
+		this.horizontal = horizontal;
 	}
 
 }
