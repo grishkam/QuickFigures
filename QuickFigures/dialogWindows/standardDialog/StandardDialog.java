@@ -992,12 +992,16 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	/**Asks user for a String array. Each element in the array should be pasted on a separate line
 	 * @return
 	 */
-	public static String[] getStringArrayFromUser(String label, String start, Object... otherOptions) {
+	public static String[] getStringArrayFromUser(String label, String start, Integer nRows, Object... otherOptions) {
 		StandardDialog sd = new StandardDialog(label);
 		sd.setModal(true);
 		sd.setWindowCentered(true);
 		
-		sd.add(label, new StringInputPanel(label, start, 16, 25));
+		if(nRows==null)
+			nRows=16;
+			
+		
+		sd.add(label, new StringInputPanel(label, start, nRows, 25));
 		if (otherOptions!=null &&otherOptions.length>0) {
 			for(Object of: otherOptions)StoredValueDilaog.addFieldsForObject(sd, of);
 		}
@@ -1009,6 +1013,28 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		if(start==null)
 			return null;
 		return start.split(""+'\n');
+	}
+	
+	/**Asks user for a String array. Each element in the array should be pasted on a separate line
+	 * @return
+	 */
+	public static String getStringFromUser(String label, String start, Object... otherOptions) {
+		StandardDialog sd = new StandardDialog(label);
+		sd.setModal(true);
+		sd.setWindowCentered(true);
+		
+		sd.add(label, new StringInputPanel(label, start));
+		if (otherOptions!=null &&otherOptions.length>0) {
+			for(Object of: otherOptions)StoredValueDilaog.addFieldsForObject(sd, of);
+		}
+		sd.showDialog();
+		
+		if(sd.wasOKed) {
+			return sd.getString(label);
+		}
+		if(start==null)
+			return null;
+		return start;
 	}
 	
 }

@@ -57,13 +57,13 @@ public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, 
 	
 	NumberArrayInputPanel dashinput=new NumberArrayInputPanel(6,0);{
 		dashinput.setLabel("Dashes");
-		
+		dashinput.setDecimalPlaces(2);
 	}
 	
 	
 	
-	NumberInputPanel widthInput=new NumberInputPanel("Stroke Width ", 0);
-	NumberInputPanel miterInput=new NumberInputPanel("Miterlimit ", 0);
+	NumberInputPanel widthInput=new NumberInputPanel("Stroke Width ", 0);  {widthInput.setDecimalPlaces(2);}
+	NumberInputPanel miterInput=new NumberInputPanel("Miterlimit ", 0); {miterInput.setDecimalPlaces(2);}
 	ColorComboboxPanel strokeColorInput=null;
 	ChoiceInputPanel joinInput=new ChoiceInputPanel("Stroke Join", strokejoins, 0);
 	ChoiceInputPanel capInput=new ChoiceInputPanel("Stroke Cap", strokecaps, 0);

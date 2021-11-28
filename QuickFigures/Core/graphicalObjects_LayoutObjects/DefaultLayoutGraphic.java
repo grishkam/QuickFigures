@@ -508,7 +508,7 @@ public void resizeLayoutToFitContents() {
 		private int amount=1;
 		
 		private BasicLayout myLayout;
-		private int nOptions;
+		//private int nOptions;
 		boolean shifted=false;
 		
 
@@ -530,9 +530,15 @@ public void resizeLayoutToFitContents() {
 			}
 			
 			myLayout=montageLayoutGraphic.getPanelLayout();
-			nOptions=myLayout.nPanels();
+			
+		}
+		
+		/**returns how many possible locations the item attached to this can have (depending on whether it is attached to rows cols or panels))*/
+		public int nOptions() {
+			int nOptions = myLayout.nPanels();
 			if (this.isRows())nOptions=myLayout.nRows();
 			if (this.isCols())nOptions=myLayout.nColumns();
+			return nOptions;
 		}
 		
 		/**returns which type of attachment position this item has*/
@@ -557,16 +563,21 @@ public void resizeLayoutToFitContents() {
 		public JPopupMenu getJPopup() {
 			JPopupMenu out = super.getJPopup();
 			
-			JMenu moveMenu = getRowSwithMenu();
+			
 			if(out==null) return null;
-			out.add(moveMenu);
+			
+			out.add( getRowSwithMenu(false));
+			out.add( getRowSwithMenu(true));
 			return out;
 		}
 
 		private JMenu getRowSwithMenu(boolean copy) {
-			JMenu moveMenu=new SmartJMenu("Switch "+changeText());
+			String baseText = "Switch ";
+			if(copy)
+				baseText="Copy to ";
+			JMenu moveMenu=new SmartJMenu(baseText+changeText());
 			
-			for(int i=1; i<=nOptions; i++) {
+			for(int i=1; i<=nOptions(); i++) {
 				moveMenu.add(new RowSwitchMenuItem(""+i,i, copy));
 			}
 		
@@ -673,7 +684,11 @@ public void resizeLayoutToFitContents() {
 					LocatedObject2D target2 = target1.copy();
 					if(target1 instanceof ZoomableGraphic && target2 instanceof ZoomableGraphic)
 						undo.addEditToList(Edit.addItem(((ZoomableGraphic) target1).getParentLayer(), (ZoomableGraphic) target2));
+					target2.setAttachmentPosition(target1.getAttachmentPosition());
 					target1=target2;
+					attachmentSite.addLockedItem(target1);
+					 undo.addEditToList(new UndoAddOrRemoveAttachedItem(attachmentSite, target1, false));
+					 
 				}
 				
 				undo.addEdit(new UndoMoveItems(target1));
@@ -695,7 +710,7 @@ public void resizeLayoutToFitContents() {
 				
 				undo.establishFinalState();
 				this.addUndo(undo);
-				
+				me.getAsDisplay().updateDisplay();
 				
 			}
 		}

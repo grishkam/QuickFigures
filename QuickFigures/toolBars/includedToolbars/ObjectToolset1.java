@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
 package includedToolbars;
@@ -83,7 +83,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	
 	public void graphicTools() {
 		
-		maxGridx=11;
+		maxGridx=12;
 		
 		addToolBit(new Object_Mover());
 		ArrayList<ToolBit> layoutTools = LayoutToolSet.getMinimumLayoutToolBits();
@@ -253,6 +253,17 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 	}
 	
+	/**Returns tool for drawing simple lines*/
+	public static ArrayList<ToolBit> getLineGraphicBits() {
+		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
+	
+		ArrowGraphicTool e = new ArrowGraphicTool(0);
+		e.getModelArrow().setStrokeWidth(1);
+		out.add(e);
+		return out;
+		
+	}
+	
 	public void addToolBit(ToolBit t) {
 		addTool(new  GeneralTool( t));
 	}
@@ -266,6 +277,8 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 		addTool(new  GeneralTool( getRegularPolygonShapeTools()));
 		addTool(new  GeneralTool( getArrowGraphicBits() ));
+		addTool(new  GeneralTool( getLineGraphicBits() ));
+		
 		addTool(new  GeneralTool( new BrushTool(false, 0)));
 		addTool(new  GeneralTool( getPathGraphicBits()));
 		addTool(new  GeneralTool( getTextToolBits()));

@@ -223,7 +223,7 @@ public class StoredValueDilaog extends StandardDialog{
 		
 		/**Creates a string input for an array*/
 		public StringInput(String label, Object of, Field f, RetrievableOption o, boolean b) throws IllegalArgumentException, IllegalAccessException {
-			super(label, (String[]) f.get(of));
+			super(label, (String[]) f.get(of), o.nExpected(), 15);
 			addStringInputListener(this);
 			this.field=f;
 			this.object=of;

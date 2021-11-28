@@ -555,7 +555,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 		AttachmentPosition position=null;
 		String[] nameList=new String[] {};
 		if (LabelCreationOptions.current.useLabelList())
-				nameList=StandardDialog.getStringArrayFromUser("Paste Labels Here", "");
+				nameList=StandardDialog.getStringArrayFromUser("Paste Labels Here", "", null);
 		
 		for(int i=1; i<=limit; i++) {
 			TextGraphic item=null;

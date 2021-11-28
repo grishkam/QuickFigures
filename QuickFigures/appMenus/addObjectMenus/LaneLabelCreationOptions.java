@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 24, 2021
+ * Date Modified: Nov 27, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -29,15 +29,16 @@ public class LaneLabelCreationOptions {
 	public static LaneLabelCreationOptions current=new LaneLabelCreationOptions() ;
 	
 	public static final String numberCode="%number%";
+	public static String defaultLabelText="Lane "+numberCode;
 	
 	@RetrievableOption(key = "nLanes", label="How many lanes?")
 	public double nLanes=8;
 	
-	@RetrievableOption(key = "label prefix and suffix", label="Label text ")
-	public String prefix="Lane "+numberCode;
+	@RetrievableOption(key = "label prefix and suffix", label="Label text here", nExpected=12)
+	public String[] prefix=new String[] {defaultLabelText};
 	
 	
-	@RetrievableOption(key = "mark conditions", label="How many lines of +/- marks")
+	@RetrievableOption(key = "mark conditions", label="How many lines of +/- marks", nExpected=4)
 	public double nPlusMarks=0;
 	
 	@RetrievableOption(key = "Mark Text", label="Marks will be")

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
 package standardDialog.numbers;
@@ -55,6 +55,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 	
 	}
 	
+	/**Sets the font of each field*/
 	public void setItemFont(Font f) {
 		super.setItemFont(f);
 		for(NumericTextField f2:fields) {
@@ -63,6 +64,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 	 }
 	
 	
+	/**Adds another numerif field with the given starting number*/
 	public void addFieldAndNumber(double number) {
 		NumericTextField f = new NumericTextField(number, precision);
 		f.addKeyListener(this);
@@ -73,10 +75,18 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		
 	}
 	
+	/**sets the number of decimal places shown in the text field*/
+	public void setDecimalPlaces(int precis) {
+		super.setDecimalPlaces(precis);
+		for(NumericTextField f:fields) {f.setDecimalPlaces(precis);}
+	}
+	
+	/**Sets the label for the series of fields*/
 	public void setLabel(String st) {
 		label.setText(st);
 	}
 
+	/**Sets the number within a specific text field*/
 	public void setNumber(int index, Double value) {
 		if (numbers==null) return;
 		while(index>=numbers.size()) addFieldAndNumber(0);
@@ -85,6 +95,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		else fields.get(index).setText("");
 	}
 	
+	/**returns an array with each number. Blank fields are skipped*/
 	public float[] getArray() {
 		ArrayList<Float> oo=new ArrayList<Float>();
 		for(NumericTextField f: fields) {
@@ -99,6 +110,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		
 	}
 	
+	/**Sets the numbers for each numeric field in this panel*/
 	public void setArray(float[] f) {
 		if (f==null) return;
 		for(int i=0; i<fields.size(); i++) {
@@ -111,6 +123,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		}
 	}
 	
+	/**Restores the panel to its original state*/
 	public void revert() {
 		for(int i=0; i<fields.size(); i++) {
 			Double numberI = numbersOriginal.get(i);
@@ -173,6 +186,7 @@ public class NumberArrayInputPanel extends NumberInputPanel implements KeyListen
 		
 	}
 	
+	/**returns a JPanel with each numeric field inside of it*/
 	JPanel fieldPanel() {
 		JPanel fieldPanel=new JPanel();
 		fieldPanel.setLayout(new FlowLayout());

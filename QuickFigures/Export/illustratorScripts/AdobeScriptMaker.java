@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
 package illustratorScripts;
@@ -106,7 +106,7 @@ public class AdobeScriptMaker {
 
 	/**Add the given worksheet to the artlayer*/
 	protected void sentToIlls(Object worksheet, ArtLayerRef aref) {
-		IssueLog.log("making illustrator script for "+worksheet);
+		IssueLog.log("making illustrator script for "+worksheet, "This could take some time for complex figures");
 		
 		if (worksheet instanceof FigureDisplayWorksheet) {
 			FigureDisplayWorksheet mont2 = (FigureDisplayWorksheet)worksheet;

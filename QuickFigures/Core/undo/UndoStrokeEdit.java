@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 27, 2021
  * Version: 2021.2
  */
 package undo;
@@ -44,7 +44,9 @@ public class UndoStrokeEdit extends AbstractUndoableEdit2 {
 
 	public UndoStrokeEdit(StrokedItem item) {
 		this.item=item;
+		if(item.getDashes()!=null)
 		iDash =   item.getDashes().clone();
+		
 		iMiter=   item.getMiterLimit();
 		iCap  =   item.getStrokeCap();
 		iJoin =   item.getStrokeJoin();
@@ -53,6 +55,7 @@ public class UndoStrokeEdit extends AbstractUndoableEdit2 {
 
 	
 	public void establishFinalState() {
+		if(item.getDashes()!=null)
 		fDash =   item.getDashes().clone();
 		fMiter=   item.getMiterLimit();
 		fCap  =   item.getStrokeCap();

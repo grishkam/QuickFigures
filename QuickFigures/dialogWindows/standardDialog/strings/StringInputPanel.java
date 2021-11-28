@@ -90,7 +90,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	public StringInputPanel(String labeln, String[] contend, int rows, int cols) {
 		field=new JTextArea(rows, cols);
 		String starting="";
-		for(String s: contend)starting+=s+lineseparator;
+		for(String s: contend)starting+=s+lineseparator;//makes a string where eaxh strig is a different line
 		setupInnitialText(labeln, starting);
 	}
 	

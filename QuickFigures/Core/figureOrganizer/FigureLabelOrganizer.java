@@ -42,6 +42,18 @@ public class FigureLabelOrganizer implements Serializable {
 	/**
 	 * 
 	 */
+	private static final String RIGHT_ROW_NAME = "Row ";
+	/**
+	 * 
+	 */
+	private static final String LEFT_ROW_NAME = "        Row ";
+	/**
+	 * 
+	 */
+	private static final String PANEL_NAME = "Panel ", COLUMN_NAME = "Column ";
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	
 	/**A class dedicated for panel labels*/
@@ -185,11 +197,47 @@ public class FigureLabelOrganizer implements Serializable {
 	 * @param targetLayout the layout*/
 	public static TextGraphic addLabelOfType(int labelType, int index, GraphicLayer destinationLayer, DefaultLayoutGraphic targetLayout, boolean opposideSide) {
 		TextGraphic item=null;
-		if (labelType==BasicLayout.ROWS) item=addRowLabel((opposideSide?"Row ":"          Row ")+index, index, destinationLayer, targetLayout, opposideSide);
+		
+		return addLabelOfType(null, labelType, index, destinationLayer, targetLayout, opposideSide, item);
+	}
+
+	/**
+	 * @param name the text of the label
+	 * @param labelType the type of label
+	 * @param index the index
+	 * @param destinationLayer the target layer
+	 * @param targetLayout the layout
+	 * @param opposideSide
+	 * @param item
+	 * @return
+	 */
+	public static TextGraphic addLabelOfType(String name, int labelType, int index, GraphicLayer destinationLayer,
+			DefaultLayoutGraphic targetLayout, boolean opposideSide, TextGraphic item) {
+		if(name==null)
+			name=getDefaultNameOfType(labelType, opposideSide)+index;
 		else 
-			if (labelType==BasicLayout.COLS) item= addColLabel("Column "+index, index, destinationLayer, targetLayout);
+			name=name.replaceAll(getNumberCode(), ""+index);
+		
+		if (labelType==BasicLayout.ROWS) item=addRowLabel(name, index, destinationLayer, targetLayout, opposideSide);
+		else 
+			if (labelType==BasicLayout.COLS) item= addColLabel(name, index, destinationLayer, targetLayout);
 			else 
-				if (labelType==BasicLayout.PANELS)item= addPanelLabel("Panel "+index, index, destinationLayer, targetLayout);
+				if (labelType==BasicLayout.PANELS)item= addPanelLabel(name, index, destinationLayer, targetLayout);
 		return item;
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getNumberCode() {
+		return "%number%";
+	}
+	
+	public static String getDefaultNameOfType(int labelType, boolean oppositeSide) {
+		if (labelType==BasicLayout.ROWS) return (oppositeSide?RIGHT_ROW_NAME:LEFT_ROW_NAME);
+		else 
+			if (labelType==BasicLayout.COLS) return COLUMN_NAME;
+			
+		return PANEL_NAME;
 	}
 }

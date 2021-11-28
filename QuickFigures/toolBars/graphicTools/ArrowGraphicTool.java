@@ -135,4 +135,8 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 		return model.getTreeIcon();
 	}
 
+	public ArrowGraphic getModelArrow() {
+		return model;
+	}
+
 }

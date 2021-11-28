@@ -53,6 +53,7 @@ import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
+import standardDialog.StandardDialog;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -71,6 +72,8 @@ public class AddLabelHandle extends MoveRowHandle {
 	
 	private LabelExamplePicker picker;//determines what labels are already considered as already present
 	private int mode=PANELS;
+
+	private String defaultText=null;
 	
 	/**The constructor
 	 * @param montageLayoutGraphic the layouts
@@ -164,19 +167,18 @@ public class AddLabelHandle extends MoveRowHandle {
 		}
 		spaceFilled =spaceFillerList.size()>0;
 		
-		if(type==PANELS) {
-			 spaceFilled=false;
-		}
-		
 		return spaceFilled;
 	}
 	
 	/**returns the section the layout where the label belongs*/
 	private Rectangle2D getSpaceForLabel(int index, boolean opposite) {
 		Rectangle2D space = layout.getPanelLayout().makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_TOP).getBounds();
-	if(type==ROWS)  space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
+	if(type==ROWS) 
+		space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
 	if(type==ROWS&&opposite)  
 		space = layout.getPanelLayout().makeAltered(LayoutSpaces.ROW_OF_PANELS).getSelectedSpace(index, LayoutSpaces.LABEL_ALLOTED_RIGHT).getBounds();
+	if(type==PANELS)  
+		space = layout.getPanelLayout().getSelectedSpace(index, LayoutSpaces.PANELS).getBounds();
 	
 	
 	return space;
@@ -226,23 +228,43 @@ public class AddLabelHandle extends MoveRowHandle {
 	
 	
 
-	/**Adds labels to all the single label additions
+	/**Adds labels to all the single label locations that are empty.
+	 * Prompts the user to input text
 	 * @param canvasMouseEventWrapper
 	 * @param cEdit
 	 */
 	private void performSingleAllLabelAddition(CanvasMouseEvent canvasMouseEventWrapper, CombinedEdit cEdit) {
+		String s1=FigureLabelOrganizer.getDefaultNameOfType(type, opposite)+FigureLabelOrganizer.getNumberCode();
+		String[] dText = new String[] {s1};
+		dText=StandardDialog.getStringArrayFromUser("Label Text", s1, 10);
+		
+		performAllLabelAddition(canvasMouseEventWrapper, cEdit, dText);
+		
+	}
+
+	/**Adds labels to all the single label locations that are empty
+	 * @param canvasMouseEventWrapper
+	 * @param cEdit
+	 * @param dText
+	 */
+	public void performAllLabelAddition(CanvasMouseEvent canvasMouseEventWrapper, CombinedEdit cEdit, String[] dText) {
 		int n=layout.getPanelLayout().nPanels();
-		if (type==BasicLayout.ROWS) n=layout.getPanelLayout().nRows();
+		if (type==BasicLayout.ROWS) 
+			n=layout.getPanelLayout().nRows();
 		else 
-			if (type==BasicLayout.COLS) n=layout.getPanelLayout().nColumns();
+			if (type==BasicLayout.COLS) 
+				n=layout.getPanelLayout().nColumns();
 		for(int i=0; i<n; i++) {
 			AddLabelHandle current = new AddLabelHandle(layout, type, i+1, opposite);
-			  
+			if(i<dText.length)
+				current.defaultText=dText[i];
+			else 
+				current.defaultText=dText[dText.length-1];
+			
 			if(!current.isHidden()) {
 				current.performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
 			}
 		}
-		
 	}
 
 	/**Adds a single label
@@ -250,11 +272,9 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @param cEdit
 	 */
 	protected void performSingleLabelAddition(CanvasMouseEvent canvasMouseEventWrapper, CombinedEdit cEdit) {
-		TextGraphic label = FigureLabelOrganizer.addLabelOfType(type, index, layout.getParentLayer(), layout, opposite);
-		
-		
-		
-		addLabel(canvasMouseEventWrapper, label, cEdit);
+		TextGraphic label = FigureLabelOrganizer.addLabelOfType(defaultText,type, index, layout.getParentLayer(), layout, opposite, null);
+
+		afterAddLabel(canvasMouseEventWrapper, label, cEdit);
 	}
 
 	/**Adds lane labels to the column i. This feature is a work in progress
@@ -299,8 +319,8 @@ public class AddLabelHandle extends MoveRowHandle {
 		canvasMouseEventWrapper.addUndo(undo);
 	}
 
-	/**Adds the label and adds an undo to the undo manager*/
-	protected void addLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label, CombinedEdit cEdit) {
+	/**Formats teh label and adds an undo to the undo manager*/
+	protected void afterAddLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label, CombinedEdit cEdit) {
 		
 		setUpMatchingLocation(label, true);
 		

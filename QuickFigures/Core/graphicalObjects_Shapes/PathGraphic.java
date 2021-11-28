@@ -108,7 +108,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	private boolean useArea=false;//determines whether the outline is the area enclosed by the path
 	
 	/**creates a path graphic from the given path2d*/
-	private PathGraphic(Path2D path2d) {
+	public PathGraphic(Path2D path2d) {
 		this.setPath(path2d);
 	}
 	

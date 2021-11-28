@@ -819,7 +819,7 @@ protected Point2D getDrawnLineEnd2() {
 	@Override
 	public Icon getTreeIcon() {
 		return new GraphicDisplayComponent(createIconArrow() );
-		//return createImageIcon();
+		
 	}
 	
 	/**creates a small arrow that is used as an icon for the arrow*/

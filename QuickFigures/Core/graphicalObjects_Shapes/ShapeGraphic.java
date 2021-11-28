@@ -149,7 +149,9 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	/**changes the stroke properties of this object to 
 	 *match the shape given*/
 	public void copyStrokeFrom(StrokedItem source) {
-		this.setDashes(source.getDashes().clone());
+		if(source.getDashes()!=null)
+			this.setDashes(source.getDashes().clone());
+		else this.setDashes(null);
 		this.setStrokeWidth(source.getStrokeWidth());
 		this.end=source.getStrokeCap();
 		this.join=source.getStrokeJoin();

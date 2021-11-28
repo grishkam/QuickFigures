@@ -1192,7 +1192,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 				createUndoForDragHandle() ;
 				}
 		
-		if(sh.handlesOwnUndo()) { currentundoDragHandle=null; currentundoDragHandle=null;}
+		if(sh!=null&&sh.handlesOwnUndo()) { currentundoDragHandle=null; currentundoDragHandle=null;}
 			
 			if (!addedcurrentundoDragHandle&&currentundoDragHandle!=null) {
 				

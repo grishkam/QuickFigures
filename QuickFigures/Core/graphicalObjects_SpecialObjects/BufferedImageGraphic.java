@@ -123,6 +123,8 @@ public class BufferedImageGraphic extends ImagePanelGraphic implements Illustrat
         return output;
 	}
 	
+	
+	
 	/**Removed unneeded channels and crops image*/
 	public BufferedImage filterCrop(BufferedImage image) {
 		boolean[] colors=this.getRemovedChannels();

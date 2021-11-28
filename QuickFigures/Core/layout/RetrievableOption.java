@@ -53,6 +53,9 @@ public @interface RetrievableOption {
 	/**the range of numbers that a numeric field should have.*/
 	int[] minmax() default {0,0} ;
 	
+	/**the nubmer of inputs that a user is expected to give for arrays*/
+	int nExpected() default 2 ;
+	
 	/**the name that will appear next to this item in a user interface*/
 	String label() default "unnamed field";
 	

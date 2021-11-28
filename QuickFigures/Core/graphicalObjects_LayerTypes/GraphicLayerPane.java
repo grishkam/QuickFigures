@@ -367,7 +367,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 				ills.toIllustrator(sub);
 			}
 		}catch (Throwable t) {
-			
+			IssueLog.logT(t);
 		}
 		return sub;
 	}

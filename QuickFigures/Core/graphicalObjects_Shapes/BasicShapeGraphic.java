@@ -34,7 +34,8 @@ import locatedObject.BasicStrokedItem;
 import locatedObject.Scales;
 import locatedObject.StrokedItem;
 
-/**An object that can take the form of an arbitrary shape. Used as a superclass for many different shapes*/
+/**An object that can take the form of an arbitrary shape. Used as a superclass for many different shapes
+   This is meant to be used */
 public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartHandles{
 
 	/**
@@ -109,7 +110,7 @@ public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartH
 		af.scale(mag, mag);
 		p2=scalePointAbout(p2, p,mag,mag);
 		shape=af.createTransformedShape(shape);
-		this.setLocationUpperLeft(p2);
+		this.setLocationUpperLeft(p2);//not properly implemented by this class but implemented by subclasses
 		BasicStrokedItem.scaleStrokeProps(this, mag);
 		
 	}

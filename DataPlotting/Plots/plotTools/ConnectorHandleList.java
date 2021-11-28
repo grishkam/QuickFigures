@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: Nov 28, 2021
  * Version: 2021.2
  */
 package plotTools;
@@ -25,6 +25,7 @@ import java.awt.geom.Point2D;
 import applicationAdapters.CanvasMouseEvent;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import logging.IssueLog;
 import plotParts.stats.ConnectorGraphic;
 
 /**
@@ -53,8 +54,7 @@ public class ConnectorHandleList extends SmartHandleList{
 	
 	
 	/**
-	 
-	 * 
+	A handle that allows the user to adjust the location of a connector graphic
 	 */
 public class ConnectorHandle extends SmartHandle {
 
@@ -83,7 +83,20 @@ public class ConnectorHandle extends SmartHandle {
 	
 	/**called when a user drags a handle */
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
+		int handlenum = target;
 		connector.getAnchors()[target].setLocation(lastDragOrRelMouseEvent.getCoordinatePoint());
+		
+		
+		if (handlenum<connector.getAnchors().length) 
+			connector.getAnchors()[handlenum].setLocation(lastDragOrRelMouseEvent.getCoordinatePoint());
+		
+		if(connector.isHorizontal()) {
+			
+		} else if (connector.getAnchors().length>2) {
+			double nx=connector.getAnchors()[0].getX()+connector.getAnchors()[2].getX();
+			nx/=2;
+			connector.getAnchors()[1].setLocation(nx, connector.getAnchors()[1].getY());
+		}
 	
 	}
 

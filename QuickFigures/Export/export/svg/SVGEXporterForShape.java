@@ -86,14 +86,21 @@ public Element toSVG(Document dom, Element e) {
 	
 	
 	element.setAttribute("id", shape.getName());
-	SVGPaintDescriptor fillpaint = new SVGPaint(context).toSVG(shape.getFillColor());
 	
+	
+	
+	Color fillColor = shape.getFillColor();
+	if(!shape.isFilled())
+		{fillColor=new Color(0,0,0,0);}//transparent fill color
+	
+	SVGPaintDescriptor fillpaint = new SVGPaint(context).toSVG(fillColor);
 	
 	
 	if (shape.isFilled()) {
 		
 		addSVGDescriptor( fillpaint, element);
 	}
+	
 
 	setColorString(element, "stroke", "stroke-opacity", c);
 	

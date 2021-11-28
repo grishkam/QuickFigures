@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 2, 2021
- * Date Modified: Nov 25, 2021
+ * Date Modified: Nov 27, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -52,10 +52,6 @@ import undo.UndoAddItem;
  * Meant to represent lane labels*/
 public class LaneLabelAdder extends BasicGraphicAdder {
 	
-	/**
-	 * 
-	 */
-	private static final String LABEL_PASTE_TEXT_AREA_KEY = "Custom";
 
 	/**
 	 * 
@@ -63,7 +59,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	private static final long serialVersionUID = 1L;
 	
 	LaneLabelCreationOptions options=new LaneLabelCreationOptions();
-	private String[] labelList;
+	
 	
 	public LaneLabelAdder() {
 		
@@ -198,11 +194,14 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			ag2.setLocation(panel.getCenterX(), panel.getMinY());
 			
 			/**Sets the text of the label*/
-			String text_for_label = options.prefix;
-			text_for_label =text_for_label.replace(LaneLabelCreationOptions.numberCode, ""+laneIndex);
-			if(labelList!=null &&labelList.length>=laneIndex) {
-				text_for_label=labelList[laneIndex-1];
+			String[] labelList = options.prefix;
+			String text_for_label = LaneLabelCreationOptions.defaultLabelText;
+			
+			
+			if(labelList!=null ) {
+				text_for_label=labelList[(laneIndex-1)%labelList.length];
 			}
+			text_for_label =text_for_label.replace(LaneLabelCreationOptions.numberCode, ""+laneIndex);
 			ag2.setContent(text_for_label);
 			
 			
@@ -280,12 +279,12 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
-		 labelList=null;
-		 storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list here", "", 15, 20));
+		
+		 //storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list here", "", 15, 20));
 		 
 		storedValueDilaog.showDialog();
 		
-		labelList=storedValueDilaog.getLinesFromString(LABEL_PASTE_TEXT_AREA_KEY);
+		//labelList=storedValueDilaog.getLinesFromString(LABEL_PASTE_TEXT_AREA_KEY);
 		return storedValueDilaog.wasOKed();
 	}
 	

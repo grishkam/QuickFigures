@@ -297,7 +297,8 @@ public class PathItemRef extends IllustratorObjectRef {
 	
 	
 	public String setStrokeDashes(float[] dashlength) {
-		
+		if(dashlength==null)
+			return "";
 		String output=refname+".strokeDashes="+numberArray(dashlength)+";";
 		addScript(output);
 		return output;

@@ -67,6 +67,8 @@ public class BasicStrokedItem implements StrokedItem , Serializable{
 	}
 	protected static void scaleDashes(StrokedItem recipient, double mag) {
 		float[] d = recipient.getDashes();
+		if(d==null)
+			return;
 		float[] d2 = new float[recipient.getDashes().length];
 		for(int i=0; i<d.length; i++) {
 			d2[i]=(float) (d[i]*mag);

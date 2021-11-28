@@ -684,7 +684,8 @@ public class EditManyObjects extends BasicMultiSelectionOperator implements  Lay
 
 	protected NumberInputPanel getStrokeWidthInput() {
 		if(this.getStrokeWidth()==null) return null;
-		NumberInputPanel panel = new NumberInputPanel("Stroke Width", this.getStrokeWidth(), 0,50);
+		NumberInputPanel panel = new NumberInputPanel("Stroke Width", this.getStrokeWidth(), 1,50);
+		panel.setDecimalPlaces(2);
 		panel.addNumberInputListener(new NumberInputListener() {
 			
 			@Override
@@ -702,6 +703,7 @@ public class EditManyObjects extends BasicMultiSelectionOperator implements  Lay
 	protected NumberInputPanel getMiterInput() {
 		
 		NumberInputPanel panel = new NumberInputPanel("Miter Limit", this.getModelItem().getMiterLimit());
+		panel.setDecimalPlaces(2);
 		panel.addNumberInputListener(new NumberInputListener() {
 			public void numberChanged(NumberInputEvent ne) {
 				strokeWidth=(float) ne.getNumber();
