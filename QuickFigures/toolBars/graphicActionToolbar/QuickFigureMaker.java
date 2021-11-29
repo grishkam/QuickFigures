@@ -163,6 +163,9 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		if(localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT) {
 			added.getMontageLayoutGraphic().moveLayoutAndContents(80, 80);//western blot figure should be created with more space for expansion
+			if(added.getMontageLayoutGraphic().getPanelLayout().labelSpaceWidthTop>20)
+				added.getMontageLayoutGraphic().getPanelLayout().labelSpaceWidthTop=80;
+			added.getMontageLayoutGraphic().select();
 		}
 		
 		if(added==null) {

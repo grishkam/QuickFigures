@@ -724,6 +724,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		oo.setName(getName());
 		oo.setClosedShape(true);
 		if(this.isSelected())oo.select();
+		if(this.getStrokeWidth()<2&&this.isFillable()&&this.isFilled())
+			oo.setUseFilledShapeAsOutline(true);
 		return oo;
 	}
 	

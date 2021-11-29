@@ -203,7 +203,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		if (mode==LayoutSpaces.COLUMN_OF_PANELS &&layout.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane figure=(FigureOrganizingLayerPane) layout.getParentLayer();
 			if(figure.getFigureType()==FigureType.WESTERN_BLOT) {
-				boolean decision = FileChoiceUtil.yesOrNo("Do you want to add multiple lane labels? This feature is a work in progress");
+				boolean decision = FileChoiceUtil.yesOrNo("Do you want to add multiple lane labels? This feature is meant for blots and gels");
 				if (decision) {
 					addLaneLabels(canvasMouseEventWrapper);
 					return;

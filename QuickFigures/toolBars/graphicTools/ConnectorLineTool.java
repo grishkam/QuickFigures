@@ -28,42 +28,35 @@ import javax.swing.Icon;
 
 import applicationAdapters.ImageWorkSheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.ConnectorGraphic;
+import handles.ConnectorHandleList;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
-public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
+public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{
 	
-	ArrowGraphic model = new ArrowGraphic(); {} {super.temporaryTool=true;}
+	ConnectorGraphic model = new ConnectorGraphic(true, new Point2D[] {new Point2D.Double()}); {} {super.temporaryTool=true;}
 	
 	
 	void setUpModel() {super.iconSet=TreeIconWrappingToolIcon.createIconSet(model);model.setStrokeColor(Color.black);}
 		{setUpModel(); }
-	public ArrowGraphicTool() {
+	public ConnectorLineTool() {
 	}
 	
-	public ArrowGraphicTool(int head) {
-		this(head, false);
-	}
+	
 	
 	/**constructs a tool
 	 * @param tail determines if this tool creates arrow with a distinct head and tail*/
-	public ArrowGraphicTool(int nHead, boolean tail) {
+	public ConnectorLineTool(int nAnchors, boolean horizontalStart) {
 		
-		if(tail) {nHead=2; }
-		ArrowGraphic arrow = new ArrowGraphic();
-		{
-			model = arrow;
-			model.setNumerOfHeads(nHead);
-			model.getHead().setArrowStyle(ArrowGraphic.NORMAL_HEAD);
-			
-			if(tail) {
-				arrow.setHeadsSame(false);
-				arrow.getHead(ArrowGraphic.SECOND_HEAD).setArrowStyle(ArrowGraphic.FEATHER_TAIL);
-			}
-		}
+		
+		
+		Point2D.Double[] anchors=new Point2D.Double[nAnchors];
+		for(int i=0; i<nAnchors; i++) anchors[i]=new Point2D.Double();
 		setUpModel();
+		model.setAnchors(anchors);
+		model.setHorizontal(horizontalStart);
 	}
 	
 	
@@ -71,13 +64,15 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	
-		if (getPrimarySelectedObject() instanceof ArrowGraphic) return;
+		if (getPrimarySelectedObject() instanceof ConnectorGraphic) return;
 		int cx = getClickedCordinateX();
 		int cy = getClickedCordinateY();
-		ArrowGraphic bg = createArrow(cx, cy);
+		ConnectorGraphic bg = createLine(cx, cy, 15);
+		
 		setPrimarySelectedObject(bg);
-		setSelectedHandleNumber(1);
-		super.setPressedSmartHandle(bg.getSmartHandleList().getHandleNumber(1));;
+		int handle = ConnectorHandleList.getHandleIDForAnchor(bg.getAnchors().length-1);
+		setSelectedHandleNumber(handle);
+		super.setPressedSmartHandle(bg.getSmartHandleList().getHandleNumber(handle));;
 		
 		GraphicLayer layer = gmp.getTopLevelLayer().getSelectedContainer();
 				layer.add(bg);
@@ -89,25 +84,23 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	}
 	
 	/**
-	creates the arrow at the given point
+	creates a horizontal line at the given point
 	 */
-	public ArrowGraphic createArrow(double d, double e) {
-		ArrowGraphic bg = new ArrowGraphic();
+	public ConnectorGraphic createLine(double lx, double ly, double length) {
+		ConnectorGraphic bg = new ConnectorGraphic(true, new Point2D.Double(lx,ly), new Point2D.Double(lx+length,ly-length/2), new Point2D.Double(lx+length*2,ly));
+		if(!model.isHorizontal())
+			 bg= new ConnectorGraphic(false, new Point2D.Double(lx,ly), new Point2D.Double(lx+length/2,ly+length), new Point2D.Double(lx,ly+length*2));
 		
-		bg.setHeadsSame(model.headsAreSame());
 		bg.copyAttributesFrom(model);
-		bg.copyArrowAtributesFrom(model);
 		bg.copyColorsFrom(model);
 		
-		
-		bg.setLocation(d, e);
 		return bg;
 	}
 	
 	/**creates an arrow that stretches from one end of the rectangle to another*/
-	public ArrowGraphic createShape(Rectangle r) {
-		ArrowGraphic createArrow = createArrow(r.getX(), r.getY());
-		createArrow.setPoints(new Point2D.Double(r.getX(), r.getY()), new Point2D.Double(r.getMaxX(), r.getMaxY()));
+	public ConnectorGraphic createShape(Rectangle r) {
+		ConnectorGraphic createArrow = createLine(r.getX(), r.getY(), r.width);
+		
 		return createArrow;
 	}
 	
@@ -119,7 +112,7 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	
 	@Override
 	public String getToolTip() {
-			return "Draw an Arrow";
+			return "Draw an horizontal or vertical line";
 		}
 	
 
@@ -129,15 +122,13 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	}
 	
 	public String getShapeName() {
-		if(model.getNHeads()==0)
-			return "Line";
-		return "Arrow";
+		return this.getModelObject().getShapeName();
 	}
 	public Icon getIcon() {
 		return model.getTreeIcon();
 	}
 
-	public ArrowGraphic getModelArrow() {
+	public ConnectorGraphic getModelObject() {
 		return model;
 	}
 

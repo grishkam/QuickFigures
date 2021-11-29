@@ -20,6 +20,7 @@
  */
 package handles;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -34,7 +35,7 @@ A handle list for moving the anchor points of a connector
  */
 public class ConnectorHandleList extends SmartHandleList{
 
-	public static int CONNECTOR_HANDLE_CODE=170000;
+	public static final int CONNECTOR_HANDLE_CODE=170000;
 
 	/**
 	 * 
@@ -53,6 +54,14 @@ public class ConnectorHandleList extends SmartHandleList{
 	}
 	
 	
+	/**returns the handle id for anchor number i
+	 * @param i
+	 * @return
+	 */
+	public static int getHandleIDForAnchor(int i) {
+		return CONNECTOR_HANDLE_CODE+i;
+	}
+	
 	/**
 	A handle that allows the user to adjust the location of a connector graphic
 	 */
@@ -65,39 +74,81 @@ public class ConnectorHandle extends SmartHandle {
 		 */
 		private static final long serialVersionUID = 1L;
 	private int target;
+	private Point2D downpoint=new Point2D.Double();
 
 	/**
 	 * @param i
 	 */
 	public ConnectorHandle(int i) {
 		this.target=i;
-		this.setHandleNumber(CONNECTOR_HANDLE_CODE+i);
+		this.setHandleNumber(getHandleIDForAnchor(i));
 	}
+
+	
 	
 	@Override
 	public
 	Point2D getCordinateLocation() {
-		if(target==1) return new Point2D.Double(0.5*(connector.getAnchors()[0].getX()+connector.getAnchors()[2].getX()), connector.getAnchors()[1].getY());
-		return connector.getAnchors()[target];
+		if(target==1&&nAnchors()>2) 
+			return new Point2D.Double(0.5*(connector.getAnchors()[0].getX()+connector.getAnchors()[2].getX()), connector.getAnchors()[1].getY());
+		if(target==1&&nAnchors()==2&&connector.isHorizontal()) 
+			return new Point2D.Double(connector.getAnchors()[1].getX(), connector.getAnchors()[0].getY());
+		if(target==1&&nAnchors()==2&&!connector.isHorizontal()) 
+			return new Point2D.Double(connector.getAnchors()[0].getX(), connector.getAnchors()[1].getY());
+		
+		if(target<nAnchors())
+			return connector.getAnchors()[target];
+		else return new Point2D.Double();
+	}
+	
+	@Override
+	public boolean isHidden() {
+		if(target>=nAnchors())
+			return true;
+		return super.isHidden();
+	}
+
+	/**
+	 * @return
+	 */
+	public int nAnchors() {
+		return connector.getAnchors().length;
+	}
+	
+	
+	/**called when a user drags a handle */
+	public void handlePress(CanvasMouseEvent lastDragOrRelMouseEvent) {
+		 downpoint = lastDragOrRelMouseEvent.getCoordinatePoint();
 	}
 	
 	/**called when a user drags a handle */
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 		int handlenum = target;
-		connector.getAnchors()[target].setLocation(lastDragOrRelMouseEvent.getCoordinatePoint());
+		Point point = lastDragOrRelMouseEvent.getCoordinatePoint();
+		connector.getAnchors()[target].setLocation(point);
 		
 		
-		if (handlenum<connector.getAnchors().length) 
-			connector.getAnchors()[handlenum].setLocation(lastDragOrRelMouseEvent.getCoordinatePoint());
+		if (handlenum<nAnchors()) 
+			connector.getAnchors()[handlenum].setLocation(point);
 		
 		if(connector.isHorizontal()) {
 			
-		} else if (connector.getAnchors().length>2) {
+		} else if (nAnchors()>2) {
 			double nx=connector.getAnchors()[0].getX()+connector.getAnchors()[2].getX();
 			nx/=2;
 			connector.getAnchors()[1].setLocation(nx, connector.getAnchors()[1].getY());
 		}
 	
+		
+		double liftY = Math.abs(point.getY()-downpoint.getY());
+		double liftX = Math.abs(point.getX()-downpoint.getX());
+		if(nAnchors()==2 && connector.isHorizontal()&&liftX>0&&liftY/liftX>5) {
+			connector.setHorizontal(false);
+		}else
+			if(nAnchors()==2 && !connector.isHorizontal()&&liftY>0&&liftX/liftY>5) {
+				connector.setHorizontal(true);
+			}
+		
 	}
 
 }

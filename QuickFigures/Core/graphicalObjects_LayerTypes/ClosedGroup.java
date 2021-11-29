@@ -462,7 +462,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
-		ArtLayerRef sub = aref.createSubRefG();
+		ArtLayerRef sub = aref.createSubRef();
 		sub.setName(getName());
 		for(ZoomableGraphic layer: this.getTheInternalLayer() .getItemArray()) try{
 			if (layer instanceof  IllustratorObjectConvertable) {
@@ -470,7 +470,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 				ills.toIllustrator(sub);
 			}
 		}catch (Throwable t) {
-			
+			IssueLog.logT(t);
 		}
 		return sub;
 	}
@@ -558,6 +558,12 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 		int i = getParentLayer().getItemArray().indexOf(this);
 		getParentLayer().add(getTheInternalLayer());
+		ArrayList<ZoomableGraphic> items = this.getTheInternalLayer().getAllGraphics();
+		for(ZoomableGraphic item: items) {
+			if(item instanceof LocatedObject2D) {
+				((LocatedObject2D) item).moveLocation(tx,ty);
+			}
+		}
 		getParentLayer().moveItemToIndex(getTheInternalLayer(), i);//does not move the item correctly
 		
 		getParentLayer().remove(this);
@@ -609,7 +615,9 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ungroup();
+					boolean answer = ShowMessage.showOptionalMessage("Warning", false, "Breaking groups can create large numbers of individual objects", "too many separate objects can lead to crashes when performing specific tasks");
+					if(answer)
+						ungroup();
 					
 					
 				}

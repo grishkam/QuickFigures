@@ -46,7 +46,7 @@ public class ZIllustratorScriptGenerator {
 	}
 	public void setScale(double d) {scale=d;}
 	
-	public String accumulatedscrip="";
+	public StringBuilder accumulatedscrip=new StringBuilder();
 	private String pathOfImages="temp";
 	boolean deleteonExit=true;
 	
@@ -63,7 +63,8 @@ public class ZIllustratorScriptGenerator {
 	/**Adds lines of code the the accumulated javascript*/
 	void addScript(String... arg) {
 		for (String st: arg) {
-			accumulatedscrip+='\n'+st;
+			accumulatedscrip.append('\n');
+			accumulatedscrip.append(st);
 		}
 	}
 
@@ -71,8 +72,8 @@ public class ZIllustratorScriptGenerator {
 	/**saves the string containing javascript code and opens it.
 	 * resets the accumulated script*/
 	public void execute() {
-		savejsxAndRun(accumulatedscrip, DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+AdobeScriptGenerator.outputFile);
-		accumulatedscrip="";
+		savejsxAndRun(accumulatedscrip.toString(), DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+AdobeScriptGenerator.outputFileSubPath+AdobeScriptGenerator.outputFile);
+		accumulatedscrip=new StringBuilder();
 	}
 	public  static void savejsxAndRun(String javascript, String directoryJSX){
 		IssueLog.log("File inside "+directoryJSX);

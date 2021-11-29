@@ -53,7 +53,7 @@ public class FileChoiceUtil {
 				    "",
 				    JOptionPane.YES_NO_OPTION
 				    );
-			if (i==0) {
+			if (i==JOptionPane.YES_OPTION) {
 				return true;
 				
 			}

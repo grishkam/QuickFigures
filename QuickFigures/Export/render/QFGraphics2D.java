@@ -47,6 +47,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.FreeformShape;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -86,6 +87,7 @@ public class QFGraphics2D extends AbstractGraphics2D {
 	@Override
 	public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
 		IssueLog.log("rendered image draw not yet implemented");
+		throw new NullPointerException();
 	}
 
 	@Override
@@ -151,8 +153,8 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		 this.getTransform().transform(point1, point1);
 		graphicImage .setLocationUpperLeft(point1);
 		getLayer().add(graphicImage);
-		
-		return false;
+		throw new NullPointerException();
+		//return false;
 	}
 
 	/**
@@ -218,7 +220,7 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		else if(this.getStroke() instanceof BasicStroke) {
 			
 			ShapeGraphic bs = createShapeGraphic(s);
-			IssueLog.log("Drawing shape "+bs);
+			
 			//bs.setFilled(false);//not sure why but when some shapes are set to filled here, they are made black when exported as SVG
 			bs.setFillColor(new Color(0,0,0,0));
 			bs.setStrokeColor(getColor());
@@ -285,16 +287,7 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		ShapeGraphic output =null;
 	
 		
-		 output = new BasicShapeGraphic(s) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			public void moveLocation(double dx, double dy) {//added so user will be able to move this shape
-				//setShape(AffineTransform.getTranslateInstance(dx, dy).createTransformedShape(getShape()));
-			}
-		};
+		 output = new FreeformShape(s);
 		output.setName("Shape "+count);
 		count++;
 		

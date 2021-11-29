@@ -35,6 +35,7 @@ import graphicActionToolbar.PSActionTool;
 import graphicActionToolbar.QuickFigureMaker;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.ComplexText_GraphicTool;
+import graphicTools.ConnectorLineTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.RegularPolygonGraphicTool;
 import graphicTools.Text_GraphicTool;
@@ -44,6 +45,8 @@ import graphicalObjects_Shapes.ComplexBlobShape;
 import graphicalObjects_Shapes.ComplexStar;
 import graphicalObjects_Shapes.GearShape;
 import graphicalObjects_Shapes.NotchedRectangleGraphic;
+import graphicalObjects_Shapes.OpenRectangleGraphic;
+import graphicalObjects_Shapes.OpenTriangleGraphic;
 import graphicalObjects_Shapes.PlusGraphic;
 import graphicalObjects_Shapes.RightTriangleGraphic;
 import graphicalObjects_Shapes.RoundedRectangleGraphic;
@@ -164,6 +167,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 
 	out.add(new ShapeGraphicTool(new TriangleGraphic(standardRectangle)));
 	
+	
 	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePositions.LOWER_RIGHT)));
 	out.add(new  ShapeGraphicTool(new RightTriangleGraphic(standardRectangle, RectangleEdgePositions.LOWER_LEFT)));
 	out.add(new ShapeGraphicTool(new PlusGraphic(standardRectangle)));
@@ -256,10 +260,17 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 	/**Returns tool for drawing simple lines*/
 	public static ArrayList<ToolBit> getLineGraphicBits() {
 		ArrayList<ToolBit> out = new ArrayList<ToolBit>();
-	
+		
+		Rectangle standardRectangle = new Rectangle(0,0,5,5);
+		out.add(new ShapeGraphicTool(new OpenRectangleGraphic(standardRectangle)));
+		out.add(new ShapeGraphicTool(new OpenTriangleGraphic(standardRectangle)));
+		out.add(new ConnectorLineTool(3,true));
+		out.add(new ConnectorLineTool(3,false));
 		ArrowGraphicTool e = new ArrowGraphicTool(0);
 		e.getModelArrow().setStrokeWidth(1);
 		out.add(e);
+		
+	
 		return out;
 		
 	}

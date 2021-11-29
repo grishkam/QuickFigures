@@ -21,6 +21,7 @@
 package locatedObject;
 
 import java.awt.BasicStroke;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
@@ -29,6 +30,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import graphicalObjects_Shapes.ShapeGraphic;
+import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
 /**A list of points that form a Path with many methods
@@ -324,6 +327,7 @@ public class PathPointList extends ArrayList<PathPoint> {
 			
 			
 			PathPoint newpp = new PathPoint(new Point2D.Double(d[0], d[1]));
+			int lastType=-90;
 			
 			if (type==PathIterator.SEG_CLOSE) {
 				if (lastpp!=null) {
@@ -363,16 +367,26 @@ public class PathPointList extends ArrayList<PathPoint> {
 			
 			/**I dont have the pathpoint list do quad directly but assume
 			  that a cubic with the two control points being equal is 
-			  very close in appearance to a quad curve. not sure
-			  how good that guess is */
+			  very close in appearance to a quad curve. Approximation and not sure
+			  how good that guess is. images look wrong export packages have error messages when quads are included in paths */
 			if (type==PathIterator.SEG_QUADTO) {
-				newpp.setCurveControl1(new Point2D.Double(d[2],d[3]));
-				if (lastpp!=null) {
-					lastpp.setCurveControl2(new Point2D.Double(d[2],d[3]));
+				java.awt.geom.Point2D.Double anchor = new Point2D.Double(d[2],d[3]);
+				newpp.setAnchor(anchor);
+				Point2D curveControl = new Point2D.Double(d[0],d[1]);
+				
+				newpp.setCurveControl1(ShapeGraphic.betweenPoint(curveControl, anchor, 0.666666666));//green one
+				
+				newpp.select();
+				if (lastpp!=null) {//edited on nov 28 2021 TODO: finally get this to work right
+					lastpp.setCurveControl2(ShapeGraphic.betweenPoint( curveControl,lastpp.getAnchor(),0.6666666));
 				}
 				
 			
 			}
+			
+			
+			
+			
 			
 			if (type==PathIterator.SEG_LINETO||type==PathIterator.SEG_MOVETO) {
 				newpp.setCurveControl1(new Point2D.Double(d[0],d[1]));
@@ -394,6 +408,7 @@ public class PathPointList extends ArrayList<PathPoint> {
 			
 			pi.next();
 			lastpp=newpp;
+			lastType=type;
 		}
 		
 		return output;
@@ -981,5 +996,16 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 		for(locatedObject.PathPoint p: this) {
 			p.deselect();
 		}
+	}
+	
+	
+	/**returns a version of the shape that lacks quad curves
+	 * @param path2
+	 * @return
+	 */
+	public static Path2D convertToCubicShape(Shape path2) {
+		PathPointList pa = createFromIterator(path2.getPathIterator(AffineTransform.getTranslateInstance(0, 0)));
+		Path2D it2 = pa.createPath(true);
+		return it2;
 	}
 }

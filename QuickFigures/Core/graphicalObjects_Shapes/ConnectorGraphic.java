@@ -31,27 +31,26 @@ import java.awt.geom.Point2D;
 import javax.swing.Icon;
 
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_Shapes.ShapeGraphic;
 import handles.ConnectorHandleList;
 import handles.HasSmartHandles;
 import handles.SmartHandleList;
 import iconGraphicalObjects.IconTraits;
 import locatedObject.BasicStrokedItem;
-import locatedObject.RectangleEdges;
 import locatedObject.Scales;
 import standardDialog.graphics.GraphicDisplayComponent;
 
-/**A path consisting of strait vertical or horizontal lines with no curves */
+/**A path consisting of strait vertical or horizontal lines with no curves.
+ * Made to illustrate link between two datasets on a plot */
 public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHandles{
 
-	Point2D[] anchors=new Point2D[] {new Point(), new Point(), new Point()};
+	private Point2D[] anchors=new Point2D[] {new Point(), new Point(), new Point()};
 	private transient ConnectorHandleList smartHandles;
 	
 	private boolean horizontal=false;
 	
 	public ConnectorGraphic(boolean horizontal, Point2D... a) {
 		this.setName("Line link");
-		anchors=a;
+		setAnchors(a);
 		this.setHorizontal(horizontal);
 	}
 	
@@ -64,8 +63,14 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 			return buildFrom2Anchors();
 		return null;
 	}
+	
+	public String toString() {
+		String output="Connection: ";
+		for(Point2D p: anchors) {output+=p;}
+		return output;
+	}
 
-	/**
+	/**returns the Shape of the line based on the current anchors
 	 * @return
 	 */
 	public Shape buildFrom3Anchors() {
@@ -141,7 +146,7 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	  */
 	@Override
 	public Shape getOutline() {
-		return  new BasicStroke(this.getStrokeWidth()+2).createStrokedShape(getShape());
+		return  new BasicStroke(this.getStrokeWidth()+2).createStrokedShape(super.getRotationTransformShape());
 	}
 	
 	
@@ -150,7 +155,7 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	public SmartHandleList getSmartHandleList() {
 		if (smartHandles==null)
 			smartHandles=new ConnectorHandleList(this);
-		return smartHandles;
+		return SmartHandleList.combindLists(smartHandles, getButtonList());
 	}
 
 	/**returns the anchor locations for the connector*/
@@ -161,10 +166,10 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	/**creates a copy*/
 	public ConnectorGraphic copy() {
 		
-		ConnectorGraphic out = new ConnectorGraphic(this.isHorizontal(),new Point2D[anchors.length]);
-		for(int i=0; i<anchors.length; i++) 
-			{	out.anchors[i]=new Point2D.Double();
-				out.anchors[i].setLocation(anchors[i]);
+		ConnectorGraphic out = new ConnectorGraphic(this.isHorizontal(),new Point2D[getAnchors().length]);
+		for(int i=0; i<getAnchors().length; i++) 
+			{	out.getAnchors()[i]=new Point2D.Double();
+				out.getAnchors()[i].setLocation(getAnchors()[i]);
 			}
 		out.copyAttributesFrom(this);
 		out.copyColorsFrom(this);
@@ -177,11 +182,18 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	
 	@Override
 	public Rectangle getBounds() {
-		return getShape().getBounds();
+		Rectangle bounds = getShape().getBounds();
+		if(bounds.width==0)
+			bounds.width=1;//align options and possibly other features wont work if area is zero
+		if (bounds.height==0)
+			bounds.height=1;//align options and possibly other features wont work if area is zero
+		return bounds;
 	}
 
 	@Override
 	public String getShapeName() {
+		if(this.getAnchors().length>2)
+			return "Bracket Line";
 		return "Line link";
 	}
 	
@@ -193,16 +205,37 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	
 	@Override
 	public Icon getTreeIcon() {
-		return new GraphicDisplayComponent(createIconArrow() );
+		return new GraphicDisplayComponent(createIconLine() );
 		
 	}
 	
 	/**creates a small arrow that is used as an icon for the arrow*/
-	ConnectorGraphic createIconArrow() {
-		ConnectorGraphic out = new ConnectorGraphic(true, new Point(0,IconTraits.TREE_ICON_HEIGHT/2-1), new Point(IconTraits.TREE_ICON_WIDTH-1,IconTraits.TREE_ICON_HEIGHT/2-1));
+	ConnectorGraphic createIconLine() {
+		int hLevel = IconTraits.TREE_ICON_HEIGHT/3-1;
+		int wLevel = IconTraits.TREE_ICON_WIDTH-1;
+		ConnectorGraphic out = new ConnectorGraphic(true, new Point(0,hLevel), new Point(wLevel,hLevel));
+		if(!isHorizontal())
+			out = new ConnectorGraphic(false, new Point(wLevel/2,0), new Point(wLevel/2,hLevel*3));
+		
+		if(getAnchors().length>2) {
+			out = new ConnectorGraphic(false, new Point(0,             hLevel+5), 
+											 new Point(wLevel/2,      hLevel-4), 
+											 new Point(wLevel,        hLevel+10));
+			
+		}
+		
+		if(getAnchors().length>2&&this.isHorizontal()) {
+			out = new ConnectorGraphic(true, 
+					new Point(6,0), 
+					new Point(wLevel,hLevel*2),
+					new Point(0,hLevel+10)
+					);
+			
+		}
+		
+		
 		out.copyColorsFrom(this);
 		out.copyAttributesFrom(this);
-		
 		
 		return out;
 	}
@@ -219,6 +252,38 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 
 	public void setHorizontal(boolean horizontal) {
 		this.horizontal = horizontal;
+	}
+
+	public void setAnchors(Point2D[] anchors) {
+		this.anchors = anchors;
+	}
+	
+	/**since this shape is niether filled nor rotatable*/
+	@Override
+	public boolean isFillable() {return false;}
+	public boolean doesSetAngle() {return false;}
+	public double getAngle() {return 0;}
+	
+	@Override
+	public Point2D getLocationUpperLeft() {
+		return this.getBounds().getLocation();
+	}
+	
+	@Override
+	public void setLocationUpperLeft(double x, double y) {
+		Point2D px = getLocationUpperLeft();
+		this.moveLocation(x-px.getX(), y-px.getY());
+	}
+	
+	/**sets the location. does not trigger the listeners*/
+	public void setLocation(double x,double y) {
+		this.setLocationUpperLeft(x, y);
+	}
+	
+	/**sets the location. does not trigger the listeners
+	 * @return */
+	public Point2D getLocation() {
+		return getLocationUpperLeft();
 	}
 
 }

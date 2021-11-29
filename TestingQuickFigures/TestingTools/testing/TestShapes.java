@@ -42,6 +42,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.ConnectorGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RegularPolygonGraphic;
@@ -511,6 +512,16 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		}
 		PathGraphic p = new CartoonPolygonAdder(0).createCartoon(false, false);
 		l.add(p);
+		
+		
+		ConnectorGraphic h2 = new ConnectorGraphic(true, new Point(100, 200), new Point(165, 200));
+		h2.setStrokeColor(Color.green.darker());
+		l.add(h2);
+		
+		
+		h2 = new ConnectorGraphic(false, new Point(150, 400), new Point(265, 200));
+		h2.setStrokeColor(Color.red.darker());
+		l.add(h2);
 	}
 	
 	
