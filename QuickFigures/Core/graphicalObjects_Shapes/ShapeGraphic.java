@@ -61,6 +61,7 @@ import layersGUI.HasTreeLeafIcon;
 import locatedObject.BasicStrokedItem;
 import locatedObject.DefaultPaintProvider;
 import locatedObject.Fillable;
+import locatedObject.LocatedObject2D;
 import locatedObject.PaintProvider;
 import locatedObject.PathPointList;
 import locatedObject.RectangleEdges;
@@ -733,6 +734,20 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 			oo.setUseFilledShapeAsOutline(true);
 		return oo;
 	}
+	
+	/**returns a filled shape that matches the stroke
+	 * @return
+	 */
+	public ShapeGraphic createFilledStrokeCopy() {
+		Shape s = this.getRotationTransformShape();
+		s=this.getStroke().createStrokedShape(s);
+		BasicShapeGraphic output = new FreeformShape(s);
+		output.setStrokeWidth(-1);//no stroke
+		output.setFillColor(this.getStrokeColor());
+		output.setFilled(true);
+		return output;
+	}
+	
 	
 	
 	/**returns the shape that will be used for the path copy

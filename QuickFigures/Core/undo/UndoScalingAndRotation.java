@@ -25,6 +25,7 @@ import java.awt.geom.Point2D;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.ConnectorGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
@@ -48,7 +49,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 	private RectangularGraphic iRect;
 	private PathGraphic fpath;
 	private PathGraphic ipath;
-	private PathEditUndo pathUndo;
+	private AbstractUndoableEdit2 pathUndo;
 	private BarGraphic fBar;
 	private BarGraphic iBar;
 	private double iScale;
@@ -84,6 +85,14 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 			
 			ipath=((PathGraphic)o).copy();
 			pathUndo=new PathEditUndo((PathGraphic) o);
+			
+			
+			}
+		
+		if (o instanceof ConnectorGraphic) {
+			
+			ipath=((PathGraphic)o).copy();
+			pathUndo=new ConnectorAnchorChangeUndo((ConnectorGraphic) o);
 			
 			
 			}

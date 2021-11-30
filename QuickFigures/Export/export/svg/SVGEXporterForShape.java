@@ -30,6 +30,7 @@ import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**An SVG exporter for shapes. works somewhat differently in the special case
  * of scale bars
@@ -39,8 +40,6 @@ public class SVGEXporterForShape extends SVGExporter {
 
 	private ShapeGraphic shape;
 	
-	/**set to true if a transparent fill should be used for empty () shapes*/
-	private boolean useTransparentFill=false;
 
 	public  SVGEXporterForShape(ShapeGraphic shape) {
 		this.shape=shape;
@@ -60,6 +59,13 @@ public Element toSVG(Document dom, Element e) {
 		//return b.getBreakdownGroup().getSVGEXporter().toSVG(dom, e);
 	}
 	
+	if(!shape.isFilled()||shape.getFillColor().getAlpha()==0) {
+		if(BatiKExportContext.currentContext==BatiKExportContext.EPS)
+			{
+			ShowMessage.showOptionalMessage("EPS file format does not support semi-transparent colors", true, "EPS file format not compatible with some colors", "Will convert completely transparent shapes to empty forms");
+			shape=shape.createFilledStrokeCopy();
+		}
+	}
 	
 	if (shape instanceof FrameGraphic) {
 		IssueLog.log("frames notperfect");
@@ -102,10 +108,12 @@ public Element toSVG(Document dom, Element e) {
 	
 	
 	if ((shape.isFilled())) {//for some reason EPS files after transcoding have a black fill instead of nothing but making the fill transparent also does not work well
-		IssueLog.log("Setting up fill paint for "+shape);
+		//EPS transcoder does not use transparent fill colors nor does it appear to allow unfilled shapes
 		addSVGDescriptor( fillpaint, element);
 	} else {
-		element.setAttribute("fill", "none");//does not fix issue with eps but does no harm
+		
+		element.setAttribute("fill", "none");//fill should be none if no attribute is given. This should not be necesary but does no harm. problem might be with EPS transcoder
+		//element.setAttribute("style", "fill: #0000ff; fill-opacity: 0.0;  ");//does not fix issue with eps but does no harm. problem might be with EPS transcoder
 	}
 	
 
@@ -118,10 +126,7 @@ public Element toSVG(Document dom, Element e) {
 	
 	}
 
-	//gra2D.setColor(this.getStrokeColor());;
-	//SVGColor storkeColor = new SVGColor(context);
-	//SVGDescriptor to = storkeColor.toSVG(gra2D.getGraphicContext());
-	//strokeColor=getStrokeColor();
+
 
 	
 }

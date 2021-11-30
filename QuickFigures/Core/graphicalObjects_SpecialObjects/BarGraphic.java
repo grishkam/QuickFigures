@@ -55,6 +55,8 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicHolder;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.FreeformShape;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasSmartHandles;
@@ -1119,6 +1121,14 @@ public AbstractUndoableEdit2 provideUndoForDialog() {
 @Override
 public String getShapeName() {
 	return "Scale Bar";
+}
+
+
+/**Overrides the superclass method
+ * @return
+ */
+public ShapeGraphic createFilledStrokeCopy() {
+	return this;
 }
 
 
