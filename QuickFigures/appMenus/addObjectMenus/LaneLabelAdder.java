@@ -43,7 +43,6 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
 import messages.ShowMessage;
-import standardDialog.strings.StringInputPanel;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;

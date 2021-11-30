@@ -130,8 +130,8 @@ public class SVGsaver {
 	}
 
 	/**Saved the figure to the given path*/
-	public void saveFigure(String newpath, DisplayedImage diw) throws TransformerException, ParserConfigurationException {
-		
+	public void saveFigure(String newpath, DisplayedImage diw, BatiKExportContext e) throws TransformerException, ParserConfigurationException {
+		BatiKExportContext.currentContext=e;
 		 GraphicLayer set = diw.getImageAsWorksheet().getTopLevelLayer();
 		  Document doc = makeDocument(newpath);
 		  Element element = createSVGelememnt(doc);

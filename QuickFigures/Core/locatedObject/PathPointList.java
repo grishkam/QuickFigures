@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import graphicalObjects_Shapes.ShapeGraphic;
-import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
 /**A list of points that form a Path with many methods

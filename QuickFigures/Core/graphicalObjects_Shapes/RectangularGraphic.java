@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 29, 2021
  * Version: 2021.2
  */
 package graphicalObjects_Shapes;
@@ -610,11 +610,19 @@ public void setSquareLock(boolean b) {
 		r1.setStrokeColor(c);
 		return r1;
 	}
+	
 	/**returns a filled rectangle with not visible stroke*/
 	public static RectangularGraphic filledRect(Rectangle r) {
+		return filledRect(r, null);
+	}
+	
+	/**returns a filled rectangle with not visible stroke*/
+	public static RectangularGraphic filledRect(Rectangle r, Color fillColor) {
 		RectangularGraphic output = new RectangularGraphic(r);
 		output.setFilled(true);
 		output.setStrokeWidth(-1);//no stroke
+		if(fillColor!=null)
+			output.setFillColor(fillColor);
 		return output;
 		}
 

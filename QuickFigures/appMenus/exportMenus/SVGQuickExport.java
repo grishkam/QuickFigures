@@ -21,6 +21,7 @@ import java.awt.Window;
 import java.io.File;
 
 import applicationAdapters.DisplayedImage;
+import export.svg.BatiKExportContext;
 import export.svg.SVGsaver;
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
@@ -80,7 +81,7 @@ public class SVGQuickExport extends QuickExport {
 			 diw.updateDisplay();
 			 SVGsaver saver = new SVGsaver();
 			   
-			  saver.saveFigure(newpath, diw);
+			  saver.saveFigure(newpath, diw, BatiKExportContext.SVG);
 		} catch (Exception e) {
 			IssueLog.log(e);
 		} 

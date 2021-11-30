@@ -57,7 +57,6 @@ import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorObjectConvertable;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
-import render.QFGraphics2D;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import utilityClasses1.ArraySorter;

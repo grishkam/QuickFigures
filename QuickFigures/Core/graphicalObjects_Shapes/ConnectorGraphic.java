@@ -25,8 +25,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.Path2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import javax.swing.Icon;
 
@@ -35,13 +36,22 @@ import handles.ConnectorHandleList;
 import handles.HasSmartHandles;
 import handles.SmartHandleList;
 import iconGraphicalObjects.IconTraits;
+import illustratorScripts.ArtLayerRef;
+import illustratorScripts.PathItemRef;
 import locatedObject.BasicStrokedItem;
+import locatedObject.PathPoint;
+import locatedObject.PathPointList;
 import locatedObject.Scales;
+import logging.IssueLog;
+import menuUtil.PopupMenuSupplier;
+import popupMenusForComplexObjects.ConnectorMenu;
+import popupMenusForComplexObjects.PathGraphicMenu;
 import standardDialog.graphics.GraphicDisplayComponent;
 
 /**A path consisting of strait vertical or horizontal lines with no curves.
- * Made to illustrate link between two datasets on a plot */
-public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHandles{
+ * Made to illustrate link between two datasets on a plot.
+ * Works similarly to connectors in powerpoint */
+public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHandles{
 
 	private Point2D[] anchors=new Point2D[] {new Point(), new Point(), new Point()};
 	private transient ConnectorHandleList smartHandles;
@@ -52,19 +62,55 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 		this.setName("Line link");
 		setAnchors(a);
 		this.setHorizontal(horizontal);
+		this.setFilled(false);
 	}
 	
 	/**creates the shape*/
 	public Shape getShape() {
-		
-		if(getAnchors().length==3)
-			return buildFrom3Anchors();
-		else if(getAnchors().length==2)
-			return buildFrom2Anchors();
+		try {
+			return updateShapeFromAnchors();
+		} catch (Exception e) {
+			IssueLog.log("problem drawing shape"+this.toString());
+			IssueLog.logT(e);
+			
+		}
 		return null;
 	}
+
+	/**
+	 * @return
+	 */
+	public Shape updateShapeFromAnchors() {
+		ArrayList<Point2D> updatedShape = null;
+		if (getAnchors().length == 3)
+			updatedShape = buildFrom3Anchors();
+		else if (getAnchors().length == 2)
+			updatedShape = buildFrom2Anchors();
+		
+		PathPointList points = this.getPoints();
+		if(getPoints()!=null&&points.size()==updatedShape.size()) 
+			{
+			for(int i=0; i<updatedShape.size(); i++) {
+				Point2D newP = updatedShape.get(i);
+				PathPoint pathP = points.get(i);
+				pathP.setAnchorPoint(newP);
+				pathP.setCurveControl1(newP);
+				pathP.setCurveControl2(newP);
+				this.updatePathFromPoints();
+			}
+			} else {
+		
+			PathPointList newList = new PathPointList();
+			for(Point2D p: updatedShape) {
+				newList.addPoint(p);
+			}
+			this.setPoints(newList);
+		}
+		
+		return getPath();
+	}
 	
-	public String toString() {
+	public String summaryString() {
 		String output="Connection: ";
 		for(Point2D p: anchors) {output+=p;}
 		return output;
@@ -73,43 +119,59 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	/**returns the Shape of the line based on the current anchors
 	 * @return
 	 */
-	public Shape buildFrom3Anchors() {
+	public ArrayList<Point2D> buildFrom3Anchors() {
+		double x0 = getAnchors()[0].getX();
+		double y0 = getAnchors()[0].getY();
+		double x1 = getAnchors()[1].getX();
+		double y1 = getAnchors()[1].getY();
+		double y2 = getAnchors()[2].getY();
+		double x2 = getAnchors()[2].getX();
+		ArrayList<Point2D> thePath=new ArrayList<Point2D> ();
 		if(isHorizontal()) {
-			Path2D path1 = new Path2D.Double();
-			path1.moveTo(getAnchors()[0].getX(), getAnchors()[0].getY());
-			path1.lineTo(getAnchors()[1].getX(), getAnchors()[0].getY());
-			path1.lineTo(getAnchors()[1].getX(), getAnchors()[2].getY());
-			path1.lineTo(getAnchors()[2].getX(), getAnchors()[2].getY());
-			return path1;
+			
+			thePath.add(new Point2D.Double(x0, y0));
+			thePath.add(new Point2D.Double(x1, y0));
+			thePath.add(new Point2D.Double(x1, y2));
+			thePath.add(new Point2D.Double(x2, y2));
+			
 		}
 		else {
-			Path2D path1 = new Path2D.Double();
-			path1.moveTo(getAnchors()[0].getX(), getAnchors()[0].getY());
-			path1.lineTo(getAnchors()[0].getX(), getAnchors()[1].getY());
-			path1.lineTo(getAnchors()[2].getX(), getAnchors()[1].getY());
-			path1.lineTo(getAnchors()[2].getX(), getAnchors()[2].getY());
-			return path1;
+			
+			thePath.add(new Point2D.Double(x0, y0));
+		
+			thePath.add(new Point2D.Double(x0, y1));
+			thePath.add(new Point2D.Double(x2, y1));
+			thePath.add(new Point2D.Double(x2, y2));
+			
 		}
+		
+		return thePath;
 	}
 	
 	
+	
+
 	/**returns a strait line connector built from 1 or two 
 	 * @return
 	 */
-	public Shape buildFrom2Anchors() {
+	public ArrayList<Point2D> buildFrom2Anchors() {
+		ArrayList<Point2D> thePath=new ArrayList<Point2D> ();
 		if(isHorizontal()) {
-			Path2D path1 = new Path2D.Double();
-			path1.moveTo(getAnchors()[0].getX(), getAnchors()[0].getY());
-			path1.lineTo(getAnchors()[1].getX(), getAnchors()[0].getY());
 			
-			return path1;
+			thePath.add(new Point2D.Double(getAnchors()[0].getX(), getAnchors()[0].getY()));
+			thePath.add(new Point2D.Double(getAnchors()[1].getX(), getAnchors()[0].getY()));
+			thePath.add(new Point2D.Double(getAnchors()[1].getX(), getAnchors()[1].getY()));
+			
 		}
 		else {
-			Path2D path1 = new Path2D.Double();
-			path1.moveTo(getAnchors()[0].getX(), getAnchors()[0].getY());
-			path1.lineTo(getAnchors()[0].getX(), getAnchors()[1].getY());
-			return path1;
+			
+			thePath.add(new Point2D.Double(getAnchors()[0].getX(), getAnchors()[0].getY()));
+			thePath.add(new Point2D.Double(getAnchors()[0].getX(), getAnchors()[1].getY()));
+			thePath.add(new Point2D.Double(getAnchors()[1].getX(), getAnchors()[1].getY()));
+			
 		}
+		
+		return thePath;
 	}
 	
 	
@@ -193,8 +255,8 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	@Override
 	public String getShapeName() {
 		if(this.getAnchors().length>2)
-			return "Bracket Line";
-		return "Line link";
+			return "Bracket Conector";
+		return "Elbow Connector";
 	}
 	
 	@Override
@@ -213,9 +275,9 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	ConnectorGraphic createIconLine() {
 		int hLevel = IconTraits.TREE_ICON_HEIGHT/3-1;
 		int wLevel = IconTraits.TREE_ICON_WIDTH-1;
-		ConnectorGraphic out = new ConnectorGraphic(true, new Point(0,hLevel), new Point(wLevel,hLevel));
+		ConnectorGraphic out = new ConnectorGraphic(true, new Point(0,hLevel-5), new Point(wLevel,hLevel+8));
 		if(!isHorizontal())
-			out = new ConnectorGraphic(false, new Point(wLevel/2,0), new Point(wLevel/2,hLevel*3));
+			out = new ConnectorGraphic(false, new Point(wLevel/2-8,0), new Point(wLevel/2+8,hLevel+10));
 		
 		if(getAnchors().length>2) {
 			out = new ConnectorGraphic(false, new Point(0,             hLevel+5), 
@@ -285,5 +347,61 @@ public class ConnectorGraphic extends ShapeGraphic implements Scales, HasSmartHa
 	public Point2D getLocation() {
 		return getLocationUpperLeft();
 	}
+	
+	
+	/**returns the path point list*/
+	public PathPointList getPoints() {
+		if(super.getPoints()==null) {
+			IssueLog.log("null path point list detected");
+			this.updateShapeFromAnchors();
+		}
+		return super.getPoints();
+	}
+	
+	
+	/**override for the superclass*/
+	@Override
+	public Point2D getTransformPointsForPathGraphic(Point2D p) {
+		return p;
+	}
+	
+	
+	/**overrides the suberclass*/
+	@Override
+	public AffineTransform getTransformForPathGraphic() {
+		return  AffineTransform.getTranslateInstance(0,0);
+	}
 
+	/**returns the number of anchor points for this connector
+	 * @return
+	 */
+	public int nAnchors() {
+		return this.getAnchors().length;
+	}
+	
+	/**determines what popup menu matches this shape*/
+	public PopupMenuSupplier getMenuSupplier() {
+		return new ConnectorMenu(this);
+	}
+	
+
+	
+	public boolean isDrawClosePoint() {
+		return false;
+	}
+	
+	
+	/**since this subclass is already a path, its path copy is just a normal copy*/
+	public PathGraphic createPathCopy() {
+		
+		PathGraphic createIdenticalPath = createIdenticalPath();
+		createIdenticalPath.setLocation(0, 0);
+		return createIdenticalPath;
+	}
+
+	
+	/**creates the object within an illustrator art layer*/
+	public Object toIllustrator(ArtLayerRef aref) {
+		return this.createPathCopy().toIllustrator(aref);
+	}
 }

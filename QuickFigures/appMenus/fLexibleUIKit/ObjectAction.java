@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 29, 2021
  * Version: 2021.2
  */
 package fLexibleUIKit;
@@ -53,7 +53,7 @@ public abstract class ObjectAction<Type> implements ActionListener {
 	}
 	
 	public JMenuItem createJMenuItem(String st, Icon i) {
-		JMenuItem out=new JMenuItem(st);
+		JMenuItem out=new BasicSmartMenuItem(st);
 		out.setIcon(i);
 		out.addActionListener(this);
 		return out;

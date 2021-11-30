@@ -28,7 +28,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -36,7 +35,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -50,13 +48,10 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.KnowsTree;
 import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_LayerTypes.ClosedGroup.ClosedSmartHandle;
 import graphicalObjects_Shapes.RectangularGraphic;
 import handles.HasSmartHandles;
-import handles.ReshapeHandleList;
 import handles.SmartHandle;
 import handles.SmartHandleList;
-import handles.ReshapeHandleList.ReshapeSmartHandle;
 import iconGraphicalObjects.IconUtil;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.IllustratorObjectConvertable;
@@ -73,7 +68,6 @@ import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
-import menuUtil.SmartMenuItem;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 

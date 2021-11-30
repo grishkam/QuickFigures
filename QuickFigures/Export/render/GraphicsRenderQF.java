@@ -12,7 +12,6 @@ package render;
 
 import java.awt.Graphics2D;
 
-import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 
 /**

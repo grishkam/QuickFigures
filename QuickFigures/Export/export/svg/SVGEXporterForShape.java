@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 29, 2021
  * Version: 2021.2
  */
 package export.svg;
@@ -32,10 +32,15 @@ import graphicalObjects_SpecialObjects.BarGraphic;
 import logging.IssueLog;
 
 /**An SVG exporter for shapes. works somewhat differently in the special case
- * of scale bars*/
+ * of scale bars
+ * TODO: fix issue with EPS export in that shapes without a fill are filled in black. this does not occur with SVG or PDF
+  so it might be a problem with the EPS transcoder. if I am not mistaken, this problem appeared to be fixed in some earlier versions */
 public class SVGEXporterForShape extends SVGExporter {
 
 	private ShapeGraphic shape;
+	
+	/**set to true if a transparent fill should be used for empty () shapes*/
+	private boolean useTransparentFill=false;
 
 	public  SVGEXporterForShape(ShapeGraphic shape) {
 		this.shape=shape;
@@ -91,14 +96,16 @@ public Element toSVG(Document dom, Element e) {
 	
 	Color fillColor = shape.getFillColor();
 	if(!shape.isFilled())
-		{fillColor=new Color(0,0,0,0);}//transparent fill color
+		{fillColor=new Color(0,0,0,0);}//transparent fill color. some formats 
 	
 	SVGPaintDescriptor fillpaint = new SVGPaint(context).toSVG(fillColor);
 	
 	
-	if (shape.isFilled()) {
-		
+	if ((shape.isFilled())) {//for some reason EPS files after transcoding have a black fill instead of nothing but making the fill transparent also does not work well
+		IssueLog.log("Setting up fill paint for "+shape);
 		addSVGDescriptor( fillpaint, element);
+	} else {
+		element.setAttribute("fill", "none");//does not fix issue with eps but does no harm
 	}
 	
 

@@ -29,6 +29,8 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.fop.render.ps.EPSTranscoder;
 
+import export.svg.BatiKExportContext;
+
 /**A class that functions to save a Worksheet as an .eps file*/
 public class EPSsaver extends PDFsaver{
 
@@ -46,7 +48,15 @@ public class EPSsaver extends PDFsaver{
 	}
 	
 
+	/**
+	 * @return
+	 */
+	@Override
+	protected
+	 BatiKExportContext getTheRightContext() {
 	
+		return BatiKExportContext.EPS;
+	}
 	
 	
 

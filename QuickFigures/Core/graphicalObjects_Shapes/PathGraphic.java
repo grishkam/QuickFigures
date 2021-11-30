@@ -194,6 +194,13 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	/**makes a copy*/
 	@Override
 	public PathGraphic copy() {
+		return createIdenticalPath();
+	}
+
+	/**returns a path that looks the same as this one
+	 * @return
+	 */
+	public PathGraphic createIdenticalPath() {
 		PathGraphic output = new PathGraphic(getPath());
 		copyColorAttributeTo(output);
 		output.setLocation(getLocation());
@@ -207,7 +214,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	/**since this subclass is already a path, its path copy is just a normal copy*/
 	public PathGraphic createPathCopy() {
-		return copy();
+		return createIdenticalPath();
 	}
 
 	/**given a location on the canvas, adds a new point to the path (from that location)
@@ -453,15 +460,15 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	
 	@Override
-	public Point getLocationUpperLeft() {
+	public Point2D getLocationUpperLeft() {
 		Rectangle b = getBounds();
 		return new Point(b.x, b.y);
 	}
 
 	@Override
 	public void setLocationUpperLeft(double x, double y) {
-		Point p = getLocationUpperLeft() ;
-		super.moveLocation(x-p.x, y-p.y);
+		Point2D p = getLocationUpperLeft() ;
+		super.moveLocation(x-p.getX(), y-p.getY());
 		outline=null;//so a new outline will be created next time its needed
 		reshapeListForSelectedPoints=null;
 	}
@@ -763,7 +770,11 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 					getArrowHead2().setPoint2(getTransformPointsForPathGraphic(lastPoint.getAnchor()));
 					boolean useCC = lastPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
 					if (useCC) getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
-					else getArrowHead2().setPoint1(getTransformPointsForPathGraphic(getPoints().getPreviousPoint(lastPoint).getCurveControl2()));
+					else {
+						PathPoint previousPoint = getPoints().getPreviousPoint(lastPoint);
+						Double newPP = previousPoint.getCurveControl2();
+						getArrowHead2().setPoint1(getTransformPointsForPathGraphic(newPP));
+					}
 					
 					getArrowHead2().moveNotchToHead1();
 					

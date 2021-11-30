@@ -46,7 +46,7 @@ abstract class QuickExportTest {
 	boolean opensFiles=false;
 	boolean prompt=false;
 	
-	TestExample testExample=null;//which cases to test. set to null if all should be tested
+	TestExample testExample=TestExample.FIGURE_WITH_INSETS;//which cases to test. set to null if all should be tested
 
 	/**set to true if user will view files one by one as they are being created*/
 	private boolean viewOnebyOne=false;

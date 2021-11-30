@@ -37,7 +37,7 @@ import ultilInputOutput.FileChoiceUtil;
 	
 	
 	
-	TestExample testCase=null;//which cases to test. set to null if all should be tested
+	TestExample testCase=TestExample.DIVERSE_SHAPES;//which cases to test. set to null if all should be tested
 
 
 	@Test

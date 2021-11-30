@@ -127,33 +127,35 @@ public class PathItemRef extends IllustratorObjectRef {
 		return output;
 	}
 	
+	
+	/**does not create correct path, will need to figure out a solution*/
 	public String createPathWithoutCurves(ArtLayerRef aref, Shape p) {
 		this.createItem(aref);
 		double x = p.getBounds().getCenterX();
 		double y = p.getBounds().getCenterX();
 		this.setLeftandTop((int)x, (int)y);
 		Shape p2 = AffineTransform.getTranslateInstance(0, 0).createTransformedShape(p);
-		String output=	refname+".setEntirePath([";
+		StringBuilder output=	new StringBuilder(refname+".setEntirePath([");
 		
 		PathIterator pi = p2.getPathIterator(new AffineTransform());
 		double[] d=new double[6];
 		
 		pi.currentSegment(d);
-		output+=pointToJSarray(new Point2D.Double(d[0], d[1])); 
+		output.append(pointToJSarray(new Point2D.Double(d[0], d[1]))); 
 		pi.next();
 		while (!pi.isDone()) {
 			pi.currentSegment(d);
 			//if (d[0]==0&& d[1]==0) {} else
-			output+=","+pointToJSarray(new Point2D.Double(d[0], d[1])); 
+			output.append(","+pointToJSarray(new Point2D.Double(d[0], d[1]))); 
 			
 			pi.next();
 		}
 		
 		
-		output+= ""+"]);";
-		addScript(output);
+		output.append(""+"]);");
+		addScript(output.toString());
 		
-		return output;
+		return output.toString();
 		
 	}
 	

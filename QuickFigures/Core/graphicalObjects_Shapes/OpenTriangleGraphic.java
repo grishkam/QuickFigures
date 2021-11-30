@@ -24,12 +24,9 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import handles.RectangleEdgeHandle;
-import handles.SmartHandleList;
 import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import locatedObject.RectangleEdges;
@@ -118,9 +115,14 @@ public class OpenTriangleGraphic extends TriangleGraphic {
 	
 		
 	
-	
+	/**Creates the shape in adobe illustrator*/
+	public void createShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
+		basicCreateShapeOnPathItem(	aref,pi, false);
+	}
 
-	
+	public boolean isDrawClosePoint() {
+		return false;
+	}
 
 	
 	

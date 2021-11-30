@@ -407,6 +407,11 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	
 	/**Method to create on path item*/
 	protected void basicCreateShapeOnPathItem(ArtLayerRef aref, PathItemRef pi) {
+		basicCreateShapeOnPathItem(aref, pi, true);
+	}
+	
+	/**Method to create on path item*/
+	protected void basicCreateShapeOnPathItem(ArtLayerRef aref, PathItemRef pi, boolean closed) {
 		if (this.isCompleteMoveToIlls()) {
 			pi.addPathWithCurves2(aref, getShape().getPathIterator(new AffineTransform()), true, isDrawClosePoint());
 			

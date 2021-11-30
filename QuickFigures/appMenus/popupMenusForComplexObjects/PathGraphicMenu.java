@@ -83,7 +83,16 @@ PopupMenuSupplier  {
 	public PathGraphicMenu(PathGraphic textG) {
 		super();
 		this.pathForMenuG = textG;
-		this.addAllMenuItems(new ShapeGraphicMenu(textG).createMenuItems());
+		addAllMenuItems();
+	}
+
+
+	/**Adds every meny item to the menu
+	 * @param textG
+	 */
+	public void addAllMenuItems() {
+		
+		this.addAllMenuItems(new ShapeGraphicMenu(pathForMenuG).createMenuItems());
 		
 		 addItem(ADD_POINT);
 		

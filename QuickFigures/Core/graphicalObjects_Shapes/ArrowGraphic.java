@@ -934,6 +934,8 @@ protected Point2D getDrawnLineEnd2() {
 	@Override
 	public SmartHandleList getSmartHandleList() {
 		if (smartList==null)smartList=createSmartHandleList(); 
+		if(superSelected&&hideNormalHandles)
+			return SmartHandleList.combindLists(smartList,getButtonList());
 		if (!superSelected||hideNormalHandles) 
 			return SmartHandleList.combindLists(smartList);
 		return SmartHandleList.combindLists(smartList, getButtonList(), getRotateList());

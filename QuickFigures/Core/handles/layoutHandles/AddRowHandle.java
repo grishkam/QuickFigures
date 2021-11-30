@@ -38,7 +38,6 @@ import imageMenu.CanvasAutoResize;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.BasicLayoutEditor;
 import layout.basicFigure.LayoutSpaces;
-import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoLayoutEdit;
 

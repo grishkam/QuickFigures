@@ -58,7 +58,6 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import handles.HasHandles;
 import handles.HasSmartHandles;
-import handles.ItemGlueSmartHandle;
 import handles.AttachmentPositionHandle;
 import handles.ReshapeHandleList;
 import handles.SmartHandle;

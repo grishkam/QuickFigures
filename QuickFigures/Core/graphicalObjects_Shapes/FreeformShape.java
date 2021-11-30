@@ -21,13 +21,11 @@
  */
 package graphicalObjects_Shapes;
 
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
 import illustratorScripts.ArtLayerRef;
-import illustratorScripts.PathItemRef;
 import locatedObject.PathPointList;
 
 /**

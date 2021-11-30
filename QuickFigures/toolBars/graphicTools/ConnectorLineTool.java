@@ -91,6 +91,13 @@ public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{
 		if(!model.isHorizontal())
 			 bg= new ConnectorGraphic(false, new Point2D.Double(lx,ly), new Point2D.Double(lx+length/2,ly+length), new Point2D.Double(lx,ly+length*2));
 		
+		if(model.nAnchors()==2) {
+			bg = new ConnectorGraphic(true, new Point2D.Double(lx,ly), new Point2D.Double(lx+length,ly-length/2));
+		}
+		if(model.nAnchors()==2&&!model.isHorizontal()) {
+			bg = new ConnectorGraphic(false, new Point2D.Double(lx,ly), new Point2D.Double(lx+length/2,ly+length));
+		}
+		
 		bg.copyAttributesFrom(model);
 		bg.copyColorsFrom(model);
 		

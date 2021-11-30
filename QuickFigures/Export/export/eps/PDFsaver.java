@@ -36,6 +36,7 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.fop.svg.PDFTranscoder;
 
 import applicationAdapters.DisplayedImage;
+import export.svg.BatiKExportContext;
 import export.svg.SVGsaver;
 import figureFormat.DirectoryHandler;
 import graphicalObjects_SpecialObjects.TextGraphic;
@@ -49,7 +50,7 @@ import undo.UndoTextEdit;
 public class PDFsaver {
 
 	public void saveWrapper(String newpath, DisplayedImage diw) throws IOException, TransformerException, ParserConfigurationException, TranscoderException {
-		
+		BatiKExportContext.currentContext=this.getTheRightContext();
 		
 		try {
 			CombinedEdit ce=new CombinedEdit() ;
@@ -71,7 +72,7 @@ public class PDFsaver {
 				}
 			
 			/**saves the figure in the temp file as an svg*/
-			new SVGsaver().saveFigure(tempPath, diw);
+			new SVGsaver().saveFigure(tempPath, diw, this.getTheRightContext());
 			
 			/**transcodes the svg file into a pdf*/
 			transcode(newpath, tempFile);
@@ -92,6 +93,15 @@ public class PDFsaver {
 				ShowMessage.showOptionalMessage("have you installed batik 1.13?", false, "Seems that you have not installed the latest version of batik", "This feature was written with batik 1.13.");
 			}
 		}
+	}
+
+
+	/**
+	 * @return
+	 */
+	protected BatiKExportContext getTheRightContext() {
+	
+		return BatiKExportContext.PDF;
 	}
 
 

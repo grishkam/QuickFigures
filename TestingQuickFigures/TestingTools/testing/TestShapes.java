@@ -43,6 +43,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.ConnectorGraphic;
+import graphicalObjects_Shapes.OpenRectangleGraphic;
+import graphicalObjects_Shapes.OpenTriangleGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RegularPolygonGraphic;
@@ -514,14 +516,41 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		l.add(p);
 		
 		
-		ConnectorGraphic h2 = new ConnectorGraphic(true, new Point(100, 200), new Point(165, 200));
+		ConnectorGraphic h2 = new ConnectorGraphic(true, new Point(100, 200), new Point(165, 150));
 		h2.setStrokeColor(Color.green.darker());
 		l.add(h2);
 		
 		
 		h2 = new ConnectorGraphic(false, new Point(150, 400), new Point(265, 200));
 		h2.setStrokeColor(Color.red.darker());
+		h2.moveLocation(12, 30);
 		l.add(h2);
+		
+
+		h2  = new ConnectorGraphic(false, new Point(150, 400), new Point(265, 200),new Point(265, 300));
+		h2.moveLocation(100, 40);
+		h2.setStrokeColor(Color.blue.darker());
+		l.add(h2);
+		
+		
+		OpenTriangleGraphic b = new OpenTriangleGraphic(z.getBounds());
+		b.moveLocation(200, 18);
+		b.scaleAbout(new Point(110,50), 0.8);
+		b.moveLocation(-80, 70);
+		b.setStrokeColor(Color.pink);
+		b.setStrokeWidth(3);
+		l.add(b);
+		
+		OpenRectangleGraphic openRect = new OpenRectangleGraphic(b);
+		openRect.moveLocation(2, 100);
+		l.add(openRect);
+		
+		l.add(RectangularGraphic.filledRect(new Rectangle(115,210,90, 100), Color.magenta));
+		RectangularGraphic transparentFill = RectangularGraphic.filledRect(new Rectangle(215,210,90, 100), new Color(0,0,0,0));
+		transparentFill.setStrokeWidth(4);
+		transparentFill.setStrokeColor(Color.cyan.darker());
+		l.add(transparentFill);
+		
 	}
 	
 	

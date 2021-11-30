@@ -266,6 +266,8 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		out.add(new ShapeGraphicTool(new OpenTriangleGraphic(standardRectangle)));
 		out.add(new ConnectorLineTool(3,true));
 		out.add(new ConnectorLineTool(3,false));
+		out.add(new ConnectorLineTool(2,true));
+		out.add(new ConnectorLineTool(2,false));
 		ArrowGraphicTool e = new ArrowGraphicTool(0);
 		e.getModelArrow().setStrokeWidth(1);
 		out.add(e);
