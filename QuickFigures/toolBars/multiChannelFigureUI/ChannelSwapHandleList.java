@@ -159,7 +159,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		void setUpChannelColorAndText() {
 				try {
 					this.message=(
-							theDisplayLayer.getMultiChannelImage().getRealChannelName(getChannelNumber()));
+							getTheDisplayLayer().getMultiChannelImage().getRealChannelName(getChannelNumber()));
 					if(message==null) message="Channel #"+entry.getOriginalChannelIndex();
 					this.setHandleColor(entry.getColor());
 					this.messageColor=entry.getColor().darker();
@@ -217,14 +217,14 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	swaps the two channels given. does not alter the source image file
 	 */
 	protected void swapImageChannelOrder(int relHandleIndex, int pressHandleIndex2) {
-		if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
-			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer() ;
+		if (getTheDisplayLayer().getParentLayer() instanceof FigureOrganizingLayerPane) {
+			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) getTheDisplayLayer().getParentLayer() ;
 			for(ImageDisplayLayer item: f.getMultiChannelDisplaysInOrder()) {
 				item.getPanelManager().performChannelSwap(relHandleIndex, pressHandleIndex2);
 			}
 		}
 		else if(pressHandleIndex2!=relHandleIndex) {
-			theDisplayLayer.getPanelManager().performChannelSwap(relHandleIndex, pressHandleIndex2);
+			getTheDisplayLayer().getPanelManager().performChannelSwap(relHandleIndex, pressHandleIndex2);
 		}
 	}
 
@@ -232,16 +232,16 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	swaps the two channels given
 	 */
 	protected void swapSourceImageChannels(int relHandleIndex, int pressHandleIndex2) {
-		if (theDisplayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
-			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) theDisplayLayer.getParentLayer() ;
+		if (getTheDisplayLayer().getParentLayer() instanceof FigureOrganizingLayerPane) {
+			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) getTheDisplayLayer().getParentLayer() ;
 			for(ImageDisplayLayer item: f.getMultiChannelDisplaysInOrder()) {
 				item.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex2);
 				item.updatePanels();
 			}
 		}
 		else if(pressHandleIndex2!=relHandleIndex) {
-			theDisplayLayer.getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex2);
-			theDisplayLayer.updatePanelsAndLabelsFromSource();
+			getTheDisplayLayer().getMultiChannelImage().getChannelSwapper().swapChannelsOfImage(relHandleIndex, pressHandleIndex2);
+			getTheDisplayLayer().updatePanelsAndLabelsFromSource();
 		}
 	}
 	
@@ -252,7 +252,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 			
 			SmartPopupJMenu output = new SmartPopupJMenu ();
 			
-			figure=FigureOrganizingLayerPane.findFigureOrganizer(theDisplayLayer);
+			figure=FigureOrganizingLayerPane.findFigureOrganizer(getTheDisplayLayer());
 			
 			ChannelPanelEditingMenu out;
 			if(anchorObject instanceof ImagePanelGraphic)
@@ -267,7 +267,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 				output.add(jEveryImage);
 				
 				SmartJMenu jOneImage=new SmartJMenu("Just This Image's Panels");
-				jOneImage.setText("Only For "+theDisplayLayer.getTitle());
+				jOneImage.setText("Only For "+getTheDisplayLayer().getTitle());
 				
 				out = new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
 				out.setScope(0);
@@ -282,9 +282,23 @@ public class ChannelSwapHandleList extends SmartHandleList {
 	
 		private static final long serialVersionUID = 1L;}
 
+	
+	
+	/**Sets the multichannel display that is the main target of this handle list*/
 	public void setDisplayLayer(MultichannelDisplayLayer display) {
 		this.theDisplayLayer=display;
 		
+	}
+
+	/**Returns the multichannel display that is the main target of this handle list*/
+	public MultichannelDisplayLayer getTheDisplayLayer() {
+		if(theDisplayLayer==null && anchorObject instanceof ImagePanelGraphic)
+			{
+			ImagePanelGraphic panel=(ImagePanelGraphic) anchorObject;
+			theDisplayLayer=	MultichannelDisplayLayer.findMultiChannelForGraphic(panel.getParentLayer(), panel);
+			
+			}
+		return theDisplayLayer;
 	}
 
 	

@@ -113,7 +113,7 @@ public Element toSVG(Document dom, Element e) {
 	} else {
 		
 		element.setAttribute("fill", "none");//fill should be none if no attribute is given. This should not be necesary but does no harm. problem might be with EPS transcoder
-		//element.setAttribute("style", "fill: #0000ff; fill-opacity: 0.0;  ");//does not fix issue with eps but does no harm. problem might be with EPS transcoder
+		
 	}
 	
 

@@ -693,6 +693,8 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	
 	/**given an object, moves up the layer tree until it find a figure organizer to return*/
 	public static FigureOrganizingLayerPane findFigureOrganizer(KnowsParentLayer k) {
+		if(k instanceof FigureOrganizingLayerPane)
+			return (FigureOrganizingLayerPane) k;
 		GraphicLayer output = k.getParentLayer();
 		
 		while (output!=null &&!(output instanceof FigureOrganizingLayerPane)) {
