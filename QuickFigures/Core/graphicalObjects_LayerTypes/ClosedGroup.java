@@ -148,7 +148,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 			for( ZoomableGraphic current: getTheInternalLayer().getAllGraphics()) {
 				if(current instanceof Scales) {
 					Scales s1=(Scales) current;
-					s1.scaleAbout(p, scale);
+					s1.scaleAbout(p, theScale);
 				}
 			}
 			setLocationUpperLeft(leftCorner);
@@ -158,8 +158,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	}
 
 	/**
-		 
-		 * 
+		 A series of handles for the closed group
 		 */
 	public class ClosedGroupSmartHandleList extends SmartHandleList  implements RectangleEdgePositions{
 
@@ -245,34 +244,8 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 	private static final long serialVersionUID = 1L;
 	
-	
-
-	/**Select the group*/
-	@Override
-	public void select() {
-		super.select();
-		
-		
-	}
-	
-	/**deselect the group*/
-	@Override
-	public void deselect() {
-		super.deselect();
-		
-	}
 
 
-
-	
-
-
-	
-	
-	/**returns the parent layer of the graphic group*/
-	private GraphicLayer theParent() {
-		return this.getParentLayer();
-	}
 	
 	/**returns the location*/
 	@Override
@@ -288,6 +261,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 		
 		this.tx=x;
 		this.ty=y;
+		updateBounds();
 		
 	}
 
@@ -321,17 +295,10 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 		return bounds;
 		}
 
-
-
-
-	
-
 	
 	
 	@Override
 	public void moveLocation(double xmov, double ymov) {
-		
-		
 		bounds.x+=xmov;
 		bounds.y+=ymov;
 		tx+=xmov;
@@ -354,7 +321,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 	
 	/**
-	 * 
+	 updates the bounds to the current location of the objects
 	 */
 	public void updateBounds() {
 		ArrayObjectContainer.ignoredClass=null;
@@ -364,7 +331,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	}
 
 
-	/***/
+	/**This group always has a consitent location type. TODO:implement more location types ()*/
 	@Override
 	public int getLocationType() {
 		return RectangleEdges.UPPER_LEFT;
@@ -375,11 +342,11 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
 		//CordinateConverter c = cords.getCopyTranslated(-x, -y);
 
-		graphics.translate(tx*cords.getMagnification(), ty*cords.getMagnification());
+		graphics.translate(tx*cords.getMagnification(), ty*cords.getMagnification());//applies the displacement transform
 		
 		this.drawLayer(graphics, cords);
 		
-		graphics.translate(-tx*cords.getMagnification(), -ty*cords.getMagnification());
+		graphics.translate(-tx*cords.getMagnification(), -ty*cords.getMagnification());//reverses the displacement transfo
 		
 		if (this.isSelected()) {
 			graphics.setStroke(new BasicStroke(5));
@@ -456,6 +423,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
+		removeDisplacement() ;
 		ArtLayerRef sub = aref.createSubRef();
 		sub.setName(getName());
 		for(ZoomableGraphic layer: this.getTheInternalLayer() .getItemArray()) try{
@@ -511,7 +479,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 
 	@Override
 	public GraphicLayer getSelectedLayer() {
-		// TODO Auto-generated method stub
+		
 		return this.getTheInternalLayer();
 	}
 	
@@ -537,12 +505,14 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 	@Override
 	public SVGExporter getSVGEXporter() {
+		removeDisplacement() ;
 		ShowMessage.showOptionalMessage("This figure contains objects that might not be exportable");
 		return getTheInternalLayer().getSVGEXporter();
 	}
 
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
+		removeDisplacement() ;
 		ShowMessage.showOptionalMessage("This figure contains objects that might not be exportable");
 		return new GroupToOffice(this);
 	}
@@ -552,15 +522,27 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	
 		int i = getParentLayer().getItemArray().indexOf(this);
 		getParentLayer().add(getTheInternalLayer());
+		removeDisplacement();
+		getParentLayer().moveItemToIndex(getTheInternalLayer(), i);//does not move the item correctly
+		
+		getParentLayer().remove(this);
+	}
+
+
+
+	/**
+	 * Removes the displacement transform
+	 */
+	public void removeDisplacement() {
 		ArrayList<ZoomableGraphic> items = this.getTheInternalLayer().getAllGraphics();
 		for(ZoomableGraphic item: items) {
 			if(item instanceof LocatedObject2D) {
 				((LocatedObject2D) item).moveLocation(tx,ty);
 			}
 		}
-		getParentLayer().moveItemToIndex(getTheInternalLayer(), i);//does not move the item correctly
-		
-		getParentLayer().remove(this);
+		tx=0;
+		ty=0;
+		updateBounds();
 	}
 	
 	@Override
