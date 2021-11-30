@@ -174,7 +174,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			
 			if (! batikInstall)
 				{
-				installItem(new ShowInformation("SVG, PDF and EPS export packages not installed", "To export in some formats, one must install Apache Batik 1.13 (into the plugins folder)"));
+				installItem(new ShowInformation("SVG, PDF and EPS export packages not installed", "To export in some formats, one must install Apache Batik 1.14 (into the plugins folder)"));
 				}
 			if (! exportPackagesInstall)
 			{

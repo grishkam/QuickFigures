@@ -90,7 +90,7 @@ public class PDFsaver {
 		} catch (Throwable e) {
 			IssueLog.logT(e);
 			if(e instanceof ClassNotFoundException || e instanceof NoClassDefFoundError) {
-				ShowMessage.showOptionalMessage("have you installed batik 1.13?", false, "Seems that you have not installed the latest version of batik", "This feature was written with batik 1.13.");
+				ShowMessage.showOptionalMessage("have you installed batik 1.14?", false, "Seems that you have not installed the latest version of batik", "This feature was written with batik 1.13.");
 			}
 		}
 	}
