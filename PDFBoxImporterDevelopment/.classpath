@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="QFGraphics2D"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DataPlotting"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IJ1DataPlot"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ImageJ1ModuleForQuickFigures"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/pdfbox-app-3.0.0-alpha2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/ij.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

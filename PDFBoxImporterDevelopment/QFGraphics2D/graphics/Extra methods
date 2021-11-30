@@ -1,0 +1,64 @@
+
+	
+	
+	public QFGraphics2D(GraphicLayer g) {
+		this.layer=g;
+	}
+	
+
+
+	@Override
+	public boolean drawImage(Image img, AffineTransform xform, ImageObserver obs) {
+		
+		return false;
+	}
+
+	@Override
+	public void drawImage(BufferedImage img, BufferedImageOp op, int x, int y) {
+		layer.add(new ImagePanelGraphic(img));
+		
+	}
+
+	@Override
+	public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawString(String str, int x, int y) {
+		
+	}
+
+
+
+	@Override
+	public void drawString(String str, float x, float y) {
+		addTextGraphic(str, x, y);
+		
+	}
+
+	@Override
+	public void drawString(AttributedCharacterIterator iterator, int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawString(AttributedCharacterIterator iterator, float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawGlyphVector(GlyphVector g, float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
+	
