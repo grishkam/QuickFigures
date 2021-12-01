@@ -686,7 +686,9 @@ transient static IconSet i;
 	@Override
 	public File getFile() {
 		if (slot.getMultichannelImage()==null) return null;
-		String path= slot.getMultichannelImage().getPath();
+		String path= slot.getOriginalPath();
+		if(path==null)
+			return null;
 		return new File(path);
 	}
 	

@@ -25,4 +25,6 @@ import java.io.File;
 /**An interface for objects that are connected to a particular file */
 public interface PointsToFile {
 	public File getFile();
+	
+	
 }

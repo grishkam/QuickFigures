@@ -26,10 +26,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.sl.usermodel.Placeholder;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFGroupShape;
+import org.apache.poi.xslf.usermodel.XSLFNotes;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
+import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
@@ -37,7 +40,9 @@ import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import locatedObject.ArrayObjectContainer;
+import locatedObject.PointsToFile;
 import logging.IssueLog;
 import messages.ShowMessage;
 import ultilInputOutput.FileChoiceUtil;
@@ -99,6 +104,8 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			        	t.printStackTrace();
 			        }
 			        
+			        addNotesToSlide(slide, ppt, figure);
+			        
 			
 			        FileOutputStream out;
 					try {
@@ -123,6 +130,33 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	}
 	
 	
+	/**
+	 * @param slide
+	 * @param ppt 
+	 * @param figure 
+	 */
+	private void addNotesToSlide(XSLFSlide slide, XMLSlideShow ppt, DisplayedImage figure) {
+		 String notesString = "This slide was exported from QuickFigures";
+		 for(ZoomableGraphic object: figure.getImageAsWorksheet().getTopLevelLayer().getObjectsAndSubLayers()) {
+			 if(object instanceof PointsToFile) {
+				 PointsToFile pane=(PointsToFile) object;
+				 File file = pane.getFile();
+				 if(file!=null)
+					 notesString+='\n'+file.getAbsolutePath();
+			 }
+			
+		 }
+		
+		XSLFNotes notes = ppt.getNotesSlide(slide);
+		for (XSLFTextShape shape : notes.getPlaceholders()) {
+	        if (shape.getTextType() == Placeholder.BODY) {
+	           
+				shape.setText(notesString);
+	            break;
+	        }
+	    }
+	}
+
 	/**
 	 saves the image in the given path
 	 */
