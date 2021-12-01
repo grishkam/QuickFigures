@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import basicMenusForApp.TreeShower;
 import imageDisplayApp.ImageDisplayIOTest;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
@@ -49,8 +50,8 @@ import testing.TestProvider;
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws Exception, IOException {
-		showExample(testCase);
-		
+		DisplayedImage d = showExample(testCase);
+		new TreeShower().performActionDisplayedImageWrapper(d);
 		
 		/**pauses long enough for the user to test out */
 		IssueLog.waitSeconds(215);

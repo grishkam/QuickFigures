@@ -43,7 +43,7 @@ public class PDFImporter_ implements PlugIn {
 	
 		try {
 			installPlotPackagePDFImporterOntoQuickFigures();
-			ShowMessage.showOptionalMessage("You should be able to import PDF files into QuickFigures", true, "You can now import some objects from PDF files as vector graphics", "They will be placed behind a new layout", "This is a work in progress","Move the layout to move the object");
+			ShowMessage.showOptionalMessage("You should be able to import PDF files into QuickFigures", true, "You can now import some objects from PDF files as vector graphics", "The objects will be grouped together", "This is a work in progress","Move the layout to move the object");
 					
 			} catch (Throwable t) {
 			IssueLog.logT(t);

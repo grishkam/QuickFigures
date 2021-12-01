@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 1, 2021
+ * Version: 2021.2
+ */
 package layersGUI;
 
 
@@ -52,6 +57,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -100,6 +106,19 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	
 
 	
+	
+	/**
+	 * 
+	 */
+
+
+	/**
+	 * 
+	 */
+	/**meant to control the size of the tree. This determines the innitial size
+	 * of both the tree object and the scroll pane.
+	 *  TODO: does not update when items are added or removed from the tree. fix this*/
+	private  Dimension TREE_SIZE = new Dimension(280,2000);
 	
 	static ArrayList <MiscTreeOptions> otherOps=new ArrayList <MiscTreeOptions>();
 	private FigureDisplayWorksheet graphicDisplayContainer;
@@ -282,7 +301,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	
 		 GraphicSetDisplayTree output = new GraphicSetDisplayTree(this.getWorksheet(), masternode) ;
 		
-		 output.setPreferredSize(new Dimension(300,500));
+		 output.setPreferredSize(TREE_SIZE);
 		return output;
 	}
 	
@@ -314,9 +333,9 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 		new DropTarget(tree, this);
 		pane=new JScrollPane(tree);
 	//	pane.setPreferredSize(new Dimension(550,1800));
-	//	pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
-		tree.setPreferredSize(new Dimension(280,1500));
+		tree.setPreferredSize(TREE_SIZE);
 		cons=new GridBagConstraints();
 		cons.gridx=0;
 		cons.gridy=0;
@@ -1087,7 +1106,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	}
 	
 
-	/***/
+	/**meant as a response to drag and drop. does not fully read all types of objects. TODO: replace with PDF reader*/
 	public void addSavedGraphic(File f, GraphicLayer gc) {
 		GraphicEncoder ag = new GraphicEncoder(gc);
 		
@@ -1101,6 +1120,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		return selecteditem;
 	}
 
+	/**Sets the selected item for both the tree and the toolbar*/
 	public void setSelecteditem(ZoomableGraphic selecteditem) {
 		this.selecteditem = selecteditem;
 		
@@ -1172,8 +1192,8 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 	}
 	
-	public static void main(String[] args) {
-		//GraphicLayerPane gpane = new GraphicLayerPane("");
+	public static void switchToDebugMode(String[] args) {
+		
 		setTreeDebugMode(true);
 		GraphicCellRenderer.setTreeDebug(true);
 		

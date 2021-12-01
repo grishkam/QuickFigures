@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 1, 2021
+ * Version: 2021.2
+ */
 package layersGUI;
 
 import java.awt.Color;

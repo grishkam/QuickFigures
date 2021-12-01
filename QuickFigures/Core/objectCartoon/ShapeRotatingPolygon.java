@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Dec 1, 2021
  * Version: 2021.2
  */
 package objectCartoon;
@@ -603,9 +603,7 @@ public void moveCurvePointToward(Point2D towardthis, Point2D startingpoint, int 
 		
 	}
 	
-	public static void main(String[] args) {
-		GraphicTreeUI.main(args);
-	}
+	
 
 
 
