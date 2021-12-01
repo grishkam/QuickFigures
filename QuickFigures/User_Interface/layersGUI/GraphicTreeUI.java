@@ -115,10 +115,15 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	/**
 	 * 
 	 */
+	private static final Dimension INNITIAL_TREE_SIZE = new Dimension(280,2000);
+
+	/**
+	 * 
+	 */
 	/**meant to control the size of the tree. This determines the innitial size
 	 * of both the tree object and the scroll pane.
 	 *  TODO: does not update when items are added or removed from the tree. fix this*/
-	private  Dimension TREE_SIZE = new Dimension(280,2000);
+	private  Dimension TREE_SIZE = INNITIAL_TREE_SIZE;
 	
 	static ArrayList <MiscTreeOptions> otherOps=new ArrayList <MiscTreeOptions>();
 	private FigureDisplayWorksheet graphicDisplayContainer;
@@ -132,12 +137,12 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	
 	/**Creates a panel of buttons that are visible near the bottom of the window*/
 	public JPanel createButtonPanel() {
-		JPanel ButtonPanel=new JPanel(); 
-		ButtonPanel.setLayout(new FlowLayout());
-		ButtonPanel.add(upButton);
-		ButtonPanel.add(downButton);
+		JPanel theButtonPanel=new JPanel(); 
+		theButtonPanel.setLayout(new FlowLayout());
+		theButtonPanel.add(upButton);
+		theButtonPanel.add(downButton);
 
-		return ButtonPanel;
+		return theButtonPanel;
 	}
 	
 	
@@ -435,11 +440,32 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		DefaultTreeModel t=(DefaultTreeModel) tree.getModel();
 		t.nodeStructureChanged(node);
 		
+		
+		expandTreeSize(z, 1);
+		
 	//	node = branchOperation().findDescendantWithuserObject(masternode, z);
 		//tree.expandPath(branchOperation().getPath(node));//makes sure the item is visible in the tree
 	}
 	
 	
+	/**changes the size of the JTree based on new objects
+	 * @param newObject
+	 * @param direction
+	 */
+	private void expandTreeSize(ZoomableGraphic newObject, int direction) {
+		int n=1;
+		if(newObject instanceof GraphicLayer) {
+			n+=((GraphicLayer) newObject).getAllGraphics().size();
+		}
+		
+		this.TREE_SIZE.height+=20*n;
+		this.tree.setPreferredSize(TREE_SIZE);
+	}
+
+
+
+
+
 	/**called when an item is added to a graphic container*/
 	public void itemRemovedFromContainer( GraphicLayer gc, ZoomableGraphic z) {
 		if (isTreeDebugMode())IssueLog.log("will update tree");
@@ -452,7 +478,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		DefaultTreeModel t=(DefaultTreeModel) tree.getModel();
 		t.nodeStructureChanged(node);
 		
-		
+		expandTreeSize(z, -1);
 		
 		//tree.expandPath(branchOperation().getPath(node));//makes sure the item is visible in the tree
 		
