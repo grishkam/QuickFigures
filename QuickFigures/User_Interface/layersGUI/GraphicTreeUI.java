@@ -113,7 +113,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 
 
 	/**
-	 * 
+	 The starting size of the JTree that dispays the layers
 	 */
 	private static final Dimension INNITIAL_TREE_SIZE = new Dimension(280,2000);
 
@@ -122,8 +122,8 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	 */
 	/**meant to control the size of the tree. This determines the innitial size
 	 * of both the tree object and the scroll pane.
-	 *  TODO: does not update when items are added or removed from the tree. fix this*/
-	private  Dimension TREE_SIZE = INNITIAL_TREE_SIZE;
+	 *  TODO: does not update to an ideal size when items are added or removed from the tree. improve this*/
+	private  Dimension currentTreeSize = INNITIAL_TREE_SIZE;
 	
 	static ArrayList <MiscTreeOptions> otherOps=new ArrayList <MiscTreeOptions>();
 	private FigureDisplayWorksheet graphicDisplayContainer;
@@ -170,24 +170,25 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	{
 		this.innitializeBMenuBut();
 	}
-	JPanel ButtonPanel= createButtonPanel(); 
+	JPanel currentButtonPanel= createButtonPanel(); 
 	
-	
-	public JMenuItem createMenuItem(String text, String ActionCommand, Icon i) {
+	/**Creates a menu item with this tree as the action listener*/
+	public JMenuItem createMenuItem(String text, String actionCommand, Icon i) {
 		JMenuItem jm = new JMenuItem(text, i);
 		jm.addActionListener(this);
-		jm.setActionCommand(ActionCommand);
+		jm.setActionCommand(actionCommand);
 		return jm;
 	}
 	
-	public JButton createButtonItem(String text, String ActionCommand, Icon i) {
+	/**Creates a button with this tree as the action listener*/
+	public JButton createButtonItem(String text, String actionCommand, Icon i) {
 		JButton jb = new JButton(text, i);
 		 jb.setBorderPainted(false);
 	        
 	       
 		AbstractExternalToolset.stripButton(jb);
 		jb.addActionListener(this);
-		jb.setActionCommand(ActionCommand);
+		jb.setActionCommand(actionCommand);
 		return jb;
 	}
 	
@@ -306,7 +307,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	
 		 GraphicSetDisplayTree output = new GraphicSetDisplayTree(this.getWorksheet(), masternode) ;
 		
-		 output.setPreferredSize(TREE_SIZE);
+		 output.setPreferredSize(currentTreeSize);
 		return output;
 	}
 	
@@ -328,7 +329,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	
 	void refreshTreeFrame() {
 		frame.remove(pane);
-		frame.remove(ButtonPanel);
+		frame.remove(currentButtonPanel);
 		tree = makeTreeForSet(getWorksheet().getTopLevelLayer());
 		
 		layout=new GridBagLayout();
@@ -340,7 +341,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 	//	pane.setPreferredSize(new Dimension(550,1800));
 		pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
-		tree.setPreferredSize(TREE_SIZE);
+		tree.setPreferredSize(currentTreeSize);
 		cons=new GridBagConstraints();
 		cons.gridx=0;
 		cons.gridy=0;
@@ -348,7 +349,7 @@ public class GraphicTreeUI implements TreeSelectionListener,LayerSelectionSystem
 		
 		cons.gridy++;
 		cons.anchor=GridBagConstraints.WEST;
-		frame.add(ButtonPanel, cons);
+		frame.add(currentButtonPanel, cons);
 		
 		tree.addTreeSelectionListener(this);
 		tree.setDragEnabled(true);
@@ -458,8 +459,14 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 			n+=((GraphicLayer) newObject).getAllGraphics().size();
 		}
 		
-		this.TREE_SIZE.height+=20*n;
-		this.tree.setPreferredSize(TREE_SIZE);
+		this.currentTreeSize.height+=20*n;
+		
+		if(tree.treeRenderer.maxSize+50>currentTreeSize.width) {
+			currentTreeSize.width=tree.treeRenderer.maxSize+50;
+			IssueLog.log("Expanding tree width");
+		}
+		
+		this.tree.setPreferredSize(currentTreeSize);
 	}
 
 
@@ -513,8 +520,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 
 	@Override
 	public void dragEnter(DropTargetDragEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 

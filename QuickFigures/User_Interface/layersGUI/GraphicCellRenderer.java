@@ -40,6 +40,9 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 	/**set to true if programmer sants a simplified tree */
 	private static boolean treeDebug=false;
 
+	/**keeps track of the mazimum width of the component*/
+	int maxSize=0;
+
 	public Component  	getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		
 		TreeCellRenderer ren = getUniqueRenderer(value);
@@ -51,6 +54,9 @@ public class GraphicCellRenderer implements TreeCellRenderer  {
 
 		Component output = new DefaultTreeCellRenderer().getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 	
+		if(output.getWidth()>maxSize)
+			maxSize=output.getWidth();
+		
 		 return output;
 	}
 	
@@ -95,6 +101,9 @@ TextGraphicListCellComponent getPanel(JTree treee, Object value, boolean selecte
 	
 	}
 	panel.setMinimumWidth(100);
+	
+	if(panel.getWidth()>maxSize)
+		maxSize=panel.getWidth();
 	
 	return panel;
 	

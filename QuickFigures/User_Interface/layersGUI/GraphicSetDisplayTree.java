@@ -62,6 +62,9 @@ TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphi
 	/**The top level layer*/
 	GraphicLayer baseLayer;
 	
+	/**stores the tree cell renderer*/
+	GraphicCellRenderer treeRenderer = new GraphicCellRenderer();
+	
 	/**Creates a J tree for the given container*/
 	public GraphicSetDisplayTree(FigureDisplayWorksheet cont, DefaultMutableTreeNode masternode) {
 		super(masternode, true);
@@ -70,7 +73,8 @@ TreeBranchOperations<ZoomableGraphic> tu=new TreeBranchOperations<ZoomableGraphi
 		 baseLayer=cont.getTopLevelLayer();
 		 setDisplayContainer=cont;
 		if (TreeMode.fancy)this.setRowHeight(0);
-		setCellRenderer(new GraphicCellRenderer());
+		 treeRenderer = new GraphicCellRenderer();
+		setCellRenderer(treeRenderer);
 		
 	
 	}
