@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 14, 2021
+ * Date Modified: Dec 2, 2021
  * Version: 2021.2
  */
 package graphicTools;
@@ -41,6 +41,7 @@ import javax.swing.Icon;
 import applicationAdapters.ImageWorkSheet;
 import externalToolBar.AbstractExternalToolset;
 import graphicalObjects.KnowsParentLayer;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.CursorFinder;
@@ -145,8 +146,10 @@ public class Text_GraphicTool extends GraphicTool {
 				layer.getParentLayer().add(textob);
 			}
 			else 
-			{gmp.getTopLevelLayer().add(textob);
-			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), textob);
+			{
+				GraphicLayer homeLayer =  findLayerForObjectAddition(gmp, textob);
+				homeLayer.add(textob);
+			addUndoerForAddItem(gmp, homeLayer.getSelectedContainer(), textob);
 			}
 			this.setPrimarySelectedObject(textob);
 		}

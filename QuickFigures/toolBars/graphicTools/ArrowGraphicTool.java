@@ -79,7 +79,7 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 		setSelectedHandleNumber(1);
 		super.setPressedSmartHandle(bg.getSmartHandleList().getHandleNumber(1));;
 		
-		GraphicLayer layer = gmp.getTopLevelLayer().getSelectedContainer();
+		GraphicLayer layer = findLayerForObjectAddition(gmp, bg);
 				layer.add(bg);
 				addUndoerForAddItem(gmp, layer, bg);
 				

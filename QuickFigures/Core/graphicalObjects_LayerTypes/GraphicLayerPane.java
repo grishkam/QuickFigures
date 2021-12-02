@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Ded 2, 2021
  * Version: 2021.2
  */
 package graphicalObjects_LayerTypes;
@@ -498,7 +498,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	/**returns the object that is selected in the layers window*/
 	@Override
 	public LocatedObject2D getSelectionObject() {
-		if (this.getTree()!=null) {
+		if (isTreeLayerSelected()) {
 			ZoomableGraphic item = getTree().getSelectedLayer();
 			if (item instanceof LocatedObject2D) return (LocatedObject2D) item;
 			}
@@ -508,11 +508,23 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	/**if another layer or sublayer is selected within the tree, returns that layer.
 	  otherwise returns this layer*/
 	public GraphicLayer getSelectedContainer() {
-		if (this.getTree()!=null) {
+		if (isTreeLayerSelected()) {
 			GraphicLayer item = getTree().getSelectedLayer();
-			if (item!=null) return (GraphicLayer) item;
+			if (item!=null) 
+				return (GraphicLayer) item;
 			}
 		return this;
+	}
+
+	/**returns true if the user has selected a specific layer in the same tree as this layer.
+	 * If there is no tree, returns false
+	 * @return
+	 */
+	public boolean isTreeLayerSelected() {
+		boolean b = this.getTree()!=null;
+		if(b&&getTree().getSelectedLayer()==null)
+			return false;
+		return b;
 	}
 	
 	/**called after the layers window is closed. At that point, the layers no longer need to keep the tree up to 

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Dec 2, 2021
  * Version: 2021.2
  */
 package graphicTools;
@@ -28,11 +28,14 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWorkSheet;
+import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 import imageDisplayApp.OverlayObjectManager;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdgePositions;
+import logging.IssueLog;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import storedValueDialog.StoredValueDilaog;
 
@@ -81,11 +84,14 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 			currentRect= createShape(new Rectangle(getClickedCordinateX(), getClickedCordinateY(), 15,15));
 			currentRect.copyColorsFrom(getModel());
 			currentRect.copyAttributesFrom(getModel());
+			
 			/**adds the item*/
-			gmp.getTopLevelLayer().getSelectedContainer().add(currentRect);
+			GraphicLayer selectedContainer = findLayerForObjectAddition(gmp, currentRect);
+			
+			selectedContainer.add(currentRect);
 			
 			/**Adds an undo*/
-			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), currentRect);
+			addUndoerForAddItem(gmp, selectedContainer, currentRect);
 			
 			/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
 			setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
@@ -97,6 +103,9 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 		
 		
 	}
+
+
+
 	
 	public void mouseReleased() {
 		started=false;

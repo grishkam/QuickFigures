@@ -121,7 +121,7 @@ public class PathGraphicTool extends GraphicTool {
 		
 		super.setPrimarySelectedObject(p);
 		
-		GraphicLayer setcur = this.getImageClicked().getTopLevelLayer();
+		GraphicLayer setcur = findLayerForObjectAddition( this.getImageClicked(), p);
 		setcur.add(p);
 		
 		getImageDisplayWrapperClick().getUndoManager().addEdit(new UndoAddItem(setcur, p));

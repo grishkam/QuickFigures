@@ -142,7 +142,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		return bits;
 	} 
 	
-	/** TODO: determine if these obsolete tools have any use. deletethese if not
+	/** TODO: determine if these obsolete tools have any use. delete these if not
 	private static ArrayList<ToolBit> getLockToolBits() {
 		ArrayList<ToolBit> output = new ArrayList<ToolBit>();
 		output.add(new BarGraphicTool());

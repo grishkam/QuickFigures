@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 1, 2021
+ * Date Modified: Dec 2, 2021
  * Version: 2021.2
  */
 package layersGUI;
@@ -449,20 +449,28 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	}
 	
 	
-	/**changes the size of the JTree based on new objects
+	/**changes the size of the JTree based on new objects so that the JTree is large enough to display all of them
 	 * @param newObject
 	 * @param direction
 	 */
 	private void expandTreeSize(ZoomableGraphic newObject, int direction) {
 		int n=1;
+		int level=1;
 		if(newObject instanceof GraphicLayer) {
-			n+=((GraphicLayer) newObject).getAllGraphics().size();
+			GraphicLayer graphicLayer = (GraphicLayer) newObject;
+			n+=graphicLayer.getAllGraphics().size();
+			while(graphicLayer.getParentLayer()!=null) {
+				level++;
+				graphicLayer=graphicLayer.getParentLayer();
+				if(level>20)
+					break;
+			}
 		}
 		
 		this.currentTreeSize.height+=20*n;
 		
-		if(tree.treeRenderer.maxSize+50>currentTreeSize.width) {
-			currentTreeSize.width=tree.treeRenderer.maxSize+50;
+		if(tree.treeRenderer.maxSize+50*level>currentTreeSize.width) {
+			currentTreeSize.width=tree.treeRenderer.maxSize+50*level;
 			IssueLog.log("Expanding tree width");
 		}
 		
@@ -969,9 +977,10 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	
 
 
-	
+	/**returns the currently selected layer*/
 	public GraphicLayer getSelectedLayer() {
-		if (getSelecteditem()==null) return getWorksheet().getTopLevelLayer();
+		if (getSelecteditem()==null) 
+			return null;//getWorksheet().getTopLevelLayer();//on Dec 2 2021, changed tools to do something if no layer was selected, and change this to return null
 		if (getSelecteditem() instanceof GraphicLayer) return (GraphicLayer) getSelecteditem();
 		
 		if (lastPath!=null ) {
@@ -997,18 +1006,21 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		boolean triggerpop=arg0.getButton()==MouseEvent.BUTTON3||arg0.isPopupTrigger()||arg0.isControlDown();
 		
 		if (arg0.getClickCount()==2&&!triggerpop) {
-			//RectangleDialog.setGraphicSetContainer(getGraphicDisplayContainer());
 			
 			if (z instanceof ShowsOptionsDialog) {
 				ShowsOptionsDialog so=(ShowsOptionsDialog) z;
 				so.showOptionsDialog();
+			} else if (z==null) {
+				
+				tree.setSelectionPath(null);
 			}
+			
+			
 		}
 		
 		
-		//if (triggerpop) IssueLog.log("popup triggered");
 		if (triggerpop&&  z instanceof HasUniquePopupMenu)try  {
-			//IssueLog.log("will attempt to display menu");
+			
 			HasUniquePopupMenu so=(HasUniquePopupMenu) z;
 			currentpopup = so.getMenuSupplier().getJPopup();
 			if (currentpopup instanceof SmartPopupJMenu) {
@@ -1037,6 +1049,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	}
 
 
+	/**hides/unhides the item if the user clicks the icon*/
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 	

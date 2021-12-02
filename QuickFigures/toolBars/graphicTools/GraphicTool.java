@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Dec 2, 2021
  * Version: 2021.2
  */
 package graphicTools;
@@ -24,6 +24,7 @@ import applicationAdapters.ImageWorkSheet;
 import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.RectangularGraphic;
 import layout.RetrievableOption;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
@@ -39,6 +40,9 @@ public class GraphicTool extends Object_Mover {
 	  the mouse movement is done */
 	@RetrievableOption(key = "Switch Back To Defaul Tool after use", label="Switch away from tool after use")
 	protected boolean temporaryTool=false;
+	
+	@RetrievableOption(key = "Add to layer", label="Add to the layer of clicked object")
+	protected boolean layerAdd=false;
 
 	
 	@Override 
@@ -101,5 +105,29 @@ public class GraphicTool extends Object_Mover {
 		return temporaryTool;
 	}
 	
+	
+	/**returns the appropriate layer for an object to be added
+	 * @param gmp
+	 * @param currentRect
+	 * @return
+	 */
+	public GraphicLayer findLayerForObjectAddition(ImageWorkSheet gmp, ZoomableGraphic currentRect) {
+		GraphicLayer selectedContainer = gmp.getTopLevelLayer().getSelectedContainer();
+		
+		/**TODO: get this to work such that objects will be placed in the layer of the clicked item*/
+		if(!gmp.getTopLevelLayer().isTreeLayerSelected()) {
+			
+			//if no tree layer is selected then the container selected is the top level
+			LocatedObject2D object = super.getObjectAt(gmp,getClickedCordinateX(), getClickedCordinateY());
+		
+			
+			if(object instanceof ZoomableGraphic) {
+				GraphicLayer parent = ((ZoomableGraphic) object).getParentLayer();
+				if(parent!=null &&parent.canAccept(currentRect))
+					selectedContainer =parent;
+			}
+		}
+		return selectedContainer;
+	}
 
 }

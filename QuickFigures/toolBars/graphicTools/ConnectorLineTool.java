@@ -74,7 +74,7 @@ public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{
 		setSelectedHandleNumber(handle);
 		super.setPressedSmartHandle(bg.getSmartHandleList().getHandleNumber(handle));;
 		
-		GraphicLayer layer = gmp.getTopLevelLayer().getSelectedContainer();
+		GraphicLayer layer = findLayerForObjectAddition(gmp, bg);
 				layer.add(bg);
 				addUndoerForAddItem(gmp, layer, bg);
 				

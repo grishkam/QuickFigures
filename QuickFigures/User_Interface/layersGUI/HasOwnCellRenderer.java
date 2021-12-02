@@ -13,11 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 1, 2021
+ * Version: 2021.2
+ */
 package layersGUI;
 
 import javax.swing.tree.TreeCellRenderer;
 
-/**Any objects that have unique tree cells can implement this interface to ensure they are drawn correctly*/
+/**Any objects that have unique tree cells can implement this interface. */
 public interface HasOwnCellRenderer {
 	
 	public TreeCellRenderer getCellRenderer();

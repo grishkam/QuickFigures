@@ -99,8 +99,10 @@ public interface GraphicLayer extends ItemLayer<ZoomableGraphic>, Named, KnowsPa
 	/**returns true is the item is either in this container or a sub-container*/
 	public boolean hasItem(ZoomableGraphic z) ;
 	
-	/**if one of the sublayers is selected, returns the sublayer.???? */
+	/**if one of the sublayers is selected in the layers window, returns the sublayer. */
 	public GraphicLayer getSelectedContainer();
+	/**returns true if there is another layer selected by user*/
+	public boolean isTreeLayerSelected();
 	
 	public void addLayerStructureChangeListener(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> listener) ;
 	public void removeLayerStructureChangeListener(LayerStructureChangeListener<ZoomableGraphic, GraphicLayer> listener) ;
