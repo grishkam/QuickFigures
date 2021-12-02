@@ -42,7 +42,7 @@ public class GraphicTool extends Object_Mover {
 	protected boolean temporaryTool=false;
 	
 	@RetrievableOption(key = "Add to layer", label="Add to the layer of clicked object")
-	protected boolean layerAdd=false;
+	protected boolean layerAdd=true;
 
 	
 	@Override 
@@ -115,7 +115,7 @@ public class GraphicTool extends Object_Mover {
 		GraphicLayer selectedContainer = gmp.getTopLevelLayer().getSelectedContainer();
 		
 		/**TODO: get this to work such that objects will be placed in the layer of the clicked item*/
-		if(!gmp.getTopLevelLayer().isTreeLayerSelected()) {
+		if(!gmp.getTopLevelLayer().isTreeLayerSelected()&&layerAdd) {
 			
 			//if no tree layer is selected then the container selected is the top level
 			LocatedObject2D object = super.getObjectAt(gmp,getClickedCordinateX(), getClickedCordinateY());

@@ -450,12 +450,13 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 	
 	
 	/**changes the size of the JTree based on new objects so that the JTree is large enough to display all of them
+	 * Not coded for exact match, just rule of thumb approuch
 	 * @param newObject
 	 * @param direction
 	 */
 	private void expandTreeSize(ZoomableGraphic newObject, int direction) {
-		int n=1;
-		int level=1;
+		int n=1;//how may objects were added with this one
+		int level=1;//how many layers deep is the object
 		if(newObject instanceof GraphicLayer) {
 			GraphicLayer graphicLayer = (GraphicLayer) newObject;
 			n+=graphicLayer.getAllGraphics().size();
@@ -469,9 +470,11 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		
 		this.currentTreeSize.height+=20*n;
 		
-		if(tree.treeRenderer.maxSize+50*level>currentTreeSize.width) {
-			currentTreeSize.width=tree.treeRenderer.maxSize+50*level;
-			IssueLog.log("Expanding tree width");
+		/**now expand the width enough that it will more than fit the content*/
+		int proposedLevel = 60*level;
+		if(tree.treeRenderer.maxWidthSize+proposedLevel>currentTreeSize.width) {
+			currentTreeSize.width=tree.treeRenderer.maxWidthSize+proposedLevel;
+			
 		}
 		
 		this.tree.setPreferredSize(currentTreeSize);
@@ -522,7 +525,7 @@ public void addGraphicToTreeNode(DefaultMutableTreeNode t,ZoomableGraphic z) {
 		DefaultTreeModel t=(DefaultTreeModel) tree.getModel();
 		
 		t.nodeStructureChanged(node);
-		
+		expandTreeSize(z1, 0);
 	}
 	
 
