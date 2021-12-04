@@ -53,6 +53,7 @@ import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.ShapesUtil;
 import locatedObject.TakesAttachedItems;
+import standardDialog.StandardDialog;
 
 /**A tool for adding text items to the image*/
 public class Text_GraphicTool extends GraphicTool {
@@ -269,10 +270,7 @@ public class Text_GraphicTool extends GraphicTool {
 	}
 	
 	
-	@Override
-	public void showOptionsDialog() {
-		model.showOptionsDialog();
-	}
+	
 	
 	@Override
 	public boolean keyPressed(KeyEvent arg0) {
@@ -383,6 +381,11 @@ public class Text_GraphicTool extends GraphicTool {
 		
 		return list2;
 		
+	}
+
+	@Override
+	protected StandardDialog getOptionsDialog() {
+		return model.getOptionsDialog();
 	}
 	
 	

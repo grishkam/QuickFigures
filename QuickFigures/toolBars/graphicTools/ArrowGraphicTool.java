@@ -31,6 +31,9 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
+import objectDialogs.RectangleGraphicOptionsDialog;
+import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
 public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
@@ -112,10 +115,8 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 	}
 	
 	
-	@Override
-	public void showOptionsDialog() {
-		model.showOptionsDialog();
-	}
+
+	
 	
 	@Override
 	public String getToolTip() {
@@ -139,6 +140,11 @@ public class ArrowGraphicTool extends GraphicTool implements ShapeAddingTool{
 
 	public ArrowGraphic getModelArrow() {
 		return model;
+	}
+
+	@Override
+	protected StandardDialog getOptionsDialog() {
+		return model.getOptionsDialog();
 	}
 
 }

@@ -32,6 +32,8 @@ import graphicalObjects_Shapes.ConnectorGraphic;
 import handles.ConnectorHandleList;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
+import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
 public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{
@@ -112,10 +114,7 @@ public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{
 	}
 	
 	
-	@Override
-	public void showOptionsDialog() {
-		model.showOptionsDialog();
-	}
+
 	
 	@Override
 	public String getToolTip() {
@@ -137,6 +136,13 @@ public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{
 
 	public ConnectorGraphic getModelObject() {
 		return model;
+	}
+
+
+
+	@Override
+	protected StandardDialog getOptionsDialog() {
+		return model.getOptionsDialog();
 	}
 
 }

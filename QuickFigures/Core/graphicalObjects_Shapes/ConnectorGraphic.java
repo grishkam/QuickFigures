@@ -81,11 +81,7 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	 * @return
 	 */
 	public Shape updateShapeFromAnchors() {
-		ArrayList<Point2D> updatedShape = null;
-		if (getAnchors().length == 3)
-			updatedShape = buildFrom3Anchors();
-		else if (getAnchors().length == 2)
-			updatedShape = buildFrom2Anchors();
+		ArrayList<Point2D> updatedShape = buildFromAnchors();
 		
 		PathPointList points = this.getPoints();
 		if(getPoints()!=null&&points.size()==updatedShape.size()) 
@@ -108,6 +104,18 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 		}
 		
 		return getPath();
+	}
+
+	/**returns a list of points on the connector
+	 * @return
+	 */
+	public ArrayList<Point2D> buildFromAnchors() {
+		ArrayList<Point2D> updatedShape = null;
+		if (getAnchors().length == 3)
+			updatedShape = buildFrom3Anchors();
+		else if (getAnchors().length == 2)
+			updatedShape = buildFrom2Anchors();
+		return updatedShape;
 	}
 	
 	public String summaryString() {
@@ -404,4 +412,14 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	public Object toIllustrator(ArtLayerRef aref) {
 		return this.createPathCopy().toIllustrator(aref);
 	}
+	
+	/**returns the location of the stroke handle*/
+	public Point2D[] getStrokeHandlePoints() {
+		/**this math places the handle at the edge of the stroke near the middle of the line*/
+		
+		Point2D location1 = this.buildFromAnchors().get(0);
+		Point2D location2 = this.buildFromAnchors().get(1);
+		return calculatePointsOnStrokeBetween(location1, location2);
+	}
+	
 }

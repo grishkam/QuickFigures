@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 29, 2021
+ * Date Modified: Dec 4, 2021
  * Version: 2021.2
  */
 package handles;
@@ -29,6 +29,7 @@ import graphicalObjects_Shapes.ConnectorGraphic;
 import handles.SmartHandle;
 import handles.SmartHandleList;
 import logging.IssueLog;
+import standardDialog.StandardDialog;
 import undo.ConnectorAnchorChangeUndo;
 
 /**
@@ -38,6 +39,7 @@ A handle list for moving the anchor points of a connector
 public class ConnectorHandleList extends SmartHandleList{
 
 	public static final int CONNECTOR_HANDLE_CODE=170000;
+	private static final int STROKE_HANDLE = 14;
 
 	/**
 	 * 
@@ -53,6 +55,7 @@ public class ConnectorHandleList extends SmartHandleList{
 		this.add(new ConnectorHandle(0));
 		this.add(new ConnectorHandle(1));
 		this.add(new ConnectorHandle(2));
+		this.add(new ConnectorHandle(STROKE_HANDLE));
 	}
 	
 	
@@ -75,6 +78,7 @@ public class ConnectorHandle extends SmartHandle {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+	
 	private int target;
 	//private Point2D downpoint=new Point2D.Double();
 	private ConnectorAnchorChangeUndo undo;
@@ -84,6 +88,13 @@ public class ConnectorHandle extends SmartHandle {
 	 */
 	public ConnectorHandle(int i) {
 		this.target=i;
+		
+		if(i==STROKE_HANDLE){
+				this.setHandleColor(Color.magenta);
+				this.setHandleNumber(STROKE_HANDLE);
+				return;
+			}
+		
 		this.setHandleNumber(getHandleIDForAnchor(i));
 		if(target==1)
 			this.setHandleColor(Color.gray);
@@ -96,6 +107,12 @@ public class ConnectorHandle extends SmartHandle {
 	@Override
 	public
 	Point2D getCordinateLocation() {
+		
+		if (this.isStrokeHandle()) {
+			return connector.getStrokeHandlePoints()[0];
+		}
+		
+		
 		if(target==1&&nAnchors()>2&&!connector.isHorizontal()) 
 			return new Point2D.Double(0.5*(connector.getAnchors()[0].getX()+connector.getAnchors()[2].getX()), connector.getAnchors()[1].getY());
 		if(target==1&&nAnchors()>2&&connector.isHorizontal()) 
@@ -107,11 +124,27 @@ public class ConnectorHandle extends SmartHandle {
 		
 		if(target<nAnchors())
 			return connector.getAnchors()[target];
+		
+		
+		
 		else return new Point2D.Double();
 	}
 	
+	/**
+	 * @return
+	 */
+	private boolean isStrokeHandle() {
+		return this.getHandleNumber()==STROKE_HANDLE;
+	}
+
+
+
 	@Override
 	public boolean isHidden() {
+		if (this.isStrokeHandle()) {
+			return false;
+		}
+		
 		if(target>=nAnchors())
 			return true;
 		return super.isHidden();
@@ -125,10 +158,30 @@ public class ConnectorHandle extends SmartHandle {
 	}
 	
 	
-	/**called when a user drags a handle */
+	/**called when a user presses a handle */
 	public void handlePress(CanvasMouseEvent lastDragOrRelMouseEvent) {
-		 //downpoint = lastDragOrRelMouseEvent.getCoordinatePoint();
 		undo=new  ConnectorAnchorChangeUndo(connector);
+		
+		
+		if (this.isStrokeHandle()&&lastDragOrRelMouseEvent.clickCount()==2) {
+			return ;
+		}
+		
+		if (this.isStrokeHandle()) {
+			return ;
+		}
+		
+		
+		/**if the user double clicks, will be allowed to input a point dia dialog*/
+		if(lastDragOrRelMouseEvent.clickCount()==2) {
+			Point2D starting=connector.getAnchors()[target];
+			Point2D newPoint = StandardDialog.getPointFromUser("Input point", starting);
+			if(!starting.equals(newPoint)) {
+				connector.getAnchors()[target].setLocation(newPoint);
+				lastDragOrRelMouseEvent.addUndo(undo);
+			}
+		}
+		
 	}
 	
 
@@ -141,6 +194,17 @@ public class ConnectorHandle extends SmartHandle {
 	
 	/**called when a user drags a handle */
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
+		
+		
+		if (this.isStrokeHandle()) {
+			
+				Point2D metric = connector.getStrokeHandlePoints()[1];
+				double d = metric.distance(lastDragOrRelMouseEvent.getCoordinatePoint());
+				connector.setStrokeWidth((float) (d*2));
+			return ;
+		}
+		
+		
 		int handlenum = target;
 		Point point = lastDragOrRelMouseEvent.getCoordinatePoint();
 		connector.getAnchors()[target].setLocation(point);

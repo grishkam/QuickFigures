@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 4, 2021
  * Version: 2021.2
  */
 package objectDialogs;
@@ -57,7 +57,7 @@ public class StrokeInputPanel extends ObjectInputPanel implements OnGridLayout, 
 	
 	NumberArrayInputPanel dashinput=new NumberArrayInputPanel(6,0);{
 		dashinput.setLabel("Dashes");
-		dashinput.setDecimalPlaces(2);
+		dashinput.setDecimalPlaces(1);
 	}
 	
 	

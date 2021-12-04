@@ -37,6 +37,7 @@ import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdgePositions;
 import logging.IssueLog;
 import objectDialogs.RectangleGraphicOptionsDialog;
+import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 
 /**Tool used to draw a rectangular object on the figure. Used as a superclass 
@@ -126,16 +127,7 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 		
 	}
 	
-	
-	
-	/**Shows the model shape's options dialog. The options in that dialog fulfill the role of a tool dialog*/
-	@Override
-	public void showOptionsDialog() {
-		RectangleGraphicOptionsDialog o = getModel().getOptionsDialog(false);
-		StoredValueDilaog.addFieldsForObject(o, this);
-		o.showDialog();
-	}
-	
+
 	
 	@Override
 	public String getToolTip() {
@@ -159,6 +151,12 @@ public class RectGraphicTool extends GraphicTool implements ShapeAddingTool{
 
 	public RectangularGraphic getModel() {
 		return model;
+	}
+
+
+	@Override
+	protected StandardDialog getOptionsDialog() {
+		return getModel().getOptionsDialog(false);
 	}
 	
 	

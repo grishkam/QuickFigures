@@ -28,6 +28,8 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import layout.RetrievableOption;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
+import standardDialog.StandardDialog;
+import storedValueDialog.StoredValueDilaog;
 import undo.UndoAddItem;
 
 /**A tool for adding and manipulating shapes.
@@ -41,7 +43,7 @@ public class GraphicTool extends Object_Mover {
 	@RetrievableOption(key = "Switch Back To Defaul Tool after use", label="Switch away from tool after use")
 	protected boolean temporaryTool=false;
 	
-	@RetrievableOption(key = "Add to layer", label="Add to the layer of clicked object")
+	@RetrievableOption(key = "Add to layer", label="If no layer is selcted, choose layer based on mouse location")
 	protected boolean layerAdd=true;
 
 	
@@ -129,5 +131,22 @@ public class GraphicTool extends Object_Mover {
 		}
 		return selectedContainer;
 	}
+	
+	/**Shows the model shape's options dialog. The options in that dialog fulfill the role of a tool dialog*/
+	@Override
+	public void showOptionsDialog() {
+		StandardDialog o =getOptionsDialog();
+		if(o==null)
+			return;
+		StoredValueDilaog.addFieldsForObject(o, this);
+		o.showDialog();
+	}
+
+
+
+	/**returns the options dialog.different subclasss return different dialogs
+	 */
+	protected StandardDialog getOptionsDialog() {
+		return null;};
 
 }

@@ -169,8 +169,8 @@ public class BrushTool extends PathGraphicTool {
 	
 	
 	@Override
-	public void showOptionsDialog() {
-		model.showOptionsDialog();
+	public StandardDialog getOptionsDialog() {
+		return model.getOptionsDialog();
 	}
 	
 	@Override

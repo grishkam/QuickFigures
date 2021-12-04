@@ -30,6 +30,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
 import icons.TreeIconWrappingToolIcon;
 import logging.IssueLog;
+import standardDialog.StandardDialog;
 import undo.UndoAddItem;
 import undo.PathEditUndo;
 
@@ -180,10 +181,7 @@ public class PathGraphicTool extends GraphicTool {
 	}
 	
 	
-	@Override
-	public void showOptionsDialog() {
-		model.showOptionsDialog();
-	}
+	
 	
 	@Override
 	public String getToolName() {
@@ -218,6 +216,12 @@ public class PathGraphicTool extends GraphicTool {
 			if(!b) finishPath() ;
 		super.onToolChange(b);
 		
+	}
+
+
+	@Override
+	protected StandardDialog getOptionsDialog() {
+		return model.getOptionsDialog();
 	}
 	
 
