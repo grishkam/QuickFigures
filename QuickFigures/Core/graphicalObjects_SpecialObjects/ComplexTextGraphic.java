@@ -380,7 +380,8 @@ public class ComplexTextGraphic extends TextGraphic {
 	/**returns a dimmed color*/
 	public Color getDimmedColor(Color c) {
 	
-		if (this.isDimColor()) return ColorDimmer.modifyColor( c, colordimming, true);
+		if (this.isDimColor()&& getDimming()!=null) 
+			return ColorDimmer.modifyColor( c, getDimming(), true);
 		 	  
 		 	    else return c;
 	}

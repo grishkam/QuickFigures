@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 4, 2021
+ * Version: 2021.2
+ */
 package undo;
 
 import java.awt.Color;
@@ -23,6 +28,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.ColorDimmer;
 import textObjectProperties.TextParagraph;
 
+/**An undo for edits to text items*/
 public class UndoTextEdit extends AbstractUndoableEdit2 {
 
 	/**
@@ -62,6 +68,8 @@ public class UndoTextEdit extends AbstractUndoableEdit2 {
 		isnap=new UndoAttachmentPositionChange(t);
 		iColor=t.getTextColor();
 		iDim=t.getDimming();
+		
+		setUpFinalState();//TODO: determine why button for changing merge label does not redo (undo still works)
 	}
 	
 	public void setUpFinalState() {

@@ -114,7 +114,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 
 	{ locationType=RectangleEdgePositions.MIDDLE;}
 	
-	protected ColorDimmer colordimming=ColorDimmer.FULL_BRIGTHNESS;
+	private ColorDimmer colordimming=ColorDimmer.FULL_BRIGTHNESS;
 	private boolean dimColor=true;
 	
 	transient double width=0;

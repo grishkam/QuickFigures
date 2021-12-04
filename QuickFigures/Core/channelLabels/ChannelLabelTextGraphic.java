@@ -242,15 +242,15 @@ public class ChannelLabelTextGraphic extends ComplexTextGraphic implements Chann
 	
 		
 		
-		if (isDimColor()) output= ColorDimmer.modifyColor( c, colordimming, dontinvert);
+		if (isDimColor()) output= ColorDimmer.modifyColor( c, getDimming(), dontinvert);
 		 	  
 		 	    else return c;
 		
-		if (!dontinvert&&colordimming.ordinal()<4) {
+		if (!dontinvert&&getDimming().ordinal()<4) {
 			if (c.equals(Color.black)) return Color.white;
 			//if (c.equals(Color.white)) return Color.black;
 		}
-		if (dontinvert&&colordimming.ordinal()<4) {
+		if (dontinvert&&getDimming().ordinal()<4) {
 			//if (c.equals(Color.black)) return Color.white;
 			if (c.equals(Color.white)) return Color.black;
 		}

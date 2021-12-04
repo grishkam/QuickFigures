@@ -568,6 +568,8 @@ public void resizeLayoutToFitContents() {
 			out.add( getRowSwithMenu(true));
 			return out;
 		}
+		
+		String allSubsequent="Next several";
 
 		private JMenu getRowSwithMenu(boolean copy) {
 			String baseText = "Switch ";
@@ -575,9 +577,11 @@ public void resizeLayoutToFitContents() {
 				baseText="Copy to ";
 			JMenu moveMenu=new SmartJMenu(baseText+changeText());
 			
-			for(int i=1; i<=nOptions(); i++) {
+			 for(int i=1; i<=nOptions(); i++) {
 				moveMenu.add(new RowSwitchMenuItem(""+i,i, copy));
 			}
+			 if (copy)
+			moveMenu.add(new RowSwitchMenuItem(allSubsequent,getPanelLocations().get(getObject()), copy));
 		
 			return moveMenu;
 		}
@@ -665,10 +669,12 @@ public void resizeLayoutToFitContents() {
 			private static final long serialVersionUID = 1L;
 			private int index;
 			private boolean copy;
+			private boolean all;
 			RowSwitchMenuItem(String t, int index, boolean copy) {
 				super(t);
 				this.index=index;
 				this.copy=copy;
+				all=t.equals(allSubsequent);
 			}
 			
 			@Override
@@ -676,7 +682,28 @@ public void resizeLayoutToFitContents() {
 				
 				LocatedObject2D target1 = getObject();
 				
+				CombinedEdit undo;
+				if (all) {
+					undo=new CombinedEdit();
+					for(int i=index+1;i<=nOptions(); i++) {
+						undo.addEditToList(new RowSwitchMenuItem(""+i,i, copy).performTask(target1));
+					}
+				}
+				else 
+				undo= performTask(target1);
 				
+				
+				
+				this.addUndo(undo);
+				me.getAsDisplay().updateDisplay();
+				
+			}
+
+			/**
+			 * @param target1
+			 * @return
+			 */
+			public CombinedEdit performTask(LocatedObject2D target1) {
 				CombinedEdit undo = new CombinedEdit();
 				if(copy) {
 					LocatedObject2D target2 = target1.copy();
@@ -707,9 +734,7 @@ public void resizeLayoutToFitContents() {
 				snapLockedItem(target1);
 				
 				undo.establishFinalState();
-				this.addUndo(undo);
-				me.getAsDisplay().updateDisplay();
-				
+				return undo;
 			}
 		}
 		

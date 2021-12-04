@@ -28,7 +28,8 @@ import graphicalObjects.ZoomableGraphic;
 import logging.IssueLog;
 import messages.ShowMessage;
 
-/**An implementation of the SVG exporter for compound shapes that have no perfect equivalent in svg*/
+/**An implementation of the SVG exporter for compound shapes that have no perfect equivalent in svg but can be broken down 
+ * into separate objects that are each exportable*/
 public class SVGExporter_ShapeList extends SVGExporter {
 	
 	private ZoomableGraphic[] layer;

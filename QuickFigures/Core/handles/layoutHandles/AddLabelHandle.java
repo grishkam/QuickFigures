@@ -51,6 +51,7 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
@@ -162,6 +163,7 @@ public class AddLabelHandle extends MoveRowHandle {
 				spaceFillerList.add(currentObject);
 			if(currentObject.getTagHashMap().get("Index")!=null&&(int)currentObject.getTagHashMap().get("Index")!=index)// what to do if the tag on the object says it belongs to another location
 				spaceFillerList.remove(currentObject);
+			
 		}
 		spaceFilled =spaceFillerList.size()>0;
 		
@@ -246,6 +248,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @param dText
 	 */
 	public void performAllLabelAddition(CanvasMouseEvent canvasMouseEventWrapper, CombinedEdit cEdit, String[] dText) {
+		int count=0;
 		int n=layout.getPanelLayout().nPanels();
 		if (type==BasicLayout.ROWS) 
 			n=layout.getPanelLayout().nRows();
@@ -261,7 +264,11 @@ public class AddLabelHandle extends MoveRowHandle {
 			
 			if(!current.isHidden()) {
 				current.performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
+				count++;
 			}
+		}
+		if(count==0) {
+			ShowMessage.showOptionalMessage("Label space is occupied", false, "It appears that there are already labels in those locations");
 		}
 	}
 
@@ -367,6 +374,8 @@ public class AddLabelHandle extends MoveRowHandle {
 			space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_LEFT).getBounds();
 		if (type==ROWS &&opposite) 
 			space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, LayoutSpaces.LABEL_ALLOTED_RIGHT).getBounds();
+		if (type==PANELS ) 
+			space = layout.getPanelLayout().makeAltered(LayoutSpaces.BLOCK_OF_PANELS).getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
 		
 		
 		ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingItems(space.getBounds(), layout.getPanelLayout().getVirtualWorksheet());
@@ -381,6 +390,7 @@ public class AddLabelHandle extends MoveRowHandle {
 					label.setAngle(t.getAngle());
 					if(t.getTagHashMap().get("Index")!=null)
 						label.getTagHashMap().put("Index", this.index);
+					label.setTextColor(t.getTextColor());
 				}
 		}
 	}

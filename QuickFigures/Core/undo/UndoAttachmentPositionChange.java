@@ -26,7 +26,7 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 
-/**An undo for changes to the attachment positino of an object
+/**An undo for changes to the attachment position of an object
  * @see AttachmentPosition
  * */
 public class UndoAttachmentPositionChange extends AbstractUndoableEdit2 {
