@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 4, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -113,7 +113,7 @@ PopupMenuSupplier  {
 		
 		// addItem(addNormIndicators);
 		 addItem(SWITCH_HANDLE_MODES);
-		String subMenuName = "expert options";
+		String subMenuName = "Expert options";
 		
 		 addItem(tFormMenu, UNCURVED_MIMIC);
 		addItem(tFormMenu,SMOOTH);

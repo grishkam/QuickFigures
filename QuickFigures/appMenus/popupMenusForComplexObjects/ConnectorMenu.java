@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Nov 29, 2021
- * Date Modified: Nov 29, 2021
+ * Date Modified:Dec 4, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -52,7 +52,7 @@ public class ConnectorMenu extends PathGraphicMenu {
 		
 		this.addAllMenuItems(new ShapeGraphicMenu(pathForMenuG).createMenuItems());
 		
-		String subMenuName = "expert options";
+		String subMenuName = "Expert options";
 		
 		 
 		addItem(subMenuName, getAddArrowHead2MenuCommand());

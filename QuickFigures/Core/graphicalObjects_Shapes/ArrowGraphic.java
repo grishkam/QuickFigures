@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 5, 2021
+ * Date Modified: Dec 4, 2021
  * Version: 2021.2
  */
 package graphicalObjects_Shapes;
@@ -778,9 +778,9 @@ protected Point2D getDrawnLineEnd2() {
 			return  createPathCopy().toIllustrator(aref2);
 			
 		 } else if (headOnly) {
-			 IssueLog.log("will draw arrow head only (in illustrator) "+this.getStrokeColor()+"  at "+this.getLocation());
+			 
 			 Object a=null;
-			 if (drawsFirstHead()) a=this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);
+			 	if (drawsFirstHead()) a=this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);
 			 	if (drawsSecondHead())a= this.getHead1DrawShape(SECOND_HEAD).toIllustrator(aref2);
 			return a;
 		 } else {

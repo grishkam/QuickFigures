@@ -567,7 +567,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		
 		ArrayList<PathPointList> secs = this.getPoints().createAtCloseSubsections();
 		if(hasArrows()) {
-			IssueLog.log("should use group breakdown to draw arrows in illustrator now");
+			
 			return createCopyWithDetachedHeads().toIllustrator(aref);
 		}
 		
@@ -842,7 +842,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 
 	/**
-	 * 
+	 Formats the internal arrow for display at one end of this path
 	 */
 	void prepareArrowHead1() {
 		this.getArrowHead1().setStrokeWidth(this.getStrokeWidth());
@@ -857,7 +857,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	}
 
 	/**
-	 * 
+	 Formats the internal arrow for display at one end of this path
 	 */
 	void prepareArrowHead2() {
 		this.getArrowHead2().setStrokeWidth(this.getStrokeWidth());
