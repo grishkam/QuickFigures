@@ -57,6 +57,7 @@ public class ConnectorMenu extends PathGraphicMenu {
 		 
 		addItem(subMenuName, getAddArrowHead2MenuCommand());
 		 addItem(subMenuName, getAddArrowHead1MenuCommand());
+		 addItem(subMenuName, BREAK_ARROWS_OFF);
 	}
 
 }

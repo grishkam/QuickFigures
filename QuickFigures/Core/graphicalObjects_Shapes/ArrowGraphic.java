@@ -771,12 +771,18 @@ protected Point2D getDrawnLineEnd2() {
 	public Object toIllustrator(ArtLayerRef aref) {
 		ArtLayerRef aref2 = aref.createSubRefG();
 		aref2.setName(getName());
-		if ( outlineDraw()) {
+		if ( outlineDraw()&&!headOnly) {
 			// this.getBackGroundShape().setShape(getOutline());
 			// getBackGroundShape().setName(getName());
 			 
 			return  createPathCopy().toIllustrator(aref2);
 			
+		 } else if (headOnly) {
+			 IssueLog.log("will draw arrow head only (in illustrator) "+this.getStrokeColor()+"  at "+this.getLocation());
+			 Object a=null;
+			 if (drawsFirstHead()) a=this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);
+			 	if (drawsSecondHead())a= this.getHead1DrawShape(SECOND_HEAD).toIllustrator(aref2);
+			return a;
 		 } else {
 			 Object output = super.toIllustrator(aref2);
 			 if (drawsFirstHead()) this.getHead1DrawShape(FIRST_HEAD).toIllustrator(aref2);

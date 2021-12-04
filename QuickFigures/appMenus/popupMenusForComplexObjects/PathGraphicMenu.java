@@ -32,6 +32,8 @@ import java.util.HashMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
@@ -62,6 +64,7 @@ PopupMenuSupplier  {
 	static final String CROSSING_MARKS="Show Crossing Path Lines", NORMAL_MARKS="show vectors",
 			ELIMINATE_UNNEEDED_POINTS="Eliminate extra points", SMOOTH="Smooth", ADD_POINT="Add Point";
 	;private static final String ADD_ARROW_HEAD_1="Arrow Head At Start", ADD_ARROW_HEAD_2="Arrow Head At End";
+	protected static final String BREAK_ARROWS_OFF="Detach arrow heads";
 	
 	
 	PathGraphic pathForMenuG;
@@ -119,6 +122,7 @@ PopupMenuSupplier  {
 		 addItem(subMenuName, getAddArrowHead1MenuCommand());
 		 addItem(subMenuName, ELIMINATE_UNNEEDED_POINTS);
 		 addItem(subMenuName, MOVE_ENDPOINT);
+		 addItem(subMenuName, BREAK_ARROWS_OFF);
 	}
 	
 	
@@ -201,6 +205,15 @@ PopupMenuSupplier  {
 
 		}
 		
+		ArrowGraphic h1 = pathForMenuG.getArrowHead1();
+		ArrowGraphic h2 = pathForMenuG.getArrowHead2();
+		if (com.equals(BREAK_ARROWS_OFF)) {
+			GraphicGroup newpath = pathForMenuG.createCopyWithDetachedHeads();
+			newpath.select();
+			undo=Edit.addItem(pathForMenuG.getParentLayer(), newpath);
+
+		}
+		
 		if (com.equals(HORIZONTAL_FLIP)) {
 			pathForMenuG.getPoints().applyAffine(BasicShapeMaker.createHFlip(pathForMenuG.getPoints().createPath(true).getBounds().getCenterX()));
 		}
@@ -247,13 +260,13 @@ PopupMenuSupplier  {
 		
 		if (com.equals(getAddArrowHead1MenuCommand())) {
 			if (!pathForMenuG.hasArrowHead1())pathForMenuG.addArrowHeads(1);
-			else if (pathForMenuG.getArrowHead1()!=null)
-				new ArrowSwingDialog(pathForMenuG.getArrowHead1(), 1).showDialog();;
+			else if (h1!=null)
+				new ArrowSwingDialog(h1, 1).showDialog();;
 		}
 				if (com.equals(getAddArrowHead2MenuCommand())) {
 				if (!pathForMenuG.hasArrowHead2())pathForMenuG.addArrowHeads(2);
-				else if (pathForMenuG.getArrowHead2()!=null)
-					new ArrowSwingDialog(pathForMenuG.getArrowHead2(), 1).showDialog();;
+				else if (h2!=null)
+					new ArrowSwingDialog(h2, 1).showDialog();;
 					
 		}
 		

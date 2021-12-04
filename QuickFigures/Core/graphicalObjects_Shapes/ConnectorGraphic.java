@@ -236,13 +236,15 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	/**creates a copy*/
 	public ConnectorGraphic copy() {
 		
-		ConnectorGraphic out = new ConnectorGraphic(this.isHorizontal(),new Point2D[getAnchors().length]);
-		for(int i=0; i<getAnchors().length; i++) 
-			{	out.getAnchors()[i]=new Point2D.Double();
-				out.getAnchors()[i].setLocation(getAnchors()[i]);
-			}
+		ConnectorGraphic out = new ConnectorGraphic(this.isHorizontal(),this.copyAnchors());
+		
 		out.copyAttributesFrom(this);
 		out.copyColorsFrom(this);
+		
+		if (this.arrowHead1!=null) out.arrowHead1=this.getArrowHead1().copy();
+		if (this.arrowHead2!=null) out.arrowHead2=this.getArrowHead2().copy();
+		
+		
 		return out;
 	}
 
@@ -406,6 +408,19 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 		createIdenticalPath.setLocation(0, 0);
 		return createIdenticalPath;
 	}
+	
+	
+
+	/**returns a path that looks the same as this one
+	 * @return
+	 */
+	public PathGraphic createIdenticalPath() {
+		PathGraphic output = super.createHeadlessCopy();
+		if (this.arrowHead1!=null) output.arrowHead1=this.getArrowHead1().copy();
+		if (this.arrowHead2!=null) output.arrowHead2=this.getArrowHead2().copy();
+		
+		return output;
+	}
 
 	
 	/**creates the object within an illustrator art layer*/
@@ -427,9 +442,18 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	 * @return
 	 */
 	public PathGraphic createHeadlessCopy() {
-		 ConnectorGraphic output = new ConnectorGraphic(horizontal, this.getAnchors().clone());
+		 ConnectorGraphic output = new ConnectorGraphic(horizontal, copyAnchors());
 		copyColorAttributeTo(output);
 		
+		return output;
+	}
+
+	/**returns a copy of the anchors
+	 * @return
+	 */
+	Point2D[] copyAnchors() {
+		Point2D[] output = new Point2D[anchors.length];
+		for(int i=0; i<output.length; i++) output[i]=new Point2D.Double(anchors[i].getX(), anchors[i].getY());
 		return output;
 	}
 	

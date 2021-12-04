@@ -42,6 +42,7 @@ import export.svg.SVGExporter;
 import export.svg.SVGExporter_ShapeList;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicHolder;
 import handles.HasSmartHandles;
 import handles.PathPointReshapeList;
@@ -59,6 +60,7 @@ import locatedObject.PathObject;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import locatedObject.ScalesFully;
+import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import objectCartoon.ShapeMaker;
 import popupMenusForComplexObjects.PathGraphicMenu;
@@ -222,6 +224,24 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		output.setClosedShape(this.isClosedShape());
 		output.updatePathFromPoints();
 		return output;
+	}
+	
+	/**returns a group that contains a headless version of this path and two detached heads*/
+	public GraphicGroup createCopyWithDetachedHeads() {
+		GraphicGroup newpath = new GraphicGroup();
+		ArrowGraphic h1 = getArrowHead1();
+		ArrowGraphic h2 = getArrowHead2();
+		newpath.getTheInternalLayer().add(createHeadlessCopy());
+		if(h1!=null)
+			{this.prepareArrowHead1();
+			newpath.getTheInternalLayer().add(h1.copy());
+			}
+		if(h2!=null) {
+			this.prepareArrowHead2();
+			newpath.getTheInternalLayer().add(h2.copy());
+			
+			}
+		return newpath;
 	}
 	
 	/**since this subclass is already a path, its path copy is just a normal copy*/
@@ -543,10 +563,18 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	/**Used when generating a script for adobe illustrator*/
 	@Override
 	public Object toIllustrator(ArtLayerRef aref) {
+		
+		
 		ArrayList<PathPointList> secs = this.getPoints().createAtCloseSubsections();
-	
+		if(hasArrows()) {
+			IssueLog.log("should use group breakdown to draw arrows in illustrator now");
+			return createCopyWithDetachedHeads().toIllustrator(aref);
+		}
+		
 			if (secs.size()==1) {
-		return super.toIllustrator(aref);
+					Object illustrator = super.toIllustrator(aref);
+					//addArrowsToIllustratorLayers(aref);
+					return illustrator;
 		
 			}
 			IllustratorObjectRef wantspathITems;
@@ -564,8 +592,30 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		for(PathPointList s: secs) {
 			createShapeIllustrator(wantspathITems,s);
 		}
+		//addArrowsToIllustratorLayers(aref);
+		
 		return wantspathITems;
 		
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean hasArrows() {
+		return this.getArrowHead1()!=null||this.getArrowHead2()!=null;
+	}
+
+	/**
+	 * @param aref
+	 */
+	void addArrowsToIllustratorLayers(ArtLayerRef aref) {
+		if(this.getArrowHead1()!=null) {
+			IssueLog.log("head 1 in ilustrator");
+			this.getArrowHead1().toIllustrator(aref);
+			}
+		if(this.getArrowHead2()!=null) {
+			this.getArrowHead2().toIllustrator(aref);
+			}
 	}
 	
 	
@@ -776,19 +826,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		;
 		if (i==2&&getArrowHead2()!=null)
 			{
-					this.getArrowHead2().setStrokeWidth(this.getStrokeWidth());
-					getArrowHead2().copyColorsFrom(this);
-					PathPoint lastPoint = getPoints().getLastPoint();
-					getArrowHead2().setPoint2(getTransformPointsForPathGraphic(lastPoint.getAnchor()));
-					boolean useCC = lastPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
-					if (useCC) getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
-					else {
-						PathPoint previousPoint = getPoints().getPreviousPoint(lastPoint);
-						Double newPP = previousPoint.getCurveControl2();
-						getArrowHead2().setPoint1(getTransformPointsForPathGraphic(newPP));
-					}
-					
-					getArrowHead2().moveNotchToHead1();
+					prepareArrowHead2();
 					
 					
 					getArrowHead2().draw(g, cords);
@@ -796,19 +834,45 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		
 		if (i==1&&getArrowHead1()!=null)
 		{
-				this.getArrowHead1().setStrokeWidth(this.getStrokeWidth());
-				getArrowHead1().copyColorsFrom(this);
-				PathPoint firstPoint = getPoints().get(0);
-				getArrowHead1().setPoint2(getTransformPointsForPathGraphic(firstPoint.getAnchor()));
-				boolean useCC = firstPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
-				if (useCC) getArrowHead1().setPoint1(getTransformPointsForPathGraphic(firstPoint.getCurveControl2()));
-				else  getArrowHead1().setPoint1(getTransformPointsForPathGraphic(getPoints().getNextPoint(firstPoint).getCurveControl1()));
-		
-				getArrowHead1().moveNotchToHead1();
+				prepareArrowHead1();
 				
 				
 				getArrowHead1().draw(g, cords);
 		}
+	}
+
+	/**
+	 * 
+	 */
+	void prepareArrowHead1() {
+		this.getArrowHead1().setStrokeWidth(this.getStrokeWidth());
+		getArrowHead1().copyColorsFrom(this);
+		PathPoint firstPoint = getPoints().get(0);
+		getArrowHead1().setPoint2(getTransformPointsForPathGraphic(firstPoint.getAnchor()));
+		boolean useCC = firstPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
+		if (useCC) getArrowHead1().setPoint1(getTransformPointsForPathGraphic(firstPoint.getCurveControl2()));
+		else  getArrowHead1().setPoint1(getTransformPointsForPathGraphic(getPoints().getNextPoint(firstPoint).getCurveControl1()));
+
+		getArrowHead1().moveNotchToHead1();
+	}
+
+	/**
+	 * 
+	 */
+	void prepareArrowHead2() {
+		this.getArrowHead2().setStrokeWidth(this.getStrokeWidth());
+		getArrowHead2().copyColorsFrom(this);
+		PathPoint lastPoint = getPoints().getLastPoint();
+		getArrowHead2().setPoint2(getTransformPointsForPathGraphic(lastPoint.getAnchor()));
+		boolean useCC = lastPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
+		if (useCC) getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
+		else {
+			PathPoint previousPoint = getPoints().getPreviousPoint(lastPoint);
+			Double newPP = previousPoint.getCurveControl2();
+			getArrowHead2().setPoint1(getTransformPointsForPathGraphic(newPP));
+		}
+		
+		getArrowHead2().moveNotchToHead1();
 	}
 
 	public ArrowGraphic getArrowHead1() {
@@ -975,10 +1039,10 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return "Path";
 	}
 	
-	/**Called when the user exports to adobe illustrator*/
+	/**Called when the user exports to SVG*/
 	@Override
 	public SVGExporter getSVGEXporter() {
-		if(this.getArrowHead1()!=null||this.getArrowHead2()!=null) {
+		if(hasArrows()) {
 			return new SVGExporter_ShapeList(this.getName(), this.createHeadlessCopy(), this.getArrowHead1(), this.getArrowHead2());
 		} 
 		
