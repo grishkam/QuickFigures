@@ -37,6 +37,9 @@ import java.util.ArrayList;
 
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEvent;
+import export.svg.SVGEXporterForShape;
+import export.svg.SVGExporter;
+import export.svg.SVGExporter_ShapeList;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicHolder;
@@ -201,14 +204,22 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	 * @return
 	 */
 	public PathGraphic createIdenticalPath() {
+		PathGraphic output = createHeadlessCopy();
+		if (this.arrowHead1!=null) output.arrowHead1=this.getArrowHead1().copy();
+		if (this.arrowHead2!=null) output.arrowHead2=this.getArrowHead2().copy();
+		
+		return output;
+	}
+
+	/**returns a copy that lacks arrow heads
+	 * @return
+	 */
+	public PathGraphic createHeadlessCopy() {
 		PathGraphic output = new PathGraphic(getPath());
 		copyColorAttributeTo(output);
 		output.setLocation(getLocation());
 		output.setPoints(getPoints().copy());
 		output.setClosedShape(this.isClosedShape());
-		if (this.arrowHead1!=null) output.arrowHead1=this.getArrowHead1().copy();
-		if (this.arrowHead2!=null) output.arrowHead2=this.getArrowHead2().copy();
-		
 		return output;
 	}
 	
@@ -961,6 +972,16 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	@Override
 	public String getShapeName() {
 		return "Path";
+	}
+	
+	/**Called when the user exports to adobe illustrator*/
+	@Override
+	public SVGExporter getSVGEXporter() {
+		if(this.getArrowHead1()!=null||this.getArrowHead2()!=null) {
+			return new SVGExporter_ShapeList(this.getName(), this.createHeadlessCopy(), this.getArrowHead1(), this.getArrowHead2());
+		} 
+		
+		return new SVGEXporterForShape(this);
 	}
 
 }
