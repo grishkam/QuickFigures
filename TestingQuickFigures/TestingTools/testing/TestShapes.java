@@ -528,13 +528,15 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		
 
 		h2  = new ConnectorGraphic(false, new Point(150, 400), new Point(265, 200),new Point(265, 300));
-		h2.moveLocation(100, 40);
+		h2.moveLocation(100, -60);
+		h2.setStrokeWidth(3);
 		h2.setStrokeColor(Color.blue.darker());
 		l.add(h2);
-		
+		h2.addArrowHeads(1);
+		h2.addArrowHeads(2);
 		
 		OpenTriangleGraphic b = new OpenTriangleGraphic(z.getBounds());
-		b.moveLocation(200, 18);
+		b.moveLocation(200, -18);
 		b.scaleAbout(new Point(110,50), 0.8);
 		b.moveLocation(-80, 70);
 		b.setStrokeColor(Color.pink);
@@ -551,6 +553,13 @@ if (type==TestExample.MANY_ANGLE_COMPLEX_TEXT) {
 		transparentFill.setStrokeColor(Color.cyan.darker());
 		l.add(transparentFill);
 		
+		
+		PathGraphic p3 = new PathGraphic(new Point(200, 300), new Point(200, 400));
+		
+		p3.setStrokeWidth(3);
+		p3.setStrokeColor(Color.orange.darker());
+		p3.addArrowHeads(1);
+		l.add(p3);
 	}
 	
 	

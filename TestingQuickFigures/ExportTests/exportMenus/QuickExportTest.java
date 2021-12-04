@@ -43,10 +43,10 @@ abstract class QuickExportTest {
 
 	/**set to true if one want each file to be opened automatically.
 	  Dye to dialogs comming up in powerpoint and other softwares, decided it best not to do this*/
-	boolean opensFiles=false;
+	boolean opensFiles=true;
 	boolean prompt=false;
 	
-	TestExample testExample=TestExample.FIGURE_WITH_INSETS;//which cases to test. set to null if all should be tested
+	TestExample testExample=TestExample .DIVERSE_SHAPES;//which cases to test. set to null if all should be tested
 
 	/**set to true if user will view files one by one as they are being created*/
 	private boolean viewOnebyOne=false;

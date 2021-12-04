@@ -220,6 +220,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		output.setLocation(getLocation());
 		output.setPoints(getPoints().copy());
 		output.setClosedShape(this.isClosedShape());
+		output.updatePathFromPoints();
 		return output;
 	}
 	

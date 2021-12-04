@@ -422,4 +422,15 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 		return calculatePointsOnStrokeBetween(location1, location2);
 	}
 	
+	
+	/**returns a copy that lacks arrow heads
+	 * @return
+	 */
+	public PathGraphic createHeadlessCopy() {
+		 ConnectorGraphic output = new ConnectorGraphic(horizontal, this.getAnchors().clone());
+		copyColorAttributeTo(output);
+		
+		return output;
+	}
+	
 }

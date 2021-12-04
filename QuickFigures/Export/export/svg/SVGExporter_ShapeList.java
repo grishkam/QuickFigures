@@ -52,7 +52,10 @@ public Element toSVG(Document dom, Element e) {
 				
 		    	if (z instanceof SVGExportable) {
 		    		SVGExportable exs=(SVGExportable) z;
-		    		exs.getSVGEXporter().toSVG(dom, element);
+		    		SVGExporter svgeXporter = exs.getSVGEXporter();
+					svgeXporter.toSVG(dom, element);
+		    		
+		    		IssueLog.log("working on "+z+"   "+svgeXporter);
 		    	}
 			
 			
