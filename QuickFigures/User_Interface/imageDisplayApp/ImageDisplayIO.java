@@ -68,6 +68,9 @@ public class ImageDisplayIO {
 			if (e instanceof java.lang.ClassNotFoundException) {
 				FileChoiceUtil.OkOrNo("Class not found. "+"File likely saved with earlier version");
 			}
+			if (e instanceof java.io.StreamCorruptedException) {
+				FileChoiceUtil.OkOrNo("File type wrong "+" cannot read that file");
+			}
 			IssueLog.logT(e);;
 			return null;
 		}

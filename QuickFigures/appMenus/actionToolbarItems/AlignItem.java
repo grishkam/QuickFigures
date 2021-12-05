@@ -58,7 +58,7 @@ public class AlignItem extends BasicMultiSelectionOperator implements  LayoutSpa
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	/**The constant values that are used to indicate that the align item operator will do*/
+	/**The constant values that are used to indicate what the align item operator will do*/
 	public static final int MOVE_TO_FRONT = 102;
 	public static final int MOVE_TO_BACK = 103;
 	public static final int MOVE_FORWARD = 100;

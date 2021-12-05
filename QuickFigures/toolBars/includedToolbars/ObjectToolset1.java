@@ -108,14 +108,16 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 			if (nameChan)//ensures that the QuickFigure button will always be before theinset tool
 				{
 				addTool(new QuickFigureMaker());
-				QuickFigureMaker tool = new QuickFigureMaker(QuickFigureMaker.GEL);
-				tool.setIconSet(GraphicToolIcon.createIconSet( new BlotFigureIcon(0)));
-				addTool(tool);
+				
 				}
 			addToolBit(b);
 			
 			
 		}
+		
+		QuickFigureMaker tool = new QuickFigureMaker(QuickFigureMaker.GEL);
+		tool.setIconSet(GraphicToolIcon.createIconSet( new BlotFigureIcon(0)));
+		addTool(tool);
 		
 		addTool(new GeneralTool(new ChannelSwapperToolBit(), new BasicChannelLabelTool(), new LutSwapperTool()));
 		

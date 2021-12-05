@@ -28,6 +28,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import actionToolbarItems.AlignItem;
+import actionToolbarItems.AlignSize;
 import actionToolbarItems.DistributeItems;
 import figureFormat.MassTemplateApplication;
 import figureFormat.TemplateUserMenuAction;
@@ -87,6 +88,8 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		operators.add(new DistributeItems(false));
 		operators.add(new DistributeItems(true));
 		
+		
+		
 		operators.add(new HideItem());
 		operators.add(new UnHideItem());
 		operators.add(new SelectOrDeselectItem(false));
@@ -115,7 +118,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		operators.add(new FitLayout(FitLayout.ALIGN_GRID));
 		operators.add(new FitLayout(false));
 		operators.add(new FitLayout(true));
-		
+		operators.addAll(AlignSize.getAllPossibleAligns());
 		
 		operators.add(new ScalingSyncer());
 		operators.add(new ScalingSyncerFigures());
