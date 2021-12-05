@@ -102,7 +102,7 @@ public class AffineTransformDialog extends StandardDialog {
 			
 	}
 
-	public static AffineTransform showScale(Point point) {
+	public static AffineTransform showScale(Point2D point) {
 		AffineTransformDialog affineTransformDialog = new AffineTransformDialog(SCALED, point.getX(), point.getY());
 		affineTransformDialog.showDialog();
 		return affineTransformDialog.getTransform();

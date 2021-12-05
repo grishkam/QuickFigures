@@ -42,8 +42,10 @@ import objectCartoon.BasicShapeMaker;
 import objectDialogs.ArrowSwingDialog;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
 import menuUtil.SmartJMenu;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import sUnsortedDialogs.AffineTransformDialog;
+import standardDialog.StandardDialog;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
@@ -135,7 +137,7 @@ PopupMenuSupplier  {
 	}
 	
 	public JMenuItem createItem(String st) {
-		JMenuItem o=new JMenuItem(st);
+		JMenuItem o=new BasicSmartMenuItem(st);
 		o.addActionListener(this);
 		o.setActionCommand(st);
 		
@@ -163,11 +165,17 @@ PopupMenuSupplier  {
 			pathForMenuG.getPoints().moveEnd();
 		}
 		if (com.equals(ROTATE)) {
-			pathForMenuG.getPoints().applyAffine(AffineTransformDialog.showRotation(0, new Point(0,0)));
+			Double angle = StandardDialog.getNumberFromUser("input angle", 0, true);
+			if(angle!=null)
+				pathForMenuG.rotateAbout(pathForMenuG.getCenterOfRotation(), -angle);
+			//AffineTransform showRotation = AffineTransformDialog.showRotation(0, pathForMenuG.getCenterOfRotation());
+			//pathForMenuG.getPoints().applyAffine(showRotation);
 		}
 		
 		if (com.equals(SCALE)) {
-			pathForMenuG.getPoints().applyAffine(AffineTransformDialog.showScale(new Point(1,1)));
+			AffineTransform scaleTransform = AffineTransformDialog.showScale(new Point(1,1));
+			
+			pathForMenuG.scaleAbout( pathForMenuG.getCenterOfRotation(), scaleTransform.getScaleX(), scaleTransform.getScaleY());
 		}
 		
 
@@ -208,9 +216,13 @@ PopupMenuSupplier  {
 		ArrowGraphic h1 = pathForMenuG.getArrowHead1();
 		ArrowGraphic h2 = pathForMenuG.getArrowHead2();
 		if (com.equals(BREAK_ARROWS_OFF)) {
+			
 			GraphicGroup newpath = pathForMenuG.createCopyWithDetachedHeads();
 			newpath.select();
-			undo=Edit.addItem(pathForMenuG.getParentLayer(), newpath);
+			
+			AbstractUndoableEdit2 undo2 = Edit.addItem(pathForMenuG.getParentLayer(), newpath);
+			AbstractUndoableEdit2 undo3 = Edit.removeItem(pathForMenuG.getParentLayer(),pathForMenuG );
+			undo=new CombinedEdit(undo2, undo3);
 
 		}
 		

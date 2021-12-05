@@ -80,15 +80,7 @@ PopupMenuSupplier  {
 				
 			}}.createJMenuItem("Duplicate Points"));
 		
-		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public void actionPerformed(ActionEvent e) {
-				LocatedObject2D copy = item.createFilledStrokeCopy();
-				copy.moveLocation(5, 25);
-				performUndoable(
-						Edit.addItem(item.getParentLayer(),(ZoomableGraphic) copy)
-						);
-				
-			}}.createJMenuItem("Convert To Filled line"));
+	
 		
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public void actionPerformed(ActionEvent e) {

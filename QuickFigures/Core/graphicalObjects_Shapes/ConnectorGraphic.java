@@ -237,7 +237,7 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	public ConnectorGraphic copy() {
 		
 		ConnectorGraphic out = new ConnectorGraphic(this.isHorizontal(),this.copyAnchors());
-		
+		out.setName(getName());
 		out.copyAttributesFrom(this);
 		out.copyColorsFrom(this);
 		

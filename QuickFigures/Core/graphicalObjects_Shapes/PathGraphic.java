@@ -218,6 +218,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	 */
 	public PathGraphic createHeadlessCopy() {
 		PathGraphic output = new PathGraphic(getPath());
+		output.setName(getName());
 		copyColorAttributeTo(output);
 		output.setLocation(getLocation());
 		output.setPoints(getPoints().copy());
@@ -229,6 +230,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	/**returns a group that contains a headless version of this path and two detached heads*/
 	public GraphicGroup createCopyWithDetachedHeads() {
 		GraphicGroup newpath = new GraphicGroup();
+		newpath.setName(getName());
 		ArrowGraphic h1 = getArrowHead1();
 		ArrowGraphic h2 = getArrowHead2();
 		newpath.getTheInternalLayer().add(createHeadlessCopy());
