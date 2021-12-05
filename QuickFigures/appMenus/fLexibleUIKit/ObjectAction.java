@@ -15,20 +15,25 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 29, 2021
+ * Date Modified: Dec 4, 2021
  * Version: 2021.2
  */
 package fLexibleUIKit;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
+import javax.swing.undo.UndoableEdit;
 
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import menuUtil.BasicSmartMenuItem;
 import undo.AbstractUndoableEdit2;
+import undo.Edit;
 
 /**an abstract class for action listeners that perform one task targettig one
  * specific object*/
@@ -61,6 +66,16 @@ public abstract class ObjectAction<Type> implements ActionListener {
 	
 	public void addUndo(AbstractUndoableEdit2 e) {
 		new CurrentFigureSet().addUndo(e);
+	}
+	
+	public AbstractUndoableEdit2 performAction() {
+		return null;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		
+
+		this.addUndo(performAction());
 	}
 	
 	

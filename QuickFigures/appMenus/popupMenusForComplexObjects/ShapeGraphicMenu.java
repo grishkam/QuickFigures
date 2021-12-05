@@ -34,6 +34,8 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
 import undo.Edit;
 import menuUtil.PopupMenuSupplier;
 
@@ -57,37 +59,35 @@ PopupMenuSupplier  {
 	public ArrayList<JMenuItem> createMenuItems() {
 		ArrayList<JMenuItem> j=new ArrayList<JMenuItem>();
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public void actionPerformed(ActionEvent e) {
+			public AbstractUndoableEdit2  performAction() {
 				item.showOptionsDialog();
+				return null;
 			}}.createJMenuItem("Options"));
 			
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public void actionPerformed(ActionEvent e) {
+			public AbstractUndoableEdit2  performAction() {
 				LocatedObject2D copy = item.copy();
 				copy.moveLocation(5, 25);
-				performUndoable(
-						Edit.addItem(item.getParentLayer(), (ZoomableGraphic) copy)
-						);
+				return Edit.addItem(item.getParentLayer(), (ZoomableGraphic) copy);
 			}}.createJMenuItem("Duplicate"));
 		
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public void actionPerformed(ActionEvent e) {
+			public AbstractUndoableEdit2  performAction() {
 				LocatedObject2D copy = item.createPathCopy();
 				copy.moveLocation(5, 25);
-				performUndoable(
-						Edit.addItem(item.getParentLayer(),(ZoomableGraphic) copy)
-						);
+				return Edit.addItem(item.getParentLayer(),(ZoomableGraphic) copy);
+						
 				
 			}}.createJMenuItem("Duplicate Points"));
 		
 	
 		
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public void actionPerformed(ActionEvent e) {
+			public CombinedEdit  performAction() {
 				ZoomableGraphic copy = (ZoomableGraphic)item.createPathCopy();
 				GraphicLayer layer = item.getParentLayer();
 				
-				performUndoable(
+				return new CombinedEdit(
 						Edit.addItem(layer, copy),
 						Edit.swapItemOrder(layer, item, copy),
 						Edit.removeItem(layer, item)

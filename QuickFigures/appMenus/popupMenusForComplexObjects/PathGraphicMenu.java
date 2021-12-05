@@ -97,7 +97,7 @@ PopupMenuSupplier  {
 	 */
 	public void addAllMenuItems() {
 		
-		this.addAllMenuItems(new ShapeGraphicMenu(pathForMenuG).createMenuItems());
+		addAllMenuItems(new ShapeGraphicMenu(pathForMenuG).createMenuItems());
 		
 		 addItem(ADD_POINT);
 		

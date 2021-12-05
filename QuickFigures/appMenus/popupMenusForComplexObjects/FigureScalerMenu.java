@@ -32,6 +32,7 @@ import menuUtil.SmartJMenu;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
+import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 
 /**a set of menu options that allow the user to scale a figure*/
@@ -65,14 +66,15 @@ public class FigureScalerMenu extends SmartJMenu{
 	
 		add(new ObjectAction<PanelLayoutGraphic>(item) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public AbstractUndoableEdit2  performAction() {
 				FigureScaler scaler = new FigureScaler(false);
 					double factor=scaler.getSlideSizeScale(item);
 					
 					CombinedEdit undo = scaler.scaleFigure(item, factor, item.getPanelLayout().getReferenceLocation());
 					item.updateDisplay();
-					addEdit(undo);
+					
 					FigureScaler.scaleMessages(item.getParentLayer());
+					return undo;
 			}	
 	}.createJMenuItem("Scale to Slide Size"));
 		
@@ -80,13 +82,14 @@ public class FigureScalerMenu extends SmartJMenu{
 		
 		add(new ObjectAction<PanelLayoutGraphic>(item) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public AbstractUndoableEdit2  performAction() {
 				FigureScaler scaler = new FigureScaler(false);
 				CombinedEdit undo = scaler.scaleFigure(item, getScaleFromDialog(), item.getPanelLayout().getReferenceLocation());
 				undo.addEditToList(new CanvasAutoResize(false).performUndoableAction(mouseE.getAsDisplay()));
 				item.updateDisplay();
-				addEdit(undo);
+				
 				FigureScaler.scaleMessages(item.getParentLayer());
+				return undo;
 				}
 
 			

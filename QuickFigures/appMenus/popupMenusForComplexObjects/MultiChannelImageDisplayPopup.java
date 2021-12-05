@@ -37,6 +37,7 @@ import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import ultilInputOutput.FileChoiceUtil;
+import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
 
@@ -95,12 +96,12 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	protected void addRemoveImage(JMenu thi) {
 		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(displayLayer) {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public AbstractUndoableEdit2  performAction() {
 				if(displayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
 					FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) displayLayer.getParentLayer() ;
 					if(f.getAllSourceImages().size()==1) {
 						FileChoiceUtil.yesOrNo("Figure must contain at least one image. Will not remove last image. Understood?");
-						return;
+						return null;
 					}
 				}
 				boolean b=FileChoiceUtil.yesOrNo("Are you sure you want to remove this image from figure?");
@@ -108,11 +109,11 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 				if (b)
 					{
 					
-					addUndo(Edit.removeItem(displayLayer.getParentLayer(), displayLayer)
-							);
+					return Edit.removeItem(displayLayer.getParentLayer(), displayLayer);
 					
 					
 					};
+					return null;
 				
 			}};
 		thi.add(act.createJMenuItem("Remove From Figure"));
@@ -135,9 +136,9 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	protected void addView(JMenu thi) {
 		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(displayLayer) {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				this.addUndo(
-						createSecondView(displayLayer));
+			public AbstractUndoableEdit2  performAction() {
+				return 
+						createSecondView(displayLayer);
 				
 				
 				

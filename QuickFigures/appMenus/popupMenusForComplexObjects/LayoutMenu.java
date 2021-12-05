@@ -29,6 +29,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
+import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 
 /**A menu for the default layouts */
@@ -64,7 +65,10 @@ public class LayoutMenu extends AttachedItemMenu {
 		
 		add(new ObjectAction<DefaultLayoutGraphic>(c) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {item.showOptionsDialog();}	
+			public AbstractUndoableEdit2  performAction() {
+				item.showOptionsDialog();
+				return null;
+			}	
 	}.createJMenuItem("Other Options"));
 		
 	

@@ -38,6 +38,7 @@ import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import menuUtil.PopupMenuSupplier;
 import objectDialogs.TextInsetsDialog;
+import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
 
 /**A menu for text graphics*/
@@ -88,18 +89,16 @@ PopupMenuSupplier  {
 	public ObjectAction<TextGraphic> createDuplicatorAction(boolean rowLabel) {
 		return new ObjectAction<TextGraphic>(textG) {
 
-			public void actionPerformed(ActionEvent e) {
+			public AbstractUndoableEdit2  performAction() {
 				TextGraphic c = textG.copy();
 				c.moveLocation(5, 2);
 				
 				
 				
 				GraphicLayer targetLayer = textG.getParentLayer();
-				if(targetLayer==null) return;
+				if(targetLayer==null) return null;
 				targetLayer.add(c);
-				this.addUndo(new UndoAddItem(targetLayer, c));
-				
-				
+				return new UndoAddItem(targetLayer, c);
 				
 			}};
 	}

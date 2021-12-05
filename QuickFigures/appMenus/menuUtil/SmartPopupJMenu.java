@@ -169,7 +169,7 @@ public void addUndo(AbstractUndoableEdit e) {
 	if (undoManager!=null) {
 		undoManager.addEdits(e);
 	} else {
-		IssueLog.log("failed to add undo");
+		IssueLog.log("failed to add undo "+e);
 	}
 }
 

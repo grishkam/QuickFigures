@@ -29,6 +29,7 @@ import figureOrganizer.PanelManager;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
 import standardDialog.StandardDialog;
+import undo.AbstractUndoableEdit2;
 import undo.PanelManagerUndo;
 
 public class PanelMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
@@ -69,13 +70,11 @@ public class PanelMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 	public void addChangePPIMenuItem() {
 		add(new ObjectAction<PanelManager>(panelManager) {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public AbstractUndoableEdit2  performAction() {
 				ImagePanelGraphic panel = panelManager.getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
 			double newppi=StandardDialog.getNumberFromUser("Input PPI ", ppi);
-			addUndo(
-					panelManager.changePPI(newppi)
-					);
+			return panelManager.changePPI(newppi);
 			}
 			
 		}.createJMenuItem("Re-Set Pixel Density"));
