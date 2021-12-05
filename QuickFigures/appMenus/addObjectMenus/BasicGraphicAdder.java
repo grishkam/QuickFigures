@@ -102,6 +102,9 @@ public abstract class BasicGraphicAdder extends BasicMultiSelectionOperator impl
 		GraphicLayer l = null;
 		if(selector!=null &&selector.getSelectedLayer()!=null)l=selector.getSelectedLayer();
 	
+		if(l==null)
+			l=this.selector.getWorksheet().getTopLevelLayer();
+		
 		ZoomableGraphic item = this.add(l);
 		
 		if(item!=null) {

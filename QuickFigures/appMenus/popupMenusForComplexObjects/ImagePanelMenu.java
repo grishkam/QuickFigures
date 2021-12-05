@@ -85,12 +85,16 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	
 		/**Creates a menu option for adding a scale bar*/
 		add(new ObjectAction<ImagePanelGraphic>(c) {
-			public void actionPerformed(ActionEvent arg0) {addScaleBar();}	
+			@Override
+			public CombinedEdit performAction() {
+				return addScaleBar();
+				}	
 	}.createJMenuItem("Add Scale Bar"));
 		
 		/**Creates a menu option for add a label*/
 		add(new ObjectAction<ImagePanelGraphic>(c) {
-			public void actionPerformed(ActionEvent arg0) {addText();}	
+			@Override
+			public CombinedEdit performAction() { return addText();}	
 	}.createJMenuItem("Add Text", ComplexTextGraphic.createImageIcon()));
 		
 		
@@ -121,8 +125,9 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	}
 
 
-	/**adds a label to the image panel*/
-	protected void addText() {
+	/**adds a label to the image panel
+	 * @return */
+	protected CombinedEdit addText() {
 		CombinedEdit undo=new CombinedEdit();
 		String name=null;
 	
@@ -137,16 +142,17 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		undo.addEditToList(Edit.addItem(parentLayer, text));
 		
 		
-		imagePanel.getUndoManager().addEdit(undo);
+		return undo;
 	}
 
 
-	/**Adds a scale bar tot he image panel*/
-	public void addScaleBar() {
+	/**Adds a scale bar tot he image panel
+	 * @return */
+	public CombinedEdit addScaleBar() {
 		CombinedEdit undo = new CombinedEdit();
 		createScaleBar(undo, imagePanel);
 		
-		imagePanel.getUndoManager().addEdit(undo);
+		return undo;
 	}
 
 

@@ -103,7 +103,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 			undo = FigureOrganizingSuplierForPopup.recropManyImages(context.getPrincipalDisplay(),context.getExtraDisplays());;
 		}
 		
-		if(this.actionType==COLOR_MODE) {
+		if(this.actionType==COLOR_MODE ) {
 			context.setScope(ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
 			undo=context.changeColorModes();
 		}

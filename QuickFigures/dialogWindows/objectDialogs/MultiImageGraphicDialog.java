@@ -26,6 +26,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import logging.IssueLog;
+import messages.ShowMessage;
 import undo.Edit;
 
 /**A dialog for editing the options of multiple image panels at once*/
@@ -80,5 +81,16 @@ public class MultiImageGraphicDialog extends ImageGraphicOptionsDialog{
 	public void setArray(ArrayList<ImagePanelGraphic > array) {
 		this.array = array;
 	}
+	
+	 public void showDialog() {
+		 if(array.size()==0) {
+			 ShowMessage.showOptionalMessage("No items compatible with this dialog are selected");
+			 return;
+		 }
+		super.showDialog();
+			  
+		  }
+	 
+	 
 	
 }

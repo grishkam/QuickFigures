@@ -110,6 +110,8 @@ public class FigureScalerMenu extends SmartJMenu{
 				}
 	}.createJMenuItem("Scale objects and Reset scale");
 	}
+	
+	
 	public  double getScaleFromDialog() {
 		return getScaleFromDialog("Scale Layout", null, 2);
 	}

@@ -181,7 +181,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 	   /**Trims the unneeded label space in the montage*/
 	   public void trimLabelSpacesToFitContents(BasicLayout ml) {
 		 
-		   trimLabelpacesToIncludeOnly(ml, getRecomendedContentArea(ml));
+		   trimLabelSpacesToIncludeOnly(ml, getRecomendedContentArea(ml));
 	   }
 	   
 	   /**returns the area that this montage takes up, returns the dimensions not the position*/
@@ -234,7 +234,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 	   
 	   /**Adds label space to the layout to make sure it includes the Rectangle r (the bounds of a label).
 	     */
-	  private void trimLabelpacesToIncludeOnly(BasicLayout ml, Rectangle r) {
+	  private void trimLabelSpacesToIncludeOnly(BasicLayout ml, Rectangle r) {
 		   Rectangle space = ml.getSelectedSpace(1,LayoutSpaces.ALL_MONTAGE_SPACE).getBounds();
 
 		   if (r.x>space.x) {
@@ -251,8 +251,7 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		  
 		   if (r.y+r.height<space.y+space.height) {
 			   this.addBottomLabelSpace(ml, (r.y+r.height-space.y-space.height));
-		   } /**
-		   */
+		   }
 		   
 	   }
 	  
@@ -309,6 +308,14 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		 /**Changes the y location of the layout relative to the 0 point*/
 		public void setTopSpecialSpace(BasicLayout ml, double space) {
 			addTopSpecialSpace(ml, space-ml.specialSpaceWidthTop);
+		}
+		
+		/**Changes all the label spaces*/
+		public void setMultipleLabelSpaces(BasicLayout ml, double topspace, double bottomspace, double leftspace, double rightspace) {
+			this.setTopLabelSpace(ml, topspace);
+			this.setBottomLabelSpace(ml, bottomspace);
+			this.setLeftLabelSpace(ml, leftspace);
+			this.setRightLabelSpace(ml, rightspace);
 		}
 		
 		/**Sets the base location for the layout.

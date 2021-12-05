@@ -221,11 +221,11 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	public void actionPerformed(ActionEvent arg0) {
 		CombinedEdit undo = null ;
 		
-		if (arg0.getActionCommand().equals(minMaxCommand)) {
+		if (arg0.getActionCommand().equals(minMaxCommand)&& !isDisplayMissing(true)) {
 			undo=showDisplayRangeDialog(WindowLevelDialog.MIN_MAX);
 			
 		}
-		if (arg0.getActionCommand().equals(WLCommand)) {
+		if (arg0.getActionCommand().equals(WLCommand)&& !isDisplayMissing(true)) {
 			
 			undo=showDisplayRangeDialog(WindowLevelDialog.WINDOW_LEVEL);
 			
@@ -239,11 +239,11 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		
 		
 		
-		if (arg0.getActionCommand().equals(COLOR_MODE_COMMAND)) {
+		if (arg0.getActionCommand().equals(COLOR_MODE_COMMAND) && !isDisplayMissing(true)) {
 			undo= changeColorModes();
 		}
 		
-if (	arg0.getActionCommand().equals(colorRecolorCommand)) {
+if (	arg0.getActionCommand().equals(colorRecolorCommand)&& !isDisplayMissing(true)) {
 			undo=recolorBasedOnRealChannelNames();
 		}
 
@@ -326,7 +326,10 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		return undo;
 	}
 
+	/***/
 	public CombinedEdit changeColorModes() {
+		if(this.isDisplayMissing(true))
+			return null;
 		ChannelUseInstructions ins = getPresseddisplay().getPanelList().getChannelUseInstructions();
 		if (this.getPressedInset()!=null) {
 			 ins =getPressedInset().getPanelManager().getPanelList().getChannelUseInstructions();
@@ -361,6 +364,8 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 
 	
 	protected CombinedEdit showDisplayRangeDialog(int type) {
+		if(this.isDisplayMissing(true))
+			return null;
 		WindowLevelDialog.showWLDialogs(getChannelEntryList(),  getPrincipalMultiChannel(), this, type , ChannelDisplayUndo.createMany(getAllMultiChannelImages(), this));
 		return ChannelDisplayUndo.createMany(getAllMultiChannelImages(), this);
 	}
@@ -383,7 +388,8 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			out.add(entryPress);
 			return out;
 		}
-		if (stackSlicePressed==null && getPresseddisplay()!=null) return  getPresseddisplay().getMultiChannelImage().getChannelEntriesInOrder();  
+		if (stackSlicePressed==null && getPresseddisplay()!=null) 
+			return  getPresseddisplay().getMultiChannelImage().getChannelEntriesInOrder();  
 		return this.stackSlicePressed.getChannelEntries();
 	}
 	
@@ -877,6 +883,8 @@ public SmartJMenu createChannelMergeMenu(int form) {
 /**returns a list of menu items of a given type*/
 public ArrayList<ChannelMergeMenuItem> createChannelMergeMenuItems(int form) {
 	ArrayList<ChannelMergeMenuItem> m =new  ArrayList<ChannelMergeMenuItem> ();
+	if(isDisplayMissing(false))
+		return m;
 	for(ChannelEntry e: getPresseddisplay().getMultiChannelImage().getChannelEntriesInOrder()) {
 		int ignoreAfterC = getPresseddisplay().getPanelList().getChannelUseInstructions().ignoreAfterChannel;
 		if (ignoreAfterC!=ChannelUseInstructions.NONE_SELECTED   &e.getOriginalChannelIndex()>ignoreAfterC) continue;
@@ -888,6 +896,19 @@ public ArrayList<ChannelMergeMenuItem> createChannelMergeMenuItems(int form) {
 		 m.add(new ChannelMergeMenuItem(e));
 	}
 	return m;
+}
+
+/**Check to see if a multichannel image is detectable
+ * if not, shows the user a message
+ * @return true if none is 
+ */
+public boolean isDisplayMissing(boolean message) {
+	if(this.getPrincipalDisplay()==null) {
+		if(message)
+		ShowMessage.showOptionalMessage("This option is not available for isolated image panels", false, "The source image is not found.", "This option is not applicable to isolated image panels");
+		return true;
+	}
+	return false;
 }
 
 /**returns the inset that is selected*/

@@ -26,6 +26,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import logging.IssueLog;
+import messages.ShowMessage;
 import undo.Edit;
 
 /**A dialog for editing the properties of multiple scale bars at once*/
@@ -73,5 +74,14 @@ public class MultiBarDialog extends BarSwingGraphicDialog {
 		for(BarGraphic rect: array) setItemsToDialog(rect);
 		return ;
 	}
+	
+	public void showDialog() {
+		 if(array.size()==0) {
+			 ShowMessage.showOptionalMessage("No items compatible with this dialog are selected");
+			 return;
+		 }
+		super.showDialog();
+			  
+		  }
 
 }

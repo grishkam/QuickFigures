@@ -105,6 +105,7 @@ class TextItemAdder extends BasicGraphicAdder {
 	public ZoomableGraphic add(GraphicLayer gc) {
 		TextGraphic out = new TextGraphic();
 		if(!simple) out=new ComplexTextGraphic();
+		out.setContent("new text");
 		
 		TextPattern input=this.pattern;
 		
@@ -338,7 +339,11 @@ class TextItemAdder extends BasicGraphicAdder {
 	public void run() {
 		GraphicLayer l = null;
 		if(selector!=null &&selector.getSelectedLayer()!=null)l=selector.getSelectedLayer();
-	
+		if(selector!=null &&l==null) {
+			l=selector.getWorksheet().getTopLevelLayer();
+		}
+		
+		
 		ZoomableGraphic item = this.add(l);
 		
 		if(undo!=null) getUndoManager().addEdit(undo) ;

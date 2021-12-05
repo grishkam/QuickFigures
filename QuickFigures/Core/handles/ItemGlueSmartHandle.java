@@ -44,10 +44,12 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
+import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoMoveItems;
 import undo.UndoReorder;
+import undo.UndoTagChange;
 
 /**
  A handle that can be used to attach text item to other objects 
@@ -76,6 +78,13 @@ public class ItemGlueSmartHandle extends SmartHandle {
 		this.target=textGraphic;
 		this.setHandleColor(Color.red);
 		this.setHandleNumber(GLUE_HANDLE_ID);
+	}
+	
+	@Override
+	public boolean isHidden() {
+		if(target.isEditMode())
+			return true;
+		return super.isHidden();
 	}
 	
 	/**location of the handle. this determines where in the figure the handle will actually appear
@@ -211,6 +220,51 @@ public class ItemGlueSmartHandle extends SmartHandle {
 		
 		return bounds;
 	}
+	
+	/**Returns a rectangle that best depicts where the label be be attached
+	 * @param potentialNewAttachmentSite
+	 * @param point 
+	 * @param attachmentPosition 
+	 * @return
+	 */
+	protected int findIndexOfAttachmentLocation(LocatedObject2D potentialNewAttachmentSite, AttachmentPosition attachmentPosition, Point2D point) {
+		if( potentialNewAttachmentSite==null)
+			return 1;
+		
+		if(attachmentPosition==null)
+			attachmentPosition=AttachmentPosition.defaultInternalPanel();
+		
+		int index=1;
+		
+		if(potentialNewAttachmentSite instanceof PanelLayoutGraphic) {
+			 PanelLayoutGraphic layout=(PanelLayoutGraphic) potentialNewAttachmentSite ;
+			
+				PanelLayout panelLayout = layout.getPanelLayout();
+				
+				
+				
+				index= panelLayout.getNearestPanelIndex(point.getX(), point.getY());
+			
+		}
+		
+		
+		if(potentialNewAttachmentSite instanceof DefaultLayoutGraphic) {
+			DefaultLayoutGraphic layout=(DefaultLayoutGraphic) potentialNewAttachmentSite ;
+			
+			 BasicLayout panelLayout = layout.getPanelLayout();
+				
+				
+				if(attachmentPosition.isColumnAttachment())
+					panelLayout =panelLayout.makeAltered(LayoutSpaces.COLS);
+				if(attachmentPosition.isRowAttachment())
+					panelLayout =panelLayout.makeAltered(LayoutSpaces.ROWS);
+				
+				index= panelLayout.getNearestPanelIndex(point.getX(), point.getY());
+			
+		}
+		
+		return index;
+	}
 
 	/**
 	 * @param p2
@@ -332,9 +386,17 @@ public class ItemGlueSmartHandle extends SmartHandle {
 			currentEdit=new CombinedEdit();
 			currentEdit.addEditToList(new UndoMoveItems( getObject()));
 			TakesAttachedItems newAttachmentSite2 = (TakesAttachedItems) newAttachmentSite;
+			
+			if(target.getTag("Index")!=null) {
+				currentEdit.addEditToList(new  UndoTagChange(target.getTagHashMap()));
+				 int i=findIndexOfAttachmentLocation(newAttachmentSite, target.getAttachmentPosition(), canvasMouseEventWrapper.getCoordinatePoint());
+				 target.getTagHashMap().put("Index", i);
+				
+			}
 			UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(newAttachmentSite2, getObject() , false);
 			currentEdit.addEditToList(undo);
 			newAttachmentSite2 .addLockedItem(getObject());
+			
 			
 			canvasMouseEventWrapper.getAsDisplay().getUndoManager().addEdit(currentEdit);
 		}

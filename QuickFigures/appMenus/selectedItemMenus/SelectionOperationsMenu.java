@@ -203,7 +203,9 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 			} catch (Throwable t) {IssueLog.logT(t);}
 			
 		}
-		selector.getWorksheet().updateDisplay();
+		
+		if(selector.getWorksheet()!=null)
+			selector.getWorksheet().updateDisplay();
 	}
 
 }

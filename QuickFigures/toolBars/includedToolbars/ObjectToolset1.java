@@ -54,6 +54,9 @@ import graphicalObjects_Shapes.SimpleRing;
 import graphicalObjects_Shapes.SimpleStar;
 import graphicalObjects_Shapes.TrapezoidGraphic;
 import graphicalObjects_Shapes.TriangleGraphic;
+import icons.BlotFigureIcon;
+import icons.GraphicToolIcon;
+import icons.QuickFigureIcon;
 import locatedObject.RectangleEdgePositions;
 import graphicTools.ShapeGraphicTool;
 import logging.IssueLog;
@@ -102,7 +105,13 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		
 			boolean nameChan=(b instanceof InsetTool);
 			
-			if (nameChan)addTool(new QuickFigureMaker());
+			if (nameChan)//ensures that the QuickFigure button will always be before theinset tool
+				{
+				addTool(new QuickFigureMaker());
+				QuickFigureMaker tool = new QuickFigureMaker(QuickFigureMaker.GEL);
+				tool.setIconSet(GraphicToolIcon.createIconSet( new BlotFigureIcon(0)));
+				addTool(tool);
+				}
 			addToolBit(b);
 			
 			

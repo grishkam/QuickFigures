@@ -41,10 +41,13 @@ import figureOrganizer.FigureType;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import icons.BlotFigureIcon;
 import icons.GraphicToolIcon;
 import icons.QuickFigureIcon;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
+import layout.basicFigure.BasicLayoutEditor;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
@@ -57,7 +60,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	/**
 	 * 
 	 */
-	private static final String SELECTED_SLICE_AND_FRAME = "+Z+T", SELECTED_FRAME = "+T", SELECTED_SLICE = "+Z", SPLIT = "Split", MERGE = "Merge", GEL="Gel or Blot";
+	public static final String SELECTED_SLICE_AND_FRAME = "+Z+T", SELECTED_FRAME = "+T", SELECTED_SLICE = "+Z", SPLIT = "Split", MERGE = "Merge", GEL="Gel or Blot";
 	private static final String slowFigure = "Slow Figure";
 	
 	/**A list of the possible codes. This determines what variety of FigureMakers are displayed in a menu*/
@@ -94,7 +97,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		 localFigureAdder.autoFigureGenerationOptions=figureCreationOptions;
 	 }
 	 
-	
+	/**Creates a quickfigure button for the toolbar*/
 	public QuickFigureMaker() {
 		super("quickFig",GraphicToolIcon.createIconSet( new QuickFigureIcon(0)));
 		setupAdder() ;
@@ -162,10 +165,16 @@ public class QuickFigureMaker extends DisplayActionTool {
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
 		if(localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT) {
-			added.getMontageLayoutGraphic().moveLayoutAndContents(80, 80);//western blot figure should be created with more space for expansion
-			if(added.getMontageLayoutGraphic().getPanelLayout().labelSpaceWidthTop>20)
-				added.getMontageLayoutGraphic().getPanelLayout().labelSpaceWidthTop=80;
-			added.getMontageLayoutGraphic().select();
+			DefaultLayoutGraphic montageLayoutGraphic = added.getMontageLayoutGraphic();
+			montageLayoutGraphic.moveLayoutAndContents(80, 80);//western blot figure should be created with more space for expansion
+			if(montageLayoutGraphic.getPanelLayout().labelSpaceWidthTop<20) {
+				BasicLayoutEditor editor = montageLayoutGraphic.getEditor();
+				editor.setMultipleLabelSpaces(montageLayoutGraphic.getPanelLayout(), 50,20, 50, 20);
+				if(montageLayoutGraphic.getPanelLayout().theBorderWidthBottomTop<4)
+					editor.setVerticalBorder(montageLayoutGraphic.getPanelLayout(), 4);
+			}
+			
+			montageLayoutGraphic.select();
 		}
 		
 		if(added==null) {
@@ -347,6 +356,10 @@ public class QuickFigureMaker extends DisplayActionTool {
 		boolean singleSlice = aC.contains(SELECTED_SLICE);
 		setSingleSliceMode(singleSlice);
 		boolean singleFrame = aC.contains(SELECTED_FRAME);
+		if(aC.contains(GEL)) {
+			this.localFigureAdder.setFigureType(FigureType.WESTERN_BLOT);
+			
+		}
 		setSingleFrameMode(singleFrame);
 	}
 
@@ -437,6 +450,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	class QuickFigureFileMenuItem extends BasicMenuItemForObj {
 		
 		Icon icon=new QuickFigureIcon(QuickFigureIcon.NORMAL_ICON_TYPE).getMenuVersion();
+		Icon blotVersion=new BlotFigureIcon(QuickFigureIcon.NORMAL_ICON_TYPE).getMenuVersion();
 
 		@Override
 		public String getNameText() {
@@ -467,6 +481,13 @@ public class QuickFigureMaker extends DisplayActionTool {
 		}
 		public Icon getSuperMenuIcon() {
 			return icon;
+		}
+		/**The icon for this menu item*/
+		@Override
+		public Icon getIcon() {
+			if(localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT)
+				return blotVersion;
+			return null;
 		}
 		
 		

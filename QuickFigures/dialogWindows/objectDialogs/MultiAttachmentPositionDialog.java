@@ -26,6 +26,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
+import messages.ShowMessage;
 import standardDialog.attachmentPosition.AttachmentPositionPanel;
 import standardDialog.booleans.BooleanInputPanel;
 
@@ -107,4 +108,13 @@ public class MultiAttachmentPositionDialog extends GraphicItemOptionsDialog {
 		}
 }
 
+	
+	public void showDialog() {
+		 if(array.size()==0) {
+			 ShowMessage.showOptionalMessage("No items compatible with this dialog are selected");
+			 return;
+		 }
+		super.showDialog();
+			  
+		  }
 }

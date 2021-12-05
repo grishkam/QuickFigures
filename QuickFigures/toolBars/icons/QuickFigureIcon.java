@@ -41,6 +41,7 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 	Color dashColor1=new Color(250,250,250, 100);
 	Color dashColor2=new Color(250,250,250, 100);
 	Paint fillColor=Color.black;
+	Color plusColor = Color.green.darker();
 	
 	Color[] blotchColors=new Color[] {null, null, Color.yellow, Color.red, Color.green, new Color(150,150, 255)};
 	
@@ -61,30 +62,23 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 		if (arg10 instanceof Graphics2D) {
 		Graphics2D g2d = (Graphics2D) arg10;
 		
-		int size=7;
-		int size2=8;
+		
+	
 		
 		
-		int down=16;
-		int move=size+1;
+		
 		;
 		int x = arg2+2;
 		int y = arg3;
+		int count=0;
 		
-		Rectangle2D[] r2 = new Rectangle2D[] {
-				new Rectangle2D.Double(x, y,size2, size2),
-				new Rectangle2D.Double(x+2, y+3,size2, size2),
-				new Rectangle2D.Double(x+5, y+5,size2, size2)
-		};
+		Rectangle2D[] r2 = getSeries1Rectangles( x, y);
 		
 		x-=1;
-		Rectangle2D[] r3 = new Rectangle2D[] {
-				new Rectangle2D.Double(x, y+down,size, size),
-				new Rectangle2D.Double(x+move, y+down,size, size),
-				new Rectangle2D.Double(x+move+move, y+down,size, size)
-		};
 		
-		int count=0;
+		Rectangle2D[] r3 = getSeries2Rectangles(x, y);
+		
+		
 		for(Rectangle2D r:r2)
 			{	drawRectangle(g2d, r, true, count);
 				count++;
@@ -95,7 +89,20 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 			count++;
 			}
 		
-		g2d.setColor(Color.green.darker());
+		drawPlus(g2d, x, y);
+		}
+		
+	
+		}
+	
+	/**Draws a + mark in a colored circle
+	 * @param g2d
+	 * @param x
+	 * @param y
+	 */
+	protected void drawPlus(Graphics2D g2d, int x, int y) {
+		
+		g2d.setColor(plusColor);
 		Ellipse2D.Double s = new Ellipse2D.Double(x+12, y+6, 10,10);
 		g2d.fill(s);
 		g2d.setColor(Color.white);
@@ -106,10 +113,37 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 		g2d.fill(new Rectangle2D.Double(s.getCenterX()-plusSize/2, s.getCenterY()-plusThickness/2, plusSize, plusThickness));
 		g2d.fill(new Rectangle2D.Double(s.getCenterX()-plusThickness/2, s.getCenterY()-plusSize/2,  plusThickness, plusSize));
 		g2d.setStroke(new BasicStroke(1));
-		}
-		
-	
-		}
+	}
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	protected Rectangle2D[] getSeries2Rectangles(int x, int y) {
+		int size=7;
+		int down=16;
+		int move=size+1;
+		Rectangle2D[] r3 = new Rectangle2D[] {
+				new Rectangle2D.Double(x, y+down,size, size),
+				new Rectangle2D.Double(x+move, y+down,size, size),
+				new Rectangle2D.Double(x+move+move, y+down,size, size)
+		};
+		return r3;
+	}
+	/**
+	 * @param size2
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	protected Rectangle2D[] getSeries1Rectangles(int x, int y) {
+		int size2=8;
+		return new Rectangle2D[] {
+				new Rectangle2D.Double(x, y,size2, size2),
+				new Rectangle2D.Double(x+2, y+3,size2, size2),
+				new Rectangle2D.Double(x+5, y+5,size2, size2)
+		};
+	}
 
 	/**
 	 * @param g2d
@@ -120,10 +154,7 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 		g2d.fill(r);
 		Color blotch = blotchColors[count];
 		if(blotch!=null) {
-			ColorBlotchForIcon c=new ColorBlotchForIcon(new Rectangle(count/2,1,3,3), blotch);
-			c.paintBlotch(g2d, (int)r.getX(), (int)r.getY());
-			 c=new ColorBlotchForIcon(new Rectangle(count,3,1,3), blotch);
-			c.paintBlotch(g2d, (int)r.getX(), (int)r.getY());
+			paintBlotchOnRectangle(g2d, r, count, blotch);
 		}
 		
 		if (!stroke) return;
@@ -139,6 +170,19 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 		g2d.draw(r);
 		
 		
+	}
+	
+	/**paints the blotches which are dabs of color to make the rectangles resemble images rather than plain color
+	 * @param g2d
+	 * @param r
+	 * @param count
+	 * @param blotch
+	 */
+	protected void paintBlotchOnRectangle(Graphics2D g2d, Rectangle2D r, int count, Color blotch) {
+		ColorBlotchForIcon c=new ColorBlotchForIcon(new Rectangle(count/2,1,3,3), blotch);
+		c.paintBlotch(g2d, (int)r.getX(), (int)r.getY());
+		 c=new ColorBlotchForIcon(new Rectangle(count,3,1,3), blotch);
+		c.paintBlotch(g2d, (int)r.getX(), (int)r.getY());
 	}
 	
 	

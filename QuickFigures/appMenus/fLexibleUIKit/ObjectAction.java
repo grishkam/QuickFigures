@@ -26,14 +26,10 @@ import java.lang.reflect.Method;
 
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
-import javax.swing.undo.UndoableEdit;
 
 import graphicActionToolbar.CurrentFigureSet;
-import graphicalObjects.ZoomableGraphic;
-import graphicalObjects_LayerTypes.GraphicLayer;
 import menuUtil.BasicSmartMenuItem;
 import undo.AbstractUndoableEdit2;
-import undo.Edit;
 
 /**an abstract class for action listeners that perform one task targettig one
  * specific object*/
@@ -41,6 +37,7 @@ public abstract class ObjectAction<Type> implements ActionListener {
 	
 	public Type item;
 	Method m;
+	private BasicSmartMenuItem menuitem;
 	
 	public ObjectAction(Type i) {
 		item=i;
@@ -52,30 +49,38 @@ public abstract class ObjectAction<Type> implements ActionListener {
 	}
 
 	public JMenuItem createJMenuItem(String st) {
-		JMenuItem out=new BasicSmartMenuItem(st);
+		BasicSmartMenuItem out=new BasicSmartMenuItem(st);
 		out.addActionListener(this);
+		menuitem=out;
 		return out;
 	}
 	
 	public JMenuItem createJMenuItem(String st, Icon i) {
-		JMenuItem out=new BasicSmartMenuItem(st);
+		BasicSmartMenuItem out=new BasicSmartMenuItem(st);
 		out.setIcon(i);
 		out.addActionListener(this);
+		menuitem=out;
 		return out;
 	}
 	
 	public void addUndo(AbstractUndoableEdit2 e) {
+		if(e==null)
+			return;
+		if(menuitem.getUndoManager()!=null) {
+			menuitem.getUndoManager().addEdit(e);
+			
+		} else 
 		new CurrentFigureSet().addUndo(e);
 	}
 	
+	/**May be overwritten by subclasses. Does some task and returns an undo*/
 	public AbstractUndoableEdit2 performAction() {
 		return null;
 	}
 	
+	/**Called when the menu item is pressed, does some task and adds an undo to the undo manager*/
 	public void actionPerformed(ActionEvent e) {
-		
-
-		this.addUndo(performAction());
+		addUndo(performAction());
 	}
 	
 	

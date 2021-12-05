@@ -30,6 +30,7 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
+import messages.ShowMessage;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.colors.ColorDimmingBox;
@@ -175,7 +176,14 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 		this.unifyPosition = unifyPosition;
 	}
 	
-
+	public void showDialog() {
+		 if(array.size()==0) {
+			 ShowMessage.showOptionalMessage("No items compatible with this dialog are selected");
+			 return;
+		 }
+		super.showDialog();
+			  
+		  }
 	
 	
 }
