@@ -44,7 +44,6 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.TakesAttachedItems;
-import logging.IssueLog;
 import undo.CombinedEdit;
 import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoMoveItems;

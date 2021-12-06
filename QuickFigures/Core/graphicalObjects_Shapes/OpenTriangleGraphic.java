@@ -79,7 +79,7 @@ public class OpenTriangleGraphic extends TriangleGraphic {
 	
 	
 
-	/**implements a formula to produce a trapezoid*/
+	/**implements a formula to produce a wedge shape*/
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();

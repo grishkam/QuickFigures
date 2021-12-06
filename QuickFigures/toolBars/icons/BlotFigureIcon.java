@@ -41,16 +41,14 @@ public class BlotFigureIcon extends QuickFigureIcon {
 		 plusColor = Color.green.darker().darker();
 	}
 	
-	/**not implemented for blot figures
+	/**not implemented for blot figures. overrides the superclass method
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	protected Rectangle2D[] getSeries2Rectangles(int x, int y) {
-		int size=6;
-		int down=1;
-		int move=size+1;
-		int width=size*3;
+
+	
 		
 		Rectangle2D[] r3 = new Rectangle2D[] {
 				
@@ -97,6 +95,8 @@ public class BlotFigureIcon extends QuickFigureIcon {
 			Color blotchcolor = blotch;
 			if(i==1)
 				blotchcolor=Color.darkGray;//some variability in the lanes
+			if(count==2&&i==2) 
+				blotchcolor=Color.lightGray;
 			ColorBlotchForIcon c=new ColorBlotchForIcon(new Rectangle(shift,2,4,2), blotchcolor);
 			c.blotchRadius=(float) 12;
 			c.paintBlotch(g2d, (int)r.getX(), (int)r.getY());
@@ -105,6 +105,7 @@ public class BlotFigureIcon extends QuickFigureIcon {
 		}
 	}
 	
+	/**blot icon only designed to draw the plus under specific circumstances*/
 	protected void drawPlus(Graphics2D g2d, int x, int y) { 
 		if(this.type!=GraphicToolIcon.NORMAL_ICON_TYPE)
 			super.drawPlus(g2d, x, y);

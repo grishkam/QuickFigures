@@ -22,8 +22,6 @@ package popupMenusForComplexObjects;
 
 
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 

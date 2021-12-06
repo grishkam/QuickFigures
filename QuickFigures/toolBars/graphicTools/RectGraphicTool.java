@@ -28,17 +28,13 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWorkSheet;
-import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 import imageDisplayApp.OverlayObjectManager;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdgePositions;
-import logging.IssueLog;
-import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.StandardDialog;
-import storedValueDialog.StoredValueDilaog;
 
 /**Tool used to draw a rectangular object on the figure. Used as a superclass 
  * for several other classes*/

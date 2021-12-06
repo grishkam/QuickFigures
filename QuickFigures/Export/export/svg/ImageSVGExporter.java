@@ -34,7 +34,6 @@ import org.w3c.dom.Element;
 
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import illustratorScripts.PathItemRef;
 
 /**An SVG exporter implementation for image panels using Apache Batik*/
 public class ImageSVGExporter extends SVGExporter {

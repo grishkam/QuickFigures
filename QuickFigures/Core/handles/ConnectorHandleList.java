@@ -28,7 +28,6 @@ import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_Shapes.ConnectorGraphic;
 import handles.SmartHandle;
 import handles.SmartHandleList;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import undo.ConnectorAnchorChangeUndo;
 

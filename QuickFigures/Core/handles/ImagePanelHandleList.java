@@ -40,6 +40,7 @@ public class ImagePanelHandleList extends SmartHandleList {
 	ImagePanelHandle frameHandle=null;
 	private ImagePanelGraphic panel;
 	private static final long serialVersionUID = 1L;
+	
 	public ImagePanelHandleList(ImagePanelGraphic panel) {
 		this.panel=panel;
 		Rectangle bounds = panel.getBounds();
@@ -58,10 +59,15 @@ public class ImagePanelHandleList extends SmartHandleList {
 		
 	}
 	
+	/**updates the locations of each handle to fit the location and size of the image panel*/
 	public void updateHandleLocs() {
 		ArrayList<Point2D> spots = RectangleEdges.getLocationsForHandles(panel.getBounds());
-		for(int i=0; i<9; i++) {
-			this.get(i).setCordinateLocation(spots.get(i));
+		for(int i=RectangleEdges.UPPER_LEFT; i<=RectangleEdges.CENTER; i++) {
+			SmartHandle smartHandle = this.get(i);
+			smartHandle.setCordinateLocation(spots.get(i));
+			if(i==panel.getLocationType())
+				smartHandle.setHandleColor(Color.red);
+			else smartHandle.setHandleColor(Color.white);
 		}
 		frameHandle.setCordinateLocation(getFrameHandlePoint());
 		for(int i=10; i<this.size(); i++) {

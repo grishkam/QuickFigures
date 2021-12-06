@@ -61,7 +61,6 @@ import layersGUI.HasTreeLeafIcon;
 import locatedObject.BasicStrokedItem;
 import locatedObject.DefaultPaintProvider;
 import locatedObject.Fillable;
-import locatedObject.LocatedObject2D;
 import locatedObject.PaintProvider;
 import locatedObject.PathPointList;
 import locatedObject.RectangleEdges;
@@ -101,7 +100,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 
 	
 	
-	/**Is the shape closed of open*/
+	/**Is the shape closed or open*/
 	private boolean closedShape=false;
 	/**set to true if antialias rendering hint used*/
 	private boolean antialize=true;
@@ -216,6 +215,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		
 	}
 	
+	/**Sets the stroke width*/
 	public void setStrokeWidth(float strokeWidth) {
 		if(strokeWidth>250) {
 			IssueLog.log("Attmpted to set a strange stroke width for a shape "+strokeWidth);

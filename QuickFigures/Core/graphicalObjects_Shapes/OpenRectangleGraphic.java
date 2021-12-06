@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Dec 6, 2021
  * Version: 2021.2
  */
 package graphicalObjects_Shapes;
@@ -31,6 +31,7 @@ import illustratorScripts.ArtLayerRef;
 import illustratorScripts.PathItemRef;
 import locatedObject.RectangleEdges;
 
+/**a modified rectangle class. might replace with */
 public class OpenRectangleGraphic extends RectangularGraphic {
 	
 
@@ -73,12 +74,12 @@ public class OpenRectangleGraphic extends RectangularGraphic {
 	
 	
 
-	/**implements a formula to produce a trapezoid*/
+	/**implements a formula to create a rectangle that is missing one side*/
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
 		Rectangle2D r = this.getRectangle();
-		double rx=getObjectWidth()/2;
+		
 
 		Point2D startPoint = RectangleEdges.getLocation(LOWER_LEFT, r);
 		path.moveTo( startPoint .getX(),startPoint .getY());

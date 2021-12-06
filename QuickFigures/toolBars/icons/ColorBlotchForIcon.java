@@ -27,8 +27,6 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import logging.IssueLog;
-
 /**a class that daws dabs of color. Used to paint certain icons*/
 class ColorBlotchForIcon {
 	

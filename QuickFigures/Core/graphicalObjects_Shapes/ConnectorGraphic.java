@@ -37,7 +37,6 @@ import handles.HasSmartHandles;
 import handles.SmartHandleList;
 import iconGraphicalObjects.IconTraits;
 import illustratorScripts.ArtLayerRef;
-import illustratorScripts.PathItemRef;
 import locatedObject.BasicStrokedItem;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
@@ -45,7 +44,6 @@ import locatedObject.Scales;
 import logging.IssueLog;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.ConnectorMenu;
-import popupMenusForComplexObjects.PathGraphicMenu;
 import standardDialog.graphics.GraphicDisplayComponent;
 
 /**A path consisting of strait vertical or horizontal lines with no curves.

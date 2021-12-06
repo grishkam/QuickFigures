@@ -40,7 +40,6 @@ import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.PointsToFile;
 import logging.IssueLog;

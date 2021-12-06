@@ -15,8 +15,6 @@
  *******************************************************************************/
 package popupMenusForComplexObjects;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.JMenu;
 
 import advancedChannelUseGUI.AdvancedChannelUseGUI;

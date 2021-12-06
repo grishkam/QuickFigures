@@ -53,7 +53,7 @@ public class PlusGraphic extends TrapezoidGraphic {
 	private static final long serialVersionUID = 1L;
 	
 	
-	/**implements a formula to produce a trapezoid*/
+	/**implements a formula to produce a plus shape*/
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();

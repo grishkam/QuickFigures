@@ -26,7 +26,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
-import layersGUI.GraphicTreeUI;
 import locatedObject.PathObject;
 import locatedObject.PathPointList;
 import logging.IssueLog;

@@ -33,7 +33,6 @@ import handles.ConnectorHandleList;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
 import standardDialog.StandardDialog;
-import storedValueDialog.StoredValueDilaog;
 
 /**A tool to draw an arrow. If the number of arrow heads is set to 0, this is just a tool to draw a line (arrow without heads)*/
 public class ConnectorLineTool extends GraphicTool implements ShapeAddingTool{

@@ -24,7 +24,6 @@ package undo;
 import java.awt.geom.Point2D;
 
 import graphicalObjects_Shapes.ConnectorGraphic;
-import logging.IssueLog;
 
 /**
  An  undo for changes in the anchor positons of a connector

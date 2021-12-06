@@ -56,7 +56,6 @@ import graphicalObjects_Shapes.TrapezoidGraphic;
 import graphicalObjects_Shapes.TriangleGraphic;
 import icons.BlotFigureIcon;
 import icons.GraphicToolIcon;
-import icons.QuickFigureIcon;
 import locatedObject.RectangleEdgePositions;
 import graphicTools.ShapeGraphicTool;
 import logging.IssueLog;

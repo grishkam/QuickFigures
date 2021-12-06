@@ -21,7 +21,6 @@
  */
 package popupMenusForComplexObjects;
 
-import graphicalObjects_Shapes.ConnectorGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 
 /**

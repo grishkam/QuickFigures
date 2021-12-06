@@ -79,7 +79,16 @@ public class ImagePanelHandle extends SmartHandle {
 		if(RectangleEdges.CENTER==handlenum) {
 			super.handlesize*=5;
 		} 
-		
+		setupHandleColor();
+	}
+
+	/**
+	sets the handle color such that the fixed edge handle will be red
+	 */
+	protected void setupHandleColor() {
+		if(handlecode==thePanel.getLocationType())
+			this.setHandleColor(Color.red);
+		else this.setHandleColor(Color.white);
 	}
 	
 	/**Returns a 4 direction arrow shape that will appear on this handle*/

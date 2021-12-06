@@ -24,7 +24,6 @@ import applicationAdapters.ImageWorkSheet;
 import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_Shapes.RectangularGraphic;
 import layout.RetrievableOption;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;

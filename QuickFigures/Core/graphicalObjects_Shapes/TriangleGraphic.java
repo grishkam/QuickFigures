@@ -81,7 +81,7 @@ public class TriangleGraphic extends RectangularGraphic {
 	
 	
 
-	/**implements a formula to produce a trapezoid*/
+	/**implements a formula to produce a triangle*/
 	@Override
 	public Shape getShape() {
 		Path2D.Double path=new Path2D.Double();
