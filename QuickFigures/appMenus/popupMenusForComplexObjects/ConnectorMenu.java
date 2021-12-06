@@ -50,14 +50,12 @@ public class ConnectorMenu extends PathGraphicMenu {
 	 */
 	public void addAllMenuItems() {
 		
-		this.addAllMenuItems(new ShapeGraphicMenu(pathForMenuG).createMenuItems());
+		this.addAllMenuItems(new ShapeGraphicMenu(targetPathForMenu).createMenuItems());
 		
 		String subMenuName = "Expert options";
 		
 		 
-		addItem(subMenuName, getAddArrowHead2MenuCommand());
-		 addItem(subMenuName, getAddArrowHead1MenuCommand());
-		 addItem(subMenuName, BREAK_ARROWS_OFF);
+		addArrowHeadOptions(subMenuName);
 	}
 
 }

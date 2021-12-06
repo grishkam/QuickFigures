@@ -38,6 +38,7 @@ import graphicalObjects_Shapes.PathGraphic;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import objectCartoon.BasicShapeMaker;
 import objectDialogs.ArrowSwingDialog;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
@@ -62,14 +63,14 @@ PopupMenuSupplier  {
 	
 	static final String OPTIONS_DIALOG="Options", MOVE_ENDPOINT="Move Endpoint", ROTATE="Rotate", SCALE="Scale", 
 			VERTICAL_FLIP="Flip Vertical", HORIZONTAL_FLIP="Flip Horizontal", SPLIT_LOOSE_PARTS="Split Up Parts", 
-			SWITCH_HANDLE_MODES="Switch Handle Modes", UNCURVED_MIMIC="Make Uncurved Copy";//, backGroundShap="Outline Shape";
+			SWITCH_HANDLE_MODES="Switch Handle Modes", UNCURVED_MIMIC="Make Uncurved Copy";
 	static final String CROSSING_MARKS="Show Crossing Path Lines", NORMAL_MARKS="show vectors",
 			ELIMINATE_UNNEEDED_POINTS="Eliminate extra points", SMOOTH="Smooth", ADD_POINT="Add Point";
 	;private static final String ADD_ARROW_HEAD_1="Arrow Head At Start", ADD_ARROW_HEAD_2="Arrow Head At End";
-	protected static final String BREAK_ARROWS_OFF="Detach arrow heads";
+	protected static final String BREAK_ARROWS_OFF="Detach arrow heads", ARROW_HEAD_FLIP="Flip arrow head to opposite end";
 	
 	
-	PathGraphic pathForMenuG;
+	PathGraphic targetPathForMenu;
 	
 	
 	HashMap<String, SmartJMenu> subMenus=new HashMap<String, SmartJMenu> ();
@@ -87,7 +88,7 @@ PopupMenuSupplier  {
 	
 	public PathGraphicMenu(PathGraphic textG) {
 		super();
-		this.pathForMenuG = textG;
+		this.targetPathForMenu = textG;
 		addAllMenuItems();
 	}
 
@@ -97,7 +98,7 @@ PopupMenuSupplier  {
 	 */
 	public void addAllMenuItems() {
 		
-		addAllMenuItems(new ShapeGraphicMenu(pathForMenuG).createMenuItems());
+		addAllMenuItems(new ShapeGraphicMenu(targetPathForMenu).createMenuItems());
 		
 		 addItem(ADD_POINT);
 		
@@ -120,11 +121,22 @@ PopupMenuSupplier  {
 		 addItem(tFormMenu, UNCURVED_MIMIC);
 		addItem(tFormMenu,SMOOTH);
 		addItem(tFormMenu,SPLIT_LOOSE_PARTS);
-		addItem(subMenuName, getAddArrowHead2MenuCommand());
-		 addItem(subMenuName, getAddArrowHead1MenuCommand());
+		addArrowHeadOptions(subMenuName);
+		 
 		 addItem(subMenuName, ELIMINATE_UNNEEDED_POINTS);
 		 addItem(subMenuName, MOVE_ENDPOINT);
-		 addItem(subMenuName, BREAK_ARROWS_OFF);
+		
+	}
+
+
+	/**Adds the arrow head options to the submenu of the given name
+	 * @param subMenuName
+	 */
+	protected void addArrowHeadOptions(String subMenuName) {
+		addItem(subMenuName, getAddArrowHead2MenuCommand());
+		 addItem(subMenuName, getAddArrowHead1MenuCommand());
+		  addItem(subMenuName, BREAK_ARROWS_OFF);
+		  addItem(subMenuName, ARROW_HEAD_FLIP);
 	}
 	
 	
@@ -156,18 +168,18 @@ PopupMenuSupplier  {
 	public void actionPerformed(ActionEvent arg0) {
 		String com=arg0.getActionCommand();
 		
-		AbstractUndoableEdit2 undo = new PathEditUndo(pathForMenuG);
+		AbstractUndoableEdit2 undo = new PathEditUndo(targetPathForMenu);
 		
 		if (com.equals(OPTIONS_DIALOG)) {
-			pathForMenuG.showOptionsDialog();
+			targetPathForMenu.showOptionsDialog();
 		}
 		if (com.equals(MOVE_ENDPOINT)) {
-			pathForMenuG.getPoints().moveEnd();
+			targetPathForMenu.getPoints().moveEnd();
 		}
 		if (com.equals(ROTATE)) {
 			Double angle = StandardDialog.getNumberFromUser("input angle", 0, true);
 			if(angle!=null)
-				pathForMenuG.rotateAbout(pathForMenuG.getCenterOfRotation(), -angle);
+				targetPathForMenu.rotateAbout(targetPathForMenu.getCenterOfRotation(), -angle);
 			//AffineTransform showRotation = AffineTransformDialog.showRotation(0, pathForMenuG.getCenterOfRotation());
 			//pathForMenuG.getPoints().applyAffine(showRotation);
 		}
@@ -175,13 +187,13 @@ PopupMenuSupplier  {
 		if (com.equals(SCALE)) {
 			AffineTransform scaleTransform = AffineTransformDialog.showScale(new Point(1,1));
 			
-			pathForMenuG.scaleAbout( pathForMenuG.getCenterOfRotation(), scaleTransform.getScaleX(), scaleTransform.getScaleY());
+			targetPathForMenu.scaleAbout( targetPathForMenu.getCenterOfRotation(), scaleTransform.getScaleX(), scaleTransform.getScaleY());
 		}
 		
 
 		
 		if (com.equals(SPLIT_LOOSE_PARTS)) {
-			PathIterator pi = pathForMenuG.getPath().getPathIterator(new AffineTransform());
+			PathIterator pi = targetPathForMenu.getPath().getPathIterator(new AffineTransform());
 			
 		/**PathGraphic textG2 = (PathGraphic) textG.copy();
 		textG.getParentLayer().add(textG2);*/
@@ -191,112 +203,122 @@ PopupMenuSupplier  {
 			ArrayList<PathPointList> arrayOfSec = PathPointList.createFromIterator(pi).createAtCloseSubsections();
 			for(PathPointList arr: arrayOfSec) {
 				if (arr==null ) continue;
-				PathGraphic textG2 = (PathGraphic) pathForMenuG.copy();
-				undo2.addEditToList(Edit.addItem(pathForMenuG.getParentLayer(), textG2));
+				PathGraphic textG2 = (PathGraphic) targetPathForMenu.copy();
+				undo2.addEditToList(Edit.addItem(targetPathForMenu.getParentLayer(), textG2));
 				
 				
 				textG2.setPoints(arr);
 				
 			}
-			undo2.addEditToList(new UndoAbleEditForRemoveItem(pathForMenuG.getParentLayer(), pathForMenuG));
-			pathForMenuG.getParentLayer().remove(pathForMenuG);
+			undo2.addEditToList(new UndoAbleEditForRemoveItem(targetPathForMenu.getParentLayer(), targetPathForMenu));
+			targetPathForMenu.getParentLayer().remove(targetPathForMenu);
 			undo=undo2;
 			
 			;
 		}
 		
 		if (com.equals(UNCURVED_MIMIC)) {
-			PathGraphic newpath = pathForMenuG.break10(20);
+			PathGraphic newpath = targetPathForMenu.break10(20);
 		
 			newpath.select();
-			undo=Edit.addItem(pathForMenuG.getParentLayer(), newpath);
+			undo=Edit.addItem(targetPathForMenu.getParentLayer(), newpath);
 
 		}
 		
-		ArrowGraphic h1 = pathForMenuG.getArrowHead1();
-		ArrowGraphic h2 = pathForMenuG.getArrowHead2();
+		ArrowGraphic h1 = targetPathForMenu.getArrowHead1();
+		ArrowGraphic h2 = targetPathForMenu.getArrowHead2();
 		if (com.equals(BREAK_ARROWS_OFF)) {
-			
-			GraphicGroup newpath = pathForMenuG.createCopyWithDetachedHeads();
+			if(!targetPathForMenu.hasArrows()) {
+				ShowMessage.showOptionalMessage("this can only be done if arrow heads are attached to this line");
+				return;
+			}
+			GraphicGroup newpath = targetPathForMenu.createCopyWithDetachedHeads();
 			newpath.select();
 			
-			AbstractUndoableEdit2 undo2 = Edit.addItem(pathForMenuG.getParentLayer(), newpath);
-			AbstractUndoableEdit2 undo3 = Edit.removeItem(pathForMenuG.getParentLayer(),pathForMenuG );
+			AbstractUndoableEdit2 undo2 = Edit.addItem(targetPathForMenu.getParentLayer(), newpath);
+			AbstractUndoableEdit2 undo3 = Edit.removeItem(targetPathForMenu.getParentLayer(),targetPathForMenu );
 			undo=new CombinedEdit(undo2, undo3);
 
 		}
 		
 		if (com.equals(HORIZONTAL_FLIP)) {
-			pathForMenuG.getPoints().applyAffine(BasicShapeMaker.createHFlip(pathForMenuG.getPoints().createPath(true).getBounds().getCenterX()));
+			targetPathForMenu.getPoints().applyAffine(BasicShapeMaker.createHFlip(targetPathForMenu.getPoints().createPath(true).getBounds().getCenterX()));
 		}
 		
 		if (com.equals(VERTICAL_FLIP)) {
-			pathForMenuG.getPoints().applyAffine(BasicShapeMaker.createVFlip(pathForMenuG.getPoints().createPath(true).getBounds().getCenterY()));
+			targetPathForMenu.getPoints().applyAffine(BasicShapeMaker.createVFlip(targetPathForMenu.getPoints().createPath(true).getBounds().getCenterY()));
 		}
 		if (com.equals(SWITCH_HANDLE_MODES)) {
-			if (pathForMenuG.getHandleMode()!=PathGraphic.ANCHOR_HANDLE_ONLY_MODE) {
+			if (targetPathForMenu.getHandleMode()!=PathGraphic.ANCHOR_HANDLE_ONLY_MODE) {
 				
-				pathForMenuG.setHandleMode(PathGraphic.ANCHOR_HANDLE_ONLY_MODE);
+				targetPathForMenu.setHandleMode(PathGraphic.ANCHOR_HANDLE_ONLY_MODE);
 					} 
-				else pathForMenuG.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
+				else targetPathForMenu.setHandleMode(PathGraphic.THREE_HANDLE_MODE);
 		}
 		
-		if (com.equals(CROSSING_MARKS)) {pathForMenuG.setUseArea(!pathForMenuG.isUseArea());}
+		if (com.equals(ARROW_HEAD_FLIP)) {
+			ArrowGraphic a1 = targetPathForMenu.getArrowHead1();
+			ArrowGraphic a2 = targetPathForMenu.getArrowHead2();
+			targetPathForMenu.setArrowHead2(a1);
+			targetPathForMenu.setArrowHead1(a2);
+		}
+		
+		if (com.equals(CROSSING_MARKS)) {targetPathForMenu.setUseArea(!targetPathForMenu.isUseArea());}
 		
 		if (com.equals(ELIMINATE_UNNEEDED_POINTS)) {
-			pathForMenuG.getPoints().cullUselessPoints(0.98, false, 2, true);
+			targetPathForMenu.getPoints().cullUselessPoints(0.98, false, 2, true);
 		}
 		
 		if (com.equals(SMOOTH)) {
-			for(PathPoint l:pathForMenuG.getPoints() ) {
+			for(PathPoint l:targetPathForMenu.getPoints() ) {
 				l.evenOutAngleOfCurveControls(0.5);
-				pathForMenuG.updatePathFromPoints();
+				targetPathForMenu.updatePathFromPoints();
 			}
 			
 		}
 		
 		if (com.equals(NORMAL_MARKS)) {
-			ArrayList<Point2D[]> vectors = pathForMenuG.getPoints().getTangentVectors();//.getDiffVectors();
-			 pathForMenuG.getPoints().getMidpionts(0.5);
+			ArrayList<Point2D[]> vectors = targetPathForMenu.getPoints().getTangentVectors();//.getDiffVectors();
+			 targetPathForMenu.getPoints().getMidpionts(0.5);
 			for(int it=0; it<vectors.size(); it++) {
 				PathGraphic pt = PathGraphic.blackLine(vectors.get(it));pt.setStrokeWidth(2);
 	
-				pt.moveLocation(pathForMenuG.getLocation().getX(), pathForMenuG.getLocation().getY());
-				pathForMenuG.getParentLayer().add(pt);
+				pt.moveLocation(targetPathForMenu.getLocation().getX(), targetPathForMenu.getLocation().getY());
+				targetPathForMenu.getParentLayer().add(pt);
 			}
 		}
 		
 		if (com.equals(ADD_POINT)) {
-			new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathForMenuG, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
+			new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(targetPathForMenu, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
 		}
 		
 		if (com.equals(getAddArrowHead1MenuCommand())) {
-			if (!pathForMenuG.hasArrowHead1())pathForMenuG.addArrowHeads(1);
+			if (!targetPathForMenu.hasArrowHead1())targetPathForMenu.addArrowHeads(1);
 			else if (h1!=null)
 				new ArrowSwingDialog(h1, 1).showDialog();;
 		}
 				if (com.equals(getAddArrowHead2MenuCommand())) {
-				if (!pathForMenuG.hasArrowHead2())pathForMenuG.addArrowHeads(2);
+				if (!targetPathForMenu.hasArrowHead2())targetPathForMenu.addArrowHeads(2);
 				else if (h2!=null)
 					new ArrowSwingDialog(h2, 1).showDialog();;
 					
 		}
 		
-		pathForMenuG.updatePathFromPoints();
+		targetPathForMenu.updatePathFromPoints();
 		undo.establishFinalState();
 		if (getUndoManager()!=null) getUndoManager().addEdit(undo);
-		pathForMenuG.updateDisplay();
+		targetPathForMenu.updateDisplay();
 	}
 
 
 	public String getAddArrowHead1MenuCommand() {
-		if(!pathForMenuG.hasArrowHead1()) return "Add Arrow Head To Start";
+		if(!targetPathForMenu.hasArrowHead1()) return "Add Arrow Head To Start";
 		return ADD_ARROW_HEAD_1;
 	}
 
 
 	public  String getAddArrowHead2MenuCommand() {
-		if(!pathForMenuG.hasArrowHead2()) return "Add Arrow Head To End";
+		if(!targetPathForMenu.hasArrowHead2()) return "Add Arrow Head To End";
 		return ADD_ARROW_HEAD_2;
 	}
 	

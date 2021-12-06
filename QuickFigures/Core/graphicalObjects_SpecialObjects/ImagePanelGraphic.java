@@ -653,7 +653,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			
 		
 			
-			if (this.getFrameWidthH()>0||this.getFrameWidthV()>0){
+			if (hasFrame()){
 				PathItemRef pi=new PathItemRef();
 				pi.createRectangle(aref, getFrameRect());
 				pi.setFilled(true);
@@ -691,6 +691,13 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			
 			
 			return pir;
+		}
+
+		/**returns true if this image has a visible frame around it
+		 * @return
+		 */
+		public boolean hasFrame() {
+			return this.getFrameWidthH()>0||this.getFrameWidthV()>0;
 		}
 
 		

@@ -60,6 +60,11 @@ public class ImagePanelImmitator implements OfficeObjectMaker {
        
         XSLFPictureShape pic = slide.createPicture(idx);
      
+        if(imagepanel.getFrameWidthH()!=0 ) {
+        	
+        	pic.setLineColor(imagepanel.getFrameColor());
+        	pic.setLineWidth(imagepanel.getFrameWidthH());
+        }
       
         pic.setAnchor(ipg.getBounds());//TODO Check if using bounds2d instead of bounds has an effect
        f.deleteOnExit();

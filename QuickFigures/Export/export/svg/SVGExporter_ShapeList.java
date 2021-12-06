@@ -55,7 +55,7 @@ public Element toSVG(Document dom, Element e) {
 		    		SVGExporter svgeXporter = exs.getSVGEXporter();
 					svgeXporter.toSVG(dom, element);
 		    		
-		    		IssueLog.log("working on "+z+"   "+svgeXporter);
+		    		
 		    	}
 			
 			

@@ -265,8 +265,8 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	@Override
 	public String getShapeName() {
 		if(this.getAnchors().length>2)
-			return "Bracket Conector";
-		return "Elbow Connector";
+			return "Bracket line";
+		return "Elbow line";
 	}
 	
 	@Override

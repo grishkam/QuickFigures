@@ -32,7 +32,9 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import illustratorScripts.PathItemRef;
 
 /**An SVG exporter implementation for image panels using Apache Batik*/
 public class ImageSVGExporter extends SVGExporter {
@@ -47,6 +49,18 @@ public class ImageSVGExporter extends SVGExporter {
 	/**Adds an image panel to the Document*/
 	@Override
 	public Element toSVG(Document dom, Element e) {
+		
+		
+		if (graphic.hasFrame()){
+			RectangularGraphic rect = new RectangularGraphic(graphic.getFrameRect());
+			rect.setFilled(true);
+			rect.setFillColor(graphic.getFrameColor());
+			rect.setName("Frame");
+			rect.setStrokeWidth(0);
+			rect.getSVGEXporter().toSVG(dom, e);
+		
+	}
+		
 		ImageWriterRegistry.getInstance().register((ImageWriter) new PNGImageWriter());
 		
 		BufferedImage image = graphic.getProcessedImageForDisplay();

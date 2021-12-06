@@ -915,10 +915,13 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return arrowHead2;
 	}
 
-	public void setArrowHead2(ArrowGraphic arrowHead2) {
-		this.arrowHead2 = arrowHead2;
+	public void setArrowHead2(ArrowGraphic arrowHead) {
+		this.arrowHead2 = arrowHead;
 	}
-
+	public void setArrowHead1(ArrowGraphic arrowHead) {
+		this.arrowHead1 = arrowHead;
+	}
+	
 	/**returns all items that are part of this object but 
 	 * may be clicked on separately*/
 	@Override
