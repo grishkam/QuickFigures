@@ -412,14 +412,14 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		}
 
 		
-
+		/**returns the frame width in the vertical direction*/
 		public double getFrameWidthV() {
 			return frameWidthv;
 		}
 
 		
 		
-		
+		/**returns the frame width in the horizontal direction*/
 		public double getFrameWidthH() {
 			
 			if (uniformFrameWidth) return getFrameWidthV();
