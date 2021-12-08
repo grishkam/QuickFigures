@@ -417,13 +417,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			return frameWidthv;
 		}
 
-		public void setFrameWidthV(double size) {
-			if(size<0) size=0;
-			if (frameWidthv==size) return;
-			if (uniformFrameWidth) this.frameWidthh=size;
-			this.frameWidthv = size;
-			notifyListenersOfSizeChange();
-		}
+		
 		
 		
 		public double getFrameWidthH() {
@@ -431,12 +425,35 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 			if (uniformFrameWidth) return getFrameWidthV();
 			return frameWidthh;
 		}
+		
+		/**sets the frame width Sets both the horizontal and the vertical frame width*/
+		public void setFrameWidth(double d) {
+			boolean changed = false;
+			if(frameWidthh !=d)
+				changed=true;
+			if(frameWidthv !=d)
+				changed=true;
+			this.frameWidthh = d;
+			this.frameWidthv = d;
+			if(changed)
+				notifyListenersOfSizeChange();
+		}
 
+		/**sets the horizontal frame width*/
 		public void setFrameWidthH(double d) {
 			if(d<0) d=0;//negative numbers not allowed
 			if (frameWidthh==d) return;
 			if (uniformFrameWidth) this.frameWidthv=d;
 			this.frameWidthh = d;
+			notifyListenersOfSizeChange();
+		}
+		
+		/**sets the vertical frame width*/
+		public void setFrameWidthV(double size) {
+			if(size<0) size=0;
+			if (frameWidthv==size) return;
+			if (uniformFrameWidth) this.frameWidthh=size;
+			this.frameWidthv = size;
 			notifyListenersOfSizeChange();
 		}
 		

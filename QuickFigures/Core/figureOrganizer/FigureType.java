@@ -58,6 +58,17 @@ public enum FigureType {
 			
 		
 	}
+	
+	/**returns the frame thickness that image panels start with in this type of figure*/
+	public double getFrameWidth() {
+		switch(this) {
+		case WESTERN_BLOT: 
+			return 1;
+			default:
+				return 0;
+		}
+		
+	}
 
 	/**a minimum width to determine when crop areas are valid and when to ask the user to adjust it*/
 	public  int getMinWidthForCropArea() {

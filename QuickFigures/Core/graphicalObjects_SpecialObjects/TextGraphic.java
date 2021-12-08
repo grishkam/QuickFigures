@@ -957,7 +957,7 @@ public void handleKeyPressEvent(KeyEvent arg0) {
 	if(st.equals(this.getText())) return;
 	this.setText(st);
 	setHighlightPositionToCursor();
-	IssueLog.log("After press "+this.getText());
+	
 }
 
 public void onBackspace() {

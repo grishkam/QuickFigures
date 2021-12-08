@@ -197,9 +197,11 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			String text_for_label = LaneLabelCreationOptions.defaultLabelText;
 			
 			
-			if(labelList!=null ) {
+			if(labelList!=null &&labelList.length>0) {
 				text_for_label=labelList[(laneIndex-1)%labelList.length];
-			}
+			} else if (labelList.length==0) 
+				text_for_label="";
+				
 			text_for_label =text_for_label.replace(LaneLabelCreationOptions.numberCode, ""+laneIndex);
 			ag2.setContent(text_for_label);
 			
@@ -241,6 +243,8 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				int markTextRow = (i-1)/nColumns;
 				if(markTextRow>=options.markText.length)
 					markTextRow=options.markText.length-1;
+				if(markTextRow>options.markText.length||options.markText.length==0)
+					continue;//if the text has been deleted
 				
 				String currentMarkText = options.markText[markTextRow];
 				TextGraphic  ag2 = new TextGraphic("+");

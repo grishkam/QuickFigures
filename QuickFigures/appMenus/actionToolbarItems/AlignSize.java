@@ -35,7 +35,6 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.LocatedObject2D;
-import locatedObject.RectangleEdges;
 import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -329,27 +328,15 @@ public class AlignSize extends BasicMultiSelectionOperator {
 				output.add(new Rectangle(0,0,8,3));
 				output.add(new Rectangle(0,4,8,8));
 				output.add(new Rectangle(0,14,8,6));
-				//output.add(new Rectangle(0,0,0,18));
-						} else  if(this.type==RectangleEdges.RIGHT) {
-							output.add(new Rectangle(8,0,8,4));
-							output.add(new Rectangle(0,6,16,6));
-							output.add(new Rectangle(12,14,4,4));
-							output.add(new Rectangle(16,0,0,18));
-					} /** else  if(this.type==RectangleEdges.BOTTOM) {
-						output.add(new Rectangle(0,6,4,8));
-						output.add(new Rectangle(6,0,6,14));
-						output.add(new Rectangle(14,11,4,3));
-						output.add(new Rectangle(0,14,18,0));
-					} else if (this.type==RectangleEdges.TOP) {
-						output.add(new Rectangle(0,0,4,8));
-						output.add(new Rectangle(6,0,6,14));
-						output.add(new Rectangle(14,0,4,3));
-						output.add(new Rectangle(0,0,18,0));
-					}*/else if (this.type==PANEL_SCALE) {
+						} else  if(this.type==HEIGHT) {
+							
+							output.add(new Rectangle(0, 7, 4,6));
+							output.add(new Rectangle(6, 7, 8, 6));
+							output.add(new Rectangle(15,7, 4,6));
+					} else if (this.type==PANEL_SCALE) {
 						output.add(new Rectangle(1,3,16,10));
 						output.add(new Rectangle(1,3,8,5));
 						
-						//output.add(new Rectangle(14,3,6,8));
 						;
 					}else if (this.type==BOTH) {
 						output.add(new Rectangle(6,15,8,6));
