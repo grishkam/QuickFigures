@@ -43,6 +43,7 @@ public enum FigureType {
 		this.menuItemName=menuName;
 	}
 	
+	/**returns the color that is optimal for objects drawn above the image panels in this figure type*/
 	public Color getForeGroundDrawColor() {
 		switch(this) {
 			case WESTERN_BLOT: 
@@ -88,7 +89,9 @@ public enum FigureType {
 			return 100;// western blots can have very long narrow crop areas. 
 		return MAX_ASPECT_RATIO_FOR_CROP_AREA;
 	}
+	
 	/**
+	 * returns true if a scale bar is needed for this figure type
 	 * @return
 	 */
 	public boolean needsScaleBar() {
@@ -96,7 +99,8 @@ public enum FigureType {
 			return false;
 		return true;
 	}
-	/**
+	
+	/**returns true if channel labels need to be added to this figure type
 	 * @return
 	 */
 	public boolean needsLabels() {
