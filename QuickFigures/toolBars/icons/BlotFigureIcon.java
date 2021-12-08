@@ -27,7 +27,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 /**
- An icon for the blot figure button
+ An icon for the blot figure button. Looks like a mini western blot
  */
 public class BlotFigureIcon extends QuickFigureIcon {
 	
