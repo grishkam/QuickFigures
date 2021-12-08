@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 8, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -33,24 +33,26 @@ import graphicTools.ShapeAddingTool;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ShapeGraphic;
 import locatedObject.LocatedObject2D;
+import menuUtil.BasicSmartMenuItem;
 import undo.UndoAddItem;
 
 /**class represents a menu item that adds one shape that will be placed above a panel. 
    The added shape will always be */
-public class PanelShapeAdder extends JMenuItem implements Serializable, ActionListener {
+public class PanelShapeAdder extends BasicSmartMenuItem implements Serializable, ActionListener {
 
 	Color shapeStrokeColor = Color.white;
 	private ShapeAddingTool shape;//determines what kind of shape is added
 	private Rectangle boundry;
 	private GraphicLayer layer;
 
-	public PanelShapeAdder(ShapeAddingTool arrowGraphicTool, LocatedObject2D boundry, GraphicLayer layer) {
-		super(arrowGraphicTool.getShapeName());
-		this.setIcon(arrowGraphicTool.getIcon());
+	public PanelShapeAdder(ShapeAddingTool arrowGraphicTool, LocatedObject2D boundry, GraphicLayer layer, Color strokeColor) {
+		super(arrowGraphicTool.getShapeName(), arrowGraphicTool.getIcon());
+		
 		shape=arrowGraphicTool;
 		this.boundry=boundry.getBounds();
 		this.layer=layer;
-		this.addActionListener(this);
+		
+		shapeStrokeColor =strokeColor;
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class PanelShapeAdder extends JMenuItem implements Serializable, ActionLi
 		/**Since most image panels are black, the shape stroke color is set to white*/
 		addedShape.setStrokeColor(shapeStrokeColor);
 		layer.add(addedShape);
-		new CurrentFigureSet().addUndo(new UndoAddItem(layer, addedShape));
+		this.addUndo(new UndoAddItem(layer, addedShape));
 		CurrentFigureSet.updateActiveDisplayGroup();
 		
 	}

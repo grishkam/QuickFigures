@@ -59,6 +59,7 @@ import export.pptx.OfficeObjectMaker;
 import export.svg.ImageSVGExporter;
 import export.svg.SVGExportable;
 import export.svg.SVGExporter;
+import figureOrganizer.FigureType;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
@@ -371,6 +372,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private transient ImagePanelActionHandleList aHandleList;
 
 	private transient ChannelSwapHandleList extraHandles;
+	private FigureType figureType;
 	
 
 
@@ -1154,6 +1156,22 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return new CombinedEdit(new UndoScalingAndRotation(this), new ColorEditUndo(this));
 		}
 
+		/**sets the figure type
+		 * @param figureType
+		 */
+		public void setFigureType(FigureType figureType) {
+			this.figureType=figureType;
+			
+		}
+		
+		/**
+		 returns the figure type. never returns null
+		 */
+		public FigureType getFigureType() {
+			if (this.figureType!=null)
+				return figureType;
+			return FigureType.FLUORESCENT_CELLS;
+		}
 		
 
 	

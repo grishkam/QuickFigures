@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import channelLabels.ChannelLabelManager;
+import figureOrganizer.FigureType;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelManager;
 import figureOrganizer.PanelSetter;
@@ -85,6 +86,13 @@ public interface ImageDisplayLayer extends GraphicLayer {
 	eliminates the current panels and creates replacements
 	 */
 	public void eliminateAndRecreate();
+
+
+
+	/**
+	 * @return
+	 */
+	public FigureType getFigureType();
 	
 	
 

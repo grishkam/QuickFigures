@@ -822,6 +822,8 @@ public void resizeLayoutToFitContents() {
 		//new MontageEditorDialogs().showBorderEditorDialog(getEditor(), getPanelLayout());
 		
 	*/}
+
 	
+
 	
 }

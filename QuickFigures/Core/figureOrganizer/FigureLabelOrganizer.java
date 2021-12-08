@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Dec 8, 2021
  * Version: 2021.2
  */
 package figureOrganizer;
@@ -40,17 +40,9 @@ import textObjectProperties.TextParagraph;
 public class FigureLabelOrganizer implements Serializable {
 
 	/**
-	 * 
+	The default names for each kind of label
 	 */
-	private static final String RIGHT_ROW_NAME = "Row ";
-	/**
-	 * 
-	 */
-	private static final String LEFT_ROW_NAME = "        Row ";
-	/**
-	 * 
-	 */
-	private static final String PANEL_NAME = "Panel ", COLUMN_NAME = "Column ";
+	private static final String RIGHT_ROW_NAME = "Row ", LEFT_ROW_NAME = "        Row ", PANEL_NAME = "Panel ", COLUMN_NAME = "Column ";
 	/**
 	 * 
 	 */
@@ -105,7 +97,7 @@ public class FigureLabelOrganizer implements Serializable {
 		textContent=textContent.replace("_", " ");
 		ComplexTextGraphic tg=new FigureLabelOrganizer.PanelLabelTextGraphic();
 		tg.setAttachmentPosition(AttachmentPosition.defaultInternalPanel());
-		tg.getParagraph().setAllLinesToCodeString(textContent, Color.white);
+		tg.getParagraph().setAllLinesToCodeString(textContent, theLayout.getFigureType().getForeGroundDrawColor());
 		tg.getParagraph().setJustification(TextParagraph.JUSTIFY_CENTER);
 		thisLayer.add(tg);
 		Rectangle2D p = theLayout.getPanelLayout().makeAltered(LayoutSpaces.PANELS).getPanel(index);
@@ -226,7 +218,7 @@ public class FigureLabelOrganizer implements Serializable {
 		return item;
 	}
 
-	/**
+	/**returns the string that indicates that the panel, row or column number should replace it within the text.
 	 * @return
 	 */
 	public static String getNumberCode() {

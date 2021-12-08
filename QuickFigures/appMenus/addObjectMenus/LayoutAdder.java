@@ -53,7 +53,7 @@ class LayoutAdder extends BasicGraphicAdder {
 	}
 	
 	public DefaultLayoutGraphic createStandard() {
-DefaultLayoutGraphic p = new DefaultLayoutGraphic();
+		DefaultLayoutGraphic p = new DefaultLayoutGraphic();
 		
 		p.getPanelLayout().setStandardPanelWidth(100);
 		p.getPanelLayout().setStandardPanelHeight(100);

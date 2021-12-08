@@ -458,9 +458,10 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	}
 	
 	/**creates a layout that is of the right dimensions for the panel stack display to use to place the image's panels*/
- static DefaultLayoutGraphic createLayoutForImage(MultiChannelImage image, ImageDisplayLayer panelStackDisplay) {
+private static DefaultLayoutGraphic createLayoutForImage(MultiChannelImage image, ImageDisplayLayer panelStackDisplay) {
 		DefaultLayoutGraphic p = new DefaultLayoutGraphic();
-		//p.getPanelLayout().setNColumns(image.nChannels()+1);
+		p.setFigureType(panelStackDisplay.getFigureType());
+		
 		p.getPanelLayout().setHorizontalBorder(10);
 		p.getPanelLayout().setVerticalBorder(10);
 		setUpRowAndColsToFit(image, panelStackDisplay, p);

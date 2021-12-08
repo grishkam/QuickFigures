@@ -118,9 +118,10 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	/**Creates a submenu for adding shapes, user should be able to add*/
 	public void addShapeSubmenu() {
 		SmartJMenu s = new SmartJMenu("Add Shape ");
-		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer()));
-		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer()));
-		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer()));
+		Color color = imagePanel.getFigureType().getForeGroundDrawColor();
+		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
+		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
+		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer(), color));
 		this.add(s);
 	}
 
@@ -134,7 +135,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			name="Panel";
 		
 		ComplexTextGraphic text = new ComplexTextGraphic(name);
-		text.setTextColor(Color.white);
+		text.setTextColor(imagePanel.getFigureType().getForeGroundDrawColor());
 		Text_GraphicTool.lockAndSnap(imagePanel, text, (int)imagePanel.getLocationUpperLeft().getX(), (int) imagePanel.getLocationUpperLeft().getY());
 		
 		undo.addEditToList(new UndoAddOrRemoveAttachedItem(imagePanel, text, false));
@@ -168,7 +169,12 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			parentLayer=parentLayer.getParentLayer();
 		}
 		BarGraphicTool.getCurrentBarTool().addBarGraphic(imagePanel, parentLayer, undo, (int)imagePanel.getBounds().getMaxX(),(int)imagePanel.getBounds().getMaxY());
-		return imagePanel.getScaleBar();
+		
+		BarGraphic scaleBar = imagePanel.getScaleBar();
+		Color c = imagePanel.getFigureType().getForeGroundDrawColor();
+		scaleBar.setFillColor(c);
+		scaleBar.getBarText().setTextColor(c);
+		return scaleBar;
 	}
 	
 }

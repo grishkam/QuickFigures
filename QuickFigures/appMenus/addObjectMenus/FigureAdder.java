@@ -269,6 +269,7 @@ public class FigureAdder extends LayoutAdder {
 		if (isAutoGenerateFromModel()) {
 				multiDimensionalImage.eliminateAndRecreate();
 				DefaultLayoutGraphic layout = currentFigureOrganizer.getMontageLayoutGraphic();
+				layout.setFigureType(getFigureType());
 				if (getFigureType()==FigureType.WESTERN_BLOT) {
 					layout.rowLabelsOnRight=true;//I prefer to label western blots on right
 				}

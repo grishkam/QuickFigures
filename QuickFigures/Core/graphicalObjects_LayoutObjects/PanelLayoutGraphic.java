@@ -41,6 +41,7 @@ import javax.swing.Icon;
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.GenericImage;
 import applicationAdapters.ImageWorkSheet;
+import figureOrganizer.FigureType;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.KnowsParentLayer;
@@ -115,7 +116,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	protected PanelLayout layout=new BasicLayout();
 	private  HashMap<LocatedObject2D, Integer> panelLocations=new HashMap<LocatedObject2D, Integer>();
-	
+	private FigureType figureType;
 	private int strokeWidth=2;//how thick the rectangles for the panels are drawn
 	
 	
@@ -1183,5 +1184,21 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		if(handleBoxes2==null)
 			handleBoxes2=new SmartHandleList();
 		return handleBoxes2;
+	}
+	
+	/** sets the figure type
+	 * @param figureType
+	 */
+	public void setFigureType(FigureType figureType) {
+		this.figureType=figureType;
+		
+	}
+	/**
+	 returns the figure type that will be used
+	 */
+	public FigureType getFigureType() {
+		if (this.figureType!=null)
+			return figureType;
+		return FigureType.FLUORESCENT_CELLS;
 	}
 }

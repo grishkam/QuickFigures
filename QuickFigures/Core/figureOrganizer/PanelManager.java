@@ -117,8 +117,7 @@ public class PanelManager implements Serializable, EditListener{
 			
 			panelgraphic.setName(name);
 			
-			panelgraphic.setFrameColor(display.getFigureType().getForeGroundDrawColor());// to ensure that the frame is a different color from the image
-			panelgraphic.setFrameWidthH(display.getFigureType().getFrameWidth());
+			setFigureType(panelgraphic);
 			
 			layer.add(panelgraphic);
 			
@@ -127,6 +126,15 @@ public class PanelManager implements Serializable, EditListener{
 			//
 			
 			return panelgraphic;
+	}
+
+	/**sets the properties of the image panel according to the figure type of the current display
+	 * @param panelgraphic
+	 */
+	protected void setFigureType(ImagePanelGraphic panelgraphic) {
+		panelgraphic.setFrameColor(display.getFigureType().getForeGroundDrawColor());// to ensure that the frame is a different color from the image
+		panelgraphic.setFrameWidthH(display.getFigureType().getFrameWidth());
+		panelgraphic.setFigureType(display.getFigureType());
 	}
 	
 	/**returns the display object for the panel*/
