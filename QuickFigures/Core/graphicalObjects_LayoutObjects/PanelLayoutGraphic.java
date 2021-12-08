@@ -1194,7 +1194,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 	}
 	/**
-	 returns the figure type that will be used
+	 returns the figure type 
 	 */
 	public FigureType getFigureType() {
 		if (this.figureType!=null)

@@ -549,7 +549,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 				   double scaleFrame=this.getFrameWidthV()*cords.getMagnification();
 					double scaleFrame2=this.getFrameWidthH()*cords.getMagnification();
 					
-					Rectangle rect2 = new Rectangle((int)(x1-scaleFrame2 ), (int)(y1-scaleFrame), (int)(x2-x1+2*scaleFrame2), (int)(y2-y1+2*scaleFrame));
+					Rectangle2D rect2 = new Rectangle2D.Double((x1-scaleFrame2 ), (y1-scaleFrame), (x2-x1+2*scaleFrame2), (y2-y1+2*scaleFrame));
 					
 				   graphics.setColor(getFrameColor());
 				   graphics.fill(rect2);

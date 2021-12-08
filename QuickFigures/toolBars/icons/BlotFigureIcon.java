@@ -55,7 +55,8 @@ public class BlotFigureIcon extends QuickFigureIcon {
 		};
 		return r3;
 	}
-	/**
+	
+	/**returns the three rectangles that represent the 3 cut strips displayed in the icon
 	 * @param size2
 	 * @param x
 	 * @param y
@@ -65,7 +66,7 @@ public class BlotFigureIcon extends QuickFigureIcon {
 		int size=5;
 		int down=3;
 		int move=size+1;
-		int width=size*4;
+		int width=size*4-1;
 		int x1 = x+1;
 		int y1 = y+1;
 		

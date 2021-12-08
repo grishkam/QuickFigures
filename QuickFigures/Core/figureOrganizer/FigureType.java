@@ -63,7 +63,7 @@ public enum FigureType {
 	public double getFrameWidth() {
 		switch(this) {
 		case WESTERN_BLOT: 
-			return 1;
+			return 2;
 			default:
 				return 0;
 		}
