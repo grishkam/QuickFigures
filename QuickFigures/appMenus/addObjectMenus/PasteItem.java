@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 9, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -26,6 +26,7 @@ import locatedObject.LocatedObject2D;
 import selectedItemMenus.CopyItem;
 import undo.UndoAddManyItem;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class PasteItem extends BasicGraphicAdder{
@@ -45,7 +46,8 @@ public class PasteItem extends BasicGraphicAdder{
 
 	@Override
 	public ZoomableGraphic add(GraphicLayer layer) {
-		if ( CopyItem.thearray==null) return null;
+		if ( objectDuplicateNotPossible())
+			return null;
 	
 		
 		ArrayList<ZoomableGraphic> copiedArray = new ArrayList<ZoomableGraphic> ();
@@ -54,15 +56,36 @@ public class PasteItem extends BasicGraphicAdder{
 			if (s instanceof LocatedObject2D) {
 				LocatedObject2D l=(LocatedObject2D) s;
 				l=l.copy();
+				l.moveLocation(CopyItem.currentShift.getX(), CopyItem.currentShift.getY());
 				copiedArray.add((ZoomableGraphic) l);
 				if (layer!=null ) layer.add((ZoomableGraphic) l);
 			}
 		}
 		
+		CopyItem.currentShift=new Point2D.Double(CopyItem.currentShift.getX()+CopyItem.shiftDisplace.getX(), CopyItem.currentShift.getY()+CopyItem.shiftDisplace.getY());
+		
 		UndoAddManyItem undo = new UndoAddManyItem(layer,copiedArray );
 		selector.getWorksheet().getUndoManager().addEdit(undo);
 		
 		return null;
+	}
+
+
+
+
+
+
+
+
+	/**
+	 * @return
+	 */
+	public static boolean objectDuplicateNotPossible() {
+		if(CopyItem.thearray==null)
+			return true;
+		if(CopyItem.thearray.size()==0)
+			return true;
+		return CopyItem.thearray==null;
 	}
 
 	

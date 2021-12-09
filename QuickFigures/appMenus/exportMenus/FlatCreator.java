@@ -37,6 +37,7 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.FigureDisplayWorksheet;
+import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputEvent;
@@ -86,10 +87,10 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 	
 	/**creates a buffered image and draws all of the graphics on it. 
 	 * copies the buffered image to the system clipboard*/
-	public void toSystemClip(FigureDisplayWorksheet cont) {
+	public void toSystemClip(FigureDisplayWorksheet cont) throws IOException {
 		image = createFlat( cont) ;
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clip.setContents(this, null);
+		clip.setContents(this, null);
 	}
 
 	
@@ -111,7 +112,12 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		toSystemClip(diw.getImageAsWorksheet());
+		try {
+			toSystemClip(diw.getImageAsWorksheet());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

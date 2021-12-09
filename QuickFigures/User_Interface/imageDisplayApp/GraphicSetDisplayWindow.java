@@ -55,6 +55,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+import addObjectMenus.ClipboardAdder;
 import addObjectMenus.PasteItem;
 import applicationAdapters.DisplayedImage;
 import basicAppAdapters.GenericCanvasMouseAction;
@@ -389,36 +390,8 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 					if (getDisplaySet().getUndoManager().canRedo())this.getDisplaySet().getUndoManager().redo();
 				}
 		
-		SelectedSetLayerSelector selector = new SelectedSetLayerSelector(this.getTheSet());
-		/**The copy and paste options*/
-				if (arg0.getKeyCode()==KeyEvent.VK_C&&WindowsOrMacMeta) {
-						new FlatCreator().toSystemClip(getTheSet());
-						CopyItem cc = new CopyItem();
-						cc.setSelector(selector);
-						cc.run();
-					}
-				
-				if (arg0.getKeyCode()==KeyEvent.VK_X&&WindowsOrMacMeta) {
-						new FlatCreator().toSystemClip(getTheSet());
-						CopyItem cc = new CopyItem();
-						cc.setSelector(selector);
-						cc.run();
-						
-						ItemRemover ir = new ItemRemover();
-						ir.setSelector(selector);
-						ir.setSelection(selector.getSelecteditems());
-						ir.run();
-						this.repaint();
-					}
-				
-				if (arg0.getKeyCode()==KeyEvent.VK_V&&WindowsOrMacMeta) {
-					
-					PasteItem pp = new PasteItem();
-					pp.setSelector(new SelectedSetLayerSelector(this.getTheSet()));
-					
-					pp.add(new SelectedSetLayerSelector(this.getTheSet()).getSelectedLayer());
-					
-					}
+		if(!arg0.isConsumed())
+			implementCopyPasteKeys(arg0, WindowsOrMacMeta);
 		
  		
 		if (KeyEvent.VK_ESCAPE==arg0.getKeyCode()) {
@@ -459,6 +432,66 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			IssueLog.log(t);
 		}
 
+	}
+
+
+	/**
+	 * @param arg0
+	 * @param WindowsOrMacMeta
+	 */
+	protected void implementCopyPasteKeys(KeyEvent arg0, boolean WindowsOrMacMeta) {
+		SelectedSetLayerSelector selector = new SelectedSetLayerSelector(this.getTheSet());
+		/**The copy and paste options*/
+		CopyItem cc = new CopyItem(new Point2D.Double(5, 5));
+				if (arg0.getKeyCode()==KeyEvent.VK_C&&WindowsOrMacMeta) {
+					IssueLog.log("Attempting to copy");
+						
+						
+						cc.setSelector(selector);
+						cc.run();
+						toSyteomClipboard();
+					}
+				
+				if (arg0.getKeyCode()==KeyEvent.VK_X&&WindowsOrMacMeta) {
+					IssueLog.log("Attempting to cut");
+						toSyteomClipboard();
+					
+						cc.setSelector(selector);
+						cc.run();
+						
+						ItemRemover ir = new ItemRemover();
+						ir.setSelector(selector);
+						ir.setSelection(selector.getSelecteditems());
+						ir.run();
+						this.repaint();
+						
+					}
+				
+				if (arg0.getKeyCode()==KeyEvent.VK_V&&WindowsOrMacMeta) {
+					GraphicLayer selectedLayer = new SelectedSetLayerSelector(this.getTheSet()).getSelectedLayer();
+						if(!PasteItem.objectDuplicateNotPossible())
+						{
+							PasteItem pp = new PasteItem();
+							pp.setSelector(new SelectedSetLayerSelector(this.getTheSet()));
+						
+							pp.add(selectedLayer);
+						} else {
+							new ClipboardAdder(false).add(selectedLayer);
+						}
+						arg0.consume();
+					}
+	}
+
+
+	/**
+	 * 
+	 */
+	protected void toSyteomClipboard() {
+		try {
+			new FlatCreator().toSystemClip(getTheSet());
+		}  catch (IOException e) {
+			IssueLog.log("copy to clipboard attempted");
+		}
 	}
 
 

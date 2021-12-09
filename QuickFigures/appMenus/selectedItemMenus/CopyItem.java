@@ -20,6 +20,7 @@
  */
 package selectedItemMenus;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import graphicalObjects.ZoomableGraphic;
@@ -40,6 +41,13 @@ public class CopyItem extends BasicMultiSelectionOperator {
 	public static ArrayList<ZoomableGraphic> thearray=null;
 	static String text="";
 	
+	public static Point2D currentShift=new Point2D.Double(15, 15);
+	public static Point2D shiftDisplace=new Point2D.Double(15, 15);
+
+	
+	/**construct that includes a location shift*/
+	public CopyItem(Point2D locationShift) {
+			}
 	
 	@Override
 	public String getMenuCommand() {
@@ -51,6 +59,7 @@ public class CopyItem extends BasicMultiSelectionOperator {
 	@Override
 	public void setSelection(ArrayList<ZoomableGraphic> array) {
 		thearray=array;
+		currentShift=new Point2D.Double(5, 5);
 	}
 
 	@Override
