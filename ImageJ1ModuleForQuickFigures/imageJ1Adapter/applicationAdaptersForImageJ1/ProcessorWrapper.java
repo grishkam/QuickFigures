@@ -28,6 +28,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import applicationAdapters.PixelWrapper;
+import ij.ImagePlus;
 import ij.gui.Roi;
 import ij.gui.ShapeRoi;
 import ij.process.ByteProcessor;
@@ -174,11 +175,38 @@ public class ProcessorWrapper implements PixelWrapper {
 				
 	}
 
+	/**crops the processor*/
 	@Override
 	public void crop(Rectangle r) {
 		if (object==null) return;
 			object.setRoi(r);
 		object=object.crop();
+		
+	}
+	
+	/**Done prior to crops in which the crop area is below zero (done prior to rotation)
+	 * @param xShift
+	 * @param yShift
+	 */
+	private void createExpandedTopAndLeft(int xShift, int yShift) {
+		if(xShift==0&&yShift==0)
+			return;
+		ImageProcessor newObject = object.createProcessor(2*xShift+object.getWidth(), 2*yShift+object.getHeight());
+		newObject.insert(object, xShift, yShift);
+		object=newObject;
+		
+	}
+	
+	/**Done prior to crops in which the crop area is beyond the max of the image (done prior to rotation)
+	 * @param xShift
+	 * @param yShift
+	 */
+	private void createExpandedBottomAndRight(int xShift, int yShift) {
+		if(xShift==0&&yShift==0)
+			return;
+		ImageProcessor newObject = object.createProcessor(xShift+object.getWidth(), yShift+object.getHeight());
+		newObject.insert(object, 0, 0);
+		object=newObject;
 		
 	}
 	
@@ -224,6 +252,7 @@ public int[] getDistribution() {
 		
 }
 
+/**implements the angle crop*/
 @Override
 public void cropAtAngle(Rectangle r, double angle) {
 	if(angle%Math.PI==0) {this.crop(r);return;}
@@ -235,28 +264,88 @@ public void cropAtAngle(Rectangle r, double angle) {
 		return;
 		}
 	
-	/**first performs an easy crop that just gets rid of extra pixels*/
+	/**first performs an easy 'pre-crop' crop that just gets rid of extra pixels. 
+	 * later rotation can be time consuming for large images, crops to a smaller image first*/
 	Shape firstLevelCrop = AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
-	Rectangle bounds = firstLevelCrop.getBounds(); if (bounds.x>r.x||bounds.y>r.y) {
+	Rectangle bounds = firstLevelCrop.getBounds(); //this area should have the same center as the crop area
+	
+	
+	
+	if (bounds.x>r.x||bounds.y>r.y) {
 		/** At certain angles for rectangles with high aspect ratio, the bounds of the rotated rectangle does not include
 		  all of the region of interest. Problem might occur under these conditions so the next few lines alter*/
 		Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, bounds);
 		if(bounds.height>bounds.width)bounds.width=bounds.height;
 		if(bounds.height<bounds.width)bounds.height=bounds.width;
 		RectangleEdges.setLocation(bounds, RectangleEdges.CENTER, center.getX(), center.getY());
+		
 	}
-	angle=angle*180/Math.PI;
+	
+	r=performZeroCorrection(bounds, r);
+	
+	angle=angle*180/Math.PI;//changes the units of the angle to degrees
 	this.crop(bounds);
+	
+	
+	
+	//at this point, a smaller image that requires less processing to rotate is available
+	
 	
 	/**now rotates the smaller image*/
 	this.setInterPolationMethodFor(object);
-	object.rotate(angle);
+	object.rotate(angle);//rotation is about center
 	
 	Rectangle r2 = new Rectangle(r);
 	r2.x-=bounds.getMinX();
 	r2.y-=bounds.getMinY();
+	
+	
 	this.crop(r2);
 	
+}
+
+
+
+/**If the innitial bounds for a pre-crop is below zero this will attempt to correct it
+ * @param bounds
+ * @param r 
+ * @return 
+ */
+private Rectangle performZeroCorrection(Rectangle bounds, Rectangle r) {
+	int xShift = 0;
+	int yShift =0;
+	if (bounds.x<0) {
+		/** Found to have difficulty with x or y below zero. fix was created on Dec 10 2021*/
+		xShift=bounds.x;
+		if(bounds.x<0)
+			{bounds.x=0;}
+			createExpandedTopAndLeft(Math.abs(xShift), 0);//creates a version that does not need to have a crop rectangle below zero
+			Rectangle output = new Rectangle(r.x-xShift, r.y, r.width, r.height);
+			
+		return output;
+		
+	}
+	
+	if (bounds.y<0) {
+		/** Found to have difficulty with x or y below zero. fix was created on Dec 10 2021*/
+		yShift=bounds.y;
+		if(bounds.y<0)
+			{bounds.y=0;}
+			createExpandedTopAndLeft( 0, Math.abs(yShift));//creates a version that does not need to have a crop rectangle below zero
+			Rectangle output = new Rectangle(r.x, r.y-yShift, r.width, r.height);
+			
+		return output;
+		
+	}
+	
+	if(bounds.getMaxX()>object.getWidth()) {
+		createExpandedBottomAndRight((int) (bounds.getMaxX()-object.getWidth()), 0);
+	}
+	if(bounds.getMaxY()>object.getHeight()) {
+		createExpandedBottomAndRight(0, (int) (bounds.getMaxY()-object.getHeight()));
+	}
+	
+	return r;
 }
 
 @Override
