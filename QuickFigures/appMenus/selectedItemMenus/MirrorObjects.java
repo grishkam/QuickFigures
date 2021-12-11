@@ -29,7 +29,6 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import locatedObject.LocatedObject2D;
 import messages.ShowMessage;
 import undo.UndoAddItem;
 import utilityClasses1.ArraySorter;
@@ -50,12 +49,13 @@ public class MirrorObjects extends BasicGraphicAdder {
 	@Override
 	public void run() {
 		
-		ArrayList<LocatedObject2D> objects = super.getAllObjects();
+		ArrayList<ZoomableGraphic> objects = super.getSelector().getSelecteditems();
+		
 		ShapeGraphic s=null;
 		ImagePanelGraphic startPanel=null;
 		ArrayList<ImagePanelGraphic> otherPanels=new ArrayList<ImagePanelGraphic>();
 		
-		for(LocatedObject2D o: objects) {
+		for(ZoomableGraphic o: objects) {
 			if(o instanceof ShapeGraphic) {
 				s=(ShapeGraphic) o;
 			}
@@ -71,7 +71,7 @@ public class MirrorObjects extends BasicGraphicAdder {
 			return;
 		
 		ArraySorter.removeThoseNotOfClass(objects, ImagePanelGraphic.class);
-		for(LocatedObject2D o: objects) {
+		for(ZoomableGraphic o: objects) {
 			if(o instanceof ImagePanelGraphic) {
 				ImagePanelGraphic panel=(ImagePanelGraphic) o;
 				if(panel.getOutline().contains(s.getOutline().getBounds()))
@@ -134,7 +134,6 @@ public class MirrorObjects extends BasicGraphicAdder {
 
 	@Override
 	public String getCommand() {
-		// TODO Auto-generated method stub
 		return getMenuCommand();
 	}
 }

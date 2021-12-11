@@ -55,6 +55,8 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import standardDialog.booleans.BooleanInputEvent;
+import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.graphics.GraphicComponent;
 import standardDialog.numbers.AngleInputPanel;
@@ -66,6 +68,11 @@ import standardDialog.strings.InfoDisplayPanel;
 /**a dialog for setting the crop area for a multi dimensional image.
  * Can also be used to set a crop area for one or more image panels.*/
 public class CroppingDialog extends GraphicItemOptionsDialog implements MouseListener, MouseMotionListener, ActionListener{
+
+	/**
+	 * 
+	 */
+	private static final String ALLOW_OUT_KEY = "allow out";
 
 	/**
 	 * 
@@ -135,6 +142,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	public double scaleFactorForCropArea=1;
 	/**set to true if this dialog changes the scale as well*/
 	public boolean changeScale=false;
+
+	/**set to true if the user is not precented from setting an out of bounds crop area*/
+	private boolean outofBoundsCrop=false;
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -384,7 +394,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 					getCropAreaScaler().showAsPopup(e);
 					
 				}}));
-		
+		this.add(ALLOW_OUT_KEY, new BooleanInputPanel("Permit out of bounds crop", outofBoundsCrop));
 		this.pack();
 		boolean allOK = false;
 		if (dialogContext!=null) allOK =dialogContext.okToAll;
@@ -519,6 +529,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	/**Returns true if the current crop rectangle is valid. If the rectangle is partly outside the image, this will return false*/
 	public boolean isCroppingRectangleValid() {
+		if(outofBoundsCrop)
+			return true;
 		RectangularGraphic testedRect = cropAreaRectangle;
 		return isCropRectangleValid(testedRect);
 	}
@@ -538,6 +550,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	/**Changes the stored rectangle to match the dialog fields*/
 	public void setRectToDialog() {
+		
 		RectangularGraphic rect2 = cropAreaRectangle.copy();
 		Rectangle r = new Rectangle(this.getNumberInt("x"), this.getNumberInt("y"),this.getNumberInt("width"), this.getNumberInt("height"));
 		
@@ -583,6 +596,11 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getChoiceIndex();updateDisplayImage();}
 	}
 
+	@Override 
+	public void booleanInput(BooleanInputEvent be) {
+		this.outofBoundsCrop=this.getBoolean(ALLOW_OUT_KEY);
+	}
+
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -609,7 +627,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-	press = panel.getCord().unTransformClickPoint(arg0);
+		press = panel.getCord().unTransformClickPoint(arg0);
 		handle=cropAreaRectangle.handleNumber(arg0.getX(), arg0.getY());
 		
 

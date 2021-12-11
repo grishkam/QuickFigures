@@ -37,7 +37,6 @@ import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.FigureDisplayWorksheet;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.numbers.NumberInputEvent;

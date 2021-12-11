@@ -26,7 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 
-import javax.swing.JMenuItem;
 
 import graphicActionToolbar.CurrentFigureSet;
 import graphicTools.ShapeAddingTool;

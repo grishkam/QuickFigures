@@ -37,6 +37,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
 import graphicActionToolbar.CurrentFigureSet;
+import iconGraphicalObjects.CheckBoxIcon;
 import iconGraphicalObjects.ColorIcon;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
@@ -121,9 +122,11 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 				if (pMethod!=null) {
 					Object b = pMethod.invoke(o);
 				
-					if (b==null||b.toString().equals("false")) {};
+					if (b==null||b.toString().equals("false")) {
+						item.setIcon(new CheckBoxIcon(Color.black, false));
+					};
 					if(b.toString().equals("true")) {
-						item.setIcon(new ColorIcon(Color.black));
+						item.setIcon(new CheckBoxIcon(Color.black, true));
 					}
 					
 					
