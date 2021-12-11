@@ -13,8 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Dec 10, 2021
+ * Copyright (C) 2020 Gregory Mazo
+ * 
+ */
 package figureEditDialogs;
 
+/**responds to changes in the display range dialog*/
 public interface DisplayRangeChangeListener {
 
 	/**What needs to be done after min max is set*/

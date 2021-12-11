@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 25, 2021
+ * Date Modified: Dec 10, 2021
  * Version: 2021.2
  */
 package multiChannelFigureUI;
@@ -443,7 +443,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			double max) {
 		for(MultiChannelImage w: wraps) try {
 			if (realName!=null &&!realName.equals("null")) {
-				channelNumber=getBestMatchToChannel(w, realName, channelNumber);
+				channelNumber=getBestMatchToChannel(w, realName, channelNumber);//if the channel with the given name is not located at the same number but a name still exists
 			} 
 			
 			w.setChannelMin(channelNumber, min);
@@ -457,7 +457,10 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		if (realName==null||realName.trim().equals("")) this.updateAllDisplays();
 		else {
 			for(ImageDisplayLayer pd: getAllDisplays() ) {
-			pd.updateOnlyPanelsWithChannel(realName);
+				if(pd.getMultiChannelImage().nChannels()==1)//dont bother checking for name match if only one channel each
+					pd.updatePanels();
+				else
+				pd.updateOnlyPanelsWithChannel(realName);
 			if (updateInsets) {
 				if (this.updateInsets) updateInsetPanels(pd, realName);
 			}
