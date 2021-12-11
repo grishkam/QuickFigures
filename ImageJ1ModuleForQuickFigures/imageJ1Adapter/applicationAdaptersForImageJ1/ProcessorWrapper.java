@@ -175,40 +175,37 @@ public class ProcessorWrapper implements PixelWrapper {
 				
 	}
 
-	/**crops the processor*/
+	/**crops the processor. If the crop area extends beyond the image processor, will creates a processor that is the 
+	 * same size as the crop area*/
 	@Override
 	public void crop(Rectangle r) {
-		if (object==null) return;
+		if (object==null) 
+			return;
+		boolean add=false;
+		int addLeft=0;
+		if(r.x<0)
+			{addLeft=Math.abs(r.x);add=true;}
+		int addTop=0;
+		if(r.y<0)
+			{addTop=Math.abs(r.y);add=true;}
+		if(r.getMaxX()>object.getWidth())
+			{add=true;}
+		if(r.getMaxY()>object.getHeight())
+			{add=true;}
+		
+		
 			object.setRoi(r);
 		object=object.crop();
 		
-	}
-	
-	/**Done prior to crops in which the crop area is below zero (done prior to rotation)
-	 * @param xShift
-	 * @param yShift
-	 */
-	private void createExpandedTopAndLeft(int xShift, int yShift) {
-		if(xShift==0&&yShift==0)
-			return;
-		ImageProcessor newObject = object.createProcessor(2*xShift+object.getWidth(), 2*yShift+object.getHeight());
-		newObject.insert(object, xShift, yShift);
-		object=newObject;
+		if(add) {
+			ImageProcessor newObject = object.createProcessor(r.width,r.height);
+			newObject.insert(object, addLeft, addTop);
+			object=newObject;
+		}
 		
 	}
 	
-	/**Done prior to crops in which the crop area is beyond the max of the image (done prior to rotation)
-	 * @param xShift
-	 * @param yShift
-	 */
-	private void createExpandedBottomAndRight(int xShift, int yShift) {
-		if(xShift==0&&yShift==0)
-			return;
-		ImageProcessor newObject = object.createProcessor(xShift+object.getWidth(), yShift+object.getHeight());
-		newObject.insert(object, 0, 0);
-		object=newObject;
-		
-	}
+
 	
 	private ImageProcessor getProcessor() {
 		return getPixels();
@@ -255,36 +252,28 @@ public int[] getDistribution() {
 /**implements the angle crop*/
 @Override
 public void cropAtAngle(Rectangle r, double angle) {
-	if(angle%Math.PI==0) {this.crop(r);return;}
+	if(angle%Math.PI==0) {
+		this.crop(r);
+		return;//non-rotated crop areas are simple
+		}
 	if(angle%Math.PI/2==0) {
 		IssueLog.log("performing 90 deg crop");
 		Rectangle r2 = new Rectangle(r);
 		r2.width=r.height; r2.height=r.width; r2.x+=(r.width-r2.width)/2; r2.y+=(r.height-r2.height)/2;
 		this.crop(r2);
-		return;
+		return;//right angle crop areas are very simple too.
 		}
 	
-	/**first performs an easy 'pre-crop' crop that just gets rid of extra pixels. 
-	 * later rotation can be time consuming for large images, crops to a smaller image first*/
-	Shape firstLevelCrop = AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
-	Rectangle bounds = firstLevelCrop.getBounds(); //this area should have the same center as the crop area
+	/**first performs an easy 'pre-crop' crop that just gets rid of extra pixels
+	 *  and makes the center of the image match the center of rotation 
+	 * later rotation can be time consuming for large images, crops to a smaller image first.
+	 * Crop area for first crop has same center location as final crop and contains all the pixels that will be in the final crop. 
+	 * after first crop, rotation will be performed. Lastly, the final crop will be done*/
+	Rectangle firstCropBounds = createFirstPhaseCropArea(r, angle);
 	
 	
 	
-	if (bounds.x>r.x||bounds.y>r.y) {
-		/** At certain angles for rectangles with high aspect ratio, the bounds of the rotated rectangle does not include
-		  all of the region of interest. Problem might occur under these conditions so the next few lines alter*/
-		Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, bounds);
-		if(bounds.height>bounds.width)bounds.width=bounds.height;
-		if(bounds.height<bounds.width)bounds.height=bounds.width;
-		RectangleEdges.setLocation(bounds, RectangleEdges.CENTER, center.getX(), center.getY());
-		
-	}
-	
-	r=performZeroCorrection(bounds, r);
-	
-	angle=angle*180/Math.PI;//changes the units of the angle to degrees
-	this.crop(bounds);
+	crop(firstCropBounds);//the first crop bounds has the same center as the final crop area but is larger such that all pixels that might fall within a rotated crop are present
 	
 	
 	
@@ -293,60 +282,40 @@ public void cropAtAngle(Rectangle r, double angle) {
 	
 	/**now rotates the smaller image*/
 	this.setInterPolationMethodFor(object);
-	object.rotate(angle);//rotation is about center
+	angle=angle*180/Math.PI;//changes the units of the angle to degree
+	object.rotate(angle);//rotation is about center. 
 	
-	Rectangle r2 = new Rectangle(r);
-	r2.x-=bounds.getMinX();
-	r2.y-=bounds.getMinY();
-	
-	
-	this.crop(r2);
+	/**performs the final crop*/
+	Rectangle secondPhaseCropArea = new Rectangle(r);
+	secondPhaseCropArea.x-=firstCropBounds.getMinX();
+	secondPhaseCropArea.y-=firstCropBounds.getMinY();
+	this.crop(secondPhaseCropArea);
 	
 }
 
-
-
-/**If the innitial bounds for a pre-crop is below zero this will attempt to correct it
- * @param bounds
- * @param r 
- * @return 
+/**
+ * @param r
+ * @param angle
+ * @return
  */
-private Rectangle performZeroCorrection(Rectangle bounds, Rectangle r) {
-	int xShift = 0;
-	int yShift =0;
-	if (bounds.x<0) {
-		/** Found to have difficulty with x or y below zero. fix was created on Dec 10 2021*/
-		xShift=bounds.x;
-		if(bounds.x<0)
-			{bounds.x=0;}
-			createExpandedTopAndLeft(Math.abs(xShift), 0);//creates a version that does not need to have a crop rectangle below zero
-			Rectangle output = new Rectangle(r.x-xShift, r.y, r.width, r.height);
-			
-		return output;
+protected Rectangle createFirstPhaseCropArea(Rectangle r, double angle) {
+	Shape firstLevelCrop = AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
+	Rectangle firstCropBounds = firstLevelCrop.getBounds(); //this area should have the same center as the crop area
+	if (firstCropBounds.x>r.x||firstCropBounds.y>r.y) {
+		/** At certain angles for rectangles with high aspect ratio, the bounds of the rotated rectangle does not include
+		  all of the region of interest. Problem might occur under these conditions so the next few lines alter*/
+		Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, firstCropBounds);
+		if(firstCropBounds.height>firstCropBounds.width)firstCropBounds.width=firstCropBounds.height;
+		if(firstCropBounds.height<firstCropBounds.width)firstCropBounds.height=firstCropBounds.width;
+		RectangleEdges.setLocation(firstCropBounds, RectangleEdges.CENTER, center.getX(), center.getY());
 		
 	}
-	
-	if (bounds.y<0) {
-		/** Found to have difficulty with x or y below zero. fix was created on Dec 10 2021*/
-		yShift=bounds.y;
-		if(bounds.y<0)
-			{bounds.y=0;}
-			createExpandedTopAndLeft( 0, Math.abs(yShift));//creates a version that does not need to have a crop rectangle below zero
-			Rectangle output = new Rectangle(r.x, r.y-yShift, r.width, r.height);
-			
-		return output;
-		
-	}
-	
-	if(bounds.getMaxX()>object.getWidth()) {
-		createExpandedBottomAndRight((int) (bounds.getMaxX()-object.getWidth()), 0);
-	}
-	if(bounds.getMaxY()>object.getHeight()) {
-		createExpandedBottomAndRight(0, (int) (bounds.getMaxY()-object.getHeight()));
-	}
-	
-	return r;
+	return firstCropBounds;
 }
+
+
+
+
 
 @Override
 public int getBitsPerPixel() {
