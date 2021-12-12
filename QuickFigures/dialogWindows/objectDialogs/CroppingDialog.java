@@ -70,6 +70,7 @@ import standardDialog.numbers.AngleInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.ButtonPanel;
+import standardDialog.strings.CombindedInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 
 /**a dialog for setting the crop area for a multi dimensional image.
@@ -380,6 +381,16 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		if(includeAngle) {
 				this.add("angle", new AngleInputPanel("angle", cropAreaRectangle.getAngle(), true));
 		}
+		if(this.includeScaleButton)
+			this.add("scale", new ButtonPanel("  ", "Scale Crop Area", new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					getCropAreaScaler().showAsPopup(e);
+					
+				}}));
+		
 		if(showsFrameSlider()) {
 			ChannelSliceAndFrameSelectionDialog.addFrameSelectionToDialog(this, multiChannelSource, display.frame);
 		}
@@ -392,15 +403,29 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 		this.moveGrid(-2, 0);
 		
-		if(this.includeScaleButton)
-			this.add("scale", new ButtonPanel("  ", "Scale Crop Area", new ActionListener() {
+		
+		
+		ButtonPanel in = new ButtonPanel("Zoom", "+", new ActionListener() {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-					getCropAreaScaler().showAsPopup(e);
-					
-				}}));
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				changeZoomLevel(2);
+				
+			}});
+		
+		ButtonPanel out = new ButtonPanel("Zoom", "-", new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				changeZoomLevel(-2);
+				
+			}});
+		CombindedInputPanel zoomLevelPanel = new CombindedInputPanel("Zoom", out, in);
+		super.add("ZoomI", zoomLevelPanel);
+		
+		
 		this.add(ALLOW_OUT_KEY, new BooleanInputPanel("Permit out of bounds crop", outofBoundsCrop));
 		
 		this.pack();
@@ -916,10 +941,17 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int turns=e.getWheelRotation();
+		changeZoomLevel(turns);
+		
+	}
+
+	/**
+	 * @param turns
+	 */
+	public void changeZoomLevel(int turns) {
 		this.setDisplayScale(displayMagnification+turns*0.02);
 	
 		this.repaint();
-		
 	}
 	
 

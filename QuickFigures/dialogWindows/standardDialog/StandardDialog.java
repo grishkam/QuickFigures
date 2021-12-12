@@ -78,6 +78,7 @@ import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.numbers.PointInputPanel;
+import standardDialog.strings.CombindedInputPanel;
 import standardDialog.strings.StringInputEvent;
 import standardDialog.strings.StringInputListener;
 import standardDialog.strings.StringInputPanel;
@@ -229,6 +230,20 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		allStrings.put(key, st);
 		st.addStringInputListener(this);
 		st.setKey(key);
+		place(st);
+	}
+	
+	/**Adds a compound input panel to the dialog*/
+	public void add(String key, CombindedInputPanel st) {
+		int count=0;
+		for(StringInputPanel inputPanel: st.getFieldList()) {
+			count++;
+			
+		allStrings.put(key+count, inputPanel);
+		inputPanel.addStringInputListener(this);
+		inputPanel.setKey(key);
+		}
+		
 		place(st);
 	}
 	

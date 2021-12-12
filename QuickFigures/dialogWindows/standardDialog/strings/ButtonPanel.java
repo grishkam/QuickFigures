@@ -41,6 +41,7 @@ public class ButtonPanel extends  StringInputPanel{
 	}
 	
 	/**sets the text that is displayed as information*/
+	@Override
 	public void setContentText(String contend) {
 		getTextField().setText(contend);
 	}
