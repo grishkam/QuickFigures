@@ -346,12 +346,12 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 		
 	
 		
-		if (arg0.getKeyCode()==KeyEvent.VK_PLUS||arg0.getKeyChar()=='='||arg0.getKeyChar()=='+') {
+		if (isZoomInKey(arg0)) {
 			if(!arg0.isConsumed())
 			ZoomIn();
 			
 		}
-		if (arg0.getKeyCode()==KeyEvent.VK_MINUS||arg0.getKeyChar()=='-') {
+		if (isZoomOutKey(arg0)) {
 			if(!arg0.isConsumed())
 			ZoomOut();
 			
@@ -432,6 +432,24 @@ public class GraphicSetDisplayWindow extends JFrame implements KeyListener, Mous
 			IssueLog.log(t);
 		}
 
+	}
+
+
+	/**returns true if the key even is a zoom in key
+	 * @param arg0
+	 * @return
+	 */
+	public static boolean isZoomInKey(KeyEvent arg0) {
+		return arg0.getKeyCode()==KeyEvent.VK_PLUS||arg0.getKeyChar()=='='||arg0.getKeyChar()=='+';
+	}
+
+
+	/**
+	 * @param arg0
+	 * @return
+	 */
+	public static boolean isZoomOutKey(KeyEvent arg0) {
+		return arg0.getKeyCode()==KeyEvent.VK_MINUS||arg0.getKeyChar()=='-';
 	}
 
 
