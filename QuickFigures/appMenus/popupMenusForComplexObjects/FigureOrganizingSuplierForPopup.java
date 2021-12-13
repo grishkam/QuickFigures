@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 18, 2021
+ * Date Modified: Dec 11, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -61,6 +61,7 @@ import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -492,7 +493,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		
 		for(ImageDisplayLayer crop2: all) {
 				output.addEditToList(
-							applyNewPanelSizeTo((MultichannelDisplayLayer) crop2, newScale));
+							applyNewPanelSizeTo((MultichannelDisplayLayer) crop2, newScale, true));
 		}
 		
 		return output;
@@ -574,12 +575,14 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		 * @param newScale
 		 * @return
 		 */
-		private UndoableEdit applyNewPanelSizeTo(MultichannelDisplayLayer layer, double newScale) {
+		private UndoableEdit applyNewPanelSizeTo(MultichannelDisplayLayer layer, double newScale, boolean upperLeft) {
 			CombinedEdit undoOutPut = new CombinedEdit();
 			for(ZoomableGraphic object:layer.getAllGraphics()) {
 				if (object instanceof ImagePanelGraphic) {
 					ImagePanelGraphic imagepanel=(ImagePanelGraphic) object;
 					UndoScalingAndRotation undo = new UndoScalingAndRotation(imagepanel);
+					if(upperLeft)
+						imagepanel.setLocationType(RectangleEdges.UPPER_LEFT);
 					imagepanel.setRelativeScale(newScale);
 					undo.establishFinalState();
 					undoOutPut.addEditToList(undo);
