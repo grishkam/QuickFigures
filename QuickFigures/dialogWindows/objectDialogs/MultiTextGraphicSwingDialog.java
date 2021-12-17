@@ -119,7 +119,7 @@ public class MultiTextGraphicSwingDialog extends TextGraphicSwingDialog {
 			super.bgDialog. addBackgroundShapeToDialog(t.getBackGroundShape());
 		}
 		
-		addSnappingBehviourToDialog(textItem);
+		addAttachmentPositionToDialog(textItem);
 	}
 	
 	protected void addBackgroundOptionsToDialog() {

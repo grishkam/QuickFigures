@@ -779,16 +779,19 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		
 	}
 	
-	
+	/**returns the horizontal offset*/
 	public double getHorizontalOffset() {
 		return horizontalOffset;
 	}
+	/**sets the horizontal offset*/
 	public void setHorizontalOffset(double snapHOffset) {
 		this.horizontalOffset = snapHOffset;
 	}
+	/**returns the vertical offset*/
 	public double getVerticalOffset() {
 		return verticalOffset;
 	}
+	/**sets the vertical offset*/
 	public void setVerticalOffset(double snapVOffset) {
 		this.verticalOffset = snapVOffset;
 	}

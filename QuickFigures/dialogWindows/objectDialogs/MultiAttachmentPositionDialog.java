@@ -67,7 +67,7 @@ public class MultiAttachmentPositionDialog extends GraphicItemOptionsDialog {
 			if (ob1.getAttachmentPosition()!=null) primaryObject=ob1; 
 		}
 		
-		AttachmentPositionPanel panel = this.addSnappingBehviourToDialog(primaryObject);
+		AttachmentPositionPanel panel = this.addAttachmentPositionToDialog(primaryObject);
 			this.getOptionDisplayTabs().remove(mainPanel);
 			BooleanInputPanel booleanPanel = new BooleanInputPanel("Keep Relative Positions Same", !useDistinctAttachmentPositions);
 			add("create unique", booleanPanel);

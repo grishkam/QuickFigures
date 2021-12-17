@@ -66,7 +66,7 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 		addLineTabs();
 		
 	
-		addSnappingBehviourToDialog(textItem);
+		addAttachmentPositionToDialog(textItem);
 		
 		
 	}

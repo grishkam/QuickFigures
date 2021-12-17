@@ -118,7 +118,7 @@ public class GraphicItemOptionsDialog extends StandardDialog {
 	
 	
 	
-	public AttachmentPositionPanel addSnappingBehviourToDialog(LocatedObject2D l) {
+	public AttachmentPositionPanel addAttachmentPositionToDialog(LocatedObject2D l) {
 		
 		
 		if (l==null||l.getAttachmentPosition()==null) return null;

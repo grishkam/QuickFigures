@@ -83,7 +83,7 @@ public class TextGraphicSwingDialog extends GraphicItemOptionsDialog{
 		
 		addDimmingToDialog();
 		addBackgroundOptionsToDialog();
-		addSnappingBehviourToDialog(textItem);
+		addAttachmentPositionToDialog(textItem);
 		
 	}
 	

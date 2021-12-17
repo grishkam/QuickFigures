@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Dec 16, 2021
  * Version: 2021.2
  */
 package locatedObject;
@@ -119,8 +119,8 @@ public class RectangleEdges implements  RectangleEdgePositions {
 		case BELOW_AT_RIGHT: return "Below item, toward Right";
 		case BELOW_AT_MIDDLE: return "Below item, Centered";
 		
-		case CornerToCenter_LowerLeft: return "With Lower Corner To Center";
-		case CornerToCenter_UpperRight: return "With Upper Corner To Center";
+		case CornerToCenter_LowerLeft: return "Lower Corner, To Center";
+		case CornerToCenter_UpperRight: return " Upper Corner, To Center";
 		
 		}
 		return "Upper Left";

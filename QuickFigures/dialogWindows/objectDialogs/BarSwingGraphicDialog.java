@@ -79,7 +79,7 @@ public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {
 		this.getMainPanel().moveGrid(2, -1);
 		this.add("autoT" ,new BooleanInputPanel("Autolocate text ", rect.isSnapBarText()));
 		this.getMainPanel().moveGrid(-2, 0);
-		super.addSnappingBehviourToDialog(rect);
+		super.addAttachmentPositionToDialog(rect);
 		
 		TextGraphic t = rect.getBarText();
 		TextGraphicSwingDialog tgsd = new TextGraphicSwingDialog(t);

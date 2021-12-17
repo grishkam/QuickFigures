@@ -95,7 +95,7 @@ public class ImageGraphicOptionsDialog extends GraphicItemOptionsDialog {
 		
 		this.add("locked in place", new BooleanInputPanel("Protect from mouse drags ", image.isUserLocked()==1));
 
-		this.addSnappingBehviourToDialog(image);
+		this.addAttachmentPositionToDialog(image);
 	}
 	
 	public void addCommonOptionsToDialog() {
