@@ -59,7 +59,7 @@ import standardDialog.StandardDialog;
 public class Text_GraphicTool extends GraphicTool {
 	
 	private Cursor textCursor=new Cursor(Cursor.TEXT_CURSOR);
-	{excludedClass=PanelLayoutGraphic.class;super.temporaryTool=false;}
+	{excludedClass=PanelLayoutGraphic.class;super.temporaryTool=true;}
 	
 	
 
@@ -132,7 +132,7 @@ public class Text_GraphicTool extends GraphicTool {
 			}
 		
 		
-		
+		/**Called in the event of a double click*/
 		if (createNew&&this.clickCount()==2)
 			{ 
 			textob= makeNewTextObject();
@@ -197,8 +197,9 @@ public class Text_GraphicTool extends GraphicTool {
 			newCreation= makeNewTextObject();
 			
 			ImageWorkSheet gmp = this.getImageClicked();
-			gmp.getTopLevelLayer().add(newCreation);
-			addUndoerForAddItem(gmp, gmp.getTopLevelLayer().getSelectedContainer(), newCreation);
+			 GraphicLayer homeLayer = findLayerForObjectAddition(gmp, newCreation);
+			 homeLayer.add(newCreation);
+			addUndoerForAddItem(gmp, homeLayer, newCreation);
 			this.setPrimarySelectedObject(newCreation);
 		}
 		}

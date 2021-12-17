@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 21, 2021
+ * Date Modified: Dec 16, 2021
  * Version: 2021.2
  */
 package handles.layoutHandles;
@@ -109,6 +109,8 @@ public class AddLabelHandle extends MoveRowHandle {
 	
 	this.message="Add Label";
 	
+
+	
 	int width=60;
 	int hight=20;
 	this.setHandleColor(new Color(0,0,0,0));
@@ -122,6 +124,11 @@ public class AddLabelHandle extends MoveRowHandle {
 		else this.specialShape=new Rectangle(-width/2,hight, width, hight);
 	}
 
+	if(type==COLS&&montageLayoutGraphic.getFigureType()==FigureType.WESTERN_BLOT) {
+		this.message="Add Lane Labels";
+		width=width*3/2;
+		this.specialShape=new Rectangle(-width/2,-hight, width, hight);
+	}
 	
 	hideIfNotNeeded(montageLayoutGraphic, index, getPicker(mode));
 	hideIfNotNeeded(montageLayoutGraphic, index, new ChannelLabelExamplePicker(new TextGraphic()));
