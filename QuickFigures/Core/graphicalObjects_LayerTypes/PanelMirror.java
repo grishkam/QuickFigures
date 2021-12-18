@@ -16,12 +16,13 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 1, 2021
- * Date Modified: October 24, 2021
+ * Date Modified: Dec 18, 2021
  * Version: 2021.2
  */
 package graphicalObjects_LayerTypes;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -30,12 +31,17 @@ import javax.swing.JMenu;
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
+import layout.basicFigure.LayoutSpaces.SpaceType;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import logging.IssueLog;
@@ -53,7 +59,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 
 	
 
-	private ImagePanelGraphic primaryPanel;
+	private PanelAddress primaryPanel;
 	private ShapeGraphic primaryShape;
 	private final ArrayList<Reflection> reflections=new ArrayList<Reflection>();
 	
@@ -77,7 +83,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 	 */
 	public PanelMirror(ShapeGraphic s, ImagePanelGraphic startPanel, ArrayList<ImagePanelGraphic> otherPanels) {
 		this("mirror");
-		this.primaryPanel=startPanel;
+		this.primaryPanel=new ImagePanelAddress(startPanel);
 		this.primaryShape=s;
 		
 		for(ImagePanelGraphic panel:otherPanels) {
@@ -95,12 +101,35 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 			this.add(copy);
 			
 			
-			reflections.add(new Reflection(copy, panel));
+			PanelAddress panelAddress = new ImagePanelAddress(panel);
+			addReflection(copy, panelAddress);
 			
 		}
 		
 		s.addLocationChangeListener(this);
 		
+	}
+	
+	/**
+	 * @param s
+	 * @param startPanel
+	 * @param otherPanels
+	 */
+	public PanelMirror(ShapeGraphic s, PanelAddress panel) {
+		this("mirror");
+		this.primaryPanel=panel;
+		this.primaryShape=s;
+		
+		s.addLocationChangeListener(this);
+		
+	}
+
+	/**Adds a new reflection to the list
+	 * @param copy
+	 * @param panelAddress
+	 */
+	public void addReflection(SimpleGraphicalObject copy, PanelAddress panelAddress) {
+		reflections.add(new Reflection(copy, panelAddress));
 	}
 
 	/**
@@ -118,14 +147,14 @@ public class Reflection implements Serializable {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private ImagePanelGraphic targetPanel;
+		private PanelAddress targetPanel;
 		private SimpleGraphicalObject reflectedObject;
 
 		/**
 		 * @param copy
 		 * @param panel
 		 */
-		public Reflection(SimpleGraphicalObject copy, ImagePanelGraphic panel) {
+		public Reflection(SimpleGraphicalObject copy, PanelAddress panel) {
 			
 			this.reflectedObject=copy;
 			this.targetPanel=panel;
@@ -136,8 +165,8 @@ public class Reflection implements Serializable {
 		/**
 		Assuming that a reflected objects starts in one panel (primary panel), moves the object to the equivalent location in the target panel
 		 */
-		protected void moveReflectionToDestinationPanel(ImagePanelGraphic targetPanel, ImagePanelGraphic primaryPanel, SimpleGraphicalObject reflectedObject) {
-			Point2D pf = targetPanel.getLocationUpperLeft();
+		protected void moveReflectionToDestinationPanel(PanelAddress targetPanel2, PanelAddress primaryPanel, SimpleGraphicalObject reflectedObject) {
+			Point2D pf = targetPanel2.getLocationUpperLeft();
 			Point2D pi = primaryPanel.getLocationUpperLeft();
 			
 			double dx = pf.getX()-pi.getX();
@@ -153,7 +182,7 @@ public class Reflection implements Serializable {
 		/**
 		 * 
 		 */
-		public void updateLocation(ImagePanelGraphic targetPanel, ImagePanelGraphic primaryPanel, SimpleGraphicalObject reflectedObject, ShapeGraphic primaryShape) {
+		public void updateLocation(PanelAddress targetPanel2, PanelAddress primaryPanel, SimpleGraphicalObject reflectedObject, ShapeGraphic primaryShape) {
 			
 			/**what to do if the mirrored object is a rectangle*/
 			if(reflectedObject instanceof RectangularGraphic && primaryShape instanceof RectangularGraphic ) {
@@ -161,7 +190,7 @@ public class Reflection implements Serializable {
 				 r.copyAttributesFrom(primaryShape);
 				 r.setRectangle(((RectangularGraphic) primaryShape).getRectangle());
 				 r.setAngle(primaryShape.getAngle());
-				 moveReflectionToDestinationPanel(targetPanel, primaryPanel, reflectedObject) ;
+				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
 			}
 			
 			if(reflectedObject instanceof ArrowGraphic && primaryShape instanceof ArrowGraphic ) {
@@ -170,7 +199,7 @@ public class Reflection implements Serializable {
 				 ArrowGraphic primary=(ArrowGraphic) primaryShape;
 				 r.setPoints(primary.getLineStartLocation(), primary.getLineEndLocation());
 				
-				 moveReflectionToDestinationPanel(targetPanel, primaryPanel, reflectedObject) ;
+				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
 			}
 			
 			/**what to do if the mirrored object is a rectangle*/
@@ -180,7 +209,7 @@ public class Reflection implements Serializable {
 				 PanelGraphicInsetDefiner primaryShape2 = (PanelGraphicInsetDefiner ) primaryShape;
 				r.setRectangle(primaryShape2.getRectangle());
 				 r.setAngle(primaryShape.getAngle());
-				 moveReflectionToDestinationPanel(targetPanel, primaryPanel, reflectedObject) ;
+				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
 			}
 			
 			
@@ -391,4 +420,60 @@ public boolean mirrorPaused() {
 		this.mirrorActive = mirrorActive;
 	}
 
+	static interface PanelAddress {
+
+		/**
+		 * @return
+		 */
+		Point2D getLocationUpperLeft();
+		}
+	
+	/**Implementation of panel address for image panels*/
+	static class ImagePanelAddress implements PanelAddress {
+
+		private ImagePanelGraphic imagePanel;
+
+		/**
+		 * @param startPanel
+		 */
+		public ImagePanelAddress(ImagePanelGraphic startPanel) {
+			this.imagePanel=startPanel;
+		}
+
+		/**
+		 * @return
+		 */
+		public Point2D getLocationUpperLeft() {
+			return imagePanel.getLocationUpperLeft();
+		}
+		}
+	
+	
+	/**Implementation of panel address for image panels*/
+	public static class LayoutAddress implements PanelAddress {
+
+		
+
+		private DefaultLayoutGraphic layout;
+		private int index;
+		private SpaceType type;
+
+		/**
+		 * @param thePanels
+		 */
+		public  LayoutAddress(DefaultLayoutGraphic thePanels, int index, LayoutSpaces.SpaceType type) {
+			this.layout=thePanels;
+			this.index=index;
+			this.type=type;
+		}
+
+		/**
+		 * @return
+		 */
+		public Point2D getLocationUpperLeft() {
+			BasicLayout panelLayout = layout.getPanelLayout().makeAltered(type.getFullSpaceCode());
+			Rectangle2D rect = panelLayout.getPanel(index);
+			return new Point2D.Double(rect.getX(), rect.getY());
+		}
+		}
 }

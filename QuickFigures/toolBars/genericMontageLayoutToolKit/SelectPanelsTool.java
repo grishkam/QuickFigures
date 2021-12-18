@@ -54,7 +54,7 @@ public class SelectPanelsTool extends GeneralLayoutEditorTool {
 	public void showPanelSelectorOptions() {
 		StandardDialog gd=new StandardDialog("Panel Selector Options", true);
 		gd.add("Select what type of space",new ChoiceInputPanel("Select what type of space", stringDescriptors, targetType%100));
-		gd.add("Mod", new ChoiceInputPanel(" ", stringDescriptorsOfModifyers, panelSelectionMod));
+		gd.add("Mod", new ChoiceInputPanel(" ", stringDescriptorsOfModifiers, panelSelectionMod));
 		String[] option2=new String[] {"Select", "Swap", "Move"};
 		gd.add("What to do ",new ChoiceInputPanel("What to do ", option2,actionType));
 

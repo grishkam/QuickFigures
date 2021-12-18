@@ -33,6 +33,7 @@ import figureOrganizer.PanelManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
@@ -91,24 +92,31 @@ PopupMenuSupplier  {
 		
 		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.PANELS);
+				return performLayoutDuplicate(LayoutSpaces.SpaceType.PANEL, false);
 			}
 
 			}.createJMenuItem("To panels"));
 		
 		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.COLS);
+				return performLayoutDuplicate(LayoutSpaces.SpaceType.COLUMN, false);
 			}
 
 			}.createJMenuItem("To columns"));
 		
 		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.ROWS);
+				return performLayoutDuplicate(LayoutSpaces.SpaceType.ROW, false);
 			}
 
 			}.createJMenuItem("To rows"));
+		
+		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
+			public AbstractUndoableEdit2  performAction() {
+				return performLayoutDuplicate(LayoutSpaces.SpaceType.COLUMN, true);
+			}
+
+			}.createJMenuItem("To columns and mirror"));
 		
 		j.add(duplicateMenu);
 	
@@ -168,8 +176,10 @@ PopupMenuSupplier  {
 		return Edit.addItem(targetShape.getParentLayer(),(ZoomableGraphic) copy);
 	}
 
-	/**Creates duplicates of this item in every panel*/
-	private AbstractUndoableEdit2 performLayoutDuplicate( int type) {
+	/**Creates duplicates of this item in every panel
+	 * @param mirrow set to true if a panel mirrow should be created
+	 * */
+	private AbstractUndoableEdit2 performLayoutDuplicate( LayoutSpaces.SpaceType type, boolean mirror) {
 		CombinedEdit output = new CombinedEdit();
 		GraphicLayerPane layer = (GraphicLayerPane) targetShape.getParentLayer();
 		DefaultLayoutGraphic layout = PanelManager.getGridLayout(layer);
@@ -180,44 +190,82 @@ PopupMenuSupplier  {
 		
 		Point2D location = targetShape.getLocation();
 		BasicLayout panelLayout = layout.getPanelLayout();
-		panelLayout=panelLayout.makeAltered(type);
+		panelLayout=panelLayout.makeAltered(type.getFullSpaceCode());
 		int panelIndex = panelLayout.getPanelIndex(location.getX(), location.getY());
 		Rectangle2D panel = panelLayout.getPanel(panelIndex);
+		
+		
 		
 		if(panel==null) {
 			ShowMessage.showOptionalMessage("The object must overlap a layout panel for this option to work");
 			return null;
 		}
 		
-		int nPanels=0;
+		int nPanelPerObject=0;//how many panels worth of space each object occupies
 		for(Rectangle2D p: panelLayout.getPanels()) {
 			if(targetShape.doesIntersect(p))
-				nPanels++;
+				nPanelPerObject++;
 		}
 		
-		if(nPanels==0) {
-			IssueLog.log("failed to find panel that overlaps object");
-			nPanels=1;
+		if(nPanelPerObject==0) {
+			nPanelPerObject=1;//if no panels intersect the shape, assumes that each 
 		}
 		
 		double displaceX = location.getX()-panel.getX();
 		double displaceY = location.getY()-panel.getY();
 		
-		for(int i=1; i<=panelLayout.nPanels(); i+=nPanels) {
-			if(i==panelIndex)
-				continue;
-			Rectangle2D currentPanel = panelLayout.getPanel(i);
-			SimpleGraphicalObject newItem = targetShape.copy();
-			newItem.setLocationType(targetShape.getLocationType());
-			newItem.setLocation(currentPanel.getX()+displaceX, currentPanel.getY()+displaceY);
-			output.addEditToList(
-					Edit.addItem(layout.getParentLayer(), newItem)
-					);
+		
+		GraphicLayer targetLayer = layout.getParentLayer();
+		PanelMirror mirror1=null;
+		if(mirror) {
+			mirror1=new PanelMirror(targetShape, new PanelMirror.LayoutAddress(layout, panelIndex, type));
+			output.addEdit(
+					Edit.addItem(targetLayer, mirror1));
+			targetLayer=mirror1;
 		}
 		
 		
+		SimpleGraphicalObject copy;
+		for(int i=panelIndex; i<=panelLayout.nPanels(); i+=nPanelPerObject) {
+			if(i==panelIndex)
+				continue;
+			copy=createCopy(i, output, displaceX, displaceY, panelLayout, targetLayer);
+			if(mirror1!=null&&copy!=null) {
+				mirror1.addReflection(copy, new PanelMirror.LayoutAddress(layout, i, type));
+			}
+		}
+		for(int i=panelIndex; i>=1; i-=nPanelPerObject) {
+			if(i==panelIndex)
+				continue;
+			copy=createCopy(i, output, displaceX, displaceY, panelLayout, targetLayer);
+			if(mirror1!=null&&copy!=null) {
+				mirror1.addReflection(copy, new PanelMirror.LayoutAddress(layout, i, type));
+			}
+		}
+		if(mirror1!=null)
+			mirror1.updateAllReflections();
+		
 		return output;
 		
+	}
+
+	/**Creates the copy for layout index i
+	 * @param i
+	 * @param output
+	 * @param panelLayout 
+	 * @param displaceY 
+	 * @param displaceX 
+	 * @return 
+	 */
+	private SimpleGraphicalObject createCopy(int i, CombinedEdit output, double displaceX, double displaceY, BasicLayout panelLayout, GraphicLayer layer) {
+		Rectangle2D currentPanel = panelLayout.getPanel(i);
+		SimpleGraphicalObject newItem = targetShape.copy();
+		newItem.setLocationType(targetShape.getLocationType());
+		newItem.setLocation(currentPanel.getX()+displaceX, currentPanel.getY()+displaceY);
+		output.addEditToList(
+				Edit.addItem(layer, newItem)
+				);
+		return newItem;
 	}
 	
 	

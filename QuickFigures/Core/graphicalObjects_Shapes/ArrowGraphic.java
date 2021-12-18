@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 4, 2021
+ * Date Modified: Dec 18, 2021
  * Version: 2021.2
  */
 package graphicalObjects_Shapes;
@@ -437,6 +437,26 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	/**returns the starting tip of the arrow*/
 	public Point2D.Double getLineStartLocation() {
 		return new Point2D.Double(x,y);
+	}
+	
+	/**Sets the horizontal distance between the two end points*/
+	public void setObjectWidth(double w) {
+		if(x<=x2) {
+			x2=x+w;
+		}
+		else {
+			x=x2+w;
+		}
+	}
+	
+	/**Sets the vertical distance between the two end points*/
+	public void setObjectHeight(double h) {
+		if(y<=y2) {
+			y2=y+h;
+		}
+		else {
+			y=y2+h;
+		}
 	}
 	
 

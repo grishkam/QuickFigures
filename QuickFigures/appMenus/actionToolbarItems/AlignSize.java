@@ -32,9 +32,11 @@ import javax.swing.Icon;
 
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import messages.ShowMessage;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -58,6 +60,8 @@ public class AlignSize extends BasicMultiSelectionOperator {
 
 	/**set to a grey tone if the dark grey version of the icon should be used*/
 	public Color darkFillForIcon;
+
+	private ArrowGraphic reference;
 	
 	/**returns each possible align size object*/
 	public static ArrayList<AlignSize> getAllPossibleAligns() {
@@ -198,10 +202,30 @@ public class AlignSize extends BasicMultiSelectionOperator {
 				 ImagePanelGraphic i=(ImagePanelGraphic) a;
 				return i.getBounds2D();
 			}
+			if(a instanceof ArrowGraphic) {
+				ArrowGraphic i=(ArrowGraphic) a;
+				reference=i;
+				return findArrowBounds(i);
+				
+			}
 			if(output!=null)
 				return output;
 		}
 		return output;
+	}
+
+	/**returns a rectangle in which the two ends of the arrow are at two corners
+	 * @param i
+	 * @return
+	 */
+	public Rectangle2D findArrowBounds(ArrowGraphic i) {
+		java.awt.geom.Point2D.Double e = i.getLineEndLocation();
+		java.awt.geom.Point2D.Double s = i.getLineStartLocation();
+		double x = Math.min(e.getX(), s.getX());
+		double y = Math.min(e.getY(), s.getY());
+		double w=Math.abs(e.getX()-s.getX());
+		double h=Math.abs(e.getY()-s.getY());
+		return new Rectangle2D.Double(x, y, w, h);
 	}
 
 
@@ -222,6 +246,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 					if (type==AlignSize.BOTH)  {
 						allignWidths(a, b, c);
 						allignToHeights(a, b, c);
+						allignSpecial(a, b, c);
 					} 
 			
 		}
@@ -238,6 +263,17 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	
 	
 
+	/**TODO: create means of aligning the size of arrows
+	 * @param a
+	 * @param b
+	 * @param c
+	 */
+	private void allignSpecial(LocatedObject2D a, Rectangle2D b, CombinedEdit c) {
+		if(a instanceof ArrowGraphic) {
+			 IssueLog.log("size align for arrows not yet implemented");
+		}
+	}
+
 	/**
 	 * @param a
 	 * @param b
@@ -245,16 +281,24 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 */
 	private void allignToHeights(LocatedObject2D a, Rectangle2D b, CombinedEdit c) {
 		
+			double height2 = b.getHeight();
 			if(a instanceof RectangularGraphic) {
 				RectangularGraphic rectangularGraphic = (RectangularGraphic) a;
 				c.addEditToList( rectangularGraphic.provideDragEdit());
-				rectangularGraphic.setHeight(b.getHeight());;
+				rectangularGraphic.setHeight(height2);;
 			}
 			if(a instanceof ImagePanelGraphic) {
 				 ImagePanelGraphic panel = ( ImagePanelGraphic) a;
 				c.addEditToList( panel.provideDragEdit());
-				double change = b.getHeight()/panel.getObjectHeight();
+				double change = height2/panel.getObjectHeight();
 				panel.setRelativeScale(panel.getRelativeScale()*change);
+			}
+			
+			if(a instanceof ArrowGraphic) {
+				
+				ArrowGraphic panel = ( ArrowGraphic) a;
+				c.addEditToList( panel.provideDragEdit());
+				panel.setObjectHeight(height2);
 			}
 		
 	}
@@ -267,16 +311,23 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 * @param c
 	 */
 	private void allignWidths(LocatedObject2D a, Rectangle2D b, CombinedEdit c) {
+		double width2 = b.getWidth();
 		if(a instanceof RectangularGraphic) {
 			RectangularGraphic rectangularGraphic = (RectangularGraphic) a;
 			c.addEditToList( rectangularGraphic.provideDragEdit());
-			rectangularGraphic.setWidth(b.getWidth());;
+			rectangularGraphic.setWidth(width2);;
 		}
 		if(a instanceof ImagePanelGraphic) {
 			 ImagePanelGraphic panel = ( ImagePanelGraphic) a;
 			c.addEditToList( panel.provideDragEdit());
-			double change = b.getWidth()/panel.getObjectWidth();
+			double change = width2/panel.getObjectWidth();
 			panel.setRelativeScale(panel.getRelativeScale()*change);
+		}
+		if(a instanceof ArrowGraphic) {
+			ArrowGraphic panel = ( ArrowGraphic) a;
+			c.addEditToList( panel.provideDragEdit());
+			
+			panel.setObjectWidth(width2);
 		}
 		
 	}

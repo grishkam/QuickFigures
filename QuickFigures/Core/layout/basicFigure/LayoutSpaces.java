@@ -56,7 +56,32 @@ public interface LayoutSpaces {
 	
 	public static final int GROUP_FACTOR=100;
 	public static final int ONLY_THIS_ONE=0, ALL_OF_THE=1*GROUP_FACTOR, THIS_COLS=2*GROUP_FACTOR, THIS_ROWS=3*GROUP_FACTOR, PAIR=4*GROUP_FACTOR, TRIAD=5*GROUP_FACTOR, QUAD=6*GROUP_FACTOR, PENT=7*GROUP_FACTOR;
-	final String[] stringDescriptorsOfModifyers=new String[] {"of the single panel ", "of the entire montage", "of this column", "of this row", "of pair", "of trio", "of quartet", "of pentet"};
+	final String[] stringDescriptorsOfModifiers=new String[] {"of the single panel ", "of the entire montage", "of this column", "of this row", "of pair", "of trio", "of quartet", "of pentet"};
 
+	
+	/**An enum to keep track of whether a label is attached to a row column or panel*/
+	public static enum SpaceType{
+		PANEL(PANELS,PANELS), COLUMN(COLS, COLUMN_OF_PANELS), ROW(ROWS, ROW_OF_PANELS);
+	;
+
+	private int fullSpaceCode;//code for the entire row or column
+	private int blockSpaceCode;//code for just the bounds of panels within the row or column 
+
+	/**
+	 * @param panels
+	 * @param panels2
+	 */
+	SpaceType(int panels, int panels2) {
+		this.fullSpaceCode=panels;
+		this.blockSpaceCode=panels2;
+	}
+
+	public int getFullSpaceCode() {
+		return fullSpaceCode;
+	}
+
+	public int getBlockSpaceCode() {
+		return blockSpaceCode;
+	}}
 }
 
