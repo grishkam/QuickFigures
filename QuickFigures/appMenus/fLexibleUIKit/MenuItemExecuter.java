@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 17, 2021
  * Version: 2021.2
  */
 package fLexibleUIKit;
@@ -43,16 +43,21 @@ import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.MenuSupplier;
 import undo.UndoManagerPlus;
 
 /**this will generate working popup menus from the annotated methods in
-  an object. It allos a programmer to build complex popup menus with a little less complexity each time*/
+  an object. It allows a programmer to build complex popup menus with a little less complexity each time*/
 public class MenuItemExecuter implements ActionListener, MenuSupplier {
-	private Object o;
+	
+	/**Object containing the method calls that are the basis of menu items*/
+	private Object sourceObject;
 
+	/**Maps that link method calls to items within this menu */
 	private HashMap<MenuItemMethod, Method> map=new HashMap<MenuItemMethod, Method>();
 	private HashMap<String, Method> mapComms=new HashMap<String, Method>();
+	
 	private MenuSupplier partner=null;
 
 	private SmartPopupJMenu popupMenu;
@@ -64,7 +69,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	
 	/**creates a menu item execuer for the object*/
 	public MenuItemExecuter(Object o) {
-		this.o=o;
+		this.sourceObject=o;
 		innitiallizeMap();
 	}
 
@@ -81,20 +86,11 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 	public ArrayList<JMenuItem> findJItems() {
 		return findJItems(null);
 	}
+	
+	/**builds a list of JMenu items*/
 	public ArrayList<JMenuItem> findJItems(JMenu menu) {
 		//this.o=o;
-		Set<MenuItemMethod> keySet = map.keySet();
-		
-		/**need a sorted list*/
-		ArrayList<MenuItemMethod> allKeys= new ArrayList<MenuItemMethod>();
-		allKeys.addAll(keySet);
-		
-		Collections.sort(allKeys, new Comparator<MenuItemMethod>() {
-
-			@Override
-			public int compare(MenuItemMethod arg0, MenuItemMethod arg1) {
-				return arg0.orderRank()-arg1.orderRank();
-			}});
+		ArrayList<MenuItemMethod> allKeys = getOrderedListOfMenuMethods();
 		
 		
 		HashMap<String, JMenu> submenus=new HashMap<String, JMenu>();
@@ -104,9 +100,9 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 			
 			
 			if (!k.permissionMethod().equals("")) try{
-				Method pMethod = o.getClass().getMethod(k.permissionMethod());
+				Method pMethod = sourceObject.getClass().getMethod(k.permissionMethod());
 				if (pMethod!=null) {
-					Object b = pMethod.invoke(o);
+					Object b = pMethod.invoke(sourceObject);
 				/**will not include this menu item in the list if the permission method is null or false*/
 					if (b==null||b.toString().equals("false")) continue;
 					
@@ -118,9 +114,9 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 			
 			/**sets up the icon*/
 			if (!k.iconMethod().equals("")) try{
-				Method pMethod = o.getClass().getMethod(k.iconMethod());
+				Method pMethod = sourceObject.getClass().getMethod(k.iconMethod());
 				if (pMethod!=null) {
-					Object b = pMethod.invoke(o);
+					Object b = pMethod.invoke(sourceObject);
 				
 					if (b==null||b.toString().equals("false")) {
 						item.setIcon(new CheckBoxIcon(Color.black, false));
@@ -136,7 +132,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 			}catch (Throwable t) {IssueLog.log(t);}
 			
 			
-			
+			/**determines whether to add the item to the main menu or find/create a submenu*/
 			if (k.subMenuName().equals(""))
 				output.add(item);
 			else {
@@ -144,19 +140,19 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 				String submenuName = k.subMenuName();
 				if (submenuName.contains("<")) submenuName=submenuName.split("<")[0];//if divideed, we need to put the first submenu into the hashmap
 		
-				JMenu submen = submenus.get(submenuName);
-				if (submen==null) {
+				JMenu targetSubmenu = submenus.get(submenuName);
+				if (targetSubmenu==null) {
 						{
-								submen=new JMenu(submenuName);
-								submenus.put(submenuName, submen);
-								output.add(submen);
+								targetSubmenu=new SmartJMenu(submenuName);
+								submenus.put(submenuName, targetSubmenu);
+								output.add(targetSubmenu);
 						}
 				}
 				
 				if (k.subMenuName().contains("<"))
-						submen=SmartJMenu. getOrCreateSubmenuFromPath(submen, k.subMenuName().split("<"), 1);
+						targetSubmenu=SmartJMenu. getOrCreateSubmenuFromPath(targetSubmenu, k.subMenuName().split("<"), 1);
 				
-				submen.add(item);
+				targetSubmenu.add(item);
 			}
 		}	
 		
@@ -166,7 +162,27 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		
 		return output;
 	}
+
+	/**organizes the list of menu item methods into their specified order and returns the result
+	 * @return
+	 */
+	public ArrayList<MenuItemMethod> getOrderedListOfMenuMethods() {
+		Set<MenuItemMethod> keySet = map.keySet();
+		
+		/**need a sorted list*/
+		ArrayList<MenuItemMethod> allKeys= new ArrayList<MenuItemMethod>();
+		allKeys.addAll(keySet);
+		
+		Collections.sort(allKeys, new Comparator<MenuItemMethod>() {
+
+			@Override
+			public int compare(MenuItemMethod arg0, MenuItemMethod arg1) {
+				return arg0.orderRank()-arg1.orderRank();
+			}});
+		return allKeys;
+	}
 	
+	/**creates a j popup menu*/
 	public JPopupMenu getJPopup() {
 		SmartPopupJMenu p=new SmartPopupJMenu();
 		ArrayList<JMenuItem> arr = findJItems();
@@ -177,6 +193,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		return p;
 	}
 	
+	/**Creates a JMenu*/
 	public JMenu getJMenu() {
 		SmartJMenu p=new SmartJMenu("");
 		addToJMenu(p);
@@ -184,20 +201,21 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		return p;
 	}
 
-	/**
+	/**Adds all the items to the target j menu
 	 * @param p
 	 */
-	public void addToJMenu(JMenu p) {
+	public void addToJMenu(SmartJMenu p) {
 		ArrayList<JMenuItem> arr = findJItems();
 		for(JMenuItem a:arr) {p.add(a);}
+		this.theSmartMenu=p;
 	}
 	
-	
+	/**sets up a map linking a list of action commands to to specific method calls within the class*/
 	private void innitiallizeMap() {
 		map.clear();
 		mapComms.clear();
-		if(o==null) return;
-		Method[] methods = o.getClass().getMethods();
+		if(sourceObject==null) return;
+		Method[] methods = sourceObject.getClass().getMethods();
 		for(Method m:methods) {
 		MenuItemMethod anns = m.getAnnotation(MenuItemMethod.class);
 		if(anns==null ) continue;
@@ -212,8 +230,10 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		mi.setActionCommand(anns.menuActionCommand());
 		return mi;
 	}
+	
+	/**Creates a JMenu item for invoking the method call*/
 	public JMenuItem generateJMenuItemFrom(MenuItemMethod anns, Method m) {
-		JMenuItem mi = new JMenuItem(anns.menuText());
+		JMenuItem mi = new BasicSmartMenuItem(anns.menuText());
 		mi.addActionListener(this);
 		mi.setActionCommand(anns.menuActionCommand());
 		return mi;
@@ -226,9 +246,10 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		Method m = mapComms.get(arg0.getActionCommand());
 		try {
 			
-			Object item = m.invoke(o, new Object[] {});
-			if (getUndoManager()!=null &&item instanceof UndoableEdit) {
-				getUndoManager().addEdit((UndoableEdit) item);
+			Object item = m.invoke(sourceObject, new Object[] {});
+			UndoManagerPlus manager1 = getUndoManager();
+			if (manager1!=null &&item instanceof UndoableEdit) {
+				manager1.addEdit((UndoableEdit) item);
 			}
 			
 			new CurrentFigureSet().getCurrentlyActiveDisplay().updateDisplay();
@@ -237,8 +258,7 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		}
 	}
 	
-	@MenuItemMethod(menuActionCommand = RectangleEdges.RIGHT_SIDE_BOTTOM+"", menuText = "")
-	void go() {}
+	
 
 
 
@@ -250,10 +270,13 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		this.partner = partner;
 	}
 	
+	/**returns the undo manager that will be used to  */
 	public UndoManagerPlus getUndoManager() {
+		/**first determines if this executor is using a popup menu that knows its undo manager*/
 		if (undoManager==null & popupMenu!=null && this.popupMenu.getUndoManager()!=null) {
 			this.undoManager=popupMenu.getUndoManager();
 		}
+		/**next determines if this executor is using a normalmenu that knows its undo manager*/
 		if (undoManager==null & theSmartMenu!=null && this.theSmartMenu.getUndoManager()!=null) {
 			this.undoManager=theSmartMenu.getUndoManager();
 		}

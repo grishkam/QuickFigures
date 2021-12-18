@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 11, 2021
+ * Date Modified: Dec 17, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -81,7 +81,7 @@ import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
 import undo.UndoScalingAndRotation;
 
-/**A menu for a figure organizing layer*/
+/**A menu for a figure organizing layer. This is a rather complex menu with many options*/
 public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, LayoutSpaces, ActionListener {
 	FigureOrganizingLayerPane figureOrganizingLayerPane;
 	JMenuItem addImageFromFileButton;
@@ -130,7 +130,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		
 	
 
-		JMenu labelMenu = new SmartJMenu("Add Labels", ComplexTextGraphic.createImageIcon());
+		SmartJMenu labelMenu = new SmartJMenu("Add Labels", ComplexTextGraphic.createImageIcon());
 		
 			 rowLabelButton = new BasicSmartMenuItem("Generate Row Labels", new ToolIconWithText(0, ROW_OF_PANELS).getMenuVersion());
 			 labelMenu.add(rowLabelButton);
@@ -144,6 +144,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
 					
+						/**Adds more options to the label menu based on annotations on the method calls within this class*/
 						new MenuItemExecuter(this).addToJMenu(labelMenu);
 					jj.add(labelMenu);
 					
