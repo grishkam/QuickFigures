@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 17, 2021
+ * Date Modified: Dec 18, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -118,6 +118,13 @@ PopupMenuSupplier  {
 
 			}.createJMenuItem("To columns and mirror"));
 		
+		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
+			public AbstractUndoableEdit2  performAction() {
+				return performLayoutDuplicate(LayoutSpaces.SpaceType.ROW, true);
+			}
+
+			}.createJMenuItem("To rows and mirror"));
+		
 		j.add(duplicateMenu);
 	
 		
@@ -184,7 +191,7 @@ PopupMenuSupplier  {
 		GraphicLayerPane layer = (GraphicLayerPane) targetShape.getParentLayer();
 		DefaultLayoutGraphic layout = PanelManager.getGridLayout(layer);
 		if(layout==null) {
-			ShowMessage.showOptionalMessage("A layout is required to use this option. Paernt layer does not have a layout");
+			ShowMessage.showOptionalMessage("Layout required", true, "A layout is required to use this option. Parent layer does not have a layout.", "Either draw a shape inside a layout or move it to a layer with a layout");
 			return null;
 		}
 		

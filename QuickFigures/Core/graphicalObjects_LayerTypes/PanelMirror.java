@@ -32,7 +32,6 @@ import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
-import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -110,7 +109,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 		
 	}
 	
-	/**
+	/**Creates a new panel mirrow
 	 * @param s
 	 * @param startPanel
 	 * @param otherPanels
@@ -264,6 +263,7 @@ public void turnColorMirrorOnOff() {
 	else {
 		this.setColorMirrorActive(true);
 		copyColors();
+		this.updateAllReflections();
 	}
 }
 
@@ -420,7 +420,8 @@ public boolean mirrorPaused() {
 		this.mirrorActive = mirrorActive;
 	}
 
-	static interface PanelAddress {
+	/**An interface that keeps tack of which panel the reflection or the original is located*/
+	static interface PanelAddress extends Serializable {
 
 		/**
 		 * @return
@@ -431,6 +432,10 @@ public boolean mirrorPaused() {
 	/**Implementation of panel address for image panels*/
 	static class ImagePanelAddress implements PanelAddress {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private ImagePanelGraphic imagePanel;
 
 		/**
@@ -449,11 +454,15 @@ public boolean mirrorPaused() {
 		}
 	
 	
-	/**Implementation of panel address for image panels*/
+	/**Implementation of panel address for layout panels*/
 	public static class LayoutAddress implements PanelAddress {
 
 		
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private DefaultLayoutGraphic layout;
 		private int index;
 		private SpaceType type;
