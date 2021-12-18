@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 2, 2021
+ * Date Modified: Dec 17, 2021
  * Version: 2021.2
  */
 package graphicTools;
@@ -43,7 +43,7 @@ public class GraphicTool extends Object_Mover {
 	protected boolean temporaryTool=false;
 	
 	@RetrievableOption(key = "Add to layer", label="If no layer is selcted, choose layer based on mouse location")
-	protected boolean layerAdd=true;
+	protected boolean findLayerForAdd=true;
 
 	
 	@Override 
@@ -78,7 +78,7 @@ public class GraphicTool extends Object_Mover {
 	public void mouseReleased() {
 		super.mouseReleased();
 		onRelease(this.getImageClicked(),getPrimarySelectedObject());
-		if (isTemporaryTool()) {
+		if (isTemporaryTool()&&!this.shiftDown()) {
 			super.todefaultTool();}
 	}
 	
@@ -116,7 +116,7 @@ public class GraphicTool extends Object_Mover {
 		GraphicLayer selectedContainer = gmp.getTopLevelLayer().getSelectedContainer();
 		
 		/**TODO: get this to work such that objects will be placed in the layer of the clicked item*/
-		if(!gmp.getTopLevelLayer().isTreeLayerSelected()&&layerAdd) {
+		if(!gmp.getTopLevelLayer().isTreeLayerSelected()&&findLayerForAdd) {
 			
 			//if no tree layer is selected then the container selected is the top level
 			LocatedObject2D object = super.getObjectAt(gmp,getClickedCordinateX(), getClickedCordinateY());

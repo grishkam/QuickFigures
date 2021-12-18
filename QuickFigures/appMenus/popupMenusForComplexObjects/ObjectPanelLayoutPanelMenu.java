@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import fLexibleUIKit.ObjectAction;
 import graphicalObjects_LayoutObjects.SpacedPanelLayoutGraphic;
 import objectDialogs.SpacedPanelLayoutBorder;
+import undo.AbstractUndoableEdit2;
 
 public class ObjectPanelLayoutPanelMenu extends AttachedItemMenu {
 
@@ -36,12 +37,14 @@ public class ObjectPanelLayoutPanelMenu extends AttachedItemMenu {
 	public ObjectPanelLayoutPanelMenu(SpacedPanelLayoutGraphic c) {
 		add(new ObjectAction<SpacedPanelLayoutGraphic>(c) {
 					@Override
-					public void actionPerformed(ActionEvent arg0) {item.repack();item.repack();item.repack(); item.updateDisplay();}	
+					public AbstractUndoableEdit2 performAction() {item.repack();item.repack();item.repack(); item.updateDisplay();
+					return null;}	
 			}.createJMenuItem("Repack Panels"));
 		
 		add(new ObjectAction<SpacedPanelLayoutGraphic>(c) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {SpacedPanelLayoutBorder dialog = new SpacedPanelLayoutBorder(item);  dialog.showDialog(); }	
+			public AbstractUndoableEdit2 performAction() {SpacedPanelLayoutBorder dialog = new SpacedPanelLayoutBorder(item);  dialog.showDialog();
+			return null; }	
 	}.createJMenuItem("Set Borders"));
 		
 		

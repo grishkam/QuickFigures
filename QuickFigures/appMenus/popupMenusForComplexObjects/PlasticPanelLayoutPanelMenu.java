@@ -31,6 +31,7 @@ import layout.plasticPanels.AddPanelSizeDefiningItemMenu;
 import menuUtil.IndexChoiceMenu;
 import menuUtil.SmartJMenu;
 import objectDialogs.SpacedPanelLayoutBorder;
+import undo.AbstractUndoableEdit2;
 
 public class PlasticPanelLayoutPanelMenu extends AttachedItemMenu {
 
@@ -66,16 +67,19 @@ public class PlasticPanelLayoutPanelMenu extends AttachedItemMenu {
 		JMenu panelsmen = new SmartJMenu("Panels");
 		panelsmen.	add(new ObjectAction<PlasticPanelLayoutGraphic>(c) {
 					@Override
-					public void actionPerformed(ActionEvent arg0) {item.repack();item.repack();item.repack(); item.updateDisplay();}	
+					public AbstractUndoableEdit2 performAction() {item.repack();item.repack();item.repack(); item.updateDisplay();
+					return null;}	
 			}.createJMenuItem("Repack Panels"));
 		
 		panelsmen.add(new ObjectAction<PlasticPanelLayoutGraphic>(c) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {SpacedPanelLayoutBorder dialog = new SpacedPanelLayoutBorder(item);  dialog.showDialog(); }	
+			public AbstractUndoableEdit2 performAction() {SpacedPanelLayoutBorder dialog = new SpacedPanelLayoutBorder(item);  dialog.showDialog();
+			return null; }	
 	}.createJMenuItem("Set Borders"));
 		panelsmen.add(new ObjectAction<PlasticPanelLayoutGraphic>(c) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {item.getPanelLayout().addNewPanel(); item.updateDisplay();}	
+			public AbstractUndoableEdit2 performAction() {item.getPanelLayout().addNewPanel(); item.updateDisplay();
+			return null;}	
 	}.createJMenuItem("Add Panel"));
 		try {
 			panelsmen.add(new RemovalPanelMenu(c));
@@ -86,7 +90,8 @@ public class PlasticPanelLayoutPanelMenu extends AttachedItemMenu {
 		
 		panelsmen.	add(new ObjectAction<PlasticPanelLayoutGraphic>(c) {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {item.getPanelLayout().sortLeftToRightAboveToBottom(); item.updateDisplay();}	
+			public AbstractUndoableEdit2 performAction() {item.getPanelLayout().sortLeftToRightAboveToBottom(); item.updateDisplay();
+			return null;}	
 	}.createJMenuItem("Resort Panels"));
 		
 		return panelsmen ;

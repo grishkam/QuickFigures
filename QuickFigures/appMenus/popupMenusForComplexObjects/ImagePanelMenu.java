@@ -41,6 +41,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.SourceImageTreeIcon;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
+import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
 import undo.UndoAddOrRemoveAttachedItem;
@@ -105,7 +106,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	add(expert);
 	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {item.showCroppingDialog();}	
+		public AbstractUndoableEdit2 performAction() {item.showCroppingDialog();return null;}	
 }.createJMenuItem("Crop Only This Panel"));
 
 

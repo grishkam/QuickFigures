@@ -55,7 +55,8 @@ PopupMenuSupplier  {
 		this.addAllMenuItems(createMenuItems());
 	}
 
-	public ArrayList<JMenuItem> createMenuItems() {
+	/**Creates the menu items for this menu*/
+	ArrayList<JMenuItem> createMenuItems() {
 		ArrayList<JMenuItem> j=new ArrayList<JMenuItem>();
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public AbstractUndoableEdit2  performAction() {
