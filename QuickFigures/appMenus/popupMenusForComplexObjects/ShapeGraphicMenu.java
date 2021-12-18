@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 17, 2021
  * Version: 2021.2
  */
 package popupMenusForComplexObjects;
@@ -159,7 +159,7 @@ PopupMenuSupplier  {
 				);
 	}
 
-	/**
+	/**creates a single duplicate
 	 * @return
 	 */
 	public AbstractUndoableEdit2 performPointDuplicate() {

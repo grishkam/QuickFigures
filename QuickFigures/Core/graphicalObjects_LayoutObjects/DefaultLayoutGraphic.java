@@ -57,6 +57,7 @@ import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartJMenu;
+import messages.ShowMessage;
 import popupMenusForComplexObjects.LayoutMenu;
 import standardDialog.StandardDialog;
 import undo.UndoLayoutEdit;
@@ -569,32 +570,52 @@ public void resizeLayoutToFitContents() {
 			return out;
 		}
 		
-		String allSubsequent="Next several";
+		String allSubsequent="All subsequent";
 
 		private JMenu getRowSwithMenu(boolean copy) {
 			String baseText = "Switch ";
 			if(copy)
-				baseText="Copy to ";
+				baseText="Copy label to ";
 			JMenu moveMenu=new SmartJMenu(baseText+changeText());
 			
 			 for(int i=1; i<=nOptions(); i++) {
 				moveMenu.add(new RowSwitchMenuItem(""+i,i, copy));
 			}
-			 if (copy)
-			moveMenu.add(new RowSwitchMenuItem(allSubsequent,getPanelLocations().get(getObject()), copy));
+			 RowSwitchMenuItem copyAllItem = createCopyToAllMenuItem(copy);
+			 if (copy) {
+				
+				moveMenu.add(copyAllItem);
+			}
 		
 			return moveMenu;
 		}
-		
-		/**Changes the position of the label*/
-		void advanceLabel(int direction) {
-			Integer newind = getPanelLocations().get(getObject())+amount*direction;
-			
-			if(newind<=0) return;
-			getPanelLocations().put(getObject(), newind);
-			snapLockedItem(getObject());
+
+		/**returns the menu item for creating a copy in all subsequent rows, cols or panels
+		 * @param copy
+		 * @return
+		 */
+		public RowSwitchMenuItem createCopyToAllMenuItem(boolean copy) {
+			//TODO: convert 
+			 int indexOfCurrent=getPanelLocations().get(getObject());
+			 if (myLayout.rowmajor&&isRows()) {
+				 indexOfCurrent=indexOfCurrent/myLayout.nColumns()+1;
+				}
+			 RowSwitchMenuItem copyAllItem = new RowSwitchMenuItem(allSubsequent,indexOfCurrent, copy);
+			return copyAllItem;
 		}
 		
+		/**Changes the position of the label
+		 * @return */
+		LocatedObject2D advanceLabel(int direction) {
+			Integer newind = getPanelLocations().get(getObject())+amount*direction;
+			
+			if(newind<=0) return null;
+			getPanelLocations().put(getObject(), newind);
+			snapLockedItem(getObject());
+			return getObject();
+		}
+		
+		/**Determines how a handle draw will function on a row or column label*/
 		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 	
 			BasicLayout rLayout = myLayout.makeAltered(getObject().getAttachmentPosition().getGridSpaceCode());
@@ -685,9 +706,12 @@ public void resizeLayoutToFitContents() {
 				CombinedEdit undo;
 				if (all) {
 					undo=new CombinedEdit();
-					for(int i=index+1;i<=nOptions(); i++) {
+					int startCount = index+1;
+					for(int i=startCount;i<=nOptions(); i++) {
 						undo.addEditToList(new RowSwitchMenuItem(""+i,i, copy).performTask(target1));
 					}
+					if(undo.empty())
+						ShowMessage.showOptionalMessage("Could not perform task, rows appear to be occupied "+startCount);
 				}
 				else 
 				undo= performTask(target1);
