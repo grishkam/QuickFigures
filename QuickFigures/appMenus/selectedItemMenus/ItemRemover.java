@@ -115,8 +115,8 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 			p2=new Point(5,24);
 			ag2.setPoints(p1, p2);
 			
-			Area s= ag2.getOutline();
-			s.add(ag1.getOutline());
+			Area s= ag2.getDrawOutline();
+			s.add(ag1.getDrawOutline());
 			BasicShapeGraphic output = new BasicShapeGraphic(s);
 			output.copyAttributesFrom(ag2);
 			output.setStrokeColor(Color.black);

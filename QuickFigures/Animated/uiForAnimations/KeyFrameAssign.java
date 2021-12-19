@@ -92,8 +92,8 @@ public class KeyFrameAssign extends BasicTimeLineOperator {
 			ArrowGraphic ag3 = ag2.copy();
 			ag3.moveLocation(2, 8); ag3.moveLocation(3, -3);
 			
-			Area s= ag2.getOutline();
-			s.add(ag1.getOutline()); s.add(ag3.getOutline());
+			Area s= ag2.getDrawOutline();
+			s.add(ag1.getDrawOutline()); s.add(ag3.getDrawOutline());
 			BasicShapeGraphic output = new BasicShapeGraphic(s);
 			output.copyAttributesFrom(ag2);
 			output.setStrokeColor(Color.black);

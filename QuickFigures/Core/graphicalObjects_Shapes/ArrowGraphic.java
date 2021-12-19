@@ -490,9 +490,17 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	}
 
 	
-	/**returns the shape of the arrow*/
+	/**returns the shape of the arrow that determines if a user mouse click will be inside of it*/
 	@Override
 	public Area getOutline() {
+		Area output = getDrawOutline();
+		if(this.getStrokeWidth()<4)
+			output.add(new Area(new BasicStroke(3).createStrokedShape(getDrawnLineBetweenHeads())));
+		return output;
+	}
+	
+	/**returns the shape of the arrow*/
+	public Area getDrawOutline() {
 		Area ar = new Area(getStroke().createStrokedShape(getDrawnLineBetweenHeads()));
 		if (this.getNHeads()==0) return ar;
 		if(headOnly) ar=new Area();
@@ -521,7 +529,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 	@Override
 	public Rectangle getBounds() {
-		return getOutline().getBounds();
+		return getDrawOutline().getBounds();
 	}
 	
 	/**returns the angle of the arrow*/
@@ -549,7 +557,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 	@Override
 	public Shape getShape() {
-		return this.getOutline();
+		return this.getDrawOutline();
 	
 		
 	}
@@ -625,7 +633,7 @@ private Line2D getDrawnLineBetweenHeads() {
 		
 		//draws the outline shape
 		 if (outlineDraw() ) {
-			 this.getBackGroundShape().setShape(getOutline());
+			 this.getBackGroundShape().setShape(getDrawOutline());
 			 getBackGroundShape().draw(g, cords);
 		 }
 		 		else
@@ -792,7 +800,7 @@ protected Point2D getDrawnLineEnd2() {
 		ArtLayerRef aref2 = aref.createSubRefG();
 		aref2.setName(getName());
 		if ( outlineDraw()&&!headOnly) {
-			// this.getBackGroundShape().setShape(getOutline());
+			// this.getBackGroundShape().setShape(getDrawOutline());
 			// getBackGroundShape().setName(getName());
 			 
 			return  createPathCopy().toIllustrator(aref2);
@@ -881,7 +889,7 @@ protected Point2D getDrawnLineEnd2() {
 	 */
 	public BasicShapeGraphic getBackGroundShape() {
 		if (backGroundShape==null) {
-			backGroundShape=new  BasicShapeGraphic(this.getOutline());
+			backGroundShape=new  BasicShapeGraphic(this.getDrawOutline());
 			backGroundShape.setStrokeWidth(2);
 			backGroundShape.setStrokeColor(this.getStrokeColor());
 			backGroundShape.setAntialize(true);
@@ -924,7 +932,7 @@ protected Point2D getDrawnLineEnd2() {
 	
 	/**returns a pathGraphic that looks just like this arrow*/
 	public PathGraphic createPathCopy() {
-		PathPointList list = PathPointList.createFromIterator(this.getOutline().getPathIterator(new AffineTransform()));
+		PathPointList list = PathPointList.createFromIterator(this.getDrawOutline().getPathIterator(new AffineTransform()));
 		PathGraphic oo = new PathGraphic(list);
 		oo.copyColorsFrom(this.getBackGroundShape());
 		oo.copyAttributesFrom(this.getBackGroundShape());
