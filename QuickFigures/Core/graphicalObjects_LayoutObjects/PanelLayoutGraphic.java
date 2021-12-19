@@ -761,7 +761,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	return true;
 	}
 
-	/**returns the panel index of the object*/
+	/**returns the panel index of the object. this is the index used to determine what layout panel an attached item should belong to*/
 	public int getPanelForObject(LocatedObject2D o) {
 		
 		Object tag = o.getTagHashMap().get("Index");

@@ -386,7 +386,7 @@ public class ItemGlueSmartHandle extends SmartHandle {
 			currentEdit.addEditToList(new UndoMoveItems( getObject()));
 			TakesAttachedItems newAttachmentSite2 = (TakesAttachedItems) newAttachmentSite;
 			
-			if(target.getTag("Index")!=null) {
+			if(target.getTag("Index")!=null) {//if there is a layout address on the item
 				currentEdit.addEditToList(new  UndoTagChange(target.getTagHashMap()));
 				 int i=findIndexOfAttachmentLocation(newAttachmentSite, target.getAttachmentPosition(), canvasMouseEventWrapper.getCoordinatePoint());
 				 target.getTagHashMap().put("Index", i);

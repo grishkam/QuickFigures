@@ -426,7 +426,7 @@ public void resizeLayoutToFitContents() {
 	
 	/**Adds the panel swap handles*/
 	protected void addFirstLayerHandles(SmartHandleList box) {
-		if(!hidePanelSwapHandles)
+		if(!hidePanelSwapHandles&&getPanelLayout().nPanels()>1)
 		for(int i=1; i<=this.getPanelLayout().nPanels(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.PANELS, false, i));
 			
@@ -441,11 +441,11 @@ public void resizeLayoutToFitContents() {
 		box.add(new RepackRowColoumnHandle(this));
 		box.add(new ScaleLayoutHandle(this));
 		
-		if(!hideRowColSwapHandles)
+		if(!hideRowColSwapHandles&&getPanelLayout().nColumns()>1)
 		for(int i=1; i<=this.getPanelLayout().nColumns(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.COLS, false, i));
 			}
-		if(!hideRowColSwapHandles)
+		if(!hideRowColSwapHandles&&getPanelLayout().nRows()>1)
 		for(int i=1; i<=this.getPanelLayout().nRows(); i++) {
 			box.add(new MoveRowHandle(this, LayoutSpaces.ROWS, false, i));
 			

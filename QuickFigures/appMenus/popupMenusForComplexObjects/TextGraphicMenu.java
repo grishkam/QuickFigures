@@ -30,13 +30,18 @@ import javax.swing.JPopupMenu;
 
 import channelLabels.ChannelLabelTextGraphic;
 import fLexibleUIKit.ObjectAction;
+import figureOrganizer.FigureLabelOrganizer.ColumnLabelTextGraphic;
+import figureOrganizer.FigureLabelOrganizer.PanelLabelTextGraphic;
+import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
 import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.PanelManager;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
-import menuUtil.PopupMenuSupplier;
 import objectDialogs.TextInsetsDialog;
 import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
@@ -91,13 +96,40 @@ PopupMenuSupplier  {
 
 			public AbstractUndoableEdit2  performAction() {
 				TextGraphic c = textG.copy();
+				GraphicLayer targetLayer = textG.getParentLayer();
 				c.moveLocation(5, 2);
 				
 				
 				
-				GraphicLayer targetLayer = textG.getParentLayer();
+				
+				/**Determines if the original is attached to a layout and attaches a duplicate*/
+				DefaultLayoutGraphic layout = PanelManager.getGridLayout(textG.getParentLayer());
+				if(layout.hasLockedItem(textG)) {
+					
+					boolean isARowLabel = textG instanceof RowLabelTextGraphic;
+					boolean isAColLabel = textG instanceof ColumnLabelTextGraphic;
+					boolean isAPanelLabel= textG instanceof PanelLabelTextGraphic;
+					
+						int increment = 1;
+						if(layout.getPanelLayout().rowmajor&&isARowLabel ) 
+							increment=layout.getPanelLayout().nColumns();
+						if(!layout.getPanelLayout().rowmajor&&isAColLabel ) 
+							increment=layout.getPanelLayout().nRows();
+						int panelIndex = layout.getPanelForObject(textG)+increment;
+						c.getTagHashMap().put("Index", panelIndex);
+						layout.addLockedItem(c);
+						layout.snapLockedItem(c);
+						if(textG.getTag("Index")==null) {
+							c.getTagHashMap().put("Index", null);
+						}
+					
+					c.setAttachmentPosition(textG.getAttachmentPosition());
+					ShowMessage.showOptionalMessage("Label was attached to layout", true, "Label started out attached to layout", "A duplicate is now attached to the layout and placed in next row, coloumn or panel", "You have the option to release the attached label in the Attachment submenu (right click)");
+				}
+				
 				if(targetLayer==null) return null;
 				targetLayer.add(c);
+				
 				return new UndoAddItem(targetLayer, c);
 				
 			}};

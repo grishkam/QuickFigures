@@ -395,7 +395,7 @@ public class AddLabelHandle extends MoveRowHandle {
 					TextGraphic t = (TextGraphic) seniorTextItem;
 					label.setFont(t.getFont());
 					label.setAngle(t.getAngle());
-					if(t.getTagHashMap().get("Index")!=null)
+					if(t.getTagHashMap().get("Index")!=null)//if an existing label has an address, assigns that address to the current label
 						label.getTagHashMap().put("Index", this.index);
 					label.setTextColor(t.getTextColor());
 				}
