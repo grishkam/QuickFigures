@@ -625,15 +625,20 @@ public void resizeLayoutToFitContents() {
 			double d = cordinatePoint.distance(p1);
 			if(originalBounds!=null) d = cordinatePoint.distance(originalBounds.getCenterX(), originalBounds.getCenterY());
 			
+			Rectangle r2 = getObject().getBounds();
+			Rectangle2D nearestPanel = rLayout.getNearestPanel(cordinatePoint);
+			if (originalSnap!=null)
+				originalSnap.snapRects(r2, nearestPanel); 
+			
 			/**determine whether the object is being dragged out of range of its hone row of column*/
 			boolean outsideOfHomeRow = d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent) &&super.object.getTagHashMap().get("Index")==null;
-			if(outsideOfHomeRow&&!super.isInFineControlMode()) {
+			if(outsideOfHomeRow&&!super.isInFineControlMode()&&r2.contains(lastDragOrRelMouseEvent.getCoordinatePoint())) {
 				shifted=true;
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 
-					Rectangle2D nearestPanel = rLayout.getNearestPanel(cordinatePoint);
-					Rectangle r2 = getObject().getBounds();
-					if (originalSnap!=null)originalSnap.snapRects(r2, nearestPanel); else
+					if (originalSnap!=null)
+						originalSnap.snapRects(r2, nearestPanel); 
+					else
 						getObject().getAttachmentPosition().snapRects(r2, nearestPanel);
 					
 					setDragMask(lastDragOrRelMouseEvent, r2);//displays the new destination row to the user
@@ -646,6 +651,7 @@ public void resizeLayoutToFitContents() {
 			
 			
 		}
+		
 
 		protected void setDragMask(CanvasMouseEvent lastDragOrRelMouseEvent, Rectangle2D r2) {
 			if(r2==null) {lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(null, 0);
@@ -667,6 +673,10 @@ public void resizeLayoutToFitContents() {
 				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 				mapPanelLocation(getObject());
+				if(getObject().getTagHashMap().get("Index")!=null) {
+					int indexNew=findNearestPanelIndex(getObject());
+					getObject().getTagHashMap().put("Index", indexNew);
+				}
 				shifted=false;
 			} 
 			originalSnap=null;

@@ -771,6 +771,14 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			}
 		
 		/**if not index is permanently set, returns the nearest panel*/
+		return findNearestPanelIndex(o);
+	}
+
+	/**finds the layout panel that is nearest the object
+	 * @param o
+	 * @return
+	 */
+	public int findNearestPanelIndex(LocatedObject2D o) {
 		return this.getPanelLayout().getNearestPanelIndex(o.getBounds().getCenterX(),o.getBounds().getCenterY());
 	}
 	

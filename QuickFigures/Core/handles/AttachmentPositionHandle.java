@@ -90,6 +90,7 @@ public class AttachmentPositionHandle extends SmartHandle {
 	
 	/**set to true if both base position and offsets are to be changedd*/
 	private boolean useFullControlMode=false;
+	private CanvasMouseEvent pressLocation;
 
 	public AttachmentPositionHandle() {
 	
@@ -126,6 +127,8 @@ public class AttachmentPositionHandle extends SmartHandle {
 		return false;
 		//return KeyDownTracker.isKeyDown('f')||KeyDownTracker.isKeyDown('F');the keyboard control was buggy so I omited it
 	}
+	
+	
 
 	public void updateLocation() {
 		this.setCordinateLocation(RectangleEdges.getLocation(RectangleEdges.CENTER, getObject().getBounds()));
@@ -161,6 +164,8 @@ public class AttachmentPositionHandle extends SmartHandle {
 	
 	}
 
+	/**Adds text which indicates to the user that the current drag location includes an option to release
+	 * the item or transplant it*/
 	public void showMessageForOutOfRange(CanvasMouseEvent mEvent) {
 		boolean out = outOfRange(mEvent);
 		Point2D p2=mEvent.getCoordinatePoint();
@@ -176,12 +181,12 @@ public class AttachmentPositionHandle extends SmartHandle {
 			LocatedObject2D a = AttachedItemTool.getPotentialLockAcceptorAtPoint(mEvent.getCoordinatePoint(), this.getObject(), mEvent.getAsDisplay().getImageAsWorksheet(),true);
 			if (a!=null&&!this.isInFineControlMode())
 				{
-				RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
-				selectionManagger.setSelection(marker3, 0);
-				marker.setText("Transplant Item?");
-				marker.setTextColor(Color.red);
-				potentialTransplantTarget=a;
-				transplantIt=true;
+					RectangularGraphic marker3 = RectangularGraphic.blankRect(a.getBounds(), Color.green);
+					selectionManagger.setSelection(marker3, 0);
+					marker.setText("Transplant Item?");
+					marker.setTextColor(Color.red);
+					potentialTransplantTarget=a;
+					transplantIt=true;
 				} else transplantIt=false;
 			if(originalSnap!=null)
 			getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
@@ -195,6 +200,8 @@ public class AttachmentPositionHandle extends SmartHandle {
 
 	/**returns true if the user mouse event has dragged the objects beyond the range of its attachment point*/
 	protected boolean outOfRange(CanvasMouseEvent mEvent) {
+		if(pressLocation!=null&&mEvent.getCoordinatePoint().distance(pressLocation.getCoordinatePoint())<5)//ensures that tweaks will be allowed even if near the edge of the range
+			return false;
 		return AttachedItemTool2.outofRange(this.getObject().getBounds(), attachmentSite.getBounds(), mEvent.getCoordinatePoint());
 	}
 
@@ -299,17 +306,21 @@ private Shape createDrawnCirc(Point2D pt) {
 public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 	originalSnap=getObject().getAttachmentPosition().copy();
 	originalBounds=getObject().getBounds();
+	
+	/**determines if the mouse press was in the center part of the handle, if so puts the handle into fine control mode*/
 	if(lastInnerShape!=null&&lastInnerShape.contains(canvasMouseEventWrapper.getClickedXScreen(), canvasMouseEventWrapper.getClickedYScreen()))
 		setInfineControl(true); else setInfineControl(false);
 	
 	releaseIt=false;
 	transplantIt=false;
 	currentEdit=new CombinedEdit();
+	pressLocation=canvasMouseEventWrapper;
 	
 	/**options dialog for the item*/
 	int clickCount = canvasMouseEventWrapper.clickCount();
 	if (object instanceof ShowsOptionsDialog && clickCount>1) {
 		
+		/**ensures that a text item can still be placed into edit mode by a double click on the handle*/
 		if(object instanceof TextGraphic) {
 			TextGraphic t=(TextGraphic) object;
 			boolean inside=t.getBounds().contains(canvasMouseEventWrapper.getCoordinatePoint());
@@ -361,6 +372,7 @@ public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 	canvasMouseEventWrapper.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 }
 
+/***/
 private void performTransplant() {
 	
 	/**These lines of code move the locked item beween lock takers*/
@@ -402,7 +414,7 @@ private void performTransplant() {
 /**Creates a simplified version of this handle that will be used for dragging the attached object directly*/
 public AttachmentPositionHandle createDemiVersion() {
 	if (demiVersion==null) demiVersion = copyForSimpleDrag();
-	demiVersion.isADemiversion=true;
+	 demiVersion.isADemiversion=true;
 	 demiVersion.suppressMenu=demiVersion.isADemiversion;
 	 demiVersion.handlesize=handlesize/2;
 	 demiVersion.handleStrokeColor=new Color(0,0,0,0);
