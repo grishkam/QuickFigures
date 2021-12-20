@@ -63,6 +63,11 @@ public class RectangleEdgeHandle extends SmartHandle {
 		this.displaceFactor=displace;
 		this.setHandleNumber(handleNumber);
 	}
+	
+	/**Copies the parameter values from another handle*/
+	public void copyValuesFrom(RectangleEdgeHandle h) {
+		 theParameter.copyValuesFrom(h.theParameter);
+	}
 
 	/**
 	 * 
@@ -133,6 +138,7 @@ public class RectangleEdgeHandle extends SmartHandle {
 		theParameter.setLength(distance);
 		theParameter.setRatioToMaxLength(distance/maxDistance);
 		addUndo(lastDragOrRelMouseEvent);
+		theShape.getListenerList().notifyListenersOfUserSizeChange(theShape);
 	}
 
 
@@ -177,5 +183,9 @@ public class RectangleEdgeHandle extends SmartHandle {
 	
 	public boolean handlesOwnUndo() {
 		return true;
+	}
+	
+	public String toString() {
+		return "Rectangle Edge Handle id="+this.getHandleNumber()+"   amount="+this.displaceAmount+"   ratio="+this.displaceFactor;
 	}
 }

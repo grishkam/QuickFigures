@@ -190,14 +190,14 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		} else if (handlenum==CENTER) {
 			this.setLocationType(CENTER);
 			this.setLocation(destination);
-			
+			getListenerList().notifyListenersOfUserMove(this);
 			}
 		
 		
 		if (handlenum==RectangularShapeSmartHandle.ROTATION_HANDLE){
 
 			setAngle(BasicGraphicalObject.distanceFromCenterOfRotationtoAngle(getCenterOfRotation(), destination));
-		
+			getListenerList().notifyListenersOfUserMove(this);
 			
 		}
 		

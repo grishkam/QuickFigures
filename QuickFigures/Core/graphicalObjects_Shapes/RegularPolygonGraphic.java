@@ -47,7 +47,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 
 	{name="Polygon";}
 	
-	
+	/**Parameter that defines the number of vertices*/
 	private final CountParameter nvertex=new CountParameter(this, 5); {nvertex.parameterName="n sides";}
 	
 	private static final long serialVersionUID = 1L;

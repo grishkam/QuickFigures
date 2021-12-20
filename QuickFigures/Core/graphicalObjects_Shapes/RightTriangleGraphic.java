@@ -65,6 +65,7 @@ public class RightTriangleGraphic extends RectangularGraphic implements Rectangl
 		this.type=type;
 	}
 	
+	/**Creates a right triangle with the same size, colors and lines as the input shape*/
 	public RightTriangleGraphic(RectangularGraphic r) {
 		super(r);
 	}

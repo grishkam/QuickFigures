@@ -250,7 +250,7 @@ PopupMenuSupplier  {
 			}
 		}
 		if(mirror1!=null)
-			mirror1.updateAllReflections();
+			mirror1.updateAllReflectionLocations();
 		
 		return output;
 		

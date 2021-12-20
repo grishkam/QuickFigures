@@ -88,6 +88,15 @@ public class RectangleEdgeParameter implements Serializable, RectangleEdgePositi
 	public RectangleEdgeParameter self() {
 		return this;
 	}
+
+	/**copies the values from one paramter to the other
+	 * @param theParameter
+	 */
+	public void copyValuesFrom(RectangleEdgeParameter theParameter) {
+		this.length=theParameter.getLength();
+		this.ratioToMax=theParameter.getRatioToMaxLength();
+		
+	}
 	
 	
 }

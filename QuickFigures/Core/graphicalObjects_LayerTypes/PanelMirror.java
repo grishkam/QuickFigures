@@ -38,6 +38,10 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import handles.HasSmartHandles;
+import handles.RectangleEdgeHandle;
+import handles.SmartHandle;
+import handles.SmartHandleList;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import layout.basicFigure.LayoutSpaces.SpaceType;
@@ -65,7 +69,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 	/**mirror can be paused*/
 	private boolean mirrorActive=true;
 	private boolean locationMirrorActive=true;
-	private boolean colorMirrowActive=false;
+	private boolean colorMirrowActive=true;
 	
 
 	/**
@@ -197,23 +201,25 @@ public class Reflection implements Serializable {
 				 r.copyAttributesFrom(primaryShape);
 				 ArrowGraphic primary=(ArrowGraphic) primaryShape;
 				 r.setPoints(primary.getLineStartLocation(), primary.getLineEndLocation());
-				
+				r.copyArrowAtributesFrom(primary);
 				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
 			}
 			
 			/**what to do if the mirrored object is a rectangle*/
 			if(reflectedObject instanceof FrameGraphic && primaryShape instanceof PanelGraphicInsetDefiner ) {
 				FrameGraphic r= (FrameGraphic) reflectedObject ;
-				 mirrorProperties(r);
+				// 
 				 PanelGraphicInsetDefiner primaryShape2 = (PanelGraphicInsetDefiner ) primaryShape;
 				r.setRectangle(primaryShape2.getRectangle());
 				 r.setAngle(primaryShape.getAngle());
 				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
 			}
 			
-			
+			copyParamterHandles(primaryShape, reflectedObject);
 			
 		}
+
+		
 
 		/**
 		 changess the colors of the reflection to match the primary shape
@@ -236,6 +242,7 @@ public class Reflection implements Serializable {
 			if(reflectedObject instanceof FrameGraphic && primaryShape instanceof PanelGraphicInsetDefiner ) {
 				FrameGraphic r= (FrameGraphic) reflectedObject ;
 				r.copyColorsFrom(primaryShape);
+				mirrorProperties(r);
 			}
 			
 			
@@ -262,8 +269,8 @@ public void turnColorMirrorOnOff() {
 	}
 	else {
 		this.setColorMirrorActive(true);
-		copyColors();
-		this.updateAllReflections();
+		copyColorAndLineTraits();
+		this.updateAllReflectionLocations();
 	}
 }
 
@@ -274,13 +281,14 @@ public void turnLocationMirrorOnOff() {
 	}
 	else {
 		this.setLocationMirrorActive(true);
-		this.updateAllReflections();
+		this.updateAllReflectionLocations();
 	}
 }
 
 
 /**copies the colors from the original to all reflections*/
-public void copyColors() {
+public void copyColorAndLineTraits() {
+	
 	for(Reflection r: reflections) try {
 		r.mirrorColors();
 	} catch (Throwable t) {
@@ -292,18 +300,28 @@ public void copyColors() {
 /**whenever the primary object is moved, this updates every reflection*/
 	@Override
 	public void objectMoved(LocatedObject2D object) {
-		if(!isMirrorActive())
-			return;
-		if (isLocationMirrorActive())
-			updateAllReflections();
-		if(isColorMirrorActive())
-			copyColors();
+		//IssueLog.log("Object move detected "+System.currentTimeMillis());
+		//mirrorAfterObjectMove();
 		
 	}
 
+/**
+updates the reflections if the mirror is active
+ */
+public void mirrorAfterObjectMove() {
+	if(!isMirrorActive())
+		return;
+	if (isLocationMirrorActive())
+		updateAllReflectionLocations();
+	if(isColorMirrorActive()) {
+		copyColorAndLineTraits();
+		
+		}
+}
+
 
 /**updates the location of all reflections. does not affect the original*/
-public void updateAllReflections() {
+public void updateAllReflectionLocations() {
 	for(Reflection r: reflections) try {
 		r.updateLocation();
 	} catch (Throwable t) {
@@ -321,7 +339,7 @@ public void stopMirror() {
 public void startMirror() {
 	this.setMirrorActive(true);
 	if(isLocationMirrorActive())
-		updateAllReflections();
+		updateAllReflectionLocations();
 }
 
 /**returns true if the mirror is active*/
@@ -336,7 +354,7 @@ public boolean mirrorPaused() {
 
 	@Override
 	public void objectSizeChanged(LocatedObject2D object) {
-		// TODO Auto-generated method stub
+		mirrorAfterObjectMove();
 		
 	}
 
@@ -348,22 +366,18 @@ public boolean mirrorPaused() {
 
 	@Override
 	public void userMoved(LocatedObject2D object) {
-		if(isMirrorActive()) {
+		
 			
-			if(object!=primaryShape) {
-				
-			}
-			else
-				if(isLocationMirrorActive())
-					updateAllReflections();
 			
-		}
+				mirrorAfterObjectMove();
+			
+		
 		
 	}
 
 	@Override
 	public void userSizeChanged(LocatedObject2D object) {
-		// TODO Auto-generated method stub
+		mirrorAfterObjectMove();
 		
 	}
 	
@@ -485,4 +499,29 @@ public boolean mirrorPaused() {
 			return new Point2D.Double(rect.getX(), rect.getY());
 		}
 		}
+	
+	/**Copies certain kinds of parameters using the handles. does not yet function 
+	 * @param primaryShape
+	 * @param reflectedObject2
+	 */
+	public static void copyParamterHandles(ShapeGraphic primaryShape, SimpleGraphicalObject reflectedObject2) {
+	
+		if(primaryShape instanceof HasSmartHandles && reflectedObject2 instanceof HasSmartHandles) {
+			HasSmartHandles model=(HasSmartHandles) primaryShape;
+			HasSmartHandles target=(HasSmartHandles) reflectedObject2;
+			SmartHandleList list1 = model.getSmartHandleList();
+			SmartHandleList list2 = target.getSmartHandleList();
+			for(SmartHandle mHandle: list1)
+				for(SmartHandle tHandle: list2) {
+				
+					if(mHandle.getHandleNumber()==tHandle.getHandleNumber()&&mHandle instanceof RectangleEdgeHandle && tHandle instanceof RectangleEdgeHandle) {
+						
+						RectangleEdgeHandle mHandle2=(RectangleEdgeHandle) mHandle;
+						RectangleEdgeHandle tHandle2=(RectangleEdgeHandle) tHandle;
+						tHandle2.copyValuesFrom(mHandle2);
+					}
+				}
+		}
+		
+	}
 }

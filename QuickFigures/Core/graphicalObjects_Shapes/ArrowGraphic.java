@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 18, 2021
+ * Date Modified: Dec 19, 2021
  * Version: 2021.2
  */
 package graphicalObjects_Shapes;
@@ -85,7 +85,8 @@ import objectDialogs.StrokeOnlySwingDialog;
 public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, HasTreeLeafIcon,HasBackGroundShapeGraphic, HasUniquePopupMenu, OfficeObjectConvertable, HasSmartHandles {
 
 	private static final int STANDARD_HEAD_SIZE = 16;
-	private static final double STANDARD_TIP_ANGLE = Math.PI/4, STANDARD_NOTCH_ANGLE = Math.PI*3/4;
+	private static final double STANDARD_TIP_ANGLE = Math.PI/4,
+			STANDARD_NOTCH_ANGLE = Math.PI*3/4;
 	
 	/**set to true if an outline of the arrow will be drawn*/
 	public static final int NO_OUTLINE=0, OUTLINE_SHAPE=1, OUTLINE_OF_NORMAL_HEAD=20, 
@@ -93,24 +94,25 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 	private int outline=NO_OUTLINE;
 	
 	
-	/**The choices that appear in the user dialog*/
-	
+	/**The choices for head type*/
 	public static final int NORMAL_HEAD=0, OPEN_HEAD=1, REVERSE_HEAD=2, REVERSE_OPEN_HEAD=3,FEATHER_TAIL=5, FEATHER_TAIL_2=6, SQUARE_HEAD=7, BALL_HEAD=8, LINE_CAP=9,HALF_LINE_HEAD2 = 10, TRIANGLE_HEAD=11, 
 			TAIL=12, NARROW_TAIL=13, HALF_CIRCLE_TAIL=14, NO_HEAD=15,
 			POLYGON_HEAD=16;
 	public static final int DIAMOND_HEAD=POLYGON_HEAD+1, PENTAGON_HEAD=POLYGON_HEAD+2, HEXAGON_HEAD=POLYGON_HEAD+3;	
-	
-	public static final int[] arrowStyleList=new int[] {
-			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL, NO_HEAD};
-	
-	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle","No Head","Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
-	/**some options not available to the user dialog but available to programmer*/
 	public static final int 
 	 HALF_BAR_HEAD = 400,  HALF_BAR_HEAD2 = 500 ,BAR_HEAD = 444,
 	   HALF_LINE_HEAD = 500 ;
 	
+	public static final int[] arrowStyleList=new int[] {
+			NORMAL_HEAD, TRIANGLE_HEAD,  POLYGON_HEAD, OPEN_HEAD, SQUARE_HEAD, BALL_HEAD, DIAMOND_HEAD,PENTAGON_HEAD, HEXAGON_HEAD, LINE_CAP, HALF_LINE_HEAD2, REVERSE_HEAD, REVERSE_OPEN_HEAD, TAIL, FEATHER_TAIL, FEATHER_TAIL_2, NARROW_TAIL, HALF_CIRCLE_TAIL, NO_HEAD};
+	
+	/**optiuons that appear in the user dialog for head type*/
+	public static final String[] arrowStyleChoices=new String[] {"Normal", "Open Head", "Reverse Head", "Reverse open head", "Outline of head", "Feather Tail", "Fine Feather Tail",  "Square Cap", "Circle Cap", "Line Cap", "Half Line Cap", "Arrow Cap", "Tail", "Narrow Tail","Semi Circle","No Head","Triangle Cap", "Diamond Cap", "Pentagon Cap", "Hexagon Cap"};
+	/**some options not available to the user dialog but available to programmer*/
 	
 	
+	
+	/**The handle id numbers for arrow handles*/
 	public static final int HANDLE_1=0, HANDLE_2=1, ARROW_SIZE_HANDLE=2, ARROW_STROKE_HANDLE=3, HEAD_NUMBER_HANDLE=4, ARROW_SIZE_HANDLE_2=5;;
 	
 	public static final int FIRST_HEAD=1, SECOND_HEAD=2;
@@ -1038,7 +1040,7 @@ protected Point2D getDrawnLineEnd2() {
 	}
 	
 	/**A handle for the user to modify the arrow*/
-class ArrowSmartHandle extends SmartHandle {
+static class ArrowSmartHandle extends SmartHandle {
 		
 		/**
 		 * 
@@ -1050,14 +1052,14 @@ class ArrowSmartHandle extends SmartHandle {
 			super.draw(graphics, cords);
 		}
 
-		private ArrowGraphic rect;
+		private ArrowGraphic targetArrow;
 		private transient UndoScalingAndRotation undo;
 		private transient boolean undoAdded=false;
 
 		public ArrowSmartHandle(int type, ArrowGraphic r) {
 		
 			this.setHandleNumber(type);
-			this.rect=r;
+			this.targetArrow=r;
 			if(isArrowSizeHandle()) {
 				this.setHandleColor(Color.blue);
 			}
@@ -1072,50 +1074,50 @@ class ArrowSmartHandle extends SmartHandle {
 		
 		
 		public Point2D getCordinateLocation() {
-			ArrayList<Point2D> ends = getEndPoints();
+			ArrayList<Point2D> ends = targetArrow.getEndPoints();
 			if (this.getHandleNumber()==HANDLE_1) return ends.get(0);
 			if (this.getHandleNumber()==HANDLE_2) return ends.get(1);
 			if (this.isArrowStrokeHandle()) {
-				return getStrokeHandlePoints()[0];
+				return targetArrow.getStrokeHandlePoints()[0];
 			}
 			
 			
 			if (this.isArrowSizeHandle2()) {
-				if (head2.isHalfHead2()) return getHeadPoints(SECOND_HEAD)[0];
-				return getHeadPoints(SECOND_HEAD)[2];
+				if (targetArrow.head2.isHalfHead2()) return targetArrow.getHeadPoints(SECOND_HEAD)[0];
+				return targetArrow.getHeadPoints(SECOND_HEAD)[2];
 			}
 
-			if (head1.isHalfHead2()) return getHeadPoints(FIRST_HEAD)[0];
-			return getHeadPoints(FIRST_HEAD)[2];
+			if (targetArrow.head1.isHalfHead2()) return targetArrow.getHeadPoints(FIRST_HEAD)[0];
+			return targetArrow.getHeadPoints(FIRST_HEAD)[2];
 		
 		}
 		
 		
 		public void handlePress(CanvasMouseEvent lastDragOrRelMouseEvent) {
 			undoAdded=false;
-			undo=new UndoScalingAndRotation(rect);
+			undo=new UndoScalingAndRotation(targetArrow);
 			if (lastDragOrRelMouseEvent.clickCount()==2&&isArrowSizeHandle())
 				{
-				ArrowHead head = getHead(ArrowGraphic.FIRST_HEAD);
+				ArrowHead head = targetArrow.getHead(ArrowGraphic.FIRST_HEAD);
 				java.lang.Double p = StandardDialog.getNumberFromUser("Arrow Size", head.getArrowHeadSize());
 				head.setArrowHeadSize(p);
 				setupUndo(lastDragOrRelMouseEvent);
 				}
 			
 			if (lastDragOrRelMouseEvent.clickCount()==2&&isArrowStrokeHandle()) {
-				new StrokeOnlySwingDialog(rect).showDialog();
+				new StrokeOnlySwingDialog(targetArrow).showDialog();
 				setupUndo(lastDragOrRelMouseEvent);
 			}
 			
 			if (lastDragOrRelMouseEvent.clickCount()==2&&this.getHandleNumber()==HANDLE_1) {
-				Point2D p = StandardDialog.getPointFromUser("Set Location ",getLineStartLocation());
-				setPoint1(p);
+				Point2D p = StandardDialog.getPointFromUser("Set Location ",targetArrow.getLineStartLocation());
+				targetArrow.setPoint1(p);
 				setupUndo(lastDragOrRelMouseEvent);
 			}
 			
 			if (lastDragOrRelMouseEvent.clickCount()==2&&this.getHandleNumber()==HANDLE_2) {
-				Point2D p = StandardDialog.getPointFromUser("Set Location ",getLineEndLocation());
-				setPoint2(p);
+				Point2D p = StandardDialog.getPointFromUser("Set Location ",targetArrow.getLineEndLocation());
+				targetArrow.setPoint2(p);
 				setupUndo(lastDragOrRelMouseEvent);
 			}
 			
@@ -1131,32 +1133,33 @@ class ArrowSmartHandle extends SmartHandle {
 		public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
 			Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 			if (this.getHandleNumber()==HANDLE_1) {
-				setPoint1(p2);
-				notifyListenersOfMoveMent();
+				targetArrow.setPoint1(p2);
+				targetArrow.notifyListenersOfMoveMent();
 			}
 			if (this.getHandleNumber()==HANDLE_2) {
-				setPoint2(p2);
-				notifyListenersOfMoveMent();
+				targetArrow.setPoint2(p2);
+				targetArrow.notifyListenersOfMoveMent();
 			}
 			
 			if (isArrowSizeHandle()) {
-				java.awt.geom.Point2D.Double metric = getHeadPoints(FIRST_HEAD)[3];
+				java.awt.geom.Point2D.Double metric = targetArrow.getHeadPoints(FIRST_HEAD)[3];
 				double d = metric.distance(p2);
-				getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize(d);
+				targetArrow.getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize(d);
 			}
 			
 			if (isArrowSizeHandle2()) {
-				java.awt.geom.Point2D.Double metric = getHeadPoints(SECOND_HEAD)[3];
+				java.awt.geom.Point2D.Double metric = targetArrow.getHeadPoints(SECOND_HEAD)[3];
 				double d = metric.distance(p2);
-				getHead(ArrowGraphic.SECOND_HEAD).setArrowHeadSize(d);
-				if(headsAreSame()) getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize(d);
+				targetArrow.getHead(ArrowGraphic.SECOND_HEAD).setArrowHeadSize(d);
+				if(targetArrow.headsAreSame()) targetArrow.getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize(d);
 			}
 			if (isArrowStrokeHandle()) {
-				Point2D metric = getStrokeHandlePoints()[1];
+				Point2D metric = targetArrow.getStrokeHandlePoints()[1];
 				double d = metric.distance(p2);
-				rect.setStrokeWidth((float) (d*2));
+				targetArrow.setStrokeWidth((float) (d*2));
 			}
 			setupUndo(lastDragOrRelMouseEvent);
+			targetArrow.getListenerList().notifyListenersOfUserSizeChange(targetArrow);
 			
 		}
 		
@@ -1187,10 +1190,10 @@ class ArrowSmartHandle extends SmartHandle {
 		
 		@Override
 		public boolean isHidden() {
-			if (getNHeads()==0 &&isArrowSizeHandle() )
+			if (targetArrow.getNHeads()==0 &&isArrowSizeHandle() )
 				return true;
 			
-			if (getNHeads()<2 &&isArrowSizeHandle2() )
+			if (targetArrow.getNHeads()<2 &&isArrowSizeHandle2() )
 				return true;
 			return hidden;
 		}
