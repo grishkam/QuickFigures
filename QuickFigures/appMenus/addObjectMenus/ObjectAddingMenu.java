@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: October, 2021
+ * Date Modified: Dec 23, 2021
  * Version: 2021.2
  */
 package addObjectMenus;
@@ -83,11 +83,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			
 			
 			adders.add(new BarGraphicAdder());
-			//adders.add(new SavedGraphicAdder());
-			
-			
-			
-			//adders.add(new layoutAdder());
+		
 			adders.add(new GroupAdder());
 			imageadders.add(new FileImageAdder(false));
 			imageadders.add(new ClipboardAdder(false));
@@ -100,7 +96,6 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			}
 			
 		
-			//adders.add(new PasteItem());
 			cartoonadders.add(new CartoonPolygonAdder(1));
 			cartoonadders.add(new CartoonPolygonAdder(0));
 			cartoonadders.add(new CartoonPolygonAdder(2));

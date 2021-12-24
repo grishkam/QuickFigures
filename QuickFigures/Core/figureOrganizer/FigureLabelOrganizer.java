@@ -25,6 +25,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
+import addObjectMenus.LaneLabelCreationOptions;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
@@ -222,7 +223,7 @@ public class FigureLabelOrganizer implements Serializable {
 	 * @return
 	 */
 	public static String getNumberCode() {
-		return "%number%";
+		return LaneLabelCreationOptions.numberCode;
 	}
 	
 	public static String getDefaultNameOfType(int labelType, boolean oppositeSide) {

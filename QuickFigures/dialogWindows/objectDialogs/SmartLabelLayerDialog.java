@@ -47,7 +47,7 @@ public class SmartLabelLayerDialog extends TextPatternDialog {
 	InfoDisplayPanel previewPanel;
 	
 	public SmartLabelLayerDialog(SmartLabelLayer l, boolean includeData) {
-		super(l.getTextPattern(), includeData);
+		super(l.getTextPattern(), includeData, true);
 		labelLayer=l;
 		this.setTitle("Smart Label Options");
 		addLayerOptionsToDialog();

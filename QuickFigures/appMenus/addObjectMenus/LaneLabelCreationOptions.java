@@ -21,6 +21,7 @@
 package addObjectMenus;
 
 import layout.RetrievableOption;
+import textObjectProperties.TextPattern;
 
 /**A set of properties that determine how figure labels are automatically generated*/
 public class LaneLabelCreationOptions {
@@ -28,14 +29,14 @@ public class LaneLabelCreationOptions {
 	/**The current label creation options*/
 	public static LaneLabelCreationOptions current=new LaneLabelCreationOptions() ;
 	
-	public static final String numberCode="%number%";
+	public static final String numberCode="%number%", letterCode="%letter%";
 	public static String defaultLabelText="Lane "+numberCode;
 	
 	@RetrievableOption(key = "nLanes", label="How many lanes?")
 	public double nLanes=8;
 	
 	@RetrievableOption(key = "label prefix and suffix", label="Label text here", nExpected=12)
-	public String[] prefix=new String[] {defaultLabelText};
+	public String[] textOfLabel=new String[] {defaultLabelText};
 	
 	
 	@RetrievableOption(key = "mark conditions", label="How many lines of +/- marks", nExpected=4)
@@ -44,4 +45,6 @@ public class LaneLabelCreationOptions {
 	@RetrievableOption(key = "Mark Text", label="Marks will be")
 	public String[] markText=new String[] {"-+", "--++"};
 
+	/**The pattern for numbers*/
+	TextPattern pattern1=new TextPattern(); {pattern1.setSuffix("");pattern1.setPrefix("");}
 }

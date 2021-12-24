@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: Dec 23, 2021
+ * Version: 2021.2
  */
 package textObjectProperties;
 

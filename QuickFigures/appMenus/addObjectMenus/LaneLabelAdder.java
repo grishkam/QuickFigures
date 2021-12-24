@@ -43,6 +43,7 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
 import messages.ShowMessage;
+import objectDialogs.TextPatternDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -193,7 +194,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			ag2.setLocation(panel.getCenterX(), panel.getMinY());
 			
 			/**Sets the text of the label*/
-			String[] labelList = options.prefix;
+			String[] labelList = options.textOfLabel;
 			String text_for_label = LaneLabelCreationOptions.defaultLabelText;
 			
 			
@@ -202,11 +203,11 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			} else if (labelList.length==0) 
 				text_for_label="";
 				
-			text_for_label =text_for_label.replace(LaneLabelCreationOptions.numberCode, ""+laneIndex);
+			text_for_label =text_for_label.replace(LaneLabelCreationOptions.numberCode, getTextForLaneNumber(laneIndex) );
 			ag2.setContent(text_for_label);
 			
 			
-			if(ag2.getText()==null||ag2.getText().equals(""))
+			if(ag2.getText()==null||ag2.getText().equals("")||ag2.getText().equals(" "))
 				continue;//if the user deleted the text
 			
 			ag2.setTextColor(Color.black);
@@ -250,10 +251,13 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				TextGraphic  ag2 = new TextGraphic("+");
 				if(currentMarkText.length()>0) {
 					int charLocation = ((i-nColumns*markTextRow)-1)%currentMarkText.length();
-					String newText = ""+currentMarkText.charAt(charLocation);
+					
+					String characterAt = ""+currentMarkText.charAt(charLocation);//text for a single character
+					
 					if (currentMarkText.contains(LaneLabelCreationOptions.numberCode))
-						ag2.setText(currentMarkText.replace(LaneLabelCreationOptions.numberCode, i+""));
-					ag2.setText(""+newText);
+						ag2.setText(currentMarkText.replace(LaneLabelCreationOptions.numberCode, getTextForLaneNumber(i)));
+					else
+						ag2.setText(""+characterAt);
 				}
 				ag2.setTextColor(Color.black);
 				
@@ -275,19 +279,30 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	}
 
 	/**
+	 * @param laneIndex
+	 * @return
+	 */
+	public String getTextForLaneNumber(int laneIndex) {
+		return options.pattern1.getText(laneIndex);
+	}
+
+	/**
 	 * Shos the dialog which allods the user to choose how many lane labels to create
-	 * @return 
+	 * @return true if user pressed ok
 	 */
 	protected boolean showLaneLabelDialog() {
 		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
-		
-		 //storedValueDilaog.add(LABEL_PASTE_TEXT_AREA_KEY, new StringInputPanel("Paste label list here", "", 15, 20));
+		 
+		 /**Adds a text pattern tab*/
+		 TextPatternDialog dis = new TextPatternDialog(options.pattern1, false, false);
+		storedValueDilaog.addSubordinateDialog("%number%", dis);
 		 
 		storedValueDilaog.showDialog();
 		
-		//labelList=storedValueDilaog.getLinesFromString(LABEL_PASTE_TEXT_AREA_KEY);
+		options.pattern1=dis.getTheTextPattern();//sets the pattern based on the text pattern tab
+		
 		return storedValueDilaog.wasOKed();
 	}
 	

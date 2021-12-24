@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Oct 25, 2021
- * Date Modified: Oct 25, 2021
+ * Date Modified: Oct Dec 23, 2021
  * Version: 2021.2
  * 
  */
@@ -25,6 +25,7 @@ package objectDialogs;
 
 import java.util.ArrayList;
 
+import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
@@ -49,10 +50,12 @@ public class TextPatternDialog extends StandardDialog {
 	ArrayList<TextPattern> patterns;
 	protected TextPattern theTextPattern;
 	private boolean includeDataType=true;
+	private boolean includePrefixAndSuffix=true;
 	
-	public TextPatternDialog(TextPattern l,boolean includeType) {
+	public TextPatternDialog(TextPattern l,boolean includeType, boolean prefixAndSuffix) {
 		this.theTextPattern=l;
 		this.includeDataType=includeType;
+		this.includePrefixAndSuffix=prefixAndSuffix;
 		this.setTitle("Smart Label Options");
 		this.addOptionsToDialog();
 		this.setWindowCentered(true);
@@ -93,9 +96,11 @@ public class TextPatternDialog extends StandardDialog {
 		this.add(startIndexKey, new NumberInputPanel("Start at", theTextPattern.getStartIndex(), 3));
 		this.add(countByKey, new NumberInputPanel(countByKey, theTextPattern.getCountBy(), 3));
 		
-		this.add(prefixKey, new StringInputPanel(prefixKey, theTextPattern.getPrefix()));
-
-		this.add(suffixKey, new StringInputPanel(suffixKey, theTextPattern.getSuffix()));
+		if(includePrefixAndSuffix) {
+			this.add(prefixKey, new StringInputPanel(prefixKey, theTextPattern.getPrefix()));
+	
+			this.add(suffixKey, new StringInputPanel(suffixKey, theTextPattern.getSuffix()));
+		}
 		
 	}
 	
@@ -111,8 +116,10 @@ public class TextPatternDialog extends StandardDialog {
 	protected TextPattern getTextPatternFromDialog() {
 		TextPattern theTextPattern = patterns.get((int) this.getChoiceIndex(patternKey));
 		 theTextPattern.setStartIndex(this.getNumberInt(startIndexKey));
-		 theTextPattern.setPrefix(this.getString(prefixKey));
-		 theTextPattern.setSuffix(this.getString(suffixKey));
+			if(includePrefixAndSuffix) {
+				 theTextPattern.setPrefix(this.getString(prefixKey));
+				 theTextPattern.setSuffix(this.getString(suffixKey));
+			}
 		 theTextPattern.setCountBy(this.getNumberInt(countByKey));
 		 
 		 if (includeDataType)
@@ -126,9 +133,15 @@ public class TextPatternDialog extends StandardDialog {
 		
 	}
 	
+	/**Each time a user changes a dialog option*/
+	protected void afterEachItemChange() {
+		
+		setOptionsToDialog();
+	}	
+	
 	/**Shows a modal dialog and returns the pattern*/
 	public static TextPattern getPatternFromUser(TextPattern input, boolean includeData) {
-		TextPatternDialog dialog = new TextPatternDialog(input,includeData);
+		TextPatternDialog dialog = new TextPatternDialog(input,includeData, true);
 		dialog.showDialog();
 		
 		return dialog.getTheTextPattern();

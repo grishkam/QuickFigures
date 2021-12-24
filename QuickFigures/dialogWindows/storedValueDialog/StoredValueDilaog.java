@@ -100,6 +100,8 @@ public class StoredValueDilaog extends StandardDialog{
 					addStringArrayField(d, of, f, o);
 				}
 				
+				
+				
 				}
 				
 				/**need option to add a choice*/

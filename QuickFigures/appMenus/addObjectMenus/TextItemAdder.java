@@ -227,7 +227,7 @@ class TextItemAdder extends BasicGraphicAdder {
 		processItemAttachment(listOfLabels, count, it, ag2, taker);
 		
 		
-		ag2.setTextColor(Color.white);
+		ag2.setTextColor(it.getFigureType().getForeGroundDrawColor());
 		
 	}
 	
