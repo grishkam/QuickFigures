@@ -103,7 +103,11 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 		if (imp instanceof CompositeImage)
 			setLutColorWithoutDisplayRangeEdit((CompositeImage)imp, createLutFromColor, chan);
 		else {
-			imp.getProcessor().setLut(createLutFromColor);
+			try {
+				imp.getProcessor().setLut(createLutFromColor);
+			} catch (Exception e) {
+				IssueLog.log("Problem, failed to set channel color");
+			}
 		}
 	}
 	

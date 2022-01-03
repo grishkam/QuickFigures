@@ -246,7 +246,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		Object source = arg0.getSource();
 		CombinedEdit undo=null ;
 		if (source==addImageFromFileButton) {
-			IssueLog.log("about to open image ");
+			
 			undo=figureOrganizingLayerPane.nextMultiChannel(true);
 		}
 		if (source==addOpenImageFromList) {

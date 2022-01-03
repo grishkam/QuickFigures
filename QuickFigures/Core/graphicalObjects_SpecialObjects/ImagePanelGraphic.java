@@ -115,8 +115,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private double height;
 
 	 private Color frameColor=Color.white;
-		private double frameWidthv=2;
-		private double frameWidthh=2;
+		private double frameWidthv=0;
+		private double frameWidthh=0;
 		private boolean uniformFrameWidth=true;
 		
 	protected static int imagePanelUserLocked=NOT_LOCKED;//determines if the user is allowed to move image panels by directly clicking and draging

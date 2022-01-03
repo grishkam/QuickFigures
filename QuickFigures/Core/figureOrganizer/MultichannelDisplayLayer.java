@@ -508,6 +508,8 @@ private static final long serialVersionUID = 1L;
 	public static MultichannelDisplayLayer findMultiChannelForGraphic(GraphicLayer l, ImagePanelGraphic impg) {
 		if (impg==null) return null;
 		if (impg.getParentLayer() instanceof MultichannelDisplayLayer) return (MultichannelDisplayLayer) impg.getParentLayer();
+		if(l==null)
+			l=impg.getParentLayer();
 		
 		ArrayList<GraphicLayer> gs = l.getSubLayers();
 		ArrayList<GraphicLayer> displays = new ArraySorter<GraphicLayer>().getThoseOfClass(gs, MultichannelDisplayLayer.class);

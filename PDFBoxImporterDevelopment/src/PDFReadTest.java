@@ -1,4 +1,4 @@
-
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +9,10 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
-import figureFormat.DirectoryHandler;
 import graphicalObjects_LayerTypes.ClosedGroup;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
-import logging.IssueLog;
+import pdfImporter.QFPDFRenderer;
 import render.GraphicsRenderQF;
 import undo.CombinedEdit;
 import undo.Edit;
@@ -34,21 +33,7 @@ import undo.Edit;
  */
 public class PDFReadTest {
 
-	public static String path=new DirectoryHandler().getFigureFolderPath()+"/vv2.pdf";
 	
-	/**
-	 * 
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		File file = new File(path);
-		IssueLog.log(file.exists()+"will check  "+path);
-		IssueLog.sytemprint=true;
-		showPDFFile(file);
-		
-		//reader.renderPageToGraphics(0, graphics);
-	}
 
 	/**
 	 * @param file
@@ -86,8 +71,10 @@ public class PDFReadTest {
 		
 		float scale=1;
 		PDDocument pd = Loader.loadPDF(file);
-		PDFRenderer reader=new PDFRenderer(pd);
-		reader.renderPageToGraphics(0,  GraphicsRenderQF.getGraphics2D(gg.getTheInternalLayer()), scale);
+		java.awt.Graphics2D g2d= GraphicsRenderQF.getGraphics2D(gg.getTheInternalLayer());
+		PDFRenderer reader=new QFPDFRenderer(pd, gg.getTheInternalLayer(), g2d);
+		
+		reader.renderPageToGraphics(0, g2d, scale);
 		
 	
 	

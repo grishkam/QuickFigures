@@ -152,8 +152,10 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		 this.getTransform().transform(point1, point1);
 		graphicImage .setLocationUpperLeft(point1);
 		getLayer().add(graphicImage);
-		throw new NullPointerException();
+		GraphicsRenderQF.lastImage=graphicImage;
+		//throw new NullPointerException();
 		//return false;
+		return true;
 	}
 
 	/**
