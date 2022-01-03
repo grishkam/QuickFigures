@@ -21,6 +21,8 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
  */
 public class GraphicsRenderQF {
 	public static ImagePanelGraphic lastImage;
+	public static double lastImageX;
+	public static double lastImageY;
 
 	/***/
 	public static Graphics2D getGraphics2D(GraphicLayer g) {

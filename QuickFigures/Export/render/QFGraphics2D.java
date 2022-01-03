@@ -138,11 +138,21 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public boolean drawImage(Image img,
+            AffineTransform xform,
+            ImageObserver obs){ 
+		
+		GraphicsRenderQF.lastImageX=xform.getTranslateX();//stores the location 
+		GraphicsRenderQF.lastImageY=xform.getTranslateY();
+		return super.drawImage(img, xform,obs);
+	}
 
 	@Override
 	public boolean drawImage(Image image, int x, int y, ImageObserver io) {
 		
-		IssueLog.log("image draw not yet fully implemented "+image);
+		
 		BufferedImage bi = createImageWithColorModel(image, io);
 		if(image instanceof BufferedImage) {
 			bi=(BufferedImage) image;
@@ -153,8 +163,6 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		graphicImage .setLocationUpperLeft(point1);
 		getLayer().add(graphicImage);
 		GraphicsRenderQF.lastImage=graphicImage;
-		//throw new NullPointerException();
-		//return false;
 		return true;
 	}
 

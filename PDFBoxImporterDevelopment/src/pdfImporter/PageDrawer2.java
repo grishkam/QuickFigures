@@ -11,30 +11,23 @@
 package pdfImporter;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.contentstream.PDFStreamEngine;
 import org.apache.pdfbox.contentstream.operator.Operator;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.rendering.PageDrawer;
 import org.apache.pdfbox.rendering.PageDrawerParameters;
 
-import appContextforIJ1.ImageDisplayTester;
 import figureFormat.DirectoryHandler;
 import graphicalObjects_LayerTypes.GraphicLayer;
-import graphicalObjects_SpecialObjects.BufferedImageGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
-import imageDisplayApp.ImageWindowAndDisplaySet;
-import logging.IssueLog;
+import locatedObject.RectangleEdges;
 import render.GraphicsRenderQF;
 
 /**
@@ -103,12 +96,10 @@ public class PageDrawer2 extends PageDrawer {
     {
         String operationName = operator.getName();
        
-      
-        IssueLog.log("processing operator "+operationName+ " wnich is "+ operator);
 		if( codeForImage.equals(operationName) )
         {
 			super.processOperator( operator, operands);
-            processForImage(operands);
+            replaceLastImage(operands);
         }
         else
         {
@@ -117,12 +108,21 @@ public class PageDrawer2 extends PageDrawer {
         }
     }
 
+    
+    @Override
+    public void drawImage(PDImage pdImage) throws IOException
+    	{
+    	
+    	super.drawImage(pdImage);
+    	}
+    
+ 
 
-	/**
+	/**Replaces the scaled version of the image with the unscaled version
 	 * @param operands
 	 * @throws IOException
 	 */
-	public void processForImage(List<COSBase> operands) throws IOException {
+	public void replaceLastImage(List<COSBase> operands) throws IOException {
 		PDXObject xobject = getPDXObject(operands);
 		if( xobject instanceof PDImageXObject)
 		{
@@ -131,7 +131,14 @@ public class PageDrawer2 extends PageDrawer {
 		    
 		   ImagePanelGraphic imagePanel = new ImagePanelGraphic(image.getImage());
 		   if ( GraphicsRenderQF.lastImage!=null) {
-			   GraphicsRenderQF.lastImage.setImage(image.getImage());
+			   BufferedImage newImage = image.getImage();
+			  double startWidth= GraphicsRenderQF.lastImage.getBufferedImage().getWidth();
+			  double ratio = newImage.getWidth()/startWidth;
+			  GraphicsRenderQF.lastImage.setLocationType(RectangleEdges.UPPER_LEFT);
+			   GraphicsRenderQF.lastImage.setImage(newImage);
+			   GraphicsRenderQF.lastImage.setRelativeScale(GraphicsRenderQF.lastImage.getRelativeScale()/ratio);
+			   GraphicsRenderQF.lastImage.setLocationUpperLeft( GraphicsRenderQF.lastImageX,  GraphicsRenderQF.lastImageY);//Note, this works because there is no scale
+			 //  ShowMessage.showOptionalMessage("Warning: image import", true, "Import of image panels not yet fully implemented");
 		   }
 		   else
 			   layer.add( imagePanel);
@@ -141,11 +148,12 @@ public class PageDrawer2 extends PageDrawer {
 		}
 		else if(xobject instanceof PDFormXObject)
 		{
-			IssueLog.log("showing form of "+xobject);
+			
 		    PDFormXObject form = (PDFormXObject)xobject;
 		    showForm(form);
+		    
 		} else {
-			IssueLog.log("dont know what do to with "+xobject);
+			
 		}
 	}
 
