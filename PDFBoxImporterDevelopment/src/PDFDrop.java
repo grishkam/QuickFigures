@@ -1,3 +1,9 @@
+/**
+ * Author: Greg Mazo
+ * Date Created Nov 27, 2021
+ * Date Modified: Jan 3, 2022
+ * Version: 2021.2
+ */
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
@@ -7,21 +13,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import undo.CombinedEdit;
 
-/**
- * Author: Greg Mazo
- * Date Modified: Nov 27, 2021
- * Copyright (C) 2021 Gregory Mazo
- * 
- */
-/**
- 
- * 
- */
 
-/**
- 
- * 
- */
 public class PDFDrop implements FileDropListener {
 
 	@Override

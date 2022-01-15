@@ -293,20 +293,38 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @param canvasMouseEventWrapper
 	 */
 	private void addLaneLabels(CanvasMouseEvent canvasMouseEventWrapper) {
-		CombinedEdit undo = new CombinedEdit();
 		
+		DefaultLayoutGraphic layout2 = layout;
+		int index2 = this.index;
+		
+		CombinedEdit undo = createLaneLabelsFor(canvasMouseEventWrapper, layout2, index2);
+			
+		canvasMouseEventWrapper.addUndo(undo);
+	}
+
+	/**
+	 * @param canvasMouseEventWrapper
+	 * @param layout2
+	 * @param index2
+	 * @return
+	 */
+	public static CombinedEdit createLaneLabelsFor(CanvasMouseEvent canvasMouseEventWrapper, DefaultLayoutGraphic layout2,
+			int index2) {
+		CombinedEdit undo = new CombinedEdit();
 		LaneLabelAdder laneLabelAdder = new LaneLabelAdder();
 		TextGraphic textItem = laneLabelAdder. createTextItem();
 		
 		
 		
-		Rectangle box = layout.getPanelLayout().getSelectedSpace(this.index, LayoutSpaces.PANELS).getBounds();
+		
+		
+		Rectangle box = layout2.getPanelLayout().getSelectedSpace(index2, LayoutSpaces.PANELS).getBounds();
 		
 		ArrayList<TextGraphic> labelList = new ArrayList<TextGraphic>();
-		DefaultLayoutGraphic laneLabelLayout = laneLabelAdder.addLaneLabel(textItem, true, labelList, layout.getParentLayer(), box, undo);
+		DefaultLayoutGraphic laneLabelLayout = laneLabelAdder.addLaneLabel(textItem, true, labelList, layout2.getParentLayer(), box, undo);
 		
 		if(laneLabelLayout ==null)
-			return;//if user clicks cancel will not return a layout
+			return null;//if user clicks cancel will not return a layout
 		
 		Rectangle laneLabelBounds = laneLabelLayout.getBounds();
 		
@@ -314,24 +332,23 @@ public class AddLabelHandle extends MoveRowHandle {
 			textItem=labelList.get(0);
 		if( laneLabelBounds.getMaxY()>box.getMinY()+1) {
 			
-			undo.addEditToList(new UndoLayoutEdit(layout));
+			undo.addEditToList(new UndoLayoutEdit(layout2));
 			double height = laneLabelBounds.getMaxY()-box.getMinY();
 			
-			layout.moveLayoutAndContents(0, height);//to make sure lane labels are above
+			layout2.moveLayoutAndContents(0, height);//to make sure lane labels are above
 			laneLabelLayout.moveLayoutAndContents(0, -height);
 		}
 		
 		/**expands the figure label pace for new lane labels*/
-			undo.addEditToList(performLabelSpaceExpansion( laneLabelLayout));
+			undo.addEditToList(performLabelSpaceExpansion( laneLabelLayout, layout2));
 		
 			undo.addEditToList(
 					new CanvasAutoResize(false).performUndoableAction(canvasMouseEventWrapper.getAsDisplay())
 			);
-			
-		canvasMouseEventWrapper.addUndo(undo);
+		return undo;
 	}
 
-	/**Formats teh label and adds an undo to the undo manager*/
+	/**Formats the label and adds an undo to the undo manager*/
 	protected void afterAddLabel(CanvasMouseEvent canvasMouseEventWrapper, TextGraphic label, CombinedEdit cEdit) {
 		
 		setUpMatchingLocation(label, true);
@@ -347,7 +364,7 @@ public class AddLabelHandle extends MoveRowHandle {
 		
 		
 		
-		cEdit.addEditToList(performLabelSpaceExpansion(label));
+		cEdit.addEditToList(performLabelSpaceExpansion(label, layout));
 		
 		
 	}
@@ -356,9 +373,9 @@ public class AddLabelHandle extends MoveRowHandle {
 	 * @param label
 	 * @return
 	 */
-	protected UndoLayoutEdit performLabelSpaceExpansion(BasicGraphicalObject label) {
+	protected static UndoLayoutEdit performLabelSpaceExpansion(BasicGraphicalObject label,  DefaultLayoutGraphic layout) {
 		UndoLayoutEdit undo2 = new UndoLayoutEdit(layout);
-		expandLabelSpace(label);
+		expandLabelSpace(label, layout);
 		undo2.establishFinalLocations();
 		return undo2;
 	}
@@ -366,7 +383,7 @@ public class AddLabelHandle extends MoveRowHandle {
 	/**
 	 * @param label
 	 */
-	public void expandLabelSpace(BasicGraphicalObject label) {
+	public static void expandLabelSpace(BasicGraphicalObject label,  DefaultLayoutGraphic layout) {
 		layout.getEditor().expandSpacesToInclude(layout.getPanelLayout(), label.getBounds());
 	}
 

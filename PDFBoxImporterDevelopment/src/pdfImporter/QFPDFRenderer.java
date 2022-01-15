@@ -1,12 +1,8 @@
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 2, 2022
- * Copyright (C) 2022 Gregory Mazo
- * 
- */
-/**
- 
- * 
+ * Date Created Jan 2, 2022
+ * Date Modified: Jan 3, 2022
+ * Version: 2021.2
  */
 package pdfImporter;
 

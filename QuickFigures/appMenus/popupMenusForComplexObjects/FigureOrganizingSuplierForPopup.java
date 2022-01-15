@@ -22,6 +22,7 @@ package popupMenusForComplexObjects;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,6 +52,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import handles.layoutHandles.AddLabelHandle;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
@@ -71,6 +73,7 @@ import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import objectDialogs.CroppingDialog;
 import objectDialogs.CroppingDialog.CropDialogContext;
+import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup.AddLaneLabelButton;
 import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.AbstractUndoableEdit2;
@@ -83,6 +86,8 @@ import undo.UndoScalingAndRotation;
 
 /**A menu for a figure organizing layer. This is a rather complex menu with many options*/
 public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, LayoutSpaces, ActionListener {
+
+
 	FigureOrganizingLayerPane figureOrganizingLayerPane;
 	JMenuItem addImageFromFileButton;
 	private JMenuItem addOpenImageFromList;
@@ -143,7 +148,10 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 					panelLabelButton = new BasicSmartMenuItem("Generate Panel Labels", new ToolIconWithText(0, PANELS).getMenuVersion());
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
-					
+						
+						 BasicSmartMenuItem addLaneLabel=new AddLaneLabelButton( figureOrganizingLayerPane.getMontageLayoutGraphic());
+						 labelMenu.add(addLaneLabel);
+						 
 						/**Adds more options to the label menu based on annotations on the method calls within this class*/
 						new MenuItemExecuter(this).addToJMenu(labelMenu);
 					jj.add(labelMenu);
@@ -613,4 +621,33 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	}
 	
 	
+	/**
+	 Implements a menu item to add lane labels. Will select which column the labels belong in based on the clickpoint used to bring up this popup menu
+	 */
+public class AddLaneLabelButton extends BasicSmartMenuItem {
+
+	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+	private DefaultLayoutGraphic thelayout;
+
+	/**
+	 * @param montageLayoutGraphic
+	 */
+	public AddLaneLabelButton(DefaultLayoutGraphic montageLayoutGraphic) {
+		super("Add Lane Labels");
+		this.thelayout=montageLayoutGraphic;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Point point = super.me.getCoordinatePoint();
+		int index = thelayout.getPanelLayout().makeAltered(COLS).getPanelIndex(point.getX(), point.getY());
+		addUndo(
+				AddLabelHandle.createLaneLabelsFor(me, thelayout, index)
+		);
+	}
+
+}
 }

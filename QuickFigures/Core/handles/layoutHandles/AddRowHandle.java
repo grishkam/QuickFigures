@@ -23,6 +23,7 @@ package handles.layoutHandles;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
@@ -59,24 +60,22 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 	private boolean undoAdded;
 	private CombinedEdit undo2;
 
+	public static final int AT_SIDE=0, AT_TOP_OR_LEFT=1;
+	private int locationType= AT_TOP_OR_LEFT;//AT_SIDE;
 
 	/**creates a handle*/
-	public AddRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int rowColHandleType) {
-
+	public AddRowHandle(DefaultLayoutGraphic montageLayoutGraphic, int rowColHandleType, int locType) {
+		locationType=locType;
 		
 		this.layout=montageLayoutGraphic;
 		this.type=rowColHandleType;
-		int offset = -defaultOffSet; if(subtractionOnly) offset=-offset;
-		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
 		
-		double x2 = space.getCenterX()+offset;
-		double y2 = space.getMaxY()+20;
-		if(type==COLS) {
-			offset = -defaultOffSet; if(!subtractionOnly) offset=defaultOffSet;
-			y2 = space.getCenterY()+offset;
-			x2 = space.getMaxX()+20;
-		}
-		this.setCordinateLocation(new Point2D.Double(x2, y2));
+		
+		
+		if(locationType==AT_SIDE)
+			setupHandleLocationAtSide();
+		if(locationType== AT_TOP_OR_LEFT)
+			setupHandleLocationExtremity();
 		
 		super.handlesize=4;
 		
@@ -86,11 +85,52 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		if (subtractionOnly)this.setHandleColor(Color.red);
 		else setHandleColor(Color.green);
 		
-		if(type==COLS) this.setHandleNumber(PanelLayoutGraphic.AddColHandle); else
-		this.setHandleNumber(PanelLayoutGraphic.AddRowHandle);
+		if(type==COLS) this.setHandleNumber(PanelLayoutGraphic.ADD_COL_HANDLE_ID); else
+		this.setHandleNumber(PanelLayoutGraphic.ADD_ROW_HANDLE_ID);
 		
 	
 		
+	}
+
+
+
+
+
+	/**
+	 * @param space
+	 */
+	private void setupHandleLocationExtremity() {
+		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
+		int offset = defaultOffSet;
+		int offset2 = 5;;
+		double x2 = space.getMinX()+layout.getPanelLayout().getPanelWidthOfColumn(1);;
+		double y2 = space.getMaxY()+offset2;
+		if(type==COLS) {
+			
+			y2 = space.getMinY()+layout.getPanelLayout().getPanelHeightOfRow(1);
+			x2 = space.getMaxX()+offset2;
+		}
+		setCordinateLocation(new Point2D.Double(x2, y2));
+	}
+
+
+
+
+
+	/**
+	 * @param space
+	 */
+	public void setupHandleLocationAtSide() {
+		Rectangle2D space = layout.getPanelLayout().getSelectedSpace(1, ALL_OF_THE+PANELS).getBounds();
+		int offset = -defaultOffSet; if(subtractionOnly) offset=-offset;
+		double x2 = space.getCenterX()+offset;
+		double y2 = space.getMaxY()+20;
+		if(type==COLS) {
+			offset = -defaultOffSet; if(!subtractionOnly) offset=defaultOffSet;
+			y2 = space.getCenterY()+offset;
+			x2 = space.getMaxX()+20;
+		}
+		this.setCordinateLocation(new Point2D.Double(x2, y2));
 	}
 
 
@@ -106,7 +146,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		createUndos();
 		
 		if(canvasMouseEventWrapper.clickCount()<2) return;
-		if (this.subtractionOnly) {
+		/**if (this.subtractionOnly) {
 			if(type==COLS&&layout.getPanelLayout().nColumns()>1) 
 				layout.getEditor().addCols(layout.getPanelLayout(), -1);
 			if (type==ROWS&&layout.getPanelLayout().nRows()>1) layout.getEditor().addRows(layout.getPanelLayout(), -1);
@@ -115,7 +155,7 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 		if(type==COLS) layout.getEditor().addCols(layout.getPanelLayout(), 1);
 			else layout.getEditor().addRows(layout.getPanelLayout(), 1);
 		}
-		
+		*/
 		
 	}
 
@@ -152,6 +192,8 @@ public class AddRowHandle extends SmartHandle implements LayoutSpaces{
 			
 			}
 	}
+	
+	
 	
 	@Override
 	public void handleRelease(CanvasMouseEvent lastDragOrRelMouseEvent) {

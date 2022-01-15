@@ -102,8 +102,8 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	protected static final int ROW_HEIGTH_HANDLE=0, PANEL_LOCATION_HANDLE=1, COLUMN_WIDTH_HANDLE=2, ROW_HEIGHT_HANDLE_UNIFORM=3,COLUMN_WIDTH_HANDLE_UNIFORM=4;
 	protected static final int LAYOUT_LOCATION_HANDLE=5*handleIDFactor, RightHandleID = LAYOUT_LOCATION_HANDLE+1,
 					BottomHandleID=LAYOUT_LOCATION_HANDLE+2, LeftHandleID=LAYOUT_LOCATION_HANDLE+3, TopHandleID=LAYOUT_LOCATION_HANDLE+4;
-	public static final int AddRowHandle=LAYOUT_LOCATION_HANDLE+5,
-			AddColHandle=LAYOUT_LOCATION_HANDLE+6, 
+	public static final int ADD_ROW_HANDLE_ID=LAYOUT_LOCATION_HANDLE+5,
+			ADD_COL_HANDLE_ID=LAYOUT_LOCATION_HANDLE+6, 
 			RepackPanelsHandle=LAYOUT_LOCATION_HANDLE+7, SELECT_ALL_HANDLE=LAYOUT_LOCATION_HANDLE+8, SCALE_HANDLE=LAYOUT_LOCATION_HANDLE+9;
 	
 	transient ArrayList<PanelContentExtract> contentstack;

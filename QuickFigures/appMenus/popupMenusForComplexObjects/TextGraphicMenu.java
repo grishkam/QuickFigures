@@ -104,7 +104,7 @@ PopupMenuSupplier  {
 				
 				/**Determines if the original is attached to a layout and attaches a duplicate*/
 				DefaultLayoutGraphic layout = PanelManager.getGridLayout(textG.getParentLayer());
-				if(layout.hasLockedItem(textG)) {
+				if(layout!=null&&layout.hasLockedItem(textG)) {
 					
 					boolean isARowLabel = textG instanceof RowLabelTextGraphic;
 					boolean isAColLabel = textG instanceof ColumnLabelTextGraphic;

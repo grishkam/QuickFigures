@@ -31,6 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
+import figureOrganizer.FigureType;
 import genericMontageUIKitMenuItems.LayoutEditCommandMenu;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -289,6 +290,9 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 			{
 			med.showColumnNumberEditorDialog(getEditor(), thelayout, 1,1);
 			}
+		else if (handlenum==ADD_ROW_HANDLE_ID||handlenum==ADD_COL_HANDLE_ID) {
+			med.showColumnNumberEditorDialog(getEditor(), thelayout, 1,1);
+		}
 		else  med.showGeneralEditorDialog(getEditor(), getPanelLayout());
 		 
 		undo.establishFinalLocations();
@@ -435,8 +439,11 @@ public void resizeLayoutToFitContents() {
 	
 	/**Adds several handles to the list for label addition*/
 	protected void addAdditionalHandles(SmartHandleList box) {
-		box.add(new AddRowHandle(this, LayoutSpaces.ROWS));
-		box.add(new AddRowHandle(this, LayoutSpaces.COLS));
+		addHandlesForRowColAddition(box, AddRowHandle.AT_SIDE);
+		
+		if(this.getFigureType()==FigureType.WESTERN_BLOT) {
+			addHandlesForRowColAddition(box, AddRowHandle.AT_TOP_OR_LEFT);
+		}
 		
 		box.add(new RepackRowColoumnHandle(this));
 		box.add(new ScaleLayoutHandle(this));
@@ -461,6 +468,15 @@ public void resizeLayoutToFitContents() {
 				box.add(new AddLabelHandle(this, LayoutSpaces.ROWS,  i, true));
 			}
 	
+	}
+
+	/**Adds handles to the given handle list for adding new rows and columns
+	 * @param box
+	 * @param atSide 
+	 */
+	public void addHandlesForRowColAddition(SmartHandleList box, int atSide) {
+		box.add(new AddRowHandle(this, LayoutSpaces.ROWS, atSide));
+		box.add(new AddRowHandle(this, LayoutSpaces.COLS, atSide));
 	}
 	
 	/**creates a locked item handle for use in this layout*/

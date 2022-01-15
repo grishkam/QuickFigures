@@ -888,7 +888,7 @@ public class BasicLayout implements LayoutSpaces,GridLayout, Serializable, Panel
 		   
 		   /**transforms the columns into panels of this layout*/
 		   private void convertToColumnLayout() {
-			   /**not sure if this calculated correctlu*/
+			   /**not sure if this calculated correctly*/
 			   double newheight=SumYincrement(nRows())+labelSpaceWidthBottom+labelSpaceWidthTop-bottomBorderOfRow(nRows());//-BorderWidthBottomTop;			  
 			   panelHeight=newheight; 
 			   
