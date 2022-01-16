@@ -123,7 +123,7 @@ public class SmartPopupJMenu extends JPopupMenu {
 		return menuItem;
 	}
 	
-	protected CanvasMouseEvent getMemoryOfMouseEvent() {return mEvent;};
+	public CanvasMouseEvent getMemoryOfMouseEvent() {return mEvent;};
 
 	
 	public void setVisible(boolean b) {

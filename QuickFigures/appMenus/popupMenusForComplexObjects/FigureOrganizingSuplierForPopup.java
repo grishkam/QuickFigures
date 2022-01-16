@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
+import applicationAdapters.CanvasMouseEvent;
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
@@ -73,7 +74,6 @@ import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import objectDialogs.CroppingDialog;
 import objectDialogs.CroppingDialog.CropDialogContext;
-import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup.AddLaneLabelButton;
 import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.AbstractUndoableEdit2;
@@ -149,8 +149,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
 						
-						 BasicSmartMenuItem addLaneLabel=new AddLaneLabelButton( figureOrganizingLayerPane.getMontageLayoutGraphic());
-						 labelMenu.add(addLaneLabel);
+				
 						 
 						/**Adds more options to the label menu based on annotations on the method calls within this class*/
 						new MenuItemExecuter(this).addToJMenu(labelMenu);
@@ -621,33 +620,18 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	}
 	
 	
-	/**
-	 Implements a menu item to add lane labels. Will select which column the labels belong in based on the clickpoint used to bring up this popup menu
-	 */
-public class AddLaneLabelButton extends BasicSmartMenuItem {
-
-	/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-	private DefaultLayoutGraphic thelayout;
-
-	/**
-	 * @param montageLayoutGraphic
-	 */
-	public AddLaneLabelButton(DefaultLayoutGraphic montageLayoutGraphic) {
-		super("Add Lane Labels");
-		this.thelayout=montageLayoutGraphic;
+	
+	/**shows a labeling options dialog
+	 * @return */
+	@MenuItemMethod(menuActionCommand = "Lane Label", menuText = "Add Lane Labels")
+	public CombinedEdit addLaneLabel(CanvasMouseEvent me) {
+		Point point = me.getCoordinatePoint();
+		DefaultLayoutGraphic thelayout = figureOrganizingLayerPane.getMontageLayoutGraphic();
+		int index = thelayout.getPanelLayout().makeAltered(COLS).getPanelIndex(point.getX(), point.getY());
+		return AddLabelHandle.createLaneLabelsFor(me, thelayout, index);
+		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Point point = super.me.getCoordinatePoint();
-		int index = thelayout.getPanelLayout().makeAltered(COLS).getPanelIndex(point.getX(), point.getY());
-		addUndo(
-				AddLabelHandle.createLaneLabelsFor(me, thelayout, index)
-		);
-	}
+	
 
-}
 }

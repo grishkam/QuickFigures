@@ -124,7 +124,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 		
 			
 			
-			adders.add(new LaneLabelAdder()); 
+			//adders.add(new LaneLabelAdder()); 
 			if (new SVGQuickExport().isBatikInstalled())
 				adders.add(new SVG_GraphicAdder2());
 			for(AddingMenuInstaller bonus:  bonusAdders) try {bonus.installOntoMenu(this);} catch (Throwable t) {IssueLog.logT(t);}

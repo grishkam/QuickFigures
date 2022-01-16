@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 17, 2021
+ * Date Modified: Jan 15, 2022
  * Version: 2021.2
  */
 package fLexibleUIKit;
@@ -36,6 +36,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
+import applicationAdapters.CanvasMouseEvent;
 import graphicActionToolbar.CurrentFigureSet;
 import iconGraphicalObjects.CheckBoxIcon;
 import iconGraphicalObjects.ColorIcon;
@@ -43,6 +44,7 @@ import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.MenuSupplier;
 import undo.UndoManagerPlus;
@@ -246,7 +248,18 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 		Method m = mapComms.get(arg0.getActionCommand());
 		try {
 			
-			Object item = m.invoke(sourceObject, new Object[] {});
+			Object[] args = new Object[] {};
+			Class<?>[] types = m.getParameterTypes();
+			if((types.length==1 )&& types[0]==CanvasMouseEvent.class) {
+				CanvasMouseEvent event = getEvent();
+				if(event==null) {
+					ShowMessage.showOptionalMessage("This menu option can only be used if one clicks directly on the worksheet");
+					return;
+				}
+				args= new Object[] {event};
+			}
+			
+			Object item = m.invoke(sourceObject, args);
 			UndoManagerPlus manager1 = getUndoManager();
 			if (manager1!=null &&item instanceof UndoableEdit) {
 				manager1.addEdit((UndoableEdit) item);
@@ -281,5 +294,18 @@ public class MenuItemExecuter implements ActionListener, MenuSupplier {
 			this.undoManager=theSmartMenu.getUndoManager();
 		}
 		return undoManager;
+	}
+	
+	/**returns the undo manager that will be used to  */
+	public CanvasMouseEvent getEvent() {
+		/**the popup had this event*/
+		if (popupMenu!=null) {
+			return popupMenu.getMemoryOfMouseEvent();
+		}
+		/**next determines if this event is in the */
+		if (theSmartMenu!=null) {
+			return theSmartMenu.getMemoryOfMouseEvent();
+		}
+		return null;
 	}
 }

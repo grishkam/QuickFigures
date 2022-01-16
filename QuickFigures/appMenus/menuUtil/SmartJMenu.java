@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 15, 2022
  * Version: 2021.2
  */
 package menuUtil;
@@ -162,4 +162,7 @@ public class SmartJMenu extends JMenu implements SmartMenuItem {
 		}
 	}
 
+	/**returns the record of the mouse event that brought about this
+	 * @return */
+	public CanvasMouseEvent getMemoryOfMouseEvent() {return mouseE;}
 }
