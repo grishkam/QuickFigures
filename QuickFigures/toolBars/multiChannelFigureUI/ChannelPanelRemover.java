@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: October 25, 2021
- * Version: 2021.2
+ * Version: 2022.0
  */
 package multiChannelFigureUI;
 

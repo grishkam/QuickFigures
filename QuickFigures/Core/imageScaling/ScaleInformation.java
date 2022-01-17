@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: April 18, 2021
  * Date Modified: April 18, 2021
- * Version: 2021.2
+ * Version: 2022.0
  */
 package imageScaling;
 
