@@ -1,0 +1,11 @@
+Known issues
+
+-Some users report slow behavior for large z stacks and some CZI files.  
+
+-for users of Linux systems, the tools sometimes disappear from the toolbar (can be fixed by using menu option to make toolbar re-appear).
+
+-Sometimes the crop dialog does not appear to pack correctly and image fails to appear. Calling the same menu item again results in a normal dialog.
+
+-when a worksheet is saved and re-opened, channel colors of ImageJ images will sometimes not be preserved. 
+This does not happen every time and appears to be an issue with ImageJ and not QuickFigures
+
