@@ -55,7 +55,8 @@ public class FigureScaler {
 	/**returns a factor that would bring the figure to slide size*/
 	public double getSlideSizeScale(PanelLayoutGraphic item) {
 		if (item.getBounds().width>500) return 1;
-		double factor=650.00/(item.getBounds().width+item.getBounds().x);
+		
+		double factor=960.00/(item.getBounds().width+item.getBounds().x);
 		
 		double idealPanelPixelDensity = 300.0;
 		double [] factors= new double []{ idealPanelPixelDensity/200, idealPanelPixelDensity/150, idealPanelPixelDensity/100, idealPanelPixelDensity/ImageDPIHandler.getInchDefinition(), idealPanelPixelDensity/50};

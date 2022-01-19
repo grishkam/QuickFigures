@@ -20,6 +20,7 @@
  */
 package exportMenus;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,6 +50,7 @@ import ultilInputOutput.FileChoiceUtil;
 /**A menu item for powerpoint export*/
 public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	
+	Dimension slideSize = new Dimension((int)(13.333333333333333 *72) , (int)(7.5 *72));
 
 	public PPTQuickExport(boolean openNow) {
 		super(openNow);
@@ -82,7 +84,10 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 						
 						
 			        XMLSlideShow ppt = new XMLSlideShow();
+			        
+					ppt.setPageSize(slideSize);
 			        XSLFSlide slide = ppt.createSlide();
+			        
 			        XSLFGroupShape group = slide.createGroup();
 			    
 			     

@@ -67,7 +67,7 @@ public class CanvasAutoResize extends BasicMenuItemForObj {
 			Rectangle2D.Double r=new Rectangle2D.Double(0,0, ImageDPIHandler.getInchDefinition()*8.5, 490);
 			
 			if (mode==SLIDE_SIZE) {
-				r=new Rectangle2D.Double(0,0,ImageDPIHandler.getInchDefinition()*10, ImageDPIHandler.getInchDefinition()*7.5);
+				r=new Rectangle2D.Double(0,0,ImageDPIHandler.getInchDefinition()*13.33333333333333333333333, ImageDPIHandler.getInchDefinition()*7.5);
 				}
 			iw.worksheetResize( (int)r.width, (int)r.height, 0,0);
 		}
