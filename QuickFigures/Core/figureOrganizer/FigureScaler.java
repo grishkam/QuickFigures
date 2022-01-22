@@ -21,6 +21,7 @@
 package figureOrganizer;
 
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import imageScaling.ScaleInformation;
+import layout.BasicObjectListHandler;
 import locatedObject.Scales;
 import messages.ShowMessage;
 import undo.CombinedEdit;
@@ -55,9 +57,13 @@ public class FigureScaler {
 
 	/**returns a factor that would bring the figure to slide size*/
 	public double getSlideSizeScale(PanelLayoutGraphic item, Dimension slideSize) {
+		int w = determineCurrentWidth(item);
 		if (item.getBounds().width>500) return 1;
 		
-		double factor=slideSize.width/(item.getBounds().width+item.getBounds().x);
+		double factor=slideSize.width/w;
+		
+		if(factor<1.25&&factor>0.75)
+			return 1;//if the width is already close no need to do more path.
 		
 		double idealPanelPixelDensity = 300.0;
 		double [] factors= new double []{ idealPanelPixelDensity/200, idealPanelPixelDensity/150, idealPanelPixelDensity/100, idealPanelPixelDensity/ImageDPIHandler.getInchDefinition(), idealPanelPixelDensity/50};
@@ -68,6 +74,19 @@ public class FigureScaler {
 		}
 		
 		return factor;
+	}
+
+	/**returns the width occupied by the layout and its contents
+	 * @param item
+	 * @return
+	 */
+	public int determineCurrentWidth(PanelLayoutGraphic item) {
+		int layoutWidth = item.getBounds().width+item.getBounds().x;
+		Rectangle allObjectWidth=BasicObjectListHandler.boundsOfAllObjects(BasicObjectListHandler.getAs2DObjects(item.getParentLayer().getAllGraphics()));
+		if(allObjectWidth.width>layoutWidth)
+			return allObjectWidth.width;
+		
+		return layoutWidth;
 	}
 	
 	/**scales the figure*/

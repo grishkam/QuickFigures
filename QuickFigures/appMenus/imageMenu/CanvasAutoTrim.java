@@ -49,15 +49,7 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 		BasicObjectListHandler boh = new BasicObjectListHandler();
 		
 		ArrayList<LocatedObject2D> list = iw.getLocatedObjects();
-		Rectangle bound=null;
-		for(LocatedObject2D l:list) {
-			if (l==null) continue;
-			if (bound==null) bound=l.getBounds(); 
-				else  {
-					Rectangle b2 = l.getBounds();
-					bound=bound.createUnion(b2).getBounds();
-				}
-		}
+		Rectangle bound = BasicObjectListHandler.boundsOfAllObjects(list);
 		
 		boh.CanvasResizeObjectsIncluded(iw, bound.width, bound.height, -bound.x, -bound.y);
 		
@@ -65,6 +57,8 @@ public class CanvasAutoTrim extends BasicMenuItemForObj{
 		diw.updateDisplay();
 		diw.updateWindowSize();
 	}
+
+	
 
 	@Override
 	public String getCommand() {

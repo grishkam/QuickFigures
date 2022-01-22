@@ -555,4 +555,21 @@ public class BasicObjectListHandler {
 		
 		return output;
 	}
+	
+	/**returns the united bounds of all the objects
+	 * @param list
+	 * @return
+	 */
+	public static Rectangle boundsOfAllObjects(ArrayList<LocatedObject2D> list) {
+		Rectangle bound=null;
+		for(LocatedObject2D l:list) {
+			if (l==null) continue;
+			if (bound==null) bound=l.getBounds(); 
+				else  {
+					Rectangle b2 = l.getBounds();
+					bound=bound.createUnion(b2).getBounds();
+				}
+		}
+		return bound;
+	}
 }
