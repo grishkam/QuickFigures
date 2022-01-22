@@ -79,6 +79,7 @@ import menuUtil.HasUniquePopupMenu;
 import popupMenusForComplexObjects.AttachedItemMenu;
 import sUnsortedDialogs.LayoutPanelSizeModifyDialog;
 import utilityClasses1.ArraySorter;
+import utilityClasses1.TagConstants;
 
 /**A graphical object that stores a layout, displays the layout, includes handles for editing the layout
  * this abstract superclass is somewhat complex*/
@@ -736,8 +737,8 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		int r = getPanelForObject(o);
 		
 		/**If a permanent index has been assigned, sets that one*/
-		if (o.getTagHashMap().containsKey("Index")) {
-			Object index = o.getTagHashMap().get("Index");
+		if (o.getTagHashMap().containsKey(TagConstants.INDEX)) {
+			Object index = o.getTagHashMap().get(TagConstants.INDEX);
 			if(index instanceof Integer)
 			{
 				getPanelLocations().put(o, ((Integer) index).intValue());
@@ -764,7 +765,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	/**returns the panel index of the object. this is the index used to determine what layout panel an attached item should belong to*/
 	public int getPanelForObject(LocatedObject2D o) {
 		
-		Object tag = o.getTagHashMap().get("Index");
+		Object tag = o.getTagHashMap().get(TagConstants.INDEX);
 		if(tag!=null && tag instanceof Integer) {
 			//if a permanent index is assigned;
 			return ((Integer)tag);

@@ -30,7 +30,9 @@ import applicationAdapters.ImageWorkSheet;
 import channelLabels.ChannelLabelTextGraphic;
 import figureOrganizer.FigureLabelOrganizer.ColumnLabelTextGraphic;
 import figureOrganizer.FigureLabelOrganizer.RowLabelTextGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.BasicObjectListHandler;
 import layout.PanelContentExtract;
 import layout.PanelLayout;
@@ -758,11 +760,13 @@ public class BasicLayoutEditor implements LayoutSpaces {
 				ml.resetPtsPanels();
 		   }
 		   
-		   /**some objects do not enter into the calculations when optimizing panel sizes*/
-		   static Class<?>[] nonConsideredClasses=new Class<?>[] {BarGraphic.class, BarGraphic.BarTextGraphic.class, ChannelLabelTextGraphic.class, ColumnLabelTextGraphic.class, RowLabelTextGraphic.class};
+		   /**some objects do not enter into the calculations when optimizing panel sizes
+		    * TODO: determine if the recent additions of shape and text graphic make sense and dont cause any issues*/
+		   static Class<?>[] nonConsideredClasses=new Class<?>[] {BarGraphic.class, BarGraphic.BarTextGraphic.class, ChannelLabelTextGraphic.class, ColumnLabelTextGraphic.class, RowLabelTextGraphic.class, ShapeGraphic.class, TextGraphic.class};
 		   
 		   
-		   /**makes the column fit objects*/
+		   /**makes the column fit objects
+		    * TODO: determine if any classes other than those already present need to be on the non considered list. */
 		   public void alterPanelWidthsToFitContents(BasicLayout ml) {
 			   
 			   ArrayList<PanelContentExtract> stack= cutStack(ml.makeAltered(LayoutSpaces.COLUMN_OF_PANELS));

@@ -47,6 +47,7 @@ import objectDialogs.TextPatternDialog;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
+import utilityClasses1.TagConstants;
 
 /**Adds text objects to a selected image panel
  * Meant to represent lane labels*/
@@ -212,7 +213,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			
 			ag2.setTextColor(Color.black);
 			
-			ag2.getTagHashMap().put("Index",laneIndex);
+			ag2.getTagHashMap().put(TagConstants.INDEX,laneIndex);
 			
 			added.add(ag2);
 			addedLayer.add(ag2);
@@ -267,7 +268,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				ag2.setAttachmentPosition(attach );
 				Rectangle2D panel = layout.getPanel(i);
 				ag2.setLocation(panel.getCenterX(), panel.getMinY());
-				ag2.getTagHashMap().put("Index",i);
+				ag2.getTagHashMap().put(TagConstants.INDEX,i);
 			
 				undo.addEditToList(new UndoAddItem(addedLayer, ag2));
 			}

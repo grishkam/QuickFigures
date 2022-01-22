@@ -25,6 +25,7 @@ import java.util.HashMap;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
+import utilityClasses1.TagConstants;
 
 /**An undo for changes to the attachment position of an object
  * @see AttachmentPosition
@@ -53,8 +54,8 @@ public class UndoAttachmentPositionChange extends AbstractUndoableEdit2 {
 		iSnap=object.getAttachmentPosition().copy();
 		
 		/**If the index is fixed, stores it*/
-		if (object.getTagHashMap().containsKey("Index"))
-			iIndex=object.getTagHashMap().get("Index");
+		if (object.getTagHashMap().containsKey(TagConstants.INDEX))
+			iIndex=object.getTagHashMap().get(TagConstants.INDEX);
 	}
 	
 	public UndoAttachmentPositionChange(LocatedObject2D object, PanelLayoutGraphic t) { 
@@ -67,8 +68,8 @@ public class UndoAttachmentPositionChange extends AbstractUndoableEdit2 {
 	public void establishFinalState() {
 		fSnap=object.getAttachmentPosition().copy();
 		/**If the index is fixed, stores it*/
-		if (object.getTagHashMap().containsKey("Index"))
-			fIndex=object.getTagHashMap().get("Index");
+		if (object.getTagHashMap().containsKey(TagConstants.INDEX))
+			fIndex=object.getTagHashMap().get(TagConstants.INDEX);
 		
 		if(containingLayout!=null&&iLoc!=null) {
 			fLoc = new HashMap<LocatedObject2D, Integer>();
@@ -84,8 +85,8 @@ public class UndoAttachmentPositionChange extends AbstractUndoableEdit2 {
 		if (object==null) return;
 		if (fSnap==null) object.setAttachmentPosition(null); else
 		fSnap.givePropertiesTo(object.getAttachmentPosition());
-		if (object.getTagHashMap().containsKey("Index"))
-			object.getTagHashMap().put("Index", fIndex);
+		if (object.getTagHashMap().containsKey(TagConstants.INDEX))
+			object.getTagHashMap().put(TagConstants.INDEX, fIndex);
 		
 		if(containingLayout!=null&&fLoc!=null) {
 			containingLayout.getPanelLocations().putAll(fLoc);;
@@ -97,8 +98,8 @@ public class UndoAttachmentPositionChange extends AbstractUndoableEdit2 {
 		if (iSnap==null) object.setAttachmentPosition(null); else
 		iSnap.givePropertiesTo(object.getAttachmentPosition());
 		/**If the index is fixed, makes it possible to change it*/
-		if (object.getTagHashMap().containsKey("Index"))
-			object.getTagHashMap().put("Index", iIndex);
+		if (object.getTagHashMap().containsKey(TagConstants.INDEX))
+			object.getTagHashMap().put(TagConstants.INDEX, iIndex);
 		
 		if(containingLayout!=null&&iLoc!=null) {
 			containingLayout.getPanelLocations().putAll(iLoc);;

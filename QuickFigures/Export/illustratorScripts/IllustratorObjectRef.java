@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.net.URI;
+import java.util.HashMap;
 
 import locatedObject.RectangleEdgePositions;
 import logging.IssueLog;
@@ -36,6 +37,17 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 	boolean addScripts=true;
 	
 	static boolean alertadded=false;//true is alert has been shown. for debugging purposes only
+	
+	/**replacements of certain characters are done to overcome a mac specific bug that appeared. Issue not seen in windows 10 nor on old mac with older verion of illustrator. Only in newer systems but have not nailed down the version*/
+	static  HashMap<String, String> createReplacementMap()  {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("µ", "\\u00B5");//bug fix. micron symbol will appear as this in jsx file in order to ensure that correct character is placed in illustrator. a similar fix may be needed
+		
+		
+		return map;
+		}
+	
+	static HashMap<String, String> macOSReplacements=createReplacementMap() ;
 	
 	ZIllustratorScriptGenerator getGenerator() {
 		return 	ZIllustratorScriptGenerator.instance;
@@ -255,6 +267,20 @@ public class IllustratorObjectRef implements RectangleEdgePositions{
 			
 		String output="var fileRef = new File( '"+path+"'); " +'\n';
 		return output;
+	}
+	
+	/**replaces certain characters in a string so that they will be understoon by 
+	 * @param contents
+	 * @return
+	 */
+	protected static String performReplacements(String contents) {
+		for(String key: macOSReplacements.keySet()) {
+			IssueLog.log("Checking key "+key);
+			IssueLog.log("Index of value is "+contents.indexOf(key));
+			contents=contents.replace(key, macOSReplacements.get(key));
+		}
+		IssueLog.log("replacement done "+contents);
+		return contents;
 	}
 	
 }

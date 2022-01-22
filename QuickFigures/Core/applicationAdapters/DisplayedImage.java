@@ -21,6 +21,7 @@
 package applicationAdapters;
 
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Window;
 
 import graphicalObjects.CordinateConverter;
@@ -80,6 +81,11 @@ public interface DisplayedImage {
 
 	/**returns a handle list for the user to resize the canvas*/
 	public SmartHandleList getCanvasHandles();
+
+	/**
+	 * @return
+	 */
+	public Dimension getPageSize();
 
 
 	

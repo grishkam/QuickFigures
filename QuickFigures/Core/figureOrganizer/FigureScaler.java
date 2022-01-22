@@ -20,6 +20,7 @@
  */
 package figureOrganizer;
 
+import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,10 +54,10 @@ public class FigureScaler {
 	}
 
 	/**returns a factor that would bring the figure to slide size*/
-	public double getSlideSizeScale(PanelLayoutGraphic item) {
+	public double getSlideSizeScale(PanelLayoutGraphic item, Dimension slideSize) {
 		if (item.getBounds().width>500) return 1;
 		
-		double factor=960.00/(item.getBounds().width+item.getBounds().x);
+		double factor=slideSize.width/(item.getBounds().width+item.getBounds().x);
 		
 		double idealPanelPixelDensity = 300.0;
 		double [] factors= new double []{ idealPanelPixelDensity/200, idealPanelPixelDensity/150, idealPanelPixelDensity/100, idealPanelPixelDensity/ImageDPIHandler.getInchDefinition(), idealPanelPixelDensity/50};
@@ -291,4 +292,6 @@ public class FigureScaler {
 			ShowMessage.showOptionalMessage("About Scaling", false, orderedWarnings);
 		
 	}
+
+
 }

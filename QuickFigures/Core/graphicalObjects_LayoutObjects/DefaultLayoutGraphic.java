@@ -68,6 +68,7 @@ import undo.Edit;
 import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoAttachmentPositionChange;
 import utilityClasses1.ArraySorter;
+import utilityClasses1.TagConstants;
 
 /**A layout graphic containing the standard layout for all figures*/
 public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayoutEditListener, Scales {
@@ -647,7 +648,7 @@ public void resizeLayoutToFitContents() {
 				originalSnap.snapRects(r2, nearestPanel); 
 			
 			/**determine whether the object is being dragged out of range of its hone row of column*/
-			boolean outsideOfHomeRow = d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent) &&super.object.getTagHashMap().get("Index")==null;
+			boolean outsideOfHomeRow = d>rLayout.getPanelHeight(1)*0.5 &&!outOfRange(lastDragOrRelMouseEvent) &&super.object.getTagHashMap().get(TagConstants.INDEX)==null;
 			if(outsideOfHomeRow&&!super.isInFineControlMode()&&r2.contains(lastDragOrRelMouseEvent.getCoordinatePoint())) {
 				shifted=true;
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
@@ -689,9 +690,9 @@ public void resizeLayoutToFitContents() {
 				getObject().setLocation(canvasMouseEventWrapper.getCoordinatePoint());
 				getObject().getAttachmentPosition().copyPositionFrom(originalSnap);
 				mapPanelLocation(getObject());
-				if(getObject().getTagHashMap().get("Index")!=null) {
+				if(getObject().getTagHashMap().get(TagConstants.INDEX)!=null) {
 					int indexNew=findNearestPanelIndex(getObject());
-					getObject().getTagHashMap().put("Index", indexNew);
+					getObject().getTagHashMap().put(TagConstants.INDEX, indexNew);
 				}
 				shifted=false;
 			} 
@@ -778,8 +779,8 @@ public void resizeLayoutToFitContents() {
 				}
 				
 				/**If the index is fixed, makes it possible to change it*/
-				if (getObject().getTagHashMap().containsKey("Index"))
-					getObject().getTagHashMap().put("Index", index);
+				if (getObject().getTagHashMap().containsKey(TagConstants.INDEX))
+					getObject().getTagHashMap().put(TagConstants.INDEX, index);
 				
 				snapLockedItem(target1);
 				

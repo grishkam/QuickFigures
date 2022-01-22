@@ -49,6 +49,7 @@ import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoMoveItems;
 import undo.UndoReorder;
 import undo.UndoTagChange;
+import utilityClasses1.TagConstants;
 
 /**
  A handle that can be used to attach text item to other objects 
@@ -386,10 +387,10 @@ public class ItemGlueSmartHandle extends SmartHandle {
 			currentEdit.addEditToList(new UndoMoveItems( getObject()));
 			TakesAttachedItems newAttachmentSite2 = (TakesAttachedItems) newAttachmentSite;
 			
-			if(target.getTag("Index")!=null) {//if there is a layout address on the item
+			if(target.getTag(TagConstants.INDEX)!=null) {//if there is a layout address on the item
 				currentEdit.addEditToList(new  UndoTagChange(target.getTagHashMap()));
 				 int i=findIndexOfAttachmentLocation(newAttachmentSite, target.getAttachmentPosition(), canvasMouseEventWrapper.getCoordinatePoint());
-				 target.getTagHashMap().put("Index", i);
+				 target.getTagHashMap().put(TagConstants.INDEX, i);
 				
 			}
 			UndoAddOrRemoveAttachedItem undo = new UndoAddOrRemoveAttachedItem(newAttachmentSite2, getObject() , false);

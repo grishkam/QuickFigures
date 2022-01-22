@@ -328,6 +328,11 @@ public class ImageWindowAndDisplaySet implements DisplayedImage {
 		return canvasHandleList;
 	}
 
+	@Override
+	public Dimension getPageSize() {
+		return theFigure.getCanvasDims();
+	}
+
 
 	
 }

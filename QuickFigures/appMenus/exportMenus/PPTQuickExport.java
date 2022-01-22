@@ -46,11 +46,12 @@ import locatedObject.PointsToFile;
 import logging.IssueLog;
 import messages.ShowMessage;
 import ultilInputOutput.FileChoiceUtil;
+import utilityClasses1.SizeConstants;
 
 /**A menu item for powerpoint export*/
 public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	
-	Dimension slideSize = new Dimension((int)(13.333333333333333 *72) , (int)(7.5 *72));
+	
 
 	public PPTQuickExport(boolean openNow) {
 		super(openNow);
@@ -84,7 +85,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 						
 						
 			        XMLSlideShow ppt = new XMLSlideShow();
-			        
+			        Dimension slideSize = SizeConstants.SLIDE_SIZE;
 					ppt.setPageSize(slideSize);
 			        XSLFSlide slide = ppt.createSlide();
 			        

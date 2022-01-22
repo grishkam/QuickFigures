@@ -28,6 +28,7 @@ import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.BasicMenuItemForObj;
 import layout.BasicObjectListHandler;
 import undo.CanvasResizeUndo;
+import utilityClasses1.SizeConstants;
 
 /**Performs an automated resize of a worksheet*/
 public class CanvasAutoResize extends BasicMenuItemForObj {
@@ -67,7 +68,7 @@ public class CanvasAutoResize extends BasicMenuItemForObj {
 			Rectangle2D.Double r=new Rectangle2D.Double(0,0, ImageDPIHandler.getInchDefinition()*8.5, 490);
 			
 			if (mode==SLIDE_SIZE) {
-				r=new Rectangle2D.Double(0,0,ImageDPIHandler.getInchDefinition()*13.33333333333333333333333, ImageDPIHandler.getInchDefinition()*7.5);
+				r=new Rectangle2D.Double(0,0, SizeConstants.SLIDE_SIZE.width, SizeConstants.SLIDE_SIZE.height);
 				}
 			iw.worksheetResize( (int)r.width, (int)r.height, 0,0);
 		}

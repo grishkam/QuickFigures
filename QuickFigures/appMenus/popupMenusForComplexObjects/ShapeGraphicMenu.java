@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 18, 2021
+ * Date Modified: Jan 21, 2022
  * Version: 2022.0
  */
 package popupMenusForComplexObjects;
@@ -46,6 +46,7 @@ import messages.ShowMessage;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
+import utilityClasses1.TagConstants;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartJMenu;
 
@@ -218,6 +219,8 @@ PopupMenuSupplier  {
 			nPanelPerObject=1;//if no panels intersect the shape, assumes that each 
 		}
 		
+		targetShape.getTagHashMap().put(TagConstants.GRID_SIZE,nPanelPerObject);
+		
 		double displaceX = location.getX()-panel.getX();
 		double displaceY = location.getY()-panel.getY();
 		
@@ -232,7 +235,7 @@ PopupMenuSupplier  {
 		}
 		
 		
-		SimpleGraphicalObject copy;
+		SimpleGraphicalObject copy=null;
 		for(int i=panelIndex; i<=panelLayout.nPanels(); i+=nPanelPerObject) {
 			if(i==panelIndex)
 				continue;
@@ -249,6 +252,11 @@ PopupMenuSupplier  {
 				mirror1.addReflection(copy, new PanelMirror.LayoutAddress(layout, i, type));
 			}
 		}
+		
+		if(copy!=null) {
+			copy.getTagHashMap().put(TagConstants.GRID_SIZE,nPanelPerObject);
+		}
+		
 		if(mirror1!=null)
 			mirror1.updateAllReflectionLocations();
 		

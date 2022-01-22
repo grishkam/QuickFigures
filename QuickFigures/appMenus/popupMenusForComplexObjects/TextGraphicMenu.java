@@ -45,6 +45,7 @@ import messages.ShowMessage;
 import objectDialogs.TextInsetsDialog;
 import undo.AbstractUndoableEdit2;
 import undo.UndoAddItem;
+import utilityClasses1.TagConstants;
 
 /**A menu for text graphics*/
 public class TextGraphicMenu extends SmartPopupJMenu implements ActionListener,
@@ -116,11 +117,11 @@ PopupMenuSupplier  {
 						if(!layout.getPanelLayout().rowmajor&&isAColLabel ) 
 							increment=layout.getPanelLayout().nRows();
 						int panelIndex = layout.getPanelForObject(textG)+increment;
-						c.getTagHashMap().put("Index", panelIndex);
+						c.getTagHashMap().put(TagConstants.INDEX, panelIndex);
 						layout.addLockedItem(c);
 						layout.snapLockedItem(c);
-						if(textG.getTag("Index")==null) {
-							c.getTagHashMap().put("Index", null);
+						if(textG.getTag(TagConstants.INDEX)==null) {
+							c.getTagHashMap().put(TagConstants.INDEX, null);
 						}
 					
 					c.setAttachmentPosition(textG.getAttachmentPosition());

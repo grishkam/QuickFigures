@@ -153,7 +153,9 @@ public class TextFrame extends IllustratorObjectRef {
 		return output;
 	}
 
+	/**Sets the contents of the text*/
 	public String setContents2(String contents) {
+		contents=performReplacements(contents);
 		String output="";
 		output+=refname+".contents= '"+contents+"';";
 		addScript(output);

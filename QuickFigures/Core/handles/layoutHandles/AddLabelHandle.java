@@ -57,6 +57,7 @@ import ultilInputOutput.FileChoiceUtil;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
+import utilityClasses1.TagConstants;
 
 /**A handle that is used to add a label to a default layout*/
 public class AddLabelHandle extends MoveRowHandle {
@@ -166,9 +167,9 @@ public class AddLabelHandle extends MoveRowHandle {
 				spaceFillerList.remove(currentObject);
 				}
 			
-			if(currentObject.getTagHashMap().get("Index")!=null&&(int)currentObject.getTagHashMap().get("Index")==index)// what to do if the tag on the object says it belongs to this locaiton
+			if(currentObject.getTagHashMap().get(TagConstants.INDEX)!=null&&(int)currentObject.getTagHashMap().get(TagConstants.INDEX)==index)// what to do if the tag on the object says it belongs to this locaiton
 				spaceFillerList.add(currentObject);
-			if(currentObject.getTagHashMap().get("Index")!=null&&(int)currentObject.getTagHashMap().get("Index")!=index)// what to do if the tag on the object says it belongs to another location
+			if(currentObject.getTagHashMap().get(TagConstants.INDEX)!=null&&(int)currentObject.getTagHashMap().get(TagConstants.INDEX)!=index)// what to do if the tag on the object says it belongs to another location
 				spaceFillerList.remove(currentObject);
 			
 		}
@@ -412,8 +413,8 @@ public class AddLabelHandle extends MoveRowHandle {
 					TextGraphic t = (TextGraphic) seniorTextItem;
 					label.setFont(t.getFont());
 					label.setAngle(t.getAngle());
-					if(t.getTagHashMap().get("Index")!=null)//if an existing label has an address, assigns that address to the current label
-						label.getTagHashMap().put("Index", this.index);
+					if(t.getTagHashMap().get(TagConstants.INDEX)!=null)//if an existing label has an address, assigns that address to the current label
+						label.getTagHashMap().put(TagConstants.INDEX, this.index);
 					label.setTextColor(t.getTextColor());
 				}
 		}

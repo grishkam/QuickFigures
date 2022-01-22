@@ -19,12 +19,19 @@
  * Version: 2022.0
  */
 package illustratorScripts;
+
+import java.util.HashMap;
+
+import logging.IssueLog;
+
 /**a java class that generates scripts to create and modify a text frame item object in 
 adobe illustrator*/
 public class TextRange extends IllustratorObjectRef {
 	
 	CharAttributesRef charat=null;
 	PathItemRef path=null;
+	
+	
 	
 	/**when given a referance to an illustrator object with a pathitems collection, creates a script to 
 	 att a new pathitem*/
@@ -55,13 +62,20 @@ public class TextRange extends IllustratorObjectRef {
 	
 
 	
-
+	
+	/**Sets the text conents of the textrange*/
 	public String setContents2(String contents) {
+		contents=performReplacements(contents);
 		String output="";
 		output+=refname+".contents= '"+contents+"';";
 		addScript(output);
 		return output;
 	}
+
+
+
+
+
 
 
 
