@@ -121,7 +121,7 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	**All Channels**. A channels menu. The content of this channels submenu does not depend on which channels are present in the clicked panel. Otherwise it is similar to the other channels menu. [see the section on the channels menu for details](#Channels-Submenu) 
  - **Exclude channel**. Items within this menu can be used to add or remove channel panels from the figure. The same channels will also be removed from the merge image panels. Unlike the 'Recreate Panels' dialog, this menu only affects items with the targeted channel.
  - **Format Figure** submenu. See section on [figure format](#Figure-Format-Dialog) submenus and templates. The submenu that appears in the popup will target only the clicked figure. 
- - **Scale Figure**. Scales all object within the figure. 
+ - **Scale Figure**. Scales all objects within the figure. This submenu contains a few options and might result in a change to the canvas size. The option to scale to the size of a powerpoint slide made the canvas 960*540 in size and scale the figure to a size large enough to fit well within the slide. Afterward, the user may export to PowerPoint and have a useful slide.  
 
 #### This Image Submenu
 **This Image** submenu contains options that apply to the source image for the clicked panel. The menu options are similar to the submenus within Figure Menu and the channels menu except for their scope. The most important options that are within this menu and within its' submenus are summarized here. 
