@@ -37,6 +37,7 @@ import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
@@ -61,6 +62,7 @@ import popupMenusForComplexObjects.PanelMenuForMultiChannel;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.UndoAbleEditForRemoveItem;
+import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
 
 /**A special inset definer object that the user can use to draw insets with the inset tool.
@@ -428,8 +430,9 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		resizeLayoutPanels(LOWER_RIGHT);
 	}
 	
-	/**whan a certain handle is moved, resizes the layout panels*/
-	private void resizeLayoutPanels(int handlenum) {
+	/**whan a certain handle is moved, resizes the layout panels
+	 * @return */
+	private AbstractUndoableEdit resizeLayoutPanels(int handlenum) {
 		if (this.personalLayout!=null) {
 			
 			personalLayout.snapLockedItems();
@@ -451,12 +454,37 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 			}
 			
 			
+			return expandParentLayout();
+			
 		}
+		return null;
 	}
 	
 	
 	
 	
+	/**
+	 expands the boundry of the parent layout to fit the inset layout
+	 As long as the content of the inset layout is in a sublayer of the layer 
+	 for the figure organizing layer of the source image, this will work
+	 * @return 
+	 */
+	private CombinedEdit expandParentLayout() {
+		CombinedEdit undo=new CombinedEdit();
+		FigureOrganizingLayerPane org = FigureOrganizingLayerPane.findFigureOrganizer(sourcePanel);
+		if(org!=null) {
+		
+			DefaultLayoutGraphic montageLayoutGraphic = org.getMontageLayoutGraphic();
+			UndoLayoutEdit ule=new UndoLayoutEdit(montageLayoutGraphic);
+			undo.addEditToList(ule);
+			
+			montageLayoutGraphic.getEditor().fitLabelSpacesToContents(org.getLayout());
+			ule.establishFinalLocations();
+			return undo;
+		}
+		return null;
+	}
+
 	/**returns true if another Insetdefiner shares the personal layout and layer with this one*/
 	public boolean sharesPersonalLayer() {
 		ArrayList<PanelGraphicInsetDefiner> list = getInsetDefinersFromLayer(this.getParentLayer());
