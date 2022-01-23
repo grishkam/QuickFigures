@@ -477,8 +477,9 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 			DefaultLayoutGraphic montageLayoutGraphic = org.getMontageLayoutGraphic();
 			UndoLayoutEdit ule=new UndoLayoutEdit(montageLayoutGraphic);
 			undo.addEditToList(ule);
+			montageLayoutGraphic.getEditor().expandSpacesToInclude(montageLayoutGraphic.getPanelLayout(), personalLayout.getBounds());
 			
-			montageLayoutGraphic.getEditor().fitLabelSpacesToContents(org.getLayout());
+			montageLayoutGraphic.getEditor().trimLabelSpacesToFitContents(montageLayoutGraphic.getPanelLayout());
 			ule.establishFinalLocations();
 			return undo;
 		}

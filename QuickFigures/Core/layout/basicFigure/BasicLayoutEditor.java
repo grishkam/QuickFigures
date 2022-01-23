@@ -197,24 +197,46 @@ public class BasicLayoutEditor implements LayoutSpaces {
 		   return area;
 	   }
 	   
-	   /**Adds or trims label space in the montage*/
+	   /**Adds or trims label space in the montage to match the object inside the area spanned by the layout
+	    * TODO: determine why under some circumstances this leads to rigth/downward movement*/
 	   public void fitLabelSpacesToContents(BasicLayout ml) {
-		    Area area =new Area( ml.getBoundry());
-		    area.add(new Area(ml.allPanelArea()));
+		    Area area2 = findAreaOfLayoutContent(ml);
+		   
+		   setLabelSpacesToIncludeOnly(ml, area2.getBounds());
+	   }
+	   
+	   /**Adds or trims label space in the montage to match the object inside the area spanned by the layout
+	    does not move layout*/
+	   public void fitLabelSpacesToContents2(BasicLayout ml) {
+		    Area area2 = findAreaOfLayoutContent(ml);
+		   //TODO: determine how to do this
+		   // setLabelSpacesWihtoutContentEdit(ml, area2.getBounds());
+		    setLabelSpacesToIncludeOnly(ml, area2.getBounds());
+	   }
+
+
+
+	/**returns the area within this layout
+	 * @param ml
+	 * @return
+	 */
+	public Area findAreaOfLayoutContent(BasicLayout ml) {
+		Area area =new Area( ml.getBoundry());
+		area.add(new Area(ml.allPanelArea()));
 		   
 		  //Rectangle area = getRecomendedContentArea(ml);//retrieves panel areas
 		  ArrayList<LocatedObject2D> rois = new BasicObjectListHandler().getOverlapOverlaypingOrContainedItems(area.getBounds(), ml.getVirtualWorksheet());
 		  Area area2=new Area(new Area(ml.allPanelArea()));
-		 	
+				
 		  for(LocatedObject2D roi:rois) {
-			  expandArea(area2, roi);
-			 
+				  expandArea(area2, roi);
+				 
 		  }
 		  
 		  expandForAttachedItems(area2, ml.findHoldingObject());
-		   
-		   setLabelpacesToIncludeOnly(ml, area2.getBounds());
-	   }
+		  
+				return area2;
+	}
 
 	   /**Enlarges area2 to include the given object*/
 	protected void expandArea(Area area2, LocatedObject2D rObject) {
@@ -258,9 +280,10 @@ public class BasicLayoutEditor implements LayoutSpaces {
 	   }
 	  
 	  /**Adds or subtracts label space to/from the montage to make fit Rectangle r*/
-	  private void setLabelpacesToIncludeOnly(BasicLayout ml, Rectangle r) {
+	  private void setLabelSpacesToIncludeOnly(BasicLayout ml, Rectangle r) {
 		   Rectangle space = ml.getSelectedSpace(1,LayoutSpaces.ALL_MONTAGE_SPACE).getBounds();
-			  /**currently flawd as does not take into account position the the montage*/
+			  /**currently flawed as does not take into account position the the montage
+			   * TODO: */
 		   	this.addLeftLabelSpace(ml, -(r.x-space.x));
 			   this.addTopLabelSpace(ml, -(r.y-space.y));
 			   this.addRightLabelSpace(ml, (r.x+r.width-space.x-space.width));
@@ -268,6 +291,8 @@ public class BasicLayoutEditor implements LayoutSpaces {
 			   ensurePositiveLabelSpace(ml);
 	
 	   }
+	  
+	
 	  
 	  /**If any label spaces are negative, makes them positive. There are relatively few ways a user can set
 	    the spaces to negative values. */

@@ -303,14 +303,26 @@ public class AddLabelHandle extends MoveRowHandle {
 		canvasMouseEventWrapper.addUndo(undo);
 	}
 
-	/**
+	/**Adds lane labels
 	 * @param canvasMouseEventWrapper
-	 * @param layout2
-	 * @param index2
+	 * @param layout2 the layout of the figure
+	 * @param index2 the column that the labels will be added to
 	 * @return
 	 */
 	public static CombinedEdit createLaneLabelsFor(CanvasMouseEvent canvasMouseEventWrapper, DefaultLayoutGraphic layout2,
 			int index2) {
+		DisplayedImage asDisplay = canvasMouseEventWrapper.getAsDisplay();
+		return addLaneLabelsToFigure(layout2, index2, asDisplay);
+	}
+
+	/**Adds lane labels
+	 * @param layout2
+	 * @param index2
+	 * @param asDisplay the column that the labels will be added to
+	 * @return
+	 */
+	public static CombinedEdit addLaneLabelsToFigure(DefaultLayoutGraphic layout2, int index2,
+			DisplayedImage asDisplay) {
 		CombinedEdit undo = new CombinedEdit();
 		LaneLabelAdder laneLabelAdder = new LaneLabelAdder();
 		TextGraphic textItem = laneLabelAdder. createTextItem();
@@ -340,11 +352,12 @@ public class AddLabelHandle extends MoveRowHandle {
 			laneLabelLayout.moveLayoutAndContents(0, -height);
 		}
 		
-		/**expands the figure label pace for new lane labels*/
+		/**expands the figure label space for new lane labels*/
 			undo.addEditToList(performLabelSpaceExpansion( laneLabelLayout, layout2));
 		
+			
 			undo.addEditToList(
-					new CanvasAutoResize(false).performUndoableAction(canvasMouseEventWrapper.getAsDisplay())
+					new CanvasAutoResize(false).performUndoableAction(asDisplay)
 			);
 		return undo;
 	}

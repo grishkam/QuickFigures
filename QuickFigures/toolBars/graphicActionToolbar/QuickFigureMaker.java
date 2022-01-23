@@ -42,6 +42,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import handles.layoutHandles.AddLabelHandle;
 import icons.BlotFigureIcon;
 import icons.GraphicToolIcon;
 import icons.QuickFigureIcon;
@@ -164,7 +165,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
-		if(localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT) {
+		if(isBlotFigure()) {
 			DefaultLayoutGraphic montageLayoutGraphic = added.getMontageLayoutGraphic();
 			montageLayoutGraphic.moveLayoutAndContents(80, 80);//western blot figure should be created with more space for expansion
 			if(montageLayoutGraphic.getPanelLayout().labelSpaceWidthTop<20) {
@@ -187,12 +188,22 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		
 		displayedWorksheet.getTheSet().setTitle(added.getName());
+		if(isBlotFigure())
+			AddLabelHandle.addLaneLabelsToFigure(added.getMontageLayoutGraphic(), 1, displayedWorksheet);
+		
 		new CanvasAutoResize(true).performUndoableAction(displayedWorksheet);//resizes the canvas to fit the figure
 		displayedWorksheet.autoZoom();
 		ImageWindowAndDisplaySet.centreWindow(displayedWorksheet.getWindow());
 		
 		
 		return added;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isBlotFigure() {
+		return localFigureAdder.getFigureType()==FigureType.WESTERN_BLOT;
 	}
 	
 	/**A specialized figure adder that works in the context of
@@ -412,6 +423,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	@Override
 	public String getToolTip() {
+		if(isBlotFigure())
+			return "Quick Blot Figure";
 			return "Quick Multichannel Figure";
 		}
 	
