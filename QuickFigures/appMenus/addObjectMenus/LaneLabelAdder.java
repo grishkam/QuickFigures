@@ -165,6 +165,9 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, hRow, border, border, true);
 		layout.setLeftSpace(border/2);
 		layout.move(b.getX(), b.getY());
+		if(options.nPlusMarks==0) {
+			layout.move(0, hRow-1);
+		}
 		DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
 		roi.hideAttachedItemHandles=true;
 		roi.hidePanelSwapHandles=true;
