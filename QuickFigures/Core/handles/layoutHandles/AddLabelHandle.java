@@ -348,8 +348,15 @@ public class AddLabelHandle extends MoveRowHandle {
 			undo.addEditToList(new UndoLayoutEdit(layout2));
 			double height = laneLabelBounds.getMaxY()-box.getMinY();
 			
+			
+			
 			layout2.moveLayoutAndContents(0, height);//to make sure lane labels are above
 			laneLabelLayout.moveLayoutAndContents(0, -height);
+			
+			if(laneLabelAdder.options.nPlusMarks==0) {
+				laneLabelLayout.moveLayoutAndContents(0, laneLabelLayout.getPanelLayout().panelHeight);
+			}
+			
 		}
 		
 		/**expands the figure label space for new lane labels*/

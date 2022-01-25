@@ -42,6 +42,7 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.TextPatternDialog;
 import storedValueDialog.StoredValueDilaog;
@@ -59,7 +60,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	LaneLabelCreationOptions options=new LaneLabelCreationOptions();
+	public LaneLabelCreationOptions options=new LaneLabelCreationOptions();
 	
 	
 	public LaneLabelAdder() {
@@ -160,20 +161,21 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		int hRow = b.height/5;
 		if(hRow<wCol ||options.nPlusMarks>0) 
 			hRow=wCol;
-		
+		double hShift=0;
+		if(options.nPlusMarks==0) {
+			 hShift=hRow;
+		}
 		
 		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, hRow, border, border, true);
 		layout.setLeftSpace(border/2);
 		layout.move(b.getX(), b.getY());
-		if(options.nPlusMarks==0) {
-			layout.move(0, hRow-1);
-		}
-		DefaultLayoutGraphic roi = new DefaultLayoutGraphic(layout);
-		roi.hideAttachedItemHandles=true;
-		roi.hidePanelSwapHandles=true;
-		roi.hideRowColSwapHandles=true;
 		
-		addedLayer.add(roi);
+		DefaultLayoutGraphic layoutWithLaneLabels = new DefaultLayoutGraphic(layout);
+		layoutWithLaneLabels.hideAttachedItemHandles=true;
+		layoutWithLaneLabels.hidePanelSwapHandles=true;
+		layoutWithLaneLabels.hideRowColSwapHandles=true;
+		
+		addedLayer.add(layoutWithLaneLabels);
 		
 		undo.addEditToList(new UndoAddItem(parentLayer, addedLayer));
 		parentLayer.add(addedLayer);
@@ -220,7 +222,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			
 			added.add(ag2);
 			addedLayer.add(ag2);
-			roi.addLockedItem(ag2);
+			layoutWithLaneLabels.addLockedItem(ag2);
 			output=true;
 			
 			GraphicLayer p = addedLayer;
@@ -232,19 +234,19 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		double height = 10;
 		for(TextGraphic a: added)height=a.getBounds().getHeight();
-		roi.getPanelLayout().labelSpaceWidthTop=height;
-		roi.moveLayoutAndContents(0, -height);
+		layoutWithLaneLabels.getPanelLayout().labelSpaceWidthTop=height;
+		layoutWithLaneLabels.moveLayoutAndContents(0, -height+hShift);
 		
 		
-		roi.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, b));//sets the location to the corner of the specific box. Not sure if this is necesary
+		layoutWithLaneLabels.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, b));//sets the location to the corner of the specific box. Not sure if this is necesary
 		
 		if(options.nPlusMarks>0) {
 			AttachmentPosition attach = AttachmentPosition.detaultPanelMarkLabel();
-			roi.getPanelLayout().setNRows((int) options.nPlusMarks);
-			for(int i=1; i<=roi.getPanelLayout().nPanels(); i++) {
+			layoutWithLaneLabels.getPanelLayout().setNRows((int) options.nPlusMarks);
+			for(int i=1; i<=layoutWithLaneLabels.getPanelLayout().nPanels(); i++) {
 				
 				//determine which row to read from when determining the mark text content. User may input multiple lines of marks
-				int nColumns = roi.getPanelLayout().nColumns();
+				int nColumns = layoutWithLaneLabels.getPanelLayout().nColumns();
 				int markTextRow = (i-1)/nColumns;
 				if(markTextRow>=options.markText.length)
 					markTextRow=options.markText.length-1;
@@ -267,7 +269,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				
 				ag2.setFont(new Font("Courier New", Font.BOLD, 10));
 				addedLayer.add(ag2);
-				roi.addLockedItem(ag2);
+				layoutWithLaneLabels.addLockedItem(ag2);
 				ag2.setAttachmentPosition(attach );
 				Rectangle2D panel = layout.getPanel(i);
 				ag2.setLocation(panel.getCenterX(), panel.getMinY());
@@ -279,7 +281,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		
 		
-		return roi;
+		return layoutWithLaneLabels;
 	}
 
 	/**
