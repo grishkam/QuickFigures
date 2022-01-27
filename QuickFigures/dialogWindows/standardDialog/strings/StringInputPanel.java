@@ -29,6 +29,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
@@ -57,7 +58,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	}
 	
 	public StringInputPanel(String labeln, String[] contents) {
-		this(labeln, contents,  contents.length+1, 15);
+		this(labeln, contents,  contents.length+2, 15);
 	}
 	
 	/**Creates a sring input panel with a text field of given length */
@@ -136,9 +137,19 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 		gc.gridx++;
 		gc.insets=lastInsets;
 		gc.anchor = GridBagConstraints.WEST;
-		jp.add(getTextField(), gc);
+		jp.add(getTextFieldHolder(), gc);
 		
 		
+	}
+	
+	protected Component getTextFieldHolder() {
+		
+		Component textField = getTextField();
+		if(textField instanceof JTextArea) {
+			JScrollPane scrollPane = new JScrollPane(textField);
+			return scrollPane;
+		}
+		return textField;
 	}
 	
 	protected Component getTextField() {

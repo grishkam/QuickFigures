@@ -338,7 +338,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		 graphics.setColor(getPanelColor());
 		this.getGrahpicUtil().drawRectangle(graphics, cords, r, false);
 		if (isFilledPanels()) getGrahpicUtil().fillRectangle(graphics, cords,r);
-					 this.getGrahpicUtil().drawString(graphics, cords, ""+number, new Point2D.Double(r.getX(), r.getY()), new Font("Arial", Font.BOLD, 12+this.getStrokeWidth()/2), Color.green.darker(), 0);
+					 this.getGrahpicUtil().drawString(graphics, cords, ""+number, new Point2D.Double(r.getX(), r.getY()), new Font("Arial", Font.BOLD, 12+this.getStrokeWidth()/2), Color.green.darker(), 0, false);
 	}
 
 	public Color getPanelColor() {

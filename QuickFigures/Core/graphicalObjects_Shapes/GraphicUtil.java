@@ -154,11 +154,13 @@ public  void drawDot(Graphics2D g, CordinateConverter cords, Point2D.Double poin
 		return p2;
 	}
 
-	/**A simple method to draw text*/
-	public void drawString(Graphics2D g, CordinateConverter cords, String text, Point2D p,  Font f, Color c, double angle) {
+	/**A simple method to draw text
+	 * @param dontScaleText */
+	public void drawString(Graphics2D g, CordinateConverter cords, String text, Point2D p,  Font f, Color c, double angle, boolean dontScaleText) {
 		
 		
 		Font font = cords.getScaledFont(f);
+		 if(dontScaleText) font=f;
 		g.setFont(font);
 		g.setColor(c);
 		 double sx = cords.transformX(p.getX());

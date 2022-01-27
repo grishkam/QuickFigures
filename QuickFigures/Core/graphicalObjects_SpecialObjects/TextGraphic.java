@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 24, 2021
+ * Date Modified: Jan 25, 2022
  * Version: 2022.0
  */
 package graphicalObjects_SpecialObjects;
@@ -103,7 +103,7 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	private transient int cursorPosition=Integer.MAX_VALUE-1000;//the cursor position starts at a number greater then the length of the text
 	private int highlightPosition=-1;//highlight position starts at an invalid value that indicates there is not highlight
 	
-	/**A couple of text items that may be drawn behind the text*/
+	/**A couple of items that may be drawn behind the text*/
 	private BasicStrokedItem outlineStroke=null;
 	protected BasicShapeGraphic backGroundShape=null;
 	
@@ -128,6 +128,8 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	String theText="Hello";
 	int justtification=TextParagraph.JUSTIFY_LEFT;
 	
+	/**Set to true if the font should be the same regardless of zoom level*/
+	public transient boolean dontScaleText=false;
 	transient boolean showRectCornerHandes=false;
 
 
@@ -431,6 +433,11 @@ public void drawText(Graphics2D g, CordinateConverter cords) {
     double sx = cords.transformX(x);
     double sy = cords.transformY(y);
     Font font = cords.getScaledFont(getFont());
+    if(this.dontScaleText) 
+    	{
+    	
+    	font=getFont();
+    	}
     g.setFont(font);
     g.drawString(getText(), (int)sx, (int)sy);  
     

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 28, 2021
+ * Date Modified: Jan 25, 2022
  * Version: 2022.0
  */
 package graphicalObjects_SpecialObjects;
@@ -315,7 +315,7 @@ public class ComplexTextGraphic extends TextGraphic {
 		
 			   getGrahpicUtil().drawString(g, cords, 
 					   	t.getText(), 
-					   	d, t.getFont(), getDimmedColor(t.getTextColor()), getAngle());
+					   	d, t.getFont(), getDimmedColor(t.getTextColor()), getAngle(), this.dontScaleText);
 			  
 			      double sx = cords.transformX(d.getX());
 				   double sy = cords.transformY(d.getY());

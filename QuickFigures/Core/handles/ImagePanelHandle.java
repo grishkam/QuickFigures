@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Jan 25, 2022
  * Version: 2022.0
  */
 package handles;
@@ -228,10 +228,14 @@ public class ImagePanelHandle extends SmartHandle {
 	/**creates a message below that panel that gives the user information regarding the image panel*/
 	protected void showPanelInformation(OverlayObjectManager selectionManagger) {
 		TextGraphic mark2 = new TextGraphic(thePanel.getSummary());
+		mark2.dontScaleText=true;
 		mark2.hideHandles(true);
 		mark2.deselect();
 		mark2.setLocationUpperLeft(thePanel.getBounds().getX(), thePanel.getBounds().getMaxY()+2);
-		mark2.setFontSize(thePanel.getBounds().height/5);
+		int fontSize = thePanel.getBounds().height/5;
+		if(fontSize<16)
+			fontSize=16;
+		mark2.setFontSize(fontSize);
 		mark2.setFontStyle(Font.BOLD);
 		mark2.setTextColor(Color.green.darker());
 		selectionManagger.setSelection(mark2, 1);

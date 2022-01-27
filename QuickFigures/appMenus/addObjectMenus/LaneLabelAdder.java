@@ -137,8 +137,8 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 
 	/**creates a series of lane labels with current parameters
 	 * @param ag
-	 * @param output
-	 * @param added
+	 * @param output set to true if the text item is not the first in the series and should not be added
+	 * @param added a list of the text items already added
 	 * @param it
 	 * @param b
 	 * @return
@@ -247,24 +247,41 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				
 				//determine which row to read from when determining the mark text content. User may input multiple lines of marks
 				int nColumns = layoutWithLaneLabels.getPanelLayout().nColumns();
-				int markTextRow = (i-1)/nColumns;
-				if(markTextRow>=options.markText.length)
-					markTextRow=options.markText.length-1;
-				if(markTextRow>options.markText.length||options.markText.length==0)
+				int rowIndex = (i-1)/nColumns;
+				int colIndex = (i-1)%nColumns;
+				
+				if(rowIndex>=options.markText.length)
+					rowIndex=options.markText.length-1;
+				if(rowIndex>options.markText.length||options.markText.length==0)
 					continue;//if the text has been deleted
 				
-				String currentMarkText = options.markText[markTextRow];
-				TextGraphic  ag2 = new TextGraphic("+");
-				if(currentMarkText.length()>0) {
-					int charLocation = ((i-nColumns*markTextRow)-1)%currentMarkText.length();
+				String currentRowText = options.markText[rowIndex];
+				
+				String markString="+";
+				boolean tabdelimited=currentRowText.contains(""+'\t');
+				
+				
+				String[] allMarks = currentRowText.split("");
+				if(tabdelimited)
+					allMarks =currentRowText.split(""+'\t');
+				
+				int numberMarksInPattern = allMarks.length;
+				
+				if(numberMarksInPattern>0) {
+					int markLocation = (colIndex)%numberMarksInPattern;
 					
-					String characterAt = ""+currentMarkText.charAt(charLocation);//text for a single character
+					//String characterAt = ""+currentRowText.charAt(markLocation);//text for a single character
 					
-					if (currentMarkText.contains(LaneLabelCreationOptions.numberCode))
-						ag2.setText(currentMarkText.replace(LaneLabelCreationOptions.numberCode, getTextForLaneNumber(i)));
+					if (currentRowText.contains(LaneLabelCreationOptions.numberCode)&&!tabdelimited)
+						markString=currentRowText.replace(LaneLabelCreationOptions.numberCode, getTextForLaneNumber(i));
 					else
-						ag2.setText(""+characterAt);
+						{
+						markString=""+allMarks[markLocation];
+						}
 				}
+				
+				TextGraphic  ag2 = new TextGraphic(markString);
+				
 				ag2.setTextColor(Color.black);
 				
 				ag2.setFont(new Font("Courier New", Font.BOLD, 10));
