@@ -48,6 +48,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	/**wrapper class for getting a single section and doing operations on it*/
 	public PixelWrapper getPixelWrapperForSlice(int channel, int slice, int frame, int... dim) ;
 	
+	/**returns the stack index that contains the given channel, slice and frame*/
 	public int getStackIndex(int channel, int slice, int frame, int... dim);
 	
 	

@@ -164,7 +164,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		 this.resetMinMax(true);
 		 this.updateOffsets();
 		 this.setUpPlotLabels();
-		 moxAxisLabelOutOfWay();
+		 moveAxisLabelsOutOfWay();
 		
 		 onPlotUpdate();
 		 if (this.getAllDataSeries().size()>1) {createFigureLegends();}

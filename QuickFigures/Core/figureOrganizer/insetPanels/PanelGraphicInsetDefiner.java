@@ -66,7 +66,7 @@ import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
 
 /**A special inset definer object that the user can use to draw insets with the inset tool.
- * This is the region of interest
+ * This object is the region of interest that determines which area is displayed
   */
 public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener{
 

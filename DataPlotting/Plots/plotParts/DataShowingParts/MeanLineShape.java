@@ -25,6 +25,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import dataSeries.Basic1DDataSeries;
 import dataSeries.DataSeries;
@@ -69,23 +70,26 @@ public class MeanLineShape extends AbstractDataLineShape implements DataLineShap
 			/**Combines output shapes for each position in the series*/
 			Path2D outputShape=new Path2D.Double();
 			double[] pos = getTheData().getAllPositionsInOrder();
-			if (pos.length<2) {currentDrawShape=outputShape; return;}
-			/**appends the error bars for all positions with enough points for a bar*/
+			if (pos.length<2) {currentDrawShape=outputShape;return;}
+		
 			
 			int firstPoint=0;
 			for(int i=0; i<pos.length; i++) {
-				DataSeries datai = getTheData().getValuesForPosition(pos[i]);
+				double position = pos[i];
+				DataSeries datai = getTheData().getValuesForPosition(position);
 			
-				if (isDataSeriesInvalid(datai)) continue;
+				if (isDataSeriesInvalid(datai)) {continue;}
 				
-				Point2D point1 = this.getShapeForDataPoint(datai.getIncludedValues());
+				Point2D point1 = this.getShapeForDataPoint(position, datai.getIncludedValues());
 				
 				if (point1==null) { 
 					if (i==firstPoint) firstPoint++; 
+					
 					continue;
 				}
 				if (i==firstPoint) outputShape.moveTo(point1.getX(), point1.getY());
 				else outputShape.lineTo(point1.getX(), point1.getY());
+				
 						}
 			currentDrawShape=outputShape;
 		}
@@ -93,18 +97,21 @@ public class MeanLineShape extends AbstractDataLineShape implements DataLineShap
 	
 	
 	
-	/**creates a shape for the data point d*/
-	Point2D getShapeForDataPoint(Basic1DDataSeries datai) {
+	/**creates a location for the data point d*/
+	private Point2D getShapeForDataPoint(double position, Basic1DDataSeries datai) {
 		if (datai==null||datai.length()==0) return null;
 		if (area==null) return new Point(0,0);
 		double mean = datai.getMean();
 		double offset = datai.getPositionOffset();
-		double position = datai.getPosition(0);
+		
 		
 		
 		double vOff = super.getValueOffset(position);
 		PlotCordinateHandler c = getCordinateHandler();
-		return c.translate(position, mean+vOff, offset, 0);
+		Double translate = c.translate(position, mean+vOff, offset, 0);
+		
+		
+		return translate;
 	}
 
 	public void updatePlotArea() {

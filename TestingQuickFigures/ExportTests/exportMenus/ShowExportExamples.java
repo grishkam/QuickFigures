@@ -39,7 +39,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.FIGURE_WITH_INSETS;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.FIGURE_WITH_LINE_PROFILE;//which cases to test. set to null if all should be tested
 	private static boolean saveAndReopen=false;
 	
 

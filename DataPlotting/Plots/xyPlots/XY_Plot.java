@@ -15,11 +15,12 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 21, 2021
+ * Date Modified: Jan 30, 2022
  * Version: 2022.0
  */
 package xyPlots;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -40,6 +41,7 @@ import plotParts.Core.PlotArea;
 import plotParts.DataShowingParts.DataBarShape;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
 import plotParts.DataShowingParts.ScatterPoints;
+import plotParts.DataShowingParts.SeriesStyle;
 import undo.CombinedEdit;
 
 /**A special layer for a plot with two dimensional data*/
@@ -157,11 +159,22 @@ protected void addManyNew(XYDataSeries... numbers) {
 		if (template!=null) group.addLegandPart(template.getLegandShape(), template.getSeriesLabel());
 		this.add(group);
 			//IssueLog.log("currently have "+this.getAllDataSeries().size());
-			setStylesForNewData(group);
+		setStylesForNewDataXY(group);
 	}
 	
 	onSeriesPositionInLayerChanges();
 	afterNumberOfDataSeriesChanges();
+}
+
+/**Adds a series style to the data series*/
+protected void setStylesForNewDataXY(XYPlotDataSeriesGroup group) {
+	Object color = group.getDataSeries().getTag("Color");
+	if(color instanceof Color) {
+		SeriesStyle s = new SeriesStyle(1, (Color)color, false);
+		s.applyTo(group);
+	}
+	else super.setStylesForNewData(group);
+	
 }
 
 /**Adds one additional data series for the plot*/
@@ -241,6 +254,26 @@ public void linePlot() {
 	fullPlotUpdate();
 }
 
+/**Edits the parts of each data series as to create a line plot, annotation indicates that it should be called by a popup menu*/
+@MenuItemMethod(menuActionCommand = "To Line Only", menuText = "Make Line Only", subMenuName="Change Format", orderRank=6)
+public void lineOnlyPlot() {
+	CombinedEdit undo = new CombinedEdit();
+	for(XYPlotDataSeriesGroup a: getAllDataSeries()) {
+	  if (a.getLine()==null)
+		undo.addEditToList(
+				a.addLine());
+		undo.addEditToList(
+				a.removeBoxplot());
+		undo.addEditToList(
+				a.removeScatter());
+		undo.addEditToList(
+				a.removeDataBar());
+		undo.addEditToList(
+				a.removeErrorBar());
+	}
+	fullPlotUpdate();
+}
+
 /**updates the shapes and axes to replect chanes in the settings for the plot*/
 @Override
 public void fullPlotUpdate() {
@@ -304,7 +337,7 @@ public void replaceDataWithSeriesFromUser() {
 }
 
 /**replaces the old data series with new data*/
-private void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> newAddedData) {
+public void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> newAddedData) {
 	for(int i=0; i<newAddedData.size()||i<olderSeries.size(); i++) {
 		
 		XYDataSeries  novel = null;
@@ -339,5 +372,9 @@ private void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList
 	this.autoCalculateAxisRanges();
 	this.fullPlotUpdate();
 }
+
+
+
+
 
 }

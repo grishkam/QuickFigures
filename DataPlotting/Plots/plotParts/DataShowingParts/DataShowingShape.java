@@ -182,22 +182,30 @@ public abstract class DataShowingShape extends BasicShapeGraphic implements HasU
 		return this.orientation;
 	}
 
-	
+	/**returns the maximum value needed to display the shape*/
 	@Override
 	public double getMaxNeededValue() {
 		
 		double max = 0;
 		
-		for(double p: getTheData().getAllPositions()) {
+		double[] allPositions = getTheData().getAllPositions();
+		for(double p: allPositions) {
 			DataSeries data2=getTheData().getValuesForPosition(p);
-			if (isDataSeriesInvalid(data2)) continue;
+			if (isDataSeriesInvalid(data2)) {continue;}
 			Basic1DDataSeries data = data2.getIncludedValues();
-			double max2 = data.getMean()+data.getSDDev();
+			double mean = data.getMean();
+			double sdDev = data.getSDDev();
+			
+			double max2 = mean;
+			if(sdDev>0)
+				max2+=sdDev;
+			
 			if (max2>max) max=max2;
 		}
 		
+		
 		double vOff = 0;
-		for(double p: getTheData().getAllPositions()) {
+		for(double p: allPositions) {
 			if (getTheData().getValueOffsetMap()==null) continue;
 			Double val = getTheData().getValueOffsetMap().get(p);
 			DataSeries m = getTheData().getValuesForPosition(p);

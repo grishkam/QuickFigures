@@ -39,6 +39,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.ObjectToolset1;
 import includedToolbars.QuickFiguresToolBar;
 import includedToolbars.ToolInstallers;
+import lineprofile.ProfileLineTool;
 import logging.IssueLog;
 import plotCreation.ColumnPlotCreator;
 import plotCreation.ColumnPlotCreator.ColumnPlotStyle;
@@ -118,6 +119,7 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 			t.printStackTrace();
 		}
 		toolset.addToolBit(new ColumnSwapTool());
+		toolset.addToolBit(new ProfileLineTool());
 	}
 	
 

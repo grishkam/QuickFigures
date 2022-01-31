@@ -83,6 +83,13 @@ public class SeriesStyle implements Serializable {
 		setColor(possibleColors[n%possibleColors.length]);
 	}
 	
+	public SeriesStyle(int n, Color c, boolean cBar) {
+		nSides=n+2;
+		nSeries=n;
+		this.colorBarStroke=cBar;
+		setColor(c);
+	}
+	
 	public void applyTo(DataShowingShape shape) {
 		
 		int nVertex = nSides%6;

@@ -50,6 +50,7 @@ public interface PixelWrapper {
 
 	/**returns the forms in which the data for the channel pixels is stored internally*/
 	public Object getPixels();
+	/**returns an array with the numerical values of the pixel data*/
 	public Object getRawData();
 	
 	/**resize. Sets the image to a copy with width and height specified*/

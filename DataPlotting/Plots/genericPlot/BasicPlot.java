@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 28, 2021
+ * Date Modified: Jan 30, 2022
  * Version: 2022.0
  */
 package genericPlot;
@@ -89,6 +89,10 @@ import utilityClasses1.NumberUse;
    */
 public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  GridLayoutEditListener , LayoutSpaces, SeriesLabelPositionAnchor {
 
+	/**
+	the reccomended distances between tic marks on tha axes
+	 */
+	private static final double[] TIC_DISTANCES = new double[] {1 , 5, 10, 20, 25, 30, 40, 50, 75, 100, 200, 250, 500, 1000, 2000, 5000, 10000};
 	/**
 	 * 
 	 */
@@ -410,7 +414,7 @@ public CombinedEdit addXAxiLabel(int offset) {
 }
 
 /**Moves the axis labels such that they don't overlap with column/category labels*/
-public void moxAxisLabelOutOfWay() {
+public void moveAxisLabelsOutOfWay() {
 	ArrayList<PlotLabel> labs = getBarLabels();
 	Rectangle bb = ArrayObjectContainer.combineBounds(labs).getBounds();
 
@@ -474,7 +478,7 @@ protected void setDependantVariableAxisBasedOnMax(double max, boolean ticDistanc
 	yAxis.getAxisData().setMinValue(0);
 	
 	if (ticDistance) {
-		double major = NumberUse.findNearest(max/2, new double[] {1 , 5, 10, 20, 25, 30, 40, 50, 75, 100, 200, 250, 500});
+		double major = NumberUse.findNearest(max/2, TIC_DISTANCES);
 		yAxis.getAxisData().setMajorTic((int) major);
 		yAxis.getAxisData().setMinorTic((int) major/5);
 	}
@@ -484,7 +488,7 @@ protected void setInDependantVariableAxisBasedOnMax(double max, boolean ticDista
 	thisAxis.getAxisData().setMaxValue(max+0.5);
 	
 	if (ticDistance) {
-		double major = NumberUse.findNearest(max/5, new double[] {1 , 5, 10, 20, 25, 30, 40, 50, 75, 100, 200, 250, 500});
+		double major = NumberUse.findNearest(max/5, TIC_DISTANCES);
 		thisAxis.getAxisData().setMajorTic((int) major);
 		thisAxis.getAxisData().setMinorTic((int) major/5);
 	}
@@ -492,7 +496,7 @@ protected void setInDependantVariableAxisBasedOnMax(double max, boolean ticDista
 
 /**Adds a series style to the data series*/
 protected void setStylesForNewData(BasicDataSeriesGroup group) {
-
+	
 	if (availableStyles.size()>0) {
 		SeriesStyle s = availableStyles.get(0);
 		availableStyles.remove(s);
@@ -501,7 +505,7 @@ protected void setStylesForNewData(BasicDataSeriesGroup group) {
 	
 }
 
-
+/**recalculates axes ranges*/
 public void autoCalculateAxisRanges() {
 	resetMinMax(true);
 }
@@ -1267,6 +1271,17 @@ public ArrayList<? extends DataShowingShape> getDataShape(Class<? extends DataSh
 	
 	return new ArrayList<DataShowingShape>();
 	
+}
+
+/**sets the text of the axis labels
+ * @param xLabel
+ * @param yLabel
+ */
+public void setAxesLabels(String xLabelT, String yLabelT) {
+	if(hasXLabel())
+		xLabel.setContent(xLabelT);
+	if(hasYLabel())
+		yLabel.setContent(yLabelT);
 }
 
 }

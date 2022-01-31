@@ -308,7 +308,7 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 
 	
 	/**when given a set of points, translates and rotates them to the position and angle of this arrow*/
-	private Point2D.Double[] transform(Point2D.Double[] out) {
+	protected Point2D.Double[] transform(Point2D.Double[] out) {
 		AffineTransform a=AffineTransform.getTranslateInstance(x, y);
 		
 		Point2D.Double[]  out2=new Point2D.Double[4];

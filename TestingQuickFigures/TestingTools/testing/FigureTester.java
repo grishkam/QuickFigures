@@ -61,6 +61,8 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import imageMenu.ZoomFit;
 import layout.basicFigure.BasicLayout;
+import lineprofile.ProfileLine;
+import lineprofile.ProfileLineTool;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
@@ -71,6 +73,7 @@ import multiChannelFigureUI.InsetTool;
 import popupMenusForComplexObjects.ImagePanelMenu;
 import undo.CombinedEdit;
 import utilityClasses1.ArraySorter;
+import xyPlots.XY_Plot;
 
 /**main method from this class creates a figure from a set of saved images
  * figures appear immediately and use can visually confirm 
@@ -349,16 +352,11 @@ public class FigureTester {
 	public FigureOrganizingLayerPane createFigureFromExample1BImages() {return createFigureFromExample1Images(example1BFigureMaker(), 4);}
 
 	/**returns the versionof example 1 with inset panels*/
-	public FigureOrganizingLayerPane createFigureFromExample1CImages() {
+	public FigureOrganizingLayerPane createFigureFromExample1CImagesWithInsets() {
 		FigureOrganizingLayerPane createFigureFromExample1Images = createFigureFromExample1Images(example1BFigureMaker(), 1);
 		 DisplayedImage image1 = CurrentFigureSet.getCurrentActiveDisplayGroup();
 		PanelListElement panel = createFigureFromExample1Images.getAllPanelLists().getMergePanel();
-		InsetTool tool = new InsetTool();
-		
-		PanelGraphicInsetDefiner inset1 = tool.createInsetOnImagePanel( image1.getImageAsWorksheet(), panel.getImageDisplayObject(), new Rectangle(20,25, 12,10));
-	
-		PanelGraphicInsetDefiner inset2 = tool.createInsetOnImagePanel(image1.getImageAsWorksheet(),panel.getImageDisplayObject(), new Rectangle(42,47, 15,10));
-		inset2.setAngle(-Math.PI/12);inset2.updateImagePanels();
+		PanelGraphicInsetDefiner inset1 = buildInsets(image1, panel);
 		
 		new CanvasAutoResize(true).performUndoableAction(image1);
 		panel.getImageDisplayObject().getScaleBar().getAttachmentPosition().setLocationTypeInternal(RectangleEdges.LOWER_LEFT);
@@ -372,7 +370,49 @@ public class FigureTester {
 		}
 		return createFigureFromExample1Images;
 		}
+	
+	/**returns the versionof example 1 with inset panels*/
+	public FigureOrganizingLayerPane createFigureFromExample1CImagesWithLineProfile() {
+		FigureOrganizingLayerPane createFigureFromExample1Images = createFigureFromExample1Images(example1BFigureMaker(), 1);
+		 DisplayedImage image1 = CurrentFigureSet.getCurrentActiveDisplayGroup();
+		PanelListElement panel = createFigureFromExample1Images.getAllPanelLists().getMergePanel();
+		XY_Plot inset1 = buildLineProfile(image1, panel);
+		
+		new CanvasAutoResize(true).performUndoableAction(image1);
+		panel.getImageDisplayObject().getScaleBar().getAttachmentPosition().setLocationTypeInternal(RectangleEdges.LOWER_LEFT);
+		
+		AttachmentPosition a=null;
+		
+		return createFigureFromExample1Images;
+		}
 
+	/**
+	 * @param image1
+	 * @param panel
+	 * @return
+	 */
+	public PanelGraphicInsetDefiner buildInsets(DisplayedImage image1, PanelListElement panel) {
+		InsetTool tool = new InsetTool();
+		
+		PanelGraphicInsetDefiner inset1 = tool.createInsetOnImagePanel( image1.getImageAsWorksheet(), panel.getImageDisplayObject(), new Rectangle(20,25, 12,10));
+	
+		PanelGraphicInsetDefiner inset2 = tool.createInsetOnImagePanel(image1.getImageAsWorksheet(),panel.getImageDisplayObject(), new Rectangle(42,47, 15,10));
+		inset2.setAngle(-Math.PI/12);inset2.updateImagePanels();
+		return inset1;
+	}
+
+
+	/**creates a profile line
+	 * @param image1
+	 * @param panel
+	 * @return
+	 */
+	public XY_Plot buildLineProfile(DisplayedImage image1, PanelListElement panel) {
+		ProfileLineTool tool = new ProfileLineTool();
+		ProfileLine line = tool.createProfileLine(panel.getImageDisplayObject(), new Point(5,5), new Point(20, 30));
+		;
+		return line.createLineProfile();
+	}
 	
 	/**
 	creates a figure maker that generated split channel figures
@@ -458,7 +498,7 @@ public class FigureTester {
 		 figureTester. createFigureFromExample1BImages();
 		 CurrentFigureSet .updateActiveDisplayGroup();
 		 
-		 figureTester. createFigureFromExample1CImages();
+		 figureTester. createFigureFromExample1CImagesWithInsets();
 		 CurrentFigureSet .updateActiveDisplayGroup();
 		 
 		 figureTester. createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
@@ -565,7 +605,7 @@ public class FigureTester {
 	public static TestProvider[] getTests() {
 		ignoreTemplate=true;
 		return new TestProvider[] {new FigureProvider(TestExample._FIGURE), new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
-				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL), new FigureProvider(TestExample.MANY_SCALE_IMAGEPANEL), new FigureProvider(TestExample.SCALE_BAR_STYLES_)};
+				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL), new FigureProvider(TestExample.MANY_SCALE_IMAGEPANEL), new FigureProvider(TestExample.SCALE_BAR_STYLES_), new FigureProvider(TestExample.FIGURE_WITH_LINE_PROFILE)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -597,7 +637,9 @@ public class FigureTester {
 			if (form==TestExample.MERGE_PANEL_FIGURE)
 				new FigureTester(). createFigureFromExample1BImages();
 			if (form==TestExample.FIGURE_WITH_INSETS)
-				new FigureTester(). createFigureFromExample1CImages();
+				new FigureTester(). createFigureFromExample1CImagesWithInsets();
+			if (form==TestExample.FIGURE_WITH_LINE_PROFILE)
+				new FigureTester(). createFigureFromExample1CImagesWithLineProfile();
 			if (form==TestExample.MANY_SPLIT_CHANNEL)
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL);
 			if (form==TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE)

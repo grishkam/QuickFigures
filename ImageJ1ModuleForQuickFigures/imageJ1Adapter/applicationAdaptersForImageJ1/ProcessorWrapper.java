@@ -59,11 +59,12 @@ public class ProcessorWrapper implements PixelWrapper {
 	}
 
 
-
+	/**returns the object that contains the pixel data*/
 	public ImageProcessor getPixels() {
 		return object;
 	}
 	
+	/**returns the numerical values of the pixels*/
 	public float[][] getRawData() {
 		float[][] floatArray = getPixels().getFloatArray();
 		return floatArray;

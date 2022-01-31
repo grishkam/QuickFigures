@@ -40,10 +40,27 @@ public class XYDataSeries extends AbstractDataSeries{
 		this.numbers=number;
 	}
 	
+	
+	
 	public XYDataSeries(String name2, ArrayList<BasicDataPoint> nums) {
 		this(nums);
 		this.setName(name2);
 	}
+
+	/**When given only the y values, creats an XYdata series in which in index of each 
+	 * y value is the x value
+	 * @param label
+	 * @param inputYValues
+	 */
+	public XYDataSeries(String label, float[] inputYValues) {
+		this.setName(label);
+		numbers=new ArrayList<BasicDataPoint> ();
+		for(int i=0; i<inputYValues.length; i++) {
+			numbers.add(new BasicDataPoint(i, inputYValues[i]));
+		}
+	}
+
+
 
 	public String toString() {
 		String s="";
@@ -148,6 +165,10 @@ public class XYDataSeries extends AbstractDataSeries{
 public ArrayList<BasicDataPoint> getDataPointList() {
 	return numbers;
 }
+
+
+
+	
 
 
 

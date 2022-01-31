@@ -65,7 +65,7 @@ public class ColumnPlot extends BasicPlot implements PlotArea, HasUniquePopupMen
 		 
 		 xAxis.setShowText(false);
 		 xAxis.setIntergerTics(true);
-		 moxAxisLabelOutOfWay();
+		 moveAxisLabelsOutOfWay();
 		 onPlotUpdate();
 			
 	}

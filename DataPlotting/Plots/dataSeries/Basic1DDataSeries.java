@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 29, 2022
  * Version: 2022.0
  */
 package dataSeries;
@@ -47,6 +47,12 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 		this.setName(name2);
 		data=new double[n.size()];
 		for(int i=0; i<n.size(); i++) data[i]=n.get(i);
+	}
+	
+	public Basic1DDataSeries(String name2, float[] n) {
+		this.setName(name2);
+		data=new double[n.length];
+		for(int i=0; i<n.length; i++) data[i]=n[i];
 	}
 
 	/**returns the data*/

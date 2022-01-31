@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 30, 2022
  * Version: 2022.0
  */
 package dataSeries;
@@ -36,6 +36,7 @@ public abstract class AbstractDataSeries implements DataSeries {
 	protected double positionOffset=0;
 	ArrayList<Double> allUniquePositions=null;
 	protected HashMap<Double, DataSeries> dividedSeries=new HashMap<Double, DataSeries> ();
+	private HashMap<String, Object> map;
 	
 
 	@Override
@@ -183,7 +184,7 @@ public abstract class AbstractDataSeries implements DataSeries {
 	}
 	@Override
 	public HashMap<Double, Double> getValueOffsetMap() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
@@ -200,5 +201,24 @@ public abstract class AbstractDataSeries implements DataSeries {
 	/**returns the arraylist that represents this data internally, any changes 
 	  here, change this data series*/
 public abstract  ArrayList<? extends DataPoint> getDataPointList() ;
+
+
+/**
+ * @param key
+ * @param value
+ */
+public void setTag(String key, Object value) {
+	if(map==null)
+		map=new HashMap<String, Object>();
+	map.put(key, value);
+	
+}
+
+/**returns a tag with the given key*/
+public Object getTag(String Key) {
+	if(map==null)
+		return null;
+	return map.get(Key);
+}
 
 }

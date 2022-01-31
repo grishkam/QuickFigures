@@ -43,7 +43,8 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		if (type==xyPlotForm.ScatterForm) return "Scatter Plot ";
 		if (type==xyPlotForm.DefaultForm) return "Default Plot ";
 		if (type==xyPlotForm.LineForm) return "Line Plot ";
-		return "Bar plot";
+		if (type==xyPlotForm.LineOnlyForm) return "Line Only Plot ";
+		return "XY plot";
 	}
 	
 	public UndoAddItem createPlot(String name, ArrayList<XYDataSeries> items, DisplayedImage diw) {
@@ -55,6 +56,7 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 		if (type==xyPlotForm.DefaultForm)  plot.defaultPlot();
 		if (type==xyPlotForm.ScatterForm)  plot.scatterPlot();
 		if (type==xyPlotForm.LineForm)  plot.linePlot();;
+		if (type==xyPlotForm.LineOnlyForm)  plot.lineOnlyPlot();;
 		
 		return PlotCreator.addPlotToWorksheet(diw, plot);
 	}
@@ -62,7 +64,8 @@ public class XYPlotCreator implements PlotCreator<XYDataSeries> {
 	public static enum xyPlotForm {
 		DefaultForm,
 		ScatterForm,
-		LineForm
+		LineForm,
+		LineOnlyForm
 	}
 
 	@Override
