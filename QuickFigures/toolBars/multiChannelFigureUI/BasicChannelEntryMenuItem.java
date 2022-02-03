@@ -22,12 +22,15 @@ package multiChannelFigureUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
 
 import channelMerging.ChannelEntry;
 import iconGraphicalObjects.ColorIcon;
 import menuUtil.BasicSmartMenuItem;
+import undo.AbstractUndoableEdit2;
 
 /**
 A menu item that has a color, text and appearance determined by a channel entry
@@ -51,8 +54,21 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 		this.entry=ce;
 		this.setText(entry.getLabelForMenuItem());
 		updateFont();
-	}
+		this.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AbstractUndoableEdit2 undo = onPressAction();
+				if(undo!=null)
+					getUndoManager().addEdit(
+							undo	
+						);
+			}
 
+		});
+		
+	}
+	
 
 	/**
 	 changes the font depecting on the state of the channel
@@ -103,5 +119,10 @@ public abstract class BasicChannelEntryMenuItem extends BasicSmartMenuItem{
 		
 		updateFont();
 	}
+	protected  AbstractUndoableEdit2 onPressAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}	
+	
 
 }

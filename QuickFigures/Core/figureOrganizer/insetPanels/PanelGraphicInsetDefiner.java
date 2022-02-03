@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 24, 2021
+ * Date Modified: Feb 1, 2022
  * Version: 2022.0
  */
 package figureOrganizer.insetPanels;
@@ -68,7 +68,7 @@ import utilityClasses1.ArraySorter;
 /**A special inset definer object that the user can use to draw insets with the inset tool.
  * This object is the region of interest that determines which area is displayed
   */
-public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener{
+public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener, DependentSubFigure {
 
 
 	
@@ -754,6 +754,27 @@ static Color  folderColor2= new Color(0,140, 0);
 	/**returns true if the inset should avoid creating a scaled version*/
 	public boolean isDoNotScale() {
 		return doNotScale;
+	}
+
+	/**Updates the panels with the given real channel name
+	 * @param name
+	 */
+	@Override
+	public void updateChannel(String name) {
+		if(name==null) {
+			getPanelManager().updatePanels();
+			
+		} else
+		getPanelManager().updatePanelsWithChannel(name);
+	}
+
+	/**returns true if the panel is part of the figure
+	 * @param image 
+	 * @return
+	 */
+	@Override
+	public boolean producesObject(Object image) {
+		return getPanelManager().getPanelList().getPanelGraphics().contains(image);
 	}
 	
 

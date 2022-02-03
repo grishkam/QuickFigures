@@ -810,8 +810,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 		setUpPlotLabels();
 		this.updateOffsets();
 		this.expandPlotToFitMeanBar();
-		this.autoCalculateAxisRanges();
-		this.fullPlotUpdate();
+		updateAxisRange();
 	}
 	
 	

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 21, 2022
+ * Date Modified: Jan 31, 2022
  * Version: 2022.0
  */
 package popupMenusForComplexObjects;
@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import fLexibleUIKit.MenuItemExecuter;
+import fLexibleUIKit.MenuItemMethod;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.PanelManager;
 import graphicalObjects.ZoomableGraphic;
@@ -48,7 +50,6 @@ import undo.CombinedEdit;
 import undo.Edit;
 import utilityClasses1.TagConstants;
 import menuUtil.PopupMenuSupplier;
-import menuUtil.SmartJMenu;
 
 /**A menu for shapes*/
 public class ShapeGraphicMenu extends SmartPopupJMenu implements 
@@ -61,17 +62,20 @@ PopupMenuSupplier  {
 	static final String SHOW_OPTIONS_DIALOG="Options";
 	
 	ShapeGraphic targetShape;
-	public ShapeGraphicMenu(ShapeGraphic textG) {
+	public ShapeGraphicMenu(ShapeGraphic theShape) {
 		super();
-		this.targetShape = textG;
+		this.targetShape = theShape;
 		this.addAllMenuItems(createMenuItems());
+		new MenuItemExecuter(this).addToJPopupMenu(this);
+		new MenuItemExecuter(theShape).addToJPopupMenu(this);
+		
 	}
 
 	/**Creates the menu items for this menu*/
 	ArrayList<JMenuItem> createMenuItems() {
 		ArrayList<JMenuItem> j=new ArrayList<JMenuItem>();
 		
-		SmartJMenu duplicateMenu = new SmartJMenu("Duplicate");
+		
 		
 		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
 			public AbstractUndoableEdit2  performAction() {
@@ -79,60 +83,8 @@ PopupMenuSupplier  {
 				return null;
 			}}.createJMenuItem("Options"));
 			
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performDuplication();
-			}}.createJMenuItem("Normal Duplicate"));
-		
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performPointDuplicate();
-						
-				
-			}}.createJMenuItem("Duplicate Points"));
-		
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.SpaceType.PANEL, false);
-			}
-
-			}.createJMenuItem("To panels"));
-		
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.SpaceType.COLUMN, false);
-			}
-
-			}.createJMenuItem("To columns"));
-		
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.SpaceType.ROW, false);
-			}
-
-			}.createJMenuItem("To rows"));
-		
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.SpaceType.COLUMN, true);
-			}
-
-			}.createJMenuItem("To columns and mirror"));
-		
-		duplicateMenu.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public AbstractUndoableEdit2  performAction() {
-				return performLayoutDuplicate(LayoutSpaces.SpaceType.ROW, true);
-			}
-
-			}.createJMenuItem("To rows and mirror"));
-		
-		j.add(duplicateMenu);
 	
-		
-		j.add( new ObjectAction<ShapeGraphic>(targetShape) {
-			public CombinedEdit  performAction() {
-				return performReplaceWithPoints();
-			}}.createJMenuItem("Replace With Points"));
+	
 		
 		try {
 			j.add(DonatesMenu.MenuFinder.addDonatedMenusTo(null, targetShape));
@@ -155,7 +107,8 @@ PopupMenuSupplier  {
 	/**Adds a duplicate to the layer
 	 * @return
 	 */
-	public AbstractUndoableEdit2 performDuplication() {
+	@MenuItemMethod(menuActionCommand = "duplicate", menuText = "Normal Duplicate", subMenuName="Duplicate", orderRank=2)
+	public AbstractUndoableEdit2 performNormalDuplication() {
 		LocatedObject2D copy = targetShape.copy();
 		copy.moveLocation(5, 25);
 		return Edit.addItem(targetShape.getParentLayer(), (ZoomableGraphic) copy);
@@ -164,6 +117,7 @@ PopupMenuSupplier  {
 	/**makes a path copy of the object and deletes the original
 	 * @return
 	 */
+	@MenuItemMethod(menuActionCommand = "point replace", menuText = "Replace With Points",  orderRank=8)
 	public CombinedEdit performReplaceWithPoints() {
 		ZoomableGraphic copy = (ZoomableGraphic)targetShape.createPathCopy();
 		GraphicLayer layer = targetShape.getParentLayer();
@@ -178,12 +132,30 @@ PopupMenuSupplier  {
 	/**creates a single duplicate
 	 * @return
 	 */
+	@MenuItemMethod(menuActionCommand = "point duplicate", menuText = "Duplicate Points", subMenuName="Duplicate", orderRank=2)
 	public AbstractUndoableEdit2 performPointDuplicate() {
 		LocatedObject2D copy = targetShape.createPathCopy();
 		copy.moveLocation(5, 25);
 		return Edit.addItem(targetShape.getParentLayer(),(ZoomableGraphic) copy);
 	}
 
+	/**creates series of duplicates
+	 * @return
+	 */
+	@MenuItemMethod(menuActionCommand = "l duplicate",menuText = "to ENUMs", subMenuName="Duplicate", orderRank=4)
+	public AbstractUndoableEdit2 performLayoutDuplicate( LayoutSpaces.SpaceType type) {
+		return performLayoutDuplicate( type, false);
+	}
+	
+	/**creates series of duplicates
+	 * @return
+	 */
+	@MenuItemMethod(menuActionCommand = "l duplicate",menuText = "to ENUMs and mirror", subMenuName="Duplicate", orderRank=5)
+	public AbstractUndoableEdit2 performLayoutDuplicateAndMirrow( LayoutSpaces.SpaceType type) {
+		return performLayoutDuplicate( type, true);
+	}
+	
+	
 	/**Creates duplicates of this item in every panel
 	 * @param mirrow set to true if a panel mirrow should be created
 	 * */

@@ -199,6 +199,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(laneIndex);
 			ag2.setLocation(panel.getCenterX(), panel.getMinY());
 			
+			
 			/**Sets the text of the label*/
 			String[] labelList = options.textOfLabel;
 			String text_for_label = LaneLabelCreationOptions.defaultLabelText;

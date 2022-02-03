@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 30, 2022
+ * Date Modified: Feb 2, 2022
  * Version: 2022.0
  */
 package xyPlots;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import javax.swing.undo.AbstractUndoableEdit;
 
 import dataSeries.BasicDataPoint;
+import dataSeries.MultipleDataHolder;
 import dataSeries.XYDataSeries;
 import dataTableDialogs.SeriesInoutForGroupPlots;
 import dataTableDialogs.SmartDataInputDialog;
@@ -45,7 +46,7 @@ import plotParts.DataShowingParts.SeriesStyle;
 import undo.CombinedEdit;
 
 /**A special layer for a plot with two dimensional data*/
-public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener {
+public class XY_Plot extends BasicPlot implements PlotArea, HasUniquePopupMenu, LayoutSpaces, GridLayoutEditListener, MultipleDataHolder<XYDataSeries> {
 
 
 
@@ -284,6 +285,7 @@ public void fullPlotUpdate() {
 
 
 /**returns all the data series in the plot*/
+@Override
 public ArrayList<XYPlotDataSeriesGroup> getAllDataSeries() {
 	return allData;
 }
@@ -326,7 +328,8 @@ public void replaceDataWithSeriesFromUser() {
 	ArrayList<XYPlotDataSeriesGroup> olderSeries = this.getAllDataSeries();
 	
 	ArrayList<XYDataSeries> cols = new ArrayList<XYDataSeries>();
-	for(XYPlotDataSeriesGroup o: olderSeries) {cols.add(o.getDataSeries());}
+	for(XYPlotDataSeriesGroup o: olderSeries) 
+		{cols.add(o.getDataSeries());}
 	SmartDataInputDialog d2 = SmartDataInputDialog.createXYDataDialogFrom(cols);
 	d2.setModal(true);d2.setWindowCentered(true);
 	d2.showDialog();
@@ -337,7 +340,53 @@ public void replaceDataWithSeriesFromUser() {
 }
 
 /**replaces the old data series with new data*/
-public void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> newAddedData) {
+private void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> newAddedData) {
+	
+
+	
+	for(int i=0; i<newAddedData.size()||i<olderSeries.size(); i++) {
+		
+		XYDataSeries  novel = null;
+		if (i<newAddedData.size()) novel=newAddedData.get(i);
+		
+		/**if Replacement need be done*/
+		XYPlotDataSeriesGroup oldDataSeriesGroup = olderSeries.get(i);
+		XYDataSeries old = oldDataSeriesGroup.getDataSeries();
+		if (i<newAddedData.size()&&i<olderSeries.size()) {
+			
+			
+			boolean sameName = (old.getName().equals(novel.getName()));
+			old.replaceData(novel);
+			old.setName(novel.getName());
+			if (!sameName) {
+				oldDataSeriesGroup.getSeriesLabel().getParagraph().get(0).get(0).setText(novel.getName());
+			}
+			
+			
+		}
+		
+		if (i<newAddedData.size()&&!(i<olderSeries.size())) {
+			addNew(novel);
+		}
+		
+		if (!(i<newAddedData.size())&&(i<olderSeries.size())) {
+			this.remove(oldDataSeriesGroup);
+		}
+		
+		
+		
+	}
+	
+	updateAxisRange();
+}
+
+
+
+/**replaces the old data series with new data*/
+public void replaceDataOld(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<XYDataSeries> newAddedData) {
+	
+
+	
 	for(int i=0; i<newAddedData.size()||i<olderSeries.size(); i++) {
 		
 		XYDataSeries  novel = null;
@@ -369,11 +418,25 @@ public void replaceData(ArrayList<XYPlotDataSeriesGroup> olderSeries, ArrayList<
 		
 	}
 	
-	this.autoCalculateAxisRanges();
-	this.fullPlotUpdate();
+	updateAxisRange();
 }
 
+@Override
+public void addDataSeries(XYDataSeries novel) {
+	this.addNew(novel);
+	
+}
 
+@Override
+public void removeDataSeries(XYDataSeries dataSeries) {
+	for(XYPlotDataSeriesGroup data: this.getAllDataSeries()) {
+		if(dataSeries==data.getDataSeries()) {
+			this.remove(data);
+			return;
+		}
+	}
+	
+}
 
 
 

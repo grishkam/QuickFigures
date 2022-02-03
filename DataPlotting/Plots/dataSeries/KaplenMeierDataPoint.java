@@ -66,7 +66,6 @@ public class KaplenMeierDataPoint implements Serializable, DataPoint {
 
 	@Override
 	public String getValueString() {
-		// TODO Auto-generated method stub
 		return this.getValue()+"";
 	}
 

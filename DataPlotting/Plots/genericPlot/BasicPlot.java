@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 30, 2022
+ * Date Modified: Feb 2, 2022
  * Version: 2022.0
  */
 package genericPlot;
@@ -1282,6 +1282,15 @@ public void setAxesLabels(String xLabelT, String yLabelT) {
 		xLabel.setContent(xLabelT);
 	if(hasYLabel())
 		yLabel.setContent(yLabelT);
+}
+
+
+/**
+ changes the axes range and updates the plot
+ */
+public void updateAxisRange() {
+	this.autoCalculateAxisRanges();
+	this.fullPlotUpdate();
 }
 
 }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
+import dataSeries.DataHolder;
 import dataSeries.XYDataSeries;
 import dataTableDialogs.SeriesInoutForGroupPlots;
 import fLexibleUIKit.MenuItemMethod;
@@ -41,7 +42,7 @@ import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 
 /**A specialized layer that contains and organizes objects for displaying an X-Y plot*/
-public class XYPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUniquePopupMenu, PlotComponent{
+public class XYPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUniquePopupMenu, PlotComponent, DataHolder<XYDataSeries>{
 
 	
 	
@@ -80,10 +81,17 @@ public class XYPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 
 		XYDataSeries datanew = SeriesInoutForGroupPlots.getUserPointDataData(getDataSeries());
 
-		data.replaceData(datanew);
+		replaceData(datanew);
 		plotArea.autoCalculateAxisRanges();
 		this.plotArea.fullPlotUpdate();
 		
+	}
+
+	/**
+	 * @param datanew
+	 */
+	public void replaceData(XYDataSeries datanew) {
+		data.replaceData(datanew);
 	}
 	/**
 	 * 
@@ -122,7 +130,7 @@ public class XYPlotDataSeriesGroup extends BasicDataSeriesGroup implements HasUn
 		}
 	}
 
-	
+	@Override
 	public XYDataSeries getDataSeries() {return data;}
 	
 	@MenuItemMethod(menuActionCommand = "New Regression Line", menuText = "New Regression Line", subMenuName="Add", orderRank=50)

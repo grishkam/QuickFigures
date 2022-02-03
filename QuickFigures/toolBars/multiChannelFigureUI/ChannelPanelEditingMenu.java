@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 10, 2021
+ * Date Modified: Feb 1, 2022
  * Version: 2022.0
  */
 package multiChannelFigureUI;
@@ -50,6 +50,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManagementGroup;
 import figureOrganizer.PanelManager;
+import figureOrganizer.insetPanels.DependentSubFigure;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.ZoomableGraphic;
@@ -69,6 +70,7 @@ import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
+import undo.AbstractUndoableEdit2;
 import undo.ChannelDisplayUndo;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
@@ -315,6 +317,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 							}
 	}
 
+	/**Changes the channels colors to match their respectie channel names*/
 	protected CombinedEdit recolorBasedOnRealChannelNames() {
 		ArrayList<MultiChannelImage> all = this.getAllMultiChannelImages();
 		CombinedEdit undo = ChannelDisplayUndo.createMany(all, this, ChannelDisplayUndo.COLOR_TYPE);
@@ -326,7 +329,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		return undo;
 	}
 
-	/***/
+	/**changes color modes between greyscale and colorized*/
 	public CombinedEdit changeColorModes() {
 		if(this.isDisplayMissing(true))
 			return null;
@@ -618,25 +621,21 @@ return lm;
 
 /**called to update the inset panels*/
 private void updateInsetPanels(ImageDisplayLayer pd, String name) {
-	ArrayList<PanelGraphicInsetDefiner> insets = getAllInsets(pd);
-	for(PanelGraphicInsetDefiner ins: insets) {
-		if(name==null) {
-			ins.getPanelManager().updatePanels();
-			
-		} else
-		ins.getPanelManager().updatePanelsWithChannel(name);
+	ArrayList<DependentSubFigure> insets = getAllInsets(pd);
+	for(DependentSubFigure ins: insets) {
+		ins.updateChannel(name);
 	}
 }
 
 /**returns all of the inset definers in the given layer  */
-static ArrayList<PanelGraphicInsetDefiner> getAllInsets(ImageDisplayLayer pd) {
-	ArrayList<PanelGraphicInsetDefiner> out =new ArrayList<PanelGraphicInsetDefiner>();
+static ArrayList<DependentSubFigure> getAllInsets(ImageDisplayLayer pd) {
+	ArrayList<DependentSubFigure> out =new ArrayList<DependentSubFigure>();
 	if (pd instanceof GraphicLayer) {
 		 GraphicLayer gl=(GraphicLayer) pd;
 		 ArrayList<ZoomableGraphic> items = gl.getAllGraphics();
 		 for(ZoomableGraphic i : items) {
-			 if (i instanceof PanelGraphicInsetDefiner) {
-				 PanelGraphicInsetDefiner i2=(PanelGraphicInsetDefiner) i;
+			 if (i instanceof DependentSubFigure) {
+				 DependentSubFigure i2=(DependentSubFigure) i;
 				out.add(i2);
 			 } 
 		 }
@@ -649,10 +648,10 @@ static ArrayList<PanelGraphicInsetDefiner> getAllInsets(ImageDisplayLayer pd) {
 
 /**looks for an inset definer in the image display layer that uses the given image panel to display the inset images
  * returns null if none found */
-public static PanelGraphicInsetDefiner findInsetWith(ImageDisplayLayer pd, ImagePanelGraphic image) {
-	ArrayList<PanelGraphicInsetDefiner> insets = getAllInsets(pd);
-	for(PanelGraphicInsetDefiner in: insets) {
-		if(in.getPanelManager().getPanelList().getPanelGraphics().contains(image)) return in;
+public static DependentSubFigure findInsetWith(ImageDisplayLayer pd, ImagePanelGraphic image) {
+	ArrayList<DependentSubFigure> insets = getAllInsets(pd);
+	for(DependentSubFigure in: insets) {
+		if(in.producesObject(image)) return in;
 		
 	}
 	return null;
@@ -975,15 +974,6 @@ protected PanelManager getPressPanelManagerForUser() {
 					super.setSelected(!strike);
 					updateFont();
 					
-					this.addActionListener(new ActionListener() {
-				
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							pressAction();
-						}				
-					});
-					
-							
 							
 				}
 				
@@ -996,18 +986,19 @@ protected PanelManager getPressPanelManagerForUser() {
 				
 				
 				/**
+				 * @return 
 				 * 
 				 */
-				public void pressAction() {
+				@Override
+				public AbstractUndoableEdit2 onPressAction() {
 					
 					int chaneIndex = entry.getOriginalChannelIndex();
 					boolean i = instructions.getNoMergeChannels().contains(chaneIndex);
 					CombinedEdit undo = setChannelExcludedFromMerge(chaneIndex, !i);
-					this.getUndoManager().addEdit(
-						undo	
-					);
-					
 					updateFont();
+					return undo;
+					
+					
 				}
 
 
@@ -1041,20 +1032,20 @@ protected PanelManager getPressPanelManagerForUser() {
 				
 				
 				/**
+				 * @return 
 				 * 
 				 */
-				public void pressAction() {
+				@Override
+				public AbstractUndoableEdit2 onPressAction() {
 					int chaneIndex = entry.getOriginalChannelIndex();
 					PanelManager panelManager =getPressPanelManagerForUser();
 					
 					boolean i = panelManager.getPanelList().getChannelUseInstructions().getExcludedChannelPanels().contains(chaneIndex);
 					CombinedEdit undo = setChannelExcludedFromFigure(chaneIndex, !i, excludeFromMergeAlso, true);
-					
-					this.getUndoManager().addEdit(
-						undo	
-					);
-					
 					updateFont();
+					return undo;
+					
+					
 				}
 
 
@@ -1146,8 +1137,10 @@ protected PanelManager getPressPanelManagerForUser() {
 				
 				/**
 				 Changes the channels present
+				 * @return 
 				 */
-				public void pressAction() {
+				@Override
+				public CombinedEdit onPressAction() {
 					
 					ChannelUseInstructions i = getPressPanelManagerForUser().getPanelList().getChannelUseInstructions();
 					
@@ -1170,13 +1163,11 @@ protected PanelManager getPressPanelManagerForUser() {
 							
 						}
 					updateFont();
-					this.getUndoManager().addEdit(
-							undo	
-						);
+					
 					
 					if(newState>0)
 						ShowMessage.showOptionalMessage("Merge With Each", true, "Each channel panel will now be merged with channel "+newState, "You can select the menu item again to remove the extra channel");
-					
+					return undo;
 				}
 
 				/**returns the font style that is used for this menu item*/

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 21, 2021
+ * Date Modified: Feb 2, 2022
  * Version: 2022.0
  */
 package columnPlots;
@@ -183,8 +183,7 @@ private void replaceData(ArrayList<ColumnPlotDataSeriesGroup> olderSeries, Array
 		
 	}
 	
-	this.autoCalculateAxisRanges();
-	this.fullPlotUpdate();
+	updateAxisRange();
 }
 
 /**shows a dialog for the user to input new data*/

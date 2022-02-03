@@ -3,7 +3,7 @@
 	<classpathentry excluding="plotData/DataSeriesScatter2.java|xyPlots/FigureLegendRect.java" kind="src" path="src"/>
 	<classpathentry excluding="xyPlots/FigureLegendRect.java|menuItemInstallation/NewPlot.java" kind="src" path="Plots"/>
 	<classpathentry excluding="dataTableDialogs/DataInputDialog.java" kind="src" path="UserInterface"/>
-	<classpathentry kind="src" path="LineProfileTool"/>
+	<classpathentry excluding="lineprofile/ProfileLineMenu.java" kind="src" path="LineProfileTool"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="module" value="true"/>

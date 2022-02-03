@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 21, 2021
+ * Date Modified: Feb 2, 2022
  * Version: 2022.0
  */
 package kaplanMeierPlots;
@@ -299,8 +299,7 @@ private void replaceData(ArrayList<KaplanDataSeriesGroup> olderSeries, ArrayList
 		
 	}
 	
-	this.autoCalculateAxisRanges();
-	this.fullPlotUpdate();
+	updateAxisRange();
 }
 
 /**Overrides superclass methods*/

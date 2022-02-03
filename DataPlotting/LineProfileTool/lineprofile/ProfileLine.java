@@ -16,14 +16,13 @@
 /**
  * Author: Greg Mazo
  * Date Created: Jan 29, 2022
- * Date Modified: Jan 30, 2022
+ * Date Modified:  Feb 1, 2022
  * Version: 2022.0
  */
 package lineprofile;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -38,10 +37,14 @@ import javax.swing.undo.AbstractUndoableEdit;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import dataSeries.DataReplacer;
 import dataSeries.XYDataSeries;
+import fLexibleUIKit.MenuItemMethod;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.insetPanels.DependentSubFigure;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
@@ -56,24 +59,24 @@ import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
-import menuUtil.PopupMenuSupplier;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
+import undo.Edit;
 import undo.UndoLayoutEdit;
 import xyPlots.XY_Plot;
 
-/**A special line definer object that the user can use to draw lines for line profiles
+/**work in progress.
+ * A special object that the user can use to generate line profiles
  * This object is the region of interest that determines which area is displayed
   */
-public class ProfileLine extends RectangularGraphic implements LocationChangeListener{
+public class ProfileLine extends RectangularGraphic implements LocationChangeListener, DependentSubFigure{
 
 
 	
 	/**The source panel for the inset definer*/
 	private ImagePanelGraphic sourcePanel;
-	ArrayList<Integer> channelChoices=new ArrayList<Integer>(); {channelChoices.add(1);}
 	
-	
+	boolean asLine=false;
 
 
 	
@@ -83,8 +86,13 @@ public class ProfileLine extends RectangularGraphic implements LocationChangeLis
 
 	private XY_Plot plotLayout;
 	
+	
+	/**set to 1 if line profile should be percentage of max value*/
+	private ProfileValueType usepercent= ProfileValueType.PERCENT_OF_MAX_IN_IMAGE;
+	private ArrayList<ChannelEntry> chaneEntries=new ArrayList<ChannelEntry>();
+	
 	public ProfileLine(ImagePanelGraphic p) {
-		this.setClosedShape(false);
+		if(asLine)this.setClosedShape(false);
 		this.setFilled(false);
 		this.setFillColor(new Color(255,255,255));
 		this.setFillColor(null);
@@ -136,13 +144,24 @@ public class ProfileLine extends RectangularGraphic implements LocationChangeLis
 		MultichannelDisplayLayer sourceDisplay = this.getSourceDisplay();
 		if(sourceDisplay==null)
 			return null;
-		MultiChannelImage unprocessed = sourceDisplay.getSlot().getUnprocessedVersion(false);
+		MultiChannelImage unprocessed = getOriginal();
 		 MultiChannelImage cropped = unprocessed .cropAtAngle(generateLineProfilePreprocess(getSourcePreprocess()));
 		
 		 getSourceDisplay().getSlot().matchOrderAndLuts(cropped);//there was an issue reported on oct 20 2021 with slow performance for this. really the channel order and luts should be same
 		 
 		 return cropped;
 	
+	}
+
+
+
+
+	/**
+	 * @param sourceDisplay
+	 * @return
+	 */
+	public MultiChannelImage getOriginal() {
+		return getSourceDisplay().getSlot().getUnprocessedVersion(false);
 	}
 
 	/**returns the proprocess information from the source image
@@ -210,23 +229,7 @@ public class ProfileLine extends RectangularGraphic implements LocationChangeLis
 	}
 	
 	
-	
 
-	
-
-	
-	/**retrns the popup menu that is used for this inset definers*/
-	public PopupMenuSupplier getMenuSupplier(){
-		ProfileLineMenu ii = new  ProfileLineMenu(this);
-		
-		
-		return ii;
-	}
-	
-
-
-
-	
 	
 	
 	/**
@@ -331,12 +334,7 @@ static Color  folderColor2= new Color(0,140, 0);
 
 
 
-	public AbstractUndoableEdit removeLineAndPlot() {
-		
-		getParentLayer().remove(this);
-		
-		return null;
-	}
+	
 	
 	/**checks if the setup function has run already, it not, runs that function*/
 	protected void ensureSetup() {
@@ -359,7 +357,8 @@ static Color  folderColor2= new Color(0,140, 0);
 	}
 
 	/**When given the preprocess modifications done on the original image, 
-	 * returns what preprocess would need to be used by the inset to create panels*/
+	 * returns what preprocess would need to be used to create a cropped version
+	 * with the axis matching the axis of this shape*/
 	public PreProcessInformation generateLineProfilePreprocess(PreProcessInformation p) {
 		AffineTransform inv = getSourcePanel().getAfflineTransformToCord();
 		Rectangle2D b = inv.createTransformedShape(this.getProfileBounds()).getBounds2D();
@@ -372,7 +371,7 @@ static Color  folderColor2= new Color(0,140, 0);
 		double dh=b.getHeight()/p.getScale();
 		
 		Rectangle2D.Double outputRect = new Rectangle2D.Double(nx, ny, dw, dh);
-		double angleOutput = getLineAngle();
+		double angleOutput = getAngle();
 		if (p.getRectangle()!=null) try
 			{
 			
@@ -397,13 +396,7 @@ static Color  folderColor2= new Color(0,140, 0);
 		
 	}
 
-	/**returns the angle
-	 * @return
-	 */
-	private double getLineAngle() {
-		
-		return this.getAngle();
-	}
+
 
 
 
@@ -413,36 +406,30 @@ static Color  folderColor2= new Color(0,140, 0);
 	 */
 	private Shape getProfileBounds() {
 		return this.getRectangle();
-		/**
-		double width= super.getLineEndLocation().distance(super.getLineStartLocation());
-		double  height =this.getStrokeWidth();
-		Rectangle2D.Double double1 = new Rectangle2D.Double(0,0, width, height);
-		
-		RectangleEdges.setLocation(double1, RectangleEdges.CENTER, this.getCenterOfRotation().getX(), getCenterOfRotation().getY());
-		return double1;*/
 	}
 
 
 
 
-	/**returns the scale information that will be used to scale the image that will be displayed as an inset
-	 * may return a scale of 1
+	/**returns the scale information that will be used to scale the image that will be used
+	 * to calculate the line profile
+	 * will return a scale of 1
 	 * @param p
 	 * @return
 	 */
 	protected ScaleInformation createInsetScaleInformation(PreProcessInformation p) {
 		double scaleFactor =1;
 		Interpolation inter=Interpolation.BILINEAR;
-		
 		return new ScaleInformation(scaleFactor,  inter);
 	}
 	
 	/**creates an xyplot*/
+	@MenuItemMethod(menuActionCommand = "Create new plot", subMenuName="Profile Line", menuText = "Create new plot",  orderRank=8)
 	public XY_Plot createLineProfile() {
 		MultiChannelImage image = generatePreProcessedVersion();
 		if(image==null)
 			return null;
-		ArrayList<XYDataSeries> profiles = LineProfileBuilder.createProfiles(image, channelChoices);
+		ArrayList<XYDataSeries> profiles = LineProfileBuilder.createProfiles(image, getChannelChoices(),  usepercent, getOriginal() );
 		XY_Plot plot = new XY_Plot("Line profiles", profiles);
 		plot.lineOnlyPlot();
 		plot.setAxesLabels("Distance", "Intensity");
@@ -455,30 +442,55 @@ static Color  folderColor2= new Color(0,140, 0);
 		return plot;
 	}
 	
+	/**updates the plot area with the line profiles*/
+	@MenuItemMethod(menuActionCommand = "Update plot", menuText = "Update Plot", subMenuName="Profile Line", orderRank=15)
 	public void updatePlot() {
 		if(plotLayout==null)
 			return;
 		MultiChannelImage image = generatePreProcessedVersion();
 		if(image==null)
 			return;
-		ArrayList<XYDataSeries> profiles = LineProfileBuilder.createProfiles(image, channelChoices);
+		ArrayList<XYDataSeries> profiles = LineProfileBuilder.createProfiles(image, getChannelChoices(),  usepercent, getOriginal() );
 		if(plotLayout!=null) {
-			plotLayout.replaceData(plotLayout.getAllDataSeries(), profiles);
+			new DataReplacer<XYDataSeries>().replaceAllData(plotLayout, profiles);
+			plotLayout.updateAxisRange();
 			plotLayout.moveAxisLabelsOutOfWay();
 			}
 	}
+	
+	/**removes the line profile*/
+	@MenuItemMethod( menuText = "Remove profile line and plot", subMenuName="Profile Line",  orderRank=12)
+	public AbstractUndoableEdit removeLineAndPlot() {
+		CombinedEdit c=new CombinedEdit();
+		GraphicLayer parentLayer = getParentLayer();
+		c.addEdit(Edit.removeItem(parentLayer, this));
+		c.addEdit(Edit.removeItem(parentLayer, this.plotLayout));
+		return c;
+	}
 
+	/**changes the value type*/
+	@MenuItemMethod(menuText = "", subMenuName="Profile Line<Change Profile Type", iconMethod="getProfileValueType", orderRank=9)
+	public AbstractUndoableEdit setProfileValueType(ProfileValueType v) {
+		this.usepercent=v;
+		this.updatePlot();
+		return null;
+	}
+	
+	@MenuItemMethod(menuText = "Plot channels", subMenuName="Profile Line",  orderRank=10)
+	public  ProfileLineChannelMenu getChannelChoiceMenu() {
+		return new  ProfileLineChannelMenu(this);
+	}
+	
+	public ProfileValueType getProfileValueType() {
+		return this.usepercent;
+	}
 
-
-
-	/**
+	/**Sets which channels are to be used
 	 * @param channelEntries
 	 */
 	public void setChannelChoices(ArrayList<ChannelEntry> channelEntries) {
-		channelChoices=new ArrayList<Integer>(); 
-		for(ChannelEntry entry: channelEntries) {
-			channelChoices.add(entry.getOriginalChannelIndex());
-		}
+		this.chaneEntries=channelEntries;
+		
 		
 	}
 	
@@ -488,6 +500,8 @@ static Color  folderColor2= new Color(0,140, 0);
 	/**implements a formula to create a rectangle that is missing one side*/
 	@Override
 	public Shape getShape() {
+		if(!asLine)
+			return super.getShape();
 		Path2D.Double path=new Path2D.Double();
 		Rectangle2D r = this.getRectangle();
 		
@@ -523,6 +537,8 @@ static Color  folderColor2= new Color(0,140, 0);
 	}
 	
 	public boolean isDrawClosePoint() {
+		if(!asLine)
+			return true;
 		return false;
 	}
 
@@ -549,6 +565,68 @@ static Color  folderColor2= new Color(0,140, 0);
 	@Override
 	public Shape getOutline() {
 		return new RectangularGraphic(this).getRotationTransformShape();
+	}
+
+
+
+	/**updates the plot*/
+	@Override
+	public void updateChannel(String name) {
+		this.updatePlot();
+		
+	}
+
+
+	@Override
+	public boolean producesObject(Object image) {
+		return false;
+	}
+
+
+
+
+	public ArrayList<Integer> getChannelChoices() {
+		ArrayList<Integer> channelChoices = new ArrayList<Integer>(); 
+		for(ChannelEntry entry:chaneEntries) {
+			channelChoices.add(entry.getOriginalChannelIndex());
+		}
+		if(channelChoices.size()==0)
+			channelChoices.add(1);
+		return channelChoices;
+	}
+
+
+
+
+	/**
+	 * @param entry
+	 */
+	public void addChannelToPlot(ChannelEntry entry) {
+		for(ChannelEntry c: this.chaneEntries) {
+			if(c.getOriginalChannelIndex()==entry.getOriginalChannelIndex()) {
+				
+				return;
+				
+			}
+		}
+		chaneEntries.add(entry);
+	}
+
+
+
+
+	/**
+	 * @param originalChannelIndex
+	 */
+	public void removeChannelFromPlot(int originalChannelIndex) {
+		for(ChannelEntry c: this.chaneEntries) {
+			if(c.getOriginalChannelIndex()==originalChannelIndex) {
+				chaneEntries.remove(c);
+				return;
+				
+			}
+		}
+		
 	}
 
 }

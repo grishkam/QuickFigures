@@ -315,10 +315,10 @@ public class AddLabelHandle extends MoveRowHandle {
 		return addLaneLabelsToFigure(layout2, index2, asDisplay);
 	}
 
-	/**Adds lane labels
+	/**Adds lane labels to one column of the layout
 	 * @param layout2
-	 * @param index2
-	 * @param asDisplay the column that the labels will be added to
+	 * @param index2 the column index
+	 * @param asDisplay the worksheet containing group
 	 * @return
 	 */
 	public static CombinedEdit addLaneLabelsToFigure(DefaultLayoutGraphic layout2, int index2,

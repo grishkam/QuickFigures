@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Jan 31, 2022
  * Version: 2022.0
  */
 package fLexibleUIKit;
@@ -34,6 +34,7 @@ import java.lang.annotation.Target;
   Eliminates the need for writing an action listener each time.
   Might not be efficient but all this introspection make my code
   easier to write.
+  @see MenuItemExecuter for details on how these are parsed
   */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -42,8 +43,9 @@ public @interface MenuItemMethod {
 	
 	/**The text of the Menu items*/
 	public String menuText();
+	
 	/**Action command*/
-	public String menuActionCommand();
+	public String menuActionCommand() default "";
 	
 	
 	public boolean inherit() default false;
