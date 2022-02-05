@@ -71,6 +71,7 @@ public class MenuItemExecuter implements  MenuSupplier {
 	
 	private UndoManagerPlus undoManager;
 
+	/**set to true if methods should be applied to all selected items with that method call*/
 	private boolean propagate=true;
 
 
@@ -280,29 +281,20 @@ public class MenuItemExecuter implements  MenuSupplier {
 		
 		String suffix="";
 		
-		Annotation[][] parameternotes = m.getParameterAnnotations();
+		
 		
 		/**if the method takes an enum argument, then this will create a series of versions with each possible enum*/
 		if(m.getParameterCount()==1&&m.getParameterTypes()[0].isEnum()) {
 			
-			Object[] eConstants=m.getParameterTypes()[0].getEnumConstants();
-			JMenuItem[] output=new JMenuItem[eConstants.length] ;
-			int i=0;
-			for(Object constant: eConstants) {
-				String menuText = anns.menuText()+" "+enumNameToText(constant);
-				if(anns.menuText().contains("ENUM"))
-					menuText=anns.menuText().replace("ENUM", enumNameToText(constant));
-				
-				BasicSmartMenuItem mi = new BasicSmartMenuItem(menuText);
-				mi.addActionListener(new MenuItemListener(m, new Object[] {constant}, mi));
-				setupIcon(anns, mi,constant);
-				output[i]=mi;
-				i++;
-			}
-			return output;
+			return createEnumVersions(anns, m);
 		}
 		else 
-		
+			if(m.getParameterCount()==1&&m.getParameterTypes()[0]==Boolean.class) {
+				
+				
+				return createTwoBooleanVersions(anns, m);
+			}
+			else
 		{
 			BasicSmartMenuItem mi = new BasicSmartMenuItem(anns.menuText()+suffix);
 			mi.addActionListener(new MenuItemListener(m, new Object[] {}, mi));
@@ -313,6 +305,93 @@ public class MenuItemExecuter implements  MenuSupplier {
 		
 		
 		
+	}
+
+
+
+
+	/**
+	 * @param anns
+	 * @param m
+	 * @return
+	 */
+	private JMenuItem[] createEnumVersions(MenuItemMethod anns, Method m) {
+		Object[] eConstants=m.getParameterTypes()[0].getEnumConstants();
+		JMenuItem[] output=new JMenuItem[eConstants.length] ;
+		int i=0;
+		for(Object constant: eConstants) {
+			String menuText = anns.menuText()+" "+enumNameToText(constant);
+			if(anns.menuText().contains("ENUM"))
+				menuText=anns.menuText().replace("ENUM", enumNameToText(constant));
+			
+			BasicSmartMenuItem mi = new BasicSmartMenuItem(menuText);
+			Object[] parameterArgs = new Object[] {constant};
+			mi.addActionListener(new MenuItemListener(m, parameterArgs, mi));
+			setupIcon(anns, mi,constant);
+			output[i]=mi;
+			i++;
+		}
+		return output;
+	}
+
+
+
+
+	/**Creates two menu items, one for an argument of true and another for an argument of false
+	 * If the parameter has an annotation attached that informs which method to call regarding the current status, 
+	 * will only return one menu item (that which changes the status between true and false).
+	 * @param anns
+	 * @param m
+	 * @return
+	 */
+	private JMenuItem[] createTwoBooleanVersions(MenuItemMethod anns, Method m) {
+		JMenuItem[] output=new JMenuItem[2] ;
+		int i=0;
+		for(boolean constant:  new boolean[] {true, false}) {
+			String menuText = anns.menuText();
+			if(menuText.contains(":")) {
+				String[] text = menuText.split(":");
+				if(constant==Boolean.TRUE)
+						{menuText=text[0];}
+				else {menuText=text[1];}
+			}
+			
+			BasicSmartMenuItem mi = new BasicSmartMenuItem(menuText);
+			Object[] parameterArgs = new Object[] {constant};
+			mi.addActionListener(new MenuItemListener(m, parameterArgs, mi));
+			
+			output[i]=mi;
+			i++;
+		}
+		Annotation[][] parameternotes = m.getParameterAnnotations();
+		for(Annotation[] a: parameternotes) {
+			for(Annotation b: a) {
+				if (b instanceof MenuChoiceAnnotation) {
+					MenuChoiceAnnotation menuB=(MenuChoiceAnnotation) b;
+					if(!menuB.findCurrent().equals("")) {
+						Method pMethod;
+						try {
+							pMethod = sourceObject.getClass().getMethod(menuB.findCurrent());
+							if (pMethod!=null) {
+								{
+									Object currentStatus = pMethod.invoke(sourceObject);
+									
+									if(currentStatus==Boolean.FALSE)
+										{return new JMenuItem[] {output[0]};}
+									else {return new JMenuItem[] {output[1]};}
+									}
+								}
+							
+						} catch (Exception e) {
+							IssueLog.logT(e);
+						}
+						
+					}
+				}
+			}
+		}
+		
+		return output;
 	}
 
 
@@ -412,11 +491,15 @@ public class MenuItemExecuter implements  MenuSupplier {
 				
 				/**fills in with the arguments */
 				for(int count=0; count<args.length; count++) {
-					if(arguments[count].getClass()==types[count]) {
+					Class<? extends Object> argumentClass = arguments[count].getClass();
+					Class<?> requiredArgumentClass = types[count];
+					if(argumentClass==requiredArgumentClass) {
 						args[count]=arguments[count];
 						
+					} else if (requiredArgumentClass.isPrimitive()) {
+						//argumentClass.get
 					}
-					else IssueLog.log("failed at filling in parameter "+count);
+					else IssueLog.log("failed at filling in parameter "+count+" due to class "+argumentClass+" not matching "+requiredArgumentClass);
 				}
 				
 				

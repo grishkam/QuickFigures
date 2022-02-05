@@ -37,7 +37,8 @@ public @interface MenuChoiceAnnotation {
 	
 	public int[] options() default {0,1}; 
 	
-	public String[] optionNames();
+	public String[] optionNames() default {};
 	
+	public String findCurrent() default "";
 
 }

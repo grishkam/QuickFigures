@@ -29,6 +29,8 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
+import fLexibleUIKit.MenuChoiceAnnotation;
+import fLexibleUIKit.MenuItemMethod;
 import graphicalObjects_Shapes.ArrowGraphic;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
@@ -42,13 +44,12 @@ import menuUtil.PopupMenuSupplier;
 public class ArrowGraphicMenu extends ShapeGraphicMenu implements ActionListener,
 PopupMenuSupplier  {
 
-	private static final String USE_DIFFERENT_HEADS = "Use two different heads", USE_IDENTICAL_HEADS = "Use two identical heads";
-
+	
 	/**
 	 * 
 	 */
 	/**the arrow specific menu options*/
-	static final String  EDIT_ARROW_OUTLINE="Outline Shape", SWAP_HEADS="Swap Ends", MAKE_VERTICAL= "Make Vertical",MAKE_HORIZONTAL= "Make Horizontal";
+	static final String  EDIT_ARROW_OUTLINE="Outline Shape";
 	
 	ArrowGraphic targetArrow;
 	ShapeGraphicMenu shapeGraphicMenu;
@@ -63,16 +64,6 @@ PopupMenuSupplier  {
 		/**Adds the arrow specific menu options*/
 		add(createMenuItem(EDIT_ARROW_OUTLINE));
 		
-		add(createMenuItem(SWAP_HEADS));
-		add(createMenuItem(MAKE_HORIZONTAL));
-		add(createMenuItem(MAKE_VERTICAL));
-		
-		if (arrow.headsAreSame()) {
-			add(createMenuItem(USE_DIFFERENT_HEADS));
-		}
-		if (!arrow.headsAreSame()) {
-			add(createMenuItem(USE_IDENTICAL_HEADS));
-		}
 		JComponent addedMenu=this;
 		DonatesMenu.MenuFinder.addDonatedMenusTo(addedMenu, arrow);
 		
@@ -114,28 +105,9 @@ PopupMenuSupplier  {
 		
 		AbstractUndoableEdit2 undo = targetArrow.provideUndoForDialog();
 	
-		if (com.equals(SWAP_HEADS)) {
-			swapHeads();
-		}
+	
 		
-		if (com.equals(MAKE_VERTICAL)) {
-			makeVertical();
-			
-			
-		}
-		if (com.equals(MAKE_HORIZONTAL)) {
-			makeHorizontal();
-		}
-		
-		if(com.equals(USE_DIFFERENT_HEADS)) {
-			targetArrow.setNumerOfHeads(2);
-			targetArrow.setHeadsSame(false);
-		}
-		
-		if(com.equals(USE_IDENTICAL_HEADS)) {
-			targetArrow.setNumerOfHeads(2);
-			targetArrow.setHeadsSame(true);
-		}
+
 		
 		undo.establishFinalState();
 		UndoManagerPlus um = getUndoManager();
@@ -160,32 +132,62 @@ PopupMenuSupplier  {
 		targetArrow.getBackGroundShape().showOptionsDialog();
 	}
 
-	/**
-	
+	/**Swaps the heads of the arrow
+	 * @return 
 	 */
-	public void swapHeads() {
+	@MenuItemMethod( menuText = "Swap Heads", orderRank=6)
+	public AbstractUndoableEdit2 swapHeads() {
+		UndoScalingAndRotation output = new UndoScalingAndRotation(targetArrow);
 		targetArrow.swapDirections();
 		targetArrow.updateDisplay();
+		output.establishFinalState();
+		return output;
 	}
 
 	/**
+	 * @return 
 	 */
-	public void makeVertical() {
+	@MenuItemMethod( menuText = "Make Vertical", orderRank=7)
+	public AbstractUndoableEdit2 makeVertical() {
+		UndoScalingAndRotation output = new UndoScalingAndRotation(targetArrow);
 		ArrayList<Point2D> pp = targetArrow.getEndPoints();
 		double x = pp.get(0).getX();
 		double y = pp.get(1).getY();
 		targetArrow.setPoints(pp.get(0), new Point2D.Double(x, y));
+		output.establishFinalState();
+		return output;
 	}
 
 	/**
+	 * @return 
 	 */
-	public void makeHorizontal() {
+	@MenuItemMethod( menuText = "Make Horizontal", orderRank=8)
+	public AbstractUndoableEdit2 makeHorizontal() {
+		UndoScalingAndRotation output = new UndoScalingAndRotation(targetArrow);
 		ArrayList<Point2D> pp = targetArrow.getEndPoints();
 		double x2 = pp.get(1).getX();
 		double y = pp.get(0).getY();
 		targetArrow.setPoints(pp.get(0), new Point2D.Double(x2, y));
+		output.establishFinalState();
+		return output;
 	}
 	
+	@MenuItemMethod( menuText = "Use two identical heads:Use two different heads", orderRank=10)
+	public AbstractUndoableEdit2 setHeadStatus(
+					@MenuChoiceAnnotation(findCurrent="sameHeads")
+						Boolean useSameHead
+			) {
+		AbstractUndoableEdit2 undo = targetArrow.provideUndoForDialog();
+		targetArrow.setNumerOfHeads(2);
+		targetArrow.setHeadsSame(useSameHead);
+		undo.establishFinalState();
+		return undo;
+	}
 	
-	
+	/**returns true if the arrow heads are identical*/
+	public Boolean sameHeads() {
+		if(targetArrow==null &&targetShape instanceof ArrowGraphic)
+			targetArrow=(ArrowGraphic) targetShape;
+		return targetArrow.headsAreSame();
+		}
 }

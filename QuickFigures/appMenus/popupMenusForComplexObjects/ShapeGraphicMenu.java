@@ -64,11 +64,18 @@ PopupMenuSupplier  {
 	ShapeGraphic targetShape;
 	public ShapeGraphicMenu(ShapeGraphic theShape) {
 		super();
+		setupForShape(theShape);
+		
+	}
+
+	/**
+	 * @param theShape
+	 */
+	protected void setupForShape(ShapeGraphic theShape) {
 		this.targetShape = theShape;
 		this.addAllMenuItems(createMenuItems());
 		new MenuItemExecuter(this).addToJPopupMenu(this);
 		new MenuItemExecuter(theShape).addToJPopupMenu(this);
-		
 	}
 
 	/**Creates the menu items for this menu*/

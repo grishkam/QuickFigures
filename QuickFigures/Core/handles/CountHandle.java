@@ -190,7 +190,7 @@ public class CountHandle extends SmartHandle {
 		public CountPopupMenu(CanvasMouseEvent canvasMouseEventWrapper) {
 			for(int i=0; i<count.getNames().length; i++) {
 				String name=count.getNames()[i];
-				BasicSmartMenuItem m=new CountMenu (name, canvasMouseEventWrapper) ;
+				BasicSmartMenuItem m=new CountMenuItem (name, canvasMouseEventWrapper) ;
 				add(m);
 			}
 		}
@@ -205,8 +205,8 @@ public class CountHandle extends SmartHandle {
 	}
 	
 	/**A menu item for switching the count*/
-	public class CountMenu extends BasicSmartMenuItem {
-		public CountMenu(String string, CanvasMouseEvent canvasMouseEventWrapper) {
+	public class CountMenuItem extends BasicSmartMenuItem {
+		public CountMenuItem(String string, CanvasMouseEvent canvasMouseEventWrapper) {
 			super(string);
 			this.setActionCommand(string);
 			setLastMouseEvent(canvasMouseEventWrapper);

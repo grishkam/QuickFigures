@@ -75,6 +75,7 @@ import plotParts.DataShowingParts.SeriesLabelPositionAnchor;
 import plotParts.DataShowingParts.SeriesStyle;
 import plotTools.PlotIcon;
 import undo.CombinedEdit;
+import undo.Edit;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoAddItem;
 import undo.UndoAttachmentPositionChange;
@@ -920,9 +921,10 @@ public UndoAbleEditForRemoveItem  removeTitleLabel() {
 private UndoAbleEditForRemoveItem removeLabel(PlotLabel label2) {
 	if (this.hasItem(label2)) 
 				{
-				this.remove(label2);
-				return 
-				new UndoAbleEditForRemoveItem(this, label2);
+		return Edit.removeItem(label2.getParentLayer(), label2);
+				//this.remove(label2);
+				//return 
+				//new UndoAbleEditForRemoveItem(this, label2);
 				}
 	return null;
 }
