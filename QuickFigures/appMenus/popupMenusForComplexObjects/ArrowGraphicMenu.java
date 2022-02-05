@@ -30,7 +30,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_Shapes.ArrowGraphic;
-import menuUtil.SmartPopupJMenu;
 import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 import undo.UndoScalingAndRotation;
@@ -40,7 +39,7 @@ import menuUtil.PopupMenuSupplier;
 /**a popup menu for arrows that includes both the standard menu options for shapes
   and those specific to arrows.
   */
-public class ArrowGraphicMenu extends SmartPopupJMenu implements ActionListener,
+public class ArrowGraphicMenu extends ShapeGraphicMenu implements ActionListener,
 PopupMenuSupplier  {
 
 	private static final String USE_DIFFERENT_HEADS = "Use two different heads", USE_IDENTICAL_HEADS = "Use two identical heads";
@@ -56,12 +55,10 @@ PopupMenuSupplier  {
 
 	
 	public ArrowGraphicMenu(ArrowGraphic arrow) {
-		super();
+		super(arrow);
 		this.targetArrow = arrow;
 		
-		/**adds the shape manu options*/
-		shapeGraphicMenu = new ShapeGraphicMenu(arrow);
-		this.addAllMenuItems(shapeGraphicMenu.createMenuItems());
+		
 		
 		/**Adds the arrow specific menu options*/
 		add(createMenuItem(EDIT_ARROW_OUTLINE));
@@ -172,7 +169,6 @@ PopupMenuSupplier  {
 	}
 
 	/**
-	 * 
 	 */
 	public void makeVertical() {
 		ArrayList<Point2D> pp = targetArrow.getEndPoints();
@@ -182,7 +178,6 @@ PopupMenuSupplier  {
 	}
 
 	/**
-	 * 
 	 */
 	public void makeHorizontal() {
 		ArrayList<Point2D> pp = targetArrow.getEndPoints();

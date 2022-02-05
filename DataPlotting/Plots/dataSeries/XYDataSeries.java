@@ -168,6 +168,20 @@ public ArrayList<BasicDataPoint> getDataPointList() {
 
 
 
+	/**scales the points
+	 * @param d
+	 */
+	public void scalePoints(double d, double d2) {
+		ArrayList<BasicDataPoint> output=new ArrayList<BasicDataPoint>();
+			for(int i=0; i<numbers.size(); i++) {
+				BasicDataPoint current = numbers.get(i);
+				output.add(new BasicDataPoint(d*current.getPosition(), d2*current.getValue())) ;
+			}
+		this.replaceData(new XYDataSeries(output));
+	}
+
+
+
 	
 
 

@@ -139,7 +139,7 @@ PopupMenuSupplier  {
 		return Edit.addItem(targetShape.getParentLayer(),(ZoomableGraphic) copy);
 	}
 
-	/**creates series of duplicates
+	/**creates series of duplicates for either panels, rows, or columns 
 	 * @return
 	 */
 	@MenuItemMethod(menuActionCommand = "l duplicate",menuText = "to ENUMs", subMenuName="Duplicate", orderRank=4)
@@ -147,11 +147,11 @@ PopupMenuSupplier  {
 		return performLayoutDuplicate( type, false);
 	}
 	
-	/**creates series of duplicates
+	/**creates series of duplicates for either panels, rows, or columns and keeps the duplicates in symetry with the original
 	 * @return
 	 */
 	@MenuItemMethod(menuActionCommand = "l duplicate",menuText = "to ENUMs and mirror", subMenuName="Duplicate", orderRank=5)
-	public AbstractUndoableEdit2 performLayoutDuplicateAndMirrow( LayoutSpaces.SpaceType type) {
+	public AbstractUndoableEdit2 performLayoutDuplicateAndMirror( LayoutSpaces.SpaceType type) {
 		return performLayoutDuplicate( type, true);
 	}
 	
@@ -165,6 +165,21 @@ PopupMenuSupplier  {
 		DefaultLayoutGraphic layout = PanelManager.getGridLayout(layer);
 		if(layout==null) {
 			ShowMessage.showOptionalMessage("Layout required", true, "A layout is required to use this option. Parent layer does not have a layout.", "Either draw a shape inside a layout or move it to a layer with a layout");
+			return null;
+		}
+		
+		if(layout.getPanelLayout().nPanels()<2) {
+			ShowMessage.showOptionalMessage("Layout required", true, "A layout with multiple panels is required to use this option. Layout has only one panel.");
+			return null;
+		}
+		
+		if(LayoutSpaces.SpaceType.COLUMN==type&&layout.getPanelLayout().nColumns()<2) {
+			ShowMessage.showOptionalMessage("Layout required", true, "A layout with multiple columns is required to use this option. Layout has only one.");
+			return null;
+		}
+		
+		if(LayoutSpaces.SpaceType.ROW==type&&layout.getPanelLayout().nRows()<2) {
+			ShowMessage.showOptionalMessage("Layout required", true, "A layout with multiple rows is required to use this option. Layout has only one.");
 			return null;
 		}
 		
@@ -255,7 +270,15 @@ PopupMenuSupplier  {
 		return newItem;
 	}
 	
-	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof ShapeGraphicMenu) {
+			if(((ShapeGraphicMenu) o).targetShape==this.targetShape)
+				return true;
+		}
+		
+		return false;
+	}
 	
 	
 }

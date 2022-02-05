@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 29, 2021
+ * Date Modified: Feb 4, 2022
  * Version: 2022.0
  */
 package graphicalObjects_Shapes;
@@ -31,6 +31,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 
 import animations.KeyFrameAnimation;
+import fLexibleUIKit.MenuItemMethod;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import handles.HasSmartHandles;
@@ -52,6 +53,7 @@ import locatedObject.ShowsOptionsDialog;
 import locatedObject.StrokedItem;
 import objectDialogs.RectangleGraphicOptionsDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
+import undo.AbstractUndoableEdit2;
 
 /**Defines an editable rectangle object. User may edit by dragging handles or using a dedicated dialog.
  * This is a superclass for many different shapes*/
@@ -236,7 +238,7 @@ public void setSquareLock(boolean b) {
 	}
 	
 	
-	/**not implemented by this class but subclasses 
+	/**not implemented by this class but subclasses implement this
 	 * @param handleNumber
 	 * @param p1
 	 * @param p2
@@ -627,7 +629,14 @@ public void setSquareLock(boolean b) {
 		}
 
 
-	
+	/**Makes the object a square*/
+	@MenuItemMethod(menuText = "Make Square", orderRank=5)
+	public AbstractUndoableEdit2 makeSquare() {
+		AbstractUndoableEdit2 output = this.provideDragEdit();
+		this.setHeight(this.getObjectWidth());
+		this.afterHandleMove(RectangleEdges.LOWER_LEFT, new Point(), new Point());
+		return output;
+	}
 
 	
 }

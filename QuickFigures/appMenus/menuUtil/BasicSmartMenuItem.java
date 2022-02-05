@@ -97,5 +97,10 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem, Act
 		// may be used by subclasses
 		
 	}
+	
+	
+	public CanvasMouseEvent getLastMouseEvent() {
+		return me;
+	}
 
 }

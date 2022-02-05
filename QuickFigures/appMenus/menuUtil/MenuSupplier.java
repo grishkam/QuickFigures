@@ -31,4 +31,6 @@ public interface MenuSupplier extends PopupMenuSupplier{
 	JPopupMenu getJPopup();
 	ArrayList<JMenuItem> findJItems();
 	JMenu getJMenu();
+	
+	
 }

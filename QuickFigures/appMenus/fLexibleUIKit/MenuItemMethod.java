@@ -47,7 +47,7 @@ public @interface MenuItemMethod {
 	/**Action command*/
 	public String menuActionCommand() default "";
 	
-	
+	/**not yet used in implementatoin*/
 	public boolean inherit() default false;
 	
 	/**Set if the items goes into a submenu. Use '<' symbol in the string if 

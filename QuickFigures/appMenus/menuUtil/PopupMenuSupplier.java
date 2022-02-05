@@ -28,4 +28,7 @@ public interface PopupMenuSupplier {
 	
 	/**returns  the popup menu*/
 	JPopupMenu getJPopup();
+	
+	/**returns the target object of the popup*/
+	//Object getTargetObject();
 }

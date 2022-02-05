@@ -25,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
+import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.LayerSelectionSystem;
 import selectedItemMenus.SelectionOperationsMenu;
@@ -54,7 +55,7 @@ public class GroupOfObjectPopup extends SmartPopupJMenu {
 	public void addItemsFromJMenu(JPopupMenu j, String name) {
 		if (j==null) return;
 		MenuElement[] elis = j.getSubElements();
-		JMenu j2 = new JMenu(name);
+		JMenu j2 = new SmartJMenu(name);
 		for(MenuElement item: elis) {
 			if (item instanceof JMenuItem) {
 				j2.add((JMenuItem) item);

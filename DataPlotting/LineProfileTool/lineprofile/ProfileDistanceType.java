@@ -24,17 +24,6 @@ package lineprofile;
 /**
  An enum listing the different ways in which the numbers for the values in a line profile may be calcualted
  */
-public enum ProfileValueType {
-	RAW_VALUE("Intensity"), PERCENT_OF_MAX_IN_PROFILE("Percent"), PERCENT_OF_MAX_IN_IMAGE("Percent"), PERCENT_OF_DISPLAY_RANGE("Percent");
-
-	private String axisLabel;
-
-	/**
-	 * @param string
-	 */
-	ProfileValueType(String string) {
-		this.axisLabel=string;
-	}
-	
-	public String getAxisLabel() {return axisLabel;}
+public enum ProfileDistanceType {
+	PIXELS, UNITS, PERCENT;
 }

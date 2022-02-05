@@ -85,11 +85,14 @@ public class ProfileLine extends RectangularGraphic implements LocationChangeLis
 	transient boolean setup=false;
 
 	private XY_Plot plotLayout;
-	
+	String xLabelT = "Distance";
+	String yLabelT = "Intensity";
 	
 	/**set to 1 if line profile should be percentage of max value*/
-	private ProfileValueType usepercent= ProfileValueType.PERCENT_OF_MAX_IN_IMAGE;
+	private ProfileValueType profileValueType= ProfileValueType.RAW_VALUE;
 	private ArrayList<ChannelEntry> chaneEntries=new ArrayList<ChannelEntry>();
+
+	private ProfileDistanceType profileDistanceType=ProfileDistanceType.PIXELS;
 	
 	public ProfileLine(ImagePanelGraphic p) {
 		if(asLine)this.setClosedShape(false);
@@ -429,17 +432,29 @@ static Color  folderColor2= new Color(0,140, 0);
 		MultiChannelImage image = generatePreProcessedVersion();
 		if(image==null)
 			return null;
-		ArrayList<XYDataSeries> profiles = LineProfileBuilder.createProfiles(image, getChannelChoices(),  usepercent, getOriginal() );
+		ArrayList<XYDataSeries> profiles = createProfileFor(image);
 		XY_Plot plot = new XY_Plot("Line profiles", profiles);
 		plot.lineOnlyPlot();
-		plot.setAxesLabels("Distance", "Intensity");
+		
+		plot.setAxesLabels(xLabelT, yLabelT);
 		this.plotLayout=plot;
 		this.getParentLayer().add(plot);
 		double xNew = this.sourcePanel.getBounds().getMaxX();
 		double yNew = this.sourcePanel.getBounds().getMinY();
 		plot.moveEntirePlot(xNew, yNew);
-		
+		updatePlot();
 		return plot;
+	}
+
+
+
+
+	/**
+	 * @param image
+	 * @return
+	 */
+	private ArrayList<XYDataSeries> createProfileFor(MultiChannelImage image) {
+		return LineProfileBuilder.createProfiles(image, getChannelChoices(),  profileValueType, profileDistanceType, getOriginal() );
 	}
 	
 	/**updates the plot area with the line profiles*/
@@ -450,11 +465,13 @@ static Color  folderColor2= new Color(0,140, 0);
 		MultiChannelImage image = generatePreProcessedVersion();
 		if(image==null)
 			return;
-		ArrayList<XYDataSeries> profiles = LineProfileBuilder.createProfiles(image, getChannelChoices(),  usepercent, getOriginal() );
+		ArrayList<XYDataSeries> profiles = createProfileFor(image);
 		if(plotLayout!=null) {
 			new DataReplacer<XYDataSeries>().replaceAllData(plotLayout, profiles);
 			plotLayout.updateAxisRange();
 			plotLayout.moveAxisLabelsOutOfWay();
+			
+			
 			}
 	}
 	
@@ -471,7 +488,26 @@ static Color  folderColor2= new Color(0,140, 0);
 	/**changes the value type*/
 	@MenuItemMethod(menuText = "", subMenuName="Profile Line<Change Profile Type", iconMethod="getProfileValueType", orderRank=9)
 	public AbstractUndoableEdit setProfileValueType(ProfileValueType v) {
-		this.usepercent=v;
+		this.profileValueType=v;
+		yLabelT=v.getAxisLabel();
+		if(this.plotLayout!=null)plotLayout.setAxesLabels(xLabelT, yLabelT);
+		this.updatePlot();
+		return null;
+	}
+	
+	/**changes the value type*/
+	@MenuItemMethod(menuText = "", subMenuName="Profile Line<Distance As", iconMethod="getProfileDistanceType", orderRank=9)
+	public AbstractUndoableEdit setProfileDistanceType(ProfileDistanceType v) {
+		this.profileDistanceType=v;
+		
+		if(v==ProfileDistanceType.UNITS)
+			xLabelT="Distance ("+this.getSourcePanel().getScaleInfo().getUnits()+")";
+		if(v==ProfileDistanceType.PERCENT)
+			xLabelT="Percent";
+		if(v==ProfileDistanceType.PIXELS)
+			xLabelT="Distance";
+		if(this.plotLayout!=null)
+			plotLayout.setAxesLabels(xLabelT, yLabelT);
 		this.updatePlot();
 		return null;
 	}
@@ -482,7 +518,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	}
 	
 	public ProfileValueType getProfileValueType() {
-		return this.usepercent;
+		return this.profileValueType;
 	}
 
 	/**Sets which channels are to be used
@@ -627,6 +663,13 @@ static Color  folderColor2= new Color(0,140, 0);
 			}
 		}
 		
+	}
+
+
+
+
+	public ProfileDistanceType getProfileDistanceType() {
+		return profileDistanceType;
 	}
 
 }

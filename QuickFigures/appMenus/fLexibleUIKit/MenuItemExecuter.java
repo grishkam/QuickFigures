@@ -15,13 +15,12 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 31, 2022
+ * Date Modified: Feb 4, 2022
  * Version: 2022.0
  */
 package fLexibleUIKit;
 
 import java.awt.Color;
-import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.annotation.Annotation;
@@ -32,6 +31,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -39,17 +39,22 @@ import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects.ZoomableGraphic;
 import iconGraphicalObjects.CheckBoxIcon;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
+import menuUtil.HasUniquePopupMenu;
+import menuUtil.MenuSupplier;
+import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
-import menuUtil.BasicSmartMenuItem;
-import menuUtil.MenuSupplier;
+import undo.CombinedEdit;
 import undo.UndoManagerPlus;
 
 /**this will generate working popup menus from the annotated methods in
-  an object. It allows a programmer to build complex popup menus with a little less complexity each time*/
+  an object. It allows a programmer to build complex popup menus with a little less complexity each time.
+  @see MenuItemMethod to understand the annotation*/
 public class MenuItemExecuter implements  MenuSupplier {
 	
 	/**Object containing the method calls that are the basis of menu items*/
@@ -62,8 +67,12 @@ public class MenuItemExecuter implements  MenuSupplier {
 
 	private SmartPopupJMenu popupMenu;
 	private SmartJMenu theSmartMenu;
+	private BasicSmartMenuItem lastItem;
 	
 	private UndoManagerPlus undoManager;
+
+	private boolean propagate=true;
+
 
 	
 	
@@ -152,7 +161,7 @@ public class MenuItemExecuter implements  MenuSupplier {
 
 
 
-	/**
+	/**determines what sort of ison belongs 
 	 * @param k
 	 * @param item
 	 * @param trueCheckBoxObject 
@@ -163,10 +172,20 @@ public class MenuItemExecuter implements  MenuSupplier {
 			Method pMethod = sourceObject.getClass().getMethod(k.iconMethod());
 			if (pMethod!=null) {
 				Object b = pMethod.invoke(sourceObject);
-			
+				if(b==null)
+					return;
+				
+				/**if the icon method returns an object of class icon*/
+				for(Class<?> c: b.getClass().getClasses()) {
+					if(c==Icon.class)
+						item.setIcon((Icon) b);
+					return;
+				}
+				/**if the icon method returns a null object or false*/
 				if (b==null||b.toString().equals("false")||trueCheckBoxObject!=b) {
 					item.setIcon(new CheckBoxIcon(Color.black, false));
 				};
+				/**if the icon method returns true*/
 				if(b.toString().equals("true")||b==trueCheckBoxObject) {
 					item.setIcon(new CheckBoxIcon(Color.black, true));
 				}
@@ -274,8 +293,8 @@ public class MenuItemExecuter implements  MenuSupplier {
 				if(anns.menuText().contains("ENUM"))
 					menuText=anns.menuText().replace("ENUM", enumNameToText(constant));
 				
-				JMenuItem mi = new BasicSmartMenuItem(menuText);
-				mi.addActionListener(new MenuItemListener(m, new Object[] {constant}));
+				BasicSmartMenuItem mi = new BasicSmartMenuItem(menuText);
+				mi.addActionListener(new MenuItemListener(m, new Object[] {constant}, mi));
 				setupIcon(anns, mi,constant);
 				output[i]=mi;
 				i++;
@@ -285,8 +304,8 @@ public class MenuItemExecuter implements  MenuSupplier {
 		else 
 		
 		{
-			JMenuItem mi = new BasicSmartMenuItem(anns.menuText()+suffix);
-			mi.addActionListener(new MenuItemListener(m, new Object[] {}));
+			BasicSmartMenuItem mi = new BasicSmartMenuItem(anns.menuText()+suffix);
+			mi.addActionListener(new MenuItemListener(m, new Object[] {}, mi));
 			mi.setActionCommand(anns.menuActionCommand());
 			setupIcon(anns, mi,null);
 			return new JMenuItem[] {mi};
@@ -329,18 +348,22 @@ public class MenuItemExecuter implements  MenuSupplier {
 		
 			private Method targetMethod;
 			private Object[] arguments;
+			private BasicSmartMenuItem menuItem;
+			
 
 			/**
 		 * @param m
+			 * @param mi 
 		 */
-		public MenuItemListener(Method m, Object[] args) {
+		public MenuItemListener(Method m, Object[] args, BasicSmartMenuItem mi) {
 			this.targetMethod=m;
 			this.arguments=args;
+			this.menuItem=mi;
 		}
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				lastItem=menuItem;
 				try {
 					
 					Object[] args = new Object[targetMethod.getParameterCount()];
@@ -350,11 +373,15 @@ public class MenuItemExecuter implements  MenuSupplier {
 					args = fillArguments(args, types);
 					
 					Object item = targetMethod.invoke(sourceObject, args);
+					item=propateToSelectedObjects(item, targetMethod, args);
 					
 					/**If the output is an undoable edit, adds it to the undo manager*/
 					UndoManagerPlus manager1 = getUndoManager();
 					if (manager1!=null &&item instanceof UndoableEdit) {
-						manager1.addEdit((UndoableEdit) item);
+						
+						UndoableEdit item2 = (UndoableEdit) item;
+						
+						manager1.addEdit(item2);
 					}
 					
 					/**updates the display*/
@@ -418,6 +445,9 @@ public class MenuItemExecuter implements  MenuSupplier {
 		if (undoManager==null & theSmartMenu!=null && this.theSmartMenu.getUndoManager()!=null) {
 			this.undoManager=theSmartMenu.getUndoManager();
 		}
+		
+		if(this.lastItem!=null&&lastItem.getUndoManager()!=null)
+			this.undoManager=lastItem.getUndoManager();
 		return undoManager;
 	}
 	
@@ -431,6 +461,113 @@ public class MenuItemExecuter implements  MenuSupplier {
 		if (theSmartMenu!=null) {
 			return theSmartMenu.getMemoryOfMouseEvent();
 		}
+		if(lastItem!=null)
+			return lastItem.getLastMouseEvent();
 		return null;
 	}
+	
+	/**Multiple object may be selected. if multiple objects are the targets. Will invoke the method for all of them
+	 * @param args 
+	 * @param targetMethod 
+	 * @return */
+	public UndoableEdit propateToSelectedObjects(Object item2, Method targetMethod, Object[] args) {
+		UndoableEdit output=null;
+		if(item2 instanceof UndoableEdit)
+			output=(UndoableEdit) item2;
+		CanvasMouseEvent theEvent = getEvent();
+		
+		if(theEvent==null)
+			return output;
+		
+		if(!propagate)
+			return output;;
+	
+		CombinedEdit editAll=new CombinedEdit();
+		editAll.addEditToList(output);
+		ArrayList<ZoomableGraphic> items = theEvent.getSelectionSystem().getSelecteditems();
+		for(Object currentItem: items) try {
+			Object invovationObject=currentItem;
+			if(currentItem==this.sourceObject) {
+				continue;
+			}
+			if(this.getPartner()!=null &&(this.getPartner()instanceof MenuItemExecuter)&& ((MenuItemExecuter)this.getPartner()).sourceObject==currentItem) {
+				continue;
+			}
+			
+			if(!hasMethod(currentItem, targetMethod))
+				invovationObject=findAlternativeObject(currentItem, targetMethod);
+			if(invovationObject==this.sourceObject||this.sourceObject.equals(invovationObject))
+				continue;
+			if(!hasMethod(invovationObject, targetMethod))
+				continue;
+			
+			Object item = targetMethod.invoke(invovationObject, args);
+			
+			if(item instanceof UndoableEdit)
+				editAll.addEditToList((UndoableEdit) item);
+		} catch (Throwable t ) {
+			IssueLog.logT(t);
+		}
+		
+		
+		return editAll;
+	}
+
+
+
+
+	/**
+	 * Checks the popup menus of the target object to see if any of them have the given method.
+	 * If 
+	 * @param currentItem
+	 * @param targetMethod
+	 * @return
+	 */
+	private Object findAlternativeObject(Object currentItem, Method targetMethod) {
+		
+		if(currentItem instanceof HasUniquePopupMenu) {
+			
+			PopupMenuSupplier menuSource = ((HasUniquePopupMenu) currentItem).getMenuSupplier();
+			
+			if(hasMethod(menuSource, targetMethod))
+					{
+				
+				return menuSource;
+				}
+			if(menuSource instanceof MenuItemExecuter) {
+				MenuItemExecuter m2 = (MenuItemExecuter) menuSource;
+				Object m = m2.sourceObject;
+				
+				if(hasMethod(m, targetMethod))
+					{
+						return m;
+					}
+				
+			}
+		}
+		return currentItem;
+	}
+
+
+
+
+	/**returns true if the item given has the method or an equivalent method
+	 * @param currentItem
+	 * @param targetMethod
+	 * @return
+	 */
+	private boolean hasMethod(Object currentItem, Method targetMethod) {
+		try {
+			Method theNewMethod = currentItem.getClass().getMethod(targetMethod.getName(), targetMethod.getParameterTypes());
+			
+		} catch (NoSuchMethodException | SecurityException e) {
+			return false;
+		}
+		return true;
+	}
+
+
+
+
+	
 }

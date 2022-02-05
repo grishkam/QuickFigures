@@ -581,7 +581,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			GroupOfObjectPopup menuAll = new GroupOfObjectPopup( new CurrentWorksheetLayerSelector());
 			menu=menuAll;
 			menuAll.addItemsFromJMenu( obtainUniquePopup(roi2), "this item");
-			
+			menuAll.setLastMouseEvent(e);
 		}
 		if (sh!=null) {
 			menu=sh.getJPopup();

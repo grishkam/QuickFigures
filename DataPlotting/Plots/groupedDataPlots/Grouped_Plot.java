@@ -58,7 +58,7 @@ import utilityClasses1.ArraySorter;
 
 /**A class for organizing parts of a plot with data divided into multiple groups
 Has methods to produce a layout, and a pair of axes*/
-public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
+public class Grouped_Plot extends BasicPlot{
 
 	/**
 	 * 
@@ -549,11 +549,7 @@ public class Grouped_Plot extends BasicPlot implements HasUniquePopupMenu{
 			updateOffsets();
 		} 
 	
-	/**returns the popup menu*/
-	public PopupMenuSupplier getMenuSupplier() {
-		//IssueLog.log("Menu requested");
-		return new MenuItemExecuter(this);
-	}
+
 	
 	
 	/**shows a dialog for adding a new data series to the plot, annotation indicates that it should be called by a popup menu*/

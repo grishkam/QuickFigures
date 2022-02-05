@@ -27,6 +27,7 @@ import applicationAdapters.PixelWrapper;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import dataSeries.XYDataSeries;
+import logging.IssueLog;
 
 /**Creates line profiles for an XY plot*/
 public class LineProfileBuilder {
@@ -46,7 +47,7 @@ public class LineProfileBuilder {
 	 * @param channelChoices
 	 * @return 
 	 */
-	public static  ArrayList<XYDataSeries> createProfiles(MultiChannelImage profileImage, ArrayList<Integer> channelChoices, ProfileValueType usepercent2, MultiChannelImage originalImage) {
+	public static  ArrayList<XYDataSeries> createProfiles(MultiChannelImage profileImage, ArrayList<Integer> channelChoices, ProfileValueType usepercent2, ProfileDistanceType distance, MultiChannelImage originalImage) {
 		ArrayList<XYDataSeries> profiles=new ArrayList<XYDataSeries>();
 		
 		for(Integer c: channelChoices) {
@@ -57,7 +58,9 @@ public class LineProfileBuilder {
 			float[] averages=new float[data.length];
 			for(int i=0; i<averages.length; i++) {
 				averages[i]=getMean(data[i]);
-			
+				if(data[i].length==0) {
+					IssueLog.log("missing informaiton");
+				}
 			}
 			
 			if(usepercent2==ProfileValueType.PERCENT_OF_MAX_IN_PROFILE) {
@@ -95,7 +98,19 @@ public class LineProfileBuilder {
 				}
 			}
 			
+			
+			
 			XYDataSeries profile1 = new XYDataSeries(getChannelName(profileImage, c), averages);
+			
+			if (distance==ProfileDistanceType.PERCENT) {
+				double maxPosition= averages.length;
+				profile1.scalePoints(100/maxPosition, 1);
+			}
+			if (distance==ProfileDistanceType.UNITS) {
+				
+				profile1.scalePoints(profileImage.getScaleInfo().getPixelWidth(), 1);
+			}
+			
 			profile1.setTag("Color", getChannelColor(profileImage, c));
 			profiles.add(profile1);
 		}

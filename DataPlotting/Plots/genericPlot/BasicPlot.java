@@ -52,6 +52,7 @@ import locatedObject.ArrayObjectContainer;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import plotParts.Core.AxesGraphic;
 import plotParts.Core.AxisLabel;
@@ -87,7 +88,7 @@ import utilityClasses1.NumberUse;
 /**A class for organizing parts of a plot.
    Has methods to produce a layout, and a pair of axes
    */
-public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  GridLayoutEditListener , LayoutSpaces, SeriesLabelPositionAnchor {
+public abstract class BasicPlot extends GraphicLayerPane implements PlotArea,  GridLayoutEditListener , LayoutSpaces, SeriesLabelPositionAnchor,  HasUniquePopupMenu {
 
 	/**
 	the reccomended distances between tic marks on tha axes
