@@ -276,6 +276,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			cropIfUserSelectionExists(display);
 		}
 		
+		/**if already has at least one multichannel then find the settings for that one*/
 		if (hasOne) {
 			
 			display.setPreprocessScale(principalMultiChannel.getPreprocessScale());

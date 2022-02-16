@@ -87,7 +87,7 @@ public class PlotAreaRectangle extends RectangularGraphic implements HasUniquePo
 		if (par instanceof HasUniquePopupMenu) {
 			PopupMenuSupplier out = ((HasUniquePopupMenu) par).getMenuSupplier();
 			if (out instanceof MenuItemExecuter) {
-				((MenuItemExecuter) out).setPartner(new MenuItemExecuter(this));
+				((MenuItemExecuter) out).setPartner(new MenuItemExecuter(this, true));
 			}
 			return out;
 			}

@@ -39,6 +39,7 @@ import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
 import iconGraphicalObjects.CheckBoxIcon;
 import logging.IssueLog;
@@ -72,13 +73,15 @@ public class MenuItemExecuter implements  MenuSupplier {
 	private UndoManagerPlus undoManager;
 
 	/**set to true if methods should be applied to all selected items with that method call*/
-	private boolean propagate=true;
+	private boolean propagate=false;
 
 
 	
 	
-	/**creates a menu item execuer for the object*/
-	public MenuItemExecuter(Object o) {
+	/**creates a menu item execuer for the object
+	 * @parm progagate determines if the menu items will apply to multiple selected objects*/
+	public MenuItemExecuter(Object o, boolean propagate) {
+		this.propagate=propagate;
 		this.sourceObject=o;
 		innitiallizeMap();
 	}
@@ -86,6 +89,14 @@ public class MenuItemExecuter implements  MenuSupplier {
 
 	
 	
+	/**creates a menu item execuer for the object*/
+	public MenuItemExecuter(Object basicObject) {
+		this(basicObject, false);
+	}
+
+
+
+
 	public ArrayList<JMenuItem> findJItems() {
 		return findJItems(null);
 	}
@@ -452,7 +463,9 @@ public class MenuItemExecuter implements  MenuSupplier {
 					args = fillArguments(args, types);
 					
 					Object item = targetMethod.invoke(sourceObject, args);
-					item=propateToSelectedObjects(item, targetMethod, args);
+					
+					if(propagate)
+						item=propateToSelectedObjects(item, targetMethod, args);
 					
 					/**If the output is an undoable edit, adds it to the undo manager*/
 					UndoManagerPlus manager1 = getUndoManager();

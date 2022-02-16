@@ -442,7 +442,7 @@ public ArrayList<PlotLabel> getBarLabels() {
 
 public PopupMenuSupplier getMenuSupplier() {
 	
-	return new MenuItemExecuter(this);
+	return new MenuItemExecuter(this, true);
 }
 
 /**

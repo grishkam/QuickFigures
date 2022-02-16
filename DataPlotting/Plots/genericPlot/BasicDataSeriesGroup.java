@@ -529,7 +529,7 @@ public abstract class BasicDataSeriesGroup extends GraphicLayerPane implements P
 	/**returns the menu supplier for this layer*/
 	public PopupMenuSupplier getMenuSupplier() {
 		
-		return new MenuItemExecuter(this);
+		return new MenuItemExecuter(this, true);
 	}
 	
 	/**the icon is a folder icon*/
