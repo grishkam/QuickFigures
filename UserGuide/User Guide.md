@@ -21,7 +21,7 @@ Publications involving fluorescent microscopy generally contain many panels with
 -	Close that window.
 -	Click Apply changes to download QuickFigures
 -	Restart Fiji
--  A QuickFigures menu will be present inside of the Plugins menu ( Plugins meny is on the menu bar )
+-  A QuickFigures menu will be present inside of the Plugins menu ( Plugins menu is on the menu bar )
 -  Go to the QuickFigures menu and select 'Show Main Toolbar'. 
 -  Open an image and get to work!
 
