@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 11, 2021
+ * Date Modified: Mar 1, 2022
  * Date Created: Jan 10, 2021
  * Version: 2022.0
  */
@@ -39,6 +39,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.BasicChannelEntryMenuItem;
 import standardDialog.InputPanel;
@@ -179,6 +180,7 @@ public void setValues(ArrayList<Integer> values2) {
 	currentValues=new ArrayList<Integer>();
 	for(Integer v: values2) {
 		currentValues.add(v);
+		
 	}
 	
 }
@@ -187,16 +189,17 @@ public void setValues(ArrayList<Integer> values2) {
 * @param values2
 */
 public void setValues(int v) {
-currentValues=new ArrayList<Integer>();
+	currentValues=new ArrayList<Integer>();
 
 	currentValues.add(v);
-
+	
 
 }
 
 	public void notifyChoiceListeners(int i) {
 		box.repaint();
 		notifyListeners(new ChoiceInputEvent(this, box, i, currentValues));
+		
 	}
 
 
@@ -406,14 +409,14 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 	 */
 	public ChannelEntryMenuItem(ChannelEntry ce) {
 		super(ce);
-		this.addActionListener(this);
+		//this.addActionListener(this);
 	}
 	
 	public ChannelEntryMenuItem(String st) {
 		super(null);
 		this.setText(st);
 		this.updateFont();
-		this.addActionListener(this);
+		//this.addActionListener(this);
 	}
 
 	/**
@@ -435,6 +438,7 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if(entry==null) {
 			currentValues.clear();
 		} else 
@@ -445,14 +449,18 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 				newList.add(c);
 			}
 			currentValues=newList;
+			
 		}
 		else {
 			if(maxChannelSelectable==1) currentValues.clear();
 			currentValues.add(entry.getOriginalChannelIndex());
+			
 		}
 		if (entry!=null)
 		 notifyChoiceListeners(entry.getOriginalChannelIndex());
 		else notifyChoiceListeners(ChannelUseInstructions.NONE_SELECTED);
+		
+		
 	}
 	
 } 
