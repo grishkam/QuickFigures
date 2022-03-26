@@ -36,6 +36,7 @@ import java.io.IOException;
 
 import javax.swing.JTable;
 
+import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
 /**A specialized JTable in which the top row
@@ -383,6 +384,20 @@ public class DataTable extends JTable implements TableReader {
 			return false;
 		}
 		
+	}
+
+
+
+	@Override
+	public void saveTable(boolean b) {
+		IssueLog.log("table saving still being implemented");
+		
+	}
+
+	@Override
+	public TableReader createNewSheet(String newParam) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

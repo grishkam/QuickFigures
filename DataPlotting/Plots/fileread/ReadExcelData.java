@@ -149,7 +149,7 @@ public static ArrayList<KaplanMeierDataSeries> readKaplan(String st) throws Inva
 private static ArrayList<KaplanMeierDataSeries> extractKaplanDataSeries(Workbook wb) {
 	Sheet sheet = wb.getSheetAt(0);
 	   
-	 return  SmartDataInputDialog.getKaplanDataSeriesUsingDefaultClassification(new ExcelTableReader(sheet));
+	 return  SmartDataInputDialog.getKaplanDataSeriesUsingDefaultClassification(new ExcelTableReader(wb,sheet));
 	
 }
 

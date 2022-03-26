@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 10, 2021
+ * Date Modified: Mar 26, 2021
  * Version: 2022.0
  */
 package basicMenusForApp;
@@ -224,24 +224,39 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	public void installItem(MenuItemForObj obj) {
 		if(obj==null) return;
 		try{
-		
-		JMenuItem ji=new JMenuItem(obj.getNameText());
-		ji.setIcon(obj.getIcon());
-		ji.setActionCommand(obj.getCommand());
-		ji.addActionListener(this);
-		isntalledMenuItems.put(obj.getCommand(), obj);
-		
-		String menuPath=obj.getMenuPath();
-		String delimiter="<";
-		
-		JMenu men2 = getOrCreateSubmenuOfPath(this, menuPath, delimiter);
-		men2.setIcon(obj.getSuperMenuIcon());
-		men2.add(ji);
+			HashMap<String, MenuItemForObj> isntalledMenuItems2 = isntalledMenuItems;
+			ActionListener menuHolder = this;
+			JMenuBar targetMenuBar=this;
+			
+		addItemToMenuBar(obj, targetMenuBar, menuHolder, isntalledMenuItems2);
 		
 		} catch (Throwable t) {
 			IssueLog.log("Problem installing items");
 			IssueLog.logT(t);
 		}
+	}
+
+
+	/**
+	 * @param obj
+	 * @param targetMenuBar
+	 * @param menuHolder
+	 * @param isntalledMenuItems2
+	 */
+	public static void addItemToMenuBar(MenuItemForObj obj, JMenuBar targetMenuBar, ActionListener menuHolder,
+			HashMap<String, MenuItemForObj> isntalledMenuItems2) {
+		JMenuItem ji=new JMenuItem(obj.getNameText());
+		ji.setIcon(obj.getIcon());
+		ji.setActionCommand(obj.getCommand());
+		ji.addActionListener(menuHolder);
+		isntalledMenuItems2.put(obj.getCommand(), obj);
+		
+		String menuPath=obj.getMenuPath();
+		String delimiter="<";
+		
+		JMenu men2 = getOrCreateSubmenuOfPath( targetMenuBar, menuPath, delimiter);
+		men2.setIcon(obj.getSuperMenuIcon());
+		men2.add(ji);
 	}
 	
 	/**returns the submenu with the given menu path. if that submenu does not exist, creates the submenu*/

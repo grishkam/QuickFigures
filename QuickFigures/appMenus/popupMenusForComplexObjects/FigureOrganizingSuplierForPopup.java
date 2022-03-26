@@ -26,6 +26,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JMenu;
@@ -48,7 +49,9 @@ import figureFormat.TemplateUserMenuAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.LabelCreationOptions;
 import figureOrganizer.MultichannelDisplayLayer;
+import genericTools.NormalToolDragHandler;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicActionToolbar.CurrentSetInformer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
@@ -61,6 +64,7 @@ import iconGraphicalObjects.IconUtil;
 import icons.SourceImageTreeIcon;
 import icons.ToolIconWithText;
 import imageDisplayApp.CanvasOptions;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
@@ -77,6 +81,7 @@ import objectDialogs.CroppingDialog;
 import objectDialogs.CroppingDialog.CropDialogContext;
 import standardDialog.StandardDialog;
 import storedValueDialog.StoredValueDilaog;
+import ultilInputOutput.FileChoiceUtil;
 import undo.AbstractUndoableEdit2;
 import undo.CanvasResizeUndo;
 import undo.ChannelDisplayUndo;
@@ -90,7 +95,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 
 
 	FigureOrganizingLayerPane figureOrganizingLayerPane;
-	JMenuItem addImageFromFileButton;
+	BasicSmartMenuItem addImageFromFileButton;
 	private JMenuItem addOpenImageFromList;
 	private JMenuItem rowLabelButton;
 	private JMenuItem columnLabelButton;
@@ -126,7 +131,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		JMenu addImage=new SmartJMenu("Add Image",new SourceImageTreeIcon());
 		
 		jj.add(addImage);
-		addImageFromFileButton = new BasicSmartMenuItem("Image From File");
+		addImageFromFileButton = new BasicSmartMenuItem("Images From Files");
 		addImage.add(addImageFromFileButton);
 		addImageFromFileButton.addActionListener(this);
 		
@@ -254,9 +259,11 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		Object source = arg0.getSource();
 		CombinedEdit undo=null ;
 		if (source==addImageFromFileButton) {
-			undo=new CombinedEdit();
-			
-			undo=figureOrganizingLayerPane.nextMultiChannel(true);
+			//undo=new CombinedEdit();
+			ArrayList<File> fileList = FileChoiceUtil.getFileArray();
+			undo=new NormalToolDragHandler(null).openFileListAndAddToFigure((ImageWindowAndDisplaySet) this.addImageFromFileButton.getLastMouseEvent().getAsDisplay(), fileList, true, null, this.figureOrganizingLayerPane.getMontageLayoutGraphic(), this.figureOrganizingLayerPane.getMontageLayoutGraphic(), this.figureOrganizingLayerPane);
+				
+			//undo=figureOrganizingLayerPane.nextMultiChannel(true);
 		}
 		if (source==addOpenImageFromList) {
 			undo=figureOrganizingLayerPane.nextMultiChannel(false);

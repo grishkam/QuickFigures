@@ -20,10 +20,14 @@
  */
 
 
+import java.util.ArrayList;
+
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.StartApplication;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.MenuBarItemInstaller;
+import dataTableActions.DataTableAction;
+import dataTableActions.DataTableMenu;
 import dialogs.DataShapeSyncer;
 import fileread.PlotExampleShower;
 import fileread.ExcelFileToBarPlot;
@@ -76,6 +80,7 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 			SelectionOperationsMenu.addNewOperator(new DataShapeSyncer(i));
 		NormalToolDragHandler.fileDropExtras.add(new ExcelRowToJTable());
 		;
+		
 		alreadyInstalled=true;
 		
 	}
@@ -106,6 +111,11 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 		installer.installItem(new ExcelRowToJTable());
 		installer.installItem(new ShowTable(ShowTable.OPEN_FILE));
 		installer.installItem(new ShowTable(ShowTable.NEW_TABLE));
+		ArrayList<DataTableAction> tableActions = DataTableMenu.createActions();
+		
+		for(DataTableAction a: tableActions) {
+			installer.installItem(a);
+		}
 		
 		} catch (Throwable t) {
 			t.printStackTrace();

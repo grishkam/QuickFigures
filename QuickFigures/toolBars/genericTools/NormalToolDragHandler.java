@@ -34,8 +34,8 @@ import addObjectMenus.FileImageAdder;
 import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
 import appContext.MakeFigureAfterFileOpen;
-import appContext.PendingFileOpenActions;
 import appContext.MakeFigureAfterFileOpen.ExistingFigure;
+import appContext.PendingFileOpenActions;
 import channelMerging.ImageDisplayLayer;
 import externalToolBar.BasicDragHandler;
 import figureOrganizer.FigureOrganizingLayerPane;
@@ -56,7 +56,6 @@ import locatedObject.LocatedObject2D;
 import locatedObject.Selectable;
 import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
-import messages.ShowMessage;
 import selectedItemMenus.SVG_GraphicAdder2;
 import ultilInputOutput.ForDragAndDrop;
 import undo.AbstractUndoableEdit2;
@@ -330,8 +329,8 @@ public class NormalToolDragHandler extends BasicDragHandler {
 				}
 				if(imageadded!=null) addedPanels.add(imageadded);
 				}
-			
-			imageAndDisplaySet.getImageAsWorksheet().getOverlaySelectionManagger().removeObjectSelections();
+			if(imageAndDisplaySet!=null)
+				imageAndDisplaySet.getImageAsWorksheet().getOverlaySelectionManagger().removeObjectSelections();
 		}
 		
 		
@@ -379,8 +378,11 @@ public class NormalToolDragHandler extends BasicDragHandler {
 			mlg.resizeLayoutToFitContents();
 		}
 		
-		tool.resizeCanvas(imageAndDisplaySet);
-		imageAndDisplaySet.updateDisplay();
+		if(tool!=null&&imageAndDisplaySet!=null)
+			{
+				tool.resizeCanvas(imageAndDisplaySet);
+				imageAndDisplaySet.updateDisplay();
+			}
 		
 		return undo;
 	}
@@ -417,7 +419,8 @@ public class NormalToolDragHandler extends BasicDragHandler {
 			BasicLayout ml = figure.getLayout();
 			
 			//MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
-			startIndex=figure.getMontageLayout().getPanelIndex((int)location2.getX(), (int) location2.getY());
+			if(location2!=null)
+				startIndex=figure.getMontageLayout().getPanelIndex((int)location2.getX(), (int) location2.getY());
 			figure.getMontageLayoutGraphic().generateCurrentImageWrapper();
 			figurecontext.setStoredFigure(figure, ml, startIndex);
 			

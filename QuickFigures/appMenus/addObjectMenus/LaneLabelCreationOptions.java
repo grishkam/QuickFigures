@@ -20,6 +20,8 @@
  */
 package addObjectMenus;
 
+import java.io.File;
+
 import layout.RetrievableOption;
 import textObjectProperties.TextPattern;
 
@@ -47,4 +49,7 @@ public class LaneLabelCreationOptions {
 
 	/**The pattern for numbers*/
 	TextPattern pattern1=new TextPattern(); {pattern1.setSuffix("");pattern1.setPrefix("");}
+	
+	@RetrievableOption(key = "Reference File", label="Take notes from")
+	public File templateFile=null;
 }

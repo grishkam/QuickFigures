@@ -49,6 +49,7 @@ import dataSeries.GroupedDataSeries;
 import dataSeries.KaplenMeierDataPoint;
 import dataSeries.KaplanMeierDataSeries;
 import dataSeries.XYDataSeries;
+import dataTableActions.DataTableMenu;
 import figureFormat.DirectoryHandler;
 import fileread.ExcelRowToJTable;
 import fileread.PlotType;
@@ -94,6 +95,7 @@ public class SmartDataInputDialog extends DataInputDialog2 {
 		this.setHideCancel(true);
 		super.setTabName("");
 		JMenuBar bar=new JMenuBar();
+		new DataTableMenu().installDefaultActionsOnMenuBar(bar, this.getDataTable());
 		
 		JMenu dataMenu = new JMenu("Data");
 		bar.add(dataMenu);

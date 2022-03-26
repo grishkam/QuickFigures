@@ -46,7 +46,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	private static final int STANDARD_NUMBER_OF_COLUMNS_IN_TEXT_FIELD = 15;
 	public static final String lineseparator = ""+'\n';
 	JLabel label=new JLabel();
-	JTextComponent field=new JTextField(15);
+	protected JTextComponent field=new JTextField(15);
 	ArrayList<StringInputListener> lis=new ArrayList<StringInputListener>();
 	String lasts="";
 	
@@ -129,6 +129,18 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	public void placeItems(Container jp, int x0, int y0) {
 		GridBagConstraints gc = new GridBagConstraints();
 		
+		layItems(jp, x0, y0, gc);
+		
+		
+	}
+
+	/**Places the items with the given grid bag constraints into the grid of the container
+	 * @param jp
+	 * @param x0
+	 * @param y0
+	 * @param gc
+	 */
+	protected void layItems(Container jp, int x0, int y0, GridBagConstraints gc) {
 		gc.insets=firstInsets;
 		gc.gridx=x0;
 		gc.gridy=y0;
@@ -138,8 +150,6 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 		gc.insets=lastInsets;
 		gc.anchor = GridBagConstraints.WEST;
 		jp.add(getTextFieldHolder(), gc);
-		
-		
 	}
 	
 	protected Component getTextFieldHolder() {
@@ -179,6 +189,13 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	public void keyReleased(KeyEvent arg0) {
 		if (this.getTextFromField().equals(lasts)||arg0.getSource()!=getTextComponent()) return;
 		
+		dispatchStringInputEvent();
+	}
+
+	/**
+	  notified the listeners of the event
+	 */
+	protected void dispatchStringInputEvent() {
 		StringInputEvent e = new StringInputEvent(this, this.getTextComponent(), this.getTextFromField());
 		e.setKey(key);
 		this.notifyLiseners(e);

@@ -20,6 +20,7 @@
  */
 package storedValueDialog;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
@@ -35,6 +36,7 @@ import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.FileInputPanel;
 import standardDialog.strings.StringInputEvent;
 import standardDialog.strings.StringInputListener;
 import standardDialog.strings.StringInputPanel;
@@ -100,7 +102,10 @@ public class StoredValueDilaog extends StandardDialog{
 					addStringArrayField(d, of, f, o);
 				}
 				
-				
+				if(f.getType()==File.class) {
+					IssueLog.log("Adding file field");
+					addFileField(d, of, f, o);
+				}
 				
 				}
 				
@@ -113,6 +118,19 @@ public class StoredValueDilaog extends StandardDialog{
 		 c=c.getSuperclass();
 		 }
 		 } catch (Exception e) {IssueLog.logT(e);}
+	}
+
+	/**
+	 * @param d
+	 * @param of
+	 * @param f
+	 * @param o
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 */
+	private static void addFileField(StandardDialog d, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
+		String label = o.label();
+		d.add(o.key(), new FileInput(label, of, f, o));
 	}
 
 	/**Adds a choice field to a dialog
@@ -241,6 +259,37 @@ public class StoredValueDilaog extends StandardDialog{
 				{field.set(object, inputString.split(lineseparator));}
 				else
 				field.set(object, inputString);
+			} catch (Exception e) {
+				IssueLog.logT(e);
+			} 
+		}}
+	
+	
+	/**Class changes a specific field in a specific object in response to a number input*/
+	public static class FileInput extends FileInputPanel implements StringInputListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private Field field;
+		private Object object;
+
+		public FileInput(String label, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
+			super(label, ""+ f.get(of));
+			addStringInputListener(this);
+			this.field=f;
+			this.object=of;
+		}
+		
+		
+		
+		@Override
+		public void stringInput(StringInputEvent  ne) {
+			try {
+				File inputFile = this.getFile();
+				{field.set(object, inputFile);}
+				
 			} catch (Exception e) {
 				IssueLog.logT(e);
 			} 

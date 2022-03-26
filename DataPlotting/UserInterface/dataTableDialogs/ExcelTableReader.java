@@ -20,19 +20,30 @@
  */
 package dataTableDialogs;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import fileread.ReadExcelData;
+import logging.IssueLog;
+import ultilInputOutput.FileChoiceUtil;
 
 /**an implementation of the table reader interface for excel files
  * @see TableReader*/
 public class ExcelTableReader implements TableReader {
 
 	private  org.apache.poi.ss.usermodel.Sheet sheet;
+	private Workbook workbook;
 
-	public ExcelTableReader(Sheet wb) {
+	public ExcelTableReader(Workbook wb2, Sheet wb) {
 		sheet=wb;
+		this.workbook=wb2;
 	}
 	
 	@Override
@@ -45,6 +56,50 @@ public class ExcelTableReader implements TableReader {
 	@Override
 	public int getRowCount() {
 		return sheet.getLastRowNum();
+	}
+
+	@Override
+	public void setValueAt(Object value, int rowNumber, int colNumber) {
+		Row row = sheet.getRow(rowNumber);
+		
+		if(row==null) {
+			sheet.createRow(rowNumber);
+			 row = sheet.getRow(rowNumber);
+		}
+		
+		Cell cell = row.getCell(colNumber);
+		if(cell==null) {
+			row.createCell(colNumber);
+			cell = row.getCell(colNumber);
+		}
+		cell.setCellValue(value+"");
+	}
+
+	@Override
+	public void saveTable(boolean b) {
+		
+		File fileAddress = FileChoiceUtil.getSaveFile();
+
+		
+		
+
+		try {
+		    OutputStream fileOut = new FileOutputStream(fileAddress.getAbsolutePath());
+		    workbook.write(fileOut);
+		    if(b) {
+		    	Desktop.getDesktop().open(fileAddress);
+		    }
+		    fileOut.close();
+		}
+
+		catch(Exception e) {
+		    IssueLog.log(e);
+		}
+	}
+
+	@Override
+	public TableReader createNewSheet(String name) {
+		return new  ExcelTableReader(workbook, workbook.createSheet(name));
 	}
 
 }

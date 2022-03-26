@@ -15,27 +15,21 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Created: Mar 26, 2022
+ * Date Modified: Mar 26, 2022
  * Version: 2022.0
  */
-package dataTableDialogs;
+package dataTableActions;
 
-/**an interface for any sort of target that takes the form of a table*/
-public interface TableReader {
+import basicMenusForApp.MenuItemForObj;
+import dataTableDialogs.TableReader;
 
-	/**returns the value at the row and column given*/
-	Object getValueAt(int rowNumber, int checkCol);
+/**
+ 
+ * 
+ */
+public interface DataTableAction extends MenuItemForObj {
 
-	void setValueAt(Object value, int rowNumber, int colNumber);
+	void processTableAction(TableReader item, DataTableActionContext context);
 	
-	int getRowCount();
-	
-	public void saveTable(boolean b);
-
-	/**
-	 * @param newParam TODO
-	 * @return
-	 */
-	TableReader createNewSheet(String newParam);
-
 }
