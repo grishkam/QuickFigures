@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
+import appContext.MakeFigureAfterFileOpen;
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.CSFLocation;
 import channelMerging.ChannelEntry;
@@ -253,6 +254,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		Object source = arg0.getSource();
 		CombinedEdit undo=null ;
 		if (source==addImageFromFileButton) {
+			undo=new CombinedEdit();
 			
 			undo=figureOrganizingLayerPane.nextMultiChannel(true);
 		}

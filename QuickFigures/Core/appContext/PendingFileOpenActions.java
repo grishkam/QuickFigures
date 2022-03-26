@@ -15,27 +15,36 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Created: Feb 1, 2022
- * Date Modified: Feb 1, 2022
+ * Date Created: Mar 23, 2022
+ * Date Modified: Mar 23, 2022
  * Version: 2022.0
  */
-package figureOrganizer.insetPanels;
+package appContext;
+
+import java.util.ArrayList;
+
+import figureOrganizer.MultichannelDisplayLayer;
 
 /**
- 
- * 
+ An interface for classes that wait for a file to be opened
  */
-public interface DependentSubFigure {
+public interface PendingFileOpenActions {
 
-	/**updates the object to account for a given channel edit
-	 * @param name
-	 */
-	void updateChannel(String name);
+	public static ArrayList<PendingFileOpenActions> pendingList=new  ArrayList<PendingFileOpenActions>();
+	
+	boolean isActive();
 
 	/**
-	 * @param image
+	 * @param path
 	 * @return
 	 */
-	boolean producesObject(Object image);
+	boolean isTargetFile(String path);
+
+	/**
+	 * @param zero
+	 */
+	void performActionOnImageDisplayLayer(MultichannelDisplayLayer zero);
+	
+	
 
 }

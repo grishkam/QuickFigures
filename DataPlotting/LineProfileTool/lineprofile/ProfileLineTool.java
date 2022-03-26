@@ -22,25 +22,20 @@ package lineprofile;
  */
 
 
-import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import applicationAdapters.ImageWorkSheet;
-import channelMerging.ChannelEntry;
-import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelListElement;
 import graphicTools.GraphicTool;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.AcronymIcon;
-import icons.IconSet;
 import icons.TreeIconWrappingToolIcon;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
 import locatedObject.ObjectContainer;
 import logging.IssueLog;
 import undo.CombinedEdit;
-import undo.UndoAddItem;
 import undo.UndoScalingAndRotation;
 
 

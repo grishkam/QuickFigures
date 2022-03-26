@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 11, 2021
+ * Date Modified: Mar 23, 2022
  * Version: 2022.0
  */
 package addObjectMenus;
@@ -165,7 +165,7 @@ public class FigureAdder extends LayoutAdder {
 		return add(gc, path, null);
 	}
 	
-	/**Adds a figure to the layer gc. If path is not null, the image from the save path is used
+	/**Adds a figure to the target layer. If path is not null, the image from the save path is used
 	  otherwise, uses the image that is already open. if the preprocess information given is not null
 	  sets the cropping and scale based on it. If the Preprocess informatin is null, just uses the selected roi*/
 	public FigureOrganizingLayerPane add(GraphicLayer targetLayer, String path, PreProcessInformation p) {
@@ -173,7 +173,16 @@ public class FigureAdder extends LayoutAdder {
 		/***/
 		
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
-		if(display==null) return null;
+		return addNewlyOpenedDisplayLayer(display, targetLayer, p);
+		}
+
+	/**Adds a figure to the target layer. If the preprocess information given is not null
+	  sets the cropping and scale based on it. 
+	  If the Preprocess informatin is null, just uses the selected roi*/
+	public FigureOrganizingLayerPane addNewlyOpenedDisplayLayer(MultichannelDisplayLayer display,
+			GraphicLayer targetLayer, PreProcessInformation p) {
+		if(display==null) 
+			return null;
 		display.setFigureType(getFigureType());//sets the figure type before th
 		/**determines the crop for this image*/
 		if (p==null)
@@ -197,7 +206,7 @@ public class FigureAdder extends LayoutAdder {
 		
 		
 		return figureOrganizerFor;
-		}
+	}
 
 	/**when given a normal parent layer and a multidimensional image display layer,
 	 places the multichannel display layer into a figure organizing layer (which is created if the ordinary layer is not inside of an existing figure organizer). 

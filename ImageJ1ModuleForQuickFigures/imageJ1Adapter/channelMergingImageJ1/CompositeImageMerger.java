@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Mar 19, 2022
  * Version: 2022.0
  */
 package channelMergingImageJ1;
@@ -63,7 +63,7 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 		ArrayList<ChannelEntry> channels=entry.getChannelEntries();
 		if (impw instanceof ImagePlusWrapper) {
 			ImagePlusWrapper impw2=(ImagePlusWrapper) impw;
-			return  generateMergedRGB(impw2.getImagePlus(), channels, entry.targetSliceNumber, entry.targetFrameNumber, ChannelsInGrayScale);
+			return  generateMergedRGB(impw2.getImagePlus(), channels, entry.targetSliceNumber, entry.targetFrameNumber, ChannelsInGrayScale, entry.invertChannelColor);
 		}
 		else {throw new IllegalArgumentException("Must have ImagePlusWrapper as argumenr");}
 		// TODO Auto-generated method stub
@@ -77,8 +77,9 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 		return new ProcessorWrapper(m.getProcessor());
 	}
 	
-	/**makes an rgb image by merging the given channels*/
-	private PixelWrapper generateMergedRGB(ImagePlus imp, ArrayList<ChannelEntry> channels, int slice, int frame, int ChannelsInGrayScale) {
+	/**makes an rgb image by merging the given channels
+	 * @param invertChannelColor */
+	private PixelWrapper generateMergedRGB(ImagePlus imp, ArrayList<ChannelEntry> channels, int slice, int frame, int ChannelsInGrayScale, boolean invertChannelColor) {
 		try {
 		
 		LUT[] luts =imp.getLuts();
@@ -104,7 +105,7 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 			tempcomposte.setLuts(newLut);
 			tempcomposte.updateAndDraw();
 			if (channels.size()==1) 
-				return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==ChannelUseInstructions.CHANNELS_IN_GREYSCALE); 
+				return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==ChannelUseInstructions.CHANNELS_IN_GREYSCALE, invertChannelColor); 
 			else 
 				return mergedComposite(tempcomposte);
 				}
@@ -125,7 +126,7 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 			CompositeImage tempcomposte = new CompositeImage(new ImagePlus("", st));
 			tempcomposte.setLuts(newLut);
 			tempcomposte.updateAndDraw();
-			if (channels.size()==1) return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==1); else 
+			if (channels.size()==1) return sliceOfComposite(tempcomposte, 1, ChannelsInGrayScale==1, invertChannelColor); else 
 				return mergedComposite(tempcomposte);
 				}
 		
@@ -149,14 +150,26 @@ public class CompositeImageMerger implements ChannelMerger, Serializable {
 		
 	
 	
-	/**Returns a slice of composite image as a color processor. */
-	private PixelWrapper sliceOfComposite(CompositeImage imm, int c, Boolean ChannelsInGrayScale) {
+	/**Returns a slice of composite image as a color processor. 
+	 * @param invertChannelColor */
+	private PixelWrapper sliceOfComposite(CompositeImage imm, int c, Boolean ChannelsInGrayScale, boolean invertChannelColor) {
+		LUT createWhiteLutFromColor = LUT.createLutFromColor(java.awt.Color.WHITE);
 		if (ChannelsInGrayScale&&!imm.isInvertedLut()) {
-			imm.setChannelLut(LUT.createLutFromColor(java.awt.Color.WHITE));
+			imm.setChannelLut(createWhiteLutFromColor);
 			}   
 		
 		imm.setPositionWithoutUpdate(c, imm.getSlice(), imm.getFrame());
-		if (ChannelsInGrayScale&&!imm.isInvertedLut()) {imm.setChannelLut(LUT.createLutFromColor(java.awt.Color.WHITE)); imm.setMode(CompositeImage.GRAYSCALE); imm.updateAndDraw(); } 	
+		
+			
+		if (ChannelsInGrayScale&&!imm.isInvertedLut()) 
+				{imm.setChannelLut(createWhiteLutFromColor); imm.setMode(CompositeImage.GRAYSCALE); imm.updateAndDraw(); } 	
+		
+		if(invertChannelColor) {
+			LUT inverted = imm.getChannelLut().createInvertedLut();
+			imm.setChannelLut(inverted);
+			imm.updateAndDraw(); 
+		}
+		
 		Image img = imm.getImage();
 		return new ProcessorWrapper(new ColorProcessor(img));
 	}

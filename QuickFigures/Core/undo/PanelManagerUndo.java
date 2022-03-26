@@ -23,9 +23,12 @@ package undo;
 import java.util.ArrayList;
 
 import channelMerging.ImageDisplayLayer;
+import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 
@@ -104,6 +107,23 @@ public class PanelManagerUndo extends CombinedEdit {
 		return output;
 	}
 	
+	/**creates an undoable edit for one imaged isplay layer*/
+	public static CombinedEdit createFor(FigureOrganizingLayerPane pm) {
+		CombinedEdit output = new CombinedEdit();
+		for(ImageDisplayLayer a:pm.getMultiChannelDisplaysInLayoutOrder()) {
+			output.addEditToList(createFor(a));
+		}
+		for(ZoomableGraphic a:pm.getAllGraphics()) {
+			if(a instanceof PanelGraphicInsetDefiner) {
+				output.addEditToList(
+						createFor(((PanelGraphicInsetDefiner) a).getPanelManager())
+				);
+			}
+			
+		}
+		return output;
+	}
+	
 	/**creates an undoable edit for every image display layer*/
 	public static CombinedEdit createForMany(ArrayList<? extends ImageDisplayLayer> all) {
 		CombinedEdit output = new CombinedEdit();
@@ -128,6 +148,7 @@ public class PanelManagerUndo extends CombinedEdit {
 		
 		
 		
+		
 		public ListElementUndo(PanelListElement p) {
 			this.panel=p;
 			iElement=p.copy();
@@ -137,6 +158,7 @@ public class PanelManagerUndo extends CombinedEdit {
 		public void establishFinalState() {
 			fElement=panel.copy();
 			fBar=panel.getScaleBar();
+			
 		}
 		public void redo() {
 			fElement.giveObjectsAndSettingsTo(panel);

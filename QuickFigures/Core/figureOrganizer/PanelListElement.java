@@ -81,6 +81,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		public String originalImageName;
 		public String originalImagePath;
 		public Integer originalImageID;
+		public boolean invertChannelColor;
 		public ArrayList<Integer> originalIndices=new ArrayList<Integer>();
 		
 		
@@ -88,6 +89,8 @@ import channelLabels.ChannelLabelTextGraphic;
 
 		/**Maintains a list of the channel entries*/
 		private ArrayList<ChannelEntry> hashChannel =new  ChannelEntryList();
+
+		
 		
 		
 		public String toString() {
@@ -120,6 +123,7 @@ import channelLabels.ChannelLabelTextGraphic;
 			output.designation=this.designation;
 			output.image=this.image;
 			output.hashChannel=this.hashChannel;
+			output.invertChannelColor=this.invertChannelColor;
 		}
 		
 		/**creates a copy. this method is needed for the undo to work*/

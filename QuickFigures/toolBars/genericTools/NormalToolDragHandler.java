@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 20, 2021
+ * Date Modified: Mar 24, 2022
  * Version: 2022.0
  */
 package genericTools;
@@ -31,9 +31,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import addObjectMenus.FileImageAdder;
-import addObjectMenus.FigureAdder;
 import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
+import appContext.MakeFigureAfterFileOpen;
+import appContext.PendingFileOpenActions;
+import appContext.MakeFigureAfterFileOpen.ExistingFigure;
 import channelMerging.ImageDisplayLayer;
 import externalToolBar.BasicDragHandler;
 import figureOrganizer.FigureOrganizingLayerPane;
@@ -132,7 +134,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	}
 	
 	/**selects an item. if that  item is a layer, selects everything inside the layer*/
-	public void select(Object z) {
+	public static void select(Object z) {
 		if (z instanceof Selectable) ((Selectable) z).select();
 		if (z instanceof GraphicLayer) {
 			
@@ -189,6 +191,8 @@ public class NormalToolDragHandler extends BasicDragHandler {
 
 	/**returns the object at the given location*/
 	private LocatedObject2D getObjectAtPoint(ImageWindowAndDisplaySet displaySet, Point2D position) {
+		if(position==null||displaySet==null)
+			return null;
 		return tool.getObjectAt(displaySet.getImageAsWorksheet(), (int)position.getX(), (int) position.getY());
 	}
 	
@@ -198,6 +202,8 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	  If there are single images. Adds them to the 
 	 * @return */
 	public CombinedEdit handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location, ArrayList<File> file) {
+		
+		boolean alwaysOpenMultiChannel=false;
 		
 		for(FileDropListener thisFileDrop:fileDropExtras) try {
 			if(thisFileDrop.canTarget(file))
@@ -216,17 +222,35 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	
 		
 		GraphicLayer layer = imageAndDisplaySet.getImageAsWorksheet().getTopLevelLayer();
-		ArrayList<ImagePanelGraphic> addedPanels=new ArrayList<ImagePanelGraphic>();
+		
 		
 		if(roi2 instanceof KnowsParentLayer) {
 			KnowsParentLayer km=(KnowsParentLayer) roi2;
 			if(km.getParentLayer()!=null) layer=km.getParentLayer();
 		}
 		
-		
-		
+		return openFileListAndAddToFigure(imageAndDisplaySet, file, alwaysOpenMultiChannel, location2, roi2, layout,
+				layer);
+	}
+
+	/**opens the files one at a time and adds them to the figure
+	 * @param imageAndDisplaySet
+	 * @param file
+	 * @param alwaysOpenMultiChannel
+	 * @param location2
+	 * @param roi2
+	 * @param layout
+	 * @param layer
+	 * @return
+	 */
+	public CombinedEdit openFileListAndAddToFigure(ImageWindowAndDisplaySet imageAndDisplaySet, ArrayList<File> file,
+			boolean alwaysOpenMultiChannel, Point2D location2, LocatedObject2D roi2, PanelLayoutGraphic layout,
+			GraphicLayer layer) {
+		PendingFileOpenActions.pendingList.clear();//clears the old list to avoid confusion.
+		ArrayList<ImagePanelGraphic> addedPanels=new ArrayList<ImagePanelGraphic>();
 		boolean multiChannelOpen=true;
 		CombinedEdit undo = new CombinedEdit();
+		ExistingFigure figurecontext = new ExistingFigure();
 		for(File f: file) {
 			
 			
@@ -239,10 +263,12 @@ public class NormalToolDragHandler extends BasicDragHandler {
 			if (!ForDragAndDrop.getExtension(f).equals("tif")) {
 				multiChannelOpen=false;
 			}
-			
+			if(alwaysOpenMultiChannel)
+				multiChannelOpen=true;
+			else
 			if (ForDragAndDrop.getExtension(f).equals("tiff")) {
 				multiChannelOpen=true;
-			}
+			}else
 			if (isMicroscopeFormat(f)) {
 				multiChannelOpen=true;
 			}
@@ -268,7 +294,8 @@ public class NormalToolDragHandler extends BasicDragHandler {
 			
 		
 			if (multiChannelOpen) {
-				AbstractUndoableEdit2 handleMultiChannelStackDrop = handleMultiChannelStackDrop(f,imageAndDisplaySet, layer, location2);
+				
+				AbstractUndoableEdit2 handleMultiChannelStackDrop = handleMultiChannelStackDrop(f,imageAndDisplaySet, layer, location2, figurecontext);
 				
 				undo.addEditToList(
 						handleMultiChannelStackDrop
@@ -297,7 +324,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 						if(i instanceof ImagePanelGraphic) imageadded=(ImagePanelGraphic) i;
 					}
 				}
-				if (layout!=null &&imageadded!=null) {
+				if (layout!=null &&imageadded!=null&&location2!=null) {
 					Rectangle2D rect = layout.getPanelLayout().getNearestPanel( location2.getX(),  location2.getY());
 					imageadded.setLocation(new Point2D.Double(rect.getX(), rect.getY()));
 				}
@@ -361,7 +388,7 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	/**returns true if the file is in a microscopy format*/
 	public static boolean isMicroscopeFormat(File f) {
 		String extension = ForDragAndDrop.getExtension(f);
-		String[] forms = new String[] {"zvi", "czi", "lif", "dv", "lei"};
+		String[] forms = new String[] {"zvi", "czi", "lif", "dv", "lei", "ets", "vsi"};
 		for(String form: forms) {
 			if(extension.toLowerCase().equals(form))
 				return true;
@@ -381,59 +408,38 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	}
 	
 	/**Called when a multidimensional image file is dropped onto a location*/
-	private AbstractUndoableEdit2 handleMultiChannelStackDrop(File f, ImageWindowAndDisplaySet imageAndDisplaySet, GraphicLayer layer , Point2D location2) {
+	private AbstractUndoableEdit2 handleMultiChannelStackDrop(File f, ImageWindowAndDisplaySet imageAndDisplaySet, GraphicLayer layer , Point2D location2, ExistingFigure figurecontext) {
 		CombinedEdit undo=new CombinedEdit();
 		layer = findValidLayer(layer);
 		int startIndex=-1;
-		if (layer instanceof FigureOrganizingLayerPane) {
+		if (layer instanceof FigureOrganizingLayerPane ) {
 			FigureOrganizingLayerPane figure=(FigureOrganizingLayerPane) layer;
-			MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
 			BasicLayout ml = figure.getLayout();
-			figure.getMontageLayoutGraphic().generateCurrentImageWrapper();
-			startIndex=figure.getMontageLayout().getPanelIndex((int)location2.getX(), (int) location2.getY());
-			if (item==null) return null;
-			if (startIndex>0)
-				{
-				int numberOfEmptyNeeded = figure.getPrincipalMultiChannel().getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultiChannelImage());
-				startIndex=figure.getMontageLayout().getEditor().indexOfFirstEmptyPanel(ml, numberOfEmptyNeeded, startIndex-1);
-				}
-		
-			undo = figure.nextMultiChannel(item, startIndex);
 			
-			for(ZoomableGraphic g:item.getAllGraphics()) {
-				select(g);
-			}
-			figure.getMontageLayoutGraphic().select();
+			//MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
+			startIndex=figure.getMontageLayout().getPanelIndex((int)location2.getX(), (int) location2.getY());
 			figure.getMontageLayoutGraphic().generateCurrentImageWrapper();
-			if (figure.hasItem(item)) {
-				showFileSizeWarning(item);
-			}
-			return undo;
+			figurecontext.setStoredFigure(figure, ml, startIndex);
+			
 		}
 		
 		
-		FigureOrganizingLayerPane aa = new FigureAdder(true).add(layer, f.getAbsolutePath());
-		aa.getMontageLayoutGraphic().moveLayoutAndContents(location2.getX(), location2.getY());
 		
-		imageAndDisplaySet.updateDisplay();
-		aa.fixLabelSpaces();
+		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
+		MakeFigureAfterFileOpen makeFigureAtDropLocation = new MakeFigureAfterFileOpen(imageAndDisplaySet, layer, undo, location2, f, figurecontext);
 		
-		return new UndoAddItem(layer, aa);
-		//return aa;
+		makeFigureAtDropLocation.complteOrPostcomeAction(item);
+		
+		
+			
+		return undo;
 	}
 
-	/**
-	Tells the user if his file is to big
-	 */
-	protected void showFileSizeWarning(MultichannelDisplayLayer item) {
-		int size = item.getSlot().getEstimatedSizeOriginal();
-		if (size>16*1500*1000*4*2) {
-			ShowMessage.showOptionalMessage("That is a large file!", false, "You added a very large file that takes a lot of memory",
-					"The original is kept in case you want to change the scale or crop later", 
-					"No figure needs to be this large",
-					"Please use smaller version of the image in the future ");
-		}
-	}
+
+
+	
+
+
 
 	/**finds a layer that can accept a figure organizing layer panel*/
 	private GraphicLayer findValidLayer(GraphicLayer layer) {

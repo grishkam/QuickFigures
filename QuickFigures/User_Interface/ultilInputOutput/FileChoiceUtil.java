@@ -97,6 +97,19 @@ public class FileChoiceUtil {
 	
 	/**opens a file dialog that resembles the imagej file dialog*/
 	private static File showIJDDFileDialog(FileDialog fd, String dir, String name) {
+		String st = determineStartingDirectoryAndSetupDialog(fd, dir, name, false);
+	       if (st==null) return null;
+	       
+	       return new File(fd.getDirectory()+File.separator+fd.getFile());
+	}
+	
+	/**sets up the appearance and the starting directory for a file open dialog
+	 * @param fd
+	 * @param dir
+	 * @param name
+	 * @return
+	 */
+	public static String determineStartingDirectoryAndSetupDialog(FileDialog fd, String dir, String name, boolean multipleDialog) {
 		ensureWindowsLook();
 		if (dir==null) {
 			dir=name;
@@ -120,16 +133,32 @@ public class FileChoiceUtil {
 		}  
 	       fd.setVisible(true);
 	       String st=fd.getFile();
-	       if (st==null) return null;
-	       
-	       return new File(fd.getDirectory()+File.separator+fd.getFile());
+	       fd.setMultipleMode(multipleDialog);
+		return st;
 	}
+	
+	/**opens a file dialog that resembles the imagej file dialog*/
+	public static ArrayList<File> showMultipleFileDialog(FileDialog fd, String dir, String name) {
+		String st = determineStartingDirectoryAndSetupDialog(fd, dir, name, true);
+	       if (st==null) return null;
+	       ArrayList<File> output = new ArrayList<File>();
+	      File[] files = fd.getFiles();
+	      for(File f: files) {
+	    	  if(f==null)
+	    		  continue;
+	    	  output.add(f);
+	      }
+	      return output;
+	}
+	
 	
 	/**shows a file dialog for the user to open a file in the default directory*/
 	public static File  getOpenFile() {
 		String dd = CurrentAppContext.getDefaultDirectory();
 		return getOpenFile(dd);
 	}
+	
+	
 	
 	/**shows a file dialog for the user to open a file in the given directory*/
 	public static File getOpenFile(String dd) {
@@ -144,6 +173,9 @@ public class FileChoiceUtil {
 	       return showIJDDFileDialog(fd, dd, null);
 	      
 	}
+	
+	
+
 	
 	/**shows a file dialog for the user to save a file in the default directory*/
 	public static File  getSaveFile() {

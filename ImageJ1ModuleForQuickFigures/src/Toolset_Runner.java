@@ -28,9 +28,11 @@ import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
 import appContext.RulerUnit;
 import appContextforIJ1.IJ1MultichannelContext;
+import appContextforIJ1.ImageOpenListener;
 import basicMenusForApp.ShowToolBar;
 import figureFormat.DirectoryHandler;
 import ij.IJ;
+import ij.ImagePlus;
 import ij.plugin.PlugIn;
 import imageDisplayApp.KeyDownTracker;
 import imageDisplayApp.UserPreferences;
@@ -104,7 +106,7 @@ public class Toolset_Runner implements PlugIn {
 			IssueLog.logT(t);
 		}
 		Toolkit.getDefaultToolkit().addAWTEventListener(new KeyDownTracker(), AWTEvent.KEY_EVENT_MASK);
-		
+		ImagePlus.addImageListener(new ImageOpenListener());
 	}
 
 

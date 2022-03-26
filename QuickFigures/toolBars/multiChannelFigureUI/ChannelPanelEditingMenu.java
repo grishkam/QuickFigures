@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 1, 2022
+ * Date Modified: Mar 23, 2022
  * Version: 2022.0
  */
 package multiChannelFigureUI;
@@ -103,7 +103,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	private int workOn=ALL_IMAGES_IN_CLICKED_FIGURE;
 	
 
-	static final String SCALING_COMMAND="Scale", COLOR_MODE_COMMAND="ColorMode",CHANNEL_USE_COMMAND="Channel Use";
+	static final String SCALING_COMMAND="Scale", COLOR_MODE_COMMAND="ColorMode",CHANNEL_USE_COMMAND="Channel Use", COLOR_INVERT_COMMAND="ColorInvert";
 	static final String minMaxCommand="MinMax",WLCommand="WinLev";
 	static final String orderCommand="order and luts", orderCommand2="Min, Max, order and luts";
 	static final String panContentCommand="Panel Content Gui",colorRecolorCommand="Fix Colors";
@@ -182,6 +182,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		addButtonToMenu(output, "Window/Level", WLCommand, IconUtil.createBrightnessIcon());
 		 addButtonToMenu(output, "Min/Max", minMaxCommand, IconUtil.createBrightnessIcon());
 		 addButtonToMenu(output, "Change Color Modes", COLOR_MODE_COMMAND, new ColorModeIcon(colorForColorModeIcon));
+		
 		 MultichannelDisplayLayer principalDisplay = this.getPrincipalDisplay();
 		 if(principalDisplay!=null)
 			 	addButtonToMenu(output, "Channel Use Options", CHANNEL_USE_COMMAND, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder()));
@@ -195,6 +196,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		 
 		 
 		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
+		 addButtonToMenu(output, "Invert Channel Panel Color", COLOR_INVERT_COMMAND);
 		 
 		 if(!limitVersionOfMenu) {
 		 JMenu chanLabelMenu=new JMenu("Channel Label");
@@ -223,33 +225,40 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	public void actionPerformed(ActionEvent arg0) {
 		CombinedEdit undo = null ;
 		
-		if (arg0.getActionCommand().equals(minMaxCommand)&& !isDisplayMissing(true)) {
+		String actionCommand = arg0.getActionCommand();
+		if (actionCommand.equals(minMaxCommand)&& !isDisplayMissing(true)) {
 			undo=showDisplayRangeDialog(WindowLevelDialog.MIN_MAX);
 			
 		}
-		if (arg0.getActionCommand().equals(WLCommand)&& !isDisplayMissing(true)) {
+		if (actionCommand.equals(WLCommand)&& !isDisplayMissing(true)) {
 			
 			undo=showDisplayRangeDialog(WindowLevelDialog.WINDOW_LEVEL);
 			
 		}
 		if(undo!=null) undo.establishFinalState();
-		if (arg0.getActionCommand().equals(SCALING_COMMAND)) {
+		if (actionCommand.equals(SCALING_COMMAND)) {
 			 showScaleSettingDialog() ;
 		}
 		
 
+		if (actionCommand.equals(COLOR_INVERT_COMMAND)&& !isDisplayMissing(true)) {
+			boolean invert = ShowMessage.showOptionalMessage("You may now choose to invert the color for channel panel", true, "This will make the channel color inverted for the clicked panel's channel", "This is a work in progress. undo for insets and applicaiton to newly added panels not complete yet.  ", "Are you sure you want to continue?");
+			if(invert) 
+				undo = invertForPressedPanel();
+		}
 		
 		
 		
-		if (arg0.getActionCommand().equals(COLOR_MODE_COMMAND) && !isDisplayMissing(true)) {
+		
+		if (actionCommand.equals(COLOR_MODE_COMMAND) && !isDisplayMissing(true)) {
 			undo= changeColorModes();
 		}
 		
-if (	arg0.getActionCommand().equals(colorRecolorCommand)&& !isDisplayMissing(true)) {
+if (	actionCommand.equals(colorRecolorCommand)&& !isDisplayMissing(true)) {
 			undo=recolorBasedOnRealChannelNames();
 		}
 
-if (arg0.getActionCommand().equals(channelNameCommand)) {
+if (actionCommand.equals(channelNameCommand)) {
 	ChannelLabelManager lm=getPressedChannelLabelManager();
 	
 	if (stackSlicePressed.isTheMerge()) {
@@ -262,13 +271,13 @@ if (arg0.getActionCommand().equals(channelNameCommand)) {
 }
 
 
-if (	arg0.getActionCommand().equals(renameChanCommand)) {
+if (	actionCommand.equals(renameChanCommand)) {
 	getPresseddisplay().getMultiChannelImage().renameBasedOnRealChannelName();
 	this.updateAllDisplays();
 }
 		
 		
-		if (arg0.getActionCommand().equals(CHANNEL_USE_COMMAND)) {
+		if (actionCommand.equals(CHANNEL_USE_COMMAND)) {
 			
 			
 			
@@ -297,7 +306,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		
 	
 		
-		if (arg0.getActionCommand().equals(orderCommand2)) {
+		if (actionCommand.equals(orderCommand2)) {
 			setScope(ALL_IMAGES_IN_CLICKED_FIGURE);
 			new ChannelOrderAndLutMatching().matchChannels(this.getPressedMultichannel(), this.getAllMultiChannelImages(), 2);
 			for(int c=1; c<=this.getPressedMultichannel().nChannels(); c++) {
@@ -305,7 +314,7 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 			}
 		}
 		
-		if (arg0.getActionCommand().equals(panContentCommand)) {
+		if (actionCommand.equals(panContentCommand)) {
 			AdvancedChannelUseGUI distpla = new AdvancedChannelUseGUI(  getPressedPanelManager(), this.getPressedChannelLabelManager());
 			//getPressedPanelManager().getStack().setChannelUpdateMode(true);
 			distpla.setVisible(true);
@@ -315,6 +324,53 @@ if (	arg0.getActionCommand().equals(renameChanCommand)) {
 		 updateAllAfterMenuAction();
 		if(undo!=null) { new CurrentFigureSet().addUndo(undo);
 							}
+	}
+
+	/**Sets teh channel panels for the clicked channel to have an inverted channel color
+	 * @return
+	 */
+	private CombinedEdit invertForPressedPanel() {
+		CombinedEdit undo;
+		undo=new CombinedEdit();
+		
+		
+		
+		
+				CombinedEdit undo2 = PanelManagerUndo.createFor(this.getCurrentOrganizer());
+				undo2.addEditListener(new AfterUndoChannel());
+				undo.addEditToList(undo2);
+				
+		
+		
+		boolean invertStatus = !stackSlicePressed.invertChannelColor;
+		/**inverts the panel that was clicked on*/
+		stackSlicePressed.invertChannelColor=invertStatus;
+		
+		/**inverts the main panels*/
+		Integer targetChannelNumber2 = stackSlicePressed.targetChannelNumber;
+		
+		for(ImageDisplayLayer e: this.getAllDisplays()) {
+			for(PanelListElement e2:e.getPanelList().getPanels())
+					{
+				if(e2.targetChannelNumber==targetChannelNumber2) {
+					e2.invertChannelColor=invertStatus;
+				}
+				
+						}
+		}
+		
+		/**inverts the insets*/
+		for(ImageDisplayLayer mans: this.getAllDisplays()) {
+			for(PanelGraphicInsetDefiner a:	mans.getInsets()) {
+				for(PanelListElement e2: a.getPanelManager().getPanelList().getPanels()) {
+					if(e2.targetChannelNumber==targetChannelNumber2) {
+						e2.invertChannelColor=invertStatus;
+					}
+				}
+			}
+	} 
+		this.updateAllDisplays();
+		return undo;
 	}
 
 	/**Changes the channels colors to match their respectie channel names*/
