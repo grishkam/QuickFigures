@@ -16,12 +16,14 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Mar 26, 2022
+ * Date Modified: Mar 27, 2022
  * Version: 2022.0
  */
 package plates;
 
 import java.util.ArrayList;
+
+import logging.IssueLog;
 
 /**
  
@@ -37,21 +39,43 @@ public class Plate {
 	int nCol=12;
 	int nRow=8;
 	
+	
 	ArrayList<PlateCell> cellList=new ArrayList<PlateCell>();
+	PlateOrientation oritenation=PlateOrientation.STANDARD;
+	private int skipRows;
 	
 	public Plate() {
 		createPlaceCells();
 	}
-	public Plate(int row, int col) {
+	public Plate(int row, int col, PlateOrientation orient, int skipRows) {
 		this.nCol=col;
 		this.nRow=row;
+		this.oritenation=orient;
+		this.skipRows=skipRows;
 		createPlaceCells();
 	}
 	
-	/**returns the row/col address of the */
+	/**returns the row/col address of the index. Depending on the */
 	public String getIndexAddress(int index) {
+		if(oritenation==PlateOrientation.FLIP) {
+			int rowIndex = index%nRow;
+			int colIndex = index/nRow;
+			
+			if(skipRows>0)
+				colIndex*=1+this.skipRows;//if there are gap rows meant as spacers or replicates
+			
+			rowIndex=this.nRow-rowIndex-1;
+			
+			char letter=(char)(A_Index+rowIndex);
+			String addressText = ""+letter+(colIndex+1);
+			
+			return addressText;
+		}
+		
 		int colIndex = index%nCol;
 		int rowIndex = index/nCol;
+		if(skipRows>0)
+			rowIndex*=1+this.skipRows;//if there are gap rows meant as spacers or replicates
 		
 		char letter=(char)(A_Index+rowIndex);
 		return ""+letter+(colIndex+1);

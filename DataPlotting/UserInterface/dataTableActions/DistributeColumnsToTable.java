@@ -28,9 +28,11 @@ import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
 import layout.RetrievableOption;
+import messages.ShowMessage;
 import plateDisplay.ShowPlate;
 import plates.Plate;
 import plates.PlateCell;
+import plates.PlateOrientation;
 import storedValueDialog.StoredValueDilaog;
 
 /**
@@ -52,11 +54,22 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "row", label="plate has this many rows")
 	public double nRow=8;
 	
+	@RetrievableOption(key = "skip", label="Skip rows/cols for replicates? (set to >0)")
+	public double skip=0;
+	
 	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
 	public File templateFile=new File("C://Users/Greg Mazo/Desktop/example4.xlsx");
 	
 	@RetrievableOption(key = "Combine File with another? (optional)", label="Input File With Sample names (.xlsx)")
-	public File templateFile2=new File("C://Users/Greg Mazo/Desktop/example6.xlsx");
+	public File templateFile2=null;
+	
+	@RetrievableOption(key = "roate", label="Distribute samples vertically")
+	public boolean rotatePlate=false;
+	
+	@RetrievableOption(key = "h", label="First Line is header (always true)")
+	public boolean headerPlate=true;
+	
+	
 	
 	@Override
 	public String getNameText() {
@@ -71,7 +84,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		StoredValueDilaog dd = new StoredValueDilaog("Distribute rows to a plate setup",  this);
 		dd.setModal(true);
 		dd.showDialog();
-		Plate plate = new Plate();
+		PlateOrientation po=PlateOrientation.STANDARD;
+		if(rotatePlate)
+			po=PlateOrientation.FLIP;
+		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)skip);
+		
 		
 		item= new ExcelTableReader(templateFile);
 		
@@ -152,6 +169,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		item.setValueAt("plate_location", 0, (int) colAddressColumnIndex);
 		for(int i=1; i<=total; i++) {
 			String index = plate.getIndexAddress(i-1);
+			if(i-1>=plate.getPlateCells().size()) {
+				ShowMessage.showOptionalMessage("Too many samples", true, "You have to many samples for this plate size");
+				break;
+			}
 			PlateCell plateCell = plate.getPlateCells().get(i-1);
 			plateCell.setSpreadSheetRow(i);
 			plateCell.setShortName(item.getValueAt(i, (int) sampleNameIndex));
@@ -163,7 +184,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		
 		String oSave=item.getOriginalSaveAddress();
 		if(oSave!=null&&oSave.contains(".xlsx"))
-			oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
+			{
+				oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
+				oSave=findUniqueOutputFileNam(oSave, ".xlsx");
+			}
 		
 		if(oSave==null)
 			oSave=findOutputFileNam();
@@ -181,6 +205,24 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		String name="output";
 		String extension=".xlsx";
 		name=DirectoryHandler.getDefaultHandler().getFigureFolderPath()+File.separator+name;
+		File f=new File(name+extension);
+		while(f.exists()) {
+			 f=new File(name+"_"+count+extension);
+			 count++;
+		}
+		return f.getAbsolutePath();
+	}
+	
+	/**returns a non existent output file
+	 * @return
+	 */
+	private String findUniqueOutputFileNam(String output, String extension) {
+		int count=1;
+		
+		if(output.endsWith(extension))
+			output=output.replace(extension,"");
+		String name=output;
+		
 		File f=new File(name+extension);
 		while(f.exists()) {
 			 f=new File(name+"_"+count+extension);

@@ -71,7 +71,9 @@ public @interface RetrievableOption {
 	/**A number used for sorting fields in a particular order*/
 	int rank() default 0;
 	
-
+	/**set to true if it should be locked for editing*/
+	boolean locked() default false;
+	
 }
 
 
