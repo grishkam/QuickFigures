@@ -105,7 +105,7 @@ public static ColumnDataSeries[] read(String st) throws InvalidFormatException, 
 	    //InputStream inp = new FileInputStream("workbook.xlsx");
 
 	    Workbook wb = WorkbookFactory.create(inp);
-	    
+	    inp.close();
 	   return extractBasicDataSeriesF(wb);
 	}
 
@@ -143,13 +143,13 @@ public static ArrayList<XYDataSeries> readXY(String st) throws InvalidFormatExce
 /**reads an xlsx file and returns the data*/
 public static ArrayList<KaplanMeierDataSeries> readKaplan(String st) throws InvalidFormatException, IOException {
 
-   return extractKaplanDataSeries(fileToWorkBook(st));
+   return extractKaplanDataSeries(fileToWorkBook(st), st);
 }
 
-private static ArrayList<KaplanMeierDataSeries> extractKaplanDataSeries(Workbook wb) {
+private static ArrayList<KaplanMeierDataSeries> extractKaplanDataSeries(Workbook wb, String st) {
 	Sheet sheet = wb.getSheetAt(0);
 	   
-	 return  SmartDataInputDialog.getKaplanDataSeriesUsingDefaultClassification(new ExcelTableReader(wb,sheet));
+	 return  SmartDataInputDialog.getKaplanDataSeriesUsingDefaultClassification(new ExcelTableReader(wb,sheet,st));
 	
 }
 

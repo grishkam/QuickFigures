@@ -33,6 +33,7 @@ import dataTableDialogs.TableReader;
 import fileread.ReadExcelData;
 import graphicalObjects.ZoomableGraphic;
 import logging.IssueLog;
+import storedValueDialog.StoredValueDilaog;
 import ultilInputOutput.FileChoiceUtil;
 
 /**
@@ -41,8 +42,11 @@ import ultilInputOutput.FileChoiceUtil;
  */
 public abstract class BasicDataTableAction implements DataTableAction {
 
+	protected boolean askForFile=false;
+
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		
 		boolean tablesFound=false;
 		DataTableActionContext context=new DataTableActionContext();
 		if(diw!=null)for(ZoomableGraphic item: diw.getImageAsWorksheet().getTopLevelLayer().getObjectsAndSubLayers()) {
@@ -52,16 +56,20 @@ public abstract class BasicDataTableAction implements DataTableAction {
 			}
 		}
 		
-		if(tablesFound==false) {
+		
+		
+		if(tablesFound==false&&this.askForFile) {
 			IssueLog.log("Could not find data file will ask user to open");
 			File file = FileChoiceUtil.getOpenFile();
 			if(file.getAbsolutePath().toLowerCase().endsWith("xlsx")) try {
 				Workbook wb = ReadExcelData.fileToWorkBook(file.getAbsolutePath());
-				ExcelTableReader tr = new  ExcelTableReader(wb,wb.getSheetAt(0));
+				ExcelTableReader tr = new  ExcelTableReader(wb,wb.getSheetAt(0), file.getAbsolutePath());
 				processTableAction(tr, context);
 			} catch (Throwable t) {
 				IssueLog.logT(t);
 			}
+		} else if(tablesFound==false) {
+			processTableAction(null, context);
 		}
 
 	}

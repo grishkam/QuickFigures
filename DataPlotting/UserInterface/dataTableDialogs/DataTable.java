@@ -49,6 +49,7 @@ public class DataTable extends JTable implements TableReader {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private String originalFileLocation=null;
 
 	public DataTable(Object[][] objects, Object[] objects2) {
 			super(objects, objects2);
@@ -389,7 +390,7 @@ public class DataTable extends JTable implements TableReader {
 
 
 	@Override
-	public void saveTable(boolean b) {
+	public void saveTable(boolean b, String outputFileName) {
 		IssueLog.log("table saving still being implemented");
 		
 	}
@@ -398,6 +399,11 @@ public class DataTable extends JTable implements TableReader {
 	public TableReader createNewSheet(String newParam) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getOriginalSaveAddress() {
+		return originalFileLocation;
 	}
 
 }

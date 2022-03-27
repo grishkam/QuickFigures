@@ -15,20 +15,25 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 7, 2021
+ * Date Modified: Mar 26, 2021
  * Version: 2022.0
  */
 package dataTableDialogs;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import fileread.ReadExcelData;
 import logging.IssueLog;
@@ -40,10 +45,35 @@ public class ExcelTableReader implements TableReader {
 
 	private  org.apache.poi.ss.usermodel.Sheet sheet;
 	private Workbook workbook;
+	private String fileLocation;
 
-	public ExcelTableReader(Workbook wb2, Sheet wb) {
+	public ExcelTableReader() throws IOException {
+		workbook= WorkbookFactory.create(true);
+		workbook.createSheet();
+		sheet=workbook.getSheetAt(0);
+	}
+	
+	public ExcelTableReader(File fileLocation) {
+		try {
+				 InputStream inp = new FileInputStream(fileLocation.getAbsolutePath());
+				    Workbook wb2;
+					
+						wb2 = WorkbookFactory.create(inp);
+				
+				sheet=wb2.getSheetAt(0);
+				this.workbook=wb2;
+				this.fileLocation=fileLocation.getAbsolutePath();
+				inp.close();
+			} catch (Exception e) {
+				IssueLog.logT(e);
+				
+			}
+	}
+	
+	public ExcelTableReader(Workbook wb2, Sheet wb, String fileLocation) {
 		sheet=wb;
 		this.workbook=wb2;
+		this.fileLocation=fileLocation;
 	}
 	
 	@Override
@@ -72,14 +102,27 @@ public class ExcelTableReader implements TableReader {
 			row.createCell(colNumber);
 			cell = row.getCell(colNumber);
 		}
+		
+		if(value!=null&&value.getClass()==Integer.class)
+			cell.setCellValue((Integer) value);
 		cell.setCellValue(value+"");
 	}
 
 	@Override
-	public void saveTable(boolean b) {
+	public void saveTable(boolean b, String outputFileName) {
+		File fileAddress = null;
 		
-		File fileAddress = FileChoiceUtil.getSaveFile();
-
+			
+			
+		if(outputFileName==null)
+			 fileAddress = FileChoiceUtil.getSaveFile();
+		else  {
+			if(!outputFileName.endsWith("xlsx")) {
+				outputFileName+=".xlsx";
+			}
+			fileAddress = new File(outputFileName);
+		}
+		
 		
 		
 
@@ -99,7 +142,25 @@ public class ExcelTableReader implements TableReader {
 
 	@Override
 	public TableReader createNewSheet(String name) {
-		return new  ExcelTableReader(workbook, workbook.createSheet(name));
+		return new  ExcelTableReader(workbook, workbook.createSheet(name), fileLocation);
+	}
+
+	@Override
+	public String getOriginalSaveAddress() {
+		return fileLocation;
+	}
+
+	@Override
+	public int getColumnCount() {
+		int count=1;
+		for(int i=0; i<this.getRowCount(); i++) {
+			Row row = sheet.getRow(i);
+			if(row==null) {break;}
+			if(row.getLastCellNum()>count)
+				count=row.getLastCellNum();
+		}
+		IssueLog.log("Column count "+count+ "   for    "+this.getOriginalSaveAddress());
+		return count;
 	}
 
 }

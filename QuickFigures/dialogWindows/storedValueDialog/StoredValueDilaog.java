@@ -103,7 +103,6 @@ public class StoredValueDilaog extends StandardDialog{
 				}
 				
 				if(f.getType()==File.class) {
-					IssueLog.log("Adding file field");
 					addFileField(d, of, f, o);
 				}
 				

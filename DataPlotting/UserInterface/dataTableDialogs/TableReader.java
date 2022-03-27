@@ -29,13 +29,19 @@ public interface TableReader {
 	void setValueAt(Object value, int rowNumber, int colNumber);
 	
 	int getRowCount();
+	int getColumnCount();
 	
-	public void saveTable(boolean b);
+	public void saveTable(boolean b, String outputFileName);
 
 	/**
 	 * @param newParam TODO
 	 * @return
 	 */
 	TableReader createNewSheet(String newParam);
+
+	/**
+	 * @return
+	 */
+	String getOriginalSaveAddress();
 
 }
