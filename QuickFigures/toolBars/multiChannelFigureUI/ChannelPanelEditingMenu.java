@@ -242,7 +242,7 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		
 
 		if (actionCommand.equals(COLOR_INVERT_COMMAND)&& !isDisplayMissing(true)) {
-			boolean invert = ShowMessage.showOptionalMessage("You may now choose to invert the color for channel panel", true, "This will make the channel color inverted for the clicked panel's channel", "This is a work in progress. undo for insets and applicaiton to newly added panels not complete yet.  ", "Are you sure you want to continue?");
+			boolean invert = ShowMessage.showOptionalMessage("You may now choose to invert the color for the channel panel", true, "This will make the channel color inverted for the clicked panel's channel", "Newly added panels will have normal color (work in progress).", "Are you sure you want to continue?");
 			if(invert) 
 				undo = invertForPressedPanel();
 		}
