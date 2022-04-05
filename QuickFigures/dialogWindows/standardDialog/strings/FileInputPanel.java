@@ -29,6 +29,7 @@ import java.io.File;
 
 import javax.swing.JButton;
 
+import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
 /**
@@ -58,13 +59,19 @@ public class FileInputPanel extends StringInputPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				file=FileChoiceUtil.getOpenFile();
 				if(file!=null)
 					field.setText(file.getAbsolutePath());
 				else {
 					field.setText(choose);
-				dispatchStringInputEvent();
+					
+					
+				
+				
 				}
+				
+				dispatchStringInputEvent();
 				
 			}});
 		

@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
+import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
@@ -217,7 +219,15 @@ public void setValue(int value) {
 	}
 	
 	/**returns the name of the panel*/
-	public String getName() {return label.getText();}
+	public String getName() {
+		if(label==null)
+			{	IssueLog.log("no label");
+		
+				return "no label present";
+			}
+		return 
+				label.getText();
+		}
 	
 	/**changes the text to title case*/
 	public static String titleCase(String st) {

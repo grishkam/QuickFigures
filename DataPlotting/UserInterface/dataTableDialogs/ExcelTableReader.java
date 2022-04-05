@@ -55,12 +55,17 @@ public class ExcelTableReader implements TableReader {
 	
 	public ExcelTableReader(File fileLocation) {
 		try {
+			if(fileLocation==null)
+				IssueLog.log("no file provided");
 				 InputStream inp = new FileInputStream(fileLocation.getAbsolutePath());
+				 
 				    Workbook wb2;
 					
 						wb2 = WorkbookFactory.create(inp);
 				
 				sheet=wb2.getSheetAt(0);
+				if(sheet==null)
+					IssueLog.log("no spreadsheet found");
 				this.workbook=wb2;
 				this.fileLocation=fileLocation.getAbsolutePath();
 				inp.close();
@@ -85,6 +90,11 @@ public class ExcelTableReader implements TableReader {
 
 	@Override
 	public int getRowCount() {
+		if(sheet==null)
+		{
+			IssueLog.log("null sheet issue");
+			workbook.getSheetAt(0);
+			}
 		return sheet.getLastRowNum();
 	}
 
@@ -159,7 +169,7 @@ public class ExcelTableReader implements TableReader {
 			if(row.getLastCellNum()>count)
 				count=row.getLastCellNum();
 		}
-		IssueLog.log("Column count "+count+ "   for    "+this.getOriginalSaveAddress());
+		
 		return count;
 	}
 

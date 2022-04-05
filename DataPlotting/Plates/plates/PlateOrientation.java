@@ -29,6 +29,17 @@ import java.util.ArrayList;
  */
 public enum PlateOrientation {
 	
-	STANDARD, FLIP;
+	STANDARD(1,0), FLIP(0,-1);
+	
+	public int xFlow=1;
+	public int yFlow=0;
+	
+	PlateOrientation(int dx, int dy) {
+		this.xFlow=dx;
+		this.yFlow=dy;
+	}
+	
+	
+	
 
 }

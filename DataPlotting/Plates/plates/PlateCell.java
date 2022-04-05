@@ -85,4 +85,6 @@ public class PlateCell {
 		this.shortName=valueAt;
 		
 	}
+	
+	
 }

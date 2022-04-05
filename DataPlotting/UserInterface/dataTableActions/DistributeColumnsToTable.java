@@ -28,6 +28,7 @@ import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
 import layout.RetrievableOption;
+import logging.IssueLog;
 import messages.ShowMessage;
 import plateDisplay.ShowPlate;
 import plates.Plate;
@@ -57,10 +58,13 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "skip", label="Skip rows/cols for replicates? (set to >0)")
 	public double skip=0;
 	
-	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
-	public File templateFile=new File("C://Users/Greg Mazo/Desktop/example4.xlsx");
+	@RetrievableOption(key = "block", label="Block samples ")
+	public double blockSize=4;
 	
-	@RetrievableOption(key = "Combine File with another? (optional)", label="Input File With Sample names (.xlsx)")
+	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
+	public File templateFile=new File("C:\\Users\\Greg Mazo\\Desktop\\example4.xlsx");
+	
+	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine File with another? (optional)")
 	public File templateFile2=null;
 	
 	@RetrievableOption(key = "roate", label="Distribute samples vertically")
@@ -68,6 +72,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	@RetrievableOption(key = "h", label="First Line is header (always true)")
 	public boolean headerPlate=true;
+	
+	
 	
 	
 	
@@ -84,13 +90,19 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		StoredValueDilaog dd = new StoredValueDilaog("Distribute rows to a plate setup",  this);
 		dd.setModal(true);
 		dd.showDialog();
+		if(dd.wasCanceled())
+			return;
+		
+		item=new ExcelTableReader(templateFile);
+		
 		PlateOrientation po=PlateOrientation.STANDARD;
 		if(rotatePlate)
 			po=PlateOrientation.FLIP;
-		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)skip);
+		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)skip, (int)blockSize);
 		
 		
 		item= new ExcelTableReader(templateFile);
+		IssueLog.log("working on selected file "+item.getOriginalSaveAddress());
 		
 		if(templateFile2!=null) {
 			ExcelTableReader secondTemplateTable = new ExcelTableReader(templateFile2);
@@ -99,7 +111,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			if(item.getColumnCount()>colAddressColumnIndex)
 				colAddressColumnIndex=item.getColumnCount()+1;
 		}
-		item.getColumnCount();
+		
 		distributeExcelRowsToPlate(plate, item);
 		
 	}
@@ -232,6 +244,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	}
 
 	public static void main(String[] args) {
+		IssueLog.sytemprint=true;
 		new DistributeColumnsToTable().performActionDisplayedImageWrapper(null);
 	}
 

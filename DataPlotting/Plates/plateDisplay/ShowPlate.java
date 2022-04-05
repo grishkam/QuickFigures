@@ -25,6 +25,7 @@ import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
 import dataTableDialogs.TableReader;
 import fileread.PlotType;
+import logging.IssueLog;
 import plates.Plate;
 import plates.PlateCell;
 
@@ -50,9 +51,11 @@ public class ShowPlate {
 			table.setValueAt(""+(i+1),0, i+1);
 		}
 		
-		for(PlateCell cell: plate.getPlateCells()) {
+		for(PlateCell cell: plate.getPlateCells()) try {
 			int[] index = cell.plateAddressToCell();
 			table.setValueAt(cell.getShortLabel(), index[0]+1, index[1]);
+		} catch (Throwable t) {
+			IssueLog.log("not a valid plate address ");
 		}
 	}
 	

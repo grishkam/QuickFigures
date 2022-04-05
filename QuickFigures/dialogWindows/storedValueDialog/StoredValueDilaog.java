@@ -279,6 +279,7 @@ public class StoredValueDilaog extends StandardDialog{
 			addStringInputListener(this);
 			this.field=f;
 			this.object=of;
+			this.addStringInputListener(this);
 		}
 		
 		
@@ -286,7 +287,8 @@ public class StoredValueDilaog extends StandardDialog{
 		@Override
 		public void stringInput(StringInputEvent  ne) {
 			try {
-				File inputFile = this.getFile();
+				File inputFile = new File(ne.getInputString());
+				
 				{field.set(object, inputFile);}
 				
 			} catch (Exception e) {
