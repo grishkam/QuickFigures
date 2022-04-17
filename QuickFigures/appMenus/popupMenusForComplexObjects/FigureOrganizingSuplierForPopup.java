@@ -647,6 +647,9 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	 * @return */
 	@MenuItemMethod(menuActionCommand = "Band marks", menuText = "Add Band Marks on Left")
 	public UndoAddItem addBandMarkLabel(CanvasMouseEvent me) {
+		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band labels are a work in progress. They are not yet stable. Use with caution", "Are  you sure you want to try them proceed?");
+		if(!decision)
+			return null;
 		Point point = me.getCoordinatePoint();
 		DefaultLayoutGraphic thelayout = figureOrganizingLayerPane.getMontageLayoutGraphic();
 		ImagePanelGraphic panel = figureOrganizingLayerPane.getAllPanelLists().getPanelGraphics().get(0);
