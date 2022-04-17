@@ -51,6 +51,7 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import genericMontageLayoutToolKit.FitLayout;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.QuickFigureMaker;
+import graphicalObjects_BandMarkers.BandMarkLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -351,6 +352,17 @@ public class FigureTester {
 	/**returns a version of example 1 with merge panels only*/
 	public FigureOrganizingLayerPane createFigureFromExample1BImages() {return createFigureFromExample1Images(example1BFigureMaker(), 4);}
 
+	/**Creates a figure with band markers*/
+	public FigureOrganizingLayerPane createFigureWithBandPatterImages() {
+			FigureOrganizingLayerPane startingPoint = createFigureFromExample1Images(example1BFigureMaker(), 4);
+			ImagePanelGraphic panel = startingPoint.getAllPanelLists().getPanelGraphics().get(0);
+			BandMarkLayer markLayer = new BandMarkLayer(panel);
+			markLayer.createBandMarks(panel.getBounds());
+			panel.getParentLayer().add(markLayer);
+			return startingPoint;
+	}
+
+	
 	/**returns the versionof example 1 with inset panels*/
 	public FigureOrganizingLayerPane createFigureFromExample1CImagesWithInsets() {
 		FigureOrganizingLayerPane createFigureFromExample1Images = createFigureFromExample1Images(example1BFigureMaker(), 1);
@@ -605,7 +617,8 @@ public class FigureTester {
 	public static TestProvider[] getTests() {
 		ignoreTemplate=true;
 		return new TestProvider[] {new FigureProvider(TestExample._FIGURE), new FigureProvider(TestExample.SPLIT_CHANNEL_FIGURE), new FigureProvider(TestExample.MERGE_PANEL_FIGURE),
-				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL), new FigureProvider(TestExample.MANY_SCALE_IMAGEPANEL), new FigureProvider(TestExample.SCALE_BAR_STYLES_), new FigureProvider(TestExample.FIGURE_WITH_LINE_PROFILE)};
+				new FigureProvider(TestExample.FIGURE_WITH_INSETS), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL), new FigureProvider(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE), new FigureProvider(TestExample.MANY_SIZE_IMAGEPANEL), new FigureProvider(TestExample.MANY_SCALE_IMAGEPANEL), new FigureProvider(TestExample.SCALE_BAR_STYLES_),
+				new FigureProvider(TestExample.FIGURE_WITH_LINE_PROFILE), new FigureProvider(TestExample.BAND_PATTERN_FIGURE)};
 	}
 	
 	/**A test provider to return figures. used by other classes*/
@@ -636,6 +649,8 @@ public class FigureTester {
 				new FigureTester(). createFigureFromExample1AImages();
 			if (form==TestExample.MERGE_PANEL_FIGURE)
 				new FigureTester(). createFigureFromExample1BImages();
+			if (form==TestExample.BAND_PATTERN_FIGURE)
+				new FigureTester(). createFigureWithBandPatterImages() ;
 			if (form==TestExample.FIGURE_WITH_INSETS)
 				new FigureTester(). createFigureFromExample1CImagesWithInsets();
 			if (form==TestExample.FIGURE_WITH_LINE_PROFILE)
@@ -646,6 +661,7 @@ public class FigureTester {
 				new FigureTester().createFromExample3Images(TestExample.MANY_SPLIT_CHANNEL_SCRAMBLE);
 			if (form==TestExample._FIGURE)
 				new FigureTester().createFigureFromMockImages();
+			
 			
 			DisplayedImage currentActiveDisplayGroup = CurrentFigureSet.getCurrentActiveDisplayGroup();
 			currentActiveDisplayGroup.getImageAsWorksheet().setTitle(form.name());

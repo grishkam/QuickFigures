@@ -198,6 +198,9 @@ public class AttachedItemList extends ArrayList<LocatedObject2D> implements Loca
 	public static void removeFromAlltakers(LocatedObject2D sel, ArrayList<?> allRoi, CombinedEdit undoer) {
 	
 		for(Object t: allRoi) try {
+			if(t instanceof CarriesLockTaker) {
+				t= (( CarriesLockTaker)t).getLockTaker();
+			}
 			if (t==null || !(t instanceof TakesAttachedItems)) continue;
 			
 			TakesAttachedItems taker = ((TakesAttachedItems)t);

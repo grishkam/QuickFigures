@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: April 17, 2022
  * Version: 2022.0
  */
 package handles;
@@ -38,6 +38,9 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	private static final long serialVersionUID = 1L;
 	private static final int NO_HANDLE = -1;
 	
+	public static final int OVERRIDE_DRAG_HANDLE=409367199;
+	public SmartHandle nullHandle=null;
+	
 	/**creates a new smart handle list*/
 	public static  SmartHandleList createList(SmartHandle... handles) {
 		SmartHandleList out = new SmartHandleList();
@@ -57,10 +60,14 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 		
 		return out;
 	}
+
+	
 	
 	/**Draws the handles, except for the hidden ones*/
 	public void draw(Graphics2D g, CordinateConverter cords) {
 		for(SmartHandle sh:this) {
+			if(sh==null)
+				continue;
 			if (sh.isHidden()) continue;
 			sh.draw(g, cords);
 		}
@@ -80,13 +87,15 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 			if (sh.containsClickPoint(p)) return sh;
 			
 		}
-		return null;
+		return nullHandle;
 		
 	}
 	
 	/**Returns the handle with the specified ID number*/
 	public SmartHandle getHandleNumber(int id) {
 		for(SmartHandle sh:this) {
+			if(sh==null)
+				continue;
 			if (sh.getHandleNumber()==id&&!sh.isHidden()) return sh;
 		}
 		return null;
@@ -153,6 +162,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	
 	/**the parent layer is not important for the function of a smart handle list*/
 	private transient GraphicLayer layer;
+	
 	@Override
 	public GraphicLayer getParentLayer() {
 		return layer;
@@ -161,6 +171,21 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	@Override
 	public void setParentLayer(GraphicLayer parent) {
 		layer=parent;
+		
+	}
+
+	/**
+	 * @return 
+	 * 
+	 */
+	public SmartHandle getOverrideHandle() {
+		for(SmartHandle sh: this) {
+			if(sh==null)
+				continue;
+			if(sh.getHandleNumber()==OVERRIDE_DRAG_HANDLE)
+				return sh;
+		}
+		return null;
 		
 	}
 }

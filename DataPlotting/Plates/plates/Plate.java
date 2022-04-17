@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Mar 27, 2022
+ * Date Modified: April 5, 2022
  * Version: 2022.0
  */
 package plates;
@@ -123,7 +123,7 @@ public class Plate {
 	}
 	
 	
-	/**A mobile address*/
+	/**A cell address*/
 	public class CellAddress {
 		
 		private int row;
@@ -146,7 +146,8 @@ public class Plate {
 			int nextCol=col+oritenation.xFlow;
 			
 			/**if moving accross a row and reached the end of a block*/
-			if (oritenation.xFlow>0&&blockSize!=0&&col>0&&(col+1)%blockSize==0) {
+			boolean endOfColLock = oritenation.xFlow>0&&blockSize!=0&&col>0&&(col+1)%blockSize==0;
+			if (endOfColLock) {
 				
 				nextCol-=blockSize;
 				

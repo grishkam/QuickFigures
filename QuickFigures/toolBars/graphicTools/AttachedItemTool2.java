@@ -47,6 +47,10 @@ import undo.UndoAttachmentPositionChange;
 /**A tool for moving attached items. no longer included in the toolbars but the methods
  * in this class are accessed via handles that can be clicked on without the use of this tool*/
 public class AttachedItemTool2 extends AttachedItemTool {
+	/**
+	 * 
+	 */
+	private static final double STANDARD_LIMIT = 0.3;
 	protected LocatedObject2D inside;
 	protected TakesAttachedItems lockTaker;
 	private UndoAttachmentPositionChange undosnap;
@@ -143,7 +147,7 @@ public class AttachedItemTool2 extends AttachedItemTool {
 			
 			/**removes the item from locking if out of range*/
 			if (outofRange( inside.getBounds(), lockbounds, this.getDragPoint()) &&!fineControlMode()) {
-				ArrayList<LocatedObject2D> allRoi2 = getPotentialLockAcceptors(getImageClicked());
+				ArrayList<?> allRoi2 = getPotentialLockAcceptors(getImageClicked());
 				
 				removeFromAlltakers(inside, allRoi2, undoer);
 				inside.setLocation(getDragPoint());
@@ -164,7 +168,7 @@ public class AttachedItemTool2 extends AttachedItemTool {
 
 	public static void adjustPosition(int dragx, int dragy, TakesAttachedItems lockTaker, LocatedObject2D inside) {
 		Rectangle lockbounds2 = lockTaker.getBounds();
-		adjustPosition(dragx, dragy, lockbounds2, inside, 0.3);
+		adjustPosition(dragx, dragy, lockbounds2, inside, STANDARD_LIMIT);
 	}
 
 

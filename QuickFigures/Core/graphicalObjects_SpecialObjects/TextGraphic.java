@@ -1294,6 +1294,8 @@ public SmartHandleList getStandardHandles() {
 		smartList.add(new SmartHandleForText(this, SmartHandleForText.ROTATION_HANDLE));
 		smartList.add(new SmartHandleForText(this, SmartHandleForText.TEXT_FONT_SIZE_HANDLE));
 		smartList.add(getGlueHandle());
+		if(this.getHandleFilter()!=null)
+			this.getHandleFilter().refineHandleList(this, smartList);
 	}
 return smartList;
 }
@@ -1307,8 +1309,13 @@ public AbstractUndoableEdit2 provideUndoForDialog() {
 	return new UndoTextEdit(this);
 }
 
+
+public boolean usesGlueHandle=true;
 private transient ItemGlueSmartHandle glueHandle;
+
 public ItemGlueSmartHandle getGlueHandle() {
+	if(!usesGlueHandle)
+		return null;
 	if (glueHandle==null)
 		glueHandle= new ItemGlueSmartHandle(this);
 	return glueHandle;

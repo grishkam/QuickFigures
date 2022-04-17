@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 19, 2021
+ * Date Modified: April 17, 2022
  * Version: 2022.0
  */
 package graphicalObjects_Shapes;
@@ -53,6 +53,7 @@ import export.svg.SVGExporter;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_SpecialObjects.HasBackGroundShapeGraphic;
 import handles.CountHandle;
+import handles.HandleListFilter;
 import handles.HasSmartHandles;
 import handles.ReshapeHandleList;
 import handles.SmartHandle;
@@ -176,6 +177,13 @@ public class ArrowGraphic extends ShapeGraphic implements Scales,RotatesFully, H
 		x2=p2.getX();
 		y2=p2.getY();
 	}
+	
+	/**Sets both y locations to a particular value*/
+	public void setYLocation(double py) {y=py; y2=py;}
+	public void setXLocations(double x_1, double x_2) {
+		x=x_1; x2=x_2;
+	}
+	
 	/**Creates an arrow outline that is filled with one color and stroked with another.
 	  useful for creating icons*/
 	public static ArrowGraphic createDefaltOutlineArrow(Color fill, Color stroke) {
@@ -901,7 +909,7 @@ protected Point2D getDrawnLineEnd2() {
 		return backGroundShape;
 	}
 	
-	public PopupMenuSupplier getMenuSupplier() {
+	public ArrowGraphicMenu getMenuSupplier() {
 		return new ArrowGraphicMenu(this);
 	}
 	
@@ -1016,9 +1024,16 @@ protected Point2D getDrawnLineEnd2() {
 		}
 		smList.add(createArrowSizeHandle(2));
 		smList.add(createArrowSizeHandle2(2));
+		if(getHandleFilter()!=null) {
+			getHandleFilter().refineHandleList(this, smList);
+		}
 		
 		return smList;
 	}
+	
+	
+	
+
 	public CountHandle createHeadNumberHandle() {
 		return new CountHandle(this, headnumber, HEAD_NUMBER_HANDLE, 25,2, true, 1);
 	}
@@ -1463,6 +1478,8 @@ public static ArrowGraphic createLine(Color fill, Color stroke, Point2D p1, Poin
 public String getShapeName() {
 	return "Arrow";
 }
+
+
 
 
 

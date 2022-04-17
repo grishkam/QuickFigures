@@ -39,7 +39,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample._FIGURE;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.BAND_PATTERN_FIGURE;//which cases to test. set to null if all should be tested
 	private static boolean saveAndReopen=false;
 	
 

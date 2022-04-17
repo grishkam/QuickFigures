@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 17, 2022
  * Version: 2022.0
  */
 package sUnsortedDialogs;
@@ -53,6 +53,13 @@ public class ObjectListChoice<T> extends StandardDialog {
 		int ind=this.getChoiceIndex(prompt);
 		return oos.get(ind);
 		
+	}
+	
+	/**Creates the most generic choice that applies to all types of objects*/
+	public static Object selectObject(String prompt, ArrayList<?> items) {
+		ArrayList<Object> o = new ArrayList<Object>(); 
+		o.addAll(items);
+		return new ObjectListChoice<Object>(prompt).select(prompt, o);
 	}
 	
 	public ArrayList<T> selectMany(String prompt, ArrayList<T> oos, int howMany) {

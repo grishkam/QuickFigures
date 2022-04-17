@@ -40,6 +40,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.GraphicUtil;
 import handles.DecorativeSmartHandleList;
+import handles.HandleListFilter;
 import handles.HasHandles;
 import keyFrameAnimators.BasicGraphicObjectKeyFrameAnimator;
 import locatedObject.AttachmentPosition;
@@ -64,7 +65,12 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	
 	protected int locationType=RectangleEdgePositions.UPPER_LEFT;//indicates which location will actually be returned and set by the getlocation and set location methods
 
+	/**the angle of the object*/
 	protected double angle=0;
+	
+	/**used by certain subclasses*/
+	public HandleListFilter handleModifier;
+	
 	LocationChangeListenerList listeners=new LocationChangeListenerList();
 	protected boolean handlesHidden=false;
 	
@@ -522,5 +528,20 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	public Object getScaleWarning() {
 		return null;
 	}
+	
+	
+	
+	
+	
+	/**
+	 * @returns the handle list filter is there is one
+	 */
+	public  HandleListFilter getHandleFilter() {
+		return handleModifier;
+	}
+	
+	public void setHandleListFilter(HandleListFilter handleSpecialization) {handleModifier=handleSpecialization;}
+	
+	
 	
 }

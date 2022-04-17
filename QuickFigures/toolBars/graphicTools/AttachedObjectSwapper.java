@@ -119,7 +119,7 @@ switchLockedItem(object2, inside);
 
 
 private void switchLockedItem(LocatedObject2D object2, LocatedObject2D inside) {
-	ArrayList<LocatedObject2D> allRoi = getPotentialLockAcceptors(getImageClicked());
+	ArrayList<?> allRoi = getPotentialLockAcceptors(getImageClicked());
 	TakesAttachedItems t=(TakesAttachedItems) lockTaker;
 	TakesAttachedItems t2=(TakesAttachedItems) lockTaker2;
 	

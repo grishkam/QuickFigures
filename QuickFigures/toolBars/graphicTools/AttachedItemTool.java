@@ -40,7 +40,7 @@ import utilityClasses1.ArraySorter;
  * in this class are accessed via handles that can be clicked on without the use of this tool*/
 public class AttachedItemTool extends GraphicTool {
 	protected CombinedEdit undoer;
-	private ArrayList<LocatedObject2D> allRoi;
+	private ArrayList<?> allRoi;
 	boolean askIfMultiple=true;
 	
 	{createIconSet("icons2/lockGraphic2.jpg","icons2/RectangleIconPress.jpg","icons2/LockItemIcon.jpg");
@@ -68,19 +68,19 @@ public class AttachedItemTool extends GraphicTool {
 	}
 	
 	/**goes through a list of lock taking items and removes the selected item*/
-	static void removeFromAlltakers(LocatedObject2D sel, ArrayList<LocatedObject2D> allRoi, CombinedEdit undoer) {
+	static void removeFromAlltakers(LocatedObject2D sel, ArrayList<?> allRoi, CombinedEdit undoer) {
 		AttachedItemList.removeFromAlltakers(sel, allRoi, undoer);
 	}
 	
 	/**Searches through the potential lock acceptors at teh location, returns the one that does not contain the item*/
 	public static LocatedObject2D getPotentialLockAcceptorAtPoint(Point2D pt, LocatedObject2D item, ImageWorkSheet gmp, boolean excludeCurrentAttachmentSite) {
-		ArrayList<LocatedObject2D> list=getPotentialLockAcceptors( gmp);
+		ArrayList<?> list=getPotentialLockAcceptors( gmp);
 		ArrayList<LocatedObject2D> list2=new ArrayList<LocatedObject2D>();
-		for(LocatedObject2D l: list) {
+		for(Object l: list) {
 			TakesAttachedItems t=(TakesAttachedItems) l;
 			if(t.hasLockedItem(item)&& excludeCurrentAttachmentSite) continue;
 			
-			if(l.getOutline().contains(pt)) list2.add(l);
+			if((l instanceof LocatedObject2D)&((PanelLayoutGraphic) l).getOutline().contains(pt)) list2.add((LocatedObject2D) l);
 		}
 		if(list2.size()==0) return null;
 		
@@ -127,7 +127,7 @@ if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPo
 
 
 	/**adds t to one potential locked item*/
-	protected void onLockAdd(ArrayList<LocatedObject2D> allRoi, LocatedObject2D t) {
+	protected void onLockAdd(ArrayList<?> allRoi, LocatedObject2D t) {
 		for(Class<?> c: neverLock) {
 			if (c.isInstance(t)) return;
 		}
@@ -139,7 +139,8 @@ if (this.clickCount()>1||this.getMouseButtonClick()==2||getLastMouseEvent().isPo
 				if (allRoi.size()==2 &&allRoi.get(1) instanceof ImagePanelGraphic &&allRoi.get(0) instanceof PanelLayoutGraphic) {
 					tl=(TakesAttachedItems)allRoi.get(1) ;
 				} else
-			tl=(TakesAttachedItems) new ObjectListChoice<LocatedObject2D>("").select("Chose Where to put", allRoi);
+					
+			tl=(TakesAttachedItems) ObjectListChoice.selectObject("Chose Where to put", allRoi);
 			}
 		
 		 onLock(tl,t);

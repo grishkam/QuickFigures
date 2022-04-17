@@ -70,6 +70,7 @@ import imageDisplayApp.UserPreferences;
 import includedToolbars.StatusPanel;
 import layout.PanelLayout;
 import locatedObject.ArrayObjectContainer;
+import locatedObject.CarriesLockTaker;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocatedObjectGroup;
 import locatedObject.LocationChangeListenerList;
@@ -1258,12 +1259,13 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		for(LocatedObject2D item: items) {
 		
-			if (item.isUserLocked()==LocatedObject2D.NOT_LOCKED)
+			if (item.isUserLocked()==LocatedObject2D.NOT_LOCKED&&!movingAttachedItem())
 					moveSingleObject(item, x, y);
-				if (movingAttachedItem() &&items.size()==1) {
-					StatusPanel.updateStatus("moving attached item");
+			if (movingAttachedItem() &&items.size()==1) {
+					
 					moveAttachedObject(item, x, y);
 				}
+
 					if (performSnap) {
 						Rectangle2D r4 = getNearestPanelRect(this.getImageClicked(), RectangleEdges.getLocation(RectangleEdges.CENTER, item.getBounds()), ignorehidden, this.getPrimarySelectedObject());
 						snapRoi(item, r4, 8, false);
@@ -1339,6 +1341,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 */
 	void establishAttachedItemClick(Object roi1) {
 		AttachmentPositionHandle sHandle = this.findHandleForLockedItem(roi1);
+		
 		OverlayObjectManager overlaySelectionManagger = getSelectionManager();
 		if(this.getLastMouseEvent()!=null &&this.getLastMouseEvent().shiftDown())
 			sHandle=null;
@@ -1707,8 +1710,8 @@ public String getToolTip() {
 	 * items and returns the one that has a given objet
 	 * @return 
 	 */
-	public static TakesAttachedItems getLockContainterForObject(LocatedObject2D object, ArrayList<LocatedObject2D> list) {
-		for(LocatedObject2D t: list) try {
+	public static TakesAttachedItems getLockContainterForObject(LocatedObject2D object, ArrayList<?> list) {
+		for(Object t: list) try {
 			if (t==null||!(t instanceof TakesAttachedItems)) continue;
 			TakesAttachedItems taker=(TakesAttachedItems) t;
 			if (taker.hasLockedItem(object)) return taker;
@@ -1719,13 +1722,22 @@ public String getToolTip() {
 	}
 	
 	/**gets all the objects in a particular image that can take on an attached item.*/
-	public static ArrayList<LocatedObject2D> getPotentialLockAcceptors(ImageWorkSheet gmp) {
+	public static ArrayList<?> getPotentialLockAcceptors(ImageWorkSheet gmp) {
 		ArrayList<LocatedObject2D> aRoi;
 		aRoi=gmp.getLocatedObjects();
 		ArraySorter<LocatedObject2D> as = new ArraySorter<LocatedObject2D>();
 		aRoi=as.getThoseOfClass(aRoi, TakesAttachedItems.class);
 		
-		return aRoi;
+		ArrayList<Object> output = new ArrayList<Object>();
+		output.addAll(aRoi);
+		
+		ArrayList<ZoomableGraphic> carriers = new ArraySorter<ZoomableGraphic>().getThoseOfClass(gmp.getTopLevelLayer().getObjectsAndSubLayers(), CarriesLockTaker.class);
+		for(ZoomableGraphic carrier: carriers) {
+			CarriesLockTaker c=(CarriesLockTaker) carrier;
+			output.add(c.getLockTaker());
+		}
+		
+		return output;
 	}
 	
 	/**finds what object holds the attached item
@@ -1755,6 +1767,15 @@ public String getToolTip() {
 			BarGraphic.BarTextGraphic b=(BarTextGraphic) object;
 			if (b.locationAutoMatic()) return true;
 		}
+		if(object instanceof HasSmartHandles) {
+			
+			SmartHandle overrideHandle = ((HasSmartHandles) object).getSmartHandleList().getOverrideHandle();
+			
+			if(overrideHandle!=null) {
+				
+				return true;
+			}
+		}
 		return findLockContainer(object)!=null;
 	}
 	
@@ -1767,9 +1788,18 @@ public String getToolTip() {
 		}
 		
 		AttachmentPositionHandle lockedItemHandle = findHandleForLockedItem(roi);
-		if(lockedItemHandle==null) return;
-		lockedItemHandle=lockedItemHandle.createDemiVersion();
-		lockedItemHandle.handleDrag(getLastDragOrLastReleaseMouseEvent());
+		if(lockedItemHandle!=null) {
+			lockedItemHandle=lockedItemHandle.createDemiVersion();
+			lockedItemHandle.handleDrag(getLastDragOrLastReleaseMouseEvent());
+		}
+		
+		if(roi instanceof HasSmartHandles) {
+			SmartHandle h = ((HasSmartHandles) roi).getSmartHandleList().getOverrideHandle();
+			if(h!=null) {
+				h.handleDrag(getLastDragOrLastReleaseMouseEvent());
+			}
+		}
+
 	}
 
 	
@@ -1783,6 +1813,12 @@ public String getToolTip() {
 			if (tk.getSmartHandleList()==null) return null;
 			AttachmentPositionHandle lockedItemHandle = tk.getSmartHandleList().getAttachmentPositionHandle(object);
 			return lockedItemHandle;
+		}
+		if(r instanceof HasSmartHandles) {
+			SmartHandle overrideHandle = ((HasSmartHandles) r).getSmartHandleList().getOverrideHandle();
+			if(overrideHandle!=null)
+				IssueLog.log("will return handle for object");
+			//return overrideHandle;
 		}
 		return null;
 	}

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 4, 2022
+ * Date Modified: April 17, 2022
  * Version: 2022.0
  */
 package fLexibleUIKit;
@@ -499,7 +499,7 @@ public class MenuItemExecuter implements  MenuSupplier {
 					}
 					args= new Object[] {event};
 					
-					
+					return args;
 				}
 				
 				/**fills in with the arguments */

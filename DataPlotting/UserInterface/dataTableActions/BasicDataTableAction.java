@@ -33,7 +33,6 @@ import dataTableDialogs.TableReader;
 import fileread.ReadExcelData;
 import graphicalObjects.ZoomableGraphic;
 import logging.IssueLog;
-import storedValueDialog.StoredValueDilaog;
 import ultilInputOutput.FileChoiceUtil;
 
 /**
@@ -84,7 +83,7 @@ public abstract class BasicDataTableAction implements DataTableAction {
 
 	@Override
 	public String getMenuPath() {
-		return "Table Actions";
+		return "Tables";
 	}
 
 	@Override

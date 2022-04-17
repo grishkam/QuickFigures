@@ -15,30 +15,24 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Created: Mar 26, 2022
- * Date Modified: April 5, 2022
+ * Date Created: April 17, 2022
+ * Date Modified: April 17, 2022
  * Version: 2022.0
  */
-package plates;
+package handles;
 
+import graphicalObjects_Shapes.ArrowGraphic;
 
 /**
  
  * 
  */
-public enum PlateOrientation {
-	
-	STANDARD(1,0), FLIP(0,-1);
-	
-	public int xFlow=1;
-	public int yFlow=0;
-	
-	PlateOrientation(int dx, int dy) {
-		this.xFlow=dx;
-		this.yFlow=dy;
-	}
-	
-	
-	
+public interface HandleListFilter {
+
+	/**
+	 * @param arrowGraphic
+	 * @param smList
+	 */
+	void refineHandleList(Object arrowGraphic, SmartHandleList smList);
 
 }

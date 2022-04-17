@@ -53,6 +53,7 @@ import genericTools.NormalToolDragHandler;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_BandMarkers.BandMarkLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -87,6 +88,7 @@ import undo.CanvasResizeUndo;
 import undo.ChannelDisplayUndo;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
+import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
 import undo.UndoScalingAndRotation;
 
@@ -641,6 +643,26 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		
 	}
 	
+	/**shows a labeling options dialog
+	 * @return */
+	@MenuItemMethod(menuActionCommand = "Band marks", menuText = "Add Band Marks on Left")
+	public UndoAddItem addBandMarkLabel(CanvasMouseEvent me) {
+		Point point = me.getCoordinatePoint();
+		DefaultLayoutGraphic thelayout = figureOrganizingLayerPane.getMontageLayoutGraphic();
+		ImagePanelGraphic panel = figureOrganizingLayerPane.getAllPanelLists().getPanelGraphics().get(0);
+		for(ImagePanelGraphic panel1:  figureOrganizingLayerPane.getAllPanelLists().getPanelGraphics()) {
+			if(panel1.getBounds().contains(point)) {
+					panel=panel1;
+					}
+		}
+		BandMarkLayer pa = new BandMarkLayer(panel);
+		this.figureOrganizingLayerPane.add(pa);
+		pa.createBandMarks(panel.getFrameRect());
+		thelayout .getEditor().expandSpacesToInclude(thelayout.getPanelLayout(), pa.fulloutline());
+		
+		return new UndoAddItem(figureOrganizingLayerPane, pa);
+		
+	}
 	
 
 }
