@@ -26,6 +26,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -643,15 +644,18 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		
 	}
 	
-	/**shows a labeling options dialog
+	/**Adds mark labels to the panel in the click location
 	 * @return */
 	@MenuItemMethod(menuActionCommand = "Band marks", menuText = "Add Band Marks on Left")
-	public UndoAddItem addBandMarkLabel(CanvasMouseEvent me) {
-		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band labels are a work in progress. They are not yet stable. Use with caution", "Are  you sure you want to try them proceed?");
+	public CombinedEdit addBandMarkLabel(CanvasMouseEvent me) {
+		CombinedEdit output=new CombinedEdit();
+		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band labels are a work in progress. They are not yet stable. Use with caution", "Are you sure you want to try them?");
 		if(!decision)
 			return null;
 		Point point = me.getCoordinatePoint();
 		DefaultLayoutGraphic thelayout = figureOrganizingLayerPane.getMontageLayoutGraphic();
+		output.addEdit(new UndoLayoutEdit(thelayout));
+		Point2D locI = thelayout.getLocationUpperLeft();
 		ImagePanelGraphic panel = figureOrganizingLayerPane.getAllPanelLists().getPanelGraphics().get(0);
 		for(ImagePanelGraphic panel1:  figureOrganizingLayerPane.getAllPanelLists().getPanelGraphics()) {
 			if(panel1.getBounds().contains(point)) {
@@ -663,8 +667,15 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		pa.createBandMarks(panel.getFrameRect());
 		thelayout .getEditor().expandSpacesToInclude(thelayout.getPanelLayout(), pa.fulloutline());
 		
-		return new UndoAddItem(figureOrganizingLayerPane, pa);
-		
+		output.addEdit( new UndoAddItem(figureOrganizingLayerPane, pa));
+		Point2D locF = thelayout.getLocationUpperLeft();
+		try {
+			pa.moveObjects(thelayout.getPanelLayout().getPanel(1).getMinX()-pa.fulloutline().getMaxX(),0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return output;
 	}
 	
 

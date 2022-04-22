@@ -367,7 +367,13 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 						if (sh!=null) {
 							sh.handlePress(this.getLastMouseEvent());
 							this.setPressedSmartHandle(sh);
-						} else setPressedSmartHandle(null);
+						} else {
+							setPressedSmartHandle(null);
+							SmartHandle h =this.findOverrideHandle(objectAtPressLocation);
+							if(h!=null) {
+								h.handlePress(this.getLastMouseEvent());
+							}
+						}
 			
 		/**in the event that the object pressed does not use smart handles
 		 * will soon be obsolete*/				
@@ -619,7 +625,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	 */
 	public void addAttachmentPositiontoPopup(LocatedObject2D roi2, JPopupMenu menu) {
 		try {
-			if ( isAttachedItem(roi2)) {
+			if ( isAttachedOrSpecialMovementItem(roi2)) {
 				AttachmentPositionHandle lockHandle = this.findHandleForLockedItem(roi2);
 				
 				JMenu attach = new SmartJMenu("Attachment");
@@ -987,6 +993,11 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		/**what to do in the event of a smart handle release*/
 						if (sh!=null) {
 							sh.handleRelease(this.getLastDragOrLastReleaseMouseEvent());
+						} else {
+							SmartHandle h =this.findOverrideHandle(getPrimarySelectedObject());
+							if(h!=null) {
+								h.handleRelease(getLastDragOrLastReleaseMouseEvent());
+							}
 						}
 						
 		/**what to do in the case of all types of handle release*/
@@ -1759,24 +1770,38 @@ public String getToolTip() {
 	
 	/**returns true if the user is trying to move an item that is attached to another object*/
 	private boolean movingAttachedItem() {
-		return isAttachedItem(this.getPrimarySelectedObject());
+		return isAttachedOrSpecialMovementItem(this.getPrimarySelectedObject());
 	}
 	/**returns true if the item is attached to another object*/
-	private boolean isAttachedItem(LocatedObject2D object) {
+	private boolean isAttachedOrSpecialMovementItem(LocatedObject2D object) {
 		if(object instanceof BarGraphic.BarTextGraphic) {
 			BarGraphic.BarTextGraphic b=(BarTextGraphic) object;
 			if (b.locationAutoMatic()) return true;
 		}
-		if(object instanceof HasSmartHandles) {
+		
+		
 			
-			SmartHandle overrideHandle = ((HasSmartHandles) object).getSmartHandleList().getOverrideHandle();
 			
-			if(overrideHandle!=null) {
-				
+			
+			if(null!=findOverrideHandle(object)) {
 				return true;
 			}
-		}
+		
 		return findLockContainer(object)!=null;
+	}
+	
+	/**returns the handle that is treated as presses, dragged and released when the object is pressed dragged and release*/
+	private SmartHandle findOverrideHandle(Object object) {
+		if(object instanceof HasSmartHandles) {
+					
+					SmartHandle overrideHandle = ((HasSmartHandles) object).getSmartHandleList().getOverrideHandle();
+					
+					if(overrideHandle!=null) {
+						
+						return overrideHandle;
+					}
+				}
+		return null;
 	}
 	
 	/**called if the user is trying to move an item that is attached to another object*/
@@ -1793,12 +1818,12 @@ public String getToolTip() {
 			lockedItemHandle.handleDrag(getLastDragOrLastReleaseMouseEvent());
 		}
 		
-		if(roi instanceof HasSmartHandles) {
-			SmartHandle h = ((HasSmartHandles) roi).getSmartHandleList().getOverrideHandle();
+		
+			SmartHandle h =this.findOverrideHandle(roi);
 			if(h!=null) {
 				h.handleDrag(getLastDragOrLastReleaseMouseEvent());
 			}
-		}
+		
 
 	}
 

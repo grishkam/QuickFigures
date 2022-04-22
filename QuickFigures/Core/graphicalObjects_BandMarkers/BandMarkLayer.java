@@ -21,10 +21,12 @@
  */
 package graphicalObjects_BandMarkers;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -39,9 +41,6 @@ import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
 import graphicTools.AttachedItemTool2;
 import graphicalObjects.CordinateConverter;
-import graphicalObjects_BandMarkers.BandMarkLayer.BandLockTaker;
-import graphicalObjects_BandMarkers.BandMarkLayer.BandRightAlignHandle;
-import graphicalObjects_BandMarkers.BandMarkLayer.BandTextHandle;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -61,27 +60,24 @@ import logging.IssueLog;
 import popupMenusForComplexObjects.DonatesMenu;
 import undo.CombinedEdit;
 import undo.UndoAttachmentPositionChange;
+import undo.UndoMoveItems;
 
 /**
  A specialized layer for keeping track of a set of band labels
  */
-public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker, HandleListFilter, DonatesMenu{
+public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter, DonatesMenu{
 
 	
-
-
-	
-
-
-
 
 	/**
-		 
-		 * 
+		A handle used for text items that are band markers
 		 */
 	public class BandTextHandle extends SmartHandle {
 
-		private static final int BAND_TEXT_HANDLE_ID = 1008;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private TextGraphic targetText;
 		private CombinedEdit currentEdit;
 
@@ -114,13 +110,11 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 			
 				AttachedItemTool2.adjustPosition((int)p2.getX(), (int)p2.getY(), map.get(targetText).getBounds(),targetText, 0.9);
 			
-				//targetText.getAttachmentPosition().setToNearestSnap(getObject().getBounds().getBounds(), attachmentSite.getContainerForBounds(object), new Point((int)p2.getX(), (int)p2.getY() ));
 			
-			
-			undo.establishFinalState();
+				undo.establishFinalState();
 			if(!undo.same()) {
 				if(currentEdit==null)
-				getUndoManager().addEdit(undo);
+					getUndoManager().addEdit(undo);
 				else currentEdit.addEditToList(undo);
 			}
 			snapLockedItems();
@@ -128,10 +122,15 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 		
 		}
 		
-		
+		@Override
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 			
-			currentEdit=new CombinedEdit();
+			currentEdit=getMovementEdit() ;
+			}
+		
+		@Override
+		public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
+			canvasMouseEventWrapper.addUndo(currentEdit);
 			}
 	}
 
@@ -141,8 +140,6 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 	 * 
 	 */
 	private static final int POSITION_HANDLE_id = 15;
-	GenericLockTaker lockedItemL=new BandLockTaker(this);
-	AttachedItemList list=new AttachedItemList(lockedItemL);
 	
 	private ImagePanelGraphic parentPanel;
 	HashMap<TextGraphic, ArrowGraphic> map;
@@ -161,7 +158,7 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 	/**draws the layer*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
-		
+		snapLockedItems() ;// makes sure the text is aligned to the band labels
 		super.draw(graphics, cords);
 	}
 	
@@ -169,11 +166,9 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final int GROUP_POSITION_HANDLE_ID = 60478;
+	public static final int ADD_MARK_HANDLE = 60470;
 
-	@Override
-	public TakesAttachedItems getLockTaker() {
-		return lockedItemL;
-	}
 	
 	/**Creates the band marks*/
 	public void createBandMarks(Rectangle2D r) {
@@ -194,15 +189,16 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 
 
 	@MenuItemMethod(menuText = "Add new mark")
-	public void createBandMarkFromPoint(CanvasMouseEvent c) {
+	public TextGraphic createBandMarkFromPoint(CanvasMouseEvent c) {
 		Point point = c.getCoordinatePoint();
 		ArrowGraphic modelA = null;
 		TextGraphic modelT =null;
 		if(map.keySet().size()>0) {
 			for(TextGraphic key: map.keySet()) {modelT=key;modelA=map.get(key);}
 		}
-		createBandMark(point.getX(), point.getY()+10, "new mark", modelT, modelA,5);
+		TextGraphic output = createBandMark(point.getX(), point.getY()+10, "new mark", modelT, modelA,5);
 		this.snapLockedItems();
+		return output;
 	}
 	
 	/**
@@ -210,8 +206,9 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 	 * @param yPosition
 	 * @param description2
 	 * @param i 
+	 * @return 
 	 */
-	protected void createBandMark(double x, double yPosition, String description2, TextGraphic modelT, ArrowGraphic modelA, int i) {
+	protected TextGraphic createBandMark(double x, double yPosition, String description2, TextGraphic modelT, ArrowGraphic modelA, int i) {
 		TextGraphic tg = new TextGraphic(description2);
 		if(modelT!=null)
 			tg=modelT.copy();
@@ -235,10 +232,9 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 		map.put(tg, ar);
 		ar.setStrokeColor(Color.black);
 		ar.setHandleListFilter(this);
-		list.add(tg);
 		this.add(tg);
 		this.add(ar);
-		
+		return tg;
 	}
 	
 	public void alignBandLocations() {
@@ -262,7 +258,7 @@ public class BandMarkLayer extends GraphicLayerPane implements CarriesLockTaker,
 
 
 
-
+/**modifies the handle list of a contained object*/
 @Override
 public void refineHandleList(Object graphicWithHandles, SmartHandleList smList) {
 	if(map.values().contains(graphicWithHandles)) {
@@ -279,16 +275,17 @@ public void refineHandleList(Object graphicWithHandles, SmartHandleList smList) 
 		smList.add(new BandRightAlignHandle(this, theArrow, ArrowGraphic.HANDLE_1));
 		smList.add(new BandRightAlignHandle(this, theArrow, ArrowGraphic.HANDLE_2));
 		smList.add(new BandRightAlignHandle(this, theArrow, SmartHandleList.OVERRIDE_DRAG_HANDLE));
-		
-		
-		//smList.overrideHandle=new BandDragOverride(theArrow);
-		//smList.add(smList.overrideHandle);
+		smList.add(new BandRightAlignHandle(this, theArrow,ADD_MARK_HANDLE));
+		smList.add(new BandRightAlignHandle(this, theArrow,GROUP_POSITION_HANDLE_ID));
+	
 		
 	}
 	
 	if(map.keySet().contains(graphicWithHandles)) {
 		TextGraphic t=(TextGraphic) graphicWithHandles;
 		smList.add(new BandTextHandle(this, t));
+		smList.add(new BandRightAlignHandle(this, null,GROUP_POSITION_HANDLE_ID));
+		smList.add(new BandRightAlignHandle(this,null,ADD_MARK_HANDLE));
 	}
 	
 }
@@ -297,7 +294,6 @@ public void refineHandleList(Object graphicWithHandles, SmartHandleList smList) 
 
 /**
 	 
-	 * 
 	 */
 public class BandRightAlignHandle extends SmartHandle {
 
@@ -307,6 +303,9 @@ public class BandRightAlignHandle extends SmartHandle {
 	private static final long serialVersionUID = 1L;
 	private ArrowGraphic targetArrow;
 	private BandMarkLayer theMarkLayer;
+	private CombinedEdit currentEdit;
+	private TextGraphic addedMark;
+	private boolean dragging;
 
 	/**
 	 * @param bandMarkLayer
@@ -318,21 +317,82 @@ public class BandRightAlignHandle extends SmartHandle {
 		theMarkLayer=bandMarkLayer;
 		this.setHandleNumber(handle1);
 		this.setHandleColor(Color.cyan);
+		
+		if (isDragger()) {
+			
+			this.setHandleColor(Color.green);
+		}
+
+		if (this.getHandleNumber()==ADD_MARK_HANDLE) {
+			Area a = addOrSubtractSymbol(5, false);
+			specialShape=a;//AffineTransform.getTranslateInstance(x2,y2).createTransformedShape(a);
+			setHandleColor(Color.green);
+		}
+		if (isGroupLocationHandle()) {
+			this.handlesize=10;
+		}
+		
+	}
+
+	/**
+	 * @return
+	 */
+	protected boolean isDragger() {
+		return this.getHandleNumber()==SmartHandleList.OVERRIDE_DRAG_HANDLE;
+	}
+	
+	@Override
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
+		super.draw(graphics, cords);
+		if(dragging&&dragUpDownMove() ) {
+			
+			
+			graphics.setColor(new Color(240,240,240,180));
+			graphics.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, new float[] {8,8},8f));
+			drawGridline(graphics, cords, targetArrow.getLocation(), true);
+			
+			graphics.setColor(new Color(240,0,0,150));
+			graphics.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, new float[] {8,8}, 0.0f));
+			drawGridline(graphics, cords, targetArrow.getLocation(), true);
+			
+		}
 	}
 	
 	public Point2D getCordinateLocation() {
+		if (isGroupLocationHandle()) {
+			Rectangle2D r1 = fulloutline().getBounds2D();
+			return new Point2D.Double(r1.getX()-10, r1.getCenterY());
+		}
+		if (this.getHandleNumber()==ADD_MARK_HANDLE) {
+			Rectangle2D r1 = fulloutline().getBounds2D();
+			return new Point2D.Double(r1.getCenterX(), r1.getMaxY()+10);
+		}
+		
 		ArrayList<Point2D> ends = targetArrow.getEndPoints();
 		if (this.getHandleNumber()==ArrowGraphic.HANDLE_1) return ends.get(0);
 		Point2D point2d = ends.get(1);
 		if (this.getHandleNumber()==ArrowGraphic.HANDLE_2) return point2d;
 		if (this.getHandleNumber()==POSITION_HANDLE_id) { 
-			
 			return new Point2D.Double(point2d.getX()-4, point2d.getY());
 		}
+		if (isDragger()) {
+			
+			return new Point2D.Double(-10, -10);
+		}
+		
+		
+	
 		return new Point();
 		}
 	
 	public void handleDrag(CanvasMouseEvent lastDragOrRelMouseEvent) {
+		dragging=true;
+		if(addedMark==null &&this.getHandleNumber()==ADD_MARK_HANDLE) {
+			addedMark=createBandMarkFromPoint(lastDragOrRelMouseEvent);
+			targetArrow=map.get(addedMark);
+		}
+		
+		
 		Point p2 = lastDragOrRelMouseEvent.getCoordinatePoint();
 		if (this.getHandleNumber()==ArrowGraphic.HANDLE_1) {
 			double lengthChange = p2.getX()-targetArrow.getLineStartLocation().getX();
@@ -357,17 +417,41 @@ public class BandRightAlignHandle extends SmartHandle {
 		}
 		
 		
-		if (this.getHandleNumber()==SmartHandleList.OVERRIDE_DRAG_HANDLE) {
+		if (dragUpDownMove()) {
 			targetArrow.setYLocation(p2.getY());
 		}
 		
-		
+		if (isGroupLocationHandle()) {
+			double dx = lastDragOrRelMouseEvent.getCoordinateX()-this.getCordinateLocation().getX();
+			double dy = lastDragOrRelMouseEvent.getCoordinateY()-this.getCordinateLocation().getY();
+			moveObjects(dx,dy);
+		}
 		
 		snapLockedItems();
 	}
 
+	/**
+	 * @return
+	 */
+	protected boolean dragUpDownMove() {
+		return isDragger() ||(addedMark!=null &&this.getHandleNumber()==ADD_MARK_HANDLE);
+	}
+
 	
+	@Override
+	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
+		addedMark=null;
+		currentEdit=getMovementEdit() ;
+		dragging=false;
+		IssueLog.log("Handle press");
+		}
 	
+	@Override
+	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
+		canvasMouseEventWrapper.addUndo(currentEdit);
+		dragging=false;
+		IssueLog.log("Handle release");
+		}
 	
 	/**returns true if the mouse event location is within the last drawn shape*/
 	public boolean containsClickPoint(Point2D p) {
@@ -375,27 +459,30 @@ public class BandRightAlignHandle extends SmartHandle {
 		return getClickableArea().contains(p);
 	}
 
-}
-
-
-public class BandLockTaker extends GenericLockTaker {
+	
+	@Override
+	protected Area getOverdecorationShape() {
+		if (isGroupLocationHandle()&&overDecorationShape==null) {
+			
+			this.decorationColor=Color.black;
+			overDecorationShape=getAllDirectionArrows(3, 3, false);
+		}
+		return overDecorationShape;
+	}
 
 	/**
-	 * @param parentObject
+	 * @return
 	 */
-	public BandLockTaker(Object parentObject) {
-		super(parentObject);
-		// TODO Auto-generated constructor stub
+	protected boolean isGroupLocationHandle() {
+		return this.getHandleNumber()==GROUP_POSITION_HANDLE_ID;
 	}
-	
-	
-	
-	
-
 }
 
+
+
+
 /**
- * 
+ moves the text items into position relative to the bands
  */
 protected void snapLockedItems() {
 	for(TextGraphic text: map.keySet()) {
@@ -422,5 +509,25 @@ public JMenu getDonatedMenuFor(Object requestor) {
 public Rectangle fulloutline() {
 	 return ArrayObjectContainer.combineBounds(this.getLocatedObjects()).getBounds();
 }
+
+/**moves all the objects*/
+public void moveObjects(double dx, double dy) {
+	for(LocatedObject2D g: this.getLocatedObjects()) {
+		g.moveLocation(dx, dy);
+	}
+	
+}
+
+/**returns an undoable edit for moving objects*/
+public CombinedEdit getMovementEdit() {
+	CombinedEdit out = new CombinedEdit();
+	for(LocatedObject2D g: this.getLocatedObjects()) {
+		out.addEditToList(new UndoMoveItems(g));
+	}
+	return out;
+}
+
+
+
 
 }

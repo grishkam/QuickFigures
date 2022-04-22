@@ -496,6 +496,18 @@ public Shape getClickableArea() {return lastDrawShape;}
 		g.drawLine(x1, y1, x2, y2);
 	}
 	
+	/**when given the coordinate location of points, draws them on the canvas*/
+	public  void drawGridline(Graphics2D g, CordinateConverter cords, Point2D point, boolean horizontal) {
+		int x1=(int)cords.transformX( point.getX());
+		int y1=(int)cords.transformY( point.getY());
+		int x0=(int)cords.transformX( 0);
+		int y0=(int)cords.transformY( 0);
+		if(horizontal)
+			g.drawLine(x0, y1, x0+10000, y1);
+		else 
+			g.drawLine(x1, y0, x1, y0+10000);
+	}
+	
 	/**draws a line between this point and the other point*/
 	private void drawLineTo(Graphics2D graphics, CordinateConverter cords, SmartHandle otherPoint) {
 		graphics.setColor(getHandleColor());

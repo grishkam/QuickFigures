@@ -65,7 +65,7 @@ PopupMenuSupplier  {
 		add(createMenuItem(EDIT_ARROW_OUTLINE));
 		
 		JComponent addedMenu=this;
-		DonatesMenu.MenuFinder.addDonatedMenusTo(addedMenu, arrow);
+		///DonatesMenu.MenuFinder.addDonatedMenusTo(addedMenu, arrow);
 		
 	}
 

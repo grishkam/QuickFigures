@@ -30,6 +30,7 @@ import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import selectedItemMenus.MultiSelectionOperator;
+import selectedItemMenus.SelectAllButton;
 
 /**A set of smart handles that acts as a mini toolbar for shapes*/
 public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
@@ -135,7 +136,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		else {
 			addSetAngleButton();
 		}
-
+		createGeneralButton(new SelectAllButton(shape));
 		setLocation(getLocation());
 	}
 
