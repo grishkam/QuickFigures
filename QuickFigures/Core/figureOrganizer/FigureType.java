@@ -117,4 +117,22 @@ public enum FigureType {
 			return false;
 		return true;
 	}
+	
+	/**returns true if a frame should be on an image panel
+	 * @return
+	 */
+	public boolean shouldHaveFrameforImagePanels() {
+		if(this==FLUORESCENT_CELLS)
+			return false;
+		return true;
+	}
+	
+	/**returns the addition that would be added to the name of figure template files
+	 * @return
+	 */
+	public String getTemplateName() {
+		if(this==FLUORESCENT_CELLS)
+			return "";
+		return " "+this;
+	}
 }

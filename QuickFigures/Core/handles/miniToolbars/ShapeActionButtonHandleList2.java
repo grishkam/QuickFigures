@@ -26,11 +26,16 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import actionToolbarItems.EditManyObjects;
 import actionToolbarItems.SetAngle;
+import actionToolbarItems.SetNumberX;
+import actionToolbarItems.SetNumberX.ValueSetter;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import locatedObject.Hideable;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
+import undo.AbstractUndoableEdit2;
 
 /**A set of smart handles that acts as a mini toolbar for shapes*/
 public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
@@ -195,7 +200,54 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 		 h.usePalete=true;
 		 super. addOperationList(itemForIcon, h );
 		 
+		 
+		 addArrowHeadSize((ArrowGraphic) shape, this, h);
 		
+	}
+	
+	/**Adds an arrow head size button to the list
+	 * @param dataShape
+	 * @param list
+	 */
+	public static void addArrowHeadSize(ArrowGraphic dataShape, ActionButtonHandleList list, Hideable h) {
+		ValueSetter widthSetter = new SetNumberX.ValueSetter() {
+			
+			@Override
+			public void setValue(Object a, double value2) {
+				if(a instanceof ArrowGraphic) {
+					 ArrowGraphic d=( ArrowGraphic) a;
+					d.getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize((int)value2);
+					d.getHead(ArrowGraphic.SECOND_HEAD).setArrowHeadSize((int)value2);
+				}
+				
+			}
+			
+			/**returns the arrow head size rounded to the nearest 0.1*/
+			@Override
+			public double getValue(Object a) {
+				if(a instanceof ArrowGraphic) {
+					 ArrowGraphic d=( ArrowGraphic) a;
+					return ((int) Math.round(d.getHead().getArrowHeadSize()*10))/10.0;
+				}
+				throw new NullPointerException();
+				
+			}
+			
+			@Override
+			public AbstractUndoableEdit2 createUndo(Object a) {
+				if(a instanceof ArrowGraphic) {
+					ArrowGraphic d=(ArrowGraphic) a;
+					
+					;
+					return d.provideDragEdit();
+				}
+				return null;
+			}
+		};
+		
+		SetNumberX operator = new SetNumberX(dataShape, dataShape.getHead().getArrowHeadSize(), widthSetter, "Arrow head size", null);
+		
+		list.addOperationList(operator, operator.createManyNumberSetters(new double[] {4,5, 8, 10, 15, 20, 30}), h);
 	}
 
 	/**An action handle that is only visible if the given arrow head is visible*/

@@ -62,7 +62,8 @@ public class TemplateChooserDialog extends StandardDialog {
 	 * for possible example items*/
 	public TemplateChooserDialog(FigureTemplate temp, GraphicLayer givenLayer) {
 		this.temp=temp;
-	
+		this.setTitle("Setup Template");
+		this.setWindowCentered(true);
 		this.setModal(true);
 		for(GraphicalItemPicker<?> pick: temp.getAllExamplePickers()) addGraphicItemPickerPanel(pick.getOptionName(), pick,givenLayer);
 		for(ItemPicker<?> pick: temp.pickersReg) addItemPickerPanel(pick.getOptionName(), pick,givenLayer);

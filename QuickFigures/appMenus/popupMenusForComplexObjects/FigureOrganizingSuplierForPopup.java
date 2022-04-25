@@ -55,6 +55,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.CurrentSetInformer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_BandMarkers.BandMarkLayer;
+import graphicalObjects_BandMarkers.MarkLabelCreationOptions;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -648,6 +649,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	 * @return */
 	@MenuItemMethod(menuActionCommand = "Band marks", menuText = "Add Band Marks on Left")
 	public CombinedEdit addBandMarkLabel(CanvasMouseEvent me) {
+		MarkLabelCreationOptions markOptions=new MarkLabelCreationOptions();
 		CombinedEdit output=new CombinedEdit();
 		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band labels are a work in progress. They are not yet stable. Use with caution", "Are you sure you want to try them?");
 		if(!decision)
@@ -664,7 +666,8 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		}
 		BandMarkLayer pa = new BandMarkLayer(panel);
 		this.figureOrganizingLayerPane.add(pa);
-		pa.createBandMarks(panel.getFrameRect());
+		 MarkLabelCreationOptions.showLaneLabelDialog( markOptions);
+		pa.createBandMarks(panel.getFrameRect(),  markOptions);
 		thelayout .getEditor().expandSpacesToInclude(thelayout.getPanelLayout(), pa.fulloutline());
 		
 		output.addEdit( new UndoAddItem(figureOrganizingLayerPane, pa));

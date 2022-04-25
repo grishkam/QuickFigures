@@ -37,6 +37,7 @@ import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.DisplayedImage;
 import figureFormat.ChannelLabelExamplePicker;
 import figureFormat.LabelExamplePicker;
+import figureFormat.TemplateUserMenuAction;
 import figureOrganizer.FigureLabelOrganizer;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.FigureType;
@@ -49,6 +50,7 @@ import layout.BasicObjectListHandler;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
@@ -353,7 +355,7 @@ public class AddLabelHandle extends MoveRowHandle {
 			layout2.moveLayoutAndContents(0, height);//to make sure lane labels are above
 			laneLabelLayout.moveLayoutAndContents(0, -height);
 			
-			if(laneLabelAdder.options.nPlusMarks==0) {
+			if(laneLabelAdder.laneLabelOptions.nPlusMarks==0) {
 				laneLabelLayout.moveLayoutAndContents(0, laneLabelLayout.getPanelLayout().panelHeight);
 			}
 			
@@ -366,7 +368,17 @@ public class AddLabelHandle extends MoveRowHandle {
 			undo.addEditToList(
 					new CanvasAutoResize(false).performUndoableAction(asDisplay)
 			);
-		return undo;
+			
+			try {
+				//TODO: create way to apply temlate font and angle without change to size
+				//IssueLog.log("will apply saved template to labels");
+				//new TemplateUserMenuAction(TemplateUserMenuAction.APPLY_TEMPLATE, true).loadDefaultTemplate(FigureType.WESTERN_BLOT).applyTemplateToLayer(laneLabelLayout.getParentLayer());
+			} catch (Exception e) {
+				IssueLog.log(e);
+				
+			}
+		
+			return undo;
 	}
 
 	/**Formats the label and adds an undo to the undo manager*/

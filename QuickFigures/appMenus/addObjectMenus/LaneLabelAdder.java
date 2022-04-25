@@ -42,7 +42,6 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.TextPatternDialog;
 import storedValueDialog.StoredValueDilaog;
@@ -60,7 +59,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public LaneLabelCreationOptions options=new LaneLabelCreationOptions();
+	public LaneLabelCreationOptions laneLabelOptions=new LaneLabelCreationOptions();
 	
 	
 	public LaneLabelAdder() {
@@ -150,7 +149,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		if(result==false)
 			return null;
 		
-		int nLanes=(int) options.nLanes;
+		int nLanes=(int) laneLabelOptions.nLanes;
 		
 		
 		
@@ -159,10 +158,10 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		/**calculates the column width needed to fill the space*/
 		int wCol = b.width/nLanes-border+border/(nLanes-1);		
 		int hRow = b.height/5;
-		if(hRow<wCol ||options.nPlusMarks>0) 
+		if(hRow<wCol ||laneLabelOptions.nPlusMarks>0) 
 			hRow=wCol;
 		double hShift=0;
-		if(options.nPlusMarks==0) {
+		if(laneLabelOptions.nPlusMarks==0) {
 			 hShift=hRow;
 		}
 		
@@ -201,7 +200,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			
 			
 			/**Sets the text of the label*/
-			String[] labelList = options.textOfLabel;
+			String[] labelList = laneLabelOptions.textOfLabel;
 			String text_for_label = LaneLabelCreationOptions.defaultLabelText;
 			
 			
@@ -241,9 +240,9 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		layoutWithLaneLabels.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, b));//sets the location to the corner of the specific box. Not sure if this is necesary
 		
-		if(options.nPlusMarks>0) {
+		if(laneLabelOptions.nPlusMarks>0) {
 			AttachmentPosition attach = AttachmentPosition.detaultPanelMarkLabel();
-			layoutWithLaneLabels.getPanelLayout().setNRows((int) options.nPlusMarks);
+			layoutWithLaneLabels.getPanelLayout().setNRows((int) laneLabelOptions.nPlusMarks);
 			for(int i=1; i<=layoutWithLaneLabels.getPanelLayout().nPanels(); i++) {
 				
 				//determine which row to read from when determining the mark text content. User may input multiple lines of marks
@@ -251,12 +250,12 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 				int rowIndex = (i-1)/nColumns;
 				int colIndex = (i-1)%nColumns;
 				
-				if(rowIndex>=options.markText.length)
-					rowIndex=options.markText.length-1;
-				if(rowIndex>options.markText.length||options.markText.length==0)
+				if(rowIndex>=laneLabelOptions.markText.length)
+					rowIndex=laneLabelOptions.markText.length-1;
+				if(rowIndex>laneLabelOptions.markText.length||laneLabelOptions.markText.length==0)
 					continue;//if the text has been deleted
 				
-				String currentRowText = options.markText[rowIndex];
+				String currentRowText = laneLabelOptions.markText[rowIndex];
 				
 				String markString="+";
 				boolean tabdelimited=currentRowText.contains(""+'\t');
@@ -307,7 +306,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 * @return
 	 */
 	public String getTextForLaneNumber(int laneIndex) {
-		return options.pattern1.getText(laneIndex);
+		return laneLabelOptions.pattern1.getText(laneIndex);
 	}
 
 	/**
@@ -315,17 +314,17 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 * @return true if user pressed ok
 	 */
 	protected boolean showLaneLabelDialog() {
-		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(options);
+		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(laneLabelOptions);
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
 		 
 		 /**Adds a text pattern tab*/
-		 TextPatternDialog dis = new TextPatternDialog(options.pattern1, false, false);
+		 TextPatternDialog dis = new TextPatternDialog(laneLabelOptions.pattern1, false, false);
 		storedValueDilaog.addSubordinateDialog("%number%", dis);
 		 
 		storedValueDilaog.showDialog();
 		
-		options.pattern1=dis.getTheTextPattern();//sets the pattern based on the text pattern tab
+		laneLabelOptions.pattern1=dis.getTheTextPattern();//sets the pattern based on the text pattern tab
 		
 		return storedValueDilaog.wasOKed();
 	}

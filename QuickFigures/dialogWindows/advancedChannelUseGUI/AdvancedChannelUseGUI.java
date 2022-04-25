@@ -31,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -44,7 +45,9 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import iconGraphicalObjects.ChannelUseIcon;
+import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -63,6 +66,8 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 	private PanelManager pm;
 	private ChannelLabelManager cm;
 	
+	
+	
 	private PanelListDisplay listPanels;
 	private ChannelListDisplay listChannels;
 	
@@ -77,10 +82,18 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 	JButton chooseChannelButton=new JButton("Add/Remove Channels");{chooseChannelButton.setIcon(new ChannelUseIcon());}
 	JButton alterZButton=new JButton("Z"); 
 	JButton alterTButton=new JButton("T"); 
+	JCheckBox invertChannelCheckBox=createInvertCheckBox();
 	
+	ArrayList<GraphicLayer> searchLayers=new ArrayList<GraphicLayer>();
+
+	
+	public AdvancedChannelUseGUI(MultichannelDisplayLayer layer) {
+		this(layer.getPanelManager(), layer.getChannelLabelManager());
+		searchLayers.add(layer);
+	}
 
 	/**Creates a gui and switches the panel manager to advanced channel use mode*/
-		public AdvancedChannelUseGUI(PanelManager pm, ChannelLabelManager cm) {
+	public AdvancedChannelUseGUI(PanelManager pm, ChannelLabelManager cm) {
 			this.cm=cm;
 			pm.setChannelUseMode(PanelManager.ADVANCED_CHANNEL_USE);
 			pm.getPanelList().setChannelUpdateMode(true);
@@ -116,6 +129,10 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			gc.anchor=GridBagConstraints.WEST;
 			if ( multipleChannel)this.add(chooseChannelButton, gc);
 			
+			gc.gridx=8;
+			gc.gridy=7;
+			gc.anchor=GridBagConstraints.WEST;
+			this.add(this.invertChannelCheckBox, gc);
 			
 			gc.gridwidth=1;
 			
@@ -139,6 +156,11 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			gc.gridy=2;
 			gc.anchor=GridBagConstraints.WEST;
 			this.add( alterTButton, gc);
+			
+			gc.gridx=5;
+			gc.gridy=2;
+			gc.anchor=GridBagConstraints.WEST;
+			
 			
 			
 			addPanelButton.addActionListener(this);
@@ -220,15 +242,37 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			int indexsel = getPanelJList().getSelectedIndex();
 			if (indexsel>-1&&indexsel<getPanelJList().elements.size()) {
 				PanelListElement panel= getPanelJList().elements.get(getPanelJList().getSelectedIndex());
-				getJListForChannels().setPanel(panel);
+				getJListForChannels().setPanel(panel, getCurrentPanelManager(panel));
+				this.invertChannelCheckBox.setSelected(panel.invertChannelColor);
 				}
 		}
+
+		/**
+		 * @param panel 
+		 * @return
+		 */
+		public PanelManager getCurrentPanelManager() {
+			return pm;
+		}
 		
+		/**gets the panel manager for the given panels
+		 * work in progress. this dislog will eventually work for multiple panel managers but currently works with on
+		 * @param panel 
+		 * @return
+		 */
+		public PanelManager getCurrentPanelManager(PanelListElement panel) {
+			if(pm.getPanelList().getPanels().contains(panel))
+				return pm;
+			else {
+				pm=this.getPanelJList().getCurrentPanelManager(panel);
+			}
+			return pm;
+		}
 		
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			CombinedEdit e2=PanelManagerUndo.createFor(pm);
+			CombinedEdit e2=PanelManagerUndo.createFor(getCurrentPanelManager());
 			if (arg0.getSource()==this.addPanelButton) {
 				
 				  addPanel();
@@ -287,11 +331,13 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 
 		/**shows a panel adding dialog*/
 		public void addPanel() {
-			PanelListElement panel = pm.addSingleChannelPanel(pm.getPanelList());
+			PanelListElement panel = getCurrentPanelManager().addSingleChannelPanel(getCurrentPanelManager().getPanelList());
 			  cm.generateChanelLabel(panel);
 			
-			  getPanelJList().setList(pm.getPanelList());
-			  pm.putSingleElementOntoGrid(panel, true);
+			  getPanelJList().updateList();
+			  
+			  
+			  getCurrentPanelManager().putSingleElementOntoGrid(panel, true);
 			  panel.getChannelLabelDisplay().updateDisplay();
 			
 			pack();
@@ -313,7 +359,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		/**if there are multiple options for the target slice and frame
 		 * this shows a dialog */
 		private void editPanelSliceAndFrame(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,getCurrentPanelManager(panel).getMultiChannelWrapper());
 			dia.show2DimensionDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setFrameNumber(dia.getFrame());
@@ -334,7 +380,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		
 		/**shows a dialog for the user to change the slice number of selected panels*/
 		private void editPanelSlice(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,getCurrentPanelManager(panel).getMultiChannelWrapper());
 			dia.showSliceDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setSliceNumber(dia.getSlice());
@@ -344,7 +390,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		}
 		/**shows a dialog for the user to change the frame number of selected panels*/
 		private void editPanelFrame(PanelListElement panel) {
-			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,pm.getMultiChannelWrapper());
+			ChannelSliceAndFrameSelectionDialog dia = new ChannelSliceAndFrameSelectionDialog(panel.targetChannelNumber,panel.targetSliceNumber, panel.targetFrameNumber,getCurrentPanelManager(panel).getMultiChannelWrapper());
 			dia.showFrameDialog();
 			for(PanelListElement panel1: getSelectedPanels()) {
 				panel1.setFrameNumber(dia.getFrame());
@@ -355,8 +401,8 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 
 		/**updates the panels in the figure*/
 		private void updatePanelDisplay() {
-			pm.updatePanels();
-			pm.updateDisplay();
+			getCurrentPanelManager().updatePanels();
+			getCurrentPanelManager().updateDisplay();
 			pack();
 		}
 		
@@ -379,5 +425,48 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			return listChannels;
 		}
 		
-		
+		/**Creates a checkbox that determines whether the channels are set to invert
+		 * @return
+		 */
+		protected JCheckBox createInvertCheckBox() {
+			JCheckBox jCheckBox = new JCheckBox("Invert");
+			jCheckBox.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					boolean selected = invertChannelCheckBox.isSelected();
+					
+					getPanelJList().getSelectedValue().invertChannelColor=selected;
+					
+					for(PanelListElement panel: getPanelJList().getSelectedValuesList()) {
+						panel.invertChannelColor=selected;
+					}
+					updatePanelDisplay();
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}});
+			return jCheckBox;
+		}
+
 }

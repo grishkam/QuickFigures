@@ -70,7 +70,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		this.panelManager=man;
 		
 		
-		setPanel(panel);
+		setPanel(panel, man);
 		this.setListData(elements);
 		
 		this.setDragEnabled(true);
@@ -84,9 +84,10 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 
 	/**changes the panel whose channel's are displayed
 	  replaces the channel list with a new one*/
-	public void setPanel(PanelListElement panel) {
+	public void setPanel(PanelListElement panel, PanelManager man) {
 		if(panel==null) return;
 		this.panel=panel;
+		this.panelManager=man;
 		elements.clear();
 		elements.addAll(panel.getChannelEntries());
 		
@@ -312,7 +313,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		public void onAction() { 
 			
 			super.onAction();
-			setPanel(panel);
+			setPanel(panel, panelManager);
 			
 			List<PanelListElement> list = panelDisp.getSelectedValuesList();
 			for(PanelListElement panelp: list) {

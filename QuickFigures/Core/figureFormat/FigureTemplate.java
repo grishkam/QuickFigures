@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import channelMerging.ChannelUseInstructions;
 import channelMerging.ImageDisplayLayer;
 import figureOrganizer.FigureOrganizingLayerPane;
+import figureOrganizer.FigureType;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import graphicalObjects.BasicGraphicalObject;
@@ -73,7 +74,9 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	public ItemPicker<?>[] pickersReg=new ItemPicker[] {mdp};
 	
 	public boolean awaitingReset=false;
-	
+
+	private ArrayList<GraphicalItemPicker<?>> activePickerList;
+	public FigureType suggestedType=null;
 	
 	public FigureTemplate() {
 		
@@ -317,12 +320,14 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 	}
 	
 	/**returns a list of the example object pickers used in this template*/
-	public Iterable<GraphicalItemPicker<?>> getAllExamplePickers() {
-		ArrayList<GraphicalItemPicker<?>> outputpickers = new ArrayList<GraphicalItemPicker<?>>();
+	public ArrayList<GraphicalItemPicker<?>> getAllExamplePickers() {
+		if(activePickerList !=null)
+			return activePickerList ;
+		activePickerList = new ArrayList<GraphicalItemPicker<?>>();
 		for(GraphicalItemPicker<?> pi:pickers ) {
-			outputpickers.add(pi);
+			activePickerList.add(pi);
 		}
-				return outputpickers;
+				return activePickerList;
 	}
 	
 	/**changes the properties of this templates to a version for merge only
@@ -432,6 +437,89 @@ public class FigureTemplate implements LayoutSpaces, Serializable{
 		
 		for(ZoomableGraphic all:figure.getAllGraphics())
 			if (all instanceof BarGraphic )this.getScaleBar().setModelItem(all);
+		
+	}
+	
+	/**alters the variety of pickers available to match either a blot figure 
+	 * @param graphicLayerSet
+	 */
+	public void setBasedOnAvailableFigureTypes(GraphicLayer graphicLayerSet) {
+		ArrayList<FigureType> availableTypes = listAvailabletypes(graphicLayerSet);
+		
+		/**Some figure types tend to have frames around their images*/
+		if(hasType(availableTypes, FigureType.WESTERN_BLOT, FigureType.ELECTRON_MICROSCOPY, FigureType.H_AND_E)) {
+			this.getAllExamplePickers().add(new ImageFrameExamplePicker(null));
+		}
+		
+		/**A slighly different combination of pickers is used for blots*/
+		if(hasType(availableTypes, FigureType.WESTERN_BLOT)) {
+			this.getAllExamplePickers().add(new BandMarkExamplePicker(null));
+		}
+		
+		/**If no scale bar is needed for the figure types*/
+		if(!hasType(availableTypes, FigureType.FLUORESCENT_CELLS, FigureType.ELECTRON_MICROSCOPY, FigureType.H_AND_E)) {
+			this.getAllExamplePickers().remove(this.getScaleBar());
+		}
+		
+		/**If no channel label is needed for the figure types*/
+		if(!hasType(availableTypes, FigureType.FLUORESCENT_CELLS)) {
+			this.getAllExamplePickers().remove(this.channelLabelPicker);
+		}
+		
+		if(availableTypes.size()==1) {
+			this.suggestedType=availableTypes.get(0);
+		}
+	}
+	
+	/**
+	 * @param graphicLayerSet
+	 * @return
+	 */
+	public static ArrayList<FigureType> listAvailabletypes(GraphicLayer graphicLayerSet) {
+		ArrayList<FigureType> availableTypes=new ArrayList<FigureType>();
+		addFigureTypeFor(graphicLayerSet, availableTypes);
+		for(GraphicLayer l: graphicLayerSet.getSubLayers()) {
+			addFigureTypeFor(l, availableTypes);
+		}
+		return availableTypes;
+	}
+	
+	/***/
+	public static FigureType getSuggestedFigureTypeFor(GraphicLayer l) {
+		FigureType output=null;
+		ArrayList<FigureType> types = listAvailabletypes(l);
+		if(types.size()==1)
+			return types.get(0);
+		return output;
+	}
+	
+	/**checks if the interable contains the object
+	 * @param availableTypes is the available objects list that may or may not contain w2
+	 * @param w2 is a list of objects that one is looking for
+	 * @return
+	 */
+	private boolean hasType(Iterable<?> availableTypes, Object... w2) {
+		for(Object w: w2) {
+			for(Object o:  availableTypes) {
+				if(o==w)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	/**finds the figure type of the layer and adds it to the list.
+	 * does not add null or items already on the list
+	 * @param graphicLayerSet
+	 * @param availableTypes
+	 */
+	private static void addFigureTypeFor(GraphicLayer l, ArrayList<FigureType> availableTypes) {
+		if(l instanceof FigureOrganizingLayerPane) {
+			 FigureType figureType = ((FigureOrganizingLayerPane) l).getFigureType();
+			 if(availableTypes.contains(figureType)&&figureType!=null)
+				return;
+			availableTypes.add(figureType);
+		}
 		
 	}
 	

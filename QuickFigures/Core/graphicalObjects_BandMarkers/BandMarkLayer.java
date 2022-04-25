@@ -166,13 +166,14 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int GROUP_POSITION_HANDLE_ID = 60478;
+	public static final int GROUP_POSITION_HANDLE_ID = 60478, GROUP_POSITION_HANDLE_ID_2=60479;
 	public static final int ADD_MARK_HANDLE = 60470;
 
 	
-	/**Creates the band marks*/
-	public void createBandMarks(Rectangle2D r) {
-		int nMarks=4;
+	/**Creates the band marks
+	 * @param markOptions */
+	public void createBandMarks(Rectangle2D r, MarkLabelCreationOptions markOptions) {
+		int nMarks= (int) markOptions.nMarks;
 		double x=r.getMinX();
 		double y=r.getMinY();
 		double yStep = r.getWidth()/nMarks;
@@ -180,8 +181,9 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 		at = AttachmentPosition.defaultRowLabel();
 		for(int i=0; i<nMarks; i++) {
 			double yPosition = y+i*yStep;
-			String description2 = "Mark "+i;
-			createBandMark(x, yPosition, description2, null, null, 6);
+			//String description2 = "Mark "+i;
+			String description2 = MarkLabelCreationOptions.determineTextForLabel(i+1, markOptions);
+			createBandMark(x, yPosition, description2, null, null, 20);
 		}
 		alignBandLocations() ;
 		this.snapLockedItems();
@@ -196,7 +198,7 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 		if(map.keySet().size()>0) {
 			for(TextGraphic key: map.keySet()) {modelT=key;modelA=map.get(key);}
 		}
-		TextGraphic output = createBandMark(point.getX(), point.getY()+10, "new mark", modelT, modelA,5);
+		TextGraphic output = createBandMark(point.getX(), point.getY()+10, "new mark", modelT, modelA,20);
 		this.snapLockedItems();
 		return output;
 	}
@@ -205,10 +207,10 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 	 * @param x
 	 * @param yPosition
 	 * @param description2
-	 * @param i 
+	 * @param iLengthForNewMarks 
 	 * @return 
 	 */
-	protected TextGraphic createBandMark(double x, double yPosition, String description2, TextGraphic modelT, ArrowGraphic modelA, int i) {
+	protected TextGraphic createBandMark(double x, double yPosition, String description2, TextGraphic modelT, ArrowGraphic modelA, int iLengthForNewMarks) {
 		TextGraphic tg = new TextGraphic(description2);
 		if(modelT!=null)
 			tg=modelT.copy();
@@ -217,9 +219,10 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 		if(modelA!=null)
 			ar=modelA.copy();
 		if(modelA==null) {
-			ar.setXLocations(ar.getLineStartLocation().getX(), ar.getLineStartLocation().getX()+i);
+			ar.setXLocations(ar.getLineStartLocation().getX(), ar.getLineStartLocation().getX()+iLengthForNewMarks);
 			ar.getHead().setArrowHeadSize(5);
 			ar.setNumerOfHeads(0);
+			ar.setStrokeWidth(6);
 		}
 		ar.setLocation(x, yPosition);
 		ar.setYLocation(yPosition);
@@ -275,19 +278,27 @@ public void refineHandleList(Object graphicWithHandles, SmartHandleList smList) 
 		smList.add(new BandRightAlignHandle(this, theArrow, ArrowGraphic.HANDLE_1));
 		smList.add(new BandRightAlignHandle(this, theArrow, ArrowGraphic.HANDLE_2));
 		smList.add(new BandRightAlignHandle(this, theArrow, SmartHandleList.OVERRIDE_DRAG_HANDLE));
-		smList.add(new BandRightAlignHandle(this, theArrow,ADD_MARK_HANDLE));
-		smList.add(new BandRightAlignHandle(this, theArrow,GROUP_POSITION_HANDLE_ID));
-	
+		addGroupHandles(smList, theArrow);
 		
 	}
 	
 	if(map.keySet().contains(graphicWithHandles)) {
 		TextGraphic t=(TextGraphic) graphicWithHandles;
 		smList.add(new BandTextHandle(this, t));
-		smList.add(new BandRightAlignHandle(this, null,GROUP_POSITION_HANDLE_ID));
-		smList.add(new BandRightAlignHandle(this,null,ADD_MARK_HANDLE));
+		addGroupHandles(smList, null);
 	}
 	
+}
+
+
+/**Adds a series of handles that affects this entire band mark layer
+ * @param smList
+ * @param theArrow
+ */
+protected void addGroupHandles(SmartHandleList smList, ArrowGraphic theArrow) {
+	smList.add(new BandRightAlignHandle(this, theArrow,ADD_MARK_HANDLE));
+	smList.add(new BandRightAlignHandle(this, theArrow,GROUP_POSITION_HANDLE_ID));
+	smList.add(new BandRightAlignHandle(this, theArrow, GROUP_POSITION_HANDLE_ID_2));
 }
 
 
@@ -359,6 +370,11 @@ public class BandRightAlignHandle extends SmartHandle {
 	}
 	
 	public Point2D getCordinateLocation() {
+		
+		if (this.getHandleNumber()==GROUP_POSITION_HANDLE_ID_2) {
+			Rectangle2D r1 = fulloutline().getBounds2D();
+			return new Point2D.Double(r1.getCenterX(), r1.getY()-10);
+		}
 		if (isGroupLocationHandle()) {
 			Rectangle2D r1 = fulloutline().getBounds2D();
 			return new Point2D.Double(r1.getX()-10, r1.getCenterY());
@@ -443,14 +459,13 @@ public class BandRightAlignHandle extends SmartHandle {
 		addedMark=null;
 		currentEdit=getMovementEdit() ;
 		dragging=false;
-		IssueLog.log("Handle press");
 		}
 	
 	@Override
 	public void handleRelease(CanvasMouseEvent canvasMouseEventWrapper) {
 		canvasMouseEventWrapper.addUndo(currentEdit);
 		dragging=false;
-		IssueLog.log("Handle release");
+		currentEdit=null;
 		}
 	
 	/**returns true if the mouse event location is within the last drawn shape*/
@@ -474,7 +489,7 @@ public class BandRightAlignHandle extends SmartHandle {
 	 * @return
 	 */
 	protected boolean isGroupLocationHandle() {
-		return this.getHandleNumber()==GROUP_POSITION_HANDLE_ID;
+		return this.getHandleNumber()==GROUP_POSITION_HANDLE_ID||this.getHandleNumber()==GROUP_POSITION_HANDLE_ID_2;
 	}
 }
 

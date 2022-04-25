@@ -77,11 +77,14 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**An integer telling what type of panel this is. channel or merge*/
 		public Integer designation=CHANNEL_IMAGE_PANEL;	
 		
+
+		/**set to true to invert the channel color*/
+		public boolean invertChannelColor;
+		
 		/**the original source image name and id for this panel. */
 		public String originalImageName;
 		public String originalImagePath;
 		public Integer originalImageID;
-		public boolean invertChannelColor;
 		public ArrayList<Integer> originalIndices=new ArrayList<Integer>();
 		
 		

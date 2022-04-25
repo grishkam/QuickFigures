@@ -33,6 +33,7 @@ import figureOrganizer.PanelListElement;
 import logging.IssueLog;
 import testing.FigureTest;
 import testing.FigureTester;
+import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 
 /**
@@ -72,7 +73,7 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 		ImageDisplayLayer mm = f.getPrincipalMultiChannel();
 		if (mm instanceof MultichannelDisplayLayer) {
 			MultichannelDisplayLayer m=(MultichannelDisplayLayer) mm;
-			AdvancedChannelUseGUI dialog = new AdvancedChannelUseGUI( mm.getPanelManager(), m.getChannelLabelManager());
+			AdvancedChannelUseGUI dialog = new AdvancedChannelUseGUI( m);
 			
 			dialog.setVisible(true);
 			PanelListDisplay jListOfPanels = dialog.getPanelJList();
@@ -87,7 +88,7 @@ public class AdvancedChannelUseGUITest extends FigureTest {
 				Point2D pJstart = panelJ.getImageDisplayObject().getLocationUpperLeft();
 				Point2D pIstart = panelI.getImageDisplayObject().getLocationUpperLeft();
 				
-				PanelManagerUndo undo = jListOfPanels.swapItems(panelI, panelJ);
+				CombinedEdit undo = jListOfPanels.swapItems(panelI, panelJ);
 				
 				/**makes sure the panels locations are switched*/
 				assert(panelJ== panelList.getPanels().get(i));

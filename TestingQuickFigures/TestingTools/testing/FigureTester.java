@@ -52,6 +52,7 @@ import genericMontageLayoutToolKit.FitLayout;
 import graphicActionToolbar.CurrentFigureSet;
 import graphicActionToolbar.QuickFigureMaker;
 import graphicalObjects_BandMarkers.BandMarkLayer;
+import graphicalObjects_BandMarkers.MarkLabelCreationOptions;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -357,7 +358,7 @@ public class FigureTester {
 			FigureOrganizingLayerPane startingPoint = createFigureFromExample1Images(example1BFigureMaker(), 4);
 			ImagePanelGraphic panel = startingPoint.getAllPanelLists().getPanelGraphics().get(0);
 			BandMarkLayer markLayer = new BandMarkLayer(panel);
-			markLayer.createBandMarks(panel.getBounds());
+			markLayer.createBandMarks(panel.getBounds(), new MarkLabelCreationOptions());
 			panel.getParentLayer().add(markLayer);
 			return startingPoint;
 	}

@@ -39,6 +39,7 @@ import graphicalObjects.CordinateConverter;
 import handles.IconHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import locatedObject.Hideable;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -262,6 +263,8 @@ public void updateLocationsForVertical() {
 		CanvasMouseEvent lastEvent;
 		boolean usePalete=false;
 		private Component iPanel;
+		private Object hideCon;
+		private Hideable[] hideConditions;
 
 		/**creates a handle
 		 * @param iconItem the item that will determine which icon is the handle icon
@@ -290,7 +293,17 @@ public void updateLocationsForVertical() {
 				}
 			}
 		}
-		
+		/**returns hidden if any of the hide conditions are met*/
+		@Override
+		public boolean isHidden() {
+			if(this.hideConditions!=null ) {
+				for(Hideable condition:hideConditions) {
+					if(condition!=null && condition.isHidden())
+						return true;
+				}
+			}
+			return super.isHidden();
+			}
 		
 		/**The appearance of some icons will change to reflect changes in a target object*/
 		public void updateIcon() {
@@ -404,13 +417,22 @@ public void updateLocationsForVertical() {
 			}
 
 		}
+
+		/**
+		 * @param hidden
+		 */
+		public void setHideConditions(Hideable[] hidden) {
+			this.hideConditions=hidden;
+			
+		}
 		
 	}
 	
 	/**Adds a list of actions handle list*/
-	public GeneralActionListHandle addOperationList(MultiSelectionOperator o, MultiSelectionOperator[] ops) {
+	public GeneralActionListHandle addOperationList(MultiSelectionOperator o, MultiSelectionOperator[] ops, Hideable... hidden) {
 		if (o==null) {IssueLog.log("cannot add for null icon");}
 		GeneralActionListHandle h = new GeneralActionListHandle(o, numHandleID, ops);
+		h.setHideConditions(hidden);
 		return addOperationList(o, h);
 	}
 

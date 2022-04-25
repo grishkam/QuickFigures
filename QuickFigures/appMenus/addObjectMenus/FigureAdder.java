@@ -226,7 +226,7 @@ public class FigureAdder extends LayoutAdder {
 		multiDimensionalImage.setFigureType(this.getFigureType());
 		
 		/**opens a figure template or creates one if one does not exist*/
-		FigureTemplate temp = getUsedTemplate( multiDimensionalImage);
+		FigureTemplate temp = getUsedTemplate( multiDimensionalImage, getFigureType());
 		/**If there is not a template*/
 		if (temp==null){
 				currentFigureOrganizer.addNovelMultiChannel(multiDimensionalImage, -1);
@@ -315,27 +315,37 @@ public class FigureAdder extends LayoutAdder {
 	}
 	
 	FigureTemplate getUsedTemplate() {
-		return getUsedTemplate(null);
+		return getUsedTemplate(null, null);
 	}
 		
 	/**returns the figure template to be used by this adder. 
 	  if no template is found, creates a new default template*/
-	protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
-		FigureTemplate template = getTemplatesaver().loadDefaultTemplate();
+	protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display, FigureType type) {
+		;
+		if(display!=null &&type==null) {
+			type=display.getFigureType();
+		}
+		
+		FigureTemplate template = getTemplatesaver().loadDefaultTemplate(type);
 		if (autoFigureGenerationOptions.ignoreSavedTemplate||(template==null&&display!=null)) {
 			template=new FigureTemplate(display);
-			if (!autoFigureGenerationOptions.ignoreSavedTemplate)getTemplatesaver().saveDefaultTemplate(template);
+			template.suggestedType=type;
+			
+			/**if the template is not to be ignored and had to be newly created, tries to save a new template for that figure type*/
+			if (!autoFigureGenerationOptions.ignoreSavedTemplate)
+				getTemplatesaver().saveDefaultTemplate(template);
 		}
 		return template;
 	}
-	/**Applies a figure template to the layer*/
+	/**Applies a figure template to the layer
+	@Override
 	void applyUsedTemplate(GraphicLayer g) {
 			try{
 				getUsedTemplate().applyTemplateToLayer(g);
 				}catch (Throwable t) {
 					IssueLog.logT(t);
 					}
-	}
+	}*/
 	
 
 	

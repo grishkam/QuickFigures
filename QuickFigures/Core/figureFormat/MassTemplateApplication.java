@@ -45,7 +45,7 @@ public class MassTemplateApplication extends BasicMultiSelectionOperator {
 	/**Will apply a single default template to a series of files that each contain serialized
   	figures*/
 	public void perform(ArrayList<File> files) {
-		 FigureTemplate template = templateSaver.loadDefaultTemplate();
+		 FigureTemplate template = templateSaver.loadDefaultTemplate(null);
 		for(File f: files) {
 			ImageWindowAndDisplaySet figure = ImageDisplayIO.showFile(f);
 			GraphicLayer layer = figure.getImageAsWorksheet().getTopLevelLayer();

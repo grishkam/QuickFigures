@@ -235,8 +235,9 @@ public class QuickFigureMaker extends DisplayActionTool {
 		}
 		
 		/**depending on the variable set. might need to transform the template into a merged image only version*/
-		protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display) {
-			FigureTemplate tp = super.getUsedTemplate(display);
+		@Override
+		protected FigureTemplate getUsedTemplate(MultichannelDisplayLayer display, FigureType type) {
+			FigureTemplate tp = super.getUsedTemplate(display, type);
 			if (!isMergeOnly()&&!isSplitChannelOnly()) 
 				return tp;
 	

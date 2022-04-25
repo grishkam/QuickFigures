@@ -32,6 +32,7 @@ import javax.swing.Icon;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.MenuItemForObj;
+import figureOrganizer.FigureType;
 import graphicalObjects.GraphicEncoder;
 import graphicalObjects.FigureDisplayWorksheet;
 import graphicalObjects.ZoomableGraphic;
@@ -285,6 +286,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 		}
 		
 		FigureTemplate tp=new FigureTemplate();
+		tp.setBasedOnAvailableFigureTypes( graphicLayerSet);
 		
 		/***/
 		if (this.doesSinpleDialogApplyTemplate()) {
@@ -295,8 +297,10 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 				TemplateChooserDialog dd = new TemplateChooserDialog(tp, graphicLayerSet);
 				dd.showDialog();
 			
-			saveTemplate(tp, getUserPath());
-			return null;
+				String userPath = getUserPath(tp.suggestedType);
+				IssueLog.log("Will save new template as ", userPath);
+				saveTemplate(tp, userPath);
+				return null;
 		} else 
 			if (doesApplyTemplate()) 
 					{
@@ -312,7 +316,10 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	 * @return
 	 */
 	protected CombinedEdit applySavedTemplate(GraphicLayer graphicLayerSet) {
-		FigureTemplate temp = loadTemplate( getUserPath());
+		
+		String userPath = getUserPath(FigureTemplate.getSuggestedFigureTypeFor(graphicLayerSet));
+		IssueLog.log("Will apply template from file ",userPath);
+		FigureTemplate temp = loadTemplate( userPath);
 		return applyTemplate(graphicLayerSet, temp);
 	}
 
@@ -354,10 +361,15 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 			TemplateChooserDialog dd = new TemplateChooserDialog(tp, itemsSel.getSelectedLayer());
 			dd.showDialog();
 		
-			saveTemplate(tp, getUserPath());
+			String userPath = getUserPath(tp.suggestedType);
+			IssueLog.log("Will save newly creates template as... ", userPath);
+			saveTemplate(tp, userPath);
 		} else 
-		{
-			FigureTemplate temp = loadTemplate( getUserPath());
+		{	
+			
+			FigureType type = FigureTemplate.getSuggestedFigureTypeFor(itemsSel.getSelectedLayer());
+			IssueLog.log("Will apply template of type "+type);
+			FigureTemplate temp = loadTemplate( getUserPath(type));
 			if (this.doesSinpleDialogApplyTemplate()) {
 				temp =SuggestTemplateDialog.getTemplate();
 				
@@ -379,27 +391,45 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 
 	/**deletes the template file that this template saver targets*/
 	public void deleteTemplateFile() {
-		new File(getUserPath()).delete();
+		new File(getUserPath(FigureType.FLUORESCENT_CELLS)).delete();
+		new File(getUserPath(FigureType.WESTERN_BLOT)).delete();
 	}
 	
 	
-/**returns the default template file path or returns null if the user is meant to chose one*/
-	public String getUserPath() {
+/**returns the default template file path or returns null if the user is meant to chose one
+ * @param suggestedType */
+	public String getUserPath(FigureType suggestedType) {
 		String path=null;
-		if (useDefaultpath) {path=handler.fullPathofDefaultTemplate();}
+		if (useDefaultpath) 
+			{path=determineTemplatePath(suggestedType);}
 		return path;
 	}
 	
 	/**returns the default template*/
-	public FigureTemplate loadDefaultTemplate() {
-		String path=handler.fullPathofDefaultTemplate();
+	public FigureTemplate loadDefaultTemplate(FigureType type) {
+		String path = determineTemplatePath(type);
+		IssueLog.log("Loading figure template for "+type);
 		return loadTemplate(path);
 		
+	}
+
+
+	/**
+	 * @param type
+	 * @return
+	 */
+	protected String determineTemplatePath(FigureType type) {
+		String path=handler.fullPathofDefaultTemplate();
+		if(type!=null)
+			path+=type.getTemplateName();
+		return path;
 	}
 	
 	/**Saves the given template as the new default template*/
 	public void saveDefaultTemplate(FigureTemplate temp) {
-		String path=handler.fullPathofDefaultTemplate();
+		String path=determineTemplatePath(temp.suggestedType);
+		IssueLog.log("Save template for ",path);
+		IssueLog.log("The suggested type is  "+temp.suggestedType);
 		this.saveTemplate(temp, path);
 		
 	}

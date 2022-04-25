@@ -59,6 +59,7 @@ import figureOrganizer.PanelManager;
 import graphicActionToolbar.CurrentFigureSet;
 import standardDialog.colors.ColorDimmingBox;
 import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
 import undo.EditListener;
 import undo.PanelManagerUndo;
 import undo.UndoManagerPlus;
@@ -72,9 +73,10 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PanelList list=null;
+	private ArrayList<PanelListElement> list=null;
 	Vector<PanelListElement> elements=new Vector<PanelListElement>();
 	private ListCellRenderer<PanelListElement> render= new PanelListElementCellRenderer();
+	
 	private PanelManager panelManager;
 	
 	
@@ -87,15 +89,19 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		this.addKeyListener(this);
 	}
 	
-	void setList(PanelList list) {
-		this.list=list;
+	private void setList(PanelList list) {
+		this.list=new ArrayList<PanelListElement>();
+		this.list=list.getPanels();
 		elements.clear();
 		elements.addAll(list.getPanels());
 		this.setListData(elements);
 		selectedPanels();
 	}
 	
-
+	/**updates the list to accound for changes in the panel managers*/
+	public void updateList() {
+		this.setList(this.getCurrentPanelManager(null).getPanelList());
+	}
 	
 	/**sets this to the user selected panels*/
 	public void selectedPanels() {
@@ -189,7 +195,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			int dim=theindex;
 			if (dim==-1) {dim=theindex;}
 			
-			PanelListElement panel = list.getPanels().get(theindex);
+			PanelListElement panel = list.get(theindex);
 			ArrayList<ChannelEntry> theChannelentries = panel.getChannelEntries();
 			
 			boolean merge=panel.designation+0==0+PanelListElement.MERGE_IMAGE_PANEL;
@@ -271,23 +277,35 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	/**swaps the items and returns an undoable edit
 	 * That undoable edit will not perfectly undo
 	 * affect the dialog. TODO: edit so that dialog is updated*/
-	PanelManagerUndo swapItems(PanelListElement panel1, PanelListElement panel2) {
+	CombinedEdit swapItems(PanelListElement panel1, PanelListElement panel2) {
 		
 		int ind1 = elements.indexOf(panel1);
-				int ind2 = elements.indexOf(panel2);
+		int ind2 = elements.indexOf(panel2);
+		
 			if(panel1==null||panel2==null)
 				return null;
-		PanelManagerUndo undo = panelManager.getPanelList().swapPanelLocations(panel1, panel2);
+			
+		PanelManager currentPanelManager = getCurrentPanelManager(panel1);
+		PanelManager currentPanelManager2 = getCurrentPanelManager(panel2);
+		CombinedEdit undo =new CombinedEdit();
+		if(currentPanelManager ==currentPanelManager2)
+			undo.addEditToList(
+			 currentPanelManager.getPanelList().swapPanelLocations(panel1, panel2));
+		else {
+			PanelList.swapPhysicalLocationsOfPanels(panel1, panel2, undo);
+		}
+		
 			undo.addEditToList(new UndoReorderVector<PanelListElement>(elements));
 			
-			panelManager.updatePanels();
+			currentPanelManager.updatePanels();
 			if (panel1.getChannelLabelDisplay()!=null) panel1.getChannelLabelDisplay().updateDisplay(); 
 			
 			undo.addEditListener(new EditListener() {
 
 				@Override
 				public void afterEdit() {
-					panelManager.updatePanels();
+					currentPanelManager.updatePanels();
+					currentPanelManager2.updatePanels();
 					if (panel1.getChannelLabelDisplay()!=null) panel1.getChannelLabelDisplay().updateDisplay(); 
 				
 				}});
@@ -306,16 +324,28 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			elements.remove(panel12);
 		
 			
-			panelManager.getPanelList().remove(panel12);
+			PanelManager currentPanelManager = getCurrentPanelManager(panel12);
 			
-			panelManager.removeDisplayObjectsFor(panel12);
-			panelManager.updatePanels();
-			panelManager.getImageDisplayLayer().onImageUpdated();
+			currentPanelManager.getPanelList().remove(panel12);
+			
+			currentPanelManager.removeDisplayObjectsFor(panel12);
+			currentPanelManager.updatePanels();
+			currentPanelManager.getImageDisplayLayer().onImageUpdated();
 			
 			
 			this.repaint();
 		
 		
+	}
+
+	/**
+	 * @param panel1 
+	 * @param panel12 
+	 * @param panel12 
+	 * @return
+	 */
+	protected PanelManager getCurrentPanelManager(PanelListElement panel1) {
+		return panelManager;
 	}
 
 
@@ -356,7 +386,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			if (index>-1) {
 				PanelListElement e1 = elements.get(index);
 				PanelListElement e2 = elements.get(this.getSelectedIndex());
-				PanelManagerUndo undo = swapItems(e1, e2);
+				CombinedEdit undo = swapItems(e1, e2);
 				addToUndoManager(undo);
 			}
 			;

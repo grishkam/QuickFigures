@@ -38,6 +38,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.RectangleEdges;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
+import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 import undo.UndoMoveItems;
 import undo.UndoReorderArray;
@@ -707,17 +708,27 @@ public class PanelList implements Serializable{
 	 * @return */
 	public PanelManagerUndo swapPanelLocations(PanelListElement p1, PanelListElement p2) {
 		PanelManagerUndo undo = new PanelManagerUndo(this);
-		undo.addEditToList(new UndoMoveItems(p1.getPanelGraphic(),p2.getPanelGraphic()));
+		
 		undo.addEditToList(new UndoReorderArray<PanelListElement>(panels));
 		
 		new ArraySorter<PanelListElement>().swapObjectPositionsInArray(p1, p2, panels);
 		
+		swapPhysicalLocationsOfPanels(p1, p2, undo);
+		undo.establishFinalState();
+		return undo;
+	}
+
+	/**swaps the pysical locations of two panels
+	 * @param p1
+	 * @param p2
+	 * @param undo
+	 */
+	public static void swapPhysicalLocationsOfPanels(PanelListElement p1, PanelListElement p2, CombinedEdit undo) {
+		undo.addEditToList(new UndoMoveItems(p1.getPanelGraphic(),p2.getPanelGraphic()));
 		Point2D l1 = p1.getPanelGraphic().getLocationUpperLeft();
 		Point2D l2 = p2.getPanelGraphic().getLocationUpperLeft();
 		p1.getPanelGraphic().setLocationUpperLeft(l2);
 		p2.getPanelGraphic().setLocationUpperLeft(l1);
-		undo.establishFinalState();
-		return undo;
 	}
 	
 	/**set the fixed corner of every panel to the same type*/
