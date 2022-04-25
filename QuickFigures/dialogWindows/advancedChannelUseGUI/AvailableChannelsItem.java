@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import channelMerging.ChannelEntry;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
+import logging.IssueLog;
 import multiChannelFigureUI.BasicChannelEntryMenuItem;
 
 /**a menu item that adds and removes a channel entry from an panel
@@ -75,6 +76,7 @@ public void setChannelIsIncluded(boolean include, PanelListElement panel) {
 	else {
 		panel.removeChannelEntry(entry);
 		ChannelEntry eEntry = PanelList.findEquivalent(entry, panel.getChannelEntries());
+		
 		panel.removeChannelEntry(eEntry);
 	}
 	panel.purgeDuplicateChannelEntries();

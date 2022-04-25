@@ -35,6 +35,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
+import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import appContext.MakeFigureAfterFileOpen;
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.CSFLocation;
@@ -230,7 +231,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 							SmartJMenu excluders = this.getMenuContext().createChannelMergeMenu(ChannelPanelEditingMenu.EXCLUDED_CHANNEL_AND_DONT_MERGE);
 							excluders.setIcon(new ChannelUseIcon());
 							jj.add(excluders);
-							
+							chanMen.add(new showAdvancedChannelUse2());
 							jj.add(TemplateUserMenuAction.createFormatMenu(figureOrganizingLayerPane));
 							
 							
@@ -679,6 +680,33 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 			e.printStackTrace();
 		}
 		return output;
+	}
+	
+	
+	public class showAdvancedChannelUse2 extends BasicSmartMenuItem {
+		 /**
+		 * 
+		 */
+		
+		public showAdvancedChannelUse2() {
+			super("Advanced Channel Use");
+		}
+		
+		private static final long serialVersionUID = 1L;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try{
+				AdvancedChannelUseGUI output = new AdvancedChannelUseGUI(figureOrganizingLayerPane);
+				output.setVisible(true);
+			} catch (Exception e2) {
+				IssueLog.log(e2);
+			}
+			
+			
+			
+		}
+		
+	
 	}
 	
 

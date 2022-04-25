@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 11, 2021
+ * Date Modified: April 25, 2022
  * Version: 2022.0
  */
 package objectDialogs;
@@ -27,6 +27,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -319,9 +320,21 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		int w = imagePanelGraphic.getUnderlyingImageWidth();
 		int h=imagePanelGraphic.getUnderlyingImageHeight();
+		int longAxisLength=w;
 		if (h>w)
-			w=h;
-		if (w<200) {return 200/w;}
+			longAxisLength=h;
+		if (longAxisLength<200) {return 200/longAxisLength;}
+		
+		
+		 double[] possibleFactors=new double[] {1, 0.5, 0.4, 0.2, 0.15, 0.1, 0.08, 0.04, 0.02, 0.01};
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		double xMax = screen.width*0.7;
+		double yMax = screen.height*0.7;
+		
+		for(double factor: possibleFactors) {
+			if(factor*w<xMax && factor*h<yMax)
+				return factor;
+		}
 		if (w>5000){return 0.08;}
 		if (w>4000){return 0.1;}
 		if (w>3000){return 0.15;}
@@ -812,7 +825,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		if(slot.getDisplaySlice()!=null) 
 			crop.setDisplaySlice(slot.getDisplaySlice());
-		
+		context.lastDialog=crop;
 		crop.showDialog();
 		
 		if(!crop.wasOKed()&&!crop.wasEliminated) return crop;
@@ -892,6 +905,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 
 
+
+		public CroppingDialog lastDialog;
 
 		/**indicates the number of crop dialogs that will be shown in a sequence*/
 		int nInseries=1;

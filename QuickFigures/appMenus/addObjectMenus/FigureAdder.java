@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 23, 2022
+ * Date Modified: April 23, 2022
  * Version: 2022.0
  */
 package addObjectMenus;
@@ -337,9 +337,9 @@ public class FigureAdder extends LayoutAdder {
 		}
 		return template;
 	}
+	
 	/**Applies a figure template to the layer
-	@Override
-	void applyUsedTemplate(GraphicLayer g) {
+	private void applyUsedTemplate(GraphicLayer g) {
 			try{
 				getUsedTemplate().applyTemplateToLayer(g);
 				}catch (Throwable t) {

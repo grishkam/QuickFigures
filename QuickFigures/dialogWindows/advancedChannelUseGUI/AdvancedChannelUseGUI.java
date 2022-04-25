@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 23, 2022
  * Version: 2022.0
  */
 package advancedChannelUseGUI;
@@ -40,7 +40,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import channelLabels.ChannelLabelManager;
+import channelMerging.ImageDisplayLayer;
+import channelMerging.MultiChannelImage;
 import figureEditDialogs.ChannelSliceAndFrameSelectionDialog;
+import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
@@ -86,10 +89,19 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 	
 	ArrayList<GraphicLayer> searchLayers=new ArrayList<GraphicLayer>();
 
+	public AdvancedChannelUseGUI(FigureOrganizingLayerPane layer0) {
+		this(layer0.getPrincipalMultiChannel().getPanelManager(), layer0.getPrincipalMultiChannel().getChannelLabelManager());
+		searchLayers.add(layer0);
+		listPanels.setSearchLayer(layer0);
+		listPanels.setListToSearchLayer();
+	}
+	
 	
 	public AdvancedChannelUseGUI(MultichannelDisplayLayer layer) {
 		this(layer.getPanelManager(), layer.getChannelLabelManager());
 		searchLayers.add(layer);
+		listPanels.setSearchLayer(layer);
+		
 	}
 
 	/**Creates a gui and switches the panel manager to advanced channel use mode*/
@@ -242,8 +254,11 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 			int indexsel = getPanelJList().getSelectedIndex();
 			if (indexsel>-1&&indexsel<getPanelJList().elements.size()) {
 				PanelListElement panel= getPanelJList().elements.get(getPanelJList().getSelectedIndex());
-				getJListForChannels().setPanel(panel, getCurrentPanelManager(panel));
+				
+				PanelManager currentPanelManager = getCurrentPanelManager(panel);
+				getJListForChannels().setPanel(panel, currentPanelManager);
 				this.invertChannelCheckBox.setSelected(panel.invertChannelColor);
+				currentPanelManager.updatePanels();
 				}
 		}
 
@@ -314,6 +329,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		 */
 		public void displayMenu(ActionEvent arg0) {
 			SmartPopupJMenu ppopme = new SmartPopupJMenu();
+			
 			ArrayList<AvailableChannelsItem> items = getJListForChannels().makeentries(getJListForChannels().getPanel());
 			for(AvailableChannelsItem item: items) {
 				ppopme.add(item);
@@ -333,8 +349,8 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 		public void addPanel() {
 			PanelListElement panel = getCurrentPanelManager().addSingleChannelPanel(getCurrentPanelManager().getPanelList());
 			  cm.generateChanelLabel(panel);
-			
-			  getPanelJList().updateList();
+			  getPanelJList().addPanel(panel);
+			//  getPanelJList().updateList();
 			  
 			  
 			  getCurrentPanelManager().putSingleElementOntoGrid(panel, true);
@@ -451,6 +467,7 @@ public class AdvancedChannelUseGUI extends JFrame implements ListSelectionListen
 					
 					for(PanelListElement panel: getPanelJList().getSelectedValuesList()) {
 						panel.invertChannelColor=selected;
+						listPanels.findPanelManager(panel).updatePanels();
 					}
 					updatePanelDisplay();
 				}

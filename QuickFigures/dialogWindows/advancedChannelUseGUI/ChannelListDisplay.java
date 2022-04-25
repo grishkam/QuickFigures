@@ -41,6 +41,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import channelMerging.ChannelEntry;
+import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
 import logging.IssueLog;
@@ -90,6 +91,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 		this.panelManager=man;
 		elements.clear();
 		elements.addAll(panel.getChannelEntries());
+		this.setListData(elements);
 		
 		getJMenuForChannels().removeAll();
 		ArrayList<AvailableChannelsItem> makeentries = makeentries(panel);
@@ -160,7 +162,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	
 	
 	void updateDisplay() {
-		panelManager.updatePanels();
+		getCurrentPanelManager().updatePanels();
 		
 		if (panel!=null&&panel.getChannelLabelDisplay()!=null)panel.getChannelLabelDisplay().updateDisplay(); 
 		
@@ -171,11 +173,18 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 			if(elements.size()<2) return;
 			elements.remove(o);
 			panel.removeChannelEntry(o);
-			panelManager.updatePanels();
-			panelManager.getImageDisplayLayer().onImageUpdated();
+			getCurrentPanelManager().updatePanels();
+			getCurrentPanelManager().getImageDisplayLayer().onImageUpdated();
 			this.repaint();
 		
 		
+	}
+
+	/**
+	 * @return
+	 */
+	protected PanelManager getCurrentPanelManager() {
+		return panelManager;
 	}
 
 
@@ -286,7 +295,7 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 	/**returns the add/remove channels menu elements*/
 	public ArrayList<AvailableChannelsItem> makeentries(PanelListElement e) {
 		ArrayList<AvailableChannelsItem> output=new ArrayList<AvailableChannelsItem>();
-		ArrayList<ChannelEntry> all = panelManager.getMultiChannelWrapper().getChannelEntriesInOrder();
+		ArrayList<ChannelEntry> all = getCurrentPanelManager().getMultiChannelWrapper().getChannelEntriesInOrder();
 		for(ChannelEntry entry:all) {
 			output.add(new AvailableChannelsItem2(entry, e));
 		}
@@ -314,17 +323,46 @@ public class ChannelListDisplay extends JList<Object> implements ActionListener,
 			
 			super.onAction();
 			setPanel(panel, panelManager);
-			
+			ArrayList<PanelListElement> panelsChanged =new ArrayList<PanelListElement>();
 			List<PanelListElement> list = panelDisp.getSelectedValuesList();
+			int cycle=1;
 			for(PanelListElement panelp: list) {
+				
+				
 				if (panelp==panel) continue;
-				this.setChannelIsIncluded(!isExcludedChannel(), panelp);
+				updateEntry(panelDisp.findPanelManager(panelp), entry);
+				boolean include = !isExcludedChannel();
+				
+				this.setChannelIsIncluded(include, panelp);
+				
+				
+				panelsChanged.add(panelp);
+				cycle++;
+			}
+			
+			for(PanelListElement panelp: panelsChanged) {
+				panelDisp.findPanelManager(panelp).updatePanels();
 			}
 			panelManager.updatePanels();
+			panelDisp.repaint();
+			panelManager.updateDisplay();
+		}
+		/**
+		 * @param findPanelManager
+		 * @param entry
+		 */
+		private void updateEntry(PanelManager findPanelManager, ChannelEntry entry) {
+			ArrayList<ChannelEntry> newEntries = findPanelManager.getImageDisplayLayer().getMultiChannelImage().getChannelEntriesInOrder();
+			for(ChannelEntry en2: newEntries) {
+				if(en2.getOriginalChannelIndex()==entry.getOriginalChannelIndex())
+					this.entry=en2;
+			}
 		}
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;}
+
+	
 	
 }

@@ -52,11 +52,15 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import channelMerging.ChannelEntry;
+import channelMerging.MultiChannelImage;
+import figureOrganizer.ChannelSubFigureOrganizer;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import standardDialog.colors.ColorDimmingBox;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
@@ -78,6 +82,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	private ListCellRenderer<PanelListElement> render= new PanelListElementCellRenderer();
 	
 	private PanelManager panelManager;
+	private ArrayList<GraphicLayer> searchLayers=new ArrayList<GraphicLayer>();
 	
 	
 	public PanelListDisplay(PanelManager man) {
@@ -94,6 +99,29 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		this.list=list.getPanels();
 		elements.clear();
 		elements.addAll(list.getPanels());
+		this.setListData(elements);
+		selectedPanels();
+	}
+	
+	/**
+	 * 
+	 */
+	public void setListToSearchLayer() {
+		this.list=new ArrayList<PanelListElement>();
+	
+		elements.clear();
+		for(GraphicLayer l: this.searchLayers) {
+			for(ZoomableGraphic o: l.getObjectsAndSubLayers()) {
+				if(o  instanceof ChannelSubFigureOrganizer) {
+					ArrayList<PanelListElement> found = ((ChannelSubFigureOrganizer) o).getPanelManager().getPanelList().getPanels();
+					list.addAll(found);
+					elements.addAll(found);
+				}
+			}
+		}
+	
+		
+		
 		this.setListData(elements);
 		selectedPanels();
 	}
@@ -293,6 +321,8 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			 currentPanelManager.getPanelList().swapPanelLocations(panel1, panel2));
 		else {
 			PanelList.swapPhysicalLocationsOfPanels(panel1, panel2, undo);
+			 currentPanelManager.updatePanels(); currentPanelManager2.updatePanels();
+			 currentPanelManager.updateDisplay();
 		}
 		
 			undo.addEditToList(new UndoReorderVector<PanelListElement>(elements));
@@ -312,6 +342,8 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 			
 			elements.set(ind1, panel2);
 			elements.set(ind2, panel1);
+			list.set(ind1, panel2);
+			list.set(ind2, panel1);
 			
 
 			this.repaint();
@@ -322,7 +354,7 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	void removeItem(PanelListElement panel12) {
 		
 			elements.remove(panel12);
-		
+			list.remove(panel12);
 			
 			PanelManager currentPanelManager = getCurrentPanelManager(panel12);
 			
@@ -345,11 +377,37 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 	 * @return
 	 */
 	protected PanelManager getCurrentPanelManager(PanelListElement panel1) {
+		if(panelManager.getPanelList().getPanels().contains(panel1))
+			return panelManager;
+		else {
+			panelManager=findPanelManager(panel1);
+		}
+	
 		return panelManager;
 	}
 
 
 
+
+	/**
+	 * @param panel1
+	 * @return
+	 */
+	public PanelManager findPanelManager(PanelListElement panel1) {
+		for(GraphicLayer layer: this.searchLayers) {
+			for(ZoomableGraphic object: layer.getObjectsAndSubLayers()) {
+				if(object instanceof ChannelSubFigureOrganizer) {
+					PanelManager panelManager2 = ((ChannelSubFigureOrganizer) object).getPanelManager();
+					boolean found = panelManager2.getPanelList().getPanels().contains(panel1);
+					if(found) {
+						panelManager2.setChannelUseMode(PanelManager.ADVANCED_CHANNEL_USE);
+						return panelManager2;
+						}
+				}
+			}
+		}
+		return panelManager;
+	}
 
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
@@ -538,6 +596,27 @@ public class PanelListDisplay extends JList<PanelListElement> implements ActionL
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * @param layer
+	 */
+	public void setSearchLayer(GraphicLayer layer) {
+		this.searchLayers.add(layer);
+		
+	}
+
+	/**
+	 * @param panel
+	 */
+	public void addPanel(PanelListElement panel) {
+		list.add(panel);
+		elements.add(panel);
+		this.setListData(elements);
+	}
+
+	
+
+	
 	
 	
 }

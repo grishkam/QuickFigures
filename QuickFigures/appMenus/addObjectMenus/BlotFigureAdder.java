@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: May 9, 2021
+ * Date Modified: April 25, 2022
  * Version: 2022.0
  */
 package addObjectMenus;
@@ -65,7 +65,8 @@ public class BlotFigureAdder extends FigureAdder {
 	/**when given a normal parent layer and a multidimensional image display layer,
 	 places the multichannel display layer into a figure organizing layer (which is created if the ordinary layer is not inside of an existing figure organizer). 
 	 that figure organizer will contain the multidimensional image inside of it  
-	 * @param p 
+	 * @param p */
+	@Override
 	public FigureOrganizingLayerPane addFigureOrganizerFor(GraphicLayer ordinaryLayer, MultichannelDisplayLayer multiDimensionalImage, PreProcessInformation p) {
 
 		FigureOrganizingLayerPane output = super.addFigureOrganizerFor(ordinaryLayer, multiDimensionalImage, p);
@@ -74,7 +75,7 @@ public class BlotFigureAdder extends FigureAdder {
 		ShowMessage.showOptionalMessage("Lane labels", false, "To add a series of labels for blot lanes", "first select an image panel, then", "go to the Add menu and choose 'To selected panels->Lane Labels' ");
 		output.transform().move(0, 200);
 		return output;
-	}*/
+	}
 	
 	
 	/**returns the figure template to be used by this adder. 

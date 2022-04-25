@@ -37,6 +37,7 @@ import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import figureOrganizer.ChannelSubFigureOrganizer;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
@@ -68,7 +69,7 @@ import utilityClasses1.ArraySorter;
 /**A special inset definer object that the user can use to draw insets with the inset tool.
  * This object is the region of interest that determines which area is displayed
   */
-public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener, DependentSubFigure {
+public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationChangeListener, DependentSubFigure, ChannelSubFigureOrganizer{
 
 
 	

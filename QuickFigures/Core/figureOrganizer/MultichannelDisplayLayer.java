@@ -68,7 +68,7 @@ import channelLabels.ChannelLabelProperties;
 import channelLabels.ChannelLabelTextGraphic;
 
 /**Special layer for showing parts of a specific multi dimensional image */
-public class MultichannelDisplayLayer extends GraphicLayerPane implements ZoomableGraphic, ShowsOptionsDialog, ImageDisplayLayer, KnowsParentLayer, Named, HasUniquePopupMenu,  HasTreeLeafIcon, SubFigureOrganizer, MultiChannelUpdateListener,PointsToFile , Serializable{
+public class MultichannelDisplayLayer extends GraphicLayerPane implements ZoomableGraphic, ShowsOptionsDialog, ImageDisplayLayer, KnowsParentLayer, Named, HasUniquePopupMenu,  HasTreeLeafIcon, SubFigureOrganizer, MultiChannelUpdateListener,PointsToFile , Serializable, ChannelSubFigureOrganizer{
 
 	/**
 	 * 

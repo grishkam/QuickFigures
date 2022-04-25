@@ -423,13 +423,22 @@ public class BandRightAlignHandle extends SmartHandle {
 		}
 		
 		if (this.getHandleNumber()==ArrowGraphic.HANDLE_2) {
+			/**
 			targetArrow.setYLocation(p2.getY());
 			double dx = p2.getX()-targetArrow.getLineEndLocation().getX();
 			targetArrow.moveLocation(dx, 0);
 			for(ArrowGraphic a: map.values()) {
 				a.setXLocations(targetArrow.getLineStartLocation().getX(), targetArrow.getLineEndLocation().getX());
 			}
+			*/
 			
+			double x1 = targetArrow.getLineStartLocation().getX();
+			double x2 = lastDragOrRelMouseEvent.getCoordinatePoint().getX();
+			
+			for(ArrowGraphic a: map.values()) {
+				a.setXLocations(x1, x2);
+				
+			}
 		}
 		
 		

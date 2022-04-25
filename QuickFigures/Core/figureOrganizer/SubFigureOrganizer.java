@@ -22,7 +22,9 @@ package figureOrganizer;
 
 import java.util.ArrayList;
 
+import channelLabels.ChannelLabelManager;
 import channelMerging.MultiChannelImage;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner.InsetPanelManager;
 
 /**This interface is for all classes that maintain sets of panels that are updated 
   with changes to source images*/
