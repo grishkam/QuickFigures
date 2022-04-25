@@ -22,9 +22,12 @@ package addObjectMenus;
 
 import ultilInputOutput.FileFinder;
 
+import java.util.HashMap;
+
 import appContext.CurrentAppContext;
 import channelMerging.MultiChannelImage;
 import channelMerging.PreProcessInformation;
+import figureEditDialogs.ScaleLevelInputDialog;
 import figureEditDialogs.SubStackDialog;
 import figureFormat.AutoFigureGenerationOptions;
 import figureFormat.FigureTemplate;
@@ -34,7 +37,9 @@ import figureOrganizer.FigureType;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import imageScaling.ScaleInformation;
 import logging.IssueLog;
+import messages.ShowMessage;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
 import selectedItemMenus.LayerSelectionSystem;
 
@@ -44,7 +49,7 @@ public class FigureAdder extends LayoutAdder {
 	/**
 	 a dialog will be shown to users if they attempt to add create with a very large image
 	 */
-	private static final int MAX_RECCOMENDED_SIZE_LIMIT = 25;
+	private static final int MAX_RECOMMENDED_SIZE_LIMIT_PANELS = 25;
 
 	private static final long serialVersionUID = 1L;
 
@@ -187,7 +192,8 @@ public class FigureAdder extends LayoutAdder {
 		/**determines the crop for this image*/
 		if (p==null)
 			FigureOrganizingLayerPane.cropIfUserSelectionExists(display); 
-		else display.getSlot().applyCropAndScale(p);
+		else 
+			display.getSlot().applyCropAndScale(p);
 		
 		
 		boolean useSingleFrame2 = useSingleFrame;
@@ -198,14 +204,39 @@ public class FigureAdder extends LayoutAdder {
 		if (useSingleSlice2) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultiChannelImage().getSelectedFromDimension(MultiChannelImage.SLICE_DIMENSION));
 		
 		int n = display.getPanelList().getChannelUseInstructions().estimageNPanels(display.getMultiChannelImage());
-		if (n>MAX_RECCOMENDED_SIZE_LIMIT) {
+		if (n>MAX_RECOMMENDED_SIZE_LIMIT_PANELS) {
 			new SubStackDialog(display, true, n+" would be a lot of panels " +"please select substack").showDialog();
 		}
+		p = promptForScaleDown(display, p);
 		
 		FigureOrganizingLayerPane figureOrganizerFor = addFigureOrganizerFor(targetLayer, display, p);
 		
 		
 		return figureOrganizerFor;
+	}
+
+	/**If the image that is to be added is too large, prompts the user to input a scale factor
+	 * @param display
+	 * @param p
+	 * @return
+	 */
+	public PreProcessInformation promptForScaleDown(MultichannelDisplayLayer display, PreProcessInformation p) {
+		int h = display.getPanelList().getHeight();
+		int w= display.getPanelList().getWidth();
+		
+		if(h>3000||w>3000) {
+			if(p==null)
+				p=new PreProcessInformation(1);
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("This image would produce very large panels", "Please input a scale factor above");
+			hm.put("Note", "You can alays change the scale factor or crop area later");
+			
+			ScaleLevelInputDialog dialog = new ScaleLevelInputDialog(p.getScaleInformation(), hm, "This is a very large image");
+			ScaleInformation newScale = dialog.showUserOption();
+			display.getSlot().applyCropAndScale(new PreProcessInformation(p, newScale));
+		
+		}
+		return p;
 	}
 
 	/**when given a normal parent layer and a multidimensional image display layer,

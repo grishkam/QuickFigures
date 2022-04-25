@@ -22,11 +22,14 @@
  
 package figureEditDialogs;
 
+import java.util.HashMap;
+
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import standardDialog.StandardDialog;
 import standardDialog.choices.ChoiceInputPanel;
 import standardDialog.numbers.NumberInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 
 /**
  A dialog that allows the user to input a scale level and
@@ -43,6 +46,8 @@ public class ScaleLevelInputDialog extends StandardDialog {
 	public static final String SCALE_KEY="pre scale", INTERPOLATION_KEY="interpolarion";
 	
 	private ScaleInformation scalingInformation=null;
+
+	private String messageText;
 	
 	
 	public ScaleLevelInputDialog(ScaleInformation scale) {
@@ -57,8 +62,17 @@ public class ScaleLevelInputDialog extends StandardDialog {
 	}
 
 
-	
-	
+	/**Creates a dialog with extra messages*/
+	public ScaleLevelInputDialog(ScaleInformation scale, HashMap<String, String> hm, String title) {
+		this(scale);
+		for(String key: hm.keySet()) {
+			this.add("Scale Display",  new InfoDisplayPanel(key, hm.get(key)));
+		}
+
+		
+		if(title!=null)
+			this.setTitle(title);
+	}
 	
 	/**
 	 * @param scale
@@ -100,13 +114,26 @@ public class ScaleLevelInputDialog extends StandardDialog {
 	/**shows the user a modal dialog and returns the users choice*/
 	public static ScaleInformation showUserTheDialog(ScaleInformation input) {
 		ScaleLevelInputDialog dialog = new  ScaleLevelInputDialog(input);
-		dialog.setModal(true);
-		dialog.showDialog();
+		return dialog.showUserOption();
+	}
+
+
+
+
+
+	/**shows the dialog for the given scale information 
+	 * @param input
+	 * @param dialog
+	 * @return
+	 */
+	public  ScaleInformation showUserOption() {
+		setModal(true);
+		showDialog();
 		
-		if(dialog.wasOKed)
-			return getScaleLevelInformationFromDialog(dialog);
+		if(wasOKed)
+			return getScaleLevelInformationFromDialog(this);
 		
-		return input;
+		return this.scalingInformation;
 	}
 
 }
