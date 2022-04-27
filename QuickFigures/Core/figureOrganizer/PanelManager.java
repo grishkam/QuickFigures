@@ -501,7 +501,7 @@ public class PanelManager implements Serializable, EditListener{
 	}
 
 	/**Changed the panel level scale and returns a CompoundEdit edit*/
-	protected CombinedEdit imposePanelLevelScale(double newPanelScale) {
+	public CombinedEdit imposePanelLevelScale(double newPanelScale) {
 		CombinedEdit output=new CombinedEdit();
 		
 		for(PanelListElement panel2: getPanelList().getPanels()) {
@@ -509,7 +509,8 @@ public class PanelManager implements Serializable, EditListener{
 			ImagePanelGraphic panelGraphic = panel2.getPanelGraphic();
 			
 			output.addEditToList(new UndoScalingAndRotation(panelGraphic));
-			
+			if(panelGraphic==null)
+				continue;
 			panelGraphic.setLocationType(RectangleEdges.UPPER_LEFT);
 			panelGraphic.setRelativeScale(newPanelScale);
 		}

@@ -140,12 +140,13 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		copy.setLocationType(getLocationType());
 		return copy;
 	}
-
-/**Called when the rectangle's handles are moved*/
-	public void handleSmartMove(int handlenum, Point2D destination) {
+	/**When a user drags one corner the other is set as the fixed edge*/
+	/**if the rectangle is rotated, transforms the points to the equivalent unrotated points.
+	 * this step is not needed for the rotation handle itself*/
+/**Called when the rectangle's handles are moved
+	public final void handleSmartMove(int handlenum, Point2D destination) {
 		
-		/**if the rectangle is rotated, transforms the points to the equivalent unrotated points.
-		 * this step is not needed for the rotation handle itself*/
+		
 		if (handlenum!=RectangularShapeSmartHandle.ROTATION_HANDLE && handlenum!=CENTER) {
 			
 			performRotationCorrection(destination);
@@ -154,7 +155,7 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		if (flipDuringHandleDrag)
 			handlenum=checkForHandleInvalidity(handlenum,destination);
 		
-		/**When a user drags one corner the other is set as the fixed edge*/
+		
 		int op=RectangleEdges.oppositeSide(handlenum);
 		setLocationType(op);
 		
@@ -203,7 +204,7 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 			
 		}
 		
-	}
+	}*/
 	
 	/**
 returns true if any mouse drags should maintain a sqaure shape
@@ -219,7 +220,7 @@ public void setSquareLock(boolean b) {
 }
 
 	/**Some times the user drags handles past each other, this switches the handle number accordingly*/
-	int checkForHandleInvalidity(int handlenum, Point2D p2) {
+	public int checkForHandleInvalidity(int handlenum, Point2D p2) {
 		Point2D bot = RectangleEdges.getLocation(BOTTOM, this.getRectangle());
 		Point2D top = RectangleEdges.getLocation(TOP, this.getRectangle());
 		Point2D left = RectangleEdges.getLocation(LEFT, this.getRectangle());
@@ -465,7 +466,7 @@ public void setSquareLock(boolean b) {
 	}
 	
 	/**rotation of the rectangle changes the cordinates of the handles, this method corrects for that*/
-	protected void performRotationCorrection(Point2D p) {
+	public void performRotationCorrection(Point2D p) {
 		AffineTransform aa = RectangleEdges.getRotationAboutCenter(this.getBounds(), this.getAngle());
 		aa.transform(p, p);
 	}
@@ -525,7 +526,7 @@ public void setSquareLock(boolean b) {
 	}
 	
 	/**Creates a handle*/
-	protected SmartHandle createSmartHandle(int type) {
+	protected  RectangularShapeSmartHandle createSmartHandle(int type) {
 		RectangularShapeSmartHandle out = new RectangularShapeSmartHandle(type, this);
 		if (handleSize!=null) out.handlesize=handleSize;
 		out.setHandleNumber(type);

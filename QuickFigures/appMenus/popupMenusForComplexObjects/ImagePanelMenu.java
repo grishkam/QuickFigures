@@ -15,19 +15,25 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 23, 2021
+ * Date Modified: April 25, 2022
  * Version: 2022.0
  */
 package popupMenusForComplexObjects;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import javax.swing.JMenu;
 
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.BarGraphicTool;
 import graphicTools.ShapeGraphicTool;
@@ -35,12 +41,18 @@ import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.SourceImageTreeIcon;
+import imageDisplayApp.CanvasOptions;
+import imageMenu.CanvasAutoResize;
+import locatedObject.RectangleEdges;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
+import multiChannelFigureUI.InsetTool;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
@@ -98,7 +110,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			public CombinedEdit performAction() { return addText();}	
 	}.createJMenuItem("Add Text", ComplexTextGraphic.createImageIcon()));
 		
-		
+	
 		
 	addShapeSubmenu();
 	
@@ -123,6 +135,14 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer(), color));
+		
+		/**Creates a menu option for add a label*/
+		s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
+			@Override
+			public CombinedEdit performAction() { return addInset();}
+
+			
+	}.createJMenuItem("Add ROI and Inset Panels"));
 		this.add(s);
 	}
 
@@ -146,6 +166,8 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		
 		return undo;
 	}
+	
+	
 
 
 	/**Adds a scale bar tot he image panel
@@ -178,4 +200,50 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		return scaleBar;
 	}
 	
+	/**Creates an inset*/
+	private CombinedEdit addInset() {
+		ArrayList<PanelGraphicInsetDefiner> old =PanelGraphicInsetDefiner.getInsetDefinersFromLayer(imagePanel.getParentLayer());
+		RectangularGraphic s=null;
+		if(old.size()>0)
+			s=old.get(0);
+		
+		CombinedEdit output = new CombinedEdit();
+		InsetTool iTool = new InsetTool();
+		iTool.setupToolForImagePanel(imagePanel);
+		iTool.undo=output;
+		
+		
+		Point2D c = imagePanel.getCenterOfRotation();
+		Point2D d = imagePanel.getLocationUpperLeft();
+		d=ShapeGraphic.midPoint(c, d);
+	
+		Rectangle2D newRect=new Rectangle2D.Double(d.getX(), d.getY(), c.getX()-d.getX(), c.getY()-d.getY());
+		Rectangle newRect2 = newRect.getBounds();
+		
+		if(s!=null) {
+			
+			newRect2.width=(int) s.getRectangle().width;
+			newRect2.height=(int) s.getRectangle().height;
+			if(!imagePanel.getBounds().contains(newRect2))
+				newRect2 = newRect.getBounds();
+		}
+		
+		
+		Point clickPoint = getMemoryOfMouseEvent().getCoordinatePoint();
+		RectangleEdges.setLocation(newRect2, RectangleEdges.CENTER, clickPoint.x, clickPoint.y);
+		if(imagePanel.getBounds().contains(newRect2))
+			newRect=newRect2;
+		c=RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, newRect);
+		d=RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, newRect);
+		
+		iTool.refreshInsetOnMouseDrag(c, d);
+		
+		
+		if (CanvasOptions.current.resizeCanvasAfterEdit)
+			output.addEditToList(
+					new CanvasAutoResize(false).performUndoableAction( getMemoryOfMouseEvent().getAsDisplay())
+			);
+		
+		return output;
+	}	
 }

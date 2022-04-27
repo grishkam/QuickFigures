@@ -98,7 +98,11 @@ public class ChannelOrderAndLutMatching {
 		if(channelNamesA.size()==1||1==channelNamesB.size())
 			return true;
 		for(int i=0; i<channelNamesA.size()&& i<channelNamesB.size(); i++) {
-			boolean match1 = channelNamesA.get(i).equals(channelNamesB.get(i));
+			String name0 = channelNamesA.get(i);
+				if(name0==null) {
+					return true;//if one of the names is null, cannot match channel order anyway
+				}
+			boolean match1 = name0.equals(channelNamesB.get(i));
 			if(!(match1))
 					return false;
 		}

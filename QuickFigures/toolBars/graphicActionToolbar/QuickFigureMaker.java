@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: April 26, 2022
  * Version: 2022.0
  */
 package graphicActionToolbar;
@@ -165,7 +165,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 		
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
-		if(isBlotFigure()) {
+		if(isBlotFigure()&&added!=null) {
 			DefaultLayoutGraphic montageLayoutGraphic = added.getMontageLayoutGraphic();
 			montageLayoutGraphic.moveLayoutAndContents(80, 80);//western blot figure should be created with more space for expansion
 			if(montageLayoutGraphic.getPanelLayout().labelSpaceWidthTop<20) {

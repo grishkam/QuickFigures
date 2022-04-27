@@ -22,6 +22,7 @@ package figureOrganizer.insetPanels;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -51,12 +52,15 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.FrameGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import handles.RectangularShapeSmartHandle;
+import handles.SmartHandle;
 import iconGraphicalObjects.IconUtil;
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import popupMenusForComplexObjects.InsetMenu;
 import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
@@ -776,6 +780,33 @@ static Color  folderColor2= new Color(0,140, 0);
 	@Override
 	public boolean producesObject(Object image) {
 		return getPanelManager().getPanelList().getPanelGraphics().contains(image);
+	}
+	
+	
+	/**Creates a handle*/
+	protected  RectangularShapeSmartHandle createSmartHandle(int type) {
+		 RectangularShapeSmartHandle out = super.createSmartHandle(type);
+		out.useVirtualShape=isSourcePanelOverSize();
+				return out;
+	}
+
+	/**Very large source images are slow to refresh inset, in that case, this method will return true
+	 * and handle drags will be treated differently
+	 * @return
+	 */
+	private boolean isSourcePanelOverSize() {
+		try {
+			MultiChannelImage multichannelImage = getSourceDisplay().getSlot().getUnprocessedVersion(false);
+			Dimension d = multichannelImage.getDimensions();
+			if (d == null)
+				return false;
+			int limit = 3000;
+			if (d.width > limit || d.height > limit)
+				return true;
+		} catch (Exception e) {
+			//IssueLog.logT(e);
+		}
+		return false;
 	}
 	
 

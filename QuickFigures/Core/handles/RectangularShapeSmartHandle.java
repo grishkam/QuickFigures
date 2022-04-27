@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: April 26, 2022
  * Version: 2022.0
  */
 package handles;
@@ -29,11 +29,13 @@ import java.awt.geom.Point2D;
 
 import actionToolbarItems.EditManyObjects;
 import applicationAdapters.CanvasMouseEvent;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
 import locatedObject.RectangleEdges;
 import objectDialogs.WidthAndHeightDialog;
 import standardDialog.StandardDialog;
+import undo.AbstractUndoableEdit2;
 import undo.UndoStrokeEdit;
 
 /**A handle for editing shapes whose sizes are defined by a bounding rectangle
@@ -46,7 +48,14 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 
 	
 	private RectangularGraphic targetShape;
-	private UndoStrokeEdit strokeUndo;
+	private AbstractUndoableEdit2 strokeUndo;
+
+
+	private CanvasMouseEvent pressPoint;
+	
+	/**some subclasses of rectangular graphic display a marker during mouse drags instead of changing the shape right away*/
+	public boolean useVirtualShape=false;
+	private RectangularGraphic virtualShape=null;
 
 	public RectangularShapeSmartHandle(int type, RectangularGraphic r) {
 		
@@ -134,12 +143,19 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 			double d = 2*p.distance(c);
 			if( targetShape.getStrokeHandlePoints()[0].distance(c)>12) {d=0.5;}
 			targetShape.setStrokeWidth((float)d);
-			if(strokeUndo!=null)	
-				{
-				strokeUndo.establishFinalState();
-				addStrokeUndo(w);
-			}
+			
 		} 
+		
+		else {
+			handleSmartMove( getDragShape() , getHandleNumber(),  w.getCoordinatePoint()) ;
+			 getDragShape() .afterHandleMove(getHandleNumber(), this.pressPoint.getCoordinatePoint(),   w.getCoordinatePoint());
+		}
+		
+		if(strokeUndo!=null)	
+		{
+			strokeUndo.establishFinalState();
+			addStrokeUndo(w);
+		}
 	}
 	
 	
@@ -158,7 +174,10 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 	/**when the user double click a handle with the mouse, this will show a dialog*/
 	@Override
 	public void handlePress(CanvasMouseEvent w) {
-		if (this.isStrokeHandle()) strokeUndo= new UndoStrokeEdit(targetShape);
+		this.pressPoint=w;
+		if (this.isStrokeHandle()) 
+			strokeUndo= new UndoStrokeEdit(targetShape);
+		else strokeUndo=targetShape.provideDragEdit();
 		if(w.isPopupTrigger()) {
 			showJPopup(w);;
 			return;
@@ -180,18 +199,110 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 		}
 		
 		
+	if(this.useVirtualShape) {
+		virtualShape=targetShape.copy();
+		virtualShape.setAngle(targetShape.getAngle());
+		virtualShape.setStrokeWidth(4);
+		virtualShape.setStrokeColor(Color.GREEN);
+		w.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(virtualShape, 0);
+	}	
+		
 	}
-
+	
+	@Override
+	public void handleRelease(CanvasMouseEvent w) {
+		if(this.useVirtualShape) {
+			this.targetShape.setLocationType(virtualShape.getLocationType());
+			targetShape.setRectangle(virtualShape.getRectangle());
+			targetShape.setAngle(virtualShape.getAngle());
+			targetShape.afterHandleMove(getHandleNumber(), this.pressPoint.getCoordinatePoint(),   w.getCoordinatePoint());
+			//this.handleDrag(w);
+		}
+	}
+	
+	public RectangularGraphic getDragShape() {
+		if(this.useVirtualShape&&virtualShape!=null)
+			return virtualShape;
+		return targetShape;
+	}
+	
+	
 	/**returns true if this is a stroke handle*/
 	public boolean isStrokeHandle() {
 		return this.getHandleNumber()==STROKE_HANDLE_TYPE;
 	}
 	
-	/**What to do when a handle is moved from point p1 to p2*/
+	/**What to do when a handle is moved from point p1 to p2
 	public void handleMove(Point2D p1, Point2D p2) {
-		targetShape.handleSmartMove(getHandleNumber(),  p2) ;
-		targetShape.afterHandleMove(getHandleNumber(),  p1,   p2);
+		//handleSmartMove(targetShape, getHandleNumber(),  p2) ;
+		//targetShape.afterHandleMove(getHandleNumber(),  p1,   p2);
+		
+	}*/
+	
+	/**Called when the rectangle's handles are moved*/
+	public static final void handleSmartMove(RectangularGraphic target, int handlenum, Point2D destination) {
+		
+		/**if the rectangle is rotated, transforms the points to the equivalent unrotated points.
+		 * this step is not needed for the rotation handle itself*/
+		if (handlenum!=RectangularShapeSmartHandle.ROTATION_HANDLE && handlenum!=CENTER) {
+			
+			target.performRotationCorrection(destination);
+		}
+		
+		if (target.flipDuringHandleDrag)
+			handlenum=target.checkForHandleInvalidity(handlenum,destination);
+		
+		/**When a user drags one corner the other is set as the fixed edge*/
+		int op=RectangleEdges.oppositeSide(handlenum);
+		target.setLocationType(op);
+		
+		Point2D l2 = RectangleEdges.getLocation(op, target.getBounds());
+		double newwidth = Math.abs(destination.getX()-l2.getX());
+		double newheight = Math.abs(destination.getY()-l2.getY());
+		
+		boolean squareLock=target.isSquareLock();//should the shape stay a square?
+		
+		if (handlenum<LEFT) {
+				if(squareLock &&newwidth==target.getObjectWidth()) {newwidth=newheight;}
+				else 
+				if(squareLock &&newheight==target.getObjectHeight()) {newheight=newwidth;}
+				else  if (squareLock){
+					newheight=(newwidth+newheight)/2;
+					newwidth=newheight;
+					}
+			
+				target.setWidth(newwidth);
+				target.setHeight(newheight);
+				target.getListenerList().notifyListenersOfUserSizeChange(target);
+		
+		}
+		if(handlenum==TOP||handlenum==BOTTOM) {
+			target.setHeight(newheight);
+			if(squareLock) target.setWidth(newheight);
+			target.getListenerList().notifyListenersOfUserSizeChange(target);
+			
+		} else 
+		if(handlenum==LEFT||handlenum==RIGHT) {
+			target.setWidth(newwidth);
+			if(squareLock) target.setHeight(newwidth);
+			target.getListenerList().notifyListenersOfUserSizeChange(target);
+			
+		} else if (handlenum==CENTER) {
+			target.setLocationType(CENTER);
+			target.setLocation(destination);
+			target.getListenerList().notifyListenersOfUserMove(target);
+			}
+		
+		
+		if (handlenum==RectangularShapeSmartHandle.ROTATION_HANDLE){
 
+			target.setAngle(BasicGraphicalObject.distanceFromCenterOfRotationtoAngle(target.getCenterOfRotation(), destination));
+			target.getListenerList().notifyListenersOfUserMove(target);
+			
+		}
+		
 	}
+	
+	
 	
 }

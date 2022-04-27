@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 24, 2021
+ * Date Modified: April 25, 2022
  * Version: 2022.0
  */
 package multiChannelFigureUI;
@@ -125,7 +125,7 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	public boolean addToExisting=true;
 
 
-	private CombinedEdit undo=new CombinedEdit();
+	public CombinedEdit undo=new CombinedEdit();
 
 
 
@@ -199,6 +199,8 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 	
 	}
 	
+	
+	
 	/**creates the inset panels*/
 	private CombinedEdit createInsets(PanelGraphicInsetDefiner inset) {
 				CombinedEdit undo = new CombinedEdit();
@@ -233,7 +235,12 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 					inset.personalLayout=preExisting.personalLayout;
 					inset.personalLayer=preExisting.personalLayer;
 					pm=new PanelManager(display, list, this.preExisting.personalLayer);
-					
+					inset.setInsetScale(preExisting.getInsetScale());
+					preExisting.getPanelManager().setPanelLevelScaleToPanels();
+					double panelLevelScale = preExisting.getPanelManager().getPanelLevelScale();
+					inset.getPanelManager().setPanelLevelScale(panelLevelScale);
+					inset.getPanelManager().imposePanelLevelScale(panelLevelScale);
+				
 				} else {
 					pane=inset.createPersonalLayer("Insets");//new InsetGraphicLayer("Insets");
 					inset.personalLayer=pane;
@@ -249,7 +256,10 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 				ArrayList<ImagePanelGraphic> newpanels = pm.generatePanelGraphicsFor(list);
 				undo.addEditToList(new UndoAddManyItem(pm.getLayer(), newpanels));
 				
-				inset.updateRelativeScaleOfPanels();
+				if (!usePreexisting(inset)) 
+					inset.updateRelativeScaleOfPanels();
+				
+				
 				inset.updateImagePanels();
 				
 				
@@ -390,7 +400,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 	
 	public void mouseDragged() {
 		try {
-			refreshInsetOnMouseDrag();
+			refreshInsetOnMouseDrag(this.clickedCord(), this.draggedCord());
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}
@@ -399,14 +409,14 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 
 
 	/**
-	 * 
+	 Called when inset tool is dragged from point p1 to point p2
 	 */
-	void refreshInsetOnMouseDrag() {
-		if (!getImageDisplayWrapperClick().getUndoManager().hasUndo(undo)){
+	public void refreshInsetOnMouseDrag(Point2D p1, Point2D p2) {
+		if (getImageDisplayWrapperClick()!=null&&!getImageDisplayWrapperClick().getUndoManager().hasUndo(undo)){
 				this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
 		}
 	
-		Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(this.clickedCord(), this.draggedCord());
+		Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(p1, p2);
 		createOrEditInset(r);
 	}
 

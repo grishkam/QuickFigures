@@ -370,7 +370,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		
 			/**Alters the rectangle as if its own handle was being dragged*/
 			rect.flipDuringHandleDrag=false;
-			rect.handleSmartMove(handletype, w.getCoordinatePoint());
+			RectangularShapeSmartHandle.handleSmartMove(rect,handletype, w.getCoordinatePoint());
 			
 			
 				o2=copyObjects();//creates a copy of every object to be modified
@@ -550,7 +550,7 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		/**What to do when a handle is moved from point p1 to p2. 
 		  The bounding rectangle is resized, rotated or moved depending on which handle the user is dragging*/
 		public void handleMove(Point2D p1, Point2D p2) {
-			rect.handleSmartMove(getHandleType(),  p2) ;
+			RectangularShapeSmartHandle.handleSmartMove(rect,getHandleType(),  p2) ;
 		}
 		
 	}

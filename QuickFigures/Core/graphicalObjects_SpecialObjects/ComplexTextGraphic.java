@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 25, 2022
+ * Date Modified: April 26, 2022
  * Version: 2022.0
  */
 package graphicalObjects_SpecialObjects;
@@ -264,6 +264,8 @@ public class ComplexTextGraphic extends TextGraphic {
 		}
 		
 		for (TextLine line1: allLines) {
+			if(line1==null)
+				continue;
 		   drawLineAtLocation(line1,  (Graphics2D)g, cords);
 		
 	   }

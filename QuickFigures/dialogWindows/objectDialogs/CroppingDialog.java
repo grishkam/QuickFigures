@@ -57,6 +57,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import handles.RectangularShapeSmartHandle;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
@@ -534,11 +535,15 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		RectangularGraphic rect2 = cropAreaRectangle.copy();
 		
 		
-		{cropAreaRectangle.handleMove(handle, new Point((int)press.getX(),(int) press.getY()), new Point((int)drag.getX(),(int) drag.getY()));
+		{
+			//cropAreaRectangle.handleMove(handle, new Point((int)press.getX(),(int) press.getY()), new Point((int)drag.getX(),(int) drag.getY()));
+			
 		if (handle==8||handle==-1) {
 			cropAreaRectangle.setLocationType(RectangleEdges.CENTER);
 			cropAreaRectangle.setLocation((int)drag.getX(), (int)drag.getY());
 			}
+		else RectangularShapeSmartHandle.handleSmartMove(cropAreaRectangle, handle, /**new Point((int)press.getX(),(int) press.getY()),*/ new Point((int)drag.getX(),(int) drag.getY()));
+		
 		
 		
 		/**
