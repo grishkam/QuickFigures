@@ -80,7 +80,7 @@ public class AttachedItemTool extends GraphicTool {
 			TakesAttachedItems t=(TakesAttachedItems) l;
 			if(t.hasLockedItem(item)&& excludeCurrentAttachmentSite) continue;
 			
-			if((l instanceof LocatedObject2D)&((PanelLayoutGraphic) l).getOutline().contains(pt)) list2.add((LocatedObject2D) l);
+			if((l instanceof PanelLayoutGraphic)&&((PanelLayoutGraphic) l).getOutline().contains(pt)) list2.add((LocatedObject2D) l);
 		}
 		if(list2.size()==0) return null;
 		

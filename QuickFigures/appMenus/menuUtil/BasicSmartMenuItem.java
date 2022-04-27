@@ -30,6 +30,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
 import icons.EmptyIcon;
+import undo.AbstractUndoableEdit2;
 import undo.UndoManagerPlus;
 
 /**A special JMenu item that also stores an undo manager*/
@@ -91,16 +92,23 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem, Act
 		}
 	}
 
-	/**Called when this menu item is pressed*/
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// may be used by subclasses
-		
-	}
+	
+
 	
 	
 	public CanvasMouseEvent getLastMouseEvent() {
 		return me;
 	}
+	
+	/**May be overwritten by subclasses. Does some task and returns an undo*/
+	public AbstractUndoableEdit2 performAction() {
+		return null;
+	}
+	
+	/**Called when this menu item is pressed*/
+	public void actionPerformed(ActionEvent e) {
+		addUndo(performAction());
+	}
+	
 
 }

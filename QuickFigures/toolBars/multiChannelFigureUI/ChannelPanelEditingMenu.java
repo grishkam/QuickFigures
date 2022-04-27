@@ -1136,7 +1136,7 @@ protected PanelManager getPressPanelManagerForUser() {
 			 * @return 
 			 * 
 			 */
-			protected CombinedEdit performAction() {
+			public CombinedEdit performAction() {
 				PanelManager panelManager = getPressPanelManagerForUser();
 				if(panelManager.getChannelUseInstructions().addsMergePanel())
 					return createChannelPanelRemover().removeChannelPanels(null);

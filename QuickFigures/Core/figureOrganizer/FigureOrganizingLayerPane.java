@@ -280,6 +280,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		if (hasOne) {
 			
 			display.setPreprocessScale(principalMultiChannel.getPreprocessScale());
+			principalMultiChannel.getPanelManager().setPanelLevelScaleToPanels();//such that a change in panel size is applied to the new one
 			principalMultiChannel.getPanelList().giveSettingsTo(display.getPanelList());
 			display.getSetter().startPoint=startpoint;
 			

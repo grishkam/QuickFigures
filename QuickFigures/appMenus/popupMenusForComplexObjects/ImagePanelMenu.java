@@ -46,10 +46,12 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
 import locatedObject.RectangleEdges;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
@@ -136,13 +138,15 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer(), color));
 		
-		/**Creates a menu option for add a label*/
+		/**Creates a menu option for add inset panels*/
 		s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
 			@Override
-			public CombinedEdit performAction() { return addInset();}
-
-			
-	}.createJMenuItem("Add ROI and Inset Panels"));
+			public CombinedEdit performAction() { return addInset(true);}
+					}.createJMenuItem("Add Split Channel Inset Panels", new InsetToolIcon(0).getMenuVersion()));
+		s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
+			@Override
+			public CombinedEdit performAction() { return addInset(false);}
+					}.createJMenuItem("Add Single Inset Panel", new InsetToolIcon(0).getMenuVersion()));
 		this.add(s);
 	}
 
@@ -200,8 +204,9 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		return scaleBar;
 	}
 	
-	/**Creates an inset*/
-	private CombinedEdit addInset() {
+	/**Creates an inset
+	 * @param b set to true if inset should create split channel*/
+	private CombinedEdit addInset(boolean b) {
 		ArrayList<PanelGraphicInsetDefiner> old =PanelGraphicInsetDefiner.getInsetDefinersFromLayer(imagePanel.getParentLayer());
 		RectangularGraphic s=null;
 		if(old.size()>0)
@@ -209,6 +214,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		
 		CombinedEdit output = new CombinedEdit();
 		InsetTool iTool = new InsetTool();
+		iTool.createMultiChannel=b?1:0;
 		iTool.setupToolForImagePanel(imagePanel);
 		iTool.undo=output;
 		

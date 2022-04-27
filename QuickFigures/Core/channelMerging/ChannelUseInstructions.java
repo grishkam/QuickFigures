@@ -248,8 +248,10 @@ public class ChannelUseInstructions implements Serializable {
 				makePartialMatching(output);
 				output.setExcludedChannelPanels(new ArrayList<Integer>());output.getExcludedChannelPanels().addAll(getExcludedChannelPanels());
 				output.setNoMergeChannels(new ArrayList<Integer>());output.getNoMergeChannels().addAll(getNoMergeChannels());
-				output.frameUseMethod=this.frameUseMethod.duplicate();
-				output.sliceUseMethod=this.sliceUseMethod.duplicate();
+				if(this.frameUseMethod!=null)
+					output.frameUseMethod=this.frameUseMethod.duplicate();
+				if(this.sliceUseMethod!=null)
+					output.sliceUseMethod=this.sliceUseMethod.duplicate();
 				return output;
 			}
 			

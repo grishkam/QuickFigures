@@ -204,6 +204,7 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 		virtualShape.setAngle(targetShape.getAngle());
 		virtualShape.setStrokeWidth(4);
 		virtualShape.setStrokeColor(Color.GREEN);
+		virtualShape.setSquareLock(targetShape.isSquareLock());
 		w.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelection(virtualShape, 0);
 	}	
 		

@@ -111,7 +111,7 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	public int border=2;//The width of the frames around the newly created insets
 	public double scale=2;//The width of the frames around the newly created insets
 	boolean avoidDapi=false;//true if dapi channel should not be included
-	int createMultiChannel=1;//should split channel insets be created?
+	public int createMultiChannel=1;//should split channel insets be created?
 	AttachmentPosition sb=AttachmentPosition.partnerExternal() ;
 	
 	/**set to true is insets should be created without scaling the source images*/
@@ -218,6 +218,10 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 				inset.setDoNotScale(this.dontScale);
 				inset.multiChannelStackofInsets=list;
 				
+				if (usePreexisting(inset)) {
+					list.setChannelUstInstructions(preExisting.getPanelManager().getChannelUseInstructions());
+					//must mimic the old channels 
+				}
 				
 				if (createMultiChannel==1)list.addAllCandF(display.getMultiChannelImage());
 				if (createMultiChannel==0) {
@@ -240,6 +244,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 					double panelLevelScale = preExisting.getPanelManager().getPanelLevelScale();
 					inset.getPanelManager().setPanelLevelScale(panelLevelScale);
 					inset.getPanelManager().imposePanelLevelScale(panelLevelScale);
+					list.setChannelUstInstructions(preExisting.getPanelManager().getChannelUseInstructions());
 				
 				} else {
 					pane=inset.createPersonalLayer("Insets");//new InsetGraphicLayer("Insets");
