@@ -33,13 +33,16 @@ import javax.swing.JMenu;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
+import figureOrganizer.PanelList;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.BarGraphicTool;
 import graphicTools.ShapeGraphicTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
@@ -50,9 +53,11 @@ import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
+import messages.ShowMessage;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.InsetTool;
 import undo.AbstractUndoableEdit2;
@@ -242,7 +247,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		c=RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, newRect);
 		d=RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, newRect);
 		
-		iTool.refreshInsetOnMouseDrag(c, d);
+		PanelGraphicInsetDefiner currentInset = iTool.refreshInsetOnMouseDrag(c, d);
 		
 		
 		if (CanvasOptions.current.resizeCanvasAfterEdit)
@@ -250,6 +255,38 @@ public class ImagePanelMenu extends AttachedItemMenu {
 					new CanvasAutoResize(false).performUndoableAction( getMemoryOfMouseEvent().getAsDisplay())
 			);
 		
+		if(this.isObscured(currentInset.getPanelManager().getPanelList())) {
+			ShowMessage.showOptionalMessage("Panels are behind another object", true, "Panels created at right, but another object is in the way", "you will be prompted to change their position", "drag mouse over red sqaures in the dialog that will appear on the left");
+			new InsetMenu(currentInset).showRedoInsetLayoutDialog("Edit until new panels are no longer behind another object");
+		}
+		
 		return output;
+	}
+
+
+
+	/**returns true if there are other objects obscuring the panels
+	 * @param panelList
+	 * @return
+	 */
+	private boolean isObscured(PanelList panelList) {
+		for(ImagePanelGraphic panel: panelList.getPanelGraphics()) {
+			GraphicLayer top = panel.getParentLayer().getTopLevelParentLayer();
+			boolean reachedPanel = false;
+			for(ZoomableGraphic object: top.getObjectsAndSubLayers()) {
+				if(object instanceof PanelLayoutGraphic) {
+					continue;
+				}
+				if((object instanceof ImagePanelGraphic)&&reachedPanel) {
+					ImagePanelGraphic panelInfront=(ImagePanelGraphic) object;
+					if(panelInfront.doesIntersect(panel.getBounds()))
+						return true;
+				}
+				
+				if(object==panel)
+					reachedPanel=true;
+			}
+		}
+		return false;
 	}	
 }

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 25, 2022
+ * Date Modified: April 27, 2022
  * Version: 2022.0
  */
 package multiChannelFigureUI;
@@ -36,6 +36,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.PanelManager;
+import figureOrganizer.PanelOrderCorrector;
 import figureOrganizer.insetPanels.InsetLayout;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner.InsetGraphicLayer;
@@ -219,8 +220,14 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 				inset.multiChannelStackofInsets=list;
 				
 				if (usePreexisting(inset)) {
-					list.setChannelUstInstructions(preExisting.getPanelManager().getChannelUseInstructions());
-					//must mimic the old channels 
+					//must mimic the old channels. will mimic old channel order as well as which channels are used
+					ChannelUseInstructions oldChanUse = preExisting.getPanelManager().getChannelUseInstructions();
+					InsetPanelManagementGroup ipmg = new InsetPanelManagementGroup(preExisting);
+					ChannelUseInstructions oldChanUse2 = new PanelOrderCorrector(ipmg).determineChannelOrder();
+					 oldChanUse.makePartialMatching(oldChanUse2);
+					list.setChannelUstInstructions( oldChanUse2);
+					
+					
 				}
 				
 				if (createMultiChannel==1)list.addAllCandF(display.getMultiChannelImage());
@@ -244,7 +251,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 					double panelLevelScale = preExisting.getPanelManager().getPanelLevelScale();
 					inset.getPanelManager().setPanelLevelScale(panelLevelScale);
 					inset.getPanelManager().imposePanelLevelScale(panelLevelScale);
-					list.setChannelUstInstructions(preExisting.getPanelManager().getChannelUseInstructions());
+					//list.setChannelUstInstructions(preExisting.getPanelManager().getChannelUseInstructions());
 				
 				} else {
 					pane=inset.createPersonalLayer("Insets");//new InsetGraphicLayer("Insets");
@@ -415,14 +422,16 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 
 	/**
 	 Called when inset tool is dragged from point p1 to point p2
+	 * @return 
 	 */
-	public void refreshInsetOnMouseDrag(Point2D p1, Point2D p2) {
+	public PanelGraphicInsetDefiner refreshInsetOnMouseDrag(Point2D p1, Point2D p2) {
 		if (getImageDisplayWrapperClick()!=null&&!getImageDisplayWrapperClick().getUndoManager().hasUndo(undo)){
 				this.getImageDisplayWrapperClick().getUndoManager().addEdit(undo);
 		}
 	
 		Rectangle2D r = OverlayObjectManager.createRectangleFrom2Points(p1, p2);
 		createOrEditInset(r);
+		return inset;
 	}
 
 	

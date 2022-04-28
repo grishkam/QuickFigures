@@ -133,6 +133,18 @@ public class PanelManagerUndo extends CombinedEdit {
 		return output;
 	}
 	
+	/**creates an undoable edit for every image display layer*/
+	public static CombinedEdit createForManyInset(ArrayList<?> all) {
+		CombinedEdit output = new CombinedEdit();
+		for(Object a:all) {
+			if(a instanceof PanelGraphicInsetDefiner) {
+				PanelGraphicInsetDefiner panelGraphicInsetDefiner = (PanelGraphicInsetDefiner)a;
+				output.addEditToList(createFor(panelGraphicInsetDefiner.getPanelManager()));
+			}
+		}
+		return output;
+	}
+	
 	/**an undo for a specific element in thte panel list*/
 	public class ListElementUndo extends AbstractUndoableEdit2  {
 

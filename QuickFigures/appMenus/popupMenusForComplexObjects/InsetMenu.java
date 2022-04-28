@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 24, 2021
+ * Date Modified: April 27, 2022
  * Version: 2022.0
  */
 package popupMenusForComplexObjects;
@@ -175,20 +175,28 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				}
 		
 		if (c.equals(RECRATE_INSET_LAYOUT)) {
-			if (inset instanceof PanelGraphicInsetDefiner ) {
-				 PanelGraphicInsetDefiner pgInset=(PanelGraphicInsetDefiner) inset;
-				 pgInset.previosInsetLayout.practicalSize=true;
-				InsetLayoutDialog dialog = new InsetLayoutDialog(pgInset.previosInsetLayout);
-				dialog.setTargetInset(pgInset);
-				dialog.showDialog();
-				
-			}
+			showRedoInsetLayoutDialog("Change inset layout");
 		
 			}
 		
 		
 		
 		inset.updateDisplay();
+	}
+	
+	/**
+	 * Shows a user dialog to redo the inset layout
+	 */
+	public void showRedoInsetLayoutDialog(String title) {
+		if (inset instanceof PanelGraphicInsetDefiner ) {
+			 PanelGraphicInsetDefiner pgInset=(PanelGraphicInsetDefiner) inset;
+			 pgInset.previosInsetLayout.practicalSize=true;
+			InsetLayoutDialog dialog = new InsetLayoutDialog(pgInset.previosInsetLayout);
+			dialog.setTitle(title);
+			dialog.setTargetInset(pgInset);
+			dialog.showDialog();
+			
+		}
 	}
 
 	

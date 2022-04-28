@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 23, 2022
+ * Date Modified: April 27, 2022
  * Version: 2022.0
  */
 package multiChannelFigureUI;
@@ -400,7 +400,7 @@ if (	actionCommand.equals(renameChanCommand)) {
 		undo.addEditToList(new ChannelUseChangeUndo(ins));
 		
 		int value = ins.channelColorMode;
-		if (value==1) {value=0;} else {value=1;}
+		if (value==ChannelUseInstructions.CHANNELS_IN_COLOR) {value=ChannelUseInstructions.CHANNELS_IN_GREYSCALE;} else {value=ChannelUseInstructions.CHANNELS_IN_COLOR;}
 		ins.channelColorMode=value;
 		
 		
@@ -408,6 +408,14 @@ if (	actionCommand.equals(renameChanCommand)) {
 		if (getScope()==ALL_IMAGES_IN_CLICKED_FIGURE && getPressedInset()==null) for(ImageDisplayLayer d: getAllDisplays()) {
 			undo.addEditToList(new ChannelUseChangeUndo(d));
 			d.getPanelList().getChannelUseInstructions().channelColorMode=value;
+		} else
+		if (getScope()==ALL_IMAGES_IN_CLICKED_FIGURE && getPressedInset()!=null) for(DependentSubFigure d2: getAllInsets(getPresseddisplay())) {
+			//this part affects all the the connected inset panels
+			if(d2 instanceof PanelGraphicInsetDefiner) {
+				PanelGraphicInsetDefiner d=(PanelGraphicInsetDefiner) d2;
+				undo.addEditToList(new ChannelUseChangeUndo(d.getPanelManager()));
+				d.getPanelManager().getPanelList().getChannelUseInstructions().channelColorMode=value;
+			}
 		} 
 		/**if(getExtraDisplays()!=null&&pressedInset==null)	for(ImageDisplayLayer d:this.getExtraDisplays()) {
 			undo.addEditToList(new ChannelUseChangeUndo(d));
@@ -849,7 +857,18 @@ public CombinedEdit setChannelExcludedFromMerge(int chaneIndex, boolean excluded
 	
 	if (getPressedInset()!=null) {
 		CombinedEdit undo = PanelManagerUndo.createFor(getPressedInset().getPanelManager());
+		undo.addEditToList(PanelManagerUndo.createForManyInset(getAllInsets(getPresseddisplay())));
 		getPressedInset().getPanelManager().setMergeExcluded(chaneIndex, excluded, false);
+		
+		if (getScope()==ALL_IMAGES_IN_CLICKED_FIGURE && getPressedInset()!=null) for(DependentSubFigure d2: getAllInsets(getPresseddisplay())) {
+			//this part affects all the the connected inset panels
+			if(d2 instanceof PanelGraphicInsetDefiner) {
+				PanelGraphicInsetDefiner d=(PanelGraphicInsetDefiner) d2;
+				
+				d.getPanelManager().setMergeExcluded(chaneIndex, excluded, false);
+			}
+		} 
+		
 		return undo;
 	}
 	
