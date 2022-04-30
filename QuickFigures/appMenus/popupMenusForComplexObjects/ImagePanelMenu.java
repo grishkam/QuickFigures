@@ -30,10 +30,12 @@ import java.util.ArrayList;
 
 import javax.swing.JMenu;
 
+import channelMerging.ImageDisplayLayer;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
+import figureOrganizer.insetPanels.InsetLayout;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.BarGraphicTool;
@@ -53,6 +55,7 @@ import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
+import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import menuUtil.BasicSmartMenuItem;
@@ -142,16 +145,27 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer(), color));
-		
-		/**Creates a menu option for add inset panels*/
-		s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
-			@Override
-			public CombinedEdit performAction() { return addInset(true);}
-					}.createJMenuItem("Add Split Channel Inset Panels", new InsetToolIcon(0).getMenuVersion()));
-		s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
-			@Override
-			public CombinedEdit performAction() { return addInset(false);}
-					}.createJMenuItem("Add Single Inset Panel", new InsetToolIcon(0).getMenuVersion()));
+		if(imagePanel.getParentLayer() instanceof ImageDisplayLayer) {
+					/**Creates a menu option for add inset panels*/
+					s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
+						@Override
+						public CombinedEdit performAction() { return addInset(true, imagePanel, null, null);}
+								}.createJMenuItem("Add Split Channel Inset Panels", new InsetToolIcon(0).getMenuVersion()));
+					
+					s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
+						@Override
+						public CombinedEdit performAction() { return addInset(false, imagePanel,null,null);}
+								}.createJMenuItem("Add Single Inset Panel", new InsetToolIcon(0).getMenuVersion()));
+					
+					
+					
+						
+					
+					s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
+						@Override
+						public CombinedEdit performAction() { return addInsetSeries((ImageDisplayLayer) imagePanel.getParentLayer(), imagePanel);}
+								}.createJMenuItem("Add insets to all channel panels", new InsetToolIcon(0).getMenuVersion()));
+		}
 		this.add(s);
 	}
 
@@ -209,16 +223,52 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		return scaleBar;
 	}
 	
+	
+	/**Creates an inset at every sister panel*/
+	private CombinedEdit addInsetSeries(ImageDisplayLayer img, ImagePanelGraphic primaryImage) {
+		CombinedEdit output = new CombinedEdit();
+		AttachmentPosition position = AttachmentPosition.defaultInternalPanel();
+		position.setLocationTypeInternal(RectangleEdges.LOWER_RIGHT);
+		InsetTool iTool = new InsetTool();
+			iTool.setInsetPosition(position);
+			iTool.addToExisting=false;
+			iTool.arrangement=InsetTool.ATTACH_TO_PARENT_PANEL;
+			
+		ArrayList<ImagePanelGraphic> panels = img.getPanelManager().getPanelList().getPanelGraphics();
+		if(panels.size()==1) {
+			ShowMessage.showOptionalMessage("This option can only be used if multiple parent panels are available",true,"This option can only be used if multiple parent panels are available" );
+			return null;
+		}
+		ArrayList<PanelGraphicInsetDefiner> listofAddedItems=new ArrayList<PanelGraphicInsetDefiner>();
+		for(ImagePanelGraphic panel:panels) {
+			CombinedEdit undo = addInset(false, panel,  iTool, listofAddedItems);
+			output.addEditToList(undo);
+		}
+		
+		position = AttachmentPosition.defaultInternalPanel();
+		position.setLocationTypeInternal(RectangleEdges.LOWER_RIGHT);
+		for(PanelGraphicInsetDefiner inset: listofAddedItems) {
+			ImagePanelGraphic insetPanel = inset.getPanelManager().getPanelList().getPanelGraphics().get(0);
+			inset.getSourcePanel().addLockedItem(insetPanel);
+			 insetPanel.setAttachmentPosition(position);
+		}
+		
+		return output;
+	}
+	
+	
 	/**Creates an inset
 	 * @param b set to true if inset should create split channel*/
-	private CombinedEdit addInset(boolean b) {
+	private CombinedEdit addInset(boolean b, ImagePanelGraphic imagePanel, InsetTool il, ArrayList<PanelGraphicInsetDefiner> listofAddedItems) {
 		ArrayList<PanelGraphicInsetDefiner> old =PanelGraphicInsetDefiner.getInsetDefinersFromLayer(imagePanel.getParentLayer());
-		RectangularGraphic s=null;
+		RectangularGraphic sisterInset=null;
 		if(old.size()>0)
-			s=old.get(0);
+			sisterInset=old.get(0);
 		
 		CombinedEdit output = new CombinedEdit();
 		InsetTool iTool = new InsetTool();
+		if(il!=null)
+			iTool=il;
 		iTool.createMultiChannel=b?1:0;
 		iTool.setupToolForImagePanel(imagePanel);
 		iTool.undo=output;
@@ -231,21 +281,24 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		Rectangle2D newRect=new Rectangle2D.Double(d.getX(), d.getY(), c.getX()-d.getX(), c.getY()-d.getY());
 		Rectangle newRect2 = newRect.getBounds();
 		
-		if(s!=null) {
+		if(sisterInset!=null) {
 			
-			newRect2.width=(int) s.getRectangle().width;
-			newRect2.height=(int) s.getRectangle().height;
+			newRect2.width=(int) sisterInset.getRectangle().width;
+			newRect2.height=(int) sisterInset.getRectangle().height;
 			if(!imagePanel.getBounds().contains(newRect2))
 				newRect2 = newRect.getBounds();
 		}
 		
 		
 		Point clickPoint = getMemoryOfMouseEvent().getCoordinatePoint();
-		RectangleEdges.setLocation(newRect2, RectangleEdges.CENTER, clickPoint.x, clickPoint.y);
-		if(imagePanel.getBounds().contains(newRect2))
-			newRect=newRect2;
-		c=RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, newRect);
-		d=RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, newRect);
+		
+		if(imagePanel.getBounds().contains(clickPoint )) {
+			RectangleEdges.setLocation(newRect2, RectangleEdges.CENTER, clickPoint.x, clickPoint.y);
+			if(imagePanel.getBounds().contains(newRect2))
+				newRect=newRect2;
+			c=RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, newRect);
+			d=RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, newRect);
+		}
 		
 		PanelGraphicInsetDefiner currentInset = iTool.refreshInsetOnMouseDrag(c, d);
 		
@@ -255,21 +308,24 @@ public class ImagePanelMenu extends AttachedItemMenu {
 					new CanvasAutoResize(false).performUndoableAction( getMemoryOfMouseEvent().getAsDisplay())
 			);
 		
-		if(this.isObscured(currentInset.getPanelManager().getPanelList())) {
+		//prompts the user to change the position of the inset panels if they are obscured by objects in front
+		if(isObscured(currentInset.getPanelManager().getPanelList())) {
 			ShowMessage.showOptionalMessage("Panels are behind another object", true, "Panels created at right, but another object is in the way", "you will be prompted to change their position", "drag mouse over red sqaures in the dialog that will appear on the left");
 			new InsetMenu(currentInset).showRedoInsetLayoutDialog("Edit until new panels are no longer behind another object");
 		}
-		
+		if(listofAddedItems!=null) {
+			listofAddedItems.add(currentInset);
+		}
 		return output;
 	}
 
 
 
-	/**returns true if there are other objects obscuring the panels
+	/**returns true if there are other objects obscuring the panels in the panel list
 	 * @param panelList
 	 * @return
 	 */
-	private boolean isObscured(PanelList panelList) {
+	private static boolean isObscured(PanelList panelList) {
 		for(ImagePanelGraphic panel: panelList.getPanelGraphics()) {
 			GraphicLayer top = panel.getParentLayer().getTopLevelParentLayer();
 			boolean reachedPanel = false;

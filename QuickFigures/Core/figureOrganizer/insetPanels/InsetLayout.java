@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 29, 2022
  * Version: 2022.0
  */
 package figureOrganizer.insetPanels;
@@ -70,7 +70,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 	
 		double border=DEFAULT_BORDER;
 		int positiontype=DEFAULT_PLACEMENT;
-		 boolean horizontal;
+		boolean horizontal;
 		 
 		 /**The attachment position for the inset layout.
 		  * This only acts as a recommendation */
@@ -84,21 +84,21 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			positiontype=insetPositionType;
 		}
 		public InsetLayout copy() {
-			return new InsetLayout((int)border, positiontype, horizontal, position.copy());
+			return new InsetLayout((int)getBorder(), getPositionType(), isHorizontalPreffered(), getAttachmentPosition().copy());
 		}
 		
 		
 		/**returns true if the prefFered layout of the panels is horizontal*/
 		private boolean horizontal() {
-			if (horizontal) return true;
+			if (isHorizontalPreffered()) return true;
 			return false;
 		}
 		
 		/**returns true if the attachment position stored within this layout will be used*/
 		boolean useAttachmentPosition() {
-			if (positiontype==FILL_SPACE) return true;
-			if (positiontype==ON_INNER_SIDES) return true;
-			if (positiontype==ON_OUTER_SIDES) return true;
+			if (getPositionType()==FILL_SPACE) return true;
+			if (getPositionType()==ON_INNER_SIDES) return true;
+			if (getPositionType()==ON_OUTER_SIDES) return true;
 			return defaultPlacement();
 		}
 		
@@ -107,52 +107,52 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 	
 		/**returns true if inset panels will be attached to the parent panel*/
 		boolean lockInsetPanelsToSourcePanel() {
-			if (positiontype==OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT ) return true;
+			if (getPositionType()==OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT ) return true;
 			return false;
 		}
 		
 		/**returns true if the width of the layout containing inset panels should not exceed the width of the parent panel*/
 		boolean limtedToWidthOfParentPanel() {
-			if (position.isExternalSnap()&&defaultPlacement()) { return false;}
+			if (getAttachmentPosition().isExternalSnap()&&defaultPlacement()) { return false;}
 			
 			if ((belowParentPanel()||this.aboveParentPanel())&&fillSide()) return true;
-			if(useAttachmentPosition() &&position.isInternalSnap()) return true;
+			if(useAttachmentPosition() &&getAttachmentPosition().isInternalSnap()) return true;
 			
 			return false;
 		}
 		
 		/**returns true if the height of the layout containing inset panels should not exceed the height of the parent panel*/
 		boolean limtedToHeightOfParentPanel() {
-			if (position.isExternalSnap()&&defaultPlacement()) { return false;}
+			if (getAttachmentPosition().isExternalSnap()&&defaultPlacement()) { return false;}
 			if (rightOfParentPanel()&&fillSide()) return true;
 			
 			/**TODO: determine if this part is obsolete*/
-			if (rightOfParentPanel() &&(useAttachmentPosition()&&position.isExternalRightSnap()&&defaultPlacement())) return true;
+			if (rightOfParentPanel() &&(useAttachmentPosition()&&getAttachmentPosition().isExternalRightSnap()&&defaultPlacement())) return true;
 			
-			if(useAttachmentPosition() &&position.isInternalSnap()) return true;
+			if(useAttachmentPosition() &&getAttachmentPosition().isInternalSnap()) return true;
 			return false;
 		}
 		/**
 		 * @return
 		 */
 		private boolean defaultPlacement() {
-			return positiontype==DEFAULT_PLACEMENT;
+			return getPositionType()==DEFAULT_PLACEMENT;
 		}
 		
 		/**returns true if panels will be placed below the parent panel*/
 		boolean belowParentPanel() {
-			if (useAttachmentPosition()&&position.isInternalSnap()) return false;
+			if (useAttachmentPosition()&&getAttachmentPosition().isInternalSnap()) return false;
 			
-			if (useAttachmentPosition()&&position.isExternalBottomEdgeSnap()) return true;
+			if (useAttachmentPosition()&&getAttachmentPosition().isExternalBottomEdgeSnap()) return true;
 			
 			return false;
 		}
 		
 		/**returns true if panels will be placed above the parent panel*/
 		boolean aboveParentPanel() {
-			if (useAttachmentPosition()&&position.isInternalSnap()) return false;
+			if (useAttachmentPosition()&&getAttachmentPosition().isInternalSnap()) return false;
 			
-			if (useAttachmentPosition()&&position.isExternalTopEdgeSnap()) return true;
+			if (useAttachmentPosition()&&getAttachmentPosition().isExternalTopEdgeSnap()) return true;
 			
 			return false;
 		}
@@ -161,8 +161,8 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		 * of the parent panel*/
 		boolean rightOfParentPanel() {
 			if (belowParentPanel() ) return false;
-			if (useAttachmentPosition()&&position.isInternalSnap()) return false;
-			if (useAttachmentPosition()&&position.isExternalRightSnap()) return true;
+			if (useAttachmentPosition()&&getAttachmentPosition().isInternalSnap()) return false;
+			if (useAttachmentPosition()&&getAttachmentPosition().isExternalRightSnap()) return true;
 			return true;
 		}
 		
@@ -170,8 +170,8 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		 * of the parent panel*/
 		boolean leftOfParentPanel() {
 			if (belowParentPanel() ) return false;
-			if (useAttachmentPosition()&position.isInternalSnap()) return false;
-			if (useAttachmentPosition()&&position.isExternalLeftSnap()) return true;
+			if (useAttachmentPosition()&getAttachmentPosition().isInternalSnap()) return false;
+			if (useAttachmentPosition()&&getAttachmentPosition().isExternalLeftSnap()) return true;
 			return false;
 		}
 	
@@ -181,12 +181,12 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			
 			if(innerSideBottomOrTop()) return true;
 			
-			if (positiontype==ON_OUTER_SIDES) {
+			if (getPositionType()==ON_OUTER_SIDES) {
 				if (this.outerSideBottomOrTop())   return true; else return false;
 			}
 			
 			
-			return this.horizontal;
+			return this.isHorizontalPreffered();
 					
 		}
 		
@@ -250,14 +250,14 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		/**returns true if the layout will be arranged such that the inset panels
 		 * are on either side of the parent panel*/
 		boolean onSides() {
-			if(positiontype==ON_INNER_SIDES||positiontype==ON_OUTER_SIDES)  return true;
+			if(getPositionType()==ON_INNER_SIDES||getPositionType()==ON_OUTER_SIDES)  return true;
 			
 			return false;
 		}
 		
 		/**Creates a layout in which panels of size insetPanelDim are fit around a panel with sourcePanelDim*/
 			public DefaultLayoutGraphic createLayout(int npanel, Rectangle insetPanelDim, 	Rectangle sourcePanelDim, int nimages ) {
-							AttachmentPosition theSnap = position.copy();
+							AttachmentPosition theSnap = getAttachmentPosition().copy();
 							double overallheight = sourcePanelDim.getHeight();
 							double overallwidth = sourcePanelDim.getWidth();
 							int ncol=1;
@@ -288,7 +288,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 							
 							if (limtedToHeightOfParentPanel()&&!horizontal&&npanel>1) {
 							
-									double rows = overallheight/(insetPanelDim.getHeight()+border);
+									double rows = overallheight/(insetPanelDim.getHeight()+getBorder());
 									nrow=(int) Math.floor(rows);//sets the row number to the max that will fit
 									if (nrow>npanel) nrow=npanel;
 									ncol=nimages;
@@ -299,7 +299,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 							/**if rows go below the layout, sets things up*/
 							if ( limtedToWidthOfParentPanel() &&horizontal&&npanel>1) {
 								
-								double cols = overallwidth/(insetPanelDim.getWidth()+border);
+								double cols = overallwidth/(insetPanelDim.getWidth()+getBorder());
 								ncol=(int) Math.floor(cols);//sets col number to maximum
 								if (ncol>npanel) ncol=npanel;
 								nrow=nimages ;
@@ -310,7 +310,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 							}
 							
 							
-							BasicLayout bml = new BasicLayout(ncol, nrow, (int)insetPanelDim.getWidth(), (int)insetPanelDim.getHeight(), (int) border,(int)border, rowmajorPanelArrangement());
+							BasicLayout bml = new BasicLayout(ncol, nrow, (int)insetPanelDim.getWidth(), (int)insetPanelDim.getHeight(), (int) getBorder(),(int)getBorder(), rowmajorPanelArrangement());
 				
 							DefaultLayoutGraphic lg = new DefaultLayoutGraphic(bml);
 							
@@ -327,7 +327,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			 * around the parent panel and returns the attachment position*/
 			public AttachmentPosition prepareLayoutForAttachment(Rectangle parentPanelSize, DefaultLayoutGraphic lg) {
 							BasicLayout bml = lg.getPanelLayout();
-							AttachmentPosition theSnap = position.copy();
+							AttachmentPosition theSnap = getAttachmentPosition().copy();
 							double overallheight = parentPanelSize.getHeight();
 							double overallwidth = parentPanelSize.getWidth();
 							int ncol = bml.nColumns();
@@ -350,44 +350,44 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 							}
 						} 
 						
-						if (rightOfParentPanel() && !position.isExternalTopEdgeSnap()) {
+						if (rightOfParentPanel() && !getAttachmentPosition().isExternalTopEdgeSnap()) {
 							/**only need to move it to the right side if layout is at right*/
-								bml.setLeftSpace((int) border);
+								bml.setLeftSpace((int) getBorder());
 								bml.move( parentPanelSize.getMaxX(),  parentPanelSize.getY());
 								}
 						
 						if (leftOfParentPanel()) {
-								bml.setRightSpace((int) border);
+								bml.setRightSpace((int) getBorder());
 								//bml.move( sourcePanelDim.getMaxX(),  sourcePanelDim.getY());
 								}
 						if (belowParentPanel()) {
 							
-							bml.setTopSpace((int) border);
+							bml.setTopSpace((int) getBorder());
 							bml.move( parentPanelSize.getX(),  parentPanelSize.getMaxY());
 							}
 						
 							if (aboveParentPanel()) {
 							
-							bml.setBottomSpace((int) border);
+							bml.setBottomSpace((int) getBorder());
 							bml.move( parentPanelSize.getX(),  parentPanelSize.getMaxY());
 							}
 						
 						
 						
-						if (positiontype==ON_INNER_SIDES) {
+						if (getPositionType()==ON_INNER_SIDES) {
 							theSnap=makeSideOfParentAttachmentPosition() ;
 						}
 						
 						/**If the user wants to set the position and have the new layout placed inside and to the side of source panel*/
 						if(useAttachmentPosition()) {	
-							if (positiontype==ON_OUTER_SIDES &&(ncol==2||nrow==2)) {
+							if (getPositionType()==ON_OUTER_SIDES &&(ncol==2||nrow==2)) {
 								theSnap=makeSideOfParentAttachmentPosition() ;
 								if(ncol==2 && !(outerSideBottomOrTop()&&nrow==2)) {
-									bml.setHorizontalBorder((int) (parentPanelSize.width+border*2));
+									bml.setHorizontalBorder((int) (parentPanelSize.width+getBorder()*2));
 								
 								} else 
 								if(nrow==2) {
-									bml.setVerticalBorder((int) (parentPanelSize.height+border*2));
+									bml.setVerticalBorder((int) (parentPanelSize.height+getBorder()*2));
 									//bml.setVerticalBorder((int)(border+bml.BorderWidthBottomTop+insetPanelDim.getWidth()*2));
 								}
 							}
@@ -405,15 +405,15 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			 this may differ from the recommended position
 			 */
 			private AttachmentPosition makeSideOfParentAttachmentPosition() {
-				AttachmentPosition theSpot = position.copy();
+				AttachmentPosition theSpot = getAttachmentPosition().copy();
 				
 				
-				if (this.positiontype==ON_OUTER_SIDES) {
+				if (this.getPositionType()==ON_OUTER_SIDES) {
 						theSpot.setLocationCategory(AttachmentPosition.INTERNAL);
 						
-						if (position.getSnapLocationTypeInternal()==RectangleEdges.TOP||position.getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) {
+						if (getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.TOP||getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) {
 							theSpot.setLocationTypeInternal(RectangleEdges.LEFT);
-						}else 	if (position.getSnapLocationTypeInternal()==RectangleEdges.LEFT||position.getSnapLocationTypeInternal()==RectangleEdges.RIGHT) {
+						}else 	if (getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.LEFT||getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.RIGHT) {
 							theSpot.setLocationTypeInternal(RectangleEdges.TOP);
 						} else {
 							theSpot.setLocationTypeInternal(RectangleEdges.CENTER);
@@ -422,7 +422,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 				}
 				
 
-				if (this.positiontype==ON_INNER_SIDES) {
+				if (this.getPositionType()==ON_INNER_SIDES) {
 					theSpot.setLocationCategory(AttachmentPosition.INTERNAL);
 					theSpot.setLocationTypeInternal(RectangleEdges.UPPER_LEFT);
 				}
@@ -450,23 +450,23 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			/**returns true if the placement will be on the outer sides of the parent panel
 			  above or below*/
 			boolean outerSideBottomOrTop() {
-				if (positiontype==ON_OUTER_SIDES &&position.getSnapLocationTypeInternal()==RectangleEdges.TOP) return true;
-				if (positiontype==ON_OUTER_SIDES &&position.getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) return true;
+				if (getPositionType()==ON_OUTER_SIDES &&getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.TOP) return true;
+				if (getPositionType()==ON_OUTER_SIDES &&getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) return true;
 				return false;
 				
 			}
 			/**returns true if the placement will be on the inner sides of the parent panel
 			  above or below*/
 			boolean innerSideBottomOrTop() {
-				if (positiontype==ON_INNER_SIDES &&position.getSnapLocationTypeInternal()==RectangleEdges.TOP) return true;
-				if (positiontype==ON_INNER_SIDES &&position.getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) return true;
+				if (getPositionType()==ON_INNER_SIDES &&getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.TOP) return true;
+				if (getPositionType()==ON_INNER_SIDES &&getAttachmentPosition().getSnapLocationTypeInternal()==RectangleEdges.BOTTOM) return true;
 				return false;
 				
 			}
 		
 		/**returns true if the borders of the inset layout should be adjusted to fill the side of the parent panel where it appears*/
 		boolean fillSide() {
-			if(positiontype==FILL_SPACE) return true;
+			if(getPositionType()==FILL_SPACE) return true;
 			return false;
 		}
 		
@@ -488,10 +488,10 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			 
 			/**If the user chooses not to have the panels locked, sorted nor layout out
 			  then the tool will just put the panels near the inset*/
-			if(positiontype==FREE_LOCATIONS) {
+			if(getPositionType()==FREE_LOCATIONS) {
 				ArrayList<ImagePanelGraphic> graphics = listOfPanels;
 				for(ImagePanelGraphic g: graphics) {
-					g.setLocation(new Point((int)inset.getBounds().getMaxX()+(int)border+5, (int)inset.getBounds().getMinY()+(int)border-5));
+					g.setLocation(new Point((int)inset.getBounds().getMaxX()+(int)getBorder()+5, (int)inset.getBounds().getMinY()+(int)getBorder()-5));
 				
 				}
 			}
@@ -519,7 +519,7 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			}
 			
 			
-			if (OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT!=positiontype&&positiontype!=FREE_LOCATIONS) {
+			if (OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT!=getPositionType()&&getPositionType()!=FREE_LOCATIONS) {
 				forMontageLayoutAppliestoInset(list, inset);
 			}
 			
@@ -529,15 +529,15 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 		/**Sets the frame size for a panel*/
 		public void setFrameSize(ImagePanelGraphic g) {
 			if (!needsFrame()) return;
-			g.setFrameWidthH(border);
-			g.setFrameWidthV(border);
+			g.setFrameWidthH(getBorder());
+			g.setFrameWidthV(getBorder());
 		}
 		
 	
 		
 		/**returns true if the panels should be created with frames*/
 		private boolean needsFrame() {
-			if (useAttachmentPosition() &&position.isExternalSnap()) {
+			if (useAttachmentPosition() &&getAttachmentPosition().isExternalSnap()) {
 				return false;
 			}
 			return true;
@@ -588,15 +588,27 @@ public 	class InsetLayout implements LayoutSpaces, Serializable{
 			ArrayList<AttachmentPosition> snaps =getSnappings();
 			if(i>=snaps.size()) return null;
 			AttachmentPosition snap = snaps.get(i);
-			if (positiontype==OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT)snap.setHorizontalOffset((int)border);
+			if (getPositionType()==OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT)snap.setHorizontalOffset((int)getBorder());
 			return snap;
 		}
 
 		/**returns a list of attachment positions around the edges of a parent panel*/
 		ArrayList<AttachmentPosition> getSnappings() {
-			if (positiontype==OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT)return AttachmentPosition.externalRightLeft();
+			if (getPositionType()==OUTSIDE_LEFT_RIGHT_ATTACHED_TO_PARENT)return AttachmentPosition.externalRightLeft();
 			if (defaultPlacement()) return AttachmentPosition.internalSpread(); 
 			return AttachmentPosition.externalRightLeft();
+		}
+		public AttachmentPosition getAttachmentPosition() {
+			return position;
+		}
+		public double getBorder() {
+			return border;
+		}
+		public int getPositionType() {
+			return positiontype;
+		}
+		public boolean isHorizontalPreffered() {
+			return horizontal;
 		}
 		
 	}

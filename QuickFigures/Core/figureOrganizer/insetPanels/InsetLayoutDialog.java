@@ -55,15 +55,15 @@ import standardDialog.numbers.NumberInputPanel;
 			this.currentLayout=mover;
 			
 		
-			add("snaptypeClass", new ChoiceInputPanel("Select snaptype", InsetLayout.arrangements, mover.positiontype));
+			add("snaptypeClass", new ChoiceInputPanel("Select snaptype", InsetLayout.arrangements, mover.getPositionType()));
 			
 		
-			add("border", new NumberInputPanel("Border Width", mover.border, 3));
+			add("border", new NumberInputPanel("Border Width", mover.getBorder(), 3));
 		
-			add("horizon", new BooleanInputPanel("Prefer Horizontal Panels", mover.horizontal));
+			add("horizon", new BooleanInputPanel("Prefer Horizontal Panels", mover.isHorizontalPreffered()));
 			
 			
-			this.snappanel=new AttachmentPositionPanel(mover.position , "placement of internal; Montage");
+			this.snappanel=new AttachmentPositionPanel(mover.getAttachmentPosition() , "placement of internal; Montage");
 			snappanel.addObjectEditListener(this);
 			
 			GridBagConstraints gc = new GridBagConstraints();
@@ -83,7 +83,7 @@ import standardDialog.numbers.NumberInputPanel;
 		
 		
 		protected void afterEachItemChange() {
-			int snaptype=getInsetLayout().positiontype;
+			int snaptype=getInsetLayout().getPositionType();
 			
 			getInsetLayout().border=(int) this.getNumber("border");
 			getInsetLayout().positiontype=this.getChoiceIndex("snaptypeClass");

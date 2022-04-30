@@ -157,7 +157,7 @@ PopupMenuSupplier  {
 	/**creates series of duplicates for either panels, rows, or columns and keeps the duplicates in symetry with the original
 	 * @return
 	 */
-	@MenuItemMethod(menuActionCommand = "l duplicate",menuText = "to ENUMs and mirror", subMenuName="Duplicate", orderRank=5)
+	@MenuItemMethod(menuActionCommand = "l duplicate2",menuText = "to ENUMs and mirror", subMenuName="Duplicate", orderRank=5)
 	public AbstractUndoableEdit2 performLayoutDuplicateAndMirror( LayoutSpaces.SpaceType type) {
 		return performLayoutDuplicate( type, true);
 	}

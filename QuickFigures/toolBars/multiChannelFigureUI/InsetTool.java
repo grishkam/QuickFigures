@@ -79,20 +79,36 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	static boolean locksItems=false;
 	
 	/**constants for different placement options*/
-	static final int FREE_PLACEMENT=5, OUTSIDE_ON_LEFT_RIGHT=0, 
-			ATTACH_TO_PARENT_PANEL=1,
-			FILL_SPACE_ON_SIDE=2,
-					PLACE_ON_INNER_SIDES=3,
-							PLACE_ON_OUTER_SIDES=4,
-			
-			FILL_RIGHT_SIDE=11, 
-			FILL_BOTTOM_SIDE=12,
-					PLACE_INSIDE_l_R=13, 
-			
-			VERTICAL_PLACEMENT_ON_RIGHT_SIDE=7,
-			rightTop=8,
-			rightBottom=9, 
-			BELOW_PANEL_ON_lAYOUT=10;
+	public static final int FREE_PLACEMENT=5, OUTSIDE_ON_LEFT_RIGHT=0, 
+			ATTACH_TO_PARENT_PANEL=1,//no londer attaches
+			FILL_SPACE_ON_SIDE=2;
+
+
+	public static final int PLACE_ON_INNER_SIDES=3;
+
+
+	static final int PLACE_ON_OUTER_SIDES=4;
+
+
+	static final int FILL_RIGHT_SIDE=11;
+
+
+	static final int FILL_BOTTOM_SIDE=12;
+
+
+	static final int PLACE_INSIDE_l_R=13;
+
+
+	static final int VERTICAL_PLACEMENT_ON_RIGHT_SIDE=7;
+
+
+	static final int rightTop=8;
+
+
+	static final int rightBottom=9;
+
+
+	static final int BELOW_PANEL_ON_lAYOUT=10;
 			
 			
 	
@@ -101,13 +117,16 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
 	ImagePanelGraphic SourceImageforInset=null;
 	
+	/**the inset currently being draw*/
 	PanelGraphicInsetDefiner inset=null;
+	
+	/**An older inset that shares the same parent image*/
 	PanelGraphicInsetDefiner preExisting=null;
 	
 	
 	ObjectContainer imageTargetted ;
 	
-	int arrangement=ATTACH_TO_PARENT_PANEL;//How to arrange the many panel insets
+	public int arrangement=ATTACH_TO_PARENT_PANEL;//How to arrange the many panel insets
 	
 	public int border=2;//The width of the frames around the newly created insets
 	public double scale=2;//The width of the frames around the newly created insets
@@ -127,6 +146,8 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 
 
 	public CombinedEdit undo=new CombinedEdit();
+
+
 
 
 
@@ -358,6 +379,14 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 	
 	 InsetLayout makeInsetLayout() {
 		 return new InsetLayout(border,arrangement,horizontal, sb);
+	 }
+	 
+	 /**sets the settings of this*/
+	 public void setPropertiesToLayout(InsetLayout newLayout) {
+		 this.border=(int) newLayout.getBorder();
+		 this.arrangement=newLayout.getPositionType();
+		 this.horizontal=newLayout.isHorizontalPreffered();
+		 this.setInsetPosition(newLayout.getAttachmentPosition());
 	 }
 	
 	boolean haveChanLabelsOnTop() {
@@ -660,7 +689,7 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			tool.horizontal=this.getBoolean("horizon");
 			tool.avoidDapi=this.getBoolean("aDAPI");
 			tool.dontScale=this.getChoiceIndex("do not scale")==1;
-			sb= snappanel.getSnappingBehaviour();
+			setInsetPosition(snappanel.getSnappingBehaviour());
 			int npanelsForDialog=3;
 			 tool.addToExisting=this.getBoolean("add2");
 			
@@ -711,5 +740,9 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 			
 			return INSET_TOOL_NAME;
 		}
+
+	public void setInsetPosition(AttachmentPosition sb) {
+		this.sb = sb;
+	}
 
 }

@@ -16,11 +16,12 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 1, 2021
- * Date Modified: Dec 18, 2021
+ * Date Modified: April 29, 2022
  * Version: 2022.0
  */
 package graphicalObjects_LayerTypes;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
@@ -47,6 +48,7 @@ import layout.basicFigure.LayoutSpaces;
 import layout.basicFigure.LayoutSpaces.SpaceType;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
@@ -62,7 +64,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 
 	
 
-	private PanelAddress primaryPanel;
+	private PanelAddress primaryPanelAddress;
 	private ShapeGraphic primaryShape;
 	private final ArrayList<Reflection> reflections=new ArrayList<Reflection>();
 	
@@ -86,7 +88,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 	 */
 	public PanelMirror(ShapeGraphic s, ImagePanelGraphic startPanel, ArrayList<ImagePanelGraphic> otherPanels) {
 		this("mirror");
-		this.primaryPanel=new ImagePanelAddress(startPanel);
+		this.primaryPanelAddress=new ImagePanelAddress(startPanel);
 		this.primaryShape=s;
 		
 		for(ImagePanelGraphic panel:otherPanels) {
@@ -106,7 +108,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 			
 			PanelAddress panelAddress = new ImagePanelAddress(panel);
 			addReflection(copy, panelAddress);
-			
+			//copy.addLocationChangeListener(this);//experimental
 		}
 		
 		s.addLocationChangeListener(this);
@@ -120,7 +122,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 	 */
 	public PanelMirror(ShapeGraphic s, PanelAddress panel) {
 		this("mirror");
-		this.primaryPanel=panel;
+		this.primaryPanelAddress=panel;
 		this.primaryShape=s;
 		
 		s.addLocationChangeListener(this);
@@ -133,6 +135,7 @@ public class PanelMirror extends GraphicLayerPane implements LocationChangeListe
 	 */
 	public void addReflection(SimpleGraphicalObject copy, PanelAddress panelAddress) {
 		reflections.add(new Reflection(copy, panelAddress));
+		copy.addLocationChangeListener(this);
 	}
 
 	/**
@@ -161,63 +164,18 @@ public class Reflection implements Serializable {
 			
 			this.reflectedObject=copy;
 			this.targetPanel=panel;
-			moveReflectionToDestinationPanel(targetPanel, primaryPanel, reflectedObject);
+			moveReflectionToDestinationPanel(targetPanel, primaryPanelAddress, reflectedObject);
 			
 		}
 
-		/**
-		Assuming that a reflected objects starts in one panel (primary panel), moves the object to the equivalent location in the target panel
-		 */
-		protected void moveReflectionToDestinationPanel(PanelAddress targetPanel2, PanelAddress primaryPanel, SimpleGraphicalObject reflectedObject) {
-			Point2D pf = targetPanel2.getLocationUpperLeft();
-			Point2D pi = primaryPanel.getLocationUpperLeft();
-			
-			double dx = pf.getX()-pi.getX();
-			double dy = pf.getY()-pi.getY();
-			reflectedObject.moveLocation(dx, dy);
-		}
+		
 
 		/**updates the location of the reflected object*/
 		public void updateLocation() {
-			updateLocation(targetPanel, primaryPanel,  reflectedObject, primaryShape) ;
+			PanelMirror.updateLocation(targetPanel, primaryPanelAddress,  reflectedObject, primaryShape) ;
 		}
 		
-		/**
-		 * 
-		 */
-		public void updateLocation(PanelAddress targetPanel2, PanelAddress primaryPanel, SimpleGraphicalObject reflectedObject, ShapeGraphic primaryShape) {
-			
-			/**what to do if the mirrored object is a rectangle*/
-			if(reflectedObject instanceof RectangularGraphic && primaryShape instanceof RectangularGraphic ) {
-				 RectangularGraphic r= (RectangularGraphic) reflectedObject ;
-				 r.copyAttributesFrom(primaryShape);
-				 r.setRectangle(((RectangularGraphic) primaryShape).getRectangle());
-				 r.setAngle(primaryShape.getAngle());
-				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
-			}
-			
-			if(reflectedObject instanceof ArrowGraphic && primaryShape instanceof ArrowGraphic ) {
-				ArrowGraphic r= (ArrowGraphic) reflectedObject ;
-				 r.copyAttributesFrom(primaryShape);
-				 ArrowGraphic primary=(ArrowGraphic) primaryShape;
-				 r.setPoints(primary.getLineStartLocation(), primary.getLineEndLocation());
-				r.copyArrowAtributesFrom(primary);
-				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
-			}
-			
-			/**what to do if the mirrored object is a rectangle*/
-			if(reflectedObject instanceof FrameGraphic && primaryShape instanceof PanelGraphicInsetDefiner ) {
-				FrameGraphic r= (FrameGraphic) reflectedObject ;
-				// 
-				 PanelGraphicInsetDefiner primaryShape2 = (PanelGraphicInsetDefiner ) primaryShape;
-				r.setRectangle(primaryShape2.getRectangle());
-				 r.setAngle(primaryShape.getAngle());
-				 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
-			}
-			
-			copyParamterHandles(primaryShape, reflectedObject);
-			
-		}
+		
 
 		
 
@@ -296,14 +254,30 @@ public void copyColorAndLineTraits() {
 	}
 }
 
+boolean updateOngoing=false;
 
 /**whenever the primary object is moved, this updates every reflection*/
 	@Override
 	public void objectMoved(LocatedObject2D object) {
-		//IssueLog.log("Object move detected "+System.currentTimeMillis());
-		//mirrorAfterObjectMove();
 		
 	}
+
+/**
+ * @param object
+ * @return 
+ */
+private PanelAddress findAddress(LocatedObject2D object) {
+	if(object==primaryShape)
+		return this.primaryPanelAddress;
+	for(Reflection r: reflections) try {
+		if(r.reflectedObject==object)
+			return r.targetPanel;
+	} catch (Throwable t) {
+		IssueLog.logT(t);
+	}
+	return null;
+	
+}
 
 /**
 updates the reflections if the mirror is active
@@ -367,7 +341,7 @@ public boolean mirrorPaused() {
 	@Override
 	public void userMoved(LocatedObject2D object) {
 		
-			
+		mirrorReflectionBackToOriginal(object);
 			
 				mirrorAfterObjectMove();
 			
@@ -375,8 +349,28 @@ public boolean mirrorPaused() {
 		
 	}
 
+	/**if the object given is one of the reflections, will 
+	 * @param object
+	 */
+	public void mirrorReflectionBackToOriginal(LocatedObject2D object) {
+		if(updateOngoing)
+			return;//return here precents infinite loops
+		updateOngoing=true;
+		//IssueLog.log("Object move detected "+System.currentTimeMillis());
+		PanelAddress panel = findAddress(object);
+		if(panel!=null&&object!=this.primaryShape&& !(object instanceof PanelGraphicInsetDefiner)) {
+		
+			PanelMirror.updateLocation(primaryPanelAddress, panel,  primaryShape, (ShapeGraphic) object);
+			if(primaryShape instanceof RectangularGraphic)
+				((RectangularGraphic) primaryShape).afterHandleMove(RectangleEdges.LOWER_LEFT, new Point(), new Point());
+		}
+		
+		updateOngoing=false;
+	}
+
 	@Override
 	public void userSizeChanged(LocatedObject2D object) {
+		mirrorReflectionBackToOriginal(object);
 		mirrorAfterObjectMove();
 		
 	}
@@ -400,7 +394,7 @@ public boolean mirrorPaused() {
 	}
 
 	/**
-	 returns true if the object given is one fo the reflection
+	 returns true if the object given is one fo the reflections
 	 */
 	private boolean isReflection(Object requestor) {
 		for(Reflection rel: this.reflections) {
@@ -525,6 +519,53 @@ public boolean mirrorPaused() {
 		
 	}
 	
-	
+	/**
+	Assuming that a reflected objects starts in one panel (primary panel), moves the object to the equivalent location in the target panel
+	This only needs to be done once to put each copy with the right panel
+	 */
+	protected static void moveReflectionToDestinationPanel(PanelAddress targetPanel2, PanelAddress primaryPanel, SimpleGraphicalObject reflectedObject) {
+		Point2D pf = targetPanel2.getLocationUpperLeft();
+		Point2D pi = primaryPanel.getLocationUpperLeft();
+		
+		double dx = pf.getX()-pi.getX();
+		double dy = pf.getY()-pi.getY();
+		reflectedObject.moveLocation(dx, dy);
+	}
+	/**
+	 * 
+	 */
+	public static void updateLocation(PanelAddress targetPanel2, PanelAddress primaryPanel, SimpleGraphicalObject reflectedObject, ShapeGraphic primaryShape) {
+		
+		/**what to do if the mirrored object is a rectangle*/
+		if(reflectedObject instanceof RectangularGraphic && primaryShape instanceof RectangularGraphic ) {
+			 RectangularGraphic r= (RectangularGraphic) reflectedObject ;
+			 r.copyAttributesFrom(primaryShape);
+			 r.setRectangle(((RectangularGraphic) primaryShape).getRectangle());
+			 r.setAngle(primaryShape.getAngle());
+			 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
+		}
+		
+		if(reflectedObject instanceof ArrowGraphic && primaryShape instanceof ArrowGraphic ) {
+			ArrowGraphic r= (ArrowGraphic) reflectedObject ;
+			 r.copyAttributesFrom(primaryShape);
+			 ArrowGraphic primary=(ArrowGraphic) primaryShape;
+			 r.setPoints(primary.getLineStartLocation(), primary.getLineEndLocation());
+			r.copyArrowAtributesFrom(primary);
+			 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
+		}
+		
+		/**what to do if the mirrored object is a rectangle*/
+		if(reflectedObject instanceof FrameGraphic && primaryShape instanceof PanelGraphicInsetDefiner ) {
+			FrameGraphic r= (FrameGraphic) reflectedObject ;
+			// 
+			 PanelGraphicInsetDefiner primaryShape2 = (PanelGraphicInsetDefiner ) primaryShape;
+			r.setRectangle(primaryShape2.getRectangle());
+			 r.setAngle(primaryShape.getAngle());
+			 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
+		}
+		
+		copyParamterHandles(primaryShape, reflectedObject);
+		
+	}
 
 }
