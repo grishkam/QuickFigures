@@ -52,7 +52,10 @@ import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.LocatedObject2D;
 import locatedObject.ObjectContainer;
+import locatedObject.RectangleEdgePositions;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import standardDialog.attachmentPosition.AttachmentPositionPanel;
 import standardDialog.booleans.BooleanInputPanel;
@@ -148,6 +151,9 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	public CombinedEdit undo=new CombinedEdit();
 
 
+	private boolean overSizeMode;
+
+
 
 
 
@@ -161,7 +167,7 @@ public class InsetTool extends GraphicTool implements LayoutSpaces {
 	
 public void onPress(ImageWorkSheet gmp, LocatedObject2D roi2) {
 	undo=new CombinedEdit();
-	
+	overSizeMode=false;
 	imageTargetted = this.getImageClicked();
 	if (roi2 instanceof PanelGraphicInsetDefiner) {
 		
@@ -440,8 +446,28 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 	
 	
 	public void mouseDragged() {
+		if(this.overSizeMode)
+		{	super.mouseDragged();
+			return;
+		}
 		try {
+			PanelGraphicInsetDefiner oldI = inset;
 			refreshInsetOnMouseDrag(this.clickedCord(), this.draggedCord());
+			if(inset!=null) {
+				if (inset.isSourcePanelOverSize())
+				{
+					IssueLog.log("large image used. Switching inset tool to oversize mode ");
+					this.mouseReleased();
+					ShowMessage.showOptionalMessage("Inset tool will not handle mouse drags efficiencly for large image panels");
+					/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
+					//setPrimarySelectedObject(inset);
+					//establishMovedIntoOrClickedHandle(true);//if the user clicked a handle on an existing rectangle
+					//setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
+					super.todefaultTool();
+					
+					//overSizeMode=true;
+				}
+			}
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}

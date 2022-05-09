@@ -53,6 +53,7 @@ import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.DonatesMenu;
+import popupMenusForComplexObjects.InsetMenu;
 
 /**
  Soemtimes a user wants an shape displayed over a few different parent panels
@@ -358,7 +359,7 @@ public boolean mirrorPaused() {
 		updateOngoing=true;
 		//IssueLog.log("Object move detected "+System.currentTimeMillis());
 		PanelAddress panel = findAddress(object);
-		if(panel!=null&&object!=this.primaryShape&& !(object instanceof PanelGraphicInsetDefiner)) {
+		if(panel!=null&&object!=this.primaryShape/**&& !(object instanceof PanelGraphicInsetDefiner)*/) {
 		
 			PanelMirror.updateLocation(primaryPanelAddress, panel,  primaryShape, (ShapeGraphic) object);
 			if(primaryShape instanceof RectangularGraphic)
@@ -438,7 +439,7 @@ public boolean mirrorPaused() {
 		}
 	
 	/**Implementation of panel address for image panels*/
-	static class ImagePanelAddress implements PanelAddress {
+	public static class ImagePanelAddress implements PanelAddress {
 
 		/**
 		 * 
@@ -562,6 +563,14 @@ public boolean mirrorPaused() {
 			r.setRectangle(primaryShape2.getRectangle());
 			 r.setAngle(primaryShape.getAngle());
 			 moveReflectionToDestinationPanel(targetPanel2, primaryPanel, reflectedObject) ;
+		}
+		
+		/**what to do if the mirrored object is a rectangle*/
+		if(reflectedObject instanceof PanelGraphicInsetDefiner && primaryShape instanceof PanelGraphicInsetDefiner ) {
+			PanelGraphicInsetDefiner r= (PanelGraphicInsetDefiner) reflectedObject ;
+			// 
+			 PanelGraphicInsetDefiner primaryShape2 = (PanelGraphicInsetDefiner ) primaryShape;
+			 new InsetMenu.ChangeInsetScale(r, primaryShape2.getInsetScale()).rescale();
 		}
 		
 		copyParamterHandles(primaryShape, reflectedObject);

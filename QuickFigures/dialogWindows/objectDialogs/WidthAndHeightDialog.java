@@ -59,6 +59,7 @@ public class WidthAndHeightDialog extends ShapeGraphicOptionsSwingDialog {
 		rect.setWidth(this.getNumber("width"));
 		rect.setHeight(this.getNumber("height"));
 		rect.afterHandleMove(RectangleEdges.LOWER_RIGHT, null, null);
+		rect.notifyListenersOfUserSizeChange();
 	}
 	
 

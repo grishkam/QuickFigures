@@ -241,6 +241,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				me.getUndoManager().addEdit(changer.rescale());
 				me.getAsDisplay().updateDisplay();
 				me.getAsDisplay().updateDisplay();
+				changer.primaryInset.notifyListenersOfUserSizeChange();
 			} catch (Exception e1) {
 				IssueLog.logT(e1);
 			}

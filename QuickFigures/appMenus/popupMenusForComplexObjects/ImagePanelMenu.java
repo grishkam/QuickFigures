@@ -44,6 +44,7 @@ import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -227,6 +228,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	/**Creates an inset at every sister panel*/
 	private CombinedEdit addInsetSeries(ImageDisplayLayer img, ImagePanelGraphic primaryImage) {
 		CombinedEdit output = new CombinedEdit();
+		 PanelMirror mirror=null;
 		AttachmentPosition position = AttachmentPosition.defaultInternalPanel();
 		position.setLocationTypeInternal(RectangleEdges.LOWER_RIGHT);
 		InsetTool iTool = new InsetTool();
@@ -243,16 +245,29 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		for(ImagePanelGraphic panel:panels) {
 			CombinedEdit undo = addInset(false, panel,  iTool, listofAddedItems);
 			output.addEditToList(undo);
+			PanelGraphicInsetDefiner copy = listofAddedItems.get(listofAddedItems.size()-1);
+			if(mirror==null) {
+				mirror=new PanelMirror(copy, new PanelMirror.ImagePanelAddress(panel));
+				output.addEditToList(Edit.addItem(primaryImage.getParentLayer(), mirror));
+			} else {
+				mirror.addReflection(copy, new PanelMirror.ImagePanelAddress(panel));
+				for(ImagePanelGraphic panel3: copy.getPanelManager().getPanelList().getPanelGraphics()) {
+					panel3.getScaleBar().getParentLayer().remove(panel3.getScaleBar());
+				}
+			}
+			copy.getChannelLabelManager().eliminateChanLabels();
+			Edit.removeItem(copy.getPanelManager().getGridLayout());
+			copy.getPanelManager().getChannelUseInstructions().channelColorMode=img.getPanelManager().getChannelUseInstructions().channelColorMode;
 		}
 		
 		position = AttachmentPosition.defaultInternalPanel();
-		position.setLocationTypeInternal(RectangleEdges.LOWER_RIGHT);
+		position.setLocationTypeInternal(RectangleEdges.LOWER_LEFT);
 		for(PanelGraphicInsetDefiner inset: listofAddedItems) {
 			ImagePanelGraphic insetPanel = inset.getPanelManager().getPanelList().getPanelGraphics().get(0);
 			inset.getSourcePanel().addLockedItem(insetPanel);
 			 insetPanel.setAttachmentPosition(position);
 		}
-		
+		mirror.updateAllReflectionLocations();
 		return output;
 	}
 	

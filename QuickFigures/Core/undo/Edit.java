@@ -40,6 +40,9 @@ public class Edit {
 		parentLayer.remove(z);
 		return output;
 	}
+	public static UndoAbleEditForRemoveItem removeItem(ZoomableGraphic z ) {
+		return removeItem(z.getParentLayer(), z);
+	}
 	
 	public static UndoReorder swapItemOrder(GraphicLayer parentLayer, ZoomableGraphic z, ZoomableGraphic z2) {
 		UndoReorder output = new UndoReorder(parentLayer);

@@ -401,6 +401,9 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 		return channelLabelMan;
 	}
 	
+	
+	
+	
 	/**returns the channel label menu for the inset*/
 	public MenuForMultiChannelDisplayLayer getChannelLabelMenu() {
 		return new MenuForMultiChannelDisplayLayer("Channel Label", this.getSourceDisplay(), multiChannelStackofInsets, this.getChannelLabelManager());
@@ -794,7 +797,7 @@ static Color  folderColor2= new Color(0,140, 0);
 	 * and handle drags will be treated differently
 	 * @return
 	 */
-	private boolean isSourcePanelOverSize() {
+	public boolean isSourcePanelOverSize() {
 		try {
 			MultiChannelImage multichannelImage = getSourceDisplay().getSlot().getUnprocessedVersion(false);
 			Dimension d = multichannelImage.getDimensions();

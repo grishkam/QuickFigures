@@ -196,6 +196,7 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 			targetShape.setAngle(nSW);
 		} else if (w.clickCount()==2) {
 			new WidthAndHeightDialog(targetShape).showDialog();
+		
 		}
 		
 		
