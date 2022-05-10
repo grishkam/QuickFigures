@@ -203,10 +203,14 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 		if (inset==null) return;
 		if (!inset.isValid()) {
 			inset.removeInsetAndPanels();
+			return;
+		}
+		if(this.overSizeMode) {
+			inset.getSmartHandleList().getHandleNumber( RectangleEdgePositions.LOWER_RIGHT).handleRelease(getLastDragOrLastReleaseMouseEvent());
 			
 		}
-		
-		resizeCanvas();
+		if(!overSizeMode)
+			resizeCanvas();
 		
 	}
 	
@@ -446,26 +450,38 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 	
 	
 	public void mouseDragged() {
-		if(this.overSizeMode)
+		if(this.overSizeMode&&sizeDefiningMouseDrag)
 		{	super.mouseDragged();
+			
+			inset.getSmartHandleList().getHandleNumber( RectangleEdgePositions.LOWER_RIGHT).handleDrag(getLastDragOrLastReleaseMouseEvent());
 			return;
 		}
 		try {
 			PanelGraphicInsetDefiner oldI = inset;
 			refreshInsetOnMouseDrag(this.clickedCord(), this.draggedCord());
-			if(inset!=null) {
+			if(inset!=null&&oldI!=inset) {
 				if (inset.isSourcePanelOverSize())
 				{
 					IssueLog.log("large image used. Switching inset tool to oversize mode ");
-					this.mouseReleased();
-					ShowMessage.showOptionalMessage("Inset tool will not handle mouse drags efficiencly for large image panels");
+					
+					
+					//ShowMessage.showOptionalMessage("Large image mode is a work in progress", true, "Inset tool will not handle mouse drags efficiencly for large image panels", "Please drag handles with the normal tool");
 					/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
+					if(this.getPrimarySelectedObject()!=inset) {
+						setPrimarySelectedObject(inset);
+						//mouseReleased();
+						
+						establishMovedIntoOrClickedHandle(true);
+						setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
+						inset.getSmartHandleList().getHandleNumber(RectangleEdgePositions.LOWER_RIGHT).handlePress(this.getLastMouseEvent());
+					}
 					//setPrimarySelectedObject(inset);
 					//establishMovedIntoOrClickedHandle(true);//if the user clicked a handle on an existing rectangle
 					//setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
-					super.todefaultTool();
+					//this.mouseReleased();
+					//todefaultTool();
 					
-					//overSizeMode=true;
+					overSizeMode=true;
 				}
 			}
 		} catch (Exception e) {

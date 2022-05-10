@@ -803,7 +803,7 @@ static Color  folderColor2= new Color(0,140, 0);
 			Dimension d = multichannelImage.getDimensions();
 			if (d == null)
 				return false;
-			int limit = 3000;
+			int limit = 150;
 			if (d.width > limit || d.height > limit)
 				return true;
 		} catch (Exception e) {
