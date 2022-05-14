@@ -47,6 +47,7 @@ import graphicActionToolbar.QuickFigureMaker;
 import imageMenu.CombineImages;
 import imageMenu.UndoRedoMenuItem;
 import imageMenu.UserPreferenceDialog;
+import imageMenu.AboutQuickFiguresDialog;
 import imageMenu.CanvasAutoResize;
 import imageMenu.CanvasAutoTrim;
 import imageMenu.CanvasDialogResize;
@@ -131,9 +132,8 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		add(SelectionOperationsMenu.getStandardMenu(ls));
 		add(ObjectAddingMenu.getStandardAddingMenu(ls));
 		
-		installItem(new DebugMenuItems());
-		installItem(new DebugMenuItems(false));
-		installItem(new WindowDebugMenuItem());
+		
+		//installItem(new WindowDebugMenuItem());
 		
 	String figFormatPath="Edit<Figure Format<";
 	ArrayList<TemplateUserMenuAction> templateMenu = TemplateUserMenuAction.createSeveral(figFormatPath);
@@ -146,6 +146,10 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 			if (installer==null) continue;
 			installer.addToMenuBar(this);
 		}
+		
+		installItem(new AboutQuickFiguresDialog());
+		installItem(new DebugMenuItems());
+		installItem(new DebugMenuItems(false));
 	}
 	
 	

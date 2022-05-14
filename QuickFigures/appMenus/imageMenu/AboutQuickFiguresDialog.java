@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Created: April 24, 2021
- * Date Modified: April 24, 2021
+ * Date Created: May 14, 2022
+ * Date Modified: May 14, 2022
  * Version: 2022.0
  * 
  */
@@ -24,30 +24,31 @@ package imageMenu;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
-import figureFormat.PrefsShutDownHook;
-import imageDisplayApp.UserPreferences;
-import logging.IssueLog;
-import storedValueDialog.StoredValueDilaog;
+import standardDialog.StandardDialog;
+import standardDialog.strings.InfoDisplayPanel;
 
 /**This class shows the preferences dialog for quickfigures*/
-public class UserPreferenceDialog extends BasicMenuItemForObj {
+public class AboutQuickFiguresDialog extends BasicMenuItemForObj {
 
 
 
 
-public UserPreferenceDialog() {
+public AboutQuickFiguresDialog() {
 	
 }
 
 
-
-
 public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	
-		StoredValueDilaog storedValueDilaog = new StoredValueDilaog("Preferences", UserPreferences.current);
-		storedValueDilaog.setModal(true);
+		StandardDialog storedValueDilaog = new StandardDialog("QuickFigures");
+		storedValueDilaog .add("Info", new InfoDisplayPanel("QuickFigures was created by ", " Gregory Mazo"));
+		storedValueDilaog .add("Info", new InfoDisplayPanel("You are using ", " Version: 2022.0"));
+		storedValueDilaog .add("Info", new InfoDisplayPanel("", " the code is open source and available on github "));
+		storedValueDilaog .add("Info", new InfoDisplayPanel("User Guide", "https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md"));
+		storedValueDilaog .add("Info", new InfoDisplayPanel("Publication", "https://doi.org/10.1371/journal.pone.0240280"));
+		storedValueDilaog.setWindowCentered(true);
 		storedValueDilaog.showDialog();
-		UserPreferences.current.store();
+		
 		
 		
 		
@@ -57,9 +58,9 @@ public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 }
 
 /***/
-public String getCommand() {return "Preferences1";}
-public String getNameText() {return "Preferences";}
-public String getMenuPath() {return "Edit";}
+public String getCommand() {return "version";}
+public String getNameText() {return "About QuickFigures";}
+public String getMenuPath() {return "Help";}
 
 
 

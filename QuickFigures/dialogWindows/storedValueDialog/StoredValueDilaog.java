@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: May 10, 2022
+ * Date Modified: May 14, 2022
  * Version: 2022.0
  */
 package storedValueDialog;
@@ -187,7 +187,7 @@ public class StoredValueDilaog extends StandardDialog{
 	}
 
 	/**
-	 
+	 Adds a boolean field to the dialog
 	 */
 	public static void addBooleanField(StandardDialog d, Object of, Field f, RetrievableOption o)
 			throws IllegalAccessException {
@@ -195,6 +195,9 @@ public class StoredValueDilaog extends StandardDialog{
 		d.add(o.key(), new BooleanObjectInput(label, of, f));
 	}
 	
+	/**
+	 Adds a String field to the dialog
+	 */
 	public static void addStringField(StandardDialog d, Object of, Field f, RetrievableOption o)
 			throws IllegalAccessException {
 		String label = o.label();
@@ -274,7 +277,7 @@ public class StoredValueDilaog extends StandardDialog{
 		}}
 	
 	
-	/**Class changes a specific field in a specific object in response to a number input*/
+	/**Class changes a specific field in a specific object in response to a file input*/
 	public static class FileInput extends FileInputPanel implements StringInputListener {
 
 		/**

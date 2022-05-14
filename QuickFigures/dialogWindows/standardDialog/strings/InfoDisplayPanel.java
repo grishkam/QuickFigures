@@ -15,18 +15,30 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: May 14, 2022
  * Version: 2022.0
  */
 package standardDialog.strings;
 
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JLabel;
+
+import standardDialog.strings.InfoDisplayPanel.MouseLinkListener;
 
 /**A special string panel that simply displays JLabel with information int than 
   a text field for user input*/
 public class InfoDisplayPanel extends  StringInputPanel{
+
+	
+
 
 	private JLabel content=new JLabel();
 	
@@ -47,13 +59,17 @@ public class InfoDisplayPanel extends  StringInputPanel{
 	/**sets the text that is displayed as information*/
 	public void setContentText(String contend) {
 		getTextField().setText(contend);
+		if(contend.contains("https")) {
+			getTextField().addMouseListener(new MouseLinkListener());
+			getTextField().setForeground(Color.blue);
+		}
 	}
 
 	
 	private static final long serialVersionUID = 1L;
 
 
-	
+	/**returns a JLabel text instead of a user editable text field*/
 	protected JLabel getTextField() {
 		if (content==null) {
 			content=new JLabel();
@@ -61,5 +77,49 @@ public class InfoDisplayPanel extends  StringInputPanel{
 		return content;
 	}
 
+	/**
+	 
+	 * 
+	 */
+public class MouseLinkListener implements MouseListener {
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		try {
+			Desktop.getDesktop().browse(new URI(content.getText()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
 }

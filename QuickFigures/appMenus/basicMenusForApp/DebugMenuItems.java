@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: May 14, 2022
  * Version: 2022.0
  */
 package basicMenusForApp;
@@ -40,7 +40,7 @@ public  class DebugMenuItems implements MenuItemForObj{
 	@Override
 	public String getMenuPath() {
 	
-		return "Debug";
+		return "Help";
 	}
 
 	@Override
