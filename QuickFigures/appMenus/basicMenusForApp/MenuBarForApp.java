@@ -46,6 +46,7 @@ import graphicActionToolbar.CurrentSetInformer;
 import graphicActionToolbar.QuickFigureMaker;
 import imageMenu.CombineImages;
 import imageMenu.UndoRedoMenuItem;
+import imageMenu.HelpfulLink;
 import imageMenu.UserPreferenceDialog;
 import imageMenu.AboutQuickFiguresDialog;
 import imageMenu.CanvasAutoResize;
@@ -148,6 +149,10 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		}
 		
 		installItem(new AboutQuickFiguresDialog());
+		installItem(new HelpfulLink(AboutQuickFiguresDialog.USER_GUIDE, "User Guide"));
+		installItem(new HelpfulLink("https://www.youtube.com/watch?v=9Crg-FAOHmc&list=PLM5I73cb55tDX4XCjKGK-Jm3-tJsUb7qm", "Video tutorial"));
+		installItem(new HelpfulLink(AboutQuickFiguresDialog.PUBLICATION_DOI, "Read Paper"));
+		
 		installItem(new DebugMenuItems());
 		installItem(new DebugMenuItems(false));
 	}
@@ -287,9 +292,6 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 	}
 	
 
-	public static void main(String[] args) {
-		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

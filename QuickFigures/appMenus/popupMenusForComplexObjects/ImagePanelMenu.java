@@ -29,6 +29,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import channelMerging.ImageDisplayLayer;
 import fLexibleUIKit.ObjectAction;
@@ -162,10 +163,15 @@ public class ImagePanelMenu extends AttachedItemMenu {
 					
 						
 					
-					s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
+					JMenuItem insetSeries = new ObjectAction<ImagePanelGraphic>(imagePanel) {
 						@Override
 						public CombinedEdit performAction() { return addInsetSeries((ImageDisplayLayer) imagePanel.getParentLayer(), imagePanel);}
-								}.createJMenuItem("Add insets to all channel panels", new InsetToolIcon(0).getMenuVersion()));
+								}.createJMenuItem("Add insets to all channel panels", new InsetToolIcon(0).getMenuVersion());
+					
+							SmartJMenu menuItem = new SmartJMenu("More");
+							menuItem.add(insetSeries);
+							s.add(menuItem);	
+							
 		}
 		this.add(s);
 	}

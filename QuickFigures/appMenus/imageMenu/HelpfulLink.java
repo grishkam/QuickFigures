@@ -22,43 +22,45 @@
  */
 package imageMenu;
 
+import java.awt.Desktop;
+import java.net.URI;
+
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
-import standardDialog.StandardDialog;
-import standardDialog.strings.InfoDisplayPanel;
+import logging.IssueLog;
 
 /**This class shows an information window for QuickFigures*/
-public class AboutQuickFiguresDialog extends BasicMenuItemForObj {
+public class HelpfulLink extends BasicMenuItemForObj {
 
 
-
-
-/**
-	 * 
-	 */
-	public static final String PUBLICATION_DOI = "https://doi.org/10.1371/journal.pone.0240280", 
-			USER_GUIDE = "https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md";
-public AboutQuickFiguresDialog() {
-	
+private URI link;
+private String menuText;
+public HelpfulLink(String link1, String menuText) {
+	this.menuText=menuText;
+	try {
+	this.link=new URI(link1);
+} catch (Exception e) {
+	IssueLog.logT(e);
+}
 }
 
 
 public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	
-		StandardDialog storedValueDilaog = new StandardDialog("QuickFigures");
-		storedValueDilaog .add("Info", new InfoDisplayPanel("QuickFigures was created by ", " Gregory Mazo"));
-		storedValueDilaog .add("Info", new InfoDisplayPanel("You are using ", " Version: 2022.1"));
-		storedValueDilaog .add("Info", new InfoDisplayPanel("", " the code is open source and available on github "));
-		storedValueDilaog .add("Info", new InfoDisplayPanel("User Guide", USER_GUIDE));
-		storedValueDilaog .add("Info", new InfoDisplayPanel("Publication", PUBLICATION_DOI));
-		storedValueDilaog.setWindowCentered(true);
-		storedValueDilaog.showDialog();
+	
+		
+		try {
+			
+			Desktop.getDesktop().browse(link);
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 		
 }
 
 /***/
-public String getCommand() {return "version";}
-public String getNameText() {return "About QuickFigures";}
+public String getCommand() {return menuText;}
+public String getNameText() {return menuText;}
 public String getMenuPath() {return "Help";}
 
 

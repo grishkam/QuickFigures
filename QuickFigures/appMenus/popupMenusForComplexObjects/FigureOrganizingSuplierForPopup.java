@@ -652,7 +652,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	public CombinedEdit addBandMarkLabel(CanvasMouseEvent me) {
 		MarkLabelCreationOptions markOptions=new MarkLabelCreationOptions();
 		CombinedEdit output=new CombinedEdit();
-		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band labels are a work in progress. They are not yet stable. Use with caution", "Are you sure you want to try them?");
+		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band marks are a work in progress. They may be change in later versions.", "They are for gel and blot", "Are you sure you want to try them?");
 		if(!decision)
 			return null;
 		Point point = me.getCoordinatePoint();
