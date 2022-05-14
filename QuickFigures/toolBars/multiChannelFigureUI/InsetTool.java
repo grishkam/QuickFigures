@@ -459,33 +459,33 @@ public void setupToolForImagePanel(LocatedObject2D roi2) {
 		try {
 			PanelGraphicInsetDefiner oldI = inset;
 			refreshInsetOnMouseDrag(this.clickedCord(), this.draggedCord());
-			if(inset!=null&&oldI!=inset) {
-				if (inset.isSourcePanelOverSize())
-				{
-					IssueLog.log("large image used. Switching inset tool to oversize mode ");
-					
-					
-					//ShowMessage.showOptionalMessage("Large image mode is a work in progress", true, "Inset tool will not handle mouse drags efficiencly for large image panels", "Please drag handles with the normal tool");
-					/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
-					if(this.getPrimarySelectedObject()!=inset) {
-						setPrimarySelectedObject(inset);
-						//mouseReleased();
-						
-						establishMovedIntoOrClickedHandle(true);
-						setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
-						inset.getSmartHandleList().getHandleNumber(RectangleEdgePositions.LOWER_RIGHT).handlePress(this.getLastMouseEvent());
-					}
-					//setPrimarySelectedObject(inset);
-					//establishMovedIntoOrClickedHandle(true);//if the user clicked a handle on an existing rectangle
-					//setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
-					//this.mouseReleased();
-					//todefaultTool();
-					
-					overSizeMode=true;
-				}
+			if(inset!=null&&oldI!=inset&&inset.isSourcePanelOverSize()) {
+				
+				turnOnOversizeMode();
 			}
 		} catch (Exception e) {
 			IssueLog.logT(e);
+		}
+	}
+
+	/**
+	innitiates oversize mode for a mosue drag that generates an inset.
+	 */
+	public void turnOnOversizeMode() {
+		{
+			
+			//ShowMessage.showOptionalMessage("Large image mode is a work in progress", true, "Inset tool will not handle mouse drags efficiencly for large image panels", "Please drag handles with the normal tool");
+			/**sets the selected handle to the one in the lower right hand corners. Mouse drag will work on this handle */
+			if(this.getPrimarySelectedObject()!=inset) {
+				/**simulates a handle press on the lower right handle*/
+				setPrimarySelectedObject(inset);				
+				establishMovedIntoOrClickedHandle(true);
+				setSelectedHandleNumber( RectangleEdgePositions.LOWER_RIGHT);
+				inset.getSmartHandleList().getHandleNumber(RectangleEdgePositions.LOWER_RIGHT).handlePress(this.getLastMouseEvent());
+			}
+		
+			
+			overSizeMode=true;
 		}
 	}
 

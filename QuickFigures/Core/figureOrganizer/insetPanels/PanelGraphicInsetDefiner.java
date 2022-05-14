@@ -55,6 +55,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.RectangularShapeSmartHandle;
 import handles.SmartHandle;
 import iconGraphicalObjects.IconUtil;
+import imageDisplayApp.UserPreferences;
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
@@ -803,7 +804,7 @@ static Color  folderColor2= new Color(0,140, 0);
 			Dimension d = multichannelImage.getDimensions();
 			if (d == null)
 				return false;
-			int limit = 150;
+			int limit = UserPreferences.current.useOversizeModeForInsets;
 			if (d.width > limit || d.height > limit)
 				return true;
 		} catch (Exception e) {

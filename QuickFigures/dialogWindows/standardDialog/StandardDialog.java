@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 6, 2020
+ * Date Modified: May 14, 2022
  * Version: 2022.0
  */
 package standardDialog;
@@ -123,37 +123,63 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	private boolean hideOK=false;
 	
 	boolean useMainPanel=true;
-	private String mainPanelName="";
+	
+	/**The starting name of the main panel*/
+	protected String mainPanelName="";
 	
 
+	/**Creates a tabbed pane*/
+	private JTabbedPane  optionDisplayTabs=setupOptionsTabbedPane();
+	protected GriddedPanel mainPanel=setupMainPanel(mainPanelName);
 	
+	private JTabbedPane setupOptionsTabbedPane() {
+		 optionDisplayTabs=new JTabbedPane(); {
+				GridBagConstraints mainPanelgc = new GridBagConstraints();
+				mainPanelgc.gridx=1;
+				mainPanelgc.gridy=1;
+				this.add(getOptionDisplayTabs(), mainPanelgc);
+				
+			}
+		 return optionDisplayTabs;
+	}
 	
-	
-	
+	/**removes the tabbed pane from the window*/
 	public JTabbedPane removeOptionsTab() {
 		JTabbedPane output = this.getOptionDisplayTabs();
 		this.remove(output);
 		return output;
 	}
 	
-	private JTabbedPane optionDisplayTabs=new JTabbedPane(); {
-		GridBagConstraints mainPanelgc = new GridBagConstraints();
-		mainPanelgc.gridx=1;
-		mainPanelgc.gridy=1;
-		this.add(getOptionDisplayTabs(), mainPanelgc);
-		
-	}
-	
-	
-	public GriddedPanel SetupmainPanel() {
+	/**prepares a panel that can be used as the main panel for addition of input panels to this dialog*/
+	public GriddedPanel setupMainPanel(String mainPanelName) {
 		GriddedPanel mainPanel=new GriddedPanel();
 		mainPanel.setLayout(new GridBagLayout());
 	
 		getOptionDisplayTabs().addTab(mainPanelName, mainPanel);
-	
+		
 		return mainPanel;
 	}
-	protected GriddedPanel mainPanel=SetupmainPanel();
+	
+	/**returns a panel with the given name*/
+	protected GriddedPanel getOrCreateGriddedPanelWithName(String name) {
+		GriddedPanel panel=null;
+		JTabbedPane tabbedPane = getOptionDisplayTabs();
+		for(int i=0; i<tabbedPane.getTabCount(); i++)try {
+			if(tabbedPane.getTitleAt(i).equals(name))
+				panel=(GriddedPanel) tabbedPane.getComponentAt(i);
+		} catch (Throwable t) {
+			IssueLog.logT(t);
+		}
+		if(panel==null) {
+			panel=setupMainPanel(name);
+		}
+		return panel;
+	}
+	
+	/**Changes the main panel*/
+	public void switchPanels(String name) {
+		this.mainPanel=this.getOrCreateGriddedPanelWithName(name);
+	}
 	
 	
 	

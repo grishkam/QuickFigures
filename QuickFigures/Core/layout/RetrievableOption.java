@@ -74,6 +74,9 @@ public @interface RetrievableOption {
 	/**set to true if it should be locked for editing*/
 	boolean locked() default false;
 	
+	/**If the options are grouped into categories*/
+	String category() default "";
+	
 }
 
 

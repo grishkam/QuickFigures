@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 24, 2021
+ * Date Modified: May 10, 2022
  * Version: 2022.0
  */
 package storedValueDialog;
@@ -76,6 +76,8 @@ public class StoredValueDilaog extends StandardDialog{
 		 while (c!=Object.class) {
 		 for (Field f: c.getDeclaredFields()) {
 			 RetrievableOption o= f.getAnnotation( RetrievableOption.class);
+			 //IssueLog.log("working on "+o.label());
+			if(o!=null) d.switchPanels(o.category());
 			if (o!=null) try {
 				f.setAccessible(true);
 				
@@ -89,6 +91,9 @@ public class StoredValueDilaog extends StandardDialog{
 					addBooleanField(d, of, f, o);
 				}
 				if (f.getType()==double.class) {
+					addNumberField(d, of, f, o);
+				}
+				if (f.getType()==int.class) {
 					addNumberField(d, of, f, o);
 				}
 				
@@ -111,8 +116,9 @@ public class StoredValueDilaog extends StandardDialog{
 				/**need option to add a choice*/
 				
 			} catch (Throwable e) {
-			
+				
 			} 
+			 d.switchPanels("");
 		 }
 		 c=c.getSuperclass();
 		 }
@@ -216,7 +222,11 @@ public class StoredValueDilaog extends StandardDialog{
 		@Override
 		public void numberChanged(NumberInputEvent ne) {
 			try {
-				field.set(object, ne.getNumber());
+				if(field.getType()==int.class) {
+					field.set(object, (int)ne.getNumber());
+				}
+				else 
+						field.set(object, ne.getNumber());
 			} catch (Exception e) {
 				IssueLog.logT(e);
 			} 

@@ -24,7 +24,9 @@ package imageMenu;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import figureFormat.PrefsShutDownHook;
 import imageDisplayApp.UserPreferences;
+import logging.IssueLog;
 import storedValueDialog.StoredValueDilaog;
 
 /**This class shows the preferences dialog for quickfigures*/
@@ -60,7 +62,12 @@ public String getNameText() {return "Preferences";}
 public String getMenuPath() {return "Edit";}
 
 
-
+public static void main(String[] args) {
+	PrefsShutDownHook.addShutdownHook();
+	UserPreferences.current.load();
+	IssueLog.sytemprint=true;
+	new UserPreferenceDialog().performActionDisplayedImageWrapper(null);
+}
 
 
 

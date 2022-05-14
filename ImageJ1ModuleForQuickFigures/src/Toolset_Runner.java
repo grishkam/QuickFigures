@@ -112,7 +112,7 @@ public class Toolset_Runner implements PlugIn {
 
 
 	/**
-	 * 
+	 * loads the current user preferences
 	 */
 	protected void loadUserPreferences() {
 		try {

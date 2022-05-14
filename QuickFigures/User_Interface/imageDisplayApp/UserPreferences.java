@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: April 24, 2021
- * Date Modified: April 24, 2021
+ * Date Modified: May 10, 2022
  * Version: 2022.0
  * 
  */
@@ -42,6 +42,9 @@ public static final UserPreferences current=new UserPreferences();
 	@RetrievableOption(key = "expimentalFeatures", label="Include Experimental Features?")
 	public boolean testNew=false;
 	
+	@RetrievableOption(key = "oversizeMode", label="'Large inset mode' for images larger than ", category="insets")
+	public int useOversizeModeForInsets=5000;
+	
 	/**stores the preferences as keys*/
 	public void store() {
 		MetaInfoWrapper storage = DirectoryHandler.getDefaultHandler().getPrefsStorage();
@@ -53,5 +56,6 @@ public static final UserPreferences current=new UserPreferences();
 		MetaInfoWrapper storage = DirectoryHandler.getDefaultHandler().getPrefsStorage();
 		new BasicMetaDataHandler().loadAnnotatedFields(storage, this,"");
 	}
+	
 	
 }
