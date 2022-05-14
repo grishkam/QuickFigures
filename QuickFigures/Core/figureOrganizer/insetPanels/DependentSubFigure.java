@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: Feb 1, 2022
  * Date Modified: Feb 1, 2022
- * Version: 2022.0
+ * Version: 2022.1
  */
 package figureOrganizer.insetPanels;
 

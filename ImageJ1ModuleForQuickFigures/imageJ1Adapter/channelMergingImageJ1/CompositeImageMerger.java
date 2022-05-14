@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Mar 19, 2022
- * Version: 2022.0
+ * Version: 2022.1
  */
 package channelMergingImageJ1;
 

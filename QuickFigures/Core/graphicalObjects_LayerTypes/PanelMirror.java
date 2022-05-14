@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: May 1, 2021
  * Date Modified: April 29, 2022
- * Version: 2022.0
+ * Version: 2022.1
  */
 package graphicalObjects_LayerTypes;
 

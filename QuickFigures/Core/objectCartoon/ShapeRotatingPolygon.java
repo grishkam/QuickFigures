@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Dec 1, 2021
- * Version: 2022.0
+ * Version: 2022.1
  */
 package objectCartoon;
 import java.awt.Point;

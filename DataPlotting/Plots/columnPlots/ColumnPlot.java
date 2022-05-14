@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Feb 2, 2022
- * Version: 2022.0
+ * Version: 2022.1
  */
 package columnPlots;
 

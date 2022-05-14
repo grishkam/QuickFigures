@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: May 14, 2022
  * Date Modified: May 14, 2022
- * Version: 2022.0
+ * Version: 2022.1
  * 
  */
 package imageMenu;
@@ -42,7 +42,7 @@ public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	
 		StandardDialog storedValueDilaog = new StandardDialog("QuickFigures");
 		storedValueDilaog .add("Info", new InfoDisplayPanel("QuickFigures was created by ", " Gregory Mazo"));
-		storedValueDilaog .add("Info", new InfoDisplayPanel("You are using ", " Version: 2022.0"));
+		storedValueDilaog .add("Info", new InfoDisplayPanel("You are using ", " Version: 2022.1"));
 		storedValueDilaog .add("Info", new InfoDisplayPanel("", " the code is open source and available on github "));
 		storedValueDilaog .add("Info", new InfoDisplayPanel("User Guide", "https://github.com/grishkam/QuickFigures/blob/master/UserGuide/User%20Guide.md"));
 		storedValueDilaog .add("Info", new InfoDisplayPanel("Publication", "https://doi.org/10.1371/journal.pone.0240280"));
