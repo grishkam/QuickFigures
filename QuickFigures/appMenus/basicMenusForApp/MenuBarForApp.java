@@ -152,6 +152,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new HelpfulLink(AboutQuickFiguresDialog.USER_GUIDE, "User Guide"));
 		installItem(new HelpfulLink("https://www.youtube.com/watch?v=9Crg-FAOHmc&list=PLM5I73cb55tDX4XCjKGK-Jm3-tJsUb7qm", "Video tutorial"));
 		installItem(new HelpfulLink(AboutQuickFiguresDialog.PUBLICATION_DOI, "Read Paper"));
+		installItem(new HelpfulLink("https://github.com/grishkam/QuickFigures/issues", "Report Issue"));
 		
 		installItem(new DebugMenuItems());
 		installItem(new DebugMenuItems(false));
