@@ -406,4 +406,10 @@ public class DataTable extends JTable implements TableReader {
 		return originalFileLocation;
 	}
 
+	@Override
+	public void setWrapTextAt(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

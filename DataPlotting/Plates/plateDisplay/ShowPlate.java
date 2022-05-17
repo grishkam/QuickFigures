@@ -26,6 +26,7 @@ import dataTableDialogs.SmartDataInputDialog;
 import dataTableDialogs.TableReader;
 import fileread.PlotType;
 import logging.IssueLog;
+import plates.BasicCellAddress;
 import plates.Plate;
 import plates.PlateCell;
 
@@ -43,17 +44,21 @@ public class ShowPlate {
 	
 	public void showPlate(TableReader table, Plate plate) {
 		
-		for(int i=0; i<plate.getNRows(); i++) {
+		/**for(int i=0; i<plate.getNRows(); i++) {
 			table.setValueAt(Plate.getCharForIndex(i), i+1, 0);
-		}
+		}*/
 		
 		for(int i=0; i<plate.getNCol(); i++) {
 			table.setValueAt(""+(i+1),0, i+1);
 		}
+		for(int i=0; i<plate.getNRow(); i++) {
+			table.setValueAt(""+BasicCellAddress.getCharForIndex(i), i+1, 0);
+		}
 		
 		for(PlateCell cell: plate.getPlateCells()) try {
-			int[] index = cell.plateAddressToCell();
-			table.setValueAt(cell.getShortLabel(), index[0]+1, index[1]);
+			BasicCellAddress index = cell.getAddress();
+			table.setValueAt(cell.getShortLabel(), index.getRow()+1, index.getCol()+1);
+			table.setWrapTextAt(index.getRow()+1, index.getCol()+1);
 		} catch (Throwable t) {
 			IssueLog.log("not a valid plate address ");
 		}

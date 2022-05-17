@@ -21,8 +21,10 @@
  */
 package dataTableActions;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
@@ -30,10 +32,15 @@ import figureFormat.DirectoryHandler;
 import layout.RetrievableOption;
 import logging.IssueLog;
 import messages.ShowMessage;
+import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
+import plates.BasicCellAddress;
 import plates.Plate;
 import plates.PlateCell;
 import plates.PlateOrientation;
+import standardDialog.DialogItemChangeEvent;
+import standardDialog.StandardDialogListener;
+import standardDialog.graphics.GraphicComponent;
 import storedValueDialog.StoredValueDilaog;
 
 /**
@@ -56,25 +63,27 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public double nRow=8;
 	
 	@RetrievableOption(key = "skip", label="Skip rows/cols for replicates? (set to >0)")
-	public double skip=0;
+	public double skip=3;
 	
 	@RetrievableOption(key = "block", label="Block samples ")
 	public double blockSize=4;
 	
 	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
-	public File templateFile=new File("C:\\Users\\Greg Mazo\\Desktop\\example4.xlsx");
+	public File templateFile=new File("C:\\Users\\Greg Mazo\\Desktop\\example 4.xlsx");
 	
 	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine File with another? (optional)")
 	public File templateFile2=null;
 	
-	@RetrievableOption(key = "roate", label="Distribute samples vertically")
-	public boolean rotatePlate=false;
+	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
+	public boolean rotatePlate=true;
 	
 	@RetrievableOption(key = "h", label="First Line is header (always true)")
 	public boolean headerPlate=true;
 	
 	
-	
+	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());
+
+	private StoredValueDilaog currentDialog;
 	
 	
 	@Override
@@ -87,22 +96,52 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public void processTableAction(TableReader item, DataTableActionContext context) {
 		if(item!=null)
 			templateFile=new File( item.getOriginalSaveAddress());
-		StoredValueDilaog dd = new StoredValueDilaog("Distribute rows to a plate setup",  this);
-		dd.setModal(true);
-		dd.showDialog();
-		if(dd.wasCanceled())
+		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this);
+		GraphicComponent comp = new GraphicComponent();
+		comp.getGraphicLayers().add(diplay);
+		currentDialog.add(comp);
+		updatePlateDisplayAfterDialogChange();
+		currentDialog.addDialogListener(new StandardDialogListener() {
+
+			@Override
+			public void itemChange(DialogItemChangeEvent event) {
+				
+				updatePlateDisplayAfterDialogChange();
+				
+			}
+
+			});
+		currentDialog.setModal(true);
+		currentDialog.showDialog();
+		if(currentDialog.wasCanceled())
 			return;
 		
+		buildPlate(true);
+		
+	}
+
+	/**
+	 * 
+	 */
+	public void updatePlateDisplayAfterDialogChange() {
+		diplay.setPlate( buildPlate(false));
+		diplay.updateDisplay();
+		currentDialog.repaint();
+	}
+	
+	
+	/**
+	 * @return 
+	 * 
+	 */
+	public Plate buildPlate(boolean createFile) {
+		TableReader item;
 		item=new ExcelTableReader(templateFile);
 		
-		PlateOrientation po=PlateOrientation.STANDARD;
-		if(rotatePlate)
-			po=PlateOrientation.FLIP;
-		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)skip, (int)blockSize);
+		Plate plate = createPlate();
 		
 		
 		item= new ExcelTableReader(templateFile);
-		IssueLog.log("working on selected file "+item.getOriginalSaveAddress());
 		
 		if(templateFile2!=null) {
 			ExcelTableReader secondTemplateTable = new ExcelTableReader(templateFile2);
@@ -112,8 +151,19 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				colAddressColumnIndex=item.getColumnCount()+1;
 		}
 		
-		distributeExcelRowsToPlate(plate, item);
-		
+		distributeExcelRowsToPlate(plate, item, createFile);
+		return plate;
+	}
+
+	/**
+	 * @return
+	 */
+	public Plate createPlate() {
+		PlateOrientation po=PlateOrientation.STANDARD;
+		if(rotatePlate)
+			po=PlateOrientation.FLIP;
+		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)blockSize);
+		return plate;
 	}
 
 	/**
@@ -172,40 +222,95 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 
 	/**
 	 * @param plate
-	 * @param item
+	 * @param tableAssignment
+	 * @param createFile 
 	 */
-	private void distributeExcelRowsToPlate(Plate plate, TableReader item) {
+	private void distributeExcelRowsToPlate(Plate plate, TableReader tableAssignment, boolean createFile) {
 		
-		int total=item.getRowCount();
+		int total=tableAssignment.getRowCount();
 		
-		item.setValueAt("plate_location", 0, (int) colAddressColumnIndex);
-		for(int i=1; i<=total; i++) {
-			String index = plate.getIndexAddress(i-1);
-			if(i-1>=plate.getPlateCells().size()) {
-				ShowMessage.showOptionalMessage("Too many samples", true, "You have to many samples for this plate size");
-				break;
-			}
-			PlateCell plateCell = plate.getPlateCells().get(i-1);
-			plateCell.setSpreadSheetRow(i);
-			plateCell.setShortName(item.getValueAt(i, (int) sampleNameIndex));
 		
-			item.setValueAt(index, i, (int) colAddressColumnIndex);
+		tableAssignment.setValueAt("plate_location", 0, (int) colAddressColumnIndex);
+	
+		int rowCount = tableAssignment.getRowCount();
+		double nPlatesNeeded = (rowCount-1)*this.getNReplicates()/plate.getPlateCells().size();
+		ArrayList<Plate> plates = new ArrayList<Plate>();
+		plates.add(plate);
+		for(int i=1; i<nPlatesNeeded; i++) {
+			plates.add(plate.createSimilar());
 		}
-		TableReader sheet2=item.createNewSheet("Sample setup");
-		new  ShowPlate().showPlate(sheet2, plate);
+		if(plates.size()>1) {
+			for(int i=1; i<=plates.size(); i++) {
+				plates.get(i-1).setPlateName("Plate"+i+"");
+			}
+		}
+		int plateNumber = 0;
 		
-		String oSave=item.getOriginalSaveAddress();
-		if(oSave!=null&&oSave.contains(".xlsx"))
-			{
-				oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
-				oSave=findUniqueOutputFileNam(oSave, ".xlsx");
+		int cellIndex=1;
+		for(int i=1; i<=total; i++) {
+			for(int j=0; j<getNReplicates(); j++) {
+			Object val = tableAssignment.getValueAt(i, (int) colAddressColumnIndex);
+			if(val==null)
+				val="";
+			
+			
+			//BasicCellAddress indexAddress = plate.getIndexAddress(i-1);
+			//String plateAddressAt = indexAddress.getAddress();
+			if(cellIndex-1>=plate.getPlateCells().size()) {
+				cellIndex=1;
+				plateNumber++;
+				plate=plates.get(plateNumber);
+				//ShowMessage.showOptionalMessage("Too many samples", true, "You have to many samples for this plate size");
+				//break;
+			}
+			PlateCell plateCell = plate.getPlateCells().get(cellIndex-1);
+			plateCell.setSpreadSheetRow(i);
+			plateCell.setShortName(tableAssignment.getValueAt(i, (int) sampleNameIndex));
+			String plateAddressAt = plateCell.getAddress().getAddress();
+			
+			String newText=val+"";
+			if(newText.length()>0)
+				newText+=", ";
+			if(plate.getPlateName().length()>0)
+				newText+=plate.getPlateName()+"-";
+			newText+=plateAddressAt;
+			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
+			cellIndex++;
+			}
+		}
+		
+		
+		for(int i=0; i<plates.size(); i++) {
+			Plate p=plates.get(i);
+			String tabname = "Sample setup";
+			if(plates.size()>1)
+				tabname+=p.getPlateName();
+			TableReader sheet2=tableAssignment.createNewSheet(tabname);
+			new  ShowPlate().showPlate(sheet2, p);
 			}
 		
-		if(oSave==null)
-			oSave=findOutputFileNam();
-		
-		item.saveTable(true, oSave);
-		
+		if(createFile) {
+			String oSave=tableAssignment.getOriginalSaveAddress();
+			if(oSave!=null&&oSave.contains(".xlsx"))
+				{
+					oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
+					oSave=findUniqueOutputFileNam(oSave, ".xlsx");
+				}
+			
+			if(oSave==null)
+				oSave=findOutputFileNam();
+			
+			tableAssignment.saveTable(true, oSave);
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public double getNReplicates() {
+		if(skip<1)
+			return 1;
+		return skip;
 	}
 
 	

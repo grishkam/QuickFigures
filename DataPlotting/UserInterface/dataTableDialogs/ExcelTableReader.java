@@ -30,6 +30,7 @@ import java.io.OutputStream;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -100,6 +101,19 @@ public class ExcelTableReader implements TableReader {
 
 	@Override
 	public void setValueAt(Object value, int rowNumber, int colNumber) {
+		Cell cell = findCellAt(rowNumber, colNumber);
+		
+		if(value!=null&&value.getClass()==Integer.class)
+			cell.setCellValue((Integer) value);
+		cell.setCellValue(value+"");
+	}
+
+	/**
+	 * @param rowNumber
+	 * @param colNumber
+	 * @return
+	 */
+	public Cell findCellAt(int rowNumber, int colNumber) {
 		Row row = sheet.getRow(rowNumber);
 		
 		if(row==null) {
@@ -112,10 +126,7 @@ public class ExcelTableReader implements TableReader {
 			row.createCell(colNumber);
 			cell = row.getCell(colNumber);
 		}
-		
-		if(value!=null&&value.getClass()==Integer.class)
-			cell.setCellValue((Integer) value);
-		cell.setCellValue(value+"");
+		return cell;
 	}
 
 	@Override
@@ -171,6 +182,15 @@ public class ExcelTableReader implements TableReader {
 		}
 		
 		return count;
+	}
+
+	/***/
+	@Override
+	public void setWrapTextAt(int i, int j) {
+		
+		CellStyle createCellStyle = workbook.createCellStyle();
+		createCellStyle.setWrapText(true);
+		this.findCellAt(i, j).setCellStyle(createCellStyle);
 	}
 
 }

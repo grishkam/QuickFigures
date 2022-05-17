@@ -29,31 +29,42 @@ import logging.IssueLog;
  */
 public class PlateCell {
 
+	/**Address starts out invalid*/
+	private String plateAddress="";
+	BasicCellAddress address= new BasicCellAddress(0,0);
+	
 	private int listAddress;
-	private String plateAddress;
+	
 	private int spreadSheetRow=1;
 	private Object shortName;
 
-	public PlateCell(int i, String plateAddress) {
-		this.listAddress=i;
-		this.plateAddress=plateAddress;
+	public PlateCell(BasicCellAddress address) {
+		this.address=address;
+		plateAddress=address.getAddress();
 	}
 	
+	private PlateCell(int i, String plateAddress) {
+		this.listAddress=i;
+		this.plateAddress=plateAddress;
+		address= plateAddressToCell() ;
+		
+	}
 	
-	public int[] plateAddressToCell() {
+	/**turns the plate address to a row/col*/
+	private BasicCellAddress plateAddressToCell() {
 		int[] output=new int[2];
 		if(plateAddress==null)	{ 
 			IssueLog.log("Plate Address missing");
 			return null;
 			}
 		
-		int row=(int)plateAddress.charAt(0)-Plate.A_Index;
+		int row=(int)plateAddress.charAt(0)-BasicCellAddress.A_Index;
 		int col=Integer.parseInt(plateAddress.substring(1));
 		
 		output[0]=row;
 		output[1]=col;
+		return new BasicCellAddress(row,col);
 		
-		return output;
 	}
 	
 	@Override
@@ -84,6 +95,10 @@ public class PlateCell {
 	public void setShortName(Object valueAt) {
 		this.shortName=valueAt;
 		
+	}
+
+	public BasicCellAddress getAddress() {
+		return address;
 	}
 	
 	

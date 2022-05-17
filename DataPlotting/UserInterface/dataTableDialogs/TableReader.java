@@ -44,4 +44,10 @@ public interface TableReader {
 	 */
 	String getOriginalSaveAddress();
 
+	/**
+	 * @param i
+	 * @param j
+	 */
+	void setWrapTextAt(int i, int j);
+
 }

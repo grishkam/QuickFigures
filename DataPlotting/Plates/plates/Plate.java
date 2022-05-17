@@ -22,8 +22,11 @@
 package plates;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import logging.IssueLog;
+
 
 /**
  
@@ -34,37 +37,62 @@ public class Plate {
 	/**
 	 * 
 	 */
-	public static final int A_Index = (int)'A';
+	
 	String formatName="Generic Plate";
 	int nCol=12;
 	int nRow=8;
-	int blockSize=0;
+	private int blockWidth;
+	private int blockHeight;
 	
-	
+	/**List of all the plate cells*/
 	ArrayList<PlateCell> cellList=new ArrayList<PlateCell>();
+	
+	/**List of all the plate cells*/
+	ArrayList<PlateCell> availableCellList=new ArrayList<PlateCell>();
+	
 	PlateOrientation oritenation=PlateOrientation.STANDARD;
-	private int skipRows;
+	private String plateName="";
+	
+	
 	
 	public Plate() {
-		createPlaceCells();
+		availableCellList=createPlaceCells();
 	}
-	public Plate(int row, int col, PlateOrientation orient, int skipRows, int blockSize) {
+	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight) {
 		this.nCol=col;
 		this.nRow=row;
 		this.oritenation=orient;
-		this.skipRows=skipRows;
-		this.blockSize=blockSize;
-		createPlaceCells();
+		this.blockWidth=blockWidth;
+		this.blockHeight=blockHeight;
+		availableCellList=createPlaceCells();
+		Collections.sort(availableCellList, new PlateCellComparotor());
+		Collections.sort(cellList, new PlateCellComparotor());
 	}
 	
-	/**returns the row/col address of the index. Depending on the */
-	public String getIndexAddress(int index) {
-		if(index*(1+skipRows)>=nRow*nCol)
-			return "no valid address";
+	public Plate createSimilar() {
+		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight);
+	}
+	
+	/**returns true if the cell of the given address is available*/
+	public boolean isCellAvailable(BasicCellAddress b) {
+		for(PlateCell i: availableCellList) {
+			if(i.getAddress().matches(b))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	/**returns the row/col address of the index. Depending on the system used to iterate through the plate
+	public BasicCellAddress getIndexAddress(int index) {
+		if(index*(1+skipRows)>=nRow*nCol) {
+			IssueLog.log( "no valid address");
+			return null;
+			}
 		CellAddress address = new CellAddress(0,0);
 		
 		for(int i=1; i<=index; i++) address.moveToNextCell();
-		return address.getAddress();
+		return address; */
 		/**if(oritenation==PlateOrientation.FLIP) {
 			int rowIndex = index%nRow;
 			int colIndex = index/nRow;
@@ -86,22 +114,24 @@ public class Plate {
 			rowIndex*=1+this.skipRows;//if there are gap rows meant as spacers or replicates
 		
 		char letter=(char)(A_Index+rowIndex);
-		return ""+letter+(colIndex+1);*/
-	}
+		return ""+letter+(colIndex+1);
+	}*/
 	
-	public static char getCharForIndex(int rowIndex) {
-		return (char)(A_Index+rowIndex);
-	}
 	
-	public void createPlaceCells() {
-		ArrayList<String> names=new ArrayList<String>();
-		for(int i=0; i<nRow*nCol; i++) {
-			String a1 = this.getIndexAddress(i);
-			PlateCell cell = new PlateCell(i, a1);
-			cellList.add(cell);
-			names.add(a1);
+	/**creates a list of plate cells
+	 * @return */
+	public ArrayList<PlateCell> createPlaceCells() {
+		ArrayList<PlateCell> names=new ArrayList<PlateCell>();
 		
+		for(int i=0; i<nRow; i++) {
+			for(int j=0; j<nCol; j++) {
+			BasicCellAddress a1 = new BasicCellAddress(i,j);
+			PlateCell cell = new PlateCell(a1);
+			cellList.add(cell);
+			names.add(cell);
+			}
 		}
+		return names;
 	}
 	
 	/**returns a list of plate cells*/
@@ -111,7 +141,7 @@ public class Plate {
 	/**
 	 * @return the number of rows
 	 */
-	public int getNRows() {
+	public int getNRow() {
 		return nRow;
 	}
 	
@@ -124,29 +154,28 @@ public class Plate {
 	
 	
 	/**A cell address*/
-	public class CellAddress {
+	public class CellAddress extends BasicCellAddress {
 		
-		private int row;
-		private int col;
-
+		
+		
+		/**
+		 * @param row
+		 * @param col
+		 */
 		public CellAddress(int row, int col) {
-			this.row=row;
-			this.col=col;
+			super(row, col);
+			// TODO Auto-generated constructor stub
 		}
+
 		
-		/**returns the address in A1 format*/
-		public String getAddress() {
-			char letter=(char)(A_Index+row);
-			return ""+letter+(col+1);
-		}
 		
-		/**advances to the next cell*/
+		/**advances to the next cell
 		public void moveToNextCell() {
-			int nextRow=row+oritenation.yFlow;
-			int nextCol=col+oritenation.xFlow;
-			
+			int nextRow=getRow()+oritenation.yFlow;
+			int nextCol=getCol()+oritenation.xFlow;
+			*/
 			/**if moving accross a row and reached the end of a block*/
-			boolean endOfColLock = oritenation.xFlow>0&&blockSize!=0&&col>0&&(col+1)%blockSize==0;
+			/**boolean endOfColLock = oritenation.xFlow>0&&blockSize!=0&&getCol()>0&&(getCol()+1)%blockSize==0;
 			if (endOfColLock) {
 				
 				nextCol-=blockSize;
@@ -181,9 +210,112 @@ public class Plate {
 			col=nextCol;
 			
 		}
-		
+		*/
+	}
+
+
+	/**
+	 * @param address
+	 * @return
+	 */
+	public int getSection(BasicCellAddress address) {
+		int blockWidth=this.blockWidth;
+		int blockHeight=this.blockHeight;
+		if(blockWidth==0)
+			blockWidth= getUAxisWidth();
+		if(this.blockHeight==0)
+			blockHeight=getVAxisWidth();
+		int u = getUAxisLocation(address)/blockWidth;
+		int v = getVAxisLocation(address)/blockHeight;
+				
+		int section = v*(this.getUAxisWidth()/blockWidth)+u;
+		//IssueLog.log("Section "+section+" for "+address.getRow()+" , "+address.getCol());
+		return section;
+	}
+	/**
+	 * @return
+	 */
+	private int getUAxisLocation(BasicCellAddress address) {
+		if(horizontalOrientation())
+			return address.getRow();
+		return address.getCol();
+	}
+	private int getVAxisLocation(BasicCellAddress address) {
+		int possibleV = address.getRow();
+		if(horizontalOrientation())
+			possibleV = address.getCol();
+		if(invertV())
+			possibleV =getVAxisWidth()-possibleV-1;
+		return possibleV;
 	}
 	
+	
+	/**returns true if the v axis is flipped
+	 * @return
+	 */
+	private boolean invertV() {
+		if(horizontalOrientation())
+			return false;
+		return true;
+	}
+	/**
+	 * @return
+	 */
+	public boolean horizontalOrientation() {
+		return PlateOrientation.STANDARD==oritenation;
+	}
+	private int getUAxisWidth() {
+		if(horizontalOrientation())
+			this.getNRow();
+		return this.getNCol();
+		};
+	private int getVAxisWidth() {
+		if(horizontalOrientation())
+			this.getNCol();
+		return this.getNRow();
+		};
 
 
+	class PlateCellComparotor implements Comparator<PlateCell> {
+
+		@Override
+		public int compare(PlateCell o1, PlateCell o2) {
+			int s1 = getSection(o1.address);
+			int s2 = getSection(o2.address);
+			if(s1>s2)
+				return 1;
+			if(s2>s1)
+				return -1;
+			
+			/***/
+			int v1 = getVAxisLocation(o1.address);
+			int v2 = getVAxisLocation(o2.address);
+			if(v1>v2)
+				return 1;
+			if(v2>v1)
+				return -1;
+			
+			
+			/***/
+			int u1 = getUAxisLocation(o1.address);
+			int u2 = getUAxisLocation(o2.address);
+			if(u1>u2)
+				return 1;
+			if(u2>u1)
+				return -1;
+			
+			
+			
+			return 0;
+		}}
+
+
+	/**
+	 * @param string
+	 */
+	public void setPlateName(String string) {
+		plateName=string;
+		
+	}
+	public String getPlateName() {return plateName;}
 }
