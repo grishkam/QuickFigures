@@ -187,10 +187,11 @@ public class ExcelTableReader implements TableReader {
 	/***/
 	@Override
 	public void setWrapTextAt(int i, int j) {
-		
+		/**
 		CellStyle createCellStyle = workbook.createCellStyle();
 		createCellStyle.setWrapText(true);
 		this.findCellAt(i, j).setCellStyle(createCellStyle);
+		*/
 	}
 
 }

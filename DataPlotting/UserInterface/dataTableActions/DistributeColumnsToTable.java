@@ -22,6 +22,7 @@
 package dataTableActions;
 
 import java.awt.Desktop;
+import java.awt.GridBagConstraints;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -98,8 +99,13 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			templateFile=new File( item.getOriginalSaveAddress());
 		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this);
 		GraphicComponent comp = new GraphicComponent();
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.gridx=5;
+		gc.gridy=1;
+		comp.setPrefferedSize(600, 400);
+		comp.setMagnification(0.8);
 		comp.getGraphicLayers().add(diplay);
-		currentDialog.add(comp);
+		currentDialog.add(comp, gc);
 		updatePlateDisplayAfterDialogChange();
 		currentDialog.addDialogListener(new StandardDialogListener() {
 
@@ -124,7 +130,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * 
 	 */
 	public void updatePlateDisplayAfterDialogChange() {
-		diplay.setPlate( buildPlate(false));
+		try {
+			diplay.setPlate(buildPlate(false));
+		} catch (Exception e) {
+			IssueLog.log("failed to build plate. Make sure a valid excel file is selected");
+		}
 		diplay.updateDisplay();
 		currentDialog.repaint();
 	}
@@ -266,6 +276,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			PlateCell plateCell = plate.getPlateCells().get(cellIndex-1);
 			plateCell.setSpreadSheetRow(i);
 			plateCell.setShortName(tableAssignment.getValueAt(i, (int) sampleNameIndex));
+			plateCell.setSpreadSheetRow(i);
 			String plateAddressAt = plateCell.getAddress().getAddress();
 			
 			String newText=val+"";

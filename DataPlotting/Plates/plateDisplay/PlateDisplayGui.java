@@ -69,7 +69,9 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		empty() ;
 		int cellWidth = width/plate.getNCol();
 		int cellHeeght = height/plate.getNRow();
-		BasicLayout layout = new BasicLayout(plate.getNCol(), plate.getNRow(), cellWidth, cellHeeght, 2,2, true);
+		BasicLayout layout = new BasicLayout(plate.getNCol(), plate.getNRow(), cellWidth, cellHeeght, 4,4, true);
+		layout.setLabelSpaces(50, 0, 50, 0);
+		layout.resetPtsPanels();
 		for(int n=0; n<layout.nPanels(); n++) try {
 			PlateCell plateCell = plate.getPlateCells().get(n);
 			Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
@@ -79,7 +81,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(), color1);
 			this.add(r);
 			//IssueLog.log("Drawing plate cell "+plateCell.getAddress().getAddress());
-			TextGraphic t=new TextGraphic(plateCell.getShortLabel());
+			TextGraphic t=new TextGraphic(plateCell.getSpreadSheetRow()+"");
 			t.setFontSize((int) (panel.getHeight()/2));
 			t.setLocation(RectangleEdges.getLocation(RectangleEdges.LOWER_LEFT, r.getBounds()));
 			
