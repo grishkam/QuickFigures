@@ -81,7 +81,10 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(), color1);
 			this.add(r);
 			//IssueLog.log("Drawing plate cell "+plateCell.getAddress().getAddress());
-			TextGraphic t=new TextGraphic(plateCell.getSpreadSheetRow()+"");
+			Integer spreadSheetRow = plateCell.getSpreadSheetRow();
+			if(spreadSheetRow ==null)
+				continue;
+			TextGraphic t=new TextGraphic(spreadSheetRow+"");
 			t.setFontSize((int) (panel.getHeight()/2));
 			t.setLocation(RectangleEdges.getLocation(RectangleEdges.LOWER_LEFT, r.getBounds()));
 			

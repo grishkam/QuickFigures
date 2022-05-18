@@ -84,7 +84,10 @@ public class ExcelTableReader implements TableReader {
 	
 	@Override
 	public Object getValueAt(int row, int col) {
-		Cell cell = sheet.getRow(row).getCell(col);
+		Row row2 = sheet.getRow(row);
+		if(row2==null)
+			return null;
+		Cell cell = row2.getCell(col);
 		if(cell!=null) return ReadExcelData.getObjectInCell(cell);
 		return cell;
 	}
@@ -187,11 +190,17 @@ public class ExcelTableReader implements TableReader {
 	/***/
 	@Override
 	public void setWrapTextAt(int i, int j) {
-		/**
-		CellStyle createCellStyle = workbook.createCellStyle();
+		Cell cellAt = this.findCellAt(i, j);
+		CellStyle createCellStyle=null;
+		if(cellAt.getCellStyle()!=null)
+			createCellStyle =cellAt.getCellStyle();
+		else
+			createCellStyle = workbook.createCellStyle();
+		
 		createCellStyle.setWrapText(true);
-		this.findCellAt(i, j).setCellStyle(createCellStyle);
-		*/
+		
+		cellAt.setCellStyle(createCellStyle);
+		
 	}
 
 }

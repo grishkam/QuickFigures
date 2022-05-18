@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import dataTableDialogs.DataTable;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
@@ -70,7 +71,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public double blockSize=4;
 	
 	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
-	public File templateFile=new File("C:\\Users\\Greg Mazo\\Desktop\\example 4.xlsx");
+	public File templateFile=null;
 	
 	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine File with another? (optional)")
 	public File templateFile2=null;
@@ -134,6 +135,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			diplay.setPlate(buildPlate(false));
 		} catch (Exception e) {
 			IssueLog.log("failed to build plate. Make sure a valid excel file is selected");
+			IssueLog.logT(e);
 		}
 		diplay.updateDisplay();
 		currentDialog.repaint();
@@ -145,13 +147,15 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * 
 	 */
 	public Plate buildPlate(boolean createFile) {
-		TableReader item;
-		item=new ExcelTableReader(templateFile);
-		
 		Plate plate = createPlate();
+		TableReader item=null;
+		if(templateFile!=null&&templateFile.exists())
+			item=new ExcelTableReader(templateFile);
+		else try{item=createExampleSheetForPlate(plate);} catch (Throwable t) {
+			IssueLog.log("failed to create table");
+		}
 		
 		
-		item= new ExcelTableReader(templateFile);
 		
 		if(templateFile2!=null) {
 			ExcelTableReader secondTemplateTable = new ExcelTableReader(templateFile2);
@@ -163,6 +167,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		
 		distributeExcelRowsToPlate(plate, item, createFile);
 		return plate;
+	}
+
+	/**
+	 * @param plate
+	 * @return
+	 * @throws IOException 
+	 */
+	private TableReader createExampleSheetForPlate(Plate plate) throws IOException {
+		ExcelTableReader table = new ExcelTableReader();
+		table.setValueAt("Numbers", 0, (int)sampleNameIndex);
+		for(int i=1; i<plate.getNRow()+1; i++) {
+			table.setValueAt(i+"", i, (int)sampleNameIndex);
+		}
+		return table;
 	}
 
 	/**
@@ -230,7 +248,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		
 	}
 
-	/**
+	/**iterates through the rows of the excel sheet and creates a column for the plate well assignments 
 	 * @param plate
 	 * @param tableAssignment
 	 * @param createFile 
@@ -257,8 +275,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		int plateNumber = 0;
 		
 		int cellIndex=1;
-		for(int i=1; i<=total; i++) {
+		for(int i=1; i<=total; i++)try {
 			for(int j=0; j<getNReplicates(); j++) {
+			
 			Object val = tableAssignment.getValueAt(i, (int) colAddressColumnIndex);
 			if(val==null)
 				val="";
@@ -288,6 +307,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
 			cellIndex++;
 			}
+		} catch (Throwable t) {
+			IssueLog.log("plate location distributor failed at "+i);
+			IssueLog.logT(t);
 		}
 		
 		

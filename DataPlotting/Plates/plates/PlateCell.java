@@ -35,7 +35,7 @@ public class PlateCell {
 	
 	private int listAddress;
 	
-	private int spreadSheetRow=1;
+	private Integer spreadSheetRow=null;
 	private Object shortName;
 
 	public PlateCell(BasicCellAddress address) {
@@ -79,7 +79,7 @@ public class PlateCell {
 		}
 
 
-	public int getSpreadSheetRow() {
+	public Integer getSpreadSheetRow() {
 		return spreadSheetRow;
 	}
 
