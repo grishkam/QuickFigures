@@ -20,6 +20,9 @@
  */
 package dataTableDialogs;
 
+import java.awt.Color;
+import java.util.ArrayList;
+
 /**an interface for any sort of target that takes the form of a table*/
 public interface TableReader {
 
@@ -49,5 +52,15 @@ public interface TableReader {
 	 * @param j
 	 */
 	void setWrapTextAt(int i, int j);
+
+	/**
+	 * @param color
+	 */
+	void setCellColor(Color color, int i, int j);
+
+	/**
+	 * @param c
+	 */
+	void setupColorMap(ArrayList<Color> c);
 
 }

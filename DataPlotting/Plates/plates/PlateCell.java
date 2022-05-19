@@ -21,6 +21,8 @@
  */
 package plates;
 
+import java.awt.Color;
+
 import logging.IssueLog;
 
 /**
@@ -37,6 +39,7 @@ public class PlateCell {
 	
 	private Integer spreadSheetRow=null;
 	private Object shortName;
+	private Color color=Color.lightGray;
 
 	public PlateCell(BasicCellAddress address) {
 		this.address=address;
@@ -99,6 +102,18 @@ public class PlateCell {
 
 	public BasicCellAddress getAddress() {
 		return address;
+	}
+
+	/**
+	 * 
+	 */
+	public void setColor(Color c) {
+		this.color=c;
+		
+	}
+
+	public Color getColor() {
+		return color;
 	}
 	
 	

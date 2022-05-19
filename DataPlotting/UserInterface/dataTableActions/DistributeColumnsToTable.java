@@ -23,9 +23,13 @@ package dataTableActions;
 
 import java.awt.Desktop;
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
 
 import dataTableDialogs.DataTable;
 import dataTableDialogs.ExcelTableReader;
@@ -34,6 +38,7 @@ import figureFormat.DirectoryHandler;
 import layout.RetrievableOption;
 import logging.IssueLog;
 import messages.ShowMessage;
+import objectDialogs.CroppingDialog.AllOKListener;
 import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
 import plates.BasicCellAddress;
@@ -58,17 +63,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	//@RetrievableOption(key = "A1", label="Will paste plate locations into column #")
 	public double colAddressColumnIndex=3;
 	
-	@RetrievableOption(key = "col", label="plate has this many columns")
+	@RetrievableOption(key = "col", label="# Columns")
 	public double nCol=12;
 	
-	@RetrievableOption(key = "row", label="plate has this many rows")
+	@RetrievableOption(key = "row", label="# Rows")
 	public double nRow=8;
 	
-	@RetrievableOption(key = "skip", label="Skip rows/cols for replicates? (set to >0)")
+	@RetrievableOption(key = "skip", label="How many replicates?")
 	public double skip=3;
 	
-	@RetrievableOption(key = "block", label="Block samples ")
+	@RetrievableOption(key = "block", label="Group samples ")
 	public double blockSize=4;
+	
+	@RetrievableOption(key = "flip group", label="Flip group orientation")
+	public boolean flipGroup=false;
 	
 	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
 	public File templateFile=null;
@@ -79,8 +87,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
 	public boolean rotatePlate=true;
 	
-	@RetrievableOption(key = "h", label="First Line is header (always true)")
-	public boolean headerPlate=true;
+	//@RetrievableOption(key = "h", label="First Line is header (always true)")
+	//public boolean headerPlate=true;
 	
 	
 	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());
@@ -104,7 +112,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		gc.gridx=5;
 		gc.gridy=1;
 		comp.setPrefferedSize(600, 400);
-		comp.setMagnification(0.8);
+		comp.setMagnification(0.75);
 		comp.getGraphicLayers().add(diplay);
 		currentDialog.add(comp, gc);
 		updatePlateDisplayAfterDialogChange();
@@ -118,12 +126,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			}
 
 			});
+		JButton spreadsheet=new JButton("Create Spreadsheet"); {spreadsheet.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buildPlate(true);
+				
+			}});}
+		currentDialog.addButton(spreadsheet);
 		currentDialog.setModal(true);
 		currentDialog.showDialog();
 		if(currentDialog.wasCanceled())
 			return;
 		
-		buildPlate(true);
+		
 		
 	}
 
@@ -148,17 +164,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 */
 	public Plate buildPlate(boolean createFile) {
 		Plate plate = createPlate();
-		TableReader item=null;
-		if(templateFile!=null&&templateFile.exists())
-			item=new ExcelTableReader(templateFile);
-		else try{item=createExampleSheetForPlate(plate);} catch (Throwable t) {
+		
+		
+		TableReader item=openExcelFile(templateFile);
+		if(item==null)
+				try
+			{item=createExampleSheetForPlate(plate);}
+				catch (Throwable t) {
 			IssueLog.log("failed to create table");
 		}
 		
 		
 		
 		if(templateFile2!=null) {
-			ExcelTableReader secondTemplateTable = new ExcelTableReader(templateFile2);
+			ExcelTableReader secondTemplateTable = openExcelFile(templateFile2);
 			item=combinePlates(item, secondTemplateTable);
 			sampleNameIndex=0;
 			if(item.getColumnCount()>colAddressColumnIndex)
@@ -170,6 +189,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	}
 
 	/**
+	 * @return
+	 */
+	public ExcelTableReader openExcelFile(File templateFile) {
+		if(templateFile==null)
+			return null;
+		if(!templateFile.exists())
+			return null;
+		if(templateFile.getAbsolutePath().endsWith(".xlsx"))
+			return new ExcelTableReader(templateFile);
+		IssueLog.log("The file is not an excel file", templateFile.getAbsolutePath(), "");
+		return null;
+	}
+
+	/**
 	 * @param plate
 	 * @return
 	 * @throws IOException 
@@ -177,7 +210,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	private TableReader createExampleSheetForPlate(Plate plate) throws IOException {
 		ExcelTableReader table = new ExcelTableReader();
 		table.setValueAt("Numbers", 0, (int)sampleNameIndex);
-		for(int i=1; i<plate.getNRow()+1; i++) {
+		int nToFill = (int) (plate.getNRow()*plate.getNCol()/this.getNReplicates());
+		for(int i=1; i<nToFill+1; i++) {
 			table.setValueAt(i+"", i, (int)sampleNameIndex);
 		}
 		return table;
@@ -190,7 +224,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		PlateOrientation po=PlateOrientation.STANDARD;
 		if(rotatePlate)
 			po=PlateOrientation.FLIP;
-		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)blockSize);
+		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)blockSize, this.flipGroup);
 		return plate;
 	}
 
@@ -288,6 +322,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			if(cellIndex-1>=plate.getPlateCells().size()) {
 				cellIndex=1;
 				plateNumber++;
+				if(plates.size()>plateNumber)
+					break;
 				plate=plates.get(plateNumber);
 				//ShowMessage.showOptionalMessage("Too many samples", true, "You have to many samples for this plate size");
 				//break;
@@ -312,7 +348,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			IssueLog.logT(t);
 		}
 		
-		
+		/**Creates a sample setup sheet*/
 		for(int i=0; i<plates.size(); i++) {
 			Plate p=plates.get(i);
 			String tabname = "Sample setup";
@@ -324,9 +360,15 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		
 		if(createFile) {
 			String oSave=tableAssignment.getOriginalSaveAddress();
+			
 			if(oSave!=null&&oSave.contains(".xlsx"))
 				{
+				File file = new File(oSave);
+				String outputFolder = file.getParentFile().getAbsolutePath()+"/plate_setup/";
+				if(!new File(outputFolder).exists())
+					new File(outputFolder).mkdirs();
 					oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
+					oSave= outputFolder+new File(oSave).getName();
 					oSave=findUniqueOutputFileNam(oSave, ".xlsx");
 				}
 			
@@ -381,6 +423,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		return f.getAbsolutePath();
 	}
 
+	
+	
 	public static void main(String[] args) {
 		IssueLog.sytemprint=true;
 		new DistributeColumnsToTable().performActionDisplayedImageWrapper(null);

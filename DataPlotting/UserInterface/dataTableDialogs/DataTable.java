@@ -20,6 +20,7 @@
  */
 package dataTableDialogs;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -33,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 
@@ -408,6 +410,18 @@ public class DataTable extends JTable implements TableReader {
 
 	@Override
 	public void setWrapTextAt(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCellColor(Color color, int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setupColorMap(ArrayList<Color> c) {
 		// TODO Auto-generated method stub
 		
 	}

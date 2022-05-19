@@ -20,6 +20,7 @@
  */
 package dataTableDialogs;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,14 +28,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.CustomIndexedColorMap;
+import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import fileread.ReadExcelData;
 import logging.IssueLog;
@@ -47,6 +59,8 @@ public class ExcelTableReader implements TableReader {
 	private  org.apache.poi.ss.usermodel.Sheet sheet;
 	private Workbook workbook;
 	private String fileLocation;
+	private HashMap<Color, XSSFCellStyle> cellStyles;
+	private ArrayList<XSSFCellStyle> used=new ArrayList<XSSFCellStyle>();
 
 	public ExcelTableReader() throws IOException {
 		workbook= WorkbookFactory.create(true);
@@ -191,11 +205,7 @@ public class ExcelTableReader implements TableReader {
 	@Override
 	public void setWrapTextAt(int i, int j) {
 		Cell cellAt = this.findCellAt(i, j);
-		CellStyle createCellStyle=null;
-		if(cellAt.getCellStyle()!=null)
-			createCellStyle =cellAt.getCellStyle();
-		else
-			createCellStyle = workbook.createCellStyle();
+		CellStyle createCellStyle = findCellStyle(cellAt);
 		
 		createCellStyle.setWrapText(true);
 		
@@ -203,4 +213,103 @@ public class ExcelTableReader implements TableReader {
 		
 	}
 
+	/**
+	 * @param cellAt
+	 * @return
+	 */
+	public CellStyle findCellStyle(Cell cellAt) {
+		CellStyle createCellStyle=null;
+		if(cellAt.getCellStyle()!=null)
+			createCellStyle =cellAt.getCellStyle();
+		else
+			createCellStyle = workbook.createCellStyle();
+		return createCellStyle;
+	}
+
+	@Override
+	public void setCellColor(Color color, int i, int j) {
+		Cell cellAt = this.findCellAt(i, j);
+		boolean setup =false;
+		if(cellStyles!=null) {
+			XSSFCellStyle xssfCellStyle = cellStyles.get(color);
+			
+			cellAt.setCellStyle(xssfCellStyle);
+		}/**
+		for(XSSFCellStyle style: cellStyles) {
+			byte[] values = style.getFillForegroundColorColor().getRGB();
+			byte[]  rgb = new byte[3];
+			  rgb[0] = (byte) color.getRed(); // red
+			  rgb[1] = (byte) color.getBlue(); // green
+			  rgb[2] = (byte) color.getGreen(); // blue
+			  
+			if (color.getRed()-256==values[0]&& color.getBlue()-256==values[2]&& color.getGreen()-256==values[1]) {
+				cellAt.setCellStyle(style);
+				setup = true;
+				used.add(style);
+			}
+			else
+				if (color.getRed()+256==values[0]&& color.getBlue()+256==values[2]&& color.getGreen()+256==values[1]) {
+					cellAt.setCellStyle(style);
+					setup = true;
+					used.add(style);
+				}
+			XSSFColor c2 = this.convertColor(color);
+			if(c2.getRGB().equals(values))
+				cellAt.setCellStyle(style);
+			if(values.equals(rgb))
+				cellAt.setCellStyle(style);
+			
+		}
+		if(!setup) {
+			for(XSSFCellStyle style: cellStyles) {
+				byte[] rgb = style.getFillForegroundColorColor().getRGB();
+				if(!used.contains(style))
+				IssueLog.log("Checking  "+color+" in "+ style+"versus "+rgb[0]+", "+rgb[1]+","+rgb[2]);
+			}
+		}
+		*/
+	}
+
+	public void setupColorMap(ArrayList<Color> c) {
+		 cellStyles = new HashMap<Color, XSSFCellStyle>();
+		// c.clear();
+		// c.add(new Color(128,255,159));
+		 for(Color color1: c) {
+			  XSSFCellStyle cellStyle;
+			  XSSFColor color;
+	
+			  //Your custom color #800080
+			  //create cell style on workbook level
+			  cellStyle = (XSSFCellStyle) workbook.createCellStyle();
+			  cellStyle.setWrapText(true);
+			  //set pattern fill settings
+			  cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			  
+			  //create the RGB byte array
+			  color = convertColor(color1);
+			 
+			  //set fill color to cell style
+			  cellStyle.setFillForegroundColor(color);
+	
+			  cellStyles.put(color1,cellStyle);
+		  }
+		
+	}
+
+	/**
+	 * @param color1
+	 * @return
+	 */
+	public XSSFColor convertColor(Color color1) {
+		byte[] rgb;
+		XSSFColor color;
+		rgb = new byte[3];
+		  rgb[0] = (byte) color1.getRed(); // red
+		  rgb[2] = (byte) color1.getBlue(); // blue
+		  rgb[1] = (byte) color1.getGreen(); // green
+		  //create XSSFColor
+		  color = new XSSFColor(rgb, new DefaultIndexedColorMap());
+		return color;
+	}
+	
 }

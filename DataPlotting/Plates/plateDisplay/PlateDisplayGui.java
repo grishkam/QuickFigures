@@ -76,9 +76,10 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			PlateCell plateCell = plate.getPlateCells().get(n);
 			Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
 			//Rectangle2D panel = layout.getPanel(n+1);
-			int section = plate.getSection(plateCell.getAddress());
-			Color color1 = moreColors.get(section);
-			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(), color1);
+			//int section = plate.getSection(plateCell.getAddress());
+			//Color color1 = moreColors.get(section);
+			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plateCell.getColor());
+			//r.setFillColor();
 			this.add(r);
 			//IssueLog.log("Drawing plate cell "+plateCell.getAddress().getAddress());
 			Integer spreadSheetRow = plateCell.getSpreadSheetRow();

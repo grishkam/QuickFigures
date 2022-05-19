@@ -21,9 +21,11 @@
  */
 package plates;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import logging.IssueLog;
 
@@ -53,24 +55,31 @@ public class Plate {
 	PlateOrientation oritenation=PlateOrientation.STANDARD;
 	private String plateName="";
 	
+	/**determines whether the group are ordered up/down or left/right*/
+	private boolean flipGroups=false;
+	private ArrayList<Integer> usedSections=new ArrayList<Integer>();
+	public HashMap<Integer, Color> hues;
+	
 	
 	
 	public Plate() {
 		availableCellList=createPlaceCells();
 	}
-	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight) {
+	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight, boolean flipGroups) {
 		this.nCol=col;
 		this.nRow=row;
 		this.oritenation=orient;
 		this.blockWidth=blockWidth;
 		this.blockHeight=blockHeight;
+		this.flipGroups=flipGroups;
 		availableCellList=createPlaceCells();
 		Collections.sort(availableCellList, new PlateCellComparotor());
 		Collections.sort(cellList, new PlateCellComparotor());
+		assignHuesToSections();
 	}
 	
 	public Plate createSimilar() {
-		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight);
+		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight, flipGroups);
 	}
 	
 	/**returns true if the cell of the given address is available*/
@@ -229,7 +238,10 @@ public class Plate {
 		int v = getVAxisLocation(address)/blockHeight;
 				
 		int section = v*(this.getUAxisWidth()/blockWidth)+u;
-		//IssueLog.log("Section "+section+" for "+address.getRow()+" , "+address.getCol());
+		if(!flipGroups)
+			section = u*(getUAxisWidth()/blockHeight)+v;
+		if(!usedSections.contains(section))
+			usedSections.add(section);
 		return section;
 	}
 	/**
@@ -318,4 +330,23 @@ public class Plate {
 		
 	}
 	public String getPlateName() {return plateName;}
+	
+	public void assignHuesToSections() {
+		HashMap<Integer, Color> hudes=new HashMap<Integer, Color>();
+		double size = usedSections.size();
+		
+		for(int i=0; i<this.cellList.size();i++) {
+			PlateCell cell= this.cellList.get(i);
+			int section = this.getSection(cell.getAddress());
+			int repeat = (i/(blockWidth));
+			 
+			float theHue = (float)(1.0*(section/size))*0.9f;
+			float theBrightness = (float) (0.2f*(repeat%blockHeight)+0.2);
+			Color c = Color.getHSBColor(theHue, theBrightness, 1f);
+			hudes.put(i, c);
+			//Color h = hudes.get(this.getSection(cell.getAddress()));
+			cell.setColor(c);
+		}
+		this.hues=hudes;
+	}
 }

@@ -182,8 +182,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	
-	
+	/**Adds a button for the button panel*/
 	public void addButton(JButton b) {
+		if(b!=null)
 		additionButtons.add(b);
 	}
 	
