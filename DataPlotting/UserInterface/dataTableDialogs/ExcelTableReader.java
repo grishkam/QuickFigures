@@ -59,7 +59,7 @@ public class ExcelTableReader implements TableReader {
 	private  org.apache.poi.ss.usermodel.Sheet sheet;
 	private Workbook workbook;
 	private String fileLocation;
-	private HashMap<Color, XSSFCellStyle> cellStyles;
+	private HashMap<String, XSSFCellStyle> cellStyles;
 	private ArrayList<XSSFCellStyle> used=new ArrayList<XSSFCellStyle>();
 
 	public ExcelTableReader() throws IOException {
@@ -122,7 +122,12 @@ public class ExcelTableReader implements TableReader {
 		
 		if(value!=null&&value.getClass()==Integer.class)
 			cell.setCellValue((Integer) value);
-		cell.setCellValue(value+"");
+		else
+			cell.setCellValue(value+"");
+		
+		/**Sets a formula*/
+		//if(value.getClass()==String.class&& (""+value).startsWith("="))
+			//cell.setCellFormula((value+"").replace("=", ""));
 	}
 
 	/**
@@ -229,49 +234,17 @@ public class ExcelTableReader implements TableReader {
 	@Override
 	public void setCellColor(Color color, int i, int j) {
 		Cell cellAt = this.findCellAt(i, j);
-		boolean setup =false;
+		//boolean setup =false;
 		if(cellStyles!=null) {
-			XSSFCellStyle xssfCellStyle = cellStyles.get(color);
+			XSSFCellStyle xssfCellStyle = cellStyles.get(color.toString());
 			
 			cellAt.setCellStyle(xssfCellStyle);
-		}/**
-		for(XSSFCellStyle style: cellStyles) {
-			byte[] values = style.getFillForegroundColorColor().getRGB();
-			byte[]  rgb = new byte[3];
-			  rgb[0] = (byte) color.getRed(); // red
-			  rgb[1] = (byte) color.getBlue(); // green
-			  rgb[2] = (byte) color.getGreen(); // blue
-			  
-			if (color.getRed()-256==values[0]&& color.getBlue()-256==values[2]&& color.getGreen()-256==values[1]) {
-				cellAt.setCellStyle(style);
-				setup = true;
-				used.add(style);
-			}
-			else
-				if (color.getRed()+256==values[0]&& color.getBlue()+256==values[2]&& color.getGreen()+256==values[1]) {
-					cellAt.setCellStyle(style);
-					setup = true;
-					used.add(style);
-				}
-			XSSFColor c2 = this.convertColor(color);
-			if(c2.getRGB().equals(values))
-				cellAt.setCellStyle(style);
-			if(values.equals(rgb))
-				cellAt.setCellStyle(style);
-			
 		}
-		if(!setup) {
-			for(XSSFCellStyle style: cellStyles) {
-				byte[] rgb = style.getFillForegroundColorColor().getRGB();
-				if(!used.contains(style))
-				IssueLog.log("Checking  "+color+" in "+ style+"versus "+rgb[0]+", "+rgb[1]+","+rgb[2]);
-			}
-		}
-		*/
 	}
 
+	/**Craeates cell styles for each color listed*/
 	public void setupColorMap(ArrayList<Color> c) {
-		 cellStyles = new HashMap<Color, XSSFCellStyle>();
+		 cellStyles = new HashMap<String, XSSFCellStyle>();
 		// c.clear();
 		// c.add(new Color(128,255,159));
 		 for(Color color1: c) {
@@ -291,7 +264,7 @@ public class ExcelTableReader implements TableReader {
 			  //set fill color to cell style
 			  cellStyle.setFillForegroundColor(color);
 	
-			  cellStyles.put(color1,cellStyle);
+			  cellStyles.put(color1.toString(),cellStyle);
 		  }
 		
 	}
@@ -310,6 +283,12 @@ public class ExcelTableReader implements TableReader {
 		  //create XSSFColor
 		  color = new XSSFColor(rgb, new DefaultIndexedColorMap());
 		return color;
+	}
+
+	@Override
+	public Object getSheetName(int i) {
+		return workbook.getSheetAt(0).getSheetName();
+		
 	}
 	
 }

@@ -63,4 +63,10 @@ public interface TableReader {
 	 */
 	void setupColorMap(ArrayList<Color> c);
 
+	/**
+	 * @param i
+	 * @return
+	 */
+	Object getSheetName(int i);
+
 }

@@ -272,7 +272,7 @@ public class AddLabelHandle extends MoveRowHandle {
 			else 
 				current.defaultText=dText[dText.length-1];
 			
-			if(!current.isHidden()) {
+			if(!current.isHidden()&&canvasMouseEventWrapper!=null) {
 				current.performSingleLabelAddition(canvasMouseEventWrapper, cEdit);
 				count++;
 			}

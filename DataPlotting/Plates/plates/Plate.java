@@ -58,7 +58,8 @@ public class Plate {
 	/**determines whether the group are ordered up/down or left/right*/
 	private boolean flipGroups=false;
 	private ArrayList<Integer> usedSections=new ArrayList<Integer>();
-	public HashMap<Integer, Color> hues;
+	public HashMap<Integer, Color> hues;//a map with the hues for each section
+	private boolean hueMismash=true;
 	
 	
 	
@@ -228,12 +229,8 @@ public class Plate {
 	 * @return
 	 */
 	public int getSection(BasicCellAddress address) {
-		int blockWidth=this.blockWidth;
-		int blockHeight=this.blockHeight;
-		if(blockWidth==0)
-			blockWidth= getUAxisWidth();
-		if(this.blockHeight==0)
-			blockHeight=getVAxisWidth();
+		int blockWidth = getBlockWidth();
+		int blockHeight = getBlockHeight();
 		int u = getUAxisLocation(address)/blockWidth;
 		int v = getVAxisLocation(address)/blockHeight;
 				
@@ -243,6 +240,24 @@ public class Plate {
 		if(!usedSections.contains(section))
 			usedSections.add(section);
 		return section;
+	}
+	/**
+	 * @return
+	 */
+	public int getBlockWidth() {
+		int blockWidth=this.blockWidth;
+		if(this.blockWidth==0)
+			blockWidth= getUAxisWidth();
+		return blockWidth;
+	}
+	/**
+	 * @return
+	 */
+	public int getBlockHeight() {
+		int blockHeight=this.blockHeight;
+		if(this.blockHeight==0)
+			blockHeight=getVAxisWidth();
+		return blockHeight;
 	}
 	/**
 	 * @return
@@ -338,10 +353,20 @@ public class Plate {
 		for(int i=0; i<this.cellList.size();i++) {
 			PlateCell cell= this.cellList.get(i);
 			int section = this.getSection(cell.getAddress());
-			int repeat = (i/(blockWidth));
+			int repeat = (i/(getBlockWidth()));
 			 
 			float theHue = (float)(1.0*(section/size))*0.9f;
-			float theBrightness = (float) (0.2f*(repeat%blockHeight)+0.2);
+			if(hueMismash) {
+				int h=(int) (theHue*10000);
+				if(section%2==0)
+					h=h/2;
+				else {
+					h=(h-1)/2+5000;
+				}
+				theHue=h/10000.0f;
+			}
+			
+			float theBrightness = (float) (0.2f*(repeat%getBlockHeight())+0.2);
 			Color c = Color.getHSBColor(theHue, theBrightness, 1f);
 			hudes.put(i, c);
 			//Color h = hudes.get(this.getSection(cell.getAddress()));

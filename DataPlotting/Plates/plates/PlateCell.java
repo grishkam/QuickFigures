@@ -40,6 +40,7 @@ public class PlateCell {
 	private Integer spreadSheetRow=null;
 	private Object shortName;
 	private Color color=Color.lightGray;
+	private String sourceSheet="Sheet0";
 
 	public PlateCell(BasicCellAddress address) {
 		this.address=address;
@@ -114,6 +115,22 @@ public class PlateCell {
 
 	public Color getColor() {
 		return color;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getSourceSheetName() {
+		// TODO Auto-generated method stub
+		return sourceSheet;
+	}
+
+	/**
+	 * @param sheetName
+	 */
+	public void setSourceSheetName(String sheetName) {
+		sourceSheet=sheetName;
+		
 	}
 	
 	

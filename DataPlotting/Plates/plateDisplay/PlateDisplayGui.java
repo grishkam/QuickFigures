@@ -14,13 +14,19 @@ import java.util.ArrayList;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import handles.layoutHandles.AddLabelHandle;
 import layout.basicFigure.BasicLayout;
+import layout.basicFigure.LayoutSpaces;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import plates.BasicCellAddress;
 import plates.Plate;
 import plates.PlateCell;
+import undo.CombinedEdit;
 import undo.Edit;
 
 public class PlateDisplayGui extends GraphicLayerPane {
@@ -72,6 +78,10 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		BasicLayout layout = new BasicLayout(plate.getNCol(), plate.getNRow(), cellWidth, cellHeeght, 4,4, true);
 		layout.setLabelSpaces(50, 0, 50, 0);
 		layout.resetPtsPanels();
+		DefaultLayoutGraphic layoutGraphic = new DefaultLayoutGraphic(layout);
+		this.add(layoutGraphic);
+		int font =5;
+		//new AddLabelHandle(layoutGraphic, AddLabelHandle.ROWS, 1, false).performAllLabelAddition(null, new CombinedEdit(), );;
 		for(int n=0; n<layout.nPanels(); n++) try {
 			PlateCell plateCell = plate.getPlateCells().get(n);
 			Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
@@ -86,14 +96,46 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			if(spreadSheetRow ==null)
 				continue;
 			TextGraphic t=new TextGraphic(spreadSheetRow+"");
-			t.setFontSize((int) (panel.getHeight()/2));
+			 font = (int) (panel.getHeight()/2);
+			
+			t.setFontSize(font);
 			t.setLocation(RectangleEdges.getLocation(RectangleEdges.LOWER_LEFT, r.getBounds()));
 			
 			this.add(t);
 		} catch (Throwable t) {
+			IssueLog.logT(t);
+		}
+		
+		 if(font>20)
+			 font=20;
+		String[] rows = new String[] {"A", "B", "C","D", "E", "F", "G", "H"};
+		rows=BasicCellAddress.namesOfAxis(layout.nRows());
+		for(int n=0; n<layout.nRows(); n++) try {
+			BasicLayout l2 = layout.makeAltered(LayoutSpaces.ROWS);
+			TextGraphic t=new TextGraphic(rows[n]+"");
+			Rectangle2D r= l2.getPanelAtPosition(n+1, 1);
+			t.setFontSize(font);
+			t.setLocation(RectangleEdges.getLocation(RectangleEdges.LEFT, r.getBounds()));
+			this.add(t);
+			
+		} catch (Throwable t) {
+			IssueLog.logT(t);
+		}
+		
+		
+		rows=BasicCellAddress.namesOfAxisCols(layout.nColumns());
+		for(int n=0; n<layout.nColumns(); n++) try {
+			BasicLayout l2 = layout.makeAltered(LayoutSpaces.COLS);
+			TextGraphic t=new TextGraphic(rows[n]+"");
+			Rectangle2D r= l2.getPanelAtPosition(1,n+1);
+			t.setFontSize(font);
+			t.setLocation(RectangleEdges.getLocation(RectangleEdges.TOP, r.getBounds()));
+			t.moveLocation(0, 20);
+			this.add(t);
+			
+		} catch (Throwable t) {
 			IssueLog.log(t);
 		}
-	
 	}
 
 	/**

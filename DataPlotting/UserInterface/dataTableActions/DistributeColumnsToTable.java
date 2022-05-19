@@ -295,7 +295,12 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		tableAssignment.setValueAt("plate_location", 0, (int) colAddressColumnIndex);
 	
 		int rowCount = tableAssignment.getRowCount();
-		double nPlatesNeeded = (rowCount-1)*this.getNReplicates()/plate.getPlateCells().size();
+		int numberCellsNeeded = (int) ((rowCount-1)*this.getNReplicates());
+		int nWells = plate.getNCol()*plate.getNRow();
+		int nPlatesNeeded = numberCellsNeeded/nWells;//number plates that can be filled completely
+	
+		if(nPlatesNeeded%nWells>0)
+			nPlatesNeeded++;//one more plate may be needed. this plate will be not filled completely
 		ArrayList<Plate> plates = new ArrayList<Plate>();
 		plates.add(plate);
 		for(int i=1; i<nPlatesNeeded; i++) {
@@ -307,7 +312,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			}
 		}
 		int plateNumber = 0;
-		
+		Plate currentPlate = plate;
 		int cellIndex=1;
 		for(int i=1; i<=total; i++)try {
 			for(int j=0; j<getNReplicates(); j++) {
@@ -322,25 +327,37 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			if(cellIndex-1>=plate.getPlateCells().size()) {
 				cellIndex=1;
 				plateNumber++;
-				if(plates.size()>plateNumber)
+				if(plates.size()<=plateNumber)
 					break;
-				plate=plates.get(plateNumber);
+				currentPlate=plates.get(plateNumber);
 				//ShowMessage.showOptionalMessage("Too many samples", true, "You have to many samples for this plate size");
 				//break;
 			}
-			PlateCell plateCell = plate.getPlateCells().get(cellIndex-1);
+			PlateCell plateCell =currentPlate.getPlateCells().get(cellIndex-1);
 			plateCell.setSpreadSheetRow(i);
 			plateCell.setShortName(tableAssignment.getValueAt(i, (int) sampleNameIndex));
 			plateCell.setSpreadSheetRow(i);
+			plateCell.setSourceSheetName(tableAssignment.getSheetName(0)+"");
 			String plateAddressAt = plateCell.getAddress().getAddress();
 			
 			String newText=val+"";
 			if(newText.length()>0)
 				newText+=", ";
-			if(plate.getPlateName().length()>0)
-				newText+=plate.getPlateName()+"-";
+			
 			newText+=plateAddressAt;
 			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
+			if(plate.getPlateName().length()>0)
+				{
+				String newText2 = currentPlate.getPlateName();
+				tableAssignment.setValueAt(newText2, i, (int) colAddressColumnIndex+1);
+				tableAssignment.setValueAt("plate_name", 0,(int) colAddressColumnIndex+1);
+				if(newText.contains(","))
+					newText=newText.replace(", ", ", "+newText2+"-");
+				newText=newText2+"-"+newText;
+				tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+2);
+				tableAssignment.setValueAt("full_location", 0,(int) colAddressColumnIndex+2);
+				}
+			
 			cellIndex++;
 			}
 		} catch (Throwable t) {

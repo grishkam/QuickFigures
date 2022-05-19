@@ -46,4 +46,19 @@ public class BasicCellAddress {
 			return true;
 		return false;
 	}
+	
+	public static String[] namesOfAxis(int n) {
+		String[] output = new String[n];
+		for(int i=0; i<n; i++) {
+			output[i]=""+getCharForIndex(i);
+		}
+		return output;
+	}
+	public static String[] namesOfAxisCols(int n) {
+		String[] output = new String[n];
+		for(int i=0; i<n; i++) {
+			output[i]=""+(i+1);
+		}
+		return output;
+	}
 }

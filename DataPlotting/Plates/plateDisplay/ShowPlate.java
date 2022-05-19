@@ -39,6 +39,8 @@ import plates.PlateCell;
  */
 public class ShowPlate {
 
+	boolean useFormula=false;
+	
 	public void showVisiblePlate(Plate p) {
 		SmartDataInputDialog dialog =  new SmartDataInputDialog(new DataTable(300, 15), PlotType.COLUMN_PLOT_TYPE);
 		showPlate(dialog.getDataTable(), p);
@@ -70,7 +72,12 @@ public class ShowPlate {
 			BasicCellAddress index = cell.getAddress();
 			int rowR = index.getRow()+1;
 			int ColC = index.getCol()+1;
-			table.setValueAt(cell.getShortLabel(), rowR, ColC);
+			String shortLabel = cell.getShortLabel();
+			if(this.useFormula&&cell.getSpreadSheetRow()!=null) {
+				shortLabel="=$"+cell.getSourceSheetName()+".A"+cell.getSpreadSheetRow();
+				
+			}
+			table.setValueAt(shortLabel, rowR, ColC);
 			table.setWrapTextAt(rowR, ColC);
 			
 			table.setCellColor(cell.getColor(), rowR, ColC);
