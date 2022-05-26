@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Mar 26, 2022
+ * Date Modified: May 19, 2022
  * Version: 2022.1
  */
 package plateDisplay;
@@ -39,6 +39,8 @@ import plates.PlateCell;
  */
 public class ShowPlate {
 
+	/**formulas that reference another sheet are not automatically understood to be formulas by libre office nad excel
+	 * this feature is not yet implemented*/
 	boolean useFormula=false;
 	
 	public void showVisiblePlate(Plate p) {
@@ -74,10 +76,10 @@ public class ShowPlate {
 			int ColC = index.getCol()+1;
 			String shortLabel = cell.getShortLabel();
 			if(this.useFormula&&cell.getSpreadSheetRow()!=null) {
-				shortLabel="=$"+cell.getSourceSheetName()+".A"+cell.getSpreadSheetRow();
+				shortLabel="="+cell.getSourceSheetName()+"!"+".A"+cell.getSpreadSheetRow();
 				
 			}
-			table.setValueAt(shortLabel, rowR, ColC);
+				table.setValueAt(shortLabel, rowR, ColC);
 			table.setWrapTextAt(rowR, ColC);
 			
 			table.setCellColor(cell.getColor(), rowR, ColC);

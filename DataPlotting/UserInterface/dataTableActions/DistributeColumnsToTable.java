@@ -87,8 +87,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
 	public boolean rotatePlate=true;
 	
-	//@RetrievableOption(key = "h", label="First Line is header (always true)")
-	//public boolean headerPlate=true;
+	@RetrievableOption(key = "show names", label="Preview sample names")
+	public boolean showSampleNames=false;
 	
 	
 	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());
@@ -111,8 +111,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx=5;
 		gc.gridy=1;
-		comp.setPrefferedSize(600, 400);
-		comp.setMagnification(0.75);
+		comp.setPrefferedSize(720, 480);
+		comp.setMagnification(1);
 		comp.getGraphicLayers().add(diplay);
 		currentDialog.add(comp, gc);
 		updatePlateDisplayAfterDialogChange();
@@ -148,6 +148,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 */
 	public void updatePlateDisplayAfterDialogChange() {
 		try {
+			diplay.setShowSampleNames(this.showSampleNames);
 			diplay.setPlate(buildPlate(false));
 		} catch (Exception e) {
 			IssueLog.log("failed to build plate. Make sure a valid excel file is selected");

@@ -125,8 +125,9 @@ public class ExcelTableReader implements TableReader {
 		else
 			cell.setCellValue(value+"");
 		
-		/**Sets a formula*/
+		/**Sets a formula. this tends not to work */
 		//if(value.getClass()==String.class&& (""+value).startsWith("="))
+			//cell.setCellFormula(value+"");
 			//cell.setCellFormula((value+"").replace("=", ""));
 	}
 
