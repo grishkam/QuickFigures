@@ -72,7 +72,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public double skip=3;
 	
 	@RetrievableOption(key = "block", label="Group samples ")
-	public double blockSize=6;
+	public double blockSize=4;
 	
 	@RetrievableOption(key = "flip group", label="Flip group orientation")
 	public boolean flipGroup=false;
@@ -84,7 +84,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public File templateFile2=null;
 	
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
-	public boolean rotatePlate=false;
+	public boolean rotatePlate=true;
 	
 	@RetrievableOption(key = "show names", label="Preview sample names")
 	public boolean showSampleNames=false;
