@@ -86,13 +86,14 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
 	public boolean rotatePlate=true;
 	
+	/**the names of the samples that will be seen in the spreadsheet */
 	@RetrievableOption(key = "show names", label="Preview sample names")
 	public boolean showSampleNames=false;
 	@RetrievableOption(key = "sample", label="names are in col #")
 	public double sampleNameIndex=0;
 	
 	
-	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());
+	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());//displays the setup for this plate
 
 	private StoredValueDilaog currentDialog;
 	
