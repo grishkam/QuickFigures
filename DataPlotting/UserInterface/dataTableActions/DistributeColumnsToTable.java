@@ -57,8 +57,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 
 	
 	
-	@RetrievableOption(key = "sample", label="Sample names are in column #")
-	public double sampleNameIndex=0;
+	
 	
 	//@RetrievableOption(key = "A1", label="Will paste plate locations into column #")
 	public double colAddressColumnIndex=3;
@@ -73,22 +72,24 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public double skip=3;
 	
 	@RetrievableOption(key = "block", label="Group samples ")
-	public double blockSize=4;
+	public double blockSize=6;
 	
 	@RetrievableOption(key = "flip group", label="Flip group orientation")
 	public boolean flipGroup=false;
 	
-	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File With Sample names (.xlsx)")
+	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File 1 (.xlsx)")
 	public File templateFile=null;
 	
-	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine File with another? (optional)")
+	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine with File2? (optional)")
 	public File templateFile2=null;
 	
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
-	public boolean rotatePlate=true;
+	public boolean rotatePlate=false;
 	
 	@RetrievableOption(key = "show names", label="Preview sample names")
 	public boolean showSampleNames=false;
+	@RetrievableOption(key = "sample", label="names are in col #")
+	public double sampleNameIndex=0;
 	
 	
 	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());
@@ -111,8 +112,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx=5;
 		gc.gridy=1;
-		comp.setPrefferedSize(720, 480);
-		comp.setMagnification(1);
+		comp.setPrefferedSize(600, 420);
+		comp.setMagnification(0.8);
 		comp.getGraphicLayers().add(diplay);
 		currentDialog.add(comp, gc);
 		updatePlateDisplayAfterDialogChange();
@@ -134,7 +135,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				
 			}});}
 		currentDialog.addButton(spreadsheet);
-		currentDialog.setModal(true);
+		//currentDialog.setModal(true);
 		currentDialog.showDialog();
 		if(currentDialog.wasCanceled())
 			return;
@@ -176,9 +177,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		}
 		
 		
-		
-		if(templateFile2!=null) {
-			ExcelTableReader secondTemplateTable = openExcelFile(templateFile2);
+		ExcelTableReader secondTemplateTable = openExcelFile(templateFile2);
+		if(secondTemplateTable!=null) {
+			
 			item=combinePlates(item, secondTemplateTable);
 			sampleNameIndex=0;
 			if(item.getColumnCount()>colAddressColumnIndex)

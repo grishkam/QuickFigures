@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: April 5, 2022
+ * Date Modified: May 26, 2022
  * Version: 2022.1
  */
 package plates;
@@ -60,6 +60,7 @@ public class Plate {
 	private ArrayList<Integer> usedSections=new ArrayList<Integer>();
 	public HashMap<Integer, Color> hues;//a map with the hues for each section
 	private boolean hueMismash=true;
+	private int lastB;
 	
 	
 	
@@ -76,7 +77,7 @@ public class Plate {
 		availableCellList=createPlaceCells();
 		Collections.sort(availableCellList, new PlateCellComparotor());
 		Collections.sort(cellList, new PlateCellComparotor());
-		assignHuesToSections();
+		assignHuesToSections( usedSections.size());
 	}
 	
 	public Plate createSimilar() {
@@ -223,6 +224,7 @@ public class Plate {
 		*/
 	}
 
+	
 
 	/**
 	 * @param address
@@ -231,12 +233,24 @@ public class Plate {
 	public int getSection(BasicCellAddress address) {
 		int blockWidth = getBlockWidth();
 		int blockHeight = getBlockHeight();
+		
 		int u = getUAxisLocation(address)/blockWidth;
 		int v = getVAxisLocation(address)/blockHeight;
 				
-		int section = v*(this.getUAxisWidth()/blockWidth)+u;
-		if(!flipGroups)
-			section = u*(getUAxisWidth()/blockHeight)+v;
+		int blocksPersection = this.getUAxisWidth()/blockWidth;
+		
+		int section = v*blocksPersection+u;
+		if(!flipGroups) {
+			int b_perSection = getUAxisWidth()/blockHeight;
+			section = u*b_perSection+v;
+				{
+					//IssueLog.log(" factor will be multiplied "+b_perSection+" for "+address.toString());
+				//	IssueLog.log(" u= "+u +" v="+v+ " section="+section);
+				}
+			
+		}
+		
+		
 		if(!usedSections.contains(section))
 			usedSections.add(section);
 		return section;
@@ -346,14 +360,15 @@ public class Plate {
 	}
 	public String getPlateName() {return plateName;}
 	
-	public void assignHuesToSections() {
+	public void assignHuesToSections(double size) {
 		HashMap<Integer, Color> hudes=new HashMap<Integer, Color>();
-		double size = usedSections.size();
+		
 		
 		for(int i=0; i<this.cellList.size();i++) {
 			PlateCell cell= this.cellList.get(i);
 			int section = this.getSection(cell.getAddress());
 			int repeat = (i/(getBlockWidth()));
+			
 			 
 			float theHue = (float)(1.0*(section/size))*0.9f;
 			if(hueMismash) {
@@ -366,8 +381,9 @@ public class Plate {
 				theHue=h/10000.0f;
 			}
 			
-			float theBrightness = (float) (0.2f*(repeat%getBlockHeight())+0.2);
+			float theBrightness = (float) (1f*(repeat%getBlockHeight())/getBlockHeight()+0.2)/2f;//number should always be a max of 1 or hues will not match
 			Color c = Color.getHSBColor(theHue, theBrightness, 1f);
+			
 			hudes.put(i, c);
 			//Color h = hudes.get(this.getSection(cell.getAddress()));
 			cell.setColor(c);

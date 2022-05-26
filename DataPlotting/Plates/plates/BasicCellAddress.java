@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 16, 2022
- * Date Modified: May 19, 2022
+ * Date Modified: May 26, 2022
  * Version: 2022.1
  */
 package plates;
@@ -46,6 +46,10 @@ public class BasicCellAddress {
 	public int getCol() {
 		return col;
 	}
+	
+	  public String toString() {
+	        return getClass().getName() + "["+"row="+this.getRow()+", "+"col="+this.getCol()+", code="+this.getAddress()+"]";
+	    }
 	
 	/**returns true if the cell addresses match. 
 	 * @param b
@@ -79,4 +83,6 @@ public class BasicCellAddress {
 	public static char getCharForIndex(int rowIndex) {
 		return (char)(A_Index+rowIndex);
 	}
+	
+	
 }
