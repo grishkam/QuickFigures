@@ -830,7 +830,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		if(slot.getDisplaySlice()!=null) 
 			crop.setDisplaySlice(slot.getDisplaySlice());
-		context.lastDialog=crop;
+		if(context!=null)
+			context.lastDialog=crop;
 		crop.showDialog();
 		
 		if(!crop.wasOKed()&&!crop.wasEliminated) return crop;

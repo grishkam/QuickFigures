@@ -61,19 +61,21 @@ public class Plate {
 	public HashMap<Integer, Color> hues;//a map with the hues for each section
 	private boolean hueMismash=true;
 	private int lastB;
+	public AddressModification addressMod=new AddressModification(0,0);
 	
 	
 	
 	public Plate() {
 		availableCellList=createPlaceCells();
 	}
-	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight, boolean flipGroups) {
+	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight, boolean flipGroups, AddressModification m) {
 		this.nCol=col;
 		this.nRow=row;
 		this.oritenation=orient;
 		this.blockWidth=blockWidth;
 		this.blockHeight=blockHeight;
 		this.flipGroups=flipGroups;
+		this.addressMod=m;
 		availableCellList=createPlaceCells();
 		Collections.sort(availableCellList, new PlateCellComparotor());
 		Collections.sort(cellList, new PlateCellComparotor());
@@ -81,7 +83,7 @@ public class Plate {
 	}
 	
 	public Plate createSimilar() {
-		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight, flipGroups);
+		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight, flipGroups, addressMod);
 	}
 	
 	/**returns true if the cell of the given address is available*/
@@ -136,8 +138,8 @@ public class Plate {
 		
 		for(int i=0; i<nRow; i++) {
 			for(int j=0; j<nCol; j++) {
-			BasicCellAddress a1 = new BasicCellAddress(i,j);
-			PlateCell cell = new PlateCell(a1);
+			BasicCellAddress a1 = new BasicCellAddress(i,j, addressMod);
+			PlateCell cell = new PlateCell(a1, addressMod);
 			cellList.add(cell);
 			names.add(cell);
 			}
@@ -173,8 +175,8 @@ public class Plate {
 		 * @param row
 		 * @param col
 		 */
-		public CellAddress(int row, int col) {
-			super(row, col);
+		public CellAddress(int row, int col, AddressModification m) {
+			super(row, col, m);
 			// TODO Auto-generated constructor stub
 		}
 

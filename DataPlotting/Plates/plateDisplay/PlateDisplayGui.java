@@ -135,9 +135,10 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		 if(font>20)
 			 font=20;
 		String[] rows = new String[] {"A", "B", "C","D", "E", "F", "G", "H"};
-		rows=BasicCellAddress.namesOfAxisRows(layout.nRows());
+		rows=BasicCellAddress.namesOfAxisRows(layout.nRows(), plate.addressMod);
 		for(int n=0; n<layout.nRows(); n++) try {
 			BasicLayout l2 = layout.makeAltered(LayoutSpaces.ROWS);
+			
 			TextGraphic t=new TextGraphic(rows[n]+"");
 			Rectangle2D r= l2.getPanelAtPosition(n+1, 1);
 			t.setFontSize(font);
@@ -149,7 +150,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		}
 		
 		
-		rows=BasicCellAddress.namesOfAxisCols(layout.nColumns());
+		rows=BasicCellAddress.namesOfAxisCols(layout.nColumns(), plate.addressMod);
 		for(int n=0; n<layout.nColumns(); n++) try {
 			BasicLayout l2 = layout.makeAltered(LayoutSpaces.COLS);
 			TextGraphic t=new TextGraphic(rows[n]+"");

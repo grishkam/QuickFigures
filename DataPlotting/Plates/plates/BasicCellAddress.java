@@ -31,14 +31,27 @@ public class BasicCellAddress {
 	 int row;
 	 int col;
 
-	public BasicCellAddress(int row, int col) {
+
+	private AddressModification addressMod;
+
+	public BasicCellAddress(int row, int col, AddressModification addressModification) {
 		this.row=row;
 		this.col=col;
+		this.addressMod=addressModification;
 	}
-	/**returns the address in A1 format*/
-	public String getAddress() {
-		char letter=(char)(A_Index+getRow());
-		return ""+letter+(getCol()+1);
+	/**returns the address in A1 format
+	 * @param addressModification */
+	public String getAddress(AddressModification addressModification) {
+		
+		int r = A_Index+getRow();
+		int c = getCol()+1;
+		if(addressModification!=null) {
+			r+=addressModification.getRowShift();
+			c+=addressModification.getColShift();
+		}
+		
+		char letter=(char)r;
+		return ""+letter+c;
 	}
 	public int getRow() {
 		return row;
@@ -48,7 +61,7 @@ public class BasicCellAddress {
 	}
 	
 	  public String toString() {
-	        return getClass().getName() + "["+"row="+this.getRow()+", "+"col="+this.getCol()+", code="+this.getAddress()+"]";
+	        return getClass().getName() + "["+"row="+this.getRow()+", "+"col="+this.getCol()+", code="+this.getAddress(addressMod)+"]";
 	    }
 	
 	/**returns true if the cell addresses match. 
@@ -62,19 +75,19 @@ public class BasicCellAddress {
 	}
 	
 	/**returns the names of the rows, A, B, C... as an array.*/
-	public static String[] namesOfAxisRows(int n) {
+	public static String[] namesOfAxisRows(int n, AddressModification m) {
 		String[] output = new String[n];
 		for(int i=0; i<n; i++) {
-			output[i]=""+getCharForIndex(i);
+			output[i]=""+getCharForIndex(i+m.getRowShift());
 		}
 		return output;
 	}
 	
 	/**returns the names of the cols, 1, 2, 3 ... as an array.*/
-	public static String[] namesOfAxisCols(int n) {
+	public static String[] namesOfAxisCols(int n, AddressModification m) {
 		String[] output = new String[n];
 		for(int i=0; i<n; i++) {
-			output[i]=""+(i+1);
+			output[i]=""+(i+1+m.getColShift());
 		}
 		return output;
 	}

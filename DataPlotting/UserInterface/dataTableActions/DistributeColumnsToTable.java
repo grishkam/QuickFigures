@@ -41,6 +41,7 @@ import messages.ShowMessage;
 import objectDialogs.CroppingDialog.AllOKListener;
 import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
+import plates.AddressModification;
 import plates.BasicCellAddress;
 import plates.Plate;
 import plates.PlateCell;
@@ -91,6 +92,12 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public boolean showSampleNames=false;
 	@RetrievableOption(key = "sample", label="names are in col #")
 	public double sampleNameIndex=0;
+	
+	@RetrievableOption(key = "row shoft", label="shift rows", category="special")
+	public double rowShift=0;
+	
+	@RetrievableOption(key = "col shoft", label="shift cols", category="special")
+	public double colShift=0;
 	
 	
 	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());//displays the setup for this plate
@@ -227,7 +234,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		PlateOrientation po=PlateOrientation.STANDARD;
 		if(rotatePlate)
 			po=PlateOrientation.FLIP;
-		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)blockSize, this.flipGroup);
+		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)blockSize, this.flipGroup, this.getAddressMod());
 		return plate;
 	}
 
@@ -341,7 +348,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			plateCell.setShortName(tableAssignment.getValueAt(i, (int) sampleNameIndex));
 			plateCell.setSpreadSheetRow(i);
 			plateCell.setSourceSheetName(tableAssignment.getSheetName(0)+"");
-			String plateAddressAt = plateCell.getAddress().getAddress();
+			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
 			
 			String newText=val+"";
 			if(newText.length()>0)
@@ -448,6 +455,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public static void main(String[] args) {
 		IssueLog.sytemprint=true;
 		new DistributeColumnsToTable().performActionDisplayedImageWrapper(null);
+	}
+	
+	public AddressModification getAddressMod() {
+		return new AddressModification(rowShift, colShift);
 	}
 
 }

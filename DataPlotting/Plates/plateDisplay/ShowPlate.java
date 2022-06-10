@@ -56,10 +56,16 @@ public class ShowPlate {
 		}*/
 		
 		for(int i=0; i<plate.getNCol(); i++) {
-			table.setValueAt(""+(i+1),0, i+1);
+			int i3 = i+1;
+			if(plate.addressMod!=null)
+				i3+=plate.addressMod.getColShift();
+			table.setValueAt(""+i3,0, i+1);
 		}
 		for(int i=0; i<plate.getNRow(); i++) {
-			table.setValueAt(""+BasicCellAddress.getCharForIndex(i), i+1, 0);
+			int i2 = i;
+			if(plate.addressMod!=null)
+				i2+=plate.addressMod.getRowShift();
+			table.setValueAt(""+BasicCellAddress.getCharForIndex(i2), i+1, 0);
 		}
 		
 		if(plate.hues!=null) {

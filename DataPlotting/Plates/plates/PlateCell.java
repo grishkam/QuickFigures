@@ -33,7 +33,7 @@ public class PlateCell {
 
 	/**Address starts out invalid*/
 	private String plateAddress="";
-	BasicCellAddress address= new BasicCellAddress(0,0);
+	BasicCellAddress address= new BasicCellAddress(0,0, null);
 	
 	private int listAddress;
 	
@@ -41,10 +41,12 @@ public class PlateCell {
 	private Object shortName;
 	private Color color=Color.lightGray;
 	private String sourceSheet="Sheet0";
+	private AddressModification addressMod;
 
-	public PlateCell(BasicCellAddress address) {
+	public PlateCell(BasicCellAddress address, AddressModification m) {
 		this.address=address;
-		plateAddress=address.getAddress();
+		plateAddress=address.getAddress(m);
+		this.addressMod=m;
 	}
 	
 	private PlateCell(int i, String plateAddress) {
@@ -67,7 +69,7 @@ public class PlateCell {
 		
 		output[0]=row;
 		output[1]=col;
-		return new BasicCellAddress(row,col);
+		return new BasicCellAddress(row,col, addressMod);
 		
 	}
 	
