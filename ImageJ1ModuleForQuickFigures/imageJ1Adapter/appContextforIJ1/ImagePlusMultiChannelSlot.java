@@ -252,7 +252,11 @@ import logging.IssueLog;
 		/**Turns the image data into a byte array*/
 		@MenuItemMethod(menuActionCommand = "saveEm", menuText = "Save Embedded", subMenuName="Image")
 		public void saveImageEmbed() {
+			try {
 			saveWorkingImage();
+			} catch (Throwable t) {
+				IssueLog.logT(t);
+			}
 			
 			/**needed to keep the original around in case imageJ disposes of it*/
 			if (original!=null)original.saveSubslotImage();
