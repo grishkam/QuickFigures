@@ -43,21 +43,29 @@ public class ImageOpenListener implements ImageListener {
 	@Override
 	public void imageOpened(ImagePlus arg0) {
 		MultichannelDisplayLayer zero = new IJ1MultiChannelCreator().createDisplayFromImagePlus(arg0);
+		boolean actionDone=false;
 		for(PendingFileOpenActions action: PendingFileOpenActions.pendingList) try {
 			
 			if(!action.isActive())
 				continue;
 			if(action.isTargetFile(new ImagePlusWrapper(arg0).getPath())) {
 				action.performActionOnImageDisplayLayer(zero);
-				
+				actionDone=true;
 				
 				break;
 			}
 		} 
+		
+		
+		
 		catch (Throwable t ) {
 			IssueLog.logT(t);
 		}
 
+		if(!actionDone) {
+			zero.getSlot().kill();
+		}
+		
 	}
 
 	@Override

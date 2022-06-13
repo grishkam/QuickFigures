@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Oct 26, 2021
+ * Date Modified: June 13, 2022
  * Version: 2022.1
  */
 package infoStorage;
@@ -53,8 +53,8 @@ public class BasicMetaDataHandler {
 		new String[] {"ChannelDescription|LUTName ", " ", "lif"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
 		new String[] {"LUT Channel ", " name ", "lei"},   //the most reliable key for lei. only tested on one lei file
 		new String[] {"Block 2 csLutName", " ", "lei"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
-		new String[] {"Channel Name ", " ", "zvi"} //For .zvi
-		
+		new String[] {"Channel Name ", " ", "zvi"}, //For .zvi
+		new String[] {"Nikon Ti2, FilterChanger(Turret-Lo) #", " ", "nd2"}//for nikon. Name # entry gave confusing results with two cy5
 	};
 	
 	
@@ -816,21 +816,21 @@ public class BasicMetaDataHandler {
 				
 				
 				ArrayList <String> ChannelNames=new ArrayList <String> ();
-					String c1;
+					String currentChannelName=null;
 					int c2;
 					/**checks indexes 0 through 7 for channel data. For each of my indices,
 					 * returns a number c2. then adds the name of channel c2 to the lists of names
 					 * */ 
 					for (int j=0; j<7; j++) {
 						try {	String c3=(String) getEntryFromInfoAsString(select, myIndexCode+j+ " " ) ;
-								c1=c3.trim();
-								c2=Integer.parseInt(c1);
+								currentChannelName=c3.trim();
+								c2=Integer.parseInt(currentChannelName);
 								
 						try {
+							//sets 
+							currentChannelName=getRealChannelInformationBasedOnMetaData(select, chanKey, c2) ;
 							
-							c1=getRealChannelInformationBasedOnMetaData(select, chanKey, c2) ;
-							
-							ChannelNames.add(c1);
+							ChannelNames.add(currentChannelName);
 							
 				} catch (Exception nn) {}
 			} catch (Exception nn) {}	
@@ -855,7 +855,9 @@ public class BasicMetaDataHandler {
 			}
 			
 			/**To accomadate newer versions of locitools, I need to write this.
-			   this will obtain a list of the channel names and their numbers and record their indexes*/
+			   this will obtain a list of the channel names and their numbers and record their indexes.
+			   in the meta data. When QuickFigures reorders channels, these will also be reordered.
+			   innitial channel names are derived from the microscope meta data (as it has been placed by locitools).*/
 			private void createGregIndexSystem(MetaInfoWrapper select) {
 				ArrayList <String> ChannelNames=new ArrayList <String> ();
 				ArrayList <Integer> ChannelNums=new ArrayList <Integer> ();

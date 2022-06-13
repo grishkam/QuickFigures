@@ -386,7 +386,7 @@ import logging.IssueLog;
 		
 		
 		/**Sets the imagePlus to imp. does nothing if imp is null*/
-		public void setAndInnitializeImagePlus(ImagePlus imp) {
+		void setAndInnitializeImagePlus(ImagePlus imp) {
 			if (imp==null){
 				IssueLog.log("no image plus was given");
 				
