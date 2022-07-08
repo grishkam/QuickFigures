@@ -21,7 +21,6 @@
  */
 package dataTableActions;
 
-import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,18 +30,14 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
-import dataTableDialogs.DataTable;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
 import layout.RetrievableOption;
 import logging.IssueLog;
-import messages.ShowMessage;
-import objectDialogs.CroppingDialog.AllOKListener;
 import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
 import plates.AddressModification;
-import plates.BasicCellAddress;
 import plates.Plate;
 import plates.PlateCell;
 import plates.PlateOrientation;
@@ -191,7 +186,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			item=combinePlates(item, secondTemplateTable);
 			sampleNameIndex=0;
 			if(item.getColumnCount()>colAddressColumnIndex)
-				colAddressColumnIndex=item.getColumnCount()+1;
+				colAddressColumnIndex=item.getColumnCount();
 		}
 		
 		distributeExcelRowsToPlate(plate, item, createFile);
@@ -275,7 +270,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 					output.setValueAt(combined,row3, 0);
 					output.setValueAt(count,row3, 1);
 					count++;
-					output.setValueAt("Combined Names ",0,1);
+					output.setValueAt("Combined Names ",0,0);
+					output.setValueAt("Combined Name Index ",0,1);
 					row3++;
 					
 				}
@@ -316,10 +312,12 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		for(int i=1; i<nPlatesNeeded; i++) {
 			plates.add(plate.createSimilar());
 		}
-		if(plates.size()>1) {
+		if(plates.size()>=1) {
 			for(int i=1; i<=plates.size(); i++) {
 				plates.get(i-1).setPlateName("Plate"+i+"");
 			}
+		} else {
+			
 		}
 		int plateNumber = 0;
 		Plate currentPlate = plate;
@@ -356,8 +354,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			
 			newText+=plateAddressAt;
 			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
-			if(plate.getPlateName().length()>0)
-				{
+			tableAssignment.setWrapTextAt(i, (int) colAddressColumnIndex);
+			//if(plate.getPlateName().length()>0)
+				//{
 				String newText2 = currentPlate.getPlateName();
 				tableAssignment.setValueAt(newText2, i, (int) colAddressColumnIndex+1);
 				tableAssignment.setValueAt("plate_name", 0,(int) colAddressColumnIndex+1);
@@ -366,7 +365,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				newText=newText2+"-"+newText;
 				tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+2);
 				tableAssignment.setValueAt("full_location", 0,(int) colAddressColumnIndex+2);
-				}
+			//	}
 			
 			cellIndex++;
 			}
