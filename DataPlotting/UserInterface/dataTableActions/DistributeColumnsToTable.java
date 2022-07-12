@@ -355,8 +355,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			newText+=plateAddressAt;
 			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
 			tableAssignment.setWrapTextAt(i, (int) colAddressColumnIndex);
-			//if(plate.getPlateName().length()>0)
-				//{
+		
 				String newText2 = currentPlate.getPlateName();
 				tableAssignment.setValueAt(newText2, i, (int) colAddressColumnIndex+1);
 				tableAssignment.setValueAt("plate_name", 0,(int) colAddressColumnIndex+1);
@@ -365,7 +364,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				newText=newText2+"-"+newText;
 				tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+2);
 				tableAssignment.setValueAt("full_location", 0,(int) colAddressColumnIndex+2);
-			//	}
+			
 			
 			cellIndex++;
 			}
