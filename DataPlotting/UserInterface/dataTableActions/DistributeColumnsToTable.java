@@ -56,7 +56,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	
 	//@RetrievableOption(key = "A1", label="Will paste plate locations into column #")
-	public double colAddressColumnIndex=3;
+	public double colAddressColumnIndex=2;
 	
 	@RetrievableOption(key = "col", label="# Columns")
 	public double nCol=12;
@@ -355,6 +355,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			newText+=plateAddressAt;
 			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
 			tableAssignment.setWrapTextAt(i, (int) colAddressColumnIndex);
+			
+			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+3);
+			tableAssignment.setValueAt("well", 0,(int) colAddressColumnIndex+3);
 		
 				String newText2 = currentPlate.getPlateName();
 				tableAssignment.setValueAt(newText2, i, (int) colAddressColumnIndex+1);
@@ -365,6 +368,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+2);
 				tableAssignment.setValueAt("full_location", 0,(int) colAddressColumnIndex+2);
 			
+				
 			
 			cellIndex++;
 			}

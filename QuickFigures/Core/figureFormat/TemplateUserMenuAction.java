@@ -96,7 +96,9 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	 * and returns the file that the user has chosen to open*/
 	public static File  getFileToOpen() {
 		String path=handler.fullPathofDefaultTemplate();
-		  File files=FileChoiceUtil.getOpenFile(path);//jd.getSelectedFile();
+		IssueLog.log("Asking user to open file "+path);
+		  File files=FileChoiceUtil.getOpenFile(path, true);//jd.getSelectedFile();
+		  
 		  return files;
 	}
 	
@@ -126,8 +128,9 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	public FigureTemplate loadTemplate(String path) {
 		File f;
 		if (path==null) {
-			IssueLog.log("Problem: cannot load template");
+			IssueLog.log("Will ask user to provide template file");
 			f=getFileToOpen() ;
+			IssueLog.log("User selected file "+f);
 		}
 		else f=new File(path);
 		
@@ -318,7 +321,9 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	protected CombinedEdit applySavedTemplate(GraphicLayer graphicLayerSet) {
 		
 		String userPath = getUserPath(FigureTemplate.getSuggestedFigureTypeFor(graphicLayerSet));
+		
 		IssueLog.log("Will apply template from file ",userPath);
+		
 		FigureTemplate temp = loadTemplate( userPath);
 		return applyTemplate(graphicLayerSet, temp);
 	}

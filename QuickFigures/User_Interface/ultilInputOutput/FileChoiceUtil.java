@@ -155,15 +155,16 @@ public class FileChoiceUtil {
 	/**shows a file dialog for the user to open a file in the default directory*/
 	public static File  getOpenFile() {
 		String dd = CurrentAppContext.getDefaultDirectory();
-		return getOpenFile(dd);
+		return getOpenFile(dd, true);
 	}
 	
 	
 	
 	/**shows a file dialog for the user to open a file in the given directory*/
-	public static File getOpenFile(String dd) {
+	public static File getOpenFile(String dd, boolean modal) {
 		ensureWindowsLook();
 		 FileDialog fd = new  FileDialog(new JFrame(), "Open ", FileDialog.LOAD);
+		 fd.setModal(modal);
 		 if (!(new File(dd).isDirectory())) {
 			 dd=(new File(dd)).getParent();
 		 }
