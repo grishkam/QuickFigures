@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Oct 13, 2022
  * Version: 2022.1
  */
 package popupMenusForComplexObjects;
@@ -43,17 +43,19 @@ public class SetImagePixelSize extends ObjectAction<MultichannelDisplayLayer> {
 		display=d;
 	}
 	
-	public void showPixelSizeSetDialog() {
+	/**shows the dialog*/
+	public ScaleSettingDialog showPixelSizeSetDialog() {
 		ScaleSettingDialog ssd = new  ScaleSettingDialog(display.getSlot(), null, true);
 		ssd.setWindowCentered(true);
 		ssd.setModal(true);
 		ssd.setScaleResetListen(createScaleResetListener());
 		ssd.undo=new ImageScaleUndo(display);
 		ssd.showDialog();
-		
+		return ssd;
 	}
 
 	
+	/**A listener that updates the panels and scale bars after a scale reset*/
 	public ScaleResetListener createScaleResetListener() {
 		return new ScaleResetListener() {
 
@@ -77,6 +79,8 @@ public class SetImagePixelSize extends ObjectAction<MultichannelDisplayLayer> {
 	public void actionPerformed(ActionEvent e) {
 		showPixelSizeSetDialog();
 	}
+	
+	
 	
 	/**An undoable edit for this action*/
 	class ImageScaleUndo extends AbstractUndoableEdit2 {

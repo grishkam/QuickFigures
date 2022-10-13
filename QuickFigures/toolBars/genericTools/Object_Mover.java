@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Oct 12, 2022
  * Version: 2022.1
  */
 package genericTools;
@@ -1359,13 +1359,14 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		
 		if (sHandle!=null) {
 			AttachmentPositionHandle demiVersion = sHandle.createDemiVersion();
-			demiVersion.handlePress(getLastMouseEvent());
+			
 			
 			
 				overlaySelectionManagger.setExtraHandle(demiVersion);
 			
 			if (this.getPressedSmartHandle()==null&&!textEditMode())
 				{
+				demiVersion.handlePress(getLastMouseEvent());
 				this.setPressedSmartHandle(demiVersion);
 				this.setSelectedHandleNumber(demiVersion.getHandleNumber());
 				}

@@ -43,8 +43,8 @@ class CropDialogSizeTest {
 		ImageDisplayTester.setupImageJ();
 		MultiChannelDisplayCreator cc = c.getMultichannelOpener();
 		
-		int[] xSizes = new int[] {600, 1000, 6000};
-		int[] ySizes = new int[]{500, 1000, 5000};
+		int[] xSizes = new int[] {500, 1000, 2000};
+		int[] ySizes = new int[]{250, 1000, 2000};
 		IssueLog.sytemprint=true;
 		for(int xSize: xSizes)
 		for(int ySize: ySizes)

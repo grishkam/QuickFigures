@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 25, 2021
+ * Date Modified: Oct 12, 2022
  * Version: 2022.1
  */
 package graphicalObjects_SpecialObjects;
@@ -360,14 +360,13 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	}
 	
 
-	@Override
 	public void handleMouseEvent(CanvasMouseEvent me, int handlenum, int button, int clickcount, int type,
 			int... other) {
 		if (clickcount<2) return;
 		if(clickcount>2) return;
 		if (handlenum==1) getBarText().showOptionsDialog();
-		else if (handlenum==NO_HANDLE_)showOptionsDialog();
-
+		//else if (handlenum==NO_HANDLE_)showOptionsDialog();
+		IssueLog.log("Called on handle mouse event ");
 	}
 
 	
@@ -383,7 +382,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 	
 	@Override
 	public void showOptionsDialog() {
-		new BarSwingGraphicDialog(this).showDialog();;
+		new BarSwingGraphicDialog(this).showDialog();
+		
 
 	}
 
@@ -849,7 +849,7 @@ class BarSmartHandle extends SmartHandle {
 	public BarSmartHandle(BarGraphic bar1, int x, int y) {
 		
 		this.bar=bar1;
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public BarSmartHandle(BarGraphic bar1,int rHandle) {
@@ -885,6 +885,7 @@ class BarSmartHandle extends SmartHandle {
 			setLengthInUnits(StandardDialog.getNumberFromUser("Bar Length in "+getScaleInfo().getUnits(), getLengthInUnits()));
 			addUndo(l);
 		}
+		//if(l.clickCount()==2)throw new NullPointerException();
 	}
 	
 	void addUndo(CanvasMouseEvent lastDragOrRelMouseEvent) {
@@ -946,7 +947,10 @@ class BarSmartHandle extends SmartHandle {
 			
 			/**set of operation that jumps to round numbers if the scale bar size is large
 			 * For example,user drag would set the length to 40 rather than 38 or 100 rather than 101*/
-			if(change<oldLengthInUnits/200&&oldLengthInUnits>200) {
+			if(change<oldLengthInUnits/1000&&oldLengthInUnits>1000) {
+				newLengthInUnits = Math.round(newLengthInUnits/100)*100;
+			}else 
+				if(change<oldLengthInUnits/200&&oldLengthInUnits>200) {
 				newLengthInUnits = Math.round(newLengthInUnits/50)*50;
 			}else
 				if(change<oldLengthInUnits/50&&oldLengthInUnits>50) {
@@ -1013,7 +1017,7 @@ class BarSmartHandle extends SmartHandle {
 		}
 		
 		if (isBarThicknessHandle()) {
-		 	 return getBathThicknessHandleLocation();
+		 	 return getBarsThicknessHandleLocation();
 		
 	}
 		if (isBarLengthHandle()) {
@@ -1032,7 +1036,8 @@ class BarSmartHandle extends SmartHandle {
 		
 	}
 
-	protected Point2D getBathThicknessHandleLocation() {
+	/**returns the location of the bar thickness handle*/
+	protected Point2D getBarsThicknessHandleLocation() {
 		Point2D location = getBarBounds().getLocation();
 		int dir=getAttachmentPosition().getOffSetPolarities()[0];
 		if(dir>0) {

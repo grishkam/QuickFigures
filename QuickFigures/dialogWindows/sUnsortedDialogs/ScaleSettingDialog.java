@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Oct 12, 2022
  * Version: 2022.1
  */
 package sUnsortedDialogs;
@@ -26,6 +26,7 @@ import standardDialog.GriddedPanel;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.StringInputPanel;
+import undo.AbstractUndoableEdit2;
 import standardDialog.StandardDialogListener;
 
 /**Alternative to the "Set Scale" dialog of imageJ. does exactly that but after this dialog,
@@ -60,6 +61,8 @@ public class ScaleSettingDialog  extends StandardDialog {
 		
 		this.addDialogListener(listener);
 	}
+	
+	public AbstractUndoableEdit2 getUndo() {return undo;}
 	
 	@Override
 	public void onOK() {
