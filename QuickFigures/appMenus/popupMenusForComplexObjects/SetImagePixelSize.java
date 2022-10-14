@@ -28,6 +28,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicActionToolbar.CurrentFigureSet;
 import locatedObject.ScaleInfo;
+import logging.IssueLog;
 import sUnsortedDialogs.ScaleResetListener;
 import sUnsortedDialogs.ScaleSettingDialog;
 import undo.AbstractUndoableEdit2;
@@ -44,13 +45,17 @@ public class SetImagePixelSize extends ObjectAction<MultichannelDisplayLayer> {
 	}
 	
 	/**shows the dialog*/
-	public ScaleSettingDialog showPixelSizeSetDialog() {
+	public ScaleSettingDialog usePixelSizeSetDialog(String mold) {
+		
 		ScaleSettingDialog ssd = new  ScaleSettingDialog(display.getSlot(), null, true);
 		ssd.setWindowCentered(true);
 		ssd.setModal(true);
 		ssd.setScaleResetListen(createScaleResetListener());
 		ssd.undo=new ImageScaleUndo(display);
-		ssd.showDialog();
+		if(mold!=null)
+			ssd.switchto(mold); 
+		else
+			ssd.showDialog();
 		return ssd;
 	}
 
@@ -77,7 +82,7 @@ public class SetImagePixelSize extends ObjectAction<MultichannelDisplayLayer> {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		showPixelSizeSetDialog();
+		usePixelSizeSetDialog(null);
 	}
 	
 	
@@ -107,5 +112,7 @@ public class SetImagePixelSize extends ObjectAction<MultichannelDisplayLayer> {
 			display.getSlot().setScaleInfo(iScale);
 			createScaleResetListener().scaleReset(display.getSlot(), iScale);
 		}
+		
+		public double getRatio() {return iScale.getPixelWidth()/fScale.getPixelWidth();}
 	}
 }

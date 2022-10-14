@@ -85,55 +85,77 @@ PopupMenuSupplier  {
 	 */
 	public void addScaleChangeMenuItem() {
 		SmartJMenu unitsMenu = new SmartJMenu("units");
-		BasicSmartMenuItem out=new UnitChangeMenuItem("Set Pixel Size (Set Scale...)") ;
-		unitsMenu.add(out);
+		
+		unitsMenu.add(new UnitChangeMenuItem("Set Pixel Size (Set Scale...)", null));
+		for(String st: ScaleSettingDialog.unitnames) {
+			UnitChangeMenuItem menuItem = new UnitChangeMenuItem(st, st);
+			if(!menuItem.invalidUnitOption())
+				unitsMenu.add(menuItem);
+		}
 		this.add(unitsMenu);
 	}
 	
 	
 	class UnitChangeMenuItem extends  BasicSmartMenuItem {
+		
+		String unit1=null;
 		private static final long serialVersionUID = 1L;
 		/**
 		 * @param string
+		 * @param object 
 		 */
-		public UnitChangeMenuItem(String string) {
+		public UnitChangeMenuItem(String string, String object1) {
 			super(string);
+			unit1=object1;
 		}
 		@Override
 		public AbstractUndoableEdit2 performAction() {
+			if(invalidUnitOption())
+			{
+			return null;
+			}
+			
 			ImagePanelGraphic sp = findImagePanel(barG);
-			double oWidth= barG.getBarWidthBasedOnUnits();
+			boolean ok = ShowMessage.showOptionalMessage("Scale change", true, "This will chnage the pysical measurements of the image.", "This feature is a work in progress"," Are you sure you want to continue?");
+			if(!ok)
+				return null;
 			
 			if(sp instanceof ImagePanelGraphic) {
+				
+				
 				ChannelPanelEditingMenu cpem = new ChannelPanelEditingMenu((ImagePanelGraphic) sp);
 				MultichannelDisplayLayer presseddisplay = cpem.getPresseddisplay();
 				if(presseddisplay==null) {
 					ShowMessage.showOptionalMessage("could not identify source image");
 					return null;
 				}
+				
 				SetImagePixelSize dialog = new SetImagePixelSize(presseddisplay);
+				
 				AbstractUndoableEdit2 edit2 = barG.provideUndoForDialog();
 				
-				ScaleSettingDialog showPixelSizeSetDialog = dialog. showPixelSizeSetDialog();
+				ScaleSettingDialog showPixelSizeSetDialog = dialog. usePixelSizeSetDialog(unit1);
 				
 				/**What to do if the bar becomes too small to see*/
-				sp.updateBarScale();
-				double fWidth= barG.getBarWidthBasedOnUnits();
 				
-				//if(fWidth<5||fWidth>300) {
-					double factor = 10.0;
-					if(fWidth>0) {
-						factor=oWidth/fWidth;
-					}
-					barG.setLengthInUnits((int) (barG.getLengthInUnits()*factor));
-					
-				//}
-				CombinedEdit cEdit = new CombinedEdit(showPixelSizeSetDialog.getUndo(), edit2);
+				double factor = 1/showPixelSizeSetDialog. getRatioChange();
+				barG.setLengthInUnits((int)Math.round(barG.getLengthInUnits()*factor));
+				sp.updateBarScale();
+				
+				AbstractUndoableEdit2 undo = showPixelSizeSetDialog.getUndo();
+				CombinedEdit cEdit = new CombinedEdit(undo, edit2);
 				return cEdit;
 			} else {
 				ShowMessage.showOptionalMessage("the image panel does not appear to be connected to a source image");
 				return null;
 			}
+		}
+		
+		/**returns false if this menu option cannot change the unit because the scale bar already uses that unit
+		 * @return
+		 */
+		public boolean invalidUnitOption() {
+			return unit1!=null&& unit1==barG.getScaleInfo().getUnits();
 		}
 	}
 	
@@ -147,6 +169,10 @@ PopupMenuSupplier  {
 				BarGraphic bar = ((ImagePanelGraphic) item).getScaleBar();
 				if(bar==barG2)
 					return (ImagePanelGraphic) item;
+				for(LocatedObject2D attachment:((ImagePanelGraphic) item).getLockedItems()) {
+					if(attachment ==barG2)
+						return (ImagePanelGraphic) item;
+				}
 			}
 		}
 		return null;

@@ -15,13 +15,17 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Oct 12, 2022
+ * Date Modified: Oct 13, 2022
  * Version: 2022.1
  */
 package sUnsortedDialogs;
 
+import java.util.HashMap;
+
 import applicationAdapters.HasScaleInfo;
 import locatedObject.ScaleInfo;
+import logging.IssueLog;
+import messages.ShowMessage;
 import standardDialog.GriddedPanel;
 import standardDialog.StandardDialog;
 import standardDialog.numbers.NumberInputPanel;
@@ -42,10 +46,12 @@ public class ScaleSettingDialog  extends StandardDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private HasScaleInfo scaled;
+	private ScaleInfo originalScale;
 	ScaleInfo info;
 	private ScaleResetListener scaleResetListen;
 	
-	boolean alternateDialog=false;//two versions of this dialog are possible. indicates which
+	boolean alternateDialog=false;//two versions of this dialog are possible. indicates which one
+	
 	
 	public ScaleSettingDialog(HasScaleInfo scaled, StandardDialogListener listener) {
 		this(scaled, listener, true);
@@ -56,6 +62,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 		this.getOptionDisplayTabs().remove(this.getMainPanel());
 		this.scaled=scaled;
 		 info = scaled.getScaleInfo();
+		 originalScale=info.copy();
 		
 		this.addScaleInfoToDialog(scaled.getScaleInfo());
 		
@@ -67,6 +74,13 @@ public class ScaleSettingDialog  extends StandardDialog {
 	@Override
 	public void onOK() {
 		setScaleInfoToDialog(info);
+		afterDialogInput();
+	}
+
+	/**
+	 * 
+	 */
+	public void afterDialogInput() {
 		scaled.setScaleInfo(info);
 		if (scaleResetListen!=null) scaleResetListen.scaleReset(scaled, info);
 	}
@@ -103,5 +117,36 @@ public class ScaleSettingDialog  extends StandardDialog {
 	}
 	
 
+	/**a list of units that con be converted into each other*/
+	public static final String[] unitnames=new String[]{"µm", "nm"};
+	double[] unitsizes=new double[]{  1.0 , 1000.0};
 	
+	/**Changes the unit*/
+	public AbstractUndoableEdit2 switchto(String units) {
+		
+		HashMap<String, Double> unitsReference=new HashMap<String, Double> ();
+		for(int i=0; i<unitnames.length; i++) {
+			unitsReference.put(unitnames[i], unitsizes[i]);
+		}
+		
+		String startingUnit = info.getUnits();
+		Double ratio = unitsReference.get(startingUnit);
+		if(ratio==null)
+			{
+			ShowMessage.showOptionalMessage("unit not convertible", false, "could not find conversion factor between units");
+			return null;
+			}
+		ratio=ratio/unitsReference.get(units);
+		
+		info.setUnits(units);
+		info.scaleXY(ratio);
+		
+		this. afterDialogInput();
+		
+	
+	return getUndo();
+	}
+	
+	/**returns the ratio*/
+	public double getRatioChange() {return this.originalScale.getPixelWidth()/info.getPixelWidth();}
 }

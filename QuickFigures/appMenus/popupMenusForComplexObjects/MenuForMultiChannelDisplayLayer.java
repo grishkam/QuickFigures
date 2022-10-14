@@ -282,7 +282,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 				private static final long serialVersionUID = 1L;
 				@Override
 				public void onAction() {
-					new SetImagePixelSize(display). showPixelSizeSetDialog();
+					new SetImagePixelSize(display). usePixelSizeSetDialog(null);
 				}
 			};
 			this.add(out);

@@ -1033,6 +1033,7 @@ protected static String handlePasteForString(String st, String newText, int curs
 /**adds a key char to a string based on a key event
  * @param highlight */
 static String handleKeyOnString(KeyEvent e, String st, int cursor, int highlight) {
+	
 	if (modifierKey(e)) {return st;}
 	if (ArrowKey(e)) {return st;}
 	if(cursor<0||cursor>st.length()) cursor=st.length();
@@ -1043,7 +1044,7 @@ static String handleKeyOnString(KeyEvent e, String st, int cursor, int highlight
 	
 	if(highlight>cursor) endCut=highlight;
 	if(highlight<cursor) startCut=highlight;
-	
+	if(startCut<0) startCut=0;
 	
 	if (e.getKeyCode()==KeyEvent.VK_BACK_SPACE&&st.length()>0) {
 		
@@ -1051,7 +1052,16 @@ static String handleKeyOnString(KeyEvent e, String st, int cursor, int highlight
 		
 	} 
 	
-	String newST=st.substring(0, startCut)+enteredKey+st.substring(endCut);
+	String newST;
+	try {
+		String part1 = st.substring(0, startCut);
+		String part2 = st.substring(endCut);
+		newST = part1 + enteredKey + part2;
+	} catch (Exception e2) {
+		IssueLog.logT(e2);
+		newST=st;
+		
+	}
 	
 	if (e.getKeyCode()==KeyEvent.VK_DELETE&&st.length()>0&&cursor<st.length()) {
 		if (cursor<st.length()) {newST=st.substring(0, cursor)+st.substring(cursor+1);}

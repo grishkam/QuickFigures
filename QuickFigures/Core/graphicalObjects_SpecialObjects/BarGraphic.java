@@ -251,6 +251,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		bg.copyLocationFrom(this);
 		bg.setStrokeColor(getStrokeColor());
 		bg.setFillColor(getFillColor());
+		
 		//if (getSnappingBehaviour()!=null) bg.setSnappingBehaviour(this.getSnappingBehaviour().copy());
 		return bg;
 	}
@@ -261,7 +262,7 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		this.setScaleInfo(b.getScaleInfo());
 		this.setScaleProvider(b.getScaleProvider());
 		if (b.getAttachmentPosition()!=null)this.setAttachmentPosition(b.getAttachmentPosition().copy());
-		
+		this.setLocationUpperLeft(b.getLocationUpperLeft());
 		
 		
 		
@@ -365,8 +366,8 @@ public class BarGraphic extends ShapeGraphic implements Scales,ScalededItem,Rect
 		if (clickcount<2) return;
 		if(clickcount>2) return;
 		if (handlenum==1) getBarText().showOptionsDialog();
-		//else if (handlenum==NO_HANDLE_)showOptionsDialog();
-		IssueLog.log("Called on handle mouse event ");
+		else if (handlenum==NO_HANDLE_)showOptionsDialog();
+		
 	}
 
 	
