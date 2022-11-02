@@ -54,6 +54,9 @@ public class BasicMetaDataHandler {
 		new String[] {"LUT Channel ", " name ", "lei"},   //the most reliable key for lei. only tested on one lei file
 		new String[] {"Block 2 csLutName", " ", "lei"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
 		new String[] {"Channel Name ", " ", "zvi"}, //For .zvi
+		
+		new String[] {"Name #", " ", "nd2"},//for nikon. Name # entry gave confusing results with two cy5
+
 		new String[] {"Nikon Ti2, FilterChanger(Turret-Lo) #", " ", "nd2"}//for nikon. Name # entry gave confusing results with two cy5
 	};
 	

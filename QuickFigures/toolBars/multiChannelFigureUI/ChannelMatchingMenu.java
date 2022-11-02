@@ -126,12 +126,14 @@ ActionListener, DisplayRangeChangeListener  {
 		
 	}
 
+	/**Sets the min/max of every multichannel image*/
 	public static void setAllChannelMinMax(ArrayList<MultiChannelImage> items, int chan, String realName, double min, double max) {
 		for(MultiChannelImage w: items) {
 			chan = ChannelPanelEditingMenu.getBestMatchToChannel(w, realName, chan);
 			w.setChannelMin(chan, min);
 			w.setChannelMax(chan, max);
 			w.updateDisplay();
+			
 		}
 	}
 	

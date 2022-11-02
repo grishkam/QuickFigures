@@ -496,7 +496,7 @@ if (	actionCommand.equals(renameChanCommand)) {
 		  or (if no match), those with the same number*/
 		String realName=getPressedMultichannel().getRealChannelName(channelNumber);
 		
-		StatusPanel.updateStatus("Setting Display Range "+realName+" in c= "+channelNumber+" "+min+", "+max);
+		StatusPanel.updateStatus("Set Display Range "+realName+" in c= "+channelNumber+" "+min+", "+max);
 		
 		setDisplayRange(wraps, channelNumber, realName, min, max);
 		updateAllDisplaysWithRealChannel( realName);

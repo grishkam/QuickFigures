@@ -586,6 +586,17 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 				(new BasicMetaDataHandler()).createChanNamesFor(mcw, imp.getNChannels());//if there are no channel names, creates artificial ones
 			this.chanexposures=(new BasicMetaDataHandler()).getChannelExposuresInOrder(mcw);
 		}
+		try {
+			if(sameNames()) {
+				IssueLog.log("Problem: more than one channels have the same name");
+				for(int i=1; i<=channames.size();i++) {
+					channames.set(i-1, channames.get(i-1)+" "+i);
+				}
+			};
+			
+		} catch (Throwable t) {
+			IssueLog.log(t);
+		}
 		return channames;
 	}
 	
@@ -598,6 +609,26 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 			
 		}
 		return null;
+	}
+	
+	/**returns true if more than one channel shares the same name*/
+	public boolean sameNames() {
+		for(int i=0; i<channames.size(); i++) {
+			for(int j=0; j<channames.size(); j++) {
+				if(i==j)
+					continue;
+				String stringI = channames.get(i);
+				String stringJ = channames.get(j);
+				if(stringI==null||stringJ==null)
+					continue;
+				if(stringI.equals(stringJ)) {
+					IssueLog.log("Two channels share the same name "+stringI+"   "+stringJ+"  "+i+"   "+j);
+					return true;
+					}
+			}
+		}
+		
+		return false;
 	}
 	
 	/**if the exposure of the given channel is available, returns it*/

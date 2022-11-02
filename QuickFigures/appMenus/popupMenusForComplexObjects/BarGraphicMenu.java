@@ -108,6 +108,8 @@ PopupMenuSupplier  {
 			super(string);
 			unit1=object1;
 		}
+		
+		/**Changes the scale and alters the scale bar*/
 		@Override
 		public AbstractUndoableEdit2 performAction() {
 			if(invalidUnitOption())
@@ -116,7 +118,7 @@ PopupMenuSupplier  {
 			}
 			
 			ImagePanelGraphic sp = findImagePanel(barG);
-			boolean ok = ShowMessage.showOptionalMessage("Scale change", true, "This will chnage the pysical measurements of the image.", "This feature is a work in progress"," Are you sure you want to continue?");
+			boolean ok = ShowMessage.showOptionalMessage("Scale change", true, "This will change the physical measurements of the image.", "This menu option is a work in progress"," Are you sure you want to continue?");
 			if(!ok)
 				return null;
 			
