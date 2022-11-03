@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Nov 3, 2022
  * Version: 2022.1
  */
 package applicationAdaptersForImageJ1;
@@ -33,6 +33,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
 import ij.ImagePlus;
 import ij.gui.*;
 import ij.io.Opener;
@@ -712,7 +714,15 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 			return new HashMap<String, Object>();
 		}
 		
-		
+		/**returns a QuickFigures object that resembles this shape*/
+		public ZoomableGraphic convertToQFObject() {
+			BasicShapeGraphic output = new BasicShapeGraphic(this.getShape());
+			output.setStrokeWidth(this.getStrokeWidth());
+			output.setStrokeColor(this.getStrokeColor());
+			output.setName(this.getName());
+			
+			return output;
+		}
 		
 
 }

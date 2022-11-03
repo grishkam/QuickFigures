@@ -110,6 +110,8 @@ abstract class QuickExportTest {
 			if (viewOnebyOne) {
 			createExample.setZoomLevel(1);
 			ImageDisplayIOTest.assertCompareWindows(createExample.getWindow(), this.createExporter().viewSavedFile(file));
+			} else {
+				createExample.getWindow().setVisible(false);
 			}
 			
 			

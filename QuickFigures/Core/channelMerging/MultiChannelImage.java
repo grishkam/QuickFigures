@@ -129,6 +129,12 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	public double bitDepth();
 	
 	
+	/**
+	work in progress, returns a list of objects that mimic the overlay
+	 */
+	public ArrayList<Object> getOverlayObjects();
+	
+	
 
 	
 }

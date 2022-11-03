@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Nov 3, 2022
  * Version: 2022.1
  */
 package applicationAdaptersForImageJ1;
@@ -24,6 +24,7 @@ import ij.CompositeImage;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.Prefs;
+import ij.gui.Overlay;
 import ij.gui.Roi;
 import ij.gui.Toolbar;
 import ij.measure.Calibration;
@@ -96,7 +97,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	
 	}
 	
-	/***/
+	/**takes a region of interest from the image*/
 	@Override
 	public void takeFromImage(LocatedObject2D roi) {
 		checkVoid();
@@ -106,6 +107,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 
 	}
 
+	/**Adds a region of interest to the imate*/
 	@Override
 	public void addItemToImage(LocatedObject2D roi) {
 		checkVoid();
@@ -546,13 +548,14 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	
 	
 
-
+	/**sets the title*/
 	@Override
 	public void setTitle(String st) {
 		imp.setTitle(st);
 		
 	}
 
+	/**returns the channel entry for the given channel, slice and frame. */
 	@Override
 	public ChannelEntry getSliceChannelEntry(int channel, int slice, int frame,
 			int... dim) {
@@ -813,6 +816,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		return 0;
 	}
 
+	/**returns the bit depth of the image*/
 	@Override
 	public double bitDepth() {
 		if (imp==null) return 8;
@@ -848,7 +852,24 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		return output;
 	}
 
+	/**work in progress, converts overlay roi objects to a list of QuickFigures objects*/
+	public ArrayList<LocatedObject2D> convertOverlaytoObjects() {
+		 ArrayList<LocatedObject2D> output=new  ArrayList<LocatedObject2D>();
+		 Overlay o = imp.getOverlay();
+		 Roi[] arrayO = o.toArray();
+		 for(Roi roi: arrayO) {
+			 RoiWrapper wrap = new  RoiWrapper(roi);
+			 output.add((LocatedObject2D) wrap.convertToQFObject());
+		 }
+		 return output;
+	}
 
+	/**returns a list of objects that match the overlay of the image. work in progress*/
+	@Override
+	public ArrayList<Object> getOverlayObjects() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 
