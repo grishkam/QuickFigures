@@ -49,15 +49,15 @@ public class BasicMetaDataHandler {
 	   */
 	static String[][] allNameKeys=new String[][] {
 		//new String[] {"DisplaySetting|Channel|DyeName|", " ", "czi"},//for CZI does not work the same way others do
-		new String[] {myColorCode, " ", "any"},   //A system created by me
-		new String[] {"ChannelDescription|LUTName ", " ", "lif"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
-		new String[] {"LUT Channel ", " name ", "lei"},   //the most reliable key for lei. only tested on one lei file
-		new String[] {"Block 2 csLutName", " ", "lei"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
-		new String[] {"Channel Name ", " ", "zvi"}, //For .zvi
+		new String[] {myColorCode, " ", "any", "0"},   //A system created by me
+		new String[] {"ChannelDescription|LUTName ", " ", "lif", "0"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
+		new String[] {"LUT Channel ", " name ", "lei", "0"},   //the most reliable key for lei. only tested on one lei file
+		new String[] {"Block 2 csLutName", " ", "lei", "0"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
+		new String[] {"Channel Name ", " ", "zvi", "0"}, //For .zvi
 		
-		new String[] {"Name #", " ", "nd2"},//for nikon. Name # entry gave confusing results with two cy5
+		new String[] {"Name #", " ", "nd2", "2"},//for nikon. Name # entry gave confusing results with two cy5
 
-		new String[] {"Nikon Ti2, FilterChanger(Turret-Lo) #", " ", "nd2"}//for nikon. Name # entry gave confusing results with two cy5
+		new String[] {"Nikon Ti2, FilterChanger(Turret-Lo) #", " ", "nd2", "0"}//for nikon. Name # entry gave confusing results with two cy5
 	};
 	
 	
@@ -846,7 +846,11 @@ public class BasicMetaDataHandler {
 			 *  Channels here are numbered from 0, 1, 2 onward ()*/
 			public String getRealChannelInformationBasedOnMetaData(MetaInfoWrapper select, String[] prefixSuffix,
 					int channelNumber) {
-				return (String) getEntryFromInfoAsString(select, prefixSuffix[0]+channelNumber+ prefixSuffix[1] );
+				String fullKey = prefixSuffix[0]+(channelNumber+Integer.parseInt(prefixSuffix[3]))+ prefixSuffix[1];
+			
+				String entryFromInfoAsString = (String) getEntryFromInfoAsString(select, fullKey );
+				IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
+				return entryFromInfoAsString;
 			}
 
 			/**Checks the file for my metadta regarding he channel indeces, creates the info if not already present*/
