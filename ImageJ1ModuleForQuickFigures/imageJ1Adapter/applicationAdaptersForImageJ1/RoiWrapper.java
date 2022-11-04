@@ -703,23 +703,27 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 		}
 		@Override
 		public boolean isFillable() {
-			// TODO Auto-generated method stub
 			return true;
 		}
 
 
 		@Override
 		public HashMap<String, Object> getTagHashMap() {
-			// TODO Auto-generated method stub
 			return new HashMap<String, Object>();
 		}
 		
 		/**returns a QuickFigures object that resembles this shape*/
 		public ZoomableGraphic convertToQFObject() {
 			BasicShapeGraphic output = new BasicShapeGraphic(this.getShape());
-			output.setStrokeWidth(this.getStrokeWidth());
+			float strokeWidth = this.getStrokeWidth();
+			if(strokeWidth==0)
+				strokeWidth=1;
+			output.setStrokeWidth(strokeWidth);
 			output.setStrokeColor(this.getStrokeColor());
 			output.setName(this.getName());
+			if(this.getName()==null||"null".equals(this.getName())) {
+				output.setName("object from imagej roi");
+			}
 			
 			return output;
 		}

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Nov 3, 2022
  * Version: 2022.1
  */
 package graphicalObjects;
@@ -54,4 +54,7 @@ public interface CordinateConverter {
 	
 	/**returns a copy with the x,y positions shifted*/
 	CordinateConverter getCopyTranslated(int dx, int dy);
+	
+	/**returns a copy with the magnification multiplied by the given factor*/
+	CordinateConverter getCopyScaled(double ds);
 }

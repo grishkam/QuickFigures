@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: June 13, 2022
+ * Date Modified: Nov 3, 2022
  * Version: 2022.1
  */
 package infoStorage;
@@ -849,7 +849,7 @@ public class BasicMetaDataHandler {
 				String fullKey = prefixSuffix[0]+(channelNumber+Integer.parseInt(prefixSuffix[3]))+ prefixSuffix[1];
 			
 				String entryFromInfoAsString = (String) getEntryFromInfoAsString(select, fullKey );
-				IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
+				//IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
 				return entryFromInfoAsString;
 			}
 

@@ -93,6 +93,9 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**Maintains a list of the channel entries*/
 		private ArrayList<ChannelEntry> hashChannel =new  ChannelEntryList();
 
+		/**Maintains a list of overlay objects*/
+		private ArrayList<Object> overlayObjects;
+
 		
 		
 		
@@ -396,7 +399,7 @@ import channelLabels.ChannelLabelTextGraphic;
 				ImagePanelGraphic graphic=(ImagePanelGraphic) getImageDisplayObject();
 				graphic.setSourcePanel(this);
 				graphic.setImage((BufferedImage) getAwtImage());
-			
+				graphic.setOverlayObjects(this.getOverlayObjects());
 				graphic.setScaleInfo(getDisplayScaleInfo());
 				createChanSwapHandles(graphic);
 				graphic.setScaleInfo(getDisplayScaleInfo());
@@ -506,6 +509,21 @@ import channelLabels.ChannelLabelTextGraphic;
 		 */
 		public boolean isCustomPanel() {
 			return designation==CUSTOM_IMAGE_PANEL;
+		}
+
+		/**work in progress. Returns a list of overlay objects
+		 * @return
+		 */
+		public ArrayList<Object> getOverlayObjects() {
+			return overlayObjects;
+		}
+
+		/**
+		 * @param overlayObjects
+		 */
+		public void setOverLayObjects(ArrayList<Object> overlayObjects) {
+			this.overlayObjects=overlayObjects;
+			
 		}
 		
 		

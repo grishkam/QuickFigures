@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Nov 3, 2022
  * Version: 2022.1
  */
 package graphicalObjects;
@@ -253,5 +253,10 @@ public class BasicCoordinateConverter implements CordinateConverter, Serializabl
 	@Override
 	public CordinateConverter getCopyTranslated(int dx, int dy) {
 		return new BasicCoordinateConverter(x+dx,y+dy,magnification);
+	}
+
+	@Override
+	public CordinateConverter getCopyScaled(double ds) {
+		return new BasicCoordinateConverter(x,y,magnification*ds);
 	}
 }

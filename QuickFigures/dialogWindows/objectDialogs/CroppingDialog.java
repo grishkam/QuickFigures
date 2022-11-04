@@ -210,16 +210,29 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.setWindowCentered(true);
 	}
 
-	/**adds indicators regarding the position of insets to the crop dialog*/
+	/**adds indicators regarding the position of insets to the crop dialog.
+	 * Also adds overlay objects*/
 	public void includeInsets(MultiChannelSlot s) {
 		for(PanelGraphicInsetDefiner i: s.getDisplayLayer().getInsets()) {
 			if(i==null) continue;
 			RectangularGraphic r3 = i.mapRectBackToUnprocessedVersion(s.getModifications());
 			this.addExtraItem(r3);
 		}
+		
+		ArrayList<Object> objects = s.getMultichannelImage().getOverlayObjects("Draw onto crop dialog");
+		
+		if(objects!=null) {
+			
+			for(Object o: objects) {
+				if(o instanceof ZoomableGraphic) {
+					this.addExtraItem((ZoomableGraphic) o);
+					
+				}
+			}
+		}
 	}
 	
-	private void addExtraItem(RectangularGraphic r3) {
+	private void addExtraItem(ZoomableGraphic r3) {
 		extraItems.add(r3);
 		
 	}

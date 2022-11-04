@@ -44,7 +44,9 @@ import undo.UndoManagerPlus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.Window;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 import channelMerging.ChannelColorWrap;
@@ -58,6 +60,7 @@ import channelMergingImageJ1.CompositeImageMerger;
 import channelMergingImageJ1.IJ1ChannelOrderWrap;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.BasicShapeGraphic;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import applicationAdapters.OpenFileReference;
@@ -76,6 +79,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	ImagePlus imp;
 	private ArrayList<String> channames;
 	private ArrayList<String> chanexposures;
+	private transient ArrayList<Object> overlayObjectList;
 	
 	public ImagePlusWrapper(ImagePlus imp) {
 		
@@ -88,7 +92,16 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		if(imp!=null)
 		ChannelManipulations.innitializeDisplayRangetoMinMax(this);
 		}
+	/**
+	 * @param imagePlus
+	 * @param overlayObjectrecord
+	 */
+	public ImagePlusWrapper(ImagePlus imagePlus, ArrayList<Object> overlayObjectrecord) {
+		this(imagePlus);
+		this.overlayObjectList=overlayObjectrecord;
+	}
 	
+
 	public ImagePlus getImagePlus() {
 		return imp;
 	}
@@ -776,13 +789,67 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		ImagePlusWrapper imagePlusWrapper = new ImagePlusWrapper(d);
 		imagePlusWrapper.setChannelNames(this.channames);
 		
+		imagePlusWrapper.setOverlayObjects(cropOverlayAtAngle(  r, angle,scale));
 		
 		ScaleInfo scaled = this.getScaleInfo().getScaledCopyXY(scale);
 		imagePlusWrapper.setScaleInfo(scaled);
 		
+		
 		return imagePlusWrapper;
 		
 	
+	}
+
+	/**sets the overlay object list
+	 * @param cropOverlayAtAngle
+	 */
+	public void setOverlayObjects(ArrayList<Object> cropOverlayAtAngle) {
+		this.overlayObjectList=cropOverlayAtAngle;
+	
+	}
+
+	/**work in progress. Will create a crop and scale version of the overlay
+	 * @param overlay
+	 * @param r
+	 * @param angle
+	 * @param scale
+	 * @return
+	 */
+	private ArrayList<Object> cropOverlayAtAngle(Rectangle r, double angle, double scale) {
+
+		ArrayList<Object> overlayObjects = getOverlayObjects("crop");
+		ArrayList<Object> output = new ArrayList<Object> ();
+		if(r==null) {
+			 output.addAll(overlayObjects );
+			
+			return output ;
+			}
+		for(Object o: overlayObjects) {
+			
+			if(o instanceof BasicShapeGraphic) {
+				
+				BasicShapeGraphic b = ((BasicShapeGraphic) o).copy();
+				Shape shape1=b.getShape();
+				AffineTransform rotTransform = AffineTransform.getRotateInstance(angle, r.getCenterX(), r.getCenterY());
+				shape1=rotTransform.createTransformedShape(shape1);
+				
+			//	if(!r.contains(shape1.getBounds()))continue; //workin in progress to distinguish between shapes inside and outside the crop area
+				
+				AffineTransform translate = AffineTransform.getTranslateInstance(-r.getMinX(), -r.getMinY());
+				shape1=translate.createTransformedShape(shape1);
+				if(scale!=1) {
+					AffineTransform scaleTransform = AffineTransform.getScaleInstance(scale, scale);
+					
+					shape1=scaleTransform.createTransformedShape(shape1);
+					}
+				b.setShape(shape1);
+				b.setName("crop of "+b.getName());
+				
+				output.add(b);
+				
+			}
+		}
+		return output;
 	}
 
 	/**
@@ -852,23 +919,40 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		return output;
 	}
 
-	/**work in progress, converts overlay roi objects to a list of QuickFigures objects*/
-	public ArrayList<LocatedObject2D> convertOverlaytoObjects() {
-		 ArrayList<LocatedObject2D> output=new  ArrayList<LocatedObject2D>();
-		 Overlay o = imp.getOverlay();
-		 Roi[] arrayO = o.toArray();
-		 for(Roi roi: arrayO) {
-			 RoiWrapper wrap = new  RoiWrapper(roi);
-			 output.add((LocatedObject2D) wrap.convertToQFObject());
-		 }
-		 return output;
-	}
+	
 
-	/**returns a list of objects that match the overlay of the image. work in progress*/
+	/**returns a list of QuickFigures objects that match the overlay of the image. work in progress*/
 	@Override
-	public ArrayList<Object> getOverlayObjects() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Object> getOverlayObjects(String context) {
+		
+		if(this.overlayObjectList!=null &&!"Draw onto crop dialog".equals(context)) {
+			
+			ArrayList<Object> output = new  ArrayList<Object>();
+			output.addAll( overlayObjectList);
+			if(output.size()>1) {
+				
+			}
+			return output;
+			
+		}
+		
+		ArrayList<Object> output = new ArrayList<Object> ();
+		Overlay overlay = imp.getOverlay();
+		
+		if(overlay!=null) {
+			Roi[] array = overlay.toArray();
+			
+			for(Roi roi: array) {
+				
+				RoiWrapper roiW = new RoiWrapper(roi);
+				output.add(roiW.convertToQFObject());
+			}
+		}
+		
+		if(output.size()>1) {
+			
+		}
+		return output;
 	}
 
 

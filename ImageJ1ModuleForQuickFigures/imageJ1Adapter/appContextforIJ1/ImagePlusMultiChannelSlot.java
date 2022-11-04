@@ -99,7 +99,8 @@ import logging.IssueLog;
 			
 		}
 
-		/**returns the working image*/
+		/**returns the working image.
+		 * Does not yet correctly return the cropped version of the overlay */
 		@Override
 		public ImagePlusWrapper getMultichannelImage() {
 			if (getImagePlus()==null) {
@@ -109,6 +110,7 @@ import logging.IssueLog;
 			if (multiChannelWrapper!=null && this.multiChannelWrapper.getImagePlus()==this.getImagePlus())
 				return multiChannelWrapper;
 			multiChannelWrapper =new ImagePlusWrapper(getImagePlus());
+			multiChannelWrapper.getOverlayObjects("Check before getting image");
 			return multiChannelWrapper;
 		}
 		
@@ -523,7 +525,7 @@ import logging.IssueLog;
 			 preprocessRecord=process;
 			 
 			 setImagePlus(m.getImagePlus());
-			
+			 getMultichannelImage().setOverlayObjects(m.getOverlayObjects("setting to cropped objects"));
 			getDisplayUpdater().imageUpdated(getImagePlus());
 		}
 	
@@ -549,8 +551,10 @@ import logging.IssueLog;
 		public ImagePlusWrapper getUnprocessedVersion(boolean b) {
 			ImagePlus backup = getBackup(b);
 			ImagePlusWrapper bwrap=getBackupAsWrapper();
+			
 			if (backup!=null&&bwrap==null) 
 				bwrap=new ImagePlusWrapper(backup);
+			
 			if(backup==null) {
 				/**If the backup once existed will ask user to reopen*/
 				if (original.innitialized) 

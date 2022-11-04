@@ -132,7 +132,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	/**
 	work in progress, returns a list of objects that mimic the overlay
 	 */
-	public ArrayList<Object> getOverlayObjects();
+	public ArrayList<Object> getOverlayObjects(String context);
 	
 	
 

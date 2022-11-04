@@ -35,7 +35,8 @@ import locatedObject.Scales;
 import locatedObject.StrokedItem;
 
 /**An object that can take the form of an arbitrary shape. Used as a superclass for many different shapes
-   This is meant to be used */
+   This is meant to be used as a superclass and not used directly except under certain circumstances
+   The shape may not be serializable and therefore */
 public class BasicShapeGraphic extends ShapeGraphic implements Scales, HasSmartHandles{
 
 	/**

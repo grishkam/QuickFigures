@@ -531,7 +531,7 @@ public class PanelList implements Serializable{
 		if (entry.getChannelEntryList().size()<1) 
 			IssueLog.log("It appears that you removed all the channels from this panel", "At least one channel is needed for an image");
 		entry.setImageObjectWrapped(impw.getChannelMerger().generateMergedRGB(entry, getChannelUseInstructions().channelColorMode));
-	
+		entry.setOverLayObjects(impw.getOverlayObjects("set objects for panel list"));
 		entry.setScaleInfo(impw.getScaleInfo());
 	
 		/**needed to change the image when there are updates but not for initial creation*/

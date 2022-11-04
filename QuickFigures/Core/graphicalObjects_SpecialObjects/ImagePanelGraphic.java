@@ -63,6 +63,7 @@ import figureOrganizer.FigureType;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects.ZoomableGraphic;
 import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
 import handles.AttachmentPositionHandle;
@@ -373,6 +374,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 
 	private transient ChannelSwapHandleList extraHandles;
 	private FigureType figureType;
+	private ArrayList<Object> overlayObjects;
 	
 
 
@@ -536,8 +538,38 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 					   
 				   }
 				 
+				  drawOverlayObjects(graphics, cords);
 			
 			}
+
+		/**Draws any overlay objects that are completely inside the region of interest
+		 * @param graphics
+		 * @param cords
+		 */
+		public void drawOverlayObjects(Graphics2D graphics, CordinateConverter cords) {
+			try {
+				  if(overlayObjects==null) {
+					  
+				  } else {
+					  Rectangle2D r = new Rectangle2D.Double(0,0, this.getObjectWidth()/scale, this.getObjectHeight()/scale);
+					  
+					  CordinateConverter cordsOverlay = cords.getCopyScaled(scale).getCopyTranslated((int)(-this.getLocationUpperLeft().getX()/scale), (int)(-this.getLocationUpperLeft().getY()/scale));
+					
+					  for(Object object: overlayObjects) {
+						  if(object instanceof LocatedObject2D) {
+							  boolean inside = r.contains(((LocatedObject2D) object).getBounds());
+		
+							  if(!inside)
+								  continue;
+						  }
+						  if(object instanceof ZoomableGraphic) {
+							  ZoomableGraphic z=(ZoomableGraphic) object;
+							  z.draw(graphics, cordsOverlay);
+						  }
+					  }
+				  }
+			  } catch (Throwable t){}
+		}
 
 		/**
 		 * Draws the Frame
@@ -760,11 +792,20 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		if (panel==null) return;//bugfix not sure why it is turning out null
 			this.sourcePanel=panel;
 			setImage((BufferedImage) panel.getAwtImage());
+			setOverlayObjects(panel.getOverlayObjects());
 			setScaleInfo(panel.getDisplayScaleInfo());
 			this.updateBarScale();
 			
 		}
 		
+	/**
+		 * @param overlayObjects
+		 */
+		public void setOverlayObjects(ArrayList<Object> overlayObjects) {
+			this.overlayObjects=overlayObjects;
+			
+		}
+
 	/**Sets the image*/
 		public void setImage(BufferedImage img) {
 			
