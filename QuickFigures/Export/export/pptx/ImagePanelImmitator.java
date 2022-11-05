@@ -15,13 +15,14 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 6, 2022
  * Version: 2022.1
  */
 package export.pptx;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 
 import org.apache.poi.sl.usermodel.PictureData.PictureType;
 import org.apache.poi.util.IOUtils;
@@ -30,6 +31,8 @@ import org.apache.poi.xslf.usermodel.XSLFPictureData;
 import org.apache.poi.xslf.usermodel.XSLFPictureShape;
 import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 
+import exportMenus.PPTQuickExport;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import illustratorScripts.PlacedItemRef;
 import logging.IssueLog;
@@ -68,6 +71,14 @@ public class ImagePanelImmitator implements OfficeObjectMaker {
       
         pic.setAnchor(ipg.getBounds());//TODO Check if using bounds2d instead of bounds has an effect
        f.deleteOnExit();
+       
+       if(ipg.isShowOverlay()) {
+    	   ArrayList<ZoomableGraphic> graphics = ipg.extractOverlay().getAllGraphics();
+    	   for(ZoomableGraphic g: graphics) {
+    		   PPTQuickExport.addObjectToSlide(ppt, slide, g);
+    	   }
+       }
+       
        return pic;
        
 		} catch (Exception e) {

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 28, 2021
+ * Date Modified: Nov 3, 2022
  * Version: 2022.1
  */
 package includedToolbars;
@@ -328,6 +328,7 @@ public void run(String s) {
 		selectDefaultTool();
 		
 		addDragAndDrop();
+		
 		
 	}
 

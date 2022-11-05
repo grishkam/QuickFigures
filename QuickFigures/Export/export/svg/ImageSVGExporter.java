@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package export.svg;
@@ -32,8 +32,10 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import logging.IssueLog;
 
 /**An SVG exporter implementation for image panels using Apache Batik*/
 public class ImageSVGExporter extends SVGExporter {
@@ -74,6 +76,12 @@ public class ImageSVGExporter extends SVGExporter {
 		handler.handleImage((Image)image, element, (int)p.getX(),(int) p.getY(), (int)graphic.getObjectWidth(), (int)graphic.getObjectHeight(), g2d.getGeneratorContext());
 		
 		e.appendChild(element);
+		
+		if(graphic.isShowOverlay()) {
+			GraphicLayerPane overlay = graphic.extractOverlay();
+			
+			new SVGExporter_GraphicLayer(overlay).toSVG(dom, e);
+		}
 		
 		return element;
 	}

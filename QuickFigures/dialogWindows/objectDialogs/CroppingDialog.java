@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 25, 2022
+ * Date Modified: Nov 4, 2022
  * Version: 2022.1
  */
 package objectDialogs;
@@ -57,6 +57,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 import handles.RectangularShapeSmartHandle;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
@@ -219,15 +220,17 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			this.addExtraItem(r3);
 		}
 		
-		ArrayList<Object> objects = s.getMultichannelImage().getOverlayObjects("Draw onto crop dialog");
+		OverlayObjectList objects = s.getMultichannelImage().getOverlayObjects("Draw onto crop dialog");
 		
 		if(objects!=null) {
 			
-			for(Object o: objects) {
+			for(Object o: objects.getOverlayObjects()) try {
 				if(o instanceof ZoomableGraphic) {
 					this.addExtraItem((ZoomableGraphic) o);
 					
 				}
+			} catch (Throwable t) {
+				IssueLog.logT(t);
 			}
 		}
 	}

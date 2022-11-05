@@ -150,7 +150,7 @@ public class SVGsaver {
 	        	}
 			  
 	        }catch (Throwable t) {
-	        	t.printStackTrace();
+	        	IssueLog.logT(t);
 	        }
 			
 			

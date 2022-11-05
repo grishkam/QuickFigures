@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 12, 2021
+ * Date Modified: Nov 4, 2022
  * Version: 2022.1
  */
 package imageDisplayApp;
@@ -43,10 +43,11 @@ import locatedObject.Selectable;
 import locatedObject.StrokedItem;
 import logging.IssueLog;
 
-/**A list of special objects that are drawn over the image. 
+/**A list of special objects that are drawn over the worksheet. 
  * These objects are always drawn in their selected forms. 
  * Always above the normal objects in the image.
-  These are temporary objects that are not saved/exported*/
+  These are temporary objects that are not saved/exported.
+  They should not be confused with the image overlays*/
 public class OverlayObjectManager {
 	private ZoomableGraphic selectionGraphic=null;
 	protected ZoomableGraphic selectionGraphic2=null;

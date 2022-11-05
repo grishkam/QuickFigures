@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 3, 2022
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package applicationAdaptersForImageJ1;
@@ -36,6 +36,7 @@ import imageScaling.Interpolation;
 import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
 import locatedObject.LocatedObject2D;
+import locatedObject.PathPointList;
 import locatedObject.ScaleInfo;
 import logging.IssueLog;
 import multiChannelFigureUI.ChannelManipulations;
@@ -43,10 +44,12 @@ import undo.UndoManagerPlus;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Window;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import channelMerging.ChannelColorWrap;
@@ -60,7 +63,12 @@ import channelMergingImageJ1.CompositeImageMerger;
 import channelMergingImageJ1.IJ1ChannelOrderWrap;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import applicationAdapters.OpenFileReference;
@@ -79,7 +87,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	ImagePlus imp;
 	private ArrayList<String> channames;
 	private ArrayList<String> chanexposures;
-	private transient ArrayList<Object> overlayObjectList;
+	private OverlayObjectList overlayObjectList;
 	
 	public ImagePlusWrapper(ImagePlus imp) {
 		
@@ -92,14 +100,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		if(imp!=null)
 		ChannelManipulations.innitializeDisplayRangetoMinMax(this);
 		}
-	/**
-	 * @param imagePlus
-	 * @param overlayObjectrecord
-	 */
-	public ImagePlusWrapper(ImagePlus imagePlus, ArrayList<Object> overlayObjectrecord) {
-		this(imagePlus);
-		this.overlayObjectList=overlayObjectrecord;
-	}
+
 	
 
 	public ImagePlus getImagePlus() {
@@ -803,42 +804,42 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	/**sets the overlay object list
 	 * @param cropOverlayAtAngle
 	 */
-	public void setOverlayObjects(ArrayList<Object> cropOverlayAtAngle) {
+	public void setOverlayObjects(OverlayObjectList cropOverlayAtAngle) {
 		this.overlayObjectList=cropOverlayAtAngle;
 	
 	}
 
 	/**work in progress. Will create a crop and scale version of the overlay
+	 * TODO: make it work with ovals, arrows and rectangles
 	 * @param overlay
 	 * @param r
 	 * @param angle
 	 * @param scale
 	 * @return
 	 */
-	private ArrayList<Object> cropOverlayAtAngle(Rectangle r, double angle, double scale) {
+	private OverlayObjectList cropOverlayAtAngle(Rectangle r, double angle, double scale) {
 
-		ArrayList<Object> overlayObjects = getOverlayObjects("crop");
-		ArrayList<Object> output = new ArrayList<Object> ();
+		OverlayObjectList overlayObjects = getOverlayObjects("crop");
+		OverlayObjectList output = new OverlayObjectList();
 		if(r==null) {
 			 output.addAll(overlayObjects );
 			
 			return output ;
 			}
-		for(Object o: overlayObjects) {
+		for(Object o: overlayObjects.getOverlayObjects()) try {
+			AffineTransform rotTransform = AffineTransform.getRotateInstance(angle, r.getCenterX(), r.getCenterY());
+			AffineTransform translate = AffineTransform.getTranslateInstance(-r.getMinX(), -r.getMinY());
+			AffineTransform scaleTransform= AffineTransform.getScaleInstance(scale, scale);
+			
 			
 			if(o instanceof BasicShapeGraphic) {
 				
 				BasicShapeGraphic b = ((BasicShapeGraphic) o).copy();
 				Shape shape1=b.getShape();
-				AffineTransform rotTransform = AffineTransform.getRotateInstance(angle, r.getCenterX(), r.getCenterY());
 				shape1=rotTransform.createTransformedShape(shape1);
 				
-			//	if(!r.contains(shape1.getBounds()))continue; //workin in progress to distinguish between shapes inside and outside the crop area
-				
-				AffineTransform translate = AffineTransform.getTranslateInstance(-r.getMinX(), -r.getMinY());
 				shape1=translate.createTransformedShape(shape1);
 				if(scale!=1) {
-					AffineTransform scaleTransform = AffineTransform.getScaleInstance(scale, scale);
 					
 					shape1=scaleTransform.createTransformedShape(shape1);
 					}
@@ -846,11 +847,77 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 				b.setName("crop of "+b.getName());
 				
 				output.add(b);
+				}
 				
-			}
-		}
+				if(o instanceof RectangularGraphic) {
+					RectangularGraphic o2 = (RectangularGraphic) o;
+					ShapeGraphic b2;
+					if(angle!=0)
+						b2 = createCroppedPathVersion(scale, rotTransform, translate, scaleTransform, o2);
+					else 
+						{
+						b2=o2.copy();
+						b2.moveLocation(-r.getMinX(), -r.getMinY());
+						b2.scaleAbout(new Point.Double(), scale);
+						}
+					output.add(b2);
+				}
+				
+				
+				
+				if(o instanceof ArrowGraphic) {
+					ArrowGraphic o2 = (ArrowGraphic) o;
+					ArrowGraphic b2;
+						
+						b2=o2.copy();
+						b2.rotateAbout(new Point2D.Double(r.getCenterX(), r.getCenterY()), angle);
+						b2.moveLocation(-r.getMinX(), -r.getMinY());
+						b2.scaleAbout(new Point.Double(), scale);
+						
+					output.add(b2);
+				}
+				
+				if(o instanceof PathGraphic) {
+					PathGraphic o2 = (PathGraphic) o;
+					ShapeGraphic b2;
+					
+						b2 = createCroppedPathVersion(scale, rotTransform, translate, scaleTransform, o2);
+					
+					output.add(b2);
+				}
+				
+				
+			
+		}catch (Throwable t){
+			  IssueLog.log(t);
+		  }
 		return output;
 	}
+
+
+
+	/**returns a scropped and scaled path
+	 * @param scale
+	 * @param rotTransform
+	 * @param translate
+	 * @param scaleTransform
+	 * @param o2
+	 * @return
+	 */
+	public PathGraphic createCroppedPathVersion(double scale, AffineTransform rotTransform, AffineTransform translate,
+			AffineTransform scaleTransform, ShapeGraphic o2) {
+		PathGraphic b2 = o2.createPathCopy();
+		PathPointList points = b2.getPoints();
+		points.applyAffine(rotTransform);
+		points.applyAffine(translate);
+		if (scale!=1)points.applyAffine(scaleTransform);
+		b2.setPoints(points);
+		b2.updatePathFromPoints();
+		b2.setName("crop of "+b2.getName());
+		return b2;
+	}
+	
+	
 
 	/**
 	sets the channel names of this image wrapper. sometimes called to avoid time lag that comes with digging channel names out of metadata
@@ -923,20 +990,18 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 
 	/**returns a list of QuickFigures objects that match the overlay of the image. work in progress*/
 	@Override
-	public ArrayList<Object> getOverlayObjects(String context) {
+	public OverlayObjectList getOverlayObjects(String context) {
 		
 		if(this.overlayObjectList!=null &&!"Draw onto crop dialog".equals(context)) {
 			
-			ArrayList<Object> output = new  ArrayList<Object>();
+			OverlayObjectList output = new  OverlayObjectList();
 			output.addAll( overlayObjectList);
-			if(output.size()>1) {
-				
-			}
+			
 			return output;
 			
 		}
 		
-		ArrayList<Object> output = new ArrayList<Object> ();
+		OverlayObjectList output = new OverlayObjectList();
 		Overlay overlay = imp.getOverlay();
 		
 		if(overlay!=null) {
@@ -949,9 +1014,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 			}
 		}
 		
-		if(output.size()>1) {
-			
-		}
+		
 		return output;
 	}
 

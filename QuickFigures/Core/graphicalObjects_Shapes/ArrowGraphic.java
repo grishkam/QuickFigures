@@ -949,7 +949,6 @@ protected Point2D getDrawnLineEnd2() {
 		oo.setName(getName());
 		oo.setClosedShape(true);
 		oo.setUseFilledShapeAsOutline(true);
-		//TODO: find out if this works well
 		if (!(head1.isOutlineType()||head2.isOutlineType())) {
 			oo.setStrokeWidth(-1);
 			oo.setFillColor(getStrokeColor());
@@ -960,7 +959,7 @@ protected Point2D getDrawnLineEnd2() {
 	
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
-		return this.createPathCopy().getObjectMaker();
+		return createPathCopy().createPathCopy().getObjectMaker();
 	}
   
 	@Override

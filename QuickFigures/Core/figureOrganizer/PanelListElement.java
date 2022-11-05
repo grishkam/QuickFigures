@@ -32,6 +32,7 @@ import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 import layout.basicFigure.GridIndex;
 import locatedObject.ScaleInfo;
 import locatedObject.ScalededItem;
@@ -94,7 +95,7 @@ import channelLabels.ChannelLabelTextGraphic;
 		private ArrayList<ChannelEntry> hashChannel =new  ChannelEntryList();
 
 		/**Maintains a list of overlay objects*/
-		private ArrayList<Object> overlayObjects;
+		private OverlayObjectList overlayObjects;
 
 		
 		
@@ -514,14 +515,14 @@ import channelLabels.ChannelLabelTextGraphic;
 		/**work in progress. Returns a list of overlay objects
 		 * @return
 		 */
-		public ArrayList<Object> getOverlayObjects() {
+		public OverlayObjectList getOverlayObjects() {
 			return overlayObjects;
 		}
 
 		/**
 		 * @param overlayObjects
 		 */
-		public void setOverLayObjects(ArrayList<Object> overlayObjects) {
+		public void setOverLayObjects(OverlayObjectList overlayObjects) {
 			this.overlayObjects=overlayObjects;
 			
 		}

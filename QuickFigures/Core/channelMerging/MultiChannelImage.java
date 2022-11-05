@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import applicationAdapters.HasScaleInfo;
 import applicationAdapters.OpenFileReference;
 import applicationAdapters.PixelWrapper;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 
 /**An interface representing a multidimensional image.
  */
@@ -132,7 +133,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	/**
 	work in progress, returns a list of objects that mimic the overlay
 	 */
-	public ArrayList<Object> getOverlayObjects(String context);
+	public OverlayObjectList getOverlayObjects(String context);
 	
 	
 

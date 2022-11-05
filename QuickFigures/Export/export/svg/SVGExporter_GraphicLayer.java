@@ -44,9 +44,10 @@ public Element toSVG(Document dom, Element e) {
 			element.setAttribute("id",layer.getName());
 			
 			
-			
 			for(ZoomableGraphic z: layer.getItemArray()) try {
+				
 		    	if (z instanceof SVGExportable) {
+		    		
 		    		SVGExportable exs=(SVGExportable) z;
 		    		exs.getSVGEXporter().toSVG(dom, element);
 		    	}

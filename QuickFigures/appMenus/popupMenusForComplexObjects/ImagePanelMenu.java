@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 25, 2022
+ * Date Modified: Nov 4, 2022
  * Version: 2022.1
  */
 package popupMenusForComplexObjects;
@@ -23,7 +23,6 @@ package popupMenusForComplexObjects;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -45,6 +44,7 @@ import graphicTools.RectGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
@@ -131,9 +131,39 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
 		public AbstractUndoableEdit2 performAction() {item.showCroppingDialog();return null;}	
-}.createJMenuItem("Crop Only This Panel"));
+	}.createJMenuItem("Crop Only This Panel"));
 
+	
+	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
+		@Override
+		public AbstractUndoableEdit2 performAction() {item.setShowOverlay(!item.isShowOverlay()); item.updateDisplay();return null;}	
+		public JMenuItem createJMenuItem(String st) {
+			JMenuItem output = super.createJMenuItem("Show Overlay");
+			if(item.isShowOverlay())
+				output = super.createJMenuItem("Hide Overlay");
+			return output;
+		}
+	}.createJMenuItem("Show Overlay"));
 
+	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
+		@Override
+		public AbstractUndoableEdit2 performAction() {
+			
+			
+			GraphicLayerPane extractOverlay = item.extractOverlay();
+			if(extractOverlay.getItemArray().size()==1) {
+				ShowMessage.showOptionalMessage("No overlay objects were extracted");
+				return null;
+			}
+				
+			AbstractUndoableEdit2 addItem = Edit.addItem(item.getParentLayer(), extractOverlay);
+			item.setShowOverlay(false);
+			return addItem;
+			
+			}	
+		
+	}.createJMenuItem("Extract Overlay"));
+	
 		super.setLockedItem(c);
 		super.addLockedItemMenus();
 	}

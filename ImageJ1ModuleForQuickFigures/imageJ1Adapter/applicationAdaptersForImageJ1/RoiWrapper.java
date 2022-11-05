@@ -34,7 +34,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.CircularGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import ij.ImagePlus;
 import ij.gui.*;
 import ij.io.Opener;
@@ -714,7 +718,50 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 		
 		/**returns a QuickFigures object that resembles this shape*/
 		public ZoomableGraphic convertToQFObject() {
-			BasicShapeGraphic output = new BasicShapeGraphic(this.getShape());
+			ShapeGraphic output =null; 
+			String type1 = roi.getTypeAsString();
+			
+			
+			if("Rectangle".equals(type1)) {
+				output =new RectangularGraphic(roi.getBounds());
+			}
+			
+			if("Oval".equals(type1)) {
+				output =new CircularGraphic(roi.getBounds());
+			}
+			
+			if("Straight Line".equals(type1)&& roi instanceof ij.gui.Line) {
+				ij.gui.Line line=(Line) roi;
+				ArrowGraphic arrow = new ArrowGraphic(new Point2D.Double(line.x1, line.y1),  new Point2D.Double(line.x2, line.y2));
+				arrow.setNumerOfHeads(0);
+				output=arrow;
+			}
+			if(roi instanceof ij.gui.Arrow) {
+				ij.gui.Arrow line=(Arrow) roi;
+				ArrowGraphic arrow = new ArrowGraphic(new Point2D.Double(line.x1, line.y1),  new Point2D.Double(line.x2, line.y2));
+				arrow.setHeadsSame(true);
+				arrow.getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize((line.getHeadSize()+line.getStrokeWidth())*2.8);
+				if(line.getDoubleHeaded())
+					arrow.setNumerOfHeads(2);
+				
+				output=arrow;
+			}
+			
+			if(output==null) {
+				output=new BasicShapeGraphic(this.getShape());
+				output=output.createPathCopy();
+			}
+			
+			matchNameAndColor(output);
+			
+			return output;
+		}
+
+
+		/**
+		 * @param output
+		 */
+		public void matchNameAndColor(ShapeGraphic output) {
 			float strokeWidth = this.getStrokeWidth();
 			if(strokeWidth==0)
 				strokeWidth=1;
@@ -724,8 +771,6 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 			if(this.getName()==null||"null".equals(this.getName())) {
 				output.setName("object from imagej roi");
 			}
-			
-			return output;
 		}
 		
 

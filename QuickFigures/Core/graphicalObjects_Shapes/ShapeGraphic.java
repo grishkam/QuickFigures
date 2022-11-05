@@ -779,4 +779,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		return true;
 	}
 	
+	/**returns a copy*/
+	public abstract ShapeGraphic copy();
+	
 }

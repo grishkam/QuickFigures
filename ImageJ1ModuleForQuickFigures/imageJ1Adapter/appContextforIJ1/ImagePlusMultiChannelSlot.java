@@ -110,7 +110,7 @@ import logging.IssueLog;
 			if (multiChannelWrapper!=null && this.multiChannelWrapper.getImagePlus()==this.getImagePlus())
 				return multiChannelWrapper;
 			multiChannelWrapper =new ImagePlusWrapper(getImagePlus());
-			multiChannelWrapper.getOverlayObjects("Check before getting image");
+			
 			return multiChannelWrapper;
 		}
 		

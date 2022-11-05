@@ -184,7 +184,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 
 	
 	
-	public void addObjectToSlide( XMLSlideShow ppt, XSLFShapeContainer slide, Object o) throws FileNotFoundException, IOException {
+	public static void addObjectToSlide( XMLSlideShow ppt, XSLFShapeContainer slide, Object o) throws FileNotFoundException, IOException {
 		
 		if (o instanceof OfficeObjectConvertable)try {
 			OfficeObjectConvertable t=(OfficeObjectConvertable) o;
@@ -193,6 +193,8 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 				IssueLog.log("object maker not found for "+t);
 				} else
 			objectMaker.addObjectToSlide( ppt, slide);
+			
+			
 			
 		}
 		catch (Throwable t) {

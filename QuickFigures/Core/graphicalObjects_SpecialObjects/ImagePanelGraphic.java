@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package graphicalObjects_SpecialObjects;
@@ -64,6 +64,9 @@ import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
 import handles.AttachmentPositionHandle;
@@ -139,6 +142,9 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 	private boolean filederived=false;
 	private boolean loadFromFile=false;
     boolean filefound=false;
+    
+    /**if set to true, will show overlay*/
+    private boolean showOverlay=true;
 	 
 	
 	private static final long serialVersionUID = 1L;
@@ -374,7 +380,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 
 	private transient ChannelSwapHandleList extraHandles;
 	private FigureType figureType;
-	private ArrayList<Object> overlayObjects;
+	private OverlayObjectList overlayObjects;
 	
 
 
@@ -538,7 +544,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 					   
 				   }
 				 
-				  drawOverlayObjects(graphics, cords);
+				if(isShowOverlay())  
+					drawOverlayObjects(graphics, cords);
 			
 			}
 
@@ -555,7 +562,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 					  
 					  CordinateConverter cordsOverlay = cords.getCopyScaled(scale).getCopyTranslated((int)(-this.getLocationUpperLeft().getX()/scale), (int)(-this.getLocationUpperLeft().getY()/scale));
 					
-					  for(Object object: overlayObjects) {
+					  for(Object object: overlayObjects.getOverlayObjects())  try {
 						  if(object instanceof LocatedObject2D) {
 							  boolean inside = r.contains(((LocatedObject2D) object).getBounds());
 		
@@ -566,9 +573,13 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 							  ZoomableGraphic z=(ZoomableGraphic) object;
 							  z.draw(graphics, cordsOverlay);
 						  }
+					  }catch (Throwable t){
+						  IssueLog.logT(t);
 					  }
 				  }
-			  } catch (Throwable t){}
+			  } catch (Throwable t){
+				  IssueLog.logT(t);
+			  }
 		}
 
 		/**
@@ -722,7 +733,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				prepareImageForExport(pir);
 			pir.resize(100*this.getRelativeScale(), 100*getRelativeScale());
 			if (getName()!=null) pir.setName(getName()); //Bug fix: a null name would previously case a problem with the position of the panel
-	//./this.
+	
 			pir.setLeftandTop(x, y);
 			} 
 			
@@ -730,16 +741,17 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				Image i=this.getPNGExportImage() ;
 				pir.prepareImageForJavaScript(i, getName(), x,y, false);
 				pir.resize(100*this.getRelativeScale(), 100*getRelativeScale());
-		//./this.
+		
 				pir.setLeftandTop(x, y);
 			}
-		//	else 
-			//pir.prepareImageForJavaScript(getScaledImage(), getName(), x,y, false);
 			
 			
 			
 			pir.embed();
 			
+			if (this.isShowOverlay()){
+				this.extractOverlay().toIllustrator(aref);
+		}
 			
 			return pir;
 		}
@@ -801,7 +813,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 	/**
 		 * @param overlayObjects
 		 */
-		public void setOverlayObjects(ArrayList<Object> overlayObjects) {
+		public void setOverlayObjects(OverlayObjectList overlayObjects) {
 			this.overlayObjects=overlayObjects;
 			
 		}
@@ -1213,8 +1225,59 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				return figureType;
 			return FigureType.FLUORESCENT_CELLS;
 		}
-		
 
+		public boolean isShowOverlay() {
+			return showOverlay;
+		}
+
+		public void setShowOverlay(boolean showOverlay) {
+			this.showOverlay = showOverlay;
+		}
+		
+		/**returns a Scaled copy of the overlay*/
+		public GraphicLayerPane extractOverlay() {
+			GraphicLayerPane added = new GraphicLayerPane("Overlay Copy");
+			try {
+				  if(overlayObjects==null) {
+					  
+				  } else {
+					  Rectangle2D sizeOfImagePanel = new Rectangle2D.Double(0,0, this.getObjectWidth()/scale, this.getObjectHeight()/scale);
+					 
+					 
+					  for(Object object: overlayObjects.getOverlayObjects())  try {
+						  if(object instanceof ShapeGraphic) {
+							  Rectangle objectbounds = ((ShapeGraphic) object).getBounds();
+							  ShapeGraphic copy = ((ShapeGraphic) object).copy();
+							  if (copy instanceof BasicShapeGraphic) {
+								  copy=copy.createPathCopy();
+							  }
+							  copy.scaleAbout(new Point2D.Double(0,0), scale);
+							  
+							  boolean inside = sizeOfImagePanel.contains(objectbounds);
+							  
+							  copy.moveLocation((int)(this.getLocationUpperLeft().getX()), (int)(this.getLocationUpperLeft().getY()));
+							 
+							  
+							
+							
+								
+							  if(!inside) { 
+								  //will not extract items not within the clip area
+								    continue;
+							  }
+							  added.addItemToLayer(copy);
+						  }
+						  
+					  }catch (Throwable t){
+						  IssueLog.logT(t);
+					  }
+				  }
+			  } catch (Throwable t){
+				  IssueLog.logT(t);
+			  }
+			
+			return added;
+		}
 	
 
 }

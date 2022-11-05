@@ -67,6 +67,8 @@ public ShapeToOffice(ShapeGraphic p1) {
 	       shape.setLineColor(pathGraphic.getStrokeColor());
 	       if (pathGraphic.getStrokeColor().getAlpha()==0)  shape.setLineColor(null);
 	        shape.setLineWidth(pathGraphic.getStrokeWidth());
+	        if(pathGraphic.getStrokeWidth()<0)
+	        	shape.setLineWidth(0);//powerpoint will display an error for negative line widths
 	        shape.setRotation(pathGraphic.getAngle()*(-180/Math.PI));
 	        
 	        setupStrokeCap(shape, pathGraphic);
@@ -126,7 +128,7 @@ public ShapeToOffice(ShapeGraphic p1) {
 				Shape path = this.shape.getShape();
 				GeneralPath path2 = new GeneralPath();
 				
-				path2.append(path.getPathIterator(new AffineTransform()), true);//true
+				path2.append(path.getPathIterator(AffineTransform.getTranslateInstance(0, 0)), true);//true
 				
 				if (shape instanceof PathGraphic) {
 					IssueLog.log("with some shapes, powerpoint will need to repair the exported file");

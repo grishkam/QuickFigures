@@ -27,6 +27,7 @@ import includedToolbars.AlignAndArrangeActionTools;
 import includedToolbars.ActionToolset2;
 import includedToolbars.LayoutToolSet;
 import includedToolbars.ObjectToolset1;
+import logging.IssueLog;
 
 /**A Menu item that shows one of several possible toolbars*/
 public class ShowToolBar  extends BasicMenuItemForObj {
@@ -69,7 +70,11 @@ public class ShowToolBar  extends BasicMenuItemForObj {
 	
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
-		if (getToolBarName().equals(OBJECT_TOOLS))new ObjectToolset1().run("");
+		if (getToolBarName().equals(OBJECT_TOOLS)) {
+			IssueLog.log("QuickFigures toolbar opening");
+			new ObjectToolset1().run("");
+			
+			return;}
 		if (getToolBarName().equals(LAYOUT_TOOLS))new LayoutToolSet().run("");	
 		if (getToolBarName().equals(ACTION_BAR))new AlignAndArrangeActionTools().run("");
 		if (getToolBarName().equals(SHAPE_AND_TEXT_EDITING_BAR))new ActionToolset2().run("");
