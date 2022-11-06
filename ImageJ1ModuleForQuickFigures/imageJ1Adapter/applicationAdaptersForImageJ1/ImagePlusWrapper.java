@@ -69,6 +69,7 @@ import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import applicationAdapters.OpenFileReference;
@@ -820,11 +821,11 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	private OverlayObjectList cropOverlayAtAngle(Rectangle r, double angle, double scale) {
 
 		OverlayObjectList overlayObjects = getOverlayObjects("crop");
-		OverlayObjectList output = new OverlayObjectList();
+		OverlayObjectList output = new OverlayObjectList("");
 		if(r==null) {
-			 output.addAll(overlayObjects );
 			
-			return output ;
+			
+			return overlayObjects.copy() ;
 			}
 		for(Object o: overlayObjects.getOverlayObjects()) try {
 			AffineTransform rotTransform = AffineTransform.getRotateInstance(angle, r.getCenterX(), r.getCenterY());
@@ -833,7 +834,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 			
 			
 			if(o instanceof BasicShapeGraphic) {
-				
+				/**
 				BasicShapeGraphic b = ((BasicShapeGraphic) o).copy();
 				Shape shape1=b.getShape();
 				shape1=rotTransform.createTransformedShape(shape1);
@@ -846,7 +847,11 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 				b.setShape(shape1);
 				b.setName("crop of "+b.getName());
 				
-				output.add(b);
+				output.add(b.createPathCopy());*/
+				}
+			
+			if(o instanceof TextGraphic) {
+				
 				}
 				
 				if(o instanceof RectangularGraphic) {
@@ -988,16 +993,16 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 
 	
 
-	/**returns a list of QuickFigures objects that match the overlay of the image. work in progress*/
+	/**returns a list of QuickFigures objects that match the overlay of the image. work in progress
+	 Once the overlay objects list has been turned into QF objects, it is kept stored in this object*/
 	@Override
 	public OverlayObjectList getOverlayObjects(String context) {
 		
-		if(this.overlayObjectList!=null &&!"Draw onto crop dialog".equals(context)) {
+		if(this.overlayObjectList!=null /**&&!"Draw onto crop dialog".equals(context)*/) {
 			
-			OverlayObjectList output = new  OverlayObjectList();
-			output.addAll( overlayObjectList);
 			
-			return output;
+			
+			return overlayObjectList;
 			
 		}
 		
@@ -1013,6 +1018,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 				output.add(roiW.convertToQFObject());
 			}
 		}
+		this.overlayObjectList=output;
 		
 		
 		return output;

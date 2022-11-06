@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package undo;
@@ -49,6 +49,8 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 	
 	private Color oldFrameColor;
 	private Color newFrameColor;
+	private boolean oldShowOverlay;
+	private boolean newShowOverlay;
 	
 	
 	public ColorEditUndo(Object o) {
@@ -66,6 +68,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		if (o instanceof ImagePanelGraphic) {
 			image=(ImagePanelGraphic) o;
 			 oldFrameColor=image.getFrameColor();
+			 oldShowOverlay=image.isShowOverlay();
 		}
 	}
 	
@@ -77,6 +80,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 			}
 		if(image!=null) {
 			newFrameColor=image.getFrameColor();
+			newShowOverlay=image.isShowOverlay();
 		}
 		
 	}
@@ -91,6 +95,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		}
 		if(image!=null) {
 			image.setFrameColor(oldFrameColor);
+			image.setShowOverlay(oldShowOverlay);
 		}
 		
 	}
@@ -102,6 +107,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		}
 		if(image!=null) {
 			image.setFrameColor(newFrameColor);
+			image.setShowOverlay(newShowOverlay);
 		}
 		
 	}

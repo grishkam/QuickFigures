@@ -34,7 +34,6 @@ import logging.IssueLog;
 import testing.FigureTest;
 import testing.FigureTester;
 import undo.CombinedEdit;
-import undo.PanelManagerUndo;
 
 /**
  this is a partly manual test. After automatic tests are done, user will be able to edit the figure 

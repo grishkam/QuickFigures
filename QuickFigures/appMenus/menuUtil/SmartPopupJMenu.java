@@ -46,7 +46,7 @@ public class SmartPopupJMenu extends JPopupMenu {
 	
 	private UndoManagerPlus undoManager;
 
-	private transient CanvasMouseEvent mEvent;
+	protected transient CanvasMouseEvent mEvent;
 	
 	public void setLastMouseEvent(CanvasMouseEvent e) {
 		this.mEvent=e;

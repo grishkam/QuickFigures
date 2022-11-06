@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Oct 28, 2021
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package appContextforIJ1;
@@ -37,6 +37,7 @@ import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.SelectImageDialog;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
 import ij.IJ;
@@ -85,6 +86,9 @@ import logging.IssueLog;
 		/**The channel frame and slice that is seen in the cropping dialog*/
 		private CSFLocation displayLocation;
 
+
+		private OverlayObjectList workingOverlay;
+
 		public ImagePlusMultiChannelSlot() {
 			
 		}
@@ -99,7 +103,7 @@ import logging.IssueLog;
 			
 		}
 
-		/**returns the working image.
+		/**returns the working image. This is the version that is already cropped.
 		 * Does not yet correctly return the cropped version of the overlay */
 		@Override
 		public ImagePlusWrapper getMultichannelImage() {
@@ -110,7 +114,7 @@ import logging.IssueLog;
 			if (multiChannelWrapper!=null && this.multiChannelWrapper.getImagePlus()==this.getImagePlus())
 				return multiChannelWrapper;
 			multiChannelWrapper =new ImagePlusWrapper(getImagePlus());
-			
+			multiChannelWrapper.setOverlayObjects(workingOverlay);
 			return multiChannelWrapper;
 		}
 		
@@ -219,6 +223,28 @@ import logging.IssueLog;
 			}
 		}
 		
+		/**sets the image.This method is called after crop/scale to set the current working image
+		 * @param m
+		 */
+		private void setSourceImagePlus(ImagePlusWrapper m) {
+			if(m==null) {
+				this.setImagePlus(null);
+				this.setOverlay(null);
+				return;
+			}
+			this.setImagePlus(m.getImagePlus());
+			this.setOverlay(m.getOverlayObjects(""));
+			
+		}
+		
+		/**
+		 * @param overlayObjects
+		 */
+		private void setOverlay(OverlayObjectList overlayObjects) {
+			this.workingOverlay=overlayObjects;
+			
+		}
+
 		public static FileFinder getFileFinder() {
 			FileFinder finder = new FileFinder();
 			return finder;
@@ -365,7 +391,7 @@ import logging.IssueLog;
 					if (save) storeImage();
 					
 					
-					dis.setImagePlus(null);
+					dis.setSourceImagePlus(null);
 				ImagePlus.removeImageListener(this);
 				}
 			}
@@ -524,12 +550,14 @@ import logging.IssueLog;
 			ImagePlusWrapper m =unprocessedVersion.cropAtAngle(process);
 			 preprocessRecord=process;
 			 
-			 setImagePlus(m.getImagePlus());
-			 getMultichannelImage().setOverlayObjects(m.getOverlayObjects("setting to cropped objects"));
+			 setSourceImagePlus(m);
+			
 			getDisplayUpdater().imageUpdated(getImagePlus());
 		}
 	
 	
+
+
 
 	/**returns true if the two modifications are the same*/
 		private boolean areTheySame(PreProcessInformation process) {
@@ -710,6 +738,7 @@ import logging.IssueLog;
 			private String lastSavePath=null;
 			private int estimatedFileSize;
 			private Rectangle originalDimensions;
+			private OverlayObjectList overlayObjectList;
 			/**
 			 * 
 			 */
@@ -786,7 +815,7 @@ import logging.IssueLog;
 					this.lastSavePath=originalSavePath;
 					this.estimatedFileSize=backupUncroppedImagePlus.getBitDepth()*backupUncroppedImagePlus.getWidth()*backupUncroppedImagePlus.getHeight()*backupUncroppedImagePlus.getStackSize();
 					this.originalDimensions=new Rectangle(0,0, backupUncroppedImagePlus.getWidth(), backupUncroppedImagePlus.getHeight());
-				
+					this.overlayObjectList=wrappedUpVersion.getOverlayObjects("");
 				}
 			}
 
@@ -806,6 +835,8 @@ import logging.IssueLog;
 			public ImagePlusWrapper getWrappedUpVersion() {
 				if(wrappedUpVersion==null)
 					new ImagePlusWrapper(getOrCreateImagePlus());
+				if(this.overlayObjectList!=null)
+					{wrappedUpVersion.setOverlayObjects(this.overlayObjectList);}
 				return wrappedUpVersion;
 			}
 		}

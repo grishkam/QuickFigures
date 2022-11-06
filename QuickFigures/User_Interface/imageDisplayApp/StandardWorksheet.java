@@ -49,6 +49,12 @@ public class StandardWorksheet extends GenericImage {
 	
 	}
 	
+	/**minimal constructor*/
+	public StandardWorksheet(GraphicLayerPane g) {
+		this(g, new BasicImageInfo());
+	
+	}
+	
 	/**creates an image with the given file info and parent layer*/
 	public StandardWorksheet(GraphicLayerPane layer2, BasicImageInfo basics) {
 		super.setLayer(layer2);

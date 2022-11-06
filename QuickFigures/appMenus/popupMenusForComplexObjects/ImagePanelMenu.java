@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 4, 2022
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package popupMenusForComplexObjects;
@@ -23,6 +23,8 @@ package popupMenusForComplexObjects;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -35,12 +37,11 @@ import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
-import figureOrganizer.insetPanels.InsetLayout;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicTools.ArrowGraphicTool;
 import graphicTools.BarGraphicTool;
-import graphicTools.ShapeGraphicTool;
 import graphicTools.RectGraphicTool;
+import graphicTools.ShapeGraphicTool;
 import graphicTools.Text_GraphicTool;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -56,11 +57,12 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
+import imageDisplayApp.ImageWindowAndDisplaySet;
+import imageDisplayApp.StandardWorksheet;
 import imageMenu.CanvasAutoResize;
 import locatedObject.AttachmentPosition;
-import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
-import menuUtil.BasicSmartMenuItem;
+import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
@@ -133,11 +135,28 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		public AbstractUndoableEdit2 performAction() {item.showCroppingDialog();return null;}	
 	}.createJMenuItem("Crop Only This Panel"));
 
-	
+	expert = new SmartJMenu("Overlay");
+	add(expert);
 	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
-		public AbstractUndoableEdit2 performAction() {item.setShowOverlay(!item.isShowOverlay()); item.updateDisplay();return null;}	
+		public AbstractUndoableEdit2 performAction() {
+			AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+			item.setShowOverlay(!item.isShowOverlay());
+			if(item.getOverlay()==null) {
+				ShowMessage.showOptionalMessage("There is no overlay in this image", false, "there are no overlay objects");
+				return undo;
+				
+			} else if(item.getOverlay().getOverlayObjects().size()==0) {
+				ShowMessage.showOptionalMessage("There are no overlay objects in this image", false, "there are no overlay objects");
+				return undo;
+			}
+			
+			item.updateDisplay();
+			return undo;
+			}	
+		
 		public JMenuItem createJMenuItem(String st) {
+			
 			JMenuItem output = super.createJMenuItem("Show Overlay");
 			if(item.isShowOverlay())
 				output = super.createJMenuItem("Hide Overlay");
@@ -148,24 +167,107 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	expert.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
 		public AbstractUndoableEdit2 performAction() {
-			
+			AbstractUndoableEdit2 undo = item.provideUndoForDialog();
 			
 			GraphicLayerPane extractOverlay = item.extractOverlay();
-			if(extractOverlay.getItemArray().size()==1) {
+			if(extractOverlay.getItemArray().size()==0) {
 				ShowMessage.showOptionalMessage("No overlay objects were extracted");
 				return null;
 			}
 				
 			AbstractUndoableEdit2 addItem = Edit.addItem(item.getParentLayer(), extractOverlay);
 			item.setShowOverlay(false);
-			return addItem;
+			return new CombinedEdit( undo,addItem);
 			
 			}	
 		
 	}.createJMenuItem("Extract Overlay"));
 	
+	addOverlayEditor(c, expert);
+	
+	
+	
 		super.setLockedItem(c);
 		super.addLockedItemMenus();
+	}
+
+
+
+	/**Adds a menu option to edit the overlay objects in a separate window
+	 * @param c
+	 * @param expert
+	 */
+	public void addOverlayEditor(ImagePanelGraphic c, SmartJMenu expert) {
+		expert.add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+				item.setShowOverlay(true);
+				ImagePanelGraphic background2 = item.copy();
+				background2.setRelativeScale(1);
+				background2.setLocationUpperLeft(0, 0);
+				
+				GraphicLayerPane extractOverlay = item.getOverlay();
+				StandardWorksheet gs = new StandardWorksheet( extractOverlay);
+				gs.setTitle(item.getName());
+				gs.getBasics().setWidth( item.getUnderlyingImageWidth());
+				gs.getBasics().setHeight(item.getUnderlyingImageHeight());
+				ImageWindowAndDisplaySet newwindow = ImageWindowAndDisplaySet.show(gs);
+				
+				
+				
+				newwindow.getTheCanvas().setBackgroundImage(background2);
+				newwindow.getWindow().setVisible(true);
+				ShowMessage.showOptionalMessage("You may now edit overlay objects", true, "A window to edit overlay objects has appeared", "Note: if you recrop the parent image, this overlay may be replaced");
+				newwindow.getWindow().addWindowListener(new WindowListener() {
+
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						 
+						
+					}
+
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}});
+				return undo;
+				
+				}	
+			
+		}.createJMenuItem("Edit Overlay Objects"));
 	}
 
 

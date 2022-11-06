@@ -43,9 +43,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
-import javax.swing.undo.AbstractUndoableEdit;
 
 import popupMenusForComplexObjects.ImagePanelMenu;
+import undo.AbstractUndoableEdit2;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;
@@ -144,7 +144,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
     boolean filefound=false;
     
     /**if set to true, will show overlay*/
-    private boolean showOverlay=true;
+    private boolean showOverlay=false;
 	 
 	
 	private static final long serialVersionUID = 1L;
@@ -157,7 +157,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		
 		public ImagePanelGraphic() {}
 		
-		/***/
+		/**Creats a new image panel from the image given*/
 		public ImagePanelGraphic(BufferedImage bi) {
 			setImage(bi);
 		}
@@ -555,14 +555,14 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAtta
 		 */
 		public void drawOverlayObjects(Graphics2D graphics, CordinateConverter cords) {
 			try {
-				  if(overlayObjects==null) {
+				  if(getOverlay()==null) {
 					  
 				  } else {
 					  Rectangle2D r = new Rectangle2D.Double(0,0, this.getObjectWidth()/scale, this.getObjectHeight()/scale);
 					  
 					  CordinateConverter cordsOverlay = cords.getCopyScaled(scale).getCopyTranslated((int)(-this.getLocationUpperLeft().getX()/scale), (int)(-this.getLocationUpperLeft().getY()/scale));
 					
-					  for(Object object: overlayObjects.getOverlayObjects())  try {
+					  for(Object object: getOverlay().getOverlayObjects())  try {
 						  if(object instanceof LocatedObject2D) {
 							  boolean inside = r.contains(((LocatedObject2D) object).getBounds());
 		
@@ -1205,7 +1205,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 
 		@Override
-		public AbstractUndoableEdit provideUndoForDialog() {
+		public AbstractUndoableEdit2 provideUndoForDialog() {
 			return new CombinedEdit(new UndoScalingAndRotation(this), new ColorEditUndo(this));
 		}
 
@@ -1234,38 +1234,50 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			this.showOverlay = showOverlay;
 		}
 		
-		/**returns a Scaled copy of the overlay*/
+		/**returns a scaled copy of the overlay*/
 		public GraphicLayerPane extractOverlay() {
 			GraphicLayerPane added = new GraphicLayerPane("Overlay Copy");
 			try {
-				  if(overlayObjects==null) {
-					  
+				  if(getOverlay()==null) {
+					  IssueLog.log("no overlay objects detected");
 				  } else {
-					  Rectangle2D sizeOfImagePanel = new Rectangle2D.Double(0,0, this.getObjectWidth()/scale, this.getObjectHeight()/scale);
+					  Rectangle2D sizeOfImagePanel = new Rectangle2D.Double(-1/scale,-1/scale, (getObjectWidth()+getFrameWidthH()+2)/scale, (getObjectHeight()+getFrameWidthV()+2)/scale);
 					 
 					 
-					  for(Object object: overlayObjects.getOverlayObjects())  try {
+					  ArrayList<?> overlayObjectList = getOverlay().getOverlayObjects();
+					  if(overlayObjectList.size()==0) {
+						  IssueLog.log("There are no objects listed. cannot extract overlay ");
+					  }
+					  
+					for(Object object: overlayObjectList)  try {
+						 
 						  if(object instanceof ShapeGraphic) {
+							 
 							  Rectangle objectbounds = ((ShapeGraphic) object).getBounds();
 							  ShapeGraphic copy = ((ShapeGraphic) object).copy();
+							 
 							  if (copy instanceof BasicShapeGraphic) {
 								  copy=copy.createPathCopy();
 							  }
 							  copy.scaleAbout(new Point2D.Double(0,0), scale);
 							  
 							  boolean inside = sizeOfImagePanel.contains(objectbounds);
+							  boolean overlaps = sizeOfImagePanel.intersects(objectbounds);
 							  
 							  copy.moveLocation((int)(this.getLocationUpperLeft().getX()), (int)(this.getLocationUpperLeft().getY()));
 							 
-							  
-							
-							
 								
 							  if(!inside) { 
 								  //will not extract items not within the clip area
 								    continue;
+							  } 
+							  else {
+								  added.addItemToLayer(copy);
+								
+									
 							  }
-							  added.addItemToLayer(copy);
+						  } else {
+							  IssueLog.log("failed to extract item "+object);
 						  }
 						  
 					  }catch (Throwable t){
@@ -1275,8 +1287,14 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			  } catch (Throwable t){
 				  IssueLog.logT(t);
 			  }
-			
+			if(added.getAllGraphics().size()==0) {
+				IssueLog.log(" have not added any items ");
+			}
 			return added;
+		}
+
+		public OverlayObjectList getOverlay() {
+			return overlayObjects;
 		}
 	
 

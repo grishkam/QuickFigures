@@ -53,6 +53,7 @@ import figureOrganizer.FigureType;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
+import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -60,7 +61,11 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import handles.RectangularShapeSmartHandle;
 import imageScaling.ScaleInformation;
+import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
+import locatedObject.Selectable;
+import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
 import standardDialog.booleans.BooleanInputEvent;
 import standardDialog.booleans.BooleanInputPanel;
@@ -158,6 +163,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	/**set to true if the user is not precented from setting an out of bounds crop area*/
 	private boolean outofBoundsCrop=false;
+
+	private OverlayObjectList objectList;
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -220,15 +227,15 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			this.addExtraItem(r3);
 		}
 		
-		OverlayObjectList objects = s.getMultichannelImage().getOverlayObjects("Draw onto crop dialog");
+		 objectList = s.getUnprocessedVersion(false).getOverlayObjects("  ");
 		
-		if(objects!=null) {
+		if(objectList!=null) {
 			
-			for(Object o: objects.getOverlayObjects()) try {
-				if(o instanceof ZoomableGraphic) {
-					this.addExtraItem((ZoomableGraphic) o);
+			 try {
+				 
+					this.addExtraItem(objectList);
 					
-				}
+				
 			} catch (Throwable t) {
 				IssueLog.logT(t);
 			}
@@ -547,32 +554,26 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
+		if(arg0.isAltDown()) {
+			
+			
+			return;
+		}
+		
+		
 		Point2D drag=panel.getCord().unTransformClickPoint(arg0);
 		RectangularGraphic rect2 = cropAreaRectangle.copy();
 		
 		
 		{
-			//cropAreaRectangle.handleMove(handle, new Point((int)press.getX(),(int) press.getY()), new Point((int)drag.getX(),(int) drag.getY()));
-			
+				
 		if (handle==8||handle==-1) {
 			cropAreaRectangle.setLocationType(RectangleEdges.CENTER);
 			cropAreaRectangle.setLocation((int)drag.getX(), (int)drag.getY());
 			}
 		else RectangularShapeSmartHandle.handleSmartMove(cropAreaRectangle, handle, /**new Point((int)press.getX(),(int) press.getY()),*/ new Point((int)drag.getX(),(int) drag.getY()));
 		
-		
-		
-		/**
-		if(cropAreaRectangle.getBounds().getX()<0) {
-			cropAreaRectangle.setLocationUpperLeft(0, cropAreaRectangle.getLocationUpperLeft().getY());
-			
-		}
-		
-		if(cropAreaRectangle.getBounds().getY()<0) {
-			cropAreaRectangle.setLocationUpperLeft(cropAreaRectangle.getLocationUpperLeft().getX(), 0);
-		
-		} 
-		*/
+
 		boolean isNewRectValid = isCroppingRectangleValid();
 		
 		/**if the new rectangle location is outside the area, reverts the Rectangular Graphic*/
@@ -698,7 +699,21 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		if(arg0.getClickCount()>1) {
+			Point2D drag=panel.getCord().unTransformClickPoint(arg0);
+			LocatedObject2D item = new BasicObjectListHandler().getClickedRoi(objectList, (int) drag.getX(), (int)drag.getY());
+			if(item instanceof ShowsOptionsDialog) {
+			//	((ShowsOptionsDialog) item).showOptionsDialog();
+			}
+			
+			if(item instanceof Selectable) {
+				if(item.isSelected())
+					item.deselect();
+				else
+				item.select();
+				this.repaint();
+			}
+		}
 		
 	}
 

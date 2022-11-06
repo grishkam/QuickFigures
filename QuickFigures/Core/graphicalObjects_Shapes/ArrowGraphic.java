@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 17, 2022
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package graphicalObjects_Shapes;
@@ -959,7 +959,7 @@ protected Point2D getDrawnLineEnd2() {
 	
 	@Override
 	public OfficeObjectMaker getObjectMaker() {
-		return createPathCopy().createPathCopy().getObjectMaker();
+		return createPathCopy().getObjectMaker();
 	}
   
 	@Override
@@ -1231,7 +1231,7 @@ public void moveNotchToHead1() {
 public void rotateAbout(Point2D c, double distanceFromCenterOfRotationtoAngle) {
 	try {
 		if(distanceFromCenterOfRotationtoAngle==0) {
-			IssueLog.log("returned after arrow rotation attempt failed due to 0 angle");
+			//will return if the angle is 0. IssueLog.log("returned after arrow rotation attempt failed due to 0 angle");
 			return;
 			}
 		

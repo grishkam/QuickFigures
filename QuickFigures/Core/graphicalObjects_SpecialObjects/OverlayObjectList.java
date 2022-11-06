@@ -14,12 +14,28 @@ package graphicalObjects_SpecialObjects;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 
 /**
  A class for storing a list of objects that are drawn in front of an image panel
  */
-public class OverlayObjectList implements Serializable {
+public class OverlayObjectList extends GraphicLayerPane implements Serializable {
+
+	/**
+	 * @param name
+	 */
+	public OverlayObjectList(String name) {
+		super(name);
+	}
+
+
+	/**
+	 * 
+	 */
+	public OverlayObjectList() {
+		super("");
+	}
+
 
 	/**
 	 * 
@@ -27,11 +43,11 @@ public class OverlayObjectList implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private transient ArrayList<Object> overlayObjects=new ArrayList<Object>();
+	private ArrayList<Object> overlayObjects=new ArrayList<Object>();
 
 
-	public ArrayList<Object> getOverlayObjects() {
-		return overlayObjects;
+	public ArrayList<?> getOverlayObjects() {
+		return super.getAllGraphics();
 	}
 
 
@@ -40,31 +56,12 @@ public class OverlayObjectList implements Serializable {
 	}
 
 
-	/**
-	 * @param overlayObjectList
-	 */
-	public void addAll(ArrayList<Object> overlayObjectList) {
-		 getOverlayObjects().addAll(overlayObjectList);
-		
+	/***/
+	public  OverlayObjectList copy() {
+		OverlayObjectList output = new  OverlayObjectList(description);
+		for(Object o:this.overlayObjects) {
+			output.overlayObjects.add(o);
+		}
+		return output;
 	}
-
-
-	/**
-	 * @param overlayObjects2
-	 */
-	public void addAll(OverlayObjectList overlayObjects2) {
-		addAll(overlayObjects2.getOverlayObjects());
-		
-	}
-
-
-	/**
-	 * @param b
-	 */
-	public void add(ZoomableGraphic b) {
-		this.overlayObjects.add(b);
-		
-	}
-	
-
 }

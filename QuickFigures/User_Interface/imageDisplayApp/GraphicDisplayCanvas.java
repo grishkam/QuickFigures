@@ -40,6 +40,7 @@ import javax.swing.JComponent;
 import appContext.ImageDPIHandler;
 import appContext.RulerUnit;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import handles.HasSmartHandles;
 import locatedObject.Selectable;
@@ -64,7 +65,7 @@ public class GraphicDisplayCanvas extends JComponent {
 	static final int INCH_MARK_SIZE = 10;
 	static final int  FRACTION_OF_INCH_MARK_SIZE = 5;
 	
-	
+	private ZoomableGraphic backgroundImage=null;
 	
 	/**
 	 * 
@@ -120,9 +121,18 @@ public class GraphicDisplayCanvas extends JComponent {
 			GraphicLayer layerSet = window.getTheSet().getTopLevelLayer();
 			CordinateConverter conv1 = getConverter();
 			
+			
+				if (backgroundImage != null) try {
+					backgroundImage.draw(g2, conv1);
+				} 
+			 catch (Exception e) {
+				IssueLog.logT(e);
+			}
+				
 			layerSet.draw(g2, conv1);
 			
 			gmp.getOverlaySelectionManagger().drawSelections(g2, getConverter());
+			
 			
 			/**although there is no user option for this. a programmer can create a version of the 
 			  window that does not use a scroll pane but instead indicates the position 
@@ -349,5 +359,15 @@ public class GraphicDisplayCanvas extends JComponent {
 		/**returns the unit used by the ruler (inches or cm)*/
 		public static RulerUnit getRulerUnit() {
 			return ImageDPIHandler.getRulerUnit();
+		}
+
+
+		public ZoomableGraphic getBackgroundImage() {
+			return backgroundImage;
+		}
+
+
+		public void setBackgroundImage(ZoomableGraphic backgroundImage) {
+			this.backgroundImage = backgroundImage;
 		}
 }

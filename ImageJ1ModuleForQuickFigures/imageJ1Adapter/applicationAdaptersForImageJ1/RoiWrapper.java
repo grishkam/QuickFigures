@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 3, 2022
+ * Date Modified: Nov 5, 2022
  * Version: 2022.1
  */
 package applicationAdaptersForImageJ1;
@@ -39,6 +39,7 @@ import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import ij.ImagePlus;
 import ij.gui.*;
 import ij.io.Opener;
@@ -746,10 +747,19 @@ public class RoiWrapper implements LocatedObject2D, HasText, IllustratorObjectCo
 				
 				output=arrow;
 			}
+			if(roi instanceof TextRoi) {
+				TextRoi text = (TextRoi) roi;
+				TextGraphic textGraphic = new TextGraphic(text.getText());
+				
+				textGraphic.setFont(text.getCurrentFont());
+				textGraphic.setLocationUpperLeft(text.getBounds().getX(), text.getBounds().getY());
+				textGraphic.setTextColor(text.getStrokeColor());
+				return textGraphic;
+			}
 			
 			if(output==null) {
-				output=new BasicShapeGraphic(this.getShape());
-				output=output.createPathCopy();
+				output=new BasicShapeGraphic(this.getShape()).createPathCopy();
+
 			}
 			
 			matchNameAndColor(output);

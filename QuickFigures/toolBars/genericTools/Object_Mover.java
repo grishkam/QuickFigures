@@ -1050,6 +1050,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		this.setPressedSmartHandle(null);
 	}
 	
+	/**Selects all the items*/
 	protected void selectRoisInDrawnSelector() {
 		Rectangle2D rect = areaSelection;
 		//getImageWrapperClick().getSelectionManagger().select(rect, 0);
