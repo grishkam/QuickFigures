@@ -218,6 +218,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 				
 				newwindow.getTheCanvas().setBackgroundImage(background2);
 				newwindow.getWindow().setVisible(true);
+				item.setOverlayEditingWindow(newwindow.getWindow());
 				ShowMessage.showOptionalMessage("You may now edit overlay objects", true, "A window to edit overlay objects has appeared", "Note: if you recrop the parent image, this overlay may be replaced");
 				newwindow.getWindow().addWindowListener(new WindowListener() {
 

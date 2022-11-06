@@ -79,6 +79,8 @@ import illustratorScripts.HasIllustratorOptions;
 import illustratorScripts.IllustratorObjectConvertable;
 import illustratorScripts.PathItemRef;
 import illustratorScripts.PlacedItemRef;
+import imageDisplayApp.GraphicSetDisplayWindow;
+import imageDisplayApp.ImageWindowAndDisplaySet;
 import includedToolbars.StatusPanel;
 import keyFrameAnimators.ImagePanelGraphicKeyFrameAnimator;
 import layersGUI.HasTreeLeafIcon;
@@ -814,6 +816,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		 * @param overlayObjects
 		 */
 		public void setOverlayObjects(OverlayObjectList overlayObjects) {
+			 closeOverlayEditingWindow();
 			this.overlayObjects=overlayObjects;
 			
 		}
@@ -1295,6 +1298,26 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		public OverlayObjectList getOverlay() {
 			return overlayObjects;
+		}
+		
+		
+		transient GraphicSetDisplayWindow overlayEditingwindow;
+
+		/**
+		 * @param newwindow
+		 */
+		public void setOverlayEditingWindow(GraphicSetDisplayWindow graphicSetDisplayWindow) {
+			closeOverlayEditingWindow();
+			this.overlayEditingwindow=graphicSetDisplayWindow;
+			
+		}
+
+		/**
+		 * closes the overlay editing window if there is one
+		 */
+		private void closeOverlayEditingWindow() {
+			if(overlayEditingwindow!=null)
+				overlayEditingwindow.setVisible(false);
 		}
 	
 
