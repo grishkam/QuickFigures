@@ -36,7 +36,7 @@ import undo.UndoAddItem;
 import undo.UndoAddOrRemoveAttachedItem;
 
 /**A tool to add scale bars to panels. no longer included in the tool bar but its methods are called by popup menus
-   Excluded from current version due to more convenient ways to add a scale bar*/
+   Excluded from toolbar in current version due to more convenient ways to add a scale bar*/
 public class BarGraphicTool extends GraphicTool {
 	
 	private static BarGraphicTool currentBar;

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 5, 2022
+ * Date Modified: Nov 6, 2022
  * Version: 2022.1
  */
 package graphicalObjects_SpecialObjects;
@@ -840,7 +840,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			//new BufferedImageGraphicDialog(this);
 		}
 
-		
+		/**shows a cropping dialog specific to the individual panel. This is not compatible with overlays yet*/
 		public void showCroppingDialog() {
 			CroppingDialog cd = new CroppingDialog();
 			cd.hideRotateHandle=true;
@@ -851,15 +851,17 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 
 	
-
+		/**returns the color of the frame*/
 		public Color getFrameColor() {
 			return frameColor;
 		}
 
+		/**sets the color of the frame*/
 		public void setFrameColor(Color frameColor) {
 			this.frameColor = frameColor;
 		}
 		
+		/**changes the image data to a serializable form before serialization of this object*/
 		private void writeObject(java.io.ObjectOutputStream out)
 			     throws IOException {
 
@@ -1265,13 +1267,13 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 							  copy.scaleAbout(new Point2D.Double(0,0), scale);
 							  
 							  boolean inside = sizeOfImagePanel.contains(objectbounds);
-							  boolean overlaps = sizeOfImagePanel.intersects(objectbounds);
+							  boolean overlaps = sizeOfImagePanel.intersects(objectbounds);//might be used later
 							  
 							  copy.moveLocation((int)(this.getLocationUpperLeft().getX()), (int)(this.getLocationUpperLeft().getY()));
 							 
 								
 							  if(!inside) { 
-								  //will not extract items not within the clip area
+								
 								    continue;
 							  } 
 							  else {
@@ -1296,14 +1298,15 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			return added;
 		}
 
+		/**returns an overlay object list*/
 		public OverlayObjectList getOverlay() {
 			return overlayObjects;
 		}
 		
-		
+		/**The current overlay editing window*/
 		transient GraphicSetDisplayWindow overlayEditingwindow;
 
-		/**
+		/**Sets the overlay editing window
 		 * @param newwindow
 		 */
 		public void setOverlayEditingWindow(GraphicSetDisplayWindow graphicSetDisplayWindow) {
@@ -1319,6 +1322,11 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			if(overlayEditingwindow!=null)
 				overlayEditingwindow.setVisible(false);
 		}
-	
+
+		/**closes any overlay editing windows*/
+		public void kill() {
+			super.kill();
+			closeOverlayEditingWindow();
+		}
 
 }
