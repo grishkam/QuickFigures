@@ -308,8 +308,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.display.frame=frame;
 		this.display.slice=slice;
 		
-		BufferedImage image3 = createDisplayImage(chan, frame, slice);
-		this.image=new ImagePanelGraphic(image3);
+		BufferedImage image3 = createDisplayImage(display, multichanalWrapper,chan, frame, slice);
+		ImagePanelGraphic imagePanelGraphic = new ImagePanelGraphic(image3);
+		this.image=imagePanelGraphic;
 		includeAngle=true;
 		this.includeScaleButton=true;
 		
@@ -319,14 +320,16 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	void updateDisplayImage() {
 		if(dialogDisplayImage==null) return;
-		dialogDisplayImage.setImage(createDisplayImage(this.display.channel, this.display.frame, this.display.slice));
+		dialogDisplayImage.setImage(createDisplayImage(display,multiChannelSource, this.display.channel, this.display.frame, this.display.slice));
 		dialogDisplayImage.updateDisplay();
 		panel.repaint();
 	}
 
 	
-	/**creates an image of the entire source image to display as the background*/
-	public BufferedImage createDisplayImage(int chan, int frame, int slice) {
+	/**creates an image of the entire source image to display as the background
+	 * @param multichanalWrapper 
+	 * @param display2 */
+	public static BufferedImage createDisplayImage(CSFLocation display, MultiChannelImage multiChannelSource, int chan, int frame, int slice) {
 		PanelListElement pList;
 		PanelList panelList = new PanelList();
 		if(chan==0 &&multiChannelSource.nChannels()>1)

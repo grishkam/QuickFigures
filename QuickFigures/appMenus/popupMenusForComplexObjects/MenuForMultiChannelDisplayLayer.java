@@ -22,14 +22,21 @@ package popupMenusForComplexObjects;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import channelLabels.ChannelLabelManager;
+import channelMerging.CSFLocation;
+import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
+import objectDialogs.CroppingDialog;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -272,9 +279,78 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 				}
 				
 			};
+			
+			
+			addOverlayEditOption();
+			
 			this.add(out);
+			
 			return out;
 		}
+
+	/**
+	 * Adds a menu option for editing the overlay for the original source image
+	 */
+	public void addOverlayEditOption() {
+		SmartMenuItem2 outoverlay = new SmartMenuItem2("Edit Overlay") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onAction() {
+				MultiChannelImage unprocessedVersion = display.getSlot().getUnprocessedVersion(false);
+				OverlayObjectList objects = unprocessedVersion.getOverlayObjects("editor window");
+				ImagePanelGraphic imagepanel = new ImagePanelGraphic(CroppingDialog.createDisplayImage(new CSFLocation(),unprocessedVersion, 0, 1, 1));
+				imagepanel.setOverlayObjects(objects);
+				addUndo(OverlaySubmenu.showEditWindowForOverlay(imagepanel, new WindowListener() {
+
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						display.updateFromOriginal();
+						
+					}
+
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						display.updateFromOriginal();
+						
+					}
+					
+				}));
+			}
+			
+		};
+		this.add(outoverlay);
+	}
 		
 	 
 		protected SmartMenuItem2 createSetScaleItem() {

@@ -150,7 +150,10 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	adds a set angle button to the list
 	 */
 	private void addSetAngleButton() {
-		if(shape.doesSetAngle()&&!shape.getName().equals(CroppingDialog.cropAreaRectName)) {
+		if(shape.doesSetAngle()
+				&&
+				!shape.getName().equals(CroppingDialog.cropAreaRectName//the crop area within a crop dialog should not have this as it may result in an out of bounds crop area
+						)) {
 			SetAngle itemForIcon2 = new SetAngle(45);
 			GeneralActionListHandle h4 = addOperationList(itemForIcon2,SetAngle.createManyAngles() );
 				h4.itemForInputPanel=new SetAngle(shape);
