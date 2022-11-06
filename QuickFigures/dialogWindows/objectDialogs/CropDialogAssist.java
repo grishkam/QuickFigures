@@ -29,6 +29,7 @@ import java.awt.Window;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.SmartHandleList;
 import imageDisplayApp.MiniToolBarPanel;
@@ -60,6 +61,11 @@ public class CropDialogAssist implements DisplayedImage {
 	public ImageWorkSheet getImageAsWorksheet() {
 		
 		StandardWorksheet gs = new StandardWorksheet( this.cropDialog.objectList);
+		if(cropDialog.selectedObject==cropDialog.cropAreaRectangle) {
+			GraphicLayerPane pane = new GraphicLayerPane("");
+			pane.add(cropDialog.cropAreaRectangle);
+			gs = new StandardWorksheet( pane);
+		}
 		ImagePanelGraphic item = this.cropDialog.dialogDisplayImage;
 		gs.setTitle(this.cropDialog.getTitle());
 		gs.getBasics().setWidth( item.getUnderlyingImageWidth());

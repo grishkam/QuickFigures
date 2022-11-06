@@ -33,6 +33,7 @@ import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.Hideable;
+import objectDialogs.CroppingDialog;
 import selectedItemMenus.MultiSelectionOperator;
 import selectedItemMenus.SelectAllButton;
 import undo.AbstractUndoableEdit2;
@@ -149,7 +150,7 @@ public class ShapeActionButtonHandleList2 extends ActionButtonHandleList {
 	adds a set angle button to the list
 	 */
 	private void addSetAngleButton() {
-		if(shape.doesSetAngle()) {
+		if(shape.doesSetAngle()&&!shape.getName().equals(CroppingDialog.cropAreaRectName)) {
 			SetAngle itemForIcon2 = new SetAngle(45);
 			GeneralActionListHandle h4 = addOperationList(itemForIcon2,SetAngle.createManyAngles() );
 				h4.itemForInputPanel=new SetAngle(shape);

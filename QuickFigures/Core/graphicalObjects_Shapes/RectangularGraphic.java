@@ -140,71 +140,7 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 		copy.setLocationType(getLocationType());
 		return copy;
 	}
-	/**When a user drags one corner the other is set as the fixed edge*/
-	/**if the rectangle is rotated, transforms the points to the equivalent unrotated points.
-	 * this step is not needed for the rotation handle itself*/
-/**Called when the rectangle's handles are moved
-	public final void handleSmartMove(int handlenum, Point2D destination) {
-		
-		
-		if (handlenum!=RectangularShapeSmartHandle.ROTATION_HANDLE && handlenum!=CENTER) {
-			
-			performRotationCorrection(destination);
-		}
-		
-		if (flipDuringHandleDrag)
-			handlenum=checkForHandleInvalidity(handlenum,destination);
-		
-		
-		int op=RectangleEdges.oppositeSide(handlenum);
-		setLocationType(op);
-		
-		Point2D l2 = RectangleEdges.getLocation(op, getBounds());
-		double newwidth = Math.abs(destination.getX()-l2.getX());
-		double newheight = Math.abs(destination.getY()-l2.getY());
-		
-		boolean squareLock=isSquareLock();//should the shape stay a square?
-		
-		if (handlenum<LEFT) {
-				if(squareLock &&newwidth==this.getObjectWidth()) {newwidth=newheight;}
-				else 
-				if(squareLock &&newheight==this.getObjectHeight()) {newheight=newwidth;}
-				else  if (squareLock){
-					newheight=(newwidth+newheight)/2;
-					newwidth=newheight;
-					}
-			
-			this.setWidth(newwidth);
-			this.setHeight(newheight);
-			getListenerList().notifyListenersOfUserSizeChange(this);
-		
-		}
-		if(handlenum==TOP||handlenum==BOTTOM) {
-			this.setHeight(newheight);
-			if(squareLock) this.setWidth(newheight);
-			getListenerList().notifyListenersOfUserSizeChange(this);
-			
-		} else 
-		if(handlenum==LEFT||handlenum==RIGHT) {
-			this.setWidth(newwidth);
-			if(squareLock) this.setHeight(newwidth);
-			getListenerList().notifyListenersOfUserSizeChange(this);
-			
-		} else if (handlenum==CENTER) {
-			this.setLocationType(CENTER);
-			this.setLocation(destination);
-			getListenerList().notifyListenersOfUserMove(this);
-			}
-		
-		
-		if (handlenum==RectangularShapeSmartHandle.ROTATION_HANDLE){
 
-			setAngle(BasicGraphicalObject.distanceFromCenterOfRotationtoAngle(getCenterOfRotation(), destination));
-			getListenerList().notifyListenersOfUserMove(this);
-			
-		}
-		
-	}*/
 	
 	/**
 returns true if any mouse drags should maintain a sqaure shape

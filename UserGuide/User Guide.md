@@ -241,8 +241,9 @@ The target images for a display range dialog do not change while the dialog is o
 ![image](images/Dialogs/DisplayRangeDialog.png)  
 #### Crop Dialog
 The Crop dialog window provides a way to change the crop area and rotation angle used for a source image. A user can either input numbers in the fields to the left of the window or drag the handles of rectangle. Depending on the image, the dialog may also contain an option to change which channel, frame and slice is being shown while one edits the crop area. At the bottom of the window, there is an **Eliminate Cropping Rectangle** button which offers the options not to crop (nor rotate). A few different popup menu options can open a crop dialog.  
-A user can select multiple images and click the ![image](images/minitoolbar/Cicon.png) icon to display a series of crop dialogs for those images only.  
+A user can select multiple images and click the ![image](images/minitoolbar/Cicon.png) icon to display a series of crop dialogs for those images only. 
 ![image](images/Dialogs/CropDialog.png)
+Every crop dialog contains a cropping rectangle. If the ImageJ image has an overlay, overlay objects may be shown in the crop dialog but only the crop rectangle will be editable by dragging. Options to change the color and appearance of objects will become visible if one double clicks on an object.
 
 #### Select Example Dialog
 This dialog is shown when the user chooses the **select example** menu option in the Figure Format menu. A user can browse through a list of figures, each of which is visible in the popup menu. After selecting a figure, a user may choose it to be the default template by clicking the button on the bottom of the dialog. Although this contains fewer options than the Figure Format Dialog, a user can use this dialog even if no figure is open.  

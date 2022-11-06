@@ -92,10 +92,14 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	 */
 	private static final String ALLOW_OUT_KEY = "allow out";
 
+	public static final String cropAreaRectName="Crop area rectangle for image";;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	
 	
 	/**The component that will display a preview image and a crop area*/
 	public GraphicComponent panel=new GraphicComponent();
@@ -171,6 +175,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	OverlayObjectList objectList=new OverlayObjectList();
 
 	private MiniToolBarPanel toolbarPanel;
+
+	LocatedObject2D selectedObject;
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -547,6 +553,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	 */
 	public void setupCropAreaRectangle(Rectangle r) {
 		cropAreaRectangle=new RectangularGraphic(r);
+		cropAreaRectangle.setName(cropAreaRectName);
 		cropAreaRectangle.hideStrokeHandle=true;
 		cropAreaRectangle.handleSize=4;
 		if(this.hideRotateHandle) {
@@ -628,6 +635,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		setFieldsToRect();
 		deselectObjects();
+		setSelectedObject(this.cropAreaRectangle);
+
 		
 		this.onOK();
 		panel.repaint();
@@ -739,7 +748,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 				LocatedObject2D item = new BasicObjectListHandler().getClickedRoi(objectList, (int) drag.getX(),
 						(int) drag.getY());
 
-				if(item==null)item=this.cropAreaRectangle;
+				if(item==null)
+					item=this.cropAreaRectangle;
+				this.selectedObject=item;
 				
 				if (item instanceof ShapeGraphic && arg0.getClickCount() > 2) {
 					ShapeGraphicOptionsSwingDialog dialog = ((ShapeGraphic) item).getOptionsDialog();
@@ -765,10 +776,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 					else {
 						if (!arg0.isShiftDown())
 							deselectObjects();
-						item.select();
-						toolbarPanel.updateAlternateList(item);
-						toolbarPanel.repaint();
-						repaint();
+						setSelectedObject(item);
 
 					}
 					this.repaint();
@@ -780,11 +788,23 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 	}
 
+	/**Sets the primary selected object
+	 * @param item
+	 */
+	private void setSelectedObject(LocatedObject2D item) {
+		item.select();
+		toolbarPanel.updateAlternateList(item);
+		selectedObject=item;
+		toolbarPanel.repaint();
+		repaint();
+	}
+
 	/**
 	 * Deselects the overlay objects
 	 */
 	private void deselectObjects() {
 		deselectAll(objectList.getAllGraphics());
+		this.selectedObject=this.cropAreaRectangle;
 	}
 	
 	/**Deelects the items in the list*/
