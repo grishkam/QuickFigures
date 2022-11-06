@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 12, 2021
+ * Date Modified: Nov 6, 2022
  * Version: 2022.1
  */
 package imageDisplayApp;
@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import applicationAdapters.CanvasMouseEvent;
+import applicationAdapters.DisplayedImage;
 import basicAppAdapters.GenericCanvasMouseAction;
 import basicMenusForApp.MenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
@@ -48,10 +49,10 @@ import imageMenu.ZoomFit;
 
 /**A components that displays a mini toolbar
  that depends on the item selected and the worksheet*/
-class MiniToolBarPanel extends JPanel implements MouseListener {
+public class MiniToolBarPanel extends JPanel implements MouseListener {
 
 	ArrayList<MenuItemForObj> permanentObjects=new ArrayList<MenuItemForObj>();
-	private ImageWindowAndDisplaySet displaySet;
+	private DisplayedImage displaySet;
 	private ActionButtonHandleList buttonList;
 	private ActionButtonHandleList alternateList;
 	private Object lastItem;
@@ -65,7 +66,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	
 	
 	
-	public MiniToolBarPanel(ImageWindowAndDisplaySet display, boolean vertical) {
+	public MiniToolBarPanel( DisplayedImage display, boolean vertical) {
 		this.vertical=vertical;
 		setDisplay(display);
 		
@@ -85,7 +86,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	/**changes the display set for this panels
 	 * @param display
 	 */
-	public void setDisplay(ImageWindowAndDisplaySet display) {
+	public void setDisplay( DisplayedImage display) {
 		if(display==this.displaySet)
 			return;
 		this.displaySet=display;
@@ -96,7 +97,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	
 	
 
-	public MiniToolBarPanel(ImageWindowAndDisplaySet display) {
+	public MiniToolBarPanel( DisplayedImage display) {
 		this(display, true);
 	}
 
@@ -147,7 +148,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	returns the currently used action button handle list
 	 */
 	public ActionButtonHandleList getChangingButtonList() {
-		ImageWindowAndDisplaySet displaySet2 = getDisplaySet();
+		DisplayedImage displaySet2 = getDisplaySet();
 		if(displaySet2==null) return null;
 		Object selectedItem = displaySet2.getImageAsWorksheet().getSelectionObject();
 		if (selectedItem!=lastItem) {
@@ -162,7 +163,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 	/**
 	 * @return
 	 */
-	public ImageWindowAndDisplaySet getDisplaySet() {
+	public DisplayedImage getDisplaySet() {
 		return displaySet;
 	}
 
@@ -278,7 +279,7 @@ class MiniToolBarPanel extends JPanel implements MouseListener {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public LocalMouseEvent(ImageWindowAndDisplaySet displaySet, MouseEvent e) {
+		public LocalMouseEvent(DisplayedImage displaySet, MouseEvent e) {
 			super(displaySet, e);
 		}
 

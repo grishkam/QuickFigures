@@ -29,6 +29,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects.KnowsSetContainer;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import logging.IssueLog;
 /**Simple subclass of the generic image
  * that contains an object linking it to the 
  * the window being used to display the */
@@ -40,7 +41,7 @@ public class StandardWorksheet extends GenericImage {
 	private String savePath=null;//where was this saved
 	
 	/**The window that displays the item*/
-	private transient ImageWindowAndDisplaySet displayItems=null;
+	private transient DisplayedImage displayItems=null;
 
 	
 	/**minimal constructor*/
@@ -57,6 +58,10 @@ public class StandardWorksheet extends GenericImage {
 	
 	/**creates an image with the given file info and parent layer*/
 	public StandardWorksheet(GraphicLayerPane layer2, BasicImageInfo basics) {
+		if(layer2==null) {
+			IssueLog.log("cannot create a worksheet with a null layer");
+			layer2=new GraphicLayerPane("null layer");
+		}
 		super.setLayer(layer2);
 		super.setObjectContainer(layer2);
 		onItemLoad(layer2);
@@ -90,7 +95,7 @@ public class StandardWorksheet extends GenericImage {
 
 
 	
-	public void setDisplayGroup(ImageWindowAndDisplaySet displayGroup) {
+	public void setDisplayGroup(DisplayedImage displayGroup) {
 		this.displayItems=displayGroup;
 		
 	}
@@ -100,6 +105,7 @@ public class StandardWorksheet extends GenericImage {
 
 	@Override
 	public void updateDisplay() {
+		if(displayItems!=null)
 		displayItems.updateDisplay();
 		
 	}

@@ -143,6 +143,12 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
 #### Other submenus
 **Expert Options**. Options that are expected to interest relatively few users are placed in these submenus. To avoid confusing new users, this user manual does not contain details of those tools. See [supplemental user guide](SupplementalUserGuide.md) for details of these options (not yet written).
 
+**Overlay** Submenu. Contains options that are related to the overlay. If your ImageJ image had an overlay before you made your figure, these shapes will be a nearly identical copy of the ImageJ overlay. 
+ -	**Show/Hide Overlay** Changes whether the overlay objects associated with an [image panel](#Image-Panels) are shown or not. Overlay objects cannot be clicked on or edited directly. Instead position/size of overlay objects changes with the position or size of your image panel.
+ -	**Edit Overlay Objects** Opens a new window in which the overlay objects can be edited. Uses can then add or edit objects the same way as normal. If the overlay is hidden, this will unhide it. Changes made in this window will be seen on the main worksheet when one clicks back on it.
+ -	**Extract Overlay** makes a copy of the visible overlay objects. The new objects should look nearly identical to the old overlay. However, these objects can be clicked on and edited directly. (They are not bound to an image panel). If the overlay is not hidden, this will hide it. 
+  -	**Make Overlay Unique** Use this if multiple image panels share the same overlay. This option makes a copy of the overlay; that copy becomes the new overlay for this image panel only. Subsequent changes to this overlay will not affect the other image panels.
+
 #### Image Panel Popup Menu
 The popup menu contains options related to the clicked [image panel](#Image-Panels) or the figure containing that panel. When an image panel is part of a figure, Image Panel popup menus can contain options related to the [channels](#Channels-Submenu), [This Image](#This-Image-Submenu) and the [figure](#Figure-Submenu).
 The **Add Shape** submenu along with the **Add Scale Bar**, **Add Text** options are part of this popup menu for every image panel. Added object are placed in the same layer as the figure and subject to the same layout. The added scale bar and added text will be [attached](#Attached-Items) to the [image panel](#Image-Panels). The add Inset Panel options will create a series of inset panels and a [region of interest](#Insets).

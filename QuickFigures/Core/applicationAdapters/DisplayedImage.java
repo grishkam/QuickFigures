@@ -26,6 +26,7 @@ import java.awt.Window;
 
 import graphicalObjects.CordinateConverter;
 import handles.SmartHandleList;
+import imageDisplayApp.MiniToolBarPanel;
 import locatedObject.Selectable;
 import undo.UndoManagerPlus;
 
@@ -41,6 +42,8 @@ public interface DisplayedImage {
 	
 	/**returns the ImageWrapper*/
 	public ImageWorkSheet getImageAsWorksheet() ;
+	
+	/**returns the cordinate converter*/
 	public CordinateConverter getConverter();
 	/**returns the window used to display the image*/
 	public Window getWindow();
@@ -83,9 +86,16 @@ public interface DisplayedImage {
 	public SmartHandleList getCanvasHandles();
 
 	/**
-	 * @return
+	
 	 */
 	public Dimension getPageSize();
+
+	
+	/**some incarnations of the displayed image will update the minitoolbar panel*/
+	/**
+	 * @param miniToolBarPanel
+	 */
+	public void setSidePanel(MiniToolBarPanel miniToolBarPanel);
 
 
 	

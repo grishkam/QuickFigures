@@ -812,10 +812,12 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			
 		}
 		
-	/**
+	/**Sets the overlay object list
 		 * @param overlayObjects
 		 */
 		public void setOverlayObjects(OverlayObjectList overlayObjects) {
+			if(this.overlayObjects==overlayObjects)
+				return;
 			 closeOverlayEditingWindow();
 			this.overlayObjects=overlayObjects;
 			

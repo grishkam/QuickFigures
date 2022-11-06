@@ -1,13 +1,26 @@
+/*******************************************************************************
+ * Copyright (c) 2021 Gregory Mazo
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
 /**
  * Author: Greg Mazo
+ * Date Created: Nov 6, 2022
  * Date Modified: Nov 6, 2022
  * Copyright (C) 2022 Gregory Mazo
- * 
+ * Version: 2022.1
  */
-/**
- 
- * 
- */
+
 package popupMenusForComplexObjects;
 
 import java.awt.event.WindowEvent;
@@ -28,8 +41,7 @@ import undo.CombinedEdit;
 import undo.Edit;
 
 /**
- 
- * 
+ A submenu for actions related to the overlays above an image panel
  */
 public class OverlaySubmenu extends SmartJMenu {
 
@@ -98,6 +110,19 @@ public class OverlaySubmenu extends SmartJMenu {
 	}.createJMenuItem("Extract Overlay"));
 		
 		addOverlayEditor( );
+		
+		/**Adds an option to make the overlay for this panel unique.*/
+		add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+				item.setOverlayObjects(item.getOverlay().copy());
+				
+				return undo;
+				}	
+			
+		}.createJMenuItem("Make Overlay Unique"));
+		
 	}
 	
 	/**Adds a menu option to edit the overlay objects in a separate window

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 4, 2022
+ * Date Modified: Nov 6, 2022
  * Version: 2022.1
  */
 package objectDialogs;
@@ -57,9 +57,11 @@ import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import handles.RectangularShapeSmartHandle;
+import imageDisplayApp.MiniToolBarPanel;
 import imageScaling.ScaleInformation;
 import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
@@ -67,6 +69,8 @@ import locatedObject.RectangleEdges;
 import locatedObject.Selectable;
 import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
+import standardDialog.DialogItemChangeEvent;
+import standardDialog.StandardDialogListener;
 import standardDialog.booleans.BooleanInputEvent;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
@@ -145,7 +149,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private CSFLocation display=new CSFLocation();
 	
 	/**This object displays the full size uncropped image for the user to see*/
-	private ImagePanelGraphic dialogDisplayImage;
+	ImagePanelGraphic dialogDisplayImage;
 	
 	private CropDialogContext dialogContext;
 	
@@ -164,7 +168,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	/**set to true if the user is not precented from setting an out of bounds crop area*/
 	private boolean outofBoundsCrop=false;
 
-	private OverlayObjectList objectList;
+	OverlayObjectList objectList=new OverlayObjectList();
+
+	private MiniToolBarPanel toolbarPanel;
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -381,8 +387,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 		setDialogImagePanel(imagePanelGraphic);
 		
-		double d = this.getIdealDisplayScaleForImage(imagePanelGraphic);
-		setDisplayScale(d);
+		setScaleToDisplay(imagePanelGraphic);
 		
 		
 		if (r==null) {r=getRectForEntireImage(imagePanelGraphic);}
@@ -444,23 +449,32 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				changeZoomLevel(2);
+				zoomIn();
 				
-			}});
+			}
+
+			});
 		
 		ButtonPanel out = new ButtonPanel("Zoom", "-", new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				changeZoomLevel(-2);
+				zoomOut();
 				
-			}});
+			}
+
+			/**
+			 * 
+			 */
+			});
 		CombindedInputPanel zoomLevelPanel = new CombindedInputPanel("Zoom", out, in);
 		super.add("ZoomI", zoomLevelPanel);
 		
 		
 		this.add(ALLOW_OUT_KEY, new BooleanInputPanel("Permit out of bounds crop", outofBoundsCrop));
+		toolbarPanel = new MiniToolBarPanel(new CropDialogAssist(this));
+		add(toolbarPanel);
 		
 		this.pack();
 		boolean allOK = false;
@@ -485,6 +499,22 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		if(cropAreaRectangle==null)return null;
 		return cropAreaRectangle.getBounds();
+	}
+
+	/**Changes the magnification for view of an image with the size of the given image panel
+	 * @param imagePanelGraphic
+	 */
+	void setScaleToDisplay(ImagePanelGraphic imagePanelGraphic) {
+		double d = this.getIdealDisplayScaleForImage(imagePanelGraphic);
+		setDisplayScale(d);
+	}
+	
+	/**changes the zoom level*/
+	void zoomOut() {
+		changeZoomLevel(-2);
+	}
+	void zoomIn() {
+		changeZoomLevel(2);
 	}
 
 	/**Creates the image panel that will be shown within the crop dialog window
@@ -597,6 +627,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			setImageCropping();
 		
 		setFieldsToRect();
+		deselectObjects();
 		
 		this.onOK();
 		panel.repaint();
@@ -697,24 +728,81 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 	}
 
+	/**Selects and deselects overlay objects*/
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		if(arg0.getClickCount()>1) {
-			Point2D drag=panel.getCord().unTransformClickPoint(arg0);
-			LocatedObject2D item = new BasicObjectListHandler().getClickedRoi(objectList, (int) drag.getX(), (int)drag.getY());
-			if(item instanceof ShowsOptionsDialog) {
-			//	((ShowsOptionsDialog) item).showOptionsDialog();
-			}
-			
-			if(item instanceof Selectable) {
-				if(item.isSelected())
-					item.deselect();
-				else
-				item.select();
-				this.repaint();
-			}
+		try {
+			if (!arg0.isShiftDown())
+				deselectObjects();
+			if (arg0.getClickCount() > 1) {
+				Point2D drag = panel.getCord().unTransformClickPoint(arg0);
+				LocatedObject2D item = new BasicObjectListHandler().getClickedRoi(objectList, (int) drag.getX(),
+						(int) drag.getY());
+
+				if(item==null)item=this.cropAreaRectangle;
+				
+				if (item instanceof ShapeGraphic && arg0.getClickCount() > 2) {
+					ShapeGraphicOptionsSwingDialog dialog = ((ShapeGraphic) item).getOptionsDialog();
+					dialog.setModal(true);
+					dialog.setWindowCentered(true);
+
+					dialog.addDialogListener(new StandardDialogListener() {
+
+						@Override
+						public void itemChange(DialogItemChangeEvent event) {
+							repaintCropWindow();
+
+						}
+					});
+
+					dialog.showDialog();
+					repaintCropWindow();
+				}
+
+				if (item instanceof Selectable) {
+					if (item.isSelected()&&item!=this.cropAreaRectangle)
+						item.deselect();
+					else {
+						if (!arg0.isShiftDown())
+							deselectObjects();
+						item.select();
+						toolbarPanel.updateAlternateList(item);
+						toolbarPanel.repaint();
+						repaint();
+
+					}
+					this.repaint();
+				}
+			} 
+		} catch (Exception e) {
+			IssueLog.logT(e);
 		}
 		
+	}
+
+	/**
+	 * Deselects the overlay objects
+	 */
+	private void deselectObjects() {
+		deselectAll(objectList.getAllGraphics());
+	}
+	
+	/**Deelects the items in the list*/
+	public static void deselectAll(ArrayList<?> ls) {
+		for(Object l: ls) {
+			
+			if (l instanceof Selectable) {
+				Selectable s=(Selectable) l;
+				s.deselect();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void repaintCropWindow() {
+		this.repaint();
 	}
 
 	@Override
@@ -1000,7 +1088,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	public void changeZoomLevel(int turns) {
 		this.setDisplayScale(displayMagnification+turns*0.02);
 	
-		this.repaint();
+		repaintCropWindow();
 	}
 	
 

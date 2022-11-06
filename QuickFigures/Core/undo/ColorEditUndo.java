@@ -24,6 +24,7 @@ import java.awt.Color;
 
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 import graphicalObjects_SpecialObjects.TextGraphic;
 
 /**an undoable edit for changes to the color of objects
@@ -51,6 +52,8 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 	private Color newFrameColor;
 	private boolean oldShowOverlay;
 	private boolean newShowOverlay;
+	private OverlayObjectList oldOverlay;
+	private OverlayObjectList newOverlay;
 	
 	
 	public ColorEditUndo(Object o) {
@@ -69,6 +72,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 			image=(ImagePanelGraphic) o;
 			 oldFrameColor=image.getFrameColor();
 			 oldShowOverlay=image.isShowOverlay();
+			 oldOverlay=image.getOverlay();
 		}
 	}
 	
@@ -81,6 +85,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		if(image!=null) {
 			newFrameColor=image.getFrameColor();
 			newShowOverlay=image.isShowOverlay();
+			newOverlay=image.getOverlay();
 		}
 		
 	}
@@ -96,6 +101,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		if(image!=null) {
 			image.setFrameColor(oldFrameColor);
 			image.setShowOverlay(oldShowOverlay);
+			image.setOverlayObjects(oldOverlay);
 		}
 		
 	}
@@ -108,6 +114,7 @@ public class ColorEditUndo extends AbstractUndoableEdit2 {
 		if(image!=null) {
 			image.setFrameColor(newFrameColor);
 			image.setShowOverlay(newShowOverlay);
+			image.setOverlayObjects(newOverlay);
 		}
 		
 	}
