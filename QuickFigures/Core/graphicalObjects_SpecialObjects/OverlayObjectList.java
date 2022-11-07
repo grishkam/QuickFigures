@@ -33,7 +33,9 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.ShapeGraphic;
 import undo.CombinedEdit;
+import undo.ProvidesDialogUndoableEdit;
 
 /**
  A class for storing a list of objects that are drawn in front of an image panel
@@ -87,8 +89,14 @@ public class OverlayObjectList extends GraphicLayerPane implements Serializable 
 	public CombinedEdit getUndoForEditWindow() {
 		CombinedEdit output = new CombinedEdit();
 		for(Object o:this.getOverlayObjects()) {
-			if(o instanceof BasicGraphicalObject)
+			if(o instanceof BasicGraphicalObject) {
 			 output.addEditToList(((BasicGraphicalObject) o).provideDragEdit());
+			//need to add a dialog edit
+			}
+			if(o instanceof ProvidesDialogUndoableEdit) {
+				 output.addEditToList(((ProvidesDialogUndoableEdit) o).provideUndoForDialog());
+				//need to add a dialog edit
+				}
 		}
 		return output;
 	}

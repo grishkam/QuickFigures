@@ -281,7 +281,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 			};
 			
 			
-			addOverlayEditOption();
+			
 			
 			this.add(out);
 			
@@ -291,7 +291,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 	/**
 	 * Adds a menu option for editing the overlay for the original source image
 	 */
-	public void addOverlayEditOption() {
+	public void addOverlayEditOption(JMenu targetMenu) {
 		SmartMenuItem2 outoverlay = new SmartMenuItem2("Edit Overlay") {
 			private static final long serialVersionUID = 1L;
 
@@ -349,7 +349,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 			}
 			
 		};
-		this.add(outoverlay);
+		targetMenu.add(outoverlay);
 	}
 		
 	 

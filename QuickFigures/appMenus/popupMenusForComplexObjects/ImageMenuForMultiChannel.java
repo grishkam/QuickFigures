@@ -41,10 +41,11 @@ public class ImageMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
+	/**generates meny items*/
 	public void generateIncludedMenuItems() {
 		createSetScaleItem() ;
 		createCropOption();
+		addOverlayEditOption(this);
 		
 		JMenu mm = new JMenu("Expert Options") ;
 		createSaveImageItem(mm) ;
