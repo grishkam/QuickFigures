@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: April 23, 2022
  * Date Modified: April 23, 2022
- * Version: 2022.1
+ * Version: 2022.2
  */
 package figureOrganizer;
 

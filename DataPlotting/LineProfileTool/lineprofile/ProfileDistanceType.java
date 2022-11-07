@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: Feb 1, 2022
  * Date Modified: Feb 1, 2022
- * Version: 2022.1
+ * Version: 2022.2
  */
 package lineprofile;
 

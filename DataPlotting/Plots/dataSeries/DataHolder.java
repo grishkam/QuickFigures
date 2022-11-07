@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: Feb 2, 2021
  * Date Modified: Feb 2, 2021
- * Version: 2022.1
+ * Version: 2022.2
  */
 package dataSeries;
 

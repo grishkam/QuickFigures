@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Feb 24, 2021
- * Version: 2022.1
+ * Version: 2022.2
  */
 package graphicalObjects_LayerTypes;
 
@@ -106,7 +106,7 @@ public class GraphicGroupTest extends ToolTester {
 				
 				Point2D spot = super.simulateHandlePressCordinateEvent(image, gg, n);
 				assert(gg.getSmartHandleList().getHandleNumber(n)==sh);
-				int shift = 45;//suffidient distance for change to shapes to be certain
+				int shift = 85;//suffidient distance for change to shapes to be certain
 				this.simulateMouseCordinateEvent(image, new Point2D.Double(spot.getX()+shift, spot.getY()+shift), MouseEvent.MOUSE_DRAGGED);
 				this.simulateMouseCordinateEvent(image, new Point2D.Double(spot.getX()+shift, spot.getY()+shift), MouseEvent.MOUSE_RELEASED);
 				

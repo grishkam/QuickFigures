@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Nov 12, 2021
- * Version: 2022.1
+ * Version: 2022.2
  */
 package plotParts.Core;
 
