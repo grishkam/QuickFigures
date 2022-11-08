@@ -20,6 +20,8 @@
  */
 import java.awt.AWTEvent;
 import java.awt.Toolkit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -57,12 +59,7 @@ public class Toolset_Runner implements PlugIn {
 		
 		
 		
-		String string = UIManager.getLookAndFeel()+"";
-		if(string.contains("FlatLaf")||string.contains("Nimbus")||string.contains("CDE")) {
-			boolean result=ShowMessage.showOptionalMessage("Please change Look and Feel", true, "Current look and feel is not optimal for QuickFigures", "You may go to 'Edit<Options<Look and Feel...' in ImageJ menu", "You may select a 'Metal' Look and Feel or Windows Look and Feel", "Do not use FlatLaf, Nimbus or CDE/Motif", "An incompatible look and feel may cause QuickFigures to crash");
-			IJ.run("Look and Feel...");
-				
-		}
+		performLookAndFeelCheck(true);
 		
 		if (firstRun) {
 			onFirstRun();
@@ -100,8 +97,59 @@ public class Toolset_Runner implements PlugIn {
 		}
 		
 		ShowToolBar.showToolbarFor(arg0);
-	
+		if(arg0.contains(ShowToolBar.OBJECT_TOOLS)) {
+		
+			ObjectToolset1.currentToolset.getframe().addPropertyChangeListener(createLookAndFeelCheckListener());
+		}
 
+	}
+
+
+
+	/**returns a property chagne listener that will respond to a problematic look and feel
+	 * @return
+	 */
+	public PropertyChangeListener createLookAndFeelCheckListener() {
+		return new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				IssueLog.log("Checking look and feel "+evt.getNewValue());
+				
+				performLookAndFeelCheck(false);
+				
+				if(lookAndFeelInvalid())
+					ObjectToolset1.currentToolset.getframe().setVisible(false);
+			}};
+	}
+
+
+
+	/**
+	 * Warns user about a the look and feel issue
+	 */
+	public void performLookAndFeelCheck(boolean run) {
+		boolean lookAndFeelInvalid = lookAndFeelInvalid();
+		if(lookAndFeelInvalid) {
+			boolean result=ShowMessage.showOptionalMessage("Please change Look and Feel", false, "Current Look and Feel is not optimal for QuickFigures on Windows", "You may go to 'Edit<Options<Look and Feel...' in ImageJ menu", "You may select a 'Metal' Look and Feel or 'Windows' Look and Feel", "Do NOT use FlatLaf, Nimbus or CDE/Motif", "An incompatible Look and Feel may cause QuickFigures to crash");
+
+			if(run&&result)
+				IJ.run("Look and Feel...");
+			
+		}
+	}
+
+
+
+	/**Checks if a problematic look and feel
+	 * @return
+	 */
+	public boolean lookAndFeelInvalid() {
+		if(!IssueLog.isWindows())
+			return false;
+		String string = UIManager.getLookAndFeel()+"";
+		boolean lookAndFeelInvalid = string.contains("FlatLaf")||string.contains("Nimbus")||string.contains("CDE");
+		return lookAndFeelInvalid;
 	}
 	
 	
