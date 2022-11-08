@@ -23,6 +23,9 @@ package includedToolbars;
 import java.awt.dnd.DropTarget;
 
 import javax.swing.AbstractButton;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuBarForApp;
@@ -33,6 +36,7 @@ import externalToolBar.ToolBarManager;
 import genericTools.GeneralTool;
 import genericTools.ToolBit;
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**The superclass for most of the QuickFigures toolbars*/
 public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>  {
@@ -45,6 +49,9 @@ public class QuickFiguresToolBar extends AbstractExternalToolset<DisplayedImage>
 	
 	/**shows the JFrame*/
 	public void showFrame() {
+		
+		
+		
 		if (this.usesMenuBar())getframe().setJMenuBar(new MenuBarForApp());
 		super.showFrame();
 		

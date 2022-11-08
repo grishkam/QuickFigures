@@ -221,6 +221,10 @@ public class OverlaySubmenu extends SmartJMenu {
 		item.setShowOverlay(true);
 		
 		OverlayObjectList extractOverlay = item.getOverlay();
+		if(extractOverlay==null){
+			extractOverlay =new OverlayObjectList();
+			item.setOverlayObjects(extractOverlay);
+			}
 		
 		ImageWindowAndDisplaySet window = createOverlayEditorWindow(item, extractOverlay);
 		

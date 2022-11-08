@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
 import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
 import appContext.RulerUnit;
@@ -47,9 +50,20 @@ import ultilInputOutput.FileChoiceUtil;
 /**This class is used by imageJ to make the toolbars appear*/
 public class Toolset_Runner implements PlugIn {
 	static boolean firstRun=true;
+	private static boolean reccomendationBlocked=true;
 
 	@Override
 	public void run(String arg0) {
+		
+		
+		
+		String string = UIManager.getLookAndFeel()+"";
+		if(string.contains("FlatLaf")||string.contains("Nimbus")||string.contains("CDE")) {
+			boolean result=ShowMessage.showOptionalMessage("Please change Look and Feel", true, "Current look and feel is not optimal for QuickFigures", "You may go to 'Edit<Options<Look and Feel...' in ImageJ menu", "You may select a 'Metal' Look and Feel or Windows Look and Feel", "Do not use FlatLaf, Nimbus or CDE/Motif", "An incompatible look and feel may cause QuickFigures to crash");
+			IJ.run("Look and Feel...");
+				
+		}
+		
 		if (firstRun) {
 			onFirstRun();
 			firstRun=false;
@@ -99,6 +113,8 @@ public class Toolset_Runner implements PlugIn {
 		loadUserPreferences();
 		
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		
+		
 		try {
 			if (!DirectoryHandler.getDefaultHandler().defaultTemplateExits())
 					checkForAutoRun() ;
@@ -185,7 +201,7 @@ public class Toolset_Runner implements PlugIn {
 	public static void checkForAutoRun() throws Exception {
 		
 			    
-			    if (!hasAutoRun() ) {
+			    if (!hasAutoRun() &&!reccomendationBlocked) {
 			 
 			    	boolean start =   FileChoiceUtil.yesOrNo("Open QuickFigures toolbars whenever ImageJ starts?"); 
 			    	IssueLog.log("Will write to startup macros file");
