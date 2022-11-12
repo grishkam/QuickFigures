@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: May 14, 2022
+ * Date Modified: Nov 12, 2022
  * Version: 2022.2
  */
 package storedValueDialog;
@@ -288,7 +288,7 @@ public class StoredValueDilaog extends StandardDialog{
 		private Object object;
 
 		public FileInput(String label, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
-			super(label, ""+ f.get(of));
+			super(label, ""+ f.get(of), o.note());
 			addStringInputListener(this);
 			this.field=f;
 			this.object=of;

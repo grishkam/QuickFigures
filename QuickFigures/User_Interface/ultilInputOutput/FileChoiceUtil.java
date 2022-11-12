@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
@@ -43,6 +44,7 @@ import logging.IssueLog;
 /**this class contains methods related to file dialogs, opening, and saving files*/
 public class FileChoiceUtil {
 	private static String workingDirectory=DirectoryHandler.getDefaultHandler().getFigureFolderPath();
+	private static HashMap<String, String> recentPaths=new HashMap<String, String>();
 	
 
 	
@@ -158,7 +160,16 @@ public class FileChoiceUtil {
 		return getOpenFile(dd, true);
 	}
 	
-	
+	/**shows a file dialog for the user to open a file with a specific default directory*/
+	public static File  getOpenFile(String type) {
+		String dd = recentPaths.get(type);
+		if(dd==null)
+			dd = CurrentAppContext.getDefaultDirectory();
+		File openFile = getOpenFile(dd, true);
+		if(openFile!=null)
+			recentPaths.put(type, openFile.getAbsolutePath());
+		return openFile;
+	}
 	
 	/**shows a file dialog for the user to open a file in the given directory*/
 	public static File getOpenFile(String dd, boolean modal) {

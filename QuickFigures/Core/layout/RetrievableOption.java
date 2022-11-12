@@ -77,6 +77,9 @@ public @interface RetrievableOption {
 	/**If the options are grouped into categories*/
 	String category() default "";
 	
+	
+	/**Can provide more information*/
+	String note() default "";
 }
 
 

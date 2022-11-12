@@ -73,10 +73,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "flip group", label="Flip group orientation")
 	public boolean flipGroup=false;
 	
-	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File 1 (.xlsx)")
+	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File 1 (.xlsx)", note="Excel")
 	public File templateFile=null;
 	
-	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine with File2? (optional)")
+	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine with File2? (optional)", note="Excel")
 	public File templateFile2=null;
 	
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")

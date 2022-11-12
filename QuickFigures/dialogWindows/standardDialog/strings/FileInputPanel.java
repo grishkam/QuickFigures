@@ -16,39 +16,49 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Created: Mar 26, 2022
+ * Date Modified: Nov 12, 2022
  * Version: 2022.2
  */
 package standardDialog.strings;
 
 import java.awt.Container;
 import java.awt.GridBagConstraints;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
+import ultilInputOutput.ForDragAndDrop;
 
 /**
  
  * 
  */
-public class FileInputPanel extends StringInputPanel {
+public class FileInputPanel extends StringInputPanel implements  DropTargetListener{
 
 	static final String choose="No File";
 	private JButton selectContent=new JButton("Choose File");
 	File file=null;
+	private String searchIn="";
 	
 	/**
 	 * @param labeln
 	 * @param contend
 	 */
-	public FileInputPanel(String labeln, String contend) {
+	public FileInputPanel(String labeln, String contend, String searchForm) {
 		super(labeln, contend);
 		setup();
+		this.searchIn=searchForm;
 	}
 	
 	/**
@@ -60,7 +70,8 @@ public class FileInputPanel extends StringInputPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				file=FileChoiceUtil.getOpenFile();
+				file=FileChoiceUtil.getOpenFile(searchIn);
+				
 				if(file!=null)
 					field.setText(file.getAbsolutePath());
 				else {
@@ -74,7 +85,8 @@ public class FileInputPanel extends StringInputPanel {
 				dispatchStringInputEvent();
 				
 			}});
-		
+		new DropTarget(selectContent, this);
+		new DropTarget(field, this);
 	}
 
 	public FileInputPanel(String labeln) {
@@ -110,5 +122,60 @@ public class FileInputPanel extends StringInputPanel {
 		
 		return file;
 		}
+
+	@Override
+	public void dragEnter(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragOver(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dropActionChanged(DropTargetDragEvent dtde) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragExit(DropTargetEvent dte) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drop(DropTargetDropEvent dtde) {
+		if(dtde.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+
+			ArrayList<File> files = ForDragAndDrop.dropedFiles(dtde);
+			performFileListAction(files);
+			for(File f: files) {
+				performsingleFileAction(f);
+			}
+			
+			return;
+			}
+		
+	}
+
+	/**
+	 * @param f
+	 */
+	private void performsingleFileAction(File f) {
+		getTextComponent().setText(f.getAbsolutePath());
+		dispatchStringInputEvent();
+	}
+
+	/**
+	 * @param files
+	 */
+	private void performFileListAction(ArrayList<File> files) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
