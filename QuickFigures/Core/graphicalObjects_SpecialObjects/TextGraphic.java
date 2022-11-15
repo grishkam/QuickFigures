@@ -96,10 +96,13 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 	/**
 	 
 	 */
-	
+	/**stores the text that was recently 'copied' by the user*/
 	public static String lastCopy=null;
 
+	/***/
 	private boolean fillBackGround=false;
+	
+	/**records if the bounding shape has been innitialized or not*/
 	transient boolean boundsInnitial=false;
 	
 	private transient int cursorPosition=Integer.MAX_VALUE-1000;//the cursor position starts at a number greater then the length of the text
@@ -116,15 +119,18 @@ public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles
 
 	{ locationType=RectangleEdgePositions.MIDDLE;}
 	
+	/**Determines how the base color will be modified*/
 	private ColorDimmer colordimming=ColorDimmer.FULL_BRIGTHNESS;
+	
+	/**Determines if the base color will be modified*/
 	private boolean dimColor=true;
 	
 	transient double width=0;
 	transient double height=0;
 	
-	
-	public void setX(int x) {this.x=x;}
-	public void setY(int y) {this.y=y;}
+	/**sets the baseline location of the text*/
+	public void setX(double x) {this.x=x;}
+	public void setY(double y) {this.y=y;}
 
 	Font font=new Font("Arial", Font.BOLD, 12);
 	String theText="Hello";
