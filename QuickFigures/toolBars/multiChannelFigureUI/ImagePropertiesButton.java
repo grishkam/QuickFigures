@@ -33,6 +33,7 @@ import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import selectedItemMenus.BasicMultiSelectionOperator;
 import selectedItemMenus.LayerSelectionSystem;
@@ -86,6 +87,15 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 	@Override
 	public void run() {
 		
+		CombinedEdit undo = performButtonAction();
+		
+		if(undo!=null&&this.getUndoManager()!=null) this.getUndoManager().addEdit(undo);
+	}
+
+	/**
+	 * @return
+	 */
+	public CombinedEdit performButtonAction() {
 		CombinedEdit undo=null;
 		
 		
@@ -97,7 +107,11 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 	
 			
 		if(this.actionType==CROP_IMAGE) {
-			if(context.getExtraDisplays().size()<1) return;
+			if(context.getExtraDisplays().size()<1) {
+				//IssueLog.log("cannot crop because displays not available");
+				//return null;
+				
+					};
 			context.getExtraDisplays().remove(context.getPrincipalDisplay());
 		
 			undo = FigureOrganizingSuplierForPopup.recropManyImages(context.getPrincipalDisplay(),context.getExtraDisplays());;
@@ -107,8 +121,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 			context.setScope(ChannelPanelEditingMenu.ALL_IMAGES_IN_CLICKED_FIGURE);
 			undo=context.changeColorModes();
 		}
-		
-		if(undo!=null&&this.getUndoManager()!=null) this.getUndoManager().addEdit(undo);
+		return undo;
 	}
 	/**
 	 * @return 

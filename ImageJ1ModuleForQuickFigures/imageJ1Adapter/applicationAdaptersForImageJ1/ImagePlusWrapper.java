@@ -37,7 +37,9 @@ import infoStorage.BasicMetaDataHandler;
 import infoStorage.MetaInfoWrapper;
 import locatedObject.LocatedObject2D;
 import locatedObject.PathPointList;
+import locatedObject.RotatesFully;
 import locatedObject.ScaleInfo;
+import locatedObject.Scales;
 import logging.IssueLog;
 import multiChannelFigureUI.ChannelManipulations;
 import undo.UndoManagerPlus;
@@ -61,6 +63,7 @@ import channelMerging.PreProcessInformation;
 import channelMergingImageJ1.ChannelSwapListener;
 import channelMergingImageJ1.CompositeImageMerger;
 import channelMergingImageJ1.IJ1ChannelOrderWrap;
+import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
@@ -791,7 +794,8 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		ImagePlusWrapper imagePlusWrapper = new ImagePlusWrapper(d);
 		imagePlusWrapper.setChannelNames(this.channames);
 		
-		imagePlusWrapper.setOverlayObjects(cropOverlayAtAngle(  r, angle,scale));
+		imagePlusWrapper.setOverlayObjects(OverlayObjectList.cropOverlayAtAngle( getOverlayObjects("crop"),  r, angle,scale, false));
+		
 		
 		ScaleInfo scaled = this.getScaleInfo().getScaledCopyXY(scale);
 		imagePlusWrapper.setScaleInfo(scaled);
@@ -810,117 +814,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	
 	}
 
-	/**work in progress. Will create a crop and scale version of the overlay
-	 * TODO: make it work with ovals, arrows and rectangles
-	 * @param overlay
-	 * @param r
-	 * @param angle
-	 * @param scale
-	 * @return
-	 */
-	private OverlayObjectList cropOverlayAtAngle(Rectangle r, double angle, double scale) {
-
-		OverlayObjectList overlayObjects = getOverlayObjects("crop");
-		OverlayObjectList output = new OverlayObjectList("");
-		if(r==null) {
-			
-			
-			return overlayObjects.copy() ;
-			}
-		for(Object o: overlayObjects.getOverlayObjects()) try {
-			AffineTransform rotTransform = AffineTransform.getRotateInstance(angle, r.getCenterX(), r.getCenterY());
-			AffineTransform translate = AffineTransform.getTranslateInstance(-r.getMinX(), -r.getMinY());
-			AffineTransform scaleTransform= AffineTransform.getScaleInstance(scale, scale);
-			
-			
-			if(o instanceof BasicShapeGraphic) {
-				/**
-				BasicShapeGraphic b = ((BasicShapeGraphic) o).copy();
-				Shape shape1=b.getShape();
-				shape1=rotTransform.createTransformedShape(shape1);
-				
-				shape1=translate.createTransformedShape(shape1);
-				if(scale!=1) {
-					
-					shape1=scaleTransform.createTransformedShape(shape1);
-					}
-				b.setShape(shape1);
-				b.setName("crop of "+b.getName());
-				
-				output.add(b.createPathCopy());*/
-				}
-			
-			if(o instanceof TextGraphic) {
-				
-				}
-				
-				if(o instanceof RectangularGraphic) {
-					RectangularGraphic o2 = (RectangularGraphic) o;
-					ShapeGraphic b2;
-					if(angle!=0)
-						b2 = createCroppedPathVersion(scale, rotTransform, translate, scaleTransform, o2);
-					else 
-						{
-						b2=o2.copy();
-						b2.moveLocation(-r.getMinX(), -r.getMinY());
-						b2.scaleAbout(new Point.Double(), scale);
-						}
-					output.add(b2);
-				}
-				
-				
-				
-				if(o instanceof ArrowGraphic) {
-					ArrowGraphic o2 = (ArrowGraphic) o;
-					ArrowGraphic b2;
-						
-						b2=o2.copy();
-						b2.rotateAbout(new Point2D.Double(r.getCenterX(), r.getCenterY()), angle);
-						b2.moveLocation(-r.getMinX(), -r.getMinY());
-						b2.scaleAbout(new Point.Double(), scale);
-						
-					output.add(b2);
-				}
-				
-				if(o instanceof PathGraphic) {
-					PathGraphic o2 = (PathGraphic) o;
-					ShapeGraphic b2;
-					
-						b2 = createCroppedPathVersion(scale, rotTransform, translate, scaleTransform, o2);
-					
-					output.add(b2);
-				}
-				
-				
-			
-		}catch (Throwable t){
-			  IssueLog.log(t);
-		  }
-		return output;
-	}
-
-
-
-	/**returns a scropped and scaled path
-	 * @param scale
-	 * @param rotTransform
-	 * @param translate
-	 * @param scaleTransform
-	 * @param o2
-	 * @return
-	 */
-	public PathGraphic createCroppedPathVersion(double scale, AffineTransform rotTransform, AffineTransform translate,
-			AffineTransform scaleTransform, ShapeGraphic o2) {
-		PathGraphic b2 = o2.createPathCopy();
-		PathPointList points = b2.getPoints();
-		points.applyAffine(rotTransform);
-		points.applyAffine(translate);
-		if (scale!=1)points.applyAffine(scaleTransform);
-		b2.setPoints(points);
-		b2.updatePathFromPoints();
-		b2.setName("crop of "+b2.getName());
-		return b2;
-	}
+	
 	
 	
 

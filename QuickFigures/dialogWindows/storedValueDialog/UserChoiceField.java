@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**An annotation fiwth a list of strings for user choice options
+/**An annotation with a list of strings for user choice options
  * work in progress*/
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

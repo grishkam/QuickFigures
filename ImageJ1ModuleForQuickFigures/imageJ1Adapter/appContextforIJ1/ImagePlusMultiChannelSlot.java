@@ -873,6 +873,12 @@ import logging.IssueLog;
 		public String getOriginalPath() {
 			return original.getOriginalSavePath();
 		}
+
+		@Override
+		public void setOriginalOverlay(OverlayObjectList reversed) {
+			original.overlayObjectList=reversed;
+			
+		}
 		
 		
 	}

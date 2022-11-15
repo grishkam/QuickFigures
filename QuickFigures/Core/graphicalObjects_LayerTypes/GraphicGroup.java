@@ -614,6 +614,12 @@ public class GraphicGroup extends BasicGraphicalObject implements ZoomableGraphi
 			super.deselect();
 			theGroup.deselect();
 		}
+
+		@Override
+		public void scaleAbout(Point2D p, double mag) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		
 	

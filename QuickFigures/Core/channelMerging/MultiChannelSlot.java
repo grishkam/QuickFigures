@@ -23,6 +23,7 @@ package channelMerging;
 import java.io.Serializable;
 
 import applicationAdapters.HasScaleInfo;
+import graphicalObjects_SpecialObjects.OverlayObjectList;
 
 /**classes that implement this store and retrieve a particular 
  multi-dimensional image. */
@@ -114,6 +115,10 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	
 	/**returns the file path for the orginal source image*/
 	public String getOriginalPath();
+	/**
+	 * @param reversed
+	 */
+	public void setOriginalOverlay(OverlayObjectList reversed);
 	
 	
 }

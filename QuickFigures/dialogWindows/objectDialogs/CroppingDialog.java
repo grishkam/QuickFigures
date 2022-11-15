@@ -69,6 +69,7 @@ import locatedObject.RectangleEdges;
 import locatedObject.Selectable;
 import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
+import messages.ShowMessage;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import standardDialog.booleans.BooleanInputEvent;
@@ -177,6 +178,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private MiniToolBarPanel toolbarPanel;
 
 	LocatedObject2D selectedObject;
+
+	private boolean enableObjectSelection=false;
+
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -747,10 +751,20 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			if (!arg0.isShiftDown())
 				deselectObjects();
 			if (arg0.getClickCount() > 1) {
+				
+				
 				Point2D drag = panel.getCord().unTransformClickPoint(arg0);
 				LocatedObject2D item = new BasicObjectListHandler().getClickedRoi(objectList, (int) drag.getX(),
 						(int) drag.getY());
 
+				/**Asks user*/
+				if(item!=this.cropAreaRectangle&&item!=null&&!enableObjectSelection) {
+					enableObjectSelection=ShowMessage.yesOrNo("Enable Selection Of Overlay Objects?");
+					if(!enableObjectSelection)
+						return;
+					ShowMessage.showMessages("You may select overlay objects by double clicking", "you may use the tools on the right panel to change their color and appearance.", "Changes to these objects will only effect overlays for panels without a custom overlay");
+				}
+				
 				if(item==null)
 					item=this.cropAreaRectangle;
 				this.selectedObject=item;
@@ -1016,7 +1030,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			
 			slot.setDisplaySlice(crop.display);
 			slot.applyCropAndScale(process);
-			
+			if(crop.enableObjectSelection) {
+				slot.redoCropAndScale();
+			}
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}

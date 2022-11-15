@@ -25,6 +25,7 @@ import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import standardDialog.GriddedPanel;
 import standardDialog.OnGridLayout;
@@ -195,6 +196,20 @@ public class ShowMessage {
 		 */
 		private static final long serialVersionUID = 1L;}
 	
+	/**Displays a modal dialog that presents the user with a question. returns the answer */
+	public static boolean yesOrNo(String s) {
+			int i=JOptionPane.showConfirmDialog(null, 	
+					s,
+				    "",
+				    JOptionPane.YES_NO_OPTION
+				    );
+			if (i==JOptionPane.YES_OPTION) {
+				return true;
+				
+			}
+		
+		return false;
 	
+}
 
 }

@@ -88,10 +88,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "sample", label="names are in col #")
 	public double sampleNameIndex=0;
 	
-	@RetrievableOption(key = "row shoft", label="shift rows", category="special")
+	@RetrievableOption(key = "row shift", label="shift rows", category="special")
 	public double rowShift=0;
 	
-	@RetrievableOption(key = "col shoft", label="shift cols", category="special")
+	@RetrievableOption(key = "col shift", label="shift cols", category="special")
 	public double colShift=0;
 	
 	
@@ -110,7 +110,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public void processTableAction(TableReader item, DataTableActionContext context) {
 		if(item!=null)
 			templateFile=new File( item.getOriginalSaveAddress());
-		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this);
+		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this, "general");
 		GraphicComponent comp = new GraphicComponent();
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx=5;

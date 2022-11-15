@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Nov 6, 2022
- * Date Modified: Nov 6, 2022
+ * Date Modified: Nov 14, 2022
  * Copyright (C) 2022 Gregory Mazo
  * Version: 2022.2
  */
@@ -25,20 +25,30 @@ package popupMenusForComplexObjects;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 
+import channelMerging.PreProcessInformation;
 import fLexibleUIKit.ObjectAction;
+import figureOrganizer.MultichannelDisplayLayer;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import imageDisplayApp.OverlayObjectManager;
 import imageDisplayApp.StandardWorksheet;
+import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
+import multiChannelFigureUI.ImagePropertiesButton;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
+import utilityClasses1.ArraySorter;
 
 /**
  A submenu for actions related to the overlays above an image panel
@@ -63,6 +73,9 @@ public class OverlaySubmenu extends SmartJMenu {
 	/**Adds the meny items*/
 	public void addMenuItems() {
 	
+		SmartJMenu editMenu = new SmartJMenu("Edit");
+		
+		
 		add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
 		public AbstractUndoableEdit2 performAction() {
@@ -89,13 +102,16 @@ public class OverlaySubmenu extends SmartJMenu {
 			return output;
 		}
 	}.createJMenuItem("Show Overlay"));
-
-		add(new ObjectAction<ImagePanelGraphic>(c) {
+		
+		this.add(editMenu);
+		
+		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
 		public AbstractUndoableEdit2 performAction() {
 			AbstractUndoableEdit2 undo = item.provideUndoForDialog();
 			
-			GraphicLayerPane extractOverlay = item.extractOverlay();
+			GraphicLayerPane extractOverlay =new GraphicLayerPane("Extracted overlay");
+			CombinedEdit undo2 = item.extractOverlay(extractOverlay, true);
 			if(extractOverlay.getItemArray().size()==0) {
 				ShowMessage.showOptionalMessage("No overlay objects were extracted");
 				return null;
@@ -103,45 +119,167 @@ public class OverlaySubmenu extends SmartJMenu {
 				
 			AbstractUndoableEdit2 addItem = Edit.addItem(item.getParentLayer(), extractOverlay);
 			item.setShowOverlay(false);
-			return new CombinedEdit( undo,addItem);
+			return new CombinedEdit( undo,addItem, undo2);
 			
 			}	
 		
-	}.createJMenuItem("Extract Overlay"));
+	}.createJMenuItem("Extract Objects"));
 		
-		addOverlayEditor( );
+		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+				
+				ArrayList<LocatedObject2D> itemsAdded = c.getTopLevelContainer().getLocatedObjects();
+				ArraySorter.removeNonSelectionItems(itemsAdded);
+				switchToEditMode(item);
+				return new CombinedEdit( undo,item.insertIntoOverlay(itemsAdded));
+				
+				}	
+			
+		}.createJMenuItem("Add selected objects"));
+		
+		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+				int n = item.getOverlay().getAllGraphics().size();
+				ArrayList<LocatedObject2D> itemsAdded = new BasicObjectListHandler().getContainedObjects(item.getBounds(), item.getTopLevelContainer());
+				
+				switchToEditMode(item);
+				CombinedEdit insertIntoOverlay = item.insertIntoOverlay(itemsAdded);
+				int dn = item.getOverlay().getAllGraphics().size()-n;
+				IssueLog.log("Added "+dn+" objects to overlay");
+				return new CombinedEdit( undo,insertIntoOverlay);
+				
+				}	
+			
+		}.createJMenuItem("Add shapes"));
+		
+		addOverlayEditor( editMenu);
+		
+		
+		SmartJMenu share = new SmartJMenu("Sharing");
+		this.add(share);
 		
 		/**Adds an option to make the overlay for this panel unique.*/
-		add(new ObjectAction<ImagePanelGraphic>(c) {
+		share.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
 				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
 				item.setOverlayObjects(item.getOverlay().copy());
-				
+				switchToEditMode(item);
 				return undo;
 				}	
 			
 		}.createJMenuItem("Make Overlay Unique"));
 		
+		/**Adds an option to make the overlay for this panel unique.*/
+		share.add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				ArrayList<ZoomableGraphic> panels = item.getParentLayer().getAllGraphics();
+				ArraySorter.removeNonSelectionItems(panels);
+				ArraySorter.removeThoseNotOfClass(panels, ImagePanelGraphic.class);
+				panels.remove(item);
+				boolean done=false;
+				if(panels.size()==0) {
+					ShowMessage.showOptionalMessage("Make sure that you select one of the sister panels");
+					return null;
+				}
+				
+				for(Object p: panels) {
+					ImagePanelGraphic imagePanelGraphic = (ImagePanelGraphic)p;
+					if(imagePanelGraphic.getOverlay()==item.getOverlay())
+						continue;
+					imagePanelGraphic.getOverlay().setEdited(false);
+					imagePanelGraphic.setOverlayObjects(item.getOverlay());
+					done=true;
+				}
+				if(!done&&panels.size()>0) {
+					ShowMessage.showOptionalMessage("It seems that the selected panels already share an overlay");
+				}
+				switchToEditMode(item);
+					return null;
+				}	
+			
+		}.createJMenuItem("Share Overlay With Selected Sister Panels"));
+		
+		/**Adds an option to make the overlay for this panel unique.*/
+		share.add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				//ShowMessage.showOptionalMessage("Will use a copy of this overlay to update panel overlays", true, "Updated overlay for source image", "You will see ", "There is no undo");
+				
+				OverlayObjectList o = item.getOverlay();
+				PreProcessInformation lastProcess = o.getLastProcess();
+				
+				OverlayObjectList reversed = OverlayObjectList.cropOverlayAtAngle(o, lastProcess, true);
+				MultichannelDisplayLayer original = MultichannelDisplayLayer.findMultiChannelForGraphic(item.getParentLayer(), item);
+				original.getSlot().setOriginalOverlay(reversed);
+			
+				CombinedEdit performButtonAction = new ImagePropertiesButton(item, ImagePropertiesButton.CROP_IMAGE).performButtonAction();
+				original.getSlot().redoCropAndScale();
+				
+				return performButtonAction;
+				
+			
+			}	
+			
+		}.createJMenuItem("Show Re-Crop dialog with this overlay"));
+		
+		
+		
+		/**Adds an option to make the overlay for this panel unique.*/
+		if(c.getOverlay().manualEditsMade()) add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				boolean proceed = ShowMessage.showOptionalMessage("You sure?", true, "Are you sure you want to clear the overlay");
+				
+				if(proceed)item.setOverlayObjects(null);
+				c.updateDisplay();
+				return null;
+			}	
+			
+		}.createJMenuItem("Clear custom overlay"));
+		
+		
+		
+		
 	}
 	
 	/**Adds a menu option to edit the overlay objects in a separate window
+	 * @param editMenu 
 	 * @param c
 	 * @param expert
 	 */
-	public void addOverlayEditor( ) {
-		 add(new ObjectAction<ImagePanelGraphic>(c) {
+	public void addOverlayEditor(SmartJMenu editMenu ) {
+		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
+				switchToEditMode(item);
 				return showEditWindowForOverlay(item, null);
 				
 				}
 
 			
 			
-		}.createJMenuItem("Edit Overlay Objects"));
+		}.createJMenuItem("Edit objects in isolated Window"));
 	}
 	
+	/**
+	 * @param c 
+	 * 
+	 */
+	public void switchToEditMode(ImagePanelGraphic c) {
+		int size = c.getOverlay().getAllGraphics().size();
+		if(!c.isShowOverlay()&&size>0) {
+			ShowMessage.showOptionalMessage("Overlay now visible",true, "Your overlay was hidden", "There were already "+size+" objects inside", "Those and any newly added objects will now be visible", "You can hide the overlay at any time");
+		}
+		c.setShowOverlay(true);
+		c.getOverlay().setEdited(true);
+	}
+
 	/**returns a separate window
 	 * @param background2
 	 * @param extractOverlay

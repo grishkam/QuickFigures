@@ -427,4 +427,11 @@ public class DividedPanelLayoutGraphic extends PanelLayoutGraphic implements Has
 	
 	}
 
+
+	@Override
+	public void scaleAbout(Point2D p, double mag) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

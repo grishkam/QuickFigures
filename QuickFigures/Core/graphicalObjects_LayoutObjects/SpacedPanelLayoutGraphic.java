@@ -20,6 +20,7 @@
  */
 package graphicalObjects_LayoutObjects;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import layout.PanelContentExtract;
@@ -44,6 +45,12 @@ public class SpacedPanelLayoutGraphic extends PanelLayoutGraphic {
 		getPanelLayout().autoLocatePanels();
 		getEditor().pasteStack(getPanelLayout(), stack);
 		this.snapLockedItems();
+		
+	}
+
+	@Override
+	public void scaleAbout(Point2D p, double mag) {
+		// TODO Auto-generated method stub
 		
 	}
 

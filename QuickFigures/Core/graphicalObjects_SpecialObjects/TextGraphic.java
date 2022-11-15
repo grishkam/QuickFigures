@@ -80,7 +80,9 @@ import locatedObject.PathPointList;
 import locatedObject.RectangleEdgePositions;
 import locatedObject.RectangleEdges;
 import locatedObject.Rotatable;
+import locatedObject.RotatesFully;
 import locatedObject.Scales;
+import locatedObject.ScalesFully;
 import locatedObject.ShapesUtil;
 import locatedObject.Snap2Rectangle;
 import logging.IssueLog;
@@ -90,7 +92,7 @@ import objectDialogs.TextGraphicSwingDialog;
 
 /**A graphical object that consists of text. This one displays a piece of 
  * text with a single font and color. Used for the most simple labels*/
-public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit, DimsColor {
+public class TextGraphic extends BasicGraphicalObject implements HasSmartHandles,HasMiniToolBarHandles, TextItem, Scales, HasTextInsets,HasBackGroundShapeGraphic, Rotatable, ColorDims,IllustratorObjectConvertable, RectangleEdgePositions , HasTreeLeafIcon, HasUniquePopupMenu, OfficeObjectConvertable,  SVGExportable, ProvidesDialogUndoableEdit, DimsColor,  RotatesFully {
 	/**
 	 
 	 */
@@ -1329,6 +1331,23 @@ public ItemGlueSmartHandle getGlueHandle() {
 	if (glueHandle==null)
 		glueHandle= new ItemGlueSmartHandle(this);
 	return glueHandle;
+}
+
+
+
+/**Performs a rotation transform*/
+@Override
+public void rotateAbout(Point2D p, double distanceFromCenterOfRotationtoAngle) {
+	if(distanceFromCenterOfRotationtoAngle==0) return;
+	
+	Point2D p2 = this.getBaseLocation();;
+	AffineTransform at = AffineTransform.getRotateInstance(distanceFromCenterOfRotationtoAngle, p.getX(), p.getY());
+	at.transform(p2, p2);
+	this.x=p2.getX();
+	this.y=p2.getY();
+	this.setLocation(p2);
+	
+	this.setAngle(this.getAngle()-distanceFromCenterOfRotationtoAngle);
 }
 
 

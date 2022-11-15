@@ -529,7 +529,8 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 		return null;
 	}
 	
-	
+	public abstract void scaleAbout(Point2D p, double mag);
+	public abstract BasicGraphicalObject copy();
 	
 	
 	
@@ -541,6 +542,13 @@ public abstract class BasicGraphicalObject implements GraphicalObject, HasHandle
 	}
 	
 	public void setHandleListFilter(HandleListFilter handleSpecialization) {handleModifier=handleSpecialization;}
+
+
+	/**
+	 * @param double1
+	 * @param angle2
+	 */
+	
 	
 	
 	

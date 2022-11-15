@@ -65,6 +65,12 @@ public class StoredValueDilaog extends StandardDialog{
 		this("", of);
 	}
 	
+	/**creates a dialog */
+	public StoredValueDilaog(String item, Object of, String tabName) {
+		this(item, of);
+		this.setTabName(tabName);
+	}
+	
 
 	/**
 	 looks for annotated fields in the object and add items to the dialog for each 
@@ -75,6 +81,7 @@ public class StoredValueDilaog extends StandardDialog{
 		 try{
 		 while (c!=Object.class) {
 		 for (Field f: c.getDeclaredFields()) {
+			 Object lastField=null;
 			 RetrievableOption o= f.getAnnotation( RetrievableOption.class);
 			 //IssueLog.log("working on "+o.label());
 			if(o!=null) d.switchPanels(o.category());
@@ -83,7 +90,7 @@ public class StoredValueDilaog extends StandardDialog{
 				
 				if(o.choices().length>1) {
 					String[] theChoices = o.choices();
-					addChoice(d, of, f, o, theChoices);
+					lastField=addChoice(d, of, f, o, theChoices);
 					
 				}else {
 				 
@@ -108,7 +115,7 @@ public class StoredValueDilaog extends StandardDialog{
 				}
 				
 				if(f.getType()==File.class) {
-					addFileField(d, of, f, o);
+					lastField=addFileField(d, of, f, o);
 				}
 				
 				}
@@ -130,12 +137,15 @@ public class StoredValueDilaog extends StandardDialog{
 	 * @param of
 	 * @param f
 	 * @param o
+	 * @return 
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
 	 */
-	private static void addFileField(StandardDialog d, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
+	private static FileInput addFileField(StandardDialog d, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
 		String label = o.label();
-		d.add(o.key(), new FileInput(label, of, f, o));
+		FileInput fileInput1 = new FileInput(label, of, f, o);
+		d.add(o.key(), fileInput1);
+		return fileInput1;
 	}
 
 	/**Adds a choice field to a dialog
@@ -144,8 +154,9 @@ public class StoredValueDilaog extends StandardDialog{
 	 * @param f
 	 * @param o
 	 * @param theChoices
+	 * @return 
 	 */
-	private static void addChoice(StandardDialog d, Object of, Field f, RetrievableOption o, String[] theChoices) {
+	private static ChoiceInputPanel addChoice(StandardDialog d, Object of, Field f, RetrievableOption o, String[] theChoices) {
 		int startIndex=1;
 		try {
 		if (f.getType()==int.class) {
@@ -156,12 +167,12 @@ public class StoredValueDilaog extends StandardDialog{
 		} 
 		 ChoiceInputPanel panel = new  ChoiceInput(of, f, o, startIndex);
 		 d.add(o.key(), panel);
-		
+		return panel;
 		}catch (Throwable e) {
 			IssueLog.logT(e);
 		}
 		
-		
+		return null;
 		
 	}
 
