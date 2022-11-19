@@ -480,8 +480,8 @@ static Color  folderColor2= new Color(0,140, 0);
 	public AbstractUndoableEdit removeLineAndPlot() {
 		CombinedEdit c=new CombinedEdit();
 		GraphicLayer parentLayer = getParentLayer();
-		c.addEdit(Edit.removeItem(parentLayer, this));
-		c.addEdit(Edit.removeItem(parentLayer, this.plotLayout));
+		c.addEditToList(Edit.removeItem(parentLayer, this));
+		c.addEditToList(Edit.removeItem(parentLayer, this.plotLayout));
 		return c;
 	}
 

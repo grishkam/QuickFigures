@@ -65,6 +65,7 @@ import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
@@ -104,7 +105,7 @@ import objectDialogs.ImageGraphicOptionsDialog;
 
 /**an object that displays an image inside a frame at a specified size.
  * May also have an additional cropping operation*/
-public class ImagePanelGraphic extends BasicGraphicalObject implements TakesAttachedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePositions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
+public class ImagePanelGraphic extends BasicGraphicalObject implements OverlayHolder, TakesAttachedItems, HasTreeLeafIcon,ScalededItem,HasIllustratorOptions ,Scales,IllustratorObjectConvertable, PointsToFile, RectangleEdgePositions, OfficeObjectConvertable,  SVGExportable, HasSmartHandles, HasMiniToolBarHandles, ProvidesDialogUndoableEdit{
 
 	
 	/**Images temporarily stored*/
@@ -808,7 +809,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		if (panel==null) return;//bugfix not sure why it is turning out null
 			this.sourcePanel=panel;
 			setImage((BufferedImage) panel.getAwtImage());
-			setOverlayObjects(panel.getOverlayObjects());
+			updateOrSetOverlayObjects(panel.getOverlayObjects());
 			setScaleInfo(panel.getDisplayScaleInfo());
 			this.updateBarScale();
 			
@@ -817,13 +818,13 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 	/**Sets the overlay object list
 		 * @param overlayObjects
 		 */
-		public void setOverlayObjects(OverlayObjectList overlayObjects) {
+		public void updateOrSetOverlayObjects(OverlayObjectList overlayObjects) {
 			if(this.overlayObjects==overlayObjects)
 				return;
 			if(this.getOverlay().manualEditsMade) {
 				boolean result = ShowMessage.showOptionalMessage("Manual edits have been made to the overlay", true, "This action will replace your manually edited overlay with new objects", "It cannot be stopped");
 				if(result) {
-					this.overlayObjects=getOverlay().changeCropArea( overlayObjects.getLastProcess())	;
+					this.setOverlayObjects(getOverlay().changeCropArea( overlayObjects.getLastProcess()))	;
 					this.overlayObjects.manualEditsMade=true;
 					closeOverlayEditingWindow();
 					
@@ -831,7 +832,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				}
 			}
 			 closeOverlayEditingWindow();
-			this.overlayObjects=overlayObjects;
+			this.setOverlayObjects(overlayObjects);
 			
 		}
 
@@ -1256,133 +1257,16 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		/**returns a scaled copy of the overlay that can be placed into the image*/
 		public GraphicLayerPane extractOverlay() {
 			GraphicLayerPane added=new GraphicLayerPane("Overlay objects");
-			extractOverlay(added, false);
+			OverlayHolder.extractOverlay(this, added, false, this.getOverlay());
 			return added;
 		}
 		
 		
-		/**adds to the given layer. Adds a scaled copy of the overlay that can be placed into the image*/
-		public CombinedEdit extractOverlay(GraphicLayerPane added, boolean removeOriginal) {
-			CombinedEdit edit = new CombinedEdit();
-			try {
-				  if(getOverlay()==null) {
-					  IssueLog.log("no overlay objects detected");
-				  } else {
-					  Rectangle2D sizeOfImagePanel = new Rectangle2D.Double(-1/scale,-1/scale, (getObjectWidth()+getFrameWidthH()+2)/scale, (getObjectHeight()+getFrameWidthV()+2)/scale);
-					 
-					 
-					  ArrayList<?> overlayObjectList = getOverlay().getOverlayObjects();
-					  if(overlayObjectList.size()==0) {
-						  IssueLog.log("There are no objects listed. cannot extract overlay ");
-					  }
-					  
-					for(Object object: overlayObjectList)  try {
-						 
-						  if(object instanceof BasicGraphicalObject) {
-							 
-							  Rectangle objectbounds = ((BasicGraphicalObject) object).getBounds();
-							  BasicGraphicalObject copy = ((BasicGraphicalObject) object).copy();
-							 
-							  if (copy instanceof BasicShapeGraphic) {
-								  copy=((ShapeGraphic) copy).createPathCopy();
-							  }
-							  copy.scaleAbout(new Point2D.Double(0,0), scale);
-							  
-							  boolean inside = sizeOfImagePanel.contains(objectbounds);
-							  boolean overlaps = sizeOfImagePanel.intersects(objectbounds);//might be used later
-							  
-							  copy.moveLocation((int)(this.getLocationUpperLeft().getX()), (int)(this.getLocationUpperLeft().getY()));
-							 
-								
-							  if(!inside) { 
-								
-								    continue;
-							  } 
-							  else {
-								  added.addItemToLayer(copy);
-								if(removeOriginal) {
-									edit.addEditToList(Edit.removeItem(((BasicGraphicalObject) object).getParentLayer(), (ZoomableGraphic) object));
-								}
-									
-							  }
-						  } else {
-							  IssueLog.log("failed to extract item "+object);
-						  }
-						  
-					  }catch (Throwable t){
-						  IssueLog.logT(t);
-					  }
-				  }
-			  } catch (Throwable t){
-				  IssueLog.logT(t);
-			  }
-			if(added.getAllGraphics().size()==0) {
-				IssueLog.log(" have not added any items ");
-			}
-			return edit;
-		}
-		
-		/**implementation for the insert item*/
-		public CombinedEdit insertIntoOverlay(ArrayList<?> objects) {
-			CombinedEdit output=new CombinedEdit();
-			if(objects.size()==0) {
-				  IssueLog.log("There are no objects listed. cannot insert ");
-			  }
-			
-			OverlayObjectList destination = this.getOverlay();
-			  Rectangle bounds = this.getBounds();
-			for(Object object: objects)  try {
-				 
-				  if(object instanceof BasicGraphicalObject) {
-					  
-					 
-					  BasicGraphicalObject basicGraphicalObject = (BasicGraphicalObject) object;
-					  if(!destination.canAccept(basicGraphicalObject))
-						  continue;
-					Rectangle objectbounds = basicGraphicalObject.getBounds();
-					  BasicGraphicalObject copy = basicGraphicalObject.copy();
-					 
-					  if (copy instanceof BasicShapeGraphic) {
-						  copy=((ShapeGraphic) copy).createPathCopy();
-					  }
-					  
-					  
-					
-					boolean inside = bounds.contains(objectbounds);
-					 boolean overlaps =  bounds.intersects(objectbounds);//might be used later
-					  
-					  copy.moveLocation((int)(-this.getLocationUpperLeft().getX()), (int)(-this.getLocationUpperLeft().getY()));
-					  copy.scaleAbout(new Point2D.Double(0,0), 1/scale);
-						
-					  if(!inside|| object==this||!destination.canAccept(copy)) { 
-						
-						    continue;
-					  } 
-					  else {
-						  
-						 
-						  output.addEditToList(Edit.removeItem(basicGraphicalObject.getParentLayer(), (ZoomableGraphic) object));
-						 
-						  output.addEditToList( Edit.addItem(destination, copy));
-						 
-						
-							
-					  }
-				  } else {
-					  IssueLog.log("failed to insert item "+object);
-				  }
-				  
-			  }catch (Throwable t){
-				  IssueLog.logT(t);
-			  }
-			
-			return output;
-		}
 
 		/**returns an overlay object list*/
 		public OverlayObjectList getOverlay() {
 			if(overlayObjects==null)
-				overlayObjects=new OverlayObjectList();
+				setOverlayObjects(new OverlayObjectList());
 			return overlayObjects;
 		}
 		
@@ -1410,6 +1294,10 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		public void kill() {
 			super.kill();
 			closeOverlayEditingWindow();
+		}
+
+		public void setOverlayObjects(OverlayObjectList overlayObjects) {
+			this.overlayObjects = overlayObjects;
 		}
 
 }

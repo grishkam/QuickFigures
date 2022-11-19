@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEdit;
 
+import graphicalObjects.ZoomableGraphic;
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**Since edit that contains a sequence of undoable edits*/
 public class CombinedEdit extends AbstractUndoableEdit2 {
@@ -39,9 +41,17 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 	/**Called before and after each undo*/
 	ArrayList<EditListener> afterEdits=new 	ArrayList<EditListener> ();
 	
+	String name="combined edit";
+	
 	public CombinedEdit(AbstractUndoableEdit... edits) {
 		for(AbstractUndoableEdit undo: edits)
 			if (undo!=null)this.addEditToList(undo);
+	}
+	
+	public CombinedEdit(String name,ZoomableGraphic z, AbstractUndoableEdit... edits) {
+		this(edits);
+		this.name=name;
+		this.actedOnObjects.add(z);
 	}
 	
 	public void establishFinalState() {
@@ -92,6 +102,7 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 	}
 	
 	
+	
 	public boolean empty() {return nEdits()==0;}
 
 	/**the number of edits inside of this*/
@@ -99,5 +110,18 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 		return editlist.size();
 	}
 
+	public void addEditListenerMessage(String st) {
+		addEditListener(new EditListener() {
 
+			@Override
+			public void afterEdit() {
+				IssueLog.log(st);
+				
+			}});
+	}
+
+	
+	public String toString() {
+		return this.name+": "+super.toString();
+	}
 }

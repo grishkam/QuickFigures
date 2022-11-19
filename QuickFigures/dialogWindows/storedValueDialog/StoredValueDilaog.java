@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 12, 2022
+ * Date Modified: Nov 19, 2022
  * Version: 2022.2
  */
 package storedValueDialog;
@@ -364,6 +364,14 @@ public class StoredValueDilaog extends StandardDialog{
 			this.object=of;
 			this.f2=f;
 			this.addBooleanInputListener(this);
+		}
+		
+		public BooleanObjectInput(String label, Object of, String f) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+			super(label, of.getClass().getDeclaredField(f).getBoolean(of));
+			this.object=of;
+			this.f2=of.getClass().getField(f);
+			this.addBooleanInputListener(this);
+			
 		}
 
 		@Override

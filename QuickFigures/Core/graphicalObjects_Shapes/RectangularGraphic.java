@@ -134,7 +134,7 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 
 	@Override
 	public RectangularGraphic copy() {
-		RectangularGraphic copy = new RectangularGraphic(getRectangle().getBounds());
+		RectangularGraphic copy = new RectangularGraphic(getRectangle().getBounds2D());
 		copy.copyAttributesFrom(this);
 		copy.copyColorsFrom(this);
 		copy.setLocationType(getLocationType());

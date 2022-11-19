@@ -56,6 +56,7 @@ import locatedObject.LocatedObject2D;
 import locatedObject.Selectable;
 import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
+import messages.ShowMessage;
 import selectedItemMenus.SVG_GraphicAdder2;
 import ultilInputOutput.ForDragAndDrop;
 import undo.AbstractUndoableEdit2;
@@ -349,6 +350,10 @@ public class NormalToolDragHandler extends BasicDragHandler {
 				} else {
 					moveToNewLayer=true;
 					newLayer=new GraphicLayerPane("new layer for panels");
+					if(layer==null||!layer.canAccept(newLayer)) {
+						ShowMessage.showOptionalMessage("Cannot add this item to this layer");
+						return null;
+					}
 					layer.add(newLayer);
 					
 					ml = new BasicLayout(addedPanels.size(),1,  rect.width, rect.height, 2,2, true);
@@ -429,6 +434,10 @@ public class NormalToolDragHandler extends BasicDragHandler {
 		
 		
 		MultichannelDisplayLayer item = CurrentAppContext.getMultichannelContext().createMultichannelDisplay().creatMultiChannelDisplayFromUserSelectedImage(true, f.getAbsolutePath());
+		if(layer==null||!layer.canAccept(item)) {
+			ShowMessage.showOptionalMessage("Cannot add item to this layer");
+			return null;
+		}
 		MakeFigureAfterFileOpen makeFigureAtDropLocation = new MakeFigureAfterFileOpen(imageAndDisplaySet, layer, undo, location2, f, figurecontext);
 		
 		makeFigureAtDropLocation.complteOrPostcomeAction(item);
@@ -457,6 +466,10 @@ public class NormalToolDragHandler extends BasicDragHandler {
 		ImagePanelGraphic image = new FileImageAdder(hasAlpha).getImage(f);
 		if (image==null)return null;
 		image.setRelativeScale(ImageDPIHandler.ratioForIdealDPI());
+		if(layer==null||!layer.canAccept(image)) {
+			ShowMessage.showOptionalMessage("Cannot add image to this layer");
+			return null;
+		}
 		layer.add(image);
 		image.setLocation(location2);
 		return image;

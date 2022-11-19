@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Nov 6, 2022
- * Date Modified: Nov 14, 2022
+ * Date Modified: Nov 19, 2022
  * Copyright (C) 2022 Gregory Mazo
  * Version: 2022.2
  */
@@ -28,6 +28,7 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
+import javax.swing.undo.AbstractUndoableEdit;
 
 import channelMerging.PreProcessInformation;
 import fLexibleUIKit.ObjectAction;
@@ -35,6 +36,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.OverlayHolder;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageDisplayApp.OverlayObjectManager;
@@ -108,18 +110,20 @@ public class OverlaySubmenu extends SmartJMenu {
 		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
 		@Override
 		public AbstractUndoableEdit2 performAction() {
-			AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+			CombinedEdit undo2= item.getOverlay().getUndoForEditWindow(item);
+			undo2.addEditToList( item.provideUndoForDialog());
 			
 			GraphicLayerPane extractOverlay =new GraphicLayerPane("Extracted overlay");
-			CombinedEdit undo2 = item.extractOverlay(extractOverlay, true);
+			
+			undo2.addEditToList(OverlayHolder.extractOverlay(item, extractOverlay, true, item.getOverlay()));
 			if(extractOverlay.getItemArray().size()==0) {
 				ShowMessage.showOptionalMessage("No overlay objects were extracted");
 				return null;
 			}
 				
-			AbstractUndoableEdit2 addItem = Edit.addItem(item.getParentLayer(), extractOverlay);
+			undo2.addEditToList( Edit.addItem(item.getParentLayer(), extractOverlay));
 			item.setShowOverlay(false);
-			return new CombinedEdit( undo,addItem, undo2);
+			return  undo2;
 			
 			}	
 		
@@ -128,12 +132,12 @@ public class OverlaySubmenu extends SmartJMenu {
 		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
-				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
-				
+				CombinedEdit undo2= item.getOverlay().getUndoForEditWindow(item);
+				undo2.addEditToList( item.provideUndoForDialog());
 				ArrayList<LocatedObject2D> itemsAdded = c.getTopLevelContainer().getLocatedObjects();
 				ArraySorter.removeNonSelectionItems(itemsAdded);
 				switchToEditMode(item);
-				return new CombinedEdit( undo,item.insertIntoOverlay(itemsAdded));
+				return new CombinedEdit( undo2,OverlayHolder.insertIntoOverlay(item, item.getOverlay(),itemsAdded));
 				
 				}	
 			
@@ -142,15 +146,17 @@ public class OverlaySubmenu extends SmartJMenu {
 		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
-				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
+				
+				CombinedEdit undo2= item.getOverlay().getUndoForEditWindow(item);
+				undo2.addEditToList( item.provideUndoForDialog());
 				int n = item.getOverlay().getAllGraphics().size();
 				ArrayList<LocatedObject2D> itemsAdded = new BasicObjectListHandler().getContainedObjects(item.getBounds(), item.getTopLevelContainer());
 				
 				switchToEditMode(item);
-				CombinedEdit insertIntoOverlay = item.insertIntoOverlay(itemsAdded);
+				undo2.addEditToList(  OverlayHolder.insertIntoOverlay(item, item.getOverlay(), itemsAdded));
 				int dn = item.getOverlay().getAllGraphics().size()-n;
 				IssueLog.log("Added "+dn+" objects to overlay");
-				return new CombinedEdit( undo,insertIntoOverlay);
+				return undo2;
 				
 				}	
 			
@@ -167,7 +173,7 @@ public class OverlaySubmenu extends SmartJMenu {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
 				AbstractUndoableEdit2 undo = item.provideUndoForDialog();
-				item.setOverlayObjects(item.getOverlay().copy());
+				item.updateOrSetOverlayObjects(item.getOverlay().copy());
 				switchToEditMode(item);
 				return undo;
 				}	
@@ -178,6 +184,8 @@ public class OverlaySubmenu extends SmartJMenu {
 		share.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
+				CombinedEdit undo = new CombinedEdit();
+				undo.addEditToList(item.provideUndoForDialog());
 				ArrayList<ZoomableGraphic> panels = item.getParentLayer().getAllGraphics();
 				ArraySorter.removeNonSelectionItems(panels);
 				ArraySorter.removeThoseNotOfClass(panels, ImagePanelGraphic.class);
@@ -190,17 +198,21 @@ public class OverlaySubmenu extends SmartJMenu {
 				
 				for(Object p: panels) {
 					ImagePanelGraphic imagePanelGraphic = (ImagePanelGraphic)p;
+					
 					if(imagePanelGraphic.getOverlay()==item.getOverlay())
 						continue;
+					undo.addEditToList(imagePanelGraphic.provideUndoForDialog());
 					imagePanelGraphic.getOverlay().setEdited(false);
-					imagePanelGraphic.setOverlayObjects(item.getOverlay());
+					imagePanelGraphic.updateOrSetOverlayObjects(item.getOverlay());
+					
 					done=true;
 				}
 				if(!done&&panels.size()>0) {
 					ShowMessage.showOptionalMessage("It seems that the selected panels already share an overlay");
 				}
-				switchToEditMode(item);
-					return null;
+				
+				if(done)switchToEditMode(item);
+					return undo;
 				}	
 			
 		}.createJMenuItem("Share Overlay With Selected Sister Panels"));
@@ -216,9 +228,10 @@ public class OverlaySubmenu extends SmartJMenu {
 				
 				OverlayObjectList reversed = OverlayObjectList.cropOverlayAtAngle(o, lastProcess, true);
 				MultichannelDisplayLayer original = MultichannelDisplayLayer.findMultiChannelForGraphic(item.getParentLayer(), item);
-				original.getSlot().setOriginalOverlay(reversed);
+				AbstractUndoableEdit partialundo = original.getSlot().setOriginalOverlay(reversed);
 			
 				CombinedEdit performButtonAction = new ImagePropertiesButton(item, ImagePropertiesButton.CROP_IMAGE).performButtonAction();
+				performButtonAction.addEditToList(partialundo);
 				original.getSlot().redoCropAndScale();
 				
 				return performButtonAction;
@@ -234,11 +247,12 @@ public class OverlaySubmenu extends SmartJMenu {
 		if(c.getOverlay().manualEditsMade()) add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
+				CombinedEdit undo=new CombinedEdit(item.provideUndoForDialog(), item.getOverlay().getUndoForEditWindow(item));
 				boolean proceed = ShowMessage.showOptionalMessage("You sure?", true, "Are you sure you want to clear the overlay");
 				
-				if(proceed)item.setOverlayObjects(null);
+				if(proceed)item.updateOrSetOverlayObjects(null);
 				c.updateDisplay();
-				return null;
+				return undo;
 			}	
 			
 		}.createJMenuItem("Clear custom overlay"));
@@ -257,8 +271,8 @@ public class OverlaySubmenu extends SmartJMenu {
 		editMenu.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
-				switchToEditMode(item);
-				return showEditWindowForOverlay(item, null);
+				AbstractUndoableEdit2 undo1 = switchToEditMode(item);
+				return new CombinedEdit(undo1,showEditWindowForOverlay(item, null));
 				
 				}
 
@@ -269,15 +283,18 @@ public class OverlaySubmenu extends SmartJMenu {
 	
 	/**
 	 * @param c 
+	 * @return 
 	 * 
 	 */
-	public void switchToEditMode(ImagePanelGraphic c) {
+	public AbstractUndoableEdit2 switchToEditMode(ImagePanelGraphic c) {
+		AbstractUndoableEdit2 undo = c.provideUndoForDialog();
 		int size = c.getOverlay().getAllGraphics().size();
 		if(!c.isShowOverlay()&&size>0) {
 			ShowMessage.showOptionalMessage("Overlay now visible",true, "Your overlay was hidden", "There were already "+size+" objects inside", "Those and any newly added objects will now be visible", "You can hide the overlay at any time");
 		}
 		c.setShowOverlay(true);
 		c.getOverlay().setEdited(true);
+		return undo;
 	}
 
 	/**returns a separate window
@@ -320,7 +337,7 @@ public class OverlaySubmenu extends SmartJMenu {
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				 
+				 ArraySorter.deselectItems(item.getOverlay().getAllGraphics());
 				
 			}
 
@@ -361,13 +378,13 @@ public class OverlaySubmenu extends SmartJMenu {
 		OverlayObjectList extractOverlay = item.getOverlay();
 		if(extractOverlay==null){
 			extractOverlay =new OverlayObjectList();
-			item.setOverlayObjects(extractOverlay);
+			item.updateOrSetOverlayObjects(extractOverlay);
 			}
 		
 		ImageWindowAndDisplaySet window = createOverlayEditorWindow(item, extractOverlay);
 		
 		if(w!=null)window.getWindow().addWindowListener(w);
 		
-		return new CombinedEdit(undo, extractOverlay.getUndoForEditWindow());
+		return new CombinedEdit(undo, extractOverlay.getUndoForEditWindow(item));
 	}	
 }

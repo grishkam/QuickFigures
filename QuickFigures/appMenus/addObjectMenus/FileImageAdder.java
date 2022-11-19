@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Nov 17, 2022
  * Version: 2022.2
  */
 package addObjectMenus;
@@ -71,8 +71,11 @@ public class FileImageAdder extends BasicGraphicAdder{
 	public ZoomableGraphic add(GraphicLayer gc) {
 		
 		ImagePanelGraphic ag= getImage();
+		if(!gc.canAccept(ag)) {
+			ShowMessage.showOptionalMessage("Cannot add an image to this kind of layer");
+		}
 		
-		if(isImageMade&&ag!=null) {
+		if(isImageMade&&ag!=null&&gc.canAccept(ag)) {
 			ag.setEmbed(true);
 			gc.add(ag);;
 			ag.setLocationUpperLeft(0, 0);

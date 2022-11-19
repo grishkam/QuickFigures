@@ -84,7 +84,7 @@ public class UndoInsetDefChange extends AbstractUndoableEdit2 {
 		
 		
 		for(ImagePanelGraphic p: insetDefiner.getPanelManager().getPanelList().getPanelGraphics()) {
-			output.addEdit(p.provideDragEdit());
+			output.addEditToList(p.provideDragEdit());
 		}
 		
 		output.addEditListener(new EditListener() {

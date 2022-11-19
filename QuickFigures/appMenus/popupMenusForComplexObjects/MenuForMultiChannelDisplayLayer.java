@@ -300,7 +300,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 				MultiChannelImage unprocessedVersion = display.getSlot().getUnprocessedVersion(false);
 				OverlayObjectList objects = unprocessedVersion.getOverlayObjects("editor window");
 				ImagePanelGraphic imagepanel = new ImagePanelGraphic(CroppingDialog.createDisplayImage(new CSFLocation(),unprocessedVersion, 0, 1, 1));
-				imagepanel.setOverlayObjects(objects);
+				imagepanel.updateOrSetOverlayObjects(objects);
 				addUndo(OverlaySubmenu.showEditWindowForOverlay(imagepanel, new WindowListener() {
 
 					@Override

@@ -415,7 +415,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		CSFLocation csfInitial = display.getSlot().getDisplaySlice().duplicate();
 		
 		
-		CroppingDialog.showCropDialogOfSize(display.getSlot(), dim, context);
+		CroppingDialog cd = CroppingDialog.showCropDialogOfSize(display.getSlot(), dim, context);
 		
 		onViewLocationChange(display, csfInitial, display.getSlot().getDisplaySlice());
 		
@@ -426,7 +426,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		undo1.establishFinalLocations();
 		
 		
-		return new CombinedEdit(undo1, updateRowColSizesOf(display));
+		return new CombinedEdit(cd.additionalUndo,undo1, updateRowColSizesOf(display), cd.additionalUndo);
 		
 	}
 

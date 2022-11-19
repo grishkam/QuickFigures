@@ -169,7 +169,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 				inset.setSquareLock(!inset.isSquareLock());
 				if (inset.isSquareLock()) {
 					inset.setWidth(inset.getObjectHeight());
-					inset.afterHandleMove(RectangleEdges.LOWER_RIGHT, null, null);
+					inset.afterHandleMove();
 				}
 				
 				}

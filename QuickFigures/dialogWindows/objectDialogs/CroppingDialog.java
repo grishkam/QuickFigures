@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 6, 2022
+ * Date Modified: Nov 19, 2022
  * Version: 2022.2
  */
 package objectDialogs;
@@ -36,6 +36,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -56,14 +57,17 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import graphicalObjects_SpecialObjects.OverlayHolder;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import handles.RectangularShapeSmartHandle;
 import imageDisplayApp.MiniToolBarPanel;
 import imageScaling.ScaleInformation;
 import layout.BasicObjectListHandler;
+import layout.RetrievableOption;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import locatedObject.Selectable;
@@ -82,6 +86,11 @@ import standardDialog.numbers.NumberInputPanel;
 import standardDialog.strings.ButtonPanel;
 import standardDialog.strings.CombindedInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
+import storedValueDialog.StoredValueDilaog;
+import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
+import undo.EditListener;
+import undo.UndoScalingAndRotation;
 
 /**a dialog for setting the crop area for a multi dimensional image.
  * Can also be used to set a crop area for one or more image panels.*/
@@ -99,6 +108,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public  CombinedEdit additionalUndo;
 
 	
 	
@@ -181,6 +192,12 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	private boolean enableObjectSelection=false;
 
+	/**lists for the inset rects*/
+	private ArrayList<PanelGraphicInsetDefiner> panelInsetList=new  ArrayList<PanelGraphicInsetDefiner>();
+	private ArrayList<RectangularGraphic> insetrepresenations=new ArrayList<RectangularGraphic>();
+	@RetrievableOption(key = "Update inset locations after crop", label="Update inset locations after crop")
+	public boolean updateInsets=false;//set to true if insets should be moved
+
 	
 	{this.setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
@@ -238,8 +255,16 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	 * Also adds overlay objects*/
 	public void includeInsets(MultiChannelSlot s) {
 		for(PanelGraphicInsetDefiner i: s.getDisplayLayer().getInsets()) {
+			panelInsetList.add(i);
 			if(i==null) continue;
-			RectangularGraphic r3 = i.mapRectBackToUnprocessedVersion(s.getModifications());
+			
+			
+			RectangularGraphic r3 =mapInsetLocationToRectCropArea( s.getModifications(),i); //
+				//r3=	i.mapRectBackToUnprocessedVersion(s.getModifications());
+			insetrepresenations.add(r3);
+			
+			
+			
 			this.addExtraItem(r3);
 		}
 		
@@ -486,6 +511,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		
 		this.add(ALLOW_OUT_KEY, new BooleanInputPanel("Permit out of bounds crop", outofBoundsCrop));
+		StoredValueDilaog.addFieldsForObject(this, this);
+		
 		toolbarPanel = new MiniToolBarPanel(new CropDialogAssist(this));
 		add(toolbarPanel);
 		
@@ -947,21 +974,23 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	/**shows a recrop dialog
 	 * @param context will determine what to do if this is the second in a series*/
-	public static void showCropDialogOfSize(MultiChannelSlot slot, Dimension recommmendation,  CropDialogContext context) {
+	public static CroppingDialog showCropDialogOfSize(MultiChannelSlot slot, Dimension recommmendation,  CropDialogContext context) {
 		if (recommmendation==null)
 			{
-			showCropDialog(slot, null, 0, context);
-			return;
+			return showCropDialog(slot, null, 0, context);
+			
 			}
 		
 		if (slot.getModifications()!=null &&slot.getModifications().getRectangle()!=null) {
 			Rectangle rold = slot.getModifications().getRectangle();
 			if(rold!=null)
-				showCropDialog(slot, new Rectangle(rold.x, rold.y, recommmendation.width, recommmendation.height), slot.getModifications().getAngle(), context);
-			else showCropDialog(slot, null, 0, context);
+				return  showCropDialog(slot, new Rectangle(rold.x, rold.y, recommmendation.width, recommmendation.height), slot.getModifications().getAngle(), context);
+			else return  showCropDialog(slot, null, 0, context);
 		}
 		else if (recommmendation!=null)
-			showCropDialog(slot, new Rectangle(0,0, recommmendation.width, recommmendation.height),0, context);
+			return showCropDialog(slot, new Rectangle(0,0, recommmendation.width, recommmendation.height),0, context);
+		return null;
+		
 		
 	
 	}
@@ -1033,11 +1062,93 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			if(crop.enableObjectSelection) {
 				slot.redoCropAndScale();
 			}
+			crop.additionalUndo=					updateInsets(crop, process);
+			
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}
 		return crop;
 		
+	}
+
+	/**
+	 * @param crop
+	 * @param process
+	 * @return 
+	 */
+	public static CombinedEdit updateInsets(CroppingDialog crop, PreProcessInformation process) {
+		/**updates the location of insets*/
+		if(crop.updateInsets) {
+			CombinedEdit c=new CombinedEdit();
+			for(int i=0; i<crop.insetrepresenations.size(); i++) try {
+				RectangularGraphic is = crop.insetrepresenations.get(i);
+				PanelGraphicInsetDefiner onimagePane = crop.panelInsetList.get(i);
+				Double r = onimagePane.getRectangle();
+				
+				CombinedEdit undolocal = onimagePane.provideDragEdit();
+				RectangularGraphic newInset = mapRectCropAreaToNewInsetLocation(process, is, onimagePane);
+				
+				
+				Double nRect = newInset.getRectangle();
+				onimagePane.setRectangle(nRect);
+				onimagePane.setAngle(newInset.getAngle());
+				
+				
+				undolocal.addEditToList(
+						onimagePane.afterHandleMove()
+						);
+				
+				
+				c.addEditToList(undolocal);
+				
+				
+			} catch (Throwable t) {
+				IssueLog.log("Failed to update location for inset "+crop.panelInsetList.get(i));
+			}
+			return c;
+		}
+		return null;
+	}
+
+	/**determines the new location of the inset based on the rectangle crop area drawn on the original image
+	 * @param process
+	 * @param is
+	 * @param onimagePane
+	 * @return
+	 */
+	public static RectangularGraphic mapRectCropAreaToNewInsetLocation(PreProcessInformation process,
+			RectangularGraphic is, PanelGraphicInsetDefiner onimagePane) {
+		ImagePanelGraphic p2 = onimagePane.getSourcePanel();
+		OverlayObjectList c = OverlayObjectList.cropOverlayAtAngle(new OverlayObjectList(is), process, false);
+		GraphicLayerPane added = new GraphicLayerPane("");
+		OverlayHolder.extractOverlay(p2, added, false, c);
+		RectangularGraphic newInset = (RectangularGraphic) added.getAllGraphics().get(0);
+		
+		return newInset;
+	}
+	
+	/**determines the new location of an inset crop area on the main dialog
+	 * @param process
+	 * @param is
+	 * @param onimagePane
+	 * @return
+	 */
+	public static RectangularGraphic mapInsetLocationToRectCropArea(PreProcessInformation process,
+			 PanelGraphicInsetDefiner onimagePane) {
+		ImagePanelGraphic p2 = onimagePane.getSourcePanel();
+	
+		OverlayObjectList added = new OverlayObjectList();
+		RectangularGraphic item = new RectangularGraphic(onimagePane.getRectangle());
+		
+		item.setAngle(onimagePane.getAngle());
+		item =(RectangularGraphic) OverlayHolder.moveFromBaseLocationToOverlay(p2, item);
+		added.addItemToLayer(item);
+	
+		
+		OverlayObjectList c = OverlayObjectList.cropOverlayAtAngle(added, process, true);
+		RectangularGraphic newInset = (RectangularGraphic) c.getAllGraphics().get(0);
+		
+		return newInset;
 	}
 
 	
@@ -1073,7 +1184,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		public CroppingDialog lastDialog;
 
 		/**indicates the number of crop dialogs that will be shown in a sequence*/
-		int nInseries=1;
+		private int nInseries=1;
 		
 		/**indicates the index of the current crop dialog*/
 		public int current=1;
@@ -1082,21 +1193,33 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		boolean okToAll=false;
 		
 		/**set to true if the user has scaled a crop area*/
-		public boolean userScaledCropArea;
+		boolean userScaledCropArea;
 		/**what scale factor the user selected for rescaling*/
-		public double userRescale=1;
+		double userRescale=1;
 		
 		/**Set to a nonnull value if a particular scale should be forced on each image in the sequence*/
-		public ScaleInformation scaleInformation;
+		ScaleInformation scaleInformation;
 		
 		
 		/**What sort of figure is this*/
 		FigureType type=FigureType.FLUORESCENT_CELLS;
+
+		private CombinedEdit additionalundo;
 		
 		public CropDialogContext(int nImages, FigureType type) {
 			this.nInseries=nImages;
 			this.type=type;
 			
+		}
+
+		/**
+		 * @param updateInsets
+		 */
+		public void addAdditionalUndo(CombinedEdit theUndo) {
+			if(additionalundo==null) {
+				additionalundo=theUndo;
+			}
+			else additionalundo.addEditToList(theUndo);
 		}
 
 		/**

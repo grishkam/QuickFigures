@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
+import appContextforIJ1.ImagePlusMultiChannelSlot.OverlaySwitchUndo;
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.CSFLocation;
 import channelMerging.ChannelOrderAndLutMatching;
@@ -40,6 +43,7 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
+import undo.AbstractUndoableEdit2;
 import ij.IJ;
 import ij.ImageListener;
 import ij.ImagePlus;
@@ -57,6 +61,36 @@ import logging.IssueLog;
 	public class ImagePlusMultiChannelSlot implements MultiChannelSlot {
 
 		
+		/**
+		 
+		 * 
+		 */
+	public class OverlaySwitchUndo extends AbstractUndoableEdit2{
+
+			private OverlayObjectList originalList;
+			private OverlayObjectList newLis;
+
+			/**
+			 * @param overlayObjectList
+			 * @param reversed
+			 */
+			public OverlaySwitchUndo(OverlayObjectList overlayObjectList, OverlayObjectList reversed) {
+				originalList=overlayObjectList;
+				newLis=reversed;
+			}
+			
+			public void redo() {
+				original.overlayObjectList=newLis;
+				redoCropAndScale();
+			}
+			
+			public void undo() {
+				original.overlayObjectList=originalList;
+				redoCropAndScale();
+			}
+
+	}
+
 		/**An object that keeps track of the original image*/
 		private SubSlot original=new SubSlot();
 		
@@ -875,9 +909,10 @@ import logging.IssueLog;
 		}
 
 		@Override
-		public void setOriginalOverlay(OverlayObjectList reversed) {
+		public AbstractUndoableEdit setOriginalOverlay(OverlayObjectList reversed) {
+			OverlaySwitchUndo osu = new OverlaySwitchUndo(original.overlayObjectList, reversed);
 			original.overlayObjectList=reversed;
-			
+			return osu;
 		}
 		
 		

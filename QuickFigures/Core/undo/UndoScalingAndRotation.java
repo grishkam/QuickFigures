@@ -72,6 +72,7 @@ public class UndoScalingAndRotation  extends AbstractUndoableEdit2 {
 	  }
 
 	public UndoScalingAndRotation(Object o) {
+		
 		this.o=o;
 		if (o instanceof ArrowGraphic) {
 			iArrow = ((ArrowGraphic)o).copy();

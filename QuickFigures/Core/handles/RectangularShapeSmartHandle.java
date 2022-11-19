@@ -33,6 +33,7 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import objectDialogs.WidthAndHeightDialog;
 import standardDialog.StandardDialog;
 import undo.AbstractUndoableEdit2;
@@ -168,7 +169,11 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 	/**adds the stroke undo to the undo manager*/
 	private void addStrokeUndo(CanvasMouseEvent w) {
 		if (!w.getAsDisplay().getUndoManager().hasUndo(strokeUndo))
+			{
 			w.getAsDisplay().getUndoManager().addEdit(strokeUndo);
+			
+			}
+		
 	}
 	
 	/**when the user double click a handle with the mouse, this will show a dialog*/
@@ -178,6 +183,7 @@ public class RectangularShapeSmartHandle extends SmartHandle {
 		if (this.isStrokeHandle()) 
 			strokeUndo= new UndoStrokeEdit(targetShape);
 		else strokeUndo=targetShape.provideDragEdit();
+		
 		if(w.isPopupTrigger()) {
 			showJPopup(w);;
 			return;

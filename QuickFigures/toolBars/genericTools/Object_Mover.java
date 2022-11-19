@@ -1219,6 +1219,8 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			/**updates the undoable edit so that it reflects this drag motion and not the previous*/
 			if (currentundoDragHandle!=null)currentundoDragHandle.setFinalLocation(new Point(getDragCordinateX(), getDragCordinateY()));
 			if (smartHandleMoveUndo!=null &&smartHandleMoveUndo.isMyObject(getPrimarySelectedObject())) smartHandleMoveUndo.establishFinalState();
+	
+	
 	}
 
 	/**

@@ -26,6 +26,7 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
+import messages.ShowMessage;
 import selectedItemMenus.LayerSelectionSystem;
 
 /**An adding menu item that adds a layout*/
@@ -42,8 +43,13 @@ class LayoutAdder extends BasicGraphicAdder {
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
 		GraphicLayerPane l22 = new GraphicLayerPane("Layout Layer");
-		gc.add(l22);
 		DefaultLayoutGraphic p = createStandard() ;
+		if(!gc.canAccept(p)) {
+			ShowMessage.showOptionalMessage("Cannot add a layout to this layer");
+			return null;
+		}
+		gc.add(l22);
+		
 		p.showOptionsDialog();
 		p.getPanelLayout().resetPtsPanels();
 		p.moveLocation(10, 10);

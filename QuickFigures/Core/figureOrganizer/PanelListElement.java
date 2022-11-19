@@ -400,7 +400,7 @@ import channelLabels.ChannelLabelTextGraphic;
 				ImagePanelGraphic graphic=(ImagePanelGraphic) getImageDisplayObject();
 				graphic.setSourcePanel(this);
 				graphic.setImage((BufferedImage) getAwtImage());
-				graphic.setOverlayObjects(this.getOverlayObjects());
+				graphic.updateOrSetOverlayObjects(this.getOverlayObjects());
 				graphic.setScaleInfo(getDisplayScaleInfo());
 				createChanSwapHandles(graphic);
 				graphic.setScaleInfo(getDisplayScaleInfo());

@@ -30,10 +30,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import channelMerging.PreProcessInformation;
+import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -42,12 +44,16 @@ import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import locatedObject.PathPointList;
 import locatedObject.RotatesFully;
 import locatedObject.Scales;
 import logging.IssueLog;
+import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.ProvidesDialogUndoableEdit;
+import undo.UndoLayerContentChange;
+import undo.UndoReorder;
 
 /**
  A class for storing a list of objects that are drawn in front of an image panel
@@ -77,6 +83,11 @@ public class OverlayObjectList extends GraphicLayerPane implements Serializable 
 	public OverlayObjectList() {
 		this("Overlay");
 	}
+	
+	public OverlayObjectList(ZoomableGraphic z) {
+		this();
+		this.addItemToLayer(z);
+	}
 
 	/**returns the object list*/
 	public ArrayList<?> getOverlayObjects() {
@@ -105,13 +116,19 @@ public class OverlayObjectList extends GraphicLayerPane implements Serializable 
 			return false;
 		if(z instanceof ImagePanelGraphic)
 			return false;
+		if(z instanceof BarTextGraphic)
+			return false;
+		if(z instanceof PanelGraphicInsetDefiner)
+			return false;
 	
 		return super.canAccept(z);
 	}
 	
 	/**returns an undo*/
-	public CombinedEdit getUndoForEditWindow() {
+	public CombinedEdit getUndoForEditWindow(ImagePanelGraphic panel) {
 		CombinedEdit output = new CombinedEdit();
+		output.addEditToList(new UndoReorder(this));
+		output.addEditToList(new UndoLayerContentChange(this));
 		for(Object o:this.getOverlayObjects()) {
 			if(o instanceof BasicGraphicalObject) {
 			 output.addEditToList(((BasicGraphicalObject) o).provideDragEdit());
@@ -122,6 +139,7 @@ public class OverlayObjectList extends GraphicLayerPane implements Serializable 
 				//need to add a dialog edit
 				}
 		}
+		output.addEditToList(new ColorEditUndo(panel));
 		return output;
 	}
 
@@ -161,15 +179,16 @@ public class OverlayObjectList extends GraphicLayerPane implements Serializable 
 	 * @param scale
 	 * @return
 	 */
-	public static OverlayObjectList cropOverlayAtAngle(OverlayObjectList overlayObjects, Rectangle r, double angle, double scale, boolean reverse) {
+	public static OverlayObjectList cropOverlayAtAngle(OverlayObjectList overlayObjects, Rectangle2D r, double angle, double scale, boolean reverse) {
 
 		
 		OverlayObjectList output = new OverlayObjectList("");
-		output.setLastProcess(new PreProcessInformation(r, angle, scale));
-		
 		if(r==null) {
 			return overlayObjects.copy() ;
 			}
+		output.setLastProcess(new PreProcessInformation(r.getBounds(), angle, scale));
+		
+		
 		
 		AffineTransform rotTransform = AffineTransform.getRotateInstance(angle, r.getCenterX(), r.getCenterY());
 		AffineTransform translate = AffineTransform.getTranslateInstance(-r.getMinX(), -r.getMinY());

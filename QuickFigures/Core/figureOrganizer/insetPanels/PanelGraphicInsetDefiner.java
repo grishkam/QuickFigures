@@ -67,6 +67,7 @@ import popupMenusForComplexObjects.MenuForMultiChannelDisplayLayer;
 import popupMenusForComplexObjects.PanelMenuForMultiChannel;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
+import undo.EditListener;
 import undo.UndoAbleEditForRemoveItem;
 import undo.UndoLayoutEdit;
 import utilityClasses1.ArraySorter;
@@ -443,6 +444,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	 * @return */
 	private AbstractUndoableEdit resizeLayoutPanels(int handlenum) {
 		if (this.personalLayout!=null) {
+			UndoLayoutEdit undo1 = new UndoLayoutEdit(personalLayout);
 			
 			personalLayout.snapLockedItems();
 			personalLayout.generateCurrentImageWrapper();
@@ -463,7 +465,7 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 			}
 			
 			
-			return expandParentLayout();
+			return new CombinedEdit(undo1, expandParentLayout());
 			
 		}
 		return null;
@@ -566,9 +568,13 @@ public class PanelGraphicInsetDefiner extends FrameGraphic implements LocationCh
 	}
 	
 	/**if edit is requested */
-	public AbstractUndoableEdit2 provideDragEdit() {
+	public CombinedEdit provideDragEdit() {
+		CombinedEdit combinedEdit = new CombinedEdit("Inset drag undo for inset and layout", this, super.provideDragEdit(),  new UndoLayoutEdit(personalLayout));
 		
-		return null;
+		
+		
+		return combinedEdit;
+		
 		
 	}
 	
@@ -692,11 +698,25 @@ static Color  folderColor2= new Color(0,140, 0);
 	 */
 	@Override
 	public void afterHandleMove(int handleNumber, Point2D p1, Point2D p2) {
-		updateImagePanels();
-		resizeLayoutPanels(handleNumber);
+		updatePanelsForHandle(handleNumber);
 		
 	}
+
+	/**
+	 * @param handleNumber
+	 * @return 
+	 */
+	public AbstractUndoableEdit updatePanelsForHandle(int handleNumber) {
+		updateImagePanels();
+		return resizeLayoutPanels(handleNumber);
+	}
 	
+	/**Called to induce the same updates as a handle movement
+	 * @return */
+	public AbstractUndoableEdit afterHandleMove() {
+		return updatePanelsForHandle(RectangleEdges.LOWER_RIGHT);
+		
+	}
 	
 	public AbstractUndoableEdit removeInsetAndPanels() {
 		

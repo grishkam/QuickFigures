@@ -593,7 +593,7 @@ private AbstractUndoableEdit2 reorderImagePanels() {
 		
 		for(PanelListElement panel:list) {
 			ImagePanelGraphic graphic = panel.getImageDisplayObject();
-			undo.addEdit(new UndoMoveItems(graphic));
+			undo.addEditToList(new UndoMoveItems(graphic));
 			locations.add(graphic.getLocationUpperLeft());
 		}
 		this.getPanelList().sortThese(list);

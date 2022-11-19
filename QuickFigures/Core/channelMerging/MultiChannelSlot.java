@@ -22,6 +22,8 @@ package channelMerging;
 
 import java.io.Serializable;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
 import applicationAdapters.HasScaleInfo;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 
@@ -118,7 +120,7 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	/**
 	 * @param reversed
 	 */
-	public void setOriginalOverlay(OverlayObjectList reversed);
+	public AbstractUndoableEdit setOriginalOverlay(OverlayObjectList reversed);
 	
 	
 }

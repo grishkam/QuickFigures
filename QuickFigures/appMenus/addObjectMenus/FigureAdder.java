@@ -247,6 +247,11 @@ public class FigureAdder extends LayoutAdder {
 
 		/**Sets up which figure organizing layer pane should be used*/
 		 currentFigureOrganizer = getOrCreateUsedFigureOrganizingLayerPane(ordinaryLayer);
+		 if(currentFigureOrganizer==null)
+		 	{ 
+			 IssueLog.log("Failed to find or create figure organizer for layer "+ordinaryLayer);
+			 return null;
+			 }
 		 
 		 /**If the figure organizer is newly created, it will need a new name which depends on the multichannel*/
 		if (currentFigureOrganizer!=null&&currentFigureOrganizer.getPrincipalMultiChannel()==null) {
