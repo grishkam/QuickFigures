@@ -36,6 +36,7 @@ import layout.basicFigure.BasicLayout;
 import locatedObject.Selectable;
 import logging.IssueLog;
 import messages.ShowMessage;
+import objectDialogs.CroppingDialog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 
@@ -211,7 +212,7 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 
 	}
 	
-	/**
+	/**Creates a figure at the drop location. user may stop this action by hitting cancel in the dialog
 	 * @param item
 	 * @param imageAndDisplaySet
 	 * @param layer
@@ -226,14 +227,28 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 		}
 		
 		
+		CroppingDialog.lastUserCancel=false;
+		FigureOrganizingLayerPane aa=null;
 		
-		FigureOrganizingLayerPane aa = figureAdder.addNewlyOpenedDisplayLayer(item, layer, preprocessForNewFigure);
-		aa.getMontageLayoutGraphic().moveLayoutAndContents(location2.getX(), location2.getY());
+		try {
+			aa = figureAdder.addNewlyOpenedDisplayLayer(item, layer, preprocessForNewFigure);
+			aa.getMontageLayoutGraphic().moveLayoutAndContents(location2.getX(), location2.getY());
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
+		if(CroppingDialog.lastUserCancel)
+				{
+			CroppingDialog.lastUserCancel=false;
+			new UndoAddItem(layer, aa).undo();
+				return;
+				}
 		
 		window.updateDisplay();
 		aa.fixLabelSpaces();
 		
 		undo.addEditToList(new UndoAddItem(layer, aa));
+		
+		
 		theExistingFigure.setStoredFigure(aa, aa.getLayout(), theExistingFigure.startIndex);
 	}
 	

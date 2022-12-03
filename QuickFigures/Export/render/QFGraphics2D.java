@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Nov 27, 2021
- * Date Modified: Nov 27, 2021
+ * Date Modified: Nov 20, 2022
  * Version: 2022.2
  */
 package render;
@@ -28,8 +28,14 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.Image;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Line2D.Double;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -38,6 +44,7 @@ import java.awt.image.ImageObserver;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
+import java.util.ArrayList;
 
 import org.apache.batik.ext.awt.g2d.AbstractGraphics2D;
 import org.apache.batik.ext.awt.g2d.GraphicContext;
@@ -46,12 +53,16 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.BasicShapeGraphic;
+import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.FreeformShape;
+import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import locatedObject.PathPointList;
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**
  A work in progress. Does not implement every aspect of Graphics2D. implementation of Graphics2D. Good enough to import r plots using Apache PDFBox and
@@ -59,17 +70,19 @@ import logging.IssueLog;
  */
 public class QFGraphics2D extends AbstractGraphics2D {
 
-	private GraphicLayer layer=new GraphicLayerPane("");
-	private GraphicLayer sublayer=null;
+	private ArrayList<ZoomableGraphic> layer=new ArrayList<ZoomableGraphic>();
+	
 	ShapeGraphic lastShapeObject=null;
 	Shape lastShape=null;
 	private Shape lastUntransformed;
 	private AffineTransform lastTransform;
 	private ShapeGraphic lastAdded;
 	int count=1;
-	private boolean dontAutoSubgroup;
+	private boolean dontAutoSubgroup=true;
 	
 	boolean asPath=true;
+	private int shapecount;
+	private long startShapetime;
 	
 	public QFGraphics2D() {
 		super(false);
@@ -78,20 +91,20 @@ public class QFGraphics2D extends AbstractGraphics2D {
 			gc=new GraphicContext();
 	}
 	
-	public QFGraphics2D(GraphicLayer g) {
+	public QFGraphics2D(ArrayList<ZoomableGraphic> g) {
 		this();
 		this.layer=g;
 	}
 
 	@Override
 	public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
-		IssueLog.log("rendered image draw not yet implemented");
+		IssueLog.logOptional("rendered image draw not yet implemented");
 		throw new NullPointerException();
 	}
 
 	@Override
 	public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
-		IssueLog.log("rendered image draw not yet implemented");
+		IssueLog.logOptional("rendered image draw not yet implemented");
 		
 	}
 
@@ -100,10 +113,12 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		addTextGraphic(str, x, y);
 		
 	}
+	
+	
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, float x, float y) {
-		IssueLog.log("Drawing string method not implemented for "+iterator.toString());
+		IssueLog.logOptional("Drawing string method not implemented for "+iterator.toString());
 		
 	}
 
@@ -169,28 +184,16 @@ public class QFGraphics2D extends AbstractGraphics2D {
 	/**
 	 * @return
 	 */
-	public GraphicLayer getLayer() {
-		if(sublayer!=null)
-			return sublayer;
+	public ArrayList<ZoomableGraphic> getLayer() {
+		
 		return layer;
 	}
 	
-	void exitSublayer() {
-		sublayer=null;
-	}
 	
-	void enterSublayer(ZoomableGraphic z) {
-		sublayer=new GraphicLayerPane("sublayer");
-		layer.add(sublayer);
-		layer.remove(z);
-		sublayer.add(z);
-	}
-	
-	boolean inSublayer() {return sublayer!=null;}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
-		IssueLog.log("image draw not yet implemented "+2);
+		IssueLog.logOptional("image draw not yet implemented "+2);
 		return false;
 	}
 
@@ -200,24 +203,130 @@ public class QFGraphics2D extends AbstractGraphics2D {
 		
 	}
 
+	public void drawLine(int x1, int y1,int x2, int y2) {
+		Double path =new Line2D.Double(x1, y1, x2, y2);
+		
+		Shape s = this.getTransform().createTransformedShape(path);
+		addShape(s,false);
+		ShowMessage.showOptionalMessage("line drawing is a work in progress");
+		
+	}
+	
+	@Override
+	public void drawPolyline(int[] x1, int[] y1,int x2) {
+		
+		ShowMessage.showOptionalMessage("poly line drawing is a work in progress");
+		
+	}
+	
+	@Override
+	public void drawPolygon(Polygon p) {
+		
+		ShowMessage.showOptionalMessage("polygon drawing is a work in progress");
+		super.drawPolygon(p);
+	
+	}
+	
+	@Override
+	public void drawPolygon(int[] x1, int[] y1,int x2) {
+		
+		ShowMessage.showOptionalMessage("polygon 2 drawing is a work in progress");
+	
+	
+	}
+	
+	@Override
+	public void drawRect(int x, int y, int w, int h) {
+		draw(new Rectangle(x,y,w,h));
+		ShowMessage.showOptionalMessage("rect drawing is a work in progress");
+
+	}
+	
+	@Override
+	public void fillRect(int x, int y, int w, int h) {
+		fill(new Rectangle(x,y,w,h));
+		//ShowMessage.showOptionalMessage("fill rect drawing is a work in progress");
+
+	}
+	@Override
+	public void drawRoundRect(int x, int y, int w, int h, int aw, int ah) {
+		
+		ShowMessage.showOptionalMessage("round rect drawing is a work in progress");
+
+	}
+	
+	@Override
+	public void fillRoundRect(int x, int y, int w, int h, int aw, int ah) {
+		
+		ShowMessage.showOptionalMessage("round rect drawing is a work in progress");
+
+	}
+	
+	@Override
+	public void draw3DRect(int x, int y, int w, int h, boolean r) {
+		ShowMessage.showOptionalMessage("3d rect drawing is a work in progress");
+
+	}
+	
+	@Override
+	public void fill3DRect(int x, int y, int w, int h, boolean r) {
+		ShowMessage.showOptionalMessage("3d rect drawing is a work in progress");
+
+	}
+	
+	@Override
+	public void drawArc(int x, int y, int w, int h, int sa, int r) {
+		ShowMessage.showOptionalMessage("arc drawing is a work in progress");
+		
+	}
+	
 	@Override
 	public void draw(Shape s) {
 		boolean putonLastShape = false;
 		
-		if(s.equals(lastUntransformed))
-			putonLastShape = true;
 		
-		s=this.getTransform().createTransformedShape(s);
-		if (s.equals(lastShape))
+		if(s==lastUntransformed||  s.equals(lastUntransformed))
 			putonLastShape = true;
+		/**meant to check if the shapes are nearly the same but not perfect*/
+		if(isHighlySimilarToLastShape(s, lastUntransformed)) putonLastShape = true;
+		
 		if(!getTransform().equals(lastTransform))
 			putonLastShape = false;
 		
-		/**meant to check if the shapes are nearly the same but not perfect*/
-		if(isHighlySimilarToLastShape(s))
-			putonLastShape = true;
+		if(!putonLastShape)s=this.getTransform().createTransformedShape(s);
+		addShape(s, putonLastShape);
 		
 		
+		
+	}
+
+	boolean hideShapes=false;
+	private ArrayList<Object> shapeList=new ArrayList<Object>();
+	
+	/**
+	 * @param s
+	 * @param putonLastShape
+	 */
+	public void addShape(Shape s, boolean putonLastShape) {
+		shapecount++;
+		if(shapecount==1) {
+			startShapetime=System.currentTimeMillis();
+		}
+		if(shapecount>1000&&shapecount%1000==0) {
+			//long ctime = System.currentTimeMillis()-startShapetime;
+			//boolean proceed = ShowMessage.showOptionalMessage("will have difficulty drawing so many shapes: ", false, "will have difficulty drawing so many shapes: "+shapecount, "Are you sure you want to continue?", "time since start is "+ctime);
+	
+		}
+		if(hideShapes)
+			{
+			shapeList.add(s);
+			return;
+			}
+		
+		
+		
+		
+		//if(!getClip().getBounds2D().contains(s.getBounds2D())) {return;}
 		
 		if(putonLastShape&&this.getStroke() instanceof BasicStroke)
 			{
@@ -238,20 +347,21 @@ public class QFGraphics2D extends AbstractGraphics2D {
 			if(s.getBounds().width*s.getBounds().height==0)
 				return;			
 			
-			handleSublayergrouping(lastAdded, bs);
-			getLayer().add(bs);
+			//handleSublayergrouping(lastAdded, bs);
+			
 			if(s.getBounds().width*s.getBounds().height==0||bs.getStrokeWidth()==0)
-				getLayer().remove(bs);
-			else
-			lastAdded=bs;
+						{
+				//shapes with no volumne are ignored
+						}
+			else {
+				getLayer().add(bs);
+				lastAdded=bs;
+			}
 		}
 		
 		lastShape=null;
 		lastShapeObject=null;
 		lastUntransformed=null;
-		
-		
-		
 	}
 
 
@@ -260,29 +370,34 @@ public class QFGraphics2D extends AbstractGraphics2D {
 	 * @param s
 	 * @return
 	 */
-	public boolean isHighlySimilarToLastShape(Shape s) {
+	public boolean isHighlySimilarToLastShape(Shape s, Shape lastShape) {
 		return lastShape!=null&&s.getBounds()!=null&&s.getBounds().equals(lastShape.getBounds());
 	}
 	@Override
 	public void fill(Shape s) {
+		
+		if(hideShapes)
+			return;
 		lastUntransformed=s;
 		s=this.getTransform().createTransformedShape(s);
 		ShapeGraphic newShape = createShapeGraphic(s);
 		if(s.getBounds().width*s.getBounds().height==0)
 			return;
-		handleSublayergrouping(lastAdded, newShape);
+		//handleSublayergrouping(lastAdded, newShape);
 		
-		getLayer().add(newShape);
+		
 		if(s.getBounds().width*s.getBounds().height==0)
-			getLayer().remove(newShape);
-		else lastAdded=newShape;
+		{}
+		else {
+			getLayer().add(newShape);
+			lastAdded=newShape;
+		}
 		
 		newShape.setStrokeWidth(0);
 		newShape.setFillColor(getColor());
 		lastShape=s;
 		lastShapeObject=newShape;
 		lastTransform=this.getTransform();
-		
 		
 	}
 
@@ -291,14 +406,28 @@ public class QFGraphics2D extends AbstractGraphics2D {
 	 * @return
 	 */
 	public ShapeGraphic createShapeGraphic(Shape s) {
+		
+		
 		if(s instanceof Rectangle2D)
 			return new RectangularGraphic( (Rectangle2D)s);
+		if(s instanceof Ellipse2D)
+		{
+			
+			return new CircularGraphic( ((Ellipse2D)s).getBounds2D());
+			
+		}
+
+
+		if(s instanceof Path2D) {
+			
+		}
 		ShapeGraphic output =null;
 	
 		
 		 output = new FreeformShape(s);
 		output.setName("Shape "+count);
 		count++;
+		
 		
 		return output;
 		
@@ -310,7 +439,7 @@ public class QFGraphics2D extends AbstractGraphics2D {
 	 * @param y
 	 */
 	protected void addTextGraphic(String str, double x, double y) {
-		IssueLog.log("PDF text items not fully implemented");
+		IssueLog.logOptional("PDF text items not fully implemented");
 		TextGraphic t = new TextGraphic(str);
 		t.setLocation(x, y);
 		
@@ -334,21 +463,7 @@ public class QFGraphics2D extends AbstractGraphics2D {
         return bi;
 	}
 	
-	/**determines whether the two shapes belong together in a sublayer*/
-	void handleSublayergrouping(ZoomableGraphic z1, ZoomableGraphic z2) {
-		if(dontAutoSubgroup)
-			return;
-		int score = simiarity(z1, z2);
-		if(this.inSublayer()) {
-			if(score==0)
-				this.exitSublayer();
-		} else {
-			if(score==1)
-				this.enterSublayer(z1);
-		}
-		
-		
-	}
+	
 
 	/**
 	 * @param z1

@@ -255,6 +255,16 @@ public class IssueLog {
 	public static boolean waitSeconds(int s) {
 		return waitMiliseconds(1000*s);
 	}
+
+
+
+	/**
+	 * @param string
+	 */
+	public static void logOptional(String string) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

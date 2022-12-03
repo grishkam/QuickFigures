@@ -354,7 +354,8 @@ public boolean mirrorPaused() {
 	 * @param object
 	 */
 	public void mirrorReflectionBackToOriginal(LocatedObject2D object) {
-		if(updateOngoing)
+		
+		if(updateOngoing||!isMirrorActive())
 			return;//return here precents infinite loops
 		updateOngoing=true;
 		//IssueLog.log("Object move detected "+System.currentTimeMillis());

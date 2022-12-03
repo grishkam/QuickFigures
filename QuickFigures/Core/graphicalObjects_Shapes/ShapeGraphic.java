@@ -281,33 +281,60 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 		this.y=y;
 	}
 
+	static int shapecount=0;
+	static Long shapeTime=null;
+	static boolean skip=true;
+	
+	
 	/**Draws the shape*/
 	@Override
 	public void draw(Graphics2D g, CordinateConverter cords) {
+		
+			
+			
+		
+		shapecount++;
+		
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, isAntialize()?RenderingHints.VALUE_ANTIALIAS_ON: RenderingHints.VALUE_ANTIALIAS_OFF);
 		
 		/**Sets up the shape that will be used to draw*/
-		 Shape r= cords.getAffineTransform().createTransformedShape(getShape());
-		   if (angle!=0) {
-			  r=getRotationTransform().createTransformedShape(getShape());
-			  r= cords.getAffineTransform().createTransformedShape(r);
-		   }
+		 Shape r= null;
+		 shapeTime=System.currentTimeMillis();
 		 
+		   if (angle!=0) {
+			  AffineTransform tr = getRotationTransform();
+			  tr.preConcatenate(cords.getAffineTransform());
+			  r= tr.createTransformedShape(getShape());
+		   }
+		   else 
+			   r=cords.getAffineTransform().createTransformedShape(getShape());
+		   
+		   long transformTime = System.currentTimeMillis();
 		   /**fills the shape*/
 		  if (filled) {
 			getFillPaintProvider().fillShape(g, r);
 		  }
+		  long fillTime = System.currentTimeMillis();
+		  
 		  
 		  /**draws the stroke*/
-		  if (this.getStrokeWidth()>=0){
+		  if (this.getStrokeWidth()>0){
 			  g.setStroke(cords.getScaledStroke(getStroke()));
 			  if (r!=null )getStrokePaintProvider().strokeShape(g, r);
 			  	else IssueLog.log("Shape graphic has no shape "+this.getClass().getName()+" "+this.getName());
 	}
+		  
+		  long st = System.currentTimeMillis()-  shapeTime;
+			 if(st>100) {
+				 IssueLog.log(st +" Shape took a long time to draw shape="+this);
+				 IssueLog.log((System.currentTimeMillis()-fillTime) +" taken since fill shape"+this);
+				 
+				 IssueLog.log((transformTime-shapeTime) +" taken for transform ");
+				 IssueLog.log((fillTime-transformTime) +" taken for fill "+this.getBounds());
+			 }
 		
 		  drawHandesSelection(g, cords);
-		  
-		 
+		
 		   }
 	
 	/**If the object is selected, draws the handles that the user may drag. 

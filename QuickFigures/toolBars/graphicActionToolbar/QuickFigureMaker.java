@@ -52,6 +52,7 @@ import layout.basicFigure.BasicLayoutEditor;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
+import objectDialogs.CroppingDialog;
 import ultilInputOutput.FileChoiceUtil;
 
 /**This class is used to create a new figure from either an open image or a saved image file
@@ -134,6 +135,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	 * @return */
 	public FigureOrganizingLayerPane createFigureFromOpenImage(PreProcessInformation p) {
 		FigureOrganizingLayerPane f = createFigure(p);
+		
 		if (f!=null && this.hidesImage)f.hideImages();
 		return f;
 	}
@@ -144,11 +146,19 @@ public class QuickFigureMaker extends DisplayActionTool {
 	}
 	
 	/**creates a new window with new figure. If path is set to null, uses the image that the user has open
-	  otherwise, opens the file in the path*/
+	  otherwise, opens the file in the path. User may cancel this action */
 	public FigureOrganizingLayerPane createFigure(String path, PreProcessInformation p2) {
 		ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 40, 30);
+		CroppingDialog.lastUserCancel=false;
+		FigureOrganizingLayerPane createFigure = createFigure(diw, path, p2);
+		if(CroppingDialog.lastUserCancel) {
+			IssueLog.log("user has cancel "+CroppingDialog.lastUserCancel);
+			
+			diw.closeWindowButKeepObjects();
+			return null;
+		}
 		
-		return createFigure(diw, path, p2);
+		return createFigure;
 	}
 
 
@@ -164,6 +174,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 		}else localFigureAdder.openFile=true;
 		
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
+		
+		
 		
 		if(isBlotFigure()&&added!=null) {
 			DefaultLayoutGraphic montageLayoutGraphic = added.getMontageLayoutGraphic();

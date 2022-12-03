@@ -28,7 +28,7 @@ import logging.IssueLog;
 
 public class ShowPDFReadResult {
 	
-	public static String path=new DirectoryHandler().getFigureFolderPath()+"/rotations.pdf";
+	public static String path=new DirectoryHandler().getFigureFolderPath()+"/rotations2.pdf";
 	
 
 	/**
@@ -37,6 +37,7 @@ public class ShowPDFReadResult {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
+		
 		File file = new File(path);
 		IssueLog.log(file.exists()+"will check  "+path);
 		IssueLog.sytemprint=true;

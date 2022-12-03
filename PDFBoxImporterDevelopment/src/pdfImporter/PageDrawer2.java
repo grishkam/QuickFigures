@@ -1,20 +1,37 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Gregory Mazo
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
 /**
  * Author: Greg Mazo
  * Date Created Jan 2, 2022
- * Date Modified: Jan 3, 2022
+ * Date Modified: Nov 20, 2022
  * Version: 2022.2
  */
 package pdfImporter;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Point;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.contentstream.operator.Operator;
@@ -22,6 +39,7 @@ import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSString;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
@@ -34,10 +52,11 @@ import org.apache.pdfbox.pdmodel.graphics.state.PDTextState;
 import org.apache.pdfbox.rendering.PageDrawer;
 import org.apache.pdfbox.rendering.PageDrawerParameters;
 import org.apache.pdfbox.util.Matrix;
-import org.apache.pdfbox.util.Vector;
 
-import figureFormat.DirectoryHandler;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import locatedObject.RectangleEdges;
@@ -64,7 +83,7 @@ public class PageDrawer2 extends PageDrawer {
    
    public static void main( String[] args ) throws IOException
    {
-	   IssueLog.sytemprint=true;
+	   PDF_importLog.sytemprint=true;
        PDDocument document = null;
        ImageDisplayTester.main(null);
    	ImageWindowAndDisplaySet diw = ImageWindowAndDisplaySet.createAndShowNew("New Image", 400, 300);
@@ -79,7 +98,7 @@ public class PageDrawer2 extends PageDrawer {
            for( PDPage page : document.getPages() )
            {
                pageNum++;
-              	IssueLog.log( "On page: " + pageNum );
+              	PDF_importLog.log( "On page: " + pageNum );
                //extact.processPage(page);
            }
        }
@@ -93,15 +112,19 @@ public class PageDrawer2 extends PageDrawer {
    }
  */
 	
-	private GraphicLayer layer;
+	private ArrayList<ZoomableGraphic> layer;
 
 	private boolean textAsGyphs=false;
 	private PDFont defaultFont;
-	 
+	PDRectangle cropBox;
 
-	public PageDrawer2(PageDrawerParameters parameters, GraphicLayer layer) throws IOException {
+	public PageDrawer2(PageDrawerParameters parameters, ArrayList<ZoomableGraphic> layer2) throws IOException {
 		super(parameters);
-		this.layer=layer;
+		this.layer=layer2;
+	PDF_importLog.log("page matrix is"+	parameters.getPage().getMatrix());
+	cropBox = parameters.getPage().getCropBox();
+	PDF_importLog.log("page crop box is"+	cropBox);
+	
 	}
 	
 	
@@ -115,7 +138,7 @@ public class PageDrawer2 extends PageDrawer {
     protected void processOperator( Operator operator, List<COSBase> operands) throws IOException
     {
         String operationName = operator.getName();
-        IssueLog.log("operator for "+operator);
+       // PDF_importLog.log("operator for "+operator);
        
         if(this.codeForColor.equals(operationName)) {
         	
@@ -224,7 +247,7 @@ public class PageDrawer2 extends PageDrawer {
         PDFont font = textState.getFont();
         if (font == null)
         {
-            IssueLog.log("No font found, will use default");
+            PDF_importLog.log("No font found, will use default");
             font = getDefaultFont();
         }
 
@@ -297,7 +320,8 @@ public class PageDrawer2 extends PageDrawer {
             // update the text matrix
             textMatrix.translate(tx, ty);*/
         }
-        IssueLog.log("possible parsed text is "+output);
+       
+        printTextToGraphics(output);
     }
     
     private PDFont getDefaultFont()
@@ -311,78 +335,191 @@ public class PageDrawer2 extends PageDrawer {
     
     public void showTextStrings(COSArray array) throws IOException
     {
-    if(textAsGyphs)	{
-    	super.showTextStrings(array);
-    	return ;
-    }
-    PDGraphicsState state = getGraphicsState();
-    PDTextState textState = getGraphicsState().getTextState();
-    float fontSize = textState.getFontSize();
-    float horizontalScaling = textState.getHorizontalScaling() / 100f;
+		    if(textAsGyphs)	{
+		    	super.showTextStrings(array);
+		    	return ;
+		    }
+		    String start = getTextFromCos(array);   
+		    
+    printTextToGraphics(start);
     
-    // put the text state parameters into matrix form
-    Matrix parameters = new Matrix(
-            fontSize * horizontalScaling, 0, // 0
-            0, fontSize,                     // 0
-            0, textState.getRise());         // 1
     
-    PDFont font = textState.getFont();
-    String start="";
-    for (COSBase obj : array) {
-    	if(obj instanceof COSString)
-        {
-            COSString obj2 = (COSString)obj;
-			byte[] string = obj2.getBytes();
-            InputStream in = new ByteArrayInputStream(string);
-          
-            while (in.available() > 0)
-            {
-            	 int code = font.readCode(in);
-                 start+=(char) code;
-            	
-            };
-        }
     	
     }
-    Matrix ctm = state.getCurrentTransformationMatrix();
-    Matrix textMatrix2 = super.getTextMatrix();
-	Matrix textRenderingMatrix = parameters.multiply(textMatrix2).multiply(ctm);
-    IssueLog.log("Render text at "+textRenderingMatrix  );
-    reportOnMatrix(ctm, "ctm");
-    reportOnMatrix( textMatrix2, "textMatrix2");
-    reportOnMatrix(textRenderingMatrix, "textRenderingMatrix");
-    
-    if(start.equals(""))
-    	return;
-    else {
-    	TextGraphic tg = new TextGraphic(start);
-    	tg.setFont(Font.decode(font.getName()));
-    	IssueLog.log("string is "+start);
-    	IssueLog.log("font name is "+font.getName());
-    	IssueLog.log("font name is "+Font.decode(font.getName()));
-    	IssueLog.log("color name is "+this.getGraphicsState().getNonStrokingColor());
+
+
+	/**
+	 * @param start
+	 * @throws IOException
+	 */
+	public void printTextToGraphics(String start) throws IOException {
+		PDGraphicsState state = getGraphicsState();
+		PDTextState textState = getGraphicsState().getTextState();
+		float fontSize = textState.getFontSize();
+		float horizontalScaling = textState.getHorizontalScaling() / 100f;
+		PDFont font = textState.getFont();
+		// put the text state parameters into matrix form
+		Matrix parameters = new Matrix(
+		        fontSize * horizontalScaling, 0, // 0
+		        0, fontSize,                     // 0
+		        0, textState.getRise());         // 1
+		PDF_importLog.log("text "+start+" is of font size "+fontSize+" with expected scaling "+horizontalScaling);
+		Matrix ctm = state.getCurrentTransformationMatrix();
+		Matrix textMatrix2 = super.getTextMatrix();
+		Matrix textRenderingMatrix = parameters.multiply(textMatrix2).multiply(ctm);
+		//PDF_importLog.log("string is "+start);
+		//PDF_importLog.log("Render text at "+textRenderingMatrix  );
+		reportOnMatrix(ctm, "ctm");
+		reportOnMatrix( textMatrix2, "textMatrix2");
+		
+		reportOnMatrix(textRenderingMatrix, "textRenderingMatrix");
+		
+		if(start.equals(""))
+			return;
+		else {
+			TextGraphic tg = new TextGraphic(start);
+			tg.setFont(Font.decode(font.getName()));
+			//PDF_importLog.log("string is "+start);
+			//PDF_importLog.log("font name is "+font.getName());
+			//PDF_importLog.log("font name is "+Font.decode(font.getName()));
+			//PDF_importLog.log("color name is "+this.getGraphicsState().getNonStrokingColor());
+			
+			
+			int rgb = this.getGraphicsState().getNonStrokingColor().toRGB();
+			tg.setTextColor(new Color(rgb));
+			tg.setFontSize((int) (fontSize*0.75));
+			if(textMatrix2.getScaleX()==textMatrix2.getScaleY()) {
+				float scale = textMatrix2.getScaleX();
+				if(scale!=0&&scale!=1)
+					tg.setFontSize((int) (scale*fontSize));
+			}
+			tg.setContent(start);
+			tg.setLocation(textRenderingMatrix.getTranslateX(), ctm.getTranslateY()-textRenderingMatrix.getTranslateY());
+			tg.setAngle(determineAngle(ctm));
+			layer.add(tg);
+			
+			
+			
+			AffineTransform flipYaxis2 = pageFlipTransform(state);
+			//at.concatenate(flipYaxis);
+			
+			
+			    	
+			AffineTransform textRenderingMatrix2 = ctm.createAffineTransform();
+			textRenderingMatrix2.concatenate(textMatrix2.createAffineTransform());
+			textRenderingMatrix2.concatenate(parameters.createAffineTransform());
+			//textRenderingMatrix2.concatenate(flipYaxis);
+			if(textMatrix2.getScaleX()==1&&textMatrix2.getScaleY()==-1)
+				textRenderingMatrix2.preConcatenate(flipYaxis2);
+			else {
+				textRenderingMatrix2.preConcatenate(flipYaxis2);
+			}
+			
+			//showInsightBox(textRenderingMatrix2, Color.green);
+			//AffineTransform t1 = textRenderingMatrix.createAffineTransform();
+			//showInsightBox(t1, Color.red);
+			
+			//showInsightBox(textMatrix2.multiply(ctm).createAffineTransform(), Color.blue);
+			
+			
+			
+			
+			Point2D p=new Point2D.Double();
+			p=textRenderingMatrix2.transform(p, null);
+			if(tg.getAngle()!=0)	{
+				//tg.setLocationType(RectangleEdges.UPPER_RIGHT);
+				//tg.setLocation(p);
+				tg.setX(p.getX());
+				tg.setY(p.getY());
+			}
+			if(textMatrix2.getScaleX()==textMatrix2.getScaleY())
+			{
+				double height = cropBox.getHeight();
+				tg.moveLocation(0, height);
+				//PDF_importLog.log("moving down "+height);
+				}
+			
+			
+			
+		}
+	}
+
+
+	/**
+	 * @param array
+	 * @return
+	 * @throws IOException
+	 */
+	public String getTextFromCos(COSArray array) throws IOException {
+		PDTextState textState2 = getGraphicsState().getTextState();
+		PDFont font2 = textState2.getFont();
+		String start="";
+		for (COSBase obj : array) {
+			if(obj instanceof COSString)
+		    {
+		        COSString obj2 = (COSString)obj;
+				byte[] string = obj2.getBytes();
+		        InputStream in = new ByteArrayInputStream(string);
+		      
+		        while (in.available() > 0)
+		        {
+		        	 int code = font2.readCode(in);
+		             start+=(char) code;
+		        	
+		        };
+		    }
+			
+		}
+		return start;
+	}
+
+
+	/**
+	 * @param state
+	 * @return 
+	 */
+	public AffineTransform pageFlipTransform(PDGraphicsState state) {
+		//double h = state.getCurrentClippingPath().getBounds2D().getHeight();
+    	AffineTransform axes = AffineTransform.getTranslateInstance(0, cropBox.getHeight());
+    	axes.concatenate(AffineTransform.getScaleInstance(1, -1));
+    	return axes;
+	}
+	
+	/**
+	 * @param state
+	 * @return 
+	 */
+	public AffineTransform pageShiftTransform(PDGraphicsState state) {
+		double h = state.getCurrentClippingPath().getBounds2D().getHeight();
+    	AffineTransform axes = AffineTransform.getTranslateInstance(0, h);
     	
-    	
-    	int rgb = this.getGraphicsState().getNonStrokingColor().toRGB();
-    	tg.setTextColor(new Color(rgb));
-    	tg.setFontSize((int) (fontSize*0.75));
-    	tg.setContent(start);
-    	tg.setLocation(textRenderingMatrix.getTranslateX(), ctm.getTranslateY()-textRenderingMatrix.getTranslateY());
-    	tg.setAngle(determineAngle(ctm));
-    	layer.add(tg);
-    }
-    	
-    }
+    	return axes;
+	}
+
+
+	/**
+	 * @param at
+	 * @param textColor
+	 */
+	public void showInsightBox(AffineTransform at, Color textColor) {
+		Rectangle2D box=new Rectangle2D.Double(0,0,1,1);
+		Shape s = at.createTransformedShape(box);
+		ShapeGraphic bsg = new RectangularGraphic(s.getBounds2D());
+		
+		bsg.setFillColor(textColor);
+    	layer.add(bsg);
+	}
 
 
 	/**
 	 * @param ctm
 	 */
 	public void reportOnMatrix(Matrix ctm, String st) {
-		IssueLog.log("Checking Matrix "+st);
-		IssueLog.log(st+":scale of matrix "+ctm + " which is scaled "+ctm.getScaleX()+", "+ctm.getScaleY());
-		IssueLog.log(st+":shear is "+ ctm.getShearX()+",   "+ctm.getShearY());
-		IssueLog.log(st+": translate is "+ctm.getTranslateX()+",  "+ctm.getTranslateY());
+		//PDF_importLog.log("Checking Matrix "+st);
+		//PDF_importLog.log(st+":scale of matrix "+ctm + " which is scaled "+ctm.getScaleX()+", "+ctm.getScaleY());
+		///PDF_importLog.log(st+":shear is "+ ctm.getShearX()+",   "+ctm.getShearY());
+		//PDF_importLog.log(st+": translate is "+ctm.getTranslateX()+",  "+ctm.getTranslateY());
+		
 	}
     
     

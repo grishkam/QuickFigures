@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Gregory Mazo
+ * Copyright (c) 2022 Gregory Mazo
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -30,9 +31,12 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.ClosedGroup;
+import graphicalObjects_LayerTypes.GraphicLayerPane;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
+import messages.ShowMessage;
 import pdfImporter.QFPDFRenderer;
 import render.GraphicsRenderQF;
 import undo.CombinedEdit;
@@ -57,7 +61,7 @@ public class PDFReadTest {
 		
 		
 		ImageDisplayTester.main(null);
-		new PDFImporter_().run("");
+		new PDF_Importer().run("");
 		
 		
 		
@@ -77,26 +81,36 @@ public class PDFReadTest {
 		if(file==null)
 			return null;
 		
-		ClosedGroup gg = new ClosedGroup();
-		
-		gg.setName(file.getName());
 		
 		float scale=1;
+		
+		
+		
 		PDDocument pd = Loader.loadPDF(file);
-		java.awt.Graphics2D g2d= GraphicsRenderQF.getGraphics2D(gg.getTheInternalLayer());
-		PDFRenderer reader=new QFPDFRenderer(pd, gg.getTheInternalLayer(), g2d);
+		ArrayList<ZoomableGraphic> theInternalLayer = new ArrayList<ZoomableGraphic> ();
+		
+		java.awt.Graphics2D g2d= GraphicsRenderQF.getGraphics2D(theInternalLayer);
+		PDFRenderer reader=new QFPDFRenderer(pd, theInternalLayer, g2d);
 		
 		reader.renderPageToGraphics(0, g2d, scale);
 		
 	
-	
+		if(theInternalLayer.size()>2000) {
+			boolean xontinuie = ShowMessage.showOptionalMessage("The pdf is complex", true, "This PDF has many objects "+theInternalLayer.size(), "Too many items to draw may result in slow performance", "You may consider importing an image instead");
+			if(!xontinuie)
+				return null;
+		
+		}
+		ClosedGroup gg = new ClosedGroup("display me", theInternalLayer);
+		
+		gg.setName(file.getName());
 	
 		gg.scaleAbout(new Point(0,0), 1/scale);
 		
 		CombinedEdit ce=new CombinedEdit();
 		ce.addEditToList(
 		Edit.addItem(diw.getImageAsWorksheet().getTopLevelLayer(), gg));
-		diw.getImageAsWorksheet().addItemToImage(gg);
+		//diw.getImageAsWorksheet().addItemToImage(gg);
 		ce.addEditToList(
 		new CanvasAutoResize(true).performUndoableAction(diw));
 		

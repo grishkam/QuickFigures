@@ -368,7 +368,9 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends ImageDisplayLayer> all) {
 	
 	
-	
+	if(crop1==null) {
+		return null;
+	}
 	CombinedEdit output = new CombinedEdit();
 	CropDialogContext context = new CroppingDialog.CropDialogContext(all.size()+1, crop1.getFigureType());
 	

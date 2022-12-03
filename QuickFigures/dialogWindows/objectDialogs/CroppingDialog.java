@@ -54,7 +54,6 @@ import figureOrganizer.FigureType;
 import figureOrganizer.PanelList;
 import figureOrganizer.PanelListElement;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
-import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
@@ -196,7 +195,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private ArrayList<PanelGraphicInsetDefiner> panelInsetList=new  ArrayList<PanelGraphicInsetDefiner>();
 	private ArrayList<RectangularGraphic> insetrepresenations=new ArrayList<RectangularGraphic>();
 	@RetrievableOption(key = "Update inset locations after crop", label="Update inset locations after crop")
-	public boolean updateInsets=false;//set to true if insets should be moved
+	public static boolean updateInsets=false;//set to true if insets should be moved
+
+	//is set to true/false depending on if the user hits cancel for a crop dialog
+	public static boolean lastUserCancel=false;
 
 	
 	{this.setLayout(new GridBagLayout());
@@ -1019,7 +1021,11 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			context.lastDialog=crop;
 		crop.showDialog();
 		
-		if(!crop.wasOKed()&&!crop.wasEliminated) return crop;
+		if(!crop.wasOKed()&&!crop.wasEliminated) {
+			CroppingDialog.lastUserCancel=true;
+			return crop;
+		}
+		CroppingDialog.lastUserCancel=false;
 		
 		if(!crop.isCroppingRectangleValid()) return crop;
 		

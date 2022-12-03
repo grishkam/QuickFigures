@@ -81,6 +81,13 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		key=generateRandomKey()+count; count++;
 	}
 	
+	
+	
+	public GraphicLayerPane(String name, ArrayList<ZoomableGraphic> z) {
+		this.name=name;
+		theGraphics=z;
+	}
+	
 	/**generates a random string that is used as an ID for this layer*/
 	public String generateRandomKey() {
 		int i=(int)(Math.random()*1000000);
@@ -146,10 +153,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	}
 
 	
-	public GraphicLayerPane(String name, Object key) {
-		this.name=name;
-		this.key=key;
-	}
+	
 	
 	public void setName(String name) {
 		this.name=name;
@@ -237,10 +241,9 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	public void addItemToLayer(ZoomableGraphic z) {
 	
 		if (theGraphics.contains(z)) return;
-		if (z instanceof KnowsParentLayer) {
-			KnowsParentLayer l=(KnowsParentLayer) z;
-			l.setParentLayer(this);
-		}
+		
+			z.setParentLayer(this);
+		
 		if (z instanceof KnowsSetContainer) {
 			KnowsSetContainer kn=(KnowsSetContainer) z;
 			kn.setGraphicSetContainer(this.getGraphicSetContainer());
@@ -297,6 +300,8 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		
 	}
 
+	boolean ignoreHidden=true;
+	
 	/**draws the layer*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
@@ -305,7 +310,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		
 		try {
 			for(ZoomableGraphic z: allGraphicsDrawn) try {
-				if (z==null||isHidden(z)) continue;
+				if (ignoreHidden&&(z==null||isHidden(z))) continue;
 				
 				z.draw(graphics, cords);
 			}

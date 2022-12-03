@@ -180,6 +180,9 @@ public class OverlaySubmenu extends SmartJMenu {
 			
 		}.createJMenuItem("Make Overlay Unique"));
 		
+	
+		
+		
 		/**Adds an option to make the overlay for this panel unique.*/
 		share.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
@@ -221,20 +224,7 @@ public class OverlaySubmenu extends SmartJMenu {
 		share.add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
-				//ShowMessage.showOptionalMessage("Will use a copy of this overlay to update panel overlays", true, "Updated overlay for source image", "You will see ", "There is no undo");
-				
-				OverlayObjectList o = item.getOverlay();
-				PreProcessInformation lastProcess = o.getLastProcess();
-				
-				OverlayObjectList reversed = OverlayObjectList.cropOverlayAtAngle(o, lastProcess, true);
-				MultichannelDisplayLayer original = MultichannelDisplayLayer.findMultiChannelForGraphic(item.getParentLayer(), item);
-				AbstractUndoableEdit partialundo = original.getSlot().setOriginalOverlay(reversed);
-			
-				CombinedEdit performButtonAction = new ImagePropertiesButton(item, ImagePropertiesButton.CROP_IMAGE).performButtonAction();
-				performButtonAction.addEditToList(partialundo);
-				original.getSlot().redoCropAndScale();
-				
-				return performButtonAction;
+				return showRecropWithThisOverlay(item);
 				
 			
 			}	
@@ -243,24 +233,45 @@ public class OverlaySubmenu extends SmartJMenu {
 		
 		
 		
+		
 		/**Adds an option to make the overlay for this panel unique.*/
 		if(c.getOverlay().manualEditsMade()) add(new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
-				CombinedEdit undo=new CombinedEdit(item.provideUndoForDialog(), item.getOverlay().getUndoForEditWindow(item));
-				boolean proceed = ShowMessage.showOptionalMessage("You sure?", true, "Are you sure you want to clear the overlay");
-				
-				if(proceed)item.updateOrSetOverlayObjects(null);
-				c.updateDisplay();
-				return undo;
-			}	
-			
+				return clearcustom(item);
+			}
+
+			/**
+			 * @return
+			 */
 		}.createJMenuItem("Clear custom overlay"));
 		
 		
-		
+		/**Adds an option to make the overlay for this panel unique.*/
+		if(c.getOverlay().manualEditsMade()) share.add(new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				AbstractUndoableEdit2 clearcustom = clearcustom(item);
+				MultichannelDisplayLayer original = MultichannelDisplayLayer.findMultiChannelForGraphic(item.getParentLayer(), item);
+				original.getSlot().redoCropAndScale();
+				return clearcustom;
+			}
+
+			/**
+			 * @return
+			 */
+		}.createJMenuItem("Replace custom overlay"));
 		
 	}
+	public AbstractUndoableEdit2 clearcustom(ImagePanelGraphic item) {
+		CombinedEdit undo=new CombinedEdit(item.provideUndoForDialog(), item.getOverlay().getUndoForEditWindow(item));
+		boolean proceed = ShowMessage.showOptionalMessage("You sure?", true, "Are you sure you want to clear the overlay");
+		
+		if(proceed)item.setOverlayObjects(null);
+		item.updateDisplay();
+		return undo;
+	}	
+	
 	
 	/**Adds a menu option to edit the overlay objects in a separate window
 	 * @param editMenu 
@@ -295,6 +306,26 @@ public class OverlaySubmenu extends SmartJMenu {
 		c.setShowOverlay(true);
 		c.getOverlay().setEdited(true);
 		return undo;
+	}
+
+	/**
+	 * @return
+	 */
+	public AbstractUndoableEdit2 showRecropWithThisOverlay(ImagePanelGraphic item) {
+		//ShowMessage.showOptionalMessage("Will use a copy of this overlay to update panel overlays", true, "Updated overlay for source image", "You will see ", "There is no undo");
+		
+		OverlayObjectList o = item.getOverlay();
+		PreProcessInformation lastProcess = o.getLastProcess();
+		
+		OverlayObjectList reversed = OverlayObjectList.cropOverlayAtAngle(o, lastProcess, true);
+		MultichannelDisplayLayer original = MultichannelDisplayLayer.findMultiChannelForGraphic(item.getParentLayer(), item);
+		AbstractUndoableEdit partialundo = original.getSlot().setOriginalOverlay(reversed);
+
+		CombinedEdit performButtonAction = new ImagePropertiesButton(item, ImagePropertiesButton.CROP_IMAGE).performButtonAction();
+		performButtonAction.addEditToList(partialundo);
+		original.getSlot().redoCropAndScale();
+		
+		return performButtonAction;
 	}
 
 	/**returns a separate window

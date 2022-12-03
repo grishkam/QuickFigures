@@ -21,8 +21,10 @@
 package locatedObject;
 
 import java.awt.BasicStroke;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import graphicalObjects_Shapes.ShapeGraphic;
+import logging.IssueLog;
 import utilityClasses1.ArraySorter;
 
 /**A list of points that form a Path with many methods
@@ -1006,5 +1009,55 @@ java.awt.geom.Point2D.Double diff2 = subtract(get(i+1).getAnchor(), get(i).getAn
 		PathPointList pa = createFromIterator(path2.getPathIterator(AffineTransform.getTranslateInstance(0, 0)));
 		Path2D it2 = pa.createPath(true);
 		return it2;
+	}
+	
+	public boolean isRectangle() {
+		if(this.size()>5)
+			return false;
+		
+		for(int i=1; i<4; i++) {
+			if(
+			!areInLine(this.get(i-1), this.get(i)))
+				return false;
+			
+		}
+		for(int i=2; i<4; i++) {
+			if(
+			!areInLine(this.get(i-2), this.get(i)))
+				return false;
+			
+		}
+		
+		return true;
+	}
+
+	/**returns true if the two points lie along a horizontal or vertical line
+	 * @param pathPoint
+	 * @param pathPoint2
+	 * @return 
+	 */
+	private boolean areInLine(PathPoint pathPoint, PathPoint pathPoint2) {
+		if(pathPoint.isCurved())
+			{
+			return false;
+			}
+		if(pathPoint2.isCurved())
+			return false;
+		if(pathPoint.equals(pathPoint2))
+			return false;
+		
+		return true;
+	}
+	
+	public static void main(String[] args) {
+		Rectangle r = new Rectangle(40,40,50,50);
+		PathPointList list = PathPointList.createFromIterator(r.getPathIterator(new AffineTransform()));
+		
+		System.out.println(list.isRectangle());
+		
+		java.awt.geom.Ellipse2D.Double e = new Ellipse2D.Double(40,40,50,50);
+		PathPointList list2 = PathPointList.createFromIterator(e.getPathIterator(new AffineTransform()));
+		
+		System.out.println(list2.isRectangle());
 	}
 }

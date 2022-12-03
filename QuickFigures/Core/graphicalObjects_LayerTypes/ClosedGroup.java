@@ -204,7 +204,7 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	/**
 	 * 
 	 */
-	private GraphicLayerPane theLayerPane=new GraphicLayerPane("Group", this);
+	private GraphicLayerPane theLayerPane=new GraphicLayerPane("Group");
 				{theLayerPane.addLayerStructureChangeListener(this);}
 	
 	
@@ -231,6 +231,13 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 		for(LocatedObject2D tz: o2) 
 			{if(tz instanceof ZoomableGraphic)
 				getTheInternalLayer().add((ZoomableGraphic) tz);}
+	}
+	
+	/**creates a group*/
+	public ClosedGroup(String name, ArrayList<ZoomableGraphic> o2) {
+		theLayerPane=new GraphicLayerPane(name, o2);
+		theLayerPane.addLayerStructureChangeListener(this);
+		theLayerPane.ignoreHidden=false;
 	}
 
 	public static Color defaultFolderColor=new Color(200,180, 140);
@@ -534,6 +541,8 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	 * Removes the displacement transform
 	 */
 	public void removeDisplacement() {
+		if(tx==0&&ty==0)
+			return;
 		ArrayList<ZoomableGraphic> items = this.getTheInternalLayer().getAllGraphics();
 		for(ZoomableGraphic item: items) {
 			if(item instanceof LocatedObject2D) {

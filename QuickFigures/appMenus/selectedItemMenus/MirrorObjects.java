@@ -29,7 +29,9 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import logging.IssueLog;
 import messages.ShowMessage;
+import undo.CombinedEdit;
 import undo.UndoAddItem;
 import utilityClasses1.ArraySorter;
 
@@ -52,23 +54,50 @@ public class MirrorObjects extends BasicGraphicAdder {
 		ArrayList<ZoomableGraphic> objects = super.getSelector().getSelecteditems();
 		
 		ShapeGraphic s=null;
+		CombinedEdit c=new CombinedEdit();
+		
+		for(int i=0; i<objects.size(); i++) try {
+			ZoomableGraphic o = objects.get(i);
+			if(o instanceof ShapeGraphic) {
+				s=(ShapeGraphic) o;
+				ArrayList<ZoomableGraphic> objects2=new ArrayList<ZoomableGraphic>(); objects2.addAll(objects);
+				UndoAddItem createMirror = mirrowShapeToImagePanels(objects2, s);
+				if (createMirror!=null)
+					c.addEditToList(createMirror);
+				
+			}
+		} catch (Throwable t) {
+			IssueLog.logT(t);
+		}
+		
+		
+		
+		
+		super.addUndo(
+				c
+				);
+
+	}
+
+	/**
+	 * @param objects
+	 * @param s
+	 * @return
+	 */
+	public synchronized UndoAddItem mirrowShapeToImagePanels(ArrayList<ZoomableGraphic> objects, ShapeGraphic s) {
 		ImagePanelGraphic startPanel=null;
 		ArrayList<ImagePanelGraphic> otherPanels=new ArrayList<ImagePanelGraphic>();
 		
-		for(ZoomableGraphic o: objects) {
-			if(o instanceof ShapeGraphic) {
-				s=(ShapeGraphic) o;
-			}
-		}
+		
 		
 		if(s==null) {
-			ShowMessage.showOptionalMessage("A shape and multiple image panels must be selected");
-			return;
+			//ShowMessage.showOptionalMessage("A shape and multiple image panels must be selected");
+			return null;
 		}
 		
-		boolean proceed = ShowMessage.showOptionalMessage("mirror is a new experimental feature", true, "Do you wish to mirror the object "+s);
+		boolean proceed = ShowMessage.showOptionalMessage("mirror is a new experimental feature", false, "Do you wish to mirror the object "+s);
 		if(!proceed)
-			return;
+			return null;
 		
 		ArraySorter.removeThoseNotOfClass(objects, ImagePanelGraphic.class);
 		for(ZoomableGraphic o: objects) {
@@ -83,7 +112,7 @@ public class MirrorObjects extends BasicGraphicAdder {
 		
 		if( startPanel==null) {
 			ShowMessage.showOptionalMessage("A shape over an image panel must be selected");
-			return;
+			return null;
 		}
 		
 		objects.remove(startPanel);
@@ -92,10 +121,8 @@ public class MirrorObjects extends BasicGraphicAdder {
 			ShowMessage.showOptionalMessage("A shape and multiple image panels must be selected");
 		}
 		
-		super.addUndo(
-				createMirror(s, startPanel, otherPanels)
-				);
-
+		UndoAddItem createMirror = createMirror(s, startPanel, otherPanels);
+		return createMirror;
 	}
 
 	/**
