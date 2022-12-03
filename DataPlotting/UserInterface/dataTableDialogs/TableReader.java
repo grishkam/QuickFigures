@@ -69,4 +69,9 @@ public interface TableReader {
 	 */
 	Object getSheetName(int i);
 
+	/**
+	 * @return
+	 */
+	ArrayList<String> getColumnHeaders();
+
 }

@@ -206,6 +206,21 @@ public class ExcelTableReader implements TableReader {
 		
 		return count;
 	}
+	
+	@Override
+	public ArrayList<String> getColumnHeaders() {
+		Row row = sheet.getRow(0);
+		short count1 = row.getLastCellNum();
+		 ArrayList<String> ss=new ArrayList<String>();
+		 for(int i=0; i<count1; i++) {
+			 Object valueAt = this.getValueAt(0, i);
+			 if(valueAt==null)
+				 ss.add(i, "null");
+			 else  ss.add(i, valueAt+"");
+		 }
+		 
+		 return ss;
+	}
 
 	/***/
 	@Override
@@ -290,6 +305,20 @@ public class ExcelTableReader implements TableReader {
 	public Object getSheetName(int i) {
 		return workbook.getSheetAt(0).getSheetName();
 		
+	}
+	
+	/**
+	 * @return
+	 */
+	public static ExcelTableReader openExcelFile(File targetFile) {
+		if(targetFile==null)
+			return null;
+		if(!targetFile.exists())
+			return null;
+		if(targetFile.getAbsolutePath().endsWith(".xlsx"))
+			return new ExcelTableReader(targetFile);
+		IssueLog.log("The file is not an excel file", targetFile.getAbsolutePath(), "");
+		return null;
 	}
 	
 }

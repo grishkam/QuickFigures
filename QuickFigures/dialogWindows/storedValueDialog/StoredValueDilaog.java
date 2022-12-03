@@ -24,6 +24,8 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import javax.swing.JButton;
+
 import layout.RetrievableOption;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
@@ -118,6 +120,13 @@ public class StoredValueDilaog extends StandardDialog{
 					lastField=addFileField(d, of, f, o);
 				}
 				
+				Object object = f.get(of);
+				boolean b = object instanceof CustomSlot;
+				if(b) {
+					CustomSlot so=(CustomSlot) object;
+					so.addInput(d, o, so);
+				}
+				
 				}
 				
 				/**need option to add a choice*/
@@ -141,11 +150,10 @@ public class StoredValueDilaog extends StandardDialog{
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
 	 */
-	private static FileInput addFileField(StandardDialog d, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
-		String label = o.label();
-		FileInput fileInput1 = new FileInput(label, of, f, o);
-		d.add(o.key(), fileInput1);
-		return fileInput1;
+	public static FileInput addFileField(StandardDialog d, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
+		
+		return  new FileInput(d,of, f, o, null);
+		
 	}
 
 	/**Adds a choice field to a dialog
@@ -298,8 +306,14 @@ public class StoredValueDilaog extends StandardDialog{
 		private Field field;
 		private Object object;
 
-		public FileInput(String label, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
-			super(label, ""+ f.get(of), o.note());
+		public FileInput(StandardDialog d, Object of, Field f, RetrievableOption o, JButton extraButton) throws IllegalArgumentException, IllegalAccessException {
+			this(o.label(), of, f, o, extraButton);
+			d.add(o.key(), this);
+		}
+		
+		
+		public FileInput(String label, Object of, Field f, RetrievableOption o, JButton extraButton) throws IllegalArgumentException, IllegalAccessException {
+			super(label, ""+ f.get(of), o.note(),extraButton);
 			addStringInputListener(this);
 			this.field=f;
 			this.object=of;

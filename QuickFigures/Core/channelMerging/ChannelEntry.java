@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: Dec 4, 2022
  * Version: 2022.2
  */
 package channelMerging;
@@ -43,6 +43,11 @@ public class ChannelEntry implements Serializable{
 	
 	
 	private static final long serialVersionUID = 1L;
+	
+	public ChannelEntry(String label, int number) {
+		this(label, Color.black, number);
+	}
+	
 	public ChannelEntry(String label, Color c, int number) {
 		this.setLabel(label);
 		this.setColor(c);

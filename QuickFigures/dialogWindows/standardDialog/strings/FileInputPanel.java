@@ -48,6 +48,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 
 	static final String choose="No File";
 	private JButton selectContent=new JButton("Choose File");
+	private JButton extraButton=null;
 	File file=null;
 	private String searchIn="";
 	
@@ -55,11 +56,16 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	 * @param labeln
 	 * @param contend
 	 */
-	public FileInputPanel(String labeln, String contend, String searchForm) {
+	public FileInputPanel(String labeln, String contend, String searchForm, JButton eButton) {
 		super(labeln, contend);
+		extraButton=eButton;
+		
 		setup();
 		this.searchIn=searchForm;
+		
 	}
+	
+	
 	
 	/**
 	 * 
@@ -72,15 +78,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 				
 				file=FileChoiceUtil.getOpenFile(searchIn);
 				
-				if(file!=null)
-					field.setText(file.getAbsolutePath());
-				else {
-					field.setText(choose);
-					
-					
-				
-				
-				}
+				updateFieldToMatchFile(file);
 				
 				dispatchStringInputEvent();
 				
@@ -116,6 +114,10 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 		super.layItems(jp, x0, y0, gc);
 		gc.gridx++;
 		jp.add( selectContent, gc);
+		if(extraButton!=null) {
+			gc.gridx++;
+			jp.add( extraButton, gc);
+		}
 	}
 	
 	public File getFile() {
@@ -154,8 +156,10 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 			ArrayList<File> files = ForDragAndDrop.dropedFiles(dtde);
 			performFileListAction(files);
 			for(File f: files) {
-				performsingleFileAction(f);
+				if(f.exists())
+				performSingleFileAction(f);
 			}
+			dispatchStringInputEvent();
 			
 			return;
 			}
@@ -165,9 +169,9 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	/**
 	 * @param f
 	 */
-	private void performsingleFileAction(File f) {
-		getTextComponent().setText(f.getAbsolutePath());
-		dispatchStringInputEvent();
+	public void performSingleFileAction(File f) {
+		changeFile(f);
+		
 	}
 
 	/**
@@ -176,6 +180,25 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	private void performFileListAction(ArrayList<File> files) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	/**Changes the file*/
+	public void changeFile(File f) {
+		file=f;
+		updateFieldToMatchFile(f);
+	}
+	/**
+	 * @param file 
+	 * 
+	 */
+	public void updateFieldToMatchFile(File file) {
+		if(file!=null)
+			field.setText(file.getAbsolutePath());
+		else {
+			field.setText(choose);
+		}
 	}
 
 }

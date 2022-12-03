@@ -432,4 +432,10 @@ public class DataTable extends JTable implements TableReader {
 		return null;
 	}
 
+	@Override
+	public ArrayList<String> getColumnHeaders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
+import channelMerging.ChannelEntry;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
@@ -44,6 +45,7 @@ import plates.PlateOrientation;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import standardDialog.graphics.GraphicComponent;
+import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog;
 
 /**
@@ -74,10 +76,12 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public boolean flipGroup=false;
 	
 	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File 1 (.xlsx)", note="Excel")
-	public File templateFile=null;
+	public FileSlot templateFile=new FileSlot();
 	
 	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine with File2? (optional)", note="Excel")
-	public File templateFile2=null;
+	public FileSlot templateFile2=new FileSlot(templateFile);
+
+	
 	
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
 	public boolean rotatePlate=true;
@@ -85,8 +89,14 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	/**the names of the samples that will be seen in the spreadsheet */
 	@RetrievableOption(key = "show names", label="Preview sample names")
 	public boolean showSampleNames=false;
+	
+	
+	//@RetrievableOption(key = "sample", label="names are in col #")
+//public double getSampleNameIndex()=0;
+	
+	
 	@RetrievableOption(key = "sample", label="names are in col #")
-	public double sampleNameIndex=0;
+	public ColumnSlot col1=new ColumnSlot(templateFile);
 	
 	@RetrievableOption(key = "row shift", label="shift rows", category="special")
 	public double rowShift=0;
@@ -109,7 +119,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@Override
 	public void processTableAction(TableReader item, DataTableActionContext context) {
 		if(item!=null)
-			templateFile=new File( item.getOriginalSaveAddress());
+			setSampleListFile(new File( item.getOriginalSaveAddress()));
 		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this, "general");
 		GraphicComponent comp = new GraphicComponent();
 		GridBagConstraints gc = new GridBagConstraints();
@@ -148,6 +158,14 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	}
 
 	/**
+	 * @param file
+	 */
+	private void setSampleListFile(File file) {
+		templateFile.setFile(file);
+		
+	}
+
+	/**
 	 * 
 	 */
 	public void updatePlateDisplayAfterDialogChange() {
@@ -171,7 +189,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		Plate plate = createPlate();
 		
 		
-		TableReader item=openExcelFile(templateFile);
+		TableReader item=ExcelTableReader.openExcelFile(getSampleListFile());
+		
+		
+		
 		if(item==null)
 				try
 			{item=createExampleSheetForPlate(plate);}
@@ -179,33 +200,49 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			IssueLog.log("failed to create table");
 		}
 		
+		int columnCount = item.getColumnCount();
 		
-		ExcelTableReader secondTemplateTable = openExcelFile(templateFile2);
+			
+		
+		
+		ExcelTableReader secondTemplateTable = ExcelTableReader.openExcelFile(getSecondFile());
 		if(secondTemplateTable!=null) {
 			
 			item=combinePlates(item, secondTemplateTable);
-			sampleNameIndex=0;
-			if(item.getColumnCount()>colAddressColumnIndex)
-				colAddressColumnIndex=item.getColumnCount();
+			setSampleNameIndex(0);
+			if(columnCount>colAddressColumnIndex)
+				colAddressColumnIndex=columnCount;
 		}
 		
 		distributeExcelRowsToPlate(plate, item, createFile);
 		return plate;
 	}
 
+
+
+	/**
+	 * @param i
+	 */
+	private void setSampleNameIndex(int i) {
+		 col1.setIndex(i);
+		
+	}
+
 	/**
 	 * @return
 	 */
-	public ExcelTableReader openExcelFile(File templateFile) {
-		if(templateFile==null)
-			return null;
-		if(!templateFile.exists())
-			return null;
-		if(templateFile.getAbsolutePath().endsWith(".xlsx"))
-			return new ExcelTableReader(templateFile);
-		IssueLog.log("The file is not an excel file", templateFile.getAbsolutePath(), "");
-		return null;
+	public File getSampleListFile() {
+		return templateFile.getFile();
 	}
+
+	/**returns the file that will be combined with the first
+	 * @return
+	 */
+	public File getSecondFile() {
+		return templateFile2.getFile();
+	}
+
+	
 
 	/**
 	 * @param plate
@@ -214,12 +251,19 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 */
 	private TableReader createExampleSheetForPlate(Plate plate) throws IOException {
 		ExcelTableReader table = new ExcelTableReader();
-		table.setValueAt("Numbers", 0, (int)sampleNameIndex);
+		table.setValueAt("Numbers", 0, (int)getSampleNameIndex());
 		int nToFill = (int) (plate.getNRow()*plate.getNCol()/this.getNReplicates());
 		for(int i=1; i<nToFill+1; i++) {
-			table.setValueAt(i+"", i, (int)sampleNameIndex);
+			table.setValueAt(i+"", i, (int)getSampleNameIndex());
 		}
 		return table;
+	}
+
+	/**
+	 * @return
+	 */
+	private int getSampleNameIndex() {
+		return (int)col1.getIndex();
 	}
 
 	/**
@@ -266,7 +310,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 						output.setValueAt(secondTemplateTable.getValueAt(row2, col2), row3,shiftForward+ col2+transitionColumnIndex);
 					}
 					
-					String combined = ""+item.getValueAt(row1, (int) sampleNameIndex)+" "+'\n'+secondTemplateTable.getValueAt(row2, (int) sampleNameIndex);
+					String combined = ""+item.getValueAt(row1, (int) getSampleNameIndex())+" "+'\n'+secondTemplateTable.getValueAt(row2, (int) getSampleNameIndex());
 					output.setValueAt(combined,row3, 0);
 					output.setValueAt(count,row3, 1);
 					count++;
@@ -343,7 +387,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			}
 			PlateCell plateCell =currentPlate.getPlateCells().get(cellIndex-1);
 			plateCell.setSpreadSheetRow(i);
-			plateCell.setShortName(tableAssignment.getValueAt(i, (int) sampleNameIndex));
+			plateCell.setShortName(tableAssignment.getValueAt(i, (int) getSampleNameIndex()));
 			plateCell.setSpreadSheetRow(i);
 			plateCell.setSourceSheetName(tableAssignment.getSheetName(0)+"");
 			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());

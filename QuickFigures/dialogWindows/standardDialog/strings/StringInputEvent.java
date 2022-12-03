@@ -43,6 +43,10 @@ public class StringInputEvent extends ComponentInputEvent{
 		return inputString;
 	}
 
+	public String toString() {
+		return getInputString();
+	}
+	
 	
 	
 }

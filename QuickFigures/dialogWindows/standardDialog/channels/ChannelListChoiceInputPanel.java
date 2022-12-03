@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 1, 2022
+ * Date Modified: Dec 3, 2022
  * Date Created: Jan 10, 2021
  * Version: 2022.2
  */
@@ -55,6 +55,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	protected JLabel label=new JLabel();
 	protected ChanListBox box=new ChanListBox();
 	String noneSelectedLabel="none";
+	String use_none_option = "dont exclude any";
 	
 	boolean omitLabel=false;
 	
@@ -75,14 +76,31 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	private ArrayList<ChannelEntryMenuItem> items;
 	
 	
+	
+	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, ArrayList<Integer> start) {
+		this(labeln, availableChannels, start, "none selected");
+	}
+	
 	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, ArrayList<Integer> start, String alltext) {
-		currentValues=new ArrayList<Integer>();
 		label.setText(labeln);
+		this.noneSelectedLabel=alltext;
+		
+		setupChannelOptions(availableChannels, start);
+	}
+
+	/**
+	 * @param availableChannels
+	 * @param start
+	 */
+	public void setupChannelOptions(ArrayList<ChannelEntry> availableChannels, ArrayList<Integer> start) {
+		currentValues=new ArrayList<Integer>();
+		
 		this.setValues(start);
 		originalValues=this.currentValues;
-		this.noneSelectedLabel=alltext;
+		
 		items = new ArrayList<ChannelEntryMenuItem>();
-		items.add(new ChannelEntryMenuItem("dont exclude any"));
+		
+		items.add(new ChannelEntryMenuItem(use_none_option));
 		for(ChannelEntry entry: availableChannels) {
 			items.add(new ChannelEntryMenuItem(entry));
 			this.availableValues.add(entry.getOriginalChannelIndex());
@@ -98,9 +116,21 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 		
 		label.setText(labeln);
 		
-		this.setValues(start); this.maxChannelSelectable=1;//so that only one value is ever selected
-		originalValues=this.currentValues;
 		this.noneSelectedLabel=noneText;
+		use_none_option=noneText;
+		this.maxChannelSelectable=1;//so that only one value is ever selected
+		
+		setupForChannelList(availableChannels, start);
+	}
+
+	/**
+	 * @param availableChannels
+	 * @param start
+	 */
+	public void setupForChannelList(ArrayList<ChannelEntry> availableChannels, int start) {
+		this.setValues(start); 
+		originalValues=this.currentValues;
+		
 		items = new ArrayList<ChannelEntryMenuItem>();
 		items.add(new ChannelEntryMenuItem("none"));
 		for(ChannelEntry entry: availableChannels) {
@@ -275,8 +305,10 @@ public class ChanListBox extends JPanel implements MouseListener {
 		for(int i=0; i<maxLabel; i++) {
 			JLabel label1 = labels.get(i);
 			String text="";
-			if(noneLab&&i==0) text=noneSelectedLabel;
-			else if (noneLab) text=" ";
+			if(noneLab&&i==0)
+				text=noneSelectedLabel;
+			else if (noneLab) 
+				text=" ";
 			
 			label1.setText(text);
 			label1.setForeground(Color.black);
@@ -307,12 +339,32 @@ public class ChanListBox extends JPanel implements MouseListener {
 		resetLabels();
 		if(currentValues.size()>0) {
 			
+			ArrayList<ChannelEntryMenuItem> eachExcluded=new ArrayList<ChannelEntryMenuItem>();
+			
 			/**makes labels for this component match the channels selected*/
-			for(int i=0; i< maxLabel&&i<items.size(); i++) {
+			for(int i=0; i<items.size(); i++) {
 				ChannelEntryMenuItem item = items.get(i);
-				JLabel label1 = labels.get(i);
+				
 				if(item.isExcludedChannel())
 						{	
+					eachExcluded.add(item);
+								
+							
+							
+						}
+				
+				
+			}
+			
+			/**makes labels for this component match the channels selected*/
+			for(int i=0; i< maxLabel; i++) {
+				ChannelEntryMenuItem item =null;
+				if(i<eachExcluded.size()) 
+					item= eachExcluded.get(i);
+				JLabel label1 = labels.get(i);
+				if(item!=null&&item.isExcludedChannel())
+						{	
+					
 								String text =" "+ item.getText()+" ";
 								label1.setText(text);
 							

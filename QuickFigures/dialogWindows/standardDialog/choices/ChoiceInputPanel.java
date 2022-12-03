@@ -31,6 +31,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
+import channelMerging.ChannelEntry;
 import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
@@ -40,6 +41,7 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 
 	protected JLabel label=new JLabel();
 	protected JComboBox<? extends Object> box=new JComboBox<String>();
+	private JComboBox<String> box2;
 	protected AbstractButton  button;
 	
 	boolean omitLabel=false;
@@ -55,19 +57,52 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 	
 	
 	
+	
 	public ChoiceInputPanel(String labeln, String[] choices, int startingindex) {
-		JComboBox<String> box2 = new JComboBox<String>();
-		box=box2;
+		
 		label.setText(labeln);
+		
+		box2 = new JComboBox<String>();
+		box=box2;
+		changeOptions(choices, startingindex, true);
+		
+	}
+	
+	
+	public ChoiceInputPanel(String labeln, ArrayList<ChannelEntry> choices, int startingindex) {
+		
+		this(labeln, updateOptions(choices), startingindex);
+		
+	}
+
+	public static String[] updateOptions(ArrayList<ChannelEntry> ce) {
+		String[] sa = new String[ce.size()];
+		for(int i=0; i<ce.size(); i++) {
+			sa[i]=ce.get(i).getLabel();
+		}
+		return sa;
+	}
+
+	/**
+	 * @param choices
+	 * @param startingindex
+	 * @param box2
+	 */
+	public void changeOptions(String[] choices, int startingindex,  boolean listen) {
+		
+		box2.removeAllItems();
 		for(String c: choices) {
 			box2.addItem(c);
 		}
-		if (startingindex>=box2.getItemCount()) startingindex=0;
-		box2.setSelectedIndex(startingindex);
-		{box2.addItemListener(this);}
+		
+		if (startingindex>=box2.getItemCount()) 
+			startingindex=0;
+		if(box2.getItemCount()!=0)
+			box2.setSelectedIndex(startingindex);
+		if(listen)	{box2.addItemListener(this);}
+			
 		this.originalStatus=startingindex;
 		originalValues.add(startingindex);
-		
 	}
 	
 
