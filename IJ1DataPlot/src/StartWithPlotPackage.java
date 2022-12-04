@@ -99,7 +99,10 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 			
 		
 		for(ColumnPlotStyle plotform: ColumnPlotCreator.ColumnPlotStyle.values())
-			installer.installItem(new ExcelFileToBarPlot(plotform));
+			{
+			installer.installItem(new ExcelFileToBarPlot(plotform, true));
+			installer.installItem(new ExcelFileToBarPlot(plotform, false));
+			}
 		
 		for(xyPlotForm form:XYPlotCreator.xyPlotForm.values()) installer.installItem(new ExcelFileToXYPlot(form));
 		

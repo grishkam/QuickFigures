@@ -35,6 +35,10 @@ public class ColumnDataSeries extends AbstractDataSeries {
 	
 	ArrayList<LocalDataPoint> data=new ArrayList<LocalDataPoint> ();
 
+	public ColumnDataSeries(String string, Basic1DDataSeries data) {
+		this(string, data.getRawValues());
+	}
+	
 	public ColumnDataSeries(String string, ArrayList<? extends DataPoint> output) {
 		this.setName(string);
 		replaceData(output);

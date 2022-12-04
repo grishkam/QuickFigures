@@ -202,7 +202,7 @@ protected ArrayList<ColumnDataSeries> getNewDataSeriesFromUser() {
 @MenuItemMethod(menuActionCommand = "Add Data File", menuText = "New Data Series From Excel File", subMenuName="Data", orderRank=18)
 public CombinedEdit addDataSeriesFromFile() {
 	CombinedEdit cc = new CombinedEdit();
-	ColumnDataSeries[] datas = new ExcelFileToBarPlot(ColumnPlotCreator.ColumnPlotStyle.BAR_AND_SCATTER).getDataFromFile();
+	ColumnDataSeries[] datas = new ExcelFileToBarPlot(ColumnPlotCreator.ColumnPlotStyle.BAR_AND_SCATTER, false).getDataFromFile();
 	for(ColumnDataSeries data: datas)
 		cc.addEditToList(
 				addNew(data)

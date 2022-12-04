@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import dataSeries.Basic1DDataSeries;
 import dataSeries.BasicDataPoint;
+import dataSeries.ColumnDataSeries;
 import dataSeries.GroupedDataSeries;
 import dataSeries.XYDataSeries;
 
@@ -76,6 +77,19 @@ public class ExcelRowSubset extends ArrayList<Row> {
 		 
 		return out;
 		
+	}
+	
+	public Basic1DDataSeries createDataSeries( int colIndex) {
+		return  createDataSeries(name, colIndex);
+	}
+	
+	
+	public ColumnDataSeries createColumnDataSeries(int colIndex) {
+		return  new ColumnDataSeries(name, createDataSeries(name, colIndex));
+	}
+	
+	public ColumnDataSeries createColumnDataSeries(String name, int colIndex) {
+		return  new ColumnDataSeries(name, createDataSeries(name, colIndex));
 	}
 	
 	public Basic1DDataSeries createDataSeries(String name, int colIndex) {
