@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+
+import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
@@ -61,6 +63,7 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 		label.setText(labeln);
 		setChecked(b);
 		 originAlStatus=b;
+		
 	}
 	
 	
@@ -115,15 +118,15 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	}
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
-		if (arg0.getSource()==getCheckBox()) {
-			notigyListeners();
-		}
+			
+			notifyListeners();
+		
 		
 	}
 	/**
 	notifies the listeners of a change
 	 */
-	private void notigyListeners() {
+	private void notifyListeners() {
 		BooleanInputEvent bi = new BooleanInputEvent(this, getCheckBox(), getCheckBox().isSelected());
 		bi.setKey(key);
 		this.notifyListeners(bi);
@@ -131,6 +134,7 @@ public class BooleanInputPanel extends InputPanel implements OnGridLayout, ItemL
 	void notifyListeners(BooleanInputEvent bi) {
 		for(BooleanInputListener l:lis) {
 			l.booleanInput(bi);
+			
 		}
 	}
 	

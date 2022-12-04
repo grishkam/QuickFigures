@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 3, 2022
+ * Date Modified: Dec 4, 2022
  * Version: 2022.2
  */
 package objectDialogs;
@@ -171,6 +171,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	/**the stroke color for the rectangle*/
 	private Color rectangleStrokeColor=new Color(200, 200, 250);
 	
+	/**the orignal crop area*/
 	private PreProcessInformation startingCrop;
 
 	private Rectangle reccomendedRectangle;
@@ -194,7 +195,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	/**lists for the inset rects*/
 	private ArrayList<PanelGraphicInsetDefiner> panelInsetList=new  ArrayList<PanelGraphicInsetDefiner>();
 	private ArrayList<RectangularGraphic> insetrepresenations=new ArrayList<RectangularGraphic>();
-	@RetrievableOption(key = "Update inset locations after crop", label="Update inset locations after crop")
+
+	private GraphicLayerPane ghost=new GraphicLayerPane("ghost");
+	
+	@RetrievableOption(key = "Maintain inset locations", label="Maintain inset locations")
 	public static boolean updateInsets=false;//set to true if insets should be moved
 
 	//is set to true/false depending on if the user hits cancel for a crop dialog
@@ -264,11 +268,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			RectangularGraphic r3 =mapInsetLocationToRectCropArea( s.getModifications(),i); //
 				//r3=	i.mapRectBackToUnprocessedVersion(s.getModifications());
 			insetrepresenations.add(r3);
-			
-			
-			
-			this.addExtraItem(r3);
+
 		}
+		
+		this.addExtraItem(createGhost(insetrepresenations));
 		
 		 objectList = s.getUnprocessedVersion(false).getOverlayObjects("  ");
 		
@@ -285,6 +288,48 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		}
 	}
 	
+	/**
+	 * @param insetrepresenations2
+	 * @return
+	 */
+	private ZoomableGraphic createGhost(ArrayList<RectangularGraphic> insetrepresenations2) {
+		GraphicLayerPane gl = new GraphicLayerPane("ghost");
+		for(RectangularGraphic i:insetrepresenations2 )
+			gl.addItemToLayer(i.copy());
+		 updateGhost();
+		this.ghost=gl;
+		return gl;
+	}
+	
+	/**
+	 * updates the ghost
+	 */
+	private void updateGhost() {
+		
+		OverlayObjectList oo = new OverlayObjectList();
+		
+		for(RectangularGraphic i:insetrepresenations )
+			{
+				RectangularGraphic copy = i.copy();
+				i.setStrokeColor(new Color(250,250, 250, 150));
+				oo.addItemToLayer(copy);
+			}
+		
+		if(!updateInsets) {
+				oo=oo.cropOverlayAtAngle(oo, this.startingCrop, false);
+				
+				RectangularGraphic r = getRectangle();
+				if(r==null)
+					return;
+				ScaleInformation scaleInformation=new ScaleInformation();
+				PreProcessInformation pp = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), scaleInformation);
+				oo=oo.cropOverlayAtAngle(oo, pp, true);
+		}
+		ghost.removeItemsWithoutNotificaiton();
+		ghost.addItemToLayer(oo);
+		
+	}
+
 	private void addExtraItem(ZoomableGraphic r3) {
 		extraItems.add(r3);
 		
@@ -515,6 +560,14 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		this.add(ALLOW_OUT_KEY, new BooleanInputPanel("Permit out of bounds crop", outofBoundsCrop));
 		StoredValueDilaog.addFieldsForObject(this, this);
 		
+		this.addDialogListener(new StandardDialogListener() {
+
+			@Override
+			public void itemChange(DialogItemChangeEvent event) {
+					updateGhost();
+				repaint();
+			}});
+		
 		toolbarPanel = new MiniToolBarPanel(new CropDialogAssist(this));
 		add(toolbarPanel);
 		
@@ -672,7 +725,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		setFieldsToRect();
 		deselectObjects();
 		setSelectedObject(this.cropAreaRectangle);
-
+		updateGhost();
 		
 		this.onOK();
 		panel.repaint();
@@ -690,7 +743,10 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		cropAreaRectangle.setRectangle(rect2.getRectangle());
 		cropAreaRectangle.setAngle(rect2.getAngle());
 		cropAreaRectangle.setLocationType(rect2.getLocationType());
+		updateGhost();
 	}
+
+
 
 
 	/**Returns true if the current crop rectangle is valid. If the rectangle is partly outside the image, this will return false*/
@@ -764,6 +820,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	@Override 
 	public void booleanInput(BooleanInputEvent be) {
+		super.booleanInput(be);
 		this.outofBoundsCrop=this.getBoolean(ALLOW_OUT_KEY);
 	}
 
@@ -1077,14 +1134,14 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 	}
 
-	/**
+	/**moves the insets
 	 * @param crop
 	 * @param process
 	 * @return 
 	 */
 	public static CombinedEdit updateInsets(CroppingDialog crop, PreProcessInformation process) {
 		/**updates the location of insets*/
-		if(crop.updateInsets) {
+		if(updateInsets) {
 			CombinedEdit c=new CombinedEdit();
 			for(int i=0; i<crop.insetrepresenations.size(); i++) try {
 				RectangularGraphic is = crop.insetrepresenations.get(i);

@@ -397,6 +397,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		st.addBooleanInputListener(this);
 		st.setKey(key);
 		place(st);
+		
 	}
 		
 	public boolean getBoolean(String key) {
@@ -663,7 +664,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	@Override
 	public void booleanInput(BooleanInputEvent bie) {
 		notifyAllListeners(bie.getSourcePanel(), bie.getKey());
-		
+	
 	}
 
 	@Override

@@ -258,7 +258,9 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 		
 	}
 	
-
+ public void removeItemsWithoutNotificaiton() {
+	 theGraphics.clear();
+ }
 
 	public void removeItemFromLayer(ZoomableGraphic z) {
 		if (z instanceof KnowsParentLayer) {
