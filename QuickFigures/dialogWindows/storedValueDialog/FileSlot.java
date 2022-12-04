@@ -83,11 +83,12 @@ public class FileSlot implements CustomSlot, StringInputListener {
 		File f2 = this.getFile();
 		this.setFile(f1);
 		sister.setFile(f2);
+		this.lastInput.dispatchStringInputEvent();
 	}
 
 	@Override
 	public void stringInput(StringInputEvent sie) {
-		IssueLog.log(sie);
+		
 		
 	}
 

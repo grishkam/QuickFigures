@@ -210,16 +210,27 @@ public class ExcelTableReader implements TableReader {
 	@Override
 	public ArrayList<String> getColumnHeaders() {
 		Row row = sheet.getRow(0);
+		ArrayList<String> ss = getAllColumnHeaders(row);
+		 
+		 return ss;
+	}
+
+	/**returns the column headers
+	 * @param row
+	 * @return
+	 */
+	public static ArrayList<String> getAllColumnHeaders(Row row) {
 		short count1 = row.getLastCellNum();
 		 ArrayList<String> ss=new ArrayList<String>();
 		 for(int i=0; i<count1; i++) {
-			 Object valueAt = this.getValueAt(0, i);
+			 Object valueAt = null;//this.getValueAt(0, i);
+			 Cell cell = row.getCell(i);
+				if(cell!=null)valueAt =ReadExcelData.getObjectInCell(cell);
 			 if(valueAt==null)
 				 ss.add(i, "null");
 			 else  ss.add(i, valueAt+"");
 		 }
-		 
-		 return ss;
+		return ss;
 	}
 
 	/***/

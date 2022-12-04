@@ -95,15 +95,27 @@ public class ExcelRowSubset extends ArrayList<Row> {
 	/**Looks in columns, creates an xy data series from 
 	  the first numeric columns it finds */
 	public ArrayList<XYDataSeries> createXYDataSeries(int categoryCol) { 
+		
+		int xCol=findFirstNumericColIndex();
+		int yCol=xCol+1;
+		
+		return createXYDataSeries(xCol, yCol, categoryCol);
+	
+	}
+
+	/**
+	 * @param xCol
+	 * @param yCol
+	 * @param categoryCol
+	 * @return
+	 */
+	public ArrayList<XYDataSeries> createXYDataSeries(int xCol, int yCol, int categoryCol) {
 		ArrayList<XYDataSeries> xx=new ArrayList<XYDataSeries>();
-		int col1=findFirstNumericColIndex();
-		int col2=col1+1;
 		ArrayList<ExcelRowSubset> sets = this.createSubsetsBasedOnColumn(categoryCol);
 		for(ExcelRowSubset set: sets) {
-			xx.add(set.createXYDataSeries(set.name, col1, col2));
+			xx.add(set.createXYDataSeries(set.name, xCol, yCol));
 		}
 		return xx;
-	
 	}
 	
 	/**Creates category data series, Divides this into 

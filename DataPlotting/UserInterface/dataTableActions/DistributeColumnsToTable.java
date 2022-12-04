@@ -96,7 +96,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	
 	@RetrievableOption(key = "sample", label="names are in col #")
-	public ColumnSlot col1=new ColumnSlot(templateFile);
+	public ColumnSlotList col1=new ColumnSlotList(
+			new ColumnSlot(templateFile, new ChannelEntry("first column", 0)),
+			new ColumnSlot(templateFile, new ChannelEntry("next column", 1))
+				);
 	
 	@RetrievableOption(key = "row shift", label="shift rows", category="special")
 	public double rowShift=0;
@@ -224,7 +227,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * @param i
 	 */
 	private void setSampleNameIndex(int i) {
-		 col1.setIndex(i);
+		 col1.setIndex(0,i);
 		
 	}
 
@@ -263,7 +266,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * @return
 	 */
 	private int getSampleNameIndex() {
-		return (int)col1.getIndex();
+		return (int)col1.getIndex(0);
 	}
 
 	/**

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 3, 2022
+ * Date Modified: Dec 4, 2022
  * Date Created: Jan 10, 2021
  * Version: 2022.2
  */
@@ -74,6 +74,8 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	public ArrayList<Integer> availableValues=new ArrayList<Integer>();
 	
 	private ArrayList<ChannelEntryMenuItem> items;
+	private boolean invert;
+	private boolean useStrike;
 	
 	
 	
@@ -102,7 +104,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 		
 		items.add(new ChannelEntryMenuItem(use_none_option));
 		for(ChannelEntry entry: availableChannels) {
-			items.add(new ChannelEntryMenuItem(entry));
+			items.add(createMenuItemFor(entry));
 			this.availableValues.add(entry.getOriginalChannelIndex());
 		}
 		
@@ -112,8 +114,9 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	}
 	
 	/**constructor for a single value version of the combo box*/
-	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, int start, String noneText) {
-		
+	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, int start, String noneText, boolean invert) {
+		this.invert=invert;
+		this.useStrike=!invert;
 		label.setText(labeln);
 		
 		this.noneSelectedLabel=noneText;
@@ -134,13 +137,26 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 		items = new ArrayList<ChannelEntryMenuItem>();
 		items.add(new ChannelEntryMenuItem("none"));
 		for(ChannelEntry entry: availableChannels) {
-			items.add(new ChannelEntryMenuItem(entry));
+			items.add(createMenuItemFor(entry));
 			this.availableValues.add(entry.getOriginalChannelIndex());
 		}
 		
 		/**called so a separate array list stores the current and the originala*/
 		this.setValues(start);
 		box.resetLabels();
+		
+	}
+
+	/**
+	 * @param entry
+	 * @return
+	 */
+	public ChannelEntryMenuItem createMenuItemFor(ChannelEntry entry) {
+		ChannelEntryMenuItem channelEntryMenuItem = new ChannelEntryMenuItem(entry);
+		
+			channelEntryMenuItem.invert=invert;
+			channelEntryMenuItem.useStrike=this.useStrike;
+		return channelEntryMenuItem;
 	}
 	
 

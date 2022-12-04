@@ -49,16 +49,28 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	private FileInput inputPanel;
 	private ArrayList<ChannelEntry> channelsAvailable;
 	private ChannelListChoiceInputPanel cip;
-	private double indexCol;
+	
+	
+	private ChannelEntry theDefault;
 	private ChannelEntry chosen;
-	private int indexChosen;
+	private String keyword=null;
+	private String label=null;
 
 	/**
 	 * @param templateFile
 	 */
-	public ColumnSlot(FileSlot templateFile) {
+	public ColumnSlot(FileSlot templateFile, String key) {
 		fileOrigin=templateFile;
 		setupInputPanel();
+		
+	}
+	
+	/**
+	 * @param templateFile
+	 */
+	public ColumnSlot(FileSlot templateFile, ChannelEntry theDefault) {
+		this(templateFile, theDefault.getLabel());
+		this.theDefault=theDefault;
 	}
 
 	/**
@@ -70,23 +82,35 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 			inputPanel.addStringInputListener(this);
 	}
 
+	/**updats the choices after input of a new file*/
 	@Override
 	public void stringInput(StringInputEvent sie) {
 		updateFromChosenFile();
-		cip.setupChannelOptions(channelsAvailable, new ArrayList<Integer>());
-		
-
-		
-		
+		ArrayList<Integer> start = new ArrayList<Integer>();
+		start.add(this.getDefaultStartIndex());
+		cip.setupChannelOptions(channelsAvailable, start);
+	
 	}
 
 	/**
-	 * 
+	 * updates the channel options in response to new file input
 	 */
 	public void updateFromChosenFile() {
 		
 		File file = inputPanel.getFile();
 		useExcelFile(file);
+		
+	}
+	
+	/**
+	 *  updates the channel options in response to existing file
+	 */
+	public void updateFromFile() {
+		
+		File file = fileOrigin.getFile();
+		IssueLog.log("   file is "+file);
+		useExcelFile(file);
+		
 	}
 
 	/**
@@ -96,21 +120,39 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 		
 		ExcelTableReader data = ExcelTableReader.openExcelFile(file);
 		channelsAvailable = getColumnHeaders(data);
+			
 	}
 
 	@Override
 	public void addInput(StandardDialog d, RetrievableOption o, CustomSlot so) {
+		useExcelFile(fileOrigin.getFile());
+		 String label = this.getLabel();
+		 if(label==null)
+			 label=o.label();
+		 String key = o.key();
+		 
+		addFieldToDialog(d, label, key, getDefaultStartIndex());
+
+	}
+
+	/**
+	 * @param d
+	 * @param label
+	 * @param key
+	 */
+	public void addFieldToDialog(StandardDialog d, String label, String key, int start) {
 		setupInputPanel();
 		try {
-			updateFromChosenFile();
-			 cip = new ChannelListChoiceInputPanel(o.label(), channelsAvailable,
-					0, "None" );
+			updateFromFile();
+			
+			cip = new ChannelListChoiceInputPanel(label, channelsAvailable,
+					start, "None", true );
 			 cip.addChoiceInputListener(this);
-			d.add(o.key(), cip);
+			
+			d.add(key, cip);
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}
-
 	}
 	
 	/**
@@ -139,11 +181,11 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 
 	@Override
 	public void valueChanged(ChoiceInputEvent ne) {
-		indexCol=ne.getChoiceIndex();
+		
 		if(channelsAvailable!=null&&channelsAvailable.size()>0) {
 			chosen=channelsAvailable.get((int) ne.getChoiceIndex());
-			indexChosen=chosen.getOriginalChannelIndex();
-			indexCol=indexChosen;
+			
+			
 		}
 	}
 
@@ -151,7 +193,8 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	 * @param i
 	 */
 	public void setIndex(int i) {
-		indexCol=i;
+		
+		chosen=new ChannelEntry("", i);
 		
 	}
 
@@ -160,8 +203,43 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	 * 
 	 */
 	public double getIndex() {
-		return indexCol;
+		if(chosen!=null)
+			return chosen.getOriginalChannelIndex();
+		return getDefaultStartIndex();
 		
+	}
+
+	/**
+	 * @return
+	 */
+	public int getDefaultStartIndex() {
+		if(this.theDefault!=null)
+			return theDefault.getOriginalChannelIndex();
+		return 0;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setKeyword(String string) {
+		keyword=string;
+		
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setLabel(String string) {
+		this.label=string;
+		
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public String getKeyword() {
+		return keyword;
 	}
 
 }

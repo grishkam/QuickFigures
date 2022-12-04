@@ -326,7 +326,8 @@ public class StoredValueDilaog extends StandardDialog{
 		public void stringInput(StringInputEvent  ne) {
 			try {
 				File inputFile = new File(ne.getInputString());
-				
+				if(ne.getInputString().equals(FileInputPanel.chooseNothing))
+					inputFile=null;
 				{field.set(object, inputFile);}
 				
 			} catch (Exception e) {

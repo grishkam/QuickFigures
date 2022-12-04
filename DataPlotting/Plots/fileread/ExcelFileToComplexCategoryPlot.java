@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import applicationAdapters.DisplayedImage;
+import channelMerging.ChannelEntry;
 import dataSeries.ColumnDataSeries;
 import dataSeries.GroupedDataSeries;
+import dataTableActions.MakePlotFromTable;
 import logging.IssueLog;
 import plotCreation.GroupedPlotCreator;
 
@@ -61,12 +63,20 @@ public class ExcelFileToComplexCategoryPlot extends  ExcelDataImport {
 		}
 	}
 
-
+	
 	public void createPlotFromFileExcelFile(DisplayedImage diw, File f)
+			throws InvalidFormatException, IOException { 
+		MakePlotFromTable pm = new MakePlotFromTable(f, new String[] {"Subset Column","Category Column", "Values"});
+		pm.showSelectionDialog();
+		
+		createPlotFromFileExcelFile(diw, f, pm.columnsChosen.getIndex("Subset Column"),  pm.columnsChosen.getIndex("Category Column"), pm.columnsChosen.getIndex("Values"));
+	}
+
+	public void createPlotFromFileExcelFile(DisplayedImage diw, File f, int subsetcol, int groupCol, int numberCol)
 			throws InvalidFormatException, IOException {
 		ExcelRowSubset subset = new ExcelRowSubset(ReadExcelData.fileToWorkBook(f.getAbsolutePath()));
 		
-		ArrayList<GroupedDataSeries> items = subset.createCategoryDataSeries(0, 1, 2);//ReadExcelData.readXY(f.getAbsolutePath());
+		ArrayList<GroupedDataSeries> items = subset.createCategoryDataSeries(subsetcol, groupCol, numberCol);//ReadExcelData.readXY(f.getAbsolutePath());
 		IssueLog.log("creating file from "+items.size());
 		String name=f.getName().split("\\.")[0];
 		

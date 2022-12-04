@@ -36,7 +36,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
-import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.ForDragAndDrop;
 
@@ -46,7 +45,7 @@ import ultilInputOutput.ForDragAndDrop;
  */
 public class FileInputPanel extends StringInputPanel implements  DropTargetListener{
 
-	static final String choose="No File";
+	public static final String chooseNothing="No File";
 	private JButton selectContent=new JButton("Choose File");
 	private JButton extraButton=null;
 	File file=null;
@@ -88,7 +87,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	}
 
 	public FileInputPanel(String labeln) {
-		super(labeln, choose);
+		super(labeln, chooseNothing);
 		setup();
 	}
 
@@ -197,7 +196,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 		if(file!=null)
 			field.setText(file.getAbsolutePath());
 		else {
-			field.setText(choose);
+			field.setText(chooseNothing);
 		}
 	}
 

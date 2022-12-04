@@ -20,10 +20,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import applicationAdapters.DisplayedImage;
 import dataSeries.ColumnDataSeries;
 import dataSeries.XYDataSeries;
+import dataTableActions.MakePlotFromTable;
+import dataTableDialogs.ExcelTableReader;
 import plotCreation.XYPlotCreator;
 
 public class ExcelFileToXYPlot extends ExcelDataImport{
@@ -53,10 +56,23 @@ public class ExcelFileToXYPlot extends ExcelDataImport{
 			File f=getFileAndaddExtension();
 			if (f==null) return;
 			
-			ExcelRowSubset subset = new ExcelRowSubset(ReadExcelData.fileToWorkBook(f.getAbsolutePath()));
+			Workbook fileToWorkBook = ReadExcelData.fileToWorkBook(f.getAbsolutePath());
+			ArrayList<String> headers = ExcelTableReader.getAllColumnHeaders(fileToWorkBook.getSheetAt(0).getRow(0));
+			ExcelRowSubset subset = new ExcelRowSubset(fileToWorkBook);
 			
 			
-			ArrayList<XYDataSeries> items = subset.createXYDataSeries(0);//ReadExcelData.readXY(f.getAbsolutePath());
+			ArrayList<XYDataSeries> items=null;
+			if(headers.size()==3)
+				items = subset.createXYDataSeries(0);//ReadExcelData.readXY(f.getAbsolutePath());
+			else {
+				MakePlotFromTable pm = new MakePlotFromTable(f, new String[] {"name","x", "y"});
+				pm.showSelectionDialog();
+				
+				items = subset.createXYDataSeries(pm.columnsChosen.getIndex("x"), pm.columnsChosen.getIndex("y"), pm.columnsChosen.getIndex("name"));
+			
+			
+			}
+			
 			String name=f.getName().split("\\.")[0];
 			
 			createPlot(name, items, diw);

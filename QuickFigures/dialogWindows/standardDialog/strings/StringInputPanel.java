@@ -34,7 +34,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
@@ -196,7 +195,7 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	/**
 	  notified the listeners of the event
 	 */
-	protected void dispatchStringInputEvent() {
+	public void dispatchStringInputEvent() {
 		StringInputEvent e = new StringInputEvent(this, this.getTextComponent(), this.getTextFromField());
 		e.setKey(key);
 		this.notifyLiseners(e);
