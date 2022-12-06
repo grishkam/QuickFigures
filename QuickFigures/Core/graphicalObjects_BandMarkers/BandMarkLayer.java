@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.JMenu;
 
@@ -41,6 +42,7 @@ import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
 import graphicTools.AttachedItemTool2;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -49,6 +51,7 @@ import handles.HandleListFilter;
 import handles.RectangularShapeSmartHandle;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import layout.BasicObjectListHandler;
 import locatedObject.ArrayObjectContainer;
 import locatedObject.AttachedItemList;
 import locatedObject.AttachmentPosition;
@@ -59,6 +62,9 @@ import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import popupMenusForComplexObjects.DonatesMenu;
 import undo.CombinedEdit;
+import undo.Edit;
+import undo.UndoAbleEditForRemoveItem;
+import undo.UndoAddItem;
 import undo.UndoAttachmentPositionChange;
 import undo.UndoMoveItems;
 
@@ -176,12 +182,11 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 		int nMarks= (int) markOptions.nMarks;
 		double x=r.getMinX();
 		double y=r.getMinY();
-		double yStep = r.getWidth()/nMarks;
+		double yStep = r.getHeight()/nMarks;
 		map= new HashMap<TextGraphic, ArrowGraphic>();
 		at = AttachmentPosition.defaultRowLabel();
 		for(int i=0; i<nMarks; i++) {
 			double yPosition = y+i*yStep;
-			//String description2 = "Mark "+i;
 			String description2 = MarkLabelCreationOptions.determineTextForLabel(i+1, markOptions);
 			createBandMark(x, yPosition, description2, null, null, 20);
 		}
@@ -191,6 +196,40 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 
 
 	@MenuItemMethod(menuText = "Add new mark")
+	public UndoAddItem createMark(CanvasMouseEvent c) {
+		TextGraphic mark = createBandMarkFromPoint(c);
+		return new UndoAddItem(mark.getParentLayer(), mark);
+	}
+	
+	@MenuItemMethod(menuText = "Remove this mark")
+	public CombinedEdit removeMark(CanvasMouseEvent c) {
+		BasicObjectListHandler oh=new BasicObjectListHandler();
+		ArrayList<LocatedObject2D> marks = oh.getAllClickedRoi(c.getAsDisplay().getImageAsWorksheet(), c.getCoordinateX(), c.getCoordinateY(),Object.class, true);
+		if (marks.size()==1)
+			return null;
+		LocatedObject2D o = marks.get(0);
+		if(map.keySet().contains(o)) {
+			return new CombinedEdit(Edit.removeItem((ZoomableGraphic) o), Edit.removeItem(map.get(o)));
+		}
+		Collection<ArrowGraphic> values = map.values();
+		if(values.contains(o)) {
+			Set<TextGraphic> keys = map.keySet();
+			for(TextGraphic v: keys) {
+				if(map.get(v)==o) {
+					return new CombinedEdit(Edit.removeItem((ZoomableGraphic) o), Edit.removeItem(v));
+				}
+			}
+			
+		}
+		
+		return null;
+	}
+	
+	@MenuItemMethod(menuText = "Remove marks", orderRank=5)
+	public UndoAbleEditForRemoveItem removeAllMark(CanvasMouseEvent c) {
+		return Edit.removeItem(this);
+	}
+	
 	public TextGraphic createBandMarkFromPoint(CanvasMouseEvent c) {
 		Point point = c.getCoordinatePoint();
 		ArrowGraphic modelA = null;
@@ -202,6 +241,8 @@ public class BandMarkLayer extends GraphicLayerPane implements  HandleListFilter
 		this.snapLockedItems();
 		return output;
 	}
+	
+	
 	
 	/**
 	 * @param x

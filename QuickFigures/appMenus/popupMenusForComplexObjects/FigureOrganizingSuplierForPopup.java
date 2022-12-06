@@ -90,6 +90,7 @@ import undo.AbstractUndoableEdit2;
 import undo.CanvasResizeUndo;
 import undo.ChannelDisplayUndo;
 import undo.CombinedEdit;
+import undo.Edit;
 import undo.PreprocessChangeUndo;
 import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
@@ -654,9 +655,9 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	public CombinedEdit addBandMarkLabel(CanvasMouseEvent me) {
 		MarkLabelCreationOptions markOptions=new MarkLabelCreationOptions();
 		CombinedEdit output=new CombinedEdit();
-		boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band marks are a work in progress. They may be change in later versions.", "They are for gel and blot", "Are you sure you want to try them?");
-		if(!decision)
-			return null;
+		//boolean decision = ShowMessage.showOptionalMessage("work in progress ", false, "Band marks are a work in progress. They may be change in later versions.", "They are for gel and blot", "Are you sure you want to try them?");
+		//if(!decision)
+		//	return null;
 		Point point = me.getCoordinatePoint();
 		DefaultLayoutGraphic thelayout = figureOrganizingLayerPane.getMontageLayoutGraphic();
 		output.addEdit(new UndoLayoutEdit(thelayout));
@@ -668,12 +669,13 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 					}
 		}
 		BandMarkLayer pa = new BandMarkLayer(panel);
-		this.figureOrganizingLayerPane.add(pa);
+		output.addEditToList(
+				Edit.addItem(figureOrganizingLayerPane, pa));
+		
 		 MarkLabelCreationOptions.showLaneLabelDialog( markOptions);
 		pa.createBandMarks(panel.getFrameRect(),  markOptions);
 		thelayout .getEditor().expandSpacesToInclude(thelayout.getPanelLayout(), pa.fulloutline());
 		
-		output.addEdit( new UndoAddItem(figureOrganizingLayerPane, pa));
 		Point2D locF = thelayout.getLocationUpperLeft();
 		try {
 			pa.moveObjects(thelayout.getPanelLayout().getPanel(1).getMinX()-pa.fulloutline().getMaxX(),0);

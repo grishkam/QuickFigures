@@ -70,13 +70,11 @@ import layout.RetrievableOption;
 import locatedObject.LocatedObject2D;
 import locatedObject.RectangleEdges;
 import locatedObject.Selectable;
-import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
 import messages.ShowMessage;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import standardDialog.booleans.BooleanInputEvent;
-import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputEvent;
 import standardDialog.graphics.GraphicComponent;
 import standardDialog.numbers.AngleInputPanel;
@@ -86,10 +84,7 @@ import standardDialog.strings.ButtonPanel;
 import standardDialog.strings.CombindedInputPanel;
 import standardDialog.strings.InfoDisplayPanel;
 import storedValueDialog.StoredValueDilaog;
-import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
-import undo.EditListener;
-import undo.UndoScalingAndRotation;
 
 /**a dialog for setting the crop area for a multi dimensional image.
  * Can also be used to set a crop area for one or more image panels.*/
@@ -97,11 +92,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 
 	
 
-	/**String key for the field that presents the user withan option to permit crop areas that extend beyond the image.
-	 */
-	private static final String ALLOW_OUT_KEY = "allow out";
-
-	public static final String cropAreaRectName="Crop area rectangle for image";;
+	public static final String cropAreaRectName="Crop area rectangle for image";
 
 	/**
 	 * 
@@ -181,8 +172,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	/**set to true if this dialog changes the scale as well*/
 	public boolean changeScale=false;
 
-	/**set to true if the user is not precented from setting an out of bounds crop area*/
-	private boolean outofBoundsCrop=false;
+	
 
 	OverlayObjectList objectList=new OverlayObjectList();
 
@@ -196,10 +186,17 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	private ArrayList<PanelGraphicInsetDefiner> panelInsetList=new  ArrayList<PanelGraphicInsetDefiner>();
 	private ArrayList<RectangularGraphic> insetrepresenations=new ArrayList<RectangularGraphic>();
 
+	/**A list of objects that demonstrate where the insets will be after the crop*/
 	private GraphicLayerPane ghost=new GraphicLayerPane("ghost");
+	
+	/**set to true if the user is not precented from setting an out of bounds crop area*/
+	@RetrievableOption(key = "Permit Out of Bounds Crop", label="Permit Out of Bounds Crop")
+	private boolean outofBoundsCrop=false;
 	
 	@RetrievableOption(key = "Maintain inset locations", label="Maintain inset locations")
 	public static boolean updateInsets=false;//set to true if insets should be moved
+	
+
 
 	//is set to true/false depending on if the user hits cancel for a crop dialog
 	public static boolean lastUserCancel=false;
@@ -557,7 +554,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		super.add("ZoomI", zoomLevelPanel);
 		
 		
-		this.add(ALLOW_OUT_KEY, new BooleanInputPanel("Permit out of bounds crop", outofBoundsCrop));
+		
 		StoredValueDilaog.addFieldsForObject(this, this);
 		
 		this.addDialogListener(new StandardDialogListener() {
@@ -821,7 +818,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	@Override 
 	public void booleanInput(BooleanInputEvent be) {
 		super.booleanInput(be);
-		this.outofBoundsCrop=this.getBoolean(ALLOW_OUT_KEY);
+		
 	}
 
 	@Override
