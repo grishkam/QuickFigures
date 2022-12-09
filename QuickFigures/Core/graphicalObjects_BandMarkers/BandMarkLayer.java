@@ -550,9 +550,12 @@ public class BandRightAlignHandle extends SmartHandle {
  moves the text items into position relative to the bands
  */
 protected void snapLockedItems() {
+	if(map==null)
+		return;
 	for(TextGraphic text: map.keySet()) {
 		ArrowGraphic arrow = map.get(text);
-		
+		if(arrow==null)
+			continue;
 		text.getAttachmentPosition().snapObjectToRectangle(text, arrow.getBounds());
 		
 		
