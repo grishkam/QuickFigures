@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 16, 2022
- * Date Modified: May 26, 2022
+ * Date Modified: Dec 10, 2022
  * Version: 2022.2
  */
 package plateDisplay;
@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
@@ -56,6 +57,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	
 	private boolean showSampleNames=false;
 	private boolean trimIdenticalSections=false;
+	private HashMap<PlateCell, RectangularGraphic> cellMap=new HashMap<PlateCell, RectangularGraphic>();
 	
 	/**
 	 * @param name
@@ -82,15 +84,17 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		for(ZoomableGraphic g: this.getAllGraphics()) {
 			this.remove(g);
 		}
+		cellMap.clear();
 	}
 	
 	/**draws the layer*/
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
-		this.updatePlateDisplay();
+		//this.updatePlateDisplay();
 		super.draw(graphics, cords);
 	}
 	
+	/**updates the plate display based on new settings to the plate configuration*/
 	public void updatePlateDisplay() {
 		empty() ;
 		int cellWidth = width/plate.getNCol();
@@ -102,16 +106,16 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		this.add(layoutGraphic);
 		int font =5;
 		//new AddLabelHandle(layoutGraphic, AddLabelHandle.ROWS, 1, false).performAllLabelAddition(null, new CombinedEdit(), );;
-		for(int n=0; n<layout.nPanels(); n++) try {
+		for(int n=0; n<layout.nPanels()&&n<plate.getPlateCells().size(); n++) try {
 			PlateCell plateCell = plate.getPlateCells().get(n);
 			Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
 			//Rectangle2D panel = layout.getPanel(n+1);
 			//int section = plate.getSection(plateCell.getAddress());
 			//Color color1 = moreColors.get(section);
 			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plateCell.getColor());
-			//r.setFillColor();
+			r.getTagHashMap().put("Cell", plateCell);
 			this.add(r);
-			//IssueLog.log("Drawing plate cell "+plateCell.getAddress().getAddress());
+			cellMap.put(plateCell, r);
 			TextGraphic t = createCellLabel(plateCell);
 			if(t==null)
 				continue;
@@ -126,7 +130,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			t.setFontSize(font);
 			t.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, r.getBounds()));
 			t.moveLocation(1,font);
-			
+			t.getTagHashMap().put("Cell", plateCell);
 			this.add(t);
 		} catch (Throwable t) {
 			IssueLog.logT(t);
@@ -164,6 +168,40 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			IssueLog.log(t);
 		}
 	}
+	
+	/**
+	 * @param cellPress
+	 * @param cellDrag
+	 * @return 
+	 */
+	public ArrayList<PlateCell> selectCell(PlateCell cellPress, PlateCell cellDrag) {
+		ArrayList<PlateCell> cells=new ArrayList<PlateCell>();
+		int minCol = Math.min(cellPress.getAddress().getCol(), cellDrag.getAddress().getCol());
+		int minRow = Math.min(cellPress.getAddress().getRow(), cellDrag.getAddress().getRow());
+		int maxCol = Math.max(cellPress.getAddress().getCol(), cellDrag.getAddress().getCol());
+		int maxRow = Math.max(cellPress.getAddress().getRow(), cellDrag.getAddress().getRow());
+		for(PlateCell cell: cellMap.keySet()) {
+			int c = cell.getAddress().getCol();
+			int r = cell.getAddress().getRow();
+			if(c>=minCol&&c<=maxCol&r>=minRow&&r<=maxRow) {
+				selectCell(cell, false);
+				cells.add(cell);
+			}
+			else selectCell(cell, true);
+			
+		}
+		return cells;
+	}
+	
+	public void selectCell(PlateCell cell1, boolean deselect) {
+		RectangularGraphic r = cellMap.get(cell1);
+		if(r==null)
+				{IssueLog.log("could not find cell ");}
+		r.setFillColor(Color.lightGray);
+		if(deselect)
+			r.setFillColor(Color.white);
+		
+	}
 
 	/**returns a label for the cell
 	 * @param plateCell
@@ -174,8 +212,8 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		if(!showSampleNames&&spreadSheetRow ==null)
 			return null;
 		if(!showSampleNames) {
-		TextGraphic t=new TextGraphic(spreadSheetRow+"");
-		return t;
+				TextGraphic t=new TextGraphic(spreadSheetRow+"");
+				return t;
 		}
 		else {
 			String label = plateCell.getShortLabel();
@@ -225,5 +263,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	public void setShowSampleNames(boolean showSampleNames) {
 		this.showSampleNames = showSampleNames;
 	}
+
+	
 
 }

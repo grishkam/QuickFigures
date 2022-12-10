@@ -35,6 +35,7 @@ import handles.SmartHandleList;
 import imageDisplayApp.MiniToolBarPanel;
 import imageDisplayApp.StandardWorksheet;
 import locatedObject.Selectable;
+import standardDialog.graphics.GraphicComponent;
 import undo.UndoManagerPlus;
 
 /**
@@ -44,9 +45,11 @@ import undo.UndoManagerPlus;
 public class CropDialogAssist implements DisplayedImage {
 
 	private CroppingDialog cropDialog;
+	private GraphicComponent panel;
 
 	public CropDialogAssist(CroppingDialog c) {
 		this.cropDialog=c;
+		this.panel=c.panel;
 	}
 	
 	
@@ -78,7 +81,7 @@ public class CropDialogAssist implements DisplayedImage {
 	@Override
 	public CordinateConverter getConverter() {
 		// TODO Auto-generated method stub
-		return null;
+		return panel.getCord();
 	}
 
 	@Override

@@ -16,14 +16,16 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: May 26, 2022
+ * Date Modified: Dec 10, 2022
  * Version: 2022.2
  */
 package dataTableActions;
 
 import java.awt.GridBagConstraints;
+import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,8 +36,12 @@ import channelMerging.ChannelEntry;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
+import graphicalObjects.BasicGraphicalObject;
 import layout.RetrievableOption;
+import locatedObject.LocatedObject2D;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
+import menuUtil.SmartPopupJMenu;
 import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
 import plates.AddressModification;
@@ -43,15 +49,19 @@ import plates.Plate;
 import plates.PlateCell;
 import plates.PlateOrientation;
 import standardDialog.DialogItemChangeEvent;
+import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
 import standardDialog.graphics.GraphicComponent;
+import standardDialog.graphics.GraphicComponent.CanvasMouseListener;
 import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog;
+import ultilInputOutput.FileChoiceUtil;
+import undo.AbstractUndoableEdit2;
 
 /**
  A table action that transforms a list of conditions into a plate setup file
  */
-public class DistributeColumnsToTable extends BasicDataTableAction implements DataTableAction {
+public class DistributeColumnsToTable extends BasicDataTableAction implements DataTableAction, CanvasMouseListener {
 
 	
 	
@@ -70,7 +80,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public double skip=3;
 	
 	@RetrievableOption(key = "block", label="Group samples ")
-	public double blockSize=4;
+	public double blockSize=0;
 	
 	@RetrievableOption(key = "flip group", label="Flip group orientation")
 	public boolean flipGroup=false;
@@ -97,8 +107,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	@RetrievableOption(key = "sample", label="names are in col #")
 	public ColumnSlotList col1=new ColumnSlotList(
-			new ColumnSlot(templateFile, new ChannelEntry("first column", 0)),
-			new ColumnSlot(templateFile, new ChannelEntry("next column", 1))
+			new ColumnSlot(templateFile, new ChannelEntry("first column", 0))
+			//,new ColumnSlot(templateFile, new ChannelEntry("next column", 1))
 				);
 	
 	@RetrievableOption(key = "row shift", label="shift rows", category="special")
@@ -111,7 +121,18 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());//displays the setup for this plate
 
 	private StoredValueDilaog currentDialog;
+
+	private PlateCell cellPress;
+
+	private PlateCell cellRelease;
+
+	private GraphicComponent comp;
+
+	private PlateCell cellDrag;
+
+	private ArrayList<PlateCell> selectedCells=new ArrayList<PlateCell> ();
 	
+	private ArrayList<PlateCell> bannedCells=new ArrayList<PlateCell> ();
 	
 	@Override
 	public String getNameText() {
@@ -124,13 +145,16 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		if(item!=null)
 			setSampleListFile(new File( item.getOriginalSaveAddress()));
 		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this, "general");
-		GraphicComponent comp = new GraphicComponent();
+		 comp = new GraphicComponent();
+		comp.addComponentMouseListener(this);
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx=5;
 		gc.gridy=1;
 		comp.setPrefferedSize(600, 420);
 		comp.setMagnification(0.8);
 		comp.getGraphicLayers().add(diplay);
+		
+		
 		currentDialog.add(comp, gc);
 		updatePlateDisplayAfterDialogChange();
 		currentDialog.addDialogListener(new StandardDialogListener() {
@@ -173,8 +197,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 */
 	public void updatePlateDisplayAfterDialogChange() {
 		try {
+			diplay.updatePlateDisplay();
 			diplay.setShowSampleNames(this.showSampleNames);
 			diplay.setPlate(buildPlate(false));
+			diplay.updatePlateDisplay();
 		} catch (Exception e) {
 			IssueLog.log("failed to build plate. Make sure a valid excel file is selected");
 			IssueLog.logT(e);
@@ -276,8 +302,19 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		PlateOrientation po=PlateOrientation.STANDARD;
 		if(rotatePlate)
 			po=PlateOrientation.FLIP;
-		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)blockSize, this.flipGroup, this.getAddressMod());
+		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)getWorkingBlockSize(), this.flipGroup, this.getAddressMod(), bannedCells);
 		return plate;
+	}
+
+	/**
+	 * @return
+	 */
+	public double getWorkingBlockSize() {
+		if(blockSize!=0)
+			return blockSize;
+		if(rotatePlate)
+			return nRow;
+		return nCol;
 	}
 
 	/**
@@ -349,7 +386,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 		int rowCount = tableAssignment.getRowCount();
 		int numberCellsNeeded = (int) ((rowCount-1)*this.getNReplicates());
-		int nWells = plate.getNCol()*plate.getNRow();
+		int nWells = plate.getNCol()*plate.getNRow()-this.bannedCells.size();
 		int nPlatesNeeded = numberCellsNeeded/nWells;//number plates that can be filled completely
 	
 		if(nPlatesNeeded%nWells>0)
@@ -506,8 +543,155 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		new DistributeColumnsToTable().performActionDisplayedImageWrapper(null);
 	}
 	
+	/**returns the address modificaton*/
 	public AddressModification getAddressMod() {
 		return new AddressModification(rowShift, colShift);
 	}
+
+	
+	
+	/**responds to mouse drags on the plate with changed in the selection or a popup menu*/
+	@Override
+	public void itemAction(LocatedObject2D item, MouseEvent e) {
+		if(item instanceof BasicGraphicalObject) {
+			BasicGraphicalObject bgo=(BasicGraphicalObject) item;
+			Object cell = bgo.getTag("Cell");
+			
+			if(e.getID()==MouseEvent.MOUSE_PRESSED ) {
+				if((cell instanceof PlateCell))
+					{cellPress=(PlateCell) cell;
+					
+					//diplay.selectCell(cellPress);
+					comp.repaint();
+					}
+				else cellPress=null;
+				currentDialog.repaint();
+			}
+			
+			if(e.getID()==MouseEvent.MOUSE_DRAGGED ) {
+				if((cell instanceof PlateCell))
+					{cellDrag=(PlateCell) cell;
+					
+					selectedCells=diplay.selectCell(cellPress, cellDrag);
+					comp.repaint();
+					}
+				else cellDrag=null;
+				currentDialog.repaint();
+			}
+			
+			
+			if(e.getID()==MouseEvent.MOUSE_RELEASED) {
+				if((cell instanceof PlateCell))
+					cellRelease=(PlateCell) cell;
+				else cellRelease=null;
+				
+				if(cellPress!=null &&cellRelease!=null) {
+					String selectedCellRange = cellPress+" to "+cellRelease;
+					////boolean answer = FileChoiceUtil.yesOrNo("do you want to select only this area of plate "+s);
+					//if(!answer)
+					//	return;
+					
+					int widthInCol =  1 + Math.abs(cellPress.getAddress().getCol()-cellRelease.getAddress().getCol());
+					int heightInRow = 1 + Math.abs(cellPress.getAddress().getRow()-cellRelease.getAddress().getRow());
+					
+					
+					int startRow = Math.min(cellPress.getAddress().getRow(), cellRelease.getAddress().getRow());
+					int startCol = Math.min(cellPress.getAddress().getCol(), cellRelease.getAddress().getCol());
+					
+					
+					
+					SmartPopupJMenu ss = new SmartPopupJMenu();
+					TableSetupMenuItem mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					ss.add(mi);
+					ss.add(new TableSetupMenuItem("96-well", 12, 8));
+					ss.add(new TableSetupMenuItem("48-well", 8, 6));
+					ss.add(new TableSetupMenuItem("24-well", 6, 4));
+					ss.add(new TableSetupMenuItem("12-well", 4, 3));
+					ss.add(new TableSetupMenuItem("6-well", 3, 2));
+					
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.banCells;
+					mi.setText("Exclude cells "+selectedCellRange);
+					ss.add(mi);
+					
+					ss.show(comp, e.getX(), e.getY());
+				}
+			}
+		}
+		
+	}
+
+	/**
+	 * @param s
+	 * @param widthInCol
+	 * @param heightInRow
+	 * @param startRow
+	 * @param startCol
+	 * @param selectedCells2 
+	 * @return
+	 */
+	public TableSetupMenuItem createSelectSpecifcItem(String s, int widthInCol, int heightInRow, int startRow,
+			int startCol, ArrayList<PlateCell> selectedCells2) {
+		TableSetupMenuItem mi = new TableSetupMenuItem(widthInCol, heightInRow, startRow, startCol);
+		mi.setText("use Cells "+s);
+		mi.cellSelection=selectedCells2;
+		return mi;
+	}
+
+	
+	/**Changes the settings*/
+	class TableSetupMenuItem extends BasicSmartMenuItem {
+
+		public ArrayList<PlateCell> cellSelection;
+		public static final int banCells=1;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		int widthInCol=12, heightInRow=8, startRow, startCol;
+		private int actionType;
+		
+	
+		
+		public TableSetupMenuItem(int widthInCol, int heightInRow, int startRow, int startCol) {
+			this( "custom ",widthInCol, heightInRow);
+			this.startRow=startRow;
+			this.startCol=startCol;
+		}
+		
+		public TableSetupMenuItem(String st, int widthInCol, int heightInRow) {
+			this.setText(st);
+			this.widthInCol=widthInCol;
+			this.heightInRow=heightInRow;
+		}
+		
+	public AbstractUndoableEdit2  performAction() {
+		if(actionType==banCells) {
+			bannedCells.addAll(selectedCells);
+			updatePlateDisplayAfterDialogChange();
+			return null;
+		}
+		 applySetup();
+		 diplay.updatePlateDisplay();
+		 return null;
+	}
+		
+		/**
+		 * @param widthInCol
+		 * @param heightInRow
+		 * @param startRow
+		 * @param startCol
+		 */
+		public void applySetup() {
+			bannedCells=new ArrayList<PlateCell>();
+			currentDialog.setNumberAndNotify("row", heightInRow);
+			currentDialog.setNumberAndNotify("col", widthInCol);
+			currentDialog.setNumberAndNotify("row shift", startRow);
+			currentDialog.setNumberAndNotify("col shift", startCol);
+			
+		}
+	}
+	
+	
 
 }

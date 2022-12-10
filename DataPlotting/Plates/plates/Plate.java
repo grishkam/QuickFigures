@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: May 26, 2022
+ * Date Modified: Dec 10, 2022
  * Version: 2022.2
  */
 package plates;
@@ -31,8 +31,7 @@ import logging.IssueLog;
 
 
 /**
- 
- * 
+ An organized plate of samples
  */
 public class Plate {
 	
@@ -62,13 +61,15 @@ public class Plate {
 	private boolean hueMismash=true;
 	private int lastB;
 	public AddressModification addressMod=new AddressModification(0,0);
+	private ArrayList<PlateCell> bannedCell;
 	
 	
 	
 	public Plate() {
 		availableCellList=createPlaceCells();
 	}
-	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight, boolean flipGroups, AddressModification m) {
+	public Plate(int row, int col, PlateOrientation orient, int blockWidth, int blockHeight, boolean flipGroups, AddressModification m, ArrayList<PlateCell> bannedCells) {
+		this.bannedCell=bannedCells;
 		this.nCol=col;
 		this.nRow=row;
 		this.oritenation=orient;
@@ -83,7 +84,7 @@ public class Plate {
 	}
 	
 	public Plate createSimilar() {
-		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight, flipGroups, addressMod);
+		return new Plate(nRow, nCol, oritenation, blockWidth, blockHeight, flipGroups, addressMod, bannedCell);
 	}
 	
 	/**returns true if the cell of the given address is available*/
@@ -131,7 +132,7 @@ public class Plate {
 	}*/
 	
 	
-	/**creates a list of plate cells
+	/**creates a list of plate cell objects for every row and column
 	 * @return */
 	public ArrayList<PlateCell> createPlaceCells() {
 		ArrayList<PlateCell> names=new ArrayList<PlateCell>();
@@ -140,6 +141,8 @@ public class Plate {
 			for(int j=0; j<nCol; j++) {
 			BasicCellAddress a1 = new BasicCellAddress(i,j, addressMod);
 			PlateCell cell = new PlateCell(a1, addressMod);
+			if(isCellProhibited(a1))
+				continue;
 			cellList.add(cell);
 			names.add(cell);
 			}
@@ -147,6 +150,19 @@ public class Plate {
 		return names;
 	}
 	
+	/**checks if the address is prohibited
+	 * @param a1
+	 * @return
+	 */
+	private boolean isCellProhibited(BasicCellAddress a1) {
+		if(this.bannedCell!=null) {
+			for(PlateCell b: bannedCell) {
+				if(b.getAddress().matches(a1))
+					return true;
+			}
+		}
+		return false;
+	}
 	/**returns a list of plate cells*/
 	public ArrayList<PlateCell> getPlateCells() {
 		return this.cellList;

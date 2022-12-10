@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: May 14, 2022
+ * Date Modified: Dec 10, 2022
  * Version: 2022.2
  */
 package standardDialog;
@@ -328,6 +328,12 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		NumberInputPanel ob = allNumbers.get(key);
 		if(ob==null) return;
 		ob.setNumber(number);
+	}
+	
+	public void setNumberAndNotify(String key, double number) {
+		NumberInputPanel ob = allNumbers.get(key);
+		if(ob==null) return;
+		ob.setNumberAndNotify(number);
 	}
 	
 	

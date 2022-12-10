@@ -108,7 +108,7 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	public void updateFromFile() {
 		
 		File file = fileOrigin.getFile();
-		IssueLog.log("   file is "+file);
+		
 		useExcelFile(file);
 		
 	}

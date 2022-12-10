@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Mar 26, 2022
+ * Date Modified: Dec 10, 2022
  * Version: 2022.2
  */
 package plates;
@@ -26,8 +26,7 @@ import java.awt.Color;
 import logging.IssueLog;
 
 /**
- 
- * 
+ contains information about a cell in a plate
  */
 public class PlateCell {
 

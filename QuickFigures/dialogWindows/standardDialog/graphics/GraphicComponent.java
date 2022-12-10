@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Dec 10, 2022
  * Version: 2022.2
  */
 package standardDialog.graphics;
@@ -24,17 +24,31 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
+import logging.IssueLog;
+import standardDialog.graphics.GraphicComponent.CanvasMouseListener;
+import standardDialog.graphics.GraphicComponent.PassalongMouseListener;
 
 /**A component that contains a graphic layer with object to draw
  * objects are drawn on this component at a specific magnification
  * @see GraphicLayerPane
  * */
 public class GraphicComponent extends JComponent {
+
+	
+
+	
 
 	/**
 	 * 
@@ -47,7 +61,16 @@ public class GraphicComponent extends JComponent {
 	private double magnification=0.4;
 	
 	
+	
 	protected Color background=Color.white;
+	private ArrayList<CanvasMouseListener> canvaslistenerList=new ArrayList<CanvasMouseListener>();
+	
+	
+	public GraphicComponent() {
+		PassalongMouseListener l = new PassalongMouseListener(this);
+		this.addMouseListener(l);
+		this.addMouseMotionListener(l);
+	}
 	
 	public void setPrefferedSize(double width, double height) {
 		this.width=(int) width;
@@ -91,6 +114,104 @@ public class GraphicComponent extends JComponent {
 		this.magnification = magnification;
 	}
 	
+	public void addComponentMouseListener(CanvasMouseListener cml) {
+		this.canvaslistenerList.add(cml);
+		
+	}
 	
+	/**
+	 
+	 * 
+	 */
+	public interface CanvasMouseListener {
+
+		/**
+		 * @param item
+		 * @param e
+		 */
+		void itemAction(LocatedObject2D item, MouseEvent e);
+			
+	}
+	
+	public class CanvasMouseListenerEvent {
+		
+	}
+	
+	/**
+	 
+	 * 
+	 */
+public class PassalongMouseListener implements MouseListener, MouseMotionListener {
+
+	private GraphicComponent targetedCoponent;
+
+	/**
+	 * @param graphicComponent
+	 */
+	public PassalongMouseListener(GraphicComponent graphicComponent) {
+		targetedCoponent=graphicComponent;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		notifyProxy(e);
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+		notifyProxy(e);
+	}
+
+	/**
+	 * @param e
+	 */
+	public void notifyProxy(MouseEvent e) {
+		Point2D drag = getCord().unTransformClickPoint(e);
+		LocatedObject2D item = new BasicObjectListHandler().getClickedRoi(graphicLayers, (int) drag.getX(),
+				(int) drag.getY());
+		
+		if(item==null)
+			return;
+		
+		for(CanvasMouseListener c:canvaslistenerList) try {
+			c.itemAction(item, e);
+		} catch (Throwable t) {
+			IssueLog.log(t);
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		notifyProxy(e);
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		notifyProxy(e);
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		notifyProxy(e);
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		notifyProxy(e);
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		notifyProxy(e);
+		
+	}
+
+}
 
 }
