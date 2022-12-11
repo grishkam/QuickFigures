@@ -55,9 +55,10 @@ public class ExcelFileToXYPlot extends ExcelDataImport{
 			
 			File f=getFileAndaddExtension();
 			if (f==null) return;
-			
+			ExcelTableReader tr = new ExcelTableReader(f);
 			Workbook fileToWorkBook = ReadExcelData.fileToWorkBook(f.getAbsolutePath());
-			ArrayList<String> headers = ExcelTableReader.getAllColumnHeaders(fileToWorkBook.getSheetAt(0).getRow(0));
+		
+			ArrayList<String> headers = tr.getColumnHeaders();
 			ExcelRowSubset subset = new ExcelRowSubset(fileToWorkBook);
 			
 			

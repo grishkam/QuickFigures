@@ -38,6 +38,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -61,10 +62,12 @@ public class ExcelTableReader implements TableReader {
 	private String fileLocation;
 	private HashMap<String, XSSFCellStyle> cellStyles;
 	private ArrayList<XSSFCellStyle> used=new ArrayList<XSSFCellStyle>();
+	private FormulaEvaluator createFormulaEvaluator;
 
 	public ExcelTableReader() throws IOException {
 		workbook= WorkbookFactory.create(true);
 		workbook.createSheet();
+		createFormulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		sheet=workbook.getSheetAt(0);
 	}
 	
@@ -82,6 +85,7 @@ public class ExcelTableReader implements TableReader {
 				if(sheet==null)
 					IssueLog.log("no spreadsheet found");
 				this.workbook=wb2;
+				this.createFormulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 				this.fileLocation=fileLocation.getAbsolutePath();
 				inp.close();
 			} catch (Exception e) {
@@ -93,6 +97,7 @@ public class ExcelTableReader implements TableReader {
 	public ExcelTableReader(Workbook wb2, Sheet wb, String fileLocation) {
 		sheet=wb;
 		this.workbook=wb2;
+		createFormulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		this.fileLocation=fileLocation;
 	}
 	
@@ -102,7 +107,10 @@ public class ExcelTableReader implements TableReader {
 		if(row2==null)
 			return null;
 		Cell cell = row2.getCell(col);
-		if(cell!=null) return ReadExcelData.getObjectInCell(cell);
+		if(cell!=null) {
+			
+			return ReadExcelData.getObjectInCell(cell, createFormulaEvaluator);
+		}
 		return cell;
 	}
 
@@ -186,7 +194,14 @@ public class ExcelTableReader implements TableReader {
 
 	@Override
 	public TableReader createNewSheet(String name) {
-		return new  ExcelTableReader(workbook, workbook.createSheet(name), fileLocation);
+		Sheet createSheet=null;
+		if(workbook.getSheet(name)!=null) {
+			IssueLog.log("problem workbook already has sheet "+name);
+			createSheet = workbook.getSheet(name);
+		}
+		else 
+			createSheet = workbook.createSheet(name);
+		return new  ExcelTableReader(workbook, createSheet, fileLocation);
 	}
 
 	@Override
@@ -219,13 +234,13 @@ public class ExcelTableReader implements TableReader {
 	 * @param row
 	 * @return
 	 */
-	public static ArrayList<String> getAllColumnHeaders(Row row) {
+	public  ArrayList<String> getAllColumnHeaders(Row row) {
 		short count1 = row.getLastCellNum();
 		 ArrayList<String> ss=new ArrayList<String>();
 		 for(int i=0; i<count1; i++) {
 			 Object valueAt = null;//this.getValueAt(0, i);
 			 Cell cell = row.getCell(i);
-				if(cell!=null)valueAt =ReadExcelData.getObjectInCell(cell);
+				if(cell!=null)valueAt =ReadExcelData.getObjectInCell(cell, workbook.getCreationHelper().createFormulaEvaluator());
 			 if(valueAt==null)
 				 ss.add(i, "null");
 			 else  ss.add(i, valueAt+"");

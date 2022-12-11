@@ -176,6 +176,16 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	 */
 	public ArrayList<PlateCell> selectCell(PlateCell cellPress, PlateCell cellDrag) {
 		ArrayList<PlateCell> cells=new ArrayList<PlateCell>();
+		if(cellPress==null&&cellDrag==null)
+			return cells;
+		if(cellPress==null&&cellDrag!=null) {
+			cells.add(cellDrag);
+			return cells;
+			}
+		if(cellPress!=null&&cellDrag==null) {
+			cells.add(cellPress);
+			return cells;
+			}
 		int minCol = Math.min(cellPress.getAddress().getCol(), cellDrag.getAddress().getCol());
 		int minRow = Math.min(cellPress.getAddress().getRow(), cellDrag.getAddress().getRow());
 		int maxCol = Math.max(cellPress.getAddress().getCol(), cellDrag.getAddress().getCol());

@@ -27,6 +27,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 
 import dataSeries.BasicDataPoint;
 import dataSeries.ColumnDataSeries;
@@ -326,14 +328,41 @@ public static ArrayList<BasicDataPoint> getNumbersForTwoColumn(Iterable<Row>  sh
 	}
 	
 	
-	public static Object getObjectInCell(Cell cell) {
+	public static Object getObjectInCell(Cell cell, FormulaEvaluator f) {
 		if (cell.getCellType()==CellType.STRING) {
 			return cell.getStringCellValue();
 		} else 
 		if (cell.getCellType()==CellType.NUMERIC) {
 			return cell.getNumericCellValue();
-		} else {
+		} else if (cell.getCellType()==CellType.FORMULA) {
+			 if(f!=null) {
+				try {
+					
+						CellValue v = f.evaluate(cell);
 
+						return getObjectInCell(v, null);
+					
+				} catch (Exception e) {
+					IssueLog.log("Excel formula evaluation failed for "+"="+cell.getCellFormula());
+				}
+			}
+			return "="+cell.getCellFormula();
+		} else {
+			
+		}
+		
+		
+		return null;
+	}
+	
+	public static Object getObjectInCell(CellValue cell, FormulaEvaluator f) {
+		if (cell.getCellType()==CellType.STRING) {
+			return cell.getStringValue();
+		} else 
+		if (cell.getCellType()==CellType.NUMERIC) {
+			return cell.getNumberValue();
+		}  else {
+			
 		}
 		
 		

@@ -381,12 +381,18 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		
 		int total=tableAssignment.getRowCount();
 		
-		
+		if (colAddressColumnIndex<tableAssignment.getColumnCount()) {
+			colAddressColumnIndex=tableAssignment.getColumnCount()+1;
+		}
 		tableAssignment.setValueAt("plate_location", 0, (int) colAddressColumnIndex);
 	
 		int rowCount = tableAssignment.getRowCount();
 		int numberCellsNeeded = (int) ((rowCount-1)*this.getNReplicates());
 		int nWells = plate.getNCol()*plate.getNRow()-this.bannedCells.size();
+		if(nWells==0) {
+			nWells=1;
+			IssueLog.log("well list is empty");
+		}
 		int nPlatesNeeded = numberCellsNeeded/nWells;//number plates that can be filled completely
 	
 		if(nPlatesNeeded%nWells>0)
@@ -425,11 +431,19 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				//ShowMessage.showOptionalMessage("Too many samples", true, "You have to many samples for this plate size");
 				//break;
 			}
+			if(cellIndex<1||currentPlate.getPlateCells().size()<1) {
+				return;
+			}
 			PlateCell plateCell =currentPlate.getPlateCells().get(cellIndex-1);
 			plateCell.setSpreadSheetRow(i);
-			plateCell.setShortName(tableAssignment.getValueAt(i, (int) getSampleNameIndex()));
+			Object cellNameText = tableAssignment.getValueAt(i, (int) getSampleNameIndex());
+			
+			plateCell.setShortName(cellNameText);
+			
 			plateCell.setSpreadSheetRow(i);
 			plateCell.setSourceSheetName(tableAssignment.getSheetName(0)+"");
+			
+			
 			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
 			
 			String newText=val+"";
@@ -560,7 +574,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			if(e.getID()==MouseEvent.MOUSE_PRESSED ) {
 				if((cell instanceof PlateCell))
 					{cellPress=(PlateCell) cell;
-					
+					selectedCells=diplay.selectCell(cellPress, cellPress);
 					//diplay.selectCell(cellPress);
 					comp.repaint();
 					}
@@ -585,6 +599,15 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 					cellRelease=(PlateCell) cell;
 				else cellRelease=null;
 				
+				SmartPopupJMenu ss = new SmartPopupJMenu();
+		
+				ss.add(new TableSetupMenuItem("96-well", 12, 8));
+				ss.add(new TableSetupMenuItem("48-well", 8, 6));
+				ss.add(new TableSetupMenuItem("24-well", 6, 4));
+				ss.add(new TableSetupMenuItem("12-well", 4, 3));
+				ss.add(new TableSetupMenuItem("6-well", 3, 2));
+				
+				
 				if(cellPress!=null &&cellRelease!=null) {
 					String selectedCellRange = cellPress+" to "+cellRelease;
 					////boolean answer = FileChoiceUtil.yesOrNo("do you want to select only this area of plate "+s);
@@ -600,22 +623,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 					
 					
 					
-					SmartPopupJMenu ss = new SmartPopupJMenu();
+					
 					TableSetupMenuItem mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
-					ss.add(mi);
-					ss.add(new TableSetupMenuItem("96-well", 12, 8));
-					ss.add(new TableSetupMenuItem("48-well", 8, 6));
-					ss.add(new TableSetupMenuItem("24-well", 6, 4));
-					ss.add(new TableSetupMenuItem("12-well", 4, 3));
-					ss.add(new TableSetupMenuItem("6-well", 3, 2));
+					ss.add(mi, 0);
+					
 					
 					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
 					mi.actionType=TableSetupMenuItem.banCells;
 					mi.setText("Exclude cells "+selectedCellRange);
 					ss.add(mi);
 					
-					ss.show(comp, e.getX(), e.getY());
+					
 				}
+				
+				ss.show(comp, e.getX(), e.getY());
 			}
 		}
 		

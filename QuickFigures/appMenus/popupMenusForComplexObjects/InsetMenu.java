@@ -29,6 +29,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import actionToolbarItems.AlignSize;
+import figureOrganizer.insetPanels.InsetLayout;
 import figureOrganizer.insetPanels.InsetLayoutDialog;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
@@ -43,6 +45,7 @@ import popupMenusForComplexObjects.InsetMenu.ChangeInsetScale.ScaleType;
 import sUnsortedDialogs.ScaleFigureDialog;
 import selectedItemMenus.MirrorObjects;
 import standardDialog.StandardDialog;
+import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 import undo.UndoInsetDefChange;
@@ -63,7 +66,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	 */
 	private static final String RECRATE_INSET_LAYOUT = "inset layout",
 			 REMOVE = "i6", REMOVE_PANEL_INSETS = "i4",
-			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup", TURN_SQUARE_LOCK="SQUARE LOCK", MIRROR_TO_PANELS="Mirror to sister panels";
+			CREATE_INSETS = "i3", UPDATE_PANELS = "panelup", TURN_SQUARE_LOCK="SQUARE LOCK", MIRROR_TO_PANELS="Mirror shape to sister panels";
 	/**
 	 * 
 	 */
@@ -93,7 +96,12 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		createMenuItem("Remove", REMOVE);
 	
 		createMenuItem("Redo Inset Layout", RECRATE_INSET_LAYOUT);
-		createMenuItem(MIRROR_TO_PANELS, MIRROR_TO_PANELS);
+		
+		SmartJMenu family=new SmartJMenu("Copy shape");
+		
+		createMenuItem(MIRROR_TO_PANELS, MIRROR_TO_PANELS, family);
+		if(inset.getInsetDefinersThatShareLayout().size()>1)
+			family.add(new MatchSizeMenuItem());
 		
 		SmartJMenu panels=new SmartJMenu("Expert Options");
 		createMenuItem("Update Panels", UPDATE_PANELS, panels);
@@ -105,6 +113,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		
 		
 		SmartJMenu scaleMenu=new SmartJMenu("Scale");
+		
 		SmartJMenu scaleMenuValue=new SmartJMenu("Change Scale to");
 		SmartJMenu scaleMenuFit=new SmartJMenu("Change Scale to fit");
 		SmartJMenu scaleMenuMode=new SmartJMenu("Change Scale Mode");
@@ -125,8 +134,12 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		if(inset.isDoNotScale())	 {
 			scaleMenuMode.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.SCALE_IMAGE_MODE));
 		} else scaleMenuMode.add(new ChangeScaleMenuItem( ChangeInsetScale.ScaleType.ENLARGE_IMAGE_MODE));
-
+		
+		
+		
 		add(scaleMenu);//panels menu needs upgrade
+		add(family);
+		
 	}
 
 	@Override
@@ -190,8 +203,14 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	public void showRedoInsetLayoutDialog(String title) {
 		if (inset instanceof PanelGraphicInsetDefiner ) {
 			 PanelGraphicInsetDefiner pgInset=(PanelGraphicInsetDefiner) inset;
-			 pgInset.previosInsetLayout.practicalSize=true;
-			InsetLayoutDialog dialog = new InsetLayoutDialog(pgInset.previosInsetLayout);
+			 InsetLayout previosInsetLayout = pgInset.previosInsetLayout;
+			 if(previosInsetLayout==null)
+			 {
+				 IssueLog.log("could not find layout for insets");
+				 return;
+			 }
+			previosInsetLayout.practicalSize=true;
+			InsetLayoutDialog dialog = new InsetLayoutDialog(previosInsetLayout);
 			dialog.setTitle(title);
 			dialog.setTargetInset(pgInset);
 			dialog.showDialog();
@@ -209,6 +228,37 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	}
 	
 	
+	/**
+	 * @return
+	 */
+	public AbstractUndoableEdit2 makeEachInsetTheSameSize() {
+		ArrayList<PanelGraphicInsetDefiner> ii = inset.getInsetDefinersThatShareLayout();
+		ii.add(inset);
+		CombinedEdit cc = new CombinedEdit();
+		AlignSize aa = new AlignSize(AlignSize.BOTH);
+		aa.allignArray(ii, cc, inset.getRectangle());
+		cc.addEditToList(inset.afterHandleMove());
+		return cc;
+	}
+
+
+	/**A menu item that makes all the insets match this*/
+	public class MatchSizeMenuItem extends BasicSmartMenuItem  {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		public MatchSizeMenuItem() {
+			super("Use this size/shape for other insets");
+		}
+	
+		/**May be overwritten by subclasses. Does some task and returns an undo*/
+		public AbstractUndoableEdit2 performAction() {
+			return makeEachInsetTheSameSize();
+		}
+		
+	}
 	
 	
 	/**A menu item for changing the scale*/

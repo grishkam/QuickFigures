@@ -61,7 +61,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	/**set to a grey tone if the dark grey version of the icon should be used*/
 	public Color darkFillForIcon;
 
-	private ArrowGraphic reference;
+	
 	
 	/**returns each possible align size object*/
 	public static ArrayList<AlignSize> getAllPossibleAligns() {
@@ -120,7 +120,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 			return;
 		}
 		
-		allignArray(all, undo);
+		allignArray(all, undo, null);
 		
 		undo.establishFinalState();
 		if(selector!=null&&selector.getWorksheet()!=null)
@@ -131,9 +131,9 @@ public class AlignSize extends BasicMultiSelectionOperator {
 
 
 	/**Alligns the items in the array*/
-	public void allignArray(ArrayList<LocatedObject2D> all, CombinedEdit c) { 
+	public void allignArray(ArrayList<? extends LocatedObject2D> all, CombinedEdit c, Rectangle2D b) { 
 		if(all.size()<2) return;
-		
+		b=b.getBounds();
 		
 		if(panelScaleType()) {
 			Double relativeScale=findPanelScale(all);
@@ -145,8 +145,8 @@ public class AlignSize extends BasicMultiSelectionOperator {
 			}
 			return;
 		}
-		
-		Rectangle2D b =findRectangle(all);		
+		if(b==null)
+			b =findRectangle(all);		
 		
 		allignWidthOrHeightArray(all, b, c);
 	}
@@ -158,7 +158,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 * @param relativeScale
 	 * @param c 
 	 */
-	private void alignPanelScales(ArrayList<LocatedObject2D> all, Double relativeScale, CombinedEdit c) {
+	private void alignPanelScales(ArrayList<? extends LocatedObject2D> all, Double relativeScale, CombinedEdit c) {
 		for(LocatedObject2D a: all) {
 			
 			if(a instanceof ImagePanelGraphic) {
@@ -175,7 +175,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 * @param all
 	 * @return
 	 */
-	private Double findPanelScale(ArrayList<LocatedObject2D> all) {
+	private Double findPanelScale(ArrayList<? extends LocatedObject2D> all) {
 		Double output=null;
 		for(LocatedObject2D a: all) {
 			
@@ -192,7 +192,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 * @param all
 	 * @return
 	 */
-	private Rectangle2D findRectangle(ArrayList<LocatedObject2D> all) {
+	private Rectangle2D findRectangle(ArrayList<? extends LocatedObject2D> all) {
 		Rectangle2D output=null;
 		for(LocatedObject2D a: all) {
 			if(a instanceof RectangularGraphic) {
@@ -204,7 +204,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 			}
 			if(a instanceof ArrowGraphic) {
 				ArrowGraphic i=(ArrowGraphic) a;
-				reference=i;
+				
 				return findArrowBounds(i);
 				
 			}
@@ -230,9 +230,9 @@ public class AlignSize extends BasicMultiSelectionOperator {
 
 
 	/**performs the slign operation*/
-	public void allignWidthOrHeightArray(ArrayList<LocatedObject2D> all, Rectangle2D b, CombinedEdit c) {
+	public void allignWidthOrHeightArray(ArrayList<? extends LocatedObject2D> all, Rectangle2D b, CombinedEdit c) {
 			
-			
+			b=b.getBounds();
 			
 		for(LocatedObject2D a: all) {
 			

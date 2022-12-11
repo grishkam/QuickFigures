@@ -85,7 +85,9 @@ public Element toSVG(Document dom, Element e) {
 	
 	
 	Element element = new SVGShape(context).toSVG(shape.getRotationTransformShape());
-	
+	if(e==null||element==null) {
+		IssueLog.log("problems occired when element was null during export of "+shape);
+	}
 	e.appendChild(element);
 	
 	SVGBasicStroke stroke = new SVGBasicStroke(context);
