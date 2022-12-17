@@ -56,7 +56,9 @@ public class BasicMetaDataHandler {
 		new String[] {"Channel Name ", " ", "zvi", "0"}, //For .zvi
 		
 		new String[] {"Name #", " ", "nd2", "2"},//for nikon. Name # entry gave confusing results with two cy5
+		new String[] {"Channel name #", " ", "vsi", "0"},//for olympus vsi
 
+		//Channel name #1 = C405 for vsi
 		new String[] {"Nikon Ti2, FilterChanger(Turret-Lo) #", " ", "nd2", "0"}//for nikon. Name # entry gave confusing results with two cy5
 	};
 	
@@ -329,9 +331,9 @@ public class BasicMetaDataHandler {
 				newColor=Color.green;
 			if (name.contains("yfp"))
 				newColor=Color.yellow;
-			if (name.contains("rfp")||name.contains("568")||name.contains("mplum")||name.contains("mcherry"))
+			if (name.contains("rfp")||name.contains("561")||name.contains("568")||name.contains("mplum")||name.contains("mcherry"))
 				newColor=Color.red;
-			if (name.equals("dapi")||name.contains("ebfp"))
+			if (name.equals("dapi")||name.contains("ebfp")||name.contains("405"))
 				newColor=Color.blue;
 			if (name.equals("brightfield"))
 				newColor=Color.white;
@@ -847,9 +849,9 @@ public class BasicMetaDataHandler {
 			public String getRealChannelInformationBasedOnMetaData(MetaInfoWrapper select, String[] prefixSuffix,
 					int channelNumber) {
 				String fullKey = prefixSuffix[0]+(channelNumber+Integer.parseInt(prefixSuffix[3]))+ prefixSuffix[1];
-			
+				
 				String entryFromInfoAsString = (String) getEntryFromInfoAsString(select, fullKey );
-				//IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
+				IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
 				return entryFromInfoAsString;
 			}
 
