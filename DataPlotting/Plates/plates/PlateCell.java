@@ -34,8 +34,7 @@ public class PlateCell {
 	private String plateAddress="";
 	BasicCellAddress address= new BasicCellAddress(0,0, null);
 	
-	private int replicateID;
-	private Integer spreadSheetRow=null;
+	private SheetAssignment spreadSheetRow=null;
 	
 	
 	private Object shortName;
@@ -87,13 +86,13 @@ public class PlateCell {
 
 
 	public Integer getSpreadSheetRow() {
-		return spreadSheetRow;
+		if(getSheetAddress()!=null)
+			return getSheetAddress().getSheetRow();
+		return null;
 	}
 
 
-	public void setSpreadSheetRow(int spreadSheetRow) {
-		this.spreadSheetRow = spreadSheetRow;
-	}
+	
 
 
 	/**
@@ -128,20 +127,20 @@ public class PlateCell {
 		return sourceSheet;
 	}
 
+	
+
+	
+
 	/**
-	 * @param sheetName
+	 * @param sa
 	 */
-	public void setSourceSheetName(String sheetName) {
-		sourceSheet=sheetName;
+	public void setSheetAssignment(SheetAssignment sa) {
+		this.spreadSheetRow=sa;
 		
 	}
 
-	/**
-	 * @param j
-	 */
-	public void setReplicateID(int j) {
-		this.replicateID=j;
-		
+	public SheetAssignment getSheetAddress() {
+		return spreadSheetRow;
 	}
 	
 	

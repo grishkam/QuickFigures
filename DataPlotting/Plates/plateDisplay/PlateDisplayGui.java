@@ -97,17 +97,17 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	/**updates the plate display based on new settings to the plate configuration*/
 	public void updatePlateDisplay() {
 		empty() ;
-		int cellWidth = width/plate.getNCol();
-		int cellHeeght = height/plate.getNRow();
-		BasicLayout layout = new BasicLayout(plate.getNCol(), plate.getNRow(), cellWidth, cellHeeght, 4,4, true);
+		int cellWidth = width/getPlate().getNCol();
+		int cellHeeght = height/getPlate().getNRow();
+		BasicLayout layout = new BasicLayout(getPlate().getNCol(), getPlate().getNRow(), cellWidth, cellHeeght, 4,4, true);
 		layout.setLabelSpaces(50, 0, 50, 0);
 		layout.resetPtsPanels();
 		DefaultLayoutGraphic layoutGraphic = new DefaultLayoutGraphic(layout);
 		this.add(layoutGraphic);
 		int font =5;
 		//new AddLabelHandle(layoutGraphic, AddLabelHandle.ROWS, 1, false).performAllLabelAddition(null, new CombinedEdit(), );;
-		for(int n=0; n<layout.nPanels()&&n<plate.getPlateCells().size(); n++) try {
-			PlateCell plateCell = plate.getPlateCells().get(n);
+		for(int n=0; n<layout.nPanels()&&n<getPlate().getPlateCells().size(); n++) try {
+			PlateCell plateCell = getPlate().getPlateCells().get(n);
 			Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
 			//Rectangle2D panel = layout.getPanel(n+1);
 			//int section = plate.getSection(plateCell.getAddress());
@@ -139,7 +139,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		 if(font>20)
 			 font=20;
 		String[] rows = new String[] {"A", "B", "C","D", "E", "F", "G", "H"};
-		rows=BasicCellAddress.namesOfAxisRows(layout.nRows(), plate.addressMod);
+		rows=BasicCellAddress.namesOfAxisRows(layout.nRows(), getPlate().addressMod);
 		for(int n=0; n<layout.nRows(); n++) try {
 			BasicLayout l2 = layout.makeAltered(LayoutSpaces.ROWS);
 			
@@ -154,7 +154,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		}
 		
 		
-		rows=BasicCellAddress.namesOfAxisCols(layout.nColumns(), plate.addressMod);
+		rows=BasicCellAddress.namesOfAxisCols(layout.nColumns(), getPlate().addressMod);
 		for(int n=0; n<layout.nColumns(); n++) try {
 			BasicLayout l2 = layout.makeAltered(LayoutSpaces.COLS);
 			TextGraphic t=new TextGraphic(rows[n]+"");
@@ -200,6 +200,23 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			else selectCell(cell, true);
 			
 		}
+		
+		return cells;
+	}
+	
+	public ArrayList<PlateCell> getSelectedCells() {
+		ArrayList<PlateCell> cells=new ArrayList<PlateCell>();
+		
+		for(PlateCell cell: cellMap.keySet()) {
+			int c = cell.getAddress().getCol();
+			int r = cell.getAddress().getRow();
+			if(cellMap.get(cell).getTag("Cell_selected")==Boolean.TRUE) {
+				
+				cells.add(cell);
+			}
+			
+			
+		}
 		return cells;
 	}
 	
@@ -210,7 +227,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		r.setFillColor(Color.lightGray);
 		if(deselect)
 			r.setFillColor(Color.white);
-		
+		r.getTagHashMap().put("Cell_selected", !deselect);
 	}
 
 	/**returns a label for the cell
@@ -285,6 +302,10 @@ public class PlateDisplayGui extends GraphicLayerPane {
 
 	public void setShowSampleNames(boolean showSampleNames) {
 		this.showSampleNames = showSampleNames;
+	}
+
+	public Plate getPlate() {
+		return plate;
 	}
 
 	

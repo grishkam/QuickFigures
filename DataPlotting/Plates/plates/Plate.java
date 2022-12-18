@@ -169,9 +169,46 @@ public class Plate {
 		return this.cellList;
 	}
 	
-	/**iterates to the next well. Afterwards that well is in available*/
+	public PlateCell getCellWithAddress(String st) {
+		for(PlateCell cell: cellList) {
+			String address = cell.getAddress().getAddress(addressMod);
+			if(address!=null&&address.contentEquals(st)) {
+				
+				return cell;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @param basicCellAddress
+	 * @return
+	 */
+	public PlateCell getCellWithAddress(BasicCellAddress basicCellAddress) {
+		for(PlateCell cell: cellList) {
+			BasicCellAddress address = cell.getAddress();
+			if(address.matches(basicCellAddress)) {
+				
+				return cell;
+			}
+		}
+		return  null;
+	}
+	
+	/**iterates to the next well. Afterwards that well is no longer in available*/
 	public PlateCell assignNextWell() {
 		PlateCell theCell = this.availableCellList.get(0);
+		this.availableCellList.remove(theCell);
+		return theCell;
+	}
+	
+	/**iterates to the next well. If the cell with the given address is available, goes to that cell*/
+	public PlateCell assignNextWell(BasicCellAddress b) {
+		PlateCell theCell = this.availableCellList.get(0);
+		for(PlateCell a: availableCellList) {
+			if(b.matches(a.getAddress()))
+				{theCell =a;break;}
+		}
 		this.availableCellList.remove(theCell);
 		return theCell;
 	}
@@ -423,4 +460,5 @@ public class Plate {
 		}
 		this.hues=hudes;
 	}
+	
 }

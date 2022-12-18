@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 
@@ -42,12 +43,15 @@ import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
 import plates.AddressModification;
+import plates.BasicCellAddress;
 import plates.Plate;
 import plates.PlateCell;
 import plates.PlateOrientation;
+import plates.SheetAssignment;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialog;
 import standardDialog.StandardDialogListener;
@@ -138,6 +142,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	private ArrayList<PlateCell> selectedCells=new ArrayList<PlateCell> ();
 	
 	private ArrayList<PlateCell> bannedCells=new ArrayList<PlateCell> ();
+	
+	private HashMap<SheetAssignment, PlateCell> manualCells=new HashMap<SheetAssignment, PlateCell> ();
 	
 	@Override
 	public String getNameText() {
@@ -444,17 +450,31 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			}
 			
 			int sampleNameIndex = (int) getSampleNameIndex();
-			Object cellNameText = tableAssignment.getValueAt(currentRow, sampleNameIndex);
+			
+			
+			
+			
+			
+			SheetAssignment sa = new SheetAssignment(currentRow, currentReplicate);
 			String sheetName = tableAssignment.getSheetName(sheetIndex)+"";
+			sa.setSourceSheetName(sheetName);
 			
+			SheetAssignment match = sa.findMatching(this.manualCells.keySet());
+			PlateCell plateCell;
+			if(match!=null) {
+				PlateCell plateCell2 = manualCells.get(match);
+				if(plateCell2!=null)
+					plateCell = currentPlate.assignNextWell(plateCell2.getAddress());
+				else plateCell = currentPlate.assignNextWell();
+			} else 
+					plateCell = currentPlate.assignNextWell();//.getPlateCells().get(cellIndex-1);
+				
+			plateCell.setSheetAssignment(sa);
 			
-			
-			PlateCell plateCell = getPlaceCellFor(currentPlate,  currentRow, currentReplicate);
-			
-			
+			Object cellNameText = tableAssignment.getValueAt(currentRow, sampleNameIndex);
 			plateCell.setShortName(cellNameText);
-			//plateCell.setSpreadSheetRow(i);
-			plateCell.setSourceSheetName(sheetName);
+	
+			
 			
 			
 			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
@@ -547,19 +567,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		tableAssignment.saveTable(true, oSave);
 	}
 
-	/**
-	 * @param currentPlate
-	 * @param cellIndex the nth cell in the iteration
-	 * @param currentrow the row of the spreadsheet with each of the conditiosn
-	 * @param currentReplicate the replicate
-	 * @return
-	 */
-	public PlateCell getPlaceCellFor(Plate currentPlate, int currentrow, int currentReplicate) {
-		PlateCell plateCell = currentPlate.assignNextWell();//.getPlateCells().get(cellIndex-1);
-		plateCell.setSpreadSheetRow(currentrow);
-		plateCell.setReplicateID(currentReplicate);
-		return plateCell;
-	}
+
 
 	/**
 	 * @return
@@ -626,7 +634,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			BasicGraphicalObject bgo=(BasicGraphicalObject) item;
 			Object cell = bgo.getTag("Cell");
 			
-			if(e.getID()==MouseEvent.MOUSE_PRESSED ) {
+			//	
+			if(e.getID()==MouseEvent.MOUSE_PRESSED&& !e.isShiftDown()) {
+				
+			
+				
 				if((cell instanceof PlateCell))
 					{cellPress=(PlateCell) cell;
 					selectedCells=diplay.selectCell(cellPress, cellPress);
@@ -637,10 +649,26 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				currentDialog.repaint();
 			}
 			
-			if(e.getID()==MouseEvent.MOUSE_DRAGGED ) {
+if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
+				
+			
+				
+				if((cell instanceof PlateCell))
+					{PlateCell cellPress2 = (PlateCell) cell;
+					diplay.selectCell(cellPress2, diplay.getSelectedCells().contains(cellPress2));
+					selectedCells=diplay.getSelectedCells();
+					//diplay.selectCell(cellPress);
+					comp.repaint();
+					}
+				
+				currentDialog.repaint();
+			}
+			
+			if(e.getID()==MouseEvent.MOUSE_DRAGGED && !e.isShiftDown() ) {
 				if((cell instanceof PlateCell))
 					{cellDrag=(PlateCell) cell;
-					
+					if(cellPress==null)
+						cellPress=cellDrag;
 					selectedCells=diplay.selectCell(cellPress, cellDrag);
 					comp.repaint();
 					}
@@ -648,11 +676,16 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				currentDialog.repaint();
 			}
 			
+			if(e.getID()==MouseEvent.MOUSE_RELEASED && e.isShiftDown()) {
+				//boolean answer = ShowMessage.yesOrNo("do you want to manually assign this wells location?");
+				//assignManual(e);
+			}
 			
-			if(e.getID()==MouseEvent.MOUSE_RELEASED) {
+			if(e.getID()==MouseEvent.MOUSE_RELEASED && !e.isShiftDown()) {
 				if((cell instanceof PlateCell))
 					cellRelease=(PlateCell) cell;
 				else cellRelease=null;
+				
 				
 				SmartPopupJMenu ss = new SmartPopupJMenu();
 		
@@ -689,12 +722,75 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 					ss.add(mi);
 					
 					
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.setLocations;
+					mi.setText("Assign locations "+selectedCellRange);
+					ss.add(mi);
+					
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.reset;
+					mi.setText("reset plate ");
+					ss.add(mi);
+					
 				}
 				
-				ss.show(comp, e.getX(), e.getY());
+				//if(e.isPopupTrigger())
+				if(!e.isShiftDown()|| (e.isShiftDown()&&e.isPopupTrigger()))
+					{
+						ss.show(comp, e.getX(), e.getY());
+						cellPress=null;
+					}
 			}
 		}
 		
+	}
+
+	/**reprecated
+	 * @param e
+	 */
+	public void assignManual(MouseEvent e) {
+		if (e.isShiftDown())try {
+			PlateCell cellPress2 = cellPress;
+			PlateCell cellRelease2 = cellRelease;
+			if(e.isShiftDown()&& !cellRelease2.getAddress().matches(cellPress2.getAddress())) {
+				assignCellTo(cellPress2, cellRelease2);
+			}
+		} catch (Exception e2) {
+			IssueLog.logT(e2);
+		}
+	}
+
+	/**manually assigned the location of one cells sheet address to another well
+	 * @param cellClicked
+	 * @param targetDestination
+	 */
+	public void assignCellTo(PlateCell cellClicked, PlateCell targetDestination) {
+		SheetAssignment sa = cellClicked.getSheetAddress();
+		if(sa!=null) {
+			SheetAssignment match = sa.findMatching(manualCells.keySet());
+			if(match!=null)
+				manualCells.remove(match);
+			this.manualCells.put(sa, targetDestination);
+			
+		}
+	}
+	
+	/**manually assigned the location of one cells sheet address to another well
+	 * @param cellClicked
+	 * @param targetDestination
+	 */
+	public void assignCellTo(PlateCell cellClicked, Plate p, int drow, int rcol) {
+		SheetAssignment sa = cellClicked.getSheetAddress();
+		if(sa!=null) {
+			SheetAssignment match = sa.findMatching(manualCells.keySet());
+			if(match!=null)
+				manualCells.remove(match);
+			//IssueLog.log("working on cell "+cellClicked.getAddress());
+			PlateCell targetDestination = p.getCellWithAddress(new BasicCellAddress(cellClicked.getAddress().getRow()+drow, cellClicked.getAddress().getCol()+rcol, null));
+			//IssueLog.log("will place well into destination  "+targetDestination);
+			this.manualCells.put(sa, targetDestination);
+			
+		}
 	}
 
 	/**
@@ -718,8 +814,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	/**Changes the settings*/
 	class TableSetupMenuItem extends BasicSmartMenuItem {
 
+		public static final int reset = 3;
 		public ArrayList<PlateCell> cellSelection;
-		public static final int banCells=1;
+		public static final int banCells=1, setLocations = 2;
 		/**
 		 * 
 		 */
@@ -747,6 +844,43 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			updatePlateDisplayAfterDialogChange();
 			return null;
 		}
+		if(actionType==reset) {
+			this.resetTable();
+			updatePlateDisplayAfterDialogChange();
+			return null;
+		}
+		
+		if(actionType==setLocations) {
+			String st = StandardDialog.getStringFromUser("Where to put these cells?", "");
+			Plate plate1 = diplay.getPlate();
+			
+			PlateCell firstCell = selectedCells.get(0);
+			for(PlateCell c: selectedCells) {
+				if(c.getAddress().getRow()<=firstCell.getAddress().getRow()&&c.getAddress().getCol()<=firstCell.getAddress().getCol())
+					firstCell=c;
+				
+			}
+			
+			PlateCell cell1 = plate1.getCellWithAddress(st);
+			if(cell1==null) {
+				IssueLog.log("The plate does not have such a location "+st);
+				return null;
+			}
+			int dRow = cell1.getAddress().getRow()-firstCell.getAddress().getRow();
+			int dCol = cell1.getAddress().getCol()-firstCell.getAddress().getCol();
+			
+			if(selectedCells==null||selectedCells.size()<1)
+				return null;
+			for(PlateCell c: selectedCells) {
+				assignCellTo(c,plate1, dRow, dCol);
+			}
+			
+			
+			updatePlateDisplayAfterDialogChange();
+			ShowMessage.showOptionalMessage("Manual locaitons", true, "manual locations for these samples have been saved", "you may use the reset option to remove them");
+			return null;
+		}
+		
 		 applySetup();
 		 diplay.updatePlateDisplay();
 		 return null;
@@ -759,12 +893,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		 * @param startCol
 		 */
 		public void applySetup() {
-			bannedCells=new ArrayList<PlateCell>();
+			resetTable();
 			currentDialog.setNumberAndNotify("row", heightInRow);
 			currentDialog.setNumberAndNotify("col", widthInCol);
 			currentDialog.setNumberAndNotify("row shift", startRow);
 			currentDialog.setNumberAndNotify("col shift", startCol);
 			
+		}
+
+		/**
+		 * 
+		 */
+		public void resetTable() {
+			bannedCells=new ArrayList<PlateCell>();
+			manualCells.clear();
 		}
 	}
 	
