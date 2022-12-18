@@ -49,18 +49,24 @@ public class ShowPlate {
 		dialog.showDialog();;
 	}
 	
+	/**Adds cells to the table based on the current plate*/
 	public void showPlate(TableReader table, Plate plate) {
 		
 		/**for(int i=0; i<plate.getNRows(); i++) {
 			table.setValueAt(Plate.getCharForIndex(i), i+1, 0);
 		}*/
+		/**Sets the title*/
+		table.setValueAt(plate.getPlateName(), 0, 0);
 		
+		/**sets the column names*/
 		for(int i=0; i<plate.getNCol(); i++) {
 			int i3 = i+1;
 			if(plate.addressMod!=null)
 				i3+=plate.addressMod.getColShift();
 			table.setValueAt(""+i3,0, i+1);
 		}
+		
+		/**Sets the row names*/
 		for(int i=0; i<plate.getNRow(); i++) {
 			int i2 = i;
 			if(plate.addressMod!=null)
@@ -68,6 +74,7 @@ public class ShowPlate {
 			table.setValueAt(""+BasicCellAddress.getCharForIndex(i2), i+1, 0);
 		}
 		
+		/**Creates the hues*/
 		if(plate.hues!=null) {
 			ArrayList<Color> c=new ArrayList<Color>();
 			c.addAll(plate.hues.values());
@@ -89,10 +96,13 @@ public class ShowPlate {
 			table.setWrapTextAt(rowR, ColC);
 			
 			table.setCellColor(cell.getColor(), rowR, ColC);
+			
 		} catch (Throwable t) {
 			IssueLog.log("something went wrong  "+cell.getAddress());
 			t.printStackTrace();
 		}
+		
+		table.mergeIdenticalCells(!plate.horizontalOrientation(), new int[] {1,12,1,8});
 		
 	}
 	

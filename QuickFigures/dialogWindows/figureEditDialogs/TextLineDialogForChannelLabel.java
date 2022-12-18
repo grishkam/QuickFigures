@@ -62,7 +62,7 @@ public class TextLineDialogForChannelLabel extends GraphicItemOptionsDialog {
 		c.gridy=gridPositionY;
 		c.gridheight=4;
 		c.gridwidth=6;
-		this.getMainPanel().add(tabsfull, c);
+		this.getCurrentUsePanel().add(tabsfull, c);
 		gridPositionY=5;
 		gymax=5;
 		
@@ -84,7 +84,7 @@ public class TextLineDialogForChannelLabel extends GraphicItemOptionsDialog {
 	protected static StandardDialog createMultiLineDialog(ArrayList<ChannelEntry> chans, ChannelLabelProperties prop,
 			StandardDialogListener sdl) {
 		StandardDialog jf = new StandardDialog();
-		jf.getOptionDisplayTabs().remove(jf.getMainPanel());
+		jf.getOptionDisplayTabs().remove(jf.getCurrentUsePanel());
 		for(ChannelEntry chan:chans) {
 		
 			TextLine lin = prop.getTextLineForChannel(chan);

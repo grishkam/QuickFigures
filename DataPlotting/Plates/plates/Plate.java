@@ -133,6 +133,7 @@ public class Plate {
 	
 	
 	/**creates a list of plate cell objects for every row and column
+	 * will exclude any "prohibited wells"
 	 * @return */
 	public ArrayList<PlateCell> createPlaceCells() {
 		ArrayList<PlateCell> names=new ArrayList<PlateCell>();
@@ -167,6 +168,20 @@ public class Plate {
 	public ArrayList<PlateCell> getPlateCells() {
 		return this.cellList;
 	}
+	
+	/**iterates to the next well. Afterwards that well is in available*/
+	public PlateCell assignNextWell() {
+		PlateCell theCell = this.availableCellList.get(0);
+		this.availableCellList.remove(theCell);
+		return theCell;
+	}
+	
+	/**returns true if the plate has a next well*/
+	public boolean hasNext() {
+		return availableCellList.size()>0;
+	}
+	
+	
 	/**
 	 * @return the number of rows
 	 */

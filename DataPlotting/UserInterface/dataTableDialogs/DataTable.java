@@ -438,4 +438,10 @@ public class DataTable extends JTable implements TableReader {
 		return null;
 	}
 
+	@Override
+	public void mergeIdenticalCells(boolean b, int[] is) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

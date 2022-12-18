@@ -58,7 +58,7 @@ public class DataInputDialog2 extends StandardDialog {
 		JScrollPane pane = new JScrollPane(area);
 	    pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-	    super.getMainPanel().add(pane, super.getCurrentConstraints());
+	    super.getCurrentUsePanel().add(pane, super.getCurrentConstraints());
 	}
 
 	

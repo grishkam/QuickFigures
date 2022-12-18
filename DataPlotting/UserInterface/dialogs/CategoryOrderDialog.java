@@ -47,10 +47,10 @@ public class CategoryOrderDialog extends StandardDialog{
 		
 		
 		usedList=new OrderSelectionJList<String>(items, null, otherItems);
-		this.getMainPanel().add(usedList, this.getCurrentConstraints());
+		this.getCurrentUsePanel().add(usedList, this.getCurrentConstraints());
 		GridBagConstraints cons2 = getCurrentConstraints();
 		cons2.gridy=8;
-		getMainPanel().add(usedList.createButtonPanel(), cons2);
+		getCurrentUsePanel().add(usedList.createButtonPanel(), cons2);
 	}
 	
 	public ArrayList<String> getNewOrder() {

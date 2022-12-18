@@ -169,7 +169,7 @@ public class ShowMessage {
 			gc.gridwidth=3;
 			gc.gridheight=1;
 			gc.anchor = GridBagConstraints.WEST;
-			GriddedPanel mainPanel = super.getMainPanel();
+			GriddedPanel mainPanel = super.getCurrentUsePanel();
 			for(String t: text) {
 				super.gridPositionY++;
 				
@@ -177,7 +177,7 @@ public class ShowMessage {
 				super.gridPositionY++;
 				gc.gridy=super.gridPositionY;
 			}
-			super.getMainPanel().moveGrid(0, 10);
+			super.getCurrentUsePanel().moveGrid(0, 10);
 		
 			this.add(DO_NOT_SHOW_AGAIN, new BooleanInputPanel("Dont show this again", messageSettings.dontShowAnymore));
 			

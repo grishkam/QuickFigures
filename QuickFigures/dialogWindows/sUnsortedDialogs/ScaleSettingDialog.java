@@ -59,7 +59,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 	
 	public ScaleSettingDialog(HasScaleInfo scaled, StandardDialogListener listener, boolean alternate) {
 		 alternateDialog=alternate;
-		this.getOptionDisplayTabs().remove(this.getMainPanel());
+		this.getOptionDisplayTabs().remove(this.getCurrentUsePanel());
 		this.scaled=scaled;
 		 info = scaled.getScaleInfo();
 		 originalScale=info.copy();
@@ -94,7 +94,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 	/**Adds components to the dialog*/
 	public void addScaleInfoToDialog(ScaleInfo si) {
 		if (!alternateDialog) { super.addScaleInfoToDialog(si); return;}
-		GriddedPanel omp = this.getMainPanel();
+		GriddedPanel omp = this.getCurrentUsePanel();
 		this.setMainPanel(new GriddedPanel());
 		
 		this.add("units",new StringInputPanel("Units ", si.getUnits(),  5));
@@ -102,7 +102,7 @@ public class ScaleSettingDialog  extends StandardDialog {
 		this.add("kd",new NumberInputPanel("Known Distance", 1, 4));
 		
 		
-		this.getOptionDisplayTabs().addTab("Calibration", this.getMainPanel());
+		this.getOptionDisplayTabs().addTab("Calibration", this.getCurrentUsePanel());
 		this.setMainPanel(omp);
 	}
 

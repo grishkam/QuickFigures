@@ -56,7 +56,7 @@ public class SeriesInoutForGroupPlots extends DataInputDialog2 {
 	public SeriesInoutForGroupPlots(String groupname, String[] names) {
 		super("Input Data ", true);
 		this.editName=true;;
-		GriddedPanel panel = this.getMainPanel();
+		GriddedPanel panel = this.getCurrentUsePanel();
 		title=groupname;  setTabName("");
 		vals=names;
 		int nrow=500;
@@ -92,7 +92,7 @@ public class SeriesInoutForGroupPlots extends DataInputDialog2 {
 	private SeriesInoutForGroupPlots(GroupedDataSeries starting, boolean editName) {
 		super("Input Data "+(!editName? starting.getName(): ""), true);
 		this.editName=editName;
-		GriddedPanel panel = this.getMainPanel();
+		GriddedPanel panel = this.getCurrentUsePanel();
 		title=starting.getName();
 		if (!editName)	this.setTabName(starting.getName()); else setTabName("");
 		
@@ -257,7 +257,7 @@ public class SeriesInoutForGroupPlots extends DataInputDialog2 {
 	/**Creates a data input dialog for editing a single series*/
 	private SeriesInoutForGroupPlots(XYDataSeries starting) {
 		super("Input Data", true);
-		GriddedPanel panel = this.getMainPanel();
+		GriddedPanel panel = this.getCurrentUsePanel();
 		
 			this.setTabName("Data");
 		

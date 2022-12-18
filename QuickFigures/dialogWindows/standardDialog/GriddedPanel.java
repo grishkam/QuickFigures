@@ -50,8 +50,10 @@ public class GriddedPanel extends JPanel {
 		st.placeItems(this, gx, gy);
 		if (gxmax<st.gridWidth())gxmax=st.gridWidth();
 		
-		if (moveDown)gy+=st.gridHeight();
-				else gx+=st.gridWidth();
+		if (moveDown)
+			gy+=st.gridHeight();
+				else
+			gx+=st.gridWidth();
 		
 		
 	}

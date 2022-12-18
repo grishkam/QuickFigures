@@ -122,7 +122,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	private boolean hideCancel=false;
 	private boolean hideOK=false;
 	
-	boolean useMainPanel=true;
+	private final boolean useMainPanel=true;
 	
 	/**The starting name of the main panel*/
 	protected String mainPanelName="";
@@ -188,19 +188,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		additionButtons.add(b);
 	}
 	
-	public void moveGrid(int x, int y) {
-		gridPositionY+=y;
-		gx+=x;
-		if (gx>gxmax) gxmax=gx;
-		if (gridPositionY>gymax) gymax=gridPositionY;
-	}
 	
-	protected GridBagConstraints getCurrentConstraints() {
-		GridBagConstraints output=new GridBagConstraints();
-		output.gridx=gx;
-		output.gridy=gridPositionY;
-		return output;
-	}
 	
 	JButton createOkButton() {
 		JButton OKBut=new JButton("OK");
@@ -466,11 +454,26 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public void place(OnGridLayout st) {
 		if (useMainPanel)
 			{
-			getMainPanel().place(st);
+			getCurrentUsePanel().place(st);
 			} else
-		st.placeItems(this, gx, gridPositionY);
-		if (gxmax<st.gridWidth())gxmax=st.gridWidth();
+				st.placeItems(this, gx, gridPositionY);
+		if (gxmax<st.gridWidth())
+			gxmax=st.gridWidth();
 		gridPositionY+=st.gridHeight();
+	}
+	
+	 protected void moveGrid(int x, int y) {
+		gridPositionY+=y;
+		gx+=x;
+		if (gx>gxmax) gxmax=gx;
+		if (gridPositionY>gymax) gymax=gridPositionY;
+	}
+	
+	protected GridBagConstraints getCurrentConstraints() {
+		GridBagConstraints output=new GridBagConstraints();
+		output.gridx=gx;
+		output.gridy=gridPositionY;
+		return output;
 	}
 	
 	public Font getFont(String key) {
@@ -515,7 +518,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	  
 	  protected JPanel addButtonPanel(Container cont) {
 		   GridBagConstraints c = getCurrentConstraints();
-		  
+		 c= (GridBagConstraints) c.clone();
 		   JPanel ButtonPanel = generateButtonPanel();
 		   c.gridx=1;
 		   c.gridy=this.gymax+2;
@@ -723,7 +726,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 
 	
 	public void addScaleInfoToDialog(ScaleInfo si) {
-		GriddedPanel omp = this.getMainPanel();
+		GriddedPanel omp = this.getCurrentUsePanel();
 		this.setMainPanel(new GriddedPanel());
 		
 		this.add("units",new StringInputPanel("Units ", si.getUnits(),  5));
@@ -732,7 +735,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		this.add("ph",new NumberInputPanel("Pixel Height ", si.getPixelHeight(), 4));
 		
 		
-		this.getOptionDisplayTabs().addTab("Calibration", this.getMainPanel());
+		this.getOptionDisplayTabs().addTab("Calibration", this.getCurrentUsePanel());
 		this.setMainPanel(omp);
 	}
 
@@ -751,7 +754,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		getOptionDisplayTabs().setTitleAt(0, newName);
 	}
 
-	public GriddedPanel getMainPanel() {
+	public GriddedPanel getCurrentUsePanel() {
 		return mainPanel;
 	}
 	
@@ -778,8 +781,8 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	returns the first tab component of the item
 	 */
 	protected Component extractGridPanelFrom(StandardDialog dis) {
-		Component p=dis.getOptionDisplayTabs().getTabComponentAt(0);//.getMainPanel();
-		if (p==null) p=dis.getMainPanel();
+		Component p=dis.getOptionDisplayTabs().getTabComponentAt(0);//assumes the main panel is the first tab component
+		if (p==null) p=dis.getCurrentUsePanel();
 		if (p==null) return null;
 		dis.remove(p);
 		return p;
@@ -788,7 +791,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public void addSubordinateDialogsAsTabs(String shortLabel, StandardDialog... dis) {
 		SubDialogSection ss = new SubDialogSection(shortLabel, dis);
 		gridPositionY++;
-		ss.placeItems(this.getMainPanel(), gx+1,gridPositionY);
+		ss.placeItems(this.getCurrentUsePanel(), gx+1,gridPositionY);
 		gridPositionY++;
 		for(StandardDialog d: dis)this.subordinateDialogs.add(d);
 		gridPositionY++;
@@ -997,7 +1000,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	/**returns a popup menu with the compoents of this dialog but no cancel nor op buttons*/
 	public SmartPopupJMenu createInPopup() {
 		SmartPopupJMenu output = new SmartPopupJMenu();
-		output.add(this.getMainPanel());
+		output.add(this.getCurrentUsePanel());
 		return output;
 	}
 	
@@ -1031,7 +1034,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public JPopupMenu createPopupMenuVersion() {
 		JPopupMenu popup = new JPopupMenu();
 		popup.add(new JLabel(this.getTitle()));
-		popup.add(this.getMainPanel());
+		popup.add(this.getCurrentUsePanel());
 		popup.add(setUpButtonPanel());
 		popup.pack();
 		this.thePopup=popup;

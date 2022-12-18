@@ -62,6 +62,15 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	public ColumnSlot(FileSlot templateFile, String key) {
 		fileOrigin=templateFile;
 		setupInputPanel();
+		label=key;
+	}
+	
+	/**
+	 * @param templateFile
+	 */
+	public ColumnSlot(FileSlot templateFile) {
+		fileOrigin=templateFile;
+		setupInputPanel();
 		
 	}
 	
@@ -69,7 +78,7 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	 * @param templateFile
 	 */
 	public ColumnSlot(FileSlot templateFile, ChannelEntry theDefault) {
-		this(templateFile, theDefault.getLabel());
+		this(templateFile);
 		this.theDefault=theDefault;
 	}
 
@@ -87,7 +96,9 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	public void stringInput(StringInputEvent sie) {
 		updateFromChosenFile();
 		ArrayList<Integer> start = new ArrayList<Integer>();
-		start.add(this.getDefaultStartIndex());
+		if(hasDefaultValue())
+			start.add(this.getDefaultStartIndex());
+		
 		cip.setupChannelOptions(channelsAvailable, start);
 	
 	}
@@ -183,7 +194,13 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	public void valueChanged(ChoiceInputEvent ne) {
 		
 		if(channelsAvailable!=null&&channelsAvailable.size()>0) {
-			chosen=channelsAvailable.get((int) ne.getChoiceIndex());
+			int choiceIndex = (int) ne.getChoiceIndex();
+			ArrayList<Integer> b = cip.getCurrentValues();
+			if(b.size()==1)
+				chosen=channelsAvailable.get(choiceIndex);
+			else chosen=null;
+			
+			
 			
 			
 		}
@@ -208,15 +225,34 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 		return getDefaultStartIndex();
 		
 	}
+	
+	/**
+	 * @return 
+	 * 
+	 */
+	public String getAsString() {
+		if(chosen!=null)
+			return chosen.getLabel();
+		if(this.theDefault!=null)
+			return theDefault.getLabel();
+		return null;
+	}
+	
+	/**if no column is selected*/
+	public boolean isEmpty() {
+		return getAsString()==null;
+	}
 
 	/**
 	 * @return
 	 */
 	public int getDefaultStartIndex() {
-		if(this.theDefault!=null)
+		if(hasDefaultValue())
 			return theDefault.getOriginalChannelIndex();
 		return 0;
 	}
+	
+	public boolean hasDefaultValue() {return theDefault!=null;}
 
 	/**
 	 * @param string

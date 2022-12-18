@@ -93,11 +93,11 @@ public class WindowLevelDialog extends StandardDialog  {
 			jf.undo=undo;
 			
 			
-			jf.getOptionDisplayTabs().remove(jf.getMainPanel());
+			jf.getOptionDisplayTabs().remove(jf.getCurrentUsePanel());
 			for(ChannelEntry chan:chans) {
 				WindowLevelDialog dis = new WindowLevelDialog(chan.getOriginalChannelIndex(), mrp, listen, winLev, true);
 				
-				GriddedPanel p=dis.getMainPanel();
+				GriddedPanel p=dis.getCurrentUsePanel();
 				dis.remove(dis);
 				jf.getOptionDisplayTabs().addTab(chan.getShortLabel(), p);
 				dis.undo=undo;
@@ -153,7 +153,7 @@ public class WindowLevelDialog extends StandardDialog  {
 		gbc.gridx=super.gx;
 		gbc.gridy=super.gridPositionY;
 		
-		this.getMainPanel().add(sdr,gbc);
+		this.getCurrentUsePanel().add(sdr,gbc);
 		super.gridPositionY++;
 		sdr.setLineColor(mrp.getChannelColor(chan));
 		//setModal(true);
@@ -173,7 +173,7 @@ public class WindowLevelDialog extends StandardDialog  {
 		}
 		 gbc.gridy+=5;
 		 
-		this.getMainPanel().add(super.generateButtonPanel(), gbc);
+		this.getCurrentUsePanel().add(super.generateButtonPanel(), gbc);
 		
 		
 	}

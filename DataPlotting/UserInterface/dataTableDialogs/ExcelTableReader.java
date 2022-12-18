@@ -39,11 +39,14 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.CustomIndexedColorMap;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -297,6 +300,8 @@ public class ExcelTableReader implements TableReader {
 			  //create cell style on workbook level
 			  cellStyle = (XSSFCellStyle) workbook.createCellStyle();
 			  cellStyle.setWrapText(true);
+			  cellStyle.setAlignment(HorizontalAlignment.CENTER);
+			  cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 			  //set pattern fill settings
 			  cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 			  
@@ -345,6 +350,54 @@ public class ExcelTableReader implements TableReader {
 			return new ExcelTableReader(targetFile);
 		IssueLog.log("The file is not an excel file", targetFile.getAbsolutePath(), "");
 		return null;
+	}
+
+	@Override
+	public void mergeIdenticalCells(boolean b, int[] is) {
+		int s=1;
+		Row rowS = sheet.getRow(s);
+		ArrayList<Cell> chosenRange=new ArrayList<Cell>();
+		
+		int row=1;
+		int rowMax=24;
+		int colMax=24;
+		
+		for(;row<=rowMax; row++) {
+			int colStart=1;
+			int colEnd=1;
+			int i=colStart;
+			
+			
+				for(; i<colMax; i++) {
+				Object v2 ;
+				Object v1 ;
+				if(b) {
+					v2 = this.getValueAt(row,colStart);
+					v1 = this.getValueAt(row,colEnd+1);
+				} else {
+					v2 = this.getValueAt(colStart, row);
+					v1 = this.getValueAt(colEnd+1, row);
+				}
+				
+				if(v1!=null&&v2!=null&&v1.equals(v2)) {
+					colEnd++;
+				} else {
+					if(colStart!=colEnd) {
+						if(b)
+							sheet.addMergedRegion(new CellRangeAddress(row, row, colStart, colEnd));
+						else
+							sheet.addMergedRegion(new CellRangeAddress(colStart, colEnd, row, row));
+					}
+					
+					
+					colStart=colEnd+1;
+					colEnd=colStart;
+				}
+				
+				}
+				
+		}
+		
 	}
 	
 }

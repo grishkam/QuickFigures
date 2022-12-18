@@ -117,6 +117,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "col shift", label="shift cols", category="special")
 	public double colShift=0;
 	
+	@RetrievableOption(key = "display plate", label="show plate preview", category="special")
+	public double displayPlate=0;
+	
+	int sheetIndex=0;
+	
 	
 	PlateDisplayGui diplay=new PlateDisplayGui("untitled plate", new Plate());//displays the setup for this plate
 
@@ -151,7 +156,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		gc.gridx=5;
 		gc.gridy=1;
 		comp.setPrefferedSize(600, 420);
-		comp.setMagnification(0.8);
+		comp.setMagnification(0.75);
 		comp.getGraphicLayers().add(diplay);
 		
 		
@@ -199,7 +204,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		try {
 			diplay.updatePlateDisplay();
 			diplay.setShowSampleNames(this.showSampleNames);
-			diplay.setPlate(buildPlate(false));
+			ArrayList<Plate> buildPlate = buildPlate(false);
+			
+			diplay.setPlate(buildPlate, (int) displayPlate);
 			diplay.updatePlateDisplay();
 		} catch (Exception e) {
 			IssueLog.log("failed to build plate. Make sure a valid excel file is selected");
@@ -210,11 +217,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	}
 	
 	
-	/**
+	/**creates a plate based on the currently settings
 	 * @return 
 	 * 
 	 */
-	public Plate buildPlate(boolean createFile) {
+	public ArrayList<Plate> buildPlate(boolean createFile) {
 		Plate plate = createPlate();
 		
 		
@@ -243,8 +250,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				colAddressColumnIndex=columnCount;
 		}
 		
-		distributeExcelRowsToPlate(plate, item, createFile);
-		return plate;
+		return distributeExcelRowsToPlate(plate, item, createFile);
+		//return plate;
 	}
 
 
@@ -376,8 +383,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * @param plate
 	 * @param tableAssignment
 	 * @param createFile 
+	 * @return 
 	 */
-	private void distributeExcelRowsToPlate(Plate plate, TableReader tableAssignment, boolean createFile) {
+	private ArrayList<Plate> distributeExcelRowsToPlate(Plate plate, TableReader tableAssignment, boolean createFile) {
+		
+		
 		
 		int total=tableAssignment.getRowCount();
 		
@@ -412,17 +422,15 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		int plateNumber = 0;
 		Plate currentPlate = plate;
 		int cellIndex=1;
-		for(int i=1; i<=total; i++)try {
-			for(int j=0; j<getNReplicates(); j++) {
+		for(int currentRow=1; currentRow<=total; currentRow++)try {
+			for(int currentReplicate=0; currentReplicate<getNReplicates(); currentReplicate++) {
 			
-			Object val = tableAssignment.getValueAt(i, (int) colAddressColumnIndex);
-			if(val==null)
-				val="";
+			
 			
 			
 			//BasicCellAddress indexAddress = plate.getIndexAddress(i-1);
 			//String plateAddressAt = indexAddress.getAddress();
-			if(cellIndex-1>=plate.getPlateCells().size()) {
+			if(cellIndex-1>=plate.getPlateCells().size()||!currentPlate.hasNext()) {
 				cellIndex=1;
 				plateNumber++;
 				if(plates.size()<=plateNumber)
@@ -432,50 +440,80 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				//break;
 			}
 			if(cellIndex<1||currentPlate.getPlateCells().size()<1) {
-				return;
+				return plates;
 			}
-			PlateCell plateCell =currentPlate.getPlateCells().get(cellIndex-1);
-			plateCell.setSpreadSheetRow(i);
-			Object cellNameText = tableAssignment.getValueAt(i, (int) getSampleNameIndex());
+			
+			int sampleNameIndex = (int) getSampleNameIndex();
+			Object cellNameText = tableAssignment.getValueAt(currentRow, sampleNameIndex);
+			String sheetName = tableAssignment.getSheetName(sheetIndex)+"";
+			
+			
+			
+			PlateCell plateCell = getPlaceCellFor(currentPlate,  currentRow, currentReplicate);
+			
 			
 			plateCell.setShortName(cellNameText);
-			
-			plateCell.setSpreadSheetRow(i);
-			plateCell.setSourceSheetName(tableAssignment.getSheetName(0)+"");
+			//plateCell.setSpreadSheetRow(i);
+			plateCell.setSourceSheetName(sheetName);
 			
 			
 			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
 			
-			String newText=val+"";
-			if(newText.length()>0)
-				newText+=", ";
+			Object val = tableAssignment.getValueAt(currentRow, (int) colAddressColumnIndex);
+			if(val==null)
+				val="";
+			String wellAddressListText=val+"";
+			if(wellAddressListText.length()>0)
+				wellAddressListText+=", ";
 			
-			newText+=plateAddressAt;
-			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex);
-			tableAssignment.setWrapTextAt(i, (int) colAddressColumnIndex);
+			wellAddressListText+=plateAddressAt;
+			tableAssignment.setValueAt(wellAddressListText, currentRow, (int) colAddressColumnIndex);
+			tableAssignment.setWrapTextAt(currentRow, (int) colAddressColumnIndex);
 			
-			tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+3);
-			tableAssignment.setValueAt("well", 0,(int) colAddressColumnIndex+3);
+			int wellColumnIndex = (int) colAddressColumnIndex+3;
+			int fullLocationColumnIndex = (int) colAddressColumnIndex+2;
+			int plateNameColIndex = (int) colAddressColumnIndex+1;
+			
+			tableAssignment.setValueAt(wellAddressListText, currentRow, wellColumnIndex);
+			tableAssignment.setValueAt("well", 0,wellColumnIndex);
 		
-				String newText2 = currentPlate.getPlateName();
-				tableAssignment.setValueAt(newText2, i, (int) colAddressColumnIndex+1);
-				tableAssignment.setValueAt("plate_name", 0,(int) colAddressColumnIndex+1);
-				if(newText.contains(","))
-					newText=newText.replace(", ", ", "+newText2+"-");
-				newText=newText2+"-"+newText;
-				tableAssignment.setValueAt(newText, i, (int) colAddressColumnIndex+2);
-				tableAssignment.setValueAt("full_location", 0,(int) colAddressColumnIndex+2);
+				String plateNameText = currentPlate.getPlateName();
+				tableAssignment.setValueAt(plateNameText, currentRow, plateNameColIndex);
+				tableAssignment.setValueAt("plate_name", 0,plateNameColIndex);
+				
+				String fullAddressText = wellAddressListText;
+				if(fullAddressText.contains(","))
+					fullAddressText=fullAddressText.replace(", ", ", "+plateNameText+"-");
+				fullAddressText=plateNameText+"-"+fullAddressText;
+				
+				tableAssignment.setValueAt("full_location", 0,fullLocationColumnIndex);
+				tableAssignment.setValueAt(fullAddressText, currentRow, fullLocationColumnIndex);
+				
 			
 				
 			
 			cellIndex++;
 			}
 		} catch (Throwable t) {
-			IssueLog.log("plate location distributor failed at "+i);
+			IssueLog.log("plate location distributor failed at "+currentRow);
 			IssueLog.logT(t);
 		}
 		
-		/**Creates a sample setup sheet*/
+		createSampleSetupSheets(tableAssignment, plates);
+		
+		if(createFile) {
+			saveTableWithPlateLocations(tableAssignment);
+		}
+		
+		return plates;
+	}
+
+	/**
+	 * @param tableAssignment
+	 * @param plates
+	 */
+	public void createSampleSetupSheets(TableReader tableAssignment, ArrayList<Plate> plates) {
+		/**Creates a sample setup sheet for each plate*/
 		for(int i=0; i<plates.size(); i++) {
 			Plate p=plates.get(i);
 			String tabname = "Sample setup";
@@ -484,26 +522,43 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			TableReader sheet2=tableAssignment.createNewSheet(tabname);
 			new  ShowPlate().showPlate(sheet2, p);
 			}
+	}
+
+	/** saves the table with the plate locations
+	 * @param tableAssignment
+	 */
+	public void saveTableWithPlateLocations(TableReader tableAssignment) {
+		String oSave=tableAssignment.getOriginalSaveAddress();
 		
-		if(createFile) {
-			String oSave=tableAssignment.getOriginalSaveAddress();
-			
-			if(oSave!=null&&oSave.contains(".xlsx"))
-				{
-				File file = new File(oSave);
-				String outputFolder = file.getParentFile().getAbsolutePath()+"/plate_setup/";
-				if(!new File(outputFolder).exists())
-					new File(outputFolder).mkdirs();
-					oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
-					oSave= outputFolder+new File(oSave).getName();
-					oSave=findUniqueOutputFileNam(oSave, ".xlsx");
-				}
-			
-			if(oSave==null)
-				oSave=findOutputFileNam();
-			
-			tableAssignment.saveTable(true, oSave);
-		}
+		if(oSave!=null&&oSave.contains(".xlsx"))
+			{
+			File file = new File(oSave);
+			String outputFolder = file.getParentFile().getAbsolutePath()+"/plate_setup/";
+			if(!new File(outputFolder).exists())
+				new File(outputFolder).mkdirs();
+				oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
+				oSave= outputFolder+new File(oSave).getName();
+				oSave=findUniqueOutputFileNam(oSave, ".xlsx");
+			}
+		
+		if(oSave==null)
+			oSave=findOutputFileNam();
+		
+		tableAssignment.saveTable(true, oSave);
+	}
+
+	/**
+	 * @param currentPlate
+	 * @param cellIndex the nth cell in the iteration
+	 * @param currentrow the row of the spreadsheet with each of the conditiosn
+	 * @param currentReplicate the replicate
+	 * @return
+	 */
+	public PlateCell getPlaceCellFor(Plate currentPlate, int currentrow, int currentReplicate) {
+		PlateCell plateCell = currentPlate.assignNextWell();//.getPlateCells().get(cellIndex-1);
+		plateCell.setSpreadSheetRow(currentrow);
+		plateCell.setReplicateID(currentReplicate);
+		return plateCell;
 	}
 
 	/**
@@ -606,7 +661,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				ss.add(new TableSetupMenuItem("24-well", 6, 4));
 				ss.add(new TableSetupMenuItem("12-well", 4, 3));
 				ss.add(new TableSetupMenuItem("6-well", 3, 2));
-				
+				ss.add(new TableSetupMenuItem("384-well", 24, 16));
 				
 				if(cellPress!=null &&cellRelease!=null) {
 					String selectedCellRange = cellPress+" to "+cellRelease;

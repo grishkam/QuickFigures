@@ -98,7 +98,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 		currentValues=new ArrayList<Integer>();
 		
 		this.setValues(start);
-		originalValues=this.currentValues;
+		originalValues=this.getCurrentValues();
 		
 		items = new ArrayList<ChannelEntryMenuItem>();
 		
@@ -132,7 +132,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	 */
 	public void setupForChannelList(ArrayList<ChannelEntry> availableChannels, int start) {
 		this.setValues(start); 
-		originalValues=this.currentValues;
+		originalValues=this.getCurrentValues();
 		
 		items = new ArrayList<ChannelEntryMenuItem>();
 		items.add(new ChannelEntryMenuItem("none"));
@@ -208,7 +208,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	
 	/**returns the selected index*/
 	public ArrayList<Integer> getSelectedIndices() {
-		return  currentValues;
+		return  getCurrentValues();
 	}
 
 	/**returns the choice to its original values */
@@ -225,7 +225,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 public void setValues(ArrayList<Integer> values2) {
 	currentValues=new ArrayList<Integer>();
 	for(Integer v: values2) {
-		currentValues.add(v);
+		getCurrentValues().add(v);
 		
 	}
 	
@@ -237,14 +237,14 @@ public void setValues(ArrayList<Integer> values2) {
 public void setValues(int v) {
 	currentValues=new ArrayList<Integer>();
 
-	currentValues.add(v);
+	getCurrentValues().add(v);
 	
 
 }
 
 	public void notifyChoiceListeners(int i) {
 		box.repaint();
-		notifyListeners(new ChoiceInputEvent(this, box, i, currentValues));
+		notifyListeners(new ChoiceInputEvent(this, box, i, getCurrentValues()));
 		
 	}
 
@@ -270,6 +270,11 @@ public void setValues(int v) {
 	
 	public int howManyMayBeSelected() {return 10;}
 	
+
+	public ArrayList<Integer> getCurrentValues() {
+		return currentValues;
+	}
+
 
 	/**
 	The component functions similarly to a combo box that works for multiple selections
@@ -302,8 +307,8 @@ public class ChanListBox extends JPanel implements MouseListener {
 	 *
 	 */
 	private void resetLabels() {
-		if(currentValues!=null)
-			this.resetLabels(currentValues.size()==0);
+		if(getCurrentValues()!=null)
+			this.resetLabels(getCurrentValues().size()==0);
 	}
 	
 	@Override
@@ -342,8 +347,8 @@ public class ChanListBox extends JPanel implements MouseListener {
 	 * @return
 	 */
 	public int getSelectedIndex() {
-		if (currentValues.size()>0)
-			return currentValues.get(0);
+		if (getCurrentValues().size()>0)
+			return getCurrentValues().get(0);
 		return 0;
 	}
 	
@@ -353,7 +358,7 @@ public class ChanListBox extends JPanel implements MouseListener {
 	public void paintComponent(Graphics g) {
 		
 		resetLabels();
-		if(currentValues.size()>0) {
+		if(getCurrentValues().size()>0) {
 			
 			ArrayList<ChannelEntryMenuItem> eachExcluded=new ArrayList<ChannelEntryMenuItem>();
 			
@@ -394,8 +399,8 @@ public class ChanListBox extends JPanel implements MouseListener {
 			
 			/**in the event that some of the values exceed the number of channels in the list, this makes some of the labels
 			 * equal to the numbers rather than the channel names*/
-			for(int i=0; i<currentValues.size(); i++) {
-				Integer i2 = currentValues.get(i);
+			for(int i=0; i<getCurrentValues().size(); i++) {
+				Integer i2 = getCurrentValues().get(i);
 				JLabel label1 = labels.get(i+10);
 				if(i2>=items.size())  {
 					label1.setText("# "+i2);
@@ -495,7 +500,7 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 	@Override
 	protected boolean isExcludedChannel() {
 		if(super.entry==null) return false;
-		return currentValues.contains(entry.getOriginalChannelIndex());
+		return getCurrentValues().contains(entry.getOriginalChannelIndex());
 	}
 	
 	/**The color of the text of the menu item*/
@@ -508,11 +513,11 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 	public void actionPerformed(ActionEvent e) {
 		
 		if(entry==null) {
-			currentValues.clear();
+			getCurrentValues().clear();
 		} else 
 		if (this.isExcludedChannel()) {
 			ArrayList<Integer> newList = new ArrayList<Integer>();
-			for(Integer c: currentValues) {
+			for(Integer c: getCurrentValues()) {
 				if (c==entry.getOriginalChannelIndex()) continue;
 				newList.add(c);
 			}
@@ -520,8 +525,8 @@ class ChannelEntryMenuItem extends BasicChannelEntryMenuItem  {
 			
 		}
 		else {
-			if(maxChannelSelectable==1) currentValues.clear();
-			currentValues.add(entry.getOriginalChannelIndex());
+			if(maxChannelSelectable==1) getCurrentValues().clear();
+			getCurrentValues().add(entry.getOriginalChannelIndex());
 			
 		}
 		if (entry!=null)

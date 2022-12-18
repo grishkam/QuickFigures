@@ -34,28 +34,30 @@ public class PlateCell {
 	private String plateAddress="";
 	BasicCellAddress address= new BasicCellAddress(0,0, null);
 	
-	private int listAddress;
-	
+	private int replicateID;
 	private Integer spreadSheetRow=null;
+	
+	
 	private Object shortName;
 	private Color color=Color.lightGray;
 	private String sourceSheet="Sheet0";
-	private AddressModification addressMod;
+	//private AddressModification addressMod;
+	
 
 	public PlateCell(BasicCellAddress address, AddressModification m) {
 		this.address=address;
 		plateAddress=address.getAddress(m);
-		this.addressMod=m;
+		//this.addressMod=m;
 	}
 	
-	private PlateCell(int i, String plateAddress) {
+	/**private PlateCell(int i, String plateAddress) {
 		this.listAddress=i;
 		this.plateAddress=plateAddress;
 		address= plateAddressToCell() ;
 		
 	}
 	
-	/**turns the plate address to a row/col*/
+	/**turns the plate address to a row/col
 	private BasicCellAddress plateAddressToCell() {
 		int[] output=new int[2];
 		if(plateAddress==null)	{ 
@@ -70,7 +72,7 @@ public class PlateCell {
 		output[1]=col;
 		return new BasicCellAddress(row,col, addressMod);
 		
-	}
+	}*/
 	
 	@Override
 	public String toString() {
@@ -131,6 +133,14 @@ public class PlateCell {
 	 */
 	public void setSourceSheetName(String sheetName) {
 		sourceSheet=sheetName;
+		
+	}
+
+	/**
+	 * @param j
+	 */
+	public void setReplicateID(int j) {
+		this.replicateID=j;
 		
 	}
 	

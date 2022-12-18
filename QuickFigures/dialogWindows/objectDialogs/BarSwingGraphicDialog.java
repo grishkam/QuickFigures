@@ -76,9 +76,9 @@ public class BarSwingGraphicDialog  extends GraphicItemOptionsDialog {
 		this.add("Angle",new NumberInputPanel("angle", rect.getAngle()*(180/Math.PI)));
 		this.add("fill" ,new ColorComboboxPanel("Fill Color",null, rect.getFillColor()));
 		this.add("showT" , new BooleanInputPanel("Show text ", rect.isShowText()));
-		this.getMainPanel().moveGrid(2, -1);
+		this.getCurrentUsePanel().moveGrid(2, -1);
 		this.add("autoT" ,new BooleanInputPanel("Autolocate text ", rect.isSnapBarText()));
-		this.getMainPanel().moveGrid(-2, 0);
+		this.getCurrentUsePanel().moveGrid(-2, 0);
 		super.addAttachmentPositionToDialog(rect);
 		
 		TextGraphic t = rect.getBarText();

@@ -95,6 +95,8 @@ public class FileSlot implements CustomSlot, StringInputListener {
 	public File getFile() {
 		return file;
 	}
+	
+	public boolean isEmpty() {return file==null;}
 
 	public void setFile(File file) {
 		this.file = file;

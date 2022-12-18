@@ -265,6 +265,19 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		this.plate=createPlate;
 		
 	}
+	
+	/**
+	 * @param buildPlate
+	 * @param displayPlate
+	 */
+	public void setPlate(ArrayList<Plate> buildPlate,int displayPlate) {
+		if(buildPlate.size()>displayPlate)
+			setPlate(buildPlate.get(displayPlate));
+		else {
+			setPlate(buildPlate.get(0));
+			IssueLog.log("used asked for preview "+displayPlate+ " but plate list length was too short "+buildPlate.size());
+		}
+	}
 
 	public boolean isShowSampleNames() {
 		return showSampleNames;
@@ -273,6 +286,8 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	public void setShowSampleNames(boolean showSampleNames) {
 		this.showSampleNames = showSampleNames;
 	}
+
+	
 
 	
 

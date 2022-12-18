@@ -86,8 +86,8 @@ public class AxisDialog  extends GraphicItemOptionsDialog {
 
 		super.addStrokePanelToDialog(rect);
 	
-		this.getMainPanel().moveGrid(2, -1);
-		this.getMainPanel().moveGrid(-2, 0);
+		this.getCurrentUsePanel().moveGrid(2, -1);
+		this.getCurrentUsePanel().moveGrid(-2, 0);
 		//super.addSnappingBehviourToDialog(rect);
 		
 		/**text tab*/

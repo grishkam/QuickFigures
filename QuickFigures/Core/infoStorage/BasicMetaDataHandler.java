@@ -851,7 +851,7 @@ public class BasicMetaDataHandler {
 				String fullKey = prefixSuffix[0]+(channelNumber+Integer.parseInt(prefixSuffix[3]))+ prefixSuffix[1];
 				
 				String entryFromInfoAsString = (String) getEntryFromInfoAsString(select, fullKey );
-				IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
+				//IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
 				return entryFromInfoAsString;
 			}
 

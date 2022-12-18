@@ -59,9 +59,9 @@ public class ComplexTextGraphicSwingDialog extends TextGraphicSwingDialog{
 		addBackgroundOptionsToDialog();
 		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dim Type ",  new ColorDimmingBox(textItem.getDimming().ordinal()));
 		this.add(DIM_KEY, cp);
-		this.getMainPanel().moveGrid(2, -1);
+		this.getCurrentUsePanel().moveGrid(2, -1);
 		this.add(DOES_DIM_KEY, new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
-		this.getMainPanel().moveGrid(-2, 0);
+		this.getCurrentUsePanel().moveGrid(-2, 0);
 		
 		addLineTabs();
 		

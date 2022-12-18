@@ -29,14 +29,14 @@ import standardDialog.InputPanel;
 public class ChoiceInputEvent extends ComponentInputEvent {
 
 	private int number;
-	Object chosen;
+	private Object chosen;
 	
 	
 	public ChoiceInputEvent(InputPanel panel, Component component, int number, Object chosenObject) {
 		this.setSourcePanel(panel);
 		this.setComponent(component);
 		this.setIndex(number);
-		chosen=chosenObject;
+		setChosenObject(chosenObject);
 	}
 
 
@@ -47,6 +47,18 @@ public class ChoiceInputEvent extends ComponentInputEvent {
 
 	public void setIndex(int number) {
 		this.number = number;
+	}
+
+
+
+	public Object getChosenObject() {
+		return chosen;
+	}
+
+
+
+	public void setChosenObject(Object chosen) {
+		this.chosen = chosen;
 	}
 
 

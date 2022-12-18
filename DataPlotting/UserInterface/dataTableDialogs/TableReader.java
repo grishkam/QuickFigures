@@ -74,4 +74,10 @@ public interface TableReader {
 	 */
 	ArrayList<String> getColumnHeaders();
 
+	/**
+	 * @param b
+	 * @param is
+	 */
+	void mergeIdenticalCells(boolean b, int[] is);
+
 }

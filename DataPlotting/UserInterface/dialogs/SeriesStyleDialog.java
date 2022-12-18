@@ -91,9 +91,9 @@ public class SeriesStyleDialog extends StandardDialog {
 	protected void addDimmingToDialog(SeriesStyle textItem) {
 		ChoiceInputPanel cp=new ChoiceInputPanel("Color Dim Type",  new ColorDimmingBox(textItem.getDimming().ordinal()));
 		this.add("dim", cp);
-		this.getMainPanel().moveGrid(2, -1);
+		this.getCurrentUsePanel().moveGrid(2, -1);
 		this.add("dim?", new BooleanInputPanel("Dim Color?", textItem.isDimColor()));
-		this.getMainPanel().moveGrid(-2, 0);
+		this.getCurrentUsePanel().moveGrid(-2, 0);
 	}
 	
 	
