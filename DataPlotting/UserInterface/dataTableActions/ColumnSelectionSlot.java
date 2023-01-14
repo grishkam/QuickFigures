@@ -40,21 +40,21 @@ import standardDialog.strings.StringInputListener;
 import storedValueDialog.CustomSlot;
 import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog.FileInput;
+import storedValueDialog.StoredValueDilaog.StringInput;
 
 /**
  
  * 
  */
-public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputListener{
+public class ColumnSelectionSlot implements CustomSlot, StringInputListener, ChoiceInputListener{
 
-	private FileSlot fileOrigin;
-	private FileInput inputPanel;
-	private ArrayList<ChannelEntry> channelsAvailable;
-	ChannelListChoiceInputPanel cip;
+	private  ColumnSlot fileOrigin;
+	private ChannelListChoiceInputPanel inputPanel;
+	private ArrayList<ChannelEntry> channelsAvailable=new ArrayList<ChannelEntry>();
+	private ChannelListChoiceInputPanel cip;
 	
 	
-	private ChannelEntry theDefault;
-	private ChannelEntry chosen;
+
 	private String keyword=null;
 	private String label=null;
 	private ExcelTableReader data;
@@ -63,7 +63,7 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	/**
 	 * @param templateFile
 	 */
-	public ColumnSlot(FileSlot templateFile, String key, boolean require) {
+	public ColumnSelectionSlot(ColumnSlot templateFile, String key, boolean require) {
 		fileOrigin=templateFile;
 		setupInputPanel();
 		label=key;
@@ -73,36 +73,29 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	/**
 	 * @param templateFile
 	 */
-	public ColumnSlot(FileSlot templateFile) {
+	public ColumnSelectionSlot(ColumnSlot templateFile) {
 		fileOrigin=templateFile;
 		setupInputPanel();
 		
 	}
 	
-	/**
-	 * @param templateFile
-	 */
-	public ColumnSlot(FileSlot templateFile, ChannelEntry theDefault) {
-		this(templateFile);
-		this.theDefault=theDefault;
-	}
+
 
 	/**
 	 * 
 	 */
 	public void setupInputPanel() {
-		inputPanel=fileOrigin.lastInput;
+		inputPanel=fileOrigin.cip;
 		if(inputPanel!=null)
-			inputPanel.addStringInputListener(this);
+			inputPanel.addChoiceInputListener(this);
 	}
 
 	/**updats the choices after input of a new file*/
 	@Override
 	public void stringInput(StringInputEvent sie) {
-		updateFromChosenFile();
+		updateFromChosen();
 		ArrayList<Integer> start = new ArrayList<Integer>();
-		if(hasDefaultValue())
-			start.add(this.getDefaultStartIndex());
+		
 		
 		cip.setupChannelOptions(channelsAvailable, start);
 		updateRequirementIndicator();
@@ -111,10 +104,9 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	/**
 	 * updates the channel options in response to new file input
 	 */
-	public void updateFromChosenFile() {
+	public void updateFromChosen() {
 		
-		File file = inputPanel.getFile();
-		useExcelFile(file);
+		useSlot();
 		
 	}
 	
@@ -123,31 +115,30 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	 */
 	public void updateFromFile() {
 		
-		File file = fileOrigin.getFile();
 		
-		useExcelFile(file);
+		useSlot();
 		
 	}
 
 	/**
 	 * @param file
 	 */
-	public void useExcelFile(File file) {
+	public void useSlot() {
 		
-		data = ExcelTableReader.openExcelFile(file);
-		channelsAvailable = getColumnHeaders(data);
+		
+		
 		updateRequirementIndicator();
 	}
 
 	@Override
 	public void addInput(StandardDialog d, RetrievableOption o, CustomSlot so) {
-		useExcelFile(fileOrigin.getFile());
+		useSlot();
 		 String label = this.getLabel();
 		 if(label==null)
 			 label=o.label();
 		 String key = o.key();
 		 
-		addFieldToDialog(d, label, key, getDefaultStartIndex());
+		addFieldToDialog(d, label, key);
 
 	}
 
@@ -156,16 +147,16 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	 * @param label
 	 * @param key
 	 */
-	public void addFieldToDialog(StandardDialog d, String label, String key, int start) {
+	public void addFieldToDialog(StandardDialog d, String label, String key) {
 		setupInputPanel();
 		try {
 			updateFromFile();
 			
 			cip = new ChannelListChoiceInputPanel(label, channelsAvailable,
-					start, "None", true );
+					new ArrayList<Integer>() );
 			updateRequirementIndicator();
 			cip.boxWidthLimit=150;
-			 cip.addChoiceInputListener(this);
+			
 			
 			d.add(key, cip);
 		} catch (Exception e) {
@@ -195,23 +186,11 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 		return channels;
 	}
 	
-	public ArrayList<ChannelEntry> getUniqueValuesInColumn() {
-		return getUniqueValuesInColumn(this.getAsString());
-	}
-	
 	/**returns the unique values in the current column*/
 	public ArrayList<ChannelEntry> getUniqueValuesInColumn(String col) {
-		IssueLog.log("Checking col "+col);
 		ArrayList<ChannelEntry> channels=new ArrayList<ChannelEntry>();
-		if(data==null) {
-			IssueLog.log("could not read excel data due to missing reader");
+		if(data==null||col==null)
 			return channels;
-		}
-		if(col==null) {
-			IssueLog.log("could not read excel data due to missing column name");
-			return channels;
-		}
-		
 		ArrayList<ChannelEntry> h = getColumnHeaders(data);
 		ChannelEntry c=null;
 		for(ChannelEntry h1: h) {
@@ -225,12 +204,11 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 				}
 		
 		
-		IssueLog.log("found  col "+col +" in table with "+data.getColumnCount()+ " columns");
+		
 		HashMap<String, Integer> eachValueRead=new HashMap<String, Integer>();
-		IssueLog.log("column is at index "+c.getOriginalChannelIndex());
+		
 		for(int i=1; i<data.getColumnCount(); i++) {
 			Object value = data.getValueAt(i, c.getOriginalChannelIndex());
-		
 			if(value==null)
 				continue;
 			if(!eachValueRead.containsKey(value))	{
@@ -241,29 +219,22 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 			
 		}
 		
-		int i=1;
-		for(String c1:eachValueRead.keySet() ) {
-			channels.add(new ChannelEntry(c1, i));
-			i++;
-		}
-		IssueLog.log(channels);
 		return channels;
 	}
 
 	@Override
 	public void valueChanged(ChoiceInputEvent ne) {
 		
-		if(channelsAvailable!=null&&channelsAvailable.size()>0) {
-			int choiceIndex = (int) ne.getChoiceIndex();
-			ArrayList<Integer> b = cip.getCurrentValues();
-			if(b.size()==1)
-				chosen=channelsAvailable.get(choiceIndex);
-			else chosen=null;
-			
-			updateRequirementIndicator();
-			
-			
-		}
+		updateValues();
+	}
+
+	/**
+	 * updates the options
+	 */
+	public void updateValues() {
+		channelsAvailable=fileOrigin.getUniqueValuesInColumn();
+		cip.setupChannelOptions(channelsAvailable, new ArrayList<Integer>());
+		IssueLog.log("updating options");
 	}
 
 	/**
@@ -274,7 +245,7 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 			return;
 		if(cip==null)
 			return;
-		if(chosen==null&&this.required) {
+		if(this.required) {
 		
 			cip.getBox().setBackground(bad_input);
 		} else {
@@ -282,54 +253,15 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 		}
 	}
 
-	/**
-	 * @param i
-	 */
-	public void setIndex(int i) {
-		
-		chosen=new ChannelEntry("", i);
-		
-	}
 
-	/**
-	 * @return 
-	 * 
-	 */
-	public double getIndex() {
-		if(chosen!=null)
-			return chosen.getOriginalChannelIndex();
-		return getDefaultStartIndex();
-		
-	}
-	
-	/**
-	 * @return 
-	 * 
-	 */
-	public String getAsString() {
-		if(chosen!=null)
-			return chosen.getLabel();
-		if(this.theDefault!=null)
-			return theDefault.getLabel();
-		return null;
-	}
-	
-	/**if no column is selected*/
-	public boolean isEmpty() {
-		return getAsString()==null;
-	}
 
-	/**
-	 * @return
-	 */
-	public int getDefaultStartIndex() {
-		if(hasDefaultValue())
-			return theDefault.getOriginalChannelIndex();
-		return 0;
-	}
 	
-	public boolean hasDefaultValue() {return theDefault!=null;}
+	
+	
+	
+	
 
+	
 	/**
 	 * @param string
 	 */
@@ -354,4 +286,24 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 		return keyword;
 	}
 
+	/**
+	 * @return
+	 */
+	public boolean isEmpty() {
+		if(cip.getSelectedIndices()==null||cip.getSelectedIndices().size()==0)
+			return true;
+		return false;
+	}
+
+	public ArrayList<String> getAllSelected() {
+		ArrayList<String> s=new ArrayList<String>();
+		for(int i: cip.getSelectedIndices())
+		for(ChannelEntry c: this.channelsAvailable) {
+			if(i==c.getOriginalChannelIndex())
+				s.add(c.getLabel());
+		}
+		return s;
+	}
+	
+	
 }

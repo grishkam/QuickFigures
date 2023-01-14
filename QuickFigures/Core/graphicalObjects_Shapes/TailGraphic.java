@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Dec 22, 2022
  * Version: 2022.2
  */
 package graphicalObjects_Shapes;
@@ -208,7 +208,7 @@ public class TailGraphic extends RectangularGraphic implements RectangleEdgePosi
 	protected SmartHandleList createSmartHandleList() {
 		SmartHandleList list = super.createSmartHandleList();
 		
-		list.add(new CountHandle(this, divisions, 4561215));
+		list.add(new CountHandle(this, divisions, 4561215, "tail form"));
 		return list;
 	}
 	

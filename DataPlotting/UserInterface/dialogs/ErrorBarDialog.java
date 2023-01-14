@@ -22,6 +22,7 @@ package dialogs;
 
 import java.util.ArrayList;
 
+import dataSeries.ErrorBarStyle;
 import objectDialogs.GraphicItemOptionsDialog;
 import plotParts.DataShowingParts.ErrorBarShowingShape;
 import standardDialog.booleans.BooleanInputPanel;
@@ -103,10 +104,14 @@ public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 		this.add("width", nip);
 		
 		this.add("typ",
-				new ChoiceInputPanel("Show as", CHOICES_FOR_LINES, rect.getBarType()));
+				new ChoiceInputPanel("Show as", CHOICES_FOR_LINES, rect.getBarType().ordinal()));
+		
 		
 		this.add("errorT",
-				new ChoiceInputPanel("Show Error Bar as", ERROR_BAR_TYPE_CHOICES, rect.getErrorDepiction()));
+				new ChoiceInputPanel("Show Error Bar as", ERROR_BAR_TYPE_CHOICES, rect.getErrorDepiction().ordinal()));
+		this.add("ShowErrorT",
+				ChoiceInputPanel.buildForEnum("Direction ", ErrorBarStyle.Bardirections.values(), rect.getBarDirectionsShown()));
+		
 	}
 	
 	@Override
@@ -131,10 +136,10 @@ public class ErrorBarDialog  extends GraphicItemOptionsDialog {
 
 	protected void setErrorBarSpecificOptions(ErrorBarShowingShape rect) {
 		rect.setBarWidth((int)getNumber("width"));
-		rect.setBarType(this.getChoiceIndex("typ"));
-		rect.setLowerBarShown(this.getBoolean("lower"));
-		rect.setUpperBarShown(this.getBoolean("upper"));
-		rect.setErrorDepiction(this.getChoiceIndex("errorT"));
+		rect.setBarType(ErrorBarStyle.CapAppearance.values()[this.getChoiceIndex("typ")]);
+		
+		rect.setErrorDepiction(ErrorBarStyle.ErrorType.values()[this.getChoiceIndex("errorT")]);
+		rect.setBarDirectionsShown(ErrorBarStyle.Bardirections.values()[this.getChoiceIndex("ShowErrorT")]);
 		rect.requestShapeUpdate();
 		rect.updatePlotArea();
 	}

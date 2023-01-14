@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.undo.AbstractUndoableEdit;
 
+import dataSeries.ErrorBarStyle;
 import dialogs.BoxPlotDialog;
 import dialogs.ErrorBarDialog;
 import dialogs.MeanBarDialog;
@@ -946,7 +947,7 @@ public CombinedEdit barPlot() {
 				forceBarToForm( a, DataBarShape.DATA_BAR_SHAPE));
 		
 		undo.addEditToList(
-				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
+				forceErrorBarToForm(a, ErrorBarShowingShape.ErrorType.SEM));
 		
 	
 	}
@@ -977,7 +978,7 @@ protected CombinedEdit forceBoxplotWhisker( BasicDataSeriesGroup a, int  whisker
 	return undo;
 }
 
-protected CombinedEdit forceErrorBarToForm( BasicDataSeriesGroup a, int  depiction) {
+protected CombinedEdit forceErrorBarToForm( BasicDataSeriesGroup a, ErrorBarStyle.ErrorType  depiction) {
 	CombinedEdit undo = new CombinedEdit();
 	if (a.getErrorBar()==null) 
 		undo.addEditToList(a.addErrorBar());
@@ -1011,7 +1012,7 @@ public AbstractUndoableEdit scatterPlot() {
 		undo.addEditToList(
 				forceBarToForm(a,DataBarShape.LINE_ONLY ));
 		undo.addEditToList(
-				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
+				forceErrorBarToForm(a, ErrorBarShowingShape.ErrorType.SEM));
 	
 		
 	}

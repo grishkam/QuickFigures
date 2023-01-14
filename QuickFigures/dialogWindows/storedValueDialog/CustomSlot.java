@@ -21,6 +21,8 @@
  */
 package storedValueDialog;
 
+import java.awt.Color;
+
 import layout.RetrievableOption;
 import standardDialog.StandardDialog;
 
@@ -30,6 +32,10 @@ import standardDialog.StandardDialog;
  */
 public interface CustomSlot {
 
+	static Color bad_input = new Color(230, 190, 190);
+	static Color good_input = new Color(190, 230, 190);
+	static Color neutral_input = new Color(230, 230, 230);
+	
 	/**
 	 * @param d
 	 * @param o

@@ -41,6 +41,9 @@ public class RectangleEdgeParameter implements Serializable, RectangleEdgePositi
 	  these determine where the handle is drawn and how far it can be moved*/
 	public int zeroLocation=UPPER_LEFT;
 	public int maxLengthLocation=TOP;
+	
+	/**An identifier describing what type of handle this is*/
+	private String id=null;
 
 	public RectangleEdgeParameter(RectangularGraphic ovalGraphic) {
 		
@@ -51,6 +54,11 @@ public class RectangleEdgeParameter implements Serializable, RectangleEdgePositi
 		this.length=length;
 		this.maxLengthLocation=max;
 		this.zeroLocation=zero;
+	}
+	
+	public RectangleEdgeParameter(RectangularGraphic ovalGraphic, double length, int zero, int max, String id ) {
+		this(ovalGraphic, length, zero, max);
+		this.setName(id);
 	}
 	
 	public RectangleEdgeParameter copy(RectangularGraphic ovalGraphic) {
@@ -96,6 +104,14 @@ public class RectangleEdgeParameter implements Serializable, RectangleEdgePositi
 		this.length=theParameter.getLength();
 		this.ratioToMax=theParameter.getRatioToMaxLength();
 		
+	}
+
+	public String getName() {
+		return id;
+	}
+
+	public void setName(String id) {
+		this.id = id;
 	}
 	
 	

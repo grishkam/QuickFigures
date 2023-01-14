@@ -16,11 +16,12 @@
 /**
  * Author: Greg Mazo
  * Date Created: Dec 3, 2022
- * Date Modified: Dec 3, 2022
+ * Date Modified: Jan 14, 2023
  * Version: 2022.2
  */
 package storedValueDialog;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -35,8 +36,7 @@ import standardDialog.strings.StringInputListener;
 import storedValueDialog.StoredValueDilaog.FileInput;
 
 /**
- 
- * 
+ An object that keeps track of a user option for a file choice
  */
 public class FileSlot implements CustomSlot, StringInputListener {
 
@@ -44,11 +44,23 @@ public class FileSlot implements CustomSlot, StringInputListener {
 	public FileInput lastInput=null;
 	private FileSlot sister;
 	
-	public FileSlot() {
+	boolean folder=false;
+	boolean required=false;
+	
+	public FileSlot(boolean require) {
+		this.required=require;
 	}
 	
 	public FileSlot(FileSlot sister) {
 		this.sister=sister;
+	}
+	
+	public String getPath() {
+		if(this.isEmpty())
+			return null;
+		return file.getAbsolutePath().replace("\\", "/");
+		
+		
 	}
 	
 	@Override
@@ -68,7 +80,9 @@ public class FileSlot implements CustomSlot, StringInputListener {
 			
 			FileInput fi = new StoredValueDilaog.FileInput(d, this, this.getClass().getDeclaredField("file"), o, swap);
 			fi.addStringInputListener(this);
+			
 			this.lastInput=fi;
+			updateRequirementIndicator();
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}
@@ -89,7 +103,7 @@ public class FileSlot implements CustomSlot, StringInputListener {
 	@Override
 	public void stringInput(StringInputEvent sie) {
 		
-		
+		updateRequirementIndicator();
 	}
 
 	public File getFile() {
@@ -103,6 +117,42 @@ public class FileSlot implements CustomSlot, StringInputListener {
 		if(this.lastInput!=null) {
 			lastInput.changeFile(file);
 		}
+		
+		this.updateRequirementIndicator();
+	}
+
+	/**
+	 * 
+	 */
+	private void updateRequirementIndicator() {
+		if(!required)
+			return;
+		
+		if(lastInput==null) {
+			IssueLog.log("will not update requirement indicator");
+			return;
+			}
+		
+		if(required&&!exists() ) {
+			
+		
+			lastInput.getTextComponent().setBackground(bad_input);
+			lastInput.getFileSelectionButton().setBackground(bad_input);
+		} else {
+			
+			lastInput.getTextComponent().setBackground(good_input);
+			lastInput.getFileSelectionButton().setBackground(good_input);
+		}
+		
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean exists() {
+		if(file!=null&&file.exists())
+			return true;
+		return false;
 	}
 
 }

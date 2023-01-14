@@ -90,7 +90,7 @@ public class StoredValueDilaog extends StandardDialog{
 			if (o!=null) try {
 				f.setAccessible(true);
 				
-				if(o.choices().length>1) {
+				if(o.choices().length>1&&!o.chooseExtra()) {
 					String[] theChoices = o.choices();
 					lastField=addChoice(d, of, f, o, theChoices);
 					
@@ -220,6 +220,10 @@ public class StoredValueDilaog extends StandardDialog{
 	public static void addStringField(StandardDialog d, Object of, Field f, RetrievableOption o)
 			throws IllegalAccessException {
 		String label = o.label();
+		if(o.choices()!=null&&o.choices().length>0) {
+			d.add(o.key(), new StringInput(label, of, f, o, o.choices()));
+		} else 
+			
 		d.add(o.key(), new StringInput(label, of, f, o));
 	}
 	
@@ -267,6 +271,13 @@ public class StoredValueDilaog extends StandardDialog{
 
 		public StringInput(String label, Object of, Field f, RetrievableOption o) throws IllegalArgumentException, IllegalAccessException {
 			super(label, ""+ f.get(of));
+			addStringInputListener(this);
+			this.field=f;
+			this.object=of;
+		}
+		
+		public StringInput(String label, Object of, Field f, RetrievableOption o, String[] options) throws IllegalArgumentException, IllegalAccessException {
+			super(label, ""+ f.get(of), options);
 			addStringInputListener(this);
 			this.field=f;
 			this.object=of;

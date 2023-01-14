@@ -201,7 +201,7 @@ public CombinedEdit defaultPlot() {
 				a.addLine());
 
 		undo.addEditToList(
-				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
+				forceErrorBarToForm(a, ErrorBarShowingShape.ErrorType.SEM));
 		undo.addEditToList(
 				a.removeBoxplot());
 		undo.addEditToList(
@@ -250,7 +250,7 @@ public void linePlot() {
 		undo.addEditToList(
 				forceBarToForm(a, DataBarShape.SINGLE_POINT));
 		undo.addEditToList(
-				forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
+				forceErrorBarToForm(a, ErrorBarShowingShape.ErrorType.SEM));
 	}
 	fullPlotUpdate();
 }

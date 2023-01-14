@@ -126,13 +126,21 @@ public class FileChoiceUtil {
 		File startingDir=new File(dir);
 		
 		if (startingDir.isDirectory()) {
-		fd.setDirectory(dir);}
+			fd.setDirectory(dir);
+		}
 		else {
 			fd.setDirectory(startingDir.getParent());
-				if (name==null)
-				fd.setFile(startingDir.getName());
-				else fd.setFile(name);
+				
+				
+				
 		}  
+		
+		if (name==null&&startingDir!=null)
+			fd.setFile(startingDir.getName());
+		else 
+			if(name!=null)
+				fd.setFile(name);
+		
 	       fd.setVisible(true);
 	       String st=fd.getFile();
 	       fd.setMultipleMode(multipleDialog);
@@ -201,6 +209,11 @@ public class FileChoiceUtil {
 	public static File  getSaveFile(String path, String name) {
 		 FileDialog fd = new  FileDialog(new JFrame(), "Open ", FileDialog.SAVE);
 	       return showIJDDFileDialog(fd,path , name );	      
+	}
+	
+	/**shows a file dialog for the user to save a file in the default directory*/
+	public static File  getSaveFile(String name) {
+		return getSaveFile(CurrentAppContext.getDefaultDirectory(), name); 
 	}
 	
 	/**Uses a JFileChooser to get a file from the user*/

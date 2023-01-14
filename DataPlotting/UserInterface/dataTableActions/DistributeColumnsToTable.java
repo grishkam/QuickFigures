@@ -21,6 +21,8 @@
  */
 package dataTableActions;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
@@ -90,7 +92,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	public boolean flipGroup=false;
 	
 	@RetrievableOption(key = "Input File With Sample names (.xlsx)", label="Input File 1 (.xlsx)", note="Excel")
-	public FileSlot templateFile=new FileSlot();
+	public FileSlot templateFile=new FileSlot(true);
 	
 	@RetrievableOption(key = "Combine File with another? (optional)", label="Combine with File2? (optional)", note="Excel")
 	public FileSlot templateFile2=new FileSlot(templateFile);
@@ -98,7 +100,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	
 	@RetrievableOption(key = "rotate plate", label="Distribute samples vertically")
-	public boolean rotatePlate=true;
+	public boolean rotatePlate=false;
 	
 	/**the names of the samples that will be seen in the spreadsheet */
 	@RetrievableOption(key = "show names", label="Preview sample names")
@@ -156,13 +158,14 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		if(item!=null)
 			setSampleListFile(new File( item.getOriginalSaveAddress()));
 		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this, "general");
+		currentDialog.setHideOK(true);
 		 comp = new GraphicComponent();
 		comp.addComponentMouseListener(this);
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx=5;
 		gc.gridy=1;
-		comp.setPrefferedSize(600, 420);
-		comp.setMagnification(0.75);
+		comp.setPrefferedSize(540, 378);
+		comp.setMagnification(0.70);
 		comp.getGraphicLayers().add(diplay);
 		
 		
@@ -185,6 +188,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				buildPlate(true);
 				
 			}});}
+		spreadsheet.setBackground(Color.green);
+		spreadsheet.setFont(new Font("Arial",  Font.BOLD, 24));
 		currentDialog.addButton(spreadsheet);
 		//currentDialog.setModal(true);
 		currentDialog.showDialog();
@@ -367,8 +372,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 					output.setValueAt(combined,row3, 0);
 					output.setValueAt(count,row3, 1);
 					count++;
-					output.setValueAt("Combined Names ",0,0);
-					output.setValueAt("Combined Name Index ",0,1);
+					output.setValueAt("Combined_Names",0,0);
+					output.setValueAt("Combined_Name_Index ",0,1);
 					row3++;
 					
 				}

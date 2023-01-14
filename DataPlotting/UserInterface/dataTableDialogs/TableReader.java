@@ -80,4 +80,11 @@ public interface TableReader {
 	 */
 	void mergeIdenticalCells(boolean b, int[] is);
 
+	/**
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	String getStringValueAt(int row, int col);
+
 }

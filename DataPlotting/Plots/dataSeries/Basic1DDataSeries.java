@@ -317,11 +317,11 @@ public class Basic1DDataSeries implements DataSeries, ErrorBarStyle {
 	/**returns the length of the error bars
 	 * @param errorDepiction what the error bars are
 	 * @param upperOrLower which direction bar*/
-	public double getErrorBarLength(int errorDepiction, int upperOrLower) {
+	public double getErrorBarLength(ErrorBarStyle.ErrorType errorDepiction, int upperOrLower) {
 		double barExtends= getSDDev();
-		if (errorDepiction==SEM) {barExtends= getSEM();}
-		if (errorDepiction==SEM2) {barExtends= 2*getSEM();}
-		if (errorDepiction==SEM3) {barExtends= 3*getSEM();}
+		if (errorDepiction==ErrorBarStyle.ErrorType.SEM) {barExtends= getSEM();}
+		if (errorDepiction==ErrorBarStyle.ErrorType.SEM2) {barExtends= 2*getSEM();}
+		if (errorDepiction==ErrorBarStyle.ErrorType.SEM3) {barExtends= 3*getSEM();}
 		return barExtends;
 	}
 	

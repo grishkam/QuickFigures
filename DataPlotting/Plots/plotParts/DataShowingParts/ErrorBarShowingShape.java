@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 28, 2021
+ * Date Modified: Dec 22, 2022
  * Version: 2022.2
  */
 package plotParts.DataShowingParts;
@@ -40,13 +40,17 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 
 	
 	
-	private boolean upper=true;
-	private boolean lower=true;
-	private int type=DRAW_AS_BAR;
-	private int errorShownAs=SEM;
+
+	
+	private ErrorBarStyle.Bardirections barDirectionsShown=ErrorBarStyle.Bardirections.BOTH;
+	
+	private ErrorBarStyle.CapAppearance type=ErrorBarStyle.CapAppearance.DRAW_AS_BAR;
+	
+	private ErrorBarStyle.ErrorType errorShownAs=ErrorBarStyle.ErrorType.SEM;
+	
 	{super.setName("Error Bar");}
 	
-	public ErrorBarShowingShape(DataSeries data, int type) {
+	public ErrorBarShowingShape(DataSeries data, ErrorBarStyle.CapAppearance type) {
 		super(data);
 		this.setDashes(new float[] {});
 		this.setStrokeWidth(1);
@@ -55,16 +59,16 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	}
 	
 	public ErrorBarShowingShape(DataSeries data) {
-		this(data, DRAW_AS_BAR);
+		this(data, ErrorBarStyle.CapAppearance.DRAW_AS_BAR);
 	}
 	
 	/**sets the traits that must be consistent between series on the same plot*/
 	public void copyTraitsFrom(ErrorBarShowingShape m) {
-		this.type=m.getBarType();
+		this.setBarType(m.getBarType());
 		this.setBarWidth(m.getBarWidth());
-		this.lower=m.lower;
-		this.upper=m.upper;
-		errorShownAs=m.errorShownAs;
+		this.setBarDirectionsShown(m.getBarDirectionsShown());
+
+		this.setErrorDepiction(m.getErrorDepiction());
 		super.copyStrokeFrom(m);
 	}
 	
@@ -139,7 +143,10 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	protected Path2D createShapeFor(double mean, double position, double barExtendsDown, double barExtendsUp) {
 		
 		double width=getBarWidth()/2;
-		if (type==DRAW_AS_LINE_ONLY) {width=0;}
+		
+		if (getBarType()==ErrorBarStyle.CapAppearance.DRAW_AS_LINE_ONLY) 
+			{width=0;}
+		
 		double vOffset=getValueOffset(position);
 		double lower=mean-barExtendsDown+vOffset;
 		double upper=mean+barExtendsUp+vOffset;
@@ -240,39 +247,47 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 		
 	}
 
-	public int getBarType() {
+	public ErrorBarStyle.CapAppearance getBarType() {
 		return type;
 	}
 
-	public void setBarType(int type) {
+	public void setBarType(ErrorBarStyle.CapAppearance type) {
 		this.type = type;
 	}
 
 	public boolean isUpperBarShown() {
-		return upper;
+		if(getBarDirectionsShown()==ErrorBarStyle.Bardirections.BOTH)
+			return true;
+		if(getBarDirectionsShown()==ErrorBarStyle.Bardirections.LOWER)
+			return false;
+		if(getBarDirectionsShown()==ErrorBarStyle.Bardirections.UPPER)
+			return true;
+		return false;
 	}
 
-	public void setUpperBarShown(boolean upper) {
-		this.upper = upper;
-	}
+	
 
 	public boolean isLowerBarShown() {
-		return lower;
+		if(getBarDirectionsShown()==ErrorBarStyle.Bardirections.BOTH)
+			return true;
+		if(getBarDirectionsShown()==ErrorBarStyle.Bardirections.LOWER)
+			return true;
+		if(getBarDirectionsShown()==ErrorBarStyle.Bardirections.UPPER)
+			return false;
+		return false;
 	}
 
-	public void setLowerBarShown(boolean lower) {
-		this.lower = lower;
-	}
+
 	
 	public void showOptionsDialog() {
 		new ErrorBarDialog(this, false).showDialog();;
 	}
 
-	public int getErrorDepiction() {
+	public ErrorBarStyle.ErrorType getErrorDepiction() {
 		return errorShownAs;
 	}
 	
-	public void setErrorDepiction(int form) {
+	public void setErrorDepiction(ErrorBarStyle.ErrorType form) {
 		errorShownAs=form;
 	}
 
@@ -283,5 +298,13 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 		if (smartHandles==null)
 			smartHandles=new DataBarSmartHandleList(this);
 		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
+	}
+
+	public ErrorBarStyle.Bardirections getBarDirectionsShown() {
+		return barDirectionsShown;
+	}
+
+	public void setBarDirectionsShown(ErrorBarStyle.Bardirections barDirectionsShown) {
+		this.barDirectionsShown = barDirectionsShown;
 	}
 }

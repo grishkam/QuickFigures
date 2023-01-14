@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Dec 22, 2022
  * Version: 2022.2
  */
 package graphicalObjects_Shapes;
@@ -268,7 +268,7 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 			list.add(0,new RectangleEdgeHandle(this, notchHeight, Color.cyan, 18,RectangleEdgeHandle.RATIO_TYPE, 0.05));
 			list.add(0,new RectangleEdgeHandle(this, notchWidth, Color.orange, 20,RectangleEdgeHandle.RATIO_TYPE, -0.05));
 			int dx = 45;
-			list.add(new CountHandle(this, notchType,239124, dx, 50, true, 3));
+			list.add(new CountHandle(this, notchType, 239124, dx, 50, true, 3, "notch shape"));
 			for(int i=0; i<4; i++) list.add(new NotchHandle(this, i));
 		 }
 		return list;

@@ -49,6 +49,7 @@ public @interface RetrievableOption {
 	   the field in the user interface
 	   */
 	String[] choices() default {};
+	boolean chooseExtra() default false;
 	
 	/**the range of numbers that a numeric field should have.*/
 	int[] minmax() default {0,0} ;

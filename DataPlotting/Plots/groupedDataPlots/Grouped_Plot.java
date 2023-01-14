@@ -479,7 +479,7 @@ public class Grouped_Plot extends BasicPlot{
 			undo.addEditToList(
 					forceItemColors(a, a.getDataBar()));
 			undo.addEditToList(
-					forceErrorBarToForm(a, ErrorBarShowingShape.SEM));
+					forceErrorBarToForm(a, ErrorBarShowingShape.ErrorType.SEM));
 			undo.addEditToList(
 					forceItemColors(a, a.getErrorBar()));
 		}

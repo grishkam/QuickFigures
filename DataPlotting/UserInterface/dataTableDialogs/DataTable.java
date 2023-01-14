@@ -444,4 +444,9 @@ public class DataTable extends JTable implements TableReader {
 		
 	}
 
+	@Override
+	public String getStringValueAt(int row, int col) {
+		return this.getValueAt(row, col)+"";
+	}
+
 }

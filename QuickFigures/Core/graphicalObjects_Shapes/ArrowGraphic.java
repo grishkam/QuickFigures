@@ -1034,7 +1034,7 @@ protected Point2D getDrawnLineEnd2() {
 	
 
 	public CountHandle createHeadNumberHandle() {
-		return new CountHandle(this, headnumber, HEAD_NUMBER_HANDLE, 25,2, true, 1);
+		return new CountHandle(this, headnumber, HEAD_NUMBER_HANDLE, 25,2, true, 1, "nheads");
 	}
 	public ArrowSmartHandle createArrowSizeHandle(int i) {
 		return new ArrowSmartHandle(ArrowSmartHandle.HANDLE_CONTEXT*i+ARROW_SIZE_HANDLE, this);

@@ -52,10 +52,11 @@ public class CountHandle extends SmartHandle {
 	private double widthStretch=2;
 	String up = "+";
 	String down = "-";
+	private String name=null;
 	
 	
 
-	public CountHandle(LocatedObject2D regularPolygonGraphic, CountParameter number, int handleNumber) {
+	public CountHandle(LocatedObject2D regularPolygonGraphic, CountParameter number, int handleNumber, String name) {
 		
 		polygon=regularPolygonGraphic;
 		this.count=number;
@@ -64,8 +65,8 @@ public class CountHandle extends SmartHandle {
 		this.handlesize=10;
 	}
 	
-	public CountHandle(LocatedObject2D r, CountParameter n, int handle, int dx, int dy, boolean h, double expandWidth) {
-		this(r,n, handle);
+	public CountHandle(LocatedObject2D r, CountParameter n, int handle, int dx, int dy, boolean h, double expandWidth, String name) {
+		this(r,n, handle, name);
 		oX=dx;
 		oY=dy;
 		loopToStart=h;
@@ -75,7 +76,7 @@ public class CountHandle extends SmartHandle {
 	public static CountHandle[] createTriad(LocatedObject2D r, CountParameter n, int handle) {
 		CountHandle[] out = new CountHandle[3];
 		for(int i=0; i<3; i++) {
-			out[i]=new CountHandle(r, n, handle+i);
+			out[i]=new CountHandle(r, n, handle+i, null);
 			out[i].form=COUNT_DOWN+i;
 			if(out[i].form!=DISPLAY_COUNT) {
 				out[i].widthStretch=0.7;
@@ -101,6 +102,7 @@ public class CountHandle extends SmartHandle {
 		if(form==COUNT_DOWN) px-=15;
 		return new Point2D.Double(px, py);
 	}
+	
 	public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
 		if (count.getNames()!=null) {
 			new CountPopupMenu(canvasMouseEventWrapper).showForMouseEvent(canvasMouseEventWrapper);
@@ -127,14 +129,26 @@ public class CountHandle extends SmartHandle {
 			
 			if(nV<count.getMinValue() &&loopToStart)  count.setValue(count.getMaxValue());
 				else
-			if (nV>count.getMaxValue()) count.setValue(count.getMinValue());
+			if (nV>count.getMaxValue()) 
+					count.setValue(count.getMinValue());
 				else
-				count.setValue(nV);
+					count.setValue(nV);
 		}
 		undo.establishFinalState();
 		canvasMouseEventWrapper.addUndo(undo);
 		
+		applyToAllSelected(canvasMouseEventWrapper);
 		canvasMouseEventWrapper.getAsDisplay().updateDisplay();
+	}
+
+	/**work in progress, will change all selected ones if shift is down
+	 * @param canvasMouseEventWrapper
+	 */
+	public void applyToAllSelected(CanvasMouseEvent canvasMouseEventWrapper) {
+		if(canvasMouseEventWrapper.getSelectionSystem().getSelecteditems().size()==0)
+			return;
+		
+		
 	}
 
 	public SimpleItemUndo<CountParameter> createUndo() {
@@ -180,6 +194,14 @@ public class CountHandle extends SmartHandle {
 		return true;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	/**A menu that gives the user a means to choose */
 	public class CountPopupMenu extends SmartPopupJMenu {
 		/**

@@ -24,33 +24,39 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
+import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 
 /**A JPanel containing a Label and a Text field for placement into a standard dialog with a grided panel*/
-public class StringInputPanel extends InputPanel implements OnGridLayout, KeyListener{
+public class StringInputPanel extends InputPanel implements OnGridLayout, KeyListener, ItemListener{
 
 	/**
 	 * 
 	 */
 	private static final int STANDARD_NUMBER_OF_COLUMNS_IN_TEXT_FIELD = 15;
 	public static final String lineseparator = ""+'\n';
+	
 	JLabel label=new JLabel();
 	protected JTextComponent field=new JTextField(15);
 	ArrayList<StringInputListener> lis=new ArrayList<StringInputListener>();
 	String lasts="";
 	
 	private String originalStatus;
+	private JComboBox<String> theComboBox;
 	
 	
 	public StringInputPanel(String labeln, String contend) {
@@ -65,9 +71,18 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	public StringInputPanel(String labeln, String contend, int fieldLength) {
 		field=new JTextField(contend, fieldLength);
 		setupInnitialText(labeln, contend);
-		
+	
 	}
+	
+	
 
+	public void createComboBox(String[] options) {
+		JComboBox<String> gg=new JComboBox<String>(options);
+		gg.setEditable(true);
+		gg.addItemListener(this);
+		this.theComboBox=gg;
+	}
+	
 	/**
 	 * @param labeln
 	 * @param contend
@@ -86,6 +101,12 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 		setupInnitialText(labeln, contend);
 	}
 	
+	public StringInputPanel(String labeln, String contend, String[] options) {
+		this.createComboBox(options);
+	
+		setupInnitialText(labeln, contend);
+	}
+	
 	/**creates a string input panel for many strings that are separated by lines*/
 	public StringInputPanel(String labeln, String[] contend, int rows, int cols) {
 		field=new JTextArea(rows, cols);
@@ -98,15 +119,23 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 		setContentText(originalStatus);
 	}
 	
+	/**Sets the text*/
 	public void setContentText(String contend) {
+		if(theComboBox!=null) {
+			theComboBox.setSelectedItem(contend);
+		}
 		getTextComponent().setText(contend);
 	}
 	
 	
-
-	
-	
+	/**returns the string*/
 	public String getTextFromField() {
+		if(this.theComboBox!=null) {
+			Object item = this.theComboBox.getSelectedItem();
+			if(item==null)
+				return "";
+			return item.toString();
+		}
 		return getTextComponent().getText();
 	}
 	
@@ -153,7 +182,8 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	}
 	
 	protected Component getTextFieldHolder() {
-		
+		if(this.theComboBox!=null)
+			return theComboBox;
 		Component textField = getTextField();
 		if(textField instanceof JTextArea) {
 			JScrollPane scrollPane = new JScrollPane(textField);
@@ -219,6 +249,15 @@ public class StringInputPanel extends InputPanel implements OnGridLayout, KeyLis
 	/**Returns the text component that the user types into*/
 	public JTextComponent getTextComponent() {
 		return field;
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if(e.getSource()==theComboBox) {
+			
+			dispatchStringInputEvent();
+		}
+		
 	}
 
 

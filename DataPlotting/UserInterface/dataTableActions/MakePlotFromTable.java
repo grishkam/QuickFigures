@@ -27,7 +27,7 @@ import ultilInputOutput.FileChoiceUtil;
 public class MakePlotFromTable extends BasicDataTableAction {
 
 	@RetrievableOption(key = "Data File (.xlsx)", label="Input File (.xlsx)", note="Excel")
-	public FileSlot templateFile=new FileSlot();
+	public FileSlot templateFile=new FileSlot(true);
 	
 	@RetrievableOption(key = "sample", label="names are in col #")
 	public ColumnSlotList columnsChosen=new ColumnSlotList(templateFile, new String[] {"name","x", "y"});

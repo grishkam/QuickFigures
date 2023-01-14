@@ -116,6 +116,14 @@ public class ExcelTableReader implements TableReader {
 		}
 		return cell;
 	}
+	
+	@Override
+	public String getStringValueAt(int row, int col) {
+		Object out = this.getValueAt(row, col);
+		if(out instanceof String)
+			return (String) out;
+		return out+"";
+	}
 
 	@Override
 	public int getRowCount() {

@@ -1,108 +1,221 @@
+/*******************************************************************************
+ * Copyright (c) 2021 Gregory Mazo
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 17, 2022
- * Copyright (C) 2022 Gregory Mazo
- * 
- */
-/**
- 
- * 
+ * Date Created: Dec 17, 2022
+ * Date Modified: Dec 19, 2022
+ * Version: 2022.2
  */
 package dataTableActions;
 
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import channelMerging.ChannelEntry;
 import dataTableDialogs.TableReader;
+import figureFormat.DirectoryHandler;
+import infoStorage.FileBasedMetaWrapper;
 import layout.RetrievableOption;
 import logging.IssueLog;
+import messages.ShowMessage;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
 import standardDialog.graphics.GraphicComponent;
 import standardDialog.strings.StringInputPanel;
 import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog;
+import ultilInputOutput.FileChoiceUtil;
 
 /**
  
  * 
  */
-public class CreateFunctionFromDataTables {
+public class CreateFunctionFromDataTables extends BasicDataTableAction{
 
 	private StoredValueDilaog currentDialog;
-	
+	String saveAsR ="make_plots";// "make_plots.R";
 	@RetrievableOption(key = "Input sample setup", label="Sample setup file", note="Excel")
-	public FileSlot theSampleSetup=new FileSlot();
+	public FileSlot theSampleSetup=new FileSlot(true);
 	
-	@RetrievableOption(key = "results file", label="results file", note="Excel")
-	public FileSlot results_file=new FileSlot();
+	String supportFiles="plot_functions";
 	
-	String functionName="createPlotsFrom";
+	//@RetrievableOption(key = "results file", label="results file", note="Excel")
+	//public FileSlot results_file=new FileSlot();
+	
+
 	
 	@RetrievableOption(key = "sample", label="parameters are")
 	public ColumnSlotList col1=new ColumnSlotList(
-			new ColumnSlot(theSampleSetup, "color=")
-			,new ColumnSlot(theSampleSetup, "xAxis=")
+			new ColumnSlot(theSampleSetup, "x_axis_column=", true),
+			new ColumnSlot(theSampleSetup, "color_variable_column=", false)
+			,
+			new ColumnSlot(theSampleSetup, "division_column=", false)
 				);
+	
+	@RetrievableOption(key = "excluded_based_on", label="parameters are", category="more")
+	public ColumnSlot slotexclude= new ColumnSlot(theSampleSetup, "from_column", false);
+	@RetrievableOption(key = "excluded", label="parameters are", category="more")
+	public ColumnSelectionSlot slotExclude=new ColumnSelectionSlot(slotexclude);
+	
+	@RetrievableOption(key = "data_location", label="data_location", note="any")
+	public FileSlot dataFile=new FileSlot(false);
+	
+	
+	/**
+	@RetrievableOption(key = "sample2", label="data parameters are")
+	public ColumnSlotList col2=new ColumnSlotList(
+			new ColumnSlot(results_file, "y_axis=")
+				);*/
 
+
+	
+	
+	public String form="Rscript ";
+	
+	@RetrievableOption(key = "terminal_command", label="plot using", choices= {"plot_NGS.R", "plot_FACS.R"}, chooseExtra=true)
+	public String functionName="plot_NGS.R";
+	
 	private StringInputPanel comp=new StringInputPanel("fuction", "");;
 	
-	String buildInput() {
+	
+	@RetrievableOption(key = "run me", label="also run ")
+	public String alsoRun="";
+	
+	boolean isReady() {
+		
+		ArrayList<String> warnings=new ArrayList<String>();
+		if(theSampleSetup.isEmpty())
+			warnings.add("Sample setup file is required");
+		//if(results_file.isEmpty())warnings.add("results file is required");
+		if(warnings.size()>0)
+			ShowMessage.showOptionalMessage("More items are required", false, warnings);
+		return warnings.size()<1;
+		
+	}
+	
+	String buildInput() throws IOException {
 		
 		
 		String in = "";
-		if(!theSampleSetup.isEmpty()) {
-			in+="the_sample_setup_file='"+theSampleSetup.getFile()+"'"+"\n";
-		}
+	
 		
-		in+=functionName+"(";
+		in+=form+functionName+" \"";
 		boolean comma=false;
 		
 		if(!theSampleSetup.isEmpty()) {
 			if(comma) in+=", ";
-			in+= "sample_setup_file = the_sample_setup_file";
+			in+= "sample_setup_file = '"+theSampleSetup.getPath()+"'";
 			comma=true;
 		}
 		
+		/**
+		 * 	if(!theSampleSetup.isEmpty()) {
+			in+="the_sample_setup_file='"+theSampleSetup.getPath()+"'"+"\n";
+		}
 		if(!results_file.isEmpty()) {
 			if(comma) in+=", ";
-			in="the_results_file='"+results_file.getFile()+"'"+"\n"+in;
+			in="the_results_file='"+results_file.getPath()+"'"+"\n"+in;
 			in+= "results_file = the_results_file";
 			comma=true;
-		}
+		}*/
 		
 		for(ColumnSlot c: col1.eachSlot) {
 			if(c.isEmpty())
 				continue;
 			if(comma) in+=", ";
-			in+= c.getLabel()+"'"+c.getAsString()+"'";
+			String asString = c.getAsString();
+			warnAboutColName(asString);
+			in+= c.getLabel()+"'"+asString+"'";
 		}
 		
+		if(!dataFile.isEmpty() &&dataFile.exists()) {
+			in+=", data_files='"+dataFile.getPath()+"'";
+		}
 		
-		in+=")";
-		return in;
+		if(!slotexclude.isEmpty()&&!this.slotExclude.isEmpty()) {
+			String condition_check = "!=";
+			ArrayList<String> selected = slotExclude.getAllSelected();
+			if(selected.size()>0 ) {
+				in+=", filter_rules=expr(";
+				String asString = slotexclude.getAsString();
+				warnAboutColName(asString);
+				if(selected.size()==1) {
+					
+					in+=asString+condition_check+"'"+selected.get(0)+"')";
+				}
+				
+				if(selected.size()>1) {
+					
+					
+					for(int i=0; i<selected.size(); i++) {
+						in+=(i==0?"":"&")+""+asString+condition_check+"'"+selected.get(i)+"'";
+					}
+					
+							in+=")";
+				}
+			
+			}
+		}
 		
+		in+="\"";
+		return ""+in;
+		
+	}
+
+	/**
+	 * @param asString
+	 */
+	public void warnAboutColName(String asString) {
+		if(asString.contains(" ")) {
+			IssueLog.log("Warning: column names should not have spaces in an R data table, please rename");
+		}
 	}
 
 	public void processTableAction(TableReader item, DataTableActionContext context) {
 		
-		currentDialog = new StoredValueDilaog("Distribute rows to a plate setup",  this, "general");
-		  comp = new StringInputPanel("function", "", 4, 32);
+		currentDialog = new StoredValueDilaog("Create a plot from sample setup and results",  this, "general");
+		currentDialog.setHideOK(true);
+		comp = new StringInputPanel("function", "", 8, 32);
 	
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx=5;
 		gc.gridy=1;
-		
-		
+		JButton spreadsheet=new JButton("Create Script"); {spreadsheet.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				runActionPlate(comp.getTextFromField(), saveAsR);
+				
+			}});}
+		currentDialog.addButton(spreadsheet);
 		
 		currentDialog.add("output", comp);
 		updatePlateDisplayAfterDialogChange();
@@ -126,13 +239,124 @@ public class CreateFunctionFromDataTables {
 	}
 
 
+	/**called when user presses a button
+	 * @param textFromField
+	 * @param string
+	 */
+	protected void runActionPlate(String textFromField, String string) {
+		try {
+			//new File(string);
+			if(!this.isReady())
+				return;
+			String parent = theSampleSetup.getFile().getParent();
+			File f = FileChoiceUtil.getSaveFile(parent, string);
+			String supportFolder = DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+this.supportFiles;
+			if(new File(supportFolder).exists()) {
+				copyRfilesToWorkingDirectory(supportFolder, parent);
+			} else {
+				IssueLog.log("please paste any R scripts for function into folder "+supportFolder);
+				new File(supportFolder).mkdirs();
+			}
+			FileBasedMetaWrapper.stringToFile(textFromField, f);
+			
+			if(alsoRun.equals(""))
+				return;
+			Process p = Runtime.getRuntime().exec(this.alsoRun);
+			
+			if (IssueLog.isWindows()) {
+				String[] args = new String[] {"ls"};//, "\""+parent+"\""};
+				Process proc = new ProcessBuilder(args).start();
+			} else {
+				
+				openTerminalAt(parent, f.getName());
+			}
+			
+			//Desktop.getDesktop().open(f);
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
+	}
+
+	/**
+	 * @param rFolder
+	 * @param parent
+	 */
+	private void copyRfilesToWorkingDirectory(String rFolder, String parent) {
+		File[] allFiles = new File(rFolder).listFiles();
+		for(File f: allFiles) {
+		
+			
+			String name2 = parent+"/"+f.getName();
+		
+			
+			File f2 = new File(name2);
+			if(f2.exists()) {
+				IssueLog.log("working directory already has file" +f.getName());
+				
+			} else try {
+				
+				IssueLog.log("making copy of file");
+				IssueLog.log(f);
+				IssueLog.log(name2);
+				copyFile(f, f2);
+			} catch (Throwable t) {
+				IssueLog.logT(t);
+			}
+			
+		}
+	}
+
+	/**
+	 * @param f
+	 * @param f2
+	 * @throws IOException 
+	 */
+	private void copyFile(File f, File f2) throws IOException {
+		 InputStream in = new FileInputStream(f);
+         OutputStream out = new FileOutputStream(f2);
+
+         // Copy the bits from instream to outstream
+         byte[] buf = new byte[1024];
+         int len;
+         while ((len = in.read(buf)) > 0) {
+             out.write(buf, 0, len);
+         }
+         in.close();
+         out.close();
+		
+	}
+
+	/**
+	 * @param f
+	 * @param string 
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public void openTerminalAt(String f, String string) throws IOException, InterruptedException {
+		if(f.contains(" "))
+		{
+			ShowMessage.showOptionalMessage("folder path has spaces");
+			
+			IssueLog.log(f);
+			return ;
+			}
+		IssueLog.log("will open terminal window");
+		IssueLog.log("you may run the script you just created by typing 'sh "+string+"'");
+		Process p = Runtime.getRuntime().exec("/usr/bin/open -a Terminal "+f);
+		 p.waitFor();
+	}
+
 	/**
 	 * 
 	 */
 	private void updatePlateDisplayAfterDialogChange() {
-		comp.getTextComponent().setText(buildInput());
-		currentDialog.pack();
-		this.currentDialog.repaint();
+		try {
+			comp.getTextComponent().setText(buildInput());
+			currentDialog.pack();
+			this.currentDialog.repaint();
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 		
 	}
 	
@@ -143,6 +367,12 @@ public class CreateFunctionFromDataTables {
 		//Runtime rt = Runtime.getRuntime();
 		//Process p = rt.exec("cmd /c ls");
 		
+	}
+	
+	@Override
+	public String getNameText() {
+		
+		return "Create plot script";
 	}
 	
 }

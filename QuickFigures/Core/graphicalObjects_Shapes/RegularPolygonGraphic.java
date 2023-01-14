@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Dec 22, 2022
  * Version: 2022.2
  */
 package graphicalObjects_Shapes;
@@ -199,7 +199,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 		SmartHandleList list = super.createSmartHandleList();
 		nvertex.setMinValue(minimumNVertex());
 		
-		list.add(new CountHandle(this, nvertex, 900215));
+		list.add(new CountHandle(this, nvertex, 900215, "nVertex"));
 		return list;
 	}
 	

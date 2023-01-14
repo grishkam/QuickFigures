@@ -38,9 +38,9 @@ public class RoundedRectangleGraphic extends RectangularGraphic {
 	 * 
 	 */
 
-	private RectangleEdgeParameter arcw=new RectangleEdgeParameter(this, 40, UPPER_RIGHT, UPPER_LEFT);
+	private RectangleEdgeParameter arcw=new RectangleEdgeParameter(this, 40, UPPER_RIGHT, UPPER_LEFT, "arcw");
 
-	private RectangleEdgeParameter arch=new RectangleEdgeParameter(this, 40,  UPPER_RIGHT, LOWER_RIGHT);;
+	private RectangleEdgeParameter arch=new RectangleEdgeParameter(this, 40,  UPPER_RIGHT, LOWER_RIGHT, "arch");;
 	
 	private static final long serialVersionUID = 1L;
 	

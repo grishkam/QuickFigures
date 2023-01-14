@@ -22,9 +22,11 @@ package dataSeries;
 
 /**this interface contains constants that determine how error bars are drawn*/
 public interface ErrorBarStyle {
-	public static int DRAW_AS_LINE_ONLY=0, DRAW_AS_BAR=1;
+	public static enum CapAppearance{ DRAW_AS_LINE_ONLY, DRAW_AS_BAR}
 	
-	public static int SD=0, SEM=1, SEM2=2, SEM3=3;;
+	public static enum ErrorType {SD, SEM, SEM2, SEM3}
+	
+	public static enum Bardirections {	UPPER, LOWER, BOTH}
 	
 	public static int UPPER_BAR=10, LOWER_BAR=20;
 }

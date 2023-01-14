@@ -237,8 +237,8 @@ public void setValue(int value) {
 	public static String[] enumNames(Enum<?>[] en) {
 		String[] output = new String[en.length];
 		for(int i=0; i<output.length; i++) {
-			output[i]=titleCase(en[i].name());//().toLowerCase();
-			//output[i]=output[i].replaceAll("_", " ");
+			String name = en[i].name();
+			output[i]=titleCase(name);
 		}
 		
 		return output;

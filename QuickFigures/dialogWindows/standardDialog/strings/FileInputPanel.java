@@ -70,7 +70,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	 * 
 	 */
 	private void setup() {
-		selectContent.addActionListener(new ActionListener() {
+		getFileSelectionButton().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -82,8 +82,17 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 				dispatchStringInputEvent();
 				
 			}});
-		new DropTarget(selectContent, this);
+		new DropTarget(getFileSelectionButton(), this);
 		new DropTarget(field, this);
+	}
+
+
+
+	/**
+	 * @return
+	 */
+	public JButton getFileSelectionButton() {
+		return selectContent;
 	}
 
 	public FileInputPanel(String labeln) {
@@ -112,7 +121,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	protected void layItems(Container jp, int x0, int y0, GridBagConstraints gc) {
 		super.layItems(jp, x0, y0, gc);
 		gc.gridx++;
-		jp.add( selectContent, gc);
+		jp.add( getFileSelectionButton(), gc);
 		if(extraButton!=null) {
 			gc.gridx++;
 			jp.add( extraButton, gc);

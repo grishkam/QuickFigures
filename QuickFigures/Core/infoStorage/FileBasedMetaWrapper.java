@@ -51,7 +51,7 @@ public class FileBasedMetaWrapper extends StringBasedMetaWrapper {
 	}
 
 	/**saves a string object to a file*/
-	static void stringToFile(String st, File f) {
+	public static void stringToFile(String st, File f) {
 		OutputStream fr;
 		try {
 			fr = new FileOutputStream(f);

@@ -39,7 +39,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelUseInstructions;
-import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.BasicChannelEntryMenuItem;
 import standardDialog.InputPanel;
@@ -77,6 +76,8 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	private boolean invert;
 	private boolean useStrike;
 	
+	public int boxWidthLimit=200;
+	private int boxHeightMin=28;
 	
 	
 	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, ArrayList<Integer> start) {
@@ -286,8 +287,7 @@ public class ChanListBox extends JPanel implements MouseListener {
 		private static final char DOWN_CHAR = '\u25bc';
 	ArrayList<JLabel> labels=new ArrayList<JLabel> ();
 	int maxLabel=15;
-	private int widthLimit=250;
-	private int heightMin=28;
+
 	
 	
 	public ChanListBox() {
@@ -313,12 +313,12 @@ public class ChanListBox extends JPanel implements MouseListener {
 	
 	@Override
 	public Dimension getPreferredSize() {
-		if (widthLimit==0)
+		if (boxWidthLimit==0)
 			return super.getPreferredSize();
 		
 		int height2 = super.getPreferredSize().height;
-		if(height2<heightMin) height2=heightMin;
-		return new Dimension(widthLimit, height2);
+		if(height2<boxHeightMin) height2=boxHeightMin;
+		return new Dimension(boxWidthLimit, height2);
 	}
 	
 	/**sets the labels to their innitial values*/
