@@ -93,13 +93,44 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 	
 	
 	public String form="Rscript ";
+	String regex = " ";
 	
-	@RetrievableOption(key = "terminal_command", label="plot using", choices= {"plot_NGS.R", "plot_FACS.R"}, chooseExtra=true)
+	@RetrievableOption(key = "terminal_command", label="plot using", choices= {"plot_NGS.R", "plot_FACS.R", "plot_NGS.R plot_NGS("}, chooseExtra=true)
 	public String functionName="plot_NGS.R";
 	
 	private StringInputPanel comp=new StringInputPanel("fuction", "");;
 	
 	
+	boolean isRScriptOnly() {
+		return functionName.toUpperCase().endsWith(".R");
+	}
+	
+	/**returns true if the method used is a function from an R source file*/
+	boolean isRFunctionFromSourceFile() {
+		if(this.isRScriptOnly())
+			return false;
+		
+		String[] div = functionName.split(regex);
+		if(div.length!=2)
+			return false;
+		if(div[0].toUpperCase().endsWith(".R"))
+			return true;
+		
+		return false;
+	}
+	
+	String getRSource() {
+		String[] div = functionName.split(regex);
+		return div[0];
+	}
+	
+	String getRFunction() {
+		String[] div = functionName.split(regex);
+		String string = div[1];
+		if(!string.endsWith("("))
+			string+="(";
+		return string;
+	}
 	
 	
 	boolean isReady() {
@@ -119,8 +150,12 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 		
 		String in = "";
 	
-		
-		in+=form+functionName+" \"";
+		if(this.isRScriptOnly())
+			in+=form+functionName+" \"";
+		if(this.isRFunctionFromSourceFile()) {
+			in+= "source('"+this.getRSource()+"')"+"\n";
+			in+=this.getRFunction();
+		}
 		boolean comma=false;
 		
 		if(!theSampleSetup.isEmpty()) {
@@ -177,8 +212,11 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 			
 			}
 		}
-		
-		in+="\"";
+		if(this.isRScriptOnly())
+			in+="\"";
+		else if(this.isRFunctionFromSourceFile()) {
+			in+=")";
+		}
 		return ""+in;
 		
 	}
@@ -206,7 +244,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				runActionPlate(comp.getTextFromField(), saveAsR);
+				runActionPlate(comp.getTextFromField(), getScriptSaveName());
 				
 			}});}
 		currentDialog.addButton(spreadsheet);
@@ -265,6 +303,11 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 			} else {
 				IssueLog.log("on mac ");
 				openTerminalAt(parent, f.getName());
+				if(this.isRFunctionFromSourceFile())
+					ShowMessage.showOptionalMessage("my option", true, "in the terminal type '"+form +""+f.getName()+"'");
+				else {
+					
+				}
 			}
 			
 			//Desktop.getDesktop().open(f);
@@ -287,7 +330,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 			
 			File f2 = new File(name2);
 			if(f2.exists()) {
-				IssueLog.log("working directory already has file" +f.getName());
+				IssueLog.log("working directory already has file: " +f.getName());
 				
 			} else try {
 				
@@ -370,6 +413,15 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 	public String getNameText() {
 		
 		return "Create plot script";
+	}
+
+	/**
+	 * @return
+	 */
+	public String getScriptSaveName() {
+		if(this.isRFunctionFromSourceFile())
+			return saveAsR+".R";
+		return saveAsR;
 	}
 	
 }
