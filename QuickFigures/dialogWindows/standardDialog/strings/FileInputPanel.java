@@ -50,6 +50,7 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	private JButton extraButton=null;
 	File file=null;
 	private String searchIn="";
+	private boolean chooseFolders=false;
 	
 	/**
 	 * @param labeln
@@ -161,7 +162,8 @@ public class FileInputPanel extends StringInputPanel implements  DropTargetListe
 	public void drop(DropTargetDropEvent dtde) {
 		if(dtde.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
 
-			ArrayList<File> files = ForDragAndDrop.dropedFiles(dtde);
+			ArrayList<File> files = ForDragAndDrop.dropedFiles(dtde, true);
+			
 			performFileListAction(files);
 			for(File f: files) {
 				if(f.exists())

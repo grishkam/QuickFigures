@@ -234,7 +234,7 @@ public class ColumnSelectionSlot implements CustomSlot, StringInputListener, Cho
 	public void updateValues() {
 		channelsAvailable=fileOrigin.getUniqueValuesInColumn();
 		cip.setupChannelOptions(channelsAvailable, new ArrayList<Integer>());
-		IssueLog.log("updating options");
+	
 	}
 
 	/**

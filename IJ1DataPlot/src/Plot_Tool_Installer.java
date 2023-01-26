@@ -25,6 +25,7 @@ import java.util.Scanner;
 
 import ij.IJ;
 import ij.plugin.PlugIn;
+import includedToolbars.ObjectToolset1;
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
@@ -39,6 +40,12 @@ public class Plot_Tool_Installer implements PlugIn {
 			onFirstRun();
 			firstRun=false;
 			new Toolset_Runner().run("Object Tools");
+		} else {
+			if(ObjectToolset1.currentToolset!=null) {
+				if (!ObjectToolset1.currentToolset.getframe().isVisible())
+					new Toolset_Runner().run("Object Tools");
+			}
+			
 		}
 		
 

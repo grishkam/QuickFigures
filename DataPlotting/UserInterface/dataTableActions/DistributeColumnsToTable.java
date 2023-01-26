@@ -819,9 +819,9 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 	/**Changes the settings*/
 	class TableSetupMenuItem extends BasicSmartMenuItem {
 
-		public static final int reset = 3;
+		
 		public ArrayList<PlateCell> cellSelection;
-		public static final int banCells=1, setLocations = 2;
+		public static final int banCells=1, setLocations = 2, reset = 3;
 		/**
 		 * 
 		 */
@@ -901,8 +901,10 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 			resetTable();
 			currentDialog.setNumberAndNotify("row", heightInRow);
 			currentDialog.setNumberAndNotify("col", widthInCol);
-			currentDialog.setNumberAndNotify("row shift", startRow);
-			currentDialog.setNumberAndNotify("col shift", startCol);
+			double rs = rowShift;
+			double cs = colShift;
+			currentDialog.setNumberAndNotify("row shift", startRow+rs);
+			currentDialog.setNumberAndNotify("col shift", startCol+cs);
 			
 		}
 

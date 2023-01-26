@@ -147,7 +147,12 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 			 label=o.label();
 		 String key = o.key();
 		 
-		addFieldToDialog(d, label, key, getDefaultStartIndex());
+		Integer defaultStartIndex = getDefaultStartIndex();
+		if(!hasDefaultValue()) {
+			defaultStartIndex =null;
+		}
+		
+		addFieldToDialog(d, label, key, defaultStartIndex);
 
 	}
 
@@ -156,11 +161,11 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	 * @param label
 	 * @param key
 	 */
-	public void addFieldToDialog(StandardDialog d, String label, String key, int start) {
+	public void addFieldToDialog(StandardDialog d, String label, String key, Integer start) {
 		setupInputPanel();
 		try {
 			updateFromFile();
-			
+
 			cip = new ChannelListChoiceInputPanel(label, channelsAvailable,
 					start, "None", true );
 			updateRequirementIndicator();
@@ -201,7 +206,7 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	
 	/**returns the unique values in the current column*/
 	public ArrayList<ChannelEntry> getUniqueValuesInColumn(String col) {
-		IssueLog.log("Checking col "+col);
+		
 		ArrayList<ChannelEntry> channels=new ArrayList<ChannelEntry>();
 		if(data==null) {
 			IssueLog.log("could not read excel data due to missing reader");
@@ -225,9 +230,9 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 				}
 		
 		
-		IssueLog.log("found  col "+col +" in table with "+data.getColumnCount()+ " columns");
+		
 		HashMap<String, Integer> eachValueRead=new HashMap<String, Integer>();
-		IssueLog.log("column is at index "+c.getOriginalChannelIndex());
+		
 		for(int i=1; i<data.getColumnCount(); i++) {
 			Object value = data.getValueAt(i, c.getOriginalChannelIndex());
 		
@@ -246,7 +251,7 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 			channels.add(new ChannelEntry(c1, i));
 			i++;
 		}
-		IssueLog.log(channels);
+	
 		return channels;
 	}
 
@@ -322,10 +327,10 @@ public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputL
 	/**
 	 * @return
 	 */
-	public int getDefaultStartIndex() {
+	public Integer getDefaultStartIndex() {
 		if(hasDefaultValue())
 			return theDefault.getOriginalChannelIndex();
-		return 0;
+		return null;
 	}
 	
 	public boolean hasDefaultValue() {return theDefault!=null;}

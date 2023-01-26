@@ -25,20 +25,16 @@ import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
-import channelMerging.ChannelEntry;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
 import infoStorage.FileBasedMetaWrapper;
@@ -47,7 +43,6 @@ import logging.IssueLog;
 import messages.ShowMessage;
 import standardDialog.DialogItemChangeEvent;
 import standardDialog.StandardDialogListener;
-import standardDialog.graphics.GraphicComponent;
 import standardDialog.strings.StringInputPanel;
 import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog;
@@ -79,9 +74,9 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 			new ColumnSlot(theSampleSetup, "division_column=", false)
 				);
 	
-	@RetrievableOption(key = "excluded_based_on", label="parameters are", category="more")
-	public ColumnSlot slotexclude= new ColumnSlot(theSampleSetup, "from_column", false);
-	@RetrievableOption(key = "excluded", label="parameters are", category="more")
+	@RetrievableOption(key = "excluded_based_on", label="exclude from column", category="more")
+	public ColumnSlot slotexclude= new ColumnSlot(theSampleSetup, "exclude if values in", false);
+	@RetrievableOption(key = "excluded", label="are equal to", category="more")
 	public ColumnSelectionSlot slotExclude=new ColumnSelectionSlot(slotexclude);
 	
 	@RetrievableOption(key = "data_location", label="data_location", note="any")
@@ -105,8 +100,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 	private StringInputPanel comp=new StringInputPanel("fuction", "");;
 	
 	
-	@RetrievableOption(key = "run me", label="also run ")
-	public String alsoRun="";
+	
 	
 	boolean isReady() {
 		
@@ -156,7 +150,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 		}
 		
 		if(!dataFile.isEmpty() &&dataFile.exists()) {
-			in+=", data_files='"+dataFile.getPath()+"'";
+			in+=","+"data_location" + "='"+dataFile.getPath()+"'";
 		}
 		
 		if(!slotexclude.isEmpty()&&!this.slotExclude.isEmpty()) {
@@ -194,7 +188,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 	 */
 	public void warnAboutColName(String asString) {
 		if(asString.contains(" ")) {
-			IssueLog.log("Warning: column names should not have spaces in an R data table, please rename");
+			IssueLog.log("Warning: column names should not have spaces in an R data table, please rename: "+asString);
 		}
 	}
 
@@ -245,29 +239,31 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 	 */
 	protected void runActionPlate(String textFromField, String string) {
 		try {
-			//new File(string);
+			
 			if(!this.isReady())
 				return;
 			String parent = theSampleSetup.getFile().getParent();
 			File f = FileChoiceUtil.getSaveFile(parent, string);
+			String parent2 = f.getParent();
+			
 			String supportFolder = DirectoryHandler.getDefaultHandler().getFigureFolderPath()+"/"+this.supportFiles;
 			if(new File(supportFolder).exists()) {
-				copyRfilesToWorkingDirectory(supportFolder, parent);
+				copyRfilesToWorkingDirectory(supportFolder, parent2);
 			} else {
 				IssueLog.log("please paste any R scripts for function into folder "+supportFolder);
 				new File(supportFolder).mkdirs();
 			}
 			FileBasedMetaWrapper.stringToFile(textFromField, f);
 			
-			if(alsoRun.equals(""))
-				return;
-			Process p = Runtime.getRuntime().exec(this.alsoRun);
+		
 			
 			if (IssueLog.isWindows()) {
-				String[] args = new String[] {"ls"};//, "\""+parent+"\""};
-				Process proc = new ProcessBuilder(args).start();
+				IssueLog.log("on windows, you will decide how to run the script yourself");
+				Desktop.getDesktop().open(f);
+				//String[] args = new String[] {"Rscript", f.getAbsolutePath()};//, "\""+parent+"\""};
+				//Process proc = new ProcessBuilder(args).start();
 			} else {
-				
+				IssueLog.log("on mac ");
 				openTerminalAt(parent, f.getName());
 			}
 			
@@ -333,6 +329,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 	 * @throws InterruptedException
 	 */
 	public void openTerminalAt(String f, String string) throws IOException, InterruptedException {
+		
 		if(f.contains(" "))
 		{
 			ShowMessage.showOptionalMessage("folder path has spaces");

@@ -115,7 +115,7 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	}
 	
 	/**constructor for a single value version of the combo box*/
-	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, int start, String noneText, boolean invert) {
+	public ChannelListChoiceInputPanel(String labeln, ArrayList<ChannelEntry> availableChannels, Integer start, String noneText, boolean invert) {
 		this.invert=invert;
 		this.useStrike=!invert;
 		label.setText(labeln);
@@ -131,8 +131,10 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 	 * @param availableChannels
 	 * @param start
 	 */
-	public void setupForChannelList(ArrayList<ChannelEntry> availableChannels, int start) {
-		this.setValues(start); 
+	public void setupForChannelList(ArrayList<ChannelEntry> availableChannels, Integer start) {
+		
+		if(start!=null)
+			this.setValues(start); 
 		originalValues=this.getCurrentValues();
 		
 		items = new ArrayList<ChannelEntryMenuItem>();
@@ -143,7 +145,8 @@ public class ChannelListChoiceInputPanel extends InputPanel implements OnGridLay
 		}
 		
 		/**called so a separate array list stores the current and the originala*/
-		this.setValues(start);
+		if(start!=null)
+			this.setValues(start);
 		box.resetLabels();
 		
 	}
