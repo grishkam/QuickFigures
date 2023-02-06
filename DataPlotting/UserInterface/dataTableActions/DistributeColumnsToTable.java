@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Dec 10, 2022
+ * Date Modified: Feb 6, 2023
  * Version: 2022.2
  */
 package dataTableActions;
@@ -150,7 +150,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@Override
 	public String getNameText() {
 		
-		return "Distribute Rows To Plate Setup";
+		return "Create sample_setup file";
 	}
 
 	@Override

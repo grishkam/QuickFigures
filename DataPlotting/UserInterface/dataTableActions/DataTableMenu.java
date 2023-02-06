@@ -59,6 +59,7 @@ public class DataTableMenu implements ActionListener {
 	public static ArrayList<DataTableAction> createActions() {
 		ArrayList<DataTableAction> actions2=new ArrayList<DataTableAction>();
 		actions2.add(new DistributeColumnsToTable());
+		actions2.add(new CreateSampleSetupFile());
 		actions2.add(new CreateFunctionFromDataTables());
 		return actions2;
 	}

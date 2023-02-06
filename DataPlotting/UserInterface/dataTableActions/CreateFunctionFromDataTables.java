@@ -375,7 +375,7 @@ public class CreateFunctionFromDataTables extends BasicDataTableAction{
 		
 		if(f.contains(" "))
 		{
-			ShowMessage.showOptionalMessage("folder path has spaces");
+			ShowMessage.showOptionalMessage("folder path has spaces. ");
 			
 			IssueLog.log(f);
 			return ;
