@@ -717,7 +717,7 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 					
 					
 					
-					TableSetupMenuItem mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					TableSetupMenuItem mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, (int)this.rowShift+ startRow, (int)this.colShift+startCol, this.selectedCells);
 					ss.add(mi, 0);
 					
 					
@@ -901,8 +901,8 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 			resetTable();
 			currentDialog.setNumberAndNotify("row", heightInRow);
 			currentDialog.setNumberAndNotify("col", widthInCol);
-			double rs = rowShift;
-			double cs = colShift;
+			double rs = 0;//rowShift;
+			double cs = 0;//colShift;
 			currentDialog.setNumberAndNotify("row shift", startRow+rs);
 			currentDialog.setNumberAndNotify("col shift", startCol+cs);
 			
