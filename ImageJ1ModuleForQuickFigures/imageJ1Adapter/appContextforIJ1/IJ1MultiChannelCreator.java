@@ -15,17 +15,22 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: Feb 11, 2022
  * Version: 2022.2
  */
 package appContextforIJ1;
 
+import ij.CompositeImage;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.ImageStack;
 import ij.WindowManager;
 import ij.io.Opener;
 import ij.plugin.FolderOpener;
 import ij.process.ColorProcessor;
+import ij.process.ImageProcessor;
+import infoStorage.BasicMetaDataHandler;
+import infoStorage.MetaInfoWrapper;
 import logging.IssueLog;
 import messages.ShowMessage;
 import multiChannelFigureUI.MultiChannelDisplayCreator;
@@ -34,6 +39,7 @@ import ultilInputOutput.FileChoiceUtil;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.MultiChannelImage;
@@ -197,11 +203,130 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	@Override
 	public MultiChannelImage createFromImageSequence(String path, int[] dims) {
 		ImagePlus open = FolderOpener.open(path);
+		
 		open.show();
 		return new ImagePlusWrapper( open);
 	}
 
+	/**Assuming each file represents a different channel, this will open them as a multichannel*/
+	@Override
+	public String createMultichannelFromImageSequence(Iterable<File> input, int[] dims, String path, boolean show) {
+		if(input==null)
+			input= FileChoiceUtil.showMultipleFileDialog();
+		ArrayList<File> list=new ArrayList<File> ();
+		for(File l:input) {list.add(l);}
+		ImagePlus createImageFromSeriesOfFiles = createImageFromSeriesOfFiles(list);
+		if(path==null)
+			{
+			path=list.get(0).getAbsolutePath().replace(list.get(0).getName(), createImageFromSeriesOfFiles.getTitle());
+			}
+		IJ.saveAsTiff(createImageFromSeriesOfFiles, path);
+		if(show)
+			createImageFromSeriesOfFiles.show();
+		return path;
+	}
+
 	
+	public static void main(String[] args) {
+		ImageDisplayTester.main(null);
+		ArrayList<File> dd = FileChoiceUtil.showMultipleFileDialog();
+		String image =new IJ1MultiChannelCreator().createMultichannelFromImageSequence(dd, null, null, true);
+		
+	}
+
+	/**
+	 * @param dd
+	 * @return
+	 */
+	public static ImagePlus createImageFromSeriesOfFiles(ArrayList<File> dd) {
+		String start = getStartOfName(dd,  true);
+		String end   = getStartOfName(dd, false);
+		HashMap<String, ImageProcessor> map=new HashMap<String, ImageProcessor> ();
+		
+		ImageProcessor ip;
+		ImagePlus image = new ImagePlus();
+		ImageStack stack = null;
+		ImagePlus openImage = null;
+		
+		for(File f: dd) {
+			String n = f.getName();
+			String n2=n;
+			n2=n.substring(start.length(), n.length()-end.length());
+			openImage = IJ.openImage(f.getAbsolutePath());
+			ip = openImage.getStack().getProcessor(1);
+			
+			map.put(n2, ip);
+			if(stack==null) {
+				stack=new ImageStack(ip.getWidth(), ip.getHeight());
+			}
+			stack.addSlice(n2, ip);
+		}
+		image.setStack(stack);
+		image=new CompositeImage(image);
+		
+		image.setDimensions(stack.getSize(), 1, 1);
+		image.setTitle(start+"combined"+end);
+		ImagePlusWrapper imagePlusWrapper = new ImagePlusWrapper(image);
+		
+		MetaInfoWrapper data = imagePlusWrapper.getMetadataWrapper();
+		for(int i=0; i<stack.getSize();i++) {
+			BasicMetaDataHandler.setCustomChannelColor(data, i, stack.getSliceLabel(i+1));
+		}
+		imagePlusWrapper = new ImagePlusWrapper(image);
+		imagePlusWrapper.colorBasedOnRealChannelName();
+		image.setCalibration(openImage.getCalibration());
+		return image;
+	}
+
+	/**
+	 * @param dd
+	 * @return
+	 */
+	private static String getStartOfName(ArrayList<File> dd, boolean start) {
+		int l = 1;
+		String name = dd.get(0).getName();
+		String s;
+		if(start)
+			s = name.substring(0, l);
+		else 
+			s = name.substring(name.length()-l, name.length());
+		
+		boolean mustcontinue=allNamesStartOrEndWith(dd, s, start);
+		
+		if(!mustcontinue)
+			return "";
+		String olds=s;
+		while (l<name.length() && mustcontinue) {
+			 olds=s;
+			l++;
+			if(start)
+				s = name.substring(0, l);
+			else 
+				s = name.substring(name.length()-l, name.length());
+			mustcontinue=allNamesStartOrEndWith(dd,s, start);
+			
+		}
+		return olds;
+	}
+
+	/**returns true if all file anmes tart of 
+	 * @param dd
+	 * @param s
+	 * @param startWith
+	 * @return
+	 */
+	private static boolean allNamesStartOrEndWith(ArrayList<File> dd, String s, boolean startWith) {
+		for(File d: dd) {
+			
+			if(!d.getName().startsWith(s)&startWith)
+				return false;
+			
+			if(!d.getName().endsWith(s)&!startWith)
+				return false;
+		}
+		return true;
+	}
+
 	
 	
 

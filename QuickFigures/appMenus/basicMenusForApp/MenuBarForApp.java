@@ -30,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import addObjectMenus.ObjectAddingMenu;
+import basicMenusForApp.OpenImage.OpenForm;
 import exportMenus.EPSQuickExport;
 import exportMenus.ExportIllustrator;
 import exportMenus.FlatCreator;
@@ -156,6 +157,10 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		
 		installItem(new DebugMenuItems());
 		installItem(new DebugMenuItems(false));
+		
+		for(OpenForm i: OpenImage.OpenForm.values())
+			installItem(new OpenImage(i));
+		
 	}
 	
 	

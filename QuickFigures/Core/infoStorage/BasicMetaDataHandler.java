@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 3, 2022
+ * Date Modified: Feb 11, 2023
  * Version: 2022.2
  */
 package infoStorage;
@@ -903,11 +903,35 @@ public class BasicMetaDataHandler {
 			
 			
 				for (int j=0; j<ChannelNames.size(); j++) {
-					select.setEntry(myIndexCode+j+ " ", ""+ChannelNums.get(j));
-					select.setEntry(myColorCode+ChannelNums.get(j)+ " ", ""+ChannelNames.get(j));
+					Integer integerChanNumber = ChannelNums.get(j);
+					String stringChanName = ChannelNames.get(j);
+					setCustomChannelNameForMetadata(select, j, integerChanNumber, stringChanName);
 				
 				}
 				
+			}
+
+			/**
+			 * @param select
+			 * @param j
+			 * @param integerChanNumber
+			 * @param stringChanName
+			 */
+			public static void setCustomChannelNameForMetadata(MetaInfoWrapper select, int j, Integer integerChanNumber,
+					String stringChanName) {
+				select.setEntry(myIndexCode+j+ " ", ""+integerChanNumber);
+				
+				setCustomChannelColor(select, integerChanNumber, stringChanName);
+			}
+
+			/**
+			 * @param select
+			 * @param integerChanNumber
+			 * @param stringChanName
+			 */
+			public static void setCustomChannelColor(MetaInfoWrapper select, Integer integerChanNumber,
+					String stringChanName) {
+				select.setEntry(myColorCode+integerChanNumber+ " ", ""+stringChanName);
 			}
 
 			/**Given an image opened originally from a zvi file, this method 

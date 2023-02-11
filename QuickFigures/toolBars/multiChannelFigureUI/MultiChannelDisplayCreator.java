@@ -16,6 +16,7 @@
 package multiChannelFigureUI;
 
 import java.awt.Image;
+import java.io.File;
 
 import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
@@ -33,6 +34,12 @@ public interface MultiChannelDisplayCreator {
 	
 	public String imageTypeName();
 	
+	/**when given the path of a folder with a series of images, this opens them as an image sequence (time line)*/
 	public MultiChannelImage createFromImageSequence(String path, int[] dims);
+	
+	/**when given a series of images, this assumes they are distinct channels*/
+	public String createMultichannelFromImageSequence(Iterable<File> input, int[] dims, String savePath, boolean show);
+
+	
 	
 }

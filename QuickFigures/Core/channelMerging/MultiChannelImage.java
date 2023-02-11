@@ -137,6 +137,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	public void setOverlayObjects(OverlayObjectList reversed);
 	
 	
+	
 
 	
 }

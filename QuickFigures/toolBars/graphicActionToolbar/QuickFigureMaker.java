@@ -170,8 +170,8 @@ public class QuickFigureMaker extends DisplayActionTool {
 	 * @return
 	 */
 	public FigureOrganizingLayerPane createFigure(ImageWindowAndDisplaySet displayedWorksheet, String path, PreProcessInformation p2) {
-		if (path==null) {localFigureAdder.openFile=false; 
-		}else localFigureAdder.openFile=true;
+		
+		localFigureAdder.setToUseOpenFile(path==null) ;//sets to use the currently open image if no path is given
 		
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		

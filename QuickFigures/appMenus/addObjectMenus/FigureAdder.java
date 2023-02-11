@@ -55,7 +55,6 @@ public class FigureAdder extends LayoutAdder {
 
 	public AutoFigureGenerationOptions autoFigureGenerationOptions=new AutoFigureGenerationOptions();
 	
-	public boolean openFile=false;//set to true if this opens a file to create a figure
 	
 	private boolean makeLabels=false;
 	
@@ -72,20 +71,60 @@ public class FigureAdder extends LayoutAdder {
 
 	private FigureOrganizingLayerPane currentFigureOrganizer;
 
-	private boolean useOpen;
+	//public boolean openFile=false;//set to true if this opens a file to create a figure
+	
+	public static enum ImageSource{
+		
+		USE_ACTIVE_IMAGE("Figure from active "), SAVED_MULTICHANNEL("Figure from saved "), SAVED_SEPARATE("Figure from channels saved in separate files");
+		
+		
+		String description="";
+		private ImageSource(String description) {
+			this.description=description;
+		}
+
+		/**
+		 * @return
+		 */
+		String getDescription() {
+			return description;
+		} 
+		
+		
+		}
+	
+	
+	private ImageSource useOpen=ImageSource.USE_ACTIVE_IMAGE;
 
 	private FigureType figureType;
 
 	/**creates a figure adder that relies on a file*/
 	public FigureAdder(boolean fromFile) {
-			openFile=fromFile;
+		setToUseOpenFile(fromFile);
+			
 		}
 	
-	public FigureAdder(boolean fromFile, boolean autogen) {
+	/**creates a figure adder that relies on a file*/
+	public FigureAdder(ImageSource useOpen) {
+		this.useOpen=useOpen;
+			
+		}
+
+	/**
+	 * @param fromFile
+	 */
+	public void setToUseOpenFile(boolean fromFile) {
+		if(!fromFile)
+				useOpen=ImageSource.USE_ACTIVE_IMAGE;
+			else 
+				useOpen=ImageSource.SAVED_MULTICHANNEL;
+	}
+	
+	/**private FigureAdder(boolean fromFile, boolean autogen) {
 		openFile=fromFile;
 		this.autoFigureGenerationOptions.autoGenerateFromModel=autogen;
 		this.useOpen=autogen;
-	}
+	}*/
 	
 
 	/**returns the template saver that is used to create objects*/
@@ -138,7 +177,14 @@ public class FigureAdder extends LayoutAdder {
 	/**when given a file path, opens the Image and returns a the multichannel display layer
 	  that contains the open image*/
 	public MultichannelDisplayLayer createMultiChannel(String path) {
-		MultichannelDisplayLayer output = getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(openFile, path);
+		
+		
+		MultichannelDisplayLayer output;
+		if(this.useOpen==ImageSource.SAVED_SEPARATE) {
+			path= getMultiChannelOpener().createMultichannelFromImageSequence(null, null, null, false);
+		}
+		
+		output= getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(this.useOpen!=ImageSource.USE_ACTIVE_IMAGE, path);
 		if (output==null) {
 			IssueLog.log("no image found");
 			
@@ -167,6 +213,7 @@ public class FigureAdder extends LayoutAdder {
 	/**Adds a figure to the layer gc. If path is not null, the image from the save path is used
 	  otherwise, uses the image that is already open*/
 	public FigureOrganizingLayerPane add(GraphicLayer gc, String path) {
+		
 		return add(gc, path, null);
 	}
 	
@@ -403,17 +450,14 @@ public class FigureAdder extends LayoutAdder {
 	
 	@Override
 	public String getCommand() {
-		return "addImageLayer"+openFile+isAutoGenerateFromModel();
+		return "addImageLayer"+isAutoGenerateFromModel()+useOpen.getDescription();
 	}
 
 	@Override
 	public String getMenuCommand() {
-		if (useOpen) {
-			return "Figure from active "+ nameType();
-		}
-		String output= "Figure from open "+ nameType();
-		if (openFile)  output="Figure from saved "+nameType();
-		return output;
+		String command = useOpen.getDescription()+ nameType();
+		
+		return command;
 	}
 	
 	@Override

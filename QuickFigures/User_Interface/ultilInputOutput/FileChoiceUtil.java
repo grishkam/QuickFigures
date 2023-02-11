@@ -140,15 +140,19 @@ public class FileChoiceUtil {
 		else 
 			if(name!=null)
 				fd.setFile(name);
-		
+		 fd.setMultipleMode(multipleDialog);
 	       fd.setVisible(true);
 	       String st=fd.getFile();
-	       fd.setMultipleMode(multipleDialog);
+	      
 		return st;
 	}
 	
 	/**opens a file dialog that resembles the imagej file dialog*/
-	public static ArrayList<File> showMultipleFileDialog(FileDialog fd, String dir, String name) {
+	private static ArrayList<File> showMultipleFileDialog(FileDialog fd, String dir, String name) {
+		if(fd==null) {
+			 fd=new  FileDialog(new JFrame(), "Open ", FileDialog.LOAD);
+		}
+		fd.setMultipleMode(true);
 		String st = determineStartingDirectoryAndSetupDialog(fd, dir, name, true);
 	       if (st==null) return null;
 	       ArrayList<File> output = new ArrayList<File>();
@@ -190,6 +194,7 @@ public class FileChoiceUtil {
 		 if(dd==null) {
 			 dd=CurrentAppContext.getDefaultDirectory();
 		 }
+		
 	       return showIJDDFileDialog(fd, dd, null);
 	      
 	}
@@ -319,5 +324,21 @@ public class FileChoiceUtil {
 			return i;
 		}
 		return JOptionPane.YES_OPTION;
+	}
+	
+	
+	public static void main(String[] args) {
+		
+		
+		ArrayList<File> s = showMultipleFileDialog();
+		for(File s1: s) {
+			System.out.println(s1);
+		}
+	}
+	/**
+	 * @return
+	 */
+	public static ArrayList<File> showMultipleFileDialog() {
+		return showMultipleFileDialog(null, workingDirectory, "");
 	}
 }

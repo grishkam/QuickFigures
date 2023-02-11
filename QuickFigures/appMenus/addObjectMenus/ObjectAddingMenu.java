@@ -89,8 +89,11 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			imageadders.add(new ClipboardAdder(false));
 			
 			if (CurrentAppContext.getMultichannelContext()!=null) {
-					figureAdders.add(new FigureAdder(false));
-					figureAdders.add(new FigureAdder(true));
+				
+					
+					for( FigureAdder.ImageSource i: FigureAdder.ImageSource.SAVED_SEPARATE.values())
+						figureAdders.add(new FigureAdder(i));
+					
 					figureAdders.add(new BlotFigureAdder(false));
 					figureAdders.add(new BlotFigureAdder(true));
 			}
