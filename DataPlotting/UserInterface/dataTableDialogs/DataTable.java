@@ -449,4 +449,10 @@ public class DataTable extends JTable implements TableReader {
 		return this.getValueAt(row, col)+"";
 	}
 
+	@Override
+	public void setCellBorder(int border, int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

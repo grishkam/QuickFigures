@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: May 19, 2022
+ * Date Modified: Feb 15, 2023
  * Version: 2022.2
  */
 package plateDisplay;
@@ -58,21 +58,7 @@ public class ShowPlate {
 		/**Sets the title*/
 		table.setValueAt(plate.getPlateName(), 0, 0);
 		
-		/**sets the column names*/
-		for(int i=0; i<plate.getNCol(); i++) {
-			int i3 = i+1;
-			if(plate.addressMod!=null)
-				i3+=plate.addressMod.getColShift();
-			table.setValueAt(""+i3,0, i+1);
-		}
-		
-		/**Sets the row names*/
-		for(int i=0; i<plate.getNRow(); i++) {
-			int i2 = i;
-			if(plate.addressMod!=null)
-				i2+=plate.addressMod.getRowShift();
-			table.setValueAt(""+BasicCellAddress.getCharForIndex(i2), i+1, 0);
-		}
+	
 		
 		/**Creates the hues*/
 		if(plate.hues!=null) {
@@ -81,6 +67,24 @@ public class ShowPlate {
 			table.setupColorMap( c);
 		} else {
 			IssueLog.log("group hues not setup yet");
+		}
+		
+		/**sets the column names*/
+		for(int i=0; i<plate.getNCol(); i++) {
+			int i3 = i+1;
+			if(plate.addressMod!=null)
+				i3+=plate.addressMod.getColShift();
+			table.setValueAt(""+i3,0, i+1);
+			table.setCellBorder(0,0, i+1);
+		}
+		
+		/**Sets the row names*/
+		for(int i=0; i<plate.getNRow(); i++) {
+			int i2 = i;
+			if(plate.addressMod!=null)
+				i2+=plate.addressMod.getRowShift();
+			table.setValueAt(""+BasicCellAddress.getCharForIndex(i2), i+1, 0);
+			table.setCellBorder(0,  i+1, 0);
 		}
 		
 		for(PlateCell cell: plate.getPlateCells()) try {

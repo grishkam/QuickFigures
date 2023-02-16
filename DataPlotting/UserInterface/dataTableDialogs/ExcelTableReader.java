@@ -35,6 +35,7 @@ import java.util.HashMap;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -294,6 +295,17 @@ public class ExcelTableReader implements TableReader {
 			cellAt.setCellStyle(xssfCellStyle);
 		}
 	}
+	
+	@Override
+	public void setCellBorder(int border, int i, int j) {
+		Cell cellAt = this.findCellAt(i, j);
+		//boolean setup =false;
+		if(cellStyles!=null) {
+			XSSFCellStyle xssfCellStyle = cellStyles.get("border");
+			
+			cellAt.setCellStyle(xssfCellStyle);
+		}
+	}
 
 	/**Craeates cell styles for each color listed*/
 	public void setupColorMap(ArrayList<Color> c) {
@@ -321,6 +333,15 @@ public class ExcelTableReader implements TableReader {
 	
 			  cellStyles.put(color1.toString(),cellStyle);
 		  }
+		 
+		  XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
+		 
+		  BorderStyle border=BorderStyle.THIN;
+		cellStyle.setBorderTop(border);;
+		cellStyle.setBorderBottom(border);;
+		cellStyle.setBorderLeft(border);;
+		cellStyle.setBorderRight(border);;
+		 cellStyles.put("border", cellStyle);
 		
 	}
 

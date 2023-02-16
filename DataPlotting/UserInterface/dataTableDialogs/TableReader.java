@@ -87,4 +87,11 @@ public interface TableReader {
 	 */
 	String getStringValueAt(int row, int col);
 
+	/**changes whether the borders of the cells have thick lines or not
+	 * @param border
+	 * @param i
+	 * @param j
+	 */
+	void setCellBorder(int border, int i, int j);
+
 }
