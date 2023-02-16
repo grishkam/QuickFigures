@@ -49,6 +49,10 @@ import figureOrganizer.MultichannelDisplayLayer;
 /**implementation of the MultiChannelDisplayCreator interface for ImageJ*/
 public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	
+	/**
+	 * 
+	 */
+	
 	/**Creates a multiChannel Display for the user selected open image or file.
 	  if the path is null, this allows the user to select an image*/
 	public MultichannelDisplayLayer creatMultiChannelDisplayFromUserSelectedImage(boolean openFile, String path) {
@@ -234,7 +238,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		
 	}
 
-	/**
+	/**creats a multichannel image from a list of single channel greyscale files
 	 * @param dd
 	 * @return
 	 */
@@ -253,6 +257,11 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 			String n2=n;
 			n2=n.substring(start.length(), n.length()-end.length());
 			openImage = IJ.openImage(f.getAbsolutePath());
+			if(openImage.getStackSize()>1) {
+				IssueLog.log("this option only accepts single channel greyscales ");
+				IssueLog.log("fill skip "+n);
+				continue;
+			}
 			ip = openImage.getStack().getProcessor(1);
 			
 			map.put(n2, ip);
@@ -272,9 +281,11 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		for(int i=0; i<stack.getSize();i++) {
 			BasicMetaDataHandler.setCustomChannelColor(data, i, stack.getSliceLabel(i+1));
 		}
+		data.setEntry(MADE_BY_STITCHING, "T");
 		imagePlusWrapper = new ImagePlusWrapper(image);
 		imagePlusWrapper.colorBasedOnRealChannelName();
 		image.setCalibration(openImage.getCalibration());
+		
 		return image;
 	}
 

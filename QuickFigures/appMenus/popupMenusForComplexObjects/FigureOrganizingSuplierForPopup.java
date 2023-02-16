@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 17, 2021
+ * Date Modified: Feb 15, 2023
  * Version: 2022.2
  */
 package popupMenusForComplexObjects;
@@ -35,6 +35,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.undo.UndoableEdit;
 
+import addObjectMenus.FigureAdder;
 import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import appContext.MakeFigureAfterFileOpen;
 import applicationAdapters.CanvasMouseEvent;
@@ -81,6 +82,7 @@ import messages.ShowMessage;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
+import multiChannelFigureUI.MultiChannelDisplayCreator;
 import objectDialogs.CroppingDialog;
 import objectDialogs.CroppingDialog.CropDialogContext;
 import standardDialog.StandardDialog;
@@ -265,11 +267,16 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		Object source = arg0.getSource();
 		CombinedEdit undo=null ;
 		if (source==addImageFromFileButton) {
-			//undo=new CombinedEdit();
+			
+			
+			
 			ArrayList<File> fileList = FileChoiceUtil.getFileArray();
+			
+			fileList = stichFilesIntoMultiChannel(fileList);
+			
 			undo=new NormalToolDragHandler(null).openFileListAndAddToFigure((ImageWindowAndDisplaySet) this.addImageFromFileButton.getLastMouseEvent().getAsDisplay(), fileList, true, null, this.figureOrganizingLayerPane.getMontageLayoutGraphic(), this.figureOrganizingLayerPane.getMontageLayoutGraphic(), this.figureOrganizingLayerPane);
 				
-			//undo=figureOrganizingLayerPane.nextMultiChannel(true);
+			
 		}
 		if (source==addOpenImageFromList) {
 			undo=figureOrganizingLayerPane.nextMultiChannel(false);
@@ -330,6 +337,25 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		}
 		
 		figureOrganizingLayerPane.getUndoManager().addEdit(undo);
+	}
+
+
+
+	/**combines the individual greyscale images into multichannel tif files.
+	 * @param fileList
+	 * @return
+	 */
+	public ArrayList<File> stichFilesIntoMultiChannel(ArrayList<File> fileList) {
+		/**If the figure was created by stitching to gether seprate channels this notices and does the same to the next set*/
+		String stiched = this.figureOrganizingLayerPane.getPrincipalMultiChannel().getMultiChannelImage().getMetadataWrapper().getEntryAsString(MultiChannelDisplayCreator.MADE_BY_STITCHING);
+		
+		if(stiched!=null&&stiched.contentEquals("T")) {
+			String p = new FigureAdder(true).getMultiChannelOpener().createMultichannelFromImageSequence(fileList, null, null, false);
+			 fileList =  new ArrayList<File>();
+			 fileList.add(new File(p));
+			 
+		}
+		return fileList;
 	}
 
 

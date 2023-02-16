@@ -75,7 +75,7 @@ public class FigureAdder extends LayoutAdder {
 	
 	public static enum ImageSource{
 		
-		USE_ACTIVE_IMAGE("Figure from active "), SAVED_MULTICHANNEL("Figure from saved "), SAVED_SEPARATE("Figure from channels saved in separate files");
+		USE_ACTIVE_IMAGE("Figure from active "), SAVED_MULTICHANNEL("Figure from saved "), SAVED_SEPARATE("Figure from channels saved in separate files ");
 		
 		
 		String description="";

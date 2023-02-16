@@ -22,6 +22,8 @@ import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
 
 public interface MultiChannelDisplayCreator {
+	
+	public static final String MADE_BY_STITCHING = "made by stitching";//key for channels that have been 
 	static final String useActiveImage="ActiveImage";//instructions to use the currently active image can be passes as a path to the methods
 	
 	/**Creates a multiChannel Display for the user selected open image or file. if OpenFile is false, this will 
@@ -37,7 +39,7 @@ public interface MultiChannelDisplayCreator {
 	/**when given the path of a folder with a series of images, this opens them as an image sequence (time line)*/
 	public MultiChannelImage createFromImageSequence(String path, int[] dims);
 	
-	/**when given a series of images, this assumes they are distinct channels*/
+	/**when given a series of images, this assumes they are distinct channels, creates a composite, saves the composite and returns the save path*/
 	public String createMultichannelFromImageSequence(Iterable<File> input, int[] dims, String savePath, boolean show);
 
 	

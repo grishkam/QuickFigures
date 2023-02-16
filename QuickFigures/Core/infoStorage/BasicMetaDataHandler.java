@@ -903,26 +903,13 @@ public class BasicMetaDataHandler {
 			
 			
 				for (int j=0; j<ChannelNames.size(); j++) {
-					Integer integerChanNumber = ChannelNums.get(j);
-					String stringChanName = ChannelNames.get(j);
-					setCustomChannelNameForMetadata(select, j, integerChanNumber, stringChanName);
+					select.setEntry(myIndexCode+j+ " ", ""+ChannelNums.get(j));
+					select.setEntry(myColorCode+ChannelNums.get(j)+ " ", ""+ChannelNames.get(j));
 				
 				}
 				
 			}
 
-			/**
-			 * @param select
-			 * @param j
-			 * @param integerChanNumber
-			 * @param stringChanName
-			 */
-			public static void setCustomChannelNameForMetadata(MetaInfoWrapper select, int j, Integer integerChanNumber,
-					String stringChanName) {
-				select.setEntry(myIndexCode+j+ " ", ""+integerChanNumber);
-				
-				setCustomChannelColor(select, integerChanNumber, stringChanName);
-			}
 
 			/**
 			 * @param select

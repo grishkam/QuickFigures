@@ -30,6 +30,7 @@ import applicationAdapters.HasScaleInfo;
 import applicationAdapters.OpenFileReference;
 import applicationAdapters.PixelWrapper;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
+import infoStorage.MetaInfoWrapper;
 
 /**An interface representing a multidimensional image.
  */
@@ -138,6 +139,7 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	
 	
 	
-
+	/**A way to refer to the medadata of the image*/
+	public MetaInfoWrapper getMetadataWrapper();
 	
 }
