@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 15, 2023
+ * Date Modified: Feb 18, 2023
  * Version: 2022.2
  */
 package popupMenusForComplexObjects;
@@ -272,7 +272,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 			
 			ArrayList<File> fileList = FileChoiceUtil.getFileArray();
 			
-			fileList = stichFilesIntoMultiChannel(fileList);
+			fileList = NormalToolDragHandler.stichFilesIntoMultiChannel(this.figureOrganizingLayerPane, fileList);
 			
 			undo=new NormalToolDragHandler(null).openFileListAndAddToFigure((ImageWindowAndDisplaySet) this.addImageFromFileButton.getLastMouseEvent().getAsDisplay(), fileList, true, null, this.figureOrganizingLayerPane.getMontageLayoutGraphic(), this.figureOrganizingLayerPane.getMontageLayoutGraphic(), this.figureOrganizingLayerPane);
 				
@@ -341,22 +341,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 
 
 
-	/**combines the individual greyscale images into multichannel tif files.
-	 * @param fileList
-	 * @return
-	 */
-	public ArrayList<File> stichFilesIntoMultiChannel(ArrayList<File> fileList) {
-		/**If the figure was created by stitching to gether seprate channels this notices and does the same to the next set*/
-		String stiched = this.figureOrganizingLayerPane.getPrincipalMultiChannel().getMultiChannelImage().getMetadataWrapper().getEntryAsString(MultiChannelDisplayCreator.MADE_BY_STITCHING);
-		
-		if(stiched!=null&&stiched.contentEquals("T")) {
-			String p = new FigureAdder(true).getMultiChannelOpener().createMultichannelFromImageSequence(fileList, null, null, false);
-			 fileList =  new ArrayList<File>();
-			 fileList.add(new File(p));
-			 
-		}
-		return fileList;
-	}
+
 
 
 

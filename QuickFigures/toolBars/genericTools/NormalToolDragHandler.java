@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 24, 2022
+ * Date Modified: Feb 18, 2023
  * Version: 2022.2
  */
 package genericTools;
@@ -30,6 +30,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.ArrayList;
 
+import addObjectMenus.FigureAdder;
 import addObjectMenus.FileImageAdder;
 import appContext.CurrentAppContext;
 import appContext.ImageDPIHandler;
@@ -37,6 +38,7 @@ import appContext.MakeFigureAfterFileOpen;
 import appContext.MakeFigureAfterFileOpen.ExistingFigure;
 import appContext.PendingFileOpenActions;
 import channelMerging.ImageDisplayLayer;
+import channelMerging.MultiChannelImage;
 import externalToolBar.BasicDragHandler;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
@@ -57,6 +59,7 @@ import locatedObject.Selectable;
 import locatedObject.TakesAttachedItems;
 import logging.IssueLog;
 import messages.ShowMessage;
+import multiChannelFigureUI.MultiChannelDisplayCreator;
 import selectedItemMenus.SVG_GraphicAdder2;
 import ultilInputOutput.ForDragAndDrop;
 import undo.AbstractUndoableEdit2;
@@ -246,6 +249,15 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	public CombinedEdit openFileListAndAddToFigure(ImageWindowAndDisplaySet imageAndDisplaySet, ArrayList<File> file,
 			boolean alwaysOpenMultiChannel, Point2D location2, LocatedObject2D roi2, PanelLayoutGraphic layout,
 			GraphicLayer layer) {
+		
+		if(layer instanceof FigureOrganizingLayerPane) {
+			file= stichFilesIntoMultiChannel( (FigureOrganizingLayerPane) layer, file);
+		}
+		if(layer instanceof ImageDisplayLayer) {
+			file= stichFilesIntoMultiChannel( (ImageDisplayLayer) layer, file);
+		}
+		
+		
 		PendingFileOpenActions.pendingList.clear();//clears the old list to avoid confusion.
 		ArrayList<ImagePanelGraphic> addedPanels=new ArrayList<ImagePanelGraphic>();
 		boolean multiChannelOpen=true;
@@ -500,6 +512,57 @@ public static interface FileDropListener {
 		public CombinedEdit handleFileListDrop(ImageWindowAndDisplaySet imageAndDisplaySet, Point location,
 				ArrayList<File> file) ;
 	
+}
+
+
+/**Checks if the figure was derived from separate greyscale image files using the stiching function of quickfigures.
+ * combines the individual greyscale images into multichannel tif files.
+ * @param fileList
+ * @return
+ */
+public static ArrayList<File> stichFilesIntoMultiChannel(FigureOrganizingLayerPane figureOrganizingLayerPane, ArrayList<File> fileList) {
+	/**If the figure was created by stitching to gether seprate channels this notices and does the same to the next set*/
+	ImageDisplayLayer principalMultiChannel = figureOrganizingLayerPane.getPrincipalMultiChannel();
+	return stichFilesIntoMultiChannel(principalMultiChannel, fileList);
+}
+
+
+
+/**
+ * @param principalMultiChannel
+ * @param fileList
+ * @return
+ */
+public static ArrayList<File> stichFilesIntoMultiChannel(ImageDisplayLayer principalMultiChannel, ArrayList<File> fileList) {
+	MultiChannelImage multiChannelImage = principalMultiChannel.getMultiChannelImage();
+	return stichFilesIntoMultiChannel(fileList, multiChannelImage);
+}
+
+
+
+/**
+Checks if the figure was derived from separate greyscale image files using the stiching function of quickfigures.
+ combines the individual greyscale images into multichannel tif files.
+ If this list of files consists of multichannel images only, returns the input list * 
+ * @param fileList
+ * @param multiChannelImage
+ * @return
+ */
+public static ArrayList<File> stichFilesIntoMultiChannel(ArrayList<File> fileList,
+		MultiChannelImage multiChannelImage) {
+	String stiched = multiChannelImage.getMetadataWrapper().getEntryAsString(MultiChannelDisplayCreator.MADE_BY_STITCHING);
+
+	if(fileList.size()<2)
+		return fileList;
+	if(stiched!=null&&stiched.contentEquals("T")) {
+		String p = new FigureAdder(true).getMultiChannelOpener().createMultichannelFromImageSequence(fileList, null, null, false);
+		if(p==null)
+			return fileList;
+		fileList =  new ArrayList<File>();
+		 fileList.add(new File(p));
+		 
+	}
+	return fileList;
 }
 
 }

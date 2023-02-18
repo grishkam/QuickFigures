@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 11, 2022
+ * Date Modified: Feb 18, 2023
  * Version: 2022.2
  */
 package appContextforIJ1;
@@ -212,7 +212,9 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		return new ImagePlusWrapper( open);
 	}
 
-	/**Assuming each file represents a different channel, this will open them as a multichannel*/
+	/**Assuming each file represents a different channel, this will open them as a multichannel
+	 * If none of the given files are single channel greyscales, this will return null
+	 * */
 	@Override
 	public String createMultichannelFromImageSequence(Iterable<File> input, int[] dims, String path, boolean show) {
 		if(input==null)
@@ -220,9 +222,20 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		ArrayList<File> list=new ArrayList<File> ();
 		for(File l:input) {list.add(l);}
 		ImagePlus createImageFromSeriesOfFiles = createImageFromSeriesOfFiles(list);
-		if(path==null)
-			{
-			path=list.get(0).getAbsolutePath().replace(list.get(0).getName(), createImageFromSeriesOfFiles.getTitle());
+		if(createImageFromSeriesOfFiles==null)
+			return null;
+		if(path==null){
+				path=list.get(0).getAbsolutePath().replace(list.get(0).getName(), createImageFromSeriesOfFiles.getTitle());
+
+				if(path.endsWith(".png") ) {
+					path =path.replace(".png", ".tif");
+					}
+				if(path.endsWith(".PNG") ) {
+					path =path.replace(".PNG", ".tif");
+					}
+				if(!path.toLowerCase().endsWith(".tif") &&!path.toLowerCase().endsWith(".tiff")) {
+					path =path+".tif";
+					}
 			}
 		IJ.saveAsTiff(createImageFromSeriesOfFiles, path);
 		if(show)
@@ -238,7 +251,8 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		
 	}
 
-	/**creats a multichannel image from a list of single channel greyscale files
+	/**creats a multichannel image from a list of single channel greyscale files.
+	 * May return null if the files given consists of multichannel image file
 	 * @param dd
 	 * @return
 	 */
@@ -259,7 +273,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 			openImage = IJ.openImage(f.getAbsolutePath());
 			if(openImage.getStackSize()>1) {
 				IssueLog.log("this option only accepts single channel greyscales ");
-				IssueLog.log("fill skip "+n);
+				IssueLog.log("will skip "+n);
 				continue;
 			}
 			ip = openImage.getStack().getProcessor(1);
@@ -270,6 +284,8 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 			}
 			stack.addSlice(n2, ip);
 		}
+		if(stack==null)
+			return null;
 		image.setStack(stack);
 		image=new CompositeImage(image);
 		
