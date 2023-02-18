@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Feb 6, 2023
+ * Date Modified: Feb 18, 2023
  * Version: 2022.2
  */
 package dataTableActions;
@@ -146,6 +146,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	private ArrayList<PlateCell> bannedCells=new ArrayList<PlateCell> ();
 	
 	private HashMap<SheetAssignment, PlateCell> manualCells=new HashMap<SheetAssignment, PlateCell> ();
+
+	private int samplesIn2ndPlate=0;
 	
 	@Override
 	public String getNameText() {
@@ -171,6 +173,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		
 		currentDialog.add(comp, gc);
 		updatePlateDisplayAfterDialogChange();
+		
 		currentDialog.addDialogListener(new StandardDialogListener() {
 
 			@Override
@@ -224,6 +227,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			IssueLog.logT(e);
 		}
 		diplay.updateDisplay();
+		
 		currentDialog.repaint();
 	}
 	
@@ -233,17 +237,18 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * 
 	 */
 	public ArrayList<Plate> buildPlate(boolean createFile) {
-		Plate plate = createPlate();
+		Plate plate = null;// createPlate();
 		
 		
 		TableReader item=ExcelTableReader.openExcelFile(getSampleListFile());
-		
+		ExcelTableReader secondTemplateTable = ExcelTableReader.openExcelFile(getSecondFile());
 		
 		
 		if(item==null)
-				try
-			{item=createExampleSheetForPlate(plate);}
-				catch (Throwable t) {
+				try{ 		
+						plate = createPlate();
+						item=createExampleSheetForPlate(plate);
+					} catch (Throwable t) {
 			IssueLog.log("failed to create table");
 		}
 		
@@ -252,13 +257,17 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			
 		
 		
-		ExcelTableReader secondTemplateTable = ExcelTableReader.openExcelFile(getSecondFile());
+		
 		if(secondTemplateTable!=null) {
-			
+			samplesIn2ndPlate=secondTemplateTable.getRowCount();
 			item=combinePlates(item, secondTemplateTable);
 			setSampleNameIndex(0);
 			if(columnCount>colAddressColumnIndex)
 				colAddressColumnIndex=columnCount;
+			 plate = createPlate();
+		} else {
+			samplesIn2ndPlate=0;
+			 plate = createPlate();
 		}
 		
 		return distributeExcelRowsToPlate(plate, item, createFile);
@@ -328,8 +337,16 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * @return
 	 */
 	public double getWorkingBlockSize() {
-		if(blockSize!=0)
+		/**if the user specifies a non zero block size*/
+		if(blockSize>0)
 			return blockSize;
+		
+		/**if the there are two spreadsheets, assumes the number of samples in the 2nd one are the equal to the number of blocks*/
+		if(blockSize==0&&this.samplesIn2ndPlate!=0){
+			return samplesIn2ndPlate;
+			}
+		
+		/**if there is no alternative, assumes the number of rows or columns is the block size*/
 		if(rotatePlate)
 			return nRow;
 		return nCol;
