@@ -26,9 +26,14 @@ public interface MultiChannelDisplayCreator {
 	public static final String MADE_BY_STITCHING = "made by stitching";//key for channels that have been 
 	static final String useActiveImage="ActiveImage";//instructions to use the currently active image can be passes as a path to the methods
 	
+	
+	
 	/**Creates a multiChannel Display for the user selected open image or file. if OpenFile is false, this will 
 	  either open a dialog for the user to select an image or use the path string to find an open image*/
 	public MultichannelDisplayLayer creatMultiChannelDisplayFromUserSelectedImage(boolean openFile, String path) ;
+	
+	
+	
 	public MultichannelDisplayLayer creatMultiChannelDisplayFromOpenImage() ;
 	
 	public MultiChannelImage creatMultiChannelFromImage(Image img) ;

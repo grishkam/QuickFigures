@@ -278,6 +278,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				
 			
 		}
+		
 		if (source==addOpenImageFromList) {
 			undo=figureOrganizingLayerPane.nextMultiChannel(false);
 		}

@@ -22,6 +22,7 @@ package addObjectMenus;
 
 import ultilInputOutput.FileFinder;
 
+import java.io.File;
 import java.util.HashMap;
 
 import appContext.CurrentAppContext;
@@ -94,7 +95,7 @@ public class FigureAdder extends LayoutAdder {
 		}
 	
 	
-	private ImageSource useOpen=ImageSource.USE_ACTIVE_IMAGE;
+	public ImageSource useOpen=ImageSource.USE_ACTIVE_IMAGE;
 
 	private FigureType figureType;
 
@@ -113,11 +114,14 @@ public class FigureAdder extends LayoutAdder {
 	/**
 	 * @param fromFile
 	 */
-	public void setToUseOpenFile(boolean fromFile) {
+	private void setToUseOpenFile(boolean fromFile) {
+		
 		if(!fromFile)
 				useOpen=ImageSource.USE_ACTIVE_IMAGE;
 			else 
 				useOpen=ImageSource.SAVED_MULTICHANNEL;
+		
+		
 	}
 	
 	/**private FigureAdder(boolean fromFile, boolean autogen) {
@@ -181,13 +185,15 @@ public class FigureAdder extends LayoutAdder {
 		
 		MultichannelDisplayLayer output;
 		if(this.useOpen==ImageSource.SAVED_SEPARATE) {
+			
 			path= getMultiChannelOpener().createMultichannelFromImageSequence(null, null, null, false);
 		}
 		
-		output= getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(this.useOpen!=ImageSource.USE_ACTIVE_IMAGE, path);
+		output= getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(this.useOpen==ImageSource.SAVED_MULTICHANNEL, path);
+		
 		if (output==null) {
-			IssueLog.log("no image found");
-			
+			IssueLog.log("no image found at "+path);
+			IssueLog.log("exists "+new File(path).exists());
 		};
 		return output;
 	}
@@ -225,6 +231,7 @@ public class FigureAdder extends LayoutAdder {
 		/***/
 		
 		MultichannelDisplayLayer display=  createMultiChannel(path) ;
+		
 		return addNewlyOpenedDisplayLayer(display, targetLayer, p);
 		}
 

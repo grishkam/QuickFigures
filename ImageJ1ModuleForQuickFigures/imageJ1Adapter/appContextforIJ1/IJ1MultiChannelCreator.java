@@ -86,21 +86,37 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 	 * or uses the active image
 	 * or if one method fails to return an image, tries the others*/
 	private ImagePlus selectImagePlus(boolean openFile, String path) {
+		//openFile=true;//temporarily removed this variable for testing purposes
+		progress("opeining "+path);
 		ImagePlus imp=null;
-		if (useActiveImage(path)) {
-			
-			imp=WindowManager.getCurrentImage();
-		}
 		
-		//next method attempt to open a file. Or if there is no active image, opens one
-		if ((openFile)|| (imp==null&&useActiveImage(path))) {
-			if (MultiChannelDisplayCreator.useActiveImage.equals(path)) {
+		/**If "'use active image, is the path"*/
+		if (useActiveImage(path)) {
+			progress("Mandaroy use active image");
+			imp=WindowManager.getCurrentImage();
+			if(imp==null) {
 				path=null;//one string is not a valid path but may be passed as the path
 				boolean userSelection = ShowMessage.showOptionalMessage("No image open", true,  "No active image", "please select an image file to continue");
 				if(!userSelection) 
 					return null;
-			
+			} else return imp;
+		}
+		
+		/**if there is still a failure to return an image and the instructions suggest not to open a new file*/
+		if (imp==null&&!openFile)
+			{
+				imp=showImagePlusChoice() ;
+				if(imp!=null)
+					return imp;
 			}
+		
+		//next method attempt to open a file. Or if there is no active image, opens one
+		if (true/**(openFile)|| (imp==null&&useActiveImage(path))*/) {
+			progress("Image J will attempt to open "+path);
+			//if (MultiChannelDisplayCreator.useActiveImage.equals(path)) {
+				
+			
+			//}
 			if (path==null)
 						try {
 							//imp=IJ.openImage();
@@ -109,6 +125,7 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 			
 			if (path!=null) {
 				try {
+					progress("Image J will open "+path);
 					imp=IJ.openImage(path);
 				
 					if (imp!=null) return imp;
@@ -116,14 +133,14 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 			}
 			
 			if (imp==null&&path!=null)
-				{IssueLog.log("ImageJ failed to return an image after opening  the image "+path+'\n');
+				{progress("ImageJ failed to return an image after opening  the image "+path+'\n');
 				ImagePlus shownImage = null;
 				try {
 					
 					 shownImage =WindowManager.getCurrentImage();//if bioformats import occurs then the new image will be the active one
 					 if (shownImage==null||!new ImagePlusWrapper(shownImage).getPath().equals(path))
 					 		{
-						 IssueLog.log("ImageJ failed to show the image using bioformats so will try again "+path+'\n');
+						 progress("ImageJ failed to show the image using bioformats so will try again "+path+'\n');
 							 
 						 shownImage= Opener.openUsingBioFormats(path);
 						// this.openBioformats();
@@ -144,8 +161,6 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 				}
 		
 		
-		if (imp==null&&!openFile)
-			imp=showImagePlusChoice() ;
 			
 		if (imp==null) return null;
 		return imp;
@@ -272,8 +287,8 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 			n2=n.substring(start.length(), n.length()-end.length());
 			openImage = IJ.openImage(f.getAbsolutePath());
 			if(openImage.getStackSize()>1) {
-				IssueLog.log("this option only accepts single channel greyscales ");
-				IssueLog.log("will skip "+n);
+				progress("this option only accepts single channel greyscales ");
+				progress("will skip "+n);
 				continue;
 			}
 			ip = openImage.getStack().getProcessor(1);
@@ -303,6 +318,14 @@ public class IJ1MultiChannelCreator implements MultiChannelDisplayCreator {
 		image.setCalibration(openImage.getCalibration());
 		
 		return image;
+	}
+
+	/**progress reports for the process ofopening images
+	 * @param string
+	 */
+	private static void progress(String... string) {
+		//IssueLog.log(string);
+		
 	}
 
 	/**

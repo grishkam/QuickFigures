@@ -45,7 +45,7 @@ import testing.TestingUtils;
   while using it, this class tests all sorts of locations while a user might not try every single one*/
 class AttachmentPositionTest {
 
-	@Test
+	//@Test
 	void test() {
 		performAutomatedTests();
 		

@@ -62,6 +62,7 @@ public class QuickFigureMakerTest {
 		
 		QuickFigureMaker qm = new QuickFigureMaker();
 		qm.figureCreationOptions.ignoreSavedTemplate=true;
+		qm.localFigureAdder.useOpen=FigureAdder.ImageSource.USE_ACTIVE_IMAGE;
 		FigureOrganizingLayerPane fig1 =new FigureTester(). createFigureFromExample1Images(qm, 2);
 		ArrayList<ZoomableGraphic> allGraphics = fig1.getAllGraphics();
 		

@@ -443,6 +443,9 @@ public class FigureTester {
 	 */
 	public QuickFigureMaker figureMaker() {
 		QuickFigureMaker quickFigureMaker = new QuickFigureMaker();
+		Object oo = quickFigureMaker.localFigureAdder.useOpen;
+		quickFigureMaker.localFigureAdder.useOpen=FigureAdder.ImageSource.SAVED_MULTICHANNEL;
+		
 		quickFigureMaker.figureCreationOptions.ignoreSavedTemplate=ignoreTemplate;
 		return quickFigureMaker;
 	}

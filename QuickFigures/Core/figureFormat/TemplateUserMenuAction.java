@@ -413,7 +413,7 @@ public class TemplateUserMenuAction extends BasicMultiSelectionOperator implemen
 	/**returns the default template*/
 	public FigureTemplate loadDefaultTemplate(FigureType type) {
 		String path = determineTemplatePath(type);
-		IssueLog.log("Loading figure template for "+type);
+	
 		return loadTemplate(path);
 		
 	}

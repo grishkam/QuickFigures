@@ -118,7 +118,7 @@ public class SelectImageDialog extends StandardDialog {
 		ArrayList<MultiChannelImage> multis =getAvailableMultis();
 		
 		SelectImageDialog sd = new SelectImageDialog(multis, includeChans,num);
-		if (multis.size()==0) return sd;//does not waste time showing the dialog if there are not options
+		if (multis.size()==0) return sd;//does not waste time showing the dialog if there are no options
 		sd.showDialog();;
 		return sd;
 	}

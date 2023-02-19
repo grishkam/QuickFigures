@@ -63,6 +63,8 @@ public class FileChoiceUtil {
 		return false;
 	
 }
+	
+	
 	/**Displays a modal dialog that presents the user with a message and the option to click ok*/
 	public static boolean OkOrNo(String s) {
 		JOptionPane.showMessageDialog(null, s);

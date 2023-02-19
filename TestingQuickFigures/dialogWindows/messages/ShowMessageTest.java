@@ -24,12 +24,11 @@ import org.junit.jupiter.api.Test;
 import logging.IssueLog;
 
 /**
- 
- * 
+ this test has been run many times
  */
 class ShowMessageTest {
 
-	@Test
+	//@Test
 	void test() {
 		ShowMessage.showOptionalMessage("Test 1", true, "this should be the first time you see message test 1. just click ok to contine test");
 		

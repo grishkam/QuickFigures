@@ -37,7 +37,7 @@ import testing.FigureTester;
  * Meant as a maual test of new method of sizing the crop dialog */
 class CropDialogSizeTest {
 
-	@Test
+	//@Test
 	void test() {
 		IJ1MultichannelContext c = new IJ1MultichannelContext();
 		ImageDisplayTester.setupImageJ();

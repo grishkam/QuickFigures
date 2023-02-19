@@ -86,7 +86,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	}
 	
 	
-	 LocalImageAdder  localFigureAdder=new LocalImageAdder();
+	public LocalImageAdder  localFigureAdder=new LocalImageAdder();
 	 
 	
 	 public boolean hidesImage=true;
@@ -171,7 +171,11 @@ public class QuickFigureMaker extends DisplayActionTool {
 	 */
 	public FigureOrganizingLayerPane createFigure(ImageWindowAndDisplaySet displayedWorksheet, String path, PreProcessInformation p2) {
 		
-		localFigureAdder.setToUseOpenFile(path==null) ;//sets to use the currently open image if no path is given
+		
+		//localFigureAdder.setToUseOpenFile(path==null) ;//sets to use the currently open image if no path is given
+		//if(path!=null)
+		//	localFigureAdder.setToUseOpenFile(false);
+		//IssueLog.log("was ased to create a file figure with local image adder "+localFigureAdder.useOpen+" path "+path);
 		
 		FigureOrganizingLayerPane added = localFigureAdder.add(displayedWorksheet.getImageAsWorksheet().getTopLevelLayer(), path, p2);
 		
@@ -220,7 +224,7 @@ public class QuickFigureMaker extends DisplayActionTool {
 	
 	/**A specialized figure adder that works in the context of
 	 * the quick figure maker*/
-	private class LocalImageAdder extends FigureAdder   {
+	public class LocalImageAdder extends FigureAdder   {
 		
 		/**
 		 * 

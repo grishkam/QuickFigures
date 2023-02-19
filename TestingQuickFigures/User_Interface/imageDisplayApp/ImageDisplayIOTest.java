@@ -77,7 +77,7 @@ public class ImageDisplayIOTest {
 			 l.deselect();
 			
 		 }
-		 boolean askuserToCompare=true;
+		 boolean askuserToCompare=FileChoiceUtil.yesOrNo("Do you want to compare saved/reopened versions of files to originals");
 		 
 		 saveAndReopen(i, askuserToCompare);
 	}
