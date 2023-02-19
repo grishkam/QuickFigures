@@ -16,8 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Dec 15, 2020
- * Copyright (C) 2020 Gregory Mazo
- * 
+ * Version: 2023.1
  */
 package multiChannelFigureUI;
 

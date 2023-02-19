@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: Feb 18, 2023
+ * Version: 2023.1
+ */
 package multiChannelFigureUI;
 
 import java.awt.Color;

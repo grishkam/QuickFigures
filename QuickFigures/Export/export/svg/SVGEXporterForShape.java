@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Nov 29, 2021
- * Version: 2022.2
+ * Version: 2023.1
  */
 package export.svg;
 

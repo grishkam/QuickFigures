@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Jan 6, 2021
- * Version: 2022.2
+ * Version: 2023.1
  */
 package illustratorScripts;
 /**a java class that generates scripts to create and modify a group item object in 

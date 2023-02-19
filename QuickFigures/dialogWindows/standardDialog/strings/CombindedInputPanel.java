@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: Dec 12, 2021
  * Date Modified: Dec 12, 2021
- * Version: 2022.2
+ * Version: 2023.1
  */
 package standardDialog.strings;
 

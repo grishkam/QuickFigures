@@ -33,7 +33,7 @@ import ultilInputOutput.FileChoiceUtil;
 /**needs additional examples*/
 public class ImageDisplayIOTest {
 
-	
+	static boolean askuserToCompare=true;
 	/**creates a series of example images, containing every type of object, shape, Text and so on
 	  in a variety of forms. Generally, only 3 kinds of problems might be predicted if there is something wrong. 
 	  1)a NonSerializable object can result in an exception or
@@ -43,6 +43,8 @@ public class ImageDisplayIOTest {
 	   */
 	@Test
 	void test() {
+		 askuserToCompare=FileChoiceUtil.yesOrNo("Do you want to visually compare saved/reopened versions of files to originals");
+		 
 		/**
 		/**
 		for(TestExample i: TestShapes.each) {
@@ -77,8 +79,7 @@ public class ImageDisplayIOTest {
 			 l.deselect();
 			
 		 }
-		 boolean askuserToCompare=FileChoiceUtil.yesOrNo("Do you want to compare saved/reopened versions of files to originals");
-		 
+		
 		 saveAndReopen(i, askuserToCompare);
 	}
 
@@ -98,8 +99,8 @@ public class ImageDisplayIOTest {
 		
 		ImageWindowAndDisplaySet i2 = ImageDisplayIO.showFile(f);
 		
-		
-		if(askuserToCompare) {
+		boolean compare=true;
+		if(compare) {
 		
 			GraphicSetDisplayWindow windowOriginal = i.getWindow();
 			
@@ -128,10 +129,12 @@ public class ImageDisplayIOTest {
 		windowOriginal.setVisible(true);
 		windowOriginal.setLocation(200, 20);
 		windowNew.setLocation(800, 20);
-		
-		IJ.wait(100);
-		assert(FileChoiceUtil.yesOrNo("One window contains the original example image, "+
-				"the other a saved copy that was re opened. Do they appear to be the same?"));
+		if(askuserToCompare) {
+			
+			IJ.wait(100);
+			assert(FileChoiceUtil.yesOrNo("One window contains the original example image, "+
+					"the other a saved copy that was re opened. Do they appear to be the same?"));
+		}
 		windowNew.setVisible(false);
 		windowOriginal.setVisible(false);
 	

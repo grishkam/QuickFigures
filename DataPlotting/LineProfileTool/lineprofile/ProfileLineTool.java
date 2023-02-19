@@ -18,7 +18,7 @@ package lineprofile;
  * Author: Greg Mazo
  * Date Created: Jan 29 2022
  * Date Modified: Jan 29 2022
- * Version: 2022.2
+ * Version: 2023.1
  */
 
 

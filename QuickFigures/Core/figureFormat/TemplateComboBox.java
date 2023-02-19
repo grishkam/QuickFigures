@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Modified: Apr 8, 2021
  * Date Created: Apr 8, 2021
- * Version: 2022.2
+ * Version: 2023.1
  */
 package figureFormat;
 import java.awt.Color;

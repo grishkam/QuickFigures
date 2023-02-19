@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Jan 16, 2021
- * Version: 2022.2
+ * Version: 2023.1
  */
 package standardDialog.choices;
 import java.awt.Color;
