@@ -141,6 +141,7 @@ public class ImagePropertiesButton extends BasicMultiSelectionOperator {
 				
 				if (nextone!=null&&!foundDisplays.contains(nextone))
 					{
+					
 					foundDisplays.add(nextone);
 					foundImages.add(nextone.getMultiChannelImage());
 					}

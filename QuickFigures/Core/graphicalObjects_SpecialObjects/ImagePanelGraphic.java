@@ -40,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -60,6 +61,7 @@ import export.pptx.OfficeObjectMaker;
 import export.svg.ImageSVGExporter;
 import export.svg.SVGExportable;
 import export.svg.SVGExporter;
+import figureEditDialogs.WindowLevelHandle;
 import figureOrganizer.FigureType;
 import figureOrganizer.PanelListElement;
 import graphicalObjects.BasicGraphicalObject;
@@ -71,6 +73,7 @@ import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
+import handles.SmartHandle;
 import handles.AttachmentPositionHandle;
 import handles.SmartHandleList;
 import handles.miniToolbars.HasMiniToolBarHandles;
@@ -349,6 +352,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements OverlayHo
 		for(LocatedObject2D i:this.getLockedItems()) {
 			if (i instanceof BarGraphic) updateScaleBar((BarGraphic) i);
 		}
+		
 	}
 
 	/**
@@ -360,6 +364,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements OverlayHo
 			scaleBar.getAttachmentPosition().snapLocatedObjects(getScaleBar(), this);
 			scaleBar.setUpBarRects();
 		}
+		adjustmentList=null;
 	}
 	
 	private BarGraphic scaleBar=null;
@@ -386,6 +391,7 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements OverlayHo
 	private transient ChannelSwapHandleList extraHandles;
 	private FigureType figureType;
 	private OverlayObjectList overlayObjects;
+	private ArrayList<SmartHandle> adjustmentList;
 	
 
 
@@ -1160,12 +1166,22 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 			if (!dragOngoing&&superSelected)	{
 					getActionHandleList().updateLocation();
 					out.addAll(this.getActionHandleList());
+					out.addAll(getAdjustmentHandleList());
 				}
 				return out;
 			}
 			//return getPanelHandleList();
 		}
 		
+		/**
+		 * @return
+		 */
+		private Collection<? extends SmartHandle> getAdjustmentHandleList() {
+			if(adjustmentList==null)
+				adjustmentList=WindowLevelHandle.buildHandlesForImage(this);
+			return adjustmentList;
+		}
+
 		@Override
 		public int handleNumber(double x, double y) {
 			if (this.getSmartHandleList()!=null) {
@@ -1217,6 +1233,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 				
 			} catch (Exception e) {
 			}
+			
 		}
 		
 		public String[] getScaleWarning() {

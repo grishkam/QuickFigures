@@ -88,6 +88,24 @@ public class WindowLevelDialog extends StandardDialog  {
 		public static void showWLDialogs(ArrayList<ChannelEntry> chans, MultiChannelImage mrp, DisplayRangeChangeListener listen, int winLev, AbstractUndoableEdit2 undo) {
 			
 			StandardDialog jf = new StandardDialog("Display Range");
+			buildDialogVariables(chans, mrp, listen, winLev, undo, jf);
+			jf.makeVisible();
+			
+			
+			
+		}
+
+
+		/**buids up the window level dialog
+		 * @param chans
+		 * @param mrp
+		 * @param listen
+		 * @param winLev
+		 * @param undo
+		 * @param jf
+		 */
+		public static void buildDialogVariables(ArrayList<ChannelEntry> chans, MultiChannelImage mrp,
+				DisplayRangeChangeListener listen, int winLev, AbstractUndoableEdit2 undo, StandardDialog jf) {
 			new CurrentFigureSet();
 			jf.currentUndoManager= CurrentFigureSet.getCurrentActiveDisplayGroup().getUndoManager();
 			jf.undo=undo;
@@ -109,10 +127,6 @@ public class WindowLevelDialog extends StandardDialog  {
 			gc.gridx=1;
 			gc.gridwidth=2;
 			jf.add(jf.alternateCloseButton(), gc);
-			jf.makeVisible();
-			
-			
-			
 		}
 
 
@@ -230,7 +244,7 @@ public class WindowLevelDialog extends StandardDialog  {
 	
 
 	/**Applies the Min/Max range*/
-	void resetRange() {
+	public void resetRange() {
 		imposeRange(slidermin, slidermax);
 		
 	}

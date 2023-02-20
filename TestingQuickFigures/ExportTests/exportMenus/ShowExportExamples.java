@@ -39,7 +39,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.MANY_ANGLE_TEXT;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.SPLIT_CHANNEL_FIGURE;//which cases to test. set to null if all should be tested
 	private static boolean saveAndReopen=false;
 	
 
