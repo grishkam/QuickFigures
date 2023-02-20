@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 19, 2023
+ * Date Modified: Feb 20, 2023
  * Version: 2023.1
  */
 package figureEditDialogs;
@@ -33,9 +33,11 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.SmartHandle;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ImagePropertiesButton;
+import undo.CombinedEdit;
 
 /**
  A type of handle that can be used instead of a window level dialog
+ @see WindowLevelDialog
  */
 public class WindowLevelHandle extends SmartHandle {
 	
@@ -56,6 +58,7 @@ public class WindowLevelHandle extends SmartHandle {
 	private Value_control value_control=Value_control.MIN;
 	private WindowLevelHandle sister;
 	private ChannelPanelEditingMenu context;
+	private CombinedEdit undo;
 
 	public WindowLevelHandle(ImagePanelGraphic c, Value_control value, int channelIndex) {
 		this.value_control=value;
@@ -63,6 +66,7 @@ public class WindowLevelHandle extends SmartHandle {
 		parentPanel=c;
 		ChannelPanelEditingMenu cc = new ChannelPanelEditingMenu(c);
 		pressedMultichannel = cc.getPressedMultichannel();
+		
 		widow = new WindowLevelDialog( channelIndex, pressedMultichannel, null, WindowLevelDialog.MIN_MAX, true);
 		super.setHandleNumber(8720000+100*channelIndex+value.ordinal());
 		this.setEllipseShape(true);
@@ -128,11 +132,19 @@ public class WindowLevelHandle extends SmartHandle {
 		ipb.setSelection(canvasMouseEventWrapper.getSelectionSystem().getSelecteditems());
 		
 		context=ipb.prepareContext();
+		undo=context.getUndoForChannelDisplay();
 		if(canvasMouseEventWrapper.clickCount()==2) {
 			DisplayRangeChangeListener listenNow = getListplayRangeListener();
 			listenNow.minMaxSet(channelIndex, minOfSlidingRange(),  maxOfSlidingRange());
-			
+			canvasMouseEventWrapper.addUndo(undo);
 		}
+	}
+	
+
+	/**Subclasses may returns true if the method calls with the handle add an undo to the undomanager.
+	  if not, an undo that simply tries to move a handle back to its origin location is used (those are often not complex enough to undo properly)*/
+	public boolean handlesOwnUndo() {
+		return true;
 	}
 	
 	public static ArrayList<SmartHandle> buildHandlesForImage(ImagePanelGraphic c) {
@@ -141,6 +153,8 @@ public class WindowLevelHandle extends SmartHandle {
 		MultiChannelImage pM = cc.getPressedMultichannel();
 		
 		ArrayList<SmartHandle> output = new ArrayList<SmartHandle> ();
+		if(pM==null)
+			return output;
 		for(ChannelEntry chan : pM.getChannelEntriesInOrder()) {
 			WindowLevelHandle max = new WindowLevelHandle(c, WindowLevelHandle.Value_control.MAX, chan.getOriginalChannelIndex());
 			
@@ -171,36 +185,51 @@ public class WindowLevelHandle extends SmartHandle {
 		double knobPercent = (x-slidermin)/(slidermax-slidermin);
 		
 		double value = minOfSlidingRange()+(knobPercent)*(maxOfSlidingRange()-minOfSlidingRange());
-	
+		boolean shiftDown = lastDragOrRelMouseEvent.shiftDown();
 		
-		DisplayRangeChangeListener listenNow = getListplayRangeListener();
+		valueSet(value, shiftDown);
+		if (undo!=null) {
+			lastDragOrRelMouseEvent.addUndo(undo);
+			undo=null;
+		}
+	}
+
+	/**called when this handle is dragged to a particular numerical slider value
+	 * @param value
+	 * @param shiftDown
+	 */
+	public void valueSet(double value, boolean shiftDown) {
 		
-	
+		
+		double mmin = pressedMultichannel.getChannelMin(channelIndex);
+		double mmax = pressedMultichannel.getChannelMax(channelIndex);
+		double newmin=mmin;
+		double newmax=mmax;
+		
 		
 		if(value_control==Value_control.LEVEL) {
-			double mmin = pressedMultichannel.getChannelMin(channelIndex);
-			double mmax = pressedMultichannel.getChannelMax(channelIndex);
 			double shift = value-(mmax+mmin)/2;
-			
-			listenNow.minMaxSet(channelIndex, pressedMultichannel.getChannelMin(channelIndex)+shift/2,  pressedMultichannel.getChannelMax(channelIndex)+shift/2);
-			
-		}
-		
-		if(value_control==Value_control.WINDOW|| (lastDragOrRelMouseEvent.shiftDown()&& (value_control==Value_control.MAX||value_control==Value_control.MIN))) {
-			double mmin = pressedMultichannel.getChannelMin(channelIndex);
-			double mmax = pressedMultichannel.getChannelMax(channelIndex);
+			newmin=pressedMultichannel.getChannelMin(channelIndex)+shift/2;
+			newmax= pressedMultichannel.getChannelMax(channelIndex)+shift/2;
+		} else  if(value_control==Value_control.WINDOW|| (shiftDown&& (value_control==Value_control.MAX||value_control==Value_control.MIN))) {
 			double level= (mmax+mmin)/2;
 			double window = Math.abs(value-level)*2;
-			listenNow.minMaxSet(channelIndex, level-window/2,  level+window/2);
-			
+			newmin=level-window/2;
+			newmax=level+window/2;
 		} else 	if(value_control==Value_control.MIN) {
-			listenNow.minMaxSet(channelIndex, value,  pressedMultichannel.getChannelMax(channelIndex));
-			
-		}else 	if(value_control==Value_control.MAX) {
-			listenNow.minMaxSet(channelIndex, pressedMultichannel.getChannelMin(channelIndex),  value);
-			
+			newmin=value;
+		} else 	if(value_control==Value_control.MAX) {
+			newmax=value;
 		}
-
+		
+		if(newmin>=newmax) {
+			double n = newmax;
+			newmax=newmin;
+			newmin=n;
+		}
+		
+		DisplayRangeChangeListener listenNow = getListplayRangeListener();
+		listenNow.minMaxSet(channelIndex, newmin, newmax);
 	}
 
 	/**
@@ -210,6 +239,7 @@ public class WindowLevelHandle extends SmartHandle {
 		if(context==null)
 			context=new ChannelPanelEditingMenu(parentPanel);;
 		DisplayRangeChangeListener listenNow=context;
+		
 		return listenNow;
 	}
 

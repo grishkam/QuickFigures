@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 12, 2021
+ * Date Modified: Feb 20, 2023
  * Version: 2023.1
  */
 package imageDisplayApp;
@@ -56,7 +56,7 @@ public class GraphicDisplayCanvas extends JComponent {
 	/**
 	 specifies how many extra pixels are needed on the bottom and right (they serve as space for the rulers)
 	 */
-	private static final int ADDITIONAL_SIZE = 60;
+	private static final int ADDITIONAL_SIZE = 70;
 	
 	
 	/**
@@ -349,10 +349,18 @@ public class GraphicDisplayCanvas extends JComponent {
 			if (window==null||window.getTheSet()==null ||!window.usesScrollPane()) 
 				return super.getPreferredSize();
 			Rectangle b = this.getDisplayArea().getBounds();
-			double w = b.getWidth()+ADDITIONAL_SIZE;
-			double h = b.getHeight()+ADDITIONAL_SIZE;
+			double w = b.getWidth()+getPadding();
+			double h = b.getHeight()+getPadding()*3/2;
 			
 			return new Dimension((int)w, (int)h);
+		}
+
+
+		/**
+		 * @return
+		 */
+		public int getPadding() {
+			return ADDITIONAL_SIZE;
 		}
 
 

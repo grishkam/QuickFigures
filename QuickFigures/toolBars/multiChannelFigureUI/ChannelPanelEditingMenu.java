@@ -433,7 +433,14 @@ if (	actionCommand.equals(renameChanCommand)) {
 	protected CombinedEdit showDisplayRangeDialog(int type) {
 		if(this.isDisplayMissing(true))
 			return null;
-		WindowLevelDialog.showWLDialogs(getChannelEntryList(),  getPrincipalMultiChannel(), this, type , ChannelDisplayUndo.createMany(getAllMultiChannelImages(), this));
+		WindowLevelDialog.showWLDialogs(getChannelEntryList(),  getPrincipalMultiChannel(), this, type , getUndoForChannelDisplay());
+		return getUndoForChannelDisplay();
+	}
+
+	/**returns the undoable edits for channel display
+	 * @return
+	 */
+	public CombinedEdit getUndoForChannelDisplay() {
 		return ChannelDisplayUndo.createMany(getAllMultiChannelImages(), this);
 	}
 
