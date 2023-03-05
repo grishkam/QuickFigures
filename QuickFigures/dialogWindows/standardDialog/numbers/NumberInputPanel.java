@@ -26,6 +26,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
@@ -40,6 +43,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
+import dialogMenus.FieldFillPopup;
+import logging.IssueLog;
 import standardDialog.InputPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;
@@ -134,6 +139,7 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 	
 	/**if the slider positions corresponds to a list of values. If set to null, slider position between min and max vlue will determine number*/
 	private ArrayList<Double> sliderConstants=null;
+	private JButton pressme;
 	
 	/**meant to be implicit constructor for subclasses*/
 	public  NumberInputPanel() {
@@ -177,7 +183,7 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		this.setNumber(originalStatus);
 	}
 	
-	public Component[] getParts() {
+	private Component[] getParts() {
 		Component[] comp = new Component[] {label, field, slider};
 		return comp;
 	}
@@ -203,6 +209,7 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		c.add(this.label);
 		if(this.includeField) c.add(field) ;
 		if(this.includeSlider) c.add(slider) ;
+		
 	}
 	
 	public void setNumber(double d) {
@@ -241,14 +248,21 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 		
 		if(arg0.getSource()==field) {
 			
-			double newNumber = field.getNumberFromField();
-			setValueOfSlider(newNumber);
-			
-			number=newNumber;
-			NumberInputEvent ne = new NumberInputEvent(this, field, number);
-			ne.setKey(key);
-			notifyListeners( ne);
+			respondToFieldChange();
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public void respondToFieldChange() {
+		double newNumber = field.getNumberFromField();
+		setValueOfSlider(newNumber);
+		
+		number=newNumber;
+		NumberInputEvent ne = new NumberInputEvent(this, field, number);
+		ne.setKey(key);
+		notifyListeners( ne);
 	}
 
 	/**Sets the slider value
@@ -362,7 +376,22 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 			gc.gridx++;
 		}
 		gc.insets=lastInsets;
-		if (this.includeField)  jp.add(field, gc);
+		if (this.includeField) { 
+			if (this.pressme!=null) { 
+			
+				GridBagConstraints gc2 = new GridBagConstraints();
+				gc2.gridx=x0;
+				gc2.gridy=y0;
+				JPanel jpress = new JPanel();
+				jpress.setLayout(new GridBagLayout());
+				jpress.add(field, gc2);
+				gc2.gridx++;
+				jpress.add(pressme, gc2);
+				jp.add(jpress, gc);
+				} else
+					jp.add(field, gc);
+		}
+		
 		
 	}
 
@@ -432,6 +461,24 @@ public class NumberInputPanel extends InputPanel implements KeyListener, Adjustm
 			newsliderConstants.add(d);
 		}
 		this.setSliderConstants(newsliderConstants);
+	}
+
+	/**sets the choices of constant values
+	 * @param choices
+	 * @return 
+	 */
+	public void setConstants(String[] choices) {
+		field.setContantMap(choices);
+		FieldFillPopup f = new FieldFillPopup(field, choices,new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				respondToFieldChange();
+				
+			}});
+		pressme=f.getPressTrigger();
+		
+		
 	}
 
 	

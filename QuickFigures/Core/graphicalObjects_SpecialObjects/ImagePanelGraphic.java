@@ -1097,7 +1097,6 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		@Override
 		public OfficeObjectMaker getObjectMaker() {
-			// TODO Auto-generated method stub
 			return new ImagePanelImmitator(this);
 		}
 

@@ -258,7 +258,9 @@ public class ChannelSwapHandleList extends SmartHandleList {
 			if(anchorObject instanceof ImagePanelGraphic)
 				out= new ChannelPanelEditingMenu((ImagePanelGraphic)anchorObject, entry);
 			else out=new ChannelPanelEditingMenu(figure, ChannelUseInstructions.NONE_SELECTED);
-			if (figure.getMultiChannelDisplaysInLayoutOrder().size()==1) {out.addChannelRelevantMenuItems(output);} 
+			if (figure.getMultiChannelDisplaysInLayoutOrder().size()==1) {
+				out.addChannelRelevantMenuItems(output);
+				} 
 			else {
 				SmartJMenu jEveryImage=new SmartJMenu("For Each Image");
 				out.addChannelRelevantMenuItems(jEveryImage);

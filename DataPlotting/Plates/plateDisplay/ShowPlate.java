@@ -23,6 +23,7 @@ package plateDisplay;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dataTableDialogs.DataTable;
 import dataTableDialogs.SmartDataInputDialog;
@@ -61,9 +62,9 @@ public class ShowPlate {
 	
 		
 		/**Creates the hues*/
-		if(plate.hues!=null) {
+		if(plate.getHueList()!=null) {
 			ArrayList<Color> c=new ArrayList<Color>();
-			c.addAll(plate.hues.values());
+			c.addAll(plate.getHueList());
 			table.setupColorMap( c);
 		} else {
 			IssueLog.log("group hues not setup yet");
@@ -108,6 +109,73 @@ public class ShowPlate {
 		
 		table.mergeIdenticalCells(!plate.horizontalOrientation(), new int[] {1,12,1,8});
 		
+	}
+	
+	/**Colors the cells based on the content of the label*/
+	public static ArrayList<Color> colorCellsBasedOnShortLabels(ArrayList<PlateCell>  cells) {
+		ArrayList<String> row1=new ArrayList<String>();//row 1 similarity will determine the hues
+		ArrayList<String> row2=new ArrayList<String>();//row 2 similarity will determine the brightness
+		HashMap< String, Integer> rowmap1=new HashMap<String, Integer>();//row 1 similarity will determine the hues
+		HashMap< String, Integer> rowmap2=new HashMap< String, Integer>();//row 2 similarity will determine the brightness
+		String regex = ""+'\n';
+		ArrayList<Color> colors = new ArrayList<Color>();
+		
+		int i=0;
+		int j=0;
+		for(PlateCell cell: cells) {
+			if(cell.getCellText()==null)
+				continue;
+			String label = cell.getShortLabel();
+			
+			String[] splitPart = label.split(regex);
+			
+			String row1Name = splitPart[0].trim();
+			
+			if(!rowmap1.containsKey(row1Name) )	{
+					row1.add(row1Name);
+					rowmap1.put(row1Name, i);
+					i++;
+					
+				}
+			
+			if(splitPart.length>1){
+				String row2Name = splitPart[1];
+				if(!rowmap2.containsKey(row2Name) )	{
+					row2.add(row2Name);
+					rowmap2.put(row2Name, j);
+					j++;
+					
+				}
+				
+			}
+			
+		}
+		
+	
+		
+		for(PlateCell cell: cells) {
+			if(cell.getCellText()==null)
+				continue;
+			String label = cell.getShortLabel();
+			
+			String[] splitPart = label.split(regex);
+			String row1Name = splitPart[0].trim();
+		
+			
+			int section = row1.indexOf(row1Name);
+			int block = 1;
+			if(splitPart.length>1){
+				String row2Name = splitPart[1];
+				block =row2.indexOf(row2Name);
+			}
+			Color color = Plate.determineHueForCell(row1.size()+1, section, row2.size()+1, block, true);
+			cell.setColor(color);
+			//IssueLog.log("Color for "+row1Name+" and "+row2Name+" is "+color);
+			//IssueLog.log("Color for "+section+"/"+row1.size()+" and "+block+"/"+row2.size()+" is "+color);
+			colors.add(color);
+		}
+		
+		return colors;
 	}
 	
 	

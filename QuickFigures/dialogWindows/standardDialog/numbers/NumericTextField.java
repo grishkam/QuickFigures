@@ -20,7 +20,11 @@
  */
 package standardDialog.numbers;
 
+import java.util.HashMap;
+
 import javax.swing.JTextField;
+
+import logging.IssueLog;
 
 
 /**Just a text field that keeps track of a number input*/
@@ -34,6 +38,7 @@ public class NumericTextField extends JTextField  {
 	private static final long serialVersionUID = 1L;
 	double originalnum=0;
 	private int decimalplaces=3;
+	private HashMap<String, String> contantMap;
 	
 
 	public NumericTextField(double number, int deci) {
@@ -54,7 +59,7 @@ public class NumericTextField extends JTextField  {
 		
 	}
 	
-	
+	/**Sets the text of the field*/
 	public String numberToString(double d) {
 		double factor = Math.pow(10, getDecimalPlaces());
 		int d2=(int)(d*factor);
@@ -62,11 +67,12 @@ public class NumericTextField extends JTextField  {
 		
 	}
 	
+	/**Gets the number currently set by the field*/
 	public double getNumberFromField() {
 		String st=this.getText();
 		try {
 			
-			double out = Double.parseDouble(st);
+			double out = translateStringValueToNumber(st);
 			if (Double.isNaN(out)) return originalnum;
 			originalnum=out;
 			return  originalnum;
@@ -74,7 +80,30 @@ public class NumericTextField extends JTextField  {
 			return originalnum;
 		}
 	}
+
+	/**converts the text to the number it represents 
+	 * @param st
+	 * @return
+	 */
+	public double translateStringValueToNumber(String st) {
+		st=interpretConstant(st);
+		return Double.parseDouble(st);
+	}
 	
+	/**Translates the constant
+	 * @return
+	 */
+	private String interpretConstant(String st) {
+		if(getConstantMap()==null)
+			return st;
+		String m=getConstantMap().get(st);
+		if(m!=null) {
+			
+			return m;
+			}
+		return st;
+	}
+
 	public boolean isBlank() {
 		return this.getText().trim().equals("");
 	}
@@ -87,7 +116,28 @@ public class NumericTextField extends JTextField  {
 		this.decimalplaces = decimalplaces;
 		this.setColumns(getDecimalPlaces()+4);
 	}
+
+	/**returns the map of constants*/
+	public HashMap<String, String> getConstantMap() {
+		return contantMap;
+	}
+
+	public void setContantMap(HashMap<String, String> contantMap) {
+		this.contantMap = contantMap;
+	}
 	
-	
+	/**Sets a constant map for this field*/
+	public void setContantMap(String[] contantMapValues) {
+		this.contantMap = new HashMap<String, String>();
+		for(int i=1; i<contantMapValues.length; i+=2) {
+			String key = contantMapValues[i-1];
+			String value = contantMapValues[i];
+			contantMap.put(key, value);
+			if(			translateStringValueToNumber(value)==this.getNumberFromField()) {
+				this.setText(key);
+			}
+		}
+		
+	}
 	
 }

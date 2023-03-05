@@ -23,6 +23,7 @@ package plates;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -57,11 +58,12 @@ public class Plate {
 	/**determines whether the group are ordered up/down or left/right*/
 	private boolean flipGroups=false;
 	private ArrayList<Integer> usedSections=new ArrayList<Integer>();
-	public HashMap<Integer, Color> hues;//a map with the hues for each section
+	private HashMap<Integer, Color> hues;//a map with the hues for each section
 	private boolean hueMismash=true;
 	private int lastB;
 	public AddressModification addressMod=new AddressModification(0,0);
 	private ArrayList<PlateCell> bannedCell;
+	private ArrayList<Color> additionColors;
 	
 	
 	
@@ -80,7 +82,7 @@ public class Plate {
 		availableCellList=createPlaceCells();
 		Collections.sort(availableCellList, new PlateCellComparotor());
 		Collections.sort(cellList, new PlateCellComparotor());
-		assignHuesToSections( usedSections.size());
+		assignHuesToSections( usedSections.size(), hueMismash, cellList, getBlockWidth());
 	}
 	
 	public Plate createSimilar() {
@@ -430,35 +432,80 @@ public class Plate {
 	}
 	public String getPlateName() {return plateName;}
 	
-	public void assignHuesToSections(double size) {
+	public void assignHuesToSections(double nSections, boolean hueMismash, ArrayList<PlateCell> cellList2, int blockWidth2) {
 		HashMap<Integer, Color> hudes=new HashMap<Integer, Color>();
+		int blockHeight2 = getBlockHeight();
 		
+		 
 		
-		for(int i=0; i<this.cellList.size();i++) {
-			PlateCell cell= this.cellList.get(i);
+		int size2 = cellList2.size();
+		for(int i=0; i<size2;i++) {
+			PlateCell cell= cellList2.get(i);
 			int section = this.getSection(cell.getAddress());
-			int repeat = (i/(getBlockWidth()));
+			
+			int blockStep = i/blockWidth2;
+			int repeat = blockStep;
 			
 			 
-			float theHue = (float)(1.0*(section/size))*0.9f;
-			if(hueMismash) {
-				int h=(int) (theHue*10000);
-				if(section%2==0)
-					h=h/2;
-				else {
-					h=(h-1)/2+5000;
-				}
-				theHue=h/10000.0f;
-			}
-			
-			float theBrightness = (float) (1f*(repeat%getBlockHeight())/getBlockHeight()+0.2)/2f;//number should always be a max of 1 or hues will not match
-			Color c = Color.getHSBColor(theHue, theBrightness, 1f);
+			Color c = determineHueForCell(nSections, section, blockHeight2, repeat, hueMismash);
 			
 			hudes.put(i, c);
 			//Color h = hudes.get(this.getSection(cell.getAddress()));
 			cell.setColor(c);
 		}
-		this.hues=hudes;
+		this.setHues(hudes);
+	}
+	
+	/**Assigns a certain color hue and color brightness to the cell depending on two metrics
+	 * This makes it possible to create a hue gradient and a brightness gradient
+	 * @param nSections
+	 * @param section
+	 * @param nBlocks
+	 * @param blockIndex each of threee triplicates wil
+	 * @param hueMismash
+	 * @return
+	 */
+	public static Color determineHueForCell(double nSections, int section, int nBlocks, int blockIndex, boolean hueMismash) {
+		float theHue = (float)(1.0*(section/nSections))*0.9f;
+		if(hueMismash) {
+			int h=(int) (theHue*10000);
+			if(section%2==0)
+				h=h/2;
+			else {
+				h=(h-1)/2+5000;
+			}
+			theHue=h/10000.0f;
+		}
+		
+		
+		float theBrightness = (float) (1f*(blockIndex%nBlocks)/nBlocks+0.2)/2f;//number should always be a max of 1 or hues will not match
+		Color c = Color.getHSBColor(theHue, theBrightness, 1f);
+		return c;
+		
+	}
+	public HashMap<Integer, Color> getHues() {
+		return hues;
+	}
+	public void setHues(HashMap<Integer, Color> hues) {
+		this.hues = hues;
+	}
+	/**
+	 * @return
+	 */
+	public Collection<Color> getHueList() {
+		ArrayList<Color> output = new ArrayList<Color>();
+		output.addAll(this.getHues().values());
+		if(this.additionColors!=null) {
+			output.addAll(additionColors);
+		}
+		return output;
+	}
+	/**
+	 * @param c2
+	 */
+	public void setAdditionalColors(ArrayList<Color> c2) {
+		this.additionColors=c2;
+		
 	}
 	
 }

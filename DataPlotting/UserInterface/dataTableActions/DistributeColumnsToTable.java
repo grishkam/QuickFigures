@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Feb 18, 2023
+ * Date Modified: Feb 27, 2023
  * Version: 2023.1
  */
 package dataTableActions;
@@ -24,7 +24,6 @@ package dataTableActions;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -46,6 +45,7 @@ import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
+import plateDisplay.CellColoringSystem;
 import plateDisplay.PlateDisplayGui;
 import plateDisplay.ShowPlate;
 import plates.AddressModification;
@@ -61,7 +61,6 @@ import standardDialog.graphics.GraphicComponent;
 import standardDialog.graphics.GraphicComponent.CanvasMouseListener;
 import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog;
-import ultilInputOutput.FileChoiceUtil;
 import undo.AbstractUndoableEdit2;
 
 /**
@@ -76,16 +75,16 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	//@RetrievableOption(key = "A1", label="Will paste plate locations into column #")
 	public double colAddressColumnIndex=2;
 	
-	@RetrievableOption(key = "col", label="# Columns")
+	@RetrievableOption(key = "col", label="# Columns")//, choices= {"12", "12"}, chooseExtra=true
 	public double nCol=12;
 	
-	@RetrievableOption(key = "row", label="# Rows")
+	@RetrievableOption(key = "row", label="# Rows")//, choices= {"8", "8"}, chooseExtra=true
 	public double nRow=8;
 	
 	@RetrievableOption(key = "skip", label="How many replicates?")
 	public double skip=3;
 	
-	@RetrievableOption(key = "block", label="Group samples ")
+	@RetrievableOption(key = "block", label="Group samples ", choices= {"Auto", "0", "Plate", "-1", "2", "2", "3", "3", "4", "4", "6", "6"}, chooseExtra=true)
 	public double blockSize=0;
 	
 	@RetrievableOption(key = "flip group", label="Flip group orientation")
@@ -106,9 +105,13 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "show names", label="Preview sample names")
 	public boolean showSampleNames=false;
 	
+	@RetrievableOption(key = "color", label="Color based", choices= { "on group", "on sample names (two lines)"})
+	private int colorBasedOnName=1;
 	
-	//@RetrievableOption(key = "sample", label="names are in col #")
-//public double getSampleNameIndex()=0;
+	public CellColoringSystem colorMode=CellColoringSystem.BY_FIRST_ROW;
+	
+	
+
 	
 	
 	@RetrievableOption(key = "sample", label="names are in col #")
@@ -148,6 +151,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	private HashMap<SheetAssignment, PlateCell> manualCells=new HashMap<SheetAssignment, PlateCell> ();
 
 	private int samplesIn2ndPlate=0;
+
+
 	
 	@Override
 	public String getNameText() {
@@ -342,7 +347,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			return blockSize;
 		
 		/**if the there are two spreadsheets, assumes the number of samples in the 2nd one are the equal to the number of blocks*/
-		if(blockSize==0&&this.samplesIn2ndPlate!=0){
+		if(blockSize==0 && this.samplesIn2ndPlate!=0){
 			return samplesIn2ndPlate;
 			}
 		
@@ -555,6 +560,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * @param plates
 	 */
 	public void createSampleSetupSheets(TableReader tableAssignment, ArrayList<Plate> plates) {
+		
+		if (colorBasedOnName==1) 
+			recolorPlatesBasedOnRows(plates);
+		
 		/**Creates a sample setup sheet for each plate*/
 		for(int i=0; i<plates.size(); i++) {
 			Plate p=plates.get(i);
@@ -564,6 +573,20 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			TableReader sheet2=tableAssignment.createNewSheet(tabname);
 			new  ShowPlate().showPlate(sheet2, p);
 			}
+	}
+
+	/**Changes the colors of the cells to match the text of the short names
+	 * @param plates
+	 */
+	public void recolorPlatesBasedOnRows(ArrayList<Plate> plates) {
+		ArrayList<PlateCell> allCells = new ArrayList<PlateCell> ();
+		for(Plate p: plates) {
+			allCells.addAll(p.getPlateCells());
+		}
+		ArrayList<Color> c2 = ShowPlate.colorCellsBasedOnShortLabels(allCells);
+		for(Plate p: plates) {
+			p.setAdditionalColors(c2);
+		}
 	}
 
 	/** saves the table with the plate locations
@@ -579,7 +602,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			if(!new File(outputFolder).exists())
 				new File(outputFolder).mkdirs();
 				oSave=oSave.replace(".xlsx", "_with_plate_locations.xlsx");
-				oSave= outputFolder+new File(oSave).getName();
+				oSave= outputFolder+"sample_setup_"+new File(oSave).getName();
 				oSave=findUniqueOutputFileNam(oSave, ".xlsx");
 			}
 		
@@ -606,7 +629,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 */
 	private String findOutputFileNam() {
 		int count=1;
-		String name="output";
+		String name="sample_setup";
 		String extension=".xlsx";
 		name=DirectoryHandler.getDefaultHandler().getFigureFolderPath()+File.separator+name;
 		File f=new File(name+extension);

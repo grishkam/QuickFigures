@@ -78,11 +78,19 @@ public class PlateCell {
 		return plateAddress;
 	}
 	
+	/**returns the short name of the cell that will be displayed on the summary sheet*/
 	public String getShortLabel() {
-		if(shortName!=null)
-			return ""+shortName;
+		if(getCellText()!=null)
+			return ""+getCellText();
 		return plateAddress;
 		}
+
+	/**If a specific text has been asigned to this cell
+	 * @return
+	 */
+	public Object getCellText() {
+		return shortName;
+	}
 
 
 	public Integer getSpreadSheetRow() {

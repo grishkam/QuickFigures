@@ -765,6 +765,9 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	  may be rotated at a certain angle*/
 	private ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale, Interpolation interpolateMethod) {
 		imp.deleteRoi();
+		if(imp.getProcessor()==null) {
+			IssueLog.log("problem with given image, no ImageProcessor which suggests no image data");
+		}
 		ImagePlus d = imp.duplicate();
 		ImageStack oldstack = d.getStack();
 

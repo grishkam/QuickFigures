@@ -26,11 +26,15 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import javax.swing.JPopupMenu;
+
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.SmartHandle;
+import menuUtil.SmartJMenu;
+import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ImagePropertiesButton;
 import undo.CombinedEdit;
@@ -59,17 +63,20 @@ public class WindowLevelHandle extends SmartHandle {
 	private WindowLevelHandle sister;
 	private ChannelPanelEditingMenu context;
 	private CombinedEdit undo;
+	private ChannelEntry entry;
 
-	public WindowLevelHandle(ImagePanelGraphic c, Value_control value, int channelIndex) {
+	public WindowLevelHandle(ImagePanelGraphic c, Value_control value, ChannelEntry channelIndex) {
 		this.value_control=value;
-		this.channelIndex=channelIndex;
+		entry=channelIndex;
+		this.channelIndex=channelIndex.getOriginalChannelIndex();
 		parentPanel=c;
 		ChannelPanelEditingMenu cc = new ChannelPanelEditingMenu(c);
 		pressedMultichannel = cc.getPressedMultichannel();
 		
-		widow = new WindowLevelDialog( channelIndex, pressedMultichannel, null, WindowLevelDialog.MIN_MAX, true);
-		super.setHandleNumber(8720000+100*channelIndex+value.ordinal());
+		widow = new WindowLevelDialog( this.channelIndex, pressedMultichannel, null, WindowLevelDialog.MIN_MAX, true);
+		super.setHandleNumber(8720000+100*this.channelIndex+value.ordinal());
 		this.setEllipseShape(true);
+		
 	}
 
 	public WindowLevelHandle(WindowLevelDialog dialog, ImagePanelGraphic c) {
@@ -156,13 +163,13 @@ public class WindowLevelHandle extends SmartHandle {
 		if(pM==null)
 			return output;
 		for(ChannelEntry chan : pM.getChannelEntriesInOrder()) {
-			WindowLevelHandle max = new WindowLevelHandle(c, WindowLevelHandle.Value_control.MAX, chan.getOriginalChannelIndex());
+			WindowLevelHandle max = new WindowLevelHandle(c, WindowLevelHandle.Value_control.MAX, chan);
 			
-			WindowLevelHandle min = new WindowLevelHandle(c, WindowLevelHandle.Value_control.MIN, chan.getOriginalChannelIndex());
+			WindowLevelHandle min = new WindowLevelHandle(c, WindowLevelHandle.Value_control.MIN, chan);
 			output.add(min);
 			output.add(max);
 			max.setSister(min);
-			WindowLevelHandle l = new WindowLevelHandle(c, WindowLevelHandle.Value_control.LEVEL, chan.getOriginalChannelIndex());
+			WindowLevelHandle l = new WindowLevelHandle(c, WindowLevelHandle.Value_control.LEVEL, chan);
 			output.add(l);
 			//l = new WindowLevelHandle(c, WindowLevelHandle.Value_control.WINDOW, chan.getOriginalChannelIndex());
 			//output.add(l);
@@ -257,6 +264,15 @@ public class WindowLevelHandle extends SmartHandle {
 		return (double)widow.slidermax;
 	}
 	
+	
+	/**returns the popup menu for this handle. */
+	public JPopupMenu getJPopup() {
+		ChannelPanelEditingMenu menu = new ChannelPanelEditingMenu(parentPanel, entry);
+		SmartPopupJMenu output = new SmartPopupJMenu();
+		menu.addChannelRelevantMenuItems(output);
+	
+		return output;
+	}
 	
 	
 }

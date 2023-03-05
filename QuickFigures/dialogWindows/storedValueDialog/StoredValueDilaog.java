@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 19, 2022
+ * Date Modified: Mar 1, 2023
  * Version: 2023.1
  */
 package storedValueDialog;
@@ -196,6 +196,9 @@ public class StoredValueDilaog extends StandardDialog{
 			{ panel= new NumberInputPanel(label, f.getDouble(of));}
 			else 
 				{ panel = new NumberInputPanel(label, f.getDouble(of), range[0], range[1]);}
+			if(o.choices()!=null) {
+				panel.setConstants(o.choices());
+			}
 			new NumberInput(panel,f, of);
 			
 			dialog.add(o.key(), panel);
