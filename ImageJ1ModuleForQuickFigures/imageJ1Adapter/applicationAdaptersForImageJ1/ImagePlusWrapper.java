@@ -41,6 +41,7 @@ import locatedObject.RotatesFully;
 import locatedObject.ScaleInfo;
 import locatedObject.Scales;
 import logging.IssueLog;
+import messages.ShowMessage;
 import multiChannelFigureUI.ChannelManipulations;
 import undo.UndoManagerPlus;
 
@@ -52,6 +53,8 @@ import java.awt.Shape;
 import java.awt.Window;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import channelMerging.ChannelColorWrap;
@@ -80,7 +83,7 @@ import applicationAdapters.PixelWrapper;
 
 /**An implementation of several interfaces. Some are required for an imageJ image to
   be used by QuickFigures as a multichannel image*/
-public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, ChannelSwapListener, OpenFileReference {
+public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, ChannelSwapListener, OpenFileReference, Serializable {
 
 	private static final int FRAME = 2;
 	private static final int SLICE = 1;
@@ -922,7 +925,16 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	}
 
 
-
+	/**Before serialization of the object, will warn the user (and developer) that something is attempting to save it*/
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		
+		
+		
+		ShowMessage.showOptionalMessage("should not be trying to save", false, "should not be trying to save "+this);
+		out.defaultWriteObject();
+	
+	}
 
 	
 	

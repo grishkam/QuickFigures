@@ -391,7 +391,8 @@ public class ImagePanelGraphic extends BasicGraphicalObject implements OverlayHo
 	private transient ChannelSwapHandleList extraHandles;
 	private FigureType figureType;
 	private OverlayObjectList overlayObjects;
-	private ArrayList<SmartHandle> adjustmentList;
+	
+	private transient ArrayList<SmartHandle> adjustmentList;
 	
 
 

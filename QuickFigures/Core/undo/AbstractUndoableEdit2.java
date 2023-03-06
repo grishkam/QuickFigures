@@ -20,6 +20,7 @@
  */
 package undo;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import graphicalObjects.ZoomableGraphic;
 import layersGUI.GraphicSetDisplayTree;
+import messages.ShowMessage;
 
 /**A superclass for many undoable edits*/
 public class AbstractUndoableEdit2 extends AbstractUndoableEdit implements Serializable {
@@ -73,7 +75,16 @@ public class AbstractUndoableEdit2 extends AbstractUndoableEdit implements Seria
 	}
 	
 
+	/**Before serialization of the object, will warn the user (and developer) that something is attempting to save it*/
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		
+		
+		
+		ShowMessage.showOptionalMessage("should not be trying to save", false, "should not be trying to save "+this);
+		out.defaultWriteObject();
 	
+	}
 
 
 }

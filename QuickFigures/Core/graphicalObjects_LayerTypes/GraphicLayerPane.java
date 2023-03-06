@@ -60,7 +60,7 @@ public class GraphicLayerPane implements GraphicLayer, ZoomableGraphic, Serializ
 	 * 
 	 */
 	
-	private LayerStructureChangeListenerList listenerlist=new LayerStructureChangeListenerList();
+	private transient LayerStructureChangeListenerList listenerlist=new LayerStructureChangeListenerList();
 	private static final long serialVersionUID = 1L;
 	public String name="base layer";
 	

@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Mar 5, 2023
  * Version: 2023.1
  */
 package graphicalObjects_Shapes;
@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
 import handles.AngleHandle;
+import handles.RegularPolygonAngleHandle;
 import handles.SmartHandleList;
 
 /**A star shaped polygon*/
@@ -182,45 +183,5 @@ public class SimpleStar extends RegularPolygonGraphic {
 
 
 	
-	/**S special angle handle for polygons and starts*/
-	static class RegularPolygonAngleHandle extends  AngleHandle {
-		public RegularPolygonGraphic polygon;
-		
-		private int pointNumber=1;
-		
-		public RegularPolygonAngleHandle(RegularPolygonGraphic r, AngleParameter angle, Color c, double startAngle,
-				int handleNumber, int point) {
-			super(r, angle, c, startAngle, handleNumber);
-			polygon=r;
-			 pointNumber=point;
-			 this.setType(angle.getType());
-			
-		}
-		
 
-		public double getHandleDrawAngle() {
-			return getPointNumber()*polygon.getIntervalAngle();
-		}
-		
-		public double getStandardAngle() {
-			return polygon.getIntervalAngle();
-		}
-
-		public int getPointNumber() {
-			return pointNumber;
-		}
-
-
-
-		public void setPointNumber(int pointNumber) {
-			this.pointNumber = pointNumber;
-		}
-
-
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		}
 }

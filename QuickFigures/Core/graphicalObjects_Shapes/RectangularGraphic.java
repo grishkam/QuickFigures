@@ -72,7 +72,7 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 	
 
 
-	private SmartHandleList smartList;
+	private transient SmartHandleList smartList;
 	public boolean flipDuringHandleDrag=true;
 
 	public Integer handleSize=3;

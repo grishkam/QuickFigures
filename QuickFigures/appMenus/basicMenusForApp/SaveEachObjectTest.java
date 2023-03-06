@@ -32,10 +32,8 @@ import logging.IssueLog;
 import messages.ShowMessage;
 import imageDisplayApp.ImageDisplayIO;
 
-/**implements a menu item for saving a worksheet*/
-public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
-
-	private boolean testingMode=IssueLog.sytemprint;//set to true during developer troubleshooting
+/**a menu item used for testing purposes. */
+public class SaveEachObjectTest  extends BasicMenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
@@ -54,26 +52,13 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 		diw.updateWindowSize();
 		
 		/**does the actual saving*/
-		boolean outcome = ImageDisplayIO.writeToFile(f, theSet);
-		if(!outcome) 
-			{
-			IssueLog.log("first save attempt failed: will try again");
-			outcome = ImageDisplayIO.writeToFile(f, theSet);//if fails the first time, will try again. not sure exactly why some save attempts fail. It is always one non serializable object but that does not explain wh
-			if (outcome)
-				ShowMessage.showOptionalMessage("QuickFigures required two attempts before sucessful save ", true, "sorry for the wait: QuickFigures required two attempts before sucessful save ");
-			
-			}
-		if(outcome) {
-			ShowMessage.showOptionalMessage("You have saved", true, "You haved stored your work", "files saved with earlier versions of QuickFigures will not always be openable", "it is also helpful to export files to a stable format");
-			savePreview(diw, f);
-		}else {
-			ShowMessage.showOptionalMessage("You have tried to save", false, "The worksheet failed to save", "you should try again", "if problem persists, feel free to report issue to developer" );
-			String f2 = f.getAbsolutePath()+"test_save";
-			if(testingMode)
-				ImageDisplayIO.testWriteObjects(theSet.getTopLevelLayer().getAllGraphics(), new File(f2));
-		}
+		ImageDisplayIO.writeToFile(f, theSet);
 		
 		
+		
+		ShowMessage.showOptionalMessage("You have saved", true, "You haved stored your work", "files saved with earlier versions of QuickFigures will not always be openable", "it is also helpful to export files to a stable format");
+		
+		savePreview(diw, f);
 		}
 			
 		
@@ -102,12 +87,12 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 
 	@Override
 	public String getNameText() {
-		return "Current Worksheet";
+		return "Save and reopen";
 	}
 
 	@Override
 	public String getMenuPath() {
-		return "File<Save<";
+		return "Help<Save<";
 	}
 
 }

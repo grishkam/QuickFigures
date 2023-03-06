@@ -54,7 +54,8 @@ public class BasicMetaDataHandler {
 		new String[] {"LUT Channel ", " name ", "lei", "0"},   //the most reliable key for lei. only tested on one lei file
 		new String[] {"Block 2 csLutName", " ", "lei", "0"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
 		new String[] {"Channel Name ", " ", "zvi", "0"}, //For .zvi
-		
+		new String[] {"[Channel ", " Parameters] DyeName ", ".oib", "1"},// for .oib [Channel 2 Parameters] DyeName 
+
 		new String[] {"Name #", " ", "nd2", "2"},//for nikon. Name # entry gave confusing results with two cy5
 		new String[] {"Channel name #", " ", "vsi", "0"},//for olympus vsi
 
@@ -325,7 +326,7 @@ public class BasicMetaDataHandler {
 			Color newColor=null;
 			if(name==null) return null;
 			name=name.trim().toLowerCase();
-			if (name.equals("texasred")||name.equals("mcherry"))
+			if (name.equals("texasred")||name.equals("mcherry")||name.contains("594"))
 				newColor=Color.red;
 			if (name.contains("egfp")||name.contains("488"))
 				newColor=Color.green;
@@ -848,11 +849,20 @@ public class BasicMetaDataHandler {
 			 *  Channels here are numbered from 0, 1, 2 onward ()*/
 			public String getRealChannelInformationBasedOnMetaData(MetaInfoWrapper select, String[] prefixSuffix,
 					int channelNumber) {
-				String fullKey = prefixSuffix[0]+(channelNumber+Integer.parseInt(prefixSuffix[3]))+ prefixSuffix[1];
+				String fullKey = getKeyXForChannel(prefixSuffix, channelNumber);
 				
 				String entryFromInfoAsString = (String) getEntryFromInfoAsString(select, fullKey );
 				//IssueLog.log("full key "+fullKey+" for "+channelNumber+" without output "+entryFromInfoAsString);
 				return entryFromInfoAsString;
+			}
+
+			/** returns the metadata key used to get the given information a particular channel
+			 * @param prefixSuffix
+			 * @param channelNumber
+			 * @return
+			 */
+			public String getKeyXForChannel(String[] prefixSuffix, int channelNumber) {
+				return prefixSuffix[0]+(channelNumber+Integer.parseInt(prefixSuffix[3]))+ prefixSuffix[1];
 			}
 
 			/**Checks the file for my metadta regarding he channel indeces, creates the info if not already present*/
@@ -1026,10 +1036,12 @@ public class BasicMetaDataHandler {
 			 * @return
 			 */
 			protected String[] findAppropriateKey(MetaInfoWrapper handle, String[][] targetKeyList) {
+				
 				for(String[] key : targetKeyList) try {
 					for(int i=0; i<7; i++) try {
 						
 					String f = getRealChannelInformationBasedOnMetaData(handle, key, i);
+					
 					if(f!=null) return key;
 					
 					} catch (Throwable t) {}

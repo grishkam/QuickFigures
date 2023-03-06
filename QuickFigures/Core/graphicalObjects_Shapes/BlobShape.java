@@ -28,6 +28,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import handles.RegularPolygonAngleHandle;
 import handles.SmartHandleList;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;

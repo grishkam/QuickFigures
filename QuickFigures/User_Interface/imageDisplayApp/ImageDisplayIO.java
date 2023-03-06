@@ -37,6 +37,7 @@ import ultilInputOutput.FileFinder;
   code, it is also the most effective to implement. (Without need for devising
   an entirely new file format)*/
 public class ImageDisplayIO {
+	
 	public static StandardWorksheet readFromFile(File f) {
 		FileInputStream fo;
 		StandardWorksheet output=null;
@@ -86,6 +87,26 @@ public class ImageDisplayIO {
 	}
 	
 	
+	public static boolean testWriteObjects(Iterable<?> ob, File f) {
+		boolean allSaved = true;
+		for(Object o: ob) 	try {
+			FileOutputStream fo = new FileOutputStream(f);
+			
+			ObjectOutputStream oos = new ObjectOutputStream(fo);
+			
+			oos.writeObject(o);
+			
+			
+		oos.flush();
+		fo.close();
+			IssueLog.log("was ableto save "+o);;
+		} catch (Exception e) {
+			IssueLog.log("problem occued when saving "+o);
+			IssueLog.logT(e);
+			allSaved = false;
+		}
+		return allSaved;
+	}
 	
 	/**saves the worksheet to a file*/
 	public static boolean writeToFile(File f, StandardWorksheet theSet) {
@@ -109,6 +130,8 @@ public class ImageDisplayIO {
 		
 		
 	}
+	
+	
 	
 	/**opens a saved worksheet*/
 	public static ImageWindowAndDisplaySet showFile(File f) {

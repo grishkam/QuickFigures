@@ -92,7 +92,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	private transient SmartHandleList panelHandleList=new SmartHandleList();;
 	private transient SmartHandleList allrefPointHandles=new SmartHandleList();;
 	private transient SmartHandleList handleBoxes2=new SmartHandleList();
-	ArrayList<PanelLayoutHandle> panelMotionHandles=new ArrayList<PanelLayoutHandle>();
+	private transient ArrayList<PanelLayoutHandle> panelMotionHandles=new ArrayList<PanelLayoutHandle>();
 	
 	
 	public Color panelColor=Color.red;

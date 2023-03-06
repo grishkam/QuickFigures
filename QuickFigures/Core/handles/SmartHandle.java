@@ -36,6 +36,8 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.Serializable;
 
 import javax.swing.Icon;
 import javax.swing.JPopupMenu;
@@ -49,13 +51,14 @@ import locatedObject.Hideable;
 import locatedObject.RainbowPaintProvider;
 import locatedObject.RectangleEdgePositions;
 import locatedObject.Selectable;
+import messages.ShowMessage;
 import undo.UndoManagerPlus;
 
 /**This class defines a handle that the user can drag to freely edit objects.
    most handles that the user sees are instances of this class. contains the basic methods
    that subclasses may variously override. also contains methods for creating many shapes
    that the handles can appear as*/
-public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, RectangleEdgePositions{
+public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, RectangleEdgePositions, Serializable{
 	
 	public static final int NORMAL_FILL=0, CROSS_FILL=5, RAINBOW_FILL=6, PLUS_FILL=7, CHECK_MARK=8;
 	
@@ -590,6 +593,17 @@ public Shape getClickableArea() {return lastDrawShape;}
 	public void mouseExitHandle(CanvasMouseEvent lastMouseEvent) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/**Before serialization of the object, will warn the user (and developer) that something is attempting to save it*/
+	private void writeObject(java.io.ObjectOutputStream out)
+		     throws IOException {
+		
+		
+		
+		ShowMessage.showOptionalMessage("should not be trying to save", false, "should not be trying to save "+this);
+		out.defaultWriteObject();
+	
 	}
 	
 }

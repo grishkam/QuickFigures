@@ -26,6 +26,7 @@ import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
+import handles.RegularPolygonAngleHandle;
 import handles.SmartHandleList;
 
 /**A star object with two different point lengths*/
