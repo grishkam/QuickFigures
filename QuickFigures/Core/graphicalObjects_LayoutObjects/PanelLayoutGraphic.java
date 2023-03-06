@@ -350,8 +350,8 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 	public void clearHandleBoxes() {
-		if (panelMotionHandles!=null)
-			panelMotionHandles.clear();
+		if (getPanelMotionHandles()!=null)
+			getPanelMotionHandles().clear();
 		if (getHandleBoxes2()!=null)
 			getHandleBoxes2().clear();
 		
@@ -505,7 +505,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		
 		/**creates the panel motion handles*/
 		 PanelLayoutHandle r3=createHandle( RectangleEdges.getLocation(RectangleEdges.CENTER, r.getBounds2D()), w+PANEL_LOCATION_HANDLE*handleIDFactor, 6);
-		panelMotionHandles.add(r3);
+		getPanelMotionHandles().add(r3);
 		
 
 	}
@@ -1083,8 +1083,8 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			if (hideAttachedItemHandles) 
 				for(SmartHandle s: output) {s.setHidden(true);}
 			
-		if(panelMotionHandles!=null)
-			output.addAll(panelMotionHandles);
+		if(getPanelMotionHandles()!=null)
+			output.addAll(getPanelMotionHandles());
 		if(allrefPointHandles!=null)
 			output.addAll(allrefPointHandles);
 		if(getHandleBoxes2()!=null)
@@ -1209,5 +1209,16 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		if (this.figureType!=null)
 			return figureType;
 		return FigureType.FLUORESCENT_CELLS;
+	}
+
+	public ArrayList<PanelLayoutHandle> getPanelMotionHandles() {
+		if(panelMotionHandles==null) {
+			panelMotionHandles=new ArrayList<PanelLayoutHandle>();
+		}
+		return panelMotionHandles;
+	}
+
+	public void setPanelMotionHandles(ArrayList<PanelLayoutHandle> panelMotionHandles) {
+		this.panelMotionHandles = panelMotionHandles;
 	}
 }

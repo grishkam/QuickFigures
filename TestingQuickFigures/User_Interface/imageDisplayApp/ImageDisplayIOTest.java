@@ -68,7 +68,16 @@ public class ImageDisplayIOTest {
 		
 		
 		 
-		 /**selects and deselects each to ensure that selection history does not affect serialization
+		 selectAndDeselect(i);
+		
+		 saveAndReopen(i, askuserToCompare);
+	}
+
+	/**
+	 * @param i
+	 */
+	public void selectAndDeselect(ImageWindowAndDisplaySet i) {
+		/**selects and deselects each to ensure that selection history does not affect serialization
 		   during manual testing one class with not serializable handles can interfere with serialization
 		   if it had been selected*/
 		 for(LocatedObject2D l:i.getTheSet().getLocatedObjects()) {
@@ -79,8 +88,6 @@ public class ImageDisplayIOTest {
 			 l.deselect();
 			
 		 }
-		
-		 saveAndReopen(i, askuserToCompare);
 	}
 
 	/**
@@ -107,12 +114,14 @@ public class ImageDisplayIOTest {
 			GraphicSetDisplayWindow windowNew = i2.getWindow();
 			i.setZoomLevel(1);
 			i2.setZoomLevel(1);
+			 selectAndDeselect(i2);
 			assertCompareWindows( windowOriginal, windowNew);
 		}
 		
 		f.delete();
 		
 		compare(i, i2);
+		
 	}
 
 	/**
@@ -135,6 +144,7 @@ public class ImageDisplayIOTest {
 			assert(FileChoiceUtil.yesOrNo("One window contains the original example image, "+
 					"the other a saved copy that was re opened. Do they appear to be the same?"));
 		}
+		
 		windowNew.setVisible(false);
 		windowOriginal.setVisible(false);
 	

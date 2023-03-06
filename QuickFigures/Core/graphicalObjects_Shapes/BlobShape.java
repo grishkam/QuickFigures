@@ -45,7 +45,7 @@ public class BlobShape extends SimpleStar {
 	
 	BlobCurveParameterGroup parameters=createParameters();
 
-	private SmartHandleList blobList; 
+	private transient SmartHandleList blobList; 
 	
 	public BlobShape(RectangularGraphic r) {
 		super(r);
