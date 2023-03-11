@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import actionToolbarItems.AlignItem;
 import actionToolbarItems.AlignSize;
 import actionToolbarItems.DistributeItems;
+import addObjectMenus.AddLink;
 import figureFormat.MassTemplateApplication;
 import figureFormat.TemplateUserMenuAction;
 import fileListOpps.CombineSavedFigures;
@@ -97,6 +98,7 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		
 		
 		operators.add(new DuplicateItem());
+		operators.add(new AddLink());
 		ArrayList<TemplateUserMenuAction> many = TemplateUserMenuAction.createSeveral("Figure Format");
 		operators.addAll(many);
 		
