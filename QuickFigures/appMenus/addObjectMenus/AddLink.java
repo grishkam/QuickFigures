@@ -74,6 +74,8 @@ public class AddLink extends BasicMultiSelectionOperator {
 		return "Link selected objects";
 	}
 
-
+	public String getMenuPath() {
+		return "Experimental Items";
+	}
 
 }

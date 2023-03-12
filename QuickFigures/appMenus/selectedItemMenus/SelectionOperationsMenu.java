@@ -36,6 +36,7 @@ import figureFormat.TemplateUserMenuAction;
 import fileListOpps.CombineSavedFigures;
 import fileListOpps.LoadFileLists;
 import genericMontageLayoutToolKit.FitLayout;
+import imageDisplayApp.UserPreferences;
 import journalCriteria.JournalCriteriaMenuOption;
 import journalCriteria.PPIOption;
 import locatedObject.RectangleEdges;
@@ -98,7 +99,10 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 		
 		
 		operators.add(new DuplicateItem());
-		operators.add(new AddLink());
+		
+		if(UserPreferences.current.testNew)
+			operators.add(new AddLink());
+		
 		ArrayList<TemplateUserMenuAction> many = TemplateUserMenuAction.createSeveral("Figure Format");
 		operators.addAll(many);
 		
