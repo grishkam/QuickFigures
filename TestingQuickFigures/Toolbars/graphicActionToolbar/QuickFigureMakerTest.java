@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import addObjectMenus.FigureAdder;
+import addObjectMenus.FigureAdder.ImageSource;
 import appContext.CurrentAppContext;
 import appContextforIJ1.IJ1MultichannelContext;
 import appContextforIJ1.ImageDisplayTester;
@@ -118,7 +119,9 @@ public class QuickFigureMakerTest {
 		FigureTester.closeAllWindows();
 		
 		/**now tests the merge only version*/
-		FigureOrganizingLayerPane fig2 = new FigureTester().createFigureFromExample1Images(new QuickFigureMaker(FigureAdder.MERGE_PANELS_ONLY, true), 4);
+		QuickFigureMaker qm = new QuickFigureMaker(FigureAdder.MERGE_PANELS_ONLY, true);
+		qm.localFigureAdder.useOpen=ImageSource.SAVED_MULTICHANNEL;
+		FigureOrganizingLayerPane fig2 = new FigureTester().createFigureFromExample1Images(qm, 4);
 		fig2.getLayout().getEditor().repackagePanels(fig2.getLayout(), 1, 4);
 		makeVisible();
 		

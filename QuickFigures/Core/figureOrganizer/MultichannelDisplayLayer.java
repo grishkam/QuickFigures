@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 18, 2021
+ * Date Modified: Mar 11, 2023
  * Version: 2023.1
  */
 package figureOrganizer;
@@ -107,7 +107,7 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	/**creates a copy with all the same traits but no new image initialized*/
-	public MultichannelDisplayLayer similar() {
+	public MultichannelDisplayLayer createEmptyCopy() {
 		MultichannelDisplayLayer output = new MultichannelDisplayLayer(getSlot().copy()) ;
 		output.copyTraitsFrom(this);
 		return output;

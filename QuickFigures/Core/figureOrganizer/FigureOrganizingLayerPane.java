@@ -55,6 +55,7 @@ import layout.basicFigure.TransformFigure;
 import locatedObject.AttachmentPosition;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
+import messages.ShowMessage;
 import objectDialogs.CroppingDialog;
 import objectDialogs.CroppingDialog.CropDialogContext;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
@@ -170,6 +171,12 @@ public class FigureOrganizingLayerPane extends GraphicLayerPane implements SubFi
 		if (z instanceof  ImageDisplayLayer) {
 			ImageDisplayLayer psdz = (ImageDisplayLayer) z;
 			getMultiChannelDisplays().remove(psdz);
+			if(getMultiChannelDisplays().size()==0) {
+				IssueLog.log("You have removed all the images from the figure");
+				ShowMessage.showOptionalMessage("figure is empty", true, "you have removed all image files from the figure. Organized figures should have are least one image");
+				ChannelUseInstructions cui = psdz.getPanelList().getChannelUseInstructions();
+				PreProcessInformation pp = psdz.getPreProcess();
+			}
 			this.updateImageOrder();
 		}
 	}
@@ -752,7 +759,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	If preprocess information is not given, then the user will be shown a dialog to select the crop area
 	 */
 	public static CombinedEdit createSecondView(FigureOrganizingLayerPane f, MultichannelDisplayLayer displayLayer, PreProcessInformation p) {
-		MultichannelDisplayLayer secondView = displayLayer.similar();
+		MultichannelDisplayLayer secondView = displayLayer.createEmptyCopy();
 		secondView.setSlot(secondView.getSlot().createPartner());
 		secondView.getSlot().redoCropAndScale();
 		secondView.setLaygeneratedPanelsOnGrid(true);

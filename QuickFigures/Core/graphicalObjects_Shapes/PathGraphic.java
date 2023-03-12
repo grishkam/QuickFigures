@@ -270,10 +270,19 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return output;
 	}
 	
+	
+	/**when given a point, converts the cordinate to the paths internally used
+	 * cordinates system. this involves a translation, and a rotation*/
+	public PathPoint convertPointToInternalCrdinates(PathPoint p2) {
+		p2=p2.copy();
+		p2.move(-x, -y);
+		return p2;
+		}
+	
 	/**when given a point, converts the cordinate to the paths internally used
 	 * cordinates system. this involves a translation, and a rotation*/
 	public Point2D.Double convertPointToInternalCrdinates(Point2D p2) {
-		if (angle ==0) return new Point2D.Double(p2.getX()-x, p2.getY()-y);
+		if (this.getAngle() ==0) return new Point2D.Double(p2.getX()-x, p2.getY()-y);
 		/**Point2D ptranslate = new Point2D.Double(p.getX()-x, p.getY()-y);
 		try{getRotationTransform().transform(ptranslate,  ptranslate);}  catch (Throwable r) {
 			r.printStackTrace();
@@ -284,12 +293,24 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		return p;
 		}
 	
+	/**when given a point, converts the cordinate to the paths internally used
+	 * cordinates system. this involves a translation, and a rotation*/
+	public PathPoint convertPointToExternalCrdinates(PathPoint p2) {
+		p2=p2.copy();
+		p2.move(x, y);
+		return p2;
+		}
+	
 	/**converts the location from one within this path graphics coordinate system
 	  to the equivalent in the global coordinate system*/
 	public Point2D.Double convertPointToExternalCrdinates(Point2D p2) {
 		if (getAngle()==0) return new Point2D.Double(p2.getX()+x, p2.getY()+y);
 		return null;
 		}
+	
+
+	
+	
 	
 	/**converts the location from one within this path graphics coordinate system
 	  to the equivalent in the global coordinate system*/

@@ -27,19 +27,22 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
+import locatedObject.Named;
 import locatedObject.PathPoint;
 import logging.IssueLog;
 
 /**
- 
- * 
+ A link between two paths. 
  */
-public class LinkerGraphic implements ZoomableGraphic {
+public class LinkerGraphic implements ZoomableGraphic, Named{
 
 	private GraphicLayer parent=null;
 	
 	PathGraphic path1;
 	PathGraphic path2;
+
+	private String name="Linker between paths";
+	
 	
 	/**
 	 * 
@@ -88,6 +91,18 @@ public class LinkerGraphic implements ZoomableGraphic {
 		
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String st) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public String toString() {return getName();}
 
 
 }

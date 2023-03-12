@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 18, 2021
+ * Date Modified: Mar 11, 2023
  * Version: 2023.1
  */
 package figureFormat;
@@ -145,7 +145,7 @@ public class MultichannelDisplayPicker extends
 	 */
 	public void setScaleAppropriateFor(MultichannelDisplayLayer multichannelDisplayLayer) {
 		if (getModelItem()==null) {
-			this.setModelItem(multichannelDisplayLayer.similar());
+			this.setModelItem(multichannelDisplayLayer.createEmptyCopy());
 		}
 		if( multichannelDisplayLayer==null)
 		{IssueLog.log("cannot work with null");}

@@ -51,6 +51,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import imageDisplayApp.ImageWindowAndDisplaySet;
+import infoStorage.BasicMetaDataHandler;
 import layersGUI.GraphicSetDisplayTree;
 import layersGUI.GraphicTreeTransferHandler;
 import layout.basicFigure.BasicLayout;
@@ -407,11 +408,17 @@ public class NormalToolDragHandler extends BasicDragHandler {
 	/**returns true if the file is in a microscopy format*/
 	public static boolean isMicroscopeFormat(File f) {
 		String extension = ForDragAndDrop.getExtension(f);
-		String[] forms = new String[] {"zvi", "czi", "lif", "dv", "lei", "ets", "vsi"};
+		String[] forms = new String[] {"zvi", "czi", "lif", "dv", "lei", "ets", "vsi", "nd2"};
 		for(String form: forms) {
 			if(extension.toLowerCase().equals(form))
 				return true;
 		}
+		
+		for(String[] a: BasicMetaDataHandler.allNameKeys) {
+			if(extension.toLowerCase().equals(a[2]))
+				return true;
+		}
+		
 		return false;
 	}
 	
@@ -534,6 +541,8 @@ public static ArrayList<File> stichFilesIntoMultiChannel(FigureOrganizingLayerPa
  * @return
  */
 public static ArrayList<File> stichFilesIntoMultiChannel(ImageDisplayLayer principalMultiChannel, ArrayList<File> fileList) {
+	if(principalMultiChannel==null)
+		return stichFilesIntoMultiChannel(fileList, null);
 	MultiChannelImage multiChannelImage = principalMultiChannel.getMultiChannelImage();
 	return stichFilesIntoMultiChannel(fileList, multiChannelImage);
 }
@@ -550,6 +559,9 @@ Checks if the figure was derived from separate greyscale image files using the s
  */
 public static ArrayList<File> stichFilesIntoMultiChannel(ArrayList<File> fileList,
 		MultiChannelImage multiChannelImage) {
+	if(multiChannelImage==null)
+		return fileList;
+	
 	String stiched = multiChannelImage.getMetadataWrapper().getEntryAsString(MultiChannelDisplayCreator.MADE_BY_STITCHING);
 
 	if(fileList.size()<2)

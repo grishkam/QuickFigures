@@ -47,14 +47,14 @@ public class BasicMetaDataHandler {
 	
 	/**Channel name keys for determining channel colors, can retrieved lut names or channel names
 	   */
-	static String[][] allNameKeys=new String[][] {
+	public static String[][] allNameKeys=new String[][] {
 		//new String[] {"DisplaySetting|Channel|DyeName|", " ", "czi"},//for CZI does not work the same way others do
 		new String[] {myColorCode, " ", "any", "0"},   //A system created by me
 		new String[] {"ChannelDescription|LUTName ", " ", "lif", "0"},   //for lif. not all .lif files have a useful version of this.  possible alternative "HardwareSetting|LDM_Block_Sequential|ATLConfocalSettingDefinition|MultiBand|DyeName "
 		new String[] {"LUT Channel ", " name ", "lei", "0"},   //the most reliable key for lei. only tested on one lei file
 		new String[] {"Block 2 csLutName", " ", "lei", "0"} ,           // alternate key for lei for LEI files.  block 2 part is consistent between files
 		new String[] {"Channel Name ", " ", "zvi", "0"}, //For .zvi
-		new String[] {"[Channel ", " Parameters] DyeName ", ".oib", "1"},// for .oib [Channel 2 Parameters] DyeName 
+		new String[] {"[Channel ", " Parameters] DyeName ", "oib", "1"},// for .oib [Channel 2 Parameters] DyeName 
 
 		new String[] {"Name #", " ", "nd2", "2"},//for nikon. Name # entry gave confusing results with two cy5
 		new String[] {"Channel name #", " ", "vsi", "0"},//for olympus vsi

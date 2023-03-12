@@ -58,13 +58,28 @@ import utilityClasses1.NumberUse;
 		/**creates a copy*/
 		public PathPoint copy() {
 			PathPoint p = new PathPoint(this.getAnchor());
-			p.setCurveControl1(copyPoint(getCurveControl1()));
-			p.setCurveControl2(copyPoint(getCurveControl2()));
+			copyCurveControlTo(p);
 			p.setClosePoint(isClosePoint());
 			if (isSelected())p.select();
 			return p;
 		}
 		
+		/**copies the curve control points from point p to this point
+		 * @param p
+		 */
+		public void copyCurveControlTo(PathPoint p) {
+			p.setCurveControl1(copyPoint(getCurveControl1()));
+			p.setCurveControl2(copyPoint(getCurveControl2()));
+		}
+		
+		/**copies the curve control points from this point to point p 
+		 * @param p
+		 */
+		public void givePointLocationsTo(PathPoint p) {
+			p.setAnchorPoint(copyPoint(this.getAnchor()));
+			p.setCurveControl1(copyPoint(getCurveControl1()));
+			p.setCurveControl2(copyPoint(getCurveControl2()));
+		}
 		
 		
 		static Point2D.Double copyPoint(Point2D p) {

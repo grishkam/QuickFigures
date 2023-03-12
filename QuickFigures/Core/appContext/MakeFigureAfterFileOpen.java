@@ -26,6 +26,7 @@ import java.awt.geom.Point2D;
 import java.io.File;
 
 import addObjectMenus.FigureAdder;
+import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
@@ -256,9 +257,11 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 	 * @param item
 	 */
 	public void addNewImage(MultichannelDisplayLayer item, ExistingFigure existingFigure) {
-				if (existingFigure.startIndex>0)
+				if (existingFigure.startIndex>0&&existingFigure.figure.getPrincipalMultiChannel()!=null)
 				{
-				int numberOfEmptyNeeded = existingFigure.figure.getPrincipalMultiChannel().getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultiChannelImage());
+				ImageDisplayLayer principalMultiChannel = existingFigure.figure.getPrincipalMultiChannel();
+				
+				int numberOfEmptyNeeded = principalMultiChannel.getPanelManager().getPanelList().getChannelUseInstructions().estimageNPanels(item.getMultiChannelImage());
 				existingFigure.startIndex=existingFigure.figure.getMontageLayout().getEditor().indexOfFirstEmptyPanel(existingFigure.thelayout, numberOfEmptyNeeded, existingFigure.startIndex-1);
 				
 				}
