@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Mar 25, 2023
  * Version: 2023.1
  */
 package graphicalObjects_Shapes;
@@ -325,8 +325,8 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	}
 		  
 		  long st = System.currentTimeMillis()-  shapeTime;
-			 if(st>100) {
-				 IssueLog.log(st +" Shape took a long time to draw shape="+this);
+			 if(st>500) {
+				 IssueLog.log(st +" Shape took a long time to draw. shape="+this);
 				 IssueLog.log((System.currentTimeMillis()-fillTime) +" taken since fill shape"+this);
 				 
 				 IssueLog.log((transformTime-shapeTime) +" taken for transform ");
