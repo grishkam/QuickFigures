@@ -62,6 +62,5 @@
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/SparseBitSet-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/lib/xmlgraphics-commons-2.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/commons-codec-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/lib/batik-util-1.14-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
