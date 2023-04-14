@@ -11,7 +11,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/commons-math3-3.4.1/commons-math3-3.4.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/commons-math3-3.4.1/commons-math3-3.4.1-javadoc.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-4.1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-examples-4.1.2.jar"/>
