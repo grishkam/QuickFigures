@@ -32,13 +32,15 @@ import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
-import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
+import undo.Edit;
 
 /**This class of handles is for moving points in a path*/
 public class SmartHandleForPathGraphic extends  SmartHandle {
@@ -404,7 +406,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		String closePointCom="closedPoint", selPointCom= "selectP", allUnSel="Unselect All";
 		String uncurveCom="Remove Curvature";
-		String removePoint="Remove Point", addPoint="Add Point";
+		String removePoint="Remove Point", addPoint="Add Point", splitPath="Split Path At Point", splitPath2="Divide Path Into 2 sections";
 		
 		
 		private static final long serialVersionUID = 1L;
@@ -422,6 +424,8 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			addMenuItem( uncurveCom,  uncurveCom);
 			addMenuItem(removePoint,  removePoint);
 			addMenuItem(addPoint,  addPoint);
+			addMenuItem(splitPath,  splitPath);
+			
 		}
 		
 		public void addMenuItem(String item, String itemComm) {
@@ -433,10 +437,24 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		}
 		
 		
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			AbstractUndoableEdit2 undo = pathGraphic.provideDragEdit();
+			
 			String com=arg0.getActionCommand();
+			
+			CombinedEdit undo = executeCommand(com);
+			
+			super.getUndoManager().addEdit(undo);
+			
+		}
+
+		/**Performs an action depedning on the instructions string that is input
+		 * @param com
+		 * @return
+		 */
+		public CombinedEdit executeCommand(String com) {
+			CombinedEdit undo = new CombinedEdit(pathGraphic.provideDragEdit());
 			if (com.equals(closePointCom)) {
 				pathPoint.setClosePoint(!pathPoint.isClosePoint());
 				pathGraphic.updatePathFromPoints();
@@ -464,13 +482,49 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			if (com.equals(addPoint)) {
 				new AddRemoveAnchorPointTool(false).addOrRemovePointAtLocation(pathGraphic, false, super.getMemoryOfMouseEvent().getCoordinatePoint());
 			}
-			super.getUndoManager().addEdit(undo);
 			
+			if(com.equals(splitPath)) {
+				return splitPathAtPoint();
+			}
+			
+			return undo;
 		}
+
+		/**Splits the path at the current point
+		 * @return
+		 */
+		public CombinedEdit splitPathAtPoint() {
+			int pointIndex = pathGraphic.getPoints().indexOf(pathPoint);
+			
+			return splitPathAt(pointIndex);
+		}
+
+		
 	
 }
 	
 
-
+	/**Splits the path at the given index
+	 * @param pointIndex
+	 * @return
+	 */
+	public CombinedEdit splitPathAt(int pointIndex) {
+		CombinedEdit undo4 = new CombinedEdit();
+		GraphicLayer parent = pathGraphic.getParentLayer();
+		PathGraphic p1 = pathGraphic.copy();
+		PathGraphic p2 = pathGraphic.copy();
+		
+		p1.select();
+		p2.select();
+		p1.setPoints(pathGraphic.getPoints().copyRange(0, pointIndex+1));
+		p2.setPoints(pathGraphic.getPoints().copyRange( pointIndex, pathGraphic.getPoints().size()));
+		p1.updatePathFromPoints();
+		p2.updatePathFromPoints();
+		undo4.addEditToList(Edit.removeItem(parent, pathGraphic));
+		pathGraphic.deselect();
+		undo4.addEditToList(Edit.addItem(parent, p1));
+		undo4.addEditToList(Edit.addItem(parent, p2));
+		return undo4;
+	}
 	
 }

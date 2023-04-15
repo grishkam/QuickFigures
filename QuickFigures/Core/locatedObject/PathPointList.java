@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: April 14, 2023
  * Version: 2023.1
  */
 package locatedObject;
@@ -52,6 +52,17 @@ public class PathPointList extends ArrayList<PathPoint> {
 	public PathPointList copy() {
 		PathPointList o = new PathPointList();
 		for(PathPoint p:this) {
+			o.add(p.copy());
+		}
+		
+		return o;
+	}
+	
+	/**Makes a copy of the path with only a subset of points*/
+	public PathPointList copyRange(int start, int end) {
+		PathPointList o = new PathPointList();
+		for(int i=start; i<this.size()&&i<end; i++) {
+			PathPoint p = this.get(i);
 			o.add(p.copy());
 		}
 		
