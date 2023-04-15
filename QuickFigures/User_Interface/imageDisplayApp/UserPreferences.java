@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: April 24, 2021
- * Date Modified: May 10, 2022
+ * Date Modified: April 15, 2023
  * Version: 2023.1
  * 
  */
@@ -57,5 +57,12 @@ public static final UserPreferences current=new UserPreferences();
 		new BasicMetaDataHandler().loadAnnotatedFields(storage, this,"");
 	}
 	
+	
+	/**returns true if experimental features are to be included
+	 * @return
+	 */
+	public static boolean experimentalFeaturesIncluded() {
+		return UserPreferences.current.testNew;
+	}
 	
 }

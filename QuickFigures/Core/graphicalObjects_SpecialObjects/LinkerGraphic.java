@@ -103,6 +103,17 @@ public class LinkerGraphic implements ZoomableGraphic, Named{
 	}
 	
 	public String toString() {return getName();}
+	
+	
+	public void onpathSplit(PathGraphic original, PathGraphic part1, PathGraphic part2) {
+		if(original==path1) {
+			path1=part2;
+		}
+		if(original==path2) {
+			path2=part1;
+		}
+		
+	}
 
 
 }

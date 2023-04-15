@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: April 15, 2023
  * Version: 2023.1
  */
 package handles;
@@ -34,10 +34,13 @@ import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_SpecialObjects.LinkerGraphic;
+import imageDisplayApp.UserPreferences;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import pathGraphicToolFamily.AddRemoveAnchorPointTool;
 import undo.CombinedEdit;
 import undo.Edit;
@@ -406,7 +409,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		String closePointCom="closedPoint", selPointCom= "selectP", allUnSel="Unselect All";
 		String uncurveCom="Remove Curvature";
-		String removePoint="Remove Point", addPoint="Add Point", splitPath="Split Path At Point", splitPath2="Divide Path Into 2 sections";
+		String removePoint="Remove Point", addPoint="Add Point", splitPath="Split Path At Point", splitPath2="Divide Path Into 2 Sections";
 		
 		
 		private static final long serialVersionUID = 1L;
@@ -426,6 +429,12 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			addMenuItem(addPoint,  addPoint);
 			addMenuItem(splitPath,  splitPath);
 			
+					addMenuItem(splitPath2);
+			
+		}
+		
+		public void addMenuItem(String item) {
+			addMenuItem(item, item);
 		}
 		
 		public void addMenuItem(String item, String itemComm) {
@@ -484,7 +493,12 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			}
 			
 			if(com.equals(splitPath)) {
-				return splitPathAtPoint();
+				return splitPathAtPoint(false);
+			}
+			
+			if(com.equals(splitPath2)) {
+				if(ShowMessage.showOptionalMessage("this feature is a work in progress", false, "this feature is a work in progress", "are you sure you want to continue?"))
+						return splitPathAtPoint(true);
 			}
 			
 			return undo;
@@ -493,10 +507,10 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		/**Splits the path at the current point
 		 * @return
 		 */
-		public CombinedEdit splitPathAtPoint() {
+		public CombinedEdit splitPathAtPoint(boolean link) {
 			int pointIndex = pathGraphic.getPoints().indexOf(pathPoint);
 			
-			return splitPathAt(pointIndex);
+			return splitPathAt(pointIndex, link);
 		}
 
 		
@@ -508,7 +522,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	 * @param pointIndex
 	 * @return
 	 */
-	public CombinedEdit splitPathAt(int pointIndex) {
+	public CombinedEdit splitPathAt(int pointIndex, boolean link) {
 		CombinedEdit undo4 = new CombinedEdit();
 		GraphicLayer parent = pathGraphic.getParentLayer();
 		PathGraphic p1 = pathGraphic.copy();
@@ -524,7 +538,29 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		pathGraphic.deselect();
 		undo4.addEditToList(Edit.addItem(parent, p1));
 		undo4.addEditToList(Edit.addItem(parent, p2));
+		p2.setStrokeColor(Color.getHSBColor((float)Math.random(), 0.8f, 1f));
+		
+		if(link) {
+			LinkerGraphic l = new LinkerGraphic();
+			l.setLinkedItem(p2);
+			l.setLinkedItem(p1);
+			
+			undo4.addEditToList(Edit.addItem(parent, l));
+			parent.swapmoveObjectPositionsInArray(p1  ,l);
+			
+			for(Object g: parent.getAllGraphics()) {
+				if (g instanceof LinkerGraphic) {
+					LinkerGraphic l2=(LinkerGraphic) g;
+					l2.onpathSplit(pathGraphic, p1, p2);
+				}
+			}
+			
+		}
 		return undo4;
 	}
+
+
+
+	
 	
 }
