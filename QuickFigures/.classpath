@@ -14,7 +14,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/batik-rasterizer-1.14.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/batik-slideshow-1.14.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/batik-squiggle-1.14.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/batik-svgpp-1.14.jar"/>
@@ -61,5 +60,6 @@
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/SparseBitSet-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 26 2021 downloads/batik-bin-1.14/batik-1.14/lib/xmlgraphics-commons-2.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/commons-codec-1.13.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads/batik 16/batik-bin-1.16/batik-1.16/lib/fop-transcoder-allinone-2.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
