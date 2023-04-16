@@ -35,6 +35,7 @@ import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
+
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import export.pptx.OfficeObjectConvertable;
@@ -82,7 +83,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 					try{
 						System.setProperty("javax.xml.transform.TransformerFactory",
 				                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
-						
+						//IOUtils.toByteArray(7);
 						
 			        XMLSlideShow ppt = new XMLSlideShow();
 			        Dimension slideSize = SizeConstants.SLIDE_SIZE;

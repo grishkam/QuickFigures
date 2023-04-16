@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="plotData/DataSeriesScatter2.java|xyPlots/FigureLegendRect.java" kind="src" path="src"/>
-	<classpathentry excluding="xyPlots/FigureLegendRect.java|menuItemInstallation/NewPlot.java" kind="src" path="Plots"/>
-	<classpathentry excluding="dataTableDialogs/DataInputDialog.java" kind="src" path="UserInterface"/>
-	<classpathentry excluding="lineprofile/ProfileLineMenu.java" kind="src" path="LineProfileTool"/>
-	<classpathentry kind="src" path="Plates"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/commons-math3-3.4.1/commons-math3-3.4.1.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-examples-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-excelant-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-schemas-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-scratchpad-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/commons-codec-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="output" path="bin"/>
+  <classpathentry excluding="plotData/DataSeriesScatter2.java|xyPlots/FigureLegendRect.java" kind="src" path="src"/>
+  <classpathentry excluding="xyPlots/FigureLegendRect.java|menuItemInstallation/NewPlot.java" kind="src" path="Plots"/>
+  <classpathentry excluding="dataTableDialogs/DataInputDialog.java" kind="src" path="UserInterface"/>
+  <classpathentry excluding="lineprofile/ProfileLineMenu.java" kind="src" path="LineProfileTool"/>
+  <classpathentry kind="src" path="Plates"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+    <attributes>
+      <attribute name="module" value="true"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/lib/commons-math3-3.6.1.jar"/>
+  <classpathentry combineaccessrules="false" kind="src" path="/QuickFigures"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-5.2.3.jar"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-examples-5.2.3.jar"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-excelant-5.2.3.jar"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-ooxml-5.2.3.jar"/>
+  <classpathentry kind="lib" path="C:/Users/Greg Mazo/Documents/Java/Packages/Nov 27 2020 downloads/poi-bin-4.1.2-20200217/poi-4.1.2/poi-ooxml-schemas-4.1.2.jar"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/poi-scratchpad-5.2.3.jar"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/lib/commons-codec-1.15.jar"/>
+  <classpathentry kind="lib" path="/Users/Greg Mazo/Documents/Java/Packages/Dec 2022 downloads limited/poi-bin-5.2.3-20220909/poi-bin-5.2.3/ooxml-lib/commons-logging-1.2.jar"/>
+  <classpathentry kind="output" path="bin"/>
 </classpath>
