@@ -86,12 +86,23 @@ public class FileChoiceUtil {
 	public static File[]  getFiles() {
 		ensureWindowsLook();
 		
-		JFileChooser jd= new JFileChooser(CurrentAppContext.getDefaultDirectory()); jd.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES ); jd.setDialogTitle("Choose input file"); jd.setMultiSelectionEnabled(true) ; jd.showOpenDialog(null); 
+		JFileChooser jd= new JFileChooser(CurrentAppContext.getDefaultDirectory()); jd.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES ); jd.setDialogTitle("Choose input files"); jd.setMultiSelectionEnabled(true) ; jd.showOpenDialog(null); 
 		  File[] files=jd.getSelectedFiles();
 		  return files;
 	}
 	
-	/**displays a dialog to the user for shoosing files and returns the list of files as an array*/
+	/**Allows the user to select many input files*/
+	public static File  getFolder(String message) {
+		ensureWindowsLook();
+		
+		JFileChooser jd= new JFileChooser(CurrentAppContext.getDefaultDirectory()); jd.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY ); jd.setDialogTitle("Choose input folder");  
+		jd.setName(message);
+		jd.showOpenDialog(null); 
+		 
+		  return jd.getSelectedFile();
+	}
+	
+	/**displays a dialog to the user for choosing files and returns the list of files as an array*/
 	public static ArrayList<File> getFileArray()  {
 		ArrayList<File> files=new ArrayList<File>();
 			 File[] files2 = FileChoiceUtil.getFiles();
@@ -143,6 +154,7 @@ public class FileChoiceUtil {
 			if(name!=null)
 				fd.setFile(name);
 		 fd.setMultipleMode(multipleDialog);
+		
 	       fd.setVisible(true);
 	       String st=fd.getFile();
 	      
@@ -201,9 +213,7 @@ public class FileChoiceUtil {
 	      
 	}
 	
-	
 
-	
 	/**shows a file dialog for the user to save a file in the default directory*/
 	public static File  getSaveFile() {
 		return getSaveFile(CurrentAppContext.getDefaultDirectory(), null); 
@@ -332,10 +342,11 @@ public class FileChoiceUtil {
 	public static void main(String[] args) {
 		
 		
-		ArrayList<File> s = showMultipleFileDialog();
-		for(File s1: s) {
-			System.out.println(s1);
-		}
+		
+		//ArrayList<File> s = showMultipleFileDialog();
+		//for(File s1: s) {
+			//System.out.println(s1);
+		//}
 	}
 	/**
 	 * @return

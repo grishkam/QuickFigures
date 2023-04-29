@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream;
 
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import logging.IssueLog;
+import messages.ShowMessage;
 import ultilInputOutput.FileChoiceUtil;
 import ultilInputOutput.FileFinder;
 
@@ -70,7 +71,8 @@ public class ImageDisplayIO {
 				FileChoiceUtil.OkOrNo("Class not found. "+"File likely saved with earlier version");
 			}
 			if (e instanceof java.io.StreamCorruptedException) {
-				FileChoiceUtil.OkOrNo("File type wrong "+" cannot read that file");
+				ShowMessage.showOptionalMessage("File type wrong ", false, " cannot read that file",f.getAbsolutePath());
+			
 			}
 			IssueLog.logT(e);;
 			return null;

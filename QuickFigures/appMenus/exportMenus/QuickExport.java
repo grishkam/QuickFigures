@@ -57,6 +57,11 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 		}
 		return f;
 	}
+	
+	/**Adds and extension to the file*/
+	public String addExtension(String fpath) {
+		return fpath+"."+getExtension();
+	}
 
 	protected  abstract String getExtension() ;
 	
@@ -88,5 +93,7 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 	public void saveInPath(DisplayedImage diw, String newpath) throws Exception {}
 
 	protected  abstract String getExtensionName() ;
+	
+	public String toString() {return "(" +this.getExtension()+")"+ getExtensionName() ;}
 	
 }

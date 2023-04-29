@@ -39,7 +39,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.MANY_STROKES;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample.MANY_COLORS;//which cases to test. set to null if all should be tested
 	private static boolean saveAndReopen=false;
 	
 

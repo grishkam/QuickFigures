@@ -131,7 +131,7 @@ public ShapeToOffice(ShapeGraphic p1) {
 				path2.append(path.getPathIterator(AffineTransform.getTranslateInstance(0, 0)), true);//true
 				
 				if (shape instanceof PathGraphic) {
-					IssueLog.log("with some shapes, powerpoint will need to repair the exported file");
+					//IssueLog.log("with some shapes, powerpoint will need to repair the exported file");
 
 				}
 				

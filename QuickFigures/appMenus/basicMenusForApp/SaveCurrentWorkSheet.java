@@ -39,11 +39,25 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
+		File f=null;
 		
+		saveWorksheetAs(diw, f);
+			
+		
+	}
+
+	/**
+	 * @param diw
+	 * @param f
+	 */
+	public void saveWorksheetAs(DisplayedImage diw, File f) {
 		if (diw.getImageAsWorksheet() instanceof StandardWorksheet) {
 			StandardWorksheet theSet=(StandardWorksheet) diw.getImageAsWorksheet();
-			File f=FileChoiceUtil.getSaveFile(theSet.getSavePath(), theSet.getSaveName());
-		if (f==null) return;
+			
+			if(f==null)
+			f=FileChoiceUtil.getSaveFile(theSet.getSavePath(), theSet.getSaveName());
+		
+			if (f==null) return;
 		
 		if (theSet.getTitle().equals(f.getName())) {} else {
 			theSet.setTitle(f.getName());
@@ -75,8 +89,6 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 		
 		
 		}
-			
-		
 	}
 
 	/**saves a preview to accompany the saved worksheets

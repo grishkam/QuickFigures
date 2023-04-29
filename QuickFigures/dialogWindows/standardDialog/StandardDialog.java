@@ -79,6 +79,7 @@ import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
 import standardDialog.numbers.PointInputPanel;
 import standardDialog.strings.CombindedInputPanel;
+import standardDialog.strings.InfoDisplayPanel;
 import standardDialog.strings.StringInputEvent;
 import standardDialog.strings.StringInputListener;
 import standardDialog.strings.StringInputPanel;
@@ -237,8 +238,11 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 
 	private JPopupMenu thePopup;
 
-	
-	
+	/**Add some text to this dialog*/
+	public void addMessage(String message) {
+		InfoDisplayPanel panel = new InfoDisplayPanel("", message);
+		add(message+"panel", panel);
+	}
 	
 	
 	public void add(String key, StringInputPanel st) {

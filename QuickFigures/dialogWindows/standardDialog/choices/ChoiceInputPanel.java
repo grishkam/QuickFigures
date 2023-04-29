@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
@@ -53,6 +54,9 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 	public int originalStatus;
 	private ArrayList<Integer> originalValues=new ArrayList<Integer>();
 	
+	/**only applicable when this choice input panel refers to a list of objects*/
+	private ArrayList<?> objectList;
+	
 	
 	
 	
@@ -74,11 +78,32 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 		this(labeln, updateOptions(choices), startingindex);
 		
 	}
+	
+public ChoiceInputPanel(String labeln, ArrayList<?> choices, int startingindex, Class<?> type, Method m) {
+		
+		this(labeln, setChoicesToStrings(choices, m), startingindex);
+		this.objectList=choices;
+	}
 
+	/**When given a list of channel entries as choices*/
 	public static String[] updateOptions(ArrayList<ChannelEntry> ce) {
 		String[] sa = new String[ce.size()];
 		for(int i=0; i<ce.size(); i++) {
 			sa[i]=ce.get(i).getLabel();
+		}
+		return sa;
+	}
+	
+	/**Sets the choice to the to strings*/
+	public static String[] setChoicesToStrings(ArrayList<?> ce, Method m) {
+		String[] sa = new String[ce.size()];
+		for(int i=0; i<ce.size(); i++) {
+			sa[i]=ce.get(i).toString();
+			if(m!=null) try {
+				sa[i]=""+m.invoke(ce.get(i));
+			} catch (Throwable t) {
+				IssueLog.logT(t);
+			}
 		}
 		return sa;
 	}
@@ -172,6 +197,13 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 	/**returns the selected index*/
 	public int getSelectedIndex() {
 		return getBox() .getSelectedIndex();
+	}
+	
+	/**returns the selected index*/
+	public Object getSelectedObject() {
+		if(objectList!=null)
+			return objectList.get(getSelectedIndex());
+		return null;
 	}
 	
 	/**returns the selected index*/
