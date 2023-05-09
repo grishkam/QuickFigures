@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Mar 26, 2021
+ * Date Modified: May 9, 2023
  * Version: 2023.1
  */
 package dataTableDialogs;
@@ -380,6 +380,23 @@ public class ExcelTableReader implements TableReader {
 		IssueLog.log("The file is not an excel file", targetFile.getAbsolutePath(), "");
 		return null;
 	}
+	
+	
+	@Override
+	public void setColWidth(int col_index, int width) {
+		//int oldWidth = sheet.getColumnWidth(col_index);
+		
+		sheet.setColumnWidth(col_index, width);
+	}
+	@Override
+	public void setRowHeight(int i, int h) {
+		Row row = sheet.getRow(i);
+		//short hold = row.getHeight();
+		
+		row.setHeight((short) h);
+		
+	}
+	
 
 	@Override
 	public void mergeIdenticalCells(boolean b, int[] is) {
@@ -428,5 +445,14 @@ public class ExcelTableReader implements TableReader {
 		}
 		
 	}
+
+	@Override
+	public int getRowHeight(int rowR) {
+		return sheet.getRow(rowR).getHeight();
+	}
+
+
+
+	
 	
 }

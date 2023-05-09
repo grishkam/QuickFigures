@@ -94,4 +94,22 @@ public interface TableReader {
 	 */
 	void setCellBorder(int border, int i, int j);
 
+	/**
+	 * @param col_index
+	 * @param width TODO
+	 */
+	void setColWidth(int col_index, int width);
+
+	/**
+	 * @param i
+	 * @param j
+	 */
+	void setRowHeight(int i, int j);
+
+	/**
+	 * @param rowR
+	 * @return
+	 */
+	int getRowHeight(int rowR);
+
 }

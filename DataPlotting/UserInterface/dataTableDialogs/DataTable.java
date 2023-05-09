@@ -455,4 +455,16 @@ public class DataTable extends JTable implements TableReader {
 		
 	}
 
+	@Override
+	public void setColWidth(int col_index, int width) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**not yet implemented*/
+	@Override
+	public int getRowHeight(int rowR) {
+		return 300;
+	}
+
 }

@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Feb 15, 2023
+ * Date Modified: May 9, 2023
  * Version: 2023.1
  */
 package plateDisplay;
@@ -79,6 +79,7 @@ public class ShowPlate {
 			table.setCellBorder(0,0, i+1);
 		}
 		
+		
 		/**Sets the row names*/
 		for(int i=0; i<plate.getNRow(); i++) {
 			int i2 = i;
@@ -87,6 +88,7 @@ public class ShowPlate {
 			table.setValueAt(""+BasicCellAddress.getCharForIndex(i2), i+1, 0);
 			table.setCellBorder(0,  i+1, 0);
 		}
+		table.setColWidth(0, 1000);
 		
 		for(PlateCell cell: plate.getPlateCells()) try {
 			BasicCellAddress index = cell.getAddress();
@@ -102,10 +104,23 @@ public class ShowPlate {
 			
 			table.setCellColor(cell.getColor(), rowR, ColC);
 			
+			
+			if(shortLabel.contains(""+'\n') && !plate.horizontalOrientation()) {
+			
+				int len1= shortLabel.split(""+'\n').length;
+				int base=300;
+				if(len1*base>300 && table.getRowHeight(rowR)< len1*base) 
+					
+					table.setRowHeight(rowR, len1*base);
+			
+				}
+			
 		} catch (Throwable t) {
 			IssueLog.log("something went wrong  "+cell.getAddress());
 			t.printStackTrace();
 		}
+		
+		
 		
 		table.mergeIdenticalCells(!plate.horizontalOrientation(), new int[] {1,12,1,8});
 		
