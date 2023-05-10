@@ -59,7 +59,6 @@ public class ShowPlate {
 		/**Sets the title*/
 		table.setValueAt(plate.getPlateName(), 0, 0);
 		
-	
 		
 		/**Creates the hues*/
 		if(plate.getHueList()!=null) {
@@ -77,6 +76,7 @@ public class ShowPlate {
 				i3+=plate.addressMod.getColShift();
 			table.setValueAt(""+i3,0, i+1);
 			table.setCellBorder(0,0, i+1);
+			
 		}
 		
 		
@@ -88,7 +88,7 @@ public class ShowPlate {
 			table.setValueAt(""+BasicCellAddress.getCharForIndex(i2), i+1, 0);
 			table.setCellBorder(0,  i+1, 0);
 		}
-		table.setColWidth(0, 1000);
+		
 		
 		for(PlateCell cell: plate.getPlateCells()) try {
 			BasicCellAddress index = cell.getAddress();
@@ -99,13 +99,21 @@ public class ShowPlate {
 				shortLabel="="+cell.getSourceSheetName()+"!"+".A"+cell.getSpreadSheetRow();
 				
 			}
-				table.setValueAt(shortLabel, rowR, ColC);
+				
+			table.setValueAt(shortLabel, rowR, ColC);
 			table.setWrapTextAt(rowR, ColC);
 			
-			table.setCellColor(cell.getColor(), rowR, ColC);
+			
+			if(plate.colorTheText) {
+				table.setRichText(new Color[] {cell.getColor().darker()}, new String[] {shortLabel}, rowR, ColC);
+			} else 
+				table.setCellColor(cell.getColor(), rowR, ColC);
 			
 			
-			if(shortLabel.contains(""+'\n') && !plate.horizontalOrientation()) {
+			boolean needsRowHeightAdjust = shortLabel.contains(""+'\n') && !plate.horizontalOrientation();
+			
+			
+			if(needsRowHeightAdjust) {
 			
 				int len1= shortLabel.split(""+'\n').length;
 				int base=300;

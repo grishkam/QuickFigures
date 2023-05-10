@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
- * Date Modified: Dec 10, 2022
+ * Date Modified: May 9, 2023
  * Version: 2023.1
  */
 package plates;
@@ -64,6 +64,7 @@ public class Plate {
 	public AddressModification addressMod=new AddressModification(0,0);
 	private ArrayList<PlateCell> bannedCell;
 	private ArrayList<Color> additionColors;
+	public boolean colorTheText=false;//set to true if the text whould be colored, false otherwise
 	
 	
 	

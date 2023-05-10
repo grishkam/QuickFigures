@@ -22,6 +22,7 @@ package dataTableDialogs;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,6 +43,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -52,6 +54,8 @@ import org.apache.poi.xssf.usermodel.CustomIndexedColorMap;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 import fileread.ReadExcelData;
 import logging.IssueLog;
@@ -144,6 +148,7 @@ public class ExcelTableReader implements TableReader {
 			cell.setCellValue((Integer) value);
 		else
 			cell.setCellValue(value+"");
+		
 		
 		/**Sets a formula. this tends not to work */
 		//if(value.getClass()==String.class&& (""+value).startsWith("="))
@@ -299,6 +304,7 @@ public class ExcelTableReader implements TableReader {
 	@Override
 	public void setCellBorder(int border, int i, int j) {
 		Cell cellAt = this.findCellAt(i, j);
+		
 		//boolean setup =false;
 		if(cellStyles!=null) {
 			XSSFCellStyle xssfCellStyle = cellStyles.get("border");
@@ -341,6 +347,7 @@ public class ExcelTableReader implements TableReader {
 		cellStyle.setBorderBottom(border);;
 		cellStyle.setBorderLeft(border);;
 		cellStyle.setBorderRight(border);;
+		
 		 cellStyles.put("border", cellStyle);
 		
 	}
@@ -452,7 +459,24 @@ public class ExcelTableReader implements TableReader {
 	}
 
 
-
+	/**Sets the font to something more eleborate*/
+public void setRichText(Color[] colors, String[] text, int ii, int jj) {
+	//Font baseFont = new Font("Arial",Font.BOLD, 18 );
+	
+	XSSFRichTextString t = new XSSFRichTextString();
+	for(int i=0; i< colors.length && i<text.length; i++) {
+			XSSFFont f = new XSSFFont();
+			f.setFontName("Arial");
+			f.setFontHeightInPoints((short) 12);
+			f.setBold(true);
+			f.setColor(convertColor(colors[i]));
+			t.append(text[i], f);
+	}
+	
+	Cell cellAt = this.findCellAt(ii, jj);
+	cellAt.setCellValue(t);
+			//cell.getRichStringCellValue();
+}
 	
 	
 }

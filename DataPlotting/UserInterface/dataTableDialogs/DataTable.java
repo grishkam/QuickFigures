@@ -467,4 +467,10 @@ public class DataTable extends JTable implements TableReader {
 		return 300;
 	}
 
+	@Override
+	public void setRichText(Color[] colors, String[] strings, int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

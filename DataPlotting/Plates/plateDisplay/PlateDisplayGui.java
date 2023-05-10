@@ -112,11 +112,13 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			//Rectangle2D panel = layout.getPanel(n+1);
 			//int section = plate.getSection(plateCell.getAddress());
 			//Color color1 = moreColors.get(section);
-			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plateCell.getColor());
+			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plate.colorTheText?Color.black: plateCell.getColor());
+			
 			r.getTagHashMap().put("Cell", plateCell);
 			this.add(r);
 			cellMap.put(plateCell, r);
 			TextGraphic t = createCellLabel(plateCell);
+			
 			if(t==null)
 				continue;
 			font = (int) (panel.getHeight()/2);
@@ -130,6 +132,10 @@ public class PlateDisplayGui extends GraphicLayerPane {
 			t.setFontSize(font);
 			t.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, r.getBounds()));
 			t.moveLocation(1,font);
+			if(plate.colorTheText) {
+				t.setTextColor(plateCell.getColor().darker());
+			}
+			
 			t.getTagHashMap().put("Cell", plateCell);
 			this.add(t);
 		} catch (Throwable t) {

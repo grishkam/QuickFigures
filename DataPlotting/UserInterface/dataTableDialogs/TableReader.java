@@ -112,4 +112,12 @@ public interface TableReader {
 	 */
 	int getRowHeight(int rowR);
 
+	/**
+	 * @param colors
+	 * @param strings
+	 * @param i
+	 * @param j
+	 */
+	void setRichText(Color[] colors, String[] strings, int i, int j);
+
 }

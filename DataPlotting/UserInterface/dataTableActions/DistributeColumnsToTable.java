@@ -126,6 +126,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "col shift", label="shift cols", category="special")
 	public double colShift=0;
 	
+	@RetrievableOption(key = "color text", label="Color font instead of background", category="special")
+	public boolean color_text = false;
+	
 	@RetrievableOption(key = "display plate", label="show plate preview", category="special")
 	public double displayPlate=0;
 	
@@ -335,6 +338,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		if(rotatePlate)
 			po=PlateOrientation.FLIP;
 		Plate plate = new Plate((int)nRow,(int) nCol, po, (int)getNReplicates(), (int)getWorkingBlockSize(), this.flipGroup, this.getAddressMod(), bannedCells);
+		plate.colorTheText=color_text;
 		return plate;
 	}
 
