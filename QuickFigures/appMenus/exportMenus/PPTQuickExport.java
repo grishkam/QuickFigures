@@ -200,7 +200,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 		}
 		catch (Throwable t) {
 			if ((t instanceof NoClassDefFoundError) || (t instanceof NoSuchMethodError)) {
-				ShowMessage.showOptionalMessage("Install POI 4.1.2", false, "it appears the either an older version of Apache POI is installed (or POI is not installed correctly)", "cannot export", "Please install POI 4.1.2");
+				ShowMessage.showOptionalMessage("Install POI 5.2.3", false, "it appears the either an older version of Apache POI is installed (or POI is not installed correctly)", "cannot export", "Please install POI 5.2.3");
 			} 
 			IssueLog.logT(t);
 		}

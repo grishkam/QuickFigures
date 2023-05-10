@@ -194,7 +194,7 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 				}
 			if (! exportPackagesInstall)
 			{
-				installItem(new ShowInformation("PowerPoint export packages not installed", "To export in some format, one must install Apache POI 4.1.2 (into the plugins folder)"));
+				installItem(new ShowInformation("PowerPoint export packages not installed", "To export in some format, one must install Apache POI 5.2.3 (into the plugins folder)"));
 			}
 			
 	}
