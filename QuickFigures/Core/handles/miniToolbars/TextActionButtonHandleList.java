@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 12, 2021
- * Version: 2023.1
+ * Date Modified: May 10, 2023
+ * Version: 2023.2
  */
 package handles.miniToolbars;
 
@@ -376,7 +376,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		private static final long serialVersionUID = 1L;
 		
 		public boolean isHidden() {
-			if(!text.isEditMode() && text instanceof ComplexTextGraphic) return true;//since a user must select text for this handle to affect complex text, it is hidden when text cannot be selected
+			//if(!text.isEditMode() && text instanceof ComplexTextGraphic) return true;//since a user must select text for this handle to affect complex text, it is hidden when text cannot be selected
 			return false;
 		}
 

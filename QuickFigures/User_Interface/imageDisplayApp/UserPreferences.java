@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: April 24, 2021
  * Date Modified: April 15, 2023
- * Version: 2023.1
+ * Version: 2023.2
  * 
  */
 package imageDisplayApp;

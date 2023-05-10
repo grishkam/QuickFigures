@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
- * Version: 2023.1
+ * Date Modified: May 10, 2023
+ * Version: 2023.2
  */
 package actionToolbarItems;
 
@@ -267,7 +267,17 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 			a=((TextGraphicContainer) a).getText();
 		}
 		
-		
+if (a instanceof ComplexTextGraphic && !(((ComplexTextGraphic) a).isEditMode())) {
+	ComplexTextGraphic c=(ComplexTextGraphic) a;
+	UndoTextEdit undo = new UndoTextEdit(c);
+	if(!c.isEditMode()) {
+		c.colorAllRegions(color);
+		undo.setUpFinalState();
+		edits.addEditToList(undo);
+	} 
+	
+		}
+		else
 		if (a instanceof ComplexTextGraphic && ((ComplexTextGraphic) a).isEditMode()) {
 			
 			ComplexTextGraphic c=(ComplexTextGraphic) a;
@@ -278,7 +288,10 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 			if (boldens()) c.emboldenSelectedRegion();
 			if (underlines()) c.underlineSelectedRegion();
 			if (strikes()) c.strikeLineThroughSelectedRegion();
-			if (doesRecolor()) c.colorSelectedRegion(color);
+			if (doesRecolor())  {
+				
+				c.colorSelectedRegion(color);
+			}
 			if (resizesFont()&& startFontSize>0) c.setFontSize(startFontSize);
 			
 			undo.setUpFinalState();

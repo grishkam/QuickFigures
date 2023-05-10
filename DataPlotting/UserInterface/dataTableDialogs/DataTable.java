@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Jan 7, 2021
- * Version: 2023.1
+ * Version: 2023.2
  */
 package dataTableDialogs;
 
@@ -461,11 +461,7 @@ public class DataTable extends JTable implements TableReader {
 		
 	}
 
-	/**not yet implemented*/
-	@Override
-	public int getRowHeight(int rowR) {
-		return 300;
-	}
+	
 
 	@Override
 	public void setRichText(Color[] colors, String[] strings, int i, int j) {

@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 5, 2022
- * Version: 2023.1
+ * Date Modified: May 10, 2023
+ * Version: 2023.2
  */
 package popupMenusForComplexObjects;
 
@@ -71,6 +71,7 @@ import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.Edit;
 import undo.UndoAddOrRemoveAttachedItem;
+import utilityClasses1.ArraySorter;
 
 /**Menu for Image Panels. Displayed  when user right clicks on a panel*/
 public class ImagePanelMenu extends AttachedItemMenu {
@@ -186,32 +187,113 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	 * @return */
 	protected CombinedEdit addText() {
 		CombinedEdit undo=new CombinedEdit();
-		String name=null;
-	
-			name="Panel";
+		
+		
+		
+		ImagePanelGraphic imagePanel2 = imagePanel;
+		
+		addTextToImagePanel(undo, imagePanel2, "Panel");
+		
+		 try {
+			addTextToSelectedPanels(undo);
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
+		return undo;
+	}
+
+
+
+	/**
+	 * @param undo
+	 * @param imagePanel2
+	 */
+	public void addTextToImagePanel(CombinedEdit undo, ImagePanelGraphic imagePanel2, String name) {
 		
 		ComplexTextGraphic text = new ComplexTextGraphic(name);
-		text.setTextColor(imagePanel.getFigureType().getForeGroundDrawColor());
-		Text_GraphicTool.lockAndSnap(imagePanel, text, (int)imagePanel.getLocationUpperLeft().getX(), (int) imagePanel.getLocationUpperLeft().getY());
+		text.setTextColor(imagePanel2.getFigureType().getForeGroundDrawColor());
+		Text_GraphicTool.lockAndSnap(imagePanel2, text, (int)imagePanel2.getLocationUpperLeft().getX(), (int) imagePanel2.getLocationUpperLeft().getY());
 		
-		undo.addEditToList(new UndoAddOrRemoveAttachedItem(imagePanel, text, false));
-		GraphicLayer parentLayer = imagePanel.getParentLayer();
+		undo.addEditToList(new UndoAddOrRemoveAttachedItem(imagePanel2, text, false));
+		GraphicLayer parentLayer = imagePanel2.getParentLayer();
 		undo.addEditToList(Edit.addItem(parentLayer, text));
-		
-		
-		return undo;
 	}
 	
 	
+	/**Adds scale bars to every other panel
+	 * @param undo
+	 */
+	public void addTextToSelectedPanels(CombinedEdit undo) {
+	
+			ArrayList<ZoomableGraphic> items = getOtherImagePanels();
+			if(!items.isEmpty()) {
+							boolean go = ShowMessage.showOptionalMessage("many images selected", false, "Do you want to add to every selected image panel?");
+							if(go) {
+								int count =1;
+								for(ZoomableGraphic item: items) {
+									if(item!=imagePanel) {
+										addTextToImagePanel(undo, (ImagePanelGraphic) item, "Panel "+count);
+										count++;
+									}
+								}
+							}
+		}
+			
+			
+	}
 
 
-	/**Adds a scale bar tot he image panel
+	/**Adds a scale bar to the image panel
 	 * @return */
 	public CombinedEdit addScaleBar() {
 		CombinedEdit undo = new CombinedEdit();
+		
 		createScaleBar(undo, imagePanel);
 		
+		try {
+			addScaleBarToSelectedPanels(undo);
+		} catch (Exception e) {
+			IssueLog.logT(e);
+		}
 		return undo;
+	}
+
+
+
+	/**Adds scale bars to every other panel
+	 * @param undo
+	 */
+	public void addScaleBarToSelectedPanels(CombinedEdit undo) {
+	
+			ArrayList<ZoomableGraphic> items = getOtherImagePanels();
+			if(!items.isEmpty()) {
+							boolean go = ShowMessage.showOptionalMessage("many images selected", false, "Do you want to add to every selected image panel?");
+							if(go) {
+								for(ZoomableGraphic item: items) {
+									if(item!=imagePanel) {
+										createScaleBar(undo, (ImagePanelGraphic) item);
+									}
+								}
+							}
+		}
+			
+			
+	}
+
+
+
+	/**returns all other selected image panels besides the main one
+	 * @return
+	 */
+	public ArrayList<ZoomableGraphic> getOtherImagePanels() {
+		if(imagePanel.getParentLayer()==null)
+			return new ArrayList<ZoomableGraphic>();
+		GraphicLayer topLevelParentLayer = imagePanel.getParentLayer().getTopLevelParentLayer();
+		ArrayList<ZoomableGraphic> items = topLevelParentLayer.getAllGraphics();
+		ArraySorter.removeNonSelectionItems(items);
+		ArraySorter.removeThoseNotOfClass(items, ImagePanelGraphic.class);
+		items.remove(imagePanel);
+		return items;
 	}
 
 

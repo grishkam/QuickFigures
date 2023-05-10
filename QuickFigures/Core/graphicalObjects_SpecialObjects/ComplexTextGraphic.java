@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: April 26, 2022
- * Version: 2023.1
+ * Date Modified: May 10, 2023
+ * Version: 2023.2
  */
 package graphicalObjects_SpecialObjects;
 
@@ -906,8 +906,13 @@ public class ComplexTextGraphic extends TextGraphic {
 	public boolean isSelectionStrikedThrough() {
 		return getAllSelectedSegments().get(0).isStrikeThrough();
 	}
+	
+	/**Changes the color of all selected parts of the text*/
 	public void colorSelectedRegion(Color c) {
-		if (!this.hasHighlightRegion()) return;
+		if (!this.hasHighlightRegion()) {
+			
+			return;
+		}
 		splitHighLightedSegments();
 		
 		for(TextLineSegment seg1: this.getAllSelectedSegments()) {
@@ -916,7 +921,14 @@ public class ComplexTextGraphic extends TextGraphic {
 		afterSplitUp();
 	}
 
-
+	/**Changes the color of all parts of the text. Selected or not*/
+	public void colorAllRegions(Color c) {
+		
+		for(TextLineSegment seg1: this.getParagraph().getAllSegments()) {
+			seg1.setTextColor(c);
+		}
+		
+	}
 
 
 

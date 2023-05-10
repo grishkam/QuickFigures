@@ -18,7 +18,7 @@
  * Date Created: Nov 19, 2022
  * Date Modified: Nov 19, 2022
  * Copyright (C) 2022 Gregory Mazo
- * Version: 2023.1
+ * Version: 2023.2
  */
 package graphicalObjects_SpecialObjects;
 

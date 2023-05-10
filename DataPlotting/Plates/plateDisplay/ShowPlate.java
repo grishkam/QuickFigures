@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: Mar 26, 2022
  * Date Modified: May 9, 2023
- * Version: 2023.1
+ * Version: 2023.2
  */
 package plateDisplay;
 

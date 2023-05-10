@@ -17,7 +17,7 @@
  * Author: Greg Mazo
  * Date Created: April 24, 2022
  * Date Modified: April 24, 2022
- * Version: 2023.1
+ * Version: 2023.2
  */
 package figureFormat;
 

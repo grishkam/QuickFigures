@@ -15,24 +15,16 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: April 14, 2021
  * Version: 2023.2
  */
-package dataSeries;
+package undo;
 
-import java.io.Serializable;
+/**
+ An undoable action
+ */
+public interface ObjectAction<ObjectType> {
 
-/**an interface for a datapoint */
-public interface DataPoint extends Serializable {
+	public AbstractUndoableEdit2 performAction();
 	
-	/**returns information regarding the position of the point
-	 * on a plot*/
-	public double getPosition();
-	
-	/**returns the value of the point*/
-	public double getValue();
-	public String getValueString() ;
-	
-	public boolean isExcluded();
-
 }

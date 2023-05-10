@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Modified: Mar 28, 2021
- * Version: 2023.1
+ * Version: 2023.2
  */
 package exportMenus;
 
@@ -39,7 +39,7 @@ import testing.TestProvider;
 	
 	
 	
-	static TestExample testCase=TestExample.MANY_COLORS;//which cases to test. set to null if all should be tested
+	static TestExample testCase=TestExample._FIGURE;//which cases to test. set to null if all should be tested
 	private static boolean saveAndReopen=false;
 	
 
