@@ -41,10 +41,10 @@ https://downloads.openmicroscopy.org/bio-formats/4.4.12/
 -	After installation of loci tools, one should be able to import microscopy files into ImageJ using Bio-formats (File->Import->Bio-Formats). One should set the Bio-Formats import Options to import the files as a 'Hyperstack' (in the stack viewing section), the import Color Mode should be set to 'Composite' preferably with the 'Autoscale' Checkbox set. All other part of the Bio-Formats import options can be left unchecked. Once those options are set, one should try a windowless Bio-formats import (also in the import menu).
 -	If you intend to export as SVG, PDF, or EPS you will need to download apache batik
 https://xmlgraphics.apache.org/batik/download.html
-As of this moment, Batik 1.13 or higher is required. Unzip the downloaded file and place that folder into the plugins folder of ImageJ
+As of this moment, Batik 1.14 is reccomeneded (1.13 also comfirmed to work). Unzip the downloaded file and place that folder into the plugins folder of ImageJ
 -	If you intend to export as PowerPoint or use the plot package for QuickFigures you will need Apache POI.
 https://poi.apache.org/download.html
-As of this moment, QuickFigures works with the Apache POI (4.1.2). Those who downloaded QuickFigures before the update can download/use POI 3.12. 
+The most recent version of QuickFigures works with the Apache POI (version 5.2.3, also confirmed to work with 4.1.2). 
 Copy the Apache POI folder into the plugins folder of ImageJ. Any .jar files that are in subfolders of the poi folder may need to be moved into the main POI folder
 -	Certain features of the Plot Package within QuickFigures also require Apache Commons-Math3 package. Math3 should be included in downloads of apache poi. If it is absent, 
 https://commons.apache.org/proper/commons-math/
