@@ -75,7 +75,8 @@ public class ShowPlate {
 			if(plate.addressMod!=null)
 				i3+=plate.addressMod.getColShift();
 			table.setValueAt(""+i3,0, i+1);
-			table.setCellBorder(0,0, i+1);
+			table.setCellBorder(1,0, i+1);
+			
 			
 		}
 		
@@ -101,14 +102,14 @@ public class ShowPlate {
 			}
 				
 			table.setValueAt(shortLabel, rowR, ColC);
-			table.setWrapTextAt(rowR, ColC);
+			
 			
 			
 			if(plate.colorTheText) {
 				table.setRichText(new Color[] {cell.getColor().darker()}, new String[] {shortLabel}, rowR, ColC);
 			} else 
 				table.setCellColor(cell.getColor(), rowR, ColC);
-			
+			table.setWrapTextAt(rowR, ColC);
 			
 			boolean needsRowHeightAdjust = shortLabel.contains(""+'\n') && !plate.horizontalOrientation();
 			

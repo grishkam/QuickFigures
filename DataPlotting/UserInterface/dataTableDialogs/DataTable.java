@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 
 import logging.IssueLog;
+import textObjectProperties.TextLine;
 import ultilInputOutput.FileChoiceUtil;
 
 /**A specialized JTable in which the top row
@@ -468,5 +469,13 @@ public class DataTable extends JTable implements TableReader {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setRichText(TextLine line, int ii, int jj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

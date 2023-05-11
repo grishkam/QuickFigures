@@ -59,6 +59,8 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 import fileread.ReadExcelData;
 import logging.IssueLog;
+import textObjectProperties.TextLine;
+import textObjectProperties.TextLineSegment;
 import ultilInputOutput.FileChoiceUtil;
 
 /**an implementation of the table reader interface for excel files
@@ -68,7 +70,7 @@ public class ExcelTableReader implements TableReader {
 	private  org.apache.poi.ss.usermodel.Sheet sheet;
 	private Workbook workbook;
 	private String fileLocation;
-	private HashMap<String, XSSFCellStyle> cellStyles;
+	private HashMap<String, XSSFCellStyle> cellStyles;//a list of already used cell styles
 	private ArrayList<XSSFCellStyle> used=new ArrayList<XSSFCellStyle>();
 	private FormulaEvaluator createFormulaEvaluator;
 
@@ -307,11 +309,13 @@ public class ExcelTableReader implements TableReader {
 		
 		//boolean setup =false;
 		if(cellStyles!=null) {
-			XSSFCellStyle xssfCellStyle = cellStyles.get("border");
+			XSSFCellStyle xssfCellStyle = cellStyles.get("border"+border);
 			
 			cellAt.setCellStyle(xssfCellStyle);
 		}
 	}
+	
+
 
 	/**Craeates cell styles for each color listed*/
 	public void setupColorMap(ArrayList<Color> c) {
@@ -319,37 +323,62 @@ public class ExcelTableReader implements TableReader {
 		// c.clear();
 		// c.add(new Color(128,255,159));
 		 for(Color color1: c) {
-			  XSSFCellStyle cellStyle;
+			  XSSFCellStyle cellStyle = createCenterAlignedStyle();
 			  XSSFColor color;
-	
-			  //Your custom color #800080
-			  //create cell style on workbook level
-			  cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-			  cellStyle.setWrapText(true);
-			  cellStyle.setAlignment(HorizontalAlignment.CENTER);
-			  cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-			  //set pattern fill settings
-			  cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-			  
 			  //create the RGB byte array
 			  color = convertColor(color1);
 			 
 			  //set fill color to cell style
 			  cellStyle.setFillForegroundColor(color);
-	
+			  cellStyle.setShrinkToFit(true);
+			  
 			  cellStyles.put(color1.toString(),cellStyle);
 		  }
 		 
-		  XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
+		  XSSFCellStyle cellStyle = createBorderCellStyle();
+		 cellStyles.put("border0", cellStyle);
+		
+		 cellStyle = createBorderCellStyle();
+		 cellStyle.setAlignment(HorizontalAlignment.CENTER);
+		 cellStyles.put("border1", cellStyle);
+		 
+		 cellStyles.put("centered", createCenterAlignedStyle());
+		 
+		
+	}
+
+	/**creates a cell style with a thin border
+	 * @return
+	 */
+	public XSSFCellStyle createBorderCellStyle() {
+		XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
 		 
 		  BorderStyle border=BorderStyle.THIN;
+		 
 		cellStyle.setBorderTop(border);;
 		cellStyle.setBorderBottom(border);;
 		cellStyle.setBorderLeft(border);;
 		cellStyle.setBorderRight(border);;
-		
-		 cellStyles.put("border", cellStyle);
-		
+		return cellStyle;
+	}
+
+	/**returns a cell style
+	 * @return
+	 */
+	public XSSFCellStyle createCenterAlignedStyle() {
+		XSSFCellStyle cellStyle;
+		  
+
+		  //Your custom color #800080
+		  //create cell style on workbook level
+		  cellStyle = (XSSFCellStyle) workbook.createCellStyle();
+		  cellStyle.setWrapText(true);
+		  cellStyle.setAlignment(HorizontalAlignment.CENTER);
+		  VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
+		cellStyle.setVerticalAlignment(verticalAlignment);
+		  //set pattern fill settings
+		  cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		return cellStyle;
 	}
 
 	/**
@@ -458,6 +487,26 @@ public class ExcelTableReader implements TableReader {
 		return sheet.getRow(rowR).getHeight();
 	}
 
+	
+	/**Sets the rich text value of the cell*/
+	@Override
+	public void setRichText(TextLine line, int ii, int jj) { 
+		XSSFRichTextString t = new XSSFRichTextString();
+		
+		for(int i=0; i< line.size(); i++) {
+			TextLineSegment tseg = line.get(i);
+				XSSFFont f = new XSSFFont();
+				f.setFontName(tseg.getFont().getFamily());
+				f.setFontHeightInPoints((short) 12);
+				f.setBold(tseg.getFont().isBold());
+				f.setColor(convertColor(tseg.getTextColor()));
+				t.append(tseg.getText(), f);
+		}
+		
+		Cell cellAt = this.findCellAt(ii, jj);
+		cellAt.setCellValue(t);
+		
+	}
 
 	/**Sets the font to something more eleborate*/
 public void setRichText(Color[] colors, String[] text, int ii, int jj) {

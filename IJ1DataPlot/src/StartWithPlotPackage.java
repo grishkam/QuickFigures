@@ -59,13 +59,21 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 	static boolean alreadyInstalled=false;
 	
 	public static void main(String[] args) {
+		createWorksheet();
+		
+	}
+
+	/**
+	 * @return 
+	 * 
+	 */
+	public static ImageWindowAndDisplaySet createWorksheet() {
 		IssueLog.sytemprint=false;
 		IssueLog.windowPrint=true;
 		installPlotPackageOntoQuickFigures();
 		startToolbars(true);
 		ImageDisplayTester.setupImageJ();
-		 ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
-		
+		 return ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
 	}
 	
 	/***Installs the plot package*/

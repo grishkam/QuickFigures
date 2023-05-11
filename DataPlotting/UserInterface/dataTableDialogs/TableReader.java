@@ -23,6 +23,8 @@ package dataTableDialogs;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import textObjectProperties.TextLine;
+
 /**an interface for any sort of target that takes the form of a table*/
 public interface TableReader {
 
@@ -119,5 +121,14 @@ public interface TableReader {
 	 * @param j
 	 */
 	void setRichText(Color[] colors, String[] strings, int i, int j);
+
+	/**
+	 * @param line
+	 * @param ii
+	 * @param jj
+	 */
+	void setRichText(TextLine line, int ii, int jj);
+
+	
 
 }

@@ -267,7 +267,7 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 			a=((TextGraphicContainer) a).getText();
 		}
 		
-if (a instanceof ComplexTextGraphic && !(((ComplexTextGraphic) a).isEditMode())) {
+if (a instanceof ComplexTextGraphic && !(((ComplexTextGraphic) a).isEditMode()) && this.doesRecolor()) {
 	ComplexTextGraphic c=(ComplexTextGraphic) a;
 	UndoTextEdit undo = new UndoTextEdit(c);
 	if(!c.isEditMode()) {
