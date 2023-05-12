@@ -31,6 +31,7 @@ import javax.swing.JMenuBar;
 import basicMenusForApp.MenuBarForApp;
 import basicMenusForApp.MenuItemForObj;
 import dataTableDialogs.DataTable;
+import dataTableDialogs.TextMismatchDisplay;
 import logging.IssueLog;
 
 /**
@@ -61,6 +62,7 @@ public class DataTableMenu implements ActionListener {
 		actions2.add(new DistributeColumnsToTable());
 		actions2.add(new CreateSampleSetupFile());
 		actions2.add(new CreateFunctionFromDataTables());
+		
 		return actions2;
 	}
 
@@ -83,6 +85,8 @@ public class DataTableMenu implements ActionListener {
 		for(DataTableAction a: this.getActionList()) {
 			MenuBarForApp.addItemToMenuBar(a, bar, this,itemsInstalled);
 		}
+		
+		
 	}
 	
 	public ArrayList<DataTableAction> getActionList() {
