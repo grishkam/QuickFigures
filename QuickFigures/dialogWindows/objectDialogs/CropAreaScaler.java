@@ -7,6 +7,7 @@
 package objectDialogs;
 
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -50,8 +51,19 @@ public class CropAreaScaler extends GraphicItemOptionsDialog {
 		
 	}
 	
+	
+	/**
+	 * @param r
+	 * @param scale
+	 * @return 
+	 */
+	public static java.awt.geom.Rectangle2D.Double createScaledRect(Rectangle r, double scale) {
+		return createScaledRect(new RectangularGraphic(r), scale).getRectangle();
+		
+	}
+	
 	/**returns a scaled version of the rectangle */
-	public RectangularGraphic createScaledRect(RectangularGraphic oroginal, double scale) {
+	public static RectangularGraphic createScaledRect(RectangularGraphic oroginal, double scale) {
 		RectangularGraphic output = oroginal.copy();
 		output.setLocationType(RectangleEdges.CENTER);
 		Point2D location = output.getLocation();
@@ -122,6 +134,8 @@ public class CropAreaScaler extends GraphicItemOptionsDialog {
 			popup.show(triggerButton, 0, 0);
 		
 	}
+
+	
 
 
 

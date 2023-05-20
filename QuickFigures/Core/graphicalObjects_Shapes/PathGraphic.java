@@ -696,6 +696,10 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 
 	/**the second reshape handle list contains handles for rotating, moving and scaling only a subset of points*/
 	public transient ReshapeHandleList reshapeListForSelectedPoints;
+
+	/**the center of rotation that will be used for some operations*/
+	public transient PathPoint center_rotation_on;
+	
 	private ReshapeHandleList getReshapeList2() {
 		if(this.getPoints().getSelectedPointsOnly().size()<2) return null;
 		if(reshapeListForSelectedPoints==null)reshapeListForSelectedPoints=new PathPointReshapeList( 90000000, this);

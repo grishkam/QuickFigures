@@ -60,6 +60,9 @@ public class KeyFrameOptionsDialog extends BasicTimeLineOperator {
 	ArrayList<KeyFrameAnimation> getAllKeyFrameAnimations() {
 		ArrayList<KeyFrameAnimation> output = new ArrayList<KeyFrameAnimation> ();
 		for(ZoomableGraphic selectedItem: array) {
+			if(!(selectedItem instanceof KeyFrameCompatible)) {
+				continue;
+			}
 			KeyFrameCompatible  m=(KeyFrameCompatible ) selectedItem;
 			if (m.getAnimation() instanceof KeyFrameAnimation)
 						output.add((KeyFrameAnimation) m.getAnimation());

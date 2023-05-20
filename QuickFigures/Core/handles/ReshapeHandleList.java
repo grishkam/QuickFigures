@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 13, 2021
+ * Date Modified: May 17, 2023
  * Version: 2023.2
  */
 package handles;
@@ -213,6 +213,14 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		}
 		
 		return null;
+	}
+	
+	
+	/**returns the center of rotation
+	 * @return
+	 */
+	public Point2D getCenterOfRotationForHandleList() { 
+		return rect.getCenterOfRotation();
 	}
 	
 	/**A handle for moving or resizing selected objects*/
@@ -439,9 +447,12 @@ public class ReshapeHandleList extends SmartHandleList implements RectangleEdgeP
 		
 		/**rotates all the objects by an angle. Returns an undoable edit */
 		private CombinedEdit performRotate(ArrayList<LocatedObject2D> o2, double angle) {
-			return rotateList(o2, angle, rect.getCenterOfRotation());
+			return rotateList(o2, angle, getCenterOfRotationForHandleList());
 			
 		}
+
+		
+		
 		/**rotates all the objects by an angle around a given point. Returns an undoable edit */
 		private CombinedEdit rotateList(ArrayList<LocatedObject2D> o2, double angle, Point2D centerOfRotation) {
 			CombinedEdit edit = new CombinedEdit();

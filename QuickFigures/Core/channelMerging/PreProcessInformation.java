@@ -22,11 +22,15 @@ package channelMerging;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
+import locatedObject.RectangleEdges;
 
 /**this class contains information for the rotation, cropping and scaling
   performed on a multidimensional image. This is the 'preprocess'
@@ -74,6 +78,12 @@ public class PreProcessInformation implements Serializable {
 	/**creates an instance that uses the scame crop area as the argument but different scale*/
 	public PreProcessInformation(PreProcessInformation p1, ScaleInformation scaleInfo) {
 		this(p1.getRectangle(),p1.getAngle(),scaleInfo.getScale());
+		this.interpolationType=scaleInfo.getInterpolationType();
+	}
+	
+	/**creates an instance that uses the scame crop area as the argument but different scale*/
+	public PreProcessInformation( ScaleInformation scaleInfo) {
+		this(null,0,scaleInfo.getScale());
 		this.interpolationType=scaleInfo.getInterpolationType();
 	}
 
@@ -163,6 +173,28 @@ public class PreProcessInformation implements Serializable {
 	/**returns the scale information*/
 	public ScaleInformation getScaleInformation() {return new ScaleInformation(scale, interpolationType);}
 
+	
+	/** Returns a rectangle that full contains the rotated crop area.
+	 *  If the angle is 0, this will simply return the rectangle
+	 * @param r
+	 * @param angle
+	 * @return
+	 */
+	public Rectangle getBoundsOfCropArea() {
+		Rectangle r = this.getRectangle();
+		Shape rotatedCropAreaInternal = AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
+		Rectangle boundsContainingFirstLevelCrop = rotatedCropAreaInternal.getBounds(); //this area should have the same center as the crop area
+		if (boundsContainingFirstLevelCrop.x>r.x||boundsContainingFirstLevelCrop.y>r.y) {
+			/** At certain angles for rectangles with high aspect ratio, the bounds of the rotated rectangle does not include
+			  all of the region of interest. Problem might occur under these conditions so the next few lines alter*/
+			Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, boundsContainingFirstLevelCrop);
+			if(boundsContainingFirstLevelCrop.height>boundsContainingFirstLevelCrop.width) boundsContainingFirstLevelCrop.width=boundsContainingFirstLevelCrop.height;
+			if(boundsContainingFirstLevelCrop.height<boundsContainingFirstLevelCrop.width) boundsContainingFirstLevelCrop.height=boundsContainingFirstLevelCrop.width;
+			RectangleEdges.setLocation(boundsContainingFirstLevelCrop, RectangleEdges.CENTER, center.getX(), center.getY());
+			
+		}
+		return boundsContainingFirstLevelCrop;
+	}
 
 	
 	

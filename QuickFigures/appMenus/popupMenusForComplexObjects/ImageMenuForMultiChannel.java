@@ -46,6 +46,7 @@ public class ImageMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 		createSetScaleItem() ;
 		createCropOption();
 		addOverlayEditOption(this);
+		add(createFileSizeOption());
 		
 		JMenu mm = new JMenu("Expert Options") ;
 		createSaveImageItem(mm) ;
@@ -53,6 +54,7 @@ public class ImageMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 		createMultiChanOpsions(mm) ;
 		createChannelUseItem(mm);
 		createShowImageItem(mm);
+		
 		this.add(mm);
 		
 	}

@@ -114,6 +114,7 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 	Tells the user if his file is to big
 	 */
 	protected void showFileSizeWarning(MultichannelDisplayLayer item) {
+		IssueLog.log("Checking for size warning");
 		int size = item.getSlot().getEstimatedSizeOriginal();
 		if (size>16*1500*1000*4*2) {
 			ShowMessage.showOptionalMessage("That is a large file!", false, "You added a very large file that takes a lot of memory",
@@ -121,6 +122,7 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 					"No figure needs to be this large",
 					"Please use smaller version of the image in the future ");
 		}
+		item.getSlot().attemptSizeManageMentDialog(false);
 	}
 	
 	/**selects an item. if that  item is a layer, selects everything inside the layer*/
@@ -234,6 +236,7 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 		try {
 			aa = figureAdder.addNewlyOpenedDisplayLayer(item, layer, preprocessForNewFigure);
 			aa.getMontageLayoutGraphic().moveLayoutAndContents(location2.getX(), location2.getY());
+			this.showFileSizeWarning((MultichannelDisplayLayer) aa.getPrincipalMultiChannel());
 		} catch (Exception e) {
 			IssueLog.logT(e);
 		}

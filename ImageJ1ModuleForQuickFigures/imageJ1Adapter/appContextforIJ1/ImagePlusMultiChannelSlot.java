@@ -47,8 +47,12 @@ import undo.AbstractUndoableEdit2;
 import ij.IJ;
 import ij.ImageListener;
 import ij.ImagePlus;
+import imageDisplayApp.UserPreferences;
 import locatedObject.ScaleInfo;
 import logging.IssueLog;
+import messages.ShowMessage;
+import objectDialogs.CropAreaScaler;
+import storedValueDialog.StoredValueDilaog;
 
 
 /**
@@ -120,15 +124,107 @@ import logging.IssueLog;
 		/**The channel frame and slice that is seen in the cropping dialog*/
 		private CSFLocation displayLocation;
 
-
+		/**A list of overlay objects*/
 		private OverlayObjectList workingOverlay;
+
+
+		private boolean partnerMade;//is set to true if at least one parter image had been made
 
 		public ImagePlusMultiChannelSlot() {
 			
 		}
+		
+		
 
 		public ImagePlusMultiChannelSlot(ImageDisplayLayer imagePlusDisplayPanels) {
 			display= imagePlusDisplayPanels;
+		}
+	
+		
+		/**performs a permanent crop of the 'orignal' image rather than keeping the oringal 
+		 * @param scale determines if and how the proposed crop area will be scaled
+		   */
+		public void permanentCrop(Rectangle r, double scale) {
+			
+			Rectangle scaledR = scaleBoundsAndKeepInsideImage(r, scale);
+			
+			
+			if(this.isCropAreaInsideImage(new PreProcessInformation(scaledR)))
+				r=scaledR;
+			
+		
+			
+			
+			PreProcessInformation ppInfo = new PreProcessInformation(r);
+			SubSlot ori = this.original;
+			ImagePlusWrapper unprocessedVersion = getUnprocessedVersion(true);
+			ImagePlusWrapper m =unprocessedVersion.cropAtAngle(ppInfo);
+			original=new SubSlot();
+			original.setStoredImage(m.getImagePlus());
+			original.originalSavePath=null;
+			original.lastSavePath=null;
+			
+			setOriginalOverlay( OverlayObjectList.cropOverlayAtAngle(ori.overlayObjectList, r, 0, 1, false));
+			
+			PreProcessInformation process;
+			if(preprocessRecord.getRectangle()==null) {
+				process = new PreProcessInformation(this.preprocessRecord.getScaleInformation());
+			} else {
+				Rectangle ra = preprocessRecord.getRectangle();
+				ra.x-=r.x;
+				ra.y-=r.y;
+				process = new PreProcessInformation(ra,preprocessRecord.getAngle(), this.preprocessRecord.getScaleInformation());
+				
+			}
+			applyCropAndScale(process);
+			
+		}
+
+
+
+		/**scales the rectangle and places the scaled version inside the bounds of the original image
+		 * This rectangle is supposed to be used as a potential crop area
+		 * @param r
+		 * @param scale
+		 * @return
+		 */
+		private Rectangle scaleBoundsAndKeepInsideImage(Rectangle r, double scale) {
+			Rectangle scaledR = CropAreaScaler.createScaledRect(r, scale).getBounds();
+			
+			/**What to do if the scaled crop area is outside*/
+			if(scaledR.getMaxX()>original.originalDimensions.width) {
+				scaledR.x-=(scaledR.getMaxX()-original.originalDimensions.width);
+			}
+			if(scaledR.getMaxY()>original.originalDimensions.height) {
+				scaledR.y-=(scaledR.getMaxY()-original.originalDimensions.height);
+			}
+			if(scaledR.x<0)
+				scaledR.x=0;
+			if(scaledR.y<0)
+				scaledR.y=0;
+			return scaledR;
+		}
+		
+		/**Asks the user if it is acceptable to only keep a cropped version*/
+		@Override
+		public void attemptSizeManageMentDialog(boolean mandatory) {
+			PreProcessInformation p = this.preprocessRecord;
+			
+			ArrayList<String> li = new ArrayList<String>(); li.add("large image");
+			UserPreferences ob = UserPreferences.current;
+			//boolean yes = ShowMessage.showOptionalMessage("Crop 'original' image ", false, "If image is very large, to save space, you may keep a cropped version of this image instead. Do you want to?", "this feature is a work in progress. Choose no/cancel if you are unsure.");
+			StoredValueDilaog storedValueDilaog = new StoredValueDilaog("trim image options", new UserPreferences.TrimPreferences());
+			storedValueDilaog.setName("Trim image options");
+			
+			if(mandatory) {
+				ShowMessage.resetOptionalMessage("Crop 'original' image");
+			}
+			boolean yes = ShowMessage.showOptionalMessageWithOptionsWORK("Crop 'original' image", storedValueDilaog, mandatory, "If image is very large, this can slow down QuickFigures", "to save space, you may keep a cropped version of this image instead.", "Select the option above");
+			
+			if(yes && UserPreferences.TrimPreferences.isTrimImages())
+						permanentCrop(p.getBoundsOfCropArea(), UserPreferences.TrimPreferences.getTrimZomeforLargeImageTrims());
+			
+			
 		}
 
 		@Override
@@ -881,6 +977,8 @@ import logging.IssueLog;
 		@Override
 		public MultiChannelSlot createPartner() {
 			ImagePlusMultiChannelSlot c = this.copy();
+			this.partnerMade=true;
+			c.partnerMade=true;
 			c.original=original;
 			return c;
 		}
@@ -914,6 +1012,10 @@ import logging.IssueLog;
 			original.overlayObjectList=reversed;
 			return osu;
 		}
+
+
+
+	
 		
 		
 	}

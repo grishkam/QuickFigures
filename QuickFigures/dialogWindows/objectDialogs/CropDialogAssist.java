@@ -40,7 +40,8 @@ import undo.UndoManagerPlus;
 
 /**
  An implementation of the DiaplayedImage interface that allows many options to be used inside of a crop dialog.
- Does not work with every option. Supposed to be a limited implementation
+ Does not work with every option. Supposed to be a limited implementation. 
+ Originally designed so that a user could manipulate overlay objects inside a crop dialog. 
  */
 public class CropDialogAssist implements DisplayedImage {
 

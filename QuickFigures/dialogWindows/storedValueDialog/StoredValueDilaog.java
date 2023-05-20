@@ -22,6 +22,7 @@ package storedValueDialog;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JButton;
@@ -63,6 +64,16 @@ public class StoredValueDilaog extends StandardDialog{
 		
 	}
 	
+	/**creates a dialog */
+	public StoredValueDilaog(String item, Object of, ArrayList<String> categories) {
+		this.setTitle(item);
+		this.setWindowCentered(true);
+		 addFieldsForObject(this, of, categories);
+		
+		 return;
+		
+	}
+	
 	public StoredValueDilaog(Object of) {
 		this("", of);
 	}
@@ -78,13 +89,30 @@ public class StoredValueDilaog extends StandardDialog{
 	 looks for annotated fields in the object and add items to the dialog for each 
 	 field with the RetrievableOption annotation on them
 	 */
-	public static void addFieldsForObject(StandardDialog d, Object of) {
+	public static void addFieldsForObject(StandardDialog d, Object of) { 
+		addFieldsForObject(d, of, null);
+	}
+	
+
+	/**
+	 looks for annotated fields in the object and add items to the dialog for each 
+	 field with the RetrievableOption annotation on them
+	 @param names the labels of the fields that are wanted
+	 */
+	public static void addFieldsForObject(StandardDialog d, Object of, ArrayList<String> names) {
 		Class<?> c=of.getClass();
 		 try{
 		 while (c!=Object.class) {
 		 for (Field f: c.getDeclaredFields()) {
 			 Object lastField=null;
 			 RetrievableOption o= f.getAnnotation( RetrievableOption.class);
+			 
+			 /**A way to selectively include or exclude*/
+			 if(names!=null &&names.size()>0) {
+				if(!names.contains(o.key()) && !names.contains(o.category())) 
+					continue;//skips any categoried that are not listed
+			 }
+			 
 			 //IssueLog.log("working on "+o.label());
 			if(o!=null) d.switchPanels(o.category());
 			if (o!=null) try {
@@ -100,10 +128,13 @@ public class StoredValueDilaog extends StandardDialog{
 					addBooleanField(d, of, f, o);
 				}
 				if (f.getType()==double.class) {
-					addNumberField(d, of, f, o);
+					addNumberField(d, of, f, o, double.class);
+				}
+				if (f.getType()==float.class) {
+					addNumberField(d, of, f, o, float.class);
 				}
 				if (f.getType()==int.class) {
-					addNumberField(d, of, f, o);
+					addNumberField(d, of, f, o, int.class);
 				}
 				
 				if (f.getType()==String.class) {
@@ -184,8 +215,9 @@ public class StoredValueDilaog extends StandardDialog{
 		
 	}
 
-	/**Adds a numeric field to a dialog*/
-	private static void addNumberField(StandardDialog dialog, Object of, Field f, RetrievableOption o) {
+	/**Adds a numeric field to a dialog
+	 * @param class1 */
+	private static void addNumberField(StandardDialog dialog, Object of, Field f, RetrievableOption o, Class<?> class1) {
 		String label = o.label();
 		int[] range = o.minmax();
 		boolean useSlider=false;
@@ -193,7 +225,12 @@ public class StoredValueDilaog extends StandardDialog{
 		try {
 			NumberInputPanel panel=null;
 			if (!useSlider)
-			{ panel= new NumberInputPanel(label, f.getDouble(of));}
+			{
+					if(class1==float.class) 
+						panel= new NumberInputPanel(label, f.getFloat(of), 3);
+					else
+					   panel= new NumberInputPanel(label, f.getDouble(of));
+				}
 			else 
 				{ panel = new NumberInputPanel(label, f.getDouble(of), range[0], range[1]);}
 			if(o.choices()!=null) {
@@ -253,6 +290,8 @@ public class StoredValueDilaog extends StandardDialog{
 			try {
 				if(field.getType()==int.class) {
 					field.set(object, (int)ne.getNumber());
+				} else if(field.getType()==float.class) {
+					field.set(object, (float)ne.getNumber());
 				}
 				else 
 						field.set(object, ne.getNumber());

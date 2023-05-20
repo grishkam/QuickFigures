@@ -521,9 +521,11 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	  
 	  
 	  protected JPanel addButtonPanel(Container cont) {
+		  JPanel ButtonPanel = generateButtonPanel();
+		  
 		   GridBagConstraints c = getCurrentConstraints();
 		 c= (GridBagConstraints) c.clone();
-		   JPanel ButtonPanel = generateButtonPanel();
+		   
 		   c.gridx=1;
 		   c.gridy=this.gymax+2;
 		

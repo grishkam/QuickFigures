@@ -72,7 +72,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 		create1MergeLabelItem(add) ;
 		createGenerateChannelLabelItem(add);
 		createGenerateChannelLabelItem2(add);
-	;
+
 		createEliminateChannelLabelItem(rem) ;
 		
 		
@@ -82,7 +82,9 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 		createNameChannelLabelItem(expert);
 		expert.add(add);
 		expert.add(rem);
+		
 		this.add(expert);
+		
 	}
 	
 	public SmartMenuItem2 createAllLabelMenuItem() {
@@ -284,6 +286,20 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 			
 			
 			this.add(out);
+			
+			return out;
+		}
+	 
+	 SmartMenuItem2 createFileSizeOption() {
+			SmartMenuItem2 out=new SmartMenuItem2("Trim large image") {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onAction() {
+					display.getSlot().attemptSizeManageMentDialog(true);
+				}
+				
+			};
 			
 			return out;
 		}

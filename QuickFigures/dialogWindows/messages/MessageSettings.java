@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
+ * Date Modified: May 13, 2023
  * Version: 2023.2
  */
 package messages;
@@ -25,6 +25,9 @@ stores a set of properties related to a particular message
  */
 public class MessageSettings {
 	
-	boolean dontShowAnymore=false;
+	boolean dontShowAnymore=false;//Set to true if QuickFigures should not keep showing this message
+	public boolean lastOk;
+	
+	int dontShowForAWhile=0;//how many times QuickFigures should skip this message
 
 }

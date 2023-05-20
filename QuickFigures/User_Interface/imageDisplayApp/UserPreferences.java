@@ -45,6 +45,8 @@ public static final UserPreferences current=new UserPreferences();
 	@RetrievableOption(key = "oversizeMode", label="'Large inset mode' for images larger than ", category="insets")
 	public int useOversizeModeForInsets=5000;
 	
+
+	
 	/**stores the preferences as keys*/
 	public void store() {
 		MetaInfoWrapper storage = DirectoryHandler.getDefaultHandler().getPrefsStorage();
@@ -65,4 +67,26 @@ public static final UserPreferences current=new UserPreferences();
 		return UserPreferences.current.testNew;
 	}
 	
+	
+	public static class TrimPreferences {
+		
+		@RetrievableOption(key = "trim", label="When adding a large image", choices= {"Do NOT trim large images", "Trim large images"})
+		public static int trim_large_images=0;
+		
+		@RetrievableOption(key = "crop trim", label="Trim area is how much larger than crop area?", choices= {"1", "1", "1.25", "1.25", "1.5", "1.5", "3", "3", "4", "4"}, chooseExtra=true)
+		public static float trimImages=1.5f;
+		
+		
+		
+		public static float getTrimZomeforLargeImageTrims() {
+			if(trimImages<1)
+				trimImages=1.25f;
+			if(trimImages>5)
+				trimImages=1.25f;
+			return trimImages;
+		}
+		
+		public static boolean isTrimImages() {return trim_large_images==1;}
+		
+	}
 }

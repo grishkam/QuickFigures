@@ -293,24 +293,24 @@ public void cropAtAngle(Rectangle r, double angle) {
 	
 }
 
-/**
+/** Returns a rectangle that full contains the rotated crop area 
  * @param r
  * @param angle
  * @return
  */
-protected Rectangle createFirstPhaseCropArea(Rectangle r, double angle) {
-	Shape firstLevelCrop = AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
-	Rectangle firstCropBounds = firstLevelCrop.getBounds(); //this area should have the same center as the crop area
-	if (firstCropBounds.x>r.x||firstCropBounds.y>r.y) {
+protected static Rectangle createFirstPhaseCropArea(Rectangle r, double angle) {
+	Shape rotatedCropAreaInternal = AffineTransform.getRotateInstance(-angle, r.getCenterX(), r.getCenterY()).createTransformedShape(r);
+	Rectangle boundsContainingFirstLevelCrop = rotatedCropAreaInternal.getBounds(); //this area should have the same center as the crop area
+	if (boundsContainingFirstLevelCrop.x>r.x||boundsContainingFirstLevelCrop.y>r.y) {
 		/** At certain angles for rectangles with high aspect ratio, the bounds of the rotated rectangle does not include
 		  all of the region of interest. Problem might occur under these conditions so the next few lines alter*/
-		Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, firstCropBounds);
-		if(firstCropBounds.height>firstCropBounds.width)firstCropBounds.width=firstCropBounds.height;
-		if(firstCropBounds.height<firstCropBounds.width)firstCropBounds.height=firstCropBounds.width;
-		RectangleEdges.setLocation(firstCropBounds, RectangleEdges.CENTER, center.getX(), center.getY());
+		Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, boundsContainingFirstLevelCrop);
+		if(boundsContainingFirstLevelCrop.height>boundsContainingFirstLevelCrop.width) boundsContainingFirstLevelCrop.width=boundsContainingFirstLevelCrop.height;
+		if(boundsContainingFirstLevelCrop.height<boundsContainingFirstLevelCrop.width) boundsContainingFirstLevelCrop.height=boundsContainingFirstLevelCrop.width;
+		RectangleEdges.setLocation(boundsContainingFirstLevelCrop, RectangleEdges.CENTER, center.getX(), center.getY());
 		
 	}
-	return firstCropBounds;
+	return boundsContainingFirstLevelCrop;
 }
 
 

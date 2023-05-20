@@ -191,10 +191,13 @@ public class FigureAdder extends LayoutAdder {
 		
 		output= getMultiChannelOpener().creatMultiChannelDisplayFromUserSelectedImage(this.useOpen==ImageSource.SAVED_MULTICHANNEL, path);
 		
-		if (output==null) {
+		if (output==null&path!=null) {
 			IssueLog.log("no image found at "+path);
 			IssueLog.log("exists "+new File(path).exists());
 		};
+		if(path==null) {
+			ShowMessage.showOptionalMessage("You need to choose an image file for this option to work");
+		}
 		return output;
 	}
 	

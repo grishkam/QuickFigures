@@ -152,6 +152,11 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		if (type==CURVE_CONTROL_POINT2) {
 			return Color.red;
 		}
+		
+		if (pathPoint == pathGraphic.center_rotation_on) {
+			return Color.blue;
+		}
+		
 		if (pathPoint.isPrimarySelected()) {
 			return Color.yellow;
 			
@@ -159,6 +164,8 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		if (pathPoint.isSelected()) {
 			return Color.yellow;
 		}
+		
+		
 		return Color.gray;
 	}
 	
@@ -409,7 +416,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		
 		String closePointCom="closedPoint", selPointCom= "selectP", allUnSel="Unselect All";
 		String uncurveCom="Remove Curvature";
-		String removePoint="Remove Point", addPoint="Add Point", splitPath="Split Path At Point", splitPath2="Divide Path Into 2 Sections";
+		String removePoint="Remove Point", addPoint="Add Point", splitPath="Split Path At Point", splitPath2="Divide Path Into 2 Sections", set_center= "Set/Unset center of rotation";
 		
 		
 		private static final long serialVersionUID = 1L;
@@ -430,6 +437,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			addMenuItem(splitPath,  splitPath);
 			
 					addMenuItem(splitPath2);
+					addMenuItem(set_center);
 			
 		}
 		
@@ -464,6 +472,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		 */
 		public CombinedEdit executeCommand(String com) {
 			CombinedEdit undo = new CombinedEdit(pathGraphic.provideDragEdit());
+			
 			if (com.equals(closePointCom)) {
 				pathPoint.setClosePoint(!pathPoint.isClosePoint());
 				pathGraphic.updatePathFromPoints();
@@ -499,6 +508,13 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			if(com.equals(splitPath2)) {
 				if(ShowMessage.showOptionalMessage("this feature is a work in progress", false, "this feature is a work in progress", "are you sure you want to continue?"))
 						return splitPathAtPoint(true);
+			}
+			
+			if(com.equals(set_center)) {
+				boolean isCenter = pathGraphic.center_rotation_on==pathPoint;
+				pathGraphic.center_rotation_on=pathPoint;
+				if(isCenter)
+					pathGraphic.center_rotation_on=null;
 			}
 			
 			return undo;

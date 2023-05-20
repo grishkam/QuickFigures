@@ -325,7 +325,7 @@ public abstract class ShapeGraphic extends BasicGraphicalObject implements  Stro
 	}
 		  
 		  long st = System.currentTimeMillis()-  shapeTime;
-			 if(st>500) {
+			 if(st>5000) {
 				 IssueLog.log(st +" Shape took a long time to draw. shape="+this);
 				 IssueLog.log((System.currentTimeMillis()-fillTime) +" taken since fill shape"+this);
 				 

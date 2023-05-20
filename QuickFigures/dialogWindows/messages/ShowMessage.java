@@ -15,11 +15,12 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: May 13, 2023
  * Version: 2023.2
  */
 package messages;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import standardDialog.GriddedPanel;
 import standardDialog.OnGridLayout;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
+import storedValueDialog.StoredValueDilaog;
 
 /**
  A class created to showing messages to the user. The user will have a 'dont show again' options for some messages
@@ -112,7 +114,7 @@ public class ShowMessage {
 		return showOptionalMessage(title, oneTime,ar);
 	}
 	
-	/***/
+	/**Shows a message with a 'dont show again checkbox' */
 	public static boolean showOptionalMessage(String title) {
 		return showOptionalMessage(title, false, title);
 	}
@@ -129,12 +131,53 @@ public class ShowMessage {
 		
 		if (oneTime) set.dontShowAnymore=true;
 		
-		MessageDialog m = new MessageDialog(set);
+		MessageDialog m = new MessageDialog(set, false);
 		m.setTitle(title);
 		
 		m.addMessage(st);
 		m.showDialog();
+		set.lastOk=m.wasOKed();
 		if (m.wasOKed()) return true;
+		return false;
+		
+	}
+	
+	
+	
+	/**shows a message with a 'dont show again checkbox'*/
+	public static boolean showOptionalMessageWithOptionsWORK(String title, StoredValueDilaog optionHolder, boolean mandatory, String... st) {
+		MessageSettings set = settings.get(title);
+		if(set==null) {
+			set=new MessageSettings();
+			settings.put(title, set);
+		}
+		
+		if(set.dontShowAnymore) 
+			return set.lastOk;
+		if(set.dontShowForAWhile>0) {
+			set.dontShowForAWhile--;
+			return set.lastOk;
+		}
+		
+		
+		MessageDialog m = new MessageDialog(set, mandatory);
+		m.setTitle(title);
+		
+
+		//m.getOptionDisplayTabs().addTab("options",);
+		//m.add( optionHolder.removeOptionsTab().getComponent(0), m.gc);
+		m.addSubordinateDialogsAsTabs(optionHolder.getTitle(), optionHolder);
+		
+		m.addMessage(st);
+		
+	
+		m.showDialog();
+		set.lastOk=m.wasOKed();
+		
+		if (m.wasOKed()) 
+			return true;
+		
+		
 		return false;
 		
 	}
@@ -146,21 +189,30 @@ public class ShowMessage {
 		 */
 		private static final String DO_NOT_SHOW_AGAIN = "wontshowAgain";
 		private MessageSettings messageSettings;
+		
+		GridBagConstraints gc = new GridBagConstraints();
+		private boolean mandatory;
 
 		/**
 		 * @param object
 		 */
-		public MessageDialog(MessageSettings object) {
+		public MessageDialog(MessageSettings object, boolean mandatory) {
 			messageSettings=object;
 			this.setModal(true);
 			this.setWindowCentered(true);
-			
+			this.mandatory=mandatory;
 			if (messageSettings==null)
 				return;
 				}
 		
+		public void addItem(Component c) {
+			super.gridPositionY+=20;
+			gc.gridy=super.gridPositionY;
+			mainPanel.add(c, gc);
+		}
+		
 		public void addMessage(String... text) {
-			GridBagConstraints gc = new GridBagConstraints();
+			
 			
 			
 			gc.insets=OnGridLayout.lastInsets;
@@ -179,16 +231,21 @@ public class ShowMessage {
 			}
 			super.getCurrentUsePanel().moveGrid(0, 10);
 		
-			this.add(DO_NOT_SHOW_AGAIN, new BooleanInputPanel("Dont show this again", messageSettings.dontShowAnymore));
+			if(!mandatory)
+				this.add(DO_NOT_SHOW_AGAIN, new BooleanInputPanel("Dont show this again", messageSettings.dontShowAnymore));
 			
 			
 		}
 		
 		
 		
+		
+		
 		/**what action to take when the ok button is pressed*/
 		protected void onOK() {
-			messageSettings.dontShowAnymore=this.getBoolean(DO_NOT_SHOW_AGAIN);
+			
+			if(!mandatory)
+				messageSettings.dontShowAnymore=this.getBoolean(DO_NOT_SHOW_AGAIN);
 		}
 
 		/**
@@ -211,5 +268,13 @@ public class ShowMessage {
 		return false;
 	
 }
+
+	/**
+	 If a user has chosen the 'dont show again option' for a message this undoes that effect, the message will be shown
+	 */
+	public static void resetOptionalMessage(String st) {
+		settings.remove(st);
+		
+	}
 
 }

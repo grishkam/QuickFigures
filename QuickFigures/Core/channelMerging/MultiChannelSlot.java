@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
+ * Date Modified: May 13, 2023
  * Version: 2023.2
  */
 package channelMerging;
@@ -121,6 +121,13 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	 * @param reversed
 	 */
 	public AbstractUndoableEdit setOriginalOverlay(OverlayObjectList reversed);
+	
+	
+	
+	/**
+	 * called when a user adds a very large image
+	 */
+	public void attemptSizeManageMentDialog(boolean mandatory);
 	
 	
 }

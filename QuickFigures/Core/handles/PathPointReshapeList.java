@@ -32,6 +32,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import graphicalObjects_LayerTypes.GraphicLayer;
@@ -44,16 +45,18 @@ import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import locatedObject.Scales;
 import locatedObject.ScalesFully;
+import undo.CombinedEdit;
 import undo.PathEditUndo;
 
 /**A handle list that allows the user to scale a group of points within a path by dragging the handles*/
 public class PathPointReshapeList extends ReshapeHandleList {
 
 	private PathGraphic path;
-	private PathEditUndo undo;
+	private CombinedEdit undo;
+	
 
 	public PathPointReshapeList( int hNumber, PathGraphic path) {
-		super(0, hNumber, getSelectedPoints(path));
+		super(0, hNumber, getSelectedPointsAll(path));
 		this.reshapeHandleColor=new Color(128, 0, 128);
 		this.fixedpointHandleColor=reshapeHandleColor;
 		hideCenterHandle=false;
@@ -68,24 +71,95 @@ public class PathPointReshapeList extends ReshapeHandleList {
 	protected boolean isHiddenCenterHandle() {
 		return false;
 	}
+	
+	/**returns the center of rotation
+	 * @return
+	 */
+	public Point2D getCenterOfRotationForHandleList() { 
+		if(path.center_rotation_on!=null)
+			{
+			Point2D a = path.center_rotation_on.getAnchor();
+			return path.convertPointToExternalCrdinates(a);
+			}
+		return super.getCenterOfRotationForHandleList();
+	}
 
 	public void onHandlePress() {
-		undo=new PathEditUndo(path);
+		undo=new CombinedEdit(new PathEditUndo(path));
+		ArrayList<PathGraphic> otherPaths = updateallPaths(path, false);
+		for(PathGraphic p: otherPaths) {
+			if(p!=path)
+				undo.addEditToList(new PathEditUndo(p));
+		}
 	}
 	
 	public void editover(CanvasMouseEvent w) {
 		super.editover(w);
-		path.updatePathFromPoints();
+		updatePaths();
 		if(undo!=null) {
 			w.addUndo(undo);
 		}
 	}
+
+	/**
+	 * updates all of the paths that have selected points
+	 */
+	public void updatePaths() {
+		path.updatePathFromPoints();
+		updateallPaths(path, true);
+	}
 	
+	
+	/**returns the selected path point proxies for the path*/
 	public static PathPointProxy[] getSelectedPoints(PathGraphic path) {
 		PathPointList all = path.getPoints().getSelectedPointsOnly();
 		PathPointProxy[] output = new PathPointProxy[all.size()];
 		for(int i=0; i<all.size(); i++)
 			output[i]=new PathPointProxy(all.get(i), path);
+		return output;
+	}
+	
+	/**returns the selected path point proxies for all the selected paths*/
+	public static PathPointProxy[] getSelectedPointsAll(PathGraphic path) {
+		
+		ArrayList<PathPointProxy> output = new ArrayList<PathPointProxy>();
+		ArrayList<ZoomableGraphic> g = path.getParentLayer().getTopLevelParentLayer().getAllGraphics();
+		for(ZoomableGraphic g0: g) {
+			if(g0 instanceof PathGraphic) {
+				PathGraphic p0=(PathGraphic) g0;
+				if(p0.isSelected()||p0==path) for(PathPoint point0 :p0.getPoints().getSelectedPointsOnly()) {
+					output.add(new PathPointProxy(point0, p0));
+				}
+			}
+			
+		}
+		PathPointProxy[] output2 = new PathPointProxy[output.size()];
+		output2=output.toArray(output2);
+		return output2;
+	}
+	
+	/**returns the selected path point proxies for all the selected paths*/
+	public static ArrayList<PathGraphic> updateallPaths(PathGraphic path, boolean update) {
+		
+		ArrayList<PathGraphic> output = new ArrayList<PathGraphic>();
+		ArrayList<ZoomableGraphic> g = path.getParentLayer().getTopLevelParentLayer().getAllGraphics();
+		for(ZoomableGraphic g0: g) {
+			if(g0 instanceof PathGraphic) {
+				PathGraphic p0=(PathGraphic) g0;
+				if(p0.isSelected()||p0==path) for(PathPoint point0 :p0.getPoints().getSelectedPointsOnly()) {
+					if(!output.contains(p0))
+						{
+						output.add( p0);
+						p0.updatePathFromPoints();
+						}
+					break;
+				}
+			}
+			
+		}
+		
+		
+		
 		return output;
 	}
 	
