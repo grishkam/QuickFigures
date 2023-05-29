@@ -29,6 +29,7 @@ import ij.gui.Roi;
 import ij.gui.Toolbar;
 import ij.measure.Calibration;
 import ij.plugin.CanvasResizer;
+import ij.plugin.SubstackMaker;
 import ij.process.ImageProcessor;
 import ij.process.LUT;
 import imageDisplayApp.OverlayObjectManager;
@@ -115,8 +116,10 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	}
 	
 	public void checkVoid() {
-	
+		
 	}
+	
+	
 	
 	/**takes a region of interest from the image*/
 	@Override
@@ -767,6 +770,9 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	/** returns a scaled version of this that is also cropped using a rectangle that 
 	  may be rotated at a certain angle*/
 	private ImagePlusWrapper cropAtAngle(Rectangle r, double angle, double scale, Interpolation interpolateMethod) {
+		
+		
+		
 		imp.deleteRoi();
 		if(imp.getProcessor()==null) {
 			IssueLog.log("problem with given image, no ImageProcessor which suggests no image data");

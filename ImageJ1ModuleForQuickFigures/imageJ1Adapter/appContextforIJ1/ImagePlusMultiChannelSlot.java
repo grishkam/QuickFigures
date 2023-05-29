@@ -144,7 +144,7 @@ import storedValueDialog.StoredValueDilaog;
 		/**performs a permanent crop of the 'orignal' image rather than keeping the oringal 
 		 * @param scale determines if and how the proposed crop area will be scaled
 		   */
-		public void permanentCrop(Rectangle r, double scale) {
+		public void permanentCrop(Rectangle r, float scale) {
 			
 			Rectangle scaledR = scaleBoundsAndKeepInsideImage(r, scale);
 			
@@ -205,27 +205,7 @@ import storedValueDialog.StoredValueDilaog;
 			return scaledR;
 		}
 		
-		/**Asks the user if it is acceptable to only keep a cropped version*/
-		@Override
-		public void attemptSizeManageMentDialog(boolean mandatory) {
-			PreProcessInformation p = this.preprocessRecord;
-			
-			ArrayList<String> li = new ArrayList<String>(); li.add("large image");
-			UserPreferences ob = UserPreferences.current;
-			//boolean yes = ShowMessage.showOptionalMessage("Crop 'original' image ", false, "If image is very large, to save space, you may keep a cropped version of this image instead. Do you want to?", "this feature is a work in progress. Choose no/cancel if you are unsure.");
-			StoredValueDilaog storedValueDilaog = new StoredValueDilaog("trim image options", new UserPreferences.TrimPreferences());
-			storedValueDilaog.setName("Trim image options");
-			
-			if(mandatory) {
-				ShowMessage.resetOptionalMessage("Crop 'original' image");
-			}
-			boolean yes = ShowMessage.showOptionalMessageWithOptionsWORK("Crop 'original' image", storedValueDilaog, mandatory, "If image is very large, this can slow down QuickFigures", "to save space, you may keep a cropped version of this image instead.", "Select the option above");
-			
-			if(yes && UserPreferences.TrimPreferences.isTrimImages())
-						permanentCrop(p.getBoundsOfCropArea(), UserPreferences.TrimPreferences.getTrimZomeforLargeImageTrims());
-			
-			
-		}
+	
 
 		@Override
 		public void addMultichannelUpdateListener(MultiChannelUpdateListener lis) {
@@ -630,6 +610,7 @@ import storedValueDialog.StoredValueDilaog;
 				return imp;
 		}
 
+		/**returns the crop and scale information that is applied to this slot*/
 		@Override
 		public PreProcessInformation getModifications() {
 			return preprocessRecord;

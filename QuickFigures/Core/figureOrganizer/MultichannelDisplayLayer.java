@@ -33,6 +33,7 @@ import channelMerging.MultiChannelUpdateListener;
 import channelMerging.MultiChannelImage;
 import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
+import channelMerging.SubStackSelectionInstructions.SliceUseInstructions;
 import fLexibleUIKit.MenuItemMethod;
 import figureEditDialogs.PanelStackDisplayOptions;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
@@ -47,6 +48,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import icons.IconSet;
 import icons.SourceImageTreeIcon;
+import imageDisplayApp.UserPreferences;
 import imageScaling.Interpolation;
 import imageScaling.ScaleInformation;
 import layersGUI.HasTreeLeafIcon;
@@ -58,8 +60,10 @@ import locatedObject.PointsToFile;
 import locatedObject.ShowsOptionsDialog;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
+import messages.ShowMessage;
 import objectDialogs.GraphicItemOptionsDialog;
 import popupMenusForComplexObjects.MultiChannelImageDisplayPopup;
+import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddManyItem;
 import utilityClasses1.ArraySorter;
@@ -785,6 +789,35 @@ transient static IconSet i;
 		this.figureType=figureType;
 		
 	}
+
+	/**Asks the user if it is acceptable to only keep a cropped version*/
+	public void attemptSizeManageMentDialog(boolean mandatory) {
+		PreProcessInformation p = this.getSlot().getModifications();
+		
+		ArrayList<String> li = new ArrayList<String>(); li.add("large image");
+		UserPreferences ob = UserPreferences.current;
+		//boolean yes = ShowMessage.showOptionalMessage("Crop 'original' image ", false, "If image is very large, to save space, you may keep a cropped version of this image instead. Do you want to?", "this feature is a work in progress. Choose no/cancel if you are unsure.");
+		StoredValueDilaog storedValueDilaog = new StoredValueDilaog("trim image options", new UserPreferences.TrimPreferences());
+		storedValueDilaog.setName("Trim image options");
+		
+		if(mandatory) {
+			ShowMessage.resetOptionalMessage("Crop 'original' image");
+		}
+		boolean yes = ShowMessage.showOptionalMessageWithOptionsWORK("Crop 'original' image", storedValueDilaog, mandatory, "If image is very large, this can slow down QuickFigures", "to save space, you may keep a cropped version of this image instead.", "Select the option above");
+		
+		if(yes && UserPreferences.TrimPreferences.isTrimImages())
+			getSlot().permanentCrop(p.getBoundsOfCropArea(), UserPreferences.TrimPreferences.getTrimZomeforLargeImageTrims());
+		
+		/**not yet implemented. if multiple slides or time points are used*/
+		if(getSlot().getMultichannelImage().nSlices()>1) {
+			boolean chosen = this.getPanelList().getChannelUseInstructions().getSliceUseInstructions().selectsSingle();
+			
+		}
+		
+		
+	}
+	
+	
 	
 	
 	

@@ -20,6 +20,7 @@
  */
 package channelMerging;
 
+import java.awt.Rectangle;
 import java.io.Serializable;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -124,10 +125,11 @@ public interface MultiChannelSlot extends Serializable, HasScaleInfo {
 	
 	
 	
-	/**
-	 * called when a user adds a very large image
+	/** called when a user adds a very large image. Asks user how to handle the large size
+	 * @param boundsOfCropArea
+	 * @param trimZomeforLargeImageTrims how much to leave outside the rectangle
 	 */
-	public void attemptSizeManageMentDialog(boolean mandatory);
+	public void permanentCrop(Rectangle boundsOfCropArea, float trimZomeforLargeImageTrims);
 	
 	
 }

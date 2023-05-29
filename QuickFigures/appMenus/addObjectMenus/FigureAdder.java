@@ -261,7 +261,7 @@ public class FigureAdder extends LayoutAdder {
 		if (useSingleSlice2) display.getPanelList().getChannelUseInstructions().limitStackUseToSlice( display.getMultiChannelImage().getSelectedFromDimension(MultiChannelImage.SLICE_DIMENSION));
 		
 		int n = display.getPanelList().getChannelUseInstructions().estimageNPanels(display.getMultiChannelImage());
-		if (n>MAX_RECOMMENDED_SIZE_LIMIT_PANELS) {
+		if (n > MAX_RECOMMENDED_SIZE_LIMIT_PANELS) {
 			new SubStackDialog(display, true, n+" would be a lot of panels " +"please select substack").showDialog();
 		}
 		p = promptForScaleDown(display, p);

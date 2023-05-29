@@ -296,7 +296,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 
 				@Override
 				public void onAction() {
-					display.getSlot().attemptSizeManageMentDialog(true);
+					display.attemptSizeManageMentDialog(true);
 				}
 				
 			};
