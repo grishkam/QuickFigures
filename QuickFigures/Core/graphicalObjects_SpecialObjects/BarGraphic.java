@@ -37,6 +37,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
+import javax.swing.undo.UndoableEdit;
+
 import popupMenusForComplexObjects.BarGraphicMenu;
 import popupMenusForComplexObjects.TextGraphicMenu;
 import standardDialog.StandardDialog;
@@ -1133,6 +1135,14 @@ public String getShapeName() {
  */
 public ShapeGraphic createFilledStrokeCopy() {
 	return this;
+}
+
+@Override
+public UndoableEdit requestDeleteOfHeldItem(Object z) {
+	if(z==this.getBarText()) {
+		return BarGraphicMenu.setBarTextVisible(this, false);
+	}
+	return null;
 }
 
 

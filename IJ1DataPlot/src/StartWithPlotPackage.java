@@ -69,7 +69,7 @@ public class StartWithPlotPackage extends StartApplication implements MenuBarIte
 	 * 
 	 */
 	public static ImageWindowAndDisplaySet createWorksheet() {
-		IssueLog.sytemprint=false;
+		IssueLog.sytemprint=true;
 		IssueLog.windowPrint=true;
 		installPlotPackageOntoQuickFigures();
 		startToolbars(true);

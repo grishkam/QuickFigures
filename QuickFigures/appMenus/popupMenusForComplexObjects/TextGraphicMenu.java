@@ -40,6 +40,7 @@ import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import menuUtil.PopupMenuSupplier;
+import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import objectDialogs.TextInsetsDialog;
@@ -147,7 +148,7 @@ PopupMenuSupplier  {
 	}
 	
 	public JMenu getJMenu(String st) {
-		JMenu out=new JMenu(st);
+		JMenu out=new SmartJMenu(st);
 		for(JMenuItem i: getItems() ) {out.add(i);}
 		return out;
 	}

@@ -47,6 +47,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import imageDisplayApp.OverlayObjectManager;
 import locatedObject.Hideable;
 import locatedObject.RainbowPaintProvider;
 import locatedObject.RectangleEdgePositions;
@@ -604,6 +605,11 @@ public Shape getClickableArea() {return lastDrawShape;}
 		ShowMessage.showOptionalMessage("should not be trying to save", false, "should not be trying to save "+this);
 		out.defaultWriteObject();
 	
+	}
+	
+	/**retrns the overlay manger for the event*/
+	public static OverlayObjectManager getSelectionMangerForEvent(CanvasMouseEvent mEvent) {
+		return mEvent.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 	}
 	
 }

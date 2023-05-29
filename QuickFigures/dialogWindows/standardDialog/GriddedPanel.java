@@ -24,7 +24,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
-/**A component in whcih the parts of a standard dialog are placed inside
+/** the parts of a standard dialog are placed inside this component
  **/
 public class GriddedPanel extends JPanel {
 	

@@ -320,7 +320,7 @@ public class ComplexTextGraphic extends TextGraphic {
 					   	d, t.getFont(), getDimmedColor(t.getTextColor()), getAngle(), this.dontScaleText);
 			  
 			      double sx = cords.transformX(d.getX());
-				   double sy = cords.transformY(d.getY());
+				  double sy = cords.transformY(d.getY());
 			   
 				 /**if not in editmode, dont draw cursors*/  
 				   if(!isEditMode()) return;

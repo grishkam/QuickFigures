@@ -22,6 +22,8 @@ package graphicalObjects_LayerTypes;
 
 import java.util.ArrayList;
 
+import javax.swing.undo.UndoableEdit;
+
 import graphicalObjects.ZoomableGraphic;
 
 /**Some graphics contain others inside them that do not appear in the layer
@@ -30,4 +32,8 @@ public interface GraphicHolder {
 	
 	/**returns all the graphics contained in this object*/
 	public ArrayList<ZoomableGraphic> getAllHeldGraphics();
+	
+	
+	/**Requests a delete for the object*/
+	public UndoableEdit requestDeleteOfHeldItem(Object z);
 }

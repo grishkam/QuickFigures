@@ -122,7 +122,7 @@ public class MakeFigureAfterFileOpen implements PendingFileOpenActions  {
 					"No figure needs to be this large",
 					"Please use smaller version of the image in the future ");
 		}
-		item.getSlot().attemptSizeManageMentDialog(false);
+		item.attemptSizeManageMentDialog(false);
 	}
 	
 	/**selects an item. if that  item is a layer, selects everything inside the layer*/

@@ -13,6 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  *******************************************************************************/
+/**
+ * Author: Greg Mazo
+ * Date Modified: May 20, 2023
+ * Version: 2023.2
+ */
 package uiForAnimations;
 
 import java.util.ArrayList;

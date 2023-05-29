@@ -267,8 +267,9 @@ public class WindowLevelHandle extends SmartHandle {
 	
 	/**returns the popup menu for this handle. */
 	public JPopupMenu getJPopup() {
-		ChannelPanelEditingMenu menu = new ChannelPanelEditingMenu(parentPanel, entry);
 		SmartPopupJMenu output = new SmartPopupJMenu();
+		ChannelPanelEditingMenu menu = new ChannelPanelEditingMenu(parentPanel, entry);
+		
 		menu.addChannelRelevantMenuItems(output);
 	
 		return output;

@@ -322,8 +322,6 @@ PopupMenuSupplier  {
 		return ADD_ARROW_HEAD_2;
 	}
 	
-	
-	
 }
 	
 

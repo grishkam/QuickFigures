@@ -56,7 +56,7 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	/**constant values for the type of point*/
 	public static final int ANCHOR_POINT=0, CURVE_CONTROL_POINT1=1, CURVE_CONTROL_POINT2=2; 
 	public static final int FACTOR_CODE=1000;//the maximum number of handles 
-	private PathPoint pathPoint;
+	protected PathPoint pathPoint;
 	private PathGraphic pathGraphic;
 	
 	int pointNumber=-1;//starts without a valid point number
@@ -70,23 +70,35 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		PathPointList list = p.getPoints();
 		for(int i=0; i<list.size(); i++) {
 			locatedObject.PathPoint point = list.get(i);
-			SmartHandleForPathGraphic handle;// = new SmartHandleForPathGraphic(p, point);
-		
 			
-			handle = new SmartHandleForPathGraphic(p, point);
-			handle.setUphandleType( CURVE_CONTROL_POINT1, i);
-			output.add(handle);
 			
-			handle = new SmartHandleForPathGraphic(p, point);
-			handle.setUphandleType(CURVE_CONTROL_POINT2, i);
-			output.add(handle);
-			
-			 handle = new SmartHandleForPathGraphic(p, point);
-				handle.setUphandleType(ANCHOR_POINT, i);
-				output.add(handle);
+			addHandlesFor(p, output, i, point);
 			
 		}
 		return output;
+	}
+
+
+
+	/**Adds the smart handles for a specific point
+	 * @param p
+	 * @param output
+	 * @param i
+	 * @param point
+	 */
+	public static void addHandlesFor(PathGraphic p, SmartHandleList output, int i, locatedObject.PathPoint point) {
+		SmartHandleForPathGraphic handle;
+		handle = new SmartHandleForPathGraphic(p, point);
+		handle.setUphandleType( CURVE_CONTROL_POINT1, i);
+		output.add(handle);
+		
+		handle = new SmartHandleForPathGraphic(p, point);
+		handle.setUphandleType(CURVE_CONTROL_POINT2, i);
+		output.add(handle);
+		
+		 handle = new SmartHandleForPathGraphic(p, point);
+			handle.setUphandleType(ANCHOR_POINT, i);
+			output.add(handle);
 	}
 	
 	
@@ -305,6 +317,16 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	
 	
+	/**moves a given point to a new location. location is given in the worksheet coordinates*/
+	public static void moveHandleTo(Point2D newLocation, PathGraphic pathGraphic, PathPoint pathPoint) {
+		java.awt.geom.Point2D.Double p =pathGraphic.convertPointToInternalCrdinates(newLocation);
+		java.awt.geom.Point2D.Double pAnchor = pathPoint.getAnchor();
+		
+		double dx=p.getX()-pAnchor.getX();
+		double dy=p.getY()-pAnchor.getY();
+		pathPoint.move(dx, dy);
+	}
+	
 	/**What to do when a handle is moved from point p1 to p2.
 	  */
 	public void handleDrag(CanvasMouseEvent e ) {
@@ -312,7 +334,9 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 		try{
 		
 		java.awt.geom.Point2D.Double p =pathGraphic.convertPointToInternalCrdinates(p2);
-		boolean b = e.altKeyDown()&&e.isControlDown();
+		boolean altKeyDown = e.altKeyDown();
+		boolean altAndcontrolDown = altKeyDown&&e.isControlDown();
+		
 		if (isAnchorPointHandle()||e.shiftDown()) {
 			
 			
@@ -339,16 +363,16 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			if (type==CURVE_CONTROL_POINT1) {
 			
 				pathPoint.setCurveControl(p);
-				if (linkedHandles||e.altKeyDown()) pathPoint.makePointAlongLine(true);
+				if (linkedHandles||altKeyDown) pathPoint.makePointAlongLine(true);
 				
-				if (symetricHandles||b) { pathPoint.makePointAlongLine(true);pathPoint.makePointEquidistantFromAnchor(true);}
+				if (symetricHandles||altAndcontrolDown) { pathPoint.makePointAlongLine(true);pathPoint.makePointEquidistantFromAnchor(true);}
 			}
 			else
 			if (type==CURVE_CONTROL_POINT2) {
 				
 				pathPoint.setCurveControl2(p);
-				if (linkedHandles||e.altKeyDown()) pathPoint.makePointAlongLine(false);
-				if (symetricHandles||b) { pathPoint.makePointAlongLine(false);pathPoint.makePointEquidistantFromAnchor(false);}
+				if (linkedHandles||altKeyDown) pathPoint.makePointAlongLine(false);
+				if (symetricHandles||altAndcontrolDown) { pathPoint.makePointAlongLine(false);pathPoint.makePointEquidistantFromAnchor(false);}
 				
 			}
 		}
@@ -573,6 +597,12 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 			
 		}
 		return undo4;
+	}
+
+
+
+	public int getPathHandleType() {
+		return type;
 	}
 
 

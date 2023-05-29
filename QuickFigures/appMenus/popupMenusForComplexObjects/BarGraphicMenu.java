@@ -68,10 +68,9 @@ PopupMenuSupplier  {
 		add(createItem(OPTIONS_DIALOG));
 		TextGraphicMenu textGraphicMenu = new TextGraphicMenu(textG.getBarText());		
 		JMenu jMenu = textGraphicMenu.getJMenu("Bar Text");
-		if (barG.isShowText())
-			jMenu.add(createItem(HIDE_TEXT));
-		else 
-			jMenu.add(createItem(SHOW_TEXT));
+		
+		jMenu.add(new BarHideMenuItem());
+		
 		add(jMenu);
 		add(new SwitchBarToOtherPanelMenu());
 		
@@ -213,6 +212,59 @@ PopupMenuSupplier  {
 					barG.setShowText(true);
 				}
 		
+		}
+		
+	}
+	
+	/**A menu item to show or hide the bar text*/
+	class BarHideMenuItem extends  BasicSmartMenuItem {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		public BarHideMenuItem() {
+			super(barG.isShowText()? "Hide Text": "Show Text");
+		}
+		
+		public AbstractUndoableEdit2 performAction() {
+			 return setBarTextVisible(barG, !barG.isShowText());
+		}
+		
+	}
+	
+	
+	/**shows and hides the scale bar's text*/
+	public static AbstractUndoableEdit2 setBarTextVisible(BarGraphic barG, boolean showHide) {
+		UndoForBarText undo = new UndoForBarText(barG, barG.isShowText());
+		
+		barG.setShowText(showHide);
+		return undo;
+	}
+	
+	/**An undo specifrically made for the bar text shown*/
+	public static class UndoForBarText extends AbstractUndoableEdit2 {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private boolean originalStatus=false;//set to true if the text was visible
+		private BarGraphic theBar;
+		
+		public UndoForBarText(BarGraphic b, boolean showHide) {
+			this.originalStatus=showHide;
+			this.theBar=b;
+			
+		}
+		
+		public void redo() {
+			theBar.setShowText(!originalStatus);
+		}
+		
+		public void undo() {
+			theBar.setShowText(originalStatus);
 		}
 		
 	}

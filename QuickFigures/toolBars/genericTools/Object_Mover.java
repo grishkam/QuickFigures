@@ -36,6 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
+import javax.swing.undo.UndoableEdit;
 
 import addObjectMenus.ClipboardAdder;
 import appContext.ImageDPIHandler;
@@ -47,6 +48,7 @@ import externalToolBar.DragAndDropHandler;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_LayerTypes.GraphicHolder;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
 import graphicalObjects_Shapes.PathGraphic;
@@ -1625,7 +1627,13 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		CombinedEdit undoableEdit=new CombinedEdit();
 		imageDisplayWrapperClick.getUndoManager().addEdit(undoableEdit);
 		for (LocatedObject2D roi: rois3){
-			undoableEdit.addEditToList(new UndoAbleEditForRemoveItem(null,(ZoomableGraphic)roi ));
+			UndoAbleEditForRemoveItem edit = new UndoAbleEditForRemoveItem(null,(ZoomableGraphic)roi );
+			
+			undoableEdit.addEditToList(edit);
+			if(!edit.isLayerKnown()) {
+				processDeleteActionForHeldItem(imageDisplayWrapperClick, undoableEdit, roi);
+			}
+			
 			this.getImageClicked().getTopLevelLayer().remove((ZoomableGraphic) roi);
 		}
 		for (GraphicLayer roi: rois4){
@@ -1634,6 +1642,24 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 		}
 		this.primarySelectedItem=null;
 		imageDisplayWrapperClick.setSelectedItem(null);
+	}
+
+	/**Called if there is an item that is part of the worksheet but not stored in a layer
+	 * @param imageDisplayWrapperClick
+	 * @param undoableEdit
+	 * @param roi
+	 */
+	public void processDeleteActionForHeldItem(DisplayedImage imageDisplayWrapperClick, CombinedEdit undoableEdit,
+			LocatedObject2D roi) {
+		ArrayList<ZoomableGraphic> gg = imageDisplayWrapperClick.getImageAsWorksheet().getTopLevelLayer().getAllGraphics();
+		ArraySorter.removeThoseNotOfClass(gg, GraphicHolder.class);
+		for(ZoomableGraphic g : gg) {
+			GraphicHolder holder=(GraphicHolder) g;
+			UndoableEdit undo = holder.requestDeleteOfHeldItem(roi);
+			if(undo!=null){
+					undoableEdit.addEditToList(undo);
+				}
+		}
 	}
 
 

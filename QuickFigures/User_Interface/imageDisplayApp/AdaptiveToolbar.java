@@ -37,7 +37,7 @@ import graphicActionToolbar.CurrentFigureSet;
 import logging.IssueLog;
 
 /**
- A toolbar window that changes appearance depending on what item is pressed
+ A toolbar window that changes appearance depending on what item is pressed and selected
  */
 public class AdaptiveToolbar extends JFrame implements MouseMotionListener, MouseListener,WindowListener {
 	/**

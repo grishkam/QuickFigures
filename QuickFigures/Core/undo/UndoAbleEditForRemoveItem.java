@@ -79,6 +79,10 @@ public class UndoAbleEditForRemoveItem extends AbstractUndoableEdit2 {
 	}
 
 	
+	/**returns true if the parent layer is known */
+	public boolean isLayerKnown() {
+		return layer!=null;
+	}
 
 
 }

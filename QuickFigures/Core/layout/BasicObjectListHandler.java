@@ -347,6 +347,11 @@ public class BasicObjectListHandler {
 		return null;
 	}
 	
+	/**returns the object at the clickpoint only if it is a member of one of the given class types
+	 * order is inverted*/
+	public ArrayList<LocatedObject2D> getAllClickedRoi(ObjectContainer imp, Point2D p, Class<?> onlySelectThoseOfClass) {
+		return getAllClickedRoi(imp,p.getX(),p.getY(), onlySelectThoseOfClass, false);
+	}
 	
 	/**returns the object at the clickpoint only if it is a member of one of the given class types
 	 * order is inverted*/

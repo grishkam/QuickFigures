@@ -209,7 +209,8 @@ public class PathPointList extends ArrayList<PathPoint> {
 		addPoint(new Point2D.Double(x, y));
 	
 	}
-	
+	 
+	/**returns the nearest point to the locaiton*/
 	public PathPoint getNearest(double x, double y, PathPoint exclude) {
 		double distance=Double.MAX_VALUE;
 		PathPoint nearest=null;
@@ -225,6 +226,7 @@ public class PathPointList extends ArrayList<PathPoint> {
 		return nearest;
 		
 	}
+	
 	public PathPoint getNearest(Point2D p) {
 		return getNearest(p.getX(),p.getY(),null);
 	}

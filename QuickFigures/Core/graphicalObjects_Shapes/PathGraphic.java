@@ -35,6 +35,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import javax.swing.undo.UndoableEdit;
+
 import animations.KeyFrameAnimation;
 import applicationAdapters.CanvasMouseEvent;
 import export.svg.SVGEXporterForShape;
@@ -68,6 +70,7 @@ import undo.AbstractUndoableEdit2;
 import undo.ColorEditUndo;
 import undo.CombinedEdit;
 import undo.PathEditUndo;
+import undo.UndoArrowHeadAttachment;
 import undo.UndoScalingAndRotation;
 import undo.UndoStrokeEdit;
 import utilityClasses1.NumberUse;
@@ -98,7 +101,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	
 	/**constants determine how handles are used and which handles are visible and how mouse drags on the handles work*/
 	public static final int ANCHOR_HANDLE_ONLY_MODE=0, THREE_HANDLE_MODE=2, TWO_HANDLE_MODE=1, CURVE_CONTROL_HANDLES_LINKED=3, MOVE_ALL_SELECTED_HANDLES=4, CURVE_CONTROL_SYMETRIC_MODE=5;
-	private int handleMode=THREE_HANDLE_MODE; 
+	protected int handleMode=THREE_HANDLE_MODE; 
 	
 	
 	
@@ -106,7 +109,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	ArrowGraphic arrowHead1=null,
 						arrowHead2=null;
 
-	private transient SmartHandleList smartHandleBoxes;
+	protected transient SmartHandleList smartHandleBoxes;
 
 	/**outline is the area that a user may click on to select the path. */
 	private Shape outline;
@@ -675,7 +678,8 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		if ( getPointHandles()==null) {
 			setSmartHandleBoxes(new SmartHandleList());
 		}
-		if (this.superSelected) return SmartHandleList.combindLists(getPointHandles(), getButtonList(), getReshapeList(), getReshapeList2(),getAddPointList());
+		if (this.superSelected) 
+			return SmartHandleList.combindLists(getPointHandles(), getButtonList(), getReshapeList(), getReshapeList2(),getAddPointList());
 		return  getPointHandles();
 	}
 
@@ -688,7 +692,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 
 	/**The reshape handle list contains points for rotation and scaling of the path point list*/
 	private transient ReshapeHandleList reshapeList;
-	private ReshapeHandleList getReshapeList() {
+	protected ReshapeHandleList getReshapeList() {
 		if(reshapeList==null)reshapeList=new ReshapeHandleList(0, this);
 		reshapeList.updateRectangle();
 		return reshapeList;
@@ -1077,6 +1081,20 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		} 
 		
 		return new SVGEXporterForShape(this);
+	}
+
+	/**What to do when a delete of the arrow heads is demanded*/
+	@Override
+	public UndoableEdit requestDeleteOfHeldItem(Object z) {
+		if(z==null)
+			return null;
+		if(z==this.getArrowHead1()) {
+			return UndoArrowHeadAttachment.removeHead(this,getArrowHead1());
+		}
+		if(z==this.getArrowHead2()) {
+			return UndoArrowHeadAttachment.removeHead(this,getArrowHead2());
+		}
+		return null;
 	}
 
 }

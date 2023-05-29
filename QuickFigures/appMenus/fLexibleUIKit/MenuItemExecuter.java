@@ -113,7 +113,7 @@ public class MenuItemExecuter implements  MenuSupplier {
 			JMenuItem[] items = generateJMenuItemFrom(k, map.get(k));
 			
 			for(JMenuItem item : items)
-			addItemToList(submenus, output, k, item);
+				addItemToList(submenus, output, k, item);
 		}	
 		
 		if(this.getPartner()!=null) {
@@ -123,7 +123,7 @@ public class MenuItemExecuter implements  MenuSupplier {
 		return output;
 	}
 
-	/**Adds the given J meny item to the list
+	/**Adds the given Jmenu item to the list
 	 * @param submenus a map that keeps track of every submenu
 	 * @param output the list of JMenu items
 	 * @param k the annotation that describes where the menu item should be placed

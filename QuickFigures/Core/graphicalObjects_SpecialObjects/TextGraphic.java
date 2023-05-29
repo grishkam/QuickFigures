@@ -82,7 +82,6 @@ import locatedObject.RectangleEdges;
 import locatedObject.Rotatable;
 import locatedObject.RotatesFully;
 import locatedObject.Scales;
-import locatedObject.ScalesFully;
 import locatedObject.ShapesUtil;
 import locatedObject.Snap2Rectangle;
 import logging.IssueLog;

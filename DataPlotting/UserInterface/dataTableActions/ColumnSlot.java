@@ -42,8 +42,7 @@ import storedValueDialog.FileSlot;
 import storedValueDialog.StoredValueDilaog.FileInput;
 
 /**
- 
- * 
+ A slot for selection of a column of a spreadsheet
  */
 public class ColumnSlot implements CustomSlot, StringInputListener, ChoiceInputListener{
 

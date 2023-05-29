@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 31, 2022
+ * Date Modified: May 24, 2023
  * Version: 2023.2
  */
 package popupMenusForComplexObjects;
@@ -33,15 +33,20 @@ import fLexibleUIKit.MenuItemMethod;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.PanelManager;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_FlowChart.AnchorObjectGraphic;
+import graphicalObjects_FlowChart.ShapeLabelTextGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
 import graphicalObjects_LayerTypes.PanelMirror;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_Shapes.SimpleGraphicalObject;
+import graphicalObjects_SpecialObjects.TextGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.LocatedObject2D;
+import locatedObject.LocationChangeListener;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
@@ -145,6 +150,8 @@ PopupMenuSupplier  {
 		copy.moveLocation(5, 25);
 		return Edit.addItem(targetShape.getParentLayer(),(ZoomableGraphic) copy);
 	}
+	
+	
 
 	/**creates series of duplicates for either panels, rows, or columns 
 	 * @return
@@ -286,6 +293,7 @@ PopupMenuSupplier  {
 		
 		return false;
 	}
+	
 	
 	
 }

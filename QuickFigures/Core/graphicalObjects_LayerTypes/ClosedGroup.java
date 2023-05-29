@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import javax.swing.Icon;
 import javax.swing.JPopupMenu;
+import javax.swing.undo.UndoableEdit;
 
 import applicationAdapters.CanvasMouseEvent;
 import export.pptx.GroupToOffice;
@@ -626,6 +627,14 @@ public class ClosedGroup extends BasicGraphicalObject implements HasSmartHandles
 	public ArrayList<ZoomableGraphic> getAllHeldGraphics() {
 		// TODO Auto-generated method stub
 		return new ArrayList<ZoomableGraphic>();
+	}
+
+
+
+	@Override
+	public UndoableEdit requestDeleteOfHeldItem(Object z) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
