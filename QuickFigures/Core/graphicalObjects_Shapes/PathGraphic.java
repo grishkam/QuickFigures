@@ -685,7 +685,9 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 
 	/**The add point list conists of two handles */
 	private transient SmartHandleList addPointList;
-	private SmartHandleList getAddPointList() {
+	
+	/**Creates handles to add points to the line*/
+	protected SmartHandleList getAddPointList() {
 		if (addPointList==null)addPointList=SmartHandleList.createList(new AddPointSmartHandle(this, false),new AddPointSmartHandle(this, true));
 		return addPointList;
 	}
@@ -875,7 +877,9 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	/**
 	 Formats the internal arrow for display at one end of this path
 	 */
-	void prepareArrowHead1() {
+	public void prepareArrowHead1() {
+		if(this.getArrowHead1()==null)
+			return;
 		this.getArrowHead1().setStrokeWidth(this.getStrokeWidth());
 		getArrowHead1().copyColorsFrom(this);
 		PathPoint firstPoint = getPoints().get(0);
@@ -890,13 +894,14 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 	/**
 	 Formats the internal arrow for display at one end of this path
 	 */
-	void prepareArrowHead2() {
+	public void prepareArrowHead2() {
 		this.getArrowHead2().setStrokeWidth(this.getStrokeWidth());
 		getArrowHead2().copyColorsFrom(this);
 		PathPoint lastPoint = getPoints().getLastPoint();
 		getArrowHead2().setPoint2(getTransformPointsForPathGraphic(lastPoint.getAnchor()));
 		boolean useCC = lastPoint.getCurveControl2LocationsRelativeToAnchor()[0]>1;
-		if (useCC) getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
+		if (useCC) 
+			getArrowHead2().setPoint1(getTransformPointsForPathGraphic(lastPoint.getCurveControl1()));
 		else {
 			PathPoint previousPoint = getPoints().getPreviousPoint(lastPoint);
 			Double newPP = previousPoint.getCurveControl2();

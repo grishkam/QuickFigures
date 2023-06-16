@@ -59,7 +59,9 @@ public class RegularPolygonAngleHandle extends  AngleHandle {
 		this.pointNumber = pointNumber;
 	}
 
-
+	public String toString() {
+		return this+"polygon="+polygon +", "+pointNumber;
+	}
 
 	/**
 	 * 

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import graphicalObjects_Shapes.PathGraphic.AddPointSmartHandle;
 import handles.SmartHandleList;
 import locatedObject.PathPoint;
 
@@ -79,8 +80,10 @@ public class AnchorObjectGraphic extends PathGraphic {
 	}
 	
 	
-	
-
+	/**The add point smart handles will be excluded for now*/
+	protected SmartHandleList getAddPointList() {
+		return SmartHandleList.createList();
+	}
 	
 	
 

@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_Shapes.ArrowGraphic;
@@ -32,6 +33,8 @@ import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import handles.SmartHandle;
 import imageDisplayApp.OverlayObjectManager;
+import layout.BasicObjectListHandler;
+import locatedObject.LocatedObject2D;
 
 /**
  A handle on a flow shar nexus that allows one to draw new connections
@@ -77,9 +80,20 @@ public class ChartNexusSmartHandle extends SmartHandle {
 			r1.setStrokeColor(Color.black);
 			
 			ChartNexus cn2 = new ChartNexus(r1);
-			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().addItemToImage(cn2);
+			BasicObjectListHandler oh=new BasicObjectListHandler();
+			ArrayList<LocatedObject2D> therois = oh.getAllClickedRoi(lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet(),lastDragOrRelMouseEvent.getCoordinatePoint(), ChartNexus.class);
+			if(therois.size()>0) {
+				cn2=(ChartNexus) therois.get(0);//use an existing roi if possible
+			 }else
+			    lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().addItemToImage(cn2);
+			
+			
 			Point2D m = PathGraphic.midPoint(pressLocation,lastDragOrRelMouseEvent.getCoordinatePoint());
 			AnchorObjectGraphic line = new AnchorObjectGraphic(nexus, cn2, m);
+			line.addArrowHeads(2);
+			line.getArrowHead2().getHead().setArrowHeadSize(16);;
+			line.setStrokeWidth(4);
+			
 			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().addItemToImage(line);
 		}
 		

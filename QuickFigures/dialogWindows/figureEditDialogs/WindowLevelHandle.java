@@ -33,6 +33,7 @@ import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.SmartHandle;
+import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
@@ -154,12 +155,25 @@ public class WindowLevelHandle extends SmartHandle {
 		return true;
 	}
 	
+	/***/
 	public static ArrayList<SmartHandle> buildHandlesForImage(ImagePanelGraphic c) {
-		
-		ChannelPanelEditingMenu cc = new ChannelPanelEditingMenu(c);
+		ArrayList<SmartHandle> output = new ArrayList<SmartHandle> ();
+		if(c==null)
+			{
+			IssueLog.log("Was asked for a handle list for a null image");
+			}
+		ChannelPanelEditingMenu cc=null ;
+		try {
+			cc = new ChannelPanelEditingMenu(c);
+		} catch (Exception e) {
+			IssueLog.log("problem making channel panel editing menu for image  panel "+c);
+			IssueLog.log("The panel may have already been removed from the figure "+c);
+			//IssueLog.logT(e);
+			return output;
+		}
 		MultiChannelImage pM = cc.getPressedMultichannel();
 		
-		ArrayList<SmartHandle> output = new ArrayList<SmartHandle> ();
+		
 		if(pM==null)
 			return output;
 		for(ChannelEntry chan : pM.getChannelEntriesInOrder()) {

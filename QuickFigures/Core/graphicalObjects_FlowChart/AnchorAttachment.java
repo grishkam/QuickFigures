@@ -25,6 +25,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import graphicalObjects_Shapes.ArrowGraphic;
 import handles.SmartHandleForPathGraphic;
 
 /**Keeps track of attachment sites*/
@@ -52,6 +53,22 @@ public class AnchorAttachment implements Serializable {
 	public void updateLocation() {
 		Point2D anchor = getAttachmentLocation();
 		SmartHandleForPathGraphic.moveHandleTo(anchor, getPath(), getPath().getPoints().get( pathPoint));
+		getPath().updatePathFromPoints();
+		
+		
+		if(getPath().getArrowHead1()!=null && pathPoint==0) {
+				getPath().prepareArrowHead1();
+				ArrowGraphic copyOfHead = getPath().getArrowHead1().copy();
+				Point2D newNotch = copyOfHead.moveHeadToNotch1();
+				SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPath().getPoints().get( pathPoint));
+		}
+		
+		if(getPath().getArrowHead2()!=null && pathPoint==getPath().getPoints().size()-1) {
+			getPath().prepareArrowHead2();
+			ArrowGraphic copyOfHead = getPath().getArrowHead2().copy();
+			Point2D newNotch = copyOfHead.moveHeadToNotch1();
+			SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPath().getPoints().get( pathPoint));
+	}
 	}
 
 	/**returns the current location of attachment

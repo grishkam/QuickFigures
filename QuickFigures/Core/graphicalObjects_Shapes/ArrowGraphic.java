@@ -1226,6 +1226,15 @@ public void moveNotchToHead1() {
 	moveTipLocation(p1.getX()-n1.getX(), p1.getY()-n1.getY());
 }
 
+/**reduces the arrow's length such that the head will be moved to the previous location of the notch 
+ * @return */
+public Point2D moveHeadToNotch1() {
+	Point2D p1 = this.getLineEndLocation();
+	Point2D n1 = this.getNotchLocation(FIRST_HEAD);
+	moveTipLocation(-(p1.getX()-n1.getX()), -(p1.getY()-n1.getY()));
+	return this.getNotchLocation(FIRST_HEAD);
+}
+
 /**rotates the arrow*/
 @Override
 public void rotateAbout(Point2D c, double distanceFromCenterOfRotationtoAngle) {

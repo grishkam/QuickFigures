@@ -511,7 +511,7 @@ private static final long serialVersionUID = 1L;
 	/**Given an ImagePanel Graphic, looks in layer l to find the multi-channel display that is associated with the panel*/
 	public static MultichannelDisplayLayer findMultiChannelForGraphic(GraphicLayer l, ImagePanelGraphic impg) {
 		if (impg==null) return null;
-		if (impg.getParentLayer() instanceof MultichannelDisplayLayer) return (MultichannelDisplayLayer) impg.getParentLayer();
+		if ((impg.getParentLayer()!=null) && impg.getParentLayer() instanceof MultichannelDisplayLayer) return (MultichannelDisplayLayer) impg.getParentLayer();
 		if(l==null)
 			l=impg.getParentLayer();
 		

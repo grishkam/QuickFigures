@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_SpecialObjects.LinkerGraphic;
 import imageDisplayApp.UserPreferences;
@@ -319,6 +320,23 @@ public class SmartHandleForPathGraphic extends  SmartHandle {
 	
 	/**moves a given point to a new location. location is given in the worksheet coordinates*/
 	public static void moveHandleTo(Point2D newLocation, PathGraphic pathGraphic, PathPoint pathPoint) {
+		java.awt.geom.Point2D.Double p =pathGraphic.convertPointToInternalCrdinates(newLocation);
+		java.awt.geom.Point2D.Double pAnchor = pathPoint.getAnchor();
+		
+		double dx=p.getX()-pAnchor.getX();
+		double dy=p.getY()-pAnchor.getY();
+		pathPoint.move(dx, dy);
+	}
+	
+	/**moves a given point to a new location. location is given in the worksheet coordinates*/
+	public static void moveArrowTipTo(Point2D newLocation, PathGraphic pathGraphic) {
+		
+		PathPoint pathPoint =pathGraphic.getPoints().get(0);
+		ArrowGraphic a1 = pathGraphic.getArrowHead1();
+		if(a1!=null) {
+			
+		}
+		
 		java.awt.geom.Point2D.Double p =pathGraphic.convertPointToInternalCrdinates(newLocation);
 		java.awt.geom.Point2D.Double pAnchor = pathPoint.getAnchor();
 		

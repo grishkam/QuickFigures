@@ -73,7 +73,9 @@ public class RectangularGraphic extends ShapeGraphic implements StrokedItem, Sho
 
 
 	private transient SmartHandleList smartList;
-	public boolean flipDuringHandleDrag=true;
+	public transient HasSmartHandles customHandles;
+
+	public boolean flipDuringHandleDrag=true;//if a user drags the lower right handle beyond the lower left, should it switch how it works
 
 	public Integer handleSize=3;
 	
@@ -485,9 +487,9 @@ public void setSquareLock(boolean b) {
 	/**returns the list of handles for the shape*/
 	@Override
 	public SmartHandleList getSmartHandleList() {
-		if (smartList==null)smartList=this.createSmartHandleList(); 
+		if (smartList==null) smartList=this.createSmartHandleList(); 
 		if (!superSelected) return smartList;
-		return SmartHandleList.combindLists(smartList, getButtonList());
+		return SmartHandleList.combindLists(smartList, getButtonList(),customHandles!=null? customHandles.getSmartHandleList(): null);
 	}
 
 	

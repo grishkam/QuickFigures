@@ -147,7 +147,9 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 	
 	/**Constructor that is called for the image panel's popup menu*/
 	public ChannelPanelEditingMenu(ImagePanelGraphic ipg) {
-		if(ipg==null) return;// this is sometimes called when there is no image
+		if(ipg==null) 
+			return;// this is sometimes called when there is no image
+		
 		MultichannelDisplayLayer pd = MultichannelDisplayLayer.findMultiChannelForGraphic(ipg.getParentLayer(), ipg );
 		
 		

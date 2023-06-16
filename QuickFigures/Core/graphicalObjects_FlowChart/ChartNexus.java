@@ -36,6 +36,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicHolder;
 import graphicalObjects_Shapes.PathGraphic;
+import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasHandles;
 import handles.HasSmartHandles;
@@ -71,6 +72,10 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 	
 	public ChartNexus(ShapeGraphic shape) {
 		this.shape=shape;this.setName("Nexus");
+		if (shape instanceof RectangularGraphic) {
+			RectangularGraphic rect=(RectangularGraphic) shape;
+			rect.customHandles=this;
+		}
 	}
 	
 	
@@ -170,6 +175,8 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 		return null;
 	}
 
+	
+	
 
 	@Override
 	public SmartHandleList getSmartHandleList() {
@@ -180,14 +187,15 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 		ArrayList<Point2D> points = getAttachmentPoints(0.2);
 		int j=0;
 		for(Point2D p: points) {
-			SmartHandle sm ;
+			ChartNexusSmartHandle sm ;
 			if(startsEmpty||j>=smartHandleList.size()) {
 				sm = new ChartNexusSmartHandle(this);
 				smartHandleList.add(sm);
 			} else {
-				sm = smartHandleList.get(j);
+				sm = (ChartNexusSmartHandle) smartHandleList.get(j);
 			}
 			sm.setCordinateLocation(p);
+			
 			
 			sm.setHandleNumber(1000+j);
 			j++;
