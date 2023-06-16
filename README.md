@@ -8,7 +8,7 @@ You can install using the 'Update...' command in Fiji and selecting QuickFigures
 
 See [publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0240280) for more details
 
-The most recent version uses Apache Batik (1.13) for SVG, PDF and EPS export. 
+The most recent version uses Apache Batik (1.14) for SVG, PDF and EPS export. 
 
 Note from the author: 
 You have permission to use parts of the QuickFigures project. 
