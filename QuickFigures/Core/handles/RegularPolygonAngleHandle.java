@@ -63,8 +63,6 @@ public class RegularPolygonAngleHandle extends  AngleHandle {
 		return this+"polygon="+polygon +", "+pointNumber;
 	}
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	}
