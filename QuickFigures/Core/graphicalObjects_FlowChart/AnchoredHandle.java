@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 25, 2023
- * Date Modified: May 26, 2023
+ * Date Modified: July 7, 2023
  * Version: 2023.2
  */
 
@@ -122,7 +122,7 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 	/**returns the handle color*/
 	public Color getHandleColor() {
 		if(this.getPathHandleType()==ATTACHMENT_CONTROL)
-			return Color.black;
+			return Color.lightGray;
 		return super.getHandleColor();
 	}
 	
@@ -139,7 +139,7 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 				
 				int near_index =	r.getNearestAttachmentPointIndex(e.getCoordinatePoint());
 				
-				AnchorAttachment p = r.getAttachmentforPoint(pathPoint);
+				AnchorAttachment p = r.getFlowChart().getAttachmentforPoint(pathPoint);
 				
 				if(p!=null) {
 					boolean isSame = p.getAnchorSite()==r;//true if the shape that is the drag location is the same as the anchor shape
@@ -181,6 +181,10 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 			IssueLog.sytemprint=true;
 			ToolbarTester.startToolbars(true);
 			 ImageWindowAndDisplaySet ii = ImageWindowAndDisplaySet.createAndShowNew("Figure", 400,300);
+			 
+			 FlowChart fc = new FlowChart("flow chart");
+			ii.getImageAsWorksheet().getTopLevelLayer().add(fc);
+			
 			RectangularGraphic r1 = new RectangularGraphic(new Rectangle(20,20, 50, 50));
 			r1.setStrokeColor(Color.PINK);
 			RectangularGraphic r2 = new RectangularGraphic(new Rectangle(120,60, 80, 50));
@@ -189,9 +193,9 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 			
 			ChartNexus cn = new ChartNexus(r2);
 			ChartNexus cn2 = new ChartNexus(r1);
-			
-			ii.getImageAsWorksheet().addItemToImage(cn);
-			ii.getImageAsWorksheet().addItemToImage(cn2);
+			fc.addItemToLayer(cn);
+			fc.addItemToLayer(cn2);
+		
 			
 			AnchorObjectGraphic line = new AnchorObjectGraphic(cn, cn2, new Point());
 			

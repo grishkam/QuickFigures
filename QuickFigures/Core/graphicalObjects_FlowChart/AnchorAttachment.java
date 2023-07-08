@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 29, 2023
- * Date Modified: May 29, 2023
+ * Date Modified: July 7, 2023
  * Version: 2023.2
  */
 package graphicalObjects_FlowChart;
@@ -46,6 +46,7 @@ public class AnchorAttachment implements Serializable {
 		
 		this.pathPoint=pathPointIndex;
 		this.setPath(anchor);
+		
 		this.setAnchorSite(c);
 		this.setAnchorIndex(nexusAncorSiteIndex);
 	}

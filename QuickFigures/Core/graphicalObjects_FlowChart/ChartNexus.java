@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 27, 2023
- * Date Modified: May 27, 2023
+ * Date Modified: July 7, 2023
  * Version: 2023.2
  */
 package graphicalObjects_FlowChart;
@@ -35,6 +35,7 @@ import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicHolder;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
@@ -57,7 +58,7 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 	 * 
 	 */
 	
-	public ArrayList<AnchorAttachment> attachments=new ArrayList<AnchorAttachment>();
+	//
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -137,24 +138,14 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
 			ShapeLabelTextGraphic.updateLocation(shape, label);
 	
-			for(AnchorAttachment a: attachments)
-				a.updateLocation();
-			this.updatePathsFromPoints();
+			
 			
 		
 		for(ZoomableGraphic s: this.getAllHeldGraphics()) {s.draw(graphics, cords);}
 
 	}
 
-	/**
-	 * updates the paths to reflect the changed in points
-	 */
-	private void updatePathsFromPoints() {
-		for(AnchorAttachment a: attachments) {
-			a.getPath().updatePathFromPoints();
-		}
-		
-	}
+	
 
 
 	@Override
@@ -254,25 +245,24 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 	 * @param aa
 	 */
 	public void addAttachment(AnchorAttachment aa) {
-		attachments.add(aa);
+		this.getFlowChart().addAttachment(aa);
 		
 	}
 	
-	/**returns the attachment object with the same index as this path point
-	 * @param pathPoint
-	 * @return 
+	/**
+	 * @return
 	 */
-	public AnchorAttachment getAttachmentforPoint(PathPoint pathPoint) {
-		for(AnchorAttachment a: attachments) {
-		
-			boolean match = a.pathPoint==a.getPath().getPoints().indexOf(pathPoint);
-			if(match)
-				return a;
-		}
-		
+	FlowChart getFlowChart() {
+		GraphicLayer parentLayer = this.getParentLayer();
+		if(parentLayer==null)
+			IssueLog.log("Chart nexus is not part of a flow chart layer");
+		if(parentLayer instanceof FlowChart)
+			return (FlowChart) getParentLayer();
 		return null;
-		
 	}
+
+
+
 
 
 	@Override

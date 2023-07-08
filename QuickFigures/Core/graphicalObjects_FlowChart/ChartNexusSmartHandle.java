@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 27, 2023
- * Date Modified: May 27, 2023
+ * Date Modified: July 7, 2023
  * Version: 2023.2
  */
 package graphicalObjects_FlowChart;
@@ -78,14 +78,22 @@ public class ChartNexusSmartHandle extends SmartHandle {
 			int rectSize=40;
 			RectangularGraphic r1 = new RectangularGraphic(new Rectangle(lastDragOrRelMouseEvent.getCoordinateX()-rectSize/2,lastDragOrRelMouseEvent.getCoordinateY()-rectSize/2, rectSize, rectSize));
 			r1.setStrokeColor(Color.black);
+			r1.setWidth(nexus.getBounds().getWidth());
+			r1.setHeight(nexus.getBounds().getHeight());
 			
 			ChartNexus cn2 = new ChartNexus(r1);
+			
+			
 			BasicObjectListHandler oh=new BasicObjectListHandler();
 			ArrayList<LocatedObject2D> therois = oh.getAllClickedRoi(lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet(),lastDragOrRelMouseEvent.getCoordinatePoint(), ChartNexus.class);
 			if(therois.size()>0) {
 				cn2=(ChartNexus) therois.get(0);//use an existing roi if possible
 			 }else
-			    lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().addItemToImage(cn2);
+			 { 
+				
+				 nexus.getFlowChart().addItemToLayer(cn2);
+			 }
+			   
 			
 			
 			Point2D m = PathGraphic.midPoint(pressLocation,lastDragOrRelMouseEvent.getCoordinatePoint());
