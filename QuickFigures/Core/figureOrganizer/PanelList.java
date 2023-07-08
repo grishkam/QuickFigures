@@ -38,6 +38,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import locatedObject.RectangleEdges;
 import channelMerging.MultiChannelImage;
 import logging.IssueLog;
+import messages.ShowMessage;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
 import undo.UndoMoveItems;
@@ -560,7 +561,8 @@ public class PanelList implements Serializable{
 		
 		/**the concept of merge panels does not exist when there are not separate channels. As such, this method will return null.*/
 		if (!impw.containsSplitedChannels()) {
-			IssueLog.log("Warning Channel Data is not Split"); 
+			ShowMessage.showOptionalMessage("Warning: Channel Data is not split", true, "The data for this image is not split into channels", "In some cases, you can use the 'Stack to Hyperstack...' option in image ImageJ before making a figure");
+			IssueLog.log("Warning Channel Data is not split"); 
 			
 		} else {
 		
@@ -801,7 +803,7 @@ public class PanelList implements Serializable{
 
 	/**Called after the user changes the z section that the user is */
 	public void setupViewLocation(CSFLocation d) {
-		d.channel=CSFLocation.MERGE_SELECTED;//
+		d.channel=CSFLocation.MERGE_SELECTED;
 		if(this.getChannelUseInstructions().getFrameUseInstructions().selectsSingle()) getChannelUseInstructions().getFrameUseInstructions().setupLocation(d);
 		if(this.getChannelUseInstructions().getSliceUseInstructions().selectsSingle()) getChannelUseInstructions().getSliceUseInstructions().setupLocation(d);
 	}

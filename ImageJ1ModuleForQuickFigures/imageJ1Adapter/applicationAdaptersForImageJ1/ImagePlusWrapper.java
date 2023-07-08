@@ -420,7 +420,9 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 			return Color.white;	
 		}
 		else {
-			
+			int index_c=c-1;
+			if(eachChanLUT.length<=index_c)
+				return Color.white;	
 			return getColorFromLUT(eachChanLUT[c-1], 255);
 			}
 		
