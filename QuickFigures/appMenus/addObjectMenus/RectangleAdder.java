@@ -51,23 +51,39 @@ public class RectangleAdder extends BasicGraphicAdder {
 	
 	@Override
 	public ZoomableGraphic add(GraphicLayer gc) {
-		RectangularGraphic rg = getModelForIcon().copy();
+		RectangularGraphic rg = createRectangularShape();
 		
 		gc.add(rg);
 		rg.showOptionsDialog();
 		return rg;
+	}
+
+
+	/**Creates the rectangular shape with the current parmeters
+	 * @return
+	 */
+	public RectangularGraphic createRectangularShape() {
+		return getModelForIcon().copy();
 	}
 	
 	
 
 	@Override
 	public String getCommand() {
-		return "Add rect"+unique+tool.getShapeName()+count;
+		return "Add rect"+unique+getShapeName()+count;
 	}
 
 	@Override
 	public String getMenuCommand() {
-		return "Add "+tool.getShapeName();
+		return "Add "+getShapeName();
+	}
+
+
+	/**
+	 * @return
+	 */
+	public String getShapeName() {
+		return tool.getShapeName();
 	}
 
 	public RectangularGraphic getModelForIcon() {

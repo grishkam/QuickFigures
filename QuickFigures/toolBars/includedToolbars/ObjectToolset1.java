@@ -39,6 +39,7 @@ import graphicTools.ConnectorLineTool;
 import graphicTools.RectGraphicTool;
 import graphicTools.RegularPolygonGraphicTool;
 import graphicTools.Text_GraphicTool;
+import graphicalObjects_FlowChart.FlowChartTool;
 import graphicalObjects_Shapes.BlobShape;
 import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.ComplexBlobShape;
@@ -263,6 +264,7 @@ public class ObjectToolset1 extends QuickFiguresToolBar{
 		out.add(new ArrowGraphicTool(2));
 		out.add(new ArrowGraphicTool(2, true));
 		out.add(new ArrowGraphicTool(0));
+		out.add(new FlowChartTool());
 		return out;
 		
 	}

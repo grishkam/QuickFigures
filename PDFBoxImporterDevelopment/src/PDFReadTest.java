@@ -19,7 +19,6 @@
  * Date Modified: Jan 3, 2022
  * Version: 2023.2
  */
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +32,6 @@ import appContextforIJ1.ImageDisplayTester;
 import applicationAdapters.DisplayedImage;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.ClosedGroup;
-import graphicalObjects_LayerTypes.GraphicLayerPane;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageMenu.CanvasAutoResize;
 import messages.ShowMessage;

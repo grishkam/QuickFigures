@@ -14,8 +14,9 @@
  *    limitations under the License.
  *******************************************************************************/
 /**
- 
- * 
+ * Author: Greg Mazo
+ * Date Modified: July 8, 2023
+ * Version: 2023.2
  */
 package popupMenusForComplexObjects;
 
@@ -26,7 +27,7 @@ import graphicalObjects.BasicGraphicalObject;
 import locatedObject.LocationChangeListener;
 
 /**
- interface for objects that may provide a menu under certain contexts
+ interface for objects that may provide a menu to others under certain contexts
  */
 public interface DonatesMenu {
 	

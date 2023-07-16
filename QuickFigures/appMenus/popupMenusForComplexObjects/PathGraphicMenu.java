@@ -67,7 +67,7 @@ PopupMenuSupplier  {
 	static final String CROSSING_MARKS="Show Crossing Path Lines", NORMAL_MARKS="show vectors",
 			ELIMINATE_UNNEEDED_POINTS="Eliminate extra points", SMOOTH="Smooth", ADD_POINT="Add Point";
 	;private static final String ADD_ARROW_HEAD_1="Arrow Head At Start", ADD_ARROW_HEAD_2="Arrow Head At End";
-	protected static final String BREAK_ARROWS_OFF="Detach arrow heads", ARROW_HEAD_FLIP="Flip arrow head to opposite end";
+	protected static final String BREAK_ARROWS_OFF="Detach arrow heads", ARROW_HEAD_FLIP="Flip arrow head to opposite end", ARROW_HEAD_REMOVE="Remove Arrow Heads";;
 	
 	
 	PathGraphic targetPathForMenu;
@@ -121,6 +121,7 @@ PopupMenuSupplier  {
 		 addItem(tFormMenu, UNCURVED_MIMIC);
 		addItem(tFormMenu,SMOOTH);
 		addItem(tFormMenu,SPLIT_LOOSE_PARTS);
+		
 		addArrowHeadOptions(subMenuName);
 		 
 		 addItem(subMenuName, ELIMINATE_UNNEEDED_POINTS);
@@ -137,6 +138,7 @@ PopupMenuSupplier  {
 		 addItem(subMenuName, getAddArrowHead1MenuCommand());
 		  addItem(subMenuName, BREAK_ARROWS_OFF);
 		  addItem(subMenuName, ARROW_HEAD_FLIP);
+		  addItem(subMenuName,  ARROW_HEAD_REMOVE);
 	}
 	
 	
@@ -190,7 +192,10 @@ PopupMenuSupplier  {
 			targetPathForMenu.scaleAbout( targetPathForMenu.getCenterOfRotation(), scaleTransform.getScaleX(), scaleTransform.getScaleY());
 		}
 		
-
+		if (com.equals(ARROW_HEAD_REMOVE)) {
+			targetPathForMenu.setArrowHead1(null);
+			targetPathForMenu.setArrowHead2(null);
+		}
 		
 		if (com.equals(SPLIT_LOOSE_PARTS)) {
 			PathIterator pi = targetPathForMenu.getPath().getPathIterator(new AffineTransform());

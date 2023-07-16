@@ -50,7 +50,7 @@ public class ChartNexusSmartHandle extends SmartHandle {
 	
 	public ChartNexusSmartHandle(ChartNexus nexus) {
 		this.nexus=nexus;
-		
+		this.setHandleColor(new Color(180, 100,100));
 	}
 	
 	/**called when a user drags a handle */
@@ -76,8 +76,9 @@ public class ChartNexusSmartHandle extends SmartHandle {
 		
 		if(d>30) {
 			int rectSize=40;
-			RectangularGraphic r1 = new RectangularGraphic(new Rectangle(lastDragOrRelMouseEvent.getCoordinateX()-rectSize/2,lastDragOrRelMouseEvent.getCoordinateY()-rectSize/2, rectSize, rectSize));
-			r1.setStrokeColor(Color.black);
+			Rectangle rectangleNew = new Rectangle(lastDragOrRelMouseEvent.getCoordinateX()-rectSize/2,lastDragOrRelMouseEvent.getCoordinateY()-rectSize/2, rectSize, rectSize);
+			RectangularGraphic r1 = nexus.createPartner(rectangleNew);
+		
 			r1.setWidth(nexus.getBounds().getWidth());
 			r1.setHeight(nexus.getBounds().getHeight());
 			
@@ -101,10 +102,17 @@ public class ChartNexusSmartHandle extends SmartHandle {
 			line.addArrowHeads(2);
 			line.getArrowHead2().getHead().setArrowHeadSize(16);;
 			line.setStrokeWidth(4);
+			 nexus.getFlowChart().addItemToLayer(line);
 			
-			lastDragOrRelMouseEvent.getAsDisplay().getImageAsWorksheet().addItemToImage(line);
 		}
 		
 	}
 
+	/**returns the location of this point*/
+	public Point2D getCordinateLocation() {
+		
+		Point2D cordinateLocation = super.getCordinateLocation();
+		return cordinateLocation;
+	}
+	
 }

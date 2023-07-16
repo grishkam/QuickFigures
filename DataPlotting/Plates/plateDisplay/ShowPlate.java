@@ -42,7 +42,7 @@ public class ShowPlate {
 
 	/**formulas that reference another sheet are not automatically understood to be formulas by libre office nad excel
 	 * this feature is not yet implemented*/
-	boolean useFormula=false;
+	boolean useFormula=true;
 	
 	public void showVisiblePlate(Plate p) {
 		SmartDataInputDialog dialog =  new SmartDataInputDialog(new DataTable(300, 15), PlotType.COLUMN_PLOT_TYPE);
@@ -96,8 +96,9 @@ public class ShowPlate {
 			int rowR = index.getRow()+1;
 			int ColC = index.getCol()+1;
 			String shortLabel = cell.getShortLabel();
+			
 			if(this.useFormula&&cell.getSpreadSheetRow()!=null) {
-				shortLabel="="+cell.getSourceSheetName()+"!"+".A"+cell.getSpreadSheetRow();
+				//shortLabel="="+cell.getFormulaForShortName();//+cell.getSourceSheetName()+"!"+".A"+cell.getSpreadSheetRow();
 				
 			}
 				
@@ -133,6 +134,22 @@ public class ShowPlate {
 		
 		table.mergeIdenticalCells(!plate.horizontalOrientation(), new int[] {1,12,1,8});
 		
+		if(useFormula)for(PlateCell cell: plate.getPlateCells()) try {
+			
+			BasicCellAddress index = cell.getAddress();
+			int rowR = index.getRow()+1;
+			int ColC = index.getCol()+1;
+			if(this.useFormula&&cell.getSpreadSheetRow()!=null) {
+				String formulaLabel="="+cell.getFormulaForShortName();//+cell.getSourceSheetName()+"!"+".A"+cell.getSpreadSheetRow();
+				table.setValueAt(formulaLabel, rowR, ColC);
+			}
+				
+		
+		}
+		catch (Throwable t) {
+			IssueLog.log("something went wrong while setting formula "+cell.getAddress());
+			t.printStackTrace();
+		}
 	}
 	
 	/**Colors the cells based on the content of the label*/

@@ -35,6 +35,7 @@ import java.util.HashMap;
 import javax.swing.JButton;
 
 import channelMerging.ChannelEntry;
+import dataTableDialogs.ColumnReader;
 import dataTableDialogs.ExcelTableReader;
 import dataTableDialogs.TableReader;
 import figureFormat.DirectoryHandler;
@@ -110,7 +111,8 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	public CellColoringSystem colorMode=CellColoringSystem.BY_FIRST_ROW;
 	
-	
+	@RetrievableOption(key = "plate_name", label="what to call your plates", category="special")
+	public String plate_title="Plate";
 
 	
 	
@@ -154,6 +156,11 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	private HashMap<SheetAssignment, PlateCell> manualCells=new HashMap<SheetAssignment, PlateCell> ();
 
 	private int samplesIn2ndPlate=0;
+
+	
+	/**the names of the samples that will be seen in the spreadsheet */
+	@RetrievableOption(key = "show plate names", label="include a column for plate names", category="special")
+	private boolean addPlateNameFromFormula;
 
 
 	
@@ -431,42 +438,23 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		if (colAddressColumnIndex<tableAssignment.getColumnCount()) {
 			colAddressColumnIndex=tableAssignment.getColumnCount()+1;
 		}
-		tableAssignment.setValueAt("plate_location", 0, (int) colAddressColumnIndex);
-	
-		int rowCount = tableAssignment.getRowCount();
-		int numberCellsNeeded = (int) ((rowCount-1)*this.getNReplicates());
-		int nWells = plate.getNCol()*plate.getNRow()-this.bannedCells.size();
-		if(nWells==0) {
-			nWells=1;
-			IssueLog.log("well list is empty");
-		}
-		int nPlatesNeeded = numberCellsNeeded/nWells;//number plates that can be filled completely
-	
-		if(nPlatesNeeded%nWells>0)
-			nPlatesNeeded++;//one more plate may be needed. this plate will be not filled completely
-		ArrayList<Plate> plates = new ArrayList<Plate>();
-		plates.add(plate);
-		for(int i=1; i<nPlatesNeeded; i++) {
-			plates.add(plate.createSimilar());
-		}
-		if(plates.size()>=1) {
-			for(int i=1; i<=plates.size(); i++) {
-				plates.get(i-1).setPlateName("Plate"+i+"");
-			}
-		} else {
-			
-		}
-		int plateNumber = 0;
+		
+		/**Creates a list of plates similar to the first plate*/
+		ArrayList<Plate> plates = createPlateList(plate, tableAssignment);
 		Plate currentPlate = plate;
+		int plateNumber = 0;
 		int cellIndex=1;
+		int sampleNameIndex = (int) getSampleNameIndex();
+		
+		ArrayList<PlateCell> assignedWells= new ArrayList<PlateCell>();
+		
 		for(int currentRow=1; currentRow<=total; currentRow++)try {
+			
 			for(int currentReplicate=0; currentReplicate<getNReplicates(); currentReplicate++) {
 			
 			
 			
 			
-			//BasicCellAddress indexAddress = plate.getIndexAddress(i-1);
-			//String plateAddressAt = indexAddress.getAddress();
 			if(cellIndex-1>=plate.getPlateCells().size()||!currentPlate.hasNext()) {
 				cellIndex=1;
 				plateNumber++;
@@ -480,16 +468,9 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 				return plates;
 			}
 			
-			int sampleNameIndex = (int) getSampleNameIndex();
-			
-			
-			
-			
-			
-			SheetAssignment sa = new SheetAssignment(currentRow, currentReplicate);
-			String sheetName = tableAssignment.getSheetName(sheetIndex)+"";
-			sa.setSourceSheetName(sheetName);
-			
+
+			SheetAssignment sa = new SheetAssignment(currentRow, currentReplicate, tableAssignment.getSheetName(sheetIndex)+"" , getSampleNameIndex());
+		
 			SheetAssignment match = sa.findMatching(this.manualCells.keySet());
 			PlateCell plateCell;
 			if(match!=null) {
@@ -501,54 +482,25 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 					plateCell = currentPlate.assignNextWell();//.getPlateCells().get(cellIndex-1);
 				
 			plateCell.setSheetAssignment(sa);
+			plateCell.setPlate(currentPlate);
+			assignedWells.add(plateCell);
+			
 			
 			Object cellNameText = tableAssignment.getValueAt(currentRow, sampleNameIndex);
 			plateCell.setShortName(cellNameText);
-	
-			
-			
-			
-			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
-			
-			Object val = tableAssignment.getValueAt(currentRow, (int) colAddressColumnIndex);
-			if(val==null)
-				val="";
-			String wellAddressListText=val+"";
-			if(wellAddressListText.length()>0)
-				wellAddressListText+=", ";
-			
-			wellAddressListText+=plateAddressAt;
-			tableAssignment.setValueAt(wellAddressListText, currentRow, (int) colAddressColumnIndex);
+
 			tableAssignment.setWrapTextAt(currentRow, (int) colAddressColumnIndex);
 			
-			int wellColumnIndex = (int) colAddressColumnIndex+3;
-			int fullLocationColumnIndex = (int) colAddressColumnIndex+2;
-			int plateNameColIndex = (int) colAddressColumnIndex+1;
-			
-			tableAssignment.setValueAt(wellAddressListText, currentRow, wellColumnIndex);
-			tableAssignment.setValueAt("well", 0,wellColumnIndex);
-		
-				String plateNameText = currentPlate.getPlateName();
-				tableAssignment.setValueAt(plateNameText, currentRow, plateNameColIndex);
-				tableAssignment.setValueAt("plate_name", 0,plateNameColIndex);
-				
-				String fullAddressText = wellAddressListText;
-				if(fullAddressText.contains(","))
-					fullAddressText=fullAddressText.replace(", ", ", "+plateNameText+"-");
-				fullAddressText=plateNameText+"-"+fullAddressText;
-				
-				tableAssignment.setValueAt("full_location", 0,fullLocationColumnIndex);
-				tableAssignment.setValueAt(fullAddressText, currentRow, fullLocationColumnIndex);
-				
-			
-				
-			
+
 			cellIndex++;
 			}
 		} catch (Throwable t) {
 			IssueLog.log("plate location distributor failed at "+currentRow);
 			IssueLog.logT(t);
 		}
+		
+		
+		addPlateWellColumnsToTable(tableAssignment, plates, assignedWells);
 		
 		createSampleSetupSheets(tableAssignment, plates);
 		
@@ -557,6 +509,88 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		}
 		
 		return plates;
+	}
+
+	/**
+	 * @param plate
+	 * @param tableAssignment
+	 * @return
+	 */
+	public ArrayList<Plate> createPlateList(Plate plate, TableReader tableAssignment) {
+		int rowCount = tableAssignment.getRowCount();
+		int numberCellsNeeded = (int) ((rowCount-1)*this.getNReplicates());
+		int nWells = plate.getNCol()*plate.getNRow()-this.bannedCells.size();
+		if(nWells==0) {
+			nWells=1;
+			IssueLog.log("well list is empty");
+		}
+		
+		ArrayList<Plate> plates = new ArrayList<Plate>();
+		int nPlatesNeeded = numberCellsNeeded/nWells;//number plates that can be filled completely
+	
+		if(nPlatesNeeded%nWells>0)
+			nPlatesNeeded++;//one more plate may be needed. this plate will be not filled completely
+		
+		plates.add(plate);
+		for(int i=1; i<nPlatesNeeded; i++) {
+			plates.add(plate.createSimilar());
+		}
+		if(plates.size()>=1) {
+			for(int i=1; i<=plates.size(); i++) {
+				plates.get(i-1).setPlateName(plate_title+i+"");
+			}
+		} else {
+			
+		}
+		return plates;
+	}
+
+	/**
+	 * @param tableAssignment
+	 * @param plates
+	 * @param assignedWells
+	 */
+	public void addPlateWellColumnsToTable(TableReader tableAssignment, ArrayList<Plate> plates,
+			ArrayList<PlateCell> assignedWells) {
+		Plate currentPlate;
+		ColumnReader wellColoumn = new ColumnReader(tableAssignment, (int) colAddressColumnIndex, "well");
+		ColumnReader plateColumn = null;
+		
+		
+		ColumnReader fullColumn = null;
+		
+		
+		if(plates.size()>1 && addPlateNameFromFormula) {
+				plateColumn=new ColumnReader(tableAssignment, (int) (colAddressColumnIndex+1), "plate_id");
+				
+				fullColumn=new ColumnReader(tableAssignment, (int) (colAddressColumnIndex+2), "full_location");
+		}
+		
+		
+		for(PlateCell plateCell: assignedWells) {
+			int currentRow=plateCell.getSheetAddress().getSheetRow();
+			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
+			String plateWellAddresssAt=plateAddressAt;
+			if(plates.size()>1&&!addPlateNameFromFormula) {
+				plateWellAddresssAt=  plateCell.getPlate().getPlateName()+"-"+plateWellAddresssAt;
+			}
+			wellColoumn.appendValueAt(plateWellAddresssAt, currentRow);
+		
+			if(plates.size()>1 &&addPlateNameFromFormula) {
+				
+				if(addPlateNameFromFormula) {
+					currentPlate = plateCell.getPlate();
+					String plateNameText = currentPlate.getPlateName();
+					plateColumn.setValue(plateNameText, currentRow);
+					String plateDashFormula="CONCATENATE("+plateColumn.getFormulaCode(currentRow+1)+","+"\"-\""+")";
+					String commaSpaceplateDashFormula="CONCATENATE("+"\", \""+","+plateColumn.getFormulaCode(currentRow+1)+","+"\"-\""+")";
+					String formula="CONCATENATE("+plateDashFormula+","+wellColoumn.getFormulaCode(currentRow+1)+")";
+					String formula2="="+"SUBSTITUTE("+formula+","+"\", \""+","+commaSpaceplateDashFormula+")";
+					
+					fullColumn.setValue(formula2, currentRow);
+				}
+			}
+		}
 	}
 
 	/**

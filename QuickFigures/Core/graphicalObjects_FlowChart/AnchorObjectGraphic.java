@@ -58,6 +58,9 @@ public class AnchorObjectGraphic extends PathGraphic {
 	public AnchorObjectGraphic(ChartNexus s, ChartNexus s2, Point2D point) {
 		this();
 		
+		if(point==null) {
+			point = PathGraphic.midPoint(s.getCenterOfRotation(),s2.getCenterOfRotation());
+		}
 		
 		AnchorAttachment aa = new AnchorAttachment(0, this, s, s.getNearestAttachmentPointIndex(point));
 		s.addAttachment(aa);
@@ -65,6 +68,7 @@ public class AnchorObjectGraphic extends PathGraphic {
 		
 		AnchorAttachment aa2 = new AnchorAttachment(1, this, s2, s2.getNearestAttachmentPointIndex(point));
 		s2.addAttachment(aa2);
+		
 	}
 	
 	

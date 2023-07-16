@@ -21,12 +21,14 @@
  */
 package graphicalObjects_FlowChart;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import graphicalObjects_Shapes.ArrowGraphic;
 import handles.SmartHandleForPathGraphic;
+import locatedObject.PathPoint;
 
 /**Keeps track of attachment sites*/
 public class AnchorAttachment implements Serializable {
@@ -51,9 +53,15 @@ public class AnchorAttachment implements Serializable {
 		this.setAnchorIndex(nexusAncorSiteIndex);
 	}
 	
+	/**Changes the attachment location to the one nearest the given point*/
+	public void changeAttachmentLocation(Point2D p) {
+		changeAttachmentLocation(p, shape, path,  getPathPoint());
+		
+	}
+	
 	public void updateLocation() {
 		Point2D anchor = getAttachmentLocation();
-		SmartHandleForPathGraphic.moveHandleTo(anchor, getPath(), getPath().getPoints().get( pathPoint));
+		SmartHandleForPathGraphic.moveHandleTo(anchor, getPath(), getPathPoint());
 		getPath().updatePathFromPoints();
 		
 		
@@ -61,15 +69,22 @@ public class AnchorAttachment implements Serializable {
 				getPath().prepareArrowHead1();
 				ArrowGraphic copyOfHead = getPath().getArrowHead1().copy();
 				Point2D newNotch = copyOfHead.moveHeadToNotch1();
-				SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPath().getPoints().get( pathPoint));
+				SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPathPoint());
 		}
 		
 		if(getPath().getArrowHead2()!=null && pathPoint==getPath().getPoints().size()-1) {
 			getPath().prepareArrowHead2();
 			ArrowGraphic copyOfHead = getPath().getArrowHead2().copy();
 			Point2D newNotch = copyOfHead.moveHeadToNotch1();
-			SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPath().getPoints().get( pathPoint));
+			SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPathPoint());
 	}
+	}
+
+	/**
+	 * @return
+	 */
+	public PathPoint getPathPoint() {
+		return getPath().getPoints().get( pathPoint);
 	}
 
 	/**returns the current location of attachment
@@ -78,7 +93,10 @@ public class AnchorAttachment implements Serializable {
 	public Point2D getAttachmentLocation() {
 		ArrayList<Point2D> createPathCopy = getAnchorSite().getAttachmentPoints(0);
 		
-		Point2D point = createPathCopy.get(getAnchorIndex());
+		int anchorIndex = getAnchorIndex();
+		if(anchorIndex>=createPathCopy.size())
+			anchorIndex=createPathCopy.size()-1;
+		Point2D point = createPathCopy.get(anchorIndex);
 		
 		return point;
 	}
@@ -107,4 +125,35 @@ public class AnchorAttachment implements Serializable {
 		this.path = path;
 	}
 	
+	
+
+	/**changes the attachment location for the point on the nexus that is nearest the given clickpoint
+	 * @param coordinatePoint
+	 * @param r
+	 * @param theAnchorPath
+	 * @param thePathPoint
+	 */
+	public static void changeAttachmentLocation(Point2D coordinatePoint, ChartNexus r, AnchorObjectGraphic theAnchorPath,
+			PathPoint thePathPoint) {
+		int near_index =	r.getNearestAttachmentPointIndex(coordinatePoint);//which point on the nexus is nearest
+		
+		AnchorAttachment p = r.getFlowChart().getAttachmentforPoint(thePathPoint);
+		
+		if(p!=null) {
+			boolean isSame = p.getAnchorSite()==r;//true if the shape that is the drag location is the same as the anchor shape
+			if(isSame) {
+				p.setAnchorIndex(near_index);
+		
+			} else {
+				p.setAnchorIndex(near_index);
+				p.setAnchorSite(r);
+			}
+		} else {
+			
+			int currentHandleIndex = theAnchorPath.getPoints().indexOf(thePathPoint);
+			
+			AnchorAttachment aa = new AnchorAttachment(currentHandleIndex, theAnchorPath, r, near_index);
+			r.addAttachment(aa); 
+		}
+	}
 }

@@ -16,15 +16,13 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 24, 2023
- * Date Modified: May 24, 2023
+ * Date Modified: July 9, 2023
  * Version: 2023.2
  */
 package graphicalObjects_FlowChart;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import handles.ItemGlueSmartHandle;

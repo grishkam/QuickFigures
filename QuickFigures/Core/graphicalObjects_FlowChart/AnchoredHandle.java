@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
 import applicationAdapters.ToolbarTester;
-import fLexibleUIKit.MenuItemMethod;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -99,7 +98,7 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 	 * @param point
 	 */
 	public static void addHandlesFor(PathGraphic p, SmartHandleList output, int i, locatedObject.PathPoint point) {
-		SmartHandleForPathGraphic handle;
+		AnchoredHandle handle;
 		handle = new AnchoredHandle((AnchorObjectGraphic) p, point);
 		handle.setUphandleType( CURVE_CONTROL_POINT1, i);
 		output.add(handle);
@@ -121,7 +120,7 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 	
 	/**returns the handle color*/
 	public Color getHandleColor() {
-		if(this.getPathHandleType()==ATTACHMENT_CONTROL)
+		if(isAttachmentcontrol())
 			return Color.lightGray;
 		return super.getHandleColor();
 	}
@@ -131,40 +130,45 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 	public void handleDrag(CanvasMouseEvent e ) {
 		
 		BasicObjectListHandler oh=new BasicObjectListHandler();
-		ArrayList<LocatedObject2D> therois = oh.getAllClickedRoi(e.getAsDisplay().getImageAsWorksheet(),e.getCoordinatePoint(), Object.class);
-		if(this.getPathHandleType()==ATTACHMENT_CONTROL)
+		Point coordinatePoint = e.getCoordinatePoint();
+		ArrayList<LocatedObject2D> therois = oh.getAllClickedRoi(e.getAsDisplay().getImageAsWorksheet(),coordinatePoint, Object.class);
+		if(isAttachmentcontrol())
 		for(LocatedObject2D o: therois) {
 			if(o instanceof ChartNexus) {
 				ChartNexus r=(ChartNexus) o;
 				
-				int near_index =	r.getNearestAttachmentPointIndex(e.getCoordinatePoint());
+				onHandleDragToNexus(coordinatePoint, r);
 				
-				AnchorAttachment p = r.getFlowChart().getAttachmentforPoint(pathPoint);
-				
-				if(p!=null) {
-					boolean isSame = p.getAnchorSite()==r;//true if the shape that is the drag location is the same as the anchor shape
-					if(isSame) {
-						p.setAnchorIndex(near_index);
-						IssueLog.log("changing attachment site");
-					} else {
-						p.setAnchorIndex(near_index);
-						p.setAnchorSite(r);
-					}
-				} else {
-					int currentHandleIndex = anchorPath.getPoints().indexOf(this.pathPoint);
-					
-					AnchorAttachment aa = new AnchorAttachment(currentHandleIndex, anchorPath, r, near_index);
-					r.addAttachment(aa); 
-				}
-				
-				IssueLog.log("Dragging over "+r);
-				IssueLog.log("attachment is "+p);
+				//IssueLog.log("Dragging over "+r);
+				//IssueLog.log("attachment is "+p);
 				
 				
 			}
 		}
 		
 		super.handleDrag(e);
+	}
+
+
+	/**Called when the handle is near a specific nexus, anchors the point at a location on the 
+	 * @param coordinatePoint
+	 * @param r
+	 */
+	public void onHandleDragToNexus(Point coordinatePoint, ChartNexus r) {
+		AnchorObjectGraphic theAnchorPath = anchorPath;
+		PathPoint thePathPoint = pathPoint;
+		
+		AnchorAttachment.changeAttachmentLocation(coordinatePoint, r, theAnchorPath, thePathPoint);
+	}
+
+
+
+
+	/**
+	 * @return
+	 */
+	public boolean isAttachmentcontrol() {
+		return this.getPathHandleType()==ATTACHMENT_CONTROL;
 	}
 	
 	
@@ -197,7 +201,7 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 			fc.addItemToLayer(cn2);
 		
 			
-			AnchorObjectGraphic line = new AnchorObjectGraphic(cn, cn2, new Point());
+			AnchorObjectGraphic line = new AnchorObjectGraphic(cn, cn2, null);
 			
 			Edit.addItem(cn.getParentLayer(),(ZoomableGraphic) line);
 			
@@ -213,6 +217,15 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 			textCopy.setLocationType(RectangleEdges.CENTER);
 			textCopy.setLocation(targetShape.getCenter());
 			return Edit.addItem(targetShape.getParentLayer(),(ZoomableGraphic) textCopy);
+		}
+		
+		/**returns the location of this point*/
+		public Point2D getCordinateLocation() {
+			
+			Point2D cordinateLocation = super.getCordinateLocation();
+			if(this.isAttachmentcontrol())
+				return new Point2D.Double(cordinateLocation.getX(), cordinateLocation.getY()-10);
+			return cordinateLocation;
 		}
 		
 		/**creates a single duplicate

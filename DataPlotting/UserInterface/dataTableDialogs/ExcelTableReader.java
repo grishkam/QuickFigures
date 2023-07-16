@@ -146,16 +146,20 @@ public class ExcelTableReader implements TableReader {
 	public void setValueAt(Object value, int rowNumber, int colNumber) {
 		Cell cell = findCellAt(rowNumber, colNumber);
 		
-		if(value!=null&&value.getClass()==Integer.class)
-			cell.setCellValue((Integer) value);
-		else
-			cell.setCellValue(value+"");
-		
-		
 		/**Sets a formula. this tends not to work */
-		//if(value.getClass()==String.class&& (""+value).startsWith("="))
-			//cell.setCellFormula(value+"");
-			//cell.setCellFormula((value+"").replace("=", ""));
+		if(value.getClass()==String.class&& (""+value).startsWith("=")) {
+			
+			cell.setCellFormula((value+"").replace("=", ""));
+		
+			} else {
+		
+				if(value!=null&&value.getClass()==Integer.class)
+					cell.setCellValue((Integer) value);
+				else
+					cell.setCellValue(value+"");
+		
+			}
+		
 	}
 
 	/**

@@ -32,15 +32,15 @@ public class PlateCell {
 
 	/**Address starts out invalid*/
 	private String plateAddress="";
-	BasicCellAddress address= new BasicCellAddress(0,0, null);
-	
 	private SheetAssignment spreadSheetRow=null;
+	BasicCellAddress address= new BasicCellAddress(0,0, null);
+	private Plate plate;
+	
 	
 	
 	private Object shortName;
 	private Color color=Color.lightGray;
 	private String sourceSheet="Sheet0";
-	//private AddressModification addressMod;
 	
 
 	public PlateCell(BasicCellAddress address, AddressModification m) {
@@ -49,29 +49,6 @@ public class PlateCell {
 		//this.addressMod=m;
 	}
 	
-	/**private PlateCell(int i, String plateAddress) {
-		this.listAddress=i;
-		this.plateAddress=plateAddress;
-		address= plateAddressToCell() ;
-		
-	}
-	
-	/**turns the plate address to a row/col
-	private BasicCellAddress plateAddressToCell() {
-		int[] output=new int[2];
-		if(plateAddress==null)	{ 
-			IssueLog.log("Plate Address missing");
-			return null;
-			}
-		
-		int row=(int)plateAddress.charAt(0)-BasicCellAddress.A_Index;
-		int col=Integer.parseInt(plateAddress.substring(1));
-		
-		output[0]=row;
-		output[1]=col;
-		return new BasicCellAddress(row,col, addressMod);
-		
-	}*/
 	
 	@Override
 	public String toString() {
@@ -108,6 +85,15 @@ public class PlateCell {
 	 */
 	public void setShortName(Object valueAt) {
 		this.shortName=valueAt;
+		
+	}
+	
+	/**sets the formula for the short name
+	 * @param string
+	 */
+	public String getFormulaForShortName() {
+		String string =""+spreadSheetRow.getSheetName()+"!"+"A"+(spreadSheetRow.getSheetRow()+1);
+		return string;
 		
 	}
 
@@ -150,6 +136,18 @@ public class PlateCell {
 	public SheetAssignment getSheetAddress() {
 		return spreadSheetRow;
 	}
+
+
+	public Plate getPlate() {
+		return plate;
+	}
+
+
+	public void setPlate(Plate plate) {
+		this.plate = plate;
+	}
+
+	
 	
 	
 }

@@ -29,6 +29,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import javax.swing.JMenu;
 import javax.swing.undo.UndoableEdit;
 
 import graphicalObjects.BasicGraphicalObject;
@@ -38,21 +39,27 @@ import graphicalObjects_LayerTypes.GraphicHolder;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.RoundedRectangleGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import handles.HasHandles;
 import handles.HasSmartHandles;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import locatedObject.LocatedObject2D;
+import locatedObject.LocationChangeListener;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
 import logging.IssueLog;
+import menuUtil.HasUniquePopupMenu;
+import menuUtil.PopupMenuSupplier;
+import popupMenusForComplexObjects.DonatesMenu;
 import undo.Edit;
 
 /**
  
  * 
  */
-public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, HasSmartHandles, HasHandles{
+public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, HasSmartHandles, HasHandles, HasUniquePopupMenu, DonatesMenu, LocationChangeListener{
 
 	/**
 	 * 
@@ -72,11 +79,9 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 	
 	
 	public ChartNexus(ShapeGraphic shape) {
-		this.shape=shape;this.setName("Nexus");
-		if (shape instanceof RectangularGraphic) {
-			RectangularGraphic rect=(RectangularGraphic) shape;
-			rect.customHandles=this;
-		}
+		this.setName("Nexus");
+		this.setShape(shape);
+		
 	}
 	
 	
@@ -166,7 +171,9 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 		return null;
 	}
 
-	
+	public void resetHandleList() {
+		smartHandleList=null;
+	}
 	
 
 	@Override
@@ -175,7 +182,7 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 		if(smartHandleList==null)
 			smartHandleList = new SmartHandleList();
 		boolean startsEmpty=smartHandleList.size()==0;
-		ArrayList<Point2D> points = getAttachmentPoints(0.2);
+		ArrayList<Point2D> points = getAttachmentPoints(0.35);
 		int j=0;
 		for(Point2D p: points) {
 			ChartNexusSmartHandle sm ;
@@ -214,12 +221,18 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 		Point center = shape.getCenter();
 		PathPointList listedP = shape.createPathCopy().getPoints();
 		
+		boolean includeMidPoint=true;
+		if(shape instanceof RoundedRectangleGraphic) {
+			includeMidPoint=false;
+		}
+		
 		for(int i=0; i<listedP.size(); i++) {
 			PathPoint currentP = listedP.get(i);
 			int next=i+1; if(next==listedP.size()) next=0;
 			PathPoint nextP = listedP.get(next);
 			output.add(currentP.getAnchor());
-			output.add(PathGraphic.midPoint(currentP.getAnchor(), nextP.getAnchor()));
+			if(includeMidPoint)
+				output.add(PathGraphic.midPoint(currentP.getAnchor(), nextP.getAnchor()));
 			
 		}
 		
@@ -308,6 +321,96 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 }
 
 
+	/**
+	 * @param rectangleNew
+	 * @return
+	 */
+	public RectangularGraphic createPartner(Rectangle rectangleNew) {
+		ShapeGraphic copy=shape.copy();
+		if(copy instanceof RectangularGraphic) {
+			RectangularGraphic r=(RectangularGraphic) copy;
+			r.setRectangle(rectangleNew);
+			return r;
+		}
+		return new RectangularGraphic(rectangleNew);
+	}
 
 
+
+	public PopupMenuSupplier getMenuSupplier() {
+		return new NexusMenu(this);
+	}
+
+	public RectangularGraphic getShapeAsRectangle() {
+		if(shape instanceof RectangularGraphic) {
+			return (RectangularGraphic) shape;
+		}
+		
+		return null;
+	}
+
+
+	public ShapeGraphic getShape() {
+		return shape;
+	}
+
+
+	public void setShape(ShapeGraphic shape) {
+		if(this.shape!=null)
+			this.shape.removeLocationChangeListener(this);
+		this.shape=shape;
+		if (shape instanceof RectangularGraphic) {
+			RectangularGraphic rect=(RectangularGraphic) shape;
+			rect.customHandles=this;
+			shape.addLocationChangeListener(this);
+			resetHandleList();
+			
+		}
+		
+	}
+
+
+	@Override
+	public JMenu getDonatedMenuFor(Object requestor) {
+		if(requestor==shape) {
+			return new ShapeSwitchMenu(getFlowChart(), this);
+		}
+		return null;
+	}
+
+
+	@Override
+	public void objectMoved(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void objectSizeChanged(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void objectEliminated(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void userMoved(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void userSizeChanged(LocatedObject2D object) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

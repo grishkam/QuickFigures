@@ -19,14 +19,17 @@ public class SheetAssignment {
 	private Integer sheetRow;
 	private Integer replicateNumber;
 	private String sourceSheet;
+	private int sampleNameCol;
 
 	/**
 	 * @param currentrow
 	 * @param currentReplicate
 	 */
-	public SheetAssignment(int currentrow, int currentReplicate) {
+	public SheetAssignment(int currentrow, int currentReplicate,  String sheetName, int sampleNameCol) {
 		sheetRow=currentrow;
 		replicateNumber=currentReplicate;
+		this.setSampleNameCol(sampleNameCol);
+		setSourceSheetName(sheetName);
 	}
 
 	public Integer getSheetRow() {
@@ -51,6 +54,7 @@ public class SheetAssignment {
 		return true;
 	}
 	
+	/**if there is a sheet assignment that matches this one in the list*/
 	public SheetAssignment findMatching(Iterable<SheetAssignment> all) {
 		for(SheetAssignment a:all) {
 			if(this.matches(a))
@@ -62,5 +66,20 @@ public class SheetAssignment {
 
 	public String toString() {
 		return "row "+sheetRow+ " from "+this.replicateNumber+" of "+this.sourceSheet;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getSheetName() {
+		return sourceSheet;
+	}
+
+	public int getSampleNameCol() {
+		return sampleNameCol;
+	}
+
+	public void setSampleNameCol(int sampleNameCol) {
+		this.sampleNameCol = sampleNameCol;
 	}
 }
