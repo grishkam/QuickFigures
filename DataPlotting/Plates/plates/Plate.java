@@ -205,6 +205,18 @@ public class Plate {
 		return theCell;
 	}
 	
+	public void undoWellAssignment(PlateCell theCell) {
+		availableCellList.add(0, theCell);
+	}
+	
+	
+	/**iterates to the next well. If that well is excluded, iterates the next*/
+	public PlateCell assignNextWellExcluding(Iterable<PlateCell> excluded) {
+		PlateCell theCell = this.availableCellList.get(0);
+		this.availableCellList.remove(theCell);
+		return theCell;
+	}
+	
 	/**iterates to the next well. If the cell with the given address is available, goes to that cell*/
 	public PlateCell assignNextWell(BasicCellAddress b) {
 		PlateCell theCell = this.availableCellList.get(0);
@@ -507,6 +519,14 @@ public class Plate {
 	public void setAdditionalColors(ArrayList<Color> c2) {
 		this.additionColors=c2;
 		
+	}
+	public ArrayList<PlateCell> getBannedCell() {
+		if(bannedCell==null)
+			bannedCell=new ArrayList<PlateCell>();
+		return bannedCell;
+	}
+	public void setBannedCell(ArrayList<PlateCell> bannedCell) {
+		this.bannedCell = bannedCell;
 	}
 	
 }

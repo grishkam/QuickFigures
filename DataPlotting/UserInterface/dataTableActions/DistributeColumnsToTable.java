@@ -44,6 +44,7 @@ import layout.RetrievableOption;
 import locatedObject.LocatedObject2D;
 import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
+import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import plateDisplay.CellColoringSystem;
@@ -153,7 +154,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	
 	private ArrayList<PlateCell> bannedCells=new ArrayList<PlateCell> ();
 	
+		
 	private HashMap<SheetAssignment, PlateCell> manualCells=new HashMap<SheetAssignment, PlateCell> ();
+	
+	private ArrayList<SheetAssignment> bannedSamples=new ArrayList<SheetAssignment>();
 
 	private int samplesIn2ndPlate=0;
 
@@ -161,6 +165,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	/**the names of the samples that will be seen in the spreadsheet */
 	@RetrievableOption(key = "show plate names", label="include a column for plate names", category="special")
 	private boolean addPlateNameFromFormula;
+
+	private int workingNameIndex;
+
+	private boolean set_combinationAsFormula;
 
 
 	
@@ -276,12 +284,13 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		if(secondTemplateTable!=null) {
 			samplesIn2ndPlate=secondTemplateTable.getRowCount();
 			item=combinePlates(item, secondTemplateTable);
-			setSampleNameIndex(0);
+			setWorkingSampleNameIndex(0);
 			if(columnCount>colAddressColumnIndex)
 				colAddressColumnIndex=columnCount;
 			 plate = createPlate();
 		} else {
 			samplesIn2ndPlate=0;
+			setWorkingSampleNameIndex(this.getSampleNameIndex());
 			 plate = createPlate();
 		}
 		
@@ -290,6 +299,14 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	}
 
 
+
+	/**the sample name index to use when constructing a plate map
+	 * @param i
+	 */
+	private void setWorkingSampleNameIndex(int i) {
+		workingNameIndex=i;
+		
+	}
 
 	/**
 	 * @param i
@@ -374,6 +391,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	 * @return
 	 */
 	private TableReader combinePlates(TableReader item, ExcelTableReader secondTemplateTable) {
+		int sampleNameIndex = getSampleNameIndex();
 		int count=1;
 		try {
 			ExcelTableReader output = new ExcelTableReader();
@@ -401,11 +419,21 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 						output.setValueAt(secondTemplateTable.getValueAt(row2, col2), row3,shiftForward+ col2+transitionColumnIndex);
 					}
 					
-					String combined = ""+item.getValueAt(row1, (int) getSampleNameIndex())+" "+'\n'+secondTemplateTable.getValueAt(row2, (int) getSampleNameIndex());
-					output.setValueAt(combined,row3, 0);
+					
+					
 					output.setValueAt(count,row3, 1);
 					count++;
+					
+					if(set_combinationAsFormula) {
+						String combination="= CONCATENATE("+SheetAssignment.getFormulaForCell(row3+1, sampleNameIndex+shiftForward)+", CHAR(10), "+SheetAssignment.getFormulaForCell(row3+1, sampleNameIndex+shiftForward+transitionColumnIndex)+")";
+						output.setValueAt(combination,row3, 0);
+					} else {
+						String combined = ""+item.getValueAt(row1, (int) sampleNameIndex)+" "+'\n'+secondTemplateTable.getValueAt(row2, (int) sampleNameIndex);
+						output.setValueAt(combined,row3, 0);
+					}
+					
 					output.setValueAt("Combined_Names",0,0);
+					
 					output.setValueAt("Combined_Name_Index ",0,1);
 					row3++;
 					
@@ -444,7 +472,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		Plate currentPlate = plate;
 		int plateNumber = 0;
 		int cellIndex=1;
-		int sampleNameIndex = (int) getSampleNameIndex();
+		int sampleNameIndex = (int) getWorkingSampleNameIndex();
 		
 		ArrayList<PlateCell> assignedWells= new ArrayList<PlateCell>();
 		
@@ -472,25 +500,33 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			SheetAssignment sa = new SheetAssignment(currentRow, currentReplicate, tableAssignment.getSheetName(sheetIndex)+"" , getSampleNameIndex());
 		
 			SheetAssignment match = sa.findMatching(this.manualCells.keySet());
-			PlateCell plateCell;
-			if(match!=null) {
-				PlateCell plateCell2 = manualCells.get(match);
-				if(plateCell2!=null)
-					plateCell = currentPlate.assignNextWell(plateCell2.getAddress());
-				else plateCell = currentPlate.assignNextWell();
-			} else 
-					plateCell = currentPlate.assignNextWell();//.getPlateCells().get(cellIndex-1);
+			
+			boolean issampleBanned=isSampleSkipped(sa, match);
+			
+			if(!issampleBanned) {
+				PlateCell plateCell;
+				if(match!=null) {
+					PlateCell plateCell2 = manualCells.get(match);
+					if(plateCell2!=null)
+						plateCell = currentPlate.assignNextWell(plateCell2.getAddress());
+					else plateCell = currentPlate.assignNextWell();
+				} else 
+						{
+						plateCell = currentPlate.assignNextWell();
+					
+					}//.getPlateCells().get(cellIndex-1);
+					
+				plateCell.setSheetAssignment(sa);
+				plateCell.setPlate(currentPlate);
+				assignedWells.add(plateCell);
 				
-			plateCell.setSheetAssignment(sa);
-			plateCell.setPlate(currentPlate);
-			assignedWells.add(plateCell);
-			
-			
-			Object cellNameText = tableAssignment.getValueAt(currentRow, sampleNameIndex);
-			plateCell.setShortName(cellNameText);
-
+				
+				Object cellNameText = tableAssignment.getValueAt(currentRow, sampleNameIndex);
+				plateCell.setShortName(cellNameText);
+	
+				
+			}
 			tableAssignment.setWrapTextAt(currentRow, (int) colAddressColumnIndex);
-			
 
 			cellIndex++;
 			}
@@ -509,6 +545,29 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		}
 		
 		return plates;
+	}
+
+	/**
+	 * @return
+	 */
+	private int getWorkingSampleNameIndex() {
+		return this.workingNameIndex;
+	}
+
+	/**
+	 * @param sa
+	 * @param match
+	 * @return
+	 */
+	private boolean isSampleSkipped(SheetAssignment sa, SheetAssignment match) {
+		if(match!=null)
+			sa=match;
+		for(SheetAssignment i: this.bannedSamples) {
+			if(i.isSameSample(sa))
+				return true;
+				
+		}
+		return false;
 	}
 
 	/**
@@ -798,11 +857,45 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 					TableSetupMenuItem mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, (int)this.rowShift+ startRow, (int)this.colShift+startCol, this.selectedCells);
 					ss.add(mi, 0);
 					
+					SmartJMenu excludeMenu = new SmartJMenu("Exclude/Include");
 					
 					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
 					mi.actionType=TableSetupMenuItem.banCells;
 					mi.setText("Exclude cells "+selectedCellRange);
-					ss.add(mi);
+					if(!bannedCells.containsAll(selectedCells))
+						excludeMenu.add(mi);
+					
+					
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.banSamples;
+					mi.setText("Exclude samples ");
+					excludeMenu.add(mi);
+							
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.banSamplesAndCells;
+					mi.setText("Exclude samples and cells");
+					excludeMenu.add(mi);
+							
+					
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.unbanCells;
+					mi.setText("Don't Exclude cells "+selectedCellRange);
+					for(PlateCell i: this.selectedCells) {
+						if(bannedCells.contains(i))
+							{
+							excludeMenu.add(mi);
+								break;
+							}
+					}
+					
+					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
+					mi.actionType=TableSetupMenuItem.dont_exclude_anything;
+					mi.setText("Don't exclude anything");
+					if(bannedCells.size()>0||bannedSamples.size()>0)
+						excludeMenu.add(mi);
+					
+					
+					ss.add(excludeMenu);
 					
 					
 					mi = createSelectSpecifcItem(selectedCellRange, widthInCol, heightInRow, startRow, startCol, this.selectedCells);
@@ -871,6 +964,8 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 			//IssueLog.log("working on cell "+cellClicked.getAddress());
 			PlateCell targetDestination = p.getCellWithAddress(new BasicCellAddress(cellClicked.getAddress().getRow()+drow, cellClicked.getAddress().getCol()+rcol, null));
 			//IssueLog.log("will place well into destination  "+targetDestination);
+			if(targetDestination==null)
+				IssueLog.log("Cannot assign sample to this cell. not found or occupied");
 			this.manualCells.put(sa, targetDestination);
 			
 		}
@@ -898,8 +993,9 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 	class TableSetupMenuItem extends BasicSmartMenuItem {
 
 		
+		
 		public ArrayList<PlateCell> cellSelection;
-		public static final int banCells=1, setLocations = 2, reset = 3;
+		public static final int banCells=1, setLocations = 2, reset = 3, unbanCells=4, banSamples=5, banSamplesAndCells=6, dont_exclude_anything=7;
 		/**
 		 * 
 		 */
@@ -927,6 +1023,42 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 			updatePlateDisplayAfterDialogChange();
 			return null;
 		}
+		
+		if(actionType==unbanCells) {
+			bannedCells.removeAll(selectedCells);
+			updatePlateDisplayAfterDialogChange();
+			return null;
+		}
+		
+		if(actionType==dont_exclude_anything) {
+			resetExcludedSampleLists();
+			updatePlateDisplayAfterDialogChange();
+			return null;
+		}
+		
+		if(actionType==banSamples) {
+			
+			for(PlateCell s: selectedCells) {
+				bannedSamples.add(s.getSheetAddress());
+				
+			}
+			updatePlateDisplayAfterDialogChange();
+			return null;
+		}
+		
+		
+		
+		if(actionType==banSamplesAndCells) {
+				for(PlateCell s: selectedCells) {
+					bannedSamples.add(s.getSheetAddress());
+					
+				}
+				bannedCells.addAll(selectedCells);
+				updatePlateDisplayAfterDialogChange();
+				return null;
+			}
+		
+		
 		if(actionType==reset) {
 			this.resetTable();
 			updatePlateDisplayAfterDialogChange();
@@ -990,8 +1122,17 @@ if(e.getID()==MouseEvent.MOUSE_PRESSED&& e.isShiftDown()&&!e.isPopupTrigger()) {
 		 * 
 		 */
 		public void resetTable() {
-			bannedCells=new ArrayList<PlateCell>();
 			manualCells.clear();
+			resetExcludedSampleLists();
+		}
+
+		/**
+		 * 
+		 */
+		public void resetExcludedSampleLists() {
+			bannedCells=new ArrayList<PlateCell>();
+			
+			bannedSamples = new ArrayList<SheetAssignment>();
 		}
 	}
 	

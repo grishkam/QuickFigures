@@ -51,6 +51,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	private Plate plate;
 	private int width;
 	private int height;
+	int font =5;
 	Color[] bColors=new Color[] {Color.red, Color.green,  Color.blue, Color.cyan, Color.magenta, Color.yellow};
 	Color[] colors=new Color[] {Color.red, Color.green,  Color.blue, Color.cyan, Color.magenta, Color.yellow, Color.orange, Color.pink,  Color.lightGray, Color.yellow.darker(), Color.BLACK, Color.red.darker(), Color.green.darker(), Color.blue.darker(),  Color.cyan.darker(), Color.magenta.darker(), Color.yellow.darker()};
 	ArrayList<Color> moreColors=new ArrayList<Color>();
@@ -96,6 +97,7 @@ public class PlateDisplayGui extends GraphicLayerPane {
 	
 	/**updates the plate display based on new settings to the plate configuration*/
 	public void updatePlateDisplay() {
+		font=5;
 		empty() ;
 		int cellWidth = width/getPlate().getNCol();
 		int cellHeeght = height/getPlate().getNRow();
@@ -104,43 +106,20 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		layout.resetPtsPanels();
 		DefaultLayoutGraphic layoutGraphic = new DefaultLayoutGraphic(layout);
 		this.add(layoutGraphic);
-		int font =5;
+		
 		//new AddLabelHandle(layoutGraphic, AddLabelHandle.ROWS, 1, false).performAllLabelAddition(null, new CombinedEdit(), );;
 		for(int n=0; n<layout.nPanels()&&n<getPlate().getPlateCells().size(); n++) try {
+			
 			PlateCell plateCell = getPlate().getPlateCells().get(n);
-			Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
-			//Rectangle2D panel = layout.getPanel(n+1);
-			//int section = plate.getSection(plateCell.getAddress());
-			//Color color1 = moreColors.get(section);
-			RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plate.colorTheText?Color.black: plateCell.getColor());
-			
-			r.getTagHashMap().put("Cell", plateCell);
-			this.add(r);
-			cellMap.put(plateCell, r);
-			TextGraphic t = createCellLabel(plateCell);
-			
-			if(t==null)
-				continue;
-			font = (int) (panel.getHeight()/2);
-			if(t instanceof ComplexTextGraphic) {
-				ComplexTextGraphic c=(ComplexTextGraphic) t;
-				if(c.getParagraph().size()>1||c.getParagraph().getLastLine().getText().length()>4)
-					font = (int) (panel.getHeight()/3);//for multiline labels
-				if(c.getParagraph().getLastLine().getText().length()>5)
-					font = (int) (panel.getHeight()/5);//for multiline labels
-			}
-			t.setFontSize(font);
-			t.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, r.getBounds()));
-			t.moveLocation(1,font);
-			if(plate.colorTheText) {
-				t.setTextColor(plateCell.getColor().darker());
-			}
-			
-			t.getTagHashMap().put("Cell", plateCell);
-			this.add(t);
+			addPlateCellForLayout(layout, plateCell, false);
 		} catch (Throwable t) {
-			IssueLog.logT(t);
+			IssueLog.log(t);
 		}
+		
+		for(PlateCell c: getPlate().getBannedCell()) {
+			addPlateCellForLayout(layout, c, true);
+		}
+		
 		
 		 if(font>20)
 			 font=20;
@@ -173,6 +152,56 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		} catch (Throwable t) {
 			IssueLog.log(t);
 		}
+	}
+
+	/**adds a plate cell graphic to depict the given plate cell
+	 * @param layout
+	 * @param plateCell
+	 */
+	public void addPlateCellForLayout(BasicLayout layout, PlateCell plateCell, boolean banned) {
+		
+		Rectangle2D panel = layout.getPanelAtPosition(plateCell.getAddress().getRow()+1, plateCell.getAddress().getCol()+1);
+		
+		RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plate.colorTheText?Color.black: plateCell.getColor());
+		
+		cellMap.put(plateCell, r);
+		
+		this.add(r);
+		r.getTagHashMap().put("Cell", plateCell);
+		if(banned)
+			r.setFillColor(Color.black);
+		else 
+			createCellLabel(plateCell, panel, r);
+	}
+
+	/**
+	 * @param plateCell
+	 * @param panel
+	 * @param r
+	 */
+	public void createCellLabel(PlateCell plateCell, Rectangle2D panel, RectangularGraphic r) {
+		
+		TextGraphic t = createCellLabel(plateCell);
+		
+		if(t==null)
+			return;
+		font = (int) (panel.getHeight()/2);
+		if(t instanceof ComplexTextGraphic) {
+			ComplexTextGraphic c=(ComplexTextGraphic) t;
+			if(c.getParagraph().size()>1||c.getParagraph().getLastLine().getText().length()>4)
+				font = (int) (panel.getHeight()/3);//for multiline labels
+			if(c.getParagraph().getLastLine().getText().length()>5)
+				font = (int) (panel.getHeight()/5);//for multiline labels
+		}
+		t.setFontSize(font);
+		t.setLocation(RectangleEdges.getLocation(RectangleEdges.UPPER_LEFT, r.getBounds()));
+		t.moveLocation(1,font);
+		if(plate.colorTheText) {
+			t.setTextColor(plateCell.getColor().darker());
+		}
+		
+		t.getTagHashMap().put("Cell", plateCell);
+		this.add(t);
 	}
 	
 	/**
@@ -230,9 +259,17 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		RectangularGraphic r = cellMap.get(cell1);
 		if(r==null)
 				{IssueLog.log("could not find cell ");}
+		
 		r.setFillColor(Color.lightGray);
-		if(deselect)
+		boolean banned = plate.getBannedCell().contains(cell1);
+		if(banned)
+			r.setFillColor(Color.DARK_GRAY);
+		
+		if(deselect) {
 			r.setFillColor(Color.white);
+			if(banned)
+				r.setFillColor(Color.black);
+		}
 		r.getTagHashMap().put("Cell_selected", !deselect);
 	}
 

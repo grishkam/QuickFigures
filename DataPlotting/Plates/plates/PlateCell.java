@@ -92,7 +92,8 @@ public class PlateCell {
 	 * @param string
 	 */
 	public String getFormulaForShortName() {
-		String string =""+spreadSheetRow.getSheetName()+"!"+"A"+(spreadSheetRow.getSheetRow()+1);
+	
+		String string =""+spreadSheetRow.getSheetName()+"!"+spreadSheetRow.getFormula();
 		return string;
 		
 	}
