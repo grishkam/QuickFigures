@@ -20,7 +20,10 @@
  */
 package dataTableDialogs;
 
+import java.util.ArrayList;
+
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**
  
@@ -32,17 +35,49 @@ public class ColumnReader {
 	private String columnName=null;
 	private TableReader table;
 
+	public ColumnReader(TableReader table, String colName) {
+		
+		this.columnName=colName;
+		this.table=table;
+		
+		ArrayList<String> headers = table.getColumnHeaders();
+		if(headers.contains(colName)) {
+			colIndex=headers.indexOf(colName);
+		} else {
+			IssueLog.log("column index not found for "+columnName);
+		}
+	}
+	
 	public ColumnReader(TableReader table, Integer newcolIndex, String colName) {
+		this(table,newcolIndex , colName, true);
+	}
+	
+	
+	public ColumnReader(TableReader table, Integer newcolIndex, String colName, boolean writeOver) {
 		if(newcolIndex==null) {
 			newcolIndex=0;
 		}
-		Object oldColTitle = table.getValueAt(0, newcolIndex);
-		if(isColumnTitleless(oldColTitle)) {
-			table.setValueAt(colName, 0, newcolIndex);
-		}
+		
 		this.colIndex=newcolIndex;
 		this.columnName=colName;
 		this.table=table;
+		
+		Object oldColTitle = table.getValueAt(0, newcolIndex);
+		
+		ArrayList<String> headers = table.getColumnHeaders();
+		if(headers.contains(colName)) { 
+			boolean yn=false;
+			if(!writeOver)
+				yn = ShowMessage.showOptionalYesOrNo("table already has column named well. Do you want to use that column?", true, colName+" column is already present. Do you want to use existing column?");
+			else yn=true;
+			
+			if (yn)
+				this.colIndex=headers.indexOf(colName);
+		} else		
+			if(isColumnTitleless(oldColTitle)) {
+				table.setValueAt(colName, 0, this.colIndex);
+		}
+		
 	}
 
 	/**
@@ -58,7 +93,17 @@ public class ColumnReader {
 		
 	}
 	
-	Object getValue(int row) {
+	public void clearColumn() {
+		fillColumn("");
+	}
+	
+	public void fillColumn(Object value) {
+		for(int i=1; i<=table.getRowCount(); i++) {
+			setValue( value, i) ;
+		}
+	}
+	
+	public Object getValue(int row) {
 		return table.getValueAt(row, colIndex);
 	}
 	

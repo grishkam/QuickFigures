@@ -145,7 +145,7 @@ public class ShowMessage {
 	
 	
 	/**shows a message with a 'dont show again checkbox'*/
-	public static boolean showOptionalMessageWithOptionsWORK(String title, StoredValueDilaog optionHolder, boolean mandatory, String... st) {
+	public static boolean showOptionalMessageWithOptionsWORK(String title, StoredValueDilaog optionHolder, boolean mandatory, boolean onetime, String... st) {
 		MessageSettings set = settings.get(title);
 		if(set==null) {
 			set=new MessageSettings();
@@ -166,7 +166,54 @@ public class ShowMessage {
 
 		//m.getOptionDisplayTabs().addTab("options",);
 		//m.add( optionHolder.removeOptionsTab().getComponent(0), m.gc);
-		m.addSubordinateDialogsAsTabs(optionHolder.getTitle(), optionHolder);
+		if(optionHolder!=null)
+			m.addSubordinateDialogsAsTabs(optionHolder.getTitle(), optionHolder);
+		
+		m.addMessage(st);
+		
+	
+		m.showDialog();
+		set.lastOk=m.wasOKed();
+		
+		if (m.wasOKed()) 
+			return true;
+		
+		
+		return false;
+		
+	}
+	
+	/**shows a message with a 'dont show again checkbox'*/
+	public static boolean showOptionalYesOrNo(String title, boolean onetime, String... st) {
+		return showOptionalYesOrNo(title, null, false, onetime, st);
+	}
+
+	/**shows a message with a 'dont show again checkbox'*/
+	public static boolean showOptionalYesOrNo(String title, StoredValueDilaog optionHolder, boolean mandatory, boolean onetime, String... st) {
+		MessageSettings set = settings.get(title);
+		if(set==null) {
+			set=new MessageSettings();
+			settings.put(title, set);
+		}
+		
+		if(set.dontShowAnymore) 
+			return set.lastOk;
+		if(set.dontShowForAWhile>0) {
+			set.dontShowForAWhile--;
+			return set.lastOk;
+		}
+		
+		if(onetime) {
+			set.dontShowAnymore=true;
+		}
+		MessageDialog m = new MessageDialog(set, mandatory);
+		m.makeYesNoCancel();
+		
+		m.setTitle(title);
+		
+
+		if(optionHolder!=null)
+			m.addSubordinateDialogsAsTabs(optionHolder.getTitle(), optionHolder);
 		
 		m.addMessage(st);
 		

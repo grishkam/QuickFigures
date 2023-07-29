@@ -21,6 +21,7 @@
  */
 package graphicalObjects_FlowChart;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -29,14 +30,17 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.undo.UndoableEdit;
 
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicHolder;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RoundedRectangleGraphic;
@@ -45,6 +49,7 @@ import handles.HasHandles;
 import handles.HasSmartHandles;
 import handles.SmartHandle;
 import handles.SmartHandleList;
+import layersGUI.HasTreeLeafIcon;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.PathPoint;
@@ -53,13 +58,14 @@ import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import popupMenusForComplexObjects.DonatesMenu;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.Edit;
 
 /**
  
  * 
  */
-public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, HasSmartHandles, HasHandles, HasUniquePopupMenu, DonatesMenu, LocationChangeListener{
+public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, HasSmartHandles, HasHandles, HasUniquePopupMenu, DonatesMenu, LocationChangeListener, HasTreeLeafIcon{
 
 	/**
 	 * 
@@ -411,6 +417,26 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 	public void userSizeChanged(LocatedObject2D object) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	/**returns the icon*/
+	@Override
+	public Icon getTreeIcon() {
+		return new GraphicDisplayComponent(createIcon() );
+	}
+	
+	/**creates a simple path that is used for the icon*/
+	public static GraphicGroup createIcon() {
+		RectangularGraphic output1 = new RectangularGraphic(new Rectangle2D.Double(0,1, 7,7));
+		RectangularGraphic output2 = new RectangularGraphic(new Rectangle2D.Double(9,1, 7,7));
+		ArrowGraphic a= new ArrowGraphic(new Point(2, 5), new Point(14, 5));
+		a.setStrokeColor(Color.black);
+		a.getHead(ArrowGraphic.FIRST_HEAD).setArrowHeadSize(3);
+		a.setStrokeWidth(1);
+		output1.setStrokeColor(Color.black);
+		output2.setStrokeColor(Color.black);
+		return new GraphicGroup(false, output1, output2, a);
 	}
 	
 }

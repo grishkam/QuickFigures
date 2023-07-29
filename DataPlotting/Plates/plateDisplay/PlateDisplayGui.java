@@ -165,6 +165,11 @@ public class PlateDisplayGui extends GraphicLayerPane {
 		RectangularGraphic r = RectangularGraphic.blankRect(panel.getBounds(),plate.colorTheText?Color.black: plateCell.getColor());
 		
 		cellMap.put(plateCell, r);
+		if(Plate.BY_ADDRESS.contentEquals(""+plateCell.getTagMap().get("Specified"))) {
+			r.setStrokeWidth(6);
+			r.setDashes(new float[] {5,5});
+			
+		}
 		
 		this.add(r);
 		r.getTagHashMap().put("Cell", plateCell);

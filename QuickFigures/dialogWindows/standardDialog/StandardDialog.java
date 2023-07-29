@@ -121,6 +121,7 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	
 	protected ArrayList<JButton> additionButtons=new ArrayList<JButton>();
 	private boolean hideCancel=false;
+	private boolean hideNO=true;
 	private boolean hideOK=false;
 	
 	private final boolean useMainPanel=true;
@@ -198,12 +199,27 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		
 		return OKBut;
 	}
+	
+	JButton createNoButton() {
+		JButton OKBut=new JButton("No");
+		OKBut.addActionListener(this);
+		OKBut.setActionCommand("No");
+		
+		return OKBut;
+	}
+	
 	JButton createCancelButton() {
 		JButton OKBut=new JButton("Cancel");
 		OKBut.addActionListener(this);
 		OKBut.setActionCommand("Cancel");
 		
 		return OKBut;
+	}
+	
+	public void makeYesNoCancel() {
+		this.setHideCancel(true);
+		OKBut.setText("Yes");
+		this.hideNO=false;
 	}
 	
 	protected HashMap<String, StringInputPanel> allStrings=new HashMap<String, StringInputPanel>();
@@ -541,7 +557,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		  ButtonPanel.setLayout(new FlowLayout());
 		  for(JButton b:this.additionButtons) {ButtonPanel.add(b);}
 		if (!hideCancel)  ButtonPanel.add(CancelBut);
+		if (!hideNO)  ButtonPanel.add(this.createNoButton());
 		if (!hideOK)  ButtonPanel.add(OKBut);
+		
 		 if (this.bonusButtons!=null) for(JButton b:this.bonusButtons) {ButtonPanel.add(b);}
 		  return ButtonPanel;
 	  }

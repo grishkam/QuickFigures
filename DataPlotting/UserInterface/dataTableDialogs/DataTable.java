@@ -476,6 +476,12 @@ public class DataTable extends JTable implements TableReader {
 		
 	}
 
+	@Override
+	public int getColumnWidth(int col1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 
 }

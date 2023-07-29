@@ -129,6 +129,12 @@ public interface TableReader {
 	 */
 	void setRichText(TextLine line, int ii, int jj);
 
+	/**
+	 * @param col1
+	 * @return
+	 */
+	int getColumnWidth(int col1);
+
 	
 
 }

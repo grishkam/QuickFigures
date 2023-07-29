@@ -39,6 +39,10 @@ public class Plate {
 	/**
 	 * 
 	 */
+	public static final String BY_ADDRESS = "by_address";
+	/**
+	 * 
+	 */
 	
 	String formatName="Generic Plate";
 	int nCol=12;
@@ -209,11 +213,29 @@ public class Plate {
 		availableCellList.add(0, theCell);
 	}
 	
+	/**Assigns the next cell that is not on the forbidden list
+	 * @param values
+	 * @return
+	 */
+	public PlateCell assignNextWell(CellList notpermitted, boolean direction) {
+		PlateCell theCell=null;
+		for(int i=direction? 0:availableCellList.size()-1 ; (i<availableCellList.size()&direction)||(i>=0&!direction); ) {
+			theCell = this.availableCellList.get(i);
+			if(!notpermitted.hasMatching(theCell))
+				break;
+			
+			if(direction) {i++;} else { i--;}
+		}
+		this.availableCellList.remove(theCell);
+		return theCell;
+	}
+	
 	
 	/**iterates to the next well. If that well is excluded, iterates the next*/
 	public PlateCell assignNextWellExcluding(Iterable<PlateCell> excluded) {
 		PlateCell theCell = this.availableCellList.get(0);
 		this.availableCellList.remove(theCell);
+		theCell.getTagMap().put("Specified", "as_next_well_in_sequence");
 		return theCell;
 	}
 	
@@ -222,7 +244,11 @@ public class Plate {
 		PlateCell theCell = this.availableCellList.get(0);
 		for(PlateCell a: availableCellList) {
 			if(b.matches(a.getAddress()))
-				{theCell =a;break;}
+				{
+				theCell =a;
+				theCell.getTagMap().put("Specified", BY_ADDRESS);
+				break;
+				}
 		}
 		this.availableCellList.remove(theCell);
 		return theCell;
@@ -528,5 +554,6 @@ public class Plate {
 	public void setBannedCell(ArrayList<PlateCell> bannedCell) {
 		this.bannedCell = bannedCell;
 	}
+	
 	
 }

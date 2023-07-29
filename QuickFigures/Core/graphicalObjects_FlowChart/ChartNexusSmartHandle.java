@@ -99,13 +99,20 @@ public class ChartNexusSmartHandle extends SmartHandle {
 			
 			Point2D m = PathGraphic.midPoint(pressLocation,lastDragOrRelMouseEvent.getCoordinatePoint());
 			AnchorObjectGraphic line = new AnchorObjectGraphic(nexus, cn2, m);
-			line.addArrowHeads(2);
-			line.getArrowHead2().getHead().setArrowHeadSize(16);;
-			line.setStrokeWidth(4);
+			formatArrowForFlowChart(line);
 			 nexus.getFlowChart().addItemToLayer(line);
 			
 		}
 		
+	}
+
+	/**
+	 * @param line
+	 */
+	public static void formatArrowForFlowChart(AnchorObjectGraphic line) {
+		line.addArrowHeads(2);
+		line.getArrowHead2().getHead().setArrowHeadSize(16);;
+		line.setStrokeWidth(4);
 	}
 
 	/**returns the location of this point*/

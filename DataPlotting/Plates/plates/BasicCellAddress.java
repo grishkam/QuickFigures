@@ -21,6 +21,8 @@
  */
 package plates;
 
+import logging.IssueLog;
+
 /**
  An object that keeps track of where a well is located (Example: A1, D8, G12)
  */
@@ -53,6 +55,22 @@ public class BasicCellAddress {
 		char letter=(char)r;
 		return ""+letter+c;
 	}
+	
+	public BasicCellAddress(String code) {
+		this.setAddressToText(code);
+		 addressMod=new AddressModification();
+	}
+	
+	public void setAddressToText(String code) {
+		code=code.trim();
+		char letter = code.charAt(0);
+		row=((int)letter)-A_Index;
+		col=Integer.parseInt(code.substring(1))-1;
+		
+		
+		
+	}
+	
 	public int getRow() {
 		return row;
 	}

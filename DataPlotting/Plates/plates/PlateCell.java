@@ -22,6 +22,7 @@
 package plates;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import logging.IssueLog;
 
@@ -35,6 +36,7 @@ public class PlateCell {
 	private SheetAssignment spreadSheetRow=null;
 	BasicCellAddress address= new BasicCellAddress(0,0, null);
 	private Plate plate;
+	 HashMap<String, Object> tags=new  HashMap<String, Object> ();
 	
 	
 	
@@ -146,6 +148,14 @@ public class PlateCell {
 
 	public void setPlate(Plate plate) {
 		this.plate = plate;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public HashMap<String, Object> getTagMap() {
+		return tags;
 	}
 
 	

@@ -59,6 +59,7 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 import fileread.ReadExcelData;
 import logging.IssueLog;
+import messages.ShowMessage;
 import textObjectProperties.TextLine;
 import textObjectProperties.TextLineSegment;
 import ultilInputOutput.FileChoiceUtil;
@@ -219,8 +220,18 @@ public class ExcelTableReader implements TableReader {
 	public TableReader createNewSheet(String name) {
 		Sheet createSheet=null;
 		if(workbook.getSheet(name)!=null) {
-			IssueLog.log("problem workbook already has sheet "+name);
+			//IssueLog.log("Workbook already has sheet: "+name);
+			//IssueLog.log("Old sheet will be deleted: "+name);
+			
 			createSheet = workbook.getSheet(name);
+			
+			boolean yn =true;// ShowMessage.yesOrNo("workbook already has a sheet named "+name+". Do you wish to create a new one");
+			if(yn) {
+				
+				int index=workbook.getSheetIndex(name);
+				workbook.removeSheetAt(index);
+				createSheet = workbook.createSheet(name);
+			}
 		}
 		else 
 			createSheet = workbook.createSheet(name);
@@ -240,6 +251,7 @@ public class ExcelTableReader implements TableReader {
 			if(row==null) {break;}
 			if(row.getLastCellNum()>count)
 				count=row.getLastCellNum();
+			
 		}
 		
 		return count;
@@ -428,11 +440,22 @@ public class ExcelTableReader implements TableReader {
 		
 		sheet.setColumnWidth(col_index, width);
 	}
+	/**
+	 * @param col2
+	 * @return
+	 */
+	public int getColumnWidth(int col2) {
+		return sheet.getColumnWidth(col2);
+	}
+	
+	
+	
 	@Override
 	public void setRowHeight(int i, int h) {
 		Row row = sheet.getRow(i);
 		//short hold = row.getHeight();
-		
+		if(row==null)
+			return;
 		row.setHeight((short) h);
 		
 	}
@@ -468,11 +491,17 @@ public class ExcelTableReader implements TableReader {
 				if(v1!=null&&v2!=null&&v1.equals(v2)) {
 					colEnd++;
 				} else {
-					if(colStart!=colEnd) {
+					if(colStart!=colEnd) try {
 						if(b)
 							sheet.addMergedRegion(new CellRangeAddress(row, row, colStart, colEnd));
 						else
 							sheet.addMergedRegion(new CellRangeAddress(colStart, colEnd, row, row));
+					} catch (Throwable t) {
+						if(t instanceof java.lang.IllegalStateException) {
+							IssueLog.log("Wells cannot be merged");
+						}
+						else 
+							IssueLog.log(t);
 					}
 					
 					
@@ -488,7 +517,10 @@ public class ExcelTableReader implements TableReader {
 
 	@Override
 	public int getRowHeight(int rowR) {
-		return sheet.getRow(rowR).getHeight();
+		Row row = sheet.getRow(rowR);
+		if(row==null)
+			return 10;
+		return row.getHeight();
 	}
 
 	
@@ -530,6 +562,8 @@ public void setRichText(Color[] colors, String[] text, int ii, int jj) {
 	cellAt.setCellValue(t);
 			//cell.getRichStringCellValue();
 }
+
+
 	
 	
 }

@@ -30,6 +30,11 @@ public class AddressModification {
 	private double rowShift;
 	private double colShift;
 
+	
+	public AddressModification() {
+		this(0,0);
+	}
+	
 	/**
 	 * @param rowShift
 	 * @param colShift

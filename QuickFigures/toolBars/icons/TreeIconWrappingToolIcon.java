@@ -29,24 +29,40 @@ import layersGUI.HasTreeLeafIcon;
 public class TreeIconWrappingToolIcon  extends GraphicToolIcon{
 
 	private HasTreeLeafIcon treeIcon;
+	
+	int x_shift=5;
+	int y_shift=5;
+	
 
 	public TreeIconWrappingToolIcon(HasTreeLeafIcon treeIcon, int type) {
 		super(type);
 		this.treeIcon = treeIcon;
 	}
 	
+	public TreeIconWrappingToolIcon(HasTreeLeafIcon treeIcon, int type, int x, int y) {
+		super(type);
+		this.treeIcon = treeIcon;
+		x_shift=x;
+		y_shift=y;
+	}
+	
 	protected void paintObjectOntoIcon(Component arg0, Graphics g, int arg2,
 			int arg3) {
-		treeIcon.getTreeIcon().paintIcon(arg0, g, arg2+5, arg3+5 );
+		treeIcon.getTreeIcon().paintIcon(arg0, g, arg2+x_shift, arg3+y_shift );
 		
 	}
 	
-	public static IconSet createIconSet(HasTreeLeafIcon treeIcon) {
+	public static IconSet createIconSet(HasTreeLeafIcon treeIcon, int x, int y) {
 	return	new IconSet(
-				new TreeIconWrappingToolIcon(treeIcon, 0),
-				new TreeIconWrappingToolIcon(treeIcon, 1),
-				new TreeIconWrappingToolIcon(treeIcon, 2)
+				new TreeIconWrappingToolIcon(treeIcon, 0, x, y),
+				new TreeIconWrappingToolIcon(treeIcon, 1, x, y),
+				new TreeIconWrappingToolIcon(treeIcon, 2, x, y)
 				);
+	
+	}
+	
+	public static IconSet createIconSet(HasTreeLeafIcon treeIcon) {
+		return	createIconSet(treeIcon, 5, 5);
 	
 	}
 

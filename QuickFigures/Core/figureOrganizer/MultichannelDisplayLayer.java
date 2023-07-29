@@ -803,7 +803,7 @@ transient static IconSet i;
 		if(mandatory) {
 			ShowMessage.resetOptionalMessage("Crop 'original' image");
 		}
-		boolean yes = ShowMessage.showOptionalMessageWithOptionsWORK("Crop 'original' image", storedValueDilaog, mandatory, "If image is very large, this can slow down QuickFigures", "to save space, you may keep a cropped version of this image instead.", "Select the option above");
+		boolean yes = ShowMessage.showOptionalMessageWithOptionsWORK("Crop 'original' image", storedValueDilaog, mandatory, false, "If image is very large, this can slow down QuickFigures", "to save space, you may keep a cropped version of this image instead.", "Select the option above");
 		
 		if(yes && UserPreferences.TrimPreferences.isTrimImages())
 			getSlot().permanentCrop(p.getBoundsOfCropArea(), UserPreferences.TrimPreferences.getTrimZomeforLargeImageTrims());
