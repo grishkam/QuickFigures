@@ -21,25 +21,19 @@
 package graphicalObjects_FlowChart;
 
 import java.awt.Color;
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 
 import javax.swing.Icon;
 
 import applicationAdapters.ImageWorkSheet;
 import graphicTools.GraphicTool;
-import graphicTools.ShapeAddingTool;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
-import graphicalObjects_Shapes.ShapeGraphic;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
-import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.Edit;
