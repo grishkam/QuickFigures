@@ -141,6 +141,10 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 	@RetrievableOption(key = "display plate", label="show plate preview", category="special")
 	public double displayPlate=0;
 	
+
+	@RetrievableOption(key = "plate shift", label="specify plate", category="special", choices= {"none", "1", "2", "3", "4"}, chooseExtra=true)
+	public double plateShift=1;
+	
 	int sheetIndex=0;
 	
 	
@@ -526,7 +530,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		/**Creates a list of plates similar to the first plate*/
 		ArrayList<Plate> plates = createPlateList(plate, tableAssignment);
 		Plate currentPlate = plate;
-		int plateNumber = 0;
+		int plateNumber = (int) 0;
 		int cellIndex=1;
 		int sampleNameIndex = (int) getWorkingSampleNameIndex();
 		
@@ -663,7 +667,12 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		}
 		if(plates.size()>=1) {
 			for(int i=1; i<=plates.size(); i++) {
-				plates.get(i-1).setPlateName(plate_title+i+"");
+				
+				int named_number = i;
+				if(plateShift>1) 
+					named_number=named_number+(int)plateShift-1;
+				
+				plates.get(i-1).setPlateName(plate_title+named_number+"");
 			}
 		} else {
 			
@@ -687,7 +696,7 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 		ColumnReader fullColumn = null;
 		
 		
-		if(plates.size()>1 && addPlateNameFromFormula) {
+		if((plates.size()>1 && addPlateNameFromFormula )) {
 				plateColumn=new ColumnReader(tableAssignment, (int) (colAddressColumnIndex+1), "plate_id");
 				
 				fullColumn=new ColumnReader(tableAssignment, (int) (colAddressColumnIndex+2), "full_location");
@@ -698,15 +707,18 @@ public class DistributeColumnsToTable extends BasicDataTableAction implements Da
 			int currentRow=plateCell.getSheetAddress().getSheetRow();
 			String plateAddressAt = plateCell.getAddress().getAddress(this.getAddressMod());
 			String plateWellAddresssAt=plateAddressAt;
-			if(plates.size()>1&&!addPlateNameFromFormula) {
+			
+			boolean many_plates = plates.size()>1 || plateShift>0;
+			
+			if(many_plates&&!addPlateNameFromFormula) {
 				
 				plateWellAddresssAt=  plateCell.getPlate().getPlateName()+delimiter+plateWellAddresssAt;
 			}
 			wellColoumn.appendValueAt(plateWellAddresssAt, currentRow);
 		
-			if(plates.size()>1 &&addPlateNameFromFormula) {
+			if((many_plates &&addPlateNameFromFormula)) {
 				
-				if(addPlateNameFromFormula) {
+				if(addPlateNameFromFormula||plateShift>0) {
 					currentPlate = plateCell.getPlate();
 					String plateNameText = currentPlate.getPlateName();
 					plateColumn.setValue(plateNameText, currentRow);

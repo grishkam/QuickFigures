@@ -365,6 +365,8 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 		if(this.shape!=null)
 			this.shape.removeLocationChangeListener(this);
 		this.shape=shape;
+		shape.getTagHashMap().put(FlowChart.FLOW_CHART_PART, true);
+		shape.getTagHashMap().put(FlowChart.FLOW_CHART_NEXUS, this);
 		if (shape instanceof RectangularGraphic) {
 			RectangularGraphic rect=(RectangularGraphic) shape;
 			rect.customHandles=this;

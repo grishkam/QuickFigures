@@ -22,11 +22,15 @@
 package graphicalObjects_FlowChart;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
+import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_Shapes.ShapeGraphic;
 import locatedObject.PathPoint;
 
 /**
@@ -35,6 +39,11 @@ import locatedObject.PathPoint;
  */
 public class FlowChart extends GraphicLayerPane {
 
+	/**
+	 * 
+	 */
+	public static final String FLOW_CHART_PART = "FlowChartPart";
+	public static final String FLOW_CHART_NEXUS = "ChatNexus";
 	public ArrayList<AnchorAttachment> attachments=new ArrayList<AnchorAttachment>();
 	
 	
@@ -50,6 +59,7 @@ public class FlowChart extends GraphicLayerPane {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 
 	
 	@Override
@@ -99,4 +109,54 @@ public class FlowChart extends GraphicLayerPane {
 		return null;
 		
 	}
+	
+	
+	public static boolean isChartPart(ZoomableGraphic z) {
+			if(z==null)
+				return false;
+			if(z instanceof ChartNexus) {
+				return true;
+			}
+			if(z.getParentLayer() instanceof ChartNexus) {
+				return true;
+			}
+			if(z instanceof ShapeGraphic) {
+				ShapeGraphic shape=(ShapeGraphic) z;
+				if(shape.getTag(FLOW_CHART_PART)==Boolean.TRUE)
+					return true;
+				//shape.getTagHashMap().put("FlowChartPart", true);
+			}
+		
+		return false;
+	}
+	
+	public static FlowChart findFlowChartfor(ZoomableGraphic z) {
+		if(z==null)
+			return null;
+		if(z instanceof ChartNexus) {
+			return ((ChartNexus) z).getFlowChart();
+		}
+		if(z.getParentLayer() instanceof FlowChart) {
+			return ((FlowChart) z.getParentLayer());
+		}
+		if(z instanceof ShapeGraphic) {
+			ShapeGraphic shape=(ShapeGraphic) z;
+			GraphicLayer l = z.getParentLayer();
+			ChartNexus cn=(ChartNexus) shape.getTag(FLOW_CHART_NEXUS);
+			return cn.getFlowChart();
+		}
+	
+	return null;
+}
+	
+	public Rectangle2D getNexusSize() {
+		for(ZoomableGraphic i: this.getAllGraphics()) {
+			if(i instanceof ChartNexus) {
+				return ((ChartNexus) i).getShape().getBounds();
+			}
+		}
+		
+		return null;
+	}
+	
 }

@@ -34,6 +34,7 @@ import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
+import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.Edit;
@@ -45,7 +46,11 @@ public class FlowChartTool extends GraphicTool {
 	private int cx;
 	private int cy;
 	private int cx2;
-	private int cy2; {} {super.temporaryTool=true;}
+	private int cy2;
+	private boolean press_on_chart;
+	private FlowChart currentChart;
+	private Rectangle2D currentSize; {}
+	{super.temporaryTool=true;}
 	
 	
 	void setUpModel() {super.iconSet=TreeIconWrappingToolIcon.createIconSet(new ChartNexus(new RectangularGraphic()), 2, 4);
@@ -82,18 +87,19 @@ public class FlowChartTool extends GraphicTool {
 	
 	/**
 	creates the arrow at the given point
+	 * @param allowDiagnol 
 	 */
-	public FlowChart createFlowChartWithArrow(Rectangle2D r) {
+	public FlowChart createFlowChartWithArrow(Rectangle2D totalAreaForNewParts, boolean allowDiagnol) {
 		FlowChart fc=new FlowChart("Flow Chart");
 		
 		//3.0 for boxes that take up one third of the drawn area
 		int nSteps=1;
-		boolean widthIsLoingAxis = r.getWidth()>r.getHeight();
+		boolean widthIsLoingAxis = totalAreaForNewParts.getWidth()>totalAreaForNewParts.getHeight();
 		
 		if(widthIsLoingAxis)
-			nSteps=determineSteps(r.getWidth()/r.getHeight());
+			nSteps=determineSteps(totalAreaForNewParts.getWidth()/totalAreaForNewParts.getHeight());
 		if(!widthIsLoingAxis)
-			nSteps=determineSteps( r.getHeight()/r.getWidth());
+			nSteps=determineSteps( totalAreaForNewParts.getHeight()/totalAreaForNewParts.getWidth());
 		
 		
 
@@ -109,6 +115,11 @@ public class FlowChartTool extends GraphicTool {
 			 wratio=1.0/divisionSize;
 		}
 		
+		if(allowDiagnol) {
+			 hratio=1.0/divisionSize;
+			 wratio=1.0/divisionSize;
+		}
+		
 		
 		RectangularGraphic r1 =null;
 		RectangularGraphic r2 =null;
@@ -118,15 +129,15 @@ public class FlowChartTool extends GraphicTool {
 		
 		for(int i=1; i<=nSteps; i++) {
 			
-			double boxWidth = r.getWidth()*wratio;
-			double boxHeight = r.getHeight()*hratio;
+			double boxWidth = totalAreaForNewParts.getWidth()*wratio;
+			double boxHeight = totalAreaForNewParts.getHeight()*hratio;
 			if(r1==null)
-				 r1 = new RectangularGraphic(new Rectangle2D.Double(r.getX(), r.getY(), boxWidth, boxHeight));
+				 r1 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX(), totalAreaForNewParts.getY(), boxWidth, boxHeight));
 			else 
 				r1=r2;
 			
 			//if(r2==null)
-				 r2 = new RectangularGraphic(new Rectangle2D.Double(r.getX()+boxWidth*i*2*(1-wratio), r.getY()+boxHeight*(i)*2*(1-hratio), boxWidth, boxHeight));
+				 r2 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*(1-wratio), totalAreaForNewParts.getY()+boxHeight*(i)*2*(1-hratio), boxWidth, boxHeight));
 				
 				r1.setStrokeColor(Color.PINK);
 				r2.setStrokeColor(Color.green);
@@ -160,9 +171,22 @@ public class FlowChartTool extends GraphicTool {
 	
 		cx = getClickedCordinateX();
 		cy = getClickedCordinateY();
+		super.onPress(gmp, roi2);
 		
-		
-		
+		if( FlowChart.isChartPart((ZoomableGraphic) gmp.getSelectionObject()) ) {
+			press_on_chart=true;
+			currentChart=FlowChart.findFlowChartfor( (ZoomableGraphic) gmp.getSelectionObject());
+			if(currentChart!=null)
+					{currentSize=currentChart.getNexusSize();}
+			IssueLog.log(currentChart);
+			IssueLog.log(currentSize);
+		} else {
+			
+			press_on_chart=false;
+			currentChart=null;
+			currentSize=null;
+			
+		}
 	}
 	
 	
@@ -170,11 +194,15 @@ public class FlowChartTool extends GraphicTool {
 	@Override
 	public void mouseDragged() { 
 		super.mouseDragged();
-		if(this.getImageDisplayWrapperClick().getSelectedItem() instanceof ChartNexus) {
-			return;
-		}
 		
-		FlowChart bg = prepareFlowChartBasedOnMouseDrag(this.getDragCordinateX(), this.getDragCordinateY());
+		if(press_on_chart){
+			
+			//return;
+				}
+		
+	
+		
+		FlowChart bg = prepareFlowChartBasedOnMouseDrag(this.getDragCordinateX(), this.getDragCordinateY(), this.shiftDown());
 		this.getImageDisplayWrapperClick().setSelectedItem(new GraphicGroup(bg));
 		
 		this.getImageDisplayWrapperClick().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionGraphic(bg);
@@ -183,11 +211,12 @@ public class FlowChartTool extends GraphicTool {
 	
 	
 	public void onRelease(ImageWorkSheet gmp, LocatedObject2D roi2) {
-		if(gmp.getSelectionObject() instanceof ChartNexus) {
-			return;
+		if(press_on_chart)	{
+			//return;
+	
 		}
 		
-		FlowChart bg = prepareFlowChartBasedOnMouseDrag(this.getReleaseCordinateX(), this.getReleaseCordinateY());
+		FlowChart bg = prepareFlowChartBasedOnMouseDrag(this.getReleaseCordinateX(), this.getReleaseCordinateY(), this.shiftDown());
 		
 		GraphicLayer layer = findLayerForObjectAddition(gmp, bg);
 				layer.add(bg);
@@ -202,7 +231,7 @@ public class FlowChartTool extends GraphicTool {
 	/**
 	 * @return
 	 */
-	public FlowChart prepareFlowChartBasedOnMouseDrag(double cx2, double cy2) {
+	public FlowChart prepareFlowChartBasedOnMouseDrag(double cx2, double cy2, boolean allowDiagnol) {
 		
 		double hx = cx2-cx;
 		double hy = cy2-cy;
@@ -215,7 +244,7 @@ public class FlowChartTool extends GraphicTool {
 			w=hx;
 		
 		Rectangle2D.Double r = new Rectangle2D.Double(cx, cy, w, h);
-		FlowChart bg = createFlowChartWithArrow(r);
+		FlowChart bg = createFlowChartWithArrow(r, allowDiagnol);
 		return bg;
 	}
 	
