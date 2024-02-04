@@ -48,6 +48,7 @@ import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import iconGraphicalObjects.IconUtil;
 import imageDisplayApp.CanvasOptions;
+import imageDisplayApp.UserPreferences;
 import imageMenu.CanvasAutoResize;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
@@ -278,6 +279,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		boolean hasOne=principalMultiChannel!=null;//true if there is already a multichannel image in figure
 		CombinedEdit output = new CombinedEdit();
 		
+		boolean mustCrop=isCropDialogMandatory(display);
+		
 		/**if current is the first multichannel to be added to the figure, sets up an innitial crop area*/
 		if(!hasOne&&!display.cropShown) {
 			cropIfUserSelectionExists(display);
@@ -297,7 +300,9 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			double w = principalMultiChannel.getMultiChannelImage().getDimensions().getWidth()/pScale.getScale();
 			double h = principalMultiChannel.getMultiChannelImage().getDimensions().getHeight()/pScale.getScale();
 			
-			if ( (mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
+		
+			
+			if ( (mustCrop||mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
 				{
 					
 								CropDialogContext context = new CroppingDialog.CropDialogContext(1, display.getFigureType());
@@ -374,7 +379,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	public static void cropIfUserSelectionExists(MultichannelDisplayLayer display) {
 		Rectangle totalImageSize = new Rectangle(display.getMultiChannelImage().getDimensions());
 		Rectangle b=totalImageSize;
-		
+		boolean mustCrop=isCropDialogMandatory(display);
 		boolean valid=true;//is the ROI valid
 		
 		if (display.getMultiChannelImage().getSelectionRectangle(0)!=null) try{
@@ -397,6 +402,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		if(b.width>figureType1.getMaxAspectRatioForCropArea()*b.height) valid=false;
 		if(b.width<figureType1.getMinWidthForCropArea()||b.height<figureType1.getMinHeightForCropArea()) valid=false;	
 		
+		
+		
 		/**if area is very large, rectangle is declared invalid and 
 		  a smaller one is set. Asks user to crop anyway*/
 		if(b.width>1000||b.height>1000) { 
@@ -404,6 +411,9 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			b.width=800;
 			b.height=600;
 		}
+		
+		if(mustCrop)
+			valid=false;//some user preferences have it set to always show a crop dialog
 		
 		/**if the entire image will be used, this method can return without doing a crop*/
 		if (valid&&totalImageSize.equals(b)) 
@@ -417,6 +427,15 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 		} else {
 			display.getSlot().applyCropAndScale(new PreProcessInformation(b, 0, display.getPreprocessScale()));
 		}
+	}
+
+
+	/**
+	 * @param display
+	 * @return
+	 */
+	public static boolean isCropDialogMandatory(MultichannelDisplayLayer display) {
+		return UserPreferences.current.blot_crop_always&&display.getFigureType()==FigureType.WESTERN_BLOT;
 	}
 	
 	/**returns true if the sizes are different enough to merit a cropping

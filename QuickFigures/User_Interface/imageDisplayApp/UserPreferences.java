@@ -38,6 +38,9 @@ public static final UserPreferences current=new UserPreferences();
 	@RetrievableOption(key = "spaceBarScrolling", label="Hold space bar to scroll?")
 	public boolean spaceBarScrolling=false;
 	
+	@RetrievableOption(key = "alwaysCrop", label="Always show crop dialog for blots")
+	public boolean blot_crop_always=false;
+	
 
 	@RetrievableOption(key = "expimentalFeatures", label="Include Experimental Features?")
 	public boolean testNew=false;
