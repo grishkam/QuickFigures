@@ -29,7 +29,6 @@ import java.io.IOException;
 
 import org.apache.batik.Version;
 import org.apache.poi.sl.usermodel.Placeholder;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFGroupShape;
 import org.apache.poi.xslf.usermodel.XSLFNotes;
