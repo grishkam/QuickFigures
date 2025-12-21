@@ -133,6 +133,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	/**Alligns the items in the array*/
 	public void allignArray(ArrayList<? extends LocatedObject2D> all, CombinedEdit c, Rectangle2D b) { 
 		if(all.size()<2) return;
+		if(b!=null)
 		b=b.getBounds();
 		
 		if(panelScaleType()) {
