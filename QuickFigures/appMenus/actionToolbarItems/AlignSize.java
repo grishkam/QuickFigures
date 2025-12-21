@@ -147,7 +147,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 			return;
 		}
 		if(b==null)
-			b =findRectangle(all);		
+			 b =findRectangle(all);		
 		
 		allignWidthOrHeightArray(all, b, c);
 	}
