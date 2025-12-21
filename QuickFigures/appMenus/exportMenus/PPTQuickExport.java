@@ -27,7 +27,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.batik.Version;
 import org.apache.poi.sl.usermodel.Placeholder;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFGroupShape;
 import org.apache.poi.xslf.usermodel.XSLFNotes;
@@ -35,11 +37,11 @@ import org.apache.poi.xslf.usermodel.XSLFShapeContainer;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
-
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.MenuItemForObj;
 import export.pptx.OfficeObjectConvertable;
 import export.pptx.OfficeObjectMaker;
+import export.svg.CheckInstalledVersions;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import locatedObject.ArrayObjectContainer;
@@ -83,7 +85,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 					try{
 						System.setProperty("javax.xml.transform.TransformerFactory",
 				                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
-						//IOUtils.toByteArray(7);
+						
 						
 			        XMLSlideShow ppt = new XMLSlideShow();
 			        Dimension slideSize = SizeConstants.SLIDE_SIZE;
@@ -124,7 +126,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			        
 			        
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
+						IssueLog.log(e);
 						e.printStackTrace();
 					}
 					
@@ -132,10 +134,20 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 					
 					}catch (Throwable t) {
 						IssueLog.logT(t);
+						checkPOIVersion(t);
+						batikVersionMessage(t);
+						
 						}
 	}
 	
-	
+	public static void batikVersionMessage(Throwable e) {
+		if(e instanceof ClassNotFoundException || e instanceof NoClassDefFoundError) {
+			ShowMessage.showOptionalMessage("have you installed conflicting versions of POI or xml commons?", false, "Seems that you have not installed either apache batik, apache commons or apache POI", "or there may be conflicting versions of these files installed" , "This feature was written with batik 1.14, graphics commons 2.6 and POI 5", "Please delete conflicting files from your ImageJ instalation to fix this problems");
+			IssueLog.log("Batik version is "+Version.getVersion());	
+			IssueLog.log(System.getProperty("java.class.path"));
+			new CheckInstalledVersions().batikVersionMessage(e);
+		}
+	}
 	/**
 	 * @param slide
 	 * @param ppt 
@@ -199,10 +211,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 			
 		}
 		catch (Throwable t) {
-			if ((t instanceof NoClassDefFoundError) || (t instanceof NoSuchMethodError)) {
-				ShowMessage.showOptionalMessage("Install POI 5.2.3", false, "it appears the either an older version of Apache POI is installed (or POI is not installed correctly)", "It is also possible that another PlugIn (with a different POI) is installed", "cannot export", "Please install POI 5.2.3 and remove conflicting plugins");
-			} 
-			IssueLog.logT(t);
+			checkPOIVersion(t);
 		}
 		
 		
@@ -210,6 +219,21 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	}
 	
 	
-	
+	public static void checkPOIVersion(Throwable t) {
+		if ((t instanceof ClassNotFoundException) || (t instanceof NoClassDefFoundError) || (t instanceof NoSuchMethodError)) {
+			String missing_part="";
+			if(t.toString().contains("apache.commons"))
+				missing_part+=" Apache Commons";
+			if(t.toString().contains("poi-"))
+				missing_part+=" Apache POI";
+			ShowMessage.showOptionalMessage("Install POI 5.2.3", false, "There appears to be a problem with the install of packages required to export "+missing_part, "Perhaps either an older version of "+missing_part+" is installed (or not installed correctly)", "It is also possible that another PlugIn (with a different version of " +missing_part+") is installed", "cannot export", "Please install Apache POI 5.2.3 and commons-io 2.11 and remove conflicting plugins");
+			CheckInstalledVersions.listInstalledJars();
+		} 
+		IssueLog.log("throwable as strings");
+		
+		if (t.toString().contains("batik"))
+			new CheckInstalledVersions().batikVersionMessage(t);
+		IssueLog.log(t);
+	}
 
 }

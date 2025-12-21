@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.batik.Version;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -37,6 +38,7 @@ import org.apache.fop.svg.PDFTranscoder;
 
 import applicationAdapters.DisplayedImage;
 import export.svg.BatiKExportContext;
+import export.svg.CheckInstalledVersions;
 import export.svg.SVGsaver;
 import figureFormat.DirectoryHandler;
 import graphicalObjects_SpecialObjects.TextGraphic;
@@ -71,6 +73,7 @@ public class PDFsaver {
 					
 				}
 			
+			
 			/**saves the figure in the temp file as an svg*/
 			new SVGsaver().saveFigure(tempPath, diw, this.getTheRightContext());
 			
@@ -89,13 +92,13 @@ public class PDFsaver {
 			outputFile.setReadOnly();
 		} catch (Throwable e) {
 			IssueLog.logT(e);
-			if(e instanceof ClassNotFoundException || e instanceof NoClassDefFoundError) {
-				ShowMessage.showOptionalMessage("have you installed batik 1.14?", false, "Seems that you have not installed the latest version of batik", "This feature was written with batik 1.14.");
-			}
+			new CheckInstalledVersions().batikVersionMessage(e);
 		}
 	}
 
 
+	
+	
 	/**
 	 * @return
 	 */
