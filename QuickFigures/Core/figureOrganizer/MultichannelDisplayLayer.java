@@ -172,6 +172,9 @@ private static final long serialVersionUID = 1L;
 
 	/**indicates whether the figure is an IF image, a western blot or some other form*/
 	private FigureType figureType=null;
+
+
+	public boolean isSecondView;
 	
 	
 	/**returns the list of panels that display this Image*/

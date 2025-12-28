@@ -302,7 +302,7 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 			
 		
 			
-			if ( (mustCrop||mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog)
+			if ( (mustCrop||mustResize||display.getPanelList().getChannelUseInstructions().selectsSlicesOrFrames(display.getMultiChannelImage())) &&!suppressCropDialog && !display.isSecondView)
 				{
 					
 								CropDialogContext context = new CroppingDialog.CropDialogContext(1, display.getFigureType());
@@ -435,6 +435,8 @@ public DefaultLayoutGraphic getMontageLayoutGraphic() {
 	 * @return
 	 */
 	public static boolean isCropDialogMandatory(MultichannelDisplayLayer display) {
+		if(display.isSecondView)
+			return false;
 		return UserPreferences.current.blot_crop_always&&display.getFigureType()==FigureType.WESTERN_BLOT;
 	}
 	
@@ -779,9 +781,12 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	 */
 	public static CombinedEdit createSecondView(FigureOrganizingLayerPane f, MultichannelDisplayLayer displayLayer, PreProcessInformation p) {
 		MultichannelDisplayLayer secondView = displayLayer.createEmptyCopy();
+		
 		secondView.setSlot(secondView.getSlot().createPartner());
 		secondView.getSlot().redoCropAndScale();
 		secondView.setLaygeneratedPanelsOnGrid(true);
+		secondView.isSecondView=true;
+		
 		if (p!=null) {
 				secondView.getSlot().applyCropAndScale(p);
 			} else {
@@ -794,7 +799,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					} else {
 						r=mods.getRectangle();
 					}
-					
+					IssueLog.log("showing crop dialog for second view "+r);
 					CroppingDialog.showCropDialog(secondView.getSlot(), r, 0);
 					displayLayer.cropShown=true;
 					

@@ -41,6 +41,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
@@ -192,6 +193,8 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	/**set to true if the user is not precented from setting an out of bounds crop area*/
 	@RetrievableOption(key = "Permit Out of Bounds Crop", label="Permit Out of Bounds Crop")
 	private boolean outofBoundsCrop=false;
+
+	private RecentCropAreaMenu crop_area_menu;
 	
 	@RetrievableOption(key = "Maintain inset locations", label="Maintain inset locations")
 	public static boolean updateInsets=false;//set to true if insets should be moved
@@ -512,6 +515,19 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 					
 				}}));
 		
+		
+		crop_area_menu=new RecentCropAreaMenu(this);
+		
+		this.add("recents", new ButtonPanel("  ", "recent_sizes", new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				crop_area_menu.showAsPopup(e);
+				
+			}}));
+		
+		
 		if(showsFrameSlider()) {
 			ChannelSliceAndFrameSelectionDialog.addFrameSelectionToDialog(this, multiChannelSource, display.frame);
 		}
@@ -587,9 +603,13 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			super.wasOKed=true;
 			super.onOK();
 			super.setVisible(false);
+			
 		}
 		
 		if(cropAreaRectangle==null)return null;
+		
+		if(super.wasOKed)
+			RecentCropAreaMenu.addRecentArea(cropAreaRectangle.getBounds());
 		return cropAreaRectangle.getBounds();
 	}
 
@@ -796,9 +816,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	
 	@Override
 	public void numberChanged(NumberInputEvent ne) {
-		setRectToDialog();
-		panel.repaint();
-		setImageCropping();
+		update_image_from_dialog();
 		
 		super.numberChanged(ne);
 		if(ne.getKey()==null) {return;}
@@ -806,6 +824,15 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		if(ne.getKey().equals("slice")) {display.slice=(int) ne.getNumber();updateDisplayImage();}
 		if(ne.getKey().equals("chan")) {display.channel=(int) ne.getNumber();updateDisplayImage();}
 		
+	}
+
+	/**
+	 * 
+	 */
+	public void update_image_from_dialog() {
+		setRectToDialog();
+		panel.repaint();
+		setImageCropping();
 	}
 	
 	public void valueChanged(ChoiceInputEvent ne) {
