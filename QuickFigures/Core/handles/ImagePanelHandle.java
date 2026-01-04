@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 25, 2022
+ * Date Modified: Jan 3, 2026
  * Version: 2023.2
  */
 package handles;
@@ -55,7 +55,7 @@ public class ImagePanelHandle extends SmartHandle {
 	private int handlecode=50;
 	
 	/**The panel on which this acts*/
-	private ImagePanelGraphic thePanel;
+	protected ImagePanelGraphic thePanel;
 	
 	private CombinedEdit undo;
 	

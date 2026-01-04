@@ -658,7 +658,18 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	 * @param r
 	 */
 	public void setupCropAreaRectangle(Rectangle r) {
-		cropAreaRectangle=new RectangularGraphic(r);
+		RectangularGraphic cropAreaRectangle = createCropAreaRectangle(r, cropAngle);
+		
+		this.cropAreaRectangle=cropAreaRectangle;
+		panel.getGraphicLayers().add(cropAreaRectangle);
+	}
+
+	/**
+	 * @param r
+	 * @return
+	 */
+	public RectangularGraphic createCropAreaRectangle(Rectangle r, double cropAngle) {
+		RectangularGraphic cropAreaRectangle=new RectangularGraphic(r);
 		cropAreaRectangle.setName(cropAreaRectName);
 		cropAreaRectangle.hideStrokeHandle=true;
 		cropAreaRectangle.handleSize=4;
@@ -669,9 +680,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		cropAreaRectangle.setStrokeColor(rectangleStrokeColor);
 		
 		cropAreaRectangle.select();
-		
-		
-		panel.getGraphicLayers().add(cropAreaRectangle);
+		return cropAreaRectangle;
 	}
 
 
