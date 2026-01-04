@@ -28,7 +28,10 @@ import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects.BasicGraphicalObject;
+import iconGraphicalObjects.CropIconGraphic;
 import menuUtil.BasicSmartMenuItem;
+import standardDialog.graphics.GraphicObjectDisplayBasic;
 import undo.AbstractUndoableEdit2;
 
 /**an abstract class for action listeners that perform one task targettig one
@@ -62,6 +65,8 @@ public abstract class ObjectAction<Type> implements ActionListener {
 		menuitem=out;
 		return out;
 	}
+	
+	
 	
 	public void addUndo(AbstractUndoableEdit2 e) {
 		if(e==null)

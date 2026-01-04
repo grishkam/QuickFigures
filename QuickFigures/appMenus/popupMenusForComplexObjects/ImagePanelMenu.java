@@ -54,6 +54,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.CropAreaHandle;
 import handles.ImagePanelHandleList;
 import handles.SmartHandle;
+import iconGraphicalObjects.CropIconGraphic;
 import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
@@ -116,7 +117,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 					;return null;}
 
 				
-			}.createJMenuItem("Crop by dragging handles"));
+			}.createJMenuItem("Crop by dragging handles", CropIconGraphic.createsCropIcon()));
 
 		}
 		
