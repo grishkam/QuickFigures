@@ -246,10 +246,10 @@ public class CropAreaHandle extends ImagePanelHandle {
 
 	/**Changes the handles of the image panel
 	 * @param imagePanel
-	 * @param position
+	 * @param cropHandleMode
 	 * @return
 	 */
-	public static ImagePanelHandleList hideOrRevealCropHandles(ImagePanelGraphic imagePanel, boolean position) {
+	public static ImagePanelHandleList hideOrRevealCropHandles(ImagePanelGraphic imagePanel, boolean cropHandleMode) {
 		
 		ImagePanelHandleList panelHandleList = imagePanel.getPanelHandleList();
 		boolean crop_handles_present=false;
@@ -257,14 +257,15 @@ public class CropAreaHandle extends ImagePanelHandle {
 			for (int i : CropAreaHandle.usedEdges) {
 				if(i==h.getHandleNumber()) {
 					if(h instanceof CropAreaHandle) 
-					{h.setHidden(!position); crop_handles_present=true;} else 
-					h.setHidden(position);
+					{h.setHidden(!cropHandleMode); crop_handles_present=true;} else 
+					h.setHidden(cropHandleMode);
 				}
 			}
 			
 		}
 		if(crop_handles_present) {return null;}
 		
+		if(cropHandleMode)
 		CropAreaHandle.addCropAreaHandles(imagePanel, panelHandleList);
 		
 		return panelHandleList;
