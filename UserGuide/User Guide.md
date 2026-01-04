@@ -133,7 +133,7 @@ The **Figure** submenu appears in the popup menus for layouts and image panels i
  -	**Remove From figure**. Removes the image from the figure. This will remove all image panels and channel labels (if the channel label are with those image panels).
  -	**Set Pixel Size**. Equivalent the **Set scale...** menu item within ImageJ. Allows the user to change the physical distance measurements for the size of a pixel. For example, a user can input that 100 pixels of the original source image correspond to 60 micrometers in physical distance. Afterwards, scale bars for each image panel are changed to reflect the new values. 
  -	**Advanced Channel and Frame Use** changes the image to advanced channel use mode and displays the [Advanced Channel Use](#Advanced-Channel-And-Frame-Use-Dialog) dialog. Although the options in the normal **Channel Use** dialog will be sufficient for most purposes, advanced channel use allows for more customization of panels.
- -	**Re-Crop** crops only the selected image. Although this changes the crop area, an uncropped version of the full size image is still stored.
+ -	**Re-Crop** crops only the selected image. Although this changes the crop area, an uncropped version of the full size image is still stored. While **Re-Crop** opens a [Crop Dialog](#Crop-Dialog), the **Crop by dragging handles** option (2026 version) gives the user a way to adjust the crop by dragging the handles on the image panel.
  -	**Re-Set Pixel Density**, See re-set pixel density from the [figure menu](#Figure-Submenu) section. This menu item only targets the clicked image.
 
 
@@ -417,4 +417,5 @@ Users with Fiji can select the "QuickFigures<Install Plot Package" menu item to 
 -	The **T-Test Tool** will also appear in the main toolbar if the Plot Package is installed. Assuming that the Math3 package is also installed, a user should be able to perform a T-test simply by clicking on one data series in the plot and dragging the mouse to anther data series. 
 -	The **Swap Plot Columns Tool** will also appear in the main toolbar if the Plot Package is installed. This tool can be used to re-order the data series within plot by dragging and dropping.
 -	The **Plot Objects** submenu will appear in the Selected Item(s) menu. Each menu item in this submenu will open a dialog to edit a certain type of plot object (assuming that type is selected).
+
 
