@@ -51,6 +51,9 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import handles.CropAreaHandle;
+import handles.ImagePanelHandleList;
+import handles.SmartHandle;
 import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
@@ -103,6 +106,18 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			MultiChannelImageDisplayPopup everyMenu = new MultiChannelImageDisplayPopup(m, m.getPanelList(), imagePanel);
 			everyMenu.addMenus(mc);
 			this.add(mc);
+			
+			mc.add(new ObjectAction<ImagePanelGraphic>(c) {
+				@Override
+				public AbstractUndoableEdit2 performAction() {
+					
+					CropAreaHandle.addCropHandles(imagePanel, true);
+					ShowMessage.showOptionalMessage("Crop handle instructiosn", true, "Right, Left, Top and Bottom Handles can be dragged to adjust crop area", "Panel handles will return to normal if panel is deselected", "this feature is still experimental");
+					;return null;}
+
+				
+			}.createJMenuItem("Crop image by dragging handles"));
+
 		}
 		
 	
@@ -131,6 +146,8 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		public AbstractUndoableEdit2 performAction() {item.showCroppingDialog();return null;}	
 	}.createJMenuItem("Crop Only This Panel"));
 
+	
+	
 		add(new OverlaySubmenu(c));
 	
 	

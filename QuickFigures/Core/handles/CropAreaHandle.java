@@ -23,14 +23,18 @@ package handles;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.MultiChannelSlot;
 import channelMerging.PreProcessInformation;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
+import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
@@ -38,6 +42,8 @@ import imageDisplayApp.OverlayObjectManager;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import objectDialogs.CroppingDialog;
+import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
+import undo.UndoLayoutEdit;
 
 /**
  Handle for making changes to the crop area. works for top bottom left and right
@@ -91,6 +97,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 method is called when a handle is moved to resize the image panel
 	 */
 	public void moveResizeHandle(Point p2, int handlenum) {
+		
 		thePanel.setLocationType(RectangleEdges.oppositeSide(handlenum));
 		 double dist1=RectangleEdges.distanceOppositeSide(handlenum, thePanel.getBounds());
 		 
@@ -178,6 +185,73 @@ public class CropAreaHandle extends ImagePanelHandle {
 		PreProcessInformation process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), slot.getModifications().getScaleInformation());
 		slot.applyCropAndScale(process);
 		
+		UndoLayoutEdit ud1 = FigureOrganizingSuplierForPopup.updateRowColSizesOf(this.mdl);
+		e.addUndo(ud1);
+	}
+	
+	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT};
+	
+	/**adds crop  handles*/
+	public static void addCropAreaHandles(ImagePanelGraphic im, SmartHandleList l) {
+		l.add(new CropAreaHandle(im, RectangleEdges.TOP)); 
+		l.add(new CropAreaHandle(im, RectangleEdges.BOTTOM)); 
+		
+		l.add(new CropAreaHandle(im, RectangleEdges.LEFT)); 
+		l.add(new CropAreaHandle(im, RectangleEdges.RIGHT)); 
 	}
 
+	
+	/**updates the locations of each handle to fit the location and size of the image panel*/
+	public void updateHandleLocs() {
+		
+			Point2D l1 = RectangleEdges.getLocation(this.getHandleNumber(), thePanel.getBounds());
+			setCordinateLocation(l1);
+			
+		
+		
+	}
+	
+	@Override
+	public void draw(Graphics2D graphics, CordinateConverter cords) {
+		this.updateHandleLocs();
+		super.draw(graphics, cords);
+	}
+	
+	
+	
+
+	
+	/**
+	 * 
+	 */
+	public static void addCropHandles(ImagePanelGraphic imagePanel, boolean position) {
+		hideOrRevealCropHandles(imagePanel, position);
+		
+		
+	}
+
+
+	/**
+	 * @param imagePanel
+	 * @param position
+	 * @return
+	 */
+	public static ImagePanelHandleList hideOrRevealCropHandles(ImagePanelGraphic imagePanel, boolean position) {
+		ImagePanelHandleList panelHandleList = imagePanel.getPanelHandleList();
+		boolean crop_handles_present=false;
+		for(SmartHandle h : panelHandleList) {
+			for (int i : CropAreaHandle.usedEdges) {
+				if(i==h.getHandleNumber()) {
+					if(h instanceof CropAreaHandle) 
+					{h.setHidden(!position); crop_handles_present=true;} else 
+					h.setHidden(position);
+				}
+			}
+			
+		}
+		if(crop_handles_present) {return null;}
+		
+		CropAreaHandle.addCropAreaHandles(imagePanel, panelHandleList);
+		return panelHandleList;
+	}	
 }

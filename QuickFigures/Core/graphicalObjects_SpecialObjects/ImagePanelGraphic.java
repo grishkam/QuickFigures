@@ -75,6 +75,7 @@ import handles.HasSmartHandles;
 import handles.ImagePanelHandleList;
 import handles.SmartHandle;
 import handles.AttachmentPositionHandle;
+import handles.CropAreaHandle;
 import handles.SmartHandleList;
 import handles.miniToolbars.HasMiniToolBarHandles;
 import handles.miniToolbars.ImagePanelActionHandleList;
@@ -1129,7 +1130,7 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 		}
 		
 		/**returns a list that contains both the image panels handles and the attached item handles*/
-		protected ImagePanelHandleList getPanelHandleList() {
+		public ImagePanelHandleList getPanelHandleList() {
 			if (panelHandleList==null) 
 				{
 						panelHandleList=new ImagePanelHandleList(this);
@@ -1226,10 +1227,13 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		@Override
 		public void select() {
+			boolean startsSeleced=selected;
 			selected=true;
 			dragOngoing=false;
 			try {
 				StatusPanel.updateStatus(getMinimalSummary());
+				if(!startsSeleced) {CropAreaHandle.hideOrRevealCropHandles(this, false);}//hides the crop handles
+				
 				
 			} catch (Exception e) {
 			}
