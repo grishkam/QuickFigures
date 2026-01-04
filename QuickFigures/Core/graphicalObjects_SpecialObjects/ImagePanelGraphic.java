@@ -1227,16 +1227,25 @@ protected File prepareImageForExport(PlacedItemRef pir) {
 
 		@Override
 		public void select() {
-			boolean startsSeleced=selected;
+			
 			selected=true;
 			dragOngoing=false;
 			try {
 				StatusPanel.updateStatus(getMinimalSummary());
-				if(!startsSeleced) {CropAreaHandle.hideOrRevealCropHandles(this, false);}//hides the crop handles
 				
 				
 			} catch (Exception e) {
 			}
+			
+		}
+		
+		/**sets object as not selected*/
+		@Override
+		public void deselect() {
+			
+			selected=false;
+			superSelected=false;
+			{CropAreaHandle.hideOrRevealCropHandles(this, false);}//hides the crop handles
 			
 		}
 		

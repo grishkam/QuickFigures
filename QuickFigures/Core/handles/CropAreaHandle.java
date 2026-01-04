@@ -244,12 +244,13 @@ public class CropAreaHandle extends ImagePanelHandle {
 	}
 
 
-	/**
+	/**Changes the handles of the image panel
 	 * @param imagePanel
 	 * @param position
 	 * @return
 	 */
 	public static ImagePanelHandleList hideOrRevealCropHandles(ImagePanelGraphic imagePanel, boolean position) {
+		
 		ImagePanelHandleList panelHandleList = imagePanel.getPanelHandleList();
 		boolean crop_handles_present=false;
 		for(SmartHandle h : panelHandleList) {
