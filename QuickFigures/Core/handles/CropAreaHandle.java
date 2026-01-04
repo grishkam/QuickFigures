@@ -190,6 +190,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 		if(!valid) {
 			ShowMessage.showOptionalMessage("this crop area is not volid");
+			return;
 		}
 		
 		e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();

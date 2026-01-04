@@ -116,7 +116,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 					;return null;}
 
 				
-			}.createJMenuItem("Crop image by dragging handles"));
+			}.createJMenuItem("Crop by dragging handles"));
 
 		}
 		
