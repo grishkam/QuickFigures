@@ -16,7 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Jan 3, 2026
- * Date Modified: Jan 3, 2026
+ * Date Modified: Jan 4, 2026
  * Version: 2026.1
  */
 package handles;
@@ -41,12 +41,15 @@ import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.OverlayObjectManager;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import messages.ShowMessage;
 import objectDialogs.CroppingDialog;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
+import undo.CombinedEdit;
+import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
 
 /**
- Handle for making changes to the crop area. works for top bottom left and right
+ Handle for making changes to the crop area. works for top bottom left and right.
  */
 public class CropAreaHandle extends ImagePanelHandle {
 
@@ -57,6 +60,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private Color overcolor=Color.red;
 	private double expand;
 	private RectangularGraphic alternateCropArea;
+	private boolean valid;
 	/**
 	 * @param panel
 	 * @param handlenum
@@ -109,12 +113,19 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 		
 		PreProcessInformation modifications = slot.getModifications();
-		 alternateCropArea = crop.createCropAreaRectangle(modifications.getRectangle(),modifications.getAngle() );
+		if(modifications==null) {
+			modifications=new PreProcessInformation(crop.getRectForEntireImage());
+		}
+		 Rectangle rectangle = modifications.getRectangle();
+		 if(rectangle==null) {
+			 rectangle=crop.getRectForEntireImage();
+		 }
+		alternateCropArea = crop.createCropAreaRectangle(rectangle,modifications.getAngle() );
 		
 		if(handlenum==RectangleEdges.RIGHT || handlenum==RectangleEdges.LEFT) {
 			expand = dist2x/dist1;
 			
-			double w = modifications.getRectangle().getWidth();
+			double w = rectangle.getWidth();
 			double w2 = w*expand;
 			
             alternateCropArea.setWidth(w2);
@@ -128,7 +139,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		if(handlenum==RectangleEdges.BOTTOM||handlenum==RectangleEdges.TOP) {
 			expand = dist2y/dist1;
 			
-			double h = modifications.getRectangle().getHeight();
+			double h = rectangle.getHeight();
 			double h2 = h*expand;
 			
 		
@@ -139,7 +150,7 @@ public class CropAreaHandle extends ImagePanelHandle {
            
 		}
 		
-		 boolean valid = crop.isCropRectangleValid(alternateCropArea);
+		 valid = crop.isCropRectangleValid(alternateCropArea);
          
          if(valid) {overcolor=Color.green;} else {
          	overcolor=Color.red;
@@ -176,17 +187,19 @@ public class CropAreaHandle extends ImagePanelHandle {
 	
 	public void handleRelease(CanvasMouseEvent e) {
 		thePanel.dragOngoing=false;
-		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
-			{
-			releaseCenterHandle(e);
-			}
+		
+		if(!valid) {
+			ShowMessage.showOptionalMessage("this crop area is not volid");
+		}
+		
 		e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 		RectangularGraphic r = alternateCropArea;
 		PreProcessInformation process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), slot.getModifications().getScaleInformation());
+		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(mdl);
 		slot.applyCropAndScale(process);
 		
 		UndoLayoutEdit ud1 = FigureOrganizingSuplierForPopup.updateRowColSizesOf(this.mdl);
-		e.addUndo(ud1);
+		e.addUndo(new CombinedEdit(crop.additionalUndo,undo1, ud1, crop.additionalUndo));
 	}
 	
 	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT};
@@ -252,6 +265,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		if(crop_handles_present) {return null;}
 		
 		CropAreaHandle.addCropAreaHandles(imagePanel, panelHandleList);
+		
 		return panelHandleList;
 	}	
 }
