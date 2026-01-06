@@ -36,9 +36,9 @@ public class CheckInstalledVersions {
 
 	public static void batikVersionMessage(Throwable e) {
 		if(e instanceof ClassNotFoundException || e instanceof NoClassDefFoundError || e instanceof NoSuchMethodError) {
-			String tip="If using the latest version of Fiji, you can fix this problem by Frist) Moving Batik1.14 and Poi 5.2.3 jar files into the jars foler in your fiji installation";
+			String tip="If using the recent versions of Fiji, you can fix this problem by Frist) Moving Batik and Poi 5.2.3 .jar files into the jars foler in your fiji installation";
 			
-			ShowMessage.showOptionalMessage("have you installed batik 1.14?", false, "Seems that you have not installed the right version of batik", "or there may be old/conflicting versions of batik installed" , "This feature was written with batik 1.14.", "Please delete conflicting batik files from your ImageJ instalation to fix this problems", tip);
+			ShowMessage.showOptionalMessage("have you installed batik? Versions 1.14 trhough 1.19 should work?", false, "Seems that you have either not installed the batik", "or there may be old/conflicting versions of batik installed" , "This feature was written with batik 1.14 and updated to work with 1.19.", "Please delete conflicting batik files from your ImageJ instalation to fix this problems",  tip);
 			IssueLog.log("Batik version is "+Version.getVersion());	
 			analyzeClassPath() ;
 			

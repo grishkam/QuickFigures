@@ -27,6 +27,7 @@ import channelMerging.ChannelOrderAndColorWrap;
 import ij.CompositeImage;
 import ij.ImagePlus;
 import ij.process.LUT;
+import imageDisplayApp.UserPreferences;
 import logging.IssueLog;
 
 /**ImageJ implementation of the channel order interface 
@@ -78,6 +79,8 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	}
 	
 	private void setLutColor(Color lut, int chan) {
+		if(UserPreferences.current.forbidLUTChange)
+					{return;}
 		if (chan<=0) {
 			IssueLog.log(" Was asked to change color for channel '0' but channel numbering starts from 1");
 			

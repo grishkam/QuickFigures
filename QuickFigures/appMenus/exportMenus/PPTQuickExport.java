@@ -225,7 +225,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 				missing_part+=" Apache Commons";
 			if(t.toString().contains("poi-"))
 				missing_part+=" Apache POI";
-			ShowMessage.showOptionalMessage("Install POI 5.2.3", false, "There appears to be a problem with the install of packages required to export powerpoint files:  "+missing_part, "Perhaps either an older version of "+missing_part+" is installed (or not installed correctly)", "It is also possible that another PlugIn (with a different version of " +missing_part+") is installed", "cannot export","If you are using fiji these should be in the jars folder. If imagej2 version of app is used, then the plugins folder,", " .jar files should not be in a subfolder of a folder", "Please install Apache POI 5.2.3, batik 1.19 and commons-io 2.11 and remove conflicting plugins");
+			ShowMessage.showOptionalMessage("Install POI 5.2.3", false, "There appears to be a problem with the install of packages required to export powerpoint files:  "+missing_part, "Perhaps either an multiple versions of "+missing_part+" is installed (or not installed correctly)", "It is also possible that another PlugIn (with a different version of " +missing_part+") is installed", "cannot export","If you are using fiji these should be in the jars folder. If imagej2 version of app is used, then the plugins folder,", " .jar files should not be in a subfolder of a folder", "Please install Apache POI 5.2.3, batik 1.19 and commons-io 2.11 and remove conflicting plugins");
 			CheckInstalledVersions.listInstalledJars();
 		} 
 		IssueLog.log("throwable as strings");

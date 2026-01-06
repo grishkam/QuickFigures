@@ -47,6 +47,9 @@ public static final UserPreferences current=new UserPreferences();
 	
 	@RetrievableOption(key = "oversizeMode", label="'Large inset mode' for images larger than ", category="insets")
 	public int useOversizeModeForInsets=5000;
+
+	@RetrievableOption(key = "lut_preserve", label="Prevent changes to channel colors")
+	public boolean forbidLUTChange;
 	
 
 	
