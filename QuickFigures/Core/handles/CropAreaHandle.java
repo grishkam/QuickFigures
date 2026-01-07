@@ -63,6 +63,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private boolean valid;
 	private double expandx;
 	private double expandy;
+	private Point cordinate_of_drag=new Point();
+	private double shiftx;
+	private double shifty;
 	/**
 	 * @param panel
 	 * @param handlenum
@@ -114,6 +117,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		double dist2y=Math.abs(p2.getY()- oppositeSidey);
 		
 		
+		
 		PreProcessInformation modifications = slot.getModifications();
 		if(modifications==null) {
 			modifications=new PreProcessInformation(crop.getRectForEntireImage());
@@ -155,6 +159,13 @@ public class CropAreaHandle extends ImagePanelHandle {
            
 		}
 		
+		if(handlenum==RectangleEdges.CENTER) {
+			shiftx=(cordinate_of_drag.getX()-thePanel.getBounds().getCenterX())/thePanel.getBounds().getWidth();
+			shifty=(cordinate_of_drag.getY()-thePanel.getBounds().getCenterY())/thePanel.getBounds().getHeight();
+			alternateCropArea.moveLocation(alternateCropArea.getBounds().getWidth()*shiftx, alternateCropArea.getBounds().getHeight()*shifty);
+			
+		}
+		
 		 valid = crop.isCropRectangleValid(alternateCropArea);
          
          if(valid) {overcolor=Color.green;} else {
@@ -189,6 +200,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 			r1.y=(int) (r1.y-(r1.height*expand-r1.height));
 			r1.height=(int) (r1.height*expand);
 		}
+		if(getHandleNumber()==RectangleEdges.CENTER)
+		RectangleEdges.setLocation(r1, RectangleEdges.CENTER, cordinate_of_drag.getX(), cordinate_of_drag.getY());
 		
 		RectangularGraphic display = new RectangularGraphic(r1);
 		display.setStrokeColor(overcolor);
@@ -199,7 +212,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		thePanel.dragOngoing=false;
 		
 		if(!valid) {
-			ShowMessage.showOptionalMessage("this crop area is not volid");
+			ShowMessage.showOptionalMessage("this crop area is not valid");
 			return;
 		}
 		
@@ -213,7 +226,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		e.addUndo(new CombinedEdit(crop.additionalUndo,undo1, ud1, crop.additionalUndo));
 	}
 	
-	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT};
+	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER};
 	
 	/**adds crop  handles*/
 	public static void addCropAreaHandles(ImagePanelGraphic im, SmartHandleList l) {
@@ -228,7 +241,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 Called when the center handle is dragged
 	 */
 	public void dragCenterHandle(CanvasMouseEvent e, OverlayObjectManager selectionManagger) {
-		
+		cordinate_of_drag=e.getCoordinatePoint();
+		this.moveResizeHandle(e.getCoordinatePoint(), RectangleEdges.CENTER);
 	}
 
 	
@@ -296,4 +310,6 @@ public class CropAreaHandle extends ImagePanelHandle {
 		thePanel.setLocationType(RectangleEdges.CENTER);
 		
 	}
+	
+
 }
