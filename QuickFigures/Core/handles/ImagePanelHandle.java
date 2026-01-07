@@ -178,8 +178,7 @@ public class ImagePanelHandle extends SmartHandle {
 		
 		if(super.getHandleNumber()==ImagePanelGraphic.CENTER)
 			{
-				thePanel.setLocationType(RectangleEdges.CENTER);
-				thePanel.setLocation(p2);
+				setPanelCenterLocationAfterHandleDrag(p2);
 				dragCenterHandle(e, selectionManagger);
 				}
 		
@@ -202,6 +201,14 @@ public class ImagePanelHandle extends SmartHandle {
 					}
 			}
 		}
+	}
+
+	/**
+	 * @param p2
+	 */
+	protected void setPanelCenterLocationAfterHandleDrag(Point p2) {
+		thePanel.setLocationType(RectangleEdges.CENTER);
+		thePanel.setLocation(p2);
 	}
 
 	/**
