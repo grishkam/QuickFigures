@@ -26,7 +26,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
-
 import layout.RetrievableOption;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
