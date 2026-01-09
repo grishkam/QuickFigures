@@ -27,7 +27,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.MultiChannelSlot;
@@ -36,6 +35,7 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.OverlayObjectManager;
@@ -66,6 +66,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private Point cordinate_of_drag=new Point();
 	private double shiftx;
 	private double shifty;
+	private double angleShift;
+	public static int ROTATION_CROP_AREA=819;//set to negative so that a function in the superclass would call drag resize handle
 	/**
 	 * @param panel
 	 * @param handlenum
@@ -102,8 +104,22 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	
+	/**performed to drag the handles*/
+	public void handleDrag(CanvasMouseEvent e) {
+		super.handleDrag(e);
+		thePanel.dragOngoing=true;
+		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
+		Point p2 = e.getCoordinatePoint();
+		int handlenum = this.getHandleNumber();
+		if (!this.isCenterHandle()){
+						moveResizeHandle(p2, handlenum);
+						
+		}
+	}
+	
 	/**
-	 method is called when a handle is moved to resize the image panel
+	 method overrides the superclass method
 	 */
 	public void moveResizeHandle(Point p2, int handlenum) {
 		
@@ -166,6 +182,13 @@ public class CropAreaHandle extends ImagePanelHandle {
 			
 		}
 		
+		if(this.isRotationHandle()) {
+			angleShift = ShapeGraphic.getAngleBetweenPoints(thePanel.getCenterOfRotation(),p2.getLocation() );
+			alternateCropArea.setAngle(modifications.getAngle()-angleShift);
+			
+			
+		}
+		
 		 valid = crop.isCropRectangleValid(alternateCropArea);
          
          if(valid) {overcolor=Color.green;} else {
@@ -203,7 +226,13 @@ public class CropAreaHandle extends ImagePanelHandle {
 		if(getHandleNumber()==RectangleEdges.CENTER)
 		RectangleEdges.setLocation(r1, RectangleEdges.CENTER, cordinate_of_drag.getX(), cordinate_of_drag.getY());
 		
+		
+		
+		
 		RectangularGraphic display = new RectangularGraphic(r1);
+		if(this.isRotationHandle()) {
+			display.setAngle(-angleShift);
+		}
 		display.setStrokeColor(overcolor);
 		selectionManagger.setSelectionGraphic(display);
 	}
@@ -226,7 +255,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		e.addUndo(new CombinedEdit(crop.additionalUndo,undo1, ud1, crop.additionalUndo));
 	}
 	
-	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER};
+	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER,ROTATION_CROP_AREA};
 	
 	/**adds crop  handles*/
 	public static void addCropAreaHandles(ImagePanelGraphic im, SmartHandleList l) {
@@ -248,6 +277,13 @@ public class CropAreaHandle extends ImagePanelHandle {
 	
 	/**updates the locations of each handle to fit the location and size of the image panel*/
 	public void updateHandleLocs() {
+		if(isRotationHandle()) {
+				Point2D p = RectangleEdges.getLocation(RectangleEdges.RIGHT,thePanel.getBounds());
+				p.setLocation(p.getX()+thePanel.getBounds().getWidth()/5, p.getY());
+				this.setHandleColor(Color.orange.darker());
+				setCordinateLocation(p);
+				return;
+				} 
 		
 			Point2D l1 = RectangleEdges.getLocation(this.getHandleNumber(), thePanel.getBounds());
 			setCordinateLocation(l1);
@@ -303,6 +339,12 @@ public class CropAreaHandle extends ImagePanelHandle {
 		return panelHandleList;
 	}	
 	
+
+	
+	public boolean isRotationHandle() {
+		return this.getHandleNumber()==ROTATION_CROP_AREA;
+	}
+	
 	/**
 	 * @param p2
 	 */
@@ -310,6 +352,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 		thePanel.setLocationType(RectangleEdges.CENTER);
 		
 	}
+	
+	
 	
 
 }
