@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -35,6 +36,7 @@ import figureOrganizer.insetPanels.InsetLayoutDialog;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import iconGraphicalObjects.TrashIconGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.RectangleEdges;
@@ -77,11 +79,16 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 	
 	/**creates a menu item with this action listener*/
 	void createMenuItem(String st, String ac) {
-		 createMenuItem(st, ac, null);
+		 createMenuItem(st, ac, null, null);
 	}
+	
 	void createMenuItem(String st, String ac, JMenu submenu) {
+		 createMenuItem(st, ac, submenu, null);
+	}
+	
+	void createMenuItem(String st, String ac, JMenu submenu, Icon i) {
 		JMenuItem g=new BasicSmartMenuItem(st);
-		
+		g.setIcon(i);
 		g.setActionCommand(ac);
 		g.addActionListener(this);
 		if(submenu==null)
@@ -93,7 +100,7 @@ public class InsetMenu extends SmartPopupJMenu implements ActionListener,
 		this.inset=inset;
 		
 		
-		createMenuItem("Remove", REMOVE);
+		createMenuItem("Remove", REMOVE, null, TrashIconGraphic.createAnIcon());
 	
 		createMenuItem("Redo Inset Layout", RECRATE_INSET_LAYOUT);
 		

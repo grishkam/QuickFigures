@@ -31,6 +31,7 @@ import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
+import iconGraphicalObjects.TrashIconGraphic;
 import locatedObject.Mortal;
 import messages.ShowMessage;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -138,7 +139,8 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 	
 	
 	public Icon getIcon() {
-		return  getDeleteIcon(true);
+		return TrashIconGraphic.createAnIcon();
+		//return  getDeleteIcon(true);
 	}
 
 }

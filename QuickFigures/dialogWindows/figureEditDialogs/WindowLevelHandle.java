@@ -34,7 +34,6 @@ import channelMerging.MultiChannelImage;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import handles.SmartHandle;
 import logging.IssueLog;
-import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import multiChannelFigureUI.ImagePropertiesButton;

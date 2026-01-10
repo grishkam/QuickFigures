@@ -49,7 +49,7 @@ import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
 
 /**
- Handle for making changes to the crop area. works for top bottom left and right.
+ Handle for making changes to the crop area without opening a crop dialog
  */
 public class CropAreaHandle extends ImagePanelHandle {
 
@@ -67,7 +67,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private double shiftx;
 	private double shifty;
 	private double angleShift;
-	public static int ROTATION_CROP_AREA=819;//set to negative so that a function in the superclass would call drag resize handle
+	public static int ROTATION_CROP_AREA=819;
 	/**
 	 * @param panel
 	 * @param handlenum
@@ -280,6 +280,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 		if(isRotationHandle()) {
 				Point2D p = RectangleEdges.getLocation(RectangleEdges.RIGHT,thePanel.getBounds());
 				p.setLocation(p.getX()+thePanel.getBounds().getWidth()/5, p.getY());
+				if(angleShift!=0) {
+					//TODO: will adda way to match the handle location to the preview rects
+				}
 				this.setHandleColor(Color.orange.darker());
 				setCordinateLocation(p);
 				return;

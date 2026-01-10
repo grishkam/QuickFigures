@@ -30,6 +30,7 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import iconGraphicalObjects.TrashIconGraphic;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
@@ -114,7 +115,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 					return null;
 				
 			}};
-		thi.add(act.createJMenuItem("Remove From Figure"));
+		thi.add(act.createJMenuItem("Remove From Figure", TrashIconGraphic.createAnIcon()));
 	}
 	
 	
