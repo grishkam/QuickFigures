@@ -34,6 +34,7 @@ import channelMerging.MultiChannelImage;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import graphicActionToolbar.CurrentFigureSet;
+import graphicalObjects_SpecialObjects.ComplexTextGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.OverlayObjectList;
 import objectDialogs.CroppingDialog;
@@ -98,6 +99,7 @@ public class MenuForMultiChannelDisplayLayer extends JMenu {
 			}
 			
 		};
+		this.setIcon(ComplexTextGraphic.createImageIcon());
 		this.add(out);
 		return out;
 	}

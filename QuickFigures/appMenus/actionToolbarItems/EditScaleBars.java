@@ -126,6 +126,10 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		};
 	}
 	
+	public static Icon getExampleIcon() {
+		return new  EditScaleBars(TYPE_CHANGE_PROJECTIONS, 0).getProjectionIcon(false);
+	}
+	
 	/**returns a list of bar length operations to change the scale bar length
 	 * @param unit the name of the units*/
 	public static EditScaleBars[] getUnitLengthList(String unit) {
@@ -238,17 +242,20 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 	
 	public Icon getIcon() {
 		if(TYPE_CHANGE_PROJECTIONS==type)
-			return getProjectionIcon();
+			return getProjectionIcon(true);
 		if (type==TYPE_HIDE_TEXT)
 			return new BarTextIcon(modelItem);
 		return getGenericIcon();
 	}
+	
+	
 
 
-	/**returns an icon that depicts a scale bar with projections*/
-	protected Icon getProjectionIcon() {
+	/**returns an icon that depicts a scale bar with projections. Set the @param includeOuterRect when the icon must fit in a defined 25x25 size*/
+	protected Icon getProjectionIcon(boolean includeOuterRect) {
 		GraphicGroup gg=new GraphicGroup();
-		gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
+		if(includeOuterRect)
+			gg.getTheInternalLayer().add(RectangularGraphic.blankRect(new Rectangle(0,0,25,25), new Color(0,0,0,0)));
 		
 		BarGraphic barGraphic = new BarGraphic();
 		barGraphic.setProjectionType(projectionType);
@@ -257,7 +264,9 @@ public class EditScaleBars extends BasicMultiSelectionOperator implements  Layou
 		BarGraphic createBarForIcon = barGraphic.createBarForIcon();
 		createBarForIcon.setStrokeColor(Color.black);
 		createBarForIcon.setFillColor(Color.black);
-		createBarForIcon.moveLocation(3,5);
+		
+		if(includeOuterRect)
+			createBarForIcon.moveLocation(3,5);
 		createBarForIcon.setShowText(false);
 		gg.getTheInternalLayer().add(createBarForIcon);
 		GraphicDisplayComponent output = new GraphicDisplayComponent(gg);;

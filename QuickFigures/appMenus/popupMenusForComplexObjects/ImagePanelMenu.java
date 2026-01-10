@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import actionToolbarItems.EditScaleBars;
+import addObjectMenus.BarGraphicAdder;
 import channelMerging.ImageDisplayLayer;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureOrganizingLayerPane;
@@ -128,7 +130,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			public CombinedEdit performAction() {
 				return addScaleBar();
 				}	
-	}.createJMenuItem("Add Scale Bar"));
+	}.createJMenuItem("Add Scale Bar", EditScaleBars.getExampleIcon()));
 		
 		/**Creates a menu option for add a label*/
 		add(new ObjectAction<ImagePanelGraphic>(c) {
