@@ -20,6 +20,9 @@
  */
 package selectedItemMenus;
 
+import javax.swing.Icon;
+
+import iconGraphicalObjects.ScaleSizeIcon;
 import sUnsortedDialogs.ScaleAboutDialog;
 
 /**opens a scaling dialog for a group of selected objects*/
@@ -48,6 +51,11 @@ public String getMenuPath() {
 	
 		
 
+	}
+	
+	
+	public Icon getIcon() {
+		return ScaleSizeIcon.createIcon();
 	}
 
 }

@@ -52,6 +52,8 @@ public class OverlayObjectManager {
 	private ZoomableGraphic selectionGraphic=null;
 	protected ZoomableGraphic selectionGraphic2=null;
 	protected ZoomableGraphic selectionGraphic3=null;
+	private ZoomableGraphic selectionGraphic_Ghost=null;
+	
 	private Color selColor=Color.blue;
 	private Color selColor2=Color.green;
 	
@@ -59,6 +61,8 @@ public class OverlayObjectManager {
 	private SmartHandleList shlist;
 	private SmartHandleList otherList;
 	private SmartHandle extraHandle=null;
+	
+	
 
 	
 	/**Returns all the objects that are drawn as overlays*/
@@ -83,6 +87,9 @@ public class OverlayObjectManager {
 				s.select();
 			}
 			G.draw(g2, cc);
+		}
+		if(this.getSelectionGhost()!=null) {
+			getSelectionGhost().draw(g2, cc);
 		}
 		
 		
@@ -190,6 +197,7 @@ public class OverlayObjectManager {
 		setSelection(null, 2);
 		setSelection(null, 1);
 		setSelection(null, 0);
+		selectionGraphic_Ghost=null;
 	}
 	
 	public void setSelection(LocatedObject2D l, int i) {
@@ -222,6 +230,7 @@ public void removeObjectSelections() {
 	this.setSelectionGraphic(null);
 	this.setSelectionGraphic2(null);
 	this.setSelectionGraphic3(null);
+	setSelectionGhost(null);
 }
 
 /**sets all three selections to null*/
@@ -371,6 +380,14 @@ public SmartHandle getExtraHandle() {
 
 public void setExtraHandle(SmartHandle extraHandle) {
 	this.extraHandle = extraHandle;
+}
+
+public ZoomableGraphic getSelectionGhost() {
+	return selectionGraphic_Ghost;
+}
+
+public void setSelectionGhost(ZoomableGraphic selectionGraphic_Ghost) {
+	this.selectionGraphic_Ghost = selectionGraphic_Ghost;
 }
 
 

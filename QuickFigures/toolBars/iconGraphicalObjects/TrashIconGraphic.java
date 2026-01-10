@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.CircularGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_Shapes.TrapezoidGraphic;
@@ -41,7 +42,8 @@ public class TrashIconGraphic extends GraphicGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Color iconColor=Color.black;
-	private Color iconColor2=Color.gray;
+	int greyLevel=170;
+	private Color iconColor2=new Color(greyLevel,greyLevel,greyLevel);
 	boolean open;
 
 	
@@ -60,8 +62,8 @@ public class TrashIconGraphic extends GraphicGroup {
 	public void createItems() {
 	
 	
-		
-		Rectangle fullRect2=new Rectangle(2,2, 14, 15);
+		/**the main body of the trash bin*/
+		Rectangle fullRect2=new Rectangle(2,2, 14, 16);
 		TrapezoidGraphic tg = new TrapezoidGraphic(fullRect2);
 		tg.setStrokeColor(Color.black);
 		tg.getParameter().setRatioToMaxLength(0.15);
@@ -70,7 +72,8 @@ public class TrashIconGraphic extends GraphicGroup {
 		tg.setAntialize(true);
 		iconParts.add(tg);
 		
-		RectangularGraphic rectangularGraphic = new RectangularGraphic(new Rectangle(5,-1, 7, 5));
+		/**handle for lid*/
+		RectangularGraphic rectangularGraphic = new CircularGraphic(new Rectangle(5,0, 7, 5));
 		rectangularGraphic.setFillColor(null);
 		rectangularGraphic.setFilled(false);
 		rectangularGraphic.setStrokeColor(Color.black);
@@ -95,6 +98,7 @@ public class TrashIconGraphic extends GraphicGroup {
 			
 			
 			ShapeGraphic bar = RectangularGraphic.filledRect(partRect);
+			bar.setAntialize(true);
 			bar.setStrokeWidth(0);
 			
 			bar.setFillColor(iconColor2.darker().darker());
@@ -107,13 +111,6 @@ public class TrashIconGraphic extends GraphicGroup {
 		
 	}
 	
-	
-	/**returns the shape of Rectangle 1. this will depend on the circumstances*/
-	private Rectangle getR1rect() {
-		 {
-			return new Rectangle(0,2,14,10);
-		}
-	}
 
 	
 	public void addItems() {

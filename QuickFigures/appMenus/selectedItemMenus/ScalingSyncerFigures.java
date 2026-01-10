@@ -22,11 +22,14 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
+import javax.swing.Icon;
+
 import figureOrganizer.FigureScaler;
 import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import iconGraphicalObjects.ScaleSizeIcon;
 import layout.BasicObjectListHandler;
 import sUnsortedDialogs.ScaleAboutDialog;
 import undo.CombinedEdit;
@@ -48,6 +51,10 @@ public class ScalingSyncerFigures extends BasicMultiSelectionOperator {
 	public String getMenuPath() {
 		
 		return "Scale";
+	}
+	
+	public Icon getIcon() {
+		return ScaleSizeIcon.createIcon();
 	}
 
 	@Override

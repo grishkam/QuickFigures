@@ -66,6 +66,8 @@ import handles.layoutHandles.AddLabelHandle;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import icons.FigureMenuIcon;
+import icons.QuickFigureIcon;
 import icons.SourceImageTreeIcon;
 import icons.ToolIconWithText;
 import imageDisplayApp.CanvasOptions;
@@ -187,7 +189,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				
 				
 				
-				recreatePanelsButton = new BasicSmartMenuItem("Recreate All Panels");
+				recreatePanelsButton = new BasicSmartMenuItem("Recreate All Panels", new QuickFigureIcon(false, true, -2).getMenuVersion());
 				jj.add(recreatePanelsButton);
 							recreatePanelsButton.addActionListener(this);
 				jj.add(imagesMenu);

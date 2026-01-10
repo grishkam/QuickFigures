@@ -68,14 +68,7 @@ import graphicalObjects_Shapes.ArrowGraphic;
 		public void paintIcon(Component arg0, Graphics g, int arg2, int arg3) {
 			Color oColor = g.getColor();//the original color
 			this.lastComponent=arg0;
-			g.setColor(lightColor);
-			if (type==PRESSED_ICON_TYPE) {
-				g.setColor(darkColor);
-			}
-			int w0 = getIconWidth()-borderLineWidth*2;
-			int h0 =getIconHeight()-borderLineWidth*2;
-			
-			g.fillRect(arg2+borderLineWidth, arg3+borderLineWidth, w0,h0);
+			fillBackGroundRect(g, arg2, arg3);
 			
 			/**this next part depends on subclasses*/
 			paintObjectOntoIcon(arg0, g, arg2, arg3);
@@ -86,6 +79,22 @@ import graphicalObjects_Shapes.ArrowGraphic;
 			
 			paintBorder(g, arg2, arg3);
 			g.setColor(oColor);//restores the original color
+		}
+
+		/**Fills a gray background before laying down the icon objects
+		 * @param g
+		 * @param arg2
+		 * @param arg3
+		 */
+		protected void fillBackGroundRect(Graphics g, int arg2, int arg3) {
+			g.setColor(lightColor);
+			if (type==PRESSED_ICON_TYPE) {
+				g.setColor(darkColor);
+			}
+			int w0 = getIconWidth()-borderLineWidth*2;
+			int h0 =getIconHeight()-borderLineWidth*2;
+			
+			g.fillRect(arg2+borderLineWidth, arg3+borderLineWidth, w0,h0);
 		}
 
 		/**

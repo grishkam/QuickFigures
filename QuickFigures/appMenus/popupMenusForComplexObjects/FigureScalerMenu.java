@@ -28,6 +28,7 @@ import applicationAdapters.DisplayedImage;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureScaler;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import iconGraphicalObjects.ScaleSizeIcon;
 import imageMenu.CanvasAutoResize;
 import imageMenu.ZoomFit;
 import menuUtil.SmartJMenu;
@@ -50,8 +51,10 @@ public class FigureScalerMenu extends SmartJMenu{
 
 	public FigureScalerMenu(PanelLayoutGraphic c) {
 		super("Scale Figure");
+		
 		item=c;
 		createItems();
+		this.setIcon(ScaleSizeIcon.createIcon());
 	}
 	
 	public void addEdit(CombinedEdit undo) {

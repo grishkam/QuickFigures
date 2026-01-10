@@ -34,6 +34,8 @@ import channelMerging.PreProcessInformation;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects_LayerTypes.GraphicGroup;
+import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
@@ -83,6 +85,10 @@ public class CropAreaHandle extends ImagePanelHandle {
 	public void handlePress(CanvasMouseEvent e) {
 		
 		this.findFigureComponentsForPanel(thePanel);
+		
+		if(e.clickCount()>1) {
+			
+		}
 		
 	}
 
@@ -206,6 +212,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 			r1.width=(int) (r1.width*expand);
 		}
 		
+	
+		
+		
 		if(this.isCenterHandle()) {
 			r1.x=(int) (r1.x-(r1.width*expand-r1.width));
 			r1.y=(int) (r1.y-(r1.height*expand-r1.height));
@@ -234,7 +243,55 @@ public class CropAreaHandle extends ImagePanelHandle {
 			display.setAngle(-angleShift);
 		}
 		display.setStrokeColor(overcolor);
+		
 		selectionManagger.setSelectionGraphic(display);
+		
+		
+		addAlignmentLine(selectionManagger, display);
+	}
+
+
+	/**Adds another line to help the user see when a possible crop area is aligned to other objects
+	 * @param selectionManagger
+	 * @param display
+	 */
+	protected void addAlignmentLine(OverlayObjectManager selectionManagger, RectangularGraphic display) {
+		int alignment_x1 = 0;
+		int alignment_x2 = 0;
+		int alignment_y1 = 0;
+		int alignment_y2 = 0;
+		if(getHandleNumber()==RectangleEdges.LEFT) { 
+			alignment_x1=display.getBounds().x;
+			alignment_x2=alignment_x1;
+			alignment_y1=display.getBounds().y-thePanel.getBounds().width/2;
+			alignment_y2=(int) (display.getBounds().getMaxY()+thePanel.getBounds().width/2);
+		}
+		if(getHandleNumber()==RectangleEdges.RIGHT) { 
+			alignment_x1=(int) display.getBounds().getMaxX();
+			alignment_x2=alignment_x1;
+			alignment_y1=display.getBounds().y-thePanel.getBounds().width/2;
+			alignment_y2=(int) (display.getBounds().getMaxY()+thePanel.getBounds().width/2);
+		}
+		
+		if(getHandleNumber()==RectangleEdges.TOP) { 
+			alignment_x1=display.getBounds().x-thePanel.getBounds().width/2;
+			alignment_x2=(int) (display.getBounds().getMaxX()+thePanel.getBounds().width/2);
+			alignment_y1=display.getBounds().y;
+			alignment_y2=alignment_y1;
+		}
+		if(getHandleNumber()==RectangleEdges.BOTTOM) { 
+			alignment_x1=display.getBounds().x-thePanel.getBounds().width/2;
+			alignment_x2=(int) (display.getBounds().getMaxX()+thePanel.getBounds().width/2);
+			alignment_y1=(int) display.getBounds().getMaxY();
+			alignment_y2=alignment_y1;
+		}
+		
+		ArrowGraphic alignment_line = ArrowGraphic.createLine(Color.gray, new Color(100,100,100, 50), new Point(alignment_x1, alignment_y1), new Point(alignment_x2, alignment_y2));
+		alignment_line.setStrokeWidth(1);
+		alignment_line.setFillColor(null);
+		
+		alignment_line.deselect();
+		selectionManagger.setSelectionGhost(alignment_line);
 	}
 	
 	public void handleRelease(CanvasMouseEvent e) {

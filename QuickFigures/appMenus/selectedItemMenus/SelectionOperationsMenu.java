@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -186,14 +187,18 @@ public class SelectionOperationsMenu extends SmartJMenu implements
 	}
 	
 	private void addMenuItemForOperator(MenuItemInstall o) {
-		JMenuItem jb = new JMenuItem(o.getMenuCommand(), o.getIcon());
+		Icon icon = o.getIcon();
+		JMenuItem jb = new JMenuItem(o.getMenuCommand(), icon);
 		jb.addActionListener(this);
 		jb.setActionCommand(o.getMenuCommand());
-		if (o.getMenuPath()==null)
-				add(jb);
+		if (o.getMenuPath()==null){add(jb);
+				}
 		else {
 			JMenu men =this;
 			men = getOrCreateSubmenuFromPath(o, men);
+			if(men.getIcon()==null) {
+				men.setIcon(icon);
+			}
 			men.add(jb);
 		}
 	}

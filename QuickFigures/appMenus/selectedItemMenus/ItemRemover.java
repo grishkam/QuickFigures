@@ -128,7 +128,7 @@ public class ItemRemover extends BasicMultiSelectionOperator {
 			return output;
 	}
 	
-	/**returns the delete icon as a red X*/
+	/**returns the delete icon as a red X. replaced this with trash can.*/
 	public GraphicDisplayComponent getDeleteIcon(boolean selected) {
 		 GraphicDisplayComponent output = new GraphicDisplayComponent(createCartoonX( selected));
 		 

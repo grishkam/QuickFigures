@@ -31,6 +31,7 @@ import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.TrashIconGraphic;
+import icons.QuickFigureIcon;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.PopupMenuSupplier;
@@ -145,7 +146,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 
 			
 			};
-		thi.add(act.createJMenuItem("Create second view"));
+		thi.add(act.createJMenuItem("Create second view",  new QuickFigureIcon(true, true, -2).getMenuVersion()));
 	}
 
 	/**Adds a channel menu that is limited to this display layer*/

@@ -42,6 +42,13 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 	Color dashColor2=new Color(250,250,250, 100);
 	Paint fillColor=Color.black;
 	Color plusColor = Color.green.darker();
+	boolean includePlus=true;
+	boolean includeSecondRow=false;
+	boolean includeStack=true;
+	int rect_size_for_row=7;
+	int shifty=0;
+	
+	
 	
 	Color[] blotchColors=new Color[] {null, null, Color.yellow, Color.red, Color.green, new Color(150,150, 255)};
 	
@@ -52,6 +59,14 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 	public QuickFigureIcon(int type) {
 		super(type);
 		
+	}
+	
+	public QuickFigureIcon(boolean include_plus, boolean include_row2, int shifty) {
+		super(0);
+		this.includePlus=include_plus;
+		this.includeSecondRow=include_row2;
+		this.includeStack= !include_row2;
+		this.shifty=shifty;
 	}
 	
 	
@@ -69,27 +84,40 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 		
 		;
 		int x = arg2+2;
-		int y = arg3;
+		int y = arg3+shifty;
 		int count=0;
 		
-		Rectangle2D[] r2 = getSeries1Rectangles( x, y);
+		Rectangle2D[] stack_of_rectangles = getSeries1Rectangles( x, y);
 		
 		x-=1;
 		
-		Rectangle2D[] r3 = getSeries2Rectangles(x, y);
+		Rectangle2D[] row_of_rectangles = getSeries2Rectangles(x, y);
 		
 		
-		for(Rectangle2D r:r2)
-			{	drawRectangle(g2d, r, true, count);
+		for(Rectangle2D r:stack_of_rectangles)
+			{	
+			if(includeStack) drawRectangle(g2d, r, true, count);
 				count++;
 			}
 			
-		for(Rectangle2D r:r3)
+		for(Rectangle2D r:row_of_rectangles)
 			{drawRectangle(g2d, r, false, count);
 			count++;
 			}
 		
-		drawPlus(g2d, x, y);
+		if(includeSecondRow) {
+			int down=8;
+			int move=rect_size_for_row+1;
+			Rectangle2D[] row_second = createRowOfRectangles(x, y, rect_size_for_row, down, move);
+			count=3;
+			for(Rectangle2D r:row_second){
+				drawRectangle(g2d, r, false, count);
+				count++;
+			}
+		}
+		
+		if(includePlus)
+			drawPlus(g2d, x, y);
 		}
 		
 	
@@ -114,15 +142,29 @@ public class QuickFigureIcon  extends GraphicToolIcon {
 		g2d.fill(new Rectangle2D.Double(s.getCenterX()-plusThickness/2, s.getCenterY()-plusSize/2,  plusThickness, plusSize));
 		g2d.setStroke(new BasicStroke(1));
 	}
+	
+	
+	
 	/**
 	 * @param x
 	 * @param y
 	 * @return
 	 */
 	protected Rectangle2D[] getSeries2Rectangles(int x, int y) {
-		int size=7;
+
 		int down=16;
-		int move=size+1;
+		int move=rect_size_for_row+1;
+		return createRowOfRectangles(x, y, rect_size_for_row, down, move);
+	}
+	/**
+	 * @param x
+	 * @param y
+	 * @param size
+	 * @param down
+	 * @param move
+	 * @return
+	 */
+	protected Rectangle2D[] createRowOfRectangles(int x, int y, int size, int down, int move) {
 		Rectangle2D[] r3 = new Rectangle2D[] {
 				new Rectangle2D.Double(x, y+down,size, size),
 				new Rectangle2D.Double(x+move, y+down,size, size),
