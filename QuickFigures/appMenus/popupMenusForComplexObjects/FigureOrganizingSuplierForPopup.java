@@ -66,6 +66,8 @@ import handles.layoutHandles.AddLabelHandle;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.IconUtil;
+import iconGraphicalObjects.PixelDensityIcon;
+import iconGraphicalObjects.ScaleSizeIcon;
 import icons.FigureMenuIcon;
 import icons.QuickFigureIcon;
 import icons.SourceImageTreeIcon;
@@ -179,11 +181,11 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				recropPanelsButton.setIcon( CropIconGraphic.createsCropIcon());
 				imagesMenu.add(recropPanelsButton);
 				
-				reScalePanelsButton= new BasicSmartMenuItem("Re-Set Scale for All Images");
+				reScalePanelsButton= new BasicSmartMenuItem("Re-Set Scale for All Images", new PixelDensityIcon(PixelDensityIcon.VERSION_IMAGE_SCALE));
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				
-				rePanelSizePanelsButton= new BasicSmartMenuItem("Re-size panels without scale Re-Set");
+				rePanelSizePanelsButton= new BasicSmartMenuItem("Re-size panels without scale Re-Set", ScaleSizeIcon.createIcon());
 				rePanelSizePanelsButton.addActionListener(this);
 				imagesMenu.add(rePanelSizePanelsButton);
 				
@@ -193,7 +195,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				jj.add(recreatePanelsButton);
 							recreatePanelsButton.addActionListener(this);
 				jj.add(imagesMenu);
-				rePPIPanelsButton=new BasicSmartMenuItem("Re-Set Pixel Density for All Images");
+				rePPIPanelsButton=new BasicSmartMenuItem("Re-Set Pixel Density for All Images", new PixelDensityIcon(PixelDensityIcon.VERSION_PIXEL_RESULUTION));
 				rePPIPanelsButton.addActionListener(this);
 				imagesMenu.add(rePPIPanelsButton);
 				
