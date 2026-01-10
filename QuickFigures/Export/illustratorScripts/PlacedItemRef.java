@@ -142,6 +142,8 @@ public class PlacedItemRef extends IllustratorObjectRef{
 		if (name.contains("?")) {name=name.replace("?", " ");}
 		if (name.contains(">")) {name=name.replace(">", " ");}
 		if (name.contains("<")) {name=name.replace("<", " ");}
+		if (name.contains("\"")) {name=name.replace("\"", " ");}
+		if (name.contains("\'")) {name=name.replace("\'", " ");}
 		if (name.contains(".zvi")) {name=name.replace(" zvi", " ");}
 		
 		String directory=DirectoryHandler.getDefaultHandler().getTempFolderPath()+"/"+name+""+((int)(1000000000*Math.random()))+".png";
