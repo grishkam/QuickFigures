@@ -30,6 +30,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.JPopupMenu;
+
 import applicationAdapters.CanvasMouseEvent;
 import genericTools.Object_Mover;
 import graphicalObjects.ZoomableGraphic;
@@ -42,6 +44,8 @@ import layout.BasicObjectListHandler;
 import locatedObject.LocatedObject2D;
 import locatedObject.ObjectContainer;
 import locatedObject.RectangleEdges;
+import menuUtil.SmartPopupJMenu;
+import popupMenusForComplexObjects.ImagePanelMenu;
 import undo.CombinedEdit;
 import undo.UndoMoveItems;
 import utilityClasses1.ArraySorter;
@@ -437,6 +441,14 @@ public class ImagePanelHandle extends SmartHandle {
 
 
 
+	}
+	
+	/**returns the popup menu for this handle. some subclasses return menus while others do not*/
+	public JPopupMenu getJPopup() {
+		SmartPopupJMenu output = new SmartPopupJMenu();
+		output.add(ImagePanelMenu.createCropModeMenuItem(thePanel));
+		
+		return output;
 	}
 
 }

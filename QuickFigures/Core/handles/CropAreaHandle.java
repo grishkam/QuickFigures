@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.MultiChannelSlot;
@@ -34,6 +35,7 @@ import channelMerging.PreProcessInformation;
 import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import graphicalObjects.CordinateConverter;
+import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
@@ -113,12 +115,18 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**Method simulates a handle drag and release at aparticular location
+	 * @return */
+	public CombinedEdit pullHandleToLocation(CanvasMouseEvent e) {
+		handlePress(e);
+		handleDrag(e);
+		return onHandleRelease(e);
+	}
 	
 	/**performed to drag the handles*/
 	public void handleDrag(CanvasMouseEvent e) {
 		super.handleDrag(e);
 		thePanel.dragOngoing=true;
-		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
 		Point p2 = e.getCoordinatePoint();
 		int handlenum = this.getHandleNumber();
 		if (!this.isCenterHandle()){
@@ -219,9 +227,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 			r1.width=(int) (r1.width*expand);
 		}
 		
-	
-		
-		
+
 		if(this.isCenterHandle()) {
 			r1.x=(int) (r1.x-(r1.width*expand-r1.width));
 			r1.y=(int) (r1.y-(r1.height*expand-r1.height));
@@ -256,7 +262,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		}
 		display.setStrokeColor(overcolor);
 		
-		selectionManagger.setSelectionGraphic(display);
+		selectionManagger.setSelectionGraphic2(display);
 		
 		
 		addAlignmentLine(selectionManagger, display);
@@ -314,6 +320,21 @@ public class CropAreaHandle extends ImagePanelHandle {
 			return;
 		}
 		
+		CombinedEdit combinedEdit = onHandleRelease(e);
+		findOtherPanels(e, combinedEdit );
+		
+		UndoLayoutEdit ud1 = FigureOrganizingSuplierForPopup.updateRowColSizesOf(this.mdl);
+		combinedEdit.addEditToList(ud1);
+		
+		e.addUndo(combinedEdit);
+	}
+
+
+	/**
+	 * @param e
+	 * @return
+	 */
+	protected CombinedEdit onHandleRelease(CanvasMouseEvent e) {
 		e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 		RectangularGraphic r = alternateCropArea;
 		PreProcessInformation modifications = slot.getModifications();
@@ -330,8 +351,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(mdl);
 		slot.applyCropAndScale(process);
 		
-		UndoLayoutEdit ud1 = FigureOrganizingSuplierForPopup.updateRowColSizesOf(this.mdl);
-		e.addUndo(new CombinedEdit(crop.additionalUndo,undo1, ud1, crop.additionalUndo));
+		
+		CombinedEdit combinedEdit = new CombinedEdit(crop.additionalUndo,undo1,  crop.additionalUndo);
+		return combinedEdit;
 	}
 	
 	/**
@@ -442,6 +464,36 @@ public class CropAreaHandle extends ImagePanelHandle {
 	protected void setPanelCenterLocationAfterHandleDrag(Point p2) {
 		thePanel.setLocationType(RectangleEdges.CENTER);
 		
+	}
+	
+	/**finds other selected images and applies the crop to them*/
+	public void findOtherPanels(CanvasMouseEvent e, CombinedEdit undo) {
+		if(!e.shiftDown()|| getHandleNumber()==RectangleEdges.LOWER_RIGHT||getHandleNumber()==RectangleEdges.UPPER_RIGHT||getHandleNumber()==RectangleEdges.CENTER)
+			return;
+		ArrayList<ImagePanelGraphic> cousinImages=new ArrayList<ImagePanelGraphic> ();
+		ArrayList<ZoomableGraphic> theSelected = e.getSelectionSystem().getSelecteditems();
+		MultichannelDisplayLayer mdl0 = MultichannelDisplayLayer.findMultiChannelForGraphic(thePanel.getParentLayer(), thePanel);
+		for(Object z: theSelected) {
+			if(z instanceof ImagePanelGraphic) {
+				ImagePanelGraphic image=(ImagePanelGraphic) z;
+				MultichannelDisplayLayer mdl1 = MultichannelDisplayLayer.findMultiChannelForGraphic(thePanel.getParentLayer(), image);
+				if(mdl1!=mdl0) {
+					cousinImages.add(image);
+				}
+			}
+		}
+		
+		if(cousinImages.size()>0 &&ShowMessage.yesOrNo("You held shift while pulling a crop handle with multiple panels selected do you want to try to propagate the crop to the other images?"))
+		for(ImagePanelGraphic c: cousinImages) {
+			CropAreaHandle.addCropHandles(c, true);
+			SmartHandleList shl = c.getSmartHandleList();
+			SmartHandle handle1 = shl.getHandleNumber(this.getHandleNumber()) ;
+			if(handle1 instanceof CropAreaHandle) {
+				CropAreaHandle c2=(CropAreaHandle) handle1;
+				CombinedEdit edit = c2.pullHandleToLocation(e);
+				undo.addEditToList(edit);
+			}
+		}
 	}
 	
 	

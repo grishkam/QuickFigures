@@ -40,9 +40,12 @@ import locatedObject.LocatedObject2D;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
+import multiChannelFigureUI.ChannelSwapHandleList.CropThisPanelPanelHandle;
 
 /**A set of handles that provide a way for the user to re-order channels*/
 public class ChannelSwapHandleList extends SmartHandleList {
+
+	
 
 	/**
 	 * 
@@ -96,6 +99,7 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		for(ChannelEntry chan:channels) {
 			add(new ChannelSwapHandle(chan));
 		}
+		add(new CropThisPanelPanelHandle());
 		
 	}
 	
@@ -303,6 +307,19 @@ public class ChannelSwapHandleList extends SmartHandleList {
 		return theDisplayLayer;
 	}
 
-	
+	/**
+	 
+	 * 
+	 */
+public class CropThisPanelPanelHandle extends SmartHandle {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		
+
+}
 
 }

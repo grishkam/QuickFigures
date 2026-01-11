@@ -110,16 +110,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			everyMenu.addMenus(mc);
 			this.add(mc);
 			
-			mc.add(new ObjectAction<ImagePanelGraphic>(c) {
-				@Override
-				public AbstractUndoableEdit2 performAction() {
-					imagePanel.select();
-					CropAreaHandle.addCropHandles(imagePanel, true);
-					ShowMessage.showOptionalMessage("Crop handle instructiosn", true, "Right, Left, Top and Bottom Handles can be dragged to adjust crop area", "Panel handles will return to normal if panel is deselected", "this feature is still experimental");
-					;return null;}
-
-				
-			}.createJMenuItem("Crop by dragging handles", CropIconGraphic.createsCropIcon()));
+			mc.add(createCropModeMenuItem(c));
 
 		}
 		
@@ -157,6 +148,25 @@ public class ImagePanelMenu extends AttachedItemMenu {
 	
 		super.setLockedItem(c);
 		super.addLockedItemMenus();
+	}
+
+
+
+	/**
+	 * @param c
+	 * @return
+	 */
+	public static JMenuItem createCropModeMenuItem(ImagePanelGraphic c) {
+		return new ObjectAction<ImagePanelGraphic>(c) {
+			@Override
+			public AbstractUndoableEdit2 performAction() {
+				c.select();
+				CropAreaHandle.addCropHandles(c, true);
+				ShowMessage.showOptionalMessage("Crop handle instructions", true, "Right, Left, Top and Bottom Handles can be dragged to adjust crop area", "Panel handles will return to normal if panel is deselected", "this feature is still new!");
+				;return null;}
+
+			
+		}.createJMenuItem("Crop by dragging handles", CropIconGraphic.createsCropIcon());
 	}
 
 

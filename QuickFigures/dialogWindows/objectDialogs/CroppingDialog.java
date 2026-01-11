@@ -1158,7 +1158,7 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 			if(crop.enableObjectSelection) {
 				slot.redoCropAndScale();
 			}
-			crop.additionalUndo=					updateInsets(crop, process);
+			crop.additionalUndo=updateInsets(crop, process);
 			
 		} catch (Exception e) {
 			IssueLog.logT(e);
