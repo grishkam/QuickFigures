@@ -446,7 +446,7 @@ public class ImagePanelHandle extends SmartHandle {
 	/**returns the popup menu for this handle. some subclasses return menus while others do not*/
 	public JPopupMenu getJPopup() {
 		SmartPopupJMenu output = new SmartPopupJMenu();
-		output.add(ImagePanelMenu.createCropModeMenuItem(thePanel));
+		output.add(ImagePanelMenu.createCropModeMenuItem(thePanel, true));
 		
 		return output;
 	}

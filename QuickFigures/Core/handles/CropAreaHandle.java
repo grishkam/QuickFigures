@@ -30,6 +30,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
+import javax.swing.JPopupMenu;
+
 import applicationAdapters.CanvasMouseEvent;
 import channelMerging.MultiChannelSlot;
 import channelMerging.PreProcessInformation;
@@ -47,9 +49,11 @@ import imageDisplayApp.OverlayObjectManager;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import objectDialogs.CroppingDialog;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
+import popupMenusForComplexObjects.ImagePanelMenu;
 import standardDialog.StandardDialog;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
@@ -79,7 +83,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private Rectangle startingLocation;
 	public static int ROTATION_CROP_AREA=819;
 	
-	public static enum CropAreaScaleMethod{NO__CROP_ONLY__DO_NOT_ALTER_ANYTHING_ELSE, YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA, YES_ALTER_PANEL_SIZE_AND_ALTER_PANEL_PPI}
+	public static enum CropAreaScaleMethod{NO__CROP_ONLY__DO_NOT_ALTER_ANYTHING_ELSE, YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA, YES_RESIZE_PANELS_WITHOUT_SCALE_RESET__CHANGE_PANEL_PPI}
 	public static CropAreaScaleMethod user_selected_scaling_method=null;
 	
 	/**
@@ -99,6 +103,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	public void handlePress(CanvasMouseEvent e) {
 		startingLocation=thePanel.getBounds();
 		this.findFigureComponentsForPanel(thePanel);
+		thePanel.setLocationType(RectangleEdges.UPPER_LEFT);
 		
 		if(e.clickCount()>1) {
 			
@@ -155,6 +160,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 */
 	private boolean isCropAreaScaleAdjusted() {
 		if(this.getHandleNumber()==RectangleEdges.UPPER_RIGHT||this.getHandleNumber()==RectangleEdges.LOWER_RIGHT)
+			return true;
+		if(this.getHandleNumber()==RectangleEdges.UPPER_LEFT||this.getHandleNumber()==RectangleEdges.LOWER_LEFT)
 			return true;
 		return false;
 	}
@@ -232,7 +239,7 @@ public class CropAreaHandle extends ImagePanelHandle {
            
 		}
 		
-		if(handlenum==RectangleEdges.LOWER_RIGHT||getHandleNumber()==RectangleEdges.UPPER_RIGHT) {
+		if(this.isCropAreaScaleAdjusted()) {
 			alternateCropArea.scaleAbout(alternateCropArea.getCenterOfRotation(), expandx);
 		}
 		
@@ -319,7 +326,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 		RectangularGraphic display = new RectangularGraphic(r1);
 		
-		if(getHandleNumber()==RectangleEdges.LOWER_RIGHT||getHandleNumber()==RectangleEdges.UPPER_RIGHT) {
+		if(this.isCropAreaScaleAdjusted()) {
 			display.scaleAbout(display.getCenterOfRotation(), expandx);
 		}
 		
@@ -424,12 +431,13 @@ public class CropAreaHandle extends ImagePanelHandle {
 				scaleInformation=scaleInformation.getAtDifferentScale(newScaleLevel);
 			}//if user is scaling the crop area
 			
-			if(user_selected_scaling_method==CropAreaScaleMethod.YES_ALTER_PANEL_SIZE_AND_ALTER_PANEL_PPI) {
+			if(user_selected_scaling_method==CropAreaScaleMethod.YES_RESIZE_PANELS_WITHOUT_SCALE_RESET__CHANGE_PANEL_PPI) {
 		
 				undoextra=new CombinedEdit();
 				for(ImagePanelGraphic aPanel: mdl.getPanelList().getPanelGraphics()) {
 					undoextra.addEditToList(new CombinedEdit(new UndoScalingAndRotation(aPanel),new UndoMoveItems(aPanel)));
-						aPanel.setRelativeScale(aPanel.getRelativeScale()/expandx);
+					aPanel.setLocationType(RectangleEdges.UPPER_LEFT);	
+					aPanel.setRelativeScale(aPanel.getRelativeScale()/expandx);
 				}
 			}
 		}
@@ -445,7 +453,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	
 	
 
-	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER,ROTATION_CROP_AREA, RectangleEdges.LOWER_RIGHT, RectangleEdges.UPPER_RIGHT};
+	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER,ROTATION_CROP_AREA, RectangleEdges.LOWER_RIGHT,RectangleEdges.UPPER_RIGHT, RectangleEdges.UPPER_LEFT, RectangleEdges.LOWER_LEFT};
 	
 	/**adds crop  handles*/
 	public static void addCropAreaHandles(ImagePanelGraphic im, SmartHandleList l) {
@@ -513,6 +521,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	public static ImagePanelHandleList hideOrRevealCropHandles(ImagePanelGraphic imagePanel, boolean cropHandleMode) {
 		if(!cropHandleMode)
 		user_selected_scaling_method=null;//resets this to null so that the user is asked to choose again
+		imagePanel.setLocationType(RectangleEdges.UPPER_LEFT);
 		ImagePanelHandleList panelHandleList = imagePanel.getPanelHandleList();
 		boolean crop_handles_present=false;
 		for(SmartHandle h : panelHandleList) {
@@ -679,5 +688,12 @@ public class CropAreaHandle extends ImagePanelHandle {
 		return this.getHandleNumber()==RectangleEdges.LEFT||this.getHandleNumber()==RectangleEdges.RIGHT;
 	}
 	
+	/**returns the popup menu for this handle. some subclasses return menus while others do not*/
+	public JPopupMenu getJPopup() {
+		SmartPopupJMenu output = new SmartPopupJMenu();
+		output.add(ImagePanelMenu.createCropModeMenuItem(thePanel, false));
+		
+		return output;
+	}
 
 }

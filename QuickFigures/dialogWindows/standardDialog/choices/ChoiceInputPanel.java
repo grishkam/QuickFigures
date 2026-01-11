@@ -61,7 +61,7 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 	
 	
 	
-	
+	/**Constructor for the input panel*/
 	public ChoiceInputPanel(String labeln, String[] choices, int startingindex) {
 		
 		label.setText(labeln);

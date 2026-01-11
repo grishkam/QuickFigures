@@ -57,6 +57,7 @@ import handles.CropAreaHandle;
 import handles.ImagePanelHandleList;
 import handles.SmartHandle;
 import iconGraphicalObjects.CropIconGraphic;
+import iconGraphicalObjects.ScaleSizeIcon;
 import icons.InsetToolIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
@@ -110,7 +111,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			everyMenu.addMenus(mc);
 			this.add(mc);
 			
-			mc.add(createCropModeMenuItem(c));
+			mc.add(createCropModeMenuItem(c, true));
 
 		}
 		
@@ -152,21 +153,21 @@ public class ImagePanelMenu extends AttachedItemMenu {
 
 
 
-	/**
+	/**returns a menu item to makde the crop handles appear and vanish
 	 * @param c
 	 * @return
 	 */
-	public static JMenuItem createCropModeMenuItem(ImagePanelGraphic c) {
+	public static JMenuItem createCropModeMenuItem(ImagePanelGraphic c, boolean show_crop_handles) {
 		return new ObjectAction<ImagePanelGraphic>(c) {
 			@Override
 			public AbstractUndoableEdit2 performAction() {
 				c.select();
-				CropAreaHandle.addCropHandles(c, true);
-				ShowMessage.showOptionalMessage("Crop handle instructions", true, "Drag Right, Left, Top and Bottom Handles to adjust crop area for this set of images", "Drag the lower right corner to scale the crop area", "If you have multiple sets of images selected, you can align their crop areas", "Panel handles will return to normal if panel is deselected", "this feature is still new!");
+				CropAreaHandle.addCropHandles(c, show_crop_handles);
+				ShowMessage.showOptionalMessage("Crop handle instructions", true, "Drag handles to adjust, move or resize crop area for this set of images", "If you have multiple sets of images selected, you can align their crop areas", "Panel handles will return to normal if panel is deselected", "this feature is still new!");
 				;return null;}
 
 			
-		}.createJMenuItem("Crop by dragging handles", CropIconGraphic.createsCropIcon());
+		}.createJMenuItem(show_crop_handles? "Crop by dragging handles": "Resize panel by dragging handles", show_crop_handles? CropIconGraphic.createsCropIcon(): ScaleSizeIcon.createIcon());
 	}
 
 
