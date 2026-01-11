@@ -50,6 +50,8 @@ import javax.swing.undo.UndoManager;
 import channelMerging.ChannelEntry;
 import channelMerging.MultiChannelImage;
 import graphicActionToolbar.CurrentFigureSet;
+import imageScaling.Interpolation;
+import imageScaling.ScaleInformation;
 import locatedObject.ScaleInfo;
 import logging.IssueLog;
 import menuUtil.SmartPopupJMenu;
@@ -976,6 +978,9 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	public static Double getNumberFromUser(String st, double starting) {
 		return getNumberFromUser(st, starting, false, new Object[] {});
 	}
+	
+	
+	
 	public static Double getNumberFromUser(String st, double starting, boolean angle, Object... otherOptions) {
 		StandardDialog sd = new StandardDialog(st);
 		sd.setModal(true);
@@ -993,6 +998,27 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 		}
 		return starting;
 	}
+	
+	/**Attempts to add a quick enum selection*/
+	public static Enum<?> getEnumChoiseFromUser(String st, Enum<?> starting, Enum<?>[] possible_vales, Object... otherOptions) {
+		StandardDialog sd = new StandardDialog(st);
+		sd.setModal(true);
+		sd.setWindowCentered(true);
+		
+		ChoiceInputPanel interpolationChoice = ChoiceInputPanel.buildForEnum(st, possible_vales, starting); 
+			sd.add(st, interpolationChoice);
+		
+		if (otherOptions!=null &&otherOptions.length>0) {
+			for(Object of: otherOptions)StoredValueDilaog.addFieldsForObject(sd, of);
+		}
+		sd.showDialog();
+		
+		if(sd.wasOKed) {
+			return possible_vales[interpolationChoice.getSelectedIndex()];
+		}
+		return starting;
+	}
+	
 	
 	public static Point2D getPointFromUser(String st, Point2D starting) {
 		StandardDialog sd = new StandardDialog(st);

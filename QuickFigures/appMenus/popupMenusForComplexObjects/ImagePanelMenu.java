@@ -162,7 +162,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			public AbstractUndoableEdit2 performAction() {
 				c.select();
 				CropAreaHandle.addCropHandles(c, true);
-				ShowMessage.showOptionalMessage("Crop handle instructions", true, "Right, Left, Top and Bottom Handles can be dragged to adjust crop area", "Panel handles will return to normal if panel is deselected", "this feature is still new!");
+				ShowMessage.showOptionalMessage("Crop handle instructions", true, "Drag Right, Left, Top and Bottom Handles to adjust crop area for this set of images", "Drag the lower right corner to scale the crop area", "If you have multiple sets of images selected, you can align their crop areas", "Panel handles will return to normal if panel is deselected", "this feature is still new!");
 				;return null;}
 
 			

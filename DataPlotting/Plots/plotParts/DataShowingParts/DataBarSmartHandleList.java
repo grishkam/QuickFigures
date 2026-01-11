@@ -187,6 +187,7 @@ public static class BarWidthSmartHandle extends SmartHandle {
 			/**shows a dialog for this handle*/
 			if (mouse.clickCount()==2) {
 				Double n = StandardDialog.getNumberFromUser("Input Width", theBar.getBarWidth());
+				
 				prepareUndoForHandle();
 				if(n!=null && n>0.1)
 					{

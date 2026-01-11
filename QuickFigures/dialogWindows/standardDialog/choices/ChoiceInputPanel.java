@@ -271,6 +271,7 @@ public void setValue(int value) {
 		for(int i=0; i<output.length; i++) {
 			String name = en[i].name();
 			output[i]=titleCase(name);
+			output[i]=output[i].replace("  ", ". ");
 		}
 		
 		return output;
