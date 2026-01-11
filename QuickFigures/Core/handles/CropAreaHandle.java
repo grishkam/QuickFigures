@@ -41,6 +41,7 @@ import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import imageDisplayApp.OverlayObjectManager;
+import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import messages.ShowMessage;
@@ -51,7 +52,7 @@ import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
 
 /**
- Handle for making changes to the crop area without opening a crop dialog
+ Handle for making changes to the crop area without opening a crop dialog. 
  */
 public class CropAreaHandle extends ImagePanelHandle {
 
@@ -77,7 +78,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 	public CropAreaHandle(ImagePanelGraphic panel, int handlenum) {
 		super(panel, handlenum);
 		this.setHandleColor(Color.darkGray);
-		
+		if(handlenum==RectangleEdges.LOWER_RIGHT) {
+			this.setHandleColor(Color.yellow);
+		}
 		
 	}
 	
@@ -181,6 +184,10 @@ public class CropAreaHandle extends ImagePanelHandle {
            
 		}
 		
+		if(handlenum==RectangleEdges.LOWER_RIGHT||getHandleNumber()==RectangleEdges.UPPER_RIGHT) {
+			alternateCropArea.scaleAbout(alternateCropArea.getCenterOfRotation(), expandx);
+		}
+		
 		if(handlenum==RectangleEdges.CENTER) {
 			shiftx=(cordinate_of_drag.getX()-thePanel.getBounds().getCenterX())/thePanel.getBounds().getWidth();
 			shifty=(cordinate_of_drag.getY()-thePanel.getBounds().getCenterY())/thePanel.getBounds().getHeight();
@@ -204,7 +211,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 	}
 	
-	/**creates a message below that panel that gives the user information regarding the image panel*/
+	/**creates preview of the scale for the panel*/
 	protected void showPanelInformation(OverlayObjectManager selectionManagger) {
 		Rectangle r1 = super.thePanel.getBounds();
 		if(getHandleNumber()==RectangleEdges.RIGHT) {
@@ -239,6 +246,11 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 		
 		RectangularGraphic display = new RectangularGraphic(r1);
+		
+		if(getHandleNumber()==RectangleEdges.LOWER_RIGHT||getHandleNumber()==RectangleEdges.UPPER_RIGHT) {
+			display.scaleAbout(display.getCenterOfRotation(), expandx);
+		}
+		
 		if(this.isRotationHandle()) {
 			display.setAngle(-angleShift);
 		}
@@ -298,13 +310,23 @@ public class CropAreaHandle extends ImagePanelHandle {
 		thePanel.dragOngoing=false;
 		
 		if(!valid) {
-			ShowMessage.showOptionalMessage("this crop area is not valid");
+			ShowMessage.showOptionalMessage("this crop area is not valid. ");
 			return;
 		}
 		
 		e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
 		RectangularGraphic r = alternateCropArea;
-		PreProcessInformation process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), slot.getModifications().getScaleInformation());
+		PreProcessInformation modifications = slot.getModifications();
+		if(modifications==null) {
+			modifications= new PreProcessInformation(new ScaleInformation());
+		}
+		ScaleInformation scaleInformation = modifications.getScaleInformation();
+		
+		if(changeScaleLevelToKeepPanelSizeSame()) {
+			scaleInformation=scaleInformation.getAtDifferentScale(scaleInformation.getScale()/expandx);//if user is scaling the crop area
+		}
+		
+		PreProcessInformation process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), scaleInformation);
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(mdl);
 		slot.applyCropAndScale(process);
 		
@@ -312,7 +334,16 @@ public class CropAreaHandle extends ImagePanelHandle {
 		e.addUndo(new CombinedEdit(crop.additionalUndo,undo1, ud1, crop.additionalUndo));
 	}
 	
-	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER,ROTATION_CROP_AREA};
+	/**
+	 * @return
+	 */
+	private boolean changeScaleLevelToKeepPanelSizeSame() {
+		if(this.getHandleNumber()!=RectangleEdges.LOWER_RIGHT)
+			return false;
+		return ShowMessage.yesOrNo("Do you want to change the image scale such that the new crop fits in the same area?");
+	}
+
+	public static final int[] usedEdges= new int[] {RectangleEdges.TOP,  RectangleEdges.BOTTOM, RectangleEdges.LEFT, RectangleEdges.RIGHT, RectangleEdges.CENTER,ROTATION_CROP_AREA, RectangleEdges.LOWER_RIGHT, RectangleEdges.UPPER_RIGHT};
 	
 	/**adds crop  handles*/
 	public static void addCropAreaHandles(ImagePanelGraphic im, SmartHandleList l) {

@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Feb 18, 2023
- * Version: 2023.2
+ * Date Modified: Jan 10, 2026
+ * Version: 2026.1
  */
 package popupMenusForComplexObjects;
 
@@ -181,7 +181,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				recropPanelsButton.setIcon( CropIconGraphic.createsCropIcon());
 				imagesMenu.add(recropPanelsButton);
 				
-				reScalePanelsButton= new BasicSmartMenuItem("Re-Set Scale for All Images", new PixelDensityIcon(PixelDensityIcon.VERSION_IMAGE_SCALE));
+				reScalePanelsButton= new BasicSmartMenuItem("Re-Set Scale for All Images", new PixelDensityIcon(PixelDensityIcon.VERSION_SCALE_TO_KEEP_PIXEL_SIZE));
 				reScalePanelsButton.addActionListener(this);
 				imagesMenu.add(reScalePanelsButton);
 				
@@ -311,7 +311,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 		}
 		
 		if (source ==reScalePanelsButton) {
-			undo=showReScaleAll();
+			undo=showReScaleAll(figureOrganizingLayerPane, (MultichannelDisplayLayer) figureOrganizingLayerPane.getPrincipalMultiChannel(), true);
 		}
 		
 		if (source ==rePanelSizePanelsButton) {
@@ -489,8 +489,8 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	}
 	
 	/**shows a dialog for changing the scale factor of many multichannel images within the figure*/
-	CombinedEdit showReScaleAll() {
-		CombinedEdit output     = showReScaleAllDisplayDialog((MultichannelDisplayLayer) figureOrganizingLayerPane.getPrincipalMultiChannel());
+	public static CombinedEdit showReScaleAll(FigureOrganizingLayerPane figureOrganizingLayerPane, MultichannelDisplayLayer l,  boolean apply_to_all) {
+		CombinedEdit output     = showReScaleAllDisplayDialog(figureOrganizingLayerPane, l, apply_to_all);
 		CanvasResizeUndo output2 = CurrentFigureSet.canvasResizeUndoable();
 		return new CombinedEdit(output, output2);
 	}
@@ -505,7 +505,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 	/**shows a dialog for changing the scale factor of many multichannel images within the figure*/
-	 CombinedEdit showReScaleAllDisplayDialog(MultichannelDisplayLayer display) {
+	 static CombinedEdit showReScaleAllDisplayDialog(FigureOrganizingLayerPane figureOrganizingLayerPane, MultichannelDisplayLayer display, boolean apply_to_all) {
 		 CombinedEdit output = new CombinedEdit();
 		ScaleInformation newScale = showRescaleDialogSingleFor(display);
 		
@@ -514,7 +514,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 				);
 		
 		ArrayList<ImageDisplayLayer> all = figureOrganizingLayerPane.getMultiChannelDisplays();
-		
+		if(apply_to_all)
 		for(ImageDisplayLayer crop2: all) {
 			if(crop2==display) continue;
 			

@@ -30,10 +30,12 @@ import figureOrganizer.FigureOrganizingLayerPane;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import iconGraphicalObjects.PixelDensityIcon;
 import iconGraphicalObjects.TrashIconGraphic;
 import icons.QuickFigureIcon;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
+import messages.ShowMessage;
 import menuUtil.PopupMenuSupplier;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import ultilInputOutput.FileChoiceUtil;
@@ -64,7 +66,10 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	/**Adds each submenu*/
 	public void addMenus(SmartPopupJMenu thi, MultichannelDisplayLayer panel, PanelList list) {
 		thi.add(new ImageMenuForMultiChannel("Source Image", panel, list) );
-		thi.add(new PanelMenuForMultiChannel("Image Panels", panel, list, panel.getPanelManager()));
+		PanelMenuForMultiChannel menuItem = new PanelMenuForMultiChannel("Image Panels", panel, list, panel.getPanelManager());
+		addChangeScale(menuItem);
+		thi.add(menuItem);
+		
 		thi.add(new MenuForMultiChannelDisplayLayer("Channel Labels", panel, list, panel.getChannelLabelManager()));
 		addChannelMenu(thi);
 	}
@@ -75,6 +80,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 		output[0]=new ImageMenuForMultiChannel("Source Image", displayLayer, list) ;
 		thi.add(output[0]);
 		output[1]=generatePanelMenu();
+		addChangeScale(output[1]);
 		thi.add(output[1]);
 		addChannelLabelMenu(thi);
 		
@@ -147,6 +153,23 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 			
 			};
 		thi.add(act.createJMenuItem("Create second view",  new QuickFigureIcon(true, true, -2).getMenuVersion()));
+	}
+	
+	/**creates a menu item to add another display layer, using the same source image as this one*/
+	protected void addChangeScale(JMenu thi) {
+		ObjectAction<MultichannelDisplayLayer> act = new ObjectAction<MultichannelDisplayLayer>(displayLayer) {
+			@Override
+			public AbstractUndoableEdit2  performAction() {
+				ShowMessage.showOptionalMessage("This option does not apply to all images in the figure", true, "This will only set the scale of one image", "only use this option if you know you want different scale values for each image", "Go to the figure menu to set scale for all images in the figure");
+				
+				
+				return FigureOrganizingSuplierForPopup.showReScaleAll(FigureOrganizingLayerPane.findFigureOrganizer(displayLayer), displayLayer, false);
+				
+			}
+
+			
+			};
+		thi.add(act.createJMenuItem("Change scale for this image only",  new PixelDensityIcon(PixelDensityIcon.VERSION_SCALE_TO_KEEP_PIXEL_SIZE)));
 	}
 
 	/**Adds a channel menu that is limited to this display layer*/

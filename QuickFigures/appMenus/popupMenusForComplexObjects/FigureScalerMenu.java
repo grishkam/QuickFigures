@@ -28,6 +28,7 @@ import applicationAdapters.DisplayedImage;
 import fLexibleUIKit.ObjectAction;
 import figureOrganizer.FigureScaler;
 import graphicalObjects_LayoutObjects.PanelLayoutGraphic;
+import iconGraphicalObjects.PixelDensityIcon;
 import iconGraphicalObjects.ScaleSizeIcon;
 import imageMenu.CanvasAutoResize;
 import imageMenu.ZoomFit;
@@ -134,7 +135,7 @@ public class FigureScalerMenu extends SmartJMenu{
 			public void actionPerformed(ActionEvent arg0) {
 				showFigureRescaleDialog();
 				}
-	}.createJMenuItem("Scale objects and Reset scale");
+	}.createJMenuItem("Scale objects and Reset scale", new PixelDensityIcon(PixelDensityIcon.VERSION_SCALE_TO_KEEP_PIXEL_SIZE));
 	}
 	
 	
