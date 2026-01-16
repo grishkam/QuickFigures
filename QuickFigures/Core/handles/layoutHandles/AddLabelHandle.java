@@ -219,6 +219,7 @@ public class AddLabelHandle extends MoveRowHandle {
 					return;
 					}
 				
+				
 			}
 		}
 		
@@ -300,6 +301,8 @@ public class AddLabelHandle extends MoveRowHandle {
 		DefaultLayoutGraphic layout2 = layout;
 		int index2 = this.index;
 		
+		
+		
 		CombinedEdit undo = createLaneLabelsFor(canvasMouseEventWrapper, layout2, index2);
 			
 		canvasMouseEventWrapper.addUndo(undo);
@@ -327,6 +330,11 @@ public class AddLabelHandle extends MoveRowHandle {
 			DisplayedImage asDisplay) {
 		CombinedEdit undo = new CombinedEdit();
 		LaneLabelAdder laneLabelAdder = new LaneLabelAdder();
+		
+		boolean result = laneLabelAdder.showLaneLabelDialog();
+		if(result==false)
+			return null;
+		
 		TextGraphic textItem = laneLabelAdder. createTextItem();
 		
 		

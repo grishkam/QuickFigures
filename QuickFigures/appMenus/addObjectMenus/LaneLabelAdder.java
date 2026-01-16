@@ -16,8 +16,8 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 2, 2021
- * Date Modified: Nov 27, 2021
- * Version: 2023.2
+ * Date Modified: Jan 15, 2026
+ * Version: 2026.1
  */
 package addObjectMenus;
 
@@ -42,8 +42,10 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
+import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.TextPatternDialog;
+import standardDialog.choices.ChoiceInputPanel;
 import storedValueDialog.StoredValueDilaog;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -53,7 +55,9 @@ import utilityClasses1.TagConstants;
  * Meant to represent lane labels*/
 public class LaneLabelAdder extends BasicGraphicAdder {
 	
-
+	static enum LaneLabelFormat {DEFAULT, VERTICAL, HORIZONTAL}
+	static LaneLabelFormat currentFormat=LaneLabelFormat.DEFAULT;
+	
 	/**
 	 * 
 	 */
@@ -89,6 +93,11 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		boolean proceed = ShowMessage.showOptionalMessage("Lane labels are an experimental feature for western blot and gel images", false, "Lane labels for western blots are a work in progress, are you sure you want to proceed?");
 		if(!proceed)
 			return null;
+		
+		boolean result = showLaneLabelDialog();
+		if(result==false)
+			return null;
+		
 		TextGraphic out = createTextItem();
 		 addLockedItemToSelectedImage(out);
 		
@@ -103,8 +112,17 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	public TextGraphic createTextItem() {
 		TextGraphic out=new FigureLabelOrganizer.ColumnLabelTextGraphic();
 		out.setLocationUpperLeft(50, 50);
-		out.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
+		
+		out.setAttachmentPosition(getAttachmentPositionForLabel() );
 		return out;
+	}
+	
+	public AttachmentPosition getAttachmentPositionForLabel() {
+		if(currentFormat==LaneLabelFormat.DEFAULT)
+			return AttachmentPosition.defaultLaneLabel();
+		
+		return AttachmentPosition.defaultColLabel();
+			
 	}
 
 	/**Adds many copies of the text item to the selected images. Attaches each text to 
@@ -145,9 +163,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	public DefaultLayoutGraphic addLaneLabel(TextGraphic ag, boolean output, ArrayList<TextGraphic> added, GraphicLayer parentLayer,
 			Rectangle b, CombinedEdit undo) {
 		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
-		boolean result = showLaneLabelDialog();
-		if(result==false)
-			return null;
+		
 		
 		int nLanes=(int) laneLabelOptions.nLanes;
 		
@@ -186,13 +202,13 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 			if(newFontSize<=2)
 				newFontSize=2;
 			ag2.setFontSize(newFontSize);
-			ag2.setAngle(45);
+			ag2.setAngle(getAngleForLaneLabel());
 			
 			if (output) {
 				ag2=ag.copy();
 				ag2.setAttachmentPosition(ag.getAttachmentPosition());
 			} else {
-				ag.setAttachmentPosition(AttachmentPosition.defaultLaneLabel());
+				ag.setAttachmentPosition(getAttachmentPositionForLabel());
 				while (ag.getBounds().width>0.8*b.getWidth()) {ag.setFontSize(ag.getFont().getSize()-1);}
 			}
 			Rectangle2D panel = layout.makeAltered(LayoutSpaces.COLUMN_OF_PANELS).getPanel(laneIndex);
@@ -301,6 +317,18 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		return layoutWithLaneLabels;
 	}
 
+	/**returns the angle for the lane label
+	 * @return
+	 */
+	protected double getAngleForLaneLabel() {
+		
+		if(currentFormat==LaneLabelFormat.DEFAULT)
+		return Math.PI/3;
+		if(currentFormat==LaneLabelFormat.VERTICAL)
+			return Math.PI/2;
+		return 0;
+	}
+
 	/**
 	 * @param laneIndex
 	 * @return
@@ -313,10 +341,15 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 * Shos the dialog which allods the user to choose how many lane labels to create
 	 * @return true if user pressed ok
 	 */
-	protected boolean showLaneLabelDialog() {
+	public boolean showLaneLabelDialog() {
 		StoredValueDilaog storedValueDilaog = new StoredValueDilaog(laneLabelOptions);
 		storedValueDilaog .setModal(true);
 		 storedValueDilaog.setTitle("How many lane labels?");
+		 
+		 String lane_label_option="Label orientation";
+		 ChoiceInputPanel interpolationChoice = ChoiceInputPanel.buildForEnum(lane_label_option, LaneLabelFormat.values(), currentFormat); 
+		 storedValueDilaog.add(lane_label_option, interpolationChoice);
+			
 		 
 		 /**Adds a text pattern tab*/
 		 TextPatternDialog dis = new TextPatternDialog(laneLabelOptions.pattern1, false, false);
@@ -324,6 +357,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		 
 		storedValueDilaog.showDialog();
 		
+		currentFormat= LaneLabelFormat.values()[storedValueDilaog.getChoiceIndex(lane_label_option)];
 		laneLabelOptions.pattern1=dis.getTheTextPattern();//sets the pattern based on the text pattern tab
 		
 		return storedValueDilaog.wasOKed();
