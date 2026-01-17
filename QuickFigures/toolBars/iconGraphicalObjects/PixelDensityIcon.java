@@ -46,7 +46,9 @@ public class PixelDensityIcon implements Icon {
 	Object interpolation2=RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR;
 
 	
-	
+	public PixelDensityIcon() {
+		this(VERSION_SCALE_TO_KEEP_PIXEL_SIZE);
+	}
 	
 	public PixelDensityIcon(int version) {
 		the_version=version;

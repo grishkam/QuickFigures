@@ -30,6 +30,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JPopupMenu;
 
 import applicationAdapters.CanvasMouseEvent;
@@ -45,6 +46,9 @@ import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import iconGraphicalObjects.CropIconGraphic;
+import iconGraphicalObjects.PixelDensityIcon;
+import iconGraphicalObjects.ScaleSizeIcon;
 import imageDisplayApp.OverlayObjectManager;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
@@ -143,6 +147,23 @@ public class CropAreaHandle extends ImagePanelHandle {
 		return null;
 	}
 	
+	/**Method simulates a handle drag and release at aparticular location
+	 * @return */
+	public CombinedEdit pullHandleToValueLocation(CanvasMouseEvent e, double value) {
+		if(this.isCropHeightAdjusted()||this.isCropWidthAdjusted()) {
+			handlePress(e);
+			handleDrag(e);
+			
+			this.setExpansionFactorToThisFinalWidth(value);
+		
+			return onHandleRelease(e);
+		}
+		
+		
+		
+		return null;
+	}
+	
 	/**This scales the crop area by a given factor if it is a valid scaling*/
 	public CombinedEdit pullHandleToScale(CanvasMouseEvent e, double scale) {
 		if(isCropAreaScaleAdjusted()) {
@@ -198,6 +219,32 @@ public class CropAreaHandle extends ImagePanelHandle {
 			return;
 		}
 		
+		
+		expandx= dist2x/dist1;
+		expandy=dist2y/dist1;
+		
+		if(handlenum==RectangleEdges.RIGHT || handlenum==RectangleEdges.LEFT) {
+			expand = dist2x/dist1;
+			}
+		if(handlenum==RectangleEdges.BOTTOM||handlenum==RectangleEdges.TOP) {
+			expand = dist2y/dist1; 
+			}
+		
+		if(this.isRotationHandle()) {
+			angleShift = ShapeGraphic.getAngleBetweenPoints(thePanel.getCenterOfRotation(),p2.getLocation() );
+		}
+		
+		determineValidityOfCropArea(handlenum);
+		
+		
+	}
+
+
+	/**Determines if an antered crop area with the current settings for height, width and angle changes is valid
+	 * @param handlenum
+	 * @return 
+	 */
+	protected RectangularGraphic determineValidityOfCropArea(int handlenum) {
 		PreProcessInformation modifications = slot.getModifications();
 		if(modifications==null) {
 			modifications=new PreProcessInformation(crop.getRectForEntireImage());
@@ -207,12 +254,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 			 rectangle=crop.getRectForEntireImage();
 		 }
 		alternateCropArea = crop.createCropAreaRectangle(rectangle,modifications.getAngle() );
-		expandx= dist2x/dist1;
-		expandy=dist2y/dist1;
-		
 		
 		if(handlenum==RectangleEdges.RIGHT || handlenum==RectangleEdges.LEFT) {
-			expand = dist2x/dist1;
+			
 			
 			double w = rectangle.getWidth();
 			double w2 = w*expand;
@@ -226,7 +270,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		}
 		
 		if(handlenum==RectangleEdges.BOTTOM||handlenum==RectangleEdges.TOP) {
-			expand = dist2y/dist1;
+			
 			
 			double h = rectangle.getHeight();
 			double h2 = h*expand;
@@ -251,7 +295,6 @@ public class CropAreaHandle extends ImagePanelHandle {
 		}
 		
 		if(this.isRotationHandle()) {
-			angleShift = ShapeGraphic.getAngleBetweenPoints(thePanel.getCenterOfRotation(),p2.getLocation() );
 			alternateCropArea.setAngle(modifications.getAngle()-angleShift);
 			
 			
@@ -262,8 +305,7 @@ public class CropAreaHandle extends ImagePanelHandle {
          if(valid) {overcolor=Color.green;} else {
          	overcolor=Color.red;
          }
-		
-		
+         return alternateCropArea;
 	}
 	
 	
@@ -386,23 +428,67 @@ public class CropAreaHandle extends ImagePanelHandle {
 	}
 	
 	public void handleRelease(CanvasMouseEvent e) {
+		
+		boolean userSet=false;
+		double userSize=this.isCropHeightAdjusted()?thePanel.getObjectHeight(): thePanel.getObjectWidth();
+		
+		
+		/**If the user has double clicked, shows a dialog to enter a numeric value*/
+		if(e.clickCount()==2) {
+			
+			if(this.isCropAreaScaleAdjusted()) {
+				clearPreview(e);
+				return;
+			}
+			
+			
+			double size =StandardDialog.getNumberFromUser("What final panel "+(isCropHeightAdjusted()?"Height":"Width")+" do you want?", userSize);
+			userSet=true;
+			setExpansionFactorToThisFinalWidth(size);
+			userSize=size;
+			
+			
+		}
+		
 		thePanel.dragOngoing=false;
 		
 		if(!valid) {
 			ShowMessage.showOptionalMessage("this crop area is not valid. ");
-			OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
-			selectionManagger.setSelectionGhost(null);
-			selectionManagger.setSelectionGraphic2(null);
+			clearPreview(e);
 			return;
 		}
 		
 		CombinedEdit combinedEdit = onHandleRelease(e);
-		findOtherPanels(e, combinedEdit );
+		
+		findOtherPanelsAndApplyEdit(e, combinedEdit, userSet,  userSize);
 		
 		UndoLayoutEdit ud1 = FigureOrganizingSuplierForPopup.updateRowColSizesOf(this.mdl);
 		combinedEdit.addEditToList(ud1);
 		
 		e.addUndo(combinedEdit);
+	}
+
+
+	/**Based on an input width or height that the panel must attain, determines the scale factor to change the crop area width or height
+	 * @param size
+	 */
+	protected void setExpansionFactorToThisFinalWidth(double size) {
+		double currentSize=this.isCropHeightAdjusted()?thePanel.getObjectHeight(): thePanel.getObjectWidth();
+		
+		expand=size/currentSize;
+		
+		determineValidityOfCropArea(this.getHandleNumber()) ;
+		
+	}
+
+
+	/**
+	 * @param e
+	 */
+	protected void clearPreview(CanvasMouseEvent e) {
+		OverlayObjectManager selectionManagger = e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger();
+		selectionManagger.setSelectionGhost(null);
+		selectionManagger.setSelectionGraphic2(null);
 	}
 
 
@@ -423,7 +509,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 			
 			if(user_selected_scaling_method==null) {
 				user_selected_scaling_method=CropAreaScaleMethod.NO__CROP_ONLY__DO_NOT_ALTER_ANYTHING_ELSE;
-			user_selected_scaling_method=(CropAreaScaleMethod) StandardDialog.getEnumChoiseFromUser("Do you want to fit the newly croped panels in the same area?", user_selected_scaling_method, CropAreaScaleMethod.values());
+			user_selected_scaling_method=(CropAreaScaleMethod) StandardDialog.getEnumChoiseFromUser("Do you want to fit the newly croped panels in the same area?", user_selected_scaling_method, CropAreaScaleMethod.values(), new Icon[] {CropIconGraphic.createsCropIcon(), new PixelDensityIcon(), ScaleSizeIcon.createIcon()});
 			}
 			
 			if(user_selected_scaling_method==CropAreaScaleMethod.YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA) {
@@ -444,6 +530,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 		PreProcessInformation process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), scaleInformation);
 		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(mdl);
+	
 		slot.applyCropAndScale(process);
 		
 		
@@ -557,7 +644,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	}
 	
 	/**finds other selected images and applies the crop to them*/
-	public void findOtherPanels(CanvasMouseEvent e, CombinedEdit undo) {
+	public void findOtherPanelsAndApplyEdit(CanvasMouseEvent e, CombinedEdit undo, boolean userSetSpecificNumber, double value) {
 		
 		if(getHandleNumber()==RectangleEdges.CENTER)
 			return;
@@ -572,7 +659,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 				ImagePanelGraphic image=(ImagePanelGraphic) z;
 				MultichannelDisplayLayer mdl1 = MultichannelDisplayLayer.findMultiChannelForGraphic(image.getParentLayer(), image);
 				
-				if(mdl1!=mdl0 & theseEdgesOverlapEnoughForAlignedCropping(image, thePanel)    & areTheseBoundsCropAlignCompatible(image.getBounds(), startingLocation)  & !cousinDisplays.contains(mdl1)) {
+				if(mdl1!=mdl0 & (theseEdgesOverlapEnoughForAlignedCropping(image, thePanel) || userSetSpecificNumber)   & (areTheseBoundsCropAlignCompatible(image.getBounds(), startingLocation)|| userSetSpecificNumber)  & !cousinDisplays.contains(mdl1)) {
 					{
 						cousinDisplays.add(mdl1);
 						cousinImages.add(image);
@@ -595,6 +682,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 				CombinedEdit edit;
 				if(c2.isCropAreaScaleAdjusted()) {
 					edit = c2.pullHandleToScale(e, this.expandx);
+				} else if (userSetSpecificNumber) {
+					 edit = c2.pullHandleToValueLocation(e, value);
 				} else
 						{ edit = c2.pullHandleToLocation(e);}
 				undo.addEditToList(edit);

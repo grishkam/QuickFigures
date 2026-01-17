@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
@@ -318,6 +319,14 @@ public void setValue(int value) {
 		return sb.toString();
 		
 		
+	}
+
+
+	/**
+	 * @param icons
+	 */
+	public void setIcons(Icon[] icons) {
+		this.box.setRenderer(new IconListCellRenderer(icons));
 	}
 
 	

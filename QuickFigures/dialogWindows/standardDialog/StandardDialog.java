@@ -39,6 +39,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -1000,12 +1001,13 @@ public class StandardDialog extends JDialog implements KeyListener, ActionListen
 	}
 	
 	/**Attempts to add a quick enum selection*/
-	public static Enum<?> getEnumChoiseFromUser(String st, Enum<?> starting, Enum<?>[] possible_vales, Object... otherOptions) {
+	public static Enum<?> getEnumChoiseFromUser(String st, Enum<?> starting, Enum<?>[] possible_vales, Icon[] icons, Object... otherOptions) {
 		StandardDialog sd = new StandardDialog(st);
 		sd.setModal(true);
 		sd.setWindowCentered(true);
 		
 		ChoiceInputPanel interpolationChoice = ChoiceInputPanel.buildForEnum(st, possible_vales, starting); 
+		interpolationChoice.setIcons(icons);
 			sd.add(st, interpolationChoice);
 		
 		if (otherOptions!=null &&otherOptions.length>0) {
