@@ -31,8 +31,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 /**
- 
- * 
+ A simnple modification to the list cell renderer that adds icons
  */
 public class IconListCellRenderer extends BasicComboBoxRenderer implements ListCellRenderer<Object> {
 

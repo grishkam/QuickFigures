@@ -224,11 +224,14 @@ public class CropAreaHandle extends ImagePanelHandle {
 		expandy=dist2y/dist1;
 		
 		if(handlenum==RectangleEdges.RIGHT || handlenum==RectangleEdges.LEFT) {
-			expand = dist2x/dist1;
+			expand = expandx;
 			}
 		if(handlenum==RectangleEdges.BOTTOM||handlenum==RectangleEdges.TOP) {
-			expand = dist2y/dist1; 
+			expand = expandy; 
 			}
+		if(this.isCropAreaScaleAdjusted()) {
+			expand=expandx;
+		}
 		
 		if(this.isRotationHandle()) {
 			angleShift = ShapeGraphic.getAngleBetweenPoints(thePanel.getCenterOfRotation(),p2.getLocation() );
@@ -284,7 +287,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		}
 		
 		if(this.isCropAreaScaleAdjusted()) {
-			alternateCropArea.scaleAbout(alternateCropArea.getCenterOfRotation(), expandx);
+			alternateCropArea.scaleAbout(alternateCropArea.getCenterOfRotation(), expand);
 		}
 		
 		if(handlenum==RectangleEdges.CENTER) {
@@ -313,7 +316,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	boolean isCropScaleValid(double scaleFactor) {
 		alternateCropArea=findCurruentCropAreaRectangle();
 		alternateCropArea.scaleAbout(alternateCropArea.getCenterOfRotation(), scaleFactor);
-		expandx=scaleFactor;
+		expand=scaleFactor;
 		return  crop.isCropRectangleValid(alternateCropArea);
 	}
 
@@ -369,7 +372,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		RectangularGraphic display = new RectangularGraphic(r1);
 		
 		if(this.isCropAreaScaleAdjusted()) {
-			display.scaleAbout(display.getCenterOfRotation(), expandx);
+			display.scaleAbout(display.getCenterOfRotation(), expand);
 		}
 		
 		if(this.isRotationHandle()) {
@@ -437,6 +440,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		if(e.clickCount()==2) {
 			
 			if(this.isCropAreaScaleAdjusted()) {
+				double scale = StandardDialog.getNumberFromUser("Scale Crop Area by", 1);
 				clearPreview(e);
 				return;
 			}
@@ -513,7 +517,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 			}
 			
 			if(user_selected_scaling_method==CropAreaScaleMethod.YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA) {
-				double newScaleLevel = scaleInformation.getScale()/expandx;
+				double newScaleLevel = scaleInformation.getScale()/expand;
 				scaleInformation=scaleInformation.getAtDifferentScale(newScaleLevel);
 			}//if user is scaling the crop area
 			
@@ -523,7 +527,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 				for(ImagePanelGraphic aPanel: mdl.getPanelList().getPanelGraphics()) {
 					undoextra.addEditToList(new CombinedEdit(new UndoScalingAndRotation(aPanel),new UndoMoveItems(aPanel)));
 					aPanel.setLocationType(RectangleEdges.UPPER_LEFT);	
-					aPanel.setRelativeScale(aPanel.getRelativeScale()/expandx);
+					aPanel.setRelativeScale(aPanel.getRelativeScale()/expand);
 				}
 			}
 		}
@@ -643,7 +647,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 	}
 	
-	/**finds other selected images and applies the crop to them*/
+	/**finds other selected images and applies the crop action to them*/
 	public void findOtherPanelsAndApplyEdit(CanvasMouseEvent e, CombinedEdit undo, boolean userSetSpecificNumber, double value) {
 		
 		if(getHandleNumber()==RectangleEdges.CENTER)
@@ -681,7 +685,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 				CropAreaHandle c2=(CropAreaHandle) handle1;
 				CombinedEdit edit;
 				if(c2.isCropAreaScaleAdjusted()) {
-					edit = c2.pullHandleToScale(e, this.expandx);
+					edit = c2.pullHandleToScale(e, this.expand);
 				} else if (userSetSpecificNumber) {
 					 edit = c2.pullHandleToValueLocation(e, value);
 				} else
