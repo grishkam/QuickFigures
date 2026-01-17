@@ -85,6 +85,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private double shifty;
 	private double angleShift;
 	private Rectangle startingLocation;
+	private boolean wasHandleDragged;
 	public static int ROTATION_CROP_AREA=819;
 	
 	public static enum CropAreaScaleMethod{NO__CROP_ONLY__DO_NOT_ALTER_ANYTHING_ELSE, YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA, YES_RESIZE_PANELS_WITHOUT_SCALE_RESET__CHANGE_PANEL_PPI}
@@ -109,9 +110,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		this.findFigureComponentsForPanel(thePanel);
 		thePanel.setLocationType(RectangleEdges.UPPER_LEFT);
 		
-		if(e.clickCount()>1) {
-			
-		}
+		thePanel.dragOngoing=false;
 		
 	}
 
@@ -192,6 +191,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	public void handleDrag(CanvasMouseEvent e) {
 		super.handleDrag(e);
 		thePanel.dragOngoing=true;
+		
 		Point p2 = e.getCoordinatePoint();
 		int handlenum = this.getHandleNumber();
 		if (!this.isCenterHandle()){
@@ -441,26 +441,44 @@ public class CropAreaHandle extends ImagePanelHandle {
 			
 			if(this.isCropAreaScaleAdjusted()) {
 				double scale = StandardDialog.getNumberFromUser("Scale Crop Area by", 1);
+				userSize=scale;
+				this.expand=scale;
+				userSet=true;
+				determineValidityOfCropArea(this.getHandleNumber()) ;
 				clearPreview(e);
-				return;
-			}
+				
+			} else {
 			
 			
 			double size =StandardDialog.getNumberFromUser("What final panel "+(isCropHeightAdjusted()?"Height":"Width")+" do you want?", userSize);
 			userSet=true;
 			setExpansionFactorToThisFinalWidth(size);
 			userSize=size;
+			}
 			
+		}
+		
+		
+		
+		if(!valid & (thePanel.dragOngoing|userSet)) {
+			ShowMessage.showOptionalMessage("this crop area is not valid. ");
 			
+		}
+		
+		if(!valid) {
+			clearPreview(e);
+			thePanel.dragOngoing=false;
+			return;
+		}
+		
+		/**if the crop area would be valid but the user has failed to drag this handle */
+		if(!thePanel.dragOngoing && !userSet){
+			clearPreview(e);
+			thePanel.dragOngoing=false;
+			return;
 		}
 		
 		thePanel.dragOngoing=false;
-		
-		if(!valid) {
-			ShowMessage.showOptionalMessage("this crop area is not valid. ");
-			clearPreview(e);
-			return;
-		}
 		
 		CombinedEdit combinedEdit = onHandleRelease(e);
 		
