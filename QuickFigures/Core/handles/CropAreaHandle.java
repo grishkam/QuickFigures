@@ -458,8 +458,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 			
 		}
 		
-		
-		
+			
 		if(!valid & (thePanel.dragOngoing|userSet)) {
 			ShowMessage.showOptionalMessage("this crop area is not valid. ");
 			
