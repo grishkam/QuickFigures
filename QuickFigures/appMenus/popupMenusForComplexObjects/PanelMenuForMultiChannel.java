@@ -24,6 +24,7 @@ import javax.swing.JMenu;
 
 import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import fLexibleUIKit.ObjectAction;
+import figureEditDialogs.PPIChangeDialog;
 import figureEditDialogs.PanelStackDisplayOptions;
 import figureOrganizer.MultichannelDisplayLayer;
 import figureOrganizer.PanelList;
@@ -32,6 +33,7 @@ import figureOrganizer.PanelManager;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.PixelDensityIcon;
+import imageScaling.PixelDensityInstructions;
 import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import undo.AbstractUndoableEdit2;
@@ -78,10 +80,12 @@ public class PanelMenuForMultiChannel extends MenuForMultiChannelDisplayLayer {
 			@Override
 			public AbstractUndoableEdit2  performAction() {
 				ImagePanelGraphic panel = panelManager.getPanelList().getPanels().get(0).getPanelGraphic();
+				
 			double ppi = panel.getQuickfiguresPPI();
 			ShowMessage.showOptionalMessage("This option does not apply to all images in the figure", true, "This will only set the scale/resulting pixel density for one image", "only use this option if you know you want different scale values for each image", "normally you should go to the figure menu to set the scale for all images in a figure", "only use this option if your figure has only one image");
 			
-			double newppi=StandardDialog.getNumberFromUser("Input PPI ", ppi);
+			PixelDensityInstructions newppi=PPIChangeDialog.showUserTheDialog(ppi);
+					
 			return panelManager.changePPI(newppi);
 			}
 			

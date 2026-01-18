@@ -53,12 +53,14 @@ import imageDisplayApp.OverlayObjectManager;
 import imageScaling.ScaleInformation;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 import objectDialogs.CroppingDialog;
 import popupMenusForComplexObjects.FigureOrganizingSuplierForPopup;
 import popupMenusForComplexObjects.ImagePanelMenu;
 import standardDialog.StandardDialog;
+import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.PreprocessChangeUndo;
 import undo.UndoLayoutEdit;
@@ -432,12 +434,25 @@ public class CropAreaHandle extends ImagePanelHandle {
 	
 	public void handleRelease(CanvasMouseEvent e) {
 		
-		boolean userSet=false;
-		double userSize=this.isCropHeightAdjusted()?thePanel.getObjectHeight(): thePanel.getObjectWidth();
+		
 		
 		
 		/**If the user has double clicked, shows a dialog to enter a numeric value*/
-		if(e.clickCount()==2) {
+		boolean useDialogToSetSize = e.clickCount()==2;
+		
+		performHandleReleaseCropAndPropagateToAllSelectedImages(e, useDialogToSetSize);
+	}
+
+
+	/**
+	 * @param e
+	 * @param useDialogToSetSize
+	 */
+	private void performHandleReleaseCropAndPropagateToAllSelectedImages(CanvasMouseEvent e,
+			boolean useDialogToSetSize) {
+		boolean userSet=false;
+		double userSize=getPanelSizeForHandle();
+		if(useDialogToSetSize) {
 			
 			if(this.isCropAreaScaleAdjusted()) {
 				double scale = StandardDialog.getNumberFromUser("Scale Crop Area by", 1);
@@ -450,7 +465,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 			} else {
 			
 			
-			double size =StandardDialog.getNumberFromUser("What final panel "+(isCropHeightAdjusted()?"Height":"Width")+" do you want?", userSize);
+			double size = askUserForDesiredPanelSize(userSize);
 			userSet=true;
 			setExpansionFactorToThisFinalWidth(size);
 			userSize=size;
@@ -490,11 +505,36 @@ public class CropAreaHandle extends ImagePanelHandle {
 	}
 
 
+	/**Shows a dialog window to ask the user what size they want
+	 * @param userSize
+	 * @return
+	 */
+	protected Double askUserForDesiredPanelSize(double userSize) {
+		return StandardDialog.getNumberFromUser("What final panel "+getDimensionNameForHandle()+" do you want?", userSize);
+	}
+
+
+	/**
+	 * @return
+	 */
+	private String getDimensionNameForHandle() {
+		return isCropHeightAdjusted()?"Height":"Width";
+	}
+
+
+	/**Returns the panel size value relevant to this handle. Width for left and right hangles. Height for top and bottom.
+	 * @return
+	 */
+	protected double getPanelSizeForHandle() {
+		return this.isCropHeightAdjusted()?thePanel.getObjectHeight(): thePanel.getObjectWidth();
+	}
+
+
 	/**Based on an input width or height that the panel must attain, determines the scale factor to change the crop area width or height
 	 * @param size
 	 */
 	protected void setExpansionFactorToThisFinalWidth(double size) {
-		double currentSize=this.isCropHeightAdjusted()?thePanel.getObjectHeight(): thePanel.getObjectWidth();
+		double currentSize=getPanelSizeForHandle();
 		
 		expand=size/currentSize;
 		
@@ -513,9 +553,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 	}
 
 
-	/**
+	/**A set of tasks that are performed when the user completes a handle release
 	 * @param e
-	 * @return
+	 * @return an undoable edit
 	 */
 	protected CombinedEdit onHandleRelease(CanvasMouseEvent e) {
 		e.getAsDisplay().getImageAsWorksheet().getOverlaySelectionManagger().setSelectionstoNull();
@@ -798,10 +838,40 @@ public class CropAreaHandle extends ImagePanelHandle {
 		return this.getHandleNumber()==RectangleEdges.LEFT||this.getHandleNumber()==RectangleEdges.RIGHT;
 	}
 	
+	protected boolean isSideHandle() {
+		
+		return isCropWidthAdjusted() | isCropHeightAdjusted();
+	}
+	
 	/**returns the popup menu for this handle. some subclasses return menus while others do not*/
 	public JPopupMenu getJPopup() {
 		SmartPopupJMenu output = new SmartPopupJMenu();
 		output.add(ImagePanelMenu.createCropModeMenuItem(thePanel, false));
+		
+		/**Adds an option to crop to a set panel height/width*/
+		if(isSideHandle())
+		output.add(new BasicSmartMenuItem("Crop all to specific "+getDimensionNameForHandle()) {
+			private static final long serialVersionUID = 1L;
+			public AbstractUndoableEdit2 performAction() {
+				performHandleReleaseCropAndPropagateToAllSelectedImages(me, true);
+				return null;
+			}
+			
+		});
+		
+		if(this.isCropAreaScaleAdjusted()) {
+			output.add(new BasicSmartMenuItem("Scale Crop Areas") {
+				private static final long serialVersionUID = 1L;
+				public AbstractUndoableEdit2 performAction() {
+					performHandleReleaseCropAndPropagateToAllSelectedImages(me, true);
+					return null;
+				}
+				
+			});
+		}
+		
+		
+		
 		
 		return output;
 	}

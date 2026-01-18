@@ -57,6 +57,7 @@ import handles.SmartHandle;
 import iconGraphicalObjects.IconUtil;
 import imageDisplayApp.UserPreferences;
 import imageScaling.Interpolation;
+import imageScaling.PixelDensityInstructions;
 import imageScaling.ScaleInformation;
 import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
@@ -619,13 +620,13 @@ static Color  folderColor2= new Color(0,140, 0);
 		
 		/**a working change ppi function. Alters the pixel density of the inset panels if the inset is set to scale its panels */
 		@Override
-		public CombinedEdit changePPI(double newppi) {
+		public CombinedEdit changePPI(PixelDensityInstructions newppi) {
 			if(getInset().isDoNotScale())
 				return null;
 			ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 			double ppi = panel.getQuickfiguresPPI();
-			double newPanelScale=panel.getRelativeScale()*ppi/newppi;
-			double newScale=getInset().getInsetScale()*newppi/ppi;
+			double newPanelScale=panel.getRelativeScale()*ppi/newppi.getPPI();
+			double newScale=getInset().getInsetScale()*newppi.getPPI()/ppi;
 			if (getInset().getSourceDisplay().getSlot().getModifications()!=null) newScale/=getInset().getSourceDisplay().getSlot().getModifications().getScale();
 			
 			for(PanelListElement panel2: getPanelList().getPanels()) {

@@ -84,4 +84,9 @@ public class ScaleInformation {
 	
 	/**returns a version of this that has been multiplied*/
 	public ScaleInformation multiplyBy(double factor) {return new ScaleInformation(scale*factor, interpolationType);}
+
+	/**returns a version of this that has been multiplied*/
+	public ScaleInformation multiplyBy(double factor, Interpolation interpolationType) {return new ScaleInformation(scale*factor, interpolationType);}
+
+
 }

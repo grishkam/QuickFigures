@@ -35,6 +35,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
+import imageScaling.Interpolation;
+import imageScaling.PixelDensityInstructions;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import locatedObject.RectangleEdges;
@@ -478,11 +480,13 @@ public class PanelManager implements Serializable, EditListener{
 	
 	/**alters the pixel density of the figure.
 	 */
-	public CombinedEdit changePPI(double newppi) {
+	public CombinedEdit changePPI(PixelDensityInstructions desiredPPI) {
+		double newppi=desiredPPI.getPPI();
+		Interpolation interpolationType=desiredPPI.getInterpolation();
 		ImagePanelGraphic panel = getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
 		double newPanelScale=panel.getRelativeScale()*ppi/newppi;
-		ScaleInformation newScale=getImageDisplayLayer().getPreprocessScale().multiplyBy(newppi/ppi);
+		ScaleInformation newScale=getImageDisplayLayer().getPreprocessScale().multiplyBy(newppi/ppi, interpolationType);
 		
 		CombinedEdit output = new CombinedEdit();
 		

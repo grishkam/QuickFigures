@@ -17,8 +17,11 @@ package selectedItemMenus;
 
 import java.util.ArrayList;
 
+import javax.swing.Icon;
+
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import iconGraphicalObjects.DuplicateIcon;
 import locatedObject.LocatedObject2D;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
@@ -66,6 +69,10 @@ public class DuplicateItem extends BasicMultiSelectionOperator {
 		
 		this.getSelector().getWorksheet().getUndoManager().addEdit(undo);
 
+	}
+	
+	public Icon getIcon() {
+		return DuplicateIcon.createIcon();
 	}
 
 }

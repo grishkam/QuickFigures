@@ -46,6 +46,7 @@ import channelMerging.ImageDisplayLayer;
 import channelMerging.PreProcessInformation;
 import fLexibleUIKit.MenuItemExecuter;
 import fLexibleUIKit.MenuItemMethod;
+import figureEditDialogs.PPIChangeDialog;
 import figureEditDialogs.ScaleLevelInputDialog;
 import figureEditDialogs.WindowLevelDialog;
 import figureFormat.TemplateUserMenuAction;
@@ -75,6 +76,7 @@ import icons.ToolIconWithText;
 import imageDisplayApp.CanvasOptions;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import imageScaling.Interpolation;
+import imageScaling.PixelDensityInstructions;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
@@ -546,7 +548,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	/**shows a dialog for the user to input a pixel density for all the images*/
 	 private CombinedEdit showRePPIAll() {
 		 CombinedEdit output = new CombinedEdit();
-		 double newPPI = showPPISingleImage(figureOrganizingLayerPane.getPrincipalMultiChannel());
+		 PixelDensityInstructions newPPI = showPPISingleImage(figureOrganizingLayerPane.getPrincipalMultiChannel());
 		 ArrayList<ImageDisplayLayer> all = figureOrganizingLayerPane.getMultiChannelDisplays();
 		 for(ImageDisplayLayer crop2: all) {
 			 output.addEditToList(
@@ -559,10 +561,12 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 
 
 	 /**shows a dialog for the user to input a pixel density for an image*/
-	private double showPPISingleImage(ImageDisplayLayer principalMultiChannel) {
+	private PixelDensityInstructions showPPISingleImage(ImageDisplayLayer principalMultiChannel) {
 		ImagePanelGraphic panel = principalMultiChannel.getPanelManager().getPanelList().getPanels().get(0).getPanelGraphic();
 		double ppi = panel.getQuickfiguresPPI();
-		double newppi=StandardDialog.getNumberFromUser("Input Pixels per inch ", ppi);
+		
+		PixelDensityInstructions newppi=PPIChangeDialog.showUserTheDialog(ppi, principalMultiChannel.getPreprocessScale().getInterpolationType());
+		
 		return newppi;
 	}
 

@@ -25,10 +25,12 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import appContext.ImageDPIHandler;
+import figureEditDialogs.PPIChangeDialog;
 import figureOrganizer.PanelManager;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.IconUtil;
+import imageScaling.PixelDensityInstructions;
 import logging.IssueLog;
 import multiChannelFigureUI.ChannelPanelEditingMenu;
 import selectedItemMenus.BasicMultiSelectionOperator;
@@ -92,21 +94,25 @@ public class PPIOption extends BasicMultiSelectionOperator {
 	/**shows a dialog to the user*/
 	protected CombinedEdit showPPIChangeDialog(ArrayList<PanelManager> panels, String st, double starting) {
 		CombinedEdit output = new CombinedEdit();
-		StandardDialog sd = new StandardDialog(st);
+		/*StandardDialog sd = new StandardDialog(st);
 		sd.setModal(true);
 		sd.setWindowCentered(true);
 		
 		sd.add(st, new NumberInputPanel(st, starting, 4));
 		
-		sd.showDialog();
+		*sd.showDialog();
 		
 		if(!sd.wasOKed()) {
 			return null;
 		}
 		double n = sd.getNumber(st);
+		*/
+		PPIChangeDialog alternativeDialog = new PPIChangeDialog(new PixelDensityInstructions(starting));
+		PixelDensityInstructions inputPPI = alternativeDialog.showUserOption();
+		
 		for(PanelManager p: panels) {
 			output.addEditToList(
-					p.changePPI(n)
+					p.changePPI(inputPPI)
 					)	;
 			
 		}
