@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -271,7 +272,9 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		String delimiter="<";
 		
 		JMenu men2 = getOrCreateSubmenuOfPath( targetMenuBar, menuPath, delimiter);
-		men2.setIcon(obj.getSuperMenuIcon());
+		Icon superMenuIcon = obj.getSuperMenuIcon();
+		if(superMenuIcon!=null)
+			men2.setIcon(superMenuIcon);
 		men2.add(ji);
 	}
 	

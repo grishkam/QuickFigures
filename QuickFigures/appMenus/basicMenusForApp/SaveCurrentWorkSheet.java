@@ -23,9 +23,12 @@ package basicMenusForApp;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.Icon;
+
 import applicationAdapters.DisplayedImage;
 import exportMenus.FlatCreator;
 import exportMenus.PNGQuickExport;
+import iconGraphicalObjects.SaveIcon;
 import ultilInputOutput.FileChoiceUtil;
 import imageDisplayApp.StandardWorksheet;
 import logging.IssueLog;
@@ -120,6 +123,10 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 	@Override
 	public String getMenuPath() {
 		return "File<Save<";
+	}
+	
+	public Icon getSuperMenuIcon() {
+		return SaveIcon.createIcon();
 	}
 
 }

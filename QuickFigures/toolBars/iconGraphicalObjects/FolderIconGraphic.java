@@ -23,12 +23,15 @@ package iconGraphicalObjects;
 import java.awt.Color;
 import java.awt.Rectangle;
 
+import javax.swing.Icon;
+
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RhombusGraphic;
 import locatedObject.DefaultPaintProvider;
 import locatedObject.PaintProvider;
 import locatedObject.RectangleEdges;
+import standardDialog.graphics.GraphicObjectDisplayBasic;
 
 /**A class for creation of a folder icon object. This actually consists of a few objects
  * arranges to appear like a folder. The colors of a folder can be changed*/
@@ -43,11 +46,13 @@ public class FolderIconGraphic extends GraphicGroup {
 	private RhombusGraphic r;
 	private RectangularGraphic r2;
 	private RectangularGraphic r3;
+	int base_size=14;
 	boolean tiltfolder=true;
 	boolean darkopen=true;
 	
-	public FolderIconGraphic(Color folderColor, boolean open) {
+	public FolderIconGraphic(Color folderColor, boolean open, int base_size) {
 		this.open=open;
+		this.base_size=base_size;
 		this.setFolderColor(folderColor);
 		createItems() ;
 		setItemColors();
@@ -58,12 +63,16 @@ public class FolderIconGraphic extends GraphicGroup {
 	
 	
 	public void createItems() {
+		
+		
 		r = new RhombusGraphic();
 		r.setRectangle(new Rectangle(0,2,14,10));
+		r.setRectangle(new Rectangle(0,base_size*2/14,base_size,base_size*5/7));
 		;
 		r.setAntialize(true);
-		r2 = RectangularGraphic.filledRect(new Rectangle(2,0, 6,5));
-		 r3 = RectangularGraphic.filledRect(new Rectangle(1,1, 12,9));
+		
+		r2 = RectangularGraphic.filledRect(new Rectangle(base_size*2/14,0, base_size*6/14,base_size*5/14));
+		 r3 = RectangularGraphic.filledRect(new Rectangle(base_size/14,base_size/14, base_size*12/14,base_size*9/14));
 		 r.makeNearlyDashLess();
 		 setItemColors() ;
 	}
@@ -73,9 +82,10 @@ public class FolderIconGraphic extends GraphicGroup {
 	private Rectangle getR1rect() {
 		if (open) {
 			if (tiltfolder) {
-				return new Rectangle(5,2,10,7);
+				return new Rectangle(base_size*5/14,base_size*2/14,base_size*10/14,base_size/2);
+				//return new Rectangle(5,2,10,7);
 				
-			} else {return new Rectangle(0,4,14,8);}
+			} else {return new Rectangle(0,base_size*4/14,base_size,base_size*8/14);}
 			
 		}
 		else {
@@ -164,6 +174,14 @@ public class FolderIconGraphic extends GraphicGroup {
 
 	public void setFolderColor(Color folderColor) {
 		this.folderColor = folderColor;
+	}
+	
+	/**creares and example icon
+	 * @return
+	 */
+	public static Icon createAnIcon(Color c, boolean open) {
+		
+		return new GraphicObjectDisplayBasic<FolderIconGraphic>(new 	FolderIconGraphic(c, open, 20));
 	}
 	
 }

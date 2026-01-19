@@ -75,6 +75,17 @@ public class NotchedRectangleGraphic extends RectangularGraphic {
 		super(r);
 	}
 	
+	public void setNotchRatios(double arc_ratio) {
+		notchWidth.setRatioToMaxLength(arc_ratio);
+		notchHeight.setRatioToMaxLength(arc_ratio);
+	}
+	
+	
+	public NotchedRectangleGraphic(Rectangle r, boolean[] notches) {
+		super(r);
+		if(notches.length==4)
+		this.notchPositions=notches;
+	}
 	
 
 	

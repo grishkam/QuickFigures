@@ -169,7 +169,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		
 		
-		int border = 4;
+		int border = 5;
 		
 		/**calculates the column width needed to fill the space*/
 		int wCol = b.width/nLanes-border+border/(nLanes-1);		

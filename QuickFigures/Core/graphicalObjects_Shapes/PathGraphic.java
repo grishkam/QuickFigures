@@ -1101,5 +1101,13 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 		}
 		return null;
 	}
+	
+	/**switches the two arrow heads*/
+	public void flipArrowHeads() {
+		ArrowGraphic a1 = getArrowHead1();
+		ArrowGraphic a2 = getArrowHead2();
+		setArrowHead2(a1);
+		setArrowHead1(a2);
+	}
 
 }

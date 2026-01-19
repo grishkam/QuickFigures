@@ -21,8 +21,11 @@
 package imageMenu;
 
 
+import javax.swing.Icon;
+
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import iconGraphicalObjects.ArrowArcIcon;
 import logging.IssueLog;
 
 /**The Undo/Redo menu item in the Edit meny*/
@@ -69,6 +72,11 @@ public class UndoRedoMenuItem  extends BasicMenuItemForObj {
 	@Override
 	public String getMenuPath() {
 		return "Edit";
+	}
+	
+	@Override
+	public Icon getIcon() {
+		return ArrowArcIcon.createIcon(undo);
 	}
 
 }

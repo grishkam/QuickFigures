@@ -262,10 +262,7 @@ PopupMenuSupplier  {
 		}
 		
 		if (com.equals(ARROW_HEAD_FLIP)) {
-			ArrowGraphic a1 = targetPathForMenu.getArrowHead1();
-			ArrowGraphic a2 = targetPathForMenu.getArrowHead2();
-			targetPathForMenu.setArrowHead2(a1);
-			targetPathForMenu.setArrowHead1(a2);
+			flipArrowHeads();
 		}
 		
 		if (com.equals(CROSSING_MARKS)) {targetPathForMenu.setUseArea(!targetPathForMenu.isUseArea());}
@@ -313,6 +310,15 @@ PopupMenuSupplier  {
 		undo.establishFinalState();
 		if (getUndoManager()!=null) getUndoManager().addEdit(undo);
 		targetPathForMenu.updateDisplay();
+	}
+
+
+	/**
+	 * 
+	 */
+	private void flipArrowHeads() {
+		targetPathForMenu.flipArrowHeads();
+		
 	}
 
 

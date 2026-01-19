@@ -47,7 +47,7 @@ public class IconUtil {
 		private static final long serialVersionUID = 1L;
 		
 		public folderIcon(boolean open, Color c) {
-			this.setCurrentDisplayObject(new FolderIconGraphic(c,open));
+			this.setCurrentDisplayObject(new FolderIconGraphic(c,open, 14));
 		}
 		
 	}

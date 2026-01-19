@@ -363,6 +363,8 @@ public class AddLabelHandle extends MoveRowHandle {
 			layout2.moveLayoutAndContents(0, height);//to make sure lane labels are above
 			laneLabelLayout.moveLayoutAndContents(0, -height);
 			
+			laneLabelLayout.getEditor().setPanelHeight(laneLabelLayout.getPanelLayout(), laneLabelLayout.getPanelLayout().getPanelHeight(1)*0.75, 1);
+			
 			if(laneLabelAdder.laneLabelOptions.nPlusMarks==0) {
 				laneLabelLayout.moveLayoutAndContents(0, laneLabelLayout.getPanelLayout().panelHeight);
 			}

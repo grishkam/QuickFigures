@@ -20,9 +20,14 @@
  */
 package basicMenusForApp;
 
+import java.awt.Color;
 import java.io.File;
+
+import javax.swing.Icon;
+
 import ultilInputOutput.FileChoiceUtil;
 import applicationAdapters.DisplayedImage;
+import iconGraphicalObjects.FolderIconGraphic;
 import imageDisplayApp.ImageDisplayIO;
 
 /**Opens a saved file with figures*/
@@ -53,5 +58,11 @@ public class OpenerSavedWorkSheet  extends BasicMenuItemForObj {
 	public String getMenuPath() {
 		return "File<Open<";
 	}
+	
+	/**The icon for the menu that contains this item*/
+	public Icon getSuperMenuIcon() {
+		return FolderIconGraphic.createAnIcon( new Color(120,120,180), true);
+	}
+	
 
 }
