@@ -133,6 +133,8 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 	@Override
 	public JPopupMenu getJPopup() {
 		SmartPopupJMenu jj = new SmartPopupJMenu();
+		
+		
 		 addMenus(jj);
 		return jj;
 	}

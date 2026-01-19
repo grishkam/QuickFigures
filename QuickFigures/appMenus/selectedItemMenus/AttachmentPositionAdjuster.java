@@ -80,9 +80,9 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 	}
 	
 	/**returns an icon containing a red rectangle for tha parent panel and a blue rectangle for the attached item*/
-	public GraphicDisplayComponent getItemIcon(boolean selected) {
+	public static GraphicDisplayComponent getItemIcon(boolean selected, LocatedObject2D primaryObject) {
 		GraphicGroup gg=new GraphicGroup();
-		ArrayList<Rectangle> rects = getRectanglesForIcon();
+		ArrayList<Rectangle> rects = getRectanglesForIcon(primaryObject);
 		Color[] colors=new Color[] {Color.red,  Color.blue,  new Color((float)0.0,(float)0.0,(float)0.0, (float)0.0)};
 		
 		for(int i=0; i<rects.size(); i++ ) {
@@ -103,14 +103,14 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 	}
 	
 	/**returns the rectangles that are drawn onto the icon*/
-	private ArrayList<Rectangle> getRectanglesForIcon() {
+	private static ArrayList<Rectangle> getRectanglesForIcon(LocatedObject2D primaryObject) {
 		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
 		
 				output.add(new Rectangle(5,8,12,10));//the large rectangle
 				
 			AttachmentPosition s = AttachmentPosition.defaultColLabel();
 				output.add(new Rectangle(0,0,5,5));//the small rectangle
-				setAttachmentPositionIconToModelItem(s);
+				setAttachmentPositionIconToModelItem(s, primaryObject);
 				s.snapRects(output.get(1), output.get(0));
 				
 				output.add(new Rectangle(0,0,20,20));
@@ -118,9 +118,12 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 	}
 	
 	/***/
-	private void setAttachmentPositionIconToModelItem(AttachmentPosition position) {
-		if(this.primaryObject==null) return;
-		AttachmentPosition a = this.primaryObject.getAttachmentPosition();
+	private static void setAttachmentPositionIconToModelItem(AttachmentPosition position, LocatedObject2D primaryObject) {
+		AttachmentPosition a = null;
+		if(primaryObject!=null) 
+			a = primaryObject.getAttachmentPosition(); else
+		    a= AttachmentPosition.defaultColLabel();
+		
 		if(a==null)return;
 		position.setLocationTypeInternal(a.getSnapLocationTypeInternal());
 		position.setLocationTypeExternal(a.getSnapLocationTypeExternal());
@@ -129,7 +132,7 @@ public class AttachmentPositionAdjuster extends BasicMultiSelectionOperator {
 		position.setVerticalOffset(0);
 	}
 	public Icon getIcon() {
-		return  getItemIcon(true);
+		return  getItemIcon(true, primaryObject);
 	}
 
 }

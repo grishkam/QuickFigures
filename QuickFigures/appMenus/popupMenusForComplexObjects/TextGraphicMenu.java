@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -39,6 +40,8 @@ import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_SpecialObjects.BarGraphic.BarTextGraphic;
 import graphicalObjects_SpecialObjects.TextGraphic;
+import iconGraphicalObjects.DialogIcon;
+import iconGraphicalObjects.DuplicateIcon;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
@@ -71,10 +74,10 @@ PopupMenuSupplier  {
 	
 	public ArrayList<JMenuItem> getItems() {
 		ArrayList<JMenuItem> jm=new ArrayList<JMenuItem>();
-		jm.add(createItem(OPTIONS_DIALOG));
+		jm.add(createItem(OPTIONS_DIALOG, DialogIcon.getIcon()));
 		//if (textG!=null && textG.isSelected())jm.add(createItem(EDIT_MODE));
 		addExpertOptions(jm);
-		jm.add(createDuplicatorAction(false).createJMenuItem("Duplicate"));
+		jm.add(createDuplicatorAction(false).createJMenuItem("Duplicate", DuplicateIcon.createIcon() ));
 		
 		
 		FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(textG);
@@ -143,8 +146,8 @@ PopupMenuSupplier  {
 	 */
 	void addExpertOptions(ArrayList<JMenuItem> jm) {
 		if(excludeExpertOptions) return;
-		jm.add(createItem(TEXT_INSETS));
-		jm.add(createItem(FORMAT_BACKGROUND));
+		jm.add(createItem(TEXT_INSETS, null));
+		jm.add(createItem(FORMAT_BACKGROUND, null));
 	}
 	
 	public JMenu getJMenu(String st) {
@@ -153,8 +156,8 @@ PopupMenuSupplier  {
 		return out;
 	}
 	
-	public JMenuItem createItem(String st) {
-		JMenuItem o=new JMenuItem(st);
+	public JMenuItem createItem(String st, Icon i) {
+		JMenuItem o=new JMenuItem(st, i);
 		o.addActionListener(this);
 		o.setActionCommand(st);
 		

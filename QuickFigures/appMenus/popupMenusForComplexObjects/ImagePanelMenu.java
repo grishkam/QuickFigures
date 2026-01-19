@@ -59,6 +59,7 @@ import handles.SmartHandle;
 import iconGraphicalObjects.CropIconGraphic;
 import iconGraphicalObjects.ScaleSizeIcon;
 import icons.InsetToolIcon;
+import icons.QuickFigureIcon;
 import icons.SourceImageTreeIcon;
 import imageDisplayApp.CanvasOptions;
 import imageMenu.CanvasAutoResize;
@@ -96,9 +97,12 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			this.add(channelMenu);
 			new ChannelPanelEditingMenu(c). addChannelRelevantMenuItems(channelMenu);
 			
-			JMenu extendFigure=new SmartJMenu("Figure");
+			JMenu extendFigure=new SmartJMenu("Figure", new QuickFigureIcon(false, false, 0).getMenuVersion());
 			new FigureOrganizingSuplierForPopup(folp).addMenus(extendFigure);
 			this.add(extendFigure);
+			
+
+			this.add(createCropModeMenuItem(c, true));
 			
 		}
 		
@@ -111,7 +115,6 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			everyMenu.addMenus(mc);
 			this.add(mc);
 			
-			mc.add(createCropModeMenuItem(c, true));
 
 		}
 		

@@ -169,7 +169,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 
 			
 			};
-		thi.add(act.createJMenuItem("Change scale for this image only",  new PixelDensityIcon(PixelDensityIcon.VERSION_SCALE_TO_KEEP_PIXEL_SIZE)));
+		thi.add(act.createJMenuItem("Change scale (this image only)",  new PixelDensityIcon(PixelDensityIcon.VERSION_SCALE_TO_KEEP_PIXEL_SIZE)));
 	}
 
 	/**Adds a channel menu that is limited to this display layer*/

@@ -59,7 +59,9 @@ import standardDialog.StandardDialog;
 public class Text_GraphicTool extends GraphicTool {
 	
 	private Cursor textCursor=new Cursor(Cursor.TEXT_CURSOR);
-	{excludedClass=PanelLayoutGraphic.class;super.temporaryTool=true;}
+	{
+		excludedClass=PanelLayoutGraphic.class;//why was it excluded?
+	super.temporaryTool=true;}
 	
 	
 

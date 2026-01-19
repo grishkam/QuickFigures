@@ -52,6 +52,7 @@ import locatedObject.TakesAttachedItems;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartPopupJMenu;
 import objectDialogs.MultiAttachmentPositionDialog;
+import selectedItemMenus.AttachmentPositionAdjuster;
 import undo.CombinedEdit;
 import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoAttachmentPositionChange;
@@ -218,8 +219,9 @@ public class AttachmentPositionHandle extends SmartHandle {
 public JPopupMenu getJPopup() {
 	if (suppressMenu) return null;
 		SmartPopupJMenu men = new SmartPopupJMenu();
+		
 		JMenuItem jm = createAdjustPositionMenuItem();
-
+		
 		men.add(jm);
 		
 		BasicSmartMenuItem jm2 = new BasicSmartMenuItem("Release Attached Item") {
@@ -247,7 +249,8 @@ public JPopupMenu getJPopup() {
 
 /**returns a menu item that makes the adjust position dialog appear*/
 public JMenuItem createAdjustPositionMenuItem() {
-	JMenuItem jm = new JMenuItem("Adjust Position");
+	JMenuItem jm = new JMenuItem("Adjust Position", AttachmentPositionAdjuster.getItemIcon(true, null));
+	
 	jm.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {

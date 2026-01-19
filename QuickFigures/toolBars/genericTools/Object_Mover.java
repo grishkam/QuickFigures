@@ -88,6 +88,7 @@ import messages.ShowMessage;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.SmartJMenu;
 import objectDialogs.GraphicItemOptionsDialog;
+import selectedItemMenus.AttachmentPositionAdjuster;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
@@ -630,7 +631,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 			if ( isAttachedOrSpecialMovementItem(roi2)) {
 				AttachmentPositionHandle lockHandle = this.findHandleForLockedItem(roi2);
 				
-				JMenu attach = new SmartJMenu("Attachment");
+				JMenu attach = new SmartJMenu("Attachment", AttachmentPositionAdjuster.getItemIcon(false, null));
 				for(MenuElement e: lockHandle.getJPopup().getSubElements()) {
 					if(e instanceof JMenuItem)
 						attach.add((JMenuItem) e);
