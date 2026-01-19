@@ -130,7 +130,8 @@ public class MenuBarForApp extends JMenuBar implements ActionListener{
 		installItem(new CombineImages());
 		addExportMenus();
 		installItem(new CloseWorksheet());
-		installItem(new ConvertSavedWorksheets());
+		installItem(new ConvertSavedWorksheets(false));
+		installItem(new ConvertSavedWorksheets(true));
 		
 		CurrentWorksheetLayerSelector ls = new CurrentWorksheetLayerSelector();
 		add(SelectionOperationsMenu.getStandardMenu(ls));

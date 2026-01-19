@@ -56,6 +56,8 @@ public class BooleanArrayInputPanel extends BooleanInputPanel {
 		for(JCheckBox b: check) {b.addItemListener(this);};
 	}
 	
+	
+	
 	public void setArray(boolean[] b) {
 		for(int i=0; i<b.length; i++) {
 			if (boxes.size()>i) boxes.get(i).setSelected(b[i]);
@@ -63,6 +65,15 @@ public class BooleanArrayInputPanel extends BooleanInputPanel {
 		}
 	}
 	
+	/**Sets text for each box*/
+	public void setBoxNames(String[] b) {
+		for(int i=0; i<b.length; i++) {
+			if (boxes.size()>i) boxes.get(i).setText(b[i]);
+			
+		}
+	}
+	
+	/***/
 	public boolean[] getArray() {
 		boolean[] b=new boolean[boxes.size()];
 		for(int i=0; i<b.length; i++) {

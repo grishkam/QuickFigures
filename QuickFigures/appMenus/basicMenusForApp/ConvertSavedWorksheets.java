@@ -38,6 +38,7 @@ import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import messages.ShowMessage;
 import standardDialog.StandardDialog;
+import standardDialog.booleans.BooleanArrayInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 
 /**Implementa a menu item that.
@@ -47,7 +48,13 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 	
 	public ArrayList<QuickExport> options=createExporterList();
 
+	boolean allow_multiple_format_export=true;
 
+	
+	public ConvertSavedWorksheets(boolean multiples) {
+		allow_multiple_format_export=multiples;
+	}
+	
 	/**
 	 * @return
 	 */
@@ -76,33 +83,87 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 		sd.setModal(true);
 		sd.addMessage("Please select the file type");
 		ChoiceInputPanel panel=new ChoiceInputPanel("Export as", options, 0, QuickExport.class, null);
-		sd.add("choices", panel);
+		boolean[] startingBoxes = new boolean[options.size()];
+		startingBoxes[0]=true;
+		startingBoxes[4]=true;
+		BooleanArrayInputPanel array_input = new BooleanArrayInputPanel("Export multiple formats", startingBoxes);
+		
+		
+		if(this.allow_multiple_format_export) {
+			String[] choices_as_strings = ChoiceInputPanel.setChoicesToStrings(options, null);
+			array_input.setBoxNames(choices_as_strings);
+			sd.add("multichoices", array_input);
+		}
+		else sd.add("choices", panel);
+		
 		sd.showDialog();
-		QuickExport qe= (QuickExport) panel.getSelectedObject();
+		
+		QuickExport[] qe2=null;
+		if(!allow_multiple_format_export) {
+				QuickExport qe= (QuickExport) panel.getSelectedObject();
+				qe2=new QuickExport[] {qe};
+		} else {
+			boolean[] b = array_input.getArray();
+			ArrayList<QuickExport> selected_formats=new ArrayList<QuickExport>();
+			for(int i=0; i<b.length; i++) {
+				if(b[i])
+				selected_formats.add(options.get(i));
+				
+			}
+			qe2=selected_formats.toArray(new QuickExport[selected_formats.size()] );
+		}
 		
 		File fd1 = FileChoiceUtil.getFolder("Choose where to save files");
 		String basePath = fd1.getAbsolutePath()+File.separator;
 	
+		int count = exportFilesToSelectedFormat(files, qe2, basePath);
+		
+		if(count==0) {
+			ShowMessage.showOptionalMessage("Failed to export", false, "was not able to open/export files", "Perhaps the wrong file type or anyother issue occured");
+		}
+		
+	}
+
+
+	/**
+	 * @param files
+	 * @param qe
+	 * @param basePath
+	 * @return
+	 */
+	private int exportFilesToSelectedFormat(File[] files, QuickExport[] qe, String basePath) {
 		int count = 0;
 		
 		for(File f: files) try {
 		
 				ImageWindowAndDisplaySet open = ImageDisplayIO.showFile(f);
-				String newpath = basePath+f.getName();
-				newpath = qe.addExtension(newpath);
-				
-				qe.saveInPath(open, newpath);
+				String worksheet_name = f.getName();
+				saveInSeveralFormats(qe, basePath, open, worksheet_name);
 				open.closeWindowButKeepObjects();
 				count++;
 				
 		} catch (Throwable e) {
 			IssueLog.log(e);
 		}
+		return count;
+	}
+
+	/**saves files into multiple format
+	 * @param qe
+	 * @param basePath
+	 * @param open
+	 * @param worksheet_name
+	 * @throws Exception
+	 */
+	private void saveInSeveralFormats(QuickExport[] qe, String basePath, ImageWindowAndDisplaySet open,
+			String worksheet_name) throws Exception {
+		String newpath = basePath+worksheet_name;
 		
-		if(count==0) {
-			ShowMessage.showOptionalMessage("Failed to export", false, "was not able to open/export files", "Perhaps the wrong file type or anyother issue occured");
+		for(QuickExport qe2: qe){
+			String newpath2 = qe2.addExtension(newpath);
+			qe2.saveInPath(open, newpath2);
+			
 		}
-		
 	}
 	
 
@@ -114,6 +175,8 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 
 	@Override
 	public String getNameText() {
+		if(allow_multiple_format_export)
+			return "Worksheets to multiple formats";
 		return "Open many worksheets and export";
 	}
 
