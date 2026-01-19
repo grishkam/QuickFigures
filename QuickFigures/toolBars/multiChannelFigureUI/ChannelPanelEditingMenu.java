@@ -60,6 +60,7 @@ import iconGraphicalObjects.ChannelUseIcon;
 import iconGraphicalObjects.ColorIcon;
 import iconGraphicalObjects.ColorModeIcon;
 import iconGraphicalObjects.IconUtil;
+import imageDisplayApp.UserPreferences;
 import includedToolbars.StatusPanel;
 import logging.IssueLog;
 import menuUtil.BasicSmartMenuItem;
@@ -786,10 +787,27 @@ public class ChanReColorer implements ColorInputListener {
 	public ChanReColorer(int num) {
 		myNum=num;
 	}
+	
+	/**how to respond*/
 	@Override
 	public void ColorChanged(ColorInputEvent fie) {
+		boolean startsBlocked=false;
+		if(isUserBlockingChangesToChannelColor()) {
+			startsBlocked=true;
+			UserPreferences.current.forbidLUTChange=false;//to bypass the block color change option. This menu item is the only exception to that block
+		}
+		
 		setTheColor(fie.getColor(), myNum);
 		
+		if(startsBlocked) {
+			UserPreferences.current.forbidLUTChange=true;
+		}
+	}
+	/**
+	 * @return
+	 */
+	private boolean isUserBlockingChangesToChannelColor() {
+		return UserPreferences.current.forbidLUTChange;
 	}
 	
 
