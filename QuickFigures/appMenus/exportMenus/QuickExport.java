@@ -22,10 +22,13 @@ package exportMenus;
 
 import java.awt.Window;
 import java.io.File;
+
+import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
+import iconGraphicalObjects.SaveIcon;
 import ultilInputOutput.FileChoiceUtil;
 
 /**An abstract superclass for export menu items*/
@@ -95,5 +98,9 @@ public abstract class QuickExport  extends BasicMenuItemForObj {
 	protected  abstract String getExtensionName() ;
 	
 	public String toString() {return "(" +this.getExtension()+")"+ getExtensionName() ;}
+	
+	public void setOpenImmediately(boolean b) {openImmediately=b;}
+	
+	
 	
 }

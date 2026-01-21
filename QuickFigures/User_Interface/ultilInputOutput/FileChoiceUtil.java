@@ -320,7 +320,7 @@ public class FileChoiceUtil {
 	}
 	
 	/**Asked the user if the file should be overwritten
-	 * returns yes if the file does not exist*/
+	 * returns yes without asking if the file does not exist*/
 	public static int overrideQuestion(File f) {
 		if (f.exists()) {
 			int i=JOptionPane.showConfirmDialog(null, 	
@@ -336,6 +336,11 @@ public class FileChoiceUtil {
 			return i;
 		}
 		return JOptionPane.YES_OPTION;
+	}
+	
+	/**Asks permission to override the file*/
+	public static boolean overridePermission(File f) {
+		return  overrideQuestion( f)==	JOptionPane.YES_OPTION;
 	}
 	
 	

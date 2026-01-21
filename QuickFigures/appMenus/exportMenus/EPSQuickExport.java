@@ -23,8 +23,12 @@ package exportMenus;
 
 import java.awt.Desktop;
 import java.io.File;
+
+import javax.swing.Icon;
+
 import applicationAdapters.DisplayedImage;
 import export.eps.EPSsaver;
+import iconGraphicalObjects.SaveIcon;
 import logging.IssueLog;
 import ultilInputOutput.FileChoiceUtil;
 
@@ -65,8 +69,7 @@ public class EPSQuickExport extends QuickExport {
 			if (file==null) return;
 		String newpath=file.getAbsolutePath();
 		
-		FileChoiceUtil.overrideQuestion(new File(newpath));
-		
+		if(FileChoiceUtil.overridePermission(new File(newpath)))
 		 this.saveInPath(diw, newpath);
 		   
 		 
@@ -107,6 +110,8 @@ public class EPSQuickExport extends QuickExport {
 		return "EPS";
 	}
 	
-	
+	public Icon getSuperMenuIcon() {
+		return SaveIcon.createIcon(true);
+	}
 	
 }

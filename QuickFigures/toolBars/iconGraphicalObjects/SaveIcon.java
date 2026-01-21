@@ -22,6 +22,7 @@
 package iconGraphicalObjects;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -30,7 +31,9 @@ import javax.swing.Icon;
 
 import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_Shapes.ArrowGraphic;
+import graphicalObjects_Shapes.BasicShapeGraphic;
 import graphicalObjects_Shapes.NotchedRectangleGraphic;
+import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_Shapes.RoundedRectangleGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
@@ -52,9 +55,10 @@ public class SaveIcon extends GraphicGroup {
 
 	
 	ArrayList<ShapeGraphic> iconParts=new ArrayList<ShapeGraphic>();
+	private boolean exportVersion;
 	
-	public  SaveIcon() {
-	
+	public  SaveIcon(boolean export) {
+		this.exportVersion=export;
 		createItems() ;
 		
 		addItems();
@@ -104,6 +108,20 @@ public class SaveIcon extends GraphicGroup {
 		iconParts.add(r_slider);
 		iconParts.add(r_label);
 		
+		if(this.exportVersion) {
+			//PathGraphic aa = new ArrowArcIcon(exportVersion).createUsedPath();
+			//BasicShapeGraphic e = new BasicShapeGraphic(aa.getOutline());
+			
+			ArrowGraphic e= new ArrowGraphic(r_large.getCenterOfRotation(), new Point(28,-3));
+			e.setStrokeColor(Color.green.darker());
+			e.setStrokeWidth(3);
+			e.getHead().setArrowHeadSize(12);
+			e.moveLocation(-3, 6);
+			e.setAntialize(true);
+			iconParts.add(e);
+		}
+		
+		
 		
 		
 	}
@@ -136,8 +154,8 @@ public class SaveIcon extends GraphicGroup {
 	/**
 	 * @return
 	 */
-	public static Icon createIcon() {
-		return new GraphicObjectDisplayBasic<SaveIcon>(new 	SaveIcon());
+	public static Icon createIcon(boolean export) {
+		return new GraphicObjectDisplayBasic<SaveIcon>(new 	SaveIcon(export));
 	}
 
 	

@@ -83,8 +83,8 @@ PopupMenuSupplier  {
 		FigureOrganizingLayerPane f = FigureOrganizingLayerPane.findFigureOrganizer(textG);
 		if(f!=null && !(textG instanceof ChannelLabelTextGraphic)) {
 			EditLabels menuItem = f.getMenuSupplier().getLabelEditorMenuItemFor(textG);
-			if (menuItem==null ) 
-				menuItem=new EditLabels(textG);//TODO: determine if this is ever called
+			if (menuItem==null &&textG.getAttachmentPosition()!=null) 
+				menuItem=new EditLabels(textG);//TODO: determine if this is ever called. found that it was called when an unattached label was in a figure organizing layer
 			if (menuItem!=null)
 				jm.add(menuItem);
 			

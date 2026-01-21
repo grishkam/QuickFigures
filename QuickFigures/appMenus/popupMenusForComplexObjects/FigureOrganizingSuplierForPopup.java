@@ -80,6 +80,7 @@ import imageScaling.PixelDensityInstructions;
 import imageScaling.ScaleInformation;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.SmartJMenu;
@@ -365,7 +366,13 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 
 	/**returns a label editor for the given text item*/
 	public EditLabels getLabelEditorMenuItemFor(TextGraphic t) {
-		int gridSnap = t.getAttachmentPosition().getGridSpaceCode();
+		AttachmentPosition attachmentPosition = t.getAttachmentPosition();
+		
+		int gridSnap =0;
+		if(attachmentPosition!=null) gridSnap=attachmentPosition.getGridSpaceCode();
+		
+		if (figureOrganizingLayerPane==null)
+			return null;
 		EditLabels output = new EditLabels(gridSnap, figureOrganizingLayerPane.getMontageLayoutGraphic(), t);
 	
 		if(output.getLabels(t).size()==0) {

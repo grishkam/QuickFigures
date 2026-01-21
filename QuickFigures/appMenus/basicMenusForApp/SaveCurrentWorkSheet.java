@@ -126,7 +126,7 @@ public class SaveCurrentWorkSheet  extends BasicMenuItemForObj {
 	}
 	
 	public Icon getSuperMenuIcon() {
-		return SaveIcon.createIcon();
+		return SaveIcon.createIcon(false);
 	}
 
 }

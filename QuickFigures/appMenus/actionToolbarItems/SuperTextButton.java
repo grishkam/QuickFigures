@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
+import javax.swing.JColorChooser;
 import javax.swing.JMenuItem;
 
 import externalToolBar.AbstractExternalToolset;
@@ -219,7 +220,10 @@ public class SuperTextButton extends BasicMultiSelectionOperator implements Seri
 		
 			}
 		
-		
+		if(doesUserSelectColor()) {
+			
+			color=JColorChooser.showDialog(null, "Color", color);
+		}
 		for(LocatedObject2D a: all) {
 			actOnObject(edits, a);
 				}
@@ -368,6 +372,9 @@ public Component getInputPanel() {
 	return null;
 	}
 
+public boolean doesUserSelectColor() {
+	return type==SELECT_COLOR;
+}
 
 
 /**returns a panel meant for the user to input a font size*/
@@ -461,7 +468,9 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 				TextGraphic.setAntialiasedText(arg1, true);
 				arg1.setColor(Color.black);
 				if(color!=null) arg1.setColor(color);
-				if (doesUserSelectColor()) {arg1.setColor(Color.white);};
+				if (doesUserSelectColor()) {
+					arg1.setColor(Color.white);
+					};
 				arg1.setFont(new Font("Arial", 0, 15));
 				if(doesDimColor()) 
 					{
@@ -531,9 +540,7 @@ public NumberInputPanel getFontInputPanel(LayerSelectionSystem s) {
 
 			
 
-			public boolean doesUserSelectColor() {
-				return type==SELECT_COLOR;
-			}
+			
 			}
 		
 		

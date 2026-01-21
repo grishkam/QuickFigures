@@ -21,6 +21,7 @@
 package exportMenus;
 
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
@@ -67,10 +68,12 @@ public class PDFQuickExport extends QuickExport {
 		
 			String newpath=file.getAbsolutePath();
 		
-			FileChoiceUtil.overrideQuestion(new File(newpath));
-		   
-		  saveInPath(diw, newpath);
+			File f = new File(newpath);
+			if(FileChoiceUtil.overridePermission(f))
+					saveInPath(diw, newpath);
 		
+			
+			
 		} catch (Throwable t) {
 			if (t instanceof NoClassDefFoundError) {
 				IssueLog.showMessage("Opps"+ "It seems imageJ cant find "+t.getMessage());

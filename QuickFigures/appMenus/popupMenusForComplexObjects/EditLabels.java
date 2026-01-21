@@ -47,6 +47,7 @@ public class EditLabels extends BasicSmartMenuItem  {
 	/**creates an edit labels that targets all labels with the same grid attachment type as the given
 	 * text */
 	EditLabels(TextGraphic t) {
+		if(t.getAttachmentPosition()!=null)
 		 type=t.getAttachmentPosition().getGridSpaceCode();
 		 setUpPickerFortype(type);
 		 modelTextItem=t;

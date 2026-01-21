@@ -55,7 +55,7 @@ public class SVGQuickExport extends QuickExport {
 			File file = getFileAndaddExtension();
 			if (file==null) return;
 		String newpath=file.getAbsolutePath();
-		FileChoiceUtil.overrideQuestion(new File(newpath));
+		if(FileChoiceUtil.overridePermission(new File(newpath)))
 		saveInPath(diw,newpath);
 		   
 		  if (openImmediately)

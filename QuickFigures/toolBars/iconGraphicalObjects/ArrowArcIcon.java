@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Created: Jan 10, 2026
- * Date Modified: Jan 10, 2026
+ * Date Created: Jan 19, 2026
+ * Date Modified: Jan 19, 2026
  * Version: 2026.1
  */
 package iconGraphicalObjects;
@@ -42,7 +42,6 @@ public class ArrowArcIcon extends GraphicGroup {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Color iconColor=Color.black;
-	private Color iconColor2=Color.gray;
 	boolean singleHead=true;
 	boolean arrowIncluded=true;
 	boolean reverse=false;
@@ -76,7 +75,7 @@ public class ArrowArcIcon extends GraphicGroup {
 	/**
 	 * @return
 	 */
-	private PathGraphic createUsedPath() {
+	public PathGraphic createUsedPath() {
 		spacefilled = new CircularGraphic(getDisplayRect(), CircularGraphic.PI_ARC);
 		spacefilled.setRectangle(getDisplayRect());
 		spacefilled.setAntialize(true);
@@ -90,7 +89,7 @@ public class ArrowArcIcon extends GraphicGroup {
 		
 		
 		
-		r_large.setStrokeColor(iconColor2);
+		r_large.setStrokeColor(iconColor);
 		return r_large;
 	}
 

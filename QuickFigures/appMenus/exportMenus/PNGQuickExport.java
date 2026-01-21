@@ -54,7 +54,7 @@ public class PNGQuickExport extends QuickExport {
 		try{
 		
 		String newpath=getFileAndaddExtension().getAbsolutePath();
-		FileChoiceUtil.overrideQuestion(new File(newpath));
+		if(FileChoiceUtil.overridePermission(new File(newpath)))
 		saveInPath(diw, newpath);
 		
 		} catch (Throwable t) {

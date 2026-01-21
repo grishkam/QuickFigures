@@ -21,6 +21,7 @@
  */
 package basicMenusForApp;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -32,23 +33,25 @@ import exportMenus.PNGQuickExport;
 import exportMenus.PPTQuickExport;
 import exportMenus.QuickExport;
 import exportMenus.TiffQuickExport;
-import figureFormat.DirectoryHandler;
 import imageDisplayApp.ImageDisplayIO;
 import imageDisplayApp.ImageWindowAndDisplaySet;
 import logging.IssueLog;
 import messages.ShowMessage;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanArrayInputPanel;
+import standardDialog.booleans.BooleanInputPanel;
 import standardDialog.choices.ChoiceInputPanel;
 
 /**Implementa a menu item that.
- * Opens a series of saved files with figures, exports them all into another format*/
+ * Opens a series of saved files with figures, exports them all into one or more other formats*/
 public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 
 	
 	public ArrayList<QuickExport> options=createExporterList();
 
 	boolean allow_multiple_format_export=true;
+
+	private boolean open_right_away=true;
 
 	
 	public ConvertSavedWorksheets(boolean multiples) {
@@ -88,7 +91,6 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 		startingBoxes[4]=true;
 		BooleanArrayInputPanel array_input = new BooleanArrayInputPanel("Export multiple formats", startingBoxes);
 		
-		
 		if(this.allow_multiple_format_export) {
 			String[] choices_as_strings = ChoiceInputPanel.setChoicesToStrings(options, null);
 			array_input.setBoxNames(choices_as_strings);
@@ -96,18 +98,25 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 		}
 		else sd.add("choices", panel);
 		
-		sd.showDialog();
+		sd.add("open right away", new BooleanInputPanel("open right away", this.open_right_away));
 		
+		
+		sd.showDialog();
+		open_right_away=sd.getBoolean("open right away");
 		QuickExport[] qe2=null;
 		if(!allow_multiple_format_export) {
 				QuickExport qe= (QuickExport) panel.getSelectedObject();
+				
 				qe2=new QuickExport[] {qe};
 		} else {
 			boolean[] b = array_input.getArray();
 			ArrayList<QuickExport> selected_formats=new ArrayList<QuickExport>();
 			for(int i=0; i<b.length; i++) {
-				if(b[i])
-				selected_formats.add(options.get(i));
+				if(b[i]) {
+					QuickExport e = options.get(i);
+					
+					selected_formats.add(e);
+				}
 				
 			}
 			qe2=selected_formats.toArray(new QuickExport[selected_formats.size()] );
@@ -135,9 +144,9 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 		int count = 0;
 		
 		for(File f: files) try {
-		
-				ImageWindowAndDisplaySet open = ImageDisplayIO.showFile(f);
 				String worksheet_name = f.getName();
+				ImageWindowAndDisplaySet open = ImageDisplayIO.showFile(f);
+				
 				saveInSeveralFormats(qe, basePath, open, worksheet_name);
 				open.closeWindowButKeepObjects();
 				count++;
@@ -159,10 +168,14 @@ public class ConvertSavedWorksheets  extends BasicMenuItemForObj {
 			String worksheet_name) throws Exception {
 		String newpath = basePath+worksheet_name;
 		
-		for(QuickExport qe2: qe){
+		for(QuickExport qe2: qe) try {
 			String newpath2 = qe2.addExtension(newpath);
 			qe2.saveInPath(open, newpath2);
-			
+			if(open_right_away) {
+				Desktop.getDesktop().open(new File(newpath2));
+			}
+		} catch (java.io.FileNotFoundException ex) {
+			ShowMessage.showOptionalMessage("Had an issue with this file saving", true, "problem saving "+ex.getMessage());
 		}
 	}
 	

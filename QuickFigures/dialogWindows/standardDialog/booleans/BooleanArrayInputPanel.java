@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
- * Version: 2023.2
+ * Date Modified: Jan 19, 2026
+ * Version: 2026.1
  */
 package standardDialog.booleans;
 

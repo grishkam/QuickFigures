@@ -72,7 +72,7 @@ public class PPTQuickExport extends QuickExport implements MenuItemForObj{
 	@Override
 	public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 		File f=getFileAndaddExtension();
-		FileChoiceUtil.overrideQuestion(f);
+		if(FileChoiceUtil.overridePermission(f))
 		saveToPath(diw, f);
 	}
 
