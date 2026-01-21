@@ -20,7 +20,7 @@
  */
 package channelMerging;
 
-
+import imageDisplayApp.UserPreferences;
 
 /**interface for reordering the channels of a multichannel image
  * or reordering their colors*/
@@ -32,6 +32,8 @@ public interface ChannelOrderAndColorWrap extends ChannelColorWrap{
 	
 	/**moves the channel at position 1 to position 2. */
 	public void moveChannelOfImage(int choice1, int choice2);
+	
+	
 	
 	
 	

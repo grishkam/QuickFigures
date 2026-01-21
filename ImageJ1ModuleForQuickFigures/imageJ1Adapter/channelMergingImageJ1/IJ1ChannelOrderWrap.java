@@ -21,14 +21,18 @@
 package channelMergingImageJ1;
 
 import java.awt.Color;
+import java.io.File;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
+import channelMerging.ChannelColorWrap;
 import channelMerging.ChannelOrderAndColorWrap;
 import ij.CompositeImage;
+import ij.IJ;
 import ij.ImagePlus;
 import ij.process.LUT;
 import imageDisplayApp.UserPreferences;
 import logging.IssueLog;
+import messages.ShowMessage;
 
 /**ImageJ implementation of the channel order interface 
  * @see ChannelOrderAndColorWrap*/
@@ -79,7 +83,7 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	}
 	
 	private void setLutColor(Color lut, int chan) {
-		if(UserPreferences.current.forbidLUTChange)
+		if(ChannelColorWrap.isUserBlockingChangesToChannelColor())
 					{return;}
 		if (chan<=0) {
 			IssueLog.log(" Was asked to change color for channel '0' but channel numbering starts from 1");
@@ -141,6 +145,34 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 
 	public void addChannelSwapListener(ChannelSwapListener imagePlusWrapper) {
 		this.listener=imagePlusWrapper;
+		
+	}
+	
+	public static String[] getApplicationSpecificColorChoices() {
+		String[] output = new String[] {};
+		
+		
+		return output;
+	}
+
+	@Override
+	public void setChannelColorToSavedLut(String lut, int chan) {
+		//TODO implement a way for a saved imagej lut to be references and loaded
+		String path=IJ.getDirectory("luts")+"StartupMacros.txt";
+		File f = new File(path);
+		File[] files = f.listFiles();
+		File the_lut_file=null;
+		for(File a_file: files) {
+			if(a_file.getName().toLowerCase()==lut.toLowerCase()|| a_file.getName().toLowerCase()==(lut.toLowerCase()+".lut")) {
+				the_lut_file=a_file;
+			}
+			IssueLog.log(a_file.getName());
+		}
+		
+		if(the_lut_file==null) {
+			ShowMessage.showOptionalMessage("Could not find that lut file");
+		}
+		
 		
 	}
 	

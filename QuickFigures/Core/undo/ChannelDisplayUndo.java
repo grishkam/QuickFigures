@@ -23,6 +23,7 @@ package undo;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import channelMerging.ChannelColorWrap;
 import channelMerging.MultiChannelImage;
 import figureEditDialogs.DisplayRangeChangeListener;
 
@@ -95,7 +96,9 @@ public class ChannelDisplayUndo extends AbstractUndoableEdit2 {
 		mw.updateDisplay();
 		lis.updateAllDisplaysWithRealChannel(null);
 	}
+	
 	public void editNow(Color[] ca) {
+		ChannelColorWrap.setUserBlockColorChange(false);//the undo will bypass a block to user color changes
 		int nC=mw.nChannels();
 		for(int i=0; i<nC; i++) {
 			mw.getChannelSwapper().setChannelColor(ca[i], i+1);

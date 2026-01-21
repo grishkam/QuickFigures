@@ -36,6 +36,7 @@ import javax.swing.JMenuItem;
 import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import applicationAdapters.HasScaleInfo;
 import channelLabels.ChannelLabelManager;
+import channelMerging.ChannelColorWrap;
 import channelMerging.ChannelEntry;
 import channelMerging.ChannelOrderAndLutMatching;
 import channelMerging.ChannelUseInstructions;
@@ -199,9 +200,10 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 			}
 			
 		 
-		 
-		 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
-		 addButtonToMenu(output, "Invert Channel Panel Color", COLOR_INVERT_COMMAND);
+		 if(!ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
+			 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
+			 addButtonToMenu(output, "Invert Channel Panel Color", COLOR_INVERT_COMMAND);
+		 }
 		 
 		 if(!limitVersionOfMenu) {
 		 JMenu chanLabelMenu=new JMenu("Channel Label");
@@ -209,8 +211,14 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		 addButtonToMenu(chanLabelMenu, "Reset Channel Label Names ", renameChanCommand);
 		// output.add(chanLabelMenu);
 		 }
-		 if(!limitVersionOfMenu&&this.getAllMultiChannelImages().size()>1) 
-			 addButtonToMenu(output, "Match Min, Max, Channel Order and LUT Colors", orderCommand2);
+		 if(!limitVersionOfMenu&&this.getAllMultiChannelImages().size()>1) {
+			 
+			 String text = "Match Min, Max, Channel Order and LUT Colors";
+			 if(ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
+				 text = "Match Min, Max, and Channel Order";
+			 }
+			addButtonToMenu(output, text, orderCommand2);
+			 }
 			
 	}
 
@@ -260,6 +268,10 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		}
 		
 if (	actionCommand.equals(colorRecolorCommand)&& !isDisplayMissing(true)) {
+	if(ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
+		boolean result = ShowMessage.showOptionalMessage("channel color change blocked", false, "Current user preferenes setting blocks changes to channel color. you may go to the preferences menu option to change this ");
+		
+	} else
 			undo=recolorBasedOnRealChannelNames();
 		}
 
@@ -792,26 +804,24 @@ public class ChanReColorer implements ColorInputListener {
 	@Override
 	public void ColorChanged(ColorInputEvent fie) {
 		boolean startsBlocked=false;
-		if(isUserBlockingChangesToChannelColor()) {
+		if(ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
+			
 			startsBlocked=true;
-			UserPreferences.current.forbidLUTChange=false;//to bypass the block color change option. This menu item is the only exception to that block
+			ChannelColorWrap.setUserBlockColorChange(false);//to bypass the block color change option. This menu item is the only exception to that block
 		}
 		
 		setTheColor(fie.getColor(), myNum);
 		
 		if(startsBlocked) {
-			UserPreferences.current.forbidLUTChange=true;
+			ChannelColorWrap.setUserBlockColorChange(true);
 		}
 	}
-	/**
-	 * @return
-	 */
-	private boolean isUserBlockingChangesToChannelColor() {
-		return UserPreferences.current.forbidLUTChange;
-	}
+
 	
 
 }
+
+
 
 /**Adds a recolor channel menu to the container. the channels in the channel entry list fill appear in that menu*/
 public void addChenEntryColorMenus(Container j, ArrayList<ChannelEntry> iFin) {

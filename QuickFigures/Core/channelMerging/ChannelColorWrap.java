@@ -21,6 +21,8 @@ package channelMerging;
 
 import java.awt.Color;
 
+import imageDisplayApp.UserPreferences;
+
 /**
  
  */
@@ -33,5 +35,19 @@ public interface ChannelColorWrap {
 	
 	/**set the channel colors*/
 	public void setChannelColor(Color c, int chan);
+	public void setChannelColorToSavedLut(String lut, int chan);
+	
 	void setChannelColor(byte[][] lut, int chan);//sets the lookup table
+	
+	
+	
+	/**
+	 * @return
+	 */
+	public static boolean isUserBlockingChangesToChannelColor() {
+		return UserPreferences.current.forbidLUTChange;
+	}
+	public static void setUserBlockColorChange(boolean b) {
+		UserPreferences.current.forbidLUTChange=b;
+	}
 }
