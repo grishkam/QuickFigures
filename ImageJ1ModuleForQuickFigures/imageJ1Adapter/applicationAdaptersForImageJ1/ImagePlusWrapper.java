@@ -736,6 +736,9 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 
 	@Override
 	public void colorBasedOnRealChannelName() {
+		if(ChannelColorWrap.isUserBlockingChangesToChannelColor())
+		{return;}
+		
 		for(int i=1; i<=this.nChannels(); i++) try {
 		
 			String name=this.getRealChannelName(i);

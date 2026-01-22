@@ -20,6 +20,7 @@
  */
 package standardDialog.choices;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -27,11 +28,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 import channelMerging.ChannelEntry;
 import logging.IssueLog;
@@ -44,6 +48,7 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 	protected JLabel label=new JLabel();
 	protected JComboBox<? extends Object> box=new JComboBox<String>();
 	private JComboBox<String> box2;
+	
 	protected AbstractButton  button;
 	
 	boolean omitLabel=false;
@@ -57,6 +62,7 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 	
 	/**only applicable when this choice input panel refers to a list of objects*/
 	private ArrayList<?> objectList;
+
 	
 	
 	
@@ -72,6 +78,10 @@ public class ChoiceInputPanel extends InputPanel implements OnGridLayout, ItemLi
 		changeOptions(choices, startingindex, true);
 		
 	}
+	
+	
+	
+	
 	
 	
 	public ChoiceInputPanel(String labeln, ArrayList<ChannelEntry> choices, int startingindex) {
@@ -121,6 +131,7 @@ public ChoiceInputPanel(String labeln, ArrayList<?> choices, int startingindex, 
 			box2.addItem(c);
 		}
 		
+		
 		if (startingindex>=box2.getItemCount()) 
 			startingindex=0;
 		if(box2.getItemCount()!=0)
@@ -131,6 +142,7 @@ public ChoiceInputPanel(String labeln, ArrayList<?> choices, int startingindex, 
 		originalValues.add(startingindex);
 	}
 	
+
 
 	
 	public ChoiceInputPanel(String labeln, JComboBox<? extends Object> box) {
@@ -169,7 +181,10 @@ public ChoiceInputPanel(String labeln, ArrayList<?> choices, int startingindex, 
 		gc.anchor = GridBagConstraints.WEST;
 		
 		gc.insets=lastInsets;
-		jp.add(box, gc);
+		
+		
+			jp.add(getChoiceGUIObject(), gc);
+		
 		
 		if (button!=null) {
 			gc.anchor = GridBagConstraints.EAST;
@@ -180,6 +195,15 @@ public ChoiceInputPanel(String labeln, ArrayList<?> choices, int startingindex, 
 			
 		}
 		
+	}
+
+
+
+
+
+
+	 Component getChoiceGUIObject() {
+		return box;
 	}
 
 	
@@ -197,9 +221,17 @@ public ChoiceInputPanel(String labeln, ArrayList<?> choices, int startingindex, 
 
 	/**returns the selected index*/
 	public int getSelectedIndex() {
+
 		return getBox() .getSelectedIndex();
 	}
 	
+	
+
+
+
+
+
+
 	/**returns the selected index*/
 	public Object getSelectedObject() {
 		if(objectList!=null)

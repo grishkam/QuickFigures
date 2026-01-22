@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import appContext.MultiDimensionalImageContext;
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.MultiChannelImage;
+import channelMergingImageJ1.IJ1ChannelOrderWrap;
 import graphicalObjects_Shapes.RegularPolygonGraphic;
 import graphicalObjects_Shapes.SimpleStar;
 import ij.IJ;
@@ -121,5 +122,13 @@ public class IJ1MultichannelContext implements MultiDimensionalImageContext {
 		WindowManager.setCurrentWindow(image.getWindow());
 		return new ImagePlusWrapper(image);
 	}
+
+	@Override
+	public ArrayList<String> getChannelColorOptions() {
+		return IJ1ChannelOrderWrap.getLutOptions();
+		
+	}
+	
+	
 
 }

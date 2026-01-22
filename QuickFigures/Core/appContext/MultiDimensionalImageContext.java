@@ -39,6 +39,8 @@ public interface MultiDimensionalImageContext {
   
   /**Returns the active multi-dimensional image if one is present*/
   public MultiChannelImage getCurrentMultichanal();
+  
+  public ArrayList<String> getChannelColorOptions();
 
   /**returns the default save directory for multidimensional images*/
   public String getDefaultDirectory();

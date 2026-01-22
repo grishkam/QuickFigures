@@ -202,8 +202,9 @@ public class ChannelPanelEditingMenu implements ActionListener, DisplayRangeChan
 		 
 		 if(!ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
 			 addButtonToMenu(output, "Recolor Channels Automatically", colorRecolorCommand, new ChannelUseIcon(principalDisplay.getMultiChannelImage().getChannelEntriesInOrder(), ChannelUseIcon.VERTICAL_BARS, true));
-			 addButtonToMenu(output, "Invert Channel Panel Color", COLOR_INVERT_COMMAND);
+			
 		 }
+		 addButtonToMenu(output, "Invert Channel Panel Color", COLOR_INVERT_COMMAND);
 		 
 		 if(!limitVersionOfMenu) {
 		 JMenu chanLabelMenu=new JMenu("Channel Label");
@@ -808,19 +809,23 @@ public class ChanReColorer implements ColorInputListener {
 	/**how to respond*/
 	@Override
 	public void ColorChanged(ColorInputEvent fie) {
-		boolean startsBlocked=false;
-		if(ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
+		
+	
+		setTheColor(fie.getColorObject(), myNum);
+		
+		
+	}
+	
+	/**
+	 * boolean startsBlocked=false;
+	if(ChannelColorWrap.isUserBlockingChangesToChannelColor()) {
 			
 			startsBlocked=true;
 			ChannelColorWrap.setUserBlockColorChange(false);//to bypass the block color change option. This menu item is the only exception to that block
 		}
-		
-		setTheColor(fie.getColorObject(), myNum);
-		
 		if(startsBlocked) {
 			ChannelColorWrap.setUserBlockColorChange(true);
-		}
-	}
+		}*/
 
 	
 

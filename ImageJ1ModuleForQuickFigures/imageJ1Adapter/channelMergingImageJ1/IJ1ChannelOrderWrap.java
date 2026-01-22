@@ -22,6 +22,7 @@ package channelMergingImageJ1;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
 import channelMerging.ChannelColorWrap;
@@ -34,6 +35,9 @@ import ij.process.LUT;
 import imageDisplayApp.UserPreferences;
 import logging.IssueLog;
 import messages.ShowMessage;
+import standardDialog.StandardDialog;
+import standardDialog.choices.JListInputPanel;
+import ultilInputOutput.FileChoiceUtil;
 
 /**ImageJ implementation of the channel order interface 
  * @see ChannelOrderAndColorWrap*/
@@ -74,6 +78,7 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 
 	@Override
 	public void setChannelColor(Color c, int chan) {
+		
 		setLutColor(c,chan);
 	}
 	
@@ -84,8 +89,7 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	}
 	
 	private void setLutColor(Color lut, int chan) {
-		if(ChannelColorWrap.isUserBlockingChangesToChannelColor())
-					{return;}
+		
 		if (chan<=0) {
 			IssueLog.log(" Was asked to change color for channel '0' but channel numbering starts from 1");
 			
@@ -159,22 +163,21 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	@Override
 	public void setChannelColorToSavedLut(String lut, int chan) {
 		
-		File[] files = getListOfLutFiles();
+		if(new File(lut).exists()) {
+			setLut(chan, LutLoader.openLut(new File(lut).getAbsolutePath()));
+			return;
+		}
 		
-		File the_lut_file=null;
+		File the_lut_file = findLutFileWithName(lut);
 		
-		
-		
-		for(File a_file: files) {
-			if(a_file.getName().toLowerCase().equals(lut.toLowerCase())|| a_file.getName().toLowerCase().equals((lut.toLowerCase()+".lut"))) {
-				the_lut_file=a_file;
-				
-			}
-			IssueLog.log(a_file.getName());
+		if(the_lut_file==null) {
+			lut=JListInputPanel.getChoiceFromUser("Could not find that lut file", getLutOptions());
+			the_lut_file = findLutFileWithName(lut);
 		}
 		
 		if(the_lut_file==null) {
-			ShowMessage.showOptionalMessage("Could not find that lut file");
+			ShowMessage.showOptionalMessage("Could not find that lut file ", true,"Could not find that lut file "+the_lut_file, "Try these "+getExampleLutFileNames() );
+			
 		} else {
 			
 			setLut(chan, LutLoader.openLut(the_lut_file.getAbsolutePath()));
@@ -184,15 +187,68 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 	}
 
 	/**
+	 * @param lut
 	 * @return
 	 */
-	private File[] getListOfLutFiles() {
-		String path=IJ.getDirectory("luts");
-		IssueLog.log("looking in "+path);
+	private File findLutFileWithName(String lut) {
+		File[] files = getListOfLutFiles();
+		
+		File the_lut_file=null;
+		
+		
+		if(files!=null)
+		for(File a_file: files) {
+			if(a_file.getName().toLowerCase().equals(lut.toLowerCase())|| a_file.getName().toLowerCase().equals((lut.toLowerCase()+".lut"))) {
+				the_lut_file=a_file;
+				
+			}
+			IssueLog.log(a_file.getName());
+		}
+		return the_lut_file;
+	}
+
+	/**
+	 * @return
+	 */
+	private static File[] getListOfLutFiles() {
+		String path=getLutFilePath();
+		
 		File f = new File(path);
 		File[] files = f.listFiles();
 		return files;
 	}
+	
+	public static ArrayList<String> getLutOptions() {
+		File[] f=getListOfLutFiles();
+		ArrayList<String> output = new ArrayList<String>();
+		for(File file: f) {
+			if(file.getName().endsWith(".lut")) {
+				output.add(file.getName().replace(".lut", ""));
+			}
+		}
+		return output;
+	}
+
+	/**
+	 * @return
+	 */
+	private static String getLutFilePath() {
+		return IJ.getDirectory("luts");
+	}
+	
+	/**returns some found lut file names to help the user*/
+	public static String getExampleLutFileNames() {
+		File[] files = getListOfLutFiles();
+		if(files==null||files.length==0)
+			return "[Could not fine any lut files or failed to find folder]";
+		String output = "Examples: " +files[0].getName();
+			for(int i=1; i<files.length&i<5; i++)
+				output+=", "+files[i].getName();
+										
+		return output;
+		
+	}
+	
 
 	/**Sets the channel color*/
 	@Override
@@ -201,6 +257,9 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 			this.setChannelColor((Color)c, chan);
 		if(c instanceof LUT) {
 			setLut(chan, (LUT)c);
+		}
+		if(c instanceof byte[][]) {
+			this.setChannelColor((byte[][]) c, chan);
 		}
 	}
 	

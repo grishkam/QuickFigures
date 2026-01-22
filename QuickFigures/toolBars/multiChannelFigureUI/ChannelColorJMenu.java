@@ -31,24 +31,35 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
+import appContext.CurrentAppContext;
 import channelMerging.ChannelColor;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
+import messages.ShowMessage;
 import standardDialog.StandardDialog;
+import standardDialog.choices.JListInputPanel;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
+import ultilInputOutput.FileChoiceUtil;
 
 /**A menu that is used to pick colors for channels. 
  * Written as a more elegant alternative to the color JMenu
  * Displays the menu items as a gradient of color
  * Color rectangles appear in the menu instead of normal menu items*/
 public class ChannelColorJMenu extends SmartJMenu {
+	/**
+	 * 
+	 */
+	private static final String OPEN_LUT = "Open...", USE_INSTALLED_LUT = "? ? ?";
+
+
 	/**
 	 * 
 	 */
@@ -62,7 +73,9 @@ public class ChannelColorJMenu extends SmartJMenu {
 		for(Color c:standard) {
 			add(new ColorJMenuItem(c));
 		 }
-		add(new ColorJMenuItem("? ? ?"));
+		add(new ColorJMenuItem(OPEN_LUT));
+		
+		add(new ColorJMenuItem(USE_INSTALLED_LUT));
 	}
 	
 	
@@ -179,22 +192,30 @@ public class ChannelColorJMenu extends SmartJMenu {
 				Rectangle b = this.getBounds();
 			
 				if(g instanceof Graphics2D & !custom) {
-					Graphics2D graphics2d = (Graphics2D) g;
-					Color c1 = Color.black;
-					Color c2 = color;
-					if(color.equals(Color.black)) {
-						c1=Color.white;
-						c2=Color.black;
-					}
-					
-					GradientPaint paint = new GradientPaint(new Point(getX(), 0+b.height/2), c1, new Point(getX()+b.width, 0+b.height/2), c2, false);
-					graphics2d.setPaint(paint);
-					graphics2d.fillRect(getX(), 0, b.width, b.height);
-					graphics2d.setColor(c2.darker().darker());
-					
-					
-					graphics2d.draw(b);
+					drawSimpleGradientOneColor(g, b);
 				}
+			}
+
+			/**
+			 * @param g
+			 * @param b
+			 */
+			private void drawSimpleGradientOneColor(Graphics g, Rectangle b) {
+				Graphics2D graphics2d = (Graphics2D) g;
+				Color c1 = Color.black;
+				Color c2 = color;
+				if(color.equals(Color.black)) {
+					c1=Color.white;
+					c2=Color.black;
+				}
+				
+				GradientPaint paint = new GradientPaint(new Point(getX(), 0+b.height/2), c1, new Point(getX()+b.width, 0+b.height/2), c2, false);
+				graphics2d.setPaint(paint);
+				graphics2d.fillRect(getX(), 0, b.width, b.height);
+				graphics2d.setColor(c2.darker().darker());
+				
+				
+				graphics2d.draw(b);
 			}
 			
 			public ColorJMenuItem(ChannelColor c) {
@@ -219,7 +240,17 @@ public class ChannelColorJMenu extends SmartJMenu {
 			public void notifyListens() {
 				ColorInputEvent fie = new ColorInputEvent(null, this, color);
 				if(custom) {
-					 stringFromUser = StandardDialog.getStringFromUser("Please input lut name", stringFromUser);
+					if(this.getText().equals(OPEN_LUT)) {
+						File f = FileChoiceUtil.getOpenFile("/luts");
+						if(f==null)
+							return;
+						stringFromUser = f.getAbsolutePath();
+						if(stringFromUser.endsWith(".lut")) {
+							ShowMessage.showOptionalMessage("please select a lut file");
+						}
+					} else
+						stringFromUser=JListInputPanel.getChoiceFromUser("Could not find that lut file", CurrentAppContext.getMultichannelContext().getChannelColorOptions());
+					    // stringFromUser = StandardDialog.getStringFromUser("Please input lut name", stringFromUser);
 					 stringFromUser = stringFromUser.replace(" ", "_");
 					fie = new ColorInputEvent(null, this, stringFromUser);
 				}
