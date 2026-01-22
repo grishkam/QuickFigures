@@ -32,12 +32,19 @@ public class ColorInputEvent extends ComponentInputEvent {
 	
 	private Color color;
 	public CanvasMouseEvent event;
+	String colorString=null;
 
 	
 	public ColorInputEvent(InputPanel sourcePanel, Component component, Color number) {
 		this.setSourcePanel(sourcePanel);
 		this.setComponent(component);
 		this.setColor(number);
+	}
+	
+	public ColorInputEvent(InputPanel sourcePanel, Component component, String value) {
+		this.setSourcePanel(sourcePanel);
+		this.setComponent(component);
+		colorString=value;
 	}
 
 	public Color getColor() {
@@ -47,7 +54,17 @@ public class ColorInputEvent extends ComponentInputEvent {
 	public void setColor(Color number) {
 		this.color = number;
 	}
+	
+	public String getColorAsText() {
+		return colorString;
+	}
 
+	public Object getColorObject() {
+		if (colorString!=null)
+			return colorString;
+		
+		return color;
+	}
 
 
 	

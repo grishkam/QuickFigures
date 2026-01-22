@@ -765,7 +765,7 @@ public static int getBestMatchToChannel(MultiChannelImage mw, String realChanNam
 
 /**sets the color of the channel
  * @return */
-public CombinedEdit setTheColor(Color color, Integer chan1) {
+public CombinedEdit setTheColor(Object color, Integer chan1) {
 	String realName=getPressedMultichannel().getRealChannelName(chan1);
 	
 	
@@ -774,7 +774,12 @@ public CombinedEdit setTheColor(Color color, Integer chan1) {
 	
 	for(MultiChannelImage ic: allWrappers) {
 		int chan=getBestMatchToChannel(ic, realName, chan1);
-		ic.getChannelSwapper().setChannelColor(color, chan);
+		
+		if(color instanceof Color)
+			ic.getChannelSwapper().setChannelColor( (Color)color, chan);
+		else if(color instanceof String)
+			ic.getChannelSwapper().setChannelColorToSavedLut( (String)color, chan);
+		
 	}
 	updateAllDisplaysWithRealChannel( realName);
 	updateAllDisplays();
@@ -810,7 +815,7 @@ public class ChanReColorer implements ColorInputListener {
 			ChannelColorWrap.setUserBlockColorChange(false);//to bypass the block color change option. This menu item is the only exception to that block
 		}
 		
-		setTheColor(fie.getColor(), myNum);
+		setTheColor(fie.getColorObject(), myNum);
 		
 		if(startsBlocked) {
 			ChannelColorWrap.setUserBlockColorChange(true);

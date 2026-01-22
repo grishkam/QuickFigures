@@ -36,6 +36,9 @@ public interface ChannelColorWrap {
 	/**set the channel colors*/
 	public void setChannelColor(Color c, int chan);
 	public void setChannelColorToSavedLut(String lut, int chan);
+	public void setChannelColorTo(Object c, int chan);
+	
+	
 	
 	void setChannelColor(byte[][] lut, int chan);//sets the lookup table
 	

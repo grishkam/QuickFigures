@@ -40,6 +40,7 @@ import javax.swing.JMenuBar;
 import channelMerging.ChannelColor;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
+import standardDialog.StandardDialog;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 
@@ -61,6 +62,7 @@ public class ChannelColorJMenu extends SmartJMenu {
 		for(Color c:standard) {
 			add(new ColorJMenuItem(c));
 		 }
+		add(new ColorJMenuItem("? ? ?"));
 	}
 	
 	
@@ -125,7 +127,8 @@ public class ChannelColorJMenu extends SmartJMenu {
 			
 		}
 
-
+		private static String stringFromUser="16 colors";
+		
 		class ColorJMenuItem extends BasicSmartMenuItem implements ActionListener {
 
 			/**
@@ -133,20 +136,41 @@ public class ChannelColorJMenu extends SmartJMenu {
 			 */
 			private static final long serialVersionUID = 1L;
 			private Color color;
+			private boolean custom;
+			
 			
 			public ColorJMenuItem(Color c) {
 				this.setColor(c);
 				this.setForeground(c);
 				this.setBackground(c);
 				this.setText("Color ");
-				this.addActionListener(this);
+				
+				setFontColor(color);
+				this.setFocusPainted(false);
+				this.setFocusable(false);
+			}
+
+			/**
+			 * 
+			 */
+			private void setFontColor(Color color) {
 				Font font = new Font("Times", Font.BOLD, 25);
 				HashMap<TextAttribute, Object> map = new HashMap<TextAttribute, Object> ();
 				map.put(TextAttribute.FOREGROUND, color);
 				font=font.deriveFont(map);
 				this.setFont(font);
-				this.setFocusPainted(false);
-				this.setFocusable(false);
+			}
+			
+			/**
+			 * @param string
+			 */
+			public ColorJMenuItem(String string) {
+				this(Color.lightGray);
+				this.setText(string);
+				this.custom=true;
+				this.setForeground(Color.black);
+				setFontColor(Color.black);
+				this.setBackground(Color.white);
 			}
 			
 			@Override
@@ -154,7 +178,7 @@ public class ChannelColorJMenu extends SmartJMenu {
 				super.paintComponent(g);
 				Rectangle b = this.getBounds();
 			
-				if(g instanceof Graphics2D) {
+				if(g instanceof Graphics2D & !custom) {
 					Graphics2D graphics2d = (Graphics2D) g;
 					Color c1 = Color.black;
 					Color c2 = color;
@@ -162,10 +186,13 @@ public class ChannelColorJMenu extends SmartJMenu {
 						c1=Color.white;
 						c2=Color.black;
 					}
+					
 					GradientPaint paint = new GradientPaint(new Point(getX(), 0+b.height/2), c1, new Point(getX()+b.width, 0+b.height/2), c2, false);
 					graphics2d.setPaint(paint);
 					graphics2d.fillRect(getX(), 0, b.width, b.height);
 					graphics2d.setColor(c2.darker().darker());
+					
+					
 					graphics2d.draw(b);
 				}
 			}
@@ -173,6 +200,8 @@ public class ChannelColorJMenu extends SmartJMenu {
 			public ColorJMenuItem(ChannelColor c) {
 				this(c.getTopColor());
 			}
+
+			
 
 			public Color getColor() {
 				return color;
@@ -188,8 +217,15 @@ public class ChannelColorJMenu extends SmartJMenu {
 			}
 			
 			public void notifyListens() {
+				ColorInputEvent fie = new ColorInputEvent(null, this, color);
+				if(custom) {
+					 stringFromUser = StandardDialog.getStringFromUser("Please input lut name", stringFromUser);
+					 stringFromUser = stringFromUser.replace(" ", "_");
+					fie = new ColorInputEvent(null, this, stringFromUser);
+				}
 				for(ColorInputListener listen: listens) {
-					listen.ColorChanged(new ColorInputEvent(null, this, color));
+					
+					listen.ColorChanged(fie);
 				}
 			}
 			

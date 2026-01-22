@@ -408,7 +408,7 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 	/**gets the channel lut as a color*/
 	@Override
 	public Color getChannelColor(int c) {
-		// TODO Auto-generated method stub
+		
 		if(imp==null) return null;
 		LUT[] eachChanLUT=imp.getLuts(); 
 		if (eachChanLUT==null)
@@ -426,6 +426,27 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 			return getColorFromLUT(eachChanLUT[c-1], 255);
 			}
 		
+	}
+	
+
+	@Override
+	public Object getChannelColorObject(int c) {
+		if(imp==null) return null;
+		LUT[] eachChanLUT=imp.getLuts(); 
+		if (eachChanLUT==null)
+			return getChannelColor(c);
+		else if (c==0) {
+			IssueLog.log("problem with lut arrays");
+			return null;
+		} else if (eachChanLUT.length==0){
+			return Color.white;	
+		}
+		else {
+			int index_c=c-1;
+			if(eachChanLUT.length<=index_c)
+				return Color.white;	
+			return eachChanLUT[c-1];
+			}
 	}
 	
 	
@@ -943,6 +964,9 @@ public class ImagePlusWrapper implements  ImageWorkSheet, MultiChannelImage, Cha
 		out.defaultWriteObject();
 	
 	}
+
+
+
 
 	
 	

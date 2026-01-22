@@ -73,7 +73,7 @@ public class ChannelOrderAndLutMatching {
 			
 			
 			
-			if (command!=ORDER_ONLY) edited.getChannelColors().setChannelColor(reference.getChannelColor(channelOfRef),channelToEdit);
+			if (command!=ORDER_ONLY) edited.getChannelColors().setChannelColorTo(reference.getChannelColorObject(channelOfRef),channelToEdit);
 			if (command==ORDER_ONLY||command==ORDER_AND_COLOR) {
 				if(!sameOrder)
 					edited.getChannelSwapper().swapChannelsOfImage( channelOfRef, channelToEdit);

@@ -29,6 +29,7 @@ import channelMerging.ChannelOrderAndColorWrap;
 import ij.CompositeImage;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.plugin.LutLoader;
 import ij.process.LUT;
 import imageDisplayApp.UserPreferences;
 import logging.IssueLog;
@@ -157,23 +158,50 @@ public class IJ1ChannelOrderWrap implements ChannelOrderAndColorWrap{
 
 	@Override
 	public void setChannelColorToSavedLut(String lut, int chan) {
-		//TODO implement a way for a saved imagej lut to be references and loaded
-		String path=IJ.getDirectory("luts")+"StartupMacros.txt";
-		File f = new File(path);
-		File[] files = f.listFiles();
+		
+		File[] files = getListOfLutFiles();
+		
 		File the_lut_file=null;
+		
+		
+		
 		for(File a_file: files) {
-			if(a_file.getName().toLowerCase()==lut.toLowerCase()|| a_file.getName().toLowerCase()==(lut.toLowerCase()+".lut")) {
+			if(a_file.getName().toLowerCase().equals(lut.toLowerCase())|| a_file.getName().toLowerCase().equals((lut.toLowerCase()+".lut"))) {
 				the_lut_file=a_file;
+				
 			}
 			IssueLog.log(a_file.getName());
 		}
 		
 		if(the_lut_file==null) {
 			ShowMessage.showOptionalMessage("Could not find that lut file");
+		} else {
+			
+			setLut(chan, LutLoader.openLut(the_lut_file.getAbsolutePath()));
 		}
 		
 		
+	}
+
+	/**
+	 * @return
+	 */
+	private File[] getListOfLutFiles() {
+		String path=IJ.getDirectory("luts");
+		IssueLog.log("looking in "+path);
+		File f = new File(path);
+		File[] files = f.listFiles();
+		return files;
+	}
+
+	/**Sets the channel color*/
+	@Override
+	public void setChannelColorTo(Object c, int chan) {
+		if(c instanceof Color)
+			this.setChannelColor((Color)c, chan);
+		if(c instanceof LUT) {
+			setLut(chan, (LUT)c);
+		}
 	}
 	
 }

@@ -106,6 +106,9 @@ public interface MultiChannelImage extends OpenFileReference, HasScaleInfo {
 	
 	/**for handling channel colors*/
 	public Color getChannelColor(int i);
+	public Object getChannelColorObject(int i);
+	
+	
 	/**returns the channel swapper*/
 	public ChannelOrderAndColorWrap getChannelSwapper();
 	public ChannelColorWrap getChannelColors();
