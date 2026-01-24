@@ -15,22 +15,25 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
- * Version: 2023.2
+ * Date Modified: Jan 24, 2026
+ * Version: 2026.1
  */
 package handles.miniToolbars;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JColorChooser;
 
 import applicationAdapters.CanvasMouseEvent;
+import graphicalObjects_SpecialObjects.KeyCharInput;
 import handles.SmartHandle;
 import locatedObject.ColorDimmer;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
 
-/**A set of colored rectangles to be drawn in a color chooser style array. User will be able to select color. 
+/**A set of colored rectangles to be drawn in a color chooser style array. User will be able to select color.
+Adapted to include a character selection feature.
  */
 public class ColorButtonHandleList extends ActionButtonHandleList {
 	private Color[] standardColor=new Color[] { Color.black, Color.white, Color.blue, Color.green, Color.red,  Color.cyan, Color.magenta, Color.yellow , 
@@ -39,10 +42,11 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 	
 	private static final long serialVersionUID = 1L;
 	private ColorInputListener coloring;//responds to a color choice
+	private KeyCharInput lettering;//responds to a letter
 	
 	/**builds an array for color handles*/
-	public  ColorButtonHandleList(ColorInputListener c) {
-		this.coloring=c;
+	public  ColorButtonHandleList(ColorInputListener colorListener) {
+		this.coloring=colorListener;
 		
 		for(int i=4; i>=0; i--) {
 			for(Color color: standardColor) {
@@ -60,32 +64,59 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 		}
 		}
 		
-		add(new ColorHandle(new Color(0,0,0,0)));
-		add(new ColorHandle(true));
+		add(new ColorPalleteHandle(new Color(0,0,0,0)));
+		add(new ColorPalleteHandle(true));
 		
 	}
 	
+	public ColorButtonHandleList(KeyCharInput listendsForKeys, char[] letters) {
+		lettering=listendsForKeys;
+		for(char c: letters) {
+			addLetter(c);
+		}
+	}
+	
+	
+	
+
 	void addColor(Color c) {
-		add(new ColorHandle(c));
+		add(new ColorPalleteHandle(c));
+	}
+	
+	ColorPalleteHandle addLetter(char c) {
+		ColorPalleteHandle e = new ColorPalleteHandle(c);
+		add(e);
+		return e;
 	}
 	
 	/**An individual color handle*/
-	public class ColorHandle extends SmartHandle {
+	public class ColorPalleteHandle extends SmartHandle {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		private Color theColor;//the color for this handle
+		Character letter=null;
 		private boolean moreColors;//set to true if a Jcolorchooser should be shown instead of 
 		{super.handleStrokeColor=Color.DARK_GRAY.darker().darker();}
 
 	
+		/**Attempted*/
+		public ColorPalleteHandle(char c) {
+			this(Color.white);
+			letter=c;
+			if(letter!=null) {
+				this.message=letter+"";
+				message_over_handle = true;
+			}
+		}
 
-		public ColorHandle(Color c) {
+		public ColorPalleteHandle(Color c) {
 			this(false);
 			this.setHandleColor(c);
 			this.setTheColor(c);
+			
 			if(c==null||c.getAlpha()==0)
 				{
 				this.setHandleColor(Color.white);
@@ -99,7 +130,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 		/**builds a handle. if the boolean is set to true
 		 * this handle will be a special handle that appears as a rainbow and 
 		 * shows a color chooser when clicked*/
-		public ColorHandle(boolean rainbow) {
+		public ColorPalleteHandle(boolean rainbow) {
 			this.handlesize=8;
 			maxGrid=standardColor.length;
 			this.setHandleColor(Color.white);
@@ -110,6 +141,17 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 		}
 		
 		public void handlePress(CanvasMouseEvent canvasMouseEventWrapper) {
+			
+			if(letter!=null) {
+				lettering.handleKeyPressEvent(new KeyEvent(canvasMouseEventWrapper.getComponent(), 0, System.currentTimeMillis(), 0, 0, letter));
+			} else
+			afterColorPress(canvasMouseEventWrapper);
+		}
+
+		/**
+		 * @param canvasMouseEventWrapper
+		 */
+		private void afterColorPress(CanvasMouseEvent canvasMouseEventWrapper) {
 			if (moreColors) {
 				theColor=JColorChooser.showDialog(null, "Color", getTheColor());
 				addColor(theColor);

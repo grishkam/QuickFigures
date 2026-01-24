@@ -16,6 +16,7 @@
 /**
  * Author: Greg Mazo
  * Date Created: Dec 11, 2021
+ * Date Modified: Dec 24, 2026
  * Version: 2023.2
  */
 package iconGraphicalObjects;
@@ -39,11 +40,16 @@ public class CheckBoxIcon implements Icon, MiniToolBarIcon {
 
 	private Color color=Color.black;
 	private boolean checked=false;
-	
+	String str = "\u2713";
 	
 
 	public CheckBoxIcon(Color colorForColorModeIcon, boolean checked) {
 		this.color=colorForColorModeIcon;
+		this.setChecked(checked);
+	}
+	
+	public CheckBoxIcon(String st) {
+		str=st;
 		this.setChecked(checked);
 	}
 
@@ -70,8 +76,10 @@ public class CheckBoxIcon implements Icon, MiniToolBarIcon {
 		
 			g2.setColor(color);
 			g2.setFont(new Font("LucidaSans", Font.BOLD, 16));
-			if(isChecked())
-				g2.drawString("\u2713", rectX+2, rectY+14);
+			if(isChecked()) {
+				
+				g2.drawString(str, rectX+2, rectY+14);
+			}
 	}
 		
 		

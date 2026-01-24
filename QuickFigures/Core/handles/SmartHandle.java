@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
+ * Date Modified: Jan 24, 2026
  * Version: 2023.2
  */
 package handles;
@@ -118,6 +118,8 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, Recta
 	}
 
 	private static final long serialVersionUID = 1L;
+
+	 protected boolean message_over_handle = false;
 	
 	@Override
 	public void draw(Graphics2D graphics, CordinateConverter cords) {
@@ -174,7 +176,13 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, Recta
 		if(message!=null) {
 			graphics.setColor(messageColor);
 			graphics.setFont(getMessageFont());
-			graphics.drawString(message, (int)s.getBounds().getMaxX()+1, (int)(s.getBounds().getCenterY()/2+s.getBounds().getMaxY()/2));
+			int message_x = (int)s.getBounds().getMaxX()+1;
+			int message_y = (int)(s.getBounds().getCenterY()/2+s.getBounds().getMaxY()/2);
+			if(this.message_over_handle) {
+				message_x = (int)(s.getBounds().getMinX()+s.getBounds().getCenterX())/2;
+				message_y = (int)(s.getBounds().getCenterY()/2+s.getBounds().getMaxY()/2);
+			}
+			graphics.drawString(message, message_x, message_y);
 		}
 	}
 

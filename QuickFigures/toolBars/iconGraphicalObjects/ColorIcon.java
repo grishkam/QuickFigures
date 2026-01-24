@@ -15,14 +15,15 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 5, 2021
- * Version: 2023.2
+ * Date Modified: Jan 24, 2026
+ * Version: 2026.1
  */
 package iconGraphicalObjects;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -38,17 +39,27 @@ public class ColorIcon implements Icon, MiniToolBarIcon {
 	
 
 	private Color color;
-	
+	String text=null;
+	int circle_shift = 3;
+	int circle_size = 18;
 
 
 	public ColorIcon(Color colorForColorModeIcon) {
 		this.color=colorForColorModeIcon;
 	}
+	
+	public ColorIcon(Color colorForColorModeIcon, String c, int circle_shift,  int circle_size) {
+		this.color=colorForColorModeIcon;
+		text=c;
+		this.circle_shift=circle_shift;
+		this.circle_size=circle_size;
+	}
 
 	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 	
-		java.awt.geom.Rectangle2D.Double ra = new Rectangle2D.Double(x+3, y+3, 18, 18);
+		
+		java.awt.geom.Rectangle2D.Double ra = new Rectangle2D.Double(x+circle_shift, y+circle_shift, circle_size, circle_size);
 		
 		
 		java.awt.geom.Ellipse2D.Double a = new Ellipse2D.Double();
@@ -65,6 +76,12 @@ public class ColorIcon implements Icon, MiniToolBarIcon {
 			g2.setColor(Color.black);
 			g2.setStroke(new BasicStroke(1));
 			g2.draw(a);
+			if(text!=null) {
+				Font f = g2.getFont().deriveFont((float) ra.height);
+				g2.setFont(f);
+				g2.setColor(Color.black);
+				g2.drawString(text, (int)(ra.getMinX()+ra.getCenterX())/2, (int) (ra.getMaxY()+ra.getCenterY())/2);
+			}
 		
 			
 	}

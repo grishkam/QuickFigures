@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: May 10, 2023
- * Version: 2023.2
+ * Date Modified: Jan 24, 2026
+ * Version: 2026.1
  */
 package handles.miniToolbars;
 
@@ -119,6 +119,7 @@ public class TextActionButtonHandleList extends ActionButtonHandleList {
 		if (!this.hideAngleAndDialogHandles)this.add(new TextDialogHandle(800210));
 		if (!this.hideAngleAndDialogHandles)this.add(new TextHandleNonEditmode(new SelectAllButton(text), 819100));
 		add(new JustifyButtonForText(1488925));
+		add(new CharacterInsertButton(text));
 		setLocation(getLocation());
 		
 		
