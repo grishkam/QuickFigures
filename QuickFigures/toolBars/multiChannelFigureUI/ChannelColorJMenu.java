@@ -43,7 +43,6 @@ import channelMerging.ChannelColor;
 import menuUtil.BasicSmartMenuItem;
 import menuUtil.SmartJMenu;
 import messages.ShowMessage;
-import standardDialog.StandardDialog;
 import standardDialog.choices.JListInputPanel;
 import standardDialog.colors.ColorInputEvent;
 import standardDialog.colors.ColorInputListener;
