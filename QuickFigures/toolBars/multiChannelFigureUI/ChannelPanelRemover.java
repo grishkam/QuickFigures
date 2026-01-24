@@ -36,6 +36,7 @@ import figureOrganizer.insetPanels.PanelGraphicInsetDefiner;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
+import logging.IssueLog;
 import undo.ChannelUseChangeUndo;
 import undo.CombinedEdit;
 import undo.PanelManagerUndo;
@@ -180,6 +181,7 @@ public class ChannelPanelRemover implements LayoutSpaces{
 	 removes the channel panels for the given channel
 	 */
 	public CombinedEdit removeChannelPanels(Integer chaneIndex) {
+		
 		if(chaneIndex==null)
 			chaneIndex=0;
 		CombinedEdit output=new CombinedEdit();
@@ -210,9 +212,11 @@ public class ChannelPanelRemover implements LayoutSpaces{
 		
 		for(PanelManager d: panelManagement.getPanelManagers()) {
 			for(PanelListElement l:d.getPanelList().getPanels()) {
-				boolean remove = (!l.isTheMerge()&&l.targetChannelNumber==chaneIndex)
+				boolean remove = (!l.isTheMerge()&&(int)l.targetChannelNumber==(int)chaneIndex)
 						|| (l.isTheMerge()&&chaneIndex==0);
+				
 				if (remove) {
+					
 					output.addEditToList(
 							d.removeDisplayObjectsFor(l)
 							);

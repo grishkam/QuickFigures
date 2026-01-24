@@ -233,10 +233,12 @@ public class PanelManager implements Serializable, EditListener{
 	public CombinedEdit removeDisplayObjectsFor(PanelListElement g) {
 		CombinedEdit itemsTaken=new CombinedEdit();
 		
-			itemsTaken.addEditToList(new UndoAbleEditForRemoveItem(layer, g.getPanelGraphic()));
-			layer.remove(g.getPanelGraphic()); 
+			ImagePanelGraphic panelGraphic = g.getPanelGraphic();
+			itemsTaken.addEditToList(new UndoAbleEditForRemoveItem(panelGraphic.getParentLayer(), panelGraphic));
+			panelGraphic.getParentLayer().remove(panelGraphic); 
+		
 			
-		BarGraphic bar = g.getPanelGraphic().getScaleBar();
+		BarGraphic bar = panelGraphic.getScaleBar();
 		if (bar!=null) {
 			itemsTaken.addEditToList(new UndoAbleEditForRemoveItem(layer, bar));
 			layer.remove(bar); 
