@@ -25,19 +25,15 @@ import java.io.File;
 import java.util.ArrayList;
 
 import applicationAdaptersForImageJ1.ImagePlusWrapper;
-import channelMerging.ChannelColorWrap;
 import channelMerging.ChannelOrderAndColorWrap;
 import ij.CompositeImage;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.LutLoader;
 import ij.process.LUT;
-import imageDisplayApp.UserPreferences;
 import logging.IssueLog;
 import messages.ShowMessage;
-import standardDialog.StandardDialog;
 import standardDialog.choices.JListInputPanel;
-import ultilInputOutput.FileChoiceUtil;
 
 /**ImageJ implementation of the channel order interface 
  * @see ChannelOrderAndColorWrap*/
