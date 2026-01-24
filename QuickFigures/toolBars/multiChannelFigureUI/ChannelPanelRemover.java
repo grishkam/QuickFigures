@@ -108,9 +108,9 @@ public class ChannelPanelRemover implements LayoutSpaces{
 					d.getPanelList().getChannelUseInstructions().MergeHandleing=ChannelUseInstructions.MERGE_FIRST;
 				
 				/**check if this manager is the same one that has channel labels*/
-				if (panelManagement.getChannelLabelManager().getPanelList()==d.getPanelList()) {
+				boolean channelLabelNeeded = panelManagement.getChannelLabelManager().getPanelList()==d.getPanelList();
+				if (channelLabelNeeded) 
 					addChannelLabel(chan, panelManagement.getChannelLabelManager());
-				}
 				
 				
 				d.updatePanels();
@@ -164,15 +164,20 @@ public class ChannelPanelRemover implements LayoutSpaces{
 		
 		
 		for( PanelListElement panel: panels2) {
+			
+			
 					if(channelLabelManager.isNonLabeledSlice(panel)
-							|| (chan!=null && panel.targetChannelNumber!=chan)
+							|| (chan!=null && (int)panel.targetChannelNumber!=(int)chan)
 							|| (panel.isTheMerge()&&chan!=null)
 							|| (!panel.isTheMerge()&&chan==null)
 							) 
 						continue;
 					ArrayList<ChannelLabelTextGraphic> oldLabels = channelLabelManager.getAllLabels();
 					ChannelLabelTextGraphic newLabel = channelLabelManager.generateChannelLabelFor(panel);
-					if(oldLabels.size()>0) newLabel.copyAttributesFrom(oldLabels.get(0));
+					if(oldLabels.size()>0) {
+						newLabel.copyAttributesFrom(oldLabels.get(0));
+						newLabel.setAttachmentPosition(oldLabels.get(0).getAttachmentPosition());
+					}
 			}
 		
 	}
