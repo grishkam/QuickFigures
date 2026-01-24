@@ -450,6 +450,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 */
 	private void performHandleReleaseCropAndPropagateToAllSelectedImages(CanvasMouseEvent e,
 			boolean useDialogToSetSize) {
+		if(e.isPopupTrigger())
+			return;
 		boolean userSet=false;
 		double userSize=getPanelSizeForHandle();
 		if(useDialogToSetSize) {

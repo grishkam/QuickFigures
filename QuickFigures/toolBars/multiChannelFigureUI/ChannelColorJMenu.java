@@ -240,24 +240,36 @@ public class ChannelColorJMenu extends SmartJMenu {
 			public void notifyListens() {
 				ColorInputEvent fie = new ColorInputEvent(null, this, color);
 				if(custom) {
-					if(this.getText().equals(OPEN_LUT)) {
-						File f = FileChoiceUtil.getOpenFile("/luts");
-						if(f==null)
-							return;
-						stringFromUser = f.getAbsolutePath();
-						if(stringFromUser.endsWith(".lut")) {
-							ShowMessage.showOptionalMessage("please select a lut file");
-						}
-					} else
-						stringFromUser=JListInputPanel.getChoiceFromUser("Could not find that lut file", CurrentAppContext.getMultichannelContext().getChannelColorOptions());
-					    // stringFromUser = StandardDialog.getStringFromUser("Please input lut name", stringFromUser);
-					 stringFromUser = stringFromUser.replace(" ", "_");
-					fie = new ColorInputEvent(null, this, stringFromUser);
+					fie = showUserDialogsForCustomChannelColor();
 				}
+				
+				if(fie!=null)
 				for(ColorInputListener listen: listens) {
-					
 					listen.ColorChanged(fie);
 				}
+			}
+
+			/**
+			 * @return
+			 */
+			private ColorInputEvent showUserDialogsForCustomChannelColor() {
+				ColorInputEvent fie;
+				if(this.getText().equals(OPEN_LUT)) {
+					File f = FileChoiceUtil.getOpenFile("/luts");
+					if(f==null)
+						{ShowMessage.showOptionalMessage("did you forget to select a lut file?");
+						return null;}
+					
+					stringFromUser = f.getAbsolutePath();
+					if(stringFromUser.endsWith(".lut")) {
+						ShowMessage.showOptionalMessage("please select a lut file");
+					}
+				} else
+					stringFromUser=JListInputPanel.getChoiceFromUser("Could not find that lut file", CurrentAppContext.getMultichannelContext().getChannelColorOptions());
+				    // stringFromUser = StandardDialog.getStringFromUser("Please input lut name", stringFromUser);
+				 stringFromUser = stringFromUser.replace(" ", "_");
+				fie = new ColorInputEvent(null, this, stringFromUser);
+				return fie;
 			}
 			
 		}
