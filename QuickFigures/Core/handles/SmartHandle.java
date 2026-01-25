@@ -81,6 +81,9 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, Recta
 	
 	protected transient Shape lastDrawShape=null;
 	transient protected Shape specialShape=null;
+	
+	/**the handle may include a short text*/
+	protected Font message_font = new Font("Arial", Font.BOLD, 12);
 	protected String message=null;
 
 	protected CordinateConverter lastDrawnConverter;
@@ -207,7 +210,8 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, Recta
 
 	/**returns the font of the handle message*/
 	protected Font getMessageFont() {
-		return new Font("Arial", Font.BOLD, 12);
+		
+		return message_font;
 	}
 	
 	/**Draws the main Shape. mouse clicks inside this shape will result in calls

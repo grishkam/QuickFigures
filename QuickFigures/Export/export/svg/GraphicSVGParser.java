@@ -59,6 +59,7 @@ import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.util.ParsedURL;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -100,7 +101,7 @@ import textObjectProperties.TextParagraph;
 public class GraphicSVGParser {
 	
 	static BridgeContext startingContext=null;
-	
+	IOUtils a;
 	
 	public  StandardWorksheet openSVG(String path) throws IOException {
 		 String parser = XMLResourceDescriptor.getXMLParserClassName();

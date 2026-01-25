@@ -15,12 +15,13 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 24, 2026
+ * Date Modified: Jan 25, 2026
  * Version: 2026.1
  */
 package handles.miniToolbars;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JColorChooser;
@@ -69,7 +70,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 		
 	}
 	
-	public ColorButtonHandleList(KeyCharInput listendsForKeys, char[] letters) {
+	public ColorButtonHandleList(KeyCharInput listendsForKeys, Iterable<Character> letters) {
 		lettering=listendsForKeys;
 		for(char c: letters) {
 			addLetter(c);
@@ -85,6 +86,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 	
 	ColorPalleteHandle addLetter(char c) {
 		ColorPalleteHandle e = new ColorPalleteHandle(c);
+		
 		add(e);
 		return e;
 	}
@@ -109,6 +111,7 @@ public class ColorButtonHandleList extends ActionButtonHandleList {
 			if(letter!=null) {
 				this.message=letter+"";
 				message_over_handle = true;
+				message_font = new Font("Helvetica", Font.BOLD, 12);
 			}
 		}
 

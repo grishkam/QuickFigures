@@ -193,7 +193,9 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		addedLayer.add(layoutWithLaneLabels);
 		
 		undo.addEditToList(new UndoAddItem(parentLayer, addedLayer));
+		
 		parentLayer.add(addedLayer);
+		parentLayer.moveItemBackward(addedLayer);//to place it in back of the image that is alreay there
 		
 		for(int laneIndex=1; laneIndex<=nLanes; laneIndex++){
 			TextGraphic  ag2 = ag;

@@ -110,5 +110,10 @@ public class BasicSmartMenuItem extends JMenuItem implements  SmartMenuItem, Act
 		addUndo(performAction());
 	}
 	
+	public void updateDisplay() {
+		if(me!=null)
+		me.getAsDisplay().updateDisplay();
+	}
+	
 
 }

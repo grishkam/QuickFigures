@@ -342,6 +342,7 @@ if (	actionCommand.equals(renameChanCommand)) {
 		 updateAllAfterMenuAction();
 		if(undo!=null) { new CurrentFigureSet().addUndo(undo);
 							}
+		
 	}
 
 	/**Sets teh channel panels for the clicked channel to have an inverted channel color
@@ -1198,6 +1199,7 @@ protected PanelManager getPressPanelManagerForUser() {
 						performAction()
 						);
 				updateFont() ;
+				updateDisplay();
 			}
 
 			/**
@@ -1209,6 +1211,7 @@ protected PanelManager getPressPanelManagerForUser() {
 				if(panelManager.getChannelUseInstructions().addsMergePanel())
 					return createChannelPanelRemover().removeChannelPanels(null);
 				else return createChannelPanelRemover().addChannelPanels(null);
+				
 			}
 			
 			

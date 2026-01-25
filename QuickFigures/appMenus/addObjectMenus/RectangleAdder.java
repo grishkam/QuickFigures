@@ -41,11 +41,14 @@ public class RectangleAdder extends BasicGraphicAdder {
 	String menuPath = "Shapes";
 	
 	/**creates an object adder from the rectangular graphic tool*/
-	public RectangleAdder(RectGraphicTool t, String subMenuName) {
+	public RectangleAdder(RectGraphicTool t, String subMenuName, boolean sharesicon) {
 		this.tool=t;
 		if (subMenuName!=null) menuPath +="<"+subMenuName;
 		t.getModel().setStrokeColor(Color.blue);
 		t.getModel().setRectangle(new Rectangle(0,0,50,50));// the icon will be large due to this
+		if(sharesicon) {
+			superMenuIcon=this.getIcon();
+		}
 	}
 	
 	

@@ -450,7 +450,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 */
 	private void performHandleReleaseCropAndPropagateToAllSelectedImages(CanvasMouseEvent e,
 			boolean useDialogToSetSize) {
-		if(e.isPopupTrigger())
+		if(e.isPopupTrigger()&!useDialogToSetSize)
 			return;
 		boolean userSet=false;
 		double userSize=getPanelSizeForHandle();
@@ -463,6 +463,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 				userSet=true;
 				determineValidityOfCropArea(this.getHandleNumber()) ;
 				clearPreview(e);
+				
 				
 			} else {
 			
@@ -573,6 +574,19 @@ public class CropAreaHandle extends ImagePanelHandle {
 			if(user_selected_scaling_method==null) {
 				user_selected_scaling_method=CropAreaScaleMethod.NO__CROP_ONLY__DO_NOT_ALTER_ANYTHING_ELSE;
 			user_selected_scaling_method=(CropAreaScaleMethod) StandardDialog.getEnumChoiseFromUser("Do you want to fit the newly croped panels in the same area?", user_selected_scaling_method, CropAreaScaleMethod.values(), new Icon[] {CropIconGraphic.createsCropIcon(), new PixelDensityIcon(), ScaleSizeIcon.createIcon()});
+			
+			String option_to_align="Align sizing of image panels";
+			if(CropAreaScaleMethod.YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA==user_selected_scaling_method) {
+				option_to_align="Re-Set Scale for all images";
+			}
+			
+			if(CropAreaScaleMethod.YES_RESIZE_PANELS_WITHOUT_SCALE_RESET__CHANGE_PANEL_PPI==user_selected_scaling_method)
+				ShowMessage.showOptionalMessage("You are scaling your first crop area", true, "You are scaling your first crop area", "Note: when you have multiple sets of panels in the same figure, keep in mind that this option can set different scales for each set.", "If you want to set the same scale for all your images, you may consider the options to '"+option_to_align+"' in the Figure>Images submenu ");
+			
+			if(CropAreaScaleMethod.YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA==user_selected_scaling_method)
+				ShowMessage.showOptionalMessage("You are scaling your first crop area and scaling", true, "You are scaling your first crop area with a scale reset", "Note: when you have multiple sets of panels in the same figure, keep in mind that this option can set different scales for each set.", "If you want to set the same scale for all your images, you may consider the options to '"+option_to_align+"' in the Figure>Images submenu ");
+			
+			
 			}
 			
 			if(user_selected_scaling_method==CropAreaScaleMethod.YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA) {

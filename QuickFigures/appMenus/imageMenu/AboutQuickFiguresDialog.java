@@ -47,7 +47,7 @@ public void performActionDisplayedImageWrapper(DisplayedImage diw) {
 	
 		StandardDialog storedValueDilaog = new StandardDialog("QuickFigures");
 		storedValueDilaog .add("Info", new InfoDisplayPanel("QuickFigures was created by ", " Gregory Mazo"));
-		storedValueDilaog .add("Info", new InfoDisplayPanel("You are using ", " Version: 2023.2"));
+		storedValueDilaog .add("Info", new InfoDisplayPanel("You are using ", " Version: 2026.1"));
 		storedValueDilaog .add("Info", new InfoDisplayPanel("", " the code is open source and available on github "));
 		storedValueDilaog .add("Info", new InfoDisplayPanel("User Guide", USER_GUIDE));
 		storedValueDilaog .add("Info", new InfoDisplayPanel("Publication", PUBLICATION_DOI));

@@ -137,19 +137,27 @@ public class AlignSize extends BasicMultiSelectionOperator {
 		b=b.getBounds();
 		
 		if(panelScaleType()) {
-			Double relativeScale=findPanelScale(all);
-			if(relativeScale!=null) {
-				alignPanelScales(all, relativeScale, c);
-			}
-			else {
-				ShowMessage.showOptionalMessage("Image Panels must be selected to use this option ");
-			}
+			alignPanelScales(all, c);
 			return;
 		}
 		if(b==null)
 			 b =findRectangle(all);		
 		
 		allignWidthOrHeightArray(all, b, c);
+	}
+
+	/**
+	 * @param all
+	 * @param c
+	 */
+	public static void alignPanelScales(ArrayList<? extends Object> all, CombinedEdit c) {
+		Double relativeScale=findPanelScale(all);
+		if(relativeScale!=null) {
+			alignPanelScales(all, relativeScale, c);
+		}
+		else {
+			ShowMessage.showOptionalMessage("Image Panels must be selected to use this option ");
+		}
 	}
 	
 	
@@ -159,8 +167,8 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 * @param relativeScale
 	 * @param c 
 	 */
-	private void alignPanelScales(ArrayList<? extends LocatedObject2D> all, Double relativeScale, CombinedEdit c) {
-		for(LocatedObject2D a: all) {
+	private static void alignPanelScales(ArrayList<? extends Object> all, Double relativeScale, CombinedEdit c) {
+		for(Object a: all) {
 			
 			if(a instanceof ImagePanelGraphic) {
 				 ImagePanelGraphic i=(ImagePanelGraphic) a;
@@ -176,9 +184,9 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	 * @param all
 	 * @return
 	 */
-	private Double findPanelScale(ArrayList<? extends LocatedObject2D> all) {
+	private static Double findPanelScale(ArrayList<? extends Object> all) {
 		Double output=null;
-		for(LocatedObject2D a: all) {
+		for(Object a: all) {
 			
 			if(a instanceof ImagePanelGraphic) {
 				 ImagePanelGraphic i=(ImagePanelGraphic) a;
@@ -341,9 +349,9 @@ public class AlignSize extends BasicMultiSelectionOperator {
 		return "Align<Shape Size";
 	}
 	
-	public GraphicDisplayComponent getItemIcon(boolean selected) {
+	public static GraphicDisplayComponent getItemIcon(boolean selected, int type, Color darkFillForIcon) {
 		GraphicGroup gg=new GraphicGroup();
-		ArrayList<Rectangle> rects = getRectanglesForIcon();
+		ArrayList<Rectangle> rects = getRectanglesForIcon(type);
 		Color[] colors=new Color[] {Color.red, Color.green, Color.blue, new Color((float)0.0,(float)0.0,(float)0.0, (float)0.5)};
 	
 		for(int i=0; i<rects.size(); i++ ) {
@@ -374,23 +382,23 @@ public class AlignSize extends BasicMultiSelectionOperator {
 		 return output;
 	}
 	
-	private ArrayList<Rectangle> getRectanglesForIcon() {
+	private static ArrayList<Rectangle> getRectanglesForIcon(int type) {
 		ArrayList<Rectangle> output = new ArrayList<Rectangle>();
-		if(this.type==WIDTH) {
+		if(type==WIDTH) {
 				output.add(new Rectangle(0,0,8,3));
 				output.add(new Rectangle(0,4,8,8));
 				output.add(new Rectangle(0,14,8,6));
-						} else  if(this.type==HEIGHT) {
+						} else  if(type==HEIGHT) {
 							
 							output.add(new Rectangle(0, 7, 4,6));
 							output.add(new Rectangle(6, 7, 8, 6));
 							output.add(new Rectangle(15,7, 4,6));
-					} else if (this.type==PANEL_SCALE) {
+					} else if (type==PANEL_SCALE) {
 						output.add(new Rectangle(1,3,16,10));
 						output.add(new Rectangle(1,3,8,5));
 						
 						;
-					}else if (this.type==BOTH) {
+					}else if (type==BOTH) {
 						output.add(new Rectangle(6,15,8,6));
 						output.add(new Rectangle(0,5,8,6));
 						output.add(new Rectangle(10,5,8,6));
@@ -406,7 +414,7 @@ public class AlignSize extends BasicMultiSelectionOperator {
 	
 	
 	public Icon getIcon() {
-		return  getItemIcon(true);
+		return  getItemIcon(true, type, darkFillForIcon);
 	}
 	
 

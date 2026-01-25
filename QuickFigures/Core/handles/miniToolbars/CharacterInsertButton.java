@@ -24,12 +24,14 @@ package handles.miniToolbars;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import applicationAdapters.CanvasMouseEvent;
 import graphicalObjects_SpecialObjects.KeyCharInput;
 import graphicalObjects_SpecialObjects.TextGraphic;
 import handles.IconHandle;
 import iconGraphicalObjects.ColorIcon;
+import messages.ShowMessage;
 
 /**A handle that shows a popup with a character array when clicked. based on a color array version*/
 public class CharacterInsertButton extends IconHandle implements KeyCharInput {
@@ -41,8 +43,9 @@ public class CharacterInsertButton extends IconHandle implements KeyCharInput {
 	private TextGraphic item;
 	private transient CanvasMouseEvent lastPress;
 	private static final int hadleNum=94204;
-	static char[] default_insertChars = new char[] {'µ', '\u0394', '\u2642', '\u2640', '\u00C5',/**math*/'\u00D7', '\u00B1', '\u00B0', '\u00B2', '\u00B3', '\u00B5', '\u00B9'/**greek*/,'\u03B1','\u03B2','\u03B3', '\u03B4','\u03B5', '\u03B6','\u03B7', '\u03B8','\u03B9'};
-
+	static char[] default_insertChars = new char[] {'µ', '\u0394', '\u2642', '\u2640', '\u00C5',/**math*/'\u00D7', '\u00B1', '\u00B0', '\u00B9','\u00B2', '\u00B3', '\u00BD', '\u00A9','\u221E' };
+	
+	
 	/**Builds a new coloring button*/
 	public CharacterInsertButton(TextGraphic itemForIcon ) {
 		
@@ -81,14 +84,14 @@ public class CharacterInsertButton extends IconHandle implements KeyCharInput {
 	 * @return
 	 */
 	private ColorButtonHandleList getHandleListForPopup() {
-		return new ColorButtonHandleList(this, default_insertChars);
+		return new ColorButtonHandleList(this, getDefaultInsertChars());
 	}
 	
 	
 
 	@Override
 	public void handleKeyPressEvent(KeyEvent fie) {
-		
+		ShowMessage.showOptionalMessage("you have inserted your first symbol!", true, "You can now insert symbols in QuickFigures."," Note: Not every symbol works with every font","If your symbol does not appear, try changing the font (example 'Helvetica')","Also, not every  symbol is available in every export format");
 		item.handleKeyPressEvent(fie);
 		
 		lastPress.getSelectionSystem().getWorksheet().updateDisplay();
@@ -100,5 +103,40 @@ public class CharacterInsertButton extends IconHandle implements KeyCharInput {
 		if(item.isEditMode()) return false;
 		return true;
 		}
+	
+	public static ArrayList<Character> getDefaultInsertChars() {
+		ArrayList<Character> output= new ArrayList<Character>();
+		for(char c: default_insertChars) {
+			output.add(c);
+		}
+	
+		output.addAll(getDefaultSeriesChar('\u03B1', 25) ); //lowercase greek
+		//output.addAll(getDefaultSeriesChar('\u0391', 25) ); //upercase greek
+		output.addAll(getDefaultSeriesChar('\u2074', 27) );//subscripts and super scripts
+		output.addAll(getDefaultSeriesChar('\u25A0', 60) );//shapes
+		
+		return output;
+	}
+	
+	
+	static ArrayList<Character> getDefaultSeriesChar(char c, int n) {
+		ArrayList<Character> output= new ArrayList<Character>();
+		
+		for(int i=0; i<n; i++) {
+			output.add(c);
+			c=nextCharacter(c);
+		}
+		
+		return output;
+	}
+	static char nextCharacter(char c) { return (char)(1+(int)c);}
+	
+	
+	public static void main(String[] args) {
+		for(char i: getDefaultInsertChars()) {
+			System.out.println(i);
+			//System.out.println((i=='\u00B5')+" is micron symbol");
+		}
+	}
 
 }

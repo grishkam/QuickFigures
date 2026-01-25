@@ -47,6 +47,9 @@ public abstract class BasicGraphicAdder extends BasicMultiSelectionOperator impl
 
 	
 	protected int unique=(int)Math.random()*1000;
+
+
+	protected Icon superMenuIcon;
 	
 
 	/**finds any image panels that are selected, adds the object to those panels
@@ -80,7 +83,11 @@ public abstract class BasicGraphicAdder extends BasicMultiSelectionOperator impl
 		if (m==null)return null;
 		return new GraphicDisplayComponent(getModelForIcon(), getScaleToIcon());
 	}
-
+	
+	
+	public Icon getSuperMenuIcon() {
+		return superMenuIcon;
+	}
 
 
 	protected BasicGraphicalObject getModelForIcon() {

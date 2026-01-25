@@ -77,7 +77,8 @@ public static Icon createBrightnessIcon() {
 	/**returns an icon that displays a short String*/
 	public static GraphicGroup createAllIcon(String all) {
 		GraphicGroup gg = new GraphicGroup();
-		addRect(gg, new Rectangle(2,2,18,16), new Color(0,0,0,0), null);
+		Rectangle r = new Rectangle(2,2,18,16);
+		addRect(gg, r, new Color(0,0,0,0), null);
 		
 		TextGraphic z = new TextGraphic(all);
 		z.moveLocation(2, 15);

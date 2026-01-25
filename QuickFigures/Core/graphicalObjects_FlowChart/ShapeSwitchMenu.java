@@ -15,8 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: July 8, 2023
- * Date Created: July 8, 2023
+ * Date Modified: Jan 24, 2026
  * Version: 2023.2
  */
 package graphicalObjects_FlowChart;
@@ -73,7 +72,7 @@ public class ShapeSwitchMenu extends SmartJMenu {
 		SmartJMenu sm = new SmartJMenu(submenu);
 		for(ToolBit i: list) {
 			if (i instanceof RectGraphicTool) {
-				RectangleAdder rectangleAdder = new RectangleAdder((RectGraphicTool) i, "");
+				RectangleAdder rectangleAdder = new RectangleAdder((RectGraphicTool) i, "", i==list.get(0));
 				ShapeSwitchMenuItem menuItem = new ShapeSwitchMenuItem(rectangleAdder);
 				menuItem.setIcon(rectangleAdder.getIcon());
 				sm.add(menuItem);

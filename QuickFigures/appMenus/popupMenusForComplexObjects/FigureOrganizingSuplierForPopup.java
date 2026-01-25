@@ -33,8 +33,10 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
+import actionToolbarItems.AlignSize;
 import addObjectMenus.FigureAdder;
 import advancedChannelUseGUI.AdvancedChannelUseGUI;
 import appContext.MakeFigureAfterFileOpen;
@@ -196,6 +198,8 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				
 				
 				
+				
+				
 				recreatePanelsButton = new BasicSmartMenuItem("Recreate All Panels", new QuickFigureIcon(false, true, -2).getMenuVersion());
 				jj.add(recreatePanelsButton);
 							recreatePanelsButton.addActionListener(this);
@@ -204,7 +208,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 				rePPIPanelsButton.addActionListener(this);
 				imagesMenu.add(rePPIPanelsButton);
 				
-				
+				imagesMenu.add(new AlignPanelSizesMenuItem());
 			
 				
 				if (figureOrganizingLayerPane.getMontageLayoutGraphic()!=null) {
@@ -740,6 +744,26 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 		}
 		
 	
+	}
+	
+	public class AlignPanelSizesMenuItem extends BasicSmartMenuItem {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public AlignPanelSizesMenuItem() {
+			super("Align sizing of image panels");
+			setIcon(AlignSize.getItemIcon(false, AlignSize.PANEL_SCALE, null));
+		}
+		/**May be overwritten by subclasses. Does some task and returns an undo*/
+		public AbstractUndoableEdit2 performAction() {
+			CombinedEdit output = new CombinedEdit(new CombinedEdit[] {} );
+			AlignSize.alignPanelScales(figureOrganizingLayerPane.getAllPanelLists().getPanelGraphics(), output);
+			super.updateDisplay();
+			return output;
+		}
 	}
 	
 

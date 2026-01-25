@@ -45,6 +45,10 @@ public interface GraphicAdder extends MenuItemInstall {
 		/**sets the selection system*/
 		public void setSelector(LayerSelectionSystem selector);
 		public void run();
+		/**
+		 * @return
+		 */
+		public Icon getSuperMenuIcon();
 	
 	
 }

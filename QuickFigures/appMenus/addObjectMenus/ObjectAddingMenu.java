@@ -152,7 +152,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 	protected void extractShapeAddersFrom(ArrayList<ToolBit> list, String sName) {
 		for(ToolBit i: list) {
 			if (i instanceof RectGraphicTool)
-				adders.add(new RectangleAdder((RectGraphicTool) i, sName));
+				adders.add(new RectangleAdder((RectGraphicTool) i, sName, i==list.get(0)));
 		}
 	}
 	/**
@@ -176,6 +176,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 				return;
 		JMenuItem jmi=new AddingMenuItem(ad);
 		
+		
 		/**certain items appear as images in the menu and not as menu items*/
 		if (ad instanceof DisplaysGraphicalObject) {
 			GraphicJMenuItem jmi2 = new GraphicJMenuItem(ad.getMenuCommand());
@@ -184,6 +185,7 @@ public class ObjectAddingMenu extends SmartJMenu implements KeyListener {
 			jmi=jmi2;
 		}
 			JMenu menu1 = super.getOrCreateSubmenuFromPath(ad, this);
+			if(ad.getSuperMenuIcon()!=null) menu1.setIcon(ad.getSuperMenuIcon());
 			menu1.add(jmi);
 	}
 
