@@ -42,7 +42,6 @@ import layout.basicFigure.BasicLayout;
 import layout.basicFigure.LayoutSpaces;
 import locatedObject.AttachmentPosition;
 import locatedObject.RectangleEdges;
-import logging.IssueLog;
 import messages.ShowMessage;
 import objectDialogs.TextPatternDialog;
 import standardDialog.choices.ChoiceInputPanel;

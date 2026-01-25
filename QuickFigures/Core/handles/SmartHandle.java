@@ -92,6 +92,7 @@ public class SmartHandle implements Selectable, Hideable, ZoomableGraphic, Recta
 
 	protected boolean hidden;
 
+	/**shapes to draw bahind and in from of handle for more style*/
 	public transient Area underDecorationShape;
 	public transient Area overDecorationShape;
 
