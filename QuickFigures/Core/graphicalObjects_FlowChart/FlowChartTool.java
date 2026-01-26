@@ -53,7 +53,7 @@ public class FlowChartTool extends GraphicTool {
 	{super.temporaryTool=true;}
 	
 	
-	void setUpModel() {super.iconSet=TreeIconWrappingToolIcon.createIconSet(new ChartNexus(new RectangularGraphic()), 2, 4);
+	void setUpModel() {super.iconSet=TreeIconWrappingToolIcon.createIconSet(new ChartNexus(new RectangularGraphic(), ""), 2, 4);
 		model.setStrokeColor(Color.black);
 		}
 		{setUpModel(); }
@@ -144,13 +144,13 @@ public class FlowChartTool extends GraphicTool {
 				
 				
 				if(cn==null) {
-					cn = new ChartNexus(r1);
+					cn = new ChartNexus(r1, "new node");
 					fc.addItemToLayer(cn);
 					}
 				else cn=cn2;
 				
 				
-				cn2 = new ChartNexus(r2);
+				cn2 = new ChartNexus(r2, "node");
 				
 				fc.addItemToLayer(cn2);
 			

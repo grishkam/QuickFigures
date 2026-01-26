@@ -34,6 +34,8 @@ import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.undo.UndoableEdit;
 
+import fLexibleUIKit.MenuItemExecuter;
+import fLexibleUIKit.MenuItemMethod;
 import graphicalObjects.BasicGraphicalObject;
 import graphicalObjects.CordinateConverter;
 import graphicalObjects.ZoomableGraphic;
@@ -57,8 +59,12 @@ import locatedObject.PathPointList;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
+import menuUtil.SmartJMenu;
 import popupMenusForComplexObjects.DonatesMenu;
+import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
+import undo.AbstractUndoableEdit2;
+import undo.CombinedEdit;
 import undo.Edit;
 
 /**
@@ -84,9 +90,11 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 	private transient SmartHandleList smartHandleList;
 	
 	
-	public ChartNexus(ShapeGraphic shape) {
-		this.setName("Nexus");
+	public ChartNexus(ShapeGraphic shape, String name) {
+		this.setName(name);
 		this.setShape(shape);
+		
+		label.getParagraph().get(0).get(0).setText(name);
 		
 	}
 	
@@ -206,6 +214,7 @@ public class ChartNexus extends BasicGraphicalObject implements GraphicHolder, H
 		}
 		return smartHandleList;
 	}
+	
 
 
 	@Override
@@ -380,10 +389,23 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 
 	@Override
 	public JMenu getDonatedMenuFor(Object requestor) {
+		
 		if(requestor==shape) {
-			return new ShapeSwitchMenu(getFlowChart(), this);
+			return getMenuForShape();
 		}
 		return null;
+	}
+
+
+	/**
+	 * @return
+	 */
+	private SmartJMenu getMenuForShape() {
+		SmartJMenu sm = new SmartJMenu("Chart");
+		ShapeSwitchMenu shapeSwitchMenu = new ShapeSwitchMenu(getFlowChart(), this);
+		sm.add(shapeSwitchMenu);
+		new MenuItemExecuter(this).addToJMenu(sm);
+		return sm;
 	}
 
 
@@ -440,5 +462,17 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 		output2.setStrokeColor(Color.black);
 		return new GraphicGroup(false, output1, output2, a);
 	}
+	
+	
+	/**A method to create a new nexus with a menu option*/
+	@MenuItemMethod(menuText = "Add new nexus")
+	public AbstractUndoableEdit2 createNewNexus() {
+		return new ChartNexusSmartHandle(this).createNewNexus(StandardDialog.getNumberFromUser("Add how many new nodes to chart?", 1).intValue());
+	}
+	
+	public String toString() {
+		return label.toString();
+	}
+
 	
 }

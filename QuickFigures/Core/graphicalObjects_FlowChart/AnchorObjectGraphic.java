@@ -66,7 +66,7 @@ public class AnchorObjectGraphic extends PathGraphic {
 		s.addAttachment(aa);
 		
 		
-		AnchorAttachment aa2 = new AnchorAttachment(1, this, s2, s2.getNearestAttachmentPointIndex(point));
+		AnchorAttachment aa2 = new AnchorAttachment(-1, this, s2, s2.getNearestAttachmentPointIndex(point));
 		s2.addAttachment(aa2);
 		
 	}

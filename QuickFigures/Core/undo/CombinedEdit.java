@@ -15,7 +15,7 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Nov 19, 2022
+ * Date Modified: Jan 26, 2026
  * Version: 2023.2
  */
 package undo;
@@ -42,6 +42,8 @@ public class CombinedEdit extends AbstractUndoableEdit2 {
 	ArrayList<EditListener> afterEdits=new 	ArrayList<EditListener> ();
 	
 	String name="combined edit";
+	
+	public CombinedEdit() {}
 	
 	public CombinedEdit(AbstractUndoableEdit... edits) {
 		for(AbstractUndoableEdit undo: edits)

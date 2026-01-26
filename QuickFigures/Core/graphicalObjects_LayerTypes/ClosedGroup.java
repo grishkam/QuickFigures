@@ -73,7 +73,7 @@ import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
 
 /**An object that consists of many internal objects. Each is a vector graphic but none are directly editable
-   This object can be scaled and moved by the user but objects inside are not accessible
+   This object can be scaled and moved by the user but objects inside are not accessible via click
    Meant to simplify figures with complex graphics that can appear when using @class QFGraphics2D
   Expect that if I later write code to import into QuickFigures, this will be needed to keep the figures simple
    */

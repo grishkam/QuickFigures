@@ -36,7 +36,7 @@ import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
 import storedValueDialog.StoredValueDilaog;
 
-/**A special list of */
+/**An implementation of an attachment site for items. not yet used */
 public class GenericLockTaker implements HasUniquePopupMenu, TakesAttachedItems {
 
 	/**

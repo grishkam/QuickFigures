@@ -39,7 +39,7 @@ public class AnchorAttachment implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int pathPoint;
+	private int pathPoint;
 	private AnchorObjectGraphic path;
 	private ChartNexus shape;
 	private int index;
@@ -72,7 +72,7 @@ public class AnchorAttachment implements Serializable {
 				SmartHandleForPathGraphic.moveHandleTo(newNotch, getPath(), getPathPoint());
 		}
 		
-		if(getPath().getArrowHead2()!=null && pathPoint==getPath().getPoints().size()-1) {
+		if(getPath().getArrowHead2()!=null && getPathPointIndex()==getPath().getPoints().size()-1) {
 			getPath().prepareArrowHead2();
 			ArrowGraphic copyOfHead = getPath().getArrowHead2().copy();
 			Point2D newNotch = copyOfHead.moveHeadToNotch1();
@@ -84,6 +84,7 @@ public class AnchorAttachment implements Serializable {
 	 * @return
 	 */
 	public PathPoint getPathPoint() {
+		if(pathPoint==-1) return getPath().getPoints().getLastPoint();
 		return getPath().getPoints().get( pathPoint);
 	}
 
@@ -155,5 +156,13 @@ public class AnchorAttachment implements Serializable {
 			AnchorAttachment aa = new AnchorAttachment(currentHandleIndex, theAnchorPath, r, near_index);
 			r.addAttachment(aa); 
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public int getPathPointIndex() {
+		if(pathPoint==-1) return getPath().getPoints().size()-1;
+		return pathPoint;
 	}
 }

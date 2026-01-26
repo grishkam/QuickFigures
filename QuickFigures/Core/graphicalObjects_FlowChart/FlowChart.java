@@ -101,7 +101,7 @@ public class FlowChart extends GraphicLayerPane {
 	public AnchorAttachment getAttachmentforPoint(PathPoint pathPoint) {
 		for(AnchorAttachment a: attachments) {
 		
-			boolean match = a.pathPoint==a.getPath().getPoints().indexOf(pathPoint);
+			boolean match = a.getPathPointIndex()==a.getPath().getPoints().indexOf(pathPoint);
 			if(match)
 				return a;
 		}

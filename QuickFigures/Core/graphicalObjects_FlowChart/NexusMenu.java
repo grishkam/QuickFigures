@@ -23,6 +23,8 @@ package graphicalObjects_FlowChart;
 
 import javax.swing.JPopupMenu;
 
+import fLexibleUIKit.MenuItemExecuter;
+import menuUtil.BasicSmartMenuItem;
 import menuUtil.PopupMenuSupplier;
 import menuUtil.SmartPopupJMenu;
 
@@ -37,11 +39,18 @@ PopupMenuSupplier {
 	
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	/**
 	 * @param n
 	 */
 	public NexusMenu(ChartNexus n) {
 		ShapeSwitchMenu ssm = new ShapeSwitchMenu(n.getFlowChart(), n);
 		this.add(ssm);
+		new MenuItemExecuter(n).addToJPopupMenu(this);
 	}
 
 

@@ -195,8 +195,8 @@ public class AnchoredHandle extends SmartHandleForPathGraphic {
 			r2.setStrokeColor(Color.green);
 			
 			
-			ChartNexus cn = new ChartNexus(r2);
-			ChartNexus cn2 = new ChartNexus(r1);
+			ChartNexus cn = new ChartNexus(r2, "node1");
+			ChartNexus cn2 = new ChartNexus(r1, "node2");
 			fc.addItemToLayer(cn);
 			fc.addItemToLayer(cn2);
 		
