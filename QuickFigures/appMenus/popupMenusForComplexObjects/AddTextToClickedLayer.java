@@ -26,13 +26,17 @@ import java.awt.Point;
 
 import graphicalObjects.KnowsParentLayer;
 import graphicalObjects_LayerTypes.GraphicLayer;
+import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
+import locatedObject.AttachmentPosition;
 import menuUtil.BasicSmartMenuItem;
+import menuUtil.SmartJMenu;
 import undo.AbstractUndoableEdit2;
 import undo.CombinedEdit;
 import undo.UndoAddItem;
 
-/**A menu iten for adding text to a variety of targets*/
+/**A menu item for adding text to a variety of targets*/
 public class AddTextToClickedLayer extends BasicSmartMenuItem {
 	
 	/**
@@ -42,12 +46,22 @@ public class AddTextToClickedLayer extends BasicSmartMenuItem {
 	private GraphicLayer layer;
 	protected ComplexTextGraphic addition;
 	protected CombinedEdit the_undo;
+	private AttachmentPosition attach;
+	private KnowsParentLayer source;
 
 	public AddTextToClickedLayer(String name, KnowsParentLayer l) {
 		super(name);
 		layer=l.getParentLayer();
+		source=l;
 		setIcon(ComplexTextGraphic.createImageIcon());
 	}
+	
+	public AddTextToClickedLayer(String name, KnowsParentLayer l, AttachmentPosition a) {
+		this(name, l);
+		attach=a;
+	}
+	
+	
 	/**May be overwritten by subclasses. Does some task and returns an undo*/
 	public AbstractUndoableEdit2 performAction() {
 		Point p = super.me.getCoordinatePoint();
@@ -56,9 +70,31 @@ public class AddTextToClickedLayer extends BasicSmartMenuItem {
 		UndoAddItem undo = new UndoAddItem(layer, addition);
 		the_undo=new CombinedEdit(undo);
 		layer.add(addition);
+		
+		if(source instanceof ShapeGraphic) {
+			ShapeGraphic rect=(ShapeGraphic) source;
+			
+			if(rect.getStrokeWidth()>0) {
+				addition.setTextColor(rect.getStrokeColor());
+			}
+			
+			snapItems();
+		}
+		
+		
 		super.updateDisplay();
+		
+		
 		afterAddition();
 		return the_undo;
+	}
+
+	/**
+	 * 
+	 */
+	private void snapItems() {
+		if(attach!=null)
+			attach.snapLocatedObjects(addition, (ShapeGraphic) source);
 	}
 	/**
 	 * @param p
@@ -74,5 +110,15 @@ public class AddTextToClickedLayer extends BasicSmartMenuItem {
 	
 	public void afterAddition() {
 		
+	}
+	
+	public static SmartJMenu getAddTextMenu( String name, KnowsParentLayer l) {
+		SmartJMenu output=new SmartJMenu(name);
+		output.add(new AddTextToClickedLayer("Above", l, AttachmentPosition.defaultColLabel()));
+		output.add(new AddTextToClickedLayer("Below", l, AttachmentPosition.defaultPlotBottomSide()));
+		output.add(new AddTextToClickedLayer("Left", l, AttachmentPosition.defaultRowSide()));
+		output.add(new AddTextToClickedLayer("Right", l, AttachmentPosition.rightOfRowSide()));
+		
+		return output;
 	}
 }

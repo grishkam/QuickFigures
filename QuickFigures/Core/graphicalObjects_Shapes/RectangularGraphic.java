@@ -51,7 +51,9 @@ import locatedObject.RectangleEdges;
 import locatedObject.ScalesFully;
 import locatedObject.ShowsOptionsDialog;
 import locatedObject.StrokedItem;
+import menuUtil.SmartJMenu;
 import objectDialogs.RectangleGraphicOptionsDialog;
+import popupMenusForComplexObjects.AddTextToClickedLayer;
 import standardDialog.graphics.GraphicDisplayComponent;
 import undo.AbstractUndoableEdit2;
 
@@ -575,6 +577,11 @@ public void setSquareLock(boolean b) {
 		this.setHeight(this.getObjectWidth());
 		this.afterHandleMove(RectangleEdges.LOWER_LEFT, new Point(), new Point());
 		return output;
+	}
+	
+	@MenuItemMethod(menuText = "Add text", orderRank=9)
+	public SmartJMenu createLabelAddMenu() {
+		return AddTextToClickedLayer.getAddTextMenu("Add Text", this);
 	}
 
 	
