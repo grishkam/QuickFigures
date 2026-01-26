@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 4, 2021
- * Version: 2023.2
+ * Date Modified: Jan 24, 2026
+ * Version: 2026.1
  */
 package locatedObject;
 
@@ -202,6 +202,17 @@ public class AttachmentPosition implements  RectangleEdgePositions, Serializable
 		output.setLocationCategory(EXTERNAL);
 		return output;
 	}
+	
+	/**returns the default location for an external label that is positioned to be a title for a plot*/
+	public static AttachmentPosition defaultMontageTitle() {
+		AttachmentPosition output = new AttachmentPosition();
+		output.setLocationTypeExternal(ABOVE_AT_MIDDLE);
+		output.setGridChoice2(LayoutSpaces.ALL_MONTAGE_SPACE);
+		output.setLocationCategory(EXTERNAL);
+		return output;
+	}
+	
+	
 	
 	/**returns the default location for an external label that is positioned to be a label at
 	  the bottom of a plot referring to a data series*/

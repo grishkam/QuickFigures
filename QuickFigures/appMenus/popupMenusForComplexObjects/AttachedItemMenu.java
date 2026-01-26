@@ -58,7 +58,8 @@ public class AttachedItemMenu extends SmartPopupJMenu implements ActionListener,
 		addLockedItemMenus();
 	}
 	
-	public void addLockedItemMenus() {
+	/**Creates a menu that allows a user to add or remove attached items based on what objects are available*/
+	public JMenu addLockedItemMenus() {
 			//this.add(snap);
 			if (list==null) list=getLockedItemTaker().getLockedItems();
 		ReleaseLockedMenu removeLockedItemenu = new ReleaseLockedMenu(getLockedItemTaker(), list);
@@ -68,11 +69,16 @@ public class AttachedItemMenu extends SmartPopupJMenu implements ActionListener,
 		if (men.getItemCount()>0) this.add(men);
 		try {
 			AddLockedMenu addLockedItemMenu = new AddLockedMenu(getLockedItemTaker());
-			if (addLockedItemMenu.getNItems()>0)add(addLockedItemMenu);
+			if (addLockedItemMenu.getNItems()>0)
+				{
+				add(addLockedItemMenu);
+				return addLockedItemMenu;
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return men;
 	}
 	
 	

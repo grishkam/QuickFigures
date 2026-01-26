@@ -15,10 +15,12 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Jan 6, 2021
- * Version: 2023.2
+ * Date Modified: Jan 25, 2026
+ * Version: 2026.1
  */
 package popupMenusForComplexObjects;
+
+import java.awt.Color;
 
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -26,9 +28,11 @@ import fLexibleUIKit.ObjectAction;
 import genericMontageUIKitMenuItems.LayoutEditCommandMenu;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
+import locatedObject.AttachmentPosition;
 import menuUtil.SmartPopupJMenu;
 import menuUtil.HasUniquePopupMenu;
 import undo.AbstractUndoableEdit2;
+import undo.UndoAddOrRemoveAttachedItem;
 import undo.UndoManagerPlus;
 
 /**A menu for the default layouts */
@@ -39,10 +43,11 @@ public class LayoutMenu extends AttachedItemMenu {
 	 */
 	private static final long serialVersionUID = 1L;
 	private LayoutEditCommandMenu editmenu;
+	private DefaultLayoutGraphic the_layout;
 
 	public LayoutMenu(DefaultLayoutGraphic c) {
 
-		
+		the_layout=c;
 	
 		c.generateCurrentImageWrapper();
 		  editmenu = new LayoutEditCommandMenu(c);
@@ -50,7 +55,7 @@ public class LayoutMenu extends AttachedItemMenu {
 		add(editmenu.getInclusiveList());
 		
 		super.setLockedItem(c);
-		super.addLockedItemMenus();
+		JMenu lock_menu = super.addLockedItemMenus();
 		
 		GraphicLayer par = c.getParentLayer();
 		if (par instanceof HasUniquePopupMenu) try {
@@ -69,6 +74,28 @@ public class LayoutMenu extends AttachedItemMenu {
 				return null;
 			}	
 	}.createJMenuItem("Other Options"));
+		
+		
+		/***/
+		lock_menu.add(new AddTextToClickedLayer("New Title Label", c) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void afterAddition() {
+				addition.setAttachmentPosition(AttachmentPosition.defaultMontageTitle());
+				the_layout.addLockedItem(addition);
+				the_undo.addEditToList(new UndoAddOrRemoveAttachedItem(the_layout, addition, false));
+				addition.setFontSize(20);
+				addition.setTextColor(Color.black);
+			}
+		});
+		
+		/***/
+		add(new AddTextToClickedLayer("Add Text", c) );
+		
+		
 		
 	
 	}

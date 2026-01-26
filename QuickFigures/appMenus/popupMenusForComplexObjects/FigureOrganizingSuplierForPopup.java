@@ -103,7 +103,6 @@ import undo.ChannelDisplayUndo;
 import undo.CombinedEdit;
 import undo.Edit;
 import undo.PreprocessChangeUndo;
-import undo.UndoAddItem;
 import undo.UndoLayoutEdit;
 import undo.UndoScalingAndRotation;
 
@@ -173,6 +172,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 					panelLabelButton = new BasicSmartMenuItem("Generate Panel Labels", new ToolIconWithText(0, PANELS).getMenuVersion());
 					 labelMenu.add(panelLabelButton);
 						panelLabelButton.addActionListener(this);
+						
 						
 				
 						 
@@ -746,6 +746,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 	
 	}
 	
+	/**A menu iten to align the sizes*/
 	public class AlignPanelSizesMenuItem extends BasicSmartMenuItem {
 		
 		/**
@@ -765,6 +766,7 @@ public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, Arra
 			return output;
 		}
 	}
+	
 	
 
 }
