@@ -113,7 +113,7 @@ public class CharacterInsertButton extends IconHandle implements KeyCharInput {
 		output.addAll(getDefaultSeriesChar('\u03B1', 25) ); //lowercase greek
 		//output.addAll(getDefaultSeriesChar('\u0391', 25) ); //upercase greek
 		output.addAll(getDefaultSeriesChar('\u2074', 27) );//subscripts and super scripts
-		output.addAll(getDefaultSeriesChar('\u25A0', 60) );//shapes
+		output.addAll(getDefaultSeriesChar('\u25A0', 88) );//shapes
 		
 		return output;
 	}

@@ -32,13 +32,17 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import javax.swing.Icon;
+
 import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
 import basicMenusForApp.BasicMenuItemForObj;
 import graphicalObjects.BasicCoordinateConverter;
 import graphicalObjects.FigureDisplayWorksheet;
+import iconGraphicalObjects.IconUtil;
 import standardDialog.StandardDialog;
 import standardDialog.booleans.BooleanInputPanel;
+import standardDialog.graphics.GraphicDisplayComponent;
 import standardDialog.numbers.NumberInputEvent;
 import standardDialog.numbers.NumberInputListener;
 import standardDialog.numbers.NumberInputPanel;
@@ -182,5 +186,10 @@ public class FlatCreator extends BasicMenuItemForObj implements Transferable{
 			setUseTransparent(this.getBoolean("transp"));
 			deselectAll=this.getBoolean("Deselect");
 		}
+	}
+	
+	@Override
+	public Icon getIcon() {
+		return new GraphicDisplayComponent(IconUtil.createAllIcon(""+'\u29C9',16)  );//U+25A3
 	}
 }

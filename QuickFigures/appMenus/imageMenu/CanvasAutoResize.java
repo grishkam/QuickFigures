@@ -22,11 +22,15 @@ package imageMenu;
 
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.Icon;
+
 import appContext.ImageDPIHandler;
 import applicationAdapters.DisplayedImage;
 import applicationAdapters.ImageWorkSheet;
 import basicMenusForApp.BasicMenuItemForObj;
+import iconGraphicalObjects.IconUtil;
 import layout.BasicObjectListHandler;
+import standardDialog.graphics.GraphicDisplayComponent;
 import undo.CanvasResizeUndo;
 import utilityClasses1.SizeConstants;
 
@@ -105,9 +109,16 @@ public class CanvasAutoResize extends BasicMenuItemForObj {
 
 	@Override
 	public String getMenuPath() {
+	
 		return "Edit<Canvas";
 	}
 	
+	
+	public Icon getSuperMenuIcon() {
+		
+			//return new GraphicDisplayComponent(IconUtil.createAllIcon(""+'\u25A3',20)  );//in process of figuring out the best symbol
+		return null;
+	}
 	
 
 

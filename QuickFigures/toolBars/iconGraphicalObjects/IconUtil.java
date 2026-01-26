@@ -74,13 +74,20 @@ public static Icon createBrightnessIcon() {
 		
 	}
 	
+	
+	
 	/**returns an icon that displays a short String*/
 	public static GraphicGroup createAllIcon(String all) {
+		return createAllIcon(all, 12);
+	}
+	public static GraphicGroup createAllIcon(String all, int fontSize) {
 		GraphicGroup gg = new GraphicGroup();
 		Rectangle r = new Rectangle(2,2,18,16);
 		addRect(gg, r, new Color(0,0,0,0), null);
 		
 		TextGraphic z = new TextGraphic(all);
+		z.setFontSize(fontSize);
+		z.setFontFamily("Helvetica");
 		z.moveLocation(2, 15);
 		gg.getTheInternalLayer().add(z);
 		

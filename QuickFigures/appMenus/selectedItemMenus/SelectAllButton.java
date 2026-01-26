@@ -67,7 +67,7 @@ public class SelectAllButton extends BasicMultiSelectionOperator {
 	}
 	
 	public Icon getIcon() {
-		return new GraphicDisplayComponent(IconUtil.createAllIcon("all")  );
+		return new GraphicDisplayComponent(IconUtil.createAllIcon("all", 14)  );
 	}
 	
 
