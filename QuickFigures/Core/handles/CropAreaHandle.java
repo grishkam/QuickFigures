@@ -569,6 +569,8 @@ public class CropAreaHandle extends ImagePanelHandle {
 		}
 		ScaleInformation scaleInformation = modifications.getScaleInformation();
 		CombinedEdit undoextra=null;
+		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(mdl);
+		
 		if(this.isCropAreaScaleAdjusted() ) {
 			
 			if(user_selected_scaling_method==null) {
@@ -592,6 +594,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 			if(user_selected_scaling_method==CropAreaScaleMethod.YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA) {
 				double newScaleLevel = scaleInformation.getScale()/expand;
 				scaleInformation=scaleInformation.getAtDifferentScale(newScaleLevel);
+				
 			}//if user is scaling the crop area
 			
 			if(user_selected_scaling_method==CropAreaScaleMethod.YES_RESIZE_PANELS_WITHOUT_SCALE_RESET__CHANGE_PANEL_PPI) {
@@ -606,8 +609,9 @@ public class CropAreaHandle extends ImagePanelHandle {
 		}
 		
 		PreProcessInformation process = new PreProcessInformation(r.getRectangle().getBounds(), r.getAngle(), scaleInformation);
-		PreprocessChangeUndo undo1 = new PreprocessChangeUndo(mdl);
-	
+		
+		setFixedEdgeForAppPanels(mdl.getPanelManager().getPanelList().getPanelGraphics());
+		
 		slot.applyCropAndScale(process);
 		
 		
@@ -734,7 +738,11 @@ public class CropAreaHandle extends ImagePanelHandle {
 		for(Object z: theSelected) {
 			if(z instanceof ImagePanelGraphic) {
 				ImagePanelGraphic image=(ImagePanelGraphic) z;
+				image.setLocationType(RectangleEdges.UPPER_LEFT);
 				MultichannelDisplayLayer mdl1 = MultichannelDisplayLayer.findMultiChannelForGraphic(image.getParentLayer(), image);
+				
+				ArrayList<ImagePanelGraphic> all_other_panels = mdl1.getPanelList().getPanelGraphics();
+				setFixedEdgeForAppPanels(all_other_panels);
 				
 				if(mdl1!=mdl0 & (theseEdgesOverlapEnoughForAlignedCropping(image, thePanel) || userSetSpecificNumber)   & (areTheseBoundsCropAlignCompatible(image.getBounds(), startingLocation)|| userSetSpecificNumber)  & !cousinDisplays.contains(mdl1)) {
 					{
@@ -767,6 +775,16 @@ public class CropAreaHandle extends ImagePanelHandle {
 			}
 		}
 		
+	}
+
+
+	/**
+	 * @param all_other_panels
+	 */
+	private void setFixedEdgeForAppPanels(ArrayList<ImagePanelGraphic> all_other_panels) {
+		for(ImagePanelGraphic image1: all_other_panels) {
+			image1.setLocationType(RectangleEdges.UPPER_LEFT);
+		}
 	}
 	
 	/** determines if the panels have crop handles that can be dragged together. 

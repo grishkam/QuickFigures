@@ -62,7 +62,7 @@ public class AddTextToClickedLayer extends BasicSmartMenuItem {
 	}
 	
 	
-	/**May be overwritten by subclasses. Does some task and returns an undo*/
+	/**May be overwritten by subclasses. Adds a text item to the same layer as a target object*/
 	public AbstractUndoableEdit2 performAction() {
 		Point p = super.me.getCoordinatePoint();
 		addition = createItem(p);
