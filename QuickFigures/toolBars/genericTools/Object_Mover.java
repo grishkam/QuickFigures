@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Oct 12, 2022
- * Version: 2023.2
+ * Date Modified: Jan 28, 2026
+ * Version: 2026.1
  */
 package genericTools;
 
@@ -930,19 +930,29 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	}
 	
 	
-	protected static ArrayList<PanelLayout> getPotentialSnapLayouts(ImageWorkSheet imageWrapperClick, double x, double y, boolean ignoreHidden, LocatedObject2D exempt) {
+	/**returns a list of panel layouts that are potential snap targets of the objects being moved.*/
+	protected static ArrayList<PanelLayout> getPotentialSnapLayouts(ImageWorkSheet imageWrapperClick, double x, double y, boolean ignoreHidden, LocatedObject2D exemptLayout, Object snapCandidate) {
 		  
 		
-		ArrayList<LocatedObject2D> As = imageWrapperClick.getLocatedObjects();
-		ArraySorter.removeThoseNotOfClass(As, PanelLayoutGraphic.class);
-		if (ignoreHidden) ArraySorter.removeHiddenItemsFrom(As);
-		As.remove(exempt);
+		ArrayList<LocatedObject2D> possibleSnapLayouts = imageWrapperClick.getLocatedObjects();
+		ArraySorter.removeThoseNotOfClass(possibleSnapLayouts, PanelLayoutGraphic.class);
+		if (ignoreHidden) ArraySorter.removeHiddenItemsFrom(possibleSnapLayouts);
+		possibleSnapLayouts.remove(exemptLayout);
 		
 		ArrayList<PanelLayout> layouts=new ArrayList<PanelLayout>();
-		for(LocatedObject2D l:As) {
+		for(LocatedObject2D l:possibleSnapLayouts) {
 			if (l==null) continue;
 			PanelLayoutGraphic p=(PanelLayoutGraphic) l;
-			layouts.add(p.getPanelLayout());
+			
+			if(p.rejectedClass!=null)
+				for(Class<?> c: p.rejectedClass) {
+					if(c.isInstance(snapCandidate)) {
+						p=null;//the layout is set to reject snaps form this type of object
+						}
+				}
+			
+			if(p!=null)
+				layouts.add(p.getPanelLayout());
 		}
 		//layouts.add(this.getImageWrapperClick().createLayout());
 		return layouts;
@@ -951,7 +961,7 @@ public class Object_Mover extends BasicToolBit implements ToolBit  {
 	/**returns the nearest layout panel to point xy*/
 	public static Rectangle2D getNearestPanelRect(ImageWorkSheet imageWrapperClick, Point2D p, boolean ignoreHidden, LocatedObject2D exempt) {
 		
-		ArrayList<PanelLayout> layouts = getPotentialSnapLayouts(imageWrapperClick, p.getX(), p.getY(), ignoreHidden, exempt);
+		ArrayList<PanelLayout> layouts = getPotentialSnapLayouts(imageWrapperClick, p.getX(), p.getY(), ignoreHidden, exempt, exempt);
 		
 		PanelLayout ml2=getNearestPanelLayout(p, layouts);
 	

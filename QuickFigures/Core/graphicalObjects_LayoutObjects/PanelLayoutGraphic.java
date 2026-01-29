@@ -114,11 +114,16 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 	
 	
 	public boolean hideAttachedItemHandles=false;
+	public boolean hideRowColSizeHandles=false;
 	
 	protected PanelLayout layout=new BasicLayout();
 	private  HashMap<LocatedObject2D, Integer> panelLocations=new HashMap<LocatedObject2D, Integer>();
 	private FigureType figureType;
 	private int strokeWidth=2;//how thick the rectangles for the panels are drawn
+	
+	
+	/**List of classes that this layout will not consider as snap targets*/
+	public Class<?>[] rejectedClass=new Class<?>[] {};
 	
 	
 	protected transient BasicLayoutEditor editor;
@@ -488,6 +493,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 		/**Creates the panel resizing handles*/
 		 Point2D location = RectangleEdges.getLocation(RectangleEdges.LOWER_RIGHT, r.getBounds2D());
 		
+		 if(!hideRowColSizeHandles) {
 		 PanelLayoutHandle r2 = createHandle( new Point2D.Double(location.getX(), location.getY()-5), w+ROW_HEIGTH_HANDLE*handleIDFactor, 2);
 		this.getHandleBoxes2().add(r2);
 		if (getPanelLayout().doesPanelUseUniqueWidth(w+1)) {
@@ -501,6 +507,7 @@ public abstract class PanelLayoutGraphic extends BasicGraphicalObject implements
 			  r2.handlesize=3;
 			  r2.setHandleColor(Color.red);
 			  }
+		 }
 			
 		
 		/**creates the panel motion handles*/

@@ -49,7 +49,8 @@ public class OpeningFileDropHandler extends FileDropHandler {
 		QuickFigureMaker quickFigureMaker = new QuickFigureMaker(FigureAdder.MERGE_PANELS_ONLY, false);
 		
 		FigureOrganizingLayerPane f2 = quickFigureMaker.createFigure(file.getAbsolutePath(), null);
-		f2.getPrincipalMultiChannel().getSlot().showImage();
+		if(f2!=null)
+			f2.getPrincipalMultiChannel().getSlot().showImage();
 	}
 
 private boolean isImageFormat(File f) {

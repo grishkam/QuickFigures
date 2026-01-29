@@ -88,6 +88,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	private double angleShift;
 	private Rectangle startingLocation;
 	private boolean wasHandleDragged;
+	private boolean panel_not_on_layout;
 	public static int ROTATION_CROP_AREA=819;
 	
 	public static enum CropAreaScaleMethod{NO__CROP_ONLY__DO_NOT_ALTER_ANYTHING_ELSE, YES_CHANGE_IMAGE_SCALING_TO_FIT_FINAL_PANEL_IN_SAME_AREA, YES_RESIZE_PANELS_WITHOUT_SCALE_RESET__CHANGE_PANEL_PPI}
@@ -110,7 +111,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	public void handlePress(CanvasMouseEvent e) {
 		startingLocation=thePanel.getBounds();
 		this.findFigureComponentsForPanel(thePanel);
-		thePanel.setLocationType(RectangleEdges.UPPER_LEFT);
+		thePanel.setLocationType(getFixedEdgeForHandle());
 		
 		thePanel.dragOngoing=false;
 		
@@ -602,7 +603,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 				undoextra=new CombinedEdit();
 				for(ImagePanelGraphic aPanel: mdl.getPanelList().getPanelGraphics()) {
 					undoextra.addEditToList(new CombinedEdit(new UndoScalingAndRotation(aPanel),new UndoMoveItems(aPanel)));
-					aPanel.setLocationType(RectangleEdges.UPPER_LEFT);	
+					aPanel.setLocationType(getFixedEdgeForHandle());	
 					aPanel.setRelativeScale(aPanel.getRelativeScale()/expand);
 				}
 			}
@@ -724,6 +725,15 @@ public class CropAreaHandle extends ImagePanelHandle {
 		
 	}
 	
+	
+	/**returns the corner of the image that should remain fixed*/
+	public int getFixedEdgeForHandle() {
+		if ((panel_not_on_layout)&&(this.getHandleNumber()==RectangleEdges.LEFT||this.getHandleNumber()==RectangleEdges.TOP))
+			return RectangleEdges.LOWER_RIGHT;
+		
+		return RectangleEdges.UPPER_LEFT;
+	}
+	
 	/**finds other selected images and applies the crop action to them*/
 	public void findOtherPanelsAndApplyEdit(CanvasMouseEvent e, CombinedEdit undo, boolean userSetSpecificNumber, double value) {
 		
@@ -738,7 +748,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 		for(Object z: theSelected) {
 			if(z instanceof ImagePanelGraphic) {
 				ImagePanelGraphic image=(ImagePanelGraphic) z;
-				image.setLocationType(RectangleEdges.UPPER_LEFT);
+				image.setLocationType(getFixedEdgeForHandle());
 				MultichannelDisplayLayer mdl1 = MultichannelDisplayLayer.findMultiChannelForGraphic(image.getParentLayer(), image);
 				
 				ArrayList<ImagePanelGraphic> all_other_panels = mdl1.getPanelList().getPanelGraphics();
@@ -783,7 +793,7 @@ public class CropAreaHandle extends ImagePanelHandle {
 	 */
 	private void setFixedEdgeForAppPanels(ArrayList<ImagePanelGraphic> all_other_panels) {
 		for(ImagePanelGraphic image1: all_other_panels) {
-			image1.setLocationType(RectangleEdges.UPPER_LEFT);
+			image1.setLocationType(getFixedEdgeForHandle());
 		}
 	}
 	

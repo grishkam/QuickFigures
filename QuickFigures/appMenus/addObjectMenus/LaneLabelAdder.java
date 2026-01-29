@@ -172,13 +172,10 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		/**calculates the column width needed to fill the space*/
 		int wCol = b.width/nLanes-border+border/(nLanes-1);		
-		int hRow = b.height/5;
-		if(hRow<wCol ||laneLabelOptions.nPlusMarks>0) 
-			hRow=wCol;
+		int hRow = 2;
+		if(hRow<wCol ||laneLabelOptions.nPlusMarks>0) hRow=wCol; else hRow=2;
 		double hShift=0;
-		if(laneLabelOptions.nPlusMarks==0) {
-			 hShift=hRow;
-		}
+		if(laneLabelOptions.nPlusMarks==0) { hShift=-hRow;}
 		
 		BasicLayout layout = new BasicLayout(nLanes, 1, wCol, hRow, border, border, true);
 		layout.setLeftSpace(border/2);
@@ -188,6 +185,8 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		layoutWithLaneLabels.hideAttachedItemHandles=true;
 		layoutWithLaneLabels.hidePanelSwapHandles=true;
 		layoutWithLaneLabels.hideRowColSwapHandles=true;
+		layoutWithLaneLabels.hideRowColSizeHandles=true;
+		layoutWithLaneLabels.rejectedClass=new Class<?>[] {ImagePanelGraphic.class};
 		
 		addedLayer.add(layoutWithLaneLabels);
 		
@@ -250,7 +249,12 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		
 		double height = 10;
-		for(TextGraphic a: added)height=a.getBounds().getHeight();
+		for(TextGraphic a: added) {
+			double h=a.getBounds().getHeight();
+			if(h>height) height=h+2;
+		}
+		height+=2;
+		
 		layoutWithLaneLabels.getPanelLayout().labelSpaceWidthTop=height;
 		layoutWithLaneLabels.moveLayoutAndContents(0, -height+hShift);
 		

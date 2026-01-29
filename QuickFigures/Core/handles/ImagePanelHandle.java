@@ -395,7 +395,8 @@ public class ImagePanelHandle extends SmartHandle {
 		RectangularGraphic[] markDestinationAndRival(CanvasMouseEvent e) {
 			Point2D center = RectangleEdges.getLocation(RectangleEdges.CENTER, panel.getBounds());
 			
-			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWorksheet(), center, true, null);
+			//TODO: find a way to ignore lane label layouts
+			Rectangle2D r = Object_Mover.getNearestPanelRect(e.getAsDisplay().getImageAsWorksheet(), center, true, thePanel);
 			
 			Rectangle b = panel.getBounds();
 			RectangularGraphic mark = RectangularGraphic.blankRect(b, Color.green, true, true);

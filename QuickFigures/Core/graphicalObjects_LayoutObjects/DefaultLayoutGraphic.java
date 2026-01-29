@@ -86,6 +86,7 @@ public class DefaultLayoutGraphic extends PanelLayoutGraphic implements GridLayo
 	public boolean hidePanelSwapHandles=false;
 	public boolean hideRowColSwapHandles=false;
 	
+	
 	 
 	public DefaultLayoutGraphic() {}
 	

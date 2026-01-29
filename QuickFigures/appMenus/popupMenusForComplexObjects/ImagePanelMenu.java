@@ -102,7 +102,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			this.add(extendFigure);
 			
 
-			this.add(createCropModeMenuItem(c, true));
+			
 			
 		}
 		
@@ -116,6 +116,10 @@ public class ImagePanelMenu extends AttachedItemMenu {
 			this.add(mc);
 			
 
+		}
+		
+		if (folp!=null) {
+			this.add(createCropModeMenuItem(c, true));
 		}
 		
 	
@@ -167,6 +171,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 				c.select();
 				CropAreaHandle.addCropHandles(c, show_crop_handles);
 				ShowMessage.showOptionalMessage("Crop handle instructions", true, "Drag handles to adjust, move or resize crop area for this set of images", "If you have multiple sets of images selected, you can align their crop areas", "Panel handles will return to normal if panel is deselected", "this feature is still new!");
+				c.updateDisplay();
 				;return null;}
 
 			
@@ -182,6 +187,7 @@ public class ImagePanelMenu extends AttachedItemMenu {
 		s.add(new PanelShapeAdder(new ArrowGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new RectGraphicTool(), imagePanel, imagePanel.getParentLayer(), color));
 		s.add(new PanelShapeAdder(new ShapeGraphicTool(new CircularGraphic(null)), imagePanel, imagePanel.getParentLayer(), color));
+		
 		if(imagePanel.getParentLayer() instanceof ImageDisplayLayer) {
 					/**Creates a menu option for add inset panels*/
 					s.add(new ObjectAction<ImagePanelGraphic>(imagePanel) {
