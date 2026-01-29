@@ -173,7 +173,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		/**calculates the column width needed to fill the space*/
 		int wCol = b.width/nLanes-border+border/(nLanes-1);		
 		int hRow = 2;
-		if(hRow<wCol ||laneLabelOptions.nPlusMarks>0) hRow=wCol; else hRow=2;
+		if(laneLabelOptions.nPlusMarks>0) hRow=wCol; else hRow=2;//hRow<wCol ||
 		double hShift=0;
 		if(laneLabelOptions.nPlusMarks==0) { hShift=-hRow;}
 		
