@@ -273,7 +273,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		this.addExtraItem(createGhost(insetrepresenations));
 		
-		 objectList = s.getUnprocessedVersion(false).getOverlayObjects("  ");
+		 MultiChannelImage unprocessedVersion = s.getUnprocessedVersion(false);
+		 if(unprocessedVersion!=null)
+		objectList = unprocessedVersion.getOverlayObjects("  ");
 		
 		if(objectList!=null) {
 			
@@ -1098,10 +1100,12 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		
 		
 		CroppingDialog crop;
+		MultiChannelImage unprocessedVersion = slot.getUnprocessedVersion(true);
+		if(unprocessedVersion==null) IssueLog.log("could not find original image");
 		if(recommmendation==null)
-			crop= new CroppingDialog(slot, slot.getUnprocessedVersion(true), slot.getModifications());
+			crop= new CroppingDialog(slot, unprocessedVersion, slot.getModifications());
 		else {
-			crop = new CroppingDialog(slot, slot.getUnprocessedVersion(true), recommmendation, recAngle);
+			crop = new CroppingDialog(slot, unprocessedVersion, recommmendation, recAngle);
 		}
 		crop.setContext(context);
 		

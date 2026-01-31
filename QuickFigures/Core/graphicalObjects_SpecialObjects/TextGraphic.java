@@ -1299,7 +1299,7 @@ public SmartHandleList getSmartHandleList() {
 				aList=createActionHandleList();
 			}
 			aList.updateLocationBasedOnParentItem();
-			return SmartHandleList.combindLists(aList, this.getStandardHandles());
+			return SmartHandleList.combineLists(aList, this.getStandardHandles());
 			
 		} else
 			return getStandardHandles();

@@ -16,8 +16,8 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 27, 2023
- * Date Modified: July 7, 2023
- * Version: 2023.2
+ * Date Modified: Jan 31, 2026
+ * Version: 2026.2
  */
 package graphicalObjects_FlowChart;
 
@@ -56,6 +56,7 @@ import locatedObject.LocatedObject2D;
 import locatedObject.LocationChangeListener;
 import locatedObject.PathPoint;
 import locatedObject.PathPointList;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import menuUtil.HasUniquePopupMenu;
 import menuUtil.PopupMenuSupplier;
@@ -401,7 +402,7 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 	 * @return
 	 */
 	private SmartJMenu getMenuForShape() {
-		SmartJMenu sm = new SmartJMenu("Chart");
+		SmartJMenu sm = new SmartJMenu("Flow Chart");
 		ShapeSwitchMenu shapeSwitchMenu = new ShapeSwitchMenu(getFlowChart(), this);
 		sm.add(shapeSwitchMenu);
 		new MenuItemExecuter(this).addToJMenu(sm);
@@ -465,9 +466,35 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 	
 	
 	/**A method to create a new nexus with a menu option*/
-	@MenuItemMethod(menuText = "Add new nexus")
+	@MenuItemMethod(menuText = "Right", subMenuName="Add new nexus")
 	public AbstractUndoableEdit2 createNewNexus() {
-		return new ChartNexusSmartHandle(this).createNewNexus(StandardDialog.getNumberFromUser("Add how many new nodes to chart?", 1).intValue());
+		return new ChartNexusSmartHandle(this).createNewNexus(getNNexiToAdd(), RectangleEdges.RIGHT);
+	}
+
+
+	/**
+	 * @return
+	 */
+	private int getNNexiToAdd() {
+		return StandardDialog.getNumberFromUser("Add how many new nodes to chart?", 3).intValue();
+	}
+	
+	/**A method to create a new nexus with a menu option*/
+	@MenuItemMethod(menuText = "Left", subMenuName="Add new nexus")
+	public AbstractUndoableEdit2 createNewNexusLEFT() {
+		return new ChartNexusSmartHandle(this).createNewNexus(getNNexiToAdd(), RectangleEdges.RIGHT);
+	}
+	
+	/**A method to create a new nexus with a menu option*/
+	@MenuItemMethod(menuText = "Below", subMenuName="Add new nexus")
+	public AbstractUndoableEdit2 createNewNexusBELOW() {
+		return new ChartNexusSmartHandle(this).createNewNexus(getNNexiToAdd(), RectangleEdges.BOTTOM);
+	}
+	
+	/**A method to create a new nexus with a menu option*/
+	@MenuItemMethod(menuText = "Above", subMenuName="Add new nexus")
+	public AbstractUndoableEdit2 createNewNexusAbove() {
+		return new ChartNexusSmartHandle(this).createNewNexus(getNNexiToAdd(), RectangleEdges.TOP);
 	}
 	
 	public String toString() {

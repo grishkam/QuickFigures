@@ -211,7 +211,7 @@ public class BlobShape extends SimpleStar {
 			blobList=parameters.createHandlesList(this);
 		}
 		
-		return SmartHandleList.combindLists(list1, blobList);
+		return SmartHandleList.combineLists(list1, blobList);
 	}
 	
 	/**a group of angle parameters that function as anchor and curve control points or a blob*/

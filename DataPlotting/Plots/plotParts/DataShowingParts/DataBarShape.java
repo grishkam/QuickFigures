@@ -243,7 +243,7 @@ public boolean showsAsPoint() {
 	public SmartHandleList getSmartHandleList() {
 		if (smartHandles==null)
 			smartHandles=new DataBarSmartHandleList(this);
-		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
+		return SmartHandleList.combineLists(smartHandles,super.getButtonList());
 	}
 
 	/**

@@ -491,7 +491,7 @@ public void setSquareLock(boolean b) {
 	public SmartHandleList getSmartHandleList() {
 		if (smartList==null) smartList=this.createSmartHandleList(); 
 		if (!superSelected) return smartList;
-		return SmartHandleList.combindLists(smartList, getButtonList(),customHandles!=null? customHandles.getSmartHandleList(): null);
+		return SmartHandleList.combineLists(smartList, getButtonList(),customHandles!=null? customHandles.getSmartHandleList(): null);
 	}
 
 	

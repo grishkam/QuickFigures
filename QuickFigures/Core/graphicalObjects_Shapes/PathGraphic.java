@@ -679,7 +679,7 @@ public class PathGraphic extends ShapeGraphic implements PathObject, ScalesFully
 			setSmartHandleBoxes(new SmartHandleList());
 		}
 		if (this.superSelected) 
-			return SmartHandleList.combindLists(getPointHandles(), getButtonList(), getReshapeList(), getReshapeList2(),getAddPointList());
+			return SmartHandleList.combineLists(getPointHandles(), getButtonList(), getReshapeList(), getReshapeList2(),getAddPointList());
 		return  getPointHandles();
 	}
 

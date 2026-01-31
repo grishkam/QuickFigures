@@ -766,7 +766,7 @@ public class AxesGraphic extends ShapeGraphic  implements Scales, HasSmartHandle
 		
 		if (!superSelected) return smartList;
 		
-		return SmartHandleList.combindLists(smartList, getButtonList());
+		return SmartHandleList.combineLists(smartList, getButtonList());
 	}
 	
 	/**returns the list of handles that take the role of buttons on a 'mini-toolbar' of sorts*/

@@ -233,7 +233,7 @@ public class ComplexBlobShape extends BlobShape {
 			}
 		}
 		
-		return SmartHandleList.combindLists(list1, blobList2);
+		return SmartHandleList.combineLists(list1, blobList2);
 	}
 	
 	public static void main(String[] args) {

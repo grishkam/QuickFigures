@@ -1085,7 +1085,7 @@ public SmartHandleList getSmartHandleList() {
 			smartList.add(new BarSmartHandle(this, BAR_THICKNESS_HANDLE));
 			smartList.add(new BarSmartHandle(this, LENGTH_HANDLE));
 		}
-		return SmartHandleList.combindLists(smartList, getActionList());
+		return SmartHandleList.combineLists(smartList, getActionList());
 	//return smartList;
 }
 

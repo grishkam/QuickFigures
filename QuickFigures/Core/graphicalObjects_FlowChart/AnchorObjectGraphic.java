@@ -32,6 +32,7 @@ import graphicalObjects.CordinateConverter;
 import graphicalObjects_Shapes.PathGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import graphicalObjects_Shapes.PathGraphic.AddPointSmartHandle;
+import handles.ReshapeHandleList;
 import handles.SmartHandleList;
 import locatedObject.PathPoint;
 
@@ -89,6 +90,10 @@ public class AnchorObjectGraphic extends PathGraphic {
 		return SmartHandleList.createList();
 	}
 	
+	/**this subclass does not need a reshape list in its set of handles*/
+	protected ReshapeHandleList getReshapeList() {
+		return null;
+	}
 	
 
 }

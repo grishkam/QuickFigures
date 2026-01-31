@@ -16,8 +16,8 @@
 /**
  * Author: Greg Mazo
  * Date Created: May 27, 2023
- * Date Modified: July 7, 2023
- * Version: 2023.2
+ * Date Modified: Jan 31, 2026
+ * Version: 2026.2
  */
 package graphicalObjects_FlowChart;
 
@@ -105,24 +105,49 @@ public class ChartNexusSmartHandle extends SmartHandle {
 	}
 	
 	
-	/**A method to create a new nexus with a menu option*/
-	public AbstractUndoableEdit2 createNewNexus(int count) {
+	/**A method to create a new nexus with a menu option
+	 * @param count refers to the number of nexi to add
+	 * @param side refers to the RectangleEdges.RIGHT or LEFT
+	 * */
+	public AbstractUndoableEdit2 createNewNexus(int count, int side) {
 		CombinedEdit output= new CombinedEdit();
 		
+		
+		
+		          
+		int opposite_side =  RectangleEdges.getAppropriateFixedEdgeForAttachmentType(side);
+		
+		
 		Rectangle  r = nexus.getShapeAsRectangle().getBounds();
-		r.x+= r.width*2;
+		if(RectangleEdges.isHorizontalEdge(side))
+				{r.x+= r.width*2*RectangleEdges.getXDirectionOfOffSetForAttachmentType(opposite_side);}
+		if(RectangleEdges.isVerticalEdge(side))
+				{r.y+= -r.height*2*RectangleEdges.getYDirectionOfOffSetForAttachmentType(opposite_side);}
+		
+		double spacing_factor=1.5;
 		
 		for(int i=0; i<count; i++) {
-			double yshift=r.getHeight()*1.25*(count-1-i);
-			double totalyshift=r.getHeight()*1.25*(count-1);
+			
 			Rectangle new_rect=r.getBounds();
-			new_rect.y+=yshift-totalyshift/2;
+			
+			if(RectangleEdges.isHorizontalEdge(side)) {
+				double yshift=r.getHeight()*spacing_factor*(count-1-i);
+				double totalyshift=r.getHeight()*spacing_factor*(count-1);
+				new_rect.y+=yshift-totalyshift/2;
+			}
+			
+			if(RectangleEdges.isVerticalEdge(side)) {
+				double xshift=r.getWidth()*spacing_factor*(count-1-i);
+				double totalxshift=r.getWidth()*spacing_factor*(count-1);
+				new_rect.x+=xshift-totalxshift/2;
+			}
+			
 			
 				ChartNexus new_nexus = createNewNexus(new_rect, "node "+(i+1));
 				nexus.getFlowChart().addItemToLayer(new_nexus);
 				output.addEditToList(new UndoAddItem(nexus.getFlowChart(),new_nexus));
 				
-				AnchorObjectGraphic link = createLinkToOtherNexus(RectangleEdges.getLocation(RectangleEdges.RIGHT, nexus.getShape().getBounds()), RectangleEdges.getLocation(RectangleEdges.LEFT, new_nexus.getShape().getBounds()), new_nexus);
+				AnchorObjectGraphic link = createLinkToOtherNexus(RectangleEdges.getLocation(side, nexus.getShape().getBounds()), RectangleEdges.getLocation(opposite_side, new_nexus.getShape().getBounds()), new_nexus);
 				output.addEditToList(new UndoAddItem(nexus.getFlowChart(),link));
 		
 		}

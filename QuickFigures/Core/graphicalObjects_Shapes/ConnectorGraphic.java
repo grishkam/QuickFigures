@@ -223,7 +223,7 @@ public class ConnectorGraphic extends PathGraphic implements Scales, HasSmartHan
 	public SmartHandleList getSmartHandleList() {
 		if (smartHandles==null)
 			smartHandles=new ConnectorHandleList(this);
-		return SmartHandleList.combindLists(smartHandles, getButtonList());
+		return SmartHandleList.combineLists(smartHandles, getButtonList());
 	}
 
 	/**returns the anchor locations for the connector*/

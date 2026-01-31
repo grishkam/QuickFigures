@@ -174,7 +174,7 @@ public class RectangleEdges implements  RectangleEdgePositions {
 	
 	/**Returns 1 or -1 depending on whether the offset from the base location 
 	 of the location type is positive or negative. @see AttachmentPosition*/
-	public int getXDirectionOfOffSetForAttachmentType(int locationType){
+	public static int getXDirectionOfOffSetForAttachmentType(int locationType){
 		switch (locationType) {
 		case UPPER_LEFT:  return 1;
 		case UPPER_RIGHT:return -1;
@@ -210,7 +210,7 @@ public class RectangleEdges implements  RectangleEdgePositions {
 	
 	/**Returns 1 or -1 depending on whether the offset from the base location 
 	 of the location type is positive or negative. @see AttachmentPosition*/
-public int getYDirectionOfOffSetForAttachmentType(int locationType){
+public static int getYDirectionOfOffSetForAttachmentType(int locationType){
 	switch (locationType) {
 	case UPPER_LEFT:  return 1;
 	case UPPER_RIGHT:return 1;
@@ -564,6 +564,24 @@ public int getYDirectionOfOffSetForAttachmentType(int locationType){
 	/**Returns the rotation transform for rotating objects about the center of the given shape's bounds*/
 	public static AffineTransform getRotationAboutCenter(Shape s, double angle) {
 		return AffineTransform.getRotateInstance(angle, s.getBounds().getCenterX(), s.getBounds().getCenterY());
+	}
+	
+	/**returns true if the edge is top of bottom*/
+	public static boolean isVerticalEdge(int side) {
+		if(side==TOP)
+			return true;
+		if(side==BOTTOM)
+			return true;
+		return false;
+	}
+	
+	/**returns true if the edge is right or left*/
+	public static boolean isHorizontalEdge(int side) {
+		if(side==RIGHT)
+			return true;
+		if(side==LEFT)
+			return true;
+		return false;
 	}
 	
 }

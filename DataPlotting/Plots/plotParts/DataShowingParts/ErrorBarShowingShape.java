@@ -297,7 +297,7 @@ public class ErrorBarShowingShape extends DataShowingShape implements ErrorBarSt
 	public SmartHandleList getSmartHandleList() {
 		if (smartHandles==null)
 			smartHandles=new DataBarSmartHandleList(this);
-		return SmartHandleList.combindLists(smartHandles,super.getButtonList());
+		return SmartHandleList.combineLists(smartHandles,super.getButtonList());
 	}
 
 	public ErrorBarStyle.Bardirections getBarDirectionsShown() {

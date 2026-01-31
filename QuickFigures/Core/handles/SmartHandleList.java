@@ -52,7 +52,7 @@ public class SmartHandleList extends ArrayList<SmartHandle> implements ZoomableG
 	}
 	
 	/**creates a new smart handle list*/
-	public static  SmartHandleList combindLists(SmartHandleList... handles) {
+	public static  SmartHandleList combineLists(SmartHandleList... handles) {
 		SmartHandleList out = new SmartHandleList();
 		for(SmartHandleList h: handles) {
 			if(h!=null) out.addAll(h);

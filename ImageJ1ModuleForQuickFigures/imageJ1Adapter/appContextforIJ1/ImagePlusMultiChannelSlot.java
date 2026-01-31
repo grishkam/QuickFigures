@@ -686,7 +686,8 @@ import storedValueDialog.StoredValueDilaog;
 			return r1.equals(r2);
 		}
 
-		/**returns the original image*/
+		/**returns the original image. 
+		 * TODO: determine why this sometimes returns null after loading a saved file*/
 		public ImagePlusWrapper getUnprocessedVersion(boolean b) {
 			ImagePlus backup = getBackup(b);
 			ImagePlusWrapper bwrap=getBackupAsWrapper();
@@ -709,7 +710,11 @@ import storedValueDialog.StoredValueDilaog;
 					else  {
 						/**if the original image has never been innitialized*/
 						original.setStoredImage(this.sourceImagePlus);
-						bwrap=this.getMultichannelImage();
+						ImagePlusWrapper multichannelImage = this.getMultichannelImage();
+						if(multichannelImage==null) {
+							IssueLog.log("there appears to be no source image in the image slot");
+						}
+						bwrap=multichannelImage;
 				}
 			}
 			return bwrap;
