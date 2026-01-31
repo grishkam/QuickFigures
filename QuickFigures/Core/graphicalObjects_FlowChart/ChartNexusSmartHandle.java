@@ -118,9 +118,9 @@ public class ChartNexusSmartHandle extends SmartHandle {
 		int opposite_side =  RectangleEdges.getAppropriateFixedEdgeForAttachmentType(side);
 		
 		
-		Rectangle  r = nexus.getShapeAsRectangle().getBounds();
+		Rectangle  r = nexus.getShape().getBounds();
 		if(RectangleEdges.isHorizontalEdge(side))
-				{r.x+= r.width*2*RectangleEdges.getXDirectionOfOffSetForAttachmentType(opposite_side);}
+				{r.x+= -r.width*2*RectangleEdges.getXDirectionOfOffSetForAttachmentType(opposite_side);}
 		if(RectangleEdges.isVerticalEdge(side))
 				{r.y+= -r.height*2*RectangleEdges.getYDirectionOfOffSetForAttachmentType(opposite_side);}
 		

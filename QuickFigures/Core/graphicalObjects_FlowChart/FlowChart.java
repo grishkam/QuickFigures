@@ -159,4 +159,23 @@ public class FlowChart extends GraphicLayerPane {
 		return null;
 	}
 	
+	
+	/**returns a list of each chart nexus*/
+	public ArrayList<ChartNexus> getEachNexus() {
+		ArrayList<ChartNexus> output=new ArrayList<ChartNexus>();
+		for(ZoomableGraphic i: this.getAllGraphics()) {
+			if(i instanceof ChartNexus) {
+				output.add((ChartNexus) i);
+			}
+		}
+		
+		return output;
+	}
+	
+	/**returns the chart nexus that is last*/
+	public ChartNexus getLastNexus() {
+		ArrayList<ChartNexus> nList = getEachNexus();
+		return nList.get(nList.size()-1);
+	}
+	
 }

@@ -32,8 +32,10 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.ShapeGraphic;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
+import locatedObject.RectangleEdges;
 import logging.IssueLog;
 import standardDialog.StandardDialog;
 import standardDialog.graphics.GraphicDisplayComponent;
@@ -94,35 +96,60 @@ public class FlowChartTool extends GraphicTool {
 		
 		//3.0 for boxes that take up one third of the drawn area
 		int nSteps=1;
-		boolean widthIsLoingAxis = totalAreaForNewParts.getWidth()>totalAreaForNewParts.getHeight();
+		double whRatio=totalAreaForNewParts.getWidth()/totalAreaForNewParts.getHeight();
+		boolean widthIsLoingAxis = whRatio>1;
+		double tolerance_for_square = 0.3;
+		double tolerance_for__almost_gold_rect = 0.6;
+		
+		boolean almostSquare = (whRatio<1+tolerance_for_square) &&(whRatio>1-tolerance_for_square);
+		boolean almostGoldRect = (whRatio<1+tolerance_for__almost_gold_rect) &&(whRatio>1-tolerance_for__almost_gold_rect) &&!almostSquare;
 		
 		if(widthIsLoingAxis)
 			nSteps=determineSteps(totalAreaForNewParts.getWidth()/totalAreaForNewParts.getHeight());
 		if(!widthIsLoingAxis)
 			nSteps=determineSteps( totalAreaForNewParts.getHeight()/totalAreaForNewParts.getWidth());
-		
-		
+		if(almostSquare)
+			nSteps=1;
+		if(almostGoldRect)
+			nSteps=2;
 
 		double divisionSize=1.0+nSteps*2.0;//3.0;
 		
 		double hratio=1.0/divisionSize;
 		double wratio=1.0;
 		
-		
+		double hDirection=1;
+		double vDirection=1;
 		
 		if(widthIsLoingAxis) {
 			 hratio=1;
 			 wratio=1.0/divisionSize;
 		}
 		
-		if(allowDiagnol) {
+		if(allowDiagnol ) {
 			 hratio=1.0/divisionSize;
 			 wratio=1.0/divisionSize;
+		} else if(widthIsLoingAxis) {
+			vDirection=0;
+		} else {
+			hDirection=0;
+		}
+		
+		if(almostSquare ) {
+			 hratio=0.333333333333;
+			 wratio=hratio;
+		}
+		
+		if(almostGoldRect ) {
+			 hratio=0.2;
+			 wratio=hratio;
 		}
 		
 		
-		RectangularGraphic r1 =null;
-		RectangularGraphic r2 =null;
+		
+		
+		ShapeGraphic previousNodeShape =null;
+		ShapeGraphic r2 =null;
 		
 		ChartNexus cn=null;
 		ChartNexus cn2 =null;
@@ -131,35 +158,68 @@ public class FlowChartTool extends GraphicTool {
 			
 			double boxWidth = totalAreaForNewParts.getWidth()*wratio;
 			double boxHeight = totalAreaForNewParts.getHeight()*hratio;
-			if(r1==null)
-				 r1 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX(), totalAreaForNewParts.getY(), boxWidth, boxHeight));
-			else 
-				r1=r2;
+			if(previousNodeShape==null) {
+				 previousNodeShape = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX(), totalAreaForNewParts.getY(), boxWidth, boxHeight));
+			if(almostSquare || (almostGoldRect&&i==1)) {
+				if(widthIsLoingAxis) {
+					previousNodeShape.setLocationType(RectangleEdges.LEFT);
+					previousNodeShape.setLocation(RectangleEdges.getLocation(RectangleEdges.LEFT, totalAreaForNewParts));
+				} else {
+				previousNodeShape.setLocationType(RectangleEdges.TOP);
+				previousNodeShape.setLocation(RectangleEdges.getLocation(RectangleEdges.TOP, totalAreaForNewParts));
+				}
+			}
+			
+			}else 
+				previousNodeShape=r2;
+			
+			
 			
 			//if(r2==null)
-				 r2 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*(1-wratio), totalAreaForNewParts.getY()+boxHeight*(i)*2*(1-hratio), boxWidth, boxHeight));
-				
-				r1.setStrokeColor(Color.PINK);
+				 //r2 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*(1-wratio), totalAreaForNewParts.getY()+boxHeight*(i)*2*(1-hratio), boxWidth, boxHeight));
+				 r2 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*hDirection, totalAreaForNewParts.getY()+boxHeight*(i)*2*vDirection, boxWidth, boxHeight));
+					
+				 
+				 if(almostSquare) {
+					 previousNodeShape.setStrokeColor(Color.magenta);
+				 } else if(almostGoldRect) {
+					 previousNodeShape.setStrokeColor(Color.yellow.darker());
+				 } else 
+				previousNodeShape.setStrokeColor(Color.PINK);
 				r2.setStrokeColor(Color.green);
 				
 				
 				if(cn==null) {
-					cn = new ChartNexus(r1, "new node");
+					cn = new ChartNexus(previousNodeShape, "new node");
 					fc.addItemToLayer(cn);
 					}
 				else cn=cn2;
 				
+				if ((!almostSquare && !almostGoldRect) ){
+						cn2 = new ChartNexus(r2, "node");
+						
+						fc.addItemToLayer(cn2);
+					
+						
+						AnchorObjectGraphic line = new AnchorObjectGraphic(cn, cn2, null);
+						ChartNexusSmartHandle.formatArrowForFlowChart(line);
 				
-				cn2 = new ChartNexus(r2, "node");
-				
-				fc.addItemToLayer(cn2);
-			
-				
-				AnchorObjectGraphic line = new AnchorObjectGraphic(cn, cn2, null);
-				ChartNexusSmartHandle.formatArrowForFlowChart(line);
-		
-				
-				Edit.addItem(cn.getParentLayer(),(ZoomableGraphic) line);
+						
+						Edit.addItem(cn.getParentLayer(),(ZoomableGraphic) line);
+						cn=cn2;
+				} else {
+					if(cn!=null) {
+						int count = almostSquare?3:i==2?3:1;
+						
+						new ChartNexusSmartHandle(cn).createNewNexus(count, widthIsLoingAxis? RectangleEdges.RIGHT: RectangleEdges.BOTTOM);
+					}
+					cn2=fc.getLastNexus();
+					
+					cn2.getShape().setStrokeColor(Color.cyan);
+					cn=cn2;
+					
+					
+				}
 		}
 		
 		

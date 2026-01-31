@@ -472,7 +472,7 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 	}
 
 
-	/**
+	/**Asks the user how many nodes to add
 	 * @return
 	 */
 	private int getNNexiToAdd() {
@@ -482,7 +482,7 @@ private Point2D getNearest(ArrayList<Point2D> points, Point2D coordinatePoint) {
 	/**A method to create a new nexus with a menu option*/
 	@MenuItemMethod(menuText = "Left", subMenuName="Add new nexus")
 	public AbstractUndoableEdit2 createNewNexusLEFT() {
-		return new ChartNexusSmartHandle(this).createNewNexus(getNNexiToAdd(), RectangleEdges.RIGHT);
+		return new ChartNexusSmartHandle(this).createNewNexus(getNNexiToAdd(), RectangleEdges.LEFT);
 	}
 	
 	/**A method to create a new nexus with a menu option*/

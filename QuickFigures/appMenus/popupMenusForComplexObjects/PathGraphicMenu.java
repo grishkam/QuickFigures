@@ -122,7 +122,7 @@ PopupMenuSupplier  {
 		addItem(tFormMenu,SMOOTH);
 		addItem(tFormMenu,SPLIT_LOOSE_PARTS);
 		
-		addArrowHeadOptions(subMenuName);
+		addArrowHeadOptions("Arrow heads");
 		 
 		 addItem(subMenuName, ELIMINATE_UNNEEDED_POINTS);
 		 addItem(subMenuName, MOVE_ENDPOINT);
