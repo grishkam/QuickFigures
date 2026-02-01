@@ -32,6 +32,7 @@ import graphicalObjects_LayerTypes.GraphicGroup;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_Shapes.ArrowGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
+import graphicalObjects_Shapes.RegularPolygonGraphic;
 import graphicalObjects_Shapes.ShapeGraphic;
 import icons.TreeIconWrappingToolIcon;
 import locatedObject.LocatedObject2D;
@@ -159,7 +160,7 @@ public class FlowChartTool extends GraphicTool {
 			double boxWidth = totalAreaForNewParts.getWidth()*wratio;
 			double boxHeight = totalAreaForNewParts.getHeight()*hratio;
 			if(previousNodeShape==null) {
-				 previousNodeShape = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX(), totalAreaForNewParts.getY(), boxWidth, boxHeight));
+				 previousNodeShape = new RegularPolygonGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX(), totalAreaForNewParts.getY(), boxWidth, boxHeight),8);
 			if(almostSquare || (almostGoldRect&&i==1)) {
 				if(widthIsLoingAxis) {
 					previousNodeShape.setLocationType(RectangleEdges.LEFT);
@@ -177,7 +178,7 @@ public class FlowChartTool extends GraphicTool {
 			
 			//if(r2==null)
 				 //r2 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*(1-wratio), totalAreaForNewParts.getY()+boxHeight*(i)*2*(1-hratio), boxWidth, boxHeight));
-				 r2 = new RectangularGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*hDirection, totalAreaForNewParts.getY()+boxHeight*(i)*2*vDirection, boxWidth, boxHeight));
+				 r2 = new RegularPolygonGraphic(new Rectangle2D.Double(totalAreaForNewParts.getX()+boxWidth*i*2*hDirection, totalAreaForNewParts.getY()+boxHeight*(i)*2*vDirection, boxWidth, boxHeight), 8);
 					
 				 
 				 if(almostSquare) {

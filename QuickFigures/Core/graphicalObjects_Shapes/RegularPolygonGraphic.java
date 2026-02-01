@@ -56,7 +56,7 @@ public class RegularPolygonGraphic extends RectangularGraphic {
 	public RegularPolygonGraphic(Rectangle2D rectangle) {
 		super(rectangle);
 	}
-	public RegularPolygonGraphic(Rectangle rectangle, int nV) {
+	public RegularPolygonGraphic(Rectangle2D rectangle, int nV) {
 		super(rectangle);
 		this.setNvertex(nV);
 	}
