@@ -15,8 +15,8 @@
  *******************************************************************************/
 /**
  * Author: Greg Mazo
- * Date Modified: Dec 22, 2022
- * Version: 2023.2
+ * Date Modified: Jan 31, 2026
+ * Version: 2026.2
  */
 package graphicalObjects_Shapes;
 
