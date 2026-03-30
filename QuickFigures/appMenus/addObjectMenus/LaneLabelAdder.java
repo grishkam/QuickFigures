@@ -33,6 +33,7 @@ import figureOrganizer.FigureLabelOrganizer;
 import graphicalObjects.ZoomableGraphic;
 import graphicalObjects_LayerTypes.GraphicLayer;
 import graphicalObjects_LayerTypes.GraphicLayerPane;
+import graphicalObjects_LayerTypes.LaneLabelLayer;
 import graphicalObjects_LayoutObjects.DefaultLayoutGraphic;
 import graphicalObjects_Shapes.RectangularGraphic;
 import graphicalObjects_SpecialObjects.ComplexTextGraphic;
@@ -161,7 +162,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 	 */
 	public DefaultLayoutGraphic addLaneLabel(TextGraphic ag, boolean output, ArrayList<TextGraphic> added, GraphicLayer parentLayer,
 			Rectangle b, CombinedEdit undo) {
-		GraphicLayerPane addedLayer = new GraphicLayerPane("lane labels");
+		LaneLabelLayer addedLayer = new LaneLabelLayer();
 		
 		
 		int nLanes=(int) laneLabelOptions.nLanes;
@@ -182,11 +183,7 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		layout.move(b.getX(), b.getY());
 		
 		DefaultLayoutGraphic layoutWithLaneLabels = new DefaultLayoutGraphic(layout);
-		layoutWithLaneLabels.hideAttachedItemHandles=true;
-		layoutWithLaneLabels.hidePanelSwapHandles=true;
-		layoutWithLaneLabels.hideRowColSwapHandles=true;
-		layoutWithLaneLabels.hideRowColSizeHandles=true;
-		layoutWithLaneLabels.rejectedClass=new Class<?>[] {ImagePanelGraphic.class};
+		makeIntoLaneLabelLayout(layoutWithLaneLabels);
 		
 		addedLayer.add(layoutWithLaneLabels);
 		
@@ -320,6 +317,17 @@ public class LaneLabelAdder extends BasicGraphicAdder {
 		
 		
 		return layoutWithLaneLabels;
+	}
+
+	/**
+	 * @param layoutWithLaneLabels
+	 */
+	public static void makeIntoLaneLabelLayout(DefaultLayoutGraphic layoutWithLaneLabels) {
+		layoutWithLaneLabels.hideAttachedItemHandles=true;
+		layoutWithLaneLabels.hidePanelSwapHandles=true;
+		layoutWithLaneLabels.hideRowColSwapHandles=true;
+		layoutWithLaneLabels.hideRowColSizeHandles=true;
+		layoutWithLaneLabels.rejectedClass=new Class<?>[] {ImagePanelGraphic.class};
 	}
 
 	/**returns the angle for the lane label
