@@ -41,7 +41,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
