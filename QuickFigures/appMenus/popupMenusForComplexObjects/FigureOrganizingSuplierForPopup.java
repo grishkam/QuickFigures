@@ -396,7 +396,7 @@ public class FigureOrganizingSuplierForPopup implements PopupMenuSupplier, Layou
 	}
 
 
-	/**shows a dialog for changing the drop area for many multichannel images within the figure*/
+	/**shows a dialog for changing the crop area for many multichannel images within the figure*/
 public static CombinedEdit recropManyImages(MultichannelDisplayLayer crop1, ArrayList<? extends ImageDisplayLayer> all) {
 	
 	

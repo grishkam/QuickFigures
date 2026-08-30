@@ -33,6 +33,7 @@ import graphicalObjects_SpecialObjects.ImagePanelGraphic;
 import iconGraphicalObjects.PixelDensityIcon;
 import iconGraphicalObjects.TrashIconGraphic;
 import icons.QuickFigureIcon;
+import logging.IssueLog;
 import menuUtil.SmartJMenu;
 import menuUtil.SmartPopupJMenu;
 import messages.ShowMessage;
@@ -132,7 +133,7 @@ public class MultiChannelImageDisplayPopup extends SmartPopupJMenu implements
 	public CombinedEdit createSecondView(MultichannelDisplayLayer displayLayer) {
 		if(displayLayer.getParentLayer() instanceof FigureOrganizingLayerPane) {
 			FigureOrganizingLayerPane f=(FigureOrganizingLayerPane) displayLayer.getParentLayer() ;
-			
+			if(displayLayer==null||f==null) {IssueLog.log("Cannot create second view with a specified source image");}
 			return FigureOrganizingLayerPane.createSecondView(f, displayLayer, null);
 			
 		} else return null;

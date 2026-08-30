@@ -780,9 +780,10 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 	If preprocess information is not given, then the user will be shown a dialog to select the crop area
 	 */
 	public static CombinedEdit createSecondView(FigureOrganizingLayerPane f, MultichannelDisplayLayer displayLayer, PreProcessInformation p) {
-		MultichannelDisplayLayer secondView = displayLayer.createEmptyCopy();
+		MultichannelDisplayLayer secondView = displayLayer.createEmptyCopy(); //displayLayer.createPartnerCopy(); //working on this
 		
 		secondView.setSlot(secondView.getSlot().createPartner());
+		secondView.getSlot().getUnprocessedVersion(true);
 		secondView.getSlot().redoCropAndScale();
 		secondView.setLaygeneratedPanelsOnGrid(true);
 		secondView.isSecondView=true;
@@ -799,6 +800,7 @@ public static void setUpRowAndColsToFit(MultiChannelImage image, ImageDisplayLay
 					} else {
 						r=mods.getRectangle();
 					}
+					
 					IssueLog.log("showing crop dialog for second view "+r);
 					CroppingDialog.showCropDialog(secondView.getSlot(), r, 0);
 					displayLayer.cropShown=true;

@@ -382,6 +382,9 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 	/**sets the target multichannel image*/
 	private void setImageToCrop(MultiChannelImage multichanalWrapper,int chan, int frame, int slice) {
 		multiChannelSource= multichanalWrapper;
+		if(multichanalWrapper==null) {
+			IssueLog.log("Cannot find image data");
+		}
 		this.setTitle("Crop: "+multichanalWrapper.getTitle());
 		this.display.frame=frame;
 		this.display.slice=slice;

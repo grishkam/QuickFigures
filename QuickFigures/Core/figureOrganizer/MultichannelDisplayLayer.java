@@ -112,11 +112,23 @@ private static final long serialVersionUID = 1L;
 	
 	/**creates a copy with all the same traits but no new image initialized*/
 	public MultichannelDisplayLayer createEmptyCopy() {
-		MultichannelDisplayLayer output = new MultichannelDisplayLayer(getSlot().copy()) ;
+		MultiChannelSlot original_slot = getSlot();
+		original_slot.getMultichannelImage();//try this
+		MultichannelDisplayLayer output = new MultichannelDisplayLayer(original_slot.copy()) ;
+		
 		output.copyTraitsFrom(this);
 		return output;
 	}
 	
+	/**creates a copy with all the same traits but with the same source image initialized*/
+	public MultichannelDisplayLayer createPartnerCopy() {
+		MultiChannelSlot original_slot = getSlot();
+		original_slot.getMultichannelImage();//try this
+		MultichannelDisplayLayer output = new MultichannelDisplayLayer(original_slot.createPartner()) ;
+		
+		output.copyTraitsFrom(this);
+		return output;
+	}
 
 	
 	/**copies the scaling, frame width and label properties from argument*/

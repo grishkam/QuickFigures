@@ -694,7 +694,9 @@ import storedValueDialog.StoredValueDilaog;
 			
 			if (backup!=null&&bwrap==null) 
 				bwrap=new ImagePlusWrapper(backup);
-			
+			if(bwrap==null) {
+				IssueLog.log("Looking for original image data...");
+			}
 			if(backup==null) {
 				/**If the backup once existed will ask user to reopen*/
 				if (original.innitialized) 
@@ -709,6 +711,9 @@ import storedValueDialog.StoredValueDilaog;
 					}
 					else  {
 						/**if the original image has never been innitialized*/
+						if(sourceImagePlus==null) {
+							IssueLog.log("setting up original image data (not found)...");
+						}
 						original.setStoredImage(this.sourceImagePlus);
 						ImagePlusWrapper multichannelImage = this.getMultichannelImage();
 						if(multichannelImage==null) {
@@ -780,7 +785,14 @@ import storedValueDialog.StoredValueDilaog;
 		public ImagePlusMultiChannelSlot copy() {
 			 ImagePlusMultiChannelSlot output = new ImagePlusMultiChannelSlot();
 			 output.path=path;
-			 output.setAndInnitializeImagePlus(getUncroppedOriginal());
+			 ImagePlus uncroppedOriginal = getUncroppedOriginal();
+			 if(uncroppedOriginal==null) {
+				 IssueLog.log("original image data for the slot is not open. This may take a moment...");
+				 output.original=original;
+				 output.setAndInnitializeImagePlus(original.getOrCreateImagePlus());
+				 //Note: lack of ability to handle this situation caused the second view option to fail if used after reopening a saved worksheet. not sure if this solution is optimal but it does retrieve the original
+			 } else
+			output.setAndInnitializeImagePlus(uncroppedOriginal);
 			if(getModifications()!=null)
 			output.applyCropAndScale(getModifications());
 			return output;
