@@ -1088,7 +1088,6 @@ public class CroppingDialog extends GraphicItemOptionsDialog implements MouseLis
 		return null;
 		
 		
-	
 	}
 	
 	/**Shows a crop dialog based on a suggested rectangle*/
